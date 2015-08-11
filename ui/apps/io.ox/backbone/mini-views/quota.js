@@ -81,8 +81,10 @@ define('io.ox/backbone/mini-views/quota', [
         renderTitle: function (opt) {
             var label;
             this.$el.append(
-                label = $('<span class="pull-right gray">'),
-                $('<span class="title">').text(this.opt.title)
+                $('<div class="quota-description">').append(
+                    $('<span class="title pull-left">').text(this.opt.title),
+                    label = $('<span class="numbers">')
+                )
             );
 
             if (opt.quota <= 0) {
@@ -101,10 +103,12 @@ define('io.ox/backbone/mini-views/quota', [
         },
 
         renderBar: function (opt) {
+
             // do not render the bar with unlimited quota
             if (opt.quota <= 0) return;
 
-            var width = Math.min(100, Math.round(opt.usage / opt.quota * 100));
+            // max is 100%, of course; visual minimum is 5%
+            var width = Math.max(5, Math.min(100, Math.round(opt.usage / opt.quota * 100)));
 
             if (!opt.quota) width = 100;
             if (!opt.usage) width = 0;

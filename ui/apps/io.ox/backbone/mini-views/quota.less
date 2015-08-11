@@ -13,12 +13,32 @@
 
 .io-ox-quota-view {
 
-    &.border-top {
-        padding-top: 2px;
+    font-size: 13px;
+    line-height: 16px;
+    font-weight: 300;
+    padding: 0 16px 16px 40px;
+
+    .quota-description {
+        // use display: table (or float: left) to avoid inner margin issues
+        display: table;
+        width: 100%;
+        margin: 3px 0 4px 0;
+    }
+
+    .title {
+        white-space: nowrap;
+        display: inline-block;
+        margin-right: 8px;
+    }
+
+    .numbers {
+        float: right;
     }
 
     .progress {
         clear: both;
-        margin-bottom: 0;
+        margin: 0;
+        height: 8px;
+        background-color: #ddd;
     }
 }
