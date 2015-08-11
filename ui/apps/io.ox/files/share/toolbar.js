@@ -18,11 +18,11 @@ define('io.ox/files/share/toolbar', [
     'io.ox/core/yell',
     'io.ox/core/folder/api',
     'io.ox/files/api',
-    'io.ox/files/share/permissions',
+    'io.ox/files/share/api',
     'gettext!io.ox/files',
     'io.ox/files/actions',
     'less!io.ox/files/style'
-], function (ext, links, actions, yell, folderAPI, filesAPI, permissionsModel, gt) {
+], function (ext, links, actions, yell, folderAPI, filesAPI, api, gt) {
 
     'use strict';
 
@@ -49,9 +49,8 @@ define('io.ox/files/share/toolbar', [
     new actions.Action('io.ox/files/share/edit', {
         requires: 'one',
         action: function (baton) {
-            var model = baton.app.mysharesListView.collection.get(baton.data);
             require(['io.ox/files/share/permissions'], function (permissions) {
-                permissions.show(model);
+                permissions.show(baton.model);
             });
         }
     });
@@ -59,36 +58,12 @@ define('io.ox/files/share/toolbar', [
     new actions.Action('io.ox/files/share/revoke', {
         requires: 'one',
         action: function (baton) {
-            var model = baton.app.mysharesListView.collection.get(baton.data),
-                permissions = model.getPermissions(),
-                collection = new permissionsModel.Permissions(),
-                id = model.get('id'),
-                changes,
-                def,
-                options = {
-                    cascadePermissions: false,
-                    message: ''
-                };
-
-            collection.reset(_(permissions).where({ entity: ox.user_id }));
-
-            if (model.isFolder()) {
-                changes = { permissions: collection.toJSON() };
-                def = folderAPI.update(id, changes, options);
-            } else {
-                changes = { object_permissions: collection.toJSON() };
-                def = filesAPI.update({ id: id }, changes, options);
-            }
-
-            def.then(
-                function success() {
-                    baton.app.mysharesListView.collection.remove(model);
+            require(['io.ox/files/share/permissions'], function (permissions) {
+                var collection = new permissions.Permissions();
+                api.revoke(collection, baton.model).then(function () {
                     yell('success', gt('Revoked access.'));
-                },
-                function fail(error) {
-                    yell(error);
-                }
-            );
+                }).fail(yell);
+            });
         }
     });
 

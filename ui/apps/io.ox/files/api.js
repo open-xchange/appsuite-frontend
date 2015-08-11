@@ -1063,6 +1063,7 @@ define('io.ox/files/api', [
                     // rename?
                     var changes = arguments[2] || {};
                     if ('title' in changes || 'filename' in changes) api.propagate('rename', file);
+                    if ('object_permissions' in changes) api.propagate('permissions', file);
                     break;
 
                 case 'change:version':
@@ -1108,6 +1109,10 @@ define('io.ox/files/api', [
 
                 case 'rename':
                     api.trigger('rename', _.cid(file));
+                    break;
+
+                case 'permissions':
+                    api.trigger('change:permissions', _.cid(file));
                     break;
 
                 case 'unlock':
