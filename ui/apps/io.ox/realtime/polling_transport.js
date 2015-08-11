@@ -267,11 +267,11 @@ function (ext, Event, caps, uuids, http, stanza, tabId) {
 
     // Periodically flush resend buffer
     actions.flushResendBuffer = function (ticks) {
-        if (damage.state == 'broken') {
+        if (damage.state === 'broken') {
             if (api.debug) {
                 console.log('Skipping flush of resend buffer due to broken connection');
-                return;
             }
+            return;
         }
 
         var hasBegunCountout = false;
