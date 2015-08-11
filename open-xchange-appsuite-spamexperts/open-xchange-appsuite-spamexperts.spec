@@ -92,6 +92,8 @@ if [ -x %{update} ]; then %{update} --later; fi
 %changelog
 * Wed Aug 05 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
 First candidate for 7.8.0 release
+* Wed Aug 05 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
+Build for patch 2015-08-10
 * Tue Aug 04 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
 Build for patch 2015-08-03 (2650)
 * Fri Jul 17 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
