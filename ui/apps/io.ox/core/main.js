@@ -1309,11 +1309,11 @@ define('io.ox/core/main', [
             if (looksLikeDeepLink && hash.app && hash.folder && hash.id && hash.folder.indexOf('virtual/') !== 0 && hash.id.indexOf(',') < 0) {
 
                 // new-school: app + folder + id
-                var id = hash.id.indexOf('.') > -1 ? _.cid(hash.id).id : hash.id;
+                var id = hash.id.indexOf('.') > -1 ? _.cid(hash.id).id : hash.id,
+                    usesDetailPage = /^io.ox\/(mail|contacts|calendar|tasks)$/.test(hash.app);
 
                 _.url.hash({
-                    // special treatment for files (viewer + drive app)
-                    app: hash.app === 'io.ox/files' ? 'io.ox/files' : hash.app + '/detail',
+                    app: usesDetailPage ? hash.app + '/detail' : hash.app,
                     folder: hash.folder,
                     id: id
                 });
