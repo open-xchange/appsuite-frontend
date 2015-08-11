@@ -390,6 +390,8 @@ define('io.ox/files/api', [
                 columns: allColumns,
                 sort: params.sort || '702',
                 order: params.order || 'asc',
+                // tell server to prefetch thumbnails (see bug 39897)
+                pregenerate_previews: true,
                 timezone: 'utc'
             };
         },
