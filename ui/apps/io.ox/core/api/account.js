@@ -195,13 +195,19 @@ define('io.ox/core/api/account', [
 
     /**
      * return folders for accounts
-     * @param  {string} type ('inbox', 'send', 'drafts')
+     * @param {string} type ('inbox', 'send', 'drafts')
+     * @param {integer} accountId [optional]
      * @return { array} folders
      */
-    api.getFoldersByType = function (type) {
-        return _(typeHash).chain().map(function (value, key) {
-            return value === type ? key : null;
-        }).compact().value();
+    api.getFoldersByType = function (type, accountId) {
+        return _(typeHash)
+            .chain()
+            .map(function (value, key) {
+                if (accountId !== undefined && key.indexOf('default' + accountId) === -1) return false;
+                return value === type ? key : false;
+            })
+            .compact()
+            .value();
     };
 
     api.getStandardFolders = function () {

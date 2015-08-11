@@ -368,9 +368,8 @@ define('io.ox/mail/api', [
      * @return { deferred}
      */
     api.archive = function (ids) {
-        if (!_.isArray(ids) || ids.length === 0) {
-            return;
-        }
+
+        if (!_.isArray(ids) || ids.length === 0) return;
 
         prepareRemove(ids);
 
@@ -381,17 +380,15 @@ define('io.ox/mail/api', [
                 data: http.simplify(ids)
             })
             .done(function () {
-                var accountId = accountAPI.parseAccountId(_.cid(ids[0])),
-                    folders = _.intersection(accountAPI.getFoldersByType('archive'), folderAPI.getStandardMailFolders());
 
-                folders = _(folders).filter(function (folder) {
-                    return accountAPI.parseAccountId(folder) === accountId;
-                });
+                var accountId = accountAPI.parseAccountId(_.cid(ids[0])),
+                    archiveFolderId = accountAPI.getFoldersByType('archive', accountId)[0],
+                    exists = folderAPI.pool.models[archiveFolderId] !== undefined;
 
                 // this test will only work for primary archive folders
                 // account api assumes, that external accounts are always having an archive folder
-                if (folders.length > 0) {
-                    folderAPI.reload(folders);
+                if (exists) {
+                    folderAPI.reload(archiveFolderId);
                 } else {
                     // refresh all folders because the archive folder might be new
                     folderAPI.refresh();
