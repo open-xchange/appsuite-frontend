@@ -780,6 +780,7 @@ define('io.ox/core/folder/api', [
                 // trigger event
                 if (!options.silent) {
                     api.trigger('update update:' + id, id, newId, model.toJSON());
+                    if ('permissions' in changes) api.trigger('change:permissions', id);
                 }
                 // fetch subfolders of parent folder to ensure proper order after rename/move
                 if (id !== newId || changes.title || changes.folder_id ) return list(model.get('folder_id'), { cache: false }).then(function () {

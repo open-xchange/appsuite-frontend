@@ -347,6 +347,7 @@ define('io.ox/files/main', [
                     if (app.mysharesListViewControl) {
                         app.mysharesListViewControl.$el.show().siblings().hide();
                     } else {
+
                         app.mysharesListView = new MySharesView({
                             app: app,
                             pagination: false,
@@ -355,39 +356,19 @@ define('io.ox/files/main', [
                             noSwipe: true
                         });
 
-                        app.mysharesListView.model.set({ sort: 'name', order: 'asc' });
-
-                        app.mysharesListView.toggleCheckboxes(false);
-
                         app.mysharesListViewControl = new ListViewControl({
                             id: 'io.ox/files/share/myshares',
                             listView: app.mysharesListView,
                             app: app
                         });
 
-                        var openPermissionsDialog = function () {
-                            var model = app.mysharesListView.collection.get(app.mysharesListView.selection.get()[0]);
-                            return require(['io.ox/files/share/permissions'], function (permissions) {
-                                permissions.show(model);
-                            });
-                        };
+                        api.on('change:permissions', _.debounce(function () {
+                            app.mysharesListView.reload();
+                        }), 10);
 
-                        // Doubleclick handler
-                        app.mysharesListView.$el.on(
-                            _.device('touch') ? 'tap' : 'dblclick',
-                            '.list-item .list-item-content',
-                            openPermissionsDialog
-                        );
-
-                        // Keydown handler (only Enter) on selection
-                        (function () {
-                            if (_.device('smartphone')) return;
-                            app.mysharesListView.$el.on('keydown', '.list-item', function (e) {
-                                if (e.which === 13) {
-                                    openPermissionsDialog();
-                                }
-                            });
-                        })();
+                        folderAPI.on('change:permissions', _.debounce(function () {
+                            app.mysharesListView.reload();
+                        }), 10);
 
                         var toolbar = new Toolbar({ title: app.getTitle(), tabindex: 1 });
 
@@ -397,7 +378,8 @@ define('io.ox/files/main', [
                             var baton = ext.Baton({
                                 $el: toolbar.$list,
                                 data: app.mysharesListView.collection.get(list),
-                                app: app
+                                collection: app.mysharesListView.collection,
+                                model: app.mysharesListView.collection.get(app.mysharesListView.collection.get(list))
                             }),
                             ret = ext.point('io.ox/files/share/classic-toolbar')
                                 .invoke('draw', toolbar.$list.empty(), baton);

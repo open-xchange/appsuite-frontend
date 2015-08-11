@@ -20,7 +20,7 @@
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/folder/api',
     'io.ox/files/api',
-    'io.ox/files/share/model',
+    'io.ox/files/share/api',
     'io.ox/core/api/user',
     'io.ox/core/api/group',
     'io.ox/contacts/api',
@@ -34,7 +34,7 @@
     'less!io.ox/files/share/style',
     // todo: relocate smart-dropdown logic
     'io.ox/core/tk/flag-picker'
-], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, shareModel, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, capabilities, gt) {
+], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, capabilities, gt) {
 
     'use strict';
 
@@ -576,7 +576,7 @@
 
         showByModel: function (model, options) {
             var isFile = model.isFile ? model.isFile() : model.has('folder_id');
-            model = new shareModel.Share(isFile ? model.pick('id', 'folder_id') : model.pick('id'));
+            model = new api.Model(isFile ? model.pick('id', 'folder_id') : model.pick('id'));
             model.loadExtendedPermissions().done(function () {
                 that.show(model, options);
             });

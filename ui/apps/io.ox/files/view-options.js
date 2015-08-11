@@ -155,12 +155,10 @@ define('io.ox/files/view-options', [
         id: 'breadcrumb',
         index: 300,
         draw: function (baton) {
-            if (_.device('smartphone')) {
-                return;
-            }
 
-            // leave 250px for the other buttons
-            var view = new BreadcrumbView({ app: baton.app, rightWidth: 250 }).render().$el.addClass('toolbar-item'),
+            if (_.device('smartphone')) return;
+
+            var view = new BreadcrumbView({ app: baton.app }).render().$el.addClass('toolbar-item'),
                 results = $('<div class="toolbar-item">').text(gt('Search results')).hide();
 
             this.append(view, results);

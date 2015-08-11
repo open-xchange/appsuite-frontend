@@ -175,7 +175,6 @@ define('io.ox/core/folder/extensions', [
             if (_.device('smartphone')) return;
 
             this.append(new QuotaView({
-                className: 'links border-top',
                 title: gt('Mail quota'),
                 renderUnlimited: false,
                 upsell: {

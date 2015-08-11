@@ -24,24 +24,25 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
         },
 
         initialize: function (options) {
+
             this.folder = options.folder;
             this.label = options.label;
             this.exclude = options.exclude;
-            this.rightWidth = options.rightWidth || 0;
+            this.ellipsisCount = 4;
+            this.ownWidth = 0;
 
             // last item is a normal item (not a unclickable tail node)
             this.notail = options.notail;
 
             if (options.app) {
+
                 var self = this;
                 this.app = options.app;
                 this.handler = function (id) { this.app.folder.set(id); };
                 this.folder = this.app.folder.get();
                 this.find = this.app.get('find');
                 this.listenTo(this.app, 'folder:change', this.onChangeFolder);
-                // do not use listen to here, does not work with dom events, see http://stackoverflow.com/questions/14460855/
-                $(document).on('resize', this.computeWidth.bind(self));
-                $(window).on('resize', this.computeWidth.bind(self));
+
                 if (this.find && this.find.isActive()) {
                     // use item's folder id
                     this.folder = options.folder;
@@ -52,17 +53,21 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
                         folder.set(id);
                     };
                 }
-            }
-        },
 
-        close: function () {
-            $(document).off('resize', this.computeWidth);
-            $(window).off('resize', this.computeWidth);
+                // do not use listen to here, does not work with dom events, see http://stackoverflow.com/questions/14460855/
+                $(window).on('resize', this.computeWidth.bind(self));
+
+                this.on('dispose', function () {
+                    $(window).off('resize', this.computeWidth);
+                });
+            }
         },
 
         onChangeFolder: function (id) {
             this.folder = id;
             this.render();
+            this.ownWidth = 0;
+            this.computeWidth();
         },
 
         render: function () {
@@ -92,18 +97,37 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
                 // path
                 _(path).map(this.renderLink, this)
             );
-
-            // just scroll to max
-            this.computeWidth();
-            this.$el.scrollLeft($(window).width());
         },
 
-        computeWidth: _.debounce( function () {
-            if (this.$el && this.$el.parent() && this.$el.is(':visible')) {
-                var width = Math.max( this.$el.parent().width() - this.rightWidth, 150);
-                this.$el.css('max-width', width + 'px');
+        computeWidth: _.throttle( function () {
+
+            if (this.disposed || !this.$el.is(':visible')) return;
+
+            var ownWidth = this.ownWidth || this.el.scrollWidth,
+                parentWidth = this.$el.parent().width(),
+                siblingsWidth = _(this.$el.siblings()).reduce(function (sum, node) {
+                    return sum + $(node).outerWidth(true);
+                }, 0),
+                maxWidth = parentWidth - siblingsWidth;
+
+            // we store this once (per folder)
+            this.ownWidth = ownWidth;
+
+            if (ownWidth > maxWidth) {
+                if (this.ellipsisCount === 4) {
+                    this.ellipsisCount = 2;
+                    this.render();
+                }
+            } else {
+                if (this.ellipsisCount === 2) {
+                    this.ellipsisCount = 4;
+                    this.render();
+                }
             }
-        }, 300),
+
+            this.$el.css('max-width', maxWidth);
+
+        }, 100),
 
         renderLink: function (data, index, all) {
 
@@ -112,7 +136,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
                 node;
 
             // add ellipsis for more than four items
-            if (length > 4 && index > 0 && index < length - 3) {
+            if (length > this.ellipsisCount && index > 0 && index < length - (this.ellipsisCount - 1)) {
                 return index === 1 ?
                     $('<span class="breadcrumb-ellipsis" aria-hidden="true">&hellip;</span><i class="fa breadcrumb-divider" aria-hidden="true"></span>') :
                     $();
@@ -124,7 +148,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             else node = $('<a href="#" role="button" class="breadcrumb-link" tabindex="1">');
 
             node.attr('data-id', data.id).text(
-                _.ellipsis(data.title, { max: isLast ? 40 : 20 })
+                isLast ? data.title : _.ellipsis(data.title, { max: 20 })
             );
 
             if (!isLast) node = node.add($('<i class="fa breadcrumb-divider" aria-hidden="true">'));

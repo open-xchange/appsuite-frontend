@@ -354,6 +354,10 @@ define('io.ox/mail/api', [
                     api.trigger('delete');
                     api.trigger('deleted-mails', ids);
                 })
+                .fail(function () {
+                    // something went wrong; let's kind of rollback
+                    api.trigger('refresh.all');
+                })
             );
         } finally {
             // try/finally is used to set up http.wait() first
@@ -703,20 +707,22 @@ define('io.ox/mail/api', [
 
         return http.wait(
             update(list, { folder_id: targetFolderId }, type).then(function (response) {
-                var errorText, i = 0, $i = response.length;
-                // look if anything went wrong
-                for (; i < $i; i++) {
-                    if (response[i].error) {
-                        errorText = response[i].error.error;
-                        break;
-                    }
-                }
+                // assume success
                 api.trigger(type, list, targetFolderId);
                 folderAPI.reload(targetFolderId, list);
-                if (errorText) return errorText;
+                // any errors? (debugging code below)
+                var error = _(response).find(function (item) { return !!item.error; });
+                if (error) return $.Deferred().reject(error);
             })
         );
     }
+
+    // debugging error
+    // response[0] = {
+    //     error: 'Die zulässige Quota auf dem Mailserver \"dovecot.qa.open-xchange.com\" wurde überschritten.',
+    //     error_params: ['dovecot.qa.open-xchange.com ', 'applause40', 42, 26, 'NO [OVERQUOTA] Quota exceeded (mailbox for user is full) (0.000 secs).'],
+    //     code: 'MSG-1024'
+    // };
 
     /**
      * move mails to another folder

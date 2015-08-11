@@ -24,6 +24,19 @@ define('io.ox/calendar/week/view', [
 
     'use strict';
 
+    // helper
+
+    function getTimezoneLabels() {
+
+        var list = _.intersection(
+            settings.get('favoriteTimezones', []),
+            settings.get('renderTimezones', [])
+        );
+
+        // avoid double appearance of default timezone
+        return _(list).without(coreSettings.get('timezone'));
+    }
+
     var View = Backbone.View.extend({
 
         className:      'week',
@@ -709,12 +722,11 @@ define('io.ox/calendar/week/view', [
             }
 
             function drawTimezoneLabels() {
-                var list = _.intersection(
-                    settings.get('favoriteTimezones', []),
-                    settings.get('renderTimezones', [])
-                );
+
+                var list = getTimezoneLabels();
 
                 $('.timezone', self.timeLabelBar).remove();
+
                 self.timeLabelBar.prepend(
                     _(list).map(function (tz) {
                         return $('<div class="timezone">').text(moment().tz(tz).zoneAbbr());
@@ -844,10 +856,8 @@ define('io.ox/calendar/week/view', [
             );
 
             var renderSecondaryTimeLabels = _.throttle(function () {
-                var list = _.intersection(
-                    settings.get('favoriteTimezones', []),
-                    settings.get('renderTimezones', [])
-                );
+
+                var list = getTimezoneLabels();
 
                 $('.secondary-timezone', self.pane).remove();
                 $('.week-container-label', self.pane).before(

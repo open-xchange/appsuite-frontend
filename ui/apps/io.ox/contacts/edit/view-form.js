@@ -135,7 +135,7 @@ define('io.ox/contacts/edit/view-form', [
             128: 'first_name last_name position department tax_id',
             256: 'url profession street_home street_other street_business',
             512: 'email1 email2 email3 company',
-            5680: 'comment'
+            5680: 'note'
         }
     };
 
