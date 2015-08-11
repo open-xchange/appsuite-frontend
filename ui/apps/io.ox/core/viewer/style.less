@@ -421,22 +421,19 @@
         .viewer-toolbar-navigation {
             position: absolute;
             top: 0;
-            left: ~"calc(50% - 80px)";
+            left: ~"calc(50% - 280px)";
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: row;
-            &.sidebar-offset {
-                left: ~"calc(50% - 280px)";
             
-                @media (max-width: 1023px) {
-                    left: 135px;
-                }
-                
-                @media (max-width: 767px) {
-                    display: none;
-                }
+            @media (max-width: 1023px) {
+                left: 135px;
             }
+            
+            @media (max-width: 767px) {
+                display: none;
+            }            
         }
 
         @viewer-toolbar-link-disabled-color: #CCCCCC;
