@@ -777,14 +777,14 @@ define('io.ox/presenter/views/presentationview', [
             this.pdfView.setRenderCallbacks(renderCallbacks);
             // set scale/zoom according to device's viewport width
             this.setZoomLevel(this.getFitScreenZoomFactor());
-            // focus first active slide initially
-            this.focusActiveSlide();
             // bind slide click handler
             if (_.device('desktop')) {
                 this.pages.on('mousedown mouseup', this.onSlideClick.bind(this));
             }
             // resolve the document load Deferred: this document view is fully loaded.
             this.documentLoad.resolve();
+            // focus first active slide initially
+            this.focusActiveSlide();
         },
 
         /**

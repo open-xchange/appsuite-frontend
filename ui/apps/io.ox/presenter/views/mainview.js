@@ -139,6 +139,9 @@ define('io.ox/presenter/views/mainview', [
                 var eventType = (rtModel.get('paused') && !rtModel.previous('paused')) ? 'presenter:presentation:pause' : 'presenter:presentation:continue';
                 this.presenterEvents.trigger(eventType);
             }
+
+            //always focus in navigation for keyboard stuff
+            this.presentationView.focusActiveSlide();
         },
 
         /**
