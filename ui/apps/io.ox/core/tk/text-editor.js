@@ -165,13 +165,14 @@ define('io.ox/core/tk/text-editor', function () {
 
         this.handleShow = function (compose) {
             textarea.prop('disabled', false).idle().show();
+            var parents = textarea.parents('.window-content');
             if (!compose) {
                 textarea.next().hide();
-                textarea.parents('.window-content').find('.mce-tinymce').hide();
+                parents.find('.mail-compose-contenteditable-fields').hide();
                 resizeEditorMargin();
                 $(window).on('resize.text-editor', resizeEditorMargin);
             } else {
-                textarea.parents('.window-content').find('.editable-toolbar').hide().next().hide();
+                parents.find('.mail-compose-contenteditable-fields').hide();
                 resizeEditorMargin();
                 $(window).on('resize.text-editor', resizeEditorMargin);
             }
