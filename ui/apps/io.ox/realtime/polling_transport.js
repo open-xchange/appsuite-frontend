@@ -667,6 +667,12 @@ function (ext, Event, caps, uuids, http, stanza, tabId) {
         if (api.debug) {
             console.log('Send', options);
         }
+        if (rejectAll || !running) {
+            if (api.debug) {
+                console.log('Not connected, so rejecting all (send)');
+            }
+            return def.reject();
+        }
         if (!options.seq) {
             options.seq = seq;
             seq++;
@@ -678,7 +684,7 @@ function (ext, Event, caps, uuids, http, stanza, tabId) {
         var def = $.Deferred();
         if (rejectAll || !running) {
             if (api.debug) {
-                console.log('Not connected, so rejecting all');
+                console.log('Not connected, so rejecting all (sendWithoutSequence)');
             }
             return def.reject();
         }
