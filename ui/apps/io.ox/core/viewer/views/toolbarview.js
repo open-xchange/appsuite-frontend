@@ -379,7 +379,8 @@ define('io.ox/core/viewer/views/toolbarview', [
         id: 'popoutstandalone',
         requires: function () {
             var currentApp = ox.ui.App.getCurrentApp().getName();
-            return currentApp !== 'io.ox/files/detail';
+            // detail is the target of popoutstandalone, no support for mail attachments
+            return currentApp !== 'io.ox/files/detail' && currentApp !== 'io.ox/mail';
         },
         action: function (baton) {
             var fileModel = baton.model;
