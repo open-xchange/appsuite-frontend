@@ -730,22 +730,29 @@
                                 $('<label class="sr-only">', { 'for': guid }).text(gt('Start typing to search for user names')),
                                 typeaheadView.$el.attr({ id: guid })
                             )
-                            .on('keydown', 'input', function (e) {
-                                // enter
-                                if (e.which !== 13) return;
-                                // mail does not support sharing folders to guets
+                            // use delegate because typeahead's uses stopPropagation(); apparently not stopImmediatePropagation()
+                            .on('keydown blur', 'input', function addManualInput(e) {
+
+                                // mail does not support sharing folders to guests
                                 // so we skip any manual edits
                                 if (module === 'mail') return;
-                                var val = $(this).typeahead('val');
-                                if (_.isEmpty(val)) return;
+
+                                // enter or blur?
+                                if (e.type === 'keydown' && e.which !== 13) return;
+
+                                // use shown input
+                                var value = $.trim($(this).typeahead('val'));
+                                if (_.isEmpty(value)) return;
+
+                                // add to collection
                                 permissionsView.collection.add(new Permission({
-                                    type: 'guest',
-                                    bits: objModel.isFolder() ? 4227332 : 1, // Author : Viewer
-                                    contact: {
-                                        email1: val
-                                    }
+                                    // Author for Folder : Viewer for Files
+                                    bits: objModel.isFolder() ? 4227332 : 1,
+                                    contact: { email1: value },
+                                    type: 'guest'
                                 }));
-                                // clear input
+
+                                // clear input field
                                 $(this).typeahead('val', '');
                             })
                         ),
