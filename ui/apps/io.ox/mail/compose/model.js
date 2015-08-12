@@ -257,7 +257,7 @@ define('io.ox/mail/compose/model', [
             );
 
             result = _.extend(result, {
-                attachments:    attachmentCollection.mailAttachments(),  // get all attachments
+                attachments:    _(attachmentCollection.mailAttachments()).reject(function (o) { return o.source === 'drive'; }),  // get all attachments without files from drive
                 contacts_ids:   attachmentCollection.contactsIds(),      // flat cids for contacts_ids
                 infostore_ids:  attachmentCollection.driveFiles(),       // get ids only for infostore_ids
                 files:          attachmentCollection.localFiles()        // get fileObjs for locally attached files
