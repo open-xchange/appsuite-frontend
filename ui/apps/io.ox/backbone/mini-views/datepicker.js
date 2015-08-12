@@ -88,12 +88,10 @@ define('io.ox/backbone/mini-views/datepicker', [
                         // render timezone badge
                         var timezoneAbbreviation = gt.noI18n(moment.tz(self.model.get(self.options.timezoneAttribute)).zoneAbbr());
 
-                        if (self.options.timezoneButton && !self.mobileMode) {
-                            timezoneContainer = $('<div class="timezone input-group-btn">').append(
-                                self.nodes.timezoneField = $('<button class="btn btn-default" tabindex="1" type="button">').text(timezoneAbbreviation)
-                            );
+                        if (!self.options.timezoneButton && !self.mobileMode) {
+                            timezoneContainer = self.nodes.timezoneField  = $('<div class="timezone input-group-addon">').text(timezoneAbbreviation);
                         } else {
-                            timezoneContainer = self.nodes.timezoneField = $('<a class="timezone input-group-addon" data-toggle="popover" tabindex="1">').text(timezoneAbbreviation);
+                            timezoneContainer = self.nodes.timezoneField = $('<a class="timezone input-group-addon btn" data-toggle="popover" tabindex="1">').text(timezoneAbbreviation);
                             if (self.model.has('start_date') && self.model.has('end_date')) {
                                 require(['io.ox/calendar/util'], function (calendarUtil) {
                                     calendarUtil.addTimezonePopover(
