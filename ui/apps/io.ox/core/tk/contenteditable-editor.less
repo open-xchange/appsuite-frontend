@@ -1,0 +1,32 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Richard Petersen <richard.petersen@open-xchange.com>
+ */
+
+.mce-window {
+    // fix for tinymce link dialog
+    .mce-formitem {
+        .mce-widget {
+            width: auto!important;;
+            position: relative!important;
+        }
+    }
+
+    // fix for tinymce alerts
+    .mce-container-body.mce-window-body.mce-abs-layout {
+        label {
+            &.mce-widget.mce-label.mce-autoscroll.mce-abs-layout-item.mce-first.mce-last {
+                white-space: pre-wrap;
+                position: relative;
+            }
+        }
+    }
+}

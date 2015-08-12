@@ -16,7 +16,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
     'io.ox/core/capabilities',
     'settings!io.ox/core',
     'io.ox/core/extensions',
-    'io.ox/core/tk/textproc'
+    'io.ox/core/tk/textproc',
+    'less!io.ox/core/tk/contenteditable-editor'
 ], function (emoji, capabilities, settings, ext, textproc) {
 
     'use strict';
