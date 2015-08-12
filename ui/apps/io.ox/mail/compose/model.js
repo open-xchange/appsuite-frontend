@@ -61,8 +61,10 @@ define('io.ox/mail/compose/model', [
             }
 
             if (_.isArray(attachmentsCollection)) {
-                this.set('attachments', new Attachments.Collection(attachmentsCollection), { silent: true });
-                attachmentsCollection = this.get('attachments');
+                var c = new Attachments.Collection();
+                c.add(attachmentsCollection);
+                this.set('attachments', c);
+                attachmentsCollection = c;
             }
 
             var content = attachmentsCollection.at(0);

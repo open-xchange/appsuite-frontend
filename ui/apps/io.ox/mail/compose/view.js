@@ -445,6 +445,7 @@ define('io.ox/mail/compose/view', [
                     content = textproc.htmltotext(content);
                 }
                 attachmentCollection.at(0).set('content', content);
+                self.model.unset('attachments');
                 self.model.set('attachments', attachmentCollection);
                 obj = data = attachmentCollection = null;
             });

@@ -388,6 +388,11 @@ define('io.ox/mail/compose/extensions', [
                     }
                 });
 
+                view.listenTo(baton.model, 'change:attachments', function () {
+                    view.$list.empty();
+                    view.renderList();
+                });
+
                 view.listenToOnce(view.collection, 'add remove reset', _.debounce(function () {
                     if (this.getValidModels().length > 0) {
                         this.$el.addClass('open');
