@@ -986,7 +986,11 @@ define('io.ox/mail/compose/view', [
             this.editor.setContent(content);
 
             if (this.model.get('initial')) {
-                this.setSelectedSignature(this.model.get('defaultSignatureId'));
+                if (this.model.get('mode') === 'compose') {
+                    this.setSelectedSignature(this.model.get('defaultSignatureId'));
+                } else {
+                    this.setSelectedSignature(this.model.get('defaultReplyForwardSignatureId'));
+                }
             }
         },
 

@@ -36,6 +36,7 @@ define('io.ox/mail/compose/model', [
                 sendDisplayName: !!settings.get('sendDisplayName', true),
                 sendtype: mailAPI.SENDTYPE.NORMAL,
                 defaultSignatureId: settings.get('defaultSignature'),
+                defaultReplyForwardSignatureId: settings.get('defaultReplyForwardSignature'),
                 csid: mailAPI.csid(),
                 vcard: settings.get('appendVcard', false) ? 1 : 0,
                 infostore_ids_saved: []
