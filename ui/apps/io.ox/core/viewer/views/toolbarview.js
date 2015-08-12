@@ -209,7 +209,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 },
                 'share': {
                     prio: 'hi',
-                    mobile: 'lo',
+                    mobile: 'hi',
                     icon: 'fa fa-user-plus',
                     label: gt('Share'),
                     drawDisabled: true,
