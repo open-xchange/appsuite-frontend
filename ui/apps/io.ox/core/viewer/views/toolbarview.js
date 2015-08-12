@@ -148,9 +148,9 @@ define('io.ox/core/viewer/views/toolbarview', [
             },
             'popoutstandalone': {
                 prio: 'hi',
-                mobile: 'lo',
+                mobile: 'hi',
                 label: gt('Pop out'),
-                icon: 'fa  fa-external-link-square',
+                icon: 'fa fa-external-link-square',
                 ref: TOOLBAR_ACTION_ID + '/popoutstandalone',
                 customize: function () {
                     this.addClass('viewer-toolbar-popoutstandalone')
