@@ -354,7 +354,7 @@ define('io.ox/core/tk/list', [
                 // let it spin
                 $('#ptr-spinner').addClass('fa-spin');
                 // trigger event to do the refresh elsewhere
-                ox.trigger('pull-to-refresh', this);
+                this.options.app.trigger('pull-to-refresh', this);
 
                 e.preventDefault();
                 e.stopPropagation();
