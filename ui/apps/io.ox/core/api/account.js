@@ -496,8 +496,7 @@ define('io.ox/core/api/account', [
         })
         .then(function (data) {
             // reload all accounts
-            api.cache = {};
-            return api.all().then(function () {
+            return api.reload().then(function () {
                 api.trigger('create:account', { id: data.id, email: data.primary_address, name: data.name });
                 require(['io.ox/core/folder/api'], function (api) {
                     api.propagate('account:create');
@@ -694,9 +693,16 @@ define('io.ox/core/api/account', [
      * @fires  api#refresh.all
      * @return { promise }
      */
-    api.refresh = function () {
+
+    api.reload = function () {
         api.cache = {};
-        api.trigger('refresh.all');
+        return api.all();
+    };
+
+    api.refresh = function () {
+        return this.reload().done(function () {
+            api.trigger('refresh.all');
+        });
     };
 
     ox.on('refresh^', function () {

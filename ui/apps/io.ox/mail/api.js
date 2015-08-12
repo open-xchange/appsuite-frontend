@@ -383,21 +383,18 @@ define('io.ox/mail/api', [
                 params: { action: 'archive', timestamp: _.then() },
                 data: http.simplify(ids)
             })
-            .done(function () {
-
-                var accountId = accountAPI.parseAccountId(_.cid(ids[0])),
-                    archiveFolderId = accountAPI.getFoldersByType('archive', accountId)[0],
-                    exists = folderAPI.pool.models[archiveFolderId] !== undefined;
-
-                // this test will only work for primary archive folders
-                // account api assumes, that external accounts are always having an archive folder
-                if (exists) {
-                    folderAPI.reload(archiveFolderId);
+            .done(function (data) {
+                // backend tells us the if the archive folder is new and its id
+                if (data.created) {
+                    // update account data
+                    accountAPI.reload().done(function () {
+                        // refresh all folders because the archive folder might be new
+                        folderAPI.refresh();
+                        // reload mail views
+                        api.trigger('refresh.all');
+                    });
                 } else {
-                    // refresh all folders because the archive folder might be new
-                    folderAPI.refresh();
-                    // reload mail views
-                    api.trigger('refresh.all');
+                    folderAPI.reload(data.id);
                 }
             })
         );
