@@ -662,16 +662,14 @@ define('io.ox/files/main', [
          * Add listener to files upload to select newly uploaded files after listview reload
          */
         'select-uploaded-files': function (app) {
-            api.on('stop:upload', function (e, requests) {
+            api.on('stop:upload', function (requests) {
                 api.collectionLoader.collection.once('reload', function () {
                     $.when.apply(this, requests).done(function () {
                         var files,
                             selection = app.listView.selection,
                             items;
 
-                        files = _(arguments).map(function (file) {
-                            return _.cid({ id: file.data, folder: app.folder.get() });
-                        });
+                        files = _(arguments).map(_.cid);
 
                         items = selection.getItems(function () {
                             return files.indexOf($(this).attr('data-cid')) >= 0;
