@@ -42,6 +42,11 @@ define('io.ox/core/folder/actions/imap-subscription', [
             node.prop('checked', !state);
         }
 
+        // remove "all" cache entries
+        _(api.pool.collections).each(function (collection, id) {
+            if (id.indexOf('all/') === 0) delete api.pool.collections[id];
+        });
+
         picker({
 
             all: true,
@@ -70,7 +75,10 @@ define('io.ox/core/folder/actions/imap-subscription', [
                     api.list(id, { cache: false });
                 });
 
-                http.resume();
+                http.resume().done(function () {
+                    // refresh all virtual folders to be safe
+                    api.virtual.refresh();
+                });
             },
 
             customize: function (baton) {
