@@ -96,10 +96,19 @@ define('io.ox/files/actions', [
 
         new Action('io.ox/files/actions/editor-new', {
             requires: function (e) {
-                return util.conditionChain(
-                    (e.baton.openedBy !== 'io.ox/mail/compose'),
-                    util.isFolderType('!trash', e.baton)
-                );
+                return e.baton.app.folder.getData().then(function (data) {
+                    //hide for virtual folders (other files root, public files root)
+                    var virtual = _.contains(['14', '15'], data.id);
+
+                    //no new files in trash folders
+                    if (folderAPI.is('trash', data)) return false;
+                    // no new files in virtual folders
+                    if (virtual) return false;
+                    // no new files in mail attachments
+                    if (e.baton.openedBy === 'io.ox/mail/compose') return false;
+
+                    return folderAPI.can('create', data);
+                });
             },
             action: function (baton) {
                 ox.launch('io.ox/editor/main').done(function () {
