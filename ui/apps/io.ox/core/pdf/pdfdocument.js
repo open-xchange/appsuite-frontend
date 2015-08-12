@@ -56,7 +56,7 @@ define('io.ox/core/pdf/pdfdocument', [
          *
          * Disable range requests with Chrome on small devices
          */
-        if (true/*_.browser.Chrome /*&& _.device('smartphone')*/ && PDFJS.disableRange) {
+        if (true && _.isBoolean(PDFJS.disableRange)) {
             PDFJS.disableRange = true;
         }
 
