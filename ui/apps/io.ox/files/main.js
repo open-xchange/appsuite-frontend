@@ -269,7 +269,7 @@ define('io.ox/files/main', [
          * Setup list view
          */
         'list-view': function (app) {
-            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true, noSwipe: true });
+            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true, noSwipe: true, noPullToRefrsh: true });
             app.listView.model.set({ folder: app.folder.get(), sort: app.props.get('sort'), order: app.props.get('order') });
             // for debugging
             window.list = app.listView;
