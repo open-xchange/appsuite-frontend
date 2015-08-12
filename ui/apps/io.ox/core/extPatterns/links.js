@@ -142,6 +142,7 @@ define('io.ox/core/extPatterns/links', [
         // add help description
         var id = extension.ref.replace(/\//g, '-') + '-descr';
         link.attr('aria-describedby', id);
+        link.parent().addClass('has-dropdown-description');
         this.append(
             $('<li>')
                 .attr({
