@@ -47,6 +47,12 @@
     line-height: 1.42857143;
     color: #999;
 
+    // allow line breaks for dropdown description (using bs dropdown-header style)
+    &.dropdown-description {
+        min-width: 200px;
+        white-space: normal;
+    }
+
     html.high-contrast & {
         color: @hc-gray; // HC
     }
