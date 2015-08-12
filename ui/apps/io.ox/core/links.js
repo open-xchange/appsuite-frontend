@@ -137,7 +137,7 @@ define('io.ox/core/links', [], function () {
         ox.registry.call('mail-compose', 'compose', {
             to: [[name, address]],
             subject: params.subject || '',
-            attachments: [{ content: params.body || '' }]
+            attachments: params.body ? [{ content: params.body || '' }] : undefined
         });
     });
 });
