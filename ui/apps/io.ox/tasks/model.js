@@ -68,20 +68,6 @@ define('io.ox/tasks/model', [
                         changeParticipantsUpdate = false;
                     });
                     return this._participants;
-                },
-                // special functions for datepicker
-                getDate: function (attr) {
-                    var time = this.get.apply(this, arguments);
-                    if (time && _.indexOf(['start_time', 'end_time'], attr) >= 0) {
-                        time = moment.utc(time).local(true).valueOf();
-                    }
-                    return time;
-                },
-                setDate: function (attr, time) {
-                    if (time && _.indexOf(['start_time', 'end_time'], attr) >= 0) {
-                        arguments[1] = moment(time).utc(true).valueOf();
-                    }
-                    return this.set.apply(this, arguments);
                 }
             }
         });
