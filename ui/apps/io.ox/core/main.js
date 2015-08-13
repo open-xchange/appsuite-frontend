@@ -662,8 +662,11 @@ define('io.ox/core/main', [
         }
 
         function getHelp() {
-            var currentApp = ox.ui.App.getCurrentApp(),
-                currentType = currentApp && currentApp.getName(),
+            var currentApp = ox.ui.App.getCurrentApp();
+
+            if (currentApp && currentApp.getContextualHelp) return currentApp.getContextualHelp();
+
+            var currentType = currentApp && currentApp.getName(),
                 manifest = _.defaults(
                     ox.manifests.apps[currentType] || {},
                     ox.manifests.apps[currentType + '/main'] || {},
@@ -675,7 +678,7 @@ define('io.ox/core/main', [
                     }
                 ).help;
 
-            return currentApp && currentApp.getContextualHelp ? currentApp.getContextualHelp() : manifest.target;
+            return manifest;
         }
 
         ox.ui.apps.on('add', function (model) {
