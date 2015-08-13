@@ -27,6 +27,11 @@ define('io.ox/core/tk/sidebar', [], function () {
         // target: [optional] The outer DOM element (defaults to #io-ox-windowmanager)
         // visible: true/false Sets the initial state
         //
+        // The sidebar responds to the following DOM events:
+        // - toggle-sidebar
+        // - maximize-sidebar
+        // - minimize-sidebar
+        //
         add: function (options) {
 
             options = _.extend({ side: 'right', visible: true }, options);
@@ -70,4 +75,17 @@ define('io.ox/core/tk/sidebar', [], function () {
     function toggle(e, state) {
         $(this).toggleClass('visible', state);
     }
+
+    //
+    // HOW TO
+    //
+    // Add a sidebar:
+    // require(['io.ox/core/tk/sidebar'], function (sidebar) { sidebar.add(); });
+    //
+    // Toggle, maximize, minimize can be triggered from the sidebar as the DOM events bubble up
+    // Either inspect the element and use $($0) in console OR use debugging shorthand window.sidebar
+    //
+    // sidebar.trigger('toggle-sidebar');
+    // sidebar.trigger('maximize-sidebar');
+    // sidebar.trigger('minimize-sidebar');
 });
