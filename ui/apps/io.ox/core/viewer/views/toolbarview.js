@@ -380,10 +380,18 @@ define('io.ox/core/viewer/views/toolbarview', [
         requires: function () {
             var currentApp = ox.ui.App.getCurrentApp().getName();
             // detail is the target of popoutstandalone, no support for mail attachments
-            return currentApp !== 'io.ox/files/detail' && currentApp !== 'io.ox/mail';
+            return currentApp !== 'io.ox/files/detail';
         },
         action: function (baton) {
-            var fileModel = baton.model;
+            var fileModel,
+                currentApp = ox.ui.App.getCurrentApp().getName();
+
+            if (currentApp === 'io.ox/mail') {
+                fileModel = { file: baton.data };
+            } else {
+                fileModel = baton.model;
+            }
+
             ox.launch('io.ox/files/detail/main', fileModel);
         }
     });
