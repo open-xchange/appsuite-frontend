@@ -70,7 +70,7 @@ define('plugins/portal/mail/register', [
                 );
 
             // Give plugins a chance to customize mail display
-            ext.point('io.ox/mail/portal/list/item').invoke('customize', this.$el, this.model, baton, this.$el);
+            ext.point('io.ox/mail/portal/list/item').invoke('customize', this.$el, this.model.toJSON(), baton, this.$el);
             return this;
         }
     });
