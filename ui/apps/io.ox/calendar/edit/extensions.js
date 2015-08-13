@@ -27,7 +27,8 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/core/capabilities',
     'io.ox/core/folder/picker',
     'io.ox/core/folder/api',
-    'settings!io.ox/calendar'
+    'settings!io.ox/calendar',
+    'less!io.ox/calendar/style'
 ], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, AddParticipant, pViews, capabilities, picker, folderAPI, settings) {
 
     'use strict';
