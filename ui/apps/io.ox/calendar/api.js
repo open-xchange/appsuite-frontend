@@ -515,6 +515,13 @@ define('io.ox/calendar/api', [
                 api.trigger('mark:invite:confirmed', o);
                 delete api.caches.get[key];
                 return api.get(o).then(function (data) {
+                    // fix confirmation data
+                    // this is necessary when changing the confirmation for a single appointment
+                    // within a series as it becomes an exception.
+                    // the series does not update, however (see bug 40137)
+                    var user = _(data.users).findWhere({ id: ox.user_id });
+                    if (user) user.confirmation = o.data.confirmation;
+                    // events
                     api.trigger('update', data);
                     api.trigger('update:' + _.ecid(data), data);
                     return data;
