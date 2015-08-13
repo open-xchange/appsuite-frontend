@@ -197,7 +197,7 @@ define('io.ox/core/viewer/views/sidebarview', [
          * and version history.
          */
         renderSections: function () {
-            var detailPane = this.$('.detail-pane');
+            var detailPane = this.$('.detail-pane'), fileInfoOpt;
             // remove previous sections
             detailPane.empty();
             // remove dropzone handler
@@ -220,9 +220,16 @@ define('io.ox/core/viewer/views/sidebarview', [
                 this.zone.on('drop', this.onNewVersionDropped.bind(this));
                 detailPane.append(this.zone.render().$el.addClass('abs'));
             }
+            // options
+            fileInfoOpt = {
+                model: this.model,
+                fixed: true,
+                closable: this.options.closable,
+                disableFolderInfo: this.options.opt.disableFolderInfo
+            };
             // render sections
             detailPane.append(
-                new FileInfoView({ model: this.model, fixed: true, closable: this.options.closable }).render().el,
+                new FileInfoView(fileInfoOpt).render().el,
                 new FileDescriptionView({ model: this.model }).render().el,
                 new FileVersionsView({ model: this.model }).render().el,
                 new UploadNewVersionView({ model: this.model }).render().el

@@ -53,12 +53,31 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 $('<dt>').text(gt('Modified')),
                 $('<dd class="modified">').append(
                     $.txt(dateString), $('<br>'), UserAPI.getTextNode(modifiedBy)
-                ),
-                // path; using "Folder" instead of "Save in" because that one
-                // might get quite long, e.g. "Gespeichert unter"
-                $('<dt>').text(gt('Folder')),
-                $('<dd class="saved-in">')
+                )
             );
+
+            // folder info block
+            if (!baton.options.disableFolderInfo) {
+                dl.append(
+                    // path; using "Folder" instead of "Save in" because that one
+                    // might get quite long, e.g. "Gespeichert unter"
+                    $('<dt>').text(gt('Folder')),
+                    $('<dd class="saved-in">')
+                );
+
+                var breadcrumb = new BreadcrumbView({ folder: model.get('folder_id'), exclude: ['9'], notail: true });
+
+                breadcrumb.handler = function (id) {
+                    // launch files and set/change folder
+                    ox.launch('io.ox/files/main', { folder: id }).done(function () {
+                        this.folder.set(id);
+                    });
+                };
+
+                dl.find('dd.saved-in').append(
+                    breadcrumb.render().$el
+                );
+            }
 
             // UserAPI.getName(modifiedBy)
             //     .done(function (name) {
@@ -92,19 +111,6 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             }
 
             panelBody = this.find('.sidebar-panel-body').empty().append(dl);
-
-            var breadcrumb = new BreadcrumbView({ folder: model.get('folder_id'), exclude: ['9'], notail: true });
-
-            breadcrumb.handler = function (id) {
-                // launch files and set/change folder
-                ox.launch('io.ox/files/main', { folder: id }).done(function () {
-                    this.folder.set(id);
-                });
-            };
-
-            panelBody.find('dl > dd.saved-in').append(
-                breadcrumb.render().$el
-            );
         }
     });
 
@@ -117,8 +123,8 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         className: 'viewer-fileinfo',
 
         initialize: function (options) {
-            options = options || {};
-            this.closable = !!options.closable;
+            this.options = options || {};
+            this.closable = !!this.options.closable;
             this.setPanelHeader(gt('File details'));
             // attach event handlers
             this.listenTo(this.model, 'change:filename change:file_size change:last_modified change:folder_id', this.render);
@@ -130,7 +136,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             if (!this.model) return;
 
             var data = this.model.isFile() ? this.model.toJSON() : this.model.get('origData'),
-                baton = Ext.Baton({ model: this.model, data: data });
+                baton = Ext.Baton({ model: this.model, data: data, options: this.options });
             Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', this.$el, baton);
 
             // only draw if needed
