@@ -324,12 +324,12 @@
             id: 'image',
             draw: function (baton) {
 
-                var column = $('<div class=" col-xs-1">'),
+                var column = $('<div class="col-md-1 col-xs-2 image">'),
                     node = $('<span class="contact-picture">');
 
                 if (baton.view.user) {
                     column.append(
-                        contactsAPI.pictureHalo(node, baton.view.user, { width: 80, height: 80 })
+                        contactsAPI.pictureHalo(node, baton.view.user, { width: 40, height: 40 })
                     );
                 } else {
                     column.append(
@@ -353,7 +353,7 @@
                 var url = baton.model.get('share_url');
 
                 this.append(
-                    $('<div class="col-xs-6">').append(
+                    $('<div class="col-md-5 col-xs-8">').append(
                         $('<div class="display_name">').text(baton.view.display_name),
                         $('<div class="description">').append(
                             url ? $('<a href="" target="_blank" tabindex="1">').attr('href', url).text(url) : $.txt(baton.view.description)
@@ -411,7 +411,7 @@
                 }
 
                 this.append(
-                    $('<div class="col-xs-2 role">').append(node)
+                    $('<div class="col-md-3 col-xs-6 role">').append(node)
                 );
             }
         },
@@ -425,7 +425,7 @@
 
                 // not available for anonymous links (read-only)
                 if (baton.model.get('type') === 'anonymous') {
-                    this.append('<div class="col-xs-2">');
+                    this.append('<div class="col-md-2 col-xs-6">');
                     return;
                 }
 
@@ -434,7 +434,7 @@
                     // only fix invalid values
                     var bits = baton.model.get('bits');
                     if (bits < 1 || bits > 4) baton.model.set('bits', 1);
-                    this.append($('<div class="col-xs-2 detail-dropdown">'));
+                    this.append($('<div class="col-md-2 col-xs-6 detail-dropdown">'));
                     return;
                 }
 
@@ -509,8 +509,8 @@
                 if (!baton.parentModel.isAdmin()) dropdown.$('li > a').addClass('disabled');
 
                 this.append(
-                    $('<div class="col-xs-2 detail-dropdown">').append(
-                        dropdown.$el.addClass('pull-right').attr('title', gt('Detailed access rights'))
+                    $('<div class="col-md-2 col-xs-6 detail-dropdown">').append(
+                        dropdown.$el.attr('title', gt('Detailed access rights'))
                     )
                 );
             }
@@ -519,7 +519,7 @@
         // Remove button
         //
         {
-            index: 500,
+            index: _.device('smartphone') ? 250 : 500,
             id: 'actions',
             draw: function (baton) {
 
@@ -550,8 +550,8 @@
                 }
 
                 this.append(
-                    $('<div class="col-xs-1 entity-actions">').append(
-                        dropdown.render().$el.addClass('pull-right')
+                    $('<div class="col-md-1 col-xs-2 entity-actions">').append(
+                        dropdown.render().$el
                     )
                 );
             }
