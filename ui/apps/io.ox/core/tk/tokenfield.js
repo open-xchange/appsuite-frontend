@@ -278,10 +278,13 @@ define('io.ox/core/tk/tokenfield', [
                 },
                 'tokenfield:createdtoken': function (e) {
                     if (e.attrs) {
-                        var model = e.attrs.model || self.getModelByCID(e.attrs.value);
-
+                        var model = e.attrs.model || self.getModelByCID(e.attrs.value),
+                            node = $(e.relatedTarget),
+                            label = node.find('.token-label');
+                        // remove wrongly calculated max-width
+                        if (label.css('max-width') === '0px') label.css('max-width', 'none');
                         // a11y: set title
-                        $(e.relatedTarget).attr('title', function () {
+                        node.attr('title', function () {
                             var token = model.get('token'),
                                 title = token.label;
                             if (token.label !== token.value) {
