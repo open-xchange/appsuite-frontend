@@ -488,10 +488,10 @@ define('io.ox/core/pdf/pdfview', [
          *   The real size of the page in pixels, based on the original size and the pageZoom
          */
         this.getRealPageSize = function (pageNumber, pageZoom) {
-            var pageSize = _.isNumber(pageNumber) ? pdfDocument.getOriginalPageSize(pageNumber) : pdfDocument.getDefaultPageSize(),
+            var pageSize = _.isObject(pdfDocument) ? (_.isNumber(pageNumber) ? pdfDocument.getOriginalPageSize(pageNumber) : pdfDocument.getDefaultPageSize()) : null,
                 curPageZoom = this.getPageZoom(pageNumber, pageZoom);
 
-            return { width: Math.ceil(curPageZoom * pageSize.width), height: Math.ceil(curPageZoom * pageSize.height) };
+            return _.isObject(pageSize) ? { width: Math.ceil(curPageZoom * pageSize.width), height: Math.ceil(curPageZoom * pageSize.height) } : { width: 0, height: 0 };
         };
 
         // ---------------------------------------------------------------------

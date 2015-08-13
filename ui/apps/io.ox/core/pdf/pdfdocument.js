@@ -60,6 +60,9 @@ define('io.ox/core/pdf/pdfdocument', [
             PDFJS.disableRange = true;
         }
 
+        // set verbosity level for PDF.js to errors only
+        PDFJS.verbosity = PDFJS.VERBOSITY_LEVELS.errors;
+
         // ---------------------------------------------------------------------
 
         function initializePageSize(pageNumber) {
