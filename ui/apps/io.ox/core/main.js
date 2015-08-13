@@ -1650,7 +1650,7 @@ define('io.ox/core/main', [
                         if (hash.app === 'io.ox/files' && hash.id !== undefined) {
                             require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (Viewer, api) {
                                 api.get(hash).done(function (data) {
-                                    new Viewer().launch({ files: [data] });
+                                    new Viewer().launch({ files: [data], folder: hash.folder });
                                 });
                             });
                         }

@@ -40,38 +40,46 @@ define('io.ox/core/viewer/main', [], function () {
          *  a reference to an app object, from which this viewer is launched.
          *  @param {Object} [data.opt]
          *  a reference to an an options object that can be accessed in all subviews
+         *  @param {String} [data.folder]
+         *  if you want to open all files in the folder with the current file selected you can pass a single file and a folder. the file will be selected first
          */
         this.launch = function (data) {
 
-            if (!data) {
-                console.error('Core.Viewer.main.launch(): no data supplied');
-                return;
+            if (!data) return console.error('Core.Viewer.main.launch(): no data supplied');
+            if (!_.isArray(data.files) || data.files.length === 0) return console.error('Core.Viewer.main.launch(): no files to preview.');
+
+            var self = this,
+                el = $('<div class="io-ox-viewer abs">'),
+                fileList = [].concat(data.files),
+                container = data.container || $('#io-ox-core');
+
+            container.append(el);
+
+            function cont() {
+                // resolve dependencies now for an instant response
+                require(['io.ox/core/viewer/backbone', 'io.ox/core/viewer/views/mainview'], function (backbone, MainView) {
+                    // create file collection and populate it with file models
+                    self.fileCollection = new backbone.Collection();
+                    self.fileCollection.reset(fileList, { parse: true });
+                    // set the index of the selected file (Drive only)
+                    if (data.selection) {
+                        self.fileCollection.setStartIndex(data.selection);
+                    }
+                    // create main view and append main view to core
+                    self.mainView = new MainView({ collection: self.fileCollection, el: el, app: data.app, standalone: data.standalone, opt: data.opt || {} });
+                });
             }
 
-            var el = $('<div class="io-ox-viewer abs">');
-
-            (data.container || $('#io-ox-core')).append(el);
-
-            // resolve dependencies now for an instant response
-            require(['io.ox/core/viewer/backbone', 'io.ox/core/viewer/views/mainview'], function (backbone, MainView) {
-                var fileList = data.files;
-                if (!(_.isArray(fileList) && fileList.length > 0)) {
-                    console.error('Core.Viewer.main.launch(): no files to preview.');
-                    el.remove();
-                    el = null;
-                    return;
-                }
-                // create file collection and populate it with file models
-                this.fileCollection = new backbone.Collection();
-                this.fileCollection.reset(fileList, { parse: true });
-                // set the index of the selected file (Drive only)
-                if (data.selection) {
-                    this.fileCollection.setStartIndex(data.selection);
-                }
-                // create main view and append main view to core
-                this.mainView = new MainView({ collection: this.fileCollection, el: el, app: data.app, standalone: data.standalone, opt: data.opt || {} });
-
-            }.bind(this));
+            if (data.folder) {
+                require(['io.ox/files/api'], function (api) {
+                    api.getAll(data.folder).then(function success(files) {
+                        data.selection = data.files[0];
+                        fileList = files;
+                    }).always(cont);
+                });
+            } else {
+                cont();
+            }
         };
     };
 
