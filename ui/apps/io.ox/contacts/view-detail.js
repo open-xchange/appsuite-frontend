@@ -22,10 +22,11 @@ define('io.ox/contacts/view-detail',
      'io.ox/core/extPatterns/links',
      'io.ox/core/date',
      'io.ox/core/util',
+     'io.ox/core/capabilities',
      'gettext!io.ox/contacts',
      'settings!io.ox/contacts',
      'less!io.ox/contacts/style'
-    ], function (ext, util, api, actions, model, getBreadcrumb, links, date, coreUtil, gt, settings) {
+    ], function (ext, util, api, actions, model, getBreadcrumb, links, date, coreUtil, capabilities, gt, settings) {
 
     'use strict';
 
@@ -746,18 +747,22 @@ define('io.ox/contacts/view-detail',
         draw: function (baton) {
 
             var options = { subfolder: false, prefix: gt('Saved in'), module: 'contacts' };
+            var id = baton.data.folder_id;
 
             // this is also used by halo, so we might miss a folder id
-            if (baton.data.folder_id) {
-                // do we know the app?
-                if (baton.app) {
-                    options.handler = baton.app.folder.set;
-                }
-                this.append(
-                    $('<div class="clearfix">'),
-                    getBreadcrumb(baton.data.folder_id, options).addClass('chromeless')
-                );
+            if (!id) return;
+
+            // don't show folders path for folder 6 if global address book is disabled
+            if (String(id) === '6' && !capabilities.has('gab')) return;
+
+            // do we know the app?
+            if (baton.app) {
+                options.handler = baton.app.folder.set;
             }
+            this.append(
+                $('<div class="clearfix">'),
+                getBreadcrumb(baton.data.folder_id, options).addClass('chromeless')
+            );
         }
     });
 
