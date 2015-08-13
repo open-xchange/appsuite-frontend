@@ -1,4 +1,3 @@
-// jscs:disable disallowTrailingWhitespace
 /**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
