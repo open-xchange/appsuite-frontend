@@ -41,13 +41,13 @@
     var POINT = 'io.ox/files/share/permissions',
 
         roles = {
-            // view folder + read all
+            //#. Role: view folder + read all
             viewer: { bit: 257, label: gt('Viewer') },
-            // view folder + read/write all
+            //#. Role: view folder + read/write all
             reviewer: { bit: 33025, label: gt('Reviewer') },
-            // create folder + read/write/delete all
+            //#. Role: create folder + read/write/delete all
             author: { bit: 4227332, label: gt('Author') },
-            // all
+            //#. Role: all permissions
             administrator: { bit: 272662788, label: gt('Administrator') }
         },
 
