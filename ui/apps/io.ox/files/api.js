@@ -816,10 +816,11 @@ define('io.ox/files/api', [
             // allow API consumers to override the module (like OX Guard will certainly do)
             module: 'files'
         }, options);
+
         var params = _.extend({
             action: options.action,
             filename: options.filename,
-            timestamp: _.now()
+            timestamp: _.then()
         }, options.params);
 
         var formData = new FormData();
@@ -943,7 +944,7 @@ define('io.ox/files/api', [
                     action: 'detach',
                     id: file.id,
                     folder: file.folder_id,
-                    timestamp: _.now()
+                    timestamp: _.then()
                 },
                 data: [file.version],
                 appendColumns: false

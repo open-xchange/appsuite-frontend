@@ -515,7 +515,7 @@ define('io.ox/files/legacy_api', [
                 extendedResponse: true,
                 filename: options.filename,
                 id: options.id,
-                timestamp: _.now()
+                timestamp: _.then()
             },
             data: formData,
             // TODO: temp. backend fix
@@ -809,7 +809,7 @@ define('io.ox/files/legacy_api', [
                 action: 'detach',
                 id: version.id,
                 folder: version.folder_id,
-                timestamp: _.now()
+                timestamp: _.then()
             },
             data: [version.version],
             appendColumns: false

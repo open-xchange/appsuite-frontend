@@ -93,7 +93,7 @@ define('io.ox/files/upload/main', [
                     file: item.file,
                     //                 id: app.currentFile.id,
                     //                 folder: app.currentFile.folder_id,
-                    timestamp: _.now()
+                    timestamp: _.then()
                 })
                 .progress(function (e) {
                     var sub = e.loaded / e.total;

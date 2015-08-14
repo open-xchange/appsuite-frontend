@@ -477,7 +477,7 @@ define('io.ox/calendar/api', [
                     action: 'confirm',
                     folder: folder_id,
                     id: o.id,
-                    timestamp: _.now(),
+                    timestamp: _.then(),
                     timezone: 'UTC'
                 };
 
@@ -730,7 +730,7 @@ define('io.ox/calendar/api', [
                     id: o.id,
                     folder: o.folder_id || o.folder,
                     // mandatory for 'update'
-                    timestamp: o.timestamp || _.now()
+                    timestamp: o.timestamp || _.then()
                 },
                 data: { folder_id: targetFolderId },
                 appendColumns: false
