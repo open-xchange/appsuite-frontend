@@ -410,7 +410,7 @@ define('io.ox/contacts/api', [
                     action: 'update',
                     id: o.id,
                     folder: o.folder,
-                    timestamp: _.then(),
+                    timestamp: o.last_modified || _.then(),
                     timezone: 'UTC'
                 },
                 data: o.data,

@@ -78,10 +78,10 @@ define('io.ox/calendar/api', [
             var key = (o.folder || o.folder_id) + '.' + o.start + '.' + o.end + '.' + o.order,
                 params = {
                     action: 'all',
-                    // id, folder_id, private_flag, color_label, recurrence_id, recurrence_position, start_date,
+                    // id, folder_id, last_modified, private_flag, color_label, recurrence_id, recurrence_position, start_date,
                     // title, end_date, location, full_time, shown_as, users, organizer, organizerId, created_by,
                     // participants, recurrence_type, days, day_in_month, month, interval, until, occurrences
-                    columns: '1,20,101,102,206,207,201,200,202,400,401,402,221,224,227,2,209,212,213,214,215,222,216,220',
+                    columns: '1,20,5,101,102,206,207,201,200,202,400,401,402,221,224,227,2,209,212,213,214,215,222,216,220',
                     start: o.start,
                     end: o.end,
                     showPrivate: true,
@@ -208,7 +208,7 @@ define('io.ox/calendar/api', [
                         action: 'update',
                         id: o.id,
                         folder: folder_id,
-                        timestamp: o.timestamp || _.then(),
+                        timestamp: o.last_modified || o.timestamp || _.then(),
                         timezone: 'UTC'
                     },
                     data: o,
@@ -435,7 +435,9 @@ define('io.ox/calendar/api', [
                     order: 'asc',
                     timezone: 'UTC'
                 }
-            }).then(function (items) {
+            })
+            .then(function (items) {
+
                 var conflicts = [],
                     //maximum number of conflicts to return (to reduce calculations and prevent cases with really high numbers of appointments)
                     max = 50;
@@ -730,7 +732,7 @@ define('io.ox/calendar/api', [
                     id: o.id,
                     folder: o.folder_id || o.folder,
                     // mandatory for 'update'
-                    timestamp: o.timestamp || _.then()
+                    timestamp: o.last_modified || o.timestamp || _.then()
                 },
                 data: { folder_id: targetFolderId },
                 appendColumns: false
