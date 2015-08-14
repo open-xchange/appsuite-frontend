@@ -320,7 +320,8 @@ define('io.ox/find/main', [
                 'change:list-of-actives': _.debounce(function (state, value, model) {
                     if (app.model.manager.isFolderOnly());
                     require(['io.ox/metrics/main'], function (metrics) {
-                        var apptitle = _.last(app.get('parent').get('id').split('/')),
+                        var name = app.get('parent').get('name') || 'unknown',
+                            apptitle = _.last(name.split('/')),
                             facet = model.get('facet').get('id').split(':')[0];
                         // toolbar actions
                         metrics.trackEvent({
