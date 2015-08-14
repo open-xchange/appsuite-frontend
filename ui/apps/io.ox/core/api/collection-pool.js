@@ -119,8 +119,10 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             // register new collection
             hash[cid] = { access: _.now(), collection: new backbone.Collection() };
 
-            // add "expired" attribute
+            // add attributes
             hash[cid].collection.expired = false;
+            hash[cid].collection.complete = false;
+            hash[cid].collection.sorted = true;
 
             // to simplify debugging
             hash[cid].collection.cid = cid;
@@ -207,18 +209,28 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             return model;
         },
 
-        grep: function (str) {
+        grep: function () {
+            var args = arguments;
+
+            function contains(memo, str) {
+                return memo && this.indexOf(str) > -1;
+            }
+
             return _(this.getCollections())
                 .chain()
                 .filter(function (entry, id) {
-                    return id.indexOf(str) > -1;
+                    return _(args).reduce(contains.bind(id), true);
                 })
                 .pluck('collection')
                 .value();
         },
 
         getByFolder: function (id) {
-            return this.grep('folder=' + id);
+            return this.grep('folder=' + id + '&');
+        },
+
+        getBySorting: function (sort, folder) {
+            return this.grep('folder=' + folder + '&', 'sort=' + sort);
         },
 
         // used by garbage collector to resolve threads
