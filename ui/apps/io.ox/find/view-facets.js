@@ -133,7 +133,7 @@ define('io.ox/find/view-facets', [
                             });
                     },
                     disable: function (data) {
-                        return !api.can('read', data);
+                        return !api.can('read', data) || api.isVirtual(data.id);
                     }
                 });
             });
