@@ -197,7 +197,6 @@ define('io.ox/core/tk/list', [
 
             if (this.selection) this.selection.remove(cid, li);
             li.remove();
-
             this.trigger('remove-mobile');
             // selection changes if removed item was selected
             if (isSelected) this.selection.triggerChange();
@@ -365,8 +364,14 @@ define('io.ox/core/tk/list', [
             var li = this.$el.find('li[data-cid="' + $.escape(this.getCompositeKey(model)) + '"]'),
                 baton = this.getBaton(model),
                 index = model.changed.index;
+
             // change position?
-            if (index !== undefined) li.attr('data-index', index);
+            if (index !== undefined) {
+                li.attr('data-index', index);
+                // don't redraw if only the index has changed, also respect
+                // the strange "head" changed when threadview is on
+                if (model.changed.index && model.changed.head) return;
+            }
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li.children().eq(1).empty(), baton);
             // forward event
@@ -607,6 +612,7 @@ define('io.ox/core/tk/list', [
                     baton = this.getBaton(model);
                 point.invoke('draw', $(li).children().eq(1).empty(), baton);
             }.bind(this));
+
         },
 
         createListItem: function () {
