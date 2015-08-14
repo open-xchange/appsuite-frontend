@@ -329,6 +329,18 @@ define('io.ox/mail/api', [
         return pool.resetFolder(accountAPI.getFoldersByType(type));
     }
 
+    function unsetSorted(list, sort) {
+        _(list)
+            .chain()
+            .pluck('folder_id')
+            .uniq()
+            .map(pool.getBySorting.bind(pool, sort))
+            .flatten()
+            .each(function (collection) {
+                collection.sorted = false;
+            });
+    }
+
     /**
      * wrapper for factories remove to update counters
      * @param  {array} ids
@@ -580,7 +592,9 @@ define('io.ox/mail/api', [
 
         return http.wait(
             update(list, { color_label: label })
-        );
+        ).done(function () {
+            unsetSorted(list, 102);
+        });
     };
 
     /**
@@ -606,6 +620,7 @@ define('io.ox/mail/api', [
         });
 
         return update(list, { flags: api.FLAGS.SEEN, value: false }).done(function () {
+            unsetSorted(list, 651);
             folderAPI.reload(list);
         });
     };
@@ -637,6 +652,7 @@ define('io.ox/mail/api', [
         });
 
         return update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
+            unsetSorted(list, 651);
             folderAPI.reload(list);
         });
     };
