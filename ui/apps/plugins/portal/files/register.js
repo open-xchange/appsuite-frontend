@@ -71,9 +71,11 @@ define('plugins/portal/files/register', [
                     content.html(_.escape(filecontent).replace(/\n/g, '<br>'));
                 });
             } else {
+                options = { width: 300, height: 300, scaleType: 'cover' };
+
                 // try images url via preview engines
                 baton.data.url = api.getUrl(baton.data, 'bare');
-                if ((url = preview.getPreviewImage(baton.data))) {
+                if ((url = preview.getPreviewImage(baton.data) || api.getUrl(baton.data, 'preview', options))) {
                     this.addClass('preview');
                     content.addClass('decoration');
                     content.css('backgroundImage', 'url(' + url + ')');
