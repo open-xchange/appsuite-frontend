@@ -124,7 +124,7 @@ define('io.ox/core/notifications', [
             if (desktopNotifications.getPermissionStatus() === 'default') {
                 var self = this,
                     textNode = $('<div>').text(gt('Would you like to enable desktop notifications?')),
-                    laterButton = $('<button class="later-button btn btn-danger">').text(gt('later')).on('click', function (e) {
+                    laterButton = $('<button class="later-button btn btn-danger">').text(gt('Later')).on('click', function (e) {
                         e.stopPropagation();
                         cleanup();
                     }),
