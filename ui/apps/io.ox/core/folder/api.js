@@ -103,6 +103,10 @@ define('io.ox/core/folder/api', [
         return /^(contacts|calendar|tasks)$/.test(id);
     }
 
+    function isNested(id) {
+        return /^(mail|infostore)$/.test(id);
+    }
+
     function getCollectionId(id, all) {
         return (all ? 'all/' : '') + String(id);
     }
@@ -1170,6 +1174,7 @@ define('io.ox/core/folder/api', [
         virtual: virtual,
         isVirtual: isVirtual,
         isFlat: isFlat,
+        isNested: isNested,
         getFlatCollection: getFlatCollection,
         getFlatViews: getFlatViews,
         getDefaultFolder: util.getDefaultFolder,

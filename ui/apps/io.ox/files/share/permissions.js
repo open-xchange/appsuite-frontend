@@ -588,6 +588,8 @@
         },
 
         show: function (objModel, options) {
+            // folder tree: nested (whitelist) vs. flat
+            var nested = folderAPI.isNested(objModel.get('module'));
 
             // // Check if ACLs enabled and only do that for mail component,
             // // every other component will have ACL capabilities (stored in DB)
@@ -600,7 +602,8 @@
                 center: false,
                 async: true,
                 help: 'ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles',
-                share: false
+                share: false,
+                nested: nested
             }, options);
 
             if (_.device('desktop')) {
@@ -713,7 +716,7 @@
                     }),
                     guid = _.uniqueId('form-control-label-');
 
-                if (objModel.isFolder()) {
+                if (objModel.isFolder() && options.nested) {
                     dialog.getFooter().prepend(
                         $('<div>').addClass('form-group cascade').append(
                             $('<label>').addClass('checkbox-inline').text(gt('Apply to all subfolders')).prepend(
