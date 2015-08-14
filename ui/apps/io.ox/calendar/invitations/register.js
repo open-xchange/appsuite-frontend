@@ -39,11 +39,11 @@ define('io.ox/calendar/invitations/register', [
 
     var buttonClasses = {
         'accept': 'btn-success accept',
-        'accept_and_replace': '',
+        'accept_and_replace': 'btn-success',
         'accept_and_ignore_conflicts': 'btn-success ignore',
         'accept_party_crasher': '',
         'create': '',
-        'update': '',
+        'update': 'btn-success',
         'delete': '',
         'declinecounter': 'btn-danger',
         'tentative': 'btn-warning',
