@@ -17,10 +17,10 @@ define('io.ox/mail/detail/content', [
     'io.ox/core/emoji/util',
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
+    'io.ox/mail/detail/links',
     'settings!io.ox/mail',
-    'gettext!io.ox/mail',
-    'io.ox/mail/detail/links'
-], function (api, coreUtil, emoji, ext, capabilities, settings, gt) {
+    'gettext!io.ox/mail'
+], function (api, coreUtil, emoji, ext, capabilities, links, settings, gt) {
 
     'use strict';
 
@@ -305,22 +305,29 @@ define('io.ox/mail/detail/content', [
     });
 
     ext.point('io.ox/mail/detail/content').extend({
-        id: 'link-target',
+        id: 'check-links',
         index: 900,
         process: function () {
             each(this, 'a', function (node) {
-                var link = $(node)
-                        .filter('[href^="mailto:"]')
-                        .addClass('mailto-link')
-                        // to be safe
-                        .attr('target', '_blank'),
+                var link = $(node),
+                    href = link.attr('href') || '',
+                    data, text;
+                // deep links?
+                if (links.isDeepLink(href)) {
+                    data = links.parseDeepLink(href);
+                    link.addClass('deep-link-files').data(data);
+                }
+                // mailto
+                if (href.indexOf('mailto') > -1) {
+                    link.addClass('mailto-link').attr('target', '_blank');
                     text = link.text();
-                if (text.search(/^mailto:/) > -1) {
-                    //cut of mailto
-                    text = text.substring(7);
-                    //cut of additional parameters
-                    text = text.split(/\?/, 2)[0];
-                    link.text(text);
+                    if (text.search(/^mailto:/) > -1) {
+                        //cut of mailto
+                        text = text.substring(7);
+                        //cut of additional parameters
+                        text = text.split(/\?/, 2)[0];
+                        link.text(text);
+                    }
                 }
             });
         }
