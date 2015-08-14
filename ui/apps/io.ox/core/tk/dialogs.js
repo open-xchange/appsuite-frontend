@@ -816,11 +816,12 @@ define('io.ox/core/tk/dialogs', [
 
                 if (options.closely && _.device('!smartphone')) {
                     if (mode === 'left') {
-                        pct = getPct(e.pageX - 100);
+                        // sidepopup's max-width is 45%, so we limit to 54%
+                        pct = Math.min(54, 100 - getPct(e.pageX - 100));
                         left = '';
-                        right = (100 - pct) + '%';
+                        right = pct + '%';
                     } else {
-                        pct = getPct(e.pageX + 100);
+                        pct = Math.min(54, getPct(e.pageX + 100));
                         left = pct + '%';
                         right = '';
                     }

@@ -87,7 +87,7 @@ define('io.ox/calendar/view-detail', [
                         // mdash
                         $.txt(' \u00A0 '),
                         // time
-                        util.addTimezoneLabel($('<span class="time">'), baton.data)
+                        util.addTimezoneLabel($('<span class="time">'), baton.data, { placement: 'top' })
                     )
                 );
             }
