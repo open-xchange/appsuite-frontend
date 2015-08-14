@@ -191,8 +191,21 @@
             },
 
             onResend: function (e) {
+
                 e.preventDefault();
-                alert('TBD: Resend!');
+
+                var type = this.parentModel.isFile() ? 'file' : 'folder',
+                    id = this.parentModel.get('id'),
+                    entity = this.model.get('entity');
+
+                api.resend(type, id, entity).then(
+                    function success() {
+                        yell('success', gt('The notification has been resent'));
+                    },
+                    function fail(error) {
+                        yell(error);
+                    }
+                );
             },
 
             onEdit: function (e) {

@@ -368,8 +368,26 @@ define('io.ox/files/share/api', [
                 changes = { object_permissions: [] };
                 return filesAPI.update({ id: id }, changes);
             }
-        }
+        },
 
+        // resend invitation/notification
+        // module is infostore oder folders
+        // id is either folder_id or file id
+        // entity is group/user/guest id
+        resend: function (type, id, entity) {
+
+            var module = type === 'file' ? 'infostore' : 'folders',
+                params = { action: 'notify', id: id };
+
+            if (module === 'folders') params.tree = 1;
+
+            return http.PUT({
+                module: module,
+                params: params,
+                data: { entities: [entity] },
+                appendColumns: false
+            });
+        }
     };
 
     Events.extend(api);
