@@ -1,4 +1,3 @@
-
 /**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
@@ -12,13 +11,13 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('io.ox/tours/main',
-    ['io.ox/core/extensions',
-     'io.ox/core/notifications',
-     'io.ox/core/extPatterns/stage',
-     'gettext!io.ox/tours',
-     'css!3rd.party/hopscotch/hopscotch.css'
-    ], function (ext, notifications, Stage, gt) {
+define('io.ox/tours/main', [
+    'io.ox/core/extensions',
+    'io.ox/core/notifications',
+    'io.ox/core/extPatterns/stage',
+    'gettext!io.ox/tours',
+    'css!3rd.party/hopscotch/hopscotch.css'
+], function (ext, notifications, Stage, gt) {
 
     'use strict';
 
@@ -39,7 +38,7 @@ define('io.ox/tours/main',
                         $(that).one('finishedCreating', yielded);//calendar needs some time to set up the view
                         that.create({});
                     } else if (name === 'io.ox/mail/write/main') {
-                        that.compose({ subject: '[Guided tours] Example e-mail'});
+                        that.compose({ subject: '[Guided tours] Example e-mail' });
                         yielded();
                     } else {
                         yielded();
@@ -332,7 +331,7 @@ define('io.ox/tours/main',
             },
             {
                 title: gt('Halo view'),
-                placement: (_.device('desktop') ? 'right': 'bottom'),
+                placement: (_.device('desktop') ? 'right' : 'bottom'),
                 target: function () { return $('.person-link.person-from:visible')[0]; },
                 content: gt('To receive information about the sender or other recipients, open the Halo view by clicking on a name.'),
                 arrowOffset: 1,
@@ -674,7 +673,7 @@ define('io.ox/tours/main',
             },
             {
                 title: gt('Entering billing information'),
-                placement: (_.device('desktop') ? 'top': 'left'),
+                placement: (_.device('desktop') ? 'top' : 'left'),
                 target: function () { return $('.task-edit-row [tabindex="2"]:visible')[0]; },
                 content: gt('To enter billing information, click on Show details.'),
                 onShow: function () { $('.tab-link[tabindex="2"]:visible').click(); }
@@ -788,7 +787,7 @@ define('io.ox/tours/main',
         index: 210, /* close to the help link */
         draw: function () {
             var node = this,
-                link = $('<li>', {'class': 'io-ox-specificHelp'}).appendTo(node);
+                link = $('<li>', { 'class': 'io-ox-specificHelp' }).appendTo(node);
 
             if (_.device('smartphone')) {//tablets are fine just disable phones
                 return;
@@ -820,7 +819,7 @@ define('io.ox/tours/main',
         index: 220, /* close to the intro tour and the help link */
         draw: function () {
             var node = this,
-                tourLink = $('<li>', {'class': 'io-ox-specificHelp'}).appendTo(node);
+                tourLink = $('<li>', { 'class': 'io-ox-specificHelp' }).appendTo(node);
 
             if (_.device('smartphone')) {
                 tourLink.remove();
@@ -841,7 +840,7 @@ define('io.ox/tours/main',
                     }
                 }
 
-            	tourLink.append(
+                tourLink.append(
                     $('<a target="_blank" href="" role="menuitem">').text(gt('Guided tour for this app'))
                     .on('click', function (e) {
                         var currentApp = ox.ui.App.getCurrentApp(),
