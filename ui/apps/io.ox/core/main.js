@@ -1302,8 +1302,8 @@ define('io.ox/core/main', [
         // checks url which app to launch, needed to handle direct links
         function appCheck(baton) {
 
-            var hash = _.url.hash(), looksLikeDeepLink = !('!!' in hash);
-
+            var hash = _.url.hash(),
+                looksLikeDeepLink = !('!!' in hash);
             // fix old infostore
             if (hash.m === 'infostore') hash.m = 'files';
 
@@ -1326,9 +1326,11 @@ define('io.ox/core/main', [
             } else if (hash.m && hash.f && hash.i) {
 
                 // old-school: module + folder + id
+                var usesDetailPage = /^(mail|contacts|calendar|tasks)$/.test(hash.m);
+
                 _.url.hash({
                     // special treatment for files (viewer + drive app)
-                    app: hash.m === 'io.ox/files' ? 'io.ox/files' : hash.m + '/detail',
+                    app: 'io.ox/' + (usesDetailPage ? hash.m + '/detail' : hash.m),
                     folder: hash.f,
                     id: hash.i
                 });
