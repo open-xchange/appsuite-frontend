@@ -1,3 +1,4 @@
+[
 {
     "namespace": "io.ox/core/main",
     "title": "Guided tours",
@@ -8,4 +9,93 @@
     "index": 100,
     "package": "open-xchange-guidedtours",
     "path": "io.ox/tours/main"
+},
+{
+    "namespace": "io.ox/core/main",
+    "title": "Guided tours Intro",
+    "company": "Open-Xchange",
+    "icon": "/images/icon.png",
+    "category": "Dev",
+    "settings": false,
+    "index": 100,
+    "package": "open-xchange-guidedtours",
+    "path": "io.ox/tours/intro"
+},
+{
+    "namespace": "io.ox/calendar/main",
+    "title": "Guided tours for Calendar",
+    "company": "Open-Xchange",
+    "icon": "/images/icon.png",
+    "category": "Dev",
+    "settings": false,
+    "index": 100,
+    "package": "open-xchange-guidedtours",
+    "path": "io.ox/tours/calendar"
+},
+{
+    "namespace": "io.ox/contacts/main",
+    "title": "Guided tours for Contacts",
+    "company": "Open-Xchange",
+    "icon": "/images/icon.png",
+    "category": "Dev",
+    "settings": false,
+    "index": 100,
+    "package": "open-xchange-guidedtours",
+    "path": "io.ox/tours/contacts"
+},
+{
+    "namespace": "io.ox/files/main",
+    "title": "Guided tours for Drive",
+    "company": "Open-Xchange",
+    "icon": "/images/icon.png",
+    "category": "Dev",
+    "settings": false,
+    "index": 100,
+    "package": "open-xchange-guidedtours",
+    "path": "io.ox/tours/files"
+},
+{
+    "namespace": ["io.ox/mail/main"],
+    "title": "Guided tours for Mail",
+    "company": "Open-Xchange",
+    "icon": "/images/icon.png",
+    "category": "Dev",
+    "settings": false,
+    "index": 100,
+    "package": "open-xchange-guidedtours",
+    "path": "io.ox/tours/mail"
+},
+{
+    "namespace": "io.ox/portal/main",
+    "title": "Guided tours for Portal",
+    "company": "Open-Xchange",
+    "icon": "/images/icon.png",
+    "category": "Dev",
+    "settings": false,
+    "index": 100,
+    "package": "open-xchange-guidedtours",
+    "path": "io.ox/tours/portal"
+},
+{
+    "namespace": "io.ox/settings/main",
+    "title": "Guided tours for Settings",
+    "company": "Open-Xchange",
+    "icon": "/images/icon.png",
+    "category": "Dev",
+    "settings": false,
+    "index": 100,
+    "package": "open-xchange-guidedtours",
+    "path": "io.ox/tours/settings"
+},
+{
+    "namespace": "io.ox/tasks/main",
+    "title": "Guided tours for Tasks",
+    "company": "Open-Xchange",
+    "icon": "/images/icon.png",
+    "category": "Dev",
+    "settings": false,
+    "index": 100,
+    "package": "open-xchange-guidedtours",
+    "path": "io.ox/tours/tasks"
 }
+]
