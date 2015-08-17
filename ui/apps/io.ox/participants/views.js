@@ -13,9 +13,10 @@
 define('io.ox/participants/views', [
     'io.ox/contacts/api',
     'io.ox/core/util',
+    'io.ox/core/folder/api',
     'gettext!io.ox/participants/views',
     'less!io.ox/participants/style'
-], function (api, util, gt) {
+], function (api, util, folderAPI, gt) {
 
     'use strict';
 
@@ -103,6 +104,21 @@ define('io.ox/participants/views', [
             }
         },
 
+        isOrganizer: function () {
+            if (!this.options.baton) return false;
+            var appointment = this.options.baton.model.toJSON();
+            return this.model.get('id') === appointment.organizerId;
+        },
+
+        isRemovable: function () {
+            if (!this.options.baton) return false;
+            var appointment = this.options.baton.model.toJSON();
+            // participants can be removed unless they are organizer
+            if (this.model.get('id') !== appointment.organizerId) return true;
+            // special case: organizer can be removed from public folders
+            return folderAPI.pool.getModel(appointment.folder_id).is('public');
+        },
+
         setTypeStyle: function  () {
 
             var mail = this.model.getTarget(),
@@ -116,10 +132,10 @@ define('io.ox/participants/views', [
             case 1:
             case 5:
                 // set organizer
-                if (this.options.baton && this.model.get('id') === this.options.baton.model.get('organizerId')) {
+                if (this.isOrganizer()) {
                     extra = gt('Organizer');
                     // don't remove organizer
-                    this.$el.removeClass('removable');
+                    if (!this.isRemovable()) this.$el.removeClass('removable');
                 }
 
                 if (mail && this.options.halo) {

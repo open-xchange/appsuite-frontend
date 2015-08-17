@@ -17,10 +17,11 @@ define('io.ox/calendar/edit/main', [
     'io.ox/core/extPatterns/dnd',
     'io.ox/calendar/edit/view',
     'io.ox/core/notifications',
+    'io.ox/core/folder/api',
     'gettext!io.ox/calendar/edit/main',
     'settings!io.ox/calendar',
     'less!io.ox/calendar/edit/style'
-], function (appointmentFactory, api, dnd, EditView, notifications, gt, settings) {
+], function (appointmentFactory, api, dnd, EditView, notifications, folderAPI, gt, settings) {
 
     'use strict';
 
@@ -231,12 +232,16 @@ define('io.ox/calendar/edit/main', [
                     });
                 }
 
+                function loadFolder() {
+                    folderAPI.get(self.model.get('folder_id')).always(cont);
+                }
+
                 // check mode
                 if (opt.mode === 'edit' && data.id) {
                     // hash support
                     self.setState({ folder: data.folder_id, id: data.id });
                     self.model = appointmentFactory.create(data);
-                    cont();
+                    loadFolder();
                 } else {
 
                     // default values from settings
@@ -247,12 +252,10 @@ define('io.ox/calendar/edit/main', [
 
                     self.model = appointmentFactory.realm('default').create(data);
                     if (!data.folder_id || /^virtual/.test(data.folder_id)) {
-                        require(['io.ox/core/folder/api']).done(function (api) {
-                            self.model.set('folder_id', data.folder_id = api.getDefaultFolder('calendar'));
-                            cont();
-                        });
+                        self.model.set('folder_id', data.folder_id = folderAPI.getDefaultFolder('calendar'));
+                        loadFolder();
                     } else {
-                        cont();
+                        loadFolder();
                     }
                 }
             },
