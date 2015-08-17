@@ -130,14 +130,12 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
             var image = new Image();
             image.className = className;
             image.onload = function () {
-                var ratio = this.width / this.height,
-                    defaultWidth = this.width > this.height ? 140 : 100;
-                $(this.parentNode).css({
-                    width: defaultWidth,
-                    height: defaultWidth / ratio
-                });
                 $(image.parentNode).removeClass('io-ox-busy');
             };
+            image.style.width = '100%';
+            image.style.height = 'auto';
+            image.style.maxWidth = '100%';
+            image.style.maxHeight = '100%';
             return image;
         },
 
