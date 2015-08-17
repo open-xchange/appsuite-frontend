@@ -237,9 +237,9 @@ define('io.ox/files/actions', [
     });
 
     new Action('io.ox/files/actions/showlink', {
-        capabilities: '!alone',
         requires: function (e) {
             return util.conditionChain(
+                capabilities.has('!alone !guest'),
                 _.device('!smartphone'),
                 !_.isEmpty(e.baton.data),
                 e.collection.has('some', 'items'),
