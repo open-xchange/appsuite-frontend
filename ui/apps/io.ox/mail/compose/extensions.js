@@ -25,29 +25,6 @@ define('io.ox/mail/compose/extensions', [
     'static/3rd.party/jquery-ui.min.js'
 ], function (contactAPI, sender, mini, Dropdown, ext, Tokenfield, dropzone, capabilities, settings, gt) {
 
-    function renderFrom(array) {
-        if (!array) return;
-        var name = _(array).first(), address = _(array).last();
-        // consider custom settings
-        if (!settings.get('sendDisplayName', true)) {
-            name = null;
-        } else if (settings.get(['customDisplayNames', address, 'overwrite'])) {
-            name = settings.get(['customDisplayNames', address, 'name'], '');
-        }
-        return [
-            $('<span class="name">').text(name ? name + ' ' : ''),
-            $('<span class="address">').text(name ? '<' + address + '>' : address)
-        ];
-    }
-
-    var SenderDropdown = Dropdown.extend({
-
-        label: function () {
-            var from = _(this.model.get('from')).first();
-            this.$('.dropdown-label').empty().append(renderFrom(from));
-        }
-    });
-
     var POINT = 'io.ox/mail/compose';
 
     //make strings accessible to translators
@@ -109,11 +86,25 @@ define('io.ox/mail/compose/extensions', [
 
             var node = $('<div class="row sender" data-extension-id="sender">'),
                 render = function () {
+                    function renderFrom(array) {
+                        if (!array) return;
+                        var name = _(array).first(), address = _(array).last();
+                        // consider custom settings
+                        if (!settings.get('sendDisplayName', true)) {
+                            name = null;
+                        } else if (settings.get(['customDisplayNames', address, 'overwrite'])) {
+                            name = settings.get(['customDisplayNames', address, 'name'], '');
+                        }
+                        return [
+                            $('<span class="name">').text(name ? name + ' ' : ''),
+                            $('<span class="address">').text(name ? '<' + address + '>' : address)
+                        ];
+                    }
 
                     var defaultSender = _(baton.model.get('from')).first(),
-                        dropdown = new SenderDropdown({
+                        dropdown = new Dropdown({
                             model: baton.model,
-                            label: _(defaultSender).first() + ' <' + _(defaultSender).last() + '>',
+                            label: renderFrom(defaultSender),
                             aria: gt('From'),
                             caret: true
                         });
@@ -130,9 +121,11 @@ define('io.ox/mail/compose/extensions', [
                         }
 
                         function redraw() {
+                            var from = _(baton.model.get('from')).first();
                             dropdown.$('ul').empty();
                             drawOptions();
-                            dropdown.label();
+
+                            dropdown.$('.dropdown-label').empty().append(renderFrom(from));
                             // re-focus element otherwise the bootstap a11y closes the drop-down
                             dropdown.$ul.find('[data-name="toggle-display"]').focus();
                         }
@@ -168,6 +161,7 @@ define('io.ox/mail/compose/extensions', [
                         );
 
                         ox.on('change:customDisplayNames', redraw);
+                        baton.view.listenTo(baton.model, 'change:from', redraw);
                     });
                 };
 
