@@ -225,7 +225,7 @@ define('io.ox/core/viewer/views/sidebarview', [
                 model: this.model,
                 fixed: true,
                 closable: this.options.closable,
-                disableFolderInfo: this.options.opt.disableFolderInfo
+                disableFolderInfo: !!(this.options.opt && this.options.opt.disableFolderInfo)
             };
             // render sections
             detailPane.append(
