@@ -210,7 +210,7 @@ define('io.ox/mail/main', [
             });
 
             app.getTour = function () {
-                return { id: 'yeah', path: 'hokuspokus' };
+                return { id: 'default/io.ox/mail', path: 'io.ox/tours/mail' };
             };
         },
 

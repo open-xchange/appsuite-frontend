@@ -55,17 +55,6 @@
     "path": "io.ox/tours/files"
 },
 {
-    "namespace": ["io.ox/mail/main"],
-    "title": "Guided tours for Mail",
-    "company": "Open-Xchange",
-    "icon": "/images/icon.png",
-    "category": "Dev",
-    "settings": false,
-    "index": 100,
-    "package": "open-xchange-guidedtours",
-    "path": "io.ox/tours/mail"
-},
-{
     "namespace": "io.ox/portal/main",
     "title": "Guided tours for Portal",
     "company": "Open-Xchange",
