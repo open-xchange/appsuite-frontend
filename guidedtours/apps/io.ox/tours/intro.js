@@ -69,7 +69,7 @@ define('io.ox/tours/intro', [
                 content: gt('In case of new notifications, e.g. appointment invitations, the info area is opened on the right side.')
             },
             {
-                onShow: function () { notifications.hideList(); },
+                onShow: function () { notifications.hide(); },
                 title: gt('Creating new items'),
                 placement: 'right',
                 target: function () { return $('.classic-toolbar .io-ox-action-link:visible')[0]; },
