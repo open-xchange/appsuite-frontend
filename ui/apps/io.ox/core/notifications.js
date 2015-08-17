@@ -50,7 +50,7 @@ define('io.ox/core/notifications', [
 
                 if (!isInside ) {
                     if (self.getStatus() !== 'closed') {
-                        self.hide();
+                        self.hide({ refocus: false });
                     }
                 }
             });
@@ -289,7 +289,8 @@ define('io.ox/core/notifications', [
             this.trigger('show');
         },
 
-        hide: function () {
+        hide: function (opt) {
+            var opt = _.extend({ refocus: true }, opt || {});
             $(document).off('keydown.notification');
             var badgeview = this.badgeview;
             // if it's closed already we're done
@@ -304,8 +305,9 @@ define('io.ox/core/notifications', [
             if (_.device('smartphone')) {
                 $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
             }
+            // disable refocus f.e. when triggerd by click on searchbox
+            if (opt.refocus) badgeview.$el.focus();
 
-            badgeview.$el.focus();
             if (this.hideNotificationInfo) {
                 this.$el.find('.desktop-notification-info').remove();
                 this.hideNotificationInfo = false;
