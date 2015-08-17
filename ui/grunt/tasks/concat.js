@@ -129,6 +129,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/relogin.js',
                             'apps/io.ox/core/uuids.js',
                             'apps/io.ox/core/tk/wizard.js',
+                            'apps/io.ox/tours/get-started.js',
                             // 3rd wave
                             'apps/io.ox/core/extPatterns/links.js',
                             'apps/io.ox/core/adaptiveLoader.js',

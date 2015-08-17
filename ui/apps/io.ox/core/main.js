@@ -32,7 +32,8 @@ define('io.ox/core/main', [
     'io.ox/core/relogin',
     'io.ox/core/links',
     'io.ox/core/http_errors',
-    'io.ox/backbone/disposable'
+    'io.ox/backbone/disposable',
+    'io.ox/tours/get-started'
 ], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, commons, upsell, UpsellView, capabilities, ping, folderAPI, settings, gt) {
 
     'use strict';

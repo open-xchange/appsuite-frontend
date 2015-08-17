@@ -208,6 +208,10 @@ define('io.ox/mail/main', [
                 container: app.getWindow().nodes.main,
                 classes: 'rightside'
             });
+
+            app.getTour = function () {
+                return { id: 'yeah', path: 'hokuspokus' };
+            };
         },
 
         /*
