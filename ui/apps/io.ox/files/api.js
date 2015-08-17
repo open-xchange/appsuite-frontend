@@ -402,13 +402,14 @@ define('io.ox/files/api', [
                 http.GET({ module: module, params: _(params).omit('limit') }).then(null, $.when)
             )
             .then(function (folders, files) {
+                if (params.order === 'desc') folders.reverse();
                 return [].concat(folders, files[0] || []);
             });
         },
         // use client-side limit
         useSlice: true,
         // set higher limit; works much faster than mail
-        // we pick a number than looks for typical columns, so 5 * 6 * 7 = 210
+        // we pick a number that looks ok for typical columns, so 5 * 6 * 7 = 210
         LIMIT: 210
     });
 
