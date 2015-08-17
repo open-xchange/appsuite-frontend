@@ -216,7 +216,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                     mobile: 'hi',
                     icon: 'fa fa-user-plus',
                     label: gt('Share'),
-                    drawDisabled: true,
                     title: gt('Share selected files'),
                     ref: 'io.ox/files/dropdown/share',
                     customize: function (baton) {
@@ -227,11 +226,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                             LinksPattern.DropdownLinks({
                                 ref: 'io.ox/files/links/toolbar/share',
                                 wrap: false,
-                                //function to call when dropdown is empty
                                 emptyCallback: function () {
-                                    self.addClass('disabled')
-                                        .attr({ 'aria-disabled': true })
-                                        .removeAttr('href');
+                                    self.parent().hide();
                                 }
                             }, baton)
                         );
