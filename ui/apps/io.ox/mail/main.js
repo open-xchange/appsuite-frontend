@@ -999,8 +999,11 @@ define('io.ox/mail/main', [
             }
 
             api.on('beforedelete', function (e, ids) {
-                if (isSingleThreadMessage(ids, app.listView.selection.get())) return;
-                app.listView.selection.dodge();
+                var selection = app.listView.selection.get();
+                if (isSingleThreadMessage(ids, selection)) return;
+                // looks for intersection
+                ids = _(ids).map(_.cid);
+                if (_.intersection(ids, selection).length) app.listView.selection.dodge();
             });
         },
 
