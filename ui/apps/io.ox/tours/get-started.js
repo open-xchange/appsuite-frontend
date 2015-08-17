@@ -38,7 +38,6 @@ define('io.ox/tours/get-started', ['io.ox/core/extensions', 'io.ox/core/tk/wizar
             // check if the current app implements getTour()
             var app = ox.ui.App.getCurrentApp(),
                 visible = !!app && _.isFunction(app.getTour);
-            console.log('visible?', visible, app, app.getTour);
             this.$el.toggle(visible);
         },
 
