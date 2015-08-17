@@ -341,10 +341,13 @@ define('io.ox/core/tk/tokenfield', [
                 options: this.options
             });
 
+            // add non-public api;
+            this.hiddenapi = this.input.data('ttTypeahead');
+
             // calculate postion for typeahead dropdown (tt-dropdown-menu)
             if (_.device('smartphone') || o.leftAligned) {
-                this.tt = this.input.data('ttTypeahead');
-                this.tt.dropdown._show = function () {
+                // non-public api of typeahead
+                this.hiddenapi.dropdown._show = function () {
                     var width = 'auto', left = 0;
                     if (_.device('smartphone')) {
                         left = self.input.offset().left * -1;
@@ -363,6 +366,11 @@ define('io.ox/core/tk/tokenfield', [
                     var enter = e.which === 13,
                         validquery = !!self.input.val() && self.input.val().length >= o.minLength,
                         runningrequest = self.model.get('query') !== self.input.val();
+                    // clear dropdown when query changes
+                    if (runningrequest && !enter) {
+                        self.hiddenapi.dropdown.empty();
+                        self.hiddenapi.dropdown.close();
+                    }
                     // flag query string when enter was hit before drowdown was drawn
                     if (enter && validquery && runningrequest) {
                         self.autoselect[self.input.val()] = true;
