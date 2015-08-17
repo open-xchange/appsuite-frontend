@@ -56,10 +56,12 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.append(filenameLabel).parent().addClass('pull-left');
 
                     if (baton.model.isFile()) {
-                        this.attr('title', gt('File name, click to rename'));
+                        this.attr('data-original-title', gt('File name, click to rename'));
                     } else {
-                        this.attr('title', gt('File name'));
+                        this.attr('data-original-title', gt('File name'));
                     }
+                    this.attr({ 'data-placement': 'bottom' });
+                    this.tooltip();
                 }
             },
             'zoomout': {
@@ -137,6 +139,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'hi',
                 icon: 'fa fa-info-circle',
+                label: gt('View details'),
                 ref: TOOLBAR_ACTION_ID + '/togglesidebar',
                 customize: function () {
                     this.addClass('viewer-toolbar-togglesidebar')
@@ -164,6 +167,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'hi',
                 icon: 'fa fa-times',
+                label: gt('Close'),
                 ref: TOOLBAR_ACTION_ID + '/close',
                 customize: function () {
                     this.addClass('viewer-toolbar-close')
