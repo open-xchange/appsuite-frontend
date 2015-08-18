@@ -194,7 +194,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     mobile: 'lo',
                     label: gt('Edit description'),
                     section: 'edit',
-                    ref: TOOLBAR_ACTION_DROPDOWN_ID + '/editdescription'
+                    ref: 'io.ox/files/actions/edit-description'
                 },
                 'download': {
                     prio: 'hi',
@@ -260,7 +260,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     mobile: 'lo',
                     label: gt('Delete'),
                     section: 'delete',
-                    ref: TOOLBAR_ACTION_DROPDOWN_ID + '/delete'
+                    ref: 'io.ox/files/actions/delete'
                 }
             },
             mail: {
@@ -329,27 +329,12 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     // define actions of this ToolbarView
     var Action = ActionsPattern.Action;
+
     new Action(TOOLBAR_ACTION_DROPDOWN_ID, {
         requires: function () { return true; },
         action: $.noop
     });
-    new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/editdescription', {
-        id: 'edit-description',
-        action: function (baton) {
-            var actionBaton = Ext.Baton({ data: baton.model.toJSON() });
-            ActionsPattern.invoke('io.ox/files/actions/edit-description', null, actionBaton);
-        }
-    });
-    new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/delete', {
-        id: 'delete',
-        requires: function (e) {
-            return !e.baton.context.standalone;
-        },
-        action: function (baton) {
-            var actionBaton = Ext.Baton({ data: baton.model.toJSON() });
-            ActionsPattern.invoke('io.ox/files/actions/delete', null, actionBaton);
-        }
-    });
+
     new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/print', {
         id: 'print',
         requires: function (e) {

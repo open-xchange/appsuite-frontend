@@ -257,6 +257,8 @@ define('io.ox/files/actions', [
         requires: function (e) {
             // hide in mail compose preview
             if (e.baton.openedBy === 'io.ox/mail/compose') return false;
+            // not in standalone mode
+            if (e.context.standalone) return false;
             return e.collection.has('some', 'delete') && util.hasStatus('!lockedByOthers', e);
         },
         multiple: function (list, baton) {
