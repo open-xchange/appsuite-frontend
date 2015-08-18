@@ -151,6 +151,16 @@ define('io.ox/mail/compose/extensions', [
                                 .link('edit-real-names', gt('Edit names'), editNames);
                         }
 
+                        function updateDisplayName(names) {
+                            // clone 'from'
+                            var from = [].concat(_(baton.model.get('from')).first());
+                            _.each(names, function (data, id) {
+                                if (from[1] !== id) return;
+                                from[0] = data.overwrite ? data.name : data.defaultName;
+                            });
+                            baton.model.set('from', [ from ]);
+                        }
+
                         drawOptions();
 
                         node.append(
@@ -160,7 +170,7 @@ define('io.ox/mail/compose/extensions', [
                             )
                         );
 
-                        ox.on('change:customDisplayNames', redraw);
+                        ox.on('change:customDisplayNames', updateDisplayName);
                         baton.view.listenTo(baton.model, 'change:from', redraw);
                     });
                 };

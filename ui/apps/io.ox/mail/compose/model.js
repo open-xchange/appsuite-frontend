@@ -91,6 +91,10 @@ define('io.ox/mail/compose/model', [
 
             if (!this.get('from') || this.get('from').length === 0) {
                 accountAPI.getPrimaryAddressFromFolder(this.get('folder_id')).then(function (address) {
+                    // custom display names
+                    if (settings.get(['customDisplayNames', address[1], 'overwrite'])) {
+                        address[0] = settings.get(['customDisplayNames', address[1], 'name'], '');
+                    }
                     this.set('from', [address]);
                 }.bind(this));
             }

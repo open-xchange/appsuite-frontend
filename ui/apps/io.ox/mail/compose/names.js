@@ -103,7 +103,7 @@ define('io.ox/mail/compose/names', [
         save: function () {
             var names = {};
             this.collection.each(function (model) {
-                names[model.id] = model.pick('name', 'overwrite');
+                names[model.id] = model.pick('name', 'overwrite', 'defaultName');
             });
             settings.set('customDisplayNames', names).save();
             ox.trigger('change:customDisplayNames', names);
