@@ -194,7 +194,7 @@ define('io.ox/files/api', [
             video: /^(avi|m4v|mp4|ogv|ogm|mov|mpeg|webm)$/,
             doc:   /^(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)$/,
             xls:   /^(csv|xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb|ods|ots)$/,
-            ppt:   /^(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa)$/,
+            ppt:   /^(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa|odg|otg)$/,
             pdf:   /^pdf$/,
             zip:   /^(zip|tar|gz|rar|7z|bz2)$/,
             txt:   /^(txt|md)$/,
