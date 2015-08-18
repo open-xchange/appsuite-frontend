@@ -189,6 +189,7 @@ define('plugins/notifications/calendar/register', [
                     apiEvents: {
                         reset: 'set:calendar:reminder'
                     },
+                    //#. Reminders (notifications) about appointments
                     title: gt('Appointment reminders'),
                     extensionPoints: {
                         item: 'io.ox/core/notifications/calendar-reminder/item'
@@ -196,7 +197,9 @@ define('plugins/notifications/calendar/register', [
                     detailview: 'io.ox/calendar/view-detail',
                     autoOpen: autoOpen,
                     genericDesktopNotification: {
+                        //#. Title of generic desktop notification about new reminders for appointments
                         title: gt('New appointment reminders'),
+                        //#. Body text of generic desktop notification about new reminders for appointments
                         body: gt('You\'ve got appointment reminders'),
                         icon: ''
                     },
@@ -206,11 +209,13 @@ define('plugins/notifications/calendar/register', [
                             time = ', ' + util.getTimeInterval(model.attributes);
 
                         return {
+                            //#. Title of the desktop notification about new reminder for a specific appointment
                             title: gt('New appointment reminder'),
                             body: title + date + time,
                             icon: ''
                         };
                     },
+                    //#. Reminders (notifications) about appointments
                     hideAllLabel: gt('Hide all appointment reminders.')
                 },
                 subview = new Subview(options);
@@ -236,6 +241,7 @@ define('plugins/notifications/calendar/register', [
                         remove: 'delete:appointment mark:invite:confirmed'
                     },
                     useListRequest: true,
+                    //#. Invitations (notifications) about appointments
                     title: gt('Appointment invitations'),
                     extensionPoints: {
                         item: 'io.ox/core/notifications/invites/item'
@@ -243,7 +249,9 @@ define('plugins/notifications/calendar/register', [
                     detailview: 'io.ox/calendar/view-detail',
                     autoOpen: autoOpen,
                     genericDesktopNotification: {
+                        //#. Title of generic desktop notification about new invitations to appointments
                         title: gt('New appointment invitation'),
+                        //#. Body text of generic desktop notification about new invitations to appointments
                         body: gt('You\'ve got appointment invitations'),
                         icon: ''
                     },
@@ -253,11 +261,13 @@ define('plugins/notifications/calendar/register', [
                             time = ', ' + util.getTimeInterval(model.attributes);
 
                         return {
+                            //#. Title of the desktop notification about new invitation to a specific appointment
                             title: gt('New appointment invitation'),
                             body: title + date + time,
                             icon: ''
                         };
                     },
+                    //#. Invitations (notifications) about appointments
                     hideAllLabel: gt('Hide all appointment invitations.')
                 },
                 subview = new Subview(options);
