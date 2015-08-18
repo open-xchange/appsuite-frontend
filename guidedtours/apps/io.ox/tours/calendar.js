@@ -15,133 +15,108 @@
 define('io.ox/tours/calendar', [
     'io.ox/core/extensions',
     'io.ox/core/notifications',
-    'io.ox/tours/utils',
+    'io.ox/core/tk/wizard',
     'gettext!io.ox/tours'
-], function (ext, notifications, utils, gt) {
+], function (ext, notifications, Tour, gt) {
 
     'use strict';
 
+    var createApp;
+
     /* Tour: calendar / appointments */
-    ext.point('io.ox/tours/extensions').extend({
+    Tour.registry.add({
         id: 'default/io.ox/calendar',
         app: 'io.ox/calendar',
-        priority: 1,
-        tour: {
-            id: 'Calendar',
-            steps: [{
-                title: gt('Creating a new appointment'),
-                placement: 'right',
-                target: function () {
-                    return $('[data-ref="io.ox/calendar/detail/actions/create"]')[0];
-                },
-                // target: function () { return $('.classic-toolbar .io-ox-action-link:visible')[0];
-                content: gt('To create a new appointment, click on New in the toolbar.'),
-                multipage: true,
-                onNext: function () {
-                    if (
-                        $('.launcher[data-app-name="io.ox/calendar/edit"]').length === 0) {
-                        utils.switchToApp('io.ox/calendar/edit/main', function () {
-                            window.hopscotch.nextStep();
-                            window.hopscotch.prevStep();
+        priority: 1
+    }, function () {
+        new Tour()
+            .step()
+                .title(gt('Creating a new appointment'))
+                .content(gt('To create a new appointment, click on New in the toolbar.'))
+                .spotlight('[data-ref="io.ox/calendar/detail/actions/create"]')
+                .on('next', function () {
+                    ox.load(['io.ox/calendar/edit/main']).then(function (edit) {
+                        var app = edit.getApp();
+                        createApp = app;
+                        return $.when(app, app.launch());
+                    }).then(function (app) {
+                        return app.create({
+                            folder_id: app.folder.get(),
+                            participants: []
                         });
-                    } else {
-                        $('.launcher[data-app-name="io.ox/calendar/edit"]').first().click();
-                        window.hopscotch.nextStep();
-                        window.hopscotch.prevStep();
-                    }
-                }
-            },
-            {
-                title: gt('Entering the appointment\'s data'),
-                placement: 'bottom',
-                target: function () { return $('[data-extension-id="title"]:visible')[0]; },
-                content: gt('Enter the subject, the start and the end date of the appointment. Other details are optional.')
-            },
-            {
-                title: gt('Creating recurring appointments'),
-                placement: 'top',
-                target: function () { return $('[data-extension-id="recurrence"]:visible')[0]; },
-                content: gt('To create recurring appointments, enable Repeat. Functions for setting the recurrence parameters are shown.')
-            },
-            {
-                title: gt('Using the reminder function'),
-                placement: 'top',
-                target: function () { return $('[data-extension-id="alarm"]:visible')[0]; },
-                content: gt('To not miss the appointment, use the reminder function.')
-            },
-            {
-                title: gt('Inviting other participants'),
-                placement: 'top',
-                target: function () {
-                    if (!_.device('desktop')) {//tablets need scrolling here
-                        $('.add-participant:visible')[0].scrollIntoView(true);
-                    }
-                    return $('.add-participant:visible')[0];
-                },
-                content: gt('To invite other participants, enter their names in the field below Participants. To avoid appointment conflicts, click on Find a free time at the upper right side.')
-            },
-            {
-                title: gt('Adding attachments'),
-                placement: 'top',
-                target: function () {
-                    if (!_.device('desktop')) {//tablets need scrolling here
-                        $('[data-extension-id="attachments_legend"]:visible')[0].scrollIntoView(true);
-                    }
-                    return $('[data-extension-id="attachments_legend"]:visible')[0];
-                },
-                content: gt('Further down you can add documents as attachments to the appointment.')
-            },
-            {
-                title: gt('Creating the appointment'),
-                placement: 'left',
-                target: function () {
-                    if (!_.device('desktop')) {//tablets need scrolling here
-                        $('[data-action="save"]:visible')[0].scrollIntoView(true);
-                    }
-                    return $('[data-action="save"]:visible')[0];
-                },
-                content: gt('To create the appointment, click on Create at the upper right side.'),
-                multipage: true,
-                onNext: function () {
-                    utils.switchToApp('io.ox/calendar/main', function () {
-                        window.hopscotch.nextStep();
-                        window.hopscotch.prevStep();
                     });
+                })
+                .end()
+            .step()
+                .title(gt('Entering the appointment\'s data'))
+                .content(gt('Enter the subject, the start and the end date of the appointment. Other details are optional.'))
+                .waitFor('[data-extension-id="title"] > label')
+                .spotlight('[data-extension-id="title"] > label')
+                .end()
+            .step()
+                .title(gt('Creating recurring appointments'))
+                .content(gt('To create recurring appointments, enable Repeat. Functions for setting the recurrence parameters are shown.'))
+                .spotlight('[data-extension-id="recurrence"]')
+                .end()
+            .step()
+                .title(gt('Using the reminder function'))
+                .content(gt('To not miss the appointment, use the reminder function.'))
+                .spotlight('[data-extension-id="alarm"]')
+                .end()
+            .step()
+                .title(gt('Inviting other participants'))
+                .content(gt('To invite other participants, enter their names in the field below Participants. To avoid appointment conflicts, click on Find a free time at the upper right side.'))
+                .spotlight('.add-participant')
+                .end()
+            .step()
+                .title(gt('Adding attachments'))
+                .content(gt('Further down you can add documents as attachments to the appointment.'))
+                .hotspot('[data-extension-id="attachments_legend"]')
+                .end()
+            .step()
+                .title(gt('Creating the appointment'))
+                .content(gt('To create the appointment, click on Create at the upper right side.'))
+                .referTo('[data-action="save"]')
+                .hotspot('[data-action="save"]')
+                .end()
+            .step()
+                .title(gt('Selecting a view'))
+                .content(gt('To select one of the views like Day, Month or List, click on View in the toolbar. Select a menu entry from the Layout section.'))
+                .navigateTo('io.ox/calendar/main')
+                .waitFor('.classic-toolbar .pull-right')
+                .spotlight('.classic-toolbar .pull-right')
+                .on('before:show', function () {
+                    if ($('.toolbar-button.dropdown.open .dropdown-menu:visible').length === 0) {
+                        $('[data-ref="io.ox/calendar/links/toolbar/view"]:visible').click();
+                    }
+                })
+                .end()
+            .step()
+                .title(gt('The List view'))
+                .content(gt('The List view shows a list of the appointments in the current folder. If clicking on an appointment, the appointment\'s data and some functions are displayed in the Detail view.'))
+                .spotlight('.classic-toolbar .pull-right')
+                .on('before:show', function () {
+                    if ($('.toolbar-button.dropdown.open .dropdown-menu:visible').length === 0) {
+                        $('[data-ref="io.ox/calendar/links/toolbar/view"]:visible').click();
+                    }
+                })
+                .end()
+            .step()
+                .title(gt('The calendar views'))
+                .content(gt('The calendar views display a calendar sheet with the appointments for the selected time range.'))
+                .spotlight('.classic-toolbar .pull-right:visible')
+                .on('show', function () {
+                    if ($('.toolbar-button.dropdown.open .dropdown-menu:visible').length === 0) {
+                        $('[data-ref="io.ox/calendar/links/toolbar/view"]:visible').click();
+                    }
+                })
+                .end()
+            .on('stop', function () {
+                if (createApp) {
+                    //prevent app from asking about changed content
+                    createApp.quit();
                 }
-            },
-            {
-                onShow: function () {
-                    if ($('.toolbar-button.dropdown.open .dropdown-menu:visible').length === 0) {
-                        $('[data-ref="io.ox/calendar/links/toolbar/view"]:visible').click();
-                    }
-                },
-                title: gt('Selecting a view'),
-                placement: 'left',
-                target: function () { return $('.classic-toolbar .pull-right:visible')[0]; },
-                content: gt('To select one of the views like Day, Month or List, click on View in the toolbar. Select a menu entry from the Layout section.')
-            },
-            {
-                onShow: function () {
-                    if ($('.toolbar-button.dropdown.open .dropdown-menu:visible').length === 0) {
-                        $('[data-ref="io.ox/calendar/links/toolbar/view"]:visible').click();
-                    }
-                },
-                title: gt('The List view'),
-                placement: 'left',
-                target: function () { return $('.classic-toolbar .pull-right:visible')[0]; },
-                content: gt('The List view shows a list of the appointments in the current folder. If clicking on an appointment, the appointment\'s data and some functions are displayed in the Detail view.')
-            },
-            {
-                onShow: function () {
-                    if ($('.toolbar-button.dropdown.open .dropdown-menu:visible').length === 0) {
-                        $('[data-ref="io.ox/calendar/links/toolbar/view"]:visible').click();
-                    }
-                },
-                title: gt('The calendar views'),
-                placement: 'left',
-                target: function () { return $('.classic-toolbar .pull-right:visible')[0]; },
-                content: gt('The calendar views display a calendar sheet with the appointments for the selected time range.')
-            }]
-        }
+            })
+            .start();
     });
 });

@@ -165,6 +165,10 @@ define('io.ox/calendar/main', [
                 name: 'list',
                 container: c
             });
+
+            app.getTour = function () {
+                return { id: 'default/io.ox/calendar', path: 'io.ox/tours/calendar' };
+            };
         },
 
         /*

@@ -22,17 +22,6 @@
     "path": "io.ox/tours/intro"
 },
 {
-    "namespace": "io.ox/calendar/main",
-    "title": "Guided tours for Calendar",
-    "company": "Open-Xchange",
-    "icon": "/images/icon.png",
-    "category": "Dev",
-    "settings": false,
-    "index": 100,
-    "package": "open-xchange-guidedtours",
-    "path": "io.ox/tours/calendar"
-},
-{
     "namespace": "io.ox/contacts/main",
     "title": "Guided tours for Contacts",
     "company": "Open-Xchange",
