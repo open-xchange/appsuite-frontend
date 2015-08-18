@@ -68,7 +68,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             'header': ['From', 'any', 'Subject', 'mailingList', 'To', 'Cc', 'cleanHeader'],
             'envelope': ['envelope'],
             'size': ['size'],
-            'body': ['body']
+            'body': ['body'],
+            'currentdate': ['currentdate']
         },
 
         actionsTranslations = {
