@@ -45,13 +45,6 @@ define('io.ox/settings/accounts/settings/pane', [
             );
         },
 
-        drawPrivacyNotice = function () {
-            return $('<div class="hint">').append(
-                $('<span>').text(gt('Social accounts are only used to download contact and/or calendar data') + '. '),
-                $('<b>').text(gt('Such data will never be uploaded') + '. ')
-            );
-        },
-
         drawRecoveryButtonHeadline = function () {
             return $('<h2 class="sr-only">').text(gt('Password recovery'));
         },
@@ -59,7 +52,7 @@ define('io.ox/settings/accounts/settings/pane', [
         drawRecoveryButton = function () {
             return $('<div class="hint">').append(
                 $.txt(
-                    gt('For security reasons, all account passwords are encrypted with your primary account password. ' +
+                    gt('For security reasons, all credentials are encrypted with your primary account password. ' +
                         'If you change your primary password, your external accounts might stop working. In this case, ' +
                         'you can use your old password to recover all account passwords:')
                 ),
@@ -205,9 +198,8 @@ define('io.ox/settings/accounts/settings/pane', [
                     },
 
                     render: function () {
-                        this.$el.empty().append(drawPane);
 
-                        this.$el.find('.io-ox-accounts-settings').append(drawPrivacyNotice);
+                        this.$el.empty().append(drawPane);
 
                         if (this.collection.length > 1) {
                             this.$el.find('.io-ox-accounts-settings').append(drawRecoveryButtonHeadline(), drawRecoveryButton());
