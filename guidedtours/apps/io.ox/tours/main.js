@@ -47,38 +47,6 @@ define('io.ox/tours/main', [
         }
     });
 
-    /* Link: Intro tour in settings toolbar */
-    ext.point('io.ox/core/topbar/right/dropdown').extend({
-        id: 'intro-tour',
-        index: 210, /* close to the help link */
-        draw: function () {
-            var node = this,
-                link = $('<li>', { 'class': 'io-ox-specificHelp' }).appendTo(node);
-
-            if (_.device('smartphone')) {//tablets are fine just disable phones
-                return;
-            }
-
-            require(['settings!io.ox/tours', 'io.ox/tours/main'], function (tourSettings, thisIsStupid) {
-                if (tourSettings.get('disableTours', false)) {
-                    link.remove();
-                    return;
-                }
-
-                link.append(
-                    $('<a target="_blank" href="" role="menuitem">').text(
-                        //#. Tour name; general introduction
-                        gt('Getting started')
-                    )
-                    .on('click', function (e) {
-                        thisIsStupid.runTour('io.ox/intro');
-                        e.preventDefault();
-                    })
-                );
-            });
-        }
-    });
-
     /* Link: Tour specifically for this app in settings toolbar */
     ext.point('io.ox/core/topbar/right/dropdown').extend({
         id: 'app-specific-tour',
