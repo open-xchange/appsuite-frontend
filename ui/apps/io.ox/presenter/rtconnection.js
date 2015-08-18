@@ -343,12 +343,12 @@ define('io.ox/presenter/rtconnection', [
                         case 'error':
                             hasError = true;
                             data = { error: payload.data };
-                        break;
+                            break;
                         default:
                             if (!data) {
                                 data = payload.data;
                             }
-                        break;
+                            break;
                         }
                     }
                     return hasError;
