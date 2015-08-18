@@ -510,6 +510,9 @@ define('io.ox/core/desktop', [
                 this.get('window').show();
                 this.trigger('resume', this);
                 ox.trigger('app:resume', this);
+                // if image previews were already displayed in the files app, it might happen that another app (e.g. latest files widget) did some changes to the pool
+                // and the previews were redrawn but not displayed since the 'appear' event has not been triggered
+                $(window).trigger('resize.lazyload');
             }
 
             return deferred.pipe(function () {
