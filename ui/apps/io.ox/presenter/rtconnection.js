@@ -311,6 +311,119 @@ define('io.ox/presenter/rtconnection', [
         }
 
         /**
+         * Handles the resolved response of the RT low-level join request
+         * and makes checks for certain aspects (errors).
+         *
+         * @param {Object} {jQuery.Deferred} def
+         *
+         * @paran {Object} response
+         *  The original response from a join-request provided by the RT
+         *  low-level code.
+         */
+        function handleJoinResponse(def, response) {
+            var // the payloads of the join response
+                payloads = response && response.payloads || [],
+                // the data to resolve/reject the deferred
+                data = null,
+                // do we found an error
+                hasError = false;
+
+            if (self.destroyed) {
+                // reject deferred after destroy
+                def.reject({ cause: 'closing' });
+            }
+
+            if (payloads.length > 0) {
+                // Extract the answer payload from the backend answer, look
+                // for possible errors sent by RT via payloads, too. Should be
+                // handled by RT-core (see #39911).
+                _.find(payloads, function (payload) {
+                    if (_.isObject(payload) && _.isObject(payload.data) && _.isString(payload.element)) {
+                        switch (payload.element) {
+                        case 'error':
+                            hasError = true;
+                            data = { error: payload.data };
+                        break;
+                        default:
+                            if (!data) {
+                                data = payload.data;
+                            }
+                        break;
+                        }
+                    }
+                    return hasError;
+                });
+
+                data = data || payloads[0].data; // as fallback
+                if (hasError) { def.reject(data); } else { def.resolve(data); }
+            } else {
+                // we must receive at least one payload - otherwise we
+                // assume an error
+                def.reject(response);
+            }
+        }
+
+        /**
+         * Handles the rejected response of the RT low-level join request
+         * and makes checks for certain aspects (errors). In special cases
+         * a re-join is started to re-enroll the client.
+         *
+         * @param {Object} {jQuery.Deferred} def
+         *
+         * @paran {Object} response
+         *  The original response from a join-request provided by the RT
+         *  low-level code.
+         */
+        function handleRejectedJoinRequest(def, response, retryHandler) {
+            var // do we found error data
+                hasError = false;
+
+            if (self.destroyed) {
+                // reject deferred after destroy
+                def.reject({ cause: 'closing' });
+            }
+
+            // we assume that we receive the error data as a property in the response
+            if (_.isObject(response) && _.isObject(response.error)) {
+                hasError = true;
+            }
+
+            // check error code to decide, if we can try to re-join
+            if (hasError && response.error.code === 1007) {
+                // try to re-join in case of code 1007 (STATE_MISSING)
+                handleRejoin(def, response, retryHandler);
+            } else {
+                joining = false;
+                def.reject(response);
+            }
+        }
+
+        /**
+         * Handles the re-join of the client, in case a re-enroll
+         * is necessary.
+         *
+         * @param {Function} retryHandler
+         *  A handler which is responsible to start a re-join of the client.
+         *  Must be valid function.
+         */
+        function handleRejoin(def, response, retryHandler) {
+            // We have to wait for possible notifications from the
+            // low-level RT part to determine, if a retry is possible.
+            _.delay(function () {
+                // now check the states and decide, if we can try to
+                // start a reconnect using a possible retry handler
+                if (rejoinPossible) {
+                    rejoinPossible = false;
+                    retryHandler.call(this, def);
+                    joining = false;
+                } else {
+                    handleJoinResponse(def, response);
+                    joining = false;
+                }
+            }, 1000);
+        }
+
+        /**
          * Join a group using the provided options and set the asynchronous
          * state. An optional retryHandler is called, if there is a chance
          * to retry the joining.
@@ -336,35 +449,22 @@ define('io.ox/presenter/rtconnection', [
                     def.reject({ cause: 'closing' });
                     joining = false;
                 } else if (payloads.length > 0) {
-                    handleResolvedResponse(def, response);
+                    handleJoinResponse(def, response);
                     joining = false;
                 } else {
                     // We encountered an illegal state for our join request.
                     if (_.isFunction(retryHandler)) {
-                        // We have to wait for possible notifications from the
-                        // low-level RT part to determine, if a retry is possible.
-                        _.delay(function () {
-                            // now check the states and decide, if we can try to
-                            // start a reconnect using a possible retry handler
-                            if (rejoinPossible) {
-                                rejoinPossible = false;
-                                retryHandler.call(this, def);
-                                joining = false;
-                            } else {
-                                handleResolvedResponse(def, response);
-                                joining = false;
-                            }
-                        }, 1000);
+                        // try to re-join if handler is available
+                        handleRejoin(def, response, retryHandler);
                     } else {
                         // without retry handler just process the original
                         // response
-                        handleResolvedResponse(def, response);
+                        handleJoinResponse(def, response);
                         joining = false;
                     }
                 }
             }, function (response) {
-                handleRejectedResponse(def, response);
-                joining = false;
+                handleRejectedJoinRequest(def, response, retryHandler);
             });
         }
 
@@ -606,6 +706,7 @@ define('io.ox/presenter/rtconnection', [
                     // This must be limited to error code 1007 which means that
                     // we have to re-enroll. A reset after we received a reset with
                     // data.code 1007 is also normal, ignore that, too.
+                    // See #40096, the error structure changed
                     if ((!rejoinPossible && (data && data.code === 1007)) || rejoinPossible) {
                         if (!rejoinPossible) {
                             rejoinPossible = true;
