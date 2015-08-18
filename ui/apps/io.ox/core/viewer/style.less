@@ -426,14 +426,14 @@
             justify-content: center;
             align-items: center;
             flex-direction: row;
-            
+
             @media (max-width: 1023px) {
                 left: 135px;
             }
-            
+
             @media (max-width: 767px) {
                 display: none;
-            }            
+            }
         }
 
         @viewer-toolbar-link-disabled-color: #CCCCCC;
@@ -528,7 +528,19 @@
         }
 
         .viewer-displayer-image {
+
             display: none;
+
+            // fix transparent images; see e.g. http://lea.verou.me/css3patterns/#checkerboard
+            @g: #eee;
+            @t: transparent;
+            background-color: #fff;
+            background-image: -webkit-linear-gradient(45deg, @g 25%, @t 25%, @t 75%, @g 75%, @g),
+                -webkit-linear-gradient(45deg, @g 25%, @t 25%, @t 75%, @g 75%, @g);
+            background-image: linear-gradient(45deg, @g 25%, @t 25%, @t 75%, @g 75%, @g),
+                linear-gradient(45deg, @g 25%, @t 25%, @t 75%, @g 75%, @g);
+            background-position: 0 0, 16px 16px;
+            background-size: 32px 32px;
         }
 
         .viewer-displayer-audio {
