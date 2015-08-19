@@ -320,7 +320,8 @@ define('io.ox/core/tk/wizard', [
                 next: true,
                 enableBack: true,
                 labelBack: gt('Back'),
-                labelDone: gt('Done')
+                //#. finish the tour
+                labelDone: gt.pgettext('tour', 'Finish')
             }, options);
 
             // forward events
