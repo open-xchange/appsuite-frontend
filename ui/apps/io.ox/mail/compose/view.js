@@ -283,7 +283,7 @@ define('io.ox/mail/compose/view', [
             this.contentEditable = $('<div class="editable">').attr({
                 'data-editor-id': this.editorId,
                 'tabindex': 1
-            });
+            }).css('margin-bottom', '32px');
             this.textarea = $('<textarea class="plain-text">').attr({
                 'data-editor-id': this.editorId,
                 'tabindex': 1
