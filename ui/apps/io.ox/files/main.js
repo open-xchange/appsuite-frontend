@@ -599,10 +599,8 @@ define('io.ox/files/main', [
                 var cid = $(e.currentTarget).parent().attr('data-cid'),
                     selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
                     baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app });
-                ox.load(['io.ox/core/viewer/main']).done(function (Viewer) {
-                    var viewer = new Viewer();
-                    viewer.launch( { selection: baton.data, files: baton.collection.models });
-                });
+
+                actions.invoke('io.ox/files/actions/default', null, baton);
             });
         },
 
@@ -623,10 +621,11 @@ define('io.ox/files/main', [
             // files
             app.listView.$el.on('keydown', '.list-item:not(.file-type-folder)', function (e) {
                 if (e.which === 13) {
-                    ox.load(['io.ox/core/viewer/main']).done(function (Viewer) {
-                        var viewer = new Viewer();
-                        viewer.launch({ selection: _.cid(app.listView.selection.get()[0]), files: app.listView.collection.models });
-                    });
+                    var cid = app.listView.selection.get()[0],
+                        selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
+                        baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app });
+
+                    actions.invoke('io.ox/files/actions/default', null, baton);
                 }
             });
         },
