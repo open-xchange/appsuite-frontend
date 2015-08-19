@@ -83,7 +83,7 @@ define('io.ox/tours/intro', [
             .end()
         .step()
             .title(gt('The info area'))
-            .content(gt('In case of new notifications, e.g. appointment invitations, the info area is opened on the right side.'))
+            .content(gt('In case of new notifications, e.g. appointment invitations, the info area is opened.'))
             .hotspot('#io-ox-notifications-icon')
             .end()
         .step()

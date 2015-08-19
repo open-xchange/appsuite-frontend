@@ -85,7 +85,7 @@ define('io.ox/tours/tasks', [
             .end()
         .step()
             .title(gt('Creating the task'))
-            .content(gt('To create the task, click on Create on the upper right side.'))
+            .content(gt('To create the task, click on Create.'))
             .spotlight('.btn.task-edit-save')
             .end()
         .step()

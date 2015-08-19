@@ -43,7 +43,7 @@ define('io.ox/tours/portal', [
             .end()
         .step()
             .title(gt('Closing a square'))
-            .content(gt('If you no longer want to display a square, click the cross on the upper right side.'))
+            .content(gt('If you no longer want to display a square, click the cross.'))
             .hotspot('.widget .disable-widget .fa-times:visible')
             .spotlight('.widget .disable-widget .fa-times:visible')
             .end()
