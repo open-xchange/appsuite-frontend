@@ -22,17 +22,6 @@
     "path": "io.ox/tours/intro"
 },
 {
-    "namespace": "io.ox/settings/main",
-    "title": "Guided tours for Settings",
-    "company": "Open-Xchange",
-    "icon": "/images/icon.png",
-    "category": "Dev",
-    "settings": false,
-    "index": 100,
-    "package": "open-xchange-guidedtours",
-    "path": "io.ox/tours/settings"
-},
-{
     "namespace": "io.ox/tasks/main",
     "title": "Guided tours for Tasks",
     "company": "Open-Xchange",

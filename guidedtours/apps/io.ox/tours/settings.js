@@ -13,50 +13,49 @@
  */
 
 define('io.ox/tours/settings', [
-    'io.ox/core/extensions',
-    'io.ox/core/notifications',
+    'io.ox/core/tk/wizard',
     'gettext!io.ox/tours'
-], function (ext, notifications, gt) {
+], function (Tour, gt) {
 
     'use strict';
 
     /* Tour: Settings */
-    ext.point('io.ox/tours/extensions').extend({
+    Tour.registry.add({
         id: 'default/io.ox/settings',
         app: 'io.ox/settings',
-        priority: 1,
-        tour: {
-            id: 'Settings',
-            steps: [{
-                title: gt('Opening the settings'),
-                placement: 'left',
-                target: function () { return $('.launcher .fa-cog:visible')[0]; },
-                content: gt('To open the settings, click the System menu icon on the upper right side of the menu bar. Select Settings. ')
-            },
-            {
-                title: gt('How the settings are organized'),
-                placement: 'right',
-                target: function () { return $('.io-ox-settings-window .vgrid-scrollpane')[0]; },
-                content: gt('The settings are organized in topics. Select the topic on the left side, e.g Basic settings or E-Mail. To view all settings, enable Advanced settings at the bottom.')
-            },
-            {
-                title: gt('Editing settings'),
-                placement: 'left',
-                target: function () { return $('.io-ox-settings-window .settings-container')[0]; },
-                content: gt('Edit a setting on the right side. In most of the cases, the changes are activated immediately.')
-            },
-            {
-                title: gt('Opening the help'),
-                placement: 'left',
-                target: function () { return $('#io-ox-topbar .launcher .fa-cog')[0]; },
-                content: gt('To open the help, click the System menu icon on the upper right side of the menu bar. Select Help. The help for the currently selected app is displayed. To browse the complete help, click on Start Page or Table Of Contents at the upper part of the window.')
-            },
-            {
-                title: gt('Signing out'),
-                placement: 'left',
-                target: function () { return $('#io-ox-topbar .launcher .fa-cog')[0]; },
-                content: gt('To sign out, click the System menu icon on the upper right side of the menu bar. Select Sign out.')
-            }]
-        }
+        priority: 1
+    }, function () {
+        new Tour()
+        .step()
+            .title(gt('Opening the settings'))
+            .content(gt('To open the settings, click the System menu icon on the upper right side of the menu bar. Select Settings. '))
+            .spotlight('.launcher .fa-bars')
+            .hotspot('.launcher .fa-bars')
+            .end()
+        .step()
+            .title(gt('How the settings are organized'))
+            .content(gt('The settings are organized in topics. Select the topic on the left side, e.g Basic settings or E-Mail. To view all settings, enable Advanced settings at the bottom.'))
+            .navigateTo('io.ox/settings/main')
+            .waitFor('.io-ox-settings-window .folder-tree')
+            .spotlight('.io-ox-settings-window .folder-tree')
+            .end()
+        .step()
+            .title(gt('Editing settings'))
+            .content(gt('Edit a setting on the right side. In most of the cases, the changes are activated immediately.'))
+            .spotlight('.io-ox-settings-window .settings-detail-pane')
+            .end()
+        .step()
+            .title(gt('Opening the help'))
+            .content(gt('To open the help, click the System menu icon on the upper right side of the menu bar. Select Help. The help for the currently selected app is displayed. To browse the complete help, click on Start Page or Table Of Contents at the upper part of the window.'))
+            .spotlight('#io-ox-topbar .launcher .fa-bars')
+            .hotspot('#io-ox-topbar .launcher .fa-bars')
+            .end()
+        .step()
+            .title(gt('Signing out'))
+            .content(gt('To sign out, click the System menu icon on the upper right side of the menu bar. Select Sign out.'))
+            .spotlight('#io-ox-topbar .launcher .fa-bars')
+            .hotspot('#io-ox-topbar .launcher .fa-bars')
+            .end()
+        .start();
     });
 });

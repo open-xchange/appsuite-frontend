@@ -510,6 +510,10 @@ define('io.ox/settings/main', [
             }
         });
 
+        app.getTour = function () {
+            return { id: 'default/io.ox/settings', path: 'io.ox/tours/settings' };
+        };
+
         app.setSettingsPane = function (options) {
             if (options && options.id) {
                 return paintTree().done(function () {
