@@ -18,9 +18,10 @@ define('io.ox/files/share/listview', [
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/tk/list',
     'io.ox/files/common-extensions',
-    'io.ox/files/share/view-options',
-    'less!io.ox/files/share/style'
-], function (api, ext, sModel, BreadcrumbView, ListView, extensions) {
+    'gettext!io.ox/files',
+    'less!io.ox/files/share/style',
+    'io.ox/files/share/view-options'
+], function (api, ext, sModel, BreadcrumbView, ListView, extensions, gt) {
 
     'use strict';
 
@@ -204,7 +205,9 @@ define('io.ox/files/share/listview', [
             draw: function (baton) {
                 this.append(
                     $('<div class="list-item-column type gray">').append(
-                        $('<i class="fa fa-user">').toggleClass('gray', !hasUser(baton))
+                        $('<i class="fa fa-user">')
+                            .toggleClass('gray', !hasUser(baton))
+                            .attr('title', gt('Internal users'))
                     )
                 );
             }
@@ -215,7 +218,9 @@ define('io.ox/files/share/listview', [
             draw: function (baton) {
                 this.append(
                     $('<div class="list-item-column type gray">').append(
-                        $('<i class="fa fa-user-plus">').toggleClass('gray', !hasGuests(baton))
+                        $('<i class="fa fa-user-plus">')
+                            .toggleClass('gray', !hasGuests(baton))
+                            .attr('title', gt('External guests'))
                     )
                 );
             }
@@ -226,7 +231,9 @@ define('io.ox/files/share/listview', [
             draw: function (baton) {
                 this.append(
                     $('<div class="list-item-column type gray">').append(
-                        $('<i class="fa fa-link">').toggleClass('gray', !isPublic(baton))
+                        $('<i class="fa fa-link">')
+                            .toggleClass('gray', !isPublic(baton))
+                            .attr('title', gt('Public link'))
                     )
                 );
             }

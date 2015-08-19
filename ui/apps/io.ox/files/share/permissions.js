@@ -209,17 +209,27 @@
             },
 
             onEdit: function (e) {
+
                 e.preventDefault();
-                // turn parent model into file/folder model
-                var model = new filesAPI.Model(this.parentModel.attributes),
-                    popup = this.$el.closest('.share-permissions-dialog');
-                ox.load(['io.ox/files/actions/share']).done(function (action) {
-                    popup.hide();
-                    action.link([model]).one('close', function () {
-                        popup.show();
-                        popup = model = null;
+                var popup = this.$el.closest('.share-permissions-dialog');
+
+                function cont(data) {
+                    // turn parent model into file/folder model
+                    var model = new filesAPI.Model(data);
+                    ox.load(['io.ox/files/actions/share']).done(function (action) {
+                        popup.hide();
+                        action.link([model]).one('close', function () {
+                            popup.show();
+                            popup = model = null;
+                        });
                     });
-                });
+                }
+
+                if (this.parentModel.isFile()) {
+                    cont(this.parentModel.attributes);
+                } else {
+                    folderAPI.get(this.parentModel.get('id')).done(cont);
+                }
             },
 
             getEntityDetails: function () {

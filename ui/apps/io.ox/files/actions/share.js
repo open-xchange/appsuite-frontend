@@ -40,10 +40,22 @@ define('io.ox/files/actions/share', [
 
         var dialog = new dialogs.ModalDialog({ width: 600, async: true })
             .header($('<h4>').text(header))
-            .append(view.render().$el)
-            .addPrimaryButton('share', type === 'invite' ? gt('Invite') : gt('Done'), 'share')
-            .addButton('cancel', gt('Cancel'), 'cancel')
-            .on('share', function () {
+            .append(view.render().$el);
+
+        if (type === 'invite') {
+            // invite guests
+            dialog
+                .addPrimaryButton('share', gt('Invite'), 'share')
+                .addButton('cancel', gt('Cancel'), 'cancel');
+        } else {
+            // get a link (anonymouse)
+            // TODO: Offer "Remove link" (addAlternativeButton; which does what it says)
+            dialog
+                .addPrimaryButton('share', gt('Done'), 'share')
+                .addButton('cancel', gt('Cancel'), 'cancel');
+        }
+
+        dialog.on('share', function () {
                 view.share().then(this.close, this.idle);
             })
             .on('cancel', function () {

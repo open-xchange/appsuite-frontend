@@ -186,7 +186,7 @@ define('io.ox/files/share/model', [
                     return api.invite(model.toJSON()).fail(yell);
                 case 'read':
                     return api.getLink(this.toJSON()).then(function (data, timestamp) {
-                        if (data.is_new && data.is_new === true) {
+                        if (data.is_new === true) {
                             // if existing link add unique ID to simulate existing Backbone model
                             delete data.is_new;
                             data.id = _.uniqueId();
