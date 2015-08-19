@@ -136,6 +136,10 @@ define('io.ox/tasks/main', [
                 container: app.getWindow().nodes.main,
                 classes: 'rightside'
             });
+
+            app.getTour = function () {
+                return { id: 'default/io.ox/tasks', path: 'io.ox/tours/tasks' };
+            };
         },
         /*
          * Init all nav- and toolbar labels for mobile
