@@ -139,6 +139,10 @@ define('io.ox/contacts/main', [
                 container: app.getWindow().nodes.main,
                 classes: 'rightside'
             });
+
+            app.getTour = function () {
+                return { id: 'default/io.ox/contacts', path: 'io.ox/tours/contacts' };
+            };
         },
 
         'folder-view-mobile': function (app) {

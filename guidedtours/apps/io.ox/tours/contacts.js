@@ -13,46 +13,41 @@
  */
 
 define('io.ox/tours/contacts', [
-    'io.ox/core/extensions',
-    'io.ox/core/notifications',
+    'io.ox/core/tk/wizard',
     'gettext!io.ox/tours'
-], function (ext, notifications, gt) {
+], function (Tour, gt) {
 
     'use strict';
 
     /* Tour: contacts / address book */
-    ext.point('io.ox/tours/extensions').extend({
+    Tour.registry.add({
         id: 'default/io.ox/contacts',
         app: 'io.ox/contacts',
-        priority: 1,
-        tour: {
-            id: 'Address book',
-            steps: [{
-                title: gt('Creating a new contact'),
-                placement: 'right',
-                target: function () { return $('.classic-toolbar .io-ox-action-link:visible')[0]; },
-                content: gt('To create a new contact, click on New > Add contact in the toolbar.'),
-                yOffset: -10
-            },
-            {
-                title: gt('Navigation bar'),
-                placement: 'right',
-                target: function () { return $('.contact-grid-index:visible')[0]; },
-                content: gt('Click on a letter on the left side of the navigation bar in order to display the corresponding contacts from the selected address book.')
-            },
-            {
-                title: gt('Sending an E-Mail to a contact'),
-                placement: 'bottom',
-                target: function () { return $('.contact-detail [href^="mailto"]:visible')[0]; },
-                content: gt('To send an E-Mail to the contact, click on an E-Mail address or on Send email in the toolbar.')
-            },
-            {
-                title: gt('Editing multiple contacts'),
-                placement: 'top',
-                target: function () { return $('.vgrid-scrollpane-container:visible')[0]; },
-                content: gt('To edit multiple contacts at once, enable the checkboxes on the left side of the contacts. If the checkboxes are not displayed, click on View > Checkboxes on the right side of the toolbar.'),
-                xOffset: -20
-            }]
-        }
+        priority: 1
+    }, function () {
+        new Tour()
+        .step()
+            .title(gt('Creating a new contact'))
+            .content(gt('To create a new contact, click on New > Add contact in the toolbar.'))
+            .spotlight('.classic-toolbar .io-ox-action-link:first')
+            .end()
+        .step()
+            .title(gt('Navigation bar'))
+            .content(gt('Click on a letter on the left side of the navigation bar in order to display the corresponding contacts from the selected address book.'))
+            .spotlight('.contact-grid-index')
+            .end()
+        .step()
+            .title(gt('Sending an E-Mail to a contact'))
+            .content(gt('To send an E-Mail to the contact, click on an E-Mail address or on Send email in the toolbar.'))
+            .spotlight('.contact-detail [href^="mailto"]:first')
+            .hotspot('.classic-toolbar [data-action=send]')
+            .end()
+        .step()
+            .title(gt('Editing multiple contacts'))
+            .content(gt('To edit multiple contacts at once, enable the checkboxes on the left side of the contacts. If the checkboxes are not displayed, click on View > Checkboxes on the right side of the toolbar.'))
+            .spotlight('.vgrid-scrollpane')
+            .hotspot('.classic-toolbar [data-dropdown=view]')
+            .end()
+        .start();
     });
 });
