@@ -443,11 +443,13 @@ define('io.ox/settings/main', [
             id: 'io.ox/core'
         });
 
-        ext.point('io.ox/settings/pane/general').extend({
-            title: gt('Accounts'),
-            index: 200,
-            id: 'io.ox/settings/accounts'
-        });
+        if (!capabilities.has('guest')) {
+            ext.point('io.ox/settings/pane/general').extend({
+                title: gt('Accounts'),
+                index: 200,
+                id: 'io.ox/settings/accounts'
+            });
+        }
 
         ext.point('io.ox/settings/pane').extend({
             id: 'tools',

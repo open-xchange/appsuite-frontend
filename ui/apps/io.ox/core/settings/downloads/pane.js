@@ -154,8 +154,8 @@ define('io.ox/core/settings/downloads/pane', [
         });
     }
 
-    // no download available?
-    if (ext.point('io.ox/core/settings/downloads/pane/detail').list().length === 0) return;
+    // no download available or guest mode?
+    if (ext.point('io.ox/core/settings/downloads/pane/detail').list().length === 0 || capabilities.has('guest')) return;
 
     //
     // draw settings pane
