@@ -60,9 +60,8 @@ define('io.ox/presenter/main', [
                         app.mainView = new MainView({ model: fileModel, app: app });
                         page.append(app.mainView.render().$el);
                         // restore state before the browser reload
-                        if (lastState) {
-                            //console.info('restart presentaion after browser reload');
-                            app.rtConnection.startPresentation();
+                        if (lastState && lastState.isPresenter) {
+                            app.rtConnection.startPresentation({ activeSlide: lastState.slideId || 0 });
                         }
                     }
 
@@ -118,10 +117,10 @@ define('io.ox/presenter/main', [
 
         'on-window-unload': function (app) {
             $(window).on('beforeunload', function () {
-                var lastState = SessionRestore.state('presenter~' + app.file.id);
-                if (lastState) {
-
-                    lastState.slideId = app.mainView.getActiveSlideIndex();
+                var state = SessionRestore.state('presenter~' + app.file.id);
+                if (state) {
+                    state.slideId = app.mainView.getActiveSlideIndex();
+                    SessionRestore.state('presenter~' + app.file.id, state);
                 }
 
                 app.disposeRTConnection();
