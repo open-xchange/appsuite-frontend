@@ -22,17 +22,6 @@
     "path": "io.ox/tours/intro"
 },
 {
-    "namespace": "io.ox/files/main",
-    "title": "Guided tours for Drive",
-    "company": "Open-Xchange",
-    "icon": "/images/icon.png",
-    "category": "Dev",
-    "settings": false,
-    "index": 100,
-    "package": "open-xchange-guidedtours",
-    "path": "io.ox/tours/files"
-},
-{
     "namespace": "io.ox/portal/main",
     "title": "Guided tours for Portal",
     "company": "Open-Xchange",

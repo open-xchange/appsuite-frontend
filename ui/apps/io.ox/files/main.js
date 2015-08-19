@@ -68,6 +68,10 @@ define('io.ox/files/main', [
                 container: c,
                 startPage: true
             });
+
+            app.getTour = function () {
+                return { id: 'default/io.ox/files', path: 'io.ox/tours/files' };
+            };
         },
 
         /*
