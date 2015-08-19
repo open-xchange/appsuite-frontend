@@ -45,12 +45,13 @@ define('io.ox/core/notifications', [
             //close when clicked outside, since we don't have the overlay anymore
             //does not work with some dropdowns though (they prevent event bubbling), but the notification popup is in the background then
             $(document.body).on('click', function (e) {
-                var isInside = $( e.target )
-                    .closest('#io-ox-notifications, #io-ox-notifications-sidepopup, #io-ox-notifications-icon, .io-ox-dialog-underlay, .io-ox-dialog-popup, .modal-footer, .custom-dropdown').length > 0;
+                // don't check if notification area is closed
+                if (self.getStatus() !== 'closed') {
+                    var isInside = $( e.target )
+                        .closest('#io-ox-notifications, #io-ox-notifications-sidepopup, #io-ox-notifications-icon, .io-ox-dialog-underlay, .io-ox-dialog-popup, .modal-footer, .custom-dropdown').length > 0;
 
-                if (!isInside ) {
-                    if (self.getStatus() !== 'closed') {
-                        self.hide({ refocus: false });
+                    if (!isInside ) {
+                        self.hide({ refocus: document.body === document.activeElement });
                     }
                 }
             });
@@ -217,13 +218,16 @@ define('io.ox/core/notifications', [
 
         onCloseSidepopup: function () {
             this.sidepopupIsClosing = false;
-            this.model.set('status', 'open');
-            if (_.device('smartphone')) {
-                this.nodes.main.addClass('active');
+            // if the notification area is closed already we don't set the status back to open etc
+            if (this.model.get('status') !== 'closed') {
+                this.model.set('status', 'open');
+                if (_.device('smartphone')) {
+                    this.nodes.main.addClass('active');
+                }
+                //focus first for now
+                this.nodes.main.find('.item').first().focus();
             }
 
-            //focus first for now
-            this.nodes.main.find('.item').first().focus();
             var self = this,
                 popup = this.model.get('sidepopup');
             if (popup) {
