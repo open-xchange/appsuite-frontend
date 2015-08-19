@@ -339,6 +339,10 @@ define('io.ox/portal/main', [
         return !_(haystack).some(function (suspiciousHay) {return suspiciousHay.cid === needle; });
     };
 
+    app.getTour = function () {
+        return { id: 'default/io.ox/portal', path: 'io.ox/tours/portal' };
+    };
+
     app.getWidgetCollection = function () {
         return collection;
     };
