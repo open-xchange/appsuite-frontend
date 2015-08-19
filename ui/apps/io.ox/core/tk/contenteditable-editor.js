@@ -242,6 +242,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
             entity_encoding: 'raw',
 
+            forced_root_block: 'p',
+
             browser_spellcheck: true,
 
             plugins: opt.plugins,
@@ -413,7 +415,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             if (!str) return;
             return textproc.texttohtml(str).done(function (content) {
                 if (/^<blockquote\>/.test(content)) {
-                    content = '<p></p>' + content;
+                    content = '<p><br></p>' + content;
                 }
                 set(content);
             });
@@ -441,13 +443,19 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         this.appendContent = function (str) {
             var content = this.getContent();
             str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
-            this.setContent(content + str);
+            content = content.replace(/^(<p><br><\/p>){2,}/, '').replace(/(<p><br><\/p>)+$/, '') + '<p><br></p>' + str;
+            if (/^<blockquote/.test(content)) {
+                content = '<p><br></p>' + content;
+            }
+            this.setContent(content);
         };
 
         this.prependContent = function (str) {
             var content = this.getContent();
             str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
-            this.setContent(str + content);
+            content = str + '<p><br></p>' + content.replace(/^(<p><br><\/p>)+/, '').replace(/(<p><br><\/p>){2,}$/, '');
+            content = '<p><br></p>' + content;
+            this.setContent(content);
         };
 
         this.replaceParagraph = function (str, rep) {

@@ -131,12 +131,15 @@ define('io.ox/core/tk/text-editor', function () {
 
         this.appendContent = function (str) {
             var content = this.getContent();
+            // Remove whitespace above and below content and add newline before appended string
+            content = this.getContent().replace(/\n+$/, '').replace(/^\n+/, '');
             this.setContent(content + '\n\n' + str);
         };
 
         this.prependContent = function (str) {
-            var content = this.getContent();
-            this.setContent(str + '\n\n' + content);
+            // Remove whitespace above and below content and add newline before prepended string
+            var content = this.getContent().replace(/^\n+/, '').replace(/\n+$/, '');
+            this.setContent('\n' + str + '\n\n' + content);
         };
 
         this.replaceParagraph = function (str, rep) {

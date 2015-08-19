@@ -918,20 +918,24 @@ define('io.ox/mail/compose/view', [
                 return (self.editorHash[self.model.get('editorMode')] = new Editor(self.model.get('editorMode') === 'text' ? self.textarea : self.contentEditable))
                     .done(function () {
                         self.editor = self.editorHash[self.model.get('editorMode')];
-                        self.editor.setPlainText(content);
-                        self.editor.handleShow(true);
-                        if (self.model.get('mode') !== 'compose') {
-                            self.editor.focus();
-                        }
+                        return $.when(self.editor.setPlainText(content)).done(function () {
+                            self.editor.handleShow(true);
+                            self.setSelectedSignature();
+                            if (self.model.get('mode') !== 'compose') {
+                                self.editor.focus();
+                            }
+                        });
                     });
             });
         },
 
         reuseEditor: function (content) {
+            var self = this;
             this.editor = this.editorHash[this.model.get('editorMode')];
-            this.editor.setPlainText(content);
-            this.editor.handleShow(true);
-            return $.when();
+            return $.when(this.editor.setPlainText(content)).done(function () {
+                self.editor.handleShow(true);
+                self.setSelectedSignature();
+            });
         },
 
         getEditor: function () {
@@ -945,11 +949,14 @@ define('io.ox/mail/compose/view', [
         },
 
         toggleEditorMode: function () {
+            var self = this;
             // be busy
             this.contentEditable.busy();
             this.textarea.prop('disabled', true).busy();
 
             if (this.editor) {
+                this.removeSignature();
+
                 var content = this.editor.getPlainText(),
                     self = this;
                 this.editor.clear();
@@ -984,38 +991,45 @@ define('io.ox/mail/compose/view', [
                 content = content.replace(/[\s\uFEFF\xA0]+$/, '');
             }
 
+            if (this.model.get('mode') !== 'compose') {
+                // Remove extranous <br>
+                content = content.replace(/\n<br>&nbsp;$/, '\n');
+            }
+
             this.editor.setContent(content);
 
             if (this.model.get('initial')) {
-                if (this.model.get('mode') === 'compose') {
-                    this.setSelectedSignature(this.model.get('defaultSignatureId'));
-                } else {
-                    this.setSelectedSignature(this.model.get('defaultReplyForwardSignatureId'));
-                }
+                this.setSelectedSignature();
+                this.prependNewLine();
             }
         },
 
         setSelectedSignature: function (model, id) {
+            if (!model) model = this.model.get('defaultSignatureId');
 
             if (_.isString(model)) id = model;
 
             var signatures = this.model.get('signatures');
 
-            var newSignature  = _(signatures).where({ id: String(id) })[0],
-                prevSignature = _(signatures).where({ id: _.isObject(model) ? model.previous('defaultSignatureId') : '' })[0];
+            this.model.set('signature', _(signatures).where({ id: String(id) })[0]);
 
-            if (prevSignature) {
-                this.removeSignature(prevSignature);
-            }
-            if (newSignature) {
-                var ds = newSignature;
+            var prevSignature = _(signatures).where({ id: _.isObject(model) ? model.previous('defaultSignatureId') : '' })[0];
+
+            if (prevSignature) this.removeSignature(prevSignature);
+
+            if (this.model.get('signature')) {
+                var ds = this.model.get('signature');
                 ds.misc = _.isString(ds.misc) ? JSON.parse(ds.misc) : ds.misc;
                 this.setSignature(ds);
             }
-            this.prependNewLine();
         },
 
         removeSignature: function (signature) {
+
+            if (!signature) {
+                if (!this.model.get('signature')) return;
+                signature = this.model.get('signature');
+            }
 
             var self = this,
                 isHTML = !!this.editor.find,
@@ -1073,12 +1087,10 @@ define('io.ox/mail/compose/view', [
             return $('<div>').append(node).html();
         },
 
-        prependNewLine: function (content) {
-            var content = this.editor.getContent(),
-                nl = this.model.get('editorMode') === 'html' ? '<p><br></p>' : '\n\n';
-            if (content !== '' && content.indexOf(nl) !== 0 && content.indexOf('<br>') !== 0) {
-                this.editor.setContent(nl + content);
-            }
+        prependNewLine: function () {
+            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p><br><\/p>)+/, ''),
+                nl = this.model.get('editorMode') === 'html' ? '<p><br></p>' : '\n';
+            this.editor.setContent(nl + content);
         },
 
         setMail: function () {

@@ -36,7 +36,6 @@ define('io.ox/mail/compose/model', [
                 sendDisplayName: !!settings.get('sendDisplayName', true),
                 sendtype: mailAPI.SENDTYPE.NORMAL,
                 defaultSignatureId: settings.get('defaultSignature'),
-                defaultReplyForwardSignatureId: settings.get('defaultReplyForwardSignature'),
                 csid: mailAPI.csid(),
                 vcard: settings.get('appendVcard', false) ? 1 : 0,
                 infostore_ids_saved: []
@@ -97,6 +96,11 @@ define('io.ox/mail/compose/model', [
                     }
                     this.set('from', [address]);
                 }.bind(this));
+            }
+
+            // Set default signature dependant on mode, there are settings that correspond to this
+            if (this.get('mode') !== 'compose') {
+                this.set('defaultSignatureId', settings.get('defaultReplyForwardSignature'));
             }
 
             if (!this.get('signatures')) this.getSignatures();
