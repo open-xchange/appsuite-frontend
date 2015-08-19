@@ -115,7 +115,9 @@
             isOpera = Object.prototype.toString.call(window.opera) === '[object Opera]';
             webkit = ua.indexOf('AppleWebKit/') > -1;
             chrome = ua.indexOf('Chrome/') > -1;
-            edge = ua.indexOf('Edge/') > -1;  // TODO: This needs to be updated, if better user agent is available
+            // TODO: This needs to be updated, if better user agent is available
+            // http://dev.modern.ie/platform/faq/what-is-the-microsoft-edge-user-agent-st
+            edge = ua.indexOf('Edge/') > -1;
             phantom = ua.indexOf('PhantomJS/') > -1;
             MacOS = ua.indexOf('Macintosh') > -1;
             Windows = ua.indexOf('Windows') > -1;
