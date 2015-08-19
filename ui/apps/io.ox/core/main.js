@@ -1194,17 +1194,24 @@ define('io.ox/core/main', [
                     $.txt(sc.bannerProductName || 'App Suite')
                 );
 
-                // show current user
-                banner.find('.banner-content').append(
-                    $('<label>').text(gt('Signed in as:')),
-                    $.txt(' '), $.txt(ox.user),
+                var content = banner.find('.banner-content');
+
+                // show current user (unless anonymous)
+                if (ox.user !== 'anonymous') {
+                    content.append(
+                        $('<label>').text(gt('Signed in as:')),
+                        $.txt(' '), $.txt(ox.user)
+                    );
+                }
+
+                content.append(
                     $('<a href="#" class="banner-action" data-action="logout" role="button" tabindex="1">')
-                        .attr('title', gt('Sign out'))
-                        .append('<i class="fa fa-power-off">')
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            logout();
-                        })
+                    .attr('title', gt('Sign out'))
+                    .append('<i class="fa fa-power-off">')
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        logout();
+                    })
                 );
 
                 // prevent logout action within top-bar drop-down

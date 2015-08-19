@@ -353,7 +353,7 @@ define('io.ox/core/tk/tokenfield', [
                         left = self.input.offset().left * -1;
                         width = window.innerWidth;
                     } else if (o.leftAligned) {
-                        left = self.tt.$node.position().left;
+                        left = self.input.position().left;
                         left = Math.round(left) * -1 + 17;
                     }
                     this.$menu.css({ left: left, width: width }).show();
