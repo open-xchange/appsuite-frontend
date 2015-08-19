@@ -18,8 +18,9 @@ define('io.ox/presenter/main', [
     'io.ox/presenter/rtconnection',
     'io.ox/presenter/rtmodel',
     'io.ox/presenter/views/mainview',
+    'io.ox/presenter/sessionrestore',
     'less!io.ox/presenter/style'
-], function (FilesAPI, PageController, RTConnection, RTModel, MainView) {
+], function (FilesAPI, PageController, RTConnection, RTModel, MainView, SessionRestore) {
 
     'use strict';
 
@@ -50,14 +51,19 @@ define('io.ox/presenter/main', [
 
                     var title = data.filename || data.title,
                         fileModel = FilesAPI.pool.get('detail').get(_.cid(data)),
-                        page = app.pages.getPage('presentationView');
+                        page = app.pages.getPage('presentationView'),
+                        lastState = SessionRestore.state('presenter~' + app.file.id);
 
                     // RT connect success handler
                     function rtConnectSuccess(response) {
-                        console.info('ConnectSuccess()', response);
                         app.rtModel.set(app.rtModel.parse(response));
                         app.mainView = new MainView({ model: fileModel, app: app });
                         page.append(app.mainView.render().$el);
+                        // restore state before the browser reload
+                        if (lastState) {
+                            //console.info('restart presentaion after browser reload');
+                            app.rtConnection.startPresentation();
+                        }
                     }
 
                     // RT connect error handler
@@ -67,7 +73,7 @@ define('io.ox/presenter/main', [
 
                     // Handler update events of the RT connection
                     function rtUpdateHandler (event, data) {
-                        console.info('Presenter - rtUpdateHandler()', data);
+                        //console.info('Presenter - rtUpdateHandler()', data);
                         app.rtModel.set(app.rtModel.parse(data));
                     }
 
@@ -111,7 +117,13 @@ define('io.ox/presenter/main', [
         },
 
         'on-window-unload': function (app) {
-            $(window).on('unload', function () {
+            $(window).on('beforeunload', function () {
+                var lastState = SessionRestore.state('presenter~' + app.file.id);
+                if (lastState) {
+
+                    lastState.slideId = app.mainView.getActiveSlideIndex();
+                }
+
                 app.disposeRTConnection();
             });
         },
@@ -119,6 +131,7 @@ define('io.ox/presenter/main', [
         'on-app-quit': function (app) {
             app.on('quit', function () {
                 app.disposeRTConnection();
+                SessionRestore.state('presenter~' + app.file.id, null);
             });
         }
 

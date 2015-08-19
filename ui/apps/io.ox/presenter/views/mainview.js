@@ -15,13 +15,14 @@ define('io.ox/presenter/views/mainview', [
     'io.ox/core/notifications',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/actions',
+    'io.ox/presenter/sessionrestore',
     'io.ox/presenter/views/presentationview',
     'io.ox/presenter/views/sidebarview',
     'io.ox/presenter/views/toolbarview',
     'io.ox/presenter/views/thumbnailview',
     'gettext!io.ox/presenter',
     'io.ox/core/tk/nodetouch'
-], function (DisposableView, Notifications, Ext, ActionsPattern, PresentationView, SidebarView, ToolbarView, ThumbnailView, gt) {
+], function (DisposableView, Notifications, Ext, ActionsPattern, SessionRestore, PresentationView, SidebarView, ToolbarView, ThumbnailView, gt) {
 
     'use strict';
 
@@ -148,6 +149,15 @@ define('io.ox/presenter/views/mainview', [
          * Handles remote presentation start invoked by the real-time framework.
          */
         onPresentationStart: function () {
+            var rtModel = this.app.rtModel,
+                userId = this.app.rtConnection.getRTUuid();
+
+            if (rtModel.isPresenter(userId)) {
+                // store presenter state and slide id to restore presentation on browser reload
+                SessionRestore.state('presenter~' + this.model.get('id'), { isPresenter: true, slideId: this.getActiveSlideIndex() });
+            }
+
+            // show presentation start notification to all participants.
             this.notifyPresentationStart();
         },
 
@@ -170,6 +180,8 @@ define('io.ox/presenter/views/mainview', [
             if (!rtModel.hasPresenter() && (userId !== formerPresenter.presenterId)) {
                 this.toggleFullscreen(false);
             }
+            // remove presenter id from session store
+            SessionRestore.state('presenter~' + this.model.get('id'), null);
             // show presentation end notification to all participants.
             this.notifyPresentationEnd();
         },
