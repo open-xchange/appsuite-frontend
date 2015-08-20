@@ -530,7 +530,17 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             if (layout === 'list') {
                 this.triggerChange(items);
             } else {
-                this.view.trigger('selection:change selection:action', this.get());
+                var list = this.get(),
+                    events = 'selection:change selection:action';
+
+                // to keep correct select all checkbox state
+                if (items.length > 0 && items.length === list.length) {
+                    events += ' selection:all';
+                } else {
+                    events += ' selection:subset';
+                }
+
+                this.view.trigger(events, list);
             }
         }
     };
