@@ -17,11 +17,19 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     'io.ox/core/api/user',
     'io.ox/core/util',
     'io.ox/core/capabilities',
-    'io.ox/core/folder/breadcrumb',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, FolderAPI, UserAPI, util, capabilities, BreadcrumbView, gt) {
+], function (PanelBaseView, Ext, folderAPI, UserAPI, util, capabilities, gt) {
 
     'use strict';
+
+    function setFolder(e) {
+        // launch files and set/change folder
+        e.preventDefault();
+        var id = e.data.id;
+        ox.launch('io.ox/files/main', { folder: id }).done(function () {
+            this.folder.set(id);
+        });
+    }
 
     Ext.point('io.ox/core/viewer/sidebar/fileinfo').extend({
         index: 100,
@@ -62,41 +70,17 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                     // path; using "Folder" instead of "Save in" because that one
                     // might get quite long, e.g. "Gespeichert unter"
                     $('<dt>').text(gt('Folder')),
-                    $('<dd class="saved-in">')
-                );
-
-                var breadcrumb = new BreadcrumbView({ folder: model.get('folder_id'), exclude: ['9'], notail: true });
-
-                breadcrumb.handler = function (id) {
-                    // launch files and set/change folder
-                    ox.launch('io.ox/files/main', { folder: id }).done(function () {
-                        this.folder.set(id);
-                    });
-                };
-
-                dl.find('dd.saved-in').append(
-                    breadcrumb.render().$el
+                    $('<dd class="saved-in">').append(
+                        $('<a href="#">').append(folderAPI.getTextNode(model.get('folder_id')))
+                        .on('click', { id: model.get('folder_id') }, setFolder)
+                    )
                 );
             }
 
-            // UserAPI.getName(modifiedBy)
-            //     .done(function (name) {
-            //         dl.find('.size').after(
-            //             // modified
-            //             $('<dt>').text(gt('Modified by')),
-            //             $('<dd class="modified-by">').text(name));
-            //     })
-            //     .fail(function () {
-            //         dl.find('.size').after(
-            //             // modified
-            //             $('<dt>').text(gt('Modified by')),
-            //             $('<dd class="modified-by">').text(gt('unknown')));
-            //     });
-
             if (!capabilities.has('alone') && !capabilities.has('guest')) {
-                FolderAPI.get(baton.model.get('folder_id')).done(function (folderData) {
+                folderAPI.get(baton.model.get('folder_id')).done(function (folderData) {
                     // only show links to infostore files, links to mail attachments would mean broken links, see bug 39752
-                    if (FolderAPI.is('infostore', folderData)) {
+                    if (folderAPI.is('infostore', folderData)) {
                         dl.append(
                             // deep link
                             $('<dt>').text(gt('Link')),
