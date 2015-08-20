@@ -414,8 +414,10 @@ define('io.ox/files/actions', [
                                 });
                                 if (conflicts.title) {
                                     require(['io.ox/core/tk/filestorageUtil'], function (filestorageUtil) {
-                                        filestorageUtil.displayConflicts(conflicts, function () {
-                                            api[type](list, baton.target, true);
+                                        filestorageUtil.displayConflicts(conflicts, {
+                                            callbackIgnoreConflicts: function () {
+                                                api[type](list, baton.target, true);
+                                            }
                                         });
                                     });
                                 } else {
@@ -444,8 +446,11 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/invite', {
         capabilities: 'invite_guests',
         requires: function (e) {
-            // true if we have a file
-            if (e.collection.has('one')) return true;
+            if (e.collection.has('one')) {
+                var id = e.baton.data.folder_id;
+                // check if the folder supports giving permissions (external filestorage folders might not)
+                return folderAPI.pool.getModel(id).supports('permissions');
+            }
             // otherwise check if the user is admin for the current folder
             if (!e.baton.app) return false;
             var id = e.baton.app.folder.get();
@@ -470,8 +475,11 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/getalink', {
         capabilities: 'share_links',
         requires: function (e) {
-            // true if we have a file
-            if (e.collection.has('one')) return true;
+            if (e.collection.has('one')) {
+                var id = e.baton.data.folder_id;
+                // check if the folder supports giving permissions (external filestorage folders might not)
+                return folderAPI.pool.getModel(id).supports('permissions');
+            }
             // otherwise check if the user is admin for the current folder
             if (!e.baton.app) return false;
             var id = e.baton.app.folder.get();

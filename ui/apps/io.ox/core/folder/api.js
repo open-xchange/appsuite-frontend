@@ -182,7 +182,12 @@ define('io.ox/core/folder/api', [
 
         // check if the folder can be shared (requires admin bit and the capability "permissions")
         isShareable: function () {
-            return this.isAdmin() && _(this.get('supported_capabilities')).indexOf('permissions') > -1;
+            return this.isAdmin() && this.supports('permissions');
+        },
+
+        // checks if the folder supports a capability
+        supports: function (capability) {
+            return _(this.get('supported_capabilities')).indexOf(capability) > -1;
         },
 
         // convenience functions / maps to folderAPI.is(type, folder)
