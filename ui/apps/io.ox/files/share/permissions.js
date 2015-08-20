@@ -260,8 +260,7 @@
             getRole: function () {
                 var bits = this.model.get('bits'), bitmask;
                 if (this.parentModel.isFile()) {
-                    if (bits === 4) return 'author';
-                    if (bits === 2) return 'reviewer';
+                    if (bits === 2 || bits === 4) return 'reviewer';
                 } else {
                     bitmask = folderAPI.Bitmask(this.model.get('bits'));
                     if (bitmask.get('admin')) return 'administrator';
@@ -410,10 +409,13 @@
                         })
                         .option('role', 'reviewer', function () {
                             return [$.txt(gt('Reviewer')), $.txt(' '), $('<small>').text(gt('(Read and write)'))];
-                        })
-                        .option('role', 'author', function () {
+                        });
+                    if (!isFile) {
+                        // files cannot be deleted in file-based shares
+                        dropdown.option('role', 'author', function () {
                             return [$.txt(gt('Author')), $.txt(' '), $('<small>').text(gt('(Read, write, and delete)'))];
                         });
+                    }
                     if (baton.view.supportsAdminRole()) {
                         dropdown.divider().option('role', 'administrator', gt('Administrator'));
                     }
