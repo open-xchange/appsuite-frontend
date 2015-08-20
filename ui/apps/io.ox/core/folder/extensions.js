@@ -23,9 +23,8 @@ define('io.ox/core/folder/extensions', [
     'gettext!io.ox/core',
     'io.ox/core/folder/folder-color',
     'io.ox/backbone/mini-views/upsell',
-    'io.ox/backbone/mini-views/quota',
     'io.ox/core/folder/favorites'
-], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color, UpsellView, QuotaView) {
+], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color, UpsellView) {
 
     'use strict';
 
@@ -171,22 +170,6 @@ define('io.ox/core/folder/extensions', [
             }).render().$el);
         },
 
-        mailQuota: function () {
-            if (_.device('smartphone')) return;
-
-            this.append(new QuotaView({
-                title: gt('Mail quota'),
-                renderUnlimited: false,
-                upsell: {
-                    title: gt('Need more space?'),
-                    requires: 'active_sync || caldav || carddav',
-                    id: 'mail-folderview-quota',
-                    icon: ''
-                },
-                upsellLimit: 5 * 1024 * 1024 // default upsell limit of 5 mb
-            }).render().$el);
-        },
-
         otherFolders: function (tree) {
             this.append(
                 new TreeNodeView({
@@ -273,11 +256,6 @@ define('io.ox/core/folder/extensions', [
             id: 'upsell-mail',
             index: INDEX += 100,
             draw: extensions.synchronizeAccount
-        },
-        {
-            id: 'quota',
-            index: INDEX += 100,
-            draw: extensions.mailQuota
         }
     );
 

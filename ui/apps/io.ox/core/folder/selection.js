@@ -180,8 +180,8 @@ define('io.ox/core/folder/selection', [], function () {
             return nodes.addClass('selected')
                 .attr({ 'aria-selected': true, tabindex: 1 })
                 .find('.folder-label').each(function () {
-                    var left = $(this).position().left, maxWidth = width - left - 64;
-                    $(this).css('max-width', Math.max(maxWidth, 120));
+                    var left = $(this).position().left, maxWidth = width - left - 64 - 8;
+                    $(this).css('max-width', Math.max(maxWidth, 80));
                 })
                 .end();
         },

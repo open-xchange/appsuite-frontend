@@ -29,6 +29,7 @@ define('io.ox/mail/main', [
     'io.ox/core/capabilities',
     'io.ox/core/folder/tree',
     'io.ox/core/folder/view',
+    'io.ox/backbone/mini-views/quota',
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
     'io.ox/mail/actions',
@@ -38,7 +39,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, gt, settings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, QuotaView, gt, settings) {
 
     'use strict';
 
@@ -222,11 +223,31 @@ define('io.ox/mail/main', [
             if (_.device('smartphone')) return;
 
             // tree view
-            var tree = new TreeView({ app: app, module: 'mail', contextmenu: true });
+            app.treeView = new TreeView({ app: app, module: 'mail', contextmenu: true });
 
             // initialize folder view
-            FolderView.initialize({ app: app, tree: tree });
+            FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
+        },
+
+        'mail-quota': function (app) {
+
+            if (_.device('smartphone')) return;
+
+            app.treeView.$el.append(
+                new QuotaView({
+                    title: gt('Mail quota'),
+                    renderUnlimited: false,
+                    upsell: {
+                        title: gt('Need more space?'),
+                        requires: 'active_sync || caldav || carddav',
+                        id: 'mail-folderview-quota',
+                        icon: ''
+                    },
+                    upsellLimit: 5 * 1024 * 1024 // default upsell limit of 5 mb
+                })
+                .render().$el
+            );
         },
 
         /*
