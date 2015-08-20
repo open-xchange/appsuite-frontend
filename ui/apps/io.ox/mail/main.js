@@ -383,6 +383,11 @@ define('io.ox/mail/main', [
                     // turn off conversation mode for any sort order but date (610)
                     if (value !== 610) app.props.set('thread', false);
                 }
+                if (value === 610) {
+                    // restore thread when it was disabled by force
+                    var options = app.getViewOptions(app.folder.get());
+                    app.props.set('thread', options.threadrestore);
+                }
                 // now change sort columns
                 model.set('sort', value);
             });
@@ -401,7 +406,7 @@ define('io.ox/mail/main', [
          * Respond to conversation mode changes
          */
         'change:thread': function (app) {
-            app.props.on('change:thread', function (model, value) {
+            app.props.on('change:thread', function (model, value, opt) {
                 if (app.listView.collection) {
                     app.listView.collection.expired = true;
                 }
@@ -409,6 +414,8 @@ define('io.ox/mail/main', [
                     app.props.set('sort', 610);
                     app.listView.model.set('thread', true);
                 } else {
+                    // remember/remove thread state for restoring
+                    opt.viewOptions = app.props.get('sort') === 610 ? { threadrestore: undefined } : { threadrestore: true };
                     app.listView.model.set('thread', false);
                 }
             });
@@ -425,11 +432,11 @@ define('io.ox/mail/main', [
          * Store view options
          */
         'store-view-options': function (app) {
-            app.props.on('change', _.debounce(function () {
+            app.props.on('change', _.debounce(function (model, options) {
                 if (app.props.get('find-result')) return;
                 var folder = app.folder.get(), data = app.props.toJSON();
                 app.settings
-                    .set(['viewOptions', folder], { sort: data.sort, order: data.order, thread: data.thread })
+                    .set(['viewOptions', folder], _.extend({ sort: data.sort, order: data.order, thread: data.thread }, options.viewOptions || {} ))
                     .set('layout', data.layout)
                     .set('showContactPictures', data.contactPictures)
                     .set('showExactDates', data.exactDates);
@@ -561,7 +568,7 @@ define('io.ox/mail/main', [
                     fromTo = $(app.left[0]).find('.dropdown.grid-options .dropdown-menu [data-value="from-to"] span'),
                     showFrom = account.is('sent|drafts', id);
 
-                app.props.set(options);
+                app.props.set(_.pick(options, 'sort', 'order', 'thread'));
                 app.listView.model.set('folder', id);
                 app.folder.getData();
 
