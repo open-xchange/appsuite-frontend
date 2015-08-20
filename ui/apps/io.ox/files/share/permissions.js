@@ -346,7 +346,7 @@
             id: 'image',
             draw: function (baton) {
 
-                var column = $('<div class="col-md-1 col-xs-2 image">'),
+                var column = $('<div class="col-sm-1 col-xs-2 image">'),
                     node = $('<span class="contact-picture">');
 
                 if (baton.view.user) {
@@ -375,7 +375,7 @@
                 var url = baton.model.get('share_url');
 
                 this.append(
-                    $('<div class="col-md-5 col-xs-8">').append(
+                    $('<div class="col-sm-5 col-xs-10">').append(
                         $('<div class="display_name">').text(baton.view.display_name),
                         $('<div class="description">').append(
                             url ? $('<a href="" target="_blank" tabindex="1">').attr('href', url).text(url) : $.txt(baton.view.description)
@@ -436,7 +436,7 @@
                 }
 
                 this.append(
-                    $('<div class="col-md-3 col-xs-6 role">').append(node)
+                    $('<div class="col-sm-3 col-sm-offset-0 col-xs-3 col-xs-offset-2 role">').append(node)
                 );
             }
         },
@@ -450,7 +450,7 @@
 
                 // not available for anonymous links (read-only)
                 if (baton.model.get('type') === 'anonymous') {
-                    this.append('<div class="col-md-2 col-xs-6">');
+                    this.append('<div class="col-sm-2 col-xs-4">');
                     return;
                 }
 
@@ -459,7 +459,7 @@
                     // only fix invalid values
                     var bits = baton.model.get('bits');
                     if (bits < 1 || bits > 4) baton.model.set('bits', 1);
-                    this.append($('<div class="col-md-2 col-xs-6 detail-dropdown">'));
+                    this.append($('<div class="col-sm-2 col-xs-4 detail-dropdown">'));
                     return;
                 }
 
@@ -534,7 +534,7 @@
                 if (!baton.parentModel.isAdmin()) dropdown.$('li > a').addClass('disabled');
 
                 this.append(
-                    $('<div class="col-md-2 col-xs-6 detail-dropdown">').append(
+                    $('<div class="col-sm-2 col-xs-4 detail-dropdown">').append(
                         dropdown.$el.attr('title', gt('Detailed access rights'))
                     )
                 );
@@ -575,7 +575,7 @@
                 }
 
                 this.append(
-                    $('<div class="col-md-1 col-xs-2 entity-actions">').append(
+                    $('<div class="col-sm-1 col-xs-2 entity-actions">').append(
                         dropdown.render().$el
                     )
                 );
