@@ -274,17 +274,20 @@ define('io.ox/files/share/api', [
 
             options = _.extend({ cache: true }, options);
 
-            var model = filesAPI.pool.get('detail').get(_.cid(obj));
-            if (options.cache && model.has('com.openexchange.share.extendedObjectPermissions')) return $.when(model.toJSON());
+            return filesAPI.get(obj).then(function (data) {
 
-            return http.PUT({
-                module: 'files',
-                params: { action: 'list', columns: '7010' },
-                data: [{ id: obj.id, folder: obj.folder_id }]
-            })
-            .then(function (array) {
-                model.set(array[0]);
-                return model.toJSON();
+                if (options.cache && data['com.openexchange.share.extendedObjectPermissions']) return data;
+
+                return http.PUT({
+                    module: 'files',
+                    params: { action: 'list', columns: '7010' },
+                    data: [{ id: obj.id, folder: obj.folder_id }]
+                })
+                .then(function (array) {
+                    var model = filesAPI.pool.get('detail').get(_.cid(obj));
+                    model.set(array[0]);
+                    return model.toJSON();
+                });
             });
         },
 
