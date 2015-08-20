@@ -371,6 +371,9 @@ define('io.ox/mail/compose/view', [
             // Empty compose (early exit)
             if (obj.mode === 'compose') return $.when();
 
+            // keep attachments (mail body) for restored reply
+            if (obj.restored) return $.when();
+
             var self = this,
                 mode = obj.mode;
 
