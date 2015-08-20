@@ -40,7 +40,25 @@ define('io.ox/core/pdf/pdfview', [
         DEVICE_OUTPUTSCALING = Math.min(DEVICE_PIXEL_RATIO, MAX_DEVICE_PIXEL_RATIO),
 
         // render the optional text layer with a timeout of 200ms
-        TEXT_LAYER_RENDER_DELAY = 200;
+        TEXT_LAYER_RENDER_DELAY = 200,
+
+        // between every render call (assigned deferred) there is create a timeout of 250ms
+        handleRenderQueue = (function () {
+            var lastDef = $.when();
+
+            return function (deferred) {
+                lastDef = lastDef.then(function () {
+                    var def = $.Deferred();
+                    deferred.then(function () {
+                        setTimeout(function () {
+                            def.resolve();
+                        }, 250);
+                    });
+                    deferred.resolve();
+                    return def;
+                });
+            };
+        }());
 
     // - class PDFView ---------------------------------------------------------
 
@@ -534,42 +552,44 @@ define('io.ox/core/pdf/pdfview', [
                 pageData[pagePos].curPageZoom = pageZoom;
                 pageData[pagePos].isInRendering = true;
 
-                return pdfDocument.getPDFJSPage(pageNumber).then( function (pdfjsPage) {
-                    if (pageNode.children().length) {
-                        var viewport = getPageViewport(pdfjsPage, pageZoom),
-                            pageSize = PDFView.getNormalizedSize({ width: viewport.width, height: viewport.height }),
-                            scaledSize = { width: pageSize.width * DEVICE_OUTPUTSCALING, height: pageSize.height * DEVICE_OUTPUTSCALING },
-                            canvasWrapperNode = pageNode.children('.canvas-wrapper'),
-                            canvasNode = canvasWrapperNode.children('canvas'),
-                            textWrapperNode = pageNode.children('.text-wrapper'),
-                            pdfTextBuilder = null;
+                var renderDef = $.Deferred();
+                renderDef.then(function () {
+                    pdfDocument.getPDFJSPage(pageNumber).then( function (pdfjsPage) {
+                        if (pageNode.children().length) {
+                            var viewport = getPageViewport(pdfjsPage, pageZoom),
+                                pageSize = PDFView.getNormalizedSize({ width: viewport.width, height: viewport.height }),
+                                scaledSize = { width: pageSize.width * DEVICE_OUTPUTSCALING, height: pageSize.height * DEVICE_OUTPUTSCALING },
+                                canvasWrapperNode = pageNode.children('.canvas-wrapper'),
+                                canvasNode = canvasWrapperNode.children('canvas'),
+                                textWrapperNode = pageNode.children('.text-wrapper'),
+                                pdfTextBuilder = null;
 
-                        canvasNode.empty();
+                            canvasNode.empty();
 
-                        pageNode.attr(pageSize).css(pageSize);
-                        pageNode.parent('.document-page').css(pageSize);
-                        canvasWrapperNode.attr(pageSize).css(pageSize);
-                        canvasNode.attr(scaledSize).css(pageSize);
+                            pageNode.attr(pageSize).css(pageSize);
+                            pageNode.parent('.document-page').css(pageSize);
+                            canvasWrapperNode.attr(pageSize).css(pageSize);
+                            canvasNode.attr(scaledSize).css(pageSize);
 
-                        if (textWrapperNode.length) {
-                            textWrapperNode.empty().attr(pageSize).css(pageSize);
+                            if (textWrapperNode.length) {
+                                textWrapperNode.empty().attr(pageSize).css(pageSize);
 
-                            pdfTextBuilder = new PDFTextLayerBuilder({
-                                textLayerDiv: textWrapperNode[0],
-                                viewport: viewport,
-                                pageIndex: pageNumber });
-                        }
+                                pdfTextBuilder = new PDFTextLayerBuilder({
+                                    textLayerDiv: textWrapperNode[0],
+                                    viewport: viewport,
+                                    pageIndex: pageNumber });
+                            }
 
-                        var canvasCtx = canvasNode[0].getContext('2d');
+                            var canvasCtx = canvasNode[0].getContext('2d');
 
-                        canvasCtx._transformMatrix = [DEVICE_OUTPUTSCALING, 0, 0, DEVICE_OUTPUTSCALING, 0, 0];
-                        canvasCtx.scale(DEVICE_OUTPUTSCALING, DEVICE_OUTPUTSCALING);
+                            canvasCtx._transformMatrix = [DEVICE_OUTPUTSCALING, 0, 0, DEVICE_OUTPUTSCALING, 0, 0];
+                            canvasCtx.scale(DEVICE_OUTPUTSCALING, DEVICE_OUTPUTSCALING);
 
-                        return pdfjsPage.render({
-                            canvasContext: canvasCtx,
-                            viewport: viewport
-                        }).then( function () {
-                            return (pdfTextBuilder ?
+                            return pdfjsPage.render({
+                                canvasContext: canvasCtx,
+                                viewport: viewport
+                            }).then( function () {
+                                if (pdfTextBuilder) {
                                     pdfjsPage.getTextContent().then( function (pdfTextContent) {
                                         pdfTextBuilder.setTextContent(pdfTextContent);
                                         setTimeout(function () {
@@ -577,12 +597,17 @@ define('io.ox/core/pdf/pdfview', [
                                             prepareTextLayerForTextSelection(textWrapperNode);
                                         }, TEXT_LAYER_RENDER_DELAY);
                                         return def.resolve();
-                                    }) : def.resolve());
-                        });
-                    } else {
-                        return def.reject();
-                    }
+                                    });
+                                } else {
+                                    def.resolve();
+                                }
+                            });
+                        } else {
+                            return def.reject();
+                        }
+                    });
                 });
+                handleRenderQueue(renderDef);
             } else {
                 def.reject();
             }
