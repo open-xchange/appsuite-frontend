@@ -785,6 +785,9 @@ define('io.ox/core/main', [
             id: 'notifications',
             index: 100,
             draw: function () {
+                // disable notifications if there is no capability of the following (e.g. drive as only app)
+                if (!capabilities.has('webmail') && !capabilities.has('calendar') && !capabilities.has('tasks')) return;
+
                 var self = this;
                 if (ox.online) {
                     // we don't need this right from the start,
