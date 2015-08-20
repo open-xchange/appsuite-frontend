@@ -402,6 +402,10 @@ define('io.ox/files/api', [
                 http.GET({ module: module, params: _(params).omit('limit') }).then(null, $.when)
             )
             .then(function (folders, files) {
+                // sort by date client-side
+                if (String(params.sort) === '5') {
+                    folders = _(folders).sortBy('last_modified');
+                }
                 if (params.order === 'desc') folders.reverse();
                 return [].concat(folders, files[0] || []);
             });
