@@ -190,9 +190,14 @@ define('io.ox/core/folder/api', [
             return _(this.get('supported_capabilities')).indexOf(capability) > -1;
         },
 
-        // convenience functions / maps to folderAPI.is(type, folder)
+        // convenience function / maps to folderAPI.is(type, folder)
         is: function (type) {
             return util.is(type, this.attributes);
+        },
+
+        // convenience function / maps to folderAPI.can(action, folder)
+        can: function (action) {
+            return util.can(action, this.attributes);
         }
     });
 
