@@ -36,7 +36,7 @@ define('io.ox/core/links', [], function () {
         e.preventDefault();
         var data = $(this).data();
         if (data.id) {
-            // open file in side-popup
+            // open file in viewer
             require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (Viewer, api) {
                 api.get(_.cid(data.id)).done(function (data) {
                     var viewer = new Viewer();

@@ -81,7 +81,7 @@ define('io.ox/mail/detail/links', [
                 tasks: gt('Tasks'),
                 files: gt('Folder')
             },
-            regDeepLink = /^([\s\S]*)(http[^#]+#!{0,2}&?app=([^&]+)((&(folder|id|perspective)=[^&\s]+)+))([\s\S]*)$/i,
+            regDeepLink = /^([\s\S]*)(http[^#]+#!{0,2}&?app=([^&]+)((&(folder|id|item|perspective)=[^&\s]+)+))([\s\S]*)$/i,
             regDeepLinkAlt = /^([\s\S]*)(http[^#]+#m=(contacts|calendar|tasks|infostore)((&(f|i)=[^&\s]+)+))([\s\S]*)$/i;
 
         isDeepLink = function (str) {
@@ -95,7 +95,8 @@ define('io.ox/mail/detail/links', [
             // fix app
             data.app = app[data.app] || data.app;
             // add folder, id, perspective (jQuery's extend to skip undefined)
-            return $.extend(data, { folder: params.f, id: params.i }, { folder: params.folder, id: params.id, perspective: params.perspective });
+            // share links use "item" instead of "id" (for whatever reason)
+            return $.extend(data, { folder: params.f, id: params.i }, { folder: params.folder, id: params.id || params.item, perspective: params.perspective });
         };
 
         // node must be a plain text node or a string
