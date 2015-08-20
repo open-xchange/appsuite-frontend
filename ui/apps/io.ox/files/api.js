@@ -23,7 +23,7 @@ define('io.ox/files/api', [
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, settings, filesSettings, gt) {
+], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, coreSettings, settings, gt) {
 
     'use strict';
 
@@ -386,7 +386,7 @@ define('io.ox/files/api', [
         getQueryParams: function (params) {
             return {
                 action: 'all',
-                folder: params.folder || settings.get('folder/infostore'),
+                folder: params.folder || coreSettings.get('folder/infostore'),
                 columns: allColumns,
                 sort: params.sort || '702',
                 order: params.order || 'asc',
@@ -646,7 +646,7 @@ define('io.ox/files/api', [
             });
         },
         'remove:infostore': function () {
-            var id = filesSettings.get('folder/trash');
+            var id = settings.get('folder/trash');
             if (id) {
                 folderAPI.list(id, { cache: false });
                 _(pool.getByFolder(id)).each(function (collection) {
@@ -817,7 +817,7 @@ define('io.ox/files/api', [
         options = _.extend({
             // used by api.version.upload to be different from api.upload
             action: 'new',
-            folder: settings.get('folder/infostore'),
+            folder: coreSettings.get('folder/infostore'),
             // allow API consumers to override the module (like OX Guard will certainly do)
             module: 'files'
         }, options);
@@ -1103,6 +1103,13 @@ define('io.ox/files/api', [
                     });
                     // file count changed, need to reload folder
                     folderAPI.reload(list);
+                    // mark trash folders as expired
+                    var id = coreSettings.get('folder/trash');
+                    if (id) {
+                        _(pool.getByFolder(id)).each(function (collection) {
+                            collection.expired = true;
+                        });
+                    }
                     break;
 
                 case 'remove:version':
