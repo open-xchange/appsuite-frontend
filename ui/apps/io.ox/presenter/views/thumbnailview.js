@@ -148,15 +148,17 @@ define('io.ox/presenter/views/thumbnailview', [
         createDocumentThumbnailImage: function (className) {
             var image = new Image(),
                 self = this;
+
             image.className = className;
             image.onload = function () {
-                var ratio = this.width / this.height,
-                    defaultWidth = this.width > this.height ? self.thumbnailWidthLandscape : self.thumbnailWidthPortrait;
-                $(this.parentNode).css({
-                    width: defaultWidth,
-                    height: defaultWidth / ratio
-                });
-                $(image.parentNode).removeClass('io-ox-busy');
+                var $image = $(this),
+                    $parent = $image.parent(),
+                    width = $image.width(),
+                    height = $image.height(),
+                    ratio = width / height,
+                    defaultWidth = (width > height) ? self.thumbnailWidthLandscape : self.thumbnailWidthPortrait;
+
+                $parent.width(defaultWidth).height(defaultWidth / ratio).removeClass('io-ox-busy');
             };
             return image;
         },
