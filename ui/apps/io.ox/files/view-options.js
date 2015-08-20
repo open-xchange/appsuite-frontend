@@ -226,6 +226,7 @@ define('io.ox/files/view-options', [
                                 .append(
                                     icon ? [$('<i class="fa ' + icon + '" aria-hidden="true">'), $('<span class="sr-only">').text(text)] : $('<span>').text(text)
                                 ).attr({
+                                    'data-trigger': 'hover',
                                     'data-toggle': 'tooltip',
                                     'data-placement': 'top',
                                     'data-animation': 'false',
@@ -233,7 +234,8 @@ define('io.ox/files/view-options', [
                                     'title': text
                                 }).tooltip();
                             if (service) {
-                                node.on('click', function () {
+                                node.on('click', function (e) {
+                                    e.preventDefault();
                                     var win = window.open(ox.base + '/busy.html', '_blank', 'height=600, width=800, resizable=yes, scrollbars=yes');
                                     service.createInteractively(win);
                                 });
