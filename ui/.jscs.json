@@ -10,7 +10,6 @@
     "disallowMultipleLineBreaks": true,
     "disallowTrailingWhitespace": true,
     "disallowMixedSpacesAndTabs": true,
-    "requireDotNotation": true,
     "requireLineFeedAtFileEnd": true,
     "requireCommaBeforeLineBreak": true,
     "disallowSpaceBeforePostfixUnaryOperators": ["++", "--"],
