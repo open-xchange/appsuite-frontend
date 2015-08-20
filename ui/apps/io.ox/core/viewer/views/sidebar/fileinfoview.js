@@ -47,6 +47,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 modified = model.get('last_modified'),
                 isToday = moment().isSame(moment(modified), 'day'),
                 dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-',
+                folder_id = model.get('folder_id'),
                 link = util.getDeepLink('io.ox/files', model.toJSON()),
                 dl = $('<dl>');
 
@@ -71,14 +72,16 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                     // might get quite long, e.g. "Gespeichert unter"
                     $('<dt>').text(gt('Folder')),
                     $('<dd class="saved-in">').append(
-                        $('<a href="#">').append(folderAPI.getTextNode(model.get('folder_id')))
-                        .on('click', { id: model.get('folder_id') }, setFolder)
+                        $('<a>')
+                        .attr('href', folderAPI.getDeepLink({ module: 'infostore', id: folder_id }))
+                        .append(folderAPI.getTextNode(folder_id))
+                        .on('click', { id: folder_id }, setFolder)
                     )
                 );
             }
 
             if (!capabilities.has('alone') && !capabilities.has('guest')) {
-                folderAPI.get(baton.model.get('folder_id')).done(function (folderData) {
+                folderAPI.get(folder_id).done(function (folderData) {
                     // only show links to infostore files, links to mail attachments would mean broken links, see bug 39752
                     if (folderAPI.is('infostore', folderData)) {
                         dl.append(

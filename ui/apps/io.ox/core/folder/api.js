@@ -998,6 +998,14 @@ define('io.ox/core/folder/api', [
         return node;
     }
 
+    function getDeepLink(data) {
+
+        var app = 'io.ox/' + (data.module === 'infostore' ? 'files' : data.module),
+            folder = encodeURIComponent(data.id);
+
+        return ox.abs + ox.root + '/#!&app=' + app + '&folder=' + folder;
+    }
+
     //
     // ignoreSentItems()
     // check a list of object if they originate from more than one folder
@@ -1195,6 +1203,7 @@ define('io.ox/core/folder/api', [
         getDefaultFolder: util.getDefaultFolder,
         getStandardMailFolders: getStandardMailFolders,
         getTextNode: getTextNode,
+        getDeepLink: getDeepLink,
         getFolderTitle: getFolderTitle,
         ignoreSentItems: ignoreSentItems,
         processListResponse: processListResponse,
