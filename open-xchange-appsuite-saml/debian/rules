@@ -6,9 +6,19 @@ export DEB_BUILDINFO_STRICT=1
 
 include /usr/share/cdbs/1/class/ant.mk
 include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/rules/utils.mk
+
+# Which distribution is this?
+DIST_CODE = $(shell lsb_release -sc)
+
+ifeq "$(DIST_CODE)" "wheezy"
+    HTDOC := /var/www/
+else ifeq "$(DIST_CODE)" "jessie"
+    HTDOC := /var/www/html/
+else
+    $(error Not supported Debian version.)
+endif
 
 JAVA_HOME = /usr/lib/jvm/default-java
-DEB_ANT_ARGS = -DdestDir=$(DEB_DESTDIR) -DpackageName=$(DEB_SOURCE_PACKAGE) -DkeepCache=true
+DEB_ANT_ARGS = -DdestDir=$(DEB_DESTDIR) -DpackageName=$(DEB_SOURCE_PACKAGE) -Dhtdoc=$(HTDOC) -DkeepCache=true
 DEB_ANT_BUILDFILE = build/build.xml
 DEB_ANT_INSTALL_TARGET = build

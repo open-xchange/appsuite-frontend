@@ -3,30 +3,44 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-ifneq (,$(or $(filter noopt,$(DEB_BUILD_OPTIONS)),\
-             $(filter nostrip,$(DEB_BUILD_OPTIONS))))
+ifneq (,$(or $(filter noopt,$(DEB_BUILD_OPTIONS)),$(filter nostrip,$(DEB_BUILD_OPTIONS))))
 	FLAGS += debug=1
 endif
 
-PKGNAME := open-xchange-appsuite
+# Which distribution is this?
+DIST_CODE = $(shell lsb_release -sc)
+
+ifeq "$(DIST_CODE)" "wheezy"
+	HTDOC := /var/www/
+else ifeq "$(DIST_CODE)" "jessie"
+	HTDOC := /var/www/html/
+else
+	$(error Not supported Debian version.)
+endif
+
+PKGNAME := $(strip $(shell egrep '^Source: ' debian/control | cut -f 2 -d ':'))
 ROOT := $(CURDIR)/debian/$(PKGNAME)
 
 override_dh_auto_install:
-	ant -Dbasedir=build -DdestDir=$(ROOT) -DpackageName=$(PKGNAME) -Dlanguages=false -DkeepCache=true -f build/build.xml build
+	ant -Dbasedir=build -DdestDir=$(ROOT) -DpackageName=$(PKGNAME) -Dhtdoc=$(HTDOC) -Dlanguages=false -DkeepCache=true -f build/build.xml build
 	for LANG in ca_ES cs_CZ da_DK de_DE en_GB en_US es_ES es_MX fi_FI fr_CA fr_FR hu_HU it_IT ja_JP lv_LV nb_NO nl_NL pl_PL pt_BR ro_RO ru_RU sk_SK sv_SE zh_CN zh_TW; do \
 		PACKAGE_EXTENSION=$$(echo $${LANG} | tr '[:upper:]_' '[:lower:]-'); \
-		ant -Dbasedir=build -DdestDir=$(ROOT)-l10n-$${PACKAGE_EXTENSION} -DpackageName=$(PKGNAME) -DinstallTarget=$${LANG} -DkeepCache=true -Dnoclean=true -f build/build.xml build; \
+		ant -Dbasedir=build -DdestDir=$(ROOT)-l10n-$${PACKAGE_EXTENSION} -DpackageName=$(PKGNAME) -Dhtdoc=$(HTDOC) -DinstallTarget=$${LANG} -DkeepCache=true -Dnoclean=true -f build/build.xml build; \
 	done
 	mkdir -p $(ROOT)-manifest/opt
 	mv $(ROOT)/opt $(ROOT)-manifest/
 	mkdir -p $(ROOT)/opt/open-xchange/sbin
-	cat $(ROOT)-manifest/opt/open-xchange/sbin/touch-appsuite | sed -e "s:## cd ##:cd /var/www/appsuite:" > \
+	cat $(ROOT)-manifest/opt/open-xchange/sbin/touch-appsuite | sed -e "s:## cd ##:cd $(HTDOC)appsuite:" > \
 		$(ROOT)/opt/open-xchange/sbin/touch-appsuite
 	chmod +x $(ROOT)/opt/open-xchange/sbin/touch-appsuite
 	rm -r $(ROOT)-manifest/opt/open-xchange/sbin/
 
 override_dh_auto_clean:
 	ant -Dbasedir=build -f build/build.xml clean
+
+override_dh_installdeb:
+	echo $(HTDOC)appsuite/apps/themes/.htaccess >$(CURDIR)/debian/open-xchange-appsuite.conffiles
+	dh_installdeb
 
 %:
 	dh $@
