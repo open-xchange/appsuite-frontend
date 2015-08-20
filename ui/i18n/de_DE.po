@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-08-20 09:11+0100\n"
+"PO-Revision-Date: 2015-08-20 11:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -5634,7 +5634,7 @@ msgstr "Öffentlicher Link"
 #: apps/io.ox/files/share/permissions.js:45 module:io.ox/core
 #: apps/io.ox/files/share/permissions.js:409
 msgid "Viewer"
-msgstr "Viewer"
+msgstr "Betrachter"
 
 #. Role: view folder + read/write all
 #: apps/io.ox/files/share/permissions.js:47 module:io.ox/core
