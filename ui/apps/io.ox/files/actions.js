@@ -446,15 +446,13 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/invite', {
         capabilities: 'invite_guests',
         requires: function (e) {
-            if (e.collection.has('one')) {
-                var id = e.baton.data.folder_id;
-                // check if the folder supports giving permissions (external filestorage folders might not)
-                return folderAPI.pool.getModel(id).supports('permissions');
+            var id;
+            if (e.baton.app) {
+                id = e.baton.app.folder.get();
+            } else if (e.collection.has('one')) {
+                id = e.baton.data.folder_id;
             }
-            // otherwise check if the user is admin for the current folder
-            if (!e.baton.app) return false;
-            var id = e.baton.app.folder.get();
-            return folderAPI.pool.getModel(id).isShareable();
+            return id ? folderAPI.pool.getModel(id).isShareable() : false;
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
@@ -475,15 +473,13 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/getalink', {
         capabilities: 'share_links',
         requires: function (e) {
-            if (e.collection.has('one')) {
-                var id = e.baton.data.folder_id;
-                // check if the folder supports giving permissions (external filestorage folders might not)
-                return folderAPI.pool.getModel(id).supports('permissions');
+            var id;
+            if (e.baton.app) {
+                id = e.baton.app.folder.get();
+            } else if (e.collection.has('one')) {
+                id = e.baton.data.folder_id;
             }
-            // otherwise check if the user is admin for the current folder
-            if (!e.baton.app) return false;
-            var id = e.baton.app.folder.get();
-            return folderAPI.pool.getModel(id).isShareable();
+            return id ? folderAPI.pool.getModel(id).isShareable() : false;
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
