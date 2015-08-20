@@ -927,6 +927,9 @@ define('io.ox/mail/compose/view', [
                             if (self.model.get('mode') !== 'compose') {
                                 self.editor.focus();
                             }
+                            if (self.model.get('editorMode') !== 'text') {
+                                self.editor.resetUndo();
+                            }
                         });
                     });
             });

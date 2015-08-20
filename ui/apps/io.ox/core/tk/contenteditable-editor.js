@@ -537,6 +537,10 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             $(window).off('resize.tinymce');
         };
 
+        this.resetUndo = function () {
+            ed.undoManager.clear();
+        };
+
         this.destroy = function () {
             this.handleHide();
             if (el.tinymce()) {
