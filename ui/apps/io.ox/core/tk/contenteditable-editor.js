@@ -394,7 +394,10 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         };
 
         this.focus = function () {
-            ed.focus();
+            _.defer(function () {
+                ed.focus();
+                ed.execCommand('mceFocus', false, el.attr('data-editor-id'));
+            });
         };
 
         this.ln2br = ln2br;
