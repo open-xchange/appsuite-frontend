@@ -642,7 +642,8 @@ define('io.ox/files/api', [
         'before:clear': function (id) {
             // clear target folder
             _(pool.getByFolder(id)).each(function (collection) {
-                collection.reset([]);
+                var files = collection.filter(function (model) { return model.isFile(); });
+                collection.remove(files);
             });
         },
         'remove:infostore': function () {
