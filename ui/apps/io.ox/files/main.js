@@ -348,6 +348,9 @@ define('io.ox/files/main', [
             app.folderView.tree.on({
                 'virtual': function (id) {
                     if (id !== 'virtual/myshares') return;
+
+                    app.trigger('folder-virtual:change', id);
+
                     if (app.mysharesListViewControl) {
                         app.mysharesListViewControl.$el.show().siblings().hide();
                     } else {
