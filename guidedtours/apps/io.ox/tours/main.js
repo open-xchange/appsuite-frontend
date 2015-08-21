@@ -31,7 +31,7 @@ define('io.ox/tours/main', [
                 return $.when();
             }
 
-            ox.load(['io.ox/tours/main', 'settings!io.ox/tours']).done(function (tours, tourSettings) {
+            ox.load(['io.ox/core/tk/wizard', 'settings!io.ox/tours']).done(function (Tour, tourSettings) {
                 var disableTour = tourSettings.get('server/disableTours'),
                     startOnFirstLogin = tourSettings.get('server/startOnFirstLogin'),
                     tourVersion = tourSettings.get('server/version', 0),
@@ -39,7 +39,7 @@ define('io.ox/tours/main', [
 
                 if (!disableTour && startOnFirstLogin && tourVersion > tourVersionSeen) {
                     tourSettings.set('user/alreadySeenVersion', tourVersion).save();
-                    tours.runTour('io.ox/intro');
+                    Tour.registry.run('default/io.ox/intro');
                 }
             });
             return $.when();
