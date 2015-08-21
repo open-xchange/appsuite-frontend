@@ -500,10 +500,16 @@ define('io.ox/files/main', [
          * Respond to changed filter
          */
         'change:filter': function (app) {
+
             app.props.on('change:filter', function (model, value) {
                 app.listView.selection.selectNone();
                 if (value === 'none') app.listView.setFilter();
                 else app.listView.setFilter('.file-type-' + value);
+            });
+
+            // reset filter on folder change
+            app.on('folder:change', function () {
+                app.props.set('filter', 'none');
             });
         },
 
