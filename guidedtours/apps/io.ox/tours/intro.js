@@ -15,10 +15,10 @@
 define('io.ox/tours/intro', [
     'io.ox/core/extensions',
     'io.ox/core/notifications',
-    'io.ox/tours/utils',
+    'io.ox/core/capabilities',
     'io.ox/core/tk/wizard',
     'gettext!io.ox/tours'
-], function (ext, notifications, utils, Tour, gt) {
+], function (ext, notifications, capabilities, Tour, gt) {
 
     'use strict';
 
@@ -58,6 +58,9 @@ define('io.ox/tours/intro', [
     Tour.registry.add({
         id: 'default/io.ox/intro'
     }, function () {
+        //Tour needs webmail and should be disabled for guests (See Bug 40545)
+        if (!capabilities.has('webmail && !guest')) return;
+
         new Tour()
         .step()
             .title(gt.format(gt('Welcome to %s'), ox.serverConfig.productName))
