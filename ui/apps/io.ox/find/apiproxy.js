@@ -101,7 +101,7 @@ define('io.ox/find/apiproxy',[
                             params: { module: app.getModuleParam() },
                             data: { prefix: '' }
                         };
-                    return api.autocomplete(request).then(extend.bind(this, request));
+                    return api.config(request).then(extend.bind(this, request));
                 },
                 // suggestions
                 search: function (query) {

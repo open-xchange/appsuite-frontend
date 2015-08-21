@@ -107,6 +107,12 @@ define('io.ox/find/api', [
         return JSON.stringify(request);
     };
 
+    api.config = function (options) {
+        var opt = $.extend(true, {}, getDefault('autocomplete'), options);
+        opt.data.options.check = false;
+        return api.autocomplete(opt);
+    };
+
     /**
      * get available facets
      * @param  {object}     options
