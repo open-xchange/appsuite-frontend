@@ -347,12 +347,20 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/rename', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('one', 'modify', 'items') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
+            return (e.collection.has('one', 'modify', 'items') || e.collection.has('one', 'rename:folder', 'folders')) && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         action: function (baton) {
-            ox.load(['io.ox/files/actions/rename']).done(function (action) {
-                action(baton.data);
-            });
+            // if this is a folder use the folder rename action
+            if (baton.data.folder_id === 'folder') {
+                ox.load(['io.ox/core/folder/actions/rename']).done(function (action) {
+                    action(baton.data.id);
+                });
+            } else {
+                // files use the file rename action
+                ox.load(['io.ox/files/actions/rename']).done(function (action) {
+                    action(baton.data);
+                });
+            }
         }
     });
 

@@ -800,6 +800,8 @@ define('io.ox/core/folder/api', [
                 if (!options.silent) {
                     api.trigger('update update:' + id, id, newId, model.toJSON());
                     if ('permissions' in changes) api.trigger('change:permissions', id);
+                    // used by drive to respond to updated foldernames in icon/list view
+                    if ('title' in changes) api.trigger('rename', id, model.toJSON());
                 }
                 // fetch subfolders of parent folder to ensure proper order after rename/move
                 if (id !== newId || changes.title || changes.folder_id ) return list(model.get('folder_id'), { cache: false }).then(function () {
