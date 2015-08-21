@@ -48,7 +48,9 @@
             //#. Role: create folder + read/write/delete all
             author: { bit: 4227332, label: gt('Author') },
             //#. Role: all permissions
-            administrator: { bit: 272662788, label: gt('Administrator') }
+            administrator: { bit: 272662788, label: gt('Administrator') },
+            //#. Role: Owner (same as admin)
+            owner: { bit: 272662788, label: gt('Owner') }
         },
 
         fileRoles = {
@@ -261,6 +263,8 @@
                 var bits = this.model.get('bits'), bitmask;
                 if (this.parentModel.isFile()) {
                     if (bits === 2 || bits === 4) return 'reviewer';
+                } else if (this.model.get('entity') === ox.user_id) {
+                    return 'owner';
                 } else {
                     bitmask = folderAPI.Bitmask(this.model.get('bits'));
                     if (bitmask.get('admin')) return 'administrator';
@@ -395,12 +399,13 @@
                 var node, dropdown,
                     role = baton.view.getRole(),
                     description = baton.view.getRoleDescription(role),
-                    isFile = baton.parentModel.isFile();
+                    isFile = baton.parentModel.isFile(),
+                    isOwner = baton.model.get('entity') === ox.user_id;
 
                 // apply role for the first time
                 baton.model.set('role', role, { silent: true });
 
-                if (!baton.parentModel.isAdmin() || baton.model.get('type') === 'anonymous') {
+                if (!baton.parentModel.isAdmin() || isOwner || baton.model.get('type') === 'anonymous') {
                     node = $.txt(description);
                 } else {
                     dropdown = new DropdownView({ caret: true, label: description, title: gt('Current role'), model: baton.model, smart: true })
