@@ -199,6 +199,7 @@ define('io.ox/core/desktop', [
                     unset: function () {
                         // unset
                         folder = null;
+                        _.url.hash('folder', null);
                         // update window title?
                         if (win) {
                             win.setTitle(_.noI18n(''));
