@@ -552,7 +552,8 @@
 
                 var dropdown = new DropdownView({ label: $('<i class="fa fa-bars">'), smart: true, title: gt('Actions') }),
                     type = baton.model.get('type'),
-                    myself = type === 'user' && baton.model.get('entity') === ox.user_id;
+                    myself = type === 'user' && baton.model.get('entity') === ox.user_id,
+                    isNew = baton.model.has('new');
 
                 switch (type) {
                     case 'group':
@@ -560,7 +561,7 @@
                         break;
                     case 'user':
                     case 'guest':
-                        if (!myself) {
+                        if (!myself && !isNew) {
                             dropdown.link('resend', gt('Resend invitation')).divider();
                         }
                         dropdown.link('revoke', gt('Revoke access'));
@@ -722,7 +723,8 @@
                             var obj = {
                                 bits: objModel.isFolder() ? 4227332 : 1, // Author : Viewer
                                 group: member.get('type') === 2,
-                                type: member.get('type') === 2 ? 'group' : 'user'
+                                type: member.get('type') === 2 ? 'group' : 'user',
+                                new: true
                             };
                             if (member.get('type') === 2 || member.get('type') === 1) {
                                 obj.entity = member.get('id');
@@ -777,7 +779,8 @@
                                     // Author for Folder : Viewer for Files
                                     bits: objModel.isFolder() ? 4227332 : 1,
                                     contact: { email1: value },
-                                    type: 'guest'
+                                    type: 'guest',
+                                    new: true
                                 }));
 
                                 // clear input field
