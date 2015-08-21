@@ -90,6 +90,8 @@ define('io.ox/core/extPatterns/actions', [
             extension = list[i];
             // avoid default behaviour?
             if (extension.id === 'default' && baton.isDefaultPrevented()) continue;
+            // check for disabled extensions
+            if (baton.isDisabled(point.id, extension.id)) continue;
             // empty tracker?
             if (!ignoreEmptyTracker && baton.tracker.length === 0) break;
             // apply filter
