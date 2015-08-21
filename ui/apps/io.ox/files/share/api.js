@@ -359,17 +359,16 @@ define('io.ox/files/share/api', [
 
         revoke: function (collection, model) {
 
-            var id = model.get('id'),
-                changes;
+            var changes;
 
             if (model.isFolder()) {
                 // TODO: Refactor this ugly workaround
                 collection.reset(_(model.getPermissions()).where({ entity: ox.user_id }));
                 changes = { permissions: collection.toJSON() };
-                return folderAPI.update(id, changes);
+                return folderAPI.update(model.get('id'), changes);
             } else {
-                changes = { object_permissions: [] };
-                return filesAPI.update({ id: id }, changes);
+                changes = { object_permissions: [], 'com.openexchange.share.extendedObjectPermissions': [] };
+                return filesAPI.update(model.pick('folder_id', 'id'), changes);
             }
         },
 

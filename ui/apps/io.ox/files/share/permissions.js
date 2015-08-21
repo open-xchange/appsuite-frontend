@@ -815,14 +815,14 @@
 
             dialog.on('save', function () {
 
-                var id = objModel.get('id'), changes, options = dialogConfig.toJSON(), def;
+                var changes, options = dialogConfig.toJSON(), def;
 
                 if (objModel.isFolder()) {
                     changes = { permissions: permissionsView.collection.toJSON() };
-                    def = folderAPI.update(id, changes, options);
+                    def = folderAPI.update(objModel.get('id'), changes, options);
                 } else {
                     changes = { object_permissions: permissionsView.collection.toJSON() };
-                    def = filesAPI.update({ id: id }, changes, options);
+                    def = filesAPI.update(objModel.pick('folder_id', 'id'), changes, options);
                 }
 
                 def.then(
