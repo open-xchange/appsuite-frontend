@@ -113,25 +113,6 @@ define('io.ox/presenter/main', [
                     app.setState({ id: id, folder: folder_id });
                 }
             });
-        },
-
-        'on-window-unload': function (app) {
-            $(window).on('beforeunload', function () {
-                var state = SessionRestore.state('presenter~' + app.file.id);
-                if (state) {
-                    state.slideId = app.mainView.getActiveSlideIndex();
-                    SessionRestore.state('presenter~' + app.file.id, state);
-                }
-
-                app.disposeRTConnection();
-            });
-        },
-
-        'on-app-quit': function (app) {
-            app.on('quit', function () {
-                app.disposeRTConnection();
-                SessionRestore.state('presenter~' + app.file.id, null);
-            });
         }
 
     });
@@ -147,6 +128,16 @@ define('io.ox/presenter/main', [
             title: ''
         });
 
+        function beforeUnloadHandler() {
+            var state = SessionRestore.state('presenter~' + app.file.id);
+            if (state) {
+                state.slideId = app.mainView.getActiveSlideIndex();
+                SessionRestore.state('presenter~' + app.file.id, state);
+            }
+
+            app.disposeRTConnection();
+        }
+
         // launcher
         return app.setLauncher(function (options) {
 
@@ -158,6 +149,15 @@ define('io.ox/presenter/main', [
 
             app.setWindow(win);
             app.mediate();
+
+            ox.on('beforeunload', beforeUnloadHandler);
+
+            app.on('quit', function () {
+                ox.off('beforeunload', beforeUnloadHandler);
+                app.disposeRTConnection();
+                SessionRestore.state('presenter~' + app.file.id, null);
+            });
+
             win.show();
 
             var cid = options.cid, obj;

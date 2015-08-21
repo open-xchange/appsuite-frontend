@@ -739,7 +739,9 @@ define('io.ox/core/desktop', [
             });
 
         // browser will show a confirmation dialog, if onbeforeunload returns a string
-        if (dirtyApps.length > 0) {
+        var unsavedChanges = dirtyApps.length > 0;
+        ox.trigger('beforeunload', unsavedChanges);
+        if (unsavedChanges) {
             return gt('There are unsaved changes.');
         }
     };
