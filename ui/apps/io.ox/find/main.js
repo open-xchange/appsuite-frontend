@@ -115,9 +115,14 @@ define('io.ox/find/main', [
 
             'reset': function (app) {
                 if (!app.get('inplace')) return;
-
                 // reset on folder click
-                app.listenTo(app.get('parent'), 'folder:change', app.cancel);
+                app.listenTo(app.get('parent'), 'folder:change folder-virtual:change', app.cancel);
+            },
+
+            'enable-disable-toggle': function (app) {
+                if (!app.get('inplace')) return;
+                // disable search field for unsupported folders
+                app.listenTo(app.get('parent'), 'folder:change folder-virtual:change', app.toggle);
             },
 
             'vgrid': function (app) {
@@ -276,6 +281,11 @@ define('io.ox/find/main', [
         // reset and collapse/hide
         app.cancel = function () {
             if (this.view) this.view.cancel();
+        };
+
+        app.toggle = function (folder) {
+            var eventname = /^virtual/.test(folder) ? 'view:disable' : 'view:enable';
+            app.trigger(eventname);
         };
 
         // parent app id

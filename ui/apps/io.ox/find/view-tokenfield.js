@@ -247,8 +247,17 @@ define('io.ox/find/view-tokenfield', [
             this.trigger(e.type, e);
         },
 
+        disable: function () {
+            this.api('disable');
+        },
+
+        enable: function () {
+            this.api('enable');
+        },
+
         // register additional handlers
         register: function () {
+            var self = this;
             function preventOnCancel (e) {
                 if ($(document.activeElement).is('body')) e.preventDefault();
             }
@@ -273,6 +282,12 @@ define('io.ox/find/view-tokenfield', [
             // list for custom typeahead events
             this.ui.view.on({
                 'typeahead-custom:dropdown-rendered': _.bind(this.restoreSelection, this)
+            });
+
+            //
+            this.app.on({
+                'view:disable': _.bind(self.disable, self),
+                'view:enable': _.bind(self.enable, self)
             });
         },
 

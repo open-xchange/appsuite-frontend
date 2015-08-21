@@ -26,6 +26,21 @@ define('io.ox/find/view-placeholder', [
             var win = options.app.getWindow();
             // field stub already rendered by desktop.js
             this.setElement(win.nodes.sidepanel.find('.io-ox-find'));
+
+            this.ui = {
+                field: this.$el.find('.search-field')
+            };
+
+            this.listenTo(options.app, 'view:disable', this.disable);
+            this.listenTo(options.app, 'view:enable', this.enable);
+        },
+
+        disable: function () {
+            this.ui.field.attr('disabled', true);
+        },
+
+        enable: function () {
+            this.ui.field.removeAttr('disabled');
         },
 
         focused: function () {
