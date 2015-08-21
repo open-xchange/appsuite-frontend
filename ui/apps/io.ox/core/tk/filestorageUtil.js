@@ -25,15 +25,15 @@ define('io.ox/core/tk/filestorageUtil', [
             /* displays conflicts when a filestorage does not support some features like versioning. Offers cancel and ignore warnings function
              conflicts is an object with a title and a warnings array containing strings
              options may have :
-                onlyOkButton - if this is set to true, conflicts are only displayed and only a ok button is drawn. There is no choice to ignore conflicts or not.
                 callbackIgnoreConflicts - function that is called when the ignore conflicts button is pressed
                 callbackCancel - function that is called when the ignore cancel button is pressed
+             if there is no callback function only an OK button is drawn
             */
             displayConflicts: function (conflicts, options) {
                 options = options || {};
                 var popup = new dialogs.ModalDialog(),
                     warnings = [];
-                if (options.onlyOkButton) {
+                if (!options.callbackCancel && !options.callbackIgnoreConflicts) {
                     popup.addPrimaryButton('ok', gt('Ok'), 'changechange', { tabIndex: 1 });
                 } else {
                     popup.addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })

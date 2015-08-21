@@ -409,15 +409,24 @@ define('io.ox/files/actions', [
                         successCallback: function (response) {
                             if (!_.isString(response)) {
                                 var conflicts = { warnings: [] };
+                                if (_.isObject(response)) {
+                                    response = [response];
+                                }
                                 // find possible conflicts with filestorages and offer a dialog with ignore warnings option see(Bug 39039)
                                 _(response).each(function (error) {
-                                    if (response.categories === 'CONFLICT' && response.code === 'FLD-1038') {
-                                        if (!conflicts.title) {
-                                            conflicts.title = error.error;
+                                    if (error.error) {
+                                        if (error.error.categories === 'CONFLICT' && (error.error.code === 'FILE_STORAGE-0045' || error.error.code === 'FLD-1038')) {
+                                            if (!conflicts.title) {
+                                                conflicts.title = error.error.error;
+                                            }
+                                            if (_.isObject(error.error.warnings)) {
+                                                conflicts.warnings.push(error.error.warnings.error);
+                                            } else {
+                                                _(error.error.warnings).each(function (warning) {
+                                                    conflicts.warnings.push(warning.error);
+                                                });
+                                            }
                                         }
-                                        _(error.warnings).each(function (warning) {
-                                            conflicts.warnings.push(warning.error);
-                                        });
                                     }
                                 });
                                 if (conflicts.title) {

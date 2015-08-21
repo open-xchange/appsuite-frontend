@@ -831,23 +831,7 @@
                     },
                     function fail(error) {
                         dialog.idle();
-                        var conflicts = { warnings: [] };
-                        // find possible conflicts with filestorages and offer a dialog with ignore warnings option see(Bug 39039)
-                        if (error.categories === 'CONFLICT' && error.code === 'FILE_STORAGE-0045') {
-                            if (!conflicts.title) {
-                                conflicts.title = error.error;
-                            }
-                            conflicts.warnings.push(error.warnings.error);
-                        }
-                        if (conflicts.title) {
-                            require(['io.ox/core/tk/filestorageUtil'], function (filestorageUtil) {
-                                filestorageUtil.displayConflicts(conflicts, {
-                                    onlyOkButton: true
-                                });
-                            });
-                        } else {
-                            yell(error);
-                        }
+                        yell(error);
                     }
                 );
             });

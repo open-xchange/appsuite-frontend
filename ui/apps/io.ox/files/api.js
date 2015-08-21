@@ -698,18 +698,18 @@ define('io.ox/files/api', [
     // Move / Copy
     //
 
-    function move(list, targetFolderId, ignoreConflicts) {
+    function move(list, targetFolderId, ignoreWarnings) {
         http.pause();
         _(list).map(function (item) {
             // move files and folders
             return item.folder_id === 'folder' ?
-                folderAPI.move(item.id, targetFolderId, ignoreConflicts) :
-                api.update(item, { folder_id: targetFolderId }, { silent: true });
+                folderAPI.move(item.id, targetFolderId, ignoreWarnings) :
+                api.update(item, { folder_id: targetFolderId }, { silent: true,  ignoreWarnings: ignoreWarnings });
         });
         return http.resume();
     }
 
-    function copy(list, targetFolderId) {
+    function copy(list, targetFolderId, ignoreWarnings) {
         http.pause();
         _(list).map(function (item) {
             return http.PUT({
@@ -718,7 +718,8 @@ define('io.ox/files/api', [
                     action: 'copy',
                     id: item.id,
                     folder: item.folder_id,
-                    timestamp: item.timestamp || _.then()
+                    timestamp: item.timestamp || _.then(),
+                    ignoreWarnings: ignoreWarnings
                 },
                 data: { folder_id: targetFolderId },
                 appendColumns: false
@@ -727,14 +728,15 @@ define('io.ox/files/api', [
         return http.resume();
     }
 
-    function transfer(type, list, targetFolderId, ignoreConflicts) {
+    function transfer(type, list, targetFolderId, ignoreWarnings) {
         var fn = type === 'move' ? move : copy;
 
-        return http.wait(fn(list, targetFolderId, ignoreConflicts)).then(function (response) {
+        return http.wait(fn(list, targetFolderId, ignoreWarnings)).then(function (response) {
             var errorText, i = 0, $i = response ? response.length : 0;
             // look if anything went wrong
             for (; i < $i; i++) {
-                if (response[i].error) {
+                // conflicts are handled separately
+                if (response[i].error && response[i].error.categories !== 'CONFLICT') {
                     errorText = response[i].error.error;
                     break;
                 }
@@ -749,21 +751,21 @@ define('io.ox/files/api', [
      * Move files to another folder
      * @param  {array} list of objects { id, folder_id }
      * @param  {string} targetFolderId
-     * @param  {boolean} ignoreConflicts
+     * @param  {boolean} ignoreWarnings
      */
-    api.move = function (list, targetFolderId, ignoreConflicts) {
+    api.move = function (list, targetFolderId, ignoreWarnings) {
         prepareRemove(list);
-        return transfer('move', list, targetFolderId, ignoreConflicts);
+        return transfer('move', list, targetFolderId, ignoreWarnings);
     };
 
     /**
      * Copy files to another folder
      * @param  {array} list
      * @param  {string} targetFolderId
-     * @param  {boolean} ignoreConflicts
+     * @param  {boolean} ignoreWarnings
      */
-    api.copy = function (list, targetFolderId, ignoreConflicts) {
-        return transfer('copy', list, targetFolderId, ignoreConflicts);
+    api.copy = function (list, targetFolderId, ignoreWarnings) {
+        return transfer('copy', list, targetFolderId, ignoreWarnings);
     };
 
     //
@@ -802,7 +804,8 @@ define('io.ox/files/api', [
             params: {
                 action: 'update',
                 id: file.id,
-                timestamp: _.then()
+                timestamp: _.then(),
+                ignoreWarnings: options.ignoreWarnings
             },
             data: data,
             appendColumns: false
