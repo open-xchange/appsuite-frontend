@@ -1,6 +1,6 @@
 Name:           open-xchange-dynamic-theme
 Version:        @OXVERSION@
-%define         ox_release 20
+%define         ox_release 2
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
@@ -58,6 +58,10 @@ if [ -x %{update} ]; then %{update}; fi
 %config(noreplace) /opt/open-xchange/etc/settings/open-xchange-dynamic-theme.properties
 
 %changelog
+* Fri Aug 21 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
+Second candidate for 7.8.0 release
+* Wed Aug 05 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
+First candidate for 7.8.0 release
 * Wed Aug 05 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
 First candidate for 7.8.0 release
 * Wed Aug 05 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
@@ -102,6 +106,8 @@ Moved open-xchange-dynamic-theme to the core repository
 Follow-up release for rpost theme
 * Tue Dec 16 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
 Follow-up release for rpost theme
+* Wed Nov 05 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
+prepare for 7.8.0 release
 * Mon Oct 20 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
 Follow-up release candidate for 7.6.1.
 * Wed Oct 15 2014 Viktor Pracht <viktor.pracht@open-xchange.com>

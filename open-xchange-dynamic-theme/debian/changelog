@@ -1,3 +1,9 @@
+open-xchange-dynamic-theme (7.8.0-2) stable; urgency=medium
+
+  * Second candidate for 7.8.0 release
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Fri, 21 Aug 2015 15:15:11 +0000
+
 open-xchange-dynamic-theme (7.8.0-1) stable; urgency=low
 
   * First candidate for 7.8.0 release
