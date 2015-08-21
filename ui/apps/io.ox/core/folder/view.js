@@ -305,6 +305,8 @@ define('io.ox/core/folder/view', [
 
             var ignoreChangeEvent = false;
 
+            tree.on('virtual', app.folder.unset);
+
             tree.on('change', function (id) {
                 ignoreChangeEvent = true;
                 app.folder.set(id);
