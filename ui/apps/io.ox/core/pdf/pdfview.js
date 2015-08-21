@@ -265,7 +265,7 @@ define('io.ox/core/pdf/pdfview', [
 
                         $.when.apply($, renderDefs).always( function () {
                             // notify possible <code>renderCallbacks.endRendering</code> callback function
-                            if (_.isFunction(renderCallbacks.endRendering)) {
+                            if (_.isObject(renderCallbacks) && _.isFunction(renderCallbacks.endRendering)) {
                                 renderCallbacks.endRendering(pagesToRender);
                             }
 
