@@ -207,11 +207,9 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
 
         // return deep link for a given file
         getDeepLink: function (app, data) {
-
-            var folder = encodeURIComponent(data.folder_id),
-                id = encodeURIComponent(data.id);
-
-            return ox.abs + ox.root + '/#!&app=' + app + '&folder=' + folder + '&id=' + id;
+            return ox.abs + ox.root + '/#!&app=' + app +
+                '&folder=' + encodeURIComponent(data.folder_id) +
+                (data.id !== undefined ? '&id=' + encodeURIComponent(data.id) : '');
         }
     };
 

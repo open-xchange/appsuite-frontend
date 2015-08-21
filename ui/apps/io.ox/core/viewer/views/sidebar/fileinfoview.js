@@ -40,7 +40,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
             var panelBody,
                 model = baton.model,
-                fileName = model.get('filename') || '-',
+                name = model.getDisplayName() || '-',
                 size = model.get('file_size'),
                 sizeString = (_.isNumber(size)) ? _.filesize(size) : '-',
                 modifiedBy = model.get('modified_by'),
@@ -48,13 +48,13 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 isToday = moment().isSame(moment(modified), 'day'),
                 dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-',
                 folder_id = model.get('folder_id'),
-                link = util.getDeepLink('io.ox/files', model.toJSON()),
+                link =  util.getDeepLink('io.ox/files', model.isFile() ? model.pick('folder_id', 'id') : model.pick('folder_id')),
                 dl = $('<dl>');
 
             dl.append(
                 // filename
-                $('<dt>').text(gt('Filename')),
-                $('<dd class="file-name">').text(fileName),
+                $('<dt>').text(gt('Name')),
+                $('<dd class="file-name">').text(name),
                 // size
                 $('<dt>').text(gt('Size')),
                 $('<dd class="size">').text(sizeString),
@@ -112,7 +112,8 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         initialize: function (options) {
             this.options = options || {};
             this.closable = !!this.options.closable;
-            this.setPanelHeader(gt('File details'));
+            //#. File and folder details
+            this.setPanelHeader(gt('Details'));
             // attach event handlers
             this.listenTo(this.model, 'change:filename change:file_size change:last_modified change:folder_id', this.render);
             this.on('dispose', this.disposeView.bind(this));

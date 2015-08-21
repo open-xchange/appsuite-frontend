@@ -477,8 +477,18 @@ define('io.ox/files/main', [
                         )
                     );
                 } else {
-                    var fileModel = app.listView.collection.get(app.listView.selection.get()[0]);
-                    sidebarView.render(fileModel);
+
+                    var item = app.listView.selection.get()[0], folder, model;
+
+                    if (/^folder\./.test(item)) {
+                        // get folder
+                        folder = folderAPI.pool.getModel(item.replace(/^folder\./, ''));
+                        model = new api.Model(folder.attributes);
+                    } else {
+                        model = app.listView.collection.get(item);
+                    }
+
+                    sidebarView.render(model);
                     sidebarView.renderSections();
                     sidebarView.$('img').trigger('appear.lazyload');
                     sidebarView.$('.sidebar-panel-thumbnail').attr('aria-label', gt('thumbnail'));
