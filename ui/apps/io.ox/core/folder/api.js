@@ -226,6 +226,7 @@ define('io.ox/core/folder/api', [
         onRemove: function (model) {
             if (isFlat(model.get('module'))) return;
             pool.getModel(this.id).set('subfolders', this.length > 0);
+            api.trigger('collection:remove', this.id, model);
         }
     });
 

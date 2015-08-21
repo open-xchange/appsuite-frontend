@@ -52,6 +52,11 @@ define('io.ox/core/folder/favorites', [
         // respond to change events
         collection.on('add remove', storeCollection);
 
+        // respond to collection remove event to sync favorites
+        api.on('collection:remove', function (id, model) {
+            collection.remove(model);
+        });
+
         var extension = {
             id: 'favorites',
             index: 1,
@@ -132,6 +137,9 @@ define('io.ox/core/folder/favorites', [
                 module = baton.module,
                 favorites = settings.get('favorites/' + module, []),
                 isFavorite = _(favorites).indexOf(id) > -1;
+
+            // don't offer for trash folders
+            if (api.is('trash', baton.data)) return;
 
             addLink(this, {
                 action: 'toggle-favorite',

@@ -221,6 +221,9 @@ define('io.ox/core/folder/contextmenu', [
                 var canCreate = baton.data.id === 'default0' && api.altnamespace;
                 if (!canCreate && !api.can('create:folder', baton.data)) return;
 
+                // not within trash
+                if (api.is('trash', baton.data)) return;
+
                 addLink(this, {
                     action: 'add-subfolder',
                     data: { app: baton.app, folder: baton.data.id, module: baton.module },
