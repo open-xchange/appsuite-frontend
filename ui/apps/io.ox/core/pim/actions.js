@@ -27,7 +27,6 @@ define('io.ox/core/pim/actions', [
 
         // view attachment
         view: {
-            id: 'view_new',
             requires: 'some',
             multiple: function (baton) {
                 require(['io.ox/core/viewer/main'], function (Viewer) {
@@ -39,7 +38,6 @@ define('io.ox/core/pim/actions', [
 
         // open attachment
         open: {
-            id: 'open',
             requires: 'one',
             action: function (baton) {
                 var url = attachmentAPI.getUrl(baton.data, 'view');
@@ -49,7 +47,6 @@ define('io.ox/core/pim/actions', [
 
         // download attachment
         download: {
-            id: 'download',
             requires: function (e) {
                 // browser support for downloading more than one file at once is pretty bad (see Bug #36212)
                 return e.collection.has('one') && _.device('!ios');
@@ -62,7 +59,6 @@ define('io.ox/core/pim/actions', [
 
         // save attachment
         save: {
-            id: 'save',
             capabilities: 'infostore',
             requires: 'some',
             multiple: function (list) {

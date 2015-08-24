@@ -291,7 +291,6 @@ define('io.ox/files/actions', [
 
     //drive action for double-click or enter in files
     new Action('io.ox/files/actions/default', {
-        id: 'default',
         action: function (baton) {
             require(['io.ox/core/extPatterns/actions']).done(function (actions) {
                 actions.invoke('io.ox/files/actions/viewer', null, baton);
@@ -409,7 +408,6 @@ define('io.ox/files/actions', [
 
     function moveAndCopy(type, label, success) {
         new Action('io.ox/files/actions/' + type, {
-            id: type,
             requires:  function (e) {
                 if (!e.collection.has('some')) return false;
                 if (e.baton.openedBy === 'io.ox/mail/compose') return false;

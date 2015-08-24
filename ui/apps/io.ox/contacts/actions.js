@@ -30,7 +30,6 @@ define('io.ox/contacts/actions', [
 
     new Action('io.ox/contacts/actions/delete', {
         index: 100,
-        id: 'delete',
         requires: 'some delete',
         action: function (baton) {
             ox.load(['io.ox/contacts/actions/delete']).done(function (action) {
@@ -41,7 +40,6 @@ define('io.ox/contacts/actions', [
 
     new Action('io.ox/contacts/actions/update', {
         index: 100,
-        id: 'edit',
         requires:  function (e) {
             return e.collection.has('one') && e.collection.has('modify');
         },
@@ -67,7 +65,6 @@ define('io.ox/contacts/actions', [
 
     new Action('io.ox/contacts/actions/create', {
         index: 100,
-        id: 'create',
         requires:  function (e) {
             return e.baton.app.folder.can('create');
         },
@@ -83,7 +80,6 @@ define('io.ox/contacts/actions', [
 
     new Action('io.ox/contacts/actions/distrib', {
         index: 100,
-        id: 'create-dist',
         requires: function (e) {
             if (_.device('smartphone')) {
                 return false;
@@ -103,7 +99,6 @@ define('io.ox/contacts/actions', [
     function moveAndCopy(type, label, success) {
 
         new Action('io.ox/contacts/actions/' + type, {
-            id: type,
             requires: type === 'move' ? 'some read delete' : 'some read',
             multiple: function (list, baton) {
 

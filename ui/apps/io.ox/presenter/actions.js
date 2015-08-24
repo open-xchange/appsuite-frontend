@@ -20,7 +20,6 @@ define('io.ox/presenter/actions', [
     var Action = ActionsPattern.Action;
 
     new Action(PRESENTER_ACTION_ID + '/start', {
-        id: 'start',
         requires: function (e) {
             if (!e.baton.context) { return false; }
 
@@ -39,7 +38,6 @@ define('io.ox/presenter/actions', [
     });
 
     new Action(PRESENTER_ACTION_ID + '/end', {
-        id: 'end',
         requires: function (e) {
             if (!e.baton.context) { return false; }
 
@@ -55,7 +53,6 @@ define('io.ox/presenter/actions', [
     });
 
     new Action(PRESENTER_ACTION_ID + '/pause', {
-        id: 'pause',
         requires: function (e) {
             if (!e.baton.context) { return false; }
 
@@ -73,7 +70,6 @@ define('io.ox/presenter/actions', [
     });
 
     new Action(PRESENTER_ACTION_ID + '/continue', {
-        id: 'continue',
         requires: function (e) {
             if (!e.baton.context) { return false; }
 
@@ -89,7 +85,6 @@ define('io.ox/presenter/actions', [
     });
 
     new Action(PRESENTER_ACTION_ID + '/join', {
-        id: 'join',
         requires: function (e) {
             if (!e.baton.context) { return false; }
 
@@ -106,7 +101,6 @@ define('io.ox/presenter/actions', [
     });
 
     new Action(PRESENTER_ACTION_ID + '/leave', {
-        id: 'leave',
         requires: function (e) {
             if (!e.baton.context) { return false; }
 
@@ -122,7 +116,6 @@ define('io.ox/presenter/actions', [
     });
 
     new Action(PRESENTER_ACTION_ID + '/fullscreen', {
-        id: 'fullscreen',
         requires: function (e) {
             // iOS doesn't support full-screen
             if (!e.baton.context || _.device('iOS')) { return false; }
@@ -139,7 +132,6 @@ define('io.ox/presenter/actions', [
     });
 
     new Action(PRESENTER_ACTION_ID + '/togglesidebar', {
-        id: 'togglesidebar',
         requires: function (e) {
             if (!e.baton.context) { return false; }
 
@@ -155,7 +147,6 @@ define('io.ox/presenter/actions', [
     });
 
     new Action(PRESENTER_ACTION_ID + '/zoomin', {
-        id: 'zoomin',
         requires: function (e) {
             if (!e.baton.context) { return false; }
 
@@ -170,7 +161,6 @@ define('io.ox/presenter/actions', [
     });
 
     new Action(PRESENTER_ACTION_ID + '/zoomout', {
-        id: 'zoomout',
         requires: function (e) {
             if (!e.baton.context) { return false; }
 

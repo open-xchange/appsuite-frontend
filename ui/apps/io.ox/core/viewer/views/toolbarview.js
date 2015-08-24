@@ -336,7 +336,6 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/print', {
-        id: 'print',
         requires: function (e) {
             var model = e.baton.model;
             return e.baton.context.standalone && (model.isOffice() || model.isPDF() || model.isText());
@@ -348,20 +347,17 @@ define('io.ox/core/viewer/views/toolbarview', [
         }
     });
     new Action(TOOLBAR_ACTION_ID + '/rename', {
-        id: 'rename',
         requires: function () {
             return true;
         }
     });
     new Action(TOOLBAR_ACTION_ID + '/togglesidebar', {
-        id: 'togglesidebar',
         action: function (baton) {
             baton.context.onToggleSidebar();
         }
     });
 
     new Action(TOOLBAR_ACTION_ID + '/popoutstandalone', {
-        id: 'popoutstandalone',
         requires: function () {
             var currentApp = ox.ui.App.getCurrentApp().getName();
             // detail is the target of popoutstandalone, no support for mail attachments
@@ -382,7 +378,6 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     new Action(TOOLBAR_ACTION_ID + '/launchpresenter', {
-        id: 'launchpresenter',
         capabilities: 'document_preview',
         requires: function (e) {
             return e.baton.model.isPresentation();
@@ -394,12 +389,10 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     new Action(TOOLBAR_ACTION_ID + '/close', {
-        id: 'close',
         action: function () {}
     });
     // define actions for the zoom function
     new Action(TOOLBAR_ACTION_ID + '/zoomin', {
-        id: 'zoomin',
         requires: function (e) {
             var model = e.baton.model;
             return model.isOffice() || model.isPDF() || model.isText();
@@ -410,7 +403,6 @@ define('io.ox/core/viewer/views/toolbarview', [
         }
     });
     new Action(TOOLBAR_ACTION_ID + '/zoomout', {
-        id: 'zoomout',
         requires: function (e) {
             var model = e.baton.model;
             return model.isOffice() || model.isPDF() || model.isText();
@@ -422,7 +414,6 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     new Action(TOOLBAR_ACTION_ID + '/zoomfitwidth', {
-        id: 'zoomfitwidth',
         requires: function (e) {
             var model = e.baton.model;
             return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
@@ -435,7 +426,6 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     new Action(TOOLBAR_ACTION_ID + '/zoomfitheight', {
-        id: 'zoomfitheight',
         requires: function (e) {
             var model = e.baton.model;
             return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
@@ -448,7 +438,6 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     new Action(TOOLBAR_ACTION_ID + '/sendasmail', {
-        id: 'sendasmail',
         requires: function (e) {
             var model = e.baton.model;
             return model.isOffice() || model.isPDF();
