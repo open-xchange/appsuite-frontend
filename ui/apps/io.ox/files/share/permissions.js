@@ -572,11 +572,10 @@
                         dropdown.link('revoke', gt('Revoke access'));
                         break;
                     case 'anonymous':
-                        if (capabilities.has('share_links')) dropdown.link('edit', gt('Edit'));
-                        dropdown
-                            .link('resend', gt('Resend invitation'))
-                            .divider()
-                            .link('revoke', gt('Revoke access'));
+                        if (capabilities.has('share_links')) {
+                            dropdown.link('edit', gt('Edit')).divider();
+                        }
+                        dropdown.link('revoke', gt('Revoke access'));
                         break;
                 }
 
