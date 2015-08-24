@@ -299,10 +299,13 @@ define('io.ox/calendar/actions', [
             return _.device('!smartphone');
         },
         action: function (baton) {
+            var perspective = baton.app.getWindow().getPerspective(),
+                start_date = perspective && perspective.getStartDate ? perspective.getStartDate() : _.now();
             ox.launch('io.ox/calendar/freebusy/main', {
                 baton: baton,
                 folder: baton.app.folder.get(),
-                participants: [{ id: ox.user_id, type: 1 }]
+                participants: [{ id: ox.user_id, type: 1 }],
+                start_date: start_date
             });
         }
     });

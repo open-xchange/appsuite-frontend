@@ -437,6 +437,10 @@ define('io.ox/calendar/week/perspective', [
                 this.view.setStartDate(obj.start_date);
                 this.view.trigger('onRefresh');
             }
+        },
+
+        getStartDate: function () {
+            return this.view.startDate.valueOf();
         }
     });
 

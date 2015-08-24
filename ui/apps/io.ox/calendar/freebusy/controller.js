@@ -53,10 +53,12 @@ define('io.ox/calendar/freebusy/controller', [
 
             this.promise = state.promise();
 
-            if (options.baton && options.baton.app) {
+            if (options.start_date) {
+                refDate = moment(options.start_date);
+            } else if (options.baton && options.baton.app) {
                 refDate = options.baton.app.refDate;
             } else {
-                refDate = moment(options.start_date || _.now());
+                refDate = moment();
             }
 
             // create container node
