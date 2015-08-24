@@ -7,7 +7,7 @@
 <link rel="home" href="index.html" title="User Guide">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Permissions">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html" title="11.2.2. Permissions for folders that already exist">
-<link rel="next" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. Sharing folders">
+<link rel="next" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. grant permissions">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -47,7 +47,7 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.personalfoldernew"></a><p>If you create a new folder in a personal folder: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>You are the <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Owner">owner</a>. </p></li>
+<li class="listitem"><p>You are the <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrator">administrator</a>. </p></li>
 <li class="listitem"><p>Other users inherit the permissions which they have for the parent folder.</p></li>
 </ul></div>
 <p>
@@ -56,8 +56,8 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.publicfoldernew"></a><p>If you create a new folder in the <span class="guibutton"><strong>Public files</strong></span> folder: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>You are the <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Owner">owner</a>.</p></li>
-<li class="listitem"><p>Other users will get no rights. You have to set the permissions for the new folder. If you then create new subfolders in this folder, the permissions for this folder are inherited by the new subfolders. Information on granting permissions can be found in <a class="xref" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. Sharing folders">11.2.4: Sharing folders</a>. </p></li>
+<li class="listitem"><p>You are the <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrator">administrator</a>.</p></li>
+<li class="listitem"><p>Other users will get no rights. You have to set the permissions for the new folder. If you then create new subfolders in this folder, the permissions for this folder are inherited by the new subfolders. Information on granting permissions can be found in <a class="xref" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. grant permissions">11.2.4: grant permissions</a>. </p></li>
 </ul></div>
 <p>
       </p>
@@ -65,12 +65,11 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.sharedfoldernew"></a><p>If you create a new folder in the shared folder of another user: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>The user who shared the folder, gets <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrator">Admin</a> permissions for the new folder. </p></li>
-<li class="listitem"><p>You are the <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Owner">owner</a>.</p></li>
+<li class="listitem"><p>The user who shared the folder is the <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrator">administrator</a> of the new folder. </p></li>
+<li class="listitem"><p>You are the <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="Author">author</a> of the new folder.</p></li>
 <li class="listitem"><p>Other users will get the same rights as for the parent folder.</p></li>
 </ul></div>
-<p>
-      </p>
+<p><span class="phrase"><strong>Note:</strong></span> You need to have the permission to create objects in the shared folder.</p>
 </div>
 </div>
           </div>

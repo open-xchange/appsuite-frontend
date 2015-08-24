@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>11.2.4. Sharing folders</title>
+<title>11.2.4. grant permissions</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="User Guide">
@@ -33,20 +33,19 @@
 <h2 class="sr-only">Permissions</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.dataorganisation.rights.grant"></a>11.2.4. Sharing folders</h3></div></div></div>
-<a class="indexterm" name="id-1.12.5.8.2"></a><a class="indexterm" name="id-1.12.5.8.3"></a><a class="indexterm" name="id-1.12.5.8.4"></a><a class="indexterm" name="id-1.12.5.8.5"></a><div class="concept">
-<a name="ox.appsuite.user.concept.rights.share"></a><p>In order to share data with other users, share one or more folders. You can share a folder by granting other users particular rights for the folder. The following options exist: </p>
+<a name="ox.appsuite.user.sect.dataorganisation.rights.grant"></a>11.2.4. grant permissions</h3></div></div></div>
+<a class="indexterm" name="id-1.12.5.8.2"></a><a class="indexterm" name="id-1.12.5.8.3"></a><div class="concept">
+<a name="ox.appsuite.user.concept.rights.grant"></a><p>In order to share data with internal users or external partners, share one or more folders by granting particular rights for the folder. The following options exist: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.share" title="How to grant permissions for a folder:">grant</a> rights for a folder,</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.add" title="How to grant permissions for a folder:">grant</a> rights for a folder,</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.change" title="How to change the folder permissions:">change</a> the rights for a folder,</p></li>
-<li class="listitem"><p>grant rights by applying a <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.applyrole" title="How to grant permissions by applying a user role:">user role</a>, and</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.remove" title="How to remove a user's folder permissions:">delete</a> the rights for a folder.</p></li>
 </ul></div>
 <p>
       </p>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.share.limitations"></a><p><span class="phrase"><strong>Note:</strong></span> Be aware of the following restrictions. </p>
+<a name="ox.appsuite.user.concept.rights.limitations"></a><p><span class="phrase"><strong>Note:</strong></span> Be aware of the following restrictions. </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none"><p>In order to grant rights for a folder to another user, you have to have the administrator right for that folder.</p></li>
 <li class="listitem" style="list-style-type: none"><p>You can not share your personal <span class="guilabel"><strong>Inbox</strong></span> folder. In order to grant other users access to your E-Mail messages, share an E-Mail folder that is located below your <span class="guilabel"><strong>Inbox</strong></span> folder. Other users have to subscribe to this E-Mail folder.</p></li>
@@ -56,22 +55,35 @@
       </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.rights.share"></a><p class="title">How to grant permissions for a folder:</p>
+<a name="ox.appsuite.user.task.rights.add"></a><p class="title">How to grant permissions for a folder:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
 <p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="How to open or select a folder:">Select</a> a folder in the folder tree.</p>
 <p><span class="phrase"><strong>Note:</strong></span> You need to have administrative rights for this folder.</p>
 </li>
-<li class="step"><p>Click the <span class="guibutton"><strong>Folder-specific actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.share"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> next to folder name. Click on <span class="guibutton"><strong>Permissions</strong></span>. The <span class="guilabel"><strong>Folder permissions</strong></span> window shows the current permissions for this folder.</p></li>
-<li class="step"><p>At the bottom, enter a user's name. Click the icon <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.share.add"></a><img src="../../images/appsuite_user_icon_add.png"></span> . The user gets the preset permissions. </p></li>
-<li class="step"><p>Click on a user's permission to change it.</p></li>
-<li class="step"><p>If required, repeat these steps to grant additional permissions.</p></li>
+<li class="step"><p>Click the <span class="guibutton"><strong>Folder-specific actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.share"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> next to the folder name. Click on <span class="guibutton"><strong>Permissions</strong></span>. A window shows the current permissions for this folder.</p></li>
+<li class="step">
+<p>Enter an E-Mail address in <span class="guilabel"><strong>Add people</strong></span>. The E-Mail address will be added to the list as internal user, group or guest. Preset permissions are granted.</p>
+<p>If required, enter a message.</p>
+</li>
+<li class="step">
+<p>To edit the permissions, you have the following options.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>To adjust a user role, click on the entry in <span class="guibutton"><strong>Current role</strong></span>. Select an entry from the menu.</p></li>
+<li class="listitem" style="list-style-type: none"><p>To adjust the permission details, click on the entry in <span class="guibutton"><strong>Detailed access rights</strong></span>. Select a permission from the menu.</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
 <li class="step">
 <p>In order to transfer the permissions to all existing or newly created subfolders in this folder, enable <span class="guibutton"><strong>Apply to all subfolders</strong></span>.</p>
 <p><span class="phrase"><strong>Note:</strong></span> You need to have admin rights for the subfolders. </p>
 </li>
 <li class="step"><p>Click on <span class="guibutton"><strong>Save</strong></span>.</p></li>
 </ol></div>
+<div class="taskrelated">
+          <p><span class="phrase"><strong>Tip:</strong></span> A shared folder is marked with the <span class="guibutton"><strong>Shared</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.rights.shared"></a><img src="../../images/appsuite_user_icon_folder_shared.png"></span> . If clicking the icon, the window for adjusting the permissions opens.</p>
+        </div>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.rights.change"></a><p class="title">How to change the folder permissions:</p>
@@ -80,23 +92,17 @@
 <p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="How to open or select a folder:">Select</a> a folder in the folder tree.</p>
 <p><span class="phrase"><strong>Note:</strong></span> You need to have administrative rights for this folder.</p>
 </li>
-<li class="step"><p>Click the <span class="guibutton"><strong>Folder-specific actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.change"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> next to folder name. Click on <span class="guibutton"><strong>Permissions</strong></span>. The <span class="guilabel"><strong>Folder permissions</strong></span> window shows the current permissions for this folder.</p></li>
+<li class="step"><p>Click the <span class="guibutton"><strong>Folder-specific actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.change"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> next to the folder name. Click on <span class="guibutton"><strong>Permissions</strong></span>. A window shows the current permissions for this folder.</p></li>
 <li class="step">
-<p>Click on a permission to change it.</p>
+<p>Use the following methods:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>To adjust a user role, click on the entry in <span class="guibutton"><strong>Current role</strong></span>. Select an entry from the menu.</p></li>
+<li class="listitem" style="list-style-type: none"><p>To adjust the permission details, click on the entry in <span class="guibutton"><strong>Detailed access rights</strong></span>. Select a permission from the menu.</p></li>
+</ul></div>
+<p>
+            </p>
 <p><span class="phrase"><strong>Note:</strong></span> You cannot change the administrative rights of a personal folder. </p>
 </li>
-<li class="step"><p>Click on <span class="guibutton"><strong>Save</strong></span>.</p></li>
-</ol></div>
-</div>
-<div class="task">
-<a name="ox.appsuite.user.task.rights.applyrole"></a><p class="title">How to grant permissions by applying a user role:</p>
-<div class="procedure"><ol class="procedure" type="1">
-<li class="step">
-<p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="How to open or select a folder:">Select</a> a folder in the folder tree.</p>
-<p><span class="phrase"><strong>Note:</strong></span> You need to have administrative rights for this folder.</p>
-</li>
-<li class="step"><p>Click the <span class="guibutton"><strong>Folder-specific actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.applyrole"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> next to folder name. Click on <span class="guibutton"><strong>Permissions</strong></span>. The <span class="guilabel"><strong>Folder permissions</strong></span> window shows the current permissions for this folder.</p></li>
-<li class="step"><p>Click on <span class="guibutton"><strong>Apply role</strong></span> next to a user name. Select a <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles">User role</a> from the menu.</p></li>
 <li class="step"><p>Click on <span class="guibutton"><strong>Save</strong></span>.</p></li>
 </ol></div>
 </div>
@@ -107,8 +113,8 @@
 <p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="How to open or select a folder:">Select</a> a folder in the folder tree.</p>
 <p><span class="phrase"><strong>Note:</strong></span> You need to have administrative rights for this folder.</p>
 </li>
-<li class="step"><p>Click the <span class="guibutton"><strong>Folder-specific actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.remove"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> next to folder name. Click on <span class="guibutton"><strong>Permissions</strong></span>.</p></li>
-<li class="step"><p>In order to remove a user's permissions, click the icon <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.removeuser"></a><img src="../../images/appsuite_user_icon_trash.png"></span>next to the user's name.</p></li>
+<li class="step"><p>Click the <span class="guibutton"><strong>Folder-specific actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.remove"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> next to the folder name. Click on <span class="guibutton"><strong>Permissions</strong></span>. A window shows the current permissions for this folder.</p></li>
+<li class="step"><p>In order to remove a user's permissions, click the <span class="guibutton"><strong>Actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.removeuser"></a><img src="../../images/appsuite_user_icon_actions.png"></span>next to the user's name. Click on <span class="guibutton"><strong>Revoke access</strong></span> in the menu.</p></li>
 <li class="step"><p>Click on <span class="guibutton"><strong>Save</strong></span>.</p></li>
 </ol></div>
 </div>
