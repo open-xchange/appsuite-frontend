@@ -167,15 +167,20 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/permissions', {
         requires: function (e) {
-            if (!capabilities.has('gab')) return false;
-            if (capabilities.has('alone')) return false;
             if (_.device('smartphone')) return false;
-            // single folders only
-            return e.collection.has('one', 'folders');
+            if (!e.collection.has('one')) return false;
+            // get proper id
+            var id = e.collection.has('folders') ? e.baton.data.id : e.baton.data.folder_id;
+            return folderAPI.pool.getModel(id).isShareable();
         },
         action: function (baton) {
             require(['io.ox/files/share/permissions'], function (controller) {
-                controller.showFolderPermissions(baton.data.id);
+                var model = baton.models[0];
+                if (model.isFile()) {
+                    controller.showFilePermissions(baton.data);
+                } else {
+                    controller.showFolderPermissions(baton.data.id);
+                }
             });
         }
     });

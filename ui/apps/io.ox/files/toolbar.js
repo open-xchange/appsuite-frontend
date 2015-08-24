@@ -227,7 +227,7 @@ define('io.ox/files/toolbar', [
                 mobile: 'lo',
                 label: gt('Permissions'),
                 ref: 'io.ox/files/actions/permissions',
-                section: 'file-op'
+                section: 'sharing'
             }
         };
 
