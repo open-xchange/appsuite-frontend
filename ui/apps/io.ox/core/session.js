@@ -24,6 +24,8 @@ define('io.ox/core/session', [
     var getBrowserLanguage = function () {
         var language = (navigator.language || navigator.userLanguage).substr(0, 2),
             languages = ox.serverConfig.languages || {};
+        // special treatment for 'en' (return en_US instead of en_UK which comes first in the list)
+        if (language === 'en') return 'en_US';
         return _.chain(languages).keys().find(function (id) {
             return id.substr(0, 2) === language;
         }).value();
@@ -273,7 +275,9 @@ define('io.ox/core/session', [
         version: function () {
             // need to work with ox.version since we don't have the server config for auto-login
             return String(ox.version).split('.').slice(0, 3).join('.');
-        }
+        },
+
+        getBrowserLanguage: getBrowserLanguage
     };
 
     return that;

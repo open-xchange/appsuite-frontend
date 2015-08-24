@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util'], function (gettext, util) {
+define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/core/session'], function (gettext, util, session) {
 
     'use strict';
 
@@ -60,14 +60,6 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util'], function
             return selectedLanguage;
         },
 
-        getBrowserLanguage: function () {
-            var language = (navigator.language || navigator.userLanguage).substr(0, 2),
-                languages = ox.serverConfig.languages || {};
-            return _.chain(languages).keys().find(function (id) {
-                return id.substr(0, 2) === language;
-            }).value();
-        },
-
         setDefaultLanguage: function () {
             // look at navigator.language with en_US as fallback
             var navLang = (navigator.language || navigator.userLanguage).substr(0, 2),
@@ -110,7 +102,7 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util'], function
 
                 var self = this,
                     maxLang = 30,
-                    defaultLanguage = _.getCookie('language') || this.getBrowserLanguage(),
+                    defaultLanguage = _.getCookie('language') || session.getBrowserLanguage(),
                     // Display native select box for languages if there are up to 'maxLang' languages
                     langSorted = _.toArray(_.invert(lang)).sort(function (a, b) {
                         return lang[a] <= lang[b] ? -1 : +1;
