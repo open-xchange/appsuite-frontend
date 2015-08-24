@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/links', [], function () {
+define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
 
     'use strict';
 
@@ -38,16 +38,27 @@ define('io.ox/core/links', [], function () {
         if (data.id) {
             // open file in viewer
             require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (Viewer, api) {
-                api.get(_.cid(data.id)).done(function (data) {
-                    var viewer = new Viewer();
-                    viewer.launch({ files: [data] });
-                });
+                api.get(_(data).pick('folder', 'id')).then(
+                    function sucess(data) {
+                        var viewer = new Viewer();
+                        viewer.launch({ files: [data] });
+                    },
+                    // fail
+                    yell
+                );
             });
         } else {
             // open files app
-            ox.launch('io.ox/files/main', { folder: data.folder }).done(function () {
-                // set proper folder
-                if (this.folder.get() !== data.folder) this.folder.set(data.folder);
+            require(['io.ox/core/folder/api'], function (api) {
+                api.get(data.folder).then(
+                    function () {
+                        ox.launch('io.ox/files/main', { folder: data.folder }).done(function () {
+                            // set proper folder
+                            if (this.folder.get() !== data.folder) this.folder.set(data.folder);
+                        });
+                    },
+                    yell
+                );
             });
         }
     });
