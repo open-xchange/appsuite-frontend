@@ -553,7 +553,9 @@
             id: 'actions',
             draw: function (baton) {
 
+                var isFolderAdmin = folderAPI.Bitmask(baton.parentModel.get('own_rights')).get('admin') >= 1;
                 if (!baton.parentModel.isAdmin()) return;
+                if (isFolderAdmin && baton.model.get('entity') === ox.user_id) return;
 
                 var dropdown = new DropdownView({ label: $('<i class="fa fa-bars">'), smart: true, title: gt('Actions') }),
                     type = baton.model.get('type'),
