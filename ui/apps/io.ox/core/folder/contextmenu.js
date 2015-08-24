@@ -49,6 +49,12 @@ define('io.ox/core/folder/contextmenu', [
         );
     }
 
+    function header(label) {
+        this.append(
+            $('<li class="dropdown-header" role="presentation" aria-hidden="true">').text(label)
+        );
+    }
+
     var ColorSelectionView = Backbone.View.extend({
         tagName: 'div',
         className: 'custom-colors',
@@ -394,11 +400,11 @@ define('io.ox/core/folder/contextmenu', [
         }()),
 
         //
-        // Permissions
+        // Permissions / Sharing
         //
-        permissions: (function () {
+        shares: (function () {
 
-            function handler(e) {
+            function invite(e) {
                 e.preventDefault();
                 var id = String(e.data.app.folder.get());
                 require(['io.ox/files/share/permissions'], function (controller) {
@@ -406,19 +412,50 @@ define('io.ox/core/folder/contextmenu', [
                 });
             }
 
+            function getALink(e) {
+                e.preventDefault();
+                var id = String(e.data.app.folder.get());
+                ox.load(['io.ox/files/api', 'io.ox/files/actions/share']).done(function (filesApi, action) {
+                    var model = new filesApi.Model(api.pool.getModel(id).toJSON());
+                    action.link([model]);
+                });
+            }
+
             return function (baton) {
 
-                if (!capabilities.has('gab')) return;
-                if (capabilities.has('alone')) return;
                 if (_.device('smartphone')) return;
 
-                addLink(this, {
-                    action: 'permissions',
-                    data: { app: baton.app },
-                    enabled: true,
-                    handler: handler,
-                    text: gt('Permissions')
-                });
+                var supportsInvite = capabilities.has('invite_guests'),
+                    supportsLinks = capabilities.has('share_links');
+
+                // stop if neither invites or links are supported
+                if (!supportsInvite && !supportsLinks) return;
+
+                // check if folder can be shared
+                var id = String(baton.app.folder.get());
+                if (!api.pool.getModel(id).isShareable(id)) return;
+
+                header.call(this, gt('Sharing'));
+
+                if (supportsInvite) {
+                    addLink(this, {
+                        action: 'invite',
+                        data: { app: baton.app },
+                        enabled: true,
+                        handler: invite,
+                        text: gt('Invite people')
+                    });
+                }
+
+                if (supportsLinks) {
+                    addLink(this, {
+                        action: 'get-link',
+                        data: { app: baton.app },
+                        enabled: true,
+                        handler: getALink,
+                        text: gt('Get link')
+                    });
+                }
             };
         }()),
 
@@ -583,55 +620,51 @@ define('io.ox/core/folder/contextmenu', [
             draw: extensions.subscribe
         },
         {
-            id: 'divider-2',
+            id: 'divider-1',
             index: 1450,
             draw: divider
         },
+        // -----------------------------------------------
         {
             id: 'customColor',
             index: 1500,
             draw: extensions.customColor
         },
         {
-            id: 'divider-1',
+            id: 'divider-2',
             index: 1600,
             draw: divider
         },
         // -----------------------------------------------
         {
-            id: 'import',
+            id: 'shares',
+            index: 2000,
+            draw: extensions.shares
+        },
+        {
+            id: 'divider-3',
             index: 2100,
-            draw: extensions.importData
-        },
-        {
-            id: 'export',
-            index: 2200,
-            draw: extensions.exportData
-        },
-        {
-            id: 'zip',
-            index: 2300,
-            draw: extensions.zip
-        },
-        {
-            id: 'divider-2',
-            index: 2400,
             draw: divider
         },
         // -----------------------------------------------
         {
-            id: 'permissions',
+            id: 'import',
             index: 3100,
-            draw: extensions.permissions
+            draw: extensions.importData
         },
         {
-            id: 'properties',
+            id: 'export',
             index: 3200,
-            draw: extensions.properties
+            draw: extensions.exportData
         },
         {
-            id: 'divider-3',
+            id: 'zip',
             index: 3300,
+            draw: extensions.zip
+        },
+        {
+            id: 'divider-4',
+            index: 3400,
             draw: divider
         },
         // -----------------------------------------------
@@ -656,24 +689,29 @@ define('io.ox/core/folder/contextmenu', [
             draw: extensions.archive
         },
         {
-            id: 'empty',
+            id: 'divider-5',
             index: 4500,
-            draw: extensions.empty
-        },
-        {
-            id: 'divider-4',
-            index: 4600,
             draw: divider
         },
         // -----------------------------------------------
         {
+            id: 'properties',
+            index: 6100,
+            draw: extensions.properties
+        },
+        {
             id: 'toggle',
-            index: 5100,
+            index: 6200,
             draw: extensions.toggle
         },
         {
+            id: 'empty',
+            index: 6300,
+            draw: extensions.empty
+        },
+        {
             id: 'delete',
-            index: 5200,
+            index: 6500,
             draw: extensions.removeFolder
         }
     );

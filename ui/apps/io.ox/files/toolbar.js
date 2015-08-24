@@ -221,13 +221,6 @@ define('io.ox/files/toolbar', [
                 label: gt('Unlock'),
                 ref: 'io.ox/files/actions/unlock',
                 section: 'file-op'
-            },
-            'permissions': {
-                prio: 'lo',
-                mobile: 'lo',
-                label: gt('Permissions'),
-                ref: 'io.ox/files/actions/permissions',
-                section: 'sharing'
             }
         };
 

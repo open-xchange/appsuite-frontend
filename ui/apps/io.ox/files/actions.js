@@ -644,7 +644,7 @@ define('io.ox/files/actions', [
     new links.ActionLink('io.ox/files/links/toolbar/share', {
         index: 200,
         id: 'getalink',
-        label: gt('Get a link'),
+        label: gt('Get link'),
         //#. sharing: a link will be created
         description: gt('Everybody gets the same link. The link just allows to view the file or folder.'),
         ref: 'io.ox/files/actions/getalink'

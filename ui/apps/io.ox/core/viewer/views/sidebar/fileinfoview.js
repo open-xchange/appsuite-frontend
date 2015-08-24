@@ -31,6 +31,14 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         });
     }
 
+    function openShareDialog(e) {
+        e.preventDefault();
+        var model = e.data.model;
+        require(['io.ox/files/share/permissions'], function (controller) {
+            controller.showByModel(model);
+        });
+    }
+
     Ext.point('io.ox/core/viewer/sidebar/fileinfo').extend({
         index: 100,
         id: 'fileinfo',
@@ -95,6 +103,25 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                         );
                     }
                 });
+            }
+
+            var permissions = model.isFile() ?
+                model.get('object_permissions') || [] :
+                _(model.get('permissions')).filter(function (item) { return item.entity !== ox.user_id; });
+
+            if (capabilities.has('invite_guests')) {
+                dl.append(
+                    //#. "Shares" in terms of "shared with others" ("Freigaben")
+                    $('<dt>').text(gt('Shares')),
+                    $('<dd>').append(
+                        permissions.length ?
+                            $('<a href="#">').text(
+                                model.isFile() ? gt('This file is shared with others') : gt('This folder is shared with others')
+                            )
+                            .on('click', { model: model }, openShareDialog) :
+                            $.txt('-')
+                    )
+                );
             }
 
             panelBody = this.find('.sidebar-panel-body').empty().append(dl);
