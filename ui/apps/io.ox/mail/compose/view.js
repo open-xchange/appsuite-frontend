@@ -483,8 +483,14 @@ define('io.ox/mail/compose/view', [
                 def = new $.Deferred(),
                 old_vcard_flag;
 
-            if (mail.msgref && mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
-                delete mail.msgref;
+            if (mail.msgref) {
+                switch (mail.sendtype) {
+                    case mailAPI.SENDTYPE.EDIT_DRAFT:
+                    case mailAPI.SENDTYPE.FORWARD:
+                        break;
+                    default:
+                        delete mail.msgref;
+                }
             }
 
             if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {

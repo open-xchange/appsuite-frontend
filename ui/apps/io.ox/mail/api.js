@@ -161,11 +161,11 @@ define('io.ox/mail/api', [
     api.separator = settings.get('defaultseparator', '/');
 
     api.SENDTYPE = {
-        NORMAL:  '0',
-        REPLY:   '1',
-        FORWARD: '2',
-        EDIT_DRAFT: '3',
-        DRAFT:   '4'
+        NORMAL:     0,
+        REPLY:      1,
+        FORWARD:    2,
+        EDIT_DRAFT: 3,
+        DRAFT:      4
     };
 
     api.FLAGS = {
