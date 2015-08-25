@@ -63,8 +63,8 @@ define('io.ox/mail/actions', [
             if (!e.collection.has('one') && !e.baton.isThread) return;
             // get first mail
             var data = e.baton.first();
-            // other recipients that me? and not a draft mail
-            return util.hasOtherRecipients(data) && !isDraftMail(data);
+            // has sender? and not a draft mail
+            return util.hasFrom(data) && !isDraftMail(data);
         },
         action: function (baton) {
             ox.registry.call('mail-compose', 'replyall', baton.first());
