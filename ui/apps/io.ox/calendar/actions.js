@@ -288,7 +288,7 @@ define('io.ox/calendar/actions', [
     });
 
     new Action('io.ox/calendar/actions/freebusy', {
-        capabilities: 'freebusy !alone',
+        capabilities: 'freebusy !alone !guest',
         requires: function () {
             return _.device('!smartphone');
         },
