@@ -955,6 +955,13 @@ define('io.ox/files/main', [
                     actions.invoke('io.ox/files/actions/delete', null, ext.Baton({ data: list }));
                 });
             });
+        },
+
+        // register listView as dropzone (folders only)
+        'listview-dropzone': function (app) {
+            app.listView.$el
+                .addClass('dropzone')
+                .attr('data-dropzones', '.selectable.file-type-folder');
         }
     });
 
@@ -979,6 +986,13 @@ define('io.ox/files/main', [
             baton.data = _(baton.data).map(function (item) {
                 return _.isString(item) ? _.cid(item) : item;
             });
+            // empty?
+            if (!baton.data.length) return;
+            // ensure proper type
+            baton.dropType = 'infostore';
+            baton.target = baton.target.replace(/^folder\./, '');
+            // avoid self-reference
+            if (baton.data[0].id === baton.target) return;
             // call move action (instead of API) to have visual error handlers
             actions.invoke('io.ox/files/actions/move', null, baton);
         });

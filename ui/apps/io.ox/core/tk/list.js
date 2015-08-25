@@ -251,8 +251,12 @@ define('io.ox/core/tk/list', [
                 })
                 .remove();
 
-            // make sure the first selected item is visible
-            if (selected) selected.scrollIntoView();
+            if (selected) return;
+
+            // make sure the first selected item is visible (if out of viewport)
+            var top = selected.position().top,
+                outOfViewport = top < 0 || top > this.el.offsetHeight;
+            if (outOfViewport) selected.scrollIntoView();
         },
 
         onSort: (function () {
