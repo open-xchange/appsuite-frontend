@@ -188,7 +188,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             advanced: 'styleselect fontselect fontsizeselect | forecolor backcolor | link image',
             toolbar2: '',
             toolbar3: '',
-            plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji',
+            plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji lists',
             theme: 'unobtanium',
             skin: 'ox'
         }, opt);
