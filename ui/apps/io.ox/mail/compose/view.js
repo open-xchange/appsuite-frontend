@@ -484,6 +484,7 @@ define('io.ox/mail/compose/view', [
                 old_vcard_flag;
 
             switch (mail.sendtype) {
+                case mailAPI.SENDTYPE.DRAFT:
                 case mailAPI.SENDTYPE.EDIT_DRAFT:
                     break;
                 case mailAPI.SENDTYPE.FORWARD:
