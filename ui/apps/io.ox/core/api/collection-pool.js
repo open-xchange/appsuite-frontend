@@ -187,9 +187,12 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             }
         },
 
+        map: _.identity,
+
         add: function (cid, data) {
             if (arguments.length === 1) { data = cid; cid = 'detail'; }
             var collection = this.get(cid);
+            data =  _([].concat(data)).map(this.map, collection);
             collection.add(data, { merge: true, parse: true });
             return collection;
         },

@@ -44,6 +44,19 @@ define('io.ox/mail/api', [
     // model pool
     var pool = Pool.create('mail');
 
+    // client-side fix for missing to/cc/bcc fields
+    if (settings.get('features/fixtoccbcc')) {
+        pool.map = function (data) {
+            var cid = _.cid(data), model = this.get(cid);
+            if (!model) return data;
+            ['to', 'cc', 'bcc'].forEach(function (field) {
+                var list = model.get(field);
+                if (_.isArray(list) && list.length > 0) delete data[field];
+            });
+            return data;
+        };
+    }
+
     // generate basic API
     var api = apiFactory({
         module: 'mail',
