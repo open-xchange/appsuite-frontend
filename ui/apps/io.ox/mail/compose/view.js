@@ -479,28 +479,9 @@ define('io.ox/mail/compose/view', [
             win.busy();
             // get mail
             var self = this,
-                mail = this.model.getMail(),
+                mail = this.model.getMailForDraft(),
                 def = new $.Deferred(),
                 old_vcard_flag;
-
-            switch (mail.sendtype) {
-                case mailAPI.SENDTYPE.DRAFT:
-                case mailAPI.SENDTYPE.EDIT_DRAFT:
-                    break;
-                case mailAPI.SENDTYPE.FORWARD:
-                    mail.sendtype = mailAPI.SENDTYPE.DRAFT;
-                    break;
-                default:
-                    mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                    if (mail.msgref) delete mail.msgref;
-            }
-            this.model.set('sendtype', mail.sendtype, { silent: true });
-
-            if (_(mail.flags).isUndefined()) {
-                mail.flags = mailAPI.FLAGS.DRAFT;
-            } else if ((mail.data.flags & 4) === 0) {
-                mail.flags += mailAPI.FLAGS.DRAFT;
-            }
 
             // never append vcard when saving as draft
             // backend will append vcard for every send operation (which save as draft is)
@@ -556,6 +537,7 @@ define('io.ox/mail/compose/view', [
                     if (mail.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
                         self.model.set('msgref', result, { silent: true });
                     }
+
                     var saved = self.model.get('infostore_ids_saved');
                     self.model.set('infostore_ids_saved', [].concat(saved, mail.infostore_ids || []));
                     notifications.yell('success', gt('Mail saved as draft'));

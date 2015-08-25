@@ -289,16 +289,37 @@ define('io.ox/mail/compose/model', [
 
         },
 
-        getMailForAutosave: function () {
+        getMailForDraft: function () {
             var mail = this.getMail();
 
-            if (mail.msgref && mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
-                delete mail.msgref;
+            switch (mail.sendtype) {
+                case mailAPI.SENDTYPE.DRAFT:
+                    mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                    break;
+                case mailAPI.SENDTYPE.EDIT_DRAFT:
+                    break;
+                case mailAPI.SENDTYPE.FORWARD:
+                    mail.sendtype = mailAPI.SENDTYPE.DRAFT;
+                    break;
+                default:
+                    mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                    if (mail.msgref) delete mail.msgref;
             }
-            if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
-                mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                this.set('sendtype', mail.sendtype, { silent: true });
+
+            this.set('sendtype', mail.sendtype, { silent: true });
+
+            if (_(mail.flags).isUndefined()) {
+                mail.flags = mailAPI.FLAGS.DRAFT;
+            } else if ((mail.data.flags & 4) === 0) {
+                mail.flags += mailAPI.FLAGS.DRAFT;
             }
+
+            return mail;
+        },
+
+        getMailForAutosave: function () {
+
+            var mail = this.getMailForDraft();
 
             // delete mail.infostore_ids;
             if (mail.infostore_ids) {
@@ -309,11 +330,6 @@ define('io.ox/mail/compose/model', [
                 });
             }
 
-            if (_(mail.flags).isUndefined()) {
-                mail.flags = mailAPI.FLAGS.DRAFT;
-            } else if ((mail.data.flags & 4) === 0) {
-                mail.flags += mailAPI.FLAGS.DRAFT;
-            }
             return mail;
         },
 
