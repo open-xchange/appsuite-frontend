@@ -404,7 +404,7 @@ define('io.ox/mail/main', [
                     // turn off conversation mode for any sort order but date (610)
                     if (value !== 610) app.props.set('thread', false);
                 }
-                if (value === 610) {
+                if (value === 610 && !app.props.get('thread')) {
                     // restore thread when it was disabled by force
                     var options = app.getViewOptions(app.folder.get());
                     app.props.set('thread', options.threadrestore);
