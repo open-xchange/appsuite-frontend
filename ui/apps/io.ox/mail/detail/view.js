@@ -283,6 +283,13 @@ define('io.ox/mail/detail/view',
             ox.trigger('mail:detail:body:render', this);
         },
 
+        onChangeRecipients: _.debounce(function () {
+            var data = this.model.toJSON(),
+                baton = ext.Baton({ data: data, model: this.model, view: this }),
+                node = this.$('.recipients').empty();
+            extensions.recipients.call(node, baton);
+        }, 10),
+
         onToggle: function (e) {
 
             if (e.type === 'keydown' && e.which !== 13) return;
@@ -389,6 +396,7 @@ define('io.ox/mail/detail/view',
             this.loaded = options.loaded || false;
             this.listenTo(this.model, 'change:flags', this.onChangeFlags);
             this.listenTo(this.model, 'change:attachments', this.onChangeContent);
+            this.listenTo(this.model, 'change:to change:cc change:bcc', this.onChangeRecipients);
 
             this.on({
                 'load': function () {
