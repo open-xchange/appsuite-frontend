@@ -47,21 +47,31 @@ define('io.ox/core/viewer/views/toolbarview', [
                 ref: TOOLBAR_ACTION_ID + '/rename',
                 title: gt('File name'),
                 customize: function (baton) {
-                    var fileIcon = $('<i class="fa">').addClass(Util.getIconClass(baton.model)),
-                        filenameLabel = $('<span class="filename-label">').text(baton.model.get('filename'));
-                    this.addClass('viewer-toolbar-filename');
-                    if (!baton.context.standalone) {
-                        this.append(fileIcon);
-                    }
-                    this.append(filenameLabel).parent().addClass('pull-left');
 
+                    this.append(
+                        // icon
+                        !baton.context.standalone ?
+                            $('<i class="fa">').addClass(Util.getIconClass(baton.model)) :
+                            null,
+                        // filename
+                         $('<span class="filename-label">').text(baton.model.get('filename'))
+                    );
+
+                    this.addClass('viewer-toolbar-filename').parent().addClass('pull-left');
+
+                    // check if action is available
                     if (baton.model.isFile()) {
-                        this.attr('data-original-title', gt('File name, click to rename'));
-                    } else {
-                        this.attr('data-original-title', gt('File name'));
+                        ActionsPattern.check('io.ox/files/actions/rename', [baton.data]).then(
+                            function yep() {
+                                this.attr('data-original-title', gt('File name, click to rename'));
+                                this.attr({ 'data-placement': 'bottom' });
+                                this.tooltip();
+                            }.bind(this),
+                            function nope() {
+                                this.addClass('disabled');
+                            }.bind(this)
+                        );
                     }
-                    this.attr({ 'data-placement': 'bottom' });
-                    this.tooltip();
                 }
             },
             'zoomout': {
@@ -346,11 +356,13 @@ define('io.ox/core/viewer/views/toolbarview', [
             window.open(documentPDFUrl, '_blank');
         }
     });
+
     new Action(TOOLBAR_ACTION_ID + '/rename', {
         requires: function () {
             return true;
         }
     });
+
     new Action(TOOLBAR_ACTION_ID + '/togglesidebar', {
         action: function (baton) {
             baton.context.onToggleSidebar();
@@ -544,11 +556,15 @@ define('io.ox/core/viewer/views/toolbarview', [
          *
          * @param {jQuery.Event} event
          */
-        onRename: function (event) {
-            if ((this.model.isFile()) && (event.which === 32 || event.which === 13 || event.type === 'click')) {
-                event.preventDefault();
-                ActionsPattern.invoke('io.ox/files/actions/rename', null, { data: this.model.toJSON() });
-            }
+        onRename: function (e) {
+            if (!(e.which === 32 || e.which === 13 || e.type === 'click')) return;
+            e.preventDefault();
+            if (!this.model.isFile()) return;
+            var POINT = 'io.ox/files/actions/rename',
+                data = this.model.toJSON();
+            ActionsPattern.check(POINT, [data]).done(function () {
+                ActionsPattern.invoke(POINT, null, data);
+            });
         },
 
         /**

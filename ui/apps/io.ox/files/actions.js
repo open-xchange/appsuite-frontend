@@ -348,10 +348,30 @@ define('io.ox/files/actions', [
         }
     });
 
+    function hasObjectWritePermissions(data) {
+        if (_.isArray(data)) data = _(data).first();
+        if (!_.isObject(data)) return false;
+        var array = data.object_permissions || data['com.openexchange.share.extendedObjectPermissions'],
+            myself = _(array).findWhere({ entity: ox.user_id });
+        return !!(myself && (myself.bits >= 2));
+    }
+
     new Action('io.ox/files/actions/rename', {
         requires: function (e) {
+            // one?
+            if (!e.collection.has('one')) return false;
+            if (util.hasStatus('lockedByOthers', e)) return false;
             // hide in mail compose preview
-            return (e.collection.has('one', 'modify', 'items') || e.collection.has('one', 'rename:folder', 'folders')) && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
+            if (e.baton.openedBy === 'io.ox/mail/compose') return false;
+            // case 1: folder?
+            if (e.collection.has('folders')) {
+                return e.collection.has('rename:folder');
+            }
+            // case 2: file
+            // access on folder?
+            if (e.collection.has('modify')) return true;
+            // check object permission
+            return hasObjectWritePermissions(e.baton.data);
         },
         action: function (baton) {
             // if this is a folder use the folder rename action
@@ -367,14 +387,6 @@ define('io.ox/files/actions', [
             }
         }
     });
-
-    function hasObjectWritePermissions(data) {
-        if (_.isArray(data)) data = _(data).first();
-        if (!_.isObject(data)) return false;
-        var array = data.object_permissions || data['com.openexchange.share.extendedObjectPermissions'],
-            myself = _(array).findWhere({ entity: ox.user_id });
-        return !!(myself && (myself.bits >= 2));
-    }
 
     new Action('io.ox/files/actions/edit-description', {
         requires: function (e) {
