@@ -172,6 +172,7 @@ define('io.ox/core/attachments/view', [
             // to provoke lazyload
             this.$preview.trigger('scroll');
             this.updateScrollControls();
+            $(window).trigger('resize');
         },
 
         scrollLeft: function () {

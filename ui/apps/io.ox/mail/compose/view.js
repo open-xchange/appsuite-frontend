@@ -1125,28 +1125,22 @@ define('io.ox/mail/compose/view', [
                 toolbar = this.mcetoolbar,
                 editor = this.contentEditable,
                 fixed = false,
-                top = 0;
-
-            // get top position
-            scrollPane.on('scroll', _.debounce(function () {
-                // could also use: toolbar.get(0).offsetTop (need to check all browsers)
-                if (!fixed) top = toolbar.position().top + scrollPane.scrollTop();
-            }, 50, true));
+                top = 14;
 
             scrollPane.on('scroll', function () {
-
-                if (top < scrollPane.scrollTop()) {
+                if (self.model.get('editorMode') === 'text') return;
+                if (scrollPane.scrollTop() - scrollPane.find('.mail-compose-fields').height() > top) {
                     // toolbar leaves viewport
                     if (!fixed) {
-                        toolbar.addClass('fixed').css('top', self.$el.parent().offset().top);
-                        editor.css('margin-top', toolbar.height());
-                        $(window).trigger('resize.tinymce');
                         fixed = true;
+                        toolbar.addClass('fixed').css('top', self.$el.parent().offset().top);
+                        $(window).trigger('resize.tinymce');
                     }
+                    editor.css('margin-top', toolbar.height());
                 } else if (fixed) {
+                    fixed = false;
                     toolbar.removeClass('fixed').css('top', 0);
                     editor.css('margin-top', 0);
-                    fixed = false;
                 }
             });
         },
