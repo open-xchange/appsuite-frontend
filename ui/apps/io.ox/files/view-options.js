@@ -200,10 +200,10 @@ define('io.ox/files/view-options', [
                                 return !submodule.canAdd || submodule.canAdd.apply(this);
                             }),
                             buttonTemplates = {
-                                'google': [gt('Add Google Drive account'),'logo-google', 'fa-google'],
-                                'dropbox': [gt('Add Dropbox account'),'logo-dropbox', 'fa-dropbox'],
-                                'msliveconnect': [gt('Add OneDrive account'),'logo-onedrive', 'fa-windows'],
-                                'boxcom': [gt('Add Box.com account'), 'logo-boxcom', 'fa-archive']
+                                'google': [gt('Add Google Drive account'),'logo-google'],
+                                'dropbox': [gt('Add Dropbox account'),'logo-dropbox'],
+                                'msliveconnect': [gt('Add OneDrive account'),'logo-onedrive'],
+                                'boxcom': [gt('Add Box account'), 'logo-boxcom']
                             },
                             buttons = {},
                             container = toolbar.find('.over-bottom').length ? toolbar.find('.over-bottom') : $('<div class="generic-toolbar over-bottom visual-focus">').appendTo(toolbar);
@@ -221,10 +221,10 @@ define('io.ox/files/view-options', [
                             container.hide();
                             return;
                         }
-                        function buildbutton (text, customclass, icon, service) {
+                        function buildbutton (text, customclass, service) {
                             var node = $('<a href="#" class="toolbar-item" role="button">').addClass(customclass)
                                 .append(
-                                    icon ? [$('<i class="fa ' + icon + '" aria-hidden="true">'), $('<span class="sr-only">').text(text)] : $('<span>').text(text)
+                                    $('<span class="sr-only">').text(text)
                                 ).attr({
                                     'data-trigger': 'hover',
                                     'data-toggle': 'tooltip',
@@ -251,7 +251,7 @@ define('io.ox/files/view-options', [
                                 buttons.google || '',
                                 buttons.msliveconnect || '',
                                 buttons.boxcom || ''
-                                /*buildbutton(gt('Add account'), 'misc-link', 'fa-ellipsis-h').on('click', function () {
+                                /*buildbutton(gt('Add account'), 'misc-link').on('click', function () {
                                     ox.launch('io.ox/settings/main', { id: 'io.ox/settings/accounts' }).done(function () {
                                         this.setSettingsPane({ id: 'io.ox/settings/accounts' });
                                     });
