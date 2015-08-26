@@ -65,6 +65,13 @@ define('io.ox/core/tk/tokenfield', [
         return this.$element.get(0);
     };
 
+    // workaround for 7.6.2: use more than one emailaddreses of a single user/contact
+    function makeUnique (model) {
+        // extend id by used email field
+        model.id = model.id + '_' + model.get('field');
+        return model;
+    }
+
     var Tokenfield = Typeahead.extend({
 
         className: 'test',
@@ -169,7 +176,7 @@ define('io.ox/core/tk/tokenfield', [
                             value: e.attrs.value
                         }, { silent: true });
                         // add model to the collection and save cid to the token
-                        self.collection.addUniquely(model);
+                        self.collection.addUniquely(makeUnique(model));
                         // save cid to token value
                         e.attrs.value = model.cid;
                         e.attrs.model = model;
