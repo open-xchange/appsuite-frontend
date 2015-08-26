@@ -126,7 +126,23 @@
 
         // Permission Collection
         Permissions = Backbone.Collection.extend({
-            model: Permission
+            model: Permission,
+            // method to check if a guest is already in the collection (they receive entity ids that differ from the emails, so this check is needed)
+            isAlreadyGuest: function (newGuest) {
+                var guests = this.where({ type: 'guest' }),
+                    isGuest = false;
+                // use try catch not to run into a js error if the field attribute isn't there or sth
+                try {
+                    for (var i = 0; i < guests.length; i++) {
+                        if (guests[i].attributes.contact.email1 === newGuest.contact[newGuest.field]) {
+                            isGuest = true;
+                        }
+                    }
+                } catch (e) {
+                }
+
+                return isGuest;
+            }
         }),
 
         // Simple permission view
@@ -742,6 +758,10 @@
                                 obj.contact_id = member.get('id');
                                 obj.folder_id = member.get('folder_id');
                                 obj.field = member.get('field');
+                                // guests don't have a proper entity id yet, so we have to check by email
+                                if (permissionsView.collection.isAlreadyGuest(obj)) {
+                                    return;
+                                }
                             }
                             permissionsView.collection.add(new Permission(obj));
                         },
