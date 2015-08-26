@@ -332,7 +332,9 @@ define('io.ox/core/attachments/view', [
         },
 
         renderContent: function () {
-            this.$('.file').text(this.model.getShortTitle());
+            this.$('.file')
+                .attr('title', this.model.getTitle())
+                .text(this.model.getShortTitle(50));
         },
 
         renderControls: function () {

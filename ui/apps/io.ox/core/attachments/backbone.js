@@ -122,8 +122,8 @@ define('io.ox/core/attachments/backbone', [
             return this.get('filename');
         },
 
-        getShortTitle: function () {
-            return shortTitle(this.getTitle(), 30);
+        getShortTitle: function (length) {
+            return shortTitle(this.getTitle(), length || 30);
         },
 
         getSize: function () {
