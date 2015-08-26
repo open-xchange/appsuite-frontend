@@ -283,7 +283,6 @@ define('io.ox/mail/common-extensions', [
 
             var showAllRecipients = function (e) {
                 e.preventDefault();
-                e.stopPropagation();
                 $(this).find('.show-all-recipients').remove();
                 $(this).children().show();
             };
