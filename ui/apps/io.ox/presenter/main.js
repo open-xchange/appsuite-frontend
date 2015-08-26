@@ -124,7 +124,6 @@ define('io.ox/presenter/main', [
         var app = ox.ui.createApp({
             closable: true,
             name: NAME,
-            id: NAME,
             title: ''
         });
 
