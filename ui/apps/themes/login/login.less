@@ -323,7 +323,7 @@ html.baseline {
 @media (max-width: @screen-xs-max) {
 
     #io-ox-login-header {
-        h1 { font-size: 14pt; }
+        h1 { font-size: 20pt; }
     }
 
     #io-ox-login-container {
@@ -332,7 +332,13 @@ html.baseline {
     }
 
     #io-ox-languages {
-        margin-right: 0;
+        text-align: left;
+        margin-left: 16px;
+
+        select {
+            background: transparent;
+            border:0;
+        }
     }
 
     #io-ox-login-footer > span {
@@ -349,6 +355,8 @@ html.baseline {
     }
 
     #io-ox-copyright {
+        margin-left: 16px;
+        text-align: left;
         font-size: 10px;
     }
     #io-ox-login-form input.form-control, #io-ox-login-container input.form-control {
