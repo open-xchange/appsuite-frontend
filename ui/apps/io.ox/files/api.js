@@ -365,6 +365,8 @@ define('io.ox/files/api', [
                 type: 'error',
                 text: gt('The allowed quota is reached.')
             };
+        } else if (e.error && e.error === 'abort') {
+            return;
         } else {
             e.data.custom = {
                 type: 'error',
@@ -868,16 +870,23 @@ define('io.ox/files/api', [
     api.upload = function (options) {
         var folder_id = options.folder_id || options.folder;
         options.action = 'new';
-        return performUpload(options, {
-            folder_id: folder_id,
-            description: options.description || ''
-        })
-        .then(function (result) {
-            // result.data just provides the new file id
-            api.propagate('add:file', { id: result.data, folder_id: folder_id });
-            // return id and folder id
-            return { id: result.data, folder_id: folder_id };
-        });
+
+        var def = performUpload(options, {
+                folder_id: folder_id,
+                description: options.description || ''
+            }),
+            chain = def.then(function (result) {
+                // result.data just provides the new file id
+                api.propagate('add:file', { id: result.data, folder_id: folder_id });
+                // return id and folder id
+                return { id: result.data, folder_id: folder_id };
+            });
+
+        // we need to hand over the abort function to the deferred of the chain.
+        // this is necessary, since .then creates a new deferred
+        chain.abort = def.abort;
+
+        return chain;
     };
 
     // File versions
