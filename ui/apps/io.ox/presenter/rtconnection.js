@@ -31,7 +31,7 @@ define('io.ox/presenter/rtconnection', [
     // private static functions ===============================================
 
     /**
-     * Encodes the file name of the passed file descriptor to a resource
+     * Encodes file properties of the passed file descriptor to a resource
      * identifier that can be used to initialize a real-time connection.
      *
      * @param {Object} file
@@ -44,7 +44,7 @@ define('io.ox/presenter/rtconnection', [
      *  valid file.
      */
     function encodeFileAsResourceId(file) {
-        return encodeURIComponent(file.folder_id).replace(/\./g, '%2E') + '.' + encodeURIComponent(file.id).replace(/\./g, '%2E');
+        return encodeURIComponent(file['com.openexchange.realtime.resourceID'] || file.id);
     }
 
     // class RTConnection =====================================================
