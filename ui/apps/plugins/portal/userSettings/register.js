@@ -110,16 +110,25 @@ define('plugins/portal/userSettings/register', [
             .addPrimaryButton('change', gt('Change password and sign out'))
             .addButton('cancel', gt('Cancel'))
             .on('change', function (e, data, dialog) {
-                var node = dialog.getContentNode();
-                if (newPass.val() === newPass2.val()) {
+
+                var node = dialog.getContentNode(),
+                    newPassword1 = newPass.val(),
+                    newPassword2 = newPass2.val();
+
+                if (capabilities.has('guest') && newPassword1 === '' && newPassword2 === '') {
+                    newPassword1 = null;
+                    newPassword2 = null;
+                }
+
+                if (newPassword1 === newPassword2) {
                     http.PUT({
                         module: 'passwordchange',
                         params: { action: 'update' },
                         appendColumns: false,
                         data: {
                             old_password: oldPass.val(),
-                            new_password: newPass.val(),
-                            new_password2: newPass2.val()
+                            new_password: newPassword1,
+                            new_password2: newPassword2
                         }
                     })
                     .done(function () {
