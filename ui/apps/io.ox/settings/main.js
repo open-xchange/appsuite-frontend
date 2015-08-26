@@ -306,14 +306,16 @@ define('io.ox/settings/main', [
         }
 
         function addModelsToPool(groupList) {
+
             var externalList = [];
 
             function processSubgroup(extPoint, subgroup) {
+
                 subgroup = subgroup + '/' + extPoint.id;
                 disableListetSettingsPanes(subgroup);
+
                 var list = _(ext.point(subgroup).list()).map(function (p) {
                     processSubgroup(p, subgroup);
-
                     return pool.addModel({
                         id: 'virtual/settings/' + p.id,
                         module: 'settings',
@@ -330,10 +332,15 @@ define('io.ox/settings/main', [
             }
 
             _.each(groupList, function (val) {
+
                 if (val.subgroup) {
                     mainGroups.push('virtual/settings/' + val.id);
                     disableListetSettingsPanes(val.subgroup);
                     var list = _(ext.point(val.subgroup).list()).map(function (p) {
+
+                        // check for dedicated requirements for settings (usually !guest)
+                        if (p.settingsRequires && !capabilities.has(p.settingsRequires)) return false;
+
                         processSubgroup(p, val.subgroup);
 
                         return pool.addModel({
@@ -344,6 +351,7 @@ define('io.ox/settings/main', [
                             meta: p
                         });
                     });
+                    list = _(list).compact();
                     pool.addCollection('virtual/settings/' + val.id, list, { reset: true });
                 } else {
                     // this handles all old settings without a settingsgroup

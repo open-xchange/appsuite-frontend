@@ -14,12 +14,16 @@
 define('io.ox/core/settings/errorlog/settings/pane', [
     'io.ox/core/extensions',
     'io.ox/core/http',
+    'io.ox/core/capabilities',
     'settings!io.ox/core',
     'gettext!io.ox/core',
     'static/3rd.party/Chart.js/Chart.js'
-], function (ext, http, settings, gt) {
+], function (ext, http, capabilities, settings, gt) {
 
     'use strict';
+
+    // let's hide this for guests
+    if (capabilities.has('guest')) return;
 
     ext.point('io.ox/settings/pane/tools').extend({
         id: 'errorlog',
