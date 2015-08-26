@@ -133,7 +133,16 @@ define('io.ox/mail/actions', [
             });
             if (check === true) return;
 
-            ox.registry.call('mail-compose', 'edit', data);
+            require(['settings!io.ox/mail'], function (settings) {
+
+                // Open Drafts in HTML mode if content type is html even if text-editor is default
+                if (data.content_type === 'text/html' && settings.get('messageFormat', 'html') === 'text') {
+                    data.preferredEditorMode = 'html';
+                    data.editorMode = 'html';
+                }
+
+                ox.registry.call('mail-compose', 'edit', data);
+            });
         }
     });
 

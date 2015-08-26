@@ -15,11 +15,15 @@ define('io.ox/files/settings/pane', [
     'settings!io.ox/files',
     'io.ox/files/settings/model',
     'io.ox/core/extensions',
+    'io.ox/core/capabilities',
     'gettext!io.ox/files',
     'io.ox/backbone/mini-views'
-], function (settings, filesSettingsModel, ext, gt, mini) {
+], function (settings, filesSettingsModel, ext, capabilities, gt, mini) {
 
     'use strict';
+
+    // not really relevant for guests (as of today)
+    if (capabilities.has('guest')) return;
 
     var model = settings.createModel(filesSettingsModel),
         POINT = 'io.ox/files/settings/detail';

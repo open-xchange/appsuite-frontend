@@ -379,9 +379,11 @@ define('io.ox/mail/compose/extensions', [
                 zone.on({
                     'show': function () {
                         $el.css('minHeight', '100px');
+                        $(window).trigger('resize');
                     },
                     'hide': function () {
                         $el.css('minHeight', 0);
+                        $(window).trigger('resize');
                     },
                     'drop': function (files) {
                         baton.model.attachFiles(
@@ -389,6 +391,7 @@ define('io.ox/mail/compose/extensions', [
                                 return _.extend(file, { group: 'localFile' });
                             })
                         );
+                        $(window).trigger('resize');
                     }
                 });
 
@@ -400,7 +403,10 @@ define('io.ox/mail/compose/extensions', [
                 view.listenToOnce(view.collection, 'add remove reset', _.debounce(function () {
                     if (this.getValidModels().length > 0) {
                         this.$el.addClass('open');
-                        if (!this.isListRendered) this.renderList();
+                        if (!this.isListRendered) {
+                            this.renderList();
+                        }
+                        $(window).trigger('resize');
                     }
                 }));
 

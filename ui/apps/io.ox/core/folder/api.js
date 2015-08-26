@@ -182,7 +182,11 @@ define('io.ox/core/folder/api', [
 
         // check if the folder can be shared (requires admin bit and the capability "permissions")
         isShareable: function () {
-            return this.isAdmin() && this.supports('permissions');
+            if (!this.isAdmin()) return false;
+            // for mail folders check "capabilities" bitmask
+            if (this.is('mail') && (this.get('capabilities') & 1) === 1) return true;
+            // for other folders check supported_capabilities
+            return this.supports('permissions');
         },
 
         // checks if the folder supports a capability

@@ -7,15 +7,12 @@ ifneq (,$(or $(filter noopt,$(DEB_BUILD_OPTIONS)),$(filter nostrip,$(DEB_BUILD_O
 	FLAGS += debug=1
 endif
 
-# Which distribution is this?
-DIST_CODE = $(shell lsb_release -sc)
-
-ifeq "$(DIST_CODE)" "wheezy"
+# Apache docroot was changed starting with Debian Jessie
+VERSION = $(shell lsb_release -rs | awk '{print ($1 >= 8)}')
+ifeq ("0","$(VERSION)")
 	HTDOC := /var/www/
-else ifeq "$(DIST_CODE)" "jessie"
-	HTDOC := /var/www/html/
 else
-	$(error Not supported Debian version.)
+	HTDOC := /var/www/html/
 endif
 
 PKGNAME := $(strip $(shell egrep '^Source: ' debian/control | cut -f 2 -d ':'))

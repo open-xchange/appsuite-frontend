@@ -432,8 +432,9 @@ define('io.ox/core/folder/contextmenu', [
                 if (!supportsInvite && !supportsLinks) return;
 
                 // check if folder can be shared
-                var id = String(baton.app.folder.get());
-                if (!api.pool.getModel(id).isShareable(id)) return;
+                var id = String(baton.app.folder.get()),
+                    model = api.pool.getModel(id);
+                if (!model.isShareable(id)) return;
 
                 header.call(this, gt('Sharing'));
 
@@ -447,7 +448,8 @@ define('io.ox/core/folder/contextmenu', [
                     });
                 }
 
-                if (supportsLinks) {
+                // "Get link" doesn't work for mail folders
+                if (supportsLinks && !model.is('mail')) {
                     addLink(this, {
                         action: 'get-link',
                         data: { app: baton.app },

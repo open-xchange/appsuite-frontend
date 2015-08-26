@@ -789,10 +789,23 @@ define('io.ox/files/api', [
     //
     api.update = function (file, changes, options) {
 
+        function process (prev, model, response) {
+            // success
+            if (!(response && response.error)) return;
+            // restore old attribute properties
+            if (prev && model) model.set(prev);
+        }
+
         if (!_.isObject(changes) || _.isEmpty(changes)) return;
 
-        var model = api.pool.get('detail').get(_.cid(file));
-        if (model) model.set(changes);
+        var model = api.pool.get('detail').get(_.cid(file)),
+            prev = {}, keys;
+        if (model) {
+            model.set(changes);
+            // store attribues before set was executed
+            keys = Object.keys(model.changedAttributes());
+            _.each(keys, function (attr) { prev[attr] = model.previous(attr); });
+        }
 
         // build split data object to support notifications
         options = _.extend({ silent: false }, options);
@@ -813,6 +826,7 @@ define('io.ox/files/api', [
             data: data,
             appendColumns: false
         })
+        .always(_.lfo(process, prev, model))
         .done(function () {
             if (!options.silent) api.propagate('change:file', file, changes);
         });
