@@ -131,6 +131,7 @@ define('io.ox/files/view-options', [
         id: 'select',
         index: 2000,
         draw: function (baton) {
+            if (_.device('smartphone')) return;
 
             var dropdown = new Dropdown({
                 //#. Sort options drop-down
@@ -142,7 +143,38 @@ define('io.ox/files/view-options', [
             ext.point('io.ox/files/select/options').invoke('draw', dropdown.$el, baton);
 
             this.append(
-                dropdown.render().$el.addClass('grid-options toolbar-item ' + (_.device('smartphone') ? 'pull-left' : 'pull-right'))
+                dropdown.render().$el.addClass('grid-options toolbar-item pull-right')
+            );
+        }
+    });
+
+    ext.point('io.ox/files/list-view/toolbar/top').extend({
+        id: 'move-up',
+        index: 2100,
+        draw: function (baton) {
+            if (_.device('!smartphone')) return;
+
+            this.append(
+                $('<div class="grid-options toolbar-item pull-left" >').append(
+                    $('<a href=# tabindex="1" role="button">').append(
+                        $('<i class="fa fa-level-up">')
+                    ).attr({
+                        'aria-label': gt('Switch to parent folder')
+                    }).on('click', function (e) {
+                        e.preventDefault();
+
+                        var app = baton.app,
+                            folder = app.folder;
+
+                        folder.getData().done(function (data) {
+                            if (data.folder_id === '9') {
+                                app.pages.goBack();
+                            } else {
+                                folder.set(data.folder_id);
+                            }
+                        });
+                    })
+                )
             );
         }
     });
