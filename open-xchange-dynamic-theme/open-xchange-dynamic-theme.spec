@@ -60,6 +60,8 @@ if [ -x %{update} ]; then %{update}; fi
 %changelog
 * Fri Aug 21 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
 Second candidate for 7.8.0 release
+* Tue Aug 18 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
+Build for patch 2015-08-24 (2674)
 * Wed Aug 05 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
 First candidate for 7.8.0 release
 * Wed Aug 05 2015 Viktor Pracht <viktor.pracht@open-xchange.com>

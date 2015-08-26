@@ -11,9 +11,9 @@ Source:         %{name}_%{version}.orig.tar.bz2
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
 %if 0%{?rhel_version} && 0%{?rhel_version} >= 700
-BuildRequires: ant
+BuildRequires:  ant
 %else
-BuildRequires: ant-nodeps
+BuildRequires:  ant-nodeps
 %endif
 BuildRequires:  java-devel >= 1.6.0
 BuildRequires:  nodejs >= 0.10.0
@@ -51,6 +51,8 @@ if [ -x %{update} ]; then %{update}; fi
 %changelog
 * Fri Aug 21 2015 Markus Wagner <markus.wagner@open-xchange.com>
 Second candidate for 7.8.0 release
+* Tue Aug 18 2015 Francisco Laguna <francisco.laguna@open-xchange.com>
+Build for patch 2015-08-24 (2674)
 * Thu Aug 06 2015 Francisco Laguna <francisco.laguna@open-xchange.com>
 Build for patch 2015-08-17 (2666)
 * Wed Aug 05 2015 Markus Wagner <markus.wagner@open-xchange.com>

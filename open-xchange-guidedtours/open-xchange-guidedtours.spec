@@ -53,6 +53,8 @@ ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -DkeepCache=tru
 %changelog
 * Fri Aug 21 2015 Marcus Klein <marcus.klein@open-xchange.com>
 Second candidate for 7.8.0 release
+* Tue Aug 18 2015 Marcus Klein <marcus.klein@open-xchange.com>
+Build for patch 2015-08-24 (2674)
 * Thu Aug 06 2015 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2015-08-17 (2666)
 * Wed Aug 05 2015 Marcus Klein <marcus.klein@open-xchange.com>

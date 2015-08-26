@@ -7,15 +7,12 @@ export DEB_BUILDINFO_STRICT=1
 include /usr/share/cdbs/1/class/ant.mk
 include /usr/share/cdbs/1/rules/debhelper.mk
 
-# Which distribution is this?
-DIST_CODE = $(shell lsb_release -sc)
-
-ifeq "$(DIST_CODE)" "wheezy"
+# Apache docroot was changed starting with Debian Jessie
+NEW_DOCROOT = $(shell lsb_release -rs | awk '{print ($$1 >= 8)}')
+ifeq (0,$(NEW_DOCROOT))
     HTDOC := /var/www/
-else ifeq "$(DIST_CODE)" "jessie"
-    HTDOC := /var/www/html/
 else
-    $(error Not supported Debian version.)
+    HTDOC := /var/www/html/
 endif
 
 JAVA_HOME = /usr/lib/jvm/default-java
