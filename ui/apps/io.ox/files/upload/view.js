@@ -113,7 +113,9 @@ define('io.ox/files/upload/view', [
             events: {
                 'click .remove-link': 'removeEntry'
             },
-            removeEntry: function () {
+            removeEntry: function (e) {
+                e.preventDefault();
+
                 var index = this.$el.attr('index');
 
                 fileUpload.abort(index);
