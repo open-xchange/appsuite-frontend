@@ -145,28 +145,46 @@
          */
         hash: (function () {
 
-            var hashData = {};
+            function url(name, value) {
+                if (arguments.length === 0) {
+                    return url.data;
+                } else if (arguments.length === 1) {
+                    if (_.isString(name)) {
+                        return url.data[name];
+                    } else {
+                        _(name).each(function (value, name) {
+                            url.set(name, value);
+                        });
+                        url.update();
+                    }
+                } else if (arguments.length === 2) {
+                    url.set(name, value);
+                    url.update();
+                }
+            }
+
+            url.data = {};
 
             function decode() {
                 // since the hash might change we decode it for every request
                 // firefox has a bug and already decodes the hash string, so we use href
-                hashData = location.href.split(/#/)[1] || '';
-                hashData = deserialize(
-                     hashData.substr(0, 1) === '?' ? rot(decodeURIComponent(hashData.substr(1)), -1) : hashData
+                url.data = location.href.split(/#/)[1] || '';
+                url.data = deserialize(
+                     url.data.substr(0, 1) === '?' ? rot(decodeURIComponent(url.data.substr(1)), -1) : url.data
                 );
             }
 
-            function set(name, value) {
+            url.set = function (name, value) {
                 if (value === null) {
-                    delete hashData[name];
+                    delete url.data[name];
                 } else {
-                    hashData[name] = value;
+                    url.data[name] = value;
                 }
-            }
+            };
 
-            function update() {
+            url.update = function () {
                 // update hash
-                var hashStr = _.serialize(hashData, '&', function (v) {
+                var hashStr = _.serialize(url.data, '&', function (v) {
                     // need strict encoding for Japanese characters, for example
                     // safari throws URIError otherwise (Bug 26411)
                     // keep slashes and colons for readability
@@ -177,28 +195,13 @@
                 });
                 // be persistent
                 document.location.hash = hashStr;
-            }
+            };
 
             decode();
             $(window).on('hashchange', decode);
 
-            return function (name, value) {
-                if (arguments.length === 0) {
-                    return hashData;
-                } else if (arguments.length === 1) {
-                    if (_.isString(name)) {
-                        return hashData[name];
-                    } else {
-                        _(name).each(function (value, name) {
-                            set(name, value);
-                        });
-                        update();
-                    }
-                } else if (arguments.length === 2) {
-                    set(name, value);
-                    update();
-                }
-            };
+            return url;
+
         }()),
 
         /**
