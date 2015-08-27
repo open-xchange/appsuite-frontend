@@ -8,7 +8,7 @@ ifneq (,$(or $(filter noopt,$(DEB_BUILD_OPTIONS)),$(filter nostrip,$(DEB_BUILD_O
 endif
 
 # Apache docroot was changed starting with Debian Jessie
-VERSION = $(shell lsb_release -rs | awk '{print ($1 >= 8)}')
+VERSION = $(shell lsb_release -rs | awk '{print ($$1 >= 8)}')
 ifeq ("0","$(VERSION)")
 	HTDOC := /var/www/
 else
