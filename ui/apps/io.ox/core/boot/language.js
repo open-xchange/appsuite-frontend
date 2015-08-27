@@ -61,27 +61,8 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
         },
 
         setDefaultLanguage: function () {
-            // look at navigator.language with en_US as fallback
-            var navLang = (navigator.language || navigator.userLanguage).substr(0, 2),
-                languages = ox.serverConfig.languages || {},
-                lang = 'en_US', id = '', found = false, langCookie = _.getCookie('language');
-            if (langCookie) {
-                return this.change(langCookie);
-            }
-            for (id in languages) {
-                // match?
-                if (id.substr(0, 2) === navLang) {
-                    lang = id;
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                if (!_.isEmpty(languages)) {
-                    lang = _(languages).keys()[0];
-                }
-            }
-            return this.change(lang);
+            var language = _.getCookie('language') || session.getBrowserLanguage();
+            return this.change(language);
         },
 
         changeByUser: function (id) {
