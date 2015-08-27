@@ -157,7 +157,10 @@ define('io.ox/files/view-options', [
             this.append(
                 $('<div class="grid-options toolbar-item pull-left" >').append(
                     $('<a href=# tabindex="1" role="button">').append(
-                        $('<i class="fa fa-level-up">')
+                        $('<span class="folder-up fa-stack">').append(
+                            $('<i class="fa fa-folder fa-stack-2x">'),
+                            $('<i class="fa fa-level-up fa-stack-1x fa-inverse">')
+                        )
                     ).attr({
                         'aria-label': gt('Switch to parent folder')
                     }).on('click', function (e) {
