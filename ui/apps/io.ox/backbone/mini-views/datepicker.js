@@ -293,7 +293,10 @@ define('io.ox/backbone/mini-views/datepicker', [
         // toggle time input fields
         toggleTimeInput: function (show) {
             if (this.mobileMode) {
-                this.nodes.dayField.mobiscroll('option', { preset: show ? 'datetime' : 'date' });
+                // mobiscroll may not be initialized yet, due to async loading.
+                if (this.nodes.dayField.mobiscroll) {
+                    this.nodes.dayField.mobiscroll('option', { preset: show ? 'datetime' : 'date' });
+                }
             } else {
                 this.$el.toggleClass('dateonly', !show);
                 this.nodes.timeField.add(this.nodes.timezoneField).css('display', show ? '' : 'none');
