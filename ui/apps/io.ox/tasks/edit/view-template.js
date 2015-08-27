@@ -412,7 +412,7 @@ define('io.ox/tasks/edit/view-template', [
                     contacts: true,
                     users: true,
                     groups: true,
-                    resources: true,
+                    resources: false,
                     distributionlists: true
                 },
                 collection: baton.model.getParticipants()
