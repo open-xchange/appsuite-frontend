@@ -190,7 +190,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             toolbar3: '',
             plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji lists',
             theme: 'unobtanium',
-            skin: 'ox'
+            skin: 'lightgray'
         }, opt);
 
         opt.toolbar1 += ' | ' + opt.advanced;
