@@ -78,7 +78,8 @@ define('io.ox/files/share/model', [
             // collect target data
             _(this.get('files')).each(function (item) {
                 var target = {
-                    module: 'infostore'
+                    // this model is used by folders from other applications as well
+                    module: item.get('module') || 'infostore'
                 };
                 if (item.isFolder()) {
                     target.folder = item.get('id');
