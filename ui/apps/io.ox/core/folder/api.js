@@ -1183,6 +1183,25 @@ define('io.ox/core/folder/api', [
     // Check if "altnamespace" is enabled (mail server setting)
     var altnamespace = mailSettings.get('namespace', 'INBOX/') === '';
 
+    //
+    // Special lookup for
+    //
+
+    function getExistingFolder(type) {
+        var defaultId = util.getDefaultFolder(type);
+        if (defaultId) return defaultId;
+        if (type === 'mail') return 'default0' + mailSettings.get('defaultseparator') + 'INBOX';
+        if (type === 'infostore') return 10;
+        return flat({ module: type }).then(function (data) {
+            for (var section in data) {
+                if (section === 'hidden') continue;
+                var list = data[section];
+                if (list && list[0] && list[0].id) return list[0].id;
+            }
+            return null;
+        });
+    }
+
     // publish api
     _.extend(api, {
         FolderModel: FolderModel,
@@ -1215,6 +1234,7 @@ define('io.ox/core/folder/api', [
         getFlatCollection: getFlatCollection,
         getFlatViews: getFlatViews,
         getDefaultFolder: util.getDefaultFolder,
+        getExistingFolder: getExistingFolder,
         getStandardMailFolders: getStandardMailFolders,
         getTextNode: getTextNode,
         getDeepLink: getDeepLink,

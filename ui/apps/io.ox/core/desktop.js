@@ -279,18 +279,21 @@ define('io.ox/core/desktop', [
                     },
 
                     setDefault: function () {
-                        var def = new $.Deferred();
-                        require(['settings!io.ox/mail'], function (mailConfig) {
+                        return require(['settings!io.ox/mail']).then(function (mailConfig) {
                             var defaultFolder = type === 'mail' ? mailConfig.get('folder/inbox') : coreConfig.get('folder/' + type);
                             if (defaultFolder) {
-                                that.set(defaultFolder)
-                                    .done(def.resolve)
-                                    .fail(def.reject);
+                                return that.set(defaultFolder);
                             } else {
-                                def.reject({ error: gt('Could not get a default folder for this application.') });
+                                return api.getExistingFolder(type).then(
+                                    function (id) {
+                                        return that.set(id);
+                                    },
+                                    function () {
+                                        return $.Deferred().reject({ error: gt('Could not get a default folder for this application.') });
+                                    }
+                                );
                             }
                         });
-                        return def;
                     },
 
                     get: function () {
