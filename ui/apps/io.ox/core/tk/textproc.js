@@ -411,7 +411,8 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
             _.extend(lexer.rules, {
                 heading:  noop,
                 code: noop,
-                hr: noop
+                hr: noop,
+                lheading: noop
             });
 
             def.resolve(marked.parser(lexer.lex(string)));

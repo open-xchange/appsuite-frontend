@@ -30,6 +30,7 @@ define('plugins/portal/quota/register', [
 
         if (capabilities.has('infostore')) {
             fields.push({
+                module: 'file',
                 quota: quota.file.quota,
                 usage: quota.file.use,
                 name: 'memory-file',
@@ -37,6 +38,7 @@ define('plugins/portal/quota/register', [
             });
         }
         fields.push({
+            module: 'mail',
             quota: quota.mail.quota,
             usage: quota.mail.use,
             name: 'memory-mail',
@@ -44,6 +46,7 @@ define('plugins/portal/quota/register', [
         });
 
         fields.push({
+            module: 'mail',
             quota: quota.mail.countquota,
             usage: quota.mail.countuse,
             name: 'mailcount',

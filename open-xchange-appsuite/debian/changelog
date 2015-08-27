@@ -2,7 +2,7 @@ open-xchange-appsuite (7.8.0-2) stable; urgency=medium
 
   * Second candidate for 7.8.0 release
 
- -- Markus Wagner <markus.wagner@open-xchange.com>  Fri, 21 Aug 2015 15:02:12 +0000
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Fri, 21 Aug 2015 17:02:12 +0200
 
 open-xchange-appsuite (7.8.0-1) stable; urgency=low
 
@@ -15,6 +15,12 @@ open-xchange-appsuite (7.8.0-0) unstable; urgency=medium
   * prepare for 7.8.0 release
 
  -- Markus Wagner <markus.wagner@open-xchange.com>  Wed, 05 Nov 2014 16:20:51 +0100
+
+open-xchange-appsuite (7.6.2-23) stable; urgency=medium
+
+  * Build for patch 2015-08-24 (2674)
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 18 Aug 2015 17:32:10 +0200
 
 open-xchange-appsuite (7.6.2-22) stable; urgency=low
 

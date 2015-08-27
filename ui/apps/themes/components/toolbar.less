@@ -313,6 +313,16 @@
         line-height: @height-default - 2;
         padding: 0 @default-padding;
         text-decoration: none;
+
+        .folder-up {
+            &.fa-stack {
+                .fa-level-up {
+                    -webkit-transform: scale(-1.2, 1) translate(4px, 0);
+                    -ms-transform: scale(-1.2, 1) translate(4px, 0);
+                    transform: scale(-1.2, 1) translate(4px, 0);
+                }
+            }
+        }
     }
 
     &.over-bottom {
@@ -333,22 +343,22 @@
 
             float: none;
             margin: 0 4px 10px 0;
-
+            background-size: cover;
             width: 32px;
             height: 32px;
             padding: 0;
 
             &.logo-google {
-                background-image: url(/apps/themes/default/googledrive_logo32.png);
+                background-image: url(apps/themes/default/googledrive_logo64.png);
             }
             &.logo-boxcom {
-                background-image: url(/apps/themes/default/box_logo32.png);
+                background-image: url(apps/themes/default/box_logo64.png);
             }
             &.logo-onedrive {
-                background-image: url(/apps/themes/default/onedrive_logo32.png);
+                background-image: url(apps/themes/default/onedrive_logo64.png);
             }
             &.logo-dropbox {
-                background-image: url(/apps/themes/default/dropbox_logo32.png);
+                background-image: url(apps/themes/default/dropbox_logo64.png);
             }
         }
     }

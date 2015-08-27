@@ -8,26 +8,26 @@ ifneq (,$(or $(filter noopt,$(DEB_BUILD_OPTIONS)),$(filter nostrip,$(DEB_BUILD_O
 endif
 
 # Apache docroot was changed starting with Debian Jessie
-VERSION = $(shell lsb_release -rs | awk '{print ($1 >= 8)}')
-ifeq ("0","$(VERSION)")
-	HTDOC := /var/www/
+NEW_DOCROOT = $(shell lsb_release -rs | awk '{print ($$1 >= 8)}')
+ifeq ("0","$(NEW_DOCROOT)")
+	HTDOC := var/www
 else
-	HTDOC := /var/www/html/
+	HTDOC := var/www/html
 endif
 
 PKGNAME := $(strip $(shell egrep '^Source: ' debian/control | cut -f 2 -d ':'))
 ROOT := $(CURDIR)/debian/$(PKGNAME)
 
 override_dh_auto_install:
-	ant -Dbasedir=build -DdestDir=$(ROOT) -DpackageName=$(PKGNAME) -Dhtdoc=$(HTDOC) -Dlanguages=false -DkeepCache=true -f build/build.xml build
+	ant -Dbasedir=build -DdestDir=$(ROOT) -DpackageName=$(PKGNAME) -Dhtdoc=/$(HTDOC) -Dlanguages=false -DkeepCache=true -f build/build.xml build
 	for LANG in ca_ES cs_CZ da_DK de_DE en_GB en_US es_ES es_MX fi_FI fr_CA fr_FR hu_HU it_IT ja_JP lv_LV nb_NO nl_NL pl_PL pt_BR ro_RO ru_RU sk_SK sv_SE zh_CN zh_TW; do \
 		PACKAGE_EXTENSION=$$(echo $${LANG} | tr '[:upper:]_' '[:lower:]-'); \
-		ant -Dbasedir=build -DdestDir=$(ROOT)-l10n-$${PACKAGE_EXTENSION} -DpackageName=$(PKGNAME) -Dhtdoc=$(HTDOC) -DinstallTarget=$${LANG} -DkeepCache=true -Dnoclean=true -f build/build.xml build; \
+		ant -Dbasedir=build -DdestDir=$(ROOT)-l10n-$${PACKAGE_EXTENSION} -DpackageName=$(PKGNAME) -Dhtdoc=/$(HTDOC) -DinstallTarget=$${LANG} -DkeepCache=true -Dnoclean=true -f build/build.xml build; \
 	done
 	mkdir -p $(ROOT)-manifest/opt
 	mv $(ROOT)/opt $(ROOT)-manifest/
 	mkdir -p $(ROOT)/opt/open-xchange/sbin
-	cat $(ROOT)-manifest/opt/open-xchange/sbin/touch-appsuite | sed -e "s:## cd ##:cd $(HTDOC)appsuite:" > \
+	cat $(ROOT)-manifest/opt/open-xchange/sbin/touch-appsuite | sed -e "s:## cd ##:cd /$(HTDOC)/appsuite:" > \
 		$(ROOT)/opt/open-xchange/sbin/touch-appsuite
 	chmod +x $(ROOT)/opt/open-xchange/sbin/touch-appsuite
 	rm -r $(ROOT)-manifest/opt/open-xchange/sbin/
@@ -36,7 +36,7 @@ override_dh_auto_clean:
 	ant -Dbasedir=build -f build/build.xml clean
 
 override_dh_installdeb:
-	echo $(HTDOC)appsuite/apps/themes/.htaccess >$(CURDIR)/debian/open-xchange-appsuite.conffiles
+	sed -i "s:@DOCROOT@:$(HTDOC):g" $(CURDIR)/debian/open-xchange-appsuite.conffiles
 	dh_installdeb
 
 %:

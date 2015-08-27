@@ -283,9 +283,8 @@ define('io.ox/mail/common-extensions', [
 
             var showAllRecipients = function (e) {
                 e.preventDefault();
-                e.stopPropagation();
-                $(this).find('.show-all-recipients').remove();
-                $(this).children().show();
+                $(this).parent().children().show();
+                $(this).hide();
             };
 
             return function (baton) {
@@ -347,8 +346,8 @@ define('io.ox/mail/common-extensions', [
                     container.append(
                         //#. %1$d - number of other recipients (names will be shown if string is clicked)
                         $('<a href="#" class="show-all-recipients">').text(gt('and %1$d others', items.length - 2))
+                        .on('click', showAllRecipients)
                     );
-                    container.on('click', showAllRecipients);
                 }
             };
         }()),
