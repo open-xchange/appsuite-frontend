@@ -21,6 +21,7 @@ define('io.ox/core/viewer/views/types/textview', [
 
         initialize: function (options) {
             _.extend(this, options);
+            this.isPrefetched = false;
             this.listenTo(this.viewerEvents, 'viewer:zoom:in', this.onZoomIn);
             this.listenTo(this.viewerEvents, 'viewer:zoom:out', this.onZoomOut);
             this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
@@ -43,6 +44,7 @@ define('io.ox/core/viewer/views/types/textview', [
                 $el.idle().append($('<div class="white-page letter plain-text">').text(text));
                 $el = null;
             });
+            this.isPrefetched = true;
             return this;
         },
 
@@ -58,6 +60,7 @@ define('io.ox/core/viewer/views/types/textview', [
          */
         unload: function () {
             this.$el.find('.white-page').remove();
+            this.isPrefetched = false;
             return this;
         },
 

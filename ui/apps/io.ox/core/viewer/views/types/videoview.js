@@ -28,6 +28,10 @@ define('io.ox/core/viewer/views/types/videoview',  [
      */
     var VideoView = BaseView.extend({
 
+        initialize: function () {
+            this.isPrefetched = false;
+        },
+
         /**
          * Creates and renders the video slide.
          *
@@ -87,6 +91,7 @@ define('io.ox/core/viewer/views/types/videoview',  [
          *  the VideoView instance.
          */
         prefetch: function () {
+            this.isPrefetched = true;
             return this;
         },
 
@@ -120,6 +125,7 @@ define('io.ox/core/viewer/views/types/videoview',  [
             // never unload slide duplicates
             if (this.$el.hasClass('swiper-slide-duplicate')) return this;
             this.disposeElement();
+            this.isPrefetched = false;
             return this;
         },
 
