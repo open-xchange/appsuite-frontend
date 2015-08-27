@@ -884,6 +884,13 @@ define('io.ox/core/folder/api', [
                 subscribed: 1,
                 title: gt('New Folder')
             }, options);
+            // don't inherit permissions for flat folders
+            if (isFlat(options.module)) {
+                // empty array doesn't work; we heve to copy the admins
+                options.permissions = _(parent.permissions).filter(function (item) {
+                    return !!(item.bits & 268435456);
+                });
+            }
             // go!
             return http.PUT({
                 module: 'folders',
