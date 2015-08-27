@@ -60,7 +60,7 @@ define('io.ox/tasks/mobile-toolbar-actions', [
             'undone': {
                 prio: 'hi',
                 mobile: 'hi',
-                label: gt('Undone'),
+                label: gt('Mark as undone'),
                 drawDisabled: true,
                 ref: 'io.ox/tasks/actions/undone'
             },

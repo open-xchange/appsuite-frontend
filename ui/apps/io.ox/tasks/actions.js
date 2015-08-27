@@ -295,7 +295,7 @@ define('io.ox/tasks/actions', [
         index: 310,
         prio: 'hi',
         mobile: 'hi',
-        label: gt('Undone'),
+        label: gt('Mark as undone'),
         ref: 'io.ox/tasks/actions/undone'
     }));
 
