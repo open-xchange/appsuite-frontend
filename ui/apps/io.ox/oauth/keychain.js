@@ -258,7 +258,7 @@ define.async('io.ox/oauth/keychain', [
             return def;
         };
 
-        if (this.id === 'facebook' || this.id === 'xing' || this.id === 'twitter' || this.id === 'linkedin' ||
+        if (this.id === 'xing' || this.id === 'twitter' || this.id === 'linkedin' ||
             this.id === 'boxcom' || this.id === 'dropbox' || this.id === 'google' || this.id === 'msliveconnect') {
             this.canAdd = function () {
                 return self.getAll().length === 0;
