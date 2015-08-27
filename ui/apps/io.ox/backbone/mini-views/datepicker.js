@@ -184,7 +184,7 @@ define('io.ox/backbone/mini-views/datepicker', [
 
                     self.nodes.timeField.combobox(comboboxHours).addClass('');
                     self.nodes.timeField.on('change', _.bind(self.updateModel, self));
-                    self.toggleTimeInput(self.options.display === 'DATETIME');
+                    self.toggleTimeInput(!self.isFullTime());
 
                     def.resolve();
                 });

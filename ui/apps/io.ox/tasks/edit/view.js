@@ -50,6 +50,33 @@ define('io.ox/tasks/edit/view', [
             });
         },
 
+        autoOpen: function (data) {
+            var data = data || this.model.attributes,
+                expandLink = this.$el.find('.expand-link'),
+                expandDetailsLink = this.$el.find('.expand-details-link');
+            if (expandLink.length === 0 || !this.collapsed) {
+                return;
+            }
+            var details = _(_(data)
+                    .pick(['actual_duration', 'target_duration', 'actual_costs', 'target_costs', 'currency', 'trip_meter', 'billing_information', 'companies']))
+                    .filter(function (val) {
+                        return val;
+                    }),
+                attributes = _(_(data)
+                    .pick(['start_time', 'end_time', 'alarm', 'recurrence_type', 'percent_completed', 'private_flag', 'number_of_attachments', 'priority']))
+                    .filter(function (val) {
+                        return val;
+                    });
+            if (this.collapsed && (details.length || attributes.length || this.model.get('status') !== 1 ||
+                    //check if attributes contain values other than the defaults
+                    (data.participants && data.participants.length))) {
+                expandLink.click();
+                if (details.length && this.detailsCollapsed) {
+                    expandDetailsLink.click();
+                }
+            }
+        },
+
         render: function (app) {
             var self = this,
                 rows = {};
@@ -112,24 +139,7 @@ define('io.ox/tasks/edit/view', [
             }
             //look if there is data beside the default values to trigger autoexpand (only in edit mode)
             if (self.model.get('id')) {
-                var details = _(_(self.model.attributes)
-                        .pick(['actual_duration', 'target_duration', 'actual_costs', 'target_costs', 'currency', 'trip_meter', 'billing_information', 'companies']))
-                        .filter(function (val) {
-                            return val;
-                        }),
-                    attributes = _(_(self.model.attributes)
-                        .pick(['start_time', 'end_time', 'alarm', 'recurrence_type', 'percent_completed', 'private_flag', 'number_of_attachments', 'priority']))
-                        .filter(function (val) {
-                            return val;
-                        });
-                if (details.length || attributes.length || self.model.get('status') !== 1 ||
-                        //check if attributes contain values other than the defaults
-                        (self.model.get('participants') && self.model.get('participants').length)) {
-                    self.$el.find('.expand-link').click();
-                    if (details.length) {
-                        self.$el.find('.expand-details-link').click();
-                    }
-                }
+                self.autoOpen();
             }
 
             // Toggle disabled state of save button
