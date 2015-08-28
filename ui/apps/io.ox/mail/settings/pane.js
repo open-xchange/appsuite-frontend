@@ -23,13 +23,11 @@ define('io.ox/mail/settings/pane', [
     'gettext!io.ox/mail',
     'io.ox/core/api/account',
     'io.ox/backbone/mini-views'
-], function (settings, userAPI, capabilities, contactsAPI, mailUtil, mailSettingsModel, ext, notifications, gt, api, mini) {
+], function (settings, userAPI, capabilities, contactsAPI, mailUtil, mailSettings, ext, notifications, gt, api, mini) {
 
     'use strict';
 
-    var mailSettings =  settings.createModel(mailSettingsModel),
-
-        mailViewSettings,
+    var mailViewSettings,
         POINT = 'io.ox/mail/settings/detail',
         optionsAllAccounts,
 
