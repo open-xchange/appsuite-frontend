@@ -221,18 +221,19 @@ define('io.ox/tasks/edit/main', [
 
         app.failRestore = function (point) {
             this.markDirty();
-            if (_.isUndefined(point.id)) {
-                // make auto open first, before the model is set. Otherwise the view has strange behavior (elements are hidden when they are updating)
-                this.view.autoOpen(point);
-                this.model.set(point);
-                this.setTitle(point.title || gt('Create task'));
-            } else {
-                this.model.set(point);
+
+            // make auto open first, before the model is set. Otherwise the view has strange behavior (elements are hidden when they are updating)
+            this.view.autoOpen(point);
+            this.model.set(point);
+            // if we have an id switch to edit mode
+            if (!_.isUndefined(point.id)) {
                 this.edit = true;
                 this.view.trigger('changeMode', 'edit');
                 this.cid = 'io.ox/tasks:edit.' + _.cid(point);
-                this.setTitle(point.title || gt('Edit task'));
             }
+            // trigger blur so apptitle and save button disabled state is updated
+            console.log('blur', this.view.$el.find('.title-field'));
+            this.view.$el.find('.title-field').trigger('blur');
             return $.when();
         };
 

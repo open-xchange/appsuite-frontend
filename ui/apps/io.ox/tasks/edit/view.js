@@ -145,7 +145,6 @@ define('io.ox/tasks/edit/view', [
             // Toggle disabled state of save button
             function fnToggleSave(value) {
                 var node = app.getWindow().nodes.header.find('.btn[data-action="save"]');
-                if (_.device('smartphone')) node = self.$el.parent().parent().find('.btn[data-action="save"]');
                 node.prop('disabled', value === '');
             }
             //delegate some events
