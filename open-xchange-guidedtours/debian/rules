@@ -6,7 +6,6 @@ export DEB_BUILDINFO_STRICT=1
 
 include /usr/share/cdbs/1/class/ant.mk
 include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/rules/utils.mk
 
 JAVA_HOME = /usr/lib/jvm/default-java
 DEB_ANT_ARGS = -DdestDir=$(DEB_DESTDIR) -DpackageName=$(DEB_SOURCE_PACKAGE) -DkeepCache=true

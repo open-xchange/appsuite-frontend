@@ -38,10 +38,10 @@ ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docro
 %define update /opt/open-xchange/appsuite/share/update-themes.sh
 
 %post
-if [ $1 -eq 1 -a -x %{update} ]; then %{update}; fi
+if [ $1 -eq 1 -a -x %{update} ]; then %{update} --later; fi
 
 %postun
-if [ -x %{update} ]; then %{update}; fi
+if [ -x %{update} ]; then %{update} --later; fi
 
 %files
 %defattr(-,root,root)
