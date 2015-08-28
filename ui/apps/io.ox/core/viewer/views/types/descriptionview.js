@@ -12,8 +12,9 @@
  */
 
 define('io.ox/core/viewer/views/types/descriptionview', [
-    'io.ox/core/viewer/views/types/baseview'
-], function (BaseView) {
+    'io.ox/core/viewer/views/types/baseview',
+    'io.ox/files/api'
+], function (BaseView, api) {
 
     'use strict';
 
@@ -38,8 +39,12 @@ define('io.ox/core/viewer/views/types/descriptionview', [
         },
 
         show: function () {
-            var description = this.model.get('description');
-            this.$el.append($('<div class="white-page letter plain-text">').text(description));
+            // make sure we have the description
+            this.$el.busy();
+            api.get(this.model.pick('folder_id', 'id')).done(function (data) {
+                if (this.disposed) return;
+                this.$el.idle().append($('<div class="white-page letter plain-text">').text(data.description));
+            }.bind(this));
             return this;
         },
 

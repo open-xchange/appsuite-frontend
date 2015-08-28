@@ -54,7 +54,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                             $('<i class="fa">').addClass(Util.getIconClass(baton.model)) :
                             null,
                         // filename
-                         $('<span class="filename-label">').text(baton.model.get('filename'))
+                        $('<span class="filename-label">').text(baton.model.getDisplayName())
                     );
 
                     this.addClass('viewer-toolbar-filename').parent().addClass('pull-left');
