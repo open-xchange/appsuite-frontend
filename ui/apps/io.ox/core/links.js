@@ -26,7 +26,12 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
                 { action: 'load', file: { folder_id: data.folder, id: data.id }} :
                 _(data).pick('folder', 'folder_id', 'id');
 
-        ox.launch(data.app + '/main', options);
+        ox.launch(data.app + '/main', options).done(function () {
+            // special handling for settings (bad, but apparently solved differently)
+            if (_.isFunction(this.setSettingsPane)) this.setSettingsPane(options);
+            // set proper folder
+            else if (data.folder && this.folder.get() !== data.folder) this.folder.set(data.folder);
+        });
     });
 
     //

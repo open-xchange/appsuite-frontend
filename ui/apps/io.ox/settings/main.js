@@ -258,6 +258,7 @@ define('io.ox/settings/main', [
             tree.selection.resetSelected(tree.selection.getItems());
             tree.selection.preselect(id);
             app.folder.set(id);
+
             var item = tree.selection.byId(id),
                 view = item.closest('li').data('view');
             folderUtil.open(view.options.parent);
@@ -525,10 +526,11 @@ define('io.ox/settings/main', [
         };
 
         app.setSettingsPane = function (options) {
-            if (options && options.id) {
+            if (options && (options.id || options.folder)) {
                 return paintTree().done(function () {
-                    var baton = new ext.Baton({ data: pool.getModel('virtual/settings/' + options.id).get('meta'), options: options || {} });
-                    tree.trigger('virtual', 'virtual/settings/' + options.id, {}, baton);
+                    var id = options.folder || ('virtual/settings/' + options.id),
+                        baton = new ext.Baton({ data: pool.getModel(id).get('meta'), options: options || {} });
+                    tree.trigger('virtual', id, {}, baton);
                 });
             } else {
                 if (!_.device('smartphone')) {
@@ -540,7 +542,7 @@ define('io.ox/settings/main', [
         };
 
         // go!
-        commons.addFolderSupport(app, null, 'settings', 'virtual/settings/io.ox/core')
+        commons.addFolderSupport(app, null, 'settings', options.folder || 'virtual/settings/io.ox/core')
             .always(function always() {
                 win.show(function () {
                     paintTree().done(function () {

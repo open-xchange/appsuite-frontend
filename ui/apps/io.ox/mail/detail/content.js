@@ -311,11 +311,12 @@ define('io.ox/mail/detail/content', [
             each(this, 'a', function (node) {
                 var link = $(node),
                     href = link.attr('href') || '',
-                    data, text;
+                    data, text, className;
                 // deep links?
                 if (links.isDeepLink(href)) {
                     data = links.parseDeepLink(href);
-                    link.addClass('deep-link-files').data(data);
+                    className = /^(contacts|calendar|tasks|files)/.test(data.app) ? data.app : 'app';
+                    link.addClass('deep-link-' + className).data(data);
                 }
                 // mailto
                 if (href.indexOf('mailto') > -1) {
