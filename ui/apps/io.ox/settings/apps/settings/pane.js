@@ -120,13 +120,13 @@ define('io.ox/settings/apps/settings/pane', [
         model: OAuthModel,
         load: function () {
             var self = this;
-
             return http.GET({
                 module: 'oauth/grants',
                 params: {
                     action: 'all'
                 }
-            }).done(function (list) {
+            })
+            .done(function (list) {
                 self.reset(list);
             });
         }

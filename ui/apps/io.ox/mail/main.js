@@ -407,7 +407,7 @@ define('io.ox/mail/main', [
                 if (value === 610 && !app.props.get('thread')) {
                     // restore thread when it was disabled by force
                     var options = app.getViewOptions(app.folder.get());
-                    app.props.set('thread', options.threadrestore);
+                    app.props.set('thread', options.threadrestore || false);
                 }
                 // now change sort columns
                 model.set('sort', value);
