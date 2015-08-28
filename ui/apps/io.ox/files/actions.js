@@ -774,6 +774,26 @@ define('io.ox/files/actions', [
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'invite',
+        index: index += 100,
+        prio: 'lo',
+        mobile: 'lo',
+        label: gt('Invite people'),
+        ref: 'io.ox/files/actions/invite',
+        section: 'share'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'getalink',
+        index: index += 100,
+        prio: 'lo',
+        mobile: 'lo',
+        label: gt('Get link'),
+        ref: 'io.ox/files/actions/getalink',
+        section: 'share'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'rename',
         index: index += 100,
         prio: 'lo',
