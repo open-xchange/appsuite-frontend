@@ -16,91 +16,346 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.7.7\n"
 
+#: apps/io.ox/tours/calendar.js:72 module:io.ox/tours
+msgid "Adding attachments"
+msgstr "Anlagen hinzufügen"
+
+#: apps/io.ox/tours/tasks.js:54 module:io.ox/tours
+msgid "Adding further details"
+msgstr "Details hinzufügen"
+
+#: apps/io.ox/tours/contacts.js:36 module:io.ox/tours
+msgid ""
+"Click on a letter on the left side of the navigation bar in order to display "
+"the corresponding contacts from the selected address book."
+msgstr ""
+"Klicken Sie links in der Navigationsleiste auf einen Buchstaben, um aus dem "
+"geöffneten Adressbuch die entsprechenden Kontakte anzuzeigen."
+
+#: apps/io.ox/tours/portal.js:45 module:io.ox/tours
+msgid "Closing a square"
+msgstr "Eine Kachel schließen"
+
+#: apps/io.ox/tours/mail.js:33 module:io.ox/tours
+msgid "Composing a new E-Mail"
+msgstr "Eine neue E-Mail verfassen"
+
 #: apps/io.ox/tours/calendar.js:34 module:io.ox/tours
 msgid "Creating a new appointment"
 msgstr "Einen neuen Termin anlegen"
 
-#: apps/io.ox/tours/calendar.js:35 module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr ""
-"Um einen neuen Termin anzulegen, klicken Sie in der Werkzeugleiste auf Neu."
+#: apps/io.ox/tours/contacts.js:30 module:io.ox/tours
+msgid "Creating a new contact"
+msgstr "Einen neuen Kontakt anlegen"
 
-#: apps/io.ox/tours/calendar.js:51 module:io.ox/tours
-msgid "Entering the appointment's data"
-msgstr "Termindaten eingeben"
+#: apps/io.ox/tours/tasks.js:32 module:io.ox/tours
+msgid "Creating a new task"
+msgstr "Eine neue Aufgabe erstellen"
+
+#: apps/io.ox/tours/files.js:60 module:io.ox/tours
+msgid "Creating a note"
+msgstr "Eine Notiz anlegen"
+
+#: apps/io.ox/tours/intro.js:93 module:io.ox/tours
+msgid "Creating new items"
+msgstr "Neue Objekte erzeugen"
+
+#: apps/io.ox/tours/calendar.js:57 module:io.ox/tours
+msgid "Creating recurring appointments"
+msgstr "Wiederkehrende Termine anlegen"
+
+#: apps/io.ox/tours/tasks.js:62 module:io.ox/tours
+msgid "Creating recurring tasks"
+msgstr "Wiederkehrende Aufgaben erstellen"
+
+#: apps/io.ox/tours/calendar.js:77 module:io.ox/tours
+msgid "Creating the appointment"
+msgstr "Den Termin anlegen"
+
+#: apps/io.ox/tours/tasks.js:87 module:io.ox/tours
+msgid "Creating the task"
+msgstr "Die Aufgabe anlegen"
+
+#: apps/io.ox/tours/portal.js:51 module:io.ox/tours
+msgid "Customizing the Portal"
+msgstr "Das Portal anpassen"
+
+#: apps/io.ox/tours/intro.js:112 module:io.ox/tours
+msgid ""
+"Depending on the app, the toolbar contains various functions for creating, "
+"editing and organizing objects."
+msgstr ""
+"In der Werkzeugleiste finden Sie je nach App verschiedene Funktionen zum "
+"Anlegen, Bearbeiten und Organisieren von Objekten."
+
+#: apps/io.ox/tours/intro.js:132 module:io.ox/tours
+msgid ""
+"Detailed instructions for the single apps are located in System menu > Help."
+msgstr ""
+"Ausführliche Anleitungen zu allen Apps finden Sie in Systemmenü > Hilfe."
+
+#: apps/io.ox/tours/files.js:67 module:io.ox/tours
+msgid "Displaying information"
+msgstr "Informationen anzeigen"
+
+#: apps/io.ox/tours/intro.js:75 module:io.ox/tours
+msgid "Displaying the help or the settings"
+msgstr "Hilfe anzeigen oder Einstellungen aufrufen"
+
+#: apps/io.ox/tours/portal.js:40 module:io.ox/tours
+msgid "Drag and drop"
+msgstr "Drag and drop"
+
+#: apps/io.ox/tours/settings.js:44 module:io.ox/tours
+msgid ""
+"Edit a setting on the right side. In most of the cases, the changes are "
+"activated immediately."
+msgstr ""
+"Auf der rechten Seite bearbeiten Sie eine Einstellung. In den meisten Fällen "
+"werden die Änderungen sofort wirksam."
+
+#: apps/io.ox/tours/mail.js:106 module:io.ox/tours
+msgid "Editing multiple E-Mails"
+msgstr "Mehrere E-Mails bearbeiten"
+
+#: apps/io.ox/tours/contacts.js:46 module:io.ox/tours
+msgid "Editing multiple contacts"
+msgstr "Mehrere Kontakte bearbeiten"
+
+#: apps/io.ox/tours/tasks.js:99 module:io.ox/tours
+msgid "Editing multiple tasks"
+msgstr "Mehrere Aufgaben bearbeiten"
+
+#: apps/io.ox/tours/settings.js:43 module:io.ox/tours
+msgid "Editing settings"
+msgstr "Die Einstellungen bearbeiten"
+
+#: apps/io.ox/tours/mail.js:69 module:io.ox/tours
+msgid ""
+"Enter the E-Mail text into the main area. If the text format was set to HTMl "
+"in the options, you can format the E-Mail text. To do so select a text part "
+"and then click an icon in the formatting bar."
+msgstr ""
+"Geben Sie den E-Mail-Text in den Hauptbereich ein. Wenn das Textformat in "
+"den Optionen auf HTML eingestellt wurde, können Sie den E-Mail-Text "
+"formatieren. Markieren Sie dazu einen Textteil und klicken Sie dann auf ein "
+"Symbol in der Formatierleiste."
+
+#: apps/io.ox/tours/mail.js:48 module:io.ox/tours
+msgid ""
+"Enter the recipient's name into the recipients field. As soon as you typed "
+"the first letters, suggestions from the address books are displayed. To "
+"accept a recipient suggestion, click on it."
+msgstr ""
+"Geben Sie den Namen des Empfängers in die Empfängerzeile ein. Sobald Sie die "
+"ersten Buchstaben eingetippt haben, werden Vorschläge aus den Adressbüchern "
+"angezeigt. Klicken Sie auf einen Vorschlag, um diesen als Empfänger zu "
+"übernehmen."
+
+#: apps/io.ox/tours/mail.js:59 module:io.ox/tours
+msgid "Enter the subject into the subject field."
+msgstr "Geben Sie den Betreff in die Betreffzeile ein."
 
 #: apps/io.ox/tours/calendar.js:52 module:io.ox/tours
 msgid ""
 "Enter the subject, the start and the end date of the appointment. Other "
 "details are optional."
 msgstr ""
-"Geben Sie den Betreff, den Beginn und das Ende des Termins ein. Andere Angaben "
-"sind optional."
+"Geben Sie den Betreff, den Beginn und das Ende des Termins ein. Andere "
+"Angaben sind optional."
 
-#: apps/io.ox/tours/calendar.js:57 module:io.ox/tours
-msgid "Creating recurring appointments"
-msgstr "Wiederkehrende Termine anlegen"
+#: apps/io.ox/tours/tasks.js:49 module:io.ox/tours
+msgid "Enter the subject, the start date, and a description."
+msgstr "Geben Sie den Betreff, den Beginn und eine Beschreibung ein."
 
-#: apps/io.ox/tours/calendar.js:58 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:82 module:io.ox/tours
+msgid "Entering billing information"
+msgstr "Abrechnungsinformationen eintragen"
+
+#: apps/io.ox/tours/mail.js:68 module:io.ox/tours
+msgid "Entering the E-Mail text"
+msgstr "Den E-Mail Text eingeben"
+
+#: apps/io.ox/tours/calendar.js:51 module:io.ox/tours
+msgid "Entering the appointment's data"
+msgstr "Termindaten eingeben"
+
+#: apps/io.ox/tours/mail.js:47 module:io.ox/tours
+msgid "Entering the recipient's name"
+msgstr "Den Empfänger bestimmen"
+
+#: apps/io.ox/tours/mail.js:58 module:io.ox/tours
+msgid "Entering the subject"
+msgstr "Den Betreff eingeben"
+
+#: apps/io.ox/tours/tasks.js:48 module:io.ox/tours
+msgid "Entering the task's data"
+msgstr "Aufgabendaten eingeben"
+
+#: apps/io.ox/tours/files.js:30 module:io.ox/tours
+msgid "Folder tree"
+msgstr "Der Ordnerbaum"
+
+#: apps/io.ox/tours/calendar.js:73 module:io.ox/tours
+msgid "Further down you can add documents as attachments to the appointment."
+msgstr "Weiter unten können Sie dem Termin Dokumente als Anlagen hinzufügen."
+
+#: apps/io.ox/tours/mail.js:63 module:io.ox/tours
+msgid "Further functions"
+msgstr "Weitere Funktionen"
+
+#: apps/io.ox/tours/intro.js:131 module:io.ox/tours
+msgid "Further information"
+msgstr "Weitere Informationen"
+
+#. Tour name; general introduction
+#: apps/io.ox/tours/intro.js:46 module:io.ox/tours
+msgid "Getting started"
+msgstr "Einstieg"
+
+#: apps/io.ox/tours/main.js:77 module:io.ox/tours
+msgid "Guided tour for this app"
+msgstr "Guided Tour für diese App"
+
+#: apps/io.ox/tours/mail.js:101 module:io.ox/tours
+msgid "Halo view"
+msgstr "Die Halo View"
+
+#: apps/io.ox/tours/settings.js:36 module:io.ox/tours
+msgid "How the settings are organized"
+msgstr "Organisation der Einstellungen"
+
+#: apps/io.ox/tours/mail.js:92 module:io.ox/tours
 msgid ""
-"To create recurring appointments, enable Repeat. Functions for setting the "
-"recurrence parameters are shown."
+"If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
+"separate window."
 msgstr ""
-"Um wiederkehrende Termine anzulegen, aktivieren Sie Wiederholen. Funktionen "
-"zum Einstellen der Wiederholungsparameter werden eingeblendet."
+"Ein Doppelklick auf eine E-Mail in der Liste öffnet die E-Mail in einem "
+"eigenen Fenster."
 
-#: apps/io.ox/tours/calendar.js:62 module:io.ox/tours
-#: apps/io.ox/tours/tasks.js:67
-msgid "Using the reminder function"
-msgstr "Die Erinnerungsfunktion verwenden"
+#: apps/io.ox/tours/portal.js:46 module:io.ox/tours
+msgid "If you no longer want to display a square, click the cross."
+msgstr "Um eine Kachel zu schließen, klicken Sie auf das Kreuz."
 
-#: apps/io.ox/tours/calendar.js:63 module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "Um den Termin nicht zu verpassen, verwenden Sie die Erinnerungsfunktion."
+#: apps/io.ox/tours/intro.js:89 module:io.ox/tours
+msgid ""
+"In case of new notifications, e.g. appointment invitations, the info area is "
+"opened."
+msgstr ""
+"Bei neuen Benachrichtigungen, zum Beispiel bei Termineinladungen, öffnet "
+"sich der Infobereich."
+
+#: apps/io.ox/tours/mail.js:107 module:io.ox/tours
+msgid ""
+"In order to edit multiple E-Mails at once, enable the checkboxes on the left "
+"side of the E-Mails. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"Wenn Sie mehrere E-Mails gemeinsam bearbeiten möchten, aktivieren Sie die "
+"Kontrollfelder links neben den E-Mails. Wenn die Kontrollfelder nicht "
+"angezeigt werden, klicken Sie rechts in der Werkzeugleiste auf Ansicht > "
+"Kontrollfelder."
+
+#: apps/io.ox/tours/mail.js:64 module:io.ox/tours
+msgid ""
+"In this area you can find further functions, e.g. for adding attachments."
+msgstr ""
+"In diesem Bereich finden Sie weitere Funktionen, z.B. für das Hinzufügen von "
+"Anlagen."
 
 #: apps/io.ox/tours/calendar.js:67 module:io.ox/tours
 #: apps/io.ox/tours/tasks.js:77
 msgid "Inviting other participants"
 msgstr "Andere Teilnehmer einladen"
 
-#: apps/io.ox/tours/calendar.js:68 module:io.ox/tours
-msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. To avoid appointment conflicts, click on Find a free time at the "
-"upper right side."
-msgstr ""
-"Um andere Teilnehmer einzuladen, geben Sie ihre Namen in das Feld unterhalb "
-"von Teilnehmer ein. Um Terminkonflikte zu vermeiden, klicken Sie oben rechts "
-"auf Verfügbaren Zeitraum finden."
+#: apps/io.ox/tours/intro.js:70 module:io.ox/tours
+msgid "Launching an app"
+msgstr "Eine App starten"
 
-#: apps/io.ox/tours/calendar.js:72 module:io.ox/tours
-msgid "Adding attachments"
-msgstr "Anlagen hinzufügen"
+#: apps/io.ox/tours/contacts.js:35 module:io.ox/tours
+msgid "Navigation bar"
+msgstr "Navigationsleiste"
 
-#: apps/io.ox/tours/calendar.js:73 module:io.ox/tours
-msgid "Further down you can add documents as attachments to the appointment."
-msgstr "Weiter unten können Sie dem Termin Dokumente als Anlagen hinzufügen."
+#: apps/io.ox/tours/mail.js:91 module:io.ox/tours
+msgid "Opening an E-Mail in a separate window"
+msgstr "E-Mail in eigenem Fenster öffnen"
 
-#: apps/io.ox/tours/calendar.js:77 module:io.ox/tours
-msgid "Creating the appointment"
-msgstr "Den Termin anlegen"
+#: apps/io.ox/tours/intro.js:101 module:io.ox/tours
+msgid "Opening or closing the folder tree"
+msgstr "Den Ordnerbaum öffnen oder schließen"
 
-#: apps/io.ox/tours/calendar.js:78 module:io.ox/tours
-msgid "To create the appointment, click on Create at the upper right side."
-msgstr "Um den Termin anzulegen, klicken Sie rechts oben auf Anlegen."
+#: apps/io.ox/tours/mail.js:112 module:io.ox/tours
+msgid "Opening the E-Mail settings"
+msgstr "Die E-Mail Einstellungen öffnen"
+
+#: apps/io.ox/tours/settings.js:48 module:io.ox/tours
+msgid "Opening the help"
+msgstr "Die Hilfe öffnen"
+
+#: apps/io.ox/tours/settings.js:30 module:io.ox/tours
+msgid "Opening the settings"
+msgstr "Die Einstellungen öffnen"
+
+#: apps/io.ox/tours/mail.js:96 module:io.ox/tours
+msgid "Reading E-Mail conversations"
+msgstr "E-Mail-Konversationen lesen"
+
+#: apps/io.ox/tours/portal.js:35 module:io.ox/tours
+msgid "Reading the details"
+msgstr "Details lesen"
+
+#: apps/io.ox/tours/intro.js:106 module:io.ox/tours
+msgid "Searching for objects"
+msgstr "Objekte suchen"
 
 #: apps/io.ox/tours/calendar.js:83 module:io.ox/tours
 #: apps/io.ox/tours/files.js:35 apps/io.ox/tours/mail.js:86
 msgid "Selecting a view"
 msgstr "Eine Ansicht wählen"
 
-#: apps/io.ox/tours/calendar.js:84 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:40 module:io.ox/tours
+msgid "Sending an E-Mail to a contact"
+msgstr "E-Mail an Kontakt senden"
+
+#: apps/io.ox/tours/mail.js:74 module:io.ox/tours
+msgid "Sending the E-Mail"
+msgstr "Die E-Mail senden"
+
+#: apps/io.ox/tours/settings.js:54 module:io.ox/tours
+msgid "Signing out"
+msgstr "Abmelden"
+
+#: apps/io.ox/tours/tasks.js:92 module:io.ox/tours
+msgid "Sorting tasks"
+msgstr "Aufgaben sortieren"
+
+#: apps/io.ox/tours/mail.js:79 module:io.ox/tours
+msgid "Sorting your E-Mails"
+msgstr "E-Mails sortieren"
+
+#: apps/io.ox/tours/intro.js:126 module:io.ox/tours
+msgid "The Detail view"
+msgstr "Die Detailansicht"
+
+#: apps/io.ox/tours/intro.js:127 module:io.ox/tours
 msgid ""
-"To select one of the views like Day, Month or List, click on View in the "
-"toolbar. Select a menu entry from the Layout section."
+"The Detail view displays an object's content. Depending on the app, further "
+"functions for organizing objects can be found in the Detail view."
 msgstr ""
-"Um eine der Ansichten wie Tag, Monat oder Liste zu wählen, klicken Sie in der "
-"Werkzeugleiste auf Ansicht. Wählen Sie unter Layout einen Menüeintrag."
+"Die Detailansicht zeigt Inhalte von Objekten. Je nach App finden Sie in der "
+"Detailansicht weitere Funktionen zum Organisieren von Objekten."
+
+#: apps/io.ox/tours/files.js:45 module:io.ox/tours
+msgid "The Icons view"
+msgstr "Die Symbolansicht"
+
+#: apps/io.ox/tours/files.js:46 module:io.ox/tours
+msgid ""
+"The Icons view displays an icon and the file name for each file. Click on an "
+"icon to view further details and functions in the pop-up."
+msgstr ""
+"Zeigt für jede Datei ein Symbol und den Dateinamen. Klicken Sie auf ein "
+"Symbol, um im Popup weitere Details und Funktionen anzuzeigen."
 
 #: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
 #: apps/io.ox/tours/files.js:40
@@ -116,454 +371,27 @@ msgstr ""
 "Zeigt eine Liste der Termine im aktuellen Ordner. Anklicken eines Termins "
 "zeigt in der Detailansicht die Daten des Termins und einige Funktionen."
 
-#: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
-msgid "The calendar views"
-msgstr "Die Kalenderansichten"
-
-#: apps/io.ox/tours/calendar.js:106 module:io.ox/tours
-msgid ""
-"The calendar views display a calendar sheet with the appointments for the "
-"selected time range."
-msgstr "Zeigen für den gewählten Zeitraum ein Kalenderblatt mit den Terminen."
-
-#: apps/io.ox/tours/contacts.js:30 module:io.ox/tours
-msgid "Creating a new contact"
-msgstr "Einen neuen Kontakt anlegen"
-
-#: apps/io.ox/tours/contacts.js:31 module:io.ox/tours
-msgid "To create a new contact, click on New > Add contact in the toolbar."
-msgstr ""
-"Um einen neuen Kontakt anzulegen, klicken Sie in der Werkzeugleiste auf Neu > "
-"Kontakt hinzufügen."
-
-#: apps/io.ox/tours/contacts.js:35 module:io.ox/tours
-msgid "Navigation bar"
-msgstr "Navigationsleiste"
-
-#: apps/io.ox/tours/contacts.js:36 module:io.ox/tours
-msgid ""
-"Click on a letter on the left side of the navigation bar in order to display "
-"the corresponding contacts from the selected address book."
-msgstr ""
-"Klicken Sie links in der Navigationsleiste auf einen Buchstaben, um aus dem "
-"geöffneten Adressbuch die entsprechenden Kontakte anzuzeigen."
-
-#: apps/io.ox/tours/contacts.js:40 module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
-msgstr "E-Mail an Kontakt senden"
-
-#: apps/io.ox/tours/contacts.js:41 module:io.ox/tours
-msgid ""
-"To send an E-Mail to the contact, click on an E-Mail address or on Send email "
-"in the toolbar."
-msgstr ""
-"Um eine E-Mail an den Kontakt zu senden, klicken Sie auf eine E-Mail Adresse "
-"oder in der Werkzeugleiste auf E-Mail versenden."
-
-#: apps/io.ox/tours/contacts.js:46 module:io.ox/tours
-msgid "Editing multiple contacts"
-msgstr "Mehrere Kontakte bearbeiten"
-
-#: apps/io.ox/tours/contacts.js:47 module:io.ox/tours
-msgid ""
-"To edit multiple contacts at once, enable the checkboxes on the left side of "
-"the contacts. If the checkboxes are not displayed, click on View > Checkboxes "
-"on the right side of the toolbar."
-msgstr ""
-"Wenn Sie mehrere Kontakte gemeinsam bearbeiten möchten, aktivieren Sie die "
-"Kontrollfelder links neben den Kontakten. Wenn die Kontrollfelder nicht "
-"angezeigt werden, klicken Sie rechts in der Werkzeugleiste auf Ansicht > "
-"Kontrollfelder."
-
-#: apps/io.ox/tours/files.js:30 module:io.ox/tours
-msgid "Folder tree"
-msgstr "Der Ordnerbaum"
-
-#: apps/io.ox/tours/files.js:31 module:io.ox/tours
-msgid ""
-"Use the folder tree to access own, public or shared files. If the folder tree "
-"is hidden, click on View > Folder view on the right side of the toolbar."
-msgstr ""
-"Nutzen Sie den Ordnerbaum, um auf eigene, öffentliche oder freigegebene "
-"Dateien zuzugreifen. Wenn der Ordnerbaum nicht angezeigt wird, klicken Sie "
-"rechts in der Werkzeugleiste auf Ansicht > Ordneransicht."
-
-#: apps/io.ox/tours/files.js:36 module:io.ox/tours
-msgid ""
-"To select one of the views List, Icons or Squares, click on View on the right "
-"side of the toolbar."
-msgstr ""
-"Um eine der Ansichten Liste, Symbole oder Kacheln zu wählen, klicken Sie "
-"rechts in der Werkzeugleiste auf Ansicht."
-
 #: apps/io.ox/tours/files.js:41 module:io.ox/tours
 msgid ""
 "The List view shows details like the size and date of change. Use the "
 "checkboxes to select files. Click on a file to view further details and "
 "functions in the pop-up."
 msgstr ""
-"Zeigt Details wie Größe und Änderungsdatum. Nutzen Sie die Kontrollfelder, um "
-"Dateien auzuwählen. Klicken Sie auf eine Datei, um im Popup weitere Details "
-"und Funktionen anzuzeigen."
+"Zeigt Details wie Größe und Änderungsdatum. Nutzen Sie die Kontrollfelder, "
+"um Dateien auzuwählen. Klicken Sie auf eine Datei, um im Popup weitere "
+"Details und Funktionen anzuzeigen."
 
-#: apps/io.ox/tours/files.js:45 module:io.ox/tours
-msgid "The Icons view"
-msgstr "Die Symbolansicht"
-
-#: apps/io.ox/tours/files.js:46 module:io.ox/tours
-msgid ""
-"The Icons view displays an icon and the file name for each file. Click on an "
-"icon to view further details and functions in the pop-up."
-msgstr ""
-"Zeigt für jede Datei ein Symbol und den Dateinamen. Klicken Sie auf ein "
-"Symbol, um im Popup weitere Details und Funktionen anzuzeigen."
-
-#: apps/io.ox/tours/files.js:50 module:io.ox/tours
-msgid "The Tiles view"
-msgstr "Die Ansicht Kacheln"
-
-#: apps/io.ox/tours/files.js:51 module:io.ox/tours
-msgid ""
-"The Tiles view shows a big icon for each file. Click on an icon to view "
-"further details and functions in the pop-up."
-msgstr ""
-"Zeigt für jede Datei ein großes Symbol. Klicken Sie auf ein Symbol, um im "
-"Popup weitere Details und Funktionen anzuzeigen."
-
-#: apps/io.ox/tours/files.js:55 module:io.ox/tours
-msgid "Uploading a file"
-msgstr "Eine Datei hochladen"
-
-#: apps/io.ox/tours/files.js:56 module:io.ox/tours
-msgid "To upload a file, click on New > Upload new file in the toolbar."
-msgstr ""
-"Um eine Datei hochzuladen, klicken Sie in der Werkzeugleiste auf Neu > Neue "
-"Datei hochladen."
-
-#: apps/io.ox/tours/files.js:60 module:io.ox/tours
-msgid "Creating a note"
-msgstr "Eine Notiz anlegen"
-
-#: apps/io.ox/tours/files.js:61 module:io.ox/tours
-msgid "To create a note, click on New > Add note in the toolbar."
-msgstr ""
-"Um eine Notiz anzulegen, klicken Sie in der Werkzeugleiste auf Neu > Notiz "
-"anlegen."
-
-#: apps/io.ox/tours/files.js:67 module:io.ox/tours
-msgid "Displaying information"
-msgstr "Informationen anzeigen"
-
-#: apps/io.ox/tours/files.js:68 module:io.ox/tours
-msgid ""
-"To view further information, click on a file. A pop-up window displays further "
-"details and functions."
-msgstr ""
-"Um weitere Informationen anzuzeigen, klicken Sie auf eine Datei. Ein Popup-"
-"Fenster zeigt weitere Details und Funktionen."
-
-#. Tour name; general introduction
-#: apps/io.ox/tours/intro.js:46 module:io.ox/tours
-msgid "Getting started"
-msgstr "Einstieg"
-
-#: apps/io.ox/tours/intro.js:63 module:io.ox/tours
-msgid "Welcome to %s"
-msgstr "Willkommen bei %s"
-
-#: apps/io.ox/tours/intro.js:64 module:io.ox/tours
-msgid ""
-"This guided tour will briefly introduce you to the product. Get more detailed "
-"information in the tours for the single apps or in the online help."
-msgstr ""
-"Diese Guided Tour bietet Ihnen eine kurze Einführung in das Produkt. "
-"Ausführliche Informationen erhalten Sie in den Guided Tours der einzelnen Apps "
-"oder in der Online Hilfe."
-
-#: apps/io.ox/tours/intro.js:67 module:io.ox/tours
-msgid "Launching an app"
-msgstr "Eine App starten"
-
-#: apps/io.ox/tours/intro.js:68 module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
-msgstr ""
-"Um eine App zu starten, klicken Sie links in der Menüleiste auf einen Eintrag."
-
-#: apps/io.ox/tours/intro.js:72 module:io.ox/tours
-msgid "Displaying the help or the settings"
-msgstr "Hilfe anzeigen oder Einstellungen aufrufen"
-
-#: apps/io.ox/tours/intro.js:73 module:io.ox/tours
-msgid ""
-"To display the help or the settings, click the System menu icon in the menu "
-"bar."
-msgstr ""
-"Um die Hilfe anzuzeigen oder um die Einstellungen aufzurufen, klicken Sie in "
-"der Menüleiste auf das Symbol Systemmenü."
-
-#: apps/io.ox/tours/intro.js:79 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:82 module:io.ox/tours
 msgid "The New objects icon"
 msgstr "Das Symbol Neue Objekte"
 
-#: apps/io.ox/tours/intro.js:80 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:83 module:io.ox/tours
 msgid ""
 "The New objects icon shows the number of unread E-Mails or other "
 "notifications. If clicking the icon, the info area opens."
 msgstr ""
 "Das Symbol Neue Objekte zeigt die Anzahl ungelesener E-Mails oder sonstiger "
 "Benachrichtigungen. Anklicken öffnet den Infobereich."
-
-#: apps/io.ox/tours/intro.js:85 module:io.ox/tours
-msgid "The info area"
-msgstr "Der Infobereich"
-
-#: apps/io.ox/tours/intro.js:86 module:io.ox/tours
-msgid ""
-"In case of new notifications, e.g. appointment invitations, the info area is "
-"opened."
-msgstr ""
-"Bei neuen Benachrichtigungen, zum Beispiel bei Termineinladungen, öffnet sich "
-"der Infobereich."
-
-#: apps/io.ox/tours/intro.js:90 module:io.ox/tours
-msgid "Creating new items"
-msgstr "Neue Objekte erzeugen"
-
-#: apps/io.ox/tours/intro.js:91 module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
-msgstr ""
-"Um eine neue E-Mail zu verfassen, klicken Sie in der Werkzeugleiste auf "
-"Verfassen."
-
-#: apps/io.ox/tours/intro.js:98 module:io.ox/tours
-msgid "Opening or closing the folder tree"
-msgstr "Den Ordnerbaum öffnen oder schließen"
-
-#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
-msgid ""
-"To open or close the folder tree, click on View >  Folder view on the right "
-"side of the toolbar."
-msgstr ""
-"Um den Ordnerbaum zu öffnen oder zu schließen, klicken Sie rechts in der "
-"Werkzeugleiste auf Ansicht > Ordneransicht."
-
-#: apps/io.ox/tours/intro.js:103 module:io.ox/tours
-msgid "Searching for objects"
-msgstr "Objekte suchen"
-
-#: apps/io.ox/tours/intro.js:104 module:io.ox/tours
-msgid "To search for objects, click the Search icon in the menu bar."
-msgstr ""
-"Um nach Objekten zu suchen, klicken Sie in der Menüleiste auf das Symbol "
-"Suchen."
-
-#: apps/io.ox/tours/intro.js:108 module:io.ox/tours
-msgid "The toolbar"
-msgstr "Die Werkzeugleiste"
-
-#: apps/io.ox/tours/intro.js:109 module:io.ox/tours
-msgid ""
-"Depending on the app, the toolbar contains various functions for creating, "
-"editing and organizing objects."
-msgstr ""
-"In der Werkzeugleiste finden Sie je nach App verschiedene Funktionen zum "
-"Anlegen, Bearbeiten und Organisieren von Objekten."
-
-#: apps/io.ox/tours/intro.js:113 module:io.ox/tours
-msgid "The folder tree"
-msgstr "Der Ordnerbaum"
-
-#: apps/io.ox/tours/intro.js:114 module:io.ox/tours
-msgid ""
-"Use the folder tree to open the folder containing the objects that you want to "
-"view in the list."
-msgstr ""
-"Im Ordnerbaum öffnen Sie den Ordner, dessen Objekte Sie in der Liste sehen "
-"möchten."
-
-#: apps/io.ox/tours/intro.js:118 module:io.ox/tours
-msgid "The list"
-msgstr "Die Liste"
-
-#: apps/io.ox/tours/intro.js:119 module:io.ox/tours
-msgid ""
-"Use the list to select an object, show its contents or activate functions."
-msgstr ""
-"In der Liste wählen Sie ein Objekt, um seine Inhalte anzuzeigen oder "
-"Funktionen auszuführen."
-
-#: apps/io.ox/tours/intro.js:123 module:io.ox/tours
-msgid "The Detail view"
-msgstr "Die Detailansicht"
-
-#: apps/io.ox/tours/intro.js:124 module:io.ox/tours
-msgid ""
-"The Detail view displays an object's content. Depending on the app, further "
-"functions for organizing objects can be found in the Detail view."
-msgstr ""
-"Die Detailansicht zeigt Inhalte von Objekten. Je nach App finden Sie in der "
-"Detailansicht weitere Funktionen zum Organisieren von Objekten."
-
-#: apps/io.ox/tours/intro.js:128 module:io.ox/tours
-msgid "Further information"
-msgstr "Weitere Informationen"
-
-#: apps/io.ox/tours/intro.js:129 module:io.ox/tours
-msgid ""
-"Detailed instructions for the single apps are located in System menu > Help."
-msgstr "Ausführliche Anleitungen zu allen Apps finden Sie in Systemmenü > Hilfe."
-
-#: apps/io.ox/tours/mail.js:33 module:io.ox/tours
-msgid "Composing a new E-Mail"
-msgstr "Eine neue E-Mail verfassen"
-
-#: apps/io.ox/tours/mail.js:34 module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
-msgstr ""
-"Um eine neue E-Mail zu verfassen, klicken Sie in der Werkzeugleiste auf "
-"Verfassen."
-
-#: apps/io.ox/tours/mail.js:47 module:io.ox/tours
-msgid "Entering the recipient's name"
-msgstr "Den Empfänger bestimmen"
-
-#: apps/io.ox/tours/mail.js:48 module:io.ox/tours
-msgid ""
-"Enter the recipient's name into the recipients field. As soon as you typed the "
-"first letters, suggestions from the address books are displayed. To accept a "
-"recipient suggestion, click on it."
-msgstr ""
-"Geben Sie den Namen des Empfängers in die Empfängerzeile ein. Sobald Sie die "
-"ersten Buchstaben eingetippt haben, werden Vorschläge aus den Adressbüchern "
-"angezeigt. Klicken Sie auf einen Vorschlag, um diesen als Empfänger zu "
-"übernehmen."
-
-#: apps/io.ox/tours/mail.js:58 module:io.ox/tours
-msgid "Entering the subject"
-msgstr "Den Betreff eingeben"
-
-#: apps/io.ox/tours/mail.js:59 module:io.ox/tours
-msgid "Enter the subject into the subject field."
-msgstr "Geben Sie den Betreff in die Betreffzeile ein."
-
-#: apps/io.ox/tours/mail.js:63 module:io.ox/tours
-msgid "Further functions"
-msgstr "Weitere Funktionen"
-
-#: apps/io.ox/tours/mail.js:64 module:io.ox/tours
-msgid "In this area you can find further functions, e.g. for adding attachments."
-msgstr ""
-"In diesem Bereich finden Sie weitere Funktionen, z.B. für das Hinzufügen von "
-"Anlagen."
-
-#: apps/io.ox/tours/mail.js:68 module:io.ox/tours
-msgid "Entering the E-Mail text"
-msgstr "Den E-Mail Text eingeben"
-
-#: apps/io.ox/tours/mail.js:69 module:io.ox/tours
-msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTMl "
-"in the options, you can format the E-Mail text. To do so select a text part "
-"and then click an icon in the formatting bar."
-msgstr ""
-"Geben Sie den E-Mail-Text in den Hauptbereich ein. Wenn das Textformat in den "
-"Optionen auf HTML eingestellt wurde, können Sie den E-Mail-Text formatieren. "
-"Markieren Sie dazu einen Textteil und klicken Sie dann auf ein Symbol in der "
-"Formatierleiste."
-
-#: apps/io.ox/tours/mail.js:74 module:io.ox/tours
-msgid "Sending the E-Mail"
-msgstr "Die E-Mail senden"
-
-#: apps/io.ox/tours/mail.js:75 module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
-msgstr "Um die E-Mail zu senden, klicken Sie auf  \"Senden\". "
-
-#: apps/io.ox/tours/mail.js:79 module:io.ox/tours
-msgid "Sorting your E-Mails"
-msgstr "E-Mails sortieren"
-
-#: apps/io.ox/tours/mail.js:80 module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
-msgstr ""
-"Um die E-Mails zu sortieren, klicken Sie auf Sortieren nach. Wählen Sie ein "
-"Sortierkriterium."
-
-#: apps/io.ox/tours/mail.js:87 module:io.ox/tours
-msgid ""
-"To choose between the different views. click on View in the toolbar. Select a "
-"menu entry in the layout."
-msgstr ""
-"Um zwischen verschiedenen Ansichten zu wählen, klicken Sie in der "
-"Werkzeugleiste auf Ansicht. Wählen Sie unter Layout einen Menüeintrag."
-
-#: apps/io.ox/tours/mail.js:91 module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
-msgstr "E-Mail in eigenem Fenster öffnen"
-
-#: apps/io.ox/tours/mail.js:92 module:io.ox/tours
-msgid ""
-"If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
-"separate window."
-msgstr ""
-"Ein Doppelklick auf eine E-Mail in der Liste öffnet die E-Mail in einem "
-"eigenen Fenster."
-
-#: apps/io.ox/tours/mail.js:96 module:io.ox/tours
-msgid "Reading E-Mail conversations"
-msgstr "E-Mail-Konversationen lesen"
-
-#: apps/io.ox/tours/mail.js:97 module:io.ox/tours
-msgid ""
-"To open or close an E-Mail in a conversation, click on a free area in the "
-"header."
-msgstr ""
-"Um eine E-Mail einer Konversation zu öffnen oder zu schließen, klicken Sie im "
-"Header auf eine freie Stelle."
-
-#: apps/io.ox/tours/mail.js:101 module:io.ox/tours
-msgid "Halo view"
-msgstr "Die Halo View"
-
-#: apps/io.ox/tours/mail.js:102 module:io.ox/tours
-msgid ""
-"To receive information about the sender or other recipients, open the Halo "
-"view by clicking on a name."
-msgstr ""
-"Um Informationen zum Absender oder anderen Empfängern zu erhalten, öffnen Sie "
-"die Halo View, indem Sie einen Namen anklicken."
-
-#: apps/io.ox/tours/mail.js:106 module:io.ox/tours
-msgid "Editing multiple E-Mails"
-msgstr "Mehrere E-Mails bearbeiten"
-
-#: apps/io.ox/tours/mail.js:107 module:io.ox/tours
-msgid ""
-"In order to edit multiple E-Mails at once, enable the checkboxes on the left "
-"side of the E-Mails. If the checkboxes are not displayed, click on View > "
-"Checkboxes on the right side of the toolbar."
-msgstr ""
-"Wenn Sie mehrere E-Mails gemeinsam bearbeiten möchten, aktivieren Sie die "
-"Kontrollfelder links neben den E-Mails. Wenn die Kontrollfelder nicht "
-"angezeigt werden, klicken Sie rechts in der Werkzeugleiste auf Ansicht > "
-"Kontrollfelder."
-
-#: apps/io.ox/tours/mail.js:112 module:io.ox/tours
-msgid "Opening the E-Mail settings"
-msgstr "Die E-Mail Einstellungen öffnen"
-
-#: apps/io.ox/tours/mail.js:113 module:io.ox/tours
-msgid ""
-"To open the E-Mail settings, click the System menu icon on the upper right "
-"side of the menu bar. Select Settings. Click on E-Mail on the left side."
-msgstr ""
-"Um die E-Mail-Einstellungen zu öffnen, klicken Sie auf das Symbol Systemmenü "
-"in der oberen rechten Seite der Menüleiste. Wählen Sie Einstellungen. Klicken "
-"Sie auf der linken Seite auf E-Mail."
-
-#: apps/io.ox/tours/main.js:77 module:io.ox/tours
-msgid "Guided tour for this app"
-msgstr "Guided Tour für diese App"
 
 #: apps/io.ox/tours/portal.js:30 module:io.ox/tours
 msgid "The Portal"
@@ -577,61 +405,39 @@ msgstr ""
 "Das Portal informiert Sie über aktuelle E-Mail, Termine oder Neuigkeiten aus "
 "Ihren sozialen Netzwerken."
 
-#: apps/io.ox/tours/portal.js:35 module:io.ox/tours
-msgid "Reading the details"
-msgstr "Details lesen"
+#: apps/io.ox/tours/files.js:50 module:io.ox/tours
+msgid "The Tiles view"
+msgstr "Die Ansicht Kacheln"
 
-#: apps/io.ox/tours/portal.js:36 module:io.ox/tours
-msgid "To read the details, click on an entry in a square."
-msgstr "Lesen Sie Details, indem Sie in einer Kachel einen Eintrag anklicken."
-
-#: apps/io.ox/tours/portal.js:40 module:io.ox/tours
-msgid "Drag and drop"
-msgstr "Drag and drop"
-
-#: apps/io.ox/tours/portal.js:41 module:io.ox/tours
+#: apps/io.ox/tours/files.js:51 module:io.ox/tours
 msgid ""
-"To change the layout, drag a square's title to another position and drop it "
-"there."
+"The Tiles view shows a big icon for each file. Click on an icon to view "
+"further details and functions in the pop-up."
 msgstr ""
-"Ändern Sie das Layout, indem Sie eine Kachel an ihrem Titel anfassen und an "
-"eine andere Position ziehen."
+"Zeigt für jede Datei ein großes Symbol. Klicken Sie auf ein Symbol, um im "
+"Popup weitere Details und Funktionen anzuzeigen."
 
-#: apps/io.ox/tours/portal.js:45 module:io.ox/tours
-msgid "Closing a square"
-msgstr "Eine Kachel schließen"
+#: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
+msgid "The calendar views"
+msgstr "Die Kalenderansichten"
 
-#: apps/io.ox/tours/portal.js:46 module:io.ox/tours
-msgid "If you no longer want to display a square, click the cross."
-msgstr "Um eine Kachel zu schließen, klicken Sie auf das Kreuz."
-
-#: apps/io.ox/tours/portal.js:51 module:io.ox/tours
-msgid "Customizing the Portal"
-msgstr "Das Portal anpassen"
-
-#: apps/io.ox/tours/portal.js:52 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:106 module:io.ox/tours
 msgid ""
-"To display a square again or to display further information sources, click on "
-"Customize this page."
-msgstr ""
-"Um eine Kachel wieder zu öffnen oder weitere Informationsquellen anzuzeigen, "
-"klicken Sie auf Diese Seite personalisieren."
+"The calendar views display a calendar sheet with the appointments for the "
+"selected time range."
+msgstr "Zeigen für den gewählten Zeitraum ein Kalenderblatt mit den Terminen."
 
-#: apps/io.ox/tours/settings.js:30 module:io.ox/tours
-msgid "Opening the settings"
-msgstr "Die Einstellungen öffnen"
+#: apps/io.ox/tours/intro.js:116 module:io.ox/tours
+msgid "The folder tree"
+msgstr "Der Ordnerbaum"
 
-#: apps/io.ox/tours/settings.js:31 module:io.ox/tours
-msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
-msgstr ""
-"Um die Einstellungen zu öffnen, klicken Sie in der Menüleiste rechts oben auf "
-"das Symbol Systemmenü. Wählen Sie Einstellungen."
+#: apps/io.ox/tours/intro.js:88 module:io.ox/tours
+msgid "The info area"
+msgstr "Der Infobereich"
 
-#: apps/io.ox/tours/settings.js:36 module:io.ox/tours
-msgid "How the settings are organized"
-msgstr "Organisation der Einstellungen"
+#: apps/io.ox/tours/intro.js:121 module:io.ox/tours
+msgid "The list"
+msgstr "Die Liste"
 
 #: apps/io.ox/tours/settings.js:37 module:io.ox/tours
 msgid ""
@@ -641,21 +447,200 @@ msgstr ""
 "Die Einstellungen werden in Themen organisiert. Wählen Sie das Thema auf der "
 "linken Seite, wie z.B. Grundeinstellungen oder E-Mail."
 
-#: apps/io.ox/tours/settings.js:43 module:io.ox/tours
-msgid "Editing settings"
-msgstr "Die Einstellungen bearbeiten"
+#: apps/io.ox/tours/intro.js:111 module:io.ox/tours
+msgid "The toolbar"
+msgstr "Die Werkzeugleiste"
 
-#: apps/io.ox/tours/settings.js:44 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:67 module:io.ox/tours
 msgid ""
-"Edit a setting on the right side. In most of the cases, the changes are "
-"activated immediately."
+"This guided tour will briefly introduce you to the product. Get more "
+"detailed information in the tours for the single apps or in the online help."
 msgstr ""
-"Auf der rechten Seite bearbeiten Sie eine Einstellung. In den meisten Fällen "
-"werden die Änderungen sofort wirksam."
+"Diese Guided Tour bietet Ihnen eine kurze Einführung in das Produkt. "
+"Ausführliche Informationen erhalten Sie in den Guided Tours der einzelnen "
+"Apps oder in der Online Hilfe."
 
-#: apps/io.ox/tours/settings.js:48 module:io.ox/tours
-msgid "Opening the help"
-msgstr "Die Hilfe öffnen"
+#: apps/io.ox/tours/tasks.js:55 module:io.ox/tours
+msgid "To add further details, click on Expand form."
+msgstr ""
+"Wenn Sie weitere Angaben machen möchten, klicken Sie auf Formular erweitern."
+
+#: apps/io.ox/tours/portal.js:41 module:io.ox/tours
+msgid ""
+"To change the layout, drag a square's title to another position and drop it "
+"there."
+msgstr ""
+"Ändern Sie das Layout, indem Sie eine Kachel an ihrem Titel anfassen und an "
+"eine andere Position ziehen."
+
+#: apps/io.ox/tours/mail.js:87 module:io.ox/tours
+msgid ""
+"To choose between the different views. click on View in the toolbar. Select "
+"a menu entry in the layout."
+msgstr ""
+"Um zwischen verschiedenen Ansichten zu wählen, klicken Sie in der "
+"Werkzeugleiste auf Ansicht. Wählen Sie unter Layout einen Menüeintrag."
+
+#: apps/io.ox/tours/mail.js:34 module:io.ox/tours
+msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgstr ""
+"Um eine neue E-Mail zu verfassen, klicken Sie in der Werkzeugleiste auf "
+"Verfassen."
+
+#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
+msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgstr ""
+"Um eine neue E-Mail zu verfassen, klicken Sie in der Werkzeugleiste auf "
+"Verfassen."
+
+#: apps/io.ox/tours/calendar.js:35 module:io.ox/tours
+msgid "To create a new appointment, click on New in the toolbar."
+msgstr ""
+"Um einen neuen Termin anzulegen, klicken Sie in der Werkzeugleiste auf Neu."
+
+#: apps/io.ox/tours/contacts.js:31 module:io.ox/tours
+msgid "To create a new contact, click on New > Add contact in the toolbar."
+msgstr ""
+"Um einen neuen Kontakt anzulegen, klicken Sie in der Werkzeugleiste auf Neu "
+"> Kontakt hinzufügen."
+
+#: apps/io.ox/tours/tasks.js:33 module:io.ox/tours
+msgid "To create a new task, click on New in the toolbar."
+msgstr ""
+"Um eine neue Aufgabe anzulegen, klicken Sie in der Werkzeugleiste auf Neu."
+
+#: apps/io.ox/tours/files.js:61 module:io.ox/tours
+msgid "To create a note, click on New > Add note in the toolbar."
+msgstr ""
+"Um eine Notiz anzulegen, klicken Sie in der Werkzeugleiste auf Neu > Notiz "
+"anlegen."
+
+#: apps/io.ox/tours/calendar.js:58 module:io.ox/tours
+msgid ""
+"To create recurring appointments, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"Um wiederkehrende Termine anzulegen, aktivieren Sie Wiederholen. Funktionen "
+"zum Einstellen der Wiederholungsparameter werden eingeblendet."
+
+#: apps/io.ox/tours/tasks.js:63 module:io.ox/tours
+msgid ""
+"To create recurring tasks, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"Um wiederkehrende Aufgaben anzulegen, aktivieren Sie Wiederholen. Funktionen "
+"zum Einstellen der Wiederholungsparameter werden eingeblendet."
+
+#: apps/io.ox/tours/calendar.js:78 module:io.ox/tours
+msgid "To create the appointment, click on Create at the upper right side."
+msgstr "Um den Termin anzulegen, klicken Sie rechts oben auf Anlegen."
+
+#: apps/io.ox/tours/tasks.js:88 module:io.ox/tours
+msgid "To create the task, click on Create."
+msgstr "Um die Aufgabe zu erstellen, klicken Sie auf Erstellen."
+
+#: apps/io.ox/tours/portal.js:52 module:io.ox/tours
+msgid ""
+"To display a square again or to display further information sources, click "
+"on Customize this page."
+msgstr ""
+"Um eine Kachel wieder zu öffnen oder weitere Informationsquellen anzuzeigen, "
+"klicken Sie auf Diese Seite personalisieren."
+
+#: apps/io.ox/tours/intro.js:76 module:io.ox/tours
+msgid ""
+"To display the help or the settings, click the System menu icon in the menu "
+"bar."
+msgstr ""
+"Um die Hilfe anzuzeigen oder um die Einstellungen aufzurufen, klicken Sie in "
+"der Menüleiste auf das Symbol Systemmenü."
+
+#: apps/io.ox/tours/contacts.js:47 module:io.ox/tours
+msgid ""
+"To edit multiple contacts at once, enable the checkboxes on the left side of "
+"the contacts. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"Wenn Sie mehrere Kontakte gemeinsam bearbeiten möchten, aktivieren Sie die "
+"Kontrollfelder links neben den Kontakten. Wenn die Kontrollfelder nicht "
+"angezeigt werden, klicken Sie rechts in der Werkzeugleiste auf Ansicht > "
+"Kontrollfelder."
+
+#: apps/io.ox/tours/tasks.js:100 module:io.ox/tours
+msgid ""
+"To edit multiple tasks at once, enable the checkboxes at the left side of "
+"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
+"on the right side of the toolbar."
+msgstr ""
+"Wenn Sie mehrere Aufgaben gemeinsam bearbeiten möchten, aktivieren Sie die "
+"Kontrollfelder links neben den Aufgaben. Wenn die Kontrollfelder nicht "
+"angezeigt werden, klicken Sie rechts in der Werkzeugleiste auf Ansicht > "
+"Kontrollfelder."
+
+#: apps/io.ox/tours/tasks.js:83 module:io.ox/tours
+msgid "To enter billing information, click on Show details."
+msgstr ""
+"Wenn Sie Abrechnungsinformationen eintragen möchten, klicken Sie auf Details "
+"anzeigen."
+
+#: apps/io.ox/tours/calendar.js:68 module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. To avoid appointment conflicts, click on Find a free time at "
+"the upper right side."
+msgstr ""
+"Um andere Teilnehmer einzuladen, geben Sie ihre Namen in das Feld unterhalb "
+"von Teilnehmer ein. Um Terminkonflikte zu vermeiden, klicken Sie oben rechts "
+"auf Verfügbaren Zeitraum finden."
+
+#: apps/io.ox/tours/tasks.js:78 module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. You can add documents as attachment to the task."
+msgstr ""
+"Um andere Teilnehmer einzuladen, geben Sie ihre Namen in das Feld unterhalb "
+"von Teilnehmer ein. Sie können der Aufgabe Dokumente als Anlagen hinzufügen."
+
+#: apps/io.ox/tours/intro.js:71 module:io.ox/tours
+msgid "To launch an app, click on an entry on the left side of the menu bar."
+msgstr ""
+"Um eine App zu starten, klicken Sie links in der Menüleiste auf einen "
+"Eintrag."
+
+#: apps/io.ox/tours/calendar.js:63 module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr ""
+"Um den Termin nicht zu verpassen, verwenden Sie die Erinnerungsfunktion."
+
+#: apps/io.ox/tours/tasks.js:68 module:io.ox/tours
+msgid "To not miss the task, use the reminder function."
+msgstr ""
+"Um die Aufgabe nicht zu versäumen, verwenden Sie die Erinnerungsfunktion."
+
+#: apps/io.ox/tours/mail.js:97 module:io.ox/tours
+msgid ""
+"To open or close an E-Mail in a conversation, click on a free area in the "
+"header."
+msgstr ""
+"Um eine E-Mail einer Konversation zu öffnen oder zu schließen, klicken Sie "
+"im Header auf eine freie Stelle."
+
+#: apps/io.ox/tours/intro.js:102 module:io.ox/tours
+msgid ""
+"To open or close the folder tree, click on View >  Folder view on the right "
+"side of the toolbar."
+msgstr ""
+"Um den Ordnerbaum zu öffnen oder zu schließen, klicken Sie rechts in der "
+"Werkzeugleiste auf Ansicht > Ordneransicht."
+
+#: apps/io.ox/tours/mail.js:113 module:io.ox/tours
+msgid ""
+"To open the E-Mail settings, click the System menu icon on the upper right "
+"side of the menu bar. Select Settings. Click on E-Mail on the left side."
+msgstr ""
+"Um die E-Mail-Einstellungen zu öffnen, klicken Sie auf das Symbol Systemmenü "
+"in der oberen rechten Seite der Menüleiste. Wählen Sie Einstellungen. "
+"Klicken Sie auf der linken Seite auf E-Mail."
 
 #: apps/io.ox/tours/settings.js:49 module:io.ox/tours
 msgid ""
@@ -669,9 +654,59 @@ msgstr ""
 "angezeigt. Um die vollständige Hilfe zu durchblättern, klicken Sie oben auf "
 "Startseite oder auf Inhaltsverzeichnis."
 
-#: apps/io.ox/tours/settings.js:54 module:io.ox/tours
-msgid "Signing out"
-msgstr "Abmelden"
+#: apps/io.ox/tours/settings.js:31 module:io.ox/tours
+msgid ""
+"To open the settings, click the System menu icon on the upper right side of "
+"the menu bar. Select Settings."
+msgstr ""
+"Um die Einstellungen zu öffnen, klicken Sie in der Menüleiste rechts oben "
+"auf das Symbol Systemmenü. Wählen Sie Einstellungen."
+
+#: apps/io.ox/tours/portal.js:36 module:io.ox/tours
+msgid "To read the details, click on an entry in a square."
+msgstr "Lesen Sie Details, indem Sie in einer Kachel einen Eintrag anklicken."
+
+#: apps/io.ox/tours/mail.js:102 module:io.ox/tours
+msgid ""
+"To receive information about the sender or other recipients, open the Halo "
+"view by clicking on a name."
+msgstr ""
+"Um Informationen zum Absender oder anderen Empfängern zu erhalten, öffnen "
+"Sie die Halo View, indem Sie einen Namen anklicken."
+
+#: apps/io.ox/tours/intro.js:107 module:io.ox/tours
+msgid "To search for objects, click the Search icon in the menu bar."
+msgstr ""
+"Um nach Objekten zu suchen, klicken Sie in der Menüleiste auf das Symbol "
+"Suchen."
+
+#: apps/io.ox/tours/files.js:36 module:io.ox/tours
+msgid ""
+"To select one of the views List, Icons or Squares, click on View on the "
+"right side of the toolbar."
+msgstr ""
+"Um eine der Ansichten Liste, Symbole oder Kacheln zu wählen, klicken Sie "
+"rechts in der Werkzeugleiste auf Ansicht."
+
+#: apps/io.ox/tours/calendar.js:84 module:io.ox/tours
+msgid ""
+"To select one of the views like Day, Month or List, click on View in the "
+"toolbar. Select a menu entry from the Layout section."
+msgstr ""
+"Um eine der Ansichten wie Tag, Monat oder Liste zu wählen, klicken Sie in "
+"der Werkzeugleiste auf Ansicht. Wählen Sie unter Layout einen Menüeintrag."
+
+#: apps/io.ox/tours/contacts.js:41 module:io.ox/tours
+msgid ""
+"To send an E-Mail to the contact, click on an E-Mail address or on Send "
+"email in the toolbar."
+msgstr ""
+"Um eine E-Mail an den Kontakt zu senden, klicken Sie auf eine E-Mail Adresse "
+"oder in der Werkzeugleiste auf E-Mail versenden."
+
+#: apps/io.ox/tours/mail.js:75 module:io.ox/tours
+msgid "To send the E-Mail, click on Send"
+msgstr "Um die E-Mail zu senden, klicken Sie auf  \"Senden\". "
 
 #: apps/io.ox/tours/settings.js:55 module:io.ox/tours
 msgid ""
@@ -681,88 +716,11 @@ msgstr ""
 "Zm Abmelden klicken Sie in der Menüleiste rechts oben auf das Symbol "
 "Systemmenü. Wählen Sie Abmelden."
 
-#: apps/io.ox/tours/tasks.js:32 module:io.ox/tours
-msgid "Creating a new task"
-msgstr "Eine neue Aufgabe erstellen"
-
-#: apps/io.ox/tours/tasks.js:33 module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
+#: apps/io.ox/tours/mail.js:80 module:io.ox/tours
+msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
 msgstr ""
-"Um eine neue Aufgabe anzulegen, klicken Sie in der Werkzeugleiste auf Neu."
-
-#: apps/io.ox/tours/tasks.js:48 module:io.ox/tours
-msgid "Entering the task's data"
-msgstr "Aufgabendaten eingeben"
-
-#: apps/io.ox/tours/tasks.js:49 module:io.ox/tours
-msgid "Enter the subject, the start date, and a description."
-msgstr "Geben Sie den Betreff, den Beginn und eine Beschreibung ein."
-
-#: apps/io.ox/tours/tasks.js:54 module:io.ox/tours
-msgid "Adding further details"
-msgstr "Details hinzufügen"
-
-#: apps/io.ox/tours/tasks.js:55 module:io.ox/tours
-msgid "To add further details, click on Expand form."
-msgstr ""
-"Wenn Sie weitere Angaben machen möchten, klicken Sie auf Formular erweitern."
-
-#: apps/io.ox/tours/tasks.js:62 module:io.ox/tours
-msgid "Creating recurring tasks"
-msgstr "Wiederkehrende Aufgaben erstellen"
-
-#: apps/io.ox/tours/tasks.js:63 module:io.ox/tours
-msgid ""
-"To create recurring tasks, enable Repeat. Functions for setting the recurrence "
-"parameters are shown."
-msgstr ""
-"Um wiederkehrende Aufgaben anzulegen, aktivieren Sie Wiederholen. Funktionen "
-"zum Einstellen der Wiederholungsparameter werden eingeblendet."
-
-#: apps/io.ox/tours/tasks.js:68 module:io.ox/tours
-msgid "To not miss the task, use the reminder function."
-msgstr ""
-"Um die Aufgabe nicht zu versäumen, verwenden Sie die Erinnerungsfunktion."
-
-#: apps/io.ox/tours/tasks.js:72 module:io.ox/tours
-msgid "Tracking the editing status"
-msgstr "Bearbeitungsstand verfolgen"
-
-#: apps/io.ox/tours/tasks.js:73 module:io.ox/tours
-msgid "To track the editing status, enter the current progress."
-msgstr ""
-"Um den Stand der Bearbeitung zu verfolgen, tragen Sie den aktuellen "
-"Fortschritt ein."
-
-#: apps/io.ox/tours/tasks.js:78 module:io.ox/tours
-msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. You can add documents as attachment to the task."
-msgstr ""
-"Um andere Teilnehmer einzuladen, geben Sie ihre Namen in das Feld unterhalb "
-"von Teilnehmer ein. Sie können der Aufgabe Dokumente als Anlagen hinzufügen."
-
-#: apps/io.ox/tours/tasks.js:82 module:io.ox/tours
-msgid "Entering billing information"
-msgstr "Abrechnungsinformationen eintragen"
-
-#: apps/io.ox/tours/tasks.js:83 module:io.ox/tours
-msgid "To enter billing information, click on Show details."
-msgstr ""
-"Wenn Sie Abrechnungsinformationen eintragen möchten, klicken Sie auf Details "
-"anzeigen."
-
-#: apps/io.ox/tours/tasks.js:87 module:io.ox/tours
-msgid "Creating the task"
-msgstr "Die Aufgabe anlegen"
-
-#: apps/io.ox/tours/tasks.js:88 module:io.ox/tours
-msgid "To create the task, click on Create."
-msgstr "Um die Aufgabe zu erstellen, klicken Sie auf Erstellen."
-
-#: apps/io.ox/tours/tasks.js:92 module:io.ox/tours
-msgid "Sorting tasks"
-msgstr "Aufgaben sortieren"
+"Um die E-Mails zu sortieren, klicken Sie auf Sortieren nach. Wählen Sie ein "
+"Sortierkriterium."
 
 #: apps/io.ox/tours/tasks.js:93 module:io.ox/tours
 msgid "To sort the tasks, click on Sort by. Select a sort criteria."
@@ -770,102 +728,66 @@ msgstr ""
 "Um die Aufgaben zu sortieren, klicken Sie auf Sortieren nach. Wählen Sie ein "
 "Sortierkriterium."
 
-#: apps/io.ox/tours/tasks.js:99 module:io.ox/tours
-msgid "Editing multiple tasks"
-msgstr "Mehrere Aufgaben bearbeiten"
-
-#: apps/io.ox/tours/tasks.js:100 module:io.ox/tours
-msgid ""
-"To edit multiple tasks at once, enable the checkboxes at the left side of the "
-"tasks. If the checkboxes are not displayed, click on View > Checkboxes on the "
-"right side of the toolbar."
+#: apps/io.ox/tours/tasks.js:73 module:io.ox/tours
+msgid "To track the editing status, enter the current progress."
 msgstr ""
-"Wenn Sie mehrere Aufgaben gemeinsam bearbeiten möchten, aktivieren Sie die "
-"Kontrollfelder links neben den Aufgaben. Wenn die Kontrollfelder nicht "
-"angezeigt werden, klicken Sie rechts in der Werkzeugleiste auf Ansicht > "
-"Kontrollfelder."
+"Um den Stand der Bearbeitung zu verfolgen, tragen Sie den aktuellen "
+"Fortschritt ein."
 
-#~ msgid ""
-#~ "Below the recipient you will find further functions, e.g. for sending "
-#~ "copies to other recipients or for adding attachments."
-#~ msgstr ""
-#~ "Unterhalb des Empfängers finden Sie weitere Funktionen, zum Beispiel zum "
-#~ "Senden von Kopien an andere Empfänger oder zum Hinzufügen von Anlagen."
+#: apps/io.ox/tours/files.js:56 module:io.ox/tours
+msgid "To upload a file, click on New > Upload new file in the toolbar."
+msgstr ""
+"Um eine Datei hochzuladen, klicken Sie in der Werkzeugleiste auf Neu > Neue "
+"Datei hochladen."
 
-#~ msgid "Enter the E-Mail text below the subject."
-#~ msgstr "Geben Sie den E-Mail-Text unterhalb des Betreffs ein."
+#: apps/io.ox/tours/files.js:68 module:io.ox/tours
+msgid ""
+"To view further information, click on a file. A pop-up window displays "
+"further details and functions."
+msgstr ""
+"Um weitere Informationen anzuzeigen, klicken Sie auf eine Datei. Ein Popup-"
+"Fenster zeigt weitere Details und Funktionen."
 
-#~ msgid ""
-#~ "Enter the E-Mail text below the subject. If the text format was set to HTMl "
-#~ "in the options, you can format the E-Mail text. To do so select a text part "
-#~ "and then click an icon in the formatting bar."
-#~ msgstr ""
-#~ "Unterhalb des Betreffs geben Sie den E-Mail Text ein. Wenn bei den "
-#~ "Funktionen das Textformat auf HTML eingestellt ist, können Sie den E-Mail "
-#~ "Text formatieren. Dazu wählen Sie einen Teil des Textes aus und klicken "
-#~ "anschließend auf ein Symbol in der Formatierleiste."
+#: apps/io.ox/tours/tasks.js:72 module:io.ox/tours
+msgid "Tracking the editing status"
+msgstr "Bearbeitungsstand verfolgen"
 
-#~ msgid ""
-#~ "Enter the recipient's name on the top left side. As soon as you typed the "
-#~ "first letters, suggestions from the address books are displayed. To accept "
-#~ "a recipient suggestion, click on it."
-#~ msgstr ""
-#~ "Geben Sie links oben den Namen des Empfängers ein. Sobald Sie die ersten "
-#~ "Buchstaben eingetippt haben, werden Vorschläge aus den Adressbüchern "
-#~ "angezeigt. Klicken Sie auf einen Vorschlag, um ihn als Empfänger zu "
-#~ "übernehmen."
+#: apps/io.ox/tours/files.js:55 module:io.ox/tours
+msgid "Uploading a file"
+msgstr "Eine Datei hochladen"
 
-#~ msgid "Enter the subject on the right side of the recipient."
-#~ msgstr "Rechts neben dem Empfänger geben Sie den Betreff ein."
+#: apps/io.ox/tours/files.js:31 module:io.ox/tours
+msgid ""
+"Use the folder tree to access own, public or shared files. If the folder "
+"tree is hidden, click on View > Folder view on the right side of the toolbar."
+msgstr ""
+"Nutzen Sie den Ordnerbaum, um auf eigene, öffentliche oder freigegebene "
+"Dateien zuzugreifen. Wenn der Ordnerbaum nicht angezeigt wird, klicken Sie "
+"rechts in der Werkzeugleiste auf Ansicht > Ordneransicht."
 
-#~ msgid ""
-#~ "If a folder contains images, you can display a slideshow. To do so click "
-#~ "the View slideshow icon in the toolbar."
-#~ msgstr ""
-#~ "Wenn der Ordner Bilder enthält, können Sie eine Diashow anzeigen lassen. "
-#~ "Klicken Sie in der Werkzeugleiste auf das Symbol Diashow starten."
+#: apps/io.ox/tours/intro.js:117 module:io.ox/tours
+msgid ""
+"Use the folder tree to open the folder containing the objects that you want "
+"to view in the list."
+msgstr ""
+"Im Ordnerbaum öffnen Sie den Ordner, dessen Objekte Sie in der Liste sehen "
+"möchten."
 
-#~ msgid ""
-#~ "If you no longer want to display a square, click the cross on the upper "
-#~ "right side."
-#~ msgstr ""
-#~ "Wenn Sie eine Kachel nicht mehr sehen möchten, klicken Sie rechts oben auf "
-#~ "das Kreuz."
+#: apps/io.ox/tours/intro.js:122 module:io.ox/tours
+msgid ""
+"Use the list to select an object, show its contents or activate functions."
+msgstr ""
+"In der Liste wählen Sie ein Objekt, um seine Inhalte anzuzeigen oder "
+"Funktionen auszuführen."
 
-#~ msgid ""
-#~ "In case of new notifications, e.g. appointment invitations, the info area "
-#~ "is opened on the right side."
-#~ msgstr ""
-#~ "Bei neuen Benachrichtigungen, zum Beispiel bei Termineinladungen, öffnet "
-#~ "sich rechts der Infobereich."
+#: apps/io.ox/tours/calendar.js:62 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:67
+msgid "Using the reminder function"
+msgstr "Die Erinnerungsfunktion verwenden"
 
-#~ msgid "Slideshow"
-#~ msgstr "Diashow"
-
-#~ msgid ""
-#~ "The settings are organized in topics. Select the topic on the left side, e."
-#~ "g Basic settings or E-Mail. To view all settings, enable Advanced settings "
-#~ "at the bottom."
-#~ msgstr ""
-#~ "Die Einstellungen sind in Gruppen organisiert. Auf der linken Seite wählen "
-#~ "Sie eine Gruppe, zum Beispiel Grundeinstellungen oder E-Mail. Um alle "
-#~ "Einstellungen anzuzeigen, aktivieren Sie unten Erweiterte Einstellungen."
-
-#~ msgid "To create the task, click on Create on the upper right side."
-#~ msgstr "Um die Aufgabe anzulegen, klicken Sie rechts oben auf Anlegen."
-
-#~ msgid ""
-#~ "To open the E-Mail settings, click the System menu icon on the upper right "
-#~ "side of the menu bar. Select Settings. Click on E-Mail on the left side. To "
-#~ "display all settings, enable Advanced settings in the bottom left side"
-#~ msgstr ""
-#~ "Um die E-Mail Einstellungen zu öffnen, klicken Sie in der Menüleiste rechts "
-#~ "oben auf das Symbol Systemmenü. Wählen Sie Einstellungen. Klicken Sie links "
-#~ "auf E-Mail. Um alle Einstellungen anzuzeigen, aktivieren Sie links unten "
-#~ "Erweiterte Einstellungen"
-
-#~ msgid "To send the E-Mail, click on Send on the upper right side."
-#~ msgstr "Um die E-Mail zu senden, klicken Sie rechts oben auf Senden."
+#: apps/io.ox/tours/intro.js:66 module:io.ox/tours
+msgid "Welcome to %s"
+msgstr "Willkommen bei %s"
 
 #~ msgid " is currently editing this document."
 #~ msgstr " bearbeitet gerade dieses Dokument."
@@ -1247,12 +1169,13 @@ msgstr ""
 #~ msgstr "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
 
 #~ msgid ""
-#~ "A refresh takes some time, so please be patient, while the refresh runs in "
-#~ "the background. Only one refresh per subscription and per session is "
+#~ "A refresh takes some time, so please be patient, while the refresh runs "
+#~ "in the background. Only one refresh per subscription and per session is "
 #~ "allowed."
 #~ msgstr ""
-#~ "Eine Aktualisierung nimmt einige Zeit in Anspruch und läuft im Hintergrund "
-#~ "ab. Pro Abonnement und Sitzung ist nur eine Aktualisierung erlaubt."
+#~ "Eine Aktualisierung nimmt einige Zeit in Anspruch und läuft im "
+#~ "Hintergrund ab. Pro Abonnement und Sitzung ist nur eine Aktualisierung "
+#~ "erlaubt."
 
 #~ msgid "A return receipt has been sent"
 #~ msgstr "Lesebestätigung wurde gesendet"
@@ -1334,11 +1257,11 @@ msgstr ""
 #~ msgstr "Account-Einstellungen konnten nicht gespeichert werden."
 
 #~ msgid ""
-#~ "Account settings could not be saved. Please take a look at the annotations "
-#~ "in the form."
+#~ "Account settings could not be saved. Please take a look at the "
+#~ "annotations in the form."
 #~ msgstr ""
-#~ "Account-Einstellungen konnten nicht gespeichert werden. Bitte lesen Sie die "
-#~ "Anmerkungen im Popup-Fenster."
+#~ "Account-Einstellungen konnten nicht gespeichert werden. Bitte lesen Sie "
+#~ "die Anmerkungen im Popup-Fenster."
 
 #~ msgid "Account updated"
 #~ msgstr "Account wurde aktualisiert"
@@ -1656,8 +1579,8 @@ msgstr ""
 #~ msgstr "Aquablau"
 
 #~ msgid ""
-#~ "Are you really sure about your decision? Are you aware of all consequences "
-#~ "you have to live with?"
+#~ "Are you really sure about your decision? Are you aware of all "
+#~ "consequences you have to live with?"
 #~ msgstr "Sind Sie sich wirklich sicher? Sind Ihnen alle Konsequenzen klar?"
 
 #~ msgid "Are you sure you want to delete this Tweet?"
@@ -1700,11 +1623,11 @@ msgstr ""
 #~ msgstr[1] "Anlagen wurden gespeichert"
 
 #~ msgid ""
-#~ "Attachment uploads are not supported in Internet Explorer 9. Please upgrade "
-#~ "to Internet Explorer 10."
+#~ "Attachment uploads are not supported in Internet Explorer 9. Please "
+#~ "upgrade to Internet Explorer 10."
 #~ msgstr ""
-#~ "Der Internet Explorer 9 unterstützt das Hochladen von Anlagen nicht. Bitte "
-#~ "führen Sie ein Upgrade auf den Internet Explorer 10 durch."
+#~ "Der Internet Explorer 9 unterstützt das Hochladen von Anlagen nicht. "
+#~ "Bitte führen Sie ein Upgrade auf den Internet Explorer 10 durch."
 
 #~ msgid "Attachments"
 #~ msgstr "Anlagen"
@@ -1749,27 +1672,29 @@ msgstr ""
 #~ msgstr "Automatisch abmelden"
 
 #~ msgid ""
-#~ "Automatically collect contacts in the folder \"Collected addresses\" while "
-#~ "reading"
+#~ "Automatically collect contacts in the folder \"Collected addresses\" "
+#~ "while reading"
 #~ msgstr ""
-#~ "Beim Lesen Kontakte automatisch im Ordner \"Gesammelte Adressen\" speichern"
+#~ "Beim Lesen Kontakte automatisch im Ordner \"Gesammelte Adressen\" "
+#~ "speichern"
 
 #~ msgid ""
-#~ "Automatically collect contacts in the folder \"Collected addresses\" while "
-#~ "reading?"
+#~ "Automatically collect contacts in the folder \"Collected addresses\" "
+#~ "while reading?"
 #~ msgstr ""
-#~ "Beim Lesen Kontakte automatisch im Ordner \"Gesammelte Adressen\" speichern?"
+#~ "Beim Lesen Kontakte automatisch im Ordner \"Gesammelte Adressen\" "
+#~ "speichern?"
 
 #~ msgid ""
-#~ "Automatically collect contacts in the folder \"Collected addresses\" while "
-#~ "sending"
+#~ "Automatically collect contacts in the folder \"Collected addresses\" "
+#~ "while sending"
 #~ msgstr ""
 #~ "Beim Versenden Kontakte automatisch im Ordner \"Gesammelte Adressen\" "
 #~ "speichern"
 
 #~ msgid ""
-#~ "Automatically collect contacts in the folder \"Collected addresses\" while "
-#~ "sending?"
+#~ "Automatically collect contacts in the folder \"Collected addresses\" "
+#~ "while sending?"
 #~ msgstr ""
 #~ "Beim Versenden Kontakte automatisch im Ordner \"Gesammelte Adressen\" "
 #~ "speichern?"
@@ -1777,7 +1702,8 @@ msgstr ""
 #~ msgid ""
 #~ "Automatically delete a notification mail after it has been accepted or "
 #~ "declined?"
-#~ msgstr "E-Mail-Benachrichtigung nach Bestätigen/Ablehnen automatisch löschen?"
+#~ msgstr ""
+#~ "E-Mail-Benachrichtigung nach Bestätigen/Ablehnen automatisch löschen?"
 
 #~ msgid "Automatically select first E-Mail"
 #~ msgstr "Erste E-Mail automatisch selektieren"
@@ -1811,6 +1737,13 @@ msgstr ""
 
 #~ msgid "Below quoted text"
 #~ msgstr "Unterhalb des zitierten Textes"
+
+#~ msgid ""
+#~ "Below the recipient you will find further functions, e.g. for sending "
+#~ "copies to other recipients or for adding attachments."
+#~ msgstr ""
+#~ "Unterhalb des Empfängers finden Sie weitere Funktionen, zum Beispiel zum "
+#~ "Senden von Kopien an andere Empfänger oder zum Hinzufügen von Anlagen."
 
 #~ msgid "Billing information"
 #~ msgstr "Rechnungsinformation"
@@ -2056,8 +1989,8 @@ msgstr ""
 
 #~ msgid "Click on a sentence to choose when to repeat the appointment."
 #~ msgstr ""
-#~ "Durch Klicken auf einen Satz können Sie wählen, wann der Termin wiederholt "
-#~ "werden soll."
+#~ "Durch Klicken auf einen Satz können Sie wählen, wann der Termin "
+#~ "wiederholt werden soll."
 
 #~ msgid "Click on the links to change the values."
 #~ msgstr "Zum Ändern der Werte klicken Sie auf die Links."
@@ -2070,7 +2003,8 @@ msgstr ""
 
 #~ msgid "Click to open. Drag to your desktop to download."
 #~ msgstr ""
-#~ "Zum Öffnen bitte klicken. Zum Herunterladen bitte auf ihren Desktop ziehen."
+#~ "Zum Öffnen bitte klicken. Zum Herunterladen bitte auf ihren Desktop "
+#~ "ziehen."
 
 #~ msgid "Click to retry"
 #~ msgstr "Für einen erneuten Versuch bitte klicken."
@@ -2354,8 +2288,8 @@ msgstr ""
 #~ msgstr "Erstellt"
 
 #~ msgid ""
-#~ "Created private folder '%1$s' in %2$s and subscribed successfully to shared "
-#~ "folder"
+#~ "Created private folder '%1$s' in %2$s and subscribed successfully to "
+#~ "shared folder"
 #~ msgstr ""
 #~ "Privater Ordner '%1$s' wurde in %2$s angelegt und das Abonnement des "
 #~ "freigegebenen Ordners war erfolgreich."
@@ -2522,8 +2456,8 @@ msgstr ""
 
 #~ msgid "Deleting messages on local storage also deletes them on server"
 #~ msgstr ""
-#~ "Beim Löschen von Nachrichten aus dem lokalen Speicher werden diese auch auf "
-#~ "dem Server gelöscht"
+#~ "Beim Löschen von Nachrichten aus dem lokalen Speicher werden diese auch "
+#~ "auf dem Server gelöscht"
 
 #~ msgid "Demote one level"
 #~ msgstr "Eine Ebene nach unten verschieben"
@@ -2624,12 +2558,12 @@ msgstr ""
 
 #~ msgid ""
 #~ "Do you really want to delete the following setting and lose all data you "
-#~ "entered or would you just disable it to stop it from showing on the portal "
-#~ "page?"
+#~ "entered or would you just disable it to stop it from showing on the "
+#~ "portal page?"
 #~ msgstr ""
 #~ "Wollen Sie die folgende Einstellung wirklich löschen und damit alle "
-#~ "eingegebenen Daten verlieren oder wollen Sie die Einstellung deaktivieren, "
-#~ "sodass sie nicht mehr auf der Portal-Seite erscheint? "
+#~ "eingegebenen Daten verlieren oder wollen Sie die Einstellung "
+#~ "deaktivieren, sodass sie nicht mehr auf der Portal-Seite erscheint? "
 
 #~ msgid "Do you really want to delete the following stream?"
 #~ msgstr "Wollen Sie den folgenden Stream wirklich löschen?"
@@ -2685,8 +2619,8 @@ msgstr ""
 #~ "Soll das Startdatum auch auf das neue Fälligkeitsdatum gesetzt werden?"
 
 #~ msgid ""
-#~ "Do you want to confirm the whole series or just one appointment within the "
-#~ "series?"
+#~ "Do you want to confirm the whole series or just one appointment within "
+#~ "the series?"
 #~ msgstr ""
 #~ "Wollen Sie die komplette Serie oder einen einzelnen Termin aus der Serie "
 #~ "bestätigen?"
@@ -2786,7 +2720,8 @@ msgstr ""
 
 #~ msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
 #~ msgstr ""
-#~ "Zum Hochladen einer <b class=\"dndignore\">neuen Datei</b> hier fallenlassen"
+#~ "Zum Hochladen einer <b class=\"dndignore\">neuen Datei</b> hier "
+#~ "fallenlassen"
 
 #~ msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
 #~ msgstr ""
@@ -2801,7 +2736,8 @@ msgstr ""
 
 #~ msgid "Drop here to upload a <b class='dndignore'>new attachment</b>"
 #~ msgstr ""
-#~ "Zum Hochladen einer <b class='dndignore'>neuen Anlage</b> hier fallenlassen"
+#~ "Zum Hochladen einer <b class='dndignore'>neuen Anlage</b> hier "
+#~ "fallenlassen"
 
 #~ msgid "Drop the file anywhere to add attachment"
 #~ msgstr ""
@@ -3022,6 +2958,32 @@ msgstr ""
 #~ msgid "Enter document title here"
 #~ msgstr "Geben Sie hier den Dokumententitel ein"
 
+#~ msgid "Enter the E-Mail text below the subject."
+#~ msgstr "Geben Sie den E-Mail-Text unterhalb des Betreffs ein."
+
+#~ msgid ""
+#~ "Enter the E-Mail text below the subject. If the text format was set to "
+#~ "HTMl in the options, you can format the E-Mail text. To do so select a "
+#~ "text part and then click an icon in the formatting bar."
+#~ msgstr ""
+#~ "Unterhalb des Betreffs geben Sie den E-Mail Text ein. Wenn bei den "
+#~ "Funktionen das Textformat auf HTML eingestellt ist, können Sie den E-Mail "
+#~ "Text formatieren. Dazu wählen Sie einen Teil des Textes aus und klicken "
+#~ "anschließend auf ein Symbol in der Formatierleiste."
+
+#~ msgid ""
+#~ "Enter the recipient's name on the top left side. As soon as you typed the "
+#~ "first letters, suggestions from the address books are displayed. To "
+#~ "accept a recipient suggestion, click on it."
+#~ msgstr ""
+#~ "Geben Sie links oben den Namen des Empfängers ein. Sobald Sie die ersten "
+#~ "Buchstaben eingetippt haben, werden Vorschläge aus den Adressbüchern "
+#~ "angezeigt. Klicken Sie auf einen Vorschlag, um ihn als Empfänger zu "
+#~ "übernehmen."
+
+#~ msgid "Enter the subject on the right side of the recipient."
+#~ msgstr "Rechts neben dem Empfänger geben Sie den Betreff ein."
+
 #~ msgid "Entire thread"
 #~ msgstr "Gesamten Thread"
 
@@ -3134,7 +3096,8 @@ msgstr ""
 
 #~ msgid "Failed to add. Maybe the vCard attachment is invalid."
 #~ msgstr ""
-#~ "Hinzufügen ist fehlgeschlagen. Möglicherweise ist die vCard-Anlage ungültig."
+#~ "Hinzufügen ist fehlgeschlagen. Möglicherweise ist die vCard-Anlage "
+#~ "ungültig."
 
 #~ msgid "Failed to connect."
 #~ msgstr "Verbindung ist fehlgeschlagen"
@@ -3149,8 +3112,8 @@ msgstr ""
 #~ msgstr "Anmelden ist fehlgeschlagen"
 
 #~ msgid ""
-#~ "Failed to start application. Maybe you have connection problems. Please try "
-#~ "again."
+#~ "Failed to start application. Maybe you have connection problems. Please "
+#~ "try again."
 #~ msgstr ""
 #~ "Applikation konnte nicht gestartet werden. Vielleicht haben Sie "
 #~ "Verbindungsprobleme. Bitte versuchen Sie es erneut."
@@ -3166,8 +3129,8 @@ msgstr ""
 #~ "Failed to update confirmation status; most probably the task has been "
 #~ "deleted."
 #~ msgstr ""
-#~ "Der Bestätigungsstatus konnte nicht aktualisiert werden. Die Aufgabe wurde "
-#~ "wahrscheinlich gelöscht."
+#~ "Der Bestätigungsstatus konnte nicht aktualisiert werden. Die Aufgabe "
+#~ "wurde wahrscheinlich gelöscht."
 
 #~ msgid "Failure! Please refresh."
 #~ msgstr "Fehlgeschlagen. Bitte aktualisieren Sie."
@@ -3318,9 +3281,9 @@ msgstr ""
 #~ "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden "
 #~ "files and folders\" to access this folder again."
 #~ msgstr ""
-#~ "Der Ordner namens \"%1$s\" wird versteckt. Zum Zugreifen auf diesen Ordner "
-#~ "müssen Sie die Einstellung \"Versteckte Dateien und Ordner anzeigen\" "
-#~ "aktivieren."
+#~ "Der Ordner namens \"%1$s\" wird versteckt. Zum Zugreifen auf diesen "
+#~ "Ordner müssen Sie die Einstellung \"Versteckte Dateien und Ordner anzeigen"
+#~ "\" aktivieren."
 
 #~ msgid "Folder-specific actions"
 #~ msgstr "Ordnerspezifische Aktionen"
@@ -3347,16 +3310,16 @@ msgstr ""
 #~ msgstr "Für beste Ergebnisse, verwenden Sie bitte "
 
 #~ msgid ""
-#~ "For security reasons, all account passwords are encrypted with your primary "
-#~ "account password. If you change your primary password, your external "
-#~ "accounts might stop working. In this case, you can use your old password to "
-#~ "recover all account passwords:"
+#~ "For security reasons, all account passwords are encrypted with your "
+#~ "primary account password. If you change your primary password, your "
+#~ "external accounts might stop working. In this case, you can use your old "
+#~ "password to recover all account passwords:"
 #~ msgstr ""
-#~ "Aus Sicherheitsgründen sind alle Account-Passwörter mit dem Passwort Ihres "
-#~ "primären Accounts verschlüsselt. Wenn Sie Ihr primäres Passwort ändern, "
-#~ "funktionieren Ihre externen Accounts eventuell nicht mehr. In diesem Fall "
-#~ "können Sie Ihr altes Passwort zum Wiederherstellen aller Account-Passwörter "
-#~ "verwenden:"
+#~ "Aus Sicherheitsgründen sind alle Account-Passwörter mit dem Passwort "
+#~ "Ihres primären Accounts verschlüsselt. Wenn Sie Ihr primäres Passwort "
+#~ "ändern, funktionieren Ihre externen Accounts eventuell nicht mehr. In "
+#~ "diesem Fall können Sie Ihr altes Passwort zum Wiederherstellen aller "
+#~ "Account-Passwörter verwenden:"
 
 #~ msgid "Forgot your password?"
 #~ msgstr "Passwort vergessen?"
@@ -3567,6 +3530,13 @@ msgstr ""
 #~ msgstr "Symbole"
 
 #~ msgid ""
+#~ "If a folder contains images, you can display a slideshow. To do so click "
+#~ "the View slideshow icon in the toolbar."
+#~ msgstr ""
+#~ "Wenn der Ordner Bilder enthält, können Sie eine Diashow anzeigen lassen. "
+#~ "Klicken Sie in der Werkzeugleiste auf das Symbol Diashow starten."
+
+#~ msgid ""
 #~ "If you change the password, you will be signed out. Please ensure that "
 #~ "everything is closed and saved."
 #~ msgstr ""
@@ -3574,9 +3544,16 @@ msgstr ""
 #~ "sicher, dass alles geschlossen und gesichert ist. "
 
 #~ msgid ""
-#~ "If you spot a free time, just select this area. To do this, move the cursor "
-#~ "to the start time, hold the mouse button, and <b>drag the mouse</b> to the "
-#~ "end time."
+#~ "If you no longer want to display a square, click the cross on the upper "
+#~ "right side."
+#~ msgstr ""
+#~ "Wenn Sie eine Kachel nicht mehr sehen möchten, klicken Sie rechts oben "
+#~ "auf das Kreuz."
+
+#~ msgid ""
+#~ "If you spot a free time, just select this area. To do this, move the "
+#~ "cursor to the start time, hold the mouse button, and <b>drag the mouse</"
+#~ "b> to the end time."
 #~ msgstr ""
 #~ "Wählen Sie einen freien Zeitraum. Bewegen Sie dafür den Cursor auf das "
 #~ "Startdatum, halten Sie die linke Maustaste gedrückt und <b>ziehen Sie die "
@@ -3639,6 +3616,13 @@ msgstr ""
 
 #~ msgid "In %s weeks:"
 #~ msgstr "In %s Wochen:"
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened on the right side."
+#~ msgstr ""
+#~ "Bei neuen Benachrichtigungen, zum Beispiel bei Termineinladungen, öffnet "
+#~ "sich rechts der Infobereich."
 
 #~ msgid "In progress"
 #~ msgstr "In Bearbeitung"
@@ -3746,18 +3730,18 @@ msgstr ""
 #~ msgstr "Interne Benutzer-ID"
 
 #~ msgid ""
-#~ "Internet Explorer 9 does not support attachment uploads. Please upgrade to "
-#~ "Internet Explorer 10."
+#~ "Internet Explorer 9 does not support attachment uploads. Please upgrade "
+#~ "to Internet Explorer 10."
 #~ msgstr ""
-#~ "Der Internet Explorer 9 unterstützt das Hochladen von Anhängen nicht. Bitte "
-#~ "führen Sie ein Upgrade auf den Internet Explorer 10 durch."
+#~ "Der Internet Explorer 9 unterstützt das Hochladen von Anhängen nicht. "
+#~ "Bitte führen Sie ein Upgrade auf den Internet Explorer 10 durch."
 
 #~ msgid ""
 #~ "Internet Explorer 9 does not support file uploads. Please upgrade to "
 #~ "Internet Explorer 10."
 #~ msgstr ""
-#~ "Der Internet Explorer 9 unterstützt das Hochladen von Dateien nicht. Bitte "
-#~ "führen Sie ein Upgrade auf den Internet Explorer 10 durch."
+#~ "Der Internet Explorer 9 unterstützt das Hochladen von Dateien nicht. "
+#~ "Bitte führen Sie ein Upgrade auf den Internet Explorer 10 durch."
 
 #~ msgid "Invalid data"
 #~ msgstr "Ungültige Daten"
@@ -3860,8 +3844,8 @@ msgstr ""
 
 #~ msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
 #~ msgstr ""
-#~ "Programmstarter-Aufklappmenü. Durch Drücken der Eingabetaste öffnen Sie das "
-#~ "Aufklappmenü."
+#~ "Programmstarter-Aufklappmenü. Durch Drücken der Eingabetaste öffnen Sie "
+#~ "das Aufklappmenü."
 
 #~ msgid "Layout"
 #~ msgstr "Layout"
@@ -4438,30 +4422,34 @@ msgstr ""
 #~ msgstr "Hinweis"
 
 #~ msgid "Note: One contact is not shown due to missing phone numbers"
-#~ msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
+#~ msgid_plural ""
+#~ "Note: %1$d contacts are not shown due to missing phone numbers"
 #~ msgstr[0] ""
 #~ "Hinweis: Ein Kontakt wird wegen fehlender Telefonnummern nicht angezeigt"
 #~ msgstr[1] ""
-#~ "Hinweis: %1$d Kontakte werden wegen fehlender Telefonnummern nicht angezeigt"
+#~ "Hinweis: %1$d Kontakte werden wegen fehlender Telefonnummern nicht "
+#~ "angezeigt"
 
 #~ msgid ""
 #~ "Note: Refreshing this subscription will replace the calendar content with "
 #~ "the external content. Changes you have made inside appsuite will be "
 #~ "overwritten"
 #~ msgstr ""
-#~ "Hinweis: Das Aktualisieren des Abonnements überschreibt den Kalenderinhalt "
-#~ "mit dem externen Inhalt. Änderungen, die Sie Innerhalb AppSuite vorgenommen "
-#~ "haben, werden überschrieben."
+#~ "Hinweis: Das Aktualisieren des Abonnements überschreibt den "
+#~ "Kalenderinhalt mit dem externen Inhalt. Änderungen, die Sie Innerhalb "
+#~ "AppSuite vorgenommen haben, werden überschrieben."
 
 #~ msgid "Note: The vCard format cannot contain distribution lists"
 #~ msgstr "Hinweis: Das vCard-Format kann keine Verteilerlisten enthalten"
 
 #~ msgid ""
-#~ "Note: This subscription will replace the calendar content with the external "
-#~ "content. Therefore you must create a new folder for this subscription."
+#~ "Note: This subscription will replace the calendar content with the "
+#~ "external content. Therefore you must create a new folder for this "
+#~ "subscription."
 #~ msgstr ""
-#~ "Hinweis: Dieses Abonnement überschreibt den Kalenderinhalt mit dem externen "
-#~ "Inhalt. Sie müssen deshalb einen neuen Ordner für dieses Abonnement anlegen."
+#~ "Hinweis: Dieses Abonnement überschreibt den Kalenderinhalt mit dem "
+#~ "externen Inhalt. Sie müssen deshalb einen neuen Ordner für dieses "
+#~ "Abonnement anlegen."
 
 #~ msgid "Notify all participants by email."
 #~ msgstr "Alle Teilnehmer per E-Mail benachrichtigen"
@@ -4535,14 +4523,14 @@ msgstr ""
 #~ msgstr "Eineinhalb"
 
 #~ msgid ""
-#~ "One or more attached files exceed the size limit per email. Therefore, the "
-#~ "files are not sent as attachments but kept on the server. The email you "
-#~ "have sent just contains links to download these files."
+#~ "One or more attached files exceed the size limit per email. Therefore, "
+#~ "the files are not sent as attachments but kept on the server. The email "
+#~ "you have sent just contains links to download these files."
 #~ msgstr ""
-#~ "Ein oder mehrere der angehängten Dateien übersteigen die Größenbeschränkung "
-#~ "pro E-Mail. Die Dateien werden deshalb nicht als Anlagen gesendet, sondern "
-#~ "auf dem Server gespeichert. Die von Ihnen gesendete E-Mail enthält "
-#~ "lediglich Links zum Herunterladen dieser Dateien."
+#~ "Ein oder mehrere der angehängten Dateien übersteigen die "
+#~ "Größenbeschränkung pro E-Mail. Die Dateien werden deshalb nicht als "
+#~ "Anlagen gesendet, sondern auf dem Server gespeichert. Die von Ihnen "
+#~ "gesendete E-Mail enthält lediglich Links zum Herunterladen dieser Dateien."
 
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "Auf Mobilgeräten nur Widget-Übersicht anzeigen"
@@ -4899,17 +4887,17 @@ msgstr ""
 #~ "Please note, changing or removing the file extension will cause problems "
 #~ "when viewing or editing."
 #~ msgstr ""
-#~ "Bitte beachten Sie, dass das Ändern oder Entfernen der Dateiendung Probleme "
-#~ "beim Betrachten und Bearbeiten der Datei verursacht."
+#~ "Bitte beachten Sie, dass das Ändern oder Entfernen der Dateiendung "
+#~ "Probleme beim Betrachten und Bearbeiten der Datei verursacht."
 
 #~ msgid ""
 #~ "Please note, that support requests cannot be handled via the feedback-"
 #~ "formular. When you have questions or problems please contact our support "
 #~ "directly"
 #~ msgstr ""
-#~ "Bitte beachten Sie, dass Support-Anfragen nicht über das Feedback-Formular "
-#~ "bearbeitet werden können. Sollten Sie Fragen oder Probleme haben, "
-#~ "kontaktieren Sie unseren Support bitte direkt."
+#~ "Bitte beachten Sie, dass Support-Anfragen nicht über das Feedback-"
+#~ "Formular bearbeitet werden können. Sollten Sie Fragen oder Probleme "
+#~ "haben, kontaktieren Sie unseren Support bitte direkt."
 
 #~ msgid ""
 #~ "Please provide the old password so the account passwords can be recovered."
@@ -5086,8 +5074,8 @@ msgstr ""
 
 #~ msgid "Progress must be a valid number between 0 and 100"
 #~ msgstr ""
-#~ "Der Fortschritt muss mit einer gültigen Ziffer zwischen 0 und 100 angegeben "
-#~ "werden."
+#~ "Der Fortschritt muss mit einer gültigen Ziffer zwischen 0 und 100 "
+#~ "angegeben werden."
 
 #~ msgid "Promote one level"
 #~ msgstr "Eine Ebene nach oben verschieben"
@@ -5173,7 +5161,8 @@ msgstr ""
 #~ "arrowkeys to adjust your rating."
 #~ msgstr ""
 #~ "Bewertung %1$d von %2$d. Drücken Sie die Eingabetaste zum Bestätigen oder "
-#~ "verwenden Sie die linke und rechte Pfeiltaste zum Anpassen Ihrer Bewertung."
+#~ "verwenden Sie die linke und rechte Pfeiltaste zum Anpassen Ihrer "
+#~ "Bewertung."
 
 #~ msgid "Read Only Mode"
 #~ msgstr "Schreibgeschützter Lesezugriff"
@@ -5615,8 +5604,8 @@ msgstr ""
 
 #~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""
-#~ "Alle E-Mails anzeigen. Hinweis: E-Mails werden nicht mehr nach Konversation "
-#~ "gruppiert."
+#~ "Alle E-Mails anzeigen. Hinweis: E-Mails werden nicht mehr nach "
+#~ "Konversation gruppiert."
 
 #~ msgid "Show all my appointments from all calendars"
 #~ msgstr "Alle meine Termine aus allen Kalendern anzeigen."
@@ -5772,10 +5761,14 @@ msgstr ""
 #~ msgid "Skip this step"
 #~ msgstr "Diesen Schritt überspringen"
 
+#~ msgid "Slideshow"
+#~ msgstr "Diashow"
+
 #~ msgid "Slow requests"
 #~ msgstr "Langsame Anfragen"
 
-#~ msgid "Social accounts are only used to download contact and/or calendar data"
+#~ msgid ""
+#~ "Social accounts are only used to download contact and/or calendar data"
 #~ msgstr ""
 #~ "Social Accounts werden nur zum Herunterladen von Kontakt- und/oder "
 #~ "Kalenderdaten verwendet"
@@ -5813,8 +5806,8 @@ msgstr ""
 #~ "Sorry, we cannot help you here. Your provider needs to obtain a key from "
 #~ "LinkedIn with the permission to do read messages."
 #~ msgstr ""
-#~ "Wir können leider nichts für Sie tun. Ihr Provider muss von LinkedIn einen "
-#~ "Key anfordern für die Berechtigung, Nachrichten zu lesen. "
+#~ "Wir können leider nichts für Sie tun. Ihr Provider muss von LinkedIn "
+#~ "einen Key anfordern für die Berechtigung, Nachrichten zu lesen. "
 
 #~ msgctxt "dropdown"
 #~ msgid "Sort by"
@@ -5902,10 +5895,10 @@ msgstr ""
 #~ msgstr "IMAP-Ordner abonnieren"
 
 #~ msgid ""
-#~ "Subscribing to items that are not delivered by another Open-Xchange Server "
-#~ "(i.e. OXMF) may take some time. Example: Importing 100 contacts from Xing "
-#~ "takes about 5 minutes. We are continually improving this functionality. "
-#~ "Future releases will work significantly faster."
+#~ "Subscribing to items that are not delivered by another Open-Xchange "
+#~ "Server (i.e. OXMF) may take some time. Example: Importing 100 contacts "
+#~ "from Xing takes about 5 minutes. We are continually improving this "
+#~ "functionality. Future releases will work significantly faster."
 #~ msgstr ""
 #~ "Das Abonnieren von Objekten, die nicht von einem Open-Xchange Server "
 #~ "bereitgestellt werden (z.B. OXMF), kann einige Zeit in Anspruch nehmen. "
@@ -5977,7 +5970,8 @@ msgstr ""
 
 #~ msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
 #~ msgstr ""
-#~ "Aufgaben-Einladung. %1$s %2$s %3$s. Drücken Sie die Eingabetaste zum Öffnen."
+#~ "Aufgaben-Einladung. %1$s %2$s %3$s. Drücken Sie die Eingabetaste zum "
+#~ "Öffnen."
 
 #~ msgid "Task invitations"
 #~ msgstr "Aufgaben-Einladungen"
@@ -6081,9 +6075,9 @@ msgstr ""
 #~ msgstr "Die Symbolansicht zeigt für jede Datei ein Symbol."
 
 #~ msgid ""
-#~ "The List view shows a sidebar with appointments and a display area with the "
-#~ "data of the selected appointment. This view corresponds to the view in E-"
-#~ "Mail and Contacts."
+#~ "The List view shows a sidebar with appointments and a display area with "
+#~ "the data of the selected appointment. This view corresponds to the view "
+#~ "in E-Mail and Contacts."
 #~ msgstr ""
 #~ "Die Ansicht Liste zeigt eine Seitenleiste mit Terminen und einen "
 #~ "Anzeigebereich mit den Daten des angeklickten Termins. Diese Ansicht ist "
@@ -6115,69 +6109,69 @@ msgstr ""
 
 #~ msgid ""
 #~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> days</"
-#~ "a>."
+#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "days</a>."
 #~ msgstr ""
 #~ "Der Termin findet <a href=\"#\"  data-widget=\"number\" data-attribute="
 #~ "\"interval\">alle <span class=\"number-control\">2</span> Tage</a> statt. "
 
 #~ msgid ""
 #~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> weeks</"
-#~ "a> on <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">monday</"
-#~ "a>."
+#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "weeks</a> on <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days"
+#~ "\">monday</a>."
 #~ msgstr ""
 #~ "Der Termin findet <a href=\"#\"  data-widget=\"number\" data-attribute="
-#~ "\"interval\">alle <span class=\"number-control\">2</span> Wochen</a> am <a "
-#~ "href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">Montag</a> "
+#~ "\"interval\">alle <span class=\"number-control\">2</span> Wochen</a> am "
+#~ "<a href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">Montag</a> "
 #~ "statt. "
 
 #~ msgid ""
-#~ "The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType\" "
-#~ "data-widget=\"options\">weekly</a>."
+#~ "The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType"
+#~ "\" data-widget=\"options\">weekly</a>."
 #~ msgstr ""
 #~ "Die Terminserie wird <a href=\"#\" data-attribute=\"recurrenceType\" data-"
 #~ "widget=\"options\">wöchentlich</a> wiederholt."
 
 #~ msgid ""
 #~ "The appointment is repeated every <a href=\"#\" data-widget=\"options\" "
-#~ "data-attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" "
-#~ "data-attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget=\"options"
-#~ "\" data-attribute=\"month\">October</a>."
+#~ "data-attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget="
+#~ "\"options\" data-attribute=\"month\">October</a>."
 #~ msgstr ""
 #~ "Der Termin findet jeden <a href=\"#\" data-widget=\"options\" data-"
-#~ "attribute=\"ordinal\">ersten</a> <a href=\"#\" data-widget=\"options\" data-"
-#~ "attribute=\"day\">Mittwoch</a> im <a href=\"#\" data-widget=\"options\" "
-#~ "data-attribute=\"month\">Oktober</a> statt. "
+#~ "attribute=\"ordinal\">ersten</a> <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"day\">Mittwoch</a> im <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"month\">Oktober</a> statt. "
 
 #~ msgid ""
 #~ "The appointment is repeated every year on day <a href=\"#\" data-widget="
-#~ "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
-#~ "span></a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
-#~ "\">October</a>."
+#~ "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control"
+#~ "\">10</span></a> of <a href=\"#\" data-widget=\"options\" data-attribute="
+#~ "\"month\">October</a>."
 #~ msgstr ""
 #~ "Der Termin findet jedes Jahr am Tag <a href=\"#\" data-widget=\"number\" "
-#~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10</ span></a> "
-#~ "im <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">Oktober</"
-#~ "a> statt. "
+#~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10</ span></"
+#~ "a> im <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
+#~ "\">Oktober</a> statt. "
 
 #~ msgid ""
 #~ "The appointment is repeated on day <a href=\"#\" data-widget=\"number\" "
-#~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> "
-#~ "<a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every "
+#~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></"
+#~ "a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every "
 #~ "<span class=\"number-control\">2</span> months</a>."
 #~ msgstr ""
 #~ "Der Termin findet  <a href=\"#\" data-widget=\"number\" data-attribute="
-#~ "\"interval\">alle <span class=\"number-control\">2</span> Monate</a> am Tag "
-#~ "<a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span "
-#~ "class=\"number-control\">10</span></a> statt."
+#~ "\"interval\">alle <span class=\"number-control\">2</span> Monate</a> am "
+#~ "Tag <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth"
+#~ "\"><span class=\"number-control\">10</span></a> statt."
 
 #~ msgid ""
-#~ "The appointment is repeated the <a href=\"#\" data-widget=\"options\" data-"
-#~ "attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options\" data-"
-#~ "attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number\" data-"
-#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
-#~ "months</a>."
+#~ "The appointment is repeated the <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number"
+#~ "\" data-attribute=\"interval\">every <span class=\"number-control\">2</"
+#~ "span> months</a>."
 #~ msgstr ""
 #~ "Der Termin findet jeden <a href=\"#\" data-widget=\"options\" data-"
 #~ "attribute=\"ordinal\">zweiten</a> <a href=\"#\" data-widget=\"options\" "
@@ -6186,8 +6180,8 @@ msgstr ""
 #~ "Monate</a> statt."
 
 #~ msgid ""
-#~ "The blue graph shows the distribution of request durations in percent. The "
-#~ "gray graph shows a trivial network ping to recognize slow connections."
+#~ "The blue graph shows the distribution of request durations in percent. "
+#~ "The gray graph shows a trivial network ping to recognize slow connections."
 #~ msgstr ""
 #~ "Die blaue Grafik zeigt die Verteilung der Anfragedauer in Prozent. Die "
 #~ "graue Grafik zeigt das Ergebnis eines einfachen Netzwerk-'Ping' zum "
@@ -6200,8 +6194,8 @@ msgstr ""
 #~ msgstr "Das Zeichen\" \" ist nicht zulässig."
 
 #~ msgid ""
-#~ "The display area shows an object's content. At the top of the display area "
-#~ "you will find functions for e.g. moving or deleting objects."
+#~ "The display area shows an object's content. At the top of the display "
+#~ "area you will find functions for e.g. moving or deleting objects."
 #~ msgstr ""
 #~ "Der Anzeigebereich zeigt Inhalte von Objekten. Oben im Anzeigebereich "
 #~ "finden Sie Funktionen wie Verschieben oder Löschen von Objekten."
@@ -6225,8 +6219,8 @@ msgstr ""
 #~ "Dateigröße von %2$s übersteigt."
 
 #~ msgid ""
-#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-#~ "%2$s"
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
 #~ msgstr ""
 #~ "Die Datei \"%1$s\" kann nicht hochgeladen werden, da sie das Quota-Limit  "
 #~ "von %2$s übersteigt."
@@ -6265,8 +6259,8 @@ msgstr ""
 #~ "die ideale Leistung, die blaue Linie zeigt die gemessene Leistung."
 
 #~ msgid ""
-#~ "The icon at the bottom right side helps you sort your tasks. Click the icon "
-#~ "to get a list of sort criteria."
+#~ "The icon at the bottom right side helps you sort your tasks. Click the "
+#~ "icon to get a list of sort criteria."
 #~ msgstr ""
 #~ "Bestimmen Sie die Sortierung der Aufgaben, indem Sie unten rechts auf das "
 #~ "Symbol klicken."
@@ -6279,7 +6273,8 @@ msgstr ""
 #~ "Symbol klicken."
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
-#~ msgstr "Die Anzahl der Empfänger ist auf %1$s Empfänger pro Feld beschränkt."
+#~ msgstr ""
+#~ "Die Anzahl der Empfänger ist auf %1$s Empfänger pro Feld beschränkt."
 
 #~ msgid ""
 #~ "The number on the right side of the E-Mail subject corresponds to the "
@@ -6309,7 +6304,8 @@ msgstr ""
 #~ msgstr ""
 #~ "Die Terminserie <a href=\"#\" data-attribute=\"ending\" data-widget="
 #~ "\"options\">endet</a> <a href=\"#\" data-attribute=\"occurrences\" data-"
-#~ "widget=\"number\">nach <span class=\"number-control\">2</span> Terminen</a>."
+#~ "widget=\"number\">nach <span class=\"number-control\">2</span> Terminen</"
+#~ "a>."
 
 #~ msgid ""
 #~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -6317,8 +6313,8 @@ msgstr ""
 #~ "\">11/03/2013</a>."
 #~ msgstr ""
 #~ "Die Terminserie <a href=\"#\" data-attribute=\"ending\" data-widget="
-#~ "\"options\">endet</a> am <a href=\"#\" data-attribute=\"until\" data-widget="
-#~ "\"custom\">11.03.2013</a>."
+#~ "\"options\">endet</a> am <a href=\"#\" data-attribute=\"until\" data-"
+#~ "widget=\"custom\">11.03.2013</a>."
 
 #~ msgid ""
 #~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -6331,11 +6327,21 @@ msgstr ""
 #~ "The setting has been saved and will become active when you enter the "
 #~ "application the next time."
 #~ msgstr ""
-#~ "Die Einstellung wurde gespeichert und wird nach dem nächsten Anmeldevorgang "
-#~ "aktiviert."
+#~ "Die Einstellung wurde gespeichert und wird nach dem nächsten "
+#~ "Anmeldevorgang aktiviert."
 
 #~ msgid "The setting has been saved."
 #~ msgstr "Die Einstellung wurde gespeichert."
+
+#~ msgid ""
+#~ "The settings are organized in topics. Select the topic on the left side, "
+#~ "e.g Basic settings or E-Mail. To view all settings, enable Advanced "
+#~ "settings at the bottom."
+#~ msgstr ""
+#~ "Die Einstellungen sind in Gruppen organisiert. Auf der linken Seite "
+#~ "wählen Sie eine Gruppe, zum Beispiel Grundeinstellungen oder E-Mail. Um "
+#~ "alle Einstellungen anzuzeigen, aktivieren Sie unten Erweiterte "
+#~ "Einstellungen."
 
 #~ msgid ""
 #~ "The settings for collecting contacts in this folder will become disabled "
@@ -6372,19 +6378,19 @@ msgstr ""
 #~ "The unrecoverable items have been cleaned up successfully. Please refresh "
 #~ "this page to see the changes."
 #~ msgstr ""
-#~ "Die nicht wiederherstellbaren Objekte wurden erfolgreich aufgeräumt. Bitte "
-#~ "aktualisieren Sie die Seite, um die Änderungen zu sehen."
+#~ "Die nicht wiederherstellbaren Objekte wurden erfolgreich aufgeräumt. "
+#~ "Bitte aktualisieren Sie die Seite, um die Änderungen zu sehen."
 
 #~ msgid ""
-#~ "The updater provides a simple installation wizard. Follow the instructions "
-#~ "to install the application. The updater will inform you of any updates for "
-#~ "the Connector for Microsoft Outlook, Notifier and Drive. You can download "
-#~ "the updates from within the updater."
+#~ "The updater provides a simple installation wizard. Follow the "
+#~ "instructions to install the application. The updater will inform you of "
+#~ "any updates for the Connector for Microsoft Outlook, Notifier and Drive. "
+#~ "You can download the updates from within the updater."
 #~ msgstr ""
-#~ "Der Updater bietet einen einfachen Installationsassistenten. Folgen Sie den "
-#~ "Anweisungen zum Installieren der Applikation. Der Updater informiert Sie "
-#~ "über alle Updates für den Konnektor für Microsoft Outlook, Notifier und "
-#~ "Drive. Sie können die Updates aus dem Updater heraus herunterladen."
+#~ "Der Updater bietet einen einfachen Installationsassistenten. Folgen Sie "
+#~ "den Anweisungen zum Installieren der Applikation. Der Updater informiert "
+#~ "Sie über alle Updates für den Konnektor für Microsoft Outlook, Notifier "
+#~ "und Drive. Sie können die Updates aus dem Updater heraus herunterladen."
 
 #~ msgid "The user can "
 #~ msgstr "Der Benutzer kann "
@@ -6406,13 +6412,15 @@ msgstr ""
 #~ msgstr[0] "Es gibt bereits %1$d Termin in diesem Zeitraum."
 #~ msgstr[1] "Es gibt bereits %1$d Termine in diesem Zeitraum."
 
-#~ msgid "There is an update available, please reload your browser or press F5."
+#~ msgid ""
+#~ "There is an update available, please reload your browser or press F5."
 #~ msgstr "Update verfügbar. Bitte Browser neu laden oder F5 drücken."
 
 #~ msgid "There is no rule defined"
 #~ msgstr "Es wurde keine Regel definiert"
 
-#~ msgid "There was no suitable server found for this mail/password combination"
+#~ msgid ""
+#~ "There was no suitable server found for this mail/password combination"
 #~ msgstr ""
 #~ "Es wurde kein passender Server für diese E-Mail/Passwort-Kombination "
 #~ "gefunden"
@@ -6421,17 +6429,18 @@ msgstr ""
 #~ msgstr "Es gab keine Aktivitäten in Ihrem Netzwerk"
 
 #~ msgid ""
-#~ "These statistics only include folders, which have a depth less than four in "
-#~ "the folder structure from the folder \"%1$s\"."
+#~ "These statistics only include folders, which have a depth less than four "
+#~ "in the folder structure from the folder \"%1$s\"."
 #~ msgstr ""
-#~ "Diese Statistiken beinhalten nur Ordner, die maximal drei Ebenen unterhalb "
-#~ "des Ordners  \"%1$s\" liegen."
+#~ "Diese Statistiken beinhalten nur Ordner, die maximal drei Ebenen "
+#~ "unterhalb des Ordners  \"%1$s\" liegen."
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "Dieser Account kann nicht validiert werden."
 
 #~ msgid "This browser is not supported on your current platform."
-#~ msgstr "Dieser Browser wird auf Ihrer aktuellen Plattform nicht unterstützt."
+#~ msgstr ""
+#~ "Dieser Browser wird auf Ihrer aktuellen Plattform nicht unterstützt."
 
 #~ msgid "This contact is private and cannot be shared"
 #~ msgstr "Dies ist ein privater Kontakt und kann nicht freigegeben werden."
@@ -6447,10 +6456,11 @@ msgstr ""
 #~ msgid "This email address cannot be used for appointments"
 #~ msgstr "Diese E-Mail-Adresse kann nicht für Termine verwendet werden."
 
-#~ msgid "This email contains a subscription invitation for a shared %1$s folder"
+#~ msgid ""
+#~ "This email contains a subscription invitation for a shared %1$s folder"
 #~ msgstr ""
-#~ "Diese E-Mail enthält eine Abonnement-Einladung für einen freigegebenen %1$s-"
-#~ "Ordner."
+#~ "Diese E-Mail enthält eine Abonnement-Einladung für einen freigegebenen "
+#~ "%1$s-Ordner."
 
 #~ msgid "This email contains a task"
 #~ msgstr "Diese E-Mail enthält eine Aufgabe"
@@ -6462,8 +6472,8 @@ msgstr ""
 #~ msgstr "Diese Funktion wurde deaktiviert"
 
 #~ msgid ""
-#~ "This feature is not available. In order to use it, you need to upgrade your "
-#~ "account now."
+#~ "This feature is not available. In order to use it, you need to upgrade "
+#~ "your account now."
 #~ msgstr ""
 #~ "Diese Funktion ist nicht verfügbar. Zum Verwenden der Funktion benötigen  "
 #~ "Sie ein Upgrade für Ihren Account."
@@ -6534,8 +6544,8 @@ msgstr ""
 
 #~ msgid "This file will be written in your default folder to allow editing"
 #~ msgstr ""
-#~ "Diese Datei wird in Ihrem Standardordner gespeichert, um das Bearbeiten zu "
-#~ "ermöglichen."
+#~ "Diese Datei wird in Ihrem Standardordner gespeichert, um das Bearbeiten "
+#~ "zu ermöglichen."
 
 #~ msgid "This folder has no publications"
 #~ msgstr "Dieser Ordner enthält keine Veröffentlichungen"
@@ -6583,8 +6593,8 @@ msgstr ""
 #~ msgstr "Dieser Hinweis wird nicht gedruckt"
 
 #~ msgid ""
-#~ "This rule applies to all messages. Please add a condition to restrict this "
-#~ "rule to specific messages."
+#~ "This rule applies to all messages. Please add a condition to restrict "
+#~ "this rule to specific messages."
 #~ msgstr ""
 #~ "Diese Regel gilt für alle Nachrichten. Fügen Sie bitte eine Bedingung "
 #~ "hinzu, um diese Regel auf bestimmte Nachrichten zu beschränken. "
@@ -6595,7 +6605,8 @@ msgstr ""
 #~ msgid ""
 #~ "This widget is currently offline because the twitter rate limit exceeded."
 #~ msgstr ""
-#~ "Dieses Widget ist derzeit offline, da das Twitter-Limit überschritten wurde."
+#~ "Dieses Widget ist derzeit offline, da das Twitter-Limit überschritten "
+#~ "wurde."
 
 #~ msgid "Thread"
 #~ msgstr "Konversation"
@@ -6649,13 +6660,16 @@ msgstr ""
 #~ "doe@example.com or \"John Doe\" <jd@example.com>)"
 #~ msgstr ""
 #~ "Zum manuellen HInzufügen von Teilnehmern geben Sie einfach eine gültige E-"
-#~ "Mail-Adresse an (z.B. john.doe@beispiel.com oder \"John Doe\" <jd@beispiel."
-#~ "com>)"
+#~ "Mail-Adresse an (z.B. john.doe@beispiel.com oder \"John Doe\" "
+#~ "<jd@beispiel.com>)"
 
 #~ msgid "To create a note, click the icon at the top. Select Add note."
 #~ msgstr ""
 #~ "Um eine Notiz anzulegen, klicken Sie oben auf das Symbol. Wählen Sie Add "
 #~ "note."
+
+#~ msgid "To create the task, click on Create on the upper right side."
+#~ msgstr "Um die Aufgabe anzulegen, klicken Sie rechts oben auf Anlegen."
 
 #~ msgid "To launch an app, click on a tile's headline."
 #~ msgstr ""
@@ -6663,11 +6677,25 @@ msgstr ""
 #~ "klicken."
 
 #~ msgid ""
-#~ "To open the help, click the System menu icon on the upper right side of the "
-#~ "menu bar. Select Help."
+#~ "To open the E-Mail settings, click the System menu icon on the upper "
+#~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
+#~ "side. To display all settings, enable Advanced settings in the bottom "
+#~ "left side"
+#~ msgstr ""
+#~ "Um die E-Mail Einstellungen zu öffnen, klicken Sie in der Menüleiste "
+#~ "rechts oben auf das Symbol Systemmenü. Wählen Sie Einstellungen. Klicken "
+#~ "Sie links auf E-Mail. Um alle Einstellungen anzuzeigen, aktivieren Sie "
+#~ "links unten Erweiterte Einstellungen"
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help."
 #~ msgstr ""
 #~ "Um die Hilfe zu öffnen, klicken Sie in der Menüleiste rechts oben auf das "
 #~ "Symbol Systemmenü. Wählen Sie Hilfe."
+
+#~ msgid "To send the E-Mail, click on Send on the upper right side."
+#~ msgstr "Um die E-Mail zu senden, klicken Sie rechts oben auf Senden."
 
 #~ msgid "Today"
 #~ msgstr "Heute"
@@ -6803,8 +6831,8 @@ msgstr ""
 #~ msgstr "Standard-Signatur zurücksetzen"
 
 #~ msgid ""
-#~ "Unsupported Preview - Certain functions disabled and stability not assured "
-#~ "until general release later this year"
+#~ "Unsupported Preview - Certain functions disabled and stability not "
+#~ "assured until general release later this year"
 #~ msgstr ""
 #~ "Nicht unterstützte Vorschau. Einige Funktionen wurden deaktiviert und die "
 #~ "Stabilität kann erst für ein späteres Release zugesichert werden."
@@ -6864,13 +6892,13 @@ msgstr ""
 
 #~ msgid ""
 #~ "Use cursor keys to change the date. Press ctrl-key at the same time to "
-#~ "change year or shift-key to change month. Close date-picker by pressing ESC "
-#~ "key."
+#~ "change year or shift-key to change month. Close date-picker by pressing "
+#~ "ESC key."
 #~ msgstr ""
-#~ "Verwenden Sie die Pfeiltasten zum Ändern des Datums. Zum Ändern des Jahres "
-#~ "drücken Sie gleichzeitig die Strg-Taste.  Zum Ändern des Monats verwenden "
-#~ "Sie die Umschalttaste. Das Datumsfenster können Sie mit der Esc-Taste "
-#~ "wieder schließen. "
+#~ "Verwenden Sie die Pfeiltasten zum Ändern des Datums. Zum Ändern des "
+#~ "Jahres drücken Sie gleichzeitig die Strg-Taste.  Zum Ändern des Monats "
+#~ "verwenden Sie die Umschalttaste. Das Datumsfenster können Sie mit der Esc-"
+#~ "Taste wieder schließen. "
 
 #~ msgid "Use cursor keys to change the item position"
 #~ msgstr "Verwenden Sie die Pfeiltasten zum Ändern der Objektposition."
@@ -6971,27 +6999,27 @@ msgstr ""
 #~ "legal obligations (Copyright, Privacy Laws). Especially when sharing "
 #~ "personal data you are the responsible party according to the Federal Data "
 #~ "Protection Act (BDSG, Germany) or other Privacy Acts of your country. "
-#~ "According to European and other national regulations you as the responsible "
-#~ "party are in charge of data economy, and must not publish or forward "
-#~ "personal data without the person's consent. Beyond legal obligations, we "
-#~ "would like to encourage extreme care when dealing with personal data. "
-#~ "Please consider carefully where you store and to whom you forward personal "
-#~ "data. Please ensure appropriate access protection, e.g. by proper password "
-#~ "protection."
+#~ "According to European and other national regulations you as the "
+#~ "responsible party are in charge of data economy, and must not publish or "
+#~ "forward personal data without the person's consent. Beyond legal "
+#~ "obligations, we would like to encourage extreme care when dealing with "
+#~ "personal data. Please consider carefully where you store and to whom you "
+#~ "forward personal data. Please ensure appropriate access protection, e.g. "
+#~ "by proper password protection."
 #~ msgstr ""
 #~ "Wenn Sie diese Funktion einsetzen, sind Sie als Inhaber der Daten für den "
-#~ "sorgfältigen Umgang und die Einhaltung einschlägiger Gesetze (Datenschutz, "
-#~ "Urheberrecht) verantwortlich. Insbesondere gelten Sie bei der "
-#~ "Bereitstellung personenbezogener Daten als verantwortliche Stelle im Sinne "
-#~ "des Bundesdatenschutzgesetzes. Nach den derzeit in Deutschland und in der "
-#~ "EU geltenden Gesetzen sind Sie als verantwortliche Stelle unter anderem "
-#~ "verpflichtet, so sparsam wie möglich mit personenbezogenen Daten umzugehen "
-#~ "und die Zustimmung der Betroffenen einzuholen, bevor Sie deren "
+#~ "sorgfältigen Umgang und die Einhaltung einschlägiger Gesetze "
+#~ "(Datenschutz, Urheberrecht) verantwortlich. Insbesondere gelten Sie bei "
+#~ "der Bereitstellung personenbezogener Daten als verantwortliche Stelle im "
+#~ "Sinne des Bundesdatenschutzgesetzes. Nach den derzeit in Deutschland und "
+#~ "in der EU geltenden Gesetzen sind Sie als verantwortliche Stelle unter "
+#~ "anderem verpflichtet, so sparsam wie möglich mit personenbezogenen Daten "
+#~ "umzugehen und die Zustimmung der Betroffenen einzuholen, bevor Sie deren "
 #~ "personenbezogene Daten veröffentlichen oder weitergeben. Unabhängig von "
 #~ "gesetzlichen Regelungen raten wir zu großer Sorgfalt beim Umgang mit "
 #~ "personenbezogenen Daten. Bedenken Sie genau, wem Sie derartige Daten "
-#~ "weitergeben und sorgen Sie unbedingt für angemessenen Zugriffsschutz, z.B. "
-#~ "durch eine gute Passwort-Absicherung."
+#~ "weitergeben und sorgen Sie unbedingt für angemessenen Zugriffsschutz, z."
+#~ "B. durch eine gute Passwort-Absicherung."
 
 #~ msgid "Whole day"
 #~ msgstr "Ganzer Tag"
@@ -7049,15 +7077,15 @@ msgstr ""
 #~ "You are about to change your confirmation status. Please leave a comment "
 #~ "for other participants."
 #~ msgstr ""
-#~ "Sie sind dabei, Ihren Bestätigungsstatus zu ändern. Bitte hinterlassen Sie "
-#~ "für die anderen Teilnehmer einen Kommentar. "
+#~ "Sie sind dabei, Ihren Bestätigungsstatus zu ändern. Bitte hinterlassen "
+#~ "Sie für die anderen Teilnehmer einen Kommentar. "
 
 #~ msgid ""
 #~ "You are currently using %1$s of your %2$s available disk space. You have "
 #~ "%3$s left."
 #~ msgstr ""
-#~ "Sie verwenden derzeit %1$s von dem für Sie verfügbaren %2$s Speicherplatz. "
-#~ "Sie haben noch %3$s zur Verfügung."
+#~ "Sie verwenden derzeit %1$s von dem für Sie verfügbaren %2$s "
+#~ "Speicherplatz. Sie haben noch %3$s zur Verfügung."
 
 #~ msgid ""
 #~ "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
@@ -7070,8 +7098,8 @@ msgstr ""
 #~ "You are not allowed to create appointments in \"%1$s\". Appointments will "
 #~ "therefore be created in your private calendar."
 #~ msgstr ""
-#~ "Sie haben keine Berechtigung, Termine in \"%1$s\" anzulegen. Termine werden "
-#~ "daher in Ihrem privaten Kalender erstellt."
+#~ "Sie haben keine Berechtigung, Termine in \"%1$s\" anzulegen. Termine "
+#~ "werden daher in Ihrem privaten Kalender erstellt."
 
 #~ msgid "You are the organizer"
 #~ msgstr "Sie sind der Organisator"
@@ -7083,8 +7111,8 @@ msgstr ""
 #~ "hinzufügen."
 
 #~ msgid ""
-#~ "You can drag and drop files from your computer to upload either a new file "
-#~ "or another version of a file."
+#~ "You can drag and drop files from your computer to upload either a new "
+#~ "file or another version of a file."
 #~ msgstr ""
 #~ "Sie können per Drag & drop neue Dateien oder andere Dateiversionen von "
 #~ "Ihrem Rechner hochladen."
@@ -7126,14 +7154,15 @@ msgstr ""
 #~ msgstr[1] "Sie haben %1$d Benachrichtigungen"
 
 #~ msgid ""
-#~ "You have %1$d notifications. Press [enter] to jump to the notification area "
-#~ "and [escape] to close it again."
+#~ "You have %1$d notifications. Press [enter] to jump to the notification "
+#~ "area and [escape] to close it again."
 #~ msgid_plural ""
-#~ "You have %1$d notifications. Press [enter] to jump to the notification area "
-#~ "and [escape] to close it again."
+#~ "You have %1$d notifications. Press [enter] to jump to the notification "
+#~ "area and [escape] to close it again."
 #~ msgstr[0] ""
-#~ "Sie haben %1$d Benachrichtigung. Durch Drücken der Eingabetaste öffnen Sie "
-#~ "den Infobereich. Durch Drücken der Escape-Taste schließen Sie ihn wieder."
+#~ "Sie haben %1$d Benachrichtigung. Durch Drücken der Eingabetaste öffnen "
+#~ "Sie den Infobereich. Durch Drücken der Escape-Taste schließen Sie ihn "
+#~ "wieder."
 #~ msgstr[1] ""
 #~ "Sie haben %1$d Benachrichtigungen. Durch Drücken der Eingabetaste öffnen "
 #~ "Sie den Infobereich. Durch Drücken der Escape-Taste schließen Sie ihn "
@@ -7198,8 +7227,9 @@ msgstr ""
 #~ msgstr "Sie haben diese Aufgabe vorläufig bestätigt"
 
 #~ msgid ""
-#~ "You will automatically return to the appointment dialog. The selected start "
-#~ "and end time as well as the current participant list will be applied."
+#~ "You will automatically return to the appointment dialog. The selected "
+#~ "start and end time as well as the current participant list will be "
+#~ "applied."
 #~ msgstr ""
 #~ "Sie kehren automatisch zum Termindialog zurück. Das gewählte Start- und "
 #~ "Enddatum und die aktuelle Teilnehmerliste werden übernommen. "
@@ -7278,8 +7308,8 @@ msgstr ""
 #~ msgstr "Ihr Passwort wurde geändert"
 
 #~ msgid ""
-#~ "Your password is more secure if it also contains capital letters, numbers, "
-#~ "and special characters like $, _, %"
+#~ "Your password is more secure if it also contains capital letters, "
+#~ "numbers, and special characters like $, _, %"
 #~ msgstr ""
 #~ "Ihr Passwort ist sicherer, wenn es auch Großbuchstaben, Zahlen und "
 #~ "Sonderzeichen wie $, _, % enthält."

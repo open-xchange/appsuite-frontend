@@ -14,81 +14,347 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.7.7\n"
 
+#: apps/io.ox/tours/calendar.js:72 module:io.ox/tours
+msgid "Adding attachments"
+msgstr "Mellékletek csatolása"
+
+#: apps/io.ox/tours/tasks.js:54 module:io.ox/tours
+msgid "Adding further details"
+msgstr "További részletek hozzáadása"
+
+#: apps/io.ox/tours/contacts.js:36 module:io.ox/tours
+msgid ""
+"Click on a letter on the left side of the navigation bar in order to display "
+"the corresponding contacts from the selected address book."
+msgstr ""
+"Kattintson  a bal oldalon található egyik betűre, hogy az ehhez tartozó "
+"megfelelő névjegyek megjelenjenek a kiválasztott címjegyzékből."
+
+#: apps/io.ox/tours/portal.js:45 module:io.ox/tours
+msgid "Closing a square"
+msgstr "Elem bezárása"
+
+#: apps/io.ox/tours/mail.js:33 module:io.ox/tours
+msgid "Composing a new E-Mail"
+msgstr "Új levél szerkesztése"
+
 #: apps/io.ox/tours/calendar.js:34 module:io.ox/tours
 msgid "Creating a new appointment"
 msgstr "Új találkozó létrehozása"
 
-#: apps/io.ox/tours/calendar.js:35 module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr "Új találkozó létrehozásához kattintson az eszköztárban található Új ikonra."
+#: apps/io.ox/tours/contacts.js:30 module:io.ox/tours
+msgid "Creating a new contact"
+msgstr "Új névjegy létrehozása"
 
-#: apps/io.ox/tours/calendar.js:51 module:io.ox/tours
-msgid "Entering the appointment's data"
-msgstr "Találkozó adatainak megadása"
+#: apps/io.ox/tours/tasks.js:32 module:io.ox/tours
+msgid "Creating a new task"
+msgstr "Új feladat létrehozása"
 
-#: apps/io.ox/tours/calendar.js:52 module:io.ox/tours
-msgid ""
-"Enter the subject, the start and the end date of the appointment. Other "
-"details are optional."
-msgstr "Adja meg a találkozó tárgyát, majd a kezdő- és végdátumot. További információ megadása nem kötelező."
+#: apps/io.ox/tours/files.js:60 module:io.ox/tours
+msgid "Creating a note"
+msgstr "Jegyzet létrehozása"
+
+#: apps/io.ox/tours/intro.js:93 module:io.ox/tours
+msgid "Creating new items"
+msgstr "Új elemek létrehozása"
 
 #: apps/io.ox/tours/calendar.js:57 module:io.ox/tours
 msgid "Creating recurring appointments"
 msgstr "Ismétlődő találkozók létrehozása"
 
-#: apps/io.ox/tours/calendar.js:58 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:62 module:io.ox/tours
+msgid "Creating recurring tasks"
+msgstr "Ismétlődő feladatok létrehozása"
+
+#: apps/io.ox/tours/calendar.js:77 module:io.ox/tours
+msgid "Creating the appointment"
+msgstr "Új találkozó létrehozása"
+
+#: apps/io.ox/tours/tasks.js:87 module:io.ox/tours
+msgid "Creating the task"
+msgstr "Feladat létrehozása"
+
+#: apps/io.ox/tours/portal.js:51 module:io.ox/tours
+msgid "Customizing the Portal"
+msgstr "Portál testreszabása"
+
+#: apps/io.ox/tours/intro.js:112 module:io.ox/tours
 msgid ""
-"To create recurring appointments, enable Repeat. Functions for setting the "
-"recurrence parameters are shown."
-msgstr "Ismétlődő találkozó létrehozásához engedélyezze az Ismétlést. Az ismétlődés beállításához tartozó funkciók megjelennek."
+"Depending on the app, the toolbar contains various functions for creating, "
+"editing and organizing objects."
+msgstr ""
+"Az alkalmazástól függően az eszköztár az objektumok létrehozásához, "
+"szerkesztéséhez és rendezéséhez kapcsolódó funkciókat tartalmaz."
 
-#: apps/io.ox/tours/calendar.js:62 module:io.ox/tours
-#: apps/io.ox/tours/tasks.js:67
-msgid "Using the reminder function"
-msgstr "Emlékeztető funkció használata"
+#: apps/io.ox/tours/intro.js:132 module:io.ox/tours
+msgid ""
+"Detailed instructions for the single apps are located in System menu > Help."
+msgstr ""
+"Az egyes alkalmazások részletes leírása a Rendszer menü Súgó menüpontjában "
+"található."
 
-#: apps/io.ox/tours/calendar.js:63 module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "Használja az emlékeztető funkciókat, hogy ne felejtse el a találkozókat."
+#: apps/io.ox/tours/files.js:67 module:io.ox/tours
+msgid "Displaying information"
+msgstr "Információ megjelenítése"
+
+#: apps/io.ox/tours/intro.js:75 module:io.ox/tours
+msgid "Displaying the help or the settings"
+msgstr "A súgó vagy a beállítások megjelenítése"
+
+#: apps/io.ox/tours/portal.js:40 module:io.ox/tours
+msgid "Drag and drop"
+msgstr "Fogd és vidd"
+
+#: apps/io.ox/tours/settings.js:44 module:io.ox/tours
+msgid ""
+"Edit a setting on the right side. In most of the cases, the changes are "
+"activated immediately."
+msgstr ""
+"A beállítások a jobb oldalon szerkeszthetők. A legtöbb esetben a módosítások "
+"azonnal érvényre jutnak."
+
+#: apps/io.ox/tours/mail.js:106 module:io.ox/tours
+msgid "Editing multiple E-Mails"
+msgstr "Több levél szerkesztése"
+
+#: apps/io.ox/tours/contacts.js:46 module:io.ox/tours
+msgid "Editing multiple contacts"
+msgstr "Több névjegy szerkesztése"
+
+#: apps/io.ox/tours/tasks.js:99 module:io.ox/tours
+msgid "Editing multiple tasks"
+msgstr "Több feladat szerkesztése"
+
+#: apps/io.ox/tours/settings.js:43 module:io.ox/tours
+msgid "Editing settings"
+msgstr "Beállítások szerkesztése"
+
+#: apps/io.ox/tours/mail.js:69 module:io.ox/tours
+msgid ""
+"Enter the E-Mail text into the main area. If the text format was set to HTMl "
+"in the options, you can format the E-Mail text. To do so select a text part "
+"and then click an icon in the formatting bar."
+msgstr ""
+"A levél szövegét a fő területre írja be. Amennyiben a szövegformátum HTML-re "
+"van állítva, akkor a levél szövege formázható. Ehhez válassza ki a szöveg "
+"egy részét és kattintson valamely ikonra a formázósávon."
+
+#: apps/io.ox/tours/mail.js:48 module:io.ox/tours
+msgid ""
+"Enter the recipient's name into the recipients field. As soon as you typed "
+"the first letters, suggestions from the address books are displayed. To "
+"accept a recipient suggestion, click on it."
+msgstr ""
+"Adja meg a címzettek nevét a címzett mezőbe. Az első karakter leütésekor a "
+"javaslatok jelennek meg a címjegyzékből. A javaslat jóváhagyásához "
+"kattintson rá."
+
+#: apps/io.ox/tours/mail.js:59 module:io.ox/tours
+msgid "Enter the subject into the subject field."
+msgstr "Adja meg "
+
+#: apps/io.ox/tours/calendar.js:52 module:io.ox/tours
+msgid ""
+"Enter the subject, the start and the end date of the appointment. Other "
+"details are optional."
+msgstr ""
+"Adja meg a találkozó tárgyát, majd a kezdő- és végdátumot. További "
+"információ megadása nem kötelező."
+
+#: apps/io.ox/tours/tasks.js:49 module:io.ox/tours
+msgid "Enter the subject, the start date, and a description."
+msgstr "Töltse ki a tárgyat, a kezdő dátumot és a leírást."
+
+#: apps/io.ox/tours/tasks.js:82 module:io.ox/tours
+msgid "Entering billing information"
+msgstr "Belépés a számlázási adatokhoz"
+
+#: apps/io.ox/tours/mail.js:68 module:io.ox/tours
+msgid "Entering the E-Mail text"
+msgstr "Levél megírása"
+
+#: apps/io.ox/tours/calendar.js:51 module:io.ox/tours
+msgid "Entering the appointment's data"
+msgstr "Találkozó adatainak megadása"
+
+#: apps/io.ox/tours/mail.js:47 module:io.ox/tours
+msgid "Entering the recipient's name"
+msgstr "Címzett nevének megadása"
+
+#: apps/io.ox/tours/mail.js:58 module:io.ox/tours
+msgid "Entering the subject"
+msgstr "Tárgy megadása"
+
+#: apps/io.ox/tours/tasks.js:48 module:io.ox/tours
+msgid "Entering the task's data"
+msgstr "Feladatok adatainak megadása"
+
+#: apps/io.ox/tours/files.js:30 module:io.ox/tours
+msgid "Folder tree"
+msgstr "Mappastruktúra"
+
+#: apps/io.ox/tours/calendar.js:73 module:io.ox/tours
+msgid "Further down you can add documents as attachments to the appointment."
+msgstr "Lejjebb mellékletként dokumentumokat csatolhat a találkozóhoz."
+
+#: apps/io.ox/tours/mail.js:63 module:io.ox/tours
+msgid "Further functions"
+msgstr "További műveletek"
+
+#: apps/io.ox/tours/intro.js:131 module:io.ox/tours
+msgid "Further information"
+msgstr "További információk"
+
+#. Tour name; general introduction
+#: apps/io.ox/tours/intro.js:46 module:io.ox/tours
+msgid "Getting started"
+msgstr "Első lépések"
+
+#: apps/io.ox/tours/main.js:77 module:io.ox/tours
+msgid "Guided tour for this app"
+msgstr "Az alkalmazás bemutatója"
+
+#: apps/io.ox/tours/mail.js:101 module:io.ox/tours
+msgid "Halo view"
+msgstr "Áttekintő nézet"
+
+#: apps/io.ox/tours/settings.js:36 module:io.ox/tours
+msgid "How the settings are organized"
+msgstr "Mi szerint vannak rendezve a beállítások"
+
+#: apps/io.ox/tours/mail.js:92 module:io.ox/tours
+msgid ""
+"If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
+"separate window."
+msgstr ""
+"Amennyiben egy levélre duplán kattint a listában, akkor a levél külön "
+"ablakban nyílik meg."
+
+#: apps/io.ox/tours/portal.js:46 module:io.ox/tours
+msgid "If you no longer want to display a square, click the cross."
+msgstr ""
+"Ha nem akarja továbbiakban megjeleníteni a négyzetet, akkor kattintson a "
+"keresztre."
+
+#: apps/io.ox/tours/intro.js:89 module:io.ox/tours
+msgid ""
+"In case of new notifications, e.g. appointment invitations, the info area is "
+"opened."
+msgstr ""
+"Új értesítés megérkezésekor pl. meghívás találkozóra, az információs terület "
+"megnyílik."
+
+#: apps/io.ox/tours/mail.js:107 module:io.ox/tours
+msgid ""
+"In order to edit multiple E-Mails at once, enable the checkboxes on the left "
+"side of the E-Mails. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"Több levél egyszerre történő szerkesztéséhez használja a levelek bal oldalán "
+"található jelölőnégyzetet. Amennyiben a jelölőnégyzetek nem láthatók, "
+"kattintson a eszköztár jobb oldalán található Nézet > Jelelölőnégyzetek "
+"ikonra."
+
+#: apps/io.ox/tours/mail.js:64 module:io.ox/tours
+msgid ""
+"In this area you can find further functions, e.g. for adding attachments."
+msgstr ""
+"Ezen a területen további funkciók találhatók, pl. a melléklet hozzáadása."
 
 #: apps/io.ox/tours/calendar.js:67 module:io.ox/tours
 #: apps/io.ox/tours/tasks.js:77
 msgid "Inviting other participants"
 msgstr "További résztvevők meghívása"
 
-#: apps/io.ox/tours/calendar.js:68 module:io.ox/tours
-msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. To avoid appointment conflicts, click on Find a free time at "
-"the upper right side."
-msgstr "További résztvevők meghívásához adja meg azok nevét a Résztvevők alatt található mezőben. A találkozók ütközésének elkerüléséhez kattintson a jobb felső oldalon található Szabad idő keresése gombra."
+#: apps/io.ox/tours/intro.js:70 module:io.ox/tours
+msgid "Launching an app"
+msgstr "Alkalmazás indítása"
 
-#: apps/io.ox/tours/calendar.js:72 module:io.ox/tours
-msgid "Adding attachments"
-msgstr "Mellékletek csatolása"
+#: apps/io.ox/tours/contacts.js:35 module:io.ox/tours
+msgid "Navigation bar"
+msgstr "Navigációs sáv"
 
-#: apps/io.ox/tours/calendar.js:73 module:io.ox/tours
-msgid "Further down you can add documents as attachments to the appointment."
-msgstr "Lejjebb mellékletként dokumentumokat csatolhat a találkozóhoz."
+#: apps/io.ox/tours/mail.js:91 module:io.ox/tours
+msgid "Opening an E-Mail in a separate window"
+msgstr "Levél megnyitása külön ablakban"
 
-#: apps/io.ox/tours/calendar.js:77 module:io.ox/tours
-msgid "Creating the appointment"
-msgstr "Új találkozó létrehozása"
+#: apps/io.ox/tours/intro.js:101 module:io.ox/tours
+msgid "Opening or closing the folder tree"
+msgstr "Mappastruktúra megnyitása és bezárása"
 
-#: apps/io.ox/tours/calendar.js:78 module:io.ox/tours
-msgid "To create the appointment, click on Create at the upper right side."
-msgstr "A találkozó létrehozásához kattintson a jobb felső részen található Létrehozás gombra."
+#: apps/io.ox/tours/mail.js:112 module:io.ox/tours
+msgid "Opening the E-Mail settings"
+msgstr "Levelezés beállításainak megnyitása"
+
+#: apps/io.ox/tours/settings.js:48 module:io.ox/tours
+msgid "Opening the help"
+msgstr "Súgó megnyitása"
+
+#: apps/io.ox/tours/settings.js:30 module:io.ox/tours
+msgid "Opening the settings"
+msgstr "Beállítások megnyitása"
+
+#: apps/io.ox/tours/mail.js:96 module:io.ox/tours
+msgid "Reading E-Mail conversations"
+msgstr "E-mail társalgások olvasása"
+
+#: apps/io.ox/tours/portal.js:35 module:io.ox/tours
+msgid "Reading the details"
+msgstr "Részletek olvasása"
+
+#: apps/io.ox/tours/intro.js:106 module:io.ox/tours
+msgid "Searching for objects"
+msgstr "Elemek keresése"
 
 #: apps/io.ox/tours/calendar.js:83 module:io.ox/tours
 #: apps/io.ox/tours/files.js:35 apps/io.ox/tours/mail.js:86
 msgid "Selecting a view"
 msgstr "Nézet kiválasztása"
 
-#: apps/io.ox/tours/calendar.js:84 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:40 module:io.ox/tours
+msgid "Sending an E-Mail to a contact"
+msgstr "Levél küldése a címjegyzékben található kapcsolatnak"
+
+#: apps/io.ox/tours/mail.js:74 module:io.ox/tours
+msgid "Sending the E-Mail"
+msgstr "Levél küldése"
+
+#: apps/io.ox/tours/settings.js:54 module:io.ox/tours
+msgid "Signing out"
+msgstr "Kijelentkezés"
+
+#: apps/io.ox/tours/tasks.js:92 module:io.ox/tours
+msgid "Sorting tasks"
+msgstr "Feladatok rendezése"
+
+#: apps/io.ox/tours/mail.js:79 module:io.ox/tours
+msgid "Sorting your E-Mails"
+msgstr "Levelek rendezése"
+
+#: apps/io.ox/tours/intro.js:126 module:io.ox/tours
+msgid "The Detail view"
+msgstr "A részletes nézet"
+
+#: apps/io.ox/tours/intro.js:127 module:io.ox/tours
 msgid ""
-"To select one of the views like Day, Month or List, click on View in the "
-"toolbar. Select a menu entry from the Layout section."
-msgstr "A nézet kiválasztásához, amely lehet Nap, Hónap vagy Lista, kattintson az eszköztárban található Nézet ikonra. Válasszon ki egy menüelemet az Elrendezés részből."
+"The Detail view displays an object's content. Depending on the app, further "
+"functions for organizing objects can be found in the Detail view."
+msgstr ""
+"A részletes nézetben látható az objektum tartalma. Az alkalmazástól függően "
+"az objektumok rendezéséhez kapcsolódó további funkciók a részletes nézetben "
+"találhatók."
+
+#: apps/io.ox/tours/files.js:45 module:io.ox/tours
+msgid "The Icons view"
+msgstr "Ikonnézet"
+
+#: apps/io.ox/tours/files.js:46 module:io.ox/tours
+msgid ""
+"The Icons view displays an icon and the file name for each file. Click on an "
+"icon to view further details and functions in the pop-up."
+msgstr ""
+"A Ikonnézet minden fájlhoz egy ikont és a fájlnevet jelenít meg. Az ikonra "
+"kattintva egy felugró ablakban további részletek és funkciók jelennek meg."
 
 #: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
 #: apps/io.ox/tours/files.js:40
@@ -100,376 +366,32 @@ msgid ""
 "The List view shows a list of the appointments in the current folder. If "
 "clicking on an appointment, the appointment's data and some functions are "
 "displayed in the Detail view."
-msgstr "A Listanézet az aktuális mappában lévő találkozók listáját mutatja. A találkozókra kattintva a Részletes nézetben a találkozó adatai és az ahhoz kapcsolódó funkciók jelennek meg."
-
-#: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
-msgid "The calendar views"
-msgstr "Naptárnézetek"
-
-#: apps/io.ox/tours/calendar.js:106 module:io.ox/tours
-msgid ""
-"The calendar views display a calendar sheet with the appointments for the "
-"selected time range."
-msgstr "A naptárnézetek jelenítik meg a naptárakat a megadott időintervallumban lévő találkozókkal."
-
-#: apps/io.ox/tours/contacts.js:30 module:io.ox/tours
-msgid "Creating a new contact"
-msgstr "Új névjegy létrehozása"
-
-#: apps/io.ox/tours/contacts.js:31 module:io.ox/tours
-msgid "To create a new contact, click on New > Add contact in the toolbar."
-msgstr "Új névjegy létrehozásához kattintson a menüsorban található Új > Névjegy hozzáadása ikonra."
-
-#: apps/io.ox/tours/contacts.js:35 module:io.ox/tours
-msgid "Navigation bar"
-msgstr "Navigációs sáv"
-
-#: apps/io.ox/tours/contacts.js:36 module:io.ox/tours
-msgid ""
-"Click on a letter on the left side of the navigation bar in order to display "
-"the corresponding contacts from the selected address book."
-msgstr "Kattintson  a bal oldalon található egyik betűre, hogy az ehhez tartozó megfelelő névjegyek megjelenjenek a kiválasztott címjegyzékből."
-
-#: apps/io.ox/tours/contacts.js:40 module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
-msgstr "Levél küldése a címjegyzékben található kapcsolatnak"
-
-#: apps/io.ox/tours/contacts.js:41 module:io.ox/tours
-msgid ""
-"To send an E-Mail to the contact, click on an E-Mail address or on Send "
-"email in the toolbar."
-msgstr "Levél küldéséhez kattintson az e-mail címre vagy az eszköztárban található E-mail küldése ikonra."
-
-#: apps/io.ox/tours/contacts.js:46 module:io.ox/tours
-msgid "Editing multiple contacts"
-msgstr "Több névjegy szerkesztése"
-
-#: apps/io.ox/tours/contacts.js:47 module:io.ox/tours
-msgid ""
-"To edit multiple contacts at once, enable the checkboxes on the left side of "
-"the contacts. If the checkboxes are not displayed, click on View > "
-"Checkboxes on the right side of the toolbar."
-msgstr "Több névjegy egyszerre történő szerkesztéséhez használja a névjegyek bal oldalán található jelölőnégyzetet. Amennyiben a jelölőnégyzetek nem láthatók, kattintson a eszköztár jobb oldalán található Nézet > Jelelölőnégyzetek ikonra."
-
-#: apps/io.ox/tours/files.js:30 module:io.ox/tours
-msgid "Folder tree"
-msgstr "Mappastruktúra"
-
-#: apps/io.ox/tours/files.js:31 module:io.ox/tours
-msgid ""
-"Use the folder tree to access own, public or shared files. If the folder "
-"tree is hidden, click on View > Folder view on the right side of the toolbar."
-msgstr "Használja a mappastruktúrát a saját, publikus vagy megosztott fájlok eléréséhez. Amennyiben a mappa rejtett, kattintson az eszköztár jobb oldalán található Nézet > Mappanézet ikonra."
-
-#: apps/io.ox/tours/files.js:36 module:io.ox/tours
-msgid ""
-"To select one of the views List, Icons or Squares, click on View on the "
-"right side of the toolbar."
-msgstr "Az egyik Ikon- vagy Listanézet kiválasztásához, kattintson az eszköztár alján található ikonra."
+msgstr ""
+"A Listanézet az aktuális mappában lévő találkozók listáját mutatja. A "
+"találkozókra kattintva a Részletes nézetben a találkozó adatai és az ahhoz "
+"kapcsolódó funkciók jelennek meg."
 
 #: apps/io.ox/tours/files.js:41 module:io.ox/tours
 msgid ""
 "The List view shows details like the size and date of change. Use the "
 "checkboxes to select files. Click on a file to view further details and "
 "functions in the pop-up."
-msgstr "A Listanézet olyan részleteket mutat meg, mint a méret vagy a módosítás dátuma. A fájlok kiválasztásához használja a jelölőnégyzeteket. A fájlra kattintva egy felugró ablakban további részletek és funkciók jelennek meg."
+msgstr ""
+"A Listanézet olyan részleteket mutat meg, mint a méret vagy a módosítás "
+"dátuma. A fájlok kiválasztásához használja a jelölőnégyzeteket. A fájlra "
+"kattintva egy felugró ablakban további részletek és funkciók jelennek meg."
 
-#: apps/io.ox/tours/files.js:45 module:io.ox/tours
-msgid "The Icons view"
-msgstr "Ikonnézet"
-
-#: apps/io.ox/tours/files.js:46 module:io.ox/tours
-msgid ""
-"The Icons view displays an icon and the file name for each file. Click on an "
-"icon to view further details and functions in the pop-up."
-msgstr "A Ikonnézet minden fájlhoz egy ikont és a fájlnevet jelenít meg. Az ikonra kattintva egy felugró ablakban további részletek és funkciók jelennek meg."
-
-#: apps/io.ox/tours/files.js:50 module:io.ox/tours
-msgid "The Tiles view"
-msgstr "A Mozaik nézet"
-
-#: apps/io.ox/tours/files.js:51 module:io.ox/tours
-msgid ""
-"The Tiles view shows a big icon for each file. Click on an icon to view "
-"further details and functions in the pop-up."
-msgstr "A Mozaik nézet minden fájlról egy nagy ikont jelenít meg. Az ikonra kattintva egy felugró ablakban további részletek és funkciók jelennek meg."
-
-#: apps/io.ox/tours/files.js:55 module:io.ox/tours
-msgid "Uploading a file"
-msgstr "Fájl feltöltése"
-
-#: apps/io.ox/tours/files.js:56 module:io.ox/tours
-msgid "To upload a file, click on New > Upload new file in the toolbar."
-msgstr "Fájl feltöltéséhez kattintson az eszköztárban található Új > Új fájl feltöltése ikonra."
-
-#: apps/io.ox/tours/files.js:60 module:io.ox/tours
-msgid "Creating a note"
-msgstr "Jegyzet létrehozása"
-
-#: apps/io.ox/tours/files.js:61 module:io.ox/tours
-msgid "To create a note, click on New > Add note in the toolbar."
-msgstr "Új megjegyzés létrehozásához kattintson az eszköztárban található Új > Megjegyzés hozzáadása ikonra."
-
-#: apps/io.ox/tours/files.js:67 module:io.ox/tours
-msgid "Displaying information"
-msgstr "Információ megjelenítése"
-
-#: apps/io.ox/tours/files.js:68 module:io.ox/tours
-msgid ""
-"To view further information, click on a file. A pop-up window displays "
-"further details and functions."
-msgstr "További információ megjelenítéséhez kattintson a fájlra. A további információ egy felugró ablakban fog megjelenni."
-
-#. Tour name; general introduction
-#: apps/io.ox/tours/intro.js:46 module:io.ox/tours
-msgid "Getting started"
-msgstr "Első lépések"
-
-#: apps/io.ox/tours/intro.js:63 module:io.ox/tours
-msgid "Welcome to %s"
-msgstr "Üdvözli a(z) %s"
-
-#: apps/io.ox/tours/intro.js:64 module:io.ox/tours
-msgid ""
-"This guided tour will briefly introduce you to the product. Get more "
-"detailed information in the tours for the single apps or in the online help."
-msgstr "Ez a bemutató röviden bemutatja a terméket. További információ az egyes alkalmazások bemutatójában vagy az online súgóban található."
-
-#: apps/io.ox/tours/intro.js:67 module:io.ox/tours
-msgid "Launching an app"
-msgstr "Alkalmazás indítása"
-
-#: apps/io.ox/tours/intro.js:68 module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
-msgstr "Az alkalmazás indításához a menüsáv bal oldali részén lévő bejegyzéshez."
-
-#: apps/io.ox/tours/intro.js:72 module:io.ox/tours
-msgid "Displaying the help or the settings"
-msgstr "A súgó vagy a beállítások megjelenítése"
-
-#: apps/io.ox/tours/intro.js:73 module:io.ox/tours
-msgid ""
-"To display the help or the settings, click the System menu icon in the menu "
-"bar."
-msgstr "A súgó vagy a beállítások megjelenítéséhez használja a menüsorban található Rendszer menüikont."
-
-#: apps/io.ox/tours/intro.js:79 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:82 module:io.ox/tours
 msgid "The New objects icon"
 msgstr "Az Új elemek ikon"
 
-#: apps/io.ox/tours/intro.js:80 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:83 module:io.ox/tours
 msgid ""
 "The New objects icon shows the number of unread E-Mails or other "
 "notifications. If clicking the icon, the info area opens."
-msgstr "Az Új elemek ikon megmutatja az olvasatlan levelek számát és más értesítéseket. Az ikonra kattintva megnyílik az információs terület."
-
-#: apps/io.ox/tours/intro.js:85 module:io.ox/tours
-msgid "The info area"
-msgstr "Az információs terület"
-
-#: apps/io.ox/tours/intro.js:86 module:io.ox/tours
-msgid ""
-"In case of new notifications, e.g. appointment invitations, the info area is "
-"opened."
-msgstr "Új értesítés megérkezésekor pl. meghívás találkozóra, az információs terület megnyílik."
-
-#: apps/io.ox/tours/intro.js:90 module:io.ox/tours
-msgid "Creating new items"
-msgstr "Új elemek létrehozása"
-
-#: apps/io.ox/tours/intro.js:91 module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
-msgstr "Új levél írásához kattintson az eszköztárban található Új levél szerkesztése ikonra."
-
-#: apps/io.ox/tours/intro.js:98 module:io.ox/tours
-msgid "Opening or closing the folder tree"
-msgstr "Mappastruktúra megnyitása és bezárása"
-
-#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
-msgid ""
-"To open or close the folder tree, click on View >  Folder view on the right "
-"side of the toolbar."
-msgstr "A mappastruktúra megnyitásához vagy bezárásához kattintson az eszköztár jobb oldalán lévő Nézet > Mappanézet ikonra."
-
-#: apps/io.ox/tours/intro.js:103 module:io.ox/tours
-msgid "Searching for objects"
-msgstr "Elemek keresése"
-
-#: apps/io.ox/tours/intro.js:104 module:io.ox/tours
-msgid "To search for objects, click the Search icon in the menu bar."
-msgstr "Az elemek kereséséhez kattintson a menüsorban található Keresés ikonra."
-
-#: apps/io.ox/tours/intro.js:108 module:io.ox/tours
-msgid "The toolbar"
-msgstr "Az eszköztár"
-
-#: apps/io.ox/tours/intro.js:109 module:io.ox/tours
-msgid ""
-"Depending on the app, the toolbar contains various functions for creating, "
-"editing and organizing objects."
-msgstr "Az alkalmazástól függően az eszköztár az objektumok létrehozásához, szerkesztéséhez és rendezéséhez kapcsolódó funkciókat tartalmaz."
-
-#: apps/io.ox/tours/intro.js:113 module:io.ox/tours
-msgid "The folder tree"
-msgstr "A mappastruktúra"
-
-#: apps/io.ox/tours/intro.js:114 module:io.ox/tours
-msgid ""
-"Use the folder tree to open the folder containing the objects that you want "
-"to view in the list."
-msgstr "Használja a mappastruktúrát, ha egy olyan elemek szeretne megtekinteni a listában, amely egy mappában van."
-
-#: apps/io.ox/tours/intro.js:118 module:io.ox/tours
-msgid "The list"
-msgstr "A lista"
-
-#: apps/io.ox/tours/intro.js:119 module:io.ox/tours
-msgid ""
-"Use the list to select an object, show its contents or activate functions."
-msgstr "Használja a listát egy olyan elem kiválasztásához, amelynek tartalmát szeretné megnézni, vagy művelet kíván vele végrehajtani."
-
-#: apps/io.ox/tours/intro.js:123 module:io.ox/tours
-msgid "The Detail view"
-msgstr "A részletes nézet"
-
-#: apps/io.ox/tours/intro.js:124 module:io.ox/tours
-msgid ""
-"The Detail view displays an object's content. Depending on the app, further "
-"functions for organizing objects can be found in the Detail view."
-msgstr "A részletes nézetben látható az objektum tartalma. Az alkalmazástól függően az objektumok rendezéséhez kapcsolódó további funkciók a részletes nézetben találhatók."
-
-#: apps/io.ox/tours/intro.js:128 module:io.ox/tours
-msgid "Further information"
-msgstr "További információk"
-
-#: apps/io.ox/tours/intro.js:129 module:io.ox/tours
-msgid ""
-"Detailed instructions for the single apps are located in System menu > Help."
-msgstr "Az egyes alkalmazások részletes leírása a Rendszer menü Súgó menüpontjában található."
-
-#: apps/io.ox/tours/mail.js:33 module:io.ox/tours
-msgid "Composing a new E-Mail"
-msgstr "Új levél szerkesztése"
-
-#: apps/io.ox/tours/mail.js:34 module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
-msgstr "Új levél írásához kattintson felül az Új levél szerkesztése ikonra."
-
-#: apps/io.ox/tours/mail.js:47 module:io.ox/tours
-msgid "Entering the recipient's name"
-msgstr "Címzett nevének megadása"
-
-#: apps/io.ox/tours/mail.js:48 module:io.ox/tours
-msgid ""
-"Enter the recipient's name into the recipients field. As soon as you typed "
-"the first letters, suggestions from the address books are displayed. To "
-"accept a recipient suggestion, click on it."
-msgstr "Adja meg a címzettek nevét a címzett mezőbe. Az első karakter leütésekor a javaslatok jelennek meg a címjegyzékből. A javaslat jóváhagyásához kattintson rá."
-
-#: apps/io.ox/tours/mail.js:58 module:io.ox/tours
-msgid "Entering the subject"
-msgstr "Tárgy megadása"
-
-#: apps/io.ox/tours/mail.js:59 module:io.ox/tours
-msgid "Enter the subject into the subject field."
-msgstr "Adja meg "
-
-#: apps/io.ox/tours/mail.js:63 module:io.ox/tours
-msgid "Further functions"
-msgstr "További műveletek"
-
-#: apps/io.ox/tours/mail.js:64 module:io.ox/tours
-msgid ""
-"In this area you can find further functions, e.g. for adding attachments."
-msgstr "Ezen a területen további funkciók találhatók, pl. a melléklet hozzáadása."
-
-#: apps/io.ox/tours/mail.js:68 module:io.ox/tours
-msgid "Entering the E-Mail text"
-msgstr "Levél megírása"
-
-#: apps/io.ox/tours/mail.js:69 module:io.ox/tours
-msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTMl "
-"in the options, you can format the E-Mail text. To do so select a text part "
-"and then click an icon in the formatting bar."
-msgstr "A levél szövegét a fő területre írja be. Amennyiben a szövegformátum HTML-re van állítva, akkor a levél szövege formázható. Ehhez válassza ki a szöveg egy részét és kattintson valamely ikonra a formázósávon."
-
-#: apps/io.ox/tours/mail.js:74 module:io.ox/tours
-msgid "Sending the E-Mail"
-msgstr "Levél küldése"
-
-#: apps/io.ox/tours/mail.js:75 module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
-msgstr "A levél elküldéséhez kattintson a Küldés gombra"
-
-#: apps/io.ox/tours/mail.js:79 module:io.ox/tours
-msgid "Sorting your E-Mails"
-msgstr "Levelek rendezése"
-
-#: apps/io.ox/tours/mail.js:80 module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
-msgstr "A levelek rendezéséhez kattintson a Rendezésre és válasszon egy rendezési módot."
-
-#: apps/io.ox/tours/mail.js:87 module:io.ox/tours
-msgid ""
-"To choose between the different views. click on View in the toolbar. Select "
-"a menu entry in the layout."
-msgstr "A különböző nézetek közötti váltáshoz kattintson az eszköztárban található Nézet ikonra. Válasszon ki egy menüelemet az Elrendezés részből."
-
-#: apps/io.ox/tours/mail.js:91 module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
-msgstr "Levél megnyitása külön ablakban"
-
-#: apps/io.ox/tours/mail.js:92 module:io.ox/tours
-msgid ""
-"If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
-"separate window."
-msgstr "Amennyiben egy levélre duplán kattint a listában, akkor a levél külön ablakban nyílik meg."
-
-#: apps/io.ox/tours/mail.js:96 module:io.ox/tours
-msgid "Reading E-Mail conversations"
-msgstr "E-mail társalgások olvasása"
-
-#: apps/io.ox/tours/mail.js:97 module:io.ox/tours
-msgid ""
-"To open or close an E-Mail in a conversation, click on a free area in the "
-"header."
-msgstr "Az E-mail társalgások megnyitásához vagy bezárásához kattintson a fejléc szabad területére."
-
-#: apps/io.ox/tours/mail.js:101 module:io.ox/tours
-msgid "Halo view"
-msgstr "Áttekintő nézet"
-
-#: apps/io.ox/tours/mail.js:102 module:io.ox/tours
-msgid ""
-"To receive information about the sender or other recipients, open the Halo "
-"view by clicking on a name."
-msgstr "Ha további információt szeretne megtudni a feladóról vagy a többi címzettről, akkor a nevükre kattintva megnyithatja a Halo nézetet."
-
-#: apps/io.ox/tours/mail.js:106 module:io.ox/tours
-msgid "Editing multiple E-Mails"
-msgstr "Több levél szerkesztése"
-
-#: apps/io.ox/tours/mail.js:107 module:io.ox/tours
-msgid ""
-"In order to edit multiple E-Mails at once, enable the checkboxes on the left "
-"side of the E-Mails. If the checkboxes are not displayed, click on View > "
-"Checkboxes on the right side of the toolbar."
-msgstr "Több levél egyszerre történő szerkesztéséhez használja a levelek bal oldalán található jelölőnégyzetet. Amennyiben a jelölőnégyzetek nem láthatók, kattintson a eszköztár jobb oldalán található Nézet > Jelelölőnégyzetek ikonra."
-
-#: apps/io.ox/tours/mail.js:112 module:io.ox/tours
-msgid "Opening the E-Mail settings"
-msgstr "Levelezés beállításainak megnyitása"
-
-#: apps/io.ox/tours/mail.js:113 module:io.ox/tours
-msgid ""
-"To open the E-Mail settings, click the System menu icon on the upper right "
-"side of the menu bar. Select Settings. Click on E-Mail on the left side."
-msgstr "A levelezés beállításainak megnyitásához kattintson a menüsor jobb felső részén található Rendszermenü ikonra. Válassza ki a Beállításokat és kattintson az E-mail beállításokra a bal oldalon."
-
-#: apps/io.ox/tours/main.js:77 module:io.ox/tours
-msgid "Guided tour for this app"
-msgstr "Az alkalmazás bemutatója"
+msgstr ""
+"Az Új elemek ikon megmutatja az olvasatlan levelek számát és más "
+"értesítéseket. Az ikonra kattintva megnyílik az információs terület."
 
 #: apps/io.ox/tours/portal.js:30 module:io.ox/tours
 msgid "The Portal"
@@ -479,77 +401,243 @@ msgstr "A Portál"
 msgid ""
 "The Portal informs you about current E-Mails, appointments or social network "
 "news."
-msgstr "A Portál értesít a legújabb levelekről, találkozókról vagy a közösségi hálózatról érkező hírekről."
+msgstr ""
+"A Portál értesít a legújabb levelekről, találkozókról vagy a közösségi "
+"hálózatról érkező hírekről."
 
-#: apps/io.ox/tours/portal.js:35 module:io.ox/tours
-msgid "Reading the details"
-msgstr "Részletek olvasása"
+#: apps/io.ox/tours/files.js:50 module:io.ox/tours
+msgid "The Tiles view"
+msgstr "A Mozaik nézet"
 
-#: apps/io.ox/tours/portal.js:36 module:io.ox/tours
-msgid "To read the details, click on an entry in a square."
-msgstr "A részletek olvasásához kattintson az egyik elemre."
-
-#: apps/io.ox/tours/portal.js:40 module:io.ox/tours
-msgid "Drag and drop"
-msgstr "Fogd és vidd"
-
-#: apps/io.ox/tours/portal.js:41 module:io.ox/tours
+#: apps/io.ox/tours/files.js:51 module:io.ox/tours
 msgid ""
-"To change the layout, drag a square's title to another position and drop it "
-"there."
-msgstr "Az elrendezés módosításához, fogja meg az elem címét és mozgassa egy másik helyre."
+"The Tiles view shows a big icon for each file. Click on an icon to view "
+"further details and functions in the pop-up."
+msgstr ""
+"A Mozaik nézet minden fájlról egy nagy ikont jelenít meg. Az ikonra "
+"kattintva egy felugró ablakban további részletek és funkciók jelennek meg."
 
-#: apps/io.ox/tours/portal.js:45 module:io.ox/tours
-msgid "Closing a square"
-msgstr "Elem bezárása"
+#: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
+msgid "The calendar views"
+msgstr "Naptárnézetek"
 
-#: apps/io.ox/tours/portal.js:46 module:io.ox/tours
-msgid "If you no longer want to display a square, click the cross."
-msgstr "Ha nem akarja továbbiakban megjeleníteni a négyzetet, akkor kattintson a keresztre."
-
-#: apps/io.ox/tours/portal.js:51 module:io.ox/tours
-msgid "Customizing the Portal"
-msgstr "Portál testreszabása"
-
-#: apps/io.ox/tours/portal.js:52 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:106 module:io.ox/tours
 msgid ""
-"To display a square again or to display further information sources, click "
-"on Customize this page."
-msgstr "Az elem újbóli megjelenítéséhez vagy további információ eléréséhez kattintson az ezen az oldalon található Testreszabásra."
+"The calendar views display a calendar sheet with the appointments for the "
+"selected time range."
+msgstr ""
+"A naptárnézetek jelenítik meg a naptárakat a megadott időintervallumban lévő "
+"találkozókkal."
 
-#: apps/io.ox/tours/settings.js:30 module:io.ox/tours
-msgid "Opening the settings"
-msgstr "Beállítások megnyitása"
+#: apps/io.ox/tours/intro.js:116 module:io.ox/tours
+msgid "The folder tree"
+msgstr "A mappastruktúra"
 
-#: apps/io.ox/tours/settings.js:31 module:io.ox/tours
-msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
-msgstr "A beállítások megnyitásához kattintson a menüsor jobb felső részében található Rendszer menü ikonra és válassza ki a Beállításokat."
+#: apps/io.ox/tours/intro.js:88 module:io.ox/tours
+msgid "The info area"
+msgstr "Az információs terület"
 
-#: apps/io.ox/tours/settings.js:36 module:io.ox/tours
-msgid "How the settings are organized"
-msgstr "Mi szerint vannak rendezve a beállítások"
+#: apps/io.ox/tours/intro.js:121 module:io.ox/tours
+msgid "The list"
+msgstr "A lista"
 
 #: apps/io.ox/tours/settings.js:37 module:io.ox/tours
 msgid ""
 "The settings are organized in topics. Select the topic on the left side, e.g "
 "Basic settings or E-Mail."
-msgstr "A beállítások témák szerint vannak rendezve. Válasszon egy témát a bal oldalon pl. Alapbeállítások vagy Levél."
+msgstr ""
+"A beállítások témák szerint vannak rendezve. Válasszon egy témát a bal "
+"oldalon pl. Alapbeállítások vagy Levél."
 
-#: apps/io.ox/tours/settings.js:43 module:io.ox/tours
-msgid "Editing settings"
-msgstr "Beállítások szerkesztése"
+#: apps/io.ox/tours/intro.js:111 module:io.ox/tours
+msgid "The toolbar"
+msgstr "Az eszköztár"
 
-#: apps/io.ox/tours/settings.js:44 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:67 module:io.ox/tours
 msgid ""
-"Edit a setting on the right side. In most of the cases, the changes are "
-"activated immediately."
-msgstr "A beállítások a jobb oldalon szerkeszthetők. A legtöbb esetben a módosítások azonnal érvényre jutnak."
+"This guided tour will briefly introduce you to the product. Get more "
+"detailed information in the tours for the single apps or in the online help."
+msgstr ""
+"Ez a bemutató röviden bemutatja a terméket. További információ az egyes "
+"alkalmazások bemutatójában vagy az online súgóban található."
 
-#: apps/io.ox/tours/settings.js:48 module:io.ox/tours
-msgid "Opening the help"
-msgstr "Súgó megnyitása"
+#: apps/io.ox/tours/tasks.js:55 module:io.ox/tours
+msgid "To add further details, click on Expand form."
+msgstr "További adatok hozzáadásához kattintson az Űrlap kibontására."
+
+#: apps/io.ox/tours/portal.js:41 module:io.ox/tours
+msgid ""
+"To change the layout, drag a square's title to another position and drop it "
+"there."
+msgstr ""
+"Az elrendezés módosításához, fogja meg az elem címét és mozgassa egy másik "
+"helyre."
+
+#: apps/io.ox/tours/mail.js:87 module:io.ox/tours
+msgid ""
+"To choose between the different views. click on View in the toolbar. Select "
+"a menu entry in the layout."
+msgstr ""
+"A különböző nézetek közötti váltáshoz kattintson az eszköztárban található "
+"Nézet ikonra. Válasszon ki egy menüelemet az Elrendezés részből."
+
+#: apps/io.ox/tours/mail.js:34 module:io.ox/tours
+msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgstr "Új levél írásához kattintson felül az Új levél szerkesztése ikonra."
+
+#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
+msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgstr ""
+"Új levél írásához kattintson az eszköztárban található Új levél szerkesztése "
+"ikonra."
+
+#: apps/io.ox/tours/calendar.js:35 module:io.ox/tours
+msgid "To create a new appointment, click on New in the toolbar."
+msgstr ""
+"Új találkozó létrehozásához kattintson az eszköztárban található Új ikonra."
+
+#: apps/io.ox/tours/contacts.js:31 module:io.ox/tours
+msgid "To create a new contact, click on New > Add contact in the toolbar."
+msgstr ""
+"Új névjegy létrehozásához kattintson a menüsorban található Új > Névjegy "
+"hozzáadása ikonra."
+
+#: apps/io.ox/tours/tasks.js:33 module:io.ox/tours
+msgid "To create a new task, click on New in the toolbar."
+msgstr ""
+"Új feladat létrehozásához kattintson az eszköztárban található Új ikonra."
+
+#: apps/io.ox/tours/files.js:61 module:io.ox/tours
+msgid "To create a note, click on New > Add note in the toolbar."
+msgstr ""
+"Új megjegyzés létrehozásához kattintson az eszköztárban található Új > "
+"Megjegyzés hozzáadása ikonra."
+
+#: apps/io.ox/tours/calendar.js:58 module:io.ox/tours
+msgid ""
+"To create recurring appointments, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"Ismétlődő találkozó létrehozásához engedélyezze az Ismétlést. Az ismétlődés "
+"beállításához tartozó funkciók megjelennek."
+
+#: apps/io.ox/tours/tasks.js:63 module:io.ox/tours
+msgid ""
+"To create recurring tasks, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"Ismétlődő feladatok létrehozásához engedélyezze az Ismétlést. Az ismétlődés "
+"beállításához tartozó funkciók megjelennek."
+
+#: apps/io.ox/tours/calendar.js:78 module:io.ox/tours
+msgid "To create the appointment, click on Create at the upper right side."
+msgstr ""
+"A találkozó létrehozásához kattintson a jobb felső részen található "
+"Létrehozás gombra."
+
+#: apps/io.ox/tours/tasks.js:88 module:io.ox/tours
+msgid "To create the task, click on Create."
+msgstr "Feladat létrehozásához kattintson a Létrehozás gombra."
+
+#: apps/io.ox/tours/portal.js:52 module:io.ox/tours
+msgid ""
+"To display a square again or to display further information sources, click "
+"on Customize this page."
+msgstr ""
+"Az elem újbóli megjelenítéséhez vagy további információ eléréséhez "
+"kattintson az ezen az oldalon található Testreszabásra."
+
+#: apps/io.ox/tours/intro.js:76 module:io.ox/tours
+msgid ""
+"To display the help or the settings, click the System menu icon in the menu "
+"bar."
+msgstr ""
+"A súgó vagy a beállítások megjelenítéséhez használja a menüsorban található "
+"Rendszer menüikont."
+
+#: apps/io.ox/tours/contacts.js:47 module:io.ox/tours
+msgid ""
+"To edit multiple contacts at once, enable the checkboxes on the left side of "
+"the contacts. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"Több névjegy egyszerre történő szerkesztéséhez használja a névjegyek bal "
+"oldalán található jelölőnégyzetet. Amennyiben a jelölőnégyzetek nem "
+"láthatók, kattintson a eszköztár jobb oldalán található Nézet > "
+"Jelelölőnégyzetek ikonra."
+
+#: apps/io.ox/tours/tasks.js:100 module:io.ox/tours
+msgid ""
+"To edit multiple tasks at once, enable the checkboxes at the left side of "
+"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
+"on the right side of the toolbar."
+msgstr ""
+"Több feladat egyszerre történő szerkesztéséhez használja a feladatok bal "
+"oldalán található jelölőnégyzetet Amennyiben a jelölőnégyzetek nem láthatók, "
+"kattintson a eszköztár jobb oldalán található Nézet > Jelelölőnégyzetek "
+"ikonra."
+
+#: apps/io.ox/tours/tasks.js:83 module:io.ox/tours
+msgid "To enter billing information, click on Show details."
+msgstr ""
+"A számlázási adatok megtekintéséhez kattintson a Részletek megjelenítésére."
+
+#: apps/io.ox/tours/calendar.js:68 module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. To avoid appointment conflicts, click on Find a free time at "
+"the upper right side."
+msgstr ""
+"További résztvevők meghívásához adja meg azok nevét a Résztvevők alatt "
+"található mezőben. A találkozók ütközésének elkerüléséhez kattintson a jobb "
+"felső oldalon található Szabad idő keresése gombra."
+
+#: apps/io.ox/tours/tasks.js:78 module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. You can add documents as attachment to the task."
+msgstr ""
+"További résztvevők meghívásához adja meg azok nevét a Résztvevők alatt "
+"található mezőben. Mellékletként dokumentumok csatolhatók a feladathoz."
+
+#: apps/io.ox/tours/intro.js:71 module:io.ox/tours
+msgid "To launch an app, click on an entry on the left side of the menu bar."
+msgstr ""
+"Az alkalmazás indításához a menüsáv bal oldali részén lévő bejegyzéshez."
+
+#: apps/io.ox/tours/calendar.js:63 module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr ""
+"Használja az emlékeztető funkciókat, hogy ne felejtse el a találkozókat."
+
+#: apps/io.ox/tours/tasks.js:68 module:io.ox/tours
+msgid "To not miss the task, use the reminder function."
+msgstr "Használja az emlékeztető funkciót, hogy ne felejtse el a feladatot."
+
+#: apps/io.ox/tours/mail.js:97 module:io.ox/tours
+msgid ""
+"To open or close an E-Mail in a conversation, click on a free area in the "
+"header."
+msgstr ""
+"Az E-mail társalgások megnyitásához vagy bezárásához kattintson a fejléc "
+"szabad területére."
+
+#: apps/io.ox/tours/intro.js:102 module:io.ox/tours
+msgid ""
+"To open or close the folder tree, click on View >  Folder view on the right "
+"side of the toolbar."
+msgstr ""
+"A mappastruktúra megnyitásához vagy bezárásához kattintson az eszköztár jobb "
+"oldalán lévő Nézet > Mappanézet ikonra."
+
+#: apps/io.ox/tours/mail.js:113 module:io.ox/tours
+msgid ""
+"To open the E-Mail settings, click the System menu icon on the upper right "
+"side of the menu bar. Select Settings. Click on E-Mail on the left side."
+msgstr ""
+"A levelezés beállításainak megnyitásához kattintson a menüsor jobb felső "
+"részén található Rendszermenü ikonra. Válassza ki a Beállításokat és "
+"kattintson az E-mail beállításokra a bal oldalon."
 
 #: apps/io.ox/tours/settings.js:49 module:io.ox/tours
 msgid ""
@@ -557,102 +645,142 @@ msgid ""
 "menu bar. Select Help. The help for the currently selected app is displayed. "
 "To browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
-msgstr "A súgó megnyitásához kattintson a menüsor jobb felső részén található Rendszer menü ikonjára. Válassza ki a Súgót. Ekkor megjelenik a kiválasztott alkalmazás súgója. A teljes Súgó megtekintéséhez kattintson az oldal felső részén található Kezdőlapra vagy a Tartalomjegyzékre."
+msgstr ""
+"A súgó megnyitásához kattintson a menüsor jobb felső részén található "
+"Rendszer menü ikonjára. Válassza ki a Súgót. Ekkor megjelenik a kiválasztott "
+"alkalmazás súgója. A teljes Súgó megtekintéséhez kattintson az oldal felső "
+"részén található Kezdőlapra vagy a Tartalomjegyzékre."
 
-#: apps/io.ox/tours/settings.js:54 module:io.ox/tours
-msgid "Signing out"
-msgstr "Kijelentkezés"
+#: apps/io.ox/tours/settings.js:31 module:io.ox/tours
+msgid ""
+"To open the settings, click the System menu icon on the upper right side of "
+"the menu bar. Select Settings."
+msgstr ""
+"A beállítások megnyitásához kattintson a menüsor jobb felső részében "
+"található Rendszer menü ikonra és válassza ki a Beállításokat."
+
+#: apps/io.ox/tours/portal.js:36 module:io.ox/tours
+msgid "To read the details, click on an entry in a square."
+msgstr "A részletek olvasásához kattintson az egyik elemre."
+
+#: apps/io.ox/tours/mail.js:102 module:io.ox/tours
+msgid ""
+"To receive information about the sender or other recipients, open the Halo "
+"view by clicking on a name."
+msgstr ""
+"Ha további információt szeretne megtudni a feladóról vagy a többi "
+"címzettről, akkor a nevükre kattintva megnyithatja a Halo nézetet."
+
+#: apps/io.ox/tours/intro.js:107 module:io.ox/tours
+msgid "To search for objects, click the Search icon in the menu bar."
+msgstr ""
+"Az elemek kereséséhez kattintson a menüsorban található Keresés ikonra."
+
+#: apps/io.ox/tours/files.js:36 module:io.ox/tours
+msgid ""
+"To select one of the views List, Icons or Squares, click on View on the "
+"right side of the toolbar."
+msgstr ""
+"Az egyik Ikon- vagy Listanézet kiválasztásához, kattintson az eszköztár "
+"alján található ikonra."
+
+#: apps/io.ox/tours/calendar.js:84 module:io.ox/tours
+msgid ""
+"To select one of the views like Day, Month or List, click on View in the "
+"toolbar. Select a menu entry from the Layout section."
+msgstr ""
+"A nézet kiválasztásához, amely lehet Nap, Hónap vagy Lista, kattintson az "
+"eszköztárban található Nézet ikonra. Válasszon ki egy menüelemet az "
+"Elrendezés részből."
+
+#: apps/io.ox/tours/contacts.js:41 module:io.ox/tours
+msgid ""
+"To send an E-Mail to the contact, click on an E-Mail address or on Send "
+"email in the toolbar."
+msgstr ""
+"Levél küldéséhez kattintson az e-mail címre vagy az eszköztárban található E-"
+"mail küldése ikonra."
+
+#: apps/io.ox/tours/mail.js:75 module:io.ox/tours
+msgid "To send the E-Mail, click on Send"
+msgstr "A levél elküldéséhez kattintson a Küldés gombra"
 
 #: apps/io.ox/tours/settings.js:55 module:io.ox/tours
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
-msgstr "A kijelentkezéshez  kattintson a menüsor jobb felső részében található Rendszer menü ikonra és válassza ki a Kijelentkezést."
+msgstr ""
+"A kijelentkezéshez  kattintson a menüsor jobb felső részében található "
+"Rendszer menü ikonra és válassza ki a Kijelentkezést."
 
-#: apps/io.ox/tours/tasks.js:32 module:io.ox/tours
-msgid "Creating a new task"
-msgstr "Új feladat létrehozása"
+#: apps/io.ox/tours/mail.js:80 module:io.ox/tours
+msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgstr ""
+"A levelek rendezéséhez kattintson a Rendezésre és válasszon egy rendezési "
+"módot."
 
-#: apps/io.ox/tours/tasks.js:33 module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
-msgstr "Új feladat létrehozásához kattintson az eszköztárban található Új ikonra."
+#: apps/io.ox/tours/tasks.js:93 module:io.ox/tours
+msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+msgstr ""
+"A feladatok rendezéséhez kattintson a Rendezésre és válasszon egy rendezési "
+"módot."
 
-#: apps/io.ox/tours/tasks.js:48 module:io.ox/tours
-msgid "Entering the task's data"
-msgstr "Feladatok adatainak megadása"
+#: apps/io.ox/tours/tasks.js:73 module:io.ox/tours
+msgid "To track the editing status, enter the current progress."
+msgstr ""
+"A szerkesztési állapot megtekintéséhez lépjen be a jelenlegi folyamatba."
 
-#: apps/io.ox/tours/tasks.js:49 module:io.ox/tours
-msgid "Enter the subject, the start date, and a description."
-msgstr "Töltse ki a tárgyat, a kezdő dátumot és a leírást."
+#: apps/io.ox/tours/files.js:56 module:io.ox/tours
+msgid "To upload a file, click on New > Upload new file in the toolbar."
+msgstr ""
+"Fájl feltöltéséhez kattintson az eszköztárban található Új > Új fájl "
+"feltöltése ikonra."
 
-#: apps/io.ox/tours/tasks.js:54 module:io.ox/tours
-msgid "Adding further details"
-msgstr "További részletek hozzáadása"
-
-#: apps/io.ox/tours/tasks.js:55 module:io.ox/tours
-msgid "To add further details, click on Expand form."
-msgstr "További adatok hozzáadásához kattintson az Űrlap kibontására."
-
-#: apps/io.ox/tours/tasks.js:62 module:io.ox/tours
-msgid "Creating recurring tasks"
-msgstr "Ismétlődő feladatok létrehozása"
-
-#: apps/io.ox/tours/tasks.js:63 module:io.ox/tours
+#: apps/io.ox/tours/files.js:68 module:io.ox/tours
 msgid ""
-"To create recurring tasks, enable Repeat. Functions for setting the "
-"recurrence parameters are shown."
-msgstr "Ismétlődő feladatok létrehozásához engedélyezze az Ismétlést. Az ismétlődés beállításához tartozó funkciók megjelennek."
-
-#: apps/io.ox/tours/tasks.js:68 module:io.ox/tours
-msgid "To not miss the task, use the reminder function."
-msgstr "Használja az emlékeztető funkciót, hogy ne felejtse el a feladatot."
+"To view further information, click on a file. A pop-up window displays "
+"further details and functions."
+msgstr ""
+"További információ megjelenítéséhez kattintson a fájlra. A további "
+"információ egy felugró ablakban fog megjelenni."
 
 #: apps/io.ox/tours/tasks.js:72 module:io.ox/tours
 msgid "Tracking the editing status"
 msgstr "Szerkesztési állapot nyomon követése"
 
-#: apps/io.ox/tours/tasks.js:73 module:io.ox/tours
-msgid "To track the editing status, enter the current progress."
-msgstr "A szerkesztési állapot megtekintéséhez lépjen be a jelenlegi folyamatba."
+#: apps/io.ox/tours/files.js:55 module:io.ox/tours
+msgid "Uploading a file"
+msgstr "Fájl feltöltése"
 
-#: apps/io.ox/tours/tasks.js:78 module:io.ox/tours
+#: apps/io.ox/tours/files.js:31 module:io.ox/tours
 msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. You can add documents as attachment to the task."
-msgstr "További résztvevők meghívásához adja meg azok nevét a Résztvevők alatt található mezőben. Mellékletként dokumentumok csatolhatók a feladathoz."
+"Use the folder tree to access own, public or shared files. If the folder "
+"tree is hidden, click on View > Folder view on the right side of the toolbar."
+msgstr ""
+"Használja a mappastruktúrát a saját, publikus vagy megosztott fájlok "
+"eléréséhez. Amennyiben a mappa rejtett, kattintson az eszköztár jobb oldalán "
+"található Nézet > Mappanézet ikonra."
 
-#: apps/io.ox/tours/tasks.js:82 module:io.ox/tours
-msgid "Entering billing information"
-msgstr "Belépés a számlázási adatokhoz"
-
-#: apps/io.ox/tours/tasks.js:83 module:io.ox/tours
-msgid "To enter billing information, click on Show details."
-msgstr "A számlázási adatok megtekintéséhez kattintson a Részletek megjelenítésére."
-
-#: apps/io.ox/tours/tasks.js:87 module:io.ox/tours
-msgid "Creating the task"
-msgstr "Feladat létrehozása"
-
-#: apps/io.ox/tours/tasks.js:88 module:io.ox/tours
-msgid "To create the task, click on Create."
-msgstr "Feladat létrehozásához kattintson a Létrehozás gombra."
-
-#: apps/io.ox/tours/tasks.js:92 module:io.ox/tours
-msgid "Sorting tasks"
-msgstr "Feladatok rendezése"
-
-#: apps/io.ox/tours/tasks.js:93 module:io.ox/tours
-msgid "To sort the tasks, click on Sort by. Select a sort criteria."
-msgstr "A feladatok rendezéséhez kattintson a Rendezésre és válasszon egy rendezési módot."
-
-#: apps/io.ox/tours/tasks.js:99 module:io.ox/tours
-msgid "Editing multiple tasks"
-msgstr "Több feladat szerkesztése"
-
-#: apps/io.ox/tours/tasks.js:100 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:117 module:io.ox/tours
 msgid ""
-"To edit multiple tasks at once, enable the checkboxes at the left side of "
-"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
-"on the right side of the toolbar."
-msgstr "Több feladat egyszerre történő szerkesztéséhez használja a feladatok bal oldalán található jelölőnégyzetet Amennyiben a jelölőnégyzetek nem láthatók, kattintson a eszköztár jobb oldalán található Nézet > Jelelölőnégyzetek ikonra."
+"Use the folder tree to open the folder containing the objects that you want "
+"to view in the list."
+msgstr ""
+"Használja a mappastruktúrát, ha egy olyan elemek szeretne megtekinteni a "
+"listában, amely egy mappában van."
 
+#: apps/io.ox/tours/intro.js:122 module:io.ox/tours
+msgid ""
+"Use the list to select an object, show its contents or activate functions."
+msgstr ""
+"Használja a listát egy olyan elem kiválasztásához, amelynek tartalmát "
+"szeretné megnézni, vagy művelet kíván vele végrehajtani."
+
+#: apps/io.ox/tours/calendar.js:62 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:67
+msgid "Using the reminder function"
+msgstr "Emlékeztető funkció használata"
+
+#: apps/io.ox/tours/intro.js:66 module:io.ox/tours
+msgid "Welcome to %s"
+msgstr "Üdvözli a(z) %s"

@@ -15,17 +15,145 @@ msgstr ""
 "20)) ? 1 : 2;\n"
 "X-Generator: Poedit 1.6.9\n"
 
+#: apps/io.ox/tours/calendar.js:72 module:io.ox/tours
+msgid "Adding attachments"
+msgstr "Adăugarea fișierelor atașate"
+
+#: apps/io.ox/tours/tasks.js:54 module:io.ox/tours
+msgid "Adding further details"
+msgstr "Adăugarea detaliilor suplimentare"
+
+#: apps/io.ox/tours/contacts.js:36 module:io.ox/tours
+msgid ""
+"Click on a letter on the left side of the navigation bar in order to display "
+"the corresponding contacts from the selected address book."
+msgstr ""
+"Apăsați pe o literă din partea stângă a barei de navigare pentru a afișa "
+"contactele corespunzătoare din agenda de contacte selectată."
+
+#: apps/io.ox/tours/portal.js:45 module:io.ox/tours
+msgid "Closing a square"
+msgstr "Închiderea unui cadru"
+
+#: apps/io.ox/tours/mail.js:33 module:io.ox/tours
+msgid "Composing a new E-Mail"
+msgstr "Compunerea unui e-mail nou"
+
 #: apps/io.ox/tours/calendar.js:34 module:io.ox/tours
 msgid "Creating a new appointment"
 msgstr "Crearea unei întâlniri noi"
 
-#: apps/io.ox/tours/calendar.js:35 module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr "Pentru a crea o întâlnire nouă, apăsați pe Nou în bara de unelte."
+#: apps/io.ox/tours/contacts.js:30 module:io.ox/tours
+msgid "Creating a new contact"
+msgstr "Crearea unui contact nou"
 
-#: apps/io.ox/tours/calendar.js:51 module:io.ox/tours
-msgid "Entering the appointment's data"
-msgstr "Introducerea datelor întâlnirii"
+#: apps/io.ox/tours/tasks.js:32 module:io.ox/tours
+msgid "Creating a new task"
+msgstr "Crearea unei sarcini noi"
+
+#: apps/io.ox/tours/files.js:60 module:io.ox/tours
+msgid "Creating a note"
+msgstr "Crearea unei note"
+
+#: apps/io.ox/tours/intro.js:93 module:io.ox/tours
+msgid "Creating new items"
+msgstr "Crearea de elemente noi"
+
+#: apps/io.ox/tours/calendar.js:57 module:io.ox/tours
+msgid "Creating recurring appointments"
+msgstr "Crearea de întâlniri periodice"
+
+#: apps/io.ox/tours/tasks.js:62 module:io.ox/tours
+msgid "Creating recurring tasks"
+msgstr "Crearea de sarcini periodice"
+
+#: apps/io.ox/tours/calendar.js:77 module:io.ox/tours
+msgid "Creating the appointment"
+msgstr "Crearea întâlnirii"
+
+#: apps/io.ox/tours/tasks.js:87 module:io.ox/tours
+msgid "Creating the task"
+msgstr "Crearea sarcinii"
+
+#: apps/io.ox/tours/portal.js:51 module:io.ox/tours
+msgid "Customizing the Portal"
+msgstr "Personalizarea portalului"
+
+#: apps/io.ox/tours/intro.js:112 module:io.ox/tours
+msgid ""
+"Depending on the app, the toolbar contains various functions for creating, "
+"editing and organizing objects."
+msgstr ""
+"În funcție de aplicație, bara de unelte conține diverse funcții pentru "
+"crearea, editarea și organizarea obiectelor."
+
+#: apps/io.ox/tours/intro.js:132 module:io.ox/tours
+msgid ""
+"Detailed instructions for the single apps are located in System menu > Help."
+msgstr ""
+"Instrucțiunile detaliate pentru aplicațiile individuale se găsesc în Meniul "
+"sistem > Ajutor."
+
+#: apps/io.ox/tours/files.js:67 module:io.ox/tours
+msgid "Displaying information"
+msgstr "Afișarea de informații"
+
+#: apps/io.ox/tours/intro.js:75 module:io.ox/tours
+msgid "Displaying the help or the settings"
+msgstr "Afișarea ajutorului și setărilor"
+
+#: apps/io.ox/tours/portal.js:40 module:io.ox/tours
+msgid "Drag and drop"
+msgstr "Glisarea și fixarea"
+
+#: apps/io.ox/tours/settings.js:44 module:io.ox/tours
+msgid ""
+"Edit a setting on the right side. In most of the cases, the changes are "
+"activated immediately."
+msgstr ""
+"Editați o setare în partea dreaptă. În cele mai multe cazuri, modificările "
+"sunt activate imediat."
+
+#: apps/io.ox/tours/mail.js:106 module:io.ox/tours
+msgid "Editing multiple E-Mails"
+msgstr "Editarea mai multor e-mailuri"
+
+#: apps/io.ox/tours/contacts.js:46 module:io.ox/tours
+msgid "Editing multiple contacts"
+msgstr "Editarea mai multor contacte"
+
+#: apps/io.ox/tours/tasks.js:99 module:io.ox/tours
+msgid "Editing multiple tasks"
+msgstr "Editarea mai multor sarcini"
+
+#: apps/io.ox/tours/settings.js:43 module:io.ox/tours
+msgid "Editing settings"
+msgstr "Editarea setărilor"
+
+#: apps/io.ox/tours/mail.js:69 module:io.ox/tours
+msgid ""
+"Enter the E-Mail text into the main area. If the text format was set to HTMl "
+"in the options, you can format the E-Mail text. To do so select a text part "
+"and then click an icon in the formatting bar."
+msgstr ""
+"Introduceți textul mesajului în zona principală. Dacă formatul text a fost "
+"setat din opțiuni pe HTML, puteți formata textul mesajului. Pentru formatare "
+"selectați o parte a textului, apoi apăsați pe o pictogramă din bara de "
+"format."
+
+#: apps/io.ox/tours/mail.js:48 module:io.ox/tours
+msgid ""
+"Enter the recipient's name into the recipients field. As soon as you typed "
+"the first letters, suggestions from the address books are displayed. To "
+"accept a recipient suggestion, click on it."
+msgstr ""
+"Introduceți numele destinatarului în câmpul corespunzător. În timp ce "
+"introduceți primele litere, se afișează sugestii din agenda de contacte. "
+"Apăsați pe sugestia dorită pentru a o accepta."
+
+#: apps/io.ox/tours/mail.js:59 module:io.ox/tours
+msgid "Enter the subject into the subject field."
+msgstr "Introduceți subiectul în câmpul corespunzător."
 
 #: apps/io.ox/tours/calendar.js:52 module:io.ox/tours
 msgid ""
@@ -35,71 +163,200 @@ msgstr ""
 "Introduceți subiectul, data de început și de sfârșit a întâlnirii. Celelalte "
 "detalii sunt opționale."
 
-#: apps/io.ox/tours/calendar.js:57 module:io.ox/tours
-msgid "Creating recurring appointments"
-msgstr "Crearea de întâlniri periodice"
+#: apps/io.ox/tours/tasks.js:49 module:io.ox/tours
+msgid "Enter the subject, the start date, and a description."
+msgstr "Introduceți subiectul, data de început și o descriere."
 
-#: apps/io.ox/tours/calendar.js:58 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:82 module:io.ox/tours
+msgid "Entering billing information"
+msgstr "Introducerea de informații de facturare"
+
+#: apps/io.ox/tours/mail.js:68 module:io.ox/tours
+msgid "Entering the E-Mail text"
+msgstr "Introducerea textului e-mailului"
+
+#: apps/io.ox/tours/calendar.js:51 module:io.ox/tours
+msgid "Entering the appointment's data"
+msgstr "Introducerea datelor întâlnirii"
+
+#: apps/io.ox/tours/mail.js:47 module:io.ox/tours
+msgid "Entering the recipient's name"
+msgstr "Introducerea numelui destinatarului"
+
+#: apps/io.ox/tours/mail.js:58 module:io.ox/tours
+msgid "Entering the subject"
+msgstr "Introducerea subiectului"
+
+#: apps/io.ox/tours/tasks.js:48 module:io.ox/tours
+msgid "Entering the task's data"
+msgstr "Introducerea datelor sarcinii"
+
+#: apps/io.ox/tours/files.js:30 module:io.ox/tours
+msgid "Folder tree"
+msgstr "Arborele de dosare"
+
+#: apps/io.ox/tours/calendar.js:73 module:io.ox/tours
+msgid "Further down you can add documents as attachments to the appointment."
+msgstr "Mai jos puteți adăuga documente ca fișiere atașate întâlnirii ."
+
+#: apps/io.ox/tours/mail.js:63 module:io.ox/tours
+msgid "Further functions"
+msgstr "Funcții suplimentare"
+
+#: apps/io.ox/tours/intro.js:131 module:io.ox/tours
+msgid "Further information"
+msgstr "Informații suplimentare"
+
+#. Tour name; general introduction
+#: apps/io.ox/tours/intro.js:46 module:io.ox/tours
+msgid "Getting started"
+msgstr "Introducere"
+
+#: apps/io.ox/tours/main.js:77 module:io.ox/tours
+msgid "Guided tour for this app"
+msgstr "Vizită ghidată pentru această aplicație"
+
+#: apps/io.ox/tours/mail.js:101 module:io.ox/tours
+msgid "Halo view"
+msgstr "Vedere halou"
+
+#: apps/io.ox/tours/settings.js:36 module:io.ox/tours
+msgid "How the settings are organized"
+msgstr "Cum sunt organizate setările"
+
+#: apps/io.ox/tours/mail.js:92 module:io.ox/tours
 msgid ""
-"To create recurring appointments, enable Repeat. Functions for setting the "
-"recurrence parameters are shown."
+"If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
+"separate window."
 msgstr ""
-"Pentru a crea întâlniri periodice, activați funcția Repetă. Se vor afișa "
-"funcțiile pentru setarea parametrilor periodicității."
+"Printr-un dublu clic pe un e-mail din listă, e-mailul se deschide într-o "
+"fereastră separată."
 
-#: apps/io.ox/tours/calendar.js:62 module:io.ox/tours
-#: apps/io.ox/tours/tasks.js:67
-msgid "Using the reminder function"
-msgstr "Utilizarea funcției de memento"
+#: apps/io.ox/tours/portal.js:46 module:io.ox/tours
+msgid "If you no longer want to display a square, click the cross."
+msgstr "Dacă nu mai doriți afișarea cadrului, apăsați pe cruce."
 
-#: apps/io.ox/tours/calendar.js:63 module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "Pentru a nu rata întâlnirea, utilizați funcția de memento."
+#: apps/io.ox/tours/intro.js:89 module:io.ox/tours
+msgid ""
+"In case of new notifications, e.g. appointment invitations, the info area is "
+"opened."
+msgstr ""
+"În cazul unor notificări noi, de ex. invitații pentru întâlniri, se deschide "
+"zona de informații."
+
+#: apps/io.ox/tours/mail.js:107 module:io.ox/tours
+msgid ""
+"In order to edit multiple E-Mails at once, enable the checkboxes on the left "
+"side of the E-Mails. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"Pentru a edita mai multe e-mailuri în același timp, activați casetele de "
+"selectare din stânga e-mailurilor. În cazul în care casetele de selectare nu "
+"sunt afișate, apăsați pe Vedere > Casete de selectare în partea dreaptă a "
+"barei de unelte."
+
+#: apps/io.ox/tours/mail.js:64 module:io.ox/tours
+msgid ""
+"In this area you can find further functions, e.g. for adding attachments."
+msgstr ""
+"În această zonă găsiți funcțiile suplimentare, de ex. pentru adăugarea de "
+"fișiere atașate."
 
 #: apps/io.ox/tours/calendar.js:67 module:io.ox/tours
 #: apps/io.ox/tours/tasks.js:77
 msgid "Inviting other participants"
 msgstr "Invitarea altor participanți "
 
-#: apps/io.ox/tours/calendar.js:68 module:io.ox/tours
-msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. To avoid appointment conflicts, click on Find a free time at "
-"the upper right side."
-msgstr ""
-"Pentru a invita alți participanți, introduceți numele acestora în câmpul de "
-"sub Participanți. Pentru a evita conflictele între întâlniri, apăsați pe "
-"Găsește un interval de timp liber în partea dreaptă sus."
+#: apps/io.ox/tours/intro.js:70 module:io.ox/tours
+msgid "Launching an app"
+msgstr "Lansarea unei aplicații"
 
-#: apps/io.ox/tours/calendar.js:72 module:io.ox/tours
-msgid "Adding attachments"
-msgstr "Adăugarea fișierelor atașate"
+#: apps/io.ox/tours/contacts.js:35 module:io.ox/tours
+msgid "Navigation bar"
+msgstr "Bara de navigare"
 
-#: apps/io.ox/tours/calendar.js:73 module:io.ox/tours
-msgid "Further down you can add documents as attachments to the appointment."
-msgstr "Mai jos puteți adăuga documente ca fișiere atașate întâlnirii ."
+#: apps/io.ox/tours/mail.js:91 module:io.ox/tours
+msgid "Opening an E-Mail in a separate window"
+msgstr "Deschiderea unui e-mail într-o fereastră separată"
 
-#: apps/io.ox/tours/calendar.js:77 module:io.ox/tours
-msgid "Creating the appointment"
-msgstr "Crearea întâlnirii"
+#: apps/io.ox/tours/intro.js:101 module:io.ox/tours
+msgid "Opening or closing the folder tree"
+msgstr "Deschiderea sau închiderea arborelui de dosare"
 
-#: apps/io.ox/tours/calendar.js:78 module:io.ox/tours
-msgid "To create the appointment, click on Create at the upper right side."
-msgstr "Pentru a crea întâlnirea, apăsați pe Creează în partea dreaptă sus."
+#: apps/io.ox/tours/mail.js:112 module:io.ox/tours
+msgid "Opening the E-Mail settings"
+msgstr "Deschiderea setărilor de e-mail"
+
+#: apps/io.ox/tours/settings.js:48 module:io.ox/tours
+msgid "Opening the help"
+msgstr "Deschiderea ajutorului"
+
+#: apps/io.ox/tours/settings.js:30 module:io.ox/tours
+msgid "Opening the settings"
+msgstr "Deschiderea setărilor"
+
+#: apps/io.ox/tours/mail.js:96 module:io.ox/tours
+msgid "Reading E-Mail conversations"
+msgstr "Citirea conversațiilor de e-mail"
+
+#: apps/io.ox/tours/portal.js:35 module:io.ox/tours
+msgid "Reading the details"
+msgstr "Citirea detaliilor"
+
+#: apps/io.ox/tours/intro.js:106 module:io.ox/tours
+msgid "Searching for objects"
+msgstr "Căutarea de obiecte"
 
 #: apps/io.ox/tours/calendar.js:83 module:io.ox/tours
 #: apps/io.ox/tours/files.js:35 apps/io.ox/tours/mail.js:86
 msgid "Selecting a view"
 msgstr "Selectare unei vederi"
 
-#: apps/io.ox/tours/calendar.js:84 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:40 module:io.ox/tours
+msgid "Sending an E-Mail to a contact"
+msgstr "Trimiterea unui e-mail către un contact"
+
+#: apps/io.ox/tours/mail.js:74 module:io.ox/tours
+msgid "Sending the E-Mail"
+msgstr "Trimiterea e-mailului"
+
+#: apps/io.ox/tours/settings.js:54 module:io.ox/tours
+msgid "Signing out"
+msgstr "Deconectare"
+
+#: apps/io.ox/tours/tasks.js:92 module:io.ox/tours
+msgid "Sorting tasks"
+msgstr "Sortarea sarcinilor"
+
+#: apps/io.ox/tours/mail.js:79 module:io.ox/tours
+msgid "Sorting your E-Mails"
+msgstr "Sortarea e-mailurilor"
+
+#: apps/io.ox/tours/intro.js:126 module:io.ox/tours
+msgid "The Detail view"
+msgstr "Vederea detaliată"
+
+#: apps/io.ox/tours/intro.js:127 module:io.ox/tours
 msgid ""
-"To select one of the views like Day, Month or List, click on View in the "
-"toolbar. Select a menu entry from the Layout section."
+"The Detail view displays an object's content. Depending on the app, further "
+"functions for organizing objects can be found in the Detail view."
 msgstr ""
-"Pentru a selecta una dintre vederi, cum ar fi pe Zile, pe Luni sau Listă, "
-"apăsați pe Vedere în bara de unelte. Selectați o intrare din meniu în "
-"secțiunea Aspect."
+"Vederea detaliată afișează conținutul obiectului. În funcție de aplicație, "
+"în vederea detaliată se pot găsi funcții suplimentare pentru organizarea "
+"obiectelor."
+
+#: apps/io.ox/tours/files.js:45 module:io.ox/tours
+msgid "The Icons view"
+msgstr "Vederea pe pictograme"
+
+#: apps/io.ox/tours/files.js:46 module:io.ox/tours
+msgid ""
+"The Icons view displays an icon and the file name for each file. Click on an "
+"icon to view further details and functions in the pop-up."
+msgstr ""
+"Vederea pe pictograme afișează o pictogramă și numele fișierului pentru "
+"fiecare fișier. Apăsați pe o pictogramă pentru a vizualiza detaliile și "
+"funcțiile suplimentare într-o fereastră pop-up. "
 
 #: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
 #: apps/io.ox/tours/files.js:40
@@ -116,88 +373,6 @@ msgstr ""
 "un clic pe o întâlnire, datele referitoare la întâlnire și anumite funcții "
 "se afișează în vederea detaliată."
 
-#: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
-msgid "The calendar views"
-msgstr "Vederile calendarului"
-
-#: apps/io.ox/tours/calendar.js:106 module:io.ox/tours
-msgid ""
-"The calendar views display a calendar sheet with the appointments for the "
-"selected time range."
-msgstr ""
-"Vederile calendar afișează o foaie de calendar cu întâlnirile pentru "
-"intervalul de timp selectat."
-
-#: apps/io.ox/tours/contacts.js:30 module:io.ox/tours
-msgid "Creating a new contact"
-msgstr "Crearea unui contact nou"
-
-#: apps/io.ox/tours/contacts.js:31 module:io.ox/tours
-msgid "To create a new contact, click on New > Add contact in the toolbar."
-msgstr ""
-"Pentru a crea un contact nou, apăsați pe Nou > Adaugă contact în bara de "
-"unelte."
-
-#: apps/io.ox/tours/contacts.js:35 module:io.ox/tours
-msgid "Navigation bar"
-msgstr "Bara de navigare"
-
-#: apps/io.ox/tours/contacts.js:36 module:io.ox/tours
-msgid ""
-"Click on a letter on the left side of the navigation bar in order to display "
-"the corresponding contacts from the selected address book."
-msgstr ""
-"Apăsați pe o literă din partea stângă a barei de navigare pentru a afișa "
-"contactele corespunzătoare din agenda de contacte selectată."
-
-#: apps/io.ox/tours/contacts.js:40 module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
-msgstr "Trimiterea unui e-mail către un contact"
-
-#: apps/io.ox/tours/contacts.js:41 module:io.ox/tours
-msgid ""
-"To send an E-Mail to the contact, click on an E-Mail address or on Send "
-"email in the toolbar."
-msgstr ""
-"Pentru a trimite un e-mail unui contact, apăsați pe o adresă de e-mail sau "
-"pe Trimite un e-mail în bara de unelte."
-
-#: apps/io.ox/tours/contacts.js:46 module:io.ox/tours
-msgid "Editing multiple contacts"
-msgstr "Editarea mai multor contacte"
-
-#: apps/io.ox/tours/contacts.js:47 module:io.ox/tours
-msgid ""
-"To edit multiple contacts at once, enable the checkboxes on the left side of "
-"the contacts. If the checkboxes are not displayed, click on View > "
-"Checkboxes on the right side of the toolbar."
-msgstr ""
-"Pentru a edita mai multe contacte în același timp, activați casetele de "
-"selectare din stânga contactelor. În cazul în care casetele de selctare nu "
-"sunt afișate, apăsați pe Vedere > Casete de selectare în partea dreaptă a "
-"barei de unelte."
-
-#: apps/io.ox/tours/files.js:30 module:io.ox/tours
-msgid "Folder tree"
-msgstr "Arborele de dosare"
-
-#: apps/io.ox/tours/files.js:31 module:io.ox/tours
-msgid ""
-"Use the folder tree to access own, public or shared files. If the folder "
-"tree is hidden, click on View > Folder view on the right side of the toolbar."
-msgstr ""
-"Utilizați arborele de dosare pentru a accesa fișierele proprii, publice sau "
-"partajate. Dacă arborele de dosare este ascuns, apăsați pe Vedere > Vedere "
-"dosar în partea dreaptă a barei de unelte."
-
-#: apps/io.ox/tours/files.js:36 module:io.ox/tours
-msgid ""
-"To select one of the views List, Icons or Squares, click on View on the "
-"right side of the toolbar."
-msgstr ""
-"Pentru a selecta una dintre vederile Listă, Pictograme sau Cadre, apăsați pe "
-"Vedere în partea dreaptă a barei de unelte."
-
 #: apps/io.ox/tours/files.js:41 module:io.ox/tours
 msgid ""
 "The List view shows details like the size and date of change. Use the "
@@ -209,18 +384,30 @@ msgstr ""
 "fișier pentru a vizualiza detaliile și funcțiile suplimentare într-o "
 "fereastră pop-up. "
 
-#: apps/io.ox/tours/files.js:45 module:io.ox/tours
-msgid "The Icons view"
-msgstr "Vederea pe pictograme"
+#: apps/io.ox/tours/intro.js:82 module:io.ox/tours
+msgid "The New objects icon"
+msgstr "Pictograma Obiecte noi"
 
-#: apps/io.ox/tours/files.js:46 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:83 module:io.ox/tours
 msgid ""
-"The Icons view displays an icon and the file name for each file. Click on an "
-"icon to view further details and functions in the pop-up."
+"The New objects icon shows the number of unread E-Mails or other "
+"notifications. If clicking the icon, the info area opens."
 msgstr ""
-"Vederea pe pictograme afișează o pictogramă și numele fișierului pentru "
-"fiecare fișier. Apăsați pe o pictogramă pentru a vizualiza detaliile și "
-"funcțiile suplimentare într-o fereastră pop-up. "
+"Pictograma pentru obiecte noi afișează numărul de e-mailuri sau alte "
+"notificări necitite . Atunci când apăsați pe pictogramă, se deschide zona de "
+"informații."
+
+#: apps/io.ox/tours/portal.js:30 module:io.ox/tours
+msgid "The Portal"
+msgstr "Portalul"
+
+#: apps/io.ox/tours/portal.js:31 module:io.ox/tours
+msgid ""
+"The Portal informs you about current E-Mails, appointments or social network "
+"news."
+msgstr ""
+"Portalul vă informează despre e-mailurile, întâlnirile sau știrile din "
+"rețelele sociale curente."
 
 #: apps/io.ox/tours/files.js:50 module:io.ox/tours
 msgid "The Tiles view"
@@ -235,408 +422,29 @@ msgstr ""
 "pe o pictogramă pentru a vizualiza detaliile și funcțiile suplimentare într-"
 "o fereastră pop-up. "
 
-#: apps/io.ox/tours/files.js:55 module:io.ox/tours
-msgid "Uploading a file"
-msgstr "Încărcarea unui fișier"
+#: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
+msgid "The calendar views"
+msgstr "Vederile calendarului"
 
-#: apps/io.ox/tours/files.js:56 module:io.ox/tours
-msgid "To upload a file, click on New > Upload new file in the toolbar."
-msgstr ""
-"Pentru a încărca un fișier, apăsați pe Nou > Încarcă fișier nou în bara de "
-"unelte."
-
-#: apps/io.ox/tours/files.js:60 module:io.ox/tours
-msgid "Creating a note"
-msgstr "Crearea unei note"
-
-#: apps/io.ox/tours/files.js:61 module:io.ox/tours
-msgid "To create a note, click on New > Add note in the toolbar."
-msgstr "Pentru a crea o notă, apăsați pe Nou >Adaugă notă în bara de unelte."
-
-#: apps/io.ox/tours/files.js:67 module:io.ox/tours
-msgid "Displaying information"
-msgstr "Afișarea de informații"
-
-#: apps/io.ox/tours/files.js:68 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:106 module:io.ox/tours
 msgid ""
-"To view further information, click on a file. A pop-up window displays "
-"further details and functions."
+"The calendar views display a calendar sheet with the appointments for the "
+"selected time range."
 msgstr ""
-"Pentru a vizualiza informații suplimentare, apăsați pe un fișier. Detaliile "
-"și funcțiile suplimentare se afișează într-o fereastră pop-up."
+"Vederile calendar afișează o foaie de calendar cu întâlnirile pentru "
+"intervalul de timp selectat."
 
-#. Tour name; general introduction
-#: apps/io.ox/tours/intro.js:46 module:io.ox/tours
-msgid "Getting started"
-msgstr "Introducere"
-
-#: apps/io.ox/tours/intro.js:63 module:io.ox/tours
-msgid "Welcome to %s"
-msgstr "Bine ați venit la %s"
-
-#: apps/io.ox/tours/intro.js:64 module:io.ox/tours
-msgid ""
-"This guided tour will briefly introduce you to the product. Get more "
-"detailed information in the tours for the single apps or in the online help."
-msgstr ""
-"Această vizită ghidată vă va prezenta rapid produsul. Puteți obține mai "
-"multe informații în vizitele pentru aplicațiile individuale sau în ajutorul "
-"online."
-
-#: apps/io.ox/tours/intro.js:67 module:io.ox/tours
-msgid "Launching an app"
-msgstr "Lansarea unei aplicații"
-
-#: apps/io.ox/tours/intro.js:68 module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
-msgstr ""
-"Pentru a lansa o aplicație, apăsați pe o intrare din partea stângă a barei "
-"de meniu."
-
-#: apps/io.ox/tours/intro.js:72 module:io.ox/tours
-msgid "Displaying the help or the settings"
-msgstr "Afișarea ajutorului și setărilor"
-
-#: apps/io.ox/tours/intro.js:73 module:io.ox/tours
-msgid ""
-"To display the help or the settings, click the System menu icon in the menu "
-"bar."
-msgstr ""
-"Pentru a afișa ajutorul sau setările, apăsați pe pictograma Meniu sistem din "
-"bara de meniu."
-
-#: apps/io.ox/tours/intro.js:79 module:io.ox/tours
-msgid "The New objects icon"
-msgstr "Pictograma Obiecte noi"
-
-#: apps/io.ox/tours/intro.js:80 module:io.ox/tours
-msgid ""
-"The New objects icon shows the number of unread E-Mails or other "
-"notifications. If clicking the icon, the info area opens."
-msgstr ""
-"Pictograma pentru obiecte noi afișează numărul de e-mailuri sau alte "
-"notificări necitite . Atunci când apăsați pe pictogramă, se deschide zona de "
-"informații."
-
-#: apps/io.ox/tours/intro.js:85 module:io.ox/tours
-msgid "The info area"
-msgstr "Zona de informații"
-
-#: apps/io.ox/tours/intro.js:86 module:io.ox/tours
-msgid ""
-"In case of new notifications, e.g. appointment invitations, the info area is "
-"opened."
-msgstr ""
-"În cazul unor notificări noi, de ex. invitații pentru întâlniri, se deschide "
-"zona de informații."
-
-#: apps/io.ox/tours/intro.js:90 module:io.ox/tours
-msgid "Creating new items"
-msgstr "Crearea de elemente noi"
-
-#: apps/io.ox/tours/intro.js:91 module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
-msgstr ""
-"Pentru a crea un e-mail nou, apăsați pe Creează e-mail nou în bara de unelte."
-
-#: apps/io.ox/tours/intro.js:98 module:io.ox/tours
-msgid "Opening or closing the folder tree"
-msgstr "Deschiderea sau închiderea arborelui de dosare"
-
-#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
-msgid ""
-"To open or close the folder tree, click on View >  Folder view on the right "
-"side of the toolbar."
-msgstr ""
-"Pentru a deschide sau a închide arborele de dosare, apăsați pe Vedere > "
-"Vedere dosar în partea dreaptă a barei de unelte. "
-
-#: apps/io.ox/tours/intro.js:103 module:io.ox/tours
-msgid "Searching for objects"
-msgstr "Căutarea de obiecte"
-
-#: apps/io.ox/tours/intro.js:104 module:io.ox/tours
-msgid "To search for objects, click the Search icon in the menu bar."
-msgstr ""
-"Pentru a căuta anumite obiecte,  apăsați pe pictograma Căutare din bara de "
-"meniu."
-
-#: apps/io.ox/tours/intro.js:108 module:io.ox/tours
-msgid "The toolbar"
-msgstr "Bara de unelte"
-
-#: apps/io.ox/tours/intro.js:109 module:io.ox/tours
-msgid ""
-"Depending on the app, the toolbar contains various functions for creating, "
-"editing and organizing objects."
-msgstr ""
-"În funcție de aplicație, bara de unelte conține diverse funcții pentru "
-"crearea, editarea și organizarea obiectelor."
-
-#: apps/io.ox/tours/intro.js:113 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:116 module:io.ox/tours
 msgid "The folder tree"
 msgstr "Arborele de dosare"
 
-#: apps/io.ox/tours/intro.js:114 module:io.ox/tours
-msgid ""
-"Use the folder tree to open the folder containing the objects that you want "
-"to view in the list."
-msgstr ""
-"Utilzați arborele de dosare pentru a deschide dosarul care conține obiectele "
-"pe care doriți să le vizualizați în listă."
+#: apps/io.ox/tours/intro.js:88 module:io.ox/tours
+msgid "The info area"
+msgstr "Zona de informații"
 
-#: apps/io.ox/tours/intro.js:118 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:121 module:io.ox/tours
 msgid "The list"
 msgstr "Lista"
-
-#: apps/io.ox/tours/intro.js:119 module:io.ox/tours
-msgid ""
-"Use the list to select an object, show its contents or activate functions."
-msgstr ""
-"Utilizați lista pentru a selecta un obiect, a afișa conținutul acestuia sau "
-"a activa anumite funcții."
-
-#: apps/io.ox/tours/intro.js:123 module:io.ox/tours
-msgid "The Detail view"
-msgstr "Vederea detaliată"
-
-#: apps/io.ox/tours/intro.js:124 module:io.ox/tours
-msgid ""
-"The Detail view displays an object's content. Depending on the app, further "
-"functions for organizing objects can be found in the Detail view."
-msgstr ""
-"Vederea detaliată afișează conținutul obiectului. În funcție de aplicație, "
-"în vederea detaliată se pot găsi funcții suplimentare pentru organizarea "
-"obiectelor."
-
-#: apps/io.ox/tours/intro.js:128 module:io.ox/tours
-msgid "Further information"
-msgstr "Informații suplimentare"
-
-#: apps/io.ox/tours/intro.js:129 module:io.ox/tours
-msgid ""
-"Detailed instructions for the single apps are located in System menu > Help."
-msgstr ""
-"Instrucțiunile detaliate pentru aplicațiile individuale se găsesc în Meniul "
-"sistem > Ajutor."
-
-#: apps/io.ox/tours/mail.js:33 module:io.ox/tours
-msgid "Composing a new E-Mail"
-msgstr "Compunerea unui e-mail nou"
-
-#: apps/io.ox/tours/mail.js:34 module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
-msgstr "Pentru a compune un e-mail nou, apăsați pe Compune în bara de unelte."
-
-#: apps/io.ox/tours/mail.js:47 module:io.ox/tours
-msgid "Entering the recipient's name"
-msgstr "Introducerea numelui destinatarului"
-
-#: apps/io.ox/tours/mail.js:48 module:io.ox/tours
-msgid ""
-"Enter the recipient's name into the recipients field. As soon as you typed "
-"the first letters, suggestions from the address books are displayed. To "
-"accept a recipient suggestion, click on it."
-msgstr ""
-"Introduceți numele destinatarului în câmpul corespunzător. În timp ce "
-"introduceți primele litere, se afișează sugestii din agenda de contacte. "
-"Apăsați pe sugestia dorită pentru a o accepta."
-
-#: apps/io.ox/tours/mail.js:58 module:io.ox/tours
-msgid "Entering the subject"
-msgstr "Introducerea subiectului"
-
-#: apps/io.ox/tours/mail.js:59 module:io.ox/tours
-msgid "Enter the subject into the subject field."
-msgstr "Introduceți subiectul în câmpul corespunzător."
-
-#: apps/io.ox/tours/mail.js:63 module:io.ox/tours
-msgid "Further functions"
-msgstr "Funcții suplimentare"
-
-#: apps/io.ox/tours/mail.js:64 module:io.ox/tours
-msgid ""
-"In this area you can find further functions, e.g. for adding attachments."
-msgstr ""
-"În această zonă găsiți funcțiile suplimentare, de ex. pentru adăugarea de "
-"fișiere atașate."
-
-#: apps/io.ox/tours/mail.js:68 module:io.ox/tours
-msgid "Entering the E-Mail text"
-msgstr "Introducerea textului e-mailului"
-
-#: apps/io.ox/tours/mail.js:69 module:io.ox/tours
-msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTMl "
-"in the options, you can format the E-Mail text. To do so select a text part "
-"and then click an icon in the formatting bar."
-msgstr ""
-"Introduceți textul mesajului în zona principală. Dacă formatul text a "
-"fost setat din opțiuni pe HTML, puteți formata textul mesajului. Pentru "
-"formatare selectați o parte a textului, apoi apăsați pe o pictogramă din "
-"bara de format."
-
-#: apps/io.ox/tours/mail.js:74 module:io.ox/tours
-msgid "Sending the E-Mail"
-msgstr "Trimiterea e-mailului"
-
-#: apps/io.ox/tours/mail.js:75 module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
-msgstr "Pentru a trimite un e-mail, apăsați pe Trimite"
-
-#: apps/io.ox/tours/mail.js:79 module:io.ox/tours
-msgid "Sorting your E-Mails"
-msgstr "Sortarea e-mailurilor"
-
-#: apps/io.ox/tours/mail.js:80 module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
-msgstr ""
-"Pentru sortarea e-mailurilor, apăsați pe Sortează după. Selectați un "
-"criteriu de sortare."
-
-#: apps/io.ox/tours/mail.js:87 module:io.ox/tours
-msgid ""
-"To choose between the different views. click on View in the toolbar. Select "
-"a menu entry in the layout."
-msgstr ""
-"Pentru a alege între diferitele vederi, apăsați pe Vedere în bara de unelte. "
-"Selectați o intrare din meniu în aspect."
-
-#: apps/io.ox/tours/mail.js:91 module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
-msgstr "Deschiderea unui e-mail într-o fereastră separată"
-
-#: apps/io.ox/tours/mail.js:92 module:io.ox/tours
-msgid ""
-"If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
-"separate window."
-msgstr ""
-"Printr-un dublu clic pe un e-mail din listă, e-mailul se deschide într-o "
-"fereastră separată."
-
-#: apps/io.ox/tours/mail.js:96 module:io.ox/tours
-msgid "Reading E-Mail conversations"
-msgstr "Citirea conversațiilor de e-mail"
-
-#: apps/io.ox/tours/mail.js:97 module:io.ox/tours
-msgid ""
-"To open or close an E-Mail in a conversation, click on a free area in the "
-"header."
-msgstr ""
-"Pentru a deschide sau a închide un e-mail dintr-o conversație, apăsați pe o "
-"zonă liberă din antet."
-
-#: apps/io.ox/tours/mail.js:101 module:io.ox/tours
-msgid "Halo view"
-msgstr "Vedere halou"
-
-#: apps/io.ox/tours/mail.js:102 module:io.ox/tours
-msgid ""
-"To receive information about the sender or other recipients, open the Halo "
-"view by clicking on a name."
-msgstr ""
-"Pentru a primi informații despre expeditor sau alți destinatari, deschideți "
-"vederea haloului apăsând pe un nume."
-
-#: apps/io.ox/tours/mail.js:106 module:io.ox/tours
-msgid "Editing multiple E-Mails"
-msgstr "Editarea mai multor e-mailuri"
-
-#: apps/io.ox/tours/mail.js:107 module:io.ox/tours
-msgid ""
-"In order to edit multiple E-Mails at once, enable the checkboxes on the left "
-"side of the E-Mails. If the checkboxes are not displayed, click on View > "
-"Checkboxes on the right side of the toolbar."
-msgstr ""
-"Pentru a edita mai multe e-mailuri în același timp, activați casetele de "
-"selectare din stânga e-mailurilor. În cazul în care casetele de selectare nu "
-"sunt afișate, apăsați pe Vedere > Casete de selectare în partea dreaptă a "
-"barei de unelte."
-
-#: apps/io.ox/tours/mail.js:112 module:io.ox/tours
-msgid "Opening the E-Mail settings"
-msgstr "Deschiderea setărilor de e-mail"
-
-#: apps/io.ox/tours/mail.js:113 module:io.ox/tours
-msgid ""
-"To open the E-Mail settings, click the System menu icon on the upper right "
-"side of the menu bar. Select Settings. Click on E-Mail on the left side."
-msgstr ""
-"Pentru a deschide setările de e-mail, apăsați pe pictograma Meniu sistem din "
-"partea dreaptă sus a barei de meniu. Selectați Setări. Apăsați pe E-mail în "
-"partea stângă."
-
-#: apps/io.ox/tours/main.js:77 module:io.ox/tours
-msgid "Guided tour for this app"
-msgstr "Vizită ghidată pentru această aplicație"
-
-#: apps/io.ox/tours/portal.js:30 module:io.ox/tours
-msgid "The Portal"
-msgstr "Portalul"
-
-#: apps/io.ox/tours/portal.js:31 module:io.ox/tours
-msgid ""
-"The Portal informs you about current E-Mails, appointments or social network "
-"news."
-msgstr ""
-"Portalul vă informează despre e-mailurile, întâlnirile sau știrile din "
-"rețelele sociale curente."
-
-#: apps/io.ox/tours/portal.js:35 module:io.ox/tours
-msgid "Reading the details"
-msgstr "Citirea detaliilor"
-
-#: apps/io.ox/tours/portal.js:36 module:io.ox/tours
-msgid "To read the details, click on an entry in a square."
-msgstr "Pentru a citi detaliile, apăsați pe o intrare într-un cadru."
-
-#: apps/io.ox/tours/portal.js:40 module:io.ox/tours
-msgid "Drag and drop"
-msgstr "Glisarea și fixarea"
-
-#: apps/io.ox/tours/portal.js:41 module:io.ox/tours
-msgid ""
-"To change the layout, drag a square's title to another position and drop it "
-"there."
-msgstr ""
-"Pentru a schimba aspectul, glisați titlul unui cadru într-o altă poziție și "
-"fixați-l acolo."
-
-#: apps/io.ox/tours/portal.js:45 module:io.ox/tours
-msgid "Closing a square"
-msgstr "Închiderea unui cadru"
-
-#: apps/io.ox/tours/portal.js:46 module:io.ox/tours
-msgid "If you no longer want to display a square, click the cross."
-msgstr "Dacă nu mai doriți afișarea cadrului, apăsați pe cruce."
-
-#: apps/io.ox/tours/portal.js:51 module:io.ox/tours
-msgid "Customizing the Portal"
-msgstr "Personalizarea portalului"
-
-#: apps/io.ox/tours/portal.js:52 module:io.ox/tours
-msgid ""
-"To display a square again or to display further information sources, click "
-"on Customize this page."
-msgstr ""
-"Pentru a afișa un cadru din nou sau pentru a afișa surse de informații "
-"suplimentare, apăsați pe Personalizează pagina."
-
-#: apps/io.ox/tours/settings.js:30 module:io.ox/tours
-msgid "Opening the settings"
-msgstr "Deschiderea setărilor"
-
-#: apps/io.ox/tours/settings.js:31 module:io.ox/tours
-msgid ""
-"To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
-msgstr ""
-"Pentru a deschide setările, apăsați pe pictograma Meniu sistem din partea "
-"dreaptă sus a barei de meniu. Selectați Setări."
-
-#: apps/io.ox/tours/settings.js:36 module:io.ox/tours
-msgid "How the settings are organized"
-msgstr "Cum sunt organizate setările"
 
 #: apps/io.ox/tours/settings.js:37 module:io.ox/tours
 msgid ""
@@ -646,21 +454,189 @@ msgstr ""
 "Setările sunt grupate pe subiecte. Selectați subiectul în partea stângă, de "
 "ex. Setări de bază sau E-mail."
 
-#: apps/io.ox/tours/settings.js:43 module:io.ox/tours
-msgid "Editing settings"
-msgstr "Editarea setărilor"
+#: apps/io.ox/tours/intro.js:111 module:io.ox/tours
+msgid "The toolbar"
+msgstr "Bara de unelte"
 
-#: apps/io.ox/tours/settings.js:44 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:67 module:io.ox/tours
 msgid ""
-"Edit a setting on the right side. In most of the cases, the changes are "
-"activated immediately."
+"This guided tour will briefly introduce you to the product. Get more "
+"detailed information in the tours for the single apps or in the online help."
 msgstr ""
-"Editați o setare în partea dreaptă. În cele mai multe cazuri, modificările "
-"sunt activate imediat."
+"Această vizită ghidată vă va prezenta rapid produsul. Puteți obține mai "
+"multe informații în vizitele pentru aplicațiile individuale sau în ajutorul "
+"online."
 
-#: apps/io.ox/tours/settings.js:48 module:io.ox/tours
-msgid "Opening the help"
-msgstr "Deschiderea ajutorului"
+#: apps/io.ox/tours/tasks.js:55 module:io.ox/tours
+msgid "To add further details, click on Expand form."
+msgstr "Pentru a adăuga detalii suplimentare. apăsați pe Extinde formularul."
+
+#: apps/io.ox/tours/portal.js:41 module:io.ox/tours
+msgid ""
+"To change the layout, drag a square's title to another position and drop it "
+"there."
+msgstr ""
+"Pentru a schimba aspectul, glisați titlul unui cadru într-o altă poziție și "
+"fixați-l acolo."
+
+#: apps/io.ox/tours/mail.js:87 module:io.ox/tours
+msgid ""
+"To choose between the different views. click on View in the toolbar. Select "
+"a menu entry in the layout."
+msgstr ""
+"Pentru a alege între diferitele vederi, apăsați pe Vedere în bara de unelte. "
+"Selectați o intrare din meniu în aspect."
+
+#: apps/io.ox/tours/mail.js:34 module:io.ox/tours
+msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgstr "Pentru a compune un e-mail nou, apăsați pe Compune în bara de unelte."
+
+#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
+msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgstr ""
+"Pentru a crea un e-mail nou, apăsați pe Creează e-mail nou în bara de unelte."
+
+#: apps/io.ox/tours/calendar.js:35 module:io.ox/tours
+msgid "To create a new appointment, click on New in the toolbar."
+msgstr "Pentru a crea o întâlnire nouă, apăsați pe Nou în bara de unelte."
+
+#: apps/io.ox/tours/contacts.js:31 module:io.ox/tours
+msgid "To create a new contact, click on New > Add contact in the toolbar."
+msgstr ""
+"Pentru a crea un contact nou, apăsați pe Nou > Adaugă contact în bara de "
+"unelte."
+
+#: apps/io.ox/tours/tasks.js:33 module:io.ox/tours
+msgid "To create a new task, click on New in the toolbar."
+msgstr "Pentru a crea o sarcină nouă, apăsați pe Nou în bara de unelte."
+
+#: apps/io.ox/tours/files.js:61 module:io.ox/tours
+msgid "To create a note, click on New > Add note in the toolbar."
+msgstr "Pentru a crea o notă, apăsați pe Nou >Adaugă notă în bara de unelte."
+
+#: apps/io.ox/tours/calendar.js:58 module:io.ox/tours
+msgid ""
+"To create recurring appointments, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"Pentru a crea întâlniri periodice, activați funcția Repetă. Se vor afișa "
+"funcțiile pentru setarea parametrilor periodicității."
+
+#: apps/io.ox/tours/tasks.js:63 module:io.ox/tours
+msgid ""
+"To create recurring tasks, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"Pentru a crea sarcini periodice, activați funcția Repetă. Se vor afișa "
+"funcțiile pentru setarea parametrilor periodicității."
+
+#: apps/io.ox/tours/calendar.js:78 module:io.ox/tours
+msgid "To create the appointment, click on Create at the upper right side."
+msgstr "Pentru a crea întâlnirea, apăsați pe Creează în partea dreaptă sus."
+
+#: apps/io.ox/tours/tasks.js:88 module:io.ox/tours
+msgid "To create the task, click on Create."
+msgstr "Pentru a crea sarcina, apăsați pe Creează."
+
+#: apps/io.ox/tours/portal.js:52 module:io.ox/tours
+msgid ""
+"To display a square again or to display further information sources, click "
+"on Customize this page."
+msgstr ""
+"Pentru a afișa un cadru din nou sau pentru a afișa surse de informații "
+"suplimentare, apăsați pe Personalizează pagina."
+
+#: apps/io.ox/tours/intro.js:76 module:io.ox/tours
+msgid ""
+"To display the help or the settings, click the System menu icon in the menu "
+"bar."
+msgstr ""
+"Pentru a afișa ajutorul sau setările, apăsați pe pictograma Meniu sistem din "
+"bara de meniu."
+
+#: apps/io.ox/tours/contacts.js:47 module:io.ox/tours
+msgid ""
+"To edit multiple contacts at once, enable the checkboxes on the left side of "
+"the contacts. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"Pentru a edita mai multe contacte în același timp, activați casetele de "
+"selectare din stânga contactelor. În cazul în care casetele de selctare nu "
+"sunt afișate, apăsați pe Vedere > Casete de selectare în partea dreaptă a "
+"barei de unelte."
+
+#: apps/io.ox/tours/tasks.js:100 module:io.ox/tours
+msgid ""
+"To edit multiple tasks at once, enable the checkboxes at the left side of "
+"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
+"on the right side of the toolbar."
+msgstr ""
+"Pentru a edita mai multe sarcini în același timp, activați casetele de "
+"selectare din stânga sarcinilor. În cazul în care casetele de selectare nu "
+"sunt afișate, apăsați pe Vedere > Casete de selectare în partea dreaptă a "
+"barei de unelte."
+
+#: apps/io.ox/tours/tasks.js:83 module:io.ox/tours
+msgid "To enter billing information, click on Show details."
+msgstr ""
+"Pentru a introduce informațiile de facturare, apăsați pe Afișează detaliile."
+
+#: apps/io.ox/tours/calendar.js:68 module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. To avoid appointment conflicts, click on Find a free time at "
+"the upper right side."
+msgstr ""
+"Pentru a invita alți participanți, introduceți numele acestora în câmpul de "
+"sub Participanți. Pentru a evita conflictele între întâlniri, apăsați pe "
+"Găsește un interval de timp liber în partea dreaptă sus."
+
+#: apps/io.ox/tours/tasks.js:78 module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. You can add documents as attachment to the task."
+msgstr ""
+"Pentru a invita alți participanți, introduceți numele acestora în câmpul de "
+"sub Participanți. Puteți adăuga documente ca fișiere atașate la sarcină."
+
+#: apps/io.ox/tours/intro.js:71 module:io.ox/tours
+msgid "To launch an app, click on an entry on the left side of the menu bar."
+msgstr ""
+"Pentru a lansa o aplicație, apăsați pe o intrare din partea stângă a barei "
+"de meniu."
+
+#: apps/io.ox/tours/calendar.js:63 module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "Pentru a nu rata întâlnirea, utilizați funcția de memento."
+
+#: apps/io.ox/tours/tasks.js:68 module:io.ox/tours
+msgid "To not miss the task, use the reminder function."
+msgstr "Pentru a nu rata sarcina, utilizați funcția de memento."
+
+#: apps/io.ox/tours/mail.js:97 module:io.ox/tours
+msgid ""
+"To open or close an E-Mail in a conversation, click on a free area in the "
+"header."
+msgstr ""
+"Pentru a deschide sau a închide un e-mail dintr-o conversație, apăsați pe o "
+"zonă liberă din antet."
+
+#: apps/io.ox/tours/intro.js:102 module:io.ox/tours
+msgid ""
+"To open or close the folder tree, click on View >  Folder view on the right "
+"side of the toolbar."
+msgstr ""
+"Pentru a deschide sau a închide arborele de dosare, apăsați pe Vedere > "
+"Vedere dosar în partea dreaptă a barei de unelte. "
+
+#: apps/io.ox/tours/mail.js:113 module:io.ox/tours
+msgid ""
+"To open the E-Mail settings, click the System menu icon on the upper right "
+"side of the menu bar. Select Settings. Click on E-Mail on the left side."
+msgstr ""
+"Pentru a deschide setările de e-mail, apăsați pe pictograma Meniu sistem din "
+"partea dreaptă sus a barei de meniu. Selectați Setări. Apăsați pe E-mail în "
+"partea stângă."
 
 #: apps/io.ox/tours/settings.js:49 module:io.ox/tours
 msgid ""
@@ -674,9 +650,60 @@ msgstr ""
 "aplicația selectată momentan. Pentru a naviga în ajutorul complet, apăsați "
 "pe Pagina de pornire sau pe Cuprins în partea superioară a ferestrei."
 
-#: apps/io.ox/tours/settings.js:54 module:io.ox/tours
-msgid "Signing out"
-msgstr "Deconectare"
+#: apps/io.ox/tours/settings.js:31 module:io.ox/tours
+msgid ""
+"To open the settings, click the System menu icon on the upper right side of "
+"the menu bar. Select Settings."
+msgstr ""
+"Pentru a deschide setările, apăsați pe pictograma Meniu sistem din partea "
+"dreaptă sus a barei de meniu. Selectați Setări."
+
+#: apps/io.ox/tours/portal.js:36 module:io.ox/tours
+msgid "To read the details, click on an entry in a square."
+msgstr "Pentru a citi detaliile, apăsați pe o intrare într-un cadru."
+
+#: apps/io.ox/tours/mail.js:102 module:io.ox/tours
+msgid ""
+"To receive information about the sender or other recipients, open the Halo "
+"view by clicking on a name."
+msgstr ""
+"Pentru a primi informații despre expeditor sau alți destinatari, deschideți "
+"vederea haloului apăsând pe un nume."
+
+#: apps/io.ox/tours/intro.js:107 module:io.ox/tours
+msgid "To search for objects, click the Search icon in the menu bar."
+msgstr ""
+"Pentru a căuta anumite obiecte,  apăsați pe pictograma Căutare din bara de "
+"meniu."
+
+#: apps/io.ox/tours/files.js:36 module:io.ox/tours
+msgid ""
+"To select one of the views List, Icons or Squares, click on View on the "
+"right side of the toolbar."
+msgstr ""
+"Pentru a selecta una dintre vederile Listă, Pictograme sau Cadre, apăsați pe "
+"Vedere în partea dreaptă a barei de unelte."
+
+#: apps/io.ox/tours/calendar.js:84 module:io.ox/tours
+msgid ""
+"To select one of the views like Day, Month or List, click on View in the "
+"toolbar. Select a menu entry from the Layout section."
+msgstr ""
+"Pentru a selecta una dintre vederi, cum ar fi pe Zile, pe Luni sau Listă, "
+"apăsați pe Vedere în bara de unelte. Selectați o intrare din meniu în "
+"secțiunea Aspect."
+
+#: apps/io.ox/tours/contacts.js:41 module:io.ox/tours
+msgid ""
+"To send an E-Mail to the contact, click on an E-Mail address or on Send "
+"email in the toolbar."
+msgstr ""
+"Pentru a trimite un e-mail unui contact, apăsați pe o adresă de e-mail sau "
+"pe Trimite un e-mail în bara de unelte."
+
+#: apps/io.ox/tours/mail.js:75 module:io.ox/tours
+msgid "To send the E-Mail, click on Send"
+msgstr "Pentru a trimite un e-mail, apăsați pe Trimite"
 
 #: apps/io.ox/tours/settings.js:55 module:io.ox/tours
 msgid ""
@@ -686,82 +713,11 @@ msgstr ""
 "Pentru a vă deconecta, apăsați pe pictograma Meniu sistem din partea dreapă "
 "sus a barei de meniu. Selectați Deconectare."
 
-#: apps/io.ox/tours/tasks.js:32 module:io.ox/tours
-msgid "Creating a new task"
-msgstr "Crearea unei sarcini noi"
-
-#: apps/io.ox/tours/tasks.js:33 module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
-msgstr "Pentru a crea o sarcină nouă, apăsați pe Nou în bara de unelte."
-
-#: apps/io.ox/tours/tasks.js:48 module:io.ox/tours
-msgid "Entering the task's data"
-msgstr "Introducerea datelor sarcinii"
-
-#: apps/io.ox/tours/tasks.js:49 module:io.ox/tours
-msgid "Enter the subject, the start date, and a description."
-msgstr "Introduceți subiectul, data de început și o descriere."
-
-#: apps/io.ox/tours/tasks.js:54 module:io.ox/tours
-msgid "Adding further details"
-msgstr "Adăugarea detaliilor suplimentare"
-
-#: apps/io.ox/tours/tasks.js:55 module:io.ox/tours
-msgid "To add further details, click on Expand form."
-msgstr "Pentru a adăuga detalii suplimentare. apăsați pe Extinde formularul."
-
-#: apps/io.ox/tours/tasks.js:62 module:io.ox/tours
-msgid "Creating recurring tasks"
-msgstr "Crearea de sarcini periodice"
-
-#: apps/io.ox/tours/tasks.js:63 module:io.ox/tours
-msgid ""
-"To create recurring tasks, enable Repeat. Functions for setting the "
-"recurrence parameters are shown."
+#: apps/io.ox/tours/mail.js:80 module:io.ox/tours
+msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
 msgstr ""
-"Pentru a crea sarcini periodice, activați funcția Repetă. Se vor afișa "
-"funcțiile pentru setarea parametrilor periodicității."
-
-#: apps/io.ox/tours/tasks.js:68 module:io.ox/tours
-msgid "To not miss the task, use the reminder function."
-msgstr "Pentru a nu rata sarcina, utilizați funcția de memento."
-
-#: apps/io.ox/tours/tasks.js:72 module:io.ox/tours
-msgid "Tracking the editing status"
-msgstr "Urmărirea stării de editare"
-
-#: apps/io.ox/tours/tasks.js:73 module:io.ox/tours
-msgid "To track the editing status, enter the current progress."
-msgstr "Pentru a urmări starea de editare, introduceți progresul curent."
-
-#: apps/io.ox/tours/tasks.js:78 module:io.ox/tours
-msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. You can add documents as attachment to the task."
-msgstr ""
-"Pentru a invita alți participanți, introduceți numele acestora în câmpul de "
-"sub Participanți. Puteți adăuga documente ca fișiere atașate la sarcină."
-
-#: apps/io.ox/tours/tasks.js:82 module:io.ox/tours
-msgid "Entering billing information"
-msgstr "Introducerea de informații de facturare"
-
-#: apps/io.ox/tours/tasks.js:83 module:io.ox/tours
-msgid "To enter billing information, click on Show details."
-msgstr ""
-"Pentru a introduce informațiile de facturare, apăsați pe Afișează detaliile."
-
-#: apps/io.ox/tours/tasks.js:87 module:io.ox/tours
-msgid "Creating the task"
-msgstr "Crearea sarcinii"
-
-#: apps/io.ox/tours/tasks.js:88 module:io.ox/tours
-msgid "To create the task, click on Create."
-msgstr "Pentru a crea sarcina, apăsați pe Creează."
-
-#: apps/io.ox/tours/tasks.js:92 module:io.ox/tours
-msgid "Sorting tasks"
-msgstr "Sortarea sarcinilor"
+"Pentru sortarea e-mailurilor, apăsați pe Sortează după. Selectați un "
+"criteriu de sortare."
 
 #: apps/io.ox/tours/tasks.js:93 module:io.ox/tours
 msgid "To sort the tasks, click on Sort by. Select a sort criteria."
@@ -769,104 +725,64 @@ msgstr ""
 "Pentru a sorta sarcinile, apăsați pe Sortează după. Selectați un criteriu de "
 "sortare."
 
-#: apps/io.ox/tours/tasks.js:99 module:io.ox/tours
-msgid "Editing multiple tasks"
-msgstr "Editarea mai multor sarcini"
+#: apps/io.ox/tours/tasks.js:73 module:io.ox/tours
+msgid "To track the editing status, enter the current progress."
+msgstr "Pentru a urmări starea de editare, introduceți progresul curent."
 
-#: apps/io.ox/tours/tasks.js:100 module:io.ox/tours
-msgid ""
-"To edit multiple tasks at once, enable the checkboxes at the left side of "
-"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
-"on the right side of the toolbar."
+#: apps/io.ox/tours/files.js:56 module:io.ox/tours
+msgid "To upload a file, click on New > Upload new file in the toolbar."
 msgstr ""
-"Pentru a edita mai multe sarcini în același timp, activați casetele de "
-"selectare din stânga sarcinilor. În cazul în care casetele de selectare nu "
-"sunt afișate, apăsați pe Vedere > Casete de selectare în partea dreaptă a "
-"barei de unelte."
+"Pentru a încărca un fișier, apăsați pe Nou > Încarcă fișier nou în bara de "
+"unelte."
 
-#~ msgid ""
-#~ "Below the recipient you will find further functions, e.g. for sending "
-#~ "copies to other recipients or for adding attachments."
-#~ msgstr ""
-#~ "Sub destinatar se găsesc funcții suplimentare cum ar fi pentru trimiterea "
-#~ "de copii către alți destinatari sau pentru adăugarea de fișiere atașate."
+#: apps/io.ox/tours/files.js:68 module:io.ox/tours
+msgid ""
+"To view further information, click on a file. A pop-up window displays "
+"further details and functions."
+msgstr ""
+"Pentru a vizualiza informații suplimentare, apăsați pe un fișier. Detaliile "
+"și funcțiile suplimentare se afișează într-o fereastră pop-up."
 
-#~ msgid "Enter the E-Mail text below the subject."
-#~ msgstr "Introduceți textului e-mailului sub subiect."
+#: apps/io.ox/tours/tasks.js:72 module:io.ox/tours
+msgid "Tracking the editing status"
+msgstr "Urmărirea stării de editare"
 
-#~ msgid ""
-#~ "Enter the E-Mail text below the subject. If the text format was set to "
-#~ "HTMl in the options, you can format the E-Mail text. To do so select a "
-#~ "text part and then click an icon in the formatting bar."
-#~ msgstr ""
-#~ "Introduceți textul e-mailului sub subiect. Dacă formatul textului este "
-#~ "setat pe HTMl în opțiuni, puteți formata textul e-mailului. Pentru a "
-#~ "formata, selectați o parte de text și apăsați pe o pictogramă din bara de "
-#~ "formatare."
+#: apps/io.ox/tours/files.js:55 module:io.ox/tours
+msgid "Uploading a file"
+msgstr "Încărcarea unui fișier"
 
-#~ msgid ""
-#~ "Enter the recipient's name on the top left side. As soon as you typed the "
-#~ "first letters, suggestions from the address books are displayed. To "
-#~ "accept a recipient suggestion, click on it."
-#~ msgstr ""
-#~ "Introduceți numele destinatarului în partea stângă sus. Imediat ce "
-#~ "începeți să scrieți primele litere, se afișează sugestii din agendele de "
-#~ "contacte. Pentru a acepta o sugestie de destinatar, apăsați pe acea "
-#~ "sugestie."
+#: apps/io.ox/tours/files.js:31 module:io.ox/tours
+msgid ""
+"Use the folder tree to access own, public or shared files. If the folder "
+"tree is hidden, click on View > Folder view on the right side of the toolbar."
+msgstr ""
+"Utilizați arborele de dosare pentru a accesa fișierele proprii, publice sau "
+"partajate. Dacă arborele de dosare este ascuns, apăsați pe Vedere > Vedere "
+"dosar în partea dreaptă a barei de unelte."
 
-#~ msgid "Enter the subject on the right side of the recipient."
-#~ msgstr "Introduceți subiectul în dreapta expeditorului."
+#: apps/io.ox/tours/intro.js:117 module:io.ox/tours
+msgid ""
+"Use the folder tree to open the folder containing the objects that you want "
+"to view in the list."
+msgstr ""
+"Utilzați arborele de dosare pentru a deschide dosarul care conține obiectele "
+"pe care doriți să le vizualizați în listă."
 
-#~ msgid ""
-#~ "If a folder contains images, you can display a slideshow. To do so click "
-#~ "the View slideshow icon in the toolbar."
-#~ msgstr ""
-#~ "Dacă un dosar conține imagini, puteți afișa o prezentare. Pentru aceasta, "
-#~ "apăsați pe pictograma Vedere prezentare din bara de unelte."
+#: apps/io.ox/tours/intro.js:122 module:io.ox/tours
+msgid ""
+"Use the list to select an object, show its contents or activate functions."
+msgstr ""
+"Utilizați lista pentru a selecta un obiect, a afișa conținutul acestuia sau "
+"a activa anumite funcții."
 
-#~ msgid ""
-#~ "If you no longer want to display a square, click the cross on the upper "
-#~ "right side."
-#~ msgstr ""
-#~ "Dacă nu mai doriți să afișați un cadru, apăsați pe crucea din partea "
-#~ "dreaptă sus."
+#: apps/io.ox/tours/calendar.js:62 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:67
+msgid "Using the reminder function"
+msgstr "Utilizarea funcției de memento"
 
-#~ msgid ""
-#~ "In case of new notifications, e.g. appointment invitations, the info area "
-#~ "is opened on the right side."
-#~ msgstr ""
-#~ "Atunci când există notificări noi, de exemplu invitații pentru întâlniri, "
-#~ "zona de informații se deschide în partea dreaptă."
-
-#~ msgid "Slideshow"
-#~ msgstr "Prezentare"
-
-#~ msgid ""
-#~ "The settings are organized in topics. Select the topic on the left side, "
-#~ "e.g Basic settings or E-Mail. To view all settings, enable Advanced "
-#~ "settings at the bottom."
-#~ msgstr ""
-#~ "Setările sunt organizate pe subiecte. Selectați subiectul în partea "
-#~ "stângă, de exemplu Setări de bază sau E-Mail. Pentru a vizualiza toate "
-#~ "setările, activați Setări avansate în partea inferioară."
-
-#~ msgid "To create the task, click on Create on the upper right side."
-#~ msgstr "Pentru a crea sarcina, apăsați pe Creează în partea dreaptă sus."
-
-#~ msgid ""
-#~ "To open the E-Mail settings, click the System menu icon on the upper "
-#~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
-#~ "side. To display all settings, enable Advanced settings in the bottom "
-#~ "left side"
-#~ msgstr ""
-#~ "Pentru a deschide setările de e-mail, apăsați pictograma Meniu sistem din "
-#~ "partea dreaptă sus a barei de meniu. Selecați Setări. Apăsați pe E-mail "
-#~ "în partea stângă. Pentru a afișa toate setările, activați Setări avansate "
-#~ "în partea stângă jos"
-
-#~ msgid "To send the E-Mail, click on Send on the upper right side."
-#~ msgstr ""
-#~ "Pentru a trimite e-mailul, apăsație pe Trimite în partea dreaptă sus."
+#: apps/io.ox/tours/intro.js:66 module:io.ox/tours
+msgid "Welcome to %s"
+msgstr "Bine ați venit la %s"
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -2132,6 +2048,13 @@ msgstr ""
 
 #~ msgid "Below quoted text"
 #~ msgstr "Sub textul între ghilimele"
+
+#~ msgid ""
+#~ "Below the recipient you will find further functions, e.g. for sending "
+#~ "copies to other recipients or for adding attachments."
+#~ msgstr ""
+#~ "Sub destinatar se găsesc funcții suplimentare cum ar fi pentru trimiterea "
+#~ "de copii către alți destinatari sau pentru adăugarea de fișiere atașate."
 
 #~ msgid "Benin"
 #~ msgstr "Benin"
@@ -3981,6 +3904,32 @@ msgstr ""
 #~ msgid "Enter personal data"
 #~ msgstr "Introduceți date personale"
 
+#~ msgid "Enter the E-Mail text below the subject."
+#~ msgstr "Introduceți textului e-mailului sub subiect."
+
+#~ msgid ""
+#~ "Enter the E-Mail text below the subject. If the text format was set to "
+#~ "HTMl in the options, you can format the E-Mail text. To do so select a "
+#~ "text part and then click an icon in the formatting bar."
+#~ msgstr ""
+#~ "Introduceți textul e-mailului sub subiect. Dacă formatul textului este "
+#~ "setat pe HTMl în opțiuni, puteți formata textul e-mailului. Pentru a "
+#~ "formata, selectați o parte de text și apăsați pe o pictogramă din bara de "
+#~ "formatare."
+
+#~ msgid ""
+#~ "Enter the recipient's name on the top left side. As soon as you typed the "
+#~ "first letters, suggestions from the address books are displayed. To "
+#~ "accept a recipient suggestion, click on it."
+#~ msgstr ""
+#~ "Introduceți numele destinatarului în partea stângă sus. Imediat ce "
+#~ "începeți să scrieți primele litere, se afișează sugestii din agendele de "
+#~ "contacte. Pentru a acepta o sugestie de destinatar, apăsați pe acea "
+#~ "sugestie."
+
+#~ msgid "Enter the subject on the right side of the recipient."
+#~ msgstr "Introduceți subiectul în dreapta expeditorului."
+
 #~ msgid "Enter visible text"
 #~ msgstr "Introduceți un text vizibil"
 
@@ -4810,6 +4759,13 @@ msgstr ""
 #~ msgstr "Pictograme"
 
 #~ msgid ""
+#~ "If a folder contains images, you can display a slideshow. To do so click "
+#~ "the View slideshow icon in the toolbar."
+#~ msgstr ""
+#~ "Dacă un dosar conține imagini, puteți afișa o prezentare. Pentru aceasta, "
+#~ "apăsați pe pictograma Vedere prezentare din bara de unelte."
+
+#~ msgid ""
 #~ "If the authorization expired or was revoked, you can repeat the "
 #~ "authorization process by clicking on the button below. The authorization "
 #~ "will proceed in a separate window."
@@ -4824,6 +4780,13 @@ msgstr ""
 #~ msgstr ""
 #~ "Dacă modificați parola veți fi deconectat. Asigurați-vă că ați închis și "
 #~ "ați salvat tot."
+
+#~ msgid ""
+#~ "If you no longer want to display a square, click the cross on the upper "
+#~ "right side."
+#~ msgstr ""
+#~ "Dacă nu mai doriți să afișați un cadru, apăsați pe crucea din partea "
+#~ "dreaptă sus."
 
 #~ msgid ""
 #~ "If you spot a free time, just select this area. To do this, move the "
@@ -4897,6 +4860,13 @@ msgstr ""
 
 #~ msgid "In a public folder there must be at least one participant."
 #~ msgstr "Într-un dosar public trebuie să existe cel puțin un participant."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened on the right side."
+#~ msgstr ""
+#~ "Atunci când există notificări noi, de exemplu invitații pentru întâlniri, "
+#~ "zona de informații se deschide în partea dreaptă."
 
 #~ msgid ""
 #~ "In order to assign categories to the objects selected, use the control "
@@ -8171,6 +8141,9 @@ msgstr ""
 #~ msgid "Skip this step"
 #~ msgstr "Ignoră această etapă"
 
+#~ msgid "Slideshow"
+#~ msgstr "Prezentare"
+
 #~ msgid "Slovakia"
 #~ msgstr "Slovacia"
 
@@ -9037,6 +9010,15 @@ msgstr ""
 #~ msgstr "Setarea a fost salvată."
 
 #~ msgid ""
+#~ "The settings are organized in topics. Select the topic on the left side, "
+#~ "e.g Basic settings or E-Mail. To view all settings, enable Advanced "
+#~ "settings at the bottom."
+#~ msgstr ""
+#~ "Setările sunt organizate pe subiecte. Selectați subiectul în partea "
+#~ "stângă, de exemplu Setări de bază sau E-Mail. Pentru a vizualiza toate "
+#~ "setările, activați Setări avansate în partea inferioară."
+
+#~ msgid ""
 #~ "The settings for collecting contacts in this folder will become disabled "
 #~ "when you enter the application the next time."
 #~ msgstr ""
@@ -9416,8 +9398,22 @@ msgstr ""
 #~ "Pentru a crea o notă, apăsați pe pictograma din partea de sus. Selectați "
 #~ "Adaugă notă."
 
+#~ msgid "To create the task, click on Create on the upper right side."
+#~ msgstr "Pentru a crea sarcina, apăsați pe Creează în partea dreaptă sus."
+
 #~ msgid "To launch an app, click on a tile's headline."
 #~ msgstr "Pentru a lansa o aplicație, apăsați pe titlul unui cadru."
+
+#~ msgid ""
+#~ "To open the E-Mail settings, click the System menu icon on the upper "
+#~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
+#~ "side. To display all settings, enable Advanced settings in the bottom "
+#~ "left side"
+#~ msgstr ""
+#~ "Pentru a deschide setările de e-mail, apăsați pictograma Meniu sistem din "
+#~ "partea dreaptă sus a barei de meniu. Selecați Setări. Apăsați pe E-mail "
+#~ "în partea stângă. Pentru a afișa toate setările, activați Setări avansate "
+#~ "în partea stângă jos"
 
 #, fuzzy
 #~ msgid ""
@@ -9426,6 +9422,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Pentru a deschide ajutorul, apăsați pe pictograma Meniu sistem din partea "
 #~ "dreapă sus a barei de meniu. Selectați Ajutor."
+
+#~ msgid "To send the E-Mail, click on Send on the upper right side."
+#~ msgstr ""
+#~ "Pentru a trimite e-mailul, apăsație pe Trimite în partea dreaptă sus."
 
 #~ msgid "To view attachment you must first save your e-mail as a draft."
 #~ msgstr ""
