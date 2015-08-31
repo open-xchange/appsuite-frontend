@@ -118,6 +118,10 @@ define('plugins/portal/mail/register', [
                 }
             });
 
+        collectionLoader.each = function (obj) {
+            api.pool.add('detail', obj);
+        };
+
         collectionLoader
             .load({ folder: folderName })
             .once('load', function () {
