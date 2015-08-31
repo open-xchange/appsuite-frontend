@@ -89,7 +89,7 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
         },
 
         render: function () {
-            if (!this.model || !this.model.isFile()) return;
+            if (!this.model || !this.model.isFile()) return this;
             // check if the user has permission to upload new versions
             folderApi.get(this.model.get('folder_id')).done(function (folderData) {
                 if (this.disposed) return;
