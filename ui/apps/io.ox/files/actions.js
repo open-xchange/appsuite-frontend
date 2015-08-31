@@ -283,8 +283,15 @@ define('io.ox/files/actions', [
         },
         action: function (baton) {
             ox.load(['io.ox/core/viewer/main']).done(function (Viewer) {
-                var viewer = new Viewer();
-                viewer.launch({ selection: baton.data, files: baton.collection.models });
+                var viewer = new Viewer(),
+                    selection = [].concat(baton.data);
+
+                if (selection.length > 1) {
+                    // only show selected files - the first one is automatically selected
+                    viewer.launch({ files: selection });
+                } else {
+                    viewer.launch({ selection: _(selection).first(), files: baton.collection.models });
+                }
             });
         }
     });
@@ -770,6 +777,26 @@ define('io.ox/files/actions', [
         mobile: 'lo',
         label: gt('Add to portal'),
         ref: 'io.ox/files/actions/add-to-portal',
+        section: 'share'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'invite',
+        index: index += 100,
+        prio: 'lo',
+        mobile: 'lo',
+        label: gt('Invite people'),
+        ref: 'io.ox/files/actions/invite',
+        section: 'share'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'getalink',
+        index: index += 100,
+        prio: 'lo',
+        mobile: 'lo',
+        label: gt('Get link'),
+        ref: 'io.ox/files/actions/getalink',
         section: 'share'
     }));
 

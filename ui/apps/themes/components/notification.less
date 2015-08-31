@@ -243,7 +243,15 @@
 
     @media (max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
         #io-ox-notifications-display {
-            padding: 0 14px 14px 14px;
+            padding: 8px 14px 14px 14px;
+
+            .notification-area-title {
+                font-size: 20px;
+            }
+
+            .item {
+                background-color: rgba(0, 0, 0, 0.05);
+            }
         }
     }
 }
@@ -267,9 +275,15 @@
 }
 
 @media (max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
-    #io-ox-notifications-icon {
+    #io-ox-notifications-icon.launcher a.notifications-icon {
         i {
             display: none;
+        }
+
+        .badge {
+            top: initial;
+            left: initial;
+            padding: 2px 8px;
         }
     }
     .notifications-open { display:none; } // To hide mobile portal when notifications area is open on mobile devices

@@ -166,6 +166,10 @@ define('io.ox/tasks/edit/view-template', [
                     display: baton.model.get('full_time') ? 'DATE' : 'DATETIME'
                 }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
+                    if (_.device('smartphone')) {
+                        // trigger change to update input fields on mobile
+                        baton.model.trigger('change:start_time change:end_time');
+                    }
                 }).render().$el.attr('data-extension-id', 'start_time')
             );
         }
@@ -186,6 +190,10 @@ define('io.ox/tasks/edit/view-template', [
                     display: baton.model.get('full_time') ? 'DATE' : 'DATETIME'
                 }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
+                    if (_.device('smartphone')) {
+                        // trigger change to update input fields on mobile
+                        baton.model.trigger('change:start_time change:end_time');
+                    }
                 }).render().$el.attr('data-extension-id', 'end_time')
             );
         }

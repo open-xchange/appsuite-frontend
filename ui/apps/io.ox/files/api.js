@@ -155,6 +155,10 @@ define('io.ox/files/api', [
             return this.get('source') === 'pim';
         },
 
+        isEmptyFile: function () {
+            return this.isFile() && !this.get('filename');
+        },
+
         getDisplayName: function () {
             return this.get('filename') || this.get('title') || '';
         },

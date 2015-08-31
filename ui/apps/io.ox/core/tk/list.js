@@ -706,7 +706,13 @@ define('io.ox/core/tk/list', [
             return this;
         },
 
-        idle: function () {
+        idle: function (e) {
+            // if idle is called as an error callback we should display it (load:fail for example)
+            if (e && e.error) {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell(e);
+                });
+            }
             if (!this.isBusy) return;
             this.removeBusyIndicator();
             this.isBusy = false;

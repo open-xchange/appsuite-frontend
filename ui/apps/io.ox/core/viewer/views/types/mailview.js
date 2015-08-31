@@ -21,6 +21,7 @@ define('io.ox/core/viewer/views/types/mailview', [
     var MailView = BaseView.extend({
 
         initialize: function () {
+            this.isPrefetched = false;
         },
 
         render: function () {
@@ -30,6 +31,7 @@ define('io.ox/core/viewer/views/types/mailview', [
         },
 
         prefetch: function () {
+            this.isPrefetched = true;
             return this;
         },
 
@@ -48,6 +50,7 @@ define('io.ox/core/viewer/views/types/mailview', [
         },
 
         unload: function () {
+            this.isPrefetched = false;
             return this;
         }
     });

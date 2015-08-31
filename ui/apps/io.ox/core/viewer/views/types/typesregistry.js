@@ -46,15 +46,17 @@ define('io.ox/core/viewer/views/types/typesregistry', [
          *  file type object it could be required; or rejected, in case of an error.
          */
         getModelType: function (model) {
-            if (!model) {
-                return $.Deferred().reject();
-            }
+
+            if (!model) return $.Deferred().reject();
 
             var modelType = typesMap[model.getFileType()] || 'defaultview';
 
             if ((model.isOffice() || model.isPDF()) && !Capabilities.has('document_preview')) {
                 modelType = 'defaultview';
             }
+
+            // item without file?
+            if (model.isEmptyFile()) modelType = 'descriptionview';
 
             // special check for nested messages
             if (model.isMailAttachment() && model.get('file_mimetype') === 'message/rfc822') modelType = 'mailview';

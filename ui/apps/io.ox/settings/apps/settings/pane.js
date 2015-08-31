@@ -87,7 +87,7 @@ define('io.ox/settings/apps/settings/pane', [
                     ),
                     $('<div class="date">').append(
                         $('<span>').text(gt('Approved:')),
-                        moment(model.get('date'), 'x').format('l')
+                        moment(model.get('date')).format('l')
                     )
                 ),
                 $('<div class="widget-controls">').append(

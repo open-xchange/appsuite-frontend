@@ -86,6 +86,8 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.$el.addClass('swiper-slide-document');
             // wheter double tap zoom is already triggered
             this.doubleTapZoomed = false;
+            // indicates if the document was prefetched
+            this.isPrefetched = false;
             // resume/suspend rendering if user switched to other apps
             this.listenTo(ox, 'app:resume app:init', function (app) {
                 if (!this.pdfView) {
@@ -266,13 +268,20 @@ define('io.ox/core/viewer/views/types/documentview', [
 
         /**
          * "Prefetches" the document slide.
-         * In order to save memory and network bandwidth documents are not prefetched.
+         * In order to save memory and network bandwidth only documents with highest prefetch priority are prefetched.
+         *
+         * @param {Number} priority
+         *  the prefetch priority.
          *
          * @returns {DocumentView}
          *  the DocumentView instance.
          */
-        prefetch: function () {
-            $.ajax({ url: Util.getConverterUrl(Util.getConvertParams(this.model, { async: true })) });
+        prefetch: function (priority) {
+            // check for highest priority
+            if (priority === 1) {
+                $.ajax({ url: Util.getConverterUrl(Util.getConvertParams(this.model, { async: true })) });
+                this.isPrefetched = true;
+            }
 
             return this;
         },
@@ -648,6 +657,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 this.$el.find('div.document-container').empty();
                 // save disposed status
                 this.disposed = dispose;
+                this.isPrefetched = false;
             }
 
             return this;

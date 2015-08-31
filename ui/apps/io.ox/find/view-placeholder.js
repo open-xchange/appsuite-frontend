@@ -19,7 +19,8 @@ define('io.ox/find/view-placeholder', [
     var PlaceholderView = Backbone.View.extend({
 
         events: {
-            'focusin': 'focused'
+            'focusin': 'focused',
+            'keyup': 'showSpinner'
         },
 
         initialize: function (options) {
@@ -27,12 +28,25 @@ define('io.ox/find/view-placeholder', [
             // field stub already rendered by desktop.js
             this.setElement(win.nodes.sidepanel.find('.io-ox-find'));
 
+            // shortcuts
             this.ui = {
-                field: this.$el.find('.search-field')
+                field: this.$el.find('.search-field'),
+                action: this.$el.find('.action-show')
             };
+
+            // reuse
+            this.options = options;
 
             this.listenTo(options.app, 'view:disable', this.disable);
             this.listenTo(options.app, 'view:enable', this.enable);
+        },
+
+        hideSpinner: function () {
+            this.ui.action.removeClass('io-ox-busy');
+        },
+
+        showSpinner: function () {
+            this.ui.action.addClass('io-ox-busy');
         },
 
         disable: function () {
@@ -50,6 +64,7 @@ define('io.ox/find/view-placeholder', [
 
         destroy: function () {
             this.trigger('destroy');
+            this.hideSpinner();
             this.stopListening();
             this.off();
         }

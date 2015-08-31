@@ -29,6 +29,10 @@ define('io.ox/core/viewer/views/types/imageview', [
      */
     var ImageView =  BaseView.extend({
 
+        initialize: function () {
+            this.isPrefetched = false;
+        },
+
         /**
          * Creates and renders the image slide.
          *
@@ -76,6 +80,7 @@ define('io.ox/core/viewer/views/types/imageview', [
             var image = this.$el.find('img.viewer-displayer-image');
             if (image.length > 0) {
                 image.attr('src', image.attr('data-src'));
+                this.isPrefetched = true;
             }
 
             return this;
@@ -109,6 +114,7 @@ define('io.ox/core/viewer/views/types/imageview', [
                 if (imageToUnLoad.length > 0) {
                     imageToUnLoad.attr('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=');
                 }
+                this.isPrefetched = false;
             }
             return this;
         }

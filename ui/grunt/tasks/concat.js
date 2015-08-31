@@ -259,7 +259,7 @@ module.exports = function (grunt) {
                         src: [
                             'bower_components/tinymce-dist/tinymce.jquery.min.js',
                             'lib/tinymce/themes/unobtanium/theme.min.js',
-                            'bower_components/tinymce-dist/plugins/{autolink,link,paste,textcolor,links}/plugin.min.js',
+                            'bower_components/tinymce-dist/plugins/{autolink,link,paste,textcolor,lists}/plugin.min.js',
                             'lib/tinymce/plugins/oximage/plugin.min.js',
                             'lib/tinymce/plugins/oxpaste/plugin.min.js',
                             'lib/tinymce/plugins/oxdrop/plugin.min.js'

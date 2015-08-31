@@ -1,6 +1,6 @@
 #!/bin/sh
-UPDATE="/opt/open-xchange/appsuite/share/update-themes.sh"
+UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
 case "$1" in
     purge|upgrade|failed-upgrade) ;;
-    *) if [ -x $UPDATE]; then $UPDATE --later; fi ;;
+    *) if [ -x $UPDATE ]; then $UPDATE --later; fi ;;
 esac

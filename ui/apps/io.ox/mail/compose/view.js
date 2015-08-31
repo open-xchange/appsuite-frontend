@@ -307,6 +307,7 @@ define('io.ox/mail/compose/view', [
             this.listenTo(this.model, 'keyup:subject change:subject',   this.setTitle);
             this.listenTo(this.model, 'change:editorMode',              this.toggleEditorMode);
             this.listenTo(this.model, 'change:defaultSignatureId',      this.setSelectedSignature);
+            this.listenTo(this.model, 'change:signatures',              this.updateSelectedSignature);
             this.listenTo(this.model, 'needsync',                       this.syncMail);
 
             var mailto, params;
@@ -998,6 +999,36 @@ define('io.ox/mail/compose/view', [
             if (this.model.get('initial')) {
                 this.setSelectedSignature();
                 this.prependNewLine();
+            }
+        },
+
+        updateSelectedSignature: function () {
+            var currentSignature = this.model.get('signature');
+
+            if (!currentSignature) return;
+
+            var changedSignature = _(this.model.get('signatures')).find({ id: String(currentSignature.id) });
+
+            if (currentSignature.content !== changedSignature.content) {
+                var isHTML = !!this.editor.find;
+
+                if (isHTML) {
+                    this.editor.find('.io-ox-signature').each(function () {
+
+                        var node = $(this),
+                            text = node.text(),
+                            changed = $('<div>').html(changedSignature.content).text().replace(/\s+/g, '') !== text.replace(/\s+/g, '');
+
+                        if (changed) node.empty().append($(changedSignature.content));
+                    });
+                } else {
+                    var currentContent = mailUtil.signatures.cleanAdd(currentSignature.content, false),
+                        changedContent = mailUtil.signatures.cleanAdd(changedSignature.content, false);
+
+                    this.editor.replaceParagraph(currentContent, changedContent);
+                }
+
+                this.model.set('signature', changedSignature);
             }
         },
 

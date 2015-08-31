@@ -436,14 +436,14 @@ define('io.ox/find/main', [
         // overwrite defaults app.launch
         app.launch = function () {
             if (app.get('state') !== 'prepared') return;
+
+            // initialize views (tokenfield, typeahed, etc)
+            app.set('state', 'launching');
             // get rid of placeholder view
             if (app.placeholder) {
                 app.placeholder.destroy();
                 delete app.placeholder;
             }
-
-            // initialize views (tokenfield, typeahed, etc)
-            app.set('state', 'launching');
             require(['io.ox/find/bundle'], function () {
                 require(['io.ox/find/model', 'io.ox/find/view'], function (MainModel, MainView) {
                     app.model = new MainModel({ app: app });

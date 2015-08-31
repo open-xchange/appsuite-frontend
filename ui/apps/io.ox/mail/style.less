@@ -1597,21 +1597,52 @@ h4.mail-attachment-preview {
         .contact-picture {
             display: none;
         }
-
-        .subject {
-            font-size: @phone-font-size;
-            padding: @default-padding;
+        &.expanded .detail-view-header {
+            border:0;
         }
-
         .detail-view-header {
-            padding-left: @default-padding;
+            padding: 0 0 8px 0;
+
+            .from {
+                padding: 8px 16px 0 16px;
+                .person-link.person-from {
+                    font-weight: 500;
+                    line-height: 2rem;
+                }
+            }
+
+            .recipients {
+                padding: 8px 16px;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .subject {
+                font-size: @phone-font-size;
+                padding: @default-padding;
+                padding: 8px 16px;
+                line-height: initial;
+                font-weight: 500;
+            }
+            time { padding-left: 16px; }
             .sp {
                 margin-right: 4px;
             }
         }
 
+        section.attachments {
+            border-top: 1px solid #ddd;
+        }
+
+        &.expanded section.attachments:empty {
+            border: 0;
+        }
+
         .attachments {
             border-bottom-width: 0;
+        }
+
+        .has-attachments {
+            display: none;
         }
 
         .mail-attachment-list .ul.inline-items li.item {
@@ -1621,6 +1652,9 @@ h4.mail-attachment-preview {
             }
         }
         .mail-attachment-list {
+            .list-unstyled.io-ox-inline-links {
+                display:none;
+            }
             .links {
                 display: block;
             }
@@ -1631,17 +1665,12 @@ h4.mail-attachment-preview {
         }
 
         section.body {
-            border-top: 1px solid #ccc;
-            padding: 10px;
+            border-top: 1px solid #ddd;
+            padding: 8px;
         }
 
         &:not(.expanded) .recipients {
             opacity: 1;
-        }
-
-        .subject {
-            font-size: 15px;
-            padding: 10px 0 0 0;
         }
 
         & > header {
