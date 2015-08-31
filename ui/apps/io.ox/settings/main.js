@@ -263,6 +263,9 @@ define('io.ox/settings/main', [
                 view = item.closest('li').data('view');
             folderUtil.open(view.options.parent);
 
+            // show subfolders on default
+            if (view.hasSubFolders() && view.options.open !== 'open') view.toggle('open');
+
             previousSelection = currentSelection;
             currentSelection = pool.getModel(id).get('meta');
             if (!baton) {
