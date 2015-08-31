@@ -10,16 +10,57 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/presenter/actions', [
-    'io.ox/core/extPatterns/actions'
-], function (ActionsPattern) {
+    'io.ox/core/extPatterns/actions',
+    'io.ox/core/extPatterns/links',
+    'gettext!io.ox/presenter'
+], function (ActionsPattern, LinksPattern, gt) {
 
     'use strict';
 
-    var PRESENTER_ACTION_ID = 'io.ox/presenter/actions';
+    var TOOLBAR_ID = 'io.ox/presenter/toolbar',
+        TOOLBAR_LINKS_ID = TOOLBAR_ID + '/links',
+        PRESENTER_ACTION_ID = 'io.ox/presenter/actions';
 
     var Action = ActionsPattern.Action;
 
-    new Action(PRESENTER_ACTION_ID + '/start', {
+    // start presentation drop-down
+    new LinksPattern.ActionLink(TOOLBAR_LINKS_ID + '/dropdown/start-presentation', {
+        index: 100,
+        id: 'startlocal',
+        //#. 'start presentation' dropdown menu entry to start a local only presentation where no remote participants would be able to join.
+        label: gt('Start local presentation'),
+        description: gt('View the presentation in fullscreen on your device.'),
+        ref: PRESENTER_ACTION_ID + '/start/local'
+    });
+
+    new LinksPattern.ActionLink(TOOLBAR_LINKS_ID + '/dropdown/start-presentation', {
+        index: 200,
+        id: 'startremote',
+        //#. 'start presentation' dropdown menu entry to start a remote presentation where remote participants would be able to join.
+        label: gt('Start remote presentation'),
+        description: gt('Broadcast your presentation over the Web.'),
+        ref: PRESENTER_ACTION_ID + '/start/remote'
+    });
+
+    new Action(PRESENTER_ACTION_ID + '/start/local', {
+        requires: function (e) {
+            if (!e.baton.context) { return false; }
+
+            var rtModel = e.baton.context.app.rtModel,
+                userId = e.baton.context.app.rtConnection.getRTUuid();
+
+            return (_.device('!iOS') && !rtModel.isPresenter(userId) && !rtModel.isJoined(userId));
+        },
+        action: function (baton) {
+            var app = baton.context.app,
+                slideId = app.mainView.getActiveSlideIndex();
+
+            console.info('start local action:', baton, 'slide', slideId);
+            app.mainView.toggleFullscreen(true);
+        }
+    });
+
+    new Action(PRESENTER_ACTION_ID + '/start/remote', {
         requires: function (e) {
             if (!e.baton.context) { return false; }
 
@@ -32,7 +73,7 @@ define('io.ox/presenter/actions', [
             var app = baton.context.app,
                 slideId = app.mainView.getActiveSlideIndex();
 
-            console.info('start action:', baton, 'slide', slideId);
+            console.info('start remote action:', baton, 'slide', slideId);
             app.rtConnection.startPresentation({ activeSlide: slideId });
         }
     });

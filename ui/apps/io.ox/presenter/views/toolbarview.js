@@ -39,17 +39,34 @@ define('io.ox/presenter/views/toolbarview', [
             'start': {
                 prio: 'hi',
                 mobile: 'hi',
-                //#. button label for starting the presentation
+                //#. button label for the 'start presentation' dropdown
                 label: gt('Start presentation'),
-                ref: PRESENTER_ACTION_ID + '/start',
-                customize: function () {
-                    this.addClass('presenter-toolbar-start')
-                        .attr({
-                            tabindex: '1',
-                            //#. button tooltip for starting the presentation
-                            'aria-label': gt('Start presentation')
-                        });
-                    this.parent().addClass('pull-left');
+                //#. button tooltip for 'start presentation' dropdown
+                title: gt('Start presentation'),
+                drawDisabled: true,
+                ref: TOOLBAR_ID + '/dropdown/start-presentation',
+                customize: function (baton) {
+                    var self = this;
+                    this.append('<i class="fa fa-caret-down">');
+
+                    this.after(
+                        LinksPattern.DropdownLinks({
+                            ref: TOOLBAR_LINKS_ID + '/dropdown/start-presentation',
+                            wrap: false,
+                            //function to call when dropdown is empty
+                            emptyCallback: function () {
+                                self.parent().hide();
+                            }
+                        }, baton)
+                    );
+
+                    this.addClass('dropdown-toggle').attr({
+                        'aria-haspopup': 'true',
+                        'data-toggle': 'dropdown',
+                        'role': 'button'
+                    }).dropdown();
+
+                    this.parent().addClass('dropdown pull-left');
                 }
             },
             'end': {
@@ -222,9 +239,14 @@ define('io.ox/presenter/views/toolbarview', [
         ref: TOOLBAR_LINKS_ID
     }));
 
-    // define actions of this ToolbarView
+    // define local dummy actions
     var Action = ActionsPattern.Action;
     new Action(TOOLBAR_ACTION_DROPDOWN_ID, {
+        requires: function () { return true; },
+        action: $.noop
+    });
+
+    new Action(TOOLBAR_ID + '/dropdown/start-presentation', {
         requires: function () { return true; },
         action: $.noop
     });
