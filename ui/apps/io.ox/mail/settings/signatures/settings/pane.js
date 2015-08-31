@@ -449,6 +449,8 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 .on('click keydown', 'a[data-action=delete]', function (e) {
                     if ((e.type === 'click') || (e.which === 13)) {
                         var id = $(this).closest('li').attr('data-id');
+                        if (settings.get('defaultSignature') === id) settings.set('defaultSignature', '');
+                        if (settings.get('defaultReplyForwardSignature') === id) settings.set('defaultReplyForwardSignature', '');
                         snippets.destroy(id).fail(require('io.ox/core/notifications').yell);
                         e.preventDefault();
                     }
