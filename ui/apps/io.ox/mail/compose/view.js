@@ -1003,7 +1003,6 @@ define('io.ox/mail/compose/view', [
         },
 
         updateSelectedSignature: function () {
-            debugger;
             var currentSignature = this.model.get('signature');
 
             if (!currentSignature) return;
