@@ -54,7 +54,7 @@ define('io.ox/files/share/api', [
         },
 
         getDisplayName: function () {
-            return this.get('title');
+            return this.get('filename') || this.get('title') || '';
         },
 
         getFolderID: function () {
