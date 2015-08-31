@@ -128,6 +128,7 @@ define('io.ox/calendar/week/view', [
                 'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.')
             });
 
+            this.app = opt.app;
             this.mode = opt.mode || 'day';
             this.extPoint = opt.appExtPoint;
             this.refDate = opt.refDate || moment();
@@ -248,6 +249,7 @@ define('io.ox/calendar/week/view', [
                 month--;
             }
             this.apiRefTime = moment(this.startDate).month(month).date(1);
+            this.app.refDate = this.refDate;
         },
 
         /**
