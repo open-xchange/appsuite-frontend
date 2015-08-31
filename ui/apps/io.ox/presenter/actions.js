@@ -27,18 +27,18 @@ define('io.ox/presenter/actions', [
     new LinksPattern.ActionLink(TOOLBAR_LINKS_ID + '/dropdown/start-presentation', {
         index: 100,
         id: 'startlocal',
+        //#. 'start presentation' dropdown menu entry to start a local only presentation where no remote participants would be able to join.
         label: gt('Start local presentation'),
-        //#. presentation start: Starts the presentation to a local audience, no remote participants would be able to join.
-        description: gt('Present to a local audience.'),
+        description: gt('View the presentation in fullscreen on your device.'),
         ref: PRESENTER_ACTION_ID + '/start/local'
     });
 
     new LinksPattern.ActionLink(TOOLBAR_LINKS_ID + '/dropdown/start-presentation', {
         index: 200,
         id: 'startremote',
+        //#. 'start presentation' dropdown menu entry to start a remote presentation where remote participants would be able to join.
         label: gt('Start remote presentation'),
-        //#. presentation start: Starts the presentation and additional remote participants would be able to join the presentation.
-        description: gt('Present to additional remote participants.'),
+        description: gt('Start remote presentation Broadcast your presentation over the Web.'),
         ref: PRESENTER_ACTION_ID + '/start/remote'
     });
 
@@ -49,7 +49,7 @@ define('io.ox/presenter/actions', [
             var rtModel = e.baton.context.app.rtModel,
                 userId = e.baton.context.app.rtConnection.getRTUuid();
 
-            return (!rtModel.isPresenter(userId) && !rtModel.isJoined(userId));
+            return (_.device('!iOS') && !rtModel.isPresenter(userId) && !rtModel.isJoined(userId));
         },
         action: function (baton) {
             var app = baton.context.app,

@@ -40,7 +40,7 @@ define('io.ox/presenter/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'hi',
                 //#. button label for the 'start presentation' dropdown
-                label: gt('Presentation'),
+                label: gt('Start presentation'),
                 //#. button tooltip for 'start presentation' dropdown
                 title: gt('Start presentation'),
                 drawDisabled: true,
