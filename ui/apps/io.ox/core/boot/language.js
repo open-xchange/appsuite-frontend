@@ -84,13 +84,11 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                 var self = this,
                     maxLang = 30,
                     defaultLanguage = _.getCookie('language') || session.getBrowserLanguage(),
-                    // Display native select box for languages if there are up to 'maxLang' languages
-                    langSorted = _.toArray(_.invert(lang)).sort(function (a, b) {
-                        return lang[a] <= lang[b] ? -1 : +1;
-                    });
+                    languageArray = _.toArray(_.invert(lang)),
+                    toggle, list;
 
+                // Display native select box for languages if there are up to 'maxLang' languages
                 if (_.size(lang) < maxLang && !_.url.hash('language-select') && _.device('!smartphone')) {
-                    var toggle, list;
 
                     node.append(
                         $('<span class="lang-label" data-i18n="Languages" data-i18n-attr="text,aria-label">'),
@@ -107,7 +105,7 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                     if (_.size(lang) > 15) list.addClass('multi');
 
                     list.append(
-                        _(langSorted).map(function (value) {
+                        _(languageArray).map(function (value) {
                             return $('<li role="presentation">').append(
                                 $('<a href="#" role="menuitem">')
                                     .attr({ 'aria-label': lang[value], 'lang': value })
@@ -133,7 +131,7 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                                 exports.changeByUser($(this).val());
                             })
                             .append(
-                                _(langSorted).map(function (value) {
+                                _(languageArray).map(function (value) {
                                     return $('<option>')
                                         .attr({
                                             'aria-label': lang[value],
