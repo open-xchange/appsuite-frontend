@@ -425,31 +425,32 @@ define('io.ox/core/folder/contextmenu', [
 
                 if (_.device('smartphone')) return;
 
-                var supportsInvite = capabilities.has('invite_guests'),
-                    supportsLinks = capabilities.has('share_links');
-
-                // stop if neither invites or links are supported
-                if (!supportsInvite && !supportsLinks) return;
-
                 // check if folder can be shared
                 var id = String(baton.app.folder.get()),
                     model = api.pool.getModel(id);
-                if (!model.isShareable(id)) return;
+
+                var supportsInvite = capabilities.has('invite_guests'),
+                    supportsLinks = capabilities.has('share_links'),
+                    showInvitePeople = supportsInvite && model.supports('permissions'),
+                    showGetLink = supportsLinks && !model.is('mail') && model.isShareable(id);
+
+                // stop if neither invites or links are supported
+                if (!showInvitePeople && !showGetLink) return;
 
                 header.call(this, gt('Sharing'));
 
-                if (supportsInvite) {
+                if (showInvitePeople) {
                     addLink(this, {
                         action: 'invite',
                         data: { app: baton.app },
                         enabled: true,
                         handler: invite,
-                        text: gt('Invite people')
+                        text: model.isShareable(id) ? gt('Invite people') : gt('Existing shares')
                     });
                 }
 
                 // "Get link" doesn't work for mail folders
-                if (supportsLinks && !model.is('mail')) {
+                if (showGetLink) {
                     addLink(this, {
                         action: 'get-link',
                         data: { app: baton.app },
