@@ -38,7 +38,7 @@ define('io.ox/presenter/actions', [
         id: 'startremote',
         //#. 'start presentation' dropdown menu entry to start a remote presentation where remote participants would be able to join.
         label: gt('Start remote presentation'),
-        description: gt('Start remote presentation Broadcast your presentation over the Web.'),
+        description: gt('Broadcast your presentation over the Web.'),
         ref: PRESENTER_ACTION_ID + '/start/remote'
     });
 
