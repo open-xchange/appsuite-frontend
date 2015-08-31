@@ -321,8 +321,9 @@ define('io.ox/mail/compose/extensions', [
             baton.view.signaturesLoading = $.Deferred();
             require(['io.ox/core/api/snippets'], function (snippetAPI) {
                 snippetAPI.getAll('signature').always(function (signatures) {
-                    baton.model.set('signatures', signatures);
-                    baton.view.signaturesLoading.resolve(signatures);
+                    var oldSignatures = baton.model.get('signatures') || [],
+                        allSignatures = _.uniq(signatures.concat(oldSignatures), false, function (o) { return o.id; });
+                    baton.model.set('signatures', allSignatures);
                     var sa = _.map(signatures, function (o) {
                         return { 'id': o.id, 'displayName': o.displayname };
                     });
@@ -332,24 +333,43 @@ define('io.ox/mail/compose/extensions', [
                             self.data('view').option('defaultSignatureId', item.id, item.displayName);
                         });
                     }
+                    baton.view.signaturesLoading.resolve(allSignatures);
                 });
             });
         },
 
         signaturemenu: function (baton) {
             if (_.device('smartphone')) return;
+
             var self = this,
-            dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true })
-                .option('defaultSignatureId', '', gt('No signature'));
-            ext.point(POINT + '/signatures').invoke('draw', dropdown.$el, baton);
-            dropdown.$ul.addClass('pull-right');
-            baton.view.signaturesLoading.done(function (sig) {
-                if (sig.length > 0) {
+                container = $('<div class="dropdown signatures text-left">');
+
+            function draw() {
+                var dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true, el: container })
+                    .option('defaultSignatureId', '', gt('No signature'));
+
+                ext.point(POINT + '/signatures').invoke('draw', dropdown.$el, baton);
+                dropdown.$ul.addClass('pull-right');
+                baton.view.signaturesLoading.done(function () {
+                    dropdown.divider();
+                    dropdown.link('settings', gt('Manage signatures'), function () {
+                        var options = { id: 'io.ox/mail/settings/signatures' };
+                        ox.launch('io.ox/settings/main', options).done(function () {
+                            this.setSettingsPane(options);
+                        });
+                    });
                     dropdown.$ul.addClass('pull-right');
-                    dropdown.render().$el.addClass('signatures text-left');
-                }
+                    dropdown.render();
+                });
+
+                container.empty().append(dropdown.$el);
+            }
+
+            require(['io.ox/core/api/snippets'], function (snippetAPI) {
+                baton.view.listenTo(snippetAPI, 'refresh.all', draw);
+                draw();
             });
-            self.append(dropdown.$el);
+            self.append(container);
         },
 
         optionsmenu: function (baton) {
