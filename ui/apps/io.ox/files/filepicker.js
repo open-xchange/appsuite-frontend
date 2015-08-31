@@ -33,6 +33,7 @@ define('io.ox/files/filepicker', [
 
         options = _.extend({
             filter: function () { return true; },
+            sorter: function () {},
             header: gt('Add files'),
             primaryButtonText: gt('Save'),
             // cancelButtonText: gt('Cancel'), // really?
@@ -124,6 +125,7 @@ define('io.ox/files/filepicker', [
                 filesPane.append(
                     _.chain(files)
                     .filter(options.filter)
+                    .sortBy(options.sorter)
                     .map(function (file) {
                         var title = (file.filename || file.title),
                             $div = $('<li class="file selectable">').attr('data-obj-id', _.cid(file)).append(
