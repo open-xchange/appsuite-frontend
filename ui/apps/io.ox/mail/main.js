@@ -1040,7 +1040,12 @@ define('io.ox/mail/main', [
             // if a mail will be deleted in detail view, go back one page
             api.on('beforedelete', function () {
                 if (app.pages.getCurrentPage().name === 'detailView') {
-                    app.pages.goBack();
+                    // check if the threadoverview is empty
+                    if (app.props.get('thread') && app.threadView.collection.length === 1) {
+                        app.pages.changePage('listView', { animation: 'slideright' });
+                    } else {
+                        app.pages.goBack();
+                    }
                 }
                 app.listView.selection.selectNone();
             });
