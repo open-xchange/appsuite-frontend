@@ -234,13 +234,13 @@ define('io.ox/calendar/week/perspective', [
         },
 
         restore: function () {
-            if (this.view.restore) {
+            if (this.view) {
                 this.view.restore();
             }
         },
 
         save: function () {
-            if (this.view.save) {
+            if (this.view) {
                 this.view.save();
             }
         },
