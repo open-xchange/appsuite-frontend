@@ -59,9 +59,6 @@ define('io.ox/calendar/settings/timezones/pane', [
         draw: function () {
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle expertmode').append(
-                        $('<h2>').text(gt('Favorite timezones'))
-                    ),
                     new FavoriteView({ model: model }).render().$el
                 )
             );
