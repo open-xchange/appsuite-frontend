@@ -1,4 +1,4 @@
-/* Not supported: @@vairables
+/* Not supported: @@variables
  */
 
 if (process.argv.length > 2) {
@@ -35,6 +35,7 @@ var defFiles = [
     'apps/3rd.party/bootstrap/less/variables.less',
     'apps/3rd.party/bootstrap/less/mixins.less',
     'apps/themes/definitions.less',
+    'apps/themes/mixins.less',
     'apps/io.ox/dynamic-theme/definitions.less.in'];
 var definitions;
 parse(defFiles.map(function (file) { return fs.readFileSync(file, 'utf8'); })
@@ -72,7 +73,7 @@ function parse(input, file, callback) {
             relativeUrls: true,
             filename: file,
             syncImport: true,
-            paths: [path.dirname(file)]
+            paths: [path.dirname(file), 'apps/3rd.party/bootstrap/less/']
         }).parse(input, function (e, css) { e ? die(e) : callback(css); });
     } catch (e) {
         die(e);
