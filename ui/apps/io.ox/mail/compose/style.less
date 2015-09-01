@@ -221,13 +221,31 @@
     .io-ox-mail-compose {
         padding-top: 8px;
 
-        & > .mail-compose-fields > .row {
+        padding: 0;
+        margin:0;
 
-            margin-bottom: 7px;
+        textarea {
+            padding:8px 16px;
+            border:0;
+            &:focus {
+                outline: none;
+            }
+        }
+
+        & > .mail-compose-fields > .row {
+            font-size:16px;
+            label {
+                font-size: 16px;
+                font-weight: 400;
+                color: #aaa;
+            }
+            margin:0;
 
             &.sender { display: none; }
 
             &[data-extension-id=to],&[data-extension-id=cc],&[data-extension-id=bcc] {
+                padding-top: 2px;
+                padding-bottom: 2px;
                 .col-xs-11 {
                     width: 90%;
                     margin-right: -5px;
@@ -236,22 +254,25 @@
             &[data-extension-id=subject] {
                 .col-xs-12 { padding-left: 7px; }
             }
-            &[data-extension-id=composetoolbar] { padding-top:5px; }
+            &[data-extension-id=composetoolbar] {
+                padding-top:8px;
+                padding-bottom:4px;
+            }
 
             .maillabel {
-                padding-top: 3px;
                 &.col-xs-1 {
                     width: 10%;
                 }
             }
 
-            &.subject input { padding-left: 8px; }
-
-            &.composetoolbar { margin-top: 5px; }
+            &.subject {
+                padding-bottom: 6px;
+                padding-top:3px;
+                input { padding-left: 8px; font-size: 16px; font-weight:300; }
+            }
 
             &:not(.attachments) {
                 border-bottom: 1px solid #ccc;
-                padding-bottom: 5px;
             }
             .token-input, &.subject input {
                 &::-webkit-input-placeholder {
@@ -278,6 +299,7 @@
             }
 
             .form-control {
+                padding-top: 7px;
                 border: none;
                 //border-bottom: 1px solid #aaa;
                 border-radius: 0;
@@ -300,7 +322,7 @@
         .mail-attachment-list {
             margin-left: -15px;
             margin-right: -15px;
-            padding: 0px 15px 8px 15px;
+            padding: 8px 15px 9px;
             border-bottom: 1px solid #ccc;
             &.open { border-bottom: 1px solid #ccc; }
             &.empty { border-bottom: 0; }
