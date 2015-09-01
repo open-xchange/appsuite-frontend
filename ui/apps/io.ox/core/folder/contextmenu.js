@@ -431,7 +431,7 @@ define('io.ox/core/folder/contextmenu', [
 
                 var supportsInvite = capabilities.has('invite_guests'),
                     supportsLinks = capabilities.has('share_links'),
-                    showInvitePeople = supportsInvite && model.supports('permissions'),
+                    showInvitePeople = supportsInvite && model.supportsShares(),
                     showGetLink = supportsLinks && !model.is('mail') && model.isShareable(id);
 
                 // stop if neither invites or links are supported
