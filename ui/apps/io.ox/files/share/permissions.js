@@ -279,7 +279,7 @@
                 var bits = this.model.get('bits'), bitmask;
                 if (this.parentModel.isFile()) {
                     if (bits === 2 || bits === 4) return 'reviewer';
-                } else if (this.model.get('entity') === ox.user_id) {
+                } else if (this.model.get('entity') === this.parentModel.get('created_by')) {
                     return 'owner';
                 } else {
                     bitmask = folderAPI.Bitmask(this.model.get('bits'));
@@ -416,7 +416,7 @@
                     role = baton.view.getRole(),
                     description = baton.view.getRoleDescription(role),
                     isFile = baton.parentModel.isFile(),
-                    isOwner = baton.model.get('entity') === ox.user_id;
+                    isOwner = baton.model.get('entity') === baton.parentModel.get('created_by');
 
                 // apply role for the first time
                 baton.model.set('role', role, { silent: true });
@@ -571,7 +571,7 @@
 
                 var isFolderAdmin = folderAPI.Bitmask(baton.parentModel.get('own_rights')).get('admin') >= 1;
                 if (!baton.parentModel.isAdmin()) return;
-                if (isFolderAdmin && baton.model.get('entity') === ox.user_id) return;
+                if (isFolderAdmin && baton.model.get('entity') === baton.parentModel.get('created_by')) return;
 
                 var dropdown = new DropdownView({ label: $('<i class="fa fa-bars">'), smart: true, title: gt('Actions') }),
                     type = baton.model.get('type'),
