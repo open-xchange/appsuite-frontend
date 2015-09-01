@@ -216,18 +216,13 @@ define('io.ox/core/settings/pane', [
             index: 401,
             className: 'form-group',
             render: function () {
-                var guid = _.uniqueId('form-control-label-');
                 this.$el.append(
-                    $('<label>').attr({
-                        class: 'control-label col-sm-4',
-                        for: guid
-                    }).text(gt('High contrast theme')),
-                    $('<div>').addClass('col-sm-6').append(
-                        new miniViews.CheckboxView({
-                            name: 'highcontrast',
-                            model: this.baton.model,
-                            id: guid
-                        }).render().$el
+                    $('<div class="col-sm-offset-4 col-sm-8">').append(
+                        $('<div class="checkbox">').addClass('').append(
+                            $('<label class="control-label">').text(gt('High contrast theme')).prepend(
+                                new miniViews.CheckboxView({ name: 'highcontrast', model: this.baton.model }).render().$el
+                            )
+                        )
                     )
                 );
             }
@@ -360,18 +355,13 @@ define('io.ox/core/settings/pane', [
                         this.baton.model.set('autoOpenNotification', false);
                     }
 
-                    var guid = _.uniqueId('form-control-label-');
                     this.$el.append(
-                        $('<label>').attr({
-                            class: 'control-label col-sm-4',
-                            for: guid
-                        }).text(gt('Automatic opening of notification area')),
-                        $('<div>').addClass('col-sm-6').append(
-                            new miniViews.CheckboxView({
-                                name: 'autoOpenNotification',
-                                model: this.baton.model,
-                                id: guid
-                            }).render().$el
+                        $('<div class="col-sm-offset-4 col-sm-8">').append(
+                            $('<div>').addClass('checkbox').append(
+                                $('<label class="control-label">').text(gt('Automatic opening of notification area')).prepend(
+                                    new miniViews.CheckboxView({ name: 'autoOpenNotification', model: this.baton.model }).render().$el
+                                )
+                            )
                         )
                     );
                 }
@@ -384,13 +374,6 @@ define('io.ox/core/settings/pane', [
             index: 800,
             className: 'form-group',
             render: function () {
-                var guid = _.uniqueId('form-control-label-'),
-                    miniView = new miniViews.CheckboxView({
-                        name: 'showDesktopNotifications',
-                        model: this.baton.model,
-                        id: guid
-                    });
-
                 this.baton.model.on('change:showDesktopNotifications', function (e, value) {
                     if (value === true) {
                         desktopNotifications.requestPermission();
@@ -398,12 +381,12 @@ define('io.ox/core/settings/pane', [
                 });
 
                 this.$el.append(
-                    $('<label>').attr({
-                        class: 'control-label col-sm-4',
-                        for: guid
-                    }).text(gt('Show desktop notifications')),
-                    $('<div>').addClass('col-sm-6').append(
-                        miniView.render().$el
+                    $('<div class="col-sm-offset-4 col-sm-8">').append(
+                        $('<div>').addClass('checkbox').append(
+                            $('<label class="control-label">').text(gt('Show desktop notifications')).prepend(
+                                new miniViews.CheckboxView({ name: 'showDesktopNotifications', model: this.baton.model }).render().$el
+                            )
+                        )
                     )
                 );
             }
