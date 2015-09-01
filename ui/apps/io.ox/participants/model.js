@@ -247,8 +247,12 @@ define('io.ox/participants/model', [
             var ret = {
                 type: this.get('type')
             };
+            if (this.get('field')) {
+                ret.field = this.get('field');
+            }
             if (this.get('type') === 5) {
-                ret.mail = this.getEmail();
+                // consider field (e.g. email2)
+                ret.mail = this.get(this.get('field')) || this.getEmail();
                 var dn = util.getMailFullName(this.toJSON());
                 if (!_.isEmpty(dn)) {
                     ret.display_name = dn;
