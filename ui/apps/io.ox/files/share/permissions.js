@@ -81,6 +81,19 @@
                 }
             },
 
+            isMyself: function () {
+                return this.get('type') === 'user' && this.get('entity') === ox.user_id;
+            },
+
+            isInternal: function () {
+                var type = this.get('type');
+                return type === 'user' || type === 'group';
+            },
+
+            isAnonymous: function () {
+                return this.get('type') === 'anonymous';
+            },
+
             // bits    Number  A number as described in Permission flags.
             // entity  Number  (ignored for type “anonymous” or “guest”) User ID of the user or group to which this permission applies.
             // group   Boolean (ignored for type “anonymous” or “guest”) true if entity refers to a group, false if it refers to a user.
@@ -121,7 +134,6 @@
 
                 return data;
             }
-
         }),
 
         // Permission Collection
@@ -416,12 +428,14 @@
                     role = baton.view.getRole(),
                     description = baton.view.getRoleDescription(role),
                     isFile = baton.parentModel.isFile(),
-                    isOwner = baton.model.get('entity') === baton.parentModel.get('created_by');
+                    isOwner = baton.model.get('entity') === baton.parentModel.get('created_by'),
+                    module = baton.parentModel.get('module'),
+                    supportsWritePrivileges = baton.model.isInternal() || !/^(contacts|calendar|tasks)$/.test(module);
 
                 // apply role for the first time
                 baton.model.set('role', role, { silent: true });
 
-                if (!baton.parentModel.isAdmin() || isOwner || baton.model.get('type') === 'anonymous') {
+                if (!baton.parentModel.isAdmin() || isOwner || !supportsWritePrivileges || baton.model.isAnonymous()) {
                     node = $.txt(description);
                 } else {
                     dropdown = new DropdownView({ caret: true, label: description, title: gt('Current role'), model: baton.model, smart: true })
@@ -469,8 +483,13 @@
             id: 'detail-dropdown',
             draw: function (baton) {
 
+                var model = baton.model,
+                    isAnonymous = model.isAnonymous(),
+                    module = baton.parentModel.get('module'),
+                    supportsWritePrivileges = model.isInternal() || !/^(contacts|calendar|tasks)$/.test(module);
+
                 // not available for anonymous links (read-only)
-                if (baton.model.get('type') === 'anonymous') {
+                if (isAnonymous) {
                     this.append('<div class="col-sm-2 col-xs-4">');
                     return;
                 }
@@ -478,19 +497,19 @@
                 // simple variant for files
                 if (baton.parentModel.isFile()) {
                     // only fix invalid values
-                    var bits = baton.model.get('bits');
-                    if (bits < 1 || bits > 4) baton.model.set('bits', 1);
+                    var bits = model.get('bits');
+                    if (bits < 1 || bits > 4) model.set('bits', 1);
                     this.append($('<div class="col-sm-2 col-xs-4 detail-dropdown">'));
                     return;
                 }
 
                 // take care of highest bit (64 vs 4 vs 2)
-                var maxFolder = baton.model.get('folder') === 64 ? 64 : 4,
-                    maxRead = baton.model.get('read') === 64 ? 64 : 2,
-                    maxWrite = baton.model.get('write') === 64 ? 64 : 2,
-                    maxDelete = baton.model.get('delete') === 64 ? 64 : 2;
+                var maxFolder = model.get('folder') === 64 ? 64 : 4,
+                    maxRead = model.get('read') === 64 ? 64 : 2,
+                    maxWrite = model.get('write') === 64 ? 64 : 2,
+                    maxDelete = model.get('delete') === 64 ? 64 : 2;
 
-                var dropdown = new DropdownView({ caret: true, keep: true, label: gt('Details'), model: baton.model, smart: true })
+                var dropdown = new DropdownView({ caret: true, keep: true, label: gt('Details'), model: model, smart: true })
                     //
                     // FOLDER access
                     //
@@ -551,8 +570,8 @@
 
                 dropdown.render();
 
-                // disable all items if not admin
-                if (!baton.parentModel.isAdmin()) dropdown.$('li > a').addClass('disabled');
+                // disable all items if not admin or if not any write privileges
+                if (!baton.parentModel.isAdmin() || !supportsWritePrivileges) dropdown.$('li > a').addClass('disabled');
 
                 this.append(
                     $('<div class="col-sm-2 col-xs-4 detail-dropdown">').append(
@@ -575,7 +594,7 @@
 
                 var dropdown = new DropdownView({ label: $('<i class="fa fa-bars">'), smart: true, title: gt('Actions') }),
                     type = baton.model.get('type'),
-                    myself = type === 'user' && baton.model.get('entity') === ox.user_id,
+                    myself = baton.model.isMyself(),
                     isNew = baton.model.has('new');
 
                 switch (type) {
@@ -742,26 +761,26 @@
                         },
                         click: function (e, member) {
                             // build extended permission object
-                            var obj = {
-                                bits: objModel.isFolder() ? 4227332 : 1, // Author : Viewer
-                                group: member.get('type') === 2,
-                                type: member.get('type') === 2 ? 'group' : 'user',
-                                new: true
-                            };
-                            if (member.get('type') === 2 || member.get('type') === 1) {
+                            var isInternal = member.get('type') === 2 || member.get('type') === 1,
+                                isGuest = member.get('type') === 5,
+                                obj = {
+                                    bits: isInternal && objModel.isFolder() ? 4227332 : 1, // Author : Viewer
+                                    group: member.get('type') === 2,
+                                    type: member.get('type') === 2 ? 'group' : 'user',
+                                    new: true
+                                };
+                            if (isInternal) {
                                 obj.entity = member.get('id');
                             }
                             obj.contact = member.toJSON();
                             obj.display_name = member.getDisplayName();
-                            if (member.get('type') === 5) {
+                            if (isGuest) {
                                 obj.type = 'guest';
                                 obj.contact_id = member.get('id');
                                 obj.folder_id = member.get('folder_id');
                                 obj.field = member.get('field');
                                 // guests don't have a proper entity id yet, so we have to check by email
-                                if (permissionsView.collection.isAlreadyGuest(obj)) {
-                                    return;
-                                }
+                                if (permissionsView.collection.isAlreadyGuest(obj)) return;
                             }
                             permissionsView.collection.add(new Permission(obj));
                         },
