@@ -161,13 +161,25 @@ define('io.ox/core/tk/text-editor', function () {
                 //textarea might be destroyed already
                 if (!textarea) return;
                 var h = $(window).height(),
-                    top = textarea.offset().top;
-                textarea.css('minHeight', (h - top - 40));
+                    top = textarea.offset().top,
+                    topBar = $('#io-ox-topbar').height(),
+                    minHeight = Math.max(300, (h - top - topBar));
+
+                if (_.device('smartphone')) {
+                    minHeight = h / 2;
+                    textarea.css({
+                        'width': $(window).width(),
+                        'height': textarea.get(0).scrollHeight + 'px',
+                        'overflow-y': 'hidden'
+                    });
+                }
+                textarea.css('minHeight', minHeight);
             }, 100);
         }());
 
         this.handleShow = function (compose) {
             textarea.prop('disabled', false).idle().show();
+            textarea.on('change.text-editor keyup.text-editor', resizeEditorMargin);
             var parents = textarea.parents('.window-content');
             if (!compose) {
                 textarea.next().hide();
@@ -183,6 +195,7 @@ define('io.ox/core/tk/text-editor', function () {
         };
 
         this.handleHide = function () {
+            textarea.off('change.text-editor keyup.text-editor');
             $(window).off('resize.text-editor');
         };
 
