@@ -584,7 +584,7 @@
         // Remove button
         //
         {
-            index: _.device('smartphone') ? 250 : 500,
+            index: 500,
             id: 'actions',
             draw: function (baton) {
 
