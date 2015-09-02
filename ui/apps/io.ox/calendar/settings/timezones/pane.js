@@ -48,7 +48,7 @@ define('io.ox/calendar/settings/timezones/pane', [
         id: 'header',
         draw: function () {
             this.append(
-                $('<h1>').text(gt.pgettext('app', 'Favorite timezone'))
+                $('<h1>').text(gt.pgettext('app', 'Favorite timezones'))
             );
         }
     });

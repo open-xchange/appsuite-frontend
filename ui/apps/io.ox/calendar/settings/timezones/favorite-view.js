@@ -14,8 +14,9 @@
 define('io.ox/calendar/settings/timezones/favorite-view', [
     'io.ox/backbone/mini-views/timezonepicker',
     'settings!io.ox/core',
-    'gettext!io.ox/calendar'
-], function (TimezonePicker, coreSettings, gt) {
+    'gettext!io.ox/calendar',
+    'io.ox/core/tk/dialogs'
+], function (TimezonePicker, coreSettings, gt, dialogs) {
 
     'use strict';
 
@@ -33,7 +34,7 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
         className: 'expertmode favorite-view',
 
         events: {
-            'click button': 'addFavorite',
+            'click button': 'openDialog',
             'click a[data-action="delete"]': 'removeFavorite'
         },
 
@@ -69,13 +70,6 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
             this.$el.append(
                 $('<div class="form-group">').append(
                     $('<div class="row">').append(
-                        $('<div class="col-sm-4">').append(
-                            new TimezonePicker({
-                                name: 'timezone',
-                                model: model,
-                                className: 'form-control'
-                            }).render().$el
-                        ),
                         $('<div class="col-sm-8">').append(
                             $('<button type="button" class="btn btn-primary" tabindex="1">').text(gt('Add timezone'))
                         )
@@ -89,6 +83,24 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
             this.drawFavorites();
 
             return this;
+        },
+
+        openDialog: function () {
+            new dialogs.ModalDialog()
+                .header($('<h4>').text(gt('Select favorite timezone')))
+                .addPrimaryButton('add', gt('Add'), 'add', { tabIndex: 1 })
+                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                .build(function () {
+                    this.getContentNode().append(
+                        new TimezonePicker({
+                            name: 'timezone',
+                            model: model,
+                            className: 'form-control'
+                        }).render().$el
+                    );
+                })
+                .on('add', this.addFavorite.bind(this))
+                .show();
         },
 
         addFavorite: function () {
@@ -125,6 +137,8 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
             this.model.set('favoriteTimezones', list);
             this.model.set('renderTimezones', _.intersection(list, this.model.get('renderTimezones', [])));
             this.drawFavorites();
+
+            e.preventDefault();
         }
 
     });

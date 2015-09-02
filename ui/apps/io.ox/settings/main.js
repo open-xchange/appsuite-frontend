@@ -29,7 +29,6 @@ define('io.ox/settings/main', [
     'io.ox/core/settings/errorlog/settings/pane',
     'io.ox/core/settings/downloads/pane',
     'io.ox/settings/apps/settings/pane',
-    'io.ox/calendar/settings/timezones/pane',
     'less!io.ox/settings/style'
 ], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, notifications) {
 
