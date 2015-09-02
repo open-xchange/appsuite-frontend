@@ -1745,7 +1745,7 @@ define('io.ox/calendar/week/view', [
                 e = calc(end);
             return {
                 top: s,
-                height: Math.max(Math.round(e - s), self.minCellHeight) - 1
+                height: Math.max(Math.floor(e - s), self.minCellHeight) - 1
             };
         },
 
