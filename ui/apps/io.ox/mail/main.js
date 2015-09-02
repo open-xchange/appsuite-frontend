@@ -407,7 +407,7 @@ define('io.ox/mail/main', [
                 if (value === 610 && !app.props.get('thread')) {
                     // restore thread when it was disabled by force
                     var options = app.getViewOptions(app.folder.get());
-                    app.props.set('thread', options.threadrestore);
+                    app.props.set('thread', options.threadrestore || false);
                 }
                 // now change sort columns
                 model.set('sort', value);
@@ -1040,7 +1040,12 @@ define('io.ox/mail/main', [
             // if a mail will be deleted in detail view, go back one page
             api.on('beforedelete', function () {
                 if (app.pages.getCurrentPage().name === 'detailView') {
-                    app.pages.goBack();
+                    // check if the threadoverview is empty
+                    if (app.props.get('thread') && app.threadView.collection.length === 1) {
+                        app.pages.changePage('listView', { animation: 'slideright' });
+                    } else {
+                        app.pages.goBack();
+                    }
                 }
                 app.listView.selection.selectNone();
             });

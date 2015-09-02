@@ -137,9 +137,13 @@ define('io.ox/participants/model', [
         },
 
         getDisplayName: function () {
-            var dn = util.getMailFullName(this.toJSON());
-            // 'email only' participant
-            return dn || (this.getEmail() !== '' ? this.getEmail().split('@')[0] : '');
+            var dn = util.getMailFullName(this.toJSON()),
+                // extract name if available
+                dnFromInput = this.getEmail().match(/\"([^)]+)\"/) ? this.getEmail().match(/\"([^)]+)\"/)[1] : '',
+                // 'email only' participant
+                dnFromMail = this.getEmail() !== '' ? this.getEmail().split('@')[0] : '';
+
+            return dn || (dnFromInput !== '' ? dnFromInput : dnFromMail);
         },
 
         getEmail: function () {

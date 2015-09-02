@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/text-editor', function () {
+define('io.ox/core/tk/text-editor', ['static/3rd.party/autosize/dist/autosize.js'], function (autosize) {
 
     'use strict';
 
@@ -156,30 +156,25 @@ define('io.ox/core/tk/text-editor', function () {
             }
         };
 
-        var resizeEditorMargin = (function () {
-            return _.debounce(function () {
-                //textarea might be destroyed already
-                if (!textarea) return;
-                var h = $(window).height(),
-                    top = textarea.offset().top;
-                textarea.css('minHeight', (h - top - 40));
-            }, 100);
-        }());
-
         this.handleShow = function (compose) {
             textarea.prop('disabled', false).idle().show();
+
+            _.defer(function () {
+                textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - $('#io-ox-topbar').height())));
+                autosize(textarea);
+            });
+
             var parents = textarea.parents('.window-content');
-            if (!compose) {
-                textarea.next().hide();
-                parents.find('.mail-compose-contenteditable-fields').hide();
-                resizeEditorMargin();
-                $(window).on('resize.text-editor', resizeEditorMargin);
-            } else {
-                parents.find('.mail-compose-contenteditable-fields').hide();
-                resizeEditorMargin();
-                $(window).on('resize.text-editor', resizeEditorMargin);
+            if (!compose) textarea.next().hide();
+
+            parents.find('.mail-compose-contenteditable-fields').hide();
+
+            function resizeEditor () {
+                textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - $('#io-ox-topbar').height())));
+                autosize.update(textarea);
             }
 
+            $(window).on('resize.text-editor', resizeEditor);
         };
 
         this.handleHide = function () {

@@ -48,7 +48,7 @@ define('io.ox/calendar/settings/timezones/pane', [
         id: 'header',
         draw: function () {
             this.append(
-                $('<h1>').text(gt.pgettext('app', 'Favorite timezone'))
+                $('<h1>').text(gt.pgettext('app', 'Favorite timezones'))
             );
         }
     });
@@ -59,9 +59,6 @@ define('io.ox/calendar/settings/timezones/pane', [
         draw: function () {
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle expertmode').append(
-                        $('<h2>').text(gt('Favorite timezones'))
-                    ),
                     new FavoriteView({ model: model }).render().$el
                 )
             );

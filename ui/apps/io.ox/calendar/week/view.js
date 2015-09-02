@@ -249,7 +249,7 @@ define('io.ox/calendar/week/view', [
                 month--;
             }
             this.apiRefTime = moment(this.startDate).month(month).date(1);
-            this.app.refDate = this.refDate;
+            if (this.app) this.app.refDate = this.refDate;
         },
 
         /**

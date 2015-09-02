@@ -120,13 +120,13 @@ define('io.ox/settings/apps/settings/pane', [
         model: OAuthModel,
         load: function () {
             var self = this;
-
             return http.GET({
                 module: 'oauth/grants',
                 params: {
                     action: 'all'
                 }
-            }).done(function (list) {
+            })
+            .done(function (list) {
                 self.reset(list);
             });
         }
@@ -138,6 +138,7 @@ define('io.ox/settings/apps/settings/pane', [
         id: 'title',
         index: 100,
         draw: function () {
+            this.addClass('io-ox-app-settings');
             this.append(
                 $('<h1>').text(gt('External Apps'))
             );
@@ -171,7 +172,7 @@ define('io.ox/settings/apps/settings/pane', [
         draw: function () {
             var $fieldset;
 
-            this.append($fieldset = $('<fieldset class="io-ox-app-settings">'));
+            this.append($fieldset = $('<fieldset>'));
 
             if (collection.length > 0) {
                 collection.load();

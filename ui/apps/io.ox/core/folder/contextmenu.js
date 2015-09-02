@@ -406,7 +406,7 @@ define('io.ox/core/folder/contextmenu', [
 
             function invite(e) {
                 e.preventDefault();
-                var id = String(e.data.app.folder.get());
+                var id = e.data.id;
                 require(['io.ox/files/share/permissions'], function (controller) {
                     controller.showFolderPermissions(id);
                 });
@@ -414,7 +414,7 @@ define('io.ox/core/folder/contextmenu', [
 
             function getALink(e) {
                 e.preventDefault();
-                var id = String(e.data.app.folder.get());
+                var id = e.data.id;
                 ox.load(['io.ox/files/api', 'io.ox/files/actions/share']).done(function (filesApi, action) {
                     var model = new filesApi.Model(api.pool.getModel(id).toJSON());
                     action.link([model]);
@@ -425,34 +425,35 @@ define('io.ox/core/folder/contextmenu', [
 
                 if (_.device('smartphone')) return;
 
+                // check if folder can be shared
+                var id = String(baton.data.id),
+                    model = api.pool.getModel(id);
+
                 var supportsInvite = capabilities.has('invite_guests'),
-                    supportsLinks = capabilities.has('share_links');
+                    supportsLinks = capabilities.has('share_links'),
+                    showInvitePeople = supportsInvite && model.supportsShares(),
+                    showGetLink = supportsLinks && !model.is('mail') && model.isShareable(id);
 
                 // stop if neither invites or links are supported
-                if (!supportsInvite && !supportsLinks) return;
-
-                // check if folder can be shared
-                var id = String(baton.app.folder.get()),
-                    model = api.pool.getModel(id);
-                if (!model.isShareable(id)) return;
+                if (!showInvitePeople && !showGetLink) return;
 
                 header.call(this, gt('Sharing'));
 
-                if (supportsInvite) {
+                if (showInvitePeople) {
                     addLink(this, {
                         action: 'invite',
-                        data: { app: baton.app },
+                        data: { app: baton.app, id: id },
                         enabled: true,
                         handler: invite,
-                        text: gt('Invite people')
+                        text: model.isShareable(id) ? gt('Invite people') : gt('Existing shares')
                     });
                 }
 
                 // "Get link" doesn't work for mail folders
-                if (supportsLinks && !model.is('mail')) {
+                if (showGetLink) {
                     addLink(this, {
                         action: 'get-link',
-                        data: { app: baton.app },
+                        data: { app: baton.app, id: id },
                         enabled: true,
                         handler: getALink,
                         text: gt('Get link')
@@ -511,7 +512,7 @@ define('io.ox/core/folder/contextmenu', [
 
             function handler(e) {
                 e.preventDefault();
-                var id = e.data.baton.app.folder.get();
+                var id = e.data.id;
                 require(['io.ox/core/folder/actions/properties'], function (fn) {
                     fn(id);
                 });
@@ -523,7 +524,7 @@ define('io.ox/core/folder/contextmenu', [
 
                 addLink(this, {
                     action: 'properties',
-                    data: { baton: baton },
+                    data: { baton: baton, id: String(baton.data.id) },
                     enabled: true,
                     handler: handler,
                     text: gt('Properties')

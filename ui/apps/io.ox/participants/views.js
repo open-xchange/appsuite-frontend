@@ -107,6 +107,7 @@ define('io.ox/participants/views', [
         isOrganizer: function () {
             if (!this.options.baton) return false;
             var appointment = this.options.baton.model.toJSON();
+            if (!appointment.organizerId) return false;
             return this.model.get('id') === appointment.organizerId;
         },
 
