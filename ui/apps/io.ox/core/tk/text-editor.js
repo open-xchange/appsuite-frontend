@@ -156,47 +156,62 @@ define('io.ox/core/tk/text-editor', function () {
             }
         };
 
-        var resizeEditorMargin = (function () {
-            return _.debounce(function () {
-                //textarea might be destroyed already
-                if (!textarea) return;
-                var h = $(window).height(),
-                    top = textarea.offset().top,
-                    topBar = $('#io-ox-topbar').height(),
-                    minHeight = Math.max(300, (h - top - topBar));
+        // Shadow div to reflect textarea in order to autogrow/autoshrink
+        this.shadow = $('<div></div>').css({
+            position:       'absolute',
+            top:            -10000,
+            left:           -10000,
+            width:          textarea.width() - parseInt(textarea.css('paddingLeft')) - parseInt(textarea.css('paddingRight')),
+            paddingTop:     textarea.css('paddingTop'),
+            paddingBottom:  textarea.css('paddingBottom'),
+            fontSize:       textarea.css('fontSize'),
+            fontFamily:     textarea.css('fontFamily'),
+            lineHeight:     textarea.css('lineHeight'),
+            resize:         'none'
+        });
 
-                if (_.device('smartphone')) {
-                    minHeight = h / 2;
-                    textarea.css({
-                        'width': $(window).width(),
-                        'height': textarea.get(0).scrollHeight + 'px',
-                        'overflow-y': 'hidden'
-                    });
-                }
-                textarea.css('minHeight', minHeight);
-            }, 100);
-        }());
+        this.resizeEditor = function () {
+            var self = this,
+                minHeight = Math.max(300, ($(window).height() - textarea.offset().top - $('#io-ox-topbar').height()));
+
+            var times = function (string, number) {
+                for (var i = 0, r = ''; i < number; i++) r += string;
+                return r;
+            };
+
+            var val = textarea.get(0).value
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/&/g, '&amp;')
+                .replace(/\n$/, '<br/>&nbsp;')
+                .replace(/\n/g, '<br/>')
+                .replace(/ {2,}/g, function (space) { return times('&nbsp;', space.length -1) + ' '; });
+
+            self.shadow.html(val);
+            textarea.css('height', Math.max(self.shadow.height(), minHeight));
+        };
 
         this.handleShow = function (compose) {
+            var self = this;
+
+            this.shadow.appendTo(document.body);
             textarea.prop('disabled', false).idle().show();
-            textarea.on('change.text-editor keyup.text-editor', resizeEditorMargin);
+
             var parents = textarea.parents('.window-content');
-            if (!compose) {
-                textarea.next().hide();
-                parents.find('.mail-compose-contenteditable-fields').hide();
-                resizeEditorMargin();
-                $(window).on('resize.text-editor', resizeEditorMargin);
-            } else {
-                parents.find('.mail-compose-contenteditable-fields').hide();
-                resizeEditorMargin();
-                $(window).on('resize.text-editor', resizeEditorMargin);
-            }
+            if (!compose) textarea.next().hide();
+
+            parents.find('.mail-compose-contenteditable-fields').hide();
+
+            $(window).on('resize.text-editor', function () { self.resizeEditor(); });
+            textarea.on('input.text-editor', function () { _.defer(function () { self.resizeEditor(); }); });
+            _.defer(function () { self.resizeEditor(); });
 
         };
 
         this.handleHide = function () {
-            textarea.off('change.text-editor keyup.text-editor');
+            textarea.off('input.text-editor');
             $(window).off('resize.text-editor');
+            this.shadow.remove();
         };
 
         this.getContainer = function () {
