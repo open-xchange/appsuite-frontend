@@ -877,7 +877,9 @@
 
         .widget-controls {
 
+            float: right;
             display: inline-block;
+            padding-top: 3px;
 
             a[data-action="remove"] {
 
@@ -900,12 +902,14 @@
         }
 
         .widget-title {
+            display: block;
             font-weight: bold;
             margin-top: 1px;
             margin-right: 2em;
             white-space: nowrap;
             text-align: left;
             max-width: 100%;
+            padding-right: 5px;
             .ellipsis();
         }
 
@@ -925,6 +929,7 @@
                 color: #000000;
                 text-shadow: 0 1px 0 #ffffff;
                 opacity: 0.2;
+                margin-right: 2em;
 
                 &:hover {
                     opacity: 0.4;
