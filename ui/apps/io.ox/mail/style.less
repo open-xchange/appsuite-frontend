@@ -1569,12 +1569,20 @@ h4.mail-attachment-preview {
         }
     }
 
-    .mail-item.unread .unread-toggle {
-        display: inline-block;
-        position: relative;
-        left: -35px;
-        bottom: 22px;
+    .mail-item.unread  {
+        .unread-toggle {
+            display: inline-block;
+            position: relative;
+            right: 16px;
+            margin-top: 8px;
+            bottom: auto;
+        }
+        .subject {
+            margin-right: 32px;
+        }
     }
+
+
 
     .mail-item .unread-toggle {
         display: none;
