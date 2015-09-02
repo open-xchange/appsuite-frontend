@@ -300,11 +300,54 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                     });
                 });
             },
+
             // returns true or false if there is a filestorage Service available for the given Oauth Account serviceId.
             // If serviceId is undefined an array with ids for all available serviceIds is returned
             // fails if rampup was not done before (configscache empty)
             isStorageAvailable: function (serviceId) {
                 return serviceId ? !!serviceConfigsCache[serviceId] : _.keys(serviceConfigsCache);
+            },
+
+            // We need to keep Oauth Accounts and filestorage accounts in sync, there might be cases with strange configurations that need to be cleaned up to work properly
+            // We don't want Oauth accounts without filestorage accounts and vice versa
+            // Checks if every Oauth account has a proper filestorage account, if not creates one
+            // Checks if every filestorage account has a proper Oauth account, if not removes it
+            // if there are multiple filestorage accounts for one Oauth account, only one is kept
+            consistencyCheck: function () {
+                if (!api.rampupDone) {
+                    return;
+                }
+                require(['io.ox/oauth/keychain'], function (keychain) {
+                    // use a collection for convenience
+                    try {
+                        var accountsWithStorage = {},
+                            oauthAccounts = new Backbone.Collection(keychain.accounts[0]);
+                        _(accountsCache).each( function (accountType, id) {
+                            // let's use a hardcoded list here to not accidentally delete filestorages we are not interested in
+                            if (id === 'googledrive' || id === 'dropbox' || id === 'onedrive' || id === 'boxcom') {
+                                _(accountType.models).each(function (accountModel) {
+                                    var account = accountModel.attributes;
+                                    if (account.configuration && account.configuration.account) {
+                                        if (oauthAccounts.get(account.configuration.account) && !accountsWithStorage[account.configuration.account]) {
+                                            accountsWithStorage[account.configuration.account] = true;
+                                        } else {
+                                            // there is a Filestorage Account without OauthAccount: oauthAccounts.get(account.configuration.account) failed
+                                            // or we have one Oauth Account with multiple filestorageAccounts: accountsWithStorage[account.configuration.account] is true
+                                            api.deleteAccount(accountModel);
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        _(oauthAccounts.models).each(function (account) {
+                            // check if we have oauth accounts without fileStorage that need one
+                            if (!accountsWithStorage[account.id] && api.isStorageAvailable(account.get('serviceId'))) {
+                                api.createAccountFromOauth(account.attributes);
+                            }
+                        });
+                    } catch (e) {
+                    }
+                });
             }
         };
 
