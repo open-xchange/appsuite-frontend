@@ -34,6 +34,9 @@ define('io.ox/core/notifications/badgeview', [
             this.nodes = {};
         },
         onChangeCount: function () {
+            if (!this.nodes.badge) {
+                return;
+            }
             var count = this.model.get('count'),
                 //#. %1$d number of notifications
                 //#, c-format
@@ -81,7 +84,9 @@ define('io.ox/core/notifications/badgeview', [
             return this;
         },
         setNotifier: function (b) {
-            this.nodes.badge.toggleClass('active', !!b);
+            if (this.nodes.badge) {
+                this.nodes.badge.toggleClass('active', !!b);
+            }
         },
         registerView: function (view) {
             var views = this.model.get('registeredViews'),
