@@ -1692,7 +1692,7 @@ h4.mail-attachment-preview {
 
         section.body {
             border-top: 1px solid #ddd;
-            padding: 8px;
+            padding: 8px 16px;
         }
 
         &:not(.expanded) .recipients {
@@ -1717,11 +1717,19 @@ h4.mail-attachment-preview {
         }
 
         .content {
+            padding: 0;
             font-size: 16px;
             * {
                 line-height: 1.42857142em; // ~20px at 14px
             }
+            ul, ol {
+                padding-left: 10px;
+                margin-left: 8px;
+            }
         }
+    }
+    .io-ox-pagecontroller.page .mail-detail .content {
+        margin:0;
     }
 
     .thread-view.list-view {
