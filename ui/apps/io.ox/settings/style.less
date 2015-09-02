@@ -217,17 +217,23 @@
 .sectiondelimiter {
     clear: both;
     text-align: right;
-    padding: 0.25em 0 0.5em 0;
-    margin: 1.5em 0 1.5em 0;
-    border-bottom: 1px solid @inline-link-border-color;
-    height: 1px;
+    padding: 0;
+    padding-bottom: 7px;
+    margin: 0;
+    margin-top: 8px;
+    border-top: 1px solid @inline-link-border-color;
+    height: 8px;
 }
 
 .settings-detail-pane {
 
+    &.default-content-padding {
+        padding: 24px 32px;
+    }
+
     fieldset {
         padding: 0;
-        margin: 20px 0;
+        margin: 0;
         border: 0;
         min-width: 0;
     }
@@ -244,16 +250,83 @@
         line-height: 32px;
         margin: 2em 0 1em 0;
 
-        &:first-child { margin: 0 0 1.5em 0; }
+        &:first-child {
+            margin: 0;
+            margin-top: 16px;
+            padding-bottom: 16px;
+            line-height: 30px;
+            height: 32px;
+        }
         &.no-margin { margin: 0; }
     }
 
     h2, h2.pane-headline {
         font-size: 20px;
-        line-height: 24px;
+        line-height: 22px;
         margin: 2em 0 1.5em 0;
 
         &.no-margin { margin: 0; }
+    }
+
+    legend.sectiontitle {
+        font-weight: 700;
+        display: block;
+        width: 100%;
+        font-size: 14px;
+        height: 32px;
+        color: #333;
+        margin: 0;
+
+        h2 {
+            font-weight: 700;
+            font-size: 14px;
+            margin: 0;
+        }
+    }
+
+    .form-group {
+        margin-bottom: 8px;
+
+        label {
+            margin-bottom: 4px;
+        }
+    }
+
+    .radio, .checkbox {
+        margin: 0;
+        margin-top: 8px;
+
+        label {
+            height: 24px;
+            margin: 0;
+            line-height: 22px;
+        }
+
+        input {
+            margin-top: 5px;
+        }
+    }
+
+    input, select, button {
+        margin-top: 4px;
+        margin-bottom: 6px;
+    }
+
+    .form-horizontal {
+        .form-group {
+            label {
+                margin-top: 4px;
+            }
+            .checkbox {
+                min-height: 0;
+                margin: 0;
+                padding: 0;
+                label {
+                    margin: 0;
+                    padding-top: 0;
+                }
+            }
+        }
     }
 
 /*    .form-horizontal {
@@ -393,22 +466,6 @@
     }
 }
 
-.settings-detail-pane legend.sectiontitle {
-    font-weight: 700;
-    display: block;
-    width: 100%;
-    font-size: 14px;
-    line-height: 24px;
-    color: #333;
-    margin: 15px 0;
-
-    h2 {
-        font-weight: 700;
-        font-size: 14px;
-        margin: 0;
-    }
-}
-
 @media (max-width: 480px), (max-device-width: 480px)  {
 
     .io-ox-settings-window {
@@ -420,7 +477,15 @@
 
     .settings-detail-pane {
 
+         &.default-content-padding {
+            padding: 7px 8px 8px 8px;
+        }
+
         h1:first-child, h1.pane-headline:first-child { margin: 0; }
+
+        .form-group {
+            margin-bottom: 0;
+        }
 
         .btn.btn-primary {
             margin-bottom: 7px;
