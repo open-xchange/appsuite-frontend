@@ -306,7 +306,7 @@ define('io.ox/core/settings/pane', [
     (function () {
         var MINUTES = 60000,
             options = [
-                { label: gt('Off'), value: 0 },
+                { label: gt('disable'), value: 0 },
                 { label: gt('5 minutes'), value: 5 * MINUTES },
                 { label: gt('10 minutes'), value: 10 * MINUTES },
                 { label: gt('15 minutes'), value: 15 * MINUTES },
