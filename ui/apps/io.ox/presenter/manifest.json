@@ -4,7 +4,7 @@
     "icon": "default.png",
     "category": "Productivity",
     "settings": false,
-    "requires": "infostore",
+    "requires": "presenter infostore document_preview",
     "refreshable": true,
     "path": "io.ox/presenter/main"
 }

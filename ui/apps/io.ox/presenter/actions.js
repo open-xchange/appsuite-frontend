@@ -61,6 +61,8 @@ define('io.ox/presenter/actions', [
     });
 
     new Action(PRESENTER_ACTION_ID + '/start/remote', {
+        // starting a remote presentation requires the 'remote_presenter' capability
+        capabilities: 'remote_presenter',
         requires: function (e) {
             if (!e.baton.context) { return false; }
 
