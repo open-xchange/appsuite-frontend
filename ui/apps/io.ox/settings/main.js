@@ -264,6 +264,10 @@ define('io.ox/settings/main', [
 
             var item = tree.selection.byId(id),
                 view = item.closest('li').data('view');
+
+            // view may not exists if the user does not have this setting
+            if (!view) return;
+
             folderUtil.open(view.options.parent);
 
             // show subfolders on default
