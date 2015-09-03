@@ -504,7 +504,7 @@
 .calendar-detail {
 
     @media (max-width: 480px), (max-device-width: 480px) {
-        margin: 5px 10px 55px 10px;
+        margin: 8px 10px 55px 10px;
     }
     font-weight: 300;
 
@@ -631,6 +631,52 @@
 
         }
 
+        h1.subject {
+            line-height: 24px;
+            padding-top: 3px;
+            margin-bottom: 5px;
+        }
+
+        .date-time, .recurrence {
+            padding-top: 6px;
+            margin-bottom: 2px;
+            line-height: 24px;
+        }
+
+        .date-time {
+            padding-top: 14px;
+        }
+
+        .recurrence {
+            margin-bottom: 10px;
+        }
+
+        .date-time-recurrence { margin: 0; }
+
+        .location {
+            line-height: 32px;
+            padding-top: 18px;
+            margin: 0 0 6px 0;
+        }
+
+        .note {
+            line-height: 24px;
+            padding-top: 22px;
+            margin: 0 0 2px 0;
+        }
+
+        .details {
+            dl {
+                dt, dd {
+                    display: inline-block;
+                    line-height: 24px;
+                }
+
+                dt { min-width: 30%; }
+
+                dd { min-width: 41%; }
+            }
+        }
     }
 
 }

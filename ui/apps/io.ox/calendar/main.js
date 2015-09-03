@@ -541,6 +541,7 @@ define('io.ox/calendar/main', [
         'show-weekview-mobile': function (app) {
             if (_.device('!smartphone')) return;
             app.pages.getPage('week').on('pageshow', function () {
+                app.pages.getNavbar('week').setLeft(app.refDate.format('MMMM'));
                 //app.pages.getPageObject('week').perspective.view.setScrollPos();
             });
         },
