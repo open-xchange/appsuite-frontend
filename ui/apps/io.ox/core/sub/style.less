@@ -22,6 +22,8 @@
 
             .list-title {
                 font-weight: bold;
+                word-wrap: break-word;
+                max-width: 100%;
             }
             .content {
                 line-height: @lineHeight;
@@ -31,7 +33,11 @@
                     a, i { color: #888; }
                     a:hover { color: #555; }
                     clear: both;
-                    margin-top: 6px;
+                    padding-top: 6px;
+                }
+                .breadcrumb-view {
+                    padding-top: 4px;
+                    white-space: pre-wrap;
                 }
                 .breadcrumb {
                     background-color: transparent;

@@ -44,7 +44,22 @@ define('io.ox/core/sub/model', [
         };
     }
 
-    var Subscription = BasicModel.extend({
+    var Publication = BasicModel.extend({
+            ref: 'io.ox/core/sub/publication/',
+            defaults: function () {
+                return {
+                    entity: {},
+                    entityModule: '',
+                    target: ''
+                };
+            },
+
+            url: function () {
+                return this.attributes[this.attributes.target].url;
+            },
+            syncer: createSyncer(api.publications)
+        }),
+        Subscription = BasicModel.extend({
             ref: 'io.ox/core/sub/subscription/',
             url: function () {
                 return this.attributes[this.attributes.source].url;
@@ -80,53 +95,65 @@ define('io.ox/core/sub/model', [
             },
             syncer: createSyncer(api.subscriptions)
         }),
-        Subscriptions = Backbone.Collection.extend({
-            model: Subscription,
-            initialize: function () {
-                var collection = this;
-                api.subscriptions.on('refresh:all', function () {
-                    collection.fetch();
-                });
-                this.on('change:enabled', function (model) {
-                    model.collection.sort();
-                });
-            },
-            sync: function (method, collection) {
-                if (method !== 'read') return;
-                var self = this;
-
-                return api.subscriptions.getAll().then(function (res) {
-                    _(res).each(function (obj) {
-                        var my_model = new self.model(obj);
-                        my_model.fetch().then(function (my_model) {
-                            return collection.add(my_model);
+        PubSubCollection = {
+            factory: function (api) {
+                return Backbone.Collection.extend({
+                    initialize: function () {
+                        var collection = this;
+                        api.on('refresh:all', function () {
+                            collection.fetch();
                         });
-                    });
-                    collection.each(function (model) {
-                        if (_(res).where({ id: model.id }).length === 0) {
-                            collection.remove(model);
-                        }
-                    });
-                    return collection;
+                        this.on('change:enabled', function (model) {
+                            model.collection.sort();
+                        });
+                    },
+                    sync: function (method, collection) {
+                        if (method !== 'read') return;
+                        var self = this;
+
+                        return api.getAll().then(function (res) {
+                            _(res).each(function (obj) {
+                                var my_model = new self.model(obj);
+                                my_model.fetch().then(function (my_model) {
+                                    return collection.add(my_model);
+                                });
+                            });
+                            collection.each(function (model) {
+                                if (_(res).where({ id: model.id }).length === 0) {
+                                    collection.remove(model);
+                                }
+                            });
+                            return collection;
+                        });
+                    },
+                    /**
+                     * get a list of items for a folder
+                     *
+                     * If no folder is provided, all items will be returned.
+                     *
+                     * Use it like:
+                     * <code>
+                     *   model.collection.forFolder({ folder_id: 2342 });
+                     * </code>
+                     *
+                     * @param {object} - an object containing a folder_id attribute
+                     * @return [model] - an array containing matching model objects
+                     */
+                    forFolder: filterFolder,
+                    comparator: function (publication) {
+                        return !publication.get('enabled') + String(publication.get('displayName')).toLowerCase();
+                    }
                 });
-            },
-            /**
-             * get a list of items for a folder
-             *
-             * If no folder is provided, all items will be returned.
-             *
-             * Use it like:
-             * <code>
-             *   model.collection.forFolder({ folder_id: 2342 });
-             * </code>
-             *
-             * @param {object} - an object containing a folder_id attribute
-             * @return [model] - an array containing matching model objects
-             */
-            forFolder: filterFolder
+            }
+        },
+        Publications = PubSubCollection.factory(api.publications).extend({
+            model: Publication
         }),
-        //singleton instance
-        subscriptions;
+        Subscriptions = PubSubCollection.factory(api.subscriptions).extend({
+            model: Subscription
+        }),
+        //singleton instances
+        publications, subscriptions;
 
     function filterFolder(folder) {
         var filter = String(folder.folder_id || folder.folder || '');
@@ -137,6 +164,18 @@ define('io.ox/core/sub/model', [
             return (e.get('entity') || { folder: e.get('folder') }).folder === filter;
         });
     }
+
+    ext.point('io.ox/core/sub/publication/validation').extend({
+        validate: function (obj, errors) {
+            if (!obj.target) {
+                errors.add('target', gt('Publication must have a target.'));
+                return;
+            }
+            if ((obj[obj.target] || {}).siteName === '') {
+                errors.add('siteName', gt('Publication must have a site.'));
+            }
+        }
+    });
 
     ext.point('io.ox/core/sub/subscription/validation').extend({
         validate: function (obj, errors) {
@@ -153,6 +192,15 @@ define('io.ox/core/sub/model', [
     });
 
     return {
+        Publication: Publication,
+        publications: function () {
+            if (!publications) {
+                publications = new Publications();
+            }
+            publications.fetch();
+
+            return publications;
+        },
         subscriptions: function () {
             if (!subscriptions) {
                 subscriptions = new Subscriptions();

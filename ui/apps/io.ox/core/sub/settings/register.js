@@ -23,12 +23,22 @@ define('io.ox/core/sub/settings/register', [
 
     point.extend({
         id: id,
-        title: gt('Subscriptions'),
+        title: gt('Publications and Subscriptions'),
         ref: 'io.ox/core/sub',
         index: 100
     });
 
-    if (!capabilities.has('subscription')) {
+    if (!capabilities.has('publication') && !capabilities.has('subscription')) {
         point.disable(id);
+    } else if (!capabilities.has('publication')) {
+        point.replace({
+            id: id,
+            title: gt('Subscriptions')
+        });
+    } else if (!capabilities.has('subscription')) {
+        point.replace({
+            id: id,
+            title: gt('Publications')
+        });
     }
 });
