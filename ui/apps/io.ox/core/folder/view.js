@@ -230,9 +230,13 @@ define('io.ox/core/folder/view', [
 
         if (_.device('smartphone')) {
             // due to needed support for older androids we use click here
-            tree.$el.on('click', '.folder:not(.virtual)', _.debounce(function (e) {
-                // use default behavior for arrow and virtual folders
+            tree.$el.on('click', '.folder', _.debounce(function (e) {
+                // use default behavior for arrow
                 if ($(e.target).is('.folder-arrow, .fa')) return;
+                // use default behavior for non-selectable virtual folders
+                var targetFolder = $(e.target).closest('.folder'),
+                    selectable = tree.selection && tree.selection.selectableVirtualFolders[targetFolder.data('id')];
+                if (targetFolder.is('.virtual') && !selectable) return;
                 // edit mode?
                 if (app.props.get('mobileFolderSelectMode') === true) {
                     // ignore selection of non-labels in mobile edit mode
