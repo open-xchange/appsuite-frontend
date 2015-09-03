@@ -21,7 +21,8 @@ define('io.ox/metrics/adapters/default', [
     if (!settings.get('tracking/piwik/enabled', false)) return;
 
     var point = ext.point('io.ox/metrics/adapter'),
-        url = settings.get('tracking/piwik/url', 'https://metrics.open-xchange.com/piwik/');
+        url = settings.get('tracking/piwik/url', 'https://metrics.open-xchange.com/piwik/'),
+        id = settings.get('tracking/piwik/id', 1);
 
     // piwik uses global var to allow pushing before tracker is fully loaded
     window._paq = window._paq || [];
@@ -30,7 +31,7 @@ define('io.ox/metrics/adapters/default', [
         id: 'piwik',
         setup: function () {
             _paq.push(['setTrackerUrl', url + 'piwik.php']);
-            _paq.push(['setSiteId', ox.debug ? 2 : 1]);
+            _paq.push(['setSiteId', ox.debug ? 2 : id]);
             _paq.push(['setUserId', this.getUserHash() ]);
             //_paq.push(['trackPageView']);
             _paq.push(['enableLinkTracking']);
