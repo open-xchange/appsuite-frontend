@@ -251,7 +251,7 @@ define('io.ox/core/tk/list', [
                 })
                 .remove();
 
-            if (selected) return;
+            if (!selected) return;
 
             // make sure the first selected item is visible (if out of viewport)
             var top = selected.position().top,
