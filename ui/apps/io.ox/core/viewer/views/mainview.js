@@ -73,6 +73,8 @@ define('io.ox/core/viewer/views/mainview', [
             var startIndex = this.collection.getStartIndex(),
                 startModel = this.collection.at(startIndex);
             this.render(startModel);
+            // init metrics
+            this.initMetrics();
         },
 
         /**
@@ -102,6 +104,23 @@ define('io.ox/core/viewer/views/mainview', [
             // set initial sidebar state
             this.sidebarView.toggleSidebar(state);
             return this;
+        },
+
+        'initMetrics': function () {
+            var self = this;
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+                var toolbar = self.$el.find('.viewer-toolbar');
+                // toolbar actions
+                toolbar.delegate('.io-ox-action-link', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'core',
+                        target: 'viewer/toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+            });
         },
 
         // handler for keyboard events on the viewer
