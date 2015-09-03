@@ -971,15 +971,6 @@ define('io.ox/files/main', [
                     //node = nodes.outer,
                     toolbar = nodes.body.find('.classic-toolbar-container'),
                     sidepanel = nodes.sidepanel;
-                // detail view actions
-                app.getWindow().nodes.main.delegate('.detail-view-header .dropdown-menu a', 'mousedown', function (e) {
-                    metrics.trackEvent({
-                        app: 'drive',
-                        target: 'detail/toolbar',
-                        type: 'click',
-                        action: $(e.currentTarget).attr('data-action')
-                    });
-                });
                 // toolbar actions
                 toolbar.delegate('.io-ox-action-link', 'mousedown', function (e) {
                     metrics.trackEvent({
