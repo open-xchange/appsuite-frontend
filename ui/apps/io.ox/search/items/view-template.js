@@ -211,8 +211,12 @@ define('io.ox/search/items/view-template', [
 
             ext.point('io.ox/search/items/files').extend({
                 draw: function (baton) {
-                    // TODO: replace by new viewer
-                    if (ox.debug) console.error('Need to open new viewer', baton);
+                    // workaround: detach sidepopup the dirty way
+                    $('.io-ox-sidepopup', '#io-ox-windowmanager-pane>.io-ox-search-window').detach();
+                    require(['io.ox/core/viewer/main'], function (Viewer) {
+                        var viewer = new Viewer();
+                        viewer.launch({ files: [].concat(baton.data) });
+                    });
                 }
             });
 
