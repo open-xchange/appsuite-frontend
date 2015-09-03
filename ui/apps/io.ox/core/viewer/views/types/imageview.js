@@ -40,10 +40,13 @@ define('io.ox/core/viewer/views/types/imageview', [
          *  the ImageView instance.
          */
         render: function () {
-            //console.warn('ImageView.render()', this.model.get('filename'));
 
-            var image = $('<img class="viewer-displayer-item viewer-displayer-image">'),
-                previewUrl = this.getPreviewUrl(),
+            // since this node is not yet part of the DOM we look
+            // for the carousel's dimensions directly
+            var carousel = $('.viewer-displayer:visible'),
+                options = { scaleType: 'contain', width: carousel.width(), height: carousel.height() },
+                image = $('<img class="viewer-displayer-item viewer-displayer-image">'),
+                previewUrl = this.getPreviewUrl(options),
                 filename = this.model.get('filename') || '',
                 self = this;
 
