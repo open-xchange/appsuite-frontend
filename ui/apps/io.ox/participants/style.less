@@ -123,12 +123,20 @@
         border: none;
     }
 
+    legend {
+        margin-bottom: 6px;
+        line-height: 18px;
+        padding-top: 4px;
+        padding-bottom: 3px;
+    }
+
     .status {
         //prevent icons from floating around with multiple columns
         display: inline-block;
         vertical-align: top;
 
         margin-left: 4px;
+        line-height: 24px;
 
         &.unconfirmed {
             color: @participant-unconfirmed;
@@ -167,6 +175,12 @@
             }
 
         }
+        @media (max-width: 480px), (max-device-width: 480px) {
+            .io-ox-inline-links.embedded {
+                margin: 8px 0;
+                line-height: 16px;
+            }
+        }
 
     }
 
@@ -178,6 +192,7 @@
         .status {
             position: relative;
             margin-right: 0.3em;
+            line-height: 20px;
         }
 
         .countgroup {
@@ -198,12 +213,14 @@
 
     .participant-list {
 
+        margin-bottom: 12px;
+
         .participant {
 
             vertical-align: top;
-            line-height: 2em;
             width: 250px;
             margin: 0 20px 0em 0;
+            line-height: 0;
 
             &:focus, &:hover {
                 .person {
@@ -214,6 +231,8 @@
             }
 
             .person {
+
+               line-height: 24px;
 
                .ellipsis();
                 // icons and padding need 28px
@@ -242,8 +261,8 @@
                 color: @hc-gray;
                 white-space: normal;
                 padding-left: 1em;
-                line-height: 1.2em;
-                margin-bottom: 0.5em;
+                line-height: 16px;
+                padding-top: 4px;
             }
         }
     }
