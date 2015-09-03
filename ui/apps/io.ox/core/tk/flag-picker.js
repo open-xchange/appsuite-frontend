@@ -98,7 +98,10 @@ define('io.ox/core/tk/flag-picker', [
 
             $zIndex.each(function () {
                 var z = $(this);
-                z.data('oldIndex', z.css('z-index'));
+                //prevent accidentally overwriting of old z Index
+                if (z.data('oldIndex') === undefined) {
+                    z.data('oldIndex', z.css('z-index'));
+                }
                 z.css('z-index', 10000);
             });
 
