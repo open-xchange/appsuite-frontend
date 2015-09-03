@@ -216,6 +216,12 @@ define('io.ox/files/api', [
 
         getUrl: function (type, options) {
             return api.getUrl(this.toJSON(), type, options);
+        },
+
+        hasWritePermissions: function () {
+            var array = this.get('object_permissions') || this.get('com.openexchange.share.extendedObjectPermissions') || [],
+                myself = _(array).findWhere({ entity: ox.user_id });
+            return !!(myself && (myself.bits >= 2));
         }
     });
 
