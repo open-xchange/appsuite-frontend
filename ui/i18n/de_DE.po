@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-09-03 11:17+0100\n"
+"PO-Revision-Date: 2015-09-03 12:06+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -1626,7 +1626,7 @@ msgstr "Zeitzone hinzufügen"
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js:90
 #: module:io.ox/calendar
 msgid "Select favorite timezone"
-msgstr ""
+msgstr "Lieblings-Zeitzone wählen"
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js:91
 #: module:io.ox/calendar apps/io.ox/core/folder/actions/add.js:108
@@ -3472,9 +3472,8 @@ msgid "Import"
 msgstr "Importieren"
 
 #: apps/io.ox/core/folder/contextmenu.js:440 module:io.ox/core
-#, fuzzy
 msgid "Sharing"
-msgstr "Freigeben"
+msgstr "Freigaben"
 
 #: apps/io.ox/core/folder/contextmenu.js:448 module:io.ox/core
 #: apps/io.ox/files/actions.js:669 module:io.ox/files
