@@ -124,7 +124,7 @@
     }
 
     legend {
-        margin-bottom: 7px;
+        margin-bottom: 9px;
         line-height: 18px;
         padding-top: 2px;
         padding-bottom: 2px;
@@ -136,7 +136,9 @@
         vertical-align: top;
 
         margin-left: 4px;
-        line-height: 24px;
+        line-height: 16px;
+        padding-top: 1px;
+        margin-bottom: 7px;
 
         &.unconfirmed {
             color: @participant-unconfirmed;
@@ -178,8 +180,9 @@
     }
     @media (max-width: 480px), (max-device-width: 480px) {
         .io-ox-inline-links.embedded {
-            margin: 8px 0 6px 0;
+            margin: 9px 0 7px 0;
             line-height: 16px;
+            min-height: 0;
         }
     }
 
@@ -212,7 +215,7 @@
 
     .participant-list {
 
-        margin-bottom: 12px;
+        margin-bottom: 8px;
 
         .participant {
 
@@ -231,7 +234,9 @@
 
             .person {
 
-               line-height: 24px;
+               line-height: 16px;
+               padding-top: 1px;
+               margin-bottom: 7px;
 
                .ellipsis();
                 // icons and padding need 28px
