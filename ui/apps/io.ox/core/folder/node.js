@@ -30,7 +30,7 @@ define('io.ox/core/folder/node', [
         className: 'folder selectable',
 
         // indentation in px per level
-        indentation: _.device('smartphone') ? 10 : 30,
+        indentation: _.device('smartphone') ? 15 : 30,
 
         events: {
             'click .folder-options':  'onOptions',
