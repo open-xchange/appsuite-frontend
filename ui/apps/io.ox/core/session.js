@@ -134,19 +134,6 @@ define('io.ox/core/session', [
                 // pending?
                 if (pending !== null) return pending;
 
-                var multiple = [], forceLanguage = options.forceLanguage;
-
-                if (forceLanguage) {
-                    // required for permanent language change
-                    multiple.push({
-                        module: 'jslob',
-                        action: 'update',
-                        id: 'io.ox/core',
-                        data: { language: forceLanguage }
-                    });
-                    delete options.forceLanguage;
-                }
-
                 var params = _.extend(
                     {
                         action: 'login',
@@ -157,12 +144,13 @@ define('io.ox/core/session', [
                         client: that.client(),
                         version: that.version(),
                         timeout: TIMEOUTS.LOGIN,
-                        multiple: JSON.stringify(multiple),
                         rampup: true,
                         rampupFor: 'open-xchange-appsuite'
                     },
                     _(options).pick('action', 'name', 'password', 'language', 'rampup', 'rampupFor', 'share', 'target')
                 );
+
+                if (options.forceLanguage) params.storeLanguage = true;
 
                 return (
                     pending = http.POST({
@@ -178,7 +166,7 @@ define('io.ox/core/session', [
                             ox.rampup = data.rampup || ox.rampup || {};
                             // store session
                             // we pass forceLanguage (might be undefined); fallback is data.locale
-                            set(data, forceLanguage);
+                            set(data, options.forceLanguage);
 
                             // global event
                             ox.trigger('login', data);
