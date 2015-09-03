@@ -376,7 +376,7 @@ define('io.ox/calendar/view-detail', [
         id: 'attachments',
         index: 550,
         draw: function (baton) {
-            var $node = $('<fieldset>').append(
+            var $node = $('<fieldset class="attachments">').append(
                 $('<legend>').addClass('io-ox-label').append(
                     $('<h2>').text(gt('Attachments'))
                 )
