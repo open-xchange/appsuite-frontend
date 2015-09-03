@@ -52,7 +52,6 @@ define('io.ox/calendar/list/perspective', [
             right,
             grid,
             findRecurrence = false,
-            optDropdown = null,
             // how many months do we display
             months = 1;
 
@@ -189,17 +188,6 @@ define('io.ox/calendar/list/perspective', [
             );
         }
 
-        function buildOption(value, text) {
-            return $('<li role="presentation">')
-                .append(
-                    $('<a>').attr({
-                        href: '#',
-                        role: 'menuitem',
-                        'data-option': value
-                    }).text(text)
-                );
-        }
-
         this.updateGridOptions = function () {
 
             var dropdown = grid.getToolbar().find('.grid-options'),
@@ -217,45 +205,6 @@ define('io.ox/calendar/list/perspective', [
             dropdown.find('.fa-arrow-down').css('opacity', opacity[0]).end()
                 .find('.fa-arrow-up').css('opacity', opacity[1]).end();
         };
-
-        ext.point('io.ox/calendar/vgrid/toolbar').extend({
-            id: 'dropdown',
-            index: 100,
-            draw: function () {
-                this.append(
-                    optDropdown = $('<div class="grid-options dropdown">')
-                        .append(
-                            $('<a>')
-                                .attr({
-                                    href: '#',
-                                    tabindex: 1,
-                                    'data-toggle': 'dropdown',
-                                    'aria-haspopup': true,
-                                    'aria-expandet': false,
-                                    'aria-label': gt('Sort options')
-                                }).append(
-                                    $('<i class="fa fa-arrow-down" aria-hidden="true">'),
-                                    $('<i class="fa fa-arrow-up" aria-hidden="true">')
-                                )
-                                .dropdown(),
-                            $('<ul class="dropdown-menu" role="menu">')
-                                .append(
-                                    buildOption('asc', gt('Ascending')),
-                                    buildOption('desc', gt('Descending'))
-                                )
-                                .on('click', 'a', { grid: grid }, function () {
-                                    var option = $(this).attr('data-option');
-                                    switch (option) {
-                                    case 'asc':
-                                    case 'desc':
-                                        grid.prop('order', option).refresh(true);
-                                        break;
-                                    }
-                                })
-                        )
-                );
-            }
-        });
 
         /**
          * returns the all request for the vgrid
