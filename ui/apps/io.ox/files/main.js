@@ -349,7 +349,7 @@ define('io.ox/files/main', [
                 'virtual': function (id) {
                     if (id !== 'virtual/myshares') return;
 
-                    app.trigger('folder-virtual:change', id);
+                    app.trigger('folder-virtual:change', id, { type: 'myshares', standard_folder_type: 'virtual' });
 
                     if (app.mysharesListViewControl) {
                         app.mysharesListViewControl.$el.show().siblings().hide();
@@ -962,6 +962,78 @@ define('io.ox/files/main', [
             app.listView.$el
                 .addClass('dropzone')
                 .attr('data-dropzones', '.selectable.file-type-folder');
+        },
+
+        'metrics': function (app) {
+            require(['io.ox/metrics/main'], function (metrics) {
+                //if (!metrics.isEnabled()) return;
+                var nodes = app.getWindow().nodes,
+                    //node = nodes.outer,
+                    toolbar = nodes.body.find('.classic-toolbar-container'),
+                    sidepanel = nodes.sidepanel;
+                // detail view actions
+                app.getWindow().nodes.main.delegate('.detail-view-header .dropdown-menu a', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'drive',
+                        target: 'detail/toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // toolbar actions
+                toolbar.delegate('.io-ox-action-link', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'drive',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // toolbar options dropfdown
+                toolbar.delegate('.dropdown-menu a', 'mousedown', function (e) {
+                    var node =  $(e.target).closest('a');
+                    metrics.trackEvent({
+                        app: 'drive',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: node.attr('data-name'),
+                        detail: node.attr('data-value')
+                    });
+                });
+                // folder tree action
+                sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'drive',
+                        target: 'folder/context-menu',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // check for clicks in folder trew
+                app.on('folder:change folder-virtual:change', function (folder, data) {
+                    // http://oxpedia.org/wiki/index.php?title=HTTP_API#DefaultTypes
+                    // hint: custom ids for virtual folder 'vi'
+                    metrics.trackEvent({
+                        app: 'drive',
+                        target: 'folder',
+                        type: 'click',
+                        action: 'select',
+                        detail:  data.standard_folder_type + '.' + data.type
+                    });
+                });
+                // selection in listview
+                app.listView.on({
+                    'selection:multiple selection:one': function (list) {
+                        metrics.trackEvent({
+                            app: 'drive',
+                            target: 'list/' + app.props.get('layout'),
+                            type: 'click',
+                            action: 'select',
+                            detail: list.length > 1 ? 'multiple' : 'one'
+                        });
+                    }
+                });
+            });
         }
     });
 
