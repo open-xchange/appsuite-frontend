@@ -103,12 +103,17 @@ define('io.ox/settings/accounts/settings/pane', [
                     'data-id': self.model.get('id'),
                     'data-accounttype': self.model.get('accountType')
                 });
+
                 self.$el.append(
                     listUtils.widgetIcon(self.model.get('accountType')),
                     listUtils.widgetTitle(title),
                     listUtils.widgetControlls().append(
                         listUtils.controlsDelete(title, gt('Delete'), self.model.get('id')),
-                        listUtils.controlsEdit(title, gt('Edit'))
+                        listUtils.appendIconText(
+                                listUtils.controlsEdit(title, gt('Edit')),
+                                gt('Edit'),
+                                'edit'
+                            )
                     )
                 );
 

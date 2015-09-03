@@ -60,12 +60,9 @@ define('io.ox/tasks/view-detail', [
         index: 100,
         id: 'header',
         draw: function (baton) {
-            var infoPanel,
-                task = baton.interpretedData;
-            this.append(
-                $('<header role="heading">').append(
-                    infoPanel = $('<div>').addClass('info-panel'),
-                    $('<h1 class="title clear-title">').append(
+            var infoPanel = $('<div>').addClass('info-panel'),
+                task = baton.interpretedData,
+                title = $('<h1 class="title clear-title">').append(
                         // lock icon
                         baton.data.private_flag ? $('<i class="fa fa-lock private-flag">') : [],
                         // priority
@@ -74,7 +71,10 @@ define('io.ox/tasks/view-detail', [
                         ),
                         // title
                         $.txt(gt.noI18n(task.title))
-                    )
+                    );
+            this.append(
+                $('<header role="heading">').append(
+                    _.device('smartphone') ? [title, infoPanel] : [infoPanel, title]
                 )
             );
             ext.point('io.ox/tasks/detail-view/infopanel').invoke('draw', infoPanel, task);
@@ -100,11 +100,14 @@ define('io.ox/tasks/view-detail', [
         index: 300,
         id: 'note',
         draw: function (baton) {
-            this.append(
-                $('<div class="note">').html(
-                    calendarUtil.getNote(baton.interpretedData)
-                )
-            );
+            var note = calendarUtil.getNote(baton.interpretedData);
+            if (note !== '') {
+                this.append(
+                    $('<div class="note">').html(
+                        note
+                    )
+                );
+            }
         }
     });
     ext.point('io.ox/tasks/detail-view').extend({
@@ -128,7 +131,7 @@ define('io.ox/tasks/view-detail', [
 
             if (task.recurrence_type) {
                 $details.append(
-                    $('<dd class="detail-value">').text(gt('This task recurs')),
+                    $('<dt class="detail-value">').text(gt('This task recurs')),
                     $('<dd class="detail-value">').text(calendarUtil.getRecurrenceString(baton.data)));
                 hasDetails = true;
             }
@@ -147,7 +150,11 @@ define('io.ox/tasks/view-detail', [
             });
 
             if (hasDetails) {
-                this.append($details);
+                this.append(
+                    $('<fieldset class="details">').append(
+                        $details
+                    )
+                );
             }
         }
     });
@@ -176,7 +183,7 @@ define('io.ox/tasks/view-detail', [
             }
 
             //alarm makes no sense if reminders are disabled
-            if (task.alarm && !_.device('smartphone')) {
+            if (task.alarm) {
                 this.append(
                         $('<div>').addClass('alarm-date').text(
                             //#. %1$s reminder date of a task
