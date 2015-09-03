@@ -139,7 +139,11 @@ define('io.ox/settings/main', [
 
             var apps = _.filter(installed, function (item) {
                 if (!item.settings) return false;
-                if (item.device) return _.device(item.device);
+                if (item.device && !_.device(item.device)) return false;
+                // check for dedicated requirements for settings (usually !guest)
+                if (item.settingsRequires && !capabilities.has(item.settingsRequires)) return false;
+                // check for device requirements for settings
+                if (item.settingsDevice && !_.device(item.settingsDevice)) return false;
                 // special code for tasks because here settings depend on a capability
                 // could have been done in manifest, but I did not want to change the general structure
                 // because of one special case, that might even disappear in the future
@@ -340,10 +344,6 @@ define('io.ox/settings/main', [
                     mainGroups.push('virtual/settings/' + val.id);
                     disableListetSettingsPanes(val.subgroup);
                     var list = _(ext.point(val.subgroup).list()).map(function (p) {
-
-                        // check for dedicated requirements for settings (usually !guest)
-                        if (p.settingsRequires && !capabilities.has(p.settingsRequires)) return false;
-
                         processSubgroup(p, val.subgroup);
 
                         return pool.addModel({

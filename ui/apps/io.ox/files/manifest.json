@@ -6,6 +6,7 @@
     "requires": "infostore",
     "settings": true,
     "settingsRequires": "!guest",
+    "settingsDevice": "!smartphone",
     "refreshable": true,
     "index": 1000,
     "advancedMode": true
