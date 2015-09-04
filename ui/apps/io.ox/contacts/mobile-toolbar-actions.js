@@ -40,8 +40,10 @@ define('io.ox/contacts/mobile-toolbar-actions', [
                 prio: 'hi',
                 mobile: 'hi',
                 label: gt('Send mail'),
+                icon: 'fa fa-envelope-o',
                 ref: 'io.ox/contacts/actions/send',
-                drawDisabled: true
+                drawDisabled: true,
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
             },
             'vcard': {
                 prio: 'lo',
@@ -54,8 +56,10 @@ define('io.ox/contacts/mobile-toolbar-actions', [
                 prio: 'hi',
                 mobile: 'hi',
                 label: gt('Invite to appointment'),
+                icon: 'fa fa-calendar-o',
                 ref: 'io.ox/contacts/actions/invite',
-                drawDisabled: true
+                drawDisabled: true,
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
             },
             'edit': {
                 prio: 'hi',
@@ -109,9 +113,9 @@ define('io.ox/contacts/mobile-toolbar-actions', [
         ref: 'io.ox/contacts/mobile/toolbar/actions'
     }));
 
-    addAction(actions, ['send', 'invite', 'vcard', 'delete', 'move', 'copy']);
+    addAction(actions, ['vcard', 'delete', 'move', 'copy']);
 
-    addAction(pointDetailView, ['edit']);
+    addAction(pointDetailView, ['edit', 'send', 'invite']);
 
     pointDetailView.extend(new links.Dropdown({
         id: 'test',
