@@ -358,6 +358,10 @@ define('io.ox/calendar/invitations/register', [
                     require(['io.ox/calendar/api']).then(function (api) {
                         api.refresh();
                         notifications.yell('success', success[action]);
+                        // if the delete action was succesfull we don't need the button anymore, see Bug 40852
+                        if (action === 'delete') {
+                            self.model.set('actions', _(self.model.attributes.actions).without('delete'));
+                        }
                         self.repaint();
                     });
                 },
