@@ -297,6 +297,17 @@
                     background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 8px, @background-light 8px, @background-light 16px);
                     background-image: repeating-linear-gradient(-45deg, transparent, transparent 8px, @background-light 8px, @background-light 16px);
                 }
+
+                &.absent {
+                    color: #333;
+                    background-color: #eee;
+                    border-left-color: #333;
+                    @background-absent: #bbb;
+                    background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 7px, @background-absent 1px, @background-absent 8px);
+                    background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 7px, @background-absent 1px, @background-absent 8px);
+                    background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 7px, @background-absent 1px, @background-absent 8px);
+                    background-image: repeating-linear-gradient(-45deg, transparent, transparent 7px, @background-absent 1px, @background-absent 8px);
+                }
             }
         }
 
