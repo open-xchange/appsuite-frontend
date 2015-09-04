@@ -56,7 +56,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
             function beginConvertFinished() {
                 self.$el.removeClass('io-ox-busy');
             }
-            this.thumbnailLoadDef = Util.beginConvert(this.model.toJSON())
+            this.thumbnailLoadDef = Util.beginConvert(this.model)
                 .done(beginConvertSuccess)
                 .fail(beginConvertError)
                 .always(beginConvertFinished);
@@ -210,7 +210,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
             }
             // close convert jobs while quitting
             def.done(function (response) {
-                Util.endConvert(this.model.toJSON(), response.jobID);
+                Util.endConvert(this.model, response.jobID);
             }.bind(this));
             // unbind image on load handlers
             _.each(this.thumbnailImages, function (image) {

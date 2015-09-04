@@ -34,6 +34,15 @@ define('io.ox/core/viewer/util', [
     };
 
     /**
+     * magic module id to source map
+     */
+    Util.MODULE_SOURCE_MAP = {
+        1: 'calendar',
+        4: 'tasks',
+        7: 'contacts'
+    };
+
+    /**
      * Shortens a String and returns a result object containing the original
      * and two Strings clipped to normal and short max length.
      *
@@ -174,20 +183,67 @@ define('io.ox/core/viewer/util', [
      * @returns {jQuery.Promise}
      *  the promise from the Ajax request enriched with an abort method.
      */
-    Util.sendConverterRequest = function (file, params) {
+    Util.sendConverterRequest = function (model, params) {
+        // Returns the proprietary converter parameters of the given model,
+        // reflecting the differences of Mail, PIM and OX Guard attachment objects.
+        //
+        // TODO: this needs to be re-factored. currently we need a version that URL encodes
+        //       the parameters and a version that doesn't encode.
+        //       in addition to that we have one function for PDF rendering and on for thumb-nail generation.
+        //
+        function getProprietaryParams (model) {
+            if (!model) { return {}; }
 
-        if (!ox.ui.App.getCurrentApp()) {
-            return;
+            var originalModel = model.get('origData'),
+                params;
+
+            switch (model.get('source')) {
+                case 'mail':
+                    params = {
+                        id: originalModel.mail.id,
+                        source: 'mail',
+                        attached: model.get('id')
+                    };
+                    break;
+                case 'pim':
+                    var moduleId = model.get('module');
+                    params = {
+                        source: Util.MODULE_SOURCE_MAP[moduleId],
+                        attached: originalModel.attached,
+                        module: moduleId
+                    };
+                    break;
+                case 'guard':
+                    params = {
+                        source: 'guard',
+                        guardUrl: model.get('guardUrl'),
+                        mimetype: (model.get('meta').OrigMime === undefined ?
+                            model.get('file_mimetype') :
+                            model.get('meta').OrigMime)
+                    };
+                    break;
+                default:
+                    params = {};
+                    break;
+            }
+
+            return params;
         }
 
-        var converterParams = _.extend(params, {
+        if (!model || !ox.ui.App.getCurrentApp()) {
+            return $.Deferred().reject();
+        }
+
+        var defaultParams = {
                 session: ox.session,
                 uid: ox.ui.App.getCurrentApp().get('uniqueID'),
-                id: file.id,
-                folder_id: file.folder_id,
-                filename: file.filename,
-                version: file.version
-            }),
+                id: model.get('id'),
+                folder_id: model.get('folder_id'),
+                filename: model.get('filename'),
+                version: model.get('version')
+            },
+            proprietaryParams = getProprietaryParams(model),
+            converterParams = _.extend(defaultParams, proprietaryParams, params),
             // properties passed to the server request
             requestProps = { module:'oxodocumentconverter', params: converterParams },
             // the Deferred object representing the core AJAX request
@@ -214,26 +270,30 @@ define('io.ox/core/viewer/util', [
     /**
      * Starts the thumbnail conversion job.
      *
-     * @param {String} jobId
-     *  the conversion job ID.
+     * @param {FilesAPI.Model} model
+     *  the Drive file model.
      *
      * @returns {jQuery.Promise}
      *  the promise from document converter request.
      */
-    Util.beginConvert = function (file) {
-        if (!file) {
-            return;
+    Util.beginConvert = function (model) {
+        if (!model) {
+            return $.Deferred().reject();
         }
+
         var params = {
             action: 'convertdocument',
             convert_format: 'image',
             convert_action: 'beginconvert'
         };
-        return Util.sendConverterRequest(file, params);
+        return Util.sendConverterRequest(model, params);
     };
 
     /**
      * Ends the thumbnail conversion job.
+     *
+     * @param {FilesAPI.Model} model
+     *  the Drive file model.
      *
      * @param {String} jobId
      *  the conversion job ID.
@@ -241,16 +301,16 @@ define('io.ox/core/viewer/util', [
      * @returns {jQuery.Promise}
      *  the promise from document converter request.
      */
-    Util.endConvert = function (file, jobId) {
+    Util.endConvert = function (model, jobId) {
         if (!jobId) {
-            return;
+            return $.Deferred().reject();
         }
         var params = {
             action: 'convertdocument',
             convert_action: 'endconvert',
             job_id: jobId
         };
-        return Util.sendConverterRequest(file, params);
+        return Util.sendConverterRequest(model, params);
     };
 
     /**
@@ -284,7 +344,7 @@ define('io.ox/core/viewer/util', [
             case 'pim':
                 var moduleId = model.get('module');
                 paramExtension = {
-                    source: this.MODULE_SOURCE_MAP[moduleId],
+                    source: Util.MODULE_SOURCE_MAP[moduleId],
                     attached: originalModel.attached,
                     module: moduleId
                 };
