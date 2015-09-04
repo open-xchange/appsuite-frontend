@@ -61,6 +61,7 @@ define('io.ox/contacts/mobile-toolbar-actions', [
                 prio: 'hi',
                 mobile: 'hi',
                 label: gt('Edit'),
+                icon: 'fa fa-edit',
                 ref: 'io.ox/contacts/actions/update',
                 drawDisabled: true,
                 cssClasses: 'io-ox-action-link mobile-toolbar-action'
