@@ -318,11 +318,22 @@
         .contact-detail {
 
             .contact-header {
-                margin-bottom: 0;
-
-                h2.header-job {
+                margin-bottom: 16px;
+                h1 { font-weight: bold; }
+                h1, h2 {
                     margin: 0;
+                    padding: 0;
+                    font-size: 16px;
+                    line-height: initial;
                 }
+                h2 {
+                    padding-top: 8px;
+                }
+            }
+
+            .comment {
+                margin-bottom: 16px;
+                line-height: 20px;
             }
 
             .participant-wrapper {
@@ -330,11 +341,47 @@
             }
 
             .member-list, .breadcrumb-view {
-                padding: 0px 8px 14px 8px;
+                padding: 0;
+            }
+
+            .io-ox-inline-links:first-child {
+
+                margin: 0;
+                padding: 15px 0;
+
+                span.io-ox-action-link.dropdown {
+                    float: right;
+                }
+
+            }
+
+            .block {
+                width: 100%;
+                margin: 8px 16px 16px 0;
+                line-height: 24px;
+
+                legend {
+                    padding-top: 0;
+                    border-bottom: 1px solid #ccc;
+                    padding-bottom: 8px;
+                    margin-bottom: 8px;
+                }
+
+                .dl-horizontal {
+                    dt, dd { margin-left: 0; }
+                    dd {
+                        margin-bottom: 16px;
+                    }
+                }
             }
         }
 
+        .io-ox-pagecontroller.page.default-content-padding {
+            padding: 0;
+            .scrollable-pane { padding: 16px 16px 0 16px; }
+        }
     }
+
     .contact-grid-container {
 
         &.abs {
@@ -359,32 +406,6 @@
         }
 
     }
-
-    .contact-detail {
-
-        .io-ox-inline-links:first-child {
-
-            margin: 0;
-            padding: 15px 0;
-
-            span.io-ox-action-link.dropdown {
-                float: right;
-            }
-
-        }
-
-        .block {
-            width: 100%;
-            margin-right: 0;
-            line-height: 24px;
-
-            .dl-horizontal dt {
-                float: left;
-            }
-        }
-
-    }
-
 }
 
 //io.ox/contacts/listview, io.ox/contacts/common-extensions
