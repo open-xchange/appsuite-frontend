@@ -87,10 +87,17 @@
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
         &.column-layout .list-item {
             line-height: 40px;
+
         }
+        &.column-layout, &.grid-layout, &.icon-layout {
+            .list-item {
+                font-size: 15px;
+            }
+        }
+
         &.column-layout {
             .list-item .list-item-checkmark .fa-checkmark {
-                top: 12px;
+                top: 14px;
             }
         }
     }
