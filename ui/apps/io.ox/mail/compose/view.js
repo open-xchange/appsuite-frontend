@@ -880,11 +880,13 @@ define('io.ox/mail/compose/view', [
                 var input = this.$el.find('[data-extension-id="cc"], [data-extension-id="bcc"]');
                 if (input.hasClass('hidden')) {
                     input.removeClass('hidden');
+                    this.$el.find('[data-action="add"] span').removeClass('fa-angle-right').addClass('fa-angle-down');
                 } else {
                     if (_.isEmpty(this.model.attributes.cc) && _.isEmpty(this.model.attributes.bcc)) {
                         this.model.set('cc', []);
                         this.model.set('bcc', []);
                         input.addClass('hidden');
+                        this.$el.find('[data-action="add"] span').removeClass('fa-angle-down').addClass('fa-angle-right');
                     }
                 }
                 return input;
