@@ -152,13 +152,13 @@ define('io.ox/mail/compose/view', [
 
     ext.point(POINT + '/editors').extend({
         id: 'plain-text',
-        lable: gt('Plain Text'),
+        label: gt('Plain Text'),
         mode: 'text'
     });
 
     ext.point(POINT + '/editors').extend({
         id: 'tinymce',
-        lable: gt('HTML'),
+        label: gt('HTML'),
         mode: 'html'
     });
 
@@ -171,8 +171,8 @@ define('io.ox/mail/compose/view', [
                 .header(gt('Editor'));
 
             ext.point(POINT + '/editors').each(function (point) {
-                if (!point.mode && !point.lable) return;
-                menu.option('editorMode', point.mode, point.lable, gt('Editor'));
+                if (!point.mode && !point.label) return;
+                menu.option('editorMode', point.mode, point.label, gt('Editor'));
             });
         }
     });
