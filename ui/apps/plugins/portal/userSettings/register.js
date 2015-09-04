@@ -127,8 +127,7 @@ define('plugins/portal/userSettings/register', [
                         appendColumns: false,
                         data: {
                             old_password: oldPass.val(),
-                            new_password: newPassword1,
-                            new_password2: newPassword2
+                            new_password: newPassword1
                         }
                     })
                     .done(function () {
