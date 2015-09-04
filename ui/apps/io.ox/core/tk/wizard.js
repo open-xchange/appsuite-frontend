@@ -13,8 +13,7 @@
 
 define('io.ox/core/tk/wizard', [
     'io.ox/backbone/disposable',
-    'gettext!io.ox/core',
-    'static/3rd.party/velocity/velocity.min.js'
+    'gettext!io.ox/core'
 ], function (DisposableView, gt) {
 
     'use strict';

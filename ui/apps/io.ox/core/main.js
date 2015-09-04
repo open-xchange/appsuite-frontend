@@ -788,17 +788,18 @@ define('io.ox/core/main', [
                 // disable notifications if there is no capability of the following (e.g. drive as only app)
                 if (!capabilities.has('webmail') && !capabilities.has('calendar') && !capabilities.has('tasks')) return;
 
-                var self = this;
+                var self = this, DELAY = 5000;
+
                 if (ox.online) {
                     // we don't need this right from the start,
                     // so let's delay this for responsiveness!
-                    // only requests are delayed by 2s, the badge is drawn normally
-                    self.append(notifications.attach(addLauncher, 2000));
+                    // only requests are delayed by 5s, the badge is drawn normally
+                    self.append(notifications.attach(addLauncher, DELAY));
                     tabManager();
                 } else {
                     //lets wait till we are online
                     ox.once('connection:online', function () {
-                        self.append(notifications.attach(addLauncher, 2000));
+                        self.append(notifications.attach(addLauncher, DELAY));
                         tabManager();
                     });
                 }

@@ -372,7 +372,7 @@ define('io.ox/core/notifications', [
                 ox.manifests.loadPluginsFor('io.ox/core/notifications').done(function () {
                     ext.point('io.ox/core/notifications/register').invoke('register', self, self);
                 });
-            }, delay || 2000);
+            }, delay || 5000);
 
             return addLauncher(
                 'right',

@@ -85,6 +85,7 @@ define('io.ox/core/api/user', [
     // use rampup data
     if (ox.rampup.user && ox.rampup.user.id === ox.user_id) {
         api.caches.get.add(ox.rampup.user);
+        api.caches.list.add(ox.rampup.user);
     }
 
     /**

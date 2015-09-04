@@ -11,10 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/list-selection', [
-    'settings!io.ox/core',
-    'static/3rd.party/velocity/velocity.min.js'
-], function (settings) {
+define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settings) {
 
     'use strict';
 
