@@ -180,7 +180,7 @@ define('io.ox/core/tk/dialogs', [
                 switch (e.which || e.keyCode) {
                 case 27:
                     // ESC
-                    if (!isBusy) {
+                    if (!isBusy && self.getBody().find('.open > .dropdown-menu').length === 0) {
                         // prevent other elements to trigger close
                         e.stopPropagation();
                         if (o.easyOut) invoke('cancel');
