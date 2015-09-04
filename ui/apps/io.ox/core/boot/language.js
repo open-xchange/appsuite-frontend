@@ -74,21 +74,22 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
         render: function () {
 
             var lang = ox.serverConfig.languages,
-                node = $('#io-ox-languages');
+                node = $('#io-ox-languages'),
+                count = _.size(lang),
+                maxCount = 30;
 
-            // show languages
-            if (!_.isEmpty(lang)) {
+            // show languages if more than one
+            if (count > 1) {
 
                 util.debug('Render languages', lang);
 
                 var self = this,
-                    maxLang = 30,
                     defaultLanguage = _.getCookie('language') || session.getBrowserLanguage(),
                     languageArray = _.toArray(_.invert(lang)),
                     toggle, list;
 
                 // Display native select box for languages if there are up to 'maxLang' languages
-                if (_.size(lang) < maxLang && !_.url.hash('language-select') && _.device('!smartphone')) {
+                if (count < maxCount && !_.url.hash('language-select') && _.device('!smartphone')) {
 
                     node.append(
                         $('<span class="lang-label" data-i18n="Languages" data-i18n-attr="text,aria-label">'),
@@ -102,7 +103,7 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                     );
 
                     // add to column layout
-                    if (_.size(lang) > 15) list.addClass('multi');
+                    if (count > 15) list.addClass('multi');
 
                     list.append(
                         _(languageArray).map(function (value) {
