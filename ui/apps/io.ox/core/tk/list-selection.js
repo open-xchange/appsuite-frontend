@@ -534,7 +534,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     events = 'selection:change selection:action';
 
                 // to keep correct select all checkbox state
-                if (items.length > 0 && items.length === list.length) {
+                if (items  && items.length > 0 && items.length === list.length) {
                     events += ' selection:all';
                 } else {
                     events += ' selection:subset';
