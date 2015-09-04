@@ -109,7 +109,13 @@ define('io.ox/files/detail/main', [
             // handle mail attachments
             if (options.file) {
                 var mail = options.file.mail;
-                app.setUrlParameter({ folder: mail.folder_id, id: mail.id, attachment: options.file.id });
+                if (mail) {
+                    // generic mail attachment
+                    app.setUrlParameter({ folder: mail.folder_id, id: mail.id, attachment: options.file.id });
+                } else {
+                    // sharing mail attachment
+                    app.setUrlParameter({ folder: options.file.folder_id, id: options.file.id });
+                }
                 return app.showFile(options);
             }
 
