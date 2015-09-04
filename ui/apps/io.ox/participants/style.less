@@ -136,9 +136,7 @@
         vertical-align: top;
 
         margin-left: 4px;
-        line-height: 16px;
-        padding-top: 1px;
-        margin-bottom: 7px;
+        line-height: 24px;
 
         &.unconfirmed {
             color: @participant-unconfirmed;
@@ -178,11 +176,15 @@
 
         }
     }
+    
+    .io-ox-inline-links.embedded {
+        margin: 14px 0 18px 0;
+        line-height: 24px;
+        min-height: 0;
+    }
     @media (max-width: 480px), (max-device-width: 480px) {
         .io-ox-inline-links.embedded {
-            margin: 11px 0 0 0;
-            padding-bottom: 5px;
-            min-height: 0;
+            margin: 18px 0 14px 0;
             line-height: 16px;
         }
     }
@@ -216,14 +218,15 @@
 
     .participant-list {
 
-        margin-bottom: 8px;
+        margin-bottom: 11px;
+        padding-top: 5px;
 
         .participant {
 
             vertical-align: top;
             width: 250px;
-            margin: 0 20px 0em 0;
-            line-height: 0;
+            margin: 0 20px 8px 0;
+            line-height: 24px;
 
             &:focus, &:hover {
                 .person {
@@ -235,9 +238,8 @@
 
             .person {
 
-               line-height: 16px;
+               line-height: 24px;
                padding-top: 1px;
-               margin-bottom: 7px;
 
                .ellipsis();
                 // icons and padding need 28px
@@ -267,7 +269,8 @@
                 white-space: normal;
                 padding-left: 1em;
                 line-height: 16px;
-                padding-top: 4px;
+                padding-top: 5px;
+                margin-bottom: 3px;
             }
         }
     }
