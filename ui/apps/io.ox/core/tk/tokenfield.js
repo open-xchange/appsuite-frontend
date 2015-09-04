@@ -219,6 +219,12 @@ define('io.ox/core/tk/tokenfield', [
                         } else {
                             newAttrs = ['', e.attrs.value, '', e.attrs.value];
                         }
+                        /**
+                         * TODO: review
+                         * model values aren't updated so consumers
+                         * have to use lable/value not the model
+                         * wouldn't it be more robust we create a new model instead
+                         */
                         // save new token data to model
                         e.attrs.model = inputData.editModel.set('token', {
                             label: newAttrs[1],

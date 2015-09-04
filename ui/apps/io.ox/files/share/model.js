@@ -152,7 +152,11 @@ define('io.ox/files/share/model', [
                 // collect recipients data
                 data.recipients = [];
                 _(this.get('recipients')).each(function (recipientModel) {
-                    data.recipients.push([recipientModel.getDisplayName(), recipientModel.getTarget()]);
+                    // model values might be outdated (token edit) so we act like mail compose
+                    data.recipients.push([
+                        recipientModel.get('token').label || recipientModel.getDisplayName(),
+                        recipientModel.get('token').value || recipientModel.getTarget()
+                    ]);
                 });
                 if (data.recipients.length === 0) {
                     delete data.recipients;
