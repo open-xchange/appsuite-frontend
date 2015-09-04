@@ -62,7 +62,9 @@ define('io.ox/contacts/mobile-toolbar-actions', [
                 mobile: 'hi',
                 label: gt('Edit'),
                 ref: 'io.ox/contacts/actions/update',
-                drawDisabled: true
+                drawDisabled: true,
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+
             },
             'delete': {
                 prio: 'hi',
@@ -106,19 +108,19 @@ define('io.ox/contacts/mobile-toolbar-actions', [
         ref: 'io.ox/contacts/mobile/toolbar/actions'
     }));
 
-    addAction(actions, ['send', 'invite', 'vcard', 'edit', 'delete', 'move', 'copy']);
+    addAction(actions, ['send', 'invite', 'vcard', 'delete', 'move', 'copy']);
 
-    // add submenu as text link to toolbar in multiselect
+    addAction(pointDetailView, ['edit']);
+
     pointDetailView.extend(new links.Dropdown({
-        index: 50,
-        label: $('<span>').text(
-            //.# Will be used as menu heading in mail module which then shows the sub-actions "mark as read" and "mark as unread"
-            gt('Actions')
-        ),
-        // don't draw the caret icon beside menu link
+        id: 'test',
+        index: 900,
         noCaret: true,
-        drawDisabled: true,
-        ref: 'io.ox/contacts/mobile/actions'
+        icon: 'fa fa-bars',
+        label: gt('Actions'),
+        ariaLabel: gt('Actions'),
+        ref: 'io.ox/contacts/mobile/actions',
+        classes: 'io-ox-action-link mobile-toolbar-action'
     }));
 
     var updateToolbar = _.debounce(function (contact) {
