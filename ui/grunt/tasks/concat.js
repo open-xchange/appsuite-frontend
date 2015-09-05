@@ -120,6 +120,7 @@ module.exports = function (grunt) {
                     {
                         src: [
                             // 2nd wave
+                            'apps/io.ox/find/main.js',
                             'apps/io.ox/core/desktop.js',
                             'apps/io.ox/core/api/apps.js',
                             'apps/io.ox/core/extPatterns/stage.js',
@@ -174,7 +175,8 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/api/account.js',
                             'apps/io.ox/core/tk/selection.js',
                             'apps/io.ox/core/tk/visibility-api-util.js',
-                            'apps/io.ox/core/tk/desktopNotifications.js',
+                            'apps/io.ox/core/desktopNotifications.js',
+                            'apps/io.ox/core/notifications/badgeview.js',
                             // core
                             'apps/io.ox/core/main.js',
                             'apps/io.ox/core/links.js',
@@ -215,6 +217,9 @@ module.exports = function (grunt) {
                             'apps/io.ox/backbone/mini-views/abstract.js',
                             'apps/io.ox/backbone/mini-views/dropdown.js',
                             'apps/io.ox/backbone/mini-views/toolbar.js',
+                            'apps/io.ox/backbone/mini-views/help.js',
+                            'apps/io.ox/backbone/mini-views/upsell.js',
+                            'apps/io.ox/backbone/mini-views/quota.js',
                             'apps/io.ox/core/tk/upload.js',
                             'apps/io.ox/core/dropzone.js',
                             // mail app - 3rd wave
@@ -224,6 +229,8 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/api/user.js',
                             'apps/io.ox/core/api/group.js',
                             'apps/io.ox/core/api/resource.js',
+                            'apps/io.ox/core/api/quota.js',
+                            'apps/io.ox/core/api/filestorage.js',
                             'apps/io.ox/contacts/util.js',
                             'apps/l10n/ja_JP/io.ox/collation.js',
                             'apps/io.ox/core/tk/list-selection.js',

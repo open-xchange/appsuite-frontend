@@ -488,5 +488,25 @@ define('io.ox/portal/widgets', [
             }
         });
 
+    // add or remove upsell widget to portal
+    require(['io.ox/core/upsell', 'settings!io.ox/core'], function (upsell, settings) {
+
+        var options = _.extend({
+                enabled: true,
+                requires: 'active_sync || caldav || carddav'
+            }, settings.get('features/upsell/portal-widget')),
+            hasWidget = api.containsType('upsell'),
+            showWidget = options.enabled && !upsell.has(options.requires) && upsell.enabled(options.requires);
+
+        if (hasWidget === showWidget) return;
+
+        if (hasWidget) {
+            api.remove('upsell_0');
+        } else {
+            api.addPlugin('plugins/portal/upsell/register');
+            api.add('upsell');
+        }
+    });
+
     return api;
 });

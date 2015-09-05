@@ -142,3 +142,194 @@
         padding-top: 40px;
     }
 }
+
+.subscribe-imap-folder .modal-body {
+    padding: 0;
+}
+
+.add-infostore-file {
+    .picker-pc-container {
+        position: relative;
+        height: 350px;
+
+        .io-ox-fileselection {
+             li.file {
+                font-size: @font-size-touch;
+                outline: none;
+                line-height: 40px;
+                padding: 2px 7px;
+
+                .user-select(none);
+
+                label {
+                    margin-top:     10px;
+                    margin-left:    2px;
+                    margin-right:   5px;
+                    float: left;
+                }
+
+                .checkbox-inline {
+                    font-size: 16px;
+                }
+
+                .name {
+                    .ellipsis();
+                }
+
+                &.selected, &.selected:hover {
+                    background-color: @foldertree-selected-background;
+                    * {
+                        color: @foldertree-selected-label-color;
+                    }
+                }
+
+                &:focus {
+                    background-color: @foldertree-selected-focus-background;
+                    * {
+                        color: @foldertree-focused-label-color;
+                    }
+                }
+            }
+
+            &.singleselect li.file .name {
+                padding-left: 0.5em;
+            }
+        }
+    }
+
+    .modal-body {
+
+        padding: 0;
+        overflow: hidden;
+        &>div, &>ul {
+            display: inline-block;
+            width: 50%;
+            height: 100%;
+            vertical-align: top;
+            overflow: auto;
+            margin: 0;
+        }
+        @media all and (max-width: 480px), all and (max-device-width: 480px) {
+            &>div, &>ul {
+                width: 100%;
+            }
+        }
+        .folder-tree {
+            border-right: 1px solid #ddd;
+        }
+
+        .io-ox-fileselection {
+
+            li.file {
+
+                outline: none;
+                line-height: 30px;
+                padding: 2px 7px;
+                cursor: pointer;
+                .user-select(none);
+
+                label {
+                    margin-top: 5px;
+                    margin-left: 5px;
+                    float: left;
+                }
+
+                .name {
+                    .ellipsis();
+                }
+
+                &.selected, &.selected:hover {
+
+                    background-color: @foldertree-selected-background;
+
+                    * {
+                        color: @foldertree-selected-label-color;
+                    }
+                }
+
+                &:focus {
+
+                    background-color: @foldertree-selected-focus-background;
+
+                    * {
+                        color: @foldertree-focused-label-color;
+                    }
+
+                }
+
+            }
+
+            &.singleselect li.file .name {
+                padding-left: 0.5em;
+            }
+
+        }
+
+    }
+
+    .modal-footer {
+        margin-top: 0;
+    }
+
+}
+
+/* ios momentum scrolling, breakes mobile chrome if applied to all devices */
+.ios {
+    .io-ox-dialog-popup { -webkit-overflow-scrolling: touch; }
+}
+
+.mobile-dialog.io-ox-dialog-popup {
+
+    overflow-y: scroll;
+    max-height: 95%;
+    width: 95%;
+    margin-top: 0;
+    top: 10px;
+    .border-radius(0);
+
+    .modal-footer {
+
+        margin-top: 0;
+
+        .row {
+
+            [class*="col-"] {
+                margin-left: 0;
+            }
+
+            .btn {
+                width: 100%;
+                margin: 2px 0;
+            }
+
+        }
+
+    }
+
+    h3 {
+        font-size: 20px;
+    }
+}
+
+/***************** Android stock browser tweaks **************/
+.legacy-chrome {
+    .io-ox-dialog-popup {
+        .modal-footer {
+            .row {
+                margin: 0;
+
+                .col-md-3 {
+                    padding: 0;
+                }
+            }
+        }
+    }
+}
+
+.export-dialog {
+    .modal-body {
+        label.checkbox {
+            padding-left: 20px;
+        }
+    }
+}

@@ -17,7 +17,7 @@ define('io.ox/core/folder/tree', [
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
     'settings!io.ox/core',
-    'gettext!io.ox/core/folder/tree',
+    'gettext!io.ox/core',
     'io.ox/core/folder/favorites',
     'io.ox/core/folder/extensions'
 ], function (DisposableView, Selection, api, ext, settings, gt) {

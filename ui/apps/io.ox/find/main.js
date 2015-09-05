@@ -13,7 +13,7 @@
 
 define('io.ox/find/main', [
     'settings!io.ox/core',
-    'gettext!io.ox/find'
+    'gettext!io.ox/core'
 ], function (settings, gt) {
 
     'use strict';

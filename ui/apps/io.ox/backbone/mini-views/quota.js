@@ -15,8 +15,7 @@ define('io.ox/backbone/mini-views/quota', [
     'gettext!io.ox/core',
     'io.ox/core/api/quota',
     'io.ox/core/strings',
-    'io.ox/backbone/mini-views/upsell',
-    'less!io.ox/backbone/mini-views/quota'
+    'io.ox/backbone/mini-views/upsell'
 ], function (gt, quotaAPI, strings, UpsellView) {
 
     'use strict';

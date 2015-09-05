@@ -14,8 +14,7 @@
 define('io.ox/core/tk/dialogs', [
     'io.ox/core/event',
     'io.ox/core/extensions',
-    'io.ox/backbone/mini-views/help',
-    'less!io.ox/core/tk/dialog'
+    'io.ox/backbone/mini-views/help'
 ], function (Events, ext, HelpView) {
 
     'use strict';
