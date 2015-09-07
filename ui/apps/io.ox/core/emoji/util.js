@@ -64,7 +64,7 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (setting
             } else if (emoji) {
                 return cont(convert(str));
             } else {
-                require(['io.ox/emoji/main'], function (code) {
+                require(['io.ox/emoji/bundle'], function (code) {
                     emoji = code;
                     cont(convert(str), true);
                 });
