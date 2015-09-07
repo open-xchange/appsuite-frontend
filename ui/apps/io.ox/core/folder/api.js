@@ -511,12 +511,19 @@ define('io.ox/core/folder/api', [
     // Special case: Get multiple folders at once
     //
 
-    function multiple(ids) {
+    function multiple(ids, options) {
+        options = _.extend({ cache: true, errors: false }, options);
         try {
             http.pause();
             return $.when.apply($,
                 _(ids).map(function (id) {
-                    return get(id).then(null, function () { return $.when(undefined); });
+                    return get(id, { cache: options.cache }).then(
+                        null,
+                        function fail(error) {
+                            error.id = id;
+                            return $.when(options.errors ? error : undefined);
+                        }
+                    );
                 })
             )
             .then(function () {

@@ -26,30 +26,47 @@ define('io.ox/core/folder/favorites', [
         // register collection
         var id = 'virtual/favorites/' + module,
             model = api.pool.getModel(id),
-            collection = api.pool.getCollection(id);
+            collection = api.pool.getCollection(id),
+            // track folders that no longer exist
+            not_found = {};
 
         function store(ids) {
             settings.set('favorites/' + module, ids).save();
         }
 
         function storeCollection() {
-            store(collection.pluck('id'));
+            var ids = _(collection.pluck('id')).filter(function (id) {
+                return !not_found[id];
+            });
+            store(ids);
         }
 
         // define virtual folder
         api.virtual.add(id, function () {
-            return api.multiple(settings.get('favorites/' + module, [])).then(function (response) {
-                // compact() removes non-existent entries
-                var list = _(response).compact();
+            return api.multiple(settings.get('favorites/' + module, []), { errors: true }).then(function (response) {
+                // remove non-existent entries
+                var list = _(response).filter(function (item) {
+                    if (item.error && item.code === 'FLD-0008') {
+                        not_found[item.id] = true;
+                        return false;
+                    } else {
+                        delete not_found[item.id];
+                        return true;
+                    }
+                });
                 _(list).each(api.injectIndex.bind(api, id));
                 model.set('subfolders', list.length > 0);
                 // if there was an error we update settings
-                if (list.length !== response.length) storeCollection();
+                if (list.length !== response.length) _.defer(storeCollection);
                 return list;
             });
         });
 
         // respond to change events
+        collection.on('add', function (model) {
+            delete not_found[model.id];
+        });
+
         collection.on('add remove', storeCollection);
 
         // respond to collection remove event to sync favorites
