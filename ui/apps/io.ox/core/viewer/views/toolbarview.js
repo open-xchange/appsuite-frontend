@@ -392,7 +392,8 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/launchpresenter', {
         capabilities: 'presenter document_preview',
         requires: function (e) {
-            return e.baton.model.isPresentation();
+            var model = e.baton.model;
+            return (model.isPresentation() && model.isFile());
         },
         action: function (baton) {
             var fileModel = baton.model;
