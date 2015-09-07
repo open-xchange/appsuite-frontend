@@ -11,17 +11,27 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/mail/compose/model', [
+define.async('io.ox/mail/compose/model', [
     'io.ox/mail/api',
     'io.ox/mail/util',
+    'io.ox/core/capabilities',
     'io.ox/core/api/account',
-    'io.ox/emoji/main',
     'io.ox/core/attachments/backbone',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (mailAPI, mailUtil, accountAPI, emoji, Attachments, settings, gt) {
+], function (mailAPI, mailUtil, capabilities, accountAPI, Attachments, settings, gt) {
 
     'use strict';
+
+    var emoji = {};
+    //provide initial fake implementation of the API we need.
+    //this will be overwritten by the emoji API if user has the capability
+    emoji.converterFor = function () {
+        return _.identity;
+    };
+    emoji.sendEncoding = function () {
+        return 'unified';
+    };
 
     var MailModel = Backbone.Model.extend({
 
@@ -342,5 +352,15 @@ define('io.ox/mail/compose/model', [
         }
     });
 
-    return MailModel;
+    var def = $.Deferred();
+
+    if (capabilities.has('emoji')) {
+        require(['io.ox/emoji/bundle']).then(function (e) {
+            emoji = e;
+            def.resolve(MailModel);
+        });
+    } else {
+        def.resolve(MailModel);
+    }
+    return def;
 });
