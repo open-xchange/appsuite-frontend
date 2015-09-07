@@ -15,8 +15,9 @@
  */
 
 define('io.ox/core/pdf/pdftextlayerbuilder', [
+    'io.ox/core/pdf/pdfpolyfill',
     '3rd.party/pdfjs/pdf.combined'
-], function (PDFJS) {
+], function (Polyfill, PDFJS) {
     'use strict';
 
     /*
