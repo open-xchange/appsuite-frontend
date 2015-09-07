@@ -58,7 +58,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             'To': gt('To'),
             'Cc': gt('CC'),
             'cleanHeader': gt('Header'),
-            'envelope': gt('Envelope'),
+            'envelope': gt('Envelope - To'),
             'size': gt('Size (bytes)'),
             'body': gt('Content'),
             'currentdate': gt('Current Date')
