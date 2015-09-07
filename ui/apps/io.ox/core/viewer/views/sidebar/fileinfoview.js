@@ -56,7 +56,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 isToday = moment().isSame(moment(modified), 'day'),
                 dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-',
                 folder_id = model.get('folder_id'),
-                link =  util.getDeepLink('io.ox/files', model.isFile() ? model.pick('folder_id', 'id') : model.pick('folder_id')),
+                link =  util.getDeepLink('io.ox/files', model.isFile() ? model.pick('folder_id', 'id') : model.pick('id')),
                 dl = $('<dl>');
 
             dl.append(

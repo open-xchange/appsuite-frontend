@@ -276,15 +276,16 @@ define('io.ox/core/viewer/views/sidebarview', [
             // f.e. when used to preview file attachments in mail
             if (this.options.opt && this.options.opt.disableFileDetail) return;
 
-            FilesAPI.get(this.model.toJSON()).done(function (file) {
-                // after loading the file details we set at least an empty string as description.
-                // in order to distinguish between 'the file details have been loaded but the file has no description'
-                // and 'the file details have not been loaded yet so we don't know if it has a description'.
-                if (this.model && this.model.isFile()) {
+            if (this.model.isFile()) {
+                FilesAPI.get(this.model.toJSON()).done(function (file) {
+                    // after loading the file details we set at least an empty string as description.
+                    // in order to distinguish between 'the file details have been loaded but the file has no description'
+                    // and 'the file details have not been loaded yet so we don't know if it has a description'.
+                    if (!this.model) return;
                     var description = (file && _.isString(file.description)) ? file.description : '';
                     this.model.set('description', description);
-                }
-            }.bind(this));
+                }.bind(this));
+            }
         },
 
         /**
