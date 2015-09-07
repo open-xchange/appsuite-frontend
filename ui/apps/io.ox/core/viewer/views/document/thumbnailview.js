@@ -130,7 +130,11 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
             var image = new Image();
             image.className = className;
             image.onload = function () {
-                $(image.parentNode).removeClass('io-ox-busy');
+                var $image = $(this),
+                    $documentThumbnail = $image.parent(),
+                    landscape = ($image.width() > $image.height());
+
+                $documentThumbnail.removeClass('io-ox-busy').toggleClass('landscape', landscape);
             };
             image.style.width = '100%';
             image.style.height = 'auto';
