@@ -27,8 +27,8 @@ define('io.ox/core/folder/favorites', [
         var id = 'virtual/favorites/' + module,
             model = api.pool.getModel(id),
             collection = api.pool.getCollection(id),
-            // track folders that no longer exist
-            not_found = {};
+            // track folders without permission or that no longer exist
+            invalid = {};
 
         function store(ids) {
             settings.set('favorites/' + module, ids).save();
@@ -36,7 +36,7 @@ define('io.ox/core/folder/favorites', [
 
         function storeCollection() {
             var ids = _(collection.pluck('id')).filter(function (id) {
-                return !not_found[id];
+                return !invalid[id];
             });
             store(ids);
         }
@@ -46,11 +46,13 @@ define('io.ox/core/folder/favorites', [
             return api.multiple(settings.get('favorites/' + module, []), { errors: true }).then(function (response) {
                 // remove non-existent entries
                 var list = _(response).filter(function (item) {
-                    if (item.error && item.code === 'FLD-0008') {
-                        not_found[item.id] = true;
+                    // FLD-0008 -> not found
+                    // FLD-0003 -> permission denied
+                    if (item.error && (item.code === 'FLD-0008' || item.code === 'FLD-0003')) {
+                        invalid[item.id] = true;
                         return false;
                     } else {
-                        delete not_found[item.id];
+                        delete invalid[item.id];
                         return true;
                     }
                 });
@@ -64,7 +66,7 @@ define('io.ox/core/folder/favorites', [
 
         // respond to change events
         collection.on('add', function (model) {
-            delete not_found[model.id];
+            delete invalid[model.id];
         });
 
         collection.on('add remove', storeCollection);
