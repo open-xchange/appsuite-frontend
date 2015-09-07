@@ -1324,7 +1324,8 @@ define('io.ox/core/main', [
             if (looksLikeDeepLink && hash.app && hash.folder && hash.id && hash.folder.indexOf('virtual/') !== 0 && hash.id.indexOf(',') < 0) {
 
                 // new-school: app + folder + id
-                var id = hash.id.indexOf('.') > -1 ? _.cid(hash.id).id : hash.id,
+                // replace old IDs with a dot by 'folder_id SLASH id'
+                var id = /^\d+\./.test(hash.id) ? hash.id.replace(/\./, '/') : hash.id,
                     usesDetailPage = /^io.ox\/(mail|contacts|calendar|tasks)$/.test(hash.app);
 
                 _.url.hash({
