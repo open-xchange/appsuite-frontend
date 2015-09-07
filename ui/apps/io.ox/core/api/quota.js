@@ -11,9 +11,11 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/core/api/quota', ['io.ox/core/http'], function (http) {
+define('io.ox/core/api/quota', ['io.ox/core/http', 'io.ox/core/capabilities'], function (http, capabilities) {
 
     'use strict';
+
+    var fallback = { quota: -1, use: 0, countquota: -1, countuse: 0 };
 
     var api = {
         /**
@@ -43,13 +45,29 @@ define('io.ox/core/api/quota', ['io.ox/core/http'], function (http) {
          * @return { deferred} returns quota object
          */
         get: function () {
+
+            var hasWebmail = capabilities.has('webmail'),
+                hasFiles = capabilities.has('infostore');
+
             http.pause();
-            this.getMail();
-            this.getFile();
+            if (hasWebmail) this.getMail();
+            if (hasFiles) this.getFile();
             return http.resume()
                 .then(function (req) {
-                    $(api).trigger('quota-update', { mail: req[0].data, file: req[1].data });
-                    return { mail: req[0].data, file: req[1].data };
+                    var result = {}, item = req.shift();
+                    if (hasWebmail) {
+                        result.mail = item.data;
+                        item = req.shift();
+                    } else {
+                        result.mail = fallback;
+                    }
+                    if (hasFiles) {
+                        result.file = item.data;
+                    } else {
+                        result.file = fallback;
+                    }
+                    $(api).trigger('quota-update', result);
+                    return result;
                 });
             // for demo purposes
             // .then(function (quotas) {
