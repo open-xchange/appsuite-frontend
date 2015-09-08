@@ -77,7 +77,7 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                     module: 'fileservice',
                     params: params
                 })
-                .then( function (services) {
+                .then(function (services) {
                     servicesCache.reset(services);
                     _(services).each(function (service) {
                         try {
