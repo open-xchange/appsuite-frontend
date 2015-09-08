@@ -113,6 +113,21 @@ define('io.ox/find/api', [
         return api.autocomplete(opt);
     };
 
+    // workaround for 7.8.0: add account facet
+    function addStaticFacets (opt) {
+        // apply only for files
+        if (opt.params.module !== 'files') return;
+        // already part of call
+        if (_.findWhere(opt.data.facets, { facet: 'account' })) return;
+
+        opt.data.facets.push({
+            facet: 'account',
+            filter: null,
+            // TODO: virtual all on standard
+            value: 'com.openexchange.infostore://infostore'
+        });
+    }
+
     /**
      * get available facets
      * @param  {object}     options
@@ -121,6 +136,8 @@ define('io.ox/find/api', [
     api.autocomplete = function (options) {
         var opt = $.extend(true, {}, getDefault('autocomplete'), options),
             key = api.cid(opt);
+
+        addStaticFacets(opt);
 
         return simpleCache.get(key).then(function (data) {
             // use cache
@@ -138,6 +155,7 @@ define('io.ox/find/api', [
      */
     api.query = function (options) {
         var opt = $.extend(true, {}, getDefault('query'), getColumns(options), options);
+        addStaticFacets(opt);
         return http[opt.method](opt);
     };
 
