@@ -64,6 +64,17 @@ define('io.ox/core/folder/extensions', [
         });
     }
 
+    // TODO: right capability
+    if (capabilities.has('filestore')) {
+        api.virtual.add('virtual/filestorage', function () {
+            return api.list('1').then(function (list) {
+                return _(list).filter(function (data) {
+                    return api.isExternalFileStorage(data);
+                });
+            });
+        });
+    }
+
     var extensions = {
 
         unifiedFolders: function (tree) {
@@ -143,8 +154,22 @@ define('io.ox/core/folder/extensions', [
             );
         },
 
-        addRemoteAccount: function () {
+        fileStorageAccounts: function (tree) {
+            this.append(
+                new TreeNodeView({
+                    //empty: false,
+                    folder: 'virtual/filestorage',
+                    headless: true,
+                    open: true,
+                    icons: tree.options.icons,
+                    tree: tree,
+                    parent: tree
+                })
+                .render().$el.addClass('filestorage-folders')
+            );
+        },
 
+        addRemoteAccount: function () {
             if (!capabilities.has('multiple_mail_accounts')) return;
 
             this.append(
@@ -209,8 +234,16 @@ define('io.ox/core/folder/extensions', [
                 };
             }
 
+            // TODO overwrite handling
+            if (tree.module === 'infostore') {
+                options.filter = function (id, model) {
+                    // exclude external accounts
+                    return !api.isExternalFileStorage(model);
+                };
+            }
+
             this.append(
-                new TreeNodeView(options).render().$el
+                new TreeNodeView(options).render().$el.addClass('root-folders')
             );
         }
     };
@@ -312,17 +345,39 @@ define('io.ox/core/folder/extensions', [
     // Files / Drive
     //
 
-    ext.point('io.ox/core/foldertree/infostore/app').extend({
-        id: 'standard-folders',
-        index: 100,
-        draw: extensions.rootFolders
-    });
+    ext.point('io.ox/core/foldertree/infostore/app').extend(
+        {
+            id: 'standard-folders',
+            index: 100,
+            draw: extensions.rootFolders
+        },
+        {
+            id: 'remote-accounts',
+            index: 200,
+            draw: extensions.fileStorageAccounts
+        }
+    );
 
-    ext.point('io.ox/core/foldertree/infostore/popup').extend({
-        id: 'standard-folders',
-        index: 100,
-        draw: extensions.rootFolders
-    });
+    ext.point('io.ox/core/foldertree/infostore/popup').extend(
+        {
+            id: 'standard-folders',
+            index: 100,
+            draw: extensions.rootFolders
+        },
+        {
+            id: 'remote-accounts',
+            index: 200,
+            draw: extensions.fileStorageAccounts
+        }
+    );
+
+    ext.point('io.ox/core/foldertree/infostore/find').extend(
+        {
+            id: 'standard-folders',
+            index: 100,
+            draw: extensions.rootFolders
+        }
+    );
 
     // helper
 
