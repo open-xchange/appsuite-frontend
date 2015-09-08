@@ -13,7 +13,7 @@
 
 define('io.ox/mail/mailfilter/settings/filter/view-form', [
     'io.ox/core/notifications',
-    'gettext!io.ox/settings/settings',
+    'gettext!io.ox/settings',
     'io.ox/core/extensions',
     'io.ox/mail/mailfilter/settings/filter/defaults',
     'io.ox/backbone/mini-views',

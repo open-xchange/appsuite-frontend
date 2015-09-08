@@ -13,7 +13,7 @@
 
 define('io.ox/settings/util', [
     'io.ox/core/notifications',
-    'gettext!io.ox/settings/settings',
+    'gettext!io.ox/settings',
     'gettext!io.ox/core'
 ], function (notifications, gt, gtcore) {
 

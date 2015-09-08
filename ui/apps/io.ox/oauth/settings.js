@@ -15,7 +15,7 @@ define('io.ox/oauth/settings', [
     'io.ox/oauth/keychain',
     'io.ox/keychain/api',
     'io.ox/core/tk/dialogs',
-    'gettext!io.ox/settings/oauth'
+    'gettext!io.ox/settings'
 ], function (ext, oauthKeychain, keychain, dialogs, gt) {
 
     'use strict';
