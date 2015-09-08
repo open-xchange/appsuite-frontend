@@ -17,7 +17,7 @@ define('io.ox/mail/accounts/model', [
     'io.ox/core/api/account',
     'io.ox/core/folder/api',
     'io.ox/backbone/validation',
-    'gettext!io.ox/mail/accounts/settings'
+    'gettext!io.ox/keychain'
 ], function (ext, keychainModel, AccountAPI, folderAPI, validation, gt) {
 
     'use strict';

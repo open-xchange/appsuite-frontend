@@ -17,23 +17,22 @@ define.async('io.ox/mail/accounts/keychain', [
     'io.ox/core/api/user',
     'io.ox/core/capabilities',
     'io.ox/core/event',
-    'gettext!io.ox/core'
-], function (ext, accountAPI, userAPI, capabilities, Events, gt) {
+    'io.ox/mail/accounts/model',
+    'gettext!io.ox/keychain'
+], function (ext, accountAPI, userAPI, capabilities, Events, AccountModel, gt) {
 
     'use strict';
 
     var moduleDeferred = $.Deferred(),
         extension;
 
-    require(['io.ox/mail/accounts/model'], function (AccountModel) {
-        ext.point('io.ox/keychain/model').extend({
-            id: 'mail',
-            index: 100,
-            accountType: 'mail',
-            wrap: function (thing) {
-                return new AccountModel(thing);
-            }
-        });
+    ext.point('io.ox/keychain/model').extend({
+        id: 'mail',
+        index: 100,
+        accountType: 'mail',
+        wrap: function (thing) {
+            return new AccountModel(thing);
+        }
     });
 
     var accounts = {};
