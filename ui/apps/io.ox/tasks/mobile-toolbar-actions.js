@@ -161,6 +161,10 @@ define('io.ox/tasks/mobile-toolbar-actions', [
         setup: function (app) {
             if (!_.device('smartphone')) return;
 
+            api.on('update', function (e, data) {
+                app.updateToolbar(data);
+            });
+
             // folder change
             app.grid.on('change:ids', function () {
                 app.folder.getData().done(function (data) {
