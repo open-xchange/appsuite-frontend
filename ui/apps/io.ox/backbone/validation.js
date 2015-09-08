@@ -14,7 +14,7 @@ define('io.ox/backbone/validation', [
     'io.ox/core/extensions',
     'io.ox/core/util',
     'settings!io.ox/core',
-    'gettext!io.ox/backbone/validation'
+    'gettext!io.ox/core'
 ], function (ext, util, settings, gt) {
 
     'use strict';
