@@ -445,7 +445,8 @@ define('io.ox/core/folder/contextmenu', [
                         data: { app: baton.app, id: id },
                         enabled: true,
                         handler: invite,
-                        text: model.isShareable(id) ? gt('Invite people') : gt('Existing shares')
+                        // Using concat notation to avoid necessity for new translations right before the release
+                        text: model.isShareable(id) ? gt('Invite people') + ' / ' + gt('Permissions') : gt('Existing shares')
                     });
                 }
 
