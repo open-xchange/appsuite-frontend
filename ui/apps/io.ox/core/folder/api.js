@@ -99,6 +99,11 @@ define('io.ox/core/folder/api', [
         return /^virtual/.test(id);
     }
 
+    function isExternalFileStorage(data) {
+        var type = _.isObject(data) ? (data.get ? data.get('type') : data.type) : undefined;
+        return type === 14;
+    }
+
     function isFlat(id) {
         return /^(contacts|calendar|tasks)$/.test(id);
     }
@@ -1240,6 +1245,7 @@ define('io.ox/core/folder/api', [
         can: util.can,
         virtual: virtual,
         isVirtual: isVirtual,
+        isExternalFileStorage: isExternalFileStorage,
         isFlat: isFlat,
         isNested: isNested,
         getFlatCollection: getFlatCollection,

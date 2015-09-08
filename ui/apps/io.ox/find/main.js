@@ -13,9 +13,10 @@
 
 define('io.ox/find/main', [
     'io.ox/find/view-placeholder',
+    'io.ox/core/folder/api',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (PlaceholderView, settings, gt) {
+], function (PlaceholderView, folderAPI, settings, gt) {
 
     'use strict';
 
@@ -285,8 +286,8 @@ define('io.ox/find/main', [
         };
 
         app.toggle = function (folder) {
-            var eventname = /^virtual/.test(folder) ? 'view:disable' : 'view:enable';
-            app.trigger(eventname);
+            var disable = folderAPI.isVirtual(folder) || folderAPI.isExternalFileStorage(folder);
+            app.trigger( disable ? 'view:disable' : 'view:enable');
         };
 
         // parent app id
