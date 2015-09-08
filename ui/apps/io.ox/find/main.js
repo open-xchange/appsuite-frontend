@@ -406,9 +406,9 @@ define('io.ox/find/main', [
             };
         })();
 
-        app.getConfig = function (query) {
+        app.getConfig = function (options) {
             return app.getProxy().then(function (apiproxy) {
-                return apiproxy.config(query);
+                return apiproxy.config(options);
             });
         };
 
@@ -426,13 +426,39 @@ define('io.ox/find/main', [
             });
         };
 
+        function configPreprocess () {
+            var isInital = app.model.manager.length === 0;
+
+            if (!isInital) return $.Deferred().resolve();
+
+            return app.get('parent').folder.isDefault()
+                    .then(function (isDefault) {
+                        // add rampup
+                        if (isDefault) return;
+                        // for non default folder
+                        // use skeleton for first call cause we do not know
+                        // the facet structure yet
+                        return {
+                            data: {
+                                facets: [{
+                                    facet: 'folder',
+                                    filter: null,
+                                    // TODO: virtual all on standard
+                                    value: app.get('parent').folder.get()
+                                }]
+                            }
+                        };
+                    });
+        }
+
         app.updateConfig = function () {
-            app.getConfig().then(function (data) {
-                // be sure to ignore suggested contacts on empty 'config' call
-                data = _.reject(data, function (facet) { return facet.id === 'contact'; });
-                app.model.manager.update(data);
-                app.trigger('find:config-updated');
-            });
+            configPreprocess()
+                .then(app.getConfig)
+                .then(function (data) {
+                    data = _.reject(data, function (facet) { return facet.id === 'contact'; });
+                    app.model.manager.update(data);
+                    app.trigger('find:config-updated');
+                });
         };
 
         // overwrite defaults app.launch

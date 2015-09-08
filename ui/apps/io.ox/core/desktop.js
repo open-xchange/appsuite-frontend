@@ -296,6 +296,13 @@ define('io.ox/core/desktop', [
                         });
                     },
 
+                    isDefault: function () {
+                        return require(['settings!io.ox/mail']).then(function (mailConfig) {
+                            var defaultFolder = type === 'mail' ? mailConfig.get('folder/inbox') : coreConfig.get('folder/' + type);
+                            return folder == defaultFolder;
+                        });
+                    },
+
                     get: function () {
                         return folder;
                     },

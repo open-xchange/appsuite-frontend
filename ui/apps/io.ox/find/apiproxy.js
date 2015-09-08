@@ -103,11 +103,15 @@ define('io.ox/find/apiproxy',[
             // managing wrapper to keep model up2date and match tokenfields naming conventions
             proxy = {
                 // static facets
-                config: function () {
-                    var request = {
+                config: function (options) {
+                    var standard = {
                             params: { module: app.getModuleParam() },
-                            data: { prefix: '' }
-                        };
+                            data: {
+                                facets: model.manager.getRequest(),
+                                prefix: ''
+                            }
+                        },
+                        request = _.extend(standard, options || {});
                     return api.config(request).then(extend.bind(this, request));
                 },
                 // suggestions
