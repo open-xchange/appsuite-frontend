@@ -22,38 +22,6 @@ define('io.ox/tours/intro', [
 
     'use strict';
 
-    /* Link: Intro tour in settings toolbar */
-    ext.point('io.ox/core/topbar/right/dropdown').extend({
-        id: 'intro-tour',
-        index: 210, /* close to the help link */
-        draw: function () {
-            var node = this,
-                link = $('<li>', { 'class': 'io-ox-specificHelp' }).appendTo(node);
-
-            if (_.device('smartphone')) {//tablets are fine just disable phones
-                return;
-            }
-
-            require(['settings!io.ox/tours'], function (tourSettings) {
-                if (tourSettings.get('disableTours', false)) {
-                    link.remove();
-                    return;
-                }
-
-                link.append(
-                    $('<a target="_blank" href="" role="menuitem">').text(
-                        //#. Tour name; general introduction
-                        gt('Getting started')
-                    )
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        Tour.registry.run('default/io.ox/intro');
-                    })
-                );
-            });
-        }
-    });
-
     /* Tour: intro. The special one that does not belong to an app */
     Tour.registry.add({
         id: 'default/io.ox/intro'

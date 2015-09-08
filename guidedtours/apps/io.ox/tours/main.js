@@ -16,9 +16,8 @@ define('io.ox/tours/main', [
     'io.ox/core/extensions',
     'io.ox/core/notifications',
     'io.ox/core/extPatterns/stage',
-    'io.ox/tours/utils',
     'gettext!io.ox/tours'
-], function (ext, notifications, Stage, utils, gt) {
+], function (ext, notifications, Stage, gt) {
 
     'use strict';
 
@@ -31,7 +30,7 @@ define('io.ox/tours/main', [
                 return $.when();
             }
 
-            ox.load(['io.ox/core/tk/wizard', 'settings!io.ox/tours']).done(function (Tour, tourSettings) {
+            ox.load(['settings!io.ox/tours']).done(function (tourSettings) {
                 var disableTour = tourSettings.get('server/disableTours'),
                     startOnFirstLogin = tourSettings.get('server/startOnFirstLogin'),
                     tourVersion = tourSettings.get('server/version', 0),
@@ -39,53 +38,45 @@ define('io.ox/tours/main', [
 
                 if (!disableTour && startOnFirstLogin && tourVersion > tourVersionSeen) {
                     tourSettings.set('user/alreadySeenVersion', tourVersion).save();
-                    Tour.registry.run('default/io.ox/intro');
+                    require(['io.ox/core/tk/wizard', 'io.ox/tours/intro'], function (Tour) {
+                        Tour.registry.run('default/io.ox/intro');
+                    });
                 }
             });
             return $.when();
         }
     });
 
-    /* Link: Tour specifically for this app in settings toolbar */
+    /* Link: Intro tour in settings toolbar */
     ext.point('io.ox/core/topbar/right/dropdown').extend({
-        id: 'app-specific-tour',
-        index: 220, /* close to the intro tour and the help link */
+        id: 'intro-tour',
+        index: 210, /* close to the help link */
         draw: function () {
             var node = this,
-                tourLink = $('<li>', { 'class': 'io-ox-specificHelp' }).appendTo(node);
+                link = $('<li>', { 'class': 'io-ox-specificHelp' }).appendTo(node);
 
-            if (_.device('smartphone')) {
-                tourLink.remove();
+            if (_.device('smartphone')) {//tablets are fine just disable phones
                 return;
             }
 
-            require(['settings!io.ox/tours', 'io.ox/tours/main'], function (tourSettings, thisIsStupid) {
-
-                function toggleVisibility() {
-                    var currentApp = ox.ui.App.getCurrentApp(),
-                        currentType = currentApp ? currentApp.attributes.name : null,
-                        isAvailable = currentType && thisIsStupid.isAvailable(currentType);
-
-                    if (!isAvailable || tourSettings.get('disableTours', false) || tourSettings.get('disable/' + currentType, false)) {
-                        tourLink.hide();
-                    } else {
-                        tourLink.show();
-                    }
+            require(['settings!io.ox/tours'], function (tourSettings) {
+                if (tourSettings.get('disableTours', false)) {
+                    link.remove();
+                    return;
                 }
 
-                tourLink.append(
-                    $('<a target="_blank" href="" role="menuitem">').text(gt('Guided tour for this app'))
+                link.append(
+                    $('<a target="_blank" href="" role="menuitem">').text(
+                        //#. Tour name; general introduction
+                        gt('Getting started')
+                    )
                     .on('click', function (e) {
-                        var currentApp = ox.ui.App.getCurrentApp(),
-                            currentType = currentApp.attributes.name;
-
-                        thisIsStupid.runTour(currentType);
                         e.preventDefault();
+                        require(['io.ox/core/tk/wizard', 'io.ox/tours/intro'], function (Tour) {
+                            Tour.registry.run('default/io.ox/intro');
+                        });
                     })
                 );
-
-                ox.ui.windowManager.on('window.show', toggleVisibility);
-                toggleVisibility();
             });
         }
     });
@@ -93,25 +84,14 @@ define('io.ox/tours/main', [
     ext.point('io.ox/core/topbar/right/dropdown').sort();
 
     return {
-        availableTours: function () {
-            return _(utils.tours()).keys();
-        },
-
-        isAvailable: function (tourname) {
-            return _(_(utils.tours()).keys()).contains(tourname);
-        },
-
-        get: function (tourname) {
-            return utils.tours()[tourname];
-        },
-
-        getAll: function () {
-            return utils.tours();
-        },
-
+        //DEPRECATED: legacy method. Don't use it in new code. Use the WTF instead.
         runTour: function (tourname) {
-            require(['css!3rd.party/hopscotch/hopscotch.css', 'apps/3rd.party/hopscotch/hopscotch-0.1.js']).done(function () {
-                var tour = utils.tours()[tourname],
+            require([
+                'io.ox/tours/utils',
+                'css!3rd.party/hopscotch/hopscotch.css',
+                'apps/3rd.party/hopscotch/hopscotch-0.1.js'
+            ]).done(function (utils) {
+                var tour = utils.get(tourname),
                     hs = window.hopscotch;
 
                 if (!tour) {

@@ -59,6 +59,15 @@ define('io.ox/tours/utils', [
     return {
         switchToAppFunc: switchToAppFunc,
         switchToApp: switchToApp,
-        tours: tours
+        tours: tours,
+        availableTours: function () {
+            return _(tours()).keys();
+        },
+        isAvailable: function (tourname) {
+            return _(_(tours()).keys()).contains(tourname);
+        },
+        get: function (tourname) {
+            return tours()[tourname];
+        }
     };
 });
