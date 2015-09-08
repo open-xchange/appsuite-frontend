@@ -46,6 +46,11 @@ define('io.ox/find/view-facets', [
         draw: extensions.dropdownFolder
     });
 
+    ext.point(POINT + '/dropdown/account').extend({
+        index: 100,
+        draw: $.noop
+    });
+
     /**
      * BACKBONE
      */
