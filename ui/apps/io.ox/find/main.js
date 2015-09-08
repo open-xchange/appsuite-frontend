@@ -60,7 +60,7 @@ define('io.ox/find/main', [
             'props-mandatory': function (app) {
                 // folder facet is mandatory for the follwing apps/modules
                 app.props.set('mandatory',
-                    settings.get('search/mandatory/folder', []) || []
+                    settings.get('search/mandatory', {}) || {}
                 );
             },
             'props-default': function (app) {
