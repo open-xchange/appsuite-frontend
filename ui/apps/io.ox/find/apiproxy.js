@@ -82,7 +82,8 @@ define('io.ox/find/apiproxy',[
             // create request params
             request.data.facets = model.manager.getRequest();
             request.data.options = request.data.options || {};
-            request.data.options.folder = app.get('parent').folder.get();
+            // unused
+            // request.data.options.folder = app.get('parent').folder.get();
 
             // ignore virtual folders
             if (/^virtual/.test(request.data.options.folder) && !app.isMandatory('folder'))
