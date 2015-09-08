@@ -122,7 +122,8 @@ define('io.ox/mail/view-options', [
 
     function toggleFolderView(e) {
         e.preventDefault();
-        e.data.app.folderView.toggle(e.data.state);
+        e.data.app.folderView.forceOpen = e.data.state;
+        e.data.app.props.set('folderview', e.data.state);
     }
 
     function onFolderViewOpen(app) {

@@ -36,6 +36,7 @@ define('io.ox/core/folder/view', [
             nodes = app.getWindow().nodes,
             sidepanel = nodes.sidepanel,
             hiddenByWindowResize = false,
+            forceOpen = false,
             DEFAULT_WIDTH = 250;
 
         //
@@ -88,6 +89,7 @@ define('io.ox/core/folder/view', [
         app.folderView = {
 
             tree: tree,
+            forceOpen: forceOpen,
 
             isVisible: function () {
                 return visible;
@@ -104,6 +106,7 @@ define('io.ox/core/folder/view', [
 
             hide: function () {
                 visible = false;
+                forceOpen = false;
                 if (!hiddenByWindowResize) storeVisibleState();
                 resetLeftPosition();
                 sidepanel.removeClass('visible').css('width', '');
@@ -178,7 +181,7 @@ define('io.ox/core/folder/view', [
             if (!nodes.outer.is(':visible')) return;
             // respond to current width
             var threshold = app.folderView.resize.autoHideThreshold;
-            if (!hiddenByWindowResize && visible && width <= threshold) {
+            if (!app.folderView.forceOpen && !hiddenByWindowResize && visible && width <= threshold) {
                 app.folderView.hide();
                 hiddenByWindowResize = true;
             } else if (hiddenByWindowResize && width > threshold) {
