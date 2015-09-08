@@ -441,7 +441,7 @@ define('io.ox/core/tk/list', [
                 swipe: false
             }, options);
 
-            var events = {};
+            var events = {}, dndEnabled = false;
 
             // selection?
             if (this.options.selection) {
@@ -459,6 +459,7 @@ define('io.ox/core/tk/list', [
                 if (_.device('!smartphone')) this.$el.addClass('visible-selection');
                 // enable drag & drop
                 dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
+                dndEnabled = true;
                 // a11y
                 this.$el.addClass('f6-target');
             } else {
@@ -481,8 +482,10 @@ define('io.ox/core/tk/list', [
                 if (this.collection.length) this.onReset();
             }
 
-            // enable drag & drop
-            if (this.options.draggable) dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
+            // enable drag & drop; avoid enabling dnd twice
+            if (this.options.draggable && !dndEnabled) {
+                dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
+            }
 
             this.ref = this.ref || options.ref;
             this.app = options.app;

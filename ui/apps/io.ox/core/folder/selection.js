@@ -26,10 +26,7 @@ define('io.ox/core/folder/selection', [], function () {
         this.view.$el.addClass('dropzone')
             .attr('data-dropzones', '.selectable')
             .on('drop', function (e, baton) {
-                if (!baton) {
-                    return;
-                }
-
+                if (!baton) return;
                 baton.dropType = view.module;
                 view.selection.trigger('selection:drop', baton);
             });
