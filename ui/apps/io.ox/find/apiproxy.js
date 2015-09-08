@@ -116,6 +116,7 @@ define('io.ox/find/apiproxy',[
                 },
                 // suggestions
                 search: function (query) {
+                    console.log('%c' + '!!!', 'color: white; background-color: grey');
                     var standard = {
                             params: { module: app.getModuleParam() },
                             data: { prefix: query }
@@ -162,6 +163,7 @@ define('io.ox/find/apiproxy',[
                     }
 
                     return function (sync, params) {
+                        console.log('%c' + '!!!', 'color: white; background-color: red');
                         var manager = model.manager,
                             request = {
                                 params: _.extend({ module: app.getModuleParam() }, params),

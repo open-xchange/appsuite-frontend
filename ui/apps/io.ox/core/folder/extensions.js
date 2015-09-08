@@ -234,11 +234,14 @@ define('io.ox/core/folder/extensions', [
                 };
             }
 
-            // TODO overwrite handling
+            // TODO: disable when only one account
             if (tree.module === 'infostore') {
+                var previous = options.filter;
                 options.filter = function (id, model) {
+                    // get repsonse of previously defined filter function
+                    var unfiltered = (previous ? previous.apply(this, arguments) : true);
                     // exclude external accounts
-                    return !api.isExternalFileStorage(model);
+                    return unfiltered && !api.isExternalFileStorage(model);
                 };
             }
 
@@ -368,14 +371,6 @@ define('io.ox/core/folder/extensions', [
             id: 'remote-accounts',
             index: 200,
             draw: extensions.fileStorageAccounts
-        }
-    );
-
-    ext.point('io.ox/core/foldertree/infostore/find').extend(
-        {
-            id: 'standard-folders',
-            index: 100,
-            draw: extensions.rootFolders
         }
     );
 

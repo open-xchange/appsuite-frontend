@@ -285,9 +285,8 @@ define('io.ox/find/main', [
             if (this.view) this.view.cancel();
         };
 
-        app.toggle = function (folder) {
-            var disable = folderAPI.isVirtual(folder) || folderAPI.isExternalFileStorage(folder);
-            app.trigger( disable ? 'view:disable' : 'view:enable');
+        app.toggle = function (folderid) {
+            app.trigger( folderAPI.isVirtual(folderid) ? 'view:disable' : 'view:enable');
         };
 
         // parent app id
@@ -407,6 +406,7 @@ define('io.ox/find/main', [
         })();
 
         app.getConfig = function (options) {
+            console.log('%c' + options, 'color: white; background-color: grey');
             return app.getProxy().then(function (apiproxy) {
                 return apiproxy.config(options);
             });
@@ -431,23 +431,32 @@ define('io.ox/find/main', [
 
             if (!isInital) return $.Deferred().resolve();
 
-            return app.get('parent').folder.isDefault()
-                    .then(function (isDefault) {
-                        // add rampup
-                        if (isDefault) return;
-                        // for non default folder
-                        // use skeleton for first call cause we do not know
-                        // the facet structure yet
-                        return {
-                            data: {
-                                facets: [{
-                                    facet: 'folder',
-                                    filter: null,
-                                    // TODO: virtual all on standard
-                                    value: app.get('parent').folder.get()
-                                }]
-                            }
-                        };
+            var folderutil = app.get('parent').folder;
+
+            return $.when(folderutil.getData(), folderutil.isDefault())
+                    .then(function (data, isDefault) {
+                        var facets = [];
+
+                        // only add when non default folder
+                        if (!isDefault) {
+                            facets.push({
+                                facet: 'folder',
+                                filter: null,
+                                value: data.id
+                            });
+                        }
+
+                        // mandatory
+                        if (app.getModuleParam() === 'files') {
+                            facets.push({
+                                facet: 'account',
+                                filter: null,
+                                value: data.account_id
+                            });
+                        }
+                        if (facets.length) {
+                            return { data: { facets: facets } };
+                        }
                     });
         }
 

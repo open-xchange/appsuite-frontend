@@ -100,7 +100,8 @@ define('io.ox/core/folder/api', [
     }
 
     function isExternalFileStorage(data) {
-        var type = _.isObject(data) ? (data.get ? data.get('type') : data.type) : undefined;
+        //
+        var type = data.get ? data.get('type') : data.type;
         return type === 14;
     }
 

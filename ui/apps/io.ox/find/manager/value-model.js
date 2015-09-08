@@ -28,8 +28,9 @@ define('io.ox/find/manager/value-model', [
 
             // predefined option
             _.each(data.options, function (op) {
-                if (facet.get('id') === 'folder' || facet.get('id') === 'account')
+                if (facet.get('id') === 'folder' || facet.get('id') === 'account') {
                     if (op.active) option = op.id;
+                }
             });
 
             // hint: single value facet: in case data.id === facet.id

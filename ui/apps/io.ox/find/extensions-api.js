@@ -106,6 +106,29 @@ define('io.ox/find/extensions-api',[
                     accountdata = {},
                     mapping = {};
 
+                function all(accounts, folders) {
+                    var def = $.Deferred(),
+                        folder = baton.app.get('parent').folder.getData;
+
+                    if (baton.app.getModuleParam() !== 'files') return def.resolve(accounts, folders);
+
+                    // get accunt name for current selected account
+                    folder().then(function (data) {
+                        require(['io.ox/core/api/filestorage'], function (filestorageAPI) {
+                            filestorageAPI
+                                .getAccountByFolder(data)
+                                .then(function (data) {
+                                    if (data) {
+                                        // TODO
+                                        allfolders.item.name = allfolders.item.name +  ' (' + data.displayName + ')';
+                                    }
+                                    def.resolve(accounts, folders);
+                                });
+                        });
+                    });
+                    return def;
+                }
+
                 function compact (accounts, folders) {
                     // store account data
                     _.each(accounts, function (account) {
@@ -253,7 +276,7 @@ define('io.ox/find/extensions-api',[
                     def.resolve();
                 }
 
-                var folder;
+                var folder, allfolders;
                 baton.data.unshift(folder = {
                     id: 'folder',
                     name: gt('Folder'),
@@ -270,7 +293,7 @@ define('io.ox/find/extensions-api',[
                         item: {
                             name: gt('Folder')
                         },
-                        options: [{
+                        options: [ allfolders = {
                             account: undefined,
                             value: null,
                             id: 'disabled',
@@ -324,6 +347,7 @@ define('io.ox/find/extensions-api',[
                 http.resume();
 
                 return $.when.apply($, req)
+                    .then(all)
                     .then(compact)
                     .then(unify)
                     .then(cleanup)
@@ -334,7 +358,6 @@ define('io.ox/find/extensions-api',[
         },
 
         account: function (baton) {
-            //TODO: move to backend!!!
             var def = $.Deferred();
 
             // exit for non
@@ -376,11 +399,14 @@ define('io.ox/find/extensions-api',[
                 }
 
                 function preselect () {
-                    var folder = baton.app.get('parent').folder.get();
-                    _.each(facet.values[0].options, function (option) {
-                        if (option.data.rootFolder === folder)
-                            option.active = true;
-                    });
+                    // preselect account matching currently selected folder
+                    return baton.app.get('parent').folder.getData()
+                        .then(function (data) {
+                            _.each(facet.values[0].options, function (option) {
+                                if (option.data.qualifiedId === data.account_id)
+                                    option.active = true;
+                            });
+                        });
                 }
 
                 var facet;
