@@ -333,6 +333,87 @@ define('io.ox/find/extensions-api',[
             baton.waitsFor.push(def);
         },
 
+        account: function (baton) {
+            //TODO: move to backend!!!
+            var def = $.Deferred();
+
+            // exit for non
+            // TODO: capability
+            if (baton.app.getModuleParam() !== 'files') return def.resolve();
+
+            require(['io.ox/core/api/filestorage'], function (filestorageAPI) {
+                var req = [];
+
+                function create (accounts) {
+                    // shorthand
+                    var options = facet.values[0].options;
+                    // for each filestorage type (e.g. dropbox)
+                    _.each(accounts, function (collection) {
+
+                        // each account model
+                        collection.each(function (model) {
+                            var isPrimary = model.get('rootFolder') === '9',
+                                option = {
+                                    id: model.get('id'),
+                                    value: model.get('qualifiedId'),
+                                    item: {
+                                        name: model.get('displayName'),
+                                        detail: model.get('filestorageService')
+                                    },
+                                    hidden: true,
+                                    type: model.get('filestorageService'),
+                                    account: model.get('id'),
+                                    data: model.attributes,
+                                    filter: null
+                                };
+                            // ensure primary is listed first
+                            if (isPrimary)
+                                options.splice(0, 0, option);
+                            else
+                                options.push(option);
+                        });
+                    });
+                }
+
+                function preselect () {
+                    var folder = baton.app.get('parent').folder.get();
+                    _.each(facet.values[0].options, function (option) {
+                        if (option.data.rootFolder === folder)
+                            option.active = true;
+                    });
+                }
+
+                var facet;
+                baton.data.unshift(facet = {
+                    id: 'account',
+                    name: gt('Accounts'),
+                    style: 'custom',
+                    custom: true,
+                    hidden: true,
+                    flags: [
+                        'toolbar',
+                        'hidden',
+                        'conflicts:folder_type'
+                    ],
+                    values: [{
+                        facet: 'folder',
+                        id: 'custom',
+                        item: {
+                            name: gt('Folder')
+                        },
+                        options: []
+                    }]
+                });
+
+                return $.when.apply($, req)
+                    .then(filestorageAPI.getAllAccounts)
+                    .then(create)
+                    .then(preselect)
+                    .then(def.resolve);
+            });
+            baton.waitsFor.push(def);
+        },
+
         addOptionDisabled: function (baton) {
             // add 'disabled' option for all toolbar dropdowns
             _.each(baton.data, function (facet) {

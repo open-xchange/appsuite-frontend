@@ -45,6 +45,12 @@ define('io.ox/find/apiproxy',[
     });
 
     POINT.extend({
+        id: 'account',
+        index: 360,
+        customize: extensions.account
+    });
+
+    POINT.extend({
         id: 'add-option-disabled',
         index: 400,
         customize: extensions.addOptionDisabled
