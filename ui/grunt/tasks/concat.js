@@ -306,7 +306,7 @@ module.exports = function (grunt) {
             },
             compose: {
                 options: {
-                    banner: 'define("io.ox/mail/compose/bundle", [], function () {\n\n' +
+                    banner: 'define("io.ox/mail/compose/bundle", ["static/3rd.party/jquery-ui.min.js", "static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js"], function () {\n\n' +
                                 '"use strict";\n\n',
                     footer: '});\n'
                 },
@@ -315,6 +315,10 @@ module.exports = function (grunt) {
                         src: [
                             'apps/io.ox/mail/compose/view.js',
                             'apps/io.ox/mail/compose/model.js',
+                            'apps/io.ox/mail/compose/extensions.js',
+                            'apps/io.ox/mail/sender.js',
+                            'apps/io.ox/backbone/mini-views/common.js',
+                            'apps/io.ox/core/tk/tokenfield.js',
                             'apps/io.ox/core/api/snippets.js',
                             'apps/io.ox/core/tk/contenteditable-editor.js',
                             'apps/io.ox/core/tk/textproc.js',
