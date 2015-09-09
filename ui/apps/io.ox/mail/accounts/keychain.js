@@ -18,7 +18,10 @@ define.async('io.ox/mail/accounts/keychain', [
     'io.ox/core/capabilities',
     'io.ox/core/event',
     'io.ox/mail/accounts/model',
-    'gettext!io.ox/keychain'
+    'gettext!io.ox/keychain',
+    //pre fetch dependencies for io.ox/mail/accounts/model - saves 1 request
+    'io.ox/backbone/validation',
+    'io.ox/keychain/model'
 ], function (ext, accountAPI, userAPI, capabilities, Events, AccountModel, gt) {
 
     'use strict';
