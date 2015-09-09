@@ -134,6 +134,8 @@ define('io.ox/presenter/views/presentationview', [
             this.documentContainer = null;
             // create a debounced version of zoom function
             this.setZoomLevelDebounced = _.debounce(this.setZoomLevel.bind(this), 500);
+            // create a debounced version of the resize handler
+            this.onResizeDebounced = _.debounce(this.onResize.bind(this), 500);
             // the index of the current slide, defaults to the first slide
             this.currentSlideIndex = 0;
             // the slide count, defaults to 1
@@ -144,7 +146,7 @@ define('io.ox/presenter/views/presentationview', [
             // the slide navigation view
             this.navigationView = new NavigationView(options);
             // register resize handler
-            this.listenTo(this.presenterEvents, 'presenter:resize', this.onResize);
+            this.listenTo(this.presenterEvents, 'presenter:resize', this.onResizeDebounced);
             // bind zoom events
             this.listenTo(this.presenterEvents, 'presenter:zoomin', this.onZoomIn);
             this.listenTo(this.presenterEvents, 'presenter:zoomout', this.onZoomOut);
@@ -759,6 +761,9 @@ define('io.ox/presenter/views/presentationview', [
                        documentPage.css(pageSize)
                    )
                 );
+
+                swiperSlide.css('line-height', swiperSlide.height() + 'px');
+
             }, this);
 
             // initiate swiper
@@ -930,7 +935,9 @@ define('io.ox/presenter/views/presentationview', [
                 return;
             }
             this.documentLoad.done(function () {
-                var fitScreenZoomFactor = this.getFitScreenZoomFactor();
+                var fitScreenZoomFactor = this.getFitScreenZoomFactor(),
+                    swiperSlide = this.getActiveSlideNode();
+
                 this.setZoomLevelDebounced(fitScreenZoomFactor);
 
                 console.info('Presenter - onResize()', 'defaultZoomFactor', fitScreenZoomFactor);
@@ -941,6 +948,8 @@ define('io.ox/presenter/views/presentationview', [
                     // After an on resize call, the plugin 'resets' the active slide to the beginning.
                     //this.swiper.slideTo(this.currentSlideIndex);
                 }
+                swiperSlide.css('line-height', swiperSlide.height() + 'px');
+
             }.bind(this));
         },
 

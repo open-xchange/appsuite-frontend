@@ -218,7 +218,7 @@ define('io.ox/presenter/views/thumbnailview', [
             presentationView.$el.toggleClass('thumbnails-opened', visibility);
             // Workaround: when joining the presentation calling onResize() on iOS or Android will make Swiper failing to load the initial slide.
             if (_.device('!iOS && !Android')) {
-                presentationView.onResize();
+                this.presenterEvents.trigger('presenter:resize');
             }
         },
 

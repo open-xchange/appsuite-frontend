@@ -93,7 +93,6 @@
      }
 
      .swiper-slide {
-         .flex-center();
          .pdf-page {
              box-shadow: 0 0 8px rgba(0,0,0,0.2);
          }
@@ -253,9 +252,15 @@
         width: 100%;
         outline: none;
 
+        .document-page {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
         .swiper-slide {
             overflow: auto;
             outline: none;
+            text-align: center;
         }
 
         .swiper-button-control {
