@@ -4,5 +4,6 @@
     "company": "Open-Xchange",
     "category": "Dev",
     "requires": "search",
-    "settings": false
+    "settings": false,
+    "visible": false
 }
