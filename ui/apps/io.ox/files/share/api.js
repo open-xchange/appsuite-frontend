@@ -140,35 +140,66 @@ define('io.ox/files/share/api', [
 
         /**
          * get a temporary link and related token
-         * @param  { object } o
+         * @param  { object } data
          * @return { deferred } returns related token
          */
-        getLink: function (o) {
+        getLink: function (data) {
             return http.PUT({
                 module: 'share/management',
                 params: {
                     action: 'getLink',
                     timezone: 'UTC'
                 },
-                data: o
+                data: _(data).pick('module', 'folder', 'item')
             });
         },
 
         /**
          * update link
-         * @param  { object } o
+         * @param  { object } data
          * @return { deferred } empty data and timestamp
          */
-        updateLink: function (o, timestamp) {
-            timestamp = timestamp || _.now();
+        updateLink: function (data, timestamp) {
             return http.PUT({
                 module: 'share/management',
                 params: {
                     action: 'updateLink',
                     timezone: 'UTC',
+                    timestamp: timestamp || _.now()
+                },
+                data: _(data).pick('module', 'folder', 'item', 'password', 'expiry_date')
+            });
+        },
+
+        /**
+         * send invitation related to a link target
+         * @param  { object } data target data
+         * @return { deferred } empty data and timestamp
+         */
+        sendLink: function (data) {
+            return http.PUT({
+                module: 'share/management',
+                params: {
+                    action: 'sendLink'
+                },
+                data: _(data).pick('module', 'folder', 'item', 'recipients', 'message')
+            });
+        },
+
+        /**
+         * delete a link
+         * @param  { object } data target data
+         * @return { deferred } empty data and timestamp
+         */
+        deleteLink: function (data, timestamp) {
+            return http.PUT({
+                module: 'share/management',
+                params: {
+                    action: 'deleteLink',
+                    timezone: 'UTC',
                     timestamp: timestamp
                 },
-                data: o
+                data: _(data).pick('module', 'folder', 'item')
             });
         },
 
@@ -322,38 +353,6 @@ define('io.ox/files/share/api', [
                     action: 'delete'
                 },
                 data: shares
-            });
-        },
-
-        /**
-         * delete a link
-         * @param  { object } o target data
-         * @return { deferred } empty data and timestamp
-         */
-        deleteLink: function (o, timestamp) {
-            return http.PUT({
-                module: 'share/management',
-                params: {
-                    action: 'deleteLink',
-                    timezone: 'UTC',
-                    timestamp: timestamp
-                },
-                data: o
-            });
-        },
-
-        /**
-         * send invitation related to a link target
-         * @param  { object } o target data
-         * @return { deferred } empty data and timestamp
-         */
-        sendLink: function (o) {
-            return http.PUT({
-                module: 'share/management',
-                params: {
-                    action: 'sendLink'
-                },
-                data: o
             });
         },
 

@@ -201,19 +201,21 @@ define('io.ox/files/share/model', [
                     }).fail(yell);
                 case 'create':
                 case 'update':
-                    var self = this;
-                    return api.updateLink(model.toJSON(), model.get('lastModified')).then(function (res) {
-                        if (self.get('type') === self.TYPES.LINK && model.has('recipients') && model.get('recipients').length > 0) {
-                            api.sendLink(model.toJSON()).fail(yell);
-                        }
-                        return $.Deferred().resolve(res);
-                    }, yell);
+                    return api.updateLink(model.toJSON(), model.get('lastModified'))
+                        .done(this.send.bind(this))
+                        .fail(yell);
                 case 'delete':
                     if (this.get('type') === this.TYPES.LINK) {
                         return api.deleteLink(model.toJSON(), model.get('lastModified')).fail(yell);
                     }
                     break;
             }
+        },
+
+        send: function () {
+            if (this.get('type') !== this.TYPES.LINK) return;
+            if (_.isEmpty(this.has('recipients'))) return;
+            api.sendLink(this.toJSON()).fail(yell);
         },
 
         validate: function (attr) {
