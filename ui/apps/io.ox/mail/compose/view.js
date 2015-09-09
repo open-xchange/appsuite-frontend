@@ -1134,7 +1134,7 @@ define('io.ox/mail/compose/view', [
                 var mode = self.model.get('mode');
                 // set focus in compose and forward mode to recipient tokenfield
                 if (/(compose|forward)/.test(mode)) {
-                    if (_.device('!ios')) self.$el.find('.tokenfield:first .token-input').focus();
+                    if (_.device('!ios')) _.defer(function () { self.$el.find('.tokenfield:first .token-input').focus(); });
                 } else {
                     self.editor.focus();
                 }
