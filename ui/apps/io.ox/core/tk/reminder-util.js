@@ -35,7 +35,14 @@ define('io.ox/core/tk/reminder-util', [
                 );
         } else {
             // special link dropdown
-            var toggle;
+            var toggle, menu,
+                // super special function to have overflow scroll and dropdowns as popups see Bug 40962 and https://github.com/twbs/bootstrap/issues/7160
+                dropDownFixPosition = function (button, dropdown) {
+                var dropDownTop = button.offset().top + button.outerHeight();
+                dropdown.css('top', dropDownTop + 'px');
+                dropdown.css('left', button.offset().left + 'px');
+            };
+
             node.append(
                 $('<div>').addClass('dropdown').css({ 'float': 'left' }).append(
                     toggle = $('<a role="menuitem" tabindex="1" data-action="remind-again">')
@@ -47,7 +54,7 @@ define('io.ox/core/tk/reminder-util', [
                     .append(
                         $('<i class="fa fa-chevron-down">').css({ paddingLeft: '5px', textDecoration: 'none' })
                     ),
-                    $('<ul role="menu">').addClass('dropdown-menu dropdown-left').css({ minWidth: 'auto' }).append(function () {
+                    menu = $('<ul role="menu">').addClass('dropdown-menu dropdown-left').css({ minWidth: 'auto', position: 'fixed' }).append(function () {
                         var ret = [];
                         for (var i = 0; i < values.length; i++) {
                             ret.push('<li role="presentation"><a  tabindex="1" role="menuitem" aria-label="' + gt('Remind me again ') + values[i][1] + '" href="#" data-action="reminder" data-value="' + values[i][0] + '">' + values[i][1] + '</a></li>');
@@ -59,6 +66,10 @@ define('io.ox/core/tk/reminder-util', [
                     .attr('aria-label', gt('Close this reminder'))
             ).find('after').css('clear', 'both');
             toggle.dropdown();
+
+            $(toggle).click(function () {
+                dropDownFixPosition(toggle, menu);
+            });
         }
     }
 
