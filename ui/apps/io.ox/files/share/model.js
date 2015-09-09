@@ -88,9 +88,6 @@ define('io.ox/files/share/model', [
                     target.folder = item.get('folder_id');
                     target.item = item.get('id');
                 }
-                if (self.get('temporary')) {
-                    target.expiry_date = self.getExpiryDate();
-                }
                 targets.push(target);
             });
 
@@ -171,7 +168,7 @@ define('io.ox/files/share/model', [
                     return data;
                 } else {
                     if (this.get('temporary')) {
-                        data.expiry_date = this.get('expiry_date');
+                        data.expiry_date = this.getExpiryDate();
                     } else {
                         data.expiry_date = null;
                     }
