@@ -124,6 +124,8 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/desktop.js',
                             'apps/io.ox/core/api/apps.js',
                             'apps/io.ox/core/extPatterns/stage.js',
+                            'apps/io.ox/core/yell.js',
+                            'apps/io.ox/core/notifications.js',
                             'apps/io.ox/core/commons.js',
                             'apps/io.ox/core/upsell.js',
                             'apps/io.ox/core/ping.js',
@@ -136,12 +138,6 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/adaptiveLoader.js',
                             'apps/io.ox/core/tk/dialogs.js',
                             'apps/io.ox/core/tk/draghelper.js',
-                            // notifications
-                            'apps/io.ox/core/tk/visibility-api-util',
-                            'apps/io.ox/core/desktopNotifications',
-                            'apps/io.ox/core/yell.js',
-                            'apps/io.ox/core/notifications/badgeview',
-                            'apps/io.ox/core/notifications.js',
                             // mobile stuff
                             'apps/io.ox/core/page-controller.js',
                             'apps/io.ox/core/toolbars-mobile.js',
