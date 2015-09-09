@@ -41,6 +41,7 @@ define('io.ox/core/notifications', [
         initialize: function () {
             var self = this;
             self.bannerHeight = 0;
+            self.handledNotificationInfo = false;
             this.badgeview = new badgeview.view({ model: new badgeview.model() });
             //close when clicked outside, since we don't have the overlay anymore
             //does not work with some dropdowns though (they prevent event bubbling), but the notification popup is in the background then
@@ -121,8 +122,9 @@ define('io.ox/core/notifications', [
             return self;
         },
         drawNotificationInfo: function () {
+
             // only show if there was no decision yet
-            if (desktopNotifications.getPermissionStatus() === 'default') {
+            if (desktopNotifications.getPermissionStatus() === 'default' && !this.handledNotificationInfo) {
                 var self = this,
                     textNode = $('<div>').text(gt('Would you like to enable desktop notifications?')),
                     laterButton = $('<button class="later-button btn btn-danger">').text(gt('Later')).on('click', function (e) {
@@ -154,6 +156,10 @@ define('io.ox/core/notifications', [
                         self.hideNotificationInfo = true;
                     },
                     containerNode = $('<div class="desktop-notification-info clearfix">').append( textNode, enableButton, laterButton );
+
+                if (self.hideNotificationInfo) {
+                    cleanup();
+                }
 
                 this.$el.prepend(containerNode);
             }
@@ -315,6 +321,7 @@ define('io.ox/core/notifications', [
             if (this.hideNotificationInfo) {
                 this.$el.find('.desktop-notification-info').remove();
                 this.hideNotificationInfo = false;
+                this.handledNotificationInfo = true;
             }
             this.model.set('status', 'closed');
             this.trigger('hide');
