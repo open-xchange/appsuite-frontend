@@ -269,6 +269,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             '315': 'subscr_subflds',
             '316': 'standard_folder_type',
             '317': 'supported_capabilities',
+            '318': 'account_id',
             '3010': 'com.openexchange.publish.publicationFlag',
             '3020': 'com.openexchange.subscribe.subscriptionFlag',
             '3030': 'com.openexchange.folderstorage.displayName',
