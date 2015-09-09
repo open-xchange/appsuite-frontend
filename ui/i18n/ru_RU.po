@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-08-23 11:01+1000\n"
+"PO-Revision-Date: 2015-09-03 19:56+1000\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
@@ -721,10 +721,9 @@ msgid "Add"
 msgstr "Добавить"
 
 #: apps/io.ox/files/view-options.js:241 module:io.ox/files
-#, fuzzy
 #| msgid "Add Box.com account"
 msgid "Add Box account"
-msgstr "Добавить аккаунт Box.com"
+msgstr "Добавить аккаунт Box"
 
 #: apps/io.ox/files/view-options.js:239 module:io.ox/files
 msgid "Add Dropbox account"
@@ -1004,11 +1003,10 @@ msgid "All files"
 msgstr "Все файлы"
 
 #: apps/io.ox/core/folder/actions/common.js:53 module:io.ox/core
-#, fuzzy
 #| msgid "This file has been deleted"
 #| msgid_plural "These files have been deleted"
 msgid "All files have been deleted"
-msgstr "Файл удален."
+msgstr "Все файлы были удалены"
 
 #: apps/io.ox/search/facets/extensions.js:146 module:io.ox/core
 #: apps/io.ox/search/facets/extensions.js:158
@@ -3719,7 +3717,6 @@ msgstr "Получить бесплатное обновление"
 #: apps/io.ox/core/folder/contextmenu.js:458 module:io.ox/core
 #: apps/io.ox/files/actions.js:678 module:io.ox/files
 #: apps/io.ox/files/actions.js:798
-#, fuzzy
 #| msgid "Get a link"
 msgid "Get link"
 msgstr "Получить ссылку"
@@ -4598,10 +4595,9 @@ msgid "Manage favorites"
 msgstr "Управление избранным"
 
 #: apps/io.ox/mail/compose/extensions.js:355 module:io.ox/mail
-#, fuzzy
 #| msgid "Add new signature"
 msgid "Manage signatures"
-msgstr "Добавить новую подпись"
+msgstr "Управление подписями"
 
 #: apps/io.ox/contacts/model.js:224 module:io.ox/contacts
 msgid "Manager"
@@ -6868,13 +6864,11 @@ msgstr "Совместные задачи"
 #. "Shares" in terms of "shared with others" ("Freigaben")
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:115
 #: module:io.ox/core/viewer
-#, fuzzy
 #| msgid "Share"
 msgid "Shares"
-msgstr "Общий доступ"
+msgstr "Общие"
 
 #: apps/io.ox/core/folder/contextmenu.js:439 module:io.ox/core
-#, fuzzy
 #| msgid "Share"
 msgid "Sharing"
 msgstr "Общий доступ"
@@ -7061,14 +7055,15 @@ msgstr "Поля содержат недопустимые данные"
 
 #. %1$s the maximum file size
 #: apps/io.ox/core/tk/upload.js:291 module:io.ox/core
-#, fuzzy
 #| msgid ""
 #| "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 #| "size of %2$s"
 msgid ""
 "Some files cannot be uploaded because they exceed the maximum file size of "
 "%1$s"
-msgstr "Размер файла «%1$s» превышает максимально допустимый размер %2$s"
+msgstr ""
+"Некоторые файлы не были добавлены, так как их размер превышает максимально "
+"допустимый размер (%1$s)"
 
 #: apps/plugins/portal/linkedIn/register.js:174 module:plugins/portal
 #: apps/plugins/portal/twitter/register.js:237
@@ -7277,10 +7272,9 @@ msgid "Summary"
 msgstr "Сводка"
 
 #: apps/io.ox/files/view-options.js:165 module:io.ox/files
-#, fuzzy
 #| msgid "Sent folder"
 msgid "Switch to parent folder"
-msgstr "Папка отправленных"
+msgstr "Перейти в родительскую папку"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js:109 module:io.ox/mail/emoji
@@ -7607,27 +7601,27 @@ msgstr "Размер файла «%1$s» превышает квоту %2$s"
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js:264 module:io.ox/core
-#, fuzzy
 #| msgid ""
 #| "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
 #| "of %2$s"
 msgid "The file cannot be uploaded because it exceeds the quota limit of %1$s"
 msgid_plural ""
 "The files cannot be uploaded because they exceed the quota limit of %1$s"
-msgstr[0] "Размер файла «%1$s» превышает квоту %2$s"
-msgstr[1] "Размер файла «%1$s» превышает квоту %2$s"
-msgstr[2] "Размер файла «%1$s» превышает квоту %2$s"
+msgstr[0] "Файл не может быть добавлен, так как он превышает квоту %1$s"
+msgstr[1] "Файлы не могут быть добавлены, так как они превышают квоту %1$s"
+msgstr[2] "Файлы не могут быть добавлены, так как они превышают квоту %1$s"
 
 #. %1$s the maximum file size
 #: apps/io.ox/core/tk/upload.js:286 module:io.ox/core
-#, fuzzy
 #| msgid ""
 #| "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 #| "size of %2$s"
 msgid ""
 "The files cannot be uploaded because each file exceeds the maximum file size "
 "of %1$s"
-msgstr "Размер файла «%1$s» превышает максимально допустимый размер %2$s"
+msgstr ""
+"Файлы не могут быть добавлены, так как размер каждого из них превышает "
+"максимально допустимый размер (%1$s)"
 
 #: apps/io.ox/core/upsell.js:33 module:io.ox/core
 msgid "The first 90 days are free."
@@ -7646,10 +7640,9 @@ msgid "The folder has been cleaned up."
 msgstr "Папка освобождена."
 
 #: apps/io.ox/core/folder/actions/common.js:54 module:io.ox/core
-#, fuzzy
 #| msgid "The folder has been emptied."
 msgid "The folder has been emptied"
-msgstr "Папка освобождена."
+msgstr "Папка освобождена"
 
 #: apps/io.ox/core/main.js:1520 module:io.ox/core
 msgid ""
@@ -7984,10 +7977,9 @@ msgstr[2] "Файлы заблокированы другим пользоват
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:119
 #: module:io.ox/core/viewer
-#, fuzzy
 #| msgid "This file has been added to the portal"
 msgid "This file is shared with others"
-msgstr "Файл добавлен в портал"
+msgstr "Открыт совместный доступ к файлу"
 
 #: apps/io.ox/editor/main.js:247 module:io.ox/editor
 msgid "This file will be written in your default folder to allow editing"
@@ -8014,10 +8006,9 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:119
 #: module:io.ox/core/viewer
-#, fuzzy
 #| msgid "This folder has subscriptions"
 msgid "This folder is shared with others"
-msgstr "У этой папки есть подписки"
+msgstr "Открыт совместный доступ к папке"
 
 #: apps/io.ox/core/folder/actions/rename.js:48 module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
@@ -8816,10 +8807,9 @@ msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Для быстрого сохранения нажмите Ctrl+Enter."
 
 #: apps/io.ox/core/folder/actions/move.js:70 module:io.ox/core
-#, fuzzy
 #| msgid "You cannot move items to virtual folders"
 msgid "You cannot move items to this folder"
-msgstr "Вы не можете перемещать объекты в виртуальные папки"
+msgstr "Вы не можете перемещать объекты в эту папку"
 
 #: apps/io.ox/core/folder/actions/move.js:65 module:io.ox/core
 msgid "You cannot move items to virtual folders"
