@@ -279,7 +279,6 @@ define('io.ox/mail/compose/view', [
             this.app = options.app;
             this.editorHash = {};
             this.autosave = {};
-            this.intervals = [];
             this.blocked = [];
             this.messageFormat = options.messageFormat || settings.get('messageFormat', 'html');
 
@@ -290,21 +289,15 @@ define('io.ox/mail/compose/view', [
             this.editor = null;
             this.composeMode = 'compose';
             this.editorId = _.uniqueId('editor-');
-            this.contentEditable = $('<div class="editable">').attr({
+            this.editorContainer = $('<div class="editor">').attr({
                 'data-editor-id': this.editorId,
                 'tabindex': 1
-            }).css('margin-bottom', '32px');
-            this.textarea = $('<textarea class="plain-text">').attr({
-                'data-editor-id': this.editorId,
-                'tabindex': 1
-            }).addClass(settings.get('useFixedWidthFont') ? 'monospace' : '');
+            });
 
             this.baton = ext.Baton({
                 model: this.model,
                 view: this
             });
-
-            this.contentEditable.on('addInlineImage', function (e, id) { this.addKeepalive(id); }.bind(this));
 
             // register for 'dispose' event (using inline function to make this testable via spyOn)
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
@@ -522,7 +515,7 @@ define('io.ox/mail/compose/view', [
                 // Replace inline images in contenteditable with links from draft response
                 if (self.model.get('editorMode') === 'html') {
                     $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
-                        $('img:not(.emoji):eq(' + index + ')', self.contentEditable).attr('src', $(el).attr('src'));
+                        $('img:not(.emoji):eq(' + index + ')', self.editorContainer.find('.editable')).attr('src', $(el).attr('src'));
                     });
                 }
                 self.model.set('msgref', result.data, { silent: true });
@@ -608,15 +601,6 @@ define('io.ox/mail/compose/view', [
             delay();
         },
 
-        addKeepalive: function (id) {
-            var timeout = Math.round(settings.get('maxUploadIdleTimeout', 200000) * 0.9);
-            this.intervals.push(setInterval(mailAPI.keepalive, timeout, id));
-        },
-
-        clearKeepalive: function () {
-            _(this.intervals).each(clearInterval);
-        },
-
         clean: function () {
             // mark as not dirty
             this.model.dirty(false);
@@ -629,7 +613,6 @@ define('io.ox/mail/compose/view', [
         },
 
         dispose: function () {
-            this.clearKeepalive();
             this.stopListening();
             this.model = null;
         },
@@ -914,32 +897,36 @@ define('io.ox/mail/compose/view', [
         },
 
         loadEditor: function (content) {
-            var self = this;
+            if (this.editorHash[this.model.get('editorMode')]) {
+                return this.reuseEditor(content);
+            }
+            var self = this,
+                def = $.Deferred(),
+                options = {};
 
-            return ox.manifests.loadPluginsFor('io.ox/mail/compose/editor/' + this.model.get('editorMode')).then(function (Editor) {
-                return (self.editorHash[self.model.get('editorMode')] = new Editor(self.model.get('editorMode') === 'text' ? self.textarea : self.contentEditable))
-                    .done(function () {
-                        self.editor = self.editorHash[self.model.get('editorMode')];
-                        return $.when(self.editor.setPlainText(content)).done(function () {
-                            self.editor.handleShow(true);
-                            self.setSelectedSignature();
-                            if (self.model.get('mode') !== 'compose') {
-                                self.editor.focus();
-                            }
-                            if (self.model.get('editorMode') !== 'text') {
-                                self.editor.resetUndo();
-                            }
-                        });
-                    });
+            options.useFixedWithFont = settings.get('useFixedWithFont');
+            options.app = this.app;
+            options.view = this;
+            options.model = this.model;
+
+            ox.manifests.loadPluginsFor('io.ox/mail/compose/editor/' + this.model.get('editorMode')).then(function (Editor) {
+                new Editor(self.editorContainer, options).done(function (editor) {
+                    def.resolve(editor);
+                });
+            });
+            return def.then(function (editor) {
+                self.editorHash[self.model.get('editorMode')] = editor;
+                return self.reuseEditor.apply(self, [content]);
             });
         },
 
         reuseEditor: function (content) {
             var self = this;
             this.editor = this.editorHash[this.model.get('editorMode')];
-            return $.when(this.editor.setPlainText(content)).done(function () {
-                self.editor.handleShow(true);
+            return $.when(this.editor.setPlainText(content)).then(function () {
+                self.editor.show();
                 self.setSelectedSignature();
+                return self.editor;
             });
         },
 
@@ -954,32 +941,23 @@ define('io.ox/mail/compose/view', [
         },
 
         toggleEditorMode: function () {
-            var self = this;
-            // be busy
-            this.contentEditable.busy();
-            this.textarea.prop('disabled', true).busy();
+            var self = this, content;
+            this.editorContainer.busy();
 
             if (this.editor) {
                 this.removeSignature();
 
-                var content = this.editor.getPlainText(),
-                    self = this;
-                this.editor.clear();
-                this.editor.handleHide();
+                content = this.editor.getPlainText();
 
-                // load TEXT/HTML editor for the first time or reuse TEXT/HTML editor
-                var loaded = (!this.editorHash[this.model.get('editorMode')] ? this.loadEditor(content) : this.reuseEditor(content));
-
-                return loaded.done(function () {
-                    //update the content type of the mail
-                    //FIXME: may be, do this somewhere else? in the model?
-                    self.model.setMailContentType(self.editor.content_type);
-                });
-
-            } else {
-                // initial editor
-                return this.loadEditor();
+                this.editor.hide();
             }
+
+            return this.loadEditor(content).then(function () {
+                self.editorContainer.idle();
+                //update the content type of the mail
+                //FIXME: may be, do this somewhere else? in the model?
+                self.model.setMailContentType(self.editor.content_type);
+            });
         },
 
         syncMail: function () {
@@ -1161,33 +1139,6 @@ define('io.ox/mail/compose/view', [
                 delete this.blocked[sendtype];
         },
 
-        handleScrollbars: function () {
-            if (_.device('smartphone')) return;
-            var self = this,
-                scrollPane = this.app.getWindowNode(),
-                toolbar = this.mcetoolbar,
-                editor = this.contentEditable,
-                fixed = false,
-                top = 14;
-
-            scrollPane.on('scroll', function () {
-                if (self.model.get('editorMode') === 'text') return;
-                if (scrollPane.scrollTop() - scrollPane.find('.mail-compose-fields').height() > top) {
-                    // toolbar leaves viewport
-                    if (!fixed) {
-                        fixed = true;
-                        toolbar.addClass('fixed').css('top', self.$el.parent().offset().top);
-                        $(window).trigger('resize.tinymce');
-                    }
-                    editor.css('margin-top', toolbar.height());
-                } else if (fixed) {
-                    fixed = false;
-                    toolbar.removeClass('fixed').css('top', 0);
-                    editor.css('margin-top', 0);
-                }
-            });
-        },
-
         render: function () {
             var self = this;
 
@@ -1239,14 +1190,8 @@ define('io.ox/mail/compose/view', [
             });
 
             this.$el.append(
-                $('<div class="mail-compose-contenteditable-fields">').append(
-                    this.mcetoolbar = $('<div class="editable-toolbar">').attr('data-editor-id', this.editorId),
-                    this.contentEditable
-                ),
-                this.textarea
+                this.editorContainer
             );
-
-            this.handleScrollbars();
 
             this.initAutoSaveAsDraft();
 

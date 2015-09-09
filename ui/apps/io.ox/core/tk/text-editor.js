@@ -18,9 +18,16 @@ define('io.ox/core/tk/text-editor', ['static/3rd.party/autosize/dist/autosize.js
     // save jQuery val() - since tinyMCE is a bit too aggressive
     var val = $.original.val;
 
-    function Editor(textarea) {
+    function Editor(textarea, opt) {
 
-        textarea = $(textarea);
+        opt = _.extend({
+            useFixedWithFont: false
+        }, opt);
+
+        $(textarea).append(
+            textarea = $('<textarea>').addClass('plain-text')
+        );
+        textarea.toggleClass('monospace', opt.useFixedWidthFont);
 
         if (_.device('tablet && iOS >= 6')) {
             textarea.on('click', function () {
@@ -33,7 +40,7 @@ define('io.ox/core/tk/text-editor', ['static/3rd.party/autosize/dist/autosize.js
             });
         }
 
-        var def = $.when(),
+        var def = $.when(this),
 
             trimEnd = function (str) {
                 // ensure we have a string
@@ -80,8 +87,7 @@ define('io.ox/core/tk/text-editor', ['static/3rd.party/autosize/dist/autosize.js
 
         // publish internal 'done'
         this.done = function (fn) {
-            def.done(fn);
-            return def;
+            return def.done(fn);
         };
 
         this.focus = function () {
@@ -156,18 +162,13 @@ define('io.ox/core/tk/text-editor', ['static/3rd.party/autosize/dist/autosize.js
             }
         };
 
-        this.handleShow = function (compose) {
-            textarea.prop('disabled', false).idle().show();
+        this.show = function () {
+            textarea.prop('disabled', false).show();
 
             _.defer(function () {
                 textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - $('#io-ox-topbar').height())));
                 autosize(textarea);
             });
-
-            var parents = textarea.parents('.window-content');
-            if (!compose) textarea.next().hide();
-
-            parents.find('.mail-compose-contenteditable-fields').hide();
 
             function resizeEditor () {
                 textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - $('#io-ox-topbar').height())));
@@ -177,7 +178,8 @@ define('io.ox/core/tk/text-editor', ['static/3rd.party/autosize/dist/autosize.js
             $(window).on('resize.text-editor', resizeEditor);
         };
 
-        this.handleHide = function () {
+        this.hide = function () {
+            textarea.prop('disabled', true).hide();
             $(window).off('resize.text-editor');
         };
 
@@ -186,7 +188,7 @@ define('io.ox/core/tk/text-editor', ['static/3rd.party/autosize/dist/autosize.js
         };
 
         this.destroy = function () {
-            this.handleHide();
+            this.hide();
             this.setContent('');
             textarea = def = null;
         };
