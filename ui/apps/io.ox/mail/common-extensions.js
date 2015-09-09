@@ -72,9 +72,9 @@ define('io.ox/mail/common-extensions', [
             );
         },
 
-        picturedetail: function (baton) {
+        senderPicture: function (baton) {
 
-            // show picture of sender or first recipient
+            // shows picture of sender see Bug 41023
 
             var addresses = baton.data.from;
             this.append(
