@@ -94,6 +94,12 @@ define('plugins/administration/groups/settings/members', [
 
         idAttribute: 'internal_userid',
 
+        constructor: function () {
+            Backbone.Model.apply(this, arguments);
+            // typeahead needs "value"
+            this.value = this.getFullName();
+        },
+
         getSortName: function () {
             return (this.get('last_name') || this.get('first_name') || this.get('display_name') || '').toLowerCase();
         },
