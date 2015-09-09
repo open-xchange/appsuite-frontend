@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-08-25 06:36-0700\n"
+"PO-Revision-Date: 2015-09-06 09:27-0700\n"
 "Last-Translator: jolanta <kontekst@kontekst.biz>\n"
 "Language-Team: Polish <>\n"
 "Language: pl_PL\n"
@@ -329,9 +329,9 @@ msgstr "%1$s jest teraz połączone z %2$s"
 #: apps/io.ox/core/commons.js:48 module:io.ox/core
 msgid "%1$s item selected"
 msgid_plural "%1$s items selected"
-msgstr[0] "Wybrano %1$s pozycję"
-msgstr[1] "Wybrano %1$s pozycje"
-msgstr[2] "Wybrano %1$s pozycji"
+msgstr[0] "Wybrano %1$s element"
+msgstr[1] "Wybrano %1$s elementy"
+msgstr[2] "Wybrano %1$s elementów"
 
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
@@ -725,10 +725,9 @@ msgid "Add"
 msgstr "Dodaj"
 
 #: apps/io.ox/files/view-options.js:241 module:io.ox/files
-#, fuzzy
 #| msgid "Add Box.com account"
 msgid "Add Box account"
-msgstr "Dodaj konto Box.com"
+msgstr "Dodaj konto Box"
 
 #: apps/io.ox/files/view-options.js:239 module:io.ox/files
 msgid "Add Dropbox account"
@@ -1008,11 +1007,10 @@ msgid "All files"
 msgstr "Wszystkie pliki"
 
 #: apps/io.ox/core/folder/actions/common.js:53 module:io.ox/core
-#, fuzzy
 #| msgid "This file has been deleted"
 #| msgid_plural "These files have been deleted"
 msgid "All files have been deleted"
-msgstr "Plik został usunięty"
+msgstr "Wszystkie pliki zostały usunięte"
 
 #: apps/io.ox/search/facets/extensions.js:146 module:io.ox/core
 #: apps/io.ox/search/facets/extensions.js:158
@@ -1158,7 +1156,7 @@ msgstr "Spotkania"
 
 #: apps/io.ox/calendar/actions/create.js:41 module:io.ox/calendar
 msgid "Appointments in shared calendars"
-msgstr "Spotkania w kalendarzach udostępnionych"
+msgstr "Spotkania w udostępnionych kalendarzach"
 
 #: apps/io.ox/settings/apps/settings/pane.js:89 module:io.ox/core
 msgid "Approved:"
@@ -3744,7 +3742,6 @@ msgstr "Pobierz bezpłatne uaktualnienie"
 #: apps/io.ox/core/folder/contextmenu.js:458 module:io.ox/core
 #: apps/io.ox/files/actions.js:678 module:io.ox/files
 #: apps/io.ox/files/actions.js:798
-#, fuzzy
 #| msgid "Get a link"
 msgid "Get link"
 msgstr "Uzyskaj łącze"
@@ -4209,7 +4206,7 @@ msgstr "Mniejsze niż"
 
 #: apps/io.ox/contacts/main.js:893 module:io.ox/contacts
 msgid "Item List"
-msgstr "Lista pozycji"
+msgstr "Lista elementów"
 
 #. items list (e.g. mails)
 #: apps/io.ox/core/commons.js:596 module:io.ox/core
@@ -4223,7 +4220,7 @@ msgstr "Lista pozycji"
 #: apps/io.ox/files/main.js:294 module:io.ox/files apps/io.ox/mail/main.js:493
 #: module:io.ox/mail
 msgid "Item list options"
-msgstr "Opcje listy pozycji"
+msgstr "Opcje listy elementów"
 
 #: apps/io.ox/files/actions/download.js:45 module:io.ox/files
 msgid "Items without a file can not be downloaded."
@@ -4629,10 +4626,9 @@ msgid "Manage favorites"
 msgstr "Zarządzaj ulubionymi"
 
 #: apps/io.ox/mail/compose/extensions.js:355 module:io.ox/mail
-#, fuzzy
 #| msgid "Add new signature"
 msgid "Manage signatures"
-msgstr "Dodaj nowy podpis"
+msgstr "Zarządzaj podpisami"
 
 #: apps/io.ox/contacts/model.js:224 module:io.ox/contacts
 msgid "Manager"
@@ -4826,7 +4822,7 @@ msgstr "Więcej"
 
 #: apps/io.ox/search/view-template.js:188 module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
-msgstr "Znaleziono więcej pozycji niż wyświetlane %1$s"
+msgstr "Znaleziono więcej elementów niż wyświetlane %1$s"
 
 #: apps/io.ox/calendar/actions.js:249 module:io.ox/calendar
 #: apps/io.ox/calendar/actions.js:264 apps/io.ox/calendar/actions.js:432
@@ -5283,7 +5279,7 @@ msgstr "Liczba dni pomiędzy zawiadomieniami o urlopie dla tego samego nadawcy"
 #. number of items in a folder
 #: apps/io.ox/core/folder/actions/properties.js:56 module:io.ox/core
 msgid "Number of items"
-msgstr "Liczba pozycji"
+msgstr "Liczba elementów"
 
 #: apps/io.ox/core/tk/reminder-util.js:34 module:io.ox/core
 #: apps/io.ox/core/tk/reminder-util.js:58
@@ -6898,25 +6894,23 @@ msgstr "Udostępnione przez innych użytkowników"
 
 #: apps/io.ox/core/folder/extensions.js:352 module:io.ox/core
 msgid "Shared calendars"
-msgstr "Kalendarze udostępnione"
+msgstr "Udostępnione kalendarze"
 
 #: apps/io.ox/core/folder/extensions.js:358 module:io.ox/core
 msgid "Shared tasks"
-msgstr "Zadania udostępnione"
+msgstr "Udostępnione zadania"
 
 #. "Shares" in terms of "shared with others" ("Freigaben")
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:115
 #: module:io.ox/core/viewer
-#, fuzzy
 #| msgid "Share"
 msgid "Shares"
-msgstr "Udostępnij"
+msgstr "Udostępnienia"
 
 #: apps/io.ox/core/folder/contextmenu.js:439 module:io.ox/core
-#, fuzzy
 #| msgid "Share"
 msgid "Sharing"
-msgstr "Udostępnij"
+msgstr "Udostępnianie"
 
 #: apps/io.ox/wizards/upsell.js:133 module:io.ox/wizards
 msgid "Shopping cart"
@@ -7100,7 +7094,6 @@ msgstr "Niektóre pola zawierają nieprawidłowe dane"
 
 #. %1$s the maximum file size
 #: apps/io.ox/core/tk/upload.js:291 module:io.ox/core
-#, fuzzy
 #| msgid ""
 #| "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 #| "size of %2$s"
@@ -7108,8 +7101,9 @@ msgid ""
 "Some files cannot be uploaded because they exceed the maximum file size of "
 "%1$s"
 msgstr ""
-"Nie można przesłać pliku \"%1$s\", ponieważ jego rozmiar przekracza wartość "
-"maksymalną wynoszącą %2$s"
+"Nie można przesłać niektórych plików, ponieważ ich rozmiary przekraczają "
+"wartość "
+"maksymalną wynoszącą %1$s"
 
 #: apps/plugins/portal/linkedIn/register.js:174 module:plugins/portal
 #: apps/plugins/portal/twitter/register.js:237
@@ -7321,10 +7315,9 @@ msgid "Summary"
 msgstr "Podsumowanie"
 
 #: apps/io.ox/files/view-options.js:165 module:io.ox/files
-#, fuzzy
 #| msgid "Sent folder"
 msgid "Switch to parent folder"
-msgstr "Folder Wysłane"
+msgstr "Przełącz do folderu nadrzędnego"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js:109 module:io.ox/mail/emoji
@@ -7663,7 +7656,6 @@ msgstr ""
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js:264 module:io.ox/core
-#, fuzzy
 #| msgid ""
 #| "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
 #| "of %2$s"
@@ -7671,8 +7663,8 @@ msgid "The file cannot be uploaded because it exceeds the quota limit of %1$s"
 msgid_plural ""
 "The files cannot be uploaded because they exceed the quota limit of %1$s"
 msgstr[0] ""
-"Nie można przesłać pliku \"%1$s\", ponieważ jego rozmiar przekracza limit "
-"przydziału miejsca wynoszący %2$s"
+"Nie można przesłać pliku, ponieważ jego rozmiar przekracza limit  przydziału "
+"miejsca wynoszący %1$s"
 msgstr[1] ""
 "Nie można przesłać pliku \"%1$s\", ponieważ jego rozmiar przekracza limit "
 "przydziału miejsca wynoszący %2$s"
@@ -7682,7 +7674,6 @@ msgstr[2] ""
 
 #. %1$s the maximum file size
 #: apps/io.ox/core/tk/upload.js:286 module:io.ox/core
-#, fuzzy
 #| msgid ""
 #| "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 #| "size of %2$s"
@@ -7690,8 +7681,8 @@ msgid ""
 "The files cannot be uploaded because each file exceeds the maximum file size "
 "of %1$s"
 msgstr ""
-"Nie można przesłać pliku \"%1$s\", ponieważ jego rozmiar przekracza wartość "
-"maksymalną wynoszącą %2$s"
+"Nie można przesłać plików, ponieważ ich rozmiary przekracza wartość "
+"maksymalną wynoszącą %1$s"
 
 #: apps/io.ox/core/upsell.js:33 module:io.ox/core
 msgid "The first 90 days are free."
@@ -7710,10 +7701,9 @@ msgid "The folder has been cleaned up."
 msgstr "Folder został oczyszczony."
 
 #: apps/io.ox/core/folder/actions/common.js:54 module:io.ox/core
-#, fuzzy
 #| msgid "The folder has been emptied."
 msgid "The folder has been emptied"
-msgstr "Folder został opróżniony."
+msgstr "Folder został opróżniony"
 
 #: apps/io.ox/core/main.js:1520 module:io.ox/core
 msgid ""
@@ -7764,8 +7754,8 @@ msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
 "will generally be created on behalf of the owner."
 msgstr ""
-"Wybrany kalendarz jest udostępniony przez %1$s. Spotkania w kalendarzach "
-"udostępnionych będą zasadniczo tworzone w imieniu jego właściciela."
+"Wybrany kalendarz jest udostępniony przez %1$s. Spotkania w udostępnionych "
+"kalendarzach będą zasadniczo tworzone w imieniu jego właściciela."
 
 #: apps/io.ox/search/model.js:36 module:io.ox/search
 msgid ""
@@ -8064,10 +8054,9 @@ msgstr[2] ""
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:119
 #: module:io.ox/core/viewer
-#, fuzzy
 #| msgid "This file has been added to the portal"
 msgid "This file is shared with others"
-msgstr "Plik został dodany do portalu"
+msgstr "Plik jest udostępniony innym osobom"
 
 #: apps/io.ox/editor/main.js:247 module:io.ox/editor
 msgid "This file will be written in your default folder to allow editing"
@@ -8094,10 +8083,9 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:119
 #: module:io.ox/core/viewer
-#, fuzzy
 #| msgid "This folder has subscriptions"
 msgid "This folder is shared with others"
-msgstr "W tym folderze występują subskrypcje"
+msgstr "Folder jest udostępniony innym osobom"
 
 #: apps/io.ox/core/folder/actions/rename.js:48 module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
@@ -8906,14 +8894,13 @@ msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Możesz szybko zapisać zmiany, naciskając Ctrl+Enter."
 
 #: apps/io.ox/core/folder/actions/move.js:70 module:io.ox/core
-#, fuzzy
 #| msgid "You cannot move items to virtual folders"
 msgid "You cannot move items to this folder"
-msgstr "Nie można przenieść pozycji do folderów wirtualnych"
+msgstr "Nie można przenieść elementów do tego folderu"
 
 #: apps/io.ox/core/folder/actions/move.js:65 module:io.ox/core
 msgid "You cannot move items to virtual folders"
-msgstr "Nie można przenieść pozycji do folderów wirtualnych"
+msgstr "Nie można przenieść elementów do folderów wirtualnych"
 
 #: apps/io.ox/calendar/invitations/register.js:161 module:io.ox/calendar/main
 msgid "You declined this appointment"
@@ -9702,7 +9689,7 @@ msgstr "wstępne"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:382 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:210 module:io.ox/portal
 msgid "the item has been moved"
-msgstr "pozycja została przeniesiona"
+msgstr "element został przeniesiony"
 
 #: apps/io.ox/mail/settings/model.js:26 module:io.ox/mail
 #: apps/io.ox/mail/settings/model.js:27

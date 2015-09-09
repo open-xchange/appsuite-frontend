@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-08-24 21:27+0200\n"
+"PO-Revision-Date: 2015-09-08 23:36+0200\n"
 "Last-Translator: \n"
 "Language-Team: Dutch <kde-i18n-doc@kde.org>\n"
 "Language: nl_NL\n"
@@ -705,10 +705,9 @@ msgid "Add"
 msgstr "Toevoegen"
 
 #: apps/io.ox/files/view-options.js:241 module:io.ox/files
-#, fuzzy
 #| msgid "Add Box.com account"
 msgid "Add Box account"
-msgstr "Box.com account toevoegen"
+msgstr "Box account toevoegen"
 
 #: apps/io.ox/files/view-options.js:239 module:io.ox/files
 msgid "Add Dropbox account"
@@ -988,11 +987,10 @@ msgid "All files"
 msgstr "Alle bestanden"
 
 #: apps/io.ox/core/folder/actions/common.js:53 module:io.ox/core
-#, fuzzy
 #| msgid "This file has been deleted"
 #| msgid_plural "These files have been deleted"
 msgid "All files have been deleted"
-msgstr "Dit bestand is verwijderd"
+msgstr "Alle bestanden zijn verwijderd"
 
 #: apps/io.ox/search/facets/extensions.js:146 module:io.ox/core
 #: apps/io.ox/search/facets/extensions.js:158
@@ -3731,10 +3729,9 @@ msgstr "Ontvang een gratis upgrade"
 #: apps/io.ox/core/folder/contextmenu.js:458 module:io.ox/core
 #: apps/io.ox/files/actions.js:678 module:io.ox/files
 #: apps/io.ox/files/actions.js:798
-#, fuzzy
 #| msgid "Get a link"
 msgid "Get link"
-msgstr "Ontvang een link"
+msgstr "Ontvang link"
 
 #: apps/plugins/portal/xing/register.js:285 module:plugins/portal
 msgid ""
@@ -4613,10 +4610,9 @@ msgid "Manage favorites"
 msgstr "Beheer favorieten"
 
 #: apps/io.ox/mail/compose/extensions.js:355 module:io.ox/mail
-#, fuzzy
 #| msgid "Add new signature"
 msgid "Manage signatures"
-msgstr "Ondertekening toevoegen"
+msgstr "Beheer ondertekeningen"
 
 #: apps/io.ox/contacts/model.js:224 module:io.ox/contacts
 msgid "Manager"
@@ -6897,13 +6893,11 @@ msgstr "Gedeelde taken"
 #. "Shares" in terms of "shared with others" ("Freigaben")
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:115
 #: module:io.ox/core/viewer
-#, fuzzy
 #| msgid "Share"
 msgid "Shares"
-msgstr "Delen"
+msgstr "Gedeelde elementen"
 
 #: apps/io.ox/core/folder/contextmenu.js:439 module:io.ox/core
-#, fuzzy
 #| msgid "Share"
 msgid "Sharing"
 msgstr "Delen"
@@ -7090,7 +7084,6 @@ msgstr "Sommige velden bevatten ongeldige gegevens"
 
 #. %1$s the maximum file size
 #: apps/io.ox/core/tk/upload.js:291 module:io.ox/core
-#, fuzzy
 #| msgid ""
 #| "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 #| "size of %2$s"
@@ -7098,8 +7091,9 @@ msgid ""
 "Some files cannot be uploaded because they exceed the maximum file size of "
 "%1$s"
 msgstr ""
-"Het bestand \"%1$s\" kan niet worden geupload omdat het groter is dan het "
-"maximale bestandsgrootte van %2$s"
+"Sommige bestanden kunnen niet worden geupload omdat deze groter zijn dan de "
+"maximale bestandsgrootte van "
+"%1$s"
 
 #: apps/plugins/portal/linkedIn/register.js:174 module:plugins/portal
 #: apps/plugins/portal/twitter/register.js:237
@@ -7311,7 +7305,7 @@ msgstr "Samenvatting"
 
 #: apps/io.ox/files/view-options.js:165 module:io.ox/files
 msgid "Switch to parent folder"
-msgstr ""
+msgstr "Ga naar de bovenliggende map"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js:109 module:io.ox/mail/emoji
@@ -7650,7 +7644,6 @@ msgstr ""
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js:264 module:io.ox/core
-#, fuzzy
 #| msgid ""
 #| "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
 #| "of %2$s"
@@ -7658,15 +7651,14 @@ msgid "The file cannot be uploaded because it exceeds the quota limit of %1$s"
 msgid_plural ""
 "The files cannot be uploaded because they exceed the quota limit of %1$s"
 msgstr[0] ""
-"Het bestand \"%1$s\" kan niet worden geupload omdat het groter is dan het "
-"overgebleven quota van %2$s"
+"Het bestand kan niet worden geupload omdat deze boven het quotalimiet van %"
+"1$s komt"
 msgstr[1] ""
-"Het bestand \"%1$s\" kan niet worden geupload omdat het groter is dan het "
-"overgebleven quota van %2$s"
+"De bestanden kunnen niet worden geupload omdat deze boven het quotalimiet van "
+"%1$s komen"
 
 #. %1$s the maximum file size
 #: apps/io.ox/core/tk/upload.js:286 module:io.ox/core
-#, fuzzy
 #| msgid ""
 #| "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 #| "size of %2$s"
@@ -7674,8 +7666,8 @@ msgid ""
 "The files cannot be uploaded because each file exceeds the maximum file size "
 "of %1$s"
 msgstr ""
-"Het bestand \"%1$s\" kan niet worden geupload omdat het groter is dan het "
-"maximale bestandsgrootte van %2$s"
+"De bestanden kunnen niet worden geupload omdat deze groter zijn dan de "
+"maximale bestandsgrootte van %1$s"
 
 #: apps/io.ox/core/upsell.js:33 module:io.ox/core
 msgid "The first 90 days are free."
@@ -7694,10 +7686,9 @@ msgid "The folder has been cleaned up."
 msgstr "De map is opgeschoond."
 
 #: apps/io.ox/core/folder/actions/common.js:54 module:io.ox/core
-#, fuzzy
 #| msgid "The folder has been emptied."
 msgid "The folder has been emptied"
-msgstr "De map is leeg gemaakt."
+msgstr "De map is leeg gemaakt"
 
 #: apps/io.ox/core/main.js:1520 module:io.ox/core
 msgid ""
@@ -8045,10 +8036,9 @@ msgstr[1] ""
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:119
 #: module:io.ox/core/viewer
-#, fuzzy
 #| msgid "This file has been added to the portal"
 msgid "This file is shared with others"
-msgstr "Het bestand is toegevoegd aan het portaal"
+msgstr "Dit bestand wordt gedeeld met anderen"
 
 #: apps/io.ox/editor/main.js:247 module:io.ox/editor
 msgid "This file will be written in your default folder to allow editing"
@@ -8076,10 +8066,9 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:119
 #: module:io.ox/core/viewer
-#, fuzzy
 #| msgid "This folder has subscriptions"
 msgid "This folder is shared with others"
-msgstr "Deze map heeft abonnementen"
+msgstr "Deze map wordt gedeeld met anderen"
 
 #: apps/io.ox/core/folder/actions/rename.js:48 module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
@@ -8619,7 +8608,7 @@ msgstr "Toon de map"
 #: apps/io.ox/files/share/permissions.js:45 module:io.ox/core
 #: apps/io.ox/files/share/permissions.js:429
 msgid "Viewer"
-msgstr "Lezer"
+msgstr "Viewer"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js:614 module:io.ox/core
 msgid "Viewer Toolbar"
@@ -8893,10 +8882,9 @@ msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "U kunt uw wijzigingen snel opslaan met Ctrl+Enter"
 
 #: apps/io.ox/core/folder/actions/move.js:70 module:io.ox/core
-#, fuzzy
 #| msgid "You cannot move items to virtual folders"
 msgid "You cannot move items to this folder"
-msgstr "U kan geen items verplaatsen naar virtuele mappen"
+msgstr "U kan geen items verplaatsen naar deze map"
 
 #: apps/io.ox/core/folder/actions/move.js:65 module:io.ox/core
 msgid "You cannot move items to virtual folders"

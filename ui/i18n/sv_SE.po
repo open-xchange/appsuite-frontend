@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-08-24 11:34+0200\n"
+"PO-Revision-Date: 2015-09-03 06:52+0200\n"
 "Last-Translator: Arve Eriksson\n"
 "Language-Team: Swedish <ox@bureau-cornavin.com>\n"
 "Language: sv_SE\n"
@@ -700,10 +700,9 @@ msgid "Add"
 msgstr "Lägg till"
 
 #: apps/io.ox/files/view-options.js:241 module:io.ox/files
-#, fuzzy
 #| msgid "Add Box.com account"
 msgid "Add Box account"
-msgstr "Lägg till Box.com-konto"
+msgstr "Lägg till Box-konto"
 
 #: apps/io.ox/files/view-options.js:239 module:io.ox/files
 msgid "Add Dropbox account"
@@ -983,11 +982,10 @@ msgid "All files"
 msgstr "Alla filer"
 
 #: apps/io.ox/core/folder/actions/common.js:53 module:io.ox/core
-#, fuzzy
 #| msgid "This file has been deleted"
 #| msgid_plural "These files have been deleted"
 msgid "All files have been deleted"
-msgstr "Filen har tagits bort"
+msgstr "Alla filer har tagits bort"
 
 #: apps/io.ox/search/facets/extensions.js:146 module:io.ox/core
 #: apps/io.ox/search/facets/extensions.js:158
@@ -3691,10 +3689,9 @@ msgstr "Få gratis uppgradering"
 #: apps/io.ox/core/folder/contextmenu.js:458 module:io.ox/core
 #: apps/io.ox/files/actions.js:678 module:io.ox/files
 #: apps/io.ox/files/actions.js:798
-#, fuzzy
 #| msgid "Get a link"
 msgid "Get link"
-msgstr "Få en länk"
+msgstr "Hämta länk"
 
 #: apps/plugins/portal/xing/register.js:285 module:plugins/portal
 msgid ""
@@ -4572,10 +4569,9 @@ msgid "Manage favorites"
 msgstr "Hantera favoriter"
 
 #: apps/io.ox/mail/compose/extensions.js:355 module:io.ox/mail
-#, fuzzy
 #| msgid "Add new signature"
 msgid "Manage signatures"
-msgstr "Lägg till ny signatur"
+msgstr "Hantera signaturer"
 
 #: apps/io.ox/contacts/model.js:224 module:io.ox/contacts
 msgid "Manager"
@@ -6841,16 +6837,14 @@ msgstr "Delade uppgifter"
 #. "Shares" in terms of "shared with others" ("Freigaben")
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:115
 #: module:io.ox/core/viewer
-#, fuzzy
 #| msgid "Share"
 msgid "Shares"
-msgstr "Dela"
+msgstr "Delningar"
 
 #: apps/io.ox/core/folder/contextmenu.js:439 module:io.ox/core
-#, fuzzy
 #| msgid "Share"
 msgid "Sharing"
-msgstr "Dela"
+msgstr "Delar"
 
 #: apps/io.ox/wizards/upsell.js:133 module:io.ox/wizards
 msgid "Shopping cart"
@@ -7034,7 +7028,6 @@ msgstr "Några fält innehåller ogiltig information"
 
 #. %1$s the maximum file size
 #: apps/io.ox/core/tk/upload.js:291 module:io.ox/core
-#, fuzzy
 #| msgid ""
 #| "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 #| "size of %2$s"
@@ -7042,8 +7035,8 @@ msgid ""
 "Some files cannot be uploaded because they exceed the maximum file size of "
 "%1$s"
 msgstr ""
-"Filen \"%1$s\" kan inte laddas upp eftersom dess storlek överskrider den "
-"maximala filstorleken %2$s"
+"Vissa filer kan inte laddas upp eftersom deras storlek överskrider den "
+"maximala filstorleken %1$s"
 
 #: apps/plugins/portal/linkedIn/register.js:174 module:plugins/portal
 #: apps/plugins/portal/twitter/register.js:237
@@ -7254,10 +7247,9 @@ msgid "Summary"
 msgstr "Sammanfattning"
 
 #: apps/io.ox/files/view-options.js:165 module:io.ox/files
-#, fuzzy
 #| msgid "Sent folder"
 msgid "Switch to parent folder"
-msgstr "Skickatmapp"
+msgstr "Växla till överliggande mapp"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js:109 module:io.ox/mail/emoji
@@ -7587,21 +7579,17 @@ msgstr ""
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js:264 module:io.ox/core
-#, fuzzy
 #| msgid ""
 #| "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
 #| "of %2$s"
 msgid "The file cannot be uploaded because it exceeds the quota limit of %1$s"
 msgid_plural ""
 "The files cannot be uploaded because they exceed the quota limit of %1$s"
-msgstr[0] ""
-"Filen \"%1$s\" kan inte laddas upp eftersom den överskrider kvoten på %2$s"
-msgstr[1] ""
-"Filen \"%1$s\" kan inte laddas upp eftersom den överskrider kvoten på %2$s"
+msgstr[0] "Filen kan inte laddas upp eftersom den överskrider kvoten på %1$s"
+msgstr[1] "Filerna kan inte laddas upp eftersom den överskrider kvoten på %1$s"
 
 #. %1$s the maximum file size
 #: apps/io.ox/core/tk/upload.js:286 module:io.ox/core
-#, fuzzy
 #| msgid ""
 #| "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 #| "size of %2$s"
@@ -7609,8 +7597,8 @@ msgid ""
 "The files cannot be uploaded because each file exceeds the maximum file size "
 "of %1$s"
 msgstr ""
-"Filen \"%1$s\" kan inte laddas upp eftersom dess storlek överskrider den "
-"maximala filstorleken %2$s"
+"Filerna kan inte laddas upp eftersom deras storlek överskrider den "
+"maximala filstorleken %1$s"
 
 #: apps/io.ox/core/upsell.js:33 module:io.ox/core
 msgid "The first 90 days are free."
@@ -7629,10 +7617,9 @@ msgid "The folder has been cleaned up."
 msgstr "Mappen har städats."
 
 #: apps/io.ox/core/folder/actions/common.js:54 module:io.ox/core
-#, fuzzy
 #| msgid "The folder has been emptied."
 msgid "The folder has been emptied"
-msgstr "Mappen har tömts."
+msgstr "Mappen har tömts"
 
 #: apps/io.ox/core/main.js:1520 module:io.ox/core
 msgid ""
@@ -7969,10 +7956,9 @@ msgstr[1] "Filerna har inte tagits bort, eftersom de har låsts av dess ägare."
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:119
 #: module:io.ox/core/viewer
-#, fuzzy
 #| msgid "This file has been added to the portal"
 msgid "This file is shared with others"
-msgstr "Filen har lagts till i portalen"
+msgstr "Filen delas med andra"
 
 #: apps/io.ox/editor/main.js:247 module:io.ox/editor
 msgid "This file will be written in your default folder to allow editing"
@@ -8000,10 +7986,9 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:119
 #: module:io.ox/core/viewer
-#, fuzzy
 #| msgid "This folder has subscriptions"
 msgid "This folder is shared with others"
-msgstr "Den här mappen har prenumerationer"
+msgstr "Den här mappen delas med andra"
 
 #: apps/io.ox/core/folder/actions/rename.js:48 module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
@@ -8816,10 +8801,9 @@ msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Du kan snabbspara dina ändringar med Ctrl+Enter."
 
 #: apps/io.ox/core/folder/actions/move.js:70 module:io.ox/core
-#, fuzzy
 #| msgid "You cannot move items to virtual folders"
 msgid "You cannot move items to this folder"
-msgstr "Du kan inte flytta objekt till virtuella mappar"
+msgstr "Du kan inte flytta objekt till den här mappen"
 
 #: apps/io.ox/core/folder/actions/move.js:65 module:io.ox/core
 msgid "You cannot move items to virtual folders"
