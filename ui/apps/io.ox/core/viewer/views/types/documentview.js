@@ -50,9 +50,8 @@ define('io.ox/core/viewer/views/types/documentview', [
                 7: 'contacts'
             };
             // predefined zoom factors.
-            // Limit zoom factor on iOS because of canvas size restrictions.
-            // https://github.com/mozilla/pdf.js/issues/2439
-            this.ZOOM_FACTORS = _.device('!desktop') ? [25, 35, 50, 75, 100] : [25, 35, 50, 75, 100, 125, 150, 200, 300, 400, 600, 800];
+            // iOS Limits are handled by pdfview.js
+            this.ZOOM_FACTORS = [25, 35, 50, 75, 100, 125, 150, 200, 300, 400, 600, 800];
             // current zoom factor, defaults at 100%
             this.currentZoomFactor = 100;
             // defaults for fit zooms

@@ -42,6 +42,11 @@ define('io.ox/core/pdf/pdfview', [
         // render the optional text layer with a timeout of 200ms
         TEXT_LAYER_RENDER_DELAY = 200,
 
+        // max size of canvas width & height
+        // https://github.com/mozilla/pdf.js/issues/2439
+        // http://stackoverflow.com/a/22345796/4287795
+        MAXIMUM_SIDE_SIZE = (_.browser.iOS || _.browser.Safari || _.browser.IE <= 10) ? 2289 : 4096,
+
         // between every render call (assigned deferred) there is create a timeout of 250ms
         handleRenderQueue = (function () {
             var lastDef = $.when();
@@ -558,11 +563,20 @@ define('io.ox/core/pdf/pdfview', [
                         if (pageNode.children().length) {
                             var viewport = getPageViewport(pdfjsPage, pageZoom),
                                 pageSize = PDFView.getNormalizedSize({ width: viewport.width, height: viewport.height }),
-                                scaledSize = { width: pageSize.width * DEVICE_OUTPUTSCALING, height: pageSize.height * DEVICE_OUTPUTSCALING },
+                                scaledSize = { width: pageSize.width, height: pageSize.height },
                                 canvasWrapperNode = pageNode.children('.canvas-wrapper'),
                                 canvasNode = canvasWrapperNode.children('canvas'),
                                 textWrapperNode = pageNode.children('.text-wrapper'),
-                                pdfTextBuilder = null;
+                                pdfTextBuilder = null,
+                                deviceScale = 1;
+
+                            if (Math.max(scaledSize.width, scaledSize.height) * DEVICE_OUTPUTSCALING > MAXIMUM_SIDE_SIZE) {
+                                deviceScale = MAXIMUM_SIDE_SIZE / (Math.max(scaledSize.width, scaledSize.height) * DEVICE_OUTPUTSCALING);
+                            } else {
+                                deviceScale = DEVICE_OUTPUTSCALING;
+                            }
+                            scaledSize.width *= deviceScale;
+                            scaledSize.height *= deviceScale;
 
                             canvasNode.empty();
 
@@ -582,8 +596,8 @@ define('io.ox/core/pdf/pdfview', [
 
                             var canvasCtx = canvasNode[0].getContext('2d');
 
-                            canvasCtx._transformMatrix = [DEVICE_OUTPUTSCALING, 0, 0, DEVICE_OUTPUTSCALING, 0, 0];
-                            canvasCtx.scale(DEVICE_OUTPUTSCALING, DEVICE_OUTPUTSCALING);
+                            canvasCtx._transformMatrix = [deviceScale, 0, 0, deviceScale, 0, 0];
+                            canvasCtx.scale(deviceScale, deviceScale);
 
                             return pdfjsPage.render({
                                 canvasContext: canvasCtx,

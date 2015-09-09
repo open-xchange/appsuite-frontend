@@ -126,9 +126,8 @@ define('io.ox/presenter/views/presentationview', [
             // a Deferred object indicating the load process of this document view.
             this.documentLoad = $.Deferred();
             // predefined zoom factors.
-            // Limit zoom factor on iOS because of canvas size restrictions.
-            // https://github.com/mozilla/pdf.js/issues/2439
-            this.ZOOM_FACTORS = _.device('!desktop') ? [25, 35, 50, 75, 100, 125] : [25, 35, 50, 75, 100, 125, 150, 200, 300, 400];
+            // iOS Limits are handled by pdfview.js
+            this.ZOOM_FACTORS = [25, 35, 50, 75, 100, 125, 150, 200, 300, 400];
             // current zoom factor, defaults to 100%
             this.currentZoomFactor = 100;
             // the pdf document container
