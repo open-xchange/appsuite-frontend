@@ -281,8 +281,9 @@ define('io.ox/core/viewer/views/toolbarview', [
                     ref: 'io.ox/mail/actions/open-attachment'
                 },
                 'downloadmailattachment': {
-                    prio: 'lo',
+                    prio: 'hi',
                     mobile: 'lo',
+                    icon: 'fa fa-download',
                     label: gt('Download'),
                     ref: 'io.ox/mail/actions/download-attachment'
                 },
