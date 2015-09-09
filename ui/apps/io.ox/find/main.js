@@ -428,6 +428,8 @@ define('io.ox/find/main', [
 
         app.updateConfig = function () {
             app.getConfig().then(function (data) {
+                // be sure to ignore suggested contacts on empty 'config' call
+                data = _.reject(data, function (facet) { return facet.id === 'contact'; });
                 app.model.manager.update(data);
                 app.trigger('find:config-updated');
             });
