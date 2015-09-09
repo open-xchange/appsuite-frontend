@@ -63,11 +63,24 @@ define('io.ox/mail/common-extensions', [
                 size = api.threads.size(data),
                 single = size <= 1,
                 addresses = single && account.is('sent|drafts', data.folder_id) ? data.to : data.from;
-
             this.append(
                 contactsAPI.pictureHalo(
                     $('<div class="contact-picture" aria-hidden="true">'),
                     { email: data.picture || (addresses && addresses[0] && addresses[0][1]) },
+                    { width: 40, height: 40, effect: 'fadeIn' }
+                )
+            );
+        },
+
+        picturedetail: function (baton) {
+
+            // show picture of sender or first recipient
+
+            var addresses = baton.data.from;
+            this.append(
+                contactsAPI.pictureHalo(
+                    $('<div class="contact-picture" aria-hidden="true">'),
+                    { email: addresses && addresses[0] && addresses[0][1] },
                     { width: 40, height: 40, effect: 'fadeIn' }
                 )
             );

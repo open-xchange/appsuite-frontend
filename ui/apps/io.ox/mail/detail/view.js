@@ -67,7 +67,7 @@ define('io.ox/mail/detail/view', [
     ext.point('io.ox/mail/detail/header').extend({
         id: 'picture',
         index: INDEX_header += 100,
-        draw: extensions.picture
+        draw: extensions.picturedetail
     });
 
     ext.point('io.ox/mail/detail/header').extend({
