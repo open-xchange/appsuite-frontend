@@ -1,13 +1,13 @@
 <html lang="fr">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>7.2.3. Comment les rendez-vous sont-ils affichés ?</title>
+<title>7.2.4. Comment les rendez-vous sont-ils affichés ?</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Collecticiel">
 <link rel="up" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. Afficher les rendez-vous">
-<link rel="prev" href="ox.appsuite.user.sect.calendar.view.list.html" title="7.2.2. Afficher des rendez-vous dans la vue en liste">
-<link rel="next" href="ox.appsuite.user.sect.calendar.attachments.html" title="7.3. Affichage ou enregistrement des pièces jointes de rendez-vous">
+<link rel="prev" href="ox.appsuite.user.sect.calendar.view.list.html" title="7.2.3. Afficher des rendez-vous dans la vue en liste">
+<link rel="next" href="ox.appsuite.user.sect.calendar.attachments.html" title="7.3. Afficher ou enregistrer des pièces jointes de rendez-vous">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Note légale">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -33,17 +33,58 @@
 <h2 class="sr-only">Afficher les rendez-vous</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.calendar.view.appointments"></a>7.2.3. Comment les rendez-vous sont-ils affichés ?</h3></div></div></div>
-<a class="indexterm" name="id-1.8.9.7.2"></a><a class="indexterm" name="id-1.8.9.7.3"></a><div class="concept">
-<a name="ox.appsuite.user.concept.appointments.color"></a><p>Dans la vue d'agenda, les rendez-vous sont affichés avec les couleurs suivantes en fonction de la disponibilité : </p>
+<a name="ox.appsuite.user.sect.calendar.view.appointments"></a>7.2.4. Comment les rendez-vous sont-ils affichés ?</h3></div></div></div>
+<a class="indexterm" name="id-1.8.9.8.2"></a><a class="indexterm" name="id-1.8.9.8.3"></a><a class="indexterm" name="id-1.8.9.8.4"></a><div class="concept">
+<a name="ox.appsuite.user.concept.appointments.color"></a><p>Dans la vue en calendrier, l'affichage d'un rendez-vous est défini par les éléments suivants :</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Provisoire : jaune</p></li>
-<li class="listitem"><p>Disponible : vert</p></li>
-<li class="listitem"><p>Planifié : bleu</p></li>
-<li class="listitem"><p>Absent : rouge</p></li>
+<li class="listitem"><p>Le jeu de couleurs : classique, couleurs sombres, couleurs personnalisées</p></li>
+<li class="listitem"><p>Votre disponibilité pendant la durée du rendez-vous. Occupé, Provisoire, Absent ou Libre </p></li>
+<li class="listitem"><p>Votre état de confirmation pour ce rendez-vous : Accepté, Provisoire, Décliné</p></li>
+<li class="listitem"><p>La visibilité du sujet et de la decription du rendez-vous : Privé ou visible pour les autres utilisateurs</p></li>
 </ul></div>
-<p>Les rendez-vous privés sont toujours affichés en gris.</p>
+<p> L'affichage se distingue par les couleurs, icônes et ombrages utilisés.</p>
 </div>
+<p><a name="ox.appsuite.user.concept.appointments.show.classiccolors"></a></p>
+<p class="title"><b>Affichage pour les jeux de couleurs Classique et Couleurs sombres</b></p>
+<p>Suivant la disponibilité, les rendez-vous sont affichés dans les couleurs suivantes : </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Provisoire : jaune</p></li>
+<li class="listitem"><p>Libre : vert</p></li>
+<li class="listitem"><p>Occupé : bleu</p></li>
+<li class="listitem"><p>Absent : rouge</p></li>
+</ul></div>
+<p>Suivant l'état de confirmation du rendez-vous, les rendez-vous sont affichés comme suit : </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Les rendez-vous acceptés sont affichés dans la couleur de la disponibilité</p></li>
+<li class="listitem"><p>Les rendez-vous provisoires sont identifiés par l'ajout du texte <span class="guilabel"><strong>Provisoire</strong></span>.</p></li>
+<li class="listitem">
+<p>Les rendez-vous déclinés sont affichés en gris, le sujet étant barré.</p>
+<p><span class="phrase"><strong>Conseil :</strong></span> Dans les réglages de l'agenda, vous pouvez définir si les rendez-vous déclinés sont affichés ou non.</p>
+</li>
+</ul></div>
+<p>Les rendez-vous privés apparaissent en gris et sont identifiés par une icône.</p>
+<p><a name="ox.appsuite.user.concept.appointments.show.customcolors"></a></p>
+<p class="title"><b>Affichage pour le jeu de couleurs Couleurs personnalisées</b></p>
+<p>Suivant la disponibilité, les rendez-vous sont affichés dans les couleurs et motifs suivants : </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Provisoire : couleur choisie et hachures obliques fines</p></li>
+<li class="listitem"><p>Libre : couleur choisie et hachures diagonales larges</p></li>
+<li class="listitem"><p>Occupé : couleur choisie</p></li>
+<li class="listitem">
+<p>Absent : couleur choisie</p>
+<p><span class="phrase"><strong>Tip:</strong></span> Vous pouvez utiliser la couleur de votre choix pour <span class="guilabel"><strong>Absent</strong></span></p>
+</li>
+</ul></div>
+<p>Si vous ne choisissez pas de couleur personnalisée, c'est le bleu clair par défaut qui est utilisé. Suivant l'état de confirmation du rendez-vous, les rendez-vous sont affichés comme suit : </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Les rendez-vous acceptés sont affichés dans la couleur et le motif de la disponibilité</p></li>
+<li class="listitem"><p>Les rendez-vous provisoires sont affichés en gris clair.</p></li>
+<li class="listitem">
+<p>Les rendez-vous déclinés sont affichés en gris clair, le sujet étant barré.</p>
+<p><span class="phrase"><strong>Conseil :</strong></span> Dans les réglages de l'agenda, vous pouvez définir si les rendez-vous déclinés sont affichés ou non.</p>
+</li>
+</ul></div>
+<p>Les rendez-vous privés apparaissent en gris et sont identifiés par une icône.</p>
 </div>
           </div>
         </body>

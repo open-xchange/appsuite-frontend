@@ -4,7 +4,7 @@
 <title>5.5.18. Utiliser les filtres de courriel</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Collecticiel">
 <link rel="up" href="ox.appsuite.user.sect.email.manage.html" title="5.5. Organisation des courriels">
 <link rel="prev" href="ox.appsuite.user.sect.email.manage.unifiedmail.html" title="5.5.17. Utiliser la messagerie unifiée">
 <link rel="next" href="ox.appsuite.user.sect.email.search.html" title="5.6. Rechercher des courriels">
@@ -62,19 +62,26 @@
 <p> Certaines fonctionnalités de courrier électronique mettent en place automatiquement des filtres de courrier, par exemple celle des <a class="link" href="ox.appsuite.user.sect.email.send.vacationnotice.html#ox.appsuite.user.concept.email.vacationnotice">messages d'absence</a>.</p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.email.mailfilter.create"></a><p class="title"><b>Pour créer une nouvelle règle :</b></p>
+<a name="ox.appsuite.user.task.email.mailfilter.create"></a><p class="title">Pour créer une nouvelle règle :</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Cliquez sur l'icône <span class="guibutton"><strong>Menu système</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.create.systemmenu"></a><img src="../../images/appsuite_user_icon_settings.png"></span> à droite de la barre de menus. Choisissez l'élément <span class="guibutton"><strong>Réglages</strong></span>. </p></li>
+<li class="step"><p>Cliquez sur l'icône <span class="guibutton"><strong>Menu système</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.create.systemmenu"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> à droite de la barre de menus. Choisissez l'élément <span class="guibutton"><strong>Réglages</strong></span>. </p></li>
 <li class="step">
-<p>Si le <span class="guibutton"><strong>Filtre de message</strong></span> n'est pas affiché dans la barre latérale, activez les<span class="guibutton"><strong>Réglages avancés</strong></span> dans le bas de la barre latérale.</p>
-<p>Dans la barre latérale, cliquez sur <span class="guibutton"><strong>Filtre de courrier</strong></span>.</p>
+<p>Sélectionnez l'élément <span class="guibutton"><strong>Courrier électronique</strong></span> dans la barre latérale.</p>
+<p>Cliquez sur <span class="guibutton"><strong>Filtre de courrier</strong></span>.</p>
 </li>
 <li class="step"><p>Dans la zone d'affichage, cliquez sur <span class="guibutton"><strong>Ajouter une nouvelle règle</strong></span>. La fenêtre <span class="guilabel"><strong>Ajouter une nouvelle règle</strong></span> s'ouvre.</p></li>
 <li class="step"><p>Saisissez le nom que vous souhaitez donner à la règle.</p></li>
 <li class="step">
-<p>Pour ajouter une condition, cliquez sur <span class="guibutton"><strong>Ajouter une condition</strong></span>. Choisissez-en une dans la liste déroulante.</p>
-<p>Pour utiliser une partie du courriel qui n'est pas présente dans la liste, choisissez <span class="guibutton"><strong>En-tête</strong></span>. Saisissez un champ d'en-tête dans la zone de saisie <span class="guilabel"><strong>Nom</strong></span>. Vous pouvez afficher l'entête d'un courriel en <a class="link" href="ox.appsuite.user.sect.email.manage.source.html#ox.appsuite.user.concept.email.source">affichant le code source</a>.</p>
-<p>Vous pouvez définir un critère en cliquant sur <span class="guibutton"><strong>Correspond à</strong></span>. Saisissez un argument dans la zone de saisie.</p>
+<p>Pour ajouter une condition, cliquez sur <span class="guibutton"><strong>Ajouter une condition</strong></span>. Choisissez-en une dans la liste déroulante. Veuillez noter les points suivants :</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Pour utiliser une partie du courriel qui n'est pas présente dans la liste, choisissez <span class="guibutton"><strong>En-tête</strong></span>. Saisissez un champ d'en-tête dans la zone de saisie <span class="guilabel"><strong>Nom</strong></span>. Vous pouvez afficher l'entête d'un courriel en <a class="link" href="ox.appsuite.user.sect.email.manage.source.html#ox.appsuite.user.concept.email.source">affichant le code source</a>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Pour inclure les destinataires en <span class="guilabel"><strong>CCC</strong></span>, choisissez <span class="guibutton"><strong>Enveloppe</strong></span>. L'enveloppe comporte les destinataires du courriel apparaissant dans les champs <span class="guilabel"><strong>À</strong></span>, <span class="guilabel"><strong>CC</strong></span> ou <span class="guilabel"><strong>CCC</strong></span>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Pour utiliser une partie du contenu du courriel dans la condition, choisissez<span class="guibutton"><strong>Contenu</strong></span>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Pour utiliser la date de réception dans la condition, choisissez<span class="guibutton"><strong>Date actuelle</strong></span>.</p></li>
+</ul></div>
+<p>
+            </p>
+<p>Choisissez un critère dans la liste déroulante figurant à côté du courriel. Saisissez un argument dans le champ de saisie.</p>
 <p>Vous trouverez des exemples dans les <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.mailfilter.conditions" title="Q :">Questions sur les courriels</a>.</p>
 <p>Vous pouvez ajouter d'autres conditions. Ensuite, vous pouvez indiquer s'il suffit qu'une condition s'applique pour que les actions se déclenchent, ou si au contraire il faut qu'elles soient toutes remplies. Pour cela, cliquez sur <span class="guibutton"><strong>Appliquer la règle si toutes les conditions sont respectées</strong></span>.</p>
 <p>Pour supprimer une condition, cliquez sur l'icône <span class="guibutton"><strong>Supprimer</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.create.delete"></a><img src="../../images/appsuite_user_icon_trash.png"></span> à côté de la condition.</p>
@@ -88,14 +95,14 @@
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.email.mailfilter.change"></a><p class="title"><b>Pour modifier des règles existantes :</b></p>
+<a name="ox.appsuite.user.task.email.mailfilter.change"></a><p class="title">Pour modifier des règles existantes :</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Cliquez sur l'icône <span class="guibutton"><strong>Menu système</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.change.systemmenu"></a><img src="../../images/appsuite_user_icon_settings.png"></span> à droite de la barre de menus. Dans le menu, choisissez <span class="guibutton"><strong>Réglages</strong></span>. </p></li>
+<li class="step"><p>Cliquez sur l'icône <span class="guibutton"><strong>Menu système</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.change.systemmenu"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> à droite de la barre de menus. Dans le menu, choisissez <span class="guibutton"><strong>Réglages</strong></span>. </p></li>
 <li class="step">
-<p>Si le <span class="guibutton"><strong>Filtre de message</strong></span> n'est pas affiché dans la barre latérale, activez les<span class="guibutton"><strong>Réglages avancés</strong></span> dans le bas de la barre latérale.</p>
-<p>Dans la barre latérale, cliquez sur <span class="guibutton"><strong>Filtre de courrier</strong></span>.</p>
+<p>Sélectionnez l'élément <span class="guibutton"><strong>Courrier électronique</strong></span> dans la barre latérale.</p>
+<p>Cliquez sur <span class="guibutton"><strong>Filtre de courrier</strong></span>.</p>
 </li>
-<li class="step"><p>Pour modifier les réglages d'une règle, cliquez sur <span class="guibutton"><strong>Modifier</strong></span> à côté de la règle. Modifiez les réglages dans la fenêtre <span class="guibutton"><strong>Modifier la règle</strong></span>.</p></li>
+<li class="step"><p>Pour modifier les réglages d'une règle, cliquez sur <span class="guibutton"><strong>Modifier</strong></span> à côté de la règle. Modifiez les réglages dans la fenêtre <span class="guilabel"><strong>Modifier la règle</strong></span>.</p></li>
 <li class="step">
 <p>Pour désactiver une règle, cliquez sur <span class="guibutton"><strong>Désactiver</strong></span> à côté de la règle.</p>
 <p>Pour activer une règle, cliquez sur <span class="guibutton"><strong>Activer</strong></span> à côté de la règle.</p>
