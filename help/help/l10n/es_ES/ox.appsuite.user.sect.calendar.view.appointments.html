@@ -1,12 +1,12 @@
 <html lang="es">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>7.2.3. ¿Cómo se muestran las citas?</title>
+<title>7.2.4. ¿Cómo se muestran las citas?</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Software colaborativo">
 <link rel="up" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. Visualización de citas">
-<link rel="prev" href="ox.appsuite.user.sect.calendar.view.list.html" title="7.2.2. Mostrar citas en la vista Lista">
+<link rel="prev" href="ox.appsuite.user.sect.calendar.view.list.html" title="7.2.3. Mostrar citas en la vista Lista">
 <link rel="next" href="ox.appsuite.user.sect.calendar.attachments.html" title="7.3. Visualización y guardado de adjuntos de citas">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Aviso Legal">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
@@ -33,17 +33,58 @@
 <h2 class="sr-only">Visualización de citas</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.calendar.view.appointments"></a>7.2.3. ¿Cómo se muestran las citas?</h3></div></div></div>
-<a class="indexterm" name="id-1.8.9.7.2"></a><a class="indexterm" name="id-1.8.9.7.3"></a><div class="concept">
-<a name="ox.appsuite.user.concept.appointments.color"></a><p>En una vista del calendario, las citas se muestran en los siguientes colores, dependiendo de la disponibilidad:</p>
+<a name="ox.appsuite.user.sect.calendar.view.appointments"></a>7.2.4. ¿Cómo se muestran las citas?</h3></div></div></div>
+<a class="indexterm" name="id-1.8.9.8.2"></a><a class="indexterm" name="id-1.8.9.8.3"></a><a class="indexterm" name="id-1.8.9.8.4"></a><div class="concept">
+<a name="ox.appsuite.user.concept.appointments.color"></a><p>En una vista del calendario, la apariencia de la cita se define por los siguientes detalles:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>El esquema de color: colores clásicos, colores oscuros, colores personalizados</p></li>
+<li class="listitem"><p>Su disponibilidad durante la duración de la cita. Reservado, Provisional, Ausente o Libre</p></li>
+<li class="listitem"><p>Su estado de confirmación de la cita: Aceptada, Provisional, Rechazada</p></li>
+<li class="listitem"><p>Visibilidad del asunto y descripción de la cita: Privada o visible para otros usuarios</p></li>
+</ul></div>
+<p>La apariencia se diferencia mediante colores, iconos y diferentes sombreados.</p>
+</div>
+<p><a name="ox.appsuite.user.concept.appointments.show.classiccolors"></a></p>
+<p class="title"><b>Muestra los esquemas de color Colores clásicos o Colores oscuros</b></p>
+<p>Dependiendo de la disponibilidad, las citas se muestran con los siguientes colores:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Provisional: amarillo</p></li>
 <li class="listitem"><p>Libre: verde</p></li>
 <li class="listitem"><p>Reservado: azul</p></li>
 <li class="listitem"><p>Ausente: rojo</p></li>
 </ul></div>
-<p>Las citas privadas siempre se muestran en gris.</p>
-</div>
+<p>Dependiendo del estado de confirmación, las citas se muestran así:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Las citas aceptadas se muestran en el color de su disponibilidad</p></li>
+<li class="listitem"><p>Las citas aceptadas provisionalmente se marcan con el texto añadido <span class="guilabel"><strong>Provisional</strong></span>.</p></li>
+<li class="listitem">
+<p>Las citas rechazadas se muestran en gris claro con el asunto tachado.</p>
+<p><span class="phrase"><strong>Consejo:</strong></span> En los ajustes del calendario se puede indicar si se muestran las citas rechazadas.</p>
+</li>
+</ul></div>
+<p>Las citas privadas se muestran en gris y se marcan con un icono.</p>
+<p><a name="ox.appsuite.user.concept.appointments.show.customcolors"></a></p>
+<p class="title"><b>Muestra el esquema de color Color personalizado</b></p>
+<p>Dependiendo de la disponibilidad, las citas con los siguientes colores y patrones:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Provisional: Color seleccionado con pequeñas rayas diagonales</p></li>
+<li class="listitem"><p>Libre: Color seleccionado con rayas anchas diagonales</p></li>
+<li class="listitem"><p>Reservado: Color seleccionado</p></li>
+<li class="listitem">
+<p>Ausente: Color seleccionado </p>
+<p><span class="phrase"><strong>Consejo:</strong></span> Puede usar el color de su elección para <span class="guilabel"><strong>Ausente</strong></span></p>
+</li>
+</ul></div>
+<p>Si no selecciona ningún color, se usará el color predefinido, azul claro. Dependiendo del estado de confirmación, las citas se muestran así:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Las citas aceptadas se muestran con el color y patrón de la disponibilidad</p></li>
+<li class="listitem"><p>Las citas provisionalmente aceptadas se muestran en gris claro.</p></li>
+<li class="listitem">
+<p>Las citas rechazadas se muestran en gris claro con el asunto tachado.</p>
+<p><span class="phrase"><strong>Consejo:</strong></span> En los ajustes del calendario se puede definir si se muestran las citas rechazadas.</p>
+</li>
+</ul></div>
+<p>Las citas privadas se muestran en gris y se marcan con un icono.</p>
 </div>
           </div>
         </body>
