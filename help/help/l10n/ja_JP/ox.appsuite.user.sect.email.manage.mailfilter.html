@@ -4,7 +4,7 @@
 <title>5.5.18. メール フィルタの使用</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Groupware">
 <link rel="up" href="ox.appsuite.user.sect.email.manage.html" title="5.5. メールの整理">
 <link rel="prev" href="ox.appsuite.user.sect.email.manage.unifiedmail.html" title="5.5.17. 統合メールの使用">
 <link rel="next" href="ox.appsuite.user.sect.email.search.html" title="5.6. メールの検索">
@@ -52,9 +52,9 @@
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>名前</p></li>
 <li class="listitem"><p>一つまたは複数の条件</p></li>
-<li class="listitem"><p>一つまたは複数のアクション (一つの条件を満たすだけでアクションを実行できるようにするのか、すべての条件を満たさなければアクションを実行できないのかを指定できます)</p></li>
+<li class="listitem"><p>一つまたは複数のアクション(一つの条件を満たすだけでアクションを実行できるようにするのか、すべての条件を満たさなければアクションを実行できないのかを指定できます)</p></li>
 </ul></div>
-<p>次のようなオプションがあります。</p>
+<p>次のようなオプションの機能があります。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>新規のルールの <a class="link" href="ox.appsuite.user.sect.email.manage.mailfilter.html#ox.appsuite.user.task.email.mailfilter.create" title="新規のルールを作成する">作成</a></p></li>
 <li class="listitem"><p>既存ルールの <a class="link" href="ox.appsuite.user.sect.email.manage.mailfilter.html#ox.appsuite.user.task.email.mailfilter.create" title="新規のルールを作成する">変更</a></p></li>
@@ -62,19 +62,26 @@
 <p><a class="link" href="ox.appsuite.user.sect.email.send.vacationnotice.html#ox.appsuite.user.concept.email.vacationnotice">休暇通知</a> など、一部のメール機能では、自動的にフィルタのセットアップが行われます。</p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.email.mailfilter.create"></a><p class="title"><b>新規のルールを作成する</b></p>
+<a name="ox.appsuite.user.task.email.mailfilter.create"></a><p class="title">新規のルールを作成する</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>メニュー バーの右側にある <span class="guibutton"><strong>システム メニュー</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.create.systemmenu"></a><img src="../../images/appsuite_user_icon_settings.png"></span> をクリックします。メニューで、<span class="guibutton"><strong>設定</strong></span> の項目をクリックします。</p></li>
+<li class="step"><p>メニュー バーの右側にある <span class="guibutton"><strong>システム メニュー</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.create.systemmenu"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> をクリックします。メニューで、<span class="guibutton"><strong>設定</strong></span> の項目をクリックします。</p></li>
 <li class="step">
-<p><span class="guibutton"><strong>メール フィルタ</strong></span> がサイドバーに表示されていない場合、サイドバーの下にある <span class="guibutton"><strong>詳細設定</strong></span> を有効にします。</p>
-<p>サイドバーで、<span class="guibutton"><strong>メール フィルタ</strong></span> をクリックします。</p>
+<p>サイドバーで、<span class="guibutton"><strong>メール</strong></span>を選択します。</p>
+<p><span class="guibutton"><strong>メールフィルタ</strong></span>をクリックします。</p>
 </li>
 <li class="step"><p>表示エリアで、<span class="guibutton"><strong>新規のルールを追加</strong></span> をクリックします。<span class="guilabel"><strong>新規のルールを作成</strong></span> ウィンドウが表示されます。</p></li>
 <li class="step"><p>ルール名を入力します。</p></li>
 <li class="step">
-<p>条件を追加するには、<span class="guibutton"><strong>条件を追加</strong></span> をクリックします。ドロップダウン メニューから目的の条件を選択します。</p>
-<p>リストにないメール要素を使用するには、<span class="guibutton"><strong>ヘッダ</strong></span> を選択します。<span class="guilabel"><strong>名前</strong></span> 入力フィールドにヘッダのエントリを入力します。<a class="link" href="ox.appsuite.user.sect.email.manage.source.html#ox.appsuite.user.concept.email.source">ソース データの表示</a> で、メールのヘッダを確認することもできます。</p>
-<p><span class="guibutton"><strong>次の文字列と一致</strong></span> をクリックすると、判定基準を選択できます。入力フィールドに値を入力します。</p>
+<p>条件を追加するには、<span class="guibutton"><strong>条件を追加</strong></span> をクリックします。ドロップダウン メニューから目的の条件を選択します。次の事項にご注意ください。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>リストにないメール要素を使用するには、<span class="guibutton"><strong>ヘッダ</strong></span> を選択します。<span class="guilabel"><strong>名前</strong></span> 入力フィールドにヘッダのエントリを入力します。<a class="link" href="ox.appsuite.user.sect.email.manage.source.html#ox.appsuite.user.concept.email.source">ソース データの表示</a> で、メールのヘッダを確認することもできます。</p></li>
+<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>BCC</strong></span>に宛先を含めるには、<span class="guibutton"><strong>エンベロープ</strong></span>を選択します。エンベロープには、<span class="guilabel"><strong>To</strong></span>、 <span class="guilabel"><strong>CC</strong></span> または <span class="guilabel"><strong>BCC</strong></span>フィールドに入力したメールの宛先を含みます。</p></li>
+<li class="listitem" style="list-style-type: none"><p>条件のメールの内容の一部を使用するには、<span class="guibutton"><strong>内容</strong></span>を選択します。</p></li>
+<li class="listitem" style="list-style-type: none"><p>条件の受信日を使用するには、<span class="guibutton"><strong>現在の日付</strong></span>を選択します。</p></li>
+</ul></div>
+<p>
+            </p>
+<p>メール部分の横のドロップダウンメニューから基準を選択してください。入力フィールドに値を入力します。</p>
 <p>設定例は、<a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.mailfilter.conditions" title="問：">メールに関する質問</a> を参照してください。</p>
 <p>新しい条件をさらに追加することもできます。一つの条件を満たすだけでアクションを実行できるようにするのか、すべての条件を満たさなければアクションを実行できないのかを指定できます。これを行うには、<span class="guibutton"><strong>すべての条件を満たす場合にルールを適用</strong></span> をオンまたはオフにします。</p>
 <p>条件を削除するには、条件の隣にある <span class="guibutton"><strong>削除</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.create.delete"></a><img src="../../images/appsuite_user_icon_trash.png"></span> をクリックします。</p>
@@ -88,12 +95,12 @@
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.email.mailfilter.change"></a><p class="title"><b>既存のパスワードを変更する</b></p>
+<a name="ox.appsuite.user.task.email.mailfilter.change"></a><p class="title">既存のパスワードを変更する</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>メニュー バーの右側にある <span class="guibutton"><strong>システム メニュー</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.change.systemmenu"></a><img src="../../images/appsuite_user_icon_settings.png"></span> をクリックします。メニューで、<span class="guibutton"><strong>設定</strong></span> の項目をクリックします。</p></li>
+<li class="step"><p>メニュー バーの右側にある <span class="guibutton"><strong>システム メニュー</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.change.systemmenu"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> をクリックします。メニューで、<span class="guibutton"><strong>設定</strong></span> の項目をクリックします。</p></li>
 <li class="step">
-<p><span class="guibutton"><strong>メール フィルタ</strong></span> がサイドバーに表示されていない場合、サイドバーの下にある <span class="guibutton"><strong>詳細設定</strong></span> を有効にします。</p>
-<p>サイドバーで、<span class="guibutton"><strong>メール フィルタ</strong></span> をクリックします。</p>
+<p>サイドバーで、<span class="guibutton"><strong>メール</strong></span>を選択します。</p>
+<p><span class="guibutton"><strong>メールフィルタ</strong></span>をクリックします。</p>
 </li>
 <li class="step"><p>ルールの設定を編集するには、ルールの隣にある <span class="guibutton"><strong>編集</strong></span> をクリックします。<span class="guilabel"><strong>ルールを編集</strong></span> ウィンドウで、設定を変更します。</p></li>
 <li class="step">

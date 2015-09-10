@@ -4,7 +4,7 @@
 <title>11.2.1. 付与できる権限について</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Groupware">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. 権限">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. 権限">
 <link rel="next" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html" title="11.2.2. 既存のフォルダに関する権限">
@@ -37,93 +37,86 @@
 <div class="concept">
 <a name="ox.appsuite.user.concept.rights.roles"></a><p>一定の組み合わせの権限を簡単に付与できるよう、次のような既定のユーザ ロールが用意されています。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="所有者">所有者</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="管理者">管理者</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.viewer" title="ビューア">ビューア</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.editor" title="レビューア">レビューア</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="作成者">作成者</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.guest" title="ゲスト">ゲスト</a></p></li>
 </ul></div>
-<p>
-      </p>
+<p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.folder.rights.detail" title="詳細な権限">詳細な許可</a>を付与することで、既定の権限を変更することができます。</p>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.owner"></a><p><b>所有者 </b>フォルダの所有者には、対象のフォルダに関するすべての権限が付与されます。所有者は他のユーザに対象のフォルダに関する権限を付与できます。</p>
+<a name="ox.appsuite.user.concept.rights.roles.administrator"></a><p class="title"><b>管理者</b></p>
+<p>フォルダの管理者には、対象のフォルダに関するすべての権限が付与されます。所有者は他のユーザに対象のフォルダに関する権限を付与できます。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>フォルダ権限: オブジェクトとサブフォルダを作成</p></li>
 <li class="listitem"><p>オブジェクト権限: すべてのオブジェクトを表示、すべてのオブジェクトを編集、すべてのオブジェクトを削除</p></li>
-<li class="listitem"><p>管理者権限の付与: はい</p></li>
 </ul></div>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.administrator"></a><p><b>管理者 </b>フォルダの管理者には、対象のフォルダに関するすべての権限が付与されます。所有者は他のユーザに対象のフォルダに関する権限を付与できます。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>フォルダ権限: オブジェクトとサブフォルダを作成</p></li>
-<li class="listitem"><p>オブジェクト権限: すべてのオブジェクトを表示、すべてのオブジェクトを編集、すべてのオブジェクトを削除</p></li>
-<li class="listitem"><p>管理者権限の付与: はい</p></li>
-</ul></div>
-</div>
-<div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.author"></a><p><b>作成者 </b>作成者には、既存のオブジェクトの変更、新規オブジェクトの作成と編集、サブフォルダの作成が許可されます。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>フォルダ権限: オブジェクトとサブフォルダを作成</p></li>
-<li class="listitem"><p>オブジェクト権限: すべてのオブジェクトを表示、すべてのオブジェクトを編集、すべてのオブジェクトを削除</p></li>
-<li class="listitem"><p>管理者権限の付与: いいえ</p></li>
-</ul></div>
-</div>
-<div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.guest"></a><p><b>ゲスト </b>ゲストには、既存のオブジェクトの表示が許可されますが、そのオブジェクトの変更は許可されません。また、サブフォルダやオブジェクトの作成も許可されません。</p>
+<a name="ox.appsuite.user.concept.rights.roles.viewer"></a><p class="title"><b>ビューア</b></p>
+<p>ビューアは全ての既存のオブジェクトを閲覧できます。他の権限はありません。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>フォルダ権限: フォルダを表示</p></li>
-<li class="listitem"><p>オブジェクト権限: すべてのオブジェクトを表示、編集権限なし、削除権限なし</p></li>
-<li class="listitem"><p>管理者権限の付与: いいえ</p></li>
+<li class="listitem"><p>オブジェクト権限：全てのオブジェクトを閲覧</p></li>
 </ul></div>
 </div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.folder.rights"></a><p>各ユーザ ロールの既定の権限は変更することができます。次の権限を付与できます。</p>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.editor"></a><p class="title"><b>レビューア</b></p>
+<p>レビューアは既存のオブジェクトを読んだり、編集したりできます。しかし、新規オブジェクトの作成はできません。オブジェクトの削除はできません。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>フォルダ権限: フォルダを表示</p></li>
+<li class="listitem"><p>オブジェクト権限：全てのオブジェクトの閲覧、全てのオブジェクトの編集</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.author"></a><p class="title"><b>作成者</b></p>
+<p>作成者は、既存オブジェクトの変更または削除、新規オブジェクトの作成および変更、そして、サブフォルダの作成ができます。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>フォルダ権限: オブジェクトとサブフォルダを作成</p></li>
+<li class="listitem"><p>オブジェクト権限: すべてのオブジェクトを表示、すべてのオブジェクトを編集、すべてのオブジェクトを削除</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.folder.rights.detail"></a><p class="title"><b>詳細な権限</b></p>
+<p>各ユーザ ロールの既定の権限は変更することができます。次の権限を付与できます。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>フォルダ権限</p>
+<p>フォルダ</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p>フォルダを表示</p></li>
 <li class="listitem"><p>オブジェクトを作成</p></li>
 <li class="listitem"><p>オブジェクトとサブフォルダを作成</p></li>
 </ul></div>
 <p>
-            </p>
+              </p>
 </li>
 <li class="listitem">
-<p>オブジェクト権限 (表示)</p>
+<p>読み取り権限</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>表示権限なし</p></li>
+<li class="listitem"><p>なし</p></li>
 <li class="listitem"><p>自分のオブジェクトのみを表示</p></li>
 <li class="listitem"><p>すべてのオブジェクトを表示</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p>オブジェクト権限 (編集)</p>
+<p>書き込み権限</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>編集権限なし</p></li>
+<li class="listitem"><p>なし</p></li>
 <li class="listitem"><p>自分のオブジェクトのみを編集</p></li>
 <li class="listitem"><p>すべてのオブジェクトを編集</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p>オブジェクト権限 (削除)</p>
+<p>削除権限</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>削除権限なし</p></li>
+<li class="listitem"><p>なし</p></li>
 <li class="listitem"><p>自分のオブジェクトのみを削除</p></li>
 <li class="listitem"><p>すべてのオブジェクトを削除</p></li>
 </ul></div>
 </li>
-<li class="listitem">
-<p>管理者権限の付与</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>はい</p></li>
-<li class="listitem"><p>いいえ</p></li>
-</ul></div>
-</li>
 </ul></div>
 <p>
-      </p>
+        </p>
 </div>
 </div>
           </div>

@@ -4,7 +4,7 @@
 <title>5.6. メールの検索</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Groupware">
 <link rel="up" href="ox.appsuite.user.chap.email.html" title="第5章 メール">
 <link rel="prev" href="ox.appsuite.user.sect.email.manage.mailfilter.html" title="5.5.18. メール フィルタの使用">
 <link rel="next" href="ox.appsuite.user.sect.email.share.html" title="5.7. チームのメール">
@@ -37,51 +37,65 @@
 <a name="ox.appsuite.user.concept.email.search"></a><p>目的のメールを検索するには、次の条件を使用できます。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>件名、メールの本文、差出人、受取人を対象に検索します。</p></li>
-<li class="listitem"><p>フォルダ</p></li>
-<li class="listitem"><p>受信した期間</p></li>
+<li class="listitem">
+<p>時間範囲の条件を検索します。時間範囲内に受信したメールを検索する次の事項で有効な時間範囲を定義します。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>キーワード <span class="guilabel"><strong>今日</strong></span>、<span class="guilabel"><strong>昨日</strong></span>、<span class="guilabel"><strong>先週</strong></span>、<span class="guilabel"><strong>先月</strong></span>、<span class="guilabel"><strong>昨年</strong></span></p></li>
+<li class="listitem"><p>間隔のキーワード：<span class="guilabel"><strong>過去７日間</strong></span>、<span class="guilabel"><strong>過去30日</strong></span>、<span class="guilabel"><strong>過去365日</strong></span></p></li>
+<li class="listitem"><p>曜日、例　<span class="guilabel"><strong>月曜日</strong></span></p></li>
+<li class="listitem"><p>月、例　<span class="guilabel"><strong>７月</strong></span></p></li>
+<li class="listitem"><p>４桁の日付、例 <span class="guilabel"><strong>2015</strong></span></p></li>
+<li class="listitem"><p>日付、例 <span class="guilabel"><strong>1/31/2015</strong></span></p></li>
+<li class="listitem"><p>日付の間隔、例 <span class="guilabel"><strong>12/1/2014 - 1/31/2015</strong></span></p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="listitem"><p>検索されないフォルダ</p></li>
 </ul></div>
 <p>
     </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.email.search"></a><p class="title"><b>メールを検索する</b></p>
+<a name="ox.appsuite.user.task.email.search"></a><p class="title">メールを検索する</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>検索バーの入力フィールドに検索用語を入力します。検索メニューが表示されます。</p></li>
+<li class="step"><p><span class="guibutton"><strong>検索を開始</strong></span> アイコン<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> をクリックするか、検索バーに入力フィールドをクリックしてください。フォルダボタンは検索バーに表示されます。フォルダボタンは、検索するフォルダーを表示します。</p></li>
 <li class="step">
+<p>検索するフォルダを指定するには、フォルダボタンをクリックします。フォルダを選択します。</p>
+<p><span class="guibutton"><strong>すべてのフォルダー</strong></span>を選択すると、内部メールアカウントのすべてのフォルダーとサブフォルダーを検索します。特定のフォルダー、あるいは外部メールアカウントのフォルダーを選択すると、このフォルダーのみを検索し、サブフォルダーの検索は行いません。</p>
+</li>
+<li class="step">
+<p>入力フィールドに検索用語を入力します。検索メニューが表示されます。</p>
 <p>次のいずれかの方法を使用します。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p>差出人、宛先、件名、メールの本文内を検索するには、検索メニューに検索用語を入力します。Enter キーをクリックしたり、検索バーで、<span class="guibutton"><strong>検索</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> をクリックしても、検索を実行できます。</p>
+<p>差出人、宛先、件名、メールの本文内を検索するには、検索メニューに検索用語を入力します。Enter キーをクリックすることもできます。</p>
 <p>件名のみを検索するには、検索メニューで、<span class="guibutton"><strong>検索対象: 件名</strong></span> をクリックします。</p>
 <p>メールの本文のみを検索するには、検索メニューで、<span class="guibutton"><strong>検索対象: メールの本文</strong></span> をクリックします。</p>
 <p>検索用語で差出人または宛先を検索するには、検索メニューで、<span class="guilabel"><strong>人物</strong></span> の下にある名前をクリックします。</p>
+<p>時間軸を指定するには、検索用語として有効時間軸を使用してください。入力に有効な時間軸が認識されるとすぐに時間軸が検索メニューに表示されます。検索メニューの期間をクリックします。Enter キーをクリックすることもできます。</p>
 </li></ul></div>
 <p>
           </p>
-<p><span class="phrase"><strong>結果: </strong></span>検索結果は、表示エリアに一覧で表示されます。使用した検索条件は、検索ウィンドウの下に表示されます。</p>
-</li>
-<li class="step">
-<p>検索結果をさらに絞り込むこともできます。</p>
+<p>結果:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>すべての検索条件を表示するには、<span class="guibutton"><strong>詳細フィルタを表示</strong></span> をクリックします。</p>
-<p>検索条件を変更するには、検索条件の隣にあるアイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span> をクリックします。メニューで、目的の項目を選択します。次の検索条件を使用できます。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p><span class="guilabel"><strong>フォルダ</strong></span> ドロップダウン メニューで、目的のフォルダを検索できます。</p>
-<p><span class="guibutton"><strong>すべてのフォルダー</strong></span>を選択すると、内部メールアカウントのすべてのフォルダーとサブフォルダーを検索します。特定のフォルダー、あるいは外部メールアカウントのフォルダーを選択すると、このフォルダーのみを検索し、サブフォルダーの検索は行いません。</p>
-</li>
-<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>日付</strong></span> ドロップダウン メニューでは、検索する対象の期間を指定できます。</p></li>
-</ul></div>
-<p>
-                </p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>検索されるオブジェクトの一覧を絞るには、詳細検索機能を使用します。</p></li>
-<li class="listitem" style="list-style-type: none"><p>検索条件を削除するには、アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span> をクリックします。すべての検索条件を削除すると、検索が終了します。</p></li>
+<li class="listitem" style="list-style-type: none"><p>検索結果は、表示エリアに一覧で表示されます。</p></li>
+<li class="listitem" style="list-style-type: none"><p>各検索結果について、見つかったオブジェクトのあるフォルダを表示されます。検索を終了し、フォルダの内容を表示するには、フォルダをクリックします。</p></li>
+<li class="listitem" style="list-style-type: none"><p>検索用語は入力フィールドに表示されます。</p></li>
 </ul></div>
 <p>
           </p>
 </li>
-<li class="step"><p>検索を終了するには、<span class="guibutton"><strong>検索を閉じる</strong></span> をクリックします。</p></li>
+<li class="step">
+<p>検索結果を絞り込むために次のオプションがあります。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>検索用語として人の名前を使用する場合、名前を差出人、宛先、あるいはその両方で検索するかどうかをしてできます。そのために、名前の横の <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span>アイコンをクリックします。メニューから入力を選択してください。</p></li>
+<li class="listitem" style="list-style-type: none"><p>検索結果を変更するには、さらに検索用語を入力します。検索用語を削除するには、検索用語横の <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>アイコンをクリックします。</p></li>
+<li class="listitem" style="list-style-type: none"><p>別のフォルダを検索するには、フォルダボタンをクリックします。フォルダを選択します。</p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="step"><p>検索を終了するには、入力フィールドで<span class="guibutton"><strong>検索をキャンセル</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>をクリックします。</p></li>
 </ol></div>
 </div>
 </div>
