@@ -16,7 +16,7 @@ define('io.ox/backbone/mini-views/attachments', [
     'io.ox/core/api/attachment',
     'io.ox/core/tk/attachments',
     'io.ox/core/strings',
-    'gettext!io.ox/core/tk/attachments'
+    'gettext!io.ox/core'
 ], function (AbstractView, api, attachments, strings, gt) {
 
     'use strict';

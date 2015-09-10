@@ -19,13 +19,12 @@ define('io.ox/core/tk/attachments', [
     'io.ox/core/capabilities',
     'io.ox/preview/main',
     'io.ox/core/tk/dialogs',
-    'gettext!io.ox/core/tk/attachments',
     'io.ox/core/extPatterns/links',
     'settings!io.ox/core',
     'io.ox/core/notifications',
-    'less!io.ox/core/tk/attachments',
+    'gettext!io.ox/core',
     'io.ox/core/pim/actions'
-], function (attachmentAPI, shortTitle, strings, util, capabilities, pre, dialogs, gt, links, settings, notifications) {
+], function (attachmentAPI, shortTitle, strings, util, capabilities, pre, dialogs, links, settings, notifications, gt) {
 
     'use strict';
 

@@ -238,6 +238,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/mail/detail/content.js',
                             'apps/io.ox/core/emoji/util.js',
                             'apps/io.ox/mail/detail/links.js',
+                            'apps/io.ox/core/download.js',
                             // mail app - main
                             'apps/io.ox/mail/main.js'
                         ],
