@@ -211,7 +211,7 @@ define('io.ox/files/share/model', [
 
         send: function () {
             if (this.get('type') !== this.TYPES.LINK) return;
-            if (_.isEmpty(this.has('recipients'))) return;
+            if (_.isEmpty(this.get('recipients'))) return;
             api.sendLink(this.toJSON()).fail(yell);
         },
 
