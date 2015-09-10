@@ -4,10 +4,10 @@
 <title>11.2.3. Uprawnienia do nowych folderów</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Oprogramowanie do pracy grupowej">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Uprawnienia">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html" title="11.2.2. Uprawnienia do folderów, które już istnieją">
-<link rel="next" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. Udostępnianie folderów">
+<link rel="next" href="ox.appsuite.user.sect.dataorganisation.sharing.html" title="11.3. Udostępnianie">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Informacja Prawna">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -25,7 +25,7 @@
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html">Poprzedni</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Spis treści</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Spis treści</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html">Następny</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.sharing.html">Następny</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -34,7 +34,7 @@
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ox.appsuite.user.sect.dataorganisation.rights.foldernew"></a>11.2.3. Uprawnienia do nowych folderów</h3></div></div></div>
-<a class="indexterm" name="id-1.12.5.7.2"></a><div class="concept">
+<a class="indexterm" name="id-1.12.5.6.2"></a><div class="concept">
 <a name="ox.appsuite.user.concept.rights.foldernew"></a><p>Uprawnienia są przydzielane zależnie od miejsca utworzenia nowego folderu.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>w <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html#ox.appsuite.user.reference.rights.personalfoldernew">folderze osobistym</a></p></li>
@@ -47,8 +47,8 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.personalfoldernew"></a><p>Jeśli utworzysz folder w folderze osobistym: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Jesteś jego <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Właściciel">właścicielem</a>. </p></li>
-<li class="listitem"><p>Inni użytkownicy dziedziczą uprawnienia, które mają do folderu nadrzędnego.</p></li>
+<li class="listitem"><p>Jesteś <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrator">administratorem</a>. </p></li>
+<li class="listitem"><p>W aplikacji <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span> i <span class="phrase"><span class="guilabel"><strong>Pliki</strong></span></span> inni użytkownicy dziedziczą uprawnienia z folderu nadrzędnego. W innych aplikacjach inni użytkownicy nie dziedziczą uprawnień.</p></li>
 </ul></div>
 <p>
       </p>
@@ -56,8 +56,8 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.publicfoldernew"></a><p>Jeśli utworzysz nowy folder w folderze <span class="guibutton"><strong>Pliki publiczne</strong></span>: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Jesteś jego <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Właściciel">właścicielem</a>.</p></li>
-<li class="listitem"><p>Inni użytkownicy nie uzyskają żadnych uprawnień. Musisz ustawić uprawnienia do nowego folderu. Jeśli utworzysz później w tym folderze nowe podfoldery, uprawnienia do tego folderu będą automatycznie dziedziczone przez nowe podfoldery. Informacje o sposobie nadawania uprawnień można znaleźć tutaj: <a class="xref" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. Udostępnianie folderów">11.2.4: Udostępnianie folderów</a>. </p></li>
+<li class="listitem"><p>Jesteś <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrator">administratorem</a>.</p></li>
+<li class="listitem"><p>Inni użytkownicy nie uzyskają żadnych praw. Musisz ustawić uprawnienia do nowego folderu. Jeśli utworzysz później w tym folderze nowe podfoldery, uprawnienia do tego folderu będą automatycznie dziedziczone przez nowe podfoldery.</p></li>
 </ul></div>
 <p>
       </p>
@@ -65,12 +65,11 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.sharedfoldernew"></a><p>Jeśli utworzysz nowy folder w folderze udostępnionym innego użytkownika: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Użytkownik, który udostępnił folder, otrzymuje uprawnienia <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrator">administracyjne</a> do nowego folderu. </p></li>
-<li class="listitem"><p>Jesteś jego <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Właściciel">właścicielem</a>.</p></li>
-<li class="listitem"><p>Inni użytkownicy uzyskają takie same uprawnienia jak te, które mają w przypadku folderu nadrzędnego.</p></li>
+<li class="listitem"><p>Użytkownik, który udostępnił folder, będzie <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrator">administratorem</a> nowego folderu. </p></li>
+<li class="listitem"><p>Ty będziesz <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="Autor">autorem</a> nowego folderu.</p></li>
+<li class="listitem"><p>Inni użytkownicy otrzymają takie same uprawnienia jak w przypadku folderu nadrzędnego.</p></li>
 </ul></div>
-<p>
-      </p>
+<p><span class="phrase"><strong>Uwaga:</strong></span> musisz mieć uprawnienie do tworzenia obiektów w folderze udostępnionym.</p>
 </div>
 </div>
           </div>
