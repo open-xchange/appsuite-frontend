@@ -1,13 +1,13 @@
 <html lang="nl">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.6. Zoeken naar Bestanden</title>
+<title>9.5. Zoeken naar Bestanden</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Groupware">
 <link rel="up" href="ox.appsuite.user.chap.files.html" title="Hoofdstuk 9. Bestanden">
-<link rel="prev" href="ox.appsuite.user.sect.files.manage.multiple.html" title="9.5.12. Bewerken van meerdere bestanden in één keer">
-<link rel="next" href="ox.appsuite.user.sect.files.webdav.html" title="9.7. Benaderen van bestanden met WebDAV">
+<link rel="prev" href="ox.appsuite.user.sect.files.manage.versions.html" title="9.4.11. Werken met versies">
+<link rel="next" href="ox.appsuite.user.sect.files.sharing.html" title="9.6. Delen">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Juridische kennisgeving">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -22,69 +22,83 @@
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.manage.multiple.html">Terug</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.manage.versions.html">Terug</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Begin</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Inhoudsopgave</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.webdav.html">Volgende</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.sharing.html">Volgende</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
   <h1 class="sr-only"><span class="phrase">Bestanden</span></h1>
 <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="ox.appsuite.user.sect.files.search"></a>9.6. Zoeken naar Bestanden</h2></div></div></div>
-<a class="indexterm" name="id-1.10.12.2"></a><a class="indexterm" name="id-1.10.12.3"></a><div class="concept">
+<a name="ox.appsuite.user.sect.files.search"></a>9.5. Zoeken naar Bestanden</h2></div></div></div>
+<a class="indexterm" name="id-1.10.11.2"></a><a class="indexterm" name="id-1.10.11.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.files.search"></a><p>Om te zoeken naar een specifieke bestanden kan u de volgende zoekcriteria gebruiken:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>zoektermen voor de bestandsnamen, bestandsomschrijvingen</p></li>
-<li class="listitem"><p>Mappen</p></li>
-<li class="listitem"><p>Datum</p></li>
+<li class="listitem">
+<p>Zoekterm voor een tijdsperiode. Zoek naar bestanden die zijn gemaakt of aangepast binnen een bepaalde periode. U kan een geldige periode opgeven met de volgende details.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>De sleutelwoorden <span class="guilabel"><strong>vandaag</strong></span>, <span class="guilabel"><strong>gisteren</strong></span>, <span class="guilabel"><strong>vorige week</strong></span>, <span class="guilabel"><strong>vorige maand</strong></span>, <span class="guilabel"><strong>vorig jaar</strong></span></p></li>
+<li class="listitem"><p>De sleutelwoorden voor deze tijdsperiode: <span class="guilabel"><strong>afgelopen 7 dagen</strong></span>, <span class="guilabel"><strong>afgelopen 30 dagen</strong></span>, <span class="guilabel"><strong>afgelopen 365 dagen</strong></span></p></li>
+<li class="listitem"><p>Een weekdag, bijvoorbeeld <span class="guilabel"><strong>Maandag</strong></span></p></li>
+<li class="listitem"><p>Een specifieke maand, bijvoorbeeld <span class="guilabel"><strong>Juli</strong></span></p></li>
+<li class="listitem"><p>Een datum van vier cijfers, bijvoorbeeld <span class="guilabel"><strong>2015</strong></span></p></li>
+<li class="listitem"><p>Een datum, bijvoorbeeld <span class="guilabel"><strong>1/31/2015</strong></span></p></li>
+<li class="listitem"><p>Een tijdsperiode, bijvoorbeeld <span class="guilabel"><strong>12/1/2014 - 1/31/2015</strong></span></p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="listitem"><p>Bestandstype: alle, audio, document, afbeeldingen, ander, video</p></li>
 <li class="listitem"><p>Bestandsgrote</p></li>
-<li class="listitem"><p>bestandstype</p></li>
+<li class="listitem"><p>Maptype: alle, privé, publiek of gedeeld</p></li>
 </ul></div>
 <p>
     </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.files.search"></a><p class="title"><b>Zoeken naar bestanden gaat als volgt:</b></p>
+<a name="ox.appsuite.user.task.files.search"></a><p class="title">Zoeken naar bestanden gaat als volgt:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Geef een zoekopdracht in het invoerveld van de zoekbalk. Het zoekmenu wordt geopend.</p></li>
+<li class="step"><p>Klik op het <span class="guibutton"><strong>Start zoeken</strong></span> pictogram<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> of in het invoerveld in de zoekbalk. Een mapknop en de <span class="guibutton"><strong>Opties</strong></span> knop worden getoond in de zoekbalk. De mapknop geeft aan welke mappen doorzocht gaan worden.</p></li>
 <li class="step">
+<p>Om te bepalen welke mappen doorzocht gaan worden, klikt u op de mapknop. Selecteer een map.</p>
+<p>Als u <span class="guibutton"><strong>Alle mappen</strong></span> selecteert, worden alle privé- en publiekemappen, gedeelde- of  submappen doorzocht. Als u een specifieke map selecteert wordt alleen deze map doorzocht, niet zijn submappen.</p>
+</li>
+<li class="step">
+<p>Geef een zoekopdracht in het invoerveld. Het zoekmenu wordt geopend.</p>
 <p>Gebruik één van de volgende methoden:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p>Om te zoeken naar een bestandsnaam of de bestandsomschrijving klikt u op de zoekopdracht in het zoekmenu. U kan op Enter drukken of op het <span class="guibutton"><strong>Zoeken</strong></span> pictogram<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> klikken in de zoekbalk. </p>
+<p>Om te zoeken naar bestanden in een specifieke tijdsperiode, gebruikt u een geldige tijdsperiode als zoekopdracht. Als u een geldige tijdsperiode is herkend als uw invoer, wordt de tijdsperiode getoond in het zoekmenu. Klik op de tijdsperiode in het zoekmenu. U kan ook op Enter drukken.</p>
+<p>Om te zoeken naar de bestandsnaam of in de omschrijving klikt u op de zoekopdracht in het zoekmenu. U kan op Enter drukken.</p>
 <p>Om alleen in bestandsnamen te zoeken, klikt u op <span class="guibutton"><strong>in bestandsnamen</strong></span> in het zoekmenu.</p>
 <p>Daarnaast kan u het zoeken ook beperken tot de bestandsomschrijving.</p>
 </li></ul></div>
 <p>
           </p>
-<p><span class="phrase"><strong>Resultaat:</strong></span> Het zoekresultaat wordt getoond in de lijst die getoond wordt in het hoofdgebied. De zoekcriteria worden getoond onder het zoekscherm.</p>
-</li>
-<li class="step">
-<p>U kan de zoekresultaten verder aanpassen:</p>
+<p>Resultaat:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>Om alle zoekcriteria te tonen, klikt u op <span class="guibutton"><strong>Toon Geavanceerde Filters</strong></span>.</p>
-<p>Om de criteria aan te passen klikt u op het pictogram <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span>naast de zoekcriteria. Kies een item uit het menu. U kan de volgende zoekcriteria gebruiken:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>U kan het <span class="guilabel"><strong>Map</strong></span> drop-downmenu gebruiken om te zoeken in een specifieke map.</p>
-<p>Als u <span class="guibutton"><strong>Alle mappen</strong></span> selecteert, worden alle mappen en submappen doorzocht. Als u een specifieke map selecteert wordt alleen deze map doorzocht, niet zijn submappen.</p>
-</li>
-<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>Datum</strong></span> maakt het mogelijk te zoeken naar bestanden die op een bepaald moment aangemaakt zijn.</p></li>
-<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>bestandsgrootte</strong></span> maakt het mogelijk te zoeken naar bestanden van een specifieke grootte.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Met het <span class="guilabel"><strong>Bestandstype</strong></span> drop-downmenu kan u een zoekopdracht beperken tot specifieke bestandstypen.</p></li>
-</ul></div>
-<p>
-                </p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>Om uw zoekopdracht te verbeteren kan u een vervolgopdracht uitvoeren in de lijst van gevonden objecten.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Om de zoekcriteria te verwijderen klikt u op het pictogram <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.files.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>. Als u alle zoekcriteria heeft verwijderd, wordt het zoeken gestopt.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Het zoekresultaat wordt getoond in de lijst die getoond wordt in het hoofdgebied. De zoekcriteria worden getoond onder het zoekscherm </p></li>
+<li class="listitem" style="list-style-type: none"><p>De zoekopdracht wordt getoond in het invoerveld.</p></li>
 </ul></div>
 <p>
           </p>
 </li>
-<li class="step"><p>Om het zoeken te beëindigen, klikt u op <span class="guibutton"><strong>Zoeken afsluiten</strong></span>.</p></li>
+<li class="step">
+<p>U heeft de volgende mogelijkheden om de zoekresultaten verder aan te passen:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Om de zoekresultaten te verfijnen, geeft u meer zoekargumenten opes. Om een zoekargument te verwijderen klikt u op het pictogram <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>naast het zoekargument. </p></li>
+<li class="listitem" style="list-style-type: none"><p>Om in een andere map te zoeken klikt u op de mapknop. Selecteer een map.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Om de zoekresultaten te beperken tot privé, publieke of gedeelde mappen klikt u op <span class="guibutton"><strong>Opties</strong></span>. Selecteer een maptype.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Om de zoekresultaten te beperken tot specifieke bestanden, klikt u op <span class="guibutton"><strong>Opties</strong></span>. Selecteer een type.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Om de zoekresultaten te beperken tot bestanden van een bepaalde grootte, klikt u op <span class="guibutton"><strong>Opties</strong></span>. Selecteer een bestandsgrootte.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Om de zoekresultaten te beperken tot enkele of terugkerende taken, klikt u op <span class="guibutton"><strong>Opties</strong></span>. Selecteer een type.</p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="step"><p>Om de zoekactie te stoppen, klikt u het <span class="guibutton"><strong>Zoeken annuleren</strong></span> pictogram<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>.</p></li>
 </ol></div>
 </div>
 </div>
