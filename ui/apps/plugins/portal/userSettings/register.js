@@ -111,14 +111,11 @@ define('plugins/portal/userSettings/register', [
             .addButton('cancel', gt('Cancel'))
             .on('change', function (e, data, dialog) {
 
+                // we change empty string to null to be consistent
                 var node = dialog.getContentNode(),
-                    newPassword1 = newPass.val(),
-                    newPassword2 = newPass2.val();
-
-                if (capabilities.has('guest') && newPassword1 === '' && newPassword2 === '') {
-                    newPassword1 = null;
-                    newPassword2 = null;
-                }
+                    newPassword1 = newPass.val() === '' ? null : newPass.val(),
+                    newPassword2 = newPass2.val() === '' ? null : newPass2.val(),
+                    oldPassword = oldPass.val() === '' ? null : oldPass.val();
 
                 if (newPassword1 === newPassword2) {
                     http.PUT({
@@ -126,7 +123,7 @@ define('plugins/portal/userSettings/register', [
                         params: { action: 'update' },
                         appendColumns: false,
                         data: {
-                            old_password: oldPass.val(),
+                            old_password: oldPassword,
                             new_password: newPassword1
                         }
                     })
