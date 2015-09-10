@@ -1000,7 +1000,12 @@ define('io.ox/mail/main', [
         'prefetch-compose': function () {
             if (_.device('smartphone')) return;
             setTimeout(function () {
-                require(['io.ox/mail/compose/bundle']);
+                require(['io.ox/mail/compose/main', 'io.ox/mail/compose/bundle'], function () {
+                    require(['io.ox/core/api/snippets'], function (snippets) {
+                        // prefetch signatures
+                        snippets.getAll();
+                    });
+                });
             }, 3000);
         },
 

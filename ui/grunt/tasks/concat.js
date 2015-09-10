@@ -306,9 +306,19 @@ module.exports = function (grunt) {
             },
             compose: {
                 options: {
-                    banner: 'define("io.ox/mail/compose/bundle", ["static/3rd.party/jquery-ui.min.js", "static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js"], function () {\n\n' +
-                                '"use strict";\n\n',
-                    footer: '});\n'
+                    // jquery-min doesn't work because it messes around with anonymous define()
+                    banner: 'define("io.ox/mail/compose/bundle", [], function () {\n\n' +
+                            '  "use strict";\n' +
+                            '\n' +
+                            '  var _amd = define.amd;\n' +
+                            '  delete define.amd;\n' +
+                            '\n',
+                    footer: '\n' +
+                            '  define.amd = _amd;\n' +
+                            '});\n\n' +
+                            'define("static/3rd.party/typeahead.js/dist/typeahead.jquery.js", _.noop);\n' +
+                            'define("static/3rd.party/jquery-ui.min.js", _.noop);\n' +
+                            'define("static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js", _.noop);\n'
                 },
                 files: [
                     {
@@ -319,10 +329,22 @@ module.exports = function (grunt) {
                             'apps/io.ox/mail/sender.js',
                             'apps/io.ox/backbone/mini-views/common.js',
                             'apps/io.ox/core/tk/tokenfield.js',
+                            'apps/io.ox/core/tk/typeahead.js',
+                            'apps/io.ox/participants/model.js',
+                            'apps/io.ox/participants/views.js',
+                            'apps/io.ox/core/api/autocomplete.js',
+                            'apps/io.ox/contacts/model.js',
+                            'apps/io.ox/backbone/modelFactory.js',
+                            'apps/io.ox/backbone/validation.js',
+                            'apps/io.ox/backbone/basicModel.js',
+                            'apps/io.ox/settings/util.js',
                             'apps/io.ox/core/api/snippets.js',
                             'apps/io.ox/core/tk/contenteditable-editor.js',
                             'apps/io.ox/core/tk/textproc.js',
-                            'bower_components/tinymce-dist/jquery.tinymce.min.js'
+                            'bower_components/tinymce-dist/jquery.tinymce.min.js',
+                            'build/static/3rd.party/jquery-ui.min.js',
+                            'build/static/3rd.party/typeahead.js/dist/typeahead.jquery.js',
+                            'build/static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js'
                         ],
                         dest: 'build/apps/io.ox/mail/compose/bundle.js',
                         nonull: true

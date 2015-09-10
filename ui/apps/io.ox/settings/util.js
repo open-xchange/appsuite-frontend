@@ -13,9 +13,8 @@
 
 define('io.ox/settings/util', [
     'io.ox/core/notifications',
-    'gettext!io.ox/settings',
     'gettext!io.ox/core'
-], function (notifications, gt, gtcore) {
+], function (notifications, gt) {
 
     'use strict';
 
@@ -59,10 +58,10 @@ define('io.ox/settings/util', [
                     }, e || {});
                     if (obj.code  === 'MAIL_FILTER-0015') {
                         //show custom error message
-                        obj.message = gtcore('Unable to load mail filter settings.');
+                        obj.message = gt('Unable to load mail filter settings.');
                     } else if (obj.error) {
                         // show main error message
-                        obj.message = /*#, dynamic*/gt(obj.error);
+                        obj.message = obj.error;
                     }
 
                     // notification.yell favors obj.message over obj.error

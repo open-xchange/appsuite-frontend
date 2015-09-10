@@ -14,7 +14,7 @@ define('io.ox/participants/views', [
     'io.ox/contacts/api',
     'io.ox/core/util',
     'io.ox/core/folder/api',
-    'gettext!io.ox/participants/views',
+    'gettext!io.ox/core',
     'less!io.ox/participants/style'
 ], function (api, util, folderAPI, gt) {
 

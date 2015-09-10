@@ -19,7 +19,7 @@ define('io.ox/participants/model', [
     'io.ox/contacts/model',
     'io.ox/contacts/util',
     'io.ox/core/util',
-    'gettext!io.ox/participants/model'
+    'gettext!io.ox/core'
 ], function (userAPI, groupAPI, resourceAPI, contactAPI, ContactModel, util, coreUtil, gt) {
 
     'use strict';

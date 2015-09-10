@@ -16,7 +16,7 @@ define('io.ox/participants/add', [
     'io.ox/participants/model',
     'io.ox/participants/views',
     'io.ox/core/tk/typeahead',
-    'gettext!io.ox/participants/views'
+    'gettext!io.ox/core'
 ], function (ext, pModel, pViews, Typeahead, gt) {
 
     'use strict';
