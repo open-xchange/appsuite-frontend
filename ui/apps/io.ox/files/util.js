@@ -13,13 +13,12 @@
 
 define('io.ox/files/util', [
     'io.ox/files/api',
-    'io.ox/files/mediasupport',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/files',
     'io.ox/core/capabilities',
     'io.ox/core/folder/api',
     'settings!io.ox/files'
-], function (api, mediasupport, dialogs, gt, capabilities, folderAPI, settings) {
+], function (api, dialogs, gt, capabilities, folderAPI, settings) {
 
     'use strict';
 
@@ -211,11 +210,13 @@ define('io.ox/files/util', [
             }
 
             return def.then(function (data) {
-                // update baton
-                e.baton.allIds = data;
-                return _(data).reduce(function (memo, obj) {
-                    return memo || !!(obj && mediasupport.checkFile(type, obj.filename));
-                }, false);
+                return require(['io.ox/files/mediasupport']).then(function (mediasupport) {
+                    // update baton
+                    e.baton.allIds = data;
+                    return _(data).reduce(function (memo, obj) {
+                        return memo || !!(obj && mediasupport.checkFile(type, obj.filename));
+                    }, false);
+                });
             });
         },
 

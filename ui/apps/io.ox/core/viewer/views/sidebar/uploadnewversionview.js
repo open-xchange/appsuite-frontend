@@ -10,14 +10,14 @@
  *
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
+
 define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
     'io.ox/backbone/disposable',
     'io.ox/files/api',
     'io.ox/core/folder/api',
     'io.ox/core/tk/dialogs',
-    'io.ox/core/tk/attachments',
     'gettext!io.ox/core/viewer'
-], function (DisposableView, FilesAPI, folderApi, Dialogs, Attachments, gt) {
+], function (DisposableView, FilesAPI, folderApi, Dialogs, gt) {
 
     'use strict';
 
@@ -95,12 +95,15 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
                 if (this.disposed) return;
                 if (!folderApi.can('write', folderData)) return;
                 // add file upload widget
-                this.$el.append(
-                    Attachments.fileUploadWidget({
-                        multi: false,
-                        buttontext: gt('Upload new version')
-                    })
-                );
+                var $el = this.$el;
+                require(['io.ox/core/tk/attachments'], function (Attachments) {
+                    $el.append(
+                        Attachments.fileUploadWidget({
+                            multi: false,
+                            buttontext: gt('Upload new version')
+                        })
+                    );
+                });
             }.bind(this));
             return this;
         },

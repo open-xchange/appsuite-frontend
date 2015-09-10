@@ -23,7 +23,6 @@ define('io.ox/files/main', [
     'io.ox/core/folder/view',
     'io.ox/files/listview',
     'io.ox/core/tk/list-control',
-    'io.ox/files/share/listview',
     'io.ox/backbone/mini-views/toolbar',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/toolbars-mobile',
@@ -32,6 +31,7 @@ define('io.ox/files/main', [
     'io.ox/files/api',
     'io.ox/core/tk/sidebar',
     'io.ox/core/viewer/views/sidebarview',
+    // prefetch
     'io.ox/files/mobile-navbar-extensions',
     'io.ox/files/mobile-toolbar-actions',
     'io.ox/files/actions',
@@ -39,8 +39,10 @@ define('io.ox/files/main', [
     'less!io.ox/core/viewer/style',
     'io.ox/files/toolbar',
     'io.ox/files/share/toolbar',
-    'io.ox/files/upload/dropzone'
-], function (commons, gt, settings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, MySharesView, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview) {
+    'io.ox/files/upload/dropzone',
+    'io.ox/core/folder/breadcrumb',
+    'gettext!io.ox/core/viewer'
+], function (commons, gt, settings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview) {
 
     'use strict';
 
@@ -321,6 +323,7 @@ define('io.ox/files/main', [
          * Respond to virtual myshares
          */
         'myshares-listview': function (app) {
+
             if (!capabilities.has('publication')) return;
 
             // add virtual folder to folder api
@@ -345,6 +348,8 @@ define('io.ox/files/main', [
                 }
             });
 
+            var loading = false;
+
             app.folderView.tree.on({
                 'virtual': function (id) {
                     if (id !== 'virtual/myshares') return;
@@ -353,7 +358,14 @@ define('io.ox/files/main', [
 
                     if (app.mysharesListViewControl) {
                         app.mysharesListViewControl.$el.show().siblings().hide();
-                    } else {
+                        return;
+                    }
+
+                    app.getWindow().nodes.body.busy().children().hide();
+                    if (loading) return;
+                    loading = true;
+
+                    require(['io.ox/files/share/listview'], function (MySharesView) {
 
                         app.mysharesListView = new MySharesView({
                             app: app,
@@ -379,7 +391,11 @@ define('io.ox/files/main', [
 
                         var toolbar = new Toolbar({ title: app.getTitle(), tabindex: 1 });
 
-                        app.getWindow().nodes.body.prepend(app.mysharesListViewControl.render().$el.addClass('myshares-list-control').append(toolbar.render().$el));
+                        app.getWindow().nodes.body.prepend(
+                            app.mysharesListViewControl.render().$el
+                                .hide().addClass('myshares-list-control')
+                                .append(toolbar.render().$el)
+                        );
 
                         app.updateMyshareToolbar = _.debounce(function (list) {
                             var baton = ext.Baton({
@@ -402,12 +418,20 @@ define('io.ox/files/main', [
                             app.updateMyshareToolbar(app.mysharesListView.selection.get());
                         });
 
-                        app.mysharesListViewControl.$el.siblings().hide();
-                    }
+                        // show? (maybe user switched folder meanwhile)
+                        if (app.folder.get() === 'virtual/myshares') {
+                            app.mysharesListViewControl.$el.show().siblings().hide();
+                        }
+
+                        loading = false;
+                    });
                 },
                 'change': function () {
                     if (app.mysharesListViewControl) {
                         app.mysharesListViewControl.$el.hide().siblings().show();
+                    }
+                    if (loading) {
+                        app.getWindow().nodes.body.idle().children().show();
                     }
                 }
             });

@@ -22,7 +22,9 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/viewer/views/sidebar/fileversionsview',
     'io.ox/core/viewer/views/sidebar/uploadnewversionview',
     'io.ox/core/extensions',
-    'gettext!io.ox/core/viewer'
+    'gettext!io.ox/core/viewer',
+    // prefetch cause all views need the base view
+    'io.ox/core/viewer/views/sidebar/panelbaseview'
 ], function (DisposableView, Util, FilesAPI, Dropzone, ViewerSettings, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, ext, gt) {
 
     'use strict';
