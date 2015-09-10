@@ -89,7 +89,8 @@ define('io.ox/tasks/edit/main', [
                 notifications.hide();
             });
 
-            var taskData = options.taskData,
+            // sometimes taskdata is wrapped inside an array
+            var taskData = _.isArray(options.taskData) && options.taskData.length === 1 ? options.taskData[0] : options.taskData,
                 startApp = function () {
                     app.view = taskView = view.getView(taskModel, win.nodes.main, app);
 
