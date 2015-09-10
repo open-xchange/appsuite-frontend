@@ -11,8 +11,7 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/find/view-placeholder', [
-], function () {
+define('io.ox/find/view-placeholder', [], function () {
 
     'use strict';
 

@@ -121,6 +121,7 @@ module.exports = function (grunt) {
                         src: [
                             // 2nd wave
                             'apps/io.ox/find/main.js',
+                            'apps/io.ox/find/view-placeholder.js',
                             'apps/io.ox/core/desktop.js',
                             'apps/io.ox/core/api/apps.js',
                             'apps/io.ox/core/extPatterns/stage.js',

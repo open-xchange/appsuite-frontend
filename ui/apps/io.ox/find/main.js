@@ -12,9 +12,10 @@
  */
 
 define('io.ox/find/main', [
+    'io.ox/find/view-placeholder',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (settings, gt) {
+], function (PlaceholderView, settings, gt) {
 
     'use strict';
 
@@ -384,12 +385,10 @@ define('io.ox/find/main', [
             app.set('state', 'preparing');
             // setup
             app.mediate();
-            require(['io.ox/find/view-placeholder'], function (PlaceholderView) {
-                app.placeholder = new PlaceholderView({ app: app });
-                // delay launch app (on focus)
-                app.listenToOnce(app.placeholder, 'launch', app.launch);
-                app.set('state', 'prepared');
-            });
+            app.placeholder = new PlaceholderView({ app: app });
+            // delay launch app (on focus)
+            app.listenToOnce(app.placeholder, 'launch', app.launch);
+            app.set('state', 'prepared');
         };
 
         app.getProxy = (function () {
