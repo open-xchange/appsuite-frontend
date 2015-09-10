@@ -623,6 +623,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             }
         }
 
+        if (isWarning) {
+            ox.trigger('http:warning', response);
+        }
+
         // success
         if (o.dataType === 'json' && o.processResponse === true) {
             // variables

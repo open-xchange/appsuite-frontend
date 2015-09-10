@@ -1786,6 +1786,26 @@ define('io.ox/core/main', [
         }
     });
 
+    // white list warninff codes
+    var isValidWarning = (function () {
+        var check = function (code, regex) { return regex.test(code); },
+            reCodes = [
+                // sharing warnings
+                /^SHR_NOT-\d{4}$/
+            ];
+        return function (code) {
+            // return true in case at least one regex matched
+            var getValid = _.partial(check, code);
+            return !!(_.find(reCodes, getValid));
+        };
+    })();
+
+    ox.on('http:warning', function (warning) {
+        var valid = isValidWarning(warning.code);
+        if (valid) return notifications.yell('warning', warning.error);
+        if (ox.debug) console.warn('server response: ', warning.error);
+    });
+
     return {
         logout: logout,
         launch: launch,
