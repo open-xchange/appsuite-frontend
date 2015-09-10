@@ -37,93 +37,86 @@
 <div class="concept">
 <a name="ox.appsuite.user.concept.rights.roles"></a><p>为了简单的授予逻辑权限组合，默认有一些特定用户角色：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="拥有人">拥有人</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="管理员">管理员</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.viewer" title="检视器">检视器</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.editor" title="审核者">审核者</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="作者">作者</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.guest" title="访问者">访问者</a></p></li>
 </ul></div>
-<p>
-      </p>
+<p>您能批准<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.folder.rights.detail" title="详细权限">详细权限</a>，以更改预设权限。</p>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.owner"></a><p><b>拥有人 </b>一个文件夹拥有人有此文件夹的所有权限。拥有人可以授予其他用户该文件夹的权限。</p>
+<a name="ox.appsuite.user.concept.rights.roles.administrator"></a><p class="title"><b>管理员</b></p>
+<p>一个文件夹管理员拥有此文件夹的权限。拥有人可以授予其他用户该文件夹的权限。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>文件夹权限：创建对象和子文件夹</p></li>
 <li class="listitem"><p>对象权限：读取所有对象、编辑所有对象、删除所有对象</p></li>
-<li class="listitem"><p>管理权：是</p></li>
 </ul></div>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.administrator"></a><p><b>管理员 </b>一个文件夹管理员拥有此文件夹的权限。拥有人可以授予其他用户该文件夹的权限。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>文件夹权限：创建对象和子文件夹</p></li>
-<li class="listitem"><p>对象权限：读取所有对象、编辑所有对象、删除所有对象</p></li>
-<li class="listitem"><p>管理权：是</p></li>
-</ul></div>
-</div>
-<div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.author"></a><p><b>作者 </b>一个作者可以更改存在的对象、创建和编辑对象、和创建子文件夹。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>文件夹权限：创建对象和子文件夹</p></li>
-<li class="listitem"><p>对象权限：读取所有对象、编辑所有对象、删除所有对象</p></li>
-<li class="listitem"><p>管理权：无</p></li>
-</ul></div>
-</div>
-<div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.guest"></a><p><b>访问者 </b>一个访问者可以读取存在的对象，却不可更改。访客不允许在那里创建子文件夹或对象。</p>
+<a name="ox.appsuite.user.concept.rights.roles.viewer"></a><p class="title"><b>检视器</b></p>
+<p>一个检视者能读取所有存在的对象。一个检视者没有其他权限。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>文件夹权限：显示文件夹</p></li>
-<li class="listitem"><p>对象权限：读取所有对象、无编辑权限、无删除权限</p></li>
-<li class="listitem"><p>管理权：无</p></li>
+<li class="listitem"><p>对象权限：读取所有对象</p></li>
 </ul></div>
 </div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.folder.rights"></a><p>用具角色的默认权限是可以更改的。可以授予以下权限。</p>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.editor"></a><p class="title"><b>审核者</b></p>
+<p>一个检视者能读取和编辑存在的对象。可是审核者不能创建新对象。检视者不能删除对象。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>文件夹权限：显示文件夹</p></li>
+<li class="listitem"><p>对象权限：读取所有对象、编辑所有对象</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.author"></a><p class="title"><b>作者</b></p>
+<p>一个作者可以更改或删除存在的对象、创建和编辑新对象、和创建子文件夹。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>文件夹权限：创建对象和子文件夹</p></li>
+<li class="listitem"><p>对象权限：读取所有对象、编辑所有对象、删除所有对象</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.folder.rights.detail"></a><p class="title"><b>详细权限</b></p>
+<p>用具角色的默认权限是可以更改的。可以授予以下权限。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>文件夹管理</p>
+<p>文件夹</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>新文件夹</p></li>
+<li class="listitem"><p>检视文件夹</p></li>
 <li class="listitem"><p>创建对象</p></li>
 <li class="listitem"><p>创建对象和子文件夹</p></li>
 </ul></div>
 <p>
-            </p>
+              </p>
 </li>
 <li class="listitem">
-<p>对象权向，读取</p>
+<p>读取权限</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>无读取权限</p></li>
+<li class="listitem"><p>无:</p></li>
 <li class="listitem"><p>读取自己的对象</p></li>
 <li class="listitem"><p>读取所有对象</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p>对象权向，编辑</p>
+<p>写入权限</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>无编辑权限</p></li>
+<li class="listitem"><p>无:</p></li>
 <li class="listitem"><p>编辑自己的对象</p></li>
 <li class="listitem"><p>编辑所有对象</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p>对象权向，删除</p>
+<p>删除权限</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>无删除权限</p></li>
+<li class="listitem"><p>无:</p></li>
 <li class="listitem"><p>删除自己的对象</p></li>
 <li class="listitem"><p>删除所有对象</p></li>
 </ul></div>
 </li>
-<li class="listitem">
-<p>管理权</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>管理</p></li>
-<li class="listitem"><p>否</p></li>
-</ul></div>
-</li>
 </ul></div>
 <p>
-      </p>
+        </p>
 </div>
 </div>
           </div>
