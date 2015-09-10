@@ -7,7 +7,7 @@
 <link rel="home" href="index.html" title="">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. 權限">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html" title="11.2.2. 針對已存在文件夾的權限">
-<link rel="next" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. 共享文件夾">
+<link rel="next" href="ox.appsuite.user.sect.dataorganisation.sharing.html" title="11.3. 共享">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律聲明">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -25,7 +25,7 @@
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html">前一頁</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">起始頁</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目錄</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html">下一頁</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.sharing.html">下一頁</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -34,7 +34,7 @@
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ox.appsuite.user.sect.dataorganisation.rights.foldernew"></a>11.2.3. 權限 針對新文件夾的權限</h3></div></div></div>
-<a class="indexterm" name="id-1.12.5.7.2"></a><div class="concept">
+<a class="indexterm" name="id-1.12.5.6.2"></a><div class="concept">
 <a name="ox.appsuite.user.concept.rights.foldernew"></a><p>視您創建新文件夾的位置而定，某些權限將指定給您。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>於 <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html#ox.appsuite.user.reference.rights.personalfoldernew">個人資料夾</a></p></li>
@@ -47,8 +47,8 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.personalfoldernew"></a><p>如果您在個人文件夾中創建新文件夾：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>您是 <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="擁有者">擁有者</a>。</p></li>
-<li class="listitem"><p>其他用戶將繼承父文件夾中的權限。</p></li>
+<li class="listitem"><p>您是 <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="管理員">管理員</a>。</p></li>
+<li class="listitem"><p>在 <span class="phrase"><span class="guilabel"><strong>電子郵件</strong></span></span> 應用程式與 <span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> 應用程式，其他使用者將繼承父資料夾的權限。 在其他應用程式中，其他使用者將不會繼承權限。</p></li>
 </ul></div>
 <p>
       </p>
@@ -56,8 +56,8 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.publicfoldernew"></a><p>如果您在 <span class="guibutton"><strong>公開資料夾</strong></span> 中建立新資料夾：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>您是 <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="擁有者">擁有者</a>。</p></li>
-<li class="listitem"><p>其他使用者將無權限。您必須為新資料夾設定權限。如果您在此文件夾中創建新文件夾，此資料夾的權限會被新的子資料夾繼承。可在 <a class="xref" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. 共享文件夾">11.2.4: 共享文件夾</a> 中找到有關設定權限的資訊。</p></li>
+<li class="listitem"><p>您是 <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="管理員">管理員</a>。</p></li>
+<li class="listitem"><p>其他使用者將無權限。您必須為新資料夾設定權限。如果您在此文件夾中創建新文件夾，此資料夾的權限會被新的子資料夾繼承。</p></li>
 </ul></div>
 <p>
       </p>
@@ -65,12 +65,11 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.sharedfoldernew"></a><p>如果您在其他用戶的共享文件夾中創建新文件夾：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>分享資料夾的使用者將取得新資料夾的 <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="管理員">管理</a> 權限。</p></li>
-<li class="listitem"><p>您是 <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="擁有者">擁有者</a>。</p></li>
+<li class="listitem"><p>分享了資料夾的使用者是新資料夾的 <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="管理員">管理員</a>。</p></li>
+<li class="listitem"><p>您是新資料夾的 <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="作者">作者</a>。</p></li>
 <li class="listitem"><p>其他使用者將會取得與上層資料夾相同的權限。</p></li>
 </ul></div>
-<p>
-      </p>
+<p><span class="phrase"><strong>註:</strong></span> 您必須有權限能在該分享的資料夾中建立物件。</p>
 </div>
 </div>
           </div>
