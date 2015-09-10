@@ -53,7 +53,7 @@ define('io.ox/find/extensions-api',[
                         name: query,
                         detail: gt('as date')
                     },
-                    value: query,
+                    value: query || '',
                     options: []
                 });
                 // filter original data facet

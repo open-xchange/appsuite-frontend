@@ -111,7 +111,7 @@ define('io.ox/find/apiproxy',[
                                 prefix: ''
                             }
                         },
-                        request = _.extend(standard, options || {});
+                        request = $.extend(true, standard, options || {});
                     return api.config(request).then(extend.bind(this, request));
                 },
                 // suggestions
