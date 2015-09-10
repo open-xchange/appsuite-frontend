@@ -568,15 +568,18 @@ define('io.ox/core/pdf/pdfview', [
                                 canvasNode = canvasWrapperNode.children('canvas'),
                                 textWrapperNode = pageNode.children('.text-wrapper'),
                                 pdfTextBuilder = null,
-                                deviceScale = 1;
+                                getScale = function (orgSize) {
+                                    if (orgSize * DEVICE_OUTPUTSCALING > MAXIMUM_SIDE_SIZE) {
+                                        return MAXIMUM_SIDE_SIZE / (orgSize * DEVICE_OUTPUTSCALING);
+                                    } else {
+                                        return DEVICE_OUTPUTSCALING;
+                                    }
+                                },
+                                xScale = getScale(scaledSize.width),
+                                yScale = getScale(scaledSize.height);
 
-                            if (Math.max(scaledSize.width, scaledSize.height) * DEVICE_OUTPUTSCALING > MAXIMUM_SIDE_SIZE) {
-                                deviceScale = MAXIMUM_SIDE_SIZE / (Math.max(scaledSize.width, scaledSize.height) * DEVICE_OUTPUTSCALING);
-                            } else {
-                                deviceScale = DEVICE_OUTPUTSCALING;
-                            }
-                            scaledSize.width *= deviceScale;
-                            scaledSize.height *= deviceScale;
+                            scaledSize.width *= xScale;
+                            scaledSize.height *= yScale;
 
                             canvasNode.empty();
 
@@ -591,13 +594,14 @@ define('io.ox/core/pdf/pdfview', [
                                 pdfTextBuilder = new PDFTextLayerBuilder({
                                     textLayerDiv: textWrapperNode[0],
                                     viewport: viewport,
-                                    pageIndex: pageNumber });
+                                    pageIndex: pageNumber
+                                });
                             }
 
                             var canvasCtx = canvasNode[0].getContext('2d');
 
-                            canvasCtx._transformMatrix = [deviceScale, 0, 0, deviceScale, 0, 0];
-                            canvasCtx.scale(deviceScale, deviceScale);
+                            canvasCtx._transformMatrix = [xScale, 0, 0, yScale, 0, 0];
+                            canvasCtx.scale(xScale, yScale);
 
                             return pdfjsPage.render({
                                 canvasContext: canvasCtx,
