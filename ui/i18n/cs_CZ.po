@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-08-27 20:08+0100\n"
+"PO-Revision-Date: 2015-09-09 11:12+0100\n"
 "Last-Translator: Robert Krátký <kratky@rob.cz>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -724,10 +724,9 @@ msgid "Add"
 msgstr "Přidat"
 
 #: apps/io.ox/files/view-options.js:241 module:io.ox/files
-#, fuzzy
 #| msgid "Add Box.com account"
 msgid "Add Box account"
-msgstr "Přidat účet Box.com"
+msgstr "Přidat účet Box"
 
 #: apps/io.ox/files/view-options.js:239 module:io.ox/files
 msgid "Add Dropbox account"
@@ -1007,11 +1006,10 @@ msgid "All files"
 msgstr "Všechny soubory"
 
 #: apps/io.ox/core/folder/actions/common.js:53 module:io.ox/core
-#, fuzzy
 #| msgid "This file has been deleted"
 #| msgid_plural "These files have been deleted"
 msgid "All files have been deleted"
-msgstr "Soubor byl smazán"
+msgstr "Všechny soubory byly smazány"
 
 #: apps/io.ox/search/facets/extensions.js:146 module:io.ox/core
 #: apps/io.ox/search/facets/extensions.js:158
@@ -3714,7 +3712,6 @@ msgstr "Získat upgrade zdarma"
 #: apps/io.ox/core/folder/contextmenu.js:458 module:io.ox/core
 #: apps/io.ox/files/actions.js:678 module:io.ox/files
 #: apps/io.ox/files/actions.js:798
-#, fuzzy
 #| msgid "Get a link"
 msgid "Get link"
 msgstr "Získat odkaz"
@@ -4595,10 +4592,9 @@ msgid "Manage favorites"
 msgstr "Spravovat oblíbené"
 
 #: apps/io.ox/mail/compose/extensions.js:355 module:io.ox/mail
-#, fuzzy
 #| msgid "Add new signature"
 msgid "Manage signatures"
-msgstr "Přidat nový podpis"
+msgstr "Spravovat podpisy"
 
 #: apps/io.ox/contacts/model.js:224 module:io.ox/contacts
 msgid "Manager"
@@ -6870,16 +6866,14 @@ msgstr "Sdílené úkoly"
 #. "Shares" in terms of "shared with others" ("Freigaben")
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:115
 #: module:io.ox/core/viewer
-#, fuzzy
 #| msgid "Share"
 msgid "Shares"
-msgstr "Sdílet"
+msgstr "Sdílené položky"
 
 #: apps/io.ox/core/folder/contextmenu.js:439 module:io.ox/core
-#, fuzzy
 #| msgid "Share"
 msgid "Sharing"
-msgstr "Sdílet"
+msgstr "Sdílení"
 
 #: apps/io.ox/wizards/upsell.js:133 module:io.ox/wizards
 msgid "Shopping cart"
@@ -7063,7 +7057,6 @@ msgstr "Některá pole obsahují neplatné údaje"
 
 #. %1$s the maximum file size
 #: apps/io.ox/core/tk/upload.js:291 module:io.ox/core
-#, fuzzy
 #| msgid ""
 #| "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 #| "size of %2$s"
@@ -7071,8 +7064,8 @@ msgid ""
 "Some files cannot be uploaded because they exceed the maximum file size of "
 "%1$s"
 msgstr ""
-"Soubor „%1$s“ nelze nahrát, protože je větší než maximální povolená velikost "
-"souboru %2$s"
+"Některé soubory nelze nahrát, protože přesahují maximální povolenou velikost %"
+"1$s"
 
 #: apps/plugins/portal/linkedIn/register.js:174 module:plugins/portal
 #: apps/plugins/portal/twitter/register.js:237
@@ -7283,10 +7276,9 @@ msgid "Summary"
 msgstr "Shrnutí"
 
 #: apps/io.ox/files/view-options.js:165 module:io.ox/files
-#, fuzzy
 #| msgid "Switched to read only mode."
 msgid "Switch to parent folder"
-msgstr "Přepnuto do režimu jen pro čtení."
+msgstr "Přepnout do nadřazené složky"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js:109 module:io.ox/mail/emoji
@@ -7618,23 +7610,18 @@ msgstr ""
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js:264 module:io.ox/core
-#, fuzzy
 #| msgid ""
 #| "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
 #| "of %2$s"
 msgid "The file cannot be uploaded because it exceeds the quota limit of %1$s"
 msgid_plural ""
 "The files cannot be uploaded because they exceed the quota limit of %1$s"
-msgstr[0] ""
-"Soubor „%1$s“ nelze nahrát, protože je přesahuje dostupný volný prostor %2$s"
-msgstr[1] ""
-"Soubor „%1$s“ nelze nahrát, protože je přesahuje dostupný volný prostor %2$s"
-msgstr[2] ""
-"Soubor „%1$s“ nelze nahrát, protože je přesahuje dostupný volný prostor %2$s"
+msgstr[0] "Soubor nelze nahrát, protože je přesahuje limit %1$s"
+msgstr[1] "Soubory nelze nahrát, protože je přesahují limit %1$s"
+msgstr[2] "Soubory nelze nahrát, protože je přesahují limit %1$s"
 
 #. %1$s the maximum file size
 #: apps/io.ox/core/tk/upload.js:286 module:io.ox/core
-#, fuzzy
 #| msgid ""
 #| "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 #| "size of %2$s"
@@ -7642,8 +7629,9 @@ msgid ""
 "The files cannot be uploaded because each file exceeds the maximum file size "
 "of %1$s"
 msgstr ""
-"Soubor „%1$s“ nelze nahrát, protože je větší než maximální povolená velikost "
-"souboru %2$s"
+"Soubory nelze nahrát, protože je každý z nich větší než maximální povolená "
+"velikost "
+"souboru %1$s"
 
 #: apps/io.ox/core/upsell.js:33 module:io.ox/core
 msgid "The first 90 days are free."
@@ -7662,10 +7650,9 @@ msgid "The folder has been cleaned up."
 msgstr "Složka byla pročištěna."
 
 #: apps/io.ox/core/folder/actions/common.js:54 module:io.ox/core
-#, fuzzy
 #| msgid "The folder has been emptied."
 msgid "The folder has been emptied"
-msgstr "Složka byla vyprázdněna."
+msgstr "Složka byla vyprázdněna"
 
 #: apps/io.ox/core/main.js:1520 module:io.ox/core
 msgid ""
@@ -8008,10 +7995,9 @@ msgstr[2] "Soubory nebyl smazány, protože jsou zamčené vlastníkem."
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:119
 #: module:io.ox/core/viewer
-#, fuzzy
 #| msgid "This file has been added to the portal"
 msgid "This file is shared with others"
-msgstr "Soubor byl přidán do portálu"
+msgstr "Soubor je sdílen s ostatními"
 
 #: apps/io.ox/editor/main.js:247 module:io.ox/editor
 msgid "This file will be written in your default folder to allow editing"
@@ -8039,10 +8025,9 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:119
 #: module:io.ox/core/viewer
-#, fuzzy
 #| msgid "This folder has subscriptions"
 msgid "This folder is shared with others"
-msgstr "Tato složka má přihlášení k odběru"
+msgstr "Tato složka je sdílena s ostatními"
 
 #: apps/io.ox/core/folder/actions/rename.js:48 module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
@@ -8850,10 +8835,9 @@ msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Změny lze rychle uložit pomocí Ctrl+Enter."
 
 #: apps/io.ox/core/folder/actions/move.js:70 module:io.ox/core
-#, fuzzy
 #| msgid "You cannot move items to virtual folders"
 msgid "You cannot move items to this folder"
-msgstr "Do virtuálních složek nelze přesouvat položky"
+msgstr "Do této složky nelze přesouvat položky"
 
 #: apps/io.ox/core/folder/actions/move.js:65 module:io.ox/core
 msgid "You cannot move items to virtual folders"
