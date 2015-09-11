@@ -15,6 +15,22 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
 
     'use strict';
 
+    // open app with given folder
+    function openFolder(app, id) {
+        // open files app
+        require(['io.ox/core/folder/api'], function (api) {
+            api.get(id).then(
+                function () {
+                    ox.launch(app, { folder: id }).done(function () {
+                        // set proper folder
+                        if (this.folder.get() !== id) this.folder.set(id);
+                    });
+                },
+                yell
+            );
+        });
+    }
+
     //
     // Generic app
     //
@@ -53,18 +69,7 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
                 );
             });
         } else {
-            // open files app
-            require(['io.ox/core/folder/api'], function (api) {
-                api.get(data.folder).then(
-                    function () {
-                        ox.launch('io.ox/files/main', { folder: data.folder }).done(function () {
-                            // set proper folder
-                            if (this.folder.get() !== data.folder) this.folder.set(data.folder);
-                        });
-                    },
-                    yell
-                );
-            });
+            openFolder('io.ox/files/main', data.folder);
         }
     });
 
@@ -101,6 +106,8 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
                     });
                 });
             });
+        } else {
+            openFolder('io.ox/calendar/main', data.folder);
         }
     });
 
