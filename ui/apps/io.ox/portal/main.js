@@ -118,7 +118,7 @@ define('io.ox/portal/main', [
             );
 
             if (_.device('!smartphone')) {
-                widgets.loadAllPlugins().done(function () {
+                widgets.loadUsedPlugins().done(function () {
                     // add widgets
                     ext.point('io.ox/portal/settings/detail/pane').map(function (point) {
                         if (point && point.id === 'add') {

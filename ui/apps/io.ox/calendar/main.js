@@ -29,7 +29,8 @@ define('io.ox/calendar/main', [
     'io.ox/calendar/mobile-toolbar-actions',
     'io.ox/calendar/toolbar',
     'io.ox/calendar/actions',
-    'less!io.ox/calendar/style'
+    'less!io.ox/calendar/style',
+    'io.ox/calendar/week/view.js'
 ], function (coreConfig, commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, VGrid, Bars, PageController, api) {
 
     'use strict';

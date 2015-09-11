@@ -114,24 +114,27 @@ define('io.ox/portal/settings/pane', [
     }
 
     function repopulateAddButton() {
-        $('.io-ox-portal-settings-dropdown').children('[role=presentation]').remove().end().append(
-            _(widgets.getAllTypes()).map(function (options) {
+        widgets.loadAllPlugins().done(function () {
+            $('.io-ox-portal-settings-dropdown').children('[role=presentation]').remove().end().append(
+                _(widgets.getAllTypes()).map(function (options) {
 
-                var isUnique = options.unique && widgets.containsType(options.type),
-                    isVisible = upsell.visible(options.requires);
+                    var isUnique = options.unique && widgets.containsType(options.type),
+                        isVisible = upsell.visible(options.requires);
 
-                if (isUnique || !isVisible) {
-                    return $();
-                } else {
-                    return $('<li role="presentation">')
-                    // add disabld class if requires upsell
-                    .addClass(!upsell.has(options.requires) ? 'requires-upsell' : undefined)
-                    .append(
-                        $('<a>', { href: '#', 'data-type': options.type, role: 'menuitem', tabindex: 1 }).text(options.title)
-                    );
-                }
-            })
-        );
+                    if (isUnique || !isVisible) {
+                        return $();
+                    } else {
+                        return $('<li role="presentation">')
+                        // add disabld class if requires upsell
+                        .addClass(!upsell.has(options.requires) ? 'requires-upsell' : undefined)
+                        .append(
+                            $('<a>', { href: '#', 'data-type': options.type, role: 'menuitem', tabindex: 1 }).text(options.title)
+                        );
+                    }
+                })
+            );
+        });
+
     }
 
     ext.point(POINT + '/pane').extend({
