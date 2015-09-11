@@ -175,15 +175,15 @@ define('io.ox/core/page-controller', [], function () {
             backButtonRules = rules;
         };
 
-        this.goBack = function () {
-            var target = lastPage;
-
+        this.goBack = function (options) {
+            var target = lastPage,
+                o = _.extend({ animation: 'slideright' }, options || {});
             // if we do have a custom navigation for some pages
             // use this instead of the last page
             if (backButtonRules && backButtonRules[current]) {
                 target = backButtonRules[current];
             }
-            this.changePage(target, { animation: 'slideright' });
+            this.changePage(target, o);
         };
 
         /**

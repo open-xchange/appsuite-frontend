@@ -151,6 +151,11 @@
     .picker-pc-container {
         position: relative;
         height: 350px;
+        @media all and (max-width: 480px), all and (max-device-width: 480px) {
+            .folder-tree .folder-node .folder-arrow {
+                position: static
+            }
+        }
 
         .io-ox-fileselection {
              li.file {
