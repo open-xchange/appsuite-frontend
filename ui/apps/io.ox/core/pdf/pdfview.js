@@ -39,9 +39,6 @@ define('io.ox/core/pdf/pdfview', [
 
         DEVICE_OUTPUTSCALING = Math.min(DEVICE_PIXEL_RATIO, MAX_DEVICE_PIXEL_RATIO),
 
-        // render the optional text layer with a timeout of 200ms
-        TEXT_LAYER_RENDER_DELAY = 200,
-
         // max size of canvas width & height
         // https://github.com/mozilla/pdf.js/issues/2439
         // http://stackoverflow.com/a/22345796/4287795
@@ -608,12 +605,10 @@ define('io.ox/core/pdf/pdfview', [
                                 viewport: viewport
                             }).then( function () {
                                 if (pdfTextBuilder) {
-                                    pdfjsPage.getTextContent().then( function (pdfTextContent) {
+                                    return pdfjsPage.getTextContent().then( function (pdfTextContent) {
                                         pdfTextBuilder.setTextContent(pdfTextContent);
-                                        setTimeout(function () {
-                                            pdfTextBuilder.render();
-                                            prepareTextLayerForTextSelection(textWrapperNode);
-                                        }, TEXT_LAYER_RENDER_DELAY);
+                                        pdfTextBuilder.render();
+                                        prepareTextLayerForTextSelection(textWrapperNode);
                                         return def.resolve();
                                     });
                                 } else {

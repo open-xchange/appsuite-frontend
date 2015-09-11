@@ -71,4 +71,19 @@ define('io.ox/core/pdf/pdfpolyfill', function () {
         };
     }
 
+    (function () {
+        // override drawImage on desktop and mobile Safari
+        if (_.device('safari')) {
+            var origDrawImage = window.CanvasRenderingContext2D.prototype.drawImage;
+
+            window.CanvasRenderingContext2D.prototype.drawImage = function () {
+                try {
+                    return origDrawImage.apply(this, arguments);
+                } catch (e) {
+                    console.info('Canvas drawImage() call FAILED', e);
+                }
+            };
+        }
+    })();
+
 });
