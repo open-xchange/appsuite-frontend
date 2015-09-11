@@ -30,7 +30,7 @@ define('io.ox/calendar/main', [
     'io.ox/calendar/toolbar',
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style',
-    'io.ox/calendar/week/view.js'
+    'io.ox/calendar/week/view'
 ], function (coreConfig, commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, VGrid, Bars, PageController, api) {
 
     'use strict';
