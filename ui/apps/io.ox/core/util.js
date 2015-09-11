@@ -212,7 +212,7 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
                 folder = '&folder=' + encodeURIComponent(data.id);
             } else {
                 folder = '&folder=' + encodeURIComponent(data.folder_id);
-                id = '&id=' + encodeURIComponent(data.id);
+                id = '&id=' + (/^[\d\/]+$/.test(data.id) ? data.id : encodeURIComponent(data.id));
             }
             return ox.abs + ox.root + '/#!&app=' + app + folder + id;
         }
