@@ -18,7 +18,9 @@ define('io.ox/core/viewer/views/mainview', [
     'io.ox/core/tk/nodetouch',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
-    'less!io.ox/core/viewer/style'
+    'less!io.ox/core/viewer/style',
+    // prefetch file actions
+    'io.ox/files/actions'
 ], function (ToolbarView, DisplayerView, SidebarView, DisposableView, NodeTouch, Util, Settings) {
 
     'use strict';

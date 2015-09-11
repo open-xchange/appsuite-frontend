@@ -258,6 +258,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                     section: 'share',
                     ref: 'io.ox/files/actions/send'
                 },
+                'addtoportal': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Add to portal'),
+                    section: 'share',
+                    ref: 'io.ox/files/actions/add-to-portal'
+                },
                 'uploadnewversion': {
                     prio: 'lo',
                     mobile: 'lo',
