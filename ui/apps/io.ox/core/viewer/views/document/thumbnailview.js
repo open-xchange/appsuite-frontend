@@ -11,8 +11,9 @@
  */
 define('io.ox/core/viewer/views/document/thumbnailview', [
     'io.ox/backbone/disposable',
+    'io.ox/core/capabilities',
     'io.ox/core/viewer/util'
-], function (DisposableView, Util) {
+], function (DisposableView, Capabilities, Util) {
 
     'use strict';
 
@@ -40,6 +41,11 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
 
         render: function () {
             var self = this;
+
+            if (!Capabilities.has('document_preview')) {
+                return this;
+            }
+
             this.$el.addClass('io-ox-busy');
             function beginConvertSuccess(convertData) {
                 self.convertData = convertData;

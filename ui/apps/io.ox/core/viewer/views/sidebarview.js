@@ -15,6 +15,7 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/viewer/util',
     'io.ox/files/api',
     'io.ox/core/dropzone',
+    'io.ox/core/capabilities',
     'io.ox/core/viewer/settings',
     'io.ox/core/viewer/views/document/thumbnailview',
     'io.ox/core/viewer/views/sidebar/fileinfoview',
@@ -25,7 +26,7 @@ define('io.ox/core/viewer/views/sidebarview', [
     'gettext!io.ox/core/viewer',
     // prefetch cause all views need the base view
     'io.ox/core/viewer/views/sidebar/panelbaseview'
-], function (DisposableView, Util, FilesAPI, Dropzone, ViewerSettings, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, ext, gt) {
+], function (DisposableView, Util, FilesAPI, Dropzone, Capabilities, ViewerSettings, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, ext, gt) {
 
     'use strict';
 
@@ -58,7 +59,7 @@ define('io.ox/core/viewer/views/sidebarview', [
 
         initialize: function (options) {
 
-            options = options || {};
+            options = options || {};
 
             _.extend(this, {
                 viewerEvents: options.viewerEvents || _.extend({}, Backbone.Events),
@@ -257,7 +258,7 @@ define('io.ox/core/viewer/views/sidebarview', [
             // initially set model
             this.model = model;
             // show tab navigation in office standalone mode
-            if (this.standalone && (model.isOffice() || model.isPDF()) && !_.device('smartphone')) {
+            if (this.standalone && Capabilities.has('document_preview') && (model.isOffice() || model.isPDF()) && !_.device('smartphone')) {
                 this.$('.viewer-sidebar-tabs').show();
                 var lastActivatedThumbnail = ViewerSettings.getSidebarActiveTab();
                 this.activateTab(lastActivatedThumbnail);
