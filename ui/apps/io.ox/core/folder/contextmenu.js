@@ -16,8 +16,9 @@ define('io.ox/core/folder/contextmenu', [
     'io.ox/core/folder/actions/common',
     'io.ox/core/folder/api',
     'io.ox/core/capabilities',
+    'io.ox/core/api/filestorage',
     'gettext!io.ox/core'
-], function (ext, actions, api, capabilities, gt) {
+], function (ext, actions, api, capabilities, filestorage, gt) {
 
     'use strict';
 
@@ -333,10 +334,12 @@ define('io.ox/core/folder/contextmenu', [
                 if (_.device('smartphone')) return;
                 if (baton.module !== 'infostore') return;
 
+                //we don't allow folder download on external storages see Bug 40979
+                var isEnabled = !filestorage.isExternal(baton.data);
                 addLink(this, {
                     action: 'zip',
                     data: { id: baton.data.id },
-                    enabled: true,
+                    enabled: isEnabled,
                     handler: handler,
                     text: gt('Download entire folder')
                 });

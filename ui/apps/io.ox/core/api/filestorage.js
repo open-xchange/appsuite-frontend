@@ -322,6 +322,19 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                     } catch (e) {
                     }
                 });
+            },
+            // function to check if a folder is a folder from an external Storage
+            // folder.account_id must be present
+            isExternal: function (folder) {
+                var isExternal = false;
+                if (api.rampupDone && folder && folder.account_id) {
+                    isExternal = _(accountsCache.models).find(function (model) {
+                        var filestorageService = model.get('filestorageService');
+                        return model.get('qualifiedId') === folder.account_id && (filestorageService === 'dropbox' || filestorageService === 'googledrive' ||
+                            filestorageService === 'onedrive' ||filestorageService === 'boxcom');
+                    }) !== undefined;
+                }
+                return isExternal;
             }
         };
 
