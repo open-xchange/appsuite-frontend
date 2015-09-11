@@ -184,11 +184,6 @@ define('io.ox/core/boot/main', [
 
             $('#background-loader').fadeIn(util.DURATION, function () {
                 $('#io-ox-login-screen').hide().empty();
-                //reset the theme, because until now it was the login theme.
-                //next would be the user theme, but less! plugin will load CSS using the login theme,
-                //until theming is initialized. See Bug 41147. Resetting the global state will defer
-                //loading of CSS files, until theme is initialized
-                delete ox.theme;
             });
 
             // load user config
