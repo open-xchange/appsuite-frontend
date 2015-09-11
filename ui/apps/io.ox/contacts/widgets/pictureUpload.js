@@ -164,7 +164,7 @@ define('io.ox/contacts/widgets/pictureUpload', [
                     ),
                     $('<form>').append(
                         $('<label class="sr-only">').attr('for', guid).text(gt('Click to upload image')),
-                        self.fileInput = $('<input type="file" name="file" accepts="image/*" tabindex="1">').attr('id', guid)
+                        self.fileInput = $('<input type="file" name="file" accept="image/*" tabindex="1">').attr('id', guid)
                             .on('change', function (e) {
                                 self.handleFileSelect(e, this);
                             })
