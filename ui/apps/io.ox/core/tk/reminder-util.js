@@ -69,6 +69,10 @@ define('io.ox/core/tk/reminder-util', [
 
             $(toggle).click(function () {
                 dropDownFixPosition(toggle, menu);
+                // close on scroll
+                $('#io-ox-notifications').one('scroll', function () {
+                    toggle.dropdown('toggle');
+                });
             });
         }
     }
