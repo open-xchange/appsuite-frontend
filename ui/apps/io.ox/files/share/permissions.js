@@ -85,13 +85,55 @@
                 return this.get('type') === 'user' && this.get('entity') === ox.user_id;
             },
 
+            isGroup: function () {
+                return this.get('type') === 'group';
+            },
+
+            isUser: function () {
+                return this.get('type') === 'user';
+            },
+
             isInternal: function () {
                 var type = this.get('type');
                 return type === 'user' || type === 'group';
             },
 
+            isGuest: function () {
+                return this.get('type') === 'guest';
+            },
+
             isAnonymous: function () {
                 return this.get('type') === 'anonymous';
+            },
+
+            getDisplayName: function (htmlOutput) {
+                switch (this.get('type')) {
+                    case 'user':
+                        return contactsUtil.getFullName(this.get('contact'), htmlOutput);
+                    case 'group':
+                        return this.get('display_name');
+                    case 'guest':
+                        var data = this.get('contact');
+                        return data[data.field] || data.email1;
+                    case 'anonymous':
+                        return gt('Public link');
+                }
+            },
+
+            getSortName: function () {
+                var data = {};
+                switch (this.get('type')) {
+                    case 'user':
+                        data = this.get('contact');
+                        return data.last_name || data.first_name || data.display_name;
+                    case 'group':
+                        return this.get('display_name');
+                    case 'guest':
+                        var data = this.get('contact');
+                        return data[data.field] || data.email1;
+                    case 'anonymous':
+                        return '';
+                }
             },
 
             // bits    Number  A number as described in Permission flags.
@@ -138,7 +180,9 @@
 
         // Permission Collection
         Permissions = Backbone.Collection.extend({
+
             model: Permission,
+
             // method to check if a guest is already in the collection (they receive entity ids that differ from the emails, so this check is needed)
             isAlreadyGuest: function (newGuest) {
                 var guests = this.where({ type: 'guest' }),
@@ -154,6 +198,24 @@
                 }
 
                 return isGuest;
+            },
+
+            comparator: function (a, b) {
+                if (a.isMyself()) return -1;
+                if (b.isMyself()) return +1;
+                var snA = a.getSortName(),
+                    snB = b.getSortName(),
+                    lexic = snA < snB ? -1 : snA > snB ? +1 : 0;
+                if (a.isGroup() && b.isGroup()) return lexic;
+                if (a.isGroup()) return -1;
+                if (b.isGroup()) return +1;
+                if (a.isUser() && b.isUser()) return lexic;
+                if (a.isUser()) return -1;
+                if (b.isUser()) return +1;
+                if (a.isGuest() && b.isGuest()) return lexic;
+                if (a.isGuest()) return -1;
+                if (b.isGuest()) return +1;
+                return +1;
             }
         }),
 
@@ -341,7 +403,7 @@
 
             initialize: function () {
                 this.collection = new Permissions();
-                this.listenTo(this.collection, { reset: this.resetPermissions, add: this.addEntity });
+                this.listenTo(this.collection, 'reset add', this.renderEntities);
             },
 
             render: function () {
@@ -356,7 +418,7 @@
                 return this;
             },
 
-            resetPermissions: function () {
+            renderEntities: function () {
                 this.$el.empty();
                 this.collection.each(this.addEntity, this);
                 return this;
@@ -408,7 +470,9 @@
 
                 this.append(
                     $('<div class="col-sm-5 col-xs-10">').append(
-                        $('<div class="display_name">').text(baton.view.display_name),
+                        $('<div class="display_name">').append(
+                            baton.model.isUser() ? baton.model.getDisplayName(true) : $.txt(baton.model.getDisplayName())
+                        ),
                         $('<div class="description">').append(
                             url ? $('<a href="" target="_blank" tabindex="1">').attr('href', url).text(url) : $.txt(baton.view.description)
                         )
