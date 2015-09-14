@@ -44,7 +44,7 @@ define('io.ox/contacts/actions', [
             return e.collection.has('one') && e.collection.has('modify');
         },
         action: function (baton) {
-            var data = baton.data;
+            var data = _.isArray(baton.data) ? baton.data[0] : baton.data;
             //get full object first, because data might be a restored selection resulting in only having id and folder_id.
             //This would make distribution lists behave as normal contacts
             if (data.mark_as_distributionlist === true) {

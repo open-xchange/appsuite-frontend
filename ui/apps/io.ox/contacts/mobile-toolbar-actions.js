@@ -24,6 +24,7 @@ define('io.ox/contacts/mobile-toolbar-actions', [
 
     var pointListViewActions = ext.point('io.ox/contacts/mobile/toolbar/actions'),
         pointDetailView = ext.point('io.ox/contacts/mobile/toolbar/detailView'),
+        pointDetailViewLinks = ext.point('io.ox/contacts/mobile/toolbar/detailView/links'),
         actions = ext.point('io.ox/contacts/mobile/actions'),
         pointListView = ext.point('io.ox/contacts/mobile/toolbar/listView'),
         meta = {
@@ -115,9 +116,15 @@ define('io.ox/contacts/mobile-toolbar-actions', [
 
     addAction(actions, ['vcard', 'delete', 'move', 'copy']);
 
-    addAction(pointDetailView, ['edit', 'send', 'invite']);
+    pointDetailView.extend(new links.InlineLinks({
+        id: 'links',
+        index: 100,
+        classes: '',
+        ref: 'io.ox/contacts/mobile/toolbar/detailView/links'
+    }));
 
-    pointDetailView.extend(new links.Dropdown({
+    addAction(pointDetailViewLinks, ['edit', 'send', 'invite']);
+    pointDetailViewLinks.extend(new links.Dropdown({
         id: 'test',
         index: 900,
         noCaret: true,
