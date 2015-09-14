@@ -234,12 +234,6 @@ define('io.ox/core/tk/dialogs', [
             nodes.popup.addClass(o.addClass);
         }
 
-        if (o.help) {
-            nodes.header.append(new HelpView({
-                href: o.help,
-                tabindex: '-1'
-            }).render().$el);
-        }
         // add event hub
         Events.extend(this);
 
@@ -408,6 +402,14 @@ define('io.ox/core/tk/dialogs', [
             // empty header?
             if (nodes.header.children().length === 0) {
                 nodes.header.remove();
+            }
+
+            if (o.help) {
+                nodes.header.addClass('help');
+                nodes.header.append(new HelpView({
+                    href: o.help,
+                    tabindex: '-1'
+                }).render().$el);
             }
 
             // show but keep invisible
