@@ -49,8 +49,8 @@ define('io.ox/core/tk/wizard', [
         var o = elem.offset();
         o.width = elem.outerWidth();
         o.height = elem.outerHeight();
-        o.availableWidth = $(document).width();
-        o.availableHeight = $(document).height();
+        o.availableWidth = $(window).width();
+        o.availableHeight = $(window).height();
         o.right = o.availableWidth - o.width - o.left;
         o.bottom = o.availableHeight - o.height - o.top;
         return o;
@@ -509,6 +509,7 @@ define('io.ox/core/tk/wizard', [
 
                 // auto-align
                 this.align();
+                $(window).on('resize.wizard-step', _.debounce(this.align.bind(this, null), 100));
 
                 if (this.options.spotlight) {
                     // apply spotlight
@@ -517,7 +518,7 @@ define('io.ox/core/tk/wizard', [
                     // respond to window resize
                     $(window).on('resize.wizard.spotlight', _.debounce(function () {
                         this.parent.spotlight(this.options.spotlight);
-                    }.bind(this), 50));
+                    }.bind(this), 100));
                 } else {
                     // toggle backdrop
                     this.parent.toggleBackdrop(this.options.modal, this.options.backdropColor);
@@ -526,7 +527,7 @@ define('io.ox/core/tk/wizard', [
                 // show hotspot
                 if (this.options.hotspot) {
                     addHotspots.call(this);
-                    $(window).on('resize.wizard.hotspot', _.debounce(repositionHotspots.bind(this), 50));
+                    $(window).on('resize.wizard.hotspot', _.debounce(repositionHotspots.bind(this), 100));
                 }
 
                 // scroll?
@@ -580,7 +581,7 @@ define('io.ox/core/tk/wizard', [
             this.trigger('before:hide');
             if (!_.device('smartphone')) {
                 if (this.focusWatcher) clearInterval(this.focusWatcher);
-                $(window).off('resize.wizard.spotlight resize.wizard.hotspot');
+                $(window).off('resize.wizard.spotlight resize.wizard.hotspot resize.wizard-step');
                 this.$el.detach();
             }
             this.trigger('hide');
