@@ -710,6 +710,11 @@ define('io.ox/contacts/main', [
                     // do not change page in edit mode
                     return;
                 }
+
+                // do not open listview when folder is virtual
+                var id = $(e.target).closest('.folder').data('id');
+                if (folderAPI.isVirtual(id)) return;
+
                 app.pages.changePage('listView');
             });
         },
