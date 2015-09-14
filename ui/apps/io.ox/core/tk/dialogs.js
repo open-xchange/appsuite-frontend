@@ -106,6 +106,8 @@ define('io.ox/core/tk/dialogs', [
                 for (var prop in self) {
                     delete self[prop];
                 }
+                // remove mobile resize listener
+                $(window).off('resize.mobile-dialog');
                 self.close = self.idle = $.noop;
                 nodes.header = nodes.body = nodes.footer = nodes.underlay = nodes.wrapper = null;
                 nodes.buttons = lastFocus = innerFocus = null;
@@ -512,7 +514,13 @@ define('io.ox/core/tk/dialogs', [
             nodes.popup.removeClass('invisible');
 
             // make sure, that the maximum height of the dialog does not exceed the screen height
-            if (_.device('smartphone')) nodes.body.css('max-height', $('#io-ox-core').height() - 40 - nodes.header.outerHeight() - nodes.footer.outerHeight());
+            function fnMobileMaxHeight() {
+                nodes.body.css('max-height', $('#io-ox-core').height() - 40 - nodes.header.outerHeight() - nodes.footer.outerHeight());
+            }
+            if (_.device('smartphone')) {
+                fnMobileMaxHeight();
+                $(window).on('resize.mobile-dialog', fnMobileMaxHeight);
+            }
 
             // focus button (if available)
             var button = nodes.popup.find('.btn-primary').first().focus();
