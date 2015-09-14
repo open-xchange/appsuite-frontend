@@ -355,6 +355,7 @@ define('io.ox/files/main', [
                     if (id !== 'virtual/myshares') return;
 
                     app.trigger('folder-virtual:change', id, { type: 'myshares', standard_folder_type: 'virtual' });
+                    app.folder.unset();
 
                     if (app.mysharesListViewControl) {
                         app.mysharesListViewControl.$el.show().siblings().hide();
@@ -419,7 +420,7 @@ define('io.ox/files/main', [
                         });
 
                         // show? (maybe user switched folder meanwhile)
-                        if (app.folder.get() === 'virtual/myshares') {
+                        if (app.folder.get() === null) {
                             app.mysharesListViewControl.$el.show().siblings().hide();
                         }
 
