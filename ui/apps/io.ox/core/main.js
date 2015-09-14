@@ -263,7 +263,7 @@ define('io.ox/core/main', [
 
         var itemsVisible = launchers.children('.launcher:visible'),
             itemsRightWidth = topbar.find('.launchers-secondary').outerWidth(true),
-            viewPortWidth = $(document).width(),
+            viewPortWidth = $(window).width(),
             launcherDropDownIconWidth = launcherDropDownIcon.outerWidth(true);
 
         launcherDropDownIcon.hide();
