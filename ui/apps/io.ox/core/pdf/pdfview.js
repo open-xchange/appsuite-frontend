@@ -94,6 +94,40 @@ define('io.ox/core/pdf/pdfview', [
             return _.isObject(pdfjsPage) ? pdfjsPage.getViewport(PDFView.getAdjustedZoom(pageZoom)) : null;
         }
 
+        function intersects(aFrom, aTo, bFrom, bTo) {
+            return (aFrom >= bFrom && bTo >= aFrom) || (bFrom >= aFrom && aTo >= bFrom);
+        }
+
+        function updateLine(line, child, allLines) {
+            if (!line) {
+                line = { min: 99999999, max: 0, childs: [] };
+                var lastLine = _.last(allLines);
+                if (lastLine) {
+                    lastLine = _.last(lastLine.childs);
+                    lastLine.innerHTML = lastLine.innerHTML + '\r\n';
+                }
+                allLines.push(line);
+            }
+            var cV = PDFView.convertCssLength(child.style.top, 'px', 1);
+            var cH = PDFView.convertCssLength(child.style.fontSize, 'px', 1);
+
+            line.min = Math.min(line.min, cV);
+            line.max = Math.max(line.max, cV + cH);
+            var lastChild = _.last(line.childs);
+            line.childs.push(child);
+
+            if (lastChild) {
+                var letter = PDFView.convertCssLength(lastChild.style.fontSize, 'px', 1);
+                var dist = PDFView.convertCssLength(child.style.left, 'px', 1) - ($(lastChild).width() + PDFView.convertCssLength(lastChild.style.left, 'px', 1));
+                if (dist < letter * 4) {
+                    lastChild.innerHTML = lastChild.innerHTML + ' ';
+                } else {
+                    lastChild.innerHTML = lastChild.innerHTML + '\t';
+                }
+            }
+            return line;
+        }
+
         // ---------------------------------------------------------------------
 
         /**
@@ -103,62 +137,39 @@ define('io.ox/core/pdf/pdfview', [
         function prepareTextLayerForTextSelection(textWrapperNode) {
             if (textWrapperNode) {
                 var pageChildren = textWrapperNode.children(),
-                    last = null,
                     childrenCount = pageChildren.length,
                     //top right bottom left
                     margin = '-500px -2em 0 -10em',
                     padding = '+500px +2em 0 +10em',
-                    origin = '10em 0 0';
+                    origin = '10em 0 0',
+                    lines = [],
+                    currentLine = null;
 
                 pageChildren.detach();
-                pageChildren.sort(function (a, b) {
-                    var aV = PDFView.convertCssLength(a.style.top, 'px', 1);
-                    var bV = PDFView.convertCssLength(b.style.top, 'px', 1);
-                    var diff = aV - bV;
-
-                    if (Math.round(diff) === 0) {
-                        aV = PDFView.convertCssLength(a.style.left, 'px', 1);
-                        bV = PDFView.convertCssLength(b.style.left, 'px', 1);
-                        diff = aV - bV;
-                    }
-                    return diff;
-                });
 
                 _.each(pageChildren, function (child) {
-
                     if (child.innerHTML.length === 1) {
-                        // workaround for infinte height selections
+                        // workaround for infinite height selections
                         child.style.transform = 'scaleX(1)';
                     }
 
-                    if (last) {
+                    var childMin = PDFView.convertCssLength(child.style.top, 'px', 1);
+                    var childMax = PDFView.convertCssLength(child.style.fontSize, 'px', 1) + childMin;
 
-                        var myTop = PDFView.convertCssLength(child.style.top, 'px', 1),
-                            myLeft = PDFView.convertCssLength(child.style.left, 'px', 1),
-                            lastTop = PDFView.convertCssLength(last.style.top, 'px', 1),
-                            lastLeft = PDFView.convertCssLength(last.style.left, 'px', 1),
-                            letter = PDFView.convertCssLength(last.style['font-size'], 'px', 1),
-                            sameLine = Math.abs((myTop + child.offsetHeight) - (lastTop + last.offsetHeight)),
-                            signDist = Math.abs(myLeft - (lastLeft + last.offsetWidth)),
-                            addit = '';
-
-                        if (sameLine > letter * 2) {
-                            addit = '\r\n';
-                        } else if (sameLine < letter) {
-                            if (signDist > letter * 0.6) {
-                                addit = '\t';
-                            }
-                        } else if (sameLine > letter) {
-                            addit = ' ';
-                        }
-
-                        last.innerHTML = last.innerHTML + addit;
+                    if (currentLine && !intersects(currentLine.min, currentLine.max, childMin, childMax)) {
+                        currentLine = null;
                     }
+                    currentLine = updateLine(currentLine, child, lines);
+                });
 
-                    last = child;
+                lines.sort(function (a, b) { return a.min - b.min; });
+
+                _.each(lines, function (line) {
+                    textWrapperNode.append(line.childs);
                 });
 
                 //much bigger element for a smooth forward selection!
+                pageChildren = textWrapperNode.children();
                 _.each(pageChildren, function (child, index) {
                     // Non IPAD case
                     if (!(Modernizr.touch && _.browser.iOS && _.browser.Safari)) {
@@ -166,7 +177,6 @@ define('io.ox/core/pdf/pdfview', [
                         child.style.padding = padding;
                         child.style.transformOrigin = origin;
                     }
-
                     child.style.zIndex = childrenCount - index;
                 });
 
