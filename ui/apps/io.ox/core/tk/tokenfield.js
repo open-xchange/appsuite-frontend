@@ -333,7 +333,8 @@ define('io.ox/core/tk/tokenfield', [
                     minLength: o.minLength,
                     allowEditing: o.allowEditing,
                     typeahead: self.typeaheadOptions,
-                    html: this.options.html || false
+                    html: this.options.html || false,
+                    inputType: 'email'
                 });
 
             this.register();
