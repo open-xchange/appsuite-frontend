@@ -229,6 +229,8 @@ define('io.ox/presenter/views/navigationview', [
             this.listenTo(this.presenterEvents, 'presenter:presentation:pause', this.render);
             this.listenTo(this.presenterEvents, 'presenter:presentation:continue', this.render);
             this.listenTo(this.presenterEvents, 'presenter:participants:change', this.render);
+            this.listenTo(this.presenterEvents, 'presenter:fullscreen:enter', this.render);
+            this.listenTo(this.presenterEvents, 'presenter:fullscreen:exit', this.render);
         },
 
         /**
@@ -275,6 +277,7 @@ define('io.ox/presenter/views/navigationview', [
                 // slide number and count
                 slideNumber = this.app.mainView.getActiveSlideIndex() + 1,
                 slideCount = this.app.mainView.getSlideCount(),
+                safariFullscreen = this.app.mainView.fullscreen && _.device('safari'),
                 self = this;
 
             function onPrevSlide (event) {
@@ -313,6 +316,10 @@ define('io.ox/presenter/views/navigationview', [
 
             // set slide number in the slide input control
             slideInput.val(slideNumber);
+            // Safari blocks almost all key events to input controls in fullscreen mode. see: https://bugs.webkit.org/show_bug.cgi?id=121496
+            if (safariFullscreen) {
+                slideInput.attr({ readonly: true, disabled: true, 'aria-readonly': true });
+            }
             //#. text of a presentation slide count display
             //#. Example result: "of 10"
             //#. %1$d is the total slide count
