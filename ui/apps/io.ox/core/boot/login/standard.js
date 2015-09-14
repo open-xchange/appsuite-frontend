@@ -97,7 +97,7 @@ define('io.ox/core/boot/login/standard', [
     function storeCredentials(form) {
         var location = window.location.pathname.replace(/[^/]+$/, '') + 'busy.html'; // blank does not work in chrome
         util.debug('Store credentials', location);
-        form.find('input[name="location"]').val(location);
+        form.find('input[name="location"]').val(location).removeAttr('disabled');
         form.attr('target', 'store-credentials').submit();
     }
 
