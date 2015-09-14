@@ -248,11 +248,11 @@ define('io.ox/mail/mobile-toolbar-actions', [
             // update toolbar on selection change as well as any model change (seen/unseen flag)
             // selection:action also triggers if the same mail is opened again, so the toolbar has to be drawn
             app.listView.on('selection:change change selection:action', function () {
+                // don't update in folderview
+                if (app.pages.getCurrentPage().name === 'folderTree') return;
                 // if there's a thread-mail baton already set, don't overwrite it
                 // Happens becuase the change event occurs later than the "showmail" event
                 if (app.pages.getCurrentPage().toolbar.baton.threadMember) return;
-                // don't update in folderview
-                if (app.pages.getCurrentPage().name === 'folderView') return;
                 app.updateToolbar(app.listView.selection.get());
             });
 
