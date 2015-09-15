@@ -444,18 +444,14 @@ define('io.ox/find/main', [
         };
 
         function configPreprocess () {
-            var isInital = app.model.manager.length === 0;
+            var parent = app.get('parent');
 
-            if (!isInital) return $.Deferred().resolve();
-
-            var folderutil = app.get('parent').folder;
-
-            return $.when(folderutil.getData(), folderutil.isDefault())
+            return $.when(parent.folder.getData(), parent.folder.isDefault())
                     .then(function (data, isDefault) {
                         var facets = [];
 
                         // only add when non default folder
-                        if (!isDefault) {
+                        if (!isDefault || app.isMandatory('folder')) {
                             facets.push({
                                 facet: 'folder',
                                 filter: null,
@@ -464,7 +460,7 @@ define('io.ox/find/main', [
                         }
 
                         // mandatory
-                        if (app.getModuleParam() === 'files') {
+                        if (app.isMandatory('account')) {
                             facets.push({
                                 facet: 'account',
                                 filter: null,
