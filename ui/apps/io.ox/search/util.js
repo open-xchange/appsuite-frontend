@@ -157,11 +157,13 @@ define('io.ox/search/util', [
             var module = model.getModule(),
                 id = model.getFolder(),
                 def = $.Deferred(),
-                defaultfolder = (folderAPI.getDefaultFolder(module) || '').toString(),
-                isMandatory = model.isMandatory('folder');
+                isMandatory = model.isMandatory('folder') || model.isMandatory('account'),
+                defaultfolder;
 
             // infostore hack
             module = module === 'files' ? 'infostore' : module;
+
+            defaultfolder = (folderAPI.getDefaultFolder(module) || '').toString();
 
             function cont (type, data) {
                 var types = {
