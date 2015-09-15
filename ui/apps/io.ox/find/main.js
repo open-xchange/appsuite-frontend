@@ -315,13 +315,16 @@ define('io.ox/find/main', [
         };
 
         app.isActive = function () {
-            // return false unless view is initalised
+            // return false unless view is initialised
             return app.view ? app.view.isActive() : false;
         };
 
         app.isMandatory = function (key) {
             var list = app.props.get('mandatory');
-            return (list[key] || []).indexOf(app.getModuleParam()) >= 0;
+            // TODO: remove workaround
+            var module = app.getModuleParam();
+            if (module === 'files') module = 'drive';
+            return (list[key] || []).indexOf(module) >= 0;
         };
 
         // register event listeners
@@ -421,7 +424,6 @@ define('io.ox/find/main', [
         })();
 
         app.getConfig = function (options) {
-            console.log('%c' + options, 'color: white; background-color: grey');
             return app.getProxy().then(function (apiproxy) {
                 return apiproxy.config(options);
             });
