@@ -86,6 +86,31 @@ define('io.ox/search/apiproxy',[
             return api.autocomplete(opt).then(extend.bind(this, args));
         }
 
+        /**
+         * add static account facet
+         * @param {object} request data
+         */
+        function addAccountFacet (request) {
+            var folder = _.findWhere(request.data.facets, { facet: 'folder' }),
+                def = $.Deferred();
+
+            if (!folder || !folder.value || !model.isMandatory('account')) return def.resolve();
+
+            // get account_id of current folder for account facet
+            require(['io.ox/core/folder/api'], function (folderAPI) {
+                folderAPI.get(folder.value)
+                    .then(function (data) {
+                        request.data.facets.push({
+                            facet: 'account',
+                            filter: null,
+                            value: data.account_id
+                        });
+                        def.resolve();
+                    });
+            });
+            return def;
+        }
+
         var model = app.getModel(),
             proxy = {
                 // alias for autocomplete tk
@@ -97,13 +122,15 @@ define('io.ox/search/apiproxy',[
                             data: {
                                 prefix: query
                             }
-                        };
+                        },
+                        addAccount = _.partial(addAccountFacet, standard);
 
                     return model.getFacets()
                             .then(function (facets) {
                                 // extend standard options
                                 standard.data.facets = facets;
                             })
+                            .then(addAccount)
                             .then(function () {
                                 // call server
                                 return autocomplete(standard, options);
@@ -191,6 +218,7 @@ define('io.ox/search/apiproxy',[
                         app.view.model.trigger('query:start');
                         return model.getFacets()
                             .done(filterFacets.bind(this, opt, app.view))
+                            .then(addAccountFacet.bind(this, opt, app.view))
                             .then(getResults.bind(this, opt))
                             .then(enrich.bind(this, opt))
                             .then(
