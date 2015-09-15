@@ -509,6 +509,7 @@ define('io.ox/core/extPatterns/links', [
             // remove items with 'none' prio
             if (_.device('smartphone')) baton.$el.find('[data-prio="none"]').closest('li').remove();
             baton.$el.parent().trigger('ready');
+            delete baton.$el;
         });
     };
 
