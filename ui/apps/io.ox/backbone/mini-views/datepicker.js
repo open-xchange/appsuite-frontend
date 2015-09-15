@@ -37,7 +37,7 @@ define('io.ox/backbone/mini-views/datepicker', [
             this.attribute = this.options.attribute;
             this.nodes = {};
             this.mobileSettings = {};
-            this.mobileMode = _.device('smartphone');
+            this.mobileMode = _.device('touch');
 
             this.listenTo(this.model, 'change:' + this.attribute, this.updateView);
             this.listenTo(this.model, 'invalid:' + this.attribute, this.onError);
