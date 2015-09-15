@@ -499,7 +499,7 @@
             id: 'role',
             draw: function (baton) {
 
-                var node, dropdown,
+                var $el, node, dropdown,
                     role = baton.view.getRole(),
                     description = baton.view.getRoleDescription(role),
                     isFile = baton.parentModel.isFile(),
@@ -510,10 +510,12 @@
                 // apply role for the first time
                 baton.model.set('role', role, { silent: true });
 
+                $el = $('<div class="col-sm-3 col-sm-offset-0 col-xs-4 col-xs-offset-2 role">');
+
                 if (!baton.parentModel.isAdmin() || isOwner || !supportsWritePrivileges || baton.model.isAnonymous()) {
-                    node = $.txt(description);
+                    $el.text(description);
                 } else {
-                    dropdown = new DropdownView({ caret: true, label: description, title: gt('Current role'), model: baton.model, smart: true })
+                    dropdown = new DropdownView({ el: $el.addClass('dropdown')[0], caret: true, label: description, title: gt('Current role'), model: baton.model, smart: true })
                         .option('role', 'viewer', function () {
                             return [$.txt(gt('Viewer')), $.txt(' '), $('<small>').text(gt('(Read only)'))];
                         })
@@ -545,9 +547,7 @@
                     node = dropdown.render().$el;
                 }
 
-                this.append(
-                    $('<div class="col-sm-3 col-sm-offset-0 col-xs-3 col-xs-offset-2 role">').append(node)
-                );
+                this.append($el);
             }
         },
         //
