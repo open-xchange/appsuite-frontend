@@ -403,7 +403,8 @@
 
             initialize: function () {
                 this.collection = new Permissions();
-                this.listenTo(this.collection, 'reset add', this.renderEntities);
+                this.listenTo(this.collection, 'reset', this.renderAllEntities);
+                this.listenTo(this.collection, 'add', this.renderEntity);
             },
 
             render: function () {
@@ -418,16 +419,26 @@
                 return this;
             },
 
-            renderEntities: function () {
-                this.$el.empty();
-                this.collection.each(this.addEntity, this);
+            renderAllEntities: function () {
+                this.$el.empty().append(
+                    this.collection.map(function (model) {
+                        return new PermissionEntityView({ model: model, parentModel: this.model }).render().$el;
+                    }, this)
+                );
                 return this;
             },
 
-            addEntity: function (model) {
-                return this.$el.append(
-                    new PermissionEntityView({ model: model, parentModel: this.model }).render().$el
-                );
+            renderEntity: function (model) {
+                var children = this.$el.children(),
+                    index = this.collection.indexOf(model),
+                    newEntity = new PermissionEntityView({ model: model, parentModel: this.model }).render().$el;
+                if (index === 0) {
+                    this.$el.prepend(newEntity);
+                } else if (children.length > 1) {
+                    this.$el.children().eq(index - 1).after(newEntity);
+                } else {
+                    this.$el.append(newEntity);
+                }
             }
         });
 
