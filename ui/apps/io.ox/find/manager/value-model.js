@@ -101,6 +101,14 @@ define('io.ox/find/manager/value-model', [
         },
 
         /**
+         * status check
+         */
+
+        isMandatory: function () {
+            return this.get('facet').is('mandatory');
+        },
+
+        /**
          * option handling
          */
 
@@ -209,7 +217,7 @@ define('io.ox/find/manager/value-model', [
             };
 
             return function () {
-                if (!this.isActive()) return;
+                if (!this.isActive() && !this.isMandatory()) return;
 
                 var style = this.get('facet').getType();
                 return map[style].call(this);
