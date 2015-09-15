@@ -162,7 +162,7 @@ define('io.ox/core/folder/picker', [
             })
             .show(function () {
                 dialog.getBody().busy();
-                api.path(id)
+                (id ? api.path(id) : $.Deferred().reject())
                     .then(
                         function success(path) {
                             tree.open = _.union(tree.open, _(path).pluck('id'));
