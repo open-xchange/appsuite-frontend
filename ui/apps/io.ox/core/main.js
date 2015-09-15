@@ -1187,8 +1187,12 @@ define('io.ox/core/main', [
             id: 'default',
             draw: function () {
 
-                var sc = ox.serverConfig;
-                if (sc.banner === false || settings.get('banner/visible') === false || _.device('!desktop')) return;
+                var sc = ox.serverConfig,
+                    userOption = settings.get('banner/visible', false),
+                    globalOption = !!sc.banner;
+
+                if (userOption === false || _.device('!desktop')) return;
+                if (globalOption === false && userOption !== true) return;
 
                 var banner = $('#io-ox-core').addClass('show-banner');
 
