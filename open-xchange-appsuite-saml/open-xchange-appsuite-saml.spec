@@ -49,6 +49,8 @@ if [ -x %{update} ]; then %{update} --later; fi
 /opt/open-xchange/appsuite
 
 %changelog
+* Tue Sep 08 2015 Francisco Laguna <francisco.laguna@open-xchange.com>
+Build for patch 2015-09-14 (2732)
 * Mon Sep 07 2015 Markus Wagner <markus.wagner@open-xchange.com>
 Third candidate for 7.8.0 release
 * Fri Aug 21 2015 Markus Wagner <markus.wagner@open-xchange.com>
