@@ -6,9 +6,16 @@ export DEB_BUILDINFO_STRICT=1
 
 include /usr/share/cdbs/1/class/ant.mk
 include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/rules/utils.mk
+
+# Apache docroot was changed starting with Debian Jessie
+NEW_DOCROOT = $(shell lsb_release -rs | awk '{print ($$1 >= 8)}')
+ifeq (0,$(NEW_DOCROOT))
+    HTDOC := var/www
+else
+    HTDOC := var/www/html
+endif
 
 JAVA_HOME = /usr/lib/jvm/default-java
-DEB_ANT_ARGS = -DdestDir=$(DEB_DESTDIR) -DpackageName=$(DEB_SOURCE_PACKAGE) -DkeepCache=true
+DEB_ANT_ARGS = -DdestDir=$(DEB_DESTDIR) -DpackageName=$(DEB_SOURCE_PACKAGE) -Dhtdoc=/$(HTDOC)/ -DkeepCache=true
 DEB_ANT_BUILDFILE = build/build.xml
 DEB_ANT_INSTALL_TARGET = build

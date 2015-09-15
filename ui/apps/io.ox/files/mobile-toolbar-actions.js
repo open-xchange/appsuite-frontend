@@ -145,7 +145,7 @@ define('io.ox/files/mobile-toolbar-actions', [
         // extract single object if length === 1
         data = list.length === 1 ? list[0] : list;
         // draw toolbar
-        baton = ext.Baton({ data: data, app: this, collection: this.listView.collection, allIds: [] });
+        baton = ext.Baton({ data: data, app: this, models: models, collection: this.listView.collection, allIds: [] });
         // handle updated baton to pageController
         this.pages.getSecondaryToolbar('main').setBaton(baton);
     }, 10);

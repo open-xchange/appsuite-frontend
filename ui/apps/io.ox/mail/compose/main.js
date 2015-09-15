@@ -48,6 +48,9 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
 
         app.failRestore = function (point) {
             point.initial = false;
+            // special flag/handling for 'replace' cause we want
+            // to keep the attachments that will be removed otherwise
+            if (point.mode === 'reply') point.restored = true;
             return compose(point.mode)(point);
         };
 
@@ -72,7 +75,8 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                 win.busy().show(function () {
                     require(['io.ox/mail/compose/bundle'], function () {
                         require(['io.ox/mail/compose/view', 'io.ox/mail/compose/model'], function (MailComposeView, MailComposeModel) {
-                            var data = /(compose|edit|forward)/.test(obj.mode) ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type');
+                            var keepdata = /(compose|edit|forward)/.test(obj.mode) || obj.restored,
+                                data = keepdata ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type');
                             app.model = new MailComposeModel(data);
                             app.view = new MailComposeView({ app: app, model: app.model });
                             win.nodes.main.addClass('scrollable').append(app.view.render().$el);

@@ -32,7 +32,8 @@ define('io.ox/core/main', [
     'io.ox/core/relogin',
     'io.ox/core/links',
     'io.ox/core/http_errors',
-    'io.ox/backbone/disposable'
+    'io.ox/backbone/disposable',
+    'io.ox/tours/get-started'
 ], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, commons, upsell, UpsellView, capabilities, ping, folderAPI, settings, gt) {
 
     'use strict';
@@ -262,7 +263,7 @@ define('io.ox/core/main', [
 
         var itemsVisible = launchers.children('.launcher:visible'),
             itemsRightWidth = topbar.find('.launchers-secondary').outerWidth(true),
-            viewPortWidth = $(document).width(),
+            viewPortWidth = $(window).width(),
             launcherDropDownIconWidth = launcherDropDownIcon.outerWidth(true);
 
         launcherDropDownIcon.hide();
@@ -662,8 +663,11 @@ define('io.ox/core/main', [
         }
 
         function getHelp() {
-            var currentApp = ox.ui.App.getCurrentApp(),
-                currentType = currentApp && currentApp.getName(),
+            var currentApp = ox.ui.App.getCurrentApp();
+
+            if (currentApp && currentApp.getContextualHelp) return currentApp.getContextualHelp();
+
+            var currentType = currentApp && currentApp.getName(),
                 manifest = _.defaults(
                     ox.manifests.apps[currentType] || {},
                     ox.manifests.apps[currentType + '/main'] || {},
@@ -675,7 +679,7 @@ define('io.ox/core/main', [
                     }
                 ).help;
 
-            return currentApp && currentApp.getContextualHelp ? currentApp.getContextualHelp() : manifest.target;
+            return manifest;
         }
 
         ox.ui.apps.on('add', function (model) {
@@ -781,17 +785,21 @@ define('io.ox/core/main', [
             id: 'notifications',
             index: 100,
             draw: function () {
-                var self = this;
+                // disable notifications if there is no capability of the following (e.g. drive as only app)
+                if (!capabilities.has('webmail') && !capabilities.has('calendar') && !capabilities.has('tasks')) return;
+
+                var self = this, DELAY = 5000;
+
                 if (ox.online) {
                     // we don't need this right from the start,
                     // so let's delay this for responsiveness!
-                    // only requests are delayed by 2s, the badge is drawn normally
-                    self.append(notifications.attach(addLauncher, 2000));
+                    // only requests are delayed by 5s, the badge is drawn normally
+                    self.append(notifications.attach(addLauncher, DELAY));
                     tabManager();
                 } else {
                     //lets wait till we are online
                     ox.once('connection:online', function () {
-                        self.append(notifications.attach(addLauncher, 2000));
+                        self.append(notifications.attach(addLauncher, DELAY));
                         tabManager();
                     });
                 }
@@ -1190,17 +1198,24 @@ define('io.ox/core/main', [
                     $.txt(sc.bannerProductName || 'App Suite')
                 );
 
-                // show current user
-                banner.find('.banner-content').append(
-                    $('<label>').text(gt('Signed in as:')),
-                    $.txt(' '), $.txt(ox.user),
+                var content = banner.find('.banner-content');
+
+                // show current user (unless anonymous)
+                if (ox.user !== 'anonymous') {
+                    content.append(
+                        $('<label>').text(gt('Signed in as:')),
+                        $.txt(' '), $.txt(ox.user)
+                    );
+                }
+
+                content.append(
                     $('<a href="#" class="banner-action" data-action="logout" role="button" tabindex="1">')
-                        .attr('title', gt('Sign out'))
-                        .append('<i class="fa fa-power-off">')
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            logout();
-                        })
+                    .attr('title', gt('Sign out'))
+                    .append('<i class="fa fa-power-off">')
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        logout();
+                    })
                 );
 
                 // prevent logout action within top-bar drop-down
@@ -1299,8 +1314,8 @@ define('io.ox/core/main', [
         // checks url which app to launch, needed to handle direct links
         function appCheck(baton) {
 
-            var hash = _.url.hash(), looksLikeDeepLink = !('!!' in hash);
-
+            var hash = _.url.hash(),
+                looksLikeDeepLink = !('!!' in hash);
             // fix old infostore
             if (hash.m === 'infostore') hash.m = 'files';
 
@@ -1309,11 +1324,12 @@ define('io.ox/core/main', [
             if (looksLikeDeepLink && hash.app && hash.folder && hash.id && hash.folder.indexOf('virtual/') !== 0 && hash.id.indexOf(',') < 0) {
 
                 // new-school: app + folder + id
-                var id = hash.id.indexOf('.') > -1 ? _.cid(hash.id).id : hash.id;
+                // replace old IDs with a dot by 'folder_id SLASH id'
+                var id = /^\d+\./.test(hash.id) ? hash.id.replace(/\./, '/') : hash.id,
+                    usesDetailPage = /^io.ox\/(mail|contacts|calendar|tasks)$/.test(hash.app);
 
                 _.url.hash({
-                    // special treatment for files (viewer + drive app)
-                    app: hash.app === 'io.ox/files' ? 'io.ox/files' : hash.app + '/detail',
+                    app: usesDetailPage ? hash.app + '/detail' : hash.app,
                     folder: hash.folder,
                     id: id
                 });
@@ -1323,9 +1339,11 @@ define('io.ox/core/main', [
             } else if (hash.m && hash.f && hash.i) {
 
                 // old-school: module + folder + id
+                var usesDetailPage = /^(mail|contacts|calendar|tasks)$/.test(hash.m);
+
                 _.url.hash({
                     // special treatment for files (viewer + drive app)
-                    app: hash.m === 'io.ox/files' ? 'io.ox/files' : hash.m + '/detail',
+                    app: 'io.ox/' + (usesDetailPage ? hash.m + '/detail' : hash.m),
                     folder: hash.f,
                     id: hash.i
                 });
@@ -1650,7 +1668,7 @@ define('io.ox/core/main', [
                         if (hash.app === 'io.ox/files' && hash.id !== undefined) {
                             require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (Viewer, api) {
                                 api.get(hash).done(function (data) {
-                                    new Viewer().launch({ files: [data] });
+                                    new Viewer().launch({ files: [data], folder: hash.folder });
                                 });
                             });
                         }
@@ -1766,6 +1784,26 @@ define('io.ox/core/main', [
                 location.href = error.error;
                 break;
         }
+    });
+
+    // white list warninff codes
+    var isValidWarning = (function () {
+        var check = function (code, regex) { return regex.test(code); },
+            reCodes = [
+                // sharing warnings
+                /^SHR_NOT-\d{4}$/
+            ];
+        return function (code) {
+            // return true in case at least one regex matched
+            var getValid = _.partial(check, code);
+            return !!(_.find(reCodes, getValid));
+        };
+    })();
+
+    ox.on('http:warning', function (warning) {
+        var valid = isValidWarning(warning.code);
+        if (valid) return notifications.yell('warning', warning.error);
+        if (ox.debug) console.warn('server response: ', warning.error);
     });
 
     return {

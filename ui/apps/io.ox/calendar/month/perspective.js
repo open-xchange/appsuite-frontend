@@ -540,6 +540,14 @@ define('io.ox/calendar/month/perspective', [
                 });
             });
 
+            if (_.keys(this.tops).length <= 1) {
+                // when this page is shown for the first time and has no tops (means it is invisible) we have to wait until it is show and afterwards select the month
+                // this requires special handling since gotoMonth uses scrollIntoView() which needs the page to be visible.
+                self.app.pages.getPageObject(self.name).$el.one('animationstart', function () {
+                    self.gotoMonth();
+                });
+            }
+
             this.main
                 .on('keydown', function (e) {
                     switch (e.which) {
@@ -587,6 +595,10 @@ define('io.ox/calendar/month/perspective', [
         // called when an appointment detail-view opens the according appointment
         selectAppointment: function (obj) {
             this.gotoMonth(moment(obj.start_date));
+        },
+
+        getStartDate: function () {
+            return this.current.valueOf();
         }
     });
 

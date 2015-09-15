@@ -110,7 +110,6 @@ define('io.ox/tasks/actions', [
     });
 
     new Action('io.ox/tasks/actions/confirm', {
-        id: 'confirm',
         requires: function (args) {
             var result = false;
             if (args.baton.data.users) {
@@ -149,7 +148,6 @@ define('io.ox/tasks/actions', [
     });
 
     new Action('io.ox/tasks/actions/print-disabled', {
-        id: 'print',
         requires: function () {
             return _.device('!smartphone');
         },
@@ -297,7 +295,7 @@ define('io.ox/tasks/actions', [
         index: 310,
         prio: 'hi',
         mobile: 'hi',
-        label: gt('Undone'),
+        label: gt('Mark as undone'),
         ref: 'io.ox/tasks/actions/undone'
     }));
 

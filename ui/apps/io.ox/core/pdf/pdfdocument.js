@@ -54,11 +54,23 @@ define('io.ox/core/pdf/pdfdocument', [
          * but ATM, we're running into into rate limits
          * much too often
          *
-         * Disable range requests with Chrome on small devices
+         * Additionally Safari has issues with cached range requests see:
+         * https://github.com/mozilla/pdf.js/issues/3260
+         *
+         * Disable range requests
          */
-        if (true/*_.browser.Chrome /*&& _.device('smartphone')*/ && PDFJS.disableRange) {
-            PDFJS.disableRange = true;
+        PDFJS.disableRange = true;
+
+        /**
+         * On Safari also disable streaming
+         * taken from pdfjs/compatibility.js
+         */
+        if (_.device('safari')) {
+            PDFJS.disableStream = true;
         }
+
+        // set verbosity level for PDF.js to errors only
+        PDFJS.verbosity = PDFJS.VERBOSITY_LEVELS.errors;
 
         // ---------------------------------------------------------------------
 

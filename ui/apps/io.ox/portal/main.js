@@ -118,7 +118,7 @@ define('io.ox/portal/main', [
             );
 
             if (_.device('!smartphone')) {
-                widgets.loadAllPlugins().done(function () {
+                widgets.loadUsedPlugins().done(function () {
                     // add widgets
                     ext.point('io.ox/portal/settings/detail/pane').map(function (point) {
                         if (point && point.id === 'add') {
@@ -337,6 +337,10 @@ define('io.ox/portal/main', [
         var needle = model.cid,
             haystack = this.models;
         return !_(haystack).some(function (suspiciousHay) {return suspiciousHay.cid === needle; });
+    };
+
+    app.getTour = function () {
+        return { id: 'default/io.ox/portal', path: 'io.ox/tours/portal' };
     };
 
     app.getWidgetCollection = function () {

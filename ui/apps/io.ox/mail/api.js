@@ -44,6 +44,19 @@ define('io.ox/mail/api', [
     // model pool
     var pool = Pool.create('mail');
 
+    // client-side fix for missing to/cc/bcc fields
+    if (settings.get('features/fixtoccbcc')) {
+        pool.map = function (data) {
+            var cid = _.cid(data), model = this.get(cid);
+            if (!model) return data;
+            ['to', 'cc', 'bcc'].forEach(function (field) {
+                var list = model.get(field);
+                if (_.isArray(list) && list.length > 0) delete data[field];
+            });
+            return data;
+        };
+    }
+
     // generate basic API
     var api = apiFactory({
         module: 'mail',
@@ -161,11 +174,11 @@ define('io.ox/mail/api', [
     api.separator = settings.get('defaultseparator', '/');
 
     api.SENDTYPE = {
-        NORMAL:  '0',
-        REPLY:   '1',
-        FORWARD: '2',
-        EDIT_DRAFT: '3',
-        DRAFT:   '4'
+        NORMAL:     0,
+        REPLY:      1,
+        FORWARD:    2,
+        EDIT_DRAFT: 3,
+        DRAFT:      4
     };
 
     api.FLAGS = {
@@ -329,6 +342,18 @@ define('io.ox/mail/api', [
         return pool.resetFolder(accountAPI.getFoldersByType(type));
     }
 
+    function unsetSorted(list, sort) {
+        _(list)
+            .chain()
+            .pluck('folder_id')
+            .uniq()
+            .map(pool.getBySorting.bind(pool, sort))
+            .flatten()
+            .each(function (collection) {
+                collection.sorted = false;
+            });
+    }
+
     /**
      * wrapper for factories remove to update counters
      * @param  {array} ids
@@ -383,21 +408,18 @@ define('io.ox/mail/api', [
                 params: { action: 'archive', timestamp: _.then() },
                 data: http.simplify(ids)
             })
-            .done(function () {
-
-                var accountId = accountAPI.parseAccountId(_.cid(ids[0])),
-                    archiveFolderId = accountAPI.getFoldersByType('archive', accountId)[0],
-                    exists = folderAPI.pool.models[archiveFolderId] !== undefined;
-
-                // this test will only work for primary archive folders
-                // account api assumes, that external accounts are always having an archive folder
-                if (exists) {
-                    folderAPI.reload(archiveFolderId);
+            .done(function (data) {
+                // backend tells us the if the archive folder is new and its id
+                if (data.created) {
+                    // update account data
+                    accountAPI.reload().done(function () {
+                        // refresh all folders because the archive folder might be new
+                        folderAPI.refresh();
+                        // reload mail views
+                        api.trigger('refresh.all');
+                    });
                 } else {
-                    // refresh all folders because the archive folder might be new
-                    folderAPI.refresh();
-                    // reload mail views
-                    api.trigger('refresh.all');
+                    folderAPI.reload(data.id);
                 }
             })
         );
@@ -583,7 +605,9 @@ define('io.ox/mail/api', [
 
         return http.wait(
             update(list, { color_label: label })
-        );
+        ).done(function () {
+            unsetSorted(list, 102);
+        });
     };
 
     /**
@@ -609,6 +633,7 @@ define('io.ox/mail/api', [
         });
 
         return update(list, { flags: api.FLAGS.SEEN, value: false }).done(function () {
+            unsetSorted(list, 651);
             folderAPI.reload(list);
         });
     };
@@ -640,6 +665,7 @@ define('io.ox/mail/api', [
         });
 
         return update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
+            unsetSorted(list, 651);
             folderAPI.reload(list);
         });
     };

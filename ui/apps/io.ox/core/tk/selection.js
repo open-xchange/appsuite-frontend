@@ -1239,7 +1239,8 @@ define('io.ox/core/tk/selection', [
                 // prevent text selection and kills the focus
                 if (!_.browser.IE) {
                     // Not needed in IE - See #27981
-                    (options.focus ? container.find(options.focus).first() : container).focus();
+                    var selectable = $(e.target).closest(options.focus);
+                    (options.focus && selectable.length ? selectable : container).focus();
                 }
             }
 

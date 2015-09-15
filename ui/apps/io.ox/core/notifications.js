@@ -41,16 +41,18 @@ define('io.ox/core/notifications', [
         initialize: function () {
             var self = this;
             self.bannerHeight = 0;
+            self.handledNotificationInfo = false;
             this.badgeview = new badgeview.view({ model: new badgeview.model() });
             //close when clicked outside, since we don't have the overlay anymore
             //does not work with some dropdowns though (they prevent event bubbling), but the notification popup is in the background then
             $(document.body).on('click', function (e) {
-                var isInside = $( e.target )
-                    .closest('#io-ox-notifications, #io-ox-notifications-sidepopup, #io-ox-notifications-icon, .io-ox-dialog-underlay, .io-ox-dialog-popup, .modal-footer, .custom-dropdown').length > 0;
+                // don't check if notification area is closed
+                if (self.getStatus() !== 'closed') {
+                    var isInside = $( e.target )
+                        .closest('#io-ox-notifications, #io-ox-notifications-sidepopup, #io-ox-notifications-icon, .io-ox-dialog-underlay, .io-ox-dialog-popup, .modal-footer, .custom-dropdown').length > 0;
 
-                if (!isInside ) {
-                    if (self.getStatus() !== 'closed') {
-                        self.hide();
+                    if (!isInside ) {
+                        self.hide({ refocus: document.body === document.activeElement });
                     }
                 }
             });
@@ -120,11 +122,12 @@ define('io.ox/core/notifications', [
             return self;
         },
         drawNotificationInfo: function () {
+
             // only show if there was no decision yet
-            if (desktopNotifications.getPermissionStatus() === 'default') {
+            if (desktopNotifications.getPermissionStatus() === 'default' && !this.handledNotificationInfo) {
                 var self = this,
                     textNode = $('<div>').text(gt('Would you like to enable desktop notifications?')),
-                    laterButton = $('<button class="later-button btn btn-danger">').text(gt('later')).on('click', function (e) {
+                    laterButton = $('<button class="later-button btn btn-danger">').text(gt('Later')).on('click', function (e) {
                         e.stopPropagation();
                         cleanup();
                     }),
@@ -153,6 +156,10 @@ define('io.ox/core/notifications', [
                         self.hideNotificationInfo = true;
                     },
                     containerNode = $('<div class="desktop-notification-info clearfix">').append( textNode, enableButton, laterButton );
+
+                if (self.hideNotificationInfo) {
+                    cleanup();
+                }
 
                 this.$el.prepend(containerNode);
             }
@@ -217,13 +224,16 @@ define('io.ox/core/notifications', [
 
         onCloseSidepopup: function () {
             this.sidepopupIsClosing = false;
-            this.model.set('status', 'open');
-            if (_.device('smartphone')) {
-                this.nodes.main.addClass('active');
+            // if the notification area is closed already we don't set the status back to open etc
+            if (this.model.get('status') !== 'closed') {
+                this.model.set('status', 'open');
+                if (_.device('smartphone')) {
+                    this.nodes.main.addClass('active');
+                }
+                //focus first for now
+                this.nodes.main.find('.item').first().focus();
             }
 
-            //focus first for now
-            this.nodes.main.find('.item').first().focus();
             var self = this,
                 popup = this.model.get('sidepopup');
             if (popup) {
@@ -289,7 +299,8 @@ define('io.ox/core/notifications', [
             this.trigger('show');
         },
 
-        hide: function () {
+        hide: function (opt) {
+            var opt = _.extend({ refocus: true }, opt || {});
             $(document).off('keydown.notification');
             var badgeview = this.badgeview;
             // if it's closed already we're done
@@ -304,11 +315,13 @@ define('io.ox/core/notifications', [
             if (_.device('smartphone')) {
                 $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
             }
+            // disable refocus f.e. when triggerd by click on searchbox
+            if (opt.refocus) badgeview.$el.focus();
 
-            badgeview.$el.focus();
             if (this.hideNotificationInfo) {
                 this.$el.find('.desktop-notification-info').remove();
                 this.hideNotificationInfo = false;
+                this.handledNotificationInfo = true;
             }
             this.model.set('status', 'closed');
             this.trigger('hide');
@@ -366,7 +379,7 @@ define('io.ox/core/notifications', [
                 ox.manifests.loadPluginsFor('io.ox/core/notifications').done(function () {
                     ext.point('io.ox/core/notifications/register').invoke('register', self, self);
                 });
-            }, delay || 2000);
+            }, delay || 5000);
 
             return addLauncher(
                 'right',

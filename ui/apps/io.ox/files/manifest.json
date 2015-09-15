@@ -3,8 +3,10 @@
     "company": "Open-Xchange",
     "icon": "files.png",
     "category": "Productivity",
-    "settings": true,
     "requires": "infostore",
+    "settings": true,
+    "settingsRequires": "!guest",
+    "settingsDevice": "!smartphone",
     "refreshable": true,
     "index": 1000,
     "advancedMode": true

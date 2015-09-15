@@ -14,17 +14,55 @@
 define('io.ox/core/relogin', [
     'io.ox/core/session',
     'io.ox/core/notifications',
+    'io.ox/core/capabilities',
+    'io.ox/core/tk/dialogs',
     'gettext!io.ox/core',
     'settings!io.ox/core'
-], function (session, notifications, gt, settings) {
+], function (session, notifications, capabilities, dialogs, gt, settings) {
 
     'use strict';
 
     var queue = [], pending = false;
 
+    function getReason(error) {
+        return error && error.code === 'SES-0205' ?
+            gt('Your IP address has changed') :
+            gt('Your session is expired');
+    }
+
+    function getLocation() {
+        var location = capabilities.has('guest') ?
+            settings.get('customLocations/guestLogout') || ox.serverConfig.guestLogoutLocation :
+            settings.get('customLocations/logout') || ox.serverConfig.logoutLocation;
+        return (location || ox.logoutLocation || '').replace('[hostname]', window.location.hostname);
+    }
+
+    function redirect() {
+        _.url.redirect(getLocation());
+    }
+
     function relogin(request, deferred, error) {
 
         if (!ox.online) return;
+
+        // don't ask anonymous users
+        if (ox.user === 'anonymous') {
+
+            return new dialogs.ModalDialog({ easyOut: false, width: 400 })
+                .build(function () {
+                    this.getPopup().addClass('relogin');
+                    this.getContentNode().append(
+                        $('<h4>').text(getReason(error)),
+                        $('<div>').text(gt('You have to sign in again'))
+                    );
+                })
+                .addPrimaryButton('ok', gt('Ok'))
+                .on('ok', function () {
+                    ox.trigger('relogin:cancel');
+                    redirect();
+                })
+                .show();
+        }
 
         if (!pending) {
 
@@ -34,79 +72,70 @@ define('io.ox/core/relogin', [
             // set flag
             pending = true;
 
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-
-                new dialogs.ModalDialog({ easyOut: false, async: true, width: 400, enter: 'relogin' })
-                    .build(function () {
-                        this.getPopup().addClass('relogin');
-                        this.getHeader().append(
-                            $('<h4>').text(
-                                error && error.code === 'SES-0205' ?
-                                    gt('Your IP address has changed') :
-                                    gt('Your session is expired')
-                            ),
-                            $('<div>').text(gt('Please sign in again to continue'))
-                        );
-                        this.getContentNode().append(
-                            $('<label>').text(gt('Password')),
-                            $('<input type="password" name="relogin-password" class="form-control">')
-                        );
-                    })
-                    .addPrimaryButton('relogin', gt('Sign in'))
-                    .addAlternativeButton('cancel', gt('Cancel'))
-                    .on('cancel', function () {
-                        ox.trigger('relogin:cancel');
-                        var location = settings.get('customLocations/logout'),
-                            logoutLocation = location || ox.serverConfig.logoutLocation || ox.logoutLocation || '';
-                        logoutLocation = logoutLocation.replace('[hostname]', window.location.hostname);
-                        _.url.redirect(logoutLocation);
-                    })
-                    .on('relogin', function () {
-                        var self = this.busy();
-                        // relogin
-                        session.login({
-                            name: ox.user,
-                            password: this.getContentNode().find('input').val(),
-                            rampup: false,
-                            store: ox.secretCookie
-                        }).then(
-                            function success() {
-                                notifications.yell('close');
-                                self.getContentNode().find('input').val('');
-                                self.close();
-                                // process queue
-                                var i = 0, item, http = require('io.ox/core/http');
-                                for (; (item = queue[i]); i++) {
-                                    if (!item.request.noRetry) {
-                                        http.retry(item.request)
-                                            .done(item.deferred.resolve)
-                                            .fail(item.deferred.fail);
-                                    }
+            new dialogs.ModalDialog({ easyOut: false, async: true, width: 400, enter: 'relogin' })
+                .build(function () {
+                    this.getPopup().addClass('relogin');
+                    this.getHeader().append(
+                        $('<h4>').text(getReason(error)),
+                        $('<div>').text(gt('Please sign in again to continue'))
+                    );
+                    this.getContentNode().append(
+                        $('<label>').text(gt('Password')),
+                        $('<input type="password" name="relogin-password" class="form-control">')
+                    );
+                })
+                .addPrimaryButton('relogin', gt('Sign in'))
+                .addAlternativeButton('cancel', gt('Cancel'))
+                .on('cancel', function () {
+                    ox.trigger('relogin:cancel');
+                    redirect();
+                })
+                .on('relogin', function () {
+                    var self = this.busy();
+                    // relogin
+                    session.login({
+                        name: ox.user,
+                        password: this.getContentNode().find('input').val(),
+                        rampup: false,
+                        store: ox.secretCookie
+                    }).then(
+                        function success() {
+                            notifications.yell('close');
+                            self.getContentNode().find('input').val('');
+                            self.close();
+                            // process queue
+                            var i = 0, item, http = require('io.ox/core/http');
+                            for (; (item = queue[i]); i++) {
+                                if (!item.request.noRetry) {
+                                    http.retry(item.request)
+                                        .done(item.deferred.resolve)
+                                        .fail(item.deferred.fail);
                                 }
-                                // set flag
-                                pending = false;
-                                ox.trigger('relogin:success');
-                            },
-                            function fail(e) {
-                                // eloquentify standard error message ;-)
-                                if (e.code === 'LGI-0006') {
-                                    e.error = gt('Please enter correct password');
-                                }
-                                notifications.yell({
-                                    headline: gt('Failed to sign in'),
-                                    type: 'error',
-                                    message: e.error
-                                });
-                                self.idle();
-                                self.getContentNode().find('input').focus().select();
-                                ox.trigger('relogin:fail', e);
                             }
-                        );
-                    })
-                    .show(function () {
-                        this.find('input').focus();
-                    });
-            });
+                            // set flag
+                            pending = false;
+                            ox.trigger('relogin:success');
+                        },
+                        function fail(e) {
+                            // eloquentify standard error message ;-)
+                            if (e.code === 'LGI-0006') {
+                                e.error = gt('Please enter correct password');
+                            }
+                            notifications.yell({
+                                headline: gt('Failed to sign in'),
+                                type: 'error',
+                                message: e.error
+                            });
+                            self.idle();
+                            self.getContentNode().find('input').focus().select();
+                            ox.trigger('relogin:fail', e);
+                        }
+                    );
+                })
+                .show(function () {
+                    this.find('input').focus();
+                });
+
         } else {
             // enqueue last request
             if (request && deferred) {

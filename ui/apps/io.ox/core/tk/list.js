@@ -251,8 +251,12 @@ define('io.ox/core/tk/list', [
                 })
                 .remove();
 
-            // make sure the first selected item is visible
-            if (selected) selected.scrollIntoView();
+            if (!selected) return;
+
+            // make sure the first selected item is visible (if out of viewport)
+            var top = $(selected).position().top,
+                outOfViewport = top < 0 || top > this.el.offsetHeight;
+            if (outOfViewport) selected.scrollIntoView();
         },
 
         onSort: (function () {
@@ -354,7 +358,7 @@ define('io.ox/core/tk/list', [
                 // let it spin
                 $('#ptr-spinner').addClass('fa-spin');
                 // trigger event to do the refresh elsewhere
-                ox.trigger('pull-to-refresh', this);
+                this.options.app.trigger('pull-to-refresh', this);
 
                 e.preventDefault();
                 e.stopPropagation();
@@ -437,7 +441,7 @@ define('io.ox/core/tk/list', [
                 swipe: false
             }, options);
 
-            var events = {};
+            var events = {}, dndEnabled = false;
 
             // selection?
             if (this.options.selection) {
@@ -455,6 +459,7 @@ define('io.ox/core/tk/list', [
                 if (_.device('!smartphone')) this.$el.addClass('visible-selection');
                 // enable drag & drop
                 dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
+                dndEnabled = true;
                 // a11y
                 this.$el.addClass('f6-target');
             } else {
@@ -477,8 +482,10 @@ define('io.ox/core/tk/list', [
                 if (this.collection.length) this.onReset();
             }
 
-            // enable drag & drop
-            if (this.options.draggable) dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
+            // enable drag & drop; avoid enabling dnd twice
+            if (this.options.draggable && !dndEnabled) {
+                dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
+            }
 
             this.ref = this.ref || options.ref;
             this.app = options.app;
@@ -702,7 +709,13 @@ define('io.ox/core/tk/list', [
             return this;
         },
 
-        idle: function () {
+        idle: function (e) {
+            // if idle is called as an error callback we should display it (load:fail for example)
+            if (e && e.error) {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell(e);
+                });
+            }
             if (!this.isBusy) return;
             this.removeBusyIndicator();
             this.isBusy = false;

@@ -114,24 +114,27 @@ define('io.ox/portal/settings/pane', [
     }
 
     function repopulateAddButton() {
-        $('.io-ox-portal-settings-dropdown').children('[role=presentation]').remove().end().append(
-            _(widgets.getAllTypes()).map(function (options) {
+        widgets.loadAllPlugins().done(function () {
+            $('.io-ox-portal-settings-dropdown').children('[role=presentation]').remove().end().append(
+                _(widgets.getAllTypes()).map(function (options) {
 
-                var isUnique = options.unique && widgets.containsType(options.type),
-                    isVisible = upsell.visible(options.requires);
+                    var isUnique = options.unique && widgets.containsType(options.type),
+                        isVisible = upsell.visible(options.requires);
 
-                if (isUnique || !isVisible) {
-                    return $();
-                } else {
-                    return $('<li role="presentation">')
-                    // add disabld class if requires upsell
-                    .addClass(!upsell.has(options.requires) ? 'requires-upsell' : undefined)
-                    .append(
-                        $('<a>', { href: '#', 'data-type': options.type, role: 'menuitem', tabindex: 1 }).text(options.title)
-                    );
-                }
-            })
-        );
+                    if (isUnique || !isVisible) {
+                        return $();
+                    } else {
+                        return $('<li role="presentation">')
+                        // add disabld class if requires upsell
+                        .addClass(!upsell.has(options.requires) ? 'requires-upsell' : undefined)
+                        .append(
+                            $('<a>', { href: '#', 'data-type': options.type, role: 'menuitem', tabindex: 1 }).text(options.title)
+                        );
+                    }
+                })
+            );
+        });
+
     }
 
     ext.point(POINT + '/pane').extend({
@@ -237,6 +240,8 @@ define('io.ox/portal/settings/pane', [
         id: 'drag-handle',
         index: 200,
         draw: function (baton) {
+            if (_.device('smartphone')) return;
+
             var data = baton.model.toJSON(),
                 point = ext.point(baton.view.point),
                 title = widgets.getTitle(data, point.prop('title'));
@@ -251,21 +256,8 @@ define('io.ox/portal/settings/pane', [
     });
 
     ext.point(POINT + '/view').extend({
-        id: 'title',
-        index: 300,
-        draw: function (baton) {
-            var data = baton.model.toJSON(),
-                point = ext.point(baton.view.point),
-                title = widgets.getTitle(data, point.prop('title'));
-            this.append(
-                listUtils.widgetTitle(title).addClass('widget-color-' + (data.color || 'black') + ' widget-' + data.type)
-            );
-        }
-    });
-
-    ext.point(POINT + '/view').extend({
         id: 'controls',
-        index: 400,
+        index: 300,
         draw: function (baton) {
             var data = baton.model.toJSON(),
                 point = ext.point(baton.view.point),
@@ -285,7 +277,7 @@ define('io.ox/portal/settings/pane', [
                 if (baton.view.options.editable) {
                     $controls.append(
                         listUtils.appendIconText(
-                            listUtils.controlsEdit(title, gt('Edit')),
+                            listUtils.controlsEdit(title, ''),
                             gt('Edit'),
                             'edit'
                         )
@@ -301,10 +293,14 @@ define('io.ox/portal/settings/pane', [
                         baton.view.onChangeColor(e);
                     });
                 }
-                $controls.append(
-                    $node,
-                    listUtils.appendIconText($link.attr({ 'aria-label': title + ', ' + gt('Disable') }), gt('Disable'), 'disable')
-                );
+
+                $controls.append($node);
+
+                if (_.device('!smartphone')) {
+                    $controls.append(
+                        listUtils.appendIconText($link.attr({ 'aria-label': title + ', ' + gt('Disable') }), gt('Disable'), 'disable')
+                    );
+                }
             } else {
                 $controls.append(
                     listUtils.appendIconText($link.attr({ 'aria-label': title + ', ' + gt('Enable') }), gt('Enable'), 'enable')
@@ -316,6 +312,21 @@ define('io.ox/portal/settings/pane', [
             );
 
             this.append($controls);
+        }
+    });
+
+    ext.point(POINT + '/view').extend({
+        id: 'title',
+        index: 400,
+        draw: function (baton) {
+            var data = baton.model.toJSON(),
+                point = ext.point(baton.view.point),
+                title = widgets.getTitle(data, point.prop('title'));
+            this.append(
+                listUtils.widgetTitle(title)
+                    .addClass('widget-color-' + (data.color || 'black') + ' widget-' + data.type)
+                    .removeClass('pull-left')
+            );
         }
     });
 

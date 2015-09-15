@@ -63,7 +63,7 @@ define('io.ox/core/strings', ['gettext!io.ox/core'], function (gt) {
                 decimalPlaces = 10;
             }
             var dp = Math.pow(10, decimalPlaces || 0);
-            while (size > 1024 && i < $i) {
+            while (size >= 1024 && i < $i) {
                 size = size / 1024;
                 i++;
             }

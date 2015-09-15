@@ -1,3 +1,4 @@
+[
 {
     "namespace": "io.ox/core/main",
     "title": "Guided tours",
@@ -9,3 +10,4 @@
     "package": "open-xchange-guidedtours",
     "path": "io.ox/tours/main"
 }
+]

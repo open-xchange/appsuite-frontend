@@ -25,29 +25,6 @@ define('io.ox/mail/compose/extensions', [
     'static/3rd.party/jquery-ui.min.js'
 ], function (contactAPI, sender, mini, Dropdown, ext, Tokenfield, dropzone, capabilities, settings, gt) {
 
-    function renderFrom(array) {
-        if (!array) return;
-        var name = _(array).first(), address = _(array).last();
-        // consider custom settings
-        if (!settings.get('sendDisplayName', true)) {
-            name = null;
-        } else if (settings.get(['customDisplayNames', address, 'overwrite'])) {
-            name = settings.get(['customDisplayNames', address, 'name'], '');
-        }
-        return [
-            $('<span class="name">').text(name ? name + ' ' : ''),
-            $('<span class="address">').text(name ? '<' + address + '>' : address)
-        ];
-    }
-
-    var SenderDropdown = Dropdown.extend({
-
-        label: function () {
-            var from = _(this.model.get('from')).first();
-            this.$('.dropdown-label').empty().append(renderFrom(from));
-        }
-    });
-
     var POINT = 'io.ox/mail/compose';
 
     //make strings accessible to translators
@@ -109,11 +86,25 @@ define('io.ox/mail/compose/extensions', [
 
             var node = $('<div class="row sender" data-extension-id="sender">'),
                 render = function () {
+                    function renderFrom(array) {
+                        if (!array) return;
+                        var name = _(array).first(), address = _(array).last();
+                        // consider custom settings
+                        if (!settings.get('sendDisplayName', true)) {
+                            name = null;
+                        } else if (settings.get(['customDisplayNames', address, 'overwrite'])) {
+                            name = settings.get(['customDisplayNames', address, 'name'], '');
+                        }
+                        return [
+                            $('<span class="name">').text(name ? name + ' ' : ''),
+                            $('<span class="address">').text(name ? '<' + address + '>' : address)
+                        ];
+                    }
 
                     var defaultSender = _(baton.model.get('from')).first(),
-                        dropdown = new SenderDropdown({
+                        dropdown = new Dropdown({
                             model: baton.model,
-                            label: _(defaultSender).first() + ' <' + _(defaultSender).last() + '>',
+                            label: renderFrom(defaultSender),
                             aria: gt('From'),
                             caret: true
                         });
@@ -130,9 +121,11 @@ define('io.ox/mail/compose/extensions', [
                         }
 
                         function redraw() {
+                            var from = _(baton.model.get('from')).first();
                             dropdown.$('ul').empty();
                             drawOptions();
-                            dropdown.label();
+
+                            dropdown.$('.dropdown-label').empty().append(renderFrom(from));
                             // re-focus element otherwise the bootstap a11y closes the drop-down
                             dropdown.$ul.find('[data-name="toggle-display"]').focus();
                         }
@@ -158,6 +151,16 @@ define('io.ox/mail/compose/extensions', [
                                 .link('edit-real-names', gt('Edit names'), editNames);
                         }
 
+                        function updateDisplayName(names) {
+                            // clone 'from'
+                            var from = [].concat(_(baton.model.get('from')).first());
+                            _.each(names, function (data, id) {
+                                if (from[1] !== id) return;
+                                from[0] = data.overwrite ? data.name : data.defaultName;
+                            });
+                            baton.model.set('from', [ from ]);
+                        }
+
                         drawOptions();
 
                         node.append(
@@ -167,7 +170,8 @@ define('io.ox/mail/compose/extensions', [
                             )
                         );
 
-                        ox.on('change:customDisplayNames', redraw);
+                        ox.on('change:customDisplayNames', updateDisplayName);
+                        baton.view.listenTo(baton.model, 'change:from', redraw);
                     });
                 };
 
@@ -207,7 +211,7 @@ define('io.ox/mail/compose/extensions', [
         },
 
         recipientActionLinkMobile: function () {
-            var node = $('<a href="#" tabindex="1" data-action="add" role="checkbox" aria-checked="false">').append($('<span class="fa fa-angle-down">'));
+            var node = $('<a href="#" tabindex="1" data-action="add" role="checkbox" aria-checked="false">').append($('<span class="fa fa-angle-right">'));
             this.append(node);
         },
 
@@ -317,8 +321,9 @@ define('io.ox/mail/compose/extensions', [
             baton.view.signaturesLoading = $.Deferred();
             require(['io.ox/core/api/snippets'], function (snippetAPI) {
                 snippetAPI.getAll('signature').always(function (signatures) {
-                    baton.model.set('signatures', signatures);
-                    baton.view.signaturesLoading.resolve(signatures);
+                    var oldSignatures = baton.model.get('signatures') || [],
+                        allSignatures = _.uniq(signatures.concat(oldSignatures), false, function (o) { return o.id; });
+                    baton.model.set('signatures', allSignatures);
                     var sa = _.map(signatures, function (o) {
                         return { 'id': o.id, 'displayName': o.displayname };
                     });
@@ -328,24 +333,43 @@ define('io.ox/mail/compose/extensions', [
                             self.data('view').option('defaultSignatureId', item.id, item.displayName);
                         });
                     }
+                    baton.view.signaturesLoading.resolve(allSignatures);
                 });
             });
         },
 
         signaturemenu: function (baton) {
             if (_.device('smartphone')) return;
+
             var self = this,
-            dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true })
-                .option('defaultSignatureId', '', gt('No signature'));
-            ext.point(POINT + '/signatures').invoke('draw', dropdown.$el, baton);
-            dropdown.$ul.addClass('pull-right');
-            baton.view.signaturesLoading.done(function (sig) {
-                if (sig.length > 0) {
+                container = $('<div class="dropdown signatures text-left">');
+
+            function draw() {
+                var dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true, el: container })
+                    .option('defaultSignatureId', '', gt('No signature'));
+
+                ext.point(POINT + '/signatures').invoke('draw', dropdown.$el, baton);
+                dropdown.$ul.addClass('pull-right');
+                baton.view.signaturesLoading.done(function () {
+                    dropdown.divider();
+                    dropdown.link('settings', gt('Manage signatures'), function () {
+                        var options = { id: 'io.ox/mail/settings/signatures' };
+                        ox.launch('io.ox/settings/main', options).done(function () {
+                            this.setSettingsPane(options);
+                        });
+                    });
                     dropdown.$ul.addClass('pull-right');
-                    dropdown.render().$el.addClass('signatures text-left');
-                }
+                    dropdown.render();
+                });
+
+                container.empty().append(dropdown.$el);
+            }
+
+            require(['io.ox/core/api/snippets'], function (snippetAPI) {
+                baton.view.listenTo(snippetAPI, 'refresh.all', draw);
+                draw();
             });
-            self.append(dropdown.$el);
+            self.append(container);
         },
 
         optionsmenu: function (baton) {
@@ -375,9 +399,11 @@ define('io.ox/mail/compose/extensions', [
                 zone.on({
                     'show': function () {
                         $el.css('minHeight', '100px');
+                        $(window).trigger('resize');
                     },
                     'hide': function () {
                         $el.css('minHeight', 0);
+                        $(window).trigger('resize');
                     },
                     'drop': function (files) {
                         baton.model.attachFiles(
@@ -385,13 +411,22 @@ define('io.ox/mail/compose/extensions', [
                                 return _.extend(file, { group: 'localFile' });
                             })
                         );
+                        $(window).trigger('resize');
                     }
+                });
+
+                view.listenTo(baton.model, 'change:attachments', function () {
+                    view.$list.empty();
+                    view.renderList();
                 });
 
                 view.listenToOnce(view.collection, 'add remove reset', _.debounce(function () {
                     if (this.getValidModels().length > 0) {
                         this.$el.addClass('open');
-                        if (!this.isListRendered) this.renderList();
+                        if (!this.isListRendered) {
+                            this.renderList();
+                        }
+                        $(window).trigger('resize');
                     }
                 }));
 

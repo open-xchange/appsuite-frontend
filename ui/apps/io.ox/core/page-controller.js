@@ -11,7 +11,7 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/core/page-controller', ['less!io.ox/core/page-controller'], function () {
+define('io.ox/core/page-controller', [], function () {
 
     'use strict';
 
@@ -175,15 +175,15 @@ define('io.ox/core/page-controller', ['less!io.ox/core/page-controller'], functi
             backButtonRules = rules;
         };
 
-        this.goBack = function () {
-            var target = lastPage;
-
+        this.goBack = function (options) {
+            var target = lastPage,
+                o = _.extend({ animation: 'slideright' }, options || {});
             // if we do have a custom navigation for some pages
             // use this instead of the last page
             if (backButtonRules && backButtonRules[current]) {
                 target = backButtonRules[current];
             }
-            this.changePage(target, { animation: 'slideright' });
+            this.changePage(target, o);
         };
 
         /**

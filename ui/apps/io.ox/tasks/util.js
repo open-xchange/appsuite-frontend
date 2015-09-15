@@ -11,8 +11,9 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 define('io.ox/tasks/util', [
-    'gettext!io.ox/tasks'
-], function (gt) {
+    'gettext!io.ox/tasks',
+    'settings!io.ox/core'
+], function (gt, coreSettings) {
 
     'use strict';
 
@@ -231,11 +232,9 @@ define('io.ox/tasks/util', [
                 }
 
                 function formatTime(value, format) {
-                    if (value === undefined || value === null) {
-                        return '';
-                    } else {
-                        return moment.utc(value).local(true).format(format);
-                    }
+                    if (value === undefined || value === null) return '';
+
+                    return moment.tz(value, coreSettings.get('timezone')).format(format);
                 }
 
                 // convert UTC timestamps to local time

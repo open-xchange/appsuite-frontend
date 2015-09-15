@@ -65,6 +65,11 @@ define('io.ox/core/folder/actions/move', [
                     return notifications.yell('error', gt('You cannot move items to virtual folders'));
                 }
 
+                // final check for write privileges
+                if (!api.pool.getModel(target).can('create')) {
+                    return notifications.yell('error', gt('You cannot move items to this folder'));
+                }
+
                 options.api[type](options.list, target, options.all).then(
                     function (response) {
                         // files API returns array on error; mail just a single object

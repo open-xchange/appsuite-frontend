@@ -63,12 +63,12 @@ define('io.ox/core/event', function () {
             function trigger(type) {
 
                 // trigger single event
-                myHub.triggerHandler.call(hub, type, args);
+                myHub.triggerHandler.call(myHub, type, args);
 
                 // trigger generic 'triggered' event (convert event object to event name before)
                 if (_.isObject(type)) { type = type.type; }
                 // Allow stringing event hubs together
-                myHub.triggerHandler.call(hub, 'triggered', _([type, args]).flatten(true));
+                myHub.triggerHandler.call(myHub, 'triggered', _([type, args]).flatten(true));
             }
 
             if (_.isString(types)) {

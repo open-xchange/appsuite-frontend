@@ -46,11 +46,14 @@ define('io.ox/core/folder/actions/common', [
                     .addPrimaryButton('delete', gt('Empty folder'), 'delete', { tabIndex: 1 })
                     .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                     .on('delete', function () {
-                        notifications.yell('busy', gt('Emptying folder... This may take a few seconds.'));
 
                         function clear() {
+                            // dedicated message for drive because "empty" does not remove folders
+                            var message = folder.module === 'infostore' ?
+                                gt('All files have been deleted') :
+                                gt('The folder has been emptied');
                             folderAPI.clear(id).done(function () {
-                                notifications.yell('success', gt('The folder has been emptied.'));
+                                notifications.yell('success', message);
                             });
                         }
 

@@ -77,9 +77,6 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
                 }
             }
 
-            // cleanup datepicker helper timezone
-            baton.model.unset('timezone', { silent: true });
-
             // accept any formating
             if (baton.model.get('actual_costs')) {
                 baton.model.set('actual_costs', (String(baton.model.get('actual_costs'))).replace(/,/g, '.'));

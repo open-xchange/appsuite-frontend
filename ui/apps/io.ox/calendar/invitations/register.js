@@ -39,11 +39,11 @@ define('io.ox/calendar/invitations/register', [
 
     var buttonClasses = {
         'accept': 'btn-success accept',
-        'accept_and_replace': '',
+        'accept_and_replace': 'btn-success',
         'accept_and_ignore_conflicts': 'btn-success ignore',
         'accept_party_crasher': '',
         'create': '',
-        'update': '',
+        'update': 'btn-success',
         'delete': '',
         'declinecounter': 'btn-danger',
         'tentative': 'btn-warning',
@@ -358,6 +358,10 @@ define('io.ox/calendar/invitations/register', [
                     require(['io.ox/calendar/api']).then(function (api) {
                         api.refresh();
                         notifications.yell('success', success[action]);
+                        // if the delete action was succesfull we don't need the button anymore, see Bug 40852
+                        if (action === 'delete') {
+                            self.model.set('actions', _(self.model.attributes.actions).without('delete'));
+                        }
                         self.repaint();
                     });
                 },

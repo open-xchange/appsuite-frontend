@@ -22,14 +22,23 @@ define('io.ox/core/tk/filestorageUtil', [
     'use strict';
 
     var util = {
-            // displays conflicts when a filestorage does not support some features like versioning. Offers cancel and ignore warnings function
-            // conflicts is an object with a title and a warnings array containing strings
-            displayConflicts: function (conflicts, callbackIgnoreConflicts, callbackCancel) {
-
-                var popup = new dialogs.ModalDialog()
-                    .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
-                    .addPrimaryButton('ignorewarnings', gt('Ignore warnings'), 'changechange', { tabIndex: 1 }),
+            /* displays conflicts when a filestorage does not support some features like versioning. Offers cancel and ignore warnings function
+             conflicts is an object with a title and a warnings array containing strings
+             options may have :
+                callbackIgnoreConflicts - function that is called when the ignore conflicts button is pressed
+                callbackCancel - function that is called when the ignore cancel button is pressed
+             if there is no callback function only an OK button is drawn
+            */
+            displayConflicts: function (conflicts, options) {
+                options = options || {};
+                var popup = new dialogs.ModalDialog(),
                     warnings = [];
+                if (!options.callbackCancel && !options.callbackIgnoreConflicts) {
+                    popup.addPrimaryButton('ok', gt('Ok'), 'changechange', { tabIndex: 1 });
+                } else {
+                    popup.addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                        .addPrimaryButton('ignorewarnings', gt('Ignore warnings'), 'changechange', { tabIndex: 1 });
+                }
                 // build a list of warnings
                 _(conflicts.warnings).each(function (warning) {
                     warnings.push($('<div class="filestorage-conflict-warning">').text(warning));
@@ -41,10 +50,12 @@ define('io.ox/core/tk/filestorageUtil', [
                 );
                 popup.show().done(function (action) {
                     if (action === 'ignorewarnings') {
-                        callbackIgnoreConflicts(conflicts);
-                    } else {
-                        if (callbackCancel) {
-                            callbackCancel(conflicts);
+                        if (options.callbackIgnoreConflicts) {
+                            options.callbackIgnoreConflicts(conflicts);
+                        }
+                    } else if (action === 'cancel') {
+                        if (options.callbackCancel) {
+                            options.callbackCancel(conflicts);
                         } else {
                             yell('info', gt('Canceled'));
                         }

@@ -29,6 +29,10 @@ define('io.ox/core/viewer/views/types/imageview', [
      */
     var ImageView =  BaseView.extend({
 
+        initialize: function () {
+            this.isPrefetched = false;
+        },
+
         /**
          * Creates and renders the image slide.
          *
@@ -36,10 +40,13 @@ define('io.ox/core/viewer/views/types/imageview', [
          *  the ImageView instance.
          */
         render: function () {
-            //console.warn('ImageView.render()', this.model.get('filename'));
 
-            var image = $('<img class="viewer-displayer-item viewer-displayer-image">'),
-                previewUrl = this.getPreviewUrl(),
+            // since this node is not yet part of the DOM we look
+            // for the carousel's dimensions directly
+            var carousel = $('.viewer-displayer:visible'),
+                options = { scaleType: 'contain', width: carousel.width(), height: carousel.height() },
+                image = $('<img class="viewer-displayer-item viewer-displayer-image">'),
+                previewUrl = this.getPreviewUrl(options),
                 filename = this.model.get('filename') || '',
                 self = this;
 
@@ -76,6 +83,7 @@ define('io.ox/core/viewer/views/types/imageview', [
             var image = this.$el.find('img.viewer-displayer-image');
             if (image.length > 0) {
                 image.attr('src', image.attr('data-src'));
+                this.isPrefetched = true;
             }
 
             return this;
@@ -109,6 +117,7 @@ define('io.ox/core/viewer/views/types/imageview', [
                 if (imageToUnLoad.length > 0) {
                     imageToUnLoad.attr('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=');
                 }
+                this.isPrefetched = false;
             }
             return this;
         }

@@ -59,7 +59,15 @@ var appendIconText = function (target, text, type, activeColor) {
                 icon.addClass('fa-windows');
                 break;
             case 'boxcom':
-                icon.addClass('fa-archive');
+                // there is no fitting icon for box in fontawesome
+                icon.removeClass('fa');
+                icon.css({
+                    'background-image': 'url(apps/themes/default/box_logo36.png)',
+                    'background-size': 'cover',
+                    height: '14px',
+                    width: '14px',
+                    'margin-top': '3px'
+                });
                 break;
             default:
                 icon.addClass('fa-circle');

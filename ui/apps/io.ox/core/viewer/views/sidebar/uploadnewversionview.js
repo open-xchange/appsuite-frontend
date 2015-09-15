@@ -10,14 +10,14 @@
  *
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
+
 define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
     'io.ox/backbone/disposable',
     'io.ox/files/api',
     'io.ox/core/folder/api',
     'io.ox/core/tk/dialogs',
-    'io.ox/core/tk/attachments',
     'gettext!io.ox/core/viewer'
-], function (DisposableView, FilesAPI, folderApi, Dialogs, Attachments, gt) {
+], function (DisposableView, FilesAPI, folderApi, Dialogs, gt) {
 
     'use strict';
 
@@ -89,21 +89,22 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
         },
 
         render: function () {
-            if (this.model && this.model.isFile()) {
-                var self = this;
-                // check if the user has permission to upload new versions
-                folderApi.get(this.model.get('folder_id')).done(function (folderData) {
-                    if (folderApi.can('write', folderData)) {
-                        // add file upload widget
-                        self.$el.append(
-                            Attachments.fileUploadWidget({
-                                multi: false,
-                                buttontext: gt('Upload new version')
-                            })
-                        );
-                    }
+            if (!this.model || !this.model.isFile()) return this;
+            // check if the user has permission to upload new versions
+            folderApi.get(this.model.get('folder_id')).done(function (folderData) {
+                if (this.disposed) return;
+                if (!folderApi.can('write', folderData)) return;
+                // add file upload widget
+                var $el = this.$el;
+                require(['io.ox/core/tk/attachments'], function (Attachments) {
+                    $el.append(
+                        Attachments.fileUploadWidget({
+                            multi: false,
+                            buttontext: gt('Upload new version')
+                        })
+                    );
                 });
-            }
+            }.bind(this));
             return this;
         },
 

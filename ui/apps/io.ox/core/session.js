@@ -24,6 +24,8 @@ define('io.ox/core/session', [
     var getBrowserLanguage = function () {
         var language = (navigator.language || navigator.userLanguage).substr(0, 2),
             languages = ox.serverConfig.languages || {};
+        // special treatment for 'en' (return en_US instead of en_UK which comes first in the list)
+        if (language === 'en') return 'en_US';
         return _.chain(languages).keys().find(function (id) {
             return id.substr(0, 2) === language;
         }).value();
@@ -42,6 +44,7 @@ define('io.ox/core/session', [
         if ('context_id' in data) ox.context_id = data.context_id || 0;
         // if the user has set the language on the login page, use this language instead of server settings lang
         ox.language = language || check(data.locale) || check(getBrowserLanguage()) || 'en_US';
+        _.setCookie('language', ox.language);
         manifests.reset();
         $('html').attr('lang', ox.language.split('_')[0]);
         // should not hide store() request here; made debugging hard
@@ -132,19 +135,6 @@ define('io.ox/core/session', [
                 // pending?
                 if (pending !== null) return pending;
 
-                var multiple = [], forceLanguage = options.forceLanguage;
-
-                if (forceLanguage) {
-                    // required for permanent language change
-                    multiple.push({
-                        module: 'jslob',
-                        action: 'update',
-                        id: 'io.ox/core',
-                        data: { language: forceLanguage }
-                    });
-                    delete options.forceLanguage;
-                }
-
                 var params = _.extend(
                     {
                         action: 'login',
@@ -155,12 +145,13 @@ define('io.ox/core/session', [
                         client: that.client(),
                         version: that.version(),
                         timeout: TIMEOUTS.LOGIN,
-                        multiple: JSON.stringify(multiple),
                         rampup: true,
                         rampupFor: 'open-xchange-appsuite'
                     },
                     _(options).pick('action', 'name', 'password', 'language', 'rampup', 'rampupFor', 'share', 'target')
                 );
+
+                if (options.forceLanguage) params.storeLanguage = true;
 
                 return (
                     pending = http.POST({
@@ -176,7 +167,7 @@ define('io.ox/core/session', [
                             ox.rampup = data.rampup || ox.rampup || {};
                             // store session
                             // we pass forceLanguage (might be undefined); fallback is data.locale
-                            set(data, forceLanguage);
+                            set(data, options.forceLanguage);
 
                             // global event
                             ox.trigger('login', data);
@@ -273,7 +264,9 @@ define('io.ox/core/session', [
         version: function () {
             // need to work with ox.version since we don't have the server config for auto-login
             return String(ox.version).split('.').slice(0, 3).join('.');
-        }
+        },
+
+        getBrowserLanguage: getBrowserLanguage
     };
 
     return that;

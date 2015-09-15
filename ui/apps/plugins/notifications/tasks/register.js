@@ -191,6 +191,7 @@ define('plugins/notifications/tasks/register', [
                     apiEvents: {
                         reset: 'set:tasks:reminder'
                     },
+                    //#. Reminders (notifications) about tasks
                     title: gt('Task reminders'),
                     extensionPoints: {
                         item: 'io.ox/core/notifications/task-reminder/item'
@@ -198,7 +199,9 @@ define('plugins/notifications/tasks/register', [
                     detailview: 'io.ox/tasks/view-detail',
                     autoOpen: autoOpen,
                     genericDesktopNotification: {
+                        //#. Title for a generic desktop notification about new reminders for tasks
                         title: gt('New task reminders'),
+                        //#. Content for a generic desktop notification about new reminders for tasks
                         body: gt('You\'ve got task reminders'),
                         icon: ''
                     },
@@ -207,11 +210,13 @@ define('plugins/notifications/tasks/register', [
                             endDateText = _.isEmpty(data.end_time) ? '' : ', ' + data.end_time;
 
                         return {
+                            //#. Title for a desktop notification about a new reminder for a specific task
                             title: gt('New task reminder'),
                             body: data.title + endDateText,
                             icon: ''
                         };
                     },
+                    //#. Reminders (notifications) about tasks
                     hideAllLabel: gt('Hide all task reminders.')
                 },
                 subview = new Subview(options);
@@ -328,6 +333,7 @@ define('plugins/notifications/tasks/register', [
                         add: 'mark:task:to-be-confirmed'
                     },
                     useListRequest: true,
+                    //#. Inviations (notifications) to tasks
                     title: gt('Task invitations'),
                     extensionPoints: {
                         item: 'io.ox/core/notifications/task-confirmation/item'
@@ -335,7 +341,9 @@ define('plugins/notifications/tasks/register', [
                     detailview: 'io.ox/tasks/view-detail',
                     autoOpen: autoOpen,
                     genericDesktopNotification: {
+                        //#. Title for a generic desktop notification about new invitations to tasks
                         title: gt('New task invitations'),
+                        //#. Content for a generic desktop notification about new invitations to tasks
                         body: gt('You\'ve got task invitations'),
                         icon: ''
                     },
@@ -344,11 +352,13 @@ define('plugins/notifications/tasks/register', [
                             endDateText = _.isEmpty(data.end_time) ? '' : ', ' + data.end_time;
 
                         return {
+                            //#. Title for a desktop notification about a new invitation to a specific task
                             title: gt('New task invitation'),
                             body: data.title + endDateText,
                             icon: ''
                         };
                     },
+                    //#. Inviations (notifications) to tasks
                     hideAllLabel: gt('Hide all task invitations.')
                 },
                 subview = new Subview(options);

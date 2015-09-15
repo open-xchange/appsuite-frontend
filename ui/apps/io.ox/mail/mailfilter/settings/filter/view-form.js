@@ -13,7 +13,7 @@
 
 define('io.ox/mail/mailfilter/settings/filter/view-form', [
     'io.ox/core/notifications',
-    'gettext!io.ox/settings/settings',
+    'gettext!io.ox/settings',
     'io.ox/core/extensions',
     'io.ox/mail/mailfilter/settings/filter/defaults',
     'io.ox/backbone/mini-views',
@@ -58,7 +58,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             'To': gt('To'),
             'Cc': gt('CC'),
             'cleanHeader': gt('Header'),
-            'envelope': gt('Envelope'),
+            'envelope': gt('Envelope - To'),
             'size': gt('Size (bytes)'),
             'body': gt('Content'),
             'currentdate': gt('Current Date')
@@ -68,7 +68,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             'header': ['From', 'any', 'Subject', 'mailingList', 'To', 'Cc', 'cleanHeader'],
             'envelope': ['envelope'],
             'size': ['size'],
-            'body': ['body']
+            'body': ['body'],
+            'currentdate': ['currentdate']
         },
 
         actionsTranslations = {
@@ -504,22 +505,22 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                     if (o.secondInputId) {
                         return $('<li>').addClass('filter-settings-view row').attr({ 'data-test-id': num }).append(
-                            $('<div>').addClass('col-md-4 doubleline').append(
+                            $('<div>').addClass('col-sm-4 doubleline').append(
                                 $('<span>').addClass('list-title').text(o.title)
                             ),
-                            $('<div>').addClass('col-md-8').append(
+                            $('<div>').addClass('col-sm-8').append(
                                 $('<div>').addClass('row').append(
-                                    $('<label for="' + o.inputId + '" class="col-md-4 control-label" >').text(gt('Name')),
-                                    $('<div>').addClass('first-label inline-input col-md-8').append(
+                                    $('<label for="' + o.inputId + '" class="col-sm-4 control-label" >').text(gt('Name')),
+                                    $('<div>').addClass('first-label inline-input col-sm-8').append(
                                         new Input(o.inputOptions).render().$el,
                                         o.errorView ? new mini.ErrorView({ selector: '.row' }).render().$el : []
                                     )
                                 ),
                                 $('<div>').addClass('row').append(
-                                    $('<div>').addClass('col-md-4').append(
+                                    $('<div>').addClass('col-sm-4').append(
                                         new mini.DropdownLinkView(o.dropdownOptions).render().$el
                                     ),
-                                    $('<div class="col-md-8">').append(
+                                    $('<div class="col-sm-8">').append(
                                         $('<label for="' + secondInputId + '" class="sr-only">').text(o.secondInputLabel),
                                         new Input(o.secondInputOptions).render().$el,
                                         o.errorView ? new mini.ErrorView({ selector: '.row' }).render().$el : []
@@ -530,15 +531,15 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         );
                     } else {
                         return $('<li>').addClass('filter-settings-view row').attr({ 'data-test-id': num }).append(
-                            $('<div>').addClass('col-md-4 singleline').append(
+                            $('<div>').addClass('col-sm-4 singleline').append(
                                 $('<span>').addClass('list-title').text(o.title)
                             ),
-                            $('<div>').addClass('col-md-8').append(
+                            $('<div>').addClass('col-sm-8').append(
                                 $('<div>').addClass('row').append(
-                                    $('<div>').addClass('col-md-4').append(
+                                    $('<div>').addClass('col-sm-4').append(
                                         new mini.DropdownLinkView(o.dropdownOptions).render().$el
                                     ),
-                                    $('<div class="col-md-8">').append(
+                                    $('<div class="col-sm-8">').append(
                                         $('<label for="' + o.inputId + '" class="sr-only">').text(o.inputLabel),
                                         new Input(o.inputOptions).render().$el,
                                         o.errorView ? new mini.ErrorView({ selector: '.row' }).render().$el : []
@@ -601,15 +602,15 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                         conditionList.append(
                             $('<li>').addClass('filter-settings-view row').attr({ 'data-test-id': num }).append(
-                                $('<div>').addClass('col-md-4 singleline').append(
+                                $('<div>').addClass('col-sm-4 singleline').append(
                                     $('<span>').addClass('list-title').text(headerTranslation[condition.id])
                                 ),
-                                $('<div>').addClass('col-md-8').append(
+                                $('<div>').addClass('col-sm-8').append(
                                     $('<div>').addClass('row').append(
-                                        $('<div>').addClass('col-md-4').append(
+                                        $('<div>').addClass('col-sm-4').append(
                                             new mini.DropdownLinkView({ name: 'comparison', model: cmodel, values: filterValues('currentdate', timeValues) }).render().$el
                                         ),
-                                        $('<div class="col-md-8">').append(
+                                        $('<div class="col-sm-8">').append(
                                             new ModifiedDatePicker({ model: cmodel, display: 'DATE', attribute: 'datevalue', label: gt('datepicker' ) }).render().$el
                                         )
                                     )
@@ -787,15 +788,15 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                     if (o.activeLink) {
                         return $('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num }).append(
-                            $('<div>').addClass('col-md-4 singleline').append(
+                            $('<div>').addClass('col-sm-4 singleline').append(
                                 $('<span>').addClass('list-title').text(o.title)
                             ),
-                            $('<div>').addClass(' col-md-8').append(
+                            $('<div>').addClass('col-sm-8').append(
                                 $('<div>').addClass('row').append(
-                                    $('<div>').addClass('col-md-4 rightalign').append(
+                                    $('<div>').addClass('col-sm-4 rightalign').append(
                                         $('<a href="#" tabindex="1">').addClass('folderselect').text(gt('Select folder'))
                                     ),
-                                    $('<div class="col-md-8">').append(
+                                    $('<div class=" col-sm-8">').append(
                                         $('<label for="' + o.inputId + '" class="sr-only">').text(o.inputLabel),
                                         new Input(o.inputOptions).render().$el.attr({ disabled: 'disabled' })
                                     )
@@ -805,13 +806,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         );
                     } else if (/markas_/g.test(inputId)) {
                         return $('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num }).append(
-                            $('<div>').addClass('col-md-4 singleline').append(
+                            $('<div>').addClass('col-sm-4 singleline').append(
                                 $('<span>').addClass('list-title').text(o.title)
                             ),
 
-                            $('<div>').addClass('col-md-8').append(
+                            $('<div>').addClass('col-sm-8').append(
                                 $('<div>').addClass('row').append(
-                                    $('<div>').addClass('col-md-3 col-md-offset-9 rightalign').append(
+                                    $('<div>').addClass('col-sm-3 col-sm-offset-9 rightalign').append(
                                         new Dropdown(o.dropdownOptions).render().$el
                                     )
                                 )
@@ -820,19 +821,19 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         );
                     } else if (/discard_/g.test(inputId) || /keep_/g.test(inputId)) {
                         return $('<li>').addClass('filter-settings-view ' +  o.addClass +' row').attr('data-action-id', num).append(
-                            $('<div>').addClass('col-md-4 singleline').append(
+                            $('<div>').addClass('col-sm-4 singleline').append(
                                 $('<span>').addClass('list-title').text(o.title)
                             ),
                             drawDeleteButton('action')
                         );
                     } else {
                         return $('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num }).append(
-                            $('<div>').addClass('col-md-4 singleline').append(
+                            $('<div>').addClass('col-sm-4 singleline').append(
                                 $('<span>').addClass('list-title').text(o.title)
                             ),
-                            $('<div>').addClass('col-md-8').append(
+                            $('<div>').addClass('col-sm-8').append(
                                 $('<div>').addClass('row').append(
-                                    $('<div>').addClass('col-md-8 col-md-offset-4').append(
+                                    $('<div>').addClass('col-sm-8 col-sm-offset-4').append(
                                         $('<label for="' + o.inputId + '" class="sr-only">').text(o.inputLabel),
                                         new Input(o.inputOptions).render().$el,
                                         errorView
@@ -895,12 +896,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             } else if (/^\$cl/.test(action.flags[0])) {
                                 var inputId = _.uniqueId('colorflag_');
                                 actionList.append($('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num }).append(
-                                    $('<div>').addClass('col-md-4 singleline').append(
+                                    $('<div>').addClass('col-sm-4 singleline').append(
                                         $('<span>').addClass('list-title').text(actionsTranslations.flag)
                                     ),
-                                    $('<div>').addClass('col-md-8').append(
+                                    $('<div>').addClass('col-sm-8').append(
                                         $('<div>').addClass('row').append(
-                                            $('<div>').addClass('col-md-3 col-md-offset-9 rightalign').append(
+                                            $('<div>').addClass('col-sm-3 col-sm-offset-9 rightalign').append(
                                                 drawColorDropdown(action.flags[0], COLORS, COLORFLAGS)
                                             )
                                         )

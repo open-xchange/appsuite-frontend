@@ -10,7 +10,7 @@
     "disallowMultipleLineBreaks": true,
     "disallowTrailingWhitespace": true,
     "disallowMixedSpacesAndTabs": true,
-    "requireDotNotation": true,
+    "requireDotNotation": { "allExcept": [ "keywords" ] },
     "requireLineFeedAtFileEnd": true,
     "requireCommaBeforeLineBreak": true,
     "disallowSpaceBeforePostfixUnaryOperators": ["++", "--"],
@@ -23,10 +23,6 @@
     },
     "validateLineBreaks": "LF",
     "validateQuoteMarks": { "mark": "'", "escape": false },
-    "validateJSDoc": {
-        "checkParamNames": false,
-        "requireParamTypes": false
-    },
     "validateIndentation": 4,
     "disallowTrailingComma": true,
     "disallowKeywordsOnNewLine": ["else"],

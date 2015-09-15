@@ -139,6 +139,10 @@ define('io.ox/contacts/main', [
                 container: app.getWindow().nodes.main,
                 classes: 'rightside'
             });
+
+            app.getTour = function () {
+                return { id: 'default/io.ox/contacts', path: 'io.ox/tours/contacts' };
+            };
         },
 
         'folder-view-mobile': function (app) {
@@ -706,6 +710,11 @@ define('io.ox/contacts/main', [
                     // do not change page in edit mode
                     return;
                 }
+
+                // do not open listview when folder is virtual
+                var id = $(e.target).closest('.folder').data('id');
+                if (folderAPI.isVirtual(id)) return;
+
                 app.pages.changePage('listView');
             });
         },

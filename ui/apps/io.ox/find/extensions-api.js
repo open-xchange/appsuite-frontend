@@ -237,8 +237,8 @@ define('io.ox/find/extensions-api',[
                     // conditions mapping
                     if (!isMandatory) {
                         if (isDefault || isVirtual) {
-                            // convenience function bzw. fallback
-                            preselect = all;
+                            // convenience function respectively fallback when virtual all not exists
+                            preselect = all || standard;
                         }
                     } else {
                         if (isVirtual) {

@@ -11,8 +11,9 @@
  */
 define('io.ox/core/viewer/views/document/thumbnailview', [
     'io.ox/backbone/disposable',
+    'io.ox/core/capabilities',
     'io.ox/core/viewer/util'
-], function (DisposableView, Util) {
+], function (DisposableView, Capabilities, Util) {
 
     'use strict';
 
@@ -40,6 +41,11 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
 
         render: function () {
             var self = this;
+
+            if (!Capabilities.has('document_preview')) {
+                return this;
+            }
+
             this.$el.addClass('io-ox-busy');
             function beginConvertSuccess(convertData) {
                 self.convertData = convertData;
@@ -56,7 +62,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
             function beginConvertFinished() {
                 self.$el.removeClass('io-ox-busy');
             }
-            this.thumbnailLoadDef = Util.beginConvert(this.model.toJSON())
+            this.thumbnailLoadDef = Util.beginConvert(this.model)
                 .done(beginConvertSuccess)
                 .fail(beginConvertError)
                 .always(beginConvertFinished);
@@ -130,14 +136,16 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
             var image = new Image();
             image.className = className;
             image.onload = function () {
-                var ratio = this.width / this.height,
-                    defaultWidth = this.width > this.height ? 140 : 100;
-                $(this.parentNode).css({
-                    width: defaultWidth,
-                    height: defaultWidth / ratio
-                });
-                $(image.parentNode).removeClass('io-ox-busy');
+                var $image = $(this),
+                    $documentThumbnail = $image.parent(),
+                    landscape = ($image.width() > $image.height());
+
+                $documentThumbnail.removeClass('io-ox-busy').toggleClass('landscape', landscape);
             };
+            image.style.width = '100%';
+            image.style.height = 'auto';
+            image.style.maxWidth = '100%';
+            image.style.maxHeight = '100%';
             return image;
         },
 
@@ -212,7 +220,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
             }
             // close convert jobs while quitting
             def.done(function (response) {
-                Util.endConvert(this.model.toJSON(), response.jobID);
+                Util.endConvert(this.model, response.jobID);
             }.bind(this));
             // unbind image on load handlers
             _.each(this.thumbnailImages, function (image) {

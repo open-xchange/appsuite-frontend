@@ -44,5 +44,7 @@ define('io.ox/mail/settings/model', [
 
     });
 
-    return mailSettingsModel;
+    var model = settings.createModel(mailSettingsModel);
+
+    return model;
 });

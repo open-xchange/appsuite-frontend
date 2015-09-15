@@ -104,14 +104,20 @@
 
         .custom-color {
             .color-label {
-                &.no-color {
-                    margin-right: 52px;
-                }
-
                 width: 40px;
                 height: 40px;
                 margin: 4px;
                 font-size: 30px;
+
+                &.no-color {
+                    margin-right: 52px;
+                }
+
+                &.active {
+                    .fa {
+                        line-height: 40px;
+                    }
+                }
             }
         }
     }

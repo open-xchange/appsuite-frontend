@@ -23,13 +23,11 @@ define('io.ox/mail/settings/pane', [
     'gettext!io.ox/mail',
     'io.ox/core/api/account',
     'io.ox/backbone/mini-views'
-], function (settings, userAPI, capabilities, contactsAPI, mailUtil, mailSettingsModel, ext, notifications, gt, api, mini) {
+], function (settings, userAPI, capabilities, contactsAPI, mailUtil, mailSettings, ext, notifications, gt, api, mini) {
 
     'use strict';
 
-    var mailSettings =  settings.createModel(mailSettingsModel),
-
-        mailViewSettings,
+    var mailViewSettings,
         POINT = 'io.ox/mail/settings/detail',
         optionsAllAccounts,
 
@@ -266,7 +264,7 @@ define('io.ox/mail/settings/pane', [
                         $('<label>').attr({ 'for': 'defaultSendAddress' }).text(gt('Default sender address')),
                         $('<div>').addClass('controls').append(
                             $('<div>').addClass('row').append(
-                                $('<div>').addClass('col-lg-4 col-xs-12').append(
+                                $('<div>').addClass('col-lg-6 col-xs-12').append(
                                     new mini.SelectView({ list: optionsAllAccounts, name: 'defaultSendAddress', model: mailSettings, id: 'defaultSendAddress', className: 'form-control' }).render().$el
                                 )
                             )
@@ -276,7 +274,7 @@ define('io.ox/mail/settings/pane', [
                         $('<label>').attr({ 'for': 'autoSaveDraftsAfter' }).addClass('control-label').text(gt('Auto-save email drafts')),
                         $('<div>').addClass('controls').append(
                             $('<div>').addClass('row').append(
-                                $('<div>').addClass('col-lg-4 col-xs-12').append(
+                                $('<div>').addClass('col-lg-6 col-xs-12').append(
                                     new mini.SelectView({ list: optionsAutoSave, name: 'autoSaveDraftsAfter', model: mailSettings, id: 'autoSaveDraftsAfter', className: 'form-control' }).render().$el
                                 )
                             )
@@ -340,13 +338,10 @@ define('io.ox/mail/settings/pane', [
 
             this.append(
                 $('<fieldset>').append(
-                    $('<legend class="sectiontitle">').append(
-                        $('<h2>').text(gt('IMAP folder subscription'))
-                    ),
                     $('<div class="sectioncontent">').append(
                         $('<button type="button" class="btn btn-primary" tabindex="1">')
                         .on('click', changeIMAPSubscription)
-                        .text(gt('Change subscription'))
+                        .text(gt('Change IMAP subscriptions'))
                     )
                 )
             );

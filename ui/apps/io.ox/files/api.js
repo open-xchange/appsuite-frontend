@@ -23,7 +23,7 @@ define('io.ox/files/api', [
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, settings, filesSettings, gt) {
+], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, coreSettings, settings, gt) {
 
     'use strict';
 
@@ -155,6 +155,10 @@ define('io.ox/files/api', [
             return this.get('source') === 'pim';
         },
 
+        isEmptyFile: function () {
+            return this.isFile() && !this.get('filename');
+        },
+
         getDisplayName: function () {
             return this.get('filename') || this.get('title') || '';
         },
@@ -194,7 +198,7 @@ define('io.ox/files/api', [
             video: /^(avi|m4v|mp4|ogv|ogm|mov|mpeg|webm)$/,
             doc:   /^(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)$/,
             xls:   /^(csv|xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb|ods|ots)$/,
-            ppt:   /^(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa)$/,
+            ppt:   /^(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa|odg|otg)$/,
             pdf:   /^pdf$/,
             zip:   /^(zip|tar|gz|rar|7z|bz2)$/,
             txt:   /^(txt|md)$/,
@@ -212,6 +216,12 @@ define('io.ox/files/api', [
 
         getUrl: function (type, options) {
             return api.getUrl(this.toJSON(), type, options);
+        },
+
+        hasWritePermissions: function () {
+            var array = this.get('object_permissions') || this.get('com.openexchange.share.extendedObjectPermissions') || [],
+                myself = _(array).findWhere({ entity: ox.user_id });
+            return !!(myself && (myself.bits >= 2));
         }
     });
 
@@ -340,7 +350,7 @@ define('io.ox/files/api', [
     var pool = Pool.create('files', { Collection: api.Collection, Model: api.Model });
 
     // guess 23 is "meta"
-    var allColumns = '1,2,3,5,20,23,700,702,703,704,705,707';
+    var allColumns = '1,2,3,5,20,23,108,700,702,703,704,705,707';
 
     /**
      * map error codes and text phrases for user feedback
@@ -365,6 +375,8 @@ define('io.ox/files/api', [
                 type: 'error',
                 text: gt('The allowed quota is reached.')
             };
+        } else if (e.error && e.error === 'abort') {
+            return;
         } else {
             e.data.custom = {
                 type: 'error',
@@ -386,7 +398,7 @@ define('io.ox/files/api', [
         getQueryParams: function (params) {
             return {
                 action: 'all',
-                folder: params.folder || settings.get('folder/infostore'),
+                folder: params.folder || coreSettings.get('folder/infostore'),
                 columns: allColumns,
                 sort: params.sort || '702',
                 order: params.order || 'asc',
@@ -402,13 +414,18 @@ define('io.ox/files/api', [
                 http.GET({ module: module, params: _(params).omit('limit') }).then(null, $.when)
             )
             .then(function (folders, files) {
+                // sort by date client-side
+                if (String(params.sort) === '5') {
+                    folders = _(folders).sortBy('last_modified');
+                }
+                if (params.order === 'desc') folders.reverse();
                 return [].concat(folders, files[0] || []);
             });
         },
         // use client-side limit
         useSlice: true,
         // set higher limit; works much faster than mail
-        // we pick a number than looks for typical columns, so 5 * 6 * 7 = 210
+        // we pick a number that looks ok for typical columns, so 5 * 6 * 7 = 210
         LIMIT: 210
     });
 
@@ -637,11 +654,12 @@ define('io.ox/files/api', [
         'before:clear': function (id) {
             // clear target folder
             _(pool.getByFolder(id)).each(function (collection) {
-                collection.reset([]);
+                var files = collection.filter(function (model) { return model.isFile(); });
+                collection.remove(files);
             });
         },
         'remove:infostore': function () {
-            var id = filesSettings.get('folder/trash');
+            var id = settings.get('folder/trash');
             if (id) {
                 folderAPI.list(id, { cache: false });
                 _(pool.getByFolder(id)).each(function (collection) {
@@ -693,18 +711,18 @@ define('io.ox/files/api', [
     // Move / Copy
     //
 
-    function move(list, targetFolderId, ignoreConflicts) {
+    function move(list, targetFolderId, ignoreWarnings) {
         http.pause();
         _(list).map(function (item) {
             // move files and folders
             return item.folder_id === 'folder' ?
-                folderAPI.move(item.id, targetFolderId, ignoreConflicts) :
-                api.update(item, { folder_id: targetFolderId }, { silent: true });
+                folderAPI.move(item.id, targetFolderId, ignoreWarnings) :
+                api.update(item, { folder_id: targetFolderId }, { silent: true,  ignoreWarnings: ignoreWarnings });
         });
         return http.resume();
     }
 
-    function copy(list, targetFolderId) {
+    function copy(list, targetFolderId, ignoreWarnings) {
         http.pause();
         _(list).map(function (item) {
             return http.PUT({
@@ -713,7 +731,8 @@ define('io.ox/files/api', [
                     action: 'copy',
                     id: item.id,
                     folder: item.folder_id,
-                    timestamp: item.timestamp || _.then()
+                    timestamp: item.timestamp || _.then(),
+                    ignoreWarnings: ignoreWarnings
                 },
                 data: { folder_id: targetFolderId },
                 appendColumns: false
@@ -722,14 +741,15 @@ define('io.ox/files/api', [
         return http.resume();
     }
 
-    function transfer(type, list, targetFolderId, ignoreConflicts) {
+    function transfer(type, list, targetFolderId, ignoreWarnings) {
         var fn = type === 'move' ? move : copy;
 
-        return http.wait(fn(list, targetFolderId, ignoreConflicts)).then(function (response) {
+        return http.wait(fn(list, targetFolderId, ignoreWarnings)).then(function (response) {
             var errorText, i = 0, $i = response ? response.length : 0;
             // look if anything went wrong
             for (; i < $i; i++) {
-                if (response[i].error) {
+                // conflicts are handled separately
+                if (response[i].error && response[i].error.categories !== 'CONFLICT') {
                     errorText = response[i].error.error;
                     break;
                 }
@@ -744,21 +764,21 @@ define('io.ox/files/api', [
      * Move files to another folder
      * @param  {array} list of objects { id, folder_id }
      * @param  {string} targetFolderId
-     * @param  {boolean} ignoreConflicts
+     * @param  {boolean} ignoreWarnings
      */
-    api.move = function (list, targetFolderId, ignoreConflicts) {
+    api.move = function (list, targetFolderId, ignoreWarnings) {
         prepareRemove(list);
-        return transfer('move', list, targetFolderId, ignoreConflicts);
+        return transfer('move', list, targetFolderId, ignoreWarnings);
     };
 
     /**
      * Copy files to another folder
      * @param  {array} list
      * @param  {string} targetFolderId
-     * @param  {boolean} ignoreConflicts
+     * @param  {boolean} ignoreWarnings
      */
-    api.copy = function (list, targetFolderId, ignoreConflicts) {
-        return transfer('copy', list, targetFolderId, ignoreConflicts);
+    api.copy = function (list, targetFolderId, ignoreWarnings) {
+        return transfer('copy', list, targetFolderId, ignoreWarnings);
     };
 
     //
@@ -779,10 +799,23 @@ define('io.ox/files/api', [
     //
     api.update = function (file, changes, options) {
 
+        function process (prev, model, response) {
+            // success
+            if (!(response && response.error)) return;
+            // restore old attribute properties
+            if (prev && model) model.set(prev);
+        }
+
         if (!_.isObject(changes) || _.isEmpty(changes)) return;
 
-        var model = api.pool.get('detail').get(_.cid(file));
-        if (model) model.set(changes);
+        var model = api.pool.get('detail').get(_.cid(file)),
+            prev = {}, keys;
+        if (model) {
+            model.set(changes);
+            // store attribues before set was executed
+            keys = Object.keys(model.changedAttributes());
+            _.each(keys, function (attr) { prev[attr] = model.previous(attr); });
+        }
 
         // build split data object to support notifications
         options = _.extend({ silent: false }, options);
@@ -797,11 +830,13 @@ define('io.ox/files/api', [
             params: {
                 action: 'update',
                 id: file.id,
-                timestamp: _.then()
+                timestamp: _.then(),
+                ignoreWarnings: options.ignoreWarnings
             },
             data: data,
             appendColumns: false
         })
+        .always(_.lfo(process, prev, model))
         .done(function () {
             if (!options.silent) api.propagate('change:file', file, changes);
         });
@@ -812,14 +847,15 @@ define('io.ox/files/api', [
         options = _.extend({
             // used by api.version.upload to be different from api.upload
             action: 'new',
-            folder: settings.get('folder/infostore'),
+            folder: coreSettings.get('folder/infostore'),
             // allow API consumers to override the module (like OX Guard will certainly do)
             module: 'files'
         }, options);
+
         var params = _.extend({
             action: options.action,
             filename: options.filename,
-            timestamp: _.now()
+            timestamp: _.then()
         }, options.params);
 
         var formData = new FormData();
@@ -858,16 +894,23 @@ define('io.ox/files/api', [
     api.upload = function (options) {
         var folder_id = options.folder_id || options.folder;
         options.action = 'new';
-        return performUpload(options, {
-            folder_id: folder_id,
-            description: options.description || ''
-        })
-        .then(function (result) {
-            // result.data just provides the new file id
-            api.propagate('add:file', { id: result.data, folder_id: folder_id });
-            // return id and folder id
-            return { id: result.data, folder_id: folder_id };
-        });
+
+        var def = performUpload(options, {
+                folder_id: folder_id,
+                description: options.description || ''
+            }),
+            chain = def.then(function (result) {
+                // result.data just provides the new file id
+                api.propagate('add:file', { id: result.data, folder_id: folder_id });
+                // return id and folder id
+                return { id: result.data, folder_id: folder_id };
+            });
+
+        // we need to hand over the abort function to the deferred of the chain.
+        // this is necessary, since .then creates a new deferred
+        chain.abort = def.abort;
+
+        return chain;
     };
 
     // File versions
@@ -921,7 +964,7 @@ define('io.ox/files/api', [
                 appendColumns: true
             })
             .then(function (data) {
-                model.set('versions', data);
+                model.set({ versions: data, number_of_versions: data.length });
                 // make sure we always get the same result (just data; not timestamp)
                 return data;
             });
@@ -943,7 +986,7 @@ define('io.ox/files/api', [
                     action: 'detach',
                     id: file.id,
                     folder: file.folder_id,
-                    timestamp: _.now()
+                    timestamp: _.then()
                 },
                 data: [file.version],
                 appendColumns: false
@@ -1097,6 +1140,13 @@ define('io.ox/files/api', [
                     });
                     // file count changed, need to reload folder
                     folderAPI.reload(list);
+                    // mark trash folders as expired
+                    var id = coreSettings.get('folder/trash');
+                    if (id) {
+                        _(pool.getByFolder(id)).each(function (collection) {
+                            collection.expired = true;
+                        });
+                    }
                     break;
 
                 case 'remove:version':

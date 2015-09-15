@@ -4,10 +4,10 @@
 <title>11.2.3. Permessi per le nuove cartelle</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Groupware">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Permessi">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html" title="11.2.2. Permessi per le cartelle esistenti">
-<link rel="next" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. Condividere le cartelle">
+<link rel="next" href="ox.appsuite.user.sect.dataorganisation.sharing.html" title="11.3. Condivisione">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Nota Legale">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -25,7 +25,7 @@
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html">Indietro</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Partenza</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Sommario</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html">Avanti</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.sharing.html">Avanti</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -34,7 +34,7 @@
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ox.appsuite.user.sect.dataorganisation.rights.foldernew"></a>11.2.3. Permessi per le nuove cartelle</h3></div></div></div>
-<a class="indexterm" name="id-1.12.5.7.2"></a><div class="concept">
+<a class="indexterm" name="id-1.12.5.6.2"></a><div class="concept">
 <a name="ox.appsuite.user.concept.rights.foldernew"></a><p>In base alla posizione in cui si crea una nuova cartella, si otterranno determinati permessi.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>in una <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html#ox.appsuite.user.reference.rights.personalfoldernew">cartella personale</a></p></li>
@@ -47,8 +47,8 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.personalfoldernew"></a><p>Se si crea una nuova cartella in una cartella personale: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Si è il <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Proprietario">proprietario</a>. </p></li>
-<li class="listitem"><p>Gli altri utenti ereditano gli stessi permessi che hanno sulla cartella superiore.</p></li>
+<li class="listitem"><p>Si è l'<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Amministratore">amministratore</a>. </p></li>
+<li class="listitem"><p>Nell'applicazione <span class="phrase"><span class="guilabel"><strong>Posta elettronica</strong></span></span> e nell'applicazione <span class="phrase"><span class="guilabel"><strong>File</strong></span></span>, gli altri utenti ereditano i loro permessi dalla cartella superiore. Nelle altre applicazioni, gli altri utenti non ereditano i permessi.</p></li>
 </ul></div>
 <p>
       </p>
@@ -56,21 +56,20 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.publicfoldernew"></a><p>Se si crea una nuova cartella in <span class="guibutton"><strong>Cartelle pubbliche</strong></span>: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Si è il <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Proprietario">proprietario</a>.</p></li>
-<li class="listitem"><p>Gli altri utenti non otterranno alcun permesso. Sarà necessario impostare i permessi sulla nuova cartella. Creando successivamente nuove sottocartelle, i permessi della cartella saranno ereditati dalle sottocartelle. Informazioni sull'attribuzione dei permessi sono disponibili in <a class="xref" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. Condividere le cartelle">11.2.4: Condividere le cartelle</a>. </p></li>
+<li class="listitem"><p>Si è l'<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Amministratore">amministratore</a>.</p></li>
+<li class="listitem"><p>Gli altri utenti non otterranno alcun permesso. Sarà necessario impostare i permessi sulla nuova cartella. Creando successivamente nuove sottocartelle, i permessi della cartella saranno ereditati dalle sottocartelle.</p></li>
 </ul></div>
 <p>
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.rights.sharedfoldernew"></a><p>Se si crea una nuova cartella nella cartella condivisa di un altro utente: </p>
+<a name="ox.appsuite.user.reference.rights.sharedfoldernew"></a><p>Se si crea una nuova cartella nella cartella condivisa di un altro utente:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>L'utente che ha condiviso la cartella ottiene i permessi di <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Amministratore">amministratore</a> per le nuove cartelle. </p></li>
-<li class="listitem"><p>Si è il <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Proprietario">proprietario</a>.</p></li>
-<li class="listitem"><p>Gli altri utenti otterranno gli stessi permessi che avranno sulla cartella superiore.</p></li>
+<li class="listitem"><p>L'utente che ha condiviso la cartella è l'<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Amministratore">amministratore</a> della nuova cartella. </p></li>
+<li class="listitem"><p>Si è l'<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="Autore">autore</a> della nuova cartella.</p></li>
+<li class="listitem"><p>Gli altri utenti otterranno gli stessi permessi della cartella superiore.</p></li>
 </ul></div>
-<p>
-      </p>
+<p><span class="phrase"><strong>Nota:</strong></span> è necessario disporre dei permessi per creare oggetti nella cartella condivisa.</p>
 </div>
 </div>
           </div>

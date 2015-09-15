@@ -32,16 +32,23 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
 
             panelBody.empty();
 
-            if (_.isString(description)) {
-                if (description.length > 0) {
-                    panelBody.append(
-                        $('<div class="description">', { title: gt('Description text') }).text(description)
-                    );
-                } else {
-                    panelBody.append(
-                        $('<a href="#" class="description" role="button" tabindex="1">').text(gt('Add a description'))
-                    );
-                }
+            if (!_.isString(description)) return;
+
+            if (description.length > 0) {
+                panelBody.append(
+                    $('<div class="description">', { title: gt('Description text') }).text(description)
+                );
+            } else {
+                baton.view.hasWritePermissions().then(
+                    function yep() {
+                        panelBody.append(
+                            $('<a href="#" class="description" role="button" tabindex="1">').text(gt('Add a description'))
+                        );
+                    },
+                    function nope() {
+                        panelBody.parent().hide();
+                    }
+                );
             }
         }
     });
@@ -96,7 +103,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
 
         render: function () {
             if (this.model && this.model.isFile()) {
-                Ext.point(POINT + '/text').invoke('draw', this.$el, Ext.Baton({ data: this.model.get('description') }));
+                Ext.point(POINT + '/text').invoke('draw', this.$el, Ext.Baton({ data: this.model.get('description'), view: this }));
             }
             return this;
         },
@@ -105,9 +112,16 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
          * Invoke action to edit description
          */
         editDescription: function () {
-            if (this.model) {
-                ActionsPattern.invoke('io.ox/files/actions/edit-description', null, Ext.Baton({ data: this.model.toJSON() }));
-            }
+            if (!this.model) return;
+            var baton = Ext.Baton({ data: this.model.toJSON() });
+            this.hasWritePermissions().done(function () {
+                ActionsPattern.invoke('io.ox/files/actions/edit-description', null, baton);
+            });
+        },
+
+        hasWritePermissions: function () {
+            if (!this.model) return;
+            return ActionsPattern.check('io.ox/files/actions/edit-description', [this.model.toJSON()]);
         },
 
         /**

@@ -19,13 +19,12 @@ define('plugins/portal/mail/register', [
     'io.ox/core/api/account',
     'io.ox/portal/widgets',
     'io.ox/core/tk/dialogs',
-    'gettext!plugins/portal'
-], function (ext, api, util, accountAPI, portalWidgets, dialogs, gt) {
+    'gettext!plugins/portal',
+    'io.ox/backbone/disposable',
+    'io.ox/core/api/collection-loader'
+], function (ext, api, util, accountAPI, portalWidgets, dialogs, gt, DisposableView, CollectionLoader) {
 
     'use strict';
-
-    // helper to remember tracked mails
-    var trackedMails = [];
 
     function draw(baton) {
         var popup = this.busy();
@@ -43,49 +42,107 @@ define('plugins/portal/mail/register', [
         });
     }
 
-    // need debounce here, otherwise we get tons of refresh calls
-    var refreshWidgets = _.debounce(function (type, cache) {
-        require(['io.ox/portal/main'], function (portal) {
-            var app = portal.getApp(),
-                collection = app.getWidgetCollection();
-            collection.chain()
-                .filter(function (model) {
-                    return model.get('type') === type;
-                })
-                .each(function (model) {
-                    (model.get('baton') || {}).cache = !!cache;
-                })
-                .each(app.refreshWidget);
-        });
-    }, 10);
+    var MailView = DisposableView.extend({
+
+        tagName: 'li',
+
+        className: 'item',
+
+        initialize: function () {
+            this.listenTo(this.model, 'change', this.render);
+        },
+
+        render: function (baton) {
+            var self = this,
+                received = moment(this.model.get('received_date')).format('l');
+
+            this.$el.empty()
+                .data('item', this.model.attributes)
+                .append(
+                    (function () {
+                        if ((self.model.get('flags') & 32) === 0) {
+                            return $('<i class="fa fa-circle new-item accent">');
+                        }
+                    })(),
+                    $('<span class="bold">').text(_.noI18n(util.getDisplayName(this.model.get('from')[0]))), $.txt(' '),
+                    $('<span class="normal">').text(_.noI18n(_.ellipsis(this.model.get('subject'), { max: 50 }))), $.txt(' '),
+                    $('<span class="accent">').text(_.noI18n(received))
+                );
+
+            // Give plugins a chance to customize mail display
+            ext.point('io.ox/mail/portal/list/item').invoke('customize', this.$el, this.model.toJSON(), baton, this.$el);
+            return this;
+        }
+    });
+
+    var MailListView = DisposableView.extend({
+
+        tagName: 'ul',
+
+        className: 'content list-unstyled',
+
+        initialize: function () {
+            this.listenTo(this.collection, 'add remove set reset', this.render);
+        },
+
+        render: function (baton) {
+            if (this.collection.length > 0) {
+                this.$el.empty().append(
+                    _(this.collection.first(10)).map(function (mailModel) {
+                        return new MailView({
+                            model: mailModel
+                        }).render(baton).$el;
+                    })
+                );
+            } else {
+                this.$el.empty().text(gt('No mails in your inbox'));
+            }
+
+            return this;
+        }
+    });
+
+    var loadCollection = function (folderName) {
+        var def = new $.Deferred(),
+            collectionLoader = new CollectionLoader({
+                module: 'mail',
+                getQueryParams: function (params) {
+                    return {
+                        action: 'all',
+                        folder: params.folder,
+                        columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656',
+                        sort: params.sort || '610',
+                        order: params.order || 'desc',
+                        timezone: 'utc'
+                    };
+                }
+            });
+
+        collectionLoader.each = function (obj) {
+            api.pool.add('detail', obj);
+        };
+
+        collectionLoader
+            .load({ folder: folderName })
+            .once('load', function () {
+                def.resolve();
+            });
+
+        return def;
+    };
 
     ext.point('io.ox/portal/widget/mail').extend({
 
         title: gt('Inbox'),
 
-        initialize: function () {
-            // list relevant events
-            var cache = false;
-            api.on('refresh.list delete', refreshWidgets.bind(this, 'mail', cache));
-        },
-
         load: function (baton) {
 
             function getMails(folderName) {
-                // we fetch more that we want to show because usually a lot is deleted
-                var LIMIT = _.device('smartphone') ? 5 : 10;
-                return api.getAll({ folder:  folderName, limit: LIMIT * 5 }, !!baton.cache).then(function (mails) {
-                    // filter deleted mails
-                    return _(mails).filter(function (obj) {
-                        return !util.isDeleted(obj);
-                    });
-                }).then(function (mails) {
-                    // fetch detailed data for smaller subset
-                    return api.getList(mails.slice(0, LIMIT)).done(function (data) {
-                        baton.data = data;
-                        baton.cache = false;
-                    });
-                });
+                var loader = api.collectionLoader,
+                    params = loader.getQueryParams({ folder: folderName });
+
+                baton.collection = loader.getCollection(params);
+                if (baton.collection.length === 0) return loadCollection(folderName);
             }
 
             var props = baton.model.get('props', {});
@@ -125,48 +182,9 @@ define('plugins/portal/mail/register', [
         },
 
         preview: function (baton) {
-            var $content = $('<ul class="content list-unstyled">'),
-                list = baton.data;
-
-            // unregister all old update handlers in this namespace
-            _(trackedMails).each(function (ecid) {
-                api.off('update:' + ecid + '.portalTile');
-            });
-            // reset list
-            trackedMails = [];
-
-            if (list && list.length) {
-                $content.append(
-                    _(list).map(function (mail) {
-                        var ecid = _.ecid(mail),
-                            cache = true;
-                        // store tracked ecids for unregistering
-                        trackedMails.push(ecid);
-                        // track updates for the mail
-                        api.on('update:' + ecid + '.portalTile', refreshWidgets.bind(this, 'mail', cache));
-
-                        var received = moment(mail.received_date).format('l');
-                        var $node = $('<li class="item" tabindex="1">')
-                            .data('item', mail)
-                            .append(
-                                (function () {
-                                    if ((mail.flags & 32) === 0) {
-                                        return $('<i class="fa fa-circle new-item accent">');
-                                    }
-                                })(),
-                                $('<span class="bold">').text(_.noI18n(util.getDisplayName(mail.from[0]))), $.txt(' '),
-                                $('<span class="normal">').text(_.noI18n(_.ellipsis(mail.subject, { max: 50 }))), $.txt(' '),
-                                $('<span class="accent">').text(_.noI18n(received))
-                            );
-                        // Give plugins a chance to customize mail display
-                        ext.point('io.ox/mail/portal/list/item').invoke('customize', $node, mail, baton, $node);
-                        return $node;
-                    })
-                );
-            } else {
-                $content.text(gt('No mails in your inbox'));
-            }
-            this.append($content);
+            this.append(new MailListView({
+                collection: baton.collection
+            }).render(baton).$el);
         },
 
         draw: draw

@@ -20,7 +20,7 @@ define('io.ox/participants/detail', [
     'io.ox/core/extensions',
     'io.ox/contacts/util',
     'io.ox/core/util',
-    'gettext!io.ox/participants/views',
+    'gettext!io.ox/core',
     'less!io.ox/participants/style'
 ], function (util, userAPI, groupAPI, resourceAPI, ext, contactsUtil, coreUtil, gt) {
 

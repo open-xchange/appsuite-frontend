@@ -126,15 +126,16 @@ define('io.ox/presenter/views/presentationview', [
             // a Deferred object indicating the load process of this document view.
             this.documentLoad = $.Deferred();
             // predefined zoom factors.
-            // Limit zoom factor on iOS because of canvas size restrictions.
-            // https://github.com/mozilla/pdf.js/issues/2439
-            this.ZOOM_FACTORS = _.device('!desktop') ? [25, 35, 50, 75, 100, 125] : [25, 35, 50, 75, 100, 125, 150, 200, 300, 400];
+            // iOS Limits are handled by pdfview.js
+            this.ZOOM_FACTORS = [25, 35, 50, 75, 100, 125, 150, 200, 300, 400];
             // current zoom factor, defaults to 100%
             this.currentZoomFactor = 100;
             // the pdf document container
             this.documentContainer = null;
             // create a debounced version of zoom function
             this.setZoomLevelDebounced = _.debounce(this.setZoomLevel.bind(this), 500);
+            // create a debounced version of the resize handler
+            this.onResizeDebounced = _.debounce(this.onResize.bind(this), 500);
             // the index of the current slide, defaults to the first slide
             this.currentSlideIndex = 0;
             // the slide count, defaults to 1
@@ -145,7 +146,7 @@ define('io.ox/presenter/views/presentationview', [
             // the slide navigation view
             this.navigationView = new NavigationView(options);
             // register resize handler
-            this.listenTo(this.presenterEvents, 'presenter:resize', this.onResize);
+            this.listenTo(this.presenterEvents, 'presenter:resize', this.onResizeDebounced);
             // bind zoom events
             this.listenTo(this.presenterEvents, 'presenter:zoomin', this.onZoomIn);
             this.listenTo(this.presenterEvents, 'presenter:zoomout', this.onZoomOut);
@@ -760,6 +761,9 @@ define('io.ox/presenter/views/presentationview', [
                        documentPage.css(pageSize)
                    )
                 );
+
+                swiperSlide.css('line-height', swiperSlide.height() + 'px');
+
             }, this);
 
             // initiate swiper
@@ -931,7 +935,9 @@ define('io.ox/presenter/views/presentationview', [
                 return;
             }
             this.documentLoad.done(function () {
-                var fitScreenZoomFactor = this.getFitScreenZoomFactor();
+                var fitScreenZoomFactor = this.getFitScreenZoomFactor(),
+                    swiperSlide = this.getActiveSlideNode();
+
                 this.setZoomLevelDebounced(fitScreenZoomFactor);
 
                 console.info('Presenter - onResize()', 'defaultZoomFactor', fitScreenZoomFactor);
@@ -942,6 +948,8 @@ define('io.ox/presenter/views/presentationview', [
                     // After an on resize call, the plugin 'resets' the active slide to the beginning.
                     //this.swiper.slideTo(this.currentSlideIndex);
                 }
+                swiperSlide.css('line-height', swiperSlide.height() + 'px');
+
             }.bind(this));
         },
 

@@ -103,6 +103,10 @@ define('io.ox/core/folder/api', [
         return /^(contacts|calendar|tasks)$/.test(id);
     }
 
+    function isNested(id) {
+        return /^(mail|infostore)$/.test(id);
+    }
+
     function getCollectionId(id, all) {
         return (all ? 'all/' : '') + String(id);
     }
@@ -176,9 +180,32 @@ define('io.ox/core/folder/api', [
             return !!bits.get('admin');
         },
 
+        // check if the folder can have shares
+        supportsShares: function () {
+            // for mail folders check "capabilities" bitmask
+            if (this.is('mail') && (this.get('capabilities') & 1) === 1) return true;
+            // for other folders check supported_capabilities
+            return this.supports('permissions');
+        },
+
         // check if the folder can be shared (requires admin bit and the capability "permissions")
         isShareable: function () {
-            return this.isAdmin() && _(this.get('supported_capabilities')).indexOf('permissions') > -1;
+            return this.isAdmin() && this.supportsShares();
+        },
+
+        // checks if the folder supports a capability
+        supports: function (capability) {
+            return _(this.get('supported_capabilities')).indexOf(capability) > -1;
+        },
+
+        // convenience function / maps to folderAPI.is(type, folder)
+        is: function (type) {
+            return util.is(type, this.attributes);
+        },
+
+        // convenience function / maps to folderAPI.can(action, folder)
+        can: function (action) {
+            return util.can(action, this.attributes);
         }
     });
 
@@ -207,6 +234,7 @@ define('io.ox/core/folder/api', [
         onRemove: function (model) {
             if (isFlat(model.get('module'))) return;
             pool.getModel(this.id).set('subfolders', this.length > 0);
+            api.trigger('collection:remove', this.id, model);
         }
     });
 
@@ -483,12 +511,19 @@ define('io.ox/core/folder/api', [
     // Special case: Get multiple folders at once
     //
 
-    function multiple(ids) {
+    function multiple(ids, options) {
+        options = _.extend({ cache: true, errors: false }, options);
         try {
             http.pause();
             return $.when.apply($,
                 _(ids).map(function (id) {
-                    return get(id).then(null, function () { return $.when(undefined); });
+                    return get(id, { cache: options.cache }).then(
+                        null,
+                        function fail(error) {
+                            error.id = id;
+                            return $.when(options.errors ? error : undefined);
+                        }
+                    );
                 })
             )
             .then(function () {
@@ -781,6 +816,8 @@ define('io.ox/core/folder/api', [
                 if (!options.silent) {
                     api.trigger('update update:' + id, id, newId, model.toJSON());
                     if ('permissions' in changes) api.trigger('change:permissions', id);
+                    // used by drive to respond to updated foldernames in icon/list view
+                    if ('title' in changes) api.trigger('rename', id, model.toJSON());
                 }
                 // fetch subfolders of parent folder to ensure proper order after rename/move
                 if (id !== newId || changes.title || changes.folder_id ) return list(model.get('folder_id'), { cache: false }).then(function () {
@@ -858,6 +895,13 @@ define('io.ox/core/folder/api', [
                 subscribed: 1,
                 title: gt('New Folder')
             }, options);
+            // don't inherit permissions for private flat folders
+            if (isFlat(options.module) && !(parent.id === '2' || util.is('public', parent))) {
+                // empty array doesn't work; we heve to copy the admins
+                options.permissions = _(parent.permissions).filter(function (item) {
+                    return !!(item.bits & 268435456);
+                });
+            }
             // go!
             return http.PUT({
                 module: 'folders',
@@ -977,6 +1021,14 @@ define('io.ox/core/folder/api', [
         var node = document.createTextNode('');
         get(id).done(updateTextNode.bind(node));
         return node;
+    }
+
+    function getDeepLink(data) {
+
+        var app = 'io.ox/' + (data.module === 'infostore' ? 'files' : data.module),
+            folder = encodeURIComponent(data.id);
+
+        return ox.abs + ox.root + '/#!&app=' + app + '&folder=' + folder;
     }
 
     //
@@ -1142,6 +1194,25 @@ define('io.ox/core/folder/api', [
     // Check if "altnamespace" is enabled (mail server setting)
     var altnamespace = mailSettings.get('namespace', 'INBOX/') === '';
 
+    //
+    // Special lookup for
+    //
+
+    function getExistingFolder(type) {
+        var defaultId = util.getDefaultFolder(type);
+        if (defaultId) return defaultId;
+        if (type === 'mail') return 'default0' + mailSettings.get('defaultseparator') + 'INBOX';
+        if (type === 'infostore') return 10;
+        return flat({ module: type }).then(function (data) {
+            for (var section in data) {
+                if (section === 'hidden') continue;
+                var list = data[section];
+                if (list && list[0] && list[0].id) return list[0].id;
+            }
+            return null;
+        });
+    }
+
     // publish api
     _.extend(api, {
         FolderModel: FolderModel,
@@ -1170,11 +1241,14 @@ define('io.ox/core/folder/api', [
         virtual: virtual,
         isVirtual: isVirtual,
         isFlat: isFlat,
+        isNested: isNested,
         getFlatCollection: getFlatCollection,
         getFlatViews: getFlatViews,
         getDefaultFolder: util.getDefaultFolder,
+        getExistingFolder: getExistingFolder,
         getStandardMailFolders: getStandardMailFolders,
         getTextNode: getTextNode,
+        getDeepLink: getDeepLink,
         getFolderTitle: getFolderTitle,
         ignoreSentItems: ignoreSentItems,
         processListResponse: processListResponse,

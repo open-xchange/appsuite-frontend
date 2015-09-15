@@ -16,7 +16,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
     'io.ox/core/capabilities',
     'settings!io.ox/core',
     'io.ox/core/extensions',
-    'io.ox/core/tk/textproc'
+    'io.ox/core/tk/textproc',
+    'less!io.ox/core/tk/contenteditable-editor'
 ], function (emoji, capabilities, settings, ext, textproc) {
 
     'use strict';
@@ -187,9 +188,9 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             advanced: 'styleselect fontselect fontsizeselect | forecolor backcolor | link image',
             toolbar2: '',
             toolbar3: '',
-            plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji',
+            plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji lists',
             theme: 'unobtanium',
-            skin: 'ox'
+            skin: 'lightgray'
         }, opt);
 
         opt.toolbar1 += ' | ' + opt.advanced;
@@ -219,7 +220,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         }
 
         var options = {
-            script_url: (window.cordova ? ox.localFileRoot : ox.base) + '/apps/3rd.party/tinymce/tinymce.min.js',
+            script_url: (window.cordova ? ox.localFileRoot : ox.base) + '/apps/3rd.party/tinymce/tinymce.jquery.min.js',
 
             extended_valid_elements: 'blockquote[type]',
 
@@ -240,6 +241,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             remove_script_host: false,
 
             entity_encoding: 'raw',
+
+            forced_root_block: 'p',
 
             browser_spellcheck: true,
 
@@ -391,7 +394,11 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         };
 
         this.focus = function () {
-            ed.focus();
+            if (_.device('ios')) return;
+            _.defer(function () {
+                ed.focus();
+                ed.execCommand('mceFocus', false, el.attr('data-editor-id'));
+            });
         };
 
         this.ln2br = ln2br;
@@ -412,7 +419,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             if (!str) return;
             return textproc.texttohtml(str).done(function (content) {
                 if (/^<blockquote\>/.test(content)) {
-                    content = '<p></p>' + content;
+                    content = '<p><br></p>' + content;
                 }
                 set(content);
             });
@@ -440,13 +447,19 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         this.appendContent = function (str) {
             var content = this.getContent();
             str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
-            this.setContent(content + str);
+            content = content.replace(/^(<p><br><\/p>){2,}/, '').replace(/(<p><br><\/p>)+$/, '') + '<p><br></p>' + str;
+            if (/^<blockquote/.test(content)) {
+                content = '<p><br></p>' + content;
+            }
+            this.setContent(content);
         };
 
         this.prependContent = function (str) {
             var content = this.getContent();
             str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
-            this.setContent(str + content);
+            content = str + '<p><br></p>' + content.replace(/^(<p><br><\/p>)+/, '').replace(/(<p><br><\/p>){2,}$/, '');
+            content = '<p><br></p>' + content;
+            this.setContent(content);
         };
 
         this.replaceParagraph = function (str, rep) {
@@ -526,6 +539,10 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         this.handleHide = function () {
             $(window).off('resize.tinymce');
+        };
+
+        this.resetUndo = function () {
+            ed.undoManager.clear();
         };
 
         this.destroy = function () {

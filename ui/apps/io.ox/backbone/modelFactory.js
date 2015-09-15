@@ -312,6 +312,7 @@ define('io.ox/backbone/modelFactory', [
             } else {
                 attributesToSave = model.changedSinceLoading();
                 attributesToSave.id = model.id;
+                attributesToSave.last_modified = model.get('last_modified');
                 if (!attributesToSave.folder) {
                     attributesToSave.folder = model.get('folder') || model.get('folder_id');
                 }

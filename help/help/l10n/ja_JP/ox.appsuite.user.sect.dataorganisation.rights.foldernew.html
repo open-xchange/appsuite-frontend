@@ -4,10 +4,10 @@
 <title>11.2.3. 新規フォルダの権限</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Groupware">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. 権限">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html" title="11.2.2. 既存のフォルダに関する権限">
-<link rel="next" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. フォルダの共有">
+<link rel="next" href="ox.appsuite.user.sect.dataorganisation.sharing.html" title="11.3. 共有">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -25,7 +25,7 @@
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html">戻る</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">ホーム</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目次</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html">次へ</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.sharing.html">次へ</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -34,7 +34,7 @@
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ox.appsuite.user.sect.dataorganisation.rights.foldernew"></a>11.2.3. 新規フォルダの権限</h3></div></div></div>
-<a class="indexterm" name="id-1.12.5.7.2"></a><div class="concept">
+<a class="indexterm" name="id-1.12.5.6.2"></a><div class="concept">
 <a name="ox.appsuite.user.concept.rights.foldernew"></a><p>新規フォルダを作成する場所に応じて、ユーザに特定の権限が割り当てられます。次の場所にフォルダを作成した場合に割り当てられる権限については、次のリンクをクリックします。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html#ox.appsuite.user.reference.rights.personalfoldernew">個人用フォルダ</a></p></li>
@@ -47,8 +47,8 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.personalfoldernew"></a><p>ユーザが新規フォルダを個人用フォルダに作成した場合、ユーザに次の権限が割り当てられます。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>ユーザは、そのフォルダの <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="所有者">所有者</a> になります。</p></li>
-<li class="listitem"><p>他のユーザは、そのフォルダの親フォルダの権限を継承します。</p></li>
+<li class="listitem"><p>ユーザが<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="管理者">管理者</a>です。</p></li>
+<li class="listitem"><p><span class="phrase"><span class="guilabel"><strong>メール</strong></span></span> app and the  <span class="phrase"><span class="guilabel"><strong>ドライブ</strong></span></span>アプリケーションで、他のユーザは親フォルダの権限を継承します。その他のアプリケーションでは、他のユーザは権限を継承しません。</p></li>
 </ul></div>
 <p>
       </p>
@@ -56,8 +56,8 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.publicfoldernew"></a><p>ユーザが新規フォルダを <span class="guibutton"><strong>パブリック ファイル</strong></span> フォルダに作成した場合、ユーザに次の権限が割り当てられます。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>ユーザは、そのフォルダの <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="所有者">所有者</a> になります。</p></li>
-<li class="listitem"><p>他のユーザには権限が自動的に割り当てられないため、新規フォルダに関する権限を手動で割り当てる必要があります。権限の割り当て後、このフォルダに新規のサブフォルダを作成すると、このフォルダの権限が新規のサブフォルダにも継承されます。権限の付与に関する詳細は、<a class="xref" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. フォルダの共有">11.2.4: フォルダの共有</a> を参照してください。</p></li>
+<li class="listitem"><p>ユーザが<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="管理者">管理者</a>です。</p></li>
+<li class="listitem"><p>他のユーザには権限が自動的に割り当てられないため、新規フォルダに関する権限を手動で割り当てる必要があります。権限の割り当て後、このフォルダに新規のサブフォルダを作成すると、このフォルダの権限が新規のサブフォルダにも継承されます。</p></li>
 </ul></div>
 <p>
       </p>
@@ -65,12 +65,11 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.sharedfoldernew"></a><p>新規フォルダを別のユーザの共有フォルダに作成した場合、次の権限が割り当てられます。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>その新規フォルダを共有しているユーザには、そのフォルダの <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="管理者">管理者</a> 権限が割り当てられます。</p></li>
-<li class="listitem"><p>ユーザは、そのフォルダの <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="所有者">所有者</a> になります。</p></li>
+<li class="listitem"><p>フォルダを共有するユーザが、新規フォルダの<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="管理者">管理者</a>です。</p></li>
+<li class="listitem"><p>新規フォルダの<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="作成者">作成者</a>になります。</p></li>
 <li class="listitem"><p>その他のユーザには、親フォルダと同様の権限が付与されます。</p></li>
 </ul></div>
-<p>
-      </p>
+<p><span class="phrase"><strong>注: </strong></span>共有フォルダのオブジェクトの作成権限が必要です。</p>
 </div>
 </div>
           </div>

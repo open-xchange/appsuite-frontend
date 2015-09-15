@@ -4,9 +4,9 @@
 <title>7.7. Recherche de rendez-vous</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Collecticiel">
 <link rel="up" href="ox.appsuite.user.chap.calendar.html" title="Chapitre 7. Agenda">
-<link rel="prev" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.7. Modifier plusieurs rendez-vous à la fois">
+<link rel="prev" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.8. Modifier plusieurs rendez-vous à la fois">
 <link rel="next" href="ox.appsuite.user.sect.calendar.share.html" title="7.8. Rendez-vous en équipe">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Note légale">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
@@ -37,55 +37,68 @@
 <a name="ox.appsuite.user.concept.calendar.search"></a><p>Afin de rechercher des rendez-vous spécifiques, vous pouvez utiliser les critères de recherche suivants :</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>termes de recherche pour le sujet, la description, l'emplacement ou les noms des pièces jointes</p></li>
-<li class="listitem"><p>dossiers privés, publics ou partagés</p></li>
-<li class="listitem"><p>rendez-vous unique ou récurrent</p></li>
-<li class="listitem"><p>rendez-vous futurs ou passés</p></li>
+<li class="listitem">
+<p>Critères de recherche pour une plage de temps. Recherche les rendez-vousayant lieu dans l'intervalle de temps saisi. Vous définissez un intervalle de temps valide avec les détails suivants.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>Les mots clés <span class="guilabel"><strong>aujourd'hui</strong></span>, <span class="guilabel"><strong>hier</strong></span>, <span class="guilabel"><strong>la semaine dernière</strong></span>, <span class="guilabel"><strong>le mois dernier</strong></span>, <span class="guilabel"><strong>l'année dernière</strong></span></p></li>
+<li class="listitem"><p>Les mots clés pour ce type d'intervalles de temps  : <span class="guilabel"><strong>les 7 derniers jours</strong></span>, <span class="guilabel"><strong>les 30 derniers jours</strong></span>, <span class="guilabel"><strong>les 365 derniers jours</strong></span></p></li>
+<li class="listitem"><p>Un jour de la semaine, par ex. <span class="guilabel"><strong>Lundi</strong></span></p></li>
+<li class="listitem"><p>Un mois spécifique, par ex. <span class="guilabel"><strong>Juillet</strong></span></p></li>
+<li class="listitem"><p>Une année à quatre chiffres, par ex. <span class="guilabel"><strong>2015</strong></span></p></li>
+<li class="listitem"><p>Une date, par ex. <span class="guilabel"><strong>31/01/2015</strong></span></p></li>
+<li class="listitem"><p>Un intervalle de date, par ex. <span class="guilabel"><strong>01/12/2014 - 31/01/2015</strong></span></p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="listitem"><p>Dossiers devant être ciblés par la recherche</p></li>
 <li class="listitem"><p>état de confirmation du rendez-vous</p></li>
+<li class="listitem"><p>Type : tous, récurrents, uniques</p></li>
+<li class="listitem"><p>Type de dossier : tous, privé, public, partagé</p></li>
 </ul></div>
 <p>
     </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.calendar.search"></a><p class="title"><b>Comment rechercher des rendez-vous :</b></p>
+<a name="ox.appsuite.user.task.calendar.search"></a><p class="title">Comment rechercher des rendez-vous :</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Saisissez un terme de recherche dans le champ de saisie de la barre de recherche. Le menu de recherche s'ouvre.</p></li>
+<li class="step"><p>Cliquez sur l'icône <span class="guibutton"><strong>Démarrer la recherche</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> ou le champ de saisie dans la barre de recherche. Un bouton de dossier et le bouton <span class="guibutton"><strong>Options</strong></span> apparaissent dans la barre de recherche. Le bouton de dossier indique les dossiers à cibler pour la recherche.</p></li>
 <li class="step">
+<p>Pour définir les dossiers dans lesquels effectuer la recherche, cliquez sur le bouton du dossier. Sélectionnez un dossier.</p>
+<p>Si vous choisissez <span class="guibutton"><strong>Tous les dossiers</strong></span>, la recherche s'effectue dans l'ensemble des dossiers et sous-dossiers privés, publics et partagés. Si vous choisissez un dossier spécifique ou le dossier, la recherche s'effectue uniquement dans ce dossier et aucun des sous-dossiers.</p>
+</li>
+<li class="step">
+<p>Saisissez un terme de recherche dans le champ de saisie. Le menu de recherche s'ouvre.</p>
 <p>Utilisez l'une des méthodes suivantes :</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p>Afin de chercher dans le sujet ou la description, cliquez sur le terme de recherche dans le menu de recherche. Vous pouvez également appuyer sur la touche Entrée ou cliquer sur l'icône <span class="guibutton"><strong>Chercher</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> dans la barre de recherche. </p>
+<p>Pour rechercher des rendez-vous sur un intervalle de temps donné, choisissez comme critère de recherche une plage de temps valide. Dès qu'une plage valide est reconnue dans le champ, celle-ci est affichée dans le menu de recherche. Cliquez sur l'intervalle de temps dans le menu de recherche. Vous pouvez également appuyer sur « Entrée ».</p>
+<p>Afin de ne chercher que dans le sujet ou la description, cliquez sur le terme recherché dans le menu de recherche. Vous pouvez également appuyer sur « Entrée ».</p>
 <p>Afin de ne chercher que dans le sujet, cliquez sur <span class="guibutton"><strong>dans le sujet</strong></span> dans le menu de recherche.</p>
 <p>Vous pouvez limiter la recherche respectivement à la description, l'emplacement ou le nom de la pièce jointe.</p>
 </li></ul></div>
 <p>
           </p>
-<p><span class="phrase"><strong>Résultat :</strong></span> Les résultats de la recherche sont affichés dans la liste de la zone d'affichage. Les critères de recherche utilisés sont affichés en dessous de la fenêtre de recherche.</p>
-</li>
-<li class="step">
-<p>Vous pouvez ajuster les résultats de la recherche ultérieurement :</p>
+<p>Résultat :</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>Pour afficher tous les critères de recherche, cliquez sur <span class="guibutton"><strong>Afficher les filtres avancés</strong></span>.</p>
-<p>Pour ajuster un critère, cliquez sur l'icône <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span> à côté du critère de recherche. Choisissez un critère dans le menu. Vous pouvez utiliser les critères de recherche suivants :</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>Vous pouvez utiliser la liste déroulante <span class="guilabel"><strong>Dossier</strong></span> pour rechercher dans un dossier spécifique.</p>
-<p>Si vous sélectionnez <span class="guibutton"><strong>Tous les dossiers</strong></span>, la recherche s'effectue dans l'ensemble des dossiers et sous-dossiers. Si vous choisissez un dossier spécifique ou le dossier, la recherche s'effectue uniquement dans ce dossier et aucun des sous-dossiers.</p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>La liste déroulante <span class="guilabel"><strong>Type de dossier</strong></span> permet de limiter la recherche aux dossiers privés, publics ou partagés.</p></li>
-<li class="listitem" style="list-style-type: none"><p>La liste déroulante <span class="guilabel"><strong>Type</strong></span> permet de rechercher des rendez-vous uniques ou récurrents.</p></li>
-<li class="listitem" style="list-style-type: none"><p>La liste déroulante <span class="guilabel"><strong>Date</strong></span> permet de chercher des rendez-vous futurs ou passés.</p></li>
-<li class="listitem" style="list-style-type: none"><p>La liste déroulante <span class="guilabel"><strong>Mon état</strong></span> vous permet de chercher des rendez-vous avec un état de confirmation spécifique.</p></li>
-</ul></div>
-<p>
-                </p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>Afin d'affiner votre recherche dans la liste des objets trouvés, démarrez une recherche additionnelle.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Afin de supprimer ou réinitialiser un critère de recherche, cliquez sur l'icône <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>. Si vous supprimez tous les critères de recherche, cela met fin à la recherche.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Les résultats de la recherche sont affichés dans la liste disponible dans la zone d'affichage. </p></li>
+<li class="listitem" style="list-style-type: none"><p>Le terme recherché est affiché dans le champ de saisie.</p></li>
 </ul></div>
 <p>
           </p>
 </li>
-<li class="step"><p>Afin de terminer la recherche, cliquez sur <span class="guibutton"><strong>Fermer la recherche</strong></span>.</p></li>
+<li class="step">
+<p>Vous pouvez ajuster les résultats de la recherche au moyen des options suivantes :</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Pour affiner les résultats de la recherche, saisissez des termes complémentaires : pour supprimer un terme recherché, cliquez sur l'icône <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span> à côté du terme recherché. </p></li>
+<li class="listitem" style="list-style-type: none"><p>Pour rechercher dans un autre dossier, cliquez sur le bouton du dossier. Sélectionnez un dossier.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Pour limiter la recherche aux dossiers privés, publics ou partagés, cliquez sur <span class="guibutton"><strong>Options</strong></span>. Sélectionnez un type de dossier.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Pour limiter la recherche aux rendez-vous dans un état de confirmation donné, cliquez sur <span class="guibutton"><strong>Options</strong></span>. Sélectionnez un état.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Pour limiter la recherche à des rendez-vous uniques ou récurrents, cliquez sur <span class="guibutton"><strong>Options</strong></span>. Sélectionnez un type.</p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="step"><p>Pour terminer la recherche, cliquez sur l'icône <span class="guibutton"><strong>Annuler la recherche</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>.</p></li>
 </ol></div>
 </div>
 </div>

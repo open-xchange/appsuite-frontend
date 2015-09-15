@@ -196,27 +196,6 @@ define('io.ox/core/upsell', [
 
     }());
 
-    if (window.cordova) return that;
-
-    // add or remove upsell widget to portal
-    require(['io.ox/portal/widgets'], function (widgets) {
-        var options = _.extend({
-                enabled: true,
-                requires: 'active_sync || caldav || carddav'
-            }, settings.get('features/upsell/portal-widget')),
-            hasWidget = widgets.containsType('upsell'),
-            showWidget = options.enabled && !that.has(options.requires) && that.enabled(options.requires);
-
-        if (hasWidget !== showWidget) {
-            if (hasWidget) {
-                widgets.remove('upsell_0');
-            } else {
-                widgets.addPlugin('plugins/portal/upsell/register');
-                widgets.add('upsell');
-            }
-        }
-    });
-
     return that;
 
 });

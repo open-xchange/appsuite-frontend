@@ -1,13 +1,13 @@
 <html lang="nl">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.5.11. Werken met versies</title>
+<title>9.4.11. Werken met versies</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
-<link rel="up" href="ox.appsuite.user.sect.files.manage.html" title="9.5. Bestanden Beheren">
-<link rel="prev" href="ox.appsuite.user.sect.files.manage.lock.html" title="9.5.10. Blokkeren of deblokkeren van bestanden">
-<link rel="next" href="ox.appsuite.user.sect.files.manage.multiple.html" title="9.5.12. Bewerken van meerdere bestanden in één keer">
+<link rel="home" href="index.html" title="Groupware">
+<link rel="up" href="ox.appsuite.user.sect.files.manage.html" title="9.4. Bestanden Beheren">
+<link rel="prev" href="ox.appsuite.user.sect.files.manage.lock.html" title="9.4.10. Blokkeren of deblokkeren van bestanden">
+<link rel="next" href="ox.appsuite.user.sect.files.search.html" title="9.5. Zoeken naar Bestanden">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Juridische kennisgeving">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -25,7 +25,7 @@
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.manage.lock.html">Terug</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Begin</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Inhoudsopgave</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.manage.multiple.html">Volgende</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.search.html">Volgende</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -33,8 +33,8 @@
 <h2 class="sr-only">Bestanden Beheren</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.files.manage.versions"></a>9.5.11. Werken met versies</h3></div></div></div>
-<a class="indexterm" name="id-1.10.11.15.2"></a><a class="indexterm" name="id-1.10.11.15.3"></a><div class="concept">
+<a name="ox.appsuite.user.sect.files.manage.versions"></a>9.4.11. Werken met versies</h3></div></div></div>
+<a class="indexterm" name="id-1.10.10.15.2"></a><a class="indexterm" name="id-1.10.10.15.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.files.versions"></a><p>U heeft de volgende mogelijkheden bij het werken met versies: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.open" title="Een nieuwe versie toevoegen gaat als volgt:">openen en opslaan van de huidige versie</a></p></li>
@@ -47,42 +47,83 @@
       </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.files.versions.opencurrent"></a><p class="title"><b>De huidige versie openen of opslaan gaat als volgt:</b></p>
-<div class="procedure"><ul class="procedure"><li class="step"><p>Klik op een bestand in het detailoverzicht. Om een versie te openen klikt u op <span class="guibutton"><strong>Openen</strong></span> in de pop-up. Om de specifieke versie op te slaan klikt u op <span class="guibutton"><strong>Downloaden</strong></span> in de pop-up.</p></li></ul></div>
-<div class="taskrelated">
-          <p><span class="phrase"><strong>Tip:</strong></span> Als er een documentvoorbeeld getoond wordt kan u ook de huidige versie opslaan door het voorbeeld naar de desktop te slepen en deze daar te laten vallen.</p>
-        </div>
+<a name="ox.appsuite.user.task.files.versions.opencurrent"></a><p class="title">De huidige versie openen of opslaan gaat als volgt:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p>Selecteer een bestand in het hoofdgebied. Klik op het <span class="guibutton"><strong>Downloaden</strong></span> pictogram<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.files.download"></a><img src="../../images/appsuite_user_icon_download.png"></span> vanuit de werkbalk.</p></li>
+<li class="step"><p>Loop de stappen voor het openen of downloaden.</p></li>
+</ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.files.versions.add"></a><p class="title"><b>Een nieuwe versie uploaden gaat als volgt:</b></p>
+<a name="ox.appsuite.user.task.files.versions.add"></a><p class="title">Een nieuwe versie uploaden gaat als volgt:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Klik op een bestand in het detailoverzicht. Klik in de pop-up op <span class="guibutton"><strong>Upload een nieuwe versie</strong></span>. Selecteer een bestand.</p></li>
+<li class="step">
+<p>Selecteer een bestand in het hoofdgebied. Als er geen details getoond worden, klikt u op het <span class="guibutton"><strong>Beeld</strong></span> pictogram in de werkbalk. Schakel <span class="guibutton"><strong>Bestandsdetails</strong></span> in.</p>
+<p>U kan ook een van de volgende mogelijkheden gebruiken om bestanden te openen in de <span class="guilabel"><strong>Viewer</strong></span>:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Dubbelklik op een bestand in het hoofdgebied.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Selecteer een bestand in het hoofdgebied. Klik op het <span class="guibutton"><strong>Beeld</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.add.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span> in de werkbalk.</p></li>
+</ul></div>
+<p>Als de zijbalk niet getoond wordt klikt u op het <span class="guibutton"><strong>Toon details</strong></span> pictogram<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.add.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span> .</p>
+</li>
+<li class="step"><p>Klik op <span class="guibutton"><strong>Nieuwe versie uploaden</strong></span>. Selecteer een bestand.</p></li>
 <li class="step"><p>Geef versiecommentaar.</p></li>
 <li class="step"><p>Klik op <span class="guibutton"><strong>Upload</strong></span>.</p></li>
 </ol></div>
 <div class="taskrelated">
-          <p><span class="phrase"><strong>Tip:</strong></span> U kan ook een nieuwe versie uploaden door een bestand vanaf de desktop naar het bestandsgebied te slepen en vervolgens het bestand te laten vallen in het onderste gedeelte.</p>
+          <p><span class="phrase"><strong>Tip:</strong></span> U kunt ook een nieuwe versie uploaden door een bestand vanuit de bestandsbrowser of de desktop naar het zijbalk van de viewer te slepen en daar los te laten.</p>
         </div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.files.versions.open"></a><p class="title"><b>Een nieuwe versie toevoegen gaat als volgt:</b></p>
+<a name="ox.appsuite.user.task.files.versions.open"></a><p class="title">Een nieuwe versie toevoegen gaat als volgt:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Klik op een bestand in het detailoverzicht. Klik in de pop-up op <span class="guibutton"><strong>Toon versie geschiedenis</strong></span>. Klik op de naam van een versie. Een menu wordt geopend.</p></li>
-<li class="step"><p>Geef een versiecommentaar.</p></li>
+<li class="step">
+<p>Selecteer een bestand in het hoofdgebied. Als er geen details getoond worden, klikt u op het <span class="guibutton"><strong>Beeld</strong></span> pictogram in de werkbalk. Schakel <span class="guibutton"><strong>Bestandsdetails</strong></span> in.</p>
+<p>U kan ook een van de volgende mogelijkheden gebruiken om bestanden te openen in de <span class="guilabel"><strong>Viewer</strong></span>:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Dubbelklik op een bestand in het hoofdgebiedopenopen.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Selecteer een bestand in het hoofdgebied. Klik op het <span class="guibutton"><strong>Beeld</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.open.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span> in de werkbalk.</p></li>
+</ul></div>
+<p>Als de zijbalk niet getoond wordt klikt u op het <span class="guibutton"><strong>Toon details</strong></span> pictogram<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.open.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span> .</p>
+</li>
+<li class="step">
+<p>Klik op het pictogram <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.open.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span> naast <span class="guilabel"><strong>Versies</strong></span>. De lijst met versies wordt getoond.</p>
+<p>Klik op een versie. Klik op het <span class="guibutton"><strong>Download</strong></span> menu item.</p>
+</li>
+<li class="step"><p>Loop de stappen voor het openen of downloaden.</p></li>
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.files.versions.current"></a><p class="title"><b>Een specifieke versie als huidige versie instellen gaat als volgt:</b></p>
+<a name="ox.appsuite.user.task.files.versions.current"></a><p class="title">Een specifieke versie als huidige versie instellen gaat als volgt:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Klik op een bestand in het detailoverzicht. Klik in de pop-up op <span class="guibutton"><strong>Toon versie geschiedenis</strong></span>. Klik op de naam van een versie. Een menu wordt geopend.</p></li>
-<li class="step"><p>Klik op het <span class="guibutton"><strong>Maak deze de huidige versie</strong></span> menu item.</p></li>
+<li class="step">
+<p>Selecteer een bestand in het hoofdgebied. Als er geen details getoond worden, klikt u op het <span class="guibutton"><strong>Beeld</strong></span> pictogram in de werkbalk. Schakel <span class="guibutton"><strong>Bestandsdetails</strong></span> in.</p>
+<p>U kan ook een van de volgende mogelijkheden gebruiken om bestanden te openen in de <span class="guilabel"><strong>Viewer</strong></span>:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Dubbelklik op een bestand in het hoofdgebied.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Selecteer een bestand in het hoofdgebied. Klik op het <span class="guibutton"><strong>Beeld</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.current.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span> in de werkbalk.</p></li>
+</ul></div>
+<p>Als de zijbalk niet getoond wordt klikt u op het <span class="guibutton"><strong>Toon details</strong></span> pictogram<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.current.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span> .</p>
+</li>
+<li class="step">
+<p>Klik op het pictogram <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.current.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span> naast <span class="guilabel"><strong>Versies</strong></span>. De lijst met versies wordt getoond.</p>
+<p>Klik op een versie. Klik op het <span class="guibutton"><strong>Maak deze de huidige versie</strong></span> menu item.</p>
+</li>
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.files.versions.delete"></a><p class="title"><b>Een specifieke versie downloaden of opslaan:</b></p>
+<a name="ox.appsuite.user.task.files.versions.delete"></a><p class="title">Een specifieke versie downloaden of opslaan:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Klik op een bestand in het detailoverzicht. Klik in de pop-up op <span class="guibutton"><strong>Toon versie geschiedenis</strong></span>. Klik op de naam van een versie. Een menu wordt geopend.</p></li>
-<li class="step"><p>Om de versie te openen klikt u op <span class="guibutton"><strong>Open</strong></span>. Om deze versie op te slaan klikt u op <span class="guibutton"><strong>Downloaden</strong></span>.</p></li>
+<li class="step">
+<p>Selecteer een bestand in het hoofdgebied. Als er geen details getoond worden, klikt u op het <span class="guibutton"><strong>Beeld</strong></span> pictogram in de werkbalk. Schakel <span class="guibutton"><strong>Bestandsdetails</strong></span> in.</p>
+<p>U kan ook een van de volgende mogelijkheden gebruiken om bestanden te openen in de <span class="guilabel"><strong>Viewer</strong></span>:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Dubbelklik op een bestand in het hoofdgebied.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Selecteer een bestand in het hoofdgebied. Klik op het <span class="guibutton"><strong>Beeld</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.delete.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span> in de werkbalk.</p></li>
+</ul></div>
+<p>Als de zijbalk niet getoond wordt klikt u op het <span class="guibutton"><strong>Toon details</strong></span> pictogram<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.delete.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span> .</p>
+</li>
+<li class="step"><p>Klik op het pictogram <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.delete.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span> naast <span class="guilabel"><strong>Versies</strong></span>. De lijst met versies wordt getoond.</p></li>
+<li class="step"><p>Klik op een versie. Klik op <span class="guibutton"><strong>Verwijder versie</strong></span> uit het menu.</p></li>
 </ol></div>
 </div>
 </div>

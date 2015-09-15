@@ -33,6 +33,10 @@ define('io.ox/core/viewer/views/types/defaultview',  [
      */
     var DefaultView = BaseView.extend({
 
+        initialize: function () {
+            this.isPrefetched = false;
+        },
+
         /**
          * Creates and renders the default slide.
          *
@@ -55,7 +59,7 @@ define('io.ox/core/viewer/views/types/defaultview',  [
          *  the DefaultView instance.
          */
         prefetch: function () {
-            //console.warn('DefaultView.prefetch()', this.model.get('filename'));
+            this.isPrefetched = true;
             return this;
         },
 
@@ -66,7 +70,6 @@ define('io.ox/core/viewer/views/types/defaultview',  [
          *  the DefaultView instance.
          */
         show: function () {
-            //console.warn('DefaultView.show()', this.model.get('filename'));
             return this;
         },
 
@@ -77,7 +80,7 @@ define('io.ox/core/viewer/views/types/defaultview',  [
          *  the DefaultView instance.
          */
         unload: function () {
-            //console.warn('DefaultView.unload()', this.model.get('filename'));
+            this.isPrefetched = false;
             return this;
         }
 

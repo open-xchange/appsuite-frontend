@@ -94,14 +94,17 @@ define('io.ox/core/boot/login/token', [
 
         // cleanup url
         _.url.hash({
-            language: null,
-            session: null,
-            user: null,
-            user_id: null,
             context_id: null,
+            language: null,
+            login_type: null,
+            message: null,
+            message_type: null,
+            ref: null,
             secretCookie: null,
+            session: null,
             store: null,
-            ref: null
+            user: null,
+            user_id: null
         });
 
         ox.trigger('login:success');

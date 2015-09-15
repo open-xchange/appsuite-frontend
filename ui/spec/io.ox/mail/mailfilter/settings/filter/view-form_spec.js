@@ -108,8 +108,7 @@ define([
                 { test: 'header', comparison: ['is', 'contains', 'matches'] },
                 { test: 'allof', comparison: [] },
                 { test: 'anyof', comparison: [] },
-                { test: 'body', comparison: ['regex', 'is', 'contains', 'matches'] },
-                { test: 'currentdate', comparison: ['ge', 'le', 'is', 'contains','matches'] }
+                { test: 'body', comparison: ['regex', 'is', 'contains', 'matches'] }
             ],
             actioncommands: ['keep', 'discard', 'redirect', 'move', 'reject', 'stop', 'vacation', 'notify', 'set']
         }},
@@ -1174,6 +1173,8 @@ define([
 
             $popup.find('li a[data-action="remove-test"]').click();
             expect($popup.find('li.filter-settings-view')).to.have.length(0);
+
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Current Date') + ')')).to.have.length(0);
 
         });
 

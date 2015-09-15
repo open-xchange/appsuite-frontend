@@ -16,7 +16,7 @@
     .toolbar {
 
         /* Mobile */
-        @media all and (max-width: 480px), all and (max-device-width: 480px) {
+        @media (max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
             display: none;
         }
 
@@ -297,6 +297,17 @@
                     background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 8px, @background-light 8px, @background-light 16px);
                     background-image: repeating-linear-gradient(-45deg, transparent, transparent 8px, @background-light 8px, @background-light 16px);
                 }
+
+                &.absent {
+                    color: #333;
+                    background-color: #eee;
+                    border-left-color: #333;
+                    @background-absent: #bbb;
+                    background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 7px, @background-absent 1px, @background-absent 8px);
+                    background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 7px, @background-absent 1px, @background-absent 8px);
+                    background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 7px, @background-absent 1px, @background-absent 8px);
+                    background-image: repeating-linear-gradient(-45deg, transparent, transparent 7px, @background-absent 1px, @background-absent 8px);
+                }
             }
         }
 
@@ -504,7 +515,7 @@
 .calendar-detail {
 
     @media (max-width: 480px), (max-device-width: 480px) {
-        margin: 5px 10px 55px 10px;
+        margin: 8px 10px 55px 10px;
     }
     font-weight: 300;
 
@@ -557,7 +568,7 @@
     }
 
     .location {
-        font-weight: 500;
+        font-weight: bold;
     }
 
     .private-flag {
@@ -631,6 +642,81 @@
 
         }
 
+        .private-flag {
+            line-height: 20px;
+        }
+
+        h1.subject {
+            line-height: 24px;
+            padding-top: 5px;
+            margin-bottom: 3px;
+        }
+
+        .date-time, .recurrence {
+            padding-top: 6px;
+            margin-bottom: 2px;
+            line-height: 24px;
+        }
+
+        .date-time {
+            padding-top: 14px;
+        }
+
+        .recurrence {
+            margin-bottom: 10px;
+        }
+
+        .date-time-recurrence { margin: 0; }
+
+        .location {
+            line-height: 32px;
+            padding-top: 18px;
+            margin: 0 0 6px 0;
+        }
+
+        .note {
+            line-height: 24px;
+            padding-top: 22px;
+            margin: 0 0 2px 0;
+        }
+
+        .attachments {
+            .io-ox-label {
+                margin-bottom: 3px;
+            }
+
+            .attachment-list {
+                line-height: 16px;
+                padding-top: 2px;
+                margin-bottom: 6px;
+            }
+        }
+
+        .participants-view {
+            padding-top: 8px;
+        }
+
+        .details {
+            legend {
+                padding-top: 9px;
+                margin-bottom: 1px;
+            }
+
+            dl {
+                margin-bottom: 24px;
+
+                dt, dd {
+                    display: inline-block;
+                    line-height: 16px;
+                    padding-top: 3px;
+                    margin-bottom: 5px;
+                }
+
+                dt { min-width: 30%; }
+
+                dd { min-width: 41%; }
+            }
+        }
     }
 
 }
@@ -825,7 +911,6 @@ li {
                 height: 40px;
                 margin: 4px;
                 font-size: 34px;
-                padding-top: 8px;
 
                 .fa {
                     width: 34px;

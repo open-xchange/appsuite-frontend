@@ -54,7 +54,7 @@ define('io.ox/files/share/api', [
         },
 
         getDisplayName: function () {
-            return this.get('title');
+            return this.get('filename') || this.get('title') || '';
         },
 
         getFolderID: function () {
@@ -140,35 +140,66 @@ define('io.ox/files/share/api', [
 
         /**
          * get a temporary link and related token
-         * @param  { object } o
+         * @param  { object } data
          * @return { deferred } returns related token
          */
-        getLink: function (o) {
+        getLink: function (data) {
             return http.PUT({
                 module: 'share/management',
                 params: {
                     action: 'getLink',
                     timezone: 'UTC'
                 },
-                data: o
+                data: _(data).pick('module', 'folder', 'item')
             });
         },
 
         /**
          * update link
-         * @param  { object } o
+         * @param  { object } data
          * @return { deferred } empty data and timestamp
          */
-        updateLink: function (o, timestamp) {
-            timestamp = timestamp || _.now();
+        updateLink: function (data, timestamp) {
             return http.PUT({
                 module: 'share/management',
                 params: {
                     action: 'updateLink',
                     timezone: 'UTC',
+                    timestamp: timestamp || _.now()
+                },
+                data: _(data).pick('module', 'folder', 'item', 'password', 'expiry_date')
+            });
+        },
+
+        /**
+         * send invitation related to a link target
+         * @param  { object } data target data
+         * @return { deferred } empty data and timestamp
+         */
+        sendLink: function (data) {
+            return http.PUT({
+                module: 'share/management',
+                params: {
+                    action: 'sendLink'
+                },
+                data: _(data).pick('module', 'folder', 'item', 'recipients', 'message')
+            });
+        },
+
+        /**
+         * delete a link
+         * @param  { object } data target data
+         * @return { deferred } empty data and timestamp
+         */
+        deleteLink: function (data, timestamp) {
+            return http.PUT({
+                module: 'share/management',
+                params: {
+                    action: 'deleteLink',
+                    timezone: 'UTC',
                     timestamp: timestamp
                 },
-                data: o
+                data: _(data).pick('module', 'folder', 'item')
             });
         },
 
@@ -274,17 +305,20 @@ define('io.ox/files/share/api', [
 
             options = _.extend({ cache: true }, options);
 
-            var model = filesAPI.pool.get('detail').get(_.cid(obj));
-            if (options.cache && model.has('com.openexchange.share.extendedObjectPermissions')) return $.when(model.toJSON());
+            return filesAPI.get(obj).then(function (data) {
 
-            return http.PUT({
-                module: 'files',
-                params: { action: 'list', columns: '7010' },
-                data: [{ id: obj.id, folder: obj.folder_id }]
-            })
-            .then(function (array) {
-                model.set(array[0]);
-                return model.toJSON();
+                if (options.cache && data['com.openexchange.share.extendedObjectPermissions']) return data;
+
+                return http.PUT({
+                    module: 'files',
+                    params: { action: 'list', columns: '7010' },
+                    data: [{ id: obj.id, folder: obj.folder_id }]
+                })
+                .then(function (array) {
+                    var model = filesAPI.pool.get('detail').get(_.cid(obj));
+                    model.set(array[0]);
+                    return model.toJSON();
+                });
             });
         },
 
@@ -322,54 +356,39 @@ define('io.ox/files/share/api', [
             });
         },
 
-        /**
-         * delete a link
-         * @param  { object } o target data
-         * @return { deferred } empty data and timestamp
-         */
-        deleteLink: function (o, timestamp) {
-            return http.PUT({
-                module: 'share/management',
-                params: {
-                    action: 'deleteLink',
-                    timezone: 'UTC',
-                    timestamp: timestamp
-                },
-                data: o
-            });
-        },
-
-        /**
-         * send invitation related to a link target
-         * @param  { object } o target data
-         * @return { deferred } empty data and timestamp
-         */
-        sendLink: function (o) {
-            return http.PUT({
-                module: 'share/management',
-                params: {
-                    action: 'sendLink'
-                },
-                data: o
-            });
-        },
-
         revoke: function (collection, model) {
 
-            var id = model.get('id'),
-                changes;
+            var changes;
 
             if (model.isFolder()) {
                 // TODO: Refactor this ugly workaround
                 collection.reset(_(model.getPermissions()).where({ entity: ox.user_id }));
                 changes = { permissions: collection.toJSON() };
-                return folderAPI.update(id, changes);
+                return folderAPI.update(model.get('id'), changes);
             } else {
-                changes = { object_permissions: [] };
-                return filesAPI.update({ id: id }, changes);
+                changes = { object_permissions: [], 'com.openexchange.share.extendedObjectPermissions': [] };
+                return filesAPI.update(model.pick('folder_id', 'id'), changes);
             }
-        }
+        },
 
+        // resend invitation/notification
+        // module is infostore oder folders
+        // id is either folder_id or file id
+        // entity is group/user/guest id
+        resend: function (type, id, entity) {
+
+            var module = type === 'file' ? 'infostore' : 'folders',
+                params = { action: 'notify', id: id };
+
+            if (module === 'folders') params.tree = 1;
+
+            return http.PUT({
+                module: module,
+                params: params,
+                data: { entities: [entity] },
+                appendColumns: false
+            });
+        }
     };
 
     Events.extend(api);

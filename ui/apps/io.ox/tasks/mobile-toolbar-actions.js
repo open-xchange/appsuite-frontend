@@ -60,7 +60,7 @@ define('io.ox/tasks/mobile-toolbar-actions', [
             'undone': {
                 prio: 'hi',
                 mobile: 'hi',
-                label: gt('Undone'),
+                label: gt('Mark as undone'),
                 drawDisabled: true,
                 ref: 'io.ox/tasks/actions/undone'
             },
@@ -161,6 +161,10 @@ define('io.ox/tasks/mobile-toolbar-actions', [
         setup: function (app) {
             if (!_.device('smartphone')) return;
 
+            api.on('update', function (e, data) {
+                app.updateToolbar(data);
+            });
+
             // folder change
             app.grid.on('change:ids', function () {
                 app.folder.getData().done(function (data) {
@@ -171,7 +175,7 @@ define('io.ox/tasks/mobile-toolbar-actions', [
             });
 
             // multiselect
-            app.grid.selection.on('change', function  (e, list) {
+            function updateSecondaryToolbar(list) {
                 if (app.props.get('checkboxes') !== true ) return;
                 if (list.length === 0) {
                     // reset to remove old baton
@@ -185,7 +189,7 @@ define('io.ox/tasks/mobile-toolbar-actions', [
                     // handle updated baton to pageController
                     app.pages.getSecondaryToolbar('listView').setBaton(baton);
                 });
-            });
+            }
 
             // simple select
             app.grid.selection.on('pagechange:detailView', function () {
@@ -194,6 +198,8 @@ define('io.ox/tasks/mobile-toolbar-actions', [
                 app.updateToolbar(data[0]);
             });
 
+            app.grid.selection.on('change', function (e, list) { updateSecondaryToolbar(list); });
+            app.props.on('change:checkboxes', function () { updateSecondaryToolbar(app.grid.selection.get()); });
         }
     });
 

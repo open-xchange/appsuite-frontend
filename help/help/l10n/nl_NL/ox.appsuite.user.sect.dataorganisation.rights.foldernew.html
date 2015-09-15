@@ -4,10 +4,10 @@
 <title>11.2.3. Rechten voor nieuwe mappen</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Groupware">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Rechten">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html" title="11.2.2. Rechten voor bestaande mappen">
-<link rel="next" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. Mappen delen">
+<link rel="next" href="ox.appsuite.user.sect.dataorganisation.sharing.html" title="11.3. Delen">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Juridische kennisgeving">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -25,7 +25,7 @@
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html">Terug</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Begin</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Inhoudsopgave</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html">Volgende</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.sharing.html">Volgende</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -34,7 +34,7 @@
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ox.appsuite.user.sect.dataorganisation.rights.foldernew"></a>11.2.3. Rechten voor nieuwe mappen</h3></div></div></div>
-<a class="indexterm" name="id-1.12.5.7.2"></a><div class="concept">
+<a class="indexterm" name="id-1.12.5.6.2"></a><div class="concept">
 <a name="ox.appsuite.user.concept.rights.foldernew"></a><p>Afhankelijk van waar u de nieuwe map maakt, worden specifieke rechten aan u toegekend.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>in een <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html#ox.appsuite.user.reference.rights.personalfoldernew">persoonlijke map</a></p></li>
@@ -47,8 +47,8 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.personalfoldernew"></a><p>Als u een nieuwe map aanmaakt in een persoonlijke map: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>U bent de <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Eigenaar">eigenaar</a>. </p></li>
-<li class="listitem"><p>Andere gebruikers krijgen de zelfde rechten als voor de bovenliggende map.</p></li>
+<li class="listitem"><p>U bent de <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Beheerder">beheerder</a>. </p></li>
+<li class="listitem"><p>In de <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span> en de <span class="phrase"><span class="guilabel"><strong>Bestanden</strong></span></span> app, erven gebruikers hun rechten uit de bovenliggende map. In de andere apps worden rechten niet geërfd.</p></li>
 </ul></div>
 <p>
       </p>
@@ -56,21 +56,20 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.publicfoldernew"></a><p>Als u een nieuwe map maakt in de <span class="guibutton"><strong>Openbare bestanden</strong></span> map: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>U bent de <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Eigenaar">eigenaar</a>.</p></li>
-<li class="listitem"><p>Andere gebruikers krijgen geen rechten. U moet de rechten voor de nieuwe map instellen. Als u nieuwe submap aanmaakt krijgt deze de rechten van de bovenliggende map. Informatie over het instellen van rechten kan u vinden in <a class="xref" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. Mappen delen">11.2.4: Mappen delen</a>. </p></li>
+<li class="listitem"><p>U bent de <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Beheerder">beheerder</a>.</p></li>
+<li class="listitem"><p>Andere gebruikers krijgen geen rechten. U moet de rechten voor de nieuwe map instellen. Als u nieuwe submappen aanmaakt in deze map krijgen deze de rechten van de bovenliggende map.</p></li>
 </ul></div>
 <p>
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.rights.sharedfoldernew"></a><p>Als u een nieuwe map in een gedeelde map van een andere gebruiker maakt: </p>
+<a name="ox.appsuite.user.reference.rights.sharedfoldernew"></a><p>Als u een nieuwe submap in de gedeelde map van een andere gebruiker maakt: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>De gebruiker die de map heeft gedeeld krijgt de <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Beheerder">beheerders</a>rechten voor de nieuwe map. </p></li>
-<li class="listitem"><p>U bent de <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Eigenaar">eigenaar</a>.</p></li>
-<li class="listitem"><p>Andere gebruikers krijgen de zelfde rechten als voor de bovenliggende map.</p></li>
+<li class="listitem"><p>De gebruiker die de map heeft gedeeld is de <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Beheerder">beheerder</a> van de nieuwe map. </p></li>
+<li class="listitem"><p>U bent de <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="Auteur">auteur</a> van de nieuwe map.</p></li>
+<li class="listitem"><p>Andere gebruikers krijgen dezelfde rechten als voor de bovenliggende map.</p></li>
 </ul></div>
-<p>
-      </p>
+<p><span class="phrase"><strong>Opmerking:</strong></span> U moet het recht hebben om objecten aan te maken in de gedeelde map.</p>
 </div>
 </div>
           </div>

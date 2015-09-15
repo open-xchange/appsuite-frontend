@@ -29,7 +29,8 @@ define('io.ox/calendar/main', [
     'io.ox/calendar/mobile-toolbar-actions',
     'io.ox/calendar/toolbar',
     'io.ox/calendar/actions',
-    'less!io.ox/calendar/style'
+    'less!io.ox/calendar/style',
+    'io.ox/calendar/week/view'
 ], function (coreConfig, commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, VGrid, Bars, PageController, api) {
 
     'use strict';
@@ -165,6 +166,10 @@ define('io.ox/calendar/main', [
                 name: 'list',
                 container: c
             });
+
+            app.getTour = function () {
+                return { id: 'default/io.ox/calendar', path: 'io.ox/tours/calendar' };
+            };
         },
 
         /*
@@ -537,6 +542,7 @@ define('io.ox/calendar/main', [
         'show-weekview-mobile': function (app) {
             if (_.device('!smartphone')) return;
             app.pages.getPage('week').on('pageshow', function () {
+                app.pages.getNavbar('week').setLeft(app.refDate.format('MMMM'));
                 //app.pages.getPageObject('week').perspective.view.setScrollPos();
             });
         },

@@ -333,6 +333,7 @@ define('io.ox/tasks/api', [
      * @return {[type]}
      */
     api.update = function (task, newFolder) {
+
         var obj,
             attachmentHandlingNeeded = task.tempAttachmentIndicator,
             useFolder = task.folder_id,
@@ -390,17 +391,19 @@ define('io.ox/tasks/api', [
         }
 
         var key = useFolder + '.' + task.id;
+
         return http.PUT({
             module: 'tasks',
             params: { action: 'update',
                 folder: useFolder,
                 id: task.id,
-                timestamp: _.then(),
+                timestamp: task.last_modified || _.then(),
                 timezone: 'UTC'
             },
-            data: task,
+            data: _(task).omit('last_modified'),
             appendColumns: false
-        }).then(function () {
+        })
+        .then(function () {
             // update cache
             var sortChanged = false;
             //data that is important for sorting changed, so clear the all cache
@@ -413,7 +416,8 @@ define('io.ox/tasks/api', [
                         //api.get updates list and get caches
                         .then(function () { return api.get({ id: task.id, folder_id: newFolder || useFolder }); }),
                         sortChanged ? api.caches.all.clear() : updateAllCache([task], useFolder, task));
-        }).then(function (data) {
+        })
+        .then(function (data) {
             //return object with id and folder id needed to save the attachments correctly
             obj = { folder_id: useFolder, id: task.id };
             //notification check
@@ -423,7 +427,8 @@ define('io.ox/tasks/api', [
                 api.addToUploadList(_.ecid(task));
             }
             return obj;
-        }).done(function () {
+        })
+        .done(function () {
             //trigger refresh, for vGrid etc
             api.trigger('refresh.all');
             if (move) {

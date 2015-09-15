@@ -96,18 +96,31 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         if (type === 'destroy' || type === 'close') return remove();
 
         var o = {
-            duration: 0,
-            html: false,
-            type: 'info',
-            focus: false
-        };
+                duration: 0,
+                html: false,
+                type: 'info',
+                focus: false
+            },
+            // there is a special yell for displaying conflicts for filestorages correctly
+            useConflictsView = false,
+            conflicts = { warnings: [] };
 
         if (_.isObject(type)) {
             // catch server error?
             if ('error' in type) {
-                o.type = 'error';
-                o.message = type.message || type.error;
-                o.headline = gt('Error');
+                // find possible conflicts with filestorages and offer a dialog to display all conflicts
+                if (type.categories === 'CONFLICT' && (type.code === 'FILE_STORAGE-0045' || type.code === 'FLD-1038')) {
+                    useConflictsView = true;
+                    o.type = 'error';
+                    if (!conflicts.title) {
+                        conflicts.title = type.error;
+                    }
+                    conflicts.warnings.push(type.warnings.error);
+                } else {
+                    o.type = 'error';
+                    o.message = type.message || type.error;
+                    o.headline = gt('Error');
+                }
             } else {
                 o = _.extend(o, type);
             }
@@ -124,6 +137,10 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         //screenreader only messages can be much simpler and don't need styling or formating (audio only)
         if (o.type === 'screenreader') {
             return screenreaderMessage(o.message);
+        } else if (useConflictsView) {
+            require(['io.ox/core/tk/filestorageUtil'], function (filestorageUtil) {
+                filestorageUtil.displayConflicts(conflicts);
+            });
         } else {
             clearTimeout(timer);
             timer = o.duration === -1 ? null : setTimeout(remove, o.duration || durations[o.type] || 5000);

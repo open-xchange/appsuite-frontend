@@ -1,36 +1,29 @@
 # Antje Faber, 2011, 2012, 2013.
 # Robert Kratky <robert@bureau-cornavin.com>, 2011, 2012, 2013, 2014.
+# Robert Krátký <kratky@rob.cz>, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-03-04 10:06+0100\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2015-08-27 20:43+0100\n"
+"Last-Translator: Robert Krátký <kratky@rob.cz>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Lokalize 2.0\n"
 
-#: apps/io.ox/tours/main.js:456 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:72 module:io.ox/tours
 msgid "Adding attachments"
 msgstr "Přidání příloh"
 
-#: apps/io.ox/tours/main.js:628 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:54 module:io.ox/tours
 msgid "Adding further details"
 msgstr "Doplnění dalších podrobností"
 
-#: apps/io.ox/tours/main.js:260 module:io.ox/tours
-msgid ""
-"Below the recipient you will find further functions, e.g. for sending copies "
-"to other recipients or for adding attachments."
-msgstr ""
-"Pod příjemcem najdete další funkce, např. pro posílání kopií jiným příjemcům "
-"nebo pro přidávání příloh."
-
-#: apps/io.ox/tours/main.js:378 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:36 module:io.ox/tours
 msgid ""
 "Click on a letter on the left side of the navigation bar in order to display "
 "the corresponding contacts from the selected address book."
@@ -38,55 +31,55 @@ msgstr ""
 "Kliknutím na písmeno v levé části navigační lišty zobrazíte příslušné "
 "kontakty z vybrané knihy adres."
 
-#: apps/io.ox/tours/main.js:202 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:45 module:io.ox/tours
 msgid "Closing a square"
 msgstr "Zavření dlaždice"
 
-#: apps/io.ox/tours/main.js:228 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:33 module:io.ox/tours
 msgid "Composing a new E-Mail"
 msgstr "Psaní nové zprávy"
 
-#: apps/io.ox/tours/main.js:404 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:34 module:io.ox/tours
 msgid "Creating a new appointment"
 msgstr "Vytvoření nové schůzky"
 
-#: apps/io.ox/tours/main.js:368 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:30 module:io.ox/tours
 msgid "Creating a new contact"
 msgstr "Vytvoření nového kontaktu"
 
-#: apps/io.ox/tours/main.js:603 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:32 module:io.ox/tours
 msgid "Creating a new task"
 msgstr "Vytvoření nového úkolu"
 
-#: apps/io.ox/tours/main.js:575 module:io.ox/tours
+#: apps/io.ox/tours/files.js:60 module:io.ox/tours
 msgid "Creating a note"
 msgstr "Vytvoření poznámky"
 
-#: apps/io.ox/tours/main.js:112 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:93 module:io.ox/tours
 msgid "Creating new items"
 msgstr "Vytváření nových položek"
 
-#: apps/io.ox/tours/main.js:433 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:57 module:io.ox/tours
 msgid "Creating recurring appointments"
 msgstr "Vytvoření opakujících se schůzek"
 
-#: apps/io.ox/tours/main.js:639 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:62 module:io.ox/tours
 msgid "Creating recurring tasks"
 msgstr "Vytvoření opakujících se úkolů"
 
-#: apps/io.ox/tours/main.js:467 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:77 module:io.ox/tours
 msgid "Creating the appointment"
 msgstr "Vytvoření schůzky"
 
-#: apps/io.ox/tours/main.js:683 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:87 module:io.ox/tours
 msgid "Creating the task"
 msgstr "Vytvoření úkolu"
 
-#: apps/io.ox/tours/main.js:210 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:51 module:io.ox/tours
 msgid "Customizing the Portal"
 msgstr "Přizpůsobení Portálu"
 
-#: apps/io.ox/tours/main.js:135 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:112 module:io.ox/tours
 msgid ""
 "Depending on the app, the toolbar contains various functions for creating, "
 "editing and organizing objects."
@@ -94,152 +87,139 @@ msgstr ""
 "V závislosti na aplikaci obsahuje nástrojová lišta funkce pro vytváření, "
 "editaci a organizování objektů."
 
-#: apps/io.ox/tours/main.js:162 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:132 module:io.ox/tours
 msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
 msgstr ""
 "Podrobné informace pro jednotlivé aplikace jsou v Systémové menu > Nápověda."
 
-#: apps/io.ox/tours/main.js:587 module:io.ox/tours
+#: apps/io.ox/tours/files.js:67 module:io.ox/tours
 msgid "Displaying information"
 msgstr "Zobrazení informací"
 
-#: apps/io.ox/tours/main.js:88 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:75 module:io.ox/tours
 msgid "Displaying the help or the settings"
 msgstr "Zobrazení nápovědy nebo nastavení"
 
-#: apps/io.ox/tours/main.js:190 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:40 module:io.ox/tours
 msgid "Drag and drop"
 msgstr "Táhni a pusť"
 
-#: apps/io.ox/tours/main.js:744 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:44 module:io.ox/tours
 msgid ""
 "Edit a setting on the right side. In most of the cases, the changes are "
 "activated immediately."
 msgstr ""
 "Nastavení se upravuje vpravo. Ve většině případů se změny projeví okamžitě."
 
-#: apps/io.ox/tours/main.js:342 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:106 module:io.ox/tours
 msgid "Editing multiple E-Mails"
 msgstr "Úprava více zpráv"
 
-#: apps/io.ox/tours/main.js:387 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:46 module:io.ox/tours
 msgid "Editing multiple contacts"
 msgstr "Úprava více kontaktů"
 
-#: apps/io.ox/tours/main.js:711 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:99 module:io.ox/tours
 msgid "Editing multiple tasks"
 msgstr "Úprava více úkolů"
 
-#: apps/io.ox/tours/main.js:741 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:43 module:io.ox/tours
 msgid "Editing settings"
 msgstr "Úprava nastavení"
 
-#: apps/io.ox/tours/main.js:273 module:io.ox/tours
-msgid "Enter the E-Mail text below the subject."
-msgstr "Zadejte text zprávy pod předmět."
-
-#: apps/io.ox/tours/main.js:272 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:69 module:io.ox/tours
 msgid ""
-"Enter the E-Mail text below the subject. If the text format was set to HTMl "
+"Enter the E-Mail text into the main area. If the text format was set to HTMl "
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
-"Text zprávy zadejte pod předmět. Pokud byl v nastavení zvolen formát HTML, "
-"můžete text zprávy formátovat. Provedete to tak, že vyberete část textu a "
-"kliknete na ikonu v liště s formátovacími funkcemi."
+"Text zprávy zadejte do hlavní oblasti. Pokud je nastaven formát zpráv HTML, "
+"můžete použít formátovací funkce. Provedete to označením části textu a "
+"kliknutím na ikonu v nástrojové liště pro formátování."
 
-#: apps/io.ox/tours/main.js:252 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:48 module:io.ox/tours
 msgid ""
-"Enter the recipient's name on the top left side. As soon as you typed the "
-"first letters, suggestions from the address books are displayed. To accept a "
-"recipient suggestion, click on it."
+"Enter the recipient's name into the recipients field. As soon as you typed "
+"the first letters, suggestions from the address books are displayed. To "
+"accept a recipient suggestion, click on it."
 msgstr ""
-"Jméno příjemce zadejte na levé straně. Jakmile napíšete první písmena, "
-"objeví se návrhy z knihy adres. Chcete-li navrhovaného příjemce vybrat, "
-"klikněte na něj."
+"Zadejte jméno příjemce do pole adresátů. Jakmile začnete psát, zobrazí se "
+"návrhy z adresářů. Pro přijetí návrhu na něj klikněte."
 
-#: apps/io.ox/tours/main.js:266 module:io.ox/tours
-msgid "Enter the subject on the right side of the recipient."
-msgstr "Předmět zadejte napravo od příjemce."
+#: apps/io.ox/tours/mail.js:59 module:io.ox/tours
+msgid "Enter the subject into the subject field."
+msgstr "Zadejte předmět do pole pro předmět"
 
-#: apps/io.ox/tours/main.js:430 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:52 module:io.ox/tours
 msgid ""
 "Enter the subject, the start and the end date of the appointment. Other "
 "details are optional."
 msgstr ""
 "Zadejte předmět, začátek a konec schůzky. Ostatní údaje jsou nepovinné."
 
-#: apps/io.ox/tours/main.js:625 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:49 module:io.ox/tours
 msgid "Enter the subject, the start date, and a description."
 msgstr "Zadejte předmět, datum začátku a popis."
 
-#: apps/io.ox/tours/main.js:676 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:82 module:io.ox/tours
 msgid "Entering billing information"
 msgstr "Zadání účtovacích informací"
 
-#: apps/io.ox/tours/main.js:269 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:68 module:io.ox/tours
 msgid "Entering the E-Mail text"
 msgstr "Zadání textu zprávy"
 
-#: apps/io.ox/tours/main.js:427 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:51 module:io.ox/tours
 msgid "Entering the appointment's data"
 msgstr "Zadání údajů o schůzce"
 
-#: apps/io.ox/tours/main.js:249 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:47 module:io.ox/tours
 msgid "Entering the recipient's name"
 msgstr "Zadání jména příjemce"
 
-#: apps/io.ox/tours/main.js:263 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:58 module:io.ox/tours
 msgid "Entering the subject"
 msgstr "Zadání předmětu"
 
-#: apps/io.ox/tours/main.js:622 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:48 module:io.ox/tours
 msgid "Entering the task's data"
 msgstr "Zadávání údajů o úkolu"
 
-#: apps/io.ox/tours/main.js:528 module:io.ox/tours
+#: apps/io.ox/tours/files.js:30 module:io.ox/tours
 msgid "Folder tree"
 msgstr "Strom složek"
 
-#: apps/io.ox/tours/main.js:464 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:73 module:io.ox/tours
 msgid "Further down you can add documents as attachments to the appointment."
 msgstr "O něco níže můžete ke schůzce přidat dokumenty jako přílohy."
 
-#: apps/io.ox/tours/main.js:257 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:63 module:io.ox/tours
 msgid "Further functions"
 msgstr "Další funkce"
 
-#: apps/io.ox/tours/main.js:159 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:131 module:io.ox/tours
 msgid "Further information"
 msgstr "Další informace"
 
 #. Tour name; general introduction
-#: apps/io.ox/tours/main.js:806 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:46 module:io.ox/tours
 msgid "Getting started"
 msgstr "Začínáme"
 
-#: apps/io.ox/tours/main.js:845 module:io.ox/tours
+#: apps/io.ox/tours/main.js:77 module:io.ox/tours
 msgid "Guided tour for this app"
 msgstr "Prohlídka pro tuto aplikaci"
 
-#: apps/io.ox/tours/main.js:334 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:101 module:io.ox/tours
 msgid "Halo view"
 msgstr "Souhrnný pohled"
 
-#: apps/io.ox/tours/main.js:735 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:36 module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "Jak je Nastavení organizované"
 
-#: apps/io.ox/tours/main.js:584 module:io.ox/tours
-msgid ""
-"If a folder contains images, you can display a slideshow. To do so click the "
-"View slideshow icon in the toolbar."
-msgstr ""
-"Pokud složka obsahuje obrázky, můžete je zobrazit jako slideshow. Chcete-li "
-"to udělat, klikněte na ikonku Zobrazit Slideshow na nástrojové liště."
-
-#: apps/io.ox/tours/main.js:315 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:92 module:io.ox/tours
 msgid ""
 "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
 "separate window."
@@ -247,23 +227,19 @@ msgstr ""
 "Pokud dvojitě kliknete na zprávu v seznamu, zpráva se otevře v samostatném "
 "okně."
 
-#: apps/io.ox/tours/main.js:205 module:io.ox/tours
-msgid ""
-"If you no longer want to display a square, click the cross on the upper "
-"right side."
-msgstr ""
-"Pokud už nechcete mít některou dlaždici zobrazenou, klikněte na křížek v "
-"pravé horní části."
+#: apps/io.ox/tours/portal.js:46 module:io.ox/tours
+msgid "If you no longer want to display a square, click the cross."
+msgstr "Nechcete-li již pole zobrazovat pole, klikněte na křížek."
 
-#: apps/io.ox/tours/main.js:108 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:89 module:io.ox/tours
 msgid ""
 "In case of new notifications, e.g. appointment invitations, the info area is "
-"opened on the right side."
+"opened."
 msgstr ""
-"Pokud se objeví nová upozornění, např. pozvánky na schůzky, na pravé straně "
-"se otevře informační oblast."
+"Informační oblast se otevře, pokud se objeví nová oznámení, např. oznámení o "
+"schůzkách."
 
-#: apps/io.ox/tours/main.js:346 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:107 module:io.ox/tours
 msgid ""
 "In order to edit multiple E-Mails at once, enable the checkboxes on the left "
 "side of the E-Mails. If the checkboxes are not displayed, click on View > "
@@ -273,85 +249,86 @@ msgstr ""
 "zpráv. Pokud nejsou políčka zobrazená, klikněte na Pohled > Zaškrtávací pole "
 "na pravé straně nástrojové lišty."
 
-#: apps/io.ox/tours/main.js:445 module:io.ox/tours
-#: apps/io.ox/tours/main.js:662
+#: apps/io.ox/tours/mail.js:64 module:io.ox/tours
+msgid ""
+"In this area you can find further functions, e.g. for adding attachments."
+msgstr "Zde naleznete další funkce, např. pro přidávání příloh."
+
+#: apps/io.ox/tours/calendar.js:67 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:77
 msgid "Inviting other participants"
 msgstr "Pozvání dalších účastníků"
 
-#: apps/io.ox/tours/main.js:81 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:70 module:io.ox/tours
 msgid "Launching an app"
 msgstr "Spouštění aplikace"
 
-#: apps/io.ox/tours/main.js:375 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:35 module:io.ox/tours
 msgid "Navigation bar"
 msgstr "Navigační lišta"
 
-#: apps/io.ox/tours/main.js:312 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:91 module:io.ox/tours
 msgid "Opening an E-Mail in a separate window"
 msgstr "Otevření zprávy v samostatném okně"
 
-#: apps/io.ox/tours/main.js:120 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:101 module:io.ox/tours
 msgid "Opening or closing the folder tree"
 msgstr "Otevírání a zavírání oblasti se složkami"
 
-#: apps/io.ox/tours/main.js:350 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:112 module:io.ox/tours
 msgid "Opening the E-Mail settings"
 msgstr "Otevření nastavení zpráv"
 
-#: apps/io.ox/tours/main.js:747 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:48 module:io.ox/tours
 msgid "Opening the help"
 msgstr "Otevření nápovědy"
 
-#: apps/io.ox/tours/main.js:729 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:30 module:io.ox/tours
 msgid "Opening the settings"
 msgstr "Otevření nastavení"
 
-#: apps/io.ox/tours/main.js:319 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:96 module:io.ox/tours
 msgid "Reading E-Mail conversations"
 msgstr "Čtení e-mailových konverzací"
 
-#: apps/io.ox/tours/main.js:184 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:35 module:io.ox/tours
 msgid "Reading the details"
 msgstr "Čtení podrobností"
 
-#: apps/io.ox/tours/main.js:126 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:106 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Vyhledávání objektů"
 
-#: apps/io.ox/tours/main.js:305 module:io.ox/tours
-#: apps/io.ox/tours/main.js:490 apps/io.ox/tours/main.js:534
+#: apps/io.ox/tours/calendar.js:83 module:io.ox/tours
+#: apps/io.ox/tours/files.js:35 apps/io.ox/tours/mail.js:86
 msgid "Selecting a view"
 msgstr "Vybrání pohledu"
 
-#: apps/io.ox/tours/main.js:381 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:40 module:io.ox/tours
 msgid "Sending an E-Mail to a contact"
 msgstr "Poslání zprávy kontaktu"
 
-#: apps/io.ox/tours/main.js:278 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:74 module:io.ox/tours
 msgid "Sending the E-Mail"
 msgstr "Odeslání zprávy"
 
-#: apps/io.ox/tours/main.js:753 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:54 module:io.ox/tours
 msgid "Signing out"
 msgstr "Odhlášení"
 
-#: apps/io.ox/tours/main.js:581 module:io.ox/tours
-msgid "Slideshow"
-msgstr "Slideshow"
-
-#: apps/io.ox/tours/main.js:704 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:92 module:io.ox/tours
 msgid "Sorting tasks"
 msgstr "Řazení úkolů"
 
-#: apps/io.ox/tours/main.js:296 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:79 module:io.ox/tours
 msgid "Sorting your E-Mails"
 msgstr "Řazení zpráv"
 
-#: apps/io.ox/tours/main.js:152 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:126 module:io.ox/tours
 msgid "The Detail view"
 msgstr "Podrobný pohled"
 
-#: apps/io.ox/tours/main.js:155 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:127 module:io.ox/tours
 msgid ""
 "The Detail view displays an object's content. Depending on the app, further "
 "functions for organizing objects can be found in the Detail view."
@@ -359,11 +336,11 @@ msgstr ""
 "Podrobný pohled ukazuje obsah objektu. V závislosti na aplikaci mohou být v "
 "Podrobném pohledu k dispozici další funkce pro organizování objektů."
 
-#: apps/io.ox/tours/main.js:546 module:io.ox/tours
+#: apps/io.ox/tours/files.js:45 module:io.ox/tours
 msgid "The Icons view"
 msgstr "Ikonový pohled"
 
-#: apps/io.ox/tours/main.js:549 module:io.ox/tours
+#: apps/io.ox/tours/files.js:46 module:io.ox/tours
 msgid ""
 "The Icons view displays an icon and the file name for each file. Click on an "
 "icon to view further details and functions in the pop-up."
@@ -371,12 +348,12 @@ msgstr ""
 "Ikonový pohled zobrazuje u každého souboru ikonu a název. Kliknutím na ikonu "
 "zobrazíte další podrobnosti a funkce ve vyskakovacím okně."
 
-#: apps/io.ox/tours/main.js:501 module:io.ox/tours
-#: apps/io.ox/tours/main.js:540
+#: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
+#: apps/io.ox/tours/files.js:40
 msgid "The List view"
 msgstr "Pohled seznam"
 
-#: apps/io.ox/tours/main.js:504 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:96 module:io.ox/tours
 msgid ""
 "The List view shows a list of the appointments in the current folder. If "
 "clicking on an appointment, the appointment's data and some functions are "
@@ -385,7 +362,7 @@ msgstr ""
 "Pohled Seznam zobrazuje seznam schůzek v aktuální složce. Když kliknete na "
 "schůzku, zobrazí se údaje o schůzce a některé funkce v Podrobném pohledu."
 
-#: apps/io.ox/tours/main.js:543 module:io.ox/tours
+#: apps/io.ox/tours/files.js:41 module:io.ox/tours
 msgid ""
 "The List view shows details like the size and date of change. Use the "
 "checkboxes to select files. Click on a file to view further details and "
@@ -395,11 +372,11 @@ msgstr ""
 "Použijte zaškrtávací políčka pro výběr souborů. Kliknutím na soubor "
 "zobrazíte další podrobnosti a funkce ve vyskakovacím okně."
 
-#: apps/io.ox/tours/main.js:97 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:82 module:io.ox/tours
 msgid "The New objects icon"
 msgstr "Ikona nových objektů"
 
-#: apps/io.ox/tours/main.js:100 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:83 module:io.ox/tours
 msgid ""
 "The New objects icon shows the number of unread E-Mails or other "
 "notifications. If clicking the icon, the info area opens."
@@ -407,11 +384,11 @@ msgstr ""
 "Ikona nových objektů ukazuje počet nepřečtených zpráv nebo jiná upozornění. "
 "Kliknutí na ikonu otevře informační oblast."
 
-#: apps/io.ox/tours/main.js:178 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:30 module:io.ox/tours
 msgid "The Portal"
 msgstr "Portál"
 
-#: apps/io.ox/tours/main.js:181 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:31 module:io.ox/tours
 msgid ""
 "The Portal informs you about current E-Mails, appointments or social network "
 "news."
@@ -419,11 +396,11 @@ msgstr ""
 "Portál vás informuje o nových zprávách, schůzkách nebo novinkách ze "
 "sociálních sítí."
 
-#: apps/io.ox/tours/main.js:552 module:io.ox/tours
+#: apps/io.ox/tours/files.js:50 module:io.ox/tours
 msgid "The Tiles view"
 msgstr "Dlaždicový pohled"
 
-#: apps/io.ox/tours/main.js:555 module:io.ox/tours
+#: apps/io.ox/tours/files.js:51 module:io.ox/tours
 msgid ""
 "The Tiles view shows a big icon for each file. Click on an icon to view "
 "further details and functions in the pop-up."
@@ -431,11 +408,11 @@ msgstr ""
 "Dlaždicový pohled zobrazuje pro každý soubor velkou ikonu. Kliknutím na "
 "ikonu zobrazíte další podrobnosti a funkce ve vyskakovacím okně."
 
-#: apps/io.ox/tours/main.js:512 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
 msgid "The calendar views"
 msgstr "Kalendářové pohledy"
 
-#: apps/io.ox/tours/main.js:515 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:106 module:io.ox/tours
 msgid ""
 "The calendar views display a calendar sheet with the appointments for the "
 "selected time range."
@@ -443,33 +420,31 @@ msgstr ""
 "Kalendářové pohledy ukazují kalendářovou tabulku se schůzkami pro dané "
 "časové rozmezí."
 
-#: apps/io.ox/tours/main.js:138 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:116 module:io.ox/tours
 msgid "The folder tree"
 msgstr "Strom složek"
 
-#: apps/io.ox/tours/main.js:105 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:88 module:io.ox/tours
 msgid "The info area"
 msgstr "Informační oblast"
 
-#: apps/io.ox/tours/main.js:144 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:121 module:io.ox/tours
 msgid "The list"
 msgstr "Seznam"
 
-#: apps/io.ox/tours/main.js:738 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:37 module:io.ox/tours
 msgid ""
 "The settings are organized in topics. Select the topic on the left side, e.g "
-"Basic settings or E-Mail. To view all settings, enable Advanced settings at "
-"the bottom."
+"Basic settings or E-Mail."
 msgstr ""
-"Nastavení je organizované podle témat. Téma zvolte vlevo, např. Základní "
-"nastavení nebo Zprávy. Chcete-li zobrazit všechna nastavení, klikněte dole "
-"na Pokročilá nastavení."
+"Nastavení je organizované podle témat. Na levé straně zvolte téma, např. "
+"Základní nastavení nebo Pošta."
 
-#: apps/io.ox/tours/main.js:132 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:111 module:io.ox/tours
 msgid "The toolbar"
 msgstr "Nástrojová lišta"
 
-#: apps/io.ox/tours/main.js:74 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:67 module:io.ox/tours
 msgid ""
 "This guided tour will briefly introduce you to the product. Get more "
 "detailed information in the tours for the single apps or in the online help."
@@ -477,11 +452,11 @@ msgstr ""
 "Tato prohlídka vám produkt stručně představí. Podrobnější informace najdete "
 "v prohlídkách jednotlivých aplikací nebo v online nápovědě."
 
-#: apps/io.ox/tours/main.js:631 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:55 module:io.ox/tours
 msgid "To add further details, click on Expand form."
 msgstr "Chcete-li doplnit další podrobnosti, klikněte na Rozvinout formulář."
 
-#: apps/io.ox/tours/main.js:199 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:41 module:io.ox/tours
 msgid ""
 "To change the layout, drag a square's title to another position and drop it "
 "there."
@@ -489,7 +464,7 @@ msgstr ""
 "Chcete-li změnit rozvržení, přetáhnete název dlaždice na jiné místo a tam "
 "jej pusťte."
 
-#: apps/io.ox/tours/main.js:308 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:87 module:io.ox/tours
 msgid ""
 "To choose between the different views. click on View in the toolbar. Select "
 "a menu entry in the layout."
@@ -497,40 +472,40 @@ msgstr ""
 "Chcete-li si vybrat mezi různými pohledy, klikněte na Pohled na nástrojové "
 "liště. Pak v menu vyberte rozvržení."
 
-#: apps/io.ox/tours/main.js:231 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:34 module:io.ox/tours
 msgid "To compose a new E-Mail, click on Compose in the toolbar."
 msgstr ""
 "Chcete-li napsat novou zprávu, klikněte na Napsat novou zprávu na nástrojové "
 "liště."
 
-#: apps/io.ox/tours/main.js:115 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr ""
 "Chcete-li vytvořit novou zprávu, klikněte na ikonu Napsat novou zprávu na "
 "nástrojové liště."
 
-#: apps/io.ox/tours/main.js:410 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:35 module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."
 msgstr ""
 "Chcete-li vytvořit novou schůzku, klikněte na Nové na nástrojové liště."
 
-#: apps/io.ox/tours/main.js:371 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:31 module:io.ox/tours
 msgid "To create a new contact, click on New > Add contact in the toolbar."
 msgstr ""
 "Chcete-li vytvořit nový kontakt, klikněte na Nový > Přidat kontakt na "
 "nástrojové liště."
 
-#: apps/io.ox/tours/main.js:606 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:33 module:io.ox/tours
 msgid "To create a new task, click on New in the toolbar."
 msgstr "Chcete-li vytvořit nový úkol, klikněte na Nové na nástrojové liště."
 
-#: apps/io.ox/tours/main.js:578 module:io.ox/tours
+#: apps/io.ox/tours/files.js:61 module:io.ox/tours
 msgid "To create a note, click on New > Add note in the toolbar."
 msgstr ""
 "Chcete-li vytvořit poznámku, klikněte na Nové > Přidat poznámku na "
 "nástrojové liště."
 
-#: apps/io.ox/tours/main.js:436 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:58 module:io.ox/tours
 msgid ""
 "To create recurring appointments, enable Repeat. Functions for setting the "
 "recurrence parameters are shown."
@@ -538,7 +513,7 @@ msgstr ""
 "Chcete-li vytvořit opakující se schůzky, povolte Opakování. Zobrazí se "
 "funkce pro nastavení parametrů opakování."
 
-#: apps/io.ox/tours/main.js:642 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:63 module:io.ox/tours
 msgid ""
 "To create recurring tasks, enable Repeat. Functions for setting the "
 "recurrence parameters are shown."
@@ -546,15 +521,15 @@ msgstr ""
 "Chcete-li vytvořit opakující se úkoly, klikněte na Opakovat. Zobrazí se "
 "funkce pro nastavení parametrů opakování."
 
-#: apps/io.ox/tours/main.js:475 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:78 module:io.ox/tours
 msgid "To create the appointment, click on Create at the upper right side."
 msgstr "Chcete-li schůzku vytvořit, klikněte na Vytvořit vpravo nahoře."
 
-#: apps/io.ox/tours/main.js:691 module:io.ox/tours
-msgid "To create the task, click on Create on the upper right side."
-msgstr "Chcete-li úkol vytvořit, klikněte na Vytvořit vpravo nahoře."
+#: apps/io.ox/tours/tasks.js:88 module:io.ox/tours
+msgid "To create the task, click on Create."
+msgstr "Úkol vytvoříte kliknutím na Vytvořit."
 
-#: apps/io.ox/tours/main.js:213 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:52 module:io.ox/tours
 msgid ""
 "To display a square again or to display further information sources, click "
 "on Customize this page."
@@ -562,7 +537,7 @@ msgstr ""
 "Chcete-li dlaždici opět zobrazit nebo chcete-li zobrazit jiné informační "
 "zdroje, klikněte na Přizpůsobit tuto stránku."
 
-#: apps/io.ox/tours/main.js:91 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:76 module:io.ox/tours
 msgid ""
 "To display the help or the settings, click the System menu icon in the menu "
 "bar."
@@ -570,7 +545,7 @@ msgstr ""
 "Chcete-li zobrazit nápovědu nebo nastavení, klikněte na ikonu systémového "
 "menu na liště s menu."
 
-#: apps/io.ox/tours/main.js:390 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:47 module:io.ox/tours
 msgid ""
 "To edit multiple contacts at once, enable the checkboxes on the left side of "
 "the contacts. If the checkboxes are not displayed, click on View > "
@@ -580,7 +555,7 @@ msgstr ""
 "straně kontaktů. Pokud nejsou políčka zobrazená, klikněte na Pohled > "
 "Zaškrtávací pole na pravé straně nástrojové lišty."
 
-#: apps/io.ox/tours/main.js:715 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:100 module:io.ox/tours
 msgid ""
 "To edit multiple tasks at once, enable the checkboxes at the left side of "
 "the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
@@ -590,11 +565,11 @@ msgstr ""
 "úkolů. Pokud políčka nejsou zobrazená, klikněte na Pohled > Zaškrtávací pole "
 "na pravé straně nástrojové lišty."
 
-#: apps/io.ox/tours/main.js:679 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:83 module:io.ox/tours
 msgid "To enter billing information, click on Show details."
 msgstr "Pro zadání účtovacích informací klikněte na Zobrazit podrobnosti."
 
-#: apps/io.ox/tours/main.js:453 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:68 module:io.ox/tours
 msgid ""
 "To invite other participants, enter their names in the field below "
 "Participants. To avoid appointment conflicts, click on Find a free time at "
@@ -604,7 +579,7 @@ msgstr ""
 "Účastníci. Kliknutím na Najít volný čas vpravo nahoře zabráníte konfliktům "
 "ve schůzkách."
 
-#: apps/io.ox/tours/main.js:670 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:78 module:io.ox/tours
 msgid ""
 "To invite other participants, enter their names in the field below "
 "Participants. You can add documents as attachment to the task."
@@ -612,21 +587,21 @@ msgstr ""
 "Chcete-li pozvat další účastníky, zadejte jejich jména do pole pod "
 "Účastníci. Dokumenty můžete k úkolu přidat jako přílohy."
 
-#: apps/io.ox/tours/main.js:84 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:71 module:io.ox/tours
 msgid "To launch an app, click on an entry on the left side of the menu bar."
 msgstr ""
 "Chcete-li spustit aplikaci, klikněte na položku v levé horní části lišty s "
 "menu."
 
-#: apps/io.ox/tours/main.js:442 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:63 module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
 msgstr "Nechcete-li zmeškat schůzku, použijte připomínací funkce."
 
-#: apps/io.ox/tours/main.js:648 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:68 module:io.ox/tours
 msgid "To not miss the task, use the reminder function."
 msgstr "Nechcete-li na úkol zapomenout, použijte připomínací funkci."
 
-#: apps/io.ox/tours/main.js:329 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:97 module:io.ox/tours
 msgid ""
 "To open or close an E-Mail in a conversation, click on a free area in the "
 "header."
@@ -634,7 +609,7 @@ msgstr ""
 "Chcete-li otevřít či zavřít zprávu v rámci konverzace, klikněte na prázdné "
 "místo hlavičky."
 
-#: apps/io.ox/tours/main.js:123 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:102 module:io.ox/tours
 msgid ""
 "To open or close the folder tree, click on View >  Folder view on the right "
 "side of the toolbar."
@@ -642,18 +617,15 @@ msgstr ""
 "Chcete-li otevřít nebo zavřít strom složek, klikněte na Zobrazit > Pohled na "
 "složku na pravé straně nástrojové lišty."
 
-#: apps/io.ox/tours/main.js:353 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:113 module:io.ox/tours
 msgid ""
 "To open the E-Mail settings, click the System menu icon on the upper right "
-"side of the menu bar. Select Settings. Click on E-Mail on the left side. To "
-"display all settings, enable Advanced settings in the bottom left side"
+"side of the menu bar. Select Settings. Click on E-Mail on the left side."
 msgstr ""
-"Chcete-li otevřít nastavení zpráv, klikněte na systémovou ikonu na pravé "
-"horní straně lišty s menu. Zvolte Nastavení. Klikněte nalevo nalevo na "
-"Zprávy. Chcete-li zobrazit všechna nastavení, povolte vlevo dole Pokročilá "
-"nastavení."
+"Chcete-li otevřít nastavení pošty, klikněte na ikonu Systémové menu v pravé "
+"horní části lišty menu. Zvolte Nastavení a klikněte na Pošta na levé straně."
 
-#: apps/io.ox/tours/main.js:750 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:49 module:io.ox/tours
 msgid ""
 "To open the help, click the System menu icon on the upper right side of the "
 "menu bar. Select Help. The help for the currently selected app is displayed. "
@@ -665,11 +637,7 @@ msgstr ""
 "vybranou aplikaci. Chcete-li procházet kompletní nápovědu, klikněte na "
 "stránku Start nebo Obsah v horní části okna."
 
-#: apps/io.ox/tours/main.js:732 module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the settings, click the System menu icon on the upper right side "
-#| "of the menu bar. Select Settings. "
+#: apps/io.ox/tours/settings.js:31 module:io.ox/tours
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
 "the menu bar. Select Settings."
@@ -677,11 +645,11 @@ msgstr ""
 "Chcete-li otevřít nastavení, klikněte na ikonu Systémové menu v pravé horní "
 "části lišty s menu. Zvolte Nastavení."
 
-#: apps/io.ox/tours/main.js:187 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:36 module:io.ox/tours
 msgid "To read the details, click on an entry in a square."
 msgstr "Chcete-li číst podrobnosti, klikněte na položku v dlaždicích."
 
-#: apps/io.ox/tours/main.js:337 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:102 module:io.ox/tours
 msgid ""
 "To receive information about the sender or other recipients, open the Halo "
 "view by clicking on a name."
@@ -689,12 +657,12 @@ msgstr ""
 "Chcete-li zobrazit informace o odesílateli nebo jiných příjemcích, otevřete "
 "Halo pohled kliknutím na jméno."
 
-#: apps/io.ox/tours/main.js:129 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:107 module:io.ox/tours
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr ""
 "Chcete-li vyhledávat objekty, klikněte na ikonu Vyhledávání na liště menu."
 
-#: apps/io.ox/tours/main.js:537 module:io.ox/tours
+#: apps/io.ox/tours/files.js:36 module:io.ox/tours
 msgid ""
 "To select one of the views List, Icons or Squares, click on View on the "
 "right side of the toolbar."
@@ -702,7 +670,7 @@ msgstr ""
 "Chcete-li vybrat pohled Seznam, Ikony nebo Dlaždice, klikněte na Pohled na "
 "pravé straně nástrojové lišty."
 
-#: apps/io.ox/tours/main.js:493 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:84 module:io.ox/tours
 msgid ""
 "To select one of the views like Day, Month or List, click on View in the "
 "toolbar. Select a menu entry from the Layout section."
@@ -710,7 +678,7 @@ msgstr ""
 "Chcete-li vybrat jeden z pohledů, např. Den, Měsíc nebo Seznam, klikněte na "
 "Pohled na nástrojové liště. V části rozvržení vyberte příslušnou položku."
 
-#: apps/io.ox/tours/main.js:384 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:41 module:io.ox/tours
 msgid ""
 "To send an E-Mail to the contact, click on an E-Mail address or on Send "
 "email in the toolbar."
@@ -718,11 +686,11 @@ msgstr ""
 "Chcete-li poslat zprávu kontaktu, klikněte na e-mailovou adresu nebo na "
 "Poslat zprávu na nástrojové liště."
 
-#: apps/io.ox/tours/main.js:281 module:io.ox/tours
-msgid "To send the E-Mail, click on Send on the upper right side."
-msgstr "Chcete-li zprávu poslat, klikněte na Odeslat vpravo nahoře."
+#: apps/io.ox/tours/mail.js:75 module:io.ox/tours
+msgid "To send the E-Mail, click on Send"
+msgstr "Zprávu odešlete kliknutím na Poslat"
 
-#: apps/io.ox/tours/main.js:756 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:55 module:io.ox/tours
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
@@ -730,27 +698,27 @@ msgstr ""
 "Chcete-li se odhlásit, klikněte na ikonu Systémové menu v pravé horní části "
 "lišty menu. Zvolte Odhlásit."
 
-#: apps/io.ox/tours/main.js:299 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:80 module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
 msgstr ""
 "Chcete-li zpráv seřadit, klikněte Řadit podle. Pak zvolte kritérium řazení."
 
-#: apps/io.ox/tours/main.js:707 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:93 module:io.ox/tours
 msgid "To sort the tasks, click on Sort by. Select a sort criteria."
 msgstr ""
 "Chcete-li úkoly seřadit, klikněte na Řadit podle a zvolte kritéria řazení."
 
-#: apps/io.ox/tours/main.js:659 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:73 module:io.ox/tours
 msgid "To track the editing status, enter the current progress."
 msgstr "Chcete-li sledovat stav úprav, zadejte aktuální stav."
 
-#: apps/io.ox/tours/main.js:567 module:io.ox/tours
+#: apps/io.ox/tours/files.js:56 module:io.ox/tours
 msgid "To upload a file, click on New > Upload new file in the toolbar."
 msgstr ""
 "Chcete-li nahrát soubor, klikněte na Nové > Nahrát nový soubor na nástrojové "
 "liště."
 
-#: apps/io.ox/tours/main.js:590 module:io.ox/tours
+#: apps/io.ox/tours/files.js:68 module:io.ox/tours
 msgid ""
 "To view further information, click on a file. A pop-up window displays "
 "further details and functions."
@@ -758,15 +726,15 @@ msgstr ""
 "Chcete-li zobrazit další informace, klikněte na soubor. Další podrobnosti a "
 "funkce se zobrazí ve vyskakovacím okně."
 
-#: apps/io.ox/tours/main.js:651 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:72 module:io.ox/tours
 msgid "Tracking the editing status"
 msgstr "Sledování stavu úprav"
 
-#: apps/io.ox/tours/main.js:563 module:io.ox/tours
+#: apps/io.ox/tours/files.js:55 module:io.ox/tours
 msgid "Uploading a file"
 msgstr "Nahrání souboru"
 
-#: apps/io.ox/tours/main.js:531 module:io.ox/tours
+#: apps/io.ox/tours/files.js:31 module:io.ox/tours
 msgid ""
 "Use the folder tree to access own, public or shared files. If the folder "
 "tree is hidden, click on View > Folder view on the right side of the toolbar."
@@ -775,7 +743,7 @@ msgstr ""
 "souborům. Pokud je strom složek skrytý, klikněte na Pohled > Pohled na "
 "složky na pravé straně nástrojové lišty."
 
-#: apps/io.ox/tours/main.js:141 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:117 module:io.ox/tours
 msgid ""
 "Use the folder tree to open the folder containing the objects that you want "
 "to view in the list."
@@ -783,19 +751,19 @@ msgstr ""
 "Použijte strom složek k otevření složky obsahující objekty, které chcete "
 "zobrazit v seznamu."
 
-#: apps/io.ox/tours/main.js:147 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:122 module:io.ox/tours
 msgid ""
 "Use the list to select an object, show its contents or activate functions."
 msgstr ""
 "Použijte seznam k výběru objektu, abyste mohli zobrazit jeho obsah nebo "
 "použít jiné funkce."
 
-#: apps/io.ox/tours/main.js:439 module:io.ox/tours
-#: apps/io.ox/tours/main.js:645
+#: apps/io.ox/tours/calendar.js:62 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:67
 msgid "Using the reminder function"
 msgstr "Použití připomínací funkce"
 
-#: apps/io.ox/tours/main.js:71 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:66 module:io.ox/tours
 msgid "Welcome to %s"
 msgstr "Vítejte v %s"
 
@@ -3565,6 +3533,13 @@ msgstr "Vítejte v %s"
 #~ msgid "Below quoted text"
 #~ msgstr "Pod citovaným textem"
 
+#~ msgid ""
+#~ "Below the recipient you will find further functions, e.g. for sending "
+#~ "copies to other recipients or for adding attachments."
+#~ msgstr ""
+#~ "Pod příjemcem najdete další funkce, např. pro posílání kopií jiným "
+#~ "příjemcům nebo pro přidávání příloh."
+
 #~ msgid "Benin"
 #~ msgstr "Benin"
 
@@ -5518,6 +5493,30 @@ msgstr "Vítejte v %s"
 #~ msgid "Enter personal data"
 #~ msgstr "Zadat osobní údaje"
 
+#~ msgid "Enter the E-Mail text below the subject."
+#~ msgstr "Zadejte text zprávy pod předmět."
+
+#~ msgid ""
+#~ "Enter the E-Mail text below the subject. If the text format was set to "
+#~ "HTMl in the options, you can format the E-Mail text. To do so select a "
+#~ "text part and then click an icon in the formatting bar."
+#~ msgstr ""
+#~ "Text zprávy zadejte pod předmět. Pokud byl v nastavení zvolen formát "
+#~ "HTML, můžete text zprávy formátovat. Provedete to tak, že vyberete část "
+#~ "textu a kliknete na ikonu v liště s formátovacími funkcemi."
+
+#~ msgid ""
+#~ "Enter the recipient's name on the top left side. As soon as you typed the "
+#~ "first letters, suggestions from the address books are displayed. To "
+#~ "accept a recipient suggestion, click on it."
+#~ msgstr ""
+#~ "Jméno příjemce zadejte na levé straně. Jakmile napíšete první písmena, "
+#~ "objeví se návrhy z knihy adres. Chcete-li navrhovaného příjemce vybrat, "
+#~ "klikněte na něj."
+
+#~ msgid "Enter the subject on the right side of the recipient."
+#~ msgstr "Předmět zadejte napravo od příjemce."
+
 #~ msgid "Enter visible text"
 #~ msgstr "Zadat viditelný text"
 
@@ -6552,6 +6551,13 @@ msgstr "Vítejte v %s"
 #~ msgstr "Ikony"
 
 #~ msgid ""
+#~ "If a folder contains images, you can display a slideshow. To do so click "
+#~ "the View slideshow icon in the toolbar."
+#~ msgstr ""
+#~ "Pokud složka obsahuje obrázky, můžete je zobrazit jako slideshow. Chcete-"
+#~ "li to udělat, klikněte na ikonku Zobrazit Slideshow na nástrojové liště."
+
+#~ msgid ""
 #~ "If the authorization expired or was revoked, you can repeat the "
 #~ "authorization process by clicking on the button below. The authorization "
 #~ "will proceed in a separate window."
@@ -6566,6 +6572,13 @@ msgstr "Vítejte v %s"
 #~ msgstr ""
 #~ "Změníte-li heslo, budete odhlášen(a). Ujistěte se, prosím, že je vše "
 #~ "zavřené a uložené."
+
+#~ msgid ""
+#~ "If you no longer want to display a square, click the cross on the upper "
+#~ "right side."
+#~ msgstr ""
+#~ "Pokud už nechcete mít některou dlaždici zobrazenou, klikněte na křížek v "
+#~ "pravé horní části."
 
 #~ msgid ""
 #~ "If you spot a free time, just select this area. To do this, move the "
@@ -6639,6 +6652,13 @@ msgstr "Vítejte v %s"
 
 #~ msgid "In a public folder there must be at least one participant."
 #~ msgstr "Ve veřejné složce musí být alespoň jeden účastník."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened on the right side."
+#~ msgstr ""
+#~ "Pokud se objeví nová upozornění, např. pozvánky na schůzky, na pravé "
+#~ "straně se otevře informační oblast."
 
 #~ msgid ""
 #~ "In order to assign categories to the objects selected, use the control "
@@ -10341,6 +10361,9 @@ msgstr "Vítejte v %s"
 #~ msgid "Skip this step"
 #~ msgstr "Přeskočit tento krok"
 
+#~ msgid "Slideshow"
+#~ msgstr "Slideshow"
+
 #~ msgid "Slovakia"
 #~ msgstr "Slovensko"
 
@@ -11299,6 +11322,15 @@ msgstr "Vítejte v %s"
 #~ msgstr "Nastavení bylo uloženo."
 
 #~ msgid ""
+#~ "The settings are organized in topics. Select the topic on the left side, "
+#~ "e.g Basic settings or E-Mail. To view all settings, enable Advanced "
+#~ "settings at the bottom."
+#~ msgstr ""
+#~ "Nastavení je organizované podle témat. Téma zvolte vlevo, např. Základní "
+#~ "nastavení nebo Zprávy. Chcete-li zobrazit všechna nastavení, klikněte "
+#~ "dole na Pokročilá nastavení."
+
+#~ msgid ""
 #~ "The settings for collecting contacts in this folder will become disabled "
 #~ "when you enter the application the next time."
 #~ msgstr ""
@@ -12030,8 +12062,22 @@ msgstr "Vítejte v %s"
 #~ "Chcete-li vytvořit poznámku, klikněte na ikonu nahoře. Zvolte Přidat "
 #~ "poznámku."
 
+#~ msgid "To create the task, click on Create on the upper right side."
+#~ msgstr "Chcete-li úkol vytvořit, klikněte na Vytvořit vpravo nahoře."
+
 #~ msgid "To launch an app, click on a tile's headline."
 #~ msgstr "Chcete-li spustit aplikaci, klikněte na nadpis dlaždice."
+
+#~ msgid ""
+#~ "To open the E-Mail settings, click the System menu icon on the upper "
+#~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
+#~ "side. To display all settings, enable Advanced settings in the bottom "
+#~ "left side"
+#~ msgstr ""
+#~ "Chcete-li otevřít nastavení zpráv, klikněte na systémovou ikonu na pravé "
+#~ "horní straně lišty s menu. Zvolte Nastavení. Klikněte nalevo nalevo na "
+#~ "Zprávy. Chcete-li zobrazit všechna nastavení, povolte vlevo dole "
+#~ "Pokročilá nastavení."
 
 #, fuzzy
 #~ msgid ""
@@ -12040,6 +12086,9 @@ msgstr "Vítejte v %s"
 #~ msgstr ""
 #~ "Chcete-li otevřít nápovědu, klikněte na ikonu Systémové menu v pravé "
 #~ "horní části lišty s menu. Zvolte Nápověda."
+
+#~ msgid "To send the E-Mail, click on Send on the upper right side."
+#~ msgstr "Chcete-li zprávu poslat, klikněte na Odeslat vpravo nahoře."
 
 #~ msgid "To view attachment you must first save your e-mail as a draft."
 #~ msgstr ""

@@ -231,6 +231,7 @@
         dd {
             width: 66%;
             .user-select(text);
+            word-wrap: break-word;
 
             &.io-ox-busy:before {
                 font-size: inherit;
@@ -342,14 +343,16 @@
                 text-decoration: none;
                 color: @viewer-toolbar-color;
                 border-bottom: 1px solid @viewer-toolbar-border-color;
-                &:hover {
-                    color: @viewer-toolbar-hover-color;
-                    background-color: @viewer-toolbar-hover-bgcolor;
-                }
-                &:focus,
-                &:active {
-                    color: @viewer-toolbar-focus-color;
-                    background-color: @viewer-toolbar-focus-bgcolor;
+                &:not(.disabled) {
+                    &:hover {
+                        color: @viewer-toolbar-hover-color;
+                        background-color: @viewer-toolbar-hover-bgcolor;
+                    }
+                    &:focus,
+                    &:active {
+                        color: @viewer-toolbar-focus-color;
+                        background-color: @viewer-toolbar-focus-bgcolor;
+                    }
                 }
             }
             > a.active {
@@ -398,16 +401,21 @@
             i.fa-file-text-o {
                 color: #4285f4;
             }
-            &:hover, &:active, &:focus {
-                color: @viewer-toolbar-color;
-                background: @viewer-toolbar-hover-bgcolor;
+            &:not(.disabled) {
+                &:hover, &:active, &:focus {
+                    color: @viewer-toolbar-color;
+                    background: @viewer-toolbar-hover-bgcolor;
+                }
+            }
+            &.disabled {
+                cursor: default;
             }
             @media (orientation: portrait) and (min-width: 320px) {
                 i {
                     margin-right: 5px;
                 }
                 @media (min-width: 320px) {
-                    width: 135px;
+                    width: 115px;
                 }
                 @media (min-width: 1024px) {
                     width: 215px;
@@ -426,14 +434,14 @@
             justify-content: center;
             align-items: center;
             flex-direction: row;
-            
+
             @media (max-width: 1023px) {
                 left: 135px;
             }
-            
+
             @media (max-width: 767px) {
                 display: none;
-            }            
+            }
         }
 
         @viewer-toolbar-link-disabled-color: #CCCCCC;
@@ -452,7 +460,7 @@
         @viewer-toolbar-page-bordercolor: #e0e0e0;
         .viewer-toolbar-page-wrapper {
             display: inline-block;
-            border: 1px solid @viewer-toolbar-page-bordercolor;
+            outline: 1px solid @viewer-toolbar-page-bordercolor;
             height: 30px;
             margin: 5px 10px;
         }
@@ -528,7 +536,19 @@
         }
 
         .viewer-displayer-image {
+
             display: none;
+
+            // fix transparent images; see e.g. http://lea.verou.me/css3patterns/#checkerboard
+            @g: #eee;
+            @t: transparent;
+            background-color: #fff;
+            background-image: -webkit-linear-gradient(45deg, @g 25%, @t 25%, @t 75%, @g 75%, @g),
+                -webkit-linear-gradient(45deg, @g 25%, @t 25%, @t 75%, @g 75%, @g);
+            background-image: linear-gradient(45deg, @g 25%, @t 25%, @t 75%, @g 75%, @g),
+                linear-gradient(45deg, @g 25%, @t 25%, @t 75%, @g 75%, @g);
+            background-position: 0 0, 16px 16px;
+            background-size: 32px 32px;
         }
 
         .viewer-displayer-audio {

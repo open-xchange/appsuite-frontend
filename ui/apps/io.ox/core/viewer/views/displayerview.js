@@ -165,10 +165,11 @@ define('io.ox/core/viewer/views/displayerview', [
                             return;
                         }
                         var view = new ModelType({ model: slideModel, collection: self.collection, el: element, viewerEvents: self.viewerEvents });
-                        view.render().prefetch();
-                        // don't load duplicate slides that calls document converter
+                        // don't load duplicate slides that call document converter
                         if (!model.isOffice() && !model.isPDF()) {
-                            view.show();
+                            view.render().prefetch(1).show();
+                        } else {
+                            view.render();//.prefetch(1);
                         }
                         self.slideDuplicateViews.push(view);
                     },
@@ -233,7 +234,56 @@ define('io.ox/core/viewer/views/displayerview', [
         },
 
         /**
-         * Load the given slide index and additionally number of neigboring slides in the given direction.
+         * Returns the range of neighboring slides for the given slide index depending on the given direction.
+         *
+         * @param {Number} slideIndex
+         *  The slide index to create the range for.
+         *
+         * @param {Number} offset
+         *  The number of neighboring slides to add to the range (Note: prefetchDirection='both' creates a duplicate slide amount).
+         *
+         * @param {String} [prefetchDirection = 'right']
+         *  Direction of the pre-fetch: 'left', 'right' or 'both' are supported.
+         *  Example: if activeSlide is 7 with an offset of 3, the range to load would be for
+         *      'left': [4,5,6,7]
+         *      'right':      [7,8,9,10]
+         *      'both': [4,5,6,7,8,9,10]
+         */
+        getSlideLoadRange: function (slideIndex, offset, prefetchDirection) {
+            var slideIndex = slideIndex || 0,
+                loadRange;
+
+            function getLeftRange () {
+                return _.range(slideIndex, slideIndex - (offset + 1), -1);
+            }
+
+            function getRigthRange () {
+                return _.range(slideIndex, slideIndex + offset + 1, 1);
+            }
+
+            switch (prefetchDirection) {
+            case 'left':
+                loadRange = getLeftRange();
+                break;
+
+            case 'right':
+                loadRange = getRigthRange();
+                break;
+
+            case 'both':
+                loadRange = _.union(getLeftRange(), getRigthRange());
+                break;
+
+            default:
+                loadRange = [slideIndex];
+                break;
+            }
+
+            return _.map(loadRange, this.normalizeSlideIndex.bind(this));
+        },
+
+        /**
+         * Load the given slide index and additionally number of neighboring slides in the given direction.
          *
          * @param {Number} slideToLoad
          *  The index of the current active slide to be loaded.
@@ -252,42 +302,19 @@ define('io.ox/core/viewer/views/displayerview', [
                 slidesCount = this.collection.length,
                 activeModel = this.collection.at(slideToLoad),
                 previousModel = this.collection.at(this.swiper.previousIndex - 1) || null,
-                rightRange,
-                leftRange,
-                loadRange;
-
-            switch (prefetchDirection) {
-            case 'left':
-                loadRange = _.range(slideToLoad, slideToLoad - (this.preloadOffset + 1), -1);
-                break;
-
-            case 'right':
-                loadRange = _.range(slideToLoad, slideToLoad + this.preloadOffset + 1, 1);
-                break;
-
-            case 'both':
-                rightRange = _.range(slideToLoad, slideToLoad + this.preloadOffset + 1, 1);
-                leftRange = _.range(slideToLoad, slideToLoad - (this.preloadOffset + 1), -1);
-                loadRange = _.union(leftRange, rightRange);
-                break;
-
-            default:
-                loadRange = [slideToLoad];
-                break;
-            }
+                loadRange = this.getSlideLoadRange(slideToLoad, this.preloadOffset, prefetchDirection);
 
             // prefetch data of the slides within the preload offset range
-            _.each(loadRange, function (index) {
-                var slideIndex = index;
-                if (slideIndex < 0) {
-                    slideIndex = slideIndex + slidesCount;
-                } else if (slideIndex >= slidesCount) {
-                    slideIndex = slideIndex % slidesCount;
-                }
+            _.each(loadRange, function (slideIndex) {
+                var priority;
 
                 if ((slideIndex >= 0) && !self.isSlideLoaded(slideIndex)) {
-                    self.slideViews[slideIndex].prefetch();
-                    self.loadedSlides.push(slideIndex);
+                    priority = self.getPrefetchPriority(slideIndex);
+                    self.slideViews[slideIndex].prefetch(priority);
+
+                    if (self.slideViews[slideIndex].isPrefetched) {
+                        self.loadedSlides.push(slideIndex);
+                    }
                 }
             });
 
@@ -319,6 +346,34 @@ define('io.ox/core/viewer/views/displayerview', [
         },
 
         /**
+         * Returns the priority with which the given slide should be prefetched.
+         * Starting with priority 1 as the highest priority, the following priories depend on the preload offset.
+         * Note: the preload offset determins the number of slides that are prefetched in the left/right direction of the active slide.
+         *
+         * Example: [4,5,6,7,8,9,10], if the active slide is 7  with a preloadOffset of 3, the priorities would be
+         *  1 for slide 6,7,8
+         *  2 for 5,9
+         *  3 for 4,10
+         *  4 for all other slides
+         */
+        getPrefetchPriority: function (slideId) {
+            var activeSlideId = this.getActiveSlideIndex();
+
+            if (activeSlideId === slideId) {
+                return 1;
+            }
+
+            // start with direct neighbours if the active slide, the look for neighbours of the neighbours and s.o.
+            for (var prio = 1; prio <= this.preloadOffset; prio++) {
+                if (((this.normalizeSlideIndex(activeSlideId - prio) === slideId) || (this.normalizeSlideIndex(activeSlideId + prio) === slideId))) {
+                    return prio;
+                }
+            }
+
+            return (this.preloadOffset + 1);
+        },
+
+        /**
          * Handles file version change events.
          * Loads the type model and renders the new slide content.
          *
@@ -336,7 +391,7 @@ define('io.ox/core/viewer/views/displayerview', [
             TypesRegistry.getModelType(model)
             .then(function (ModelType) {
                 var view = new ModelType({ model: model, collection: this.collection, el: slideNode, viewerEvents: this.viewerEvents });
-                view.render().prefetch().show();
+                view.render().prefetch(1).show();
                 this.slideViews[index] = view;
             }.bind(this),
             function () {
@@ -412,6 +467,19 @@ define('io.ox/core/viewer/views/displayerview', [
         },
 
         /**
+         * Returns the active slide index.
+         *
+         * @returns {Number}
+         *  The index of the active slide.
+         */
+        getActiveSlideIndex: function () {
+            if (!this.swiper) {
+                return 0;
+            }
+            return this.normalizeSlideIndex(this.swiper.activeIndex - 1);
+        },
+
+        /**
          * Returns the previous Swiper slide jQuery node,
          * including a possible Swiper duplicate node.
          *
@@ -425,18 +493,34 @@ define('io.ox/core/viewer/views/displayerview', [
             if (!this.swiper || !this.swiper.slides) {
                 return $();
             }
-            var previousSlideIndex = this.swiper.previousIndex - 1,
-                collectionLength = this.collection.length;
-
-            // recalculate previous swiper slide index, disregarding duplicate slides.
-            if (previousSlideIndex < 0) {
-                previousSlideIndex = previousSlideIndex + collectionLength;
-            }
-            if (previousSlideIndex >= collectionLength) {
-                previousSlideIndex = previousSlideIndex % collectionLength;
-            }
+            var previousSlideIndex = this.normalizeSlideIndex(this.swiper.previousIndex - 1);
 
             return this.swiper.slides.filter('[data-swiper-slide-index="' + previousSlideIndex + '"]');
+        },
+
+        /**
+         * Maps the given to the slide collection looping a negative index,
+         * or an index the is greater that the collection length.
+         *
+         * @param {Number} slideIndex
+         *  The slide index to normalize
+         *
+         * @returns {Number}
+         *  The normalized slide index.
+         */
+        normalizeSlideIndex: function (slideIndex) {
+            var collectionLength = this.collection.length;
+
+            if (slideIndex < 0) {
+                slideIndex = slideIndex + collectionLength;
+                if (slideIndex < 0) {
+                    slideIndex = 0;
+                }
+
+            } else if (slideIndex >= collectionLength) {
+                slideIndex = slideIndex % collectionLength;
+            }
+            return slideIndex;
         },
 
         /**
@@ -448,14 +532,11 @@ define('io.ox/core/viewer/views/displayerview', [
          * @param swiper
          */
         onSlideChangeEnd: function (swiper) {
-            var activeSlideIndex = swiper.activeIndex - 1,
+            var activeSlideIndex = this.getActiveSlideIndex(),
                 activeSlideNode = this.getActiveSlideNode(),
                 previousSlideNode = this.getPreviousSlideNode(),
-                collectionLength = this.collection.length,
                 preloadDirection = (swiper.previousIndex < swiper.activeIndex) ? 'right' : 'left';
-            // recalculate swiper active slide index, disregarding duplicate slides.
-            if (activeSlideIndex < 0) { activeSlideIndex = activeSlideIndex + collectionLength; }
-            if (activeSlideIndex >= collectionLength) { activeSlideIndex = activeSlideIndex % collectionLength; }
+
             //#. text of a viewer slide caption
             //#. Example result: "1 of 10"
             //#. %1$d is the slide index of the current
@@ -502,33 +583,18 @@ define('io.ox/core/viewer/views/displayerview', [
          * Example: if active slide is 7 with a preload offset of 3, the range would be: [4,5,6,7,8,9,10]
          *
          * @param activeSlideIndex
-         *  Current active swiper slide index
+         *  Current active slide index
          */
         unloadDistantSlides: function (activeSlideIndex) {
-            var self = this,
-                cacheOffset = Math.floor(this.slidesToCache / 2),
-                slidesCount = this.collection.length,
-                cachedRange = getCachedRange(activeSlideIndex),
+            var cacheOffset = Math.floor(this.slidesToCache / 2),
+                cachedRange = this.getSlideLoadRange(activeSlideIndex, cacheOffset, 'both'),
                 slidesToUnload;
 
-            function getCachedRange(activeSlideIndex) {
-                var cachedRange = [],
-                    rightRange = _.range(activeSlideIndex, activeSlideIndex + cacheOffset + 1, 1),
-                    leftRange = _.range(activeSlideIndex, activeSlideIndex - cacheOffset - 1, -1),
-                    rangeUnion = _.union(leftRange, rightRange);
-                _.each(rangeUnion, function (index) {
-                    if (index < 0) { index = Math.abs(slidesCount + index); }
-                    if (index > (slidesCount - 1)) { index = index % slidesCount; }
-                    cachedRange.push(index);
-                });
-                return cachedRange;
-            }
-
-            slidesToUnload = _.difference(self.loadedSlides, cachedRange);
+            slidesToUnload = _.difference(this.loadedSlides, cachedRange);
             _.each(slidesToUnload, function (index) {
-                self.slideViews[index].unload();
-            });
-            this.loadedSlides = cachedRange;
+                this.slideViews[index].unload();
+            }, this);
+            this.loadedSlides = _.difference(this.loadedSlides, slidesToUnload);
         },
 
         /**

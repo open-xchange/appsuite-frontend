@@ -1,1 +1,1 @@
-/var/www/appsuite/apps/themes/.htaccess
+@DOCROOT@/appsuite/apps/themes/.htaccess

@@ -282,15 +282,11 @@ define('io.ox/files/share/wizard', [
 
             this.model = new sModel.WizardShare({ files: options.files, type: options.type });
 
-            this.baton = ext.Baton({
-                model: this.model,
-                view: this
-            });
+            this.baton = ext.Baton({ model: this.model, view: this });
 
             this.listenTo(this.model, 'invalid', function (model, error) {
                 yell('error', error);
             });
-
         },
 
         render: function () {
@@ -306,19 +302,7 @@ define('io.ox/files/share/wizard', [
         },
 
         share: function () {
-            var def = $.Deferred();
-            return $.when(this.model.save()).then(function (res) {
-                if (res) {
-                    yell('success', gt('Done'));
-                    def.resolve(res);
-                } else {
-                    def.reject();
-                }
-                return def;
-            }, function () {
-                yell.apply(this, arguments);
-                return def.reject();
-            });
+            return $.when(this.model.save()).fail(yell);
         },
 
         cancel: function () {

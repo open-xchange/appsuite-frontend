@@ -37,7 +37,7 @@ define('io.ox/backbone/mini-views/datepicker', [
             this.attribute = this.options.attribute;
             this.nodes = {};
             this.mobileSettings = {};
-            this.mobileMode = _.device('smartphone');
+            this.mobileMode = _.device('touch');
 
             this.listenTo(this.model, 'change:' + this.attribute, this.updateView);
             this.listenTo(this.model, 'invalid:' + this.attribute, this.onError);
@@ -88,12 +88,10 @@ define('io.ox/backbone/mini-views/datepicker', [
                         // render timezone badge
                         var timezoneAbbreviation = gt.noI18n(moment.tz(self.model.get(self.options.timezoneAttribute)).zoneAbbr());
 
-                        if (self.options.timezoneButton && !self.mobileMode) {
-                            timezoneContainer = $('<div class="timezone input-group-btn">').append(
-                                self.nodes.timezoneField = $('<button class="btn btn-default" tabindex="1" type="button">').text(timezoneAbbreviation)
-                            );
+                        if (!self.options.timezoneButton && !self.mobileMode) {
+                            timezoneContainer = self.nodes.timezoneField  = $('<div class="timezone input-group-addon">').text(timezoneAbbreviation);
                         } else {
-                            timezoneContainer = self.nodes.timezoneField = $('<a class="timezone input-group-addon" data-toggle="popover" tabindex="1">').text(timezoneAbbreviation);
+                            timezoneContainer = self.nodes.timezoneField = $('<a class="timezone input-group-addon btn" data-toggle="popover" tabindex="1">').text(timezoneAbbreviation);
                             if (self.model.has('start_date') && self.model.has('end_date')) {
                                 require(['io.ox/calendar/util'], function (calendarUtil) {
                                     calendarUtil.addTimezonePopover(
@@ -186,7 +184,7 @@ define('io.ox/backbone/mini-views/datepicker', [
 
                     self.nodes.timeField.combobox(comboboxHours).addClass('');
                     self.nodes.timeField.on('change', _.bind(self.updateModel, self));
-                    self.toggleTimeInput(self.options.display === 'DATETIME');
+                    self.toggleTimeInput(!self.isFullTime());
 
                     def.resolve();
                 });
@@ -295,7 +293,10 @@ define('io.ox/backbone/mini-views/datepicker', [
         // toggle time input fields
         toggleTimeInput: function (show) {
             if (this.mobileMode) {
-                this.nodes.dayField.mobiscroll('option', { preset: show ? 'datetime' : 'date' });
+                // mobiscroll may not be initialized yet, due to async loading.
+                if (this.nodes.dayField.mobiscroll) {
+                    this.nodes.dayField.mobiscroll('option', { preset: show ? 'datetime' : 'date' });
+                }
             } else {
                 this.$el.toggleClass('dateonly', !show);
                 this.nodes.timeField.add(this.nodes.timezoneField).css('display', show ? '' : 'none');

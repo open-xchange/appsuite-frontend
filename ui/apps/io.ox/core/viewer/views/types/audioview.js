@@ -29,6 +29,10 @@ define('io.ox/core/viewer/views/types/audioview',  [
      */
     var AudioView = BaseView.extend({
 
+        initialize: function () {
+            this.isPrefetched = false;
+        },
+
         /**
          * Creates and renders the audio slide.
          *
@@ -100,6 +104,7 @@ define('io.ox/core/viewer/views/types/audioview',  [
          *  the AudioView instance.
          */
         prefetch: function () {
+            this.isPrefetched = true;
             return this;
         },
 
@@ -135,6 +140,7 @@ define('io.ox/core/viewer/views/types/audioview',  [
             // never unload slide duplicates
             if (this.$el.hasClass('swiper-slide-duplicate')) return this;
             this.disposeElement();
+            this.isPrefetched = false;
             return this;
         },
 

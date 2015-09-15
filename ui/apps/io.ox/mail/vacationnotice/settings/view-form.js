@@ -16,8 +16,9 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
     'io.ox/backbone/views',
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
+    'io.ox/backbone/mini-views/datepicker',
     'less!io.ox/mail/vacationnotice/settings/style'
-], function (model, views, ext, mini) {
+], function (model, views, ext, mini, DatePicker) {
 
     'use strict';
 
@@ -170,17 +171,16 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                     id: ref + '/edit/view/start_date',
                     draw: function (baton) {
 
-                        var dateView = new mini.DateView({ name: 'dateFrom', model: baton.model, future: 5, past: 5 });
+                        var dateView = new DatePicker({
+                            model: baton.model,
+                            className: 'col-sm-6 dateFrom',
+                            display: 'DATE',
+                            attribute: 'dateFrom',
+                            label: model.fields.dateFrom
+                        });
 
-                        this.append(
-                            $('<fieldset class="col-md-12 form-group dateFrom">').append(
-                                $('<legend class="simple">').append(
-                                    $('<h2>').text(model.fields.dateFrom)
-                                ),
-                                // don't wrap the date control with a label (see bug #27559)
-                                dateView.render().$el
-                            )
-                        );
+                        this.append(dateView.render().$el);
+                        dateView.$el.find('legend').removeClass('simple');
 
                         if (!baton.model.get('activateTimeFrame')) {
                             dateView.$el.find('.form-control').attr('disabled', true);
@@ -190,20 +190,18 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
 
                 ext.point(ref + '/edit/view').extend({
                     index: 500,
-                    id: ref + '/edit/view/end_date',
+                    id: ref + '/edit/view/dates',
                     draw: function (baton) {
+                        var dateView = new DatePicker({
+                            model: baton.model,
+                            className: 'col-sm-6 dateUntil',
+                            display: 'DATE',
+                            attribute: 'dateUntil',
+                            label: model.fields.dateUntil
+                        });
 
-                        var dateView = new mini.DateView({ name: 'dateUntil', model: baton.model, future: 5, past: 5 });
-
-                        this.append(
-                            $('<fieldset class="col-md-12 form-group dateUntil">').append(
-                                $('<legend class="simple">').append(
-                                    $('<h2>').text(model.fields.dateUntil)
-                                ),
-                                // don't wrap the date control with a label (see bug #27559)
-                                dateView.render().$el
-                            )
-                        );
+                        this.append(dateView.render().$el);
+                        dateView.$el.find('legend').removeClass('simple');
 
                         if (!baton.model.get('activateTimeFrame')) {
                             dateView.$el.find('.form-control').attr('disabled', true);

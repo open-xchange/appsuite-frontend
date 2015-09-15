@@ -35,74 +35,93 @@ define('io.ox/core/api/sub', [
         return $.when(
             //api.caches.all.remove(keys.folder), //enable to support getAll({ folder: folder })
             api.caches.all.remove(keys.general),
+            api.caches.get.grepRemove(keys.pub),
             api.caches.get.grepRemove(keys.sub)
         );
     };
 
     /**
-     * API for subscriptions
+     * gerneralized API for pubsub
+     * @param  {object} opt
+     * @return { object} api
      */
-    var api = apiFactory({
-            module: 'subscriptions',
-            requests: {
-                all: {
-                    columns: 'id,folder,displayName,enabled',
-                    extendColumns: 'io.ox/core/api/sub/subscriptions/all'
-                }
+    function api(opt) {
+        return $.extend(true, apiFactory(opt), {
+            /**
+             * update publication/subscription
+             * @param  {object} data
+             * @return { deferred }
+             */
+            update: function (data) {
+                return clearCache(this, { id: data.id || '', folder: data.folder || data.entity.folder || '' })
+                .then(function () {
+                    return http.PUT({
+                        module: opt.module,
+                        params: {
+                            action: 'update'
+                        },
+                        data: data
+                    });
+                });
+            },
+
+            /**
+             * removes publication/subscription
+             * @param  {string} id
+             * @return { deferred }
+             */
+            destroy: function (id) {
+                var that = this;
+                return clearCache(this, { id: id })
+                    .pipe(function () {
+                        return that.remove(id);
+                    });
+            },
+
+            /**
+             * create publication/subscription
+             * @param  {object} data (pubsub model attributes)
+             * @return { deferred} subscription id
+             */
+            create: function (data) {
+                var that = this;
+                return clearCache(that, data.entity).then(function () {
+                    return http.PUT({
+                        module: opt.module,
+                        appendColumns: false,
+                        params: {
+                            action: 'new'
+                        },
+                        data: data
+                    });
+                });
             }
+        })
+        .on('delete', function () {
+            //remove cloud icon
+            folderAPI.refresh();
         });
+    }
 
-    $.extend(true, api, {
-        /**
-        * update subscription
-        * @param  {object} data
-        * @return { deferred }
-        */
-        update: function (data) {
-            return clearCache(this, { id: data.id || '', folder: data.folder || data.entity.folder || '' })
-            .then(function () {
-                return http.PUT({
-                    module: 'subscriptions',
-                    params: {
-                        action: 'update'
-                    },
-                    data: data
-                });
-            });
-        },
+    var publications = api({
+        module: 'publications',
+        requests: {
+            all: {
+                columns: 'id,displayName,enabled',
+                extendColumns: 'io.ox/core/api/pubsub/publications/all'
+            }
+        }
+    });
 
-        /**
-         * removes subscription
-         * @param  {string} id
-         * @return { deferred }
-         */
-        destroy: function (id) {
-            var that = this;
-            return clearCache(this, { id: id })
-                .pipe(function () {
-                    return that.remove(id);
-                });
-        },
-
-        /**
-         * create subscription
-         * @param  {object} data (subscriptions model attributes)
-         * @return { deferred} subscription id
-         */
-        create: function (data) {
-            var that = this;
-            return clearCache(that, data.entity).then(function () {
-                return http.PUT({
-                    module: 'subscriptions',
-                    appendColumns: false,
-                    params: {
-                        action: 'new'
-                    },
-                    data: data
-                });
-            });
-        },
-
+    var subscriptions = $.extend(true, api({
+        module: 'subscriptions',
+        requests: {
+            all: {
+                columns: 'id,folder,displayName,enabled',
+                extendColumns: 'io.ox/core/api/pubsub/subscriptions/all'
+            }
+        }
+    }), {
         /**
          * refresh subscription
          * @param  {object} data (id,folder)
@@ -134,15 +153,14 @@ define('io.ox/core/api/sub', [
                 });
             });
         }
-    }).on('delete', function () {
-        //remove cloud icon
-        folderAPI.refresh();
     });
 
     ox.on('refresh^', function () {
-        api.caches.get.clear();
-        api.caches.all.clear().then(function () {
-            api.trigger('refresh:all');
+        _([publications, subscriptions]).each(function (api) {
+            api.caches.get.clear();
+            api.caches.all.clear().then(function () {
+                api.trigger('refresh:all');
+            });
         });
     });
 
@@ -151,7 +169,17 @@ define('io.ox/core/api/sub', [
      * @link: https://intranet.open-xchange.com/wiki/development:misc:publication.api.proposal
      */
     return {
-        subscriptions: api,
+        publications: publications,
+        publicationTargets: api({
+            module: 'publicationTargets',
+            requests: {
+                all: {
+                    columns: 'id,displayName,icon,module,formDescription',
+                    extendColumns: 'io.ox/core/api/pubsub/publicationTargets/all'
+                }
+            }
+        }),
+        subscriptions: subscriptions,
         sources: apiFactory({
             module: 'subscriptionSources',
             requests: {

@@ -38,7 +38,6 @@ define('io.ox/files/toolbar', [
                 mobile: 'hi',
                 label: gt('New'),
                 title: gt('New file'),
-                drawDisabled: true,
                 ref: 'io.ox/files/dropdown/new',
                 customize: function (baton) {
                     var self = this;
@@ -78,7 +77,6 @@ define('io.ox/files/toolbar', [
                 mobile: 'lo',
                 icon: 'fa fa-user-plus',
                 label: gt('Share'),
-                drawDisabled: true,
                 title: gt('Share selected files'),
                 ref: 'io.ox/files/dropdown/share',
                 customize: function (baton) {
@@ -91,9 +89,7 @@ define('io.ox/files/toolbar', [
                             wrap: false,
                             //function to call when dropdown is empty
                             emptyCallback: function () {
-                                self.addClass('disabled')
-                                    .attr({ 'aria-disabled': true })
-                                    .removeAttr('href');
+                                self.remove();
                             }
                         }, baton)
                     );
@@ -152,14 +148,14 @@ define('io.ox/files/toolbar', [
             //
             // --- LO ----
             //
-            'edit-description': {
+            'rename': {
                 prio: 'lo',
                 mobile: 'lo',
                 label: gt('Rename'),
                 ref: 'io.ox/files/actions/rename',
                 section: 'edit'
             },
-            'rename': {
+            'edit-description': {
                 prio: 'lo',
                 mobile: 'lo',
                 label: gt('Edit description'),
@@ -220,13 +216,6 @@ define('io.ox/files/toolbar', [
                 mobile: 'lo',
                 label: gt('Unlock'),
                 ref: 'io.ox/files/actions/unlock',
-                section: 'file-op'
-            },
-            'permissions': {
-                prio: 'lo',
-                mobile: 'lo',
-                label: gt('Permissions'),
-                ref: 'io.ox/files/actions/permissions',
                 section: 'file-op'
             }
         };

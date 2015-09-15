@@ -55,6 +55,7 @@ define('io.ox/core/tk/list-dnd', [
             data,
             source,
             selected,
+            dragged = false,
             helper = null,
             fast,
             deltaLeft = 15,
@@ -161,6 +162,7 @@ define('io.ox/core/tk/list-dnd', [
             move(e);
             // replace in DOM
             helper.appendTo(document.body);
+            dragged = true;
             // bind
             $(document)
                 .one('mousemove.dnd', firstMove)
@@ -207,6 +209,8 @@ define('io.ox/core/tk/list-dnd', [
             if (e.isDefaultPrevented()) return; else e.preventDefault();
             // process drop
             clearTimeout(toggleTimer);
+            // abort unless it was a real drag move
+            if (!dragged) return;
             var target = $(this).attr('data-model') || $(this).attr('data-id') || $(this).attr('data-cid') || $(this).attr('data-obj-id'),
                 baton = new ext.Baton({ data: data, dragType: options.dragType, dropzone: this, target: target });
             $(this).trigger('selection:drop', [baton]);
@@ -226,6 +230,7 @@ define('io.ox/core/tk/list-dnd', [
 
         function start(e) {
             // get source, selected items, and data
+            dragged = false;
             source = $(this);
             selected = _(container.find('.selected'));
             data = source.attr('data-drag-data') ?

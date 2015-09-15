@@ -47,6 +47,13 @@
     line-height: 1.42857143;
     color: #999;
 
+    // allow line breaks for dropdown description (using bs dropdown-header style)
+    &.dropdown-description {
+        min-width: 200px;
+        white-space: normal;
+        cursor: pointer;
+    }
+
     html.high-contrast & {
         color: @hc-gray; // HC
     }
@@ -209,6 +216,13 @@ ul.dropdown-menu li a.disabled {
             font-weight: 300;
             line-height: 30px;
             text-transform: uppercase;
+
+            &.dropdown-description {
+                text-transform: none;
+                font-size: 12px;
+                line-height: 1.42857143;
+                color: #999;
+            }
         }
 
         li {
@@ -229,7 +243,9 @@ ul.dropdown-menu li a.disabled {
                 line-height: inherit;
                 width: 30px;
             }
-            border-bottom: 1px solid #ddd;
+            &:not(.has-dropdown-description), & + .dropdown-description {
+                border-bottom: 1px solid #ddd;
+            }
         }
 
         li:first-child {

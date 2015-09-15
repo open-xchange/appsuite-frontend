@@ -152,13 +152,13 @@ define('io.ox/mail/compose/view', [
 
     ext.point(POINT + '/editors').extend({
         id: 'plain-text',
-        lable: gt('Plain Text'),
+        label: gt('Plain Text'),
         mode: 'text'
     });
 
     ext.point(POINT + '/editors').extend({
         id: 'tinymce',
-        lable: gt('HTML'),
+        label: gt('HTML'),
         mode: 'html'
     });
 
@@ -171,8 +171,8 @@ define('io.ox/mail/compose/view', [
                 .header(gt('Editor'));
 
             ext.point(POINT + '/editors').each(function (point) {
-                if (!point.mode && !point.lable) return;
-                menu.option('editorMode', point.mode, point.lable, gt('Editor'));
+                if (!point.mode && !point.label) return;
+                menu.option('editorMode', point.mode, point.label, gt('Editor'));
             });
         }
     });
@@ -277,13 +277,18 @@ define('io.ox/mail/compose/view', [
             this.intervals = [];
             this.blocked = [];
             this.messageFormat = options.messageFormat || settings.get('messageFormat', 'html');
+
+            // Open Drafts in HTML mode if content type is html even if text-editor is default
+            if (this.model.get('mode') === 'edit' && this.model.get('content_type') === 'text/html' && settings.get('messageFormat', 'html') === 'text') {
+                this.messageFormat = 'html';
+            }
             this.editor = null;
             this.composeMode = 'compose';
             this.editorId = _.uniqueId('editor-');
             this.contentEditable = $('<div class="editable">').attr({
                 'data-editor-id': this.editorId,
                 'tabindex': 1
-            });
+            }).css('margin-bottom', '32px');
             this.textarea = $('<textarea class="plain-text">').attr({
                 'data-editor-id': this.editorId,
                 'tabindex': 1
@@ -302,6 +307,7 @@ define('io.ox/mail/compose/view', [
             this.listenTo(this.model, 'keyup:subject change:subject',   this.setTitle);
             this.listenTo(this.model, 'change:editorMode',              this.toggleEditorMode);
             this.listenTo(this.model, 'change:defaultSignatureId',      this.setSelectedSignature);
+            this.listenTo(this.model, 'change:signatures',              this.updateSelectedSignature);
             this.listenTo(this.model, 'needsync',                       this.syncMail);
 
             var mailto, params;
@@ -370,6 +376,9 @@ define('io.ox/mail/compose/view', [
         fetchMail: function (obj) {
             // Empty compose (early exit)
             if (obj.mode === 'compose') return $.when();
+
+            // keep attachments (mail body) for restored reply
+            if (obj.restored) return $.when();
 
             var self = this,
                 mode = obj.mode;
@@ -445,6 +454,7 @@ define('io.ox/mail/compose/view', [
                     content = textproc.htmltotext(content);
                 }
                 attachmentCollection.at(0).set('content', content);
+                self.model.unset('attachments');
                 self.model.set('attachments', attachmentCollection);
                 obj = data = attachmentCollection = null;
             });
@@ -475,24 +485,9 @@ define('io.ox/mail/compose/view', [
             win.busy();
             // get mail
             var self = this,
-                mail = this.model.getMail(),
+                mail = this.model.getMailForDraft(),
                 def = new $.Deferred(),
                 old_vcard_flag;
-
-            if (mail.msgref && mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
-                delete mail.msgref;
-            }
-
-            if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
-                mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                this.model.set('sendtype', mail.sendtype, { silent: true });
-            }
-
-            if (_(mail.flags).isUndefined()) {
-                mail.flags = mailAPI.FLAGS.DRAFT;
-            } else if ((mail.data.flags & 4) === 0) {
-                mail.flags += mailAPI.FLAGS.DRAFT;
-            }
 
             // never append vcard when saving as draft
             // backend will append vcard for every send operation (which save as draft is)
@@ -548,6 +543,7 @@ define('io.ox/mail/compose/view', [
                     if (mail.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
                         self.model.set('msgref', result, { silent: true });
                     }
+
                     var saved = self.model.get('infostore_ids_saved');
                     self.model.set('infostore_ids_saved', [].concat(saved, mail.infostore_ids || []));
                     notifications.yell('success', gt('Mail saved as draft'));
@@ -884,11 +880,13 @@ define('io.ox/mail/compose/view', [
                 var input = this.$el.find('[data-extension-id="cc"], [data-extension-id="bcc"]');
                 if (input.hasClass('hidden')) {
                     input.removeClass('hidden');
+                    this.$el.find('[data-action="add"] span').removeClass('fa-angle-right').addClass('fa-angle-down');
                 } else {
                     if (_.isEmpty(this.model.attributes.cc) && _.isEmpty(this.model.attributes.bcc)) {
                         this.model.set('cc', []);
                         this.model.set('bcc', []);
                         input.addClass('hidden');
+                        this.$el.find('[data-action="add"] span').removeClass('fa-angle-down').addClass('fa-angle-right');
                     }
                 }
                 return input;
@@ -917,20 +915,27 @@ define('io.ox/mail/compose/view', [
                 return (self.editorHash[self.model.get('editorMode')] = new Editor(self.model.get('editorMode') === 'text' ? self.textarea : self.contentEditable))
                     .done(function () {
                         self.editor = self.editorHash[self.model.get('editorMode')];
-                        self.editor.setPlainText(content);
-                        self.editor.handleShow(true);
-                        if (self.model.get('mode') !== 'compose') {
-                            self.editor.focus();
-                        }
+                        return $.when(self.editor.setPlainText(content)).done(function () {
+                            self.editor.handleShow(true);
+                            self.setSelectedSignature();
+                            if (self.model.get('mode') !== 'compose') {
+                                self.editor.focus();
+                            }
+                            if (self.model.get('editorMode') !== 'text') {
+                                self.editor.resetUndo();
+                            }
+                        });
                     });
             });
         },
 
         reuseEditor: function (content) {
+            var self = this;
             this.editor = this.editorHash[this.model.get('editorMode')];
-            this.editor.setPlainText(content);
-            this.editor.handleShow(true);
-            return $.when();
+            return $.when(this.editor.setPlainText(content)).done(function () {
+                self.editor.handleShow(true);
+                self.setSelectedSignature();
+            });
         },
 
         getEditor: function () {
@@ -944,11 +949,14 @@ define('io.ox/mail/compose/view', [
         },
 
         toggleEditorMode: function () {
+            var self = this;
             // be busy
             this.contentEditable.busy();
             this.textarea.prop('disabled', true).busy();
 
             if (this.editor) {
+                this.removeSignature();
+
                 var content = this.editor.getPlainText(),
                     self = this;
                 this.editor.clear();
@@ -983,34 +991,75 @@ define('io.ox/mail/compose/view', [
                 content = content.replace(/[\s\uFEFF\xA0]+$/, '');
             }
 
+            if (this.model.get('mode') !== 'compose') {
+                // Remove extranous <br>
+                content = content.replace(/\n<br>&nbsp;$/, '\n');
+            }
+
             this.editor.setContent(content);
 
             if (this.model.get('initial')) {
-                this.setSelectedSignature(this.model.get('defaultSignatureId'));
+                this.setSelectedSignature();
+                this.prependNewLine();
+            }
+        },
+
+        updateSelectedSignature: function () {
+            var currentSignature = this.model.get('signature');
+
+            if (!currentSignature) return;
+
+            var changedSignature = _(this.model.get('signatures')).find({ id: String(currentSignature.id) });
+
+            if (currentSignature.content !== changedSignature.content) {
+                var isHTML = !!this.editor.find;
+
+                if (isHTML) {
+                    this.editor.find('.io-ox-signature').each(function () {
+
+                        var node = $(this),
+                            text = node.text(),
+                            changed = $('<div>').html(changedSignature.content).text().replace(/\s+/g, '') !== text.replace(/\s+/g, '');
+
+                        if (changed) node.empty().append($(changedSignature.content));
+                    });
+                } else {
+                    var currentContent = mailUtil.signatures.cleanAdd(currentSignature.content, false),
+                        changedContent = mailUtil.signatures.cleanAdd(changedSignature.content, false);
+
+                    this.editor.replaceParagraph(currentContent, changedContent);
+                }
+
+                this.model.set('signature', changedSignature);
             }
         },
 
         setSelectedSignature: function (model, id) {
+            if (!model) model = this.model.get('defaultSignatureId');
 
             if (_.isString(model)) id = model;
 
             var signatures = this.model.get('signatures');
 
-            var newSignature  = _(signatures).where({ id: String(id) })[0],
-                prevSignature = _(signatures).where({ id: _.isObject(model) ? model.previous('defaultSignatureId') : '' })[0];
+            this.model.set('signature', _(signatures).where({ id: String(id) })[0]);
 
-            if (prevSignature) {
-                this.removeSignature(prevSignature);
-            }
-            if (newSignature) {
-                var ds = newSignature;
+            var prevSignature = _(signatures).where({ id: _.isObject(model) ? model.previous('defaultSignatureId') : '' })[0];
+
+            if (prevSignature) this.removeSignature(prevSignature);
+
+            if (this.model.get('signature')) {
+                var ds = this.model.get('signature');
                 ds.misc = _.isString(ds.misc) ? JSON.parse(ds.misc) : ds.misc;
                 this.setSignature(ds);
             }
-            this.prependNewLine();
         },
 
         removeSignature: function (signature) {
+
+            if (!signature) {
+                if (!this.model.get('signature')) return;
+                signature = this.model.get('signature');
+            }
 
             var self = this,
                 isHTML = !!this.editor.find,
@@ -1068,12 +1117,10 @@ define('io.ox/mail/compose/view', [
             return $('<div>').append(node).html();
         },
 
-        prependNewLine: function (content) {
-            var content = this.editor.getContent(),
-                nl = this.model.get('editorMode') === 'html' ? '<p><br></p>' : '\n\n';
-            if (content !== '' && content.indexOf(nl) !== 0 && content.indexOf('<br>') !== 0) {
-                this.editor.setContent(nl + content);
-            }
+        prependNewLine: function () {
+            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p><br><\/p>)+/, ''),
+                nl = this.model.get('editorMode') === 'html' ? '<p><br></p>' : '\n';
+            this.editor.setContent(nl + content);
         },
 
         setMail: function () {
@@ -1087,7 +1134,7 @@ define('io.ox/mail/compose/view', [
                 var mode = self.model.get('mode');
                 // set focus in compose and forward mode to recipient tokenfield
                 if (/(compose|forward)/.test(mode)) {
-                    self.$el.find('.tokenfield:first .token-input').focus();
+                    if (_.device('!ios')) _.defer(function () { self.$el.find('.tokenfield:first .token-input').focus(); });
                 } else {
                     self.editor.focus();
                 }
@@ -1116,28 +1163,22 @@ define('io.ox/mail/compose/view', [
                 toolbar = this.mcetoolbar,
                 editor = this.contentEditable,
                 fixed = false,
-                top = 0;
-
-            // get top position
-            scrollPane.on('scroll', _.debounce(function () {
-                // could also use: toolbar.get(0).offsetTop (need to check all browsers)
-                if (!fixed) top = toolbar.position().top + scrollPane.scrollTop();
-            }, 50, true));
+                top = 14;
 
             scrollPane.on('scroll', function () {
-
-                if (top < scrollPane.scrollTop()) {
+                if (self.model.get('editorMode') === 'text') return;
+                if (scrollPane.scrollTop() - scrollPane.find('.mail-compose-fields').height() > top) {
                     // toolbar leaves viewport
                     if (!fixed) {
-                        toolbar.addClass('fixed').css('top', self.$el.parent().offset().top);
-                        editor.css('margin-top', toolbar.height());
-                        $(window).trigger('resize.tinymce');
                         fixed = true;
+                        toolbar.addClass('fixed').css('top', self.$el.parent().offset().top);
+                        $(window).trigger('resize.tinymce');
                     }
+                    editor.css('margin-top', toolbar.height());
                 } else if (fixed) {
+                    fixed = false;
                     toolbar.removeClass('fixed').css('top', 0);
                     editor.css('margin-top', 0);
-                    fixed = false;
                 }
             });
         },

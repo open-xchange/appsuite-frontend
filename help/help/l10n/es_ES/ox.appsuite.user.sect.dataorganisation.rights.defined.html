@@ -4,7 +4,7 @@
 <title>11.2.1. ¿Qué permisos se pueden conceder?</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Software colaborativo">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Permisos">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Permisos">
 <link rel="next" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html" title="11.2.2. Permisos para carpetas ya existentes">
@@ -35,95 +35,88 @@
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ox.appsuite.user.sect.dataorganisation.rights.defined"></a>11.2.1. ¿Qué permisos se pueden conceder?</h3></div></div></div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles"></a><p>Para conceder fácilmente combinaciones de permisos lógicos, hay roles de usuario preestablecidos: </p>
+<a name="ox.appsuite.user.concept.rights.roles"></a><p>Para conceder fácilmente combinaciones de permisos lógicos, existen roles de usuario concretos preestablecidos:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Propietario">Propietario</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrador">Administrador</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.viewer" title="Visor">Visor</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.editor" title="Revisor">Revisor</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="Autor">Autor</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.guest" title="Invitado">Invitado</a></p></li>
 </ul></div>
-<p>
-      </p>
+<p>Se pueden cambiar los permisos preestablecidos concediendo <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.folder.rights.detail" title="Permisos detallados">permisos detallados</a>.</p>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.owner"></a><p><b>Propietario </b>El propietario de una carpeta tiene todos los permisos sobre dicha carpeta. El propietario puede conceder permisos a otros usuarios para la carpeta.</p>
+<a name="ox.appsuite.user.concept.rights.roles.administrator"></a><p class="title"><b>Administrador</b></p>
+<p>El administrador de una carpeta posee todos los permisos sobre ella. El propietario puede conceder permisos a otros usuarios sobre dicha carpeta.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Permisos de carpeta: crear objetos y subcarpetas</p></li>
 <li class="listitem"><p>Permisos de objetos: leer todos los objetos, editar todos los objetos y borrar todos los objetos</p></li>
-<li class="listitem"><p>Derechos de administración: Sí</p></li>
 </ul></div>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.administrator"></a><p><b>Administrador </b>El administrador de una carpeta posee todos los permisos sobre ella. El propietario puede conceder permisos a otros usuarios sobre dicha carpeta.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Permisos de carpeta: crear objetos y subcarpetas</p></li>
-<li class="listitem"><p>Permisos de objetos: leer todos los objetos, editar todos los objetos y borrar todos los objetos</p></li>
-<li class="listitem"><p>Derechos de administración: Sí</p></li>
-</ul></div>
-</div>
-<div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.author"></a><p><b>Autor </b>A un autor se le permite cambiar objetos que ya existen, crear y editar nuevos objetos, y crear subcarpetas.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Permisos de carpeta: crear objetos y subcarpetas</p></li>
-<li class="listitem"><p>Permisos de objetos: leer todos los objetos, editar todos los objetos y borrar todos los objetos</p></li>
-<li class="listitem"><p>Derechos de administración: No</p></li>
-</ul></div>
-</div>
-<div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.guest"></a><p><b>Invitado </b>Al invitado se le permite leer objetos que ya existen pero no modificarlos. No se le permite crear subcarpetas ni objetos en ellas.</p>
+<a name="ox.appsuite.user.concept.rights.roles.viewer"></a><p class="title"><b>Visor</b></p>
+<p>Un visor puede leer todos los objetos existentes. Un visor no tiene otros permisos.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Permisos de carpeta: ver la carpeta</p></li>
-<li class="listitem"><p>Permisos de objetos: leer todos los objetos, no hay permiso de edición, no tiene permiso de borrado</p></li>
-<li class="listitem"><p>Derechos de administración: No</p></li>
+<li class="listitem"><p>Permisos de objetos: leer todos los objetos</p></li>
 </ul></div>
 </div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.folder.rights"></a><p>Los permisos predeterminados para los roles de usuario pueden ser refinados. Se pueden conceder los siguientes permisos. </p>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.editor"></a><p class="title"><b>Revisor</b></p>
+<p>Un revisor puede leer y editar objetos ya existentes. Eso sí, el revisor no puede crear nuevos objetos. El revisor no puede borrar objetos.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Permisos de carpeta: ver la carpeta</p></li>
+<li class="listitem"><p>Permisos de objetos: leer todos los objetos, editar todos los objetos</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.author"></a><p class="title"><b>Autor</b></p>
+<p>A un autor se le permite cambiar o borrar objetos que ya existen, crear y editar nuevos objetos, y crear subcarpetas.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Permisos de carpeta: crear objetos y subcarpetas</p></li>
+<li class="listitem"><p>Permisos de objetos: leer todos los objetos, editar todos los objetos y borrar todos los objetos</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.folder.rights.detail"></a><p class="title"><b>Permisos detallados</b></p>
+<p>Los permisos predeterminados para los roles de usuario pueden ser refinados. Se pueden conceder los siguientes permisos.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>Permisos de carpeta</p>
+<p>Carpetas</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>nueva carpeta</p></li>
+<li class="listitem"><p>visualizar la carpeta</p></li>
 <li class="listitem"><p>crear objetos</p></li>
 <li class="listitem"><p>crear objetos y subcarpetas</p></li>
 </ul></div>
 <p>
-            </p>
+              </p>
 </li>
 <li class="listitem">
-<p>Permisos de objetos, lectura</p>
+<p>permisos de lectura</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>no hay permiso de lectura</p></li>
+<li class="listitem"><p>ninguno</p></li>
 <li class="listitem"><p>leer objetos propios</p></li>
 <li class="listitem"><p>leer todos los objetos</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p>Permisos de objetos, editar</p>
+<p>permisos de escritura</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>no hay permiso de edición</p></li>
+<li class="listitem"><p>ninguno</p></li>
 <li class="listitem"><p>editar objetos propios</p></li>
 <li class="listitem"><p>editar todos los objetos</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p>Permisos de objetos, borrar</p>
+<p>permisos de borrado</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>no hay permiso de borrado</p></li>
+<li class="listitem"><p>ninguno</p></li>
 <li class="listitem"><p>eliminar los objetos propios</p></li>
 <li class="listitem"><p>eliminar todos los objetos</p></li>
 </ul></div>
 </li>
-<li class="listitem">
-<p>Derechos de administración</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>Sí</p></li>
-<li class="listitem"><p>No</p></li>
-</ul></div>
-</li>
 </ul></div>
 <p>
-      </p>
+        </p>
 </div>
 </div>
           </div>

@@ -101,7 +101,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             collection = this.collection = this.getCollection(params);
             this.loading = false;
 
-            if (collection.length > 0 && !collection.expired) {
+            if (collection.length > 0 && !collection.expired && collection.sorted) {
                 _.defer(function () {
                     collection.trigger(collection.complete ? 'reset load cache complete' : 'reset load cache');
                 });

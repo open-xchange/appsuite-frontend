@@ -23,9 +23,10 @@ define('io.ox/contacts/view-detail', [
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/extPatterns/links',
     'io.ox/core/util',
+    'io.ox/core/capabilities',
     'gettext!io.ox/contacts',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, gt) {
+], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, capabilities, gt) {
 
     'use strict';
 
@@ -725,12 +726,17 @@ define('io.ox/contacts/view-detail', [
         id: 'breadcrumb',
         draw: function (baton) {
 
+            var id = baton.data.folder_id;
+
             // this is also used by halo, so we might miss a folder id
-            if (!baton.data.folder_id) return;
+            if (!id) return;
+
+            // don't show folders path for folder 6 if global address book is disabled
+            if (String(id) === '6' && !capabilities.has('gab')) return;
 
             this.append(
                 $('<div class="clearfix">'),
-                new BreadcrumbView({ folder: baton.data.folder_id, app: baton.app, label: gt('Saved in:') }).render().$el
+                new BreadcrumbView({ folder: id, app: baton.app, label: gt('Saved in:') }).render().$el
             );
         }
     });

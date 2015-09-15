@@ -15,6 +15,7 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/viewer/util',
     'io.ox/files/api',
     'io.ox/core/dropzone',
+    'io.ox/core/capabilities',
     'io.ox/core/viewer/settings',
     'io.ox/core/viewer/views/document/thumbnailview',
     'io.ox/core/viewer/views/sidebar/fileinfoview',
@@ -22,8 +23,10 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/viewer/views/sidebar/fileversionsview',
     'io.ox/core/viewer/views/sidebar/uploadnewversionview',
     'io.ox/core/extensions',
-    'gettext!io.ox/core/viewer'
-], function (DisposableView, Util, FilesAPI, Dropzone, ViewerSettings, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, ext, gt) {
+    'gettext!io.ox/core/viewer',
+    // prefetch cause all views need the base view
+    'io.ox/core/viewer/views/sidebar/panelbaseview'
+], function (DisposableView, Util, FilesAPI, Dropzone, Capabilities, ViewerSettings, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, ext, gt) {
 
     'use strict';
 
@@ -56,7 +59,7 @@ define('io.ox/core/viewer/views/sidebarview', [
 
         initialize: function (options) {
 
-            options = options || {};
+            options = options || {};
 
             _.extend(this, {
                 viewerEvents: options.viewerEvents || _.extend({}, Backbone.Events),
@@ -197,7 +200,7 @@ define('io.ox/core/viewer/views/sidebarview', [
          * and version history.
          */
         renderSections: function () {
-            var detailPane = this.$('.detail-pane');
+            var detailPane = this.$('.detail-pane'), fileInfoOpt;
             // remove previous sections
             detailPane.empty();
             // remove dropzone handler
@@ -220,9 +223,16 @@ define('io.ox/core/viewer/views/sidebarview', [
                 this.zone.on('drop', this.onNewVersionDropped.bind(this));
                 detailPane.append(this.zone.render().$el.addClass('abs'));
             }
+            // options
+            fileInfoOpt = {
+                model: this.model,
+                fixed: true,
+                closable: this.options.closable,
+                disableFolderInfo: !!(this.options.opt && this.options.opt.disableFolderInfo)
+            };
             // render sections
             detailPane.append(
-                new FileInfoView({ model: this.model, fixed: true, closable: this.options.closable }).render().el,
+                new FileInfoView(fileInfoOpt).render().el,
                 new FileDescriptionView({ model: this.model }).render().el,
                 new FileVersionsView({ model: this.model }).render().el,
                 new UploadNewVersionView({ model: this.model }).render().el
@@ -248,7 +258,7 @@ define('io.ox/core/viewer/views/sidebarview', [
             // initially set model
             this.model = model;
             // show tab navigation in office standalone mode
-            if (this.standalone && (model.isOffice() || model.isPDF()) && !_.device('smartphone')) {
+            if (this.standalone && Capabilities.has('document_preview') && (model.isOffice() || model.isPDF()) && !_.device('smartphone')) {
                 this.$('.viewer-sidebar-tabs').show();
                 var lastActivatedThumbnail = ViewerSettings.getSidebarActiveTab();
                 this.activateTab(lastActivatedThumbnail);
@@ -269,15 +279,16 @@ define('io.ox/core/viewer/views/sidebarview', [
             // f.e. when used to preview file attachments in mail
             if (this.options.opt && this.options.opt.disableFileDetail) return;
 
-            FilesAPI.get(this.model.toJSON()).done(function (file) {
-                // after loading the file details we set at least an empty string as description.
-                // in order to distinguish between 'the file details have been loaded but the file has no description'
-                // and 'the file details have not been loaded yet so we don't know if it has a description'.
-                if (this.model && this.model.isFile()) {
+            if (this.model.isFile()) {
+                FilesAPI.get(this.model.toJSON()).done(function (file) {
+                    // after loading the file details we set at least an empty string as description.
+                    // in order to distinguish between 'the file details have been loaded but the file has no description'
+                    // and 'the file details have not been loaded yet so we don't know if it has a description'.
+                    if (!this.model) return;
                     var description = (file && _.isString(file.description)) ? file.description : '';
                     this.model.set('description', description);
-                }
-            }.bind(this));
+                }.bind(this));
+            }
         },
 
         /**

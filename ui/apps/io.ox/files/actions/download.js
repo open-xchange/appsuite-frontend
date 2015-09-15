@@ -26,7 +26,7 @@ define('io.ox/files/actions/download', [
      */
     function filterUnsupported(list) {
         return _(list).filter(function (obj) {
-            return !_.isEmpty(obj.filename) || obj.file_size > 0;
+            return !_.isEmpty(obj.filename) || obj.file_size > 0 || obj.standard_folder !== undefined;
         });
     }
 

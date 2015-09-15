@@ -24,6 +24,7 @@ define('io.ox/contacts/mobile-toolbar-actions', [
 
     var pointListViewActions = ext.point('io.ox/contacts/mobile/toolbar/actions'),
         pointDetailView = ext.point('io.ox/contacts/mobile/toolbar/detailView'),
+        pointDetailViewLinks = ext.point('io.ox/contacts/mobile/toolbar/detailView/links'),
         actions = ext.point('io.ox/contacts/mobile/actions'),
         pointListView = ext.point('io.ox/contacts/mobile/toolbar/listView'),
         meta = {
@@ -40,8 +41,10 @@ define('io.ox/contacts/mobile-toolbar-actions', [
                 prio: 'hi',
                 mobile: 'hi',
                 label: gt('Send mail'),
+                icon: 'fa fa-envelope-o',
                 ref: 'io.ox/contacts/actions/send',
-                drawDisabled: true
+                drawDisabled: true,
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
             },
             'vcard': {
                 prio: 'lo',
@@ -54,15 +57,20 @@ define('io.ox/contacts/mobile-toolbar-actions', [
                 prio: 'hi',
                 mobile: 'hi',
                 label: gt('Invite to appointment'),
+                icon: 'fa fa-calendar-o',
                 ref: 'io.ox/contacts/actions/invite',
-                drawDisabled: true
+                drawDisabled: true,
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
             },
             'edit': {
                 prio: 'hi',
                 mobile: 'hi',
                 label: gt('Edit'),
+                icon: 'fa fa-edit',
                 ref: 'io.ox/contacts/actions/update',
-                drawDisabled: true
+                drawDisabled: true,
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+
             },
             'delete': {
                 prio: 'hi',
@@ -106,19 +114,25 @@ define('io.ox/contacts/mobile-toolbar-actions', [
         ref: 'io.ox/contacts/mobile/toolbar/actions'
     }));
 
-    addAction(actions, ['send', 'invite', 'vcard', 'edit', 'delete', 'move', 'copy']);
+    addAction(actions, ['vcard', 'delete', 'move', 'copy']);
 
-    // add submenu as text link to toolbar in multiselect
-    pointDetailView.extend(new links.Dropdown({
-        index: 50,
-        label: $('<span>').text(
-            //.# Will be used as menu heading in mail module which then shows the sub-actions "mark as read" and "mark as unread"
-            gt('Actions')
-        ),
-        // don't draw the caret icon beside menu link
+    pointDetailView.extend(new links.InlineLinks({
+        id: 'links',
+        index: 100,
+        classes: '',
+        ref: 'io.ox/contacts/mobile/toolbar/detailView/links'
+    }));
+
+    addAction(pointDetailViewLinks, ['edit', 'send', 'invite']);
+    pointDetailViewLinks.extend(new links.Dropdown({
+        id: 'test',
+        index: 900,
         noCaret: true,
-        drawDisabled: true,
-        ref: 'io.ox/contacts/mobile/actions'
+        icon: 'fa fa-bars',
+        label: gt('Actions'),
+        ariaLabel: gt('Actions'),
+        ref: 'io.ox/contacts/mobile/actions',
+        classes: 'io-ox-action-link mobile-toolbar-action'
     }));
 
     var updateToolbar = _.debounce(function (contact) {

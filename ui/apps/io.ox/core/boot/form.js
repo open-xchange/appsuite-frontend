@@ -98,7 +98,7 @@ define('io.ox/core/boot/form', [
             var loginName = _.url.hash('login_name');
 
             // use more suitable message
-            messageReplacement = gt('Please enter the password you have received by email.');
+            messageReplacement = gt('Please enter your password.');
 
             $('.row.username').hide();
             if (!_.isEmpty(loginName)) {

@@ -47,18 +47,30 @@ define('io.ox/core/viewer/views/toolbarview', [
                 ref: TOOLBAR_ACTION_ID + '/rename',
                 title: gt('File name'),
                 customize: function (baton) {
-                    var fileIcon = $('<i class="fa">').addClass(Util.getIconClass(baton.model)),
-                        filenameLabel = $('<span class="filename-label">').text(baton.model.get('filename'));
-                    this.addClass('viewer-toolbar-filename');
-                    if (!baton.context.standalone) {
-                        this.append(fileIcon);
-                    }
-                    this.append(filenameLabel).parent().addClass('pull-left');
 
+                    this.append(
+                        // icon
+                        !baton.context.standalone ?
+                            $('<i class="fa">').addClass(Util.getIconClass(baton.model)) :
+                            null,
+                        // filename
+                        $('<span class="filename-label">').text(baton.model.getDisplayName())
+                    );
+
+                    this.addClass('viewer-toolbar-filename').parent().addClass('pull-left');
+
+                    // check if action is available
                     if (baton.model.isFile()) {
-                        this.attr('title', gt('File name, click to rename'));
-                    } else {
-                        this.attr('title', gt('File name'));
+                        ActionsPattern.check('io.ox/files/actions/rename', [baton.data]).then(
+                            function yep() {
+                                this.attr('data-original-title', gt('File name, click to rename'));
+                                this.attr({ 'data-placement': 'bottom' });
+                                this.tooltip();
+                            }.bind(this),
+                            function nope() {
+                                this.addClass('disabled');
+                            }.bind(this)
+                        );
                     }
                 }
             },
@@ -137,6 +149,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'hi',
                 icon: 'fa fa-info-circle',
+                label: gt('View details'),
                 ref: TOOLBAR_ACTION_ID + '/togglesidebar',
                 customize: function () {
                     this.addClass('viewer-toolbar-togglesidebar')
@@ -148,9 +161,9 @@ define('io.ox/core/viewer/views/toolbarview', [
             },
             'popoutstandalone': {
                 prio: 'hi',
-                mobile: 'lo',
+                mobile: false,
                 label: gt('Pop out'),
-                icon: 'fa  fa-external-link-square',
+                icon: 'fa fa-external-link-square',
                 ref: TOOLBAR_ACTION_ID + '/popoutstandalone',
                 customize: function () {
                     this.addClass('viewer-toolbar-popoutstandalone')
@@ -164,6 +177,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'hi',
                 icon: 'fa fa-times',
+                label: gt('Close'),
                 ref: TOOLBAR_ACTION_ID + '/close',
                 customize: function () {
                     this.addClass('viewer-toolbar-close')
@@ -190,7 +204,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     mobile: 'lo',
                     label: gt('Edit description'),
                     section: 'edit',
-                    ref: TOOLBAR_ACTION_DROPDOWN_ID + '/editdescription'
+                    ref: 'io.ox/files/actions/edit-description'
                 },
                 'download': {
                     prio: 'hi',
@@ -209,10 +223,9 @@ define('io.ox/core/viewer/views/toolbarview', [
                 },
                 'share': {
                     prio: 'hi',
-                    mobile: 'lo',
+                    mobile: 'hi',
                     icon: 'fa fa-user-plus',
                     label: gt('Share'),
-                    drawDisabled: true,
                     title: gt('Share selected files'),
                     ref: 'io.ox/files/dropdown/share',
                     customize: function (baton) {
@@ -223,11 +236,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                             LinksPattern.DropdownLinks({
                                 ref: 'io.ox/files/links/toolbar/share',
                                 wrap: false,
-                                //function to call when dropdown is empty
                                 emptyCallback: function () {
-                                    self.addClass('disabled')
-                                        .attr({ 'aria-disabled': true })
-                                        .removeAttr('href');
+                                    self.parent().hide();
                                 }
                             }, baton)
                         );
@@ -248,6 +258,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                     section: 'share',
                     ref: 'io.ox/files/actions/send'
                 },
+                'addtoportal': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Add to portal'),
+                    section: 'share',
+                    ref: 'io.ox/files/actions/add-to-portal'
+                },
                 'uploadnewversion': {
                     prio: 'lo',
                     mobile: 'lo',
@@ -260,7 +277,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     mobile: 'lo',
                     label: gt('Delete'),
                     section: 'delete',
-                    ref: TOOLBAR_ACTION_DROPDOWN_ID + '/delete'
+                    ref: 'io.ox/files/actions/delete'
                 }
             },
             mail: {
@@ -271,8 +288,9 @@ define('io.ox/core/viewer/views/toolbarview', [
                     ref: 'io.ox/mail/actions/open-attachment'
                 },
                 'downloadmailattachment': {
-                    prio: 'lo',
+                    prio: 'hi',
                     mobile: 'lo',
+                    icon: 'fa fa-download',
                     label: gt('Download'),
                     ref: 'io.ox/mail/actions/download-attachment'
                 },
@@ -329,29 +347,13 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     // define actions of this ToolbarView
     var Action = ActionsPattern.Action;
+
     new Action(TOOLBAR_ACTION_DROPDOWN_ID, {
         requires: function () { return true; },
         action: $.noop
     });
-    new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/editdescription', {
-        id: 'edit-description',
-        action: function (baton) {
-            var actionBaton = Ext.Baton({ data: baton.model.toJSON() });
-            ActionsPattern.invoke('io.ox/files/actions/edit-description', null, actionBaton);
-        }
-    });
-    new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/delete', {
-        id: 'delete',
-        requires: function (e) {
-            return !e.baton.context.standalone;
-        },
-        action: function (baton) {
-            var actionBaton = Ext.Baton({ data: baton.model.toJSON() });
-            ActionsPattern.invoke('io.ox/files/actions/delete', null, actionBaton);
-        }
-    });
+
     new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/print', {
-        id: 'print',
         requires: function (e) {
             var model = e.baton.model;
             return e.baton.context.standalone && (model.isOffice() || model.isPDF() || model.isText());
@@ -362,36 +364,44 @@ define('io.ox/core/viewer/views/toolbarview', [
             window.open(documentPDFUrl, '_blank');
         }
     });
+
     new Action(TOOLBAR_ACTION_ID + '/rename', {
-        id: 'rename',
         requires: function () {
             return true;
         }
     });
+
     new Action(TOOLBAR_ACTION_ID + '/togglesidebar', {
-        id: 'togglesidebar',
         action: function (baton) {
             baton.context.onToggleSidebar();
         }
     });
 
     new Action(TOOLBAR_ACTION_ID + '/popoutstandalone', {
-        id: 'popoutstandalone',
         requires: function () {
             var currentApp = ox.ui.App.getCurrentApp().getName();
+            // detail is the target of popoutstandalone, no support for mail attachments
             return currentApp !== 'io.ox/files/detail';
         },
         action: function (baton) {
-            var fileModel = baton.model;
+            var fileModel,
+                currentApp = ox.ui.App.getCurrentApp().getName();
+
+            if (currentApp === 'io.ox/mail') {
+                fileModel = { file: baton.data };
+            } else {
+                fileModel = baton.model;
+            }
+
             ox.launch('io.ox/files/detail/main', fileModel);
         }
     });
 
     new Action(TOOLBAR_ACTION_ID + '/launchpresenter', {
-        id: 'launchpresenter',
-        capabilities: 'document_preview',
+        capabilities: 'presenter document_preview',
         requires: function (e) {
-            return e.baton.model.isPresentation();
+            var model = e.baton.model;
+            return (model.isPresentation() && model.isFile());
         },
         action: function (baton) {
             var fileModel = baton.model;
@@ -400,12 +410,10 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     new Action(TOOLBAR_ACTION_ID + '/close', {
-        id: 'close',
         action: function () {}
     });
     // define actions for the zoom function
     new Action(TOOLBAR_ACTION_ID + '/zoomin', {
-        id: 'zoomin',
         requires: function (e) {
             var model = e.baton.model;
             return model.isOffice() || model.isPDF() || model.isText();
@@ -416,7 +424,6 @@ define('io.ox/core/viewer/views/toolbarview', [
         }
     });
     new Action(TOOLBAR_ACTION_ID + '/zoomout', {
-        id: 'zoomout',
         requires: function (e) {
             var model = e.baton.model;
             return model.isOffice() || model.isPDF() || model.isText();
@@ -428,7 +435,6 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     new Action(TOOLBAR_ACTION_ID + '/zoomfitwidth', {
-        id: 'zoomfitwidth',
         requires: function (e) {
             var model = e.baton.model;
             return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
@@ -441,7 +447,6 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     new Action(TOOLBAR_ACTION_ID + '/zoomfitheight', {
-        id: 'zoomfitheight',
         requires: function (e) {
             var model = e.baton.model;
             return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
@@ -454,7 +459,6 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     new Action(TOOLBAR_ACTION_ID + '/sendasmail', {
-        id: 'sendasmail',
         requires: function (e) {
             var model = e.baton.model;
             return model.isOffice() || model.isPDF();
@@ -561,11 +565,15 @@ define('io.ox/core/viewer/views/toolbarview', [
          *
          * @param {jQuery.Event} event
          */
-        onRename: function (event) {
-            if ((this.model.isFile()) && (event.which === 32 || event.which === 13 || event.type === 'click')) {
-                event.preventDefault();
-                ActionsPattern.invoke('io.ox/files/actions/rename', null, { data: this.model.toJSON() });
-            }
+        onRename: function (e) {
+            if (!(e.which === 32 || e.which === 13 || e.type === 'click')) return;
+            e.preventDefault();
+            if (!this.model.isFile()) return;
+            var POINT = 'io.ox/files/actions/rename',
+                data = this.model.toJSON();
+            ActionsPattern.check(POINT, [data]).done(function () {
+                ActionsPattern.invoke(POINT, null, data);
+            });
         },
 
         /**

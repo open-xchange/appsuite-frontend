@@ -356,7 +356,8 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
                 .replace(/(<\/?\w+(\s[^<>]*)?\/?>)/g, '') // Remove all remaining tags except mail addresses
                 .replace(/^[\t\r\n]+|[\t\r\n]+$/g, '')    // Trim leading/trailing whitespace
                 .replace(/\n\s+\n/g, '\n\n')
-                .replace(/\n{3,}/g, '\n\n');              // limit consecutive linebreaks to 2
+                .replace(/\n{3,}/g, '\n\n')              // limit consecutive linebreaks to 2
+                .replace(/&amp;/g, '&');
         }
 
         string = cleanUp(string);
@@ -410,7 +411,8 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
             _.extend(lexer.rules, {
                 heading:  noop,
                 code: noop,
-                hr: noop
+                hr: noop,
+                lheading: noop
             });
 
             def.resolve(marked.parser(lexer.lex(string)));

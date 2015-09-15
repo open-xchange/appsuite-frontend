@@ -4,10 +4,10 @@
 <title>11.2.3. Permisos para crear carpetas nuevas</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Software colaborativo">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Permisos">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html" title="11.2.2. Permisos para carpetas ya existentes">
-<link rel="next" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. Compartición de carpetas">
+<link rel="next" href="ox.appsuite.user.sect.dataorganisation.sharing.html" title="11.3. Compartir">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Aviso Legal">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -25,7 +25,7 @@
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html">Anterior</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Inicio</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">TdC</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html">Siguiente</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.sharing.html">Siguiente</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -34,7 +34,7 @@
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ox.appsuite.user.sect.dataorganisation.rights.foldernew"></a>11.2.3. Permisos para crear carpetas nuevas</h3></div></div></div>
-<a class="indexterm" name="id-1.12.5.7.2"></a><div class="concept">
+<a class="indexterm" name="id-1.12.5.6.2"></a><div class="concept">
 <a name="ox.appsuite.user.concept.rights.foldernew"></a><p>Según el lugar donde cree una carpeta nueva, se le asignan derechos específicos.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>en una <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html#ox.appsuite.user.reference.rights.personalfoldernew">carpeta personal</a></p></li>
@@ -47,8 +47,8 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.personalfoldernew"></a><p>Si ha creado una nueva carpeta en una carpeta personal: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Usted es el <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Propietario">propietario</a>. </p></li>
-<li class="listitem"><p>Otros usuarios heredan los permisos que tengan en la carpeta padre.</p></li>
+<li class="listitem"><p>Usted es el <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrador">administrador</a>. </p></li>
+<li class="listitem"><p>En las aplicaciones <span class="phrase"><span class="guilabel"><strong>Correo electrónico</strong></span></span> y <span class="phrase"><span class="guilabel"><strong>Ficheros</strong></span></span>, los otros usuarios heredan sus permisos de la carpeta padre. En las otras aplicaciones, los otros usuarios no heredan los permisos.</p></li>
 </ul></div>
 <p>
       </p>
@@ -56,8 +56,8 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.publicfoldernew"></a><p>Si crea una carpeta nueva en la carpeta <span class="guibutton"><strong>Archivos públicos</strong></span>: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Usted es el <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Propietario">propietario</a>.</p></li>
-<li class="listitem"><p>Los demás usuarios no tendrán derechos. Usted debe establecer los permisos de la nueva carpeta. Si, después, crea nuevas subcarpetas de dicha carpeta, los permisos de la carpeta los heredarán las nuevas subcarpetas. Se puede encontrar información sobre cómo conceder permisos en <a class="xref" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. Compartición de carpetas">11.2.4: Compartición de carpetas</a>. </p></li>
+<li class="listitem"><p>Usted es el <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrador">administrador</a>.</p></li>
+<li class="listitem"><p>Los demás usuarios no tendrán derechos. Usted debe establecer los permisos de la nueva carpeta. Si, después, crea nuevas subcarpetas de dicha carpeta, los permisos de la carpeta los heredarán las nuevas subcarpetas.</p></li>
 </ul></div>
 <p>
       </p>
@@ -65,12 +65,11 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.sharedfoldernew"></a><p>Si crea una nueva carpeta en la carpeta compartida de otro usuario: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>El usuario que compartió la carpeta tiene permisos de <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrador">Administrador</a> en la nueva carpeta. </p></li>
-<li class="listitem"><p>Usted es el <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Propietario">propietario</a>.</p></li>
-<li class="listitem"><p>Otros usuarios tendrán los mismos derechos que en la carpeta padre.</p></li>
+<li class="listitem"><p>El usuario que compartió la carpeta es el <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrador">administrador</a> de la nueva carpeta. </p></li>
+<li class="listitem"><p>Usted es el <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="Autor">autor</a> de la nueva carpeta.</p></li>
+<li class="listitem"><p>Los otros usuarios tendrán los mismos derechos que para la carpeta padre.</p></li>
 </ul></div>
-<p>
-      </p>
+<p><span class="phrase"><strong>Nota:</strong></span> Tiene que tener permisos para crear objetos en la carpeta compartida.</p>
 </div>
 </div>
           </div>

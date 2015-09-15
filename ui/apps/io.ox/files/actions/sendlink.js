@@ -13,13 +13,14 @@
 
 define('io.ox/files/actions/sendlink', [
     'io.ox/files/api',
+    'io.ox/core/util',
     'gettext!io.ox/files'
-], function (api, gt) {
+], function (api, util, gt) {
 
     'use strict';
 
     function getUrl(file) {
-        return ox.abs + ox.root + '/#!&app=io.ox/files&folder=' + file.folder_id + '&id=' + _.cid(file);
+        return util.getDeepLink('io.ox/files', file);
     }
 
     function getHTML(label, url) {

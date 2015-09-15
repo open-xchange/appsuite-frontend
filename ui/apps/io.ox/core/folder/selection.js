@@ -26,10 +26,7 @@ define('io.ox/core/folder/selection', [], function () {
         this.view.$el.addClass('dropzone')
             .attr('data-dropzones', '.selectable')
             .on('drop', function (e, baton) {
-                if (!baton) {
-                    return;
-                }
-
+                if (!baton) return;
                 baton.dropType = view.module;
                 view.selection.trigger('selection:drop', baton);
             });
@@ -180,8 +177,8 @@ define('io.ox/core/folder/selection', [], function () {
             return nodes.addClass('selected')
                 .attr({ 'aria-selected': true, tabindex: 1 })
                 .find('.folder-label').each(function () {
-                    var left = $(this).position().left, maxWidth = width - left - 64;
-                    $(this).css('max-width', Math.max(maxWidth, 120));
+                    var left = $(this).position().left, maxWidth = width - left - 64 - 8;
+                    $(this).css('max-width', Math.max(maxWidth, 80));
                 })
                 .end();
         },

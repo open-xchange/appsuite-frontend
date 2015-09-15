@@ -142,6 +142,7 @@ define('io.ox/core/extPatterns/links', [
         // add help description
         var id = extension.ref.replace(/\//g, '-') + '-descr';
         link.attr('aria-describedby', id);
+        link.parent().addClass('has-dropdown-description');
         this.append(
             $('<li>')
                 .attr({
@@ -508,6 +509,7 @@ define('io.ox/core/extPatterns/links', [
             // remove items with 'none' prio
             if (_.device('smartphone')) baton.$el.find('[data-prio="none"]').closest('li').remove();
             baton.$el.parent().trigger('ready');
+            delete baton.$el;
         });
     };
 

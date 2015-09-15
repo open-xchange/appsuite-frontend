@@ -63,7 +63,8 @@ module.exports = function (grunt) {
                             'marked/lib/marked.js',
                             'velocity/velocity.min.js',
                             'moment/moment.js',
-                            'moment/locale/*'
+                            'moment/locale/*',
+                            'autosize/dist/autosize.js'
                         ],
                         cwd: 'bower_components',
                         dest: 'build/static/3rd.party/'

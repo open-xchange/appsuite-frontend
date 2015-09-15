@@ -36,33 +36,27 @@
 <a name="ox.appsuite.user.sect.dataorganisation.rights.defined"></a>11.2.1. Welche Berechtigungen können erteilt werden?</h3></div></div></div>
 <div class="concept">
 <a name="ox.appsuite.user.concept.rights.roles"></a><p>Um sinnvolle Kombinationen von Berechtigungen möglichst
-        einfach erteilen zu können, sind bestimmte Benutzer-Rollen vorgegeben: </p>
+        einfach erteilen zu können, sind bestimmte Benutzer-Rollen vorgegeben: 
+        </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>
-              <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Eigentümer">Eigentümer</a>
-            </p></li>
 <li class="listitem"><p>
               <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrator">Administrator</a>
             </p></li>
 <li class="listitem"><p>
-              <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="Autor">Autor</a>
+              <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.viewer" title="Viewer">Viewer</a>
             </p></li>
 <li class="listitem"><p>
-              <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.guest" title="Gast">Gast</a>
+              <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.editor" title="Überarbeiter">Überarbeiter</a>
+            </p></li>
+<li class="listitem"><p>
+              <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="Autor">Autor</a>
             </p></li>
 </ul></div>
 <p>
+        Bei Bedarf können Sie diese Voreinstellungen ändern, indem Sie 
+        <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.folder.rights.detail" title="Detaillierte Berechtigungen">detaillierte Berechtigungen</a>
+        vergeben.
       </p>
-</div>
-<div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.owner"></a><p class="title"><b>Eigentümer</b></p>
-<p>Der Eigentümer eines Ordners besitzt alle Rechte an diesem Ordner. Er kann anderen Benutzern Berechtigungen an dem
-          Ordner erteilen.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Ordnerberechtigung: Objekte und Unterordner anlegen</p></li>
-<li class="listitem"><p>Objektberechtigungen: Alle Objekte lesen, alle Objekte bearbeiten, alle Objekte löschen</p></li>
-<li class="listitem"><p>Administrative Rechte: Ja</p></li>
-</ul></div>
 </div>
 <div class="concept">
 <a name="ox.appsuite.user.concept.rights.roles.administrator"></a><p class="title"><b>Administrator</b></p>
@@ -71,75 +65,75 @@
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Ordnerberechtigung: Objekte und Unterordner anlegen</p></li>
 <li class="listitem"><p>Objektberechtigungen: Alle Objekte lesen, alle Objekte bearbeiten, alle Objekte löschen</p></li>
-<li class="listitem"><p>Administrative Rechte: Ja</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.viewer"></a><p class="title"><b>Viewer</b></p>
+<p>Ein Viewer darf alle vorhandenen Objekte lesen. Darüber hinaus hat er keine Berechtigungen.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Ordnerberechtigungen: Ordner anzeigen</p></li>
+<li class="listitem"><p>Objektberechtigungen: Alle Objekte lesen</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.editor"></a><p class="title"><b>Überarbeiter</b></p>
+<p>Ein Überarbeiter darf vorhandene Objekte lesen und bearbeiten. Er darf aber keine neuen Objekte anlegen. Er darf keine Objekte löschen.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Ordnerberechtigungen: Ordner anzeigen</p></li>
+<li class="listitem"><p>Objektberechtigungen: Alle Objekte lesen, alle Objekte bearbeiten</p></li>
 </ul></div>
 </div>
 <div class="concept">
 <a name="ox.appsuite.user.concept.rights.roles.author"></a><p class="title"><b>Autor</b></p>
-<p>Ein Autor darf vorhandene Objekte ändern. Er darf neue Objekte anlegen und bearbeiten. Er darf Unterordner anlegen.</p>
+<p>Ein Autor darf vorhandene Objekte ändern oder löschen. Er darf neue Objekte anlegen und bearbeiten. Er darf Unterordner anlegen.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Ordnerberechtigungen: Objekte und Unterordner anlegen</p></li>
 <li class="listitem"><p>Objektberechtigungen: Alle Objekte lesen, alle Objekte bearbeiten, alle Objekte löschen</p></li>
-<li class="listitem"><p>Administrative Rechte: Nein</p></li>
 </ul></div>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.guest"></a><p class="title"><b>Gast</b></p>
-<p> Ein Gast darf vorhandene Objekte lesen, aber nicht ändern. Er darf keine neuen Unterordner oder Objekte anlegen.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Ordnerberechtigung: Ordner anzeigen</p></li>
-<li class="listitem"><p>Objektberechtigungen: Alle Objekte lesen, keine Bearbeitungsberechtigungen, keine Löschberechtigungen</p></li>
-<li class="listitem"><p>Administrative Rechte: Nein</p></li>
-</ul></div>
-</div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.folder.rights"></a><p>Bei Bedarf können die vorgegebenen Berechtigungen der
-        Benutzer-Rollen weiter verfeinert werden. Dazu können die folgenden Berechtigungen erteilt werden. </p>
+<a name="ox.appsuite.user.concept.folder.rights.detail"></a><p class="title"><b>Detaillierte Berechtigungen</b></p>
+<p>Bei Bedarf können die vorgegebenen Berechtigungen der
+          Benutzer-Rollen weiter verfeinert werden. Dazu können die folgenden Berechtigungen erteilt werden. 
+          </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>Ordnerberechtigungen</p>
+<p>Ordner</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>Neuer Ordner</p></li>
+<li class="listitem"><p>Ordner anzeigen</p></li>
 <li class="listitem"><p>Objekte anlegen</p></li>
 <li class="listitem"><p>Objekte und Unterordner anlegen</p></li>
 </ul></div>
 <p>
-            </p>
+              </p>
 </li>
 <li class="listitem">
-<p>Objektberechtigungen, lesen</p>
+<p>Leseberechtigungen</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>keine Leseberechtigungen</p></li>
-<li class="listitem"><p>eigene Objekte lesen</p></li>
-<li class="listitem"><p>alle Objekte lesen</p></li>
+<li class="listitem"><p>Keine</p></li>
+<li class="listitem"><p>Eigene Objekte lesen</p></li>
+<li class="listitem"><p>Alle Objekte lesen</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p>Objektberechtigungen, bearbeiten</p>
+<p>Schreibberechtigungen</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>keine Bearbeitungsberechtigungen</p></li>
-<li class="listitem"><p>eigene Objekte bearbeiten</p></li>
-<li class="listitem"><p>alle Objekte bearbeiten</p></li>
+<li class="listitem"><p>Keine</p></li>
+<li class="listitem"><p>Eigene Objekte bearbeiten</p></li>
+<li class="listitem"><p>Alle Objekte bearbeiten</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p>Objektberechtigungen, löschen</p>
+<p>Löschberechtigungen</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>keine Löschberechtigungen</p></li>
-<li class="listitem"><p>eigene Objekte löschen</p></li>
-<li class="listitem"><p>alle Objekte löschen</p></li>
-</ul></div>
-</li>
-<li class="listitem">
-<p>Administrative Rechte</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>Ja</p></li>
-<li class="listitem"><p>Nein</p></li>
+<li class="listitem"><p>Keine</p></li>
+<li class="listitem"><p>Eigene Objekte löschen</p></li>
+<li class="listitem"><p>Alle Objekte löschen</p></li>
 </ul></div>
 </li>
 </ul></div>
 <p>
-      </p>
+        </p>
 </div>
 </div>
           </div>

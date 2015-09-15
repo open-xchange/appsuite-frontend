@@ -4,10 +4,10 @@
 <title>11.2.3. Droits sur les nouveaux dossiers</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Collecticiel">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Droits">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html" title="11.2.2. Droits sur les dossiers existants">
-<link rel="next" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. Partager des dossiers">
+<link rel="next" href="ox.appsuite.user.sect.dataorganisation.sharing.html" title="11.3. Partage">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Note légale">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -25,7 +25,7 @@
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html">Précédent</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Sommaire</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">TdM</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html">Suivant</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.sharing.html">Suivant</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -34,7 +34,7 @@
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ox.appsuite.user.sect.dataorganisation.rights.foldernew"></a>11.2.3. Droits sur les nouveaux dossiers</h3></div></div></div>
-<a class="indexterm" name="id-1.12.5.7.2"></a><div class="concept">
+<a class="indexterm" name="id-1.12.5.6.2"></a><div class="concept">
 <a name="ox.appsuite.user.concept.rights.foldernew"></a><p>Selon l'endroit où vous créez un nouveau dossier, des droits particuliers vous sont attribués.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>dans un <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html#ox.appsuite.user.reference.rights.personalfoldernew">dossier privé</a></p></li>
@@ -47,8 +47,8 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.personalfoldernew"></a><p>Si vous créez un nouveau dossier dans un dossier privé : </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Vous en êtes le <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Propriétaire">propriétaire</a>. </p></li>
-<li class="listitem"><p>Les autres utilisateurs héritent des droits qu'ils ont sur le dossier parent.</p></li>
+<li class="listitem"><p>Vous êtes l'<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrateur">administrateur</a>. </p></li>
+<li class="listitem"><p>Dans l'app <span class="phrase"><span class="guilabel"><strong>Courriel</strong></span></span> et l'app <span class="phrase"><span class="guilabel"><strong>Fichiers</strong></span></span>, les autres utilisateurs héritent leurs droits du dossier parent. Dans les autres apps, les autres utilisateurs n'héritent pas des permissions parentes.</p></li>
 </ul></div>
 <p>
       </p>
@@ -56,8 +56,8 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.publicfoldernew"></a><p>Si vous créez un nouveau dossier dans le dossier <span class="guibutton"><strong>Fichiers publics</strong></span> : </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Vous en êtes le <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Propriétaire">propriétaire</a>.</p></li>
-<li class="listitem"><p>Les autres utilisateurs n'auront pas de droit. Vous devez définir les droits pour le nouveau dossier. Si vous créez par la suite de nouveaux sous-dossiers dans ce dossier, les droits de ce dossier sont hérités par les nouveaux sous-dossiers. Vous trouverez des informations sur l'attribution de droits dans <a class="xref" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. Partager des dossiers">11.2.4: Partager des dossiers</a>. </p></li>
+<li class="listitem"><p>Vous êtes l'<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrateur">administrateur</a>.</p></li>
+<li class="listitem"><p>Les autres utilisateurs n'auront pas de droit. Vous devez définir les droits pour le nouveau dossier. Si vous créez par la suite de nouveaux sous-dossiers dans ce dossier, les droits de ce dossier sont hérités par les nouveaux sous-dossiers.</p></li>
 </ul></div>
 <p>
       </p>
@@ -65,12 +65,11 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.sharedfoldernew"></a><p>Si vous créez un nouveau dossier dans le dossier partagé d'un autre utilisateur : </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>L'utilisateur qui a partagé le dossier obtient les droits d'<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrateur">administrateur</a> sur le nouveau dossier. </p></li>
-<li class="listitem"><p>Vous en êtes le <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Propriétaire">propriétaire</a>.</p></li>
-<li class="listitem"><p>Les autres utilisateurs obtiennent les mêmes droits que sur le dossier parent.</p></li>
+<li class="listitem"><p>L'utilisateur ayant partagé le dossier est l'<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrateur">administrateur</a> du nouveau dossier. </p></li>
+<li class="listitem"><p>Vous êtes l'<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="Auteur">auteur</a> du nouveau dossier.</p></li>
+<li class="listitem"><p>Les autres utilisateurs obtiennent des droits similaires au dossier parent.</p></li>
 </ul></div>
-<p>
-      </p>
+<p><span class="phrase"><strong>Remarque :</strong></span> vous devez avoir le droit de créer des objets dans le dossier partagé.</p>
 </div>
 </div>
           </div>

@@ -82,7 +82,7 @@ define('io.ox/core/settings/pane', [
                 $('<div data-extension-id="my-contact-data">').append(
                     $('<div class="form-group">').append(
                         $('<label class="control-label col-sm-4">'),
-                        $('<div class="col-sm-4">').append(
+                        $('<div class="col-sm-6">').append(
                             $('<button type="button" class="btn btn-default" tabindex="1">')
                             .text(gt('My contact data') + ' ...')
                             .on('click', function () {
@@ -110,7 +110,7 @@ define('io.ox/core/settings/pane', [
                     $('<div data-extension-id="change-password">').append(
                         $('<div class="form-group">').append(
                             $('<label class="control-label col-sm-4">'),
-                            $('<div class="col-sm-4">').append(
+                            $('<div class="col-sm-6">').append(
                                 $('<button type="button" class="btn btn-default" tabindex="1">')
                                 .text(gt('Change password') + ' ...')
                                 .on('click', userSettings.changePassword)
@@ -136,7 +136,7 @@ define('io.ox/core/settings/pane', [
                     class: 'control-label col-sm-4',
                     for: guid
                 }).text(gt('Language')),
-                $('<div>').addClass('col-sm-4').append(
+                $('<div>').addClass('col-sm-6').append(
                     new miniViews.SelectView({
                         list: _.map(ox.serverConfig.languages, function (key, val) { return { label: key, value: val }; }),
                         name: 'language',
@@ -162,7 +162,7 @@ define('io.ox/core/settings/pane', [
                         class: 'control-label col-sm-4',
                         for: guid
                     }).text(gt('Time zone')),
-                    $('<div>').addClass('col-sm-4').append(
+                    $('<div>').addClass('col-sm-6').append(
                         new TimezonePicker({
                             name: 'timezone',
                             model: this.baton.model,
@@ -197,7 +197,7 @@ define('io.ox/core/settings/pane', [
                             class: 'control-label col-sm-4',
                             for: guid
                         }).text(gt('Theme')),
-                        $('<div>').addClass('col-sm-4').append(
+                        $('<div>').addClass('col-sm-6').append(
                             new miniViews.SelectView({
                                 list: _.map(availableThemes, function (key, val) { return { label: key, value: val }; }),
                                 name: 'theme',
@@ -216,18 +216,13 @@ define('io.ox/core/settings/pane', [
             index: 401,
             className: 'form-group',
             render: function () {
-                var guid = _.uniqueId('form-control-label-');
                 this.$el.append(
-                    $('<label>').attr({
-                        class: 'control-label col-sm-4',
-                        for: guid
-                    }).text(gt('High contrast theme')),
-                    $('<div>').addClass('col-sm-4').append(
-                        new miniViews.CheckboxView({
-                            name: 'highcontrast',
-                            model: this.baton.model,
-                            id: guid
-                        }).render().$el
+                    $('<div class="col-sm-offset-4 col-sm-8">').append(
+                        $('<div class="checkbox">').addClass('').append(
+                            $('<label class="control-label">').text(gt('High contrast theme')).prepend(
+                                new miniViews.CheckboxView({ name: 'highcontrast', model: this.baton.model }).render().$el
+                            )
+                        )
                     )
                 );
             }
@@ -256,7 +251,7 @@ define('io.ox/core/settings/pane', [
                             class: 'control-label col-sm-4',
                             for: guid
                         }).text(gt('Refresh interval')),
-                        $('<div>').addClass('col-sm-4').append(
+                        $('<div>').addClass('col-sm-6').append(
                             new miniViews.SelectView({
                                 list: options,
                                 name: 'refreshInterval',
@@ -292,7 +287,7 @@ define('io.ox/core/settings/pane', [
                             class: 'control-label col-sm-4',
                             for: guid
                         }).text(gt('Default app after sign in')),
-                        $('<div>').addClass('col-sm-4').append(
+                        $('<div>').addClass('col-sm-6').append(
                             new miniViews.SelectView({
                                 list: options,
                                 name: 'autoStart',
@@ -311,7 +306,7 @@ define('io.ox/core/settings/pane', [
     (function () {
         var MINUTES = 60000,
             options = [
-                { label: gt('Off'), value: 0 },
+                { label: gt('disable'), value: 0 },
                 { label: gt('5 minutes'), value: 5 * MINUTES },
                 { label: gt('10 minutes'), value: 10 * MINUTES },
                 { label: gt('15 minutes'), value: 15 * MINUTES },
@@ -329,7 +324,7 @@ define('io.ox/core/settings/pane', [
                         class: 'control-label col-sm-4',
                         for: guid
                     }).text(gt('Automatic sign out')),
-                    $('<div>').addClass('col-sm-4').append(
+                    $('<div>').addClass('col-sm-6').append(
                         new miniViews.SelectView({
                             list: options,
                             name: 'autoLogout',
@@ -360,18 +355,13 @@ define('io.ox/core/settings/pane', [
                         this.baton.model.set('autoOpenNotification', false);
                     }
 
-                    var guid = _.uniqueId('form-control-label-');
                     this.$el.append(
-                        $('<label>').attr({
-                            class: 'control-label col-sm-4',
-                            for: guid
-                        }).text(gt('Automatic opening of notification area')),
-                        $('<div>').addClass('col-sm-4').append(
-                            new miniViews.CheckboxView({
-                                name: 'autoOpenNotification',
-                                model: this.baton.model,
-                                id: guid
-                            }).render().$el
+                        $('<div class="col-sm-offset-4 col-sm-8">').append(
+                            $('<div>').addClass('checkbox').append(
+                                $('<label class="control-label">').text(gt('Automatic opening of notification area')).prepend(
+                                    new miniViews.CheckboxView({ name: 'autoOpenNotification', model: this.baton.model }).render().$el
+                                )
+                            )
                         )
                     );
                 }
@@ -384,13 +374,6 @@ define('io.ox/core/settings/pane', [
             index: 800,
             className: 'form-group',
             render: function () {
-                var guid = _.uniqueId('form-control-label-'),
-                    miniView = new miniViews.CheckboxView({
-                        name: 'showDesktopNotifications',
-                        model: this.baton.model,
-                        id: guid
-                    });
-
                 this.baton.model.on('change:showDesktopNotifications', function (e, value) {
                     if (value === true) {
                         desktopNotifications.requestPermission();
@@ -398,12 +381,12 @@ define('io.ox/core/settings/pane', [
                 });
 
                 this.$el.append(
-                    $('<label>').attr({
-                        class: 'control-label col-sm-4',
-                        for: guid
-                    }).text(gt('Show desktop notifications')),
-                    $('<div>').addClass('col-sm-4').append(
-                        miniView.render().$el
+                    $('<div class="col-sm-offset-4 col-sm-8">').append(
+                        $('<div>').addClass('checkbox').append(
+                            $('<label class="control-label">').text(gt('Show desktop notifications')).prepend(
+                                new miniViews.CheckboxView({ name: 'showDesktopNotifications', model: this.baton.model }).render().$el
+                            )
+                        )
                     )
                 );
             }

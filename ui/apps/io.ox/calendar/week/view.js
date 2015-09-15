@@ -24,6 +24,19 @@ define('io.ox/calendar/week/view', [
 
     'use strict';
 
+    // helper
+
+    function getTimezoneLabels() {
+
+        var list = _.intersection(
+            settings.get('favoriteTimezones', []),
+            settings.get('renderTimezones', [])
+        );
+
+        // avoid double appearance of default timezone
+        return _(list).without(coreSettings.get('timezone'));
+    }
+
     var View = Backbone.View.extend({
 
         className:      'week',
@@ -115,6 +128,7 @@ define('io.ox/calendar/week/view', [
                 'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.')
             });
 
+            this.app = opt.app;
             this.mode = opt.mode || 'day';
             this.extPoint = opt.appExtPoint;
             this.refDate = opt.refDate || moment();
@@ -235,6 +249,7 @@ define('io.ox/calendar/week/view', [
                 month--;
             }
             this.apiRefTime = moment(this.startDate).month(month).date(1);
+            if (this.app) this.app.refDate = this.refDate;
         },
 
         /**
@@ -709,12 +724,11 @@ define('io.ox/calendar/week/view', [
             }
 
             function drawTimezoneLabels() {
-                var list = _.intersection(
-                    settings.get('favoriteTimezones', []),
-                    settings.get('renderTimezones', [])
-                );
+
+                var list = getTimezoneLabels();
 
                 $('.timezone', self.timeLabelBar).remove();
+
                 self.timeLabelBar.prepend(
                     _(list).map(function (tz) {
                         return $('<div class="timezone">').text(moment().tz(tz).zoneAbbr());
@@ -844,10 +858,8 @@ define('io.ox/calendar/week/view', [
             );
 
             var renderSecondaryTimeLabels = _.throttle(function () {
-                var list = _.intersection(
-                    settings.get('favoriteTimezones', []),
-                    settings.get('renderTimezones', [])
-                );
+
+                var list = getTimezoneLabels();
 
                 $('.secondary-timezone', self.pane).remove();
                 $('.week-container-label', self.pane).before(
@@ -1733,7 +1745,7 @@ define('io.ox/calendar/week/view', [
                 e = calc(end);
             return {
                 top: s,
-                height: Math.max(Math.round(e - s), self.minCellHeight) - 1
+                height: Math.max(Math.floor(e - s), self.minCellHeight) - 1
             };
         },
 

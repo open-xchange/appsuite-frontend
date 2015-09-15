@@ -109,7 +109,6 @@ define('io.ox/calendar/actions', [
     });
 
     new Action('io.ox/calendar/detail/actions/edit', {
-        id: 'edit',
         requires: function (e) {
             var exists = e.baton && e.baton.data ? e.baton.data.id !== undefined : true,
                 allowed = e.collection.has('one', 'modify');
@@ -132,7 +131,6 @@ define('io.ox/calendar/actions', [
     });
 
     new Action('io.ox/calendar/detail/actions/delete', {
-        id: 'delete',
         requires: function (e) {
             return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
                 return e.collection.has('delete') && isBossy;
@@ -146,7 +144,6 @@ define('io.ox/calendar/actions', [
     });
 
     new Action('io.ox/calendar/detail/actions/create', {
-        id: 'create',
         requires: function (e) {
             return e.baton.app.folder.can('create');
         },
@@ -158,7 +155,6 @@ define('io.ox/calendar/actions', [
     });
 
     new Action('io.ox/calendar/detail/actions/changestatus', {
-        id: 'change_status',
         requires: function (e) {
 
             function cont(app) {
@@ -218,7 +214,6 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/print', {
         capabilities: 'printing',
-        id: 'print',
         requires: function (e) {
             var win = e.baton.window;
             if (_.device('!smartphone') && win && win.getPerspective) {
@@ -238,7 +233,6 @@ define('io.ox/calendar/actions', [
     });
 
     new Action('io.ox/calendar/detail/actions/move', {
-        id: 'move',
         requires: function (e) {
             return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
                 var isSeries = e.baton.data.recurrence_type > 0;
@@ -294,15 +288,18 @@ define('io.ox/calendar/actions', [
     });
 
     new Action('io.ox/calendar/actions/freebusy', {
-        capabilities: 'freebusy !alone',
+        capabilities: 'freebusy !alone !guest',
         requires: function () {
             return _.device('!smartphone');
         },
         action: function (baton) {
+            var perspective = baton.app.getWindow().getPerspective(),
+                start_date = perspective && perspective.getStartDate ? perspective.getStartDate() : _.now();
             ox.launch('io.ox/calendar/freebusy/main', {
                 baton: baton,
                 folder: baton.app.folder.get(),
-                participants: [{ id: ox.user_id, type: 1 }]
+                participants: [{ id: ox.user_id, type: 1 }],
+                start_date: start_date
             });
         }
     });

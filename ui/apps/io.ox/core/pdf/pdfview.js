@@ -39,8 +39,28 @@ define('io.ox/core/pdf/pdfview', [
 
         DEVICE_OUTPUTSCALING = Math.min(DEVICE_PIXEL_RATIO, MAX_DEVICE_PIXEL_RATIO),
 
-        // render the optional text layer with a timeout of 200ms
-        TEXT_LAYER_RENDER_DELAY = 200;
+        // max size of canvas width & height
+        // https://github.com/mozilla/pdf.js/issues/2439
+        // http://stackoverflow.com/a/22345796/4287795
+        MAXIMUM_SIDE_SIZE = (_.browser.iOS || _.browser.Safari || _.browser.IE <= 10) ? 2289 : 4096,
+
+        // between every render call (assigned deferred) there is create a timeout of 250ms
+        handleRenderQueue = (function () {
+            var lastDef = $.when();
+
+            return function (deferred) {
+                lastDef = lastDef.then(function () {
+                    var def = $.Deferred();
+                    deferred.then(function () {
+                        setTimeout(function () {
+                            def.resolve();
+                        }, 250);
+                    });
+                    deferred.resolve();
+                    return def;
+                });
+            };
+        }());
 
     // - class PDFView ---------------------------------------------------------
 
@@ -74,6 +94,40 @@ define('io.ox/core/pdf/pdfview', [
             return _.isObject(pdfjsPage) ? pdfjsPage.getViewport(PDFView.getAdjustedZoom(pageZoom)) : null;
         }
 
+        function intersects(aFrom, aTo, bFrom, bTo) {
+            return (aFrom >= bFrom && bTo >= aFrom) || (bFrom >= aFrom && aTo >= bFrom);
+        }
+
+        function updateLine(line, child, allLines) {
+            if (!line) {
+                line = { min: 99999999, max: 0, childs: [] };
+                var lastLine = _.last(allLines);
+                if (lastLine) {
+                    lastLine = _.last(lastLine.childs);
+                    lastLine.innerHTML = lastLine.innerHTML + '\r\n';
+                }
+                allLines.push(line);
+            }
+            var cV = PDFView.convertCssLength(child.style.top, 'px', 1);
+            var cH = PDFView.convertCssLength(child.style.fontSize, 'px', 1);
+
+            line.min = Math.min(line.min, cV);
+            line.max = Math.max(line.max, cV + cH);
+            var lastChild = _.last(line.childs);
+            line.childs.push(child);
+
+            if (lastChild) {
+                var letter = PDFView.convertCssLength(lastChild.style.fontSize, 'px', 1);
+                var dist = PDFView.convertCssLength(child.style.left, 'px', 1) - ($(lastChild).width() + PDFView.convertCssLength(lastChild.style.left, 'px', 1));
+                if (dist < letter * 4) {
+                    lastChild.innerHTML = lastChild.innerHTML + ' ';
+                } else {
+                    lastChild.innerHTML = lastChild.innerHTML + '\t';
+                }
+            }
+            return line;
+        }
+
         // ---------------------------------------------------------------------
 
         /**
@@ -83,62 +137,39 @@ define('io.ox/core/pdf/pdfview', [
         function prepareTextLayerForTextSelection(textWrapperNode) {
             if (textWrapperNode) {
                 var pageChildren = textWrapperNode.children(),
-                    last = null,
                     childrenCount = pageChildren.length,
                     //top right bottom left
                     margin = '-500px -2em 0 -10em',
                     padding = '+500px +2em 0 +10em',
-                    origin = '10em 0 0';
+                    origin = '10em 0 0',
+                    lines = [],
+                    currentLine = null;
 
                 pageChildren.detach();
-                pageChildren.sort(function (a, b) {
-                    var aV = PDFView.convertCssLength(a.style.top, 'px', 1);
-                    var bV = PDFView.convertCssLength(b.style.top, 'px', 1);
-                    var diff = aV - bV;
-
-                    if (Math.round(diff) === 0) {
-                        aV = PDFView.convertCssLength(a.style.left, 'px', 1);
-                        bV = PDFView.convertCssLength(b.style.left, 'px', 1);
-                        diff = aV - bV;
-                    }
-                    return diff;
-                });
 
                 _.each(pageChildren, function (child) {
-
                     if (child.innerHTML.length === 1) {
-                        // workaround for infinte height selections
+                        // workaround for infinite height selections
                         child.style.transform = 'scaleX(1)';
                     }
 
-                    if (last) {
+                    var childMin = PDFView.convertCssLength(child.style.top, 'px', 1);
+                    var childMax = PDFView.convertCssLength(child.style.fontSize, 'px', 1) + childMin;
 
-                        var myTop = PDFView.convertCssLength(child.style.top, 'px', 1),
-                            myLeft = PDFView.convertCssLength(child.style.left, 'px', 1),
-                            lastTop = PDFView.convertCssLength(last.style.top, 'px', 1),
-                            lastLeft = PDFView.convertCssLength(last.style.left, 'px', 1),
-                            letter = PDFView.convertCssLength(last.style['font-size'], 'px', 1),
-                            sameLine = Math.abs((myTop + child.offsetHeight) - (lastTop + last.offsetHeight)),
-                            signDist = Math.abs(myLeft - (lastLeft + last.offsetWidth)),
-                            addit = '';
-
-                        if (sameLine > letter * 2) {
-                            addit = '\r\n';
-                        } else if (sameLine < letter) {
-                            if (signDist > letter * 0.6) {
-                                addit = '\t';
-                            }
-                        } else if (sameLine > letter) {
-                            addit = ' ';
-                        }
-
-                        last.innerHTML = last.innerHTML + addit;
+                    if (currentLine && !intersects(currentLine.min, currentLine.max, childMin, childMax)) {
+                        currentLine = null;
                     }
+                    currentLine = updateLine(currentLine, child, lines);
+                });
 
-                    last = child;
+                lines.sort(function (a, b) { return a.min - b.min; });
+
+                _.each(lines, function (line) {
+                    textWrapperNode.append(line.childs);
                 });
 
                 //much bigger element for a smooth forward selection!
+                pageChildren = textWrapperNode.children();
                 _.each(pageChildren, function (child, index) {
                     // Non IPAD case
                     if (!(Modernizr.touch && _.browser.iOS && _.browser.Safari)) {
@@ -146,7 +177,6 @@ define('io.ox/core/pdf/pdfview', [
                         child.style.padding = padding;
                         child.style.transformOrigin = origin;
                     }
-
                     child.style.zIndex = childrenCount - index;
                 });
 
@@ -247,7 +277,7 @@ define('io.ox/core/pdf/pdfview', [
 
                         $.when.apply($, renderDefs).always( function () {
                             // notify possible <code>renderCallbacks.endRendering</code> callback function
-                            if (_.isFunction(renderCallbacks.endRendering)) {
+                            if (_.isObject(renderCallbacks) && _.isFunction(renderCallbacks.endRendering)) {
                                 renderCallbacks.endRendering(pagesToRender);
                             }
 
@@ -488,10 +518,10 @@ define('io.ox/core/pdf/pdfview', [
          *   The real size of the page in pixels, based on the original size and the pageZoom
          */
         this.getRealPageSize = function (pageNumber, pageZoom) {
-            var pageSize = _.isNumber(pageNumber) ? pdfDocument.getOriginalPageSize(pageNumber) : pdfDocument.getDefaultPageSize(),
+            var pageSize = _.isObject(pdfDocument) ? (_.isNumber(pageNumber) ? pdfDocument.getOriginalPageSize(pageNumber) : pdfDocument.getDefaultPageSize()) : null,
                 curPageZoom = this.getPageZoom(pageNumber, pageZoom);
 
-            return { width: Math.ceil(curPageZoom * pageSize.width), height: Math.ceil(curPageZoom * pageSize.height) };
+            return _.isObject(pageSize) ? { width: Math.ceil(curPageZoom * pageSize.width), height: Math.ceil(curPageZoom * pageSize.height) } : { width: 0, height: 0 };
         };
 
         // ---------------------------------------------------------------------
@@ -534,55 +564,73 @@ define('io.ox/core/pdf/pdfview', [
                 pageData[pagePos].curPageZoom = pageZoom;
                 pageData[pagePos].isInRendering = true;
 
-                return pdfDocument.getPDFJSPage(pageNumber).then( function (pdfjsPage) {
-                    if (pageNode.children().length) {
-                        var viewport = getPageViewport(pdfjsPage, pageZoom),
-                            pageSize = PDFView.getNormalizedSize({ width: viewport.width, height: viewport.height }),
-                            scaledSize = { width: pageSize.width * DEVICE_OUTPUTSCALING, height: pageSize.height * DEVICE_OUTPUTSCALING },
-                            canvasWrapperNode = pageNode.children('.canvas-wrapper'),
-                            canvasNode = canvasWrapperNode.children('canvas'),
-                            textWrapperNode = pageNode.children('.text-wrapper'),
-                            pdfTextBuilder = null;
+                var renderDef = $.Deferred();
+                renderDef.then(function () {
+                    pdfDocument.getPDFJSPage(pageNumber).then( function (pdfjsPage) {
+                        if (pageNode.children().length) {
+                            var viewport = getPageViewport(pdfjsPage, pageZoom),
+                                pageSize = PDFView.getNormalizedSize({ width: viewport.width, height: viewport.height }),
+                                scaledSize = { width: pageSize.width, height: pageSize.height },
+                                canvasWrapperNode = pageNode.children('.canvas-wrapper'),
+                                canvasNode = canvasWrapperNode.children('canvas'),
+                                textWrapperNode = pageNode.children('.text-wrapper'),
+                                pdfTextBuilder = null,
+                                getScale = function (orgSize) {
+                                    if (orgSize * DEVICE_OUTPUTSCALING > MAXIMUM_SIDE_SIZE) {
+                                        return MAXIMUM_SIDE_SIZE / (orgSize * DEVICE_OUTPUTSCALING);
+                                    } else {
+                                        return DEVICE_OUTPUTSCALING;
+                                    }
+                                },
+                                xScale = getScale(scaledSize.width),
+                                yScale = getScale(scaledSize.height);
 
-                        canvasNode.empty();
+                            scaledSize.width *= xScale;
+                            scaledSize.height *= yScale;
 
-                        pageNode.attr(pageSize).css(pageSize);
-                        pageNode.parent('.document-page').css(pageSize);
-                        canvasWrapperNode.attr(pageSize).css(pageSize);
-                        canvasNode.attr(scaledSize).css(pageSize);
+                            canvasNode.empty();
 
-                        if (textWrapperNode.length) {
-                            textWrapperNode.empty().attr(pageSize).css(pageSize);
+                            pageNode.attr(pageSize).css(pageSize);
+                            pageNode.parent('.document-page').css(pageSize);
+                            canvasWrapperNode.attr(pageSize).css(pageSize);
+                            canvasNode.attr(scaledSize).css(pageSize);
 
-                            pdfTextBuilder = new PDFTextLayerBuilder({
-                                textLayerDiv: textWrapperNode[0],
-                                viewport: viewport,
-                                pageIndex: pageNumber });
-                        }
+                            if (textWrapperNode.length) {
+                                textWrapperNode.empty().attr(pageSize).css(pageSize);
 
-                        var canvasCtx = canvasNode[0].getContext('2d');
+                                pdfTextBuilder = new PDFTextLayerBuilder({
+                                    textLayerDiv: textWrapperNode[0],
+                                    viewport: viewport,
+                                    pageIndex: pageNumber
+                                });
+                            }
 
-                        canvasCtx._transformMatrix = [DEVICE_OUTPUTSCALING, 0, 0, DEVICE_OUTPUTSCALING, 0, 0];
-                        canvasCtx.scale(DEVICE_OUTPUTSCALING, DEVICE_OUTPUTSCALING);
+                            var canvasCtx = canvasNode[0].getContext('2d');
 
-                        return pdfjsPage.render({
-                            canvasContext: canvasCtx,
-                            viewport: viewport
-                        }).then( function () {
-                            return (pdfTextBuilder ?
-                                    pdfjsPage.getTextContent().then( function (pdfTextContent) {
+                            canvasCtx._transformMatrix = [xScale, 0, 0, yScale, 0, 0];
+                            canvasCtx.scale(xScale, yScale);
+
+                            return pdfjsPage.render({
+                                canvasContext: canvasCtx,
+                                viewport: viewport
+                            }).then( function () {
+                                if (pdfTextBuilder) {
+                                    return pdfjsPage.getTextContent().then( function (pdfTextContent) {
                                         pdfTextBuilder.setTextContent(pdfTextContent);
-                                        setTimeout(function () {
-                                            pdfTextBuilder.render();
-                                            prepareTextLayerForTextSelection(textWrapperNode);
-                                        }, TEXT_LAYER_RENDER_DELAY);
+                                        pdfTextBuilder.render();
+                                        prepareTextLayerForTextSelection(textWrapperNode);
                                         return def.resolve();
-                                    }) : def.resolve());
-                        });
-                    } else {
-                        return def.reject();
-                    }
+                                    });
+                                } else {
+                                    def.resolve();
+                                }
+                            });
+                        } else {
+                            return def.reject();
+                        }
+                    });
                 });
+                handleRenderQueue(renderDef);
             } else {
                 def.reject();
             }

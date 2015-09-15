@@ -29,7 +29,6 @@ define('io.ox/settings/main', [
     'io.ox/core/settings/errorlog/settings/pane',
     'io.ox/core/settings/downloads/pane',
     'io.ox/settings/apps/settings/pane',
-    'io.ox/calendar/settings/timezones/pane',
     'less!io.ox/settings/style'
 ], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, notifications) {
 
@@ -140,7 +139,11 @@ define('io.ox/settings/main', [
 
             var apps = _.filter(installed, function (item) {
                 if (!item.settings) return false;
-                if (item.device) return _.device(item.device);
+                if (item.device && !_.device(item.device)) return false;
+                // check for dedicated requirements for settings (usually !guest)
+                if (item.settingsRequires && !capabilities.has(item.settingsRequires)) return false;
+                // check for device requirements for settings
+                if (item.settingsDevice && !_.device(item.settingsDevice)) return false;
                 // special code for tasks because here settings depend on a capability
                 // could have been done in manifest, but I did not want to change the general structure
                 // because of one special case, that might even disappear in the future
@@ -258,9 +261,17 @@ define('io.ox/settings/main', [
             tree.selection.resetSelected(tree.selection.getItems());
             tree.selection.preselect(id);
             app.folder.set(id);
+
             var item = tree.selection.byId(id),
                 view = item.closest('li').data('view');
+
+            // view may not exists if the user does not have this setting
+            if (!view) return;
+
             folderUtil.open(view.options.parent);
+
+            // show subfolders on default
+            if (view.hasSubFolders() && view.options.open !== 'open') view.toggle('open');
 
             previousSelection = currentSelection;
             currentSelection = pool.getModel(id).get('meta');
@@ -306,14 +317,16 @@ define('io.ox/settings/main', [
         }
 
         function addModelsToPool(groupList) {
+
             var externalList = [];
 
             function processSubgroup(extPoint, subgroup) {
+
                 subgroup = subgroup + '/' + extPoint.id;
                 disableListetSettingsPanes(subgroup);
+
                 var list = _(ext.point(subgroup).list()).map(function (p) {
                     processSubgroup(p, subgroup);
-
                     return pool.addModel({
                         id: 'virtual/settings/' + p.id,
                         module: 'settings',
@@ -330,6 +343,7 @@ define('io.ox/settings/main', [
             }
 
             _.each(groupList, function (val) {
+
                 if (val.subgroup) {
                     mainGroups.push('virtual/settings/' + val.id);
                     disableListetSettingsPanes(val.subgroup);
@@ -344,6 +358,7 @@ define('io.ox/settings/main', [
                             meta: p
                         });
                     });
+                    list = _(list).compact();
                     pool.addCollection('virtual/settings/' + val.id, list, { reset: true });
                 } else {
                     // this handles all old settings without a settingsgroup
@@ -443,11 +458,13 @@ define('io.ox/settings/main', [
             id: 'io.ox/core'
         });
 
-        ext.point('io.ox/settings/pane/general').extend({
-            title: gt('Accounts'),
-            index: 200,
-            id: 'io.ox/settings/accounts'
-        });
+        if (!capabilities.has('guest')) {
+            ext.point('io.ox/settings/pane/general').extend({
+                title: gt('Accounts'),
+                index: 200,
+                id: 'io.ox/settings/accounts'
+            });
+        }
 
         ext.point('io.ox/settings/pane').extend({
             id: 'tools',
@@ -510,11 +527,16 @@ define('io.ox/settings/main', [
             }
         });
 
+        app.getTour = function () {
+            return { id: 'default/io.ox/settings', path: 'io.ox/tours/settings' };
+        };
+
         app.setSettingsPane = function (options) {
-            if (options && options.id) {
+            if (options && (options.id || options.folder)) {
                 return paintTree().done(function () {
-                    var baton = new ext.Baton({ data: pool.getModel('virtual/settings/' + options.id).get('meta'), options: options || {} });
-                    tree.trigger('virtual', 'virtual/settings/' + options.id, {}, baton);
+                    var id = options.folder || ('virtual/settings/' + options.id),
+                        baton = new ext.Baton({ data: pool.getModel(id).get('meta'), options: options || {} });
+                    tree.trigger('virtual', id, {}, baton);
                 });
             } else {
                 if (!_.device('smartphone')) {
@@ -526,7 +548,7 @@ define('io.ox/settings/main', [
         };
 
         // go!
-        commons.addFolderSupport(app, null, 'settings', 'virtual/settings/io.ox/core')
+        commons.addFolderSupport(app, null, 'settings', options.folder || 'virtual/settings/io.ox/core')
             .always(function always() {
                 win.show(function () {
                     paintTree().done(function () {

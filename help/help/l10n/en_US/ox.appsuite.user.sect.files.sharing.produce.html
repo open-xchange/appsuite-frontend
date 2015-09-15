@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.6.1. Sharing data</title>
+<title>9.6.1. Sharing files and folders</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="User Guide">
@@ -33,58 +33,92 @@
 <h2 class="sr-only">Sharing</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.files.sharing.produce"></a>9.6.1. Sharing data</h3></div></div></div>
+<a name="ox.appsuite.user.sect.files.sharing.produce"></a>9.6.1. Sharing files and folders</h3></div></div></div>
 <a class="indexterm" name="id-1.10.12.4.2"></a><div class="concept">
-<a name="ox.appsuite.user.concept.sharing.produce"></a><p>There are the following options:</p>
+<a name="ox.appsuite.user.concept.files.sharing.produce"></a><p>There are the following options:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.sharing.produce.html#ox.appsuite.user.task.sharing.produce.files" title="How to share objects with read or edit access:">share</a> one or several objects like files or folders with read or edit permissions</p></li>
 <li class="listitem">
-<p>Invite internal users or external partners per E-Mail to a share. </p>
-<p>For external partners without a groupware account, a guest account will be created automatically. The invitation E-Mail contains a preset password and notes on the guest account access. After the initial login to the guest account, the external partner has to change the preset password.</p>
+<p>You can share a file or folder with read access by <a class="link" href="ox.appsuite.user.sect.files.sharing.produce.html#ox.appsuite.user.task.files.sharing.produce.link" title="How to share objects with read access by using a public link:">creating a public link</a>.</p>
+<p>You can give this link to internal users or external partners. Everyone who gets this link can view the file or the folder content.</p>
+</li>
+<li class="listitem">
+<p><a class="link" href="ox.appsuite.user.sect.files.sharing.produce.html#ox.appsuite.user.task.files.sharing.produce.guest" title="How to invite internal users or external partners to a share:">Invite</a> internal users or external partners per E-Mail to a share. You define which permissions are granted for the share.</p>
+<p>The invitation E-Mail contains notes for accessing the share. If an external partner accesses the share, the partner will automatically be logged in as guest user.</p>
 <p><span class="phrase"><strong>Note:</strong></span> The invitation E-Mail is exclusively sent in html format.</p>
 </li>
-<li class="listitem">
-<p>You can also generate a link for the share. You can send this link per E-Mail or publish it in social networks.</p>
-<p><span class="phrase"><strong>Caution:</strong></span> Everyone who receives this link can access the share without a password.</p>
-</li>
 </ul></div>
-<p>
-      </p>
+<p><span class="phrase"><strong>Note:</strong></span> In order to share objects, you need to have administrator permissions.</p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.sharing.produce.files"></a><p class="title">How to share objects with read or edit access:</p>
+<a name="ox.appsuite.user.task.files.sharing.produce.link"></a><p class="title">How to share objects with read access by using a public link:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p>Select a folder in the <span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> app.</p>
-<p>Select one or several objects in the display area.</p>
+<p>Select a folder in the folder tree. Select an object in the display area.</p>
+<p><span class="phrase"><strong>Note:</strong></span>  Select a single object. Multiple objects can not be shared together in a public link.</p>
 </li>
 <li class="step">
-<p>Click the <span class="guibutton"><strong>Share</strong></span> icon <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.sharing.produce.files.share"></a><img src="../../images/appsuite_user_icon_share.png"></span>  in the toolbar. The window for sharing objects will be opened.</p>
-<p>You can also share a single file in the <span class="guilabel"><strong>Viewer</strong></span>.</p>
+<p>Click the <span class="guibutton"><strong>Share</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.sharing.produce.link"></a><img src="../../images/appsuite_user_icon_share.png"></span>  in the toolbar. Click on <span class="guibutton"><strong>Get a link</strong></span>.</p>
+<p>The window for sharing objects will be opened. It contains a public link for a read access to the share.</p>
 </li>
 <li class="step">
-<p>In order to define the people with whom you want to share the data, use one of the following options:</p>
+<p>You have the following options:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>To invite other users or external partners by using your E-Mail address, select <span class="guibutton"><strong>Invite people</strong></span>. Enter the E-Mail addresses of the users or external partners. You can enter a message for the recipients.</p></li>
-<li class="listitem" style="list-style-type: none">
-<p>To get a link that e.g. can be send per E-Mail, Messenger or in social networks, select <span class="guibutton"><strong>Get a link</strong></span>.</p>
-<p><span class="phrase"><strong>Caution:</strong></span> Everyone who receives this link can access the share without a password.</p>
-</li>
+<li class="listitem" style="list-style-type: none"><p>In order to directly send the link per E-Mail, enter the respective E-Mail addresses. You can enter a message for the recipients.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Per default, the data are shared with read access for an unlimited time. To set a time limit for the access to the shared data, enable <span class="guibutton"><strong>Expires in</strong></span>. Select a time range.</p></li>
+<li class="listitem" style="list-style-type: none"><p>To protect the access with a password, enable <span class="guibutton"><strong>Password required</strong></span>. Enter a password. If you send the public link per E-Mail, the E-Mail contains the password.</p></li>
 </ul></div>
 <p>
             </p>
 </li>
-<li class="step">
-<p>Per default, the data are shared with read access for an unlimited time. To set other sharing options, click on <span class="guibutton"><strong>Advanced options</strong></span>. Enable one or multiple of the following options.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>To set a time limit for the access to the shared data, enable <span class="guibutton"><strong>Expires in</strong></span>. Select a time range.</p></li>
-<li class="listitem" style="list-style-type: none"><p>To give edit access to the recipients of the shared data, enable <span class="guibutton"><strong>Recipients can edit</strong></span>.</p></li>
-</ul></div>
-<p>
-            </p>
-</li>
-<li class="step"><p>Click on <span class="guibutton"><strong>Share</strong></span>.</p></li>
+<li class="step"><p>Click on <span class="guibutton"><strong>Done</strong></span>.</p></li>
 </ol></div>
+<div class="taskrelated">
+          <p>You can also share a single file in the <span class="guilabel"><strong>Viewer</strong></span>.</p>
+          <p>You can also share a folder by clicking the <span class="guibutton"><strong>Folder-specific actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.sharing.produce.link.folder"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> next to the folder name in the folder tree. Click on <span class="guibutton"><strong>Get a link</strong></span>.</p>
+          <p>In order to view the permissions of a shared object, select the object in the display area. Below <span class="guilabel"><strong>Details</strong></span>, click on the button next to <span class="guilabel"><strong>Shares</strong></span>.</p>
+          <div class="itemizedlist">
+<a name="ox.appsuite.user.task.files.sharing.produce.link.similar"></a><p class="title">Similar actions</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p>
+                <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.files.sharing.produce.html#ox.appsuite.user.task.files.sharing.produce.guest" title="How to invite internal users or external partners to a share:">How to invite internal users or external partners to a share:</a></span>
+              </p></li></ul>
+</div>
+        </div>
+</div>
+<div class="task">
+<a name="ox.appsuite.user.task.files.sharing.produce.guest"></a><p class="title">How to invite internal users or external partners to a share:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p>Select a folder in the folder tree. Select one or several objects in the display area.</p></li>
+<li class="step">
+<p>Click the <span class="guibutton"><strong>Share</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.sharing.produce.guest"></a><img src="../../images/appsuite_user_icon_share.png"></span> in the toolbar. Click on <span class="guibutton"><strong>Invite people</strong></span>.</p>
+<p>A window opens. Existing permissions will be shown as a list.</p>
+</li>
+<li class="step">
+<p>Enter an E-Mail address in <span class="guilabel"><strong>Add people</strong></span>. The E-Mail address will be added to the list as internal user, group or guest. Preset permissions are granted.</p>
+<p>If required, enter a message.</p>
+</li>
+<li class="step">
+<p>To edit the permissions, you have the following options.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>To adjust a user role, click on the entry in <span class="guibutton"><strong>Current role</strong></span>. Select an entry from the menu.</p></li>
+<li class="listitem" style="list-style-type: none"><p>To adjust the permission details, click on the entry in <span class="guibutton"><strong>Detailed access rights</strong></span>. Select a permission from the menu.</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="step"><p>If you share a folder, you can transfer the folder's permissions to all existing or newly created subfolders of this folder. To do so, enable <span class="guibutton"><strong>Apply to all subfolders</strong></span>.</p></li>
+<li class="step"><p>Click on <span class="guibutton"><strong>Save</strong></span>.</p></li>
+</ol></div>
+<div class="taskrelated">
+          <p>You can also share a single file in the <span class="guilabel"><strong>Viewer</strong></span>.</p>
+          <p>You can also share a folder by clicking the <span class="guibutton"><strong>Folder-specific actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.sharing.produce.guest.folder"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> next to the folder name in the folder tree. Click on <span class="guibutton"><strong>Invite people</strong></span>.</p>
+          <p>In order to view the permissions of a shared object, select the object in the display area. Below <span class="guilabel"><strong>Details</strong></span>, click on the button next to <span class="guilabel"><strong>Shares</strong></span>.</p>
+          <div class="itemizedlist">
+<a name="ox.appsuite.user.task.files.sharing.produce.guest.similar"></a><p class="title">Similar actions</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p>
+                <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.files.sharing.produce.html#ox.appsuite.user.task.files.sharing.produce.link" title="How to share objects with read access by using a public link:">How to share objects with read access by using a public link:</a></span>
+              </p></li></ul>
+</div>
+        </div>
 </div>
 </div>
           </div>

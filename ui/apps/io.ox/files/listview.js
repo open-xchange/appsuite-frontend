@@ -161,7 +161,10 @@ define('io.ox/files/listview', [
         {
             id: 'filename',
             index: 300,
-            draw: extensions.filename
+            draw: function (baton) {
+                // use inner ellipsis for too long filenames
+                extensions.filename.call(this, baton, { max: 36, charpos: 'mid' });
+            }
         }
     );
 

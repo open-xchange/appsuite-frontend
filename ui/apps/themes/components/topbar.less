@@ -361,10 +361,6 @@
                 color: @white; //HC
             }
         }
-        &.fa-search {
-            font-size: 19px;
-            top: 3px;
-        }
     }
 
     @-webkit-keyframes launcherColours {
@@ -532,20 +528,21 @@ html.ios8-standalone-ipad-fix {
                     display: inline-block;
                 }
             }
-
-            .badge {
-                top: initial;
-                left: initial;
-            }
         }
         .launchers-secondary {
             margin-right: 0;
             padding-left: 0;
+
+            .fa.fa-search {
+                top: 2px;
+                font-size: 17px;
+            }
         }
     }
 
     #io-ox-top-logo-small {
-        margin: 8px 0 0 10px;
+        margin: 6px 8px 0 10px;
+        height: 22px;
     }
 }
 

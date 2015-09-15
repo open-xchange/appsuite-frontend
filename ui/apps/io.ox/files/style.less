@@ -84,6 +84,23 @@
             .ellipsis();
         }
     }
+    @media all and (max-width: 480px), all and (max-device-width: 480px) {
+        &.column-layout .list-item {
+            line-height: 40px;
+
+        }
+        &.column-layout, &.grid-layout, &.icon-layout {
+            .list-item {
+                font-size: 15px;
+            }
+        }
+
+        &.column-layout {
+            .list-item .list-item-checkmark .fa-checkmark {
+                top: 14px;
+            }
+        }
+    }
 }
 
 .file-type-icon {
@@ -147,7 +164,8 @@
         background-color: #eee;
         background-size: cover;
         background-repeat: no-repeat;
-        background-position: center center;
+        // top is necessary for documents; images override this to "center center"
+        background-position: top center;
         background-origin: border-box;
     }
 
@@ -351,6 +369,13 @@
     // file lock
     .locked { color: rgb(204, 0, 0); }
     &.has-focus .selected .locked { color: #fff; }
+
+    // adjust thumbnail position for images
+    &.icon-layout, &.tile-layout {
+        .file-type-image .icon-thumbnail {
+            background-position: center center;
+        }
+    }
 }
 
 .margin-bottom {

@@ -17,7 +17,7 @@ define('io.ox/preview/main', [
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
     'io.ox/files/mediasupport',
-    'gettext!io.ox/preview'
+    'gettext!io.ox/core'
 ], function (ext, capabilities, mediasupport, gt) {
 
     'use strict';

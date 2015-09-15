@@ -36,7 +36,6 @@ define('io.ox/mail/actions', [
     // actions
 
     new Action('io.ox/mail/actions/compose', {
-        id: 'compose',
         requires: function () {
             return true;
         },
@@ -46,7 +45,6 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/delete', {
-        id: 'delete',
         requires: 'toplevel some delete',
         multiple: function (list) {
             require(['io.ox/mail/actions/delete'], function (action) {
@@ -56,7 +54,6 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/reply-all', {
-        id: 'reply-all',
         requires: function (e) {
             // must be top-level
             if (!e.collection.has('toplevel', 'some')) return;
@@ -66,8 +63,8 @@ define('io.ox/mail/actions', [
             if (!e.collection.has('one') && !e.baton.isThread) return;
             // get first mail
             var data = e.baton.first();
-            // other recipients that me? and not a draft mail
-            return util.hasOtherRecipients(data) && !isDraftMail(data);
+            // has sender? and not a draft mail
+            return util.hasFrom(data) && !isDraftMail(data);
         },
         action: function (baton) {
             ox.registry.call('mail-compose', 'replyall', baton.first());
@@ -75,7 +72,6 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/reply', {
-        id: 'reply',
         requires: function (e) {
             // must be top-level
             if (!e.collection.has('toplevel', 'some')) return;
@@ -94,7 +90,6 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/forward', {
-        id: 'forward',
         requires: function (e) {
             return e.collection.has('toplevel', 'some');
         },
@@ -115,7 +110,6 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/edit', {
-        id: 'edit',
         requires: function (e) {
             // must be top-level
             if (!e.collection.has('toplevel')) return;
@@ -139,12 +133,20 @@ define('io.ox/mail/actions', [
             });
             if (check === true) return;
 
-            ox.registry.call('mail-compose', 'edit', data);
+            require(['settings!io.ox/mail'], function (settings) {
+
+                // Open Drafts in HTML mode if content type is html even if text-editor is default
+                if (data.content_type === 'text/html' && settings.get('messageFormat', 'html') === 'text') {
+                    data.preferredEditorMode = 'html';
+                    data.editorMode = 'html';
+                }
+
+                ox.registry.call('mail-compose', 'edit', data);
+            });
         }
     });
 
     new Action('io.ox/mail/actions/source', {
-        id: 'source',
         requires: function (e) {
             // must be at least one message and top-level
             if (!e.collection.has('some') || !e.collection.has('toplevel')) return;
@@ -205,7 +207,6 @@ define('io.ox/mail/actions', [
     function generate(type, label, success) {
 
         new Action('io.ox/mail/actions/' + type, {
-            id: type,
             requires: 'toplevel some',
             multiple: function (list, baton) {
                 require(['io.ox/mail/actions/copyMove'], function (action) {
@@ -225,7 +226,6 @@ define('io.ox/mail/actions', [
     generate('copy', gt('Copy'), { multiple: gt('Mails have been copied'), single: gt('Mail has been copied') });
 
     new Action('io.ox/mail/actions/mark-unread', {
-        id: 'mark-unread',
         requires: function (e) {
             // must be top-level
             if (!e.collection.has('toplevel')) return;
@@ -242,7 +242,6 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/mark-read', {
-        id: 'mark-read',
         requires: function (e) {
             // must be top-level
             if (!e.collection.has('toplevel')) return;
@@ -307,7 +306,6 @@ define('io.ox/mail/actions', [
     // Attachments
 
     new Action('io.ox/mail/actions/open-attachment', {
-        id: 'open',
         requires: 'one',
         multiple: function (list) {
             _(list).each(function (data) {
@@ -318,7 +316,6 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/view-attachment', {
-        id: 'viewer',
         // TODO capabilites check, files filter?
         requires: 'some',
         multiple: function (attachmentList, baton) {
@@ -333,7 +330,6 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/download-attachment', {
-        id: 'download',
         requires: function (e) {
             return _.device('!ios') && e.collection.has('some');
         },
@@ -352,7 +348,6 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/save-attachment', {
-        id: 'save',
         capabilities: 'infostore',
         requires: 'some',
         multiple: function (list) {
@@ -363,7 +358,6 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/vcard', {
-        id: 'vcard',
         capabilities: 'contacts',
         requires: function (e) {
             if (!e.collection.has('one')) {
@@ -383,7 +377,6 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/ical', {
-        id: 'ical',
         capabilities: 'calendar',
         requires: function (e) {
             var context = _.isArray(e.context) ? _.first(e.context) : e.context,
@@ -400,7 +393,6 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/save', {
-        id: 'save-as-eml',
         requires: function (e) {
             // ios cannot handle EML download
             return _.device('!ios') && e.collection.has('some', 'read');
@@ -433,7 +425,6 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/createdistlist', {
-        id: 'create-distlist',
         capabilities: 'contacts',
         requires: 'some',
         action: function (baton) {
@@ -444,7 +435,6 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/invite', {
-        id: 'invite',
         capabilities: 'calendar',
         requires: 'some',
         action: function (baton) {
@@ -455,7 +445,6 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/reminder', {
-        id: 'reminder',
         capabilities: 'tasks',
         requires: 'one toplevel',
         action: function (baton) {

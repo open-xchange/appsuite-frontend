@@ -25,8 +25,8 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
     var serviceConfigsCache = {},
         // stores all available services
         servicesCache = new Backbone.Collection(),
-        // stores multiple backbone collections. One for every filestorageservice, is filled after getAllAccounts was called
-        accountsCache = {},
+        // stores all filestorage accounts is filled after getAllAccounts was called
+        accountsCache = new Backbone.Collection(),
 
         api = {
             // if the api is ready to use or rampup function must be called
@@ -130,7 +130,7 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                 // only ignore cache if useCache is set to false, undefined results in using the cache
                 useCache  = useCache === false ? false : true;
 
-                if (useCache && !_(accountsCache).isEmpty()) {
+                if (useCache && accountsCache.length > 0) {
                     return $.Deferred().resolve(accountsCache);
                 }
                 return http.GET({
@@ -140,12 +140,7 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                     }
                 })
                 .then( function (accounts) {
-                    _(accounts).each(function (account) {
-                        if (!accountsCache[account.filestorageService]) {
-                            accountsCache[account.filestorageService] = new Backbone.Collection();
-                        }
-                        accountsCache[account.filestorageService].add(account, { merge: true });
-                    });
+                    accountsCache.reset(accounts);
                     return accountsCache;
                 });
             },
@@ -157,10 +152,10 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                 // only ignore cache if useCache is set to false, undefined results in using the cache
                 useCache  = useCache === false ? false : true;
 
-                if (useCache && !_(accountsCache).isEmpty() && accountsCache[options.filestorageService]) {
-                    var accounts = accountsCache[options.filestorageService].get(options.id);
-                    if (accounts) {
-                        return $.Deferred().resolve(accounts);
+                if (useCache && accountsCache.length > 0) {
+                    var data = accountsCache.get(options.id);
+                    if (data) {
+                        return $.Deferred().resolve(data);
                     }
                 }
                 return http.GET({
@@ -187,14 +182,11 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                 })
                 .then( function (accountId) {
                     return api.getAccount({ id: accountId, filestorageService: options.filestorageService }).then(function (account) {
-                        if (!accountsCache[account.get('filestorageService')]) {
-                            accountsCache[account.get('filestorageService')] = new Backbone.Collection();
-                        }
-                        accountsCache[account.get('filestorageService')].add(account);
 
-                        $(api).trigger('create', accountsCache[account.get('filestorageService')].get(account));
+                        accountsCache.add(account);
+                        $(api).trigger('create', accountsCache.get(account));
 
-                        return accountsCache[account.get('filestorageService')].get(account);
+                        return accountsCache.get(account);
                     });
                 });
             },
@@ -237,10 +229,7 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                 })
                 .then(
                     function success(response) {
-                        if (accountsCache[options.filestorageService]) {
-                            accountsCache[options.filestorageService].remove(options);
-                        }
-
+                        accountsCache.remove(options);
                         $(api).trigger('delete', model || options);
 
                         return response;
@@ -248,11 +237,8 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                     function fail(error) {
                         // may be it was deleted already. If it's in the cache, delete it
                         // deleting an Oauth account with a matching filestorage account normally deletes the filestorageaccount too.
-                        if (accountsCache[options.filestorageService]) {
-                            accountsCache[options.filestorageService].remove(options);
-
-                            $(api).trigger('delete', model || options);
-                        }
+                        accountsCache.remove(options);
+                        $(api).trigger('delete', model || options);
 
                         return error;
                     }
@@ -261,18 +247,10 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
             // utility function to find storage accounts for a given oauth account, also used to limit storage accounts to one per oauth account
             // fails if rampup was not done before (configscache empty)
             getAccountForOauth: function (oauthAccount) {
-                var account,
-                    models;
-                try {
-                    if (oauthAccount && oauthAccount.serviceId && serviceConfigsCache[oauthAccount.serviceId] &&
-                        serviceConfigsCache[oauthAccount.serviceId].filestorageService && accountsCache[serviceConfigsCache[oauthAccount.serviceId].filestorageService]) {
-                        models = accountsCache[serviceConfigsCache[oauthAccount.serviceId].filestorageService].models;
-                    }
-                } catch (e) {
-                    console.error(e);
-                }
-                _(models).each(function (item) {
-                    if (item.get('configuration').account === String(oauthAccount.id)) {
+                var account;
+
+                _(accountsCache.models).each(function (item) {
+                    if (item.get('configuration') && item.get('configuration').account === String(oauthAccount.id)) {
                         account = item;
                     }
                 });
@@ -289,22 +267,74 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                 })
                 .then(function () {
                     return api.getAccount({ id: options.id, filestorageService: options.filestorageService }, false).then(function (account) {
-                        if (!accountsCache[account.get('filestorageService')]) {
-                            accountsCache[account.get('filestorageService')] = new Backbone.Collection();
-                        }
-                        accountsCache[account.get('filestorageService')].add(account, { merge: true });
+                        accountsCache.add(account, { merge: true });
 
-                        $(api).trigger('update', accountsCache[account.get('filestorageService')].get(account));
+                        $(api).trigger('update', accountsCache.get(account));
 
-                        return accountsCache[account.get('filestorageService')].get(account);
+                        return accountsCache.get(account);
                     });
                 });
             },
+
             // returns true or false if there is a filestorage Service available for the given Oauth Account serviceId.
             // If serviceId is undefined an array with ids for all available serviceIds is returned
             // fails if rampup was not done before (configscache empty)
             isStorageAvailable: function (serviceId) {
                 return serviceId ? !!serviceConfigsCache[serviceId] : _.keys(serviceConfigsCache);
+            },
+
+            // We need to keep Oauth Accounts and filestorage accounts in sync, there might be cases with strange configurations that need to be cleaned up to work properly
+            // We don't want Oauth accounts without filestorage accounts and vice versa
+            // Checks if every Oauth account has a proper filestorage account, if not creates one
+            // Checks if every filestorage account has a proper Oauth account, if not removes it
+            // if there are multiple filestorage accounts for one Oauth account, only one is kept
+            consistencyCheck: function () {
+                if (!api.rampupDone) {
+                    return;
+                }
+                require(['io.ox/oauth/keychain'], function (keychain) {
+                    // use a collection for convenience
+                    try {
+                        var accountsWithStorage = {},
+                            oauthAccounts = new Backbone.Collection(keychain.accounts[0]);
+                        _(accountsCache.models).each( function (account) {
+                            // let's use a hardcoded list here to not accidentally delete filestorages we are not interested in
+                            if (account.get('filestorageService') === 'googledrive' || account.get('filestorageService') === 'dropbox' ||
+                                account.get('filestorageService') === 'onedrive' || account.get('filestorageService') === 'boxcom') {
+                                if (account.get('configuration') && account.get('configuration').account) {
+                                    var oauthId = account.get('configuration').account;
+                                    if (oauthAccounts.get(oauthId) && !accountsWithStorage[oauthId]) {
+                                        accountsWithStorage[oauthId] = true;
+                                    } else {
+                                        // there is a Filestorage Account without OauthAccount: oauthAccounts.get(account.configuration.account) failed
+                                        // or we have one Oauth Account with multiple filestorageAccounts: accountsWithStorage[account.configuration.account] is true
+                                        api.deleteAccount(account);
+                                    }
+                                }
+                            }
+                        });
+                        _(oauthAccounts.models).each(function (account) {
+                            // check if we have oauth accounts without fileStorage that need one
+                            if (!accountsWithStorage[account.id] && api.isStorageAvailable(account.get('serviceId'))) {
+                                api.createAccountFromOauth(account.attributes);
+                            }
+                        });
+                    } catch (e) {
+                    }
+                });
+            },
+            // function to check if a folder is a folder from an external Storage
+            // folder.account_id must be present
+            isExternal: function (folder) {
+                var isExternal = false;
+                if (api.rampupDone && folder && folder.account_id) {
+                    isExternal = _(accountsCache.models).find(function (model) {
+                        var filestorageService = model.get('filestorageService');
+                        return model.get('qualifiedId') === folder.account_id && (filestorageService === 'dropbox' || filestorageService === 'googledrive' ||
+                            filestorageService === 'onedrive' ||filestorageService === 'boxcom');
+                    }) !== undefined;
+                }
+                return isExternal;
             }
         };
 

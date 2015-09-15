@@ -63,11 +63,24 @@ define('io.ox/mail/common-extensions', [
                 size = api.threads.size(data),
                 single = size <= 1,
                 addresses = single && account.is('sent|drafts', data.folder_id) ? data.to : data.from;
-
             this.append(
                 contactsAPI.pictureHalo(
                     $('<div class="contact-picture" aria-hidden="true">'),
                     { email: data.picture || (addresses && addresses[0] && addresses[0][1]) },
+                    { width: 40, height: 40, effect: 'fadeIn' }
+                )
+            );
+        },
+
+        senderPicture: function (baton) {
+
+            // shows picture of sender see Bug 41023
+
+            var addresses = baton.data.from;
+            this.append(
+                contactsAPI.pictureHalo(
+                    $('<div class="contact-picture" aria-hidden="true">'),
+                    { email: addresses && addresses[0] && addresses[0][1] },
                     { width: 40, height: 40, effect: 'fadeIn' }
                 )
             );
@@ -283,9 +296,8 @@ define('io.ox/mail/common-extensions', [
 
             var showAllRecipients = function (e) {
                 e.preventDefault();
-                e.stopPropagation();
-                $(this).find('.show-all-recipients').remove();
-                $(this).children().show();
+                $(this).parent().children().show();
+                $(this).hide();
             };
 
             return function (baton) {
@@ -347,8 +359,8 @@ define('io.ox/mail/common-extensions', [
                     container.append(
                         //#. %1$d - number of other recipients (names will be shown if string is clicked)
                         $('<a href="#" class="show-all-recipients">').text(gt('and %1$d others', items.length - 2))
+                        .on('click', showAllRecipients)
                     );
-                    container.on('click', showAllRecipients);
                 }
             };
         }()),

@@ -131,6 +131,34 @@
 
     $(window).resize(_.recheckDevice);
 
+    //
+    // Cookie handling
+    //
+
+    _.getCookie = function (key) {
+        key = String(key || '\u0000');
+        return _.chain(document.cookie.split(/; ?/))
+            .filter(function (pair) {
+                return pair.substr(0, key.length) === key;
+            })
+            .map(function (pair) {
+                return decodeURIComponent(pair.substr(key.length + 1));
+            })
+            .first()
+            .value();
+    };
+
+    _.setCookie = function (key, value, lifetime) {
+        // yep, works this way:
+        var c = key + '=' + encodeURIComponent(value) +
+            (lifetime ? '; expires=' + new Date(new Date().getTime() + lifetime).toGMTString() : '') + '; path=/';
+        document.cookie = c;
+    };
+
+    //
+    // URL handling
+    //
+
     _.url = {
         /**
          * @param name {string} [Name] of the query parameter
@@ -145,28 +173,95 @@
          */
         hash: (function () {
 
-            var hashData = {};
+            var key;
 
-            function decode() {
-                // since the hash might change we decode it for every request
-                // firefox has a bug and already decodes the hash string, so we use href
-                hashData = location.href.split(/#/)[1] || '';
-                hashData = deserialize(
-                     hashData.substr(0, 1) === '?' ? rot(decodeURIComponent(hashData.substr(1)), -1) : hashData
-                );
+            // this is not cryptography!
+            // it just makes certain parameters like "folder" unreadable
+            // for the rare case that it contains PII
+
+            function random() {
+                return Math.random().toString().substr(2);
             }
 
-            function set(name, value) {
-                if (value === null) {
-                    delete hashData[name];
-                } else {
-                    hashData[name] = value;
+            function getKey() {
+                return new Array(5).join(random());
+            }
+
+            function encrypt(str) {
+                var result = '';
+                for (var i = 0, k = key.length, l = str.length; i < l; i++) {
+                    result += String.fromCharCode(str.charCodeAt(i) + key[i % k]);
+                }
+                return result;
+            }
+
+            function decrypt(str) {
+                var result = '';
+                for (var i = 0, k = key.length, l = str.length; i < l; i++) {
+                    result += String.fromCharCode(str.charCodeAt(i) - key[i % k]);
+                }
+                return result;
+            }
+
+            key = _.getCookie('url.key');
+            // replace by new key if invalid
+            if (!/^\d+$/.test(key)) _.setCookie('url.key', key = getKey());
+            // transform to integers
+            key = key.split('').map(function (i) { return parseInt(i, 10); });
+
+            //
+            // main function
+            //
+
+            function url(name, value) {
+                if (arguments.length === 0) {
+                    return url.data;
+                } else if (arguments.length === 1) {
+                    if (_.isString(name)) {
+                        return url.data[name];
+                    } else {
+                        _(name).each(function (value, name) {
+                            url.set(name, value);
+                        });
+                        url.update();
+                    }
+                } else if (arguments.length === 2) {
+                    url.set(name, value);
+                    url.update();
                 }
             }
 
-            function update() {
+            url.data = {};
+
+            url.set = function (name, value) {
+                if (value === null) {
+                    delete url.data[name];
+                } else {
+                    url.data[name] = value;
+                }
+            };
+
+            url.encrypt = function (data) {
+                var obj = _.extend({}, data);
+                if (/^default\d+\//.test(data.folder)) {
+                    var index = data.folder.indexOf('/') + 1;
+                    obj.folder = data.folder.substr(0, index) + '/' + encrypt(data.folder.substr(index));
+                }
+                return obj;
+            };
+
+            url.decrypt = function (data) {
+                var obj = _.extend({}, data);
+                if (/^default\d+\/\//.test(data.folder)) {
+                    var index = obj.folder.indexOf('/') + 1;
+                    obj.folder = obj.folder.substr(0, index) + decrypt(obj.folder.substr(index + 1));
+                }
+                return obj;
+            };
+
+            url.update = function () {
                 // update hash
-                var hashStr = _.serialize(hashData, '&', function (v) {
+                var hashStr = _.serialize(url.encrypt(url.data), '&', function (v) {
                     // need strict encoding for Japanese characters, for example
                     // safari throws URIError otherwise (Bug 26411)
                     // keep slashes and colons for readability
@@ -177,28 +272,22 @@
                 });
                 // be persistent
                 document.location.hash = hashStr;
+            };
+
+            function decode() {
+                // since the hash might change we decode it for every request
+                // firefox has a bug and already decodes the hash string, so we use href
+                var hash = location.href.split(/#/)[1] || '';
+                url.data = url.decrypt(deserialize(
+                     hash.substr(0, 1) === '?' ? rot(decodeURIComponent(hash.substr(1)), -1) : hash
+                ));
             }
 
             decode();
             $(window).on('hashchange', decode);
 
-            return function (name, value) {
-                if (arguments.length === 0) {
-                    return hashData;
-                } else if (arguments.length === 1) {
-                    if (_.isString(name)) {
-                        return hashData[name];
-                    } else {
-                        _(name).each(function (value, name) {
-                            set(name, value);
-                        });
-                        update();
-                    }
-                } else if (arguments.length === 2) {
-                    set(name, value);
-                    update();
-                }
-            };
+            return url;
+
         }()),
 
         /**
@@ -218,29 +307,6 @@
     _.mixin({
 
         rot: rot,
-
-        /**
-         * Get cookie value
-         */
-        getCookie: function (key) {
-            key = String(key || '\u0000');
-            return _.chain(document.cookie.split(/; ?/))
-                .filter(function (pair) {
-                    return pair.substr(0, key.length) === key;
-                })
-                .map(function (pair) {
-                    return decodeURIComponent(pair.substr(key.length + 1));
-                })
-                .first()
-                .value();
-        },
-
-        setCookie: function (key, value, lifetime) {
-            // yep, works this way:
-            var c = key + '=' + encodeURIComponent(value) +
-                (lifetime ? '; expires=' + new Date(new Date().getTime() + lifetime).toGMTString() : '') + '; path=/';
-            document.cookie = c;
-        },
 
         /**
          * This function simply writes its parameters to console.

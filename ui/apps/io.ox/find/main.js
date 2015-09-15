@@ -12,9 +12,10 @@
  */
 
 define('io.ox/find/main', [
+    'io.ox/find/view-placeholder',
     'settings!io.ox/core',
-    'gettext!io.ox/find'
-], function (settings, gt) {
+    'gettext!io.ox/core'
+], function (PlaceholderView, settings, gt) {
 
     'use strict';
 
@@ -115,9 +116,14 @@ define('io.ox/find/main', [
 
             'reset': function (app) {
                 if (!app.get('inplace')) return;
-
                 // reset on folder click
-                app.listenTo(app.get('parent'), 'folder:change', app.cancel);
+                app.listenTo(app.get('parent'), 'folder:change folder-virtual:change', app.cancel);
+            },
+
+            'enable-disable-toggle': function (app) {
+                if (!app.get('inplace')) return;
+                // disable search field for unsupported folders
+                app.listenTo(app.get('parent'), 'folder:change folder-virtual:change', app.toggle);
             },
 
             'vgrid': function (app) {
@@ -278,6 +284,11 @@ define('io.ox/find/main', [
             if (this.view) this.view.cancel();
         };
 
+        app.toggle = function (folder) {
+            var eventname = /^virtual/.test(folder) ? 'view:disable' : 'view:enable';
+            app.trigger(eventname);
+        };
+
         // parent app id
         app.getModule = function () {
             return app.get('parent').get('name');
@@ -320,7 +331,8 @@ define('io.ox/find/main', [
                 'change:list-of-actives': _.debounce(function (state, value, model) {
                     if (app.model.manager.isFolderOnly());
                     require(['io.ox/metrics/main'], function (metrics) {
-                        var apptitle = _.last(app.get('parent').get('id').split('/')),
+                        var name = app.get('parent').get('name') || 'unknown',
+                            apptitle = _.last(name.split('/')),
                             facet = model.get('facet').get('id').split(':')[0];
                         // toolbar actions
                         metrics.trackEvent({
@@ -373,12 +385,10 @@ define('io.ox/find/main', [
             app.set('state', 'preparing');
             // setup
             app.mediate();
-            require(['io.ox/find/view-placeholder'], function (PlaceholderView) {
-                app.placeholder = new PlaceholderView({ app: app });
-                // delay launch app (on focus)
-                app.listenToOnce(app.placeholder, 'launch', app.launch);
-                app.set('state', 'prepared');
-            });
+            app.placeholder = new PlaceholderView({ app: app });
+            // delay launch app (on focus)
+            app.listenToOnce(app.placeholder, 'launch', app.launch);
+            app.set('state', 'prepared');
         };
 
         app.getProxy = (function () {
@@ -417,6 +427,8 @@ define('io.ox/find/main', [
 
         app.updateConfig = function () {
             app.getConfig().then(function (data) {
+                // be sure to ignore suggested contacts on empty 'config' call
+                data = _.reject(data, function (facet) { return facet.id === 'contact'; });
                 app.model.manager.update(data);
                 app.trigger('find:config-updated');
             });
@@ -425,14 +437,14 @@ define('io.ox/find/main', [
         // overwrite defaults app.launch
         app.launch = function () {
             if (app.get('state') !== 'prepared') return;
+
+            // initialize views (tokenfield, typeahed, etc)
+            app.set('state', 'launching');
             // get rid of placeholder view
             if (app.placeholder) {
                 app.placeholder.destroy();
                 delete app.placeholder;
             }
-
-            // initialize views (tokenfield, typeahed, etc)
-            app.set('state', 'launching');
             require(['io.ox/find/bundle'], function () {
                 require(['io.ox/find/model', 'io.ox/find/view'], function (MainModel, MainView) {
                     app.model = new MainModel({ app: app });

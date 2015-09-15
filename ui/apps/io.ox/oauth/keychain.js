@@ -258,7 +258,8 @@ define.async('io.ox/oauth/keychain', [
             return def;
         };
 
-        if (this.id === 'facebook' || this.id === 'xing' || this.id === 'twitter' || this.id === 'linkedin') {
+        if (this.id === 'xing' || this.id === 'twitter' || this.id === 'linkedin' ||
+            this.id === 'boxcom' || this.id === 'dropbox' || this.id === 'google' || this.id === 'msliveconnect') {
             this.canAdd = function () {
                 return self.getAll().length === 0;
             };
@@ -317,7 +318,11 @@ define.async('io.ox/oauth/keychain', [
             });
 
             // rampup filestorageApi. Success or failure is unimportant here. Resolve loading in any case
-            filestorageApi.rampup().always( function () {
+            filestorageApi.rampup().then(function () {
+                // perform consistency check for filestorage accounts (there might be cases were they are out of sync)
+                // we delay it so it doesn't prolong appsuite startup
+                _.delay(filestorageApi.consistencyCheck, 5000);
+            }).always( function () {
                 // Resolve loading
                 moduleDeferred.resolve({
                     message: 'Done with oauth keychain',

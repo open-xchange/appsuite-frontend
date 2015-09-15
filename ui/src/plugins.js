@@ -409,7 +409,9 @@
                 queue.push(url);
             }
 
-            // Try file cache
+            // call nextTick to delay bulk loading to have some time for cache lookup
+            if (queue.length) req.delayTick();
+            // now try file cache
             fileCache.retrieve(modulename).then(
                 function hit(contents) {
                     // bad?

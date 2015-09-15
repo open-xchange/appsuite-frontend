@@ -37,44 +37,8 @@ define('plugins/portal/userSettings/register', [
     }
 
     function changeUserData() {
-
-        require(['io.ox/core/tk/dialogs', 'io.ox/core/settings/user'], function (dialogs, users) {
-            var usermodel,
-                dialog = new dialogs.ModalDialog({
-                    top: 60,
-                    width: 908,
-                    center: false,
-                    maximize: true,
-                    async: true
-                })
-                .addPrimaryButton('save', gt('Save'))
-                .addButton('discard', gt('Discard'));
-
-            var $node = dialog.getContentNode();
-
-            users.editCurrentUser($node).done(function (model) {
-                usermodel = model;
-            }).fail(function () {
-                $node.append(
-                    $.fail(gt('Couldn\'t load your contact data.'), function () {
-                        users.editCurrentUser($node).done(function () {
-                            $node.find('[data-action="discard"]').hide();
-                        });
-                    })
-                );
-            });
-            dialog.show();
-
-            dialog.on('save', function () {
-                if (usermodel._valid) {
-                    usermodel.save();
-                    dialog.close();
-                } else {
-                    dialog.idle();
-                }
-            }).on('discard', function () {
-                dialog.close();
-            });
+        require(['io.ox/core/settings/user'], function (users) {
+            users.openModalDialog();
         });
     }
 
@@ -146,16 +110,21 @@ define('plugins/portal/userSettings/register', [
             .addPrimaryButton('change', gt('Change password and sign out'))
             .addButton('cancel', gt('Cancel'))
             .on('change', function (e, data, dialog) {
-                var node = dialog.getContentNode();
-                if (newPass.val() === newPass2.val()) {
+
+                // we change empty string to null to be consistent
+                var node = dialog.getContentNode(),
+                    newPassword1 = newPass.val() === '' ? null : newPass.val(),
+                    newPassword2 = newPass2.val() === '' ? null : newPass2.val(),
+                    oldPassword = oldPass.val() === '' ? null : oldPass.val();
+
+                if (newPassword1 === newPassword2) {
                     http.PUT({
                         module: 'passwordchange',
                         params: { action: 'update' },
                         appendColumns: false,
                         data: {
-                            old_password: oldPass.val(),
-                            new_password: newPass.val(),
-                            new_password2: newPass2.val()
+                            old_password: oldPassword,
+                            new_password: newPassword1
                         }
                     })
                     .done(function () {

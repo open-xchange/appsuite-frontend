@@ -78,7 +78,8 @@ define('io.ox/files/share/model', [
             // collect target data
             _(this.get('files')).each(function (item) {
                 var target = {
-                    module: 'infostore'
+                    // this model is used by folders from other applications as well
+                    module: item.get('module') || 'infostore'
                 };
                 if (item.isFolder()) {
                     target.folder = item.get('id');
@@ -86,9 +87,6 @@ define('io.ox/files/share/model', [
                 if (item.isFile()) {
                     target.folder = item.get('folder_id');
                     target.item = item.get('id');
-                }
-                if (self.get('temporary')) {
-                    target.expiry_date = self.getExpiryDate();
                 }
                 targets.push(target);
             });
@@ -151,7 +149,11 @@ define('io.ox/files/share/model', [
                 // collect recipients data
                 data.recipients = [];
                 _(this.get('recipients')).each(function (recipientModel) {
-                    data.recipients.push([recipientModel.getDisplayName(), recipientModel.getTarget()]);
+                    // model values might be outdated (token edit) so we act like mail compose
+                    data.recipients.push([
+                        recipientModel.get('token').label || recipientModel.getDisplayName(),
+                        recipientModel.get('token').value || recipientModel.getTarget()
+                    ]);
                 });
                 if (data.recipients.length === 0) {
                     delete data.recipients;
@@ -166,7 +168,7 @@ define('io.ox/files/share/model', [
                     return data;
                 } else {
                     if (this.get('temporary')) {
-                        data.expiry_date = this.get('expiry_date');
+                        data.expiry_date = this.getExpiryDate();
                     } else {
                         data.expiry_date = null;
                     }
@@ -186,7 +188,7 @@ define('io.ox/files/share/model', [
                     return api.invite(model.toJSON()).fail(yell);
                 case 'read':
                     return api.getLink(this.toJSON()).then(function (data, timestamp) {
-                        if (data.is_new && data.is_new === true) {
+                        if (data.is_new === true) {
                             // if existing link add unique ID to simulate existing Backbone model
                             delete data.is_new;
                             data.id = _.uniqueId();
@@ -196,19 +198,21 @@ define('io.ox/files/share/model', [
                     }).fail(yell);
                 case 'create':
                 case 'update':
-                    var self = this;
-                    return api.updateLink(model.toJSON(), model.get('lastModified')).then(function (res) {
-                        if (self.get('type') === self.TYPES.LINK && model.has('recipients') && model.get('recipients').length > 0) {
-                            api.sendLink(model.toJSON()).fail(yell);
-                        }
-                        return $.Deferred().resolve(res);
-                    }, yell);
+                    return api.updateLink(model.toJSON(), model.get('lastModified'))
+                        .done(this.send.bind(this))
+                        .fail(yell);
                 case 'delete':
                     if (this.get('type') === this.TYPES.LINK) {
                         return api.deleteLink(model.toJSON(), model.get('lastModified')).fail(yell);
                     }
                     break;
             }
+        },
+
+        send: function () {
+            if (this.get('type') !== this.TYPES.LINK) return;
+            if (_.isEmpty(this.get('recipients'))) return;
+            api.sendLink(this.toJSON()).fail(yell);
         },
 
         validate: function (attr) {

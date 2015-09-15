@@ -37,93 +37,86 @@
 <div class="concept">
 <a name="ox.appsuite.user.concept.rights.roles"></a><p>為了簡化所授予的邏輯權限組合，有下列使用者角色:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="擁有者">擁有者</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="管理員">管理員</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.viewer" title="檢視者">檢視者</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.editor" title="審核者">審核者</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="作者">作者</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.guest" title="訪客">訪客</a></p></li>
 </ul></div>
-<p>
-      </p>
+<p>您可以透過授予 <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.folder.rights.detail" title="詳細權限">詳細權限</a> 來變更權限。</p>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.owner"></a><p><b>擁有者 </b>資料夾的擁有者有該資料夾的所有權限。擁有者可以向其他用戶授予文件夾權限。</p>
+<a name="ox.appsuite.user.concept.rights.roles.administrator"></a><p class="title"><b>管理員</b></p>
+<p>資料夾的管理員擁有該資料夾的所有權限。擁有者可以向其他用戶授予文件夾權限。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>資料夾權限: 建立物件與子資料夾</p></li>
 <li class="listitem"><p>物件權限: 讀取所有物件、編輯所有物件、刪除所有物件</p></li>
-<li class="listitem"><p>管理權限: 是</p></li>
 </ul></div>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.administrator"></a><p><b>管理員 </b>資料夾的管理員擁有該資料夾的所有權限。擁有者可以向其他用戶授予文件夾權限。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>資料夾權限: 建立物件與子資料夾</p></li>
-<li class="listitem"><p>物件權限: 讀取所有物件、編輯所有物件、刪除所有物件</p></li>
-<li class="listitem"><p>管理權限: 是</p></li>
-</ul></div>
-</div>
-<div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.author"></a><p><b>作者 </b>作者可以修改已存在的物件、建立並編輯新物件、並建立子資料夾。5</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>資料夾權限: 建立物件與子資料夾</p></li>
-<li class="listitem"><p>物件權限: 讀取所有物件、編輯所有物件、刪除所有物件</p></li>
-<li class="listitem"><p>管理權限: 無</p></li>
-</ul></div>
-</div>
-<div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.guest"></a><p><b>訪客 </b>訪客可讀取已存在的物件，但無法修改。訪客被允許建立子資料夾或物件。</p>
+<a name="ox.appsuite.user.concept.rights.roles.viewer"></a><p class="title"><b>檢視者</b></p>
+<p>檢視者可讀取所有現有物件。檢視者沒有其他權限。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>資料夾權限: 檢視資料夾</p></li>
-<li class="listitem"><p>物件權限: 讀取所有物件、無編輯權限、無刪除權限</p></li>
-<li class="listitem"><p>管理權限: 無</p></li>
+<li class="listitem"><p>物件權限: 讀取所有物件</p></li>
 </ul></div>
 </div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.folder.rights"></a><p>不同使用者角色的預設權限可修改。可以授權下列權限。</p>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.editor"></a><p class="title"><b>審核者</b></p>
+<p>審核者可讀取與編輯現有物件。但審核者無法建立新物件。審核者無法刪除物件。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>資料夾權限: 檢視資料夾</p></li>
+<li class="listitem"><p>物件權限: 讀取所有物件、編輯所有物件</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.author"></a><p class="title"><b>作者</b></p>
+<p>作者可以修改或刪除現有物件、建立並編輯新物件、並建立子資料夾。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>資料夾權限: 建立物件與子資料夾</p></li>
+<li class="listitem"><p>物件權限: 讀取所有物件、編輯所有物件、刪除所有物件</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.folder.rights.detail"></a><p class="title"><b>詳細權限</b></p>
+<p>不同使用者角色的預設權限可修改。可以授權下列權限。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>文件夾權限</p>
+<p>資料夾</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>新資料夾</p></li>
+<li class="listitem"><p>檢視資料夾</p></li>
 <li class="listitem"><p>建立物件</p></li>
 <li class="listitem"><p>建立物件與子資料夾</p></li>
 </ul></div>
 <p>
-            </p>
+              </p>
 </li>
 <li class="listitem">
-<p>物件權限，閱讀</p>
+<p>讀取權限</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>無讀取權限</p></li>
+<li class="listitem"><p>無</p></li>
 <li class="listitem"><p>讀取自己的物件</p></li>
 <li class="listitem"><p>讀取所有物件</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p>物件權限，編輯</p>
+<p>寫入權限</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>無編輯權限</p></li>
+<li class="listitem"><p>無</p></li>
 <li class="listitem"><p>編輯自己的物件</p></li>
 <li class="listitem"><p>編輯所有物件</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p>物件權限，刪除</p>
+<p>刪除權限</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>無刪除權限</p></li>
+<li class="listitem"><p>無</p></li>
 <li class="listitem"><p>刪除自己的物件</p></li>
 <li class="listitem"><p>刪除所有物件</p></li>
 </ul></div>
 </li>
-<li class="listitem">
-<p>管理權限</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>管理</p></li>
-<li class="listitem"><p>否</p></li>
-</ul></div>
-</li>
 </ul></div>
 <p>
-      </p>
+        </p>
 </div>
 </div>
           </div>

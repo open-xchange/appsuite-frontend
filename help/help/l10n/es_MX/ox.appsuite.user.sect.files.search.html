@@ -1,13 +1,13 @@
 <html lang="es">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.6. Búsqueda de archivos</title>
+<title>9.5. Búsqueda de archivos</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Software colaborativo">
 <link rel="up" href="ox.appsuite.user.chap.files.html" title="Capítulo 9. Ficheros">
-<link rel="prev" href="ox.appsuite.user.sect.files.manage.multiple.html" title="9.5.12. Edición de múltiples archivos de una sola vez">
-<link rel="next" href="ox.appsuite.user.sect.files.webdav.html" title="9.7. Acceso a archivos mediante WebDAV">
+<link rel="prev" href="ox.appsuite.user.sect.files.manage.versions.html" title="9.4.11. Trabajo con versiones">
+<link rel="next" href="ox.appsuite.user.sect.files.sharing.html" title="9.6. Compartición">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Aviso Legal">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -22,69 +22,83 @@
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.manage.multiple.html">Anterior</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.manage.versions.html">Anterior</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Inicio</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">TdC</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.webdav.html">Siguiente</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.sharing.html">Siguiente</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
   <h1 class="sr-only"><span class="phrase">Ficheros</span></h1>
 <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="ox.appsuite.user.sect.files.search"></a>9.6. Búsqueda de archivos</h2></div></div></div>
-<a class="indexterm" name="id-1.10.12.2"></a><a class="indexterm" name="id-1.10.12.3"></a><div class="concept">
+<a name="ox.appsuite.user.sect.files.search"></a>9.5. Búsqueda de archivos</h2></div></div></div>
+<a class="indexterm" name="id-1.10.11.2"></a><a class="indexterm" name="id-1.10.11.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.files.search"></a><p>Para buscar archivos, puede usar los siguientes criterios de búsqueda:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>términos de búsqueda de nombres de archivos, descripciones de archivos</p></li>
-<li class="listitem"><p>Carpetas</p></li>
-<li class="listitem"><p>Fecha</p></li>
+<li class="listitem">
+<p>Términos de búsqueda de un rango de tiempo. Busca archivos que hayan sido creados o editados dentro de un período de tiempo concreto. Usted define un rango de tiempo válido con los siguientes detalles.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>Las palabras clave <span class="guilabel"><strong>hoy</strong></span>, <span class="guilabel"><strong>ayer</strong></span>, <span class="guilabel"><strong>última semana</strong></span>, <span class="guilabel"><strong>último mes</strong></span>, <span class="guilabel"><strong>último año</strong></span></p></li>
+<li class="listitem"><p>Las palabras clave para dichos intervalos de tiempo: <span class="guilabel"><strong>los últimos 7 días</strong></span>, <span class="guilabel"><strong>los últimos 30 días</strong></span>, <span class="guilabel"><strong>los últimos 365 días</strong></span></p></li>
+<li class="listitem"><p>Un día de la semana, por ejemplo <span class="guilabel"><strong>Lunes</strong></span></p></li>
+<li class="listitem"><p>Un mes concreto, por ejemplo <span class="guilabel"><strong>Julio</strong></span></p></li>
+<li class="listitem"><p>Una fecha con cuatro dígitos, por ejemplo <span class="guilabel"><strong>2015</strong></span></p></li>
+<li class="listitem"><p>Una fecha, por ejemplo <span class="guilabel"><strong>31/1/2015</strong></span></p></li>
+<li class="listitem"><p>Un intervalo de fechas, por ejemplo <span class="guilabel"><strong>1/12/2014 - 31/1/2015</strong></span></p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="listitem"><p>Tipo de archivo: todos, audio, documentos, imágenes, otro, vídeo</p></li>
 <li class="listitem"><p>Tamaño de archivo</p></li>
-<li class="listitem"><p>tipo de archivo</p></li>
+<li class="listitem"><p>Tipo de carpeta: todas, privada, pública, compartida</p></li>
 </ul></div>
 <p>
     </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.files.search"></a><p class="title"><b>Cómo buscar archivos:</b></p>
+<a name="ox.appsuite.user.task.files.search"></a><p class="title">Cómo buscar archivos:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Introduzca un término de búsqueda en el campo de la barra de búsqueda. Se abre el menú de búsqueda.</p></li>
+<li class="step"><p>Presione en el icono <span class="guibutton"><strong>Comenzar búsqueda</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> o en el campo de la barra de búsqueda. Se muestran un botón de carpeta y el botón <span class="guibutton"><strong>Opciones</strong></span> en la barra de búsquedas. El botón de carpeta indica la carpeta a buscar.</p></li>
 <li class="step">
+<p>Para indicar las carpetas a buscar, presione en el botón de carpeta. Seleccione una carpeta.</p>
+<p>Si selecciona <span class="guibutton"><strong>Todas las carpetas</strong></span>, se buscará en todas las carpetas y subcarpetas privadas, públicas y compartidas. Si selecciona una carpeta concreta, sólo se buscará en dicha carpeta, pero no en sus subcarpetas.</p>
+</li>
+<li class="step">
+<p>Introduzca un término de búsqueda en el campo. Se abre el menú de búsqueda.</p>
 <p>Use uno de los siguientes métodos:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p>Para buscar en el nombre del archivo o en su descripción, presione en el término de búsqueda en el menú de búsqueda. También puede presionar Intro o el icono <span class="guibutton"><strong>Buscar</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> de la barra de búsqueda. </p>
+<p>Para buscar archivos dentro de un rango de tiempo concreto, use un rango de tiempo válido como término de búsqueda. En cuanto se reconoce un rango de tiempo válido en su entrada, el rango de tiempo se muestra en el menú de búsqueda. Presione en el rango de tiempo en el menú de búsqueda. También puede presionar Intro.</p>
+<p>Para buscar en el nombre de archivo o en la descripción, presione en el término de búsqueda en el menú de búsqueda. También puede presionar Intro.</p>
 <p>Para buscar sólo en los nombres de archivos, presione en <span class="guibutton"><strong>en el nombre del archivo</strong></span> en el menú de búsqueda.</p>
 <p>En consecuencia, puede limitar la búsqueda a la descripción del archivo.</p>
 </li></ul></div>
 <p>
           </p>
-<p><span class="phrase"><strong>Resultado:</strong></span> Los resultados de la búsqueda aparecen en la lista que se muestra en el área de visualización. El criterio de búsqueda utilizado aparece bajo la ventana de búsqueda.</p>
-</li>
-<li class="step">
-<p>Puede ajustar posteriormente el resultado de la búsqueda:</p>
+<p>Resultado:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>Para mostrar todos los criterios de búsqueda, presione en <span class="guibutton"><strong>Mostrar filtros avanzados</strong></span>.</p>
-<p>Para ajustar un criterio, presione el icono <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span> situado junto a dicho criterio. Seleccione un elemento del menú. Puede usar los siguientes criterios de búsqueda:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>Puede usar el desplegable <span class="guilabel"><strong>Carpeta</strong></span> para buscar en una carpeta concreta.</p>
-<p>Si selecciona <span class="guibutton"><strong>Todas las carpetas</strong></span>, se buscará en todas las carpetas y subcarpetas. Si selecciona una carpeta concreta o una de sus subcarpetas, sólo se buscará en dicha carpeta, pero no en sus subcarpetas.</p>
-</li>
-<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>Fecha</strong></span> permite buscar archivos que se hayan creado hace un tiempo determinado.</p></li>
-<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>Tamaño de archivo</strong></span> permite buscar archivos con un tamaño determinado.</p></li>
-<li class="listitem" style="list-style-type: none"><p>El desplegable <span class="guilabel"><strong>Tipo de archivo</strong></span> permite limitar la búsqueda a un determinado tipo de archivo.</p></li>
-</ul></div>
-<p>
-                </p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>Para ampliar su búsqueda en la lista de objetos encontrados, inicie una nueva búsqueda.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Para borrar un criterio de búsqueda, presione el icono <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.files.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>. Si elimina todos los criterios, la búsqueda se dará por finalizada.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Los resultados de la búsqueda se muestran en la lista que se muestra en el área de visualización. </p></li>
+<li class="listitem" style="list-style-type: none"><p>El término de búsqueda se muestra en el campo.</p></li>
 </ul></div>
 <p>
           </p>
 </li>
-<li class="step"><p>Para finalizar la búsqueda, presione en <span class="guibutton"><strong>Cerrar búsqueda</strong></span>.</p></li>
+<li class="step">
+<p>Tiene las siguientes opciones para ajustar el resultado de la búsqueda:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Para refinar el resultado de la búsqueda, introduzca más términos de búsqueda: Para borrar un término de búsqueda, presione el icono <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>situado junto al término de búsqueda. </p></li>
+<li class="listitem" style="list-style-type: none"><p>Para buscar en otra carpeta, presione en el botón carpeta. Seleccione un carpeta.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Para limitar la búsqueda a carpetas privadas, públicas o compartidas, presione en <span class="guibutton"><strong>Opciones</strong></span>. Seleccione un tipo de carpeta.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Para limitar la búsqueda a archivos concretos, presione en <span class="guibutton"><strong>Opciones</strong></span>. Seleccione un tipo.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Para limitar la búsqueda a archivos con un tamaño concreto, presione en <span class="guibutton"><strong>Opciones</strong></span>. Seleccione tamaño de archivo.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Para limitar la búsqueda a tareas individuales o periódicas, presione en <span class="guibutton"><strong>Opciones</strong></span>. Seleccione un tipo.</p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="step"><p>Para terminar la búsqueda, presione el icono <span class="guibutton"><strong>Cancelar búsqueda</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>.</p></li>
 </ol></div>
 </div>
 </div>

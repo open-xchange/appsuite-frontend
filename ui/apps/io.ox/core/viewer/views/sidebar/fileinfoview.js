@@ -17,11 +17,27 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     'io.ox/core/api/user',
     'io.ox/core/util',
     'io.ox/core/capabilities',
-    'io.ox/core/folder/breadcrumb',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, FolderAPI, UserAPI, util, capabilities, BreadcrumbView, gt) {
+], function (PanelBaseView, Ext, folderAPI, UserAPI, util, capabilities, gt) {
 
     'use strict';
+
+    function setFolder(e) {
+        // launch files and set/change folder
+        e.preventDefault();
+        var id = e.data.id;
+        ox.launch('io.ox/files/main', { folder: id }).done(function () {
+            this.folder.set(id);
+        });
+    }
+
+    function openShareDialog(e) {
+        e.preventDefault();
+        var model = e.data.model;
+        require(['io.ox/files/share/permissions'], function (controller) {
+            controller.showByModel(model);
+        });
+    }
 
     Ext.point('io.ox/core/viewer/sidebar/fileinfo').extend({
         index: 100,
@@ -32,20 +48,21 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
             var panelBody,
                 model = baton.model,
-                fileName = model.get('filename') || '-',
+                name = model.getDisplayName() || '-',
                 size = model.get('file_size'),
                 sizeString = (_.isNumber(size)) ? _.filesize(size) : '-',
                 modifiedBy = model.get('modified_by'),
                 modified = model.get('last_modified'),
                 isToday = moment().isSame(moment(modified), 'day'),
                 dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-',
-                link = util.getDeepLink('io.ox/files', model.toJSON()),
+                folder_id = model.get('folder_id'),
+                link =  util.getDeepLink('io.ox/files', model.isFile() ? model.pick('folder_id', 'id') : model.pick('id')),
                 dl = $('<dl>');
 
             dl.append(
                 // filename
-                $('<dt>').text(gt('Filename')),
-                $('<dd class="file-name">').text(fileName),
+                $('<dt>').text(gt('Name')),
+                $('<dd class="file-name">').text(name),
                 // size
                 $('<dt>').text(gt('Size')),
                 $('<dd class="size">').text(sizeString),
@@ -53,31 +70,28 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 $('<dt>').text(gt('Modified')),
                 $('<dd class="modified">').append(
                     $.txt(dateString), $('<br>'), UserAPI.getTextNode(modifiedBy)
-                ),
-                // path; using "Folder" instead of "Save in" because that one
-                // might get quite long, e.g. "Gespeichert unter"
-                $('<dt>').text(gt('Folder')),
-                $('<dd class="saved-in">')
+                )
             );
 
-            // UserAPI.getName(modifiedBy)
-            //     .done(function (name) {
-            //         dl.find('.size').after(
-            //             // modified
-            //             $('<dt>').text(gt('Modified by')),
-            //             $('<dd class="modified-by">').text(name));
-            //     })
-            //     .fail(function () {
-            //         dl.find('.size').after(
-            //             // modified
-            //             $('<dt>').text(gt('Modified by')),
-            //             $('<dd class="modified-by">').text(gt('unknown')));
-            //     });
+            // folder info block
+            if (!baton.options.disableFolderInfo) {
+                dl.append(
+                    // path; using "Folder" instead of "Save in" because that one
+                    // might get quite long, e.g. "Gespeichert unter"
+                    $('<dt>').text(gt('Folder')),
+                    $('<dd class="saved-in">').append(
+                        $('<a>')
+                        .attr('href', folderAPI.getDeepLink({ module: 'infostore', id: folder_id }))
+                        .append(folderAPI.getTextNode(folder_id))
+                        .on('click', { id: folder_id }, setFolder)
+                    )
+                );
+            }
 
             if (!capabilities.has('alone') && !capabilities.has('guest')) {
-                FolderAPI.get(baton.model.get('folder_id')).done(function (folderData) {
+                folderAPI.get(folder_id).done(function (folderData) {
                     // only show links to infostore files, links to mail attachments would mean broken links, see bug 39752
-                    if (FolderAPI.is('infostore', folderData)) {
+                    if (folderAPI.is('infostore', folderData)) {
                         dl.append(
                             // deep link
                             $('<dt>').text(gt('Link')),
@@ -91,20 +105,26 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 });
             }
 
+            var permissions = model.isFile() ?
+                model.get('object_permissions') || [] :
+                _(model.get('permissions')).filter(function (item) { return item.entity !== ox.user_id; });
+
+            if (capabilities.has('invite_guests')) {
+                dl.append(
+                    //#. "Shares" in terms of "shared with others" ("Freigaben")
+                    $('<dt>').text(gt('Shares')),
+                    $('<dd>').append(
+                        permissions.length ?
+                            $('<a href="#">').text(
+                                model.isFile() ? gt('This file is shared with others') : gt('This folder is shared with others')
+                            )
+                            .on('click', { model: model }, openShareDialog) :
+                            $.txt('-')
+                    )
+                );
+            }
+
             panelBody = this.find('.sidebar-panel-body').empty().append(dl);
-
-            var breadcrumb = new BreadcrumbView({ folder: model.get('folder_id'), exclude: ['9'], notail: true });
-
-            breadcrumb.handler = function (id) {
-                // launch files and set/change folder
-                ox.launch('io.ox/files/main', { folder: id }).done(function () {
-                    this.folder.set(id);
-                });
-            };
-
-            panelBody.find('dl > dd.saved-in').append(
-                breadcrumb.render().$el
-            );
         }
     });
 
@@ -117,9 +137,10 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         className: 'viewer-fileinfo',
 
         initialize: function (options) {
-            options = options || {};
-            this.closable = !!options.closable;
-            this.setPanelHeader(gt('File details'));
+            this.options = options || {};
+            this.closable = !!this.options.closable;
+            //#. File and folder details
+            this.setPanelHeader(gt('Details'));
             // attach event handlers
             this.listenTo(this.model, 'change:filename change:file_size change:last_modified change:folder_id', this.render);
             this.on('dispose', this.disposeView.bind(this));
@@ -130,7 +151,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             if (!this.model) return;
 
             var data = this.model.isFile() ? this.model.toJSON() : this.model.get('origData'),
-                baton = Ext.Baton({ model: this.model, data: data });
+                baton = Ext.Baton({ model: this.model, data: data, options: this.options });
             Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', this.$el, baton);
 
             // only draw if needed

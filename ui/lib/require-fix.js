@@ -1,13 +1,15 @@
 // Override nextTick to enable collection of dependencies for concatenation.
 (function () {
-    var waiting = 0, finalCallback = null;
+    var timeout = null, finalCallback = null;
     require.nextTick = function (fn, finalCb) {
         if (finalCb) finalCallback = finalCb;
-        if (!fn && waiting) return;
-        waiting++;
-        setTimeout(function () {
-            if (fn) fn();
-            if (--waiting || !finalCallback) return;
+        if (fn) setTimeout(fn, 4);
+        require.delayTick();
+    };
+    require.delayTick = function () {
+        if (timeout) clearTimeout(timeout);
+        timeout = setTimeout(function () {
+            if (!finalCallback) return;
             var cb = finalCallback;
             finalCallback = null;
             cb();

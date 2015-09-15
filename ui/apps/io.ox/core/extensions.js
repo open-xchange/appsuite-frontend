@@ -474,6 +474,14 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
             this.disposed = true;
         },
 
+        enable: function (pointId, extensionId) {
+            // typical developer mistake (forget pointId actually)
+            if (arguments.length < 2) console.warn('Baton.enable(pointId, extensionId) needs two arguments!');
+            var hash = this.flow.disable;
+            if (!hash[pointId]) return;
+            hash[pointId] = _(hash[pointId]).without(extensionId);
+        },
+
         disable: function (pointId, extensionId) {
             // typical developer mistake (forget pointId actually)
             if (arguments.length < 2) console.warn('Baton.disable(pointId, extensionId) needs two arguments!');

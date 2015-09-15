@@ -109,8 +109,7 @@ define('io.ox/find/view-tokenfield', [
                 guid = _.uniqueId('form-control-label-'),
                 model = baton.model,
                 hasFocus = fieldstub.is(':focus'),
-                query = fieldstub.val(),
-                self = this;
+                self = this, query;
 
             // extend basic tokenfieldview
             this.ui.view = new Tokenfield({
@@ -215,6 +214,7 @@ define('io.ox/find/view-tokenfield', [
             this.api = _.bind(this.ui.field.tokenfield, this.ui.field);
 
             // replace input stub with tokenfield
+            query = fieldstub.val();
             fieldstub.replaceWith(this.ui.field);
             // register additional handlers
             this.register();
@@ -227,8 +227,11 @@ define('io.ox/find/view-tokenfield', [
             this.ui.tokeninput = this.ui.container.find('.token-input');
 
             // recover state after replace
-            this.ui.tokeninput.val(query);
             if (hasFocus) this.setFocus();
+            if (!!query) {
+                // ensure dropdown opens
+                self.ui.field.typeahead('val', self.ui.tokeninput.val(query));
+            }
 
             // update dropdown selection state
             this.ui.tokeninput.on({
@@ -244,8 +247,17 @@ define('io.ox/find/view-tokenfield', [
             this.trigger(e.type, e);
         },
 
+        disable: function () {
+            this.api('disable');
+        },
+
+        enable: function () {
+            this.api('enable');
+        },
+
         // register additional handlers
         register: function () {
+            var self = this;
             function preventOnCancel (e) {
                 if ($(document.activeElement).is('body')) e.preventDefault();
             }
@@ -270,6 +282,12 @@ define('io.ox/find/view-tokenfield', [
             // list for custom typeahead events
             this.ui.view.on({
                 'typeahead-custom:dropdown-rendered': _.bind(this.restoreSelection, this)
+            });
+
+            //
+            this.app.on({
+                'view:disable': _.bind(self.disable, self),
+                'view:enable': _.bind(self.enable, self)
             });
         },
 

@@ -151,7 +151,7 @@ html.baseline {
 
     .help-block {
         color: #fff;
-        margin-bottom: 18px;
+        margin-bottom: 16px;
     }
 }
 
@@ -318,26 +318,59 @@ html.baseline {
 
 @media (max-width: @screen-xs-max) {
 
+    .android #io-ox-login-footer {
+        position: static;
+    }
+
     #io-ox-login-header {
-        h1 { font-size: 14pt; }
+        h1 {
+            font-size: 20pt; 
+            padding-top: 7px;
+            line-height: 48px;
+            margin-bottom: 1px;
+        }
     }
 
     #io-ox-login-container {
-        top: 0;
+        top: 16px;
         .translate(0; 0);
     }
 
+    .row.buttons {
+        .form-group {
+            margin-bottom: 12px;
+        }
+        #io-ox-login-button {
+            margin-top: 4px
+        }
+    }
     #io-ox-languages {
-        margin-right: 0;
+        text-align: left;
+        margin-left: 16px;
+
+        select {
+            background: transparent;
+            border:0;
+        }
+    }
+
+    #io-ox-login-footer {
+        margin: 16px 0;
     }
 
     #io-ox-login-footer > span {
         display: block;
     }
+    #io-ox-languages {
+        .lang-label {
+            margin-top: 1px;
+            margin-bottom: 5px;
+        }
+    }
 
     #io-ox-login-store, #io-ox-forgot-password {
-        margin-top: 4px;
-        margin-bottom: 10px;
+        margin-top: 1px;
+        margin-bottom: 15px;
     }
 
     #io-ox-forgot-password, #io-ox-backtosignin {
@@ -345,10 +378,9 @@ html.baseline {
     }
 
     #io-ox-copyright {
+        margin-left: 16px;
+        text-align: left;
         font-size: 10px;
-    }
-    #io-ox-login-form input.form-control, #io-ox-login-container input.form-control {
-        height: inherit;
     }
 }
 

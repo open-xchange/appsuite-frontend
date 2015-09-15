@@ -13,9 +13,8 @@
 
 define('io.ox/core/notifications/badgeview', [
     'gettext!io.ox/core',
-    'io.ox/core/yell',
-    'io.ox/core/capabilities'
-], function (gt, yell, capabilities) {
+    'io.ox/core/yell'
+], function (gt, yell) {
 
     'use strict';
 
@@ -35,6 +34,9 @@ define('io.ox/core/notifications/badgeview', [
             this.nodes = {};
         },
         onChangeCount: function () {
+            if (!this.nodes.badge) {
+                return;
+            }
             var count = this.model.get('count'),
                 //#. %1$d number of notifications
                 //#, c-format
@@ -64,8 +66,6 @@ define('io.ox/core/notifications/badgeview', [
             });
         },
         render: function () {
-            // do not render badgeview if there is no capability of the following (e.g. drive as only app)
-            if (!capabilities.has('webmail') && !capabilities.has('calendar') && !capabilities.has('tasks')) return this;
 
             this.$el.attr({
                 href: '#',
@@ -84,7 +84,9 @@ define('io.ox/core/notifications/badgeview', [
             return this;
         },
         setNotifier: function (b) {
-            this.nodes.badge.toggleClass('active', !!b);
+            if (this.nodes.badge) {
+                this.nodes.badge.toggleClass('active', !!b);
+            }
         },
         registerView: function (view) {
             var views = this.model.get('registeredViews'),

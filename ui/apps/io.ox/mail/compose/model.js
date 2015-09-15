@@ -11,17 +11,27 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/mail/compose/model', [
+define.async('io.ox/mail/compose/model', [
     'io.ox/mail/api',
     'io.ox/mail/util',
+    'io.ox/core/capabilities',
     'io.ox/core/api/account',
-    'io.ox/emoji/main',
     'io.ox/core/attachments/backbone',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (mailAPI, mailUtil, accountAPI, emoji, Attachments, settings, gt) {
+], function (mailAPI, mailUtil, capabilities, accountAPI, Attachments, settings, gt) {
 
     'use strict';
+
+    var emoji = {};
+    //provide initial fake implementation of the API we need.
+    //this will be overwritten by the emoji API if user has the capability
+    emoji.converterFor = function () {
+        return _.identity;
+    };
+    emoji.sendEncoding = function () {
+        return 'unified';
+    };
 
     var MailModel = Backbone.Model.extend({
 
@@ -60,8 +70,10 @@ define('io.ox/mail/compose/model', [
             }
 
             if (_.isArray(attachmentsCollection)) {
-                this.set('attachments', new Attachments.Collection(attachmentsCollection), { silent: true });
-                attachmentsCollection = this.get('attachments');
+                var c = new Attachments.Collection();
+                c.add(attachmentsCollection);
+                this.set('attachments', c);
+                attachmentsCollection = c;
             }
 
             var content = attachmentsCollection.at(0);
@@ -88,8 +100,17 @@ define('io.ox/mail/compose/model', [
 
             if (!this.get('from') || this.get('from').length === 0) {
                 accountAPI.getPrimaryAddressFromFolder(this.get('folder_id')).then(function (address) {
+                    // custom display names
+                    if (settings.get(['customDisplayNames', address[1], 'overwrite'])) {
+                        address[0] = settings.get(['customDisplayNames', address[1], 'name'], '');
+                    }
                     this.set('from', [address]);
                 }.bind(this));
+            }
+
+            // Set default signature dependant on mode, there are settings that correspond to this
+            if (this.get('mode') !== 'compose') {
+                this.set('defaultSignatureId', settings.get('defaultReplyForwardSignature'));
             }
 
             if (!this.get('signatures')) this.getSignatures();
@@ -257,7 +278,7 @@ define('io.ox/mail/compose/model', [
             );
 
             result = _.extend(result, {
-                attachments:    attachmentCollection.mailAttachments(),  // get all attachments
+                attachments:    _(attachmentCollection.mailAttachments()).reject(function (o) { return o.source === 'drive'; }),  // get all attachments without files from drive
                 contacts_ids:   attachmentCollection.contactsIds(),      // flat cids for contacts_ids
                 infostore_ids:  attachmentCollection.driveFiles(),       // get ids only for infostore_ids
                 files:          attachmentCollection.localFiles()        // get fileObjs for locally attached files
@@ -278,16 +299,37 @@ define('io.ox/mail/compose/model', [
 
         },
 
-        getMailForAutosave: function () {
+        getMailForDraft: function () {
             var mail = this.getMail();
 
-            if (mail.msgref && mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
-                delete mail.msgref;
+            switch (mail.sendtype) {
+                case mailAPI.SENDTYPE.DRAFT:
+                    mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                    break;
+                case mailAPI.SENDTYPE.EDIT_DRAFT:
+                    break;
+                case mailAPI.SENDTYPE.FORWARD:
+                    mail.sendtype = mailAPI.SENDTYPE.DRAFT;
+                    break;
+                default:
+                    mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                    if (mail.msgref) delete mail.msgref;
             }
-            if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
-                mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                this.set('sendtype', mail.sendtype, { silent: true });
+
+            this.set('sendtype', mail.sendtype, { silent: true });
+
+            if (_(mail.flags).isUndefined()) {
+                mail.flags = mailAPI.FLAGS.DRAFT;
+            } else if ((mail.data.flags & 4) === 0) {
+                mail.flags += mailAPI.FLAGS.DRAFT;
             }
+
+            return mail;
+        },
+
+        getMailForAutosave: function () {
+
+            var mail = this.getMailForDraft();
 
             // delete mail.infostore_ids;
             if (mail.infostore_ids) {
@@ -298,11 +340,6 @@ define('io.ox/mail/compose/model', [
                 });
             }
 
-            if (_(mail.flags).isUndefined()) {
-                mail.flags = mailAPI.FLAGS.DRAFT;
-            } else if ((mail.data.flags & 4) === 0) {
-                mail.flags += mailAPI.FLAGS.DRAFT;
-            }
             return mail;
         },
 
@@ -315,5 +352,15 @@ define('io.ox/mail/compose/model', [
         }
     });
 
-    return MailModel;
+    var def = $.Deferred();
+
+    if (capabilities.has('emoji')) {
+        require(['io.ox/emoji/bundle']).then(function (e) {
+            emoji = e;
+            def.resolve(MailModel);
+        });
+    } else {
+        def.resolve(MailModel);
+    }
+    return def;
 });

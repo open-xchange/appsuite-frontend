@@ -4,7 +4,7 @@
 <title>11.2.1. Welke rechten kunnen worden toegekend?</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Groupware">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Rechten">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Rechten">
 <link rel="next" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html" title="11.2.2. Rechten voor bestaande mappen">
@@ -35,95 +35,88 @@
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ox.appsuite.user.sect.dataorganisation.rights.defined"></a>11.2.1. Welke rechten kunnen worden toegekend?</h3></div></div></div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles"></a><p>Om eenvoudig logische rechtencombinaties te verlenen, zijn er gebruikersrollen voorgedefinieerd: </p>
+<a name="ox.appsuite.user.concept.rights.roles"></a><p>Om eenvoudig logische rechtencombinaties toe te kennen zijn er specifieke standaard gebruikersrollen:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Eigenaar">Eigenaar</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Beheerder">Beheerder</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.viewer" title="Lezer">Lezer</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.editor" title="Recensent">Recensent</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="Auteur">Auteur</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.guest" title="Gast">Gast</a></p></li>
 </ul></div>
-<p>
-      </p>
+<p>U kan de standaard rechten aanpassen door <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.folder.rights.detail" title="Gedetailleerde rechten">gedetailleerde rechten</a> toe te kennen.</p>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.owner"></a><p><b>Eigenaar </b>Een mapeigenaar heeft alle rechten op die map. De eigenaar kan anderen rechten geven op de map.</p>
+<a name="ox.appsuite.user.concept.rights.roles.administrator"></a><p class="title"><b>Beheerder</b></p>
+<p>Een mapbeheerder heeft alle rechten op deze map. De beheerder kan anderen rechten geven op de map.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Maprechten: objecten aanmaken, submappen aanmaken</p></li>
 <li class="listitem"><p>Objectrechten: lees alle objecten, bewerk alle objecten, verwijder alle objecten</p></li>
-<li class="listitem"><p>Beheerdersrechten: Ja</p></li>
 </ul></div>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.administrator"></a><p><b>Beheerder </b>Een mapbeheerder heeft alle rechten op deze map. De beheerder kan anderen rechten geven op de map.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Maprechten: objecten aanmaken, submappen aanmaken</p></li>
-<li class="listitem"><p>Objectrechten: lees alle objecten, bewerk alle objecten, verwijder alle objecten</p></li>
-<li class="listitem"><p>Beheerdersrechten: Ja</p></li>
-</ul></div>
-</div>
-<div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.author"></a><p><b>Auteur </b>Een auteur mag mappen wijzigen die al bestaan, objecten maken en wijzigen en het maken van submappen.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Maprechten: objecten aanmaken, submappen aanmaken</p></li>
-<li class="listitem"><p>Objectrechten: lees alle objecten, bewerk alle objecten, verwijder alle objecten</p></li>
-<li class="listitem"><p>Beheerdersrechten: Nee</p></li>
-</ul></div>
-</div>
-<div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.guest"></a><p><b>Gast </b>Een gast mag de objecten zien die al in de map staan, maar mag deze niet wijzigen. De gast mag geen submappen maken of nieuwe objecten aanmaken of wijzigen.</p>
+<a name="ox.appsuite.user.concept.rights.roles.viewer"></a><p class="title"><b>Lezer</b></p>
+<p>Een lezer kan alle bestaande objecten inzien. Een lezer heeft geen andere rechten.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Maprechten: toon de map</p></li>
-<li class="listitem"><p>Objectrechten: lees alle objecten, geen bewerkrechten, geen verwijderrechten</p></li>
-<li class="listitem"><p>Beheerdersrechten: Nee</p></li>
+<li class="listitem"><p>Objectrechten: lees alle objecten</p></li>
 </ul></div>
 </div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.folder.rights"></a><p>De basisrechten voor de gebruikersrol kan aangepast worden. De volgende rechten kunnen worden toegekend. </p>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.editor"></a><p class="title"><b>Recensent</b></p>
+<p>Een recensent kan bestaande objecten lezen en bewerken. De recensent kan geen nieuwe objecten maken. De recensent kan geen objecten verwijderen.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Maprechten: toon de map</p></li>
+<li class="listitem"><p>Objectrechten: lees alle objecten, bewerk alle objecten</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.author"></a><p class="title"><b>Auteur</b></p>
+<p>Een auteur mag bestaande objecten wijzigen of verwijderen, nieuwe objecten maken en nieuwe submappen maken.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Maprechten: objecten aanmaken, submappen aanmaken</p></li>
+<li class="listitem"><p>Objectrechten: lees alle objecten, bewerk alle objecten, verwijder alle objecten</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.folder.rights.detail"></a><p class="title"><b>Gedetailleerde rechten</b></p>
+<p>De basisrechten voor de gebruikersrol kan aangepast worden. De volgende rechten kunnen worden toegekend.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>Maprechten</p>
+<p>Mappen</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>Nieuwe map</p></li>
+<li class="listitem"><p>toon de map</p></li>
 <li class="listitem"><p>objecten aanmaken</p></li>
 <li class="listitem"><p>objecten en submappen aanmaken</p></li>
 </ul></div>
 <p>
-            </p>
+              </p>
 </li>
 <li class="listitem">
-<p>Object rechten, lezen</p>
+<p>leesrechten</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>geen lees rechten</p></li>
+<li class="listitem"><p>geen</p></li>
 <li class="listitem"><p>eigen objecten lezen</p></li>
 <li class="listitem"><p>alle objecten lezen</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p>Object rechten, bewerken</p>
+<p>schrijfrechten</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>geen wijzig rechten</p></li>
+<li class="listitem"><p>geen</p></li>
 <li class="listitem"><p>eigen objecten bewerken</p></li>
 <li class="listitem"><p>alle objecten bewerken</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p>Object rechten, verwijderen</p>
+<p>verwijderrechten</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>geen verwijder rechten</p></li>
+<li class="listitem"><p>geen</p></li>
 <li class="listitem"><p>eigen objecten verwijderen </p></li>
 <li class="listitem"><p>alle objecten verwijderen </p></li>
 </ul></div>
 </li>
-<li class="listitem">
-<p>Beheerdersrechten</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>Ja</p></li>
-<li class="listitem"><p>Nee</p></li>
-</ul></div>
-</li>
 </ul></div>
 <p>
-      </p>
+        </p>
 </div>
 </div>
           </div>

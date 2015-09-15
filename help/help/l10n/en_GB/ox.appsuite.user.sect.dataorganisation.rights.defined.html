@@ -4,7 +4,7 @@
 <title>11.2.1. Which permissions can be granted?</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Groupware">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Permissions">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Permissions">
 <link rel="next" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html" title="11.2.2. Permissions for folders that already exist">
@@ -35,95 +35,88 @@
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ox.appsuite.user.sect.dataorganisation.rights.defined"></a>11.2.1. Which permissions can be granted?</h3></div></div></div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles"></a><p>In order to easily grant logical permission combinations, there are specific preset user roles: </p>
+<a name="ox.appsuite.user.concept.rights.roles"></a><p>In order to easily grant logical permission combinations, there are specific preset user roles:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Owner">Owner</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrator">Administrator</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.viewer" title="Viewer">Viewer</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.editor" title="Reviewer">Reviewer</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="Author">Author</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.guest" title="Guest">Guest</a></p></li>
 </ul></div>
-<p>
-      </p>
+<p>You can change the preset permissions by granting <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.folder.rights.detail" title="Detailed permissions">detailed permissions</a>.</p>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.owner"></a><p><b>Owner </b>A folder's owner has all permissions for that folder. The owner can grant other users permissions to the folder.</p>
+<a name="ox.appsuite.user.concept.rights.roles.administrator"></a><p class="title"><b>Administrator</b></p>
+<p>A folder's administrator owns all permissions for this folder. The owner can grant other users permissions to the folder.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Folder permissions: create objects and subfolders</p></li>
 <li class="listitem"><p>Object permissions: read all objects, edit all objects, delete all objects</p></li>
-<li class="listitem"><p>Administrative rights: Yes</p></li>
 </ul></div>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.administrator"></a><p><b>Administrator </b>A folder's administrator owns all permissions for this folder. The owner can grant other users permissions to the folder.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Folder permissions: create objects and subfolders</p></li>
-<li class="listitem"><p>Object permissions: read all objects, edit all objects, delete all objects</p></li>
-<li class="listitem"><p>Administrative rights: Yes</p></li>
-</ul></div>
-</div>
-<div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.author"></a><p><b>Author </b>An author is allowed to change objects that already exist, to create and edit new objects, and to create subfolders.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Folder permissions: create objects and subfolders</p></li>
-<li class="listitem"><p>Object permissions: read all objects, edit all objects, delete all objects</p></li>
-<li class="listitem"><p>Administrative rights: No</p></li>
-</ul></div>
-</div>
-<div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.guest"></a><p><b>Guest </b>A guest is allowed to read objects that already exist but not to modify them. The guest is not allowed to create subfolders or objects there.</p>
+<a name="ox.appsuite.user.concept.rights.roles.viewer"></a><p class="title"><b>Viewer</b></p>
+<p>A viewer can read all existing objects. A viewer has no other permissions.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Folder permissions: view the folder</p></li>
-<li class="listitem"><p>Object permissions: read all objects, no edit permissions, no delete permissions</p></li>
-<li class="listitem"><p>Administrative rights: No</p></li>
+<li class="listitem"><p>Object permissions: read all objects</p></li>
 </ul></div>
 </div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.folder.rights"></a><p>The preset permissions for the user roles can be refined. The following permissions can be granted. </p>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.editor"></a><p class="title"><b>Reviewer</b></p>
+<p>A reviewer can read and edit existing objects. The reviewer cannot create new objects though. The reviewer cannot delete objects.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Folder permissions: view the folder</p></li>
+<li class="listitem"><p>Object permissions: read all objects, edit all objects</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.author"></a><p class="title"><b>Author</b></p>
+<p>An author is allowed to change or delete existing objects, to create and edit new objects, and to create subfolders.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Folder permissions: create objects and subfolders</p></li>
+<li class="listitem"><p>Object permissions: read all objects, edit all objects, delete all objects</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.folder.rights.detail"></a><p class="title"><b>Detailed permissions</b></p>
+<p>The preset permissions for the user roles can be refined. The following permissions can be granted.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>Folder permissions</p>
+<p>Folders</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>New folder</p></li>
+<li class="listitem"><p>view the folder</p></li>
 <li class="listitem"><p>create objects</p></li>
 <li class="listitem"><p>create objects and subfolders</p></li>
 </ul></div>
 <p>
-            </p>
+              </p>
 </li>
 <li class="listitem">
-<p>Object permissions, read</p>
+<p>read permissions</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>no read permissions</p></li>
+<li class="listitem"><p>none</p></li>
 <li class="listitem"><p>read own objects</p></li>
 <li class="listitem"><p>read all objects</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p>Object permissions, edit</p>
+<p>write permissions</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>no edit permissions</p></li>
+<li class="listitem"><p>none</p></li>
 <li class="listitem"><p>edit own objects</p></li>
 <li class="listitem"><p>edit all objects</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p>Object permissions, delete</p>
+<p>delete permissions</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>no delete permissions</p></li>
+<li class="listitem"><p>none</p></li>
 <li class="listitem"><p>delete own objects</p></li>
 <li class="listitem"><p>delete all objects</p></li>
 </ul></div>
 </li>
-<li class="listitem">
-<p>Administrative rights</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>Yes</p></li>
-<li class="listitem"><p>No</p></li>
-</ul></div>
-</li>
 </ul></div>
 <p>
-      </p>
+        </p>
 </div>
 </div>
           </div>

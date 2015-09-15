@@ -134,23 +134,17 @@ define('io.ox/portal/widgets', [
                     userWidget: true,
                     index: 4
                 },
-                facebook_0: {
-                    plugin: 'plugins/portal/facebook/register',
-                    color: 'blue',
-                    userWidget: true,
-                    index: 5
-                },
                 twitter_0: {
                     plugin: 'plugins/portal/twitter/register',
                     color: 'pink',
                     userWidget: true,
-                    index: 6
+                    index: 5
                 },
                 linkedin_0: {
                     plugin: 'plugins/portal/linkedin/register',
                     color: 'lightblue',
                     userWidget: true,
-                    index: 7
+                    index: 6
                 }
             };
 
@@ -493,6 +487,26 @@ define('io.ox/portal/widgets', [
                 settings.remove('widgets/user/' + model.get('id')).saveAndYell();
             }
         });
+
+    // add or remove upsell widget to portal
+    require(['io.ox/core/upsell', 'settings!io.ox/core'], function (upsell, settings) {
+
+        var options = _.extend({
+                enabled: true,
+                requires: 'active_sync || caldav || carddav'
+            }, settings.get('features/upsell/portal-widget')),
+            hasWidget = api.containsType('upsell'),
+            showWidget = options.enabled && !upsell.has(options.requires) && upsell.enabled(options.requires);
+
+        if (hasWidget === showWidget) return;
+
+        if (hasWidget) {
+            api.remove('upsell_0');
+        } else {
+            api.addPlugin('plugins/portal/upsell/register');
+            api.add('upsell');
+        }
+    });
 
     return api;
 });

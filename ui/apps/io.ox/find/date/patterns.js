@@ -13,7 +13,7 @@
 
 define('io.ox/find/date/patterns',[
     'io.ox/core/extensions',
-    'gettext!io.ox/find'
+    'gettext!io.ox/core'
 ], function (ext, gt) {
 
     'use strict';

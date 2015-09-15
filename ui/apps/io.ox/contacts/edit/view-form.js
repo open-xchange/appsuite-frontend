@@ -135,7 +135,7 @@ define('io.ox/contacts/edit/view-form', [
             128: 'first_name last_name position department tax_id',
             256: 'url profession street_home street_other street_business',
             512: 'email1 email2 email3 company',
-            5680: 'comment'
+            5680: 'note'
         }
     };
 
@@ -398,7 +398,6 @@ define('io.ox/contacts/edit/view-form', [
 
         // Edit Actions
         new actions.Action(ref + '/actions/edit/save', {
-            id: 'save',
             action: function (baton) {
 
                 // check if attachments are changed
@@ -422,7 +421,6 @@ define('io.ox/contacts/edit/view-form', [
         });
 
         new actions.Action(ref + '/actions/edit/discard', {
-            id: 'discard',
             action: function () {
                 if (ref === 'io.ox/core/user') {
                     //invoked by sidepopup (portal); uses event of hidden sidebar-close button
@@ -434,7 +432,6 @@ define('io.ox/contacts/edit/view-form', [
         });
 
         new actions.Action(ref + '/actions/edit/reset-image', {
-            id: 'imagereset',
             action: function (baton) {
                 baton.model.set('image1', '', { validate: true });
                 var imageUrl = api.getFallbackImage();

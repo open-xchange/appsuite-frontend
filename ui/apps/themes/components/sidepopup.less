@@ -211,9 +211,21 @@
         .io-ox-sidepopup-pane {
             position: static;
 
+            .io-ox-busy {
+                min-height: 20px;
+            }
+
             .default-content-padding {
                 padding-top: 7px;
             }
+        }
+    }
+}
+@media all and (max-width: 480px), all and (max-device-width: 480px) {
+    .io-ox-sidepopup-close {
+        margin: 0;
+        .close {
+            float: none;
         }
     }
 }

@@ -4,7 +4,7 @@
 <title>5.5.18. Uso de filtros de correo</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Software colaborativo">
 <link rel="up" href="ox.appsuite.user.sect.email.manage.html" title="5.5. Organización de correos electrónicos">
 <link rel="prev" href="ox.appsuite.user.sect.email.manage.unifiedmail.html" title="5.5.17. Utilización del correo unificado">
 <link rel="next" href="ox.appsuite.user.sect.email.search.html" title="5.6. Búsqueda de correos electrónicos">
@@ -62,19 +62,26 @@
 <p> Algunas funciones del correo electrónico configuran filtros automáticamente, por ejemplo, el <a class="link" href="ox.appsuite.user.sect.email.send.vacationnotice.html#ox.appsuite.user.concept.email.vacationnotice">aviso de ausencia</a>.</p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.email.mailfilter.create"></a><p class="title"><b>Cómo crear una nueva regla:</b></p>
+<a name="ox.appsuite.user.task.email.mailfilter.create"></a><p class="title">Cómo crear una nueva regla:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Pulse el icono <span class="guibutton"><strong>Menú del sistema</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.create.systemmenu"></a><img src="../../images/appsuite_user_icon_settings.png"></span> situado a la derecha de la barra de menús. Pulse la opción del menú <span class="guibutton"><strong>Configuración</strong></span>. </p></li>
+<li class="step"><p>Pulse el icono <span class="guibutton"><strong>Menú del sistema</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.create.systemmenu"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> situado en la parte derecha de la barra de menús. Pulse la opción del menú <span class="guibutton"><strong>Configuración</strong></span>. </p></li>
 <li class="step">
-<p>Si el <span class="guibutton"><strong>Filtro de correo</strong></span> no se muestra en la barra lateral, marque <span class="guibutton"><strong>Ajustes avanzados</strong></span> en la parte inferior de la barra lateral.</p>
-<p>En la barra lateral, pulse en <span class="guibutton"><strong>Filtro de correo</strong></span>.</p>
+<p>Seleccione el elemento <span class="guibutton"><strong>Correo</strong></span> de la barra lateral.</p>
+<p>Pulse en <span class="guibutton"><strong>Filtro de correo</strong></span>.</p>
 </li>
-<li class="step"><p>En el área de visualización, pulse en <span class="guibutton"><strong>Añadir nueva regla</strong></span>. Seleccione <span class="guibutton"><strong>Reenviar</strong></span> en el menú.</p></li>
+<li class="step"><p>En el área de visualización, pulse en <span class="guibutton"><strong>Añadir nueva regla</strong></span>. Se abre la ventana <span class="guilabel"><strong>Crear nueva regla</strong></span>.</p></li>
 <li class="step"><p>Indique un nombre para la regla.</p></li>
 <li class="step">
-<p>Para añadir una condición pulse en <span class="guibutton"><strong>Añadir condición</strong></span>. Haga una selección en el menú desplegable.</p>
-<p>Para usar una parte del correo electrónico que no está en la lista, seleccione  <span class="guibutton"><strong>Cabecera</strong></span>. Introduzca una entrada de cabecera en el campo <span class="guilabel"><strong>Nombre</strong></span>. Puede visualizar una cabecera de correo electrónico al <a class="link" href="ox.appsuite.user.sect.email.manage.source.html#ox.appsuite.user.concept.email.source">Ver los datos fuente</a>.</p>
-<p>Puede seleccionar un criterio pulsando en <span class="guibutton"><strong>Cumple</strong></span>. Indique un argumento en el campo.</p>
+<p>Para añadir una condición pulse en <span class="guibutton"><strong>Añadir condición</strong></span>. Haga una selección en el menú desplegable. Por favor, tenga en cuenta lo siguiente:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Para usar una parte del correo electrónico que no está en la lista, seleccione  <span class="guibutton"><strong>Cabecera</strong></span>. Introduzca una entrada de cabecera en el campo <span class="guilabel"><strong>Nombre</strong></span>. Puede visualizar una cabecera de correo electrónico al <a class="link" href="ox.appsuite.user.sect.email.manage.source.html#ox.appsuite.user.concept.email.source">Ver los datos fuente</a>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Para incluir los destinatarios de <span class="guilabel"><strong>CCO</strong></span>, seleccione <span class="guibutton"><strong>Sobre</strong></span>. Sobre incluye los destinatarios del correo insertados en los campos <span class="guilabel"><strong>Para</strong></span>, <span class="guilabel"><strong>CC</strong></span> y <span class="guilabel"><strong>CCO</strong></span>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Para usar una parte del contenido del correo en la condición, seleccione <span class="guibutton"><strong>Contenido</strong></span>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Para usar la fecha de recepción en la condición, seleccione <span class="guibutton"><strong>Fecha actual</strong></span>.</p></li>
+</ul></div>
+<p>
+            </p>
+<p>Seleccione un criterio de la lista desplegable que hay junto a la parte del correo. Escriba un argumento en el campo.</p>
 <p>Se pueden encontrar ejemplos en <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.mailfilter.conditions" title="P:">Preguntas sobre correos electrónicos</a>.</p>
 <p>Se pueden añadir más condiciones. Se puede indicar si una o varias de las condiciones deben cumplirse para ejecutar las acciones. Para ello, pulse en <span class="guibutton"><strong>Aplicar regla si se cumplen todas las condiciones</strong></span>.</p>
 <p>Para borrar una condición, pulse el icono <span class="guibutton"><strong>Borrar</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.create.delete"></a><img src="../../images/appsuite_user_icon_trash.png"></span> que hay junto a la condición.</p>
@@ -88,12 +95,12 @@
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.email.mailfilter.change"></a><p class="title"><b>Cómo cambiar reglas ya existentes:</b></p>
+<a name="ox.appsuite.user.task.email.mailfilter.change"></a><p class="title">Cómo cambiar reglas ya existentes:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Pulse en el icono <span class="guibutton"><strong>Menú del sistema</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.change.systemmenu"></a><img src="../../images/appsuite_user_icon_settings.png"></span> situado en la parte derecha de la barra de menús. En el menú, pulse <span class="guibutton"><strong>Configuración</strong></span>. </p></li>
+<li class="step"><p>Pulse en el icono <span class="guibutton"><strong>Menú del sistema</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.change.systemmenu"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> situado en la parte derecha de la barra de menús. En el menú, pulse <span class="guibutton"><strong>Configuración</strong></span>. </p></li>
 <li class="step">
-<p>Si el <span class="guibutton"><strong>Filtro de correo</strong></span> no se muestra en la barra lateral, marque <span class="guibutton"><strong>Ajustes avanzados</strong></span> en la parte inferior de la barra lateral.</p>
-<p>En la barra lateral, pulse en <span class="guibutton"><strong>Filtro de correo</strong></span>.</p>
+<p>Seleccione el elemento <span class="guibutton"><strong>Correo</strong></span> de la barra lateral.</p>
+<p>Pulse en <span class="guibutton"><strong>Filtro de correo</strong></span>.</p>
 </li>
 <li class="step"><p>Para editar los ajustes de una regla, pulse en <span class="guibutton"><strong>Editar</strong></span> al lado de la regla. Cambie los ajustes en la ventana <span class="guilabel"><strong>Editar regla</strong></span>.</p></li>
 <li class="step">

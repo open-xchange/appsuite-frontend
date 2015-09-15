@@ -38,54 +38,25 @@ define('io.ox/core/sub/settings/pane', [
         if (ox.debug) console.error('No clue how to get here.', cid, obj);
     }
 
-    function drawFilterInfo(folder, view) {
-
-        if (!folder) return $();
-
-        var node = $('<div class="alert alert-info sub settings">');
-
-        function removeFilter(e) {
-            e.preventDefault();
-            $(this).closest('.alert').remove();
-            filter = {};
-            view.$el.empty();
-            view.render();
-        }
-
-        folderAPI.path(folder).done(function (folder) {
-
-            var folderPath = _(folder).pluck('title').join('/');
-
-            node.append(
-                $('<div class="folder">').text(
-                    gt('Only showing items related to folder "%1$s"', folderPath)
-                ),
-                $('<a href="#" class="remove-filter" data-action="remove-filter">').text(gt('Show all items'))
-                .on('click', removeFilter)
-            );
-        });
-
-        return node;
-    }
-
     ext.point('io.ox/core/sub/settings/detail').extend({
         index: 100,
         id: 'extensions',
         draw: function (baton) {
 
-            filter = { folder: baton.options.folder };
+            filter = {};
 
             folderState = {
+                isPublished: folderAPI.is('published', baton.options.data || {}),
                 isSubscribed: folderAPI.is('subscribed', baton.options.data || {})
             };
 
             var view = new SettingView({
+                publications: model.publications(),
                 subscriptions: model.subscriptions()
             });
 
             this.append(
                 $('<h1 class="pane-headline">').text(baton.data.title),
-                drawFilterInfo(baton.options.folder, view),
                 view.render().$el
             );
             // add side popup for single file publications
@@ -94,7 +65,31 @@ define('io.ox/core/sub/settings/pane', [
     });
 
     function createPathInformation(model) {
-        return new BreadcrumbView({ folder: model.get('folder') }).render().$el;
+        var folder,
+            breadcrumb;
+
+        if (model.has('folder')) {
+            // subscriptions have a folder on top-level
+            folder = model.get('folder');
+        } else {
+            // publications have a property 'entity'
+            folder = model.get('entity').folder;
+        }
+
+        breadcrumb = new BreadcrumbView({
+            folder: folder,
+            exclude: ['9'],
+            notail: true,
+            isLast: true
+        });
+        breadcrumb.handler = function (id) {
+            // launch files and set/change folder
+            ox.launch('io.ox/files/main', { folder: id }).done(function () {
+                this.folder.set(id);
+            });
+        };
+
+        return breadcrumb.render().$el;
     }
 
     var getSiteNameRegex = /^http[^?]+\/(\w+)\?/,
@@ -147,41 +142,15 @@ define('io.ox/core/sub/settings/pane', [
 
             var data = baton.model.toJSON(),
                 enabled = data.enabled,
-                dynamicAction,
                 url,
                 displayName = getDisplayName(data) || '\u00A0';
 
             this[enabled ? 'removeClass' : 'addClass']('disabled');
 
-            if (data.source && (baton.model.refreshState() === 'ready')) {
-                // this is a subscription
-                dynamicAction = $('<a>').attr({
-                    href: '#',
-                    tabindex: '1',
-                    class: 'action',
-                    'data-action': 'refresh',
-                    'aria-label': displayName + ', ' + gt('Refresh')
-                }).text(gt('Refresh'));
-                if (isDestructiveRefresh(data)) {
-                    dynamicAction.addClass('text-error');
-                }
-            } else if (data.source && (baton.model.refreshState() !== 'pending')) {
-                // this is a subscription and refresh should be disabled
-                dynamicAction = $('<span>');
-            }
-
             url = getUrl(data);
 
             this.addClass('widget-settings-view').append(
                 $('<div class="widget-controls">').append(
-                    enabled ? dynamicAction : '',
-                    $('<a>').attr({
-                        href: '#',
-                        tabindex: '1',
-                        class: 'action',
-                        'data-action': 'toggle',
-                        'aria-label': displayName + ', ' + (enabled ? gt('Disable') : gt('Enable'))
-                    }).text(enabled ? gt('Disable') : gt('Enable')),
                     $('<a class="remove">').attr({
                         href: '#',
                         tabindex: 1,
@@ -232,8 +201,6 @@ define('io.ox/core/sub/settings/pane', [
             this.listenTo(this.model, 'remove', performRemove);
         },
         events: {
-            'click [data-action="toggle"]': 'onToggle',
-            'click [data-action="refresh"]': 'onRefresh',
             'click [data-action="remove"]': 'onRemove'
         },
         render: function () {
@@ -241,32 +208,8 @@ define('io.ox/core/sub/settings/pane', [
             ext.point('io.ox/core/sub/settings/list/itemview').invoke('draw', this.$el.empty(), baton);
             return this;
         },
-        onToggle: function (ev) {
-            var model = this.model;
-            ev.preventDefault();
-
-            model.set('enabled', !model.get('enabled'), { validate: true }).save().fail(function () {
-                model.set('enabled', !model.get('enabled'), { validate: true });
-            });
-            this.render();
-        },
-        onRefresh: function (ev) {
-            var baton = ext.Baton({ model: this.model, view: this });
-            ev.preventDefault();
-            yell({
-                type: 'busy',
-                headline: gt('Subscription refresh'),
-                message: gt(
-                    'A refresh takes some time, so please be patient, while the refresh runs in the background. ' +
-                    'Only one refresh per subscription and per session is allowed.'
-                )
-            });
-            this.model.performRefresh().done(function () {
-                baton.view.render();
-            });
-            baton.view.render();
-        },
-        onRemove: function () {
+        onRemove: function (e) {
+            e.preventDefault();
             this.model.destroy();
         },
         close: function () {
@@ -331,18 +274,25 @@ define('io.ox/core/sub/settings/pane', [
             filteredList = collection.forFolder(filter);
             var isEmpty = filteredList.length === 0,
                 isFiltered = !!filter.folder,
+                hasPublications = folderState.isPublished && type === 'publication',
                 hasSubscriptions = folderState.isSubscribed && type === 'subscription',
-                notAccessible = isEmpty && hasSubscriptions;
+                notAccessible = isEmpty && (hasPublications || hasSubscriptions);
 
-            if (notAccessible && hasSubscriptions) {
-                return gt('This folder has subscriptions but you are not allowed to view or edit them');
+            if (notAccessible) {
+                if (hasPublications) return gt('This folder has publications but you are not allowed to view or edit them');
+                if (hasSubscriptions) return gt('This folder has subscriptions but you are not allowed to view or edit them');
             }
 
             if (isEmpty) {
                 if (isFiltered) {
-                    return gt('This folder has no subscriptions');
+                    return type === 'publication' ?
+                        gt('This folder has no publications') :
+                        gt('This folder has no subscriptions');
+
                 }
-                return gt('You don\'t have any subscriptions yet');
+                return type === 'publication' ?
+                    gt('You don\'t have any publications yet') :
+                    gt('You don\'t have any subscriptions yet');
             }
 
             return '';
@@ -362,11 +312,23 @@ define('io.ox/core/sub/settings/pane', [
         id: 'content',
         render: function () {
 
-            var baton = this.baton;
+            var baton = this.baton, both = capabilities.has('publication') && capabilities.has('subscription');
+
+            if (capabilities.has('publication')) {
+                this.$el.append(
+                    $('<fieldset>').append(
+                        // pub
+                        both ? $('<legend class="pane-headline sectiontitle">').text(gt('Publications')) : $(),
+                        baton.pubListNode = $('<ul class="list-unstyled publications list-group widget-list">')
+                    )
+                );
+                setupList(baton.pubListNode.empty(), baton.publications, 'publication');
+            }
 
             if (capabilities.has('subscription')) {
                 this.$el.append(
                     $('<fieldset>').append(
+                        both ? $('<legend class="pane-headline sectiontitle">').text(gt('Subscriptions')) : $(),
                         baton.subListNode = $('<ul class="list-unstyled subscriptions list-group widget-list">')
                     )
                 );

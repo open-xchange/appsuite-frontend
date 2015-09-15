@@ -219,6 +219,12 @@ define('io.ox/core/tk/tokenfield', [
                         } else {
                             newAttrs = ['', e.attrs.value, '', e.attrs.value];
                         }
+                        /**
+                         * TODO: review
+                         * model values aren't updated so consumers
+                         * have to use lable/value not the model
+                         * wouldn't it be more robust we create a new model instead
+                         */
                         // save new token data to model
                         e.attrs.model = inputData.editModel.set('token', {
                             label: newAttrs[1],
@@ -278,10 +284,13 @@ define('io.ox/core/tk/tokenfield', [
                 },
                 'tokenfield:createdtoken': function (e) {
                     if (e.attrs) {
-                        var model = e.attrs.model || self.getModelByCID(e.attrs.value);
-
+                        var model = e.attrs.model || self.getModelByCID(e.attrs.value),
+                            node = $(e.relatedTarget),
+                            label = node.find('.token-label');
+                        // remove wrongly calculated max-width
+                        if (label.css('max-width') === '0px') label.css('max-width', 'none');
                         // a11y: set title
-                        $(e.relatedTarget).attr('title', function () {
+                        node.attr('title', function () {
                             var token = model.get('token'),
                                 title = token.label;
                             if (token.label !== token.value) {
@@ -324,7 +333,8 @@ define('io.ox/core/tk/tokenfield', [
                     minLength: o.minLength,
                     allowEditing: o.allowEditing,
                     typeahead: self.typeaheadOptions,
-                    html: this.options.html || false
+                    html: this.options.html || false,
+                    inputType: 'email'
                 });
 
             this.register();
@@ -338,16 +348,19 @@ define('io.ox/core/tk/tokenfield', [
                 options: this.options
             });
 
+            // add non-public api;
+            this.hiddenapi = this.input.data('ttTypeahead');
+
             // calculate postion for typeahead dropdown (tt-dropdown-menu)
             if (_.device('smartphone') || o.leftAligned) {
-                this.tt = this.input.data('ttTypeahead');
-                this.tt.dropdown._show = function () {
+                // non-public api of typeahead
+                this.hiddenapi.dropdown._show = function () {
                     var width = 'auto', left = 0;
                     if (_.device('smartphone')) {
                         left = self.input.offset().left * -1;
                         width = window.innerWidth;
                     } else if (o.leftAligned) {
-                        left = self.tt.$node.position().left;
+                        left = self.input.position().left;
                         left = Math.round(left) * -1 + 17;
                     }
                     this.$menu.css({ left: left, width: width }).show();
@@ -360,6 +373,11 @@ define('io.ox/core/tk/tokenfield', [
                     var enter = e.which === 13,
                         validquery = !!self.input.val() && self.input.val().length >= o.minLength,
                         runningrequest = self.model.get('query') !== self.input.val();
+                    // clear dropdown when query changes
+                    if (runningrequest && !enter) {
+                        self.hiddenapi.dropdown.empty();
+                        self.hiddenapi.dropdown.close();
+                    }
                     // flag query string when enter was hit before drowdown was drawn
                     if (enter && validquery && runningrequest) {
                         self.autoselect[self.input.val()] = true;

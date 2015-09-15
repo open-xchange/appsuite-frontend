@@ -292,18 +292,20 @@ define('io.ox/calendar/util', [
             return ret;
         },
 
-        addTimezoneLabel: function (parent, data) {
+        addTimezoneLabel: function (parent, data, options) {
+
             var current = moment(data.start_date);
 
             parent.append(
                 $.txt(gt.noI18n(this.getTimeInterval(data))),
-                this.addTimezonePopover($('<span class="label label-default pointer" tabindex="1">').text(gt.noI18n(current.zoneAbbr())), data)
+                this.addTimezonePopover($('<span class="label label-default pointer" tabindex="1">').text(gt.noI18n(current.zoneAbbr())), data, options)
             );
 
             return parent;
         },
 
         addTimezonePopover: function (parent, data, opt) {
+
             var current = moment(data.start_date);
 
             opt = _.extend({

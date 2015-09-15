@@ -108,8 +108,10 @@ define('io.ox/search/view-template', [
                                 'role': 'button'
                             })
                             .append(
-                                $('<i class="fa fa-fw"></i>'),
-                                $('<span>').text(title)
+                                $('<i class="fa fa-fw icon"></i>'),
+                                $('<span>').text(title),
+                                // countpart to keep title centered
+                                $('<i class="fa fa-fw"></i>')
                             )
                     )
                 );
@@ -137,7 +139,7 @@ define('io.ox/search/view-template', [
             if (id !== '') {
                 // add icon
                 cell.find('[data-app="' + id + '"]')
-                    .find('.fa')
+                    .find('.icon')
                     .removeClass('fa-none')
                     .addClass('fa-check');
                 // add name

@@ -32,6 +32,7 @@ define('io.ox/core/boot/login/auto', [
                 ox.trigger('server:up');
                 // set user language - see bug #31433
                 ox.language = data.locale;
+                _.setCookie('language', ox.language);
                 // event
                 ox.trigger('login:success', data);
             })

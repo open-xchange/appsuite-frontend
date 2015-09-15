@@ -33,6 +33,7 @@ define('io.ox/files/filepicker', [
 
         options = _.extend({
             filter: function () { return true; },
+            sorter: function () {},
             header: gt('Add files'),
             primaryButtonText: gt('Save'),
             // cancelButtonText: gt('Cancel'), // really?
@@ -52,7 +53,7 @@ define('io.ox/files/filepicker', [
             toolbar = $('<div class="mobile-toolbar">'),
             navbar = $('<div class="mobile-navbar">'),
             pcContainer = $('<div class="picker-pc-container">'),
-            pages = new PageController({ appname: 'filepicker', toolbar: toolbar, navbar: navbar, container: pcContainer }),
+            pages = new PageController({ appname: 'filepicker', toolbar: toolbar, navbar: navbar, container: pcContainer, disableAnimations: true }),
             containerHeight = $(window).height() - 200,
             hub = _.extend({}, Backbone.Events),
             currentFolder;
@@ -81,7 +82,7 @@ define('io.ox/files/filepicker', [
         pages.getNavbar('fileList').setLeft(gt('Folders'));
 
         pages.getNavbar('fileList').on('leftAction', function () {
-            pages.goBack();
+            pages.goBack({ disableAnimations: true });
         });
 
         Selection.extend(this, filesPane, { markable: true });
@@ -124,6 +125,7 @@ define('io.ox/files/filepicker', [
                 filesPane.append(
                     _.chain(files)
                     .filter(options.filter)
+                    .sortBy(options.sorter)
                     .map(function (file) {
                         var title = (file.filename || file.title),
                             $div = $('<li class="file selectable">').attr('data-obj-id', _.cid(file)).append(
@@ -264,12 +266,9 @@ define('io.ox/files/filepicker', [
                     pcContainer.append(navbar, toolbar);
                     pcContainer.insertAfter('.clearfix', container);
 
-                    pages.getPage('folderTree').on('click', '.folder.selectable', function () {
-                        onFolderChange(tree.selection.get());
-                    });
-
-                    hub.on('folder:changed', function () {
-                        pages.changePage('fileList');
+                    // always change pages on click, do not wait for folder-change
+                    dialog.getBody().on('click', 'li .folder.selectable.open', function () {
+                        pages.changePage('fileList', { disableAnimations: true });
                     });
                 }
 
@@ -286,6 +285,5 @@ define('io.ox/files/filepicker', [
 
         return def.promise();
     };
-
     return FilePicker;
 });

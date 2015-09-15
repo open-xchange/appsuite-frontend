@@ -36,6 +36,7 @@ define('io.ox/core/folder/view', [
             nodes = app.getWindow().nodes,
             sidepanel = nodes.sidepanel,
             hiddenByWindowResize = false,
+            forceOpen = false,
             DEFAULT_WIDTH = 250;
 
         //
@@ -88,6 +89,7 @@ define('io.ox/core/folder/view', [
         app.folderView = {
 
             tree: tree,
+            forceOpen: forceOpen,
 
             isVisible: function () {
                 return visible;
@@ -104,6 +106,7 @@ define('io.ox/core/folder/view', [
 
             hide: function () {
                 visible = false;
+                forceOpen = false;
                 if (!hiddenByWindowResize) storeVisibleState();
                 resetLeftPosition();
                 sidepanel.removeClass('visible').css('width', '');
@@ -178,7 +181,7 @@ define('io.ox/core/folder/view', [
             if (!nodes.outer.is(':visible')) return;
             // respond to current width
             var threshold = app.folderView.resize.autoHideThreshold;
-            if (!hiddenByWindowResize && visible && width <= threshold) {
+            if (!app.folderView.forceOpen && !hiddenByWindowResize && visible && width <= threshold) {
                 app.folderView.hide();
                 hiddenByWindowResize = true;
             } else if (hiddenByWindowResize && width > threshold) {
@@ -230,11 +233,16 @@ define('io.ox/core/folder/view', [
 
         if (_.device('smartphone')) {
             // due to needed support for older androids we use click here
-            tree.$el.on('click', '.folder:not(.virtual)', _.debounce(function (e) {
-                // use default behavior for arrow and virtual folders
+            tree.$el.on('click', '.folder', _.debounce(function (e) {
+                // use default behavior for arrow
                 if ($(e.target).is('.folder-arrow, .fa')) return;
+                // use default behavior for non-selectable virtual folders
+                var targetFolder = $(e.target).closest('.folder'),
+                    selectable = tree.selection && tree.selection.selectableVirtualFolders[targetFolder.data('id')],
+                    mobileSelectMode = app.props.get('mobileFolderSelectMode');
+                if (targetFolder.is('.virtual') && (!selectable || mobileSelectMode === true)) return;
                 // edit mode?
-                if (app.props.get('mobileFolderSelectMode') === true) {
+                if (mobileSelectMode === true) {
                     // ignore selection of non-labels in mobile edit mode
                     if ($(e.target).parent().hasClass('folder-label')) {
                         tree.$dropdown.find('.dropdown-toggle').trigger('click', 'foldertree');

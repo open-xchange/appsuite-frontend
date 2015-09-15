@@ -4,8 +4,8 @@
 <title>Capítulo 7. Calendario</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
-<link rel="up" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Software colaborativo">
+<link rel="up" href="index.html" title="Software colaborativo">
 <link rel="prev" href="ox.appsuite.user.sect.contacts.settings.html" title="6.11. Ajustes de la libreta de direcciones">
 <link rel="next" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. Los componentes de Calendario">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Aviso Legal">
@@ -40,8 +40,9 @@
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.view.html">7.2 Visualización de citas</a></span></dt>
 <dd><dl>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.calendar.html">7.2.1 Visualización de citas en la vista de calendario</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.list.html">7.2.2 Mostrar citas en la vista Lista</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.appointments.html">7.2.3 ¿Cómo se muestran las citas?</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.timezones.html">7.2.2 Visualización de múltiples zonas horarias</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.list.html">7.2.3 Mostrar citas en la vista Lista</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.appointments.html">7.2.4 ¿Cómo se muestran las citas?</a></span></dt>
 </dl></dd>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.attachments.html">7.3 Visualización y guardado de adjuntos de citas</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.add.html">7.4 Creación de citas</a></span></dt>
@@ -58,10 +59,11 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.edit.html">7.6.1 Edición de citas</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.dragndrop.html">7.6.2 Edición de citas con arrastrar y soltar</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.changestatus.html">7.6.3 Modificación del estado de la cita</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.move.html">7.6.4 Traslado de citas a otra carpeta</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.print.html">7.6.5 Impresión de citas</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.delete.html">7.6.6 Borrado de citas</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.multiple.html">7.6.7 Edición de varias citas de una vez</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.colors.html">7.6.4 Uso de colores del calendario</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.move.html">7.6.5 Traslado de citas a otra carpeta</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.print.html">7.6.6 Impresión de citas</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.delete.html">7.6.7 Borrado de citas</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.multiple.html">7.6.8 Edición de varias citas de una vez</a></span></dt>
 </dl></dd>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.search.html">7.7 Búsqueda de citas</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.share.html">7.8 Citas en equipos</a></span></dt>
@@ -72,7 +74,9 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.distributionlist_participants.html">7.8.4 Creación de una lista de distribución a partir de la lista de participantes</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.freebusy.html">7.8.5 Planificación de citas con varios participantes</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.settings.html">7.9 Ajustes del calendario</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.groups.html">7.9 Gestión de grupos</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.resources.html">7.10 Gestión de recursos</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.settings.html">7.11 Ajustes del calendario</a></span></dt>
 </dl>
 </div>
 <a class="indexterm" name="id-1.8.2"></a><a class="indexterm" name="id-1.8.3"></a><a class="indexterm" name="id-1.8.4"></a><a class="indexterm" name="id-1.8.5"></a><div class="concept">
@@ -85,13 +89,15 @@
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.manage.html" title="7.6. Gestión de citas">administrar</a> citas</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.search.html" title="7.7. Búsqueda de citas">buscar</a> citas</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.share.html" title="7.8. Citas en equipos">compartir</a> calendarios con otros usuarios</p></li>
-<li class="listitem"><p>use los <a class="link" href="ox.appsuite.user.sect.calendar.settings.html" title="7.9. Ajustes del calendario">ajustes de <span class="phrase"><span class="guilabel"><strong>Calendario</strong></span></span></a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.groups.html" title="7.9. Gestión de grupos">administrar</a> grupos de participantes</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.resources.html" title="7.10. Gestión de recursos">administrar</a> recursos</p></li>
+<li class="listitem"><p>use los <a class="link" href="ox.appsuite.user.sect.calendar.settings.html" title="7.11. Ajustes del calendario">ajustes de <span class="phrase"><span class="guilabel"><strong>Calendario</strong></span></span></a></p></li>
 </ul></div>
 <p>
   </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.calendar.start"></a><p class="title"><b>Cómo lanzar la aplicación <span class="phrase"><span class="guilabel"><strong>Calendario</strong></span></span>:</b></p>
+<a name="ox.appsuite.user.task.calendar.start"></a><p class="title">Cómo lanzar la aplicación <span class="phrase"><span class="guilabel"><strong>Calendario</strong></span></span>:</p>
 <div class="procedure"><ul class="procedure"><li class="step"><p>Pulse en <span class="phrase"><span class="guimenu"><strong>Calendario</strong></span></span> en la barra de menús.</p></li></ul></div>
 </div>
 </div>

@@ -21,7 +21,8 @@ define('io.ox/backbone/mini-views/help', [], function () {
     // options          {object}    HelpView options (see below)
     //
     // Attributes:
-    //  href            {string or function} The target id of the help site or a function, which should return the help site
+    //  href            {string or function} The target id of the help site or a function, which should return the help site. If it is a function, it can also return an object containing base and target.
+    //  base            {string} The base of the help site
     //  iconClass       {string} These classes are added to the i-tag
     //  tabindex        {string} The tabindex of the link
     //  content         {object or string} The object to display. If unset, the help icon will be displayed
@@ -37,12 +38,18 @@ define('io.ox/backbone/mini-views/help', [], function () {
         },
 
         onClick: function (e) {
-            var href = this.options.href;
+            var href = this.options.href,
+                base = this.options.base;
 
             // if target is dynamic, execute as function
             if (_.isFunction(href)) href = this.options.href();
 
-            window.open('help/l10n/' + ox.language + '/' + href);
+            if (_.isObject(href)) {
+                base = href.base || base;
+                href = href.target || href;
+            }
+
+            window.open(base + '/l10n/' + ox.language + '/' + href);
 
             e.preventDefault();
         },
@@ -51,7 +58,8 @@ define('io.ox/backbone/mini-views/help', [], function () {
             this.options = _.extend({
                 href: 'index.html',
                 tabindex: '1',
-                content: $('<i class="fa fa-question-circle">')
+                content: $('<i class="fa fa-question-circle">'),
+                base: 'help'
             }, options);
 
             if (!_.isString(this.options.content)) {

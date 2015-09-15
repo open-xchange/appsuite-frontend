@@ -29,6 +29,7 @@ define('io.ox/mail/main', [
     'io.ox/core/capabilities',
     'io.ox/core/folder/tree',
     'io.ox/core/folder/view',
+    'io.ox/backbone/mini-views/quota',
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
     'io.ox/mail/actions',
@@ -38,7 +39,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, gt, settings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, QuotaView, gt, settings) {
 
     'use strict';
 
@@ -208,6 +209,10 @@ define('io.ox/mail/main', [
                 container: app.getWindow().nodes.main,
                 classes: 'rightside'
             });
+
+            app.getTour = function () {
+                return { id: 'default/io.ox/mail', path: 'io.ox/tours/mail' };
+            };
         },
 
         /*
@@ -218,11 +223,31 @@ define('io.ox/mail/main', [
             if (_.device('smartphone')) return;
 
             // tree view
-            var tree = new TreeView({ app: app, module: 'mail', contextmenu: true });
+            app.treeView = new TreeView({ app: app, module: 'mail', contextmenu: true });
 
             // initialize folder view
-            FolderView.initialize({ app: app, tree: tree });
+            FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
+        },
+
+        'mail-quota': function (app) {
+
+            if (_.device('smartphone')) return;
+
+            app.treeView.$el.append(
+                new QuotaView({
+                    title: gt('Mail quota'),
+                    renderUnlimited: false,
+                    upsell: {
+                        title: gt('Need more space?'),
+                        requires: 'active_sync || caldav || carddav',
+                        id: 'mail-folderview-quota',
+                        icon: ''
+                    },
+                    upsellLimit: 5 * 1024 * 1024 // default upsell limit of 5 mb
+                })
+                .render().$el
+            );
         },
 
         /*
@@ -308,7 +333,7 @@ define('io.ox/mail/main', [
          * Setup list view
          */
         'list-view': function (app) {
-            app.listView = new MailListView({ app: app, draggable: true, ignoreFocus: true, preserve: true, selectionOptions: { mode: 'special' } });
+            app.listView = new MailListView({ swipe: true, app: app, draggable: true, ignoreFocus: true, preserve: true, selectionOptions: { mode: 'special' } });
             app.listView.model.set({ folder: app.folder.get() });
             app.listView.model.set('thread', true);
             // for debugging
@@ -379,6 +404,11 @@ define('io.ox/mail/main', [
                     // turn off conversation mode for any sort order but date (610)
                     if (value !== 610) app.props.set('thread', false);
                 }
+                if (value === 610 && !app.props.get('thread')) {
+                    // restore thread when it was disabled by force
+                    var options = app.getViewOptions(app.folder.get());
+                    app.props.set('thread', options.threadrestore || false);
+                }
                 // now change sort columns
                 model.set('sort', value);
             });
@@ -397,7 +427,7 @@ define('io.ox/mail/main', [
          * Respond to conversation mode changes
          */
         'change:thread': function (app) {
-            app.props.on('change:thread', function (model, value) {
+            app.props.on('change:thread', function (model, value, opt) {
                 if (app.listView.collection) {
                     app.listView.collection.expired = true;
                 }
@@ -405,6 +435,8 @@ define('io.ox/mail/main', [
                     app.props.set('sort', 610);
                     app.listView.model.set('thread', true);
                 } else {
+                    // remember/remove thread state for restoring
+                    opt.viewOptions = app.props.get('sort') === 610 ? { threadrestore: undefined } : { threadrestore: true };
                     app.listView.model.set('thread', false);
                 }
             });
@@ -421,11 +453,11 @@ define('io.ox/mail/main', [
          * Store view options
          */
         'store-view-options': function (app) {
-            app.props.on('change', _.debounce(function () {
+            app.props.on('change', _.debounce(function (model, options) {
                 if (app.props.get('find-result')) return;
                 var folder = app.folder.get(), data = app.props.toJSON();
                 app.settings
-                    .set(['viewOptions', folder], { sort: data.sort, order: data.order, thread: data.thread })
+                    .set(['viewOptions', folder], _.extend({ sort: data.sort, order: data.order, thread: data.thread }, options.viewOptions || {} ))
                     .set('layout', data.layout)
                     .set('showContactPictures', data.contactPictures)
                     .set('showExactDates', data.exactDates);
@@ -557,7 +589,7 @@ define('io.ox/mail/main', [
                     fromTo = $(app.left[0]).find('.dropdown.grid-options .dropdown-menu [data-value="from-to"] span'),
                     showFrom = account.is('sent|drafts', id);
 
-                app.props.set(options);
+                app.props.set(_.pick(options, 'sort', 'order', 'thread'));
                 app.listView.model.set('folder', id);
                 app.folder.getData();
 
@@ -872,7 +904,7 @@ define('io.ox/mail/main', [
 
                 if (layout !== 'list' && app.props.previousAttributes().layout === 'list' && !app.right.hasClass('preview-visible')) {
                     //listview did not create a detailview for the last mail, it was only selected, so detailview needs to be triggered manually(see bug 33456)
-                    app.listView.selection.triggerChange();
+                    app.listView.selection.selectEvents();
                 }
             };
 
@@ -968,7 +1000,12 @@ define('io.ox/mail/main', [
         'prefetch-compose': function () {
             if (_.device('smartphone')) return;
             setTimeout(function () {
-                require(['io.ox/mail/compose/bundle']);
+                require(['io.ox/mail/compose/main', 'io.ox/mail/compose/bundle'], function () {
+                    require(['io.ox/core/api/snippets'], function (snippets) {
+                        // prefetch signatures
+                        snippets.getAll();
+                    });
+                });
             }, 3000);
         },
 
@@ -995,8 +1032,11 @@ define('io.ox/mail/main', [
             }
 
             api.on('beforedelete', function (e, ids) {
-                if (isSingleThreadMessage(ids, app.listView.selection.get())) return;
-                app.listView.selection.dodge();
+                var selection = app.listView.selection.get();
+                if (isSingleThreadMessage(ids, selection)) return;
+                // looks for intersection
+                ids = _(ids).map(_.cid);
+                if (_.intersection(ids, selection).length) app.listView.selection.dodge();
             });
         },
 
@@ -1005,7 +1045,12 @@ define('io.ox/mail/main', [
             // if a mail will be deleted in detail view, go back one page
             api.on('beforedelete', function () {
                 if (app.pages.getCurrentPage().name === 'detailView') {
-                    app.pages.goBack();
+                    // check if the threadoverview is empty
+                    if (app.props.get('thread') && app.threadView.collection.length === 1) {
+                        app.pages.changePage('listView', { animation: 'slideright' });
+                    } else {
+                        app.pages.goBack();
+                    }
                 }
                 app.listView.selection.selectNone();
             });
@@ -1212,7 +1257,7 @@ define('io.ox/mail/main', [
         // respond to pull-to-refresh in mail list on mobiles
         'on:pull-to-refresh': function (app) {
             if (_.device('!smartphone')) return;
-            ox.on('pull-to-refresh', function () {
+            app.on('pull-to-refresh', function () {
                 api.refresh().always(function () {
                     app.listView.removePullToRefreshIndicator();
                 });

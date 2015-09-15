@@ -26,32 +26,38 @@ define('plugins/portal/quota/register', [
         return api.get();
     },
     availableQuota = function (quota) {
+
         var fields = [];
 
         if (capabilities.has('infostore')) {
             fields.push({
+                module: 'file',
                 quota: quota.file.quota,
                 usage: quota.file.use,
                 name: 'memory-file',
                 title: gt('File quota')
             });
         }
-        fields.push({
-            quota: quota.mail.quota,
-            usage: quota.mail.use,
-            name: 'memory-mail',
-            title: gt('Mail quota')
-        });
 
-        fields.push({
-            quota: quota.mail.countquota,
-            usage: quota.mail.countuse,
-            name: 'mailcount',
-            title: gt('Mail count quota'),
-            sizeFunction: function (name) {
-                return name;
-            }
-        });
+        if (capabilities.has('webmail')) {
+            fields.push({
+                module: 'mail',
+                quota: quota.mail.quota,
+                usage: quota.mail.use,
+                name: 'memory-mail',
+                title: gt('Mail quota')
+            });
+            fields.push({
+                module: 'mail',
+                quota: quota.mail.countquota,
+                usage: quota.mail.countuse,
+                name: 'mailcount',
+                title: gt('Mail count quota'),
+                sizeFunction: function (name) {
+                    return name;
+                }
+            });
+        }
 
         return _(fields).select(function (q) {
             //must check against undefined otherwise 0 values would lead to not displaying the quota. See Bug 25110

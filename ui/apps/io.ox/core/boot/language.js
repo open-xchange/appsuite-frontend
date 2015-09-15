@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util'], function (gettext, util) {
+define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/core/session'], function (gettext, util, session) {
 
     'use strict';
 
@@ -60,36 +60,9 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util'], function
             return selectedLanguage;
         },
 
-        getBrowserLanguage: function () {
-            var language = (navigator.language || navigator.userLanguage).substr(0, 2),
-                languages = ox.serverConfig.languages || {};
-            return _.chain(languages).keys().find(function (id) {
-                return id.substr(0, 2) === language;
-            }).value();
-        },
-
         setDefaultLanguage: function () {
-            // look at navigator.language with en_US as fallback
-            var navLang = (navigator.language || navigator.userLanguage).substr(0, 2),
-                languages = ox.serverConfig.languages || {},
-                lang = 'en_US', id = '', found = false, langCookie = _.getCookie('language');
-            if (langCookie) {
-                return this.change(langCookie);
-            }
-            for (id in languages) {
-                // match?
-                if (id.substr(0, 2) === navLang) {
-                    lang = id;
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                if (!_.isEmpty(languages)) {
-                    lang = _(languages).keys()[0];
-                }
-            }
-            return this.change(lang);
+            var language = _.getCookie('language') || session.getBrowserLanguage();
+            return this.change(language);
         },
 
         changeByUser: function (id) {
@@ -101,23 +74,22 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util'], function
         render: function () {
 
             var lang = ox.serverConfig.languages,
-                node = $('#io-ox-languages');
+                node = $('#io-ox-languages'),
+                count = _.size(lang),
+                maxCount = 30;
 
-            // show languages
-            if (!_.isEmpty(lang)) {
+            // show languages if more than one
+            if (count > 1) {
 
                 util.debug('Render languages', lang);
 
                 var self = this,
-                    maxLang = 30,
-                    defaultLanguage = _.getCookie('language') || this.getBrowserLanguage(),
-                    // Display native select box for languages if there are up to 'maxLang' languages
-                    langSorted = _.toArray(_.invert(lang)).sort(function (a, b) {
-                        return lang[a] <= lang[b] ? -1 : +1;
-                    });
+                    defaultLanguage = _.getCookie('language') || session.getBrowserLanguage(),
+                    languageArray = _.toArray(_.invert(lang)),
+                    toggle, list;
 
-                if (_.size(lang) < maxLang && !_.url.hash('language-select') && _.device('!smartphone')) {
-                    var toggle, list;
+                // Display native select box for languages if there are up to 'maxLang' languages
+                if (count < maxCount && !_.url.hash('language-select') && _.device('!smartphone')) {
 
                     node.append(
                         $('<span class="lang-label" data-i18n="Languages" data-i18n-attr="text,aria-label">'),
@@ -131,10 +103,10 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util'], function
                     );
 
                     // add to column layout
-                    if (_.size(lang) > 15) list.addClass('multi');
+                    if (count > 15) list.addClass('multi');
 
                     list.append(
-                        _(langSorted).map(function (value) {
+                        _(languageArray).map(function (value) {
                             return $('<li role="presentation">').append(
                                 $('<a href="#" role="menuitem">')
                                     .attr({ 'aria-label': lang[value], 'lang': value })
@@ -160,7 +132,7 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util'], function
                                 exports.changeByUser($(this).val());
                             })
                             .append(
-                                _(langSorted).map(function (value) {
+                                _(languageArray).map(function (value) {
                                     return $('<option>')
                                         .attr({
                                             'aria-label': lang[value],

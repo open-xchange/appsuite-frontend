@@ -49,10 +49,16 @@ define('io.ox/core/boot/login/standard', [
                 // store credentials
                 if (!util.isAnonymous()) storeCredentials(form);
                 // clear URL hash
-                _.url.hash({ share: null, target: null, login_type: null });
+                _.url.hash({
+                    share: null,
+                    target: null,
+                    login_type: null,
+                    message: null,
+                    message_type: null
+                });
                 // deep-link?
                 if (data.module && data.folder) {
-                    _.url.hash({ app: 'io.ox/' + data.module, folder: data.folder });
+                    _.url.hash({ app: 'io.ox/' + data.module, folder: data.folder, id: data.item || null });
                 }
                 // success
                 ox.trigger('login:success', data);
@@ -64,6 +70,7 @@ define('io.ox/core/boot/login/standard', [
     };
 
     function login(name, password) {
+
         var options = {
             name: name,
             password: password,
@@ -90,7 +97,7 @@ define('io.ox/core/boot/login/standard', [
     function storeCredentials(form) {
         var location = window.location.pathname.replace(/[^/]+$/, '') + 'busy.html'; // blank does not work in chrome
         util.debug('Store credentials', location);
-        form.find('input[name="location"]').val(location);
+        form.find('input[name="location"]').val(location).removeAttr('disabled');
         form.attr('target', 'store-credentials').submit();
     }
 

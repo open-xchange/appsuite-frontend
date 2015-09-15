@@ -43,6 +43,20 @@
 
         .search-box {
 
+            ::-ms-clear {
+                display: none;
+                width : 0;
+                height: 0;
+            }
+
+            .action.io-ox-busy {
+                position: absolute;
+                line-height: 22px;
+                &:before {
+                    font-size: 16px;
+                }
+            }
+
             .tokenfield-placeholder {
                 padding-left: @placeholder-padding;
             }

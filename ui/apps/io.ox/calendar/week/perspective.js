@@ -234,13 +234,13 @@ define('io.ox/calendar/week/perspective', [
         },
 
         restore: function () {
-            if (this.view.restore) {
+            if (this.view) {
                 this.view.restore();
             }
         },
 
         save: function () {
-            if (this.view.save) {
+            if (this.view) {
                 this.view.save();
             }
         },
@@ -303,6 +303,7 @@ define('io.ox/calendar/week/perspective', [
             // init views
             if (this.views[opt.perspective] === undefined) {
                 this.view = new View({
+                    app: app,
                     collection: this.collection,
                     mode: opt.perspective.split(':')[1],
                     refDate: this.app.refDate,
@@ -437,6 +438,10 @@ define('io.ox/calendar/week/perspective', [
                 this.view.setStartDate(obj.start_date);
                 this.view.trigger('onRefresh');
             }
+        },
+
+        getStartDate: function () {
+            return this.view.startDate.valueOf();
         }
     });
 

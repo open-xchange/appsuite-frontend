@@ -450,12 +450,17 @@ define('io.ox/mail/threadview', [
 
         initialize: function () {
             this.model = null;
+            this.threaded = true;
             this.collection = new backbone.Collection();
 
             this.listenTo(this.collection, {
                 add: this.onAdd,
                 remove: this.onRemove,
                 reset: this.onReset
+            });
+
+            this.listenTo(api.pool.get('detail'), {
+                remove: this.onPoolRemove
             });
 
             this.$messages = $();

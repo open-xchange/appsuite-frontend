@@ -14,8 +14,7 @@
 define('io.ox/core/tk/dialogs', [
     'io.ox/core/event',
     'io.ox/core/extensions',
-    'io.ox/backbone/mini-views/help',
-    'less!io.ox/core/tk/dialog'
+    'io.ox/backbone/mini-views/help'
 ], function (Events, ext, HelpView) {
 
     'use strict';
@@ -107,6 +106,8 @@ define('io.ox/core/tk/dialogs', [
                 for (var prop in self) {
                     delete self[prop];
                 }
+                // remove mobile resize listener
+                $(window).off('resize.mobile-dialog');
                 self.close = self.idle = $.noop;
                 nodes.header = nodes.body = nodes.footer = nodes.underlay = nodes.wrapper = null;
                 nodes.buttons = lastFocus = innerFocus = null;
@@ -180,7 +181,7 @@ define('io.ox/core/tk/dialogs', [
                 switch (e.which || e.keyCode) {
                 case 27:
                     // ESC
-                    if (!isBusy) {
+                    if (!isBusy && self.getBody().find('.open > .dropdown-menu').length === 0) {
                         // prevent other elements to trigger close
                         e.stopPropagation();
                         if (o.easyOut) invoke('cancel');
@@ -235,12 +236,6 @@ define('io.ox/core/tk/dialogs', [
             nodes.popup.addClass(o.addClass);
         }
 
-        if (o.help) {
-            nodes.header.append(new HelpView({
-                href: o.help,
-                tabindex: '-1'
-            }).render().$el);
-        }
         // add event hub
         Events.extend(this);
 
@@ -411,6 +406,14 @@ define('io.ox/core/tk/dialogs', [
                 nodes.header.remove();
             }
 
+            if (o.help) {
+                nodes.header.addClass('help');
+                nodes.header.append(new HelpView({
+                    href: o.help,
+                    tabindex: '1'
+                }).render().$el);
+            }
+
             // show but keep invisible
             // this speeds up calculation of dimenstions
             nodes.underlay.show().addClass('in');
@@ -509,6 +512,15 @@ define('io.ox/core/tk/dialogs', [
             this.trigger('beforeshow');
 
             nodes.popup.removeClass('invisible');
+
+            // make sure, that the maximum height of the dialog does not exceed the screen height
+            function fnMobileMaxHeight() {
+                nodes.body.css('max-height', $('#io-ox-core').height() - 40 - nodes.header.outerHeight() - nodes.footer.outerHeight());
+            }
+            if (_.device('smartphone')) {
+                fnMobileMaxHeight();
+                $(window).on('resize.mobile-dialog', fnMobileMaxHeight);
+            }
 
             // focus button (if available)
             var button = nodes.popup.find('.btn-primary').first().focus();
@@ -816,11 +828,12 @@ define('io.ox/core/tk/dialogs', [
 
                 if (options.closely && _.device('!smartphone')) {
                     if (mode === 'left') {
-                        pct = getPct(e.pageX - 100);
+                        // sidepopup's max-width is 45%, so we limit to 54%
+                        pct = Math.min(54, 100 - getPct(e.pageX - 100));
                         left = '';
-                        right = (100 - pct) + '%';
+                        right = pct + '%';
                     } else {
-                        pct = getPct(e.pageX + 100);
+                        pct = Math.min(54, getPct(e.pageX + 100));
                         left = pct + '%';
                         right = '';
                     }

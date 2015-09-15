@@ -87,7 +87,7 @@ define('io.ox/calendar/view-detail', [
                         // mdash
                         $.txt(' \u00A0 '),
                         // time
-                        util.addTimezoneLabel($('<span class="time">'), baton.data)
+                        util.addTimezoneLabel($('<span class="time">'), baton.data, { placement: 'top' })
                     )
                 );
             }
@@ -376,7 +376,7 @@ define('io.ox/calendar/view-detail', [
         id: 'attachments',
         index: 550,
         draw: function (baton) {
-            var $node = $('<fieldset>').append(
+            var $node = $('<fieldset class="attachments">').append(
                 $('<legend>').addClass('io-ox-label').append(
                     $('<h2>').text(gt('Attachments'))
                 )

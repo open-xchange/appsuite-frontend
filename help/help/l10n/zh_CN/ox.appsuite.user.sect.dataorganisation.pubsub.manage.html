@@ -1,13 +1,13 @@
 <html lang="zh_cn">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>11.3.3. 管理订阅和发布文件夹</title>
+<title>11.4.2. 管理已订阅文件夹</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="">
-<link rel="up" href="ox.appsuite.user.sect.dataorganisation.pubsub.html" title="11.3. 发布与订阅">
-<link rel="prev" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html" title="11.3.2. 发布数据">
-<link rel="next" href="ox.appsuite.user.chap.datainterchange.html" title="Chapter 12. 交换数据">
+<link rel="up" href="ox.appsuite.user.sect.dataorganisation.pubsub.html" title="11.4. 订阅">
+<link rel="prev" href="ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html" title="11.4.1. 订阅数据">
+<link rel="next" href="ox.appsuite.user.chap.datainterchange.html" title="第 12 章 交换数据">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -22,7 +22,7 @@
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only"></span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html">上一页</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html">上一页</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">起始页</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目录</a></li>
 <li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.chap.datainterchange.html">下一页</a></li>
@@ -30,79 +30,73 @@
 </div></nav></div>
 <div class="oxhelp-content">
   <h1 class="sr-only">组织数据</h1>
-<h2 class="sr-only">发布与订阅</h2>
+<h2 class="sr-only">订阅</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.dataorganisation.pubsub.manage"></a>11.3.3. 管理订阅和发布文件夹</h3></div></div></div>
-<a class="indexterm" name="id-1.12.6.7.2"></a><a class="indexterm" name="id-1.12.6.7.3"></a><div class="concept">
-<a name="ox.appsuite.user.concept.pubsub.manage"></a><p>要获得您的订阅和发布数据的概览以及对它们进行管理，您可以：</p>
+<a name="ox.appsuite.user.sect.dataorganisation.pubsub.manage"></a>11.4.2. 管理已订阅文件夹</h3></div></div></div>
+<a class="indexterm" name="id-1.12.7.5.2"></a><a class="indexterm" name="id-1.12.7.5.3"></a><div class="concept">
+<a name="ox.appsuite.user.concept.pubsub.manage"></a><p>要获得您的订阅数据的概览以及对它们进行管理，您可以：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.show" title="如何显示所有订阅或发布：">显示</a>所有订阅和发布</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.activate" title="如何停用过启用发布过订阅：">激活和停用</a>订阅和发布</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.edit" title="如何编辑订阅或发布的设定：">编辑</a>一个发布或订阅的设定</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.remove" title="如何移除发布或订阅：">移除</a>订阅或发布</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.show" title="如何显示所有订阅：">显示</a>所有订阅</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.activate" title="如何停用或启用一个订阅：">停用或启用</a>一个订阅</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.edit" title="如何编辑一个订阅的设置：">编辑</a>一个订阅的设置</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.remove" title="如何删除一个订阅：">移除</a>一个订阅</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.account.edit" title="如何设置一个访问社交网路的户口：">编辑或移除</a>一个社交网络户口</p></li>
 </ul></div>
 <p>
       </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.pubsub.manage.show"></a><p class="title"><b>如何显示所有订阅或发布：</b></p>
+<a name="ox.appsuite.user.task.pubsub.manage.show"></a><p class="title">如何显示所有订阅：</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>单击在菜单栏右边的<span class="guibutton"><strong>系统菜单</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.show"></a><img src="../../images/appsuite_user_icon_settings.png"></span>。单击 <span class="guibutton"><strong>设置</strong></span> 菜单项目。</p></li>
-<li class="step"><p>单击侧栏里的<span class="guibutton"><strong>发布与订阅</strong></span>。</p></li>
+<li class="step"><p>单击在菜单栏右边的<span class="guibutton"><strong>系统菜单</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.show"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span>。单击 <span class="guibutton"><strong>设置</strong></span> 菜单项目。</p></li>
+<li class="step"><p>在边栏里单击<span class="guibutton"><strong>订阅</strong></span>。</p></li>
 <li class="step">
 <p>使用以下功能已显示更多详细信息：</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>要显示发布或订阅的文件夹，单击发布或订阅名称下面的导航路线。</p></li>
-<li class="listitem" style="list-style-type: none"><p>要显示一个发布的网页，单击发布名称下面的链接。</p></li>
-</ul></div>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p>要显示订阅的文件夹，单击订阅名称下面的导航路线。</p></li></ul></div>
 <p>
             </p>
 </li>
 </ol></div>
 <div class="taskrelated">
-          <p><span class="phrase"><strong>提示：</strong></span>您只可以显示一个指定文件夹的信息。为此，单击<span class="guibutton"><strong>发布与订阅</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.show.folder"></a><img src="../../images/appsuite_user_icon_folder_cloud.png"></span>（在文件夹树里一个发布或订阅的文件夹旁边）。</p>
+          <p><span class="phrase"><strong>提示：</strong></span>您只可以显示一个指定文件夹的信息。为此，单击<span class="guibutton"><strong>订阅</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.show.folder"></a><img src="../../images/appsuite_user_icon_folder_cloud.png"></span>（在文件夹树里一个订阅的文件夹旁边）。</p>
         </div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.pubsub.manage.activate"></a><p class="title"><b>如何停用过启用发布过订阅：</b></p>
+<a name="ox.appsuite.user.task.pubsub.manage.activate"></a><p class="title">如何停用或启用一个订阅：</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>单击在菜单栏右边的<span class="guibutton"><strong>系统菜单</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.activate"></a><img src="../../images/appsuite_user_icon_settings.png"></span>。单击 <span class="guibutton"><strong>设置</strong></span> 菜单项目。</p></li>
-<li class="step"><p>单击侧栏里的<span class="guibutton"><strong>发布与订阅</strong></span>。</p></li>
-<li class="step"><p>单击一个发布或订阅旁边显示区域的<span class="guimenu"><strong>停用</strong></span>或<span class="guimenu"><strong>启用</strong></span>。</p></li>
+<li class="step"><p>单击在菜单栏右边的<span class="guibutton"><strong>系统菜单</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.activate"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span>。单击 <span class="guibutton"><strong>设置</strong></span> 菜单项目。</p></li>
+<li class="step"><p>在边栏里单击<span class="guibutton"><strong>订阅</strong></span>。</p></li>
+<li class="step"><p>单击一个订阅旁边显示区域的<span class="guimenu"><strong>停用</strong></span>或<span class="guimenu"><strong>启用</strong></span>。</p></li>
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.pubsub.manage.edit"></a><p class="title"><b>如何编辑订阅或发布的设定：</b></p>
+<a name="ox.appsuite.user.task.pubsub.manage.edit"></a><p class="title">如何编辑一个订阅的设置：</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>单击在菜单栏右边的<span class="guibutton"><strong>系统菜单</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.edit"></a><img src="../../images/appsuite_user_icon_settings.png"></span>。单击 <span class="guibutton"><strong>设置</strong></span> 菜单项目。</p></li>
-<li class="step"><p>单击侧栏里的<span class="guibutton"><strong>发布与订阅</strong></span>。</p></li>
-<li class="step"><p>单击一个发布或订阅显示区域旁边的<span class="guimenu"><strong>编辑</strong></span>。</p></li>
-<li class="step"><p>更改设置。要完成导入过程，单击<span class="guibutton"><strong>发布</strong></span>或<span class="guibutton"><strong>订阅</strong></span>。</p></li>
+<li class="step"><p>单击在菜单栏右边的<span class="guibutton"><strong>系统菜单</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.edit"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span>。单击 <span class="guibutton"><strong>设置</strong></span> 菜单项目。</p></li>
+<li class="step"><p>在边栏里单击<span class="guibutton"><strong>订阅</strong></span>。</p></li>
+<li class="step"><p>在显示区域里一个订阅旁边，单击<span class="guimenu"><strong>编辑</strong></span>。</p></li>
+<li class="step"><p>更改设置。为了完成过程，单击<span class="guibutton"><strong>订阅</strong></span>。</p></li>
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.pubsub.manage.remove"></a><p class="title"><b>如何移除发布或订阅：</b></p>
+<a name="ox.appsuite.user.task.pubsub.manage.remove"></a><p class="title">如何删除一个订阅：</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>单击在菜单栏右边的<span class="guibutton"><strong>系统菜单</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.remove.systemmenue"></a><img src="../../images/appsuite_user_icon_settings.png"></span>。单击 <span class="guibutton"><strong>设置</strong></span> 菜单项目。</p></li>
-<li class="step"><p>单击侧栏里的<span class="guibutton"><strong>发布与订阅</strong></span>。</p></li>
-<li class="step"><p>单击一个发布或订阅显示区域旁边的<span class="guibutton"><strong>删除</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.remove.delete"></a><img src="../../images/appsuite_user_icon_trash.png"></span>。</p></li>
+<li class="step"><p>单击在菜单栏右边的<span class="guibutton"><strong>系统菜单</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.remove.systemmenue"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span>。单击 <span class="guibutton"><strong>设置</strong></span> 菜单项目。</p></li>
+<li class="step"><p>在边栏里单击<span class="guibutton"><strong>订阅</strong></span>。</p></li>
+<li class="step"><p>单击一个订阅显示区域旁边的<span class="guibutton"><strong>删除</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.remove.delete"></a><img src="../../images/appsuite_user_icon_trash.png"></span>。</p></li>
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.pubsub.manage.account.edit"></a><p class="title"><b>如何设置一个访问社交网路的户口：</b></p>
+<a name="ox.appsuite.user.task.pubsub.manage.account.edit"></a><p class="title">如何设置一个访问社交网路的户口：</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>单击在菜单栏右边的<span class="guibutton"><strong>系统菜单</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.pubsub.subscribe.edit"></a><img src="../../images/appsuite_user_icon_settings.png"></span>。单击 <span class="guibutton"><strong>设置</strong></span> 菜单项目。</p></li>
+<li class="step"><p>单击在菜单栏右边的<span class="guibutton"><strong>系统菜单</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.pubsub.subscribe.edit"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span>。单击 <span class="guibutton"><strong>设置</strong></span> 菜单项目。</p></li>
 <li class="step"><p>单击侧栏里的<span class="guibutton"><strong>电子邮件和社交户口</strong></span>。</p></li>
 <li class="step">
 <p>单击在显示区域里一个户口旁边的<span class="guibutton"><strong>编辑</strong></span>。在<span class="guilabel"><strong>户口设置</strong></span>窗口里更改设定。</p>
 <p>要删除一个户口，单击户口旁边的<span class="guibutton"><strong>删除</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.pubsub.manage.account.delete"></a><img src="../../images/appsuite_user_icon_trash.png"></span>。</p>
 </li>
 </ol></div>
-<div class="taskrelated">
-          <p><a class="link" href="ox.appsuite.user.sect.firststeps.socialaccounts.html#ox.appsuite.user.task.socialaccounts.add" title="如何设置一个访问社交网路的户口：">这里</a>可以找到一个设置户口的指南。</p>
-        </div>
 </div>
 </div>
           </div>

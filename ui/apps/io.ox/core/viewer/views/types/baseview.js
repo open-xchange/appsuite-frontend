@@ -72,9 +72,9 @@ define('io.ox/core/viewer/views/types/baseview', [
          *
          * @returns {String} previewURL
          */
-        getPreviewUrl: function () {
+        getPreviewUrl: function (options) {
             if (this.model.isFile()) {
-                return FilesAPI.getUrl(this.model.toJSON(), 'thumbnail', null);
+                return FilesAPI.getUrl(this.model.toJSON(), 'thumbnail', options);
 
             } else if (this.model.isMailAttachment()) {
                 return MailAPI.getUrl(this.model.get('origData'), 'view');

@@ -15,8 +15,7 @@ define('io.ox/backbone/mini-views/quota', [
     'gettext!io.ox/core',
     'io.ox/core/api/quota',
     'io.ox/core/strings',
-    'io.ox/backbone/mini-views/upsell',
-    'less!io.ox/backbone/mini-views/quota'
+    'io.ox/backbone/mini-views/upsell'
 ], function (gt, quotaAPI, strings, UpsellView) {
 
     'use strict';
@@ -25,8 +24,9 @@ define('io.ox/backbone/mini-views/quota', [
 
         tagName: 'div',
 
-        initialize: function (opt) {
-            this.opt = _.extend({
+        initialize: function (options) {
+
+            this.options = _.extend({
                 module: 'mail',
                 quotaField: 'quota',
                 usageField: 'use',
@@ -35,7 +35,7 @@ define('io.ox/backbone/mini-views/quota', [
                     return strings.fileSize(size, 2);
                 },
                 upsellLimit: -1
-            }, opt);
+            }, options);
 
             // ensure classname
             this.$el.addClass('io-ox-quota-view');
@@ -50,39 +50,43 @@ define('io.ox/backbone/mini-views/quota', [
         },
 
         getQuota: function () {
-            var def = new $.Deferred(),
-                self = this;
 
-            if (this.opt.quota && this.opt.usage) {
-                def.resolve({
-                    quota: self.opt.quota,
-                    usage: self.opt.usage
+            var o = this.options,
+                module = o.module,
+                quotaField = o.quotaField,
+                usageField = o.usageField;
+
+            if (o.quota && o.usage) {
+                return $.when({
+                    quota: o.quota,
+                    usage: o.usage
                 });
             } else {
-                quotaAPI.get().done(function (result) {
-                    def.resolve({
-                        quota: result[self.opt.module][self.opt.quotaField],
-                        usage: result[self.opt.module][self.opt.usageField]
-                    });
+                return quotaAPI.get().then(function (result) {
+                    return {
+                        quota: result[module][quotaField],
+                        usage: result[module][usageField]
+                    };
                 });
             }
-
-            return def;
         },
 
         updateQuota: function (e, quotas) {
-            if (quotas[this.opt.module][this.opt.quotaField] && quotas[this.opt.module][this.opt.usageField]) {
-                this.opt.quota = quotas[this.opt.module][this.opt.quotaField];
-                this.opt.usage = quotas[this.opt.module][this.opt.usageField];
-                this.render();
-            }
+            var o = this.options;
+            var data = quotas[o.module];
+            if (!data[o.quotaField] || !data[o.usageField]) return;
+            o.quota = data[o.quotaField];
+            o.usage = data[o.usageField];
+            this.render();
         },
 
         renderTitle: function (opt) {
             var label;
             this.$el.append(
-                label = $('<span class="pull-right gray">'),
-                $('<span class="title">').text(this.opt.title)
+                $('<div class="quota-description">').append(
+                    $('<span class="title pull-left">').text(this.options.title),
+                    label = $('<span class="numbers">')
+                )
             );
 
             if (opt.quota <= 0) {
@@ -93,7 +97,7 @@ define('io.ox/backbone/mini-views/quota', [
                         //#. %1$s is the storagespace in use
                         //#. %2$s is the max storagespace
                         //#, c-format
-                        gt('%1$s of %2$s', this.opt.sizeFunction(opt.usage), this.opt.sizeFunction(opt.quota)) :
+                        gt('%1$s of %2$s', this.options.sizeFunction(opt.usage), this.options.sizeFunction(opt.quota)) :
                         //#. Quota maxed out; 100%
                         gt('100%')
                 );
@@ -101,10 +105,12 @@ define('io.ox/backbone/mini-views/quota', [
         },
 
         renderBar: function (opt) {
+
             // do not render the bar with unlimited quota
             if (opt.quota <= 0) return;
 
-            var width = Math.min(100, Math.round(opt.usage / opt.quota * 100));
+            // max is 100%, of course; visual minimum is 5%
+            var width = Math.max(5, Math.min(100, Math.round(opt.usage / opt.quota * 100)));
 
             if (!opt.quota) width = 100;
             if (!opt.usage) width = 0;
@@ -119,11 +125,12 @@ define('io.ox/backbone/mini-views/quota', [
         },
 
         renderUpsell: function (opt) {
-            // only draw when upsell is activated
-            if (!this.opt.upsell) return;
 
-            var view = new UpsellView(this.opt.upsell),
-                upsellLimit = view.opt.upsellLimit || this.opt.upsellLimit;
+            // only draw when upsell is activated
+            if (!this.options.upsell) return;
+
+            var view = new UpsellView(this.options.upsell),
+                upsellLimit = view.opt.upsellLimit || this.options.upsellLimit;
 
             // unlimited quota?
             if (upsellLimit <= 0) return;
@@ -141,7 +148,7 @@ define('io.ox/backbone/mini-views/quota', [
                 // do not render if quota fields are undefined
                 if (_.isUndefined(result.quota) || _.isUndefined(result.usage)) return;
                 // do not render when quota is unlimited
-                if (!self.opt.renderUnlimited && result.quota <= 0) return;
+                if (!self.options.renderUnlimited && result.quota <= 0) return;
 
                 self.$el.empty();
 

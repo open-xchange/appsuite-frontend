@@ -11,9 +11,25 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/links', [], function () {
+define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
 
     'use strict';
+
+    // open app with given folder
+    function openFolder(app, id) {
+        // open files app
+        require(['io.ox/core/folder/api'], function (api) {
+            api.get(id).then(
+                function () {
+                    ox.launch(app, { folder: id }).done(function () {
+                        // set proper folder
+                        if (this.folder.get() !== id) this.folder.set(id);
+                    });
+                },
+                yell
+            );
+        });
+    }
 
     //
     // Generic app
@@ -26,7 +42,12 @@ define('io.ox/core/links', [], function () {
                 { action: 'load', file: { folder_id: data.folder, id: data.id }} :
                 _(data).pick('folder', 'folder_id', 'id');
 
-        ox.launch(data.app + '/main', options);
+        ox.launch(data.app + '/main', options).done(function () {
+            // special handling for settings (bad, but apparently solved differently)
+            if (_.isFunction(this.setSettingsPane)) this.setSettingsPane(options);
+            // set proper folder
+            else if (data.folder && this.folder.get() !== data.folder) this.folder.set(data.folder);
+        });
     });
 
     //
@@ -36,19 +57,19 @@ define('io.ox/core/links', [], function () {
         e.preventDefault();
         var data = $(this).data();
         if (data.id) {
-            // open file in side-popup
+            // open file in viewer
             require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (Viewer, api) {
-                api.get(_.cid(data.id)).done(function (data) {
-                    var viewer = new Viewer();
-                    viewer.launch({ files: [data] });
-                });
+                api.get(_(data).pick('folder', 'id')).then(
+                    function sucess(data) {
+                        var viewer = new Viewer();
+                        viewer.launch({ files: [data] });
+                    },
+                    // fail
+                    yell
+                );
             });
         } else {
-            // open files app
-            ox.launch('io.ox/files/main', { folder: data.folder }).done(function () {
-                // set proper folder
-                if (this.folder.get() !== data.folder) this.folder.set(data.folder);
-            });
+            openFolder('io.ox/files/main', data.folder);
         }
     });
 
@@ -85,6 +106,8 @@ define('io.ox/core/links', [], function () {
                     });
                 });
             });
+        } else {
+            openFolder('io.ox/calendar/main', data.folder);
         }
     });
 
@@ -137,7 +160,7 @@ define('io.ox/core/links', [], function () {
         ox.registry.call('mail-compose', 'compose', {
             to: [[name, address]],
             subject: params.subject || '',
-            attachments: [{ content: params.body || '' }]
+            attachments: params.body ? [{ content: params.body || '' }] : undefined
         });
     });
 });

@@ -87,12 +87,44 @@
         margin: 0 1em 0 0;
     }
 }
+// under 700 we can go bigger because the listview is spread over the whole screen
+@media (max-width: 700px) {
+    .vgrid-cell.tasks .title {
+        width: 325px;
+        &.not-fulltime {
+            width: 285px;
+        }
+    }
+}
+
+@media (max-width: 500px) {
+    .vgrid-cell.tasks .title {
+        width: 225px;
+        &.not-fulltime {
+            width: 185px;
+        }
+    }
+}
+
+@media (max-width: 400px) {
+    .vgrid-cell.tasks .title {
+        width: 190px;
+        &.not-fulltime {
+            width: 150px;
+        }
+    }
+}
 
 @media (min-width: 1300px) {
     .vgrid-cell.tasks .title {
         width: 195px;
         &.not-fulltime {
             width: 155px;
+        }
+    }
+    .tasks-detailview {
+        .dl-horizontal dt {
+            width: 250px;
         }
     }
 }
@@ -115,6 +147,10 @@
     }
 }
 
+.task-detail-container {
+    padding: 16px 32px;
+}
+    
 .tasks-detailview {
 
     .io-ox-inline-links:first-child {
@@ -123,7 +159,8 @@
 
     header {
 
-       margin-bottom: 26px;
+       margin-bottom: 15px;
+       padding-top: 1px;
 
        &:after {
             content: "\00A0";
@@ -136,11 +173,15 @@
     }
 
     .title {
-        margin-top: 0;
+        margin: 0 0 16px 0;
+        font-size: 24px;
     }
 
     .note {
-    	margin-bottom: 0.5em;
+        border-top: 1px solid #ddd;
+        padding-top: 15px;
+        line-height: 24px;
+    	margin-bottom: 16px;
     	white-space: pre-wrap;
 		word-wrap: break-word;
 		cursor: text;
@@ -150,11 +191,18 @@
         margin-left: 2em;
         display: inline;
         float: right;
+        line-height: 20px;
+
+        .state {
+            margin-bottom: 3px;
+            margin-top: 1px;
+        }
     }
 
     .state, .end-date, .alarm-date, .task-progress {
     	float: right;
     	clear: both;
+    	margin-bottom: 4px;
     }
 
     .attachments {
@@ -164,13 +212,17 @@
 
     .attachments-container {
 
-        margin-top: 0.8em;
-        margin-bottom: 0.5em;
+        border-top: 1px solid #ddd;
+        padding-top: 15px;
+        margin-bottom: 7px;
         font-weight: 300;
+        line-height: 24px;
 
         .dropdown {
             margin-right: 1em;
             display: inline-block;
+            padding-bottom: 2px;
+            line-height: 22px;
         }
 
     }
@@ -181,24 +233,26 @@
     }
 
     .task-details {
-        margin: 1em 0 1em 0;
+        padding: 7px 0 0 0;
+        border-top: 1px solid #ddd;
+        margin: 0 0 8px 0;
     }
 
     .detail-label {
 
         cursor: default;
         color: #aaa;
-        margin-right: 0.5em;
         text-align: left;
-        width: 220px;
-
+        padding-top: 8px;
+        line-height: 24px;
         html.high-contrast & {
             color: @hc-gray;
         }
     }
 
     .detail-value {
-        margin-right: 1em;
+        line-height: 24px;
+        padding-top: 8px;
     }
 
     .private-flag {
@@ -241,8 +295,9 @@
 
     .tasks-detailview {
 
-        header {
-            margin-bottom: 13px;
+        .title {
+            margin: 0;
+            padding-bottom: 1px;
         }
 
         .detail-label, .detail-value, .participants-table-confirmmessage {
@@ -252,22 +307,17 @@
         .detail-label {
             margin-bottom: 0;
         }
+        .detail-value {
+            padding-top: 0;
+        }
 
         .io-ox-inline-links:first-child {
             margin: 0;
             padding: 15px 0;
         }
 
-        .task-details {
-            margin: 1em 0 0 0;
-        }
-
         .participants-table-confirmmessage {
             padding-left: 0;
-        }
-
-        .attachments-container .dropdown {
-            margin-top: 5px;
         }
 
         .info-panel {
@@ -282,7 +332,7 @@
     }
 
     .task-detail-container {
-        padding: 13px 13px 0 13px;
+        padding: 16px 16px 0 16px;
     }
 
 }

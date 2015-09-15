@@ -183,17 +183,14 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
 
         onOpen: function () {
             this.$('.sidebar-panel-heading').busy();
-            FilesAPI.versions.load(this.model.toJSON())
-            .fail(function (err) {
-                console.error('FilesAPI.versions.load()', 'error', err);
+            // loading versions will trigger 'change:version' which in turn renders the version list
+            FilesAPI.versions.load(this.model.toJSON(), { cache: false }).fail(function (error) {
+                if (ox.debug) console.error('FilesAPI.versions.load()', 'error', error);
             });
-            this.renderVersions();
         },
 
         render: function () {
-            if (!this.model) {
-                return this;
-            }
+            if (!this.model) return this;
             var count = this.model.get('number_of_versions') || 0;
             this.setPanelHeader(gt('Versions (%1$d)', _.noI18n(count)));
             // show the versions panel only if we have at least 2 versions
@@ -212,9 +209,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
          * Destructor function of this view.
          */
         disposeView: function () {
-            if (this.model) {
-                this.model = null;
-            }
+            this.model = null;
         }
     });
 

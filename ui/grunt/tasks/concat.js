@@ -35,6 +35,7 @@ module.exports = function (grunt) {
                             'build/static/3rd.party/moment/moment.js',
                             'build/static/3rd.party/moment/moment-timezone-with-data.js',
                             'build/static/3rd.party/moment/moment-interval.js',
+                            'build/static/3rd.party/velocity/velocity.min.js',
                             'bower_components/requirejs/require.js',
                             'lib/require-fix.js',
                             'lib/modernizr.js',
@@ -86,6 +87,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/boot/language.js',
                             'apps/io.ox/core/boot/load.js',
                             'apps/io.ox/core/boot/util.js',
+                            'apps/io.ox/core/boot/support.js',
                             'apps/io.ox/core/boot/login/auto.js',
                             'apps/io.ox/core/boot/login/standard.js',
                             'apps/io.ox/core/boot/login/token.js',
@@ -118,6 +120,8 @@ module.exports = function (grunt) {
                     {
                         src: [
                             // 2nd wave
+                            'apps/io.ox/find/main.js',
+                            'apps/io.ox/find/view-placeholder.js',
                             'apps/io.ox/core/desktop.js',
                             'apps/io.ox/core/api/apps.js',
                             'apps/io.ox/core/extPatterns/stage.js',
@@ -129,6 +133,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/relogin.js',
                             'apps/io.ox/core/uuids.js',
                             'apps/io.ox/core/tk/wizard.js',
+                            'apps/io.ox/tours/get-started.js',
                             // 3rd wave
                             'apps/io.ox/core/extPatterns/links.js',
                             'apps/io.ox/core/adaptiveLoader.js',
@@ -150,6 +155,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/folder/favorites.js',
                             'apps/io.ox/core/folder/view.js',
                             'apps/io.ox/core/folder/extensions.js',
+                            'apps/io.ox/core/folder/folder-color.js',
                             // defaults
                             'apps/io.ox/core/settings/defaults.js',
                             'apps/io.ox/core/settingOptions/settings/defaults.js',
@@ -158,11 +164,20 @@ module.exports = function (grunt) {
                             'apps/io.ox/calendar/settings/defaults.js',
                             'apps/io.ox/tasks/settings/defaults.js',
                             'apps/io.ox/files/settings/defaults.js',
+                            // metrics
+                            'apps/io.ox/metrics/main.js',
+                            'apps/io.ox/metrics/util.js',
+                            'apps/io.ox/metrics/extensions.js',
+                            'apps/io.ox/metrics/adapters/default.js',
+                            'apps/io.ox/metrics/adapters/console.js',
                             // 4th wave
                             'apps/io.ox/core/collection.js',
                             'apps/io.ox/core/extPatterns/actions.js',
                             'apps/io.ox/core/api/account.js',
                             'apps/io.ox/core/tk/selection.js',
+                            'apps/io.ox/core/tk/visibility-api-util.js',
+                            'apps/io.ox/core/desktopNotifications.js',
+                            'apps/io.ox/core/notifications/badgeview.js',
                             // core
                             'apps/io.ox/core/main.js',
                             'apps/io.ox/core/links.js',
@@ -203,6 +218,9 @@ module.exports = function (grunt) {
                             'apps/io.ox/backbone/mini-views/abstract.js',
                             'apps/io.ox/backbone/mini-views/dropdown.js',
                             'apps/io.ox/backbone/mini-views/toolbar.js',
+                            'apps/io.ox/backbone/mini-views/help.js',
+                            'apps/io.ox/backbone/mini-views/upsell.js',
+                            'apps/io.ox/backbone/mini-views/quota.js',
                             'apps/io.ox/core/tk/upload.js',
                             'apps/io.ox/core/dropzone.js',
                             // mail app - 3rd wave
@@ -210,6 +228,10 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/attachments/backbone.js',
                             'apps/io.ox/core/attachments/view.js',
                             'apps/io.ox/core/api/user.js',
+                            'apps/io.ox/core/api/group.js',
+                            'apps/io.ox/core/api/resource.js',
+                            'apps/io.ox/core/api/quota.js',
+                            'apps/io.ox/core/api/filestorage.js',
                             'apps/io.ox/contacts/util.js',
                             'apps/l10n/ja_JP/io.ox/collation.js',
                             'apps/io.ox/core/tk/list-selection.js',
@@ -217,6 +239,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/mail/detail/content.js',
                             'apps/io.ox/core/emoji/util.js',
                             'apps/io.ox/mail/detail/links.js',
+                            'apps/io.ox/core/download.js',
                             // mail app - main
                             'apps/io.ox/mail/main.js'
                         ],
@@ -256,14 +279,14 @@ module.exports = function (grunt) {
                 files: [
                     {
                         src: [
-                            'bower_components/tinymce-dist/tinymce.min.js',
+                            'bower_components/tinymce-dist/tinymce.jquery.min.js',
                             'lib/tinymce/themes/unobtanium/theme.min.js',
-                            'bower_components/tinymce-dist/plugins/{autolink,link,paste,textcolor}/plugin.min.js',
+                            'bower_components/tinymce-dist/plugins/{autolink,link,paste,textcolor,lists}/plugin.min.js',
                             'lib/tinymce/plugins/oximage/plugin.min.js',
                             'lib/tinymce/plugins/oxpaste/plugin.min.js',
                             'lib/tinymce/plugins/oxdrop/plugin.min.js'
                         ],
-                        dest: 'build/apps/3rd.party/tinymce/tinymce.min.js',
+                        dest: 'build/apps/3rd.party/tinymce/tinymce.jquery.min.js',
                         nonull: true
                     }
                 ]
@@ -285,19 +308,45 @@ module.exports = function (grunt) {
             },
             compose: {
                 options: {
+                    // jquery-min doesn't work because it messes around with anonymous define()
                     banner: 'define("io.ox/mail/compose/bundle", [], function () {\n\n' +
-                                '"use strict";\n\n',
-                    footer: '});\n'
+                            '  "use strict";\n' +
+                            '\n' +
+                            '  var _amd = define.amd;\n' +
+                            '  delete define.amd;\n' +
+                            '\n',
+                    footer: '\n' +
+                            '  define.amd = _amd;\n' +
+                            '});\n\n' +
+                            'define("static/3rd.party/typeahead.js/dist/typeahead.jquery.js", _.noop);\n' +
+                            'define("static/3rd.party/jquery-ui.min.js", _.noop);\n' +
+                            'define("static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js", _.noop);\n'
                 },
                 files: [
                     {
                         src: [
                             'apps/io.ox/mail/compose/view.js',
                             'apps/io.ox/mail/compose/model.js',
+                            'apps/io.ox/mail/compose/extensions.js',
+                            'apps/io.ox/mail/sender.js',
+                            'apps/io.ox/backbone/mini-views/common.js',
+                            'apps/io.ox/core/tk/tokenfield.js',
+                            'apps/io.ox/core/tk/typeahead.js',
+                            'apps/io.ox/participants/model.js',
+                            'apps/io.ox/participants/views.js',
+                            'apps/io.ox/core/api/autocomplete.js',
+                            'apps/io.ox/contacts/model.js',
+                            'apps/io.ox/backbone/modelFactory.js',
+                            'apps/io.ox/backbone/validation.js',
+                            'apps/io.ox/backbone/basicModel.js',
+                            'apps/io.ox/settings/util.js',
                             'apps/io.ox/core/api/snippets.js',
                             'apps/io.ox/core/tk/contenteditable-editor.js',
                             'apps/io.ox/core/tk/textproc.js',
-                            'bower_components/tinymce-dist/jquery.tinymce.min.js'
+                            'bower_components/tinymce-dist/jquery.tinymce.min.js',
+                            'build/static/3rd.party/jquery-ui.min.js',
+                            'build/static/3rd.party/typeahead.js/dist/typeahead.jquery.js',
+                            'build/static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js'
                         ],
                         dest: 'build/apps/io.ox/mail/compose/bundle.js',
                         nonull: true
@@ -334,6 +383,34 @@ module.exports = function (grunt) {
                             'apps/io.ox/find/view.js'
                         ],
                         dest: 'build/apps/io.ox/find/bundle.js',
+                        nonull: true
+                    }
+                ]
+            },
+            emoji: {
+                options: {
+                    banner: 'define.async("io.ox/emoji/bundle", [], function () {\n\n' +
+                                '"use strict";\n\n',
+                    /* define 2nd wave that can not be included directly, so should need 2 requests to load emoji feature completely */
+                    footer: '\n\nreturn require([' +
+                            '"css!3rd.party/emoji/emoji.css",' +
+                            '"less!io.ox/emoji/emoji",' +
+                            '"gettext!io.ox/mail/emoji",' +
+                            '"raw!io.ox/emoji/unified.json",' +
+                            '"raw!io.ox/emoji/softbank.json",' +
+                            '"raw!io.ox/emoji/japan_carrier.json",' +
+                            '"3rd.party/emoji/emoji"' +
+                            ']).then(function () { return require(["io.ox/emoji/main"]); });\n});\n'
+                },
+                files: [
+                    {
+                        src: [
+                            'apps/io.ox/mail/emoji/settings/defaults.js',
+                            'apps/io.ox/emoji/categories.js',
+                            'apps/io.ox/emoji/conversions.js',
+                            'apps/io.ox/emoji/main.js'
+                        ],
+                        dest: 'build/apps/io.ox/emoji/bundle.js',
                         nonull: true
                     }
                 ]

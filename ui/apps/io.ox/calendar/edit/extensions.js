@@ -27,8 +27,10 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/core/capabilities',
     'io.ox/core/folder/picker',
     'io.ox/core/folder/api',
-    'settings!io.ox/calendar'
-], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, AddParticipant, pViews, capabilities, picker, folderAPI, settings) {
+    'settings!io.ox/calendar',
+    'settings!io.ox/core',
+    'less!io.ox/calendar/style'
+], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, AddParticipant, pViews, capabilities, picker, folderAPI, settings, coreSettings) {
 
     'use strict';
 
@@ -217,7 +219,7 @@ define('io.ox/calendar/edit/extensions', [
                     display: baton.model.get('full_time') ? 'DATE' : 'DATETIME',
                     attribute: 'start_date',
                     label: gt('Starts on'),
-                    timezoneButton: settings.get('features/changeTimezone', false),
+                    timezoneButton: true,
                     timezoneAttribute: 'timezone'
                 }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
@@ -239,12 +241,31 @@ define('io.ox/calendar/edit/extensions', [
                     display: baton.model.get('full_time') ? 'DATE' : 'DATETIME',
                     attribute: 'end_date',
                     label: gt('Ends on'),
-                    timezoneButton: settings.get('features/changeTimezone', false),
+                    timezoneButton: true,
                     timezoneAttribute: 'endTimezone'
                 }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
                 }).on('click:timezone', openTimezoneDialog, baton).render().$el
             );
+        }
+    });
+
+    // timezone hint
+    point.extend({
+        id: 'timezone-hint',
+        index: 550,
+        nextTo: 'end-date',
+        render: function () {
+            var appointmentTimezoneAbbr = moment.tz(this.model.get('timezone')).zoneAbbr(),
+                userTimezoneAbbr = moment.tz(coreSettings.get('timezone')).zoneAbbr();
+
+            if (appointmentTimezoneAbbr === userTimezoneAbbr) return;
+
+            this.$el.append($('<div class="col-xs-12 help-block">').text(
+                //#. %1$s timezone abbreviation of the appointment
+                //#. %2$s default user timezone
+                gt('The timezone of this appointment (%1$s) differs from your default timezone (%2$s).', appointmentTimezoneAbbr, userTimezoneAbbr)
+            ));
         }
     });
 

@@ -1,0 +1,48 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Richard Petersen <richard.petersen@open-xchange.com>
+ */
+
+.io-ox-quota-view {
+
+    font-size: 13px;
+    line-height: 16px;
+    font-weight: 300;
+    padding-bottom: 16px;
+
+    .folder-tree & {
+        padding: 0 16px 16px 40px;
+    }
+
+    .quota-description {
+        // use display: table (or float: left) to avoid inner margin issues
+        display: table;
+        width: 100%;
+        margin: 3px 0 4px 0;
+    }
+
+    .title {
+        white-space: nowrap;
+        display: inline-block;
+        margin-right: 8px;
+    }
+
+    .numbers {
+        float: right;
+    }
+
+    .progress {
+        clear: both;
+        margin: 0;
+        height: 8px;
+        background-color: #ddd;
+    }
+}
