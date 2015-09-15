@@ -18,14 +18,14 @@ define('io.ox/backbone/mini-views/listutils', [], function () {
 var appendIconText = function (target, text, type, activeColor) {
     if (type === 'color') {
         if (_.device('smartphone')) {
-            return $(target).addClass('widget-color-' + activeColor).append($('<i class="fa fa-tint">').css('font-size', '20px'));
+            return $(target).empty().addClass('widget-color-' + activeColor).append($('<i class="fa fa-tint">').css('font-size', '20px'));
         } else {
             return target.text(text);
         }
     } else {
         if (_.device('smartphone')) {
             var iconClass = (type === 'edit' ? 'fa fa-pencil' : 'fa fa-power-off');
-            return $(target).append($('<i>').addClass(iconClass).css('font-size', '20px'));
+            return $(target).empty().append($('<i>').addClass(iconClass).css('font-size', '20px'));
         } else {
             return target.text(text);
         }
