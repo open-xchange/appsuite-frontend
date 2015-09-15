@@ -165,14 +165,6 @@ define('io.ox/mail/accounts/settings', [
             );
         },
 
-        drawMessage = function (alertPlaceholder, message) {
-            alertPlaceholder.find('.notice').remove();
-            alertPlaceholder.find('.alert').remove();
-            alertPlaceholder.append(
-                $('<div>').addClass('alert alert-success').text(message)
-            );
-        },
-
         drawMessageWarning = function (alertPlaceholder, message) {
             alertPlaceholder.find('.notice').remove();
             alertPlaceholder.find('.alert').remove();
@@ -316,26 +308,7 @@ define('io.ox/mail/accounts/settings', [
         },
 
         successDialog = function () {
-
-            var alertPlaceholder = $('<div>');
-
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                var successDialogbox = new dialogs.ModalDialog({
-                        width: 400,
-                        async: true
-                    });
-                successDialogbox.header()
-                .append(
-                    alertPlaceholder
-                )
-                .addButton('cancel', gt('Close'), 'cancel', { tabIndex: 1 })
-                .show(function () {
-                    successDialogbox.getFooter().find('.btn').addClass('closebutton');
-                    var message = gt('Account added successfully');
-                    drawMessage(alertPlaceholder, message);
-                    alertPlaceholder.find('.alert-success').attr('id', 'dialog-title');
-                });
-            });
+            notifications.yell('success', gt('Account added successfully'));
         },
 
         failDialog = function (message) {
