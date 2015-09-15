@@ -269,10 +269,8 @@ define('io.ox/mail/toolbar',
             app.updateToolbar = _.queued(function (list) {
                 if (!list) return $.when();
                 var isThread = this.props.get('thread');
-
                 // resolve thread
                 list = api.resolve(list, isThread);
-
                 // extract single object if length === 1
                 list = list.length === 1 ? list[0] : list;
                 // draw toolbar

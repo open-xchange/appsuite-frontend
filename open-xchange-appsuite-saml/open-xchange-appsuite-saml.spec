@@ -45,6 +45,8 @@ if [ -x %{update} ]; then %{update}; fi
 /opt/open-xchange/appsuite
 
 %changelog
+* Tue Sep 08 2015 Francisco Laguna <francisco.laguna@open-xchange.com>
+Build for patch 2015-09-14 (2732)
 * Tue Aug 18 2015 Francisco Laguna <francisco.laguna@open-xchange.com>
 Build for patch 2015-08-24 (2674)
 * Thu Aug 06 2015 Francisco Laguna <francisco.laguna@open-xchange.com>

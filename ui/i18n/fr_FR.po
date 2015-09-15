@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-04-23 10:21+0100\n"
+"PO-Revision-Date: 2015-09-02 10:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr_FR\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 1.7.7\n"
 
 #: apps/io.ox/backbone/basicModel.js:130 module:io.ox/core
 msgid "Invalid data"
@@ -5876,7 +5876,7 @@ msgstr "Brouillons"
 #: apps/io.ox/mail/accounts/view-form.js:549 module:io.ox/settings
 msgctxt "folder"
 msgid "Spam"
-msgstr "Pourriel"
+msgstr "Spam"
 
 #. Archive folder
 #: apps/io.ox/mail/accounts/view-form.js:551 module:io.ox/settings
@@ -6032,12 +6032,12 @@ msgstr "Marquer comme lu"
 #: apps/io.ox/mail/actions.js:967 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:84
 msgid "Mark as spam"
-msgstr "Marquer comme pourriel"
+msgstr "Marquer comme spam"
 
 #: apps/io.ox/mail/actions.js:977 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:91
 msgid "Not spam"
-msgstr "Pas du pourriel"
+msgstr "Pas du spam"
 
 #: apps/io.ox/mail/actions.js:988 module:io.ox/mail
 msgid "Send new mail"
@@ -6179,7 +6179,7 @@ msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
 "Le préchargement d'images externes a été bloqué pour vous protéger "
-"d'éventuels pourriels."
+"d'éventuels spams."
 
 #: apps/io.ox/mail/common-extensions.js:498 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
