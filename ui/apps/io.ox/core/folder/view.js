@@ -238,10 +238,11 @@ define('io.ox/core/folder/view', [
                 if ($(e.target).is('.folder-arrow, .fa')) return;
                 // use default behavior for non-selectable virtual folders
                 var targetFolder = $(e.target).closest('.folder'),
-                    selectable = tree.selection && tree.selection.selectableVirtualFolders[targetFolder.data('id')];
-                if (targetFolder.is('.virtual') && !selectable) return;
+                    selectable = tree.selection && tree.selection.selectableVirtualFolders[targetFolder.data('id')],
+                    mobileSelectMode = app.props.get('mobileFolderSelectMode');
+                if (targetFolder.is('.virtual') && (!selectable || mobileSelectMode === true)) return;
                 // edit mode?
-                if (app.props.get('mobileFolderSelectMode') === true) {
+                if (mobileSelectMode === true) {
                     // ignore selection of non-labels in mobile edit mode
                     if ($(e.target).parent().hasClass('folder-label')) {
                         tree.$dropdown.find('.dropdown-toggle').trigger('click', 'foldertree');
