@@ -423,7 +423,10 @@ define('io.ox/search/model', [
             },
             isMandatory: function (key) {
                 if (options.mandatory === undefined) return false;
-                return (options.mandatory[key] || []).indexOf(this.getModule()) >= 0;
+                var module = this.getModule();
+                // TODO: remove workaround when we use a unque identified for drive in frontend/backend
+                if (module === 'files') module = 'drive';
+                return (options.mandatory[key] || []).indexOf(module) >= 0;
             },
             setItems: function (data, timestamp) {
                 var application = this.getApp(),
