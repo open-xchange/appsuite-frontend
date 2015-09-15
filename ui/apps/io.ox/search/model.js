@@ -168,6 +168,13 @@ define('io.ox/search/model', [
         this.set('poollist', list);
     };
 
+    function isFolderSet (model) {
+        var folder = model.get('pool').folder,
+            value = folder ? folder.values.custom.custom : undefined,
+            disabled = model.get('pooldisabled').folder;
+        return (value || disabled);
+    }
+
     factory = new ModelFactory({
         ref: 'io.ox/search/model',
         api: api,
@@ -390,12 +397,16 @@ define('io.ox/search/model', [
             },
             ensure: function () {
                 var self = this,
-                    missingFolder = !this.get('pool').folder && !this.get('pooldisabled').folder,
+                    missingFolder = !isFolderSet(self),
                     def = missingFolder ? util.getFirstChoice(this) : $.Deferred().resolve({});
                 return def.then(function (data) {
                     data = data || {};
-                    if (!self.get('pool').folder && !self.get('pooldisabled').folder)
-                        self.add('folder', 'custom', data);
+                    if (!isFolderSet(self)) {
+                        if (self.get('pool').folder)
+                            self.update('folder', 'custom', data);
+                        else
+                            self.add('folder', 'custom', data);
+                    }
                 }, function () {
                     return {
                         message: error.virtual
