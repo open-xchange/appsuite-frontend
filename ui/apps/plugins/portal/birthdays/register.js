@@ -16,7 +16,8 @@ define('plugins/portal/birthdays/register', [
     'io.ox/contacts/util',
     'gettext!plugins/portal',
     'settings!io.ox/core',
-    'less!plugins/portal/birthdays/style'
+    'less!plugins/portal/birthdays/style',
+    'io.ox/core/tk/flag-picker'
 ], function (ext, api, util, gt, settings) {
 
     'use strict';
