@@ -130,14 +130,20 @@ define('io.ox/find/view-facets', [
         openFolderDialog: function () {
             var self = this,
                 is = self.is;
+
+            function isAccount (data) {
+                var account = self.model.manager.get('account');
+                if (!account) return true;
+                return data.account_id === account.getValue().getOption().value;
+            }
+
             require(['io.ox/core/folder/picker'], function (picker) {
                 var manager = self.model.manager,
                     facet = manager.get('folder'),
                     type = self.baton.app.getModuleParam(),
                     module = (type === 'files' ? 'infostore' : type),
                     value = facet.getValue(),
-                    id = value.getOption().value,
-                    account = self.model.manager.get('account').getValue().getOption().value;
+                    id = value.getOption().value;
 
                 picker({
                     folder: id || api.getDefaultFolder(module),
@@ -158,7 +164,7 @@ define('io.ox/find/view-facets', [
                             });
                     },
                     disable: function (data) {
-                        return !is('readable', data) || api.is('virtual', data) || data.account_id !== account;
+                        return !is('readable', data) || api.is('virtual', data) || !isAccount(data);
                     }
                 });
             });
