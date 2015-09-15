@@ -36,8 +36,7 @@ define('io.ox/search/main', [
         index: 300,
         id: 'mandatory',
         config: function (data) {
-            data.mandatory = data.mandatory || {};
-            data.mandatory.folder = settings.get('search/mandatory/folder', ['mail', 'files']);
+            data.mandatory = data.mandatory || settings.get('search/mandatory', {});
         }
     });
 
