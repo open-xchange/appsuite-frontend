@@ -316,9 +316,12 @@ define('io.ox/find/view-tokenfield', [
         },
 
         isEmpty: function () {
-            var none = !this.model.manager.getActive().length;
+            // get active facets and filter the mandatory
+            var active = this.model.manager.getActive(),
+                nonmandatory = _.filter(active, function (facet) { return !facet.is('mandatory'); });
+
             // TODO: empty check also for not yet tokenized input (data loss?!)
-            return none && this.api('getTokens').length === 0 && this.ui.tokeninput.val().trim() === '';
+            return !nonmandatory.length && this.api('getTokens').length === 0 && this.ui.tokeninput.val().trim() === '';
         },
 
         empty: function () {
