@@ -40,13 +40,13 @@
     }
 }
 
-@media(max-width: 700px) {
+@media(max-width: 900px) {
     .preview-right {
         .leftside {
-            width: 280px;
+            width: 240px;
         }
         .rightside {
-            left: 280px;
+            left: 240px;
         }
     }
 }
@@ -1091,6 +1091,12 @@ textarea.inplace-editor {
 
     .recipients {
         .person-link { color: #333; }
+    }
+
+    @media(max-width: 900px) {
+        .recipients .person-link {
+            white-space: normal;
+        }
     }
 
     &:not(.expanded) .recipients {
