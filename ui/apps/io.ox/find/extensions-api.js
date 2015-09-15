@@ -371,7 +371,7 @@ define('io.ox/find/extensions-api',[
             if (storages.length <= 1) return;
 
             // exit for non
-            // TODO: capability
+            // TODO: switch to dynamic indicator when backend provides something
             if (baton.app.getModuleParam() !== 'files') return def.resolve();
             var req = [];
 

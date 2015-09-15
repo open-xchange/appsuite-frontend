@@ -282,9 +282,8 @@ define('io.ox/find/main', [
                 var isDrive = app.getModuleParam() === 'files';
                 if (!isDrive) return app.set('storages', []);
                 require(['io.ox/core/api/filestorage'], function (filesstorageAPI) {
-                    console.log('%c' + 'files: storage ready', 'color: white; background-color: red');
                     app.set('storages', filesstorageAPI.getAccountsCache());
-
+                    // currenty implementation: filestorages do not change during runtime
                     app.get('storages').on({
                         'change': $.noop,
                         'add': $.noop,
@@ -321,7 +320,7 @@ define('io.ox/find/main', [
 
         app.isMandatory = function (key) {
             var list = app.props.get('mandatory');
-            // TODO: remove workaround
+            // TODO: remove workaround when we use a unque identified for drive in frontend/backend
             var module = app.getModuleParam();
             if (module === 'files') module = 'drive';
             return (list[key] || []).indexOf(module) >= 0;
@@ -344,7 +343,7 @@ define('io.ox/find/main', [
                     }, 10)
             });
 
-            // TODO: move to ext point
+            // TODO: move to ext point (>= 7.8.1)
             app.listenTo(manager, {
                 'change:list-of-actives': _.debounce(function (state, value, model) {
                     if (app.model.manager.isFolderOnly());
