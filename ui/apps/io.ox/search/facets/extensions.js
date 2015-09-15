@@ -150,7 +150,8 @@ define('io.ox/search/facets/extensions', [
 
             // add 'all folders'
             var link;
-            if (!baton.model.isMandatory('folder')) {
+            // do not show 'all folder' for drive when multiple accounts are defined
+            if (!baton.model.isMandatory('folder') && !baton.model.isMandatory('account')) {
                 menu.prepend(
                     $('<li role="presentation">').append(
                         link = $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1">').append(
