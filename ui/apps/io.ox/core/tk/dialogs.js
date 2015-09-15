@@ -410,7 +410,7 @@ define('io.ox/core/tk/dialogs', [
                 nodes.header.addClass('help');
                 nodes.header.append(new HelpView({
                     href: o.help,
-                    tabindex: '-1'
+                    tabindex: '1'
                 }).render().$el);
             }
 
