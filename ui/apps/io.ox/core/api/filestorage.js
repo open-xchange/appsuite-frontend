@@ -59,6 +59,9 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                         return e;
                     });
             },
+            getAccountsCache: function () {
+                return accountsCache;
+            },
             // returns a collection with all available file storage services
             getAllServices: function (filestorageService, useCache) {
                 // only ignore cache if useCache is set to false, undefined results in using the cache
@@ -124,20 +127,6 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                 .then( function (service) {
                     return new Backbone.Model(service);
                 });
-            },
-
-            getAccountByFolder: function (folder) {
-                return api.getAllAccounts()
-                            .then(function (accounttypes) {
-                                var item;
-                                debugger;
-                                _.each(accounttypes, function (collection) {
-                                    collection.each(function (model) {
-                                        if (model.get('qualifiedId') === folder.account_id) item = model.attributes;
-                                    });
-                                });
-                                return item;
-                            });
             },
 
             // returns a collection with all file storage accounts

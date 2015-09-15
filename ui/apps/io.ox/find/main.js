@@ -58,7 +58,7 @@ define('io.ox/find/main', [
                 app.props = new Backbone.Model();
             },
             'props-mandatory': function (app) {
-                // folder facet is mandatory for the follwing apps/modules
+                // a concrete facet is mandatory for the follwing apps/modules
                 app.props.set('mandatory',
                     settings.get('search/mandatory', {}) || {}
                 );
@@ -276,6 +276,21 @@ define('io.ox/find/main', [
                     chromeless: true
                 }));
                 win.show();
+            },
+
+            'file-storages': function (app) {
+                var isDrive = app.getModuleParam() === 'files';
+                if (!isDrive) return app.set('storages', []);
+                require(['io.ox/core/api/filestorage'], function (filesstorageAPI) {
+                    console.log('%c' + 'files: storage ready', 'color: white; background-color: red');
+                    app.set('storages', filesstorageAPI.getAccountsCache());
+
+                    app.get('storages').on({
+                        'change': $.noop,
+                        'add': $.noop,
+                        'remove': $.noop
+                    });
+                });
             }
 
         });
