@@ -126,6 +126,11 @@ define('plugins/portal/mail/register', [
             .load({ folder: folderName })
             .once('load', function () {
                 def.resolve();
+                this.off('load:fail');
+            })
+            .once('load:fail', function (error) {
+                def.reject(error);
+                this.off('load');
             });
 
         return def;
