@@ -34,23 +34,23 @@ define('io.ox/mail/compose/view', [
     var INDEX = 0,
         POINT = 'io.ox/mail/compose';
 
-    ext.point(POINT + '/buttons').extend({
-        index: 100,
-        id: 'send',
-        draw: extensions.buttons.send
-    });
-
-    ext.point(POINT + '/buttons').extend({
-        index: 200,
-        id: 'save',
-        draw: extensions.buttons.save
-    });
-
-    ext.point(POINT + '/buttons').extend({
-        index: 300,
-        id: 'discard',
-        draw: extensions.buttons.discard
-    });
+    ext.point(POINT + '/buttons').extend(
+        {
+            index: 100,
+            id: 'send',
+            draw: extensions.buttons.send
+        },
+        {
+            index: 200,
+            id: 'save',
+            draw: extensions.buttons.save
+        },
+        {
+            index: 300,
+            id: 'discard',
+            draw: extensions.buttons.discard
+        }
+    );
 
     ext.point(POINT + '/mailto').extend({
         id: 'mailto',
@@ -58,67 +58,93 @@ define('io.ox/mail/compose/view', [
         setup: extensions.mailto
     });
 
-    ext.point(POINT + '/header').extend({
-        index: 100,
-        id: 'title',
-        draw: extensions.title
-    });
-
-    ext.point(POINT + '/header').extend({
-        index: 200,
-        id: 'buttons',
-        draw: function (baton) {
-            ext.point(POINT + '/buttons').invoke('draw', this, baton);
+    ext.point(POINT + '/header').extend(
+        {
+            index: 100,
+            id: 'title',
+            draw: extensions.title
+        },
+        {
+            index: 200,
+            id: 'buttons',
+            draw: function (baton) {
+                ext.point(POINT + '/buttons').invoke('draw', this, baton);
+            }
         }
-    });
+    );
 
-    ext.point(POINT + '/fields').extend({
-        id: 'header',
-        index: INDEX += 100,
-        draw: extensions.header
-    });
+    ext.point(POINT + '/fields').extend(
+    {
+            id: 'header',
+            index: INDEX += 100,
+            draw: extensions.header
+        },
+        {
+            id: 'sender',
+            index: INDEX += 100,
+            draw: extensions.sender
+        },
+        {
+            id: 'to',
+            index: INDEX += 100,
+            draw: extensions.tokenfield('to')
+        },
+        {
+            id: 'cc',
+            index: INDEX += 100,
+            draw: extensions.tokenfield('cc')
+        },
+        {
+            id: 'bcc',
+            index: INDEX += 100,
+            draw: extensions.tokenfield('bcc')
+        },
+        {
+            id: 'replyto',
+            index: INDEX += 100,
+            draw: extensions.tokenfield('reply_to')
+        },
+        {
+            id: 'subject',
+            index: INDEX += 100,
+            draw: extensions.subject
+        },
+        {
+            id: 'composetoolbar',
+            index: INDEX += 100,
+            draw: function (baton) {
+                var node = $('<div data-extension-id="composetoolbar" class="row composetoolbar">');
+                ext.point(POINT + '/composetoolbar').invoke('draw', node, baton);
+                this.append(node);
+            },
+            redraw: function (baton) {
+                var node = this.find('.row.composetoolbar');
+                ext.point(POINT + '/composetoolbar').invoke('redraw', node, baton);
+            }
+        },
+        {
+            id: 'attachments',
+            index: INDEX += 100,
+            draw: function (baton) {
+                var node = $('<div data-extension-id="attachments" class="row attachments">');
+                ext.point(POINT + '/attachments').invoke('draw', node, baton);
+                this.append(node);
+            }
+        }
+    );
 
-    ext.point(POINT + '/fields').extend({
-        id: 'sender',
-        index: INDEX += 100,
-        draw: extensions.sender
-    });
-
-    ext.point(POINT + '/fields').extend({
-        id: 'to',
-        index: INDEX += 100,
-        draw: extensions.tokenfield('To')
-    });
-
-    ext.point(POINT + '/fields').extend({
-        id: 'cc',
-        index: INDEX += 100,
-        draw: extensions.tokenfield('CC')
-    });
-
-    ext.point(POINT + '/fields').extend({
-        id: 'bcc',
-        index: INDEX += 100,
-        draw: extensions.tokenfield('BCC')
-    });
-
-    ext.point(POINT + '/fields').extend({
-        id: 'subject',
-        index: INDEX += 100,
-        draw: extensions.subject
-    });
-
-    ext.point(POINT + '/recipientActionLink').extend({
-        id: 'cc',
-        index: 100,
-        draw: extensions.recipientActionLink('cc')
-    });
-
-    ext.point(POINT + '/recipientActionLink').extend({
-        id: 'bcc',
-        index: 200,
-        draw: extensions.recipientActionLink('bcc')
-    });
+    ext.point(POINT + '/recipientActionLink').extend(
+        {
+            id: 'cc',
+            index: 100,
+            draw: extensions.recipientActionLink('cc')
+        },
+        {
+            id: 'bcc',
+            index: 200,
+            draw: extensions.recipientActionLink('bcc')
+        }
+    );
 
     ext.point(POINT + '/recipientActionLinkMobile').extend({
         id: 'mobile',
@@ -132,11 +158,18 @@ define('io.ox/mail/compose/view', [
         draw: extensions.recipientActions
     });
 
-    ext.point(POINT + '/menu').extend({
-        id: 'signatures',
-        index: 100,
-        draw: extensions.signaturemenu
-    });
+    ext.point(POINT + '/menu').extend(
+        {
+            id: 'signatures',
+            index: 100,
+            draw: extensions.signaturemenu
+        },
+        {
+            id: 'options',
+            index: 200,
+            draw: extensions.optionsmenu
+        }
+    );
 
     ext.point(POINT + '/signatures').extend({
         id: 'signature',
@@ -144,109 +177,81 @@ define('io.ox/mail/compose/view', [
         draw: extensions.signature
     });
 
-    ext.point(POINT + '/menu').extend({
-        id: 'options',
-        index: 200,
-        draw: extensions.optionsmenu
-    });
-
-    ext.point(POINT + '/editors').extend({
-        id: 'plain-text',
-        label: gt('Plain Text'),
-        mode: 'text'
-    });
-
-    ext.point(POINT + '/editors').extend({
-        id: 'tinymce',
-        label: gt('HTML'),
-        mode: 'html'
-    });
-
-    ext.point(POINT + '/menuoptions').extend({
-        id: 'editor',
-        index: 100,
-        draw: function () {
-            if (_.device('smartphone')) return;
-            var menu = this.data('view')
-                .header(gt('Editor'));
-
-            ext.point(POINT + '/editors').each(function (point) {
-                if (!point.mode && !point.label) return;
-                menu.option('editorMode', point.mode, point.label, gt('Editor'));
-            });
-        }
-    });
-
-    ext.point(POINT + '/menuoptions').extend({
-        id: 'priority',
-        index: 200,
-        draw: function () {
-            this.data('view')
-                .header(gt('Priority'))
-                .option('priority', 0, gt('High'), gt('Priority'))
-                .option('priority', 3, gt('Normal'), gt('Priority'))
-                .option('priority', 5, gt('Low'), gt('Priority'));
-        }
-    });
-
-    ext.point(POINT + '/menuoptions').extend({
-        id: 'options',
-        index: 300,
-        draw: function () {
-            this.data('view')
-                .header(gt('Options'))
-                .option('vcard', 1, gt('Attach Vcard'), gt('Options'))
-                .option('disp_notification_to', true, gt('Request read receipt'), gt('Options'));
-        }
-    });
-
-    ext.point(POINT + '/composetoolbar').extend({
-        id: 'add_attachments',
-        index: 100,
-        draw: function (baton) {
-            var node = $('<div data-extension-id="add_attachments" class="col-xs-4 col-md-5 col-md-offset-1">');
-            extensions.attachment.call(node, baton);
-            this.append(node);
-        }
-    });
-
-    ext.point(POINT + '/composetoolbar').extend({
-        id: 'menus',
-        index: 200,
-        draw: function (baton) {
-            var node = $('<div class="pull-right text-right">');
-
-            ext.point(POINT + '/menu').invoke('draw', node, baton);
-
-            this.append(
-                $('<div data-extension-id="composetoolbar-menu" class="col-xs-8 col-md-6">').append(node)
-            );
-        }
-    });
-
-    ext.point(POINT + '/fields').extend({
-        id: 'composetoolbar',
-        index: INDEX += 100,
-        draw: function (baton) {
-            var node = $('<div data-extension-id="composetoolbar" class="row composetoolbar">');
-            ext.point(POINT + '/composetoolbar').invoke('draw', node, baton);
-            this.append(node);
+    ext.point(POINT + '/editors').extend(
+        {
+            id: 'plain-text',
+            label: gt('Plain Text'),
+            mode: 'text'
         },
-        redraw: function (baton) {
-            var node = this.find('.row.composetoolbar');
-            ext.point(POINT + '/composetoolbar').invoke('redraw', node, baton);
+        {
+            id: 'tinymce',
+            label: gt('HTML'),
+            mode: 'html'
         }
-    });
+    );
 
-    ext.point(POINT + '/fields').extend({
-        id: 'attachments',
-        index: INDEX += 100,
-        draw: function (baton) {
-            var node = $('<div data-extension-id="attachments" class="row attachments">');
-            ext.point(POINT + '/attachments').invoke('draw', node, baton);
-            this.append(node);
+    ext.point(POINT + '/menuoptions').extend(
+        {
+            id: 'editor',
+            index: 100,
+            draw: function () {
+                if (_.device('smartphone')) return;
+                var menu = this.data('view')
+                    .header(gt('Editor'));
+
+                ext.point(POINT + '/editors').each(function (point) {
+                    if (!point.mode && !point.label) return;
+                    menu.option('editorMode', point.mode, point.label, gt('Editor'));
+                });
+            }
+        },
+        {
+            id: 'priority',
+            index: 200,
+            draw: function () {
+                this.data('view')
+                    .header(gt('Priority'))
+                    .option('priority', 0, gt('High'), gt('Priority'))
+                    .option('priority', 3, gt('Normal'), gt('Priority'))
+                    .option('priority', 5, gt('Low'), gt('Priority'));
+            }
+        },
+        {
+            id: 'options',
+            index: 300,
+            draw: function () {
+                this.data('view')
+                    .header(gt('Options'))
+                    .option('vcard', 1, gt('Attach Vcard'), gt('Options'))
+                    .option('disp_notification_to', true, gt('Request read receipt'), gt('Options'));
+            }
         }
-    });
+    );
+
+    ext.point(POINT + '/composetoolbar').extend(
+        {
+            id: 'add_attachments',
+            index: 100,
+            draw: function (baton) {
+                var node = $('<div data-extension-id="add_attachments" class="col-xs-4 col-md-5 col-md-offset-1">');
+                extensions.attachment.call(node, baton);
+                this.append(node);
+            }
+        },
+        {
+            id: 'menus',
+            index: 200,
+            draw: function (baton) {
+                var node = $('<div class="pull-right text-right">');
+
+                ext.point(POINT + '/menu').invoke('draw', node, baton);
+
+                this.append(
+                    $('<div data-extension-id="composetoolbar-menu" class="col-xs-8 col-md-6">').append(node)
+                );
+            }
+        }
+    );
 
     ext.point(POINT + '/attachments').extend({
         id: 'attachmentPreview',
