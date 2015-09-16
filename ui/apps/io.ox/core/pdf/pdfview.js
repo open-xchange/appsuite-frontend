@@ -42,7 +42,7 @@ define('io.ox/core/pdf/pdfview', [
         // max size of canvas width & height
         // https://github.com/mozilla/pdf.js/issues/2439
         // http://stackoverflow.com/a/22345796/4287795
-        MAXIMUM_SIDE_SIZE = (_.browser.iOS || _.browser.Safari || _.browser.IE <= 10) ? 2289 : 4096,
+        MAXIMUM_SIDE_SIZE = (_.browser.iOS || _.browser.Android || _.browser.Safari || _.browser.IE <= 10) ? 2156 : 4096,
 
         /**
          * Queues the render calls for execution. The last call added is the first one to be executed (last in, first out).
