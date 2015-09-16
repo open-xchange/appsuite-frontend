@@ -24,12 +24,12 @@ define('plugins/portal/tasks/register', [
 
         title: gt('My tasks'),
 
-        initialize: function () {
+        initialize: function (baton) {
             taskAPI.on('update create delete', function () {
                 //refresh portal
                 require(['io.ox/portal/main'], function (portal) {
                     var portalApp = portal.getApp(),
-                        portalModel = portalApp.getWidgetCollection()._byId.tasks_0;
+                        portalModel = portalApp.getWidgetCollection()._byId[baton.model.id];
                     if (portalModel) {
                         portalApp.refreshWidget(portalModel, 0);
                     }
