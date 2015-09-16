@@ -170,7 +170,7 @@ define('io.ox/search/model', [
 
     function isFolderSet (model) {
         var folder = model.get('pool').folder,
-            value = folder ? folder.values.custom.custom : undefined,
+            value = folder ? folder.values.custom.custom || !model.isMandatory('folder') : undefined,
             disabled = model.get('pooldisabled').folder;
         return (value || disabled);
     }
@@ -402,7 +402,7 @@ define('io.ox/search/model', [
                 return def.then(function (data) {
                     data = data || {};
                     if (!isFolderSet(self)) {
-                        if (self.get('pool').folder)
+                        if (self.get('pool').folder && data.id)
                             self.update('folder', 'custom', data);
                         else
                             self.add('folder', 'custom', data);
