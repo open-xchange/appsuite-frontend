@@ -245,6 +245,7 @@ define('io.ox/core/main', [
     var tabManager = _.debounce(function () {
         var items = launchers.children('.launcher'),
             launcherDropDownIcon = $('.launcher-dropdown', topbar),
+            secondaryLauncher = topbar.find('.launchers-secondary'),
             forceDesktopLaunchers = settings.get('forceDesktopLaunchers', false);
 
         // we don't show any launcher in top-bar on small devices
@@ -262,14 +263,15 @@ define('io.ox/core/main', [
         });
 
         var itemsVisible = launchers.children('.launcher:visible'),
-            itemsRightWidth = topbar.find('.launchers-secondary').outerWidth(true),
+            itemsRightWidth = secondaryLauncher.length > 0 ? secondaryLauncher[0].getBoundingClientRect().width : 0,
             viewPortWidth = $(window).width(),
-            launcherDropDownIconWidth = launcherDropDownIcon.outerWidth(true);
+            launcherDropDownIconWidth = launcherDropDownIcon[0].getBoundingClientRect().width;
 
         launcherDropDownIcon.hide();
 
         itemsVisible.each(function () {
-            itemsLeftWidth += $(this).outerWidth(true);
+            // use native bounding client rect function to compute the width as floating point
+            itemsLeftWidth += this.getBoundingClientRect().width;
         });
 
         var visibleTabs,
@@ -281,7 +283,7 @@ define('io.ox/core/main', [
                 break;
             } else {
                 var lastVisibleItem = launchers.children('.launcher:visible').last();
-                itemsLeftWidth = itemsLeftWidth - lastVisibleItem.outerWidth(true);
+                itemsLeftWidth = itemsLeftWidth - lastVisibleItem[0].getBoundingClientRect().width;
                 lastVisibleItem.hide();
                 hidden++;
                 if (hidden === 1) {
