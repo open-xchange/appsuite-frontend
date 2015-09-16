@@ -59,8 +59,8 @@ define('io.ox/tours/main', [
                 return;
             }
 
-            require(['settings!io.ox/tours'], function (tourSettings) {
-                if (tourSettings.get('disableTours', false)) {
+            require(['settings!io.ox/tours', 'io.ox/core/capabilities'], function (tourSettings, capabilities) {
+                if (tourSettings.get('disableTours', false) || capabilities.has('!webmail || guest')) {
                     link.remove();
                     return;
                 }
