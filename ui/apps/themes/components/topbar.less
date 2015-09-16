@@ -493,6 +493,26 @@ html.ios8-standalone-ipad-fix {
     }
 }
 
+@media(max-width: 480px) and (orientation: portrait) {
+
+    #io-ox-topbar {
+
+        .launcher a.notifications-icon {
+
+            padding: 12px 5px;
+            width: auto;
+            min-width: 40px;
+            text-align: center;
+
+            &.no-notifications {
+                .badge {
+                    display: inline-block;
+                }
+            }
+        }
+    }
+}
+
 // small screens (mobile)
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width
@@ -516,19 +536,6 @@ html.ios8-standalone-ipad-fix {
 
     #io-ox-topbar {
 
-        .launcher a.notifications-icon {
-
-            padding: 12px 5px;
-            width: auto;
-            min-width: 40px;
-            text-align: center;
-
-            &.no-notifications {
-                .badge {
-                    display: inline-block;
-                }
-            }
-        }
         .launchers-secondary {
             margin-right: 0;
             padding-left: 0;
