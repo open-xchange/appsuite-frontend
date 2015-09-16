@@ -46,6 +46,20 @@ define('plugins/portal/birthdays/register', [
 
         title: gt('Birthdays'),
 
+        initialize: function (baton) {
+            api.on('update create delete', function () {
+                //refresh portal
+                require(['io.ox/portal/main'], function (portal) {
+                    var portalApp = portal.getApp(),
+                        portalModel = portalApp.getWidgetCollection()._byId[baton.model.id];
+                    if (portalModel) {
+                        portalApp.refreshWidget(portalModel, 0);
+                    }
+                });
+
+            });
+        },
+
         load: function (baton) {
             var start = moment().utc(true).startOf('day').subtract(1, 'day');
             return api.birthdays({
