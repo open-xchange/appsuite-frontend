@@ -52,7 +52,7 @@ msgstr "Uuden tehtävän luominen"
 msgid "Creating a note"
 msgstr "Merkinnän luominen"
 
-#: apps/io.ox/tours/intro.js:93 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:61 module:io.ox/tours
 msgid "Creating new items"
 msgstr "Uusien kohteiden luonti"
 
@@ -76,7 +76,7 @@ msgstr "Tehtävän luominen"
 msgid "Customizing the Portal"
 msgstr "Mukauttaminen"
 
-#: apps/io.ox/tours/intro.js:112 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:80 module:io.ox/tours
 msgid ""
 "Depending on the app, the toolbar contains various functions for creating, "
 "editing and organizing objects."
@@ -84,7 +84,7 @@ msgstr ""
 "Sovelluksesta riippuen, työkalupalkki sisältää erilaisia toimintoja "
 "kohteiden luomiseen, muokkaamiseen ja järjestelyyn."
 
-#: apps/io.ox/tours/intro.js:132 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:100 module:io.ox/tours
 msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
 msgstr ""
@@ -95,7 +95,7 @@ msgstr ""
 msgid "Displaying information"
 msgstr "Tietojen näyttäminen"
 
-#: apps/io.ox/tours/intro.js:75 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:43 module:io.ox/tours
 msgid "Displaying the help or the settings"
 msgstr "Ohjeen tai asetusten katselu"
 
@@ -197,18 +197,14 @@ msgstr "Alempaa voit lisätä dokumentteja tapaamisen liitteiksi."
 msgid "Further functions"
 msgstr "Muut toiminnot"
 
-#: apps/io.ox/tours/intro.js:131 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
 msgid "Further information"
 msgstr "Lisätietoja"
 
 #. Tour name; general introduction
-#: apps/io.ox/tours/intro.js:46 module:io.ox/tours
+#: apps/io.ox/tours/main.js:71 module:io.ox/tours
 msgid "Getting started"
 msgstr "Aluksi"
-
-#: apps/io.ox/tours/main.js:77 module:io.ox/tours
-msgid "Guided tour for this app"
-msgstr "Tämän sovelluksen ohjattu esittely"
 
 #: apps/io.ox/tours/mail.js:101 module:io.ox/tours
 msgid "Halo view"
@@ -229,7 +225,7 @@ msgstr ""
 msgid "If you no longer want to display a square, click the cross."
 msgstr "Jos et halua neliön näkyvän, napsauta ristiä."
 
-#: apps/io.ox/tours/intro.js:89 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:57 module:io.ox/tours
 msgid ""
 "In case of new notifications, e.g. appointment invitations, the info area is "
 "opened."
@@ -255,7 +251,7 @@ msgstr "Täältä löydät lisää toimintoja esim. liitteiden lisäämiseksi."
 msgid "Inviting other participants"
 msgstr "Muiden osallistujien kutsuminen"
 
-#: apps/io.ox/tours/intro.js:70 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:38 module:io.ox/tours
 msgid "Launching an app"
 msgstr "Sovelluksen käynnistäminen"
 
@@ -267,7 +263,7 @@ msgstr "Navigointipalkki"
 msgid "Opening an E-Mail in a separate window"
 msgstr "Sähköpostin avaaminen erilliseen ikkunaan"
 
-#: apps/io.ox/tours/intro.js:101 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:69 module:io.ox/tours
 msgid "Opening or closing the folder tree"
 msgstr "Kansiopuun avaaminen ja sulkeminen"
 
@@ -291,7 +287,7 @@ msgstr "Sähköpostikeskustelun lukeminen"
 msgid "Reading the details"
 msgstr "Yksityiskohtien katselu"
 
-#: apps/io.ox/tours/intro.js:106 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:74 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Kohteiden etsiminen"
 
@@ -320,11 +316,11 @@ msgstr "Tehtävien lajittelu"
 msgid "Sorting your E-Mails"
 msgstr "Sähköpostien lajittelu"
 
-#: apps/io.ox/tours/intro.js:126 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "The Detail view"
 msgstr "Tarkastelunäkymä"
 
-#: apps/io.ox/tours/intro.js:127 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:95 module:io.ox/tours
 msgid ""
 "The Detail view displays an object's content. Depending on the app, further "
 "functions for organizing objects can be found in the Detail view."
@@ -369,11 +365,11 @@ msgstr ""
 "Valintaruutujen avulla voit valita tiedostoja. Tiedostoa napsauttamalla näet "
 "lisää yksityiskohtia ja valikoiman toimintoja."
 
-#: apps/io.ox/tours/intro.js:82 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:50 module:io.ox/tours
 msgid "The New objects icon"
 msgstr "Uusia kohteita kuvake"
 
-#: apps/io.ox/tours/intro.js:83 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:51 module:io.ox/tours
 msgid ""
 "The New objects icon shows the number of unread E-Mails or other "
 "notifications. If clicking the icon, the info area opens."
@@ -417,15 +413,15 @@ msgstr ""
 "Kalenterinäkymät näyttävät tapaamiset valitulta aikaväliltä "
 "kalenterimuodossa."
 
-#: apps/io.ox/tours/intro.js:116 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:84 module:io.ox/tours
 msgid "The folder tree"
 msgstr "Kansiopuu"
 
-#: apps/io.ox/tours/intro.js:88 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:56 module:io.ox/tours
 msgid "The info area"
 msgstr "Tietoalue"
 
-#: apps/io.ox/tours/intro.js:121 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:89 module:io.ox/tours
 msgid "The list"
 msgstr "Listanäkymä"
 
@@ -437,11 +433,11 @@ msgstr ""
 "Asetukset on järjestetty aiheittain. Valitse aihe vasemmalta, esim. "
 "Perusasetukset tai Sähköposti."
 
-#: apps/io.ox/tours/intro.js:111 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:79 module:io.ox/tours
 msgid "The toolbar"
 msgstr "Työkalupalkki"
 
-#: apps/io.ox/tours/intro.js:67 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:35 module:io.ox/tours
 msgid ""
 "This guided tour will briefly introduce you to the product. Get more "
 "detailed information in the tours for the single apps or in the online help."
@@ -474,7 +470,7 @@ msgid "To compose a new E-Mail, click on Compose in the toolbar."
 msgstr ""
 "Uuden sähköpostin laatimiseksi, napsauta työkalupalkin Uusi viesti kuvaketta."
 
-#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:62 module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr ""
 "Luodaksesi uuden sähköpostin, napsauta yläreunan Uusi viesti kuvaketta."
@@ -533,7 +529,7 @@ msgstr ""
 "Avataksesi sovellusikkunan uudelleen tai lisätäksesi muita tietolähteitä, "
 "napsauta Mukauta tätä sivua."
 
-#: apps/io.ox/tours/intro.js:76 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid ""
 "To display the help or the settings, click the System menu icon in the menu "
 "bar."
@@ -583,7 +579,7 @@ msgstr ""
 "Muita osallistujia kutsuaksesi, syötä heidän nimensä kenttään Osallistujat "
 "osiossa. Voit lisätä asiakirjoja tehtävän liitteiksi."
 
-#: apps/io.ox/tours/intro.js:71 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:39 module:io.ox/tours
 msgid "To launch an app, click on an entry on the left side of the menu bar."
 msgstr ""
 "Käynnistääksesi sovellus napsauta kohtaa valikkopalkin vasemmassa reunassa."
@@ -604,7 +600,7 @@ msgstr ""
 "Keskustelun viestin avataksesi tai sulkeaksesi, paina tyhjää kohtaa "
 "otsakkeesta."
 
-#: apps/io.ox/tours/intro.js:102 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:70 module:io.ox/tours
 msgid ""
 "To open or close the folder tree, click on View >  Folder view on the right "
 "side of the toolbar."
@@ -655,7 +651,7 @@ msgstr ""
 "Nähdäksesi tietoa lähettäjästä tai muista vastaanottajista, avaa leijuva "
 "näkymä napsauttamalla nimeä."
 
-#: apps/io.ox/tours/intro.js:107 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:75 module:io.ox/tours
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr "Etsiäksesi kohteita, napsauta valikkopalkin hakuakuvaketta."
 
@@ -737,14 +733,14 @@ msgstr ""
 "Mikäli kansiopuu ei ole näkyvissä, napsauta työkalupalkin oikealta puolelta "
 "Näytä > Kansionäkymä."
 
-#: apps/io.ox/tours/intro.js:117 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:85 module:io.ox/tours
 msgid ""
 "Use the folder tree to open the folder containing the objects that you want "
 "to view in the list."
 msgstr ""
 "Avaa kansiopuusta kansio, jonka kohteita haluat tarkastella listanäkymässä."
 
-#: apps/io.ox/tours/intro.js:122 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:90 module:io.ox/tours
 msgid ""
 "Use the list to select an object, show its contents or activate functions."
 msgstr ""
@@ -756,7 +752,7 @@ msgstr ""
 msgid "Using the reminder function"
 msgstr "Muistutustoiminnon käyttäminen"
 
-#: apps/io.ox/tours/intro.js:66 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:34 module:io.ox/tours
 msgid "Welcome to %s"
 msgstr "Tervetuloa %s järjestelmään"
 
@@ -2676,6 +2672,9 @@ msgstr "Tervetuloa %s järjestelmään"
 
 #~ msgid "Guidance"
 #~ msgstr "Ohjausta"
+
+#~ msgid "Guided tour for this app"
+#~ msgstr "Tämän sovelluksen ohjattu esittely"
 
 #~ msgid "HTML"
 #~ msgstr "HTML"

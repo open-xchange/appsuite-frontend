@@ -224,138 +224,132 @@ msgstr ""
 msgid "To view further information, click on a file. A pop-up window displays further details and functions."
 msgstr ""
 
-#. Tour name; general introduction
-#: apps/io.ox/tours/intro.js:46
-#: module:io.ox/tours
-msgid "Getting started"
-msgstr ""
-
-#: apps/io.ox/tours/intro.js:66
+#: apps/io.ox/tours/intro.js:34
 #: module:io.ox/tours
 msgid "Welcome to %s"
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:67
+#: apps/io.ox/tours/intro.js:35
 #: module:io.ox/tours
 msgid "This guided tour will briefly introduce you to the product. Get more detailed information in the tours for the single apps or in the online help."
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:70
+#: apps/io.ox/tours/intro.js:38
 #: module:io.ox/tours
 msgid "Launching an app"
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:71
+#: apps/io.ox/tours/intro.js:39
 #: module:io.ox/tours
 msgid "To launch an app, click on an entry on the left side of the menu bar."
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:75
+#: apps/io.ox/tours/intro.js:43
 #: module:io.ox/tours
 msgid "Displaying the help or the settings"
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:76
+#: apps/io.ox/tours/intro.js:44
 #: module:io.ox/tours
 msgid "To display the help or the settings, click the System menu icon in the menu bar."
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:82
+#: apps/io.ox/tours/intro.js:50
 #: module:io.ox/tours
 msgid "The New objects icon"
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:83
+#: apps/io.ox/tours/intro.js:51
 #: module:io.ox/tours
 msgid "The New objects icon shows the number of unread E-Mails or other notifications. If clicking the icon, the info area opens."
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:88
+#: apps/io.ox/tours/intro.js:56
 #: module:io.ox/tours
 msgid "The info area"
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:89
+#: apps/io.ox/tours/intro.js:57
 #: module:io.ox/tours
 msgid "In case of new notifications, e.g. appointment invitations, the info area is opened."
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:93
+#: apps/io.ox/tours/intro.js:61
 #: module:io.ox/tours
 msgid "Creating new items"
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:94
+#: apps/io.ox/tours/intro.js:62
 #: module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:101
+#: apps/io.ox/tours/intro.js:69
 #: module:io.ox/tours
 msgid "Opening or closing the folder tree"
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:102
+#: apps/io.ox/tours/intro.js:70
 #: module:io.ox/tours
 msgid "To open or close the folder tree, click on View >  Folder view on the right side of the toolbar."
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:106
+#: apps/io.ox/tours/intro.js:74
 #: module:io.ox/tours
 msgid "Searching for objects"
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:107
+#: apps/io.ox/tours/intro.js:75
 #: module:io.ox/tours
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:111
+#: apps/io.ox/tours/intro.js:79
 #: module:io.ox/tours
 msgid "The toolbar"
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:112
+#: apps/io.ox/tours/intro.js:80
 #: module:io.ox/tours
 msgid "Depending on the app, the toolbar contains various functions for creating, editing and organizing objects."
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:116
+#: apps/io.ox/tours/intro.js:84
 #: module:io.ox/tours
 msgid "The folder tree"
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:117
+#: apps/io.ox/tours/intro.js:85
 #: module:io.ox/tours
 msgid "Use the folder tree to open the folder containing the objects that you want to view in the list."
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:121
+#: apps/io.ox/tours/intro.js:89
 #: module:io.ox/tours
 msgid "The list"
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:122
+#: apps/io.ox/tours/intro.js:90
 #: module:io.ox/tours
 msgid "Use the list to select an object, show its contents or activate functions."
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:126
+#: apps/io.ox/tours/intro.js:94
 #: module:io.ox/tours
 msgid "The Detail view"
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:127
+#: apps/io.ox/tours/intro.js:95
 #: module:io.ox/tours
 msgid "The Detail view displays an object's content. Depending on the app, further functions for organizing objects can be found in the Detail view."
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:131
+#: apps/io.ox/tours/intro.js:99
 #: module:io.ox/tours
 msgid "Further information"
 msgstr ""
 
-#: apps/io.ox/tours/intro.js:132
+#: apps/io.ox/tours/intro.js:100
 #: module:io.ox/tours
 msgid "Detailed instructions for the single apps are located in System menu > Help."
 msgstr ""
@@ -485,9 +479,10 @@ msgstr ""
 msgid "To open the E-Mail settings, click the System menu icon on the upper right side of the menu bar. Select Settings. Click on E-Mail on the left side."
 msgstr ""
 
-#: apps/io.ox/tours/main.js:77
+#. Tour name; general introduction
+#: apps/io.ox/tours/main.js:71
 #: module:io.ox/tours
-msgid "Guided tour for this app"
+msgid "Getting started"
 msgstr ""
 
 #: apps/io.ox/tours/portal.js:30

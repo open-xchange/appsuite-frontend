@@ -51,7 +51,7 @@ msgstr "创建一个新任务"
 msgid "Creating a note"
 msgstr "创建一个备注"
 
-#: apps/io.ox/tours/intro.js:93 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:61 module:io.ox/tours
 msgid "Creating new items"
 msgstr "创建新项目"
 
@@ -75,13 +75,13 @@ msgstr "创建任务"
 msgid "Customizing the Portal"
 msgstr "自定义门户"
 
-#: apps/io.ox/tours/intro.js:112 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:80 module:io.ox/tours
 msgid ""
 "Depending on the app, the toolbar contains various functions for creating, "
 "editing and organizing objects."
 msgstr "视应用程序而定，工具条包含各种用作创建、编辑、组织对象的功能。"
 
-#: apps/io.ox/tours/intro.js:132 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:100 module:io.ox/tours
 msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
 msgstr "单一应用程序的详细指南位于系统菜单 > 帮助。"
@@ -90,7 +90,7 @@ msgstr "单一应用程序的详细指南位于系统菜单 > 帮助。"
 msgid "Displaying information"
 msgstr "显示信息"
 
-#: apps/io.ox/tours/intro.js:75 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:43 module:io.ox/tours
 msgid "Displaying the help or the settings"
 msgstr "显示帮助或设定"
 
@@ -188,18 +188,14 @@ msgstr "在更下面您可以以附件方式添加文档到约会。"
 msgid "Further functions"
 msgstr "更多功能"
 
-#: apps/io.ox/tours/intro.js:131 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
 msgid "Further information"
 msgstr "更多信息"
 
 #. Tour name; general introduction
-#: apps/io.ox/tours/intro.js:46 module:io.ox/tours
+#: apps/io.ox/tours/main.js:71 module:io.ox/tours
 msgid "Getting started"
 msgstr "开始使用"
-
-#: apps/io.ox/tours/main.js:77 module:io.ox/tours
-msgid "Guided tour for this app"
-msgstr "此应用程序的导游"
 
 #: apps/io.ox/tours/mail.js:101 module:io.ox/tours
 msgid "Halo view"
@@ -219,7 +215,7 @@ msgstr "如果在列表里的一个电子邮件上单击，会在一个分离的
 msgid "If you no longer want to display a square, click the cross."
 msgstr "如果您不再要显示一个方块，单击交叉。"
 
-#: apps/io.ox/tours/intro.js:89 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:57 module:io.ox/tours
 msgid ""
 "In case of new notifications, e.g. appointment invitations, the info area is "
 "opened."
@@ -244,7 +240,7 @@ msgstr "在此区域里您能找到更多功能，例如：添加附件。"
 msgid "Inviting other participants"
 msgstr "邀请其他参与者"
 
-#: apps/io.ox/tours/intro.js:70 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:38 module:io.ox/tours
 msgid "Launching an app"
 msgstr "执行一个应用程序"
 
@@ -256,7 +252,7 @@ msgstr "导航条"
 msgid "Opening an E-Mail in a separate window"
 msgstr "在一个分离窗口打开电子邮件"
 
-#: apps/io.ox/tours/intro.js:101 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:69 module:io.ox/tours
 msgid "Opening or closing the folder tree"
 msgstr "打开或关闭文件夹树"
 
@@ -280,7 +276,7 @@ msgstr "阅读电子邮件交谈"
 msgid "Reading the details"
 msgstr "阅读详情"
 
-#: apps/io.ox/tours/intro.js:106 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:74 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "搜寻对象"
 
@@ -309,11 +305,11 @@ msgstr "排序任务"
 msgid "Sorting your E-Mails"
 msgstr "排序您的电子邮件"
 
-#: apps/io.ox/tours/intro.js:126 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "The Detail view"
 msgstr "详细视图"
 
-#: apps/io.ox/tours/intro.js:127 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:95 module:io.ox/tours
 msgid ""
 "The Detail view displays an object's content. Depending on the app, further "
 "functions for organizing objects can be found in the Detail view."
@@ -356,11 +352,11 @@ msgstr ""
 "列表视图显示像体积和更改时间等详情。使用选择框以选择文件。在一个文件上单击以"
 "在弹出窗口里检视更多详情和功能。"
 
-#: apps/io.ox/tours/intro.js:82 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:50 module:io.ox/tours
 msgid "The New objects icon"
 msgstr "新对象图标"
 
-#: apps/io.ox/tours/intro.js:83 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:51 module:io.ox/tours
 msgid ""
 "The New objects icon shows the number of unread E-Mails or other "
 "notifications. If clicking the icon, the info area opens."
@@ -398,15 +394,15 @@ msgid ""
 "selected time range."
 msgstr "日历视图显示一个选择时段约会的日历表。"
 
-#: apps/io.ox/tours/intro.js:116 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:84 module:io.ox/tours
 msgid "The folder tree"
 msgstr "文件夹树"
 
-#: apps/io.ox/tours/intro.js:88 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:56 module:io.ox/tours
 msgid "The info area"
 msgstr "信息区域"
 
-#: apps/io.ox/tours/intro.js:121 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:89 module:io.ox/tours
 msgid "The list"
 msgstr "列表"
 
@@ -416,11 +412,11 @@ msgid ""
 "Basic settings or E-Mail."
 msgstr "设置以话题组织。在左边选择话题，例如：基本设置或电子邮件。"
 
-#: apps/io.ox/tours/intro.js:111 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:79 module:io.ox/tours
 msgid "The toolbar"
 msgstr "工具条"
 
-#: apps/io.ox/tours/intro.js:67 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:35 module:io.ox/tours
 msgid ""
 "This guided tour will briefly introduce you to the product. Get more "
 "detailed information in the tours for the single apps or in the online help."
@@ -449,7 +445,7 @@ msgstr ""
 msgid "To compose a new E-Mail, click on Compose in the toolbar."
 msgstr "要编写一个新电子邮件，请单击工具条里的编写。"
 
-#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:62 module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr "要创建一个新电子邮件，请单击工具条里的创建新电子邮件。"
 
@@ -495,7 +491,7 @@ msgid ""
 "on Customize this page."
 msgstr "要重新显示一个方块或显示更多信息来源，请单击自定义此页。"
 
-#: apps/io.ox/tours/intro.js:76 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid ""
 "To display the help or the settings, click the System menu icon in the menu "
 "bar."
@@ -540,7 +536,7 @@ msgstr ""
 "要邀请其他参与者，请在参与者下面的输入字段输入他们的名字。您可以添加文档到任"
 "务成附件。"
 
-#: apps/io.ox/tours/intro.js:71 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:39 module:io.ox/tours
 msgid "To launch an app, click on an entry on the left side of the menu bar."
 msgstr "要执行一个应用程序，请单击菜单条左边的一个项目。"
 
@@ -558,7 +554,7 @@ msgid ""
 "header."
 msgstr "要在交谈里打开或关闭一个电子邮件，在标头里的一个空白区域里单击。"
 
-#: apps/io.ox/tours/intro.js:102 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:70 module:io.ox/tours
 msgid ""
 "To open or close the folder tree, click on View >  Folder view on the right "
 "side of the toolbar."
@@ -598,7 +594,7 @@ msgid ""
 "view by clicking on a name."
 msgstr "要接收有关发送人或其他收件人的信息，请单击一个名称以打开光环视图。"
 
-#: apps/io.ox/tours/intro.js:107 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:75 module:io.ox/tours
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr "要搜寻对象，请在菜单条里单击搜寻图标。"
 
@@ -671,13 +667,13 @@ msgstr ""
 "使用文件夹树以访问自己、公共、共享的文件。如果文件夹树隐藏了，单击在工具条右"
 "边的视图 > 文件夹视图。"
 
-#: apps/io.ox/tours/intro.js:117 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:85 module:io.ox/tours
 msgid ""
 "Use the folder tree to open the folder containing the objects that you want "
 "to view in the list."
 msgstr "使用文件夹树以打开包含您要在列表里检视的对象的文件夹。"
 
-#: apps/io.ox/tours/intro.js:122 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:90 module:io.ox/tours
 msgid ""
 "Use the list to select an object, show its contents or activate functions."
 msgstr "使用列表选择一个对象，显示其内容或激活功能。"
@@ -687,7 +683,7 @@ msgstr "使用列表选择一个对象，显示其内容或激活功能。"
 msgid "Using the reminder function"
 msgstr "使用提醒功能"
 
-#: apps/io.ox/tours/intro.js:66 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:34 module:io.ox/tours
 msgid "Welcome to %s"
 msgstr "欢迎到 %s"
 
@@ -4210,6 +4206,9 @@ msgstr "欢迎到 %s"
 
 #~ msgid "Guidance"
 #~ msgstr "指引"
+
+#~ msgid "Guided tour for this app"
+#~ msgstr "此应用程序的导游"
 
 #~ msgid "H-split view"
 #~ msgstr "水平拆分视图"

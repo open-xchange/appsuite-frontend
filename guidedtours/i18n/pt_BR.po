@@ -55,7 +55,7 @@ msgstr "Criando uma nova tarefa"
 msgid "Creating a note"
 msgstr "Criando uma nota"
 
-#: apps/io.ox/tours/intro.js:93 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:61 module:io.ox/tours
 msgid "Creating new items"
 msgstr "Criando novos itens"
 
@@ -79,7 +79,7 @@ msgstr "Criando a tarefa"
 msgid "Customizing the Portal"
 msgstr "Personalizando o Portal"
 
-#: apps/io.ox/tours/intro.js:112 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:80 module:io.ox/tours
 msgid ""
 "Depending on the app, the toolbar contains various functions for creating, "
 "editing and organizing objects."
@@ -87,7 +87,7 @@ msgstr ""
 "Dependendo do aplicativo, a barra de ferramentas contém diversas funções "
 "para criar, editar e organizar objetos."
 
-#: apps/io.ox/tours/intro.js:132 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:100 module:io.ox/tours
 msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
 msgstr ""
@@ -98,7 +98,7 @@ msgstr ""
 msgid "Displaying information"
 msgstr "Exibindo informações"
 
-#: apps/io.ox/tours/intro.js:75 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:43 module:io.ox/tours
 msgid "Displaying the help or the settings"
 msgstr "Exibindo a ajuda ou as configurações"
 
@@ -202,18 +202,14 @@ msgstr "Mais abaixo você pode adicionar documentos como anexos ao compromisso."
 msgid "Further functions"
 msgstr "Funções adicionais"
 
-#: apps/io.ox/tours/intro.js:131 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
 msgid "Further information"
 msgstr "Informações adicionais"
 
 #. Tour name; general introduction
-#: apps/io.ox/tours/intro.js:46 module:io.ox/tours
+#: apps/io.ox/tours/main.js:71 module:io.ox/tours
 msgid "Getting started"
 msgstr "Iniciando"
-
-#: apps/io.ox/tours/main.js:77 module:io.ox/tours
-msgid "Guided tour for this app"
-msgstr "Passeio guiado por este aplicativo"
 
 #: apps/io.ox/tours/mail.js:101 module:io.ox/tours
 msgid "Halo view"
@@ -235,7 +231,7 @@ msgstr ""
 msgid "If you no longer want to display a square, click the cross."
 msgstr "Se você não deseja mais exibir um quadrado, clique na cruz."
 
-#: apps/io.ox/tours/intro.js:89 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:57 module:io.ox/tours
 msgid ""
 "In case of new notifications, e.g. appointment invitations, the info area is "
 "opened."
@@ -265,7 +261,7 @@ msgstr ""
 msgid "Inviting other participants"
 msgstr "Convidando outros participantes"
 
-#: apps/io.ox/tours/intro.js:70 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:38 module:io.ox/tours
 msgid "Launching an app"
 msgstr "Iniciando um aplicativo"
 
@@ -277,7 +273,7 @@ msgstr "Barra de navegação"
 msgid "Opening an E-Mail in a separate window"
 msgstr "Abrindo e-mail em uma janela separada"
 
-#: apps/io.ox/tours/intro.js:101 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:69 module:io.ox/tours
 msgid "Opening or closing the folder tree"
 msgstr "Abrindo ou fechando a árvore de pastas"
 
@@ -301,7 +297,7 @@ msgstr "Lendo as conversas de e-mail"
 msgid "Reading the details"
 msgstr "Lendo os detalhes"
 
-#: apps/io.ox/tours/intro.js:106 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:74 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Pesquisando por objetos"
 
@@ -330,11 +326,11 @@ msgstr "Classificando tarefas"
 msgid "Sorting your E-Mails"
 msgstr "Classificando seus e-mails"
 
-#: apps/io.ox/tours/intro.js:126 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "The Detail view"
 msgstr "A visualização Detalhes"
 
-#: apps/io.ox/tours/intro.js:127 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:95 module:io.ox/tours
 msgid ""
 "The Detail view displays an object's content. Depending on the app, further "
 "functions for organizing objects can be found in the Detail view."
@@ -381,11 +377,11 @@ msgstr ""
 "Use a caixa de seleção para selecionar arquivos. Clique em um arquivo para "
 "visualizar mais detalhes e funções no menu suspenso."
 
-#: apps/io.ox/tours/intro.js:82 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:50 module:io.ox/tours
 msgid "The New objects icon"
 msgstr "Ícone de Novos objetos"
 
-#: apps/io.ox/tours/intro.js:83 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:51 module:io.ox/tours
 msgid ""
 "The New objects icon shows the number of unread E-Mails or other "
 "notifications. If clicking the icon, the info area opens."
@@ -429,15 +425,15 @@ msgstr ""
 "As visualizações em calendário exibem uma folha de calendário com os "
 "compromissos para o intervalo de tempo selecionado."
 
-#: apps/io.ox/tours/intro.js:116 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:84 module:io.ox/tours
 msgid "The folder tree"
 msgstr "A árvore de pastas"
 
-#: apps/io.ox/tours/intro.js:88 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:56 module:io.ox/tours
 msgid "The info area"
 msgstr "Área de informação"
 
-#: apps/io.ox/tours/intro.js:121 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:89 module:io.ox/tours
 msgid "The list"
 msgstr "A lista"
 
@@ -449,11 +445,11 @@ msgstr ""
 "As configurações estão organizadas em tópicos. Selecione o tópico no lado "
 "esquerdo, por exemplo, Configurações básicas ou E-mail."
 
-#: apps/io.ox/tours/intro.js:111 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:79 module:io.ox/tours
 msgid "The toolbar"
 msgstr "A barra de ferramentas"
 
-#: apps/io.ox/tours/intro.js:67 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:35 module:io.ox/tours
 msgid ""
 "This guided tour will briefly introduce you to the product. Get more "
 "detailed information in the tours for the single apps or in the online help."
@@ -488,7 +484,7 @@ msgstr ""
 "Para escrever um novo e-mail, clique no ícone Escrever na barra de "
 "ferramentas."
 
-#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:62 module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr ""
 "Para criar um novo e-mail, clique no ícone Escrever novo e-mail na barra de "
@@ -546,7 +542,7 @@ msgstr ""
 "Para exibir um quadrado novamente ou para exibir mais fontes de informação, "
 "clique em Personalizar esta página."
 
-#: apps/io.ox/tours/intro.js:76 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid ""
 "To display the help or the settings, click the System menu icon in the menu "
 "bar."
@@ -598,7 +594,7 @@ msgstr ""
 "Para convidar outros participantes, insira seus nomes no campo Participantes "
 "abaixo. Você pode adicionar documentos como anexo para a tarefa."
 
-#: apps/io.ox/tours/intro.js:71 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:39 module:io.ox/tours
 msgid "To launch an app, click on an entry on the left side of the menu bar."
 msgstr ""
 "Para iniciar um aplicativo, clique em uma entrada no canto superior esquerdo "
@@ -620,7 +616,7 @@ msgstr ""
 "Para abrir ou fechar um e-mail em uma conversa, clique em uma área livre no "
 "cabeçalho."
 
-#: apps/io.ox/tours/intro.js:102 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:70 module:io.ox/tours
 msgid ""
 "To open or close the folder tree, click on View >  Folder view on the right "
 "side of the toolbar."
@@ -669,7 +665,7 @@ msgstr ""
 "Para receber informações sobre o remetente ou outros destinatários, abra a "
 "visualização Halo clicando sobre um nome."
 
-#: apps/io.ox/tours/intro.js:107 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:75 module:io.ox/tours
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr ""
 "Para pesquisar por objetos, clique no ícone de Pesquisar na barra de menu."
@@ -758,7 +754,7 @@ msgstr ""
 "compartilhados. Se a árvore de pasta está oculta, clique em Visualizar > "
 "Visualização de Pasta no lado direito da barra de ferramentas."
 
-#: apps/io.ox/tours/intro.js:117 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:85 module:io.ox/tours
 msgid ""
 "Use the folder tree to open the folder containing the objects that you want "
 "to view in the list."
@@ -766,7 +762,7 @@ msgstr ""
 "Use a árvore de pastas para abrir a pasta contendo os objetos que você quer "
 "visualizar na lista."
 
-#: apps/io.ox/tours/intro.js:122 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:90 module:io.ox/tours
 msgid ""
 "Use the list to select an object, show its contents or activate functions."
 msgstr ""
@@ -777,7 +773,7 @@ msgstr ""
 msgid "Using the reminder function"
 msgstr "Usando a função lembrete"
 
-#: apps/io.ox/tours/intro.js:66 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:34 module:io.ox/tours
 msgid "Welcome to %s"
 msgstr "Bem-vindo ao %s"
 
@@ -812,6 +808,9 @@ msgstr "Bem-vindo ao %s"
 
 #~ msgid "Enter the subject on the right side of the recipient."
 #~ msgstr "Insira o assunto do lado direito do destinatário."
+
+#~ msgid "Guided tour for this app"
+#~ msgstr "Passeio guiado por este aplicativo"
 
 #~ msgid ""
 #~ "If a folder contains images, you can display a slideshow. To do so click "
