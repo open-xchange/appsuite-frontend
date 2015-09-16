@@ -95,6 +95,12 @@
             width: 285px;
         }
     }
+    .vgrid.editable .vgrid-cell.tasks .title {
+        width: 275px;
+        &.not-fulltime {
+            width: 235px;
+        }
+    }
 }
 
 @media (max-width: 500px) {
@@ -104,13 +110,25 @@
             width: 185px;
         }
     }
+    .vgrid.editable .vgrid-cell.tasks .title {
+        width: 175px;
+        &.not-fulltime {
+            width: 135px;
+        }
+    }
 }
 
 @media (max-width: 400px) {
     .vgrid-cell.tasks .title {
         width: 190px;
         &.not-fulltime {
-            width: 150px;
+            width: 140px;
+        }
+    }
+    .vgrid.editable .vgrid-cell.tasks .title {
+        width: 140px;
+        &.not-fulltime {
+            width: 100px;
         }
     }
 }
