@@ -1012,7 +1012,7 @@ define('io.ox/files/main', [
                         app: 'drive',
                         target: 'toolbar',
                         type: 'click',
-                        action: node.attr('data-name'),
+                        action: node.attr('data-name') || node.attr('data-action'),
                         detail: node.attr('data-value')
                     });
                 });
