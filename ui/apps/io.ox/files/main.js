@@ -642,7 +642,7 @@ define('io.ox/files/main', [
             app.listView.$el.on(ev, '.list-item:not(.file-type-folder) .list-item-content', function (e) {
                 var cid = $(e.currentTarget).parent().attr('data-cid'),
                     selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
-                    baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app });
+                    baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app, options: { eventname: 'selection-doubleclick' } });
 
                 actions.invoke('io.ox/files/actions/default', null, baton);
             });
@@ -667,7 +667,7 @@ define('io.ox/files/main', [
                 if (e.which === 13) {
                     var cid = app.listView.selection.get()[0],
                         selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
-                        baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app });
+                        baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app, options: { eventname: 'selection-enter' } });
 
                     actions.invoke('io.ox/files/actions/default', null, baton);
                 }
@@ -1066,6 +1066,19 @@ define('io.ox/files/main', [
                             type: 'click',
                             action: 'select',
                             detail: list.length > 1 ? 'multiple' : 'one'
+                        });
+                    }
+                });
+                // default action
+                ext.point('io.ox/files/actions/default').extend({
+                    id: 'default_preprocess',
+                    index: 50,
+                    action: function (baton) {
+                        metrics.trackEvent({
+                            app: 'drive',
+                            target: 'list/' + app.props.get('layout'),
+                            type: 'click',
+                            action: baton.options.eventname
                         });
                     }
                 });
