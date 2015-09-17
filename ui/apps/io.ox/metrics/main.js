@@ -15,11 +15,12 @@ define('io.ox/metrics/main', [
     'io.ox/core/extensions',
     'settings!io.ox/core',
     'io.ox/metrics/util',
+    'io.ox/core/capabilities',
     'io.ox/core/http',
     'io.ox/metrics/extensions',
     'io.ox/metrics/adapters/default',
     'io.ox/metrics/adapters/console'
-], function (ext, settings, util, http) {
+], function (ext, settings, util, caps, http) {
 
     'use strict';
 
@@ -73,7 +74,8 @@ define('io.ox/metrics/main', [
             point.invoke('trackPage', metrics, createBaton(data));
         },
         trackVariable: function (data) {
-            point.invoke('trackVariable', metrics, createBaton(data));
+            // properties needed: id, value, index
+            point.invoke('trackVariable', metrics, data);
         },
         // register listener
         watch: function (options, data) {
@@ -95,7 +97,11 @@ define('io.ox/metrics/main', [
 
     // called once
     point.invoke('setup', metrics);
-    point.invoke('trackVisit', metrics);
+    point.invoke('trackVisit', metrics, [
+        { id: 'language', value: ox.language },
+        { id: 'version', value: ox.version },
+        { id: 'capabilities', value: caps.getFlat().enabled }
+    ]);
 
     // global listener (ox-events)
     ext.point('io.ox/metrics/extensions').invoke('register', metrics);
