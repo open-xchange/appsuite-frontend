@@ -50,7 +50,7 @@ define('io.ox/metrics/adapters/default', [
         },
         trackPage: function (baton) {
             //_paq.push(['setUserId', this.getUserHash() ]);
-            _paq.push(['trackPageView', baton.data.id || baton.data.name || baton.data.title ]);
+            _paq.push(['trackPageView', baton.data.trackingId || baton.data.id || baton.data.name ]);
         }
     });
 

@@ -40,7 +40,7 @@ define('io.ox/metrics/extensions', [
                 metrics.trackPage({
                     name: app.get('name'),
                     id: app.get('id'),
-                    title: app.get('title')
+                    trackingId: app.get('trackingId')
                 });
             });
         }
