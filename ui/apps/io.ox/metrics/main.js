@@ -29,7 +29,7 @@ define('io.ox/metrics/main', [
 
     function isEnabled () {
         // disable when doNotTrack is enabled
-        if (util.doNotTrack()) return false;
+        if (settings.get('tracking/donottrack', false) && util.doNotTrack()) return false;
         // disable for tests
         if (_.device('karma')) return false;
         // disable durin development
