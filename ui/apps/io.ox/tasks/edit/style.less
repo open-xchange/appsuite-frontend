@@ -33,4 +33,13 @@
         padding-left: 0;
         margin-bottom: 9px;
     }
+
+    //add temporariily higher z index to fix the focus outline (Bug 41266)
+    .input-group {
+        .progress-field:focus,
+        button[data-action='minus']:focus,
+        button[data-action='plus']:focus {
+            z-index: 3;
+        }
+    }
 }
