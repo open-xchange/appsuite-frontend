@@ -83,9 +83,6 @@ define('io.ox/files/actions/upload-new-version', [
 
                 process(_.first(files), comment).then(this.close, this.idle)
                 .fail(function () {
-                    if (files.length === 0) {
-                        notify('info', gt('You have to select a file to upload.'));
-                    }
                     _.defer(function () { $node.focus(); });
                 });
             })
