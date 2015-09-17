@@ -232,7 +232,7 @@ define.async('io.ox/mail/accounts/view-form',
             onSave: function () {
 
                 var self = this,
-                    list = ['name', 'personal', 'unified_inbox_enabled'],
+                    list = ['name', 'personal', 'unified_inbox_enabled', 'password', 'transport_password'],
                     differences = returnDifferences(this.model.attributes, originalModel);
 
                 function returnDifferences(a, b) {
