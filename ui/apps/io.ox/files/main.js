@@ -995,6 +995,7 @@ define('io.ox/files/main', [
                 var nodes = app.getWindow().nodes,
                     //node = nodes.outer,
                     toolbar = nodes.body.find('.classic-toolbar-container'),
+                    control = nodes.body.find('.list-view-control > .generic-toolbar'),
                     sidepanel = nodes.sidepanel;
                 // toolbar actions
                 toolbar.delegate('.io-ox-action-link', 'mousedown', function (e) {
@@ -1014,6 +1015,20 @@ define('io.ox/files/main', [
                         type: 'click',
                         action: node.attr('data-name') || node.attr('data-action'),
                         detail: node.attr('data-value')
+                    });
+                });
+
+                // list view control toolbar dropdown
+                control.delegate('.dropdown-menu a', 'mousedown', function (e) {
+                    var node =  $(e.target).closest('a'),
+                        action = node.attr('data-name'),
+                        detail = node.attr('data-value');
+                    metrics.trackEvent({
+                        app: 'drive',
+                        target: 'list-view-toolbar',
+                        type: 'click',
+                        action: action,
+                        detail: detail
                     });
                 });
                 // folder tree action
