@@ -991,7 +991,7 @@ define('io.ox/files/main', [
 
         'metrics': function (app) {
             require(['io.ox/metrics/main'], function (metrics) {
-                //if (!metrics.isEnabled()) return;
+                if (!metrics.isEnabled()) return;
                 var nodes = app.getWindow().nodes,
                     //node = nodes.outer,
                     toolbar = nodes.body.find('.classic-toolbar-container'),
