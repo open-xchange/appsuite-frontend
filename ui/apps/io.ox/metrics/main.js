@@ -15,10 +15,11 @@ define('io.ox/metrics/main', [
     'io.ox/core/extensions',
     'settings!io.ox/core',
     'io.ox/metrics/util',
+    'io.ox/core/http',
     'io.ox/metrics/extensions',
     'io.ox/metrics/adapters/default',
     'io.ox/metrics/adapters/console'
-], function (ext, settings, util) {
+], function (ext, settings, util, http) {
 
     'use strict';
 
@@ -55,8 +56,15 @@ define('io.ox/metrics/main', [
         return qualify(baton);
     }
 
+    function mapColumns (data) {
+        var app = data.app === 'drive' ? 'files' : data.app,
+            mapping = http.getColumnMapping(app);
+        return data.detail = mapping[data.detail] || data.detail;
+    }
+
     metrics = {
         trackEvent: function (data) {
+            if (data.action === 'sort') mapColumns(data);
             point.invoke('trackEvent', metrics, createBaton(data));
         },
         trackPage: function (data) {
