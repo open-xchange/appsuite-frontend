@@ -43,7 +43,9 @@ define('io.ox/metrics/main', [
     // add generated id to baton (based on baton.data)
     function qualify (baton) {
         var data = baton.data,
-            id = _.compact([data.app, data.target, data.action, data.detail]).join('/');
+            // use only tail of non-flat action ids
+            action = data.action ? data.action.substr(data.action.lastIndexOf('/') + 1) : data.action,
+            id = _.compact([data.app, data.target, action, data.detail]).join('/');
         if (!id) return baton;
         baton.id = id;
         return baton;
