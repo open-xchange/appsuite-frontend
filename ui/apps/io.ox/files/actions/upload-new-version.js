@@ -26,8 +26,8 @@ define('io.ox/files/actions/upload-new-version', [
          */
         function notify () {
             var self = this, args = arguments;
-            require(['io.ox/core/notifications'], function (notifications) {
-                notifications.yell.apply(self, args);
+            require(['io.ox/core/yell'], function (yell) {
+                yell.apply(self, args);
             });
         }
 
@@ -75,6 +75,9 @@ define('io.ox/files/actions/upload-new-version', [
 
                 process(_.first(files), comment).then(this.close, this.idle)
                 .fail(function () {
+                    if (files.length === 0) {
+                        notify('info', gt('You have to select a file to upload.'));
+                    }
                     _.defer(function () { $node.focus(); });
                 });
             })
