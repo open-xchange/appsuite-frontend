@@ -292,6 +292,22 @@ define('io.ox/settings/main', [
 
         });
 
+        // metrics
+        tree.on('virtual', function (id) {
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+                // folder tree selection
+                metrics.trackEvent({
+                    app: 'settings',
+                    target: 'folder',
+                    type: 'click',
+                    action: 'select',
+                    // flat
+                    detail: id.substr(id.lastIndexOf('/') + 1)
+                });
+            });
+        });
+
         if (_.device('smartphone')) {
             tree.$container.on('click', '.folder.selectable.selected .folder-label', function () {
                 left.trigger('select');
