@@ -1023,6 +1023,11 @@ define('io.ox/files/main', [
                     var node =  $(e.target).closest('a'),
                         action = node.attr('data-name'),
                         detail = node.attr('data-value');
+                    // special handling for select 'links'
+                    if (['all','files','none'].indexOf(action) > -1) {
+                        detail = action;
+                        action = 'select';
+                    }
                     metrics.trackEvent({
                         app: 'drive',
                         target: 'list-view-toolbar',
