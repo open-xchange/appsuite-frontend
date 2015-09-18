@@ -23,8 +23,9 @@ define('io.ox/core/folder/extensions', [
     'gettext!io.ox/core',
     'io.ox/core/folder/folder-color',
     'io.ox/backbone/mini-views/upsell',
+    'settings!io.ox/core',
     'io.ox/core/folder/favorites'
-], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color, UpsellView) {
+], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color, UpsellView, settings) {
 
     'use strict';
 
@@ -70,6 +71,40 @@ define('io.ox/core/folder/extensions', [
             return api.list('1').then(function (list) {
                 return _(list).filter(function (data) {
                     return api.isExternalFileStorage(data);
+                });
+            });
+        });
+    }
+
+    function getMyFilesFolder() {
+        return api.get(settings.get('folder/infostore'));
+    }
+
+    function getMySharesFolder() {
+        return $.when({ id: 'virtual/myshares', folder_id: '9', title: gt('My shares') });
+    }
+
+    function getTrashFolder() {
+        return api.list('9').then(function (list) {
+            return _(list).filter(function (data) {
+                return api.is('trash', data);
+            });
+        });
+    }
+
+    if (capabilities.has('infostore')) {
+        api.virtual.add('virtual/drive/private', function () {
+            return this.concat(getMyFilesFolder(), getMySharesFolder(), getTrashFolder());
+        });
+        api.virtual.add('virtual/drive/private-without-myshares', function () {
+            return this.concat(getMyFilesFolder(), getTrashFolder());
+        });
+        api.virtual.add('virtual/drive/public', function () {
+            return api.list('9').then(function (list) {
+                return _(list).filter(function (data) {
+                    if (String(data.id) === String(settings.get('folder/infostore'))) return false;
+                    if (api.is('trash', data)) return false;
+                    return true;
                 });
             });
         });
@@ -238,7 +273,7 @@ define('io.ox/core/folder/extensions', [
             if (tree.module === 'infostore') {
                 var previous = options.filter;
                 options.filter = function (id, model) {
-                    // get repsonse of previously defined filter function
+                    // get response of previously defined filter function
                     var unfiltered = (previous ? previous.apply(this, arguments) : true);
                     // exclude external accounts
                     return unfiltered && !api.isExternalFileStorage(model);
@@ -247,6 +282,51 @@ define('io.ox/core/folder/extensions', [
 
             this.append(
                 new TreeNodeView(options).render().$el.addClass('root-folders')
+            );
+        },
+
+        privateDriveFolders: function (tree) {
+            this.append(
+                new TreeNodeView({
+                    //empty: false,
+                    folder: 'virtual/drive/private',
+                    headless: true,
+                    open: true,
+                    icons: tree.options.icons,
+                    tree: tree,
+                    parent: tree
+                })
+                .render().$el.addClass('private-drive-folders')
+            );
+        },
+
+        privateDriveFoldersWithoutMyShares: function (tree) {
+            this.append(
+                new TreeNodeView({
+                    //empty: false,
+                    folder: 'virtual/drive/private-without-myshares',
+                    headless: true,
+                    open: true,
+                    icons: tree.options.icons,
+                    tree: tree,
+                    parent: tree
+                })
+                .render().$el.addClass('private-drive-folders')
+            );
+        },
+
+        publicDriveFolders: function (tree) {
+            this.append(
+                new TreeNodeView({
+                    //empty: false,
+                    folder: 'virtual/drive/public',
+                    headless: true,
+                    open: true,
+                    icons: tree.options.icons,
+                    tree: tree,
+                    parent: tree
+                })
+                .render().$el.addClass('public-drive-folders')
             );
         }
     };
@@ -350,26 +430,36 @@ define('io.ox/core/folder/extensions', [
 
     ext.point('io.ox/core/foldertree/infostore/app').extend(
         {
-            id: 'standard-folders',
+            id: 'private-folders',
             index: 100,
-            draw: extensions.rootFolders
+            draw: extensions.privateDriveFolders
+        },
+        {
+            id: 'public-folders',
+            index: 200,
+            draw: extensions.publicDriveFolders
         },
         {
             id: 'remote-accounts',
-            index: 200,
+            index: 300,
             draw: extensions.fileStorageAccounts
         }
     );
 
     ext.point('io.ox/core/foldertree/infostore/popup').extend(
         {
-            id: 'standard-folders',
+            id: 'private-folders',
             index: 100,
-            draw: extensions.rootFolders
+            draw: extensions.privateDriveFoldersWithoutMyShares
+        },
+        {
+            id: 'public-folders',
+            index: 200,
+            draw: extensions.publicDriveFolders
         },
         {
             id: 'remote-accounts',
-            index: 200,
+            index: 300,
             draw: extensions.fileStorageAccounts
         }
     );
