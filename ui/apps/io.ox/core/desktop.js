@@ -1706,7 +1706,7 @@ define('io.ox/core/desktop', [
 
     // simple launch
     ox.launch = function (id, data) {
-        var def = $.Deferred();
+        var def = $.Deferred(), loadStart = Date.now();
         if (_.isString(id)) {
             adaptiveLoader.stop();
             var requirements = adaptiveLoader.startAndEnhance(id.replace(/\/main$/, ''), [id]);
@@ -1714,6 +1714,7 @@ define('io.ox/core/desktop', [
                 function (m) {
                     m.getApp(data).launch(data).done(function () {
                         def.resolveWith(this, arguments);
+                        ox.trigger('loadtime', { id: id, loadStart: loadStart, loadEnd: Date.now() });
                     });
                 },
                 function () {

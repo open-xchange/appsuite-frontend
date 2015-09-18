@@ -47,6 +47,22 @@ define('io.ox/metrics/extensions', [
     });
 
     point.extend({
+        id: 'loadtime',
+        register: function () {
+            var metrics = this;
+            ox.on('loadtime', function (data) {
+                debugger;
+                metrics.trackEvent({
+                    app: 'core',
+                    target: 'loadtime',
+                    action: data.id.replace('/main', ''),
+                    value: data.loadEnd - data.loadStart
+                });
+            });
+        }
+    });
+
+    point.extend({
         id: 'settings',
         register: function () {
             var metrics = this;
