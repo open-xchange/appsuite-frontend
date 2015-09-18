@@ -686,7 +686,7 @@ define('io.ox/core/tk/wizard', [
                 setTop(bounds.top);
             } else {
                 // otherwise
-                this.$el.addClass('center middle');
+                this.$el.addClass('center middle').css({ top: '', right: '', bottom: '', left: '' });
             }
 
             this.trigger('align');
