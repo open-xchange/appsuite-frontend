@@ -18,8 +18,9 @@ define('io.ox/core/boot/load', [
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'io.ox/core/capabilities',
+    'io.ox/core/manifests',
     'io.ox/core/moment'
-], function (themes, util, http, coreSettings, mailSettings, capabilities) {
+], function (themes, util, http, coreSettings, mailSettings, capabilities, manifests) {
 
     'use strict';
 
@@ -44,8 +45,13 @@ define('io.ox/core/boot/load', [
     function loadUserTheme() {
 
         var theme = _.url.hash('theme') || coreSettings.get('theme') || 'default',
-            loadCore = require(['io.ox/core/main']),
-            loadTheme = themes.set(theme);
+            loadTheme = themes.set(theme),
+            //"core" namespace has now a very similar timing to "io.ox/core/main" namespace
+            //the only difference is, "core" plugins are loaded completely before
+            //"io.ox/core/main" plugins
+            loadCore = manifests.manager.loadPluginsFor('core').then(function () {
+                return require(['io.ox/core/main']);
+            });
 
         util.debug('Load UI > require [core/main] and set theme', theme);
 
