@@ -271,7 +271,13 @@ define('io.ox/core/folder/view', [
                 _.defer(function () {
                     api.path(id).done(function (path) {
                         // get all ids except the folder itself, therefore slice(0, -1);
-                        var ids = _(path).pluck('id').slice(0, -1);
+                        var ids = _(path).pluck('id').slice(0, -1),
+                            // in our apps folders are organized in virtual folders, we need to open the matching section too (private, shared, public)
+                            section = api.getSection(_(path).where({ 'id': id })[0].type);
+
+                        if (section && _(['mail','contacts', 'calendar', 'tasks', 'infostore']).contains(tree.module) && tree.flat && tree.context === 'app') {
+                            ids.push('virtual/flat/' + tree.module + '/' + section );
+                        }
                         tree.open = _(tree.open.concat(ids)).uniq();
                     })
                     .always(function () {
@@ -282,8 +288,11 @@ define('io.ox/core/folder/view', [
                         }
                         // and on appear
                         tree.once('appear:' + id, function () {
-                            tree.selection.preselect(id);
-                            tree.selection.scrollIntoView(id);
+                            // defer selection; might be too fast otherwise
+                            _.defer(function () {
+                                tree.selection.preselect(id);
+                                tree.selection.scrollIntoView(id);
+                            });
                         });
                         // render now
                         tree.render();
