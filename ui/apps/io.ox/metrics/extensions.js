@@ -51,7 +51,6 @@ define('io.ox/metrics/extensions', [
         register: function () {
             var metrics = this;
             ox.on('loadtime', function (data) {
-                debugger;
                 metrics.trackEvent({
                     app: 'core',
                     target: 'loadtime',
