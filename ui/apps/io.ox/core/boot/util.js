@@ -69,7 +69,15 @@ define('io.ox/core/boot/util', [], function () {
         },
 
         isAnonymous: function () {
-            return _.url.hash('login_type') === 'anonymous';
+            return _.url.hash('login_type') === 'anonymous_password';
+        },
+
+        isGuest: function () {
+            return _.url.hash('login_type') === 'guest';
+        },
+
+        isGuestWithPassword: function () {
+            return _.url.hash('login_type') === 'guest_password';
         },
 
         fail: function (error, focus) {

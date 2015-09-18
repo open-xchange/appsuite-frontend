@@ -90,7 +90,11 @@ define('io.ox/core/boot/main', [
             this.useForm();
         },
 
-        anonymous: function () {
+        guest_password: function () {
+            this.useForm();
+        },
+
+        anonymous_password: function () {
             this.useForm();
         },
 
