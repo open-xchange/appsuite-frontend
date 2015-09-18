@@ -38,19 +38,31 @@ define('io.ox/metrics/adapters/default', [
             // lazy
             require([url + 'piwik.js']);
         },
-        trackVisit: function () {
-            //_paq.push(['setUserId', this.getUserHash() ]);
-            _paq.push(['setCustomVariable', 1, 'language', ox.language, 'visit' ]);
+        trackVisit: function (list) {
+            var self = this;
+            _.each(list, function (data, index) {
+                self.trackVariable(_.extend(data, { index: index + 1 }));
+            });
         },
         trackEvent: function (baton) {
             var data = baton.data;
-            //_paq.push(['setUserId', this.getUserHash() ]);
             // category, action, name, value
-            _paq.push(['trackEvent', data.app, baton.id || data.target, data.action, data.detail]);
+            _paq.push(['trackEvent', data.app, baton.id || data.target, data.action, data.detail || data.value ]);
         },
         trackPage: function (baton) {
             //_paq.push(['setUserId', this.getUserHash() ]);
             _paq.push(['trackPageView', baton.data.trackingId || baton.data.id || baton.data.name ]);
+        },
+        trackVariable: function (data) {
+            // important: index range in piwiks default settings is 1 to 5
+            // https://piwik.org/faq/how-to/faq_17931/
+            if (!data.index) {
+                if (ox.debug) console.log('Missing/invalid index argument on trackVariable call');
+                return;
+            }
+            // http://developer.piwik.org/guides/tracking-javascript-guide#custom-variables
+            data.value = _.isString(data.value) ? data.value : JSON.stringify(data.value);
+            _paq.push(['setCustomVariable', data.index, data.id, data.value, data.scope || 'visit' ]);
         }
     });
 

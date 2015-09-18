@@ -49,6 +49,24 @@ define('io.ox/backbone/mini-views/help', [], function () {
                 href = href.target || href;
             }
 
+            // metrics
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+                // track help as separate app/page
+                metrics.trackPage({
+                    id: 'io.ox/help'
+                });
+                // track what page/anchor of help is requested
+                metrics.trackEvent({
+                    app: 'core',
+                    target: 'toolbar',
+                    type: 'click',
+                    action: 'help',
+                    detail: href.substr(href.lastIndexOf('#') + 1)
+                });
+            });
+            debugger;
+
             window.open(base + '/l10n/' + ox.language + '/' + href);
 
             e.preventDefault();

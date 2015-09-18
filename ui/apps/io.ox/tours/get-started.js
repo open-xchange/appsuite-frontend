@@ -20,18 +20,38 @@ define('io.ox/tours/get-started', ['io.ox/core/extensions', 'io.ox/core/tk/wizar
         tagName: 'li',
 
         events: {
-            'click a': 'onClick'
+            'click a': 'onClick',
+            'start': 'onStart'
         },
 
         onClick: function (e) {
             e.preventDefault();
-            var app = ox.ui.App.getCurrentApp(), description;
+            var app = ox.ui.App.getCurrentApp(), description, self = this;
             if (app && _.isFunction(app.getTour)) {
                 description = app.getTour();
                 require([description.path], function () {
+                    self.$el.trigger('start', app);
                     Tour.registry.run(description.id);
                 });
             }
+        },
+
+        onStart: function (e, app) {
+            require(['io.ox/metrics/main'], function (metrics) {
+                // track help as separate app/page
+                metrics.trackPage({
+                    id: 'io.ox/guidedtour'
+                });
+                // track
+                var name = app.get('trackingId') || app.get('id') || app.get('name');
+                metrics.trackEvent({
+                    app: 'core',
+                    target: 'toolbar',
+                    type: 'click',
+                    action: 'guided-tour',
+                    detail: name.substr(name.lastIndexOf('/') + 1)
+                });
+            });
         },
 
         onAppChange: function () {
@@ -47,7 +67,7 @@ define('io.ox/tours/get-started', ['io.ox/core/extensions', 'io.ox/core/tk/wizar
 
         render: function () {
             this.$el.hide().attr('role', 'presentation').append(
-                $('<a href="#" role="menuitem">').text(gt('Guided tour for this app'))
+                $('<a href="#" role="menuitem" data-action="guided-tour">').text(gt('Guided tour for this app'))
             );
             return this;
         }

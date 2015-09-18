@@ -15,10 +15,12 @@ define('io.ox/metrics/main', [
     'io.ox/core/extensions',
     'settings!io.ox/core',
     'io.ox/metrics/util',
+    'io.ox/core/capabilities',
+    'io.ox/core/http',
     'io.ox/metrics/extensions',
     'io.ox/metrics/adapters/default',
     'io.ox/metrics/adapters/console'
-], function (ext, settings, util) {
+], function (ext, settings, util, caps, http) {
 
     'use strict';
 
@@ -29,7 +31,7 @@ define('io.ox/metrics/main', [
 
     function isEnabled () {
         // disable when doNotTrack is enabled
-        if (util.doNotTrack()) return false;
+        if (settings.get('tracking/donottrack', false) && util.doNotTrack()) return false;
         // disable for tests
         if (_.device('karma')) return false;
         // disable durin development
@@ -42,7 +44,10 @@ define('io.ox/metrics/main', [
     // add generated id to baton (based on baton.data)
     function qualify (baton) {
         var data = baton.data,
-            id = _.compact([data.app, data.target, data.action, data.detail]).join('/');
+            // use only tail of non-flat action ids
+            action = data.action ? data.action.substr(data.action.lastIndexOf('/') + 1) : data.action,
+            // we do not use data.value for this -  mostly these values do not repeat
+            id = _.compact([data.app, data.target, action, data.detail]).join('/');
         if (!id) return baton;
         baton.id = id;
         return baton;
@@ -55,15 +60,23 @@ define('io.ox/metrics/main', [
         return qualify(baton);
     }
 
+    function mapColumns (data) {
+        var app = data.app === 'drive' ? 'files' : data.app,
+            mapping = http.getColumnMapping(app);
+        return data.detail = mapping[data.detail] || data.detail;
+    }
+
     metrics = {
         trackEvent: function (data) {
+            if (data.action === 'sort') mapColumns(data);
             point.invoke('trackEvent', metrics, createBaton(data));
         },
         trackPage: function (data) {
             point.invoke('trackPage', metrics, createBaton(data));
         },
         trackVariable: function (data) {
-            point.invoke('trackVariable', metrics, createBaton(data));
+            // properties needed: id, value, index
+            point.invoke('trackVariable', metrics, data);
         },
         // register listener
         watch: function (options, data) {
@@ -85,7 +98,11 @@ define('io.ox/metrics/main', [
 
     // called once
     point.invoke('setup', metrics);
-    point.invoke('trackVisit', metrics);
+    point.invoke('trackVisit', metrics, [
+        { id: 'language', value: ox.language },
+        { id: 'version', value: ox.version },
+        { id: 'capabilities', value: caps.getFlat().enabled }
+    ]);
 
     // global listener (ox-events)
     ext.point('io.ox/metrics/extensions').invoke('register', metrics);

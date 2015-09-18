@@ -96,5 +96,18 @@ define('io.ox/core/capabilities', function () {
     var caps = _(disabled).keys().sort();
     if (caps.length) console.info('Disabled capabilities: ' + caps.join(', '));
 
+    // flat report
+    api.getFlat = function () {
+        var capcur = _.pluck(api.get(), 'id').sort(),
+            data = { enabled: [], disabled: [], mismatch: [] };
+        _.each(capcur, function (id) {
+            if (api.has(id))
+                data.enabled.push(id);
+            else
+                data.disabled.push(id);
+        });
+        return data;
+    };
+
     return api;
 });
