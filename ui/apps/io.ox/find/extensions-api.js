@@ -423,8 +423,7 @@ define('io.ox/find/extensions-api',[
                 hidden: true,
                 flags: [
                     'toolbar',
-                    'hidden',
-                    'conflicts:folder_type'
+                    'hidden'
                 ],
                 values: [{
                     facet: 'folder',
