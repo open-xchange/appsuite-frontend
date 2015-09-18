@@ -9047,6 +9047,12 @@ msgstr ""
 "Vous devez indiquer un nom d'utilisateur et un mot de passe pour vous "
 "abonner."
 
+#: apps/io.ox/files/actions/upload-new-version.js:79 module:io.ox/files
+#, fuzzy
+#| msgid "Please select a file to import"
+msgid "You have to select a file to upload."
+msgstr "Choisissez un fichier à importer"
+
 #: apps/io.ox/core/relogin.js:56 module:io.ox/core
 msgid "You have to sign in again"
 msgstr "Vous devez vous authentifier à nouveau"

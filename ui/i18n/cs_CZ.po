@@ -8962,6 +8962,12 @@ msgstr "Předběžně jste schůzku přijal(a)"
 msgid "You have to enter a username and password to subscribe."
 msgstr "Chcete-li se přihlásit, musíte zadat uživatelské jméno a heslo."
 
+#: apps/io.ox/files/actions/upload-new-version.js:79 module:io.ox/files
+#, fuzzy
+#| msgid "Please select a file to import"
+msgid "You have to select a file to upload."
+msgstr "Vyberte, prosím, soubor k importu"
+
 #: apps/io.ox/core/relogin.js:56 module:io.ox/core
 msgid "You have to sign in again"
 msgstr "Musíte se přihlásit znovu"

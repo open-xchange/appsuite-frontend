@@ -8776,6 +8776,10 @@ msgstr ""
 msgid "You have to enter a username and password to subscribe."
 msgstr ""
 
+#: apps/io.ox/files/actions/upload-new-version.js:79 module:io.ox/files
+msgid "You have to select a file to upload."
+msgstr ""
+
 #: apps/io.ox/core/relogin.js:56 module:io.ox/core
 #, fuzzy
 #| msgid "Back to appointment"

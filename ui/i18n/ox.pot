@@ -6512,6 +6512,11 @@ msgstr[1] ""
 msgid "Select file"
 msgstr ""
 
+#: apps/io.ox/files/actions/upload-new-version.js:79
+#: module:io.ox/files
+msgid "You have to select a file to upload."
+msgstr ""
+
 #: apps/io.ox/files/actions/versions-delete.js:24
 #: module:io.ox/files
 msgctxt "One file only"

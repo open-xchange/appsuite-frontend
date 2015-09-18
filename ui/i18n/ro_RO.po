@@ -9019,6 +9019,12 @@ msgstr "Ați acceptat provizoriu întâlnirea"
 msgid "You have to enter a username and password to subscribe."
 msgstr "Introduceți un nume de utilizator și o parolă pentru a vă abona."
 
+#: apps/io.ox/files/actions/upload-new-version.js:79 module:io.ox/files
+#, fuzzy
+#| msgid "Please select a file to import"
+msgid "You have to select a file to upload."
+msgstr "Selectați fișierul care trebuie importat"
+
 #: apps/io.ox/core/relogin.js:56 module:io.ox/core
 msgid "You have to sign in again"
 msgstr "Trebuie să vă autentificați din nou."
