@@ -400,7 +400,9 @@ define('io.ox/mail/compose/view', [
             obj.embedded = true;
             obj.max_size = settings.get('maxSize/compose', 1024 * 512);
 
-            return mailAPI[mode](obj, this.messageFormat).then(function (data) {
+            return mailAPI[mode](obj, this.messageFormat)
+                .then(accountAPI.getValidAddress)
+                .then(function (data) {
                 if (mode !== 'edit') {
                     data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
                 } else {
@@ -409,12 +411,7 @@ define('io.ox/mail/compose/view', [
                 data.mode = mode;
                 var attachments = _.clone(data.attachments);
                 delete data.attachments;
-                if (!_.isEmpty(data.from)) {
-                    accountAPI.getAllSenderAddresses().then(function (a) {
-                        if (_.isEmpty(a)) return;
-                        data.from = a.filter(function (from) { return from[1] === data.from[0][1]; });
-                    });
-                }
+
                 if (mode === 'forward') {
                     // move nested messages into attachment array
                     _(data.nested_msgs).each(function (obj) {
