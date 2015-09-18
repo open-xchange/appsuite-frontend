@@ -449,7 +449,8 @@ define('io.ox/find/main', [
 
             return $.when(parent.folder.getData(), parent.folder.isDefault())
                     .then(function (data, isDefault) {
-                        var facets = [];
+                        var facets = [],
+                            manager = app.model.manager;
 
                         // only add when non default folder
                         if (!isDefault || app.isMandatory('folder')) {
@@ -461,7 +462,7 @@ define('io.ox/find/main', [
                         }
 
                         // mandatory
-                        if (app.isMandatory('account')) {
+                        if (app.isMandatory('account') && !manager.findWhere({ id: 'account' })) {
                             facets.push({
                                 facet: 'account',
                                 filter: null,
