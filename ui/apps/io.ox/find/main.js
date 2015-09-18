@@ -430,9 +430,11 @@ define('io.ox/find/main', [
 
         app.getSuggestions = function (query) {
             if (app.get('state') !== 'launched') return INVALID;
-            return app.getProxy().then(function (apiproxy) {
-                return apiproxy.search(query);
-            });
+            // add app.configReady as dependency (ensure mandatry facets are set)
+            return $.when(app.getProxy(), app.configReady)
+                .then(function (apiproxy) {
+                    return apiproxy.search(query);
+                });
         };
 
         app.getSearchResult = function (params, sync) {
@@ -472,6 +474,9 @@ define('io.ox/find/main', [
                     });
         }
 
+        // global indicator of config was applied
+        app.configReady = $.Deferred();
+
         app.updateConfig = function () {
             configPreprocess()
                 .then(app.getConfig)
@@ -479,6 +484,8 @@ define('io.ox/find/main', [
                     data = _.reject(data, function (facet) { return facet.id === 'contact'; });
                     app.model.manager.update(data);
                     app.trigger('find:config-updated');
+                    // manager knows all mandatory facets now and will add them to all calls
+                    app.configReady.resolve();
                 });
         };
 
