@@ -46,6 +46,7 @@ define('io.ox/metrics/main', [
         var data = baton.data,
             // use only tail of non-flat action ids
             action = data.action ? data.action.substr(data.action.lastIndexOf('/') + 1) : data.action,
+            // we do not use data.value for this -  mostly these values do not repeat
             id = _.compact([data.app, data.target, action, data.detail]).join('/');
         if (!id) return baton;
         baton.id = id;

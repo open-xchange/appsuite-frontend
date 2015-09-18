@@ -26,7 +26,7 @@ define('io.ox/metrics/extensions', [
                     app: 'core',
                     target: 'upsell/' + data.type,
                     action: data.id,
-                    value: data.missing
+                    detail: data.missing
                 });
             });
         }
