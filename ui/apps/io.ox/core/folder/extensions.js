@@ -81,7 +81,16 @@ define('io.ox/core/folder/extensions', [
     }
 
     function getMySharesFolder() {
-        return $.when({ id: 'virtual/myshares', folder_id: '9', title: gt('My shares') });
+        return $.when({
+            id: 'virtual/myshares',
+            folder_id: '9',
+            module: 'infostore',
+            own_rights: 403710016, // all rights but admin
+            permissions: [{ bits: 403710016, entity: ox.user_id, group: false }],
+            standard_folder: true,
+            supported_capabilities: [],
+            title: gt('My shares')
+        });
     }
 
     function getTrashFolder() {

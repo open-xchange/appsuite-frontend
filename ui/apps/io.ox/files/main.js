@@ -327,26 +327,7 @@ define('io.ox/files/main', [
             if (!capabilities.has('publication')) return;
 
             // add virtual folder to folder api
-            folderAPI.virtual.add('virtual/myshares', function () {
-                return $.when([]);
-            });
-
-            ext.point('io.ox/core/foldertree/infostore/app').extend({
-                id: 'myshares',
-                index: 100,
-                draw: function (tree) {
-                    this.append(
-                        new TreeNodeView({
-                            title: gt('My shares'),
-                            folder: 'virtual/myshares',
-                            icons: tree.options.icons,
-                            tree: tree,
-                            parent: tree
-                        })
-                        .render().$el.addClass('myshares')
-                    );
-                }
-            });
+            folderAPI.virtual.add('virtual/myshares', function () { return $.when([]); });
 
             var loading = false;
 
