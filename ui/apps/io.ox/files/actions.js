@@ -123,7 +123,17 @@ define('io.ox/files/actions', [
         requires: function (e) {
             // no file-system, no download
             if (_.device('ios')) return false;
-            if (e.collection.has('multiple')) return true;
+
+            if (e.collection.has('multiple')) {
+                var result = true;
+                _.each(e.baton.data, function (obj) {
+                    if (!obj.filename || !obj.file_size) {
+                        result = false;
+                    }
+                });
+                return result;
+            }
+
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
