@@ -472,7 +472,7 @@ define('io.ox/search/model', [
                         return data.facet === 'folder';
                     });
 
-                // reset current folder when switching apps
+                // reset current folder when switching apps (exept for drives account hack)
                 tmppool.folder.values.custom.id = 'custom';
                 tmppool.folder.values.custom.custom = undefined;
                 tmppool.folder.values.custom.name = undefined;
@@ -482,8 +482,8 @@ define('io.ox/search/model', [
                     query: '',
                     autocomplete: [],
                     active: [],
-                    pool: tmppool,
-                    poollist: tmplist,
+                    pool: this.isMandatory('account') ? {} : tmppool,
+                    poollist: this.isMandatory('account') ? [] : tmplist,
                     pooldisabled: {},
                     start: 0
                 },
