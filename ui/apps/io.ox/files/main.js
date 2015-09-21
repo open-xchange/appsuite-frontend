@@ -1100,6 +1100,15 @@ define('io.ox/files/main', [
         win.addClass('io-ox-files-main');
         app.settings = settings;
 
+        // see bug 41082 - fix for unrecognized -webkit-overflow-scrolling: touch
+        function orientationChangeHandler() {
+            var menu = $('body').find('ul.dropdown-menu:visible');
+            menu.css('-webkit-overflow-scrolling', 'touch');
+            menu.css('-webkit-overflow-scrolling', '');
+        }
+
+        app.registerGlobalEventHandler(window, 'orientationchange', orientationChangeHandler);
+
         commons.wirePerspectiveEvents(app);
 
         win.nodes.outer.on('selection:drop', function (e, baton) {
