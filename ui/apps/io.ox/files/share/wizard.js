@@ -66,7 +66,10 @@ define('io.ox/files/share/wizard', [
                 )
             );
             baton.view.listenTo(baton.model, 'change:url', function (model, val) {
-                linkNode.find('input').val(val).focus().select();
+                // WORKAROUND: ios8 focus bug
+                var node = linkNode.find('input').val(val).select();
+                if (_.device('ios')) return;
+                node.focus();
             });
             if (link === '' ) {
                 baton.model.fetch();
