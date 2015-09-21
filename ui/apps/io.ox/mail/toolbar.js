@@ -237,9 +237,10 @@ define('io.ox/mail/toolbar', [
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
             var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li' })
             .header(gt('Layout'))
-            .option('layout', 'vertical', gt('Vertical'))
-            .option('layout', 'compact', gt('Compact'))
-            .option('layout', 'horizontal', gt('Horizontal'))
+            .option('layout', 'vertical', gt('Vertical'));
+            // offer compact view only on desktop
+            if (_.device('desktop')) dropdown.option('layout', 'compact', gt('Compact'));
+            dropdown.option('layout', 'horizontal', gt('Horizontal'))
             .option('layout', 'list', gt('List'))
             .divider()
             .header(gt('Options'))

@@ -264,9 +264,19 @@ define('io.ox/mail/main', [
          * Default application properties
          */
         'props': function (app) {
+
+            function getLayout() {
+                // enforece vertical on smartphones
+                if (_.device('smartphone')) return 'vertical';
+                var layout = app.settings.get('layout', 'vertical');
+                // 'compact' only works on desktop properly
+                if (layout === 'compact' && _.device('!desktop')) layout = 'vertical';
+                return layout;
+            }
+
             // introduce shared properties
             app.props = new Backbone.Model({
-                'layout': _.device('smartphone') ? 'vertical' : app.settings.get('layout', 'vertical'),
+                'layout': getLayout(),
                 'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
                 'contactPictures': _.device('smartphone') ? false : app.settings.get('showContactPictures', false),
                 'exactDates': app.settings.get('showExactDates', false),
