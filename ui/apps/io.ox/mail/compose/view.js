@@ -290,8 +290,7 @@ define('io.ox/mail/compose/view', [
             this.composeMode = 'compose';
             this.editorId = _.uniqueId('editor-');
             this.editorContainer = $('<div class="editor">').attr({
-                'data-editor-id': this.editorId,
-                'tabindex': 1
+                'data-editor-id': this.editorId
             });
 
             this.baton = ext.Baton({

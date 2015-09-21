@@ -188,7 +188,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         el.append(
             toolbar = $('<div class="editable-toolbar">').attr('data-editor-id', el.attr('data-editor-id')),
-            editor = $('<div class="editable">').css('margin-bottom', '32px')
+            editor = $('<div class="editable">').attr('tabindex', 1).css('margin-bottom', '32px')
         );
 
         var rendered = $.Deferred(), initialized = $.Deferred(), ed;

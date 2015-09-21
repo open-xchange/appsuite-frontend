@@ -25,7 +25,7 @@ define('io.ox/core/tk/text-editor', ['static/3rd.party/autosize/dist/autosize.js
         }, opt);
 
         $(textarea).append(
-            textarea = $('<textarea>').addClass('plain-text')
+            textarea = $('<textarea>').attr('tabindex', 1).addClass('plain-text')
         );
         textarea.toggleClass('monospace', opt.useFixedWidthFont);
 
