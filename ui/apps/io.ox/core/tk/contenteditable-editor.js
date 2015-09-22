@@ -546,11 +546,14 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             $(fixed_toolbar).css('display','');
             resizeEditor();
             $(window).on('resize.tinymce', resizeEditor);
+            $(window).on('orientationchange.tinymce', function () {
+                _.delay(resizeEditor, 50);
+            });
         };
 
         this.hide = function () {
             el.hide();
-            $(window).off('resize.tinymce');
+            $(window).off('resize.tinymce orientationchange.tinymce');
         };
 
         (function () {
