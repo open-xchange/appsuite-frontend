@@ -449,7 +449,7 @@ define('io.ox/core/folder/contextmenu', [
                         enabled: true,
                         handler: invite,
                         // Using concat notation to avoid necessity for new translations right before the release
-                        text: model.isShareable(id) ? gt('Invite people') + ' / ' + gt('Permissions') : gt('Existing shares')
+                        text: model.isShareable(id) ? gt('Permissions') + ' / ' + gt('Invite people') : gt('Permissions')
                     });
                 }
 
