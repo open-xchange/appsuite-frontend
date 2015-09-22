@@ -596,15 +596,15 @@ define('io.ox/core/tk/wizard', [
 
         // refer to given element; affects alignment
         // defined by selector (string or DOM element)
-        referTo: function (selector) {
-            this.options.referTo = selector;
+        referTo: function (selector, options) {
+            this.options.referTo = { selector: selector, options: options };
             return this;
         },
 
         // spotlight on given element
         // defined by selector (string or DOM element)
-        spotlight: function (selector) {
-            this.options.spotlight = selector;
+        spotlight: function (selector, options) {
+            this.options.spotlight = { selector: selector, options: options };
             return this;
         },
 
@@ -649,44 +649,99 @@ define('io.ox/core/tk/wizard', [
         // auto-align popup (used internally)
         align: function (selector) {
 
-            // if nothing is defined the step is centered
-            var elem = resolveSelector(selector || this.options.referTo || this.options.spotlight);
+            // fall back to selector from referTo() or spotlight()
+            if (!selector) {
+                if (this.options.referTo) return this.align(this.options.referTo);
+                if (this.options.spotlight) return this.align(this.options.spotlight);
+                return;
+            }
+
+            // resolve target node from selector
+            var elem, options;
+            if (_.isString(selector)) {
+                elem = resolveSelector(selector);
+            } else if (_.isObject(selector)) {
+                elem = resolveSelector(selector.selector);
+                options = selector.options;
+            }
             if (!elem) return;
 
             var $el = this.$el;
             var bounds = getBounds(elem), popupWidth = $el.width(), popupHeight = $el.height();
 
-            function set(key, value, size, available) {
+            function setOffset(key, value, size, available) {
                 value = Math.min(Math.max(16, value), available - size - 16);
                 $el.css(key, value);
             }
 
-            function setLeft(value) {
-                set('left', value, popupWidth, bounds.availableWidth);
+            function setLeftOffset(value) {
+                setOffset('left', value, popupWidth, bounds.availableWidth);
             }
 
-            function setTop(value) {
-                set('top', value, popupHeight, bounds.availableHeight);
+            function setTopOffset(value) {
+                setOffset('top', value, popupHeight, bounds.availableHeight);
+            }
+
+            // try to move the popup right of the selected node, return true on success
+            function alignRight() {
+                if ((bounds.left + bounds.width + popupWidth) < bounds.availableWidth) {
+                    setLeftOffset(bounds.left + bounds.width + 16);
+                    setTopOffset(bounds.top);
+                    return true;
+                }
+            }
+
+            // try to move the popup left of the selected node, return true on success
+            function alignLeft() {
+                if ((bounds.left - popupWidth) > 0) {
+                    setLeftOffset(bounds.left - popupWidth - 16);
+                    setTopOffset(bounds.top);
+                    return true;
+                }
+            }
+
+            // try to move the popup below the selected node, return true on success
+            function alignBottom() {
+                if ((bounds.top + bounds.height + popupHeight) < bounds.availableHeight) {
+                    setLeftOffset(bounds.left);
+                    setTopOffset(bounds.top + bounds.height + 16);
+                    return true;
+                }
+            }
+
+            // try to move the popup above the selected node, return true on success
+            function alignTop() {
+                if ((bounds.top - popupHeight) > 0) {
+                    setLeftOffset(bounds.left);
+                    setTopOffset(bounds.top - popupHeight - 16);
+                    return true;
+                }
+            }
+
+            // move the popup to the center of the screen
+            function alignCenter() {
+                this.$el.addClass('center middle').css({ top: '', right: '', bottom: '', left: '' });
             }
 
             // remove default class and reset all inline positions
             this.$el.removeClass('center middle').css({ top: 'auto', right: 'auto', bottom: 'auto', left: 'auto' });
 
-            if ((bounds.left + bounds.width + popupWidth) < bounds.availableWidth) {
-                // enough room to appear on the right side
-                setLeft(bounds.left + bounds.width + 16);
-                setTop(bounds.top);
-            } else if ((bounds.top + bounds.height + popupHeight) < bounds.availableHeight) {
-                // enough room to appear below
-                setLeft(bounds.left);
-                setTop(bounds.top + bounds.height + 16);
-            } else if ((bounds.left - popupWidth) > 0) {
-                // enough room to appear on the left side
-                setLeft(bounds.left - popupWidth - 16);
-                setTop(bounds.top);
-            } else {
-                // otherwise
-                this.$el.addClass('center middle').css({ top: '', right: '', bottom: '', left: '' });
+            // find the best position according to the passed options
+            switch ((options && options.position) || 'right') {
+            case 'right':
+                if (!(alignRight() || alignBottom() || alignLeft() || alignTop())) alignCenter();
+                break;
+            case 'left':
+                if (!(alignLeft() || alignBottom() || alignRight() || alignTop())) alignCenter();
+                break;
+            case 'bottom':
+                if (!(alignBottom() || alignTop() || alignRight() || alignLeft())) alignCenter();
+                break;
+            case 'top':
+                if (!(alignTop() || alignBottom() || alignRight() || alignLeft())) alignCenter();
+                break;
+            default:
+                alignCenter();
             }
 
             this.trigger('align');
