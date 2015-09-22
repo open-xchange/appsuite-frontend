@@ -203,6 +203,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             skin: 'lightgray'
         }, opt);
 
+        editor.addClass(opt.class);
+
         opt.toolbar1 += ' | ' + opt.advanced;
 
         // consider custom configurations
@@ -558,7 +560,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         (function () {
             if (_.device('smartphone')) return;
-            var scrollPane = opt.app.getWindowNode(),
+            var scrollPane = opt.scrollpane || opt.app && opt.app.getWindowNode(),
                 fixed = false,
                 top = 14;
 
@@ -595,7 +597,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         function addKeepalive(id) {
             var timeout = Math.round(settings.get('maxUploadIdleTimeout', 200000) * 0.9);
-            intervals.push(setInterval(mailAPI.keepalive, timeout, id));
+            intervals.push(setInterval(opt.keepalive || mailAPI.keepalive, timeout, id));
         }
 
         function clearKeepalive() {
