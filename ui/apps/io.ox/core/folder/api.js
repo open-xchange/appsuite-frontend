@@ -424,7 +424,7 @@ define('io.ox/core/folder/api', [
 
     VirtualFolder.prototype.concat = function () {
         return $.when.apply($, arguments).then(function () {
-            return _(arguments).flatten();
+            return _(arguments).chain().flatten().compact().value();
         });
     };
 
