@@ -672,7 +672,8 @@
                 var dropdown = new DropdownView({ label: $('<i class="fa fa-bars">'), smart: true, title: gt('Actions') }),
                     type = baton.model.get('type'),
                     myself = baton.model.isMyself(),
-                    isNew = baton.model.has('new');
+                    isNew = baton.model.has('new'),
+                    isMail = baton.parentModel.get('module') === 'mail';
 
                 switch (type) {
                     case 'group':
@@ -680,7 +681,7 @@
                         break;
                     case 'user':
                     case 'guest':
-                        if (!myself && !isNew) {
+                        if (!myself && !isNew && !isMail) {
                             dropdown.link('resend', gt('Resend invitation')).divider();
                         }
                         dropdown.link('revoke', gt('Revoke access'));
@@ -909,18 +910,21 @@
                                 $(this).typeahead('val', '');
                             })
                         ),
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').addClass('control-label sr-only').text(gt('Enter a Message to inform users')).attr({ for: guid = _.uniqueId('form-control-label-') }),
-                            new miniViews.TextView({
-                                name: 'message',
-                                model: dialogConfig
-                            }).render().$el.addClass('message-text').attr({
-                                id: guid,
-                                rows: 3,
-                                //#. placeholder text in share dialog
-                                placeholder: gt('Personal message (optional). This message is sent to all newly invited people.')
-                            })
-                        )
+                        // add message - not available for mail
+                        module !== 'mail' ?
+                            $('<div>').addClass('form-group').append(
+                                $('<label>').addClass('control-label sr-only').text(gt('Enter a Message to inform users')).attr({ for: guid = _.uniqueId('form-control-label-') }),
+                                new miniViews.TextView({
+                                    name: 'message',
+                                    model: dialogConfig
+                                }).render().$el.addClass('message-text').attr({
+                                    id: guid,
+                                    rows: 3,
+                                    //#. placeholder text in share dialog
+                                    placeholder: gt('Personal message (optional). This message is sent to all newly invited people.')
+                                })
+                            ) :
+                            $()
                     )
                 );
 
@@ -933,6 +937,9 @@
             dialog.on('save', function () {
 
                 var changes, options = dialogConfig.toJSON(), def;
+
+                // no notification messages for mail
+                if (objModel.get('module') === 'mail') delete options.notification;
 
                 if (objModel.isFolder()) {
                     changes = { permissions: permissionsView.collection.toJSON() };
