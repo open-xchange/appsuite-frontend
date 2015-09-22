@@ -55,6 +55,7 @@ define('io.ox/tasks/actions/doneUndone', [
                         notifications.yell('error', gt.noI18n(result));
                     });
             } else {
+                if (_.isArray(data)) data = data[0];
                 mods.id = data.id;
                 mods.folder_id = data.folder_id || data.folder;
                 api.update(mods)

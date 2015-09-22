@@ -12,6 +12,9 @@
  */
 
 // Bootstrap Tokenfield overrides
+
+@tokenfield-menu-width: 320px;
+
 .tokenfield {
 
     &.form-control {
@@ -61,12 +64,12 @@
         }
 
         & > .token-input.tt-hint, & > .token-input.tt-input,{
-            //width: 100% !important;
+            min-width: @tokenfield-menu-width !important;
         }
 
         .tt-dropdown-menu {
-            width: 320px;
-            min-width: 320px;
+            width: @tokenfield-menu-width;
+            min-width: @tokenfield-menu-width;
             @media all and (min-width: 320px) and (max-width: 480px) {
                 border-radius: 0;
                 border: 1px solid #fff;

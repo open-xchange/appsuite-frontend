@@ -37,8 +37,11 @@ define('io.ox/files/share/api', [
         },
 
         isAdmin: function () {
-            // simplification: user is always admin for single files
-            if (this.isFile()) return true;
+            // for files we don't have the parent folder information
+            // use shareable attribute instead
+            if (this.isFile()) {
+                return this.get('shareable');
+            }
             // otherwise check folder bits
             return folderAPI.Bitmask(this.get('own_rights')).get('admin') >= 1;
         },

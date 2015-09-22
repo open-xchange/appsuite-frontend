@@ -455,13 +455,15 @@
                     node = $('<span class="contact-picture">');
 
                 if (baton.view.user) {
+                    // internal users and guests
                     column.append(
                         contactsAPI.pictureHalo(node, baton.view.user, { width: 40, height: 40 })
                     );
                 } else {
+                    // groups and links
                     column.append(
                         node.addClass('group').append(
-                            $('<i class="fa fa-' + (baton.model.get('type') === 'group' ? 'group' : 'user') + '">')
+                            $('<i class="fa fa-' + (baton.model.get('type') === 'group' ? 'group' : 'link') + '">')
                         )
                     );
                 }

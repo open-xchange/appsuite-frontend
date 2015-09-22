@@ -110,6 +110,8 @@ define('io.ox/find/api', [
     api.config = function (options) {
         var opt = $.extend(true, {}, getDefault('autocomplete'), options);
         opt.data.options.check = false;
+        // console.log('config');
+        // console.log(JSON.stringify(opt.data.facets));
         return api.autocomplete(opt);
     };
 
@@ -122,9 +124,13 @@ define('io.ox/find/api', [
         var opt = $.extend(true, {}, getDefault('autocomplete'), options),
             key = api.cid(opt);
 
+        // addStaticFacets(opt);
+
         return simpleCache.get(key).then(function (data) {
             // use cache
             if (data !== null) return data;
+            // console.log('autocomplete');
+            // console.log(JSON.stringify(opt.data.facets));
             // call server
             return http[opt.method](opt)
                     .then(simpleCache.add.bind(this, key));
@@ -138,6 +144,8 @@ define('io.ox/find/api', [
      */
     api.query = function (options) {
         var opt = $.extend(true, {}, getDefault('query'), getColumns(options), options);
+        // console.log('query');
+        // console.log(JSON.stringify(opt.data.facets));
         return http[opt.method](opt);
     };
 

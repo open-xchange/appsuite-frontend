@@ -327,26 +327,7 @@ define('io.ox/files/main', [
             if (!capabilities.has('publication')) return;
 
             // add virtual folder to folder api
-            folderAPI.virtual.add('virtual/myshares', function () {
-                return $.when([]);
-            });
-
-            ext.point('io.ox/core/foldertree/infostore/app').extend({
-                id: 'myshares',
-                index: 100,
-                draw: function (tree) {
-                    this.append(
-                        new TreeNodeView({
-                            title: gt('My shares'),
-                            folder: 'virtual/myshares',
-                            icons: tree.options.icons,
-                            tree: tree,
-                            parent: tree
-                        })
-                        .render().$el.addClass('myshares')
-                    );
-                }
-            });
+            folderAPI.virtual.add('virtual/myshares', function () { return $.when([]); });
 
             var loading = false;
 
@@ -642,7 +623,7 @@ define('io.ox/files/main', [
             app.listView.$el.on(ev, '.list-item:not(.file-type-folder) .list-item-content', function (e) {
                 var cid = $(e.currentTarget).parent().attr('data-cid'),
                     selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
-                    baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app });
+                    baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app, options: { eventname: 'selection-doubleclick' } });
 
                 actions.invoke('io.ox/files/actions/default', null, baton);
             });
@@ -667,7 +648,7 @@ define('io.ox/files/main', [
                 if (e.which === 13) {
                     var cid = app.listView.selection.get()[0],
                         selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
-                        baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app });
+                        baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app, options: { eventname: 'selection-enter' } });
 
                     actions.invoke('io.ox/files/actions/default', null, baton);
                 }
@@ -991,10 +972,11 @@ define('io.ox/files/main', [
 
         'metrics': function (app) {
             require(['io.ox/metrics/main'], function (metrics) {
-                //if (!metrics.isEnabled()) return;
+                if (!metrics.isEnabled()) return;
                 var nodes = app.getWindow().nodes,
                     //node = nodes.outer,
                     toolbar = nodes.body.find('.classic-toolbar-container'),
+                    control = nodes.body.find('.list-view-control > .generic-toolbar'),
                     sidepanel = nodes.sidepanel;
                 // toolbar actions
                 toolbar.delegate('.io-ox-action-link', 'mousedown', function (e) {
@@ -1012,8 +994,27 @@ define('io.ox/files/main', [
                         app: 'drive',
                         target: 'toolbar',
                         type: 'click',
-                        action: node.attr('data-name'),
+                        action: node.attr('data-name') || node.attr('data-action'),
                         detail: node.attr('data-value')
+                    });
+                });
+
+                // list view control toolbar dropdown
+                control.delegate('.dropdown-menu a', 'mousedown', function (e) {
+                    var node =  $(e.target).closest('a'),
+                        action = node.attr('data-name'),
+                        detail = node.attr('data-value');
+                    // special handling for select 'links'
+                    if (['all','files','none'].indexOf(action) > -1) {
+                        detail = action;
+                        action = 'select';
+                    }
+                    metrics.trackEvent({
+                        app: 'drive',
+                        target: 'list-view-toolbar',
+                        type: 'click',
+                        action: action,
+                        detail: detail
                     });
                 });
                 // folder tree action
@@ -1049,6 +1050,19 @@ define('io.ox/files/main', [
                         });
                     }
                 });
+                // default action
+                ext.point('io.ox/files/actions/default').extend({
+                    id: 'default_preprocess',
+                    index: 50,
+                    action: function (baton) {
+                        metrics.trackEvent({
+                            app: 'drive',
+                            target: 'list/' + app.props.get('layout'),
+                            type: 'click',
+                            action: baton.options.eventname
+                        });
+                    }
+                });
             });
         }
     });
@@ -1066,6 +1080,15 @@ define('io.ox/files/main', [
 
         win.addClass('io-ox-files-main');
         app.settings = settings;
+
+        // see bug 41082 - fix for unrecognized -webkit-overflow-scrolling: touch
+        function orientationChangeHandler() {
+            var menu = $('body').find('ul.dropdown-menu:visible');
+            menu.css('-webkit-overflow-scrolling', 'touch');
+            menu.css('-webkit-overflow-scrolling', '');
+        }
+
+        app.registerGlobalEventHandler(window, 'orientationchange', orientationChangeHandler);
 
         commons.wirePerspectiveEvents(app);
 

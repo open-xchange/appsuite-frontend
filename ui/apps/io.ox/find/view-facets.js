@@ -13,9 +13,10 @@
 
 define('io.ox/find/view-facets', [
     'io.ox/find/extensions-facets',
+    'io.ox/core/folder/api',
     'io.ox/core/extensions',
     'gettext!io.ox/core'
-], function (extensions, ext, gt) {
+], function (extensions, api, ext, gt) {
 
     'use strict';
 
@@ -44,6 +45,11 @@ define('io.ox/find/view-facets', [
     ext.point(POINT + '/dropdown/folder').extend({
         index: 100,
         draw: extensions.dropdownFolder
+    });
+
+    ext.point(POINT + '/dropdown/account').extend({
+        index: 100,
+        draw: $.noop
     });
 
     /**
@@ -104,9 +110,34 @@ define('io.ox/find/view-facets', [
                 .focus();
         },
 
+        is: function (type, data, options) {
+
+            var matcher = {
+                    'readable': _.partial(api.can, 'read'),
+                    'virtual': function (data) {
+                        return api.isVirtual(data.id);
+                    },
+                    'account': function (data, option) {
+                        return data.account = option.account;
+                    }
+                }, match;
+
+            match = matcher[type];
+            return match ? match.call(this, data, options) : false;
+
+        },
+
         openFolderDialog: function () {
-            var self = this;
-            require(['io.ox/core/folder/picker', 'io.ox/core/folder/api'], function (picker, api) {
+            var self = this,
+                is = self.is;
+
+            function isAccount (data) {
+                var account = self.model.manager.get('account');
+                if (!account) return true;
+                return data.account_id === account.getValue().getOption().value;
+            }
+
+            require(['io.ox/core/folder/picker'], function (picker) {
                 var manager = self.model.manager,
                     facet = manager.get('folder'),
                     type = self.baton.app.getModuleParam(),
@@ -133,7 +164,7 @@ define('io.ox/find/view-facets', [
                             });
                     },
                     disable: function (data) {
-                        return !api.can('read', data) || api.isVirtual(data.id);
+                        return !is('readable', data) || api.is('virtual', data) || !isAccount(data);
                     }
                 });
             });

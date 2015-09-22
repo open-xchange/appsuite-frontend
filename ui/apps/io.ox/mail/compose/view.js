@@ -34,23 +34,23 @@ define('io.ox/mail/compose/view', [
     var INDEX = 0,
         POINT = 'io.ox/mail/compose';
 
-    ext.point(POINT + '/buttons').extend({
-        index: 100,
-        id: 'send',
-        draw: extensions.buttons.send
-    });
-
-    ext.point(POINT + '/buttons').extend({
-        index: 200,
-        id: 'save',
-        draw: extensions.buttons.save
-    });
-
-    ext.point(POINT + '/buttons').extend({
-        index: 300,
-        id: 'discard',
-        draw: extensions.buttons.discard
-    });
+    ext.point(POINT + '/buttons').extend(
+        {
+            index: 100,
+            id: 'send',
+            draw: extensions.buttons.send
+        },
+        {
+            index: 200,
+            id: 'save',
+            draw: extensions.buttons.save
+        },
+        {
+            index: 300,
+            id: 'discard',
+            draw: extensions.buttons.discard
+        }
+    );
 
     ext.point(POINT + '/mailto').extend({
         id: 'mailto',
@@ -58,67 +58,93 @@ define('io.ox/mail/compose/view', [
         setup: extensions.mailto
     });
 
-    ext.point(POINT + '/header').extend({
-        index: 100,
-        id: 'title',
-        draw: extensions.title
-    });
-
-    ext.point(POINT + '/header').extend({
-        index: 200,
-        id: 'buttons',
-        draw: function (baton) {
-            ext.point(POINT + '/buttons').invoke('draw', this, baton);
+    ext.point(POINT + '/header').extend(
+        {
+            index: 100,
+            id: 'title',
+            draw: extensions.title
+        },
+        {
+            index: 200,
+            id: 'buttons',
+            draw: function (baton) {
+                ext.point(POINT + '/buttons').invoke('draw', this, baton);
+            }
         }
-    });
+    );
 
-    ext.point(POINT + '/fields').extend({
-        id: 'header',
-        index: INDEX += 100,
-        draw: extensions.header
-    });
+    ext.point(POINT + '/fields').extend(
+    {
+            id: 'header',
+            index: INDEX += 100,
+            draw: extensions.header
+        },
+        {
+            id: 'sender',
+            index: INDEX += 100,
+            draw: extensions.sender
+        },
+        {
+            id: 'to',
+            index: INDEX += 100,
+            draw: extensions.tokenfield('to')
+        },
+        {
+            id: 'cc',
+            index: INDEX += 100,
+            draw: extensions.tokenfield('cc')
+        },
+        {
+            id: 'bcc',
+            index: INDEX += 100,
+            draw: extensions.tokenfield('bcc')
+        },
+        {
+            id: 'replyto',
+            index: INDEX += 100,
+            draw: extensions.tokenfield('reply_to')
+        },
+        {
+            id: 'subject',
+            index: INDEX += 100,
+            draw: extensions.subject
+        },
+        {
+            id: 'composetoolbar',
+            index: INDEX += 100,
+            draw: function (baton) {
+                var node = $('<div data-extension-id="composetoolbar" class="row composetoolbar">');
+                ext.point(POINT + '/composetoolbar').invoke('draw', node, baton);
+                this.append(node);
+            },
+            redraw: function (baton) {
+                var node = this.find('.row.composetoolbar');
+                ext.point(POINT + '/composetoolbar').invoke('redraw', node, baton);
+            }
+        },
+        {
+            id: 'attachments',
+            index: INDEX += 100,
+            draw: function (baton) {
+                var node = $('<div data-extension-id="attachments" class="row attachments">');
+                ext.point(POINT + '/attachments').invoke('draw', node, baton);
+                this.append(node);
+            }
+        }
+    );
 
-    ext.point(POINT + '/fields').extend({
-        id: 'sender',
-        index: INDEX += 100,
-        draw: extensions.sender
-    });
-
-    ext.point(POINT + '/fields').extend({
-        id: 'to',
-        index: INDEX += 100,
-        draw: extensions.tokenfield('To')
-    });
-
-    ext.point(POINT + '/fields').extend({
-        id: 'cc',
-        index: INDEX += 100,
-        draw: extensions.tokenfield('CC')
-    });
-
-    ext.point(POINT + '/fields').extend({
-        id: 'bcc',
-        index: INDEX += 100,
-        draw: extensions.tokenfield('BCC')
-    });
-
-    ext.point(POINT + '/fields').extend({
-        id: 'subject',
-        index: INDEX += 100,
-        draw: extensions.subject
-    });
-
-    ext.point(POINT + '/recipientActionLink').extend({
-        id: 'cc',
-        index: 100,
-        draw: extensions.recipientActionLink('cc')
-    });
-
-    ext.point(POINT + '/recipientActionLink').extend({
-        id: 'bcc',
-        index: 200,
-        draw: extensions.recipientActionLink('bcc')
-    });
+    ext.point(POINT + '/recipientActionLink').extend(
+        {
+            id: 'cc',
+            index: 100,
+            draw: extensions.recipientActionLink('cc')
+        },
+        {
+            id: 'bcc',
+            index: 200,
+            draw: extensions.recipientActionLink('bcc')
+        }
+    );
 
     ext.point(POINT + '/recipientActionLinkMobile').extend({
         id: 'mobile',
@@ -132,11 +158,18 @@ define('io.ox/mail/compose/view', [
         draw: extensions.recipientActions
     });
 
-    ext.point(POINT + '/menu').extend({
-        id: 'signatures',
-        index: 100,
-        draw: extensions.signaturemenu
-    });
+    ext.point(POINT + '/menu').extend(
+        {
+            id: 'signatures',
+            index: 100,
+            draw: extensions.signaturemenu
+        },
+        {
+            id: 'options',
+            index: 200,
+            draw: extensions.optionsmenu
+        }
+    );
 
     ext.point(POINT + '/signatures').extend({
         id: 'signature',
@@ -144,109 +177,81 @@ define('io.ox/mail/compose/view', [
         draw: extensions.signature
     });
 
-    ext.point(POINT + '/menu').extend({
-        id: 'options',
-        index: 200,
-        draw: extensions.optionsmenu
-    });
-
-    ext.point(POINT + '/editors').extend({
-        id: 'plain-text',
-        label: gt('Plain Text'),
-        mode: 'text'
-    });
-
-    ext.point(POINT + '/editors').extend({
-        id: 'tinymce',
-        label: gt('HTML'),
-        mode: 'html'
-    });
-
-    ext.point(POINT + '/menuoptions').extend({
-        id: 'editor',
-        index: 100,
-        draw: function () {
-            if (_.device('smartphone')) return;
-            var menu = this.data('view')
-                .header(gt('Editor'));
-
-            ext.point(POINT + '/editors').each(function (point) {
-                if (!point.mode && !point.label) return;
-                menu.option('editorMode', point.mode, point.label, gt('Editor'));
-            });
-        }
-    });
-
-    ext.point(POINT + '/menuoptions').extend({
-        id: 'priority',
-        index: 200,
-        draw: function () {
-            this.data('view')
-                .header(gt('Priority'))
-                .option('priority', 0, gt('High'), gt('Priority'))
-                .option('priority', 3, gt('Normal'), gt('Priority'))
-                .option('priority', 5, gt('Low'), gt('Priority'));
-        }
-    });
-
-    ext.point(POINT + '/menuoptions').extend({
-        id: 'options',
-        index: 300,
-        draw: function () {
-            this.data('view')
-                .header(gt('Options'))
-                .option('vcard', 1, gt('Attach Vcard'), gt('Options'))
-                .option('disp_notification_to', true, gt('Request read receipt'), gt('Options'));
-        }
-    });
-
-    ext.point(POINT + '/composetoolbar').extend({
-        id: 'add_attachments',
-        index: 100,
-        draw: function (baton) {
-            var node = $('<div data-extension-id="add_attachments" class="col-xs-4 col-md-5 col-md-offset-1">');
-            extensions.attachment.call(node, baton);
-            this.append(node);
-        }
-    });
-
-    ext.point(POINT + '/composetoolbar').extend({
-        id: 'menus',
-        index: 200,
-        draw: function (baton) {
-            var node = $('<div class="pull-right text-right">');
-
-            ext.point(POINT + '/menu').invoke('draw', node, baton);
-
-            this.append(
-                $('<div data-extension-id="composetoolbar-menu" class="col-xs-8 col-md-6">').append(node)
-            );
-        }
-    });
-
-    ext.point(POINT + '/fields').extend({
-        id: 'composetoolbar',
-        index: INDEX += 100,
-        draw: function (baton) {
-            var node = $('<div data-extension-id="composetoolbar" class="row composetoolbar">');
-            ext.point(POINT + '/composetoolbar').invoke('draw', node, baton);
-            this.append(node);
+    ext.point(POINT + '/editors').extend(
+        {
+            id: 'plain-text',
+            label: gt('Plain Text'),
+            mode: 'text'
         },
-        redraw: function (baton) {
-            var node = this.find('.row.composetoolbar');
-            ext.point(POINT + '/composetoolbar').invoke('redraw', node, baton);
+        {
+            id: 'tinymce',
+            label: gt('HTML'),
+            mode: 'html'
         }
-    });
+    );
 
-    ext.point(POINT + '/fields').extend({
-        id: 'attachments',
-        index: INDEX += 100,
-        draw: function (baton) {
-            var node = $('<div data-extension-id="attachments" class="row attachments">');
-            ext.point(POINT + '/attachments').invoke('draw', node, baton);
-            this.append(node);
+    ext.point(POINT + '/menuoptions').extend(
+        {
+            id: 'editor',
+            index: 100,
+            draw: function () {
+                if (_.device('smartphone')) return;
+                var menu = this.data('view')
+                    .header(gt('Editor'));
+
+                ext.point(POINT + '/editors').each(function (point) {
+                    if (!point.mode && !point.label) return;
+                    menu.option('editorMode', point.mode, point.label, gt('Editor'));
+                });
+            }
+        },
+        {
+            id: 'priority',
+            index: 200,
+            draw: function () {
+                this.data('view')
+                    .header(gt('Priority'))
+                    .option('priority', 0, gt('High'), gt('Priority'))
+                    .option('priority', 3, gt('Normal'), gt('Priority'))
+                    .option('priority', 5, gt('Low'), gt('Priority'));
+            }
+        },
+        {
+            id: 'options',
+            index: 300,
+            draw: function () {
+                this.data('view')
+                    .header(gt('Options'))
+                    .option('vcard', 1, gt('Attach Vcard'), gt('Options'))
+                    .option('disp_notification_to', true, gt('Request read receipt'), gt('Options'));
+            }
         }
-    });
+    );
+
+    ext.point(POINT + '/composetoolbar').extend(
+        {
+            id: 'add_attachments',
+            index: 100,
+            draw: function (baton) {
+                var node = $('<div data-extension-id="add_attachments" class="col-xs-4 col-md-5 col-md-offset-1">');
+                extensions.attachment.call(node, baton);
+                this.append(node);
+            }
+        },
+        {
+            id: 'menus',
+            index: 200,
+            draw: function (baton) {
+                var node = $('<div class="pull-right text-right">');
+
+                ext.point(POINT + '/menu').invoke('draw', node, baton);
+
+                this.append(
+                    $('<div data-extension-id="composetoolbar-menu" class="col-xs-8 col-md-6">').append(node)
+                );
+            }
+        }
+    );
 
     ext.point(POINT + '/attachments').extend({
         id: 'attachmentPreview',
@@ -274,7 +279,6 @@ define('io.ox/mail/compose/view', [
             this.app = options.app;
             this.editorHash = {};
             this.autosave = {};
-            this.intervals = [];
             this.blocked = [];
             this.messageFormat = options.messageFormat || settings.get('messageFormat', 'html');
 
@@ -285,21 +289,14 @@ define('io.ox/mail/compose/view', [
             this.editor = null;
             this.composeMode = 'compose';
             this.editorId = _.uniqueId('editor-');
-            this.contentEditable = $('<div class="editable">').attr({
-                'data-editor-id': this.editorId,
-                'tabindex': 1
-            }).css('margin-bottom', '32px');
-            this.textarea = $('<textarea class="plain-text">').attr({
-                'data-editor-id': this.editorId,
-                'tabindex': 1
-            }).addClass(settings.get('useFixedWidthFont') ? 'monospace' : '');
+            this.editorContainer = $('<div class="editor">').attr({
+                'data-editor-id': this.editorId
+            });
 
             this.baton = ext.Baton({
                 model: this.model,
                 view: this
             });
-
-            this.contentEditable.on('addInlineImage', function (e, id) { this.addKeepalive(id); }.bind(this));
 
             // register for 'dispose' event (using inline function to make this testable via spyOn)
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
@@ -402,7 +399,9 @@ define('io.ox/mail/compose/view', [
             obj.embedded = true;
             obj.max_size = settings.get('maxSize/compose', 1024 * 512);
 
-            return mailAPI[mode](obj, this.messageFormat).then(function (data) {
+            return mailAPI[mode](obj, this.messageFormat)
+                .then(accountAPI.getValidAddress)
+                .then(function (data) {
                 if (mode !== 'edit') {
                     data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
                 } else {
@@ -411,12 +410,7 @@ define('io.ox/mail/compose/view', [
                 data.mode = mode;
                 var attachments = _.clone(data.attachments);
                 delete data.attachments;
-                if (!_.isEmpty(data.from)) {
-                    accountAPI.getAllSenderAddresses().then(function (a) {
-                        if (_.isEmpty(a)) return;
-                        data.from = a.filter(function (from) { return from[1] === data.from[0][1]; });
-                    });
-                }
+
                 if (mode === 'forward') {
                     // move nested messages into attachment array
                     _(data.nested_msgs).each(function (obj) {
@@ -517,7 +511,7 @@ define('io.ox/mail/compose/view', [
                 // Replace inline images in contenteditable with links from draft response
                 if (self.model.get('editorMode') === 'html') {
                     $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
-                        $('img:not(.emoji):eq(' + index + ')', self.contentEditable).attr('src', $(el).attr('src'));
+                        $('img:not(.emoji):eq(' + index + ')', self.editorContainer.find('.editable')).attr('src', $(el).attr('src'));
                     });
                 }
                 self.model.set('msgref', result.data, { silent: true });
@@ -603,15 +597,6 @@ define('io.ox/mail/compose/view', [
             delay();
         },
 
-        addKeepalive: function (id) {
-            var timeout = Math.round(settings.get('maxUploadIdleTimeout', 200000) * 0.9);
-            this.intervals.push(setInterval(mailAPI.keepalive, timeout, id));
-        },
-
-        clearKeepalive: function () {
-            _(this.intervals).each(clearInterval);
-        },
-
         clean: function () {
             // mark as not dirty
             this.model.dirty(false);
@@ -624,7 +609,6 @@ define('io.ox/mail/compose/view', [
         },
 
         dispose: function () {
-            this.clearKeepalive();
             this.stopListening();
             this.model = null;
         },
@@ -909,32 +893,36 @@ define('io.ox/mail/compose/view', [
         },
 
         loadEditor: function (content) {
-            var self = this;
+            if (this.editorHash[this.model.get('editorMode')]) {
+                return this.reuseEditor(content);
+            }
+            var self = this,
+                def = $.Deferred(),
+                options = {};
 
-            return ox.manifests.loadPluginsFor('io.ox/mail/compose/editor/' + this.model.get('editorMode')).then(function (Editor) {
-                return (self.editorHash[self.model.get('editorMode')] = new Editor(self.model.get('editorMode') === 'text' ? self.textarea : self.contentEditable))
-                    .done(function () {
-                        self.editor = self.editorHash[self.model.get('editorMode')];
-                        return $.when(self.editor.setPlainText(content)).done(function () {
-                            self.editor.handleShow(true);
-                            self.setSelectedSignature();
-                            if (self.model.get('mode') !== 'compose') {
-                                self.editor.focus();
-                            }
-                            if (self.model.get('editorMode') !== 'text') {
-                                self.editor.resetUndo();
-                            }
-                        });
-                    });
+            options.useFixedWithFont = settings.get('useFixedWithFont');
+            options.app = this.app;
+            options.view = this;
+            options.model = this.model;
+
+            ox.manifests.loadPluginsFor('io.ox/mail/compose/editor/' + this.model.get('editorMode')).then(function (Editor) {
+                new Editor(self.editorContainer, options).done(function (editor) {
+                    def.resolve(editor);
+                });
+            });
+            return def.then(function (editor) {
+                self.editorHash[self.model.get('editorMode')] = editor;
+                return self.reuseEditor.apply(self, [content]);
             });
         },
 
         reuseEditor: function (content) {
             var self = this;
             this.editor = this.editorHash[this.model.get('editorMode')];
-            return $.when(this.editor.setPlainText(content)).done(function () {
-                self.editor.handleShow(true);
+            return $.when(this.editor.setPlainText(content)).then(function () {
+                self.editor.show();
                 self.setSelectedSignature();
+                return self.editor;
             });
         },
 
@@ -949,32 +937,23 @@ define('io.ox/mail/compose/view', [
         },
 
         toggleEditorMode: function () {
-            var self = this;
-            // be busy
-            this.contentEditable.busy();
-            this.textarea.prop('disabled', true).busy();
+            var self = this, content;
+            this.editorContainer.busy();
 
             if (this.editor) {
                 this.removeSignature();
 
-                var content = this.editor.getPlainText(),
-                    self = this;
-                this.editor.clear();
-                this.editor.handleHide();
+                content = this.editor.getPlainText();
 
-                // load TEXT/HTML editor for the first time or reuse TEXT/HTML editor
-                var loaded = (!this.editorHash[this.model.get('editorMode')] ? this.loadEditor(content) : this.reuseEditor(content));
-
-                return loaded.done(function () {
-                    //update the content type of the mail
-                    //FIXME: may be, do this somewhere else? in the model?
-                    self.model.setMailContentType(self.editor.content_type);
-                });
-
-            } else {
-                // initial editor
-                return this.loadEditor();
+                this.editor.hide();
             }
+
+            return this.loadEditor(content).then(function () {
+                self.editorContainer.idle();
+                //update the content type of the mail
+                //FIXME: may be, do this somewhere else? in the model?
+                self.model.setMailContentType(self.editor.content_type);
+            });
         },
 
         syncMail: function () {
@@ -1156,33 +1135,6 @@ define('io.ox/mail/compose/view', [
                 delete this.blocked[sendtype];
         },
 
-        handleScrollbars: function () {
-            if (_.device('smartphone')) return;
-            var self = this,
-                scrollPane = this.app.getWindowNode(),
-                toolbar = this.mcetoolbar,
-                editor = this.contentEditable,
-                fixed = false,
-                top = 14;
-
-            scrollPane.on('scroll', function () {
-                if (self.model.get('editorMode') === 'text') return;
-                if (scrollPane.scrollTop() - scrollPane.find('.mail-compose-fields').height() > top) {
-                    // toolbar leaves viewport
-                    if (!fixed) {
-                        fixed = true;
-                        toolbar.addClass('fixed').css('top', self.$el.parent().offset().top);
-                        $(window).trigger('resize.tinymce');
-                    }
-                    editor.css('margin-top', toolbar.height());
-                } else if (fixed) {
-                    fixed = false;
-                    toolbar.removeClass('fixed').css('top', 0);
-                    editor.css('margin-top', 0);
-                }
-            });
-        },
-
         render: function () {
             var self = this;
 
@@ -1234,14 +1186,8 @@ define('io.ox/mail/compose/view', [
             });
 
             this.$el.append(
-                $('<div class="mail-compose-contenteditable-fields">').append(
-                    this.mcetoolbar = $('<div class="editable-toolbar">').attr('data-editor-id', this.editorId),
-                    this.contentEditable
-                ),
-                this.textarea
+                this.editorContainer
             );
-
-            this.handleScrollbars();
 
             this.initAutoSaveAsDraft();
 

@@ -28,9 +28,9 @@ define('io.ox/find/manager/value-model', [
 
             // predefined option
             _.each(data.options, function (op) {
-                if (facet.get('id') === 'folder')
-                    if (op.active)
-                        option = op.id;
+                if (facet.get('id') === 'folder' || facet.get('id') === 'account') {
+                    if (op.active) option = op.id;
+                }
             });
 
             // hint: single value facet: in case data.id === facet.id
@@ -98,6 +98,14 @@ define('io.ox/find/manager/value-model', [
             // pseudo deactivated
             if (!this.getOption().id || this.getOption().id === 'disabled') return false;
             return !!this.get('active');
+        },
+
+        /**
+         * status check
+         */
+
+        isMandatory: function () {
+            return this.get('facet').is('mandatory');
         },
 
         /**
@@ -209,7 +217,7 @@ define('io.ox/find/manager/value-model', [
             };
 
             return function () {
-                if (!this.isActive()) return;
+                if (!this.isActive() && !this.isMandatory()) return;
 
                 var style = this.get('facet').getType();
                 return map[style].call(this);

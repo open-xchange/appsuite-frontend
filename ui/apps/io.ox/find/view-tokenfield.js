@@ -223,14 +223,19 @@ define('io.ox/find/view-tokenfield', [
             //http://sliptree.github.io/bootstrap-tokenfield/#methods
             this.instance = this.ui.field.data('bs.tokenfield');
             // some shortcuts (available after render)
+            this.hiddenapi = this.ui.view.hiddenapi;
             this.ui.container = this.ui.field.parent();
             this.ui.tokeninput = this.ui.container.find('.token-input');
 
-            // recover state after replace
             if (hasFocus) this.setFocus();
+
+            // recover state after replace
             if (!!query) {
-                // ensure dropdown opens
-                self.ui.field.typeahead('val', self.ui.tokeninput.val(query));
+                // trigger queryChange when query was entered befor loading finshed
+                this.app.on('change:state', function (name, state) {
+                    if (state !== 'launched') return;
+                    self.hiddenapi.input.setInputValue(query, false);
+                });
             }
 
             // update dropdown selection state
@@ -316,9 +321,12 @@ define('io.ox/find/view-tokenfield', [
         },
 
         isEmpty: function () {
-            var none = !this.model.manager.getActive().length;
+            // get active facets and filter the mandatory
+            var active = this.model.manager.getActive(),
+                nonmandatory = _.filter(active, function (facet) { return !facet.is('mandatory'); });
+
             // TODO: empty check also for not yet tokenized input (data loss?!)
-            return none && this.api('getTokens').length === 0 && this.ui.tokeninput.val().trim() === '';
+            return !nonmandatory.length && this.api('getTokens').length === 0 && this.ui.tokeninput.val().trim() === '';
         },
 
         empty: function () {

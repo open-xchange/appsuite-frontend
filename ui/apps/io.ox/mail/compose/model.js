@@ -113,7 +113,7 @@ define.async('io.ox/mail/compose/model', [
                 this.set('defaultSignatureId', settings.get('defaultReplyForwardSignature'));
             }
 
-            if (!this.get('signatures')) this.getSignatures();
+            if (!this.get('signatures')) this.set('signatures', this.getSignatures());
 
             this.updateShadow();
         },

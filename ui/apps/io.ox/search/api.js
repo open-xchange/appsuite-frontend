@@ -129,6 +129,13 @@ define('io.ox/search/api', [
                 return data;
             }
 
+            // debug
+            // if (debug) {
+            //     console.log('%c' + 'autocomplete', 'color: white; background-color: green');
+            //     _.each(opt.data.facets, function (facet) {
+            //         console.log(facet.facet, facet.value);
+            //     });
+            // }
             // call server
             return http[opt.method](opt)
                     .then(simpleCache.add.bind(this, key));
@@ -143,6 +150,13 @@ define('io.ox/search/api', [
     api.query = function (options) {
         // in case options.params.loadercolumns is defined it will be used by getColumns() and removeed from params object
         var opt = $.extend(true, {}, getDefault('query'), getColumns(options), options);
+        // debug
+        // if (debug) {
+        //     console.log('%c' + 'query', 'color: white; background-color: blue');
+        //     _.each(opt.data.facets, function (facet) {
+        //         console.log(facet.facet, facet.value);
+        //     });
+        // }
         return http[opt.method](opt);
     };
 

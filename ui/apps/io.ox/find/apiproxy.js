@@ -25,7 +25,6 @@ define('io.ox/find/apiproxy',[
      */
     var POINT = ext.point('io.ox/find/api/autocomplete');
 
-    //TODO: repair datepicker
     POINT.extend({
         id: 'custom-facet-daterange',
         index: 200,
@@ -42,6 +41,12 @@ define('io.ox/find/apiproxy',[
         id: 'folder',
         index: 350,
         customize: extensions.folder
+    });
+
+    POINT.extend({
+        id: 'account',
+        index: 360,
+        customize: extensions.account
     });
 
     POINT.extend({
@@ -82,7 +87,8 @@ define('io.ox/find/apiproxy',[
             // create request params
             request.data.facets = model.manager.getRequest();
             request.data.options = request.data.options || {};
-            request.data.options.folder = app.get('parent').folder.get();
+            // unused
+            // request.data.options.folder = app.get('parent').folder.get();
 
             // ignore virtual folders
             if (/^virtual/.test(request.data.options.folder) && !app.isMandatory('folder'))
@@ -96,11 +102,15 @@ define('io.ox/find/apiproxy',[
             // managing wrapper to keep model up2date and match tokenfields naming conventions
             proxy = {
                 // static facets
-                config: function () {
-                    var request = {
+                config: function (options) {
+                    var standard = {
                             params: { module: app.getModuleParam() },
-                            data: { prefix: '' }
-                        };
+                            data: {
+                                facets: model.manager.getRequest(),
+                                prefix: ''
+                            }
+                        },
+                        request = $.extend(true, standard, options || {});
                     return api.config(request).then(extend.bind(this, request));
                 },
                 // suggestions

@@ -55,6 +55,17 @@ define('io.ox/files/actions/share', [
                 .addButton('cancel', gt('Cancel'), 'cancel');
         }
 
+        dialog.getContentNode().addClass('invisible')
+            .parent().busy()
+            .find('.btn-primary').prop('disabled', true);
+
+        view.listenTo(view.model, 'change:url', function (value) {
+            if (!value) return;
+            dialog.getContentNode().removeClass('invisible')
+                .parent().idle()
+                .find('.btn-primary').prop('disabled', false);
+        });
+
         dialog.on('share', function () {
                 view.share().then(this.close, this.idle);
             })

@@ -38,7 +38,7 @@ define('io.ox/core/boot/login/standard', [
         if ($.trim(username).length === 0 && !util.isAnonymous()) {
             return util.fail({ error: util.gt('Please enter your credentials.'), code: 'UI-0001' }, 'username');
         }
-        if ($.trim(password).length === 0) {
+        if ($.trim(password).length === 0 && !util.isGuest()) {
             return util.fail({ error: util.gt('Please enter your password.'), code: 'UI-0002' }, 'password');
         }
 
@@ -70,7 +70,6 @@ define('io.ox/core/boot/login/standard', [
     };
 
     function login(name, password) {
-
         var options = {
             name: name,
             password: password,
@@ -82,8 +81,12 @@ define('io.ox/core/boot/login/standard', [
         };
 
         if (_.url.hash('login_type') && _.url.hash('share') && _.url.hash('target')) {
+            var action = 'guest';
+            if (util.isAnonymous()) {
+                action = 'anonymous';
+            }
             _.extend(options, {
-                action: _.url.hash('login_type'),
+                action: action,
                 // share-specific data
                 share: _.url.hash('share'),
                 target: _.url.hash('target')

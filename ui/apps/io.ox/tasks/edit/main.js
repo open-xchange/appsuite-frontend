@@ -233,7 +233,6 @@ define('io.ox/tasks/edit/main', [
                 this.cid = 'io.ox/tasks:edit.' + _.cid(point);
             }
             // trigger blur so apptitle and save button disabled state is updated
-            console.log('blur', this.view.$el.find('.title-field'));
             this.view.$el.find('.title-field').trigger('blur');
             return $.when();
         };

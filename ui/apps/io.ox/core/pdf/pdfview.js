@@ -42,21 +42,30 @@ define('io.ox/core/pdf/pdfview', [
         // max size of canvas width & height
         // https://github.com/mozilla/pdf.js/issues/2439
         // http://stackoverflow.com/a/22345796/4287795
-        MAXIMUM_SIDE_SIZE = (_.browser.iOS || _.browser.Safari || _.browser.IE <= 10) ? 2289 : 4096,
+        MAXIMUM_SIDE_SIZE = (_.browser.iOS || _.browser.Android || _.browser.Safari || _.browser.IE <= 10) ? 2156 : 4096,
 
-        // between every render call (assigned deferred) there is create a timeout of 250ms
+        /**
+         * Queues the render calls for execution. The last call added is the first one to be executed (last in, first out).
+         * Waits after every render call an amount of 250ms before executing the next one.
+         */
         handleRenderQueue = (function () {
-            var lastDef = $.when();
+            var lastDef = $.when(),
+                queue = [];
 
             return function (deferred) {
+                // add the deferred to the beginning of the queue
+                queue.unshift(deferred);
+
                 lastDef = lastDef.then(function () {
-                    var def = $.Deferred();
-                    deferred.then(function () {
-                        setTimeout(function () {
-                            def.resolve();
-                        }, 250);
-                    });
-                    deferred.resolve();
+                    var def = $.Deferred(),
+                        // remove the first deferred from the queue
+                        queuedDef = queue.shift();
+
+                    queuedDef.resolve();
+                    setTimeout(function () {
+                        def.resolve();
+                    }, 250);
+
                     return def;
                 });
             };
@@ -565,7 +574,7 @@ define('io.ox/core/pdf/pdfview', [
                 pageData[pagePos].isInRendering = true;
 
                 var renderDef = $.Deferred();
-                renderDef.then(function () {
+                renderDef.done(function () {
                     pdfDocument.getPDFJSPage(pageNumber).then( function (pdfjsPage) {
                         if (pageNode.children().length) {
                             var viewport = getPageViewport(pdfjsPage, pageZoom),

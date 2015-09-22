@@ -404,9 +404,9 @@ define('io.ox/contacts/main', [
                     // leave multiselect? -> clear selection
                     app.grid.selection.clear();
                     // hide folder button on the left
-                    app.pages.getNavbar('listView').show('.left');
+                    app.pages.getNavbar('listView').setRight(gt('Edit')).show('.left');
                 } else {
-                    app.pages.getNavbar('listView').hide('.left');
+                    app.pages.getNavbar('listView').setRight(gt('Cancel')).hide('.left');
                 }
                 app.props.set('checkboxes', !app.props.get('checkboxes'));
             });

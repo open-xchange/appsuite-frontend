@@ -103,10 +103,13 @@
         }
 
         position: absolute;
+        overflow: auto;
         width: auto;
         height: auto;
+        max-height: 100%;
         margin: 0;
         padding: 10px;
+        padding-bottom: 22px;
         background-color: white;
         top: 12px;
         left: 12px;
@@ -128,7 +131,7 @@
         }
 
         .content {
-            height: 140px;
+            height: auto;
             overflow: auto;
             margin-bottom: 15px;
         }
@@ -137,6 +140,9 @@
             padding-top: 0;
             height: auto;
 
+            .btn {
+                margin-left:0;
+            }
         }
     }
 }

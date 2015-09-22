@@ -990,8 +990,6 @@ textarea.inplace-editor {
     }
 
     &.unread .subject {
-        position: relative;
-        padding-left: 28px;
         .icon-unread {
             color: @link-color;
             display: inline-block;
@@ -1575,14 +1573,7 @@ h4.mail-attachment-preview {
         }
     }
 
-    .mail-item.unread  {
-        .unread-toggle {
-            display: inline-block;
-            position: relative;
-            right: 16px;
-            margin-top: 16px;
-            bottom: auto;
-        }
+    .mail-item  {
         .subject {
             margin-right: 32px;
         }
@@ -1591,9 +1582,11 @@ h4.mail-attachment-preview {
 
 
     .mail-item .unread-toggle {
-        display: none;
-        width: auto;
-        height: auto;
+        display: inline-block;
+        position: relative;
+        right: 16px;
+        margin-top: 16px;
+        bottom: auto;
     }
 
     .mail-item .attachments .io-ox-inline-links {
@@ -1678,10 +1671,12 @@ h4.mail-attachment-preview {
         }
 
         .mail-attachment-list {
-            .ul.inline-items li.item {
+            ul.inline-items li.item {
                 line-height: 35px;
-                .file a {
-                    color: @link-color;
+            }
+            ul.inline-items.preview li.item {
+                .file {
+                    display: block;
                 }
             }
             .list-unstyled.io-ox-inline-links {

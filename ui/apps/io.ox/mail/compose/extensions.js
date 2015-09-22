@@ -31,7 +31,8 @@ define('io.ox/mail/compose/extensions', [
     var tokenfieldTranslations = {
         to: gt('To'),
         cc: gt('CC'),
-        bcc: gt('BCC')
+        bcc: gt('BCC'),
+        reply_to: /*#. Must not exceed 8 characters. e.g. German would be: "Antworten an", needs to be abbreviated like "Antw. an" as space is very limited */ gt.pgettext('compose', 'Reply to')
     };
 
     var extensions = {
@@ -226,15 +227,15 @@ define('io.ox/mail/compose/extensions', [
             this.append(node);
         },
 
-        tokenfield: function (label) {
+        tokenfield: function (attr) {
 
-            var attr = String(label).toLowerCase();
+            if (attr === 'reply_to' && settings.get('showReplyTo/configurable', false) === false) return;
 
             return function (baton) {
                 var guid = _.uniqueId('form-control-label-'),
                     value = baton.model.get(attr) || [],
-                    // display tokeninputfields if necessary
-                    cls = 'row' + (attr === 'to' || value.length ? '' : ' hidden'),
+                    // hide tokeninputfields if necessary (empty cc/bcc)
+                    cls = 'row' + (/cc$/.test(attr) && !value.length ? ' hidden' : ''),
                     redrawLock = false,
                     tokenfieldView = new Tokenfield({
                         id: guid,

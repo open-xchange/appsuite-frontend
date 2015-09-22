@@ -133,6 +133,9 @@ define('io.ox/calendar/list/view-grid-template', [
 
         // template for labels
         label: {
+            getHeight: function () {
+                return 42;
+            },
             build: function () {
                 this.addClass('calendar-label');
             },

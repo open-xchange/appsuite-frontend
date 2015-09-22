@@ -261,8 +261,8 @@ define('io.ox/core/tk/nodetouch', [
     function touchStartHandler(event) {
         triggerEvent('start', event);
     }
-    function touchCancelHandler() {
-        triggerEvent('cancel');
+    function touchCancelHandler(event) {
+        triggerEvent('cancel', event);
     }
     function touchMoveHandler(event) {
         triggerEvent('move', event);

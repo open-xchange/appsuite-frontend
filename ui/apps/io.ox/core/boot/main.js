@@ -90,7 +90,11 @@ define('io.ox/core/boot/main', [
             this.useForm();
         },
 
-        anonymous: function () {
+        guest_password: function () {
+            this.useForm();
+        },
+
+        anonymous_password: function () {
             this.useForm();
         },
 
@@ -118,10 +122,7 @@ define('io.ox/core/boot/main', [
             .then(function (response) {
                 util.debug('Load UI > current language and core plugins DONE.');
                 gettext.enable();
-                return $.when(
-                    response[0],
-                    manifests.manager.loadPluginsFor('core')
-                );
+                return response[0];
             })
             .done(function (load) {
                 util.restore();

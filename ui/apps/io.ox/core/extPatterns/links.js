@@ -406,7 +406,7 @@ define('io.ox/core/extPatterns/links', [
                 var dd;
                 nav.append(
                     $('<li class="dropdown">').append(
-                        dd = $('<a>').addClass('actionlink').attr({
+                        dd = $('<a>').addClass('actionlink ' + (options.smart ? 'smart-dropdown' : '')).attr({
                             href: '#',
                             tabindex: 1,
                             draggable: false,

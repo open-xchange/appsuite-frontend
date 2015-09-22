@@ -26,7 +26,7 @@ define('io.ox/metrics/extensions', [
                     app: 'core',
                     target: 'upsell/' + data.type,
                     action: data.id,
-                    value: data.missing
+                    detail: data.missing
                 });
             });
         }
@@ -40,7 +40,22 @@ define('io.ox/metrics/extensions', [
                 metrics.trackPage({
                     name: app.get('name'),
                     id: app.get('id'),
-                    title: app.get('title')
+                    trackingId: app.get('trackingId')
+                });
+            });
+        }
+    });
+
+    point.extend({
+        id: 'loadtime',
+        register: function () {
+            var metrics = this;
+            ox.on('loadtime', function (data) {
+                metrics.trackEvent({
+                    app: 'core',
+                    target: 'loadtime',
+                    action: data.id.replace('/main', ''),
+                    value: data.loadEnd - data.loadStart
                 });
             });
         }

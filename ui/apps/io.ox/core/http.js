@@ -397,6 +397,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         if (!xhr) {
             return false;
         }
+        // server is still reachable since abort is triggered by the ui
+        if (xhr.statusText === 'abort') {
+            return false;
+        }
         if (xhr.status === 0) {
             return true;
         }

@@ -369,7 +369,8 @@ define('io.ox/contacts/actions', [
     ext.point('io.ox/contacts/detail/actions').extend(new links.InlineLinks({
         index: 100,
         id: 'inline-links',
-        ref: 'io.ox/contacts/links/inline'
+        ref: 'io.ox/contacts/links/inline',
+        smart: true
     }));
 
     //  inline links

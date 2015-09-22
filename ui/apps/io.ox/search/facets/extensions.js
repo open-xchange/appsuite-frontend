@@ -58,31 +58,31 @@ define('io.ox/search/facets/extensions', [
 
         facets: function (baton) {
             // ensure folder facet is set
-            baton.model.ensure();
+            // async
+            var self = this;
+            baton.model.ensure().then(function () {
+                var list = baton.model.get('poollist'),
+                    pool = baton.model.get('pool');
 
-            var list = baton.model.get('poollist'),
-                pool = baton.model.get('pool'),
-                self = this;
+                self.append(
+                    _(list).map(function (item) {
 
-            this.append(
-                _(list).map(function (item) {
+                        // get active value
+                        var facet = pool[item.facet], value, node;
 
-                    // get active value
-                    var facet = pool[item.facet], value, node;
+                        value = facet.values[item.value];
 
-                    value = facet.values[item.value];
-
-                    // for folder
-                    var special = ext.point('io.ox/search/facets/item/' + value.facet);
-                    if (special.list().length > 0) {
-                        // additional actions per id/type
-                        special.invoke('draw', self, baton, value, facet);
-                        return;
-                    }
-
-                    return node;
-                }).reverse()
-            );
+                        // for folder
+                        var special = ext.point('io.ox/search/facets/item/' + value.facet);
+                        if (special.list().length > 0) {
+                            // additional actions per id/type
+                            special.invoke('draw', self, baton, value, facet);
+                            return;
+                        }
+                        return node;
+                    }).reverse()
+                );
+            });
         },
 
         optionsHandler: function (baton) {
@@ -150,7 +150,8 @@ define('io.ox/search/facets/extensions', [
 
             // add 'all folders'
             var link;
-            if (!baton.model.isMandatory('folder')) {
+            // do not show 'all folder' for drive when multiple accounts are defined
+            if (!baton.model.isMandatory('folder') && !baton.model.isMandatory('account')) {
                 menu.prepend(
                     $('<li role="presentation">').append(
                         link = $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1">').append(

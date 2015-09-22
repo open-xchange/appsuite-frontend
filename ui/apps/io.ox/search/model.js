@@ -168,6 +168,13 @@ define('io.ox/search/model', [
         this.set('poollist', list);
     };
 
+    function isFolderSet (model) {
+        var folder = model.get('pool').folder,
+            value = folder ? folder.values.custom.custom || !model.isMandatory('folder') : undefined,
+            disabled = model.get('pooldisabled').folder;
+        return (value || disabled);
+    }
+
     factory = new ModelFactory({
         ref: 'io.ox/search/model',
         api: api,
@@ -390,12 +397,16 @@ define('io.ox/search/model', [
             },
             ensure: function () {
                 var self = this,
-                    missingFolder = !this.get('pool').folder && !this.get('pooldisabled').folder,
+                    missingFolder = !isFolderSet(self),
                     def = missingFolder ? util.getFirstChoice(this) : $.Deferred().resolve({});
                 return def.then(function (data) {
                     data = data || {};
-                    if (!self.get('pool').folder && !self.get('pooldisabled').folder)
-                        self.add('folder', 'custom', data);
+                    if (!isFolderSet(self)) {
+                        if (self.get('pool').folder && data.id)
+                            self.update('folder', 'custom', data);
+                        else
+                            self.add('folder', 'custom', data);
+                    }
                 }, function () {
                     return {
                         message: error.virtual
@@ -423,7 +434,10 @@ define('io.ox/search/model', [
             },
             isMandatory: function (key) {
                 if (options.mandatory === undefined) return false;
-                return (options.mandatory[key] || []).indexOf(this.getModule()) >= 0;
+                var module = this.getModule();
+                // TODO: remove workaround when we use a unque identified for drive in frontend/backend
+                if (module === 'files') module = 'drive';
+                return (options.mandatory[key] || []).indexOf(module) >= 0;
             },
             setItems: function (data, timestamp) {
                 var application = this.getApp(),
@@ -458,7 +472,7 @@ define('io.ox/search/model', [
                         return data.facet === 'folder';
                     });
 
-                // reset current folder when switching apps
+                // reset current folder when switching apps (exept for drives account hack)
                 tmppool.folder.values.custom.id = 'custom';
                 tmppool.folder.values.custom.custom = undefined;
                 tmppool.folder.values.custom.name = undefined;
@@ -468,8 +482,8 @@ define('io.ox/search/model', [
                     query: '',
                     autocomplete: [],
                     active: [],
-                    pool: tmppool,
-                    poollist: tmplist,
+                    pool: this.isMandatory('account') ? {} : tmppool,
+                    poollist: this.isMandatory('account') ? [] : tmplist,
                     pooldisabled: {},
                     start: 0
                 },

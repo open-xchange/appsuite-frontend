@@ -59,6 +59,9 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                         return e;
                     });
             },
+            getAccountsCache: function () {
+                return accountsCache;
+            },
             // returns a collection with all available file storage services
             getAllServices: function (filestorageService, useCache) {
                 // only ignore cache if useCache is set to false, undefined results in using the cache
@@ -77,7 +80,7 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                     module: 'fileservice',
                     params: params
                 })
-                .then( function (services) {
+                .then(function (services) {
                     servicesCache.reset(services);
                     _(services).each(function (service) {
                         try {
@@ -125,6 +128,7 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                     return new Backbone.Model(service);
                 });
             },
+
             // returns a collection with all file storage accounts
             getAllAccounts: function (useCache) {
                 // only ignore cache if useCache is set to false, undefined results in using the cache
@@ -146,6 +150,7 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
             },
             // returns a model of the file storage account
             getAccount: function (options, useCache) {
+                debugger;
                 if (!options.id || !options.filestorageService) {
                     return $.Deferred().reject();
                 }

@@ -13,9 +13,10 @@
 
 define('io.ox/find/main', [
     'io.ox/find/view-placeholder',
+    'io.ox/core/folder/api',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (PlaceholderView, settings, gt) {
+], function (PlaceholderView, folderAPI, settings, gt) {
 
     'use strict';
 
@@ -57,9 +58,9 @@ define('io.ox/find/main', [
                 app.props = new Backbone.Model();
             },
             'props-mandatory': function (app) {
-                // folder facet is mandatory for the follwing apps/modules
+                // a concrete facet is mandatory for the follwing apps/modules
                 app.props.set('mandatory',
-                    settings.get('search/mandatory/folder', []) || []
+                    settings.get('search/mandatory', {}) || {}
                 );
             },
             'props-default': function (app) {
@@ -275,6 +276,20 @@ define('io.ox/find/main', [
                     chromeless: true
                 }));
                 win.show();
+            },
+
+            'file-storages': function (app) {
+                var isDrive = app.getModuleParam() === 'files';
+                if (!isDrive) return app.set('storages', []);
+                require(['io.ox/core/api/filestorage'], function (filesstorageAPI) {
+                    app.set('storages', filesstorageAPI.getAccountsCache());
+                    // currenty implementation: filestorages do not change during runtime
+                    app.get('storages').on({
+                        'change': $.noop,
+                        'add': $.noop,
+                        'remove': $.noop
+                    });
+                });
             }
 
         });
@@ -284,9 +299,8 @@ define('io.ox/find/main', [
             if (this.view) this.view.cancel();
         };
 
-        app.toggle = function (folder) {
-            var eventname = /^virtual/.test(folder) ? 'view:disable' : 'view:enable';
-            app.trigger(eventname);
+        app.toggle = function (folderid) {
+            app.trigger( folderAPI.isVirtual(folderid) ? 'view:disable' : 'view:enable');
         };
 
         // parent app id
@@ -300,13 +314,16 @@ define('io.ox/find/main', [
         };
 
         app.isActive = function () {
-            // return false unless view is initalised
+            // return false unless view is initialised
             return app.view ? app.view.isActive() : false;
         };
 
         app.isMandatory = function (key) {
             var list = app.props.get('mandatory');
-            return (list[key] || []).indexOf(app.getModuleParam()) >= 0;
+            // TODO: remove workaround when we use a unque identified for drive in frontend/backend
+            var module = app.getModuleParam();
+            if (module === 'files') module = 'drive';
+            return (list[key] || []).indexOf(module) >= 0;
         };
 
         // register event listeners
@@ -326,7 +343,7 @@ define('io.ox/find/main', [
                     }, 10)
             });
 
-            // TODO: move to ext point
+            // TODO: move to ext point (>= 7.8.1)
             app.listenTo(manager, {
                 'change:list-of-actives': _.debounce(function (state, value, model) {
                     if (app.model.manager.isFolderOnly());
@@ -405,17 +422,19 @@ define('io.ox/find/main', [
             };
         })();
 
-        app.getConfig = function (query) {
+        app.getConfig = function (options) {
             return app.getProxy().then(function (apiproxy) {
-                return apiproxy.config(query);
+                return apiproxy.config(options);
             });
         };
 
         app.getSuggestions = function (query) {
             if (app.get('state') !== 'launched') return INVALID;
-            return app.getProxy().then(function (apiproxy) {
-                return apiproxy.search(query);
-            });
+            // add app.configReady as dependency (ensure mandatry facets are set)
+            return $.when(app.getProxy(), app.configReady)
+                .then(function (apiproxy) {
+                    return apiproxy.search(query);
+                });
         };
 
         app.getSearchResult = function (params, sync) {
@@ -425,13 +444,50 @@ define('io.ox/find/main', [
             });
         };
 
+        function configPreprocess () {
+            var parent = app.get('parent');
+
+            return $.when(parent.folder.getData(), parent.folder.isDefault())
+                    .then(function (data, isDefault) {
+                        var facets = [],
+                            manager = app.model.manager;
+
+                        // only add when non default folder
+                        if (!isDefault || app.isMandatory('folder')) {
+                            facets.push({
+                                facet: 'folder',
+                                filter: null,
+                                value: data.id
+                            });
+                        }
+
+                        // mandatory
+                        if (app.isMandatory('account') && !manager.findWhere({ id: 'account' })) {
+                            facets.push({
+                                facet: 'account',
+                                filter: null,
+                                value: data.account_id
+                            });
+                        }
+                        if (facets.length) {
+                            return { data: { facets: facets } };
+                        }
+                    });
+        }
+
+        // global indicator of config was applied
+        app.configReady = $.Deferred();
+
         app.updateConfig = function () {
-            app.getConfig().then(function (data) {
-                // be sure to ignore suggested contacts on empty 'config' call
-                data = _.reject(data, function (facet) { return facet.id === 'contact'; });
-                app.model.manager.update(data);
-                app.trigger('find:config-updated');
-            });
+            configPreprocess()
+                .then(app.getConfig)
+                .then(function (data) {
+                    data = _.reject(data, function (facet) { return facet.id === 'contact'; });
+                    app.model.manager.update(data);
+                    app.trigger('find:config-updated');
+                    // manager knows all mandatory facets now and will add them to all calls
+                    app.configReady.resolve();
+                });
         };
 
         // overwrite defaults app.launch

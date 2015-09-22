@@ -432,6 +432,7 @@ define('io.ox/tasks/api', [
             //trigger refresh, for vGrid etc
             api.trigger('refresh.all');
             if (move) {
+                api.trigger('move', { id: task.id, folder_id: useFolder, newFolder: task.folder_id });
                 api.trigger('move:' + _.ecid({ id: task.id, folder_id: useFolder }), task.folder_id);
             } else {
                 api.trigger('update', { id: task.id, folder_id: useFolder });

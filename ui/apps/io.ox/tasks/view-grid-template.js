@@ -88,7 +88,11 @@ define('io.ox/tasks/view-grid-template', [
                         //#. %1$s how much of a task is completed in percent, values from 0-100
                         //#, c-format
                         gt('Progress %1$s %', _.noI18n(data.percent_completed))).show();
+                } else {
+                    fields.progressMessage.text('').hide();
+                    fields.progress.find('.progress-bar').css('width', 0 + '%').end().hide();
                 }
+
                 this.attr({
                     'data-index': index
                 });

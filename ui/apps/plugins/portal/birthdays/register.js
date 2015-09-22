@@ -16,7 +16,8 @@ define('plugins/portal/birthdays/register', [
     'io.ox/contacts/util',
     'gettext!plugins/portal',
     'settings!io.ox/core',
-    'less!plugins/portal/birthdays/style'
+    'less!plugins/portal/birthdays/style',
+    'io.ox/core/tk/flag-picker'
 ], function (ext, api, util, gt, settings) {
 
     'use strict';
@@ -44,6 +45,20 @@ define('plugins/portal/birthdays/register', [
     ext.point('io.ox/portal/widget/birthdays').extend({
 
         title: gt('Birthdays'),
+
+        initialize: function (baton) {
+            api.on('update create delete', function () {
+                //refresh portal
+                require(['io.ox/portal/main'], function (portal) {
+                    var portalApp = portal.getApp(),
+                        portalModel = portalApp.getWidgetCollection()._byId[baton.model.id];
+                    if (portalModel) {
+                        portalApp.refreshWidget(portalModel, 0);
+                    }
+                });
+
+            });
+        },
 
         load: function (baton) {
             var start = moment().utc(true).startOf('day').subtract(1, 'day');

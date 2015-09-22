@@ -281,7 +281,7 @@ ul.dropdown-menu li a.disabled {
             margin: 0;
         };
 
-        .dropdown-menu li>a:focus {
+        .dropdown-menu li>a:focus:not(.disabled) {
             background-color: initial;
             background-image: none;
             color: initial;
@@ -314,9 +314,9 @@ ul.dropdown-menu li a.disabled {
 
         // Disable hover state on mobile devices for custom dropdowns
         // -----------
-        &.dropdown-menu li > a:hover,
-        &.dropdown-menu li > a:focus,
-        &.dropdown-submenu:hover > a {
+        &.dropdown-menu li > a:hover:not(.disabled),
+        &.dropdown-menu li > a:focus:not(.disabled),
+        &.dropdown-submenu:hover > a:not(.disabled) {
             text-decoration: none;
             color: inherit;
             background-color: inherit;

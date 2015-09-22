@@ -36,7 +36,10 @@ define('io.ox/files/actions/edit-description', [
             .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
             .on('save', save)
             .show(function () {
-                this.find('textarea').val(data.description).focus();
+                var node = this.find('textarea').val(data.description);
+                // WORKAROUND: ios8 focus bug
+                if (_.device('ios')) return;
+                node.focus();
             });
     };
 });

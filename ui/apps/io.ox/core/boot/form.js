@@ -28,7 +28,7 @@ define('io.ox/core/boot/form', [
      * url params/values (all optional)
      * ================================
      *
-     * login_type:      [ 'guest' | 'anonymous' ]
+     * login_type:      [ 'guest' | 'guest_password' | 'anonymous_password' ]
      * login_name:      [ something ]
      *
      * status:          [ 'reset_password' | 'invalid_request' ]
@@ -54,6 +54,21 @@ define('io.ox/core/boot/form', [
             $('#io-ox-login-form div.row')
                 .filter('.username, .password, .options, .buttons')
                 .remove();
+        }
+
+        function displayContinue() {
+            $('#io-ox-login-button').attr({
+                'data-i18n': gt('Continue'),
+                placeholder: gt('Continue')
+            });
+
+            var loginName = _.url.hash('login_name');
+            $('.row.username').hide();
+            $('.row.password').hide();
+            $('#io-ox-forgot-password').hide();
+            if (!_.isEmpty(loginName)) {
+                $('#io-ox-login-restoremail, #io-ox-login-username').val(loginName).prop('readonly', true);
+            }
         }
 
         function resetPassword() {
@@ -98,7 +113,7 @@ define('io.ox/core/boot/form', [
             var loginName = _.url.hash('login_name');
 
             // use more suitable message
-            messageReplacement = gt('Please enter your password.');
+            //messageReplacement = gt('Please enter your password.');
 
             $('.row.username').hide();
             if (!_.isEmpty(loginName)) {
@@ -119,6 +134,12 @@ define('io.ox/core/boot/form', [
         }
 
         function defaultLogin() {
+
+            // at this point we know that a "normal" (i.e. non-guest) login is required
+            // therefore we finally check if a custom login location is set
+            var loginLocation =  ox.serverConfig.loginLocation;
+            if (loginLocation && loginLocation !== 'ui') util.gotoSignin();
+
             // remove form for sharing
             $('#io-ox-password-forget-form').remove();
 
@@ -134,13 +155,18 @@ define('io.ox/core/boot/form', [
 
         switch (_.url.hash('login_type')) {
 
-            // show guest login
+            // show continue screen
             case 'guest':
+                displayContinue();
+                break;
+
+            // show guest login
+            case 'guest_password':
                 guestLogin();
                 break;
 
             // show anonymous login
-            case 'anonymous':
+            case 'anonymous_password':
                 anonymousLogin();
                 break;
 
@@ -156,6 +182,7 @@ define('io.ox/core/boot/form', [
                             case 'reset_password':
                                 resetPassword();
                                 break;
+
                         }
                         break;
 

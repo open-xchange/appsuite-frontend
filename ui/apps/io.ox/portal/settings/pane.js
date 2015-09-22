@@ -277,7 +277,7 @@ define('io.ox/portal/settings/pane', [
                 if (baton.view.options.editable) {
                     $controls.append(
                         listUtils.appendIconText(
-                            listUtils.controlsEdit(title, ''),
+                            listUtils.controlsEdit(title, gt('Edit')),
                             gt('Edit'),
                             'edit'
                         )

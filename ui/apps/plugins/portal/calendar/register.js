@@ -26,12 +26,12 @@ define('plugins/portal/calendar/register', [
 
         title: gt('Appointments'),
 
-        initialize: function () {
+        initialize: function (baton) {
             api.on('update create delete', function () {
                 //refresh portal
                 require(['io.ox/portal/main'], function (portal) {
                     var portalApp = portal.getApp(),
-                        portalModel = portalApp.getWidgetCollection()._byId.calendar_0;
+                        portalModel = portalApp.getWidgetCollection()._byId[baton.model.id];
                     if (portalModel) {
                         portalApp.refreshWidget(portalModel, 0);
                     }

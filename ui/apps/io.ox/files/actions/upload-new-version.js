@@ -54,16 +54,24 @@ define('io.ox/files/actions/upload-new-version', [
         }
 
         var $input = Attachments.fileUploadWidget({
-            multi: false,
-            buttontext: gt('Select file')
-        });
+                multi: false,
+                buttontext: gt('Select file')
+            }),
+            filename = $('<div class="form-group">').css('font-size', '14px').hide();
 
         new Dialogs.ModalDialog({ async: true })
             .header(
                 $('<h4>').text(gt('Upload new version'))
             )
             .append(
-                $input,
+                $input.on('change', function () {
+                    if ($input.find('input[type="file"]')[0].files.length === 0) {
+                        filename.text('').hide();
+                    } else {
+                        filename.text($input.find('input[type="file"]')[0].files[0].name).show();
+                    }
+                }),
+                filename,
                 $('<textarea rows="6" class="form-control" tabindex="1">')
             )
             .addPrimaryButton('upload', gt('Upload'), 'upload',  { 'tabIndex': '1' })

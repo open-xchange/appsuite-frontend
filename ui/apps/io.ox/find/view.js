@@ -45,7 +45,6 @@ define('io.ox/find/view', [
                 app: options.app,
                 // could be external view (inplace) or search view (standalone)
                 win: options.app.getWindow(),
-                // TODO: bottleneck
                 model: options.model,
                 baton: ext.Baton({
                     app: options.app,

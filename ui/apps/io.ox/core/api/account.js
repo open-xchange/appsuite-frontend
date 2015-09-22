@@ -292,6 +292,24 @@ define('io.ox/core/api/account', [
         });
     };
 
+    /*
+     * get valid address for account
+     */
+    api.getValidAddress = function (data) {
+        return api.getAllSenderAddresses().then(function (a) {
+            if (_.isEmpty(a)) return;
+            // Find correct display name
+            if (!_.isEmpty(data.from)) data.from = a.filter(function (from) { return from[1] === data.from[0][1]; });
+            // Set default sender if data from is empty
+            if (_.isEmpty(data.from)) {
+                api.getPrimaryAddress().then(function (defaultAddress) {
+                    data.from = [defaultAddress];
+                });
+            }
+            return data;
+        });
+    };
+
     /**
      * get primary address from folder
      * @param  {string} folder_id

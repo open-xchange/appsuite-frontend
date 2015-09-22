@@ -105,10 +105,10 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
 
             var ownWidth = this.ownWidth || this.el.scrollWidth,
                 parentWidth = this.$el.parent().width(),
-                siblingsWidth = _(this.$el.siblings()).reduce(function (sum, node) {
+                siblingsWidth = _(this.$el.siblings(':visible')).reduce(function (sum, node) {
                     return sum + $(node).outerWidth(true);
                 }, 0),
-                maxWidth = parentWidth - siblingsWidth;
+                maxWidth = Math.max(0, parentWidth - siblingsWidth - 40);
 
             // we store this once (per folder)
             this.ownWidth = ownWidth;

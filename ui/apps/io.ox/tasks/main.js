@@ -522,6 +522,16 @@ define('io.ox/tasks/main', [
             });
         },
 
+        'move': function (app) {
+            if (!_.device('smartphone')) return;
+            api.on('move', function () {
+                if (app.pages.getCurrentPage().name === 'detailView') {
+                    app.pages.goBack();
+                }
+                app.grid.selection.clear();
+            });
+        },
+
         /*
          * Add support for selection:
          */

@@ -24,7 +24,7 @@ define('io.ox/find/extensions-api',[
     var extensions = {
 
         daterange: function (baton) {
-            if (_.device('smartphone')) return;
+            if (_.device('smartphone') || (baton.app && baton.app.getModule() !== 'io.ox/mail') ) return;
 
             var query = baton.request.data.prefix,
                 facet, value;
@@ -53,7 +53,7 @@ define('io.ox/find/extensions-api',[
                         name: query,
                         detail: gt('as date')
                     },
-                    value: query,
+                    value: query || '',
                     options: []
                 });
                 // filter original data facet
@@ -105,6 +105,33 @@ define('io.ox/find/extensions-api',[
                     current,
                     accountdata = {},
                     mapping = {};
+
+                // only for drive and more than one account
+                function all(accounts, folders) {
+                    var def = $.Deferred(),
+                        storages = baton.app.get('storages'),
+                        parent = baton.app.get('parent');
+
+                    // mulitple drive accounts?
+                    if (storages.length <= 1) return def.resolve(accounts, folders);
+
+                    parent.folder.getData()
+                        .then(function (folderdata) {
+
+                            var data = storages.findWhere({ qualifiedId: folderdata.account_id });
+
+                            if (data) {
+                                // remove dropdown shortcuts that are non-account folders
+                                folders = _.filter(folders, function (folder) {
+                                    return folder.account_id === data.get('qualifiedId');
+                                });
+                                // get account name for current selected account and adjust name of 'all folders' option
+                                allfolders.item.name = allfolders.item.name +  ' (' + data.get('displayName') + ')';
+                            }
+                            def.resolve(accounts, folders);
+                        });
+                    return def;
+                }
 
                 function compact (accounts, folders) {
                     // store account data
@@ -253,7 +280,7 @@ define('io.ox/find/extensions-api',[
                     def.resolve();
                 }
 
-                var folder;
+                var folder, allfolders;
                 baton.data.unshift(folder = {
                     id: 'folder',
                     name: gt('Folder'),
@@ -262,7 +289,8 @@ define('io.ox/find/extensions-api',[
                     hidden: true,
                     flags: [
                         'toolbar',
-                        'conflicts:folder_type'
+                        'conflicts:folder_type',
+                        'mandatory'
                     ],
                     values: [{
                         facet: 'folder',
@@ -270,7 +298,7 @@ define('io.ox/find/extensions-api',[
                         item: {
                             name: gt('Folder')
                         },
-                        options: [{
+                        options: [ allfolders = {
                             account: undefined,
                             value: null,
                             id: 'disabled',
@@ -284,6 +312,8 @@ define('io.ox/find/extensions-api',[
                         }]
                     }]
                 });
+
+                if (baton.app.isMandatory('folder')) folder.flags.push('mandatory');
 
                 // infostore hack
                 module = module === 'files' ? 'infostore' : module;
@@ -324,6 +354,7 @@ define('io.ox/find/extensions-api',[
                 http.resume();
 
                 return $.when.apply($, req)
+                    .then(all)
                     .then(compact)
                     .then(unify)
                     .then(cleanup)
@@ -331,6 +362,89 @@ define('io.ox/find/extensions-api',[
                     .then(preselect);
             });
             baton.waitsFor.push(def);
+        },
+
+        account: function (baton) {
+            var def = $.Deferred(),
+                storages = baton.app.get('storages');
+            // only for drive and more than one account
+            if (storages.length <= 1) return;
+
+            // exit for non
+            // TODO: switch to dynamic indicator when backend provides something
+            if (baton.app.getModuleParam() !== 'files') return def.resolve();
+            var req = [];
+
+            function create () {
+                // shorthand
+                var options = facet.values[0].options;
+                // for each filestorage type (e.g. dropbox)
+                storages.each(function (model) {
+                    // each account model
+                    var isPrimary = model.get('isDefaultAccount'),
+                        option = {
+                            id: model.get('id'),
+                            value: model.get('qualifiedId'),
+                            item: {
+                                name: model.get('displayName'),
+                                detail: model.get('filestorageService')
+                            },
+                            hidden: true,
+                            type: model.get('filestorageService'),
+                            account: model.get('id'),
+                            data: model.attributes,
+                            filter: null
+                        };
+                    // ensure primary is listed first
+                    if (isPrimary)
+                        options.splice(0, 0, option);
+                    else
+                        options.push(option);
+                });
+            }
+
+            function preselect () {
+                // preselect account matching currently selected folder
+                return baton.app.get('parent').folder.getData()
+                    .then(function (data) {
+                        _.each(facet.values[0].options, function (option) {
+                            if (option.data.qualifiedId === data.account_id)
+                                option.active = true;
+                        });
+                    });
+            }
+
+            var facet;
+            baton.data.unshift(facet = {
+                id: 'account',
+                name: gt('Accounts'),
+                style: 'custom',
+                custom: true,
+                hidden: true,
+                flags: [
+                    'toolbar',
+                    'hidden'
+                ],
+                values: [{
+                    facet: 'folder',
+                    id: 'custom',
+                    item: {
+                        name: gt('Folder')
+                    },
+                    options: []
+                }]
+            });
+
+            // add mandatory flag
+            if (baton.app.isMandatory('account')) facet.flags.push('mandatory');
+
+            baton.waitsFor.push(def);
+
+            return $.when.apply($, req)
+                .then(create)
+                .then(preselect)
+                .then(def.resolve);
+
         },
 
         addOptionDisabled: function (baton) {
