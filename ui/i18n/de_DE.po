@@ -11488,8 +11488,8 @@ msgstr "Zu %s hinzufügen"
 #~ msgid "Permanently remove deleted emails?"
 #~ msgstr "Gelöschte E-Mails unwiderruflich entfernen?"
 
-#~ msgid "Permissions"
-#~ msgstr "Berechtigungen"
+msgid "Permissions"
+msgstr "Berechtigungen"
 
 #~ msgid "Permissions for"
 #~ msgstr "Berechtigungen für "

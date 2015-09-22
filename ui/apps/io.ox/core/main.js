@@ -973,7 +973,7 @@ define('io.ox/core/main', [
         });
 
         // fullscreen doesn't work for safari (see )
-        if (_.device('!safari')) {
+        if (_.device('desktop && !safari')) {
             ext.point('io.ox/core/topbar/right/dropdown').extend({
                 id: 'fullscreen',
                 index: 300,

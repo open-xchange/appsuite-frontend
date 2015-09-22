@@ -26,7 +26,8 @@ define('io.ox/mail/compose/view', [
     'gettext!io.ox/mail',
     'io.ox/mail/actions/attachmentEmpty',
     'less!io.ox/mail/style',
-    'less!io.ox/mail/compose/style'
+    'less!io.ox/mail/compose/style',
+    'io.ox/mail/compose/actions/send'
 ], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty) {
 
     'use strict';
@@ -652,187 +653,34 @@ define('io.ox/mail/compose/view', [
             return def;
         },
 
-        waitForPendingImages: function () {
-            if (!window.tinymce || !window.tinymce.activeEditor || !window.tinymce.activeEditor.plugins.oximage) return $.Deferred().resolve();
-
-            var ids = $('img[data-pending="true"]', window.tinymce.activeEditor.getElement()).map(function () {
-                    return $(this).attr('id');
-                }),
-                deferreds = window.tinymce.activeEditor.plugins.oximage.getPendingDeferreds(ids);
-
-            return $.when.apply(this, deferreds);
-        },
-
         send: function () {
 
-            // track click on send button
-            require(['io.ox/metrics/main'], function (metrics) {
-                metrics.trackEvent({
-                    app: 'mail',
-                    target: 'compose/toolbar',
-                    type: 'click',
-                    action: 'send'
+            var mail = this.model.getMail(),
+                view = this,
+                baton = new ext.Baton({
+                    mail: mail,
+                    model: this.model,
+                    app: this.app,
+                    view: view
+                }),
+                point = ext.point('io.ox/mail/compose/actions/send');
+
+            // invoke extensions as a waterfall, but jQuery deferreds don't have an API for this
+            // TODO: at the moment, this resolves with the result of the last extension point.
+            // not sure if this is desired.
+            return point.reduce(function (def, p) {
+                if (!def || !def.then) def = $.when(def);
+                return def.then(_.identity, function (result) {
+                    //handle errors/warnings in reject case
+                    if (result && result.error) baton.error = result.error;
+                    if (result && result.warnings) baton.warning = result.warnings;
+                    return $.when();
+                }).then(function () {
+                    if (baton.isPropagationStopped()) return;
+                    if (baton.isDisabled(point.id, p.id)) return;
+                    return p.perform.apply(undefined, [baton]);
                 });
-            });
-
-            // get mail
-            var self = this,
-                mail = this.model.getMail(),
-                def = $.Deferred();
-
-            // force correct content-type
-            if (mail.attachments[0].content_type === 'text/plain' && this.model.get('editorMode') === 'html') {
-                mail.attachments[0].content_type = 'text/html';
-            }
-
-            this.blockReuse(mail.sendtype);
-
-            function cont() {
-                var win = self.app.getWindow();
-                // start being busy
-                if (win) {
-                    win.busy();
-                    // close window now (!= quit / might be reopened)
-                    win.preQuit();
-                }
-                /*if (self.attachmentsExceedQouta(mail)) {
-                    notifications.yell({
-                        type: 'info',
-                        message: gt(
-                            'One or more attached files exceed the size limit per email. ' +
-                            'Therefore, the files are not sent as attachments but kept on the server. ' +
-                            'The email you have sent just contains links to download these files.'
-                        ),
-                        duration: 30000
-                    });
-                }*/
-
-                if (mail.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
-                    mail.sendtype = mailAPI.SENDTYPE.DRAFT;
-                }
-
-                self.waitForPendingImages().then(function () {
-                    // use actual content since the image urls could have changed
-                    mail.attachments[0].content = self.model.getMail().attachments[0].content;
-
-                    // send!
-                    mailAPI.send(mail, mail.files)
-                    .always(function (result) {
-
-                        if (result.error && !result.warnings) {
-                            if (win) { win.idle().show(); }
-                            self.app.launch();
-                            // TODO: check if backend just says "A severe error occurred"
-                            notifications.yell(result);
-                            return;
-                        }
-
-                        if (result.warnings) {
-                            notifications.yell('warning', result.warnings.error);
-                        } else {
-                            // success - some want to be notified, other's not
-                            if (settings.get('features/notifyOnSent', false)) {
-                                notifications.yell('success', gt('The email has been sent'));
-                            }
-                        }
-
-                        // update base mail
-                        var isReply = mail.sendtype === mailAPI.SENDTYPE.REPLY,
-                            isForward = mail.sendtype === mailAPI.SENDTYPE.FORWARD,
-                            sep = mailAPI.separator,
-                            base, folder, id, msgrefs, ids;
-
-                        if (isReply || isForward) {
-                            //single vs. multiple
-                            if (mail.msgref) {
-                                msgrefs = [ mail.msgref ];
-                            } else {
-                                msgrefs = _.chain(mail.attachments)
-                                    .filter(function (attachment) {
-                                        return attachment.content_type === 'message/rfc822';
-                                    })
-                                    .map(function (attachment) { return attachment.msgref; })
-                                    .value();
-                            }
-                            //prepare
-                            ids = _.map(msgrefs, function (obj) {
-                                base = _(obj.split(sep));
-                                folder = base.initial().join(sep);
-                                id = base.last();
-                                return { folder_id: folder, id: id };
-                            });
-                            // update cache
-                            mailAPI.getList(ids).pipe(function (data) {
-                                // update answered/forwarded flag
-                                if (isReply || isForward) {
-                                    var len = data.length;
-                                    for (var i = 0; i < len; i++) {
-                                        if (isReply) data[i].flags |= 1;
-                                        if (isForward) data[i].flags |= 256;
-                                    }
-                                }
-                                $.when(mailAPI.caches.list.merge(data), mailAPI.caches.get.merge(data))
-                                .done(function () {
-                                    mailAPI.trigger('refresh.list');
-                                });
-                            });
-                        }
-
-                        //remove sync listener
-                        //causes problems with inline images that are already deleted on the backend (see Bug 32599)
-                        self.stopListening(self.model, 'needsync', self.syncMail);
-                        self.model.dirty(false);
-                        self.app.quit();
-                    })
-                    .always(function (result) {
-                        self.unblockReuse(mail.sendtype);
-                        def.resolve(result);
-                    });
-                }, function (error) {
-                    if (win) { win.idle().show(); }
-
-                    self.app.launch();
-                    notifications.yell(error);
-
-                    self.unblockReuse(mail.sendtype);
-                    def.resolve(error);
-                });
-            }
-
-            // ask for empty to,cc,bcc and/or empty subject
-            var noRecipient = _.isEmpty(mail.to) && _.isEmpty(mail.cc) && _.isEmpty(mail.bcc);
-            if (noRecipient) {
-                notifications.yell('error', gt('Mail has no recipient.'));
-                self.$el.find('.tokenfield:first .token-input').focus();
-                def.reject();
-            } else if ($.trim(mail.subject) === '') {
-                // show dialog
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({ focus: false })
-                        .text(gt('Mail has empty subject. Send it anyway?'))
-                        .addPrimaryButton('send', gt('Yes, send without subject'), 'send', { tabIndex: 1 })
-                        .addButton('subject', gt('Add subject'), 'subject', { tabIndex: 1 })
-                        .show(function () {
-                            def.notify('empty subject');
-                        })
-                        .done(function (action) {
-                            if (action === 'send') {
-                                attachmentEmpty.emptinessCheck(mail.files).done(function () {
-                                    cont();
-                                });
-                            } else {
-                                self.$el.find('input[name="subject"]').focus();
-                                def.reject();
-                            }
-                        });
-                });
-            } else {
-                attachmentEmpty.emptinessCheck(mail.files).done(function () {
-                    cont();
-                });
-            }
-
-            return def;
+            }, $.when());
         },
 
         attachmentsExceedQuota: function (mail) {

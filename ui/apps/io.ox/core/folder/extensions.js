@@ -77,7 +77,8 @@ define('io.ox/core/folder/extensions', [
     }
 
     function getMyFilesFolder() {
-        return api.get(settings.get('folder/infostore'));
+        var id = settings.get('folder/infostore');
+        return id ? api.get(id) : null;
     }
 
     function getMySharesFolder() {

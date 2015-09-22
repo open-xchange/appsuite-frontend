@@ -21,7 +21,7 @@ define('io.ox/core/tk/dialogs', [
 
     // scaffolds
     function getUnderlay() {
-        return $('<div class="abs io-ox-dialog-underlay">').hide();
+        return $('<div class="abs io-ox-dialog-underlay" tabindex="-1">').hide();
     }
 
     function getPopup() {

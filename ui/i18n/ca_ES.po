@@ -10726,8 +10726,8 @@ msgstr ""
 #~ msgid "Pause Presentation"
 #~ msgstr "Convits a tasques"
 
-#~ msgid "Permissions"
-#~ msgstr "Permisos"
+msgid "Permissions"
+msgstr "Permisos"
 
 #, fuzzy
 #~| msgid "Permissions"

@@ -14,7 +14,16 @@ define('io.ox/mail/settings/signatures/settings/pane', [
 
     'use strict';
 
-    var intervals = [];
+    /**
+     * By updating the last access timestamp the referenced file is prevented from being deleted from both session and disk storage.
+     * Needed for inline images
+     */
+    function keepAlive (id) {
+        return http.GET({
+            module: 'file',
+            params: { action: 'keepalive', id: id }
+        });
+    }
 
     ext.point('io.ox/mail/settings/signature-dialog').extend({
         id: 'name',
@@ -43,31 +52,32 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         index: 300,
         draw: function (baton) {
             this.append(
-                $('<div class="form-group">').css('min-height', '266px').append(
-                    $('<div class="editable-toolbar">').attr('data-editor-id', baton.editorId),
-                    baton.$.contentEditable = $('<div class="io-ox-signature-edit editable">')
+                $('<div class="form-group">').css({
+                    'min-height': '266px',
+                    height: '266px'
+                }).append(
+                    baton.$.contentEditable = $('<div>')
                     .attr({
-                        'data-editor-id': baton.editorId,
-                        'tabindex': 1
+                        'data-editor-id': baton.editorId
                     })
                 )
             );
 
-            baton.$.contentEditable.on('addInlineImage', function (e, id) { addKeepalive(id); });
-
             require(['io.ox/core/tk/contenteditable-editor'], function (Editor) {
-                var ed;
-                (ed = new Editor(baton.$.contentEditable, {
+                new Editor(baton.$.contentEditable, {
                     toolbar1: 'bold italic | alignleft aligncenter alignright | link | image',
                     advanced: 'fontselect fontsizeselect | forecolor',
                     css: {
                         'min-height': '230px', //overwrite min-height of editor
                         'height': '230px',
                         'overflow-y': 'auto'
-                    }
-                })).done(function () {
+                    },
+                    class: 'io-ox-signature-edit',
+                    keepalive: keepAlive,
+                    scrollpane: baton.$.contentEditable
+                }).done(function (ed) {
                     baton.editor = ed;
-                    baton.editor.handleShow(true);
+                    baton.editor.show();
 
                     if (!looksLikeHTML(baton.content)) {
                         // convert to html
@@ -98,27 +108,6 @@ define('io.ox/mail/settings/signatures/settings/pane', [
             );
         }
     });
-
-    function addKeepalive (id) {
-        var timeout = Math.round(settings.get('maxUploadIdleTimeout', 200000) * 0.9);
-        intervals.push(setInterval(keepalive, timeout, id));
-    }
-
-    function clearKeepalive () {
-        _(intervals).each(clearInterval);
-        intervals = [];
-    }
-
-    /**
-     * By updating the last access timestamp the referenced file is prevented from being deleted from both session and disk storage.
-     * Needed for inline images
-     */
-    function keepalive(id) {
-        return http.GET({
-            module: 'file',
-            params: { action: 'keepalive', id: id }
-        });
-    }
 
     function looksLikeHTML(str) {
         str = str || '';
@@ -199,7 +188,6 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         })
         .on('close', function () {
             baton.editor.destroy();
-            clearKeepalive();
         })
         .show();
 

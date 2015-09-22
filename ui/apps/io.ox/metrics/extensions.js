@@ -36,7 +36,7 @@ define('io.ox/metrics/extensions', [
         id: 'app',
         register: function () {
             var metrics = this;
-            ox.on('app:start app:resume', function (app) {
+            ox.on('app:start', function (app) {
                 metrics.trackPage({
                     name: app.get('name'),
                     id: app.get('id'),
