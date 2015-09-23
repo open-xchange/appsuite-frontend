@@ -226,7 +226,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     mobile: 'hi',
                     icon: 'fa fa-user-plus',
                     label: gt('Share'),
-                    title: gt('Share selected files'),
+                    title: gt('Share this file'),
                     ref: 'io.ox/files/dropdown/share',
                     customize: function (baton) {
                         var self = this;

@@ -77,7 +77,7 @@ define('io.ox/files/toolbar', [
                 mobile: 'lo',
                 icon: 'fa fa-user-plus',
                 label: gt('Share'),
-                title: gt('Share selected files'),
+                title: gt('Share current folder'),
                 ref: 'io.ox/files/dropdown/share',
                 customize: function (baton) {
                     var self = this;
@@ -101,6 +101,28 @@ define('io.ox/files/toolbar', [
                     }).dropdown();
 
                     this.parent().addClass('dropdown');
+
+                    // set proper tooltip
+                    var folders = 0,
+                        files = 0;
+                    _(_.isArray(baton.data) ? baton.data : [baton.data]).each( function (item) {
+                        if (item.folder_id === 'folder') {
+                            folders++;
+                        } else {
+                            files++;
+                        }
+                    });
+                    if (folders) {
+                        if (files) {
+                            this.attr('data-original-title', gt('Share selected objects'));
+                        } else {
+                            this.attr('data-original-title', gt.ngettext('Share selected folder', 'Share selected folders', folders));
+                        }
+                    } else if (files) {
+                        this.attr('data-original-title', gt.ngettext('Share selected file', 'Share selected files', files));
+                    } else {
+                        this.attr('data-original-title', gt('Share current folder'));
+                    }
                 }
             },
             'mediaplayer-audio': {
