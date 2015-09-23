@@ -490,10 +490,15 @@ define('io.ox/mail/compose/view', [
             delete mail.vcard;
 
             return attachmentEmpty.emptinessCheck(mail.files).then(function () {
-                return self.waitForPendingImages();
+                var def = $.Deferred();
+                ext.point('io.ox/mail/compose/actions/send').get('wait-for-pending-images', function (p) {
+                    p.perform(new ext.Baton({
+                        mail: mail,
+                        model: self.model
+                    })).then(def.resolve, def.reject);
+                });
+                return def;
             }).then(function () {
-                mail.attachments[0].content = self.model.getMail().attachments[0].content;
-
                 return mailAPI.send(mail, mail.files);
             }).then(function (result) {
                 var opt = self.parseMsgref(result.data);
