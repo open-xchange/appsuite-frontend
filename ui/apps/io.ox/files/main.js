@@ -979,7 +979,7 @@ define('io.ox/files/main', [
                     control = nodes.body.find('.list-view-control > .generic-toolbar'),
                     sidepanel = nodes.sidepanel;
                 // toolbar actions
-                toolbar.delegate('.io-ox-action-link', 'mousedown', function (e) {
+                toolbar.delegate('.io-ox-action-link:not(.dropdown-toggle)', 'mousedown', function (e) {
                     metrics.trackEvent({
                         app: 'drive',
                         target: 'toolbar',
@@ -988,7 +988,7 @@ define('io.ox/files/main', [
                     });
                 });
                 // toolbar options dropfdown
-                toolbar.delegate('.dropdown-menu a', 'mousedown', function (e) {
+                toolbar.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
                     var node =  $(e.target).closest('a');
                     metrics.trackEvent({
                         app: 'drive',
@@ -1000,7 +1000,7 @@ define('io.ox/files/main', [
                 });
 
                 // list view control toolbar dropdown
-                control.delegate('.dropdown-menu a', 'mousedown', function (e) {
+                control.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
                     var node =  $(e.target).closest('a'),
                         action = node.attr('data-name'),
                         detail = node.attr('data-value');

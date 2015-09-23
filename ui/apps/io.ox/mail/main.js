@@ -1319,8 +1319,9 @@ define('io.ox/mail/main', [
                     });
                 });
                 // toolbar options dropfdown
-                toolbar.delegate('.dropdown-menu a', 'mousedown', function (e) {
+                toolbar.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
                     var node =  $(e.target).closest('a');
+                    if (!node.attr('data-name')) return;
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'toolbar',
