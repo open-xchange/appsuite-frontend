@@ -169,11 +169,12 @@ define('io.ox/find/view', [
         // on focusout
         smartCancel: function () {
             var self = this;
-            //
-            _.defer(function () {
-                if (!self.hasFocus() && self.isEmpty())
+            // ensures click event in toolbar resolves before cancel is executed
+            _.delay(function () {
+                if (!self.hasFocus() && self.isEmpty()) {
                     self.cancel();
-            });
+                }
+            }, 100);
         },
 
         _onResize: function (delta) {

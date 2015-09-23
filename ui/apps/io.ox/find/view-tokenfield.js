@@ -347,7 +347,8 @@ define('io.ox/find/view-tokenfield', [
         },
 
         reset: function () {
-            this.ui.tokeninput.val('');
+            // reset input/tokenfield
+            this.hiddenapi.setVal('');
             // remove all tokens
             this.empty();
             this.setPlaceholder();
