@@ -325,9 +325,7 @@ module.exports = function (grunt) {
                 files: [
                     {
                         src: [
-                            'apps/io.ox/mail/compose/view.js',
-                            'apps/io.ox/mail/compose/model.js',
-                            'apps/io.ox/mail/compose/extensions.js',
+                            'apps/io.ox/mail/compose/**/*.js',
                             'apps/io.ox/mail/sender.js',
                             'apps/io.ox/backbone/mini-views/common.js',
                             'apps/io.ox/core/tk/tokenfield.js',
