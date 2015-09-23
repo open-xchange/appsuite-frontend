@@ -396,7 +396,7 @@ define('io.ox/calendar/week/perspective', [
                 reload = function () { self.refresh(false); };
 
             // create sidepopup object with eventlistener
-            this.dialog = new dialogs.SidePopup({ tabTrap: true })
+            this.dialog = new dialogs.SidePopup({ tabTrap: true, preserveOnAppchange: true })
                 .on('close', function () {
                     $('.appointment', this.main).removeClass('opac current');
                 });
