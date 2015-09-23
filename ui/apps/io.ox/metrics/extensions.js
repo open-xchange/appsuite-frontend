@@ -51,10 +51,13 @@ define('io.ox/metrics/extensions', [
         register: function () {
             var metrics = this;
             ox.on('loadtime', function (data) {
+                // use app when available
+                var app = data.app,
+                    action = app && app.get ? app.get('trackingId') || app.get('id') || app.get('name') : data.id;
                 metrics.trackEvent({
                     app: 'core',
                     target: 'loadtime',
-                    action: data.id.replace('/main', ''),
+                    action: action,
                     value: data.loadEnd - data.loadStart
                 });
             });

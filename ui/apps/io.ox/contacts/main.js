@@ -821,7 +821,7 @@ define('io.ox/contacts/main', [
                     toolbar = nodes.body.find('.classic-toolbar-container'),
                     sidepanel = nodes.sidepanel;
                 // toolbar actions
-                toolbar.delegate('.io-ox-action-link', 'mousedown', function (e) {
+                toolbar.delegate('.io-ox-action-link:not(.dropdown-toggle)', 'mousedown', function (e) {
                     metrics.trackEvent({
                         app: 'contacts',
                         target: 'toolbar',
@@ -830,13 +830,13 @@ define('io.ox/contacts/main', [
                     });
                 });
                 // toolbar options dropfdown
-                toolbar.delegate('.dropdown-menu a', 'mousedown', function (e) {
+                toolbar.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
                     var node =  $(e.target).closest('a');
                     metrics.trackEvent({
                         app: 'contacts',
                         target: 'toolbar',
                         type: 'click',
-                        action: node.attr('data-name'),
+                        action: node.attr('data-action') || node.attr('data-name'),
                         detail: node.attr('data-value')
                     });
                 });

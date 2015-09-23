@@ -267,7 +267,8 @@ define('io.ox/files/filepicker', [
                     pcContainer.insertAfter('.clearfix', container);
 
                     // always change pages on click, do not wait for folder-change
-                    dialog.getBody().on('click', 'li .folder.selectable.open', function () {
+                    dialog.getBody().on('click', 'li .folder.selectable.open', function (e) {
+                        if ($(e.target).closest('.folder-arrow').length) return;
                         pages.changePage('fileList', { disableAnimations: true });
                     });
                 }

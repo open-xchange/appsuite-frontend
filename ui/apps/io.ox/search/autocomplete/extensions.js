@@ -44,7 +44,7 @@ define('io.ox/search/autocomplete/extensions',[
             var model = baton.model,
                 view = baton.app.view,
                 row = this.parent(),
-                field;
+                ui;
 
             var tokenview = new Tokenfield({
                 extPoint: POINT,
@@ -143,7 +143,11 @@ define('io.ox/search/autocomplete/extensions',[
             // use/show tokenfield
             this.find('.search-field').replaceWith(tokenview.$el);
             tokenview.render();
-            field = tokenview.input.attr('autofocus', true);
+            // some shortcuts
+            ui = {
+                copyhelper: tokenview.$el.data('bs.tokenfield').$copyHelper || $(),
+                field: tokenview.input.attr('autofocus', true)
+            };
 
             var updateState = function (e) {
                 var node = $('.token-input.tt-input'),
@@ -152,18 +156,20 @@ define('io.ox/search/autocomplete/extensions',[
                 if (!node.val()) {
                     container.addClass('empty');
                     $('.tokenfield > .twitter-typeahead').show();
+                    ui.copyhelper.removeAttr('disabled');
                     return;
                 }
                 // token exists
                 if (e.type === 'tokenfield:createdtoken') {
                     $('.tokenfield > .twitter-typeahead').hide();
+                    ui.copyhelper.attr('disabled', true);
                 }
                 // at least some chars are entered
                 container.removeClass('empty');
             };
 
             // toggle search/clear icon visiblity
-            field.on({
+            ui.field.on({
                 'change input': updateState
             });
             tokenview.$el.on('tokenfield:createdtoken tokenfield:removedtoken', updateState);
@@ -175,9 +181,9 @@ define('io.ox/search/autocomplete/extensions',[
 
             var empty = function (e) {
                 if (e) e.preventDefault();
-                field.parent().find('.token-input').val('');
+                ui.field.parent().find('.token-input').val('');
                 // close dropdown
-                field.typeahead('close');
+                ui.field.typeahead('close');
 
                 // empty tokenfield
                 var tokens = tokenview.$el.tokenfield('getTokens');

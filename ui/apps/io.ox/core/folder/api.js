@@ -52,6 +52,7 @@ define('io.ox/core/folder/api', [
     }
 
     function renameDefaultCalendarFolders(items) {
+
         var renameItems = [].concat(items).filter(function (item) {
                 // only for calendar
                 if (!/^(contacts|calendar|tasks)$/.test(item.module)) return false;
@@ -1152,10 +1153,15 @@ define('io.ox/core/folder/api', [
     function refresh() {
         // pause http layer to get one multiple
         http.pause();
-        // loop over all folders, get all parent folders, apply unique, and reload if they have subfolders
-        _(api.pool.models).chain().invoke('get', 'folder_id').uniq().compact().without('0').each(function (id) {
-            list(id, { cache: false });
-        });
+        // loop over all non-flat folders, get all parent folders, apply unique, and reload if they have subfolders
+        _(api.pool.models).chain()
+            .filter(function (model) {
+                return !isFlat(model.get('module'));
+            })
+            .invoke('get', 'folder_id').uniq().compact().without('0')
+            .each(function (id) {
+                list(id, { cache: false });
+            });
         // loop over flat views
         _(getFlatViews()).each(function (module) {
             flat({ module: module, cache: false });
