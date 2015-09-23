@@ -177,6 +177,8 @@ define('io.ox/core/folder/selection', [], function () {
             return nodes.addClass('selected')
                 .attr({ 'aria-selected': true, tabindex: 1 })
                 .find('.folder-label').each(function () {
+                    // special handling for settings for now
+                    if (nodes.length === 1 && (nodes.first().attr('data-id') && nodes.first().attr('data-id').indexOf('virtual/settings') === 0)) return;
                     var left = $(this).position().left, maxWidth = width - left - 64 - 8;
                     $(this).css('max-width', Math.max(maxWidth, 80));
                 })
