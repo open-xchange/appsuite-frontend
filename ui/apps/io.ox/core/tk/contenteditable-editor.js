@@ -182,7 +182,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
     function Editor(el, opt) {
         el.append(
-            el = $('<div>').attr('data-editor-id', el.data('editorId'))
+            el = $('<div class="mail-compose-contenteditable-fields">').attr('data-editor-id', el.data('editorId'))
         );
         var toolbar, editor;
 
