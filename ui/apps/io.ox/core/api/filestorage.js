@@ -150,7 +150,6 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
             },
             // returns a model of the file storage account
             getAccount: function (options, useCache) {
-                debugger;
                 if (!options.id || !options.filestorageService) {
                     return $.Deferred().reject();
                 }

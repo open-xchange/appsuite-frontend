@@ -65,7 +65,6 @@ define('io.ox/backbone/mini-views/help', [], function () {
                     detail: href.substr(href.lastIndexOf('#') + 1)
                 });
             });
-            debugger;
 
             window.open(base + '/l10n/' + ox.language + '/' + href);
 
