@@ -357,7 +357,7 @@ msgstr "%1$s, %2$s"
 
 #. %1$s is the folder owner
 #. %2$s is the folder title
-#: apps/io.ox/core/folder/api.js:81 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:82 module:io.ox/core
 msgid "%1$s: %2$s"
 msgstr "%1$s: %2$s"
 
@@ -603,7 +603,7 @@ msgctxt "help"
 msgid "Accessing Files with WebDAV"
 msgstr "Accessing Files with WebDAV"
 
-#: apps/io.ox/core/folder/api.js:488 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:489 module:io.ox/core
 msgid "Accessing global address book is not permitted"
 msgstr "Accessing global address book is not permitted"
 
@@ -867,7 +867,7 @@ msgstr "Add to favourites"
 #: apps/io.ox/contacts/toolbar.js:125
 #: apps/io.ox/core/viewer/views/toolbarview.js:264 module:io.ox/core
 #: apps/io.ox/files/actions.js:789 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:189 apps/io.ox/mail/actions.js:674
+#: apps/io.ox/files/toolbar.js:211 apps/io.ox/mail/actions.js:674
 #: module:io.ox/mail apps/io.ox/mail/toolbar.js:179
 msgid "Add to portal"
 msgstr "Add to portal"
@@ -988,7 +988,7 @@ msgstr "All folders"
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr "All messages older than %1$d days will be moved to the archive folder"
 
-#: apps/io.ox/core/folder/api.js:374 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:375 module:io.ox/core
 msgid "All my appointments"
 msgstr "All my appointments"
 
@@ -1049,7 +1049,7 @@ msgstr "Append vCard"
 msgid "Application Toolbar"
 msgstr "Application Tool bar"
 
-#: apps/io.ox/mail/main.js:1391 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1392 module:io.ox/mail
 #: apps/io.ox/settings/main.js:577 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr "Application may not work as expected until this problem is solved."
@@ -1170,7 +1170,7 @@ msgstr "As incoming e-mail server"
 
 #: apps/io.ox/files/share/view-options.js:49 module:io.ox/files
 #: apps/io.ox/files/view-options.js:56 apps/io.ox/mail/view-options.js:46
-#: module:io.ox/mail apps/io.ox/tasks/main.js:788 module:io.ox/tasks
+#: module:io.ox/mail apps/io.ox/tasks/main.js:789 module:io.ox/tasks
 msgid "Ascending"
 msgstr "Ascending"
 
@@ -1409,7 +1409,7 @@ msgstr "CW %1$d"
 msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
-#: apps/io.ox/core/folder/api.js:76 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:77 module:io.ox/core
 #: apps/io.ox/mail/detail/links.js:80 module:io.ox/mail
 msgid "Calendar"
 msgstr "Calendar"
@@ -1478,7 +1478,7 @@ msgstr "Calendar:"
 #: apps/io.ox/mail/actions/reminder.js:37
 #: apps/io.ox/mail/compose/extensions.js:464
 #: apps/io.ox/mail/compose/inline-images.js:80
-#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:632
+#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:637
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/main.js:295 apps/io.ox/mail/main.js:1209
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:149
@@ -1625,7 +1625,7 @@ msgstr "Character"
 
 #: apps/io.ox/calendar/toolbar.js:169 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:170 module:io.ox/contacts
-#: apps/io.ox/files/toolbar.js:271 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:293 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:248 module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js:145
 msgid "Checkboxes"
@@ -1954,7 +1954,7 @@ msgstr ""
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:90 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:117 apps/io.ox/files/actions.js:507
 #: module:io.ox/files apps/io.ox/files/actions.js:849
-#: apps/io.ox/files/toolbar.js:203 apps/io.ox/mail/actions.js:226
+#: apps/io.ox/files/toolbar.js:225 apps/io.ox/mail/actions.js:226
 #: apps/io.ox/mail/actions.js:612
 #: apps/io.ox/mail/mobile-toolbar-actions.js:107
 #: apps/io.ox/mail/toolbar.js:143
@@ -2014,7 +2014,7 @@ msgstr "Could not save settings"
 msgid "Could not save settings."
 msgstr "Could not save settings."
 
-#: apps/io.ox/core/folder/api.js:838 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:839 module:io.ox/core
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -2233,7 +2233,7 @@ msgstr "Default address"
 msgid "Default app after sign in"
 msgstr "Default app after sign in"
 
-#: apps/io.ox/core/folder/api.js:77 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:78 module:io.ox/core
 msgid "Default calendar"
 msgstr "Default calendar"
 
@@ -2276,7 +2276,7 @@ msgstr "Deferred"
 #: apps/io.ox/files/actions.js:748 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
-#: apps/io.ox/files/toolbar.js:145 apps/io.ox/mail/actions.js:507
+#: apps/io.ox/files/toolbar.js:167 apps/io.ox/mail/actions.js:507
 #: apps/io.ox/mail/actions/delete.js:67 apps/io.ox/mail/actions/delete.js:86
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:355
@@ -2372,7 +2372,7 @@ msgstr "Department"
 
 #: apps/io.ox/files/share/view-options.js:50 module:io.ox/files
 #: apps/io.ox/files/view-options.js:57 apps/io.ox/mail/view-options.js:47
-#: module:io.ox/mail apps/io.ox/tasks/main.js:789 module:io.ox/tasks
+#: module:io.ox/mail apps/io.ox/tasks/main.js:790 module:io.ox/tasks
 msgid "Descending"
 msgstr "Descending"
 
@@ -2455,7 +2455,7 @@ msgstr "Discard changes"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:630 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:635 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Discard message"
@@ -2593,7 +2593,7 @@ msgstr "Do you really want to delete this widget?"
 msgid "Do you really want to discard your changes?"
 msgstr "Do you really want to discard your changes?"
 
-#: apps/io.ox/mail/compose/view.js:627 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:632 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "Do you really want to discard your message?"
 
@@ -2682,7 +2682,7 @@ msgstr "Double click in this row for a whole day appointment"
 #: apps/io.ox/core/viewer/views/toolbarview.js:321
 #: apps/io.ox/files/actions.js:731 module:io.ox/files
 #: apps/io.ox/files/actions.js:739 apps/io.ox/files/actions.js:890
-#: apps/io.ox/files/toolbar.js:131 apps/io.ox/files/toolbar.js:138
+#: apps/io.ox/files/toolbar.js:153 apps/io.ox/files/toolbar.js:160
 #: apps/io.ox/mail/actions.js:717 module:io.ox/mail
 #: apps/plugins/portal/updater/register.js:38 module:plugins/portal
 msgid "Download"
@@ -2802,7 +2802,7 @@ msgid "Due %1$s"
 msgstr "Due %1$s"
 
 #: apps/io.ox/tasks/edit/view-template.js:188 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:783 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:784 module:io.ox/tasks
 msgid "Due date"
 msgstr "Due date"
 
@@ -2882,7 +2882,7 @@ msgstr "Edit contact"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js:205 module:io.ox/core
 #: apps/io.ox/files/actions.js:829 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:161
+#: apps/io.ox/files/toolbar.js:183
 msgid "Edit description"
 msgstr "Edit description"
 
@@ -3406,7 +3406,7 @@ msgstr "File"
 msgid "File Details"
 msgstr "File Details"
 
-#: apps/io.ox/files/toolbar.js:274 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:296 module:io.ox/files
 msgid "File details"
 msgstr "File details"
 
@@ -3530,7 +3530,7 @@ msgstr "Folder type"
 
 #: apps/io.ox/calendar/toolbar.js:168 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:169 module:io.ox/contacts
-#: apps/io.ox/files/toolbar.js:272 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:294 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:247 module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js:144
 msgid "Folder view"
@@ -3888,7 +3888,7 @@ msgstr "How does this work?"
 msgid "IP phone"
 msgstr "IP phone"
 
-#: apps/io.ox/files/toolbar.js:267 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:289 module:io.ox/files
 msgid "Icons"
 msgstr "Icons"
 
@@ -4276,7 +4276,7 @@ msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
 msgstr "Launcher dropdown. Press [enter] to jump to the dropdown."
 
 #: apps/io.ox/calendar/toolbar.js:160 module:io.ox/calendar
-#: apps/io.ox/files/toolbar.js:265 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:287 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:239 module:io.ox/mail
 msgid "Layout"
 msgstr "Layout"
@@ -4364,7 +4364,7 @@ msgid "Links"
 msgstr "Links"
 
 #: apps/io.ox/calendar/toolbar.js:165 module:io.ox/calendar
-#: apps/io.ox/files/toolbar.js:266 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:288 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:244 module:io.ox/mail
 msgid "List"
 msgstr "List"
@@ -4378,7 +4378,7 @@ msgid "Location"
 msgstr "Location"
 
 #: apps/io.ox/files/actions.js:859 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:210
+#: apps/io.ox/files/toolbar.js:232
 msgid "Lock"
 msgstr "Lock"
 
@@ -4498,8 +4498,8 @@ msgstr "Email reminder"
 msgid "Mail reminder for"
 msgstr "Email reminder for"
 
-#: apps/io.ox/mail/compose/view.js:520 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:544
+#: apps/io.ox/mail/compose/view.js:525 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:549
 msgid "Mail saved as draft"
 msgstr "Email saved as draft"
 
@@ -4756,7 +4756,7 @@ msgstr "More than the currently displayed %1$s items were found"
 #: apps/io.ox/contacts/toolbar.js:109
 #: apps/io.ox/core/folder/contextmenu.js:316 module:io.ox/core
 #: apps/io.ox/files/actions.js:506 module:io.ox/files
-#: apps/io.ox/files/actions.js:839 apps/io.ox/files/toolbar.js:194
+#: apps/io.ox/files/actions.js:839 apps/io.ox/files/toolbar.js:216
 #: apps/io.ox/mail/actions.js:225 apps/io.ox/mail/actions.js:602
 #: apps/io.ox/mail/mobile-toolbar-actions.js:81 apps/io.ox/mail/toolbar.js:136
 #: apps/io.ox/tasks/actions.js:317 module:io.ox/tasks
@@ -4853,7 +4853,7 @@ msgstr "Need more space?"
 msgid "New"
 msgstr "New"
 
-#: apps/io.ox/core/folder/api.js:902 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:903 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:171 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "New Folder"
@@ -5357,7 +5357,7 @@ msgstr "Optional 20"
 #: apps/io.ox/calendar/toolbar.js:167 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:168 module:io.ox/contacts
 #: apps/io.ox/core/emoji/view.js:121 module:io.ox/mail/emoji
-#: apps/io.ox/files/toolbar.js:270 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:292 module:io.ox/files
 #: apps/io.ox/find/extensions-facets.js:83 module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js:377 module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js:225 apps/io.ox/mail/compose/view.js:226
@@ -5373,7 +5373,7 @@ msgstr "Options"
 msgid "Orange"
 msgstr "Orange"
 
-#: apps/io.ox/tasks/main.js:787 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:788 module:io.ox/tasks
 msgid "Order"
 msgstr "Order"
 
@@ -5617,11 +5617,11 @@ msgstr "Plain Text"
 msgid "Plain text"
 msgstr "Plain text"
 
-#: apps/io.ox/files/toolbar.js:110 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:132 module:io.ox/files
 msgid "Play audio files"
 msgstr "Play audio files"
 
-#: apps/io.ox/files/toolbar.js:117 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:139 module:io.ox/files
 msgid "Play video files"
 msgstr "Play video files"
 
@@ -5971,7 +5971,7 @@ msgstr "Printout"
 #: apps/io.ox/mail/compose/view.js:215 apps/io.ox/mail/compose/view.js:216
 #: apps/io.ox/mail/compose/view.js:217
 #: apps/io.ox/tasks/edit/view-template.js:367 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:785 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:786 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:104
 msgid "Priority"
 msgstr "Priority"
@@ -6356,7 +6356,7 @@ msgstr "Remove member"
 #: apps/io.ox/core/viewer/views/toolbarview.js:198
 #: apps/io.ox/files/actions.js:819 module:io.ox/files
 #: apps/io.ox/files/actions/rename.js:68 apps/io.ox/files/actions/rename.js:73
-#: apps/io.ox/files/toolbar.js:154
+#: apps/io.ox/files/toolbar.js:176
 msgid "Rename"
 msgstr "Rename"
 
@@ -6546,7 +6546,7 @@ msgstr "Save"
 msgid "Save as distribution list"
 msgstr "Save as distribution list"
 
-#: apps/io.ox/mail/compose/view.js:631 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:636 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Save as draft"
 
@@ -6694,7 +6694,7 @@ msgid "Send a read receipt"
 msgstr "Send a read receipt"
 
 #: apps/io.ox/files/actions.js:769 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:175
+#: apps/io.ox/files/toolbar.js:197
 msgid "Send as internal link"
 msgstr "Send as internal link"
 
@@ -6710,7 +6710,7 @@ msgstr "Send as vCard"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js:257 module:io.ox/core
 #: apps/io.ox/files/actions.js:759 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:168
+#: apps/io.ox/files/toolbar.js:190
 msgid "Send by mail"
 msgstr "Send by mail"
 
@@ -6819,9 +6819,33 @@ msgstr "Share"
 msgid "Share \"%1$s\""
 msgstr "Share \"%1$s\""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:229 module:io.ox/core
 #: apps/io.ox/files/toolbar.js:80 module:io.ox/files
-msgid "Share selected files"
+#: apps/io.ox/files/toolbar.js:124
+#, fuzzy
+#| msgid "Select folder"
+msgid "Share current folder"
+msgstr "Select folder"
+
+#: apps/io.ox/files/toolbar.js:122 module:io.ox/files
+#, fuzzy
+#| msgid "Share selected files"
+msgid "Share selected file"
+msgid_plural "Share selected files"
+msgstr[0] "Share selected files"
+msgstr[1] "Share selected files"
+
+#: apps/io.ox/files/toolbar.js:119 module:io.ox/files
+#, fuzzy
+#| msgid "Share selected files"
+msgid "Share selected folder"
+msgid_plural "Share selected folders"
+msgstr[0] "Share selected files"
+msgstr[1] "Share selected files"
+
+#: apps/io.ox/files/toolbar.js:117 module:io.ox/files
+#, fuzzy
+#| msgid "Share selected files"
+msgid "Share selected objects"
 msgstr "Share selected files"
 
 #. if only one item -> insert filename / on more than one item -> item count
@@ -6836,6 +6860,12 @@ msgid "Share the folder \"%1$d\""
 msgid_plural "Share %1$d items"
 msgstr[0] "Share the folder \"%1$d\""
 msgstr[1] "Share %1$d items"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:229 module:io.ox/core
+#, fuzzy
+#| msgid "Save as file"
+msgid "Share this file"
+msgstr "Save as file"
 
 #: apps/plugins/halo/appointments/register.js:38 module:plugins/halo
 msgid "Shared Appointments"
@@ -6913,7 +6943,7 @@ msgstr "Show desktop notifications"
 msgid "Show details"
 msgstr "Show details"
 
-#: apps/io.ox/tasks/main.js:791 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:792 module:io.ox/tasks
 msgid "Show done tasks"
 msgstr "Show completed tasks"
 
@@ -6935,7 +6965,7 @@ msgid "Show images"
 msgstr "Show images"
 
 #: apps/io.ox/files/actions.js:779 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:182
+#: apps/io.ox/files/toolbar.js:204
 msgid "Show internal link"
 msgstr "Show internal link"
 
@@ -7101,7 +7131,7 @@ msgctxt "dropdown"
 msgid "Sort by"
 msgstr "Sort by"
 
-#: apps/io.ox/tasks/main.js:780 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:781 module:io.ox/tasks
 msgid "Sort options"
 msgstr "Sort options"
 
@@ -7202,7 +7232,7 @@ msgstr "Statistics"
 
 #: apps/io.ox/calendar/toolbar.js:71 module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js:288 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:782 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:783 module:io.ox/tasks
 msgid "Status"
 msgstr "Status"
 
@@ -7227,7 +7257,7 @@ msgstr "Student"
 #: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js:172
 #: apps/io.ox/mail/view-options.js:35
 #: apps/io.ox/tasks/edit/view-template.js:99 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:784 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:785 module:io.ox/tasks
 msgid "Subject"
 msgstr "Subject"
 
@@ -8093,7 +8123,7 @@ msgstr "Thread"
 msgid "Thumbnails"
 msgstr "Thumbnails"
 
-#: apps/io.ox/files/toolbar.js:268 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:290 module:io.ox/files
 msgid "Tiles"
 msgstr "Tiles"
 
@@ -8300,7 +8330,7 @@ msgid "Unknown sender"
 msgstr "Unknown sender"
 
 #: apps/io.ox/files/actions.js:869 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:217
+#: apps/io.ox/files/toolbar.js:239
 msgid "Unlock"
 msgstr "Unlock"
 
@@ -8393,7 +8423,7 @@ msgstr "Uploading folders is not supported."
 msgid "Uptime: %1$s minutes"
 msgstr "Uptime: %1$s minutes"
 
-#: apps/io.ox/tasks/main.js:781 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:782 module:io.ox/tasks
 msgid "Urgency"
 msgstr "Urgency"
 
@@ -8507,7 +8537,7 @@ msgstr "Videos"
 #: apps/io.ox/contacts/toolbar.js:167 module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js:77 module:io.ox/core
 #: apps/io.ox/files/actions.js:703 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:124 apps/io.ox/files/toolbar.js:264
+#: apps/io.ox/files/toolbar.js:146 apps/io.ox/files/toolbar.js:286
 #: apps/io.ox/mail/actions.js:701 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:238 apps/io.ox/tasks/toolbar.js:142
 msgid "View"
