@@ -379,7 +379,8 @@ define('io.ox/mail/compose/view', [
             if (obj.restored) return $.when();
 
             var self = this,
-                mode = obj.mode;
+                mode = obj.mode,
+                attachmentMailInfo = obj.attachment ? obj.attachments[1].mail : undefined;
 
             delete obj.mode;
 
@@ -410,6 +411,13 @@ define('io.ox/mail/compose/view', [
                 }
                 data.mode = mode;
                 var attachments = _.clone(data.attachments);
+                // to keep the previews working we copy data from the original mail
+                if (mode === 'forward' || mode === 'edit' ) {
+                    attachments.map(function (file) {
+                        return _.extend(file, { group: 'mail', mail: attachmentMailInfo });
+                    });
+                }
+
                 delete data.attachments;
 
                 if (mode === 'forward') {
