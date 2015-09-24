@@ -389,7 +389,8 @@ define('io.ox/mail/compose/extensions', [
             require(['io.ox/core/attachments/view'], function (Attachments) {
                 var view = new Attachments.List({
                         collection: baton.model.get('attachments'),
-                        editable: true
+                        editable: true,
+                        mode: settings.get('attachments/compose/mode/' + _.display(), 'preview')
                     });
 
                 // dropzone
@@ -441,6 +442,10 @@ define('io.ox/mail/compose/extensions', [
                     zone.render().$el.addClass('abs'),
                     view.$el
                 );
+
+                view.on('change-mode', function (mode) {
+                    settings.set('attachments/compose/mode/' + _.display(), mode).save();
+                });
 
                 def.resolve(view);
             }, def.reject);

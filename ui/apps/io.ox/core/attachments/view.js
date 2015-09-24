@@ -50,8 +50,7 @@ define('io.ox/core/attachments/view', [
             // editable?
             if (this.options.editable) this.$el.addClass('editable');
 
-            // Previewmode on smartpfone as default
-            if (_.device('smartphone')) this.$el.addClass('show-preview');
+            if (this.options.mode === 'preview') this.$el.addClass('show-preview');
 
             this.$header = $('<header role="heading">');
             this.$list = $('<ul class="inline-items">');
@@ -169,6 +168,7 @@ define('io.ox/core/attachments/view', [
         onToggleMode: function (e) {
             e.preventDefault();
             this.$el.toggleClass('show-preview');
+            this.trigger('change-mode', this.$el.hasClass('show-preview') ? 'preview' : 'list');
             // to provoke lazyload
             this.$preview.trigger('scroll');
             this.updateScrollControls();
