@@ -210,7 +210,6 @@
     }
 }
 
-.preview-bottom .mail-detail-pane .mail-detail-decorator { padding: 0; }
 .preview-bottom .inplace-reply { margin: 14px; }
 
 .list-view.thread-view .list-item.small { padding: 7px 14px 7px 48px; }
@@ -872,29 +871,6 @@ textarea.inplace-editor {
     }
 }
 
-/* --- */
-
-.mail-detail-pane {
-
-    .mail-detail-decorator {
-
-        position: relative;
-        padding: @default-padding;
-        display: table;
-        width: 100%;
-        // to make sure the quick-reply field can scroll out of viewport
-        min-height: 100%;
-
-        .mail-detail {
-            background-color: white;
-        }
-
-        .mail-detail:focus {
-            outline: 0;
-        }
-    }
-}
-
 .mail-detail {
 
     color: @black;
@@ -1486,25 +1462,6 @@ h4.mail-attachment-preview {
 
     .mail-detail-pane {
 
-        .mail-detail-decorator {
-
-            background-color: #fff;
-            padding: 0;
-            border-bottom: 2px solid #555;
-
-            .mail-detail  {
-
-                padding: 26px 13px 26px 13px;
-                .box-shadow(none);
-
-            }
-
-        }
-
-        .mail-detail-decorator:last-child {
-            border-bottom: 0 none;
-        }
-
         .scrollable-pane {
             background-color: #fff;
         }
@@ -1742,127 +1699,6 @@ h4.mail-attachment-preview {
         padding-left: 0;
     }
 
-    .io-ox-sidepopup-pane .mail-detail-decorator .mail-detail {
-        padding: 5px;
-    }
-
-    .mail-detail-pane .mail-detail-decorator .mail-detail {
-        padding: 13px;
-    }
-
-    .io-ox-sidepopup-pane .mail-detail-decorator .mail-detail,
-    .mail-detail-pane .mail-detail-decorator .mail-detail {
-
-        a, span {
-            font-size: 13px;
-        }
-
-        nav.io-ox-inline-links {
-            float: right;
-            margin: 0;
-        }
-
-        .flag {
-
-            width: 16px;
-
-            i {
-                font-size: 15px;
-            }
-
-        }
-
-        .mail-detail-clear-left {
-            clear: both;
-        }
-
-        .from.list {
-
-            font-size: 13px;
-            a {
-                word-break: break-all;
-                .fontWeight(bold);
-            }
-
-            i {
-                display: none;
-            }
-
-        }
-
-        .to-cc.list, .attachment-list.list {
-            margin-bottom: 5px;
-        }
-
-        .attachment-list.list {
-            margin-top: 5px;
-        }
-
-        .person-link {
-            white-space: normal; word-break: break-all;
-        }
-
-        .contact-picture {
-            margin: 0;
-            margin-left: 13px;
-            float: right;
-            display: block;
-            width: 24px;
-            height: 24px;
-        }
-
-        .subject {
-            font-size: 13px;
-            .fontWeight(bold);
-            margin: 5px 0 0 0;
-        }
-
-        .date {
-            font-size: 13px;
-            float: none;
-            padding-bottom: 4px;
-            border-bottom: 1px solid #f1f1f1;
-        }
-
-        a.attachment-link {
-            display: block;
-            word-break: break-all;
-        }
-
-        div.dropdown.flag-dropdown.flag {
-            margin: 0;
-        }
-
-        .recipient-actions {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .content {
-            margin-top: 13px;
-        }
-
-        .details-collapsed {
-
-            .to-cc.list {
-
-                span, a {
-                    display: none;
-                }
-
-                span:first-child, a:nth-child(2),span:nth-child(2) {
-                    display: inline;
-                }
-
-            }
-
-            .recipient-actions {
-                display: none;
-            }
-
-        }
-
-    }
 
 }
 .to-cc { position: relative; }
