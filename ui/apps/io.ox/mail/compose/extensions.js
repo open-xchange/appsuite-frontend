@@ -418,6 +418,7 @@ define('io.ox/mail/compose/extensions', [
 
                 view.listenTo(baton.model, 'change:attachments', function () {
                     view.$list.empty();
+                    view.$preview.empty();
                     view.renderList();
                 });
 
