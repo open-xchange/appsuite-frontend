@@ -784,17 +784,19 @@ textarea.inplace-editor {
         border-bottom-color: transparent;
     }
 
-    @media (max-width: 480px), (max-device-width: 480px)  {
+    .list-item:focus {
+        border-bottom: 1px solid @link-color;
+    }
+}
+
+.smartphone {
+    .thread-view.list-view {
         .list-item:last-child {
             .detail-view-header {
                 border-bottom: 0;
             }
             margin-bottom: @toolbar-height;
         }
-    }
-
-    .list-item:focus {
-        border-bottom: 1px solid @link-color;
     }
 }
 
