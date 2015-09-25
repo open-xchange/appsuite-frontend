@@ -454,7 +454,7 @@ define('io.ox/mail/common-extensions', [
                             AttachmentView: CustomAttachmentView,
                             collection: collection,
                             el: $el,
-                            mode: settings.get('attachments/listview/mode/' + _.display(), 'list')
+                            mode: settings.get('attachments/layout/detail/' + _.display(), 'list')
                         });
 
                     $el.append(view.render().$el);
@@ -481,8 +481,8 @@ define('io.ox/mail/common-extensions', [
                         actions.invoke('io.ox/mail/actions/view-attachment', null, baton);
                     });
 
-                    view.on('change-mode', function (mode) {
-                        settings.set('attachments/listview/mode/' + _.display(), mode).save();
+                    view.on('change:layout', function (mode) {
+                        settings.set('attachments/layout/detail/' + _.display(), mode).save();
                     });
 
                     def.resolve(view);

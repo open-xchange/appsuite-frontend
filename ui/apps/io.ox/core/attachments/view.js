@@ -168,7 +168,7 @@ define('io.ox/core/attachments/view', [
         onToggleMode: function (e) {
             e.preventDefault();
             this.$el.toggleClass('show-preview');
-            this.trigger('change-mode', this.$el.hasClass('show-preview') ? 'preview' : 'list');
+            this.trigger('change:layout', this.$el.hasClass('show-preview') ? 'preview' : 'list');
             // to provoke lazyload
             this.$preview.trigger('scroll');
             this.updateScrollControls();
