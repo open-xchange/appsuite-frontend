@@ -191,8 +191,8 @@ define('io.ox/calendar/month/perspective', [
         },
 
         // re-trigger event on app
-        bubble: function (e, data) {
-            this.app.trigger('showAppointment', e, data, this.name);
+        bubble: function (eventname, e, data) {
+            this.app.trigger(eventname, e, data, this.name);
         },
 
         drawWeeks: function (opt) {
@@ -209,8 +209,9 @@ define('io.ox/calendar/month/perspective', [
             function createView(options) {
                 return new View(options)
                     .on('showAppointment', self.showAppointment, self)
-                    .on('showAppointment', self.bubble, self)
+                    .on('showAppointment', _.bind(self.bubble, self, 'showAppointment'))
                     .on('createAppoinment', self.createAppointment, self)
+                    .on('createAppoinment', _.bind(self.bubble, self, 'createAppoinment'))
                     .on('openEditAppointment', self.openEditAppointment, self)
                     .on('updateAppointment', self.updateAppointment, self);
             }

@@ -681,6 +681,16 @@ define('io.ox/calendar/main', [
                         detail: 'one'
                     });
                 });
+                // double click or mousedown -> mark-time-slot -> mouseup
+                app.on('createAppoinment openCreateAppointment', function (e, data, layout) {
+                    var target = layout || 'list';
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: target,
+                        type: 'click',
+                        action: 'create'
+                    });
+                });
             });
         }
 

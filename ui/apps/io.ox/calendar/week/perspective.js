@@ -289,8 +289,8 @@ define('io.ox/calendar/week/perspective', [
         },
 
         // re-trigger event on app
-        bubble: function (e, data) {
-            this.app.trigger('showAppointment', e, data, this.view.mode);
+        bubble: function (eventname, e, data) {
+            this.app.trigger(eventname, e, data, this.view.mode);
         },
 
         /**
@@ -336,8 +336,9 @@ define('io.ox/calendar/week/perspective', [
                 // bind listener for view events
                 this.view
                     .on('showAppointment', this.showAppointment, this)
-                    .on('showAppointment', this.bubble, this)
+                    .on('showAppointment', _.bind(this.bubble, this, 'showAppointment'))
                     .on('openCreateAppointment', this.openCreateAppointment, this)
+                    .on('openCreateAppointment', _.bind(this.bubble, this, 'openCreateAppointment'))
                     .on('openEditAppointment', this.openEditAppointment, this)
                     .on('updateAppointment', this.updateAppointment, this)
                     .on('onRefresh', this.refresh, this)
