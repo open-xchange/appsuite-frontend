@@ -1467,6 +1467,7 @@ define('io.ox/mail/api', [
         // keys are cid, values are array of flat cids
         hash: {},
         reverse: {},
+        collection: {},
 
         contains: function (cid) {
             return !!this.hash[cid];
@@ -1474,10 +1475,14 @@ define('io.ox/mail/api', [
 
         getModels: function (cid) {
             if (!_.isString(cid)) return [];
-            var thread = this.hash[cid] || [cid], collection = pool.get('detail');
+
+            var thread = this.hash[cid] || [cid];
+            if (_.isEmpty(this.collection)) {
+                this.collection = pool.get('detail');
+            }
             return _(thread)
                 .chain()
-                .map(collection.get, collection)
+                .map(this.collection.get, this.collection)
                 .compact()
                 .value();
         },
