@@ -11,6 +11,13 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
+.window-container:not(.io-ox-find-active) .io-ox-find {
+    .twitter-typeahead {
+        // ensure it does not overlapp collapsed search field when collapsed
+        width: 100%;
+    }
+}
+
 .io-ox-find, .io-ox-search {
 
     // left
