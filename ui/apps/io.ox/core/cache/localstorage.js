@@ -224,7 +224,18 @@ define('io.ox/core/cache/localstorage', ['io.ox/core/extensions'], function (ext
         clear: function () {
             fluent = {};
             instances = {};
-            localStorage.clear();
+
+            // keep files in cache to improve relogin performance, delete anything else
+            var fileList = _.toArray(JSON.parse(localStorage.getItem('file-toc'))),
+                allKeys = _(localStorage).keys(),
+                toDelete;
+
+            fileList.push('file-toc');
+            toDelete = _.difference(allKeys, fileList);
+
+            _(toDelete).each(function (key) {
+                localStorage.removeItem(key);
+            });
         }
 
     };
