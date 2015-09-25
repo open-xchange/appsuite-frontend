@@ -432,24 +432,25 @@ define('io.ox/core/folder/contextmenu', [
                 var id = String(baton.data.id),
                     model = api.pool.getModel(id);
 
-                var supportsInvite = capabilities.has('invite_guests'),
+                var supportsPermissions = capabilities.has('gab') && !capabilities.has('alone'),
+                    supportsInvite = capabilities.has('invite_guests'),
                     supportsLinks = capabilities.has('share_links'),
                     showInvitePeople = supportsInvite && model.supportsShares(),
                     showGetLink = supportsLinks && !model.is('mail') && model.isShareable(id);
 
                 // stop if neither invites or links are supported
-                if (!showInvitePeople && !showGetLink) return;
+                if (!supportsPermissions && !showInvitePeople && !showGetLink) return;
 
                 header.call(this, gt('Sharing'));
 
-                if (showInvitePeople) {
+                if (supportsPermissions || showInvitePeople) {
                     addLink(this, {
                         action: 'invite',
                         data: { app: baton.app, id: id },
                         enabled: true,
                         handler: invite,
                         // Using concat notation to avoid necessity for new translations right before the release
-                        text: model.isShareable(id) ? gt('Permissions') + ' / ' + gt('Invite people') : gt('Permissions')
+                        text: showInvitePeople ? gt('Permissions') + ' / ' + gt('Invite people') : gt('Permissions')
                     });
                 }
 
