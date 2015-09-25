@@ -174,7 +174,7 @@ define('io.ox/find/view', [
                 if (!self.hasFocus() && self.isEmpty()) {
                     self.cancel();
                 }
-            }, 100);
+            }, 150);
         },
 
         _onResize: function (delta) {

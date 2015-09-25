@@ -821,7 +821,7 @@
                 var typeaheadView = new Typeahead({
                         apiOptions: {
                             // mail does not support sharing folders to guets
-                            contacts: module !== 'mail',
+                            contacts: capabilities.has('invite_guests') && module !== 'mail',
                             users: true,
                             groups: true
                         },
@@ -832,6 +832,8 @@
                             });
                             // remove duplicate entries from typeahead dropdown
                             return _(data).filter(function (model) {
+                                // don't offer secondary addresses as guest accounts
+                                if (!capabilities.has('invite_guests') && model.get('field') !== 'email1') return false;
                                 // mail does not support sharing folders to guets
                                 if (module === 'mail' && model.get('field') !== 'email1') return false;
                                 return !permissionsView.collection.get(model.id);
@@ -899,8 +901,7 @@
 
                                 // add to collection
                                 permissionsView.collection.add(new Permission({
-                                    // Author for Folder : Viewer for Files
-                                    bits: objModel.isFolder() ? 4227332 : 1,
+                                    bits: 1,
                                     contact: { email1: value },
                                     type: 'guest',
                                     new: true

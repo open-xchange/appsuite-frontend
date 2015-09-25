@@ -994,7 +994,7 @@ define('io.ox/files/main', [
                         app: 'drive',
                         target: 'toolbar',
                         type: 'click',
-                        action: node.attr('data-name') || node.attr('data-action'),
+                        action: node.attr('data-tracking-id') || node.attr('data-name') || node.attr('data-action'),
                         detail: node.attr('data-value')
                     });
                 });
