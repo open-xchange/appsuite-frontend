@@ -53,7 +53,7 @@ msgid_plural "%1$d Weeks"
 msgstr[0] "%1$d setmana"
 msgstr[1] "%1$d setmanes"
 
-#: apps/io.ox/core/attachments/view.js:121 module:io.ox/core
+#: apps/io.ox/core/attachments/view.js:120 module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
 msgstr[0] "%1$d adjunt"
@@ -606,7 +606,7 @@ msgid ""
 msgstr ""
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:604 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:608 module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr "N'heu enviat una confirmació de lectura"
 
@@ -755,7 +755,7 @@ msgstr "Durada real en minuts"
 #: module:io.ox/calendar apps/io.ox/core/folder/actions/add.js:108
 #: module:io.ox/core apps/io.ox/mail/accounts/settings.js:272
 #: module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/compose/extensions.js:463 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:469 module:io.ox/mail
 msgid "Add"
 msgstr "Afegeix"
 
@@ -814,7 +814,7 @@ msgid "Add as public folder"
 msgstr "Nova carpeta pública"
 
 #: apps/io.ox/core/tk/attachments.js:454 module:io.ox/core
-#: apps/io.ox/mail/compose/extensions.js:465 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:471 module:io.ox/mail
 msgid "Add attachments"
 msgstr "Afegeix-hi adjunts"
 
@@ -838,12 +838,12 @@ msgid "Add files"
 msgstr "Afegeix fitxers"
 
 #: apps/io.ox/core/tk/attachments.js:465 module:io.ox/core
-#: apps/io.ox/mail/compose/extensions.js:496 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:502 module:io.ox/mail
 msgid "Add from Drive"
 msgstr "Afegeix des de Drive"
 
 #: apps/io.ox/files/actions.js:655 module:io.ox/files
-#: apps/io.ox/mail/compose/extensions.js:489 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:495 module:io.ox/mail
 msgid "Add local file"
 msgstr "Afegeix-hi un fitxer local"
 
@@ -1322,8 +1322,8 @@ msgstr[1] "Els adjunts s'han desat"
 #: apps/io.ox/calendar/edit/extensions.js:543 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:381 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:130 module:io.ox/contacts
-#: apps/io.ox/mail/compose/extensions.js:485 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:504
+#: apps/io.ox/mail/compose/extensions.js:491 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:510
 #: apps/io.ox/tasks/edit/view-template.js:446 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js:92 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:231
@@ -1609,9 +1609,9 @@ msgstr "Calendari"
 #: apps/io.ox/mail/actions/attachmentEmpty.js:29 module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js:68 apps/io.ox/mail/actions/delete.js:87
 #: apps/io.ox/mail/actions/reminder.js:37
-#: apps/io.ox/mail/compose/extensions.js:464
+#: apps/io.ox/mail/compose/extensions.js:470
 #: apps/io.ox/mail/compose/inline-images.js:80
-#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:637
+#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:645
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/main.js:295 apps/io.ox/mail/main.js:1209
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:149
@@ -1988,7 +1988,7 @@ msgid "Company"
 msgstr "Empresa"
 
 #: apps/io.ox/mail/compose/main.js:26 module:io.ox/mail
-#: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:468
+#: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:476
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:208 apps/io.ox/mail/toolbar.js:40
 msgid "Compose"
@@ -2659,7 +2659,7 @@ msgstr "Descarta els canvis"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:635 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:643 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Descarta el missatge"
@@ -2800,7 +2800,7 @@ msgstr "Realment voleu suprimir aquest widget?"
 msgid "Do you really want to discard your changes?"
 msgstr "Realment voleu descartar els canvis?"
 
-#: apps/io.ox/mail/compose/view.js:632 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:640 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "Realment voleu descartar el vostre missatge?"
 
@@ -2958,7 +2958,7 @@ msgstr "Preferències de Drive"
 msgid "Drop EML file here for import"
 msgstr "Arrossega aquí el fitxer EML a importar"
 
-#: apps/io.ox/mail/compose/extensions.js:397 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:398 module:io.ox/mail
 msgid "Drop attachments here"
 msgstr "Arrossega els adjunts aquí"
 
@@ -3505,7 +3505,7 @@ msgstr "Contacte extern"
 msgid "External guests"
 msgstr "Participants externs"
 
-#: apps/io.ox/mail/common-extensions.js:551 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:555 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
@@ -4849,8 +4849,8 @@ msgstr "Recordatori per correu electrònic"
 msgid "Mail reminder for"
 msgstr "Recordatori per correu electrònic per a"
 
-#: apps/io.ox/mail/compose/view.js:525 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:549
+#: apps/io.ox/mail/compose/view.js:533 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:557
 msgid "Mail saved as draft"
 msgstr "Correu desat com a esborrany"
 
@@ -7030,7 +7030,7 @@ msgstr "Desa"
 msgid "Save as distribution list"
 msgstr "Desa com a llista de distribució"
 
-#: apps/io.ox/mail/compose/view.js:636 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:644 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Desa com a esborrany"
 
@@ -7180,7 +7180,7 @@ msgid "Send"
 msgstr "Envia"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:634 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:638 module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Envia una confirmació de lectura"
 
@@ -7480,7 +7480,7 @@ msgstr "Mostra els fitxers i carpetes ocults"
 msgid "Show icons"
 msgstr "Mostra les icones"
 
-#: apps/io.ox/mail/common-extensions.js:550 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:554 module:io.ox/mail
 msgid "Show images"
 msgstr "Mostra imatges"
 
@@ -8309,7 +8309,7 @@ msgstr ""
 msgid "The selected timezone is already a favorite."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:637 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:641 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr "El remitent vol ésser notificat una vegada hagueu llegit aquest correu"
 
@@ -8686,14 +8686,14 @@ msgstr "Aquest correu no té contingut"
 msgid "This message has been truncated due to size limitations."
 msgstr "Aquest correu s'ha afegit al portal"
 
-#: apps/io.ox/mail/common-extensions.js:500 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:504 module:io.ox/mail
 #, fuzzy
 #| msgid "This E-mail is read, press to mark it as unread."
 msgid "This message is read, press this button to mark it as unread."
 msgstr ""
 "Aquest correu electrònic està llegit, premeu per a marcar-lo com a no llegit"
 
-#: apps/io.ox/mail/common-extensions.js:499 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:503 module:io.ox/mail
 #, fuzzy
 #| msgid "This E-mail is unread, press to mark it as read."
 msgid "This message is unread, press this button to mark it as read."
@@ -9247,7 +9247,7 @@ msgstr "En espera"
 msgid "Warning"
 msgstr "Advertiments"
 
-#: apps/io.ox/mail/common-extensions.js:577 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:581 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Atenció: Aquest correu podria ser un intent de phishing o d'estafa"
 

@@ -52,7 +52,7 @@ msgid_plural "%1$d Weeks"
 msgstr[0] "%1$d hét"
 msgstr[1] "%1$d hét"
 
-#: apps/io.ox/core/attachments/view.js:121 module:io.ox/core
+#: apps/io.ox/core/attachments/view.js:120 module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
 msgstr[0] "%1$d melléklet"
@@ -547,7 +547,7 @@ msgstr ""
 "jogosultságot be kell állítani a nyilvános mappán."
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:604 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:608 module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr "A tértivevény elküldve"
 
@@ -687,7 +687,7 @@ msgstr "Tényleges időtartam percben"
 #: module:io.ox/calendar apps/io.ox/core/folder/actions/add.js:108
 #: module:io.ox/core apps/io.ox/mail/accounts/settings.js:272
 #: module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/compose/extensions.js:463 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:469 module:io.ox/mail
 msgid "Add"
 msgstr "Hozzáadás"
 
@@ -732,7 +732,7 @@ msgid "Add as public folder"
 msgstr "Hozzáad nyilvános mappaként"
 
 #: apps/io.ox/core/tk/attachments.js:454 module:io.ox/core
-#: apps/io.ox/mail/compose/extensions.js:465 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:471 module:io.ox/mail
 msgid "Add attachments"
 msgstr "Mellékletek csatolása"
 
@@ -756,12 +756,12 @@ msgid "Add files"
 msgstr "Fájlok hozzáadása"
 
 #: apps/io.ox/core/tk/attachments.js:465 module:io.ox/core
-#: apps/io.ox/mail/compose/extensions.js:496 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:502 module:io.ox/mail
 msgid "Add from Drive"
 msgstr "Hozzáadás a Drive-ról"
 
 #: apps/io.ox/files/actions.js:655 module:io.ox/files
-#: apps/io.ox/mail/compose/extensions.js:489 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:495 module:io.ox/mail
 msgid "Add local file"
 msgstr "Helyi fájl hozzáadása"
 
@@ -1198,8 +1198,8 @@ msgstr[1] "A mellékletek mentve"
 #: apps/io.ox/calendar/edit/extensions.js:543 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:381 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:130 module:io.ox/contacts
-#: apps/io.ox/mail/compose/extensions.js:485 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:504
+#: apps/io.ox/mail/compose/extensions.js:491 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:510
 #: apps/io.ox/tasks/edit/view-template.js:446 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js:92 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:231
@@ -1479,9 +1479,9 @@ msgstr "Naptár:"
 #: apps/io.ox/mail/actions/attachmentEmpty.js:29 module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js:68 apps/io.ox/mail/actions/delete.js:87
 #: apps/io.ox/mail/actions/reminder.js:37
-#: apps/io.ox/mail/compose/extensions.js:464
+#: apps/io.ox/mail/compose/extensions.js:470
 #: apps/io.ox/mail/compose/inline-images.js:80
-#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:637
+#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:645
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/main.js:295 apps/io.ox/mail/main.js:1209
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:149
@@ -1837,7 +1837,7 @@ msgid "Company"
 msgstr "Cég"
 
 #: apps/io.ox/mail/compose/main.js:26 module:io.ox/mail
-#: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:468
+#: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:476
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:208 apps/io.ox/mail/toolbar.js:40
 msgid "Compose"
@@ -2464,7 +2464,7 @@ msgstr "Módosítások elvetése"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:635 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:643 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Üzenet elvetése"
@@ -2602,7 +2602,7 @@ msgstr "Biztos, hogy törölni szeretné ezt a widgetet?"
 msgid "Do you really want to discard your changes?"
 msgstr "Eldobja ezeket a módosításokat?"
 
-#: apps/io.ox/mail/compose/view.js:632 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:640 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "Valóban eldobja az üzenetet?"
 
@@ -2756,7 +2756,7 @@ msgstr "Drive beállítások"
 msgid "Drop EML file here for import"
 msgstr "Ejtse ide az EML-fájlt az importálásához"
 
-#: apps/io.ox/mail/compose/extensions.js:397 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:398 module:io.ox/mail
 msgid "Drop attachments here"
 msgstr "Ejtse ide a mellékleteket"
 
@@ -3263,7 +3263,7 @@ msgstr "Külső névjegy"
 msgid "External guests"
 msgstr "Külső felhasználók"
 
-#: apps/io.ox/mail/common-extensions.js:551 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:555 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "A lehetséges levélszemét miatt a külső képek betöltése le lett tiltva!"
@@ -4056,8 +4056,8 @@ msgid ""
 "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home "
 "Screen'%4$s"
 msgstr ""
-"Ezen webapp telepítéséhez %1$s eszközére: koppintson ide: %2$s, majd a %3$s"
-"„Kezdőképernyőhöz adás”%4$s gombra"
+"Ezen webapp telepítéséhez %1$s eszközére: koppintson ide: %2$s, majd a "
+"%3$s„Kezdőképernyőhöz adás”%4$s gombra"
 
 #: apps/io.ox/contacts/model.js:253 module:io.ox/contacts
 msgid "Instant Messenger 1"
@@ -4504,8 +4504,8 @@ msgstr "Emlékeztető küldése"
 msgid "Mail reminder for"
 msgstr "Emlékeztető küldése:"
 
-#: apps/io.ox/mail/compose/view.js:525 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:549
+#: apps/io.ox/mail/compose/view.js:533 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:557
 msgid "Mail saved as draft"
 msgstr "Levél mentve piszkozatként"
 
@@ -6553,7 +6553,7 @@ msgstr "Mentés"
 msgid "Save as distribution list"
 msgstr "Mentés disztribúciós listaként"
 
-#: apps/io.ox/mail/compose/view.js:636 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:644 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Mentés piszkozatként"
 
@@ -6697,7 +6697,7 @@ msgid "Send"
 msgstr "Küldés"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:634 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:638 module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Tértivevény küldése"
 
@@ -6968,7 +6968,7 @@ msgstr "Rejtett fájlok és mappák megjelenítése"
 msgid "Show icons"
 msgstr "Ikonok megjelenítése"
 
-#: apps/io.ox/mail/common-extensions.js:550 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:554 module:io.ox/mail
 msgid "Show images"
 msgstr "Képek megjelenítése"
 
@@ -7741,7 +7741,7 @@ msgstr ""
 msgid "The selected timezone is already a favorite."
 msgstr "A kiválasztott időzóna már a kedvenc."
 
-#: apps/io.ox/mail/common-extensions.js:637 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:641 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr "A feladó értesítést szeretne kapni arról, hogy elolvasta ezt a levelet"
 
@@ -8086,12 +8086,12 @@ msgstr "A levélnek nincs tartalma"
 msgid "This message has been truncated due to size limitations."
 msgstr "A levél a méretkorlát miatt le lett vágva."
 
-#: apps/io.ox/mail/common-extensions.js:500 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:504 module:io.ox/mail
 msgid "This message is read, press this button to mark it as unread."
 msgstr ""
 "Ez egy olvasott üzenet, kattintson erre a gombra, hogy olvasatlan legyen."
 
-#: apps/io.ox/mail/common-extensions.js:499 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:503 module:io.ox/mail
 msgid "This message is unread, press this button to mark it as read."
 msgstr ""
 "Ez egy olvasatlan üzenet, kattintson erre a gombra, hogy olvasott legyen."
@@ -8603,7 +8603,7 @@ msgstr "Várakozás"
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
-#: apps/io.ox/mail/common-extensions.js:577 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:581 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Figyelem: Ez az üzenet egy adathalász vagy becsapós e-mail lehet"
 
