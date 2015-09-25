@@ -292,7 +292,26 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         id: 'header',
         index: 100,
         draw: function () {
-            this.append($('<h1>').text(gt('Signatures')));
+            var buttonContainer = $('<div class="btn-group pull-right">').append(
+                $('<button type="button" class="btn btn-primary" tabindex="1">').text(gt('Add new signature')).on('click', fnEditSignature)
+            );
+
+            this.append(
+                $('<div class="io-ox-signature-settings">').append(
+                    $('<h1 class="pull-left">').text(gt('Signatures')),
+                    !_.device('smartphone') ? buttonContainer : [],
+                    $('<div class="clearfix">')
+                )
+            );
+
+            if (config.get('gui.mail.signatures') && !_.isNull(config.get('gui.mail.signatures')) && config.get('gui.mail.signatures').length > 0) {
+                buttonContainer.append(
+                    $('<button type="button" class="btn btn-default" tabindex="1">').text(gt('Import signatures')).on('click', function (e) {
+                        fnImportSignatures(e, config.get('gui.mail.signatures'));
+                        return false;
+                    })
+                );
+            }
         },
         save: function () {
             mailSettings.saveAndYell().done(function () {
@@ -445,15 +464,6 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 })
                 .appendTo($node);
 
-                // Append "add signature" button
-                $node.append(
-                    $('<div class="sectioncontent">').append(
-                        section = $('<div class="form-group">').append(
-                            $('<button type="button" class="btn btn-primary" tabindex="1">').text(gt('Add new signature')).on('click', fnEditSignature)
-                        )
-                    )
-                );
-
                 defaultSignatureView = new mini.SelectView({ list: [], name: 'defaultSignature', model: baton.model, id: 'defaultSignature', className: 'form-control' })
                 .on('appendOption', function (option) {
                     this.$el.append($('<option>').attr({ 'value': option.value }).text(option.label));
@@ -499,14 +509,6 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 fnDrawAll();
                 snippets.on('refresh.all', fnDrawAll);
 
-                if (config.get('gui.mail.signatures') && !_.isNull(config.get('gui.mail.signatures')) && config.get('gui.mail.signatures').length > 0) {
-                    section.append(
-                        $('<button type="button" class="btn btn-default" tabindex="1">').text(gt('Import signatures')).on('click', function (e) {
-                            fnImportSignatures(e, config.get('gui.mail.signatures'));
-                            return false;
-                        })
-                    );
-                }
                 section = null;
             }
         }
