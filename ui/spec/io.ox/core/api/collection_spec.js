@@ -34,7 +34,7 @@ define([
         describe('Collection loader', function () {
 
             beforeEach(function () {
-                this.loader = new CollectionLoader({ LIMIT: 3 });
+                this.loader = new CollectionLoader({ PRIMARY_PAGE_SIZE: 3, SECONDARY_PAGE_SIZE: 3 });
                 this.loader.fetch = fetch;
             });
 

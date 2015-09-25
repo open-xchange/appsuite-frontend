@@ -183,7 +183,8 @@ define('io.ox/find/main', [
                         var collectionLoader = new CollectionLoader({
                                 module: app.getModuleParam(),
                                 mode: 'search',
-                                LIMIT: defaultLoader.LIMIT,
+                                PRIMARY_PAGE_SIZE: defaultLoader.PRIMARY_PAGE_SIZE,
+                                SECONDARY_PAGE_SIZE: defaultLoader.SECONDARY_PAGE_SIZE,
                                 fetch: function (params) {
                                     var self = this,
                                         limit = params.limit.split(','),

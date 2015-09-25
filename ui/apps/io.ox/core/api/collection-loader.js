@@ -38,6 +38,9 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
         function apply(collection, type, params, loader, data) {
 
+            // determine current page size
+            var PAGE_SIZE = type === 'load' ? loader.PRIMARY_PAGE_SIZE : loader.SECONDARY_PAGE_SIZE;
+
             // don't use loader.collection to avoid cross-collection issues (see bug 38286)
 
             if (type === 'paginate' && collection.length > 0) {
@@ -50,7 +53,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                 if (_.cid(first) !== _.cid(last)) {
                     // check d0901724d8050552b5b82c0fdd5be1ccfef50d99 for details
                     params.thread = params.action === 'threadedAll';
-                    loader.reload(params, loader.LIMIT);
+                    loader.reload(params, PAGE_SIZE);
                     return;
                 }
             }
@@ -61,7 +64,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             });
 
             // track completeness
-            collection.complete = (type === 'load' && data.length < loader.LIMIT) || (type === 'paginate' && data.length <= 1);
+            collection.complete = (type === 'load' && data.length < PAGE_SIZE) || (type === 'paginate' && data.length <= 1);
             if (collection.complete) collection.trigger('complete');
             collection.trigger(type);
         }
@@ -97,7 +100,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             var collection;
 
             params = this.getQueryParams(params || {});
-            params.limit = '0,' + this.LIMIT;
+            params.limit = '0,' + this.PRIMARY_PAGE_SIZE;
             collection = this.collection = this.getCollection(params);
             this.loading = false;
 
@@ -122,7 +125,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             // offset is collection length minus one to allow comparing last item and first fetched item (see above)
             var offset = Math.max(0, collection.length - 1);
             params = this.getQueryParams(_.extend({ offset: offset }, params));
-            params.limit = offset + ',' + (offset + this.LIMIT + 1);
+            params.limit = offset + ',' + (offset + this.SECONDARY_PAGE_SIZE + 1);
             this.loading = true;
 
             collection.expired = false;
@@ -136,7 +139,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             if (this.loading) return collection;
 
             params = this.getQueryParams(_.extend({ offset: 0 }, params));
-            params.limit = '0,' + Math.max(collection.length + (tail || 0), this.LIMIT);
+            params.limit = '0,' + Math.max(collection.length + (tail || 0), this.PRIMARY_PAGE_SIZE);
             this.loading = true;
 
             collection.expired = false;
@@ -156,7 +159,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
     _.extend(CollectionLoader.prototype, {
 
         // highly emotional and debatable default
-        LIMIT: 50,
+        PRIMARY_PAGE_SIZE: 50,
+        SECONDARY_PAGE_SIZE: 100,
 
         cid: function (obj) {
             return _(obj || {}).chain()
