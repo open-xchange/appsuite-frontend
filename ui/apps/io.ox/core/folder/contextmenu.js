@@ -134,8 +134,8 @@ define('io.ox/core/folder/contextmenu', [
         // Move all messages to a target folder ...
         //
         moveAllMessages: function (baton) {
-            // disabled until API ready
-            if (true || baton.module !== 'mail') return;
+
+            if (baton.module !== 'mail') return;
 
             addLink(this, {
                 action: 'move-all-messages',

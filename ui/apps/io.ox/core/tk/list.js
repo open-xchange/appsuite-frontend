@@ -96,29 +96,27 @@ define('io.ox/core/tk/list', [
             if (keyEvents[e.which]) this.trigger(keyEvents[e.which], e);
         },
 
-        onScroll: _.debounce(function () {
+        // use throttle instead of debouce in order to respond during scroll momentum
+        onScroll: _.throttle(function () {
 
             if (this.isBusy || this.complete || !this.$el.is(':visible')) return;
 
             var height = this.$el.outerHeight(),
                 scrollTop = this.el.scrollTop,
                 scrollHeight = this.el.scrollHeight,
-                tail = scrollHeight - (scrollTop + height);
+                bottom = scrollTop + height;
 
-            // do anything?
-            if (tail > height) return;
-            // show indicator
-            this.addBusyIndicator();
-            // really refresh?
             // two competing concepts:
             // a) the user wants to see the end of the list; some users feel better; more orientation. Less load on server.
             // b) powers users hate to wait; never want to see the end of the list. More load on server.
-            // Uncommented next line with 7.8.0:
-            // if (tail > 1) return;
-            // immediately load more
+            // we're know using b) by preloading if the bottom edge exceeds 80%
+            if (bottom / scrollHeight < 0.80) return;
+
+            // show indicator & fetch next page
+            this.addBusyIndicator();
             this.processPaginate();
 
-        }, 50),
+        }, 20),
 
         onLoad: function () {
             this.idle();

@@ -29,6 +29,7 @@ define('io.ox/mail/main', [
     'io.ox/core/capabilities',
     'io.ox/core/folder/tree',
     'io.ox/core/folder/view',
+    'io.ox/core/folder/api',
     'io.ox/backbone/mini-views/quota',
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
@@ -39,7 +40,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, QuotaView, gt, settings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, gt, settings) {
 
     'use strict';
 
@@ -536,7 +537,7 @@ define('io.ox/mail/main', [
          */
         'selection-message': function (app) {
             app.right.append(
-                $('<div class="io-ox-center multi-selection-message"><div></div></div>')
+                $('<div class="io-ox-center multi-selection-message"><div class="message"></div></div>')
             );
         },
 
@@ -705,7 +706,7 @@ define('io.ox/mail/main', [
         'show-empty': function (app) {
             app.showEmpty = function () {
                 app.threadView.empty();
-                app.right.find('.multi-selection-message div').empty().append(
+                app.right.find('.multi-selection-message .message').empty().append(
                     gt('No message selected')
                 ).attr('id', 'mail-multi-selection-message');
             };
@@ -715,13 +716,40 @@ define('io.ox/mail/main', [
          * Define function to reflect multiple selection
          */
         'show-multiple': function (app) {
+
             if (_.device('smartphone')) return;
+
             app.showMultiple = function (list) {
+
                 app.threadView.empty();
                 list = api.resolve(list, app.props.get('thread'));
-                app.right.find('.multi-selection-message div').empty().append(
-                    gt('%1$d messages selected', $('<span class="number">').text(list.length).prop('outerHTML'))
-                ).attr('id', 'mail-multi-selection-message');
+
+                // check if a folder is selected
+                var id = app.folder.get(), model = folderAPI.pool.getModel(id), total = model.get('total');
+
+                app.right.find('.multi-selection-message .message')
+                    .empty()
+                    .attr('id', 'mail-multi-selection-message')
+                    .append(
+                        // message
+                        $('<div>').append(
+                            gt('%1$d messages selected', $('<span class="number">').text(list.length).prop('outerHTML'))
+                        ),
+                        // inline actions
+                        id && total ?
+                            $('<div class="inline-actions">').append(
+                                //#. %1$d is the total number of messages
+                                $('<a href="#">').text(gt('Move all %1$d messages to another folder', total)),
+                                $('<br>'),
+                                //#. %1$d is the total number of messages
+                                $('<a href="#">').text(gt('Delete all %1$d messages', total))
+                            )
+                            .on('click', 'a', function (e) {
+                                e.preventDefault();
+                                alert('TBD');
+                            })
+                            : $()
+                    );
             };
         },
 

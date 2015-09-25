@@ -1583,7 +1583,10 @@ define('io.ox/mail/api', [
                     timezone: 'utc'
                 };
             }
-        }
+        },
+
+        PRIMARY_PAGE_SIZE: settings.get('listview/primaryPageSize', 50),
+        SECONDARY_PAGE_SIZE: settings.get('listview/secondaryPageSize', 200)
     });
 
     function filterDeleted(item) {

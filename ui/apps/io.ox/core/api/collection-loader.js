@@ -105,6 +105,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             this.loading = false;
 
             if (collection.length > 0 && !collection.expired && collection.sorted) {
+                // reduce too large collections
+                collection.reset(collection.first(this.PRIMARY_PAGE_SIZE), { silent: true });
                 _.defer(function () {
                     collection.trigger(collection.complete ? 'reset load cache complete' : 'reset load cache');
                 });
@@ -160,7 +162,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
         // highly emotional and debatable default
         PRIMARY_PAGE_SIZE: 50,
-        SECONDARY_PAGE_SIZE: 100,
+        SECONDARY_PAGE_SIZE: 200,
 
         cid: function (obj) {
             return _(obj || {}).chain()

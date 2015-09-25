@@ -41,7 +41,7 @@ define('io.ox/core/commons', [
 
             node.idle().empty().append(
                 $('<div class="io-ox-center multi-selection-message">').append(
-                    $('<div id="' + grid.multiselectId + '">').append(
+                    $('<div class="message" id="' + grid.multiselectId + '">').append(
                         gt.format(
                             //#. number of selected item
                             //#. %1$s is the number surrounded by a tag
