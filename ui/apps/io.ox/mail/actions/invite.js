@@ -13,38 +13,49 @@
  */
 
 define('io.ox/mail/actions/invite', [
-    'settings!io.ox/core',
     'io.ox/mail/util',
-    'io.ox/contacts/api'
-], function (coreConfig, util, contactAPI) {
+    'io.ox/contacts/api',
+    'io.ox/core/yell',
+    'settings!io.ox/core',
+    'gettext!io.ox/core'
+], function (util, contactAPI, yell, settings, gt) {
 
     'use strict';
 
     return function (baton) {
+
         var data = baton.data,
             collectedRecipients = [],
             participantsArray = [],
             currentId = ox.user_id,
-            currentFolder = coreConfig.get('folder/calendar'),
+            currentFolder = settings.get('folder/calendar'),
             collectedRecipientsArray = data.to.concat(data.cc).concat(data.from),
-            dev = $.Deferred(),
-            lengthValue,
-            createCalendarApp = function (participants, notetext) {
-                require(['io.ox/calendar/edit/main'], function (m) {
-                    m.getApp().launch().done(function () {
-                        //remove participants received mail via msisdn
-                        participants = _.filter(participants, function (participant) {
-                            if (participant.mail)
-                                return util.getChannel(participant.mail, false) !== 'phone';
-                            return true;
-                        });
-                        var initData = { participants: participants, title: notetext, folder_id: currentFolder };
-                        this.create(initData);
-                        // to set Dirty
-                        this.model.toSync = initData;
+            def = $.Deferred(),
+            lengthValue;
+
+        var throbber = setTimeout(function () { ox.busy(true); }, 500);
+
+        function idle() {
+            clearTimeout(throbber);
+            ox.idle();
+        }
+
+        function createCalendarApp(participants, notetext) {
+            ox.launch('io.ox/calendar/edit/main')
+                .always(idle)
+                .done(function () {
+                    // remove participants received mail via msisdn
+                    participants = _.filter(participants, function (participant) {
+                        if (participant.mail)
+                            return util.getChannel(participant.mail, false) !== 'phone';
+                        return true;
                     });
+                    var initData = { participants: participants, title: notetext, folder_id: currentFolder };
+                    this.create(initData);
+                    // to set Dirty
+                    this.model.toSync = initData;
                 });
-            };
+        }
 
         _(collectedRecipientsArray).each(function (single) {
             collectedRecipients.push(single[1]);
@@ -52,32 +63,40 @@ define('io.ox/mail/actions/invite', [
 
         lengthValue = collectedRecipients.length;
 
+        // resolve all mail addresses via contact search
         _(collectedRecipients).each(function (mail) {
-            contactAPI.search(mail).done(function (obj) {
-                var currentObj = (obj[0]) ? obj[0] : { email1: mail, display_name: mail },
-                    internalUser = { id: currentObj.internal_userid, type: 1 },
-                    externalUser = { type: 5, display_name: currentObj.display_name, mail: currentObj.email1 };
-
-                if (currentObj.internal_userid !== currentId) {
-                    if (currentObj.internal_userid !== undefined && currentObj.internal_userid !== 0) {
-                        participantsArray.push(internalUser);
-                    } else if (currentObj.internal_userid === 0) {
-                        participantsArray.push(externalUser);
+            contactAPI.search(mail).then(
+                function success(obj) {
+                    var currentObj = (obj[0]) ? obj[0] : { email1: mail, display_name: mail },
+                        internalUser = { id: currentObj.internal_userid, type: 1 },
+                        externalUser = { type: 5, display_name: currentObj.display_name, mail: currentObj.email1 };
+                    if (currentObj.internal_userid !== currentId) {
+                        if (currentObj.internal_userid !== undefined && currentObj.internal_userid !== 0) {
+                            participantsArray.push(internalUser);
+                        } else if (currentObj.internal_userid === 0) {
+                            participantsArray.push(externalUser);
+                        } else {
+                            participantsArray.push(externalUser);
+                        }
                     } else {
-                        participantsArray.push(externalUser);
+                        lengthValue = lengthValue - 1;
                     }
-                } else {
-                    lengthValue = lengthValue - 1;
+                    if (participantsArray.length === lengthValue) def.resolve();
+                },
+                function fail() {
+                    def.reject();
                 }
-
-                if (participantsArray.length === lengthValue) {
-                    dev.resolve();
-                }
-            });
+            );
         });
 
-        dev.done(function () {
-            createCalendarApp(participantsArray, data.subject);
-        });
+        def.then(
+            function () {
+                createCalendarApp(participantsArray, data.subject);
+            },
+            function () {
+                idle();
+                yell('error', gt('Error while resolving mail addresses. Please try again.'));
+            }
+        );
     };
 });

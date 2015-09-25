@@ -11,16 +11,15 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-define('io.ox/calendar/actions/invite', [
-    'io.ox/calendar/edit/main',
-    'settings!io.ox/core'
-], function (m, coreSettings) {
+define('io.ox/calendar/actions/invite', ['settings!io.ox/core'], function (settings) {
 
     'use strict';
 
     return function (baton) {
 
-        m.getApp().launch().done(function () {
+        // use ox.launch to have an indicator for slow connections
+        ox.launch('io.ox/calendar/edit/main').done(function () {
+
             // include external organizer
             var data = baton.data,
                 participants = data.participants.slice();
@@ -34,13 +33,11 @@ define('io.ox/calendar/actions/invite', [
             }
             // open create dialog with same participants
             data = {
-                folder_id: coreSettings.get('folder/calendar'),
+                folder_id: settings.get('folder/calendar'),
                 participants: participants
             };
             this.create(data);
             this.model.toSync = data;
         });
-
     };
-
 });
