@@ -242,6 +242,12 @@ define('io.ox/calendar/freebusy/controller', [
                 return calendarViews ? calendarViews[currentMode] : null;
             };
 
+            this.bubble = function (e, data) {
+                // get calendar app
+                var parentapp = options.baton && options.baton.app ? options.baton.app : $();
+                parentapp.trigger('showAppointment', e, data, 'freebusy-' + this.getCalendarView().mode);
+            };
+
             this.getCalendarViewInstance = function (mode) {
 
                 var view;
@@ -285,7 +291,8 @@ define('io.ox/calendar/freebusy/controller', [
                     // listen to create event
                     .on('openCreateAppointment', this.onCreate, this)
                     // listen to show appointment event
-                    .on('showAppointment', this.showAppointment, this);
+                    .on('showAppointment', this.showAppointment, this)
+                    .on('showAppointment', this.bubble, this);
 
                 var renderAppointment = view.renderAppointment;
                 view.renderAppointment = function (model) {

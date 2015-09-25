@@ -288,6 +288,11 @@ define('io.ox/calendar/week/perspective', [
             $(this.main).trigger('change:navbar:date', d);
         },
 
+        // re-trigger event on app
+        bubble: function (e, data) {
+            this.app.trigger('showAppointment', e, data, this.view.mode);
+        },
+
         /**
          * handle different views in this perspective
          * triggered by desktop.js
@@ -331,6 +336,7 @@ define('io.ox/calendar/week/perspective', [
                 // bind listener for view events
                 this.view
                     .on('showAppointment', this.showAppointment, this)
+                    .on('showAppointment', this.bubble, this)
                     .on('openCreateAppointment', this.openCreateAppointment, this)
                     .on('openEditAppointment', this.openEditAppointment, this)
                     .on('updateAppointment', this.updateAppointment, this)

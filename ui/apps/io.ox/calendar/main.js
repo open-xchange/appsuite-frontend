@@ -670,6 +670,17 @@ define('io.ox/calendar/main', [
                         });
                     }
                 });
+                // selection in other perspectives
+                app.on('showAppointment', function (e, data, layout) {
+                    var target = layout || 'list';
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: target,
+                        type: 'click',
+                        action: 'select',
+                        detail: 'one'
+                    });
+                });
             });
         }
 

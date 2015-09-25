@@ -190,6 +190,11 @@ define('io.ox/calendar/month/perspective', [
             });
         },
 
+        // re-trigger event on app
+        bubble: function (e, data) {
+            this.app.trigger('showAppointment', e, data, this.name);
+        },
+
         drawWeeks: function (opt) {
             var self = this,
                 param = $.extend({
@@ -204,6 +209,7 @@ define('io.ox/calendar/month/perspective', [
             function createView(options) {
                 return new View(options)
                     .on('showAppointment', self.showAppointment, self)
+                    .on('showAppointment', self.bubble, self)
                     .on('createAppoinment', self.createAppointment, self)
                     .on('openEditAppointment', self.openEditAppointment, self)
                     .on('updateAppointment', self.updateAppointment, self);
