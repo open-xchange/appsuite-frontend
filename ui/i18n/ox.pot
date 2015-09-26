@@ -254,12 +254,12 @@ msgstr ""
 #: apps/io.ox/files/toolbar.js:72
 #: apps/io.ox/mail/actions.js:497
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
-#: apps/io.ox/mail/main.js:148
-#: apps/io.ox/mail/main.js:154
-#: apps/io.ox/mail/main.js:295
-#: apps/io.ox/mail/main.js:1213
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:349
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:351
+#: apps/io.ox/mail/main.js:149
+#: apps/io.ox/mail/main.js:155
+#: apps/io.ox/mail/main.js:296
+#: apps/io.ox/mail/main.js:1241
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:368
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:370
 #: apps/io.ox/portal/settings/pane.js:280
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:281
@@ -315,8 +315,8 @@ msgstr ""
 #: apps/io.ox/mail/actions/delete.js:67
 #: apps/io.ox/mail/actions/delete.js:86
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:355
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:356
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:374
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:375
 #: apps/io.ox/mail/toolbar.js:79
 #: apps/io.ox/portal/main.js:680
 #: module:io.ox/portal
@@ -521,8 +521,8 @@ msgstr ""
 #: apps/io.ox/mail/compose/names.js:163
 #: apps/io.ox/mail/compose/view.js:645
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
-#: apps/io.ox/mail/main.js:295
-#: apps/io.ox/mail/main.js:1209
+#: apps/io.ox/mail/main.js:296
+#: apps/io.ox/mail/main.js:1237
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:149
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:253
 #: apps/io.ox/oauth/settings.js:82
@@ -1583,9 +1583,9 @@ msgstr ""
 #: apps/io.ox/files/filepicker.js:82
 #: apps/io.ox/files/main.js:158
 #: apps/io.ox/files/main.js:165
-#: apps/io.ox/mail/main.js:145
+#: apps/io.ox/mail/main.js:146
 #: module:io.ox/mail
-#: apps/io.ox/mail/main.js:152
+#: apps/io.ox/mail/main.js:153
 #: apps/io.ox/tasks/main.js:152
 #: module:io.ox/tasks
 #: apps/io.ox/tasks/main.js:159
@@ -1601,9 +1601,9 @@ msgstr ""
 #: apps/io.ox/core/commons.js:603
 #: module:io.ox/core
 #: apps/io.ox/core/tk/wizard.js:321
-#: apps/io.ox/mail/main.js:160
+#: apps/io.ox/mail/main.js:161
 #: module:io.ox/mail
-#: apps/io.ox/mail/main.js:165
+#: apps/io.ox/mail/main.js:166
 #: apps/io.ox/mail/threadview.js:40
 #: apps/io.ox/tasks/main.js:168
 #: module:io.ox/tasks
@@ -1691,9 +1691,9 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: apps/io.ox/calendar/month/perspective.js:455
+#: apps/io.ox/calendar/month/perspective.js:462
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:390
+#: apps/io.ox/calendar/week/perspective.js:397
 msgid "Appointment list"
 msgstr ""
 
@@ -2354,17 +2354,17 @@ msgstr ""
 msgid "Conflicts:"
 msgstr ""
 
-#: apps/io.ox/calendar/week/perspective.js:315
+#: apps/io.ox/calendar/week/perspective.js:320
 #: module:io.ox/calendar
 msgid "Day View"
 msgstr ""
 
-#: apps/io.ox/calendar/week/perspective.js:320
+#: apps/io.ox/calendar/week/perspective.js:325
 #: module:io.ox/calendar
 msgid "Workweek View"
 msgstr ""
 
-#: apps/io.ox/calendar/week/perspective.js:326
+#: apps/io.ox/calendar/week/perspective.js:331
 #: module:io.ox/calendar
 msgid "Week View"
 msgstr ""
@@ -3415,7 +3415,7 @@ msgstr ""
 #: apps/io.ox/files/actions/showlink.js:48
 #: module:io.ox/files
 #: apps/io.ox/files/mediaplayer.js:302
-#: apps/io.ox/files/share/permissions.js:934
+#: apps/io.ox/files/share/permissions.js:935
 #: apps/io.ox/files/upload/view.js:133
 #: apps/io.ox/mail/accounts/settings.js:327
 #: module:io.ox/mail/accounts/settings
@@ -3604,7 +3604,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/files/main.js:293
 #: module:io.ox/files
-#: apps/io.ox/mail/main.js:500
+#: apps/io.ox/mail/main.js:501
 #: module:io.ox/mail
 msgid "Item list"
 msgstr ""
@@ -4009,7 +4009,7 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/properties.js:46
 #: module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:534
+#: apps/io.ox/core/folder/contextmenu.js:535
 msgid "Properties"
 msgstr ""
 
@@ -4125,17 +4125,17 @@ msgstr ""
 msgid "Import"
 msgstr ""
 
-#: apps/io.ox/core/folder/contextmenu.js:443
+#: apps/io.ox/core/folder/contextmenu.js:444
 #: module:io.ox/core
 msgid "Sharing"
 msgstr ""
 
-#: apps/io.ox/core/folder/contextmenu.js:452
+#: apps/io.ox/core/folder/contextmenu.js:453
 #: module:io.ox/core
 msgid "Permissions"
 msgstr ""
 
-#: apps/io.ox/core/folder/contextmenu.js:452
+#: apps/io.ox/core/folder/contextmenu.js:453
 #: module:io.ox/core
 #: apps/io.ox/files/actions.js:680
 #: module:io.ox/files
@@ -4143,7 +4143,7 @@ msgstr ""
 msgid "Invite people"
 msgstr ""
 
-#: apps/io.ox/core/folder/contextmenu.js:463
+#: apps/io.ox/core/folder/contextmenu.js:464
 #: module:io.ox/core
 #: apps/io.ox/files/actions.js:689
 #: module:io.ox/files
@@ -4151,17 +4151,17 @@ msgstr ""
 msgid "Get link"
 msgstr ""
 
-#: apps/io.ox/core/folder/contextmenu.js:488
+#: apps/io.ox/core/folder/contextmenu.js:489
 #: module:io.ox/core
 msgid "New subscription"
 msgstr ""
 
-#: apps/io.ox/core/folder/contextmenu.js:568
+#: apps/io.ox/core/folder/contextmenu.js:569
 #: module:io.ox/core
 msgid "Show"
 msgstr ""
 
-#: apps/io.ox/core/folder/contextmenu.js:568
+#: apps/io.ox/core/folder/contextmenu.js:569
 #: module:io.ox/core
 msgid "Hide"
 msgstr ""
@@ -4820,7 +4820,7 @@ msgstr ""
 
 #: apps/io.ox/core/permissions/permissions.js:435
 #: module:io.ox/core
-#: apps/io.ox/files/share/permissions.js:872
+#: apps/io.ox/files/share/permissions.js:874
 msgid "Apply to all subfolders"
 msgstr ""
 
@@ -4838,7 +4838,7 @@ msgstr ""
 
 #: apps/io.ox/core/permissions/permissions.js:479
 #: module:io.ox/core
-#: apps/io.ox/files/share/permissions.js:883
+#: apps/io.ox/files/share/permissions.js:885
 #: apps/plugins/administration/groups/settings/edit.js:85
 msgid "Start typing to search for user names"
 msgstr ""
@@ -5752,7 +5752,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/files/main.js:296
 #: module:io.ox/files
-#: apps/io.ox/mail/main.js:503
+#: apps/io.ox/mail/main.js:504
 #: module:io.ox/mail
 msgid "Item list options"
 msgstr ""
@@ -6867,13 +6867,13 @@ msgstr ""
 msgid "Add people"
 msgstr ""
 
-#: apps/io.ox/files/share/permissions.js:916
+#: apps/io.ox/files/share/permissions.js:917
 #: module:io.ox/core
 msgid "Enter a Message to inform users"
 msgstr ""
 
 #. placeholder text in share dialog
-#: apps/io.ox/files/share/permissions.js:924
+#: apps/io.ox/files/share/permissions.js:925
 #: module:io.ox/core
 msgid "Personal message (optional). This message is sent to all newly invited people."
 msgstr ""
@@ -7791,6 +7791,11 @@ msgstr ""
 msgid "The appointment has been added to your calendar"
 msgstr ""
 
+#: apps/io.ox/mail/actions/invite.js:98
+#: module:io.ox/core
+msgid "Error while resolving mail addresses. Please try again."
+msgstr ""
+
 #: apps/io.ox/mail/actions/reminder.js:36
 #: module:io.ox/mail
 msgid "Create reminder"
@@ -7818,7 +7823,7 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:109
 #: apps/io.ox/mail/compose/extensions.js:168
-#: apps/io.ox/mail/main.js:609
+#: apps/io.ox/mail/main.js:610
 #: apps/io.ox/mail/view-options.js:32
 msgid "From"
 msgstr ""
@@ -7898,7 +7903,7 @@ msgstr ""
 #: apps/io.ox/mail/compose/extensions.js:32
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:58
 #: module:io.ox/settings
-#: apps/io.ox/mail/main.js:607
+#: apps/io.ox/mail/main.js:608
 #: apps/io.ox/mail/print.js:84
 #: apps/io.ox/mail/view-options.js:32
 msgid "To"
@@ -8048,15 +8053,15 @@ msgstr ""
 #: apps/io.ox/mail/compose/extensions.js:349
 #: module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js:23
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:295
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:301
 msgid "Signatures"
 msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js:350
 #: module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:327
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:329
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:385
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:346
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:348
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:404
 msgid "No signature"
 msgstr ""
 
@@ -8536,45 +8541,57 @@ msgstr ""
 msgid "Couldn't load your mail filter rules."
 msgstr ""
 
-#: apps/io.ox/mail/main.js:164
+#: apps/io.ox/mail/main.js:165
 #: module:io.ox/mail
 msgid "Thread"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:239
+#: apps/io.ox/mail/main.js:240
 #: module:io.ox/mail
 #: apps/plugins/portal/quota/register.js:48
 #: module:plugins/portal
 msgid "Mail quota"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:242
+#: apps/io.ox/mail/main.js:243
 #: module:io.ox/mail
 msgid "Need more space?"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:338
+#: apps/io.ox/mail/main.js:339
 #: module:io.ox/mail
 msgid "Mail Details"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:709
+#: apps/io.ox/mail/main.js:710
 #: module:io.ox/mail
 msgid "No message selected"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:723
+#: apps/io.ox/mail/main.js:736
 #: module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr ""
 
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js:742
+#: module:io.ox/mail
+msgid "Move all %1$d messages to another folder"
+msgstr ""
+
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js:745
+#: module:io.ox/mail
+msgid "Delete all %1$d messages"
+msgstr ""
+
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:741
+#: apps/io.ox/mail/main.js:769
 #: module:io.ox/mail
 msgid "%1$d selected"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:1392
+#: apps/io.ox/mail/main.js:1420
 #: module:io.ox/mail
 #: apps/io.ox/settings/main.js:577
 #: module:io.ox/core
@@ -8659,7 +8676,7 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js:135
 #: module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:304
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:323
 msgid "Could not save settings"
 msgstr ""
 
@@ -8797,7 +8814,7 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:224
 #: module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:504
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:309
 msgid "Import signatures"
 msgstr ""
 
@@ -8811,23 +8828,23 @@ msgstr ""
 msgid "Delete old signatures after import"
 msgstr ""
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:351
-#: module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:356
-msgid "%1$s, %2$s"
-msgstr ""
-
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:452
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:296
 #: module:io.ox/mail
 msgid "Add new signature"
 msgstr ""
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:483
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:370
+#: module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:375
+msgid "%1$s, %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:493
 #: module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr ""
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:490
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:500
 #: module:io.ox/mail
 msgid "Default signature for replies or forwardings"
 msgstr ""
