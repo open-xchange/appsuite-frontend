@@ -648,7 +648,9 @@
                 dropdown.render();
 
                 // disable all items if not admin or if not any write privileges
-                if (!baton.parentModel.isAdmin() || !supportsWritePrivileges) dropdown.$('li > a').addClass('disabled');
+                if (!baton.parentModel.isAdmin() || !supportsWritePrivileges) {
+                    dropdown.$('li > a').addClass('disabled').prop('disabled', true);
+                }
 
                 this.append(
                     $('<div class="col-sm-2 col-xs-4 detail-dropdown">').append(
