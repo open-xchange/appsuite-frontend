@@ -901,7 +901,7 @@
 
                                 // add to collection
                                 permissionsView.collection.add(new Permission({
-                                    bits: 1,
+                                    bits: objModel.isFolder() ? 257 : 1,
                                     contact: { email1: value },
                                     type: 'guest',
                                     new: true
