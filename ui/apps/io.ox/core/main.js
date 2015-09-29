@@ -242,7 +242,8 @@ define('io.ox/core/main', [
     gt.pgettext('app', 'Drive');
     gt.pgettext('app', 'Conversations');
 
-    var tabManager = _.debounce(function () {
+    var tabManager = _.throttle(function () {
+
         var items = launchers.children('.launcher'),
             launcherDropDownIcon = $('.launcher-dropdown', topbar),
             secondaryLauncher = topbar.find('.launchers-secondary'),
@@ -264,8 +265,8 @@ define('io.ox/core/main', [
 
         var itemsVisible = launchers.children('.launcher:visible'),
             itemsRightWidth = secondaryLauncher.length > 0 ? secondaryLauncher[0].getBoundingClientRect().width : 0,
-            viewPortWidth = $(window).width(),
-            launcherDropDownIconWidth = launcherDropDownIcon[0].getBoundingClientRect().width;
+            launcherDropDownIconWidth = launcherDropDownIcon.width(),
+            viewPortWidth = topbar.width() - launcherDropDownIconWidth;
 
         launcherDropDownIcon.hide();
 
@@ -274,9 +275,7 @@ define('io.ox/core/main', [
             itemsLeftWidth += this.getBoundingClientRect().width;
         });
 
-        var visibleTabs,
-            i = 0,
-            hidden = 0;
+        var visibleTabs, i = 0, hidden = 0;
         for (i = items.length; i > 1; i--) {
             visibleTabs = itemsVisible.length - hidden;
             if (itemsLeftWidth + itemsRightWidth <= viewPortWidth) {
@@ -286,9 +285,6 @@ define('io.ox/core/main', [
                 itemsLeftWidth = itemsLeftWidth - lastVisibleItem[0].getBoundingClientRect().width;
                 lastVisibleItem.hide();
                 hidden++;
-                if (hidden === 1) {
-                    itemsLeftWidth += launcherDropDownIconWidth;
-                }
             }
         }
         $('li', launcherDropdown).hide();
