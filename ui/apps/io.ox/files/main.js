@@ -315,6 +315,8 @@ define('io.ox/files/main', [
                 app.listView.empty();
                 var options = app.getViewOptions(id);
                 app.props.set(options);
+                // always trigger a change (see bug 41500)
+                app.listView.model.set('folder', null, { silent: true });
                 app.listView.model.set('folder', id);
             });
         },
