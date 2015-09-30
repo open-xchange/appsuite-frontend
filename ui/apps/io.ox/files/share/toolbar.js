@@ -43,6 +43,12 @@ define('io.ox/files/share/toolbar', [
                 label: gt('Revoke access'),
                 drawDisabled: true,
                 ref: 'io.ox/files/share/revoke'
+            },
+            'back': {
+                prio: 'lo',
+                mobile: 'hi',
+                label: gt('Folder'),
+                ref: 'io.ox/files/share/back'
             }
         };
 
@@ -64,6 +70,13 @@ define('io.ox/files/share/toolbar', [
                     yell('success', gt('Revoked access.'));
                 }).fail(yell);
             });
+        }
+    });
+
+    new actions.Action('io.ox/files/share/back', {
+        requires: 'none',
+        action: function () {
+            $('[data-page-id="io.ox/files/main"]').trigger('myshares-folder-back');
         }
     });
 

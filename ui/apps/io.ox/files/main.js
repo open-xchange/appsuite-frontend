@@ -420,6 +420,12 @@ define('io.ox/files/main', [
                     }
                 }
             });
+
+            app.pages.getPage('main').on('myshares-folder-back', function () {
+                app.folderView.tree.selection.getItems().removeClass('selected');
+                app.folderView.tree.selection.set(folderAPI.getDefaultFolder('infostore'));
+                app.mysharesListViewControl.$el.hide().siblings().show();
+            });
         },
 
         /*

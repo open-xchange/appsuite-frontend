@@ -58,6 +58,19 @@
 }
 .myshares-list-control .secondary-toolbar { top: 40px; }
 
+.myshares-list-control [data-ref="io.ox/files/share/back"] { display:none; }
+.smartphone .myshares-list-control [data-ref="io.ox/files/share/back"] {
+    display:block;
+    position: absolute;
+    left: -12px;
+    top: 2px;
+    font-size: 15px;
+    &:before {
+        font: normal normal normal 14px/1 FontAwesome;
+        content: "\f053";
+        margin-right: 3px;
+    }
+}
 .myshares-list {
 
     &.visible-selection.has-focus .list-item.selected a { color: white; }
