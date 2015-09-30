@@ -579,7 +579,7 @@ msgstr "Уведомление о чтении отправлено"
 msgid "A severe error occurred!"
 msgstr "Произошла критическая ошибка."
 
-#: apps/io.ox/core/main.js:1009 module:io.ox/core
+#: apps/io.ox/core/main.js:1005 module:io.ox/core
 msgid "About"
 msgstr "О программе"
 
@@ -1260,7 +1260,7 @@ msgstr "Автосохранение черновиков"
 msgid "Automatic opening of notification area"
 msgstr "Автоматически открывать область уведомлений"
 
-#: apps/io.ox/core/main.js:516 module:io.ox/core
+#: apps/io.ox/core/main.js:512 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:326
 msgid "Automatic sign out"
 msgstr "Автоматический выход"
@@ -1474,7 +1474,7 @@ msgstr "Календарь:"
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
 #: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:185
-#: apps/io.ox/core/main.js:519 apps/io.ox/core/main.js:1533
+#: apps/io.ox/core/main.js:515 apps/io.ox/core/main.js:1529
 #: apps/io.ox/core/permissions/permissions.js:372
 #: apps/io.ox/core/permissions/permissions.js:405 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/relogin.js:88 apps/io.ox/core/sub/subscriptions.js:57
@@ -1600,7 +1600,7 @@ msgstr "Изменить статус подтверждения"
 msgid "Change due date"
 msgstr "Изменить срок"
 
-#: apps/io.ox/core/main.js:934 module:io.ox/core
+#: apps/io.ox/core/main.js:930 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:115
 #: apps/plugins/portal/userSettings/register.js:67
 msgid "Change password"
@@ -1751,7 +1751,7 @@ msgstr "Нажмите, чтобы отправить изображение."
 
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
-#: apps/io.ox/core/folder/tree.js:224 apps/io.ox/core/main.js:1249
+#: apps/io.ox/core/folder/tree.js:224 apps/io.ox/core/main.js:1245
 #: apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/tk/wizard.js:359
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:161
@@ -1941,7 +1941,7 @@ msgstr "содержит"
 msgid "Content"
 msgstr "Содержимое"
 
-#: apps/io.ox/core/main.js:1534 module:io.ox/core
+#: apps/io.ox/core/main.js:1530 module:io.ox/core
 msgid "Continue"
 msgstr "Продолжить"
 
@@ -2168,7 +2168,7 @@ msgstr "Текущая дата"
 msgid "Current role"
 msgstr "Текущая роль"
 
-#: apps/io.ox/core/main.js:376 module:io.ox/core
+#: apps/io.ox/core/main.js:372 module:io.ox/core
 msgid "Currently refreshing"
 msgstr "Обновляется..."
 
@@ -3241,7 +3241,7 @@ msgstr "Точные даты"
 msgid "Executive"
 msgstr "Руководитель"
 
-#: apps/io.ox/core/main.js:984 module:io.ox/core
+#: apps/io.ox/core/main.js:980 module:io.ox/core
 msgid "Exit Fullscreen"
 msgstr "Закрыть полноэкранный режим"
 
@@ -3563,7 +3563,7 @@ msgid "Folder view"
 msgstr "Вид папок"
 
 #. %1$s is the filename
-#: apps/io.ox/core/main.js:1770 module:io.ox/core
+#: apps/io.ox/core/main.js:1766 module:io.ox/core
 msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
@@ -3664,7 +3664,7 @@ msgstr "Фрилансер"
 msgid "From"
 msgstr "От"
 
-#: apps/io.ox/core/main.js:987 module:io.ox/core apps/io.ox/core/main.js:991
+#: apps/io.ox/core/main.js:983 module:io.ox/core apps/io.ox/core/main.js:987
 msgid "Fullscreen"
 msgstr "Полноэкранный режим"
 
@@ -3788,7 +3788,7 @@ msgid "Hello World"
 msgstr "Здравствуй, мир!"
 
 #: apps/io.ox/calendar/freebusy/templates.js:104
-#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:957
+#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:953
 #: module:io.ox/core apps/io.ox/help/center.js:103 module:io.ox/help
 msgid "Help"
 msgstr "Справка"
@@ -4825,7 +4825,7 @@ msgstr "Мои адресные книги"
 msgid "My calendars"
 msgstr "Мои календари"
 
-#: apps/io.ox/core/main.js:912 module:io.ox/core
+#: apps/io.ox/core/main.js:908 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:87
 #: apps/plugins/portal/userSettings/register.js:217
 msgid "My contact data"
@@ -5802,7 +5802,7 @@ msgid ""
 "account:"
 msgstr "Выберите данные, на основе которых будет создана учетная запись %s:"
 
-#: apps/io.ox/core/main.js:1239 module:io.ox/core
+#: apps/io.ox/core/main.js:1235 module:io.ox/core
 #: apps/io.ox/core/relogin.js:80
 msgid "Please sign in again to continue"
 msgstr "Авторизуйтесь для продолжения"
@@ -6268,7 +6268,7 @@ msgstr "Переслать"
 msgid "Reduce to widget summary"
 msgstr "Сократить до краткого описания виджета"
 
-#: apps/io.ox/core/main.js:359 module:io.ox/core apps/io.ox/core/main.js:836
+#: apps/io.ox/core/main.js:355 module:io.ox/core apps/io.ox/core/main.js:832
 msgid "Refresh"
 msgstr "Обновить"
 
@@ -6460,7 +6460,7 @@ msgstr "Имя ресурса"
 msgid "Resources"
 msgstr "Ресурсы"
 
-#: apps/io.ox/core/main.js:1526 module:io.ox/core
+#: apps/io.ox/core/main.js:1522 module:io.ox/core
 msgid "Restore applications"
 msgstr "Восстановить приложения"
 
@@ -6633,7 +6633,7 @@ msgid "Scheduling"
 msgstr "Планирование"
 
 #: apps/io.ox/core/desktop.js:1502 module:io.ox/core
-#: apps/io.ox/core/main.js:821 apps/io.ox/find/extensions-facets.js:30
+#: apps/io.ox/core/main.js:817 apps/io.ox/find/extensions-facets.js:30
 #: apps/io.ox/find/main.js:47 apps/io.ox/find/view-tokenfield.js:119
 #: apps/io.ox/search/autocomplete/extensions.js:52
 #: apps/io.ox/search/main.js:197 module:io.ox/search
@@ -6821,7 +6821,7 @@ msgstr "Версия сервера"
 msgid "Set color"
 msgstr "Изменить цвет"
 
-#: apps/io.ox/core/main.js:891 module:io.ox/core apps/io.ox/core/main.js:1051
+#: apps/io.ox/core/main.js:887 module:io.ox/core apps/io.ox/core/main.js:1047
 #: apps/io.ox/settings/main.js:129 apps/io.ox/settings/main.js:500
 msgid "Settings"
 msgstr "Параметры"
@@ -7048,12 +7048,12 @@ msgstr "Статус в календаре"
 msgid "Sign in"
 msgstr "Вход"
 
-#: apps/io.ox/core/main.js:1030 module:io.ox/core apps/io.ox/core/main.js:1069
-#: apps/io.ox/core/main.js:1071 apps/io.ox/core/main.js:1219
+#: apps/io.ox/core/main.js:1026 module:io.ox/core apps/io.ox/core/main.js:1065
+#: apps/io.ox/core/main.js:1067 apps/io.ox/core/main.js:1215
 msgid "Sign out"
 msgstr "Выход"
 
-#: apps/io.ox/core/main.js:520 module:io.ox/core
+#: apps/io.ox/core/main.js:516 module:io.ox/core
 msgid "Sign out now"
 msgstr "Выход"
 
@@ -7072,7 +7072,7 @@ msgstr "Подписи"
 msgid "Signed in as %1$s"
 msgstr "Вошел как  %1$s"
 
-#: apps/io.ox/core/main.js:1212 module:io.ox/core
+#: apps/io.ox/core/main.js:1208 module:io.ox/core
 msgid "Signed in as:"
 msgstr "Пользователь:"
 
@@ -7689,7 +7689,7 @@ msgstr "Папка освобождена."
 msgid "The folder has been emptied"
 msgstr "Папка освобождена"
 
-#: apps/io.ox/core/main.js:1528 module:io.ox/core
+#: apps/io.ox/core/main.js:1524 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -9002,7 +9002,7 @@ msgstr ""
 "Вы автоматически вернетесь к диалогу встречи. Время начала и окончания, а "
 "также текущий участник будут сохранены."
 
-#: apps/io.ox/core/main.js:497 module:io.ox/core
+#: apps/io.ox/core/main.js:493 module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "Сеанс будет завершен через %1$d секунду"
@@ -9050,7 +9050,7 @@ msgstr "У вас есть напоминания о задачах"
 msgid "Your %s newsfeed"
 msgstr "Лента новостей %s"
 
-#: apps/io.ox/core/main.js:1097 module:io.ox/core
+#: apps/io.ox/core/main.js:1093 module:io.ox/core
 msgid "Your Applications"
 msgstr "Ваши приложения"
 
@@ -9150,7 +9150,7 @@ msgstr "Изображение превышает максимально доп�
 msgid "Your selected picture will be displayed after saving"
 msgstr "Изображение будет показано после сохранения."
 
-#: apps/io.ox/core/main.js:1238 module:io.ox/core
+#: apps/io.ox/core/main.js:1234 module:io.ox/core
 #: apps/io.ox/core/relogin.js:30
 msgid "Your session is expired"
 msgstr "Время сеанса истекло"
@@ -9242,7 +9242,7 @@ msgid "close"
 msgstr "закрыть"
 
 #. %1$s is app title/name
-#: apps/io.ox/core/main.js:636 module:io.ox/core
+#: apps/io.ox/core/main.js:632 module:io.ox/core
 msgid "close for %1$s"
 msgstr "закрыть для %1$s"
 

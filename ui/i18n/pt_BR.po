@@ -555,7 +555,7 @@ msgstr "Uma confirmação de leitura foi enviada"
 msgid "A severe error occurred!"
 msgstr "Ocorreu um erro grave!"
 
-#: apps/io.ox/core/main.js:1009 module:io.ox/core
+#: apps/io.ox/core/main.js:1005 module:io.ox/core
 msgid "About"
 msgstr "Sobre"
 
@@ -1241,7 +1241,7 @@ msgstr "Salvar automaticamente rascunhos de e-mail"
 msgid "Automatic opening of notification area"
 msgstr "Abertura automática da área de notificação"
 
-#: apps/io.ox/core/main.js:516 module:io.ox/core
+#: apps/io.ox/core/main.js:512 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:326
 msgid "Automatic sign out"
 msgstr "Encerramento automático de sessão"
@@ -1456,7 +1456,7 @@ msgstr "Calendário:"
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
 #: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:185
-#: apps/io.ox/core/main.js:519 apps/io.ox/core/main.js:1533
+#: apps/io.ox/core/main.js:515 apps/io.ox/core/main.js:1529
 #: apps/io.ox/core/permissions/permissions.js:372
 #: apps/io.ox/core/permissions/permissions.js:405 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/relogin.js:88 apps/io.ox/core/sub/subscriptions.js:57
@@ -1583,7 +1583,7 @@ msgstr "Alterar status de confirmação"
 msgid "Change due date"
 msgstr "Alterar data de vencimento"
 
-#: apps/io.ox/core/main.js:934 module:io.ox/core
+#: apps/io.ox/core/main.js:930 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:115
 #: apps/plugins/portal/userSettings/register.js:67
 msgid "Change password"
@@ -1732,7 +1732,7 @@ msgstr "Clique para enviar imagem"
 
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
-#: apps/io.ox/core/folder/tree.js:224 apps/io.ox/core/main.js:1249
+#: apps/io.ox/core/folder/tree.js:224 apps/io.ox/core/main.js:1245
 #: apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/tk/wizard.js:359
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:161
@@ -1922,7 +1922,7 @@ msgstr "Contém"
 msgid "Content"
 msgstr "Conteúdo"
 
-#: apps/io.ox/core/main.js:1534 module:io.ox/core
+#: apps/io.ox/core/main.js:1530 module:io.ox/core
 msgid "Continue"
 msgstr "Continuar"
 
@@ -2150,7 +2150,7 @@ msgstr "Data atual"
 msgid "Current role"
 msgstr "Papel atual"
 
-#: apps/io.ox/core/main.js:376 module:io.ox/core
+#: apps/io.ox/core/main.js:372 module:io.ox/core
 msgid "Currently refreshing"
 msgstr "Atualizando agora"
 
@@ -3225,7 +3225,7 @@ msgstr "Datas exatas"
 msgid "Executive"
 msgstr "Executivo"
 
-#: apps/io.ox/core/main.js:984 module:io.ox/core
+#: apps/io.ox/core/main.js:980 module:io.ox/core
 msgid "Exit Fullscreen"
 msgstr "Sair da tela inteira"
 
@@ -3552,7 +3552,7 @@ msgid "Folder view"
 msgstr "Exibição de pasta"
 
 #. %1$s is the filename
-#: apps/io.ox/core/main.js:1770 module:io.ox/core
+#: apps/io.ox/core/main.js:1766 module:io.ox/core
 msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
@@ -3654,7 +3654,7 @@ msgstr "Freelancer"
 msgid "From"
 msgstr "De"
 
-#: apps/io.ox/core/main.js:987 module:io.ox/core apps/io.ox/core/main.js:991
+#: apps/io.ox/core/main.js:983 module:io.ox/core apps/io.ox/core/main.js:987
 msgid "Fullscreen"
 msgstr "Tela cheia"
 
@@ -3778,7 +3778,7 @@ msgid "Hello World"
 msgstr "Olá Mundo"
 
 #: apps/io.ox/calendar/freebusy/templates.js:104
-#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:957
+#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:953
 #: module:io.ox/core apps/io.ox/help/center.js:103 module:io.ox/help
 msgid "Help"
 msgstr "Ajuda"
@@ -4819,7 +4819,7 @@ msgstr "Meu catálogo de endereços"
 msgid "My calendars"
 msgstr "Meus calendários"
 
-#: apps/io.ox/core/main.js:912 module:io.ox/core
+#: apps/io.ox/core/main.js:908 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:87
 #: apps/plugins/portal/userSettings/register.js:217
 msgid "My contact data"
@@ -5800,7 +5800,7 @@ msgid ""
 msgstr ""
 "Selecione qual dos seguintes dados podem ser usados para criar sua conta %s:"
 
-#: apps/io.ox/core/main.js:1239 module:io.ox/core
+#: apps/io.ox/core/main.js:1235 module:io.ox/core
 #: apps/io.ox/core/relogin.js:80
 msgid "Please sign in again to continue"
 msgstr "Inicie a sessão novamente para continuar"
@@ -6272,7 +6272,7 @@ msgstr "Redirecionar para"
 msgid "Reduce to widget summary"
 msgstr "Reduzir para o resumo do widget"
 
-#: apps/io.ox/core/main.js:359 module:io.ox/core apps/io.ox/core/main.js:836
+#: apps/io.ox/core/main.js:355 module:io.ox/core apps/io.ox/core/main.js:832
 msgid "Refresh"
 msgstr "Atualizar"
 
@@ -6464,7 +6464,7 @@ msgstr "Nome do recurso"
 msgid "Resources"
 msgstr "Recursos"
 
-#: apps/io.ox/core/main.js:1526 module:io.ox/core
+#: apps/io.ox/core/main.js:1522 module:io.ox/core
 msgid "Restore applications"
 msgstr "Restaurar aplicativos"
 
@@ -6636,7 +6636,7 @@ msgid "Scheduling"
 msgstr "Agendamento"
 
 #: apps/io.ox/core/desktop.js:1502 module:io.ox/core
-#: apps/io.ox/core/main.js:821 apps/io.ox/find/extensions-facets.js:30
+#: apps/io.ox/core/main.js:817 apps/io.ox/find/extensions-facets.js:30
 #: apps/io.ox/find/main.js:47 apps/io.ox/find/view-tokenfield.js:119
 #: apps/io.ox/search/autocomplete/extensions.js:52
 #: apps/io.ox/search/main.js:197 module:io.ox/search
@@ -6827,7 +6827,7 @@ msgstr "Versão do servidor"
 msgid "Set color"
 msgstr "Definir cor"
 
-#: apps/io.ox/core/main.js:891 module:io.ox/core apps/io.ox/core/main.js:1051
+#: apps/io.ox/core/main.js:887 module:io.ox/core apps/io.ox/core/main.js:1047
 #: apps/io.ox/settings/main.js:129 apps/io.ox/settings/main.js:500
 msgid "Settings"
 msgstr "Configurações"
@@ -7050,12 +7050,12 @@ msgstr "Exibir como"
 msgid "Sign in"
 msgstr "Iniciar sessão"
 
-#: apps/io.ox/core/main.js:1030 module:io.ox/core apps/io.ox/core/main.js:1069
-#: apps/io.ox/core/main.js:1071 apps/io.ox/core/main.js:1219
+#: apps/io.ox/core/main.js:1026 module:io.ox/core apps/io.ox/core/main.js:1065
+#: apps/io.ox/core/main.js:1067 apps/io.ox/core/main.js:1215
 msgid "Sign out"
 msgstr "Encerrar sessão"
 
-#: apps/io.ox/core/main.js:520 module:io.ox/core
+#: apps/io.ox/core/main.js:516 module:io.ox/core
 msgid "Sign out now"
 msgstr "Encerrar sessão agora"
 
@@ -7074,7 +7074,7 @@ msgstr "Assinaturas"
 msgid "Signed in as %1$s"
 msgstr "Conectado como %1$s"
 
-#: apps/io.ox/core/main.js:1212 module:io.ox/core
+#: apps/io.ox/core/main.js:1208 module:io.ox/core
 msgid "Signed in as:"
 msgstr "Conectado como:"
 
@@ -7704,7 +7704,7 @@ msgstr "A pasta foi limpa."
 msgid "The folder has been emptied"
 msgstr "A pasta foi esvaziada"
 
-#: apps/io.ox/core/main.js:1528 module:io.ox/core
+#: apps/io.ox/core/main.js:1524 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -9046,7 +9046,7 @@ msgstr ""
 "Você retornará automaticamente ao diálogo do compromisso. A hora de início e "
 "fim selecionadas, bem como a lista de participante atual serão aplicadas."
 
-#: apps/io.ox/core/main.js:497 module:io.ox/core
+#: apps/io.ox/core/main.js:493 module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "Você será automaticamente desconectado em %1$d segundo"
@@ -9093,7 +9093,7 @@ msgstr "Você tem lembretes de tarefa"
 msgid "Your %s newsfeed"
 msgstr "Seu feed de notícias %s"
 
-#: apps/io.ox/core/main.js:1097 module:io.ox/core
+#: apps/io.ox/core/main.js:1093 module:io.ox/core
 msgid "Your Applications"
 msgstr "Seus aplicativos"
 
@@ -9196,7 +9196,7 @@ msgstr ""
 msgid "Your selected picture will be displayed after saving"
 msgstr "Sua imagem selecionada será exibida depois que for salva"
 
-#: apps/io.ox/core/main.js:1238 module:io.ox/core
+#: apps/io.ox/core/main.js:1234 module:io.ox/core
 #: apps/io.ox/core/relogin.js:30
 msgid "Your session is expired"
 msgstr "Sua sessão expirou"
@@ -9289,7 +9289,7 @@ msgid "close"
 msgstr "fechar"
 
 #. %1$s is app title/name
-#: apps/io.ox/core/main.js:636 module:io.ox/core
+#: apps/io.ox/core/main.js:632 module:io.ox/core
 msgid "close for %1$s"
 msgstr "fechar para %1$s"
 

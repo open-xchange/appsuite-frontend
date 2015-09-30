@@ -556,7 +556,7 @@ msgstr "Ett läskvitto har skickats"
 msgid "A severe error occurred!"
 msgstr "Ett allvarligt fel inträffade!"
 
-#: apps/io.ox/core/main.js:1009 module:io.ox/core
+#: apps/io.ox/core/main.js:1005 module:io.ox/core
 msgid "About"
 msgstr "Om"
 
@@ -1238,7 +1238,7 @@ msgstr "Autospara e-postutkast"
 msgid "Automatic opening of notification area"
 msgstr "Öppna aviseringsområdet automatiskt"
 
-#: apps/io.ox/core/main.js:516 module:io.ox/core
+#: apps/io.ox/core/main.js:512 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:326
 msgid "Automatic sign out"
 msgstr "Automatisk utloggning"
@@ -1453,7 +1453,7 @@ msgstr "Kalender:"
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
 #: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:185
-#: apps/io.ox/core/main.js:519 apps/io.ox/core/main.js:1533
+#: apps/io.ox/core/main.js:515 apps/io.ox/core/main.js:1529
 #: apps/io.ox/core/permissions/permissions.js:372
 #: apps/io.ox/core/permissions/permissions.js:405 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/relogin.js:88 apps/io.ox/core/sub/subscriptions.js:57
@@ -1578,7 +1578,7 @@ msgstr "Ändra bekräftelsestatus"
 msgid "Change due date"
 msgstr "Ändra deadline"
 
-#: apps/io.ox/core/main.js:934 module:io.ox/core
+#: apps/io.ox/core/main.js:930 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:115
 #: apps/plugins/portal/userSettings/register.js:67
 msgid "Change password"
@@ -1728,7 +1728,7 @@ msgstr "Klicka för att ladda upp bild"
 
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
-#: apps/io.ox/core/folder/tree.js:224 apps/io.ox/core/main.js:1249
+#: apps/io.ox/core/folder/tree.js:224 apps/io.ox/core/main.js:1245
 #: apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/tk/wizard.js:359
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:161
@@ -1918,7 +1918,7 @@ msgstr "Innehåller"
 msgid "Content"
 msgstr "Innehåll"
 
-#: apps/io.ox/core/main.js:1534 module:io.ox/core
+#: apps/io.ox/core/main.js:1530 module:io.ox/core
 msgid "Continue"
 msgstr "Fortsätt"
 
@@ -2144,7 +2144,7 @@ msgstr "Aktuellt datum"
 msgid "Current role"
 msgstr "Aktuell roll"
 
-#: apps/io.ox/core/main.js:376 module:io.ox/core
+#: apps/io.ox/core/main.js:372 module:io.ox/core
 msgid "Currently refreshing"
 msgstr "Uppdaterar nu"
 
@@ -3210,7 +3210,7 @@ msgstr "Exakta datum"
 msgid "Executive"
 msgstr "Chef"
 
-#: apps/io.ox/core/main.js:984 module:io.ox/core
+#: apps/io.ox/core/main.js:980 module:io.ox/core
 msgid "Exit Fullscreen"
 msgstr "Lämna helskärmsläge"
 
@@ -3535,7 +3535,7 @@ msgid "Folder view"
 msgstr "Mappvy"
 
 #. %1$s is the filename
-#: apps/io.ox/core/main.js:1770 module:io.ox/core
+#: apps/io.ox/core/main.js:1766 module:io.ox/core
 msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
@@ -3636,7 +3636,7 @@ msgstr "Frilansare"
 msgid "From"
 msgstr "Från"
 
-#: apps/io.ox/core/main.js:987 module:io.ox/core apps/io.ox/core/main.js:991
+#: apps/io.ox/core/main.js:983 module:io.ox/core apps/io.ox/core/main.js:987
 msgid "Fullscreen"
 msgstr "Helskärm"
 
@@ -3760,7 +3760,7 @@ msgid "Hello World"
 msgstr "Hej, värld"
 
 #: apps/io.ox/calendar/freebusy/templates.js:104
-#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:957
+#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:953
 #: module:io.ox/core apps/io.ox/help/center.js:103 module:io.ox/help
 msgid "Help"
 msgstr "Hjälp"
@@ -4799,7 +4799,7 @@ msgstr "Mina adressböcker"
 msgid "My calendars"
 msgstr "Mina kalendrar"
 
-#: apps/io.ox/core/main.js:912 module:io.ox/core
+#: apps/io.ox/core/main.js:908 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:87
 #: apps/plugins/portal/userSettings/register.js:217
 msgid "My contact data"
@@ -5773,7 +5773,7 @@ msgid ""
 msgstr ""
 "Välj vilket av följande data vi får använda för att skapa ditt %s-konto:"
 
-#: apps/io.ox/core/main.js:1239 module:io.ox/core
+#: apps/io.ox/core/main.js:1235 module:io.ox/core
 #: apps/io.ox/core/relogin.js:80
 msgid "Please sign in again to continue"
 msgstr "Skriv in igen för att fortsätta"
@@ -6244,7 +6244,7 @@ msgstr "Omdirigera till"
 msgid "Reduce to widget summary"
 msgstr "Reducera till sammanfattning i komponent"
 
-#: apps/io.ox/core/main.js:359 module:io.ox/core apps/io.ox/core/main.js:836
+#: apps/io.ox/core/main.js:355 module:io.ox/core apps/io.ox/core/main.js:832
 msgid "Refresh"
 msgstr "Uppdatera"
 
@@ -6436,7 +6436,7 @@ msgstr "Resursnamn"
 msgid "Resources"
 msgstr "Resurser"
 
-#: apps/io.ox/core/main.js:1526 module:io.ox/core
+#: apps/io.ox/core/main.js:1522 module:io.ox/core
 msgid "Restore applications"
 msgstr "Återställ program"
 
@@ -6608,7 +6608,7 @@ msgid "Scheduling"
 msgstr "Schemaläggning"
 
 #: apps/io.ox/core/desktop.js:1502 module:io.ox/core
-#: apps/io.ox/core/main.js:821 apps/io.ox/find/extensions-facets.js:30
+#: apps/io.ox/core/main.js:817 apps/io.ox/find/extensions-facets.js:30
 #: apps/io.ox/find/main.js:47 apps/io.ox/find/view-tokenfield.js:119
 #: apps/io.ox/search/autocomplete/extensions.js:52
 #: apps/io.ox/search/main.js:197 module:io.ox/search
@@ -6798,7 +6798,7 @@ msgstr "Serverversion"
 msgid "Set color"
 msgstr "Ange färg"
 
-#: apps/io.ox/core/main.js:891 module:io.ox/core apps/io.ox/core/main.js:1051
+#: apps/io.ox/core/main.js:887 module:io.ox/core apps/io.ox/core/main.js:1047
 #: apps/io.ox/settings/main.js:129 apps/io.ox/settings/main.js:500
 msgid "Settings"
 msgstr "Inställningar"
@@ -7021,12 +7021,12 @@ msgstr "Visa som"
 msgid "Sign in"
 msgstr "Skriv in"
 
-#: apps/io.ox/core/main.js:1030 module:io.ox/core apps/io.ox/core/main.js:1069
-#: apps/io.ox/core/main.js:1071 apps/io.ox/core/main.js:1219
+#: apps/io.ox/core/main.js:1026 module:io.ox/core apps/io.ox/core/main.js:1065
+#: apps/io.ox/core/main.js:1067 apps/io.ox/core/main.js:1215
 msgid "Sign out"
 msgstr "Lämna"
 
-#: apps/io.ox/core/main.js:520 module:io.ox/core
+#: apps/io.ox/core/main.js:516 module:io.ox/core
 msgid "Sign out now"
 msgstr "Logga ut nu"
 
@@ -7045,7 +7045,7 @@ msgstr "Signaturer"
 msgid "Signed in as %1$s"
 msgstr "Inskriven som %1$s"
 
-#: apps/io.ox/core/main.js:1212 module:io.ox/core
+#: apps/io.ox/core/main.js:1208 module:io.ox/core
 msgid "Signed in as:"
 msgstr "Inskriven som:"
 
@@ -7666,7 +7666,7 @@ msgstr "Mappen har städats."
 msgid "The folder has been emptied"
 msgstr "Mappen har tömts"
 
-#: apps/io.ox/core/main.js:1528 module:io.ox/core
+#: apps/io.ox/core/main.js:1524 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -8996,7 +8996,7 @@ msgstr ""
 "Du kommer automatiskt återvända till mötesdialogrutan. De valda start- och "
 "sluttiderna, såväl som den aktuella deltagarlistan, kommer tillämpas."
 
-#: apps/io.ox/core/main.js:497 module:io.ox/core
+#: apps/io.ox/core/main.js:493 module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "Du kommer loggas ut automatiskt om %1$d sekund"
@@ -9043,7 +9043,7 @@ msgstr "Du har uppgiftspåminnelser"
 msgid "Your %s newsfeed"
 msgstr "Ditt %s-nyhetsflöde"
 
-#: apps/io.ox/core/main.js:1097 module:io.ox/core
+#: apps/io.ox/core/main.js:1093 module:io.ox/core
 msgid "Your Applications"
 msgstr "Dina program"
 
@@ -9144,7 +9144,7 @@ msgstr "Din valda bild överskrider den största tillåtna filstorleken, %1$s"
 msgid "Your selected picture will be displayed after saving"
 msgstr "Bilden du valde kommer visas när du sparat"
 
-#: apps/io.ox/core/main.js:1238 module:io.ox/core
+#: apps/io.ox/core/main.js:1234 module:io.ox/core
 #: apps/io.ox/core/relogin.js:30
 msgid "Your session is expired"
 msgstr "Din session är för gammal"
@@ -9236,7 +9236,7 @@ msgid "close"
 msgstr "stäng"
 
 #. %1$s is app title/name
-#: apps/io.ox/core/main.js:636 module:io.ox/core
+#: apps/io.ox/core/main.js:632 module:io.ox/core
 msgid "close for %1$s"
 msgstr "stäng för %1$s"
 
