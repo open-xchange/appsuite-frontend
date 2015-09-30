@@ -16,8 +16,9 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
     'io.ox/files/api',
     'io.ox/core/folder/api',
     'io.ox/core/tk/dialogs',
+    'io.ox/files/util',
     'gettext!io.ox/core/viewer'
-], function (DisposableView, FilesAPI, folderApi, Dialogs, gt) {
+], function (DisposableView, FilesAPI, folderApi, Dialogs, util, gt) {
 
     'use strict';
 
@@ -92,8 +93,9 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
             if (!this.model || !this.model.isFile()) return this;
             // check if the user has permission to upload new versions
             folderApi.get(this.model.get('folder_id')).done(function (folderData) {
-                if (this.disposed) return;
-                if (!folderApi.can('write', folderData)) return;
+
+                if (this.disposed || !folderApi.can('write', folderData) || util.hasStatus('lockedByOthers', { context: this.model.attributes })) return;
+
                 // add file upload widget
                 var $el = this.$el;
                 require(['io.ox/core/tk/attachments'], function (Attachments) {
