@@ -417,6 +417,11 @@ define('io.ox/calendar/api', [
          * @return {deferred}
          */
         checkConflicts: function (appointment) {
+
+            // no conflicts for free appointments
+            if (appointment.shown_as === 4) {
+                return $.Deferred().resolve([]);
+            }
             var data = appointment,
                 //conflicts with appointments in the past are of no interest
                 start = Math.max(_.now(), appointment.start_date);
