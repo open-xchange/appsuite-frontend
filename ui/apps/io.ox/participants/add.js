@@ -16,8 +16,9 @@ define('io.ox/participants/add', [
     'io.ox/participants/model',
     'io.ox/participants/views',
     'io.ox/core/tk/typeahead',
+    'io.ox/mail/util',
     'gettext!io.ox/core'
-], function (ext, pModel, pViews, Typeahead, gt) {
+], function (ext, pModel, pViews, Typeahead, util, gt) {
 
     'use strict';
 
@@ -81,7 +82,11 @@ define('io.ox/participants/add', [
             if (e.which === 13) {
                 var val = this.typeahead.$el.typeahead('val');
                 if (!_.isEmpty(val)) {
-                    this.addParticipant(e, { email1: val, field: 'email1', type: 5 }, val );
+                    this.addParticipant(e, {
+                        display_name: util.parseRecipient(val)[0],
+                        email1: util.parseRecipient(val)[1],
+                        field: 'email1', type: 5
+                    }, val );
                 }
             }
         },
