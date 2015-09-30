@@ -356,7 +356,8 @@ define('io.ox/files/main', [
                             pagination: false,
                             draggable: false,
                             ignoreFocus: true,
-                            noSwipe: true
+                            noSwipe: true,
+                            noPullToRefresh: true
                         });
 
                         app.mysharesListViewControl = new ListViewControl({
