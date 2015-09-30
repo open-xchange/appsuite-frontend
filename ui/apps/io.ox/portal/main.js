@@ -14,6 +14,7 @@
 
 define('io.ox/portal/main', [
     'io.ox/core/extensions',
+    'io.ox/core/capabilities',
     'io.ox/core/api/user',
     'io.ox/contacts/api',
     'io.ox/core/tk/dialogs',
@@ -23,7 +24,7 @@ define('io.ox/portal/main', [
     'gettext!io.ox/portal',
     'settings!io.ox/portal',
     'less!io.ox/portal/style'
-], function (ext, userAPI, contactAPI, dialogs, widgets, util, settingsPane, gt, settings) {
+], function (ext, capabilities, userAPI, contactAPI, dialogs, widgets, util, settingsPane, gt, settings) {
 
     'use strict';
 
@@ -340,6 +341,9 @@ define('io.ox/portal/main', [
     };
 
     app.getTour = function () {
+        //no tours for guests, yet. See bug 41542
+        if (capabilities.has('guest')) return;
+
         return { id: 'default/io.ox/portal', path: 'io.ox/tours/portal' };
     };
 

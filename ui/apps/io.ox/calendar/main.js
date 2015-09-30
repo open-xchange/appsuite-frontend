@@ -168,6 +168,9 @@ define('io.ox/calendar/main', [
             });
 
             app.getTour = function () {
+                //no tours for guests, yet. See bug 41542
+                if (capabilities.has('guest')) return;
+
                 return { id: 'default/io.ox/calendar', path: 'io.ox/tours/calendar' };
             };
         },

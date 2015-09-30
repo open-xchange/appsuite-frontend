@@ -57,7 +57,7 @@ define('io.ox/tours/get-started', ['io.ox/core/extensions', 'io.ox/core/tk/wizar
         onAppChange: function () {
             // check if the current app implements getTour()
             var app = ox.ui.App.getCurrentApp(),
-                visible = !!app && _.isFunction(app.getTour);
+                visible = !!app && _.isFunction(app.getTour) && !_.isEmpty(app.getTour());
             this.$el.toggle(visible);
         },
 

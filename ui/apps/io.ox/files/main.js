@@ -72,6 +72,9 @@ define('io.ox/files/main', [
             });
 
             app.getTour = function () {
+                //no tours for guests, yet. See bug 41542
+                if (capabilities.has('guest')) return;
+
                 return { id: 'default/io.ox/files', path: 'io.ox/tours/files' };
             };
         },
