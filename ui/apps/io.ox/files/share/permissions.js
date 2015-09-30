@@ -648,7 +648,9 @@
                 dropdown.render();
 
                 // disable all items if not admin or if not any write privileges
-                if (!baton.parentModel.isAdmin() || !supportsWritePrivileges) dropdown.$('li > a').addClass('disabled');
+                if (!baton.parentModel.isAdmin() || !supportsWritePrivileges) {
+                    dropdown.$('li > a').addClass('disabled').prop('disabled', true);
+                }
 
                 this.append(
                     $('<div class="col-sm-2 col-xs-4 detail-dropdown">').append(
@@ -844,7 +846,7 @@
                             var isInternal = member.get('type') === 2 || member.get('type') === 1,
                                 isGuest = member.get('type') === 5,
                                 obj = {
-                                    bits: isInternal && objModel.isFolder() ? 4227332 : 1, // Author : Viewer
+                                    bits: isInternal ? 4227332 : objModel.isFolder() ? 257 : 1, // Author : (Viewer for folders: Viewer for files)
                                     group: member.get('type') === 2,
                                     type: member.get('type') === 2 ? 'group' : 'user',
                                     new: true
@@ -901,7 +903,7 @@
 
                                 // add to collection
                                 permissionsView.collection.add(new Permission({
-                                    bits: 1,
+                                    bits: objModel.isFolder() ? 257 : 1,
                                     contact: { email1: value },
                                     type: 'guest',
                                     new: true

@@ -65,7 +65,8 @@ define('io.ox/calendar/edit/extensions', [
             this.append($('<button type="button" class="btn btn-primary save" data-action="save" >')
                 .text(baton.mode === 'edit' ? gt('Save') : gt('Create'))
                 .on('click', function () {
-                    var save = _.bind(baton.app.onSave, baton.app),
+                    var save = _.bind(baton.app.onSave || _.noop, baton.app),
+                        fail = _.bind(baton.app.onError || _.noop, baton.app),
                         folder = baton.model.get('folder_id');
                     //check if attachments are changed
                     if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
@@ -78,7 +79,7 @@ define('io.ox/calendar/edit/extensions', [
                     if (oldFolder !== folder && baton.mode === 'edit') {
                         baton.model.set({ 'folder_id': oldFolder }, { silent: true });
                         baton.model.save().done(function () {
-                            api.move(baton.model.toJSON(), folder).done(save);
+                            api.move(baton.model.toJSON(), folder).then(save, fail);
                         });
                     } else {
                         baton.model.save().done(save);

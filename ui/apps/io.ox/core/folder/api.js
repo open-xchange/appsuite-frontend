@@ -725,7 +725,7 @@ define('io.ox/core/folder/api', [
                         .map(makeObject)
                         .filter(function (folder) {
                             // read access?
-                            if (!util.can('read', folder)) return false;
+                            if (!util.can('read', folder) && !util.can('change:permissions', folder)) return false;
                             // otherwise
                             return true;
                         })

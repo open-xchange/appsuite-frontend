@@ -750,13 +750,11 @@ define('io.ox/calendar/api', [
                 folderAPI.reload(folders);
                 var def = $.Deferred();
 
-                _(result).each(function (val) {
-                    if (val.error) { notifications.yell(val.error); def.reject(val.error); }
+                _(result).each(function (item) {
+                    if (item.error) def.reject(item.error);
                 });
 
-                if (def.state() === 'rejected') {
-                    return def;
-                }
+                if (def.state() === 'rejected') return def;
 
                 return def.resolve();
             })

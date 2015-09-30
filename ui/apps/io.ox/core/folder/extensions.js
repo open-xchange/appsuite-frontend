@@ -114,6 +114,7 @@ define('io.ox/core/folder/extensions', [
                 return _(list).filter(function (data) {
                     if (String(data.id) === String(settings.get('folder/infostore'))) return false;
                     if (api.is('trash', data)) return false;
+                    if (api.isExternalFileStorage(data)) return false;
                     return true;
                 });
             });

@@ -226,6 +226,7 @@ define('io.ox/core/folder/util', [
             // empty folder
             return (rights >> 21 & 127) && is('mail', data);
         case 'changepermissions':
+        case 'change:permissions':
             return isAdmin;
         case 'viewproperties':
             // view properties

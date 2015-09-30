@@ -72,6 +72,9 @@ define('io.ox/files/main', [
             });
 
             app.getTour = function () {
+                //no tours for guests, yet. See bug 41542
+                if (capabilities.has('guest')) return;
+
                 return { id: 'default/io.ox/files', path: 'io.ox/tours/files' };
             };
         },
@@ -315,6 +318,8 @@ define('io.ox/files/main', [
                 app.listView.empty();
                 var options = app.getViewOptions(id);
                 app.props.set(options);
+                // always trigger a change (see bug 41500)
+                app.listView.model.set('folder', null, { silent: true });
                 app.listView.model.set('folder', id);
             });
         },
@@ -354,7 +359,8 @@ define('io.ox/files/main', [
                             pagination: false,
                             draggable: false,
                             ignoreFocus: true,
-                            noSwipe: true
+                            noSwipe: true,
+                            noPullToRefresh: true
                         });
 
                         app.mysharesListViewControl = new ListViewControl({
@@ -416,6 +422,12 @@ define('io.ox/files/main', [
                         app.getWindow().nodes.body.idle().children().show();
                     }
                 }
+            });
+
+            app.pages.getPage('main').on('myshares-folder-back', function () {
+                app.folderView.tree.selection.getItems().removeClass('selected');
+                app.folderView.tree.selection.set(folderAPI.getDefaultFolder('infostore'));
+                app.mysharesListViewControl.$el.hide().siblings().show();
             });
         },
 

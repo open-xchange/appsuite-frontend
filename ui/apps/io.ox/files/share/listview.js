@@ -55,7 +55,8 @@ define('io.ox/files/share/listview', [
                 _.device('touch') ? 'tap' : 'dblclick',
                 '.list-item .list-item-content',
                 function () {
-                    self.openPermissionsDialog();
+                    // using defere for "tap"; otherwise the selection is not yet ready
+                    _.defer(function () { self.openPermissionsDialog(); });
                 }
             );
 
@@ -177,6 +178,9 @@ define('io.ox/files/share/listview', [
             id: 'breadcrumb',
             index: 400,
             draw: function (baton) {
+
+                if (_.device('smartphone')) return;
+
                 var model = baton.model,
                     breadcrumb = new BreadcrumbView({
                         folder: model.getFolderID(),
@@ -203,6 +207,7 @@ define('io.ox/files/share/listview', [
             id: 'user',
             index: 600,
             draw: function (baton) {
+                if (_.device('smartphone')) return;
                 this.append(
                     $('<div class="list-item-column type gray">').append(
                         $('<i class="fa fa-user">')
@@ -216,6 +221,7 @@ define('io.ox/files/share/listview', [
             id: 'guest',
             index: 700,
             draw: function (baton) {
+                if (_.device('smartphone')) return;
                 this.append(
                     $('<div class="list-item-column type gray">').append(
                         $('<i class="fa fa-user-plus">')
@@ -229,6 +235,7 @@ define('io.ox/files/share/listview', [
             id: 'external',
             index: 800,
             draw: function (baton) {
+                if (_.device('smartphone')) return;
                 this.append(
                     $('<div class="list-item-column type gray">').append(
                         $('<i class="fa fa-link">')
