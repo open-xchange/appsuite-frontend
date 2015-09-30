@@ -656,18 +656,20 @@ define('io.ox/core/viewer/views/toolbarview', [
                 id: appName,
                 dropdown: true,
                 compactDropdown: true,
-                ref: TOOLBAR_LINKS_ID + '/' + appName
+                ref: TOOLBAR_LINKS_ID + '/' + appName,
+                customize: function () {
+                    // workaround for correct TAB traversal order:
+                    // move the close button 'InlineLink' to the right of the 'InlineLinks Dropdown' manually.
+                    if (self.disposed) return;
+                    // using .dropdown would also select other dropdowns, like the sharing dropdown
+                    this.find('[data-action="more"]').parent().after(
+                        this.find('.viewer-toolbar-togglesidebar, .viewer-toolbar-popoutstandalone, .viewer-toolbar-close').parent()
+                    );
+                }
             }));
+
             toolbarPoint.invoke('draw', toolbar, baton);
-            // workaround for correct TAB traversal order:
-            // move the close button 'InlineLink' to the right of the 'InlineLinks Dropdown' manually.
-            _.defer(function () {
-                if (self.disposed) return;
-                // using .dropdown would also select other dropdowns, like the sharing dropdown
-                self.$el.find('[data-action="more"]').parent().after(
-                    self.$('.viewer-toolbar-togglesidebar, .viewer-toolbar-popoutstandalone, .viewer-toolbar-close').parent()
-                );
-            });
+
             return this;
         },
 
