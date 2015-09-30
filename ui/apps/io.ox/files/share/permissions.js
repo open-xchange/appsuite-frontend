@@ -846,7 +846,7 @@
                             var isInternal = member.get('type') === 2 || member.get('type') === 1,
                                 isGuest = member.get('type') === 5,
                                 obj = {
-                                    bits: isInternal && objModel.isFolder() ? 4227332 : 1, // Author : Viewer
+                                    bits: isInternal ? 4227332 : objModel.isFolder() ? 257 : 1, // Author : (Viewer for folders: Viewer for files)
                                     group: member.get('type') === 2,
                                     type: member.get('type') === 2 ? 'group' : 'user',
                                     new: true
