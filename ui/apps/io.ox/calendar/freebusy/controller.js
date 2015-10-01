@@ -318,7 +318,10 @@ define('io.ox/calendar/freebusy/controller', [
                 return view;
             };
 
-            this.getCalendarViewInstance('workweek');
+            // use the same layout as calendar or default to workweek (list, and month are not supported, because they cannot show, the overlapping appointments)
+            var layout = options.baton.app.props.get('layout').replace('week:','');
+
+            this.getCalendarViewInstance(layout !== 'list' && layout !== 'month' ? layout : 'workweek');
 
             // participants collection
             this.participants = new pModel.Participants([]);
