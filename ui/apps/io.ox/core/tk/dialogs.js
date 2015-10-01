@@ -523,9 +523,11 @@ define('io.ox/core/tk/dialogs', [
             }
 
             // focus button (if available)
-            var button = nodes.popup.find('.btn-primary').first().focus();
-            if (!button.length) {
-                nodes.popup.find('.btn').not('.btn-danger').first().focus();
+            if (_.device('!smartphone')) {
+                var button = nodes.popup.find('.btn-primary').first().focus();
+                if (!button.length) {
+                    nodes.popup.find('.btn').not('.btn-danger').first().focus();
+                }
             }
 
             nodes.popup.on('keydown', fnKey);
