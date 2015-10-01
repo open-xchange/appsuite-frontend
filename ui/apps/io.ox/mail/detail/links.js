@@ -55,7 +55,7 @@ define('io.ox/mail/detail/links', [
     // Deep links
     //
 
-    var isDeepLink, parseDeepLink, processDeepLink;
+    var isDeepLink, isInternalDeepLink, parseDeepLink, processDeepLink;
 
     (function () {
 
@@ -63,15 +63,17 @@ define('io.ox/mail/detail/links', [
             app = {
                 'io.ox/contacts': 'contacts',
                 'io.ox/calendar': 'calendar',
-                'io.ox/task': 'tasks',
+                'io.ox/tasks': 'tasks',
                 'io.ox/infostore': 'files',
-                'io.ox/files': 'files'
+                'io.ox/files': 'files',
+                'infostore': 'files'
             },
             items = {
                 contacts: gt('Contact'),
                 calendar: gt('Appointment'),
                 tasks: gt('Task'),
                 files: gt('File'),
+                infostore: gt('File'),
                 'io.ox/office/text': gt('Document'),
                 'io.ox/office/spreadsheet': gt('Spreadsheet')
             },
@@ -88,12 +90,24 @@ define('io.ox/mail/detail/links', [
             return regDeepLink.test(str) || regDeepLinkAlt.test(str);
         };
 
+        isInternalDeepLink = function (str) {
+            return isDeepLink(str) && isValidHost(str);
+        };
+
         parseDeepLink = function (str) {
             var matches = String(str).match(regDeepLink.test(str) ? regDeepLink : regDeepLinkAlt),
                 data = _.object(keys, matches),
                 params = _.deserialize(data.params, '&');
             // fix app
             data.app = app[data.app] || data.app;
+            // class name
+            if (/^(files|infostore)$/.test(data.app)) {
+                data.className = 'deep-link-files';
+            } else if (/^(contacts|calendar|tasks)$/.test(data.app)) {
+                data.className = 'deep-link-' + data.app;
+            } else {
+                data.className = 'deep-link-app';
+            }
             // add folder, id, perspective (jQuery's extend to skip undefined)
             // share links use "item" instead of "id" (for whatever reason)
             return $.extend(data, { folder: params.f, id: params.i }, { folder: params.folder, id: params.id || params.item, perspective: params.perspective });
@@ -111,8 +125,7 @@ define('io.ox/mail/detail/links', [
             // internal document?
             if (isValidHost(data.link)) {
                 // add either specific css class or generic "app" deep-link
-                var className = /^(contacts|calendar|tasks|files)/.test(data.app) ? data.app : 'app';
-                link.addClass('deep-link-' + className).data(data);
+                link.addClass(data.className).data(data);
             }
 
             // move up?
@@ -287,6 +300,7 @@ define('io.ox/mail/detail/links', [
         handlers: handlers,
         isValidHost: isValidHost,
         isDeepLink: isDeepLink,
+        isInternalDeepLink: isInternalDeepLink,
         parseDeepLink: parseDeepLink,
         processDeepLink: processDeepLink,
         processTextNode: processTextNode

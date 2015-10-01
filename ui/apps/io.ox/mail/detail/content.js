@@ -311,16 +311,15 @@ define('io.ox/mail/detail/content', [
             each(this, 'a', function (node) {
                 var link = $(node),
                     href = link.attr('href') || '',
-                    data, text, className;
+                    data, text;
                 // deep links?
-                if (links.isDeepLink(href)) {
+                if (links.isInternalDeepLink(href)) {
                     data = links.parseDeepLink(href);
                     // fix invalid "folder DOT folder SLASH id" pattern
                     if (/^(\d+)\.\1\/\d+$/.test(data.id)) data.id = data.id.replace(/^\d+\./, '');
                     // fix ID, i.e. replace the DOT (old notation) by a SLASH (new notation, 7.8.0)
                     if (/^\d+\./.test(data.id)) data.id = data.id.replace(/\./, '/');
-                    className = /^(contacts|calendar|tasks|files)/.test(data.app) ? data.app : 'app';
-                    link.addClass('deep-link-' + className).data(data);
+                    link.addClass(data.className).data(data);
                 }
                 // mailto
                 if (href.indexOf('mailto') > -1) {
