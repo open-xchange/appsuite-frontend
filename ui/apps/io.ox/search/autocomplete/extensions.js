@@ -52,6 +52,7 @@ define('io.ox/search/autocomplete/extensions',[
                 placeholder: gt('Search') + '...',
                 className: 'search-field',
                 delayedautoselect: true,
+                inputtype: 'search',
                 dnd: false,
                 // tokenfield options
                 hint: false,

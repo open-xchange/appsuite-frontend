@@ -119,6 +119,7 @@ define('io.ox/find/view-tokenfield', [
                 placeholder: gt('Search') + '...',
                 className: 'search-field',
                 delayedautoselect: true,
+                inputtype: 'search',
                 dnd: false,
                 // tokenfield options
                 hint: false,
