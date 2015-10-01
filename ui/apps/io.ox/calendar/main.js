@@ -715,25 +715,43 @@ define('io.ox/calendar/main', [
         win.addClass('io-ox-calendar-main');
 
         // go!
-        commons.addFolderSupport(app, null, 'calendar', options.folder || 'virtual/all-my-appointments')
-            .always(function () {
-                app.mediate();
-                win.show();
-            })
-            .done(function () {
+        var defaultFolder  = options.folder || 'virtual/all-my-appointments';
+        if (!options.folder && capabilities.has('guest')) {
+            // guests don't have the all-my-appointments folder
+            // try to select the first shared folder available
+            if (folderAPI.getFlatCollection('calendar', 'shared').fetched) {
+                addFolderSupport(folderAPI.getFlatCollection('calendar', 'shared').models[0].get('id'));
+            } else {
+                // shared section wasn't fetched yet. Do it now.
+                folderAPI.flat({ module: 'calendar' }).done(function (sections) {
+                    addFolderSupport(sections.shared[0]);
+                });
+            }
+        } else {
+            addFolderSupport(defaultFolder);
+        }
 
-                // app perspective
-                var lastPerspective = options.perspective || _.url.hash('perspective') || app.props.get('layout');
+        function addFolderSupport (folder) {
+            commons.addFolderSupport(app, null, 'calendar', folder)
+                .always(function () {
+                    app.mediate();
+                    win.show();
+                })
+                .done(function () {
 
-                if (_.device('smartphone') && _.indexOf(['week:workweek', 'week:week', 'calendar'], lastPerspective) >= 0) {
-                    lastPerspective = 'week:day';
-                } else {
-                    // corrupt data fix
-                    if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
-                }
-                ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true });
-                app.props.set('layout', lastPerspective);
-            });
+                    // app perspective
+                    var lastPerspective = options.perspective || _.url.hash('perspective') || app.props.get('layout');
+
+                    if (_.device('smartphone') && _.indexOf(['week:workweek', 'week:week', 'calendar'], lastPerspective) >= 0) {
+                        lastPerspective = 'week:day';
+                    } else {
+                        // corrupt data fix
+                        if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
+                    }
+                    ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true });
+                    app.props.set('layout', lastPerspective);
+                });
+        }
     });
 
     return {
