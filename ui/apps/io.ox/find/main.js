@@ -206,6 +206,23 @@ define('io.ox/find/main', [
                                         self.collection.search = {
                                             next: list.length !== 0 && list.length === request.data.size
                                         };
+
+                                        if (!list.length) return list;
+
+                                        var item = list[0];
+                                        // irrelevant (not original folder property/value)
+                                        if (!item.original_folder_id) return list;
+                                        // already correct (folder id and original folder id matches)
+                                        if (item.original_folder_id === item.folder_id) return list;
+
+                                        // special: use original ids to allow proper propagation of changes (bug 41209)
+                                        list.forEach(function (obj) {
+                                            _.extend(obj, {
+                                                id: obj.original_id || obj.id,
+                                                folder_id: obj.original_folder_id || obj.folder_id
+                                            });
+                                        });
+
                                         return list;
                                     });
                                 },
