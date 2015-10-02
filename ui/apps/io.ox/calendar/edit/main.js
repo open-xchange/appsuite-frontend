@@ -335,10 +335,22 @@ define('io.ox/calendar/edit/main', [
                 input.on('keyup focus', { list: list }, stopPointerEvents);
             },
 
-            onSave: function () {
-                this.considerSaved = true;
-                this.getWindow().idle();
-                this.quit();
+            onSave: function (data) {
+                if (this.moveAfterSave) {
+                    var save = _.bind(this.onSave, this),
+                        fail = _.bind(this.onError, this),
+                        self = this;
+                    //update last modified parameter not to run into a conflict error
+                    this.model.set('last_modified', data.last_modified, { silent: true });
+                    api.move(this.model.toJSON(), this.moveAfterSave).then(function () {
+                        self.moveAfterSave = null;
+                        save();
+                    }, fail);
+                } else {
+                    this.considerSaved = true;
+                    this.getWindow().idle();
+                    this.quit();
+                }
             },
 
             onError: function (error) {
