@@ -39,9 +39,7 @@ define('io.ox/files/share/api', [
         isAdmin: function () {
             // for files we don't have the parent folder information
             // use shareable attribute instead
-            if (this.isFile()) {
-                return this.get('shareable');
-            }
+            if (this.isFile()) return !!this.get('shareable');
             // otherwise check folder bits
             return folderAPI.Bitmask(this.get('own_rights')).get('admin') >= 1;
         },
@@ -265,7 +263,7 @@ define('io.ox/files/share/api', [
                     tree: 0,
                     all: 0,
                     altNames: true,
-                    columns: '1,2,5,20,700,7010'
+                    columns: '1,2,5,20,109,700,7010'
                 }
             });
         },
