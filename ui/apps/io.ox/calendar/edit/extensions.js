@@ -66,7 +66,6 @@ define('io.ox/calendar/edit/extensions', [
                 .text(baton.mode === 'edit' ? gt('Save') : gt('Create'))
                 .on('click', function () {
                     var save = _.bind(baton.app.onSave || _.noop, baton.app),
-                        fail = _.bind(baton.app.onError || _.noop, baton.app),
                         folder = baton.model.get('folder_id');
                     //check if attachments are changed
                     if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
@@ -78,14 +77,10 @@ define('io.ox/calendar/edit/extensions', [
 
                     if (oldFolder !== folder && baton.mode === 'edit') {
                         baton.model.set({ 'folder_id': oldFolder }, { silent: true });
-                        baton.model.save().done(function (data) {
-                            //update last modified parameter to not run into a conflict error
-                            baton.model.set('last_modified', data.last_modified, { silent: true });
-                            api.move(baton.model.toJSON(), folder).then(save, fail);
-                        });
-                    } else {
-                        baton.model.save().done(save);
+                        //actual moving is done in the app.onSave method, because this method is also called after confirming conflicts, so we don't need duplicated code
+                        baton.app.moveAfterSave = folder;
                     }
+                    baton.model.save().done(save);
                 })
             );
 
