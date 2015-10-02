@@ -78,7 +78,9 @@ define('io.ox/calendar/edit/extensions', [
 
                     if (oldFolder !== folder && baton.mode === 'edit') {
                         baton.model.set({ 'folder_id': oldFolder }, { silent: true });
-                        baton.model.save().done(function () {
+                        baton.model.save().done(function (data) {
+                            //update last modified parameter to not run into a conflict error
+                            baton.model.set('last_modified', data.last_modified, { silent: true });
                             api.move(baton.model.toJSON(), folder).then(save, fail);
                         });
                     } else {
