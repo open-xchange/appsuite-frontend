@@ -17,10 +17,13 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
     'io.ox/core/folder/api',
     'io.ox/core/tk/dialogs',
     'io.ox/files/util',
+    'io.ox/core/extensions',
     'gettext!io.ox/core/viewer'
-], function (DisposableView, FilesAPI, folderApi, Dialogs, util, gt) {
+], function (DisposableView, FilesAPI, folderApi, Dialogs, util, ext, gt) {
 
     'use strict';
+
+    var POINT = 'io.ox/core/viewer/upload-new-version';
 
     /**
      * notifications lazy load
@@ -31,6 +34,68 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
             notifications.yell.apply(self, args);
         });
     }
+
+    /**
+     * dialog
+     */
+    ext.point(POINT + '/dialog').extend({
+        index: 100,
+        id: 'header',
+        draw: function (baton) {
+            // version comment
+            baton.$.header(
+                $('<h4>').text(gt('Version Comment'))
+            );
+        }
+    });
+
+    ext.point(POINT + '/dialog').extend({
+        index: 200,
+        id: 'body',
+        draw: function (baton) {
+            baton.$.append(
+                $('<textarea rows="6" class="form-control comment" tabindex="1">')
+            );
+        }
+    });
+
+    ext.point(POINT + '/dialog').extend({
+        index: 300,
+        id: 'primary',
+        draw: function (baton) {
+            var model = this.model;
+            baton.$.addPrimaryButton('upload', gt('Upload'), 'upload',  { 'tabIndex': '1' })
+                .on('upload', function () {
+                    var comment = baton.$.getContentNode().find('textarea.comment').val() || '';
+
+                    FilesAPI.versions.upload({
+                        file: baton.data,
+                        id: model.get('id'),
+                        folder: model.get('folder_id'),
+                        version_comment: comment
+                    })
+                    .fail(notify);
+                });
+        }
+    });
+
+    ext.point(POINT + '/dialog').extend({
+        index: 400,
+        id: 'cancel',
+        draw: function (baton) {
+            baton.$.addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' });
+        }
+    });
+
+    ext.point(POINT + '/dialog').extend({
+        index: 500,
+        id: 'show',
+        draw: function (baton) {
+            baton.$.show(function () {
+                this.find('.btn-primary').focus();
+            });
+        }
+    });
 
     /**
      * The UploadNewVersionView is intended as a sub view of the SidebarView and
@@ -51,34 +116,16 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
          * the file as new version.
          */
         onFileSelected: function (event) {
-            var model = this.model,
-                files = this.$('input[type="file"]')[0].files;
-
             event.preventDefault();
 
-            new Dialogs.ModalDialog()
-            .header(
-                $('<h4>').text(gt('Version Comment'))
-            )
-            .append(
-                $('<textarea rows="6" class="form-control" tabindex="1">')
-            )
-            .addPrimaryButton('upload', gt('Upload'), 'upload',  { 'tabIndex': '1' })
-            .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
-            .on('upload', function () {
-                var comment = this.getContentNode().find('textarea').val() || '';
+            var files = this.$('input[type="file"]')[0].files,
+                baton = ext.Baton({
+                    data: _.first(files),
+                    $: new Dialogs.ModalDialog()
+                });
+            // draw modal body
+            ext.point(POINT + '/dialog').invoke('draw', this, baton);
 
-                FilesAPI.versions.upload({
-                    file: _.first(files),
-                    id: model.get('id'),
-                    folder: model.get('folder_id'),
-                    version_comment: comment
-                })
-                .fail(notify);
-            })
-            .show(function () {
-                this.find('.btn-primary').focus();
-            });
         },
 
         initialize: function () {
