@@ -17,10 +17,16 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
     'io.ox/core/folder/api',
     'io.ox/core/tk/dialogs',
     'io.ox/files/util',
+    'io.ox/core/extensions',
+    'settings!io.ox/files',
     'gettext!io.ox/core/viewer'
-], function (DisposableView, FilesAPI, folderApi, Dialogs, util, gt) {
+], function (DisposableView, FilesAPI, folderApi, Dialogs, util, ext, settings, gt) {
 
     'use strict';
+
+    var POINT = 'io.ox/core/viewer/upload-new-version',
+        // TODO: switch to related capability when available
+        COMMENTS = settings.get('features/comments', true);
 
     /**
      * notifications lazy load
@@ -32,6 +38,61 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
         });
     }
 
+    /**
+     * dialog
+     */
+    ext.point(POINT + '/dialog').extend({
+        index: 100,
+        id: 'header',
+        draw: function (baton) {
+            // version comment
+            baton.$.header(
+                $('<h4>').text(gt('Version Comment'))
+            );
+        }
+    });
+
+    ext.point(POINT + '/dialog').extend({
+        index: 200,
+        id: 'body',
+        draw: function (baton) {
+            baton.$.append(
+                $('<textarea rows="6" class="form-control comment" tabindex="1">')
+            );
+        }
+    });
+
+    ext.point(POINT + '/dialog').extend({
+        index: 300,
+        id: 'primary',
+        draw: function (baton) {
+            var self = this;
+            baton.$.addPrimaryButton('upload', gt('Upload'), 'upload',  { 'tabIndex': '1' })
+                .on('upload', function () {
+                    var comment = baton.$.getContentNode().find('textarea.comment').val() || '';
+                    // upload file
+                    self.upload(comment);
+                });
+        }
+    });
+
+    ext.point(POINT + '/dialog').extend({
+        index: 400,
+        id: 'cancel',
+        draw: function (baton) {
+            baton.$.addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' });
+        }
+    });
+
+    ext.point(POINT + '/dialog').extend({
+        index: 500,
+        id: 'show',
+        draw: function (baton) {
+            baton.$.show(function () {
+                this.find('.btn-primary').focus();
+            });
+        }
+    });
     /**
      * The UploadNewVersionView is intended as a sub view of the SidebarView and
      * is responsible for uploading a new file version.
@@ -51,34 +112,34 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
          * the file as new version.
          */
         onFileSelected: function (event) {
-            var model = this.model,
-                files = this.$('input[type="file"]')[0].files;
-
             event.preventDefault();
 
-            new Dialogs.ModalDialog()
-            .header(
-                $('<h4>').text(gt('Version Comment'))
-            )
-            .append(
-                $('<textarea rows="6" class="form-control" tabindex="1">')
-            )
-            .addPrimaryButton('upload', gt('Upload'), 'upload',  { 'tabIndex': '1' })
-            .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
-            .on('upload', function () {
-                var comment = this.getContentNode().find('textarea').val() || '';
+            if (!COMMENTS) return this.upload();
 
-                FilesAPI.versions.upload({
-                    file: _.first(files),
-                    id: model.get('id'),
-                    folder: model.get('folder_id'),
-                    version_comment: comment
-                })
-                .fail(notify);
-            })
-            .show(function () {
-                this.find('.btn-primary').focus();
-            });
+            // open dropdown for
+            var baton = ext.Baton({
+                    data: this.getFile(),
+                    $: new Dialogs.ModalDialog()
+                });
+            // draw modal body
+            ext.point(POINT + '/dialog').invoke('draw', this, baton);
+
+        },
+
+        getFile: function () {
+            return _.first(this.$('input[type="file"]')[0].files);
+        },
+
+        upload: function (comment) {
+            var data = {
+                    file: this.getFile(),
+                    id: this.model.get('id'),
+                    folder: this.model.get('folder_id')
+                };
+
+            if (COMMENTS) data.version_comment = comment || '';
+
+            FilesAPI.versions.upload(data).fail(notify);
         },
 
         initialize: function () {
