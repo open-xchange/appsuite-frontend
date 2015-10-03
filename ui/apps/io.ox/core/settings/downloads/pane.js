@@ -53,7 +53,7 @@ define('io.ox/core/settings/downloads/pane', [
                         $('<p>').append(
                             $('<i class="fa fa-download">'),
                             $.txt(' '),
-                            $('<a>', { href: href, target: '_blank' }).addClass('action').text(gt('Download installation file (for Windows)'))
+                            $('<a>', { href: href, target: '_blank', download: '' }).addClass('action').text(gt('Download installation file (for Windows)'))
                         ),
                         $('<p>').text(
                             gt('When executing the downloaded file, an installation wizard will be launched. ' +
@@ -131,7 +131,7 @@ define('io.ox/core/settings/downloads/pane', [
                             $.txt(windowsClientLabel),
                             $('<br>'),
                             $('<i class="fa fa-download">'),
-                            $('<a>', { href: windowsClientUrl, target: '_blank' }).addClass('action').text(gt('Download installation file'))
+                            $('<a>', { href: windowsClientUrl, target: '_blank', download: '' }).addClass('action').text(gt('Download installation file'))
                         ) : [],
                         $('<div class="shop-link-container">').append(
                             //.# String will include the product name, "OX Drive for Mac OS"
