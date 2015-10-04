@@ -1437,7 +1437,7 @@ msgstr ""
 #: apps/io.ox/core/relogin.js:88 apps/io.ox/core/sub/subscriptions.js:57
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js:39
 #: apps/io.ox/core/tk/mobiscroll.js:27 apps/io.ox/core/upsell.js:36
-#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:67
+#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:86
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js:350 module:io.ox/editor
 #: apps/io.ox/files/actions/delete.js:68 module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js:36
@@ -8177,7 +8177,7 @@ msgstr ""
 msgid "Upgrade your account"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:66
+#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:67
 #: module:io.ox/core/viewer apps/io.ox/files/actions/upload-new-version.js:77
 #: module:io.ox/files
 msgid "Upload"
@@ -8191,7 +8191,7 @@ msgstr ""
 msgid "Upload local file"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:105
+#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:152
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:271
 #: module:io.ox/core apps/io.ox/files/actions/upload-new-version.js:64
 #: module:io.ox/files
@@ -8299,7 +8299,7 @@ msgstr ""
 msgid "Vacation Notice"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:61
+#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:47
 #: module:io.ox/core/viewer
 msgid "Version Comment"
 msgstr ""
