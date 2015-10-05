@@ -176,6 +176,12 @@ define('io.ox/core/viewer/views/mainview', [
                     event.preventDefault();
                     this.viewerEvents.trigger('viewer:document:next');
                     break;
+                case 114: // Ctrl/Meta + F3
+                    if (!event.altKey && !event.shiftKey && (event.metaKey !== event.ctrlKey)) {
+                        event.preventDefault();
+                        this.onToggleSidebar();
+                    }
+                    break;
             }
         },
 
