@@ -477,6 +477,19 @@ define('io.ox/presenter/views/presentationview', [
         },
 
         /**
+         * Returns all Swiper slide nodes.
+         *
+         * @returns {jQuery}
+         *  the slide nodes.
+         */
+        getSlides: function () {
+            if (!this.swiper || !this.swiper.slides) {
+                return $();
+            }
+            return this.swiper.slides;
+        },
+
+        /**
          * Switches Swiper to the slide with the given index.
          *
          * @param {Number} index
@@ -948,7 +961,7 @@ define('io.ox/presenter/views/presentationview', [
                     // After an on resize call, the plugin 'resets' the active slide to the beginning.
                     //this.swiper.slideTo(this.currentSlideIndex);
                 }
-                swiperSlide.css('line-height', swiperSlide.height() + 'px');
+                this.getSlides().css('line-height', swiperSlide.height() + 'px');
 
             }.bind(this));
         },
