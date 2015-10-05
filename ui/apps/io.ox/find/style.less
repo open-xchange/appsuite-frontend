@@ -15,6 +15,10 @@
     .twitter-typeahead {
         // ensure it does not overlapp collapsed search field when collapsed
         width: 100%;
+        .token-input.tt-hint, & > .token-input.tt-input,{
+            // restore min-width overwritten in tokenfield.less for mail
+            min-width: 60px !important;
+        }
     }
 }
 
