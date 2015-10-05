@@ -18,12 +18,14 @@ define('io.ox/files/actions', [
     'io.ox/core/capabilities',
     'io.ox/files/util',
     'io.ox/core/folder/api',
+    'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (api, ext, links, capabilities, util, folderAPI, gt) {
+], function (api, ext, links, capabilities, util, folderAPI, settings, gt) {
 
     'use strict';
 
-    var Action = links.Action;
+    var Action = links.Action,
+        COMMENTS = settings.get('features/comments', true);
 
     // actions
     new Action('io.ox/files/actions/upload', {
@@ -426,8 +428,8 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/upload-new-version', {
         requires: function (e) {
-            // hide in mail compose preview
-            return e.collection.has('one', 'modify', 'items') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
+            // hide in mail compose preview and only when file backend supports version comments
+            return e.collection.has('one', 'modify', 'items') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose') && COMMENTS;
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/upload-new-version']).done(function (action) {

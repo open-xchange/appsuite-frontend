@@ -18,12 +18,15 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
     'io.ox/core/tk/dialogs',
     'io.ox/files/util',
     'io.ox/core/extensions',
+    'settings!io.ox/files',
     'gettext!io.ox/core/viewer'
-], function (DisposableView, FilesAPI, folderApi, Dialogs, util, ext, gt) {
+], function (DisposableView, FilesAPI, folderApi, Dialogs, util, ext, settings, gt) {
 
     'use strict';
 
-    var POINT = 'io.ox/core/viewer/upload-new-version';
+    var POINT = 'io.ox/core/viewer/upload-new-version',
+        // TODO: switch to related capability when available
+        COMMENTS = settings.get('features/comments', true);
 
     /**
      * notifications lazy load
@@ -63,18 +66,12 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
         index: 300,
         id: 'primary',
         draw: function (baton) {
-            var model = this.model;
+            var self = this;
             baton.$.addPrimaryButton('upload', gt('Upload'), 'upload',  { 'tabIndex': '1' })
                 .on('upload', function () {
                     var comment = baton.$.getContentNode().find('textarea.comment').val() || '';
-
-                    FilesAPI.versions.upload({
-                        file: baton.data,
-                        id: model.get('id'),
-                        folder: model.get('folder_id'),
-                        version_comment: comment
-                    })
-                    .fail(notify);
+                    // upload file
+                    self.upload(comment);
                 });
         }
     });
@@ -96,7 +93,6 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
             });
         }
     });
-
     /**
      * The UploadNewVersionView is intended as a sub view of the SidebarView and
      * is responsible for uploading a new file version.
@@ -118,14 +114,32 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
         onFileSelected: function (event) {
             event.preventDefault();
 
-            var files = this.$('input[type="file"]')[0].files,
-                baton = ext.Baton({
-                    data: _.first(files),
+            if (!COMMENTS) return this.upload();
+
+            // open dropdown for
+            var baton = ext.Baton({
+                    data: this.getFile(),
                     $: new Dialogs.ModalDialog()
                 });
             // draw modal body
             ext.point(POINT + '/dialog').invoke('draw', this, baton);
 
+        },
+
+        getFile: function () {
+            return _.first(this.$('input[type="file"]')[0].files);
+        },
+
+        upload: function (comment) {
+            var data = {
+                    file: this.getFile(),
+                    id: this.model.get('id'),
+                    folder: this.model.get('folder_id')
+                };
+
+            if (COMMENTS) data.version_comment = comment || '';
+
+            FilesAPI.versions.upload(data).fail(notify);
         },
 
         initialize: function () {
