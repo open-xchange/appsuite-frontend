@@ -82,7 +82,7 @@ less.Parser.fileLoader = function (file, currentFileInfo, callback, env) {
 	var defs = [bootstrap, bootstrapDP, fontAwesome, style1].join('\n');
 	compileLess(defs, subDir('common.css'), '<multiple less files>');
 	compileLess(readFile(subDir('style.less')),
-		subDir('style.css'), '<default theme style.less>');
+		subDir('style.css'), themes[i] + '/style.less');
 	recurse('', subDir, new java.io.File('apps'));
     }
 }());
