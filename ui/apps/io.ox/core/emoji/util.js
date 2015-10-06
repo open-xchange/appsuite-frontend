@@ -46,13 +46,13 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (setting
         processEmoji: function (str, callback) {
 
             var tooLarge = str.length > (1024 * (_.device('chrome >= 30') ? 64 : 32)),
-                /* check if there might be any emojis; pure ascii cannot contain them (except 0xA9 and 0xAE)
+                /* check if there might be any emojis
                  * using a regex is 50-100 times faster than looping over the characters
                  *
                  * When adjusting this regex, make sure, all supported emoji do still
                  * match (all unified + all softbank codepoints)
                  */
-                hasEmoji = /[\xa9\xae\u203c\u2049\u20e3\u2122-\uffff]/.test(str);
+                hasEmoji = /[\u203c\u2049\u20e3\u2123-\uffff]/.test(str);
 
             function cont(str, libJustLoaded) {
                 if (callback) callback(str, { loaded: !!libJustLoaded });
