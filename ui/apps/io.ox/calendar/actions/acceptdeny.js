@@ -106,7 +106,8 @@ define('io.ox/calendar/actions/acceptdeny', [
                     .addDangerButton('declined', gt('Decline'), 'declined', { tabIndex: 1 })
                     .addAlternativeButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                     .show(function () {
-                        $(this).find('[data-property="comment"]').focus();
+                        // do not focus on mobiles. No, never, please. It does simply not work!
+                        if (_.device('!smartphone')) $(this).find('[data-property="comment"]').focus();
                     })
                     .done(function (action, data, node) {
 

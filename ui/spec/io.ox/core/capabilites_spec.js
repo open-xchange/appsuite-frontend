@@ -20,7 +20,7 @@ define([
     describe('Core capabilities', function () {
 
         beforeEach(function (done) {
-            capabilityWrapper.enable(['webmail', 'contacts']).done(function () {
+            capabilityWrapper.enable(['webmail', 'contacts', 'foo.dot', 'foo-dash', 'foo/slash']).done(function () {
                 done();
             });
         });
@@ -32,6 +32,7 @@ define([
         });
 
         describe('can evaluate expressions', function () {
+
             it('as single string', function () {
                 expect(capabilities.has('webmail')).to.be.true;
             });
@@ -42,6 +43,34 @@ define([
 
             it('as multiple string', function () {
                 expect(capabilities.has('webmail contacts')).to.be.true;
+            });
+
+            it('supports OR (1)', function () {
+                expect(capabilities.has('foo || webmail || contacts')).to.be.true;
+            });
+
+            it('supports OR (2)', function () {
+                expect(capabilities.has('foo || bar', 'webmail')).to.be.false;
+            });
+
+            it('supports OR (3)', function () {
+                expect(capabilities.has('webmail', 'foo || bar')).to.be.false;
+            });
+
+            it('supports dots in names', function () {
+                expect(capabilities.has('webmail && foo.dot')).to.be.true;
+            });
+
+            it('supports dashes in names', function () {
+                expect(capabilities.has('webmail && foo-dash')).to.be.true;
+            });
+
+            it('supports slashes in names', function () {
+                expect(capabilities.has('webmail && foo/slash')).to.be.true;
+            });
+
+            it('does not crash on bad syntax', function () {
+                expect(capabilities.has('webmail && foo)slash')).to.be.false;
             });
 
             it('as formula string', function () {

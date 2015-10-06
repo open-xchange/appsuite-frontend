@@ -39,13 +39,17 @@ define('io.ox/core/capabilities', function () {
         has: function () {
 
             // you can pass separate arguments as arrays and if two operands are not connected by an operator an && is automatically inserted
-            var condition = _(arguments).flatten().join(' && ').replace(/([^&\|]) ([^&\|])/gi, '$1 && $2');
-            condition = condition.replace(/[a-z0-9_:-]+/ig, function (match) {
-                match = match.toLowerCase();
-                return api.isDisabled(match) ? false : (match in capabilities);
-            });
+            var str = _(arguments).flatten().join(' && ').replace(/([^&\|]) ([^&\|])/gi, '$1 && $2').toLowerCase(),
+                condition = str.replace(/[a-z0-9_:\-\.\/]+/ig, function (match) {
+                    return api.isDisabled(match) ? false : (match in capabilities);
+                });
 
-            return new Function('return !!(' + condition + ')')();
+            try {
+                return new Function('return !!(' + condition + ')')();
+            } catch (e) {
+                console.error('capabilities.has()', str, e);
+                return false;
+            }
         },
 
         reset: function () {

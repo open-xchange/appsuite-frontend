@@ -135,11 +135,6 @@ define('io.ox/core/boot/form', [
 
         function defaultLogin() {
 
-            // at this point we know that a "normal" (i.e. non-guest) login is required
-            // therefore we finally check if a custom login location is set
-            var loginLocation =  ox.serverConfig.loginLocation;
-            if (loginLocation && loginLocation !== 'ui') util.gotoSignin();
-
             // remove form for sharing
             $('#io-ox-password-forget-form').remove();
 
@@ -191,6 +186,10 @@ define('io.ox/core/boot/form', [
                         break;
 
                     default:
+                        // at this point we know that a "normal" (i.e. non-guest) login is required
+                        // therefore we finally check if a custom login location is set
+                        var loginLocation =  ox.serverConfig.loginLocation;
+                        if (loginLocation && loginLocation !== 'ui') return util.gotoSignin();
                         defaultLogin();
                         break;
                 }

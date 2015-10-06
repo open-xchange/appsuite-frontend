@@ -199,6 +199,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         'files': {
             '23': 'meta',
             '108': 'object_permissions',
+            '109': 'shareable',
             '700': 'title',
             '701': 'url',
             '702': 'filename',
