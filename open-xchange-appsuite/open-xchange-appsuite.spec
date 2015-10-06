@@ -8,7 +8,7 @@ BuildRequires:  ant-nodeps
 BuildRequires:  java-devel >= 1.6.0
 BuildRequires:  nodejs >= 0.10.0
 Version:        @OXVERSION@
-%define         ox_release 6
+%define         ox_release 5
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -578,8 +578,6 @@ if [ -x %{update} ]; then %{update}; fi
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-zh-tw.properties
 
 %changelog
-* Mon Oct 05 2015 Markus Wagner <markus.wagner@open-xchange.com>
-Sixth candidate for 7.8.0 release
 * Fri Sep 25 2015 Markus Wagner <markus.wagner@open-xchange.com>
 Fith candidate for 7.8.0 release
 * Thu Sep 24 2015 Markus Wagner <markus.wagner@open-xchange.com>
