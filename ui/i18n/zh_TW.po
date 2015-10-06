@@ -17,7 +17,7 @@ msgstr ""
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
 #. %1$d is the zoom level
-#: apps/io.ox/presenter/views/presentationview.js:912 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:925 module:io.ox/presenter
 msgid "%1$d %"
 msgstr "%1$s %"
 
@@ -754,7 +754,7 @@ msgstr "新增檔案"
 msgid "Add from Drive"
 msgstr "自 Drive 新增"
 
-#: apps/io.ox/files/actions.js:655 module:io.ox/files
+#: apps/io.ox/files/actions.js:657 module:io.ox/files
 #: apps/io.ox/mail/compose/extensions.js:495 module:io.ox/mail
 msgid "Add local file"
 msgstr "新增本機檔案"
@@ -777,7 +777,7 @@ msgstr "新增行事曆"
 
 #: apps/io.ox/core/folder/actions/add.js:57 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:239
-#: apps/io.ox/core/folder/extensions.js:591 apps/io.ox/files/actions.js:672
+#: apps/io.ox/core/folder/extensions.js:591 apps/io.ox/files/actions.js:674
 #: module:io.ox/files
 msgid "Add new folder"
 msgstr "新增資料夾"
@@ -800,7 +800,7 @@ msgstr "新增簽名"
 
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
-#: apps/io.ox/files/actions.js:665 module:io.ox/files
+#: apps/io.ox/files/actions.js:667 module:io.ox/files
 msgid "Add note"
 msgstr "新增筆記"
 
@@ -860,7 +860,7 @@ msgstr "新增至最愛"
 #: apps/io.ox/contacts/actions.js:436 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:125
 #: apps/io.ox/core/viewer/views/toolbarview.js:264 module:io.ox/core
-#: apps/io.ox/files/actions.js:789 module:io.ox/files
+#: apps/io.ox/files/actions.js:791 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:211 apps/io.ox/mail/actions.js:674
 #: module:io.ox/mail apps/io.ox/mail/toolbar.js:179
 msgid "Add to portal"
@@ -1444,7 +1444,7 @@ msgstr "行事曆:"
 #: apps/io.ox/core/relogin.js:88 apps/io.ox/core/sub/subscriptions.js:57
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js:39
 #: apps/io.ox/core/tk/mobiscroll.js:27 apps/io.ox/core/upsell.js:36
-#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:86
+#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:83
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js:350 module:io.ox/editor
 #: apps/io.ox/files/actions/delete.js:68 module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js:36
@@ -1935,8 +1935,8 @@ msgstr "轉換輸入的開始與結束日期，以符合修改的時區"
 #: apps/io.ox/contacts/actions.js:129 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:452
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:90 module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js:117 apps/io.ox/files/actions.js:507
-#: module:io.ox/files apps/io.ox/files/actions.js:849
+#: apps/io.ox/contacts/toolbar.js:117 apps/io.ox/files/actions.js:509
+#: module:io.ox/files apps/io.ox/files/actions.js:851
 #: apps/io.ox/files/toolbar.js:225 apps/io.ox/mail/actions.js:226
 #: apps/io.ox/mail/actions.js:612
 #: apps/io.ox/mail/mobile-toolbar-actions.js:107
@@ -2254,7 +2254,7 @@ msgstr "延遲"
 #: apps/io.ox/core/sub/settings/pane.js:158 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:160
 #: apps/io.ox/core/viewer/views/toolbarview.js:278
-#: apps/io.ox/files/actions.js:748 module:io.ox/files
+#: apps/io.ox/files/actions.js:750 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
 #: apps/io.ox/files/toolbar.js:167 apps/io.ox/mail/actions.js:507
@@ -2331,7 +2331,7 @@ msgstr "刪除資源"
 msgid "Delete task"
 msgstr "刪除任務"
 
-#: apps/io.ox/files/actions.js:908 module:io.ox/files
+#: apps/io.ox/files/actions.js:910 module:io.ox/files
 msgid "Delete version"
 msgstr "刪除版本"
 
@@ -2656,8 +2656,8 @@ msgstr "雙擊此欄位以新增全天約會"
 #: apps/io.ox/core/viewer/views/toolbarview.js:213
 #: apps/io.ox/core/viewer/views/toolbarview.js:294
 #: apps/io.ox/core/viewer/views/toolbarview.js:321
-#: apps/io.ox/files/actions.js:731 module:io.ox/files
-#: apps/io.ox/files/actions.js:739 apps/io.ox/files/actions.js:890
+#: apps/io.ox/files/actions.js:733 module:io.ox/files
+#: apps/io.ox/files/actions.js:741 apps/io.ox/files/actions.js:892
 #: apps/io.ox/files/toolbar.js:153 apps/io.ox/files/toolbar.js:160
 #: apps/io.ox/mail/actions.js:717 module:io.ox/mail
 #: apps/plugins/portal/updater/register.js:38 module:plugins/portal
@@ -2742,15 +2742,15 @@ msgstr "放到這裡已匯入此郵件"
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr "放到此處以上傳 <b class='dndignore'>新附件</b>"
 
-#: apps/io.ox/files/actions.js:918 module:io.ox/files
+#: apps/io.ox/files/actions.js:920 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
 msgstr "放到此處以上傳 <b class='dndignore'>新檔案</b>"
 
-#: apps/io.ox/files/actions.js:940 module:io.ox/files
+#: apps/io.ox/files/actions.js:942 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
 msgstr "放到此處以上傳 <b class='dndignore'>新版本</b>"
 
-#: apps/io.ox/files/actions.js:934 module:io.ox/files
+#: apps/io.ox/files/actions.js:936 module:io.ox/files
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr "放到此處以上傳 <b class='dndignore'>新版本的</b>「%1$s」"
@@ -2801,8 +2801,8 @@ msgstr "EB"
 #: apps/io.ox/contacts/main.js:378 apps/io.ox/contacts/main.js:410
 #: apps/io.ox/contacts/main.js:744
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:68 module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:712
-#: module:io.ox/files apps/io.ox/files/actions.js:722
+#: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:714
+#: module:io.ox/files apps/io.ox/files/actions.js:724
 #: apps/io.ox/files/main.js:164 apps/io.ox/files/main.js:170
 #: apps/io.ox/files/main.js:869 apps/io.ox/files/main.js:917
 #: apps/io.ox/files/share/permissions.js:693 module:io.ox/core
@@ -2856,7 +2856,7 @@ msgid "Edit contact"
 msgstr "編輯聯絡人"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js:205 module:io.ox/core
-#: apps/io.ox/files/actions.js:829 module:io.ox/files
+#: apps/io.ox/files/actions.js:831 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:183
 msgid "Edit description"
 msgstr "編輯描述"
@@ -3165,14 +3165,14 @@ msgid "Every day"
 msgstr "每天"
 
 #. sharing: a guest user will be created for the owner of that email address
-#: apps/io.ox/files/actions.js:682 module:io.ox/files
+#: apps/io.ox/files/actions.js:684 module:io.ox/files
 msgid ""
 "Every recipient gets an individual link. Guests can also create and change "
 "files."
 msgstr "每個收件者都會收到一個獨立的鏈結，訪客也可以建立或變更檔案。"
 
 #. sharing: a link will be created
-#: apps/io.ox/files/actions.js:691 module:io.ox/files
+#: apps/io.ox/files/actions.js:693 module:io.ox/files
 msgid ""
 "Everybody gets the same link. The link just allows to view the file or "
 "folder."
@@ -3376,11 +3376,11 @@ msgstr "檔案詳情"
 msgid "File details"
 msgstr "檔案詳情"
 
-#: apps/io.ox/files/actions.js:507 module:io.ox/files
+#: apps/io.ox/files/actions.js:509 module:io.ox/files
 msgid "File has been copied"
 msgstr "已複製檔案"
 
-#: apps/io.ox/files/actions.js:506 module:io.ox/files
+#: apps/io.ox/files/actions.js:508 module:io.ox/files
 msgid "File has been moved"
 msgstr "已移動檔案"
 
@@ -3410,11 +3410,11 @@ msgstr "檔案：%1$s"
 msgid "Files"
 msgstr "檔案"
 
-#: apps/io.ox/files/actions.js:507 module:io.ox/files
+#: apps/io.ox/files/actions.js:509 module:io.ox/files
 msgid "Files have been copied"
 msgstr "已複製檔案"
 
-#: apps/io.ox/files/actions.js:506 module:io.ox/files
+#: apps/io.ox/files/actions.js:508 module:io.ox/files
 msgid "Files have been moved"
 msgstr "已移動檔案"
 
@@ -3638,8 +3638,8 @@ msgid "Get free upgrade"
 msgstr "取得免費升級"
 
 #: apps/io.ox/core/folder/contextmenu.js:464 module:io.ox/core
-#: apps/io.ox/files/actions.js:689 module:io.ox/files
-#: apps/io.ox/files/actions.js:809
+#: apps/io.ox/files/actions.js:691 module:io.ox/files
+#: apps/io.ox/files/actions.js:811
 msgid "Get link"
 msgstr "取得鏈結"
 
@@ -4041,8 +4041,8 @@ msgid "Invite owner"
 msgstr "邀請擁有者"
 
 #: apps/io.ox/core/folder/contextmenu.js:453 module:io.ox/core
-#: apps/io.ox/files/actions.js:680 module:io.ox/files
-#: apps/io.ox/files/actions.js:799
+#: apps/io.ox/files/actions.js:682 module:io.ox/files
+#: apps/io.ox/files/actions.js:801
 msgid "Invite people"
 msgstr "邀請使用者"
 
@@ -4329,7 +4329,7 @@ msgstr "清單視圖"
 msgid "Location"
 msgstr "地點"
 
-#: apps/io.ox/files/actions.js:859 module:io.ox/files
+#: apps/io.ox/files/actions.js:861 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:232
 msgid "Lock"
 msgstr "鎖定"
@@ -4489,7 +4489,7 @@ msgstr "每工作天郵件數 (%)"
 msgid "Main window"
 msgstr "主視窗"
 
-#: apps/io.ox/files/actions.js:899 module:io.ox/files
+#: apps/io.ox/files/actions.js:901 module:io.ox/files
 msgid "Make this the current version"
 msgstr "將此版本作為目前版本"
 
@@ -4707,8 +4707,8 @@ msgstr "找到超過目前顯示的 %1$s 個項目"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:84 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:109
 #: apps/io.ox/core/folder/contextmenu.js:316 module:io.ox/core
-#: apps/io.ox/files/actions.js:506 module:io.ox/files
-#: apps/io.ox/files/actions.js:839 apps/io.ox/files/toolbar.js:216
+#: apps/io.ox/files/actions.js:508 module:io.ox/files
+#: apps/io.ox/files/actions.js:841 apps/io.ox/files/toolbar.js:216
 #: apps/io.ox/mail/actions.js:225 apps/io.ox/mail/actions.js:602
 #: apps/io.ox/mail/mobile-toolbar-actions.js:81 apps/io.ox/mail/toolbar.js:136
 #: apps/io.ox/tasks/actions.js:317 module:io.ox/tasks
@@ -5198,7 +5198,7 @@ msgstr "以擁有者身分"
 msgid "On work days"
 msgstr "工作日"
 
-#: apps/io.ox/files/actions.js:881 module:io.ox/files
+#: apps/io.ox/files/actions.js:883 module:io.ox/files
 msgid "Open"
 msgstr "打開"
 
@@ -5807,7 +5807,7 @@ msgid "Presenter"
 msgstr "簡報者"
 
 #. aria label for the presenter navigation bar, for screen reader only.
-#: apps/io.ox/presenter/views/navigationview.js:243 module:io.ox/presenter
+#: apps/io.ox/presenter/views/navigationview.js:245 module:io.ox/presenter
 msgid "Presenter navigation bar"
 msgstr "剪報者導航列"
 
@@ -6288,7 +6288,7 @@ msgstr "移除成員"
 #: apps/io.ox/core/folder/actions/rename.js:65 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:264
 #: apps/io.ox/core/viewer/views/toolbarview.js:198
-#: apps/io.ox/files/actions.js:819 module:io.ox/files
+#: apps/io.ox/files/actions.js:821 module:io.ox/files
 #: apps/io.ox/files/actions/rename.js:68 apps/io.ox/files/actions/rename.js:73
 #: apps/io.ox/files/toolbar.js:176
 msgid "Rename"
@@ -6625,7 +6625,7 @@ msgstr "發送"
 msgid "Send a read receipt"
 msgstr "傳送送達回執"
 
-#: apps/io.ox/files/actions.js:769 module:io.ox/files
+#: apps/io.ox/files/actions.js:771 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:197
 msgid "Send as internal link"
 msgstr "作為內部連結發送"
@@ -6641,7 +6641,7 @@ msgid "Send as vCard"
 msgstr "以 vCard 傳送"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js:257 module:io.ox/core
-#: apps/io.ox/files/actions.js:759 module:io.ox/files
+#: apps/io.ox/files/actions.js:761 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:190
 msgid "Send by mail"
 msgstr "透過電子郵件寄送"
@@ -6896,7 +6896,7 @@ msgstr "顯示圖示"
 msgid "Show images"
 msgstr "顯示圖片"
 
-#: apps/io.ox/files/actions.js:779 module:io.ox/files
+#: apps/io.ox/files/actions.js:781 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:204
 msgid "Show internal link"
 msgstr "顯示內部連結"
@@ -8218,7 +8218,7 @@ msgstr "檢查 tumblr 部落格時發生未知錯誤。"
 msgid "Unknown sender"
 msgstr "未知的寄件者"
 
-#: apps/io.ox/files/actions.js:869 module:io.ox/files
+#: apps/io.ox/files/actions.js:871 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:239
 msgid "Unlock"
 msgstr "解鎖"
@@ -8273,7 +8273,7 @@ msgstr "升級至收費版"
 msgid "Upgrade your account"
 msgstr "升級您的帳號"
 
-#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:67
+#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:70
 #: module:io.ox/core/viewer apps/io.ox/files/actions/upload-new-version.js:77
 #: module:io.ox/files
 msgid "Upload"
@@ -8287,7 +8287,7 @@ msgstr "上傳檔案"
 msgid "Upload local file"
 msgstr "上傳本機檔案"
 
-#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:152
+#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:166
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:271
 #: module:io.ox/core apps/io.ox/files/actions/upload-new-version.js:64
 #: module:io.ox/files
@@ -8397,7 +8397,7 @@ msgstr "使用者名稱不能為空。"
 msgid "Vacation Notice"
 msgstr "假期通知"
 
-#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:47
+#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:50
 #: module:io.ox/core/viewer
 msgid "Version Comment"
 msgstr "版本注釋"
@@ -8419,7 +8419,7 @@ msgstr "影片"
 #: apps/io.ox/calendar/toolbar.js:159 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:167 module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js:77 module:io.ox/core
-#: apps/io.ox/files/actions.js:703 module:io.ox/files
+#: apps/io.ox/files/actions.js:705 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:146 apps/io.ox/files/toolbar.js:286
 #: apps/io.ox/mail/actions.js:701 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:238 apps/io.ox/tasks/toolbar.js:142
@@ -9418,7 +9418,7 @@ msgstr "無"
 #. Example result: "of 10"
 #. %1$d is the total slide count
 #: apps/io.ox/core/viewer/views/toolbarview.js:541 module:io.ox/core
-#: apps/io.ox/presenter/views/navigationview.js:319 module:io.ox/presenter
+#: apps/io.ox/presenter/views/navigationview.js:326 module:io.ox/presenter
 msgid "of %1$d"
 msgstr "共 %1$d 張"
 
