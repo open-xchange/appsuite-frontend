@@ -329,10 +329,12 @@ define('io.ox/calendar/util', [
                 }
 
                 _(list).chain().uniq().first(10).each(function (zone) {
+                    // get short name (with a few exceptions; see bug 41440)
+                    var name = /(North|East|South|West|Central)/.test(zone) ? zone : zone.replace(/^.*?\//, '');
                     // must use outer DIV with "clear: both" here for proper layout in firefox
                     div.append($('<li>').append(
                         $('<span>')
-                            .text(gt.noI18n(zone.replace(/^.*?\//, '').replace(/_/g, ' '))),
+                            .text(gt.noI18n(name.replace(/_/g, ' '))),
                         $('<span>')
                             .addClass('time')
                             .text(gt.noI18n(that.getTimeInterval(data, zone)))
