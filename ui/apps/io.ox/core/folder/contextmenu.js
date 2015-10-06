@@ -481,7 +481,7 @@ define('io.ox/core/folder/contextmenu', [
 
             return function (baton) {
 
-                if (!api.can('subscribe', baton.data || api.is('trash', baton.data))) return;
+                if (!api.can('subscribe', baton.data) || api.is('trash', baton.data)) return;
 
                 var tempLink, node, self = this;
 
