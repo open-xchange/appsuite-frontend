@@ -899,7 +899,7 @@ msgid "Additional settings"
 msgstr "További beállítások"
 
 #: apps/io.ox/contacts/settings/pane.js:64 module:io.ox/contacts
-#: apps/io.ox/mail/detail/links.js:79 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:81 module:io.ox/mail
 msgid "Address Book"
 msgstr "Címjegyzék"
 
@@ -1081,11 +1081,11 @@ msgstr "Szabály alkalmazása, ha bármely feltétel teljesül."
 msgid "Apply to all subfolders"
 msgstr "Alkalmazás az összes mappára"
 
-#: apps/io.ox/calendar/actions/acceptdeny.js:224 module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js:225 module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:365
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js:281
 #: apps/io.ox/calendar/week/perspective.js:161
-#: apps/io.ox/mail/detail/links.js:72 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:73 module:io.ox/mail
 msgid "Appointment"
 msgstr "Találkozó"
 
@@ -1413,7 +1413,7 @@ msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js:77 module:io.ox/core
-#: apps/io.ox/mail/detail/links.js:80 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:82 module:io.ox/mail
 msgid "Calendar"
 msgstr "Naptár"
 
@@ -1433,8 +1433,8 @@ msgid "Calendar:"
 msgstr "Naptár:"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:107 module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js:192
-#: apps/io.ox/calendar/actions/acceptdeny.js:225
+#: apps/io.ox/calendar/actions/acceptdeny.js:193
+#: apps/io.ox/calendar/actions/acceptdeny.js:226
 #: apps/io.ox/calendar/actions/create.js:51
 #: apps/io.ox/calendar/actions/delete.js:79
 #: apps/io.ox/calendar/actions/delete.js:91
@@ -1882,7 +1882,7 @@ msgid "Connector for Microsoft Outlook®"
 msgstr "Microsoft Outlook® konnektor"
 
 #: apps/io.ox/contacts/edit/main.js:281 module:io.ox/contacts
-#: apps/io.ox/mail/detail/links.js:71 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:72 module:io.ox/mail
 msgid "Contact"
 msgstr "Névjegy"
 
@@ -2623,7 +2623,7 @@ msgid ""
 "Do you really want to remove the extension \".%1$s\" from your filename?"
 msgstr "Valóban el kívánja távolítani a(z) „.%1$s” kiterjesztést a fájlnévből?"
 
-#: apps/io.ox/calendar/actions/acceptdeny.js:220 module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js:221 module:io.ox/calendar
 msgid ""
 "Do you want to confirm the whole series or just one appointment within the "
 "series?"
@@ -2662,7 +2662,7 @@ msgstr[1] "Véglegesen törölni szeretné ezeket az e-maileket?"
 msgid "Do you want to revoke the access of this application?"
 msgstr "Szeretné visszavonni ennek az alkalmazásnak a hozzáférését?"
 
-#: apps/io.ox/mail/detail/links.js:75 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:77 module:io.ox/mail
 msgid "Document"
 msgstr "Dokumentum"
 
@@ -3147,14 +3147,14 @@ msgstr "Becsült időtartam percben"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:442 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:444 module:io.ox/calendar
 msgid "Every %1$d days"
 msgstr "Minden %1$d. nap"
 
 #. recurrence string
 #. %1$d: numeric, interval
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:484 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:486 module:io.ox/calendar
 msgid "Every %1$d months on day %2$d"
 msgstr "Minden %1$d. hónap %2$d. napján"
 
@@ -3162,26 +3162,26 @@ msgstr "Minden %1$d. hónap %2$d. napján"
 #. %1$d: numeric, interval
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:495 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:497 module:io.ox/calendar
 msgid "Every %1$d months on the %2$s %3$s"
 msgstr "Minden %1$d. hónap %2$s %3$s"
 
 #. recurrence string
 #. %1$d: numeric
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:469 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:471 module:io.ox/calendar
 msgid "Every %1$d weeks on %2$s"
 msgstr "Minden %1$d. héten %2$s napon"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:453 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:455 module:io.ox/calendar
 msgid "Every %1$d weeks on all days"
 msgstr "Minden %1$d. hét minden napján"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:460 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:462 module:io.ox/calendar
 msgid "Every %1$d weeks on work days"
 msgstr "Minden %1$d. hét munkanapjain"
 
@@ -3189,7 +3189,7 @@ msgstr "Minden %1$d. hét munkanapjain"
 #. %1$d: interval, numeric
 #. %2$s: Month nane, e.g. January
 #. %3$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:512 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:514 module:io.ox/calendar
 msgid "Every %1$d years on %2$s %3$d"
 msgstr "Minden %1$d. év %2$s %3$d. napján"
 
@@ -3198,12 +3198,12 @@ msgstr "Minden %1$d. év %2$s %3$d. napján"
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
 #. %4$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:525 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:527 module:io.ox/calendar
 msgid "Every %1$d years on the %2$s %3$s of %4$d"
 msgstr "Minden %1$d. év %4$d %2$s %3$s napján"
 
-#: apps/io.ox/calendar/util.js:439 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:450
+#: apps/io.ox/calendar/util.js:441 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:452
 msgid "Every day"
 msgstr "Minden nap"
 
@@ -3414,8 +3414,8 @@ msgid "Feeling • Decoration"
 msgstr "Közérzet • Díszítés"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:65
-#: module:io.ox/core/viewer apps/io.ox/mail/detail/links.js:74
-#: module:io.ox/mail
+#: module:io.ox/core/viewer apps/io.ox/mail/detail/links.js:75
+#: module:io.ox/mail apps/io.ox/mail/detail/links.js:76
 msgid "File"
 msgstr "Fájl"
 
@@ -3525,7 +3525,7 @@ msgstr "Flickr"
 #: module:io.ox/core/viewer apps/io.ox/files/share/permissions.js:593
 #: module:io.ox/core apps/io.ox/files/share/toolbar.js:50 module:io.ox/files
 #: apps/io.ox/find/extensions-api.js:286 apps/io.ox/find/extensions-api.js:299
-#: apps/io.ox/find/extensions-api.js:432 apps/io.ox/mail/detail/links.js:82
+#: apps/io.ox/find/extensions-api.js:432 apps/io.ox/mail/detail/links.js:84
 #: module:io.ox/mail apps/io.ox/search/main.js:72 module:io.ox/search
 msgid "Folder"
 msgstr "Mappa"
@@ -3947,7 +3947,7 @@ msgstr "Mellőzés"
 msgid "Ignore Warnings"
 msgstr "Figyelmeztetések mellőzése"
 
-#: apps/io.ox/calendar/actions/acceptdeny.js:190 module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js:191 module:io.ox/calendar
 #: apps/io.ox/calendar/edit/main.js:152 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/month/perspective.js:113
 #: apps/io.ox/calendar/week/perspective.js:118
@@ -4068,8 +4068,8 @@ msgid ""
 "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home "
 "Screen'%4$s"
 msgstr ""
-"Ezen webapp telepítéséhez %1$s eszközére: koppintson ide: %2$s, majd a "
-"%3$s„Kezdőképernyőhöz adás”%4$s gombra"
+"Ezen webapp telepítéséhez %1$s eszközére: koppintson ide: %2$s, majd a %3$s"
+"„Kezdőképernyőhöz adás”%4$s gombra"
 
 #: apps/io.ox/contacts/model.js:253 module:io.ox/contacts
 msgid "Instant Messenger 1"
@@ -4359,7 +4359,7 @@ msgid "Liked comment"
 msgstr "Kedvelt megjegyzés"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:97
-#: module:io.ox/core/viewer apps/io.ox/mail/detail/links.js:106
+#: module:io.ox/core/viewer apps/io.ox/mail/detail/links.js:120
 #: module:io.ox/mail
 msgid "Link"
 msgstr "Hivatkozás"
@@ -4739,14 +4739,14 @@ msgstr "Hónap"
 
 #. recurrence string
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:480 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:482 module:io.ox/calendar
 msgid "Monthly on day %1$d"
 msgstr "Havonta a(z) %1$d. napon"
 
 #. recurrence string
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:490 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:492 module:io.ox/calendar
 msgid "Monthly on the %1$s %2$s"
 msgstr "Minden hónap %1$s %2$s"
 
@@ -5224,6 +5224,13 @@ msgstr ""
 msgid "Number of items"
 msgstr "Elemszám"
 
+#. number of items in a folder
+#: apps/io.ox/core/folder/actions/properties.js:56 module:io.ox/core
+#, fuzzy
+#| msgid "Number of items"
+msgid "Number of messages"
+msgstr "Elemszám"
+
 #: apps/io.ox/core/tk/reminder-util.js:34 module:io.ox/core
 #: apps/io.ox/core/tk/reminder-util.js:65
 msgid "OK"
@@ -5263,7 +5270,7 @@ msgid "On behalf of the owner"
 msgstr "A tulajdonos nevében"
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js:457 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:459 module:io.ox/calendar
 msgid "On work days"
 msgstr "Munkanapokon"
 
@@ -6788,7 +6795,7 @@ msgid "September"
 msgstr "Szeptember"
 
 #. Use singular in this context
-#: apps/io.ox/calendar/actions/acceptdeny.js:223 module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js:224 module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js:40
 #: apps/io.ox/calendar/week/perspective.js:160
 msgid "Series"
@@ -7010,7 +7017,7 @@ msgstr "Következő nap megjelenítése"
 msgid "Show previous day"
 msgstr "Előző nap megjelenítése"
 
-#: apps/io.ox/mail/detail/content.js:379 module:io.ox/mail
+#: apps/io.ox/mail/detail/content.js:378 module:io.ox/mail
 msgid "Show quoted text"
 msgstr "Idézett szöveg megjelenítése"
 
@@ -7173,7 +7180,7 @@ msgstr "Levélszemét"
 msgid "Spouse's name"
 msgstr "Házastárs neve"
 
-#: apps/io.ox/mail/detail/links.js:76 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:78 module:io.ox/mail
 msgid "Spreadsheet"
 msgstr "Táblázat"
 
@@ -7364,7 +7371,7 @@ msgstr "TTY/TDD"
 msgid "Tag mail with"
 msgstr "Levél címkézése:"
 
-#: apps/io.ox/mail/detail/links.js:73 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:74 module:io.ox/mail
 #: apps/io.ox/tasks/edit/main.js:215 module:io.ox/tasks
 msgid "Task"
 msgstr "Feladat"
@@ -7412,7 +7419,7 @@ msgstr "A feladat már törölve volt"
 msgid "Task was modified before, please reload"
 msgstr "A feladat előtte módosítva lett, töltse újra"
 
-#: apps/io.ox/mail/detail/links.js:81 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:83 module:io.ox/mail
 msgid "Tasks"
 msgstr "Feladatok"
 
@@ -7793,13 +7800,13 @@ msgstr ""
 "Az ismétlődés <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
 "\">soha nem fejeződik be</a>."
 
-#: apps/io.ox/calendar/util.js:539 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:541 module:io.ox/calendar
 msgid "The series ends after %1$d appointment"
 msgid_plural "The series ends after %1$d appointments"
 msgstr[0] "Az ismétlődés befejezése %1$d találkozó után"
 msgstr[1] "Az ismétlődés befejezése %1$d találkozó után"
 
-#: apps/io.ox/calendar/util.js:534 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:536 module:io.ox/calendar
 msgid "The series ends on %1$s"
 msgstr "Az ismétlődés befejezése: %1$s"
 
@@ -8652,7 +8659,7 @@ msgstr "Hét nézet"
 
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:465 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:467 module:io.ox/calendar
 msgid "Weekly on %1$s"
 msgstr "Hetente ekkor: %1$s"
 
@@ -8745,7 +8752,7 @@ msgstr "Év"
 #. recurrence string
 #. %1$s: Month nane, e.g. January
 #. %2$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:507 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:509 module:io.ox/calendar
 msgid "Yearly on %1$s %2$d"
 msgstr "Minden év %1$s %2$d. napján"
 
@@ -8753,7 +8760,7 @@ msgstr "Minden év %1$s %2$d. napján"
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
 #. %3$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:519 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:521 module:io.ox/calendar
 msgid "Yearly on the %1$s %2$s of %3$d"
 msgstr "Minden év %3$d %1$s %2$s napján"
 
@@ -9230,7 +9237,7 @@ msgstr[1] "%1$d találkozó után"
 
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
-#: apps/io.ox/calendar/util.js:418 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:420 module:io.ox/calendar
 msgid "and"
 msgstr "és"
 
@@ -9753,7 +9760,7 @@ msgid "weekly"
 msgstr "hetente"
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js:403 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:405 module:io.ox/calendar
 msgid "work days"
 msgstr "munkanapok"
 
