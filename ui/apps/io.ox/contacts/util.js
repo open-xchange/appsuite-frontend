@@ -77,14 +77,20 @@ define('io.ox/contacts/util', [
          * parameters to gettext.format to obtain the full name.
          */
         getFullNameFormat: function (obj) {
+
+            var first_name = $.trim(obj.first_name),
+                last_name = $.trim(obj.last_name),
+                display_name = $.trim(obj.display_name),
+                title = $.trim(obj.title);
+
             // combine title, last_name, and first_name
-            if (obj.last_name && obj.first_name) {
+            if (first_name && last_name) {
 
-                var title = getTitle(obj.title),
-                    preference = settings.get('fullNameFormat', 'auto'),
-                    format,
-                    params = [_.noI18n(obj.first_name), _.noI18n(obj.last_name)];
+                var preference = settings.get('fullNameFormat', 'auto'),
+                    params = [_.noI18n(first_name), _.noI18n(last_name)],
+                    format;
 
+                title = getTitle(title);
                 if (title) params.push(_.noI18n(title));
 
                 if (preference === 'firstname lastname') {
@@ -112,15 +118,13 @@ define('io.ox/contacts/util', [
             // for example, to keep furigana support
 
             // fallback #1: just last_name
-            if (obj.last_name) return single(2, obj.last_name);
+            if (last_name) return single(2, last_name);
 
             // fallback #2: just first_name
-            if (obj.first_name) return single(1, obj.first_name);
+            if (first_name) return single(1, first_name);
 
             // fallback #3: use existing display name?
-            if (obj.display_name) {
-                return single(4, util.unescapeDisplayName(obj.display_name));
-            }
+            if (display_name) return single(4, util.unescapeDisplayName(display_name));
 
             return { format: _.noI18n(''), params: [] };
         },
@@ -130,7 +134,7 @@ define('io.ox/contacts/util', [
             if (htmlOutput === true) {
                 copy = {};
                 _(['title', 'first_name', 'last_name', 'display_name']).each(function (id) {
-                    if (obj[id]) {
+                    if ($.trim(obj[id])) {
                         copy[id] = '<span class="' + id + '">' + _.escape(obj[id]) + '</span>';
                     }
                 });
