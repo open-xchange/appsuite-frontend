@@ -42,7 +42,6 @@ define('io.ox/files/share/api', [
             if (this.isFile()) return !!this.get('shareable');
             // Check if ACLs enabled and only do that for mail component,
             // every other component will have ACL capabilities (stored in DB)
-            this.set('capabilities', 0);
             if (this.get('module') === 'mail' && !(this.get('capabilities') & 1)) return false;
             // otherwise check folder bits
             return folderAPI.Bitmask(this.get('own_rights')).get('admin') >= 1;
