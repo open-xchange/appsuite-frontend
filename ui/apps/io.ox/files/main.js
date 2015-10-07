@@ -329,7 +329,10 @@ define('io.ox/files/main', [
          */
         'myshares-listview': function (app) {
 
-            if (!capabilities.has('publication')) return;
+            // not for guests
+            if (capabilities.has('guest')) return;
+            // normal users need the following capabilites
+            if (!capabilities.has('edit_public_folders') && !capabilities.has('read_create_shared_folders')) return false;
 
             // add virtual folder to folder api
             folderAPI.virtual.add('virtual/myshares', function () { return $.when([]); });
