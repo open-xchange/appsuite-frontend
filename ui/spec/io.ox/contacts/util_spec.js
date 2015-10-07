@@ -53,9 +53,17 @@ define(['io.ox/contacts/util'], function (util) {
             expect(util.getFullNameFormat(testPerson)).to.deep.equal({ format: '%2$s, %1$s', params: [ 'Georg', 'Tester' ] });
         });
 
-        it('should return the prepared full name ', function () {
+        it('should return the prepared full name', function () {
+            var a = { first_name: ' ', last_name: 'Tester', display_name: 'Dr. Tester, Georg' },
+                b = { first_name: 'Georg', last_name: ' ', display_name: 'Dr. Tester, Georg' },
+                c = { first_name: ' ', last_name: ' ', display_name: 'Dr. Tester, Georg' };
+            expect(util.getFullName(a)).to.equal('Tester');
+            expect(util.getFullName(b)).to.equal('Georg');
+            expect(util.getFullName(c)).to.equal('Dr. Tester, Georg');
+        });
+
+        it('should ignore first and last name if it just contains blanks', function () {
             expect(util.getFullName(testPerson)).to.equal('Tester, Georg');
-            expect(util.getFullName({})).to.be.empty;
         });
 
         it('should return the display name if available otherwise combine first and last name ', function () {
