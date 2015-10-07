@@ -266,7 +266,7 @@ define('io.ox/settings/accounts/settings/pane', [
             redraw();
 
             function onChange(id, list) {
-                if (!list || list.length === 0 || id !== 'virtual/io.ox/settings/accounts') {
+                if (!list || list.length === 0 || (id !== 'virtual/io.ox/settings/accounts' && id !== 'virtual/settings/io.ox/settings/accounts')) {
                     api.off('refresh.all refresh.list', redraw);
                     data.tree.off('virtual', onChange);
                 }

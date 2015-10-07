@@ -125,7 +125,7 @@ define.async('io.ox/oauth/keychain', [
                             success = function () {
                                 def.resolve(account);
                                 self.trigger('create', account);
-                                self.trigger('refresah.all refresh.list');
+                                self.trigger('refresh.all refresh.list');
                                 ox.trigger('refresh-portal');
                                 notifications.yell('success', gt('Account added successfully'));
                             };
@@ -300,6 +300,14 @@ define.async('io.ox/oauth/keychain', [
             _(services[0]).each(function (service) {
 
                 var keychainAPI = new OAuthKeychainAPI(service);
+
+                // add initialized listener before extending (that triggers the initialized event)
+                keychainAPI.one('initialized', function () {
+                    // trigger refresh if we have accounts or the settings account list might miss Oauth accounts due to race conditions
+                    if (_(cache[service.id].accounts).size() > 0) {
+                        keychainAPI.trigger('refresh.all');
+                    }
+                });
 
                 point.extend(keychainAPI);
                 keychainAPI.on('create', function () {
