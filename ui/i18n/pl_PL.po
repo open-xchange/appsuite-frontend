@@ -219,7 +219,7 @@ msgstr "%1$s %2$s"
 #. Name in mail addresses
 #. %1$s is the first name
 #. %2$s is the last name
-#: apps/io.ox/contacts/util.js:177 module:io.ox/contacts
+#: apps/io.ox/contacts/util.js:181 module:io.ox/contacts
 msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
@@ -381,7 +381,7 @@ msgstr "%1$s: %2$s"
 #. Name without title
 #. %1$s is the first name
 #. %2$s is the last name
-#: apps/io.ox/contacts/util.js:105 module:io.ox/contacts
+#: apps/io.ox/contacts/util.js:111 module:io.ox/contacts
 msgid "%2$s, %1$s"
 msgstr "%2$s, %1$s"
 
@@ -389,7 +389,7 @@ msgstr "%2$s, %1$s"
 #. %1$s is the first name
 #. %2$s is the last name
 #. %3$s is the title
-#: apps/io.ox/contacts/util.js:101 module:io.ox/contacts
+#: apps/io.ox/contacts/util.js:107 module:io.ox/contacts
 msgid "%3$s %2$s, %1$s"
 msgstr "%3$s %1$s %2$s"
 
@@ -1497,8 +1497,8 @@ msgstr "Kalendarz:"
 #: apps/io.ox/files/actions/rename.js:74 apps/io.ox/files/actions/share.js:49
 #: apps/io.ox/files/actions/share.js:55
 #: apps/io.ox/files/actions/upload-new-version.js:78
-#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:866
-#: apps/io.ox/files/main.js:917 apps/io.ox/files/share/permissions.js:803
+#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:869
+#: apps/io.ox/files/main.js:920 apps/io.ox/files/share/permissions.js:803
 #: apps/io.ox/keychain/secretRecoveryDialog.js:39 module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js:45 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:273
@@ -1782,7 +1782,7 @@ msgid "Close"
 msgstr "Zamknij"
 
 #: apps/io.ox/core/commons.js:650 module:io.ox/core
-#: apps/io.ox/files/main.js:899 module:io.ox/files
+#: apps/io.ox/files/main.js:902 module:io.ox/files
 #: apps/io.ox/files/view-options.js:322 apps/io.ox/mail/view-options.js:159
 #: module:io.ox/mail
 msgid "Close folder view"
@@ -2871,7 +2871,7 @@ msgstr "EB"
 #: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:714
 #: module:io.ox/files apps/io.ox/files/actions.js:724
 #: apps/io.ox/files/main.js:164 apps/io.ox/files/main.js:170
-#: apps/io.ox/files/main.js:869 apps/io.ox/files/main.js:917
+#: apps/io.ox/files/main.js:872 apps/io.ox/files/main.js:920
 #: apps/io.ox/files/share/permissions.js:693 module:io.ox/core
 #: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:497
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
@@ -5090,7 +5090,7 @@ msgstr ""
 "ponownie."
 
 #: apps/io.ox/core/commons.js:151 module:io.ox/core
-#: apps/io.ox/files/main.js:494 module:io.ox/files
+#: apps/io.ox/files/main.js:497 module:io.ox/files
 msgid "No elements selected"
 msgstr "Brak wybranych elementów"
 
@@ -7920,7 +7920,7 @@ msgstr ""
 msgid "The two newly entered passwords do not match."
 msgstr "Dwa nowowprowadzone hasła nie pasują do siebie."
 
-#: apps/io.ox/keychain/api.js:184 module:io.ox/keychain
+#: apps/io.ox/keychain/api.js:188 module:io.ox/keychain
 msgid ""
 "The unrecoverable items have been cleaned up successfully. Please refresh "
 "this page to see the changes."
@@ -9791,7 +9791,7 @@ msgstr "tego poranka"
 msgid "three months"
 msgstr "trzy miesiące"
 
-#: apps/io.ox/files/main.js:512 module:io.ox/files
+#: apps/io.ox/files/main.js:515 module:io.ox/files
 msgid "thumbnail"
 msgstr "miniaturka"
 
