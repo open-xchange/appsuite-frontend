@@ -47,7 +47,7 @@ define('io.ox/calendar/edit/main', [
                 this.model.off();
             },
 
-            // published via calllbacks objects in baton (see below)
+            // published via callbacks objects in baton (see below)
             // baton makes its journey through all extensions
             // description field (resource only) uses this function to
             // offer "Copy to description"; the click event lands here
@@ -58,7 +58,8 @@ define('io.ox/calendar/edit/main', [
                 // 'new forms.InputField({...})' stuff in template.js
                 e.preventDefault();
                 var textarea = app.view.$el.find('textarea.note');
-                textarea.val(textarea.val() + e.data.description);
+                // trigger change to update the model
+                textarea.val(textarea.val() + e.data.description).trigger('change');
                 notifications.yell('success', gt('Description has been copied'));
             },
 
