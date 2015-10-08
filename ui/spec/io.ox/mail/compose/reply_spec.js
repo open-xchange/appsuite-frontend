@@ -17,7 +17,7 @@ define([
     'use strict';
 
     describe('Mail Compose', function () {
-        var app;
+        var app, haloSpy;
         var testMessage = {
             attachment: true,
             attachments: [{
@@ -42,12 +42,18 @@ define([
                 }));
             });
             app = compose.getApp();
-            return app.launch();
+            return $.when(require(['io.ox/contacts/api']), app.launch()).then(function (contactAPI) {
+                //don't fetch contact pictures
+                expect(contactAPI).to.exist;
+                haloSpy = sinon.stub(contactAPI, 'pictureHalo', _.noop);
+            });
         });
         afterEach(function () {
-            if (app.view && app.view.model) {
+            if (app && app.view && app.view.model) {
                 app.view.model.dirty(false);
             }
+
+            haloSpy.restore();
             return app.quit();
         });
 

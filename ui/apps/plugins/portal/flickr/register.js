@@ -12,13 +12,13 @@
  * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
-define('plugins/portal/flickr/register',
-    ['io.ox/core/extensions',
-     'io.ox/portal/feed',
-     'io.ox/core/tk/dialogs',
-     'settings!io.ox/portal',
-     'gettext!plugins/portal'
-    ], function (ext, Feed, dialogs, settings, gt) {
+define('plugins/portal/flickr/register', [
+    'io.ox/core/extensions',
+    'io.ox/portal/feed',
+    'io.ox/core/tk/dialogs',
+    'settings!io.ox/portal',
+    'gettext!plugins/portal'
+], function (ext, Feed, dialogs, settings, gt) {
 
     'use strict';
 
@@ -270,7 +270,7 @@ define('plugins/portal/flickr/register',
                 } else {
                     props = { method: method, query: q, description: description };
                     if (nsid) { props.nsid = nsid; }
-                    model.set({ title: description, props: props }, {validate: true});
+                    model.set({ title: description, props: props }, { validate: true });
                     model.unset('candidate');
                     dialog.close();
                 }

@@ -11,17 +11,17 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/listview',
-    ['io.ox/mail/common-extensions',
-     'io.ox/core/extensions',
-     'io.ox/mail/util',
-     'io.ox/mail/api',
-     'io.ox/core/api/account',
-     'io.ox/core/tk/list',
-     'io.ox/core/folder/api',
-     'io.ox/mail/view-options',
-     'less!io.ox/mail/style'
-    ], function (extensions, ext, util, api, account, ListView, folderAPI) {
+define('io.ox/mail/listview', [
+    'io.ox/mail/common-extensions',
+    'io.ox/core/extensions',
+    'io.ox/mail/util',
+    'io.ox/mail/api',
+    'io.ox/core/api/account',
+    'io.ox/core/tk/list',
+    'io.ox/core/folder/api',
+    'io.ox/mail/view-options',
+    'less!io.ox/mail/style'
+], function (extensions, ext, util, api, account, ListView, folderAPI) {
 
     'use strict';
 
@@ -37,6 +37,9 @@ define('io.ox/mail/listview',
             id: 'default',
             index: 100,
             draw: function (baton) {
+
+                //add multiselection message
+                this.parent().attr('aria-describedby', 'mail-multi-selection-message');
 
                 // fix missing threadSize (aparently only used by tests)
                 fixThreadSize(baton.data);
@@ -146,6 +149,11 @@ define('io.ox/mail/listview',
             draw: extensions.account
         },
         {
+            id: 'original-folder',
+            index: 150,
+            draw: extensions.folder
+        },
+        {
             id: 'flag',
             index: 200,
             draw: extensions.flag
@@ -159,6 +167,16 @@ define('io.ox/mail/listview',
             id: 'paper-clip',
             index: 400,
             draw: extensions.paperClip
+        },
+        {
+            id: 'pgp-encrypted',
+            index: 600,
+            draw: extensions.pgp.encrypted
+        },
+        {
+            id: 'pgp-signed',
+            index: 600,
+            draw: extensions.pgp.signed
         },
         {
             id: 'subject',
@@ -245,6 +263,11 @@ define('io.ox/mail/listview',
             draw: extensions.account
         },
         {
+            id: 'original-folder',
+            index: 150,
+            draw: extensions.folder
+        },
+        {
             id: 'flag',
             index: 200,
             draw: extensions.flag
@@ -258,6 +281,16 @@ define('io.ox/mail/listview',
             id: 'paper-clip',
             index: 400,
             draw: extensions.paperClip
+        },
+        {
+            id: 'pgp-encrypted',
+            index: 450,
+            draw: extensions.pgp.encrypted
+        },
+        {
+            id: 'pgp-signed',
+            index: 450,
+            draw: extensions.pgp.signed
         },
         {
             id: 'priority',
@@ -283,17 +316,9 @@ define('io.ox/mail/listview',
 
         initialize: function (options) {
 
-            var self = this;
-            ListView.prototype.initialize.call(this, options || {});
+            ListView.prototype.initialize.call(this, options);
             this.$el.addClass('mail-item');
             this.on('collection:load', this.lookForUnseenMessage);
-
-            // mirror threaded state
-            this.listenTo(options.app.props, {
-                'change:thread': function (model) {
-                    self.threaded = model.get('thread');
-                }
-            });
 
             // track some states
             if (options && options.app) {
@@ -321,14 +346,9 @@ define('io.ox/mail/listview',
             folderAPI.setUnseenMinimum(folder_id, unseen);
         },
 
-        filter: function (model) {
-            var data = model.toJSON();
-            return !util.isDeleted(data);
-        },
-
         reprocessThread: function (model) {
             // only used when in thread mode
-            if (!this.app.isThreaded()) return;
+            if ( !(this.app && this.app.isThreaded()) ) return;
 
             // get full thread objects (instead of cids)
             var threadlist = api.threads.get(model.cid);
@@ -369,7 +389,7 @@ define('io.ox/mail/listview',
             data.picture = address && address[0] && address[0][1];
 
             // not threaded?
-            if (!this.app.isThreaded()) return data;
+            if (!(this.app && this.app.isThreaded())) return data;
 
             // get unseen flag for entire thread
             var unseen = _(thread).reduce(function (memo, obj) {
@@ -385,10 +405,8 @@ define('io.ox/mail/listview',
             return data;
         },
 
-        // support for custom cid attributes
-        // needed to identify threads
-        getCID: function (model) {
-            return 'thread.' + model.cid;
+        getCompositeKey: function (model) {
+            return this.options.threaded ? 'thread.' + model.cid : model.cid;
         }
     });
 

@@ -11,16 +11,16 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/settings/downloads/pane',
-    ['io.ox/core/extensions',
-     'io.ox/core/capabilities',
-     'io.ox/core/config',
-     'gettext!io.ox/core',
-     'settings!io.ox/core',
-     'settings!plugins/portal/oxdriveclients',
-     'less!io.ox/core/settings/downloads/style',
-     'less!plugins/portal/oxdriveclients/style'
-    ], function (ext, capabilities, config, gt, settings, driveClientsSettings) {
+define('io.ox/core/settings/downloads/pane', [
+    'io.ox/core/extensions',
+    'io.ox/core/capabilities',
+    'io.ox/core/config',
+    'gettext!io.ox/core',
+    'settings!io.ox/core',
+    'settings!plugins/portal/oxdriveclients',
+    'less!io.ox/core/settings/downloads/style',
+    'less!plugins/portal/oxdriveclients/style'
+], function (ext, capabilities, config, gt, settings, driveClientsSettings) {
 
     'use strict';
 
@@ -67,7 +67,7 @@ define('io.ox/core/settings/downloads/pane',
                         .append(
                             $('<h2>').text(gt('Connector for Microsoft Outlook®')),
                             $('<p>').text(
-                                gt('Synchronization of E-Mails, Calendar, Contacts and Tasks, along with Public, Shared and System Folders to Microsoft Outlook® clients.')
+                                gt('Synchronization of Emails, Calendar, Contacts and Tasks, along with Public, Shared and System Folders to Microsoft Outlook® clients.')
                         )
                     ),
                     $('<section>')
@@ -75,7 +75,7 @@ define('io.ox/core/settings/downloads/pane',
                         .append(
                             $('<h2>').text(gt('Notifier')),
                             $('<p>').text(
-                                gt('Informs about the current status of E-Mails and appointments without having to display the user interface or another Windows® client.')
+                                gt('Informs about the current status of Emails and appointments without having to display the user interface or another Windows® client.')
                         )
                     )
                 );
@@ -102,9 +102,9 @@ define('io.ox/core/settings/downloads/pane',
                 .css('background-image', 'url(' + imagePath + lang + '_'  + platform + '.png)');
 
             return $('<a class="shoplink">').attr({
-                        href: url,
-                        target: '_blank'
-                    }).append($img, $('<span class="sr-only">').text(gt.format(gt('Download the %s client for %s'), productName, platform)));
+                href: url,
+                target: '_blank'
+            }).append($img, $('<span class="sr-only">').text(gt.format(gt('Download the %s client for %s'), productName, platform)));
         };
 
         ext.point('io.ox/core/settings/downloads/pane/detail').extend({
@@ -151,21 +151,21 @@ define('io.ox/core/settings/downloads/pane',
                     )
                 );
             }
-         });
+        });
     }
 
-    // no download available?
-    if (ext.point('io.ox/core/settings/downloads/pane/detail').list().length === 0) return;
+    // no download available or guest mode?
+    if (ext.point('io.ox/core/settings/downloads/pane/detail').list().length === 0 || capabilities.has('guest')) return;
 
     //
     // draw settings pane
     //
-    ext.point('io.ox/settings/pane').extend({
+    ext.point('io.ox/settings/pane/tools').extend({
         id: 'io.ox/core/downloads',
-        index: 'last',
+        index: 300,
         title: gt('Downloads'),
         pane: 'io.ox/core/settings/downloads/pane',
-        advancedMode: true
+        advancedMode: false
     });
 
     ext.point('io.ox/core/settings/downloads/pane').extend({

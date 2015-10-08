@@ -1,0 +1,78 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2013
+ *
+ * @author Julian Bäume <julian.baeume@open-xchange.com>
+ */
+
+.rightside > .scrollable-pane .sub.settings {
+
+    ul {
+        li.widget-settings-view {
+            @lineHeight: 18px;
+
+            padding-right: 40px;
+            min-height: 66px;
+
+            .list-title {
+                font-weight: bold;
+                word-wrap: break-word;
+                max-width: 100%;
+            }
+            .content {
+                line-height: @lineHeight;
+                text-align: left;
+                .url {
+                    a { word-break: break-all; }
+                    a, i { color: #888; }
+                    a:hover { color: #555; }
+                    clear: both;
+                    padding-top: 6px;
+                }
+                .breadcrumb-view {
+                    padding-top: 4px;
+                    white-space: pre-wrap;
+                }
+                .breadcrumb {
+                    background-color: transparent;
+                    li { line-height: @lineHeight; }
+                }
+                .fa-spin { margin-left: 0.5em; }
+            }
+            .widget-controls .remove {
+                height: 45px;
+            }
+
+            &.disabled {
+                .list-title {
+                    color: #aaa;
+                    font-weight: normal;
+                }
+                .url {
+                    i {
+                        color: #ccc;
+                        font-style: italic;
+                    }
+                }
+            }
+        }
+    }
+
+    .breadcrumb {
+        padding: 0;
+        margin: 0;
+
+        li {
+            padding: 0;
+            margin: 0;
+        }
+    }
+
+    .remove-filter { text-decoration: underline; }
+}

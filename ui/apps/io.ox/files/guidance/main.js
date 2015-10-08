@@ -2,15 +2,15 @@
 * @author Richard Petersen
 */
 
-define('io.ox/files/guidance/main',
-    ['io.ox/core/extensions',
-     'io.ox/core/tk/dialogs',
-     'settings!io.ox/core',
-     'io.ox/core/folder/api',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/capabilities',
-     'gettext!io.ox/files'
-    ], function (ext, dialogs, settings, folderAPI, links, capabilities, gt) {
+define('io.ox/files/guidance/main', [
+    'io.ox/core/extensions',
+    'io.ox/core/tk/dialogs',
+    'settings!io.ox/core',
+    'io.ox/core/folder/api',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/capabilities',
+    'gettext!io.ox/files'
+], function (ext, dialogs, settings, folderAPI, links, capabilities, gt) {
 
     'use strict';
 
@@ -28,16 +28,16 @@ define('io.ox/files/guidance/main',
 
         // DEBUGGING: this is only for testing, due to unlimited disc space.
         // quota.quota = 1000000000000;
-        // ext.point('io.ox/files/guidance').enable('guidance_files_reload');
+        // ext.point('io.ox/files/guidance').enable('guidance-files-reload');
 
         folderAPI.get(folderID).done(function (folderObj) {
             folder = folderObj;
 
-            var dialog = new dialogs.SidePopup({closely: true, tabTrap: true });
+            var dialog = new dialogs.SidePopup({ closely: true, tabTrap: true });
 
             dialog.show(e, function (popup) {
                 app.folder.getData().done(function (data) {
-                    var baton = new ext.Baton({ id: id, dialog: dialog, folder: folder, app: app, data: data, quota: quota, options: { type: 'files'}});
+                    var baton = new ext.Baton({ id: id, dialog: dialog, folder: folder, app: app, data: data, quota: quota, options: { type: 'files' }});
 
                     ext.point('io.ox/files/guidance').invoke('draw', popup.addClass('guidance'), baton);
 
@@ -63,7 +63,7 @@ define('io.ox/files/guidance/main',
                 statistics.clearCache();
 
                 app.folder.getData().done(function (data) {
-                    var baton = new ext.Baton({ id: id, dialog: lastBaton.dialog, folder: folder, app: app, data: data, quota: quota, options: { type: 'files'}});
+                    var baton = new ext.Baton({ id: id, dialog: lastBaton.dialog, folder: folder, app: app, data: data, quota: quota, options: { type: 'files' }});
 
                     ext.point('io.ox/files/guidance').invoke('draw', lastPopup, baton);
                 });
@@ -182,7 +182,7 @@ define('io.ox/files/guidance/main',
     });
 
     ext.point('io.ox/files/guidance').extend(new links.Link({
-        id: 'guidance_files_reload',
+        id: 'guidance-files-reload',
         index: INDEX += 100,
         prio: 'hi',
         label: gt('Reload statistics'),

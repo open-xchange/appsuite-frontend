@@ -10,8 +10,11 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-define('io.ox/calendar/settings/model',
-    ['settings!io.ox/calendar'], function (settings) {
+define('io.ox/calendar/settings/model', [
+    'settings!io.ox/calendar',
+    'gettext!io.ox/calendar',
+    'io.ox/core/notifications'
+], function (settings, gt, notifications) {
 
     'use strict';
 
@@ -23,8 +26,8 @@ define('io.ox/calendar/settings/model',
             return settings.save(this.attributes);
         },
 
-        saveAndYell: function () {
-            return settings.saveAndYell(this.attributes);
+        saveAndYell: function (custom, options) {
+            return settings.saveAndYell(custom, options);
         },
 
         destroy: function () {
@@ -33,5 +36,25 @@ define('io.ox/calendar/settings/model',
 
     });
 
-    return calendarSettingsModel;
+    var model = settings.createModel(calendarSettingsModel),
+        reloadMe = [];
+
+    model.on('change', function (model) {
+        var showNotice = _(reloadMe).any(function (attr) {
+            return model.changed[attr];
+        });
+        model.saveAndYell(undefined, showNotice ? { force: true } : {}).then(
+            function success() {
+
+                if (showNotice) {
+                    notifications.yell(
+                        'success',
+                        gt('The setting has been saved and will become active when you enter the application the next time.')
+                    );
+                }
+            }
+        );
+    });
+
+    return model;
 });

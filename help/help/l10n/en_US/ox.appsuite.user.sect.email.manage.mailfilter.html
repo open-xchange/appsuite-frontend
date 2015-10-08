@@ -1,10 +1,10 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>5.5.18. Using E-Mail Filters</title>
+<title>5.5.18. Using E-Mail filters</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="User Guide">
 <link rel="up" href="ox.appsuite.user.sect.email.manage.html" title="5.5. Organizing E-Mails">
 <link rel="prev" href="ox.appsuite.user.sect.email.manage.unifiedmail.html" title="5.5.17. Using Unified Mail">
 <link rel="next" href="ox.appsuite.user.sect.email.search.html" title="5.6. Searching for E-Mails">
@@ -19,7 +19,7 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.email.manage.unifiedmail.html">Prev</a></li>
@@ -33,7 +33,7 @@
 <h2 class="sr-only">Organizing E-Mails</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.email.manage.mailfilter"></a>5.5.18. Using E-Mail Filters</h3></div></div></div>
+<a name="ox.appsuite.user.sect.email.manage.mailfilter"></a>5.5.18. Using E-Mail filters</h3></div></div></div>
 <a class="indexterm" name="id-1.6.12.23.2"></a><a class="indexterm" name="id-1.6.12.23.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.email.mailfilter"></a><p>E-Mail filters help you organize incoming E-Mail messages. An E-Mail filter consists of one or several rules. By setting rules you can e.g. trigger the following actions:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -64,20 +64,27 @@
 <div class="task">
 <a name="ox.appsuite.user.task.email.mailfilter.create"></a><p class="title">How to create a new rule:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Click the <span class="guibutton"><strong>System menu</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.create.systemmenu"></a><img src="../../images/appsuite_user_icon_settings.png"></span> on the right side of the menu bar. Click the <span class="guibutton"><strong>Settings</strong></span> menu item. </p></li>
+<li class="step"><p>Click the <span class="guibutton"><strong>System menu</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.create.systemmenu"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> on the right side of the menu bar. Click the <span class="guibutton"><strong>Settings</strong></span> menu item. </p></li>
 <li class="step">
-<p>If <span class="guibutton"><strong>Mail filter</strong></span> is not displayed in the sidebar, enable  <span class="guibutton"><strong>Advanced Settings</strong></span> at the bottom of the sidebar.</p>
-<p>In the sidebar, click on <span class="guibutton"><strong>Mail Filter</strong></span>.</p>
+<p>Select the entry <span class="guibutton"><strong>E-Mail</strong></span> in the sidebar.</p>
+<p>Click on <span class="guibutton"><strong>Mail filter</strong></span>.</p>
 </li>
 <li class="step"><p>In the display area, click on <span class="guibutton"><strong>Add new rule</strong></span>. The <span class="guilabel"><strong>Create new rule</strong></span> window opens.</p></li>
 <li class="step"><p>Enter a name for the rule.</p></li>
 <li class="step">
-<p>In order to add a condition click on <span class="guibutton"><strong>Add condition</strong></span>. Make a selection from the drop-down menu.</p>
-<p>In order to use an E-Mail part that is not contained in the list, select <span class="guibutton"><strong>Header</strong></span>. Enter a header entry in the <span class="guilabel"><strong>Name</strong></span> input field. You can display an E-Mail's header by <a class="link" href="ox.appsuite.user.sect.email.manage.source.html#ox.appsuite.user.concept.email.source">Viewing the source data</a>.</p>
-<p>You can select a criterion by clicking on <span class="guibutton"><strong>Matches</strong></span>. Enter an argument in the input field.</p>
+<p>In order to add a condition click on <span class="guibutton"><strong>Add condition</strong></span>. Make a selection from the drop-down menu. Please note the following:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>In order to use an E-Mail part that is not contained in the list, select <span class="guibutton"><strong>Header</strong></span>. Enter a header entry in the <span class="guilabel"><strong>Name</strong></span> input field. You can display an E-Mail's header by <a class="link" href="ox.appsuite.user.sect.email.manage.source.html#ox.appsuite.user.concept.email.source">Viewing the source data</a>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>In order to include the recipients in <span class="guilabel"><strong>BCC</strong></span>, select <span class="guibutton"><strong>Envelope</strong></span>. Envelope includes the E-Mail recipients entered in the <span class="guilabel"><strong>To</strong></span>, <span class="guilabel"><strong>CC</strong></span> or <span class="guilabel"><strong>BCC</strong></span> field.</p></li>
+<li class="listitem" style="list-style-type: none"><p>In order to use a part of the E-Mail content in the condition, select <span class="guibutton"><strong>Content</strong></span>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>In order to use the date of receipt in the condition, select <span class="guibutton"><strong>Current Date</strong></span>.</p></li>
+</ul></div>
+<p>
+            </p>
+<p>Select a criterion from the drop-down next to the E-Mail part. Enter an argument in the input field.</p>
 <p>Examples can be found in the <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.mailfilter.conditions" title="Q:">Questions about E-Mails</a>.</p>
 <p>You can add further conditions. You can then specify whether one or all conditions are to be met in order to process the actions. To do so, click on <span class="guibutton"><strong>Apply rule if all conditions are met</strong></span>.</p>
-<p>To delete a condition, click the <span class="guibutton"><strong>Delete</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.create.delete"></a><img src="../../images/appsuite_user_icon_trash.png"></span> next to the condition.</p>
+<p>To delete a condition, click the <span class="guibutton"><strong>Delete</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.create.delete"></a><img src="../../images/appsuite_user_icon_trash.png"></span>  next to the condition.</p>
 </li>
 <li class="step">
 <p>Specify the action to be executed if the rule is met. To do so, click on <span class="guibutton"><strong>Add action</strong></span>. Select an action from the menu. Depending on the action, further details might be required.</p>
@@ -90,10 +97,10 @@
 <div class="task">
 <a name="ox.appsuite.user.task.email.mailfilter.change"></a><p class="title">How to change existing rules:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Click the <span class="guibutton"><strong>System menu</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.change.systemmenu"></a><img src="../../images/appsuite_user_icon_settings.png"></span> on the right side of the menu bar. Click the <span class="guibutton"><strong>Settings</strong></span> menu item. </p></li>
+<li class="step"><p>Click the <span class="guibutton"><strong>System menu</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.change.systemmenu"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> on the right side of the menu bar. Click the <span class="guibutton"><strong>Settings</strong></span> menu item. </p></li>
 <li class="step">
-<p>If <span class="guibutton"><strong>Mail filter</strong></span> is not displayed in the sidebar, enable  <span class="guibutton"><strong>Advanced Settings</strong></span> at the bottom of the sidebar.</p>
-<p>In the sidebar, click on <span class="guibutton"><strong>Mail Filter</strong></span>.</p>
+<p>Select the entry <span class="guibutton"><strong>E-Mail</strong></span> in the sidebar.</p>
+<p>Click on <span class="guibutton"><strong>Mail filter</strong></span>.</p>
 </li>
 <li class="step"><p>To edit a rule's settings, click on <span class="guibutton"><strong>Edit</strong></span> next to the rule. Change the settings in the <span class="guilabel"><strong>Edit rule</strong></span> window.</p></li>
 <li class="step">

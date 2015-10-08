@@ -2,14 +2,25 @@
 <html>
 <head>
 {{> core_head }}
+<script>
+  // signin page
+  window.ox = { signin: true };
+  // fix broken URL
+  var path = location.pathname;
+  if (/^\/\//.test(path)) {
+    location.href = location.href.replace(path, path.substr(1));
+  }
+</script>
 </head>
 <body class="unselectable">
 {{> core_body }}
 
 <noscript>
 <p class="noscript">This app uses JavaScript. Your browser either doesn't support JavaScript or you have it turned off. To use this app please use a JavaScript enabled browser.</p>
-<!-- see bug #27608 -->
+<!-- see bug #27608 and #26722 -->
 </noscript>
+
+<script src="{{ base }}/precore.js" defer="defer"></script>
 
 </body>
 </html>

@@ -1,15 +1,35 @@
 {
   "name": "open-xchange-guidedtours",
-  "version": "7.6.2-25",
-  "dependencies": {
+  "version": "7.8.0-6",
+  "repository": {
+    "type": "git",
+    "url": "https://code.open-xchange.com/git/wd/frontend/web"
   },
+  "license": "CC-BY-NC-SA-2.5",
+  "dependencies": {},
+  "description": "Guided tours for App Suite",
   "optionalDependencies": {
-    "jshint": "Open-Xchange-Frontend/jshint#0ffee4a9ae",
-    "shared-grunt-config": "Open-Xchange-Frontend/shared-grunt-config#v0.5.1"
+    "open-xchange-shared-grunt-config": "^0.11.7",
+    "assemble-less": "^0.7.0",
+    "grunt": "^0.4.5",
+    "grunt-bump": "^0.3.1",
+    "grunt-check-dependencies": "^0.10.1",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-copy": "^0.8.0",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-contrib-uglify": "^0.9.1",
+    "grunt-jscs": "^2.0.0",
+    "grunt-jsonlint": "^1.0.4",
+    "grunt-newer": "^1.1.1",
+    "grunt-require-gettext": "^0.6.2",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "appserver": "^0.5.5",
+    "grunt-contrib-connect": "^0.11.2",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-karma": "^0.8.2",
-    "grunt-contrib-connect": "^0.7.1"
+    "karma": "^0.12.37"
   }
 }

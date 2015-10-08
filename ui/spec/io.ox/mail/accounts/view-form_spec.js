@@ -10,12 +10,11 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-define(['io.ox/core/extensions',
-        'gettext!io.ox/calendar',
-        'fixture!io.ox/core/api/user.json'
-
-        ], function (ext, gt, fixtureUser) {
-
+define([
+    'io.ox/core/extensions',
+    'gettext!io.ox/calendar',
+    'fixture!io.ox/core/api/user.json'
+], function (ext, gt, fixtureUser) {
     'use strict';
 
     describe('mailaccountsettings', function () {
@@ -29,7 +28,7 @@ define(['io.ox/core/extensions',
             });
 
             require(['io.ox/mail/accounts/settings']).then(function () {
-                ext.point('io.ox/settings/accounts/mail/settings/detail').invoke('draw', $node, {data: { 'primary_address': '' }});
+                ext.point('io.ox/settings/accounts/mail/settings/detail').invoke('draw', $node, { data: { 'primary_address': '' }});
 
                 $popup = $('body').find('.io-ox-dialog-popup');
                 done();
@@ -65,11 +64,10 @@ define(['io.ox/core/extensions',
             expect($popup.find('input[name="transport_password"]'), 'transport password field').to.have.length(1);
 
             //folder stuff has been removed/changed
-//             expect($popup.find('input[name="sent_fullname"]'), 'sent folder field').to.have.length(1);
-//             expect($popup.find('input[name="trash_fullname"]'), 'trash folder field').to.have.length(1);
-//             expect($popup.find('input[name="drafts_fullname"]'), 'drafts folder field').to.have.length(1);
-//             expect($popup.find('input[name="spam_fullname"]'), 'spam folder field').to.have.length(1);
-
+            // expect($popup.find('input[name="sent_fullname"]'), 'sent folder field').to.have.length(1);
+            // expect($popup.find('input[name="trash_fullname"]'), 'trash folder field').to.have.length(1);
+            // expect($popup.find('input[name="drafts_fullname"]'), 'drafts folder field').to.have.length(1);
+            // expect($popup.find('input[name="spam_fullname"]'), 'spam folder field').to.have.length(1);
         });
 
     });

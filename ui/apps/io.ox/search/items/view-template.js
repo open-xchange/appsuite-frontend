@@ -11,17 +11,18 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/items/view-template',
-    ['gettext!io.ox/core',
-     'io.ox/core/extensions'], function (gt, ext) {
+define('io.ox/search/items/view-template', [
+    'gettext!io.ox/core',
+    'io.ox/core/extensions'
+], function (gt, ext) {
 
     'use strict';
 
     var config = {
-            dependencies: {},
-            points: {},
-            classes: {},
-        };
+        dependencies: {},
+        points: {},
+        classes: {}
+    };
 
     ext.point('io.ox/search/main/items').extend({
         id: 'dependencies',
@@ -70,9 +71,15 @@ define('io.ox/search/items/view-template',
 
     var refresh = _.debounce(function (e) {
                     if (ox.ui.App.getCurrentApp().get('name') === 'io.ox/search')
-                        e.data.trigger('needs-refresh');
+                        if (e && e.data && e.data.trigger) {
+                            //jQuery event
+                            e.data.trigger('needs-refresh');
+                        } else {
+                            //backbone event
+                            this.trigger('needs-refresh');
+                        }
                     // hide sidepanel
-                    if (e.type.indexOf('delete') >= 0 || e.type.indexOf('move') >= 0)
+                    if (e && e.type && (e.type.indexOf('delete') >= 0 || e.type.indexOf('move') >= 0))
                         $('.io-ox-sidepopup', '#io-ox-windowmanager-pane>.io-ox-search-window').detach();
                 }, 100);
 
@@ -95,13 +102,17 @@ define('io.ox/search/items/view-template',
                 cell = $('<ul class="col-xs-12 list-unstyled">')
             );
 
-
             // require list view extensions points
             var dep = [].concat(config.dependencies[module]).concat('less!io.ox/search/items/style');
             require(dep, function (view, api) {
                 // ignore last element when greater than 'size' (only used to determine if more results exists)
                 var last = items.length > baton.model.get('size') ? items.length - baton.model.get('extra') : items.length;
-                if (api) {
+                if (api && api._events) {
+                    //Backbone event hub
+                    api.off(events, refresh);
+                    api.on(events, refresh, items);
+                } else if (api && api.events) {
+                    //jQuery event hub
                     api.off(events, refresh);
                     api.on(events, items, refresh);
                 }
@@ -117,7 +128,7 @@ define('io.ox/search/items/view-template',
                         node.attr({
                             'data-id': model.get('id'),
                             'data-folder': model.get('folder'),
-                            'data-app': model.get('application'),
+                            'data-app': model.get('application')
                         });
 
                         // add app specific classes
@@ -147,10 +158,11 @@ define('io.ox/search/items/view-template',
             });
 
             var elem = self.find('.row.result');
-            if (elem.length)
+            if (elem.length) {
                 elem.replaceWith(row);
-            else
+            } else {
                 self.append(row);
+            }
 
             self.append(row);
         }
@@ -181,7 +193,7 @@ define('io.ox/search/items/view-template',
 
             ext.point('io.ox/search/items/calendar').extend({
                 draw: function (baton) {
-                    draw.call(this, baton, 'io.ox/calendar/view-detail', 'io.ox/calendar/api', {deeplink: true});
+                    draw.call(this, baton, 'io.ox/calendar/view-detail', 'io.ox/calendar/api', { deeplink: true });
                 }
             });
 
@@ -199,7 +211,12 @@ define('io.ox/search/items/view-template',
 
             ext.point('io.ox/search/items/files').extend({
                 draw: function (baton) {
-                    draw.call(this, baton, 'io.ox/files/fluid/view-detail', 'io.ox/files/api');
+                    // workaround: detach sidepopup the dirty way
+                    $('.io-ox-sidepopup', '#io-ox-windowmanager-pane>.io-ox-search-window').detach();
+                    require(['io.ox/core/viewer/main'], function (Viewer) {
+                        var viewer = new Viewer();
+                        viewer.launch({ files: [].concat(baton.data) });
+                    });
                 }
             });
 
@@ -216,7 +233,7 @@ define('io.ox/search/items/view-template',
                         api.get(api.reduce(baton.data)).then(function (data) {
                             // render again with get response
                             if (!_.isEqual(baton.data, data)) {
-                                var view = new detail.View({ data: data }, {deeplink: true});
+                                var view = new detail.View({ data: data }, { deeplink: true });
                                 popup.idle().empty().append(
                                     view.render().expand().$el.addClass('no-padding')
                                 );

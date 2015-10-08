@@ -1,0 +1,83 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+#io-ox-banner {
+
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: none;
+    text-align: right;
+    color: #fff;
+    line-height: 32px;
+    padding: @default-padding;
+    .ellipsis();
+
+    #io-ox-core.show-banner & {
+        display: block;
+        .vertical-gradient(darken(@topbar-background, 15%), darken(@topbar-background, 12%));
+    }
+
+    .banner-logo {
+        float: left;
+        margin-right: 16px;
+    }
+
+    .banner-title {
+        font-size: 18px;
+        font-weight: 300;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.50);
+        margin-right: 16px;
+        float: left;
+    }
+
+    .banner-content {
+        font-weight: 300;
+        font-size: 13px;
+        padding-top: 1px;
+        label {
+            font-weight: inherit;
+            color: rgba(255, 255, 255, 0.70);
+        }
+    }
+
+    .banner-action {
+        color: #fff;
+        font-size: 18px;
+        margin-left: @default-padding * 2;
+        position: relative;
+        text-decoration: none;
+        top: 2px;
+    }
+}
+
+// adjust positions of top-bar and screens
+#io-ox-core.show-banner {
+    @height: 64px;
+    #io-ox-banner { height: @height; padding: @default-padding; }
+    #io-ox-topbar { top: @height; }
+    #io-ox-screens { top: @height + 40; }
+}
+
+// less height on smaller screens; desktop-only
+// typical maximized browser window on 1280x800 should run into this, therefore 640px
+@media all and (max-height: 640px) {
+    #io-ox-core.show-banner {
+        @height: 48px;
+        #io-ox-banner { height: @height; padding: 8px @default-padding; .banner-title { font-size: 16px; } }
+        #io-ox-topbar { top: @height; }
+        #io-ox-screens { top: @height + 40; }
+    }
+}

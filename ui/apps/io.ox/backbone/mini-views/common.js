@@ -20,8 +20,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
     //
 
     var InputView = AbstractView.extend({
-        tagName: 'input type="text"',
-        className: 'form-control',
+        el: '<input type="text" class="form-control">',
         events: { 'change': 'onChange' },
         onChange: function () {
             this.model.set(this.name, this.$el.val(), { validate: true });
@@ -34,7 +33,8 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         },
         render: function () {
             this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
-            if (this.id) this.$el.attr({ id: this.id });
+            if (this.id) this.$el.attr('id', this.id);
+            if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);
             this.update();
             return this;
         }
@@ -45,8 +45,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
     //
 
     var PasswordView = AbstractView.extend({
-        tagName: 'input type="password"',
-        className: 'form-control',
+        el: '<input type="password" class="form-control">',
         events: { 'change': 'onChange' },
         onChange: function () {
             var value = this.$el.val();
@@ -67,7 +66,8 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
                 name: this.name,
                 tabindex: this.options.tabindex || 1
             });
-            if (this.id) this.$el.attr({ id: this.id });
+            if (this.id) this.$el.attr('id', this.id);
+            if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);
             this.update();
             return this;
         }
@@ -78,8 +78,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
     //
 
     var TextView = AbstractView.extend({
-        tagName: 'textarea',
-        className: 'form-control',
+        el: '<textarea class="form-control">',
         events: { 'change': 'onChange' },
         onChange: function () {
             this.model.set(this.name, this.$el.val());
@@ -93,7 +92,8 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         },
         render: function () {
             this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
-            if (this.rows) this.$el.attr({ rows: this.rows });
+            if (this.rows) this.$el.attr('rows', this.rows);
+            if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);
             this.update();
             return this;
         }
@@ -104,8 +104,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
     //
 
     var CheckboxView = AbstractView.extend({
-        tagName: 'input type="checkbox"',
-        className: '',
+        el: '<input type="checkbox">',
         events: { 'change': 'onChange' },
         onChange: function () {
             this.model.set(this.name, this.$el.prop('checked'));
@@ -176,9 +175,9 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         },
         render: function () {
             this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
-            if (this.id) this.$el.attr({ id: this.id});
+            if (this.id) this.$el.attr({ id: this.id });
             this.$el.append(_.map(this.options.list, function (option) {
-                return $('<option>').attr({ value: option.value}).text(option.label);
+                return $('<option>').attr({ value: option.value }).text(option.label);
             }));
             this.update();
             return this;
@@ -192,8 +191,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
             if (this.options.selector) {
                 if (_.isString(this.options.selector)) return this.$el.closest(this.options.selector);
                 if (_.isObject(this.options.selector)) return this.options.selector;
-            }
-            else {
+            } else {
                 return this.$el.closest('.form-group, [class*="col-"]');
             }
         },
@@ -243,6 +241,39 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         }
     });
 
+    var DropdownLinkView = AbstractView.extend({
+        tagName: 'div',
+        className: 'dropdownlink',
+        events: { 'click [data-action="change-value"]': 'onClick' },
+        onClick: function (e) {
+            e.preventDefault();
+            this.model.set(this.name, $(e.target).attr('data-value'));
+        },
+        setup: function () {
+            this.listenTo(this.model, 'change:' + this.name, this.update);
+        },
+        update: function () {
+            this.$el.find('.dropdown-toggle').text(this.options.values[this.model.get(this.name)]);
+        },
+        render: function () {
+            this.$el.append(
+                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">').text(this.options.values[this.model.get(this.name)]),
+                $('<ul class="dropdown-menu" role="menu">').append(
+                    _(this.options.values).map(function (name, value) {
+                        return $('<li>').append(
+                            $('<a>', { href: '#', 'data-action': 'change-value', 'data-value': value, 'tabindex': '1' }).append(
+                                $.txt(name)
+                            )
+                        );
+                    })
+                )
+            );
+
+            this.update();
+            return this;
+        }
+    });
+
     return {
         AbstractView: AbstractView,
         InputView: InputView,
@@ -252,6 +283,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         RadioView: RadioView,
         SelectView: SelectView,
         ErrorView: ErrorView,
-        FormView: FormView
+        FormView: FormView,
+        DropdownLinkView: DropdownLinkView
     };
 });

@@ -10,13 +10,13 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/oauth/settings',
-    ['io.ox/core/extensions',
-     'io.ox/oauth/keychain',
-     'io.ox/keychain/api',
-     'io.ox/core/tk/dialogs',
-     'gettext!io.ox/settings/oauth'
-    ], function (ext, oauthKeychain, keychain, dialogs, gt) {
+define('io.ox/oauth/settings', [
+    'io.ox/core/extensions',
+    'io.ox/oauth/keychain',
+    'io.ox/keychain/api',
+    'io.ox/core/tk/dialogs',
+    'gettext!io.ox/settings'
+], function (ext, oauthKeychain, keychain, dialogs, gt) {
 
     'use strict';
 
@@ -77,9 +77,9 @@ define('io.ox/oauth/settings',
             dialog = new dialogs.ModalDialog();
             dialog
                 .append($form)
-                .addPrimaryButton('save', gt('Save'), 'save', {tabIndex: '1'})
-                .addAlternativeButton('reauthorize', gt('Reauthorize'), 'reauthorize', {tabIndex: '1'})
-                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: 1 })
+                .addAlternativeButton('reauthorize', gt('Reauthorize'), 'reauthorize', { tabIndex: 1 })
+                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                 .show()
                 .done(function (action) {
                     if (action === 'save') {

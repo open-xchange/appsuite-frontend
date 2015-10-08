@@ -16,10 +16,10 @@ define('io.ox/rss/settings/defaults', function () {
     'use strict';
 
     var settingsDefaults = {
-/*        groups: [
+        /* groups: [
             {groupname: 'News RSS', index: 200, members: [
-                {feedname: 'Heise', url: 'http://www.heise.de/newsticker/heise-atom.xml', index: 100},
-                {feedname: 'Gizmodo', url: 'http://www.gizmodo.de/feed', index: 200}
+                {feedname: 'Heise', url: 'http://www.heise.de/newsticker/heise-atom.xml', index: 100 },
+                {feedname: 'Gizmodo', url: 'http://www.gizmodo.de/feed', index: 200 }
             ]},
             ...more groups...
         ]*/

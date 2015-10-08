@@ -11,10 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/freebusy/templates',
-    ['io.ox/core/notifications',
-     'gettext!io.ox/calendar/freebusy'
-    ], function (notifications, gt) {
+define('io.ox/calendar/freebusy/templates', [
+    'io.ox/core/notifications',
+    'gettext!io.ox/calendar/freebusy'
+], function (notifications, gt) {
 
     'use strict';
 
@@ -85,15 +85,6 @@ define('io.ox/calendar/freebusy/templates',
 
         getControls: function () {
             return $('<div class="abs free-busy-controls">');
-        },
-
-        getAutoCompleteControls: function () {
-            return $('<div class="abs autocomplete-controls input-group">').append(
-                $('<input type="text" class="add-participant form-control" tabindex="1">').attr('placeholder', gt('Add participant') + ' ...'),
-                $('<span class="input-group-btn">').append(
-                    $('<button type="button" class="btn btn-default add-button" aria-label="' + gt('Add participant') + '" data-action="add" tabindex="-1">').append($('<i class="fa fa-plus" aria-hidden="true">'))
-                )
-            );
         },
 
         getPopover: function (standalone) {

@@ -13,9 +13,10 @@
  *
  */
 
-define(['io.ox/core/extensions',
-       'io.ox/core/cache'], function (ext, cache) {
-
+define([
+    'io.ox/core/extensions',
+    'io.ox/core/cache'
+], function (ext, cache) {
     'use strict';
 
     describe('Cache', function () {

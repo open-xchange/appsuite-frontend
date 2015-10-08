@@ -14,7 +14,7 @@ define(['io.ox/core/api/autocomplete'], function (api) {
 
     describe('Core', function () {
         describe('autocomplete API', function () {
-            var instance = new api({id: 'createDistributionList', contacts: true, distributionlists: false });
+            var instance = new api({ id: 'createDistributionList', contacts: true, distributionlists: false });
 
             //existance
             describe('has some methods', function () {

@@ -16,7 +16,7 @@ define('io.ox/contacts/widgets/exif', function () {
     var debug = false;
 
     var TiffTags = {
-        0x0112 : 'Orientation'
+        0x0112: 'Orientation'
     };
 
     function findEXIFinJPEG(file) {
@@ -224,10 +224,11 @@ define('io.ox/contacts/widgets/exif', function () {
 
         this.getSByteAt = function (iOffset) {
             var iByte = this.getByteAt(iOffset);
-            if (iByte > 127)
+            if (iByte > 127) {
                 return iByte - 256;
-            else
+            } else {
                 return iByte;
+            }
         };
 
         this.getShortAt = function (iOffset, bBigEndian) {
@@ -239,10 +240,11 @@ define('io.ox/contacts/widgets/exif', function () {
         };
         this.getSShortAt = function (iOffset, bBigEndian) {
             var iUShort = this.getShortAt(iOffset, bBigEndian);
-            if (iUShort > 32767)
+            if (iUShort > 32767) {
                 return iUShort - 65536;
-            else
+            } else {
                 return iUShort;
+            }
         };
         this.getLongAt = function (iOffset, bBigEndian) {
             var iByte1 = this.getByteAt(iOffset),
@@ -258,10 +260,11 @@ define('io.ox/contacts/widgets/exif', function () {
         };
         this.getSLongAt = function (iOffset, bBigEndian) {
             var iULong = this.getLongAt(iOffset, bBigEndian);
-            if (iULong > 2147483647)
+            if (iULong > 2147483647) {
                 return iULong - 4294967296;
-            else
+            } else {
                 return iULong;
+            }
         };
 
         this.getStringAt = function (iOffset, iLength) {

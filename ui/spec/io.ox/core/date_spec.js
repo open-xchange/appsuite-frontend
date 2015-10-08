@@ -12,6 +12,8 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
+/* jshint ignore:start */
+
 define(['io.ox/core/date', 'io.ox/core/extensions'],
 function (date, ext) {
 
@@ -158,28 +160,23 @@ function (date, ext) {
             beforeEach(function () {
                 this.d = new D(2012, 4, 16, 12, 34);
             });
-            _.each([['day of week',   date.DAYOFWEEK, 'Mi.'      ],
-                    ['date',          date.DATE,      '16.5.2012'],
-                    ['time',          date.TIME,      '12:34'    ],
-                    ['timezone',      date.TIMEZONE,  'CEST'     ],
-                    ['day of week and date', date.DAYOFWEEK_DATE,
-                                      'Mi., 16.5.2012'           ],
-                    ['date and time', date.DATE_TIME,
-                                           '16.5.2012 12:34'     ],
-                    ['time and timezone', date.TIME_TIMEZONE,
-                                                     '12:34 CEST'],
-                    ['everything',    date.FULL_DATE,
-                                      'Mi., 16.5.2012 12:34 CEST'],
-                    ['timezone implies time', date.DATE + date.TIMEZONE,
-                                           '16.5.2012 12:34 CEST'],
-                    ['day of week implies date', date.DAYOFWEEK + date.TIME,
-                                      'Mi., 16.5.2012 12:34'],
-                    ['date without year', date.DATE_NOYEAR, '16.5.']],
-                function (item) {
-                    it(item[0], function () {
-                        expect(this.d.format(item[1])).to.equal(item[2]);
-                    });
+            _.each([
+                ['day of week',              date.DAYOFWEEK,             'Mi.'],
+                ['date',                     date.DATE,                  '16.5.2012'],
+                ['time',                     date.TIME,                  '12:34'],
+                ['timezone',                 date.TIMEZONE,              'CEST'],
+                ['day of week and date',     date.DAYOFWEEK_DATE,        'Mi., 16.5.2012'],
+                ['date and time',            date.DATE_TIME,             '16.5.2012 12:34'],
+                ['time and timezone',        date.TIME_TIMEZONE,         '12:34 CEST'],
+                ['everything',               date.FULL_DATE,             'Mi., 16.5.2012 12:34 CEST'],
+                ['timezone implies time',    date.DATE + date.TIMEZONE,  '16.5.2012 12:34 CEST'],
+                ['day of week implies date', date.DAYOFWEEK + date.TIME, 'Mi., 16.5.2012 12:34'],
+                ['date without year',        date.DATE_NOYEAR,           '16.5.']
+            ], function (item) {
+                it(item[0], function () {
+                    expect(this.d.format(item[1])).to.equal(item[2]);
                 });
+            });
         });
         describe('Intervals', function () {
             beforeEach(function () {
@@ -241,3 +238,4 @@ function (date, ext) {
         });
     });
 });
+/* jshint ignore:end */

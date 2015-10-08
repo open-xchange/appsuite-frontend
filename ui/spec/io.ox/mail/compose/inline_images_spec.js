@@ -10,22 +10,27 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-define(['io.ox/mail/compose/main'], function (compose) {
+define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
     'use strict';
 
     describe('Mail Compose', function () {
-        var app;
+        var app, pictureHalo, snippetsGetAll;
         beforeEach(function () {
-            this.server.respondWith('GET', /api\/halo\/contact\/picture/, function (xhr) {
-                xhr.respond(200, 'image/gif', '');
+            return require(['io.ox/core/api/snippets', 'io.ox/contacts/api', 'settings!io.ox/mail'], function (snippetAPI, contactsAPI, settings) {
+                snippetsGetAll = sinon.stub(snippetAPI, 'getAll', function () { return $.when([]); });
+                pictureHalo = sinon.stub(contactsAPI, 'pictureHalo', _.noop);
+                settings.set('messageFormat', 'html');
+            }).then(function () {
+                app = compose.getApp();
+                return app.launch();
             });
-            app = compose.getApp();
-            return app.launch();
         });
         afterEach(function () {
             if (app.view && app.view.model) {
                 app.view.model.dirty(false);
             }
+            snippetsGetAll.restore();
+            pictureHalo.restore();
             return app.quit();
         });
         describe('inline images', function () {
@@ -41,6 +46,10 @@ define(['io.ox/mail/compose/main'], function (compose) {
             it('should switch to src attribute provided by backend response for img elements', function () {
                 var api = require('io.ox/mail/api');
                 var spy = sinon.stub(api, 'get');
+                var def = waitsFor(function () {
+                    console.log('mu');
+                    return app.view.contentEditable.find('img').length > 0;
+                });
 
                 app.view.setBody('<div>some<img src="test.png" />text</div>');
 
@@ -50,7 +59,7 @@ define(['io.ox/mail/compose/main'], function (compose) {
                     }]
                 }));
 
-                return app.view.saveDraft().then(function () {
+                return $.when(def, app.view.saveDraft()).then(function () {
                     expect(spy.calledOnce, 'mailAPI.get called once').to.be.true;
                     var img = app.view.contentEditable.find('img');
                     expect(img.attr('src')).to.equal('test_changed_by_backend.png');
@@ -61,6 +70,9 @@ define(['io.ox/mail/compose/main'], function (compose) {
             it('should not switch src attribute of emoji icons', function () {
                 var api = require('io.ox/mail/api');
                 var spy = sinon.stub(api, 'get');
+                var def = waitsFor(function () {
+                    return app.view.contentEditable.find('img').length > 0;
+                });
 
                 app.view.setBody('<div>some<img src="test.png" />text and emoji<img src="1x1.gif" class="emoji" /></div>');
 
@@ -70,7 +82,7 @@ define(['io.ox/mail/compose/main'], function (compose) {
                     }]
                 }));
 
-                return app.view.saveDraft().then(function () {
+                return $.when(def, app.view.saveDraft()).then(function () {
                     expect(spy.calledOnce, 'mailAPI.get called once').to.be.true;
                     var imgs = $('img', app.view.contentEditable);
                     expect($(imgs[0]).attr('src')).to.equal('test_changed_by_backend.png');

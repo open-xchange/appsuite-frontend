@@ -30,14 +30,14 @@ define('io.ox/core/folder/node', [
         className: 'folder selectable',
 
         // indentation in px per level
-        indentation: 30,
+        indentation: _.device('smartphone') ? 15 : 30,
 
         events: {
-            'click .folder-options'     : 'onOptions',
-            'click .folder-arrow'       : 'onArrowClick',
-            'dblclick .folder-label'    : 'onToggle',
-            'mousedown .folder-arrow'   : 'onArrowMousedown',
-            'keydown'                   : 'onKeydown'
+            'click .folder-options':  'onOptions',
+            'click .folder-arrow':    'onArrowClick',
+            'dblclick .folder-label': 'onToggle',
+            'mousedown .folder-arrow':'onArrowMousedown',
+            'keydown':                'onKeydown'
         },
 
         list: function () {
@@ -105,7 +105,6 @@ define('io.ox/core/folder/node', [
         onRemove: function (model) {
             var children = this.$.subfolders.children();
             children.filter('[data-id="' + $.escape(model.id) + '"]').remove();
-            if (children.length === 0) this.model.set('subfolders', false);
             this.renderEmpty();
         },
 
@@ -141,13 +140,9 @@ define('io.ox/core/folder/node', [
                 this.onChangeId(model);
             }
 
-            if (model.changed[this.getIndexAttribute()] !== undefined) {
-                this.renderAttributes();
-                if (this.options.parent.onSort) this.options.parent.onSort();
-            }
-
             if (model.changed.subfolders) {
-                this.options.open = !!model.changed.subfolders;
+                // close if no more subfolders
+                if (!model.changed.subfolders) this.open = false;
                 this.onChangeSubFolders();
             }
 
@@ -160,6 +155,7 @@ define('io.ox/core/folder/node', [
             this.options.open = state;
             this.onChangeSubFolders();
             this.options.tree.trigger(state ? 'open' : 'close', this.folder);
+            this.renderCounter();
         },
 
         // open/close folder
@@ -263,13 +259,20 @@ define('io.ox/core/folder/node', [
             this.onSort = _.debounce(function () {
                 // check
                 if (!this.$) return;
-                // re-append to apply sorting
-                var nodes = _(this.$.subfolders.children()).sortBy(function (node) {
-                    // don't use data() here
-                    var index = $(node).attr('data-index');
-                    return parseInt(index, 10);
+
+                var hash = {};
+
+                // recycle existing nodes
+                this.$.subfolders.children().each(function () {
+                    hash[$(this).attr('data-id')] = $(this);
                 });
-                this.$.subfolders.append(nodes);
+
+                // reinsert nodes according to order in collection
+                this.$.subfolders.append(
+                    this.collection.map(function (model) {
+                        return hash[model.id];
+                    })
+                );
             }, 10);
 
             this.repaint = _.throttle(function () {
@@ -319,10 +322,15 @@ define('io.ox/core/folder/node', [
             // collection changes
             if (o.subfolders) {
                 this.listenTo(this.collection, {
-                    'add'    : this.onAdd,
-                    'remove' : this.onRemove,
-                    'reset'  : this.onReset,
-                    'sort'   : this.onSort
+                    'add':     this.onAdd,
+                    'remove':  this.onRemove,
+                    'reset':   this.onReset,
+                    'sort':    this.onSort
+                });
+                // respond to newly created folders
+                this.listenTo(api, 'create:' + String(o.model_id).replace(/\s/g, '_'), function () {
+                    this.open = true;
+                    this.onChangeSubFolders();
                 });
             }
 
@@ -333,28 +341,36 @@ define('io.ox/core/folder/node', [
                 'destroy': this.destroy.bind(this)
             });
 
+            var offset = 0;
+            if (o.tree.options.highlightclass === 'visible-selection-smartphone') {
+                // cannot be done in css because dynamic padding-left is applied
+                // using a margin would result in unclickable area and no selection background-color on the left side
+                offset = 22;
+            }
+
             // draw scaffold
             this.$el
                 .attr({
-                    id              : this.describedbyID,
-                    'aria-label'    : '',
-                    'aria-level'    : o.level + 1,
-                    'aria-selected' : false,
-                    'data-id'       : this.folder,
-                    'data-index'    : this.getIndex(),
-                    'data-model'    : o.model_id,
+                    id: this.describedbyID,
+                    'aria-label': '',
+                    'aria-level': o.level + 1,
+                    'aria-selected': false,
+                    'data-id': this.folder,
+                    'data-model': o.model_id,
                     'data-contextmenu-id': o.contextmenu_id,
-                    'role'          : 'treeitem',
-                    'tabindex'      : '-1'
+                    'role': 'treeitem',
+                    'tabindex': '-1'
                 })
                 .append(
                     // folder
                     this.$.selectable = $('<div class="folder-node" role="presentation">')
-                    .css('padding-left', o.level * this.indentation)
+                    .css('padding-left', (o.level * this.indentation) +  offset)
                     .append(
                         this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw"></i></div>') : [],
                         this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw"></i></div>'),
-                        this.$.label = $('<div class="folder-label">'),
+                        $('<div class="folder-label">').append(
+                            this.$.label = $('<div>')
+                        ),
                         this.$.counter = $('<div class="folder-counter">')
                     ),
                     // tag for screenreader only (aria-description)
@@ -405,17 +421,22 @@ define('io.ox/core/folder/node', [
         },
 
         getCounter: function () {
-            return this.options.count !== undefined ? this.options.count : this.model.get('unread') || 0;
+            var subtotal = 0;
+            //show number of unread subfolder items only when folder is closed
+            if (!this.options.open && this.options.subfolders && this.model.get('subtotal')) {
+                subtotal = this.model.get('subtotal');
+            }
+            return this.options.count !== undefined ? this.options.count : (this.model.get('unread') || 0) + subtotal;
         },
 
         renderCounter: function () {
             var value = this.getCounter();
             this.$.selectable.toggleClass('show-counter', value > 0);
-            this.$.counter.text(value);
+            this.$.counter.text(value > 99 ? '99+' : value);
         },
 
         getTitle: function () {
-            return this.options.title || this.model.get('title') || '';
+            return this.model.get('display_title') || this.options.title || this.model.get('title') || '';
         },
 
         renderTitle: function () {
@@ -464,22 +485,9 @@ define('io.ox/core/folder/node', [
         renderAttributes: function () {
             this.$el.attr({
                 'data-id': this.folder,
-                'data-index': this.getIndex(),
                 'data-model': this.options.model_id,
                 'data-contextmenu-id': this.options.contextmenu_id
             });
-        },
-
-        getIndexAttribute: function () {
-            var parent = this.options.parent;
-            if (!parent || !parent.collection) return undefined;
-            return 'index/' + parent.collection.id;
-        },
-
-        getIndex: function () {
-            var attribute = this.getIndexAttribute();
-            if (attribute === undefined) return 0;
-            return this.model.get(attribute) || 0;
         },
 
         isEmpty: function () {

@@ -1,0 +1,277 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ */
+
+.participantsrow {
+    margin-bottom: 20px;
+    legend { margin-bottom: 10px; }
+}
+
+.participant-wrapper {
+
+    margin-bottom: 2px;
+    position: relative;
+    min-height: 54px; /* for floating icon */
+    line-height: 20px;
+
+    .autocomplete-item & {
+        margin: 0;
+    }
+
+    &.pointer {
+        cursor: pointer;
+    }
+
+    .remove {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 30px;
+        line-height: 1em;
+        background-color: #f5f5f5;
+        color: #ccc;
+        cursor: pointer;
+        display: none;
+
+        &:hover, &:focus {
+            background-color: #a00;
+            color: #fff;
+            text-decoration: none;
+            outline: 0;
+        }
+
+        .icon {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            margin-top: -0.5em;
+            text-align: center;
+        }
+    }
+
+    &.removable {
+        padding-right: 40px;
+        .remove {
+            display: block;
+        }
+    }
+
+    .participant-name {
+        padding-top: 7px;
+        font-weight: bold;
+        .ellipsis();
+    }
+
+    .participant-email-wrapper, .extra-decorator-wrapper {
+        .ellipsis();
+    }
+
+    .participant-email {
+        .ellipsis();
+    }
+
+    .extra-decorator {
+        color: #888;
+        &:hover { color: #888; text-decoration: none }
+    }
+
+    &.three-rows {
+        line-height: 18px;
+        .participant-name {
+            padding-top: 0;
+        }
+    }
+
+    .participant-image {
+        float: left;
+        margin-right: 1em;
+        .picture(54px, 54px); /* 54px allows 3 lines with 18px line-height */
+
+        &.contact-image, &.external-user-image {
+            background-image: url(@fallback-image-contact);
+        }
+
+        &.group-image {
+            background-image: url(@fallback-image-group);
+            background-position: 0 -4px;
+        }
+
+        &.resource-image {
+            background-image: url(@fallback-image-resource);
+        }
+    }
+}
+
+.participants-view {
+
+    @participant-unconfirmed:   #428BCA;
+    @participant-accepted:      #5C7F31;
+    @participant-declined:      #913F3F;
+    @participant-tentative:     #cc8800;
+
+    .group {
+        border: none;
+    }
+
+    legend {
+        margin-bottom: 9px;
+        line-height: 18px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+
+    .status {
+        //prevent icons from floating around with multiple columns
+        display: inline-block;
+        vertical-align: top;
+
+        margin-left: 4px;
+        line-height: 24px;
+
+        &.unconfirmed {
+            color: @participant-unconfirmed;
+        }
+
+        &.accepted {
+
+            color: @participant-accepted;
+
+            i {
+
+                html.high-contrast & {
+                    opacity: 1;
+                }
+
+            }
+
+        }
+
+        &.declined {
+            color: @participant-declined;
+        }
+
+        &.tentative {
+
+            color: @participant-tentative;
+
+            i {
+
+                opacity: 0.50;
+
+                html.high-contrast & {
+                    opacity: 1;
+                }
+
+            }
+
+        }
+    }
+    
+    .io-ox-inline-links.embedded {
+        margin: 14px 0 18px 0;
+        line-height: 24px;
+        min-height: 0;
+    }
+    @media (max-width: 480px), (max-device-width: 480px) {
+        .io-ox-inline-links.embedded {
+            margin: 18px 0 14px 0;
+            line-height: 16px;
+        }
+    }
+
+    .summary {
+
+        float: right;
+        display: inline-block;
+
+        .status {
+            position: relative;
+            margin-right: 0.3em;
+            line-height: 20px;
+        }
+
+        .countgroup {
+
+            margin-right: 0.5em;
+            cursor: pointer;
+
+            &.badge {
+                background-color: @white;
+                color: @black;
+                border: 1px solid #888;
+                margin: 0;
+            }
+
+        }
+
+    }
+
+    .participant-list {
+
+        margin-bottom: 11px;
+        padding-top: 5px;
+
+        .participant {
+
+            vertical-align: top;
+            width: 250px;
+            margin: 0 20px 8px 0;
+            line-height: 24px;
+
+            &:focus, &:hover {
+                .person {
+                    &.accepted, &.declined {
+                        color: black;
+                    }
+                }
+            }
+
+            .person {
+
+               line-height: 24px;
+               padding-top: 1px;
+
+               .ellipsis();
+                // icons and padding need 28px
+                max-width: 222px;
+                display: inline-block;
+
+                &.accepted {
+
+                    color: @participant-accepted;
+
+                    html.high-contrast & {
+                        color: @hc-green;
+                    }
+
+                }
+
+                &.declined {
+                    text-decoration: line-through;
+                    color: @participant-declined;
+                }
+
+                .last_name { font-weight: bold; }
+            }
+
+            .comment {
+                color: @hc-gray;
+                white-space: normal;
+                padding-left: 1em;
+                line-height: 16px;
+                padding-top: 5px;
+                margin-bottom: 3px;
+            }
+        }
+    }
+}

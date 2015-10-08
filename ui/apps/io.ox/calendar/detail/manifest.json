@@ -1,0 +1,6 @@
+{
+    "category": "Basic",
+    "requires": "calendar",
+    "refreshable": true,
+    "visible": false
+}

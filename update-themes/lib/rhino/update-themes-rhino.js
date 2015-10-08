@@ -10,66 +10,57 @@
  *
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
+
 less.Parser.fileLoader = function (file, currentFileInfo, callback, env) {
-    var href = file;
-    if (currentFileInfo && currentFileInfo.currentDirectory && !/^\//.test(file)) {
-        href = less.modules.path.join(currentFileInfo.currentDirectory, file);
-    }
+    var pathname, dirname, data,
+        newFileInfo = {
+            relativeUrls: env.relativeUrls,
+            entryPath: currentFileInfo.entryPath,
+            rootpath: currentFileInfo.rootpath,
+            rootFilename: currentFileInfo.rootFilename
+        };
 
-    var path = less.modules.path.dirname(href);
+    var paths = [currentFileInfo.currentDirectory];
+    if (env.paths) paths.push.apply(paths, env.paths);
+    if (paths.indexOf('.') === -1) paths.push('.');
 
-    var newFileInfo = {
-        currentDirectory: path + '/',
-        filename: href
-    };
-
-    if (currentFileInfo) {
-        newFileInfo.entryPath = currentFileInfo.entryPath;
-        newFileInfo.rootpath = currentFileInfo.rootpath;
-        newFileInfo.rootFilename = currentFileInfo.rootFilename;
-        newFileInfo.relativeUrls = currentFileInfo.relativeUrls;
-    } else {
-        newFileInfo.entryPath = path;
-        newFileInfo.rootpath = less.rootpath || path;
-        newFileInfo.rootFilename = href;
-        newFileInfo.relativeUrls = env.relativeUrls;
-    }
-
-    var j = file.lastIndexOf('/');
-    if(newFileInfo.relativeUrls && !/^(?:[a-z-]+:|\/)/.test(file) && j != -1) {
-        var relativeSubDirectory = file.slice(0, j+1);
-        newFileInfo.rootpath = newFileInfo.rootpath + relativeSubDirectory; // append (sub|sup) directory path of imported file
-    }
-    newFileInfo.currentDirectory = path;
-    newFileInfo.filename = href;
-
-    var paths = env.paths || ['.'];
-    if (paths.indexOf(path) < 0) paths.push(path);
-    var data = '';
-    var fileFound = false;
-    paths.forEach(function (path) {
+    for (var i = 0; i < paths.length; i++) {
         try {
-            //first, try to load directly
-            //see bug 33460
-            data += readFile(less.modules.path.join(path, href));
-            fileFound = true;
+            pathname = less.modules.path.join(paths[i], file);
+            readFile(pathname);
+            break;
         } catch (e) {
-            try {
-                // alternatively, try to load only the basename part in path
-                data += readFile(less.modules.path.join(path, less.modules.path.basename(href)));
-            } catch (e) {
-            }
+            pathname = null;
         }
-    });
-    if (!fileFound && !data) {
-        callback({ type: 'File', message: "'" + less.modules.path.basename(href) + "' wasn't found. Looked in:\n" + paths.join('\n') });
+    }
+
+    if (!pathname) {
+        callback({ type: 'File', message: "'" + file + "' wasn't found" });
         return;
     }
 
     try {
-        callback(null, data, href, newFileInfo, { lastModified: 0 });
+        data = readFile(pathname);
+        var j = file.lastIndexOf('/');
+
+        // Pass on an updated rootpath if path of imported file is relative and file
+        // is in a (sub|sup) directory
+        //
+        // Examples:
+        // - If path of imported file is 'module/nav/nav.less' and rootpath is 'less/',
+        //   then rootpath should become 'less/module/nav/'
+        // - If path of imported file is '../mixins.less' and rootpath is 'less/',
+        //   then rootpath should become 'less/../'
+        if(newFileInfo.relativeUrls && !/^(?:[a-z-]+:|\/)/.test(file) && j != -1) {
+            var relativeSubDirectory = file.slice(0, j+1);
+            newFileInfo.rootpath = newFileInfo.rootpath + relativeSubDirectory; // append (sub|sup) directory path of imported file
+        }
+        newFileInfo.currentDirectory = pathname.replace(/[^\\\/]*$/, "");
+        newFileInfo.filename = pathname;
+
+        callback(null, data, pathname, newFileInfo);
     } catch (e) {
-        callback(e, null, href);
+        callback(e);
     }
 };
 
@@ -130,6 +121,11 @@ function recurse(defs, subDir, parent) {
 function compileLess(input, outputFile, sourceFileName) {
     var fileName = outputFile.toString();
     var themeName = fileName.slice(12, fileName.indexOf('/', 12));
+    var searchPaths = [
+        'apps/3rd.party/bootstrap/less',
+        'apps/3rd.party/font-awesome/less',
+        'apps/themes'
+    ];
     var importConfig = {
             reference: [
                 'variables.less',
@@ -142,8 +138,14 @@ function compileLess(input, outputFile, sourceFileName) {
         };
     var imports = [];
     for (directive in importConfig) {
-        importConfig[directive].forEach(function (file) {
-            imports.push('@import (' + directive + ') "' + file + '";');
+        searchPaths.forEach(function (path) {
+            importConfig[directive].forEach(function (file) {
+                try {
+                    readFile(less.modules.path.join(path, file)); // simple "fs.existsSync", will throw if file does not exist
+                    imports.push('@import (' + directive + ') "' + less.modules.path.join(path, file) + '";');
+                } catch (e) {
+                }
+            });
         });
     }
     input = imports.join('\n') + '\n' + input;
@@ -151,12 +153,7 @@ function compileLess(input, outputFile, sourceFileName) {
     new less.Parser({
         syncImport: true,
         relativeUrls: false,
-        paths: [
-            'apps/3rd.party/bootstrap/less',
-            'apps/3rd.party/font-awesome/less',
-            'apps/themes',
-            'apps/themes/' + themeName
-        ],
+        paths: searchPaths,
         filename: '' + sourceFileName
     }).parse(input, function (e, css) {
         if (e) return error(e, sourceFileName);

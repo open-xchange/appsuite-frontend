@@ -11,171 +11,15 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/detail/links',
-    ['io.ox/mail/api',
-     'io.ox/core/util',
-     'io.ox/core/emoji/util',
-     'io.ox/core/extensions',
-     'settings!io.ox/mail',
-     'gettext!io.ox/mail'
-    ], function (api, coreUtil, emoji, ext, settings, gt) {
-
+define('io.ox/mail/detail/links', [
+    'io.ox/mail/api',
+    'io.ox/core/util',
+    'io.ox/core/emoji/util',
+    'io.ox/core/extensions',
+    'settings!io.ox/mail',
+    'gettext!io.ox/mail'
+], function (api, util, emoji, ext, settings, gt) {
     'use strict';
-
-    $(document).on('click', '.deep-link-files', function (e) {
-        e.preventDefault();
-        var data = $(this).data();
-        if (data.id) {
-            // open file in side-popup
-            ox.load(['io.ox/core/tk/dialogs', 'io.ox/files/api', 'io.ox/files/fluid/view-detail','io.ox/core/notifications']).done(function (dialogs, api, view, notifications) {
-                var sidePopup = new dialogs.SidePopup({ tabTrap: true }),
-                    // this pseudo app is used instead of the real files app to save resources. Because the real files app is not required when displaying a side popup.
-                    pseudoApp = {
-                        getName: function() { return 'io.ox/files'; },
-                        folder: _.extend({
-                            set: function (folderId) {
-                                ox.launch('io.ox/files/main', { folder: folderId, perspective: 'fluid:list' }).done(function () {
-                                    var app = this;
-                                    // switch to proper perspective
-                                    ox.ui.Perspective.show(app, 'fluid:list').done(function () {
-                                        // set proper folder
-                                        if (app.folder.get() === folderId) {
-                                            app.selection.set(folderId);
-                                        } else {
-                                            app.folder.set(folderId).done(function () {
-                                                app.selection.set(folderId);
-                                            });
-                                        }
-                                    });
-                                });
-                            },
-                            getData: function () {
-                                return $.Deferred().resolve(data);
-                            }
-                        }, data)
-                    };
-
-                sidePopup.show(e, function (popupNode) {
-                    popupNode.busy();
-                    api.get(_.cid(data.id)).done(function (data) {
-                        popupNode.idle().append(view.draw(data, pseudoApp));
-                    }).fail(function (e) {
-                        sidePopup.close();
-                        notifications.yell(e);
-                    });
-                });
-            });
-        } else {
-            // open files app
-            ox.launch('io.ox/files/main', { folder: data.folder, perspective: 'fluid:list' }).done(function () {
-                var app = this, folder = data.folder, id = data.id;
-                // switch to proper perspective
-                ox.ui.Perspective.show(app, 'fluid:list').done(function () {
-                    // set proper folder
-                    if (app.folder.get() === folder) {
-                        app.selection.set(id);
-                    } else {
-                        app.folder.set(folder).done(function () {
-                            app.selection.set(id);
-                        });
-                    }
-                });
-            });
-        }
-    });
-
-    $(document).on('click', '.deep-link-contacts', function (e) {
-        e.preventDefault();
-        var data = $(this).data();
-        ox.launch('io.ox/contacts/main', { folder: data.folder}).done(function () {
-            var app = this, folder = data.folder, id = data.id;
-            if (app.folder.get() === folder) {
-                app.getGrid().selection.set(id);
-            } else {
-                app.folder.set(folder).done(function () {
-                    app.getGrid().selection.set(id);
-                });
-            }
-        });
-    });
-
-    $(document).on('click', '.deep-link-calendar', function (e) {
-        e.preventDefault();
-        var data = $(this).data();
-        if (data.id) {
-            ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/api', 'io.ox/calendar/view-detail']).done(function (dialogs, api, view) {
-                new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
-                    popup.busy();
-                    api.get(data).done(function (data) {
-                        popup.idle().append(view.draw(data));
-                    });
-                });
-            });
-
-        } else {
-            ox.launch('io.ox/calendar/main', { folder: data.folder, perspective: 'list' }).done(function () {
-                var app = this, folder = data.folder;
-                // switch to proper perspective
-                ox.ui.Perspective.show(app, 'week:week').done(function (p) {
-                    // set proper folder
-                    if (app.folder.get() === folder) {
-                        p.view.trigger('showAppointment', e, data);
-                    } else {
-                        app.folder.set(folder).done(function () {
-                            p.view.trigger('showAppointment', e, data);
-                        });
-                    }
-                });
-            });
-        }
-    });
-
-    $(document).on('click', '.deep-link-tasks', function (e) {
-        e.preventDefault();
-        var data = $(this).data();
-        ox.launch('io.ox/tasks/main', { folder: data.folder}).done(function () {
-            var app = this, folder = data.folder, id = data.id;
-            if (app.folder.get() === folder) {
-                app.getGrid().selection.set(id);
-            } else {
-                app.folder.set(folder).done(function () {
-                    app.getGrid().selection.set(id);
-                });
-            }
-        });
-    });
-
-    $(document).on('click', '.mailto-link', function (e) {
-
-        e.preventDefault();
-
-        var node = $(this), data = node.data(), address, name, tmp, params = {};
-
-        // has data?
-        if (data.address) {
-            // use existing address and name
-            address = data.address;
-            name = data.name || data.address;
-        } else {
-            // parse mailto string
-            // cut off leading "mailto:" and split at "?"
-            tmp = node.attr('href').substr(7).split(/\?/, 2);
-            // address
-            address = tmp[0];
-            // use link text as display name
-            name = node.text();
-            // process additional parameters; all lower-case (see bug #31345)
-            params = _.deserialize(tmp[1]);
-            for (var key in params) params[key.toLowerCase()] = params[key];
-        }
-
-        // go!
-        ox.registry.call('mail-compose', 'compose', {
-            to: [[name, address]],
-            subject: params.subject || '',
-            attachments: [{ content: params.body || '' }]
-        });
-    });
 
     // fix hosts (still need a configurable list on the backend)
     // ox.serverConfig.hosts = (ox.serverConfig.hosts || []).concat('localhost', 'appsuite-dev.open-xchange.com', 'ui-dev.open-xchange.com', 'ox6-dev.open-xchange.com', 'ox6.open-xchange.com');
@@ -211,19 +55,43 @@ define('io.ox/mail/detail/links',
     // Deep links
     //
 
-    var isDeepLink, parseDeepLink, processDeepLink;
+    var isDeepLink, isInternalDeepLink, parseDeepLink, processDeepLink;
 
     (function () {
 
         var keys = 'all prefix link app params param name suffix'.split(' '),
-            app = { contacts: 'contacts', calendar: 'calendar', task: 'tasks', infostore: 'files' },
-            items = { contacts: gt('Contact'), calendar: gt('Appointment'), tasks: gt('Task'), files: gt('File') },
-            folders = { contacts: gt('Address Book'), calendar: gt('Calendar'), tasks: gt('Tasks'), files: gt('Folder') },
-            regDeepLink = /^([\s\S]*)(http[^#]+#!?&?app=io\.ox\/(contacts|calendar|tasks|files)((&(folder|id|perspective)=[^&\s]+)+))([\s\S]*)$/i,
+            app = {
+                'io.ox/contacts': 'contacts',
+                'io.ox/calendar': 'calendar',
+                'io.ox/tasks': 'tasks',
+                'io.ox/infostore': 'files',
+                'io.ox/files': 'files',
+                'infostore': 'files'
+            },
+            items = {
+                contacts: gt('Contact'),
+                calendar: gt('Appointment'),
+                tasks: gt('Task'),
+                files: gt('File'),
+                infostore: gt('File'),
+                'io.ox/office/text': gt('Document'),
+                'io.ox/office/spreadsheet': gt('Spreadsheet')
+            },
+            folders = {
+                contacts: gt('Address Book'),
+                calendar: gt('Calendar'),
+                tasks: gt('Tasks'),
+                files: gt('Folder')
+            },
+            regDeepLink = /^([\s\S]*)(http[^#]+#!{0,2}&?app=([^&]+)((&(folder|id|item|perspective)=[^&\s]+)+))([\s\S]*)$/i,
             regDeepLinkAlt = /^([\s\S]*)(http[^#]+#m=(contacts|calendar|tasks|infostore)((&(f|i)=[^&\s]+)+))([\s\S]*)$/i;
 
         isDeepLink = function (str) {
             return regDeepLink.test(str) || regDeepLinkAlt.test(str);
+        };
+
+        isInternalDeepLink = function (str) {
+            return isDeepLink(str) && isValidHost(str);
         };
 
         parseDeepLink = function (str) {
@@ -232,21 +100,32 @@ define('io.ox/mail/detail/links',
                 params = _.deserialize(data.params, '&');
             // fix app
             data.app = app[data.app] || data.app;
+            // class name
+            if (/^(files|infostore)$/.test(data.app)) {
+                data.className = 'deep-link-files';
+            } else if (/^(contacts|calendar|tasks)$/.test(data.app)) {
+                data.className = 'deep-link-' + data.app;
+            } else {
+                data.className = 'deep-link-app';
+            }
             // add folder, id, perspective (jQuery's extend to skip undefined)
-            return $.extend(data, { folder: params.f, id: params.i }, { folder: params.folder, id: params.id, perspective: params.perspective });
+            // share links use "item" instead of "id" (for whatever reason)
+            return $.extend(data, { folder: params.f, id: params.i }, { folder: params.folder, id: params.id || params.item, perspective: params.perspective });
         };
 
         // node must be a plain text node or a string
         processDeepLink = function (node) {
 
             var data = parseDeepLink(node.nodeValue),
+                text = ('id' in data ? items[data.app] : folders[data.app]) || gt('Link'),
                 link = $('<a role="button" href="#" target="_blank" class="deep-link btn btn-primary btn-xs" style="font-family: Arial; color: white; text-decoration: none;">')
                     .attr('href', data.link)
-                    .text('id' in data ? items[data.app] : folders[data.app]);
+                    .text(text);
 
             // internal document?
             if (isValidHost(data.link)) {
-                link.addClass('deep-link-' + data.app).data(data);
+                // add either specific css class or generic "app" deep-link
+                link.addClass(data.className).data(data);
             }
 
             // move up?
@@ -270,23 +149,20 @@ define('io.ox/mail/detail/links',
         if (matches === null || matches.length === 0) return node;
         var prefix = matches[1], url = matches[2], suffix = matches[4];
 
-        // fix punctuation marks
-        url = url.replace(/([.,;!?]+)$/, function (all, marks) {
-            suffix = marks + suffix;
-            return '';
-        });
+        // fix punctuation marks and brackets
+        var fix = util.fixUrlSuffix(url, suffix);
+        var link = $('<a href="#" target="_blank">').attr('href', fix.url).text(fix.url);
 
-        var link = $('<a href="#" target="_blank">').attr('href', url).text(url);
-
-        return { node: node, prefix: prefix, replacement: link, suffix: suffix };
+        return { node: node, prefix: prefix, replacement: link, suffix: fix.suffix };
     }
 
     //
-    // Mail Address
-    //
+    // Mail Address (RFC 6531 allows unicode beycond 0x7F)
+    // Until we discover real use-cases we stick to [\u0000-\u00FF] to support extended ASCII, e.g. umlauts
+    // This excludes Kanji in local part, for example (see bug 37051)
 
-    var regMail = /^([\s\S]*?)([^"\s<,:;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})([\s\S]*)$/i,
-        regMailMatch = /^([\s\S]*?)([^"\s<,:;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})([\s\S]*)$/i; /* dedicated one to avoid strange side effects */
+    var regMail = /^([\s\S]*?)([^"\s<,:;\(\)\[\]\u0100-\uFFFF]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})([\s\S]*)$/i,
+        regMailMatch = /^([\s\S]*?)([^"\s<,:;\(\)\[\]\u0100-\uFFFF]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})([\s\S]*)$/i; /* dedicated one to avoid strange side effects */
 
     function processMailAddress(node) {
 
@@ -377,10 +253,10 @@ define('io.ox/mail/detail/links',
         'long-character-sequences': {
             test: function (node) {
                 var text = node.nodeValue;
-                return text.length >= 30 && /\S{30}/.test(text);
+                return text.length >= 30 && /\S{30}/.test(text) && $(node).closest('a').length === 0;
             },
             process: function (node) {
-                return { node: node, replacement: $.parseHTML(coreUtil.breakableHTML(node.nodeValue)) };
+                return { node: node, replacement: $.parseHTML(util.breakableHTML(node.nodeValue)) };
             }
         }
     };
@@ -422,7 +298,9 @@ define('io.ox/mail/detail/links',
 
     return {
         handlers: handlers,
+        isValidHost: isValidHost,
         isDeepLink: isDeepLink,
+        isInternalDeepLink: isInternalDeepLink,
         parseDeepLink: parseDeepLink,
         processDeepLink: processDeepLink,
         processTextNode: processTextNode

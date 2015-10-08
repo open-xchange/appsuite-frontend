@@ -11,10 +11,10 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/search/facets/view',
-    ['io.ox/search/facets/extensions',
-     'io.ox/core/extensions'
-    ], function (extensions, ext) {
+define('io.ox/search/facets/view', [
+    'io.ox/search/facets/extensions',
+    'io.ox/core/extensions'
+], function (extensions, ext) {
 
     'use strict';
 
@@ -43,16 +43,6 @@ define('io.ox/search/facets/view',
         id: 'folder-facet',
         index: INDEX += 100,
         draw: extensions.folderFacet
-    });
-
-
-    /**
-     * special: datepicker
-     */
-    ext.point(POINT + '/item/date.custom').extend({
-        id: 'date-facet',
-        index: INDEX += 100,
-        draw: extensions.timeFacet
     });
 
     /**

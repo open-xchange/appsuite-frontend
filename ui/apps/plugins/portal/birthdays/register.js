@@ -10,15 +10,15 @@
  *
  */
 
-define('plugins/portal/birthdays/register',
-    ['io.ox/core/extensions',
-     'io.ox/contacts/api',
-     'io.ox/core/date',
-     'io.ox/contacts/util',
-     'gettext!plugins/portal',
-     'settings!io.ox/core',
-     'less!plugins/portal/birthdays/style'
-    ], function (ext, api, date, util, gt, settings) {
+define('plugins/portal/birthdays/register', [
+    'io.ox/core/extensions',
+    'io.ox/contacts/api',
+    'io.ox/contacts/util',
+    'gettext!plugins/portal',
+    'settings!io.ox/core',
+    'less!plugins/portal/birthdays/style',
+    'io.ox/core/tk/flag-picker'
+], function (ext, api, util, gt, settings) {
 
     'use strict';
 
@@ -46,10 +46,27 @@ define('plugins/portal/birthdays/register',
 
         title: gt('Birthdays'),
 
+        initialize: function (baton) {
+            api.on('update create delete', function () {
+                //refresh portal
+                require(['io.ox/portal/main'], function (portal) {
+                    var portalApp = portal.getApp(),
+                        portalModel = portalApp.getWidgetCollection()._byId[baton.model.id];
+                    if (portalModel) {
+                        portalApp.refreshWidget(portalModel, 0);
+                    }
+                });
+
+            });
+        },
+
         load: function (baton) {
-            var start = new date.UTC().setHours(0, 0, 0, 0).getTime() - date.DAY,
-                end = start + WEEKS * date.WEEK;
-            return api.birthdays({ start: start, end: end, right_hand_limit: 25 }).done(function (data) {
+            var start = moment().utc(true).startOf('day').subtract(1, 'day');
+            return api.birthdays({
+                start: start.valueOf(),
+                end: start.add(WEEKS, 'weeks').valueOf(),
+                right_hand_limit: 25
+            }).done(function (data) {
                 baton.data = data;
             });
         },
@@ -59,7 +76,7 @@ define('plugins/portal/birthdays/register',
             var $list = $('<ul class="content list-unstyled" tabindex="1" role="button" aria-label="' +  gt('Press [enter] to jump to complete list of Birthdays.') + '">'),
                 hash = {},
                 contacts = baton.data,
-                numOfItems = _.device('small') ? 5 : 15;
+                numOfItems = _.device('smartphone') ? 5 : 15;
 
             // ignore broken birthdays
             contacts = _(contacts).filter(function (contact) {
@@ -75,26 +92,25 @@ define('plugins/portal/birthdays/register',
                 $list.addClass('pointer');
                 _(contacts.slice(0, numOfItems)).each(function (contact) {
                     //just to be sure hours are the same
-                    var birthday = new date.UTC(contact.birthday).setHours(0, 0, 0, 0),
+                    var birthday = moment(contact.birthday).utc(true).startOf('day'),
                         birthdayText = '',
                         //it's not really today, its today in the year of the birthday
-                        today = new date.UTC().setHours(0, 0, 0, 0).setYear(birthday.getYear()),
+                        today = moment().utc(true).startOf('day').year(birthday.year()),
                         name = util.getFullName(contact);
-
-                    if (birthday.getTime() === today.getTime()) {
+                    if (birthday.isSame(today, 'day')) {
                         //today
                         birthdayText = gt('Today');
-                    } else if (birthday.getTime() === today.getTime() + date.DAY) {
+                    } else if (birthday.diff(today, 'day') === 1) {
                         //tomorrow
                         birthdayText = gt('Tomorrow');
-                    } else if (birthday.getTime() === today.getTime() - date.DAY) {
+                    } else if (birthday.diff(today, 'day') === -1) {
                         //yesterday
                         birthdayText = gt('Yesterday');
-                    } else if (birthday.getYear() === 1) {
+                    } else if (birthday.year() === 1) {
                         //Year 0 is special for birthdays without year (backend changes this to 1...)
-                        birthdayText = birthday.format(date.DATE_NOYEAR);
+                        birthdayText = birthday.format(moment.localeData().longDateFormat('l').replace(/Y/g, ''));
                     } else {
-                        birthdayText = birthday.format(date.DATE);
+                        birthdayText = birthday.format('l');
                     }
 
                     if (!isDuplicate(name, birthday, hash)) {
@@ -126,8 +142,7 @@ define('plugins/portal/birthdays/register',
                 );
             } else {
                 // add buy-a-gift
-                var url = $.trim(settings.get('customLocations/buy-a-gift', 'http://www.amazon.com/')),
-                    now = new date.Local();
+                var url = $.trim(settings.get('customLocations/buy-a-gift', 'http://www.amazon.com/'));
                 if (url !== 'none' && url !== '') {
                     $list.append(
                         $('<div class="buy-a-gift">').append(
@@ -139,22 +154,21 @@ define('plugins/portal/birthdays/register',
                 }
                 // loop
                 _(baton.data).each(function (contact) {
-                    var birthday = new date.Local(date.Local.utc(contact.birthday)),
+                    var birthday = moment.utc(contact.birthday).local(true),
                         // we use fullname here to avoid having duplicates like "Jon Doe" and "Doe, Jon"
                         name = util.getFullName(contact);
 
                     if (!isDuplicate(name, birthday, hash)) {
 
-                        var nextBirthday = new date.Local().setMonth(birthday.getMonth(), birthday.getDate()),
-                            delta = nextBirthday.getDays() - now.getDays();
-
+                        var nextBirthday = moment().month(birthday.month()).date(birthday.date()),
+                            delta = nextBirthday.diff(moment(), 'day');
                         //avoid negative deltas to not display negative days till birthday (-300 for example)
                         //delta -1 is ok, we display this as yesterday
                         if (delta < -1) {
                             //increase Birthday by one year to be sure it's in the future and calculate again
                             //we don't just do a + 365 days here because we we don't know if it's a leapyear
-                            nextBirthday.setYear(nextBirthday.getYear() + 1);
-                            delta = nextBirthday.getDays() - now.getDays();
+                            nextBirthday.add(1, 'year');
+                            delta = nextBirthday.diff(moment(), 'day');
                         }
                         delta = delta === 0 ? gt('Today') : delta === 1 ? gt('Tomorrow') : delta === -1 ? gt('Yesterday') : gt('In %1$d days', Math.ceil(delta));
 
@@ -162,11 +176,12 @@ define('plugins/portal/birthdays/register',
                             $('<div class="birthday" tabindex="1">').data('contact', contact).append(
                                 api.pictureHalo(
                                     $('<div class="picture">'),
-                                    $.extend(contact, { width: 48, height: 48, scaleType: 'cover' })
+                                    contact,
+                                    { width: 48, height: 48 }
                                 ),
                                 $('<div class="name">').text(_.noI18n(name)),
                                 $('<div>').append(
-                                    $('<span class="date">').text(_.noI18n(birthday.format(birthday.getYear() === 1 ? date.DATE_NOYEAR : date.DATE))), $.txt(' '),
+                                    $('<span class="date">').text(_.noI18n(birthday.format(birthday.year() === 1 ? moment.localeData().longDateFormat('l').replace(/Y/g, '') : 'l'))), $.txt(' '),
                                     $('<span class="distance">').text(delta)
                                 )
                             )

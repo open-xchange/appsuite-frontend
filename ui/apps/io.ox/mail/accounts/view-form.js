@@ -12,16 +12,16 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define.async('io.ox/mail/accounts/view-form',
-    ['io.ox/core/notifications',
-     'io.ox/core/api/account',
-     'settings!io.ox/mail',
-     'gettext!io.ox/settings',
-     'io.ox/core/extensions',
-     'io.ox/backbone/mini-views',
-     'io.ox/core/folder/picker',
-     'io.ox/core/capabilities'
-    ], function (notifications, accountAPI, settings, gt, ext, mini, picker, capabilities) {
+define.async('io.ox/mail/accounts/view-form', [
+    'io.ox/core/notifications',
+    'io.ox/core/api/account',
+    'settings!io.ox/mail',
+    'gettext!io.ox/settings',
+    'io.ox/core/extensions',
+    'io.ox/backbone/mini-views',
+    'io.ox/core/folder/picker',
+    'io.ox/core/capabilities'
+], function (notifications, accountAPI, settings, gt, ext, mini, picker, capabilities) {
 
     'use strict';
 
@@ -29,18 +29,18 @@ define.async('io.ox/mail/accounts/view-form',
         model,
 
         optionsServerType = [
-            { label: gt.noI18n('IMAP'), value: 'imap'},
-            { label: gt.noI18n('POP3'), value: 'pop3'}
+            { label: gt.noI18n('IMAP'), value: 'imap' },
+            { label: gt.noI18n('POP3'), value: 'pop3' }
         ],
 
         optionsRefreshRatePop = [
-            { label: gt.noI18n('3'), value: '3'},
-            { label: gt.noI18n('5'), value: '5'},
-            { label: gt.noI18n('10'), value: '10'},
-            { label: gt.noI18n('15'), value: '15'},
-            { label: gt.noI18n('30'), value: '30'},
-            { label: gt.noI18n('60'), value: '60'},
-            { label: gt.noI18n('360'), value: '360'}
+            { label: gt.noI18n('3'), value: '3' },
+            { label: gt.noI18n('5'), value: '5' },
+            { label: gt.noI18n('10'), value: '10' },
+            { label: gt.noI18n('15'), value: '15' },
+            { label: gt.noI18n('30'), value: '30' },
+            { label: gt.noI18n('60'), value: '60' },
+            { label: gt.noI18n('360'), value: '360' }
         ],
 
         optionsAuthType = [
@@ -103,7 +103,7 @@ define.async('io.ox/mail/accounts/view-form',
                 //if the server has no pop3 support and this account is a new one, remove the pop3 option from the selection box
                 //we leave it in with existing accounts to display them correctly even if they have pop3 protocol (we deny protocol changing when editing accounts anyway)
                 if (!capabilities.has('pop3') && !this.model.get('id')) {
-                    optionsServerType = [ { label: gt.noI18n('IMAP'), value: 'imap'} ];
+                    optionsServerType = [ { label: gt.noI18n('IMAP'), value: 'imap' } ];
                 }
 
                 //check if login and mailaddress are synced
@@ -155,7 +155,7 @@ define.async('io.ox/mail/accounts/view-form',
                 }
 
                 function syncLogin(model, value) {
-                    model.set('login', value, {validate: true});
+                    model.set('login', value, { validate: true });
                 }
 
                 //check for primary account
@@ -177,7 +177,7 @@ define.async('io.ox/mail/accounts/view-form',
 
                     //login for server should be email-address by default;
                     if (self.model.get('login') === undefined && self.model.get('primary_address') !== '') {
-                        self.model.set('login', self.model.get('primary_address'), {validate: true});
+                        self.model.set('login', self.model.get('primary_address'), { validate: true });
                     }
 
                     //if login and mailadress are the same change login if mailadress changes
@@ -232,7 +232,7 @@ define.async('io.ox/mail/accounts/view-form',
             onSave: function () {
 
                 var self = this,
-                    list = ['name', 'personal', 'unified_inbox_enabled'],
+                    list = ['name', 'personal', 'unified_inbox_enabled', 'password', 'transport_password'],
                     differences = returnDifferences(this.model.attributes, originalModel);
 
                 function returnDifferences(a, b) {
@@ -608,6 +608,8 @@ define.async('io.ox/mail/accounts/view-form',
                             )
                         ),
                         // unified inbox
+                        capabilities.has('!multiple_mail_accounts') || capabilities.has('!unified-mailbox') ?
+                        $() :
                         group(
                             checkbox(
                                 gt('Use unified mail for this account'),

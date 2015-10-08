@@ -4,9 +4,9 @@
 <title>7.7. アポイントの検索</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Groupware">
 <link rel="up" href="ox.appsuite.user.chap.calendar.html" title="第7章 予定表">
-<link rel="prev" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.7. 複数のアポイントを一度に編集">
+<link rel="prev" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.8. 複数のアポイントを一度に編集">
 <link rel="next" href="ox.appsuite.user.sect.calendar.share.html" title="7.8. チームのアポイント">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
@@ -29,11 +29,7 @@
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
-  <h1 class="sr-only">
-<span class="phrase">予定表</span>
-		
-		
-		</h1>
+  <h1 class="sr-only"><span class="phrase">予定表</span></h1>
 <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ox.appsuite.user.sect.calendar.search"></a>7.7. アポイントの検索</h2></div></div></div>
@@ -41,10 +37,24 @@
 <a name="ox.appsuite.user.concept.calendar.search"></a><p>目的のアポイントを検索するには、次の検索条件を使用します。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>件名、説明、場所、添付ファイルの名前を対象に検索します。</p></li>
-<li class="listitem"><p>プライベート 共有フォルダ、パブリック 共有フォルダ、共有フォルダ</p></li>
-<li class="listitem"><p>単一または定期的なアポイント</p></li>
-<li class="listitem"><p>将来または過去のアポイント</p></li>
+<li class="listitem">
+<p>時間範囲の条件を検索します。特定の時間範囲内に起こるアポイントを検索します。次の事項で有効な時間範囲を定義します。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>キーワード <span class="guilabel"><strong>今日</strong></span>、<span class="guilabel"><strong>昨日</strong></span>、<span class="guilabel"><strong>先週</strong></span>、<span class="guilabel"><strong>先月</strong></span>、<span class="guilabel"><strong>昨年</strong></span></p></li>
+<li class="listitem"><p>間隔のキーワード：<span class="guilabel"><strong>過去７日間</strong></span>、<span class="guilabel"><strong>過去30日</strong></span>、<span class="guilabel"><strong>過去365日</strong></span></p></li>
+<li class="listitem"><p>曜日、例　<span class="guilabel"><strong>月曜日</strong></span></p></li>
+<li class="listitem"><p>月、例　<span class="guilabel"><strong>７月</strong></span></p></li>
+<li class="listitem"><p>４桁の日付、例 <span class="guilabel"><strong>2015</strong></span></p></li>
+<li class="listitem"><p>日付、例 <span class="guilabel"><strong>1/31/2015</strong></span></p></li>
+<li class="listitem"><p>日付の間隔、例 <span class="guilabel"><strong>12/1/2014 - 1/31/2015</strong></span></p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="listitem"><p>検索されないフォルダ</p></li>
 <li class="listitem"><p>アポイントの確認ステータス</p></li>
+<li class="listitem"><p>タイプ：全て、定期的、単一アポイント</p></li>
+<li class="listitem"><p>フォルダタイプ：全て、プライベート、パブリック、共有</p></li>
 </ul></div>
 <p>
     </p>
@@ -52,44 +62,43 @@
 <div class="task">
 <a name="ox.appsuite.user.task.calendar.search"></a><p class="title">アポイントを検索する</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>検索バーの入力フィールドに検索用語を入力します。検索メニューが表示されます。</p></li>
+<li class="step"><p><span class="guibutton"><strong>検索を開始</strong></span> アイコン<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> をクリックするか、検索バーに入力フィールドをクリックしてください。フォルダボタンと<span class="guibutton"><strong>オプションボタン</strong></span>が検索バーに表示されます。フォルダボタンは、検索するフォルダーを表示します。</p></li>
 <li class="step">
+<p>検索するフォルダを指定するには、フォルダボタンをクリックします。フォルダを選択します。</p>
+<p><span class="guibutton"><strong>すべてのフォルダ</strong></span>を選択すると、全てのプライベート、パブリックおよび共有フォルダととサブフォルダを検索します。特定のフォルダ、あるいはフォルダを選択すると、このフォルダーのみを検索し、サブフォルダの検索は行いません。</p>
+</li>
+<li class="step">
+<p>入力フィールドに検索用語を入力します。検索メニューが表示されます。</p>
 <p>次のいずれかの方法を使用します。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p>件名、説明を検索するには、検索メニューで、検索用語をクリックします。Enter キーをクリックしたり、検索バーで、<span class="guibutton"><strong>検索</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> をクリックしても、検索を実行できます。</p>
+<p>特定の時間範囲のアポイントを検索するには、検索用語として有効時間軸を使用してください。入力に有効な時間軸が認識されるとすぐに時間軸が検索メニューに表示されます。検索メニューの期間をクリックします。Enter キーをクリックすることもできます。</p>
+<p>件名、説明を検索するには、検索メニューで、検索用語をクリックします。Enter キーをクリックすることもできます。</p>
 <p>件名のみを検索するには、検索メニューで、<span class="guibutton"><strong>検索対象: 件名</strong></span> をクリックします。</p>
 <p>また、検索対象を説明、場所、添付ファイルの名前にすることもできます。</p>
 </li></ul></div>
 <p>
           </p>
-<p><span class="phrase"><strong>結果: </strong></span>検索結果は、表示エリアに一覧で表示されます。使用した検索条件は、検索ウィンドウの下に表示されます。</p>
-</li>
-<li class="step">
-<p>検索結果をさらに絞り込むこともできます。</p>
+<p>結果:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>すべての検索条件を表示するには、<span class="guibutton"><strong>詳細フィルタを表示</strong></span> をクリックします。</p>
-<p>検索条件を変更するには、検索条件の隣にあるアイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span> をクリックします。メニューで、目的の項目を選択します。次の検索条件を使用できます。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p><span class="guilabel"><strong>フォルダ</strong></span> ドロップダウン メニューで、目的のフォルダを検索できます。</p>
-<p><span class="guibutton"><strong>すべてのフォルダー</strong></span>を選択すると、内部メールアカウントのすべてのフォルダーとサブフォルダーを検索します。特定のフォルダー、あるいはフォルダーを選択すると、このフォルダーのみを検索し、サブフォルダーの検索は行いません。</p>
-</li>
-<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>フォルダ タイプ</strong></span> ドロップダウン メニューでは、検索する対象をプライベート フォルダ、パブリック フォルダ、共有フォルダのうちから指定できます。</p></li>
-<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>タイプ</strong></span> ドロップダウン メニューでは、検索する対象を単一のアポイントまたは定期的なアポイントのうちから指定できます。</p></li>
-<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>日付</strong></span> ドロップダウン メニューでは、検索する対象を将来のアポイントまたは過去のアポイントのうちから指定できます。</p></li>
-<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>マイ ステータス</strong></span> ドロップダウン メニューでは、アポイントの各確認ステータスのうちから指定できます。</p></li>
-</ul></div>
-<p>
-                </p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>検索されるオブジェクトの一覧を絞るには、詳細検索機能を使用します。</p></li>
-<li class="listitem" style="list-style-type: none"><p>検索条件を削除するには、アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span> をクリックします。すべての検索条件を削除すると、検索が終了します。</p></li>
+<li class="listitem" style="list-style-type: none"><p>検索結果は、表示エリアに一覧で表示されます。</p></li>
+<li class="listitem" style="list-style-type: none"><p>検索用語は入力フィールドに表示されます。</p></li>
 </ul></div>
 <p>
           </p>
 </li>
-<li class="step"><p>検索を終了するには、<span class="guibutton"><strong>検索を閉じる</strong></span> をクリックします。</p></li>
+<li class="step">
+<p>検索結果を絞り込むために次のオプションがあります。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>検索結果を変更するには、さらに検索用語を入力します。検索用語を削除するには、検索用語横の <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>アイコンをクリックします。</p></li>
+<li class="listitem" style="list-style-type: none"><p>別のフォルダを検索するには、フォルダボタンをクリックします。フォルダを選択します。</p></li>
+<li class="listitem" style="list-style-type: none"><p>検索する対象をプライベートフォルダ、パブリックフォルダ、または共有フォルダに限定するには、<span class="guibutton"><strong>オプション</strong></span>をクリックします。フォルダを選択します。</p></li>
+<li class="listitem" style="list-style-type: none"><p>特定の確認ステータスつきのアポイントの検索を制限するには、<span class="guibutton"><strong>オプション</strong></span>をクリックします。ステータスを選択します。</p></li>
+<li class="listitem" style="list-style-type: none"><p>単一のアポイントまたは定期的なアポイントの検索を制限するには、<span class="guibutton"><strong>オプション</strong></span>をクリックします。タイプを選択します。</p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="step"><p>検索を終了するには、 <span class="guibutton"><strong>検索をキャンセル</strong></span>アイコン<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>をクリックします。</p></li>
 </ol></div>
 </div>
 </div>

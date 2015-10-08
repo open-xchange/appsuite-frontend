@@ -63,8 +63,8 @@ define('plugins/administration/groups/settings/toolbar', [
                 //#. %1$s is the group name
                 gt('Do you really want to delete the group "%1$s"? This action cannot be undone!', model.get('display_name'))
             )
-            .addPrimaryButton('delete', gt('Delete group'), 'delete', {'tabIndex': '1'})
-            .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
+            .addPrimaryButton('delete', gt('Delete group'), 'delete', { 'tabIndex': '1' })
+            .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
             .on('delete', function () {
                 groupAPI.remove(id);
             })

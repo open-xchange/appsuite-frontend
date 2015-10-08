@@ -6,28 +6,28 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/edit/view',
-    ['gettext!io.ox/tasks/edit',
-     'io.ox/tasks/edit/view-template',
-     'io.ox/tasks/model',
-     'io.ox/core/date',
-     'io.ox/tasks/edit/util',
-     'io.ox/core/extensions',
-     'io.ox/backbone/views',
-     'io.ox/core/capabilities'
-    ], function (gt, template, model, date, util, ext, views, capabilities) {
+define('io.ox/tasks/edit/view', [
+    'gettext!io.ox/tasks/edit',
+    'io.ox/tasks/edit/view-template',
+    'io.ox/tasks/model',
+    'io.ox/core/extensions',
+    'io.ox/backbone/views',
+    'io.ox/core/capabilities'
+], function (gt, template, model, ext, views, capabilities) {
 
     'use strict';
 
-    var point = views.point('io.ox/tasks/edit/view'),
-        TaskEditView = point.createView({
+    var TaskEditView = views.point('io.ox/tasks/edit/view').createView({
+
         tagName: 'div',
-        className: 'io-ox-tasks-edit container default-content-padding',
+
+        className: 'io-ox-tasks-edit container',
+
         init: function () {
             this.collapsed = true;
             this.detailsCollapsed = true;
@@ -36,19 +36,47 @@ define('io.ox/tasks/edit/view',
             //this prevents errors on saving because recurrence needs both fields filled
             this.model.on('change:recurrence_type', function (model, value) {
                 if (value) {
-                    if (!(model.get('start_date')) && model.get('start_date') !== 0) {
-                        if (model.get('end_date') !== undefined && model.get('end_date') !== null) {
-                            model.set('start_date',  model.get('end_date') - date.DAY, {validate: true});
+                    if (!(model.get('start_time')) && model.get('start_time') !== 0) {
+                        if (model.get('end_time') !== undefined && model.get('end_time') !== null) {
+                            model.set('start_time',  moment(model.get('end_time')).subtract(1, 'day').valueOf(), { validate: true });
                         } else {
-                            model.set('start_date', _.now(), {validate: true});
+                            model.set('start_time', _.now(), { validate: true });
                         }
                     }
-                    if (!(model.get('end_date')) && model.get('end_date') !== 0) {
-                        model.set('end_date', model.get('start_date') + date.DAY, {validate: true});
+                    if (!(model.get('end_time')) && model.get('end_time') !== 0) {
+                        model.set('end_time', moment(model.get('start_time')).add(1, 'day').valueOf(), { validate: true });
                     }
                 }
             });
         },
+
+        autoOpen: function (data) {
+            var data = data || this.model.attributes,
+                expandLink = this.$el.find('.expand-link'),
+                expandDetailsLink = this.$el.find('.expand-details-link');
+            if (expandLink.length === 0 || !this.collapsed) {
+                return;
+            }
+            var details = _(_(data)
+                    .pick(['actual_duration', 'target_duration', 'actual_costs', 'target_costs', 'currency', 'trip_meter', 'billing_information', 'companies']))
+                    .filter(function (val) {
+                        return val;
+                    }),
+                attributes = _(_(data)
+                    .pick(['start_time', 'end_time', 'alarm', 'recurrence_type', 'percent_completed', 'private_flag', 'number_of_attachments', 'priority']))
+                    .filter(function (val) {
+                        return val;
+                    });
+            if (this.collapsed && (details.length || attributes.length || this.model.get('status') !== 1 ||
+                    //check if attributes contain values other than the defaults
+                    (data.participants && data.participants.length))) {
+                expandLink.click();
+                if (details.length && this.detailsCollapsed) {
+                    expandDetailsLink.click();
+                }
+            }
+        },
+
         render: function (app) {
             var self = this,
                 rows = {};
@@ -67,21 +95,37 @@ define('io.ox/tasks/edit/view',
                 ext.point('io.ox/tasks/edit/view').disable('participants_legend');
             }
 
-            util.splitExtensionsByRow(this.point.list(), rows);
+            _(this.point.list()).each(function (extension) {
+                //seperate extensions with rows
+                if (extension.row) {
+                    if (!rows[extension.row]) {
+                        rows[extension.row] = [];
+                    }
+                    rows[extension.row].push(extension);
+                } else {
+                    //all the rest
+                    if (!rows.rest) { //rest is used for extension points without row
+                        rows.rest = [];
+                    }
+                    rows.rest.push(extension);
+                }
+            });
+
             //draw the rows
             _(rows).each(function (row, key) {
                 //leave out all the rest, for now
                 if (key !== 'rest') {
-                    util.buildExtensionRow(self.$el, row, self.baton);
+                    //row 0 is the headline
+                    var node = $('<div class="row">').appendTo(self.$el);
+                    for (var i = 0; i < row.length; i++) {
+                        row[i].invoke('draw', node, self.baton);
+                    }
                 }
             });
-            if (_.device('smartphone')) {
-                // create new toolbar on bottom
-                ext.point('io.ox/tasks/edit/bottomToolbar').invoke('draw', this, self.baton);
-            }
+
             //now draw the rest
             _(rows.rest).each(function (extension) {
-                extension.invoke('draw', this.$el, self.baton);
+                extension.invoke('draw', self.$el, self.baton);
             });
 
             //change title if available
@@ -91,34 +135,16 @@ define('io.ox/tasks/edit/view',
 
             // Disable Save Button if title is empty on startup
             if (!self.$el.find('input.title-field').val()) {
-                self.$el.find('.btn[data-action="save"]').prop('disabled', true);
+                app.getWindow().nodes.header.find('.btn[data-action="save"]').prop('disabled', true);
             }
             //look if there is data beside the default values to trigger autoexpand (only in edit mode)
             if (self.model.get('id')) {
-                var details = _(_(self.model.attributes)
-                        .pick(['actual_duration', 'target_duration', 'actual_costs', 'target_costs', 'currency', 'trip_meter', 'billing_information', 'companies']))
-                        .filter(function (val) {
-                            return val;
-                        }),
-                    attributes = _(_(self.model.attributes)
-                        .pick(['start_date', 'end_date', 'alarm', 'recurrence_type', 'percent_completed', 'private_flag', 'number_of_attachments', 'priority']))
-                        .filter(function (val) {
-                            return val;
-                        });
-                if (details.length || attributes.length || self.model.get('status') !== 1 ||
-                        //check if attributes contain values other than the defaults
-                        (self.model.get('participants') && self.model.get('participants').length)) {
-                    self.$el.find('.expand-link').click();
-                    if (details.length) {
-                        self.$el.find('.expand-details-link').click();
-                    }
-                }
+                self.autoOpen();
             }
 
             // Toggle disabled state of save button
             function fnToggleSave(value) {
-                var node = self.$el.find('.btn[data-action="save"]');
-                if (_.device('smartphone')) node = self.$el.parent().parent().find('.btn[data-action="save"]');
+                var node = app.getWindow().nodes.header.find('.btn[data-action="save"]');
                 node.prop('disabled', value === '');
             }
             //delegate some events
@@ -128,9 +154,8 @@ define('io.ox/tasks/edit/view',
                 app.setTitle(title);
                 fnToggleSave(value);
             });
-            return this.$el;
+            return this;
         }
-
     });
 
     return {
@@ -142,8 +167,8 @@ define('io.ox/tasks/edit/view',
                 taskModel = model.factory.wrap(taskModel);
             }
 
-            var view = new TaskEditView({model: taskModel});
-            node.append(view.render(app));
+            var view = new TaskEditView({ model: taskModel });
+            node.append(view.render(app).$el);
 
             return view;
         }

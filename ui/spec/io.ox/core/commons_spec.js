@@ -26,7 +26,7 @@ define(['io.ox/core/commons', 'io.ox/core/tk/vgrid'], function (commons, VGrid) 
             //init
             grid.prop(key, val);
             grid.prop(keyprop, 'folder_one');
-            commons.addPropertyCaching(grid, {props: key, keyprop: keyprop});
+            commons.addPropertyCaching(grid, { props: key, keyprop: keyprop });
 
             it('does not throw an error if called with invalid data', function () {
                 commons.addPropertyCaching();
@@ -44,7 +44,7 @@ define(['io.ox/core/commons', 'io.ox/core/tk/vgrid'], function (commons, VGrid) 
             });
 
             it('does not wrapps again in case function is called muliple times', function () {
-                var obj = { propcache: ''};
+                var obj = { propcache: '' };
                 commons.addPropertyCaching(obj);
                 expect(obj.propcache).not.to.be.a('function');
             });

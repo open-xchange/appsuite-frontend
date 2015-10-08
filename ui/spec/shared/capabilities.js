@@ -10,41 +10,42 @@
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
-define('spec/shared/capabilities',
-       ['fixture!capabilities/common.json',
-        'fixture!capabilities/premium.json',
-        'fixture!capabilities/pim.json'], function (common, premium, pim) {
+define('spec/shared/capabilities', [
+    'fixture!capabilities/common.json',
+    'fixture!capabilities/premium.json',
+    'fixture!capabilities/pim.json'
+], function (common, premium, pim) {
 
-        var create = function (base) {
-            var data = base.slice(0),
-                references = {},
-                /**
-                 * apply current capabilites and do the requirejs hokey pokey dance
-                 * hint: wrapped in runs/waits to usably in beforeEach without any further handling
-                 * @return {deferred} returns current set of enabled capabilties (array)
-                 */
-                apply = function () {
-                    var def = $.Deferred(),
-                        capabilities = requirejs('io.ox/core/capabilities');
+    var create = function (base) {
+        var data = base.slice(0),
+            references = {},
+            /**
+             * apply current capabilites and do the requirejs hokey pokey dance
+             * hint: wrapped in runs/waits to usably in beforeEach without any further handling
+             * @return { deferred} returns current set of enabled capabilties (array)
+             */
+            apply = function () {
+                var def = $.Deferred(),
+                    capabilities = requirejs('io.ox/core/capabilities');
 
-                    //remove existing stubs
-                    capabilities.has.restore && capabilities.has.restore();
-                    //create stub
-                    sinon.stub(capabilities, 'has', function (arg) {
-                        return data.length && _.contains(data, arg);
-                    });
-                    //reload consuming modules
-                    ox.testUtils.modules.reload('io.ox/core/capabilities')
-                        .then(function () {
-                            //require original
-                            require(references.ids, function () {
-                                //reset common methods of used references
-                                _.each(arguments, function (arg, index) {
-                                    $.extend(references.vars[index], arg || {});
-                                });
-                                def.resolve();
-                            }, def.reject);
+                // overwrite server capabilities and reload capabilities
+                ox.serverConfig.capabilities = _(data).map(function (cap) {
+                    return { id: cap };
+                });
+                capabilities.reset();
+
+                //reload consuming modules
+                ox.testUtils.modules.reload('io.ox/core/capabilities')
+                    .then(function () {
+                        //require original
+                        require(references.ids, function () {
+                            //reset common methods of used references
+                            _.each(arguments, function (arg, index) {
+                                $.extend(references.vars[index], arg || {});
+                            });
+                            def.resolve();
                         }, def.reject);
+                    }, def.reject);
 
                     return def.then(function () {
                         return data;
@@ -65,9 +66,7 @@ define('spec/shared/capabilities',
                             data.concat(list)
                         );
                     } else {
-                        data = _.filter(data, function (cap) {
-                            return _.where(list, cap).length === 0;
-                        });
+                        data = _(data).difference(list);
                     }
 
                     //set
@@ -124,49 +123,94 @@ define('spec/shared/capabilities',
                 apply: apply
 
             };
-        };
 
         return {
             /**
-             * list supported contexts
-             * @return {array}
+             * @param  {string|array} ids of used modules
+             * @param  {object|array} vars of used variables (analogous to 'ids')
+             * @return { this }
              */
-            list: function () {
-                return ['common', 'premium', 'pim'];
+            init: function (ids, vars) {
+                references = {
+                    ids: [].concat(ids),
+                    vars: [].concat(vars)
+                };
+                return this;
             },
             /**
-             * get preset capabilities
-             * @return {object}
+             * @return { array} capabilites
              */
             get: function () {
-                return {
-                    common: common,
-                    premium: premium,
-                    pim: pim
-                };
+                return [].concat(data);
             },
             /**
-             * create util object (optional: predefined capabilites by context)
-             * @param  {string} context
-             * @return {object}
+             * enable capabilities
+             * @param  {string|array} list of capabilties
+             * @return { deferred} returns current set of enabled capabilties (array)
              */
-            preset: function (context) {
-                var util;
-                switch (context) {
-                    case 'common':
-                        util = create(common);
-                        break;
-                    case 'premium':
-                        util = create(premium);
-                        break;
-                    case 'pim':
-                        util = create(pim);
-                        break;
-                    default:
-                        util = create([]);
-                        break;
-                }
-                return util;
+            enable: function (list) {
+                return process([].concat(list), 'add');
+            },
+            /**
+             * disable capabilities
+             * @param  {string|array} list of capabilties
+             * @return { deferred} returns current set of enabled capabilties (array)
+             */
+            disable: function (list) {
+                return process([].concat(list), 'remove');
+            },
+            /**
+             * reset to inital state of enabled caps (common, premium or pim)
+             * @return { deferred} returns current set of enabled capabilties (array)
+             */
+            reset: function () {
+                data = base.slice(0);
+                return apply();
             }
         };
+    };
+
+    return {
+        /**
+         * list supported contexts
+         * @return { array }
+         */
+        list: function () {
+            return ['common', 'premium', 'pim'];
+        },
+        /**
+         * get preset capabilities
+         * @return { object }
+         */
+        get: function () {
+            return {
+                common: common,
+                premium: premium,
+                pim: pim
+            };
+        },
+        /**
+         * create util object (optional: predefined capabilites by context)
+         * @param  {string} context
+         * @return { object }
+         */
+        preset: function (context) {
+            var util;
+            switch (context) {
+                case 'common':
+                    util = create(common);
+                    break;
+                case 'premium':
+                    util = create(premium);
+                    break;
+                case 'pim':
+                    util = create(pim);
+                    break;
+                default:
+                    util = create([]);
+                    break;
+            }
+            return util;
+        }
+    };
 });

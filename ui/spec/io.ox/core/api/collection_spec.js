@@ -11,7 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
+define([
+    'io.ox/core/api/collection-loader',
+    'io.ox/core/api/collection-pool'
+], function (CollectionLoader, Pool) {
 
     'use strict';
 
@@ -118,6 +121,30 @@ define(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
                             done();
                         });
                     });
+                });
+            });
+        });
+        describe('Collection Pool', function () {
+            var pool;
+            beforeEach(function () {
+                pool = Pool.create('collection_spec');
+            });
+            afterEach(function () {
+                pool.get('collection_spec').reset();
+            });
+
+            describe('add()', function () {
+                it('should add a new element to the pool', function () {
+                    var obj = {
+                            id: '1337',
+                            folder_id: '1338'
+                        },
+                        collection = pool.get('detail'),
+                        c;
+                    expect(collection.get(_.cid(obj))).not.to.exist;
+                    c = pool.add('detail', obj);
+                    expect(c).to.be.an('object');
+                    expect(collection.get(_.cid(obj))).to.be.an('object');
                 });
             });
         });

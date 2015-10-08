@@ -13,10 +13,11 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/core/folder/blacklist',
-    ['io.ox/core/extensions',
-     'settings!io.ox/core',
-     'settings!io.ox/files'], function (ext, settings, fileSettings) {
+define('io.ox/core/folder/blacklist', [
+    'io.ox/core/extensions',
+    'settings!io.ox/core',
+    'settings!io.ox/files'
+], function (ext, settings, fileSettings) {
 
     'use strict';
 

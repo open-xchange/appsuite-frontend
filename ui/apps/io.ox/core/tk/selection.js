@@ -12,14 +12,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/selection',
-    ['io.ox/core/event',
-     'io.ox/core/extensions',
-     'io.ox/core/collection',
-     'io.ox/core/notifications',
-     'gettext!io.ox/core',
-     'io.ox/core/tk/draghelper'
-    ], function (Events, ext, Collection, notifications, gt) {
+define('io.ox/core/tk/selection', [
+    'io.ox/core/event',
+    'io.ox/core/extensions',
+    'io.ox/core/collection',
+    'io.ox/core/notifications',
+    'gettext!io.ox/core',
+    'io.ox/core/tk/draghelper'
+], function (Events, ext, Collection, notifications, gt) {
 
     'use strict';
 
@@ -71,6 +71,7 @@ define('io.ox/core/tk/selection',
             changed,
             apply,
             clickHandler,
+            dblClickHandler,
             mouseupHandler,
             mousedownHandler,
             touchHandler,
@@ -287,6 +288,15 @@ define('io.ox/core/tk/selection',
             }
         };
 
+        dblClickHandler = function (e) {
+            var node, key;
+            if (!e.isDefaultPrevented()) {
+                node = $(this);
+                key = node.attr('data-obj-id');
+                self.trigger('selection:doubleclick', key);
+            }
+        };
+
         mousedownHandler = function (e) {
             var node, key, id, handleMouseDown;
             // we check for isDefaultPrevented because elements inside .selectable
@@ -449,6 +459,7 @@ define('io.ox/core/tk/selection',
             nodes.removeClass(self.classSelected).find('input.reflect-selection').prop('checked', false);
 
             for (; i < nodes.length; i++) {
+
                 node = nodes.eq(i);
                 // is selected?
                 var objID = node.attr('data-obj-id');
@@ -1025,6 +1036,7 @@ define('io.ox/core/tk/selection',
             .on('mousedown', '.selectable', mousedownHandler)
             .on('mouseup', '.selectable', mouseupHandler)
             .on('click', '.selectable', clickHandler)
+            .on('dblclick', '.selectable', dblClickHandler)
             .on('tap', '.selectable', touchHandler)
             .on('focus', '.selectable', function () {
                 container.addClass('has-focus');

@@ -12,15 +12,21 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/portal/userSettings/register',
-    ['io.ox/core/extensions',
-     'io.ox/core/main',
-     'gettext!io.ox/core',
-     'settings!io.ox/core',
-     'less!plugins/portal/userSettings/style'
-    ], function (ext, main, gt, settings) {
+define('plugins/portal/userSettings/register', [
+    'io.ox/core/extensions',
+    'io.ox/core/main',
+    'gettext!io.ox/core',
+    'settings!io.ox/core',
+    'io.ox/core/capabilities',
+    'less!plugins/portal/userSettings/style'
+], function (ext, main, gt, settings, capabilities) {
 
     'use strict';
+
+    var internalUserEdit = settings.get('user/internalUserEdit', true),
+        passwordEdit = capabilities.has('edit_password');
+
+    if (!internalUserEdit && !passwordEdit) return false;
 
     function keyClickFilter(e) {
         if (e.which === 13 || e.type === 'click') {
@@ -31,44 +37,8 @@ define('plugins/portal/userSettings/register',
     }
 
     function changeUserData() {
-
-        require(['io.ox/core/tk/dialogs', 'io.ox/core/settings/user'], function (dialogs, users) {
-            var usermodel,
-                dialog = new dialogs.ModalDialog({
-                    top: 60,
-                    width: 908,
-                    center: false,
-                    maximize: true,
-                    async: true
-                })
-                .addPrimaryButton('save', gt('Save'))
-                .addButton('discard', gt('Discard'));
-
-            var $node = dialog.getContentNode();
-
-            users.editCurrentUser($node).done(function (model) {
-                usermodel = model;
-            }).fail(function () {
-                $node.append(
-                    $.fail(gt('Couldn\'t load your contact data.'), function () {
-                        users.editCurrentUser($node).done(function () {
-                            $node.find('[data-action="discard"]').hide();
-                        });
-                    })
-                );
-            });
-            dialog.show();
-
-            dialog.on('save', function () {
-                if (usermodel._valid) {
-                    usermodel.save();
-                    dialog.close();
-                } else {
-                    dialog.idle();
-                }
-            }).on('discard', function () {
-                dialog.close();
-            });
+        require(['io.ox/core/settings/user'], function (users) {
+            users.openModalDialog();
         });
     }
 
@@ -83,32 +53,32 @@ define('plugins/portal/userSettings/register',
                 pwRegex = settings.get('password/regexp', '[^a-z0-9]'),
                 regexText = settings.get('password/special', '$, _, %'),
                 pwStrengths = [
-                    {label: gt('Password strength: Too short'), color: 'bar-weak', barLength: '20%'},//red
-                    {label: gt('Password strength: Wrong length'), color: 'bar-weak', barLength: '20%'},//red
-                    {label: gt('Password strength: Very weak'), color: 'bar-weak', barLength: '20%'},//red
-                    {label: gt('Password strength: Weak'), color: 'bar-weak', barLength: '40%'},//red
-                    {label: gt('Password strength: Good'), color: 'bar-good', barLength: '60%'},//orange
-                    {label: gt('Password strength: Strong'), color: 'bar-strong', barLength: '80%'},//green
-                    {label: gt('Password strength: Very strong'), color: 'bar-strong', barLength: '100%'},//green
-                    {label: gt('Password strength: Legendary!'), color: 'bar-legendary', barLength: '100%'},//golden
+                    { label: gt('Password strength: Too short'), color: 'bar-weak', barLength: '20%' },//red
+                    { label: gt('Password strength: Wrong length'), color: 'bar-weak', barLength: '20%' },//red
+                    { label: gt('Password strength: Very weak'), color: 'bar-weak', barLength: '20%' },//red
+                    { label: gt('Password strength: Weak'), color: 'bar-weak', barLength: '40%' },//red
+                    { label: gt('Password strength: Good'), color: 'bar-good', barLength: '60%' },//orange
+                    { label: gt('Password strength: Strong'), color: 'bar-strong', barLength: '80%' },//green
+                    { label: gt('Password strength: Very strong'), color: 'bar-strong', barLength: '100%' },//green
+                    { label: gt('Password strength: Legendary!'), color: 'bar-legendary', barLength: '100%' }//golden
                 ];
 
             new dialogs.ModalDialog({ async: true, width: 500 })
             .header($('<h4>').text(gt('Change password')))
             .build(function () {
-                               //#. %1$s are some example characters
-                               //#, c-format
+                //#. %1$s are some example characters
+                //#, c-format
                 var hintText = gt('Your password is more secure if it also contains capital letters, numbers, and special characters like %1$s', regexText);
                 if (maxLength) {
-                               //#. %1$s is the minimum password length
-                               //#. %2$s is the maximum password length
-                               //#, c-format
+                    //#. %1$s is the minimum password length
+                    //#. %2$s is the maximum password length
+                    //#, c-format
                     hintText = gt('Password length must be between %1$d and %2$d characters.', minLength, maxLength) + '<br>' + hintText;
                 } else {
                     //#. %1$s is the minimum password length
                     //#, c-format
                     hintText = gt('Minimum password length is %1$d.', minLength) + '<br>' + hintText;
-                    }
+                }
                 var pwContainer = [];
                 if (showStrength) {
                     strengthBarWrapper = $('<div>').hide().append(
@@ -140,16 +110,21 @@ define('plugins/portal/userSettings/register',
             .addPrimaryButton('change', gt('Change password and sign out'))
             .addButton('cancel', gt('Cancel'))
             .on('change', function (e, data, dialog) {
-                var node = dialog.getContentNode();
-                if (newPass.val() === newPass2.val()) {
+
+                // we change empty string to null to be consistent
+                var node = dialog.getContentNode(),
+                    newPassword1 = newPass.val() === '' ? null : newPass.val(),
+                    newPassword2 = newPass2.val() === '' ? null : newPass2.val(),
+                    oldPassword = oldPass.val() === '' ? null : oldPass.val();
+
+                if (newPassword1 === newPassword2) {
                     http.PUT({
                         module: 'passwordchange',
                         params: { action: 'update' },
                         appendColumns: false,
                         data: {
-                            old_password: oldPass.val(),
-                            new_password: newPass.val(),
-                            new_password2: newPass2.val()
+                            old_password: oldPassword,
+                            new_password: newPassword1
                         }
                     })
                     .done(function () {
@@ -235,24 +210,24 @@ define('plugins/portal/userSettings/register',
 
         preview: function () {
             var content;
-            this.append(
-                content = $('<div class="content">').append(
-                    // user data
-                    $('<div class="action" role="button" tabindex="1">').text(gt('My contact data'))
-                    .on('click keypress', { fn: changeUserData }, keyClickFilter)
+            if (internalUserEdit) {
+                this.append(
+                    content = $('<div class="content">').append(
+                        // user data
+                        $('<div class="action" role="button" tabindex="1">').text(gt('My contact data'))
+                        .on('click keypress', { fn: changeUserData }, keyClickFilter)
 
-                )
-            );
+                    )
+                );
+            }
             // password
-            //check for capability
-            require(['io.ox/core/capabilities'], function (capabilities) {
-                if (capabilities.has('edit_password')) {
-                    content.append(
-                        $('<div class="action" role="button" tabindex="1">').text(gt('My password'))
-                        .on('click keypress', { fn: changePassword}, keyClickFilter)
-                    );
-                }
-            });
+            // check for capability
+            if (passwordEdit) {
+                content.append(
+                    $('<div class="action" role="button" tabindex="1">').text(gt('My password'))
+                    .on('click keypress', { fn: changePassword }, keyClickFilter)
+                );
+            }
         }
     });
 

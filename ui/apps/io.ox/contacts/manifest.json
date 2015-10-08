@@ -8,11 +8,7 @@
         "requires": "contacts",
         "refreshable": true,
         "index": 700,
-        "advancedMode": true,
-        "help": {
-            "base": "help",
-            "target": "ox.appsuite.user.chap.contacts.html"
-        }
+        "advancedMode": true
     },
     {
         "namespace": "io.ox/dev/testing/main",

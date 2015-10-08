@@ -77,6 +77,9 @@ define(['io.ox/mail/compose/main', 'settings!io.ox/mail'], function (compose, se
                 settings.set('autoSaveDraftsAfter', '1_minute');
                 var callback = sinon.spy();
                 var api = require('io.ox/mail/api');
+                //don't fetch contact pictures
+                var contactAPI = require('io.ox/contacts/api');
+                var haloSpy = sinon.stub(contactAPI, 'pictureHalo', _.noop);
 
                 expect(app.view.model.get('sendtype')).to.equal(api.SENDTYPE.FORWARD);
                 expect(app.view.model.get('msgref')).to.exist;
@@ -124,6 +127,7 @@ define(['io.ox/mail/compose/main', 'settings!io.ox/mail'], function (compose, se
                     expect(mail.sendtype).to.equal(api.SENDTYPE.DRAFT);
                     expect(mail.msgref).to.equal('default0/INBOX/Drafts/666');
                     spy.restore();
+                    haloSpy.restore();
                     settings.set('autoSaveDraftsAfter', 'disabled');
                 });
             });

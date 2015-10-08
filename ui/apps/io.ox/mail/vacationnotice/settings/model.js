@@ -11,13 +11,13 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-define('io.ox/mail/vacationnotice/settings/model',
-    ['io.ox/backbone/modelFactory',
-     'io.ox/backbone/validation',
-     'io.ox/core/api/mailfilter',
-     'io.ox/settings/util',
-     'gettext!io.ox/mail'
-    ], function (ModelFactory, Validators, api, settingsUtil, gt) {
+define('io.ox/mail/vacationnotice/settings/model', [
+    'io.ox/backbone/modelFactory',
+    'io.ox/backbone/validation',
+    'io.ox/core/api/mailfilter',
+    'io.ox/settings/util',
+    'gettext!io.ox/mail'
+], function (ModelFactory, Validators, api, settingsUtil, gt) {
 
     'use strict';
 
@@ -97,7 +97,44 @@ define('io.ox/mail/vacationnotice/settings/model',
         var factory = new ModelFactory({
             api: api,
             ref: ref,
+            model: {
+                idAttribute: 'id',
 
+                init: function () {
+
+                    // End date automatically shifts with start date
+                    var length = this.get('dateUntil') - this.get('dateFrom'),
+                        updatingStart = false,
+                        updatingEnd = false;
+                    this.on({
+                        'change:dateFrom': function (model, dateFrom) {
+                            if (length < 0 || updatingStart) {
+                                return;
+                            }
+                            updatingEnd = true;
+                            if (dateFrom && _.isNumber(length)) {
+                                model.set('dateUntil', dateFrom + length, { validate: true });
+                            }
+                            updatingEnd = false;
+                        },
+                        'change:dateUntil': function (model, dateUntil) {
+                            if (updatingEnd) {
+                                return;
+                            }
+                            var tmpLength = dateUntil - model.get('dateFrom');
+                            if (tmpLength < 0) {
+                                updatingStart = true;
+                                if (dateUntil && _.isNumber(length)) {
+                                    model.set('dateFrom', dateUntil - length, { validate: true });
+                                }
+                                updatingStart = false;
+                            } else {
+                                length = tmpLength;
+                            }
+                        }
+                    });
+                }
+            },
             update: function (model) {
                 return settingsUtil.yellOnReject(
                     api.update(providePreparedData(model.attributes))

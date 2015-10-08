@@ -11,21 +11,21 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/files/mobile-toolbar-actions',
-   ['io.ox/core/extensions',
+define('io.ox/files/mobile-toolbar-actions', [
+    'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/files/api',
-    'gettext!io.ox/mail'],
-    function (ext, links, api, gt) {
+    'gettext!io.ox/mail'
+], function (ext, links, api, gt) {
 
     'use strict';
 
     // define links for each page
 
-    var pointMainView = ext.point('io.ox/files/mobile/toolbar/fluid'),
+    var Action = links.Action,
+        pointMainView = ext.point('io.ox/files/mobile/toolbar/main'),
         pointMainViewActions = ext.point('io.ox/files/mobile/toolbar/actions'),
-        pointMultiSelect = ext.point('io.ox/files/mobile/toolbar/fluid/multiselect'),
-        pointDetailView = ext.point('io.ox/files/mobile/toolbar/detailView'),
+        pointMultiSelect = ext.point('io.ox/files/mobile/toolbar/main/multiselect'),
         meta = {
             'create': {
                 prio: 'hi',
@@ -38,14 +38,16 @@ define('io.ox/files/mobile-toolbar-actions',
                     var self = this;
 
                     this.after(
-                        links.DropdownLinks({ ref: 'io.ox/files/links/toolbar/default',
+                        links.DropdownLinks({
+                            ref: 'io.ox/files/links/toolbar/default',
                             wrap: false,
                             //function to call when dropdown is empty
                             emptyCallback: function () {
                                 self.addClass('disabled')
                                     .attr({ 'aria-disabled': true })
                                     .removeAttr('href');
-                            }}, baton)
+                            }
+                        }, baton)
                     );
 
                     this.addClass('dropdown-toggle').attr({
@@ -103,18 +105,24 @@ define('io.ox/files/mobile-toolbar-actions',
         index = 0;
     }
 
-    // add submenu as text link to toolbar in multiselect
-    pointDetailView.extend(new links.Dropdown({
-        index: 300,
-        label: $('<span>').text(
-            //.# Will be used as button label in the toolbar, allowing the user to choose some file actions like "copy" or "delete"
-            gt('Actions')
-        ),
-        // don't draw the caret icon beside menu link
-        noCaret: true,
-        drawDisabled: true,
-        ref: 'io.ox/files/links/inline'
-    }));
+    // actions
+    new Action('io.ox/files/actions/layout-list', {
+        action: function (baton) {
+            baton.app.props.set('layout', 'list');
+        }
+    });
+
+    new Action('io.ox/files/actions/layout-icon', {
+        action: function (baton) {
+            baton.app.props.set('layout', 'icon');
+        }
+    });
+
+    new Action('io.ox/files/actions/layout-tile', {
+        action: function (baton) {
+            baton.app.props.set('layout', 'tile');
+        }
+    });
 
     // add submenu as text link to toolbar in multiselect
     pointMultiSelect.extend(new links.Dropdown({
@@ -131,20 +139,15 @@ define('io.ox/files/mobile-toolbar-actions',
 
     var updateToolbar = _.debounce(function (list) {
         if (!list) return;
-        var self = this,
-            ids = this.getIds ? this.getIds() : [];
+        var cids = list, models = api.resolve(cids, false), data, baton;
 
-        //get full data, needed for require checks for example
-        api.getList(list).done(function (data) {
-            // extract single object if length === 1
-            data = data.length === 1 ? data[0] : data;
-            // draw toolbar
-            var baton = ext.Baton({data: data, app: self, allIds: ids});
-             // handle updated baton to pageController
-            self.pages.getToolbar('detailView').setBaton(baton);
-            self.pages.getSecondaryToolbar('fluid').setBaton(baton);
-        });
-
+        list = _(models).invoke('toJSON');
+        // extract single object if length === 1
+        data = list.length === 1 ? list[0] : list;
+        // draw toolbar
+        baton = ext.Baton({ data: data, app: this, models: models, collection: this.listView.collection, allIds: [] });
+        // handle updated baton to pageController
+        this.pages.getSecondaryToolbar('main').setBaton(baton);
     }, 10);
 
     // some mediator extensions
@@ -187,7 +190,7 @@ define('io.ox/files/mobile-toolbar-actions',
                 app.folder.getData().done(function (data) {
                     var baton = ext.Baton({ data: data, app: app });
                     // handle updated baton to pageController
-                    app.pages.getToolbar('fluid').setBaton(baton);
+                    app.pages.getToolbar('main').setBaton(baton);
                 });
             }
 
@@ -201,20 +204,20 @@ define('io.ox/files/mobile-toolbar-actions',
                 });
             });
 
-            app.on('selection:change', function () {
-                if (!app.props.get('showCheckboxes')) return;
-                app.updateToolbar(app.selection.get());
-            });
-
-            app.pages.getPage('fluid').on('pageshow', function () {
-                app.pages.getToolbar('fluid').setBaton(new ext.Baton({app: app}));
-            });
-
-            // enable standard toolbar after checkbox dismiss
-            app.props.on('change:showCheckboxes', function (data) {
-                if (!data.attributes.showCheckboxes) {
-                    app.pages.getToolbar('fluid').setBaton(new ext.Baton({app: app}));
+            app.listView.on('selection:change', function (selection) {
+                if (!selection) {
+                    selection = app.listView.selection.get();
                 }
+                if (selection.length === 0) {
+                    app.pages.toggleSecondaryToolbar('main', false);
+                } else {
+                    app.pages.toggleSecondaryToolbar('main', true);
+                }
+                app.updateToolbar(selection);
+            });
+
+            app.pages.getPage('main').on('pageshow', function () {
+                app.pages.getToolbar('main').setBaton(new ext.Baton({ app: app }));
             });
         }
     });

@@ -19,7 +19,7 @@ define('io.ox/participants/model', [
     'io.ox/contacts/model',
     'io.ox/contacts/util',
     'io.ox/core/util',
-    'gettext!io.ox/participants/model'
+    'gettext!io.ox/core'
 ], function (userAPI, groupAPI, resourceAPI, contactAPI, ContactModel, util, coreUtil, gt) {
 
     'use strict';
@@ -27,14 +27,20 @@ define('io.ox/participants/model', [
 
     var Model = Backbone.Model.extend({
 
+        idAttribute: 'pid',
+
+        TYPE_UNKNOWN: 0,
         TYPE_USER: 1,
         TYPE_USER_GROUP: 2,
         TYPE_RESOURCE: 3,
         TYPE_RESOURCE_GROUP: 4,
         TYPE_EXTERNAL_USER: 5,
-        TYPE_DISTLIST_USER_GROUP: 6,
+        TYPE_DISTLIST: 6,
+
+        TYPE_LABEL: 'unknown internal usergroup resource resourcegroup external distlist'.split(' '),
 
         TYPE_STRINGS: {
+            0: gt('Unknown'),
             1: '',
             2: gt('Group'),
             3: gt('Resource'),
@@ -45,154 +51,89 @@ define('io.ox/participants/model', [
 
         defaults: {
             display_name: '',
-            email1: ''
+            email1: '',
+            field: 'email1',
+            type: 5 // external
         },
+
+        loading: null,
 
         initialize: function () {
             var self = this;
 
+            // fix type attribute / for example autocomplete api
             if (_.isString(this.get('type'))) {
-                this.fixType();
-            }
-
-            if (this.get('internal_userid')) {
-                this.cid = 'internal_' + this.get('internal_userid');
-                this.set({
-                    id: this.get('internal_userid'),
-                    type: this.TYPE_USER
-                });
-            } else if (this.get('entity')) {
-                this.cid = 'entity_' + parseInt(this.get('entity'), 10);
-                this.set({
-                    id: parseInt(this.get('entity'), 10),
-                    type: this.TYPE_USER
-                });
-            } else {
+                var newType = this.TYPE_UNKNOWN;
                 switch (this.get('type')) {
-                    case this.TYPE_USER:
-                        this.cid = 'internal_' + this.get('id');
+                    case 'user':
+                        newType = this.TYPE_USER;
                         break;
-                    case this.TYPE_USER_GROUP:
-                        this.cid = 'usergroup_' + this.get('id');
+                    case 'group':
+                        newType = this.TYPE_USER_GROUP;
                         break;
-                    case this.TYPE_RESOURCE:
-                        this.cid = 'resource_' + this.get('id');
+                    case 'resource':
+                        newType = this.TYPE_RESOURCE;
                         break;
-                    case this.TYPE_RESOURCE_GROUP:
-                        this.cid = 'resourcegroup_' + this.get('id');
-                        break;
-                    case this.TYPE_EXTERNAL_USER:
-                        this.set('id', this.getEmail());
-                        this.cid = 'external_' + this.get('id');
-                        break;
-                    case this.TYPE_DISTLIST_USER_GROUP:
-                        this.cid = 'distlist_' + this.get('id');
+                    case 'contact':
+                        if (this.get('mark_as_distributionlist')) {
+                            newType = this.TYPE_DISTLIST;
+                        } else {
+                            newType = this.TYPE_EXTERNAL_USER;
+                        }
                         break;
                 }
+                this.set('type', newType);
             }
 
-            this.fetch().done(function () {
-                self.trigger('fetch');
-                self.trigger('change');
+            // handling for distribution list members
+            if (this.get('mail_field')) {
+                this.set('field', 'email' + this.get('mail_field'));
+            }
+
+            this.loading = this.fetch().then(function () {
+                self.magic();
             });
         },
 
-        fetch: function () {
-
-            var self = this, df = new $.Deferred();
-
-            function setUser(data) {
-                self.set(data);
-                self.trigger('change', self);
-                df.resolve();
-            }
-
-            function setExternalContact(data) {
-                self.set({
-                    display_name: data.display_name,
-                    email1: self.get('mail') || self.get('email1'),
-                    image1_url: data.image1_url,
-                    type: data.internal_userid ? self.TYPE_USER : self.TYPE_EXTERNAL_USER,
-                    id: data.internal_userid ? data.internal_userid : self.get('id')
-                });
-                self.id = self.get('id');
-                self.trigger('change');
-            }
-
-            switch (self.get('type')) {
-            case self.TYPE_USER:
-                // fetch user contact
-                if (self.has('display_name') && self.has('image1_url')) {
-                    setUser(self.toJSON());
+        magic: function () {
+            // It's a kind of magic
+            // convert external user having an internal user id to internal users
+            if (this.has('field')) {
+                if (this.get('field') === 'email1') {
+                    if (this.get('type') === this.TYPE_EXTERNAL_USER && this.get('internal_userid')) {
+                        this.set({
+                            'type': this.TYPE_USER,
+                            'contact_id': this.get('id'),
+                            'id': this.get('internal_userid')
+                        });
+                    }
                 } else {
-                    userAPI.get({ id: self.get('id') }).then(
-                        function (data) {
-                            setUser(data);
-                        },
-                        function () {
-                            if (!self.get('display_name')) {
-                                self.set('display_name', self.get('mail'));
-                            }
-                            df.resolve();
-                        }
-                    );
+                    if (this.get('type') === this.TYPE_USER && this.get('contact_id')) {
+                        this.set({
+                            'type': this.TYPE_EXTERNAL_USER,
+                            'internal_userid': this.get('id'),
+                            'id': this.get('contact_id')
+                        });
+                    }
                 }
-                break;
-            case self.TYPE_USER_GROUP:
-                //fetch user group
-                groupAPI.get({ id: self.get('id') }).done(function (group) {
-                    self.set(group);
-                    self.trigger('change', self);
-                    df.resolve();
-                });
-                break;
-            case self.TYPE_RESOURCE:
-                resourceAPI.get({ id: self.get('id') }).done(function (resource) {
-                    self.set(resource);
-                    self.trigger('change', self);
-                    df.resolve();
-                });
-                break;
-            case self.TYPE_RESOURCE_GROUP:
-                self._data = { display_name: 'resource group' };
-                self.trigger('change', self);
-                df.resolve();
-                break;
-            case self.TYPE_EXTERNAL_USER:
-                // has
-                if (self.has('display_name') && self.has('image1_url')) {
-                    setExternalContact(self.toJSON());
-                } else {
-                    contactAPI.getByEmailaddress(self.get('mail') || self.get('email1')).done(function (data) {
-                        if (data && data.display_name) {
-                            setExternalContact(data);
-                        } else {
-                            self.set({
-                                display_name: coreUtil.unescapeDisplayName(self.get('display_name')),
-                                email1: self.get('mail') || self.get('email1')
-                            });
-                        }
-                        self.trigger('change', self);
-                        df.resolve();
-                    });
-                }
-                break;
-            case self.TYPE_DISTLIST_USER_GROUP:
-                //fetch user group
-                contactAPI.get({ id: self.get('id'), folder_id: self.get('folder_id') }).done(function (group) {
-                    self.set(group);
-                    self.trigger('change', self);
-                    df.resolve();
-                });
-                break;
-            default:
-                self.set({ display_name: 'unknown' });
-                self.trigger('change', self);
-                df.resolve();
-                break;
             }
 
-            return df;
+            // Fix id for unknown external users
+            if (this.get('type') === this.TYPE_EXTERNAL_USER && !this.has('id')) {
+                this.set('id', this.getEmail(), { silent: true });
+            }
+            // set pid
+            this.set('pid', [this.TYPE_LABEL[this.get('type')], this.get('id'), this.get('field')].join('_'), { silent: true });
+            // for typeahead hint
+            this.value = this.getTarget() || this.getDisplayName();
+        },
+
+        getContactID: function () {
+            if (this.get('type') === this.TYPE_USER && this.get('contact_id')) {
+                return this.get('contact_id');
+            } else {
+                return this.get('id');
+            }
         },
 
         getDisplayName: function () {
@@ -203,44 +144,28 @@ define('io.ox/participants/model', [
             return util.getMail(this.toJSON());
         },
 
-        getTarget: function () {
-            return this.get(this.get('field')) || '';
+        getTarget: function (opt) {
+            opt = _.extend({ fallback: false }, opt);
+            if (opt.fallback && this.get('type') === this.TYPE_DISTLIST) return 'distribution_list';
+            return this.get(this.get('field')) || this.getEmail();
         },
 
-        getFieldName: function () {
-            var field = this.get('field') || '';
-            return field !== '' ? ContactModel.fields[field] : '';
+        getFieldString: function () {
+            return this.has('field') ? ContactModel.fields[this.get('field')] : '';
         },
 
         getTypeString: function () {
             return this.TYPE_STRINGS[this.get('type')] || '';
         },
 
-        getImage: function () {
-            console.warn('deprecated');
-        },
-
-        fixType: function () {
-            var newType = 0;
-            switch (this.get('type')) {
-                case 'user':
-                    newType = this.TYPE_USER;
-                    break;
-                case 'group':
-                    newType = this.TYPE_USER_GROUP;
-                    break;
-                case 'resource':
-                    newType = this.TYPE_RESOURCE;
-                    break;
-                case 'contact':
-                    if (this.get('mark_as_distributionlist')) {
-                        newType = this.TYPE_DISTLIST_USER_GROUP;
-                    } else {
-                        newType = this.TYPE_EXTERNAL_USER;
-                    }
-                    break;
+        getFieldNumber: function () {
+            if (_.isNumber(this.get('mail_field'))) {
+                return this.get('mail_field');
+            } else if (this.get('field')) {
+                return parseInt(this.get('field').slice(-1), 10);
+            } else {
+                return 0;
             }
-            this.set('type', newType);
         },
 
         getAPIData: function () {
@@ -251,9 +176,8 @@ define('io.ox/participants/model', [
                 ret.field = this.get('field');
             }
             if (this.get('type') === 5) {
-                // consider field (e.g. email2)
-                ret.mail = this.get(this.get('field')) || this.getEmail();
-                var dn = util.getMailFullName(this.toJSON());
+                ret.mail = this.getTarget();
+                var dn = this.getDisplayName(this.toJSON());
                 if (!_.isEmpty(dn)) {
                     ret.display_name = dn;
                 }
@@ -261,8 +185,52 @@ define('io.ox/participants/model', [
                 ret.id = this.get('id');
             }
             return ret;
-        }
+        },
 
+        fetch: function () {
+
+            var model = this,
+                update = function (data) {
+                    model.set(data);
+                },
+                partialUpdate = function (data) {
+                    // keep display_name (see bug 40264)
+                    if (model.get('display_name')) {
+                        // if we have a display name we drop other names to keep it
+                        // since this update is done on search results
+                        data = _(data).omit('first_name', 'last_name', 'display_name');
+                    }
+                    model.set(data);
+                };
+
+            switch (this.get('type')) {
+                case this.TYPE_USER:
+                    if (this.get('display_name') && 'image1_url' in this.attributes) break;
+                    return userAPI.get({ id: this.get('id') }).then(update);
+                case this.TYPE_USER_GROUP:
+                    if (this.get('display_name') && this.get('members')) break;
+                    return groupAPI.get({ id: this.get('id') }).then(update);
+                case this.TYPE_RESOURCE:
+                    if (this.get('display_name')) break;
+                    return resourceAPI.get({ id: this.get('id') }).then(update);
+                case this.TYPE_RESOURCE_GROUP:
+                    this.set('display_name', 'resource group');
+                    break;
+                case this.TYPE_EXTERNAL_USER:
+                    if (this.get('display_name') && 'image1_url' in this.attributes) break;
+                    if (this.get('id') && this.get('folder_id')) {
+                        return contactAPI.get(this.pick('id', 'folder_id')).then(update);
+                    } else {
+                        return contactAPI.getByEmailaddress(this.getEmail()).then(partialUpdate);
+                    }
+                    break;
+                case this.TYPE_DISTLIST:
+                    if (this.get('display_name') && 'distribution_list' in this.attributes) break;
+                    return contactAPI.get(this.pick('id', 'folder_id')).then(update);
+            }
+
+            return $.when();
+        }
     });
 
     var Collection = Backbone.Collection.extend({
@@ -275,11 +243,12 @@ define('io.ox/participants/model', [
 
         initialize: function () {
             var self = this;
-            self.on('change', function () {
-                // Deduplication
-                var idMap = {};
-                var duplicates = [];
+            this.on('change', function () {
+                // Deduplication on model change
+                var idMap = {},
+                    duplicates = [];
                 self.each(function (p) {
+                    if (!p.id) return;
                     if (idMap[p.id]) {
                         duplicates.push(p);
                     } else {
@@ -288,20 +257,35 @@ define('io.ox/participants/model', [
                 });
                 self.remove(duplicates);
             });
+            // wrap add function
+            this.oldAdd = this.add;
+            this.add = this.addUniquely;
         },
 
         addUniquely: function (models, opt) {
             var self = this;
-            if (!_.isArray(models)) {
-                models = [models];
-            }
-            var toAdd = [];
-            _(models).each(function (participant) {
-                if (!self.get(participant.id)) {
-                    toAdd.push(participant);
-                }
-            });
-            return this.add(toAdd, opt);
+            _([].concat(models))
+                .each(function (participant) {
+                    // resolve distribution lists
+                    var add;
+                    if (participant instanceof self.model) {
+                        if (participant.get('mark_as_distributionlist')) {
+                            add = participant.get('distribution_list');
+                        }
+                    } else {
+                        if (participant.mark_as_distributionlist) {
+                            add = participant.distribution_list;
+                        }
+                    }
+                    _([].concat(add || participant)).each(function (data) {
+                        // check if model
+                        var mod = data instanceof self.model ? data : new self.model(data);
+                        // wait for fetch, then add to collection
+                        mod.loading.then(function () {
+                            self.oldAdd(mod, opt);
+                        });
+                    });
+                });
         }
     });
 

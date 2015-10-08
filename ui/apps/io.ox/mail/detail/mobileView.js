@@ -11,17 +11,17 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/mail/detail/mobileView',
-    ['io.ox/mail/detail/view',
-     'io.ox/mail/common-extensions',
-     'io.ox/core/extensions',
-     'io.ox/mail/api',
-     'io.ox/mail/util',
-     'io.ox/mail/detail/content',
-     'io.ox/core/extPatterns/links',
-     'gettext!io.ox/mail',
-     'less!io.ox/mail/style'
-    ], function (DetailView, extensions, ext, api, util, content, links, gt) {
+define('io.ox/mail/detail/mobileView', [
+    'io.ox/mail/detail/view',
+    'io.ox/mail/common-extensions',
+    'io.ox/core/extensions',
+    'io.ox/mail/api',
+    'io.ox/mail/util',
+    'io.ox/mail/detail/content',
+    'io.ox/core/extPatterns/links',
+    'gettext!io.ox/mail',
+    'less!io.ox/mail/style'
+], function (DetailView, extensions, ext, api, util, content, links, gt) {
 
     'use strict';
 
@@ -92,6 +92,11 @@ define('io.ox/mail/detail/mobileView',
         draw: extensions.recipients
     });
 
+    ext.point('io.ox/mail/mobile/detail/header').extend({
+        id: 'unread-toggle',
+        index: INDEX_header += 100,
+        draw: extensions.unreadToggle
+    });
 
     ext.point('io.ox/mail/mobile/detail/header').extend({
         id: 'subject',
@@ -108,12 +113,6 @@ define('io.ox/mail/detail/mobileView',
         id: 'date',
         index: INDEX_header += 100,
         draw: extensions.fulldate
-    });
-
-    ext.point('io.ox/mail/mobile/detail/header').extend({
-        id: 'unread-toggle',
-        index: INDEX_header += 100,
-        draw: extensions.unreadToggle
     });
 
     ext.point('io.ox/mail/mobile/detail/header').extend({
@@ -164,6 +163,30 @@ define('io.ox/mail/detail/mobileView',
         }
     });
 
+    ext.point('io.ox/mail/mobile/detail/body').extend({
+        id: 'max-size',
+        after: 'content',
+        draw: function (baton) {
+
+            var isTruncated = _(baton.data.attachments).some(function (attachment) { return attachment.truncated; });
+            if (!isTruncated) return;
+
+            var url = 'api/mail?' + $.param({
+                action: 'get',
+                view: 'document',
+                folder: baton.data.folder_id,
+                id: baton.data.id,
+                session: ox.session
+            });
+
+            this.append(
+                $('<div class="max-size-warning">').append(
+                    $.txt(gt('This message has been truncated due to size limitations.')), $.txt(' '),
+                    $('<a role="button" target="_blank">').attr('href', url).text(gt('Show entire message'))
+                )
+            );
+        }
+    });
 
     /*
      * Used for header information in threads on mobile (threadView page)
@@ -245,8 +268,7 @@ define('io.ox/mail/detail/mobileView',
             ext.point('io.ox/mail/mobile/detail').invoke('draw', this.$el, baton);
 
             return this;
-        },
-
+        }
     });
 
     return {

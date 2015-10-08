@@ -1,4 +1,3 @@
-
 {{!-- Visual overlays --}}
 <div id="background-loader" class="busy">
     <div class="throbber">
@@ -10,6 +9,12 @@
 
 {{!-- Core Panel --}}
 <div id="io-ox-core" class="abs unselectable" style="display: none">
+    {{!-- banner --}}
+    <div id="io-ox-banner">
+        <span class="banner-logo" style="display: none"></span>
+        <span class="banner-title"></span>
+        <span class="banner-content"></span>
+    </div>
     {{!-- top bar --}}
     <div id="io-ox-topbar" role="navigation" class="f6-target">
         <ul class="launchers list-unstyled"></ul>
@@ -30,92 +35,128 @@
 </div>
 
 {{!-- Login screen --}}
-<div id="io-ox-login-screen-decorator" style="display: none"></div>
 <div id="io-ox-login-screen" class="unselectable" style="display: block">
 
     {{!-- Background decoration --}}
     <div id="io-ox-login-background" class="wallpaper"></div>
-    <div id="io-ox-login-form-background"></div>
 
     <div id="io-ox-login-blocker" style="display: none"></div>
 
     <div id="io-ox-login-container-scrollpane">
-    <div id="io-ox-login-container">
+        <div id="io-ox-login-container" class="container">
 
-        <div class="css-table">
-
-            <div class="css-table-row">
-            <div class="css-table-cell" id="io-ox-login-header">
-                <h1 class="clear-title">
+            <div id="io-ox-login-header">
+                <h1>
                     <span id='io-ox-login-header-prefix'></span>
                     <span id='io-ox-login-header-label'>...</span>
                 </h1>
             </div>
-            </div>
 
-            <div class="css-table-row">
-            <div class="css-table-cell" id="io-ox-login-form-container">
+            <div id="io-ox-login-form-container">
                 {{!-- login dialog; must be hard-coded this way, otherwise browsers won't inject credentials --}}
-                <form action="/appsuite/api/redirect" method="post" id="io-ox-login-form" novalidate>
+                <form action="/appsuite/api/redirect" method="post" id="io-ox-login-form" target="store-credentials" novalidate>
                     <input type="hidden" name="location" value="">{{!-- used by redirect servlet --}}
-                    <div class="row">
-                        <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="row help">
+                        <div class="col-xs-12">
+                            <p id="io-ox-login-help" class="help-block"></p>
+                        </div>
+                    </div>
+                    <div class="row username">
+                        <div class="form-group col-xs-12">
                             <label for="io-ox-login-username" class="sr-only" data-i18n="User name">User name</label>
                             <input type="email" id="io-ox-login-username" name="username" class="form-control"
                                 maxlength="1000" autocorrect="off" autocapitalize="off" spellcheck="false"
                                 aria-required="true" placeholder="User name" data-i18n="User name" data-i18n-attr="placeholder">
                         </div>
-                        <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    </div>
+                    <div class="row password">
+                        <div class="form-group col-xs-12">
                             <label for="io-ox-login-password" class="sr-only" data-i18n="Password">Password</label>
-                            <input type="password" id="io-ox-login-password" name="password" class="form-control col-lg-6"
+                            <input type="password" id="io-ox-login-password" name="password" class="form-control"
                                 maxlength="100" autocorrect="off" autocapitalize="off" aria-required="true"
                                 placeholder="Password" data-i18n="Password" data-i18n-attr="placeholder">
                         </div>
-                        <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <input type="submit" name="signin"
-                                    id="login-button" class="btn btn-primary btn-block"
-                                    value="Sign in" data-i18n="Sign in" data-i18n-attr="value,aria-label">
+                    </div>
+                    <div class="row password-retype">
+                        <div class="form-group col-xs-12">
+                            <label for="io-ox-retype-password" class="sr-only" data-i18n="Confirm new password">Confirm new password</label>
+                            <input type="password" id="io-ox-retype-password" name="password2" class="form-control"
+                                maxlength="100" autocorrect="off" autocapitalize="off" aria-required="true"
+                                placeholder="Confirm new password" data-i18n="Confirm new password" data-i18n-attr="placeholder">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="io-ox-login-store">
-                            <label for="io-ox-login-store-box" class="checkbox" aria-label="Stay signed in"
-                                data-i18n="Stay signed in" data-i18n-attr="label,aria-label"
-                                ><input type="checkbox" id="io-ox-login-store-box" checked="checked" name="store" value="1">
+                    {{!-- Feedback area --}}
+                    <div class="row feedback">
+                        <div class="col-xs-12" id="io-ox-login-feedback"></div>
+                    </div>
+                    <div class="row options">
+                        <div class="col-sm-6 col-xs-12 checkbox" id="io-ox-login-store">
+                            <label for="io-ox-login-store-box" aria-label="Stay signed in" data-i18n="Stay signed in" data-i18n-attr="label,aria-label">
+                                <input type="checkbox" id="io-ox-login-store-box" checked="checked" name="store" value="1">
                                 Stay signed in
                             </label>
                         </div>
-                        <div class="col-md-6" id="io-ox-forgot-password">
+                        <div class="col-sm-6 col-xs-12 radio text-right" id="io-ox-forgot-password">
                             <a href="#" target="_blank" data-i18n="Forgot your password?">Forgot your password?</a>
                         </div>
                     </div>
-
-                    {{!-- Feedback area --}}
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="io-ox-login-feedback"></div>
+                    <div class="row buttons">
+                        <div class="form-group col-sm-6 col-xs-12">
+                            <input type="submit" name="signin"
+                                id="io-ox-login-button" class="btn btn-primary form-control"
+                                value="Sign in" data-i18n="Sign in" data-i18n-attr="value,aria-label"/>
+                        </div>
                     </div>
+                </form>
 
-
+                {{!-- forget password dialog (sharing) --}}
+                <form action="/appsuite/api/share/reset/password" method="get" id="io-ox-password-forget-form" style="display:none;" novalidate>
+                    <div class="row help">
+                        <div class="col-xs-12">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    <div class="row email">
+                        <div class="form-group col-xs-12">
+                            <label for="io-ox-login-restoremail" class="sr-only" data-i18n="Email">Email</label>
+                            <input type="email" id="io-ox-login-restoremail" name="restoremail" class="form-control"
+                                maxlength="1000" autocorrect="off" autocapitalize="off" spellcheck="false"
+                                aria-required="true" placeholder="Email" data-i18n="Email address" data-i18n-attr="placeholder">
+                        </div>
+                    </div>
+                    <div class="row button">
+                        <div class="form-group col-sm-6 col-xs-12">
+                            <input type="submit" name="resetpassword"
+                                id="resetpassword-button" class="btn btn-primary form-control"
+                                value="Reset my password" data-i18n="Next" data-i18n-attr="value,aria-label">
+                        </div>
+                        <div class="col-sm-6 col-xs-12 text-right" id="io-ox-backtosignin">
+                            <a href="#" target="_blank" data-i18n="Back to sign in">Back to sign in</a>
+                        </div>
+                    </div>
                 </form>
             </div>
-            </div>
-
-            <div class="css-table-row">
-            <div class="css-table-cell" id="io-ox-login-footer">
-                <div id="io-ox-languages"><i id="io-ox-languages-label" data-i18n="Languages" data-i18n-attr="text,aria-label" aria-label="Languages">Languages</i>:&nbsp; <span id="io-ox-language-list"></span></div>
-                <div id="io-ox-copyright"></div>
-            </div>
-            </div>
-
         </div>
-    </div>
+
+        <footer id="io-ox-login-footer">
+            <span id="io-ox-languages"></span>
+            <span id="io-ox-copyright"></span>
+        </footer>
+
     </div>
 </div>
 
 {{!-- offline notifier --}}
 <div id="io-ox-offline" style="bottom: -41px; display: none;"></div>
 
-<div id="tmp" style="display: none;"></div>
+{{!-- screenreader notifier --}}
+<div id="io-ox-alert-screenreader" role="alert" aria-live="polite" class="sr-only">
+    <span id="sr-alert-text"></span>
+</div>
+
+<div id="tmp" style="display: none;">
+    <iframe src="javascript:false" name="store-credentials"></iframe>
+</div>
 
 {{!-- blur effect overlay for browsers without cssfilter support --}}
 <svg style="height:0;"><filter id="overlay-effect"><feGaussianBlur stdDeviation="2"/></filter></svg>

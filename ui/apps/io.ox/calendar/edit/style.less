@@ -13,75 +13,20 @@
 
 .io-ox-calendar-edit {
 
-    div.header {
-        margin-bottom: 10px;
-
-       .btn.save {
-            margin-left: 13px;
-        }
-
-        h1.title {
-            line-height:0;
-            font-size: 20px;
-            float: left;
-        }
-    }
-
-    .app-bottom-toolbar {
-        .btn {
-            float: none;
-            margin: 0;
-        }
-    }
+    // baseline adjustment
+    padding-top: 16px;
 
     .btn.btn-link {
-        padding-right:0;
-        font-size: 13px;
-        font-weight: 700;
+        padding-left: 0;
     }
 
-    .sectiontitle {
-        font-family: @normal-font-family;
-        color: #333;
+    .actionToggle {
+        display: none;
+        margin: 10px 0;
     }
 
-    legend, label {
-        color: @label-default-bg;
-        margin-bottom: 5px;
-        font-size: 13px;
-        font-weight: 700;
-    }
-
-    legend {
-        padding-top: 8px;
-        display: inline-block;
-        width: 100%;
-        border: 0;
-    }
-
-    div.section {
-        display: block;
-        clear: both;
-        padding: 20px;
-    }
-
-    .dateinput {
-
-        .form-inline input {
-            width: 90px;
-            &.datepicker-day-field {
-                width: 107px;
-            }
-        }
-    }
-
-    .recurrenceview .checkbox.control-label {
+    .recurrenceview div.checkbox {
         margin-top: 0;
-    }
-
-    .privateflag .checkbox.control-label {
-        margin-top: 4px;
-        padding-top: 0;
     }
 
     textarea.note {
@@ -91,70 +36,62 @@
     }
 
     .find-free-time {
-        margin-top: 13px;
+        margin-top: 12px;
     }
 
-    .find-free-time-top {
-        margin-top: 26px;
-    }
+    .custom-color {
+        .generate-color-label(@counter) when (@counter > 0) {
+            .generate-color-label((@counter - 1));
 
-    .participantsrow {
-        margin-bottom: 30px;
+            @color-label-bg-mod: ~"color-label-bg-@{counter}";
+            @color-label-contrast: contrast(@@color-label-bg-mod);
+
+            .color-label-@{counter} {
+                @color-label-counter: ~"color-label-bg-@{counter}";
+                background-color: darken(@@color-label-counter, 10%);
+                .fa {
+                    color: @color-label-contrast;
+                }
+            }
+        }
+
+        .generate-color-label(10);
+
+        .color-label {
+            width: 20px;
+            height: 20px;
+            margin: 2px;
+            text-align: center;
+            border-radius: @border-radius-small;
+            cursor: pointer;
+
+            &.no-color {
+                border: 1px solid #555;
+                margin-right: 22px;
+                color: @black;
+            }
+
+            .fa {
+                display: none;
+            }
+
+            &.active {
+                .fa {
+                    display: inline-block;
+                }
+            }
+        }
     }
 
     .hard-conflict {
         margin: 1em 0 0 0;
     }
 
-    .filename {
-        word-wrap: break-word;
-        word-break: break-all;
-    }
-
-    .typeahead.calendaredit {
-        height: 200px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        min-width: 85px;
-
-        a {
-            text-align: right;
-            padding: 3px 15px 3px 3px;
-        }
-    }
-}
-
-/* Mobile */
-@media all and (max-width: 480px), all and (max-device-width: 480px) {
-
-    .io-ox-calendar-edit {
-        margin-top: 0;
-        padding: 0 13px;
-
-        div.header {
-            margin-bottom: 9px;
-
-            h1.title {
-                float: none;
-            }
-
-            .btn {
-                display: none;
-            }
-        }
-
-        .dateinput .form-inline input {
-            padding: 4px 6px;
-            &.datepicker-day-field {
-                width: 100%;
-            }
-        }
+    /* Mobile */
+    @media all and (max-width: 480px), all and (max-device-width: 480px) {
 
         .actionToggle {
             display: block;
-            margin: 10px 0;
-
-            &.spacer { padding-bottom: 40px; }
         }
 
         .collapsed {
@@ -162,7 +99,41 @@
         }
 
         textarea.note {
-            min-height: 0;
+            min-height: 50px;
+        }
+
+        .custom-color {
+            .color-label {
+                width: 40px;
+                height: 40px;
+                margin: 4px;
+                font-size: 30px;
+
+                &.no-color {
+                    margin-right: 52px;
+                }
+
+                &.active {
+                    .fa {
+                        line-height: 40px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.io-ox-calendar-edit-window {
+    &.header-top {
+        .window-header {
+            .header-right {
+                float: right;
+                line-height: 32px;
+
+                a {
+                    margin-left: 0.2em;
+                }
+            }
         }
     }
 }

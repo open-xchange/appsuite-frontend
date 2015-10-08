@@ -13,16 +13,20 @@
  */
 
 define('io.ox/core/tk/tokenfield', [
+    'io.ox/core/extensions',
     'io.ox/core/tk/typeahead',
     'io.ox/participants/model',
+    'io.ox/participants/views',
     'io.ox/contacts/api',
     'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css',
     'less!io.ox/core/tk/tokenfield',
     'static/3rd.party/jquery-ui.min.js'
-], function (Typeahead, pModel, contactsAPI) {
+], function (ext, Typeahead, pModel, pViews, contactAPI) {
 
     'use strict';
+
+    // http://sliptree.github.io/bootstrap-tokenfield/
 
     $.fn.tokenfield.Constructor.prototype.getTokensList = function (delimiter, beautify, active) {
         delimiter = delimiter || this._firstDelimiter;
@@ -32,7 +36,7 @@ define('io.ox/core/tk/tokenfield', [
         return $.map( this.getTokens(active), function (token) {
             if (token.model) {
                 var displayname = token.model.getDisplayName(),
-                    email = token.model.getEmail();
+                    email = token.model.getEmail ? token.model.getEmail() : undefined;
                 return displayname === email ? email : '"' + displayname + '" <' + email + '>';
             }
             return token.value;
@@ -51,7 +55,7 @@ define('io.ox/core/tk/tokenfield', [
         if (typeof tokens === 'string') {
             if (this._delimiters.length) {
                 // Split based on comma as delimiter whilst ignoring comma in quotes
-                tokens = tokens.match(/([^\"\',]*((\'[^\']*\')*||(\"[^\"]*\")*))+/gm).filter(function(e) { return e; });
+                tokens = tokens.match(/([^\"\',]*((\'[^\']*\')*||(\"[^\"]*\")*))+/gm).filter(function (e) { return e; });
             } else {
                 tokens = [tokens];
             }
@@ -65,13 +69,6 @@ define('io.ox/core/tk/tokenfield', [
         return this.$element.get(0);
     };
 
-    // workaround for 7.6.2: use more than one emailaddreses of a single user/contact
-    function makeUnique (model) {
-        // extend id by used email field
-        model.id = model.id + '_' + model.get('field');
-        return model;
-    }
-
     var Tokenfield = Typeahead.extend({
 
         className: 'test',
@@ -83,20 +80,74 @@ define('io.ox/core/tk/tokenfield', [
         initialize: function (options) {
             var self = this;
 
-            options.stringify = function (data) {
-                var model = new pModel.Participant(data.data);
-                return {
-                    value: model.getTarget(),
-                    label: model.getDisplayName(),
-                    model: model
-                };
-            };
+            options = _.extend({}, {
+                // defines tokendata
+                harmonize: function (data) {
+                    return _(data).map(function (m) {
+                        var model = new pModel.Participant(m);
+                        return {
+                            value: model.getTarget({ fallback: true }),
+                            label: model.getDisplayName(),
+                            model: model
+                        };
+                    });
+                },
+                // autoselect also when enter was hit before dropdown was drawn
+                delayedautoselect: false,
+                // tokenfield default
+                allowEditing: true,
+                createTokensOnBlur: true,
+                // dnd sort
+                dnd: true,
+                // no html by default
+                html: false,
+                // dont't call init function in typeahead view
+                init: false,
+                // activate to prevent creation of an participant model in tokenfield:create handler
+                customDefaultModel: false,
+                extPoint: 'io.ox/core/tk/tokenfield',
+                leftAligned: false
+            }, options);
+
+            /*
+             * extension point for a token
+             */
+            ext.point(options.extPoint + '/token').extend({
+                id: 'token',
+                index: 100,
+                draw: function (model) {
+                    // add contact picture
+                    $(this).prepend(
+                        contactAPI.pictureHalo(
+                            $('<div class="contact-image">'),
+                            model.toJSON(),
+                            { width: 16, height: 16, scaleType: 'contain' }
+                        )
+                    );
+                }
+            });
+
+            ext.point(options.extPoint + '/autoCompleteItem').extend({
+                id: 'view',
+                index: 100,
+                draw: function (data) {
+                    var pview = new pViews.ParticipantEntryView({
+                            model: data.model,
+                            closeButton: false,
+                            halo: false
+                        });
+                    this.append(pview.render().$el);
+                }
+            });
 
             // call super constructor
             Typeahead.prototype.initialize.call(this, options);
+            var Participants = Backbone.Collection.extend({
+                model: pModel.Participant
+            });
 
-            // initialize participant collection
-            this.collection = new pModel.Participants();
+            // initialize collection
+            this.collection = options.collection || new Participants();
 
             // update comparator function
             this.collection.comparator = function (model) {
@@ -107,7 +158,7 @@ define('io.ox/core/tk/tokenfield', [
             this.redrawLock = false;
 
             this.listenTo(this.collection, 'reset', function () {
-                self.redrawToken();
+                self.redrawTokens();
             });
         },
 
@@ -118,23 +169,48 @@ define('io.ox/core/tk/tokenfield', [
             this.collection = null;
         },
 
-        render: function () {
-            var o = this.options,
-                self = this;
+        register: function () {
+            var self = this;
+            // register custom event when token is clicked
+            this.$el.tokenfield().parent().delegate('.token', 'click mousedown', function (e) {
+                // create new event set attrs property like it's used in the non-custom events
+                var evt = $.extend(true, {}, e, {
+                    type: 'tokenfield:clickedtoken',
+                    attrs:  $(e.currentTarget).data().attrs,
+                    originalEvent: e
+                });
+                self.$el.tokenfield().trigger(evt);
+            });
 
-            this.$el
-                .attr({
-                    tabindex: this.options.tabindex,
-                    placeholder: this.options.placeholder || ''
-                })
-                .addClass('tokenfield');
-            this.$el.tokenfield({
-                createTokensOnBlur: true,
-                minLength: o.minLength,
-                typeahead: self.typeaheadOptions
-            }).on({
+            // delayed autoselect
+            if (this.options.delayedautoselect) {
+                // use hash to 'connect' enter click and query string
+                self.autoselect = {};
+                self.model.on('change:query', function (model, query) {
+                    // trigger delayed enter click after dropdown was drawn
+                    if (self.autoselect[query]) {
+                        // trigger enter key press event
+                        self.input.trigger(
+                            $.Event( 'keydown', { keyCode: 13, which: 13 } )
+                        );
+                        // remove from hash
+                        delete self.autoselect[query];
+                    }
+
+                });
+            }
+
+            this.$el.tokenfield().on({
                 'tokenfield:createtoken': function (e) {
-                    var inputData = self.getInput().data(), model;
+                    if (self.redrawLock) return;
+                    // prevent creation of default model
+                    if (self.options.customDefaultModel && !e.attrs.model) {
+                        e.preventDefault();
+                        return false;
+                    }
+
+                    // edit
+                    var inputData = self.getInput().data();
                     if (inputData.edit === true) {
                         // edit mode
                         var newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
@@ -143,50 +219,78 @@ define('io.ox/core/tk/tokenfield', [
                         } else {
                             newAttrs = ['', e.attrs.value, '', e.attrs.value];
                         }
+                        /**
+                         * TODO: review
+                         * model values aren't updated so consumers
+                         * have to use lable/value not the model
+                         * wouldn't it be more robust we create a new model instead
+                         */
                         // save new token data to model
-                        model = inputData.editModel.set('token', {
+                        e.attrs.model = inputData.editModel.set('token', {
                             label: newAttrs[1],
                             value: newAttrs[3]
                         });
                         // save cid to token value
-                        e.attrs.value = model.cid;
-                        e.attrs.model = model;
-                    } else if (!self.redrawLock) {
-                        // create mode
-                        var model;
-                        if (e.attrs.model) {
-                            model = e.attrs.model;
-                        } else {
-                            var newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
-                            if (_.isArray(newAttrs)) {
-                                e.attrs.label = newAttrs[1];
-                                e.attrs.value = newAttrs[3];
-                            } else {
-                                newAttrs = ['', e.attrs.value, '', e.attrs.value];
-                            }
-                            // add extrenal participant
-                            model = new pModel.Participant({
-                                type: 5,
-                                display_name: newAttrs[1],
-                                email1: newAttrs[3]
-                            });
-                        }
-                        model.set('token', {
-                            label: e.attrs.label,
-                            value: e.attrs.value
-                        }, { silent: true });
-                        // add model to the collection and save cid to the token
-                        self.collection.addUniquely(makeUnique(model));
-                        // save cid to token value
-                        e.attrs.value = model.cid;
-                        e.attrs.model = model;
+                        e.attrs.value = e.attrs.model.cid;
+                        return;
                     }
+
+                    // create model for unknown participants
+                    if (!e.attrs.model) {
+                        var newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
+                        if (_.isArray(newAttrs)) {
+                            e.attrs.label = newAttrs[1];
+                            e.attrs.value = newAttrs[3];
+                        } else {
+                            newAttrs = ['', e.attrs.value, '', e.attrs.value];
+                        }
+                        // add external participant
+                        e.attrs.model = new pModel.Participant({
+                            type: 5,
+                            display_name: newAttrs[1],
+                            email1: newAttrs[3]
+                        });
+                    }
+
+                    // distribution lists
+                    if (e.attrs.model.has('distribution_list')) {
+                        var models = _(e.attrs.model.get('distribution_list')).map(function (m) {
+                            m.type = 5;
+                            var model = new pModel.Participant({
+                                type: 5,
+                                display_name: m.display_name,
+                                email1: m.mail
+                            });
+                            return model.set('token', {
+                                label: m.display_name,
+                                value: m.mail
+                            }, { silent: true });
+                        });
+                        self.collection.add(models);
+                        self.redrawTokens();
+                        // clean input
+                        self.input.data('ttTypeahead').input.$input.val('');
+                        return false;
+                    }
+
+                    // create token data
+                    e.attrs.model.set('token', {
+                        label: e.attrs.label,
+                        value: e.attrs.value
+                    }, { silent: true });
+                    e.attrs.value = e.attrs.model.cid;
+                    // add model to the collection and save cid to the token
+                    self.collection.add(e.attrs.model);
                 },
                 'tokenfield:createdtoken': function (e) {
                     if (e.attrs) {
+                        var model = e.attrs.model || self.getModelByCID(e.attrs.value),
+                            node = $(e.relatedTarget),
+                            label = node.find('.token-label');
+                        // remove wrongly calculated max-width
+                        if (label.css('max-width') === '0px') label.css('max-width', 'none');
                         // a11y: set title
-                        var model = e.attrs.model || self.getModelByCID(e.attrs.value);
-                        $(e.relatedTarget).attr('title', function () {
+                        node.attr('title', function () {
                             var token = model.get('token'),
                                 title = token.label;
                             if (token.label !== token.value) {
@@ -194,11 +298,8 @@ define('io.ox/core/tk/tokenfield', [
                             }
                             return title;
                         });
-
-                        // add contact picture
-                        $(e.relatedTarget).prepend(
-                            contactsAPI.pictureHalo($('<div class="contact-image">'), _.extend(model.toJSON(), { width: 16, height: 16, scaleType: 'contain' }))
-                        );
+                        // customize token
+                        ext.point(self.options.extPoint + '/token').invoke('draw', e.relatedTarget, model, e);
                     }
                 },
                 'tokenfield:edittoken': function (e) {
@@ -214,49 +315,105 @@ define('io.ox/core/tk/tokenfield', [
                     }
                 },
                 'tokenfield:removetoken': function (e) {
-                    self.collection.remove(self.getModelByCID(e.attrs.value));
+                    _([].concat(e.attrs)).each(function (el) {
+                        self.collection.remove(self.getModelByCID(el.value));
+                    });
                 }
             });
+        },
+
+        render: function () {
+
+            var o = this.options, self = this;
+
+            this.$el
+                .addClass('tokenfield')
+                .tokenfield({
+                    createTokensOnBlur: o.createTokensOnBlur,
+                    minLength: o.minLength,
+                    allowEditing: o.allowEditing,
+                    typeahead: self.typeaheadOptions,
+                    html: this.options.html || false,
+                    inputType: 'email'
+                });
+
+            this.register();
 
             // save original typeahead input
-            this.input =  $(this.$el).data('bs.tokenfield').$input.on({
-                'typeahead:opened': function () {
-                    if (_.isFunction(o.cbshow)) o.cbshow();
-                },
-                'typeahead:selected typeahead:autocompleted': function (e, item) {
-                    o.click.call(this, e, item.data);
-                    self.input.trigger('select', item.data);
-                },
-                'blur': o.blur
+            this.input =  $(this.$el).data('bs.tokenfield').$input;
+            // call typehead render
+            Typeahead.prototype.render.call({
+                $el: this.input,
+                model: this.model,
+                options: this.options
             });
+
+            // add non-public api;
+            this.hiddenapi = this.input.data('ttTypeahead');
+
+            // calculate postion for typeahead dropdown (tt-dropdown-menu)
+            if (_.device('smartphone') || o.leftAligned) {
+                // non-public api of typeahead
+                this.hiddenapi.dropdown._show = function () {
+                    var width = 'auto', left = 0;
+                    if (_.device('smartphone')) {
+                        left = self.input.offset().left * -1;
+                        width = window.innerWidth;
+                    } else if (o.leftAligned) {
+                        left = self.input.position().left;
+                        left = Math.round(left) * -1 + 17;
+                    }
+                    this.$menu.css({ left: left, width: width }).show();
+                };
+            }
+
+            // workaround: register handler for delayed autoselect
+            if (this.options.delayedautoselect) {
+                this.input.on('keydown', function (e) {
+                    var enter = e.which === 13,
+                        validquery = !!self.input.val() && self.input.val().length >= o.minLength,
+                        runningrequest = self.model.get('query') !== self.input.val();
+                    // clear dropdown when query changes
+                    if (runningrequest && !enter) {
+                        self.hiddenapi.dropdown.empty();
+                        self.hiddenapi.dropdown.close();
+                    }
+                    // flag query string when enter was hit before drowdown was drawn
+                    if (enter && validquery && runningrequest) {
+                        self.autoselect[self.input.val()] = true;
+                    }
+                });
+            }
 
             this.$el.parent().addClass(this.options.className);
 
             // init drag 'n' drop sort
-            this.$el.closest('div.tokenfield').sortable({
-                items: '> .token',
-                connectWith: 'div.tokenfield',
-                cancel: 'a.close',
-                placeholder: 'token placeholder',
-                revert: 0,
-                forcePlaceholderSize: true,
-                // update: _.bind(this.resort, this),
-                stop: function () {
-                    self.resort.call(self);
-                },
-                receive: function (e, ui) {
-                    var tokenData = ui.item.data();
-                    self.collection.addUniquely(tokenData.attrs.model);
-                    self.resort.call(self);
-                },
-                remove: function (e, ui) {
-                    var tokenData = ui.item.data();
-                    self.collection.remove(tokenData.attrs.model);
-                    self.resort.call(self);
-                }
-            }).droppable({
-                hoverClass: 'drophover'
-            });
+            if (this.options.dnd) {
+                this.$el.closest('div.tokenfield').sortable({
+                    items: '> .token',
+                    connectWith: 'div.tokenfield',
+                    cancel: 'a.close',
+                    placeholder: 'token placeholder',
+                    revert: 0,
+                    forcePlaceholderSize: true,
+                    // update: _.bind(this.resort, this),
+                    stop: function () {
+                        self.resort.call(self);
+                    },
+                    receive: function (e, ui) {
+                        var tokenData = ui.item.data();
+                        self.collection.add(tokenData.attrs.model);
+                        self.resort.call(self);
+                    },
+                    remove: function (e, ui) {
+                        var tokenData = ui.item.data();
+                        self.collection.remove(tokenData.attrs.model);
+                        self.resort.call(self);
+                    }
+                }).droppable({
+                    hoverClass: 'drophover'
+                });
+            }
 
             // Remove on cut
             this.$el.closest('div.tokenfield').on('keydown', function (e) {
@@ -264,7 +421,7 @@ define('io.ox/core/tk/tokenfield', [
                     $(this).find('.token.active').each(function () {
                         self.collection.remove($(this).data().attrs.model);
                     });
-                    self.redrawToken();
+                    self.redrawTokens();
                 }
             });
 
@@ -275,7 +432,7 @@ define('io.ox/core/tk/tokenfield', [
             return this.collection.get({ cid: cid });
         },
 
-        redrawToken: function () {
+        redrawTokens: function () {
             var tokens = [];
             this.redrawLock = true;
             this.collection.each(function (model) {
@@ -295,14 +452,18 @@ define('io.ox/core/tk/tokenfield', [
                 col.get({ cid: token.value }).index = index;
             });
             col.sort();
-            this.redrawToken();
+            this.redrawTokens();
         },
 
         getInput: function () {
             return this.input;
+        },
+
+        setFocus: function () {
+            var tokenfield = this.$el.parent();
+            tokenfield.find('.token-input').focus();
         }
     });
 
     return Tokenfield;
-
 });

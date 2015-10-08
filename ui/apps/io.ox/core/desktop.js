@@ -12,18 +12,19 @@
  *
  */
 
-define('io.ox/core/desktop',
-    ['io.ox/core/event',
-     'io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/cache',
-     'io.ox/core/notifications',
-     'io.ox/core/upsell',
-     'io.ox/core/adaptiveLoader',
-     'io.ox/core/folder/api',
-     'settings!io.ox/core',
-     'gettext!io.ox/core'
-    ], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, api, coreConfig, gt) {
+define('io.ox/core/desktop', [
+    'io.ox/core/event',
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/cache',
+    'io.ox/core/notifications',
+    'io.ox/core/upsell',
+    'io.ox/core/adaptiveLoader',
+    'io.ox/core/folder/api',
+    'io.ox/find/main',
+    'settings!io.ox/core',
+    'gettext!io.ox/core'
+], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, api, findFactory, coreConfig, gt) {
 
     'use strict';
 
@@ -55,6 +56,33 @@ define('io.ox/core/desktop',
             this.getInstance = function () {
                 return self;
             };
+        },
+
+        setCounter: function (text, options) {
+            if (!this.get('topbarNode')) {
+                return;
+            }
+            if (!this.badge && this.get('topbarNode')) {
+                this.badge = this.get('topbarNode').find('.topbar-launcherbadge');
+                if (this.badge.length === 0) {
+                    this.badge = $('<span class="badge topbar-launcherbadge">');
+                }
+                this.get('topbarNode').find('a.apptitle').append(this.badge);
+            }
+            var oldText = this.badge.text();
+
+            this.badge.text(text);
+            if (options.arialabel) {
+                this.badge.attr('aria-label', options.arialabel);
+            }
+            if (oldText !== text) {
+                ox.trigger('recalculate-topbarsize');
+            }
+            if (!text) {
+                this.badge.hide();
+            } else {
+                this.badge.show();
+            }
         },
 
         getName: function () {
@@ -147,7 +175,6 @@ define('io.ox/core/desktop',
         },
 
         initialize: function () {
-
             var self = this;
 
             // call super constructor
@@ -158,7 +185,7 @@ define('io.ox/core/desktop',
             var save = $.proxy(this.saveRestorePoint, this);
             $(window).on('unload', save);
             // 10 secs
-            this.set('saveRestorePointTimer', setInterval(save, 10 * 1000));
+            if (!this.disableRestorePointTimer) this.set('saveRestorePointTimer', setInterval(save, 10 * 1000));
 
             // add folder management
             this.folder = (function () {
@@ -172,6 +199,7 @@ define('io.ox/core/desktop',
                     unset: function () {
                         // unset
                         folder = null;
+                        _.url.hash('folder', null);
                         // update window title?
                         if (win) {
                             win.setTitle(_.noI18n(''));
@@ -199,9 +227,6 @@ define('io.ox/core/desktop',
                                 // update grid?
                                 if (grid && grid.prop('folder') !== folder) {
                                     grid.busy().prop('folder', folder);
-                                    if (win && win.search.active) {
-                                        win.search.close();
-                                    }
                                     grid.refresh();
                                     // load fresh folder & trigger update event
                                     api.reload(id);
@@ -254,18 +279,28 @@ define('io.ox/core/desktop',
                     },
 
                     setDefault: function () {
-                        var def = new $.Deferred();
-                        require(['settings!io.ox/mail'], function (mailConfig) {
+                        return require(['settings!io.ox/mail']).then(function (mailConfig) {
                             var defaultFolder = type === 'mail' ? mailConfig.get('folder/inbox') : coreConfig.get('folder/' + type);
                             if (defaultFolder) {
-                                that.set(defaultFolder)
-                                    .done(def.resolve)
-                                    .fail(def.reject);
+                                return that.set(defaultFolder);
                             } else {
-                                def.reject({error: gt('Could not get a default folder for this application.')});
+                                return api.getExistingFolder(type).then(
+                                    function (id) {
+                                        return that.set(id);
+                                    },
+                                    function () {
+                                        return $.Deferred().reject({ error: gt('Could not get a default folder for this application.') });
+                                    }
+                                );
                             }
                         });
-                        return def;
+                    },
+
+                    isDefault: function () {
+                        return require(['settings!io.ox/mail']).then(function (mailConfig) {
+                            var defaultFolder = type === 'mail' ? mailConfig.get('folder/inbox') : coreConfig.get('folder/' + type);
+                            return folder == defaultFolder;
+                        });
                     },
 
                     get: function () {
@@ -334,12 +369,22 @@ define('io.ox/core/desktop',
             return this.get('window');
         },
 
+        searchable: function () {
+            if (this.get('find')) return;
+
+            var find = findFactory.getApp({ parent: this });
+            //TODO: bottleneck
+            find.prepare();
+            this.set('find', find);
+            return this;
+        },
+
         getWindowNode: function () {
             return this.has('window') ? this.get('window').nodes.main : $();
         },
 
         getWindowTitle: function () {
-            return this.has('window') ? this.has('window').getTitle() : '';
+            return this.has('window') ? this.get('window').getTitle() : '';
         },
 
         /**
@@ -467,9 +512,8 @@ define('io.ox/core/desktop',
                         ox.trigger('app:start', self);
                     },
                     function fail() {
-                        ox.launch(
-                            require('settings!io.ox/core').get('autoStart')
-                        );
+                        var autoStart = require('settings!io.ox/core').get('autoStart');
+                        if (autoStart !== 'none') ox.launch(autoStart);
                     }
                 );
             } else if (this.has('window')) {
@@ -477,6 +521,9 @@ define('io.ox/core/desktop',
                 this.get('window').show();
                 this.trigger('resume', this);
                 ox.trigger('app:resume', this);
+                // if image previews were already displayed in the files app, it might happen that another app (e.g. latest files widget) did some changes to the pool
+                // and the previews were redrawn but not displayed since the 'appear' event has not been triggered
+                $(window).trigger('resize.lazyload');
             }
 
             return deferred.pipe(function () {
@@ -702,7 +749,9 @@ define('io.ox/core/desktop',
             });
 
         // browser will show a confirmation dialog, if onbeforeunload returns a string
-        if (dirtyApps.length > 0) {
+        var unsavedChanges = dirtyApps.length > 0;
+        ox.trigger('beforeunload', unsavedChanges);
+        if (unsavedChanges) {
             return gt('There are unsaved changes.');
         }
     };
@@ -771,10 +820,9 @@ define('io.ox/core/desktop',
             this.afterShow = $.noop;
             this.afterHide = $.noop;
 
-
             this.show = function (app, opt) {
                 var win = app.getWindow(),
-                    pcOpt = opt.animation ? {animation: opt.animation} : {},
+                    pcOpt = opt.animation ? { animation: opt.animation } : {},
                     self = this,
                     newPerspective = opt.perspective.split(':')[0];
 
@@ -915,9 +963,8 @@ define('io.ox/core/desktop',
                 if (type === 'window.quit') {
                     // remove item at pos
                     windows.splice(pos, 1);
-                }
-                // close?
-                else if (type === 'window.close' || type === 'window.pre-quit') {
+                } else if (type === 'window.close' || type === 'window.pre-quit') {
+                    // close?
                     // add/move window to end of stack
                     windows = _(windows).without(win);
                     windows.push(win);
@@ -971,12 +1018,14 @@ define('io.ox/core/desktop',
                 this.options = options || {};
                 this.id = options.id;
                 this.name = options.name || 'generic';
-                this.nodes = { title: $(), toolbar: $(), controls: $(), closeButton: $() , facetedsearch: {}};
-                this.search = { query: '', active: false };
+                this.nodes = { title: $(), toolbar: $(), controls: $(), closeButton: $() };
                 this.state = { visible: false, running: false, open: false };
                 this.app = null;
                 this.detachable = false;
                 this.simple = false;
+                this.page = options.page;
+
+                if (this.page) pane = this.page;
 
                 var quitOnClose = false,
                     perspectives = {},
@@ -1034,9 +1083,6 @@ define('io.ox/core/desktop',
                     id: 'default',
                     draw: function () {
                         return this.body.append(
-                            // search area
-                            // deprecated: old search will be removed after 7.6.1
-                            this.search = $('<div class="window-search">'),
                             // default perspective
                             this.main = $('<div class="abs window-content">')
                         );
@@ -1045,9 +1091,19 @@ define('io.ox/core/desktop',
 
                 this.shown = shown.promise();
 
+                function considerScrollbarWidth(element) {
+                    // get scrollbar width and fix header
+                    var test = $('<div style="width: 100px; visibility: hidden; overflow-y: scroll;">').appendTo('body'),
+                        width = 100 - test[0].clientWidth;
+                    test.remove();
+                    // apply padding
+                    element.css('padding-right', width);
+                }
+
                 this.setHeader = function (node) {
-                    this.nodes.header.append(node);
+                    this.nodes.header.append(node.addClass('container'));
                     this.nodes.outer.addClass('header-top');
+                    considerScrollbarWidth(this.nodes.header);
                     return this.nodes.header;
                 };
 
@@ -1081,7 +1137,7 @@ define('io.ox/core/desktop',
                         node.show();
 
                         if (self === null) return;
-                        if (currentWindow && currentWindow !== self) {
+                        if (currentWindow && currentWindow !== self && !this.page) {
                             currentWindow.hide();
                         }
                         currentWindow = self;
@@ -1089,7 +1145,7 @@ define('io.ox/core/desktop',
                         self.state.visible = true;
                         self.state.open = true;
                         self.trigger('show');
-                        if (_.device('!small')) {
+                        if (_.device('!smartphone')) {
                             document.title = document.customTitle = gt.format(
                                 //#. Title of the browser window
                                 //#. %1$s is the name of the page, e.g. OX App Suite
@@ -1151,7 +1207,7 @@ define('io.ox/core/desktop',
                 };
 
                 this.preQuit = function () {
-                    this.hide();
+                    if (!window.cordova) this.hide();
                     this.state.open = false;
                     this.trigger('pre-quit');
                     ox.ui.windowManager.trigger('window.pre-quit', this);
@@ -1258,7 +1314,7 @@ define('io.ox/core/desktop',
                         title = str;
                         self.nodes.title.find('span').first().text(title);
                         if (this === currentWindow) {
-                            if (_.device('!small')) {
+                            if (_.device('!smartphone')) {
                                 document.title = document.customTitle = gt.format(
                                     //#. Title of the browser window
                                     //#. %1$s is the name of the page, e.g. OX App Suite
@@ -1277,228 +1333,6 @@ define('io.ox/core/desktop',
                     }
                     return this;
                 };
-
-                // deprecated: old search will be removed after 7.6.1
-                this.search = {
-
-                    active: false,
-                    query: '',
-                    previous: '',
-                    lastFocus: '',
-
-                    open: function () {
-                        if (!this.active) {
-                            this.lastFocus = $(document.activeElement);
-                            self.trigger('search:open');
-                            self.nodes.body.addClass('search-open');
-                            self.nodes.searchField.focus();
-                            this.active = true;
-                        }
-                        return this;
-                    },
-
-                    close: function () {
-                        if (this.active) {
-                            self.trigger('search:close');
-                            self.nodes.body.removeClass('search-open');
-                            this.active = false;
-                            self.nodes.searchField.val('');
-                            self.trigger('search:cancel cancel-search');
-                            this.query = this.previous = '';
-                            this.lastFocus.focus();
-                        }
-                        return this;
-                    },
-
-                    clear: function () {
-                        if (this.active) {
-                            self.trigger('search:clear');
-                            self.nodes.searchField.val('');
-                            this.query = this.previous = '';
-                        }
-                    },
-
-                    toggle: function () {
-                        if (this.active) { this.close(); } else { this.open(); }
-                        return this;
-                    },
-
-                    getOptions: function () {
-                        var tmp = {}, data = self.nodes.search.find('.search-options').data();
-                        if (data && data.options) {
-                            _.each(data.options, function (item) {
-                                if (item.checked !== undefined)
-                                    tmp[item.name] = item.checked ? 'on' : 'off';
-                            });
-                        }
-                        return tmp;
-                    },
-
-                    getQuery: function () {
-                        return self.nodes.searchField.val();
-                    },
-
-                    setQuery: function (query) {
-                        self.nodes.searchField.val(this.query = query);
-                        return this;
-                    },
-
-                    start: function (query) {
-                        this.open().setQuery(query);
-                        self.trigger('search', query);
-                        return this;
-                    },
-
-                    stop: function () {
-                        this.close();
-                        return this;
-                    }
-                };
-
-                this.facetedsearch = {
-                    active: false,
-                    lastFocus: '',
-                    ready: $.Deferred(),
-                    selectors : {
-                        facets: '.search-facets:first',
-                        facetsadv: '.search-facets-advanced'
-                    },
-                    init: function () {
-                        // via ext.point: this.name + '/facetedsearch'
-                    },
-
-                    toggle: function () {
-                        // show: search container
-                        // hide: tree, tree bottom toolbar
-                        var selector = '.folder-tree, .generic-toolbar.bottom, .search-container',
-                            nodes = self.nodes.sidepanel.find(selector);
-                        nodes.toggle();
-                        this.active = !this.active;
-                    },
-
-                    open: function () {
-                        var container = self.nodes.facetedsearch.container,
-                            facets = container.find(this.selectors.facets),
-                            advfacets = container.find(this.selectors.facetsadv),
-                            baton = self.facetedsearch.view.baton;
-
-                        if (!this.active) this.toggle();
-
-                        require(['io.ox/search/facets/extensions'], function (extensions) {
-                            extensions.facets.call(facets.empty(), baton);
-                            extensions.advfacets.call(advfacets.empty(), baton);
-                        });
-                        return this;
-                    },
-
-                    close: function () {
-                        if (this.active) {
-                            this.toggle();
-                        }
-                        return this;
-                    },
-
-                    focus: function () {
-                        self.nodes.facetedsearch.container
-                            .find('.facet > a')
-                            .focus();
-                    },
-
-                    clear: function () {
-                        // empty input
-                        self.nodes.facetedsearch.toolbar
-                            .find('.search-field')
-                            .val('');
-                    },
-
-                    cancel: function () {
-                        // empty input
-                        self.facetedsearch.clear();
-                        // reset model
-                        self.facetedsearch.view.model.reset();
-                        self.facetedsearch.close();
-                        // apps switch from 'search mode' to 'all mode'
-                        self.trigger('search:cancel');
-                    }
-                };
-
-                ext.point(this.name + '/facetedsearch').extend({
-                    id: 'searchfield',
-                    index: 100,
-                    draw: function (win) {
-                        var side = win.nodes.sidepanel,
-                            nodes = win.nodes.facetedsearch;
-
-                        // search field
-                        nodes.toolbar = $('<div class="generic-toolbar top inplace-search io-ox-search">');
-
-                        // add nodes
-                        side.append(nodes.toolbar);
-                    }
-                });
-
-                ext.point(this.name + '/facetedsearch').extend({
-                    id: 'container',
-                    index: 100,
-                    draw: function (win) {
-                        var side = win.nodes.sidepanel,
-                            nodes = win.nodes.facetedsearch;
-
-                        // facets container
-                        nodes.container = $('<div class="abs search-container">').hide().append(
-                            // active facets
-                            $('<div class="default">').append(
-                                $('<ul class="search-facets">')
-                                .attr({
-                                    //#. search: headline for list of common facets/filters
-                                    'aria-label': gt('Common Facets'),
-                                    'tabIndex': 1,
-                                    'role': 'group'
-                                })
-                            ),
-                            // advanced facets
-                            $('<div class="advanced">')
-                            .append(
-                                $('<ul class="search-facets search-facets-advanced">')
-                                .attr({
-                                    //#. search: clickable headline to show/hide list of advanced facets/filters
-                                    'aria-label': gt('Advanced Facets'),
-                                    'tabIndex': 1,
-                                    'role': 'group'
-                                })
-                            ),
-                            // cancel button
-                            $('<div>')
-                                .attr({
-                                    //#. search: actions when in search mode e.g. close search
-                                    'aria-label': gt('Actions'),
-                                    'tabIndex': 1,
-                                    'role': 'group'
-                                })
-                            .append(
-                                $('<a data-action="close">')
-                                    .text(gt('Close search'))
-                                    .attr({
-                                        tabindex: 1,
-                                        role: 'button',
-                                        href: '#'
-                                    })
-                                    .on('click', function (e) {
-                                        e.preventDefault();
-                                        win.facetedsearch.view.trigger('button:cancel');
-                                    })
-                            )
-                        )
-                        .addClass('f6-target')
-                        .attr({
-                            role: 'navigation',
-                            //#. search: leftside sidepanel container that shows active and available facets
-                            'aria-label': gt('Search Options')
-                        });
-                        // add nodes
-                        side.append(nodes.container);
-                    }
-                });
 
                 this.addClass = function () {
                     var o = this.nodes.outer;
@@ -1553,9 +1387,6 @@ define('io.ox/core/desktop',
                 classic: false,
                 id: 'window-' + guid,
                 name: '',
-                search: false,
-                facetedsearch: false,
-                searchShortcut: false,
                 title: '',
                 toolbar: false,
                 width: 0
@@ -1582,8 +1413,6 @@ define('io.ox/core/desktop',
                 win.nodes.sidepanel = $();
                 win.nodes.head = $();
                 win.nodes.body = $();
-                win.nodes.search = $();
-                win.nodes.facetedsearch = {};
 
             } else {
 
@@ -1615,8 +1444,6 @@ define('io.ox/core/desktop',
                     })
                 );
 
-                win.nodes.facetedsearch = {};
-
                 // classic window header?
                 if (opt.classic) win.nodes.outer.addClass('classic');
 
@@ -1633,255 +1460,126 @@ define('io.ox/core/desktop',
             // add event hub
             Events.extend(win);
 
-            // deprecated: old search will be removed after 7.6.1
-            if (opt.search) {
-                // search
-                var triggerSearch = function (query) {
-                        win.trigger('search', query);
-                    };
-
-                var searchHandler = {
-
-                    keydown: function (e) {
-                        if (e.which === 27) {
-                            win.search.close();
-                        } else if (e.which === 13) {
-                            searchHandler.change(e);
-                        }
-                    },
-
-                    clear: function () {
-                        win.search.clear();
-                    },
-
-                    change: function (e) {
-                        e.stopPropagation();
-                        win.search.query = win.search.getQuery();
-                        win.search.options = JSON.stringify(win.search.getOptions());
-                        var changed = win.search.query !== win.search.previous || win.search.options !== win.search.optionsprev;
-                        // trigger search?
-                        if (win.search.query !== '' && changed) {
-                            win.search.optionsprev = win.search.options;
-                            triggerSearch(win.search.previous = win.search.query);
-                        }
-                        else if (win.search.query === '') {
-                            win.search.clear();
-                        }
-                    }
-                };
-
-                $('<form class="form-search form-inline" role="search">')
-                .attr('aria-label', gt('Search for items'))
-                .append(
-                    $('<div class="search-query-container input-group">').append(
-                        // search field
-                        win.nodes.searchField = $('<input type="text" class="form-control search-query">')
-                        .attr({ name: 'query',
-                            autocomplete: 'off',
-                            tabindex: '1',
-                            placeholder: gt('Search') + ' ...',
-                            'aria-label': gt('Search')
-                        })
-                        .on(searchHandler)
-                        .placeholder(),
-                        // 'clear' X
-                        $('<i class="fa fa-times clear-query">').on('click', searchHandler.clear),
-                        $('<span class="input-group-btn">').append(
-                            $('<button type="submit" data-action="search" class="btn btn-default" aria-hidden="true">')
-                                .on('click', searchHandler.change)
-                                .append($('<i class="fa fa-search">'))
-                        )
-                    ),
-                    //abort button
-                    $('<a href="#" data-action="remove" tabindex="1">×</a>')
-                    .addClass('close close-big')
-                    .on('click', function (e) { e.preventDefault(); win.search.stop(); })
-                )
-                .on('change', 'input', function () { win.search.previous = ''; })
-                .on('submit', false)
-                .appendTo(win.nodes.search);
-            }
+            if (opt.search)
+                console.warn('search is deprecated with 7.6.0. Please use io.ox/find instead');
 
             if (opt.facetedsearch) {
-
-                    ext.point(win.name + '/facetedsearch/view').extend({
-                        id: 'container',
-                        index: 100,
-                        draw: function () {
-                             // init container
-                             ext.point(this.name + '/facetedsearch').
-                                invoke('draw', this.facetedsearch, win);
-
-                        }
-                    });
-
-                    ext.point(win.name + '/facetedsearch/view').extend({
-                        id: 'input',
-                        index: 200,
-                        draw: function () {
-                            var node = this.nodes.facetedsearch.toolbar,
-                                //#. search feature help text for screenreaders
-                                label = gt('Search'),
-                                id = win.name + '-search-field',
-                                guid = _.uniqueId('form-control-description-'),
-                                group;
-
-                            // input group and dropdown
-                            node.append(
-                                group = $('<div class="input-group">')
-                                    .append(
-                                            $('<input type="text">')
-                                            .attr({
-                                                class: 'form-control search-field f6-target',
-                                                tabindex: 1,
-                                                role: 'navigation',
-                                                'aria-label': gt('Search within application'),
-                                                id: id,
-                                                placeholder: label + ' ...',
-                                                'aria-describedby': guid
-                                            }),
-                                            $('<label class="sr-only">')
-                                                .attr('for', id)
-                                                .text(label),
-                                            $('<p class="sr-only sr-description">')
-                                                .attr({
-                                                    id: guid,
-                                                })
-                                                .text(
-                                                    //#. search feature help text for screenreaders
-                                                    gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones')
-                                                )
-                                    )
-                            );
-                        }
-                    });
-                    // hint: listener is implemented in search/autocomplete/extensions
-                    // ext.point(win.name + '/facetedsearch/view').extend({
-                    //     id: 'clear',
-                    //     index: 250,
-                    //     draw: function () {
-
-                    //         var group = this.nodes.facetedsearch.toolbar.find('.input-group');
-                    //         group.append(
-                    //             $('<a href="#">')
-                    //                 .attr({
-                    //                     'tabindex': '1',
-                    //                     'class': 'btn-clear',
-                    //                 }).append(
-                    //                     $('<i class="fa fa-times"></i>')
-                    //                 )
-                    //                 .on('click', function (e) {
-                    //                     e.preventDefault();
-                    //                 })
-                    //         );
-                    //     }
-                    // });
-
-                    ext.point(win.name + '/facetedsearch/view').extend({
-                        id: 'action',
-                        index: 300,
-                        draw: function () {
-                            var group = this.nodes.facetedsearch.toolbar.find('.input-group');
-                            group.append(
-                                $('<span class="input-group-btn">').append(
-                                    // submit
-                                    $('<button type="button">')
-                                    .attr({
-                                        'tabindex': '1',
-                                        'class': 'btn btn-default btn-search',
-                                        'data-toggle': 'tooltip',
-                                        'data-placement': 'bottom',
-                                        'data-animation': 'false',
-                                        'data-container': 'body',
-                                        'data-original-title': gt('Start search'),
-                                        'aria-label': gt('Start search')
-                                    })
-                                    .append(
-                                        $('<i class="fa fa-search"></i>')
-                                    )
-                                    .tooltip()
-                                )
-                            );
-                        }
-                    });
-
-                    ext.point(win.name + '/facetedsearch/view').extend({
-                        id: 'lazy-load',
-                        index: 400,
-                        draw: function () {
-
-                            var field = this.nodes.facetedsearch.toolbar.find('.search-field'),
-                                run = function () {
-                                    require(['io.ox/search/quickstart'], function (quickstart) {
-                                        //if (true) return;
-                                        quickstart.run(win)
-                                            .done(function () {
-                                                //field.off('focus', run);
-                                                // get view
-                                                var view = win.facetedsearch.view;
-
-                                                //events: app resume cancels search mode
-                                                win.app.on('resume', function () {
-                                                    if (win.facetedsearch.active) {
-                                                        view.trigger('button:cancel');
-                                                    }
-                                                });
-
-                                                // events: internal
-                                                view.on({
-                                                    'query':
-                                                        _.debounce(function (e, appname) {
-                                                            // one search app, one model but multiple views
-                                                            if (win.app.get('name') === appname) {
-                                                                win.facetedsearch.open();
-                                                                if (e.type === 'query') win.trigger('search:query');
-                                                            }
-                                                        }, 10
-                                                    ),
-                                                    'button:clear': function () {
-                                                        win.facetedsearch.clear();
-                                                    },
-                                                    'button:cancel': function () {
-                                                        win.facetedsearch.cancel();
-                                                    }
-                                                });
-
-                                                // events: redirect
-                                                view.model.on({
-                                                    'query': function (appname) {
-                                                        view.trigger('query', appname);
-                                                    },
-                                                    'query:result': function (response) {
-                                                        // screenreader
-                                                        var n = response.results.length,
-                                                            //#. 'no results' message for screenreaders with additional hint to adjust active filters
-                                                            empty = gt('No items were found. Please adjust currently used facets.'),
-                                                            //#. result count for screenreaders
-                                                            //#. %1$s number of items found by search feature
-                                                            some = gt.format(gt.ngettext('One item was found.', '%1$s items were found.', n), n);
-                                                        notifications.yell('screenreader', n ? some : empty);
-                                                    },
-                                                    'cancel': function (appname) {
-                                                        view.trigger('button:cancel', appname);
-                                                    }
-                                                });
-                                                win.trigger('search:loaded');
-                                                ox.trigger('search:load', win);
-                                        });
-                                    });
-                                };
-
-                            // lazy load search app when search field gets the focus for the first time
-                            // also listen to "load" to trigger this manually
-                            field.one('focus load', run);
-                        }
-                    });
-
-                // draw searchfield and attach lazy load listener
-                ext.point(win.name + '/facetedsearch/view').invoke('draw', win, ext.Baton.ensure({}));
-
+                console.warn('io.ox/search is deprecated with 7.8.0. Please use io.ox/find instead');
             }
 
+            if (opt.find) {
+
+                ext.point('io.ox/find/view').extend({
+                    id: 'view',
+                    index: 100,
+                    draw: function (baton) {
+                        baton.$.viewnode = $('<div class="generic-toolbar top io-ox-find">');
+
+                        // add nodes
+                        this.nodes.sidepanel
+                            .append(baton.$.viewnode)
+                            .addClass('top-toolbar');
+                    }
+                });
+
+                ext.point('io.ox/find/view').extend({
+                    id: 'subviews',
+                    index: 200,
+                    draw: function (baton) {
+                        baton.$.viewnode.append(
+                            baton.$.box = $('<form class="search-box">'),
+                            baton.$.boxfilter = $('<div class="search-box-filter">')
+                        );
+                    }
+                });
+
+                ext.point('io.ox/find/view').extend({
+                    id: 'form',
+                    index: 300,
+                    draw: function (baton) {
+                        // share data
+                        _.extend(baton.data, {
+                            label: gt('Search'),
+                            id:  win.name + '-search-field',
+                            guid:  _.uniqueId('form-control-description-')
+                        });
+                        // search box form
+                        baton.$.group = $('<div class="form-group has-feedback">')
+                            .append(
+                                $('<input type="text">')
+                                .attr({
+                                    class: 'form-control has-feedback search-field tokenfield-placeholder f6-target',
+                                    tabindex: 1,
+                                    role: 'search',
+                                    id: baton.data.id,
+                                    placeholder: baton.data.label + '...',
+                                    'aria-describedby': baton.data.guid
+                                })
+                            );
+                        // add to searchbox area
+                        baton.$.box.append(
+                            baton.$.group
+                        );
+                    }
+                });
+
+                ext.point('io.ox/find/view').extend({
+                    id: 'buttons',
+                    index: 400,
+                    draw: function (baton) {
+                        baton.$.group.append(
+                            // search
+                            $('<i>')
+                                .attr({
+                                    'tabindex': '-1',
+                                    'class': 'fa fa-search form-control-feedback action action-show',
+                                    'data-toggle': 'tooltip',
+                                    'data-placement': 'bottom',
+                                    'data-animation': 'false',
+                                    'data-container': 'body',
+                                    'data-original-title': gt('Start search'),
+                                    'aria-label': gt('Start search')
+                                })
+                                .tooltip(),
+                            // cancel/reset
+                            $('<i>')
+                                .attr({
+                                    'tabindex': '-1',
+                                    'class': 'fa fa-times-circle form-control-feedback action action-cancel',
+                                    'data-toggle': 'tooltip',
+                                    'data-placement': 'bottom',
+                                    'data-animation': 'false',
+                                    'data-container': 'body',
+                                    'data-original-title': gt('Cancel search'),
+                                    'aria-label': gt('Cancel search')
+                                })
+                                .tooltip()
+                        );
+                    }
+                });
+
+                ext.point('io.ox/find/view').extend({
+                    id: 'screenreader',
+                    index: 500,
+                    draw: function (baton) {
+                        baton.$.group.append(
+                            // sr label
+                            $('<label class="sr-only">')
+                                .attr('for', baton.data.id)
+                                .text(baton.data.label),
+                            // sr description
+                            $('<p class="sr-only sr-description">').attr({ id: baton.data.guid })
+                                .text(
+                                    //#. search feature help text for screenreaders
+                                    gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones')
+                                )
+                        );
+                    }
+                });
+
+                // draw searchfield and attach lazy load listener
+                ext.point('io.ox/find/view').invoke('draw', win, ext.Baton.ensure({}));
+            }
 
             // fix height/position/appearance
             if (opt.chromeless) {
@@ -1895,44 +1593,6 @@ define('io.ox/core/desktop',
                     id: 'links',
                     ref: opt.name + '/links/toolbar'
                 }));
-
-                // add search
-                // deprecated: enable search via io.ox/find application extension points instead
-                if (opt.search === true) {
-
-                    new links.Action(opt.name + '/actions/search', {
-                        action:  function (baton) {
-                            //hide open sidepopup
-                            var $sidepopup = $(baton.window.nodes.body).find('.io-ox-sidepopup');
-                            if ($sidepopup.is(':visible'))
-                                $sidepopup.trigger('remove');
-                            baton.window.search.toggle();
-                        }
-                    });
-
-                    new links.ActionLink(opt.name + '/links/toolbar/search', {
-                        label: gt('Toggle search'),
-                        ref: opt.name + '/actions/search'
-                    });
-
-                    new links.ActionGroup(opt.name + '/links/toolbar', {
-                        id: 'search',
-                        index: 300,
-                        icon: function () {
-                            return $('<i class="fa fa-search">').attr('aria-label', gt('Search'));
-                        }
-                    });
-
-                    if (opt.searchShortcut) {
-                        // look for ctrl/cmd + F
-                        win.nodes.outer.on('keydown', function (e) {
-                            if (e.which === 70 && e.metaKey) {
-                                e.preventDefault();
-                                win.search.toggle();
-                            }
-                        });
-                    }
-                }
 
                 // add fullscreen handler
                 if (opt.fullscreen === true) {
@@ -2044,34 +1704,9 @@ define('io.ox/core/desktop',
         };
     }());
 
-    ox.busy = function (block) {
-        // init screen blocker
-        $('#background-loader')[block ? 'busy' : 'idle']()
-            .show()
-            .addClass('secure' + (block ? ' block' : ''));
-    };
-
-    ox.idle = function () {
-        $('#background-loader')
-            .removeClass('secure block')
-            .hide()
-            .idle()
-            .empty();
-    };
-    // only disable, don't show night-rider
-    ox.disable = function () {
-        $('#background-loader')
-            .addClass('busy block secure')
-            .on('touchmove', function (e) {
-                e.preventDefault();
-                return false;
-            })
-            .show();
-    };
-
     // simple launch
     ox.launch = function (id, data) {
-        var def = $.Deferred();
+        var def = $.Deferred(), loadStart = Date.now();
         if (_.isString(id)) {
             adaptiveLoader.stop();
             var requirements = adaptiveLoader.startAndEnhance(id.replace(/\/main$/, ''), [id]);
@@ -2079,6 +1714,7 @@ define('io.ox/core/desktop',
                 function (m) {
                     m.getApp(data).launch(data).done(function () {
                         def.resolveWith(this, arguments);
+                        ox.trigger('loadtime', { app: this, id: id, loadStart: loadStart, loadEnd: Date.now() });
                     });
                 },
                 function () {
@@ -2098,5 +1734,4 @@ define('io.ox/core/desktop',
     });
 
     return {};
-
 });

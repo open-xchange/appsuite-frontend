@@ -1,12 +1,12 @@
 <html lang="ja">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>11.3.3. 公開フォルダと登録フォルダの管理</title>
+<title>11.4.2. 登録フォルダの管理</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
-<link rel="up" href="ox.appsuite.user.sect.dataorganisation.pubsub.html" title="11.3. 公開と登録">
-<link rel="prev" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html" title="11.3.2. データの公開">
+<link rel="home" href="index.html" title="Groupware">
+<link rel="up" href="ox.appsuite.user.sect.dataorganisation.pubsub.html" title="11.4. 登録">
+<link rel="prev" href="ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html" title="11.4.1. データの登録">
 <link rel="next" href="ox.appsuite.user.chap.datainterchange.html" title="第12章 データの連携">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
@@ -22,7 +22,7 @@
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html">戻る</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html">戻る</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">ホーム</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目次</a></li>
 <li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.chap.datainterchange.html">次へ</a></li>
@@ -30,79 +30,73 @@
 </div></nav></div>
 <div class="oxhelp-content">
   <h1 class="sr-only">データの整理</h1>
-<h2 class="sr-only">公開と登録</h2>
+<h2 class="sr-only">登録</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.dataorganisation.pubsub.manage"></a>11.3.3. 公開フォルダと登録フォルダの管理</h3></div></div></div>
-<a class="indexterm" name="id-1.12.6.7.2"></a><a class="indexterm" name="id-1.12.6.7.3"></a><div class="concept">
-<a name="ox.appsuite.user.concept.pubsub.manage"></a><p>公開データや登録データの概要を把握したり、これらのデータを管理する上で、次の機能を利用できます。</p>
+<a name="ox.appsuite.user.sect.dataorganisation.pubsub.manage"></a>11.4.2. 登録フォルダの管理</h3></div></div></div>
+<a class="indexterm" name="id-1.12.7.5.2"></a><a class="indexterm" name="id-1.12.7.5.3"></a><div class="concept">
+<a name="ox.appsuite.user.concept.pubsub.manage"></a><p>登録データの概要を把握したり、これらのデータを管理する上で、次の機能を利用できます。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>すべての公開と登録を <a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.show" title="すべての公開と登録を表示する">表示</a></p></li>
-<li class="listitem"><p>公開と登録の <a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.activate" title="公開や登録を無効化、有効化する">有効化、無効化</a></p></li>
-<li class="listitem"><p>公開と登録の設定の <a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.edit" title="公開や登録の設定を編集する">編集</a></p></li>
-<li class="listitem"><p>公開と登録の <a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.remove" title="公開や登録を削除する">削除</a></p></li>
+<li class="listitem"><p>全ての登録を<a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.show" title="すべての登録を表示する">表示</a></p></li>
+<li class="listitem"><p>登録を<a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.activate" title="登録を無効化または有効化する">無効化または有効化</a></p></li>
+<li class="listitem"><p>登録の設定を<a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.edit" title="登録の設定を編集する：">編集</a></p></li>
+<li class="listitem"><p>登録を<a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.remove" title="登録を削除する：">削除</a></p></li>
 <li class="listitem"><p>ソーシャル ネットワークのアカウントの <a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.account.edit" title="ソーシャル ネットワークにアクセスするためのアカウントをセットアップする">編集または削除</a></p></li>
 </ul></div>
 <p>
       </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.pubsub.manage.show"></a><p class="title">すべての公開と登録を表示する</p>
+<a name="ox.appsuite.user.task.pubsub.manage.show"></a><p class="title">すべての登録を表示する</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>メニュー バーの右側にある <span class="guibutton"><strong>システム メニュー</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.show"></a><img src="../../images/appsuite_user_icon_settings.png"></span> をクリックします。メニューで、<span class="guibutton"><strong>設定</strong></span> の項目をクリックします。</p></li>
-<li class="step"><p>サイドバーで、<span class="guibutton"><strong>公開と登録</strong></span> をクリックします。</p></li>
+<li class="step"><p>メニュー バーの右側にある <span class="guibutton"><strong>システム メニュー</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.show"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> をクリックします。メニューで、<span class="guibutton"><strong>設定</strong></span> の項目をクリックします。</p></li>
+<li class="step"><p>サイドバーで、<span class="guibutton"><strong>登録</strong></span>をクリックします。</p></li>
 <li class="step">
 <p>次の機能を使用すると、詳細情報を表示できます。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>公開名や登録名の下にあるナビゲーション パスをクリックすると、公開または登録されたフォルダを表示できます。</p></li>
-<li class="listitem" style="list-style-type: none"><p>公開名の下にあるリンクをクリックすると、公開されたフォルダがある Web ページにアクセスできます。</p></li>
-</ul></div>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p>登録名の下にあるナビゲーション パスをクリックすると、登録されたフォルダを表示できます。</p></li></ul></div>
 <p>
             </p>
 </li>
 </ol></div>
 <div class="taskrelated">
-          <p><span class="phrase"><strong>ヒント: </strong></span>表示できる情報は、1 つのフォルダに関する情報のみです。情報を表示するには、フォルダ ツリーで、公開または登録されたフォルダの隣にある <span class="guibutton"><strong>公開と登録</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.show.folder"></a><img src="../../images/appsuite_user_icon_folder_cloud.png"></span> をクリックします。</p>
+          <p><span class="phrase"><strong>ヒント: </strong></span>表示できる情報は、1 つのフォルダに関する情報のみです。情報を表示するには、フォルダ ツリーで、登録されたフォルダの隣にある <span class="guibutton"><strong>登録</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.show.folder"></a><img src="../../images/appsuite_user_icon_folder_cloud.png"></span> をクリックします。</p>
         </div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.pubsub.manage.activate"></a><p class="title">公開や登録を無効化、有効化する</p>
+<a name="ox.appsuite.user.task.pubsub.manage.activate"></a><p class="title">登録を無効化または有効化する</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>メニュー バーの右側にある <span class="guibutton"><strong>システム メニュー</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.activate"></a><img src="../../images/appsuite_user_icon_settings.png"></span> をクリックします。メニューで、<span class="guibutton"><strong>設定</strong></span> の項目をクリックします。</p></li>
-<li class="step"><p>サイドバーで、<span class="guibutton"><strong>公開と登録</strong></span> をクリックします。</p></li>
-<li class="step"><p>公開や登録の隣にある表示エリアで、<span class="guimenu"><strong>無効化</strong></span> または <span class="guimenu"><strong>有効化</strong></span> をクリックします。</p></li>
+<li class="step"><p>メニュー バーの右側にある <span class="guibutton"><strong>システム メニュー</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.activate"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> をクリックします。メニューで、<span class="guibutton"><strong>設定</strong></span> の項目をクリックします。</p></li>
+<li class="step"><p>サイドバーで、<span class="guibutton"><strong>登録</strong></span>をクリックします。</p></li>
+<li class="step"><p>登録の隣にある表示エリアで、<span class="guimenu"><strong>無効化</strong></span> または <span class="guimenu"><strong>有効化</strong></span> をクリックします。</p></li>
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.pubsub.manage.edit"></a><p class="title">公開や登録の設定を編集する</p>
+<a name="ox.appsuite.user.task.pubsub.manage.edit"></a><p class="title">登録の設定を編集する：</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>メニュー バーの右側にある <span class="guibutton"><strong>システム メニュー</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.edit"></a><img src="../../images/appsuite_user_icon_settings.png"></span> をクリックします。メニューで、<span class="guibutton"><strong>設定</strong></span> の項目をクリックします。</p></li>
-<li class="step"><p>サイドバーで、<span class="guibutton"><strong>公開と登録</strong></span> をクリックします。</p></li>
-<li class="step"><p>表示エリアで、公開や登録の隣に表示される <span class="guimenu"><strong>編集</strong></span> をクリックします。</p></li>
-<li class="step"><p>設定を変更します。処理を完了するには、<span class="guibutton"><strong>公開</strong></span> または <span class="guibutton"><strong>登録</strong></span> をクリックします。</p></li>
+<li class="step"><p>メニュー バーの右側にある <span class="guibutton"><strong>システム メニュー</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.edit"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> をクリックします。メニューで、<span class="guibutton"><strong>設定</strong></span> の項目をクリックします。</p></li>
+<li class="step"><p>サイドバーで、<span class="guibutton"><strong>登録</strong></span>をクリックします。</p></li>
+<li class="step"><p>表示エリアの登録の隣にある <span class="guimenu"><strong>編集</strong></span> をクリックします。</p></li>
+<li class="step"><p>設定を変更します。処理を終了するには、<span class="guibutton"><strong>登録</strong></span> をクリックします。</p></li>
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.pubsub.manage.remove"></a><p class="title">公開や登録を削除する</p>
+<a name="ox.appsuite.user.task.pubsub.manage.remove"></a><p class="title">登録を削除する：</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>メニュー バーの右側にある <span class="guibutton"><strong>システム メニュー</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.remove.systemmenue"></a><img src="../../images/appsuite_user_icon_settings.png"></span> をクリックします。メニューで、<span class="guibutton"><strong>設定</strong></span> の項目をクリックします。</p></li>
-<li class="step"><p>サイドバーで、<span class="guibutton"><strong>公開と登録</strong></span> をクリックします。</p></li>
-<li class="step"><p>表示エリアで、公開または登録の隣にある <span class="guibutton"><strong>削除</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.remove.delete"></a><img src="../../images/appsuite_user_icon_trash.png"></span> をクリックします。</p></li>
+<li class="step"><p>メニュー バーの右側にある <span class="guibutton"><strong>システム メニュー</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.remove.systemmenue"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> をクリックします。メニューで、<span class="guibutton"><strong>設定</strong></span> の項目をクリックします。</p></li>
+<li class="step"><p>サイドバーで、<span class="guibutton"><strong>登録</strong></span>をクリックします。</p></li>
+<li class="step"><p>表示エリアで、登録の隣にある <span class="guibutton"><strong>削除</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.remove.delete"></a><img src="../../images/appsuite_user_icon_trash.png"></span> をクリックします。</p></li>
 </ol></div>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.pubsub.manage.account.edit"></a><p class="title">ソーシャル ネットワークにアクセスするためのアカウントをセットアップする</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>メニュー バーの右側にある <span class="guibutton"><strong>システム メニュー</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.pubsub.subscribe.edit"></a><img src="../../images/appsuite_user_icon_settings.png"></span> をクリックします。メニューで、<span class="guibutton"><strong>設定</strong></span> の項目をクリックします。</p></li>
+<li class="step"><p>メニュー バーの右側にある <span class="guibutton"><strong>システム メニュー</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.pubsub.subscribe.edit"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> をクリックします。メニューで、<span class="guibutton"><strong>設定</strong></span> の項目をクリックします。</p></li>
 <li class="step"><p>サイドバーで、<span class="guibutton"><strong>メール アカウントとソーシャル アカウント</strong></span> をクリックします。</p></li>
 <li class="step">
 <p>表示エリアで、アカウントの隣にある <span class="guibutton"><strong>編集</strong></span> をクリックします。<span class="guilabel"><strong>アカウント設定</strong></span> ウィンドウで、設定を変更します。</p>
 <p>アカウントを削除するには、アカウントの隣にある <span class="guibutton"><strong>削除</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.pubsub.manage.account.delete"></a><img src="../../images/appsuite_user_icon_trash.png"></span> をクリックします。</p>
 </li>
 </ol></div>
-<div class="taskrelated">
-          <p>アカウントのセットアップの手順は、<a class="link" href="ox.appsuite.user.sect.firststeps.socialaccounts.html#ox.appsuite.user.task.socialaccounts.add" title="ソーシャル ネットワークにアクセスするためのアカウントをセットアップする">こちら</a> を参照してください。</p>
-        </div>
 </div>
 </div>
           </div>

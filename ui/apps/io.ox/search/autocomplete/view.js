@@ -11,10 +11,10 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/search/autocomplete/view',
-    ['io.ox/search/autocomplete/extensions',
-     'io.ox/core/extensions'
-    ], function (extensions, ext) {
+define('io.ox/search/autocomplete/view', [
+    'io.ox/search/autocomplete/extensions',
+    'io.ox/core/extensions'
+], function (extensions, ext) {
 
     'use strict';
 
@@ -24,45 +24,38 @@ define('io.ox/search/autocomplete/view',
      * search field
      * @id  io.ox/search/autocomplete/searchfield
      */
-    ext.point(POINT + '/searchfield-mobile').extend({
-        id: 'searchfield-mobile',
+    ext.point(POINT + '/searchfield').extend({
+        id: 'searchfield',
         index: 100,
-        draw: extensions.searchfieldMobile
+        draw: extensions.searchfield
     });
 
     /**
-     * reset calculated style from autocomplete tk
-     * @id  io.ox/search/autocomplete/style-container
+     * search field
+     * @id  io.ox/search/autocomplete/searchfield
      */
-    ext.point(POINT + '/style-container').extend({
-        id: 'style-container',
+    ext.point(POINT + '/tokenfield').extend({
+        id: 'tokenfield',
         index: 100,
-        draw: extensions.styleContainer
+        draw: extensions.tokenfield
     });
 
     /**
-     * dropdown item: default
-     * @id  io.ox/search/autocomplete/item
+     * dropdown item: image
+     * @id  io.ox/search/autocomplete/image
      */
     ext.point(POINT + '/item').extend({
-        id: 'item',
+        id: 'image',
         index: 100,
-        draw: extensions.item
+        draw: extensions.image
     });
-
-    /**
-     * dropdown item: special
-     * @id  io.ox/search/autocomplete/item/[facet.id]
-     */
-     // called via ext.point(POINT + '/item')
-
     /**
      * dropdown item: name
      * @id  io.ox/search/autocomplete/name
      */
-    ext.point(POINT + '/name').extend({
+    ext.point(POINT + '/item').extend({
         id: 'name',
-        index: 100,
+        index: 200,
         draw: extensions.name
     });
 
@@ -70,30 +63,29 @@ define('io.ox/search/autocomplete/view',
      * dropdown item: detail
      * @id  io.ox/search/autocomplete/detail
      */
-    ext.point(POINT + '/detail').extend({
+    ext.point(POINT + '/item').extend({
         id: 'detail',
-        index: 100,
+        index: 300,
         draw: extensions.detail
     });
-
 
     /**
      * dropdown item: detail
      * @id  io.ox/search/autocomplete/detail
      */
-    ext.point(POINT + '/a11y').extend({
-        index: 100,
+    ext.point(POINT + '/item').extend({
+        index: 400,
         draw: extensions.a11y
     });
 
     /**
-     * dropdown item: image
-     * @id  io.ox/search/autocomplete/image
+     * dropdown item: detail
+     * @id  io.ox/search/autocomplete/detail
      */
-    ext.point(POINT + '/image').extend({
-        id: 'image',
-        index: 100,
-        draw: extensions.image
+    ext.point(POINT + '/handler/click').extend({
+        id: 'default',
+        index: 1000000000000,
+        flow: extensions.select
     });
 
 });

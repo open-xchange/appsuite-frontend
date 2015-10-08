@@ -1,0 +1,364 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+.folder-tree {
+
+    padding: 8px 0;
+    overflow: auto;
+    background-color: @foldertree-sidepanel-background;
+    .user-select(none);
+
+    // font weights
+    @fontSize: 13px;
+    @normal: 400;
+    @bold: 700;
+    @indentation: 40px;
+    @height: 24px;
+
+    // width fix
+    .tree-container {
+        min-width: 100%;
+        display: table;
+        padding: 0;
+        margin: 0;
+        outline: 0;
+    }
+
+    .folder {
+        line-height: @height - 1;
+        overflow: visible;
+        white-space: nowrap;
+        width: 100%;
+        display: block;
+        cursor: pointer;
+        outline: 0;
+
+        &.selected > .folder-node > .folder-options {
+            display: inline-block;
+        }
+
+        &.empty {
+            display: none;
+        }
+
+        &.disabled > .folder-node > .folder-label {
+            opacity: 0.5;
+            font-style: italic;
+        }
+    }
+
+    .folder-node {
+        height: @height;
+    }
+
+    &.visible-selection {
+
+        .selected > .folder-node {
+            background-color: @foldertree-selected-background;
+            * {
+                color: @foldertree-selected-label-color;
+            }
+        }
+
+        .selectable > .folder-node:hover, .selectable.dnd-over > .folder-node {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .selectable:focus > .folder-node {
+
+            background-color: @foldertree-selected-focus-background;
+            * {
+                color: @foldertree-focused-label-color;
+            }
+            .folder-counter {
+                color: @foldertree-selected-focus-counter-color;
+            }
+            .folder-options {
+                background-color: @foldertree-selected-focus-options-background;
+            }
+        }
+    }
+
+    &.visible-selection-smartphone {
+        // visually ignore hover/focus/blur
+        .selected > .folder-node {
+            // using &.visible-selection .selectable:focus > .folder-node
+            background-color: @foldertree-selected-focus-background;
+            * {
+                color: @foldertree-focused-label-color;
+            }
+            .folder-counter {
+                color: @foldertree-selected-focus-counter-color;
+            }
+            .folder-options {
+                background-color: @foldertree-selected-focus-options-background;
+            }
+        }
+    }
+
+    .folder-node {
+
+        .folder-arrow {
+            color: #777;
+            display: inline-block;
+            padding-left: @default-padding;
+            width: @indentation;
+        }
+
+        .folder-label, .folder-counter, .folder-options {
+            font-weight: @normal;
+            display: inline-block;
+            -webkit-font-smoothing: antialiased;
+            margin: 0 @default-padding 0 0;
+            &:empty { margin: 0; }
+        }
+
+        .folder-label {
+            font-size: @fontSize;
+            &:first-child { // needed when arrows are hidden
+                margin-left: @default-padding;
+            }
+        }
+
+        .folder-counter {
+            color: #08c;
+            font-weight: @bold;
+            display: none;
+            vertical-align: top;
+        }
+
+        &.show-counter .folder-counter {
+            display: inline-block;
+        }
+
+        .folder-options {
+
+            padding: 0 12px;
+            line-height: @height - 1;
+            background-color: rgba(0, 0, 0, 0.05);
+            outline: 0;
+            display: none;
+
+            i { line-height: inherit; }
+
+            &:focus {
+                i { color: white; }
+                background-color: @foldertree-selected-focus-background;
+            }
+        }
+
+        .folder-icon {
+
+            display: none;
+
+            &.visible {
+                display: inline-block;
+                margin: 0 12px 0 0; // yep, 12
+            }
+
+            i {
+                text-align: left;
+                &:before { content: '\f114'; } // fa-folder-o
+            }
+
+            &.inbox { i:before { content: '\f01c'; }} // fa-inbox
+            &.sent { i:before { content: '\f1d8'; }} // fa-paper-plane
+            &.drafts { i:before { content: '\f15b'; }} // fa-file
+            &.trash { i:before { content: '\f1f8'; }} // fa-trash
+            &.spam { i:before { content: '\f05e'; }} // fa-ban
+            &.archive { i:before { content: '\f187'; }} // fa-archive
+            &.default { i { color: #aaa; }}
+        }
+
+        .folder-checkbox {
+            display: inline-block;
+            margin: 0 @default-padding 0 0;
+        }
+
+        .folder-shared {
+            padding: 2px;
+            color: rgba(0, 0, 0, 0.30);
+            &:before { content: '\f007'; } // fa-user
+        }
+
+        .folder-sub {
+            padding: 2px;
+            color: rgba(0, 0, 0, 0.30);
+            &:before { content: '\f0c2'; } // fa-cloud
+        }
+    }
+
+    .folder.open > .folder-node > .folder-icon.default {
+        i:before { content: '\f115'; } // fa-folder-open-o
+    }
+
+    .subfolders {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        display: none;
+    }
+
+    .folder.open > .subfolders {
+        display: block;
+    }
+
+    .favorites, .unified-folders, .standard-folders, .other-folders, .myshares, .root-folders {
+        margin-bottom: @default-padding;
+        @media (max-width: 480px), (max-device-width: 480px) {
+            margin-bottom: 0;
+        }
+    }
+
+    // sections in flat folder views
+    .folder.section {
+
+        &.open {
+            margin-bottom: 16px;
+        }
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        & > .folder-node > .folder-label {
+            font-weight: @bold;
+        }
+    }
+
+    // shorten folder title when selected so that folder options are visible
+    .selected > .folder-node > .folder-label {
+        font-weight: @bold;
+        vertical-align: top;
+        div {
+            .ellipsis();
+        }
+    }
+
+    .flat-tree {
+        // set min-width on flat folder to get consistent layout
+        // must match side-panel's default width of 250px
+        .folder-label {
+            min-width: 150px;
+        }
+        // set proper limit when selected (see above)
+        .selected > .folder-node > .folder-label {
+            width: 150px;
+        }
+    }
+
+
+    // links
+    .links {
+
+        margin: 0;
+        padding: 0 @default-padding @default-padding @indentation;
+        font-size: @fontSize;
+        line-height: 24px;
+        font-weight: @normal;
+
+        &:empty {
+            margin: 0;
+            padding: 0;
+        }
+    }
+
+    .folder.section + .links {
+        margin: 16px 0 16px @indentation;
+        padding: 0;
+        line-height: @height;
+        &:empty {
+            margin: 0;
+        }
+    }
+
+    .mobile-edit-mode & {
+        .selectable:not(.virtual) {
+            .folder-label {
+                color: @link-color;
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .window-sidepanel.top-toolbar & { top: @toolbar-height; }
+    .window-sidepanel.bottom-toolbar & { bottom: @toolbar-height; }
+    .window-sidepanel.bottom-toolbar & { bottom: @toolbar-height; }
+    .window-sidepanel.bottom-toolbar.file-storage-toolbar & { bottom: @toolbar-height + 72px; }
+
+    @media(max-width: 480px), (max-device-width: 480px) {
+
+        padding-left: 20px;
+
+        // custom mobile values
+        @mobile-height: 48px;
+        @mobile-line-height: @mobile-height;
+        @mobile-arrow-size: 20px;
+        @mobile-label-size: 15px;
+
+        .folder {
+            line-height: @mobile-line-height;
+        }
+        .folder-icon {
+            float: left;
+        }
+        .folder-node {
+            height: @mobile-height;
+
+            .folder-arrow {
+                font-size: @mobile-arrow-size;
+                position: absolute;
+                right: 0;
+                text-align: center;
+                padding-left: 0;
+                // .fa-caret-right:before {
+                //     content: "\f0d8";
+                // }
+                .fa-caret-down:before {
+                    content: "\f0d7";
+                }
+            }
+            .folder-label {
+                float: left;
+            }
+            .folder-label, .folder-counter, .folder-options {
+                font-size: @mobile-label-size;
+            }
+            .folder-label > div {
+                max-width: 160px;
+                .ellipsis();
+            }
+        }
+        li[data-id="virtual/settings"] {
+            .folder-node {
+                .folder-label > div {
+                    max-width: 280px;
+                }
+            }
+        }
+        .links {
+            font-size: @font-size-touch;
+        }
+    }
+}
+
+// subscribe dialog
+.io-ox-dialog-popup {
+    .has-error .btn-new-account {
+        color: #a94442;
+        border-color: #a94442;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    }
+}

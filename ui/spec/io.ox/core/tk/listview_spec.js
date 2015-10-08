@@ -16,6 +16,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
     'use strict';
 
     describe('The ListView.', function () {
+        var pictureHalo;
 
         beforeEach(function () {
 
@@ -34,10 +35,19 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
             $('body', document).append(
                 this.list.render().$el
             );
+
+            return require(['io.ox/contacts/api'], function (contactsAPI) {
+                pictureHalo = sinon.stub(contactsAPI, 'pictureHalo', _.noop);
+            });
         });
 
-        afterEach(function () {
-            this.list.remove();
+        afterEach(function (done) {
+            pictureHalo.restore();
+            //wait a little bit for debounced code to run
+            _.delay(function () {
+                this.list.remove();
+                done();
+            }.bind(this), 60);
         });
 
         describe('drawing an empty list', function () {
@@ -293,7 +303,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
             it('should update properly (case: prepend)', function () {
 
                 // add 1, add 2
-                this.collection.set([createItem(1, 0), createItem(2, 1), createItem(3, 2), createItem(4, 3), createItem(6, 4)]);
+                this.collection.set([createItem(1, 0), createItem(2, 1), createItem(3, 2), createItem(4, 3), createItem(6, 4)], { parse: true });
 
                 var nodes = this.list.$el.children(),
                     items = this.list.getItems();
@@ -328,7 +338,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
             it('should update properly (case: mixed)', function () {
 
                 // add 1, add 2, remove 3, add 4, remove 5, add 7
-                this.collection.set([createItem(1, 0), createItem(2, 1), createItem(4, 2), createItem(6, 3), createItem(7, 4)]);
+                this.collection.set([createItem(1, 0), createItem(2, 1), createItem(4, 2), createItem(6, 3), createItem(7, 4)], { parse: true });
 
                 var nodes = this.list.$el.children(),
                     items = this.list.getItems();
@@ -430,10 +440,10 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
                     var top = this.list.getItems().eq(INDEX).offset().top;
 
                     // remove some
-                    this.collection.set(_.range(20, 80).map(createItem));
+                    this.collection.set(_.range(20, 80).map(createItem), { parse: true });
 
                     // re-add
-                    this.collection.set(_.range(1, 100).map(createItem));
+                    this.collection.set(_.range(1, 100).map(createItem), { parse: true });
 
                     expect(this.list.getItems().eq(INDEX).offset().top).to.equal(top);
                 });
@@ -627,7 +637,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
                 });
                 api.threads.add(tmp[1]);
                 // update via set() - not reset()!
-                this.collection.set(tmp);
+                this.collection.set(tmp, { parse: true });
                 // check
                 var items = this.list.getItems();
                 expect(this.collection.length, 'collection length').to.equal(3);
@@ -648,7 +658,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
                 tmp[1].index = 0;
                 tmp[0].index = 1;
                 // update via set() - not reset()!
-                this.collection.set(tmp);
+                this.collection.set(tmp, { parse: true });
                 // check
                 var items = this.list.getItems();
                 expect(this.collection.length, 'collection length').to.equal(3);

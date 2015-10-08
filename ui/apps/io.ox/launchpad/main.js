@@ -13,15 +13,15 @@
 
 // huu
 
-define('io.ox/launchpad/main',
-    ['io.ox/core/desktop',
-     'io.ox/core/api/apps',
-     'settings!io.ox/core',
-     'io.ox/core/extensions',
-     'io.ox/core/upsell',
-     'gettext!io.ox/core',
-     'less!io.ox/launchpad/style'
-    ], function (desktop, api, coreConfig, ext, upsell, gt) {
+define('io.ox/launchpad/main', [
+    'io.ox/core/desktop',
+    'io.ox/core/api/apps',
+    'settings!io.ox/core',
+    'io.ox/core/extensions',
+    'io.ox/core/upsell',
+    'gettext!io.ox/core',
+    'less!io.ox/launchpad/style'
+], function (desktop, api, coreConfig, ext, upsell, gt) {
 
     'use strict';
 
@@ -143,11 +143,11 @@ define('io.ox/launchpad/main',
                 extension.openStore();
                 openedStore = true;
             });
-            if (!openedStore) {
-                require(['io.ox/applications/main'], function (m) {
-                    m.getApp().launch();
-                });
-            }
+            //  if (!openedStore) {
+            //    require(['io.ox/applications/main'], function (m) {
+            //        m.getApp().launch();
+            //    });
+            //  }
         },
 
         drawApp = function (data) {

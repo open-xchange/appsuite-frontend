@@ -1,0 +1,249 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
+ */
+
+.share-wizard {
+
+    .tokenfield .twitter-typeahead .tt-dropdown-menu {
+        max-height: 150px;
+    }
+
+    .tokenfield {
+        .border-radius(@border-radius-small @border-radius-small 0px 0px);
+    }
+
+    textarea {
+        margin-top: -16px;
+        .border-radius(0px 0px @border-radius-small @border-radius-small);
+    }
+
+    .form-group {
+
+        &.editgroup {
+            margin-bottom: 11px;
+        }
+
+        &.expiresgroup {
+            .date {
+                margin-left: 5px;
+            }
+            .dropdown {
+                vertical-align: middle;
+            }
+        }
+
+    }
+
+    a.sharelink {
+        word-break: break-all;
+    }
+
+    &.invite .passwordgroup {
+        display: none;
+    }
+
+}
+
+.list-view-control:not(.upside-down).toolbar-top-visible .list-view.myshares-list {
+    top: 80px;
+}
+.myshares-list-control .secondary-toolbar { top: 40px; }
+
+.myshares-list-control [data-ref="io.ox/files/share/back"] { display:none; }
+.smartphone .myshares-list-control [data-ref="io.ox/files/share/back"] {
+    display:block;
+    position: absolute;
+    left: -12px;
+    top: 2px;
+    font-size: 15px;
+    &:before {
+        font: normal normal normal 14px/1 FontAwesome;
+        content: "\f053";
+        margin-right: 3px;
+    }
+}
+.myshares-list {
+
+    &.visible-selection.has-focus .list-item.selected a { color: white; }
+
+    &.visible-selection.has-focus .list-item.selected .type i:not(.gray) { color: white; }
+
+    .list-item-content {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+
+        .displayname { .ellipsis(); }
+
+        .breadcrumb-view {
+            overflow: hidden;
+            a { color: #333; }
+        }
+
+        .list-item-column.column-2, .list-item-column.column-3 {
+            width: 50%;
+            padding:0;
+            text-align: left;
+        }
+        .list-item-column.type {
+            width: 20px;
+        }
+    }
+}
+
+.share-permissions-dialog {
+
+    .modal-header {
+        .btn {
+            float: right;
+            &.btn-primary { margin-left: 13px; }
+        }
+        *zoom: 1;
+        &:before,
+        &:after {
+          display: table;
+          content: "";
+          line-height: 0;
+        }
+        &:after { clear: both; }
+
+        .autocomplete-controls {
+            width: 402px;
+            float: left;
+        }
+    }
+
+    .modal-body {
+        padding: 16px 0;
+    }
+
+    .modal-footer {
+
+        .cascade {
+            display: table;
+            position: relative;
+            float: left;
+            margin-top: 5px;
+            margin-bottom: 0;
+        }
+
+        .share-options {
+            text-align: left;
+
+            textarea {
+                margin-top: -16px;
+            }
+
+        }
+
+    }
+
+    // fix border radius for a compact widget
+    .form-control.tt-input {
+        .border-radius(@border-radius-small @border-radius-small 0px 0px);
+    }
+
+    .form-control.message-text {
+        .border-radius(0px 0px @border-radius-small @border-radius-small);
+    }
+
+    .permission {
+
+        margin-bottom: 16px;
+        &:last-child { margin-bottom: 0; }
+
+        @picture-height: 40px;
+
+        .image {
+            height: @picture-height;
+        }
+        .contact-picture {
+            display: inline-block;
+            .picture(@picture-height, @picture-height);
+        }
+
+        .contact-picture.group {
+            i { font-size: @picture-height; line-height: @picture-height; color: #eee; }
+        }
+
+        .role, .detail-dropdown, .entity-actions {
+            height: 40px;
+            line-height: 40px;
+        }
+
+        .detail-dropdown, .entity-actions {
+            text-align: right;
+        }
+
+        .display_name, .description, .role, .detail-dropdown {
+            .ellipsis();
+        }
+
+        .display_name {
+            font-weight: bold;
+            .title, .first_name {
+                font-weight: normal;
+            }
+        }
+
+        .readwrite, .readonly { margin-right: 45px; }
+
+        .readonly {
+            a {
+                cursor: default;
+                color: #888;
+            }
+            i {
+                font-style:normal;
+                color: #333;
+            }
+        }
+
+        .entity {
+            padding-left: 64px + 13;
+            position: relative;
+            a { white-space: nowrap; }
+        }
+
+        .name {
+            font-weight: bold;
+            margin-right: 0.5em;
+        }
+
+        .owner {
+            margin-right: 0.5em;
+            color: darken(@red, 20%);
+        }
+
+        a[data-action="remove"] {
+            color: #777;
+            width: 40px;
+            display: inline-block;
+            position: relative;
+            text-align: center;
+            &:hover {
+                background-color: @trash-icon-hover-background;
+                i {
+                    color: @trash-icon-hover-color;
+                }
+            }
+            i {
+                color: #777;
+            }
+        }
+    }
+}
+
+.touch .permissions-dialog .modal-body {
+    height: auto;
+    min-height: 200px;
+}

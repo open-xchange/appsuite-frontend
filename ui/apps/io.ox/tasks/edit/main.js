@@ -11,14 +11,14 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/edit/main',
-    ['gettext!io.ox/tasks',
-     'io.ox/core/extensions',
-     'io.ox/tasks/model',
-     'io.ox/tasks/edit/view',
-     'io.ox/core/extPatterns/dnd',
-     'less!io.ox/tasks/edit/style'
-    ], function (gt, ext, model, view, dnd) {
+define('io.ox/tasks/edit/main', [
+    'gettext!io.ox/tasks',
+    'io.ox/core/extensions',
+    'io.ox/tasks/model',
+    'io.ox/tasks/edit/view',
+    'io.ox/core/extPatterns/dnd',
+    'less!io.ox/tasks/edit/style'
+], function (gt, ext, model, view, dnd) {
 
     'use strict';
 
@@ -42,12 +42,17 @@ define('io.ox/tasks/edit/main',
             'CLEAN': 1,
             'DIRTY': 2
         };
+
         app.getState = function () {
             return taskState;
         };
 
         app.markDirty = function () {
             taskState = app.STATES.DIRTY;
+        };
+
+        app.markClean = function () {
+            taskState = app.STATES.CLEAN;
         };
 
         app.isDirty = function () {
@@ -62,7 +67,10 @@ define('io.ox/tasks/edit/main',
             } else {
                 //check if only default Values are present
                 var data = taskModel.changedSinceLoading(),
-                    defaults = model.defaults;
+                    defaults = _.copy(model.defaults);
+                // default folder_id does not matter here (wrong in every folder beside the default folder), so make it equal
+                defaults.folder_id = data.folder_id;
+
                 check = !(_.isEqual(data, defaults));
             }
 
@@ -74,19 +82,16 @@ define('io.ox/tasks/edit/main',
             return check;
         };
 
-        app.markClean = function () {
-            taskState = app.STATES.CLEAN;
-        };
-
         // launcher
         app.setLauncher(function (options) {
             //close notification area when edit task is opened to prevent overlapping if started from notification area
             require(['io.ox/core/notifications'], function (notifications) {
-                notifications.hideList();
+                notifications.hide();
             });
 
-            var taskData = options.taskData,
-                startApp = function ()  {
+            // sometimes taskdata is wrapped inside an array
+            var taskData = _.isArray(options.taskData) && options.taskData.length === 1 ? options.taskData[0] : options.taskData,
+                startApp = function () {
                     app.view = taskView = view.getView(taskModel, win.nodes.main, app);
 
                     if (_.browser.IE === undefined || _.browser.IE > 9) {
@@ -120,7 +125,7 @@ define('io.ox/tasks/edit/main',
                 if (taskModel.get('id')) {
                     self.setState({ folder: taskModel.attributes.folder_id, id: taskModel.attributes.id });
                 } else {
-                    self.setState({ folder: taskModel.attributes.folder_id, id: null});
+                    self.setState({ folder: taskModel.attributes.folder_id, id: null });
                 }
             });
 
@@ -148,7 +153,7 @@ define('io.ox/tasks/edit/main',
                 if (options.folderid) {
                     //folderId is sometimes a String but must be a number else the discard buttons thinks this is a missmatch to the defaults
                     options.folderid = parseInt(options.folderid, 10);
-                    taskModel.set('folder_id', options.folderid, {validate: true});
+                    taskModel.set('folder_id', options.folderid, { validate: true });
                 }
 
                 startApp();
@@ -173,8 +178,8 @@ define('io.ox/tasks/edit/main',
                         .text(gt('Do you really want to discard your changes?'))
                         //#. "Discard changes" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user
-                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', {tabIndex: '1'})
-                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', { tabIndex: 1 })
+                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
@@ -216,19 +221,24 @@ define('io.ox/tasks/edit/main',
         };
 
         app.failRestore = function (point) {
-            var df = $.Deferred();
             this.markDirty();
-            if (_.isUndefined(point.id)) {
-                this.model.set(point);
-            } else {
-                this.model.set(point);
+
+            // make auto open first, before the model is set. Otherwise the view has strange behavior (elements are hidden when they are updating)
+            this.view.autoOpen(point);
+            this.model.set(point);
+            // if we have an id switch to edit mode
+            if (!_.isUndefined(point.id)) {
                 this.edit = true;
                 this.view.trigger('changeMode', 'edit');
                 this.cid = 'io.ox/tasks:edit.' + _.cid(point);
-                this.setTitle(point.title || gt('Edit task'));
             }
-            df.resolve();
-            return df;
+            // trigger blur so apptitle and save button disabled state is updated
+            this.view.$el.find('.title-field').trigger('blur');
+            return $.when();
+        };
+
+        app.getContextualHelp = function () {
+            return 'ox.appsuite.user.sect.tasks.gui.html#ox.appsuite.user.reference.tasks.gui.create';
         };
 
         return app;

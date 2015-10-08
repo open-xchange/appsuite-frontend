@@ -131,6 +131,34 @@
 
     $(window).resize(_.recheckDevice);
 
+    //
+    // Cookie handling
+    //
+
+    _.getCookie = function (key) {
+        key = String(key || '\u0000');
+        return _.chain(document.cookie.split(/; ?/))
+            .filter(function (pair) {
+                return pair.substr(0, key.length) === key;
+            })
+            .map(function (pair) {
+                return decodeURIComponent(pair.substr(key.length + 1));
+            })
+            .first()
+            .value();
+    };
+
+    _.setCookie = function (key, value, lifetime) {
+        // yep, works this way:
+        var c = key + '=' + encodeURIComponent(value) +
+            (lifetime ? '; expires=' + new Date(new Date().getTime() + lifetime).toGMTString() : '') + '; path=/';
+        document.cookie = c;
+    };
+
+    //
+    // URL handling
+    //
+
     _.url = {
         /**
          * @param name {string} [Name] of the query parameter
@@ -145,28 +173,95 @@
          */
         hash: (function () {
 
-            var hashData = {};
+            var key;
 
-            function decode() {
-                // since the hash might change we decode it for every request
-                // firefox has a bug and already decodes the hash string, so we use href
-                hashData = location.href.split(/#/)[1] || '';
-                hashData = deserialize(
-                     hashData.substr(0, 1) === '?' ? rot(decodeURIComponent(hashData.substr(1)), -1) : hashData
-                );
+            // this is not cryptography!
+            // it just makes certain parameters like "folder" unreadable
+            // for the rare case that it contains PII
+
+            function random() {
+                return Math.random().toString().substr(2);
             }
 
-            function set(name, value) {
-                if (value === null) {
-                    delete hashData[name];
-                } else {
-                    hashData[name] = value;
+            function getKey() {
+                return new Array(5).join(random());
+            }
+
+            function encrypt(str) {
+                var result = '';
+                for (var i = 0, k = key.length, l = str.length; i < l; i++) {
+                    result += String.fromCharCode(str.charCodeAt(i) + key[i % k]);
+                }
+                return result;
+            }
+
+            function decrypt(str) {
+                var result = '';
+                for (var i = 0, k = key.length, l = str.length; i < l; i++) {
+                    result += String.fromCharCode(str.charCodeAt(i) - key[i % k]);
+                }
+                return result;
+            }
+
+            key = _.getCookie('url.key');
+            // replace by new key if invalid
+            if (!/^\d+$/.test(key)) _.setCookie('url.key', key = getKey());
+            // transform to integers
+            key = key.split('').map(function (i) { return parseInt(i, 10); });
+
+            //
+            // main function
+            //
+
+            function url(name, value) {
+                if (arguments.length === 0) {
+                    return url.data;
+                } else if (arguments.length === 1) {
+                    if (_.isString(name)) {
+                        return url.data[name];
+                    } else {
+                        _(name).each(function (value, name) {
+                            url.set(name, value);
+                        });
+                        url.update();
+                    }
+                } else if (arguments.length === 2) {
+                    url.set(name, value);
+                    url.update();
                 }
             }
 
-            function update() {
+            url.data = {};
+
+            url.set = function (name, value) {
+                if (value === null) {
+                    delete url.data[name];
+                } else {
+                    url.data[name] = value;
+                }
+            };
+
+            url.encrypt = function (data) {
+                var obj = _.extend({}, data);
+                if (/^default\d+\//.test(data.folder)) {
+                    var index = data.folder.indexOf('/') + 1;
+                    obj.folder = data.folder.substr(0, index) + '/' + encrypt(data.folder.substr(index));
+                }
+                return obj;
+            };
+
+            url.decrypt = function (data) {
+                var obj = _.extend({}, data);
+                if (/^default\d+\/\//.test(data.folder)) {
+                    var index = obj.folder.indexOf('/') + 1;
+                    obj.folder = obj.folder.substr(0, index) + decrypt(obj.folder.substr(index + 1));
+                }
+                return obj;
+            };
+
+            url.update = function () {
                 // update hash
-                var hashStr = _.serialize(hashData, '&', function (v) {
+                var hashStr = _.serialize(url.encrypt(url.data), '&', function (v) {
                     // need strict encoding for Japanese characters, for example
                     // safari throws URIError otherwise (Bug 26411)
                     // keep slashes and colons for readability
@@ -177,28 +272,22 @@
                 });
                 // be persistent
                 document.location.hash = hashStr;
+            };
+
+            function decode() {
+                // since the hash might change we decode it for every request
+                // firefox has a bug and already decodes the hash string, so we use href
+                var hash = location.href.split(/#/)[1] || '';
+                url.data = url.decrypt(deserialize(
+                     hash.substr(0, 1) === '?' ? rot(decodeURIComponent(hash.substr(1)), -1) : hash
+                ));
             }
 
             decode();
             $(window).on('hashchange', decode);
 
-            return function (name, value) {
-                if (arguments.length === 0) {
-                    return hashData;
-                } else if (arguments.length === 1) {
-                    if (_.isString(name)) {
-                        return hashData[name];
-                    } else {
-                        _(name).each(function (value, name) {
-                            set(name, value);
-                        });
-                        update();
-                    }
-                } else if (arguments.length === 2) {
-                    set(name, value);
-                    update();
-                }
-            };
+            return url;
+
         }()),
 
         /**
@@ -218,29 +307,6 @@
     _.mixin({
 
         rot: rot,
-
-        /**
-         * Get cookie value
-         */
-        getCookie: function (key) {
-            key = String(key || '\u0000');
-            return _.chain(document.cookie.split(/; ?/))
-                .filter(function (pair) {
-                    return pair.substr(0, key.length) === key;
-                })
-                .map(function (pair) {
-                    return decodeURIComponent(pair.substr(key.length + 1));
-                })
-                .first()
-                .value();
-        },
-
-        setCookie: function (key, value, lifetime) {
-            // yep, works this way:
-            var c = key + '=' + encodeURIComponent(value) +
-                (lifetime ? '; expires=' + new Date(new Date().getTime() + lifetime).toGMTString() : '') + '; path=/';
-            document.cookie = c;
-        },
 
         /**
          * This function simply writes its parameters to console.
@@ -275,7 +341,7 @@
          * @returns {long} Timestamp
          */
         now: function () {
-            return (new Date()).getTime();
+            return new Date().getTime();
         },
 
         /**
@@ -315,13 +381,13 @@
 
             var isArray = _.isArray,
                 copy = function (elem, deep) {
-                        var tmp = isArray(elem) ? new Array(elem.length) : {}, prop, i;
-                        for (i in elem) {
-                            prop = elem[i];
-                            tmp[i] = deep && typeof prop === 'object' && prop !== null ? copy(prop, deep) : prop;
-                        }
-                        return tmp;
-                    };
+                    var tmp = isArray(elem) ? new Array(elem.length) : {}, prop, i;
+                    for (i in elem) {
+                        prop = elem[i];
+                        tmp[i] = deep && typeof prop === 'object' && prop !== null ? copy(prop, deep) : prop;
+                    }
+                    return tmp;
+                };
 
             return function (elem, deep) {
                 return typeof elem !== 'object' || elem === null ? elem : copy(elem, !!deep);
@@ -534,7 +600,7 @@
          * This can be safely used without risking CSS.
          * @param {string} text
          * @param {object} jQuery node
-         * @return {object} jQuery node
+         * @return { object} jQuery node
          */
         nltobr: function (text, node) {
             var normalizedText = text.replace('\r\n', '\n'),
@@ -583,7 +649,7 @@
          * hint: throttle of lo-dash can be used alternatively
          * @param  {function} func
          * @param  {nunber} wait
-         * @return {function} debonced version of func
+         * @return { function} debonced version of func
          */
         mythrottle: function (func, wait) {
             var context, args, result,
@@ -665,7 +731,7 @@
                 if (typeof o === 'string') {
                     // integer based ids?
                     if ((m = o.match(/^(\d*?)\.(\d+)(\.(\d+))?$/)) && m.length) {
-                        tmp = { folder_id: String(m[1]), id: String(m[2])};
+                        tmp = { folder_id: String(m[1]), id: String(m[2]) };
                         if (m[4] !== undefined) { tmp[r] = parseInt(m[4], 10); }
                         return tmp;
                     }
@@ -757,47 +823,47 @@
         return es;
     }({
         nbsp: 160, iexcl: 161, cent: 162, pound: 163, curren: 164, yen: 165,
-      brvbar: 166, sect: 167, uml: 168, copy: 169, ordf: 170, laquo: 171,
-      not: 172, shy: 173, reg: 174, macr: 175, deg: 176, plusmn: 177, sup2: 178,
-      sup3: 179, acute: 180, micro: 181, para: 182, middot: 183, cedil: 184,
-      sup1: 185, ordm: 186, raquo: 187, frac14: 188, frac12: 189, frac34: 190,
-      iquest: 191, Agrave: 192, Aacute: 193, Acirc: 194, Atilde: 195, Auml: 196,
-      Aring: 197, AElig: 198, Ccedil: 199, Egrave: 200, Eacute: 201, Ecirc: 202,
-      Euml: 203, Igrave: 204, Iacute: 205, Icirc: 206, Iuml: 207, ETH: 208,
-      Ntilde: 209, Ograve: 210, Oacute: 211, Ocirc: 212, Otilde: 213, Ouml: 214,
-      times: 215, Oslash: 216, Ugrave: 217, Uacute: 218, Ucirc: 219, Uuml: 220,
-      Yacute: 221, THORN: 222, szlig: 223, agrave: 224, aacute: 225, acirc: 226,
-      atilde: 227, auml: 228, aring: 229, aelig: 230, ccedil: 231, egrave: 232,
-      eacute: 233, ecirc: 234, euml: 235, igrave: 236, iacute: 237, icirc: 238,
-      iuml: 239, eth: 240, ntilde: 241, ograve: 242, oacute: 243, ocirc: 244,
-      otilde: 245, ouml: 246, divide: 247, oslash: 248, ugrave: 249, uacute: 250,
-      ucirc: 251, uuml: 252, yacute: 253, thorn: 254, yuml: 255, fnof: 402,
-      Alpha: 913, Beta: 914, Gamma: 915, Delta: 916, Epsilon: 917, Zeta: 918,
-      Eta: 919, Theta: 920, Iota: 921, Kappa: 922, Lambda: 923, Mu: 924, Nu: 925,
-      Xi: 926, Omicron: 927, Pi: 928, Rho: 929, Sigma: 931, Tau: 932,
-      Upsilon: 933, Phi: 934, Chi: 935, Psi: 936, Omega: 937, alpha: 945,
-      beta: 946, gamma: 947, delta: 948, epsilon: 949, zeta: 950, eta: 951,
-      theta: 952, iota: 953, kappa: 954, lambda: 955, mu: 956, nu: 957, xi: 958,
-      omicron: 959, pi: 960, rho: 961, sigmaf: 962, sigma: 963, tau: 964,
-      upsilon: 965, phi: 966, chi: 967, psi: 968, omega: 969, thetasym: 977,
-      upsih: 978, piv: 982, bull: 8226, hellip: 8230, prime: 8242, Prime: 8243,
-      oline: 8254, frasl: 8260, weierp: 8472, image: 8465, real: 8476,
-      trade: 8482, alefsym: 8501, larr: 8592, uarr: 8593, rarr: 8594, darr: 8595,
-      harr: 8596, crarr: 8629, lArr: 8656, uArr: 8657, rArr: 8658, dArr: 8659,
-      hArr: 8660, forall: 8704, part: 8706, exist: 8707, empty: 8709, nabla: 8711,
-      isin: 8712, notin: 8713, ni: 8715, prod: 8719, sum: 8721, minus: 8722,
-      lowast: 8727, radic: 8730, prop: 8733, infin: 8734, ang: 8736, and: 8743,
-      or: 8744, cap: 8745, cup: 8746, 'int': 8747, there4: 8756, sim: 8764,
-      cong: 8773, asymp: 8776, ne: 8800, equiv: 8801, le: 8804, ge: 8805,
-      sub: 8834, sup: 8835, nsub: 8836, sube: 8838, supe: 8839, oplus: 8853,
-      otimes: 8855, perp: 8869, sdot: 8901, lceil: 8968, rceil: 8969,
-      lfloor: 8970, rfloor: 8971, lang: 9001, rang: 9002, loz: 9674, spades: 9824,
-      clubs: 9827, hearts: 9829, diams: 9830, quot: 34, amp: 38, lt: 60, gt: 62,
-      OElig: 338, oelig: 339, Scaron: 352, scaron: 353, Yuml: 376, circ: 710,
-      tilde: 732, ensp: 8194, emsp: 8195, thinsp: 8201, zwnj: 8204, zwj: 8205,
-      lrm: 8206, rlm: 8207, ndash: 8211, mdash: 8212, lsquo: 8216, rsquo: 8217,
-      sbquo: 8218, ldquo: 8220, rdquo: 8221, bdquo: 8222, dagger: 8224,
-      Dagger: 8225, permil: 8240, lsaquo: 8249, rsaquo: 8250, euro: 8364
+        brvbar: 166, sect: 167, uml: 168, copy: 169, ordf: 170, laquo: 171,
+        not: 172, shy: 173, reg: 174, macr: 175, deg: 176, plusmn: 177, sup2: 178,
+        sup3: 179, acute: 180, micro: 181, para: 182, middot: 183, cedil: 184,
+        sup1: 185, ordm: 186, raquo: 187, frac14: 188, frac12: 189, frac34: 190,
+        iquest: 191, Agrave: 192, Aacute: 193, Acirc: 194, Atilde: 195, Auml: 196,
+        Aring: 197, AElig: 198, Ccedil: 199, Egrave: 200, Eacute: 201, Ecirc: 202,
+        Euml: 203, Igrave: 204, Iacute: 205, Icirc: 206, Iuml: 207, ETH: 208,
+        Ntilde: 209, Ograve: 210, Oacute: 211, Ocirc: 212, Otilde: 213, Ouml: 214,
+        times: 215, Oslash: 216, Ugrave: 217, Uacute: 218, Ucirc: 219, Uuml: 220,
+        Yacute: 221, THORN: 222, szlig: 223, agrave: 224, aacute: 225, acirc: 226,
+        atilde: 227, auml: 228, aring: 229, aelig: 230, ccedil: 231, egrave: 232,
+        eacute: 233, ecirc: 234, euml: 235, igrave: 236, iacute: 237, icirc: 238,
+        iuml: 239, eth: 240, ntilde: 241, ograve: 242, oacute: 243, ocirc: 244,
+        otilde: 245, ouml: 246, divide: 247, oslash: 248, ugrave: 249, uacute: 250,
+        ucirc: 251, uuml: 252, yacute: 253, thorn: 254, yuml: 255, fnof: 402,
+        Alpha: 913, Beta: 914, Gamma: 915, Delta: 916, Epsilon: 917, Zeta: 918,
+        Eta: 919, Theta: 920, Iota: 921, Kappa: 922, Lambda: 923, Mu: 924, Nu: 925,
+        Xi: 926, Omicron: 927, Pi: 928, Rho: 929, Sigma: 931, Tau: 932,
+        Upsilon: 933, Phi: 934, Chi: 935, Psi: 936, Omega: 937, alpha: 945,
+        beta: 946, gamma: 947, delta: 948, epsilon: 949, zeta: 950, eta: 951,
+        theta: 952, iota: 953, kappa: 954, lambda: 955, mu: 956, nu: 957, xi: 958,
+        omicron: 959, pi: 960, rho: 961, sigmaf: 962, sigma: 963, tau: 964,
+        upsilon: 965, phi: 966, chi: 967, psi: 968, omega: 969, thetasym: 977,
+        upsih: 978, piv: 982, bull: 8226, hellip: 8230, prime: 8242, Prime: 8243,
+        oline: 8254, frasl: 8260, weierp: 8472, image: 8465, real: 8476,
+        trade: 8482, alefsym: 8501, larr: 8592, uarr: 8593, rarr: 8594, darr: 8595,
+        harr: 8596, crarr: 8629, lArr: 8656, uArr: 8657, rArr: 8658, dArr: 8659,
+        hArr: 8660, forall: 8704, part: 8706, exist: 8707, empty: 8709, nabla: 8711,
+        isin: 8712, notin: 8713, ni: 8715, prod: 8719, sum: 8721, minus: 8722,
+        lowast: 8727, radic: 8730, prop: 8733, infin: 8734, ang: 8736, and: 8743,
+        or: 8744, cap: 8745, cup: 8746, 'int': 8747, there4: 8756, sim: 8764,
+        cong: 8773, asymp: 8776, ne: 8800, equiv: 8801, le: 8804, ge: 8805,
+        sub: 8834, sup: 8835, nsub: 8836, sube: 8838, supe: 8839, oplus: 8853,
+        otimes: 8855, perp: 8869, sdot: 8901, lceil: 8968, rceil: 8969,
+        lfloor: 8970, rfloor: 8971, lang: 9001, rang: 9002, loz: 9674, spades: 9824,
+        clubs: 9827, hearts: 9829, diams: 9830, quot: 34, amp: 38, lt: 60, gt: 62,
+        OElig: 338, oelig: 339, Scaron: 352, scaron: 353, Yuml: 376, circ: 710,
+        tilde: 732, ensp: 8194, emsp: 8195, thinsp: 8201, zwnj: 8204, zwj: 8205,
+        lrm: 8206, rlm: 8207, ndash: 8211, mdash: 8212, lsquo: 8216, rsquo: 8217,
+        sbquo: 8218, ldquo: 8220, rdquo: 8221, bdquo: 8222, dagger: 8224,
+        Dagger: 8225, permil: 8240, lsaquo: 8249, rsaquo: 8250, euro: 8364
     }));
     /* jshint +W015 */
 

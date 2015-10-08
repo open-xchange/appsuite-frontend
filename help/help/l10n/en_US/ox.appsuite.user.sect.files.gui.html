@@ -4,10 +4,10 @@
 <title>9.1. The Drive Components</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="User Guide">
 <link rel="up" href="ox.appsuite.user.chap.files.html" title="Chapter 9. Drive">
 <link rel="prev" href="ox.appsuite.user.chap.files.html" title="Chapter 9. Drive">
-<link rel="next" href="ox.appsuite.user.sect.files.view.html" title="9.2. Viewing Files">
+<link rel="next" href="ox.appsuite.user.sect.files.view.html" title="9.2. Displaying Files and Folders">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -19,7 +19,7 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.chap.files.html">Prev</a></li>
@@ -32,112 +32,264 @@
   <h1 class="sr-only"><span class="phrase">Drive</span></h1>
 <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="ox.appsuite.user.sect.files.gui"></a>9.1. The <span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> Components</h2></div></div></div>
+<a name="ox.appsuite.user.sect.files.gui"></a>9.1. The  <span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> Components</h2></div></div></div>
 <a class="indexterm" name="id-1.10.7.2"></a><div class="reference">
-<a name="ox.appsuite.user.reference.files.gui.hint"></a><p>An introduction to the user interface can be found in <a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. The User Interface">The User Interface</a>.</p>
+<a name="ox.appsuite.user.reference.files.elements"></a><p>The <span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> app includes the following components.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.search" title="Search bar">Search bar</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.foldertree" title="Folder tree">Folder tree</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.toolbar" title="Toolbar">Toolbar</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.navbar" title="Navigation bar">Navigation bar</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.content" title="Display area">Display area</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.viewer" title="Viewer">Viewer</a></p></li>
+</ul></div>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.files.gui.search"></a><p class="title"><b>Search bar</b></p>
+<p>Enables you to <a class="link" href="ox.appsuite.user.sect.files.search.html" title="9.5. Searching for Files">search</a> for files.</p>
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.files.gui.foldertree"></a><p class="title"><b>Folder tree</b></p>
-<p>Displays the folders. Enables <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.concept.folder.navigate">navigation within the folder structure</a>. In order to open the folder tree, click on the <span class="guibutton"><strong>View</strong></span> button in the <a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.toolbar" title="Toolbar">toolbar</a>. Enable <span class="guibutton"><strong>Folder view</strong></span>. The following functions are available: </p>
+<p>Displays the folders. Enables you to navigate the folder structure. In order to open the folder tree, click on the <span class="guibutton"><strong>View</strong></span> button in the <a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.toolbar" title="Toolbar">toolbar</a>. Enable <span class="guibutton"><strong>Folder view</strong></span>. Depending on the groupware configuration, the folder tree contains the following entries: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>If clicking on a folder, its files are displayed.</p></li>
-<li class="listitem"><p>The <span class="guibutton"><strong>Folder-specific actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> next to the selected folder offers functions for <a class="link" href="ox.appsuite.user.chap.dataorganisation.html#ox.appsuite.user.concept.dataorganisation">organizing data</a> and for <a class="link" href="ox.appsuite.user.chap.datainterchange.html#ox.appsuite.user.concept.datainterchange">exchanging data</a>.</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>My files</strong></span>. Contains your personal files and folders. Per default, it contains folders for documents, music, images, and videos.</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>Shared files</strong></span>. Contains files shared with you by other users.</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>Public files</strong></span>. Contains files shared with all users.</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>Trash</strong></span>. Contains the files deleted by you.</p></li>
+<li class="listitem"><p>Buttons below the folders offer functions for adding cloud storage accounts that you set up in third party products like Dropbox.</p></li>
 </ul></div>
+<p>The following functions are available:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>If clicking on a folder, its contents are displayed.</p></li>
+<li class="listitem"><p>The <span class="guibutton"><strong>Folder-specific actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> next to the selected folder offers functions for organizing data and for exchanging data.</p></li>
+</ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.files.gui.foldertree.related"></a><p class="title">Related topics</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Information on folders can be found in <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.html" title="11.1. Folders">Folders</a>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Instructions for frequently used actions can be found here:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html" title="11.1.2. Navigating within the folder structure">Navigating within the folder structure</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.create.html" title="11.1.5. Creating folders">Creating folders</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.rename.html" title="11.1.6. Renaming folders">Renaming folders</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.move.html" title="11.1.7. Moving folders">Moving folders</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html" title="11.1.8. Deleting folders">Deleting folders</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>Parent topic: <a class="xref" href="ox.appsuite.user.sect.files.gui.html" title="9.1. The Drive Components">The  <span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> Components</a></p></li>
+</ul>
+</div>
 <p>
       </p>
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.files.gui.toolbar"></a><p class="title"><b>Toolbar</b></p>
-<p>Contains the following buttons:</p>
+<p>Contains the following elements. <span class="phrase"><strong>Note:</strong></span> Some buttons are only displayed, if objects have been selected.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p><span class="guibutton"><strong>New</strong></span> button. Contains the following functions:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p><span class="guibutton"><strong>Upload new file</strong></span>. Creates a <a class="link" href="ox.appsuite.user.sect.files.add.html#ox.appsuite.user.concept.files.new">new file</a>.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Add note</strong></span>. Creates a simple <a class="link" href="ox.appsuite.user.sect.pad.add.html#ox.appsuite.user.concept.pad.new">text file</a>.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Add local file</strong></span>. Adds one or multiple local files.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Add note</strong></span>. Creates a simple text file.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>New text document</strong></span>. Creates a new text document.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>New spreadsheet</strong></span> Creates a new spreadsheet.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Add new folder</strong></span>. Creates a new folder.</p></li>
 </ul></div>
 <p>
             </p>
 </li>
-<li class="listitem"><p>If you opened a personal folder, the <span class="guibutton"><strong>Share folder</strong></span> button is displayed. If clicking on this button, a <a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html#ox.appsuite.user.concept.pubsub.publish">publication</a> of this folder will be created.</p></li>
-<li class="listitem"><p>If the folder contains images, audio or video files, icons for <a class="link" href="ox.appsuite.user.sect.files.open.multimedia.html#ox.appsuite.user.concept.files.open.multimedia">playing multimedia files</a> are displayed.</p></li>
-<li class="listitem"><p>If a file has been selected, the <a class="link" href="ox.appsuite.user.sect.files.open.html#ox.appsuite.user.concept.files.open"><span class="guibutton"><strong>Download</strong></span></a> icon will be displayed.</p></li>
-<li class="listitem"><p>If a file has been selected, the <a class="link" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.concept.files.delete"><span class="guibutton"><strong>Delete</strong></span></a> icon will be displayed.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Share</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.toolbar.share"></a><img src="../../images/appsuite_user_icon_share.png"></span> . This function allows to share files or folders.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Viewer</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.toolbar.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span> . Shows the contents of the folder's files in the viewer.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Download</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.toolbar.download"></a><img src="../../images/appsuite_user_icon_download.png"></span> . Downloads the files selected by you. Multiple files are downloaded as zip archive.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Delete</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.toolbar.delete"></a><img src="../../images/appsuite_user_icon_delete.png"></span> . Deletes the files or folders selected by you.</p></li>
 <li class="listitem">
-<p>If a file has been selected, the <span class="guibutton"><strong>More</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span> will be displayed. If clicking the icon, a menu with the following entries opens: <a class="link" href="ox.appsuite.user.sect.files.manage.send.html#ox.appsuite.user.concept.files.send"><span class="guibutton"><strong>Send by mail</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.sendlink.html#ox.appsuite.user.concept.files.sendlink"><span class="guibutton"><strong>Send as internal link</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.showlink.html#ox.appsuite.user.concept.files.showlink"><span class="guibutton"><strong>Show internal link</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.addportal.html#ox.appsuite.user.concept.files.addportal"><span class="guibutton"><strong>Add to portal</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.move.html#ox.appsuite.user.concept.files.move"><span class="guibutton"><strong>Move</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.copy.html#ox.appsuite.user.concept.files.copy"><span class="guibutton"><strong>Copy</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.lock.html#ox.appsuite.user.concept.files.lock"><span class="guibutton"><strong>Lock</strong></span></a>.</p>
+<p><span class="guibutton"><strong>Actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span> . Opens a menu with further functions:</p>
 <p><span class="phrase"><strong>Note:</strong></span> If you selected multiple files, some functions are not available.</p>
 </li>
+<li class="listitem"><p><span class="guibutton"><strong>View</strong></span> button. Allows to select the view in the <a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.content" title="Display area">display area</a>.</p></li>
+</ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.files.gui.toolbar.related"></a><p class="title">Related topics</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Instructions for the buttons and icons can be found here:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.files.add.html" title="9.3. Creating Files or Folders">Creating Files or Folders</a>, <a class="xref" href="ox.appsuite.user.sect.files.view.html" title="9.2. Displaying Files and Folders">Displaying Files and Folders</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.delete.html" title="9.4.9. Deleting files">Deleting files</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>Instructions for the functions in the <span class="guibutton"><strong>Actions</strong></span> menu<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.toolbar.related.more"></a><img src="../../images/appsuite_user_icon_more.png"></span> can be found here:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.files.manage.send.html" title="9.4.2. Sending files as E-Mail attachments">Sending files as E-Mail attachments</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.sendlink.html" title="9.4.1. Sending files as a link">Sending files as a link</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.showlink.html" title="9.4.3. Showing the link to a file">Showing the link to a file</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.addportal.html" title="9.4.8. Adding files to the portal">Adding files to the portal</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.move.html" title="9.4.6. Moving files or folders">Moving files or folders</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.copy.html" title="9.4.7. Copying files">Copying files</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.lock.html" title="9.4.10. Locking or unlocking files">Locking or unlocking files</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>Parent topic: <a class="xref" href="ox.appsuite.user.sect.files.gui.html" title="9.1. The Drive Components">The  <span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> Components</a></p></li>
+</ul>
+</div>
+<p>
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.files.gui.navbar"></a><p class="title"><b>Navigation bar</b></p>
+<p>The navigation path is located below the <a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.toolbar" title="Toolbar">toolbar</a>. It contains the following:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Navigation path. It shows the path to the folder opened. To open a parent folder, click on a path entry.</p></li>
 <li class="listitem">
-<p><span class="guibutton"><strong>View</strong></span> button. Selects one of the following views for the detail view:</p>
+<p><span class="guibutton"><strong>Select</strong></span> button. Contains functions for selecting or filtering objects in the <a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.content" title="Display area">display area</a>:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.detailview.list" title="Display area in the List view">List</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.detailview.icons" title="Display area in the Icons view">Icons</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.detailview.tiles" title="Display area in the Square view">Square</a></p></li>
+<li class="listitem"><p>select all files and folders, select all files, clear the selection</p></li>
+<li class="listitem"><p>display certain file types only, display all file types</p></li>
 </ul></div>
 <p>
             </p>
 </li>
+<li class="listitem"><p><span class="guibutton"><strong>Sort by</strong></span> button. Sorts the files in the display area by various criteria.</p></li>
 </ul></div>
-<p><span class="phrase"><strong>Note:</strong></span> Some buttons are only displayed if the selected folder contains files.</p>
+<p>
+      </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.files.gui.detailview.list"></a><p class="title"><b>Display area in the <span class="guilabel"><strong>List</strong></span> view</b></p>
-<p>For each file a row with the following contents is displayed. </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>A checkbox for selecting one or several files.</p></li>
-<li class="listitem"><p>An icon for each file in the selected folder. A file preview is displayed, if available.</p></li>
-<li class="listitem"><p>Name and size of the file</p></li>
-<li class="listitem"><p>Date or time of the last change</p></li>
-</ul></div>
-<p> If clicking on a file, a <a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.popup" title="Pop-up">popup</a> opens. It shows further data and functions.</p>
-</div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.files.gui.detailview.icons"></a><p class="title"><b>Display area in the <span class="guilabel"><strong>Icons</strong></span> view</b></p>
-<p>Navigation path to the selected folder. </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>An icon for each file in the selected folder. A file preview is displayed, if available.</p></li>
-<li class="listitem"><p>The file's name</p></li>
-</ul></div>
-<p>If clicking on a file, a <a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.popup" title="Pop-up">popup</a> opens. It shows further data and functions. </p>
-</div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.files.gui.detailview.tiles"></a><p class="title"><b>Display area in the <span class="guilabel"><strong>Square</strong></span> view</b></p>
-<p>Displays a square for each file in the selected folder. If available, a file preview is displayed. If clicking on a file, a <a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.popup" title="Pop-up">popup</a> opens. It shows further data and functions.</p>
-</div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.files.gui.popup"></a><p class="title"><b>Pop-up</b></p>
-<p>If clicking on a file, a pop-up opens. It displays the following information: </p>
+<a name="ox.appsuite.user.reference.files.gui.content"></a><p class="title"><b>Display area</b></p>
+<p>Displays the files and folders as list, icons or tiles In order to select a view, click on the <span class="guibutton"><strong>View</strong></span> button in the <a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.toolbar" title="Toolbar">toolbar</a>. The views are differentiated as follows:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>The <a class="link" href="ox.appsuite.user.sect.files.open.html#ox.appsuite.user.concept.files.open"><span class="guibutton"><strong>Open</strong></span></a> button</p>
-<p>If clicking on a document, the <a class="link" href="ox.appsuite.user.sect.files.open.office.html#ox.appsuite.user.concept.files.open.office"><span class="guibutton"><strong>View</strong></span></a> button is displayed instead of the <span class="guibutton"><strong>Open</strong></span> button.</p>
-</li>
-<li class="listitem"><p>If clicking on an editable file, the <span class="guibutton"><strong>Edit</strong></span> button is displayed.</p></li>
-<li class="listitem"><p>The <a class="link" href="ox.appsuite.user.sect.files.open.html#ox.appsuite.user.concept.files.open"><span class="guibutton"><strong>Download</strong></span></a> and the <a class="link" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.concept.files.delete"><span class="guibutton"><strong>Delete</strong></span></a> button</p></li>
-<li class="listitem">
-<p>If clicking the <span class="guibutton"><strong>More</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.popup.more"></a><img src="../../images/appsuite_user_icon_more.png"></span>  a menu with the following entries opens: <a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html#ox.appsuite.user.concept.pubsub.publish"><span class="guibutton"><strong>Share this file</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.send.html#ox.appsuite.user.concept.files.send"><span class="guibutton"><strong>Send by mail</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.sendlink.html#ox.appsuite.user.concept.files.sendlink"><span class="guibutton"><strong>Send as internal link</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.showlink.html#ox.appsuite.user.concept.files.showlink"><span class="guibutton"><strong>Show internal link</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.addportal.html#ox.appsuite.user.concept.files.addportal"><span class="guibutton"><strong>Add to portal</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.rename.html#ox.appsuite.user.concept.files.rename"><span class="guibutton"><strong>Rename</strong></span></a>, <span class="phrase"><a class="link" href="ox.appsuite.user.sect.files.manage.editdescription.html#ox.appsuite.user.concept.files.editdescription"><span class="guibutton"><strong>Edit description</strong></span></a></span>, <a class="link" href="ox.appsuite.user.sect.files.manage.move.html#ox.appsuite.user.concept.files.move"><span class="guibutton"><strong>Move</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.copy.html#ox.appsuite.user.concept.files.copy"><span class="guibutton"><strong>Copy</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.lock.html#ox.appsuite.user.concept.files.lock"><span class="guibutton"><strong>Lock</strong></span></a>.</p>
-<p><span class="phrase"><strong>Note:</strong></span> Some buttons might not be displayed if you do not have the appropriate permissions.</p>
-</li>
-<li class="listitem"><p>If clicking on a document, the <span class="guibutton"><strong>Edit as new</strong></span> button is displayed in the submenu <span class="guibutton"><strong>More</strong></span>.</p></li>
-<li class="listitem"><p>file name</p></li>
-<li class="listitem"><p>a file preview, if available</p></li>
-<li class="listitem"><p>file comments</p></li>
-<li class="listitem"><p>Navigation path to the folder selected. To open another folder, click on the path.</p></li>
-<li class="listitem"><p>Buttons for uploading a <a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.add" title="How to upload a new version:">new version</a>.</p></li>
-<li class="listitem">
-<p>The <span class="guibutton"><strong>Show version history</strong></span> button. If clicking on this button, a versions list is displayed. The current version is listed on top. For each version the following information is displayed:</p>
+<p>For each file and folder a row with the following content is displayed in the <span class="guibutton"><strong>List</strong></span> view.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>the version's file name</p></li>
-<li class="listitem"><p>version comments, if available</p></li>
+<li class="listitem"><p>An icon. There are different icons for the single object types.</p></li>
+<li class="listitem"><p>The name of the file or folder. </p></li>
+<li class="listitem"><p>Date or time of the last change</p></li>
+<li class="listitem"><p>In the case of files, the size is displayed.</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem">
+<p>For each file and folder the following information is displayed in the <span class="guibutton"><strong>Icons</strong></span> view.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>An icon. If available, a file preview is shown.</p></li>
+<li class="listitem"><p>The name of the file or folder.</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem"><p>Files and folders are displayed as squares in the <span class="guibutton"><strong>Tiles</strong></span> view.</p></li>
+</ul></div>
+<p>The following functions are available.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p>In order to display details of a selected object, click on <span class="guibutton"><strong>View</strong></span> in the <a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.toolbar" title="Toolbar">toolbar</a>. Enable <span class="guibutton"><strong>File Details</strong></span>. The following information are displayed.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem">
+<p><span class="guilabel"><strong>Details</strong></span>. Shows general information: the name of the file or folder, the file size, the date of the last change, the editor's name, folder, link</p>
+<p>If you shared the object, the button next to <span class="guilabel"><strong>Shares</strong></span> can be used to open the dialog window for editing shares.</p>
+</li>
+<li class="listitem">
+<p><span class="guilabel"><strong>Description</strong></span>. Shows file comments, if available. </p>
+<p>In order to add a description, click on <span class="guibutton"><strong>Add a description</strong></span>. In order to edit a description, double-click on the description.</p>
+</li>
+<li class="listitem"><p><span class="guibutton"><strong>Upload a new version</strong></span> button. Click on this button to select a file that is uploaded as new version.</p></li>
+<li class="listitem">
+<p>If there are several file versions, the <span class="guilabel"><strong>Versions</strong></span> area is displayed. For each version the following information is displayed:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square; ">
+<li class="listitem"><p>The version's file name. If clicking on it, a menu with several functions opens:</p></li>
+<li class="listitem"><p>The version's file size</p></li>
 <li class="listitem"><p>name of the user who uploaded the version</p></li>
 <li class="listitem"><p>date and time of the version's upload</p></li>
 </ul></div>
 <p>
-            </p>
+                  </p>
 </li>
 </ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem">
+<p>In order to display specific object types only, click on <span class="guibutton"><strong>Select</strong></span> in the navigation bar. Enable an entry below <span class="guilabel"><strong>Filter</strong></span>.</p>
+<p>In order to display all objects, click on <span class="guibutton"><strong>Select</strong></span> in the navigation bar. Enable the entry <span class="guibutton"><strong>None</strong></span> below <span class="guilabel"><strong>Filter</strong></span>.</p>
+</li>
+<li class="listitem"><p>In order to sort objects, click on <span class="guibutton"><strong>Sort by</strong></span> in the navigation bar. Enable an entry.</p></li>
+<li class="listitem">
+<p>Select a file or folder by clicking on it. You can also use your system's multi selection functions.</p>
+<p>You can also use checkboxes for selecting files and folders. To display the checkboxes, click on the <span class="guibutton"><strong>View</strong></span> button in the <a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.toolbar" title="Toolbar">toolbar</a>. Enable <span class="guibutton"><strong>Checkboxes</strong></span>. </p>
+<p>To select all objects or files or to clear the selection, click on <span class="guibutton"><strong>Select</strong></span> in the navigation bar. Click on an entry below <span class="guilabel"><strong>Select</strong></span>.</p>
+</li>
+<li class="listitem"><p>If double-clicking on a folder, it will be opened.</p></li>
+<li class="listitem"><p>If double-clicking on a file, it will be opened in the <a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.viewer" title="Viewer">viewer</a>.</p></li>
+</ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.files.gui.content.related"></a><p class="title">Related topics</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>
+              <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.files.view.html" title="9.2. Displaying Files and Folders">Displaying Files and Folders</a>, <a class="xref" href="ox.appsuite.user.sect.files.view.download.html#ox.appsuite.user.task.files.download" title="How to download files:">How to download files:</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.html" title="9.4. Managing Files">Managing Files</a>, <a class="xref" href="ox.appsuite.user.sect.files.sharing.html" title="9.6. Sharing">Sharing</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>Parent topic: <a class="xref" href="ox.appsuite.user.sect.files.gui.html" title="9.1. The Drive Components">The  <span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> Components</a></p></li>
+</ul>
+</div>
+<p>
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.files.gui.viewer"></a><p class="title"><b>Viewer</b></p>
+<p>Shows the contents of files. In order to launch the viewer, do one of the following:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Double-click on a file in the <a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.content" title="Display area">display area</a></p></li>
+<li class="listitem" style="list-style-type: none"><p>Select a file. Click the <span class="guibutton"><strong>Viewer</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span>  in the <a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.toolbar" title="Toolbar">toolbar</a>.</p></li>
+</ul></div>
+<p>The viewer includes the following elements:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Name of the selected file. If clicking on the name, the <span class="guilabel"><strong>Rename</strong></span> dialog window opens.</p></li>
+<li class="listitem">
+<p>Depending on the selected file type, the respective functions are displayed.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>If the selected file is editable, the <span class="guibutton"><strong>Edit</strong></span> button is displayed.</p></li>
+<li class="listitem"><p>If a document template is shown, the <span class="guibutton"><strong>New from template</strong></span> button is displayed.</p></li>
+<li class="listitem"><p>Depending on the content of the selected file, the <span class="guibutton"><strong>Zoom out</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.zoomout"></a><img src="../../images/appsuite_user_icon_viewer_zoomout.png"></span> and the <span class="guibutton"><strong>Zoom in</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.zoomin"></a><img src="../../images/appsuite_user_icon_viewer_zoomin.png"></span> will be displayed.</p></li>
+<li class="listitem"><p>If a presentation is shown, the <span class="guibutton"><strong>Present</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.presentation"></a><img src="../../images/appsuite_user_icon_viewer_present.png"></span>is displayed.</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem"><p><span class="guibutton"><strong>Download</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.download"></a><img src="../../images/appsuite_user_icon_viewer_download.png"></span>. Downloads the file.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Share</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.share"></a><img src="../../images/appsuite_user_icon_viewer_share.png"></span> . This function allows to share data.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.more"></a><img src="../../images/appsuite_user_icon_viewer_menuebars.png"></span> . If clicking the icon, a menu with further functions opens:</p></li>
+<li class="listitem">
+<p><span class="guibutton"><strong>View details</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.details"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span> . If clicking the icon, a sidebar with information about the file is opened or closed. The information is separated by headers into several areas. Some sections can be opened or closed by clicking the icon <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.toggle.down"></a><img src="../../images/appsuite_user_icon_toggle_down.png"></span> or the icon <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.toggle.right"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span> next to the folder name in the folder tree. The following areas are available.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem">
+<p><span class="guilabel"><strong>File Details</strong></span>. Shows general information: file name, size, date of last change, folder, link</p>
+<p>If clicking on a location detail, the Viewer will be closed and the content of the location detail is shown in the display area. If clicking on the link, the file is opened in a new page.</p>
+<p>If you shared the object, the button next to <span class="guilabel"><strong>Shares</strong></span> can be used to open the dialog window for editing shares.</p>
+</li>
+<li class="listitem">
+<p><span class="guilabel"><strong>Description</strong></span>. Shows file comments, if available. </p>
+<p>In order to add a description, click on <span class="guibutton"><strong>Add a description</strong></span>. In order to edit a description, double-click on the description.</p>
+</li>
+<li class="listitem"><p><span class="guibutton"><strong>Upload a new version</strong></span> button. Click on this button to select a file that is uploaded as new version.</p></li>
+<li class="listitem">
+<p>If there are several file versions, the <span class="guilabel"><strong>Versions</strong></span> area is displayed. For each version the following information is displayed:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square; ">
+<li class="listitem"><p>The version's file name. If clicking on it, a menu with several functions opens:</p></li>
+<li class="listitem"><p>The version's file size</p></li>
+<li class="listitem"><p>name of the user who uploaded the version</p></li>
+<li class="listitem"><p>date and time of the version's upload</p></li>
+</ul></div>
+<p>
+                  </p>
+</li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem"><p><span class="guibutton"><strong>Pop out</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.popout"></a><img src="../../images/appsuite_user_icon_viewer_popout.png"></span> . Clicking on it displays the contents of the selected file on a new page. For documents in the Office format, there are page navigation functions available:</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Close</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.close"></a><img src="../../images/appsuite_user_icon_notification_close.png"></span> . If clicking the icon, the viewer will be closed.</p></li>
+<li class="listitem">
+<p>A view of the file contents, if available</p>
+<p>If there are further files, icons for browsing are displayed to the left and to the right of the view.</p>
+</li>
+</ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.files.gui.viewer.related"></a><p class="title">Related topics</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Instructions for the buttons and icons can be found here:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.files.view.content.html" title="9.2.1. Displaying a file's content">Displaying a file's content</a>, <a class="xref" href="ox.appsuite.user.sect.files.view.presentation.html" title="9.2.2. Holding a presentation">Holding a presentation</a>, <a class="xref" href="ox.appsuite.user.sect.files.view.download.html#ox.appsuite.user.task.files.download" title="How to download files:">How to download files:</a>, <a class="xref" href="ox.appsuite.user.sect.files.sharing.produce.html" title="9.6.1. Sharing files and folders">Sharing files and folders</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.delete.html" title="9.4.9. Deleting files">Deleting files</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html" title="9.4.11. Working with versions">Working with versions</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>Instructions for the functions in the <span class="guibutton"><strong>Actions</strong></span> menu<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.related.more"></a><img src="../../images/appsuite_user_icon_viewer_menuebars.png"></span> can be found here:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.files.manage.rename.html" title="9.4.4. Editing file names">Editing file names</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.editdescription.html" title="9.4.5. Creating or editing descriptions">Creating or editing descriptions</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.send.html" title="9.4.2. Sending files as E-Mail attachments">Sending files as E-Mail attachments</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.add" title="How to upload a new version:">How to upload a new version:</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.delete.html" title="9.4.9. Deleting files">Deleting files</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>Parent topic: <a class="xref" href="ox.appsuite.user.sect.files.gui.html" title="9.1. The Drive Components">The  <span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> Components</a></p></li>
+</ul>
+</div>
 <p>
       </p>
 </div>

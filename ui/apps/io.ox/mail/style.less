@@ -12,12 +12,11 @@
  */
 
 // definitions
-@icon-size: 18px;
-@unread-toggle-width: 40px;
+@icon-size: 16px;
 
 // phone
-@phone-font-size: 14px;
-@phone-line-height: 24px;
+@phone-font-size: 16px;
+@phone-line-height: 26px;
 
 // preview panes
 
@@ -32,26 +31,6 @@
 
 .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height; }
 
-.list-view-control .toolbar {
-    .user-select(none);
-    .select-all {
-        color: #555;
-        cursor: pointer;
-        white-space: nowrap;
-        i {
-            color: #ccc;
-            margin-right: 14px;
-            width: 16px;
-            font-size: 18px;
-            position: relative;
-            top: 2px;
-        }
-    }
-    .dropdown-menu {
-        font-size: 14px;
-    }
-}
-
 .preview-right {
     .leftside {
         width: 320px;
@@ -61,13 +40,13 @@
     }
 }
 
-@media(max-width: 700px) {
+@media(max-width: 900px) {
     .preview-right {
         .leftside {
-            width: 280px;
+            width: 240px;
         }
         .rightside {
-            left: 280px;
+            left: 240px;
         }
     }
 }
@@ -117,20 +96,28 @@
     table-layout: fixed;
 }
 
-.list-item-column {
-    display: table-cell;
-    vertical-align: middle;
-    padding: 0;
-    @icon-width: 24px;
-    &.column-1 { width: @icon-width; text-align: center; }
-    &.column-2 { width: @icon-width; text-align: center; }
-    &.column-3 { width: @icon-width; text-align: center; }
-    &.column-4 { width: 35%; padding-right: 10px; }
-    &.column-5 { width: 55%; padding-right: 10px; }
-    &.column-6 { width: 140px; text-align: right; }
+.mail-item {
+
+    .list-item {
+        padding-top: 8px;
+        padding-bottom: 6px;
+    }
+
+    .list-item-column {
+        display: table-cell;
+        vertical-align: middle;
+        padding: 0;
+        @icon-width: 24px;
+        &.column-1 { width: @icon-width; text-align: center; }
+        &.column-2 { width: @icon-width; text-align: center; }
+        &.column-3 { width: @icon-width; text-align: center; }
+        &.column-4 { width: 35%; padding-right: 10px; }
+        &.column-5 { width: 55%; padding-right: 10px; }
+        &.column-6 { width: 140px; text-align: right; }
+    }
 }
 
-.list-view .list-item {
+.list-view.mail-item .list-item {
 
     &.small {
 
@@ -166,25 +153,33 @@
             }
         }
     }
+}
 
-    @media (max-width: 480px), (max-device-width: 480px)  {
+.smartphone {
+    .list-view.mail-item .list-item {
+        border-right: 1px solid rgba(0, 0, 0, 0.15);
+        margin-right: -1px;
+
         &.unread.selected {
             .subject { color: #000; }
         }
+
         &.complete > .list-item:last-child {
             margin-bottom: @toolbar-height;
             border-bottom: 0;
         }
-        font-size: @phone-font-size;
-        line-height: @phone-line-height;
 
+        .list-item-content {
+            font-size: @phone-font-size;
+            line-height: @phone-line-height;
+        }
     }
-}
-
-.list-view {
-    @media (max-width: 480px), (max-device-width: 480px)  {
+    .list-view {
+        .list-item {
+            background-color: #fff;
+        }
         .list-item:hover {
-            background-color: rgba(221, 221, 221, 0.5);
+            background-color: rgb(238, 238, 238);
         }
         &.complete > .list-item:last-child {
             margin-bottom: @toolbar-height;
@@ -193,62 +188,36 @@
     }
 }
 
-.preview-bottom .mail-detail-pane .mail-detail-decorator { padding: 0; }
+.swipe-option-cell {
+    position: absolute;
+    width: 100%;
+    right: 0;
+    z-index: -5;
+    .swipe-button {
+        height: 100%;
+        width: 95px;
+        color:#fff;
+        line-height: 63px;
+        font-size: 30px;
+        text-align: center;
+        float: right;
+        &.delete {
+            background: #FF4105;
+        }
+        &.more {
+            background: rgb(255, 169, 8);
+        }
+    }
+}
+
 .preview-bottom .inplace-reply { margin: 14px; }
 
 .list-view.thread-view .list-item.small { padding: 7px 14px 7px 48px; }
 
-.io-ox-mail-window .foldertree-sidepanel { left: 0; }
-
-.simple-mail-writer {
-    z-index: 10;
-    background-color: white;
-    @header-height: 190px;
-    @padding: 7px;
-    .header {
-        background-color: #eee;
-        position: absolute;
-        top: 40px + @padding;
-        right: @padding;
-        left: @padding;
-        height: @header-height;
-        td {
-            height: 45px;
-            padding: 0 14px 0 0;
-            vertical-align: middle;
-        }
-        td.row-label {
-            width: 100px;
-            text-align: right;
-        }
-        input {
-            height: 30px;
-            margin: 0px;
-        }
-    }
-    .editor {
-        color: #aaa;
-        background-color: white;
-        position: absolute;
-        top: @header-height + 40px;
-        right: @padding;
-        bottom: @padding;
-        left: @padding;
-        textarea {
-            height: 100%;
-            width: 100%;
-            padding: 14px;
-            overflow: auto;
-            outline: 0;
-            border: 0px none;
-        }
-    }
-}
-
 .mail-detail {
     section.body {
         margin: 0;
-        padding: 20px;
+        padding: @default-padding;
         background-color: #fff;
         display: none;
         width: 100%;
@@ -280,29 +249,13 @@
     }
 }
 
-.mail-reader {
-    background-color: #eee;
-    .overflow();
-    .thread-view-control {
-        max-width: 900px;
-        margin: 0 auto;
-    }
-    .thread-view-control, .thread-view-list {
-        position: static;
-        min-height: 100%;
-    }
-    .thread-view-list {
-        overflow: visible !important;
-    }
-}
-
 // ListView
 
 .mail-item {
 
     .contact-picture {
         float: left;
-        margin: 0px 14px 0 0;
+        margin: 0 @default-padding 0 0;
         .picture(40px, 40px);
         html.high-contrast & {
             display: none;
@@ -327,7 +280,7 @@
     .date, .size {
         .fontWeight(300);
         display: inline-block;
-        margin-left: 0.5em;
+        margin-left: 16px;
         float: right;
     }
 
@@ -357,11 +310,11 @@
     .actions {
         font-size: 14px;
         a {
-        	padding-left: 14px;
+        	padding-left: 16px;
         }
     }
 
-    @item-line-height: 21px;
+    @item-line-height: 20px;
 
     .list-item-content {
 
@@ -374,7 +327,7 @@
             display: inline-block;
             float: left;
             line-height: 20px;
-            margin-right: 7px;
+            margin-right: 8px;
         }
 
         i.icon-unread { color: @link-color; }
@@ -388,14 +341,23 @@
         }
 
         .drag-title {
-            opacity: 0.75;
+            opacity: 0.70;
         }
 
         i.flag {
             font-size: 18px;
             padding: 0;
-            margin: 0 0 0 7px;
+            margin: 0 0 0 8px;
             float: right;
+        }
+
+        // disable/reset some properties
+        .breadcrumb-view {
+            margin: 0;
+            i {
+                float: none;
+                line-height: 14px;
+            }
         }
     }
 
@@ -406,11 +368,9 @@
         }
     }
 
-    .fa-paperclip.has-attachments {
+    .fa-paperclip.has-attachments, i.fa.signed, i.fa.encrypted {
         font-size: @icon-size;
-        width: 18px;
-        height: 18px;
-        margin: 0 0 0 7px;
+        margin: 0 0 0 8px;
         float: right;
 
     }
@@ -439,33 +399,45 @@
     }
 
     .box() {
-        color: #888;
-        line-height: @item-line-height - 2;
-        padding: 0 7px;
-        margin: 0 0 0 7px;
+        font-size: 12px;
+        color: #777;
+        line-height: 14px;
+        padding: 0 4px;
+        margin: 2px 0 0 8px;
         display: inline-block;
         float: right;
         overflow: visible;
         text-align: center;
-        border: 1px solid rgba(0, 0, 0, 0.10);
+        border: 1px solid rgba(0, 0, 0, 0.15);
         .fontWeight(normal);
-        .border-radius(3px);
+        .border-radius(@border-radius-small);
     }
 
-    .account-name {
+    .account-name, .original-folder {
         .box();
+    }
+
+    .original-folder {
+        // do not overlap subject/attachmet icon
+        max-width: 50%;
+        .breadcrumb-link {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 100%;
+        }
     }
 
     .thread-size {
         .box();
-        min-width: 2em;
+        min-width: 24px;
         html.high-contrast & {
             color: @hc-gray;
         }
     }
 
     &.visible-selection.has-focus .selected {
-        .thread-size, .account-name { color: #fff; }
+        .thread-size, .account-name, .original-folder .breadcrumb-link { color: #fff; }
     }
 
     .thread-item {
@@ -492,18 +464,17 @@
     }
 
     .attachments {
-        padding: 14px 20px;
-        border-top: 1px solid #eee;
+        padding: 10px @default-padding 9px @default-padding;
         border-bottom: 1px solid #eee;
         .io-ox-inline-links {
             display: inline;
             font-family: @normal-font-family;
             font-size: 13px;
-            margin-left: 1em;
+            margin-left: @default-padding;
             a:hover {
                 text-decoration: underline;
             }
-            li { margin-right: 14px; }
+            li { margin-right: @default-padding; }
         }
         .preview .item .io-ox-core-tk-attachment {
 
@@ -557,18 +528,19 @@
     }
 
     .unread-toggle {
-        position: absolute;
-        left: 60px;
-        width: @unread-toggle-width;
-        height: 40px;
-        text-align: center;
+        &:focus i {
+            outline: thin dotted;
+            outline: 5px auto -webkit-focus-ring-color;
+            outline-offset: -2px;
+        }
+        outline: none;
+        float: right;
         font-size: 14px;
+        padding-left: 16px;
         color: #767676;
         &:hover { text-decoration: none; color: #aaa; }
         i.fa:before { content: "\f003"; } // fa-envelope-o
     }
-
-    &.no-padding .unread-toggle { left: 40px; }
 
     &.unread .unread-toggle {
         color: @link-color;
@@ -578,11 +550,16 @@
     .flag-picker {
         float: right;
         display: inline-block;
-        margin-left: 7px;
+        margin-left: 16px;
         position: relative;
         .dropdown-toggle {
-            font-size: @icon-size;
+            font-size: 14px;
             &:hover { text-decoration: none; }
+            &:focus i {
+                outline: thin dotted;
+                outline: 5px auto -webkit-focus-ring-color;
+                outline-offset: -2px;
+            }
         }
         .flag-dropdown-icon.flag_0 {
             color: #767676;
@@ -640,31 +617,35 @@
     width: 28px;
     height: 22px;
     border: 1px solid rgba(0, 0, 0, 0.2);
-    .border-radius(5px);
+    .border-radius(@border-radius-base);
 }
 
 .thread-view-control {
     background-color: #eee;
 }
 
-.subject() {
+.subject-base() {
     font-size: 20px;
     line-height: 24px;
-    padding: 20px;
+    padding: 12px @default-padding 4px @default-padding;
     margin: 0;
     .fontWeight(300);
 }
 
 .thread-view-list {
 
-    padding: 20px;
+    padding: @default-padding;
     background-color: #eee;
     &.scrollable { overflow: auto; }
 
     & > h1 {
 
-        .subject();
+        .subject-base();
         background-color: white;
+
+        .subject {
+            word-break: break-word;
+        }
 
         .toggle-all {
             color: #ccc;
@@ -676,9 +657,10 @@
 
         .summary {
 
-            color: #888;
+            color: #777;
             font-size: 13px;
-            line-height: 16px;
+            line-height: 20px;
+            margin-top: 4px;
 
             html.high-contrast & {
                 color: @hc-gray;
@@ -726,7 +708,7 @@ textarea.inplace-editor {
     .back-navigation {
 
         display: none;
-        top: 0px;
+        top: 0;
         border-bottom: 1px solid #ccc;
 
         a { outline: 0; }
@@ -736,8 +718,8 @@ textarea.inplace-editor {
         .button {
             display: table-cell;
             width: 40%;
-            padding-left: 20px;
-            i { margin-right: 14px; }
+            padding-left: @default-padding;
+            i { margin-right: @default-padding; }
         }
 
         .position {
@@ -751,8 +733,8 @@ textarea.inplace-editor {
             display: table-cell;
             text-align: right;
             width: 40%;
-            padding-right: 20px;
-            i { margin-left: 14px; }
+            padding-right: @default-padding;
+            i { margin-left: @default-padding; }
         }
 
          .fa {
@@ -792,7 +774,7 @@ textarea.inplace-editor {
         background-color: white;
         clear: both;
         padding: 0;
-        margin-bottom: 7px;
+        margin-bottom: 8px;
         border-bottom: 1px solid transparent;
     }
 
@@ -801,17 +783,19 @@ textarea.inplace-editor {
         border-bottom-color: transparent;
     }
 
-    @media (max-width: 480px), (max-device-width: 480px)  {
+    .list-item:focus {
+        border-bottom: 1px solid @link-color;
+    }
+}
+
+.smartphone {
+    .thread-view.list-view {
         .list-item:last-child {
             .detail-view-header {
                 border-bottom: 0;
             }
             margin-bottom: @toolbar-height;
         }
-    }
-
-    .list-item:focus {
-        border-bottom: 1px solid @link-color;
     }
 }
 
@@ -859,10 +843,6 @@ textarea.inplace-editor {
             top: 10%;
         }
     }
-    button.btn.btn-default.search-options {
-        border-radius:0;
-        border-left:0;
-    }
 }
 
 // Detail view
@@ -883,32 +863,18 @@ textarea.inplace-editor {
         // allows hiding "Entire thread"
         height: 110%;
     }
-}
 
-/* --- */
-
-.mail-detail-pane {
-
-    .mail-detail-decorator {
-
-        position: relative;
-        padding: 20px;
-        display: table;
-        width: 100%;
-        // to make sure the quick-reply field can scroll out of viewport
-        min-height: 100%;
-
-        .mail-detail {
-            background-color: white;
-        }
-
-        .mail-detail:focus {
-            outline: 0;
+    .multi-selection-message {
+        div {
+            color: #555;
         }
     }
 }
 
 .mail-detail {
+
+    color: @black;
+    background-color: #fff;
 
     position: relative;
     overflow-y: visible;
@@ -916,8 +882,7 @@ textarea.inplace-editor {
     width: 100%;
 
     @picture-width: 40px;
-    @header-padding: 19px;
-    @picture-padding: @picture-width + @header-padding;
+    @picture-padding: @picture-width + @default-padding;
 
     &.list-item:focus {
         outline: 0;
@@ -979,7 +944,7 @@ textarea.inplace-editor {
     }
 
     .subject {
-        .subject();
+        .subject-base();
         &.empty {
             font-style: italic;
             color: #aaa;
@@ -1000,13 +965,11 @@ textarea.inplace-editor {
     }
 
     &.unread .subject {
-        position: relative;
-        padding-left: 28px;
         .icon-unread {
             color: @link-color;
             display: inline-block;
             position: absolute;
-            left: 0px;
+            left: 0;
             top: 2px;
             html.high-contrast & {
                 color: @hc-link-color;
@@ -1024,7 +987,7 @@ textarea.inplace-editor {
     .external-images, .disposition-notification {
         display: table;
         width: 100%;
-        .btn { float: left; margin-right: 20px; }
+        .btn { float: left; margin-right: @default-padding; }
         .comment { display: table; }
         .close { position: relative; right: -10px; }
     }
@@ -1032,7 +995,7 @@ textarea.inplace-editor {
     .flag-dropdown {
 
         font-size: 22px;
-        margin: 7px 0 0 14px;
+        margin: 8px 0 0 @default-padding;
         cursor: pointer;
         float: right;
 
@@ -1083,7 +1046,8 @@ textarea.inplace-editor {
 
     .contact-picture {
         position: absolute;
-        left: 20px;
+        top: @default-padding;
+        left: @default-padding;
         .picture(@picture-width, @picture-width);
     }
 
@@ -1091,7 +1055,6 @@ textarea.inplace-editor {
 
     .io-ox-label {
         color: #767676;
-        .fontWeight(300);
         white-space: nowrap;
 
         html.high-contrast & {
@@ -1101,6 +1064,12 @@ textarea.inplace-editor {
 
     .recipients {
         .person-link { color: #333; }
+    }
+
+    @media(max-width: 900px) {
+        .recipients .person-link {
+            white-space: normal;
+        }
     }
 
     &:not(.expanded) .recipients {
@@ -1127,28 +1096,40 @@ textarea.inplace-editor {
     }
 
     blockquote {
+        color: #555;
         font-size: 13px;
-        border-left: 1px solid #08c;
-        padding: 7px 0 7px 20px;
-        margin: 10px 0;
+        border-left: 2px solid #ddd;
+        padding: 0 0 0 16px;
+        margin: 16px 0 16px 0;
+
     }
 
-    @colorQuotedWidth: 1px;
+    blockquote blockquote {
+        border-color: #3C73AA;
+        margin: 8px 0;
+    }
 
-    .colorQuoted blockquote {
-        border-left: @colorQuotedWidth solid #08c;
+    .blockquote(@color) {
+        color: @color !important;
+        border-left: 2px solid @color;
+        a[href] { color: @color; }
+        a[href]:hover { color: darken(@color, 10%); }
     }
 
     .colorQuoted blockquote blockquote {
-        border-left: @colorQuotedWidth solid #EE0889;
+        .blockquote(#3C73AA);
     }
 
     .colorQuoted blockquote blockquote blockquote {
-        border-left: @colorQuotedWidth solid #08C4FF;
+        .blockquote(#DD0880);
     }
 
     .colorQuoted blockquote blockquote blockquote blockquote {
-        border-left: @colorQuotedWidth solid #aaa;
+        .blockquote(#8F09C7);
+    }
+
+    .colorQuoted blockquote blockquote blockquote blockquote blockquote {
+        .blockquote(#777);
     }
 
     blockquote p {
@@ -1162,9 +1143,9 @@ textarea.inplace-editor {
     .blockquote-toggle {
         color: #888;
         font-size: 13px;
-        padding-left: 44px;
-        margin: 14px 0;
-        min-height: 18px;
+        padding-left: 56px;
+        margin: 16px 0;
+        min-height: 16px;
         i {
             color: #888;
             background-color: #eee;
@@ -1190,13 +1171,19 @@ textarea.inplace-editor {
     }
 
     .detail-view-header {
+        position: relative;
         .fontWeight(300);
-        padding: 14px (@header-padding + 1);
-        padding-left: @picture-padding + @unread-toggle-width;
+        line-height: 16px;
+        padding: (@default-padding + 3) @default-padding @default-padding (@picture-padding + @default-padding);
+        min-height: 71px;
+    }
+
+    &.expanded .detail-view-header {
+        border-bottom: 1px solid #eee;
     }
 
     &.no-padding .detail-view-header {
-        padding-left: @picture-padding + @unread-toggle-width - 20;
+        padding-left: @picture-padding;
         padding-right: 0;
     }
 
@@ -1205,7 +1192,7 @@ textarea.inplace-editor {
     }
 
     .notification-item {
-        padding: 14px 20px;
+        padding: @default-padding;
         background-color: #f0f0f0;
         border-top: 1px solid #ccc;
         border-bottom: 1px solid #ccc;
@@ -1218,7 +1205,7 @@ textarea.inplace-editor {
     .alert, .well {
         margin: 0;
         border: 0;
-        padding: 14px 40px 14px 20px;
+        padding: @default-padding 40px @default-padding @default-padding;
         .border-radius(0px);
         .box-shadow(none);
     }
@@ -1248,10 +1235,7 @@ textarea.inplace-editor {
 
     .content {
 
-        font-family: @normal-font-family;
-        .fontWeight(400);
-        font-size: 14px;
-        line-height: 20px;
+        font: normal e('13px/normal') @normal-font-family;
         // Max-width does not work here, see Bug #24505
         // max-width: 1000px;
         width: 100%;
@@ -1264,7 +1248,7 @@ textarea.inplace-editor {
 
         * {
             // see Bug 25737 - [L3] HTML mail with pasted text from MS Word not displayed correctly (cut off at upper edge)
-            line-height: 1.4em;
+            line-height: normal;
             box-sizing: content-box;
         }
 
@@ -1287,7 +1271,11 @@ textarea.inplace-editor {
             }
         }
 
-        &.fixed-width-font, &.fixed-width-font.plain-text {
+        &.fixed-width-font, &.fixed-width-font.plain-text,
+        &.fixed-width-font blockquote,
+        &.fixed-width-font.plain-text blockquote,
+        &.fixed-width-font blockquote p,
+        &.fixed-width-font.plain-text blockquote p {
             font-family: monospace;
         }
 
@@ -1328,7 +1316,7 @@ textarea.inplace-editor {
 
         p {
             font-family: @normal-font-family;
-            margin: 0 0 14px 0;
+            margin: 0 0 1em 0;
         }
 
         small {
@@ -1344,9 +1332,9 @@ textarea.inplace-editor {
             border: 0 none; line-height: normal; border-collapse: initial;
         }
 
-        ul {
+        ul, ol {
             padding: 0;
-            margin: 10px 0 10px 25px;
+            margin: 1em 0 1em 24px;
         }
 
         ul { list-style-type: disc; }
@@ -1354,7 +1342,7 @@ textarea.inplace-editor {
         ul ul ul { list-style-type: square; }
 
         li {
-            line-height: 1.33333em;
+            line-height: normal;
             margin-bottom: 0.5em;
         }
 
@@ -1378,7 +1366,7 @@ textarea.inplace-editor {
             text-align: left;
         }
 
-        ul, ol { padding-left: 25px; }
+        ul, ol { padding-left: 16px; }
 
         // see Bug 24995 - Strange boxes shown for invitation mails
         .calendar-detail .label {
@@ -1398,8 +1386,8 @@ textarea.inplace-editor {
 
     .max-size-warning {
         color: #777;
-        margin: 10px -20px 0 -20px;
-        padding: 20px 20px 0 20px;
+        margin: 10px -16px 0 -16px;
+        padding: 16px 16px 0 16px;
         border-top: 1px solid #ddd;
     }
 }
@@ -1474,25 +1462,6 @@ h4.mail-attachment-preview {
 
     .mail-detail-pane {
 
-        .mail-detail-decorator {
-
-            background-color: #fff;
-            padding: 0;
-            border-bottom: 2px solid #555;
-
-            .mail-detail  {
-
-                padding: 26px 13px 26px 13px;
-                .box-shadow(none);
-
-            }
-
-        }
-
-        .mail-detail-decorator:last-child {
-            border-bottom: 0 none;
-        }
-
         .scrollable-pane {
             background-color: #fff;
         }
@@ -1533,36 +1502,74 @@ h4.mail-attachment-preview {
 }
 
 // smartphone
-@media (max-width: 480px), (max-device-width: 480px)  {
+.smartphone { // was @media (max-width: 480px), (max-device-width: 480px)
 
     .thread-view-list {
         padding: 0;
         & > h1 {
             font-size: @phone-font-size + 2;
+            .summary {
+                font-size: @phone-font-size - 2;
+            }
         }
         .thread-view {
             header {
                 border-bottom: 1px solid #ccc;
             }
         }
+        .from, .recipients, .date {
+            font-size: @phone-font-size;
+            line-height: @phone-line-height;
+        }
+        .from .person-link.person-from {
+            font-weight: 500;
+        }
+        .mail-detail:not(.expanded) .recipients {
+            height: auto;
+        }
     }
 
-    .mail-item.unread .unread-toggle {
-        display: inline-block;
-        position: relative;
-        left: -35px;
-        bottom: 22px;
+    .mail-item  {
+        .subject {
+            margin-right: 32px;
+        }
     }
+
+
 
     .mail-item .unread-toggle {
-        display: none;
-        width: auto;
-        height: auto;
+        display: inline-block;
+        position: relative;
+        right: 16px;
+        margin-top: 16px;
+        bottom: auto;
     }
+
     .mail-item .attachments .io-ox-inline-links {
         font-size: @phone-font-size;
         margin-left: 0;
     }
+
+    .thread-view.list-view.multiple-messages {
+        .mail-detail .detail-view-header {
+            padding:0;
+            border: 0;
+            min-height: auto;
+
+            .from {
+                padding: 8px 0 0 16px;
+            }
+            time {
+                padding: 8px 16px 0 0;
+            }
+            .recipients {
+                padding-top: 0;
+                padding-bottom: 10px;
+                margin-bottom: -1px;
+            }
+        }
+    }
+
     .mail-detail {
 
         list-style-type: none;
@@ -1571,31 +1578,67 @@ h4.mail-attachment-preview {
         .contact-picture {
             display: none;
         }
-
-        .subject {
-            font-size: @phone-font-size;
-            padding: 10px 20px;
+        &.expanded .detail-view-header {
+            border:0;
         }
-
         .detail-view-header {
-            padding-left: 20px;
+            padding: 0 0 16px 0;
+
+            .from {
+                padding: 16px 16px 0 16px;
+                .person-link.person-from {
+                    font-weight: 500;
+                }
+            }
+
+            .recipients {
+                line-height: 23px;
+                padding: 8px 16px 16px 16px;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .subject {
+                font-size: @phone-font-size;
+                padding: @default-padding;
+                padding: 16px 16px 8px 16px;
+                line-height: 23px;
+                font-weight: 700;
+            }
+            time { padding-left: 16px; }
             .sp {
                 margin-right: 4px;
             }
+        }
+
+        section.attachments {
+            border-top: 1px solid #ddd;
+        }
+
+        &.expanded section.attachments:empty {
+            border: 0;
         }
 
         .attachments {
             border-bottom-width: 0;
         }
 
-        .mail-attachment-list .ul.inline-items li.item {
-            line-height: 35px;
-            .file a {
-                color: @link-color;
-            }
+        .has-attachments {
+            display: none;
         }
+
         .mail-attachment-list {
-            .toggle-details {
+            ul.inline-items li.item {
+                line-height: 35px;
+            }
+            ul.inline-items.preview li.item {
+                .file {
+                    display: block;
+                }
+            }
+            .list-unstyled.io-ox-inline-links {
+                display:none;
+            }
+            .links {
                 display: block;
             }
         }
@@ -1605,18 +1648,12 @@ h4.mail-attachment-preview {
         }
 
         section.body {
-            border-top: 1px solid #ccc;
-            margin-bottom: @toolbar-height;
-            padding: 10px;
+            border-top: 1px solid #ddd;
+            padding: 8px 16px;
         }
 
         &:not(.expanded) .recipients {
             opacity: 1;
-        }
-
-        .subject {
-            font-size: 15px;
-            padding: 10px 0 0 0;
         }
 
         & > header {
@@ -1631,142 +1668,37 @@ h4.mail-attachment-preview {
                     display: inline-block;
                     float: none;
                     position: absolute;
-                    right: 20px;
+                    right: 16px;
                 }
             }
         }
+
+        .content {
+            padding: 0;
+            font-size: 16px;
+            * {
+                line-height: 1.42857142em; // ~20px at 14px
+            }
+            ul, ol {
+                padding-left: 10px;
+                margin-left: 8px;
+            }
+        }
+    }
+    .io-ox-pagecontroller.page .mail-detail .content {
+        margin:0;
     }
 
     .thread-view.list-view {
         .list-item {
-            margin-bottom: 0px;
+            margin-bottom: 0;
         }
     }
 
     .io-ox-sidepopup-pane .mail-detail.no-padding .detail-view-header {
-        padding-left: 0px;
+        padding-left: 0;
     }
 
-    .io-ox-sidepopup-pane .mail-detail-decorator .mail-detail {
-        padding: 5px;
-    }
-
-    .mail-detail-pane .mail-detail-decorator .mail-detail {
-        padding: 13px;
-    }
-
-    .io-ox-sidepopup-pane .mail-detail-decorator .mail-detail,
-    .mail-detail-pane .mail-detail-decorator .mail-detail {
-
-        a, span {
-            font-size: 13px;
-        }
-
-        nav.io-ox-inline-links {
-            float: right;
-            margin: 0;
-        }
-
-        .flag {
-
-            width: 16px;
-
-            i {
-                font-size: 15px;
-            }
-
-        }
-
-        .mail-detail-clear-left {
-            clear: both;
-        }
-
-        .from.list {
-
-            font-size: 13px;
-            a {
-                word-break: break-all;
-                .fontWeight(bold);
-            }
-
-            i {
-                display: none;
-            }
-
-        }
-
-        .to-cc.list, .attachment-list.list {
-            margin-bottom: 5px;
-        }
-
-        .attachment-list.list {
-            margin-top: 5px;
-        }
-
-        .person-link {
-            white-space: normal; word-break: break-all;
-        }
-
-        .contact-picture {
-            margin: 0;
-            margin-left: 13px;
-            float: right;
-            display: block;
-            width: 24px;
-            height: 24px;
-        }
-
-        .subject {
-            font-size: 13px;
-            .fontWeight(bold);
-            margin: 5px 0 0 0;
-        }
-
-        .date {
-            font-size: 13px;
-            float: none;
-            padding-bottom: 4px;
-            border-bottom: 1px solid #f1f1f1;
-        }
-
-        a.attachment-link {
-            display: block;
-            word-break: break-all;
-        }
-
-        div.dropdown.flag-dropdown.flag {
-            margin: 0;
-        }
-
-        .recipient-actions {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .content {
-            margin-top: 13px;
-        }
-
-        .details-collapsed {
-
-            .to-cc.list {
-
-                span, a {
-                    display: none;
-                }
-
-                span:first-child, a:nth-child(2),span:nth-child(2) {
-                    display: inline;
-                }
-
-            }
-
-            .recipient-actions {
-                display: none;
-            }
-
-        }
-
-    }
 
 }
+.to-cc { position: relative; }

@@ -10,15 +10,15 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-define('io.ox/emoji/main',
-       ['3rd.party/emoji/emoji',
-       'io.ox/emoji/categories',
-       'io.ox/emoji/conversions',
-       'io.ox/core/extensions',
-       'settings!io.ox/mail/emoji',
-       'css!3rd.party/emoji/emoji.css',
-       'less!io.ox/emoji/emoji'
-    ], function (emoji, categories, conversions, ext, settings) {
+define('io.ox/emoji/main', [
+    '3rd.party/emoji/emoji',
+    'io.ox/emoji/categories',
+    'io.ox/emoji/conversions',
+    'io.ox/core/extensions',
+    'settings!io.ox/mail/emoji',
+    'css!3rd.party/emoji/emoji.css',
+    'less!io.ox/emoji/emoji'
+], function (emoji, categories, conversions, ext, settings) {
 
     'use strict';
 
@@ -242,7 +242,7 @@ define('io.ox/emoji/main',
         }
     });
 
-    return  _.extend({
+    return _.extend({
 
         getInstance: function (opt) {
             return new Emoji(opt);
@@ -267,7 +267,7 @@ define('io.ox/emoji/main',
                 },
                 cssFromCollection = function (unicode) {
                     return function (c) {
-                        return self.getInstance({collection: c}).cssFor(unicode);
+                        return self.getInstance({ collection: c }).cssFor(unicode);
                     };
                 },
                 createImageTag = function (css, unicode) {

@@ -148,11 +148,11 @@ define(['io.ox/contacts/main', 'io.ox/core/main', 'io.ox/contacts/api'], functio
 
         beforeEach(function () {
             this.server.respondWith('PUT', /api\/contacts\?action=new/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(result));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(result));
             });
 
             this.server.respondWith('GET', /api\/contacts\?action=get/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(response));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(response));
             });
 
         });

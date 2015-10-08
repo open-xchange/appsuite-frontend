@@ -11,12 +11,12 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('io.ox/emoji/categories',
-       ['gettext!io.ox/mail/emoji',
-       'raw!io.ox/emoji/unified.json',
-       'raw!io.ox/emoji/softbank.json',
-       'raw!io.ox/emoji/japan_carrier.json'
-    ], function (gt, unified, softbank, japan_carrier) {
+define('io.ox/emoji/categories', [
+    'gettext!io.ox/mail/emoji',
+    'raw!io.ox/emoji/unified.json',
+    'raw!io.ox/emoji/softbank.json',
+    'raw!io.ox/emoji/japan_carrier.json'
+], function (gt, unified, softbank, japan_carrier) {
 
     'use strict';
 

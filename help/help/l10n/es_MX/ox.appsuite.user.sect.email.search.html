@@ -4,7 +4,7 @@
 <title>5.6. Búsqueda de correos electrónicos</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Software colaborativo">
 <link rel="up" href="ox.appsuite.user.chap.email.html" title="Capítulo 5. Correo electrónico">
 <link rel="prev" href="ox.appsuite.user.sect.email.manage.mailfilter.html" title="5.5.18. Uso de filtros de correo">
 <link rel="next" href="ox.appsuite.user.sect.email.share.html" title="5.7. Correos electrónicos dentro de un equipo">
@@ -37,8 +37,21 @@
 <a name="ox.appsuite.user.concept.email.search"></a><p>Para buscar correos electrónicos determinados, puede usar los siguientes criterios de búsqueda:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>términos de búsqueda por asunto, texto del correo electrónico, remitente o destinatario</p></li>
-<li class="listitem"><p>Carpetas</p></li>
-<li class="listitem"><p>rango de tiempo para la recepción</p></li>
+<li class="listitem">
+<p>Términos de búsqueda por rangos de tiempo. Busca correos que haya recibido dentro de un rango de tiempo. Usted define un rango de tiempo válido con los detalles siguientes.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>Las palabras clave <span class="guilabel"><strong>hoy</strong></span>, <span class="guilabel"><strong>ayer</strong></span>, <span class="guilabel"><strong>última semana</strong></span>, <span class="guilabel"><strong>último mes</strong></span>, <span class="guilabel"><strong>último año</strong></span></p></li>
+<li class="listitem"><p>Las palabras clave para dichos intervalos de tiempo: <span class="guilabel"><strong>últimos 7 días</strong></span>, <span class="guilabel"><strong>últimos 30 días</strong></span>, <span class="guilabel"><strong>últimos 365 días</strong></span></p></li>
+<li class="listitem"><p>Un día de la semana, por ejemplo <span class="guilabel"><strong>Lunes</strong></span></p></li>
+<li class="listitem"><p>Un mes concreto, por ejemplo <span class="guilabel"><strong>Julio</strong></span></p></li>
+<li class="listitem"><p>Una fecha de cuatro dígitos, por ejemplo <span class="guilabel"><strong>2015</strong></span></p></li>
+<li class="listitem"><p>Una fecha, por ejemplo <span class="guilabel"><strong>31/1/2015</strong></span></p></li>
+<li class="listitem"><p>Un intervalo de fechas, por ejemplo <span class="guilabel"><strong>1/12/2014 - 31/1/2015</strong></span></p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="listitem"><p>Carpetas en las que buscar</p></li>
 </ul></div>
 <p>
     </p>
@@ -46,42 +59,43 @@
 <div class="task">
 <a name="ox.appsuite.user.task.email.search"></a><p class="title">Cómo buscar correos electrónicos:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Introduzca un término de búsqueda en el campo de entrada de la barra de búsqueda. Se abrirá el menú de búsqueda.</p></li>
+<li class="step"><p>Presione el icono <span class="guibutton"><strong>Comenzar búsqueda</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> o en el campo de la barra de búsqueda. Se mostrará un botón de carpeta en la barra de búsqueda. El botón de carpeta indica las carpetas en las que buscar.</p></li>
 <li class="step">
+<p>Para indicar las carpetas en las que buscar, presione en el botón de carpeta. Seleccione una carpeta.</p>
+<p>Si selecciona <span class="guibutton"><strong>Todas las carpetas</strong></span>, se buscará en todas las carpetas y subcarpetas de la cuenta de correo electrónico interna. Si selecciona una carpeta concreta o la carpeta de una cuenta de correo electrónico externa, sólo se buscará en dicha carpeta, pero no en las subcarpetas.</p>
+</li>
+<li class="step">
+<p>Introduzca un término de búsqueda en el campo. Se abrirá el menú de búsqueda.</p>
 <p>Utilice uno de los métodos siguientes:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p>Para buscar en el remitente, destinatario, asunto o en el texto del correo electrónico, presione en el término de búsqueda en el menú de búsqueda. Puede también presionar Intro o el icono <span class="guibutton"><strong>Buscar</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span>de la barra de búsqueda. </p>
+<p>Para buscar en el remitente, el destinatario, el asunto o el texto del correo, presione en el término de búsqueda en el menú de búsqueda. También puede presionar Intro.</p>
 <p>Para buscar únicamente en el asunto, presione en <span class="guibutton"><strong>en asunto</strong></span> en el menú de búsqueda.</p>
 <p>Para buscar únicamente en el texto del correo electrónico, presione en <span class="guibutton"><strong>en texto del correo</strong></span> en el menú de búsqueda.</p>
 <p>Para buscar remitentes o destinatarios que coincidan con el término de búsqueda, presione en un nombre bajo <span class="guilabel"><strong>Personas</strong></span>.</p>
+<p>Para buscar correos dentro de un rango de tiempo concreto, use un rango de tiempo válido como término de búsqueda. En cuando se reconozca un rango de tiempo válido en los datos introducidos, dicho rango se mostrará en el menú de búsqueda. Presione en él. También puede presionar Intro.</p>
 </li></ul></div>
 <p>
           </p>
-<p><span class="phrase"><strong>Resultado:</strong></span> Los resultados de la búsqueda se muestran en la lista que puede ver en el área de visualización. El criterio de búsqueda usado se muestra bajo la ventana de búsqueda.</p>
-</li>
-<li class="step">
-<p>Puede ajustar aún más el resultado de la búsqueda:</p>
+<p>Resultado:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>Para mostrar todos los criterios de búsqueda, presione en <span class="guibutton"><strong>Mostrar filtros avanzados</strong></span>.</p>
-<p>Para ajustar un criterio, presione el icono <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span> situado junto al criterio de búsqueda. Seleccione un elemento del menú. Puede usar los siguientes criterios de búsqueda:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>Puede usar la lista desplegable <span class="guilabel"><strong>Carpeta</strong></span> para buscar en una carpeta concreta. </p>
-<p>Si selecciona <span class="guibutton"><strong>Todas las carpetas</strong></span>, se buscará en todas las carpetas y subcarpetas de la cuenta de correo electrónico interna. Si selecciona una carpeta concreta o la carpeta de una cuenta de correo electrónico externa, sólo se buscará en dicha carpeta, pero no en las subcarpetas.</p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>La lista desplegable <span class="guilabel"><strong>Fecha</strong></span> permite limitar la búsqueda a un determinado rango de tiempo.</p></li>
-</ul></div>
-<p>
-                </p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>Para mejorar su búsqueda en la lista de objetos encontrados, inicie una nueva búsqueda.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Para eliminar un criterio de búsqueda, presione el icono <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>. Si elimina todos los criterios de búsqueda, la búsqueda finalizará.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Los resultados de la búsqueda se muestran en la lista que se muestra en el área de visualización. </p></li>
+<li class="listitem" style="list-style-type: none"><p>Por cada resultado de la búsqueda se muestra la carpeta en la que se ha encontrado el objeto. Para terminar la búsqueda y visualizar el contenido de la carpeta, presione en dicha carpeta.</p></li>
+<li class="listitem" style="list-style-type: none"><p>El término de búsqueda se muestra en el campo.</p></li>
 </ul></div>
 <p>
           </p>
 </li>
-<li class="step"><p>Para finalizar la búsqueda, presione en <span class="guibutton"><strong>Cerrar búsqueda</strong></span>.</p></li>
+<li class="step">
+<p>Tiene las siguientes opciones para ajustar el resultado de la búsqueda:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Si se está usando el nombre de una persona como término de búsqueda, puede indicar si se le buscará como remitente, destinatario o ambos. Para ello, presione el icono <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span> que hay junto al nombre. Seleccione un elemento del menú.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Para refinar el resultado de la búsqueda, introduzca términos de búsqueda adicionales: Para borrar un término de búsqueda, presione el icono <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span> que hay junto al término de búsqueda. </p></li>
+<li class="listitem" style="list-style-type: none"><p>Para buscar en otra carpeta, presione en el botón de carpeta. Seleccione una carpeta.</p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="step"><p>Para terminar la búsqueda, presione el icono <span class="guibutton"><strong>Cancelar búsqueda</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span> del campo.</p></li>
 </ol></div>
 </div>
 </div>

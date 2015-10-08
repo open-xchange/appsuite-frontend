@@ -1,9 +1,8 @@
-define('plugins/portal/twitter/util',
-    ['plugins/portal/twitter/network',
-     'gettext!plugins/portal',
-     'io.ox/core/notifications',
-     'io.ox/core/date'
-    ], function (network, gt, notifications, date) {
+define('plugins/portal/twitter/util', [
+    'plugins/portal/twitter/network',
+    'gettext!plugins/portal',
+    'io.ox/core/notifications'
+], function (network, gt, notifications) {
 
     'use strict';
 
@@ -16,21 +15,21 @@ define('plugins/portal/twitter/util',
             linkMatches;
 
         _(entities.hashtags).each(function (hashtag) {
-            var elem = $('<a>', {href: 'https://twitter.com/#!/search/%23' + hashtag.text, target: '_blank'}).text('#' + hashtag.text);
+            var elem = $('<a>', { href: 'https://twitter.com/#!/search/%23' + hashtag.text, target: '_blank' }).text('#' + hashtag.text);
             offsets[hashtag.indices[0]] = {
                 elem: elem,
                 indices: hashtag.indices
             };
         });
         _(entities.urls).each(function (url) {
-            var elem = $('<a>', {href: url.expanded_url, target: '_blank'}).text(url.display_url);
+            var elem = $('<a>', { href: url.expanded_url, target: '_blank' }).text(url.display_url);
             offsets[url.indices[0]] = {
                 elem: elem,
                 indices: url.indices
             };
         });
         _(entities.user_mentions).each(function (user_mention) {
-            var elem = $('<a>', {href: 'https://twitter.com/#!/' + user_mention.screen_name, target: '_blank'}).text('@' + user_mention.screen_name);
+            var elem = $('<a>', { href: 'https://twitter.com/#!/' + user_mention.screen_name, target: '_blank' }).text('@' + user_mention.screen_name);
             offsets[user_mention.indices[0]] = {
                 elem: elem,
                 indices: user_mention.indices
@@ -45,7 +44,7 @@ define('plugins/portal/twitter/util',
             //make sure there is nothing planned for this part already
             if (_(offsets).keys().indexOf(index.toString()) === -1) {
                 offsets[index] = {
-                    elem: $('<a>', {href: myLink}).text(myLink),
+                    elem: $('<a>', { href: myLink }).text(myLink),
                     indices: [index, index + length]
                 };
             }
@@ -71,9 +70,9 @@ define('plugins/portal/twitter/util',
         var deferred;
 
         if (tweet.favorited) {
-            deferred = network.unFavoriteTweed({ id: tweet.id_str});
+            deferred = network.unFavoriteTweed({ id: tweet.id_str });
         } else {
-            deferred = network.favoriteTweed({ id: tweet.id_str});
+            deferred = network.favoriteTweed({ id: tweet.id_str });
         }
 
         $.when(deferred).then(
@@ -85,12 +84,12 @@ define('plugins/portal/twitter/util',
                 if (tweet.favorited) {
                     $myTweet.find('.io-ox-twitter-favorite')
                         .addClass('favorited')
-                        .attr({'aria-pressed': 'true'})
+                        .attr({ 'aria-pressed': 'true' })
                         .text(gt('Favorited'));
                 } else {
                     $myTweet.find('.io-ox-twitter-favorite')
                         .removeClass('favorited')
-                        .attr({'aria-pressed': 'false'})
+                        .attr({ 'aria-pressed': 'false' })
                         .text(gt('Favorite'));
                 }
             } else {
@@ -131,7 +130,7 @@ define('plugins/portal/twitter/util',
                         if (!jsonResponse.errors) {
                             $myTweet.find('.io-ox-twitter-retweet')
                                 .addClass('retweeted')
-                                .attr({'aria-pressed': 'true'})
+                                .attr({ 'aria-pressed': 'true' })
                                 .text(gt('Retweeted'));
                             tweet.retweeted = true;
                         } else {
@@ -151,13 +150,6 @@ define('plugins/portal/twitter/util',
         });
     };
 
-    function parseDate(str) {
-        var v = str.split(' ');
-        return new Date(Date.parse(v[1] + ' ' + v[2] + ', ' + v[5] + ' ' + v[3] + ' UTC'));
-        // thx for having exactly the same problem:
-        // http://stackoverflow.com/questions/3243546/problem-with-javascript-date-function-in-ie-7-returns-nan
-    }
-
     var showTweet = function (tweet, opt) {
         if (tweet.retweeted_status) {
             var $temp = renderTweet(tweet.retweeted_status, opt);
@@ -176,7 +168,7 @@ define('plugins/portal/twitter/util',
     var renderTweet = function (tweet, opt) {
         var tweetLink = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str,
             profileLink = 'https://twitter.com/' + tweet.user.screen_name,
-            tweeted = new date.Local(parseDate(tweet.created_at)).format(date.DATE_TIME),
+            tweeted = moment(tweet.created_at).format('l LT'),
             $myTweet = $('<li class="tweet">').data('entry', tweet),
             isCurrentUser = tweet.user.id_str === currentUserID,
             hideFollowButton = (opt === undefined || opt.hideFollowButton === undefined || !opt.hideFollowButton),
@@ -192,13 +184,13 @@ define('plugins/portal/twitter/util',
         }
 
         $myTweet.append(
-            $('<a>').attr({href: profileLink, target: '_blank'}).append(
-                $('<img>', {src: tweet.user.profile_image_url_https, 'class': 'profilePicture', alt: tweet.user.description})
+            $('<a>').attr({ href: profileLink, target: '_blank' }).append(
+                $('<img>', { src: tweet.user.profile_image_url_https, 'class': 'profilePicture', alt: tweet.user.description })
             ),
             $('<div class="text">').append(
-                $('<strong class="io-ox-twitter-name">').append($('<a>', {href: profileLink, target: '_blank'}).text(tweet.user.name)),
+                $('<strong class="io-ox-twitter-name">').append($('<a>', { href: profileLink, target: '_blank' }).text(tweet.user.name)),
                 '<br />',
-                $('<a>', {'class': 'name', href: profileLink, target: '_blank'}).text('@' + tweet.user.screen_name),
+                $('<a>',  { 'class': 'name', href: profileLink, target: '_blank' }).text('@' + tweet.user.screen_name),
                 '<br />',
                 parseTweet(tweet.text, tweet.entities)
             )
@@ -206,7 +198,7 @@ define('plugins/portal/twitter/util',
 
         if (hideLinks) {
             $myTweet.append($('<div class="io-ox-twitter-details">').append(
-                $('<a>').attr({'class': 'io-ox-twitter-date', 'href': tweetLink, 'target': '_blank'}).text(tweeted),
+                $('<a>').attr({ 'class': 'io-ox-twitter-date', 'href': tweetLink, 'target': '_blank' }).text(tweeted),
                     getReplyLink(tweet, $myTweet),
                     isCurrentUser ? getDeleteLink(tweet, $myTweet) : getRetweetLink(tweet, $myTweet),
                     getFavoriteLink(tweet, $myTweet)
@@ -224,16 +216,22 @@ define('plugins/portal/twitter/util',
     };
 
     var getReplyLink = function (tweet) {
-        return $('<a>').attr({'class': 'io-ox-twitter-reply',
+        return $('<a>')
+            .attr({
+                'class': 'io-ox-twitter-reply',
                 'href': 'https://twitter.com/intent/tweet?in_reply_to=' + tweet.id_str,
-                role: 'button'})
+                role: 'button'
+            })
             .text(gt('Reply'));
     };
 
     var getRetweetLink = function (tweet, $myTweet) {
-        return $('<a>').attr({'class': 'io-ox-twitter-retweet',
+        return $('<a>')
+            .attr({
+                'class': 'io-ox-twitter-retweet',
                 'href': '#',
-                role: 'button'})
+                role: 'button'
+            })
             .text(gt('Retweet'))
             .on('click', function (e) {
                 e.preventDefault();
@@ -245,7 +243,7 @@ define('plugins/portal/twitter/util',
                         if (!jsonResponse.errors) {
                             $myTweet.find('.io-ox-twitter-retweet')
                                 .removeClass('retweeted')
-                                .attr({'aria-pressed': 'false'})
+                                .attr({ 'aria-pressed': 'false' })
                                 .text(gt('Retweet'));
                         } else {
                             if (_.isArray(jsonResponse.errors)) {
@@ -264,9 +262,12 @@ define('plugins/portal/twitter/util',
     };
 
     var getDeleteLink = function (tweet, $myTweet) {
-        return $('<a>').attr({'class': 'io-ox-twitter-delete',
+        return $('<a>')
+            .attr({
+                'class': 'io-ox-twitter-delete',
                 'href': '#',
-                role: 'button'})
+                role: 'button'
+            })
             .append(
                 $('<i class="fa fa-trash-o">'),
                 $('<span>').text(gt('Delete'))
@@ -279,9 +280,12 @@ define('plugins/portal/twitter/util',
     };
 
     var getFavoriteLink = function (tweet, $myTweet) {
-        return $('<a>').attr({'class': 'io-ox-twitter-favorite',
+        return $('<a>')
+            .attr({
+                'class': 'io-ox-twitter-favorite',
                 'href': '#',
-                role: 'button'})
+                role: 'button'
+            })
             .text(gt('Favorite'))
             .on('click', function (e) {
                 e.preventDefault();
@@ -319,7 +323,7 @@ define('plugins/portal/twitter/util',
                     )
                 )
                 .removeClass('btn-primary btn-danger following')
-                .attr({'aria-pressed': 'false'});
+                .attr({ 'aria-pressed': 'false' });
         } else {
             if (hover) {
                 //display unfollow
@@ -328,7 +332,7 @@ define('plugins/portal/twitter/util',
                         gt('Unfollow')
                     )
                     .removeClass('btn-primary').addClass('btn-danger following')
-                    .attr({'aria-pressed': 'true'});
+                    .attr({ 'aria-pressed': 'true' });
             } else {
                 //display following
                 btn.empty().text(
@@ -336,15 +340,17 @@ define('plugins/portal/twitter/util',
                         gt('Following')
                     )
                     .removeClass('btn-danger').addClass('btn-primary following')
-                    .attr({'aria-pressed': 'true'});
+                    .attr({ 'aria-pressed': 'true' });
             }
         }
     };
 
     var followButton = function (tweet) {
         var btn = $('<div>').addClass('io-ox-twitter-follow btn btn-default small')
-            .attr({'user_id': tweet.user.id_str,
-                'role': 'button'});
+            .attr({
+                'user_id': tweet.user.id_str,
+                'role': 'button'
+            });
 
         //be robust
         tweet.following = tweet.following || false;
@@ -431,8 +437,9 @@ define('plugins/portal/twitter/util',
     };
 
     var TwitterTextBox = function (title, options) {
-        var replyBoxContainer = $('<div>').attr({'class': 'io-ox-twitter-tweet-container'}),
-            textArea = $('<textarea>').attr({
+        var replyBoxContainer = $('<div>').attr({ 'class': 'io-ox-twitter-tweet-container' }),
+            textArea = $('<textarea>')
+                .attr({
                     'class': 'io-ox-twitter-tweet-textarea form-control',
                     'aria-required': 'true',
                     rows: '4'
@@ -440,27 +447,31 @@ define('plugins/portal/twitter/util',
                 .on('click', function (e) {
                     e.preventDefault();
                     if (options !== undefined && options.open !== undefined) {
-                        options.open({replyBoxContainer: replyBoxContainer,
+                        options.open({
+                            replyBoxContainer: replyBoxContainer,
                             textArea: textArea,
-                            buttonContainer: buttonContainer});
+                            buttonContainer: buttonContainer
+                        });
                     }
                     updateTextLength();
                 })
                 .on('blur', function (e) {
                     e.preventDefault();
                     if (options !== undefined && options.close !== undefined) {
-                        options.close({replyBoxContainer: replyBoxContainer,
+                        options.close({
+                            replyBoxContainer: replyBoxContainer,
                             textArea: textArea,
-                            buttonContainer: buttonContainer});
+                            buttonContainer: buttonContainer
+                        });
                     }
                 })
                 .on('keyup', function (e) {
                     e.preventDefault();
                     updateTextLength();
                 }),
-            buttonContainer = $('<div>').attr({'class': 'io-ox-twitter-tweet-button'}),
-            tweetCounter = $('<div>').attr({'class': 'io-ox-twitter-tweet-counter'}).text(140),
-            tweetButton = $('<a>').attr({'class': 'btn btn-default disabled', role: 'button'})
+            buttonContainer = $('<div>').attr({ 'class': 'io-ox-twitter-tweet-button' }),
+            tweetCounter = $('<div>').attr({ 'class': 'io-ox-twitter-tweet-counter' }).text(140),
+            tweetButton = $('<a>').attr({ 'class': 'btn btn-default disabled', role: 'button' })
                 .text(title)
                 .on('click', function (e) {
                     var text = textArea.val();
@@ -470,9 +481,11 @@ define('plugins/portal/twitter/util',
                         textArea.val('');
 
                         if (success !== undefined) {
-                            success(text, {replyBoxContainer: replyBoxContainer,
+                            success(text, {
+                                replyBoxContainer: replyBoxContainer,
                                 textArea: textArea,
-                                buttonContainer: buttonContainer});
+                                buttonContainer: buttonContainer
+                            });
                         }
                     }
                 }),
@@ -492,15 +505,19 @@ define('plugins/portal/twitter/util',
             if (options !== undefined) {
                 if (options.isOpen) {
                     if (options.open !== undefined) {
-                        options.open({replyBoxContainer: replyBoxContainer,
+                        options.open({
+                            replyBoxContainer: replyBoxContainer,
                             textArea: textArea,
-                            buttonContainer: buttonContainer});
+                            buttonContainer: buttonContainer
+                        });
                     }
                 } else {
                     if (options.close !== undefined) {
-                        options.close({replyBoxContainer: replyBoxContainer,
+                        options.close({
+                            replyBoxContainer: replyBoxContainer,
                             textArea: textArea,
-                            buttonContainer: buttonContainer});
+                            buttonContainer: buttonContainer
+                        });
                     }
                 }
             }
@@ -545,10 +562,12 @@ define('plugins/portal/twitter/util',
                 textArea.focus();
 
                 if (options.open !== undefined) {
-                    options.open({replyBoxContainer: replyBoxContainer,
+                    options.open({
+                        replyBoxContainer: replyBoxContainer,
                         textArea: textArea,
                         buttonContainer: buttonContainer,
-                        baton: baton });
+                        baton: baton
+                    });
                 }
             }
         }
@@ -557,7 +576,7 @@ define('plugins/portal/twitter/util',
             return replyBoxContainer;
         }
 
-        return {appendTo: appendTo, get: get};
+        return { appendTo: appendTo, get: get };
     };
 
     var setup = function (options) {

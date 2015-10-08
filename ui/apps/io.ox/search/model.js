@@ -11,14 +11,14 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/model',
-    ['io.ox/search/api',
-     'io.ox/search/items/main',
-     'io.ox/backbone/modelFactory',
-     'io.ox/search/util',
-     'io.ox/core/extensions',
-     'gettext!io.ox/search'
-    ], function (api, collection, ModelFactory, util, ext, gt) {
+define('io.ox/search/model', [
+    'io.ox/search/api',
+    'io.ox/search/items/main',
+    'io.ox/backbone/modelFactory',
+    'io.ox/search/util',
+    'io.ox/core/extensions',
+    'gettext!io.ox/search'
+], function (api, collection, ModelFactory, util, ext, gt) {
 
     'use strict';
 
@@ -81,10 +81,11 @@ define('io.ox/search/model',
         // ignore folder facet with 'custom' (it's equivalent to an unset filter)
         var relevant = _.filter(list, function (value) {
             var facet = pool[value.facet];
-            if (value.facet === 'folder' && (facet.values.custom.custom === 'custom' || !facet.values.custom.custom))
+            if (value.facet === 'folder' && (facet.values.custom.custom === 'custom' || !facet.values.custom.custom)) {
                 return false;
-            else
+            } else {
                 return true;
+            }
         });
 
         // collect facets that should be disabled/
@@ -110,8 +111,9 @@ define('io.ox/search/model',
                         compact.custom = 'custom';
                         tmp = compact;
                         return false;
-                    } else
+                    } else {
                         return true;
+                    }
                 });
                 list.unshift(tmp);
             } else {
@@ -132,10 +134,10 @@ define('io.ox/search/model',
             var data = list[i],
                 facet = pool[data.facet];
             if (_.contains(facet.flags, 'highlander') && Object.keys(facet.values).length > 1) {
-                if (!hash[data.facet])
+                if (!hash[data.facet]) {
                     // keep latest value (negative loop)
                     hash[data.facet] = true;
-                else {
+                } else {
                     // remove others
                     list.splice(i, 1);
                     delete facet.values[data.value];
@@ -161,10 +163,17 @@ define('io.ox/search/model',
         }
 
         // update
-        this.set('pooldisabled', disabled, {silent: true});
+        this.set('pooldisabled', disabled, { silent: true });
         this.set('pool', pool);
         this.set('poollist', list);
     };
+
+    function isFolderSet (model) {
+        var folder = model.get('pool').folder,
+            value = folder ? folder.values.custom.custom || !model.isMandatory('folder') : undefined,
+            disabled = model.get('pooldisabled').folder;
+        return (value || disabled);
+    }
 
     factory = new ModelFactory({
         ref: 'io.ox/search/model',
@@ -177,14 +186,13 @@ define('io.ox/search/model',
                     current = ref ? ref.get('name') : options.defaultApp;
 
                 // target app changed?
-                if (current !== 'io.ox/search') {
-                    this.setModule(current);
-                }
+                if (current !== 'io.ox/search') this.setModule(current);
 
                 app = this.get('app');
                 // ensure options
-                if (!options.mapping)
+                if (!options.mapping) {
                     ext.point('io.ox/search/main').invoke('config',  $(), options);
+                }
                 // return module param for api calls
                 return (options.mapping[app] || options.mapping[app + '/edit'] || app);
             },
@@ -245,10 +253,11 @@ define('io.ox/search/model',
                         pool[facet].values[value] = (itemvalue || data);
 
                         // append/prepend ids to pool list
-                        if (facet === 'folder')
+                        if (facet === 'folder') {
                             list.unshift(compact);
-                        else
+                        } else {
                             list.push(compact);
+                        }
                     }
                 });
 
@@ -272,8 +281,9 @@ define('io.ox/search/model',
                         // remove from pool
                         delete pool[item.facet].values[item.value];
                         // remove empty facet from pool
-                        if (_.isEmpty(pool[item.facet].values))
+                        if (_.isEmpty(pool[item.facet].values)) {
                             delete pool[item.facet];
+                        }
                         // remove from list
                         list.splice(i, 1);
                     }
@@ -288,10 +298,11 @@ define('io.ox/search/model',
                     return !(_.contains(facet.flags, 'advanced'));
                 });
 
-                if (!some && ox.ui.App.getCurrentApp().get('name') !== 'io.ox/search')
+                if (!some && ox.ui.App.getCurrentApp().get('name') !== 'io.ox/search') {
                     this.trigger('cancel');
-                else
+                } else {
                     this.trigger('query', this.getApp());
+                }
             },
             // manipulates poollist only
             update: function (facet, value, data) {
@@ -308,7 +319,7 @@ define('io.ox/search/model',
                     for (var i = list.length - 1; i >= 0; i--) {
                         var item = list[i];
                         if (item.facet === facet && item.value === value) {
-                            _.extend(item, facetdata.style === 'exclusive' ?  {value: data.option } : {}, data);
+                            _.extend(item, facetdata.style === 'exclusive' ?  { value: data.option } : {}, data);
                         }
                     }
                 }
@@ -321,17 +332,17 @@ define('io.ox/search/model',
                         // folder support via hidden flag
                         if (obj.id === data.option) {
                             facetdata.values[obj.id] = _.extend(
-                                                            {},
-                                                            obj,
-                                                            {
-                                                                options: facetdata.options,
-                                                                _compact: {
-                                                                    facet: facet,
-                                                                    value: data.option,
-                                                                    option: data.option
-                                                                }
-                                                            }
-                                                        );
+                                {},
+                                obj,
+                                {
+                                    options: facetdata.options,
+                                    _compact: {
+                                        facet: facet,
+                                        value: data.option,
+                                        option: data.option
+                                    }
+                                }
+                            );
                         }
                     });
                 }
@@ -370,38 +381,44 @@ define('io.ox/search/model',
             },
             setModule: function (module) {
                 var current = this.get('app');
-                this.set('app', module, {silent: true});
+                this.set('app', module, { silent: true });
                 if (current !== module) {
                     this.reset();
                 }
             },
             getFolder: function () {
-                var app = this.getApp() + '/main';
-                if (require.defined(app))
-                    return require(app).getApp().folder.get() || undefined;
-                return undefined;
+                var app = this.getApp() + '/main', folder;
+                if (require.defined(app)) {
+                    folder = require(app).getApp().folder.get() || undefined;
+                    // ignore any virtual folder
+                    if (/^virtual/.test(folder)) folder = undefined;
+                }
+                return folder;
             },
             ensure: function () {
                 var self = this,
-                    missingFolder = !this.get('pool').folder && !this.get('pooldisabled').folder,
+                    missingFolder = !isFolderSet(self),
                     def = missingFolder ? util.getFirstChoice(this) : $.Deferred().resolve({});
-                return def
-                        .then(function (data) {
-                            data = data || {};
-                            if (!self.get('pool').folder && !self.get('pooldisabled').folder)
-                                self.add('folder', 'custom', data);
-                        }, function () {
-                            return {
-                                message: error.virtual
-                            };
-                        });
+                return def.then(function (data) {
+                    data = data || {};
+                    if (!isFolderSet(self)) {
+                        if (self.get('pool').folder && data.id)
+                            self.update('folder', 'custom', data);
+                        else
+                            self.add('folder', 'custom', data);
+                    }
+                }, function () {
+                    return {
+                        message: error.virtual
+                    };
+                });
             },
             getFacets: function () {
                 var self = this;
                 return this.ensure().then(function () {
-                            // return active filters
-                            return self.fetch();
-                        });
+                    // return active filters
+                    return self.fetch();
+                });
             },
             getCompositeId: function () {
                 // TODO: We just need a "cid" attribute in the backend response
@@ -417,7 +434,10 @@ define('io.ox/search/model',
             },
             isMandatory: function (key) {
                 if (options.mandatory === undefined) return false;
-                return (options.mandatory[key] || []).indexOf(this.getModule()) >= 0;
+                var module = this.getModule();
+                // TODO: remove workaround when we use a unque identified for drive in frontend/backend
+                if (module === 'files') module = 'drive';
+                return (options.mandatory[key] || []).indexOf(module) >= 0;
             },
             setItems: function (data, timestamp) {
                 var application = this.getApp(),
@@ -441,25 +461,36 @@ define('io.ox/search/model',
                 });
             },
             getOptions: function () {
-                return  _.copy(options);
+                return _.copy(options);
             },
             reset: function (options) {
                 var opt = options || {};
                 items.empty();
+
+                var tmppool = { folder: this.get('pool').folder },
+                    tmplist = _.filter(this.get('poollist'), function (data) {
+                        return data.facet === 'folder';
+                    });
+
+                // reset current folder when switching apps (exept for drives account hack)
+                tmppool.folder.values.custom.id = 'custom';
+                tmppool.folder.values.custom.custom = undefined;
+                tmppool.folder.values.custom.name = undefined;
+
+                tmplist[0].value = 'custom';
                 this.set({
                     query: '',
                     autocomplete: [],
                     active: [],
-                    pool: {},
-                    poollist: [],
+                    pool: this.isMandatory('account') ? {} : tmppool,
+                    poollist: this.isMandatory('account') ? [] : tmplist,
                     pooldisabled: {},
                     start: 0
                 },
                 {
                     silent: true
                 });
-                if (!opt.silent)
-                    this.trigger('reset');
+                if (!opt.silent) this.trigger('reset');
             }
         }
     });

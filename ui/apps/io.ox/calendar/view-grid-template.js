@@ -11,16 +11,16 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/view-grid-template',
-    ['io.ox/calendar/util',
-     'io.ox/core/tk/vgrid',
-     'io.ox/core/extensions',
-     'io.ox/core/folder/api',
-     'gettext!io.ox/calendar',
-     'io.ox/core/api/user',
-     'io.ox/core/api/resource',
-     'less!io.ox/calendar/style'
-    ], function (util, VGrid, ext, folderAPI, gt, userAPI, resourceAPI) {
+define('io.ox/calendar/view-grid-template', [
+    'io.ox/calendar/util',
+    'io.ox/core/tk/vgrid',
+    'io.ox/core/extensions',
+    'io.ox/core/folder/api',
+    'gettext!io.ox/calendar',
+    'io.ox/core/api/user',
+    'io.ox/core/api/resource',
+    'less!io.ox/calendar/style'
+], function (util, VGrid, ext, folderAPI, gt, userAPI, resourceAPI) {
 
     'use strict';
     var fnClickPerson = function (e) {
@@ -104,7 +104,7 @@ define('io.ox/calendar/view-grid-template',
                     .each(function (participant, index, list) {
                         // check for resources
                         if (participant.type === 3) {
-                            resourceAPI.get({id: participant.id}).done(function (resource) {
+                            resourceAPI.get({ id: participant.id }).done(function (resource) {
                                 conflicts.append(
                                     $('<span>')
                                         .addClass('resource-link')
@@ -143,26 +143,6 @@ define('io.ox/calendar/view-grid-template',
                 }
                 this.attr({ 'aria-label': _.escape(a11yLabel) });
             }
-        },
-
-        // template for labels
-        label: {
-            build: function () {
-                this.addClass('calendar-label');
-            },
-            set: function (data) {
-                var d = util.getSmartDate(data);
-                this.text(gt.noI18n(d));
-            }
-        },
-
-        // detect new labels
-        requiresLabel: function (i, data, current) {
-            if (!data) {
-                return false;
-            }
-            var d = util.getSmartDate(data);
-            return (i === 0 || d !== current) ? d : false;
         },
 
         // simple grid-based list for portal & halo

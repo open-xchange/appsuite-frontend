@@ -11,16 +11,15 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/core/tk/attachmentsUtil',
-    ['io.ox/core/strings',
-     'io.ox/preview/main',
-     'io.ox/core/tk/dialogs',
-     'gettext!io.ox/core/tk/attachments',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/capabilities',
-     'io.ox/core/extensions',
-     'less!io.ox/core/tk/attachments'
-    ], function (strings, pre, dialogs, gt, links, capabilities, ext) {
+define('io.ox/core/tk/attachmentsUtil', [
+    'io.ox/core/strings',
+    'io.ox/preview/main',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/capabilities',
+    'io.ox/core/extensions',
+    'gettext!io.ox/core'
+], function (strings, pre, dialogs, links, capabilities, ext, gt) {
 
     'use strict';
 
@@ -28,7 +27,7 @@ define('io.ox/core/tk/attachmentsUtil',
         /**
          * duck checks
          * @param  {object} file
-         * @return {object} data
+         * @return { object} data
          */
         identify = function (file) {
             var data;
@@ -81,7 +80,7 @@ define('io.ox/core/tk/attachmentsUtil',
          * create preview node with attached file property
          * @param  {object} file (or wrapper object)
          * @param  {jquery} rightside (optional: needed for mail to let the popup check for events in the editor iframe)
-         * @return {jquery} textnode
+         * @return { jquery} textnode
          */
         createPreview = function (file, rightside) {
             return !self.hasPreview(file) ? $() : $('<a href="#" class="attachment-preview">')
@@ -127,7 +126,7 @@ define('io.ox/core/tk/attachmentsUtil',
          * get details
          * @param  {object} file (or wrapper object)
          * @param  {string} key (optional)
-         * @return {any}
+         * @return { any }
          */
         get: function (obj, key) {
             var file = obj.file ? obj.file : obj,
@@ -137,9 +136,9 @@ define('io.ox/core/tk/attachmentsUtil',
         /**
          * checks for preview support
          * @param  {object} file (or wrapper object)
-         * @return {boolean}
+         * @return { boolean }
          */
-        hasPreview : function (file) {
+        hasPreview: function (file) {
 
             var data = self.get(file),
                 isImage = (/^image\/(png|gif|jpe?g|bmp)$/i).test(data.type),
@@ -149,9 +148,9 @@ define('io.ox/core/tk/attachmentsUtil',
             if (capabilities.has('text')) {
                 // if we have office support let's check those files too
                 if (file.file) {
-                    isOffice = new pre.Preview({mimetype: file.file.content_type, filename: file.file.filename}).supportsPreview();
+                    isOffice = new pre.Preview({ mimetype: file.file.content_type, filename: file.file.filename }).supportsPreview();
                 } else {
-                    isOffice = new pre.Preview({mimetype: file.content_type, filename: file.filename}).supportsPreview();
+                    isOffice = new pre.Preview({ mimetype: file.content_type, filename: file.filename }).supportsPreview();
                 }
             }
 
@@ -165,7 +164,7 @@ define('io.ox/core/tk/attachmentsUtil',
             } else if (data.group === 'reference') {
                 return true;
             //local file content via fileReader
-            } else  if (window.FileReader && (isImage || isText)) {
+            } else if (window.FileReader && (isImage || isText)) {
                 return true;
             //office
             } else if (isOffice) {
@@ -179,16 +178,16 @@ define('io.ox/core/tk/attachmentsUtil',
          * returns node
          * @param  {object} file wrapper object
          * @param  {object} options
-         * @return {jquery} node
+         * @return { jquery} node
          */
         node: function (obj, options) {
             var caller = this,
                 icon, info,
                 opt = $.extend({
-                        showpreview: true,
-                        rightside: $(),
-                        labelmax: 30
-                    }, options),
+                    showpreview: true,
+                    rightside: $(),
+                    labelmax: 30
+                }, options),
                 //normalisation
                 name = obj.name || obj.filename || obj.subject || '\u00A0',
                 size = obj.file_size || obj.size || 0,
@@ -218,7 +217,7 @@ define('io.ox/core/tk/attachmentsUtil',
                         .addClass(this.fileClasses)
                         .append(
                             icon,
-                            $('<div class="row-1">').text(_.noI18n(_.ellipsis(name, {max: opt.labelmax, charpos: 'middel'}))),
+                            $('<div class="row-1">').text(_.noI18n(_.ellipsis(name, { max: opt.labelmax, charpos: 'middle' }))),
                             $('<div class="row-2">').append(
                                 info,
                                 opt.showpreview  ? createPreview(obj.file, opt.rightside) : $(),
@@ -269,15 +268,15 @@ define('io.ox/core/tk/attachmentsUtil',
             }
 
             // nested message
-            if (data.type === 'eml')  {
+            if (data.type === 'eml') {
                 preview = new pre.Preview({
-                        data: { nested_message: file },
-                        mimetype: 'message/rfc822',
-                        parent: file.parent
-                    }, {
-                        width: popup.parent().width(),
-                        height: 'auto'
-                    });
+                    data: { nested_message: file },
+                    mimetype: 'message/rfc822',
+                    parent: file.parent
+                }, {
+                    width: popup.parent().width(),
+                    height: 'auto'
+                });
                 if (preview.supportsPreview()) {
                     preview.appendTo(popup);
                     popup.append($('<div>').text(_.noI18n('\u00A0')));
@@ -352,10 +351,11 @@ define('io.ox/core/tk/attachmentsUtil',
                     }
                 };
 
-                if (file.type === 'text/plain')
+                if (file.type === 'text/plain') {
                     reader.readAsText(file);
-                else
+                } else {
                     reader.readAsDataURL(file);
+                }
             }
         }
 

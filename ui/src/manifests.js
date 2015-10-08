@@ -21,17 +21,6 @@ define(function () {
         //     path: 'plugins/owm/portal'
         // },
         {
-            path: 'io.ox/mail/write/main',
-            title: 'Compose email',
-            company: 'Open-Xchange',
-            icon: 'mail.png',
-            category: 'Basic',
-            settings: false,
-            visible: false,
-            requires: 'webmail',
-            refreshable: true
-        },
-        {
             path: 'io.ox/editor/main',
             title: 'Editor',
             company: 'Open-Xchange',

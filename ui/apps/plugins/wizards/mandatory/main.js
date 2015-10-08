@@ -12,200 +12,91 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('plugins/wizards/mandatory/main', [
-    'io.ox/core/extPatterns/stage',
-    'io.ox/core/extensions',
+define.async('plugins/wizards/mandatory/main', [
+    'io.ox/core/tk/wizard',
     'io.ox/backbone/mini-views/common',
-    'settings!io.ox/wizards/firstStart',
+    'io.ox/backbone/mini-views/timezonepicker',
+    'io.ox/core/api/user',
+    'settings!io.ox/core',
     'gettext!io.ox/wizards/firstStart'
-], function (Stage, ext, miniViews, settings, gt) {
+], function (Tour, mini, TimezonePicker, userAPI, settings, gt) {
 
     'use strict';
 
-    var point = ext.point('io.ox/wizards/firstStart');
+    return userAPI.getCurrentUser().then(function (user) {
 
-    /**
-     * Don’t use gt for this, because it contains some example text that should not be translated
-     */
-    point.extend({
-        id: 'example_welcome',
-        title: gt.format(gt('Welcome to %s'), ox.serverConfig.productName),
-        draw: function (baton) {
-            this.append(
-                'Before you can continue using the product, you have to enter some basic information. It will take less than a minute.'
-            );
-            baton.buttons.enableNext();
-        }
-    });
+        Tour.registry.add({
+            id: 'firstStartWizard'
+        }, function () {
 
-    point.extend({
-        id: 'name',
-        title: gt('Your name'),
-        load: function (baton) {
-            var def = $.Deferred();
+            //reset name, because we want to start without any previous data
+            user.set('first_name');
+            user.set('last_name');
 
-            require(['io.ox/core/api/user', 'io.ox/backbone/basicModel', 'io.ox/backbone/mini-views'], function (userAPI, Model, mini) {
-                baton.libraries = {
-                    userAPI: userAPI,
-                    mini: mini
-                };
-                userAPI.getCurrentUser().done(function (user) {
-                    baton.user = user;
+            var tour = new Tour(),
+                def = $.Deferred(),
+                tzModel = settings.createModel(Backbone.Model);
 
-                    user.set('first_name');
-                    user.set('last_name');
-
-                    function updateButtonState() {
-                        if (!_.isEmpty($.trim(user.get('first_name'))) && !_.isEmpty($.trim(user.get('last_name')))) {
-                            baton.buttons.enableNext();
-                        } else {
-                            baton.buttons.disableNext();
-                        }
-                    }
-                    baton.user.on('change', updateButtonState);
-
-                    updateButtonState();
-
+            tour.on('stop', function (reason) {
+                if (reason && reason.cancel) {
+                    def.reject();
+                } else {
+                    user.save();
+                    tzModel.save();
                     def.resolve();
-                }).fail(def.reject);
+                }
             });
 
-            return def;
-        },
-
-        draw: function (baton) {
-            // Now, on to the serious business
-            var mini = baton.libraries.mini;
-
-            this.append(
-                $('<form class="form-horizontal" />').append(
+            tour
+            .step()
+                .mandatory()
+                .title(gt.format(gt('Welcome to %s'), ox.serverConfig.productName))
+                .content(gt('Before you can continue using the product, you have to enter some basic information. It will take less than a minute.'))
+                .footer($('<button class="btn wizard-close pull-left" tabindex="1">')
+                    .text(gt('Back to sign in'))
+                    .on('click', function () {
+                        def.reject();
+                        tour.stop();
+                    })
+                )
+                .end()
+            .step()
+                .mandatory()
+                .title(gt('Your name'))
+                .content($('<form class="form-horizontal" />').append(
                     $('<div class="control-group" />').append(
                         $('<label class="control-label" for="first_name" />').text(gt('First name')),
                         $('<div class="controls" />').append(
-                            baton.focusNode = new mini.InputView({name: 'first_name', model: baton.user}).render().$el
+                            new mini.InputView({ name: 'first_name', model: user }).render().$el
                         )
                     ),
                     $('<div class="control-group" />').append(
                         $('<label class="control-label" for="last_name" />').text(gt('Last name')),
                         $('<div class="controls" />').append(
-                            new mini.InputView({name: 'last_name', model: baton.user}).render().$el
+                            new mini.InputView({ name: 'last_name', model: user }).render().$el
                         )
                     )
-                )
-            );
+                ))
+                .beforeShow(function () {
+                    var step = this;
+                    step.toggleNext(false);
+                    user.on('change', function () {
+                        step.toggleNext(!_.isEmpty($.trim(user.get('first_name'))) && !_.isEmpty($.trim(user.get('last_name'))));
+                    });
+                })
+                .on('show', function () {
+                    this.$el.find('input:first').focus();
+                })
+                .end()
+            .step()
+                .mandatory()
+                .title(gt('Your timezone'))
+                .content(new TimezonePicker({ name: 'timezone', model: tzModel }).render().$el)
+                .end()
+            .start();
 
-            this.find('input[type="text"]').on('keyup', _.debounce(function () {
-                var valid = _($('input[type="text"]')).reduce(function (memo, element) {
-                    return memo && !_.isEmpty($.trim($(element).val()));
-                }, true);
-                if (valid) {
-                    baton.buttons.enableNext();
-                } else {
-                    baton.buttons.disableNext();
-                }
-            }, 100));
-
-        },
-
-        activate: function (baton) {
-            baton.focusNode.focus();
-        },
-
-        finish: function (baton) {
-            // Depending on the capabilities of the model, this could be more complicated
-            // you might have to interrogate the model for the #changedAttributes
-            // and call an API method. In any case, finish may return a deferred object
-            // to denote the state of the save operation
-            return baton.user.save();
-        }
+            return def;
+        });
     });
 
-    point.extend({
-        id: 'timezone',
-        title: gt('Your timezone'),
-        load: function (baton) {
-            return require([
-                'settings!io.ox/core',
-                'settings!io.ox/core/settingOptions',
-                'io.ox/backbone/forms',
-                'io.ox/backbone/basicModel'
-            ], function (settings, settingOptions, forms) {
-                var available = settingOptions.get('availableTimeZones'),
-                    technicalNames = _(available).keys(),
-                    userTZ = settings.get('timezone', 'UTC'),
-                    sorted = {};
-
-                // Sort the technical names by the GMT offset
-                technicalNames.sort(function (a, b) {
-                    var va = available[a],
-                        vb = available[b],
-                        diff = Number(va.substr(4, 3)) - Number(vb.substr(4, 3));
-                    if (diff === 0 || _.isNaN(diff)) {
-                        return (vb === va) ? 0 : (va < vb) ? -1 : 1;
-                    } else {
-                        return diff;
-                    }
-                });
-
-                // filter double entries and sum up results in 'sorted' array
-                for (var i = 0; i < technicalNames.length; i++) {
-                    var key = technicalNames[i],
-                        key2 = technicalNames[i + 1];
-                    if (key2 && available[key] === available[key2]) {
-                        if (key2 === userTZ) {
-                            sorted[key2] = available[key2];
-                        } else {
-                            sorted[key] = available[key];
-                        }
-                        i++;
-                    } else {
-                        sorted[key] = available[key];
-                    }
-                }
-
-                baton.availableTimeZones = sorted;
-                baton.model = settings;
-                baton.libraries = {
-                    forms: forms
-                };
-
-                baton.buttons.enableNext();
-            });
-        },
-
-        draw: function (baton) {
-            var forms = baton.libraries.forms,
-                tzNode;
-
-            //TODO: port to miniviews, once there is a selectbox feature
-            this.append(
-                $('<form class="form-horizontal" />').append(
-                    $('<label class="control-label" for="">').text(gt('Timezone')),
-                    tzNode = $('<div class="controls" />')
-                )
-            );
-            new forms.SelectBoxField({
-                attribute: 'timezone',
-                model: baton.model,
-                selectOptions: baton.availableTimeZones,
-                '$el': tzNode
-            }).render();
-            baton.focusNode = tzNode.find('select');
-            tzNode.find('select').addClass('input-xlarge');
-        },
-
-        activate: function (baton) {
-            baton.focusNode.focus();
-        },
-
-        finish: function (baton) {
-            // Depending on the capabilities of the model, this could be more complicated
-            // you might have to interrogate the model for the #changedAttributes
-            // and call an API method. In any case, finish may return a deferred object
-            // to denote the state of the save operation
-            return baton.model.save();
-        }
-    });
-
-    return {};
 });

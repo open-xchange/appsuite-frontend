@@ -11,15 +11,14 @@
  * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
-define('plugins/portal/reddit/register',
-    ['io.ox/core/date',
-     'gettext!io.ox/portal'
-    ], function (date, gt) {
+define('plugins/portal/reddit/register', [
+    'gettext!io.ox/portal'
+], function (gt) {
 
     'use strict';
 
     // avoid JSHINT errors
-    var MediaPlayer = function () { }, settings = {};
+    var MediaPlayer = function () {}, settings = {};
 
     var drawPlugin = function (index) {
         if (!index) {
@@ -47,7 +46,7 @@ define('plugins/portal/reddit/register',
             }
         });
 
-        mp.setOptions({bigPreview: true});
+        mp.setOptions({ bigPreview: true });
 
         var extractImage = function (entry) {
             var thumbUrl = '',
@@ -82,9 +81,9 @@ define('plugins/portal/reddit/register',
         mp.init({
             appendLimitOffset: function (myurl, count, offset) {
                 // &count-param is ignored by reddit
-    //            if (count) {
-    //                myurl += "&count=" + count;
-    //            }
+                // if (count) {
+                //     myurl += "&count=" + count;
+                // }
 
                 if (offset) {
                     myurl += '&after=' + lastShowedPreview;
@@ -116,12 +115,12 @@ define('plugins/portal/reddit/register',
                     $node.append($('<div>').addClass('mediaplugin-title').text(title));
                 }
 
-                $node.append($('<div>').addClass('mediaplugin-content mediaplugin-textbackground').text(entry.created_utc ? new date.Local(entry.created_utc * 1000).format(date.DATE_TIME) : ''));
+                $node.append($('<div>').addClass('mediaplugin-content mediaplugin-textbackground').text(entry.created_utc ? moment.unix(entry.created_utc).format('l LT') : ''));
 
                 lastShowedPreview = entry.name;
 
                 if (thumbUrl !== '') {
-                    var $img = $('<img/>', {'data-original': thumbUrl});
+                    var $img = $('<img/>',  { 'data-original': thumbUrl });
                     return $img;
                 }
 
@@ -143,7 +142,7 @@ define('plugins/portal/reddit/register',
                     title = gt('No title.');
                 }
 
-                var $title = $('<div>').addClass('mediaplugin-title').text(title).css({width: maxWidth});
+                var $title = $('<div>').addClass('mediaplugin-title').text(title).css({ width: maxWidth });
                 maxHeight -= $title.height();
                 $title.appendTo($node);
 
@@ -151,10 +150,10 @@ define('plugins/portal/reddit/register',
 
                 if (entry.domain === 'youtube.com') {
                     $('<div>').html($('<span>').html(entry.media_embed.content).text()).appendTo($node);
-                } else  if (imageUrl) {
+                } else if (imageUrl) {
                     willDisableBusyIndicator = true;
 
-                    $img = $('<img/>', {'src': imageUrl}).css({display: 'none'})
+                    $img = $('<img/>',  { 'src': imageUrl }).css({ display: 'none' })
                         .load(function () {
                             if ($busyIndicator) {
                                 $busyIndicator.detach();
@@ -166,20 +165,20 @@ define('plugins/portal/reddit/register',
                 }
 
                 if (entry.url) {
-                    var $url = $('<div>').append($('<a>').attr({'href': entry.url}).text(entry.url));
+                    var $url = $('<div>').append($('<a>').attr({ 'href': entry.url }).text(entry.url));
                     $url.appendTo($node);
                     maxHeight -= $url.height();
                 }
 
                 if (entry.permalink) {
-                    $('<a>').attr({'href': 'http://www.reddit.com' + entry.permalink}).text(gt('Comments')).appendTo($node);
+                    $('<a>').attr({ 'href': 'http://www.reddit.com' + entry.permalink }).text(gt('Comments')).appendTo($node);
                 }
 
                 if (entry.author) {
                     if (entry.permalink) {
                         $('<span>').text(' | ').appendTo($node);
                     }
-                    var $author = $('<a>').attr({'href': 'http://www.reddit.com/user/' + entry.author}).text(entry.author);
+                    var $author = $('<a>').attr({ 'href': 'http://www.reddit.com/user/' + entry.author }).text(entry.author);
                     $author.appendTo($node);
                     maxHeight -= $author.height();
                 }

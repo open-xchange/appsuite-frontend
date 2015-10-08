@@ -11,10 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/settings',
-    ['io.ox/core/http',
-     'io.ox/core/event'
-    ], function (http, Event) {
+define('io.ox/core/settings', [
+    'io.ox/core/http',
+    'io.ox/core/event'
+], function (http, Event) {
 
     'use strict';
 
@@ -201,12 +201,10 @@ define('io.ox/core/settings',
                 return applyDefaults().then(function () {
                     return { tree: tree, meta: meta };
                 });
-            }
-            else if (ox.online) {
+            } else if (ox.online) {
                 // online
                 return load();
-            }
-            else {
+            } else {
                 // offline
                 self.detach();
                 return $.Deferred().resolve({ tree: tree, meta: meta });
@@ -290,10 +288,10 @@ define('io.ox/core/settings',
 
         /**
          * facade for this.save to notify user in case of errors
-         * @return {deferred}
+         * @return { deferred }
          */
         this.saveAndYell = function (custom, options) {
-            var def = this.save(custom),
+            var def = this.save(custom, options),
                 //options
                 opt = $.extend({
                     debug: false
@@ -304,10 +302,11 @@ define('io.ox/core/settings',
                 def.always(function () {
                     var list = _.isArray(this) ? this : [this];
                     _.each(list, function (current) {
-                        if (current.state)
+                        if (current.state) {
                             console.warn('SAVEANDYELL: ' +  current.state());
-                        else if (def.state)
+                        } else if (def.state) {
                             console.warn('SAVEANDYELL: ' +  def.state());
+                        }
                     });
                 });
             }

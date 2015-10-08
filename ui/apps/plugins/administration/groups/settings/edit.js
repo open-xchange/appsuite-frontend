@@ -12,16 +12,16 @@
  */
 
 define('plugins/administration/groups/settings/edit', [
+    'io.ox/core/extensions',
     'io.ox/backbone/disposable',
     'io.ox/backbone/mini-views/common',
     'io.ox/core/tk/dialogs',
-    'io.ox/calendar/edit/view-addparticipants',
+    'io.ox/core/tk/typeahead',
     'plugins/administration/groups/settings/members',
     'io.ox/core/api/group',
     'io.ox/core/notifications',
-    'io.ox/contacts/util',
     'gettext!io.ox/core'
-], function (DisposableView, common, dialogs, AddParticipantsView, members, groupAPI, notifications, util, gt) {
+], function (ext, DisposableView, common, dialogs, Typeahead, members, groupAPI, notifications, gt) {
 
     'use strict';
 
@@ -36,61 +36,43 @@ define('plugins/administration/groups/settings/edit', [
         initialize: function () {
             this.membersView = new members.View({ model: this.model, editable: true });
             this.original = this.model.toJSON();
-        },
 
-        renderAutoComplete: function () {
-
-            var guid = _.uniqueId('input'),
-                node = $('<div class="form-group has-feedback">').append(
-                    $('<label>', { 'for': guid }).text(gt('Add member')),
-                    $('<input type="text" class="form-control add-participant" tabindex="1">')
-                        .attr({
-                            'aria-label': gt('Start typing to search for user names'),
-                            'id': guid,
-                            'placeholder': gt('User name')
-                        }),
-                    // trick: use form-control-feedback to place icon within input field
-                    $('<i class="fa fa-search form-control-feedback" style="color: #777" aria-hidden="true">')
-                ),
-                autocomplete = new AddParticipantsView({ el: node });
-
-            autocomplete.render({
-                minLength: 1,
-                autoselect: true,
-                parentSelector: '.form-group',
-                placement: 'bottom',
-                top: 0,
-                left: 0,
-                contacts: false,
-                distributionlists: false,
-                groups: false,
-                resources: false,
-                users: true,
-                split: false,
-                stringify: function (obj) {
-                    return util.getFullName(obj);
-                },
-                draw: function (obj) {
-                    if (!_.isObject(obj)) return;
-                    this.append(
-                        $('<div>').html(util.getFullName(obj, true))
-                    );
+            /*
+             * extension point for autocomplete item
+             */
+            ext.point('plugins/administration/groups/settings/edit/autoCompleteItem').extend({
+                id: 'view',
+                index: 100,
+                draw: function (member) {
+                    this.append($('<div>').html(member.getFullName()));
                 }
             });
-
-            autocomplete.on('select', this.onAddUser.bind(this));
-
-            return node;
-        },
-
-        onAddUser: function (data) {
-            if (!data.internal_userid) return;
-            this.membersView.collection.add(data, { parse: true });
         },
 
         render: function () {
 
-            var guid;
+            var guid, self = this, view = new Typeahead({
+                apiOptions: {
+                    users: true,
+                    split: false
+                },
+                placeholder: gt('User name'),
+                harmonize: function (data) {
+                    data = _(data).map(function (m) {
+                        m.internal_userid = m.id;
+                        return new members.Member(m);
+                    });
+                    // remove duplicate entries from typeahead dropdown
+                    var col = self.membersView.collection;
+                    return _(data).filter(function (model) {
+                        return !col.get(model.id);
+                    });
+                },
+                click: function (e, member) {
+                    self.membersView.collection.add(member, { parse: true });
+                },
+                extPoint: 'plugins/administration/groups/settings/edit'
+            });
 
             this.$el.append(
                 // name
@@ -99,7 +81,10 @@ define('plugins/administration/groups/settings/edit', [
                     new common.InputView({ name: 'display_name', id: guid, model: this.model }).render().$el
                 ),
                 // auto-complete
-                this.renderAutoComplete(),
+                $('<div class="form-group">').append(
+                    $('<label class="sr-only">', { 'for': guid = _.uniqueId('input') }).text(gt('Start typing to search for user names')),
+                    view.$el.attr({ id: guid })
+                ),
                 // members view
                 $('<div class="form-group">').append(
                     $('<label>', { 'for': guid = _.uniqueId('list') }).text(gt('Members')),
@@ -107,6 +92,7 @@ define('plugins/administration/groups/settings/edit', [
                 )
             );
 
+            view.render();
             return this;
         },
 

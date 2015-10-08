@@ -22,7 +22,7 @@ define('plugins/halo/register', ['io.ox/core/extensions'], function (ext) {
         action: function (data, e) {
             // require detail view, dialogs & all halo extensions
             require(ox.withPluginsFor('plugins/halo', ['plugins/halo/view-detail', 'io.ox/core/tk/dialogs']), function (view, dialogs) {
-                var options = data.side ? { side: data.side} : {};
+                var options = data.side ? { side: data.side } : {};
                 new dialogs.SidePopup(options).show(e, function (popup) {
                     popup.append(view.draw(data));
                 });
@@ -34,11 +34,10 @@ define('plugins/halo/register', ['io.ox/core/extensions'], function (ext) {
         action: function (data, e) {
             // require detail view, dialogs & all halo extensions
             require(['io.ox/core/tk/dialogs', 'io.ox/contacts/view-detail'], function (dialogs, view) {
-                    new dialogs.SidePopup().show(e, function (popup) {
-                        popup.append(view.draw(data));
-                    });
-                }
-            );
+                new dialogs.SidePopup().show(e, function (popup) {
+                    popup.append(view.draw(data));
+                });
+            });
         }
     });
 

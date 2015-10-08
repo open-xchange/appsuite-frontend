@@ -11,12 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/picker',
-    ['io.ox/core/folder/tree',
-     'io.ox/core/folder/api',
-     'io.ox/core/tk/dialogs',
-     'gettext!io.ox/core'
-     ], function (TreeView, api, dialogs, gt) {
+define('io.ox/core/folder/picker', [
+    'io.ox/core/folder/tree',
+    'io.ox/core/folder/api',
+    'io.ox/core/tk/dialogs',
+    'gettext!io.ox/core'
+], function (TreeView, api, dialogs, gt) {
 
     'use strict';
 
@@ -38,6 +38,7 @@ define('io.ox/core/folder/picker',
     //     last         {bool}      Prefer last folder used (needs settings and persistent)
     //     list         {array}     list of items, use first to determine first folder
     //     module       {string}    module, e.g. 'mail'
+    //     hideTrashfolder {bool}   hides the trashfolder, used when saving attachments to drive see Bug 38280
     //     persistent   {string}    If string, this path is used to store open and last nodes; needs settings
     //     root         {string}    tree root id, e.g. '1'
     //     selection    {bool}      "Done" callback needs selected item (true/false)
@@ -67,6 +68,7 @@ define('io.ox/core/folder/picker',
             indent: true,
             module: 'mail',
             persistent: false,
+            hideTrashfolder: false,
             root: '1',
             selection: true,
             title: gt('Select folder'),
@@ -81,7 +83,8 @@ define('io.ox/core/folder/picker',
             },
             initialize: $.noop,
             close: $.noop,
-            show: $.noop
+            show: $.noop,
+            alternative: $.noop
         }, options);
 
         var dialog = new dialogs.ModalDialog({ async: o.async, addClass: o.addClass, width: o.width })
@@ -90,9 +93,12 @@ define('io.ox/core/folder/picker',
                     _.isString(o.title) ? $.txt(o.title) : o.title
                 )
             )
+            .addPrimaryButton('ok', o.button, 'ok', { tabIndex: 1 })
+            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
 
-            .addPrimaryButton('ok', o.button, 'ok', { tabIndex: '1' })
-            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: '1' });
+        if (o.alternativeButton) {
+            dialog.addAlternativeButton('alternative', o.alternativeButton);
+        }
         dialog.getBody().css({ height: o.height });
 
         var id = o.folder;
@@ -116,6 +122,7 @@ define('io.ox/core/folder/picker',
             root: o.root,
             customize: o.customize,
             disable: o.disable,
+            hideTrashfolder: o.hideTrashfolder,
             // highlight current selection
             highlight: true,
             highlightclass: _.device('smartphone') ? 'visible-selection-smartphone' : 'visible-selection'
@@ -150,9 +157,12 @@ define('io.ox/core/folder/picker',
                 if (id) o.done(id, dialog, tree);
                 o.always(dialog, tree);
             })
+            .on('alternative', function () {
+                o.alternative(dialog, tree);
+            })
             .show(function () {
                 dialog.getBody().busy();
-                api.path(id)
+                (id ? api.path(id) : $.Deferred().reject())
                     .then(
                         function success(path) {
                             tree.open = _.union(tree.open, _(path).pluck('id'));

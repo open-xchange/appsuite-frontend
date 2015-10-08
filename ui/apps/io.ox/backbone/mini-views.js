@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/backbone/mini-views',
-    ['io.ox/backbone/mini-views/abstract',
-     'io.ox/backbone/mini-views/common',
-     'io.ox/backbone/mini-views/date'
-    ], function (AbstractView, common, date) {
+define('io.ox/backbone/mini-views', [
+    'io.ox/backbone/mini-views/abstract',
+    'io.ox/backbone/mini-views/common',
+    'io.ox/backbone/mini-views/date'
+], function (AbstractView, common, date) {
 
     'use strict';
 

@@ -11,13 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/editor/main',
-    ['io.ox/files/api',
-     'io.ox/core/folder/api',
-     'io.ox/core/notifications',
-     'gettext!io.ox/editor',
-     'less!io.ox/editor/style'
-    ], function (api, folderAPI, notifications, gt) {
+define('io.ox/editor/main', [
+    'io.ox/files/api',
+    'io.ox/core/folder/api',
+    'io.ox/core/notifications',
+    'gettext!io.ox/editor',
+    'less!io.ox/editor/style'
+], function (api, folderAPI, notifications, gt) {
 
     'use strict';
 
@@ -46,7 +46,7 @@ define('io.ox/editor/main',
         },
 
         onTitleKeyup: function () {
-            this.model.trigger('keyup:title', this.getTitle());
+            this.trigger('keyup:title', this.getTitle());
         },
 
         onContentKeydown: function (e) {
@@ -163,7 +163,7 @@ define('io.ox/editor/main',
                         $('<div class="col-md-12">').append(
                             // editor
                             $('<textarea class="content form-control" tabindex="2">').val('')
-                                .attr('placeholder', _.device('ios || android') ? '': gt('You can quick-save your changes via Ctrl+Enter.'))
+                                .attr('placeholder', _.device('ios || android') ? '' : gt('You can quick-save your changes via Ctrl+Enter.'))
                         )
                     )
                 )
@@ -176,7 +176,7 @@ define('io.ox/editor/main',
     // multi instance pattern
     function createInstance() {
 
-        var app, win, model = new Backbone.Model(), view, previous = {};
+        var app, win, model = new api.Model(), view, previous = {};
 
         app = ox.ui.createApp({ name: 'io.ox/editor', title: 'Editor', closable: true });
 
@@ -206,13 +206,9 @@ define('io.ox/editor/main',
 
             win.setTitle(gt('Editor'));
 
-            model.on('keyup:title', function (title) {
-                if (!title) {
-                    title = gt('Editor');
-                }
-                app.setTitle(title);
+            view.on('keyup:title', function (title) {
+                app.setTitle(title || gt('Editor'));
             });
-
         });
 
         app.create = function (options) {
@@ -234,19 +230,25 @@ define('io.ox/editor/main',
         };
 
         app.save = function () {
+
             var fixFolder = function () {
-                //switch to default folder on missing grants (or special folders)
-                return folderAPI.get(model.get('folder_id'))
-                        .then(function (data) {
-                            var required = (model.has('id') && !folderAPI.can('write', data)) ||
-                                           (!model.has('id') && !folderAPI.can('create', data)) ||
-                                           _.contains(['14', '15'], data.id);
-                            if (required) {
-                                //update mode and notify user
-                                model.set('folder_id', folderAPI.getDefaultFolder('infostore'));
-                                notifications.yell('info', gt('This file will be written in your default folder to allow editing'));
-                            }
-                        });
+
+                // check file permissions first
+                if (model.hasWritePermissions()) return $.when();
+
+                // switch to default folder on missing grants (or special folders)
+                return folderAPI.get(model.get('folder_id')).done(function (data) {
+                    var required = (model.has('id') && !folderAPI.can('write', data)) ||
+                                   (!model.has('id') && !folderAPI.can('create', data)) ||
+                                   _.contains(['14', '15'], data.id);
+                    if (!required) return;
+                    var defaultFolder = folderAPI.getDefaultFolder('infostore');
+                    if (defaultFolder) {
+                        // update mode and notify user
+                        model.set('folder_id', defaultFolder);
+                        notifications.yell('info', gt('This file will be written in your default folder to allow editing'));
+                    }
+                });
             };
 
             require(['io.ox/files/util'], function (util) {
@@ -263,7 +265,7 @@ define('io.ox/editor/main',
                                     // create or update?
                                     if (model.has('id')) {
                                         // update
-                                        return api.uploadNewVersion({ id: data.id, folder: data.folder_id, file: blob, filename: data.filename })
+                                        return api.versions.upload({ id: data.id, folder: data.folder_id, file: blob, filename: data.filename })
                                             .done(function () {
                                                 previous = model.toJSON();
                                             })
@@ -275,14 +277,13 @@ define('io.ox/editor/main',
                                             });
                                     } else {
                                         // create
-                                        return api.uploadFile({ folder: data.folder_id, file: blob, filename: data.filename })
+                                        return api.upload({ folder: data.folder_id, file: blob, filename: data.filename })
                                             .done(function (data) {
                                                 delete data.content;
                                                 app.setState({ folder: data.folder_id, id: data.id });
                                                 model.set(data);
                                                 previous = model.toJSON();
                                                 view.idle();
-                                                api.trigger('refresh.all');
                                             })
                                             .always(function () { view.idle(); })
                                             .fail(notifications.yell);

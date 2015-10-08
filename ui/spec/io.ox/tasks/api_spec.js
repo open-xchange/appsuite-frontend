@@ -22,7 +22,7 @@ define(['shared/examples/for/api',
         describe('creating a task', function () {
             beforeEach(function () {
                 this.server.respondWith('PUT', /api\/tasks\?action=new/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data":{"id":122}}');
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data":{"id":122}}');
                 });
             });
             it('should add a new task', function (done) {
@@ -89,10 +89,10 @@ define(['shared/examples/for/api',
         describe('updating a task', function () {
             beforeEach(function () {
                 this.server.respondWith('PUT', /api\/tasks\?action=update/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data":{}}');
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data":{}}');
                 });
                 this.server.respondWith('GET', /api\/tasks\?action=get/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(apiTestData.testDataUpdate) + '}');
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data": ' + JSON.stringify(apiTestData.testDataUpdate) + '}');
                 });
                 this.server.autoRespond = false;
             });
@@ -131,7 +131,7 @@ define(['shared/examples/for/api',
                 expect(testCopy).not.to.contain.key('tempAttachmentIndicator');
             });
             it('should be added to \"Attachment upload in progress\" list if attachments are present', function () {
-              //make copy of testData
+                //make copy of testData
                 var testCopy = _.copy(apiTestData.tempTestDataUpdate, true),
                     result;
 
@@ -160,7 +160,7 @@ define(['shared/examples/for/api',
         describe('confirming a task', function () {
             beforeEach(function () {
                 this.server.respondWith('PUT', /api\/tasks\?action=confirm/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data":{}}');
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data":{}}');
                 });
             });
             it('should confirm a task', function () {
@@ -182,7 +182,7 @@ define(['shared/examples/for/api',
         describe('getting Task Notifications', function () {
             beforeEach(function () {
                 this.server.respondWith('GET', /api\/tasks\?action=all/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": []}');
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data": []}');
                 });
             });
             it('should trigger new-tasks event', function () {

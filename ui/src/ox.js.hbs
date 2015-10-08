@@ -14,8 +14,9 @@ window.ox = _.extend({
     context_id: 0,
     debug: {{ enable_debug }},
     language: 'en_US',
-    loginLocation: 'signin',
-    logoutLocation: 'signin',
+    momentLanguages: {{{ momentLanguages }}},
+    loginLocation: 'ui',
+    logoutLocation: 'ui',
     online: navigator.onLine !== undefined ? navigator.onLine : true,
     relogin: function () {},
     revision: '{{ revision }}',
@@ -24,9 +25,10 @@ window.ox = _.extend({
     secretCookie: false, // auto-login
     serverConfig: {},
     session: '',
-    signin: false,
+    signin: true,
     t0: new Date().getTime(), // for profiling
     testTimeout: 30000,
+    theme: 'default',
     ui: { session: {} },
     user: '',
     user_id: 0,

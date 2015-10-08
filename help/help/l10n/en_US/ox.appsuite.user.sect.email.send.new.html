@@ -4,7 +4,7 @@
 <title>5.4.1. Sending a new E-Mail</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="User Guide">
 <link rel="up" href="ox.appsuite.user.sect.email.send.html" title="5.4. Sending E-Mails">
 <link rel="prev" href="ox.appsuite.user.sect.email.send.html" title="5.4. Sending E-Mails">
 <link rel="next" href="ox.appsuite.user.sect.email.send.reply.html" title="5.4.2. Replying to E-Mails">
@@ -19,7 +19,7 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.email.send.html">Prev</a></li>
@@ -38,19 +38,17 @@
 <a name="ox.appsuite.user.concept.email.new"></a><p>In order to compose an E-Mail, you can do the following: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.send.new.html#ox.appsuite.user.task.email.send" title="How to send a new E-Mail:">Compose an E-Mail</a> by entering the recipient, the subject and the E-Mail text</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.send.new.html#ox.appsuite.user.task.email.send.more" title="How to use additional functions when sending E-Mails:">Use further functions</a>: send copies, add attachments, append vCard, set importance</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.send.new.html#ox.appsuite.user.task.email.send.more" title="How to use further functions when composing an E-Mail:">Use further functions</a>: send copies, add attachments, append vCard, request read receipt, set importance</p></li>
 </ul></div>
-<p>
-      </p>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.email.send"></a><p class="title">How to send a new E-Mail:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p>Click on <span class="guibutton"><strong>Compose</strong></span> in the toolbar.</p></li>
 <li class="step">
-<p>Enter the recipient's E-Mail address in the <span class="guilabel"><strong>To</strong></span> field of the sidebar. Press Enter.</p>
+<p>Enter the recipient's E-Mail address in the <span class="guilabel"><strong>To</strong></span> field. Press Enter.</p>
 <p>If there are several recipients, repeat the action. As an alternative, you can enter the name of a <a class="link" href="ox.appsuite.user.sect.contacts.distributionlist.html#ox.appsuite.user.concept.distributionlist.new">distribution list</a>.</p>
-<p>In order to delete a recipient, click the <span class="guibutton"><strong>Delete</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.delete.recipient"></a><img src="../../images/appsuite_user_icon_trash.png"></span> .</p>
+<p>In order to delete a recipient, click the <span class="guibutton"><strong>Delete</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.delete.recipient"></a><img src="../../images/appsuite_user_icon_close_setting.png"></span> .</p>
 <div class="more">
 <a name="ox.appsuite.user.task.email.send.recipient.more"></a><p><span class="phrase"><strong>Tip:</strong></span> While entering the E-Mail address, several matching suggestions are displayed. To accept a suggestion, use one of the following methods: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
@@ -60,59 +58,88 @@
 <p>
             </p>
 </div>
+<div class="more">
+<a name="ox.appsuite.user.task.email.send.sender.more"></a><p><span class="phrase"><strong>Tip:</strong></span> You can define that the recipients can only see your E-Mail address, not your full name. To do so, proceed as follows: </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Click on the sender address next to <span class="guilabel"><strong>From:</strong></span>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Enable <span class="guibutton"><strong>Hide names</strong></span>. </p></li>
+</ul></div>
+<p>
+            </p>
+</div>
 </li>
 <li class="step"><p>Enter a subject.</p></li>
 <li class="step">
 <p>Enter the E-Mail text.</p>
-<p>In order to compose the E-Mail in text format, select <span class="guibutton"><strong>Text</strong></span> below <span class="guilabel"><strong>Text format</strong></span>.</p>
-<p>In order to compose the E-Mail in HTML format, select <span class="guibutton"><strong>HTML</strong></span>. A formatting bar appears. How to format the text: </p>
-<div class="orderedlist">
-<a name="ox.appsuite.user.task.email.send.text.more"></a><ol class="orderedlist" type="a">
-<li class="listitem"><p>Select the text content.</p></li>
-<li class="listitem"><p>Click an element in the formatting bar. </p></li>
-</ol>
+<p>In order to compose the E-Mail in text format, select <span class="guibutton"><strong>Options</strong></span>. Select <span class="guilabel"><strong>Plain text</strong></span>.</p>
+<p>In order to compose the E-Mail in HTML format, select <span class="guibutton"><strong>Options</strong></span>. Select <span class="guibutton"><strong>HTML</strong></span>. A formatting bar appears. How to format the text: </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.task.email.send.text.more"></a><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Select the text content.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Click an element in the formatting bar. </p></li>
+</ul>
 </div>
 <p>
             </p>
-<p>If you use the html format, you can add images from the clipboard.</p>
+</li>
+<li class="step">
+<p>If you use the html format, you can insert images into the text. To do so, proceed as follows: </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Place the cursor at the position where you want to insert images.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Drag one image or several images from a file browser or the desktop to the E-Mail window. Drop the images in the E-Mail text input field. </p></li>
+</ul></div>
+<p>In order to remove an image from the text, select the image. Press the delete key on your keyboard.</p>
 </li>
 <li class="step"><p>You can use additional functions: send copies, select sender address, add attachments, add signature, add vCard, request delivery receipt or set the priority</p></li>
 <li class="step"><p>Click on <span class="guibutton"><strong>Send</strong></span>. </p></li>
 </ol></div>
 <div class="taskrelated">
           <p><span class="phrase"><strong>Result:</strong></span> The E-Mail is sent.</p>
-        </div>
+          <div class="itemizedlist">
+<a name="ox.appsuite.user.task.email.send.related"></a><p class="title">Similar actions</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p>
+                <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.email.send.new.html#ox.appsuite.user.task.email.send.more" title="How to use further functions when composing an E-Mail:">How to use further functions when composing an E-Mail:</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.reply.html" title="5.4.2. Replying to E-Mails">Replying to E-Mails</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.forward.html" title="5.4.3. Forwarding E-Mails">Forwarding E-Mails</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.autoforward.html" title="5.4.4. Automatically forwarding E-Mails">Automatically forwarding E-Mails</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.vacationnotice.html" title="5.4.5. Sending a vacation notice">Sending a vacation notice</a></span>
+              </p></li></ul>
+</div>
+</div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.email.send.more"></a><p class="title">How to use additional functions when sending E-Mails:</p>
+<a name="ox.appsuite.user.task.email.send.more"></a><p class="title">How to use further functions when composing an E-Mail:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step">
-<p>If you want to send copies of the E-Mail to other recipients, do the following: </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>If the recipients are to see who gets a copy of the E-Mail, click on <span class="guibutton"><strong>Copy (CC) to</strong></span>. Enter the E-Mail address of the copy's recipient.</p></li>
-<li class="listitem" style="list-style-type: none"><p>If you want to prevent the recipients from seeing who gets a copy of the E-Mail, click on <span class="guibutton"><strong>Blind copy (BCC) to</strong></span>. Enter the E-Mail address of the blind copy's recipient.</p></li>
-</ul></div>
-<p>
-            </p>
-<p>If there are several recipients, you can enter the name of a <a class="link" href="ox.appsuite.user.sect.contacts.distributionlist.html#ox.appsuite.user.concept.distributionlist.new">distribution list</a>.</p>
-<p>In order to hide the input fields, click on <span class="guibutton"><strong>Copy (CC) to</strong></span> or on <span class="guibutton"><strong>Blind copy (BCC) to</strong></span>. The addresses entered will be kept.</p>
-</li>
 <li class="step">
 <p>If you have set up <a class="link" href="ox.appsuite.user.sect.email.externalaccounts.html#ox.appsuite.user.concept.email.externalaccounts">external E-Mail accounts</a>, you can use those addresses as sender addresses. To do so, proceed as follows:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Click on <span class="guibutton"><strong>Sender</strong></span>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Click on the sender address next to <span class="guilabel"><strong>From:</strong></span>.</p></li>
 <li class="listitem" style="list-style-type: none"><p>Select an E-Mail address from the list.</p></li>
 </ul></div>
-<p> In order to hide the list, click on <span class="guibutton"><strong>Sender</strong></span>.</p>
+<p>
+            </p>
 <p><span class="phrase"><strong>Note:</strong></span> Depending on the folder selected, a defined sender address will be preset.</p>
+<div class="more">
+<a name="ox.appsuite.user.task.email.send.more.names"></a><p>You can define the names to be displayed with your E-Mail addresses. To do so, proceed as follows: </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Click on <span class="guibutton"><strong>Edit name</strong></span>. The <span class="guilabel"><strong>Edit real names</strong></span> window opens.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Enable the checkbox of the name that you want to edit. Edit the name. Click on <span class="guibutton"><strong>Save</strong></span>.</p></li>
+</ul></div>
+<p>In order to display the sender addresses without names, click on <span class="guibutton"><strong>Hide names</strong></span>.</p>
+</div>
 </li>
 <li class="step">
-<p>If you want to add attachments to the E-Mail, click on <span class="guibutton"><strong>Attachments</strong></span>. Click on <span class="guibutton"><strong>Add attachment</strong></span>. Select one or more files.</p>
-<p>In order to use the current version of a file from the <span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> app as an attachment, click on <span class="guibutton"><strong>Files</strong></span>. Open a folder in the <span class="guilabel"><strong>Add files</strong></span> windows. Check the boxes of the files that you want to add as attachments. Click on <span class="guibutton"><strong>Add</strong></span>.</p>
+<p>If you want to send copies of the E-Mail to other recipients, do the following: </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>If the recipients are to see who gets a copy of the E-Mail, click on <span class="guibutton"><strong>CC</strong></span> on the right side of the <span class="guilabel"><strong>To</strong></span> field. Enter the E-Mail address of the copy's recipient in the <span class="guibutton"><strong>CC</strong></span> field.</p></li>
+<li class="listitem" style="list-style-type: none"><p>If the recipients are not to see who gets a copy of the E-Mail, click on <span class="guibutton"><strong>BCC</strong></span> on the right side of the <span class="guilabel"><strong>To</strong></span> field. Enter the E-Mail address of the blind copy's recipient in the <span class="guibutton"><strong>BCC</strong></span> field.</p></li>
+</ul></div>
+<p><span class="phrase"><strong>Tip:</strong></span> With drag and drop you can move the recipients between the fields <span class="guilabel"><strong>To</strong></span>, <span class="guilabel"><strong>CC</strong></span> and <span class="guilabel"><strong>BCC</strong></span>.</p>
+<p>If there are several recipients, you can enter the name of a <a class="link" href="ox.appsuite.user.sect.contacts.distributionlist.html#ox.appsuite.user.concept.distributionlist.new">distribution list</a>.</p>
+</li>
+<li class="step">
+<p>If you want to add attachments to the E-Mail, click on <span class="guibutton"><strong>Attachments</strong></span>. Click on <span class="guibutton"><strong>Add local file</strong></span>. Select one or more files.</p>
+<p>In order to use the current version of a file from the <span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> app as an attachment, click on <span class="guibutton"><strong>Attachments</strong></span>. Click on <span class="phrase"><span class="guibutton"><strong>Add from Drive</strong></span></span>. Open a folder in the <span class="guilabel"><strong>Add attachments</strong></span> windows. Check the boxes of the files that you want to add as attachments. Click on <span class="guibutton"><strong>Add</strong></span>.</p>
 <p>In order to remove an attachment, click the <span class="guibutton"><strong>Delete</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.delete.attachment"></a><img src="../../images/appsuite_user_icon_trash.png"></span> .</p>
-<p>In order to hide the input fields, click on <span class="guibutton"><strong>Attachments</strong></span>. The attachments added will be kept.</p>
+<p>In order to hide or show the attachments click on the button with the attachment icon.</p>
 <div class="more">
-<a name="ox.appsuite.user.task.email.send.attachment.more"></a><p><span class="phrase"><strong>Tip:</strong></span> You can also add an attachment by dragging and dropping a document from a file browser or from the desktop to the E-Mail window. </p>
+<a name="ox.appsuite.user.task.email.send.attachment.more"></a><p><span class="phrase"><strong>Tip:</strong></span> You can also add an attachment by dragging one or several files from a file browser or from the desktop to the E-Mail window and dropping them below the <span class="guibutton"><strong>Attachments</strong></span> button. </p>
 </div>
 <div class="more">
 <a name="ox.appsuite.user.task.email.send.attachment.publish"></a><p><span class="phrase"><strong>Note:</strong></span> Depending on the groupware configuration, attachments will not be sent when having reached a certain size limit. In this case the attachment is saved in a folder below your personal files folder. The E-Mail includes a link to the attachment.</p>
@@ -124,19 +151,18 @@
 <li class="listitem" style="list-style-type: none"><p>Click on <span class="guibutton"><strong>Signatures</strong></span>.</p></li>
 <li class="listitem" style="list-style-type: none"><p>Select a signature from the list.</p></li>
 </ul></div>
-<p> In order to hide the list, again click on <span class="guibutton"><strong>Signatures</strong></span>.</p>
+<p>
+            </p>
 </li>
 <li class="step">
-<p>In order to display additional options, click the <span class="guibutton"><strong>More</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.more"></a><img src="../../images/appsuite_user_icon_more.png"></span> in the side bar. You can use the following options:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>set the priority</p></li>
-<li class="listitem"><p>attach your vCard</p></li>
-<li class="listitem"><p>request a delivery receipt </p></li>
+<p>In order to show further options, click on <span class="guibutton"><strong>Options</strong></span>. You can use the following options:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>set the priority</p></li>
+<li class="listitem" style="list-style-type: none"><p>attach your vCard</p></li>
+<li class="listitem" style="list-style-type: none"><p>request a delivery receipt</p></li>
 </ul></div>
 <p>
             </p>
-<p>In order to hide the options, click on <span class="guibutton"><strong>Options</strong></span>. The settings will be kept.</p>
-<p><span class="phrase"><strong>Tip:</strong></span> You can also set the priority by clicking the icon on the right side in the <span class="guibutton"><strong>Subject</strong></span> field.</p>
 </li>
 </ol></div>
 </div>

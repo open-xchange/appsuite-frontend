@@ -4,10 +4,10 @@
 <title>8.1. The Tasks Components</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Groupware">
 <link rel="up" href="ox.appsuite.user.chap.tasks.html" title="Chapter 8. Tasks">
 <link rel="prev" href="ox.appsuite.user.chap.tasks.html" title="Chapter 8. Tasks">
-<link rel="next" href="ox.appsuite.user.sect.tasks.view.html" title="8.2. Viewing tasks">
+<link rel="next" href="ox.appsuite.user.sect.tasks.view.html" title="8.2. Viewing Tasks">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -34,39 +34,89 @@
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ox.appsuite.user.sect.tasks.gui"></a>8.1. The <span class="phrase"><span class="guilabel"><strong>Tasks</strong></span></span> Components</h2></div></div></div>
 <a class="indexterm" name="id-1.9.7.2"></a><div class="reference">
-<a name="ox.appsuite.user.reference.tasks.gui.hint"></a><p>An introduction to the user interface can be found in <a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. The User Interface">The User Interface</a>.</p>
+<a name="ox.appsuite.user.reference.tasks.elements"></a><p>The <span class="phrase"><span class="guilabel"><strong>Tasks</strong></span></span> app includes the following components.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.tasks.gui.html#ox.appsuite.user.reference.tasks.gui.search" title="Search bar">Search bar</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.tasks.gui.html#ox.appsuite.user.reference.tasks.gui.foldertree" title="Folder tree">Folder tree</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.tasks.gui.html#ox.appsuite.user.reference.tasks.gui.toolbar" title="Tool bar">Tool bar</a></p></li>
+<li class="listitem">
+<p><a class="xref" href="ox.appsuite.user.sect.tasks.gui.html#ox.appsuite.user.reference.tasks.gui.content" title="Display area">Display area</a></p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.tasks.gui.html#ox.appsuite.user.reference.tasks.gui.list" title="List">List</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.tasks.gui.html#ox.appsuite.user.reference.tasks.gui.detailview" title="Detail view">Detail view</a></p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.tasks.gui.html#ox.appsuite.user.reference.tasks.gui.create" title="View for creating or editing">View for creating or editing</a></p></li>
+</ul></div>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.tasks.gui.search"></a><p class="title"><b>Search bar</b></p>
+<p>Enables you to <a class="link" href="ox.appsuite.user.sect.tasks.search.html" title="8.7. Searching for Tasks">search</a> for tasks.</p>
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.tasks.gui.foldertree"></a><p class="title"><b>Folder tree</b></p>
-<p>Displays the tasks folders. and enables you to <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.concept.folder.navigate">navigate the folder structure</a>. In order to open the folder tree, click on the <span class="guibutton"><strong>View</strong></span> button in the <a class="link" href="ox.appsuite.user.sect.tasks.gui.html#ox.appsuite.user.reference.tasks.gui.toolbar" title="Tool bar">tool bar</a>. Enable <span class="guibutton"><strong>Folder view</strong></span>. The following functions are available: </p>
+<p>Displays the tasks folders. Enables you to navigate the folder structure. In order to open the folder tree, click on the <span class="guibutton"><strong>View</strong></span> button in the <a class="link" href="ox.appsuite.user.sect.tasks.gui.html#ox.appsuite.user.reference.tasks.gui.toolbar" title="Tool bar">tool bar</a>. Enable <span class="guibutton"><strong>Folder view</strong></span>. Depending on the groupware configuration, the folder tree contains the following entries: </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p><span class="guilabel"><strong>My tasks</strong></span>. Contains your personal tasks. By default, it contains the <span class="guilabel"><strong>Tasks</strong></span> folder.</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>Public tasks</strong></span>. Contains tasks shared with all users.</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>Shared tasks</strong></span>. Contains tasks shared with you by other users.</p></li>
+</ul></div>
+<p>The following functions are available: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>If clicking on a folder, its tasks are displayed.</p></li>
-<li class="listitem"><p>The <span class="guibutton"><strong>Folder-specific actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.tasks.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> next to the selected folder offers functions for <a class="link" href="ox.appsuite.user.chap.dataorganisation.html#ox.appsuite.user.concept.dataorganisation">organising data</a> and for <a class="link" href="ox.appsuite.user.chap.datainterchange.html#ox.appsuite.user.concept.datainterchange">exchanging data</a>.</p></li>
-<li class="listitem"><p>Buttons in the folder tree offer functions for <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.create.html#ox.appsuite.user.concept.folder.create">creating folders</a>.</p></li>
+<li class="listitem"><p>The <span class="guibutton"><strong>Folder-specific actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.tasks.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> next to the selected folder offers functions for organising data and for exchanging data.</p></li>
+<li class="listitem"><p>Buttons in the folder tree offer functions for creating folders.</p></li>
 </ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.tasks.gui.foldertree.related"></a><p class="title">Related topics</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Information on folders can be found in <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.html" title="11.1. Folders">Folders</a>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Instructions for frequently used actions can be found here:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html" title="11.1.2. Navigating within the folder structure">Navigating within the folder structure</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.create.html" title="11.1.5. Creating folders">Creating folders</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.rename.html" title="11.1.6. Renaming folders">Renaming folders</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.move.html" title="11.1.7. Moving folders">Moving folders</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html" title="11.1.8. Deleting folders">Deleting folders</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>Parent topic: <a class="xref" href="ox.appsuite.user.sect.tasks.gui.html" title="8.1. The Tasks Components">The <span class="phrase"><span class="guilabel"><strong>Tasks</strong></span></span> Components</a></p></li>
+</ul>
+</div>
 <p>
       </p>
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.tasks.gui.toolbar"></a><p class="title"><b>Tool bar</b></p>
-<p>Contains the following buttons:</p>
+<p>Contains the following:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><span class="guibutton"><strong>New</strong></span> button. Creates a <a class="link" href="ox.appsuite.user.sect.tasks.add.html#ox.appsuite.user.concept.tasks.new">new task</a>.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Edit</strong></span> button. Edits a <a class="link" href="ox.appsuite.user.sect.tasks.manage.edit.html#ox.appsuite.user.concept.tasks.edit">task's data</a>.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Due</strong></span> button. Changes a <a class="link" href="ox.appsuite.user.sect.tasks.manage.changeduedate.html#ox.appsuite.user.concept.tasks.changeduedate">task's due date</a>.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Done</strong></span> button. Marks a <a class="link" href="ox.appsuite.user.sect.tasks.manage.markasdone.html#ox.appsuite.user.concept.tasks.markasdone">task as done</a>.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Delete</strong></span> button. <a class="link" href="ox.appsuite.user.sect.tasks.manage.delete.html#ox.appsuite.user.concept.tasks.delete">Deletes the tasks</a> selected by you.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>More</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.tasks.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span> . Opens a menu with the following entries: <a class="link" href="ox.appsuite.user.sect.tasks.manage.print.html#ox.appsuite.user.concept.tasks.print"><span class="guibutton"><strong>Print</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.tasks.manage.move.html#ox.appsuite.user.concept.tasks.move"><span class="guibutton"><strong>Move</strong></span></a>.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>New</strong></span> button. Creates a new task.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Edit</strong></span> button. Edits a task's data.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Due</strong></span> button. Changes a task's due date.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Done</strong></span> button. Marks a task as done.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Delete</strong></span> button. Deletes the tasks selected by you.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.tasks.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span> . Opens a menu with further functions:</p></li>
 <li class="listitem">
-<p><span class="guibutton"><strong>View</strong></span> button. Opens a menu with the following entries:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p><span class="guibutton"><strong>Folder view</strong></span> checkbox. Opens or closes the <a class="link" href="ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.gui.foldertree" title="Folder tree">folder tree</a>.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Checkboxes</strong></span> checkbox. Displays a checkbox next to each task in the list. This allows selecting multiple tasks to <a class="link" href="ox.appsuite.user.sect.contacts.manage.multiple.html#ox.appsuite.user.concept.contacts.multiple">edit them at once</a>.</p></li>
-</ul></div>
+<p><span class="guibutton"><strong>View</strong></span> button. Opens a menu with checkboxes for controlling the view.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.tasks.gui.toolbar.view"></a><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p><span class="guibutton"><strong>Folder view</strong></span> checkbox. Opens or closes the folder tree.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Checkboxes</strong></span> checkbox. Displays a checkbox next to each task in the list. This allows selecting multiple tasks to edit them at once.</p></li>
+</ul>
+</div>
 <p>
             </p>
 </li>
 </ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.tasks.gui.toolbar.related"></a><p class="title">Related topics</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Instructions for the buttons and icons can be found here:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.tasks.add.html" title="8.4. Creating Tasks">Creating Tasks</a>, <a class="xref" href="ox.appsuite.user.sect.tasks.manage.edit.html" title="8.6.1. Editing tasks">Editing tasks</a>, <a class="xref" href="ox.appsuite.user.sect.tasks.manage.changeduedate.html" title="8.6.3. Changing a task's due date">Changing a task's due date</a>, <a class="xref" href="ox.appsuite.user.sect.tasks.manage.markasdone.html" title="8.6.2. Marking tasks as done">Marking tasks as done</a>, <a class="xref" href="ox.appsuite.user.sect.tasks.manage.delete.html" title="8.6.7. Deleting tasks">Deleting tasks</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>Instructions for the functions in the <span class="guibutton"><strong>Actions</strong></span> menu<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.tasks.gui.toolbar.related.more"></a><img src="../../images/appsuite_user_icon_more.png"></span> can be found here:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.tasks.manage.print.html" title="8.6.6. Printing tasks">Printing tasks</a>, <a class="xref" href="ox.appsuite.user.sect.tasks.manage.move.html" title="8.6.4. Moving tasks">Moving tasks</a>, <a class="xref" href="ox.appsuite.user.sect.tasks.manage.multiple.html" title="8.6.8. Editing multiple tasks at once">Editing multiple tasks at once</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>Parent topic: <a class="xref" href="ox.appsuite.user.sect.tasks.gui.html" title="8.1. The Tasks Components">The <span class="phrase"><span class="guilabel"><strong>Tasks</strong></span></span> Components</a></p></li>
+</ul>
+</div>
 <p>
       </p>
 </div>
@@ -76,18 +126,32 @@
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.tasks.gui.list"></a><p class="title"><b>List</b></p>
-<p>Displays a list of tasks in the folder selected. The subject, status or due date, and the progress are displayed. The following functions are available: </p>
+<p>Displays a list of tasks in the folder selected. The list contains the following entries:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>The following details are displayed for each task: subject, status or due date, and the progress.</p></li>
+<li class="listitem"><p>The text above the list contains the name of the selected folder. The number corresponds to the number of objects in the selected folder.</p></li>
+</ul></div>
+<p>The following functions are available:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>If clicking on a task, its content is displayed in the <a class="link" href="ox.appsuite.user.sect.tasks.gui.html#ox.appsuite.user.reference.tasks.gui.content" title="Display area">detail view</a>.</p></li>
 <li class="listitem">
-<p>You can select multiple tasks to <a class="link" href="ox.appsuite.user.sect.tasks.manage.multiple.html#ox.appsuite.user.concept.tasks.multiple">edit them at once</a>. To do so enable the checkboxes next to the tasks by enabling the <span class="guibutton"><strong>Checkboxes</strong></span> option from the <span class="guibutton"><strong>View</strong></span> drop-down in the tool bar. </p>
+<p>You can select multiple tasks to edit them at once. To do so enable the checkboxes next to the tasks by enabling the <span class="guibutton"><strong>Checkboxes</strong></span> option from the <span class="guibutton"><strong>View</strong></span> drop-down in the tool bar. </p>
 <p>You can also use your system's multi-selection functions.</p>
 <p>In order to select all contacts in the currently selected folder, enable the <span class="guibutton"><strong>Select all</strong></span> checkbox above the list.</p>
 </li>
-<li class="listitem"><p>The text above the list contains the name of the selected folder. The number corresponds to the number of objects in the selected folder.</p></li>
 <li class="listitem"><p>If clicking the <span class="guibutton"><strong>Sort</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.tasks.gui.sort"></a><img src="../../images/appsuite_user_icon_sort.png"></span> above the list, a menu opens that allows sorting tasks. You can also define in this menu whether tasks marked done are displayed.</p></li>
-<li class="listitem"><p>If clicking on a task, its content is displayed in the <a class="link" href="ox.appsuite.user.sect.tasks.gui.html#ox.appsuite.user.reference.tasks.gui.detailview" title="Detail view">detail view</a>.</p></li>
 </ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.tasks.gui.list.related"></a><p class="title">Related topics</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>
+              <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.tasks.search.html" title="8.7. Searching for Tasks">Searching for Tasks</a>, <a class="xref" href="ox.appsuite.user.sect.tasks.manage.multiple.html" title="8.6.8. Editing multiple tasks at once">Editing multiple tasks at once</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>Parent topic: <a class="xref" href="ox.appsuite.user.sect.tasks.gui.html" title="8.1. The Tasks Components">The <span class="phrase"><span class="guilabel"><strong>Tasks</strong></span></span> Components</a></p></li>
+</ul>
+</div>
 <p>
       </p>
 </div>
@@ -95,10 +159,12 @@
 <a name="ox.appsuite.user.reference.tasks.gui.detailview"></a><p class="title"><b>Detail view</b></p>
 <p>Shows the data of the task that you selected in the list. The detail view includes the following components: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Subject</p></li>
-<li class="listitem"><p>Due date, if entered</p></li>
+<li class="listitem">
+<p>Subject</p>
+<p>A priority icon next to the subject, if available</p>
+</li>
+<li class="listitem"><p>Task's start date, if available</p></li>
 <li class="listitem"><p>Status and progress</p></li>
-<li class="listitem"><p>Priority icon</p></li>
 <li class="listitem"><p>If the task has attachments, the names of the attachments are displayed.</p></li>
 <li class="listitem"><p>Task's description, if available</p></li>
 <li class="listitem"><p> If the task is a recurring task, recurrence parameters will be displayed.</p></li>
@@ -106,13 +172,15 @@
 <li class="listitem"><p>Task details like billing information, if available</p></li>
 <li class="listitem"><p>If the task has several participants, the number of participants that accepted, declined or have not replied yet are shown on the top right side above the list of participants. In order to filter the list of participants, click the icons.</p></li>
 <li class="listitem">
-<p>Names of the participants, if they exist. If clicking on a name, a <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.popup" title="Pop-up">pop-up</a> opens. It includes the following components:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<p>Names of the participants, if they exist. If clicking on a name, a <span class="guilabel"><strong>pop-up</strong></span> opens. It displays information about the contact.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.tasks.gui.detailview.popup"></a><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p>The person's contact data.</p></li>
 <li class="listitem"><p>If you exchanged E-Mail messages with this person, they are displayed below <span class="guilabel"><strong>Recent conversations</strong></span>.</p></li>
 <li class="listitem"><p>If you have appointments scheduled with this person, they are displayed below <span class="guilabel"><strong>Shared appointments</strong></span>.</p></li>
-<li class="listitem"><p>this person's data from social networks like XING or LinkedIn. You can use the available buttons to open this person's profile.</p></li>
-</ul></div>
+<li class="listitem"><p>Information about this person from social networks. You can use the available buttons to open this person's profile.</p></li>
+</ul>
+</div>
 <p>
             </p>
 <p>If clicking on an appointment or an E-Mail, an additional pop-up opens.</p>
@@ -120,6 +188,48 @@
 <li class="listitem"><p><a name="ox.appsuite.user.reference.tasks.gui.detailview.messenger"></a>Depending on the groupware configuration, a coloured dot next to the name indicates the <span class="phrase">Messenger</span> status of the participant.</p></li>
 <li class="listitem"><p>If the appointment includes external participants, their names are displayed below <span class="guilabel"><strong>External participants</strong></span>.</p></li>
 </ul></div>
+<p>
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.tasks.gui.create"></a><p class="title"><b>View for creating or editing</b></p>
+<p>When composing a new task or editing an existing task, the following elements are displayed on a new page.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p><span class="guibutton"><strong>Create</strong></span> button. If clicking on this button, the current task data is saved and the editing page is closed.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Discard</strong></span> button. In order to cancel the creation or editing, click on this button.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Subject</strong></span> input field. Enter the subject in this field. The subject is displayed as task title in the views.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Description</strong></span> input field. You can enter a description for the task in this field.</p></li>
+<li class="listitem">
+<p><span class="guibutton"><strong>Expand form</strong></span> button. Displays additional input fields.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem">
+<p><span class="guibutton"><strong>Start date</strong></span> and <span class="guibutton"><strong>Due date</strong></span> input fields. Defines the start and the due date. If clicking on it, a dialogue for selecting the date opens.</p>
+<p>If the <span class="guibutton"><strong>All day</strong></span> checkbox is disabled, you can set start and due times.</p>
+</li>
+<li class="listitem"><p><span class="guibutton"><strong>All day</strong></span> checkbox. Enable this checkbox if the task is to last the entire days.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Repeat</strong></span> checkbox. Enable this checkbox if the task is to be repeated. Additional control elements for setting the recurring parameters are displayed. Examples can be found in the <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.serial" title="Q:">questions about appointments and tasks</a>.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Remind me</strong></span> drop-down menu. Defines when to be reminded of the task's due date by an entry in the info area. You can also set a date and time for the reminder in <span class="guibutton"><strong>Reminder date</strong></span>.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Status</strong></span> drop-down menu. Defines the task's status. You can also enter a percentage value for the task completion in <span class="guibutton"><strong>Progress</strong></span>.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Priority</strong></span> drop-down menu. Defines the task's importance.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Private</strong></span> checkbox. Enable this checkbox if other users are not to see the task's subject and description.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Add participant/resource</strong></span> input field. Enter the names of the participants that are to take part in the task in this field.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Add attachments</strong></span> button below <span class="guibutton"><strong>Attachments</strong></span>. Click on this button to attach one or several files to the contact data.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Show details</strong></span> button. If clicking on it, additional data fields are displayed where you can enter billing details like estimated costs, actual costs or billing information.</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+</ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.tasks.gui.create.related"></a><p class="title">Related topics</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>This view is used for the following actions:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.tasks.add.html" title="8.4. Creating Tasks">Creating Tasks</a>, <a class="xref" href="ox.appsuite.user.sect.tasks.manage.edit.html" title="8.6.1. Editing tasks">Editing tasks</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>Parent topic: <a class="xref" href="ox.appsuite.user.sect.tasks.gui.html" title="8.1. The Tasks Components">The <span class="phrase"><span class="guilabel"><strong>Tasks</strong></span></span> Components</a></p></li>
+</ul>
+</div>
 <p>
       </p>
 </div>

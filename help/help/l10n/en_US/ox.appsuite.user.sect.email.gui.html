@@ -4,7 +4,7 @@
 <title>5.1. The E-Mail Components</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="User Guide">
 <link rel="up" href="ox.appsuite.user.chap.email.html" title="Chapter 5. E-Mail">
 <link rel="prev" href="ox.appsuite.user.chap.email.html" title="Chapter 5. E-Mail">
 <link rel="next" href="ox.appsuite.user.sect.email.view.html" title="5.2. Displaying E-Mails">
@@ -19,7 +19,7 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.chap.email.html">Prev</a></li>
@@ -32,36 +32,82 @@
   <h1 class="sr-only"><span class="phrase">E-Mail</span></h1>
 <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="ox.appsuite.user.sect.email.gui"></a>5.1. The <span class="phrase"><span class="guilabel"><strong>E-Mail</strong></span></span> Components</h2></div></div></div>
+<a name="ox.appsuite.user.sect.email.gui"></a>5.1. The  <span class="phrase"><span class="guilabel"><strong>E-Mail</strong></span></span> Components</h2></div></div></div>
 <a class="indexterm" name="id-1.6.8.2"></a><div class="reference">
-<a name="ox.appsuite.user.reference.email.gui.hint"></a><p>An introduction to the user interface can be found in <a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. The User Interface">The User Interface</a>.</p>
+<a name="ox.appsuite.user.reference.email.elements"></a><p>The <span class="phrase"><span class="guilabel"><strong>E-Mail</strong></span></span> app includes the following components.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.search" title="Search bar">Search bar</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.foldertree" title="Folder tree">Folder tree</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.toolbar" title="Toolbar">Toolbar</a></p></li>
+<li class="listitem">
+<p><a class="xref" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.content" title="Display area">Display area</a></p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.list" title="List">List</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.detailview" title="Detail view">Detail view</a></p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.create" title="View for composing or editing">View for composing or editing</a></p></li>
+</ul></div>
+<p>
+    </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.email.gui.search"></a><p class="title"><b>Search bar</b></p>
+<p>Enables you to <a class="link" href="ox.appsuite.user.sect.email.search.html" title="5.6. Searching for E-Mails">search</a> for E-Mails</p>
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.email.gui.foldertree"></a><p class="title"><b>Folder tree</b></p>
-<p>Displays the E-Mail folders. Enables <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.concept.folder.navigate">navigation within the folder structure</a>. In order to open the folder tree, click on the <span class="guibutton"><strong>View</strong></span> button in the <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.toolbar" title="Toolbar">toolbar</a>. Enable <span class="guibutton"><strong>Folder view</strong></span>. The following functions are available: </p>
+<p>Displays the E-Mail folders. Enables you to navigate the folder structure. In order to open the folder tree, click on the <span class="guibutton"><strong>View</strong></span> button in the <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.toolbar" title="Toolbar">toolbar</a>. Enable <span class="guibutton"><strong>Folder view</strong></span>. Depending on the groupware configuration, the folder tree contains the following entries: </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p><span class="guilabel"><strong>Inbox</strong></span>. Per default, all incoming E-Mails are received in this folder.</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>Drafts</strong></span>. Contains the E-Mails saved as draft.</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>Sent objects</strong></span>. Contains the E-Mail sent by you.</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>Trash</strong></span>. Contains the E-Mail deleted by you.</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>Archive</strong></span>. Contains the E-Mails archived by you.</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>My folders</strong></span>. Contains the E-Mail folders created by you.</p></li>
+</ul></div>
+<p>The following functions are available:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>To display the number of E-Mails in a folder, hover over the folder name. A tooltip shows the number of E-Mails.</p></li>
 <li class="listitem"><p>If clicking on a folder, its E-Mails are displayed.</p></li>
-<li class="listitem"><p>The <span class="guibutton"><strong>Folder-specific actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> next to the selected folder offers functions for <a class="link" href="ox.appsuite.user.chap.dataorganisation.html#ox.appsuite.user.concept.dataorganisation">organizing data</a> and app specific folder functions.</p></li>
-<li class="listitem"><p>Below the folders there's a button for <a class="link" href="ox.appsuite.user.sect.email.externalaccounts.html#ox.appsuite.user.concept.email.externalaccounts">adding E-Mail accounts</a>.</p></li>
+<li class="listitem"><p>The <span class="guibutton"><strong>Folder-specific actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> next to the selected folder offers functions for organizing data and app specific folder functions.</p></li>
+<li class="listitem"><p>Below the folders there's a button for adding E-Mail accounts.</p></li>
 </ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.foldertree.related"></a><p class="title">Related topics</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Information on folders can be found in <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.html" title="11.1. Folders">Folders</a>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Instructions for frequently used actions can be found here:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html" title="11.1.2. Navigating within the folder structure">Navigating within the folder structure</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.create.html" title="11.1.5. Creating folders">Creating folders</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.rename.html" title="11.1.6. Renaming folders">Renaming folders</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.move.html" title="11.1.7. Moving folders">Moving folders</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html" title="11.1.8. Deleting folders">Deleting folders</a>, <a class="xref" href="ox.appsuite.user.sect.email.externalaccounts.manage.html" title="5.8.1. Setting up and editing E-Mail accounts">Setting up and editing E-Mail accounts</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>Parent topic: <a class="xref" href="ox.appsuite.user.sect.email.gui.html" title="5.1. The E-Mail Components">The  <span class="phrase"><span class="guilabel"><strong>E-Mail</strong></span></span> Components</a></p></li>
+</ul>
+</div>
 <p>
       </p>
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.email.gui.toolbar"></a><p class="title"><b>Toolbar</b></p>
-<p>Contains the following icons and buttons:</p>
+<p>Contains the following:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><span class="guibutton"><strong>Compose</strong></span> button. Creates a <a class="link" href="ox.appsuite.user.sect.email.send.new.html#ox.appsuite.user.concept.email.new">new E-Mail</a>.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Reply to sender</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.reply"></a><img src="../../images/appsuite_user_icon_reply.png"></span> . Sends a <a class="link" href="ox.appsuite.user.sect.email.send.reply.html#ox.appsuite.user.concept.email.reply">reply</a>.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Reply to all recipients</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.replyall"></a><img src="../../images/appsuite_user_icon_replyall.png"></span> . Sends a <a class="link" href="ox.appsuite.user.sect.email.send.reply.html#ox.appsuite.user.concept.email.reply">reply to all recipients</a>.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Forward</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.forward"></a><img src="../../images/appsuite_user_icon_forward.png"></span> . <a class="link" href="ox.appsuite.user.sect.email.send.reply.html#ox.appsuite.user.concept.email.reply">Forwards the E-Mail to other recipients</a>.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Delete</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.delete"></a><img src="../../images/appsuite_user_icon_functionbar_trash.png"></span> . <a class="link" href="ox.appsuite.user.sect.email.manage.delete.html#ox.appsuite.user.concept.email.delete">Deletes</a> the E-Mails selected by you.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Set color</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.label"></a><img src="../../images/appsuite_user_icon_label.png"></span> . Opens a menu allowing you to <a class="link" href="ox.appsuite.user.sect.email.manage.label.html#ox.appsuite.user.concept.email.label">assign a colored label</a> to the E-Mail.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>More</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span> . Opens a menu with the following entries: <a class="link" href="ox.appsuite.user.sect.email.manage.mark.html#ox.appsuite.user.concept.email.mark"><span class="guibutton"><strong>Mark as unread</strong></span>, <span class="guibutton"><strong>Mark as read</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.email.manage.move.html#ox.appsuite.user.concept.email.move"><span class="guibutton"><strong>Move</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.email.manage.copy.html#ox.appsuite.user.concept.email.copy"><span class="guibutton"><strong>Copy</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.email.manage.print.html#ox.appsuite.user.concept.email.print"><span class="guibutton"><strong>Print</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.email.manage.save.html#ox.appsuite.user.concept.email.save"><span class="guibutton"><strong>Save as file</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.email.manage.source.html#ox.appsuite.user.concept.email.source"><span class="guibutton"><strong>View source</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.email.manage.reminder.html#ox.appsuite.user.concept.email.reminder"><span class="guibutton"><strong>Reminder</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.email.manage.addportal.html#ox.appsuite.user.concept.email.addportal"><span class="guibutton"><strong>Add to portal</strong></span></a>.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Compose</strong></span> button. Creates a new E-Mail.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Reply to sender</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.reply"></a><img src="../../images/appsuite_user_icon_reply.png"></span> . Sends a reply.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Reply to all recipients</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.replyall"></a><img src="../../images/appsuite_user_icon_replyall.png"></span> . Sends a reply to all recipients.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Forward</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.forward"></a><img src="../../images/appsuite_user_icon_forward.png"></span> . Forwards the E-Mail to other recipients.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Delete</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.delete"></a><img src="../../images/appsuite_user_icon_functionbar_trash.png"></span> . Deletes the E-Mails selected by you.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Set color</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.label"></a><img src="../../images/appsuite_user_icon_label.png"></span> . Opens a menu allowing you to assign a colored label to the E-Mail.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Archive</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.archive"></a><img src="../../images/appsuite_user_icon_archive.png"></span> . Archives the E-Mails selected by you.</p></li>
 <li class="listitem">
-<p><span class="guibutton"><strong>View</strong></span> button. Opens a menu with the following entries:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<p><span class="guibutton"><strong>Actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span> . Opens a menu with further functions:</p>
+<p><span class="phrase"><strong>Note:</strong></span> When having selected an E-Mail conversation, some functions are not available in the toolbar.</p>
+</li>
+<li class="listitem">
+<p><span class="guibutton"><strong>View</strong></span> button. Opens a menu with checkboxes for controlling the view.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.toolbar.view"></a><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p><span class="guibutton"><strong>Vertical</strong></span>. Vertically aligns the E-Mail list and an E-Mail's detail view. The functions for selecting and sorting are displayed below the toolbar.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>Compact</strong></span> checkbox. Vertically aligns the E-Mail list and an E-Mail's detail view. The functions for selecting and sorting are displayed next to the toolbar.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>Horizontal</strong></span>. Horizontally aligns the E-Mail list and an E-Mail's detail view. </p></li>
@@ -69,30 +115,52 @@
 <p><span class="guibutton"><strong>List</strong></span> checkbox. Shows the list of E-Mails. To display the detail view click on an E-Mail.</p>
 <p>Above the detail view a navigation bar is displayed.</p>
 </li>
-<li class="listitem"><p><span class="guibutton"><strong>Folder view</strong></span> checkbox. Opens or closes the <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.foldertree" title="Folder tree">folder tree</a>.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Checkboxes</strong></span> checkbox. Displays a checkbox next to each E-Mail in the list. This allows to select multiple E-Mails to <a class="link" href="ox.appsuite.user.sect.email.manage.multiple.html#ox.appsuite.user.concept.email.multiple">edit them at once</a>.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Folder view</strong></span> checkbox. Opens or closes the folder tree.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Checkboxes</strong></span> checkbox. Displays a checkbox next to each E-Mail in the list. This allows to select multiple E-Mails to edit them at once.</p></li>
 <li class="listitem">
 <p><span class="guibutton"><strong>Contact pictures</strong></span> checkbox. Next to each E-Mail in the list, a contact picture of the sender is displayed, provided the sender saved one in the address book.</p>
 <p><span class="phrase"><strong>Note:</strong></span> The layout options <span class="guibutton"><strong>Horizontal</strong></span> and <span class="guibutton"><strong>List</strong></span> do not allow to display contact pictures.</p>
 </li>
 <li class="listitem"><p><span class="guibutton"><strong>Exact dates</strong></span> checkbox. Shows the exact date and time when the E-Mail was received.</p></li>
-</ul></div>
+</ul>
+</div>
 <p>
           </p>
 </li>
 </ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.toolbar.related"></a><p class="title">Related topics</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Instructions for the buttons and icons can be found here:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.email.send.new.html" title="5.4.1. Sending a new E-Mail">Sending a new E-Mail</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.reply.html" title="5.4.2. Replying to E-Mails">Replying to E-Mails</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.forward.html" title="5.4.3. Forwarding E-Mails">Forwarding E-Mails</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.delete.html" title="5.5.14. deleting E-Mails">deleting E-Mails</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.label.html" title="5.5.5. categorizing E-Mails with colored labels">categorizing E-Mails with colored labels</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.archive.html" title="5.5.13. Archiving E-Mails">Archiving E-Mails</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>Instructions for the functions in the <span class="guibutton"><strong>Actions</strong></span> menu<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.toolbar.related.more"></a><img src="../../images/appsuite_user_icon_more.png"></span> can be found here:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.email.manage.mark.html" title="5.5.3. Marking E-Mails as read or unread">Marking E-Mails as read or unread</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.move.html" title="5.5.1. Moving E-Mails">Moving E-Mails</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.copy.html" title="5.5.2. Copying E-Mails">Copying E-Mails</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.print.html" title="5.5.12. Printing E-Mails">Printing E-Mails</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.save.html" title="5.5.10. Saving E-Mails">Saving E-Mails</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.source.html" title="5.5.6. Showing the E-Mail source">Showing the E-Mail source</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.reminder.html" title="5.5.8. Activating E-Mail reminders">Activating E-Mail reminders</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.addportal.html" title="5.5.9. Adding an E-Mail to the portal">Adding an E-Mail to the portal</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>Parent topic: <a class="xref" href="ox.appsuite.user.sect.email.gui.html" title="5.1. The E-Mail Components">The  <span class="phrase"><span class="guilabel"><strong>E-Mail</strong></span></span> Components</a></p></li>
+</ul>
+</div>
+<p>
+      </p>
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.email.gui.content"></a><p class="title"><b>Display area</b></p>
-<p>Contains the E-Mail <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.list" title="List">list</a> and an E-Mail's <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.detailview" title="Detail view">detail view</a>. In order to select a layout, click on the <span class="guibutton"><strong>View</strong></span> button in the <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.toolbar" title="Toolbar">toolbar</a>.</p>
+<p>Contains the E-Mail <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.list" title="List">list</a> and an E-Mail's <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.detailview" title="Detail view">detail view</a>. In order to select a layout, click on the <span class="guibutton"><strong>View</strong></span> button in the <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.toolbar" title="Toolbar">toolbar</a>. </p>
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.email.gui.list"></a><p class="title"><b>List</b></p>
-<p>Displays a list of the E-Mails in the current folder. The view shows the sender, subject, date or time of receipt. Unread E-Mails are marked with the <span class="guilabel"><strong>Unread</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.list.unread"></a><img src="../../images/appsuite_user_icon_email_unread.png"></span> . If available, additional information is shown: attachment icon, colored label, number of E-Mails in the conversation, priority. The following functions are available: </p>
+<p>Displays a list of the E-Mails in the current folder. The list contains the following entries:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>The following details are displayed for each E-Mail: sender, subject, date or time of receipt. Unread E-Mails are marked with the <span class="guilabel"><strong>Unread</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.list.unread"></a><img src="../../images/appsuite_user_icon_email_unread.png"></span> .</p></li>
+<li class="listitem"><p>If available, additional information is shown: attachment icon, colored label, number of E-Mails in the conversation, priority.</p></li>
+</ul></div>
+<p>The following functions are available:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>You can select multiple E-Mails to <a class="link" href="ox.appsuite.user.sect.email.manage.multiple.html#ox.appsuite.user.concept.email.multiple">edit them at once</a>. To do so enable the checkboxes next to the E-Mails by enabling the <span class="guibutton"><strong>Checkboxes</strong></span> option from the <span class="guibutton"><strong>View</strong></span> drop-down in the toolbar. </p>
+<p>You can select multiple E-Mails to edit them at once. To do so enable the checkboxes next to the E-Mails by enabling the <span class="guibutton"><strong>Checkboxes</strong></span> option from the <span class="guibutton"><strong>View</strong></span> drop-down in the toolbar. </p>
 <p>You can also use your system's multi selection functions.</p>
+</li>
+<li class="listitem">
 <p>In order to select all visible E-Mails in the currently selected folder, enable the <span class="guibutton"><strong>Select all</strong></span> checkbox above the list.</p>
 <p><span class="phrase"><strong>Note:</strong></span> The <span class="guibutton"><strong>Select all</strong></span> checkbox only selects all visible E-Mails in a folder. To reduce latency, only a certain percentage of the E-Mails in a folder will be loaded by the server if their number exceeds a defined limit. To display all E-Mails in a folder, browse to the bottom of the list. Wait until all E-Mails have been loaded by the server.</p>
 </li>
@@ -107,6 +175,17 @@
 </li>
 </ul></div>
 <p>To adjust the list width, hover over the line between the list and the detail view. A double arrow will be displayed. Drag the border to the left or to the right.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.list.related"></a><p class="title">Related topics</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>
+              <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.email.view.html" title="5.2. Displaying E-Mails">Displaying E-Mails</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.reply.html" title="5.4.2. Replying to E-Mails">Replying to E-Mails</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.forward.html" title="5.4.3. Forwarding E-Mails">Forwarding E-Mails</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.html" title="5.5. Organizing E-Mails">Organizing E-Mails</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>Parent topic: <a class="xref" href="ox.appsuite.user.sect.email.gui.html" title="5.1. The E-Mail Components">The  <span class="phrase"><span class="guilabel"><strong>E-Mail</strong></span></span> Components</a></p></li>
+</ul>
+</div>
+<p>
+      </p>
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.email.gui.detailview"></a><p class="title"><b>Detail view</b></p>
@@ -117,31 +196,35 @@
 <p>If the E-Mail is part of a conversation, the number of E-Mails in this conversation is displayed. To open or close all E-Mails in the conversation, click the <span class="guibutton"><strong>Open/close all messages</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.detailview.threadopen"></a><img src="../../images/appsuite_user_icon_thread_open.png"></span> . If clicking on a free area between the sender and the date of receipt, the E-Mail opens or closes.</p>
 </li>
 <li class="listitem"><p>A picture of the sender, if available.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Unread</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.detailview.unread"></a><img src="../../images/appsuite_user_icon_email_unread.png"></span> . If clicking the icon, the status will be changed from Read to Unread and vice versa.</p></li>
 <li class="listitem"><p><a name="ox.appsuite.user.reference.email.gui.detailview.messenger"></a>Depending on the groupware configuration, a colored dot next to the name indicates the <span class="phrase">Messenger</span> status of the sender or a recipient.</p></li>
 <li class="listitem">
-<p>The sender's name. The names of additional E-Mail recipients, if existing. If clicking on a name, a <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.popup" title="Pop-up">pop-up</a> opens. It includes the following components:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<p>The sender's name. The names of additional E-Mail recipients, if existing. If clicking on a name, a <span class="guilabel"><strong>pop-up</strong></span> opens. It displays information about the contact.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.detailview.popup"></a><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p>The person's contact data.</p></li>
 <li class="listitem"><p>If the person's contact data are saved, the location of the data is displayed.</p></li>
 <li class="listitem"><p>If you exchanged E-Mails with this person, they are displayed below <span class="guilabel"><strong>Recent conversations</strong></span>.</p></li>
 <li class="listitem"><p>If you share appointments with this person, they are displayed below <span class="guilabel"><strong>Shared appointments</strong></span>.</p></li>
-<li class="listitem"><p>This person's data from social networks like Xing or LinkedIn. You can use the available buttons to open this person's profile.</p></li>
-</ul></div>
+<li class="listitem"><p>Information about this person from social networks. You can use the available buttons to open this person's profile.</p></li>
+</ul>
+</div>
 <p>
             </p>
 <p>If clicking on an appointment or an E-Mail, an additional pop-up opens.</p>
 </li>
 <li class="listitem"><p>Date of receipt</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.detailview.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> . If clicking the icon, a menu with the following entries opens: <a class="link" href="ox.appsuite.user.sect.email.send.reply.html#ox.appsuite.user.concept.email.reply"><span class="guibutton"><strong>Reply</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.email.send.reply.html#ox.appsuite.user.concept.email.reply"><span class="guibutton"><strong>Reply all</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.email.send.forward.html#ox.appsuite.user.concept.email.forward"><span class="guibutton"><strong>Forward</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.email.manage.delete.html#ox.appsuite.user.concept.email.delete"><span class="guibutton"><strong>Delete</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.email.manage.mark.html#ox.appsuite.user.concept.email.mark"><span class="guibutton"><strong>Mark unread</strong></span>, <span class="guibutton"><strong>Mark read</strong></span></a><a class="link" href="ox.appsuite.user.sect.email.send.new.html#ox.appsuite.user.concept.email.new"><span class="guibutton"><strong>Send new mail</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.email.share.recipient_appointment.html#ox.appsuite.user.concept.email.share.recipient_appointment"><span class="guibutton"><strong>Invite to appointment</strong></span></a><a class="link" href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html#ox.appsuite.user.concept.email.share.recipient_distributionlist"><span class="guibutton"><strong>Save as distribution list</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.email.manage.move.html#ox.appsuite.user.concept.email.move"><span class="guibutton"><strong>Move</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.email.manage.copy.html#ox.appsuite.user.concept.email.copy"><span class="guibutton"><strong>Copy</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.email.manage.print.html#ox.appsuite.user.concept.email.print"><span class="guibutton"><strong>Print</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.email.manage.save.html#ox.appsuite.user.concept.email.save"><span class="guibutton"><strong>Save as file</strong></span></a><a class="link" href="ox.appsuite.user.sect.email.manage.source.html#ox.appsuite.user.concept.email.source"><span class="guibutton"><strong>View source</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.email.manage.reminder.html#ox.appsuite.user.concept.email.reminder"><span class="guibutton"><strong>Reminder</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.email.manage.addportal.html#ox.appsuite.user.concept.email.addportal"><span class="guibutton"><strong>Add to portal</strong></span></a>.</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.manage.label.html#ox.appsuite.user.concept.email.label"><span class="guibutton"><strong>Set color</strong></span></a> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.label"></a><img src="../../images/appsuite_user_icon_label.png"></span> . Opens a menu allowing you to assign a colored label to the E-Mail. </p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Read</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.detailview.read"></a><img src="../../images/appsuite_user_icon_email_read.png"></span> . If clicking the icon, the status will be changed from Read to Unread and vice versa.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Actions</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.detailview.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> . Clicking on it opens a menu with editing functions that can be used as an alternative to the toolbar's editing functions.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Set color</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.label"></a><img src="../../images/appsuite_user_icon_label.png"></span> . Opens a menu allowing you to assign a colored label to the E-Mail. </p></li>
 <li class="listitem">
-<p>If the E-Mail contains attachments, the following elements are displayed:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<p>If the E-Mail contains attachments, further elements are displayed:</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.detailview.attachments"></a><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p>A button with the <span class="guibutton"><strong>Attachment</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.attachment"></a><img src="../../images/appsuite_user_icon_clip.png"></span> and the number of attachments. If clicking on it, the attachments are displayed as icons or list.</p></li>
 <li class="listitem"><p>Buttons that allow to apply a <a class="link" href="ox.appsuite.user.sect.email.attachments.html#ox.appsuite.user.concept.email.view.attachments">function</a> to all E-Mail attachments at once.</p></li>
 <li class="listitem"><p>The <span class="guibutton"><strong>Squares</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.tiles"></a><img src="../../images/appsuite_user_icon_tiles.png"></span> or <span class="guibutton"><strong>List</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.list"></a><img src="../../images/appsuite_user_icon_list.png"></span> . If clicking the icons, the attachments are shown as squares or as list. To apply a <a class="link" href="ox.appsuite.user.sect.email.attachments.html#ox.appsuite.user.concept.email.view.attachments">function</a> to a specific attachment, click on the attachment's name in the List view.</p></li>
-</ul></div>
+</ul>
+</div>
 <p>
             </p>
 </li>
@@ -150,6 +233,49 @@
 <p>Quotes from previous E-Mails are introduced with a vertical line. If clicking on <span class="guibutton"><strong>Show more</strong></span>, the complete quote is displayed.</p>
 </li>
 </ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.detailview.related"></a><p class="title">Related topics</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>
+              <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.email.attachments.html" title="5.3. Viewing or Saving E-Mail Attachments">Viewing or Saving E-Mail Attachments</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.reply.html" title="5.4.2. Replying to E-Mails">Replying to E-Mails</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.forward.html" title="5.4.3. Forwarding E-Mails">Forwarding E-Mails</a>, <a class="xref" href="ox.appsuite.user.sect.email.share.recipient_appointment.html" title="5.7.3. Inviting all E-Mail recipients to an appointment">Inviting all E-Mail recipients to an appointment</a>, <a class="xref" href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html" title="5.7.4. Saving all recipients of an E-Mail as a distribution list">Saving all recipients of an E-Mail as a distribution list</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.html" title="5.5. Organizing E-Mails">Organizing E-Mails</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>Parent topic: <a class="xref" href="ox.appsuite.user.sect.email.gui.html" title="5.1. The E-Mail Components">The  <span class="phrase"><span class="guilabel"><strong>E-Mail</strong></span></span> Components</a></p></li>
+</ul>
+</div>
+<p>
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.email.gui.create"></a><p class="title"><b>View for composing or editing</b></p>
+<p>When composing a new E-Mail or editing an E-Mail draft, the following elements are displayed on a new page.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p><span class="guibutton"><strong>Send</strong></span> button. When having completed the required input, click on this button to send the E-Mail.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Save</strong></span> button. If clicking on this button, the current E-Mail content is saved in the <span class="guilabel"><strong>Drafts</strong></span> folder.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Discard</strong></span> button. In order to cancel the process, click on this button. In the next dialog window, you can choose between some options.</p></li>
+<li class="listitem"><p>Your sender address is displayed next to <span class="guibutton"><strong>From</strong></span>. Depending on your groupware account's settings, you can choose between various sender addresses. In order to select another sender address, click on the address.</p></li>
+<li class="listitem">
+<p><span class="guibutton"><strong>To</strong></span> input field. Enter one or several recipients in this field. While entering the recipients, matching suggestions are displayed. To accept a suggestion, click on it.</p>
+<p>To send a copy to other recipients, click on <span class="guibutton"><strong>CC</strong></span> or <span class="guibutton"><strong>BCC</strong></span> on the right side of the input field. Enter the addresses of the recipients of the copy or the blind copy in the matching input fields.</p>
+</li>
+<li class="listitem"><p><span class="guibutton"><strong>Subject</strong></span> input field. Enter your E-Mail's subject in this field.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Attachments</strong></span> button. Click on this button to add local files or files that are saved in the <span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> app.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Signatures</strong></span> button. Let's you define whether to add a signature to the E-Mail text. Click on the button to select or remove a signature. In the E-Mail settings you can create or edit signatures.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Options</strong></span> button. Click on this button to set specific options: The E-Mail's text format, priority, read receipt.</p></li>
+<li class="listitem"><p>Input field for the E-Mail text. Enter the text in the field. If having selected the html format from the <span class="guibutton"><strong>Options</strong></span>, you can format the text or add images.</p></li>
+</ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.create.related"></a><p class="title">Related topics</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>
+              <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.email.send.new.html" title="5.4.1. Sending a new E-Mail">Sending a new E-Mail</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.draft.html" title="5.5.7. Working with E-Mail drafts">Working with E-Mail drafts</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>Parent topic: <a class="xref" href="ox.appsuite.user.sect.email.gui.html" title="5.1. The E-Mail Components">The  <span class="phrase"><span class="guilabel"><strong>E-Mail</strong></span></span> Components</a></p></li>
+</ul>
+</div>
 <p>
       </p>
 </div>

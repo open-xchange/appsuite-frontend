@@ -9,16 +9,6 @@
  * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
- *
- * To try new mail compose:
- *
- * Temporary:
- * ox.registry.set('mail-compose', 'io.ox/mail/compose/main');
- *
- * Permanently:
- * require('settings!io.ox/core').set('registry/mail-compose', 'io.ox/mail/compose/main').save();
- * To use old mail compose:
- * require('settings!io.ox/core').set('registry/mail-compose', undefined).save();
  */
 
 define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], function (mailAPI, gt) {
@@ -43,7 +33,6 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
             // get window
             app.setWindow(win = ox.ui.createWindow({
                 name: 'io.ox/mail/compose',
-                search: false,
                 chromeless: true
             }));
 
@@ -54,17 +43,24 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
 
         app.failSave = function () {
             if (!app.view) return;
-            return _.extend({ module: 'io.ox/mail/compose' }, app.view.model.getFailSave());
+            return _.extend({ module: 'io.ox/mail/compose' }, app.model.getFailSave());
         };
 
         app.failRestore = function (point) {
+            point.initial = false;
+            // special flag/handling for 'replace' cause we want
+            // to keep the attachments that will be removed otherwise
+            if (point.mode === 'reply') point.restored = true;
             return compose(point.mode)(point);
+        };
+
+        app.getContextualHelp = function () {
+            return 'ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.create';
         };
 
         function compose(type) {
 
             return function (obj) {
-
                 var def = $.Deferred();
                 _.url.hash('app', 'io.ox/mail/compose:' + type);
 
@@ -72,24 +68,36 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
 
                 app.cid = 'io.ox/mail:' + type + '.' + _.cid(obj);
 
+                // Set window and toolbars invisible initially
+                win.nodes.header.addClass('sr-only');
+                win.nodes.body.addClass('sr-only');
+
                 win.busy().show(function () {
-                    require(['io.ox/mail/compose/view'], function (MailComposeView) {
-                        app.view = new MailComposeView({ data: obj, app: app });
-                        win.nodes.main.addClass('scrollable').append(app.view.render().$el);
-                        app.view.fetchMail(obj).done(function () {
-                            app.view.setMail()
-                            .done(function () {
-                                win.idle();
-                                win.setTitle(gt('Compose'));
-                                def.resolve({ app: app });
-                                ox.trigger('mail:' + type + ':ready', obj, app);
-                            });
-                        })
-                        .fail(function (e) {
-                            require(['io.ox/core/notifications'], function (notifications) {
-                                notifications.yell(e);
-                                app.quit();
-                                def.reject();
+                    require(['io.ox/mail/compose/bundle'], function () {
+                        require(['io.ox/mail/compose/view', 'io.ox/mail/compose/model'], function (MailComposeView, MailComposeModel) {
+                            var keepdata = /(compose|edit|forward)/.test(obj.mode) || obj.restored,
+                                data = keepdata ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type');
+                            app.model = new MailComposeModel(data);
+                            app.view = new MailComposeView({ app: app, model: app.model });
+                            win.nodes.main.addClass('scrollable').append(app.view.render().$el);
+                            app.view.fetchMail(data).done(function () {
+                                app.view.setMail()
+                                .done(function () {
+                                    // Set window and toolbars visible again
+                                    win.nodes.header.removeClass('sr-only');
+                                    win.nodes.body.removeClass('sr-only').find('.scrollable').scrollTop(0);
+                                    win.idle();
+                                    win.setTitle(gt('Compose'));
+                                    def.resolve({ app: app });
+                                    ox.trigger('mail:' + type + ':ready', obj, app);
+                                });
+                            })
+                            .fail(function (e) {
+                                require(['io.ox/core/notifications'], function (notifications) {
+                                    notifications.yell(e);
+                                    app.quit();
+                                    def.reject();
+                                });
                             });
                         });
                     });

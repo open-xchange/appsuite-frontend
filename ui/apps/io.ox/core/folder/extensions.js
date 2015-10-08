@@ -11,53 +11,115 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/extensions',
-    ['io.ox/core/folder/node',
-     'io.ox/core/folder/api',
-     'io.ox/core/api/account',
-     'io.ox/core/extensions',
-     'io.ox/core/capabilities',
-     'io.ox/core/api/user',
-     'io.ox/mail/api',
-     'gettext!io.ox/core',
-     'io.ox/core/folder/favorites',
-     'less!io.ox/core/folder/style'], function (TreeNodeView, api, account, ext, capabilities, userAPI, mailAPI, gt) {
+define('io.ox/core/folder/extensions', [
+    'io.ox/core/folder/node',
+    'io.ox/core/folder/api',
+    'io.ox/core/api/account',
+    'io.ox/core/extensions',
+    'io.ox/core/capabilities',
+    'io.ox/contacts/util',
+    'io.ox/core/api/user',
+    'io.ox/mail/api',
+    'gettext!io.ox/core',
+    'io.ox/core/folder/folder-color',
+    'io.ox/backbone/mini-views/upsell',
+    'settings!io.ox/core',
+    'io.ox/core/folder/favorites'
+], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color, UpsellView, settings) {
 
     'use strict';
 
     var INBOX = 'default0' + mailAPI.separator + 'INBOX';
 
-    // define virtual/standard
-    api.virtual.add('virtual/standard', function () {
-        return this.concat(
-            // inbox
-            api.get(INBOX),
-            // sent, drafts, spam, trash, archive
-            // default0 is alternative for IMAP server that list standard folders below INBOX
-            api.list('default0'), api.list(INBOX)
-        );
-    });
+    if (capabilities.has('webmail')) {
+        // define virtual/standard
+        api.virtual.add('virtual/standard', function () {
+            return this.concat(
+                // inbox
+                api.get(INBOX),
+                // sent, drafts, spam, trash, archive
+                // default0 is alternative for IMAP server that list standard folders below INBOX
+                api.list('default0'), api.list(INBOX)
+            );
+        });
 
-    // myfolders
-    api.virtual.add('virtual/myfolders', function () {
-        var id = api.altnamespace ? 'default0' : INBOX;
-        return api.list(id).then(function (list) {
-            return _(list).filter(function (data) {
-                if (account.isStandardFolder(data.id)) return false;
-                if (api.is('public|shared', data)) return false;
-                return true;
+        // myfolders
+        api.virtual.add('virtual/myfolders', function () {
+            var id = api.altnamespace ? 'default0' : INBOX;
+            return api.list(id).then(function (list) {
+                return _(list).filter(function (data) {
+                    if (account.isStandardFolder(data.id)) return false;
+                    if (api.is('public|shared', data)) return false;
+                    return true;
+                });
             });
         });
-    });
 
-    // remote folders
-    api.virtual.add('virtual/remote', function () {
-        return api.list('1').then(function (list) {
-            return _(list).filter(function (data) {
-                return account.isExternal(data.id);
+        // remote folders
+        api.virtual.add('virtual/remote', function () {
+            return api.list('1').then(function (list) {
+                return _(list).filter(function (data) {
+                    return account.isExternal(data.id);
+                });
             });
         });
-    });
+    }
+
+    // TODO: right capability
+    if (capabilities.has('filestore')) {
+        api.virtual.add('virtual/filestorage', function () {
+            return api.list('1').then(function (list) {
+                return _(list).filter(function (data) {
+                    return api.isExternalFileStorage(data);
+                });
+            });
+        });
+    }
+
+    function getMyFilesFolder() {
+        var id = settings.get('folder/infostore');
+        return id ? api.get(id) : null;
+    }
+
+    function getMySharesFolder() {
+        return $.when({
+            id: 'virtual/myshares',
+            folder_id: '9',
+            module: 'infostore',
+            own_rights: 403710016, // all rights but admin
+            permissions: [{ bits: 403710016, entity: ox.user_id, group: false }],
+            standard_folder: true,
+            supported_capabilities: [],
+            title: gt('My shares')
+        });
+    }
+
+    function getTrashFolder() {
+        return api.list('9').then(function (list) {
+            return _(list).filter(function (data) {
+                return api.is('trash', data);
+            });
+        });
+    }
+
+    if (capabilities.has('infostore')) {
+        api.virtual.add('virtual/drive/private', function () {
+            return this.concat(getMyFilesFolder(), getMySharesFolder(), getTrashFolder());
+        });
+        api.virtual.add('virtual/drive/private-without-myshares', function () {
+            return this.concat(getMyFilesFolder(), getTrashFolder());
+        });
+        api.virtual.add('virtual/drive/public', function () {
+            return api.list('9').then(function (list) {
+                return _(list).filter(function (data) {
+                    if (String(data.id) === String(settings.get('folder/infostore'))) return false;
+                    if (api.is('trash', data)) return false;
+                    if (api.isExternalFileStorage(data)) return false;
+                    return true;
+                });
+            });
+        });
+    }
 
     var extensions = {
 
@@ -103,7 +165,6 @@ define('io.ox/core/folder/extensions',
 
             var node = new TreeNodeView({
                 contextmenu: 'myfolders',
-                count: 0,
                 // always show the folder for altnamespace
                 // otherwise the user cannot create folders
                 empty: !!api.altnamespace,
@@ -139,8 +200,22 @@ define('io.ox/core/folder/extensions',
             );
         },
 
-        addRemoteAccount: function () {
+        fileStorageAccounts: function (tree) {
+            this.append(
+                new TreeNodeView({
+                    //empty: false,
+                    folder: 'virtual/filestorage',
+                    headless: true,
+                    open: true,
+                    icons: tree.options.icons,
+                    tree: tree,
+                    parent: tree
+                })
+                .render().$el.addClass('filestorage-folders')
+            );
+        },
 
+        addRemoteAccount: function () {
             if (!capabilities.has('multiple_mail_accounts')) return;
 
             this.append(
@@ -155,6 +230,15 @@ define('io.ox/core/folder/extensions',
                     })
                 )
             );
+        },
+
+        synchronizeAccount: function () {
+            this.append(new UpsellView({
+                id: 'folderview/mail',
+                className: 'links',
+                requires: 'active_sync',
+                title: gt('Synchronize with your tablet or smartphone')
+            }).render().$el);
         },
 
         otherFolders: function (tree) {
@@ -181,15 +265,79 @@ define('io.ox/core/folder/extensions',
         },
 
         rootFolders: function (tree) {
-            this.append(
-                new TreeNodeView({
+            var options = {
                     folder: tree.root,
                     headless: true,
                     open: true,
                     tree: tree,
                     parent: tree
+                };
+
+            if (tree.options.hideTrashfolder) {
+                options.filter = function (id, model) {
+                    //exclude trashfolder
+                    return !api.is('trash', model.attributes);
+                };
+            }
+
+            // TODO: disable when only one account
+            if (tree.module === 'infostore') {
+                var previous = options.filter;
+                options.filter = function (id, model) {
+                    // get response of previously defined filter function
+                    var unfiltered = (previous ? previous.apply(this, arguments) : true);
+                    // exclude external accounts
+                    return unfiltered && !api.isExternalFileStorage(model);
+                };
+            }
+
+            this.append(
+                new TreeNodeView(options).render().$el.addClass('root-folders')
+            );
+        },
+
+        privateDriveFolders: function (tree) {
+            this.append(
+                new TreeNodeView({
+                    //empty: false,
+                    folder: 'virtual/drive/private',
+                    headless: true,
+                    open: true,
+                    icons: tree.options.icons,
+                    tree: tree,
+                    parent: tree
                 })
-                .render().$el
+                .render().$el.addClass('private-drive-folders')
+            );
+        },
+
+        privateDriveFoldersWithoutMyShares: function (tree) {
+            this.append(
+                new TreeNodeView({
+                    //empty: false,
+                    folder: 'virtual/drive/private-without-myshares',
+                    headless: true,
+                    open: true,
+                    icons: tree.options.icons,
+                    tree: tree,
+                    parent: tree
+                })
+                .render().$el.addClass('private-drive-folders')
+            );
+        },
+
+        publicDriveFolders: function (tree) {
+            this.append(
+                new TreeNodeView({
+                    //empty: false,
+                    folder: 'virtual/drive/public',
+                    headless: true,
+                    open: true,
+                    icons: tree.options.icons,
+                    tree: tree,
+                    parent: tree
+                })
+                .render().$el.addClass('public-drive-folders')
             );
         }
     };
@@ -230,6 +378,11 @@ define('io.ox/core/folder/extensions',
             id: 'add-account',
             index: INDEX += 100,
             draw: extensions.addRemoteAccount
+        },
+        {
+            id: 'upsell-mail',
+            index: INDEX += 100,
+            draw: extensions.synchronizeAccount
         }
     );
 
@@ -286,21 +439,46 @@ define('io.ox/core/folder/extensions',
     // Files / Drive
     //
 
-    ext.point('io.ox/core/foldertree/infostore/app').extend({
-        id: 'standard-folders',
-        index: 100,
-        draw: extensions.rootFolders
-    });
+    ext.point('io.ox/core/foldertree/infostore/app').extend(
+        {
+            id: 'private-folders',
+            index: 100,
+            draw: extensions.privateDriveFolders
+        },
+        {
+            id: 'public-folders',
+            index: 200,
+            draw: extensions.publicDriveFolders
+        },
+        {
+            id: 'remote-accounts',
+            index: 300,
+            draw: extensions.fileStorageAccounts
+        }
+    );
 
-    ext.point('io.ox/core/foldertree/infostore/popup').extend({
-        id: 'standard-folders',
-        index: 100,
-        draw: extensions.rootFolders
-    });
+    ext.point('io.ox/core/foldertree/infostore/popup').extend(
+        {
+            id: 'private-folders',
+            index: 100,
+            draw: extensions.privateDriveFoldersWithoutMyShares
+        },
+        {
+            id: 'public-folders',
+            index: 200,
+            draw: extensions.publicDriveFolders
+        },
+        {
+            id: 'remote-accounts',
+            index: 300,
+            draw: extensions.fileStorageAccounts
+        }
+    );
 
     // helper
 
     function addFolder(e) {
+        e.preventDefault();
         ox.load(['io.ox/core/folder/actions/add']).done(function (add) {
             add(e.data.folder, { module: e.data.module });
         });
@@ -311,6 +489,31 @@ define('io.ox/core/folder/extensions',
         //
         // Flat trees
         //
+
+        var sectionNames = {
+            'contacts': {
+                'private':  gt('My address books'),
+                'public':   gt('Public address books'),
+                'shared':   gt('Shared address books'),
+                'hidden':   gt('Hidden address books')
+            },
+            'calendar': {
+                'private':  gt('My calendars'),
+                'public':   gt('Public calendars'),
+                'shared':   gt('Shared calendars'),
+                'hidden':   gt('Hidden calendars')
+            },
+            'tasks': {
+                'private':  gt('My tasks'),
+                'public':   gt('Public tasks'),
+                'shared':   gt('Shared tasks'),
+                'hidden':   gt('Hidden tasks')
+            }
+        };
+
+        function getTitle(module, type) {
+            return sectionNames[module][type];
+        }
 
         var defaultExtension = {
             id: 'standard-folders',
@@ -323,41 +526,48 @@ define('io.ox/core/folder/extensions',
                     model_id = 'flat/' + module,
                     defaults = { count: 0, empty: false, indent: false, open: false, tree: tree, parent: tree },
                     privateFolders,
-                    publicFolders;
+                    publicFolders,
+                    placeholder = $('<div>');
 
                 ext.point('io.ox/core/foldertree/' + module + '/links').invoke('draw', links, baton);
 
-                privateFolders = new TreeNodeView(_.extend({}, defaults, { empty: true, folder: folder + '/private', model_id: model_id + '/private', title: gt('Private') }));
+                this.append(placeholder);
 
-                // open private folder whenever a folder is added to it
-                api.pool.getCollection('flat/' + module + '/private').on('add', function () {
-                    privateFolders.toggle(true);
+                // call flat() here to cache the folders. If not, any new TreeNodeview() and render() call calls flat() resulting in a total of 12 flat() calls.
+                api.flat({ module: module }).always(function () {
+
+                    privateFolders = new TreeNodeView(_.extend({}, defaults, { folder: folder + '/private', model_id: model_id + '/private', title: getTitle(module, 'private') }));
+
+                    // open private folder whenever a folder is added to it
+                    api.pool.getCollection('flat/' + module + '/private').on('add', function () {
+                        privateFolders.toggle(true);
+                    });
+
+                    // open public folder whenever a folder is added to it
+                    api.pool.getCollection('flat/' + module + '/public').on('add', function () {
+                        privateFolders.toggle(true);
+                    });
+
+                    publicFolders = new TreeNodeView(_.extend({}, defaults, { folder: folder + '/public',  model_id: model_id + '/public',  title: getTitle(module, 'public') }));
+
+                    placeholder.replaceWith(
+                        // private folders
+                        privateFolders.render().$el.addClass('section'),
+                        // links
+                        links,
+                        // public folders
+                        publicFolders.render().$el.addClass('section'),
+                        // shared with me
+                        new TreeNodeView(_.extend({}, defaults, { folder: folder + '/shared',  model_id: model_id + '/shared',  title: getTitle(module, 'shared') }))
+                        .render().$el.addClass('section'),
+                        // // shared by me
+                        // new TreeNodeView(_.extend({}, defaults, { folder: folder + '/sharing', model_id: model_id + '/sharing', title: gt('Shared by me') }))
+                        // .render().$el.addClass('section'),
+                        // hidden folders
+                        new TreeNodeView(_.extend({}, defaults, { folder: folder + '/hidden',  model_id: model_id + '/hidden',  title: getTitle(module, 'hidden') }))
+                        .render().$el.addClass('section')
+                    );
                 });
-
-                // open public folder whenever a folder is added to it
-                api.pool.getCollection('flat/' + module + '/public').on('add', function () {
-                    privateFolders.toggle(true);
-                });
-
-                publicFolders = new TreeNodeView(_.extend({}, defaults, { folder: folder + '/public',  model_id: model_id + '/public',  title: gt('Public') }));
-
-                this.append(
-                    // private folders
-                    privateFolders.render().$el.addClass('section'),
-                    // links
-                    links,
-                    // public folders
-                    publicFolders.render().$el.addClass('section'),
-                    // shared with me
-                    new TreeNodeView(_.extend({}, defaults, { folder: folder + '/shared',  model_id: model_id + '/shared',  title: gt('Shared') }))
-                    .render().$el.addClass('section'),
-                    // // shared by me
-                    // new TreeNodeView(_.extend({}, defaults, { folder: folder + '/sharing', model_id: model_id + '/sharing', title: gt('Shared by me') }))
-                    // .render().$el.addClass('section'),
-                    // hidden folders
-                    new TreeNodeView(_.extend({}, defaults, { folder: folder + '/hidden',  model_id: model_id + '/hidden',  title: gt('Hidden') }))
-                    .render().$el.addClass('section')
-                );
             }
         };
 
@@ -376,59 +586,82 @@ define('io.ox/core/folder/extensions',
 
                     if (baton.context !== 'app') return;
 
-                    var module = baton.module, folder = api.getDefaultFolder(module);
+                    var module = baton.module,
+                        folder = api.getDefaultFolder(module),
+                        title = module === 'calendar' ? gt('Add new calendar') : gt('Add new folder');
+
+                    // guests might have no default folder
+                    if (!folder) return;
 
                     this.append(
                         $('<div>').append(
                             $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
-                            .text(
-                                module === 'calendar' ? gt('New private calendar') : gt('New private folder')
-                            )
+                            .text(title)
                             .on('click', { folder: folder, module: module }, addFolder)
                         )
                     );
                 }
-            },
-            {
-                index: 300,
-                id: 'public',
-                draw: function (baton) {
-
-                    if (baton.context !== 'app') return;
-                    if (!capabilities.has('edit_public_folders')) return;
-
-                    var node = $('<div>'), module = baton.module;
-                    this.append(node);
-
-                    api.get('2').done(function (public_folder) {
-                        if (!api.can('create', public_folder)) return;
-                        node.append(
-                            $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
-                            .text(
-                                module === 'calendar' ? gt('New public calendar') : gt('New public folder')
-                            )
-                            .on('click', { folder: '2', module: module }, addFolder)
-                        );
-                    });
-                }
             }
         );
+
+        //
+        // Upsell
+        //
+
+        ext.point('io.ox/core/foldertree/contacts/links').extend({
+            index: 300,
+            id: 'upsell-contacts',
+            draw: function (baton) {
+
+                if (baton.context !== 'app') return;
+
+                this.append(new UpsellView({
+                    id: 'folderview/contacts',
+                    requires: 'carddav',
+                    title: gt('Synchronize with your tablet or smartphone')
+                }).render().$el);
+            }
+        });
+
+        ext.point('io.ox/core/foldertree/calendar/links').extend({
+            index: 300,
+            id: 'upsell-calendar',
+            draw: function (baton) {
+
+                if (baton.context !== 'app') return;
+
+                this.append(new UpsellView({
+                    id: 'folderview/calendar',
+                    requires: 'caldav',
+                    title: gt('Synchronize with your tablet or smartphone')
+                }).render().$el);
+            }
+        });
 
         //
         // Shared folders
         //
 
         function openPermissions(e) {
-            require(['io.ox/core/permissions/permissions'], function (controller) {
-                controller.show(e.data.id);
+            require(['io.ox/files/share/permissions'], function (controller) {
+                controller.showFolderPermissions(e.data.id);
             });
         }
 
-        function openPubSubSettings(e) {
-            var options = { id: 'io.ox/core/pubsub', folder: e.data.folder.id, data: e.data.folder };
+        function openSubSettings(e) {
+            var options = { id: 'io.ox/core/sub', folder: e.data.folder.id, data: e.data.folder };
             ox.launch('io.ox/settings/main', options).done(function () {
                 this.setSettingsPane(options);
             });
+        }
+
+        function openColorSelection(e) {
+            // check, if clicked on the :before element
+            if (e.offsetX < 0 || e.clientX < $(e.target).offset().left) {
+                // process as context-menu event to view
+                e.type = 'contextmenu';
+                e.data.view.$el.trigger(e);
+            }
         }
 
         ext.point('io.ox/core/foldertree/node').extend(
@@ -441,13 +674,6 @@ define('io.ox/core/folder/extensions',
                     if (!/^(contacts|calendar|tasks)$/.test(data.module)) return;
                     if (!api.is('shared', data)) return;
 
-                    this.find('.owner').remove();
-
-                    this.addClass('shared').find('.folder-node').append(
-                        $('<div class="owner">').append(
-                            userAPI.getLink(data.created_by, data['com.openexchange.folderstorage.displayName']).attr({ tabindex: -1 })
-                        )
-                    );
                     baton.view.options.a11yDescription.push(gt('Shared by other users'));
                 }
             },
@@ -474,21 +700,47 @@ define('io.ox/core/folder/extensions',
                 }
             },
             {
-                id: 'pubsub',
+                id: 'sub',
                 index: 300,
                 draw: function (baton) {
 
-                    this.find('.folder-pubsub:first').remove();
+                    if (!api.isVirtual(baton.view.folder)) {
+                        this.find('.folder-sub:first').remove();
+                    }
 
                     // ignore shared folders
                     if (api.is('shared', baton.data)) return;
-                    if (!capabilities.has('publication') || !api.is('published|subscribed', baton.data)) return;
+                    if (!api.is('subscribed', baton.data)) return;
 
                     this.find('.folder-node:first').append(
-                        $('<i class="fa folder-pubsub">').attr('title', gt('This folder has publications and/or subscriptions'))
-                        .on('click', { folder: baton.data }, openPubSubSettings)
+                        $('<i class="fa folder-sub">').attr('title', gt('This folder has subscriptions'))
+                        .on('click', { folder: baton.data }, openSubSettings)
                     );
                     baton.view.options.a11yDescription.push(gt('This folder has publications and/or subscriptions'));
+                }
+            },
+            {
+                id: 'color',
+                index: 400,
+                draw: function (baton) {
+                    if (!/^calendar$/.test(baton.data.module)) return;
+                    if (!api.is('private', baton.data)) return;
+                    if (/^virtual/.test(baton.data.id)) return;
+
+                    var folderColor = color.getFolderColor(baton.data),
+                        folderLabel = this.find('.folder-label');
+
+                    // remove any color-label.* classes from folder.
+                    folderLabel.each(function (index, node) {
+                        node.className = _(node.className.split(' ')).filter(function (c) {
+                            return !c.match(/color-label(-\d{1,2})?/);
+                        }).join(' ');
+                    }).addClass('color-label color-label-' + folderColor);
+
+                    if (_.device('!smartphone')) {
+                        folderLabel.off('click', openColorSelection)
+                            .on('click', { view: baton.view, folder: baton.data }, openColorSelection);
+                    }
                 }
             }
         );

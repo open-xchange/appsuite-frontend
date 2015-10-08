@@ -11,14 +11,16 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/core/api/quota', ['io.ox/core/http'], function (http) {
+define('io.ox/core/api/quota', ['io.ox/core/http', 'io.ox/core/capabilities'], function (http, capabilities) {
 
     'use strict';
+
+    var fallback = { quota: -1, use: 0, countquota: -1, countuse: 0 };
 
     var api = {
         /**
          * get File quota and current use
-         * @return {deferred} returns object with quota and use properties)
+         * @return { deferred} returns object with quota and use properties)
          */
         getFile: function () {
             return http.GET({
@@ -29,7 +31,7 @@ define('io.ox/core/api/quota', ['io.ox/core/http'], function (http) {
 
         /**
          * get mail quota and current use
-         * @return {deferred} returns object with quota and use properties)
+         * @return { deferred} returns object with quota and use properties)
          */
         getMail: function () {
             return http.GET({
@@ -40,29 +42,51 @@ define('io.ox/core/api/quota', ['io.ox/core/http'], function (http) {
 
         /**
          * get mail and file quota
-         * @return {deferred} returns quota object
+         * @return { deferred} returns quota object
          */
         get: function () {
+
+            var hasWebmail = capabilities.has('webmail'),
+                hasFiles = capabilities.has('infostore');
+
             http.pause();
-            this.getMail();
-            this.getFile();
+            if (hasWebmail) this.getMail();
+            if (hasFiles) this.getFile();
             return http.resume()
                 .then(function (req) {
-                    return { mail: req[0].data, file: req[1].data };
+                    var result = {}, item = req.shift();
+                    if (hasWebmail) {
+                        result.mail = item.data;
+                        item = req.shift();
+                    } else {
+                        result.mail = fallback;
+                    }
+                    if (hasFiles) {
+                        result.file = item.data;
+                    } else {
+                        result.file = fallback;
+                    }
+                    $(api).trigger('quota-update', result);
+                    return result;
                 });
-                // for demo purposes
-                // .then(function (quotas) {
-                //     // create fake values for testing
-                //     quotas.file.quota = 50 * 1024 * 1024; // 50mb limit
-                //     quotas.file.use = 26 * 1024 * 1024; // 26mb in use
-                //     quotas.mail.quota = 4.88 * 1024 * 1024; // 100mb limit
-                //     quotas.mail.use = 5.85 * 1024 * 1024; // 87mb in use
-                //     quotas.mail.countquota = 200; // 200 limit
-                //     quotas.mail.countuse = 191;  // 191 in use
-                //     return quotas;
-                // });
+            // for demo purposes
+            // .then(function (quotas) {
+            //     // create fake values for testing
+            //     quotas.file.quota = 50 * 1024 * 1024; // 50mb limit
+            //     quotas.file.use = 26 * 1024 * 1024; // 26mb in use
+            //     quotas.mail.quota = 4.88 * 1024 * 1024; // 100mb limit
+            //     quotas.mail.use = 5.85 * 1024 * 1024; // 87mb in use
+            //     quotas.mail.countquota = 200; // 200 limit
+            //     quotas.mail.countuse = 191;  // 191 in use
+            //     return quotas;
+            // });
         }
     };
+
+    // get fresh quota to trigger update events
+    ox.on('refresh^', function () {
+        api.get();
+    });
 
     return api;
 });

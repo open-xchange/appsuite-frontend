@@ -65,7 +65,7 @@ define([
             });
 
             describe('has a preview mode toggle', function () {
-                    var Model = Backbone.Model.extend({
+                var Model = Backbone.Model.extend({
                         isFileAttachment: sinon.stub().returns(true)
                     }),
                     list = new Attachments.List({
@@ -75,15 +75,15 @@ define([
                         })
                     });
 
-                list.render().onToggleDetails({preventDefault: sinon.stub()});
+                list.render().onToggleDetails({ preventDefault: sinon.stub() });
                 expect(list.$el.hasClass('show-preview'), 'preview is shown').to.be.false;
-                list.onToggleMode({preventDefault: sinon.stub()});
+                list.onToggleMode({ preventDefault: sinon.stub() });
                 expect(list.$el.hasClass('show-preview'), 'preview is shown').to.be.true;
             });
 
             it('only renders "file attachment" models', function () {
                 var model = new NonFileModel({}),
-                    renderMe = sinon.stub().returns({'$el': $()}),
+                    renderMe = sinon.stub().returns({ '$el': $() }),
                     list = new EmptyAttachmentList({
                         AttachmentView: Backbone.View.extend({
                             render: renderMe
@@ -91,7 +91,7 @@ define([
                     });
 
                 list.collection.reset([model]);
-                list.render().onToggleDetails({preventDefault: sinon.stub()});
+                list.render().onToggleDetails({ preventDefault: sinon.stub() });
                 expect(renderMe.called, 'render method called').to.be.false;
 
                 model.isFileAttachment = sinon.stub().returns(true);
@@ -101,24 +101,24 @@ define([
                     })
                 });
                 list.collection.reset([model]);
-                list.render().onToggleDetails({preventDefault: sinon.stub()});
+                list.render().onToggleDetails({ preventDefault: sinon.stub() });
                 //render twice, one time with preview, one time without
                 expect(renderMe.calledTwice, 'render method called twice').to.be.true;
             });
 
             it('allows to provide custom attachment views', function () {
                 var model = new FileModel(),
-                    renderMe = sinon.stub().returns({'$el': $()}),
+                    renderMe = sinon.stub().returns({ '$el': $() }),
                     list = new EmptyAttachmentList({
                         AttachmentView: Backbone.View.extend({
                             render: renderMe
                         })
                     });
 
-                 list.collection.reset([model]);
-                 list.render().onToggleDetails({preventDefault: sinon.stub()});
-                 //render twice, one time with preview, one time without
-                 expect(renderMe.calledTwice, 'render method called twice').to.be.true;
+                list.collection.reset([model]);
+                list.render().onToggleDetails({ preventDefault: sinon.stub() });
+                //render twice, one time with preview, one time without
+                expect(renderMe.calledTwice, 'render method called twice').to.be.true;
             });
 
             describe('renders', function () {
@@ -140,9 +140,9 @@ define([
                             AttachmentView: Backbone.View.extend({})
                         });
 
-                   list.render();
-                   expect(list.$el.hasClass('open'), 'list has class .open').to.be.false;
-                   expect(list.$('ul.preview').children('li'), 'li items in ul').to.have.length(0);
+                    list.render();
+                    expect(list.$el.hasClass('open'), 'list has class .open').to.be.false;
+                    expect(list.$('ul.preview').children('li'), 'li items in ul').to.have.length(0);
                 });
 
                 it('a default header', function () {
@@ -154,8 +154,8 @@ define([
                             AttachmentView: Backbone.View.extend({})
                         });
 
-                   list.render();
-                   expect(list.$('header'), 'header elements in list').to.have.length(1);
+                    list.render();
+                    expect(list.$('header'), 'header elements in list').to.have.length(1);
                 });
 
                 it('a custom header instead of default one', function () {
@@ -178,15 +178,15 @@ define([
 
                 it('a details toggle', function () {
                     var Model = Backbone.Model.extend({
-                        isFileAttachment: sinon.stub().returns(true)
-                    }),
-                   list = new Attachments.List({
-                       collection: new Backbone.Collection([new Model()]),
-                       AttachmentView: Backbone.View.extend({})
-                   });
+                            isFileAttachment: sinon.stub().returns(true)
+                        }),
+                        list = new Attachments.List({
+                            collection: new Backbone.Collection([new Model()]),
+                            AttachmentView: Backbone.View.extend({})
+                        });
 
-                   list.render();
-                   expect(list.$('header a.toggle-details').length === 1, 'found details toggle link').to.be.true;
+                    list.render();
+                    expect(list.$('header a.toggle-details').length === 1, 'found details toggle link').to.be.true;
                 });
 
                 it('a preview mode toggle', function () {
@@ -217,7 +217,7 @@ define([
                 list.render();
                 //renders closed by default
                 expect(list.$el.hasClass('open'), 'ul has class open').to.be.false;
-                list.onToggleDetails({preventDefault: sinon.stub()});
+                list.onToggleDetails({ preventDefault: sinon.stub() });
                 expect(list.$el.hasClass('open'), 'ul has class open').to.be.true;
             });
 
@@ -233,7 +233,7 @@ define([
                             })
                         });
 
-                    list.render().onToggleDetails({preventDefault: sinon.stub()});
+                    list.render().onToggleDetails({ preventDefault: sinon.stub() });
                     expect(list.$el.hasClass('open'), 'list has class open').to.be.true;
                     expect(list.$('ul.preview').children('li'), 'li items in ul').to.have.length(2);
                     list.collection.add(new Model());
@@ -251,7 +251,7 @@ define([
                             })
                         });
 
-                    list.render().onToggleDetails({preventDefault: sinon.stub()});
+                    list.render().onToggleDetails({ preventDefault: sinon.stub() });
                     list.collection.add(new Model());
                     expect(list.$('header').text(), 'header text').to.contain('3 Anlagen');
                 });

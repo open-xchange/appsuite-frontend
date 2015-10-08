@@ -31,7 +31,7 @@
                     data: {}
                 };
             });
-            xhr.respond(200, {'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(result));
+            xhr.respond(200,  { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(result));
         });
     });
 

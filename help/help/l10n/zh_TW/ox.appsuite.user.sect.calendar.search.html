@@ -6,7 +6,7 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="">
 <link rel="up" href="ox.appsuite.user.chap.calendar.html" title="章 7. 行事曆">
-<link rel="prev" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.7. 一次編輯多個約會">
+<link rel="prev" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.8. 一次編輯多個約會">
 <link rel="next" href="ox.appsuite.user.sect.calendar.share.html" title="7.8. 團隊約會">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律聲明">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
@@ -29,11 +29,7 @@
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
-  <h1 class="sr-only">
-<span class="phrase">行事曆</span>
-		
-		
-		</h1>
+  <h1 class="sr-only"><span class="phrase">行事曆</span></h1>
 <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ox.appsuite.user.sect.calendar.search"></a>7.7. 搜尋約會</h2></div></div></div>
@@ -41,10 +37,24 @@
 <a name="ox.appsuite.user.concept.calendar.search"></a><p>要搜尋某場約會，您可以使用以下搜尋條件:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>主旨、描述、位置、附件名稱等搜尋關鍵字</p></li>
-<li class="listitem"><p>公開、個人或共享資料夾</p></li>
-<li class="listitem"><p>單次或重複發生的約會</p></li>
-<li class="listitem"><p>未來或過去的約會</p></li>
+<li class="listitem">
+<p>搜尋時間範圍。搜尋發生在指定時間範圍內的約會。您可透過下列詳細資訊指定時間範圍。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>關鍵字 <span class="guilabel"><strong>今日</strong></span>、<span class="guilabel"><strong>昨日</strong></span>、<span class="guilabel"><strong>上週</strong></span>、<span class="guilabel"><strong>上個月</strong></span>、<span class="guilabel"><strong>去年</strong></span></p></li>
+<li class="listitem"><p>下列時間範圍的關鍵字: <span class="guilabel"><strong>前 7 天</strong></span>、<span class="guilabel"><strong>前 30 天</strong></span>、<span class="guilabel"><strong>前 365 天</strong></span></p></li>
+<li class="listitem"><p>星期幾，例如 <span class="guilabel"><strong>星期一</strong></span></p></li>
+<li class="listitem"><p>某個月分，例如 <span class="guilabel"><strong>七月</strong></span></p></li>
+<li class="listitem"><p>四位數年分，例如 <span class="guilabel"><strong>2015</strong></span></p></li>
+<li class="listitem"><p>日期，例如 <span class="guilabel"><strong>1/31/2015</strong></span></p></li>
+<li class="listitem"><p>日期區間，例如 <span class="guilabel"><strong>12/1/2014 - 1/31/2015</strong></span></p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="listitem"><p>用來搜尋的資料夾</p></li>
 <li class="listitem"><p>約會確認狀態</p></li>
+<li class="listitem"><p>類型: 全部、系列、單一約會</p></li>
+<li class="listitem"><p>資料夾類型: 全部、私人、公開、共享</p></li>
 </ul></div>
 <p>
     </p>
@@ -52,44 +62,43 @@
 <div class="task">
 <a name="ox.appsuite.user.task.calendar.search"></a><p class="title">如何搜尋約會：</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>在搜尋列的輸入欄未輸入搜尋詞彙。搜尋選單將開啟。</p></li>
+<li class="step"><p>點擊搜尋列中的輸入欄位或 <span class="guibutton"><strong>開始搜尋</strong></span> 圖示<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span>。搜尋列中將顯示 <span class="guibutton"><strong>選項</strong></span> 按鈕。資料夾按鈕代表要搜尋的資料夾。</p></li>
 <li class="step">
+<p>要指定搜尋哪些資料夾，點擊資料夾按鈕。選擇資料夾。</p>
+<p>若您選擇 <span class="guibutton"><strong>所有資料夾</strong></span>，將搜尋所有私人、公開、共享資料夾與其子資料夾。若您選擇某個資料夾，將只搜尋該資料夾。</p>
+</li>
+<li class="step">
+<p>在欄位輸入搜尋字串。搜尋選單將開啟。</p>
 <p>使用以下方式之一：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p>要搜尋主旨或描述，點擊搜尋選單中的搜尋詞彙。您也可以按下 Enter 或點下搜尋列旁的 <span class="guibutton"><strong>搜尋</strong></span> 圖示<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span>。</p>
+<p>要搜尋某個時間範圍的約會，您可以使用有效的時間範圍進行搜尋:當判斷到您的有效時間範圍，該時間範圍將顯示於搜尋選單。單擊搜尋選單中的時間範圍。您也可以點擊 Enter 鍵。</p>
+<p>要搜尋主旨或描述，點擊搜尋選單中的搜尋詞彙。您也可以點擊 Enter 鍵。</p>
 <p>若只要搜索主旨，點擊搜尋選單中的 <span class="guibutton"><strong>主旨</strong></span>。</p>
 <p>如此您就可以限制描述、位置或附件名稱。</p>
 </li></ul></div>
 <p>
           </p>
-<p><span class="phrase"><strong>結果:</strong></span> 搜尋結果將顯示於顯示區域內的清單。使用的搜尋條件將顯示於搜尋視窗中。</p>
-</li>
-<li class="step">
-<p>您還可以調整搜尋結果:</p>
+<p>結果:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>要顯示所有搜尋條件，點擊 <span class="guibutton"><strong>顯示進階過濾器</strong></span>。</p>
-<p>要調整搜尋條件，點擊搜尋條件旁的圖示 <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span>。自選單選擇項目。您可使用下列搜尋條件:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>您可使用 <span class="guilabel"><strong>資料夾</strong></span> 下拉選單在單一資料夾中搜尋。</p>
-<p>若您選擇 <span class="guibutton"><strong>所有資料夾</strong></span>，將搜尋所有資料夾與子資料夾。若您選擇某個資料夾，將只搜尋該資料夾。</p>
-</li>
-<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>資料夾類型</strong></span> 下拉選單讓您能限制搜尋範圍在公開、個人或共享資料夾內。</p></li>
-<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>類型</strong></span> 下拉選單讓您可搜尋單次或重複發生的約會。</p></li>
-<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>日期</strong></span> 下拉選單讓您搜尋未來或過去的約會。</p></li>
-<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>我的狀態</strong></span> 下拉選單讓您可搜尋某個狀態的約會。</p></li>
-</ul></div>
-<p>
-                </p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>要擴展您找到的物件清單結果，請繼續搜尋。</p></li>
-<li class="listitem" style="list-style-type: none"><p>要移除搜尋條件，點選 <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span> 圖示。若您移除所有搜尋條件，將結束搜尋。</p></li>
+<li class="listitem" style="list-style-type: none"><p>搜尋結果將顯示於顯示區域內的清單。</p></li>
+<li class="listitem" style="list-style-type: none"><p>搜尋字串將顯示於輸入框。</p></li>
 </ul></div>
 <p>
           </p>
 </li>
-<li class="step"><p>要完成搜尋，點選 <span class="guibutton"><strong>關閉搜尋</strong></span>。</p></li>
+<li class="step">
+<p>您還可以用下列選項調整搜尋結果:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>要增加搜尋條件，請輸入更多條件: 若要移除搜尋條件，點選搜尋條件旁的 <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span> 圖示。</p></li>
+<li class="listitem" style="list-style-type: none"><p>要搜尋其他資料夾，點選該資料夾按鈕。選擇資料夾。</p></li>
+<li class="listitem" style="list-style-type: none"><p>點擊 <span class="guibutton"><strong>選項</strong></span> 來限制搜尋範圍在公開、個人或共享資料夾內。選擇資料夾類型。</p></li>
+<li class="listitem" style="list-style-type: none"><p>若要限制僅搜尋某確認狀態的約會，點擊 <span class="guibutton"><strong>選項</strong></span>。選擇狀態。</p></li>
+<li class="listitem" style="list-style-type: none"><p>若要限制搜尋單一或重複發生的約會，點擊 <span class="guibutton"><strong>選項</strong></span>。選擇類型。</p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="step"><p>要完成搜尋，點選 <span class="guibutton"><strong>取消搜尋</strong></span>圖示<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>。</p></li>
 </ol></div>
 </div>
 </div>

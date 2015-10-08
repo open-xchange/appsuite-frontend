@@ -1,3 +1,7 @@
+* 2015-08-19 - marcus.klein@open-xchange.com
+
+ - Fix for bug 39797: Install AppSuite static content into the correct Apache directory.
+
 * 2013-06-13 - stefan.preuss@open-xchange.com
 
   - Fixed bug #27079 : TinyMCE background color-picker shows the same color two times

@@ -13,7 +13,7 @@
 define([
     'io.ox/mail/compose/main',
     'settings!io.ox/mail',
-    'fixture!io.ox/mail/write/signatures.json'
+    'fixture!io.ox/mail/compose/signatures.json'
 ], function (compose, settings, signatures) {
     'use strict';
 
@@ -49,7 +49,7 @@ define([
                     return app.compose({ folder_id: 'default0/INBOX' }).then(function () {
                         return app.view.signaturesLoading;
                     }).then(function () {
-                        expect(app.view.model.get('signature')).to.equal('1337');
+                        expect(app.view.model.get('defaultSignatureId')).to.equal('1337');
                         var $el = $('<div>').append(
                             app.view.editor.getContent()
                         ).find('p.io-ox-signature');
@@ -59,7 +59,7 @@ define([
                 it('should not add any signature if no default set', function () {
                     settings.set('defaultSignature', '');
                     return app.compose({ folder_id: 'default0/INBOX' }).then(function () {
-                        expect(app.view.model.get('signature')).to.be.empty;
+                        expect(app.view.model.get('defaultSignatureId')).to.be.empty;
                         var $el = $('<div>').append(
                             app.view.editor.getContent()
                         ).find('p.io-ox-signature');
@@ -69,13 +69,13 @@ define([
                 it('should support switching between different signatures', function () {
                     settings.set('defaultSignature', '1337');
                     return app.compose({ folder_id: 'default0/INBOX' }).then(function () {
-                        expect(app.view.model.get('signature')).to.equal('1337');
+                        expect(app.view.model.get('defaultSignatureId')).to.equal('1337');
                         var $el = $('<div>').append(
                             app.view.editor.getContent()
                         ).find('p.io-ox-signature');
                         expect($el.text()).to.equal('elite signature');
-                        app.view.model.set('signature', '');
-                        expect(app.view.model.get('signature')).to.be.empty;
+                        app.view.model.set('defaultSignatureId', '');
+                        expect(app.view.model.get('defaultSignatureId')).to.be.empty;
                         $el = $('<div>').append(
                             app.view.editor.getContent()
                         ).find('p.io-ox-signature');
@@ -85,13 +85,13 @@ define([
                 it('should support switching between complicated, long signatures and short ones', function () {
                     settings.set('defaultSignature', '1338');
                     return app.compose({ folder_id: 'default0/INBOX' }).then(function () {
-                        expect(app.view.model.get('signature')).to.equal('1338');
+                        expect(app.view.model.get('defaultSignatureId')).to.equal('1338');
                         var $el = $('<div>').append(
                             app.view.editor.getContent()
                         );
                         expect($el.text()).to.have.length.above(20);
-                        app.view.model.set('signature', '1337');
-                        expect(app.view.model.get('signature')).to.equal('1337');
+                        app.view.model.set('defaultSignatureId', '1337');
+                        expect(app.view.model.get('defaultSignatureId')).to.equal('1337');
                         $el = $('<div>').append(
                             app.view.editor.getContent()
                         );

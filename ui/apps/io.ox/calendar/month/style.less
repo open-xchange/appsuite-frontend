@@ -17,24 +17,19 @@
         -webkit-tap-highlight-color: rgba(0,0,0,0);
     }
 
-    .toolbar {
-
-        .info {
-            left: 20px;
-        }
-
-    }
-
     .footer-container {
 
-        border-bottom: 1px solid #ccc;
+        position: absolute;
+        top: 7px;
+        margin-left: @monthview-cw-width;
+        width: auto;
 
         .footer {
 
             left: 0;
 
             .weekday {
-                width: 100/8%;
+                width: 100/7%;
                 text-align: center;
             }
 
@@ -42,10 +37,15 @@
 
     }
 
+    .controls-container {
+        padding-top: 16px;
+    }
+
     .scrollpane {
 
+        outline: 0;
         position: absolute;
-        top: @calendar-toolbar-height + @weekview-footer-height;
+        top: @weekview-footer-height + 11px;
         right: 0;
         bottom: 0;
         left: 0;
@@ -56,53 +56,65 @@
 
             // might be 6 weeks in a month
             height: 100/6%;
-            .backface-visibility(hidden);
+            padding-left: @monthview-cw-width;
 
             .week-info {
 
-                position: relative;
-                float: right;
-                // fix for different round functions
-                width: 100/8%;
-                height: 100%;
+                position: absolute;
+                left: 0;
+                width: @monthview-cw-width - 10px;
+                height: 100/6%;
                 padding: 13px 13px 13px 1px;
                 font-size: 11px;
                 line-height: 1.0em;
                 text-align: right;
                 color: @hc-gray;
+                margin-left: 10px;
                 .ellipsis();
 
-                .month-name {
-                    font-family: @light-font-family;
-                    font-size: 18px;
-                    color: @appointment-reserved;
-                }
+                &.no-border { border: 0; }
 
                 .cw {
                     position: absolute;
                     right: 13px;
-                    bottom: 5px;
+                    top: 5px;
                     z-index: 1;
                 }
+            }
+
+            .day-filler {
+                position: relative;
+                display: inline-block;
+                width: 100/7%;
+                height: 100%;
+                background-color: @white;
+
+                &.bordertop { border-top: 1px solid @monthview-border; }
+
+                &.borderright { border-right: 1px solid @monthview-border; }
             }
 
             .day {
 
                 position: relative;
                 display: inline-block;
-                width: 100/8%;
+                width: 100/7%;
                 height: 100%;
                 border-top: 1px solid @monthview-border;
                 border-right: 1px solid @monthview-border;
                 background-color: @white;
-                .transition(background-color 0.2s linear);
-                .backface-visibility(hidden);
 
-                &.bordertop {}
+                &.bordertop { border-top: 1px solid @monthview-border; }
 
-                &.borderbottom {}
+                &.borderbottom { border-bottom: 1px solid @monthview-border; }
 
-                &.borderleft {}
+                &.borderleft { border-left: 1px solid @monthview-border; }
+
+                &.borderright { border-right: 1px solid @monthview-border; }
+
+                &.first { border-left: none; }
+
+                &.forceleftborder { border-left: 1px solid @monthview-border; }
 
                 .number {
 
@@ -110,14 +122,12 @@
                     color: #aaa;
                     text-align: right;
                     right: 0;
-                    bottom: 0;
+                    top: 0;
                     padding: 5px 7px;
                     z-index: 1;
                     font-size: 11px;
                     line-height: 1em;
                     background-color: #fff;
-                    border-top-left-radius: 9px;
-                    .transition(background-color 0.2s linear);
                     .user-select(none);
                     cursor: default;
 
@@ -129,12 +139,10 @@
 
                 &.today {
 
-                    background-color: @monthview-today;
-
                     .number {
-                        color: darken(#08c, 10%);
-                        background-color: @monthview-today;
-                        .transition(background-color 0.2s linear);
+                        color: #fff;
+                        font-weight: bold;
+                        background-color: @calendar-today;
                     }
 
                 }
@@ -144,53 +152,32 @@
                 }
 
                 .list {
+                    top: 25px;
                     margin: 2px;
                     .overflow-y(auto);
                 }
 
-                &.out {
-
-                    background-color: lighten(@monthview-appointment-out, 20%);
-                    .transition(background-color 0.2s linear);
-                    .backface-visibility(hidden);
-
-                    &.today {
-
-
-                        .number {
-                        }
-
-                    }
-
-                    .number {
-                        color: darken(@monthview-appointment-out, 25%);
-                        background-color: lighten(@monthview-appointment-out, 20%);
-                        .transition(background-color 0.2s linear);
-                    }
-
-                    .appointment {
-
-                        background-color: @monthview-appointment-out;
-                        border-color: @monthview-appointment-out;
-                        color: darken(@monthview-appointment-out, 30%);
-
-                        html.high-contrast & {
-
-                            background-color: @hc-gray;
-                            color: @black;
-
-                        }
-
-                        &.hover {
-                            background-color: darken(@monthview-appointment-out, @appointment-hover-pct);
-                        }
-
-                    }
-
-                }
-
             }
 
+        }
+
+        .month-name {
+            text-align: center;
+            font-size: 25px;
+            min-height: 40px;
+            color: #777;
+
+            @media (min-height: 850px) {
+                font-size: 35px;
+            }
+
+            div {
+                position: relative;
+                top: 50%;
+                -webkit-transform: translateY(-50%);
+                -ms-transform: translateY(-50%);
+                transform: translateY(-50%);
+            }
         }
 
     }
@@ -212,7 +199,6 @@
             width: 100%;
             font-size: 12px;
             padding: 2px 0;
-            border-left: 3px solid;
             .ellipsis();
         }
 
@@ -228,8 +214,26 @@
 
     }
 
+    @media (min-width: 1281px) {
+        @adjusted-width: @monthview-cw-width * 1.25;
+
+        .footer-container {
+            margin-left: @adjusted-width;
+        }
+
+        .scrollpane {
+            .week {
+                padding-left: @adjusted-width;
+
+                .week-info {
+                    width: @adjusted-width - 10px;
+                }
+            }
+        }
+    }
+
     // Mobile
-    @media (device-width: 480px), (max-device-width: 480px)  {
+    @media (max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
 
         .toolbar {
 
@@ -244,7 +248,12 @@
 
         .footer-container {
 
+            top: 0;
+            margin-left: 0;
+
             .footer {
+
+                left: 0;
 
                 .weekday {
                     width: 100/7%;
@@ -262,9 +271,12 @@
 
             .week {
 
-                // 5 weeks only
-                height: 20%;
+                &.no-border { border: 0; }
+
+                height: 100/6%;
+                min-height: 40px;
                 border-bottom: 1px solid #ccc;
+                padding-left: 0;
 
                 .day {
 
@@ -279,7 +291,6 @@
 
                     .number {
                         top: auto;
-                        // move number to top of cell
                         bottom: auto;
                         left: 0;
                         text-align: center;
@@ -291,37 +302,34 @@
 
                     &.today, &.today .number {
                         font-weight: bold;
-                        color: rgba(1, 1, 1, 0.6);
+                        color: @calendar-today;
                         background-color: transparent;
-                    }
-
-                    &.out {
-
-                        .number {
-                            background-color: transparent;
-                            color: rgba(1,1,1,.2);
-
-                            .transition(background-color 0.2s linear);
-                        }
-                        .list {
-                            color: lighten(@link-color, 50%);
-                            .transition(color 0.2s linear);
-                        }
-
-                        background-color: #fff;
-
                     }
 
                     .list {
                         top: 50%;
                         font-size: 12px;
                         text-align: center;
-                        color: @link-color;
+                        color: #777;
                         .transition(color 0.2s linear);
                     }
 
                 }
 
+                .day-filler {
+                    width: 100/7%;
+                    border: 0;
+
+                    &.bordertop { border: 0; }
+                }
+
+            }
+
+            .month-name {
+                margin-left: 0;
+                border: 0;
+                font-size: 26px;
+                font-weight: 300;
             }
 
         }

@@ -1,0 +1,10 @@
+{
+    "title": "Presenter",
+    "company": "Open-Xchange",
+    "icon": "default.png",
+    "category": "Productivity",
+    "settings": false,
+    "requires": "presenter infostore document_preview",
+    "refreshable": true,
+    "path": "io.ox/presenter/main"
+}

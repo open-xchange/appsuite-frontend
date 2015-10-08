@@ -7,7 +7,7 @@
 <link rel="home" href="index.html" title="">
 <link rel="up" href="ox.appsuite.user.chap.files.html" title="第 9 章 磁盘">
 <link rel="prev" href="ox.appsuite.user.chap.files.html" title="第 9 章 磁盘">
-<link rel="next" href="ox.appsuite.user.sect.files.view.html" title="9.2. 检视档案">
+<link rel="next" href="ox.appsuite.user.sect.files.view.html" title="9.2. 显示文件和文件夹">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -34,110 +34,262 @@
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ox.appsuite.user.sect.files.gui"></a>9.1. <span class="phrase"><span class="guilabel"><strong>磁盘</strong></span></span>元件</h2></div></div></div>
 <a class="indexterm" name="id-1.10.7.2"></a><div class="reference">
-<a name="ox.appsuite.user.reference.files.gui.hint"></a><p>用户界面的介绍可以在<a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. 用户界面">用户界面</a>找到。</p>
+<a name="ox.appsuite.user.reference.files.elements"></a><p><span class="phrase"><span class="guilabel"><strong>磁盘</strong></span></span>应用程序包括以下元件。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.search" title="搜寻条">搜寻条</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.foldertree" title="文件夹树">文件夹树</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.toolbar" title="工具栏">工具栏</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.navbar" title="导航栏">导航栏</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.content" title="显示区域">显示区域</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.viewer" title="检视器">检视器</a></p></li>
+</ul></div>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.files.gui.search"></a><p class="title"><b>搜寻条</b></p>
+<p>让您<a class="link" href="ox.appsuite.user.sect.files.search.html" title="9.5. 搜索文件">搜寻</a>文件。</p>
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.files.gui.foldertree"></a><p class="title"><b>文件夹树</b></p>
-<p>显示文件夹。允许您<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.concept.folder.navigate">在文件夹结构里导航</a>。为了打开文件夹树，单击<span class="guibutton"><strong>视图</strong></span>按钮（在<a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.toolbar" title="工具栏">工具条</a>里）。启用<span class="guibutton"><strong>文件夹视图</strong></span>。以下功能可供使用：</p>
+<p>显示文件夹。允许您在文件夹结构里导航。为了打开文件夹树，单击<span class="guibutton"><strong>视图</strong></span>按钮（在<a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.toolbar" title="工具栏">工具条</a>里）。启用<span class="guibutton"><strong>文件夹视图</strong></span>。视组件配置而定，文件夹树包括以下项目：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>如果单击一个文件夹，会显示档案。</p></li>
-<li class="listitem"><p>当前选择文件夹旁边的<span class="guibutton"><strong>文件夹指定动作</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span>提供<a class="link" href="ox.appsuite.user.chap.dataorganisation.html#ox.appsuite.user.concept.dataorganisation">组织数据</a>和<a class="link" href="ox.appsuite.user.chap.datainterchange.html#ox.appsuite.user.concept.datainterchange">交换数据</a>的功能。</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>我的文件</strong></span>。包括您的文件和文件和文件夹。默认是包括文档、音乐、图像、和视频的文件夹。</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>共享文件</strong></span>。包括与其他用户分享的文件。</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>公共文件</strong></span>。包括与所有用户分享的文件。</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>垃圾筒</strong></span>。包括您删除了的文件。</p></li>
+<li class="listitem"><p>文件夹下面的按钮提供功能，以添加您设置像 Dropbox 的第三方产品云存储户口。</p></li>
 </ul></div>
+<p>以下功能可供使用：</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>如果单击一个文件夹，会显示内容。</p></li>
+<li class="listitem"><p>在选中文件夹旁边的<span class="guibutton"><strong>文件夹指定动作</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span>提供组织和交换数据的功能。</p></li>
+</ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.files.gui.foldertree.related"></a><p class="title">有关主题</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>文件夹的信息可以在<a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.html" title="11.1. 文件夹">文件夹</a>里找到。</p></li>
+<li class="listitem" style="list-style-type: none"><p>常用动作的信息可以在此找到：<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html" title="11.1.2. 在文件夹结构里导航">在文件夹结构里导航</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.create.html" title="11.1.5. 创建文件夹">创建文件夹</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.rename.html" title="11.1.6. 重命名文件夹">重命名文件夹</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.move.html" title="11.1.7. 移动文件夹">移动文件夹</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html" title="11.1.8. 删除文件夹">删除文件夹</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>母主题：<a class="xref" href="ox.appsuite.user.sect.files.gui.html" title="9.1. 磁盘元件"><span class="phrase"><span class="guilabel"><strong>磁盘</strong></span></span>元件</a></p></li>
+</ul>
+</div>
 <p>
       </p>
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.files.gui.toolbar"></a><p class="title"><b>工具栏</b></p>
-<p>包含以下按钮：</p>
+<p>包括以下元素。<span class="phrase"><strong>备注：</strong></span>如果没有选中对象，只会显示一些按钮。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p><span class="guibutton"><strong>新建</strong></span> button. 包含以下功能：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p><span class="guibutton"><strong>上载新档案</strong></span>。创建一个<a class="link" href="ox.appsuite.user.sect.files.add.html#ox.appsuite.user.concept.files.new">新档案</a>。</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>添加备注</strong></span>。创建一个简易<a class="link" href="ox.appsuite.user.sect.pad.add.html#ox.appsuite.user.concept.pad.new">文本文件</a>。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>添加本地文件</strong></span>。添加一个和多个本地文件。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>添加备注</strong></span>。创建一个简易文本文件。</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>新文档</strong></span>。创建一个新文档。</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>新试算表</strong></span> 创建一个新试算表。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>添加新文件夹</strong></span>。创建一个新文件夹。</p></li>
 </ul></div>
 <p>
             </p>
 </li>
-<li class="listitem"><p>如果您打开一个个人文件夹，会显示<span class="guibutton"><strong>分享文件夹</strong></span>按钮。如果单击此按钮，将会创建一个此文件夹的<a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html#ox.appsuite.user.concept.pubsub.publish">发布</a>。</p></li>
-<li class="listitem"><p>如果文件夹包含图像、音效或影片，会显示<a class="link" href="ox.appsuite.user.sect.files.open.multimedia.html#ox.appsuite.user.concept.files.open.multimedia">播放多媒体文件</a>图标。</p></li>
-<li class="listitem"><p>如果选择一个文件，会显示<a class="link" href="ox.appsuite.user.sect.files.open.html#ox.appsuite.user.concept.files.open"><span class="guibutton"><strong>下载</strong></span></a>按钮。</p></li>
-<li class="listitem"><p>如果选择一个文件，将会显示<a class="link" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.concept.files.delete"><span class="guibutton"><strong>删除</strong></span></a><span class="guibutton"><strong>更多</strong></span>图标。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>分享</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.toolbar.share"></a><img src="../../images/appsuite_user_icon_share.png"></span>。此功能允许分享文件和文件夹。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>检视器</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.toolbar.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span>。在检视器里显示文件夹里文件的内容。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>下载</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.toolbar.download"></a><img src="../../images/appsuite_user_icon_download.png"></span>。下载您选中的文件。多个文件会下载成 zip 存档。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>删除</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.toolbar.delete"></a><img src="../../images/appsuite_user_icon_delete.png"></span>。删除您选中的文件或文件夹。</p></li>
 <li class="listitem">
-<p>如果选择一个文件，将会显示<span class="guibutton"><strong>更多</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span>。如果单击图标，会打开一个有以下项目的菜单：<a class="link" href="ox.appsuite.user.sect.files.manage.send.html#ox.appsuite.user.concept.files.send"><span class="guibutton"><strong>以邮件发送</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.sendlink.html#ox.appsuite.user.concept.files.sendlink"><span class="guibutton"><strong>以内部链接发送</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.showlink.html#ox.appsuite.user.concept.files.showlink"><span class="guibutton"><strong>显示内部链接</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.addportal.html#ox.appsuite.user.concept.files.addportal"><span class="guibutton"><strong>添加到门户</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.move.html#ox.appsuite.user.concept.files.move"><span class="guibutton"><strong>移动</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.copy.html#ox.appsuite.user.concept.files.copy"><span class="guibutton"><strong>复制</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.lock.html#ox.appsuite.user.concept.files.lock"><span class="guibutton"><strong>锁定</strong></span></a>。</p>
+<p><span class="guibutton"><strong>删除</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span>。打开带有更多功能的菜单：</p>
 <p><span class="phrase"><strong>备注：</strong></span>如果您选择多个文件，有些功能会不可用。</p>
 </li>
+<li class="listitem"><p><span class="guibutton"><strong>视图</strong></span>按钮。允许在<a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.content" title="显示区域">显示区域</a>选择视图。</p></li>
+</ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.files.gui.toolbar.related"></a><p class="title">有关主题</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>按钮和图标的信息可以在此找到：<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.files.add.html" title="9.3. 创建文件或文件夹。">创建文件或文件夹。</a>, <a class="xref" href="ox.appsuite.user.sect.files.view.html" title="9.2. 显示文件和文件夹">显示文件和文件夹</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.delete.html" title="9.4.9. 删除档案">删除档案</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>动作</strong></span>菜单<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.toolbar.related.more"></a><img src="../../images/appsuite_user_icon_more.png"></span>里功能的信息可以在此找到：<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.files.manage.send.html" title="9.4.2. 以电子邮件附件发送档案">以电子邮件附件发送档案</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.sendlink.html" title="9.4.1. 以链接发送文件">以链接发送文件</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.showlink.html" title="9.4.3. 显示连到文件的链接">显示连到文件的链接</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.addportal.html" title="9.4.8. 添加文件到门户">添加文件到门户</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.move.html" title="9.4.6. 移动文件或文件夹。">移动文件或文件夹。</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.copy.html" title="9.4.7. 复制档案">复制档案</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.lock.html" title="9.4.10. 锁定或解锁文件">锁定或解锁文件</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>母主题：<a class="xref" href="ox.appsuite.user.sect.files.gui.html" title="9.1. 磁盘元件"><span class="phrase"><span class="guilabel"><strong>磁盘</strong></span></span>元件</a></p></li>
+</ul>
+</div>
+<p>
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.files.gui.navbar"></a><p class="title"><b>导航栏</b></p>
+<p>导航路径位于<a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.toolbar" title="工具栏">工具条</a>下面。它包含以下的：</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>导航路径。它显示已打开文件的路径。要打开一个母文件夹，单击一个路径项目。</p></li>
 <li class="listitem">
-<p><span class="guibutton"><strong>视图</strong></span>按钮。使用以下视图之一作详细视图：</p>
+<p><span class="guibutton"><strong>选择</strong></span>按钮。包含选择和过滤在<a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.content" title="显示区域">显示区域</a>里对象的功能。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.detailview.list" title="在列表视图里的显示区域">列表</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.detailview.icons" title="在图标视图里的显示区域">图标</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.detailview.tiles" title="在方块视图里的显示区域">方块</a></p></li>
+<li class="listitem"><p>选择所有文件和文件夹、选择所有文件、清除选择</p></li>
+<li class="listitem"><p>只选择某些文件类型、显示所有文件类型</p></li>
 </ul></div>
 <p>
             </p>
 </li>
+<li class="listitem"><p><span class="guibutton"><strong>排序</strong></span>按钮。按各种准则排序在显示区域里的文件。</p></li>
 </ul></div>
-<p><span class="phrase"><strong>备注：</strong></span>有些按钮只会在选择文件夹包含文件时显示。</p>
+<p>
+      </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.files.gui.detailview.list"></a><p class="title"><b>在<span class="guilabel"><strong>列表</strong></span>视图里的显示区域</b></p>
-<p>会为每一个文件显示带有以下内容的行。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>一个用以选择单一或多个文件的选择框。</p></li>
-<li class="listitem"><p>选择文件夹里每一个档案的图标。如果可用，会显示一个文件预览。</p></li>
-<li class="listitem"><p>文件的名称和大小</p></li>
-<li class="listitem"><p>最后更改的日期和时间</p></li>
-</ul></div>
-<p>如果单击一个文件，会打开一个<a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.popup" title="弹出窗口">弹出窗口</a>。它显示更多数据和功能。</p>
-</div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.files.gui.detailview.icons"></a><p class="title"><b>在<span class="guilabel"><strong>图标</strong></span>视图里的显示区域</b></p>
-<p>到选择文件夹的导航路径。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>选择文件夹里每一个档案的图标。如果可用，会显示一个文件预览。</p></li>
-<li class="listitem"><p>文件名称</p></li>
-</ul></div>
-<p>如果单击一个文件，会打开一个<a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.popup" title="弹出窗口">弹出窗口</a>。它显示更多数据和功能。</p>
-</div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.files.gui.detailview.tiles"></a><p class="title"><b>在<span class="guilabel"><strong>方块</strong></span>视图里的显示区域</b></p>
-<p>显示选择文件夹里每一个档案的方块。如果有的话，会显示一个文件预览。如果单击一个文件，会打开一个<a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.popup" title="弹出窗口">弹出窗口</a>。它显示更多数据和功能。</p>
-</div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.files.gui.popup"></a><p class="title"><b>弹出窗口</b></p>
-<p>如果单击一个文件，会打开一个弹出窗口。它显示以下信息：</p>
+<a name="ox.appsuite.user.reference.files.gui.content"></a><p class="title"><b>显示区域</b></p>
+<p>显示文件和文件夹成列表、图标、或方块以选择一个视图，单击<span class="guibutton"><strong>检视</strong></span>按钮（在<a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.toolbar" title="工具栏">工具条</a>里）。细分为以下视图：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p><a class="link" href="ox.appsuite.user.sect.files.open.html#ox.appsuite.user.concept.files.open"> <span class="guibutton"><strong>打开</strong></span>按钮</a></p>
-<p>如果单击一个文档，会显示<a class="link" href="ox.appsuite.user.sect.files.open.office.html#ox.appsuite.user.concept.files.open.office"> <span class="guibutton"><strong>检视</strong></span></a>按钮而不是<span class="guibutton"><strong>打开</strong></span>按钮。</p>
-</li>
-<li class="listitem"><p>如果单击一个可编辑文件，会显示<span class="guibutton"><strong>编辑</strong></span>按钮。</p></li>
-<li class="listitem"><p>按钮<a class="link" href="ox.appsuite.user.sect.files.open.html#ox.appsuite.user.concept.files.open"><span class="guibutton"><strong>下载</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.concept.files.delete"><span class="guibutton"><strong>删除</strong></span></a></p></li>
-<li class="listitem">
-<p>如果单击<span class="guibutton"><strong>更多</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.popup.more"></a><img src="../../images/appsuite_user_icon_more.png"></span>，会打开一个有以下功能的菜单：<a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html#ox.appsuite.user.concept.pubsub.publish"><span class="guibutton"><strong>分享此文件</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.send.html#ox.appsuite.user.concept.files.send"><span class="guibutton"><strong>以邮件发送</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.sendlink.html#ox.appsuite.user.concept.files.sendlink"><span class="guibutton"><strong>以内部链接发送</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.showlink.html#ox.appsuite.user.concept.files.showlink"><span class="guibutton"><strong>显示内部链接</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.addportal.html#ox.appsuite.user.concept.files.addportal"><span class="guibutton"><strong>添加到门户</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.rename.html#ox.appsuite.user.concept.files.rename"><span class="guibutton"><strong>更名</strong></span></a>、<span class="phrase"><a class="link" href="ox.appsuite.user.sect.files.manage.editdescription.html#ox.appsuite.user.concept.files.editdescription"><span class="guibutton"><strong>编辑描述</strong></span></a></span>、<a class="link" href="ox.appsuite.user.sect.files.manage.move.html#ox.appsuite.user.concept.files.move"><span class="guibutton"><strong>移动</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.copy.html#ox.appsuite.user.concept.files.copy"><span class="guibutton"><strong>复制</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.lock.html#ox.appsuite.user.concept.files.lock"><span class="guibutton"><strong>锁定</strong></span></a>。</p>
-<p><span class="phrase"><strong>备注：</strong></span>如果您没有适当权限，有些按钮可能不会显示。</p>
-</li>
-<li class="listitem"><p>如果单击一个文档，会显示<span class="guibutton"><strong>编辑成新文件</strong></span>按钮（在<span class="guibutton"><strong>更多</strong></span>子菜单里）。</p></li>
-<li class="listitem"><p>文件名称</p></li>
-<li class="listitem"><p>一个档案预览（如有提供）</p></li>
-<li class="listitem"><p>文件注释</p></li>
-<li class="listitem"><p>到选择文件夹的导航路径。要打开别的文件夹，单击路径。</p></li>
-<li class="listitem"><p>上载一个<a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.add" title="如何上载新版本：">新版本</a>的按钮。</p></li>
-<li class="listitem">
-<p><span class="guibutton"><strong>显示版本历史</strong></span>按钮。如果单击此按钮，会显示一个版本列表。当前版本列在顶端。会显示每一个版本以下信息：</p>
+<p>同一行的每一个文件和文件夹，会在<span class="guibutton"><strong>列表</strong></span>视图里显示以下内容。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>档案名称的版本</p></li>
-<li class="listitem"><p>版本注释（如有输入）</p></li>
+<li class="listitem"><p>一个图标。单一对象类型会有不同图标。</p></li>
+<li class="listitem"><p>文件或文件夹的名称。</p></li>
+<li class="listitem"><p>最后更改的日期和时间</p></li>
+<li class="listitem"><p>在显示文件、大小的情况下。</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem">
+<p>每一个文件和文件夹会在<span class="guibutton"><strong>图标</strong></span>视图里显示以下信息。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>一个图标。如果有的话，会显示一个文件预览。</p></li>
+<li class="listitem"><p>文件或文件夹的名称。</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem"><p>在<span class="guibutton"><strong>方块</strong></span>视图里，文件和文件夹会显示成方块。</p></li>
+</ul></div>
+<p>以下功能可用。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p>为了显示一个选中对象的详情，单击<span class="guibutton"><strong>视图</strong></span>（在<a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.toolbar" title="工具栏">工具条里</a>）。启用<span class="guibutton"><strong>文件详情</strong></span>。会显示以下信息。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem">
+<p><span class="guilabel"><strong>详细信息</strong></span>。显示常规信息：文件或文件夹名称、文件大小、最后改变日期、编辑者名称、文件夹、链接</p>
+<p>如果您分享此对象，<span class="guilabel"><strong>共享</strong></span>旁边的按钮能够用以打开编辑共享的对话窗口。</p>
+</li>
+<li class="listitem">
+<p><span class="guilabel"><strong>描述</strong></span>。显示文件批注，如果有的话。</p>
+<p>为了添加一个描述，单击<span class="guibutton"><strong>添加一个描述</strong></span>。为了要编辑一个描述，双击描述。</p>
+</li>
+<li class="listitem"><p><span class="guibutton"><strong>上载一个新版本</strong></span>按钮。单击此按钮，以选择一个上载成新版本的文件。</p></li>
+<li class="listitem">
+<p>如果有多个文件版本，会显示<span class="guilabel"><strong>版本</strong></span>区域。会显示每一个版本以下信息：</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square; ">
+<li class="listitem"><p>文件名称的版本。如果单击它，会打开一个有多个功能的菜单：</p></li>
+<li class="listitem"><p>文件大小的版本</p></li>
 <li class="listitem"><p>上载该版本的用户名字</p></li>
 <li class="listitem"><p>版本上载的日期和时间</p></li>
 </ul></div>
 <p>
-            </p>
+                  </p>
 </li>
 </ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem">
+<p>为了只显示指定对象类型，单击导航条里的<span class="guibutton"><strong>选择</strong></span>。在<span class="guilabel"><strong>过滤器</strong></span>下面启用一个项目。</p>
+<p>为了显示所有对象，单击导航条里的<span class="guibutton"><strong>选择</strong></span>。启用项目<span class="guibutton"><strong>无</strong></span>（在<span class="guilabel"><strong>过滤器</strong></span>下面）。</p>
+</li>
+<li class="listitem"><p>为了排序对象，单击导航条里的<span class="guibutton"><strong>排序根据</strong></span>。启用一个项目。</p></li>
+<li class="listitem">
+<p>单击一个文件或文件夹以选择它。您可以使用您系统的多重选择功能：</p>
+<p>您也能使用检查框以选择文件和文件夹。为了显示检查框，单击<span class="guibutton"><strong>视图</strong></span>按钮（在<a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.toolbar" title="工具栏">工具条</a>里）。. 启用<span class="guibutton"><strong>选择框</strong></span>。</p>
+<p>为了选择所有对象/文件、或清除选择，单击导航条里的<span class="guibutton"><strong>选择</strong></span>。在<span class="guilabel"><strong>选择</strong></span>下面单击一个项目。</p>
+</li>
+<li class="listitem"><p>如果双击一个文件夹，将会打开它。</p></li>
+<li class="listitem"><p>如果双击一个文件，将会在<a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.viewer" title="检视器">检视器</a>里打开。</p></li>
+</ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.files.gui.content.related"></a><p class="title">有关主题</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>
+              <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.files.view.html" title="9.2. 显示文件和文件夹">显示文件和文件夹</a>, <a class="xref" href="ox.appsuite.user.sect.files.view.download.html#ox.appsuite.user.task.files.download" title="如何下载文件：">如何下载文件：</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.html" title="9.4. 管理档案">管理档案</a>, <a class="xref" href="ox.appsuite.user.sect.files.sharing.html" title="9.6. 分享">分享</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>母主题：<a class="xref" href="ox.appsuite.user.sect.files.gui.html" title="9.1. 磁盘元件"><span class="phrase"><span class="guilabel"><strong>磁盘</strong></span></span>元件</a></p></li>
+</ul>
+</div>
+<p>
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.files.gui.viewer"></a><p class="title"><b>检视器</b></p>
+<p>显示文件内容。为了执行检视器，进行以下动作之一：</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>双击在<a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.content" title="显示区域">显示区域</a>里一个文件。</p></li>
+<li class="listitem" style="list-style-type: none"><p>选择一个档案。单击<span class="guibutton"><strong>检视器</strong></span>图像<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span>（在<a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.toolbar" title="工具栏">工具条</a>里）。</p></li>
+</ul></div>
+<p>检视器包括以下元素：</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>选中文件的名称。如果单击名称，会打开<span class="guilabel"><strong>更名</strong></span>对话窗口。</p></li>
+<li class="listitem">
+<p>是选中文件类型而定，会显示相应功能。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>如果选中文件是可编辑的，会显示<span class="guibutton"><strong>编辑</strong></span>按钮。</p></li>
+<li class="listitem"><p>如果显示了文档，会显示<span class="guibutton"><strong>从模板新建</strong></span>按钮。</p></li>
+<li class="listitem"><p>是选中文件内容而定，将会显示<span class="guibutton"><strong>缩小</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.zoomout"></a><img src="../../images/appsuite_user_icon_viewer_zoomout.png"></span>和<span class="guibutton"><strong>放大</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.zoomin"></a><img src="../../images/appsuite_user_icon_viewer_zoomin.png"></span>。</p></li>
+<li class="listitem"><p>如果显示了一个演讲，会显示<span class="guibutton"><strong>演讲</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.presentation"></a><img src="../../images/appsuite_user_icon_viewer_present.png"></span>。</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem"><p><span class="guibutton"><strong>下载</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.download"></a><img src="../../images/appsuite_user_icon_viewer_download.png"></span>。下载文件。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>分享</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.share"></a><img src="../../images/appsuite_user_icon_viewer_share.png"></span>。此功能允许分享数据。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>删除</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.more"></a><img src="../../images/appsuite_user_icon_viewer_menuebars.png"></span>。如果单击图标，会打开一个有更多功能的菜单：</p></li>
+<li class="listitem">
+<p><span class="guibutton"><strong>检视详情</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.details"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span>。如果单击图标，会打开或关闭一个有关文件信息的边栏。信息会由页头分开成数个区域。有些部分能够单击文件夹树里文件夹名称旁边的图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.toggle.down"></a><img src="../../images/appsuite_user_icon_toggle_down.png"></span>或图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.toggle.right"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span>以打开或关闭。以下区域可用。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem">
+<p><span class="guilabel"><strong>文件详情</strong></span>。显示常规信息：文件名称、大小、最后改变日期、文件夹、链接</p>
+<p>如果单击一个位置详情，检视器将会关闭，然后位置内容会在显示区域里显示。如果单击链接，文件会在一个新页面里显示。</p>
+<p>如果您分享此对象，<span class="guilabel"><strong>共享</strong></span>旁边的按钮能够用以打开编辑共享的对话窗口。</p>
+</li>
+<li class="listitem">
+<p><span class="guilabel"><strong>描述</strong></span>。显示文件批注，如果有的话。</p>
+<p>为了添加一个描述，单击<span class="guibutton"><strong>添加一个描述</strong></span>。为了要编辑一个描述，双击描述。</p>
+</li>
+<li class="listitem"><p><span class="guibutton"><strong>上载一个新版本</strong></span>按钮。单击此按钮，以选择一个上载成新版本的文件。</p></li>
+<li class="listitem">
+<p>如果有多个文件版本，会显示<span class="guilabel"><strong>版本</strong></span>区域。会显示每一个版本以下信息：</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square; ">
+<li class="listitem"><p>文件名称的版本。如果单击它，会打开一个有多个功能的菜单：</p></li>
+<li class="listitem"><p>文件大小的版本</p></li>
+<li class="listitem"><p>上载该版本的用户名字</p></li>
+<li class="listitem"><p>版本上载的日期和时间</p></li>
+</ul></div>
+<p>
+                  </p>
+</li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem"><p><span class="guibutton"><strong>弹出窗口</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.popout"></a><img src="../../images/appsuite_user_icon_viewer_popout.png"></span>。单击它以在一个新页面显示选中文件的内容。Office 格式的文档，有页面导航功能可用：</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>关闭</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.close"></a><img src="../../images/appsuite_user_icon_notification_close.png"></span>。如果单击图标，将会关闭检视器。</p></li>
+<li class="listitem">
+<p>一个文件内容的视图，如果有的话</p>
+<p>如果有更多文件，浏览用的图标会在视图的左或右显示。</p>
+</li>
+</ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.files.gui.viewer.related"></a><p class="title">有关主题</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>按钮和图标的信息可以在此找到：<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.files.view.content.html" title="9.2.1. 显示文件内容">显示文件内容</a>, <a class="xref" href="ox.appsuite.user.sect.files.view.presentation.html" title="9.2.2. 举行一场演讲">举行一场演讲</a>, <a class="xref" href="ox.appsuite.user.sect.files.view.download.html#ox.appsuite.user.task.files.download" title="如何下载文件：">如何下载文件：</a>, <a class="xref" href="ox.appsuite.user.sect.files.sharing.produce.html" title="9.6.1. 分享文件和文件夹">分享文件和文件夹</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.delete.html" title="9.4.9. 删除档案">删除档案</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html" title="9.4.11. 处理版本">处理版本</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>动作</strong></span>菜单<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.viewer.related.more"></a><img src="../../images/appsuite_user_icon_viewer_menuebars.png"></span>里功能的信息可以在此找到：<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.files.manage.rename.html" title="9.4.4. 编辑档案名称">编辑档案名称</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.editdescription.html" title="9.4.5. 创建或编辑描述">创建或编辑描述</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.send.html" title="9.4.2. 以电子邮件附件发送档案">以电子邮件附件发送档案</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.add" title="如何上载新版本：">如何上载新版本：</a>, <a class="xref" href="ox.appsuite.user.sect.files.manage.delete.html" title="9.4.9. 删除档案">删除档案</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>母主题：<a class="xref" href="ox.appsuite.user.sect.files.gui.html" title="9.1. 磁盘元件"><span class="phrase"><span class="guilabel"><strong>磁盘</strong></span></span>元件</a></p></li>
+</ul>
+</div>
 <p>
       </p>
 </div>

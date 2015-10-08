@@ -1,4 +1,4 @@
-/**
+    /**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
  * law. Any use of the work other than as authorized under this license
@@ -11,34 +11,35 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/main',
-    ['io.ox/tasks/api',
-     'io.ox/core/extensions',
-     'io.ox/core/extPatterns/actions',
-     'gettext!io.ox/tasks',
-     'io.ox/core/tk/vgrid',
-     'io.ox/tasks/view-grid-template',
-     'io.ox/core/commons',
-     'io.ox/tasks/util',
-     'io.ox/tasks/view-detail',
-     'settings!io.ox/tasks',
-     'io.ox/core/folder/api',
-     'io.ox/core/folder/tree',
-     'io.ox/core/folder/view',
-     'io.ox/core/toolbars-mobile',
-     'io.ox/core/page-controller',
-     'io.ox/core/capabilities',
-     'io.ox/backbone/mini-views/dropdown',
-     'io.ox/tasks/toolbar',
-     'io.ox/tasks/mobile-navbar-extensions',
-     'io.ox/tasks/mobile-toolbar-actions'
-    ], function (api, ext, actions, gt, VGrid, template, commons, util, viewDetail, settings, folderAPI, TreeView, FolderView, Bars, PageController, capabilities, Dropdown) {
+define('io.ox/tasks/main', [
+    'io.ox/tasks/api',
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/actions',
+    'gettext!io.ox/tasks',
+    'io.ox/core/tk/vgrid',
+    'io.ox/tasks/view-grid-template',
+    'io.ox/core/commons',
+    'io.ox/tasks/util',
+    'io.ox/tasks/view-detail',
+    'settings!io.ox/tasks',
+    'io.ox/core/folder/api',
+    'io.ox/core/folder/tree',
+    'io.ox/core/folder/view',
+    'io.ox/core/toolbars-mobile',
+    'io.ox/core/page-controller',
+    'io.ox/core/capabilities',
+    'io.ox/backbone/mini-views/dropdown',
+    'io.ox/tasks/toolbar',
+    'io.ox/tasks/mobile-navbar-extensions',
+    'io.ox/tasks/mobile-toolbar-actions'
+], function (api, ext, actions, gt, VGrid, template, commons, util, viewDetail, settings, folderAPI, TreeView, FolderView, Bars, PageController, capabilities, Dropdown) {
 
     'use strict';
 
     // application object
     var app = ox.ui.createApp({
         name: 'io.ox/tasks',
+        id: 'io.ox/tasks',
         title: 'Tasks'
     });
 
@@ -52,21 +53,24 @@ define('io.ox/tasks/main',
          */
         'pages-mobile': function (app) {
             if (_.device('!smartphone')) return;
-            var c = app.getWindow().nodes.main;
-            var navbar = $('<div class="mobile-navbar">'),
-                toolbar = $('<div class="mobile-toolbar">');
+            var win = app.getWindow(),
+                navbar = $('<div class="mobile-navbar">'),
+                toolbar = $('<div class="mobile-toolbar">')
+                    .on('hide', function () { win.nodes.body.removeClass('mobile-toolbar-visible'); })
+                    .on('show', function () { win.nodes.body.addClass('mobile-toolbar-visible'); }),
+                baton = ext.Baton({ app: app });
+
             app.navbar = navbar;
             app.toolbar = toolbar;
+            app.pages = new PageController({ appname: app.options.name, toolbar: toolbar, navbar: navbar, container: win.nodes.main });
 
-            app.pages = new PageController(app, {container: c});
-
-            app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
+            win.nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
 
             // create 3 pages with toolbars and navbars
             app.pages.addPage({
                 name: 'folderTree',
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/tasks/mobile/navbar'
                 })
             });
@@ -75,16 +79,16 @@ define('io.ox/tasks/main',
                 name: 'listView',
                 startPage: true,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/tasks/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'listView',
                     extension: 'io.ox/tasks/mobile/toolbar'
                 }),
                 secondaryToolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     // nasty, but saves duplicate code. We reuse the toolbar from detailView for multiselect
                     page: 'detailView',
                     extension: 'io.ox/tasks/mobile/toolbar'
@@ -94,11 +98,11 @@ define('io.ox/tasks/main',
             app.pages.addPage({
                 name: 'detailView',
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/tasks/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'detailView',
                     extension: 'io.ox/tasks/mobile/toolbar'
 
@@ -132,6 +136,13 @@ define('io.ox/tasks/main',
                 container: app.getWindow().nodes.main,
                 classes: 'rightside'
             });
+
+            app.getTour = function () {
+                //no tours for guests, yet. See bug 41542
+                if (capabilities.has('guest')) return;
+
+                return { id: 'default/io.ox/tasks', path: 'io.ox/tours/tasks' };
+            };
         },
         /*
          * Init all nav- and toolbar labels for mobile
@@ -164,7 +175,7 @@ define('io.ox/tasks/main',
             app.pages.showPage('listView');
         },
 
-       'toolbars-mobile': function (app) {
+        'toolbars-mobile': function (app) {
 
             if (!_.device('smartphone')) return;
 
@@ -186,7 +197,7 @@ define('io.ox/tasks/main',
                     app.grid.showToolbar(false);
                     app.pages.getNavbar('listView').setRight(gt('Edit')).show('.left');
                 } else {
-                     // also show sorting options
+                    // also show sorting options
                     app.grid.showTopbar(true);
                     app.grid.showToolbar(true);
                     app.pages.getNavbar('listView').setRight(gt('Cancel')).hide('.left');
@@ -261,9 +272,9 @@ define('io.ox/tasks/main',
                 if (sort !== 'urgency') {
                     column = sort;
                 } else {
-                    column = 202;
+                    column = 317;
                 }
-                return api.getAll({folder: this.prop('folder'), sort: column, order: order}).pipe(function (data) {
+                return api.getAll({ folder: this.prop('folder'), sort: column, order: order }).pipe(function (data) {
                     if (sort !== 'urgency') {
                         datacopy = _.copy(data, true);
                     } else {
@@ -281,11 +292,7 @@ define('io.ox/tasks/main',
             listRequest = function (ids) {
                 return api.getList(ids).pipe(function (list) {
                     //use compact to eliminate unfound tasks to prevent errors(maybe deleted elsewhere)
-                    var listcopy = _.copy(_.compact(list), true),
-                        i = 0;
-                    for (; i < listcopy.length; i++) {
-                        listcopy[i] = util.interpretTask(listcopy[i], {noOverdue: grid.prop('sort') !== 'urgency'});
-                    }
+                    var listcopy = _.copy(_.compact(list), true);
 
                     return listcopy;
                 });
@@ -314,7 +321,7 @@ define('io.ox/tasks/main',
                         .find('.fa-arrow-down').css('opacity', 0.4);
                 }
                 //update api property (used cid in api.updateAllCache, api.create)
-                api.options.requests.all.sort = props.sort !== 'urgency' ? props.sort : 202;
+                api.options.requests.all.sort = props.sort !== 'urgency' ? props.sort : 317;
                 api.options.requests.all.order = props.order;
             }
 
@@ -337,7 +344,7 @@ define('io.ox/tasks/main',
                 // be busy
                 app.right.busy(true);
                 //remove unnecessary information
-                obj = {folder: obj.folder || obj.folder_id, id: obj.id};
+                obj = { folder: obj.folder || obj.folder_id, id: obj.id };
                 api.get(obj)
                     .done(_.lfo(drawTask))
                     .fail(_.lfo(drawFail, obj));
@@ -363,7 +370,7 @@ define('io.ox/tasks/main',
                 );
             };
 
-            commons.wireGridAndSelectionChange(app.grid, 'io.ox/tasks', showTask, app.right, api, true);
+            commons.wireGridAndSelectionChange(app.grid, 'io.ox/tasks', showTask, app.right, api);
 
         },
         /*
@@ -417,7 +424,7 @@ define('io.ox/tasks/main',
         'props': function (app) {
             // introduce shared properties
             app.props = new Backbone.Model({
-                'checkboxes': _.device('smartphone') ? false: app.settings.get('showCheckboxes', true),
+                'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
                 'folderEditMode': false
             });
         },
@@ -442,6 +449,7 @@ define('io.ox/tasks/main',
         'store-view-options': function (app) {
             if (_.device('smartphone')) return;
             app.props.on('change', _.debounce(function () {
+                if (app.props.get('find-result')) return;
                 var data = app.props.toJSON();
                 app.settings
                     .set('showCheckboxes', data.checkboxes)
@@ -497,7 +505,7 @@ define('io.ox/tasks/main',
          */
         'folderview-toolbar': function (app) {
             if (_.device('smartphone')) return;
-            commons.mediateFolderView(app, true);
+            commons.mediateFolderView(app);
         },
 
         /*
@@ -517,6 +525,28 @@ define('io.ox/tasks/main',
             });
         },
 
+        'move': function (app) {
+            if (!_.device('smartphone')) return;
+            api.on('move', function () {
+                if (app.pages.getCurrentPage().name === 'detailView') {
+                    app.pages.goBack();
+                }
+                app.grid.selection.clear();
+            });
+        },
+
+        /*
+         * Add support for selection:
+         */
+        'selection-doubleclick': function (app) {
+            // detail app does not make sense on small devices
+            // they already see tasks in full screen
+            if (_.device('smartphone')) return;
+            app.grid.selection.on('selection:doubleclick', function (e, key) {
+                ox.launch('io.ox/tasks/detail/main', { cid: key });
+            });
+        },
+
         /*
          * Handle delete event based on keyboard shortcut
          */
@@ -527,7 +557,7 @@ define('io.ox/tasks/main',
             });
         },
 
-         /*
+        /*
          * Handle delete event based on keyboard shortcut
          */
         'delete-mobile': function (app) {
@@ -539,17 +569,102 @@ define('io.ox/tasks/main',
             });
         },
 
-        'inplace-search': function (app) {
+        'inplace-find': function (app) {
 
-            if (_.device('small') || !capabilities.has('search')) return;
+            if (_.device('smartphone') || !capabilities.has('search')) return;
+            var find = app.searchable().get('find');
 
-            var win = app.getWindow(), side = win.nodes.sidepanel;
-            side.addClass('top-toolbar');
+            find.on({
+                'find:query': function () {
+                    // hide sort options
+                    app.grid.getToolbar().find('.grid-options:first').hide();
+                },
+                'find:cancel': function () {
+                    // show sort options again
+                    app.grid.getToolbar().find('.grid-options:first').show();
+                }
+            });
 
-            win.facetedsearch.ready
-                .done(function (search) {
-                    commons.wireGridAndSearch(app.grid, app.getWindow(), search.apiproxy);
+        },
+
+        'contextual-help': function (app) {
+            app.getContextualHelp = function () {
+                return 'ox.appsuite.user.sect.tasks.gui.html#ox.appsuite.user.sect.tasks.gui';
+            };
+        },
+
+        'metrics': function (app) {
+
+            function getFolderType(folder) {
+                if (folderAPI.is('shared', folder)) return 'shared';
+                if (folderAPI.is('private', folder)) return 'private';
+                if (folderAPI.is('public', folder)) return 'public';
+                return 'unknown';
+            }
+
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+
+                var nodes = app.getWindow().nodes,
+                    toolbar = nodes.body.find('.classic-toolbar-container'),
+                    sidepanel = nodes.sidepanel;
+                // toolbar actions
+                toolbar.delegate('.io-ox-action-link:not(.dropdown-toggle)', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'tasks',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
                 });
+                // toolbar options dropfdown
+                toolbar.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
+                    var node =  $(e.target).closest('a');
+                    if (!node.attr('data-name')) return;
+                    metrics.trackEvent({
+                        app: 'tasks',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: node.attr('data-name'),
+                        detail: node.attr('data-value')
+                    });
+                });
+                // folder tree action
+                sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'tasks',
+                        target: 'folder/context-menu',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // check for clicks in folder trew
+                app.on('folder:change', function (folder) {
+                    folderAPI
+                        .get(folder)
+                        .then(function (data) {
+                            metrics.trackEvent({
+                                app: 'tasks',
+                                target: 'folder',
+                                type: 'click',
+                                action: 'select',
+                                detail: getFolderType(data)
+                            });
+                        });
+                });
+                // selection in listview
+                app.grid.selection.on({
+                    'change': function (event, list) {
+                        metrics.trackEvent({
+                            app: 'tasks',
+                            target: 'list',
+                            type: 'click',
+                            action: 'select',
+                            detail: list.length > 1 ? 'multiple' : 'one'
+                        });
+                    }
+                });
+            });
         }
     });
 
@@ -569,7 +684,7 @@ define('io.ox/tasks/main',
             name: 'io.ox/tasks',
             title: 'Tasks',
             chromeless: true,
-            facetedsearch: capabilities.has('search')
+            find: capabilities.has('search')
         });
 
         win.addClass('io-ox-tasks-main');
@@ -626,7 +741,7 @@ define('io.ox/tasks/main',
             }
         };
         app.gridContainer = $('<div class="border-right">');
-          // grid
+
         var grid = new VGrid(app.gridContainer, {
             settings: settings,
             swipeLeftHandler: swipeRightHandler,
@@ -642,7 +757,7 @@ define('io.ox/tasks/main',
         app.getGrid = function () {
             return grid;
         };
-        // debugging
+        // FIXME: debugging leftover?
         window.tasks = app;
 
         //ready for show
@@ -656,7 +771,7 @@ define('io.ox/tasks/main',
     //extension points
     ext.point('io.ox/tasks/vgrid/toolbar').extend({
         id: 'dropdown',
-        index: 'last',
+        index: 1000000000000,
         draw: function () {
             var dropdown = new Dropdown({
                     model: app.grid.props,
@@ -669,7 +784,7 @@ define('io.ox/tasks/main',
                 .header(gt('Sort options'))
                 .option('sort', 'urgency', gt('Urgency'))
                 .option('sort', '300', gt('Status'))
-                .option('sort', '202', gt('Due date'))
+                .option('sort', '317', gt('Due date'))
                 .option('sort', '200', gt('Subject'))
                 .option('sort', '309', gt('Priority'))
                 .divider()

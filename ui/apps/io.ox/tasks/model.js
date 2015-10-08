@@ -11,15 +11,15 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/model',
-    ['io.ox/core/date',
-     'io.ox/tasks/api',
-     'io.ox/backbone/modelFactory',
-     'io.ox/backbone/validation',
-     'io.ox/core/extensions',
-     'io.ox/participants/model',
-     'gettext!io.ox/tasks'
-    ], function (date, api, ModelFactory, Validations, ext, pModel, gt) {
+define('io.ox/tasks/model', [
+    'io.ox/tasks/api',
+    'io.ox/backbone/modelFactory',
+    'io.ox/backbone/validation',
+    'io.ox/core/extensions',
+    'io.ox/participants/model',
+    'settings!io.ox/core',
+    'gettext!io.ox/tasks'
+], function (api, ModelFactory, Validations, ext, pModel, settings, gt) {
 
     'use strict';
 
@@ -29,7 +29,10 @@ define('io.ox/tasks/model',
             percent_completed: 0,
             folder_id: api.getDefaultFolder(),
             recurrence_type: 0,
+            full_time: true,
             private_flag: false,
+            // helper timezone for datepicker, is removed before saving
+            timezone: settings.get('timezone'),
             //set always (OX6 does this too)
             notification: true
         },
@@ -44,78 +47,59 @@ define('io.ox/tasks/model',
                     }
                     var self = this,
                         resetListUpdate = false,
-                        changeParticipantsUpdate = false,
-                        participants = this._participants = new pModel.Participants(this.get('participants'));
-                    participants.invoke('fetch');
+                        changeParticipantsUpdate = false;
+                    this._participants = new pModel.Participants(this.get('participants'), { silent: false });
 
-                    function resetList() {
+                    this._participants.on('add remove reset', function () {
                         if (changeParticipantsUpdate) {
                             return;
                         }
                         resetListUpdate = true;
-                        self.set('participants', participants.getAPIData());
+                        self.set('participants', this.getAPIData(), { validate: true });
                         resetListUpdate = false;
-                    }
-
-                    participants.on('add remove reset', resetList);
+                    });
 
                     this.on('change:participants', function () {
                         if (resetListUpdate) {
                             return;
                         }
                         changeParticipantsUpdate = true;
-                        participants.reset(self.get('participants'));
-                        participants.invoke('fetch');
+                        self._participants.reset(self.get('participants'));
                         changeParticipantsUpdate = false;
                     });
-
-                    return participants;
-                },
-                // special functions for datepicker
-                getDate: function (attr) {
-                    var time = this.get.apply(this, arguments);
-                    if (time && _.indexOf(['start_date', 'end_date'], attr) >= 0) {
-                        time = date.Local.utc(time);
-                    }
-                    return time;
-                },
-                setDate: function (attr, time) {
-                    if (time && _.indexOf(['start_date', 'end_date'], attr) >= 0) {
-                        arguments[1] = date.Local.localTime(time);
-                   }
-                    return this.set.apply(this, arguments);
+                    return this._participants;
                 }
             }
         });
 
     Validations.validationFor('io.ox/tasks/model', {
-        start_date: {format: 'date'},
-        end_date: {format: 'date'},
-        alarm: {format: 'date'},
-        title: {format: 'string'},
-        note: {format: 'string'},
-        companies: {format: 'string'},
-        billing_information: {format: 'string'},
-        trip_meter: {format: 'string'},
-        currency: {format: 'string'},
-        status: {format: 'number'},
-        percent_completed: {format: 'number'},
-        number_of_attachments: {format: 'number'},
+        start_time: { format: 'date' },
+        end_time: { format: 'date' },
+        alarm: { format: 'date' },
+        title: { format: 'string' },
+        note: { format: 'string' },
+        companies: { format: 'string' },
+        billing_information: { format: 'string' },
+        trip_meter: { format: 'string' },
+        currency: { format: 'string' },
+        status: { format: 'number' },
+        percent_completed: { format: 'number' },
+        number_of_attachments: { format: 'number' },
         //floats with , or . as separator
-        actual_costs: {format: 'anyFloat'},
+        actual_costs: { format: 'anyFloat' },
         //floats with , or . as separator
-        target_costs: {format: 'anyFloat'},
-        actual_duration: {format: 'number'},
-        target_duration: {format: 'number'},
-        private_flag: { format: 'boolean'}
+        target_costs: { format: 'anyFloat' },
+        actual_duration: { format: 'number' },
+        target_duration: { format: 'number' },
+        private_flag: { format: 'boolean' }
     });
 
     ext.point('io.ox/tasks/model/validation').extend({
         id: 'start-date-before-end-date',
         validate: function (attributes) {
-            //start_date = end_date is valid
-            if (attributes.start_date && attributes.end_date && attributes.end_date < attributes.start_date) {
-                this.add('end_date', gt('The start date must be before the due date.'));
+            //start_time = end_time is valid
+            if (attributes.start_time && attributes.end_time && attributes.end_time < attributes.start_time) {
+                this.add('end_time', gt('The start date must be before the due date.'));
             }
         }
     });
@@ -130,6 +114,7 @@ define('io.ox/tasks/model',
             }
         }
     });
+
     ext.point('io.ox/tasks/model/validation').extend({
         id: 'target-costs-out-of-limits',
         validate: function (attributes) {
@@ -167,8 +152,8 @@ define('io.ox/tasks/model',
         id: 'recurrence-needs-start-date',
         validate: function (attributes) {
             //0 is a valid number so check precisely
-            if (attributes.recurrence_type && (attributes.start_date === undefined || attributes.start_date === null)) {
-                this.add('start_date', gt('Recurring tasks need a valid start date.'));
+            if (attributes.recurrence_type && (attributes.start_time === undefined || attributes.start_time === null)) {
+                this.add('start_time', gt('Recurring tasks need a valid start date.'));
             }
         }
     });
@@ -177,8 +162,8 @@ define('io.ox/tasks/model',
         id: 'recurrence-needs-end-date',
         validate: function (attributes) {
             //0 is a valid number so check precisely
-            if (attributes.recurrence_type && (attributes.end_date === undefined || attributes.end_date === null)) {
-                this.add('end_date', gt('Recurring tasks need a valid due date.'));
+            if (attributes.recurrence_type && (attributes.end_time === undefined || attributes.end_time === null)) {
+                this.add('end_time', gt('Recurring tasks need a valid due date.'));
             }
         }
     });

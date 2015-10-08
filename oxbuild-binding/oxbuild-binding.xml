@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name   ="oxbuild-binding"
+         basedir="."
+         default="build-incremental">
+
+    <!-- =================================================================================
+      -->
+    <fail unless ="module"
+          message="Miss parameter 'module'." />
+
+    <fail unless ="workspace-root"
+          message="Miss parameter 'workspace-root'." />
+
+	<echo message="#### DBG : module         : ${module}"         level="debug" />
+	<echo message="#### DBG : workspace-root : ${workspace-root}" level="debug" />
+    
+    <!-- =================================================================================
+		 bind the oxbuild (namely grunt) to this eclipse frontend project.
+      -->
+
+	<property name="oxbuild-binding.path.project" value="${basedir}" />
+    <property name="oxbuild-binding.module.id"    value="${module}"  />
+	
+    <property environment="env" />
+    
+    <property name    ="env.WORKSPACE_HOME" location="${workspace-root}/.." />
+    <basename property="env.WORKSPACE"      file    ="${workspace-root}"    />
+   
+    <echo message="### DBG : WORKSPACE_HOME : ${env.WORKSPACE_HOME}" level="debug" />
+    <echo message="### DBG : WORKSPACE      : ${env.WORKSPACE}"      level="debug" />
+
+    <property name="oxbuild-binding.path.user-env"       value="${user.home}/.builddev"                              />
+    <property name="oxbuild-binding.file.config.oxbuild" value="${oxbuild-binding.path.user-env}/oxbuild.properties" />
+    <property name="oxbuild-binding.cfg-prefix"          value="oxbuild-binding.config.var"                          />
+    
+    <property file  ="${oxbuild-binding.file.config.oxbuild}"
+              prefix="oxbuild-binding.config.var."
+    />
+
+    <fail unless ="oxbuild-binding.config.var.oxbuild.home"
+          message="Miss config. Please define config property 'oxbuild.home'." />
+    
+    <property name="oxbuild-binding.file.oxclipse-xml" value="${oxbuild-binding.config.var.oxbuild.home}/bin/oxclipse.xml" />
+    <property name="env.OXBUILD_HOME" value="${oxbuild-binding.config.var.oxbuild.home}" />
+    <import file="${oxbuild-binding.file.oxclipse-xml}" />
+
+    <!-- =================================================================================
+      -->
+    <target name="clean">
+        <echo message="clean : '${oxbuild-binding.path.project}' ..." />
+        <oxbuild-binding.run-oxclipse-target target="frontend-clean" prjpath="${oxbuild-binding.path.project}" />
+    </target>
+
+    <!-- =================================================================================
+      -->
+    <target name="build-full">
+        <echo message="build full : '${oxbuild-binding.path.project}' ..." />
+        <oxbuild-binding.run-oxclipse-target target="frontend-build-full" prjpath="${oxbuild-binding.path.project}" />
+    </target>
+
+    <!-- =================================================================================
+      -->
+    <target name="build-incremental">
+        <echo message="build incremental : '${oxbuild-binding.path.project}' ..." />
+        <oxbuild-binding.run-oxclipse-target target="frontend-build-incremental" prjpath="${oxbuild-binding.path.project}" />
+    </target>
+    
+    <!-- =================================================================================
+      -->
+    <macrodef name="oxbuild-binding.run-oxclipse-target">
+    <attribute name="target"  />
+    <attribute name="prjpath" />
+    <sequential>
+
+       <echo message="... call '@{target}'" />
+       
+       <antcall target     ="@{target}"
+                inheritAll ="true"
+                inheritRefs="true"
+       >
+           <param name="module"  value="${oxbuild-binding.module.id}" />
+           <param name="prjpath" value="@{prjpath}"                   />
+       </antcall>
+    
+    </sequential>
+    </macrodef>
+    
+</project>

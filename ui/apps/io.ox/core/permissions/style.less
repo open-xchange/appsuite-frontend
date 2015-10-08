@@ -12,15 +12,9 @@
  *
  */
 
- .permissions-dialog {
+.permissions-dialog {
 
     .modal-header {
-        .breadcrumb {
-            margin-bottom: 0;
-            padding-left: 0;
-            background-color: transparent;
-            .prefix { font-weight: bold; font-size: 16px; }
-        }
         .btn {
             float: right;
             &.btn-primary { margin-left: 13px; }
@@ -33,23 +27,37 @@
           line-height: 0;
         }
         &:after { clear: both; }
+
+        .autocomplete-controls {
+            width: 402px;
+            float: left;
+        }
     }
 
-    .modal-footer .autocomplete-controls {
-        width: 402px;
-        float: left;
+    .modal-footer {
+
+        .cascade {
+            display: table;
+            position: relative;
+            float: left;
+            margin-top: 5px;
+            margin-bottom: 0;
+            margin-left: 10px;
+        }
+
     }
 
     .permission {
-        margin: 0 0 13px 0;
+
+        margin-bottom: 8px;
 
         .contact-picture {
             display: inline-block;
-            .picture(64px, 64px);
+            .picture(48px, 48px);
         }
 
         .contact-picture.group {
-            i { font-size: 64px; line-height: 64px; color: #eee; }
+            i { font-size: 48px; line-height: 48px; color: #eee; }
         }
 
         .readwrite, .readonly { margin-right: 45px; }
@@ -93,7 +101,6 @@
 
             &:hover {
                 background-color: @trash-icon-hover-background;
-                
                 i {
                     color: @trash-icon-hover-color;
                 }

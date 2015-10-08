@@ -11,22 +11,22 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/view-detail',
-    ['io.ox/core/extensions',
-     'io.ox/calendar/util',
-     'io.ox/calendar/api',
-     'io.ox/core/api/user',
-     'io.ox/core/api/group',
-     'io.ox/core/api/resource',
-     'io.ox/core/folder/api',
-     'io.ox/core/tk/attachments',
-     'io.ox/core/extPatterns/links',
-     'io.ox/calendar/participants',
-     'io.ox/core/util',
-     'gettext!io.ox/calendar',
-     'io.ox/calendar/actions',
-     'less!io.ox/calendar/style'
-    ], function (ext, util, calAPI, userAPI, groupAPI, resourceAPI, folderAPI, attachments, links, ParticipantsView, coreUtil, gt) {
+define('io.ox/calendar/view-detail', [
+    'io.ox/core/extensions',
+    'io.ox/calendar/util',
+    'io.ox/calendar/api',
+    'io.ox/core/api/user',
+    'io.ox/core/api/group',
+    'io.ox/core/api/resource',
+    'io.ox/core/folder/api',
+    'io.ox/core/tk/attachments',
+    'io.ox/core/extPatterns/links',
+    'io.ox/participants/detail',
+    'io.ox/core/util',
+    'gettext!io.ox/calendar',
+    'io.ox/calendar/actions',
+    'less!io.ox/calendar/style'
+], function (ext, util, calAPI, userAPI, groupAPI, resourceAPI, folderAPI, attachments, links, ParticipantsView, coreUtil, gt) {
 
     'use strict';
 
@@ -40,64 +40,70 @@ define('io.ox/calendar/view-detail',
         }
     });
 
-    // draw appointment date & time
-    ext.point('io.ox/calendar/detail').extend({
-        index: 200,
-        id: 'date',
-        draw: function (baton) {
-            var node = $('<div>');
-            this.append(node);
-            ext.point('io.ox/calendar/detail/date').invoke('draw', node, baton);
-        }
-    });
-
-    // draw appointment time
-    ext.point('io.ox/calendar/detail/date').extend({
-        index: 100,
-        id: 'time',
-        draw: function (baton) {
-            this.append(
-                util.addTimezoneLabel($('<div>').addClass('interval'), baton.data)
-            );
-        }
-    });
-
-    // draw date and recurrence information
-    ext.point('io.ox/calendar/detail/date').extend({
-        index: 200,
-        id: 'date',
-        draw: function (baton) {
-            var recurrenceString = util.getRecurrenceString(baton.data);
-            this.append(
-                $('<div>').addClass('day').append(
-                    $.txt(gt.noI18n(util.getDateInterval(baton.data))),
-                    $.txt(gt.noI18n((recurrenceString !== '' ? ' \u2013 ' + recurrenceString : '')))
-                )
-            );
-        }
-    });
-
     // draw private flag
     ext.point('io.ox/calendar/detail').extend({
-        index: 250,
+        index: 150,
         id: 'private-flag',
         draw: function (baton) {
-            if (baton.data.private_flag) {
-                $('<i class="fa fa-lock private-flag">').appendTo(this);
-            }
+            if (!baton.data.private_flag) return;
+            this.append(
+                $('<i class="fa fa-lock private-flag">')
+            );
         }
     });
 
     // draw title
     ext.point('io.ox/calendar/detail').extend({
-        index: 300,
+        index: 200,
         id: 'title',
         draw: function (baton) {
             this.append(
-                $('<h1>').addClass('title clear-title').text(gt.noI18n(baton.data.title || ''))
+                $('<h1 class="subject clear-title">').text(gt.noI18n(baton.data.title || ''))
             );
         }
     });
+
+    // draw appointment date & time
+    ext.point('io.ox/calendar/detail').extend({
+        index: 300,
+        id: 'date-time',
+        draw: function (baton) {
+            var node = $('<div class="date-time-recurrence">');
+            ext.point('io.ox/calendar/detail/date').invoke('draw', node, baton);
+            this.append(node);
+        }
+    });
+
+    // draw date and recurrence information
+    ext.point('io.ox/calendar/detail/date').extend(
+        {
+            index: 100,
+            id: 'date',
+            draw: function (baton) {
+                this.append(
+                    $('<div class="date-time">').append(
+                        // date
+                        $('<span class="date">').text(util.getDateInterval(baton.data)),
+                        // mdash
+                        $.txt(' \u00A0 '),
+                        // time
+                        util.addTimezoneLabel($('<span class="time">'), baton.data, { placement: 'top' })
+                    )
+                );
+            }
+        },
+        {
+            index: 200,
+            id: 'recurrence',
+            draw: function (baton) {
+                var recurrenceString = util.getRecurrenceString(baton.data);
+                if (recurrenceString === '') return;
+                this.append(
+                    $('<div class="recurrence">').text(recurrenceString)
+                );
+            }
+        }
+    );
 
     // draw location
     ext.point('io.ox/calendar/detail').extend({
@@ -129,7 +135,7 @@ define('io.ox/calendar/view-detail',
         index: 600,
         id: 'participants',
         draw: function (baton) {
-            var pView = new ParticipantsView(baton, {summary: true, inlineLinks: 'io.ox/calendar/detail/inline-actions-participantrelated'});
+            var pView = new ParticipantsView(baton, { summary: true, inlineLinks: 'io.ox/calendar/detail/inline-actions-participantrelated' });
             this.append(pView.draw());
         }
     });
@@ -144,6 +150,11 @@ define('io.ox/calendar/view-detail',
         }
     });
 
+    $(document).on('click', '.expandable-toggle', function (e) {
+        e.preventDefault();
+        $(this).closest('fieldset').toggleClass('open');
+    });
+
     // draw details
     ext.point('io.ox/calendar/detail').extend({
         index: 800,
@@ -154,13 +165,16 @@ define('io.ox/calendar/view-detail',
             var data = baton.data, folder = folderAPI.pool.getModel(data.folder_id);
             if (data.private_flag && data.created_by !== ox.user_id && !folderAPI.is('private', folder)) return;
 
-            var node = $('<dl class="dl-horizontal">');
+            var node = $('<dl class="dl-horizontal expandable-content">');
             ext.point('io.ox/calendar/detail/details').invoke('draw', node, baton, options);
-
             this.append(
-                $('<fieldset class="details">').append(
+                $('<fieldset class="details expandable">').append(
                     $('<legend class="io-ox-label">').append(
-                        $('<h2>').text(gt('Details'))
+                        $('<a href="#" class="expandable-toggle" role="button">').append(
+                            $('<h2>').text(gt('Details'))
+                        ),
+                        $.txt(' '),
+                        $('<i class="fa expandable-indicator">')
                     ),
                     node
                 )
@@ -236,17 +250,17 @@ define('io.ox/calendar/view-detail',
 
     function getDeepLink (data) {
         return [
-                ox.abs,
-                ox.root,
-                '/#app=io.ox/calendar&id=',
-                data.folder_id || data.folder,
-                '.',
-                data.recurrence_id || data.id,
-                '.',
-                data.recurrence_position || 0,
-                '&folder=',
-                data.folder_id || data.folder
-            ].join('');
+            ox.abs,
+            ox.root,
+            '/#app=io.ox/calendar&id=',
+            data.folder_id || data.folder,
+            '.',
+            data.recurrence_id || data.id,
+            '.',
+            data.recurrence_position || 0,
+            '&folder=',
+            data.folder_id || data.folder
+        ].join('');
     }
 
     //used to show deep link when outside calendar app (search, portal)
@@ -255,25 +269,61 @@ define('io.ox/calendar/view-detail',
         id: 'deeplink',
         draw: function (baton, options) {
             //stolen from io.ox/mail/detail/links: processDeepLinks
-            if (options && options.deeplink)  {
+            if (options && options.deeplink) {
                 var url = getDeepLink(baton.data),
-                    label = $('<dt class="detail-label">')
-                            .html(gt('Direct link') + ':' + '&#160;'),
-                    link = $('<dd class="detail">')
-                                .attr('style', 'font-size: 12px;')
-                                .append(
-                                        $('<a role="button">')
-                                        .attr({
-                                                href: url,
-                                                target: '_blank',
-                                                class: 'deep-link btn btn-primary btn-xs deep-link-calendar',
-                                                style: 'font-family: Arial; color: white; text-decoration: none; height: 16px; line-height: 16px; box-sizing: content-box;'
-                                        })
-                                        .text(gt('Appointment'))
-                                    );
+                    label = $('<dt class="detail-label">').html(gt('Direct link') + ':' + '&#160;'),
+                    link = $('<dd class="detail">').attr('style', 'font-size: 12px;').append(
+                        $('<a role="button">').attr({
+                            href: url,
+                            target: '_blank',
+                            class: 'deep-link btn btn-primary btn-xs',
+                            style: 'font-family: Arial; color: white; text-decoration: none; height: 16px; line-height: 16px; box-sizing: content-box;'
+                        }).text(gt('Appointment')).on('click', function (e) {
+                            e.preventDefault();
+
+                            var folder = String(baton.data.folder_id);
+
+                            ox.launch('io.ox/calendar/main', { folder: folder }).done(function () {
+                                var app = this,
+                                    perspective = app.props.get('layout') || 'week:week';
+
+                                ox.ui.Perspective.show(app, perspective).done(function (p) {
+                                    function cont() {
+                                        if (p.selectAppointment) {
+                                            p.selectAppointment(baton.data);
+                                        }
+                                    }
+
+                                    if (app.folder.get() === folder) {
+                                        cont();
+                                    } else {
+                                        app.folder.set(folder).done(cont);
+                                    }
+                                });
+                            });
+                        })
+                    );
                 this.append(label, link);
             }
         }
+        /*
+        else {
+            ox.launch('io.ox/calendar/main', { folder: data.folder, perspective: 'list' }).done(function () {
+                var app = this, folder = data.folder;
+                // switch to proper perspective
+                ox.ui.Perspective.show(app, 'week:week').done(function (p) {
+                    // set proper folder
+                    if (app.folder.get() === folder) {
+                        p.view.trigger('showAppointment', e, data);
+                    } else {
+                        app.folder.set(folder).done(function () {
+                            p.view.trigger('showAppointment', e, data);
+                        });
+                    }
+                });
+            });
+        }
+        */
     });
 
     // created on/by
@@ -326,7 +376,7 @@ define('io.ox/calendar/view-detail',
         id: 'attachments',
         index: 550,
         draw: function (baton) {
-            var $node = $('<fieldset>').append(
+            var $node = $('<fieldset class="attachments">').append(
                 $('<legend>').addClass('io-ox-label').append(
                     $('<h2>').text(gt('Attachments'))
                 )
@@ -334,7 +384,7 @@ define('io.ox/calendar/view-detail',
 
             if (calAPI.uploadInProgress(_.ecid(baton.data))) {
                 this.append(
-                    $node.css({width: '30%', height: '12px'}).busy()
+                    $node.css({ width: '30%', height: '12px' }).busy()
                 );
             } else if (baton.data.number_of_attachments && baton.data.number_of_attachment !== 0) {
                 this.append($node);

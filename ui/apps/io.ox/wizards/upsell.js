@@ -24,7 +24,7 @@ define('io.ox/wizards/upsell', [
     'settings!plugins/upsell',
     'gettext!io.ox/wizards',
     'less!io.ox/wizards/upsell'
-], function (ext, wizards, miniViews, settings, gt)  {
+], function (ext, wizards, miniViews, settings, gt) {
 
     'use strict';
 
@@ -116,7 +116,7 @@ define('io.ox/wizards/upsell', [
             _(products).each(function (p) {
                 $products.append(
                     $('<div class="upsell-product upsell-product-' + p.id + '">').append(
-                        $('<div class="upsell-product-image">').css({'background-image': 'url(' + p.get('image') + ')'}),
+                        $('<div class="upsell-product-image">').css({ 'background-image': 'url(' + p.get('image') + ')' }),
                         $('<label class="upsell-product-name">').append(
                             new miniViews.CheckboxView({ name: 'inCart', model: p }).render().$el,
                             $.txt(' '),
@@ -139,7 +139,7 @@ define('io.ox/wizards/upsell', [
             _(products).each(function (p) {
                 $details.append(
                     $('<div class="upsell-product upsell-product-' + p.id + '">').append(
-                        $('<div class="upsell-product-image">').css({'background-image': 'url(' + p.get('image') + ')'}),
+                        $('<div class="upsell-product-image">').css({ 'background-image': 'url(' + p.get('image') + ')' }),
                         $('<div class="upsell-product-name">').text(p.get('title')),
                         $('<span class="upsell-product-price">').text(printPrice(p)),
                     $('<div class="upsell-product-description">').html(p.get('description'))
@@ -217,7 +217,7 @@ define('io.ox/wizards/upsell', [
             var $this = $(this),
                 $cart = $('<table class="upsell-shopping-cart-review">').appendTo($this);
 
-            baton.confirm = {node: $cart};
+            baton.confirm = { node: $cart };
 
             $this.append(
                 $('<div class="upsell-disclaimer">').html(shop.disclaimer.en_US)
@@ -262,7 +262,7 @@ define('io.ox/wizards/upsell', [
         getInstance: function () {
             // Create a new instance of the wizard. Note that the id of the wizard determines the extension point
             // that pages have to extend
-            return wizards.getWizard({id: 'io.ox/wizards/upsell', closeable: true});
+            return wizards.getWizard({ id: 'io.ox/wizards/upsell', closeable: true });
         }
     };
 });

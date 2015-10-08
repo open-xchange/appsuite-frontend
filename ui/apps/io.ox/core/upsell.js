@@ -11,15 +11,15 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/upsell',
-    ['io.ox/core/capabilities',
-     'settings!io.ox/core',
-     'gettext!io.ox/core'
-    ], function (capabilities, settings, gt) {
+define('io.ox/core/upsell', [
+    'io.ox/core/capabilities',
+    'settings!io.ox/core',
+    'gettext!io.ox/core'
+], function (capabilities, settings, gt) {
 
     'use strict';
 
-    function showUpgradeDialog(e, options) {
+    function showUpgradeDialog(options) {
         console.debug('upsell:requires-upgrade', options);
         require(['io.ox/core/tk/dialogs'], function (dialogs) {
             new dialogs.ModalDialog()
@@ -52,7 +52,7 @@ define('io.ox/core/upsell',
         });
     }
 
-    function upgrade(e, options) {
+    function upgrade(options) {
         console.debug('upsell:upgrade', options);
         // needs no translation; just for demo purposes
         alert('User decided to upgrade! (global event: upsell:upgrade)');
@@ -86,9 +86,16 @@ define('io.ox/core/upsell',
         },
 
         // returns missing capabilities (<string>)
-        missing: function (array) {
-            if (!array) return '';
-            return _([].concat(array)).chain().filter(function (c) { return !that.has(c); }).flatten().value().join(' ');
+        missing: function (condition) {
+            if (!condition) return '';
+
+            condition = [].concat(condition).join(' ');
+
+            return _(condition.match(/!?[a-z_:-]+/ig))
+                .filter(function (c) {
+                    return !that.has(c);
+                })
+                .join(' ');
         },
 
         // bypass for convenience
@@ -115,27 +122,22 @@ define('io.ox/core/upsell',
         // true if at least one set matches
         enabled: (function () {
 
-            function lookup(memo, capability) {
-                return memo && capability in enabled;
+            // checks if upsell is enabled for a single capability
+            function isEnabled(capability) {
+                if (!_.isString(capability)) return false;
+
+                return !!enabled[capability];
             }
 
-            // checks if upsell is enabled for a single capability or
-            // multiple space-separated capabilities; example: isEnabled('infostore');
-            function isEnabled(string) {
-                if (!_.isString(string)) return false;
-                // check cache
-                if (string in enabledCache) return enabledCache[string];
-                // lookup
-                return (enabledCache[string] = _(string.split(' ')).reduce(lookup, true));
-            }
+            return function () {
+                // you can pass separate arguments as arrays and if two operands are not connected by an operator an && is automatically inserted
+                var condition = _(arguments).flatten().join(' || ').replace(/([^&\|]) ([^&\|])/gi, '$1 && $2'),
+                condition = condition.replace(/[a-z_:-]+/ig, function (match) {
+                    match = match.toLowerCase();
+                    return isEnabled(match);
+                });
 
-            function reduce(memo, capability) {
-                return memo || isEnabled(capability);
-            }
-
-            return function (array) {
-                if (!array) return true;
-                return _([].concat(array)).reduce(reduce, false);
+                return new Function('return !!(' + condition + ')')();
             };
 
         }()),
@@ -165,20 +167,17 @@ define('io.ox/core/upsell',
         // neither registers events nor adds portal plugin
         demo: function (debugCustomWizard) {
             var e = enabled, c = capabilityCache;
-            e.portal = e.webmail = e.contacts = e.calendar = e.infostore = e.tasks = e.publication = e.subscription= true;
+            e.portal = e.webmail = e.contacts = e.calendar = e.infostore = e.tasks = e.publication = e.subscription = e.carddav = e.active_sync = true;
             c.portal = c.webmail = c.contacts = true;
-            c.calendar = c.infostore = c.tasks = false;
+            c.calendar = c.infostore = c.tasks = c.active_sync = c['active_sync || caldav || carddav'] = false;
             c.publication = c.subscription = false;
+            settings.set('features/upsell/secondary-launcher', { icon: 'fa-star fa-star fa-star', color: '#ff0' });
+            settings.set('features/upsell/portal-widget', { imageURL: 'http://lorempixel.com/400/300/' });
+            settings.set('features/upsell/folderview/mail/i18n/en_US', { title: 'Custom english title for synchronizing mails.' });
+            settings.set('features/upsell/topbar-dropdown', { color: '#f00' });
             console.debug('Disabled inline actions regarding calendar, tasks, and files; enabled upsell instead');
             if (!debugCustomWizard) {
                 that.useDefaults();
-                require(['io.ox/portal/widgets'], function (widgets) {
-                    if (!widgets.containsType('upsell')) {
-                        widgets.addPlugin('plugins/portal/upsell/register');
-                        widgets.add('upsell', { color: 'gray', inverse: true });
-                        console.debug('Added upsell widget to portal');
-                    }
-                });
             }
         },
 

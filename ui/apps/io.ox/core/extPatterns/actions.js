@@ -12,11 +12,11 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/extPatterns/actions',
-    ['io.ox/core/extensions',
-     'io.ox/core/upsell',
-     'io.ox/core/collection'
-    ], function (ext, upsell, Collection) {
+define('io.ox/core/extPatterns/actions', [
+    'io.ox/core/extensions',
+    'io.ox/core/upsell',
+    'io.ox/core/collection'
+], function (ext, upsell, Collection) {
 
     'use strict';
 
@@ -44,6 +44,18 @@ define('io.ox/core/extPatterns/actions',
     var without = function (a) {
         return !_(this).any(function (b) {
             return _.isEqual(a, b);
+        });
+    };
+
+    // check if an action can be called based on a given list of items
+    var check = function (ref, array) {
+        var collection = new Collection(array);
+        return collection.getProperties().then(function () {
+            return processActions(ref, collection, ext.Baton.ensure(array)).then(function () {
+                return _(arguments).any(function (bool) { return bool === true; }) ?
+                    $.Deferred().resolve() :
+                    $.Deferred().reject();
+            });
         });
     };
 
@@ -78,6 +90,8 @@ define('io.ox/core/extPatterns/actions',
             extension = list[i];
             // avoid default behaviour?
             if (extension.id === 'default' && baton.isDefaultPrevented()) continue;
+            // check for disabled extensions
+            if (baton.isDisabled(point.id, extension.id)) continue;
             // empty tracker?
             if (!ignoreEmptyTracker && baton.tracker.length === 0) break;
             // apply filter
@@ -119,38 +133,38 @@ define('io.ox/core/extPatterns/actions',
         // combine actions
         var defs = ext.point(ref).map(function (action) {
 
-                var ret = true, params;
+            var ret = true, params;
 
-                if (stopped) {
-                    return $.Deferred().resolve(false);
-                }
+            if (stopped) {
+                return $.Deferred().resolve(false);
+            }
 
-                if (_.isFunction(action.requires)) {
-                    params = {
-                        baton: baton,
-                        collection: collection,
-                        context: baton.data,
-                        extension: action,
-                        point: ref,
-                        stopPropagation: stopPropagation
-                    };
-                    try {
-                        ret = action.requires(params);
-                    } catch (e) {
-                        params.exception = e;
-                        console.error(
-                            'point("' + ref + '") > "' + action.id + '" > processActions() > requires()', e.message, params
-                        );
-                    }
+            if (_.isFunction(action.requires)) {
+                params = {
+                    baton: baton,
+                    collection: collection,
+                    context: baton.data,
+                    extension: action,
+                    point: ref,
+                    stopPropagation: stopPropagation
+                };
+                try {
+                    ret = action.requires(params);
+                } catch (e) {
+                    params.exception = e;
+                    console.error(
+                        'point("' + ref + '") > "' + action.id + '" > processActions() > requires()', e.message, e.stack, params
+                    );
                 }
+            }
 
-                // is not deferred?
-                if (ret !== undefined && !ret.promise) {
-                    ret = $.Deferred().resolve(ret);
-                }
-                return ret;
-            })
-            .value();
+            // is not deferred?
+            if (ret !== undefined && !ret.promise) {
+                ret = $.Deferred().resolve(ret);
+            }
+            return ret;
+        })
+        .value();
 
         return $.when.apply($, defs);
     };
@@ -249,6 +263,7 @@ define('io.ox/core/extPatterns/actions',
 
     return {
         Action: Action,
+        check: check,
         invoke: invoke,
         applyCollection: applyCollection,
         updateCustomControls: updateCustomControls

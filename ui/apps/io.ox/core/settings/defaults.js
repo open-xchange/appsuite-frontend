@@ -20,7 +20,8 @@ define('io.ox/core/settings/defaults', function () {
     if (!ox.serverConfig || !ox.serverConfig.languages) {
         defaultLanguage = 'en_US';
     } else {
-        defaultLanguage = _(ox.serverConfig.languages).contains('en_US') ? 'en_US' : ox.serverConfig.languages[0];
+        var keys = Object.keys(ox.serverConfig.languages);
+        defaultLanguage = _(keys).contains('en_US') ? 'en_US' : keys[0];
     }
     var cookieLanguage = _.getCookie('language');
     if (cookieLanguage) {
@@ -33,6 +34,7 @@ define('io.ox/core/settings/defaults', function () {
         autoStart: 'io.ox/mail/main',
         autoOpenNotification: 'noEmail',
         autoLogout: 0,
+        showDesktopNotifications: true,
         settings: {
             downloadsDisabled: false
         }

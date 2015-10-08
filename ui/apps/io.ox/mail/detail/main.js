@@ -11,12 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/detail/main',
-    ['io.ox/mail/threadview',
-     'io.ox/mail/api',
-     'io.ox/mail/util',
-     'io.ox/core/notifications'
-    ], function (threadView, api, util, notifications) {
+define('io.ox/mail/detail/main', [
+    'io.ox/mail/threadview',
+    'io.ox/mail/api',
+    'io.ox/mail/util',
+    'io.ox/core/notifications'
+], function (threadView, api, util, notifications) {
 
     'use strict';
 
@@ -29,7 +29,7 @@ define('io.ox/mail/detail/main',
         'thread-view': function (app) {
             app.threadView = new threadView.Desktop();
             app.getWindow().nodes.main
-                .addClass('mail-reader')
+                .addClass('detail-view-app')
                 .append(app.threadView.render().$el);
         },
         /*

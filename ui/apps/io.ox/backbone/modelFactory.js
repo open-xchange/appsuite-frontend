@@ -10,10 +10,10 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/backbone/modelFactory',
-    ['io.ox/backbone/basicModel',
-     'io.ox/core/extensions'
-    ], function (BasicModel, ext) {
+define('io.ox/backbone/modelFactory', [
+    'io.ox/backbone/basicModel',
+    'io.ox/core/extensions'
+], function (BasicModel, ext) {
 
     'use strict';
 
@@ -206,7 +206,7 @@ define('io.ox/backbone/modelFactory',
                 // Unset all
                 _(model.attributes).each(function (value, name) {
                     if (!/^_/.test(name)) {
-                        model.unset(name, {silent: true});
+                        model.unset(name, { silent: true });
                     }
                 });
                 model.set(data);
@@ -281,7 +281,7 @@ define('io.ox/backbone/modelFactory',
         this.internal.load = delegate.load || function () {
             var args = $.makeArray(arguments);
 
-            return self.api.get.apply(self.api, args).pipe(processLoaded);
+            return self.api.get.apply(self.api, args).then(processLoaded);
         };
 
         this.internal.loadAll = delegate.loadAll || function () {
@@ -289,7 +289,7 @@ define('io.ox/backbone/modelFactory',
         };
 
         this.internal.loadBulk = delegate.loadBulk || function (idsToLoad) {
-            return self.api.getList(idsToLoad).pipe(function (result) {
+            return self.api.getList(idsToLoad).then(function (result) {
                 _(result).each(processLoaded);
                 return result;
             });
@@ -300,7 +300,7 @@ define('io.ox/backbone/modelFactory',
         };
 
         this.internal.read = delegate.read || function (model) {
-            return self.api.get({id: model.get('id'), folder: model.get('folder') || model.get('folder_id')}).done(function (data) {
+            return self.api.get({ id: model.get('id'), folder: model.get('folder') || model.get('folder_id') }).done(function (data) {
                 model.realm.refresh(self.internal.toUniqueIdFromObject(data), data);
             });
         };
@@ -312,6 +312,7 @@ define('io.ox/backbone/modelFactory',
             } else {
                 attributesToSave = model.changedSinceLoading();
                 attributesToSave.id = model.id;
+                attributesToSave.last_modified = model.get('last_modified');
                 if (!attributesToSave.folder) {
                     attributesToSave.folder = model.get('folder') || model.get('folder_id');
                 }
@@ -321,7 +322,7 @@ define('io.ox/backbone/modelFactory',
         };
 
         this.internal.destroy = delegate.destroy || function (model) {
-            return self.api.remove({id: model.id, folder: model.get('folder_id') || model.get('folder')});
+            return self.api.remove({ id: model.id, folder: model.get('folder_id') || model.get('folder') });
         };
 
         this.internal.toUniqueId = delegate.toUniqueId || function (options) {
@@ -332,7 +333,7 @@ define('io.ox/backbone/modelFactory',
         this.internal.toUniqueIdFromObject = delegate.toUniqueIdFromObject || this.internal.toUniqueId;
 
         this.internal.eventToGetArguments = delegate.eventToGetArguments || function (evt, obj) {
-            return [{id: obj.id, folder: obj.folder || obj.folder_id}];
+            return [{ id: obj.id, folder: obj.folder || obj.folder_id }];
         };
 
         this.internal.componentizeList = delegate.componentizeList || function (entities) {

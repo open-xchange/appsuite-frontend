@@ -16,7 +16,7 @@
     ========================
     https://github.com/pivotal/jasmine/wiki/Matchers
 
-    expect(function(){fn();}).toThrow(e);
+    expect(function (){fn();}).toThrow(e);
     expect(x).toBe(y);
     expect(x).toBeDefined();
     expect(x).toBeFalsy();

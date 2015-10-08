@@ -34,6 +34,7 @@ define('io.ox/mail/settings/defaults', [], function () {
         'isColorQuoted': false,
         'selectFirstMessage': true,
         'defaultSignature': false,
+        'defaultReplyForwardSignature': false,
         'mobileSignature': undefined,
         // one of 'none', 'custom'
         'mobileSignatureType': 'none',

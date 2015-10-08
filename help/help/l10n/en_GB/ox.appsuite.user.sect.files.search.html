@@ -1,13 +1,13 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.6. Searching for Files</title>
+<title>9.5. Searching for Files</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
-<link rel="up" href="ox.appsuite.user.chap.files.html" title="Chapter 9. Files">
-<link rel="prev" href="ox.appsuite.user.sect.files.manage.multiple.html" title="9.5.12. Editing multiple files at one time">
-<link rel="next" href="ox.appsuite.user.sect.files.webdav.html" title="9.7. Accessing Files with WebDAV">
+<link rel="home" href="index.html" title="Groupware">
+<link rel="up" href="ox.appsuite.user.chap.files.html" title="Chapter 9. Drive">
+<link rel="prev" href="ox.appsuite.user.sect.files.manage.versions.html" title="9.4.11. Working with versions">
+<link rel="next" href="ox.appsuite.user.sect.files.sharing.html" title="9.6. Sharing">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -22,25 +22,38 @@
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.manage.multiple.html">Prev</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.manage.versions.html">Prev</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.webdav.html">Next</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.sharing.html">Next</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
-  <h1 class="sr-only"><span class="phrase">Files</span></h1>
+  <h1 class="sr-only"><span class="phrase">Drive</span></h1>
 <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="ox.appsuite.user.sect.files.search"></a>9.6. Searching for Files</h2></div></div></div>
-<a class="indexterm" name="id-1.10.12.2"></a><a class="indexterm" name="id-1.10.12.3"></a><div class="concept">
+<a name="ox.appsuite.user.sect.files.search"></a>9.5. Searching for Files</h2></div></div></div>
+<a class="indexterm" name="id-1.10.11.2"></a><a class="indexterm" name="id-1.10.11.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.files.search"></a><p>In order to search for files, you can use the following search criteria:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>search terms for file names, file descriptions</p></li>
-<li class="listitem"><p>Folders</p></li>
-<li class="listitem"><p>Date</p></li>
+<li class="listitem">
+<p>Search terms for a time range. Searches for files that have been created or edited within a specific time frame. You define a valid time range with the following details.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>The key words <span class="guilabel"><strong>today</strong></span>, <span class="guilabel"><strong>yesterday</strong></span>, <span class="guilabel"><strong>last week</strong></span>, <span class="guilabel"><strong>last month</strong></span>, <span class="guilabel"><strong>last year</strong></span></p></li>
+<li class="listitem"><p>The key words for those time intervals: <span class="guilabel"><strong>last 7 days</strong></span>, <span class="guilabel"><strong>last 30 days</strong></span>, <span class="guilabel"><strong>last 365 days</strong></span></p></li>
+<li class="listitem"><p>A day of the week, e.g. <span class="guilabel"><strong>Monday</strong></span></p></li>
+<li class="listitem"><p>A specific month, e.g. <span class="guilabel"><strong>July</strong></span></p></li>
+<li class="listitem"><p>A four digit date, e.g. <span class="guilabel"><strong>2015</strong></span></p></li>
+<li class="listitem"><p>A date, e.g. <span class="guilabel"><strong>1/31/2015</strong></span></p></li>
+<li class="listitem"><p>A date range, e.g. <span class="guilabel"><strong>12/1/2014 - 1/31/2015</strong></span></p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="listitem"><p>File type: all, audio, documents, images, other, video</p></li>
 <li class="listitem"><p>File size</p></li>
-<li class="listitem"><p>file type</p></li>
+<li class="listitem"><p>Folder type: all, private, public, shared</p></li>
 </ul></div>
 <p>
     </p>
@@ -48,43 +61,44 @@
 <div class="task">
 <a name="ox.appsuite.user.task.files.search"></a><p class="title">How to search for files:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Enter a search term in the search bar's input field. The search menu opens.</p></li>
+<li class="step"><p>Click the <span class="guibutton"><strong>Start search</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> or in the input field in the search bar. A folder button and the <span class="guibutton"><strong>Options</strong></span> button are displayed in the search bar. The folder button indicates the folders to be searched.</p></li>
 <li class="step">
+<p>To define the folders that are to be searched, click on the folder button. Select a folder.</p>
+<p>If you select <span class="guibutton"><strong>All folders</strong></span>, all private, public, and shared folders and subfolders are searched. If you select a specific folder or the folder, only this folder is searched, but no subfolders.</p>
+</li>
+<li class="step">
+<p>Enter a search term in the input field. The search menu opens.</p>
 <p>Use one of the following methods:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p>In order to search in the file name or in the file description, click on the search term in the search menu. You can also press Enter or click the <span class="guibutton"><strong>Search</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span>in the search bar. </p>
+<p>In order to search for files within a specific time frame, use a valid time range as search term. As soon as a valid time range is recognized in your input, the time range is displayed in the search menu. Click on the time frame in the search menu. You can also press Enter.</p>
+<p>In order to search in the file name or in the description, click on the search term in the search menu. You can also press Enter.</p>
 <p>In order to only search in the file names, click on <span class="guibutton"><strong>in file name</strong></span> in the search menu.</p>
 <p>Accordingly, you can limit the search to the file description.</p>
 </li></ul></div>
 <p>
           </p>
-<p><span class="phrase"><strong>Result:</strong></span> The search results are displayed in the list that is shown in the display area. The search criteria used are displayed below the search window.</p>
-</li>
-<li class="step">
-<p>You can further adjust the search result:</p>
+<p>Result:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>In order to display all search criteria, click on <span class="guibutton"><strong>Show Advanced Filters</strong></span>.</p>
-<p>In order to adjust a criterion, click the icon <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span>next to the search criterion. Select an entry from the menu. You can use the following search criteria:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>You can use the <span class="guilabel"><strong>Folder</strong></span> drop-down to search in a specific folder.</p>
-<p>If you select <span class="guibutton"><strong>All folders</strong></span>, all folders and subfolders are searched. If you select a specific folder or the folder, only this folder is searched, but not subfolders.</p>
-</li>
-<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>Date</strong></span> allows searching for files that have been created a specific time ago.</p></li>
-<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>File size</strong></span> allows searching for files with a specific size.</p></li>
-<li class="listitem" style="list-style-type: none"><p>The <span class="guilabel"><strong>File type</strong></span> drop-down allows limiting the search to a certain file type.</p></li>
-</ul></div>
-<p>
-                </p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>In order to enhance your search in the list of found objects, start an additional search.</p></li>
-<li class="listitem" style="list-style-type: none"><p>In order to remove a search criterion, click the icon <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.files.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>. If you remove all search criteria, the search will be finished.</p></li>
+<li class="listitem" style="list-style-type: none"><p>The search results are displayed in the list that is shown in the display area. </p></li>
+<li class="listitem" style="list-style-type: none"><p>The search term is displayed in the input field.</p></li>
 </ul></div>
 <p>
           </p>
 </li>
-<li class="step"><p>In order to finish the search, click on <span class="guibutton"><strong>Close search</strong></span>.</p></li>
+<li class="step">
+<p>You have the following options for adjusting the search results:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>To refine the search results, enter additional search terms: To remove a search term, click the icon <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>next to the search term. </p></li>
+<li class="listitem" style="list-style-type: none"><p>To search in another folder, click on the folder button. Select a folder.</p></li>
+<li class="listitem" style="list-style-type: none"><p>To limit the search to private, public or shared folders, click on <span class="guibutton"><strong>Options</strong></span>. Select a folder type.</p></li>
+<li class="listitem" style="list-style-type: none"><p>To limit the search to specific files, click on <span class="guibutton"><strong>Options</strong></span>. Select a type.</p></li>
+<li class="listitem" style="list-style-type: none"><p>To limit the search to files with a specific size, click on <span class="guibutton"><strong>Options</strong></span>. Select a file size.</p></li>
+<li class="listitem" style="list-style-type: none"><p>To limit the search to single or recurring tasks, click on <span class="guibutton"><strong>Options</strong></span>. Select a type.</p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="step"><p>In order to finish the search, click the <span class="guibutton"><strong>Cancel search</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>.</p></li>
 </ol></div>
 </div>
 </div>

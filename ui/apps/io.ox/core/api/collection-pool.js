@@ -99,9 +99,13 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
         });
     }
 
-    function Pool(module) {
+    function Pool(module, options) {
 
         var hash = collections[module] || (collections[module] = {});
+
+        options = options || {};
+        this.Collection = options.Collection || backbone.Collection;
+        this.Model = options.Model || backbone.Model;
 
         this.getCollections = function () {
             return hash;
@@ -117,16 +121,19 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             }
 
             // register new collection
-            hash[cid] = { access: _.now(), collection: new backbone.Collection() };
+            var collection = new this.Collection();
+            hash[cid] = { access: _.now(), collection: collection };
 
-            // add "expired" attribute
-            hash[cid].collection.expired = false;
+            // add attributes
+            collection.expired = false;
+            collection.complete = false;
+            collection.sorted = true;
 
             // to simplify debugging
-            hash[cid].collection.cid = cid;
+            collection.cid = cid;
 
             // propagate changes in all collections
-            return hash[cid].collection.on({
+            return collection.on({
                 'remove': propagateRemove.bind(this, module),
                 'change': propagateChange.bind(this, module)
             });
@@ -136,14 +143,18 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             return module;
         };
 
+        this.gc = function () {
+            gc.call(this, hash);
+        };
+
         // clear pool on global refresh
         ox.on('refresh^', _.throttle(gc.bind(this, hash), 5000));
     }
 
     // create new pool / singleton per module
     // avoids having different instances per module
-    Pool.create = function (module) {
-        return pools[module] || (pools[module] = new Pool(module));
+    Pool.create = function (module, options) {
+        return pools[module] || (pools[module] = new Pool(module, options));
     };
 
     // inspect
@@ -158,7 +169,7 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
     };
 
     // don't propagate remove events; usually during a collection.set
-    Pool.preserve = function(fn) {
+    Pool.preserve = function (fn) {
         skipRemove = true;
         if (fn) fn();
         skipRemove = false;
@@ -167,29 +178,31 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
     _.extend(Pool.prototype, {
 
         getDefault: function () {
-            return new backbone.Collection();
+            return new this.Collection();
         },
 
         propagate: function (type, data) {
             if (type === 'change') {
-                propagateChange.call(this, this.getModule(), new backbone.Model(data));
+                propagateChange.call(this, this.getModule(), new this.Model(data));
             }
         },
 
         map: _.identity,
 
         add: function (cid, data) {
+            if (arguments.length === 1) { data = cid; cid = 'detail'; }
             var collection = this.get(cid);
             data =  _([].concat(data)).map(this.map, collection);
-            collection.add(data, { merge: true });
+            collection.add(data, { merge: true, parse: true });
             return collection;
         },
 
+        // resolve a list of composite keys (cids) to models
+        // skips items that are a model already
         resolve: function (list) {
-            var collection = this.get('detail');
+            var collection = this.get('detail'), Model = this.Model;
             return _([].concat(list)).map(function (item) {
-                var cid = _.cid(item);
-                return collection.get(cid) || {};
+                return item instanceof Model ? item : collection.get(_.cid(item)) || {};
             });
         },
 
@@ -199,7 +212,7 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
 
             if ((model = collection.get(cid))) return model;
 
-            model = new backbone.Model(data);
+            model = new this.Model(data);
 
             // add to pool unless it looks like a nested object
             if (data.folder_id !== undefined && data.parent === undefined) collection.add(model);
@@ -207,23 +220,39 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             return model;
         },
 
-        grep: function (str) {
+        grep: function () {
+            var args = arguments;
+
+            function contains(memo, str) {
+                return memo && this.indexOf(str) > -1;
+            }
+
             return _(this.getCollections())
                 .chain()
                 .filter(function (entry, id) {
-                    return id.indexOf(str) > -1;
+                    return _(args).reduce(contains.bind(id), true);
                 })
                 .pluck('collection')
                 .value();
         },
 
         getByFolder: function (id) {
-            return this.grep('folder=' + id);
+            return this.grep('folder=' + id + '&');
+        },
+
+        getBySorting: function (sort, folder) {
+            return this.grep('folder=' + folder + '&', 'sort=' + sort);
         },
 
         // used by garbage collector to resolve threads
         getDependentModels: function (/* cid */) {
             return [];
+        },
+
+        resetFolder: function (ids) {
+            var list = _(this.getByFolder(ids));
+            list.each(function (collection) { collection.expired = true; });
+            return list;
         }
     });
 

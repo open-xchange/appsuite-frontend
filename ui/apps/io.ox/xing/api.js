@@ -17,6 +17,7 @@
  * to provide more functions.
  */
 define('io.ox/xing/api', ['io.ox/core/http'], function (http) {
+
     var xingGet, xingPost, xingDelete, xingPut,
         /* external methods go here */
         findByMail, getUserfeed, getComments, addComment, deleteComment,
@@ -31,14 +32,14 @@ define('io.ox/xing/api', ['io.ox/core/http'], function (http) {
     xingGet = function (action, params) {
         return http.GET({
             module: 'xing',
-            params: _.extend(params, {action: action})
+            params: _.extend(params, { action: action })
         });
     };
 
     xingPost = function (action, params, data) {
         return http.POST({
             module: 'xing',
-            params: _.extend(params, {action: action}),
+            params: _.extend(params, { action: action }),
             data: data
         });
     };
@@ -46,7 +47,7 @@ define('io.ox/xing/api', ['io.ox/core/http'], function (http) {
     xingPut = function (action, params, data) {
         return http.PUT({
             module: 'xing',
-            params: _.extend(params, {action: action}),
+            params: _.extend(params, { action: action }),
             data: data
         });
     };
@@ -54,7 +55,7 @@ define('io.ox/xing/api', ['io.ox/core/http'], function (http) {
     xingDelete = function (action, params) {
         return http.DELETE({
             module: 'xing',
-            params: _.extend(params, {action: action})
+            params: _.extend(params, { action: action })
         });
     };
 
@@ -62,8 +63,15 @@ define('io.ox/xing/api', ['io.ox/core/http'], function (http) {
      * API methods
      */
 
+    var cache = {};
+
     findByMail = function (emails) {
-        return xingPut('find_by_mails', {}, {'emails' : emails});
+        if (!emails || emails.length === 0) return $.when({});
+        var key = emails.join(',');
+        if (cache[key]) return $.when(cache[key]);
+        return xingPut('find_by_mails', {}, { 'emails': emails }).done(function (result) {
+            cache[key] = result;
+        });
     };
 
     getUserfeed = function (params) {
@@ -136,8 +144,8 @@ define('io.ox/xing/api', ['io.ox/core/http'], function (http) {
      */
     createSubscription = function () {
         require([
-            'io.ox/core/api/pubsub',
-            'io.ox/core/pubsub/model',
+            'io.ox/core/api/sub',
+            'io.ox/core/sub/model',
             'io.ox/core/folder/api',
             'io.ox/keychain/api',
             'io.ox/core/notifications'

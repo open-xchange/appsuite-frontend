@@ -4,8 +4,8 @@
 <title>Chapter 7. Calendar</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
-<link rel="up" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="User Guide">
+<link rel="up" href="index.html" title="User Guide">
 <link rel="prev" href="ox.appsuite.user.sect.contacts.settings.html" title="6.11. Address Book Settings">
 <link rel="next" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. The Calendar Components">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
@@ -19,7 +19,7 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.contacts.settings.html">Prev</a></li>
@@ -36,12 +36,13 @@
 <div class="toc">
 <p><b>Table of Contents</b></p>
 <dl class="toc">
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.gui.html">7.1 The <span class="phrase"><span class="guilabel"><strong>Calendar</strong></span></span> Components</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.gui.html">7.1 The  <span class="phrase"><span class="guilabel"><strong>Calendar</strong></span></span> Components</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.view.html">7.2 Viewing Appointments</a></span></dt>
 <dd><dl>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.calendar.html">7.2.1 Displaying appointments in a calendar view</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.list.html">7.2.2 Displaying appointments in the list view</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.appointments.html">7.2.3 How are appointments displayed?</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.timezones.html">7.2.2 Displaying multiple time zones</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.list.html">7.2.3 Displaying appointments in the list view</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.appointments.html">7.2.4 How are appointments displayed?</a></span></dt>
 </dl></dd>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.attachments.html">7.3 Viewing or Saving Appointment Attachments</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.add.html">7.4 Creating Appointments</a></span></dt>
@@ -58,12 +59,13 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.edit.html">7.6.1 Editing appointments</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.dragndrop.html">7.6.2 Editing appointments with drag and drop</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.changestatus.html">7.6.3 Changing the appointment status</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.move.html">7.6.4 Moving appointments to another folder</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.print.html">7.6.5 Printing appointments</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.delete.html">7.6.6 Deleting appointments</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.multiple.html">7.6.7 Editing multiple appointments at once</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.colors.html">7.6.4 Using calendar colors</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.move.html">7.6.5 Moving appointments to another folder</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.print.html">7.6.6 Printing appointments</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.delete.html">7.6.7 Deleting appointments</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.multiple.html">7.6.8 Editing multiple appointments at once</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.search.html">7.7 Searching for appointments</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.search.html">7.7 Searching for Appointments</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.share.html">7.8 Appointments in teams</a></span></dt>
 <dd><dl>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.appointments.html">7.8.1 Sharing appointments</a></span></dt>
@@ -85,7 +87,7 @@
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. Creating Appointments">create</a> appointments</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.invitation.html" title="7.5. Answering appointment invitations">answer</a> appointment invitation</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.manage.html" title="7.6. Managing Appointments">manage</a> appointments</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.search.html" title="7.7. Searching for appointments">search</a> for Appointments</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.search.html" title="7.7. Searching for Appointments">search</a> for appointments</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.share.html" title="7.8. Appointments in teams">share</a> calendars with other users</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.groups.html" title="7.9. Managing Groups">manage</a> participant groups</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.resources.html" title="7.10. Managing Resources">manage</a> resources</p></li>

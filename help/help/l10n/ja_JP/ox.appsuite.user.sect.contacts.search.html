@@ -4,7 +4,7 @@
 <title>6.8. 連絡先の検索</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Groupware">
 <link rel="up" href="ox.appsuite.user.chap.contacts.html" title="第6章 アドレス帳">
 <link rel="prev" href="ox.appsuite.user.sect.contacts.manage.multiple.html" title="6.7.11. 複数の連絡先を一度に編集">
 <link rel="next" href="ox.appsuite.user.sect.contacts.share.html" title="6.9. チームの連絡先">
@@ -37,8 +37,9 @@
 <a name="ox.appsuite.user.concept.contacts.search"></a><p>目的の連絡先を検索するには、次の検索条件を使用します。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>名前、メール アドレス、電話番号、住所を対象に検索します。</p></li>
-<li class="listitem"><p>プライベート 共有フォルダ、パブリック 共有フォルダ、共有フォルダ</p></li>
-<li class="listitem"><p>連絡先または配布リスト</p></li>
+<li class="listitem"><p>検索されないフォルダ</p></li>
+<li class="listitem"><p>タイプ：連絡先、配布リスト</p></li>
+<li class="listitem"><p>フォルダタイプ：全て、プライベート、パブリック、共有</p></li>
 </ul></div>
 <p>
     </p>
@@ -46,45 +47,42 @@
 <div class="task">
 <a name="ox.appsuite.user.task.contacts.search"></a><p class="title">連絡先を検索する</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>検索バーの入力フィールドに検索用語を入力します。検索メニューが表示されます。</p></li>
+<li class="step"><p><span class="guibutton"><strong>検索を開始</strong></span> アイコン<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.contacts.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> をクリックするか、検索バーに入力フィールドをクリックしてください。フォルダボタンと<span class="guibutton"><strong>オプションボタン</strong></span>が検索バーに表示されます。フォルダボタンは、検索するフォルダーを表示します。</p></li>
 <li class="step">
+<p>検索するフォルダを指定するには、フォルダボタンをクリックします。フォルダを選択します。</p>
+<p><span class="guibutton"><strong>すべてのフォルダ</strong></span>を選択すると、全てのプライベート、パブリックおよび共有フォルダととサブフォルダを検索します。特定のフォルダ、あるいはフォルダを選択すると、このフォルダーのみを検索し、サブフォルダの検索は行いません。</p>
+</li>
+<li class="step">
+<p>入力フィールドに検索用語を入力します。検索メニューが表示されます。</p>
 <p>次のいずれかの方法を使用します。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>名前、住所、電話番号を検索するには、検索メニューで、検索用語をクリックします。Enter キーをクリックしたり、検索バーで、<span class="guibutton"><strong>検索</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.contacts.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> をクリックしても、検索を実行できます。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p>名前、住所、電話番号を検索するには、検索メニューで、検索用語をクリックします。Enter キーをクリックすることもできます。</p>
 <p>名前のみを検索するには、検索メニューで、<span class="guibutton"><strong>検索対象: 名前</strong></span> をクリックします。</p>
 <p>また、検索対象をメール アドレス、電話番号、住所にすることもできます。</p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>検索用語で連絡先を検索するには、<span class="guilabel"><strong>連絡先</strong></span> の下にある名前をクリックします。</p></li>
+<p>検索用語で連絡先を検索するには、<span class="guilabel"><strong>連絡先</strong></span> の下にある名前をクリックします。</p>
+</li></ul></div>
+<p>
+          </p>
+<p>結果:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>検索結果は、表示エリアに一覧で表示されます。</p></li>
+<li class="listitem" style="list-style-type: none"><p>検索用語は入力フィールドに表示されます。</p></li>
 </ul></div>
 <p>
           </p>
-<p><span class="phrase"><strong>結果: </strong></span>検索結果は、表示エリアに一覧で表示されます。使用した検索条件は、検索ウィンドウの下に表示されます。</p>
 </li>
 <li class="step">
-<p>検索結果をさらに絞り込むこともできます。</p>
+<p>検索結果を絞り込むために次のオプションがあります。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>すべての検索条件を表示するには、<span class="guibutton"><strong>詳細フィルタを表示</strong></span> をクリックします。</p>
-<p>検索条件を変更するには、検索条件の隣にあるアイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.contacts.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span> をクリックします。メニューで、目的の項目を選択します。次の検索条件を使用できます。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p><span class="guilabel"><strong>フォルダ</strong></span> ドロップダウン メニューで、目的のフォルダを検索できます。</p>
-<p><span class="guibutton"><strong>すべてのフォルダー</strong></span>を選択すると、内部メールアカウントのすべてのフォルダーとサブフォルダーを検索します。特定のフォルダー、あるいはフォルダーを選択すると、このフォルダーのみを検索し、サブフォルダーの検索は行いません。</p>
-</li>
-<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>フォルダ タイプ</strong></span> ドロップダウン メニューでは、検索する対象をプライベート フォルダ、パブリック フォルダ、共有フォルダのうちから指定できます。</p></li>
-<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>タイプ</strong></span> ドロップダウン メニューでは、検索する対象を連絡先または配布リストのうちから指定できます。</p></li>
-</ul></div>
-<p>
-                </p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>検索されるオブジェクトの一覧を絞るには、詳細検索機能を使用します。</p></li>
-<li class="listitem" style="list-style-type: none"><p>検索条件を削除するには、アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.contacts.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span> をクリックします。すべての検索条件を削除すると、検索が終了します。</p></li>
+<li class="listitem" style="list-style-type: none"><p>検索結果を変更するには、さらに検索用語を入力します。検索用語を削除するには、検索用語横の <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.contacts.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>アイコンをクリックします。</p></li>
+<li class="listitem" style="list-style-type: none"><p>別のフォルダを検索するには、フォルダボタンをクリックします。フォルダを選択します。</p></li>
+<li class="listitem" style="list-style-type: none"><p>検索する対象をプライベートフォルダ、パブリックフォルダ、または共有フォルダに限定するには、<span class="guibutton"><strong>オプション</strong></span>をクリックします。フォルダを選択します。</p></li>
+<li class="listitem" style="list-style-type: none"><p>検索する対象を連絡先または配布リストに限定するには、<span class="guibutton"><strong>オプション</strong></span>をクリックします。タイプを選択します。</p></li>
 </ul></div>
 <p>
           </p>
 </li>
-<li class="step"><p>検索を終了するには、<span class="guibutton"><strong>検索を閉じる</strong></span> をクリックします。</p></li>
+<li class="step"><p>検索を終了するには、 <span class="guibutton"><strong>検索をキャンセル</strong></span>アイコン<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.contacts.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>をクリックします。</p></li>
 </ol></div>
 </div>
 </div>

@@ -4,7 +4,7 @@
 <title>5.5.18. E-Mail Filter verwenden</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Benutzeranleitung">
 <link rel="up" href="ox.appsuite.user.sect.email.manage.html" title="5.5. E-Mails organisieren">
 <link rel="prev" href="ox.appsuite.user.sect.email.manage.unifiedmail.html" title="5.5.17. Unified Mail verwenden">
 <link rel="next" href="ox.appsuite.user.sect.email.search.html" title="5.6. E-Mails suchen">
@@ -19,7 +19,7 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigation umschalten</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigation umschalten</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.email.manage.unifiedmail.html">Zurück</a></li>
@@ -76,28 +76,35 @@
 <a name="ox.appsuite.user.task.email.mailfilter.create"></a><p class="title">So erstellen Sie eine neue Regel:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p>Klicken Sie in der Menüleiste rechts auf das Symbol <span class="guibutton"><strong>Systemmenü</strong></span>
-              <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.create.systemmenu"></a><img src="../../images/appsuite_user_icon_settings.png"></span> . Klicken Sie im Menü auf <span class="guibutton"><strong>Einstellungen</strong></span>. </p></li>
+              <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.create.systemmenu"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> . Klicken Sie im Menü auf <span class="guibutton"><strong>Einstellungen</strong></span>. </p></li>
 <li class="step">
-<p>Wenn in der Seitenleiste <span class="guibutton"><strong>Mailfilter</strong></span> nicht angezeigt wird, aktivieren Sie 
-              <span class="guibutton"><strong>Erweiterte Einstellungen</strong></span> unten in der Seitenleiste.</p>
-<p>Klicken Sie in der Seitenleiste auf <span class="guibutton"><strong>Mailfilter</strong></span>.</p>
+<p>Öffnen Sie in der Seitenleiste den Eintrag <span class="guibutton"><strong>E-Mail</strong></span>.</p>
+<p>Klicken Sie auf <span class="guibutton"><strong>Mailfilter</strong></span>.</p>
 </li>
 <li class="step"><p>Klicken Sie im Anzeigebereich auf <span class="guibutton"><strong>Neue Regel hinzufügen</strong></span>. Das Fenster 
               <span class="guilabel"><strong>Neue Regel erstellen</strong></span> öffnet sich.</p></li>
 <li class="step"><p>Geben Sie einen Namen für die Regel ein.</p></li>
 <li class="step">
 <p>Um eine Bedingung zu erstellen, klicken Sie auf <span class="guibutton"><strong>Bedingung hinzufügen</strong></span>. Wählen Sie im Menü
-              einen E-Mail-Bestandteil.</p>
-<p>Wenn Sie einen E-Mail-Bestandteil verwenden möchten, der nicht 
-              in der Liste enthalten ist, wählen Sie <span class="guibutton"><strong>Header</strong></span>. Geben Sie in <span class="guilabel"><strong>Name</strong></span> einen 
-              Header-Eintrag ein. Sie können die Header-Einträge einer E-Mail lesen, indem Sie die 
-              <a class="link" href="ox.appsuite.user.sect.email.manage.source.html#ox.appsuite.user.concept.email.source">Quelldaten anzeigen</a>.</p>
-<p>Wählen Sie bei Bedarf ein Kriterium, indem Sie auf 
-              <span class="guibutton"><strong>stimmt überein mit</strong></span> klicken. Geben Sie rechts neben dem Kriterium ein Argument ein.</p>
+              einen E-Mail-Bestandteil. Beachten Sie diese Hinweise:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Wenn Sie einen E-Mail-Bestandteil verwenden möchten, der nicht 
+                  in der Liste enthalten ist, wählen Sie <span class="guibutton"><strong>Header</strong></span>. Geben Sie in <span class="guilabel"><strong>Name</strong></span> einen 
+                  Header-Eintrag ein. Sie können die Header-Einträge einer E-Mail lesen, indem Sie die 
+                  <a class="link" href="ox.appsuite.user.sect.email.manage.source.html#ox.appsuite.user.concept.email.source">Quelldaten anzeigen</a>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Wenn Sie den Bestandteil <span class="guilabel"><strong>BCC</strong></span> berücksichtigen möchten, wählen Sie <span class="guibutton"><strong>Envelope</strong></span>. Envelope
+                    umfasst die Empfänger der E-Mail, die entweder in <span class="guilabel"><strong>An</strong></span>, <span class="guilabel"><strong>CC</strong></span> oder <span class="guilabel"><strong>BCC</strong></span> 
+                    angegeben sind.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Wenn Sie in der Bedingung einen Teil des E-Mail-Inhalts verwenden möchten, wählen Sie <span class="guibutton"><strong>Content</strong></span>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Wenn Sie in der Bedingung das Datum des Empfangs verwenden möchten, wählen Sie <span class="guibutton"><strong>Current Date</strong></span>.</p></li>
+</ul></div>
+<p>
+            </p>
+<p>Wählen Sie rechts neben dem Bestandteil ein Kriterium. Geben Sie rechts neben dem Kriterium ein Argument ein.</p>
 <p>Beispiele zur Anwendung finden Sie bei den 
               <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.mailfilter.conditions" title="F:">Fragen und Antworten zu E-Mails</a>.</p>
 <p>Bei Bedarf fügen Sie weitere Bedingungen hinzu. Dann können Sie bestimmen, ob eine Bedingung oder alle
-              Bedingugen zutreffen müssen, damit die Aktion ausgeführt wird. Klicken Sie dazu auf 
+              Bedingungen zutreffen müssen, damit die Aktion ausgeführt wird. Klicken Sie dazu auf 
               <span class="guibutton"><strong>Regel anwenden, wenn alle Bedingungen erfüllt sind</strong></span>.</p>
 <p>Um eine Bedingung zu löschen, klicken Sie neben der Bedingung auf das Symbol <span class="guibutton"><strong>Löschen</strong></span>
               <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.create.delete"></a><img src="../../images/appsuite_user_icon_trash.png"></span> .</p>
@@ -117,11 +124,10 @@
 <a name="ox.appsuite.user.task.email.mailfilter.change"></a><p class="title">So ändern Sie vorhandene Regeln:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p>Klicken Sie in der Menüleiste rechts auf das Symbol <span class="guibutton"><strong>Systemmenü</strong></span>
-              <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.change.systemmenu"></a><img src="../../images/appsuite_user_icon_settings.png"></span> . Klicken Sie im Menü auf <span class="guibutton"><strong>Einstellungen</strong></span>. </p></li>
+              <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.change.systemmenu"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> . Klicken Sie im Menü auf <span class="guibutton"><strong>Einstellungen</strong></span>. </p></li>
 <li class="step">
-<p>Wenn in der Seitenleiste <span class="guibutton"><strong>Mailfilter</strong></span> nicht angezeigt wird, aktivieren Sie 
-            <span class="guibutton"><strong>Erweiterte Einstellungen</strong></span> unten in der Seitenleiste.</p>
-<p>Klicken Sie in der Seitenleiste auf <span class="guibutton"><strong>Mailfilter</strong></span>.</p>
+<p>Öffnen Sie in der Seitenleiste den Eintrag <span class="guibutton"><strong>E-Mail</strong></span>.</p>
+<p>Klicken Sie auf <span class="guibutton"><strong>Mailfilter</strong></span>.</p>
 </li>
 <li class="step"><p>Um die Einstellungen einer Regel zu bearbeiten, klicken Sie neben der Regel auf
                 <span class="guibutton"><strong>Bearbeiten</strong></span>. Ändern Sie im Fenster <span class="guilabel"><strong>Regel bearbeiten</strong></span> die

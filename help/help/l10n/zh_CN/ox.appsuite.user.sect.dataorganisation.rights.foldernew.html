@@ -7,7 +7,7 @@
 <link rel="home" href="index.html" title="">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. 权限">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html" title="11.2.2. 现有文件夹的权限">
-<link rel="next" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. 共享文件夹">
+<link rel="next" href="ox.appsuite.user.sect.dataorganisation.sharing.html" title="11.3. 分享">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -25,7 +25,7 @@
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html">上一页</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">起始页</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目录</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html">下一页</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.sharing.html">下一页</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -34,7 +34,7 @@
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ox.appsuite.user.sect.dataorganisation.rights.foldernew"></a>11.2.3. 权限新文件夹的</h3></div></div></div>
-<a class="indexterm" name="id-1.12.5.7.2"></a><div class="concept">
+<a class="indexterm" name="id-1.12.5.6.2"></a><div class="concept">
 <a name="ox.appsuite.user.concept.rights.foldernew"></a><p>视您创建新文件夹的位置而定，向您指定权限。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>在一个<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html#ox.appsuite.user.reference.rights.personalfoldernew">个人文件夹</a>里</p></li>
@@ -47,8 +47,8 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.personalfoldernew"></a><p>如果您在个人文件夹中创建新文件夹：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>您是<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="拥有人">拥有人</a>。</p></li>
-<li class="listitem"><p>其他用户继承他们拥有的父文件夹的权限。</p></li>
+<li class="listitem"><p>您是<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="管理员">管理员</a>。</p></li>
+<li class="listitem"><p>在<span class="phrase"><span class="guilabel"><strong>电子邮件</strong></span></span>应用程序或<span class="phrase"><span class="guilabel"><strong>磁盘</strong></span></span>应用程序里，其他用户继承他们在母文件夹的权限。在其他应用程序里，其他用户不继承权限。</p></li>
 </ul></div>
 <p>
       </p>
@@ -56,8 +56,8 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.publicfoldernew"></a><p>如果您在<span class="guibutton"><strong>公共文件</strong></span>文件夹里创建一个新文件夹：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>您是<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="拥有人">拥有人</a>。</p></li>
-<li class="listitem"><p>其他用户将会不获得权限。您必须为新文件夹设置权限。如果您在此文件夹中创建新子文件夹，此文件夹的权限会被新子文件夹继承。授予权限的信息可以在<a class="xref" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. 共享文件夹">11.2.4: 共享文件夹</a>找到。</p></li>
+<li class="listitem"><p>您是<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="管理员">管理员</a>。</p></li>
+<li class="listitem"><p>其他用户将会不获得权限。您必须为新文件夹设置权限。如果您在此文件夹中创建新子文件夹，此文件夹的权限会被新子文件夹继承。</p></li>
 </ul></div>
 <p>
       </p>
@@ -65,12 +65,11 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.rights.sharedfoldernew"></a><p>如果您在别的用户的共享文件夹中创建新文件夹：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>分享文件夹的用户，获得新文件夹的<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="管理员">管理员</a>权限。</p></li>
-<li class="listitem"><p>您是<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="拥有人">拥有人</a>。</p></li>
+<li class="listitem"><p>分享文件夹的用户，为新文件夹的<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="管理员">管理员</a>。</p></li>
+<li class="listitem"><p>您是新文件夹的<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="作者">作者</a>。</p></li>
 <li class="listitem"><p>其他用户获得与父文件夹相同的权限。</p></li>
 </ul></div>
-<p>
-      </p>
+<p><span class="phrase"><strong>备注：</strong></span>您需要有创建对象的权限，才能在分享文件夹里创建对象。</p>
 </div>
 </div>
           </div>

@@ -1,13 +1,13 @@
 <html lang="it">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>11.2.4. Condividere le cartelle</title>
+<title>11.2.4. concedere permessi</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="OX App Suite">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Permessi">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html" title="11.2.3. Permessi per le nuove cartelle">
-<link rel="next" href="ox.appsuite.user.sect.dataorganisation.pubsub.html" title="11.3. Pubblicare e sottoscrivere">
+<link rel="next" href="ox.appsuite.user.sect.dataorganisation.pubsub.html" title="11.3. Sottoscrizioni">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Nota Legale">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -33,69 +33,76 @@
 <h2 class="sr-only">Permessi</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.dataorganisation.rights.grant"></a>11.2.4. Condividere le cartelle</h3></div></div></div>
-<a class="indexterm" name="id-1.12.5.8.2"></a><a class="indexterm" name="id-1.12.5.8.3"></a><a class="indexterm" name="id-1.12.5.8.4"></a><a class="indexterm" name="id-1.12.5.8.5"></a><div class="concept">
-<a name="ox.appsuite.user.concept.rights.share"></a><p>Per condividere dati con altri utenti, condividere una o più cartelle. Si può condividere una cartella accordando agli altri utenti determinati permessi sulla cartella stessa. Sono disponibili le seguenti opzioni: </p>
+<a name="ox.appsuite.user.sect.dataorganisation.rights.grant"></a>11.2.4. concedere permessi</h3></div></div></div>
+<a class="indexterm" name="id-1.12.5.8.2"></a><a class="indexterm" name="id-1.12.5.8.3"></a><div class="concept">
+<a name="ox.appsuite.user.concept.rights.grant"></a><p>Per condividere dati con altri utenti o collaboratori esterni, condividere una o più cartelle accordando determinati permessi sulla cartella. Sono disponibili le seguenti opzioni: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.share" title="Come accordare i permessi su una cartella:">accordare</a> permessi su una cartella,</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.add" title="Come accordare i permessi su una cartella:">accordare</a> permessi su una cartella,</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.change" title="Come modificare i permessi delle cartelle:">cambiare</a> i permessi su una cartella,</p></li>
-<li class="listitem"><p>accordare permessi applicando un <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.applyrole" title="Come accordare i permessi applicando un ruolo utente:">ruolo utente</a>,</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.remove" title="Come rimuovere i permessi di un utente su una cartella:">eliminare</a> i permessi su una cartella.</p></li>
 </ul></div>
 <p>
       </p>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.share.limitations"></a><p><span class="phrase"><strong>Nota:</strong></span> considerare le seguenti restrizioni: </p>
+<a name="ox.appsuite.user.concept.rights.limitations"></a><p><span class="phrase"><strong>Nota:</strong></span> considerare le seguenti restrizioni: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none"><p>Per accordare permessi su una cartella ad altri utenti, è necessario disporre dei permessi di amministrazione sulla cartella.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Non è possibile condividere la cartella personale <span class="guilabel"><strong>Posta in arrivo</strong></span>. Per accordare ad altri utenti l'accesso ai propri messaggi di posta elettronica, condividere una cartella di posta posizionata sotto la cartella <span class="guilabel"><strong>Posta in arrivo</strong></span>. Gli altri utenti devono sottoscrivere la cartella di posta. Vedere <a class="xref" href="ox.appsuite.user.sect.email.share.subscribe.html" title="5.7.2. Sottoscrivere cartelle di posta elettronica">5.7.2: Sottoscrivere cartelle di posta elettronica</a>.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Si dispone dei permessi esclusivi sulle proprie cartelle di calendario, contatti e attività. Non è possibile accordare ad altri utenti i permessi di amministrazione per queste cartelle. Esempi di impostazioni di base sono disponibili in <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights" title="Domanda:">organizzazione dei dati e domande sul lavoro di squadra</a>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Impossibile condividere la cartella personale <span class="guilabel"><strong>Posta in arrivo</strong></span>. Per accordare ad altri utenti l'accesso ai propri messaggi di posta elettronica, condividere una cartella di posta posizionata sotto la cartella <span class="guilabel"><strong>Posta in arrivo</strong></span>. Gli altri utenti devono sottoscrivere la cartella di posta.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Si dispone dei permessi esclusivi sulle proprie cartelle di calendario, contatti e attività. Non è possibile accordare ad altri utenti i permessi di amministrazione per queste cartelle.</p></li>
 </ul></div>
 <p>
       </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.rights.share"></a><p class="title">Come accordare i permessi su una cartella:</p>
+<a name="ox.appsuite.user.task.rights.add"></a><p class="title">Come accordare i permessi su una cartella:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Come aprire una determinata cartella:">Selezionare</a> una cartella nell'albero delle cartelle.</p>
+<p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Come aprire o selezionare una cartella:">Selezionare</a> una cartella nell'albero delle cartelle.</p>
 <p><span class="phrase"><strong>Nota:</strong></span> è necessario disporre dei permessi amministrativi per questa cartella.</p>
 </li>
-<li class="step"><p>Fare clic sull'icona <span class="guibutton"><strong>Azioni delle cartelle</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.share"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> accanto al nome della cartella. Fare clic su <span class="guibutton"><strong>Permessi</strong></span>. La finestra <span class="guilabel"><strong>Permessi delle cartelle</strong></span> mostra i permessi correnti per questa cartella.</p></li>
-<li class="step"><p>In basso, digitare il nome di un utente. Fare clic sull'icona <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.share.add"></a><img src="../../images/appsuite_user_icon_add.png"></span>. L'utente ottiene i permessi preimpostati. </p></li>
-<li class="step"><p>Fare clic sui permessi di un utente per modificarli. Impostazioni di esempio sono disponibili in <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights" title="Domanda:">Domande relative all'organizzazione dei dati e al lavoro di squadra</a>.</p></li>
-<li class="step"><p>Se necessario, ripetere l'operazione per accordare permessi aggiuntivi.</p></li>
+<li class="step"><p>Fare clic sull'icona <span class="guibutton"><strong>Azioni delle cartelle</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.share"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> accanto al nome della cartella. Fare clic su <span class="guibutton"><strong>Permessi</strong></span>. Una finestra mostra i permessi correnti per questa cartella.</p></li>
+<li class="step">
+<p>Digitare un indirizzo di posta elettronica in <span class="guilabel"><strong>Aggiungi persone</strong></span>. L'indirizzo sarà aggiunto all'elenco come utente interno, gruppo o ospite. Sono accordati i permessi preimpostati.</p>
+<p>Se richiesto, digitare un messaggio.</p>
+</li>
+<li class="step">
+<p>Per modificare i permessi, sono disponibili le seguenti opzioni.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Per modificare il ruolo di un utente, fare clic su <span class="guibutton"><strong>Ruolo attuale</strong></span>. Selezionare una voce dal menu.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Per cambiare i dettagli dei permessi, fare clic su <span class="guibutton"><strong>Permessi di accesso dettagliati</strong></span>. Selezionare un permesso dal menu.</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="step">
+<p>Per trasferire i permessi a tutte le sottocartelle esistenti o nuove in questa cartella, abilitare <span class="guibutton"><strong>Applica a tutte le sottocartelle</strong></span>.</p>
+<p><span class="phrase"><strong>Nota:</strong></span> è necessario disporre dei permessi amministrativi per le sottocartelle. </p>
+</li>
 <li class="step"><p>Fare clic su <span class="guibutton"><strong>Salva</strong></span>.</p></li>
 </ol></div>
 <div class="taskrelated">
-          <p><span class="phrase"><strong>Suggerimento:</strong></span> una cartella condivisa è marcata con l'icona <span class="guibutton"><strong>Condiviso</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.fig.rights.share.shared"></a><img src="../../images/appsuite_user_icon_folder_share.png"></span>. Facendo clic sull'icona, si aprirà la finestra <span class="guilabel"><strong>Permessi delle cartelle</strong></span>.</p>
+          <p><span class="phrase"><strong>Suggerimento:</strong></span> una cartella condivisa è marcata con l'icona <span class="guibutton"><strong>Condiviso</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.fig.rights.shared"></a><img src="../../images/appsuite_user_icon_folder_shared.png"></span> . Facendo clic sull'icona, si aprirà la finestra per modificare i permessi.</p>
         </div>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.rights.change"></a><p class="title">Come modificare i permessi delle cartelle:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Come aprire una determinata cartella:">Selezionare</a> una cartella nell'albero delle cartelle.</p>
+<p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Come aprire o selezionare una cartella:">Selezionare</a> una cartella nell'albero delle cartelle.</p>
 <p><span class="phrase"><strong>Nota:</strong></span> è necessario disporre dei permessi amministrativi per questa cartella.</p>
 </li>
-<li class="step"><p>Fare clic sull'icona <span class="guibutton"><strong>Azioni delle cartelle</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.change"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> accanto al nome della cartella. Fare clic su <span class="guibutton"><strong>Permessi</strong></span>. La finestra <span class="guilabel"><strong>Permessi delle cartelle</strong></span> mostra i permessi correnti per questa cartella.</p></li>
+<li class="step"><p>Fare clic sull'icona <span class="guibutton"><strong>Azioni delle cartelle</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.change"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> accanto al nome della cartella. Fare clic su <span class="guibutton"><strong>Permessi</strong></span>. Una finestra mostra i permessi correnti per questa cartella.</p></li>
 <li class="step">
-<p>Fare clic sui permessi per modificarli. Impostazioni di esempio sono disponibili in <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights" title="Domanda:">Domande relative all'organizzazione dei dati e al lavoro di squadra</a>.</p>
+<p>Utilizzare i seguenti metodi:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Per modificare il ruolo di un utente, fare clic su <span class="guibutton"><strong>Ruolo attuale</strong></span>. Selezionare una voce dal menu.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Per cambiare i dettagli dei permessi, fare clic su <span class="guibutton"><strong>Permessi di accesso dettagliati</strong></span>. Selezionare un permesso dal menu.</p></li>
+</ul></div>
+<p>
+            </p>
 <p> <span class="phrase"><strong>Nota:</strong></span> non è possibile modificare i diritti amministrativi di una cartella personale. </p>
 </li>
-<li class="step"><p>Fare clic su <span class="guibutton"><strong>Salva</strong></span>.</p></li>
-</ol></div>
-</div>
-<div class="task">
-<a name="ox.appsuite.user.task.rights.applyrole"></a><p class="title">Come accordare i permessi applicando un ruolo utente:</p>
-<div class="procedure"><ol class="procedure" type="1">
-<li class="step">
-<p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Come aprire una determinata cartella:">Selezionare</a> una cartella nell'albero delle cartelle.</p>
-<p><span class="phrase"><strong>Nota:</strong></span> è necessario disporre dei permessi amministrativi per questa cartella.</p>
-</li>
-<li class="step"><p>Fare clic sull'icona <span class="guibutton"><strong>Azioni delle cartelle</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.applyrole"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> accanto al nome della cartella. Fare clic su <span class="guibutton"><strong>Permessi</strong></span>. La finestra <span class="guilabel"><strong>Permessi delle cartelle</strong></span> mostra i permessi correnti per questa cartella.</p></li>
-<li class="step"><p>Fare clic su <span class="guibutton"><strong>Applica ruolo</strong></span> accanto a un nome utente. Selezionare un <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles">Ruolo utente</a> dal menu.</p></li>
 <li class="step"><p>Fare clic su <span class="guibutton"><strong>Salva</strong></span>.</p></li>
 </ol></div>
 </div>
@@ -103,11 +110,11 @@
 <a name="ox.appsuite.user.task.rights.remove"></a><p class="title">Come rimuovere i permessi di un utente su una cartella:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Come aprire una determinata cartella:">Selezionare</a> una cartella nell'albero delle cartelle.</p>
+<p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Come aprire o selezionare una cartella:">Selezionare</a> una cartella nell'albero delle cartelle.</p>
 <p><span class="phrase"><strong>Nota:</strong></span> è necessario disporre dei permessi amministrativi per questa cartella.</p>
 </li>
-<li class="step"><p>Fare clic sull'icona <span class="guibutton"><strong>Azioni delle cartelle</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.remove"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> accanto al nome della cartella. Fare clic su <span class="guibutton"><strong>Permessi</strong></span>.</p></li>
-<li class="step"><p>Per rimuovere i permessi di un utente, fare clic sull'icona <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.removeuser"></a><img src="../../images/appsuite_user_icon_trash.png"></span> accanto al nome dell'utente.</p></li>
+<li class="step"><p>Fare clic sull'icona <span class="guibutton"><strong>Azioni delle cartelle</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.remove"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> accanto al nome della cartella. Fare clic su <span class="guibutton"><strong>Permessi</strong></span>. Una finestra mostra i permessi correnti per questa cartella.</p></li>
+<li class="step"><p>Per rimuovere i permessi di un utente, fare clic sull'icona <span class="guibutton"><strong>Azioni</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.removeuser"></a><img src="../../images/appsuite_user_icon_actions.png"></span>accanto al nome dell'utente. Fare clic su <span class="guibutton"><strong>Revoca accesso</strong></span> nel menu.</p></li>
 <li class="step"><p>Fare clic su <span class="guibutton"><strong>Salva</strong></span>.</p></li>
 </ol></div>
 </div>

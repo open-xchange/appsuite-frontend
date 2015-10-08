@@ -13,7 +13,8 @@
 
 define('plugins/portal/dummy/register', $.noop);
 
-/*define('plugins/portal/dummy/register', ['io.ox/core/extensions'], function (ext) {
+/*define('plugins/portal/dummy/register', [
+    'io.ox/core/extensions'], function (ext) {
 
     'use strict';
 
@@ -47,7 +48,7 @@ define('plugins/portal/dummy/register', $.noop);
             'http://www.open-xchange.com/typo3conf/ext/opx/Resources/Public/Image/portal/icon/carousel/gear.png',
             'http://www.open-xchange.com/typo3conf/ext/opx/Resources/Public/Image/portal/icon/carousel/ignite.png'][pos];
         var $node = $('<div class="io-ox-tile-container io-ox-portal-typeB">').append(
-            $('<div class="io-ox-portal-image">').attr({'style': 'background-image: url(' + img + ')'}),
+            $('<div class="io-ox-portal-image">').attr({ 'style': 'background-image: url(' + img + ')' }),
             $('<div class="io-ox-portal-title">').text('Dummy Type B' + pos).append(
                 $('<i class="fa fa-edit io-ox-portal-action">').text(' '),
                 $('<i class="fa fa-times io-ox-portal-action">').text(' ')

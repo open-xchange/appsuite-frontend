@@ -10,11 +10,12 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/backbone/validation',
-    ['io.ox/core/extensions',
-     'io.ox/core/util',
-     'settings!io.ox/core',
-     'gettext!io.ox/backbone/validation'], function (ext, util, settings, gt) {
+define('io.ox/backbone/validation', [
+    'io.ox/core/extensions',
+    'io.ox/core/util',
+    'settings!io.ox/core',
+    'gettext!io.ox/core'
+], function (ext, util, settings, gt) {
 
     'use strict';
 

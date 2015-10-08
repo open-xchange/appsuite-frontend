@@ -11,12 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/api/factory',
-    ['io.ox/core/http',
-     'io.ox/core/cache',
-     'io.ox/core/event',
-     'io.ox/core/extensions'
-    ], function (http, cache, Events, ext) {
+define('io.ox/core/api/factory', [
+    'io.ox/core/http',
+    'io.ox/core/cache',
+    'io.ox/core/event',
+    'io.ox/core/extensions',
+    'io.ox/core/api/backbone'
+], function (http, cache, Events, ext, backbone) {
 
     'use strict';
 
@@ -35,7 +36,7 @@ define('io.ox/core/api/factory',
     /**
      * reduce object to id, folder, recurrence_position
      * @param  {object|string} obj
-     * @return {object}
+     * @return { object }
      */
     var reduce = function (obj) {
         return !_.isObject(obj) ? obj : _(GET_IDS).reduce(function (memo, prop) {
@@ -115,7 +116,7 @@ define('io.ox/core/api/factory',
              * @param  {object} cache (default is cache.all)
              * @param  {boolean} processResponse (default is true)
              * @fires api#update: + id
-             * @return {deferred}
+             * @return { deferred }
              */
             getAll: function (options, useCache, cache, processResponse) {
 
@@ -147,9 +148,8 @@ define('io.ox/core/api/factory',
                                     if (lastModified[cid] === undefined) {
                                         lastModified[cid] = obj.last_modified;
                                         return ready;
-                                    }
-                                    // do we see a newer item now?
-                                    else if (obj.last_modified > lastModified[cid]) {
+                                    } else if (obj.last_modified > lastModified[cid]) {
+                                        // do we see a newer item now?
                                         lastModified[cid] = obj.last_modified;
                                         return $.when(
                                             api.caches.list.remove(cid),
@@ -197,7 +197,7 @@ define('io.ox/core/api/factory',
              * @param  {array} ids
              * @param  {boolean} useCache (default is true)
              * @param  {object} options
-             * @return {deferred}
+             * @return { deferred }
              */
             getList: function (ids, useCache, options) {
                 // be robust
@@ -241,7 +241,7 @@ define('io.ox/core/api/factory',
 
                 //     // if just one item, we use get request
                 //     if (typeof ids[0] === 'number') {
-                //         ids = [{id: ids[0]}];
+                //         ids = [{ id: ids[0]}];
                 //     }
 
                 //     var getOptions = http.simplify(ids)[0];
@@ -269,7 +269,7 @@ define('io.ox/core/api/factory',
              * @param  {object} options
              * @param  {boolan} useCache (default is true)
              * @fires api#refresh.list
-             * @return {deferred} (resolve returns response)
+             * @return { deferred} (resolve returns response)
              */
             get: function (options, useCache) {
                 // merge defaults for get
@@ -317,7 +317,7 @@ define('io.ox/core/api/factory',
              * @param  {array} list
              * @param  {object} hash (ids of items to be removed)
              * @param  {function} getKey
-             * @return {array} (cleaned list)
+             * @return { array} (cleaned list)
              */
             localRemove: function (list, hash, getKey) {
                 return _(list).filter(function (o) {
@@ -330,7 +330,7 @@ define('io.ox/core/api/factory',
              * @param  {array|object} ids
              * @param  {boolean} silent (do not fire events)
              * @fires  api#delete: + id
-             * @return {promise} jQueries deferred promise
+             * @return { promise} jQueries deferred promise
              */
             updateCaches: function (ids, silent) {
                 // be robust
@@ -410,7 +410,7 @@ define('io.ox/core/api/factory',
              * @fires  api#delete (ids)
              * @fires  api#beforedelete (ids)
              * @fires  api#refresh:all:local
-             * @return {deferred}
+             * @return { deferred }
              */
             remove: function (ids, options) {
                 // be robust
@@ -468,7 +468,7 @@ define('io.ox/core/api/factory',
              * @param  {string} folder (id)
              * @param  {string} sort   (column)
              * @param  {string} order
-             * @return {deferred}      (resolves returns boolean)
+             * @return { deferred}      (resolves returns boolean)
              */
             needsRefresh: function (folder, sort, order) {
                 return caches.all.keys(folder + DELIM + sort + '.' + order).then(function (data) {
@@ -486,7 +486,7 @@ define('io.ox/core/api/factory',
          * @param  {string} id
          * @param  {string} format ('ids', 'names')
          * @example getMapping('cellular') of contactsAPI returns ['551', '552']
-         * @return {array} list of columnids or names
+         * @return { array} list of columnids or names
          */
         api.getMapping = function (id, format) {
             //columns ids or names
@@ -511,7 +511,7 @@ define('io.ox/core/api/factory',
              * search
              * @param  {string} query   [description]
              * @param  {object} options
-             * @return {deferred}
+             * @return { deferred }
              */
             api.search = function (query, options) {
 
@@ -557,7 +557,7 @@ define('io.ox/core/api/factory',
              * advancedsearch
              * @param  {string} query   [description]
              * @param  {object} options
-             * @return {deferred}
+             * @return { deferred }
              */
             api.advancedsearch = function (query, options) {
 
@@ -593,7 +593,7 @@ define('io.ox/core/api/factory',
         /**
          * bind to global refresh; clears caches and trigger refresh.all
          * @fires api#refresh.all
-         * @return {promise}
+         * @return { promise }
          */
         api.refresh = function () {
             if (ox.online) {
@@ -615,19 +615,9 @@ define('io.ox/core/api/factory',
             api.refresh();
         });
 
-        // basic model with custom cid
-        api.Model = Backbone.Model.extend({
-            constructor: function () {
-                Backbone.Model.apply(this, arguments);
-                this.cid = _.cid(this.attributes);
-            }
-        });
-
-        // collection using custom models
-        api.Collection = Backbone.Collection.extend({
-            comparator: 'index',
-            model: api.Model
-        });
+        // basic model with custom cid / collection using custom models
+        api.Model = backbone.Model;
+        api.Collection = backbone.Collection;
 
         return api;
     };

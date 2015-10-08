@@ -12,12 +12,11 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('plugins/upsell/bubbles/main',
-    ['io.ox/core/extPatterns/stage',
-     'io.ox/core/extensions',
-     'io.ox/core/date',
-     'settings!plugins/upsell'
-    ], function (Stage, ext, date, settings) {
+define('plugins/upsell/bubbles/main', [
+    'io.ox/core/extPatterns/stage',
+    'io.ox/core/extensions',
+    'settings!plugins/upsell'
+], function (Stage, ext, settings) {
 
     'use strict';
 
@@ -80,7 +79,7 @@ define('plugins/upsell/bubbles/main',
                     }
                     require(['io.ox/wizards/upsell'], function (wiz) {
                         var def = $.Deferred();
-                        wiz.getInstance().start({cssClass: 'upsell-wizard-container'})
+                        wiz.getInstance().start({ cssClass: 'upsell-wizard-container' })
                             .done(function () {})
                             .fail(def.reject);
                     });
@@ -122,7 +121,7 @@ define('plugins/upsell/bubbles/main',
                 zIndex: 1024,
                 placement: 'bottom',
                 id: bubble.app,
-                content: bubble.content,
+                content: bubble.content
             };
         });
     };

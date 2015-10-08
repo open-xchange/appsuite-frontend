@@ -12,24 +12,19 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/util',
-    ['io.ox/core/extensions',
-     'io.ox/core/date',
-     'io.ox/core/util',
-     'io.ox/core/api/account',
-     'io.ox/core/capabilities',
-     'settings!io.ox/mail',
-     'settings!io.ox/contacts',
-     'gettext!io.ox/core'
-    ], function (ext, date, util, accountAPI, capabilities, settings, contactsSetting, gt) {
+define('io.ox/mail/util', [
+    'io.ox/core/extensions',
+    'io.ox/core/util',
+    'io.ox/core/api/account',
+    'io.ox/core/capabilities',
+    'settings!io.ox/mail',
+    'settings!io.ox/contacts',
+    'gettext!io.ox/core'
+], function (ext, util, accountAPI, capabilities, settings, contactsSetting, gt) {
 
     'use strict';
 
     var that,
-        format = _.printf,
-        MINUTE = 60 * 1000,
-        HOUR = MINUTE * 60,
-        DAY = HOUR * 24,
 
         ngettext = function (s, p, n) {
             return n > 1 ? p : s;
@@ -47,30 +42,23 @@ define('io.ox/mail/util',
             if (!_.isNumber(timestamp)) return gt('unknown');
 
             var opt = $.extend({ fulldate: false, filtertoday: true }, options || {}),
-                now = new date.Local(),
-                d = new date.Local(timestamp),
-                base, delta,
+                d = moment(timestamp),
 
                 timestr = function () {
-                    return d.format(date.TIME);
+                    return d.format('LT');
                 },
                 datestr = function () {
-                    return d.format(date.DATE) + (opt.fulldate ? ' ' + timestr() : '');
+                    return d.format('l') + (opt.fulldate ? ' ' + timestr() : '');
                 },
                 isSameDay = function () {
-                    return d.getDate() === now.getDate() &&
-                        d.getMonth() === now.getMonth() &&
-                        d.getYear() === now.getYear();
+                    return moment().isSame(d, 'day');
                 };
 
             if (opt.filtertoday && isSameDay()) return timestr();
 
             if (opt.smart) {
-                base = Math.floor(timestamp / DAY) * DAY;
-                now = Math.floor(_.utc() / DAY) * DAY;
-                delta = Math.floor((now - base) / DAY);
-                if (delta === 1) return gt('Yesterday');
-                else if (delta <= 6) return d.format('EEEE');
+                var delta = moment().startOf('day').diff(moment(timestamp).startOf('day'), 'day');
+                if (delta === 1) { return gt('Yesterday'); } else if (delta <= 6) { return d.format('dddd'); }
             }
 
             return datestr();
@@ -109,7 +97,7 @@ define('io.ox/mail/util',
         /**
          * currently registred types
          * @example: { MSISND : '/TYPE=PLMN' }
-         * @return {array} list of types
+         * @return { array} list of types
          */
         getChannelSuffixes: (function () {
             //important: used for global replacements so keep this value unique
@@ -123,7 +111,7 @@ define('io.ox/mail/util',
          * identify channel (email or phone)
          * @param  {string} value
          * @param  {boolean} check for activated cap first (optional: default is true)
-         * @return {string} channel
+         * @return { string} channel
          */
         getChannel: function (value, check) {
             //default value
@@ -134,9 +122,9 @@ define('io.ox/mail/util',
                 setting = !(check) || capabilities.has('msisdn'),
                 //no '@' AND no alphabetic digit AND at least one numerical digit
                 phoneval = function () {
-                            return value.replace(rNotDigitAndAt, '').length === 0 &&
-                                   value.replace(rTelephoneCleanup, '').length > 0;
-                        };
+                    return value.replace(rNotDigitAndAt, '').length === 0 &&
+                           value.replace(rTelephoneCleanup, '').length > 0;
+                };
             return type || (setting && phoneval()) ? 'phone' : 'email';
         },
 
@@ -169,7 +157,7 @@ define('io.ox/mail/util',
         /**
          * remove typesuffix from sender/reciepients
          * @param  {object|string} mail
-         * @return {undefined}
+         * @return { undefined }
          */
         removeChannelSuffix: !capabilities.has('msisdn') ? _.identity :
             function (mail) {
@@ -316,9 +304,6 @@ define('io.ox/mail/util',
 
             if (options.unescapeDisplayName === true) {
                 display_name = util.unescapeDisplayName(name);
-            } else {
-                // reorderDisplayName doesn't work without unescapeDisplayName; just to be safe
-                options.reorderDisplayName = false;
             }
 
             if (options.showDisplayName === false) return email;
@@ -327,7 +312,7 @@ define('io.ox/mail/util',
                 display_name = display_name.replace(/^([^,.\(\)]+),\s([^,]+)$/, '$2 $1');
             }
 
-            if (options.displayMailAddress && display_name && email) {
+            if (options.showMailAddress && display_name && email) {
                 display_name += ' <' + email + '>';
             }
 
@@ -445,8 +430,7 @@ define('io.ox/mail/util',
         getFullDate: function (timestamp) {
             if (!_.isNumber(timestamp))
                 return gt('unknown');
-            var t = new date.Local(timestamp);
-            return t.format(date.DATE_TIME);
+            return moment(timestamp).format('l LT');
         },
 
         getSmartTime: function (timestamp) {
@@ -455,6 +439,9 @@ define('io.ox/mail/util',
             //without the page being reloaded. This might confuse the user and therefore we decided not
             //to use this method any longer. It has not been removed, yet but should so in the future.
             //The following warning is there to inform potential 3rd-party developers about the change.
+            var format = _.printf,
+                MINUTE = 60 * 1000,
+                HOUR = MINUTE * 60;
             console.warn('This method is deprecated and will be removed with 7.6.0 or at any random date later');
             if (!_.isNumber(timestamp))
                 return gt('unknown');
@@ -614,9 +601,9 @@ define('io.ox/mail/util',
                         // consider changes applied by appsuite
                         var clean = add(signature.content, !!isHTML);
                         // consider changes applied by tiny
-                        if (clean === '')
+                        if (clean === '') {
                             return '<br>';
-                        else {
+                        } else {
                             return clean
                                 // set breaks
                                 .replace(/(\r\n|\n|\r)/g, '<br>')
@@ -668,8 +655,8 @@ define('io.ox/mail/util',
                             id: obj.id,
                             content_type: 'message/rfc822',
                             filename: obj.filename ||
-                                      // remove consecutive white-space
-                                      _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), {max: 50}),
+                                // remove consecutive white-space
+                                _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), { max: 50 }),
                             title: obj.filename || obj.subject || '',
                             mail: mail,
                             parent: data.parent || mail,

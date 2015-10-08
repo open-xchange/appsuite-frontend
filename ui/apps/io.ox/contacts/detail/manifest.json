@@ -1,0 +1,6 @@
+{
+    "category": "Basic",
+    "requires": "contacts",
+    "refreshable": true,
+    "visible": false
+}

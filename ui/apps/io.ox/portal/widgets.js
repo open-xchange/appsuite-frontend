@@ -11,14 +11,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/portal/widgets',
-    ['io.ox/core/extensions',
-     'io.ox/core/manifests',
-     'io.ox/core/upsell',
-     'io.ox/core/notifications',
-     'settings!io.ox/portal',
-     'gettext!io.ox/portal'
-    ], function (ext, manifests, upsell, notifications, settings, gt) {
+define('io.ox/portal/widgets', [
+    'io.ox/core/extensions',
+    'io.ox/core/manifests',
+    'io.ox/core/upsell',
+    'io.ox/core/notifications',
+    'settings!io.ox/portal',
+    'gettext!io.ox/portal'
+], function (ext, manifests, upsell, notifications, settings, gt) {
 
     'use strict';
 
@@ -43,7 +43,7 @@ define('io.ox/portal/widgets',
 
         // Load the users widgets
         _(userWidgets || {}).each(function (widgetDef, id) {
-            widgets[id] = _.extend({}, widgetDef, {userWidget: true});
+            widgets[id] = _.extend({}, widgetDef, { userWidget: true });
         });
 
         // http://oxpedia.org/wiki/index.php?title=AppSuite:Configuring_portal_plugins
@@ -65,7 +65,7 @@ define('io.ox/portal/widgets',
             });
             return function process(widgetDef, id) {
                 if (!deleted[id]) {
-                    widgets[id] = _.extend({}, widgets[id], widgetDef, userValues[id], {eagerWidget: true});
+                    widgets[id] = _.extend({}, widgets[id], widgetDef, userValues[id], { eagerWidget: true });
                 }
             };
         }
@@ -77,7 +77,7 @@ define('io.ox/portal/widgets',
         // Ensure all protected widgets
         _(settings.get('widgets/protected' + widgetSet)).each(function (widgetDef, id) {
             widgetDef.protectedWidget = true;
-            widgets[id] = _.extend({}, widgets[id], widgetDef, {protectedWidget: true});
+            widgets[id] = _.extend({}, widgets[id], widgetDef, { protectedWidget: true });
             widgets[id].userWidget = false;
             widgetDef.userWidget = false;
 
@@ -105,7 +105,10 @@ define('io.ox/portal/widgets',
                     plugin: 'plugins/portal/mail/register',
                     color: 'blue',
                     userWidget: true,
-                    index: 1
+                    index: 1,
+                    props: {
+                        name: gt('Inbox')
+                    }
                 },
                 birthdays_0: {
                     plugin: 'plugins/portal/birthdays/register',
@@ -131,23 +134,17 @@ define('io.ox/portal/widgets',
                     userWidget: true,
                     index: 4
                 },
-                facebook_0: {
-                    plugin: 'plugins/portal/facebook/register',
-                    color: 'blue',
-                    userWidget: true,
-                    index: 5
-                },
                 twitter_0: {
                     plugin: 'plugins/portal/twitter/register',
                     color: 'pink',
                     userWidget: true,
-                    index: 6
+                    index: 5
                 },
                 linkedin_0: {
                     plugin: 'plugins/portal/linkedin/register',
                     color: 'lightblue',
                     userWidget: true,
-                    index: 7
+                    index: 6
                 }
             };
 
@@ -458,8 +455,11 @@ define('io.ox/portal/widgets',
         }
     };
 
+    // Note: Instead of returning this, collection.reset() now returns the changed (added, removed or updated) model or list of models.
     collection
-        .reset(api.getSettingsSorted())
+        .reset(api.getSettingsSorted());
+
+    collection
         .on('change', _.debounce(function (model) {
             //update widgets object
             widgets[model.get('id')] = model.attributes;
@@ -487,6 +487,26 @@ define('io.ox/portal/widgets',
                 settings.remove('widgets/user/' + model.get('id')).saveAndYell();
             }
         });
+
+    // add or remove upsell widget to portal
+    require(['io.ox/core/upsell', 'settings!io.ox/core'], function (upsell, settings) {
+
+        var options = _.extend({
+                enabled: true,
+                requires: 'active_sync || caldav || carddav'
+            }, settings.get('features/upsell/portal-widget')),
+            hasWidget = api.containsType('upsell'),
+            showWidget = options.enabled && !upsell.has(options.requires) && upsell.enabled(options.requires);
+
+        if (hasWidget === showWidget) return;
+
+        if (hasWidget) {
+            api.remove('upsell_0');
+        } else {
+            api.addPlugin('plugins/portal/upsell/register');
+            api.add('upsell');
+        }
+    });
 
     return api;
 });

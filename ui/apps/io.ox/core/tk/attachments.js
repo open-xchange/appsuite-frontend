@@ -11,21 +11,20 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/tk/attachments',
-    ['io.ox/core/extensions',
-     'io.ox/core/api/attachment',
-     'io.ox/core/folder/title',
-     'io.ox/core/strings',
-     'io.ox/core/tk/attachmentsUtil',
-     'io.ox/core/capabilities',
-     'io.ox/preview/main',
-     'io.ox/core/tk/dialogs',
-     'gettext!io.ox/core/tk/attachments',
-     'io.ox/core/extPatterns/links',
-     'settings!io.ox/core',
-     'io.ox/core/notifications',
-     'less!io.ox/core/tk/attachments'
-    ], function (ext, attachmentAPI, shortTitle, strings, util, capabilities, pre, dialogs, gt, links, settings, notifications) {
+define('io.ox/core/tk/attachments', [
+    'io.ox/core/api/attachment',
+    'io.ox/core/folder/title',
+    'io.ox/core/strings',
+    'io.ox/core/tk/attachmentsUtil',
+    'io.ox/core/capabilities',
+    'io.ox/preview/main',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/extPatterns/links',
+    'settings!io.ox/core',
+    'io.ox/core/notifications',
+    'gettext!io.ox/core',
+    'io.ox/core/pim/actions'
+], function (attachmentAPI, shortTitle, strings, util, capabilities, pre, dialogs, links, settings, notifications, gt) {
 
     'use strict';
 
@@ -82,7 +81,7 @@ define('io.ox/core/tk/attachments',
                 var $el = $('<div class="col-lg-6 col-md-6">').append(
                     $('<div class="io-ox-core-tk-attachment file">').append(
                         $('<i class="fa fa-paperclip">'),
-                        $('<div class="row-1">').text(_.ellipsis(attachment.filename, {max: 40, charpos: 'middel'})),
+                        $('<div class="row-1">').text(_.ellipsis(attachment.filename, { max: 40, charpos: 'middle' })),
                         $('<div class="row-2">').append(
                             size = $('<span class="filesize">').text(strings.fileSize(attachment.file_size))
                         ),
@@ -100,7 +99,7 @@ define('io.ox/core/tk/attachments',
             loadAttachments: function () {
                 var self = this;
                 if (this.model.id) {
-                    attachmentAPI.getAll({module: options.module, id: this.model.id, folder: this.model.get('folder') || this.model.get('folder_id')}).done(function (attachments) {
+                    attachmentAPI.getAll({ module: options.module, id: this.model.id, folder: this.model.get('folder') || this.model.get('folder_id') }).done(function (attachments) {
                         self.attachmentsOnServer = attachments;
                         self.updateState();
                     });
@@ -124,9 +123,9 @@ define('io.ox/core/tk/attachments',
 
             addFile: function (file) {
                 if (oldMode) {
-                    this.addAttachment({file: file.hiddenField, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size});
+                    this.addAttachment({ file: file.hiddenField, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size });
                 } else {
-                    this.addAttachment({file: file, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size});
+                    this.addAttachment({ file: file, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size });
                 }
             },
 
@@ -290,8 +289,8 @@ define('io.ox/core/tk/attachments',
                     });
                 }
                 return _.map(list, function (file) {
-                            return file.file;
-                        });
+                    return file.file;
+                });
             },
 
             getNode: function () {
@@ -318,7 +317,7 @@ define('io.ox/core/tk/attachments',
                     maxFileSize,
                     quota,
                     usage,
-                    isMail = (baton.app && baton.app.app.attributes.name === 'io.ox/mail/write'),
+                    isMail = (baton.app && baton.app.app.attributes.name === 'io.ox/mail/compose'),
                     filesLength = files.length,
                     autoPublish = require('io.ox/core/capabilities').has('publish_mail_attachments'),
                     result = { added: [] };
@@ -412,8 +411,8 @@ define('io.ox/core/tk/attachments',
                     return new links.Dropdown({
                         label: label || data.filename,
                         classes: 'attachment-link',
-                        ref: 'io.ox/core/tk/attachments/links'
-                    }).draw.call($node, { data: data, options: options});
+                        ref: 'io.ox/core/tk/attachment/links'
+                    }).draw.call($node, { data: data, options: options });
                 }
 
                 function redraw(e, obj) {
@@ -449,158 +448,10 @@ define('io.ox/core/tk/attachments',
         }, options);
     }
 
-    ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
-        id: 'slideshow',
-        index: 100,
-        label: gt('Slideshow'),
-        mobile: 'hi',
-        ref: 'io.ox/core/tk/attachment/actions/slideshow-attachment'
-    }));
-
-    ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
-        id: 'preview',
-        index: 100,
-        label: gt('Preview'),
-        ref: 'io.ox/core/tk/attachment/actions/preview-attachment'
-    }));
-
-    ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
-        id: 'open',
-        index: 150,
-        label: gt('Open in browser'),
-        mobile: 'hi',
-        ref: 'io.ox/core/tk/attachment/actions/open-attachment'
-    }));
-
-    ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
-        id: 'download',
-        index: 200,
-        label: gt('Download'),
-        mobile: 'hi',
-        ref: 'io.ox/core/tk/attachment/actions/download-attachment'
-    }));
-
-    ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
-        id: 'save',
-        index: 400,
-        label: gt('Save to Drive'),
-        mobile: 'hi',
-        ref: 'io.ox/core/tk/attachment/actions/save-attachment'
-    }));
-
-    //attachment actions
-    new links.Action('io.ox/core/tk/attachment/actions/preview-attachment', {
-        id: 'preview',
-        requires: function (e) {
-            return require(['io.ox/preview/main'])
-                .pipe(function (p) {
-                    var list = _.getArray(e.context);
-                    // is at least one attachment supported?
-                    return e.collection.has('some') && _(list).reduce(function (memo, obj) {
-                        return memo || new p.Preview({
-                            filename: obj.filename,
-                            mimetype: obj.content_type
-                        })
-                        .supportsPreview();
-                    }, false);
-                });
-        },
-        multiple: function (list, baton) {
-            ox.load(['io.ox/core/tk/dialogs',
-                     'io.ox/preview/main',
-                     'io.ox/core/api/attachment']).done(function (dialogs, p, attachmentAPI) {
-                //build Sidepopup
-                new dialogs.SidePopup().show(baton.e, function (popup) {
-                    _(list).each(function (data) {
-                        data.dataURL = attachmentAPI.getUrl(data, 'view');
-                        var pre = new p.Preview(data, {
-                            width: popup.parent().width(),
-                            height: 'auto'
-                        });
-                        if (pre.supportsPreview()) {
-                            popup.append(
-                                $('<h4>').text(data.filename)
-                            );
-                            pre.appendTo(popup);
-                            popup.append($('<div>').text('\u00A0'));
-                        }
-                    });
-                    if (popup.find('h4').length === 0) {
-                        popup.append($('<h4>').text(gt('No preview available')));
-                    }
-                });
-            });
-        }
-    });
-
-    new links.Action('io.ox/core/tk/attachment/actions/slideshow-attachment', {
-        id: 'slideshow',
-        requires: function (e) {
-            return e.collection.has('multiple') && _(e.context).reduce(function (memo, obj) {
-                return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
-            }, false);
-        },
-        multiple: function (list, baton) {
-            require(['io.ox/files/carousel'], function (slideshow) {
-                var files = _(list).map(function (file) {
-                    return {
-                        url: attachmentAPI.getUrl(file, 'open'),
-                        filename: file.filename
-                    };
-                });
-                slideshow.init({
-                    baton: { allIds: files },
-                    attachmentMode: true,
-                    selector: baton.options.selector
-                });
-            });
-        }
-    });
-
-    new links.Action('io.ox/core/tk/attachment/actions/open-attachment', {
-        id: 'open',
-        requires: 'one',
-        multiple: function (list) {
-            _(list).each(function (data) {
-                var url = attachmentAPI.getUrl(data, 'open');
-                window.open(url);
-            });
-        }
-    });
-
-    //attachments api currently doesn't support zip download
-    new links.Action('io.ox/core/tk/attachment/actions/download-attachment', {
-        id: 'download',
-        requires: function (e) {
-            return e.collection.has('one') && _.device('!ios');
-        },
-        action: function (baton) {
-            require(['io.ox/core/download'], function (download) {
-                var url = attachmentAPI.getUrl(baton.data, 'download');
-                download.url(url);
-            });
-        }
-    });
-
-    new links.Action('io.ox/core/tk/attachment/actions/save-attachment', {
-        id: 'save',
-        capabilities: 'infostore',
-        requires: 'some',
-        multiple: function (list) {
-            //cannot be converted to multiple request because of backend bug (module overides params.module)
-            _(list).each(function (data) {
-                attachmentAPI.save(data);
-            });
-            require(['io.ox/core/notifications'], function (notifications) {
-                setTimeout(function () {notifications.yell('success', gt('Attachments have been saved!')); }, 300);
-            });
-        }
-    });
-
     var fileUploadWidget = function (options) {
 
         options = _.extend({
-            buttontext: gt('Upload file'),
+            buttontext: gt('Add attachments'),
             tabindex: 1,
             drive: false,
             multi: true
@@ -611,7 +462,7 @@ define('io.ox/core/tk/attachments',
             label = $('<label>').attr('for', gguid).addClass('sr-only').text(options.buttontext),
             input = $('<input name="file" type="file" class="file-input">').prop({ multiple: options.multi }).attr({ id: gguid, tabindex: options.tabindex }),
             uploadButton = $('<span class="btn btn-default btn-file" role="button" tabindex="1">').append($.txt(options.buttontext)).append(label, input),
-            driveButton = $('<button type="button" class="btn btn-default" data-action="addinternal">').attr({ tabindex: options.tabindex }).text(gt('Add from Drive'));
+            driveButton = $('<button type="button" class="btn btn-default" data-action="add-internal">').attr({ tabindex: options.tabindex }).text(gt('Add from Drive'));
 
         input.on('focus', function () {
             uploadButton.addClass('active');
@@ -626,6 +477,13 @@ define('io.ox/core/tk/attachments',
         } else {
             node.append(uploadButton);
         }
+
+        node.on('keypress', function (e) {
+            if (e.which === 32) {
+                input.focus(); // BUG #34034: FF needs to focus the input-element first
+                input.trigger('click');
+            }
+        });
 
         return node;
     };

@@ -11,13 +11,14 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/vacationnotice/settings/view-form',
-    ['io.ox/mail/vacationnotice/settings/model',
-     'io.ox/backbone/views',
-     'io.ox/core/extensions',
-     'io.ox/backbone/mini-views',
-     'less!io.ox/mail/vacationnotice/settings/style'
-    ], function (model, views, ext, mini) {
+define('io.ox/mail/vacationnotice/settings/view-form', [
+    'io.ox/mail/vacationnotice/settings/model',
+    'io.ox/backbone/views',
+    'io.ox/core/extensions',
+    'io.ox/backbone/mini-views',
+    'io.ox/backbone/mini-views/datepicker',
+    'less!io.ox/mail/vacationnotice/settings/style'
+], function (model, views, ext, mini, DatePicker) {
 
     'use strict';
 
@@ -44,7 +45,7 @@ define('io.ox/mail/vacationnotice/settings/view-form',
             draw: function (baton) {
                 this.append(
                     $('<div>').addClass('form-group').append(
-                        $('<label for="subject">').text(model.fields.subject),
+                        $('<label for="subject">').append(model.fields.subject),
                         new mini.InputView({ name: 'subject', model: baton.model, className: 'form-control', id: 'subject' }).render().$el
                     )
                 );
@@ -73,7 +74,7 @@ define('io.ox/mail/vacationnotice/settings/view-form',
                         $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for': 'days' }).addClass('control-label col-md-offset-2 col-md-8').text(model.fields.days),
                             $('<div>').addClass('col-md-2').append(
-                                new mini.SelectView({ list: multiValues.days, name: 'days', model: baton.model, id: 'days', className: 'form-control'}).render().$el
+                                new mini.SelectView({ list: multiValues.days, name: 'days', model: baton.model, id: 'days', className: 'form-control' }).render().$el
                             )
                         )
                     )
@@ -91,8 +92,9 @@ define('io.ox/mail/vacationnotice/settings/view-form',
                 _(multiValues.aliases).each(function (alias) {
                     checkboxes.push(
                         $('<div>').addClass('checkbox').append(
-                            $('<label>').addClass('control-label blue').text(alias).append(
-                                new mini.CheckboxView({ name: alias, model: baton.model }).render().$el
+                            $('<label>').addClass('control-label blue').append(
+                                new mini.CheckboxView({ name: alias, model: baton.model }).render().$el,
+                                $.txt(alias)
                             )
                         )
                     );
@@ -154,8 +156,9 @@ define('io.ox/mail/vacationnotice/settings/view-form',
                         this.append(
                             $('<fieldset>').append(
                                 $('<div>').addClass('checkbox').append(
-                                    $('<label>').addClass('control-label').text(model.fields.activateTimeFrame).append(
-                                        checkboxView.render().$el
+                                    $('<label>').addClass('control-label').append(
+                                        new mini.CheckboxView({ name: 'activateTimeFrame', model: baton.model }).render().$el,
+                                        $.txt(model.fields.activateTimeFrame)
                                     )
                                 )
                             )
@@ -168,17 +171,16 @@ define('io.ox/mail/vacationnotice/settings/view-form',
                     id: ref + '/edit/view/start_date',
                     draw: function (baton) {
 
-                        var dateView = new mini.DateView({ name: 'dateFrom', model: baton.model, future: 5, past: 5 });
+                        var dateView = new DatePicker({
+                            model: baton.model,
+                            className: 'col-sm-6 dateFrom',
+                            display: 'DATE',
+                            attribute: 'dateFrom',
+                            label: model.fields.dateFrom
+                        });
 
-                        this.append(
-                            $('<fieldset class="col-md-12 form-group dateFrom">').append(
-                                $('<legend class="simple">').append(
-                                    $('<h2>').text(model.fields.dateFrom)
-                                ),
-                                // don't wrap the date control with a label (see bug #27559)
-                                dateView.render().$el
-                            )
-                        );
+                        this.append(dateView.render().$el);
+                        dateView.$el.find('legend').removeClass('simple');
 
                         if (!baton.model.get('activateTimeFrame')) {
                             dateView.$el.find('.form-control').attr('disabled', true);
@@ -188,20 +190,18 @@ define('io.ox/mail/vacationnotice/settings/view-form',
 
                 ext.point(ref + '/edit/view').extend({
                     index: 500,
-                    id: ref + '/edit/view/end_date',
+                    id: ref + '/edit/view/dates',
                     draw: function (baton) {
+                        var dateView = new DatePicker({
+                            model: baton.model,
+                            className: 'col-sm-6 dateUntil',
+                            display: 'DATE',
+                            attribute: 'dateUntil',
+                            label: model.fields.dateUntil
+                        });
 
-                        var dateView = new mini.DateView({ name: 'dateUntil', model: baton.model, future: 5, past: 5 });
-
-                        this.append(
-                            $('<fieldset class="col-md-12 form-group dateUntil">').append(
-                                $('<legend class="simple">').append(
-                                    $('<h2>').text(model.fields.dateUntil)
-                                ),
-                                // don't wrap the date control with a label (see bug #27559)
-                                dateView.render().$el
-                            )
-                        );
+                        this.append(dateView.render().$el);
+                        dateView.$el.find('legend').removeClass('simple');
 
                         if (!baton.model.get('activateTimeFrame')) {
                             dateView.$el.find('.form-control').attr('disabled', true);
@@ -209,7 +209,7 @@ define('io.ox/mail/vacationnotice/settings/view-form',
                     }
                 });
 
-                // point.extend(new forms.DatePicker({
+                // point.extend(new DatePicker({
                 //     id: ref + '/edit/view/end_date',
                 //     index: 500,
                 //     className: 'col-md-2',

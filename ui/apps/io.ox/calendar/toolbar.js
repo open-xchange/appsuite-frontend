@@ -11,23 +11,23 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/toolbar',
-    ['io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/extPatterns/actions',
-     'io.ox/backbone/mini-views/dropdown',
-     'io.ox/backbone/mini-views/toolbar',
-     'io.ox/core/tk/upload',
-     'io.ox/core/dropzone',
-     'io.ox/core/notifications',
-     'gettext!io.ox/calendar',
-     'io.ox/calendar/actions',
-     'less!io.ox/calendar/style'
-    ], function (ext, links, actions, Dropdown, Toolbar, upload, dropzone, notifications, gt) {
+define('io.ox/calendar/toolbar', [
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/backbone/mini-views/dropdown',
+    'io.ox/backbone/mini-views/toolbar',
+    'io.ox/core/tk/upload',
+    'io.ox/core/dropzone',
+    'io.ox/core/notifications',
+    'gettext!io.ox/calendar',
+    'io.ox/calendar/actions',
+    'less!io.ox/calendar/style'
+], function (ext, links, actions, Dropdown, Toolbar, upload, dropzone, notifications, gt) {
 
     'use strict';
 
-    if (_.device('small')) return;
+    if (_.device('smartphone')) return;
 
     // define links for classic toolbar
     var point = ext.point('io.ox/calendar/classic-toolbar/links');
@@ -51,6 +51,12 @@ define('io.ox/calendar/toolbar',
             title: gt('Find a free time'),
             drawDisabled: true,
             ref: 'io.ox/calendar/actions/freebusy'
+        },
+        'today': {
+            prio: 'hi',
+            mobile: 'hi',
+            label: gt('Today'),
+            ref: 'io.ox/calendar/actions/today'
         },
         'edit': {
             prio: 'hi',
@@ -161,7 +167,11 @@ define('io.ox/calendar/toolbar',
             .header(gt('Options'))
             .option('folderview', true, gt('Folder view'))
             .option('checkboxes', true, gt('Checkboxes'))
-            .option('darkColors', true, gt('Dark colors'))
+            .divider()
+            .header(gt('Color scheme'))
+            .option('colorScheme', 'classic', gt('Classic colors'))
+            .option('colorScheme', 'dark', gt('Dark colors'))
+            .option('colorScheme', 'custom', gt('Custom colors'))
             .divider()
             .link('print', gt('Print'), print.bind(null, baton))
             .listenTo(baton.app.props, 'change:layout', updateCheckboxOption)

@@ -1,0 +1,304 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+#io-ox-notifications {
+
+    position: absolute;
+    //over UI but under dropdowns
+    z-index: 11;
+    font-size: 14px;
+    top: 40px;
+    background-color: @notification-pane-background;
+    background-clip: padding-box;
+    display: none;
+
+    min-height: 200px;
+    max-height: 80%;
+    -webkit-box-shadow: 20px 0 100px 0 rgba(0, 0, 0, 0.5);
+    box-shadow: 20px 0 100px 0 rgba(0, 0, 0, 0.5);
+    .overflow-x(hidden);
+    .overflow-y(auto);
+
+    &:focus {
+        outline: 0;
+    }
+
+    @media (max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
+        //fill screen, looks weird otherwise
+        width: 100%;
+        max-height: 100%;
+        z-index: 30;
+        bottom: 0;
+        top: 40px;
+        position: fixed;
+        &.active {
+            display:block;
+        }
+    }
+
+    @media (min-width: 481px) {
+        width: 350px;
+        right: -350px;
+         &.active {
+            right: 20px;
+        }
+    }
+
+    &.active { display: block; }
+
+    html.high-contrast & {
+        background-color: @black; //HC
+    }
+
+    #io-ox-notifications-display {
+
+        padding: 24px 14px;
+        list-style-type: none; //no dots here
+
+        // special screenreader class as divs gets read everytime and spans don't...so we use spans that behave like divs
+        .span-to-div {
+            display: block;
+        }
+
+        .items{
+            //prevent busy spinner from overlapping
+            min-height: 20px;
+        }
+
+        .desktop-notification-info {
+            padding: 5px 14px 10px 14px;
+            background-color: rgba(0, 0, 0, 0.05);
+            .enable-button {
+                float: right;
+                margin-left: 5px;
+            }
+            .later-button {
+                float: right;
+            }
+            &.clickable {
+                cursor: pointer;
+                &:hover {
+                    background-color: rgba(0, 0, 0, 0.08);
+                }
+            }
+        }
+
+        .notification-area-title {
+            font-family: "Helvetica Neue", OpenSans, Helvetica, Arial, sans-serif;
+            font-weight: 300;
+            font-size: 16px;
+            line-height: 24px;
+            margin: 0 0 7px 0;
+            padding: 0 14px;
+            border: 0;
+            display: inline-block;
+        }
+
+        .clear-area-button {
+             float: right;
+             line-height: 24px;
+             margin: 0 14px 0 0;
+             padding: 0;
+             color: #767676;
+             font-size: 18px;
+        }
+
+        .section-title {
+
+            font-family: @light-font-family;
+            font-weight: 300;
+            font-size: 16px;
+            line-height: 24px;
+            margin: 14px 0 7px 0;
+            padding: 0 14px;
+            border: 0;
+            display: inline-block;
+
+            html.high-contrast & {
+                color: @white;
+            }
+
+        }
+
+        .clear-button {
+             float: right;
+             line-height: 24px;
+             margin: 14px 14px 0 0;
+             padding: 0;
+             color: #767676;
+             font-size: 18px;
+        }
+
+        .notifications:first-child {
+            margin-top: 0;
+        }
+
+        .item {
+
+            .notification-item-actions {
+                height: 15px;
+
+                .clear-single-button {
+                    float: right;
+                    line-height: 13px;
+                    padding: 0;
+                    color: #767676;
+                    font-size: 14px;
+                    display: none;
+
+                    &:focus {
+                        display: inline-block;
+                        text-decoration: underline;
+                    }
+
+                    &:hover {
+                        display: inline-block;
+                        text-decoration: underline;
+                    }
+                }
+            }
+
+            color: #767676;
+            padding: 10px 14px;
+            cursor: pointer;
+
+            &:last-child {
+                border-bottom: 0;
+            }
+
+            &:focus {
+                outline: 1px solid rgba(0, 0, 0, 0.30);
+                background-color: rgba(0, 0, 0, 0.05);
+                .clear-single-button {
+                    display: inline-block;
+                }
+            }
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.05);
+                .clear-single-button {
+                    display: inline-block;
+                }
+            }
+
+            .title {
+                color: #333;
+                pointer-events: none;
+                font-weight: bold;
+                .ellipsis();
+
+                html.high-contrast & {
+                    color: @white;
+                }
+            }
+
+            .subject {
+                .ellipsis();
+                pointer-events: none;
+            }
+
+            .empty {
+                font-style: italic;
+                color: #aaa;
+            }
+
+            .content {
+                color: #aaa;
+                line-height: 16px;
+                max-height: 5 * 16px; /* 5 rows */
+                margin-top: 3px;
+                .ellipsis();
+            }
+
+            .time {
+                float: right;
+            }
+
+            .location {
+                color: #aaa;
+            }
+
+            .actions {
+                text-align: right;
+                margin: 5px 0 5px 0;
+            }
+        }
+
+        .open-app {
+            padding: 7px 14px;
+        }
+    }
+
+    @media (max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
+        #io-ox-notifications-display {
+            padding: 8px 14px 14px 14px;
+
+            .notification-area-title {
+                font-size: 20px;
+            }
+
+            .item {
+                background-color: rgba(0, 0, 0, 0.05);
+            }
+        }
+    }
+}
+
+.touch #io-ox-notifications #io-ox-notifications-display .item .clear-single-button {
+     //no hover on touch devices, so always show single hide buttons
+     display: inline-block;
+}
+
+#io-ox-notifications-popups {
+    position: absolute;
+    top: 48px;
+    width: 400px;
+    right: 10px;
+    z-index: 65201; /* above modal dialog; above relogin screen */
+
+    .alert {
+        margin-bottom: 0.5em;
+        .box-shadow(1px 1px 3px -1px rgba(0, 0, 0, 0.80));
+    }
+}
+
+@media (max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
+    #io-ox-notifications-icon.launcher a.notifications-icon {
+        i {
+            display: none;
+        }
+
+        .badge {
+            top: initial;
+            left: initial;
+            padding: 2px 8px;
+        }
+    }
+    .notifications-open { display:none; } // To hide mobile portal when notifications area is open on mobile devices
+}
+
+// small screens (mobile)
+// note that we have to target max-width and max-device-width
+// to target all devices which don't support the max-device-width
+// property
+@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
+    #io-ox-notifications-popups {
+        top: -80px;
+        left: 10px;
+        right: 10px;
+        width: auto;
+        margin: 0;
+    }
+}

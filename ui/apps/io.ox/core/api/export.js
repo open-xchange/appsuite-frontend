@@ -11,10 +11,10 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/core/api/export',
-    ['io.ox/core/http',
-     'io.ox/core/api/factory'
-    ], function (http, apiFactory) {
+define('io.ox/core/api/export', [
+    'io.ox/core/http',
+    'io.ox/core/api/factory'
+], function (http, apiFactory) {
 
     'use strict';
 
@@ -33,11 +33,11 @@ define('io.ox/core/api/export',
      * @param  {string} type/format
      * @param  {string} folder
      * @param  {object} options
-     * @return {string} url
+     * @return { string} url
      */
     api.getUrl = function (type, folder, options) {
-        var opt = $.extend({include: true}, options || {});
-        return  ox.apiRoot + '/export' +
+        var opt = $.extend({ include: true }, options || {});
+        return ox.apiRoot + '/export' +
                 '?action=' + type +
                 '&folder=' + folder +
                 '&export_dlists=' + opt.include +

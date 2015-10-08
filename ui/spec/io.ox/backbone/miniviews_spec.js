@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date'], function (common, date) {
+define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date', 'io.ox/core/moment'], function (common, date, moment) {
 
     'use strict';
 
@@ -265,8 +265,8 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date'], f
         describe('DateView', function () {
 
             beforeEach(function () {
-                this.date = date.DateView.utc(2012, 1, 5);
-                this.model = new Backbone.Model({ test: this.date.getTime() });
+                this.date = moment.utc({ year: 2012, month: 1, date: 5 });
+                this.model = new Backbone.Model({ test: this.date.valueOf() });
                 this.view = new date.DateView({ name: 'test', model: this.model });
                 this.view.render();
             });
@@ -304,9 +304,9 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date'], f
             });
 
             it('reflects model state', function () {
-                expect(this.view.$el.find('.date').val()).to.equal(String(this.date.getUTCDate()));
-                expect(this.view.$el.find('.month').val()).to.equal(String(this.date.getUTCMonth()));
-                expect(this.view.$el.find('.year').val()).to.equal(String(this.date.getUTCFullYear()));
+                expect(this.view.$el.find('.date').val()).to.equal(String(this.date.date()));
+                expect(this.view.$el.find('.month').val()).to.equal(String(this.date.month()));
+                expect(this.view.$el.find('.year').val()).to.equal(String(this.date.year()));
             });
 
             it('updates the model', function () {
@@ -318,7 +318,7 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date'], f
 
             it('handles non-existent days correctly', function () {
                 // start end of January
-                this.model.set('test', date.DateView.utc(2013, 0, 31).getTime());
+                this.model.set('test', moment.utc({ year: 2013, month: 0, date: 31 }).valueOf());
                 expect(this.view.value()).to.equal('2013-01-31');
                 // jump to February
                 this.view.$el.find('.month').val('1').trigger('change');
@@ -335,7 +335,7 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date'], f
 
             it('handles non-existent days correctly (without a year)', function () {
                 // start end of January
-                this.model.set('test', date.DateView.utc(1, 0, 31).getTime());
+                this.model.set('test', moment.utc({ year: 1, month: 0, date: 31 }).valueOf());
                 expect(this.view.value()).to.equal('0001-01-31');
                 // jump to February
                 this.view.$el.find('.month').val('1').trigger('change');
@@ -393,7 +393,7 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date'], f
             });
 
             it('has a getContainer function ', function () {
-                 expect(this.view.getContainer).to.be.a('function');
+                expect(this.view.getContainer).to.be.a('function');
             });
 
             it('should listen to the custom container', function () {

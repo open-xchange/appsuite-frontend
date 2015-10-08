@@ -42,9 +42,9 @@ define('io.ox/core/metrics/metrics', ['io.ox/files/api', 'io.ox/core/http'], fun
 
         // listen to some demo events and generate console output
         debug: function () {
-            ox.on('login core:load core:ready app:start app:ready app:resume app:stop', function (e, data) {
+            ox.on('login core:load core:ready app:start app:ready app:resume app:stop', function (data) {
                 var t = that.formatTimestamp(that.getTime());
-                console.log('Event', e.type, t, data);
+                console.log('Event', t, data);
             });
         },
 

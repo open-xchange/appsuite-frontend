@@ -26,9 +26,12 @@ define('io.ox/core/folder/selection', [], function () {
         this.view.$el.addClass('dropzone')
             .attr('data-dropzones', '.selectable')
             .on('drop', function (e, baton) {
+                if (!baton) return;
                 baton.dropType = view.module;
                 view.selection.trigger('selection:drop', baton);
             });
+
+        this.selectableVirtualFolders = {};
     }
 
     _.extend(Selection.prototype, {
@@ -76,6 +79,9 @@ define('io.ox/core/folder/selection', [], function () {
 
             // avoid double selections
             if (e.isDefaultPrevented()) return; else e.preventDefault();
+
+            // only select in mobile edit mode when clicking on the label
+            if (this.view.app && this.view.app.props && this.view.app.props.get('mobileFolderSelectMode') === true && !$(e.target).parent().hasClass('folder-label')) return;
 
             if (e.type === 'contextmenu') e.stopPropagation();
 
@@ -167,23 +173,38 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         check: function (nodes) {
-            return nodes.addClass('selected').attr({ 'aria-selected': true, tabindex: 1 });
+            var width = this.view.$el.width();
+            return nodes.addClass('selected')
+                .attr({ 'aria-selected': true, tabindex: 1 })
+                .find('.folder-label').each(function () {
+                    // special handling for settings for now
+                    if (nodes.length === 1 && (nodes.first().attr('data-id') && nodes.first().attr('data-id').indexOf('virtual/settings') === 0)) return;
+                    var left = $(this).position().left, maxWidth = width - left - 64 - 8;
+                    $(this).css('max-width', Math.max(maxWidth, 80));
+                })
+                .end();
         },
 
         // TODO: isn't this basically the same as resetSelected?
         uncheck: function (nodes) {
-            nodes.removeClass('selected').attr({ 'aria-selected': false, tabindex: '-1' });
+            nodes.removeClass('selected').attr({ 'aria-selected': false, tabindex: '-1' })
+                .find('.folder-label').css('max-width', null);
         },
 
         getItems: function () {
             return this.view.$el.find('.selectable');
         },
 
+        addSelectableVirtualFolder: function (id) {
+            this.selectableVirtualFolders[id] = true;
+        },
+
         triggerChange: _.debounce(function (items) {
-            var item = (items || this.getItems()).filter('.selected').first(), id = item.attr('data-id'),
+            var item = (items || this.getItems()).filter('.selected').first(),
+                id = item.attr('data-id'),
                 isVirtual = /^virtual/.test(id);
             // trigger change event on view
-            this.view.trigger(isVirtual ? 'virtual' : 'change', id, item);
+            this.view.trigger(isVirtual && !this.selectableVirtualFolders[id] ? 'virtual' : 'change', id, item);
         }, 300)
     });
 

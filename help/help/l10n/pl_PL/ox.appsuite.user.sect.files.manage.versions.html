@@ -1,13 +1,13 @@
 <html lang="pl">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.5.11. Praca z wersjami</title>
+<title>9.4.11. Praca z wersjami</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
-<link rel="up" href="ox.appsuite.user.sect.files.manage.html" title="9.5. Zarządzanie plikami">
-<link rel="prev" href="ox.appsuite.user.sect.files.manage.lock.html" title="9.5.10. Blokowanie lub odblokowywanie plików">
-<link rel="next" href="ox.appsuite.user.sect.files.manage.multiple.html" title="9.5.12. Edycja wielu plików jednocześnie">
+<link rel="home" href="index.html" title="Oprogramowanie do pracy grupowej">
+<link rel="up" href="ox.appsuite.user.sect.files.manage.html" title="9.4. Zarządzanie plikami">
+<link rel="prev" href="ox.appsuite.user.sect.files.manage.lock.html" title="9.4.10. Blokowanie lub odblokowywanie plików">
+<link rel="next" href="ox.appsuite.user.sect.files.search.html" title="9.5. Wyszukiwanie plików">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Informacja Prawna">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -25,7 +25,7 @@
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.manage.lock.html">Poprzedni</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Spis treści</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Spis treści</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.manage.multiple.html">Następny</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.search.html">Następny</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -33,56 +33,97 @@
 <h2 class="sr-only">Zarządzanie plikami</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.files.manage.versions"></a>9.5.11. Praca z wersjami</h3></div></div></div>
-<a class="indexterm" name="id-1.10.11.15.2"></a><a class="indexterm" name="id-1.10.11.15.3"></a><div class="concept">
+<a name="ox.appsuite.user.sect.files.manage.versions"></a>9.4.11. Praca z wersjami</h3></div></div></div>
+<a class="indexterm" name="id-1.10.10.15.2"></a><a class="indexterm" name="id-1.10.10.15.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.files.versions"></a><p>Dostępne są następujące możliwości pracy z wersjami: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.open" title="Jak przesłać nową wersję:">otwieranie lub zapisywanie wersji bieżących</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.add" title="Jak przesłać nową wersję:">przesyłanie nowej wersji</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.open" title="Jak przesłać nową wersję:">otwieranie lub zapisywanie wersji bieżących</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.current" title="Jak ustawić określoną wersję pliku jako bieżącą:">ustawianie określonej wersji jako bieżącej</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.delete" title="Jak otworzyć lub zapisać określoną wersję:">usunięcie określonej wersji</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.open" title="Jak otworzyć lub zapisać określoną wersję:">Otwieranie lub zapisywanie wersji bieżących</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.add" title="Jak przesłać nową wersję:">Przesyłanie nowej wersji</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.open" title="Jak otworzyć lub zapisać określoną wersję:">Otwieranie lub zapisywanie wersji bieżących</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.current" title="Jak ustawić określoną wersję pliku jako bieżącą:">Ustawianie określonej wersji jako bieżącej</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.delete" title="Jak usunąć określoną wersję:">Usuwanie określonej wersji</a></p></li>
 </ul></div>
 <p>
       </p>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.files.versions.opencurrent"></a><p class="title">Jak otworzyć lub zapisać wersję bieżącą:</p>
-<div class="procedure"><ul class="procedure"><li class="step"><p>Kliknij plik w widoku szczegółów. Aby otworzyć wersję, w wyskakującym okienku kliknij przycisk <span class="guibutton"><strong>Otwórz</strong></span>. Aby zapisać wersję, kliknij przycisk <span class="guibutton"><strong>Pobierz</strong></span>.</p></li></ul></div>
-<div class="taskrelated">
-          <p><span class="phrase"><strong>Wskazówka:</strong></span> jeśli jest widoczny podgląd dokumentu, wersję bieżącą możesz zapisać, przeciągając podgląd na pulpit.</p>
-        </div>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p>Wybierz plik w obszarze wyświetlania. Kliknij widoczną na pasku narzędzi ikonę <span class="guibutton"><strong>Pobierz</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.files.download"></a><img src="../../images/appsuite_user_icon_download.png"></span>.</p></li>
+<li class="step"><p>Wykonaj czynności wymagane do otwarcia lub pobrania.</p></li>
+</ol></div>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.files.versions.add"></a><p class="title">Jak przesłać nową wersję:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>W widoku szczegółów kliknij plik. W wyskakującym okienku kliknij polecenie <span class="guibutton"><strong>Prześlij nową wersję</strong></span>.</p></li>
+<li class="step">
+<p>Wybierz plik w obszarze wyświetlania. Jeśli nie są wyświetlane żadne szczegóły, kliknij dostępną na pasku narzędzi ikonę <span class="guibutton"><strong>Widok</strong></span>. Wybierz opcję <span class="guibutton"><strong>Szczegóły pliku</strong></span>.</p>
+<p>Możesz też skorzystać z jednej z następujących możliwości, aby otworzyć plik w <span class="guilabel"><strong>Przeglądarce</strong></span>:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Kliknij dwukrotnie plik w obszarze wyświetlania.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Wybierz plik w obszarze wyświetlania. Kliknij dostępną na pasku narzędzi ikonę <span class="guibutton"><strong>Widok</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.add.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span>.</p></li>
+</ul></div>
+<p>Jeśli pasek boczny nie jest wyświetlany, kliknij ikonę <span class="guibutton"><strong>Wyświetl szczegóły</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.add.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span>.</p>
+</li>
+<li class="step"><p>Kliknij polecenie <span class="guibutton"><strong>Prześlij nową wersję</strong></span>. Wybierz plik.</p></li>
 <li class="step"><p>Wpisz komentarz do wersji.</p></li>
 <li class="step"><p>Kliknij przycisk <span class="guibutton"><strong>Prześlij</strong></span>.</p></li>
 </ol></div>
 <div class="taskrelated">
-          <p><span class="phrase"><strong>Wskazówka:</strong></span> nową wersję możesz też przesłać, przeciągając plik z pulpitu lub obszaru wyświetlania i upuszczając go w dolnej części okna.</p>
+          <p><span class="phrase"><strong>Wskazówka:</strong></span> nową wersję można też przesłać, przeciągając plik z przeglądarki plików lub pulpitu na pasek boczny Przeglądarki.</p>
         </div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.files.versions.open"></a><p class="title">Jak przesłać nową wersję:</p>
+<a name="ox.appsuite.user.task.files.versions.open"></a><p class="title">Jak otworzyć lub zapisać określoną wersję:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>W widoku szczegółów kliknij plik. W wyskakującym okienku kliknij polecenie <span class="guibutton"><strong>Pokaż historię wersji</strong></span>. Kliknij nazwę wersji. Pojawi się menu.</p></li>
-<li class="step"><p>Aby otworzyć wersję, kliknij pozycję menu <span class="guibutton"><strong>Otwórz</strong></span>. Aby zapisać wersję, kliknij polecenie menu <span class="guibutton"><strong>Pobierz</strong></span>.</p></li>
+<li class="step">
+<p>Wybierz plik w obszarze wyświetlania. Jeśli nie są wyświetlane żadne szczegóły, kliknij dostępną na pasku narzędzi ikonę <span class="guibutton"><strong>Widok</strong></span>. Wybierz opcję <span class="guibutton"><strong>Szczegóły pliku</strong></span>.</p>
+<p>Możesz też skorzystać z jednej z następujących możliwości, aby otworzyć plik w <span class="guilabel"><strong>Przeglądarce</strong></span>:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Kliknij dwukrotnie plik w obszarze wyświetlania.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Wybierz plik w obszarze wyświetlania. Kliknij dostępną na pasku narzędzi ikonę <span class="guibutton"><strong>Widok</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.open.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span>.</p></li>
+</ul></div>
+<p>Jeśli pasek boczny nie jest wyświetlany, kliknij ikonę <span class="guibutton"><strong>Wyświetl szczegóły</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.open.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span>.</p>
+</li>
+<li class="step">
+<p>Kliknij ikonę <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.open.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span> obok pozycji <span class="guilabel"><strong>Wersje</strong></span>. Zostanie wyświetlona lista wersji.</p>
+<p>Kliknij odpowiednią wersję. W menu kliknij pozycję <span class="guibutton"><strong>Pobierz</strong></span>.</p>
+</li>
+<li class="step"><p>Wykonaj czynności wymagane do otwarcia lub pobrania.</p></li>
 </ol></div>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.files.versions.current"></a><p class="title">Jak ustawić określoną wersję pliku jako bieżącą:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>W widoku szczegółów kliknij plik. W wyskakującym okienku kliknij polecenie <span class="guibutton"><strong>Pokaż historię wersji</strong></span>. Kliknij nazwę wersji. Pojawi się menu.</p></li>
-<li class="step"><p>Kliknij polecenie <span class="guibutton"><strong>Ustaw tę wersję jako bieżącą</strong></span>.</p></li>
+<li class="step">
+<p>Wybierz plik w obszarze wyświetlania. Jeśli nie są wyświetlane żadne szczegóły, kliknij dostępną na pasku narzędzi ikonę <span class="guibutton"><strong>Widok</strong></span>. Wybierz opcję <span class="guibutton"><strong>Szczegóły pliku</strong></span>.</p>
+<p>Możesz też skorzystać z jednej z następujących możliwości, aby otworzyć plik w <span class="guilabel"><strong>Przeglądarce</strong></span>:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Kliknij dwukrotnie plik w obszarze wyświetlania.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Wybierz plik w obszarze wyświetlania. Kliknij dostępną na pasku narzędzi ikonę <span class="guibutton"><strong>Widok</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.current.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span>.</p></li>
+</ul></div>
+<p>Jeśli pasek boczny nie jest wyświetlany, kliknij ikonę <span class="guibutton"><strong>Wyświetl szczegóły</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.current.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span>.</p>
+</li>
+<li class="step">
+<p>Kliknij ikonę <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.current.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span> obok pozycji <span class="guilabel"><strong>Wersje</strong></span>. Zostanie wyświetlona lista wersji.</p>
+<p>Kliknij odpowiednią wersję. W menu kliknij polecenie <span class="guibutton"><strong>Ustaw tę wersję jako bieżącą</strong></span>.</p>
+</li>
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.files.versions.delete"></a><p class="title">Jak otworzyć lub zapisać określoną wersję:</p>
+<a name="ox.appsuite.user.task.files.versions.delete"></a><p class="title">Jak usunąć określoną wersję:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>W widoku szczegółów kliknij plik. W wyskakującym okienku kliknij polecenie <span class="guibutton"><strong>Pokaż historię wersji</strong></span>. Kliknij nazwę wersji. Pojawi się menu.</p></li>
-<li class="step"><p>Kliknij w menu polecenie <span class="guibutton"><strong>Usuń wersję</strong></span>.</p></li>
+<li class="step">
+<p>Wybierz plik w obszarze wyświetlania. Jeśli nie są wyświetlane żadne szczegóły, kliknij dostępną na pasku narzędzi ikonę <span class="guibutton"><strong>Widok</strong></span>. Wybierz opcję <span class="guibutton"><strong>Szczegóły pliku</strong></span>.</p>
+<p>Możesz też skorzystać z jednej z następujących możliwości, aby otworzyć plik w <span class="guilabel"><strong>Przeglądarce</strong></span>:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Kliknij dwukrotnie plik w obszarze wyświetlania.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Wybierz plik w obszarze wyświetlania. Kliknij dostępną na pasku narzędzi ikonę <span class="guibutton"><strong>Widok</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.delete.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span>.</p></li>
+</ul></div>
+<p>Jeśli pasek boczny nie jest wyświetlany, kliknij ikonę <span class="guibutton"><strong>Wyświetl szczegóły</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.delete.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span>.</p>
+</li>
+<li class="step"><p>Kliknij ikonę <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.delete.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span> obok pozycji <span class="guilabel"><strong>Wersje</strong></span>. Zostanie wyświetlona lista wersji.</p></li>
+<li class="step"><p>Kliknij odpowiednią wersję. W menu kliknij polecenie <span class="guibutton"><strong>Usuń wersję</strong></span>.</p></li>
 </ol></div>
 </div>
 </div>

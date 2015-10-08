@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/print',
-    ['io.ox/core/http',
-     'io.ox/core/notifications',
-     'gettext!io.ox/core'
-    ], function (http, notifications, gt) {
+define('io.ox/core/print', [
+    'io.ox/core/http',
+    'io.ox/core/notifications',
+    'gettext!io.ox/core'
+], function (http, notifications, gt) {
 
     'use strict';
 
@@ -42,7 +42,7 @@ define('io.ox/core/print',
                     template = $(document.body).find('[type="text/template"]').filter(selector).html(),
                     title = (options.title  || '').trim();
 
-                $(document.body).html(_.template(template, it));
+                $(document.body).html(_.template(template)(it));
                 //hint: in case title contains a '.' chrome will cut off at this char when suggesting a filename
                 document.title = escapeTitle(ox.serverConfig.pageTitle) + escapeTitle(title.length ? ' ' + title : '') + ' ' + gt('Printout');
             } catch (e) {
@@ -175,7 +175,7 @@ define('io.ox/core/print',
                 // stop chaining
                 args = args.value();
                 // create new callback & open print window
-                var id = addCallback(options, { data: args, i18n: options.i18n, length: args.length, filtered: all - args.length  }),
+                var id = addCallback(options, { data: args, i18n: options.i18n, length: args.length, filtered: all - args.length }),
                     url = options.file + '?' + id;
                 // defer the following (see bug #31301)
                 _.defer(function () {
@@ -222,7 +222,7 @@ define('io.ox/core/print',
         // use options to overwrite default request params
         open: function (module, data, options) {
 
-            var params = {action: 'get'}, url;
+            var params = { action: 'get' }, url;
 
             // workaround for old printcalendar
             if (module === 'printCalendar') {

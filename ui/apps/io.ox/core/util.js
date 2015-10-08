@@ -93,22 +93,30 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
             // unescape inner quotes
             str = str.replace(/\\"/g, '"');
 
+            // unescape escaped backslashes
+            str = str.replace(/\\{2}/g, '\\');
+
             return str;
+        },
+
+        // fix punctuation marks and brackets at end of URLs
+        // central helper to solve this only once
+        fixUrlSuffix: function (url, suffix) {
+            suffix = suffix || '';
+            url = url.replace(/([.,;!?<>\(\)\{\}\[\]\|]+)$/, function (all, marks) {
+                suffix = marks + suffix;
+                return '';
+            });
+            return { url: url, suffix: suffix };
         },
 
         // detect URLs in plain text
         urlify: function (text) {
-
-            return text.replace(regUrl, function ($1) {
-                var suffix = '';
-                // fix punctuation marks
-                $1 = $1.replace(/([.,;!?>]+)$/, function (all, marks) {
-                    suffix = marks;
-                    return '';
-                });
+            return text.replace(regUrl, function (url) {
+                var fix = this.fixUrlSuffix(url);
                 // soft-break long words (like long URLs)
-                return '<a href="' + $1 + '" target="_blank">' + that.breakableHTML($1) + '</a>' + suffix;
-            });
+                return '<a href="' + fix.url + '" target="_blank">' + that.breakableHTML(fix.url) + '</a>' + fix.suffix;
+            }.bind(this));
         },
 
         // split long character sequences
@@ -195,7 +203,19 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
             return function (val) {
                 return validate($.trim(val));
             };
-        }())
+        }()),
+
+        // return deep link for a given file
+        getDeepLink: function (app, data) {
+            var folder, id = '';
+            if (data.folder_id === undefined) {
+                folder = '&folder=' + encodeURIComponent(data.id);
+            } else {
+                folder = '&folder=' + encodeURIComponent(data.folder_id);
+                id = '&id=' + (/^[\d\/]+$/.test(data.id) ? data.id : encodeURIComponent(data.id));
+            }
+            return ox.abs + ox.root + '/#!&app=' + app + folder + id;
+        }
     };
 
     return that;

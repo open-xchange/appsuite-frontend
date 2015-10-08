@@ -11,14 +11,15 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('plugins/core/feedback/register',
-    ['io.ox/core/tk/dialogs',
-     'gettext!io.ox/core',
-     'io.ox/core/notifications',
-     'settings!io.ox/core',
-     'io.ox/core/api/user',
-     'io.ox/core/extensions',
-     'less!plugins/core/feedback/style'], function (dialogs, gt, notifications, settings, api, ext) {
+define('plugins/core/feedback/register', [
+    'io.ox/core/tk/dialogs',
+    'gettext!io.ox/core',
+    'io.ox/core/notifications',
+    'settings!io.ox/core',
+    'io.ox/core/api/user',
+    'io.ox/core/extensions',
+    'less!plugins/core/feedback/style'
+], function (dialogs, gt, notifications, settings, api, ext) {
 
     'use strict';
 
@@ -29,35 +30,35 @@ define('plugins/core/feedback/register',
         //0 on init
         var value = 0,
             node = $('<div tabindex="1" class="star-wrapper tabindex="1" ' +
-                                     //#. %1$d is current raiting
-                                     //#. %2$d is the maximum rating
-                                     //#, c-format
-                    'aria-label="' + gt('Rating %1$d of %2$d. Press Enter to confirm or use the left and right arrowkeys to adjust your rating.', value, number) + '">')
-                    .on('keydown', function (e) {
-                        if (e.which === 37) {
-                            //left arrow
-                            var activestars = node.find('.active-star').length;
-                            if (activestars - 1 >= 0) {
-                                updateStars({data: {starnumber: activestars - 1}});
-                            }
-                            node.attr('aria-label', gt('Rating %1$d of %2$d. Press Enter to confirm or use the left and right arrowkeys to adjust your rating.', activestars - 1, number));
-                        } else if (e.which === 39) {
-                            //right arrow
-                            var activestars = node.find('.active-star').length;
-                            if (activestars + 1 <= number) {
-                                updateStars({data: {starnumber: activestars + 1}});
-                            }
-                            node.attr('aria-label', gt('Rating %1$d of %2$d. Press Enter to confirm or use the left and right arrowkeys to adjust your rating.', activestars + 1, number));
-                        } else if (e.which === 13) {
-                            //enter
-                            updateStars({type: 'click', data: {starnumber: node.find('.active-star').length}});
-                            node.attr('aria-label', gt('Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust your rating.', value, number));
-                        } else if (e.which === 9) {
-                            //tab
-                            updateStars({type: 'mouseleave', data: {starnumber: value}});
-                            node.attr('aria-label', gt('Rating %1$d of %2$d. Press Enter to confirm or use the left and right arrowkeys to adjust your rating.', value, number));
+                                 //#. %1$d is current raiting
+                                 //#. %2$d is the maximum rating
+                                 //#, c-format
+                'aria-label="' + gt('Rating %1$d of %2$d. Press Enter to confirm or use the left and right arrowkeys to adjust your rating.', value, number) + '">')
+                .on('keydown', function (e) {
+                    //left arrow
+                    if (e.which === 37) {
+                        var activestars = node.find('.active-star').length;
+                        if (activestars - 1 >= 0) {
+                            updateStars({ data: { starnumber: activestars - 1 }});
                         }
-                    }),
+                        node.attr('aria-label', gt('Rating %1$d of %2$d. Press Enter to confirm or use the left and right arrowkeys to adjust your rating.', activestars - 1, number));
+                    } else if (e.which === 39) {
+                        //right arrow
+                        var activestars = node.find('.active-star').length;
+                        if (activestars + 1 <= number) {
+                            updateStars({ data: { starnumber: activestars + 1 }});
+                        }
+                        node.attr('aria-label', gt('Rating %1$d of %2$d. Press Enter to confirm or use the left and right arrowkeys to adjust your rating.', activestars + 1, number));
+                    } else if (e.which === 13) {
+                        //enter
+                        updateStars({ type: 'click', data: { starnumber: node.find('.active-star').length }});
+                        node.attr('aria-label', gt('Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust your rating.', value, number));
+                    } else if (e.which === 9) {
+                        //tab
+                        updateStars({ type: 'mouseleave', data: { starnumber: value }});
+                        node.attr('aria-label', gt('Rating %1$d of %2$d. Press Enter to confirm or use the left and right arrowkeys to adjust your rating.', value, number));
+                    }
+                }),
             stars = [];
         //update function
         function updateStars(e) {
@@ -84,15 +85,14 @@ define('plugins/core/feedback/register',
         //build stars
         for (var i = 0; i < number; i++) {
             stars.push($('<i class="fa fa-star rating-star">')
-              .on((hover === false ? 'click' : 'click mouseenter mouseleave'), {starnumber: i + 1}, updateStars));
+              .on((hover === false ? 'click' : 'click mouseenter mouseleave'), { starnumber: i + 1 }, updateStars));
         }
         //trigger initial update
-        updateStars({data: {starnumber: value}});
+        updateStars({ data: { starnumber: value }});
 
         node.append(stars);
 
-        return {getValue: function () { return value; },
-                node: node};
+        return { getValue: function () { return value; }, node: node };
     }
 
     function sendFeedback(data) {
@@ -108,7 +108,7 @@ define('plugins/core/feedback/register',
 
                 /*return http.PUT({//could be done to use all folders, see portal widget but not sure if this is needed
                     module: 'feedback',
-                    params: {action: 'send',
+                    params: { action: 'send',
                         timezone: 'UTC'
                     },
                     data: data
@@ -123,7 +123,7 @@ define('plugins/core/feedback/register',
 
             /*return http.PUT({//could be done to use all folders, see portal widget but not sure if this is needed
                 module: 'feedback',
-                params: {action: 'send',
+                params: { action: 'send',
                     timezone: 'UTC'
                 },
                 data: data
@@ -136,8 +136,8 @@ define('plugins/core/feedback/register',
             var guid = _.uniqueId('feedback-note-'),
                 popup = new dialogs.ModalDialog()
                     .header($('<h4>').text(gt('Feedback')))
-                    .addPrimaryButton('send', gt('Send feedback'), 'send', {tabIndex: 1})
-                    .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: 1}),
+                    .addPrimaryButton('send', gt('Send feedback'), 'send', { tabIndex: 1 })
+                    .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 }),
                 stars = buildStarWidget(settings.get('feeback/numberOfStars', 5), settings.get('feeback/showHover', true)),
                 note = $('<textarea tabindex="1" id="' + guid + '" class="feedback-note form-control" rows="5">'),
                 supportlink = settings.get('feedback/supportlink', '');
@@ -145,19 +145,20 @@ define('plugins/core/feedback/register',
                 supportlink = $('<a href="' + supportlink + '" tabindex="1">');
             }
 
-            popup.getBody().append($('<div class="feedback-welcome-text">')
+            popup.getBody().append(
+                $('<div class="feedback-welcome-text">')
                     .text(gt('Welcome. Please provide your feedback about this product')),
-                    stars.node,
-                    $('<label class="feedback-label" for="' + guid + '">').text(gt('Comments and suggestions')),
-                    note,
-                    $('<div class="feedback-info">')
-                        .text(gt('Please note, that support requests cannot be handled via the feedback-formular. When you have questions or problems please contact our support directly')),
-                    supportlink,
-                    $('<div class="feedback-userdata-notice">').text(includeUserInfo ? gt('Your email address will be included when sending this feedback') : ''));
+                stars.node,
+                $('<label class="feedback-label" for="' + guid + '">').text(gt('Comments and suggestions')),
+                note,
+                $('<div class="feedback-info">')
+                    .text(gt('Please note, that support requests cannot be handled via the feedback-formular. When you have questions or problems please contact our support directly')),
+                supportlink,
+                $('<div class="feedback-userdata-notice">').text(includeUserInfo ? gt('Your email address will be included when sending this feedback') : ''));
 
             popup.show().done(function (action) {
                 if (action === 'send') {
-                    sendFeedback({rating: stars.getValue(), message: note.val()})
+                    sendFeedback({ rating: stars.getValue(), message: note.val() })
                     .done(function () {
                         notifications.yell('success', gt('Thank you for your feedback'));
                     })
@@ -200,7 +201,7 @@ define('plugins/core/feedback/register',
         id: 'feedback',
         draw: function () {
             var currentSetting = settings.get('feeback/show', 'both');
-            if (_.device('!small') && (currentSetting === 'both' || currentSetting === 'side')) {
+            if (_.device('!smartphone') && (currentSetting === 'both' || currentSetting === 'side')) {
                 feedback.drawButton();
             }
 

@@ -35,7 +35,7 @@ module.exports = function (grunt) {
             dist_custom: {
                 files: [
                     {
-                        src: ['readme.txt', 'apps/themes/.htaccess'],
+                        src: ['readme.txt'],
                         dest: 'dist/appsuite/'
                     },
                     {
@@ -90,6 +90,10 @@ module.exports = function (grunt) {
 
             content = 'io.ox/appsuite/languages/';
             content += lang + '=';
+            if (!languageNames[lang]) {
+                grunt.fail.warn('Language name not found for: ' + lang);
+                return;
+            }
             content += languageNames[lang].replace(/[^\x21-\x7e]/g, function (c) {
                 if (c === ' ') return '\\ ';
                 var hex = c.charCodeAt(0).toString(16);

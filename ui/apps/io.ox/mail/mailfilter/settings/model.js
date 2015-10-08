@@ -10,13 +10,13 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-define('io.ox/mail/mailfilter/settings/model',
-    ['io.ox/backbone/modelFactory',
-     'io.ox/backbone/validation',
-     'io.ox/core/api/mailfilter',
-     'io.ox/settings/util',
-     'gettext!io.ox/mail'
-    ], function (ModelFactory, Validators, api, settingsUtil, gt) {
+define('io.ox/mail/mailfilter/settings/model', [
+    'io.ox/backbone/modelFactory',
+    'io.ox/backbone/validation',
+    'io.ox/core/api/mailfilter',
+    'io.ox/settings/util',
+    'gettext!io.ox/mail'
+], function (ModelFactory, Validators, api, settingsUtil, gt) {
 
     'use strict';
 
@@ -24,6 +24,9 @@ define('io.ox/mail/mailfilter/settings/model',
         var factory = new ModelFactory({
             api: api,
             ref: ref,
+            model: {
+                idAttribute: 'id'
+            },
 
             update: function (model) {
                 //yell on reject
@@ -42,11 +45,11 @@ define('io.ox/mail/mailfilter/settings/model',
         });
 
         Validators.validationFor(ref, {
-            rulename: { format: 'string'},
-            test: { format:  'object'},
+            rulename: { format: 'string' },
+            test: { format:  'object' },
             actioncmds: { format: 'array' },
             flags: { format: 'array' },
-            active: { format: 'boolean'}
+            active: { format: 'boolean' }
 
         });
 

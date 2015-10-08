@@ -11,10 +11,10 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/preview/officePreview/main',
-    ['io.ox/core/tk/keys',
-     'less!io.ox/preview/officePreview/style'
-    ], function (KeyListener) {
+define('io.ox/preview/officePreview/main', [
+    'io.ox/core/tk/keys',
+    'less!io.ox/preview/officePreview/style'
+], function (KeyListener) {
 
     'use strict';
 
@@ -34,7 +34,7 @@ define('io.ox/preview/officePreview/main',
             // TODO: Respect nestings (if they are even used)
             position = $childNode.css('position');
             if (position && position.toLowerCase() === 'fixed') {
-                $childNode.css({position: 'absolute'});
+                $childNode.css({ position: 'absolute' });
             }
         });
     }
@@ -145,7 +145,7 @@ define('io.ox/preview/officePreview/main',
 
                 $shownContent.addClass(documentTypeClasses(file));
 
-                $shownContent.addClass('io-ox-office-preview-content').css({position: 'relative', left: centerOffset, right: centerOffset});
+                $shownContent.addClass('io-ox-office-preview-content').css({ position: 'relative', left: centerOffset, right: centerOffset });
 
                 app.index = pageNumber;
 
@@ -173,7 +173,7 @@ define('io.ox/preview/officePreview/main',
             var keys = new KeyListener();
 
             win = ox.ui.createWindow({
-                name: 'io.ox/mail/write',
+                name: 'io.ox/preview/officepreview',
                 title: file.name,
                 titleWidth: '40%',
                 toolbar: true,

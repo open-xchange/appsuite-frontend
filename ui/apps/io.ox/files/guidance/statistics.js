@@ -2,114 +2,114 @@
 * @author Richard Petersen
 */
 
-define('io.ox/files/guidance/statistics',
-    ['io.ox/core/strings',
-     'io.ox/core/folder/api',
-     'io.ox/core/folder/breadcrumb',
-     'io.ox/files/api',
-     'gettext!io.ox/files',
-     'io.ox/core/capabilities',
-     'static/3rd.party/Chart.js/Chart.js'
-    ], function (strings, folderAPI, getBreadcrumb, api, gt, capabilities) {
+define('io.ox/files/guidance/statistics', [
+    'io.ox/core/strings',
+    'io.ox/core/folder/api',
+    'io.ox/core/folder/breadcrumb',
+    'io.ox/files/api',
+    'gettext!io.ox/files',
+    'io.ox/core/capabilities',
+    'static/3rd.party/Chart.js/Chart.js'
+], function (strings, folderAPI, getBreadcrumb, api, gt, capabilities) {
 
     'use strict';
 
     var COLUMNS = '1,3,5,20,23,700,702,703,704,705,707',
-        WIDTH = _.device('small') ? 280 : 500,
-        HEIGHT = _.device('small') ? 150 : 200,
+        WIDTH = _.device('smartphone') ? 280 : 500,
+        HEIGHT = _.device('smartphone') ? 150 : 200,
         EXTENSION_KEYWORDS = {
             //images
-            'jpg' : 'Images',
+            'jpg':  'Images',
             'jpeg': 'Images',
-            'png' : 'Images',
-            'gif' : 'Images',
-            'tif' : 'Images',
+            'png':  'Images',
+            'gif':  'Images',
+            'tif':  'Images',
             'tiff': 'Images',
-            'bmp' : 'Images',
+            'bmp':  'Images',
 
             //audio
-            'mp3' : 'Audio',
-            'ogg' : 'Audio',
+            'mp3':  'Audio',
+            'ogg':  'Audio',
             'opus': 'Audio',
-            'aac' : 'Audio',
-            'm4a' : 'Audio',
-            'm4b' : 'Audio',
-            'wav' : 'Audio',
+            'aac':  'Audio',
+            'm4a':  'Audio',
+            'm4b':  'Audio',
+            'wav':  'Audio',
 
             //video
-            'avi' : 'Video',
-            'mp4' : 'Video',
-            'm4v' : 'Video',
-            'ogv' : 'Video',
-            'ogm' : 'Video',
+            'avi':  'Video',
+            'mp4':  'Video',
+            'm4v':  'Video',
+            'ogv':  'Video',
+            'ogm':  'Video',
             'webm': 'Video',
-            'mov' : 'Video',
+            'mov':  'Video',
             'mpeg': 'Video',
 
             //Documents
-            'odt' : 'Documents',
-            'odm' : 'Documents',
-            'ott' : 'Documents',
-            'oth' : 'Documents',
-            'doc' : 'Documents',
-            'dot' : 'Documents',
+            'odt':  'Documents',
+            'odm':  'Documents',
+            'ott':  'Documents',
+            'oth':  'Documents',
+            'doc':  'Documents',
+            'dot':  'Documents',
             'docx': 'Documents',
             'dotx': 'Documents',
             'dotm': 'Documents',
 
             //books
-            'epub' : 'Books',
-            'mobi' : 'Books',
+            'epub': 'Books',
+            'mobi': 'Books',
 
             //Spreadsheet
-            'csv' : 'Spreadsheets',
-            'ods' : 'Spreadsheets',
-            'ots' : 'Spreadsheets',
+            'csv':  'Spreadsheets',
+            'ods':  'Spreadsheets',
+            'ots':  'Spreadsheets',
             'xlsx': 'Spreadsheets',
             'xlsm': 'Spreadsheets',
             'xltx': 'Spreadsheets',
             'xltm': 'Spreadsheets',
-            'xls' : 'Spreadsheets',
-            'xlb' : 'Spreadsheets',
-            'xlt' : 'Spreadsheets',
+            'xls':  'Spreadsheets',
+            'xlb':  'Spreadsheets',
+            'xlt':  'Spreadsheets',
 
             //Presentation
-            'odp' : 'Presentations',
-            'otp' : 'Presentations',
+            'odp':  'Presentations',
+            'otp':  'Presentations',
             'pptx': 'Presentations',
             'pptm': 'Presentations',
             'ppsx': 'Presentations',
             'potx': 'Presentations',
             'potm': 'Presentations',
-            'ppt' : 'Presentations',
-            'pps' : 'Presentations',
+            'ppt':  'Presentations',
+            'pps':  'Presentations',
 
             //Pdf
-            'pdf' : 'Pdf',
+            'pdf': 'Pdf',
 
             //Archive
-            'zip' : 'Archive',
-            'tar' : 'Archive',
-            'gz'  : 'Archive',
-            'rar' : 'Archive',
-            '7z'  : 'Archive',
-            'bz2' : 'Archive',
+            'zip': 'Archive',
+            'tar': 'Archive',
+            'gz':  'Archive',
+            'rar': 'Archive',
+            '7z':  'Archive',
+            'bz2': 'Archive',
 
             //comic books
-            'cbz' : 'Comics',
-            'cbr' : 'Comics',
-            'cb7' : 'Comics',
-            'cbt' : 'Comics',
-            'cba' : 'Comics',
+            'cbz': 'Comics',
+            'cbr': 'Comics',
+            'cb7': 'Comics',
+            'cbt': 'Comics',
+            'cba': 'Comics',
 
             //Web development
             'html': 'Web',
-            'css' : 'Web',
-            'js'  : 'Web',
+            'css':  'Web',
+            'js':   'Web',
 
             //Plain text
-            'txt' : 'Plain Text',
-            ''    : 'Plain Text'
+            'txt': 'Plain Text',
+            '':    'Plain Text'
         };
 
     function createCanvas() {
@@ -142,17 +142,16 @@ define('io.ox/files/guidance/statistics',
         if (recursionDepth === 3) {
             return [];
         } else {
-            return folderAPI.list(folder.id)
-                .then(function (subfolders) {
-                    return $.when.apply($,
-                        _(subfolders).map(function (subFolder) {
-                            return getAllSubFolders(subFolder, recursionDepth + 1);
-                        })
-                    )
-                    .then(function () {
-                        return _([folder].concat(_(arguments).toArray())).flatten();
-                    });
+            return folderAPI.list(folder.id).then(function (subfolders) {
+                return $.when.apply($,
+                    _(subfolders).map(function (subFolder) {
+                        return getAllSubFolders(subFolder, recursionDepth + 1);
+                    })
+                )
+                .then(function () {
+                    return _([folder].concat(_(arguments).toArray())).flatten();
                 });
+            });
         }
     }
 
@@ -172,7 +171,7 @@ define('io.ox/files/guidance/statistics',
 
             //do not load files, when cid is already in hash
             if (!hash[cid] || hash[cid].state() === 'rejected') {
-                hash[cid] = api.getAll({ folder: options.folder, columns: COLUMNS }, false);
+                hash[cid] = api.getAll(options.folder, { cache: false, columns: COLUMNS });
             }
 
             //return deferred promise
@@ -237,13 +236,13 @@ define('io.ox/files/guidance/statistics',
 
             $.when.apply($,
                 _(list).filter(function (listItem) {
-                        return folderAPI.can('read', listItem);
-                    })
-                    .map(function (listItem) {
-                        listItem.folder_size = 0;
-                        folders[listItem.id] = listItem;
-                        return fetch({ folder: listItem.id });
-                    })
+                    return folderAPI.can('read', listItem);
+                })
+                .map(function (listItem) {
+                    listItem.folder_size = 0;
+                    folders[listItem.id] = listItem;
+                    return fetch({ folder: listItem.id });
+                })
             )
             .then(function success() {
                 var files = _(_(arguments).toArray()).flatten(),
@@ -331,11 +330,11 @@ define('io.ox/files/guidance/statistics',
 
             $.when.apply($,
                 _(list).filter(function (listItem) {
-                        return folderAPI.can('read', listItem);
-                    })
-                    .map(function (listItem) {
-                        return fetch({ folder: listItem.id });
-                    })
+                    return folderAPI.can('read', listItem);
+                })
+                .map(function (listItem) {
+                    return fetch({ folder: listItem.id });
+                })
             )
             .then(function success() {
                 var files = _(_(arguments).toArray()).flatten(),
@@ -401,7 +400,7 @@ define('io.ox/files/guidance/statistics',
                     node.idle().empty();
 
                     //remove the reload button
-                    $('a[data-action=guidance_files_reload]').remove();
+                    $('a[data-action=guidance-files-reload]').remove();
                 }
             },
             function fail() {

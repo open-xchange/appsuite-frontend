@@ -4,7 +4,7 @@
 <title>11.2.1. Quali permessi possono essere accordati?</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Groupware">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Permessi">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Permessi">
 <link rel="next" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html" title="11.2.2. Permessi per le cartelle esistenti">
@@ -35,24 +35,14 @@
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ox.appsuite.user.sect.dataorganisation.rights.defined"></a>11.2.1. Quali permessi possono essere accordati?</h3></div></div></div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles"></a><p>Per concedere facilmente combinazioni di permessi, esistono degli specifici ruoli utente preimpostati: </p>
+<a name="ox.appsuite.user.concept.rights.roles"></a><p>Per accordare combinazioni logiche di permessi in modo semplice, sono disponibili specifici ruoli utente preimpostati:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Proprietario">Proprietario</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Amministratore">Amministratore</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.viewer" title="Visualizzatore">Visualizzatore</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.editor" title="Revisore">Revisore</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="Autore">Autore</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.guest" title="Ospite">Ospite</a></p></li>
 </ul></div>
-<p>
-      </p>
-</div>
-<div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.owner"></a><p class="title"><b>Proprietario</b></p>
-<p>Il proprietario di una cartella ha tutti i permessi sulla stessa. Il proprietario può accordare permessi sulla cartella ad altri utenti.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Permessi delle cartelle: creare oggetti e sottocartelle</p></li>
-<li class="listitem"><p>Permessi degli oggetti: leggere tutti gli oggetti, modificare tutti gli oggetti, eliminare tutti gli oggetti</p></li>
-<li class="listitem"><p>Permessi amministrativi: Sì</p></li>
-</ul></div>
+<p>Si possono cambiare i permessi preimpostati accordando <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.folder.rights.detail" title="Permessi dettagliati">permessi dettagliati</a>.</p>
 </div>
 <div class="concept">
 <a name="ox.appsuite.user.concept.rights.roles.administrator"></a><p class="title"><b>Amministratore</b></p>
@@ -60,74 +50,73 @@
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Permessi delle cartelle: creare oggetti e sottocartelle</p></li>
 <li class="listitem"><p>Permessi degli oggetti: leggere tutti gli oggetti, modificare tutti gli oggetti, eliminare tutti gli oggetti</p></li>
-<li class="listitem"><p>Permessi amministrativi: Sì</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.viewer"></a><p class="title"><b>Visualizzatore</b></p>
+<p>Un visualizzatore può leggere tutti gli oggetti esistenti. Un visualizzatore non ha altri permessi.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Permessi delle cartelle: visualizzare la cartella</p></li>
+<li class="listitem"><p>Permessi degli oggetti: leggere tutti gli oggetti</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.editor"></a><p class="title"><b>Revisore</b></p>
+<p>Un revisore può leggere e modificare oggetti esistenti. Il revisore non può tuttavia creare nuovi oggetti. Il revisore non può eliminare oggetti.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Permessi delle cartelle: visualizzare la cartella</p></li>
+<li class="listitem"><p>Permessi degli oggetti: leggere tutti gli oggetti, modificare tutti gli oggetti</p></li>
 </ul></div>
 </div>
 <div class="concept">
 <a name="ox.appsuite.user.concept.rights.roles.author"></a><p class="title"><b>Autore</b></p>
-<p>Un autore può modificare oggetti già esistenti, creare e modificare nuovi oggetti e creare sottocartelle.</p>
+<p>Un autore può modificare o eliminare oggetti già esistenti, creare e modificare nuovi oggetti e creare sottocartelle.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Permessi delle cartelle: creare oggetti e sottocartelle</p></li>
 <li class="listitem"><p>Permessi degli oggetti: leggere tutti gli oggetti, modificare tutti gli oggetti, eliminare tutti gli oggetti</p></li>
-<li class="listitem"><p>Permessi amministrativi: No</p></li>
 </ul></div>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.guest"></a><p class="title"><b>Ospite</b></p>
-<p>Un ospite può leggere oggetti già esistenti, ma non modificarli. L'ospite non può creare sottocartelle oppure oggetti al loro interno.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Permessi delle cartelle: visualizzare la cartella</p></li>
-<li class="listitem"><p>Permessi degli oggetti: leggere tutti gli oggetti, nessun permesso di modifica, nessun permesso di eliminazione</p></li>
-<li class="listitem"><p>Permessi amministrativi: No</p></li>
-</ul></div>
-</div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.folder.rights"></a><p>I permessi preimpostati per i ruoli utente possono essere modificati. È possibile accordare i seguenti permessi. </p>
+<a name="ox.appsuite.user.concept.folder.rights.detail"></a><p class="title"><b>Permessi dettagliati</b></p>
+<p>I permessi preimpostati per i ruoli utente possono essere modificati. È possibile accordare i seguenti permessi.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>Permessi della cartella</p>
+<p>Cartelle</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>nuova cartella</p></li>
+<li class="listitem"><p>visualizzare la cartella</p></li>
 <li class="listitem"><p>creare oggetti</p></li>
 <li class="listitem"><p>creare oggetti e sottocartelle</p></li>
 </ul></div>
 <p>
-            </p>
+              </p>
 </li>
 <li class="listitem">
-<p>Permessi degli oggetti, lettura</p>
+<p>permessi di lettura</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>nessun permesso di lettura</p></li>
+<li class="listitem"><p>nessuno</p></li>
 <li class="listitem"><p>leggere i propri oggetti</p></li>
 <li class="listitem"><p>leggere tutti gli oggetti</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p>Permessi degli oggetti, scrittura</p>
+<p>permessi di scrittura</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>nessun permesso di modifica</p></li>
+<li class="listitem"><p>nessuno</p></li>
 <li class="listitem"><p>modificare i propri oggetti</p></li>
 <li class="listitem"><p>modificare tutti gli oggetti</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p>Permessi degli oggetti, eliminazione</p>
+<p>permessi di eliminazione</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>nessun permesso di eliminazione</p></li>
+<li class="listitem"><p>nessuno</p></li>
 <li class="listitem"><p>eliminare i propri oggetti</p></li>
 <li class="listitem"><p>eliminare tutti gli oggetti</p></li>
 </ul></div>
 </li>
-<li class="listitem">
-<p>Permessi amministrativi</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>Sì</p></li>
-<li class="listitem"><p>No</p></li>
-</ul></div>
-</li>
 </ul></div>
 <p>
-      </p>
+        </p>
 </div>
 </div>
           </div>

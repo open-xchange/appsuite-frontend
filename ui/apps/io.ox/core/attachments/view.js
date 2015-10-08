@@ -12,12 +12,12 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('io.ox/core/attachments/view',
-    ['io.ox/core/attachments/backbone',
-     'io.ox/core/strings',
-     'gettext!io.ox/core',
-     'less!io.ox/core/attachments/style'
-    ], function (backbone, strings, gt) {
+define('io.ox/core/attachments/view', [
+    'io.ox/core/attachments/backbone',
+    'io.ox/core/strings',
+    'gettext!io.ox/core',
+    'less!io.ox/core/attachments/style'
+], function (backbone, strings, gt) {
 
     'use strict';
 
@@ -49,6 +49,9 @@ define('io.ox/core/attachments/view',
 
             // editable?
             if (this.options.editable) this.$el.addClass('editable');
+
+            // Previewmode on smartpfone as default
+            if (_.device('smartphone')) this.$el.addClass('show-preview');
 
             this.$header = $('<header role="heading">');
             this.$list = $('<ul class="inline-items">');
@@ -99,14 +102,14 @@ define('io.ox/core/attachments/view',
         renderHeader: function () {
 
             this.$header.append(
+                $('<a href="#" class="pull-right toggle-mode" tabindex="1">')
+                    .append('<i class="fa">'),
                 $('<a href="#" class="toggle-details" tabindex="1">').append(
                     $('<i class="fa toggle-caret" aria-hidden="true">'),
                     $('<i class="fa fa-paperclip" aria-hidden="true">'),
                     $('<span class="summary">')
                 ),
-                $('<span class="links">'),
-                $('<a href="#" class="pull-right toggle-mode" tabindex="1">')
-                    .append('<i class="fa">')
+                $('<span class="links">')
             );
 
             this.renderSummary();
@@ -169,6 +172,7 @@ define('io.ox/core/attachments/view',
             // to provoke lazyload
             this.$preview.trigger('scroll');
             this.updateScrollControls();
+            $(window).trigger('resize');
         },
 
         scrollLeft: function () {
@@ -231,7 +235,7 @@ define('io.ox/core/attachments/view',
             // word blue
             if (/^do[ct]x?$/.test(extension)) return '#2C5897';
             // excel green
-            if (/^xlsx?$/.test(extension)) return '#1D7047';
+            if (/^xlsx?|o[dt]s$/.test(extension)) return '#1D7047';
             // powerpoint orange
             if (/^p[po]tx?$/.test(extension)) return '#D04423';
             // pdf red
@@ -328,7 +332,9 @@ define('io.ox/core/attachments/view',
         },
 
         renderContent: function () {
-            this.$('.file').text(this.model.getShortTitle());
+            this.$('.file')
+                .attr('title', this.model.getTitle())
+                .text(this.model.getShortTitle(50));
         },
 
         renderControls: function () {

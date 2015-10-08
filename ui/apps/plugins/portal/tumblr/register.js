@@ -12,14 +12,13 @@
  * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
-define('plugins/portal/tumblr/register',
-    ['io.ox/core/extensions',
-     'io.ox/portal/feed',
-     'gettext!io.ox/portal',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/date',
-     'settings!io.ox/portal'
-    ], function (ext, Feed, gt, dialogs, date, settings) {
+define('plugins/portal/tumblr/register', [
+    'io.ox/core/extensions',
+    'io.ox/portal/feed',
+    'gettext!io.ox/portal',
+    'io.ox/core/tk/dialogs',
+    'settings!io.ox/portal'
+], function (ext, Feed, gt, dialogs, settings) {
 
     'use strict';
 
@@ -84,7 +83,7 @@ define('plugins/portal/tumblr/register',
                 // find proper size
                 _(sizes).each(function (photo) {
                     if (width === 0 || (photo.width > 250 && photo.width < 1000)) {
-                        url = photo.url;
+                        url = photo.url.replace(/https?:\/\//, '//');
                         width = photo.width;
                     }
                 });
@@ -137,12 +136,11 @@ define('plugins/portal/tumblr/register',
                 },
 
                 postDate = function () {
-                    var pd = new date.Local(post.timestamp * 1000);
-                    return $('<span class="post-date">').text(' ' + pd.format(date.DATE_TIME));
+                    return $('<span class="post-date">').text(' ' + moment.unix(post.timestamp).format('lll'));
                 },
                 postTags = function () {
                     var tags = [],
-                        tagBaseUri = 'http://' + post.blog_name + '.tumblr.com/tagged/';
+                        tagBaseUri = '//' + post.blog_name + '.tumblr.com/tagged/';
                     if (post.tags && post.tags.length > 0) {
                         _(post.tags).each(function (tag) {
                             tags.push($('<a>', { href: tagBaseUri + tag, target: '_blank' })
@@ -160,7 +158,8 @@ define('plugins/portal/tumblr/register',
                                 width = photo.width;
                             }
                         });
-                        img = $('<img>').attr({'src': url}).css({
+                        url = url.replace(/https?:\/\//, '//');
+                        img = $('<img>').attr({ 'src': url }).css({
                             'width': '100%',
                             'max-width': width,
                             'margin-bottom': '13px'
@@ -234,7 +233,7 @@ define('plugins/portal/tumblr/register',
         model.set('candidate', true, { silent: true, validate: true });
 
         var dialog = new dialogs.ModalDialog({ async: true, width: 400 }),
-            $url = $('<input id="tumblr_url" type="text" class="form-control" placeholder=".tumblr.com">').placeholder(),
+            $url = $('<input id="tumblr_url" type="text" class="form-control" placeholder=".tumblr.com">'),
             $description = $('<input id="tumblr_desc" type="text" class="form-control">'),
             $error = $('<div>').addClass('alert alert-danger').css('margin-top', '15px').hide(),
             props = model.get('props') || {};
@@ -317,7 +316,7 @@ define('plugins/portal/tumblr/register',
                 model.set({
                     title: description,
                     props: { url: url, description: description }
-                }, {validate: true});
+                }, { validate: true });
                 model.unset('candidate');
             });
 

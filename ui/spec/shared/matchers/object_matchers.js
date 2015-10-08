@@ -17,7 +17,7 @@ if (jasmine) {
             //used to see if a key is present. undefined, null or false do still pass this test
             toHaveKey: function (key) {
                 var notText = this.isNot ? ' not' : '';
-                this.message = function () {return 'Expected ' + JSON.stringify(this.actual) + ' to' + notText + ' contain ' + key + ' .'; };
+                this.message = function () { return 'Expected ' + JSON.stringify(this.actual) + ' to' + notText + ' contain ' + key + ' .'; };
                 return key in this.actual;
             }
         };

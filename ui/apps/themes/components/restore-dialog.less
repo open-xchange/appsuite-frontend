@@ -1,0 +1,148 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+.io-ox-restore-dialog {
+    position: absolute;
+    width: 552px;
+    height: 326px;
+    padding: 13px 26px;
+    background-color: white;
+    top: 45%;
+    left: 50%;
+    margin: -163px 0 0 (-250px - 26);
+    z-index: 10000;
+    .box-shadow(0 0 50px 1px #aaa);
+
+    &:focus {
+        outline: 1px solid rgba(0, 136, 204, 0.5);
+    }
+
+    .header {
+        height: 110px;
+        h3 { margin-top: 0; }
+    }
+    .content {
+        height: 140px;
+        overflow: auto;
+        margin: 0;
+
+        .restore-item {
+
+            position: relative;
+            background-color: #eee;
+            padding: 14px;
+            margin-bottom: 7px;
+
+            i + span {
+                margin-left: 14px;
+            }
+
+            .oldversion {
+                margin-left: 5px;
+                color: #aaa;
+            }
+
+            .remove {
+
+                position: absolute;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                width: 40px;
+                text-align: center;
+                color: #888;
+                line-height: 50px;
+
+                &:hover, &:focus {
+                    color: white;
+                    background-color: @trash-icon-hover-background;
+                    outline: 0;
+                    text-decoration: none;
+                }
+
+            }
+
+        }
+
+    }
+
+    .footer {
+        padding-top: 13px;
+        height: 50px - 13;
+        text-align: right;
+
+        .btn {
+            margin-left: 5px;
+        }
+    }
+}
+
+
+// small screens (mobile)
+// note that we have to target max-width and max-device-width
+// to target all devices which don't support the max-device-width
+// property
+@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
+
+    .io-ox-restore-dialog {
+
+        .alert {
+            margin-bottom: 10px;
+        }
+
+        position: absolute;
+        overflow: auto;
+        width: auto;
+        height: auto;
+        max-height: 100%;
+        margin: 0;
+        padding: 10px;
+        padding-bottom: 22px;
+        background-color: white;
+        top: 12px;
+        left: 12px;
+        right: 12px;
+        z-index: 10000;
+        .box-shadow(0 0 20px -2px #888);
+        .border-radius(4px);
+
+        .header {
+            height: auto;
+            padding-bottom: 10px;
+
+            h3 {
+                font-size: 18px;
+                line-height: 34px;
+                margin-top: 0;
+            }
+
+        }
+
+        .content {
+            height: auto;
+            overflow: auto;
+            margin-bottom: 15px;
+        }
+
+        .footer {
+            padding-top: 0;
+            height: auto;
+
+            .btn {
+                margin-left:0;
+            }
+        }
+    }
+}

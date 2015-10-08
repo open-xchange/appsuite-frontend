@@ -32,15 +32,7 @@ module.exports = function (grunt) {
                 options: { lessrc: '.lessrc' },
                 files: [
                     {
-                        src: [
-                        'bower_components/bootstrap/less/normalize.less',
-                        'bower_components/bootstrap/less/scaffolding.less',
-                        'bower_components/bootstrap/less/type.less',
-                        'bower_components/bootstrap/less/grid.less',
-                        'bower_components/bootstrap/less/forms.less',
-                        'bower_components/bootstrap/less/buttons.less',
-                        'apps/themes/login/login.less'
-                        ],
+                        src: ['apps/themes/login/login.less'],
                         expand: true,
                         rename: function (dest) { return dest; },
                         dest: 'build/apps/themes/login/login.css'

@@ -1,20 +1,62 @@
+open-xchange-dynamic-theme (7.8.0-6) stable; urgency=medium
+
+  * Sixth candidate for 7.8.0 release
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Tue, 06 Oct 2015 07:37:54 +0000
+
+open-xchange-dynamic-theme (7.8.0-5) stable; urgency=medium
+
+  * Fith candidate for 7.8.0 release
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Fri, 25 Sep 2015 16:53:57 +0200
+
+open-xchange-dynamic-theme (7.8.0-4) stable; urgency=medium
+
+  * Fourth candidate for 7.8.0 release
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Fri, 18 Sep 2015 11:58:18 +0200
+
+open-xchange-dynamic-theme (7.8.0-3) stable; urgency=medium
+
+  * Third candidate for 7.8.0 release
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Mon, 07 Sep 2015 17:54:01 +0200
+
+open-xchange-dynamic-theme (7.8.0-2) stable; urgency=medium
+
+  * Second candidate for 7.8.0 release
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Fri, 21 Aug 2015 17:15:11 +0200
+
+open-xchange-dynamic-theme (7.8.0-1) stable; urgency=low
+
+  * First candidate for 7.8.0 release
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Wed, 05 Aug 2015 12:53:04 +0200
+
+open-xchange-dynamic-theme (7.8.0-0) unstable; urgency=medium
+
+  * prepare for 7.8.0 release
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Wed, 05 Nov 2014 16:22:40 +0100
+
 open-xchange-dynamic-theme (7.6.2-25) stable; urgency=medium
 
   * Build for patch 2015-09-28 (2767)
 
- -- Viktor Pracht <viktor.pracht@open-xchange.com>  Thu, 24 Sep 2015 10:49:30 +0000
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Thu, 24 Sep 2015 12:49:30 +0200
 
 open-xchange-dynamic-theme (7.6.2-24) stable; urgency=medium
 
   * Build for patch 2015-09-14 (2732)
 
- -- Viktor Pracht <viktor.pracht@open-xchange.com>  Tue, 08 Sep 2015 12:52:18 +0000
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Tue, 08 Sep 2015 14:52:18 +0200
 
 open-xchange-dynamic-theme (7.6.2-23) stable; urgency=medium
 
   * Build for patch 2015-08-24 (2674)
 
- -- Viktor Pracht <viktor.pracht@open-xchange.com>  Tue, 18 Aug 2015 15:40:14 +0000
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Tue, 18 Aug 2015 17:40:14 +0200
 
 open-xchange-dynamic-theme (7.6.2-22) stable; urgency=low
 
@@ -27,6 +69,12 @@ open-xchange-dynamic-theme (7.6.2-21) stable; urgency=low
   * Build for patch 2015-08-03 (2650)
 
  -- Viktor Pracht <viktor.pracht@open-xchange.com>  Tue, 04 Aug 2015 12:01:36 +0200
+
+open-xchange-dynamic-theme (7.6.2-20) stable; urgency=low
+
+  * First candidate for 7.8.0 release
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Wed, 05 Aug 2015 12:52:57 +0200
 
 open-xchange-dynamic-theme (7.6.2-20) stable; urgency=low
 

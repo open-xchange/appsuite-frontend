@@ -4,7 +4,7 @@
 <title>11.2.1. Quels droits peuvent être accordés ?</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Collecticiel">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Droits">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Droits">
 <link rel="next" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html" title="11.2.2. Droits sur les dossiers existants">
@@ -35,99 +35,88 @@
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ox.appsuite.user.sect.dataorganisation.rights.defined"></a>11.2.1. Quels droits peuvent être accordés ?</h3></div></div></div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles"></a><p>Pour faciliter les combinaisons de droits usuelles, il existe différents rôles prédéfinis : </p>
+<a name="ox.appsuite.user.concept.rights.roles"></a><p>Afin de définir simplement des combinaisons logiques de droits, il existe un certain nombre de rôles utilisateur prédéfinis :</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Propriétaire">Propriétaire</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrateur">Administrateur</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.viewer" title="Lecteur">Lecteur</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.editor" title="Relecteur">Relecteur</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="Auteur">Auteur</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.guest" title="Invité">Invité</a></p></li>
 </ul></div>
-<p>
-      </p>
-</div>
-<div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.owner"></a><p class="title"><b>Propriétaire</b></p>
-<p>Le propriétaire d'un dossier a tous les droits sur ce dossier. Le propriétaire peut accorder des droits sur le dossier à d'autres utilisateurs.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Droits sur le dossier : créer des objets et des sous-dossiers</p></li>
-<li class="listitem"><p>Droits sur les objets : lire tous les objets, modifier tous les objets et supprimer tous les objets</p></li>
-<li class="listitem"><p>Droits d'administration : oui</p></li>
-</ul></div>
+<p>Vous pouvez modifier les droits prédéfinis en accordant des <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.folder.rights.detail" title="Droits détaillés">droits détaillés</a>.</p>
 </div>
 <div class="concept">
 <a name="ox.appsuite.user.concept.rights.roles.administrator"></a><p class="title"><b>Administrateur</b></p>
 <p>L'administrateur d'un dossier a tous les droits sur ce dossier. L'administrateur peut accorder des droits sur le dossier à d'autres utilisateurs.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Droits sur le dossier : créer des objets et des sous-dossiers</p></li>
-<li class="listitem"><p>Droits sur les objets : lire tous les objets, modifier tous les objets et supprimer tous les objets</p></li>
-<li class="listitem"><p>Droits d'administration : oui</p></li>
+<li class="listitem"><p>Droits sur l'objet : lire tous les objets, modifier tous les objets et supprimer tous les objets</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.viewer"></a><p class="title"><b>Lecteur</b></p>
+<p>Un lecteur peut consulter tous les objets existants. Un lecteur n'a pas d'autres droits.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Droits sur le dossier : afficher le dossier</p></li>
+<li class="listitem"><p>Droits sur l'objet : lecture de tous les objets</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.editor"></a><p class="title"><b>Relecteur</b></p>
+<p>Un relecteur peut lire et modifier les objets existants. Un relecteur ne peut cependant pas créer de nouveaux objets. Le relecteur ne peut pas supprimer des objets.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Droits sur le dossier : afficher le dossier</p></li>
+<li class="listitem"><p>Droits sur l'objet : lire tous les objets, modifier tous les objets</p></li>
 </ul></div>
 </div>
 <div class="concept">
 <a name="ox.appsuite.user.concept.rights.roles.author"></a><p class="title"><b>Auteur</b></p>
-<p>Un auteur a le droit de modifier les objets existants, de créer et de modifier de nouveaux objets et de créer des sous-dossiers.</p>
+<p>Un auteur a le droit de modifier ou supprimer les objets existants, de créer et de modifier de nouveaux objets et de créer des sous-dossiers.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Droits sur le dossier : créer des objets et des sous-dossiers</p></li>
-<li class="listitem"><p>Droits sur les objets : lire tous les objets, modifier tous les objets et supprimer tous les objets</p></li>
-<li class="listitem"><p>Droits d'administration : non</p></li>
+<li class="listitem"><p>Droits sur l'objet : lire tous les objets, modifier tous les objets et supprimer tous les objets</p></li>
 </ul></div>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.guest"></a><p class="title"><b>Invité</b></p>
-<p>Un invité a le droit de lire les objets existants, mais pas de les modifier. L'invité n'a pas le droit de créer de nouveaux sous-dossiers ou objets.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Droits sur le dossier : afficher le dossier</p></li>
-<li class="listitem"><p>Droits sur les objets : lire tous les objets, pas de droit de modification, pas de droit de suppression</p></li>
-<li class="listitem"><p>Droits d'administration : non</p></li>
-</ul></div>
-</div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.folder.rights"></a><p>Les droits prédéfinis peuvent être affinés. Les droits suivants peuvent être attribués. </p>
+<a name="ox.appsuite.user.concept.folder.rights.detail"></a><p class="title"><b>Droits détaillés</b></p>
+<p>Les droits prédéfinis peuvent être affinés. Les droits suivants peuvent être attribués.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>Droits sur les dossiers</p>
+<p>Dossiers</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>Nouveau dossier</p></li>
+<li class="listitem"><p>consulter le dossier</p></li>
 <li class="listitem"><p>créer des objets</p></li>
 <li class="listitem"><p>créer des objets et des sous-dossiers</p></li>
 </ul></div>
 <p>
-            </p>
+              </p>
 </li>
 <li class="listitem">
-<p>Droits sur les objets, lecture</p>
+<p>droits de lecture</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>pas de droit en lecture</p></li>
+<li class="listitem"><p>aucun</p></li>
 <li class="listitem"><p>lire ses propres objets</p></li>
 <li class="listitem"><p>lire tous les objets</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p>Droits sur les objets, modification</p>
+<p>droits d'écriture</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>pas de droit en modification</p></li>
+<li class="listitem"><p>aucun</p></li>
 <li class="listitem"><p>modifier ses propres objets</p></li>
 <li class="listitem"><p>modifier tous les objets</p></li>
 </ul></div>
 </li>
 <li class="listitem">
-<p>Droits sur les objets, suppression</p>
+<p>droits de suppression</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>pas de droit de suppression</p></li>
+<li class="listitem"><p>aucun</p></li>
 <li class="listitem"><p>supprimer ses propres objets</p></li>
 <li class="listitem"><p>supprimer tous les objets</p></li>
 </ul></div>
 </li>
-<li class="listitem">
-<p>Droits d'administration</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>oui</p></li>
-<li class="listitem"><p>non</p></li>
-</ul></div>
-</li>
 </ul></div>
 <p>
-      </p>
+        </p>
 </div>
 </div>
           </div>

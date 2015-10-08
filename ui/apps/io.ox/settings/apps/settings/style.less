@@ -1,0 +1,60 @@
+.rightside {
+    .scrollable-pane {
+        &.io-ox-app-settings {
+
+            line-height: 16px;
+
+            .hint {
+                margin: 20px 0;
+            }
+
+            .settings-list {
+                li {
+
+                    &.widget-settings-view {
+                        padding: 16px;
+                        margin-bottom: 8px;
+                    }
+
+                    img {
+                        float: left;
+                        width: 64px;
+                        height: 64px;
+                    }
+
+                    .remove {
+                        position: absolute;
+                        top: 0;
+                        bottom: 0;
+                        right: 0;
+                        width: 45px;
+                        cursor: pointer;
+                        max-height: 45px;
+                    }
+
+                    .selectable {
+                        text-align: left;
+                        margin-left: 80px;
+                        margin-right: 45px;
+                        // fix of widget-controls. should be removed with settings refactoring
+                        margin-bottom: -16px;
+
+                        div, .widget-title {
+                            margin-top: 3px;
+                            padding-bottom: 5px;
+                        }
+
+                        .permissions, .date {
+                            color: #777;
+
+                            span {
+                                font-weight: bold;
+                                margin-right: 0.4em;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

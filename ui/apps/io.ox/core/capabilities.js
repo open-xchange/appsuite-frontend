@@ -38,24 +38,18 @@ define('io.ox/core/capabilities', function () {
 
         has: function () {
 
-            var list = _(_(arguments).flatten()).map(function (def) {
-                if (!def) {
-                    return '';
-                }
-                return def.split(/\s*[, ]\s*/);
-            });
+            // you can pass separate arguments as arrays and if two operands are not connected by an operator an && is automatically inserted
+            var str = _(arguments).flatten().join(' && ').replace(/([^&\|]) ([^&\|])/gi, '$1 && $2').toLowerCase(),
+                condition = str.replace(/[a-z0-9_:\-\.\/]+/ig, function (match) {
+                    return api.isDisabled(match) ? false : (match in capabilities);
+                });
 
-            list = _(list).flatten();
-
-            return _(list).all(function (id) {
-                var inverse = false, result;
-                if (id[0] === '!') {
-                    id = id.substr(1);
-                    inverse = true;
-                }
-                result = api.isDisabled(id) ? false : (id in capabilities);
-                return inverse ? !result : result;
-            });
+            try {
+                return new Function('return !!(' + condition + ')')();
+            } catch (e) {
+                console.error('capabilities.has()', str, e);
+                return false;
+            }
         },
 
         reset: function () {
@@ -105,6 +99,19 @@ define('io.ox/core/capabilities', function () {
     // log
     var caps = _(disabled).keys().sort();
     if (caps.length) console.info('Disabled capabilities: ' + caps.join(', '));
+
+    // flat report
+    api.getFlat = function () {
+        var capcur = _.pluck(api.get(), 'id').sort(),
+            data = { enabled: [], disabled: [], mismatch: [] };
+        _.each(capcur, function (id) {
+            if (api.has(id))
+                data.enabled.push(id);
+            else
+                data.disabled.push(id);
+        });
+        return data;
+    };
 
     return api;
 });

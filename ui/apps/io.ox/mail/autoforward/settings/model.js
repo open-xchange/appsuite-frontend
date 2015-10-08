@@ -11,13 +11,13 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-define('io.ox/mail/autoforward/settings/model',
-    ['io.ox/backbone/modelFactory',
-     'io.ox/backbone/validation',
-     'io.ox/core/api/mailfilter',
-     'io.ox/settings/util',
-     'gettext!io.ox/mail'
-    ], function (ModelFactory, Validators, api, settingsUtil, gt) {
+define('io.ox/mail/autoforward/settings/model', [
+    'io.ox/backbone/modelFactory',
+    'io.ox/backbone/validation',
+    'io.ox/core/api/mailfilter',
+    'io.ox/settings/util',
+    'gettext!io.ox/mail'
+], function (ModelFactory, Validators, api, settingsUtil, gt) {
 
     'use strict';
 
@@ -59,7 +59,9 @@ define('io.ox/mail/autoforward/settings/model',
         var factory = new ModelFactory({
             api: api,
             ref: ref,
-
+            model: {
+                idAttribute: 'id'
+            },
             update: function (model) {
                 //make the active element lose focus to get the changes of the field a user was editing
                 $(document.activeElement).blur();

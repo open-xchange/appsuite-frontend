@@ -11,11 +11,9 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/plugins',
-    ['io.ox/core/extensions'], function (ext) {
+define('io.ox/search/plugins', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
-
 
     // field facet 'subject' only once
     ext.point('io.ox/search/api/autocomplete').extend({
@@ -23,7 +21,7 @@ define('io.ox/search/plugins',
         index: 300,
         customize: function (baton) {
             var model = baton.app.getModel(),
-                subject = _.where(model.get('poollist'), {facet: 'subject'});
+                subject = _.where(model.get('poollist'), { facet: 'subject' });
 
             if (subject.length === 0) return;
 
@@ -72,7 +70,7 @@ define('io.ox/search/plugins',
             var model = this;
             // listener that adds new history entries
             model.on({
-               'facet:add': function (facet, value) {
+                'facet:add': function (facet, value) {
                     var history = model.get('extensions').history;
                     // handle search history
                     if (facet === 'global') {
@@ -97,11 +95,7 @@ define('io.ox/search/plugins',
             //add icon
             if (_.contains(baton.data.flags, 'history')) {
                 this.find('.name').prepend(
-                    $('<i>')
-                        .addClass('fa fa-clock-o')
-                        .css({
-                            'margin-right': '6px'
-                        })
+                    $('<i class="fa fa-clock-o">').css('margin-right', '6px')
                 );
             }
         }

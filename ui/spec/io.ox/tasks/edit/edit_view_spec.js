@@ -13,16 +13,18 @@
 
 define([
     'io.ox/tasks/edit/main',
-    'io.ox/core/date',
+    'io.ox/core/moment',
     'gettext!io.ox/tasks/edit',
     'spec/shared/capabilities',
     'waitsFor'
-], function (edit, date, gt, caputil, waitsFor) {
+], function (edit, moment, gt, caputil, waitsFor) {
 
     var app,
         view,
         node,
+        header,
         model,
+        capabilities,
         setup = _.memoize(
             function () {
                 //launch app
@@ -30,28 +32,30 @@ define([
                 var def = app.launch({ folder_id: 555123456 }).then(function () {
                     view = app.view;
                     node = view.$el;
+                    header = app.getWindow().nodes.header;
                     model = view.model;
                 });
 
                 return def;
-            }),
-        capabilities = caputil
-            .preset('common')
-            .init('io.ox/tasks/edit/main', edit)
-            .apply();
+            });
 
     describe('Tasks edit view', function () {
         beforeEach(function () {
             //set capabilities
+            capabilities = caputil
+                .preset('common')
+                .init('io.ox/tasks/edit/main', edit)
+                .apply();
+
             return capabilities.then(function () {
                 return setup();
             });
         });
         describe('should contain', function () {
             it('a headline', function () {
-                expect(node.find('h1.clear-title').length).to.equal(1);
-                expect(node.find('button[data-action="save"]').length).to.equal(1);
-                expect(node.find('button[data-action="discard"]').length).to.equal(1);
+                expect(header.find('h1').length).to.equal(1);
+                expect(header.find('button[data-action="save"]').length).to.equal(1);
+                expect(header.find('button[data-action="discard"]').length).to.equal(1);
             });
             it('a title inputfield', function () {
                 expect(node.find('input.title-field').length).to.equal(1);
@@ -65,27 +69,17 @@ define([
                 expect(node.find('.expand-link').length).to.equal(1);
             });
             it('a date inputfields', function () {
-                expect(node.find('[data-extension-id="start_date"]').length).to.equal(1);
-                //DatePicker brings 2 labels and 2 inputs
-                expect(node.find('[data-extension-id="start_date"] label').length).to.equal(2);
-                expect(node.find('[data-extension-id="start_date"] input').length).to.equal(2);
-                expect(node.find('[data-extension-id="end_date"]').length).to.equal(1);
-                //DatePicker brings 2 labels and 2 inputs
-                expect(node.find('[data-extension-id="end_date"] label').length).to.equal(2);
-                expect(node.find('[data-extension-id="end_date"] input').length).to.equal(2);
+                expect(node.find('input.datepicker-day-field').length).to.equal(3);
             });
             it('a recurrence view', function () {
                 expect(node.find('[data-extension-id="recurrence"]').length).to.equal(1);
                 expect(node.find('.io-ox-recurrence-view').length).to.equal(1);
                 expect(node.find('[data-extension-id="recurrence"] input[type="checkbox"]').length).to.equal(1);
             });
-            it('a reminder controls', function () {
+            it('reminder controls', function () {
                 expect(node.find('#task-edit-reminder-select').length).to.equal(1);
-                expect(node.find('[data-extension-id="alarm"]').length).to.equal(1);
-                expect(node.find('[data-extension-id="alarm"] label').length).to.equal(2);
-                expect(node.find('[data-extension-id="alarm"] input').length).to.equal(2);//alarm has date and time field
             });
-            it('a status controls', function () {
+            it('status controls', function () {
                 expect(node.find('[data-extension-id="status"] select').length).to.equal(1);
                 expect(node.find('[data-extension-id="status"] select').children().length).to.equal(5);
                 expect(node.find('#task-edit-progress-field').length).to.equal(1);
@@ -93,18 +87,17 @@ define([
                 expect(node.find('[data-action="minus"]').length).to.equal(1);
                 expect(node.find('[data-extension-id="priority"] select').length).to.equal(1);
                 expect(node.find('[data-extension-id="priority"] select').children().length).to.equal(4);
-                expect(node.find('.private-flag').length).to.equal(1);
-                expect(node.find('.private-flag input[type="checkbox"]').length).to.equal(1);
+                expect(node.find('[data-extension-id="private_flag"]').length).to.equal(1);
+                expect(node.find('[data-extension-id="private_flag"] input[type="checkbox"]').length).to.equal(1);
             });
-            it('a correct participants tab', function () {
-                //wait a little, until everything is painted (paint is async)
-                return waitsFor(function () {
-                    return node.find('.task-participant-input-field').length;
-                }).then(function () {
-                    expect(node.find('.task-participant-input-field').length, 'input field elements').to.equal(1);
-                    expect(node.find('.participantsrow').length, 'row elements').to.equal(1);
-                });
-            });
+            // it('a correct participants tab', function () {
+            //     //wait a little, until everything is painted (paint is async)
+            //     return waitsFor(function () {
+            //         return node.find('.task-participant-input-field').length;
+            //     }).then(function () {
+            //         expect(node.find('.task-participant-input-field').length, 'input field elements').to.equal(1);
+            //     });
+            // });
             it('a correct details tab', function () {
                 expect(node.find('[data-extension-id="target_duration"]').length).to.equal(1);
                 expect(node.find('[data-extension-id="actual_duration"]').length).to.equal(1);
@@ -117,8 +110,8 @@ define([
         });
         describe('headline', function () {
             it('should have correct text', function () {
-                expect(node.find('h1.clear-title').text()).to.equal(gt('Create task'));
-                expect(node.find('button[data-action="save"]').text()).to.equal(gt('Create'));
+                expect(header.find('h1').text()).to.equal(gt('Create task'));
+                expect(header.find('button[data-action="save"]').text()).to.equal(gt('Create'));
             });
         });
         describe('title', function () {
@@ -174,9 +167,8 @@ define([
         describe('reminder selector', function () {
             it('should set alarmtime', function () {
                 expect(model.get('alarm')).to.equal(undefined);
-                var testtime = new date.Local();
-                node.find('#task-edit-reminder-select').val('t').trigger('change');//tomorrow
-                expect(model.get('alarm')).to.be.above(testtime.getTime());
+                $(node.find('#task-edit-reminder-select')).val('t').trigger('change');//tomorrow
+                expect(model.get('alarm')).to.be.above(moment().valueOf());
             });
             it('should remove alarmtime', function () {
                 expect(model.get('alarm')).not.to.be.null;
@@ -186,23 +178,23 @@ define([
         });
         describe('status selector', function () {
             it('should set status', function () {
-                node.find('.status-selector').val('1').trigger('change');//not started
-                expect(model.get('status')).to.equal(1);
-                node.find('.status-selector').val('2').trigger('change');//in progress
-                expect(model.get('status')).to.equal(2);
-                node.find('.status-selector').val('3').trigger('change');//done
-                expect(model.get('status')).to.equal(3);
-                node.find('.status-selector').val('4').trigger('change');//waiting
-                expect(model.get('status')).to.equal(4);
-                node.find('.status-selector').val('5').trigger('change');//later
-                expect(model.get('status')).to.equal(5);
+                node.find('select[name="status"]').val('1').trigger('change');//not started
+                expect(model.get('status')).to.equal('1');
+                node.find('select[name="status"]').val('2').trigger('change');//in progress
+                expect(model.get('status')).to.equal('2');
+                node.find('select[name="status"]').val('3').trigger('change');//done
+                expect(model.get('status')).to.equal('3');
+                node.find('select[name="status"]').val('4').trigger('change');//waiting
+                expect(model.get('status')).to.equal('4');
+                node.find('select[name="status"]').val('5').trigger('change');//later
+                expect(model.get('status')).to.equal('5');
             });
             it('should set progress', function () {
-                node.find('.status-selector').val('1').trigger('change');//not started
+                node.find('select[name="status"]').val('1').trigger('change');//not started
                 expect(model.get('percent_completed')).to.equal(0);
-                node.find('.status-selector').val('2').trigger('change');//in progress
+                node.find('select[name="status"]').val('2').trigger('change');//in progress
                 expect(model.get('percent_completed')).to.equal(25);
-                node.find('.status-selector').val('3').trigger('change');//done
+                node.find('select[name="status"]').val('3').trigger('change');//done
                 expect(model.get('percent_completed')).to.equal(100);
             });
         });
@@ -221,11 +213,11 @@ define([
         });
         describe('priority selector', function () {
             it('should set priority', function (done) {
-                node.find('.priority-selector').val('1').trigger('change');//low
+                node.find('select[name="priority"]').val('1').trigger('change');//low
                 expect(model.get('priority')).to.equal('1');
-                node.find('.priority-selector').val('2').trigger('change');//medium
+                node.find('select[name="priority"]').val('2').trigger('change');//medium
                 expect(model.get('priority')).to.equal('2');
-                node.find('.priority-selector').val('3').trigger('change');//high
+                node.find('select[name="priority"]').val('3').trigger('change');//high
                 expect(model.get('priority')).to.equal('3');
                 //remove node because this is the last test
 

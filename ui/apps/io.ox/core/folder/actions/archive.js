@@ -11,11 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/actions/archive',
-    ['io.ox/mail/api',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/yell',
-     'gettext!io.ox/core'], function (api, dialogs, yell, gt) {
+define('io.ox/core/folder/actions/archive', [
+    'io.ox/mail/api',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/yell',
+    'gettext!io.ox/core'
+], function (api, dialogs, yell, gt) {
 
     'use strict';
 
@@ -24,9 +25,9 @@ define('io.ox/core/folder/actions/archive',
     function handler(id) {
 
         //#. notification while archiving messages
-        yell.busy(gt('Archiving messages'));
+        yell('busy', gt('Archiving messages ...'));
 
-        api.archive(id).then(yell.done, yell);
+        api.archiveFolder(id).then(yell.done, yell);
     }
 
     return function (id) {

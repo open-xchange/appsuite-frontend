@@ -1,0 +1,566 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+#io-ox-top-logo-small {
+    width: 60px;
+    height: 22px;
+    margin: 8px 7px 0 13px;
+    float: right;
+    background-image: url('apps/themes/default/logo-small.png');
+    background-repeat: no-repeat;
+
+    html.high-contrast & {
+        display: none;
+    }
+}
+
+#io-ox-topbar {
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    bottom: auto;
+    z-index: 11; // one more than #io-ox-screens
+    background-color: @topbar-background;
+
+    .launchers {
+        overflow: hidden;
+        float: left;
+        height: 100%;
+        margin: 0;
+        -ms-user-select: none; // Fix for Bug #26670
+    }
+
+    .launchers-secondary {
+        float: right;
+        position: relative;
+    }
+
+    html.high-contrast & {
+        color: #000; // HC
+        background-color: #fff; // HC
+        background-image: none; // HC
+        border-bottom: 1px solid @hc-border-color; // HC
+    }
+
+    .launcher-dropdown, .launcher {
+
+        font-size: @topbar-font-size;
+        color: @topbar-launcher-color;
+        white-space: nowrap;
+        display: inline-block;
+        -webkit-tap-highlight-color: transparent;
+
+        & > a {
+
+            color: @topbar-launcher-color;
+            padding: 12px @default-padding;
+            line-height: 40px;
+
+            html.high-contrast & {
+                color: @black;
+            }
+
+            &:hover {
+                text-decoration: none;
+                i.fa {
+                    html.high-contrast & {
+                        color: @white;
+                    }
+                }
+            }
+
+            &:focus {
+
+                outline: 0;
+                color: @topbar-launcher-color-hover;
+                background-color: @topbar-launcher-background-hover;
+                text-decoration: none;
+
+                html.high-contrast & {
+                    color: @black;
+                }
+
+            }
+
+            &.closelink {
+
+                padding: 13px 0 13px 0;
+
+                &:focus {
+
+                    outline: 0;
+                    background-color: @topbar-launcher-background-hover;
+
+                    i.fa {
+                        color: @topbar-launcher-color-hover;
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+    .launcher.closable:hover {
+        color: @topbar-launcher-color-hover;
+    }
+
+    .launcher {
+
+        max-width: 15em; // see bug :29238
+        cursor: pointer;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        vertical-align: top;
+        -webkit-font-smoothing: antialiased;
+
+        & > a {
+
+            // IE10 needs this :link class otherwise :active is not removed
+            &:link {
+                color: @topbar-launcher-color;
+                background-color: transparent;
+            }
+
+            &:hover {
+
+                color: @topbar-launcher-color-hover;
+                background-color: @topbar-launcher-background-hover;
+
+                html.high-contrast & {
+                    color: @white; // HC
+                    background-color: @black; // HC
+                }
+            }
+
+            // don't add a:active otherwise IE10 messes it up
+            &:focus {
+                outline: 0;
+                color: @topbar-launcher-color-hover;
+                background-color: @topbar-launcher-background-hover;
+            }
+
+        }
+
+        &.upsell {
+
+            color: darken(@topbar-launcher-color, 20%);
+
+            i.fa {
+                color: inherit;
+                font-size: 14px;
+                position: static;
+                margin-right: 0.5em;
+            }
+        }
+
+        &.active-app {
+
+            color: @topbar-launcher-color-active;
+            background-color: @topbar-launcher-background-active;
+            -webkit-font-smoothing: initial;
+
+            & > a {
+                color: @topbar-launcher-color-active;
+            }
+
+            html.high-contrast & {
+
+                background-color: @hc-link-color; // HC
+
+                & > a {
+                    color: @white; // HC
+                }
+
+            }
+
+            &.closable {
+                .apptitle i.fa {
+                    color: rgba(255, 255, 255, 0.80);
+                }
+                i.fa {
+                    color: rgba(255, 255, 255, 0.50);
+                }
+            }
+        }
+
+        &.closable {
+
+            max-width: none;
+            text-overflow: clip;
+
+            & > a {
+
+                max-width: 15em;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                &.apptitle {
+                    float: left;
+                    line-height: 16px;
+                }
+            }
+
+            i {
+
+                &.fa  {
+                    font-size: 14px; // default font size (see Bug 27900)
+                    top: 0;
+                    margin-right: 7px;
+                    color: #ccc;
+                    padding: 0 5px;
+                }
+
+                &.fa-times {
+
+                    padding: 12px 16px;
+                    margin: 0;
+
+                    &:hover {
+                        color: #fff;
+                    }
+
+                }
+
+            }
+
+        }
+
+        &.left-corner {
+            text-align: center;
+        }
+
+        &.right {
+
+            float: right;
+            overflow: visible;
+            height: 40px;
+
+            .dropdown-menu {
+                left: auto; right: 0; text-align: left;
+            }
+
+            .dropdown-toggle {
+                width: 3em;
+                text-align: center;
+                outline: 0;
+                border: 0 none;
+            }
+
+        }
+
+        &.io-ox-progress i {
+            -moz-animation-direction: alternate;
+            -moz-animation-duration: 0.75s;
+            -moz-animation-iteration-count: infinite;
+            -moz-animation-name: launcherColours;
+            -moz-animation-timing-function: ease-in-out;
+            -webkit-animation-direction: alternate;
+            -webkit-animation-duration: 0.75s;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-name: launcherColours;
+            -webkit-animation-timing-function: ease-in-out;
+        }
+
+        &.dropdown {
+            overflow: visible;
+            .dropdown-menu {
+                right: 4px;
+                left: auto;
+                -webkit-font-smoothing: initial;
+            }
+        }
+
+        .topbar-launcherbadge {
+            margin-left: 8px;
+            border-radius: @border-radius-small;
+            background-color: rgba(0, 0, 0, 0.30);
+        }
+    }
+
+    .launcher-dropdown {
+
+        float: left;
+        display: none;
+        @media (max-width: 480px), (max-device-width: 480px) {
+            .dropdown-toggle {
+                font-size: @mobile-launcher-icon-size;
+                padding: @mobile-launcher-icon-size - 10px 18px;
+            }
+        }
+
+        li {
+            text-align: left;
+            &.upsell i.fa {
+                color: #AAA;
+                width: 1.25em;
+            }
+            a {
+                max-width: 10em;
+                .ellipsis();
+            }
+
+            a.closable {
+                display: inline-block;
+                width: 10em;
+            }
+
+            a.closelink {
+                display: inline-block;
+                padding: 3px 0;
+                i {
+                    text-align: center;
+                    color: rgba(0, 0, 0, 0.4);
+                }
+            }
+        }
+
+        ul {
+            left: 13px;
+        }
+
+        a.dropdown-toggle {
+            color: white;
+            text-decoration: none;
+            outline: none;
+        }
+
+        li.active-app a {
+            font-weight: bold;
+        }
+    }
+
+    i.fa.launcher-icon {
+        color: @topbar-icon-color;
+        font-size: 18px;
+        text-decoration: none;
+        line-height: 1em;
+        position: relative;
+        top: 2px;
+        html.high-contrast & {
+            color: @black; // HC
+            &:hover {
+                color: @white; //HC
+            }
+        }
+    }
+
+    @-webkit-keyframes launcherColours {
+        from { color: #fff; }
+          to { color: #555; }
+    }
+
+    @-moz-keyframes launcherColours {
+        from { color: #fff; }
+          to { color: #555; }
+    }
+
+    i.fa-refresh {
+
+        @color: rgba(255, 255, 255, 0.9);
+
+        color: @color;
+        .transition(color 0.2s linear);
+
+        /* http://stackoverflow.com/questions/7947385/hovering-over-css-transition-in-safari-lightens-certain-font-color */
+        -webkit-transform: translateZ(0);
+
+        &.fa-spin {
+            color: #fff;
+        }
+
+        &.fa-spin-paused {
+            -webkit-animation-play-state: paused;
+            -moz-animation-play-state: paused;
+            animation-play-state: paused;
+            color: @color;
+        }
+    }
+
+    .launcher a.notifications-icon {
+
+        display: block;
+        width: 50px;
+        height: 40px;
+
+        &.no-notifications {
+            i {
+                color: rgba(255, 255, 255, 0.3);
+            }
+            .badge {
+                display: none;
+            }
+        }
+
+        html.high-contrast & {
+            i {
+                color: @black; // HC
+                &:hover {
+                    color: @white; //HC
+                }
+            }
+        }
+
+        i {
+            vertical-align: top;
+            top: 0px;
+        }
+
+        .badge {
+
+            position: relative;
+            top: -7px;
+            left: -11px;
+            z-index: 1;
+            vertical-align: top;
+
+            color: @notification-icon-color;
+            background-color: @notification-icon-background;
+
+            &.active {
+                color: @notification-icon-color-active;
+                background-color: @notification-icon-background-active;
+            }
+
+            html.high-contrast & {
+                color: @white; // HC
+                background-color: @black; //HC
+            }
+
+        }
+
+        &:focus .badge, &:active .badge {
+            color: white;
+            background-color: darken(@notification-icon-background, 10%);
+        }
+    }
+
+    .launcher.minimizedmediaplayer:focus {
+        outline-style: none;
+    }
+}
+
+.touch {
+
+    #io-ox-topbar {
+        height: 40px;
+    }
+}
+
+//
+// iOS 8 on Ipad needs some extra top padding for its status bar in standalone mode
+// IPhone is not (yet) affected
+//
+
+html.ios8-standalone-ipad-fix {
+
+    @height: 20px;
+
+    #io-ox-topbar {
+        border-top: @height solid @topbar-launcher-background-active;
+        height: 40 + @height;
+    }
+
+    #io-ox-screens {
+        top: 40 + @height;
+    }
+}
+
+@media (min-width: 481px), (min-device-width: 481px) {//don't break mobile dropdowns
+
+    #topbar-settings-dropdown {//keep settings dropdown inside the window (Bug #30256)
+        top: 40px;
+        right: 20px;
+        left: auto;
+    }
+}
+
+@media(max-width: 480px) and (orientation: portrait) {
+
+    #io-ox-topbar {
+
+        .launcher a.notifications-icon {
+
+            padding: 12px 5px;
+            width: auto;
+            min-width: 40px;
+            text-align: center;
+
+            &.no-notifications {
+                .badge {
+                    display: inline-block;
+                }
+            }
+        }
+    }
+}
+
+// small screens (mobile)
+// note that we have to target max-width and max-device-width
+// to target all devices which don't support the max-device-width
+// property
+@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
+
+    .smartphone {
+        #io-ox-topbar {
+            .launcher-dropdown {
+                i:before {
+                    content: "\f0c9";
+                }
+            }
+            .launchers-secondary .launcher.dropdown {
+                i:before {
+                    content: "\f013";
+                }
+            }
+        }
+    }
+
+    #io-ox-topbar {
+
+        .launchers-secondary {
+            margin-right: 0;
+            padding-left: 0;
+
+            .fa.fa-search {
+                top: 2px;
+                font-size: 17px;
+            }
+        }
+    }
+
+    #io-ox-top-logo-small {
+        margin: 6px 8px 0 10px;
+        height: 22px;
+    }
+}
+
+/** High res logo for retina screens **/
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+    only screen and (-moz-min-device-pixel-ratio: 1.5),
+    only screen and (min-device-pixel-ratio: 1.5),
+    only screen and (min-resolution: 240dppx) {
+
+    #io-ox-top-logo-small {
+        background-size: 60px 22px;
+        background-image: url('apps/themes/default/logo-large.png');
+    }
+}

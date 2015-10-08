@@ -11,12 +11,12 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/api',
-    ['io.ox/core/http',
-     'io.ox/core/cache',
-     'io.ox/core/api/factory',
-     'settings!io.ox/contacts'
-    ], function (http, cache, apiFactory, settings) {
+define('io.ox/search/api', [
+    'io.ox/core/http',
+    'io.ox/core/cache',
+    'io.ox/core/api/factory',
+    'settings!io.ox/contacts'
+], function (http, cache, apiFactory, settings) {
 
     'use strict';
 
@@ -62,7 +62,7 @@ define('io.ox/search/api',
         }),
         columns = {
             mail: {
-                columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
+                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,654,655',
                 extendColumns: 'io.ox/mail/api/list'
             },
             files: {
@@ -71,7 +71,7 @@ define('io.ox/search/api',
             },
             tasks: {
                 columns: '1,20,101,200,202,203,220,300,301,309',
-                extendColumns: 'io.ox/tasks/api/list',
+                extendColumns: 'io.ox/tasks/api/list'
             },
             contacts: {
                 columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,5',
@@ -83,7 +83,6 @@ define('io.ox/search/api',
             }
         },
         simpleCache = new cache.SimpleCache('search-find');
-
 
     function getColumns (options) {
         var module = options.params.module,
@@ -106,7 +105,7 @@ define('io.ox/search/api',
     function getDefault(key) {
         var  obj = _.copy(api.options.requests[key], true);
         // filter admin contacts
-        _.extend(obj.data.options, {admin: settings.get('showAdmin', false)});
+        _.extend(obj.data.options, { admin: settings.get('showAdmin', false) });
         return obj;
     }
 
@@ -114,11 +113,10 @@ define('io.ox/search/api',
         return JSON.stringify(request);
     };
 
-
     /**
      * get available facets
      * @param  {object}     options
-     * @return {deferred}   returns list of sorted facets/values
+     * @return { deferred}   returns list of sorted facets/values
      */
     api.autocomplete = function (options) {
         var opt = $.extend(true, {}, getDefault('autocomplete'), options),
@@ -131,6 +129,13 @@ define('io.ox/search/api',
                 return data;
             }
 
+            // debug
+            // if (debug) {
+            //     console.log('%c' + 'autocomplete', 'color: white; background-color: green');
+            //     _.each(opt.data.facets, function (facet) {
+            //         console.log(facet.facet, facet.value);
+            //     });
+            // }
             // call server
             return http[opt.method](opt)
                     .then(simpleCache.add.bind(this, key));
@@ -140,11 +145,18 @@ define('io.ox/search/api',
     /**
      * query search result
      * @param  {object}     options
-     * @return {deferred}   returns results
+     * @return { deferred}   returns results
      */
     api.query = function (options) {
         // in case options.params.loadercolumns is defined it will be used by getColumns() and removeed from params object
         var opt = $.extend(true, {}, getDefault('query'), getColumns(options), options);
+        // debug
+        // if (debug) {
+        //     console.log('%c' + 'query', 'color: white; background-color: blue');
+        //     _.each(opt.data.facets, function (facet) {
+        //         console.log(facet.facet, facet.value);
+        //     });
+        // }
         return http[opt.method](opt);
     };
 

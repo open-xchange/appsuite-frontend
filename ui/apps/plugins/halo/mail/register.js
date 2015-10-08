@@ -11,28 +11,13 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('plugins/halo/mail/register',
-    ['io.ox/core/extensions',
-     'io.ox/mail/api',
-     'gettext!plugins/halo'
-    ], function (ext, api, gt) {
+define('plugins/halo/mail/register', [
+    'io.ox/core/extensions',
+    'io.ox/mail/api',
+    'gettext!plugins/halo'
+], function (ext, api, gt) {
 
     'use strict';
-
-    function trackUpdates(obj, node, baton) {
-
-        function redraw() {
-            require(['plugins/halo/view-detail'], function (view) {
-                view.redraw(baton);
-            });
-        }
-
-        var ecid = _.ecid(obj);
-        api.on('update:' + ecid, redraw);
-        node.on('dispose', function () {
-            api.off('update:' + ecid, redraw);
-        });
-    }
 
     ext.point('io.ox/halo/contact:renderer').extend({
 
@@ -48,21 +33,26 @@ define('plugins/halo/mail/register',
 
             var sent = [], received = [], deferred = $.Deferred(), node = this;
 
-            _.each(baton.data, function (elem) {
-                if (elem.folder_id.match(/INBOX$/i)) {
-                    received.push(elem);
-                } else {
-                    sent.push(elem);
-                }
-                // register for all update events
-                trackUpdates(elem, node, baton);
+            _(baton.data).each(function (item) {
+                if (/INBOX$/i.test(item.folder_id)) received.push(item); else sent.push(item);
             });
 
             this.append(
                 $('<div class="widget-title clear-title">').text(gt('Recent conversations'))
             );
 
-            require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-grid-template'], function (dialogs, viewGrid) {
+            require(['io.ox/core/tk/dialogs', 'io.ox/mail/listview'], function (dialogs, ListView) {
+
+                function createListView(type, data) {
+                    var cid = 'halo:' + type + ':' + baton.contact.email1;
+                    return new ListView({
+                        collection: api.pool.add(cid, data),
+                        pagination: false,
+                        selection:  false,
+                        scrollable: false,
+                        threaded:   false
+                    }).render().$el.addClass('compact');
+                }
 
                 node.append(
                     // left column
@@ -70,22 +60,23 @@ define('plugins/halo/mail/register',
                         $('<p class="io-ox-subheader">').text(gt('Received mails')),
                         received.length === 0 ?
                             $('<div>').text(gt('Cannot find any messages this contact sent to you.')) :
-                            viewGrid.drawSimpleGrid(received)
+                            createListView('received', received)
+
                     ),
                     // right column
                     $('<div class="io-ox-right-column">').append(
                         $('<p class="io-ox-subheader">').text(gt('Sent mails')),
                         sent.length === 0 ?
                             $('<div>').text(gt('Cannot find any messages you sent to this contact.')) :
-                            viewGrid.drawSimpleGrid(sent)
+                            createListView('sent', sent)
                     ),
                     // clear float
                     $('<div>').css('clear', 'both')
                 );
 
-                new dialogs.SidePopup().delegate(node, '.vgrid-cell', function (pane, e, target) {
-                    var msg = target.data('objectData');
-                    api.get({ folder: msg.folder_id, id: msg.id }).done(function (data) {
+                new dialogs.SidePopup().delegate(node, '.list-item', function (pane, e, target) {
+                    var cid = String(target.attr('data-cid')).replace(/^thread\./, '');
+                    api.get(_.cid(cid)).done(function (data) {
                         require(['io.ox/mail/detail/view'], function (detail) {
                             var view = new detail.View({ data: data });
                             pane.append(view.render().expand().$el.addClass('no-padding'));

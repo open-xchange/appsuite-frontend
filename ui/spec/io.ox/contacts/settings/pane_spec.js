@@ -10,12 +10,13 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-define(['io.ox/core/extensions',
-        'gettext!io.ox/contacts',
-        'io.ox/contacts/settings/pane'
-        ], function (ext, gt) {
+define([
+    'io.ox/core/extensions',
+    'gettext!io.ox/contacts',
+    'io.ox/contacts/settings/pane'
+], function (ext, gt) {
 
-	describe('contactssettings', function () {
+    describe('contactssettings', function () {
         beforeEach(function () {
 
             $('body', document).append(this.node = $('<div id="contactssettingsNode">'));

@@ -1,30 +1,39 @@
 {
-    "requireCurlyBraces": ["for", "while", "do", "try", "catch"],
+    "requireCurlyBraces": ["do", "try", "catch"],
     "requireSpaceAfterKeywords": ["if", "else", "for", "while", "do", "switch", "return", "try", "catch"],
-    "disallowLeftStickedOperators": ["?", "+", "/", "*", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
-    "disallowRightStickedOperators": ["?", "/", "*", ":", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
-    "requireRightStickedOperators": ["!"],
-    "requireLeftStickedOperators": [","],
+    "requireSpaceBeforeBinaryOperators": ["?", "+", "/", "*", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
+    "requireSpaceAfterBinaryOperators": ["?", "/", "*", ":", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
+    "disallowSpaceAfterBinaryOperators": ["!"],
+    "disallowSpaceBeforeBinaryOperators": [","],
     "disallowImplicitTypeConversion": ["string"],
     "disallowKeywords": ["with"],
     "disallowMultipleLineBreaks": true,
     "disallowTrailingWhitespace": true,
     "disallowMixedSpacesAndTabs": true,
-    "requireDotNotation": true,
+    "requireDotNotation": { "allExcept": [ "keywords" ] },
     "requireLineFeedAtFileEnd": true,
     "requireCommaBeforeLineBreak": true,
     "disallowSpaceBeforePostfixUnaryOperators": ["++", "--"],
-    "requireSpacesInFunctionExpression": {
+    "requireSpacesInAnonymousFunctionExpression": {
+        "beforeOpeningRoundBrace": true,
         "beforeOpeningCurlyBrace": true
     },
-    "validateLineBreaks": "LF",
-    "validateQuoteMarks": "'",
-    "validateJSDoc": {
-        "checkParamNames": false,
-        "requireParamTypes": false
+    "disallowSpacesInNamedFunctionExpression": {
+        "beforeOpeningRoundBrace": true
     },
+    "validateLineBreaks": "LF",
+    "validateQuoteMarks": { "mark": "'", "escape": false },
     "validateIndentation": 4,
     "disallowTrailingComma": true,
     "disallowKeywordsOnNewLine": ["else"],
-    "disallowYodaConditions": true
+    "disallowYodaConditions": true,
+    "requireSpacesInConditionalExpression": {
+        "afterTest": true,
+        "beforeConsequent": true,
+        "afterConsequent": true,
+        "beforeAlternate": true
+    },
+    "requireSpaceBeforeBlockStatements": true,
+    "disallowSpaceAfterObjectKeys": true,
+    "requireSpacesInsideObjectBrackets": "allButNested"
 }

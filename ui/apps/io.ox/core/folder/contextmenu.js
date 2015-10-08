@@ -11,13 +11,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/contextmenu',
-    ['io.ox/core/extensions',
-     'io.ox/core/folder/actions/common',
-     'io.ox/core/folder/api',
-     'io.ox/core/notifications',
-     'io.ox/core/capabilities',
-     'gettext!io.ox/core'], function (ext, actions, api, notifications, capabilities, gt) {
+define('io.ox/core/folder/contextmenu', [
+    'io.ox/core/extensions',
+    'io.ox/core/folder/actions/common',
+    'io.ox/core/folder/api',
+    'io.ox/core/capabilities',
+    'io.ox/core/api/filestorage',
+    'gettext!io.ox/core'
+], function (ext, actions, api, capabilities, filestorage, gt) {
 
     'use strict';
 
@@ -49,6 +50,68 @@ define('io.ox/core/folder/contextmenu',
         );
     }
 
+    function header(label) {
+        this.append(
+            $('<li class="dropdown-header" role="presentation" aria-hidden="true">').text(label)
+        );
+    }
+
+    var ColorSelectionView = Backbone.View.extend({
+        tagName: 'div',
+        className: 'custom-colors',
+        events: {
+            'click .color-label': 'select',
+            'remove': 'onRemove'
+        },
+        initialize: function () {
+            this.listenTo(this.model, 'change:meta', this.update);
+        },
+        update: function () {
+            //toggle active class
+            $('.active', this.$el).removeClass('active').attr('aria-checked', false);
+            $('.color-label-' + this.model.get('meta').color_label, this.$el).addClass('active').attr('aria-checked', true);
+        },
+        select: function (e) {
+            var meta = _.extend({},
+                this.model.get('meta'),
+                { color_label: $(e.target).data('index') }
+            );
+
+            api.update(this.model.get('id'), { meta: meta }).fail(function (error) {
+                require(['io.ox/core/notifications'], function (notifications) {
+                    notifications.yell(error);
+                });
+            });
+
+            //prevent dialog from closing
+            e.stopPropagation();
+            e.preventDefault();
+        },
+        render: function (util) {
+            var folderColor = util.getFolderColor({ meta: this.model.get('meta') }),
+                self = this;
+
+            _(_.range(1, 11)).each(function (colorNumber) {
+                self.$el.append(
+                    $('<div class="color-label pull-left" tabindex="1" role="checkbox">')
+                    .addClass('color-label-' + colorNumber)
+                    .addClass(folderColor == colorNumber ? 'active' : '')
+                    .attr({
+                        'data-index': colorNumber,
+                        'aria-checked': folderColor == colorNumber,
+                        'aria-label': util.getColorLabel(colorNumber)
+                    })
+                    .append('<i class="fa fa-check">')
+                );
+            });
+
+            return this;
+        },
+        onRemove: function () {
+            this.stopListening();
+        }
+    });
+
     var extensions = {
 
         //
@@ -63,7 +126,25 @@ define('io.ox/core/folder/contextmenu',
                 data: { folder: baton.data.id, app: baton.app },
                 enabled: true,
                 handler: actions.markFolderSeen,
-                text: gt('Mark all mails as read')
+                text: gt('Mark all messages as read')
+            });
+        },
+
+        //
+        // Move all messages to a target folder ...
+        //
+        moveAllMessages: function (baton) {
+            // disabled until API ready
+            if (true || baton.module !== 'mail') return;
+
+            addLink(this, {
+                action: 'move-all-messages',
+                data: { folder: baton.data.id, app: baton.app },
+                enabled: true,
+                handler: function () {
+                    alert('Available once we get the proper API action');
+                },
+                text: gt('Move all messages')
             });
         },
 
@@ -132,6 +213,7 @@ define('io.ox/core/folder/contextmenu',
         add: (function () {
 
             function handler(e) {
+                e.preventDefault();
                 ox.load(['io.ox/core/folder/actions/add']).done(function (add) {
                     add(e.data.folder, { module: e.data.module });
                 });
@@ -146,12 +228,15 @@ define('io.ox/core/folder/contextmenu',
                 var canCreate = baton.data.id === 'default0' && api.altnamespace;
                 if (!canCreate && !api.can('create:folder', baton.data)) return;
 
+                // not within trash
+                if (api.is('trash', baton.data)) return;
+
                 addLink(this, {
                     action: 'add-subfolder',
                     data: { app: baton.app, folder: baton.data.id, module: baton.module },
                     enabled: true,
                     handler: handler,
-                    text: gt('New subfolder')
+                    text: gt('Add new folder')
                 });
             };
         }()),
@@ -249,10 +334,12 @@ define('io.ox/core/folder/contextmenu',
                 if (_.device('smartphone')) return;
                 if (baton.module !== 'infostore') return;
 
+                //we don't allow folder download on external storages see Bug 40979
+                var isEnabled = !filestorage.isExternal(baton.data);
                 addLink(this, {
                     action: 'zip',
                     data: { id: baton.data.id },
-                    enabled: true,
+                    enabled: isEnabled,
                     handler: handler,
                     text: gt('Download entire folder')
                 });
@@ -316,71 +403,65 @@ define('io.ox/core/folder/contextmenu',
         }()),
 
         //
-        // Permissions
+        // Permissions / Sharing
         //
-        permissions: (function () {
+        shares: (function () {
 
-            function handler(e) {
+            function invite(e) {
                 e.preventDefault();
-                var folder = String(e.data.app.folder.get());
-                require(['io.ox/core/permissions/permissions'], function (permissions) {
-                    permissions.show(folder);
+                var id = e.data.id;
+                require(['io.ox/files/share/permissions'], function (controller) {
+                    controller.showFolderPermissions(id);
+                });
+            }
+
+            function getALink(e) {
+                e.preventDefault();
+                var id = e.data.id;
+                ox.load(['io.ox/files/api', 'io.ox/files/actions/share']).done(function (filesApi, action) {
+                    var model = new filesApi.Model(api.pool.getModel(id).toJSON());
+                    action.link([model]);
                 });
             }
 
             return function (baton) {
 
-                if (!capabilities.has('gab')) return;
-                if (capabilities.has('alone')) return;
                 if (_.device('smartphone')) return;
 
-                addLink(this, {
-                    action: 'permissions',
-                    data: { app: baton.app },
-                    enabled: true,
-                    handler: handler,
-                    text: gt('Permissions')
-                });
-            };
-        }()),
+                // check if folder can be shared
+                var id = String(baton.data.id),
+                    model = api.pool.getModel(id);
 
-        //
-        // Publish folder
-        //
-        publish: (function () {
+                var supportsPermissions = capabilities.has('gab') && !capabilities.has('alone'),
+                    supportsInvite = capabilities.has('invite_guests'),
+                    supportsLinks = capabilities.has('share_links'),
+                    showInvitePeople = supportsInvite && model.supportsShares(),
+                    showGetLink = supportsLinks && !model.is('mail') && model.isShareable(id);
 
-            function handler(e) {
-                e.preventDefault();
-                require(['io.ox/core/pubsub/publications'], function (publications) {
-                    publications.buildPublishDialog(e.data.baton);
-                });
-            }
+                // stop if neither invites or links are supported
+                if (!supportsPermissions && !showInvitePeople && !showGetLink) return;
 
-            return function (baton) {
+                header.call(this, gt('Sharing'));
 
-                if (!api.can('publish', baton.data) || api.is('trash', baton.data)) return;
+                if (supportsPermissions || showInvitePeople) {
+                    addLink(this, {
+                        action: 'invite',
+                        data: { app: baton.app, id: id },
+                        enabled: true,
+                        handler: invite,
+                        // Using concat notation to avoid necessity for new translations right before the release
+                        text: showInvitePeople ? gt('Permissions') + ' / ' + gt('Invite people') : gt('Permissions')
+                    });
+                }
 
-                var tempLink, node, self = this;
-
-                node = $('<li>').append(
-                    tempLink = a('publications', gt('Share this folder'))
-                );
-
-                if (capabilities.has('publication')) {
-                    tempLink.on('click', { baton: baton }, handler);
-                    this.append(node);
-                } else {
-                    require(['io.ox/core/upsell'], function (upsell) {
-                        if (upsell.enabled(['publication'])) {
-                            tempLink.on('click', function () {
-                                upsell.trigger({
-                                    type: 'inline-action',
-                                    id: 'io.ox/core/foldertree/contextmenu/default/publications',
-                                    missing: upsell.missing(['publication'])
-                                });
-                            });
-                            self.append(node);
-                        }
+                // "Get link" doesn't work for mail folders
+                if (showGetLink) {
+                    addLink(this, {
+                        action: 'get-link',
+                        data: { app: baton.app, id: id },
+                        enabled: true,
+                        handler: getALink,
+                        text: gt('Get link')
                     });
                 }
             };
@@ -393,7 +474,7 @@ define('io.ox/core/folder/contextmenu',
 
             function handler(e) {
                 e.preventDefault();
-                require(['io.ox/core/pubsub/subscriptions'], function (subscriptions) {
+                require(['io.ox/core/sub/subscriptions'], function (subscriptions) {
                     subscriptions.buildSubscribeDialog(e.data);
                 });
             }
@@ -436,7 +517,7 @@ define('io.ox/core/folder/contextmenu',
 
             function handler(e) {
                 e.preventDefault();
-                var id = e.data.baton.app.folder.get();
+                var id = e.data.id;
                 require(['io.ox/core/folder/actions/properties'], function (fn) {
                     fn(id);
                 });
@@ -448,7 +529,7 @@ define('io.ox/core/folder/contextmenu',
 
                 addLink(this, {
                     action: 'properties',
-                    data: { baton: baton },
+                    data: { baton: baton, id: String(baton.data.id) },
                     enabled: true,
                     handler: handler,
                     text: gt('Properties')
@@ -488,7 +569,32 @@ define('io.ox/core/folder/contextmenu',
                     text: hidden ? gt('Show') : gt('Hide')
                 });
             };
-        }())
+        }()),
+
+        customColor: (function () {
+
+            return function (baton) {
+
+                if (!/^calendar$/.test(baton.module)) return;
+                if (!api.is('private', baton.data)) return;
+
+                if (baton.app && baton.app.props && baton.app.props.get('colorScheme') === 'custom') {
+                    var listItem;
+
+                    this.append(
+                        listItem = $('<li role="presentation">')
+                    );
+
+                    require(['io.ox/calendar/util'], function (calendarUtil) {
+                        listItem.append(
+                            new ColorSelectionView({
+                                model: api.pool.getModel(baton.data.id)
+                            }).render(calendarUtil).$el
+                        );
+                    });
+                }
+            };
+        })()
     };
 
     //
@@ -496,27 +602,6 @@ define('io.ox/core/folder/contextmenu',
     //
 
     ext.point('io.ox/core/foldertree/contextmenu/default').extend(
-        {
-            id: 'mark-folder-read',
-            index: 100,
-            draw: extensions.markFolderSeen
-        },
-        {
-            id: 'expunge',
-            index: 200,
-            draw: extensions.expunge
-        },
-        {
-            id: 'archive',
-            index: 300,
-            draw: extensions.archive
-        },
-        {
-            id: 'divider-1',
-            index: 400,
-            draw: divider
-        },
-        // -----------------------------------------------
         {
             id: 'add-folder',
             index: 1000,
@@ -543,61 +628,98 @@ define('io.ox/core/folder/contextmenu',
             draw: extensions.subscribe
         },
         {
-            id: 'divider-2',
+            id: 'divider-1',
+            index: 1450,
+            draw: divider
+        },
+        // -----------------------------------------------
+        {
+            id: 'customColor',
             index: 1500,
+            draw: extensions.customColor
+        },
+        {
+            id: 'divider-2',
+            index: 1600,
+            draw: divider
+        },
+        // -----------------------------------------------
+        {
+            id: 'shares',
+            index: 2000,
+            draw: extensions.shares
+        },
+        {
+            id: 'divider-3',
+            index: 2100,
             draw: divider
         },
         // -----------------------------------------------
         {
             id: 'import',
-            index: 2100,
+            index: 3100,
             draw: extensions.importData
         },
         {
             id: 'export',
-            index: 2200,
+            index: 3200,
             draw: extensions.exportData
         },
         {
             id: 'zip',
-            index: 2300,
+            index: 3300,
             draw: extensions.zip
         },
         {
-            id: 'divider-3',
-            index: 2400,
+            id: 'divider-4',
+            index: 3400,
             draw: divider
         },
         // -----------------------------------------------
         {
-            id: 'permissions',
-            index: 3100,
-            draw: extensions.permissions
+            id: 'mark-folder-read',
+            index: 4100,
+            draw: extensions.markFolderSeen
         },
         {
+            id: 'move-all-messages',
+            index: 4200,
+            draw: extensions.moveAllMessages
+        },
+        {
+            id: 'expunge',
+            index: 4300,
+            draw: extensions.expunge
+        },
+        {
+            id: 'archive',
+            index: 4400,
+            draw: extensions.archive
+        },
+        {
+            id: 'divider-5',
+            index: 4500,
+            draw: divider
+        },
+        // -----------------------------------------------
+        {
             id: 'properties',
-            index: 3200,
+            index: 6100,
             draw: extensions.properties
         },
         {
-            id: 'divider-4',
-            index: 3300,
-            draw: divider
-        },
-        // -----------------------------------------------
-        {
             id: 'toggle',
-            index: 4100,
+            index: 6200,
             draw: extensions.toggle
         },
         {
             id: 'empty',
-            index: 4200,
+            index: 6300,
             draw: extensions.empty
         },
         {
             id: 'delete',
-            index: 4300,
+            index: 6500,
             draw: extensions.removeFolder
         }
     );

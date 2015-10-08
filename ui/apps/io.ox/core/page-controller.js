@@ -11,25 +11,29 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/core/page-controller',
-    ['less!io.ox/core/page-controller'], function () {
+define('io.ox/core/page-controller', [], function () {
 
     'use strict';
 
-    var PageController = function (app, o) {
+    var PageController = function (o) {
         // stats ;)
-        if (!window.trappedTaps) window.trappedTaps = 0;
+        //if (!window.trappedTaps) window.trappedTaps = 0;
         var pages = {},
             current,
             order = [],
             lastPage = [],
             self = this,
-            app = app,
+            // mimic an app object instead of real reference
+            app = {
+                navbar: o.navbar || $(),
+                toolbar: o.toolbar || $(),
+                options: {
+                    name: o.appname
+                }
+            },
+            //app = app,
             backButtonRules,
-            options = o || {},
-            $taptrap = $('<div class="taptrap">').on('touchstart click mousedown', function () {
-                window.trappedTaps++;
-            });
+            options = o || {};
 
         function createPage(opt) {
             var defaults = {
@@ -76,7 +80,7 @@ define('io.ox/core/page-controller',
 
         /*
          * changePage
-         * changes the acutal page to the given one
+         * changes the actual page to the given one
          * with given animation and options
          */
         this.changePage = function (to, options) {
@@ -88,7 +92,7 @@ define('io.ox/core/page-controller',
             // check if same page
             if (to === current) return;
 
-            var opt = _.extend({ from: current, animation: _.device('smartphone') ? 'slideleft': 'pop', disableAnimations: false}, options || {}),
+            var opt = _.extend({ from: current, animation: _.device('smartphone') ? 'slideleft' : 'pop', disableAnimations: false }, options || {}),
                 $toPage = pages[to].$el,
                 $fromPage = pages[opt.from].$el;
 
@@ -96,8 +100,8 @@ define('io.ox/core/page-controller',
             opt.animation = _.device('android') ? 'pop' : opt.animation;
 
             // trigger 'before' events
-            $toPage.trigger('pagebeforeshow', {frompage: opt.from});
-            $fromPage.trigger('pagebeforehide', {topage: opt.to});
+            $toPage.trigger('pagebeforeshow', { frompage: opt.from });
+            $fromPage.trigger('pagebeforehide', { topage: opt.to });
 
             // since the pagecontroller is also used on desktop
             // we have to dismiss this part on dekstop to prevent focus and a11y trouble
@@ -120,23 +124,25 @@ define('io.ox/core/page-controller',
             lastPage = current;
             // start animation to-page in
             current = to;
-            var taptrap = $taptrap.clone(true);
+            var tapTrap = $('<div class="taptrap">');
             if (_.device('!smartphone')) {
                 // taptrap is not needed on desktop, use empty node
-                taptrap = $();
+                tapTrap = $();
             }
 
             // only animate if possible
             if (Modernizr.cssanimations && !opt.disableAnimations) {
                 _.defer(function () {
                     $toPage
-                        .append(taptrap)
+                        .append(tapTrap)
                         .addClass('io-ox-core-animation in current ' + opt.animation)
                         .one('webkitAnimationEnd mozAnimationEnd animationend', function () {
                             $(this).removeClass('io-ox-core-animation in ' + opt.animation);
-                            $toPage.trigger('pageshow', {from: opt.from, to: opt.to});
-                            taptrap.remove();
+                            $toPage.trigger('pageshow', { from: opt.from, to: opt.to });
+                            $(this).find('.taptrap').remove();
                         });
+                    // prevent leaking
+                    tapTrap = null;
                 }, 1);
 
                 // start animation "from" page out
@@ -145,13 +151,13 @@ define('io.ox/core/page-controller',
                         .addClass('io-ox-core-animation out inmotion ' + opt.animation)
                         .one('webkitAnimationEnd mozAnimationEnd animationend', function () {
                             $(this).removeClass('io-ox-core-animation out inmotion ' + opt.animation);
-                            $fromPage.trigger('pagehide', {from: opt.from, to: opt.to});
+                            $fromPage.trigger('pagehide', { from: opt.from, to: opt.to });
                         });
                 }, 1);
             } else {
                 // no animations, direct page change
-                $toPage.addClass('current').trigger('pageshow', {from: opt.from, to: opt.to});
-                $fromPage.removeClass('current').trigger('pagehide', {from: opt.from, to: opt.to});
+                $toPage.addClass('current').trigger('pageshow', { from: opt.from, to: opt.to });
+                $fromPage.removeClass('current').trigger('pagehide', { from: opt.from, to: opt.to });
             }
 
             showNavbar(to);
@@ -169,15 +175,15 @@ define('io.ox/core/page-controller',
             backButtonRules = rules;
         };
 
-        this.goBack = function () {
-            var target = lastPage;
-
+        this.goBack = function (options) {
+            var target = lastPage,
+                o = _.extend({ animation: 'slideright' }, options || {});
             // if we do have a custom navigation for some pages
             // use this instead of the last page
             if (backButtonRules && backButtonRules[current]) {
                 target = backButtonRules[current];
             }
-            this.changePage(target, {animation: 'slideright'});
+            this.changePage(target, o);
         };
 
         /**
@@ -201,7 +207,7 @@ define('io.ox/core/page-controller',
          * getPage
          * return the main DOM node of the page
          * @param  {string} page pagename to return
-         * @return {jQuery object} jQuery node
+         * @return { jQuery object} jQuery node
          */
         this.getPage = function (page) {
             if (!pages[page]) {
@@ -214,10 +220,10 @@ define('io.ox/core/page-controller',
         /**
          * returns the whole page object
          * @param  {string} page identifier of the page
-         * @return {Object} the page object
+         * @return { Object} the page object
          */
         this.getPageObject = function (page) {
-             if (!pages[page]) {
+            if (!pages[page]) {
                 console.error('PageController: Page ' + page + ' does not exist.');
                 console.error('PageController: Available pages are ' + order.join());
                 return;
@@ -272,16 +278,18 @@ define('io.ox/core/page-controller',
             return pages;
         };
 
-        this.toggleSecondaryToolbar = function (page, state)  {
-            showToolbar(page, state);
-        };
-
         var showNavbar = function (page) {
-            var bar = pages[page].navbar;
-
+            var bar = pages[page].navbar, last = pages[lastPage];
+            if (last && last.navbar) last.navbar.toggle(false);
             if (bar) {
-                    app.navbar.find('.toolbar-content').detach();
-                    app.navbar.append(bar.$el);
+                if (!bar.rendered) bar.render();
+                app.navbar.append(bar.$el);
+                app.navbar.toggle(true);
+                bar.toggle(true);
+            } else {
+                // hide navbar from previous page to get "fullscreen" page
+                app.navbar.hide();
+                pages[page].$el.addClass('fullscreen'); // remove padding
             }
         };
 
@@ -297,6 +305,7 @@ define('io.ox/core/page-controller',
                 app.toolbar.children().detach();
                 // append new toolbar view and show toolbar container
                 app.toolbar.append(bar.$el).show();
+                app.toolbar.trigger('show');
                 if (!secondary) {
                     bar.render();
                 }
@@ -304,9 +313,11 @@ define('io.ox/core/page-controller',
                 // if there is no toolbar defined for the current page, hide the whole container
                 app.toolbar.children().detach();
                 app.toolbar.hide();
+                app.toolbar.trigger('hide');
             }
         };
 
+        this.toggleSecondaryToolbar = showToolbar;
     };
 
     return PageController;

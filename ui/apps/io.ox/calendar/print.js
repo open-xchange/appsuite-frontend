@@ -11,17 +11,17 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/print',
-    ['io.ox/core/print',
-     'io.ox/calendar/api',
-     'io.ox/calendar/util',
-     'io.ox/contacts/util',
-     'io.ox/core/api/user',
-     'io.ox/core/api/group',
-     'io.ox/core/api/resource',
-     'io.ox/core/util',
-     'gettext!io.ox/calendar'
-    ], function (print, api, util, contactsUtil, userAPI, groupAPI, resourceAPI, coreUtil, gt) {
+define('io.ox/calendar/print', [
+    'io.ox/core/print',
+    'io.ox/calendar/api',
+    'io.ox/calendar/util',
+    'io.ox/contacts/util',
+    'io.ox/core/api/user',
+    'io.ox/core/api/group',
+    'io.ox/core/api/resource',
+    'io.ox/core/util',
+    'gettext!io.ox/calendar'
+], function (print, api, util, contactsUtil, userAPI, groupAPI, resourceAPI, coreUtil, gt) {
 
     'use strict';
 

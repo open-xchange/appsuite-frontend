@@ -27,7 +27,7 @@
         display: inline-block;
         border-right: 1px solid @weekview-border;
         overflow: hidden;
-        .transition(background-color 0.4s);
+        .transition(background-color 0.2s);
         .backface-visibility(hidden);
     }
 
@@ -35,6 +35,7 @@
 
         .info {
             cursor: pointer;
+            text-decoration: none;
         }
 
     }
@@ -54,18 +55,45 @@
         left: 0;
         right: 0;
         bottom: 0;
-        top: @calendar-toolbar-height + @weekview-footer-height;
+        // top: was @calendar-toolbar-height + @calendar-toolbar-top-padding;
+        // but that doesn't make sense, result is close however
+        top: 67px;
+
         // see Bug 33927 - Mini calendar doesn't block hover of underlying appointment
         z-index: 1;
 
+        .time-label-bar {
+            position: absolute;
+            width: @weekview-time-width;
+            display: table;
+            text-align: right;
+
+            div {
+                display: table-cell;
+                vertical-align: bottom;
+                padding-right: 7px;
+                width: 80px;
+            }
+
+            .timezone-abbr {
+                display: inline-block;
+                width: 3em;
+            }
+
+            .offset {
+                color: #777;
+                display: inline-block;
+                width: 3.5em;
+            }
+        }
+
         .fulltime-container {
 
-            position: absolute;
             height: @weekview-footer-height;
             .overflow-y(scroll);
             .overflow-x(hidden);
             border-bottom: 1px solid @weekview-border;
-            left: @weekview-time-width;
+            margin-left: @weekview-time-width;
             right: 0;
 
             .fulltime {
@@ -108,36 +136,53 @@
             .week-container-label {
 
                 width: @weekview-time-width;
-                position: absolute;
+                float: left;
 
                 .time {
+
+                    &.working-time-border {
+                        border-bottom: 1px solid @weekview-working-time-border;
+                    }
+
+                    &.in {
+                        font-weight: bold;
+                        color: #333;
+                    }
 
                     position: relative;
                     height: 48px;
                     margin-left: 1em;
                     border-bottom: 1px solid @weekview-border;
+                    color: #777;
 
                     .number {
                         font-size: 12px;
                         position: absolute;
-                        bottom: -1.6em;
+                        top: 4px;
+                        right: 10px;
                     }
 
                 }
 
+                &.secondary-timezone {
+                    .time {
+                        &.in {
+                            font-weight: normal;
+                            color: #777;
+                        }
+                    }
+                }
             }
 
             .week-container {
 
-                left: @weekview-time-width;
-                right: 0;
-                position: absolute;
+                margin-left: @weekview-time-width;
 
                 .timeline {
                     position: absolute;
                     height: 0;
                     width: 100%;
-                    border-bottom: 2px dashed @weekview-timeline;
+                    border-bottom: 3px solid @calendar-today;
                     z-index: 10;
                     .user-select(none);
                 }
@@ -170,31 +215,24 @@
 
                 &:nth-child(2n+1) {
                     border-color: lighten(@weekview-border, 10%);
+
+                    &.out {
+                        border-color: transparent;
+                    }
                 }
 
                 &:last-child, .time:last-child {
                     border: none;
                 }
 
-                &.in {
-                    background-color: @weekview-day-in;
+                &.working-time-border {
+                    border-bottom: 1px solid @weekview-working-time-border;
                 }
-
-                &.out {
-                    background-color: @weekview-day-out;
-                }
-
             }
 
             &.today .timeslot {
 
-                &.in {
-                    background-color: lighten(@weekview-day-out, 1%);
-                }
-
-                &.out {
-                    background-color: darken(@weekview-day-out, 2%);
-                }
+                background-color: @calendar-today-background;
 
             }
 
@@ -210,7 +248,7 @@
         }
 
         .week-view-container {
-            top: @calendar-toolbar-height + @calendar-toolbar-top-padding;
+            top: 67px;
         }
 
         .footer-container {
@@ -224,10 +262,23 @@
         position: absolute;
         background-color: @appointment-reserved;
         opacity: 1;
-        .transition(~"opacity 0.2s, background-color 0.3s, color 0.3s");
+        .transition(~"opacity 0.2s, background-color 0.2s, color 0.2s");
         .backface-visibility(hidden);
         // see Bug 32753 - Not possible to reduce an appointment to 30 minutes using drag&drop
         box-sizing: content-box;
+
+        &.no-wrap {
+            .appointment-content {
+                * {
+                    display: inline;
+                    text-overflow: clip;
+                }
+
+                .location {
+                    margin-left: 5px;
+                }
+            }
+        }
 
         &.modify {
             cursor: pointer;
@@ -242,7 +293,7 @@
 
         &.current, &.hover {
             z-index: 999 !important;
-            .transition(background-color 0.4s);
+            .transition(background-color 0.2s);
         }
 
         &.lasso {
@@ -264,7 +315,7 @@
             height: 100%;
             font-size: 12px;
             padding: 0 7px;
-            border-left: 3px solid;
+            border-left: 2px solid;
             border-color: inherit;
             .ellipsis();
 
@@ -319,6 +370,36 @@
         height: 100%;
     }
 
+    @media (min-width: 1281px) {
+        @adjusted-width: @weekview-time-width * 1.25;
+
+        .week-view-container {
+            .time-label-bar {
+                width: @adjusted-width;
+            }
+
+            .fulltime-container {
+                margin-left: @adjusted-width;
+            }
+
+            .scrollpane {
+                .week-container-label {
+                    width: @adjusted-width;
+               }
+
+               .week-container {
+                   margin-left: @adjusted-width;
+               }
+
+               &.secondary {
+                   .week-container-label {
+                       width: @weekview-time-width;
+                   }
+               }
+            }
+        }
+    }
+
     // Big Screen
     @media all and (min-height: 1200px) {
 
@@ -341,7 +422,7 @@
     }
 
     // Mobile
-    @media all and (max-width: 480px), all and (max-device-width: 480px)  {
+    @media (max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
 
         .info {
             cursor: auto;
@@ -350,7 +431,7 @@
         .week-view-container {
 
             .fulltime-container {
-                left: @weekview-time-widthSmall;
+                margin-left: @weekview-time-widthSmall;
             }
 
             .scrollpane {
@@ -366,7 +447,7 @@
                 }
 
                 .week-container {
-                    left:  @weekview-time-widthSmall;
+                    margin-left:  @weekview-time-widthSmall;
                 }
 
             }
@@ -376,7 +457,7 @@
         .dayview {
 
             .week-view-container {
-               top: 0px;
+               top: 0;
             }
 
         }

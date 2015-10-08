@@ -11,12 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/vgrid',
-    ['io.ox/core/extensions',
-     'io.ox/core/tk/selection',
-     'io.ox/core/event',
-     'gettext!io.ox/core'
-    ], function (ext, Selection, Events, gt) {
+define('io.ox/core/tk/vgrid', [
+    'io.ox/core/extensions',
+    'io.ox/core/tk/selection',
+    'io.ox/core/event',
+    'gettext!io.ox/core'
+], function (ext, Selection, Events, gt) {
 
     'use strict';
 
@@ -24,7 +24,7 @@ define('io.ox/core/tk/vgrid',
 
     /**
      * Template class
-     * @returns {Template}
+     * @returns {Template }
      */
     function Template(o) {
 
@@ -265,6 +265,8 @@ define('io.ox/core/tk/vgrid',
                 var grid = e.data.grid, checked = $(this).prop('checked');
                 if (checked) {
                     grid.selection.selectAll();
+                    // Bugfix 38498
+                    _.defer(function () { container.focus(); });
                     updateSelectAll(grid.selection.get());
                 } else {
                     grid.selection.clear();
@@ -319,16 +321,16 @@ define('io.ox/core/tk/vgrid',
                     // show toggle
                     options.showToggle === false ?
                         [] :
-                        $('<a>', { href: '#', tabindex: 1, role: 'button', 'aria-label': gt('Toggle checkboxes')})
+                        $('<a>', { href: '#', tabindex: 1, role: 'button', 'aria-label': gt('Toggle checkboxes') })
                             .addClass('select-all-toggle')
                             .append($('<i class="fa fa-th-list">'))
                             .on('click', { grid: this }, fnToggleEditable)
                 )
                 .prependTo(node),
             // item template
-            template = new Template({tempDrawContainer: container}),
+            template = new Template({ tempDrawContainer: container }),
             // label template
-            label = new Template({tempDrawContainer: container}),
+            label = new Template({ tempDrawContainer: container }),
             // item pool
             pool = [],
             // heights
@@ -408,7 +410,8 @@ define('io.ox/core/tk/vgrid',
         }
 
         // add label class
-        template.node.addClass('selectable');
+        this.multiselectId = _.uniqueId('multi-selection-message-');
+        template.node.addClass('selectable').attr('aria-describedby', this.multiselectId);
         label.node.addClass('vgrid-label').attr({ 'aria-hidden': 'true' });
 
         // fix mobile safari bug (all content other than position=static is cut off)
@@ -834,8 +837,7 @@ define('io.ox/core/tk/vgrid',
                             // not at the very top
                             setIndex(i - 2);
                         }
-                    }
-                    else if (_.isArray(i)) {
+                    } else if (_.isArray(i)) {
                         // select by object (cid)
                         //console.debug('case #3 select() >> object (cid)', i);
                         if (self.selection.contains(i)) {
@@ -843,12 +845,10 @@ define('io.ox/core/tk/vgrid',
                         } else {
                             self.selection.clear();
                         }
-                    }
-                    else if (options.selectFirst) {
+                    } else if (options.selectFirst) {
                         //console.debug('case #4 select() >> first', i);
                         self.selection.selectFirst();
-                    }
-                    else {
+                    } else {
                         self.selection.clear();
                     }
                 }
@@ -1220,7 +1220,7 @@ define('io.ox/core/tk/vgrid',
 
                         this.trigger('beforechange:prop', key, value, previous);
                         this.trigger('beforechange:prop:' + key, value, previous);
-                        props.set(key, value, {silent: true});
+                        props.set(key, value, { silent: true });
                         this.trigger('change:prop', key, value, previous);
                         this.trigger('change:prop:' + key, value, previous);
                         responsiveChange = true;
@@ -1308,7 +1308,7 @@ define('io.ox/core/tk/vgrid',
         // process some options on toolbars
         if (options.toolbarPlacement !== 'none') {
             node.addClass(options.toolbarPlacement === 'top' ? 'top-toolbar' : 'bottom-toolbar');
-            if (options.secondToolbar && _.device('!small')) {
+            if (options.secondToolbar && _.device('!smartphone')) {
                 node.addClass(options.toolbarPlacement === 'top' ? 'bottom-toolbar' : 'top-toolbar');
             }
         }

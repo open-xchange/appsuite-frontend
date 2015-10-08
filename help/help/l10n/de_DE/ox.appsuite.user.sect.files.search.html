@@ -1,13 +1,13 @@
 <html lang="de">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.6. Dateien suchen</title>
+<title>9.5. Dateien suchen</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Benutzeranleitung">
 <link rel="up" href="ox.appsuite.user.chap.files.html" title="Kapitel 9. Drive">
-<link rel="prev" href="ox.appsuite.user.sect.files.manage.multiple.html" title="9.5.12. Mehrere Dateien gemeinsam bearbeiten">
-<link rel="next" href="ox.appsuite.user.sect.files.webdav.html" title="9.7. Mit WebDAV auf Dateien zugreifen">
+<link rel="prev" href="ox.appsuite.user.sect.files.manage.versions.html" title="9.4.11. Mit Versionen arbeiten">
+<link rel="next" href="ox.appsuite.user.sect.files.sharing.html" title="9.6. Freigaben">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -19,13 +19,13 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigation umschalten</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigation umschalten</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.manage.multiple.html">Zurück</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.manage.versions.html">Zurück</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Startseite</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Inhaltsverzeichnis</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.webdav.html">Weiter</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.sharing.html">Weiter</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -37,16 +37,33 @@
   </h1>
 <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="ox.appsuite.user.sect.files.search"></a>9.6. Dateien suchen</h2></div></div></div>
-<a class="indexterm" name="id-1.10.12.2"></a><a class="indexterm" name="id-1.10.12.3"></a><div class="concept">
+<a name="ox.appsuite.user.sect.files.search"></a>9.5. Dateien suchen</h2></div></div></div>
+<a class="indexterm" name="id-1.10.11.2"></a><a class="indexterm" name="id-1.10.11.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.files.search"></a><p>Um nach Dateien zu suchen, können Sie 
       die folgenden Suchkriterien verwenden:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Suchbegriffe für Dateiname, Dateibeschreibung</p></li>
-<li class="listitem"><p>Ordner</p></li>
-<li class="listitem"><p>Datum</p></li>
+<li class="listitem">
+<p>Suchbegriffe für einen Zeitraum. Gesucht wird nach Dateien, die innerhalb eines bestimmten Zeitraums
+            angelegt oder geändert wurden. Sie bestimmen einen gültigen Zeitraum durch die folgenden Angaben.
+            </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>Die Schlüsselworte <span class="guilabel"><strong>heute</strong></span>, <span class="guilabel"><strong>gestern</strong></span>, <span class="guilabel"><strong>letzte Woche</strong></span>,
+                  <span class="guilabel"><strong>letzter Monat</strong></span>, <span class="guilabel"><strong>letztes Jahr</strong></span></p></li>
+<li class="listitem"><p>Die Schlüsselworte für diese Zeitintervalle: <span class="guilabel"><strong>letzte 7 Tage</strong></span>, <span class="guilabel"><strong>letzte 30 Tage</strong></span>,
+                  <span class="guilabel"><strong>letzte 365 Tage</strong></span></p></li>
+<li class="listitem"><p>Ein Wochentag, zum Beispiel <span class="guilabel"><strong>Montag</strong></span></p></li>
+<li class="listitem"><p>Ein Monatsname, zum Beispiel <span class="guilabel"><strong>Juli</strong></span></p></li>
+<li class="listitem"><p>Eine vierstellige Jahreszahl, zum Beispiel <span class="guilabel"><strong>2015</strong></span></p></li>
+<li class="listitem"><p>Ein Datum, zum Beispiel <span class="guilabel"><strong>31.01.2015</strong></span></p></li>
+<li class="listitem"><p>Ein Datumsintervall, zum Beispiel <span class="guilabel"><strong>01.12.2014 - 31.01.2015</strong></span></p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="listitem"><p>Dateityp: Alle, Audio, Dokumente, Bilder, Weitere, Video</p></li>
 <li class="listitem"><p>Dateigröße</p></li>
-<li class="listitem"><p>Dateityp</p></li>
+<li class="listitem"><p>Ordnertyp: Alle, Privat, Öffentlich, Freigegeben</p></li>
 </ul></div>
 <p>
     </p>
@@ -54,52 +71,63 @@
 <div class="task">
 <a name="ox.appsuite.user.task.files.search"></a><p class="title">So suchen Sie nach Dateien:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Tippen Sie in der Suchleiste einen Suchbegriff in das Eingabefeld. Das Suchmenü öffnet sich.</p></li>
+<li class="step"><p>Klicken Sie in der Suchleiste auf das Symbol <span class="guibutton"><strong>Suche starten</strong></span>
+            <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> oder in das Eingabefeld. In der Suchleiste erscheinen eine Ordner-Schaltfläche und die 
+            Schaltfläche <span class="guibutton"><strong>Optionen</strong></span>. Die Ordner-Schaltfläche zeigt an, in welchen Ordnern gesucht wird.</p></li>
 <li class="step">
+<p>Um zu bestimmen, in welchen Ordnern gesucht wird, klicken Sie auf die Ordner-Schaltfläche. Wählen 
+            Sie einen Ordner.</p>
+<p>Wenn Sie <span class="guibutton"><strong>Alle Ordner</strong></span> wählen, werden alle private, öffentliche und freigegebene
+            Ordner und Unterordner durchsucht. Wenn Sie einen bestimmten Ordner wählen, wird nur dieser Ordner durchsucht, 
+            keine Unterordner.</p>
+</li>
+<li class="step">
+<p>Tippen Sie einen Suchbegriff in das Eingabefeld. Das Suchmenü öffnet sich.</p>
 <p>Verwenden Sie eine dieser Methoden:
             </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p>Um im Dateinamen oder in der Dateibeschreibung zu suchen, klicken Sie im Suchmenü auf den Suchbegriff.
-                  Alternativ drücken Sie die Eingabetaste oder klicken in der Suchleiste auf das Symbol <span class="guibutton"><strong>Suchen</strong></span>
-                  <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span>. </p>
+<p>Um nach Dateien innerhalb eines bestimmten Zeitraums zu suchen, verwenden Sie als Suchbegriff einen gültigen 
+                  Zeitraum. Sobald in Ihrer Eingabe ein gültiger Zeitraum erkannt wird, wird der Zeitraum im Suchmenü angezeigt. 
+                  Klicken Sie im Suchmenü auf den Zeitraum. Alternativ drücken Sie die Eingabetaste.</p>
+<p>Um im Dateinamen oder in der Beschreibung zu suchen, klicken Sie im Suchmenü auf den Suchbegriff.
+                  Alternativ drücken Sie die Eingabetaste.</p>
 <p>Um nur im Dateinamen zu suchen, klicken Sie im Suchmenü auf <span class="guibutton"><strong>im Dateinamen</strong></span>.</p>
 <p>Auf die gleiche Art können Sie nur in der Dateibeschreibung suchen.</p>
 </li></ul></div>
 <p>
           </p>
-<p><span class="phrase"><strong>Ergebnis:</strong></span> Die gefundenen Objekte werden in der Liste im Anzeigebereich 
-            angezeigt. Unterhalb des Suchfensters werden die verwendeten Suchkriterien angezeigt.</p>
-</li>
-<li class="step">
-<p>Bei Bedarf können Sie das Suchergebnis anpassen:
+<p>Ergebnis: 
             </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>Um alle Suchkriterien anzuzeigen, klicken Sie auf <span class="guibutton"><strong>Erweiterte Filter anzeigen</strong></span>.</p>
-<p>Um ein Suchkriterium anzupassen, klicken Sie neben dem Suchkriterium auf das Symbol 
-                  <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span>. Wählen Sie im Menü einen Eintrag. Sie können die folgenden Suchkriterien verwenden:
-                  </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>Mit <span class="guilabel"><strong>Ordner</strong></span> können Sie in einen bestimmten Ordner suchen.</p>
-<p>Wenn Sie <span class="guibutton"><strong>Alle Ordner</strong></span> wählen, werden alle Ordner und Unterordner durchsucht.
-                      Wenn Sie einen bestimmten Ordner wählen, wird nur dieser Ordner durchsucht, keine Unterordner.</p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>Mit <span class="guilabel"><strong>Datum</strong></span> können Sie nach Dateien suchen, die vor einer bestimmten Zeit angelegt wurden.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Mit <span class="guilabel"><strong>Dateigröße</strong></span> können Sie nach Dateien suchen, die eine bestimmte Größe haben.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Mit <span class="guilabel"><strong>Dateityp</strong></span> können Sie die Suche auf einen bestimmten Dateityp beschränken.</p></li>
-</ul></div>
-<p>
-                </p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>Um in der Liste der gefundenen Objekte weiter zu suchen, starten Sie eine neue Suche.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Um ein Suchkriterium zu entfernen, klicken Sie auf das Symbol
-                  <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.files.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>. Wenn Sie alle Suchkriterien entfernen, wird die Suche beendet.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Die gefundenen Objekte werden in der Liste im Anzeigebereich angezeigt. </p></li>
+<li class="listitem" style="list-style-type: none"><p>Im Eingabefeld wird der verwendete Suchbegriff angezeigt.</p></li>
 </ul></div>
 <p>
           </p>
 </li>
-<li class="step"><p>Um die Suche zu beenden, klicken Sie auf <span class="guibutton"><strong>Suche schließen</strong></span>.</p></li>
+<li class="step">
+<p>Um das Suchergebnis anzupassen, verwenden Sie diese Methoden:
+            </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Um das Suchergebnis zu verfeinern, geben Sie weitere Suchbegriffe ein. Um einen Suchbegriff zu 
+                  entfernen, klicken Sie neben dem Suchbegriff auf das Symbol
+                  <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>. </p></li>
+<li class="listitem" style="list-style-type: none"><p>Um die Suche in einem anderen Ordner auszuführen, klicken Sie auf die Ordner-Schaltfläche. Wählen 
+                  Sie einen Ordner.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Um die Suche auf private, öffentliche oder freigegebene Ordner zu beschränken, klicken Sie auf <span class="guibutton"><strong>Optionen</strong></span>. 
+                  Wählen Sie einen Ordnertyp.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Um nach bestimmten Dateitypen zu suchen, klicken Sie auf <span class="guibutton"><strong>Optionen</strong></span>. 
+                  Wählen Sie einen Typ.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Um nach Dateien mit einer bestimmten Größe zu suchen, klicken Sie auf <span class="guibutton"><strong>Optionen</strong></span>. 
+                  Wählen Sie eine Dateigröße.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Um die Suche auf einzelne Aufgaben oder Serienaufgaben zu beschränken, klicken Sie auf <span class="guibutton"><strong>Optionen</strong></span>. 
+                  Wählen Sie einen Typ.</p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="step"><p>Um die Suche zu beenden, klicken Sie auf das Symbol <span class="guibutton"><strong>Suche abbrechen</strong></span>
+            <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>.</p></li>
 </ol></div>
 </div>
 </div>

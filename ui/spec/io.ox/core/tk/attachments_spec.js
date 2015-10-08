@@ -11,12 +11,13 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define(['io.ox/core/extensions',
-        'io.ox/core/tk/attachments',
-        'io.ox/core/notifications',
-        'spec/shared/capabilities',
-        'fixture!io.ox/files/attachment.json'], function (ext, attachments, notifications, caputil, attachmentFile) {
-
+define([
+    'io.ox/core/extensions',
+    'io.ox/core/tk/attachments',
+    'io.ox/core/notifications',
+    'spec/shared/capabilities',
+    'fixture!io.ox/files/attachment.json'
+], function (ext, attachments, notifications, caputil, attachmentFile) {
     'use strict';
 
     var capabilities = caputil.preset('common').init('io.ox/core/tk/attachments', attachments);
@@ -29,11 +30,11 @@ define(['io.ox/core/extensions',
                     capabilities.disable('infostore');
                 });
                 it('and ox.drive is enabled "Files" button should be hidden', function () {
-                    var node = attachments.fileUploadWidget({drive: true});
+                    var node = attachments.fileUploadWidget({ drive: true });
                     expect(node.find('[data-action="addinternal"]')).to.have.length(0);
                 });
                 it('and ox.drive is disabled "Files" button should be hidden', function () {
-                    var node = attachments.fileUploadWidget({drive: false});
+                    var node = attachments.fileUploadWidget({ drive: false });
                     expect(node.find('[data-action="addinternal"]')).to.have.length(0);
                 });
             });
@@ -42,11 +43,11 @@ define(['io.ox/core/extensions',
                     capabilities.enable('infostore');
                 });
                 it('and ox.drive is enabled "Files" button should be shown', function () {
-                    var node = attachments.fileUploadWidget({drive: true});
+                    var node = attachments.fileUploadWidget({ drive: true });
                     expect(node.find('[data-action="addinternal"]')).to.have.length(1);
                 });
                 it('and ox.drive is disabled "Files" button should be hidden', function () {
-                    var node = attachments.fileUploadWidget({drive: false});
+                    var node = attachments.fileUploadWidget({ drive: false });
                     expect(node.find('[data-action="addinternal"]')).to.have.length(0);
                 });
             });
@@ -61,17 +62,15 @@ define(['io.ox/core/extensions',
                 });
             },
             createList = function (baton, file, mail) {
-                if (mail) baton.app = {app: { attributes: { name: 'io.ox/mail/write' }}};
+                if (mail) baton.app = { app: { attributes: { name: 'io.ox/mail/compose' }}};
 
                 new attachments.EditableFileList({
-                        id: 'attachment_list',
-                        fileClasses: 'background',
-                        preview: false,
-                        labelmax: 18,
-                        registerTo: baton
-                    },
-                    baton
-                );
+                    id: 'attachment_list',
+                    fileClasses: 'background',
+                    preview: false,
+                    labelmax: 18,
+                    registerTo: baton
+                }, baton);
                 return function () {
                     return baton.fileList.checkQuota(file);
                 };

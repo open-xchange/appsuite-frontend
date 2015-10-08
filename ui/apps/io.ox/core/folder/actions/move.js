@@ -11,14 +11,20 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/actions/move',
-    ['io.ox/core/folder/api',
-     'io.ox/core/folder/picker',
-     'io.ox/core/notifications',
-     'io.ox/core/tk/dialogs',
-     'gettext!io.ox/core'], function (api, picker, notifications, dialogs, gt) {
+define('io.ox/core/folder/actions/move', [
+    'io.ox/core/folder/api',
+    'io.ox/core/folder/picker',
+    'io.ox/core/notifications',
+    'io.ox/core/tk/dialogs',
+    'gettext!io.ox/core',
+    'io.ox/mail/api'
+], function (api, picker, notifications, dialogs, gt, mailAPI) {
 
     'use strict';
+
+    var virtualMapping = {
+        'virtual/myfolders': 'default0' + mailAPI.separator + 'INBOX'
+    };
 
     return {
 
@@ -34,6 +40,7 @@ define('io.ox/core/folder/actions/move',
         //   root: tree root id
         //   settings: app-specific settings
         //   success: i18n strings { multiple: '...', single: '... }
+        //   successCallback: callback function on success, is used instead of yell then
         //   title: dialog title
         //   target: target is known; no dialog
         //   type: move/copy
@@ -47,7 +54,7 @@ define('io.ox/core/folder/actions/move',
 
             function success() {
                 notifications.yell('success', options.list.length > 1 ? options.success.multiple : options.success.single);
-                options.api.refresh();
+                if (options.api.refresh) options.api.refresh();
             }
 
             function commit(target) {
@@ -58,19 +65,29 @@ define('io.ox/core/folder/actions/move',
                     return notifications.yell('error', gt('You cannot move items to virtual folders'));
                 }
 
+                // final check for write privileges
+                if (!api.pool.getModel(target).can('create')) {
+                    return notifications.yell('error', gt('You cannot move items to this folder'));
+                }
+
                 options.api[type](options.list, target, options.all).then(
                     function (response) {
                         // files API returns array on error; mail just a single object
                         // contacts a double array of undefined; tasks the new object.
                         // so every API seems to behave differently.
                         if (_.isArray(response)) response = _(response).compact()[0];
-                        // fail?
-                        if (_.isObject(response) && response.error) {
-                            notifications.yell(response);
+                        // custom callback?
+                        if (options.successCallback) {
+                            options.successCallback(response);
                         } else {
-                            if (type === 'copy') success();
-                            api.reload(target, options.list);
-                            if (type === 'move' && options.vgrid) options.vgrid.idle();
+                            // fail?
+                            if (_.isObject(response) && response.error) {
+                                notifications.yell(response);
+                            } else {
+                                if (type === 'copy') success();
+                                api.reload(target, options.list);
+                                if (type === 'move' && options.vgrid) options.vgrid.idle();
+                            }
                         }
                     },
                     notifications.yell
@@ -87,6 +104,7 @@ define('io.ox/core/folder/actions/move',
             picker({
 
                 button: options.button,
+                filter: options.filter,
                 flat: !!options.flat,
                 indent: options.indent !== undefined ? options.indent : true,
                 module: options.module,
@@ -117,6 +135,7 @@ define('io.ox/core/folder/actions/move',
                 async: true,
                 addClass: 'zero-padding',
                 done: function (target, dialog) {
+                    if (!!virtualMapping[target]) target = virtualMapping[target];
                     api.move(id, target).then(dialog.close, dialog.idle).fail(notifications.yell);
                 },
                 customize: function (baton) {
@@ -127,6 +146,10 @@ define('io.ox/core/folder/actions/move',
 
                     if (module === 'mail' && data.module === 'system') return;
                     if (same || !move) this.addClass('disabled');
+                },
+                disable: function (data) {
+                    var move = id === data.id || /^virtual\//.test(data.id);
+                    return move && !virtualMapping[data.id];
                 },
                 flat: flat,
                 indent: !flat,

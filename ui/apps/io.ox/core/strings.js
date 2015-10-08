@@ -17,15 +17,26 @@ define('io.ox/core/strings', ['gettext!io.ox/core'], function (gt) {
 
     var n_size;
     function init_n_size() {
-        n_size = [/*#. Bytes*/      gt('B'),
-                  /*#. Kilobytes*/  gt('KB'),
-                  /*#. Megabytes*/  gt('MB'),
-                  /*#. Gigabytes*/  gt('GB'),
-                  /*#. Terabytes*/  gt('TB'),
-                  /*#. Petabytes*/  gt('PB'),
-                  /*#. Exabytes*/   gt('EB'),
-                  /*#. Zettabytes*/ gt('ZB'),
-                  /*#. Yottabytes*/ gt('YB')];
+        n_size = [
+            /*#. Bytes*/
+            gt('B'),
+            /*#. Kilobytes*/
+            gt('KB'),
+            /*#. Megabytes*/
+            gt('MB'),
+            /*#. Gigabytes*/
+            gt('GB'),
+            /*#. Terabytes*/
+            gt('TB'),
+            /*#. Petabytes*/
+            gt('PB'),
+            /*#. Exabytes*/
+            gt('EB'),
+            /*#. Zettabytes*/
+            gt('ZB'),
+            /*#. Yottabytes*/
+            gt('YB')
+        ];
     }
 
     return {
@@ -52,7 +63,7 @@ define('io.ox/core/strings', ['gettext!io.ox/core'], function (gt) {
                 decimalPlaces = 10;
             }
             var dp = Math.pow(10, decimalPlaces || 0);
-            while (size > 1024 && i < $i) {
+            while (size >= 1024 && i < $i) {
                 size = size / 1024;
                 i++;
             }

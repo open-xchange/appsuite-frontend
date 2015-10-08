@@ -11,13 +11,14 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/linkedIn/view-detail',
-    ['io.ox/core/extensions',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/http',
-     'gettext!io.ox/portal',
-     'less!io.ox/linkedIn/style'
-    ], function (ext, dialogs, http, gt) {
+define('io.ox/linkedIn/view-detail', [
+    'io.ox/core/extensions',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/http',
+    'io.ox/contacts/api',
+    'gettext!io.ox/portal',
+    'less!io.ox/linkedIn/style'
+], function (ext, dialogs, http, api, gt) {
 
     'use strict';
 
@@ -33,7 +34,7 @@ define('io.ox/linkedIn/view-detail',
 
         $pictureNode.append(
             $('<img>', {
-                src: data.pictureUrl || (ox.base + '/apps/themes/default/dummypicture.png'),
+                src: data.pictureUrl || api.getFallbackImage(),
                 alt: data.firstName + ' ' + data.lastName
             })
             .css({ margin: '0 5px 0 0' })
@@ -55,7 +56,7 @@ define('io.ox/linkedIn/view-detail',
         });
 
         rendererPoint.each(function (ext) {
-            $node.append(ext.draw({data: data, win: $node}));
+            $node.append(ext.draw({ data: data, win: $node }));
         });
 
         return $node;
@@ -118,7 +119,7 @@ define('io.ox/linkedIn/view-detail',
                         if (pastEngagementsVisible) {
                             $moreToggle.text('Show less');
                             _(pastEngagements).invoke('show');
-                            win.animate({scrollTop: _(pastEngagements).first().offset().top - 50}, 500);
+                            win.animate({ scrollTop: _(pastEngagements).first().offset().top - 50 }, 500);
                         } else {
                             $moreToggle.text('More...');
                             _(pastEngagements).invoke('hide');
@@ -148,23 +149,23 @@ define('io.ox/linkedIn/view-detail',
 
                 var open = function (popup, e, target) {
 
-                        var person = target.data('object-data');
-                        popup.append(draw(person));
-                        var busy = $('<div/>').css('min-height', '100px').busy().appendTo(popup);
+                    var person = target.data('object-data');
+                    popup.append(draw(person));
+                    var busy = $('<div/>').css('min-height', '100px').busy().appendTo(popup);
 
-                        http.GET({
-                            module: 'integrations/linkedin/portal',
-                            params: {
-                                action: 'fullProfile',
-                                id: person.id
-                            }
-                        })
-                        .done(function (completeProfile) {
-                            busy.idle();
-                            popup.empty()
-                                .append(draw(completeProfile));
-                        });
-                    };
+                    http.GET({
+                        module: 'integrations/linkedin/portal',
+                        params: {
+                            action: 'fullProfile',
+                            id: person.id
+                        }
+                    })
+                    .done(function (completeProfile) {
+                        busy.idle();
+                        popup.empty()
+                            .append(draw(completeProfile));
+                    });
+                };
 
                 new dialogs.SidePopup({ tabTrap: true })
                     .delegate($myNode, '.linkedin-profile-picture', open);
@@ -174,7 +175,7 @@ define('io.ox/linkedIn/view-detail',
                     if (relation.person && relation.person.pictureUrl) {
                         imageUrl = relation.person.pictureUrl;
                     } else {
-                        imageUrl = ox.base + '/apps/themes/default/dummypicture.png';
+                        imageUrl = api.getFallbackImage();
                     }
                     $('<img>')
                         .addClass('linkedin-profile-picture')

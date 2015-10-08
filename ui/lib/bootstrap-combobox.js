@@ -10,10 +10,8 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
-    // just a brand new combobox
-    // notice extends typeahead
 
-$(document).ready(function () {
+!function($) {
 
     'use strict';
 
@@ -38,7 +36,7 @@ $(document).ready(function () {
         this.listen();
     };
 
-    Combobox.prototype = $.extend({}, $.fn.typeahead.Constructor.prototype, {
+    Combobox.prototype = {
         constructor: Combobox,
         listen: function () {
             var self = this;
@@ -264,9 +262,70 @@ $(document).ready(function () {
             }
 
             return this.render(items.slice(0, this.options.items)).show();
-        }
+        },
+        matcher: function (item) {
+            return ~item.toLowerCase().indexOf(this.query.toLowerCase());
+        },
+        sorter: function (items) {
+            var beginswith = [],
+                caseSensitive = [],
+                caseInsensitive = [],
+                item;
 
-    });
+            while ((item = items.shift())) {
+                if (!item.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item);
+                else if (~item.indexOf(this.query)) caseSensitive.push(item);
+                else caseInsensitive.push(item);
+            }
+
+            return beginswith.concat(caseSensitive, caseInsensitive);
+        },
+        highlighter: function (item) {
+            var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
+            return item.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                return '<strong>' + match + '</strong>';
+            });
+        },
+        destroy : function () {
+            this.$element.data('typeahead',null);
+            this.$element
+                .off('focus')
+                .off('blur')
+                .off('keypress')
+                .off('keyup');
+
+            if (this.eventSupported('keydown')) {
+                this.$element.off('keydown');
+            }
+
+            this.$menu.remove();
+        },
+        eventSupported: function(eventName) {
+            var isSupported = eventName in this.$element;
+            if (!isSupported) {
+                this.$element.setAttribute(eventName, 'return;');
+                isSupported = typeof this.$element[eventName] === 'function';
+            }
+            return isSupported;
+        },
+        keydown: function (e) {
+            this.suppressKeyPressRepeat = ~$.inArray(e.keyCode, [40,38,9,13,27]);
+            if (!this.shown && e.keyCode == 40) {
+                this.lookup("");
+            } else {
+                this.move(e);
+            }
+        },
+        keypress: function (e) {
+            if (this.suppressKeyPressRepeat) return;
+            this.move(e);
+        },
+        mouseenter: function (e) {
+            this.mousedover = true;
+            this.$menu.find('.active').removeClass('active');
+            $(e.currentTarget).addClass('active');
+        }
+    };
 
     $.fn.combobox = function (option) {
         return this.each(function () {
@@ -303,4 +362,4 @@ $(document).ready(function () {
             $this.typeahead($this.data());
         });
     });
-});
+}(jQuery)

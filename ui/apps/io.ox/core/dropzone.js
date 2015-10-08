@@ -79,7 +79,7 @@ define('io.ox/core/dropzone', [], function () {
             this.visible = false;
             this.leaving = false;
             this.timeout = -1;
-            $(document).on(EVENTS, $.proxy(this.onDrag, this));
+            $(document).on(EVENTS, this.onDrag.bind(this));
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
         },
 
@@ -92,14 +92,66 @@ define('io.ox/core/dropzone', [], function () {
             return _(dt.types).contains('Files') || _(dt.types).contains('application/x-moz-file');
         },
 
+        filterDirectories: function (dataTransfer) {
+            var def = new $.Deferred(),
+                files = _(dataTransfer.files).toArray();
+
+            // special handling for newer chrome
+            if (_.browser.Chrome && _.browser.Chrome > 21) {
+                var items = dataTransfer.items;
+
+                def.resolve(_(files).filter(function (file, index) {
+                    var entry = items[index].webkitGetAsEntry();
+                    if (entry.isDirectory) return false;
+
+                    return true;
+                }));
+            } else {
+                $.when.apply(this, _(files).map(function (file) {
+                    // a directory has no type and has small size
+                    if (!file.type && file.size <= 16384) {
+                        var loadFile = new $.Deferred();
+
+                        // try to read the file. if it is a folder, the result will contain an error
+                        var reader = new FileReader();
+                        reader.onloadend = function () {
+                            loadFile.resolve(reader.error);
+                        };
+                        reader.readAsDataURL(file);
+
+                        return loadFile;
+                    }
+
+                    return $.when();
+                })).done(function () {
+                    var args = arguments;
+                    def.resolve(_(files).filter(function (file, index) {
+                        return !args[index];
+                    }));
+                });
+            }
+
+            return def;
+        },
+
         getFiles: function (e) {
-            var files = _(e.originalEvent.dataTransfer.files).toArray(),
+            var dataTransfer = e.originalEvent.dataTransfer,
+                numFiles = dataTransfer.files.length, // required for safari, which removes the files from that array while processing
                 filter = this.options.filter;
-            // no regex?
-            if (!_.isRegExp(filter)) return files;
-            // apply regex to filter valid files
-            return _(files).filter(function (file) {
-                return filter.test(file.name);
+
+            return this.filterDirectories(dataTransfer).then(function (files) {
+                if (numFiles !== files.length) {
+                    require(['io.ox/core/notifications', 'gettext!io.ox/core'], function (notifications, gt) {
+                        notifications.yell('error', gt('Uploading folders is not supported.'));
+                    });
+                }
+
+                // no regex?
+                if (!_.isRegExp(filter)) return files;
+                // apply regex to filter valid files
+                return _(files).filter(function (file) {
+                    return filter.test(file.name);
+                });
             });
         },
 
@@ -121,10 +173,15 @@ define('io.ox/core/dropzone', [], function () {
         // while we can ignore document's drop event, we need this one
         // to detect that a file was dropped over the dropzone
         onDrop: function (e) {
+            var self = this;
+
             // final event when a file was dropped over the dropzone
-            var files = this.getFiles(e);
-            // call proper event
-            this.trigger(files.length > 0 ? 'drop' : 'invalid', files, e);
+            this.getFiles(e).then(function success(files) {
+                // call proper event
+                self.trigger(files.length > 0 ? 'drop' : 'invalid', files, e);
+            }, function fail() {
+                self.trigger('invalid', [], e);
+            });
         },
 
         render: function () {

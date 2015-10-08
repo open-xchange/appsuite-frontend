@@ -18,11 +18,8 @@ module.exports = function (grunt) {
     grunt.config.merge({
         jshint: {
             options: {
-                jshintrc: true,
-                ignores: ['apps/io.ox/core/date.js', 'spec/io.ox/core/date_spec.js'] // date.js has some funky include stuff we have to figure out
+                jshintrc: true
             }
         }
     });
-
 };
-

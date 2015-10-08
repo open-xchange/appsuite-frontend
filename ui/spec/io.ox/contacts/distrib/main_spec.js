@@ -57,7 +57,7 @@ define(['io.ox/contacts/distrib/main', 'io.ox/contacts/api', 'waitsFor'], functi
 
         beforeEach(function () {
             this.server.respondWith('PUT', /api\/contacts\?action=new/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(result));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(result));
             });
         });
 
@@ -84,10 +84,10 @@ define(['io.ox/contacts/distrib/main', 'io.ox/contacts/api', 'waitsFor'], functi
         });
 
         it('should paint some form components', function () {
-            var createForm = app.getWindow().nodes.body.find('.window-content .create-distributionlist');
+            var createForm = app.getWindow().nodes.body.find('.window-content .create-distributionlist'),
+                header = app.getWindow().nodes.header;
             expect(createForm.find('input.add-participant').length, 'find input for name').to.equal(1);
-            expect(createForm.find('button.btn.btn-primary').length, 'find save button').to.equal(1);
-            expect(createForm.find('button[data-action="add"]').length, 'find add button').to.equal(1);
+            expect(header.find('button.btn.btn-primary').length, 'find save button').to.equal(1);
             expect(createForm.find('[data-extension-id="displayname"] input').length, 'find display name').to.equal(1);
         });
 

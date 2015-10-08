@@ -11,21 +11,21 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/threadview',
-    ['io.ox/mail/common-extensions',
-     'io.ox/core/extensions',
-     'io.ox/mail/api',
-     'io.ox/mail/util',
-     'io.ox/core/api/backbone',
-     'io.ox/mail/detail/view',
-     'io.ox/mail/detail/mobileView',
-     'io.ox/core/tk/list-dnd',
-     'io.ox/core/emoji/util',
-     'io.ox/core/http',
-     'gettext!io.ox/mail',
-     'less!io.ox/mail/style',
-     'io.ox/mail/listview'
-     ], function (extensions, ext, api, util, backbone, detail, detailViewMobile, dnd, emoji, http, gt) {
+define('io.ox/mail/threadview', [
+    'io.ox/mail/common-extensions',
+    'io.ox/core/extensions',
+    'io.ox/mail/api',
+    'io.ox/mail/util',
+    'io.ox/core/api/backbone',
+    'io.ox/mail/detail/view',
+    'io.ox/mail/detail/mobileView',
+    'io.ox/core/tk/list-dnd',
+    'io.ox/core/emoji/util',
+    'io.ox/core/http',
+    'gettext!io.ox/mail',
+    'less!io.ox/mail/style',
+    'io.ox/mail/listview'
+], function (extensions, ext, api, util, backbone, detail, detailViewMobile, dnd, emoji, http, gt) {
 
     'use strict';
 
@@ -109,8 +109,6 @@ define('io.ox/mail/threadview',
             );
         }
     });
-
-
 
     var ThreadView = Backbone.View.extend({
 
@@ -213,8 +211,12 @@ define('io.ox/mail/threadview',
             // no change?
             if (this.model && this.model.cid === cid) return;
             // get new model
-            var model = api.pool.get('detail').get(cid);
-            if (!model) return;
+            var pool = api.pool.get('detail'), model = pool.get(cid);
+            if (!model) {
+                this.empty();
+                console.error('ThreadView.show(): Mail not found in pool', cid, pool);
+                return;
+            }
             // stop listening
             if (this.model) this.stopListening(this.model);
             // use new model
@@ -279,9 +281,9 @@ define('io.ox/mail/threadview',
         },
 
         onRemove: function (model) {
-
             var children = this.getItems(),
                 li = children.filter('[data-cid="' + model.cid + '"]'),
+                first = li.length ? li.attr('data-cid') && children.first().attr('data-cid') : false,
                 top = this.$messages.scrollTop();
 
             if (li.length === 0) return;
@@ -294,6 +296,11 @@ define('io.ox/mail/threadview',
 
             // clear view if this was the last message
             if (children.length === 1) this.empty(); else this.updateHeader();
+
+            // auto open next mail if this was the latest mail in the thread
+            if (children.length > 1 && first) {
+                this.autoSelectMail();
+            }
         },
 
         onPoolRemove: function (model) {
@@ -378,7 +385,7 @@ define('io.ox/mail/threadview',
             dnd.enable({
                 container: this.$el,
                 draggable: true,
-                selectable: '.detail-view-header',
+                selectable: '.detail-view-header .contact-picture',
                 simple: true
             });
         },
@@ -443,12 +450,17 @@ define('io.ox/mail/threadview',
 
         initialize: function () {
             this.model = null;
+            this.threaded = true;
             this.collection = new backbone.Collection();
 
             this.listenTo(this.collection, {
                 add: this.onAdd,
                 remove: this.onRemove,
                 reset: this.onReset
+            });
+
+            this.listenTo(api.pool.get('detail'), {
+                remove: this.onPoolRemove
             });
 
             this.$messages = $();
@@ -477,6 +489,7 @@ define('io.ox/mail/threadview',
             cid = String(cid).replace(/^thread\.(.+)$/, '$1');
 
             var model = api.pool.get('detail').get(cid);
+
             if (!model) return;
 
             var view = new detailViewMobile.DetailView({
@@ -485,7 +498,6 @@ define('io.ox/mail/threadview',
             });
             this.mail = model.toJSON();
             return view.render().toggle().$el.attr({ role: 'listitem', tabindex: '1' });
-
 
         },
         // render scaffold
@@ -496,7 +508,7 @@ define('io.ox/mail/threadview',
 
             ext.point('io.ox/mail/thread-view').invoke('draw', this);
             return this;
-        },
+        }
     });
 
     return {

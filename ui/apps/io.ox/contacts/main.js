@@ -13,35 +13,36 @@
  *
  */
 
-define('io.ox/contacts/main',
-    ['io.ox/contacts/util',
-     'io.ox/core/util',
-     'io.ox/contacts/api',
-     'io.ox/core/tk/vgrid',
-     'io.ox/help/hints',
-     'io.ox/contacts/view-detail',
-     'io.ox/core/extensions',
-     'io.ox/core/extPatterns/actions',
-     'io.ox/core/commons',
-     'io.ox/core/capabilities',
-     'io.ox/contacts/toolbar',
-     'gettext!io.ox/contacts',
-     'settings!io.ox/contacts',
-     'io.ox/core/folder/api',
-     'io.ox/core/toolbars-mobile',
-     'io.ox/core/page-controller',
-     'io.ox/core/folder/tree',
-     'io.ox/core/folder/view',
-     'io.ox/contacts/mobile-navbar-extensions',
-     'io.ox/contacts/mobile-toolbar-actions',
-     'less!io.ox/contacts/style'
-    ], function (util, coreUtil, api, VGrid, hints, viewDetail, ext, actions, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView) {
+define('io.ox/contacts/main', [
+    'io.ox/contacts/util',
+    'io.ox/core/util',
+    'io.ox/contacts/api',
+    'io.ox/core/tk/vgrid',
+    'io.ox/help/hints',
+    'io.ox/contacts/view-detail',
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/core/commons',
+    'io.ox/core/capabilities',
+    'io.ox/contacts/toolbar',
+    'gettext!io.ox/contacts',
+    'settings!io.ox/contacts',
+    'io.ox/core/folder/api',
+    'io.ox/core/toolbars-mobile',
+    'io.ox/core/page-controller',
+    'io.ox/core/folder/tree',
+    'io.ox/core/folder/view',
+    'io.ox/contacts/mobile-navbar-extensions',
+    'io.ox/contacts/mobile-toolbar-actions',
+    'less!io.ox/contacts/style'
+], function (util, coreUtil, api, VGrid, hints, viewDetail, ext, actions, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView) {
 
     'use strict';
 
     // application object
     var app = ox.ui.createApp({
         name: 'io.ox/contacts',
+        id: 'io.ox/contacts',
         title: 'Address Book'
     });
 
@@ -54,42 +55,43 @@ define('io.ox/contacts/main',
          * the state of the toolbars and navbars
          */
         'pages-mobile': function (app) {
-            if (_.device('!small')) return;
-            var c = app.getWindow().nodes.main;
-            var navbar = $('<div class="mobile-navbar">'),
-                toolbar = $('<div class="mobile-toolbar">');
+            if (_.device('!smartphone')) return;
+            var win = app.getWindow(),
+                navbar = $('<div class="mobile-navbar">'),
+                toolbar = $('<div class="mobile-toolbar">')
+                    .on('hide', function () { win.nodes.body.removeClass('mobile-toolbar-visible'); })
+                    .on('show', function () { win.nodes.body.addClass('mobile-toolbar-visible'); }),
+                baton = ext.Baton({ app: app });
+
             app.navbar = navbar;
             app.toolbar = toolbar;
+            app.pages = new PageController({ appname: app.options.name, toolbar: toolbar, navbar: navbar, container: win.nodes.main });
 
-            app.pages = new PageController(app);
-
-            app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
+            win.nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
 
             // create 3 pages with toolbars and navbars
             app.pages.addPage({
                 name: 'folderTree',
-                container: c,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/contacts/mobile/navbar'
                 })
             });
 
             app.pages.addPage({
                 name: 'listView',
-                container: c,
                 startPage: true,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/contacts/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'listView',
                     extension: 'io.ox/contacts/mobile/toolbar'
                 }),
                 secondaryToolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     // nasty, but saves duplicate code. We reuse the toolbar from detailView for multiselect
                     page: 'detailView',
                     extension: 'io.ox/contacts/mobile/toolbar'
@@ -98,13 +100,12 @@ define('io.ox/contacts/main',
 
             app.pages.addPage({
                 name: 'detailView',
-                container: c,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/contacts/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'detailView',
                     extension: 'io.ox/contacts/mobile/toolbar'
 
@@ -119,7 +120,7 @@ define('io.ox/contacts/main',
         },
 
         'pages-desktop': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
 
             // add page controller
             app.pages = new PageController(app);
@@ -138,11 +139,18 @@ define('io.ox/contacts/main',
                 container: app.getWindow().nodes.main,
                 classes: 'rightside'
             });
+
+            app.getTour = function () {
+                //no tours for guests, yet. See bug 41542
+                if (capabilities.has('guest')) return;
+
+                return { id: 'default/io.ox/contacts', path: 'io.ox/tours/contacts' };
+            };
         },
 
         'folder-view-mobile': function (app) {
 
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
 
             var nav = app.pages.getNavbar('folderTree'),
                 page = app.pages.getPage('folderTree');
@@ -301,7 +309,7 @@ define('io.ox/contacts/main',
 
             function thumbClick() {
                 var text = $(this).data('text');
-                if (text) app.grid.scrollToLabelText(text, /* silent? */ _.device('small'));
+                if (text) app.grid.scrollToLabelText(text, /* silent? */ _.device('smartphone'));
             }
 
             function thumbMove(e) {
@@ -312,7 +320,7 @@ define('io.ox/contacts/main',
                         y = touches.clientY,
                         element = document.elementFromPoint(x, y),
                         text = $(element).data('text');
-                    if (text) app.grid.scrollToLabelText(text, /* silent? */ _.device('small'));
+                    if (text) app.grid.scrollToLabelText(text, /* silent? */ _.device('smartphone'));
                 }
             }
 
@@ -355,7 +363,7 @@ define('io.ox/contacts/main',
          */
         'navbars-mobile': function (app) {
 
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
 
             app.pages.getNavbar('listView')
                 .setLeft(gt('Folders'))
@@ -382,7 +390,7 @@ define('io.ox/contacts/main',
 
         'toolbars-mobile': function () {
 
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
 
             // tell each page's back button what to do
             app.pages.getNavbar('listView').on('leftAction', function () {
@@ -399,21 +407,84 @@ define('io.ox/contacts/main',
                     // leave multiselect? -> clear selection
                     app.grid.selection.clear();
                     // hide folder button on the left
-                    app.pages.getNavbar('listView').show('.left');
+                    app.pages.getNavbar('listView').setRight(gt('Edit')).show('.left');
                 } else {
-                    app.pages.getNavbar('listView').hide('.left');
+                    app.pages.getNavbar('listView').setRight(gt('Cancel')).hide('.left');
                 }
                 app.props.set('checkboxes', !app.props.get('checkboxes'));
             });
         },
 
         'swipe-mobile': function () {
-            // introduced with cb6b821f33c07a0a47711f639819b9d6c65d960f but does not contain any executable code
-            // TODO: remove property in case it's useless
+            // helper to remove button from grid
+
+            /*var removeButton = function () {
+                if (showSwipeButton) {
+                    var g = grid.getContainer();
+                    $('.swipeDelete', g).remove();
+                    showSwipeButton = false;
+                }
+            };
+
+            app.grid.selection.on('change', removeButton);
+
+            app.grid.selection.on('change', function () {
+                if (showSwipeButton) {
+                    removeButton();
+                }
+            });
+
+            ext.point('io.ox/contacts/swipeDelete').extend({
+                index: 666,
+                id: 'deleteButton',
+                draw: function (baton) {
+                    // remove old buttons first
+                    if (showSwipeButton) {
+                        removeButton();
+                    }
+                    this.append(
+                        $('<div class="mail cell-button swipeDelete fadein fast">')
+                            .text(gt('Delete'))
+                            .on('mousedown', function (e) {
+                                // we have to use mousedown as the selection listens to this, too
+                                // otherwise we are to late to get the event
+                                e.stopImmediatePropagation();
+                            }).on('tap', function (e) {
+                                e.preventDefault();
+                                removeButton();
+                                showSwipeButton = false;
+                                actions.invoke('io.ox/contacts/actions/delete', null, baton);
+                            })
+                    );
+                    showSwipeButton = true;
+                }
+            });
+
+            // swipe handler
+            var swipeRightHandler = function (e, id, cell) {
+                var obj = _.cid(id);
+
+                if (hasDeletePermission === undefined) {
+                    folderAPI.get({ folder: obj.folder_id, cache: true }).done(function (data) {
+                        if (folderAPI.can('delete', data)) {
+                            hasDeletePermission = true;
+                            api.getList([obj]).done(function (list) {
+                                ext.point('io.ox/contacts/swipeDelete').invoke('draw', cell, list[0]);
+                            });
+                        }
+                    });
+                } else if (hasDeletePermission) {
+                    api.getList([obj]).done(function (list) {
+                        ext.point('io.ox/contacts/swipeDelete').invoke('draw', cell, list[0]);
+                    });
+                }
+            };
+            */
+
         },
 
         'show-contact': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             // LFO callback
             var showContact, drawContact, drawFail, grid = app.grid;
 
@@ -451,11 +522,11 @@ define('io.ox/contacts/main',
             };
 
             app.showContact = showContact;
-            commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, app.right, api, true);
+            commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, app.right, api);
         },
 
         'show-contact-mobile': function (app) {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             // LFO callback
             var showContact, drawContact, drawFail, grid = app.grid;
 
@@ -494,13 +565,13 @@ define('io.ox/contacts/main',
             };
 
             app.showContact = showContact;
-            commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, app.right, api, true);
+            commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, app.right, api);
         },
         /*
          * Always change pages on tap, don't wait for data to load
          */
         'select:contact-mobile': function (app) {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             app.grid.getContainer().on('click', '.vgrid-cell.selectable', function () {
                 if (app.props.get('checkboxes') === true) return;
                 // hijack selection event hub to trigger page-change event
@@ -509,8 +580,20 @@ define('io.ox/contacts/main',
             });
         },
 
+        /*
+         * Add support for selection:
+         */
+        'selection-doubleclick': function (app) {
+            // detail app does not make sense on small devices
+            // they already see tasks in full screen
+            if (_.device('smartphone')) return;
+            app.grid.selection.on('selection:doubleclick', function (e, key) {
+                ox.launch('io.ox/contacts/detail/main', { cid: key });
+            });
+        },
+
         'delete:contact-mobile': function (app) {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             api.on('delete', function () {
                 if (app.pages.getCurrentPage().name === 'detailView') {
                     app.pages.goBack();
@@ -520,7 +603,8 @@ define('io.ox/contacts/main',
 
         'update:image': function () {
             api.on('update:image', function (evt, updated) {
-                if (updated.folder === app.currentContact.folder_id && updated.id === app.currentContact.id) {
+                //compare cids, because of all kind of different results from some strange API
+                if (_.cid(updated) === _.cid(app.currentContact)) {
                     app.showContact(app.currentContact);
                 }
             });
@@ -544,21 +628,21 @@ define('io.ox/contacts/main',
         'props': function (app) {
             // introduce shared properties
             app.props = new Backbone.Model({
-                'checkboxes': _.device('small') ? false : app.settings.get('showCheckboxes', true),
+                'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
                 'mobileFolderSelectMode': false
             });
         },
 
         'vgrid-checkboxes': function (app) {
             // always hide checkboxes on small devices initially
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             var grid = app.getGrid();
             grid.setEditable(app.props.get('checkboxes'));
         },
 
         'vgrid-checkboxes-mobile': function (app) {
             // always hide checkboxes on small devices initially
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             var grid = app.getGrid();
             app.props.on('change:checkboxes', function () {
                 grid.setEditable(app.props.get('checkboxes'));
@@ -566,19 +650,27 @@ define('io.ox/contacts/main',
 
         },
 
+        'prop-fullnameformat': function (app) {
+            // redraw contact if fullNameFormat changes to correctly display selected contact name
+            settings.on('change:fullNameFormat', function () {
+                app.showContact(app.currentContact);
+            });
+        },
+
         /*
          * Set folderview property
          */
         'prop-folderview': function (app) {
-            app.props.set('folderview', _.device('small') ? false : app.settings.get('folderview/visible/' + _.display(), true));
+            app.props.set('folderview', _.device('smartphone') ? false : app.settings.get('folderview/visible/' + _.display(), true));
         },
 
         /*
          * Store view options
          */
         'store-view-options': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.props.on('change', _.debounce(function () {
+                if (app.props.get('find-result')) return;
                 var data = app.props.toJSON();
                 app.settings
                     .set('showCheckboxes', data.checkboxes)
@@ -590,7 +682,7 @@ define('io.ox/contacts/main',
          * Respond to folder view changes
          */
         'change:folderview': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.props.on('change:folderview', function (model, value) {
                 app.folderView.toggle(value);
             });
@@ -603,7 +695,7 @@ define('io.ox/contacts/main',
         },
 
         'change:folder': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             // folder change
             app.grid.on('change:ids', function () {
                 ext.point('io.ox/contacts/thumbIndex').invoke('draw', app.thumbs, app.baton);
@@ -611,7 +703,7 @@ define('io.ox/contacts/main',
         },
 
         'folder-view-mobile-listener': function () {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             // always change folder on click
             // No way to use tap here since folderselection really messes up the event chain
             app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
@@ -621,12 +713,17 @@ define('io.ox/contacts/main',
                     // do not change page in edit mode
                     return;
                 }
+
+                // do not open listview when folder is virtual
+                var id = $(e.target).closest('.folder').data('id');
+                if (folderAPI.isVirtual(id)) return;
+
                 app.pages.changePage('listView');
             });
         },
 
         'change:folder-mobile': function () {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             app.grid.on('change:ids', function () {
                 ext.point('io.ox/contacts/thumbIndex').invoke('draw', app.thumbs, app.baton);
                 app.folder.getData().done(function (d) {
@@ -658,7 +755,7 @@ define('io.ox/contacts/main',
          * Respond to change:checkboxes
          */
         'change:checkboxes': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.props.on('change:checkboxes', function (model, value) {
                 var grid = app.getGrid();
                 grid.setEditable(value);
@@ -669,8 +766,8 @@ define('io.ox/contacts/main',
          * Folerview toolbar
          */
         'folderview-toolbar': function (app) {
-            if (_.device('small')) return;
-            commons.mediateFolderView(app, true);
+            if (_.device('smartphone')) return;
+            commons.mediateFolderView(app);
         },
 
         'api-events': function (app) {
@@ -697,17 +794,91 @@ define('io.ox/contacts/main',
             });
         },
 
-        'inplace-search': function (app) {
+        'inplace-find': function (app) {
 
-            if (_.device('small') || !capabilities.has('search')) return;
+            if (_.device('smartphone') || !capabilities.has('search')) return;
 
-            var win = app.getWindow(), side = win.nodes.sidepanel;
-            side.addClass('top-toolbar');
+            app.searchable();
+        },
 
-            win.facetedsearch.ready
-                .done(function (search) {
-                    commons.wireGridAndSearch(app.grid, app.getWindow(), search.apiproxy);
-            }   );
+        'contextual-help': function (app) {
+            app.getContextualHelp = function () {
+                return 'ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.sect.contacts.gui';
+            };
+        },
+
+        'metrics': function (app) {
+
+            function getFolderType(folder) {
+                if (folderAPI.is('shared', folder)) return 'shared';
+                if (folderAPI.is('private', folder)) return 'private';
+                if (folderAPI.is('public', folder)) return 'public';
+                if (folder.id === '6') return 'gab';
+                return 'unknown';
+            }
+
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+
+                var nodes = app.getWindow().nodes,
+                    toolbar = nodes.body.find('.classic-toolbar-container'),
+                    sidepanel = nodes.sidepanel;
+                // toolbar actions
+                toolbar.delegate('.io-ox-action-link:not(.dropdown-toggle)', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'contacts',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // toolbar options dropfdown
+                toolbar.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
+                    var node =  $(e.target).closest('a');
+                    metrics.trackEvent({
+                        app: 'contacts',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: node.attr('data-action') || node.attr('data-name'),
+                        detail: node.attr('data-value')
+                    });
+                });
+                // folder tree action
+                sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'contacts',
+                        target: 'folder/context-menu',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // check for clicks in folder trew
+                app.on('folder:change', function (folder) {
+                    folderAPI
+                        .get(folder)
+                        .then(function (data) {
+                            metrics.trackEvent({
+                                app: 'contacts',
+                                target: 'folder',
+                                type: 'click',
+                                action: 'select',
+                                detail: getFolderType(data)
+                            });
+                        });
+                });
+                // selection in listview
+                app.grid.selection.on({
+                    'change': function (event, list) {
+                        metrics.trackEvent({
+                            app: 'contacts',
+                            target: 'list',
+                            type: 'click',
+                            action: 'select',
+                            detail: list.length > 1 ? 'multiple' : 'one'
+                        });
+                    }
+                });
+            });
         }
     });
 
@@ -718,7 +889,7 @@ define('io.ox/contacts/main',
         var win = ox.ui.createWindow({
             name: 'io.ox/contacts',
             chromeless: true,
-            facetedsearch: capabilities.has('search')
+            find: capabilities.has('search')
         });
 
         app.setWindow(win);
@@ -732,15 +903,15 @@ define('io.ox/contacts/main',
 
         app.grid = new VGrid(app.gridContainer, {
             settings: settings,
-            hideTopbar: _.device('small'),
-            hideToolbar: _.device('small')
+            hideTopbar: _.device('smartphone'),
+            hideToolbar: _.device('smartphone')
             //swipeRightHandler: swipeRightHandler,
         });
 
         commons.wireGridAndWindow(app.grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(app.grid, api, win);
-        if (_.device('!small')) commons.addGridToolbarFolder(app, app.grid, 'CONTACTS');
+        if (_.device('!smartphone')) commons.addGridToolbarFolder(app, app.grid, 'CONTACTS');
 
         app.getGrid = function () {
             return app.grid;

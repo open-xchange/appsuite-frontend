@@ -1,0 +1,111 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+.io-ox-alert {
+
+    // we use position fixed and top:15px so to be independent of scroll positions esp. on mobile devices
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    margin-left: -230px;
+    width: 460px;
+    background-color: rgba(255, 255, 255, 0.95);
+    z-index: 65500;
+    box-shadow: 0 0 50px -1px rgba(0, 0, 0, 0.80);
+    outline: 0;
+    opacity: 0;
+    .border-radius(@border-radius-base);
+    .transition(opacity 0.20s ease-out);
+
+    &:focus { background-color: #fff; }
+
+    &.appear { opacity: 1.0; }
+
+    .headline {
+        margin: 0 0 7px 0;
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .message {
+        padding: 25px 60px 25px 70px;
+        min-height: 60px;
+        & > div {
+            max-height: 300px;
+            overflow: auto;
+            + div { margin-top: 7px; }
+            a { cursor: pointer; }
+            i.fa + span { margin-left: 15px; }
+        }
+    }
+
+    .icon {
+        position: absolute;
+        top: 18px;
+        left: 10px;
+        font-size: 24px;
+        color: #aaa;
+        width: 50px;
+        text-align: center;
+    }
+
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 36px;
+        line-height: 40px;
+        text-align: center;
+        display: inline-block;
+        outline: 0;
+    }
+
+    .close:hover, .close:focus {
+        background-color: rgba(0, 0, 0, 0.10);
+    }
+
+    html.high-contrast &.io-ox-alert-error {
+        background-color: @red;
+        .icon, .close, .message, a { color: @white; opacity: 1; }
+    }
+    html.high-contrast &.io-ox-alert-warning {
+        background-color: @yellow;
+        .icon, .close, .message, a { color: @black; opacity: 1; }
+    }
+    html.high-contrast &.io-ox-alert-success {
+        background-color: @green;
+        .icon, .close, .message, a { color: @black; opacity: 1; }
+    }
+
+    &.io-ox-alert-info .icon { color: #08c; }
+    &.io-ox-alert-error .icon { color: #a00; }
+    &.io-ox-alert-warning .icon { color: #fc0; }
+    &.io-ox-alert-success .icon { color: @green-light; }
+    &.io-ox-alert-busy .icon { color: #555; }
+    &.io-ox-alert-success { cursor: pointer; }
+}
+
+@media (max-width: 480px), (max-device-width: 480px) {
+    .io-ox-alert {
+        left: 10px;
+        right: 10px;
+        width: auto;
+        margin-left: 0;
+        cursor: pointer;
+        .icon { font-size: 20px; width: 30px; }
+        .message { padding: 20px 20px 20px 50px; }
+        .close { display: none; }
+    }
+}

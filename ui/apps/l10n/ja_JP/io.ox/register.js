@@ -11,21 +11,21 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
-define('l10n/ja_JP/io.ox/register',
-    ['io.ox/core/extensions',
-     'io.ox/backbone/mini-views',
-     'l10n/ja_JP/io.ox/collation',
-     'settings!io.ox/core',
-     'gettext!l10n/ja_JP',
-     'css!l10n/ja_JP/io.ox/style.css'
-    ], function (ext, mini, collation, settings, gt) {
+define('l10n/ja_JP/io.ox/register', [
+    'io.ox/core/extensions',
+    'io.ox/backbone/mini-views',
+    'l10n/ja_JP/io.ox/collation',
+    'settings!io.ox/core',
+    'gettext!l10n/ja_JP',
+    'css!l10n/ja_JP/io.ox/style.css'
+], function (ext, mini, collation, settings, gt) {
 
     'use strict';
 
     // Detail view
 
     ext.point('io.ox/contacts/detail/head').extend({
-        index: 'last',
+        index: 1000000000000,
         id: 'furigana',
         draw: function (baton) {
 
@@ -48,8 +48,7 @@ define('l10n/ja_JP/io.ox/register',
                 if (yomiField === 'yomiCompany') {
                     // don't do anything if company is empty
                     if (value === '') return;
-                }
-                else {
+                } else {
                     // don't add white-space if neither last nor first name has data
                     if ($.trim(baton.data.yomiLastName) === '' && $.trim(baton.data.yomiFirstName) === '') return;
                 }
@@ -97,7 +96,7 @@ define('l10n/ja_JP/io.ox/register',
 
             ext.point(ref + '/edit/' + point).extend({
                 id: yomiID,
-                index: 'last',
+                index: 1000000000000,
                 draw: function (baton) {
                     var input = this.find('input[name="' + id + '"]');
                     // insert furigana field before orginal field
@@ -113,7 +112,7 @@ define('l10n/ja_JP/io.ox/register',
         }
 
         ext.point(ref + '/edit').extend({
-            index: 'last',
+            index: 1000000000000,
             draw: function () {
                 // auto-complete for furigana fields?
                 if (settings.get('features/furiganaAutoComplete', false) === true) {
@@ -150,12 +149,12 @@ define('l10n/ja_JP/io.ox/register',
             }
         });
 
-        var lv = field.value; // last updated value
-                              // lv is not updated when inserting non-kana
-                              // characters, e. g. when typing the first
-                              // letter of a kana character using romaji.
-        var lp = 0, ls = 0; // length of last prefix and last suffix
-                            // (boundaries of the current word in lv)
+        var lv = field.value; /* last updated value
+                               * lv is not updated when inserting non-kana
+                               * characters, e. g. when typing the first
+                               * letter of a kana character using romaji. */
+        var lp = 0, ls = 0; /* length of last prefix and last suffix
+                               (boundaries of the current word in lv) */
         var v0 = lv; // previous value (always updated, used to wait for changes)
         var yl = 0; // length of the current word in yomiField
 
@@ -217,8 +216,7 @@ define('l10n/ja_JP/io.ox/register',
                 // copy only katakana (and hiragana "yori")
                 if (c >= 0x309f && c <= 0x30ff || // katakana
                     c >= 0x31f0 && c <= 0x31ff || // katakana phonetic extensions
-                    c >= 0xff61 && c <= 0xff9f)   // halfwidth katakana
-                {
+                    c >= 0xff61 && c <= 0xff9f) { // halfwidth katakana
                     kana.push(c);
                 }
             }
@@ -249,8 +247,10 @@ define('l10n/ja_JP/io.ox/register',
         ranges = [0x304a, 0x3054, 0x305e, 0x3069, 0x306e,
                   0x307d, 0x3082, 0x3088, 0x308d],
         */
-        letters = [0x3042, 0x304b, 0x3055, 0x305f, 0x306a,
-                   0x306f, 0x307e, 0x3084, 0x3089, 0x308f],
+        letters = [
+            0x3042, 0x304b, 0x3055, 0x305f, 0x306a,
+            0x306f, 0x307e, 0x3084, 0x3089, 0x308f
+        ],
         kana = _.map(letters, function (c) { return String.fromCharCode(c); });
 
     ext.point('io.ox/contacts/getLabel').extend({

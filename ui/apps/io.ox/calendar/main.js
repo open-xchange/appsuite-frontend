@@ -11,33 +11,34 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/main',
-    ['io.ox/core/date',
-     'settings!io.ox/core',
-     'io.ox/core/commons',
-     'io.ox/core/extensions',
-     'io.ox/core/capabilities',
-     'io.ox/core/folder/api',
-     'io.ox/core/folder/tree',
-     'io.ox/core/folder/view',
-     'settings!io.ox/calendar',
-     'gettext!io.ox/calendar',
-     'io.ox/core/tk/vgrid',
-     'io.ox/core/toolbars-mobile',
-     'io.ox/core/page-controller',
-     'io.ox/calendar/api',
-     'io.ox/calendar/mobile-navbar-extensions',
-     'io.ox/calendar/mobile-toolbar-actions',
-     'io.ox/calendar/toolbar',
-     'io.ox/calendar/actions',
-     'less!io.ox/calendar/style'
-    ], function (date, coreConfig, commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, VGrid, Bars, PageController, api) {
+define('io.ox/calendar/main', [
+    'settings!io.ox/core',
+    'io.ox/core/commons',
+    'io.ox/core/extensions',
+    'io.ox/core/capabilities',
+    'io.ox/core/folder/api',
+    'io.ox/core/folder/tree',
+    'io.ox/core/folder/view',
+    'settings!io.ox/calendar',
+    'gettext!io.ox/calendar',
+    'io.ox/core/tk/vgrid',
+    'io.ox/core/toolbars-mobile',
+    'io.ox/core/page-controller',
+    'io.ox/calendar/api',
+    'io.ox/calendar/mobile-navbar-extensions',
+    'io.ox/calendar/mobile-toolbar-actions',
+    'io.ox/calendar/toolbar',
+    'io.ox/calendar/actions',
+    'less!io.ox/calendar/style',
+    'io.ox/calendar/week/view'
+], function (coreConfig, commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, VGrid, Bars, PageController, api) {
 
     'use strict';
 
     // application object
     var app = ox.ui.createApp({
         name: 'io.ox/calendar',
+        id: 'io.ox/calendar',
         title: 'Calendar'
     }), win;
 
@@ -51,23 +52,23 @@ define('io.ox/calendar/main',
          */
         'pages-mobile': function (app) {
             if (_.device('!smartphone')) return;
-            var c = app.getWindow().nodes.main;
-            var navbar = $('<div class="mobile-navbar">'),
-                toolbar = $('<div class="mobile-toolbar">');
+            var win = app.getWindow(),
+                navbar = $('<div class="mobile-navbar">'),
+                toolbar = $('<div class="mobile-toolbar">')
+                    .on('hide', function () { win.nodes.body.removeClass('mobile-toolbar-visible'); })
+                    .on('show', function () { win.nodes.body.addClass('mobile-toolbar-visible'); }),
+                baton = ext.Baton({ app: app });
 
             app.navbar = navbar;
             app.toolbar = toolbar;
+            app.pages = new PageController({ appname: app.options.name, toolbar: toolbar, navbar: navbar, container: win.nodes.main });
 
-            app.pages = new PageController(app);
+            win.nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
 
-            app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
-
-            // create 3 pages with toolbars and navbars
             app.pages.addPage({
                 name: 'folderTree',
-                container: c,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/calendar/mobile/navbar'
                 })
             });
@@ -75,13 +76,12 @@ define('io.ox/calendar/main',
             // create 3 pages with toolbars and navbars
             app.pages.addPage({
                 name: 'month',
-                container: c,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/calendar/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'month',
                     extension: 'io.ox/calendar/mobile/toolbar'
                 }),
@@ -90,13 +90,12 @@ define('io.ox/calendar/main',
 
             app.pages.addPage({
                 name: 'week',
-                container: c,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/calendar/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'week',
                     extension: 'io.ox/calendar/mobile/toolbar'
                 })
@@ -104,18 +103,17 @@ define('io.ox/calendar/main',
 
             app.pages.addPage({
                 name: 'list',
-                container: c,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/calendar/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'list',
                     extension: 'io.ox/calendar/mobile/toolbar'
                 }),
                 secondaryToolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'list/multiselect',
                     extension: 'io.ox/calendar/mobile/toolbar'
                 })
@@ -123,13 +121,12 @@ define('io.ox/calendar/main',
 
             app.pages.addPage({
                 name: 'detailView',
-                container: c,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/calendar/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'detailView',
                     extension: 'io.ox/calendar/mobile/toolbar'
 
@@ -151,7 +148,7 @@ define('io.ox/calendar/main',
             if (_.device('smartphone')) return;
             var c = app.getWindow().nodes.main;
 
-            app.pages = new PageController(app);
+            app.pages = new PageController({ appname: app.options.name });
 
             // create 3 pages with toolbars and navbars
             app.pages.addPage({
@@ -169,6 +166,13 @@ define('io.ox/calendar/main',
                 name: 'list',
                 container: c
             });
+
+            app.getTour = function () {
+                //no tours for guests, yet. See bug 41542
+                if (capabilities.has('guest')) return;
+
+                return { id: 'default/io.ox/calendar', path: 'io.ox/tours/calendar' };
+            };
         },
 
         /*
@@ -207,7 +211,7 @@ define('io.ox/calendar/main',
 
             app.pages.getNavbar('week')
                 .on('leftAction', function () {
-                    ox.ui.Perspective.show(app, 'month', {animation: 'slideright'});
+                    ox.ui.Perspective.show(app, 'month', { animation: 'slideright' });
                 })
                 .setLeft(gt('Back'));
 
@@ -237,7 +241,7 @@ define('io.ox/calendar/main',
                 app.pages.goBack();
             });
 
-           // checkbox toggle
+            // checkbox toggle
             app.pages.getNavbar('list').on('rightAction', function () {
                 if (app.props.get('checkboxes') === true) {
                     // leave multiselect? -> clear selection
@@ -246,7 +250,7 @@ define('io.ox/calendar/main',
                     app.grid.showToolbar(false);
                     app.pages.getNavbar('list').setRight(gt('Edit')).show('.left');
                 } else {
-                     // also show sorting options
+                    // also show sorting options
                     app.grid.showTopbar(true);
                     app.grid.showToolbar(true);
                     app.pages.getNavbar('list').setRight(gt('Cancel')).hide('.left');
@@ -307,7 +311,7 @@ define('io.ox/calendar/main',
             app.folderView.resize.enable();
         },
 
-         'toggle-folder-editmode': function (app) {
+        'toggle-folder-editmode': function (app) {
 
             if (_.device('!smartphone')) return;
 
@@ -351,7 +355,7 @@ define('io.ox/calendar/main',
                 }
             };
             // initialize folder view
-            FolderView.initialize({ app: app, tree: tree, firstResponder: 'month', respondCallback: cb});
+            FolderView.initialize({ app: app, tree: tree, firstResponder: 'month', respondCallback: cb });
             page.append(tree.render().$el);
         },
 
@@ -363,10 +367,13 @@ define('io.ox/calendar/main',
             // introduce shared properties
             app.props = new Backbone.Model({
                 'layout': view,
-                'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', true),
-                'darkColors': app.settings.get('darkColors', false),
+                'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
+                'colorScheme': app.settings.get('colorScheme', 'custom'),
                 'mobileFolderSelectMode': false
             });
+
+            // store colorScheme in settings to ensure that 'colorScheme' is not undefined
+            app.settings.set('colorScheme', app.props.get('colorScheme'));
         },
 
         'vgrid-checkboxes': function (app) {
@@ -384,7 +391,7 @@ define('io.ox/calendar/main',
             app.props.set('folderview', app.settings.get('folderview/visible/' + _.display(), true));
         },
 
-         /*
+        /*
          * Set folderview property
          */
         'prop-folderview-mobile': function (app) {
@@ -398,12 +405,12 @@ define('io.ox/calendar/main',
         'store-view-options': function (app) {
             if (_.device('smartphone')) return;
             app.props.on('change', _.debounce(function (model, options) {
-                if (!options || options.fluent) return;
+                if (!options || options.fluent || app.props.get('find-result')) return;
                 var data = app.props.toJSON();
                 app.settings
                     .set('viewView', data.layout)
                     .set('showCheckboxes', data.checkboxes)
-                    .set('darkColors', data.darkColors)
+                    .set('colorScheme', data.colorScheme)
                     .save();
             }, 500));
         },
@@ -435,22 +442,30 @@ define('io.ox/calendar/main',
         },
 
         /*
-         * Respond to change:darkColors
+         * Respond to change:colorScheme
          */
-        'change:darkColors': function (app) {
-            if (_.device('smartphone')) return;
-            app.props.on('change:darkColors', function (model, value) {
-                app.getWindow().nodes.outer.toggleClass('dark-colors', value);
-            });
-            app.getWindow().nodes.outer.toggleClass('dark-colors', app.props.get('darkColors'));
-        },
+        'change:colorScheme': function (app) {
+            var selectScheme = function (app, value) {
+                var node = app.getWindow().nodes.outer;
 
-        /*
-         * Folerview toolbar
-         */
-        'folderview-toolbar': function (app) {
-            if (_.device('smartphone')) return;
-            commons.mediateFolderView(app);
+                switch (value) {
+                    case 'classic': node.removeClass('dark-colors custom-colors'); break;
+                    case 'dark':
+                        if (_.device('smartphone')) {
+                            node.removeClass('dark-colors custom-colors');
+                        } else {
+                            node.removeClass('custom-colors').addClass('dark-colors');
+                        }
+                        break;
+                    case 'custom': node.removeClass('dark-colors').addClass('custom-colors'); break;
+                    default: node.removeClass('dark-colors custom-colors'); break;
+                }
+            };
+
+            app.props.on('change:colorScheme', function (model, value) {
+                selectScheme(app, value);
+            });
+            selectScheme(app, app.props.get('colorScheme'));
         },
 
         /*
@@ -459,7 +474,7 @@ define('io.ox/calendar/main',
         'change:layout': function (app) {
             app.props.on('change:layout', function (model, value) {
                 // no animations on desktop
-                ox.ui.Perspective.show(app, value, {disableAnimations: true});
+                ox.ui.Perspective.show(app, value, { disableAnimations: true });
             });
         },
 
@@ -475,62 +490,44 @@ define('io.ox/calendar/main',
             });
         },
 
-        'inplace-search': function (app) {
+        'inplace-find': function (app) {
 
-            if (_.device('small') || !capabilities.has('search')) return;
+            if (_.device('smartphone') || !capabilities.has('search')) return;
 
-            var win = app.getWindow(), side = win.nodes.sidepanel;
-            side.addClass('top-toolbar');
+            app.searchable();
 
-            // when search is ready
-            win.facetedsearch.ready
-                .done(function (facetedsearch) {
-                    var lastPerspective,
-                        SEARCH_PERSPECTIVE = 'list',
-                        cancelSearch = function () {
-                            var win = app.getWindow();
-                            if (win.facetedsearch && win.facetedsearch.view)
-                                win.facetedsearch.view.trigger('button:cancel');
-                        };
-                    // register
-                    commons.wireGridAndSearch(app.grid, app.getWindow(), facetedsearch.apiproxy);
-
-                    // additional handler: switch to list perspective (and back)
-                    win.on({
-                        'search:query': function () {
-                            // switch to supported perspective
-                            lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
-                            if (lastPerspective !== SEARCH_PERSPECTIVE) {
-                                // fluent option: do not write to user settings
-                                app.props.set('layout', SEARCH_PERSPECTIVE, {fluent: true});
-                                // cancel search when user changes view
-                                app.props.on('change:layout', cancelSearch);
-                            }
-                        },
-                        'search:cancel': function () {
-                            // switch back to perspective used before
-                            var currentPerspective = _.url.hash('perspective') || app.props.get('layout');
-                            if (lastPerspective && lastPerspective !== currentPerspective)
-                                app.props.set('layout', lastPerspective);
-                            // disable
-                            app.props.off('change:layout', cancelSearch);
-                            // reset
-                            lastPerspective = undefined;
-
-                        }
-                    });
-                });
-        },
-        /*
-         * mobile only
-         * change current month label in navbar
-         */
-        'change:navbar:month': function (app) {
-            if (_.device('!smartphone')) return;
-            app.on('change:navbar:month', function (title) {
-                app.pages.getNavbar('month').setTitle(title);
+            var lastPerspective,
+                SEARCH_PERSPECTIVE = 'list',
+                find = app.get('find');
+            // additional handler: switch to list perspective (and back)
+            find.on({
+                'find:query': function () {
+                    // hide sort options
+                    app.grid.getToolbar().find('.grid-options:first').hide();
+                    // switch to supported perspective
+                    lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
+                    if (lastPerspective !== SEARCH_PERSPECTIVE) {
+                        // fluent option: do not write to user settings
+                        app.props.set('layout', SEARCH_PERSPECTIVE, { fluent: true });
+                        // cancel search when user changes view
+                        app.props.on('change', find.cancel);
+                    }
+                },
+                'find:cancel': function () {
+                    // switch back to perspective used before
+                    var currentPerspective = _.url.hash('perspective') || app.props.get('layout');
+                    if (lastPerspective && lastPerspective !== currentPerspective)
+                        app.props.set('layout', lastPerspective);
+                    // show sort options again
+                    app.grid.getToolbar().find('.grid-options:first').show();
+                    // disable
+                    app.props.off('change', find.cancel);
+                    // reset
+                    lastPerspective = undefined;
+                }
             });
         },
+
         /*
          * mobile only
          * change current date label in navbar
@@ -548,7 +545,155 @@ define('io.ox/calendar/main',
         'show-weekview-mobile': function (app) {
             if (_.device('!smartphone')) return;
             app.pages.getPage('week').on('pageshow', function () {
+                app.pages.getNavbar('week').setLeft(app.refDate.format('MMMM'));
                 //app.pages.getPageObject('week').perspective.view.setScrollPos();
+            });
+        },
+
+        /*
+         * Add support for selection:
+         */
+        'selection-doubleclick': function (app) {
+            // detail app does not make sense on small devices
+            // they already see appointments in full screen
+            if (_.device('smartphone')) return;
+            app.grid.selection.on('selection:doubleclick', function (e, key) {
+                ox.launch('io.ox/calendar/detail/main', { cid: key });
+            });
+        },
+
+        /*
+         * Add support for virtual folder "All my appointments"
+         */
+        'all-my-appointments': function (app) {
+
+            app.folderView.tree.selection.addSelectableVirtualFolder('virtual/all-my-appointments');
+        },
+
+        'contextual-help': function (app) {
+            app.getContextualHelp = function () {
+                return 'ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.sect.calendar.gui';
+            };
+        },
+
+        'metrics': function (app) {
+
+            function getFolderType(folder) {
+                if (folderAPI.is('shared', folder)) return 'shared';
+                if (folderAPI.is('private', folder)) return 'private';
+                if (folderAPI.is('public', folder)) return 'public';
+                return 'unknown';
+            }
+
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+
+                var nodes = app.getWindow().nodes,
+                    toolbar = nodes.body.find('.classic-toolbar-container'),
+                    sidepanel = nodes.sidepanel;
+                // toolbar actions
+                toolbar.delegate('.io-ox-action-link:not(.dropdown-toggle)', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // toolbar options dropfdown
+                toolbar.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
+                    var node =  $(e.target).closest('a');
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: node.attr('data-action') || node.attr('data-name'),
+                        detail: node.attr('data-value')
+                    });
+                });
+                // detail view
+                nodes.outer.delegate('.participants-view .io-ox-action-link', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'detail/toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // detail view as sidepopup
+                nodes.outer.delegate('.io-ox-sidepopup .io-ox-action-link', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'detail/toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // folder tree action
+                sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'folder/context-menu',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // folder permissions action
+                sidepanel.find('.folder-tree').delegate('.folder-shared', 'mousedown', function () {
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'folder',
+                        type: 'click',
+                        action: 'permissions'
+                    });
+                });
+                // check for clicks in folder trew
+                app.on('folder:change', function (folder) {
+                    folderAPI
+                        .get(folder)
+                        .then(function (data) {
+                            metrics.trackEvent({
+                                app: 'calendar',
+                                target: 'folder',
+                                type: 'click',
+                                action: 'select',
+                                detail: getFolderType(data)
+                            });
+                        });
+                });
+                // selection in listview
+                app.grid.selection.on({
+                    'change': function (event, list) {
+                        metrics.trackEvent({
+                            app: 'calendar',
+                            target: 'list',
+                            type: 'click',
+                            action: 'select',
+                            detail: list.length > 1 ? 'multiple' : 'one'
+                        });
+                    }
+                });
+                // selection in other perspectives
+                app.on('showAppointment', function (e, data, layout) {
+                    var target = layout || 'list';
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: target,
+                        type: 'click',
+                        action: 'select',
+                        detail: 'one'
+                    });
+                });
+                // double click or mousedown -> mark-time-slot -> mouseup
+                app.on('createAppoinment openCreateAppointment', function (e, data, layout) {
+                    var target = layout || 'list';
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: target,
+                        type: 'click',
+                        action: 'create'
+                    });
+                });
             });
         }
 
@@ -560,59 +705,17 @@ define('io.ox/calendar/main',
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/calendar',
-            facetedsearch: capabilities.has('search'),
+            find: capabilities.has('search'),
             chromeless: true
         }));
 
         app.settings = settings;
-        app.refDate = new date.Local();
+        app.refDate = moment();
 
         win.addClass('io-ox-calendar-main');
 
-        // easy debugging
-        window.calendar = app;
-
-        // "show all" extension for folder view
-
-        function changeShowAll() {
-            settings.set('showAllPrivateAppointments', $(this).prop('checked')).save();
-            win.getPerspective().refresh();
-        }
-
-        ext.point('io.ox/core/foldertree/calendar/links').extend({
-            index: 100,
-            id: 'show-all',
-            draw: function (baton) {
-
-                if (baton.context !== 'app') return;
-                if (!baton.data || !baton.options) return;
-
-                this.append(
-                    $('<div class="show-all-checkbox">').append(
-                        $('<label class="checkbox">').append(
-                            $('<input type="checkbox" tabindex="1">')
-                                .prop('checked', settings.get('showAllPrivateAppointments', false))
-                                .on('change', changeShowAll),
-                            $.txt(gt('Show all my appointments from all calendars'))
-                        )
-                    )
-                );
-
-                // hide "show all" checkbox when only one calendar is available
-                function toggle() {
-                    var count = folderAPI.getFlatCollection('calendar', 'private').length + folderAPI.getFlatCollection('calendar', 'public').length;
-                    this.$el.find('.show-all-checkbox').toggle(count > 0);
-                }
-
-                baton.view.listenTo(folderAPI.getFlatCollection('calendar', 'private'), 'add remove reset', toggle);
-                baton.view.listenTo(folderAPI.getFlatCollection('calendar', 'public'), 'add remove reset', toggle);
-
-                toggle.call(baton.view);
-            }
-        });
-
         // go!
-        commons.addFolderSupport(app, null, 'calendar', options.folder || coreConfig.get('folder/calendar'))
+        commons.addFolderSupport(app, null, 'calendar', options.folder || 'virtual/all-my-appointments')
             .always(function () {
                 app.mediate();
                 win.show();
@@ -628,7 +731,7 @@ define('io.ox/calendar/main',
                     // corrupt data fix
                     if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
                 }
-                ox.ui.Perspective.show(app, lastPerspective, {disableAnimations: true});
+                ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true });
                 app.props.set('layout', lastPerspective);
             });
     });

@@ -25,11 +25,6 @@
             }
         }
     }
-    @media (max-width: 480px), (max-device-width: 480px) {
-        .vgrid-scrollpane {
-            bottom: 55px;
-        }
-    }
 
     .vgrid.editable .vgrid-cell {
         padding-left: 48px;
@@ -39,10 +34,10 @@
 
         &.calendar {
 
-            height: 60px; /* = 3 rows */
+            height: 70px; /* = 3 rows */
 
             .vgrid-cell-checkbox {
-                padding-top: 9px;
+                padding-top: 19px;
             }
 
             .contentContainer {
@@ -60,7 +55,7 @@
                 height: 1em;
                 float: right;
                 margin-left: 1em;
-                .border-radius(4px);
+                .border-radius(@border-radius-base);
             }
 
             &.declined {
@@ -72,10 +67,9 @@
             }
 
             .time {
-
-                width: 64px;
+                position: relative;
+                width: 80px;
                 height: 100%;
-                border-right: 3px solid #ccc;
                 float: left;
 
                 .fragment {
@@ -85,6 +79,15 @@
 
             }
 
+            .time:after {
+                content: "";
+                width: 20px;
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+            }
+
             .date {
                 display: none;
             }
@@ -92,20 +95,58 @@
 
         .custom_shown_as {
 
-            &.reserved {
-                border-color: @appointment-reserved;
+            &.reserved:after {
+                background-color: @appointment-reserved;
             }
 
-            &.temporary {
-                border-color: @appointment-temporary;
+            &.temporary:after {
+                background-color: @appointment-temporary;
             }
 
-            &.absent {
-                border-color: @appointment-absent;
+            &.absent:after {
+                background-color: @appointment-absent;
             } /* red */
 
-            &.free {
-                border-color: @appointment-free;
+            &.free:after {
+                background-color: @appointment-free;
+            }
+        }
+    }
+}
+
+.custom-colors {
+    .calendar-list-view {
+        .vgrid-cell {
+            .custom_shown_as {
+                .generate-color-label(@counter) when (@counter > 0) {
+                    .generate-color-label((@counter - 1));
+
+                    &.color-label-@{counter} {
+                        @color-label-bg-mod: ~"color-label-bg-@{counter}";
+                        @color-label-bg-light: lighten(@@color-label-bg-mod, @custom-color-pattern-pct);
+
+
+                        &:after {
+                            background-color: ~"@{color-label-bg-@{counter}}";
+                        }
+
+                        &.free:after {
+                            background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
+                            background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
+                            background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
+                            background-image: repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
+                        }
+
+                        &.temporary:after {
+                            background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 8px, @color-label-bg-light 8px, @color-label-bg-light 16px);
+                            background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 8px, @color-label-bg-light 8px, @color-label-bg-light 16px);
+                            background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 8px, @color-label-bg-light 8px, @color-label-bg-light 16px);
+                            background-image: repeating-linear-gradient(-45deg, transparent, transparent 8px, @color-label-bg-light 8px, @color-label-bg-light 16px);
+                        }
+                    }
+                }
+
+                .generate-color-label(10);
             }
         }
     }

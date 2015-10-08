@@ -29,9 +29,9 @@ define('io.ox/core/metrics', [], function () {
 
         // listen to some demo events and generate console output
         debug: function () {
-            ox.on('login core:load core:ready app:start app:ready app:stop', function (e) {
+            ox.on('login core:load core:ready app:start app:ready app:stop', function () {
                 var t = that.formatTimestamp(that.getTime());
-                console.log('Event', e.type, t);
+                console.log('Event', t);
             });
         }
     };

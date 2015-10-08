@@ -22,7 +22,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: [
-                            'bootstrap/less/*.less',
+                            'bootstrap/less/**/*.less',
                             'bootstrap-datepicker/less/datepicker3.less',
                             'font-awesome/{less,fonts}/*',
                             'open-sans-fontface/fonts/Light/*',
@@ -34,29 +34,51 @@ module.exports = function (grunt) {
                     },
                     {
                         expand: true,
-                        src: ['view-qrcode.js', 'hopscotch/*', 'mobiscroll/css/*'],
+                        src: ['**/*', '!tinymce.min.js'],
+                        cwd: 'bower_components/tinymce-dist',
+                        dest: 'build/apps/3rd.party/tinymce/'
+                    },
+                    {
+                        expand: true,
+                        src: ['hopscotch/*'],
                         cwd: 'lib/',
                         dest: 'build/apps/3rd.party/'
                     },
                     {
                         // static lib
                         expand: true,
-                        src: ['jquery-ui.min.js'],
+                        src: ['jquery-ui.min.js', 'bootstrap-combobox.js'],
                         cwd: 'lib/',
                         dest: 'build/static/3rd.party/'
                     },
                     {
-                        // static lib
+                        // static bower_components
                         expand: true,
                         src: [
+                            'bootstrap-datepicker/js/bootstrap-datepicker.js',
                             'jquery-imageloader/jquery.imageloader.js',
                             'Chart.js/Chart.js',
                             'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
                             'typeahead.js/dist/typeahead.jquery.js',
-                            'marked/lib/marked.js'
+                            'marked/lib/marked.js',
+                            'velocity/velocity.min.js',
+                            'moment/moment.js',
+                            'moment/locale/*',
+                            'autosize/dist/autosize.js'
                         ],
                         cwd: 'bower_components',
                         dest: 'build/static/3rd.party/'
+                    },
+                    {
+                        // static bower_components
+                        expand: true,
+                        flatten: true,
+                        src: [
+                            'moment-timezone/builds/moment-timezone-with-data.js',
+                            'moment-interval/moment-interval.js'
+                        ],
+                        cwd: 'bower_components',
+                        dest: 'build/static/3rd.party/moment'
                     },
                     {
                         expand: true,
@@ -78,6 +100,24 @@ module.exports = function (grunt) {
                         src: ['*.{js,css,png}'],
                         cwd: 'lib/node_modules/emoji/lib',
                         dest: 'build/apps/3rd.party/emoji'
+                    },
+                    {
+                        expand: true,
+                        src: ['swiper.jquery.js'],
+                        cwd: 'bower_components/swiper/dist/js/',
+                        dest: 'build/static/3rd.party/swiper'
+                    },
+                    {
+                        expand: true,
+                        src: ['*.css'],
+                        cwd: 'bower_components/swiper/dist/css/',
+                        dest: 'build/apps/3rd.party/swiper'
+                    },
+                    {
+                        expand: true,
+                        src: ['**/*', '!pdf.combined.js'],
+                        cwd: 'bower_components/pdfjs-dist',
+                        dest: 'build/apps/3rd.party/pdfjs'
                     }
                 ]
             }

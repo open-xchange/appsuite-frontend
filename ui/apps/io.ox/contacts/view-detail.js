@@ -12,21 +12,21 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/contacts/view-detail',
-    ['io.ox/core/extensions',
-     'io.ox/contacts/util',
-     'io.ox/contacts/api',
-     'io.ox/contacts/actions',
-     'io.ox/contacts/model',
-     'io.ox/core/folder/breadcrumb',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/date',
-     'io.ox/core/util',
-     'io.ox/core/capabilities',
-     'gettext!io.ox/contacts',
-     'settings!io.ox/contacts',
-     'less!io.ox/contacts/style'
-    ], function (ext, util, api, actions, model, getBreadcrumb, links, date, coreUtil, capabilities, gt, settings) {
+define('io.ox/contacts/view-detail', [
+    'io.ox/core/extensions',
+    'io.ox/contacts/util',
+    'io.ox/contacts/api',
+    'io.ox/contacts/actions',
+    'io.ox/contacts/model',
+    'io.ox/participants/views',
+    'io.ox/participants/model',
+    'io.ox/core/folder/breadcrumb',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/util',
+    'io.ox/core/capabilities',
+    'gettext!io.ox/contacts',
+    'less!io.ox/contacts/style'
+], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, capabilities, gt) {
 
     'use strict';
 
@@ -86,7 +86,7 @@ define('io.ox/contacts/view-detail',
         return new links.Dropdown({
             label: label,
             classes: 'attachment-item',
-            ref: 'io.ox/contacts/attachment/links'
+            ref: 'io.ox/core/tk/attachment/links'
         }).draw.call(container, data);
     }
 
@@ -128,7 +128,8 @@ define('io.ox/contacts/view-detail',
             this.append(
                 api.pictureHalo(
                     $('<div class="picture" aria-hidden="true">'),
-                    $.extend(baton.data, { width: 64, height: 64, scaleType: 'cover' })
+                    baton.data,
+                    { width: 64, height: 64 }
                 )
             );
         }
@@ -229,17 +230,11 @@ define('io.ox/contacts/view-detail',
         draw: function (data) {
             // draw member
             this.append(
-                $('<div class="member">').append(
-                    api.pictureHalo(
-                        $('<div class="member-picture">'),
-                        $.extend(data, { width: 48, height: 48, scaleType: 'cover' })
-                    ),
-                    coreUtil.renderPersonalName({
-                        $el: $('<div class="member-name">'),
-                        name: data.display_name
-                    }, data),
-                    $('<a href="#" class="halo-link">').data({ email1: data.mail }).text(data.mail)
-                )
+                new pViews.ParticipantEntryView({
+                    tagName: 'li',
+                    model: new pModel.Participant(data),
+                    halo: true
+                }).render().$el
             );
         }
     });
@@ -248,7 +243,11 @@ define('io.ox/contacts/view-detail',
 
         draw: function (baton) {
 
-            var list = _.copy(baton.data.distribution_list || [], true), hash = {};
+            var list = _.copy(baton.data.distribution_list || [], true),
+                hash = {},
+                $list = $('<ul class="member-list list-unstyled">');
+
+            this.append($list);
 
             // if there are no members in the list
             if (list.length === 0) {
@@ -269,7 +268,7 @@ define('io.ox/contacts/view-detail',
                     }
                 })
                 .each(function (member) {
-                    ext.point('io.ox/contacts/detail/member').invoke('draw', this, member);
+                    ext.point('io.ox/contacts/detail/member').invoke('draw', $list, member);
                 }, this);
         }
     });
@@ -463,12 +462,12 @@ define('io.ox/contacts/view-detail',
                         row('birthday', function () {
                             if (baton.data.birthday) {
                                 //use utc time. birthdays must not be converted
-                                var birthday = new date.UTC(baton.data.birthday);
-                                if (birthday.getYear() === 1) {
+                                var birthday = moment.utc(baton.data.birthday);
+                                if (birthday.year() === 1) {
                                     //Year 0 is special for birthdays without year (backend changes this to 1...)
-                                    return birthday.format(date.DATE_NOYEAR);
+                                    return birthday.format(moment.localeData().longDateFormat('l').replace(/Y/g, ''));
                                 } else {
-                                    return birthday.format(date.DATE);
+                                    return birthday.format('l');
                                 }
                             }
                         }),
@@ -481,7 +480,12 @@ define('io.ox/contacts/view-detail',
                                     return $('<a>', { href: baton.data.url, target: '_blank' }).text(baton.data.url);
                                 }
                             }
-                        })
+                        }),
+                        // --- rare ---
+                        simple(data, 'marital_status'),
+                        simple(data, 'number_of_children'),
+                        simple(data, 'spouse_name'),
+                        simple(data, 'anniversary')
                     )
                     .attr('data-block', 'personal')
                 );
@@ -501,7 +505,18 @@ define('io.ox/contacts/view-detail',
                         simple(data, 'department'),
                         simple(data, 'profession'),
                         simple(data, 'company'),
-                        simple(data, 'room_number')
+                        simple(data, 'room_number'),
+                        // --- rare ---
+                        simple(data, 'employee_type'),
+                        simple(data, 'number_of_employees'),
+                        simple(data, 'sales_volume'),
+                        simple(data, 'tax_id'),
+                        simple(data, 'commercial_register'),
+                        simple(data, 'branches'),
+                        simple(data, 'business_category'),
+                        simple(data, 'info'),
+                        simple(data, 'manager_name'),
+                        simple(data, 'assistant_name')
                     )
                     .attr('data-block', 'job')
                 );
@@ -553,7 +568,19 @@ define('io.ox/contacts/view-detail',
                         phone(data, 'telephone_other'),
                         simple(data, 'fax_business'),
                         simple(data, 'fax_home'),
-                        simple(data, 'fax_other')
+                        simple(data, 'fax_other'),
+                        // --- rare ---
+                        phone(data, 'telephone_company'),
+                        phone(data, 'telephone_car'),
+                        phone(data, 'telephone_isdn'),
+                        phone(data, 'telephone_pager'),
+                        phone(data, 'telephone_primary'),
+                        phone(data, 'telephone_radio'),
+                        phone(data, 'telephone_telex'),
+                        phone(data, 'telephone_ttytdd'),
+                        phone(data, 'telephone_ip'),
+                        phone(data, 'telephone_assistant'),
+                        phone(data, 'telephone_callback')
                     )
                     .attr('data-block', 'phone')
                 );
@@ -660,7 +687,7 @@ define('io.ox/contacts/view-detail',
         regClean = /[^+0-9]/g;
 
     ext.point('io.ox/contacts/detail/content').extend({
-        index: 'last',
+        index: 1000000000000,
         id: 'description',
         draw: function (baton) {
 
@@ -694,59 +721,11 @@ define('io.ox/contacts/view-detail',
         }
     });
 
-    function showQRCode(node) {
-        require(['3rd.party/view-qrcode'], function (qr) {
-            node.find('a').text(gt('Hide QR code'));
-            var vc = qr.getVCard(node.data());
-            node.qrcode(vc);
-        });
-    }
-
-    function hideQRCode(node) {
-        node.find('canvas').remove();
-        node.find('a').text(gt('Show QR code'));
-    }
-
-    function toggleQRCode(e) {
-        e.preventDefault();
-        var node = $(e.delegateTarget);
-        if (node.find('canvas').length) {
-            hideQRCode(node);
-            $(this).attr('aria-checked', false);
-        } else {
-            showQRCode(node);
-            $(this).attr('aria-checked', true);
-        }
-    }
-
-    ext.point('io.ox/contacts/detail/content').extend({
-        index: 10000,
-        id: 'qr',
-        draw: function (baton) {
-
-            // disabled?
-            if (!settings.get('features/qrcode', true)) return;
-            // not supported
-            if (!Modernizr.canvas || baton.data.mark_as_distributionlist) return;
-
-            this.append(
-                $('<fieldset class="block">').append(
-                    $('<legend class="sr-only">').text(gt('Show QR code')),
-                    $('<i class="fa fa-qrcode" aria-hidden="true">'), $.txt(' '),
-                    $('<a href="#" role="checkbox" aria-checked="false">').text(gt('Show QR code'))
-                )
-                .data(baton.data)
-                .on('click', 'a', toggleQRCode)
-            );
-        }
-    });
-
     ext.point('io.ox/contacts/detail').extend({
-        index: 'last',
+        index: 1000000000000,
         id: 'breadcrumb',
         draw: function (baton) {
 
-            var options = { subfolder: false, prefix: gt('Saved in'), module: 'contacts' };
             var id = baton.data.folder_id;
 
             // this is also used by halo, so we might miss a folder id
@@ -755,13 +734,9 @@ define('io.ox/contacts/view-detail',
             // don't show folders path for folder 6 if global address book is disabled
             if (String(id) === '6' && !capabilities.has('gab')) return;
 
-            // do we know the app?
-            if (baton.app) {
-                options.handler = baton.app.folder.set;
-            }
             this.append(
                 $('<div class="clearfix">'),
-                getBreadcrumb(baton.data.folder_id, options).addClass('chromeless')
+                new BreadcrumbView({ folder: id, app: baton.app, label: gt('Saved in:') }).render().$el
             );
         }
     });
@@ -785,8 +760,12 @@ define('io.ox/contacts/view-detail',
                 baton = ext.Baton.ensure(baton);
 
                 var node = $.createViewContainer(baton.data, api)
-                    .on('redraw', { view: this, data: baton.data , baton: baton}, redraw)
-                    .addClass('contact-detail view');
+                    .on('redraw', { view: this, data: baton.data, baton: baton }, redraw)
+                    .addClass('contact-detail view')
+                    .attr({
+                        'role': 'complementary',
+                        'aria-label': gt('Contact Details')
+                    });
                 ext.point('io.ox/contacts/detail').invoke('draw', node, baton);
 
                 return node;

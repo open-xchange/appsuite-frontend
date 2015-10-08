@@ -10,8 +10,7 @@
  *
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
-define('plugins/portal/upsellads/settings/model',
-      ['settings!io.ox/contacts'], function (settings) {
+define('plugins/portal/upsellads/settings/model', ['settings!io.ox/contacts'], function (settings) {
 
     'use strict';
 

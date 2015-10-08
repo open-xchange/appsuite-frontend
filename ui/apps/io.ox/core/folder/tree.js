@@ -11,15 +11,16 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/tree',
-    ['io.ox/backbone/disposable',
-     'io.ox/core/folder/selection',
-     'io.ox/core/folder/api',
-     'io.ox/core/extensions',
-     'settings!io.ox/core',
-     'io.ox/core/folder/favorites',
-     'io.ox/core/folder/extensions',
-     'less!io.ox/core/folder/style'], function (DisposableView, Selection, api, ext, settings) {
+define('io.ox/core/folder/tree', [
+    'io.ox/backbone/disposable',
+    'io.ox/core/folder/selection',
+    'io.ox/core/folder/api',
+    'io.ox/core/extensions',
+    'settings!io.ox/core',
+    'gettext!io.ox/core',
+    'io.ox/core/folder/favorites',
+    'io.ox/core/folder/extensions'
+], function (DisposableView, Selection, api, ext, settings, gt) {
 
     'use strict';
 
@@ -28,9 +29,9 @@ define('io.ox/core/folder/tree',
         className: 'folder-tree',
 
         events: {
-            'click .contextmenu-control'                    : 'onToggleContextMenu',
-            'keydown .contextmenu-control'                  : 'onKeydown',
-            'contextmenu .folder.selectable[aria-haspopup="true"], .contextmenu-control'  : 'onContextMenu'
+            'click .contextmenu-control':                    'onToggleContextMenu',
+            'keydown .contextmenu-control':                  'onKeydown',
+            'contextmenu .folder.selectable[aria-haspopup="true"], .contextmenu-control': 'onContextMenu'
         },
 
         initialize: function (options) {
@@ -44,7 +45,8 @@ define('io.ox/core/folder/tree',
                 icons: settings.get('features/folderIcons', false),
                 root: 'default0/INBOX',
                 highlight: _.device('!smartphone'),
-                highlightclass: 'visible-selection'
+                highlightclass: 'visible-selection',
+                hideTrashfolder: false
             }, options);
 
             this.all = !!options.all;
@@ -215,17 +217,21 @@ define('io.ox/core/folder/tree',
             // get folder data and redraw
             api.get(id).done(function (data) {
                 var baton = new ext.Baton({ app: app, data: data, view: view, module: module });
-                if (_.device('smartphone')) {
+                ext.point(point).invoke('draw', ul, baton);
+                if (_.device('smartphone')) {
                     ul.append(
-                        $('<li role="presentation">').append(
-                            $('<a href="#" class="io-ox-action-link" data-action="close-menu" role="menuitem" aria-haspopup="true">').append(
-                                $('<i class="fa fa-chevron-down" aria-hidden="true">'),
-                                $('<span class="sr-only">')
-                            )
+                        $('<li>').append(
+                            $('<a href="#" class="io-ox-action-link" data-action="close-menu">').text(gt('Close'))
                         )
                     );
                 }
-                ext.point(point).invoke('draw', ul, baton);
+                if (_.device('smartphone')) ul.find('.divider').remove();
+                // remove unwanted dividers
+                ul.find('.divider').each(function () {
+                    var node = $(this), next = node.next();
+                    // remove leading, subsequent, and tailing dividers
+                    if (node.prev().length === 0 || next.hasClass('divider') || next.length === 0) node.remove();
+                });
                 // check if menu exceeds viewport
                 if (!_.device('smartphone') && ul.offset().top + ul.outerHeight() > $(window).height() - 20) {
                     ul.css({ top: 'auto', bottom: '20px' });

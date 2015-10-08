@@ -11,14 +11,14 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('io.ox/contacts/settings/pane',
-    ['settings!io.ox/contacts',
-     'io.ox/contacts/settings/model',
-     'io.ox/core/extensions',
-     'gettext!io.ox/contacts',
-     'io.ox/backbone/mini-views',
-     'io.ox/core/notifications',
-    ], function (settings, contactsSettingsModel, ext, gt, mini, notifications) {
+define('io.ox/contacts/settings/pane', [
+    'settings!io.ox/contacts',
+    'io.ox/contacts/settings/model',
+    'io.ox/core/extensions',
+    'gettext!io.ox/contacts',
+    'io.ox/backbone/mini-views',
+    'io.ox/core/notifications'
+], function (settings, contactsSettingsModel, ext, gt, mini, notifications) {
 
     'use strict';
 
@@ -26,12 +26,15 @@ define('io.ox/contacts/settings/pane',
         contactsModel =  settings.createModel(contactsSettingsModel),
         reloadMe = [];
 
-    contactsModel.on('change', function (e, path) {
-        contactsModel.saveAndYell().then(
+    contactsModel.on('change', function (model) {
+        var showNotice = _(reloadMe).any(function (attr) {
+            return model.changed[attr];
+        });
+
+        contactsModel.saveAndYell(undefined, showNotice ? { force: true } : {}).then(
+
             function success() {
-                var showNotice = _(reloadMe).any(function (attr) {
-                    return attr === path;
-                });
+
                 if (showNotice) {
                     notifications.yell(
                         'success',
@@ -69,8 +72,8 @@ define('io.ox/contacts/settings/pane',
         draw: function () {
             var preferences = [
                 { label: gt('Language-specific default'), value: 'auto' },
-                { label: gt('First name Last name'), value: 'firstname lastname'},
-                { label: gt('Last name, First name'), value: 'lastname, firstname'}
+                { label: gt('First name Last name'), value: 'firstname lastname' },
+                { label: gt('Last name, First name'), value: 'lastname, firstname' }
 
             ];
             this.append(
@@ -78,7 +81,7 @@ define('io.ox/contacts/settings/pane',
                     $('<legend>').addClass('sectiontitle').append(
                         $('<h2>').text(gt('Display of names'))
                     ),
-                    new mini.RadioView({ list: preferences, name: 'fullNameFormat', model: contactsModel}).render().$el
+                    new mini.RadioView({ list: preferences, name: 'fullNameFormat', model: contactsModel }).render().$el
                 )
             );
         }

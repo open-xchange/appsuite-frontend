@@ -14,12 +14,12 @@
 define('io.ox/core/api/autocomplete', [
     'io.ox/core/http',
     'io.ox/core/capabilities',
-    'io.ox/contacts/util',
     'io.ox/contacts/api',
     'io.ox/core/api/resource',
     'io.ox/core/api/group',
+    'io.ox/core/extensions',
     'settings!io.ox/contacts'
-], function (http, capabilities, util, contactsAPI, resourceAPI, groupAPI, settings) {
+], function (http, capabilities, contactsAPI, resourceAPI, groupAPI, ext, settings) {
 
     'use strict';
 
@@ -27,6 +27,12 @@ define('io.ox/core/api/autocomplete', [
         var that = this;
 
         this.options = $.extend({
+            users: false,
+            contacts: false,
+            distributionlists: false,
+            resources: false,
+            groups: false,
+            msisdn: false,
             split: true,
             limit: 0
         }, options);
@@ -47,9 +53,17 @@ define('io.ox/core/api/autocomplete', [
             this.apis.push({ type: 'group', api: groupAPI });
         }
 
+        // create separate objects for each email value
+        this.fields = this.options.split ? ['email1', 'email2', 'email3'] : ['email1'];
+        //msisdn support: request also msisdn columns (telephone columns; defined in http.js)
+        if (this.options.msisdn && (capabilities.has('msisdn'))) {
+            this.fields = this.fields.concat(contactsAPI.getMapping('msisdn', 'names'));
+        }
+
+        ext.point('io.ox/core/api/autocomplete/customize').invoke('customize', this);
+
         // If contacts auto-collector might have added new contacts
         contactsAPI.on('maybyNewContact', function () {
-            console.log('clear autocomplete cache');
             that.cache = {};
         });
     }
@@ -72,11 +86,6 @@ define('io.ox/core/api/autocomplete', [
                     limit: this.options.limit
                 };
 
-            //msisdn support: request also msisdn columns (telephone columns; defined in http.js)
-            if (this.options.msisdn && (capabilities.has('msisdn'))) {
-                options.extra = ['msisdn'];
-            }
-
             if (query in this.cache) {
                 // cache hit
                 return $.Deferred().resolve(this.cache[query]);
@@ -93,21 +102,18 @@ define('io.ox/core/api/autocomplete', [
                     .then(function () {
                         // unify and process
                         var retData = [], data = _(arguments).toArray();
-
                         _(self.apis).each(function (module, index) {
-                            var type = module.type,
-                                items = _(data[index]).map(function (data) {
-                                    return { data: data, type: type };
+                            var items = _(data[index]).map(function (data) {
+                                    data.type = module.type;
+                                    return data;
                                 });
+                            retData = retData.concat(items);
                             switch (module.type) {
-                            case 'user':
-                            case 'contact':
-                                retData = self.processContactResults(retData.concat(items), query, options);
-                                break;
-                            case 'resource':
-                            case 'group':
-                                retData = retData.concat(items);
-                                break;
+                                case 'custom':
+                                case 'user':
+                                case 'contact':
+                                    retData = self.processContactResults(retData);
+                                    break;
                             }
                         });
                         // add to cache
@@ -123,100 +129,55 @@ define('io.ox/core/api/autocomplete', [
          * process contact results
          * @param  {string} type
          * @param  {array}  data (contains results array)
-         * @param  {string} query
-         * @param  {object} options (request options)
          * @return { array }
          */
-        processContactResults: function (data, query, options) {
-
+        processContactResults: function (data) {
             var tmp = [], hash = {}, self = this;
 
             // improve response
             // 1/2: resolve email addresses
             _(data).each(function (obj) {
-                if (obj.data.mark_as_distributionlist) {
-                    // distribution list
-                    obj.data.type = obj.type;
-                    tmp.push({
-                        type: obj.type,
-                        display_name: obj.data.display_name || '',
-                        email: 'Distribution List',
-                        data: obj.data
-                    });
+                if (obj.mark_as_distributionlist) {
+                    // filter distribution lists
+                    if (self.options.distributionlists) tmp.push(obj);
                 } else {
-                    // create separate objects for each email value
-                    var fields = self.options.split ? ['email1', 'email2', 'email3'] : ['email1'];
-                    self.processContactItem(tmp, obj, 'email', fields);
-                    //msisdn support: create separate objects for each phone number
-                    if (options.extra && options.extra.length) {
-                        //get requested extra columns and process
-                        _.each(options.extra, function (id) {
-                            self.processContactItem(tmp, obj, 'phone', contactsAPI.getMapping(id, 'names'));
-                        });
-                    }
+                    //process each field
+                    _.each(self.fields, function (field) {
+                        if (obj[field]) {
+                            // magic for users beyond global adress book
+                            if (obj.folder_id !== 6 && obj.type === 'user') return;
+                            // remove users from contact api results
+                            if (self.options.users && obj.folder_id === 6 && obj.type === 'contact') return;
+                            // convert user from contact api to real user
+                            if (obj.type === 'user' && obj.internal_userid) {
+                                obj.contact_id = obj.id;
+                                obj.id = obj.internal_userid;
+                                delete obj.internal_userid;
+                            }
+
+                            var clone = _.extend({}, obj);
+                            //store target value
+                            clone.field = field;
+                            tmp.push(clone);
+                        }
+                    });
                 }
             });
 
-            //distinguish email and phone objects
-            function getTarget(obj) {
-                return obj.email !== '' ? obj.email : obj.phone;
+            // check hash for double entries
+            function inHash(obj) {
+                return hash[obj] ? false : (hash[obj] = true);
             }
 
-            // 2/2: filter distribution lists & remove email duplicates
+            // 2/2: remove email duplicates
             tmp = _(tmp).filter(function (obj) {
-                if (obj.data.mark_as_distributionlist === true) {
-                    if (self.options.distributionlists === false) {
-                        return false;
-                    }
-                    return String(obj.display_name || '').toLowerCase().indexOf(query) > -1;
-                } else {
-                    return hash[getTarget(obj)] ? false : (hash[getTarget(obj)] = true);
+                if (obj.mark_as_distributionlist) {
+                    return inHash(_.cid(obj));
                 }
+                return inHash(obj[obj.field]);
             });
             hash = null;
             return tmp;
-        },
-
-        /**
-         * process contact items
-         * @param  {array} list
-         * @param  {object} obj
-         * @param  {string} target (target property)
-         * @param  {string|array} fields
-         * @return { undefined }
-         */
-        processContactItem: function (list, obj, target, fields) {
-            //ensure array
-            var fields = [].concat(fields), ids;
-            //process each field
-            _.each(fields, function (field) {
-                var data = obj.data;
-                if (data[field]) {
-
-                    // magic for users beyond global adress book
-                    if (data.folder_id !== 6 && obj.type === 'user') return;
-
-                    //store target value
-                    ids = {};
-                    ids[target] = data[field].toLowerCase();
-
-                    data.field = field;
-                    data.type = obj.type;
-
-                    list.push(
-                        $.extend({
-                            type: obj.type,
-                            first_name: data.first_name || '',
-                            last_name: data.last_name || '',
-                            display_name: util.getMailFullName(data),
-                            data: _(data).clone(),
-                            field: field,
-                            email: '',
-                            phone: ''
-                        }, ids)
-                    );
-                }
-            });
         }
     };
 

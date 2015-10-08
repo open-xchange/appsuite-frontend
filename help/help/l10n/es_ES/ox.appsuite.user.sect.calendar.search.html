@@ -4,9 +4,9 @@
 <title>7.7. Búsqueda de citas</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Software colaborativo">
 <link rel="up" href="ox.appsuite.user.chap.calendar.html" title="Capítulo 7. Calendario">
-<link rel="prev" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.7. Edición de varias citas de una vez">
+<link rel="prev" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.8. Edición de varias citas de una vez">
 <link rel="next" href="ox.appsuite.user.sect.calendar.share.html" title="7.8. Citas en equipos">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Aviso Legal">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
@@ -37,10 +37,24 @@
 <a name="ox.appsuite.user.concept.calendar.search"></a><p>Para buscar citas concretas puede usar los siguientes criterios de búsqueda:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>términos de búsqueda por asunto, descripción, ubicación, nombres de adjuntos</p></li>
-<li class="listitem"><p>carpetas privadas, públicas o compartidas</p></li>
-<li class="listitem"><p>cita individual o recurrente</p></li>
-<li class="listitem"><p>citas futuras o pasadas</p></li>
+<li class="listitem">
+<p>Términos de búsqueda de una rango de tiempo. Busca citas que tienen lugar en un rango de tiempo concreto. Se define un rango de tiempo válido con los siguientes detalles.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>Las palabras clave <span class="guilabel"><strong>hoy</strong></span>, <span class="guilabel"><strong>ayer</strong></span>, <span class="guilabel"><strong>última semana</strong></span>, <span class="guilabel"><strong>último mes</strong></span>, <span class="guilabel"><strong>último año</strong></span></p></li>
+<li class="listitem"><p>Las palabras clave para dichos intervalos de tiempo: <span class="guilabel"><strong>último 7 días</strong></span>, <span class="guilabel"><strong>último 30 días</strong></span>, <span class="guilabel"><strong>últimos 365 días</strong></span></p></li>
+<li class="listitem"><p>Un día de la semana, por ejemplo <span class="guilabel"><strong>Lunes</strong></span></p></li>
+<li class="listitem"><p>Un mes concreto, por ejemplo <span class="guilabel"><strong>Julio</strong></span></p></li>
+<li class="listitem"><p>Una fecha de cuatro dígitos, por ejemplo <span class="guilabel"><strong>2015</strong></span></p></li>
+<li class="listitem"><p>Una fecha, por ejemplo <span class="guilabel"><strong>31/1/2015</strong></span></p></li>
+<li class="listitem"><p>Un intervalo de fechas, por ejemplo <span class="guilabel"><strong>1/12/2014 - 31/1/2015</strong></span></p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="listitem"><p>Carpetas en las que buscar</p></li>
 <li class="listitem"><p>estado de confirmación de la cita</p></li>
+<li class="listitem"><p>Tipo: todas, periódicas, citas individuales</p></li>
+<li class="listitem"><p>Tipo de carpeta: todas, privada, pública, compartida</p></li>
 </ul></div>
 <p>
     </p>
@@ -48,44 +62,43 @@
 <div class="task">
 <a name="ox.appsuite.user.task.calendar.search"></a><p class="title">Cómo buscar citas:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Indique un término de búsqueda en el campo de la barra de búsqueda. Se abre el menú de búsqueda.</p></li>
+<li class="step"><p>Pulse en el icono <span class="guibutton"><strong>Comenzar búsqueda</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> o en el campo de la barra de búsqueda. Se muestran un botón de carpeta y el botón <span class="guibutton"><strong>Opciones</strong></span> en la barra de búsqueda. El botón de carpeta indica las carpetas en las que buscar.</p></li>
 <li class="step">
+<p>Para indicar las carpetas en las que buscar, pulse el icono de carpeta. Seleccione una carpeta.</p>
+<p>Si selecciona <span class="guibutton"><strong>Todas las carpetas</strong></span>, se buscará en todas las carpetas y subcarpetas privadas, públicas y compartidas. Si selecciona una carpeta o subcarpeta específica, sólo se busca en dicha carpeta, pero no en sus subcarpetas.</p>
+</li>
+<li class="step">
+<p>Indique un término de búsqueda en el campo. Se abre el menú de búsqueda.</p>
 <p>Use uno de los siguientes métodos:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p>Para buscar en el asunto o en la descripción, pulse en el término de búsqueda en el menú de búsqueda. También puede pulsar Intro o el icono <span class="guibutton"><strong>Buscar</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span>de la barra de búsqueda. </p>
+<p>Para buscar citas dentro de un rango de tiempo concreto, utilice un rango de tiempo válido como término de búsqueda. En cuanto se detecte un rango de tiempo válido en su entrada de datos, dicho rango de tiempo se mostrará en el menú de búsqueda. Pulse en el rango de tiempo del menú de búsqueda. También puede pulsar Intro.</p>
+<p>Para buscar en el asunto o en la descripción, pulse en el término de búsqueda del menú de búsqueda. También puede pulsar Intro.</p>
 <p>Para buscar sólo en el asunto, pulse <span class="guibutton"><strong>en el asunto</strong></span> en la barra de búsqueda.</p>
 <p>En consecuencia, se puede limitar la búsqueda a la descripción, ubicación o nombre del adjunto.</p>
 </li></ul></div>
 <p>
           </p>
-<p><span class="phrase"><strong>Resultado:</strong></span> Los resultados de la búsqueda aparecen en la lista que se muestra en el área de visualización. El criterio de búsqueda utilizado se muestra debajo de la ventana de búsqueda.</p>
-</li>
-<li class="step">
-<p>Puede hacer ajustes adicionales al resultado de la búsqueda:</p>
+<p>Resultado:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>Para mostrar todos los criterios de búsqueda, pulse en <span class="guibutton"><strong>Mostrar filtros avanzados</strong></span>.</p>
-<p>Para ajustar un criterio, pulse el icono <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span>que hay junto al criterio de búsqueda. Seleccione un elemento del menú. Puede utilizar los siguientes criterios de búsqueda:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>Puede usar el desplegable <span class="guilabel"><strong>Carpeta</strong></span> para buscar en una carpeta concreta.</p>
-<p>Si selecciona <span class="guibutton"><strong>Todas las carpetas</strong></span>, se buscará en todas las carpetas y subcarpetas. Si selecciona una carpeta o subcarpeta específica, sólo se busca en dicha carpeta, pero no en sus subcarpetas.</p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>El desplegable <span class="guilabel"><strong>Tipo de carpeta</strong></span> permite limitar la búsqueda a carpetas privadas, públicas o compartidas.</p></li>
-<li class="listitem" style="list-style-type: none"><p>El desplegable <span class="guilabel"><strong>Tipo</strong></span> permite buscar citas individuales o recurrentes.</p></li>
-<li class="listitem" style="list-style-type: none"><p>El desplegable <span class="guilabel"><strong>Fecha</strong></span> permite buscar citas futuras o pasadas.</p></li>
-<li class="listitem" style="list-style-type: none"><p>El desplegable <span class="guilabel"><strong>Mi estado</strong></span> permite buscar citas con un determinado estado de confirmación.</p></li>
-</ul></div>
-<p>
-                </p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>Para mejorar su búsqueda en la lista de objetos encontrados, inicie una búsqueda adicional.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Para eliminar un criterio de búsqueda, pulse el icono <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>. Si elimina todos los criterios de búsqueda, ésta terminará.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Los resultados de la búsqueda se muestran en la lista que se muestra en el área de visualización. </p></li>
+<li class="listitem" style="list-style-type: none"><p>El término de búsqueda se muestra en el campo.</p></li>
 </ul></div>
 <p>
           </p>
 </li>
-<li class="step"><p>Para finalizar la búsqueda, pulse en <span class="guibutton"><strong>Cerrar búsqueda</strong></span>.</p></li>
+<li class="step">
+<p>Tiene las siguientes opciones para ajustar el resultado de la búsqueda:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Para afinar el resultado de la búsqueda, indique más términos de búsqueda: Para eliminar un término de búsqueda pulse en el icono <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span> que hay junto al término de búsqueda. </p></li>
+<li class="listitem" style="list-style-type: none"><p>Para buscar en otra carpeta, pulse en el botón de carpeta. Seleccione una carpeta.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Para limitar la búsqueda a carpetas privadas, públicas o compartidas, pulse en <span class="guibutton"><strong>Opciones</strong></span>. Seleccione un tipo de carpeta.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Para limitar la búsqueda a citas con un estado de confirmación determinado, pulse en <span class="guibutton"><strong>Opciones</strong></span>. Seleccione un estado.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Para limitar la búsqueda a citas individuales o periódicas, pulse en <span class="guibutton"><strong>Opciones</strong></span>.Seleccione un tipo.</p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="step"><p>Para terminar la búsqueda, pulse en el icono <span class="guibutton"><strong>Cancelar búsqueda</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>.</p></li>
 </ol></div>
 </div>
 </div>

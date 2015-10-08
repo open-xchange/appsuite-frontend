@@ -11,18 +11,18 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/contacts/edit/main',
-    ['io.ox/contacts/edit/view-form',
-     'io.ox/contacts/model',
-     'gettext!io.ox/contacts',
-     'io.ox/core/extensions',
-     'io.ox/contacts/util',
-     'io.ox/core/extPatterns/dnd',
-     'io.ox/core/capabilities',
-     'io.ox/core/notifications',
-     'io.ox/core/util',
-     'less!io.ox/contacts/edit/style'
-    ], function (view, model, gt, ext, util, dnd, capabilities, notifications, coreUtil) {
+define('io.ox/contacts/edit/main', [
+    'io.ox/contacts/edit/view-form',
+    'io.ox/contacts/model',
+    'gettext!io.ox/contacts',
+    'io.ox/core/extensions',
+    'io.ox/contacts/util',
+    'io.ox/core/extPatterns/dnd',
+    'io.ox/core/capabilities',
+    'io.ox/core/notifications',
+    'io.ox/core/util',
+    'less!io.ox/contacts/edit/style'
+], function (view, model, gt, ext, util, dnd, capabilities, notifications, coreUtil) {
 
     'use strict';
 
@@ -53,7 +53,10 @@ define('io.ox/contacts/edit/main',
 
             var cont = function (data) {
 
-                app.cid = 'io.ox/contacts/contact:edit.' + _.cid(data);
+                // if edit mode
+                if (data.id) {
+                    app.cid = 'io.ox/contacts/contact:edit.' + _.cid(data);
+                }
 
                 win.show(function () {
 
@@ -64,9 +67,9 @@ define('io.ox/contacts/edit/main',
                         app.setTitle(appTitle || gt('Create contact'));
                         win.setTitle(contact.has('id') ? gt('Edit contact') : gt('Create contact'));
                         app.contact = contact;
-                        editView = new view.ContactEditView({ model: contact });
+                        editView = new view.ContactEditView({ model: contact, app: app });
                         container.append(
-                            editView.render().$el.addClass('default-content-padding container')
+                            editView.render().$el
                         );
                         // no autofocus on smartphone and for iOS in special (see bug #36921)
                         if (_.device('!smartphone && !iOS')) {
@@ -167,12 +170,9 @@ define('io.ox/contacts/edit/main',
                                 //set url parameters
                                 app.setState({ folder: contact.get('folder_id'), id: contact.get('id') });
                             } else {
-                                app.setState({ folder: contact.get('folder_id'), id: null});
+                                app.setState({ folder: contact.get('folder_id'), id: null });
                             }
                         });
-                        if (_.device('small')) {
-                            ext.point('io.ox/contacts/edit/bottomToolbar').invoke('draw', app, new ext.Baton(contact));
-                        }
 
                         ext.point('io.ox/contacts/edit/main/model').invoke('customizeModel', contact, contact);
 
@@ -239,7 +239,7 @@ define('io.ox/contacts/edit/main',
                                      : { folder: data.folder_id });
                 cont(data);
             } else {
-                cont({folder_id: app.getState().folder, id: app.getState().id});
+                cont({ folder_id: app.getState().folder, id: app.getState().id });
             }
 
             return def;
@@ -254,8 +254,8 @@ define('io.ox/contacts/edit/main',
                         .text(gt('Do you really want to discard your changes?'))
                         //#. "Discard changes" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user
-                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', {'tabIndex': '1'})
-                        .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
+                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete',  { 'tabIndex': '1' })
+                        .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
@@ -296,6 +296,10 @@ define('io.ox/contacts/edit/main',
             }
             editView.trigger('restore');
             return $.when();
+        };
+
+        app.getContextualHelp = function () {
+            return 'ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.gui.create';
         };
 
         ext.point('io.ox/contacts/edit/main/model').extend({

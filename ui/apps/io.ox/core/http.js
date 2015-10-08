@@ -18,268 +18,280 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
     // default columns for each module
     var idMapping = {
-        'common' : {
-            '1' : 'id',
-            '2' : 'created_by',
-            '3' : 'modified_by',
-            '4' : 'creation_date',
-            '5' : 'last_modified',
-            '20' : 'folder_id',
-            '100' : 'categories',
-            '101' : 'private_flag',
-            '102' : 'color_label',
-            '104' : 'number_of_attachments'
+        'common': {
+            '1': 'id',
+            '2': 'created_by',
+            '3': 'modified_by',
+            '4': 'creation_date',
+            '5': 'last_modified',
+            '20': 'folder_id',
+            '100': 'categories',
+            '101': 'private_flag',
+            '102': 'color_label',
+            '104': 'number_of_attachments'
         },
-        'mail' : {
-            '102' : 'color_label',
-            '600' : 'id',
-            '601' : 'folder_id',
-            '602' : 'attachment',
-            '603' : 'from',
-            '604' : 'to',
-            '605' : 'cc',
-            '606' : 'bcc',
-            '607' : 'subject',
-            '608' : 'size',
-            '609' : 'sent_date',
-            '610' : 'received_date',
-            '611' : 'flags',
-            '612' : 'level',
-            '613' : 'disp_notification_to',
-            '614' : 'priority',
-            '615' : 'msgref',
-            '651' : 'flag_seen',
-            '652' : 'account_name'
+        'mail': {
+            '102': 'color_label',
+            '600': 'id',
+            '601': 'folder_id',
+            '602': 'attachment',
+            '603': 'from',
+            '604': 'to',
+            '605': 'cc',
+            '606': 'bcc',
+            '607': 'subject',
+            '608': 'size',
+            '609': 'sent_date',
+            '610': 'received_date',
+            '611': 'flags',
+            '612': 'level',
+            '613': 'disp_notification_to',
+            '614': 'priority',
+            '615': 'msgref',
+            '651': 'flag_seen',
+            '652': 'account_name',
+            '654': 'original_folder_id',
+            '655': 'original_id',
+            '656': 'content_type'
         },
-        'contacts' : {
-            '500' : 'display_name',
-            '501' : 'first_name',
-            '502' : 'last_name',
-            '503' : 'second_name',
-            '504' : 'suffix',
-            '505' : 'title',
-            '506' : 'street_home',
-            '507' : 'postal_code_home',
-            '508' : 'city_home',
-            '509' : 'state_home',
-            '510' : 'country_home',
-            '511' : 'birthday',
-            '512' : 'marital_status',
-            '513' : 'number_of_children',
-            '514' : 'profession',
-            '515' : 'nickname',
-            '516' : 'spouse_name',
-            '517' : 'anniversary',
-            '518' : 'note',
-            '519' : 'department',
-            '520' : 'position',
-            '521' : 'employee_type',
-            '522' : 'room_number',
-            '523' : 'street_business',
-            '524' : 'internal_userid',
-            '525' : 'postal_code_business',
-            '526' : 'city_business',
-            '527' : 'state_business',
-            '528' : 'country_business',
-            '529' : 'number_of_employees',
-            '530' : 'sales_volume',
-            '531' : 'tax_id',
-            '532' : 'commercial_register',
-            '533' : 'branches',
-            '534' : 'business_category',
-            '535' : 'info',
-            '536' : 'manager_name',
-            '537' : 'assistant_name',
-            '538' : 'street_other',
-            '539' : 'city_other',
-            '540' : 'postal_code_other',
-            '541' : 'country_other',
-            '542' : 'telephone_business1',
-            '543' : 'telephone_business2',
-            '544' : 'fax_business',
-            '545' : 'telephone_callback',
-            '546' : 'telephone_car',
-            '547' : 'telephone_company',
-            '548' : 'telephone_home1',
-            '549' : 'telephone_home2',
-            '550' : 'fax_home',
-            '551' : 'cellular_telephone1',
-            '552' : 'cellular_telephone2',
-            '553' : 'telephone_other',
-            '554' : 'fax_other',
-            '555' : 'email1',
-            '556' : 'email2',
-            '557' : 'email3',
-            '558' : 'url',
-            '559' : 'telephone_isdn',
-            '560' : 'telephone_pager',
-            '561' : 'telephone_primary',
-            '562' : 'telephone_radio',
-            '563' : 'telephone_telex',
-            '564' : 'telephone_ttytdd',
-            '565' : 'instant_messenger1',
-            '566' : 'instant_messenger2',
-            '567' : 'telephone_ip',
-            '568' : 'telephone_assistant',
-            '569' : 'company',
-            //'570' : 'image1',
-            '571' : 'userfield01',
-            '572' : 'userfield02',
-            '573' : 'userfield03',
-            '574' : 'userfield04',
-            '575' : 'userfield05',
-            '576' : 'userfield06',
-            '577' : 'userfield07',
-            '578' : 'userfield08',
-            '579' : 'userfield09',
-            '580' : 'userfield10',
-            '581' : 'userfield11',
-            '582' : 'userfield12',
-            '583' : 'userfield13',
-            '584' : 'userfield14',
-            '585' : 'userfield15',
-            '586' : 'userfield16',
-            '587' : 'userfield17',
-            '588' : 'userfield18',
-            '589' : 'userfield19',
-            '590' : 'userfield20',
-            '592' : 'distribution_list',
-            '594' : 'number_of_distribution_list',
-            '596' : 'contains_image1',
-            '597' : 'image_last_modified',
-            '598' : 'state_other',
-            '599' : 'file_as',
-            '104' : 'number_of_attachments',
-            '601' : 'image1_content_type',
-            '602' : 'mark_as_distributionlist',
-            '605' : 'default_address',
-            '606' : 'image1_url',
-            '607' : 'sort_name',
-            '610' : 'yomiFirstName',
-            '611' : 'yomiLastName',
-            '612' : 'yomiCompany'
+        'contacts': {
+            '500': 'display_name',
+            '501': 'first_name',
+            '502': 'last_name',
+            '503': 'second_name',
+            '504': 'suffix',
+            '505': 'title',
+            '506': 'street_home',
+            '507': 'postal_code_home',
+            '508': 'city_home',
+            '509': 'state_home',
+            '510': 'country_home',
+            '511': 'birthday',
+            '512': 'marital_status',
+            '513': 'number_of_children',
+            '514': 'profession',
+            '515': 'nickname',
+            '516': 'spouse_name',
+            '517': 'anniversary',
+            '518': 'note',
+            '519': 'department',
+            '520': 'position',
+            '521': 'employee_type',
+            '522': 'room_number',
+            '523': 'street_business',
+            '524': 'internal_userid', // user_id
+            '525': 'postal_code_business',
+            '526': 'city_business',
+            '527': 'state_business',
+            '528': 'country_business',
+            '529': 'number_of_employees',
+            '530': 'sales_volume',
+            '531': 'tax_id',
+            '532': 'commercial_register',
+            '533': 'branches',
+            '534': 'business_category',
+            '535': 'info',
+            '536': 'manager_name',
+            '537': 'assistant_name',
+            '538': 'street_other',
+            '539': 'city_other',
+            '540': 'postal_code_other',
+            '541': 'country_other',
+            '542': 'telephone_business1',
+            '543': 'telephone_business2',
+            '544': 'fax_business',
+            '545': 'telephone_callback',
+            '546': 'telephone_car',
+            '547': 'telephone_company',
+            '548': 'telephone_home1',
+            '549': 'telephone_home2',
+            '550': 'fax_home',
+            '551': 'cellular_telephone1',
+            '552': 'cellular_telephone2',
+            '553': 'telephone_other',
+            '554': 'fax_other',
+            '555': 'email1',
+            '556': 'email2',
+            '557': 'email3',
+            '558': 'url',
+            '559': 'telephone_isdn',
+            '560': 'telephone_pager',
+            '561': 'telephone_primary',
+            '562': 'telephone_radio',
+            '563': 'telephone_telex',
+            '564': 'telephone_ttytdd',
+            '565': 'instant_messenger1',
+            '566': 'instant_messenger2',
+            '567': 'telephone_ip',
+            '568': 'telephone_assistant',
+            '569': 'company',
+            //'570': 'image1',
+            '571': 'userfield01',
+            '572': 'userfield02',
+            '573': 'userfield03',
+            '574': 'userfield04',
+            '575': 'userfield05',
+            '576': 'userfield06',
+            '577': 'userfield07',
+            '578': 'userfield08',
+            '579': 'userfield09',
+            '580': 'userfield10',
+            '581': 'userfield11',
+            '582': 'userfield12',
+            '583': 'userfield13',
+            '584': 'userfield14',
+            '585': 'userfield15',
+            '586': 'userfield16',
+            '587': 'userfield17',
+            '588': 'userfield18',
+            '589': 'userfield19',
+            '590': 'userfield20',
+            '592': 'distribution_list',
+            '594': 'number_of_distribution_list',
+            '596': 'contains_image1',
+            '597': 'image_last_modified',
+            '598': 'state_other',
+            '599': 'file_as',
+            '104': 'number_of_attachments',
+            '601': 'image1_content_type',
+            '602': 'mark_as_distributionlist',
+            '605': 'default_address',
+            '606': 'image1_url',
+            '607': 'sort_name',
+            '610': 'yomiFirstName',
+            '611': 'yomiLastName',
+            '612': 'yomiCompany'
         },
-        'calendar' : {
-            '200' : 'title',
-            '201' : 'start_date',
-            '202' : 'end_date',
-            '203' : 'note',
-            '204' : 'alarm',
-            '206' : 'recurrence_id',
-            '207' : 'recurrence_position',
-            '208' : 'recurrence_date_position',
-            '209' : 'recurrence_type',
-            '210' : 'change_exceptions',
-            '211' : 'delete_exceptions',
-            '212' : 'days',
-            '213' : 'day_in_month',
-            '214' : 'month',
-            '215' : 'interval',
-            '216' : 'until',
-            '217' : 'notification',
-            '220' : 'participants',
-            '221' : 'users',
-            '222' : 'occurrences',
-            '223' : 'uid',
-            '224' : 'organizer',
-            '225' : 'sequence',
-            '226' : 'confirmations',
-            '227' : 'organizerId',
-            '228' : 'principal',
-            '229' : 'principalId',
-            '400' : 'location',
-            '401' : 'full_time',
-            '402' : 'shown_as',
-            '408' : 'timezone',
-            '410' : 'recurrence_start'
+        'calendar': {
+            '200': 'title',
+            '201': 'start_date',
+            '202': 'end_date',
+            '203': 'note',
+            '204': 'alarm',
+            '206': 'recurrence_id',
+            '207': 'recurrence_position',
+            '208': 'recurrence_date_position',
+            '209': 'recurrence_type',
+            '210': 'change_exceptions',
+            '211': 'delete_exceptions',
+            '212': 'days',
+            '213': 'day_in_month',
+            '214': 'month',
+            '215': 'interval',
+            '216': 'until',
+            '217': 'notification',
+            '220': 'participants',
+            '221': 'users',
+            '222': 'occurrences',
+            '223': 'uid',
+            '224': 'organizer',
+            '225': 'sequence',
+            '226': 'confirmations',
+            '227': 'organizerId',
+            '228': 'principal',
+            '229': 'principalId',
+            '400': 'location',
+            '401': 'full_time',
+            '402': 'shown_as',
+            '408': 'timezone',
+            '410': 'recurrence_start'
         },
-        'files' : {
-            '23' : 'meta',
-            '700' : 'title',
-            '701' : 'url',
-            '702' : 'filename',
-            '703' : 'file_mimetype',
-            '704' : 'file_size',
-            '705' : 'version',
-            '706' : 'description',
-            '707' : 'locked_until',
-            '708' : 'file_md5sum',
-            '709' : 'version_comment',
-            '710' : 'current_version',
-            '711' : 'number_of_versions'
+        'files': {
+            '23': 'meta',
+            '108': 'object_permissions',
+            '109': 'shareable',
+            '700': 'title',
+            '701': 'url',
+            '702': 'filename',
+            '703': 'file_mimetype',
+            '704': 'file_size',
+            '705': 'version',
+            '706': 'description',
+            '707': 'locked_until',
+            '708': 'file_md5sum',
+            '709': 'version_comment',
+            '710': 'current_version',
+            '711': 'number_of_versions',
+            '7010': 'com.openexchange.share.extendedObjectPermissions'
         },
-        'tasks' : {
-            '200' : 'title',
-            '201' : 'start_date',
-            '202' : 'end_date',
-            '203' : 'note',
-            '204' : 'alarm',
-            '209' : 'recurrence_type',
-            '212' : 'days',
-            '213' : 'day_in_month',
-            '214' : 'month',
-            '215' : 'internal',
-            '216' : 'until',
-            '220' : 'participants',
-            '221' : 'users',
-            '300' : 'status',
-            '301' : 'percent_completed',
-            '302' : 'actual_costs',
-            '303' : 'actual_duration',
-            '305' : 'billing_information',
-            '307' : 'target_costs',
-            '308' : 'target_duration',
-            '309' : 'priority',
-            '312' : 'currency',
-            '313' : 'trip_meter',
-            '314' : 'companies',
-            '315' : 'date_completed'
+        'tasks': {
+            '200': 'title',
+            '201': 'start_date',
+            '202': 'end_date',
+            '203': 'note',
+            '204': 'alarm',
+            '209': 'recurrence_type',
+            '212': 'days',
+            '213': 'day_in_month',
+            '214': 'month',
+            '215': 'internal',
+            '216': 'until',
+            '220': 'participants',
+            '221': 'users',
+            '300': 'status',
+            '301': 'percent_completed',
+            '302': 'actual_costs',
+            '303': 'actual_duration',
+            '305': 'billing_information',
+            '307': 'target_costs',
+            '308': 'target_duration',
+            '309': 'priority',
+            '312': 'currency',
+            '313': 'trip_meter',
+            '314': 'companies',
+            '315': 'date_completed',
+            '316': 'start_time',
+            '317': 'end_time',
+            '401': 'full_time'
         },
-        'folders' : {
-            '1' : 'id',
-            '2' : 'created_by',
-            '3' : 'modified_by',
-            '4' : 'creation_date',
-            '5' : 'last_modified',
-            '6' : 'last_modified_utc',
-            '20' : 'folder_id',
-            '23' : 'meta',
-            '300' : 'title',
-            '301' : 'module',
-            '302' : 'type',
-            '304' : 'subfolders',
-            '305' : 'own_rights',
-            '306' : 'permissions',
-            '307' : 'summary',
-            '308' : 'standard_folder',
-            '309' : 'total',
-            '310' : 'new',
-            '311' : 'unread',
-            '312' : 'deleted',
-            '313' : 'capabilities',
-            '314' : 'subscribed',
-            '315' : 'subscr_subflds',
-            '316' : 'standard_folder_type',
-            '317' : 'supported_capabilities',
-            '3010' : 'com.openexchange.publish.publicationFlag',
-            '3020' : 'com.openexchange.subscribe.subscriptionFlag',
-            '3030' : 'com.openexchange.folderstorage.displayName',
+        'folders': {
+            '1': 'id',
+            '2': 'created_by',
+            '3': 'modified_by',
+            '4': 'creation_date',
+            '5': 'last_modified',
+            '6': 'last_modified_utc',
+            '20': 'folder_id',
+            '23': 'meta',
+            '300': 'title',
+            '301': 'module',
+            '302': 'type',
+            '304': 'subfolders',
+            '305': 'own_rights',
+            '306': 'permissions',
+            '307': 'summary',
+            '308': 'standard_folder',
+            '309': 'total',
+            '310': 'new',
+            '311': 'unread',
+            '312': 'deleted',
+            '313': 'capabilities',
+            '314': 'subscribed',
+            '315': 'subscr_subflds',
+            '316': 'standard_folder_type',
+            '317': 'supported_capabilities',
+            '318': 'account_id',
+            '3010': 'com.openexchange.publish.publicationFlag',
+            '3020': 'com.openexchange.subscribe.subscriptionFlag',
+            '3030': 'com.openexchange.folderstorage.displayName',
             // 3040 exists; around EAS; no need for it
-            '3050' : 'com.openexchange.imap.extAccount'
+            '3050': 'com.openexchange.imap.extAccount',
+            '3060': 'com.openexchange.share.extendedPermissions'
         },
         'user': {
-            '610' : 'aliases',
-            '611' : 'timezone',
-            '612' : 'locale',
-            '613' : 'groups',
-            '614' : 'contact_id',
-            '615' : 'login_info'
+            '610': 'aliases',
+            '611': 'timezone',
+            '612': 'locale',
+            '613': 'groups',
+            '614': 'contact_id',
+            '615': 'login_info',
+            '616': 'guest_created_by'
         },
         'group': {
-            '1'   : 'id',
-            '700' : 'name',
-            '701' : 'display_name',
-            '702' : 'members'
+            '1':   'id',
+            '700': 'name',
+            '701': 'display_name',
+            '702': 'members'
         },
         'resource': {
         },
@@ -361,7 +373,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             'module': 'module',
             'formDescription': 'formDescription'
         }
-    };
+    },
+    // extended permissions
+    idMappingExcludes = ['3060', '7010'];
 
     // extend with commons (not all modules use common columns, e.g. folders)
     $.extend(idMapping.contacts, idMapping.common);
@@ -382,6 +396,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
     var isUnreachable = function (xhr) {
         if (!xhr) {
+            return false;
+        }
+        // server is still reachable since abort is triggered by the ui
+        if (xhr.statusText === 'abort') {
             return false;
         }
         if (xhr.status === 0) {
@@ -462,7 +480,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
      * get all columns of a module
      * @param  {string} module (name)
      * @param  {boolean} join  (join array with comma separator)
-     * @return {arrray|string} ids
+     * @return { arrray|string} ids
      */
     var getAllColumns = function (module, join) {
         // get ids
@@ -470,7 +488,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         // flatten this array
         var tmp = [], column = '';
         for (column in ids) {
-            tmp.push(column);
+            if ( idMappingExcludes.indexOf(column) === -1 )
+                tmp.push(column);
         }
         tmp.sort(function (a, b) {
             return a - b;
@@ -544,15 +563,13 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         if (type === 'GET' || type === 'POST') {
             // GET & POST
             o.data = o.params;
-        }
-        else if (type === 'PUT' || type === 'DELETE') {
+        } else if (type === 'PUT' || type === 'DELETE') {
             // PUT & DELETE
             o._url += '?' + _.serialize(o.params);
             o.original = o.data;
             o.data = typeof o.data !== 'string' ? JSON.stringify(o.data) : o.data;
             o.contentType = 'text/javascript; charset=UTF-8';
-        }
-        else if (type === 'UPLOAD') {
+        } else if (type === 'UPLOAD') {
             // POST with FormData object
             o._url += '?' + _.serialize(o.params);
             o.contentType = false;
@@ -609,6 +626,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 deferred.reject(response);
                 return;
             }
+        }
+
+        if (isWarning) {
+            ox.trigger('http:warning', response);
         }
 
         // success
@@ -751,7 +772,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
                 if (isUnreachable(xhr)) {
                     that.trigger('unreachable');
-                    ox.trigger('connection:down');
+                    ox.trigger('connection:down', error, r.o);
                 } else {
                     that.trigger('reachable');
                     ox.trigger('connection:online connection:up');
@@ -762,55 +783,57 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
             // TODO: remove backend fix
             ajax.then(function (response) {
-                    if (fixPost) {
-                        // Extract the JSON text
-                        var matches = /\((\{.*?\})\)/.exec(response);
-                        return matches && matches[1] ? JSON.parse(matches[1]) : JSON.parse(response);
-                    } else {
-                        return response;
-                    }
-                })
-                .done(function (response) {
+                if (fixPost) {
+                    // Extract the JSON text
+                    var matches = /\((\{.*?\})\)/.exec(response);
+                    return matches && matches[1] ? JSON.parse(matches[1]) : JSON.parse(response);
+                } else {
+                    return response;
+                }
+            })
+            .done(function (response) {
 
-                    that.trigger('reachable');
-                    ox.trigger('connection:online connection:up');
+                that.trigger('reachable');
+                ox.trigger('connection:online connection:up');
 
-                    //write response to console
-                    if (ox.debug)
-                        extract(r.o, response);
+                //write response to console
+                if (ox.debug)
+                    extract(r.o, response);
 
-                    // slow?
-                    var took = _.now() - t0;
-                    log.took(took);
-                    if (took > log.SLOW) {
-                        log.add({ error: 'Took: ' + (Math.round(took / 100) / 10) + 's', status: 200, took: took }, r.o);
-                    }
-                    // trigger event first since HTTP layer finishes work
-                    that.trigger('stop done', r.xhr);
-                    // process response
-                    if (r.o.processData) {
-                        processResponse(r.def, response, r.o, r.o.type);
-                    } else if (r.xhr.dataType === 'json' && response.error !== undefined) {
-                        // error handling if JSON (e.g. for UPLOAD)
-                        r.def.reject(response);
-                    } else if (_.isArray(response.data)) {
-                        // Skip Warnings (category: 13)
-                        response.data = _(response.data).map(function (o) {
-                            if (o.category !== 13) {
-                                return o;
-                            }
-                        });
-                        r.def.resolve(response);
-                    } else {
-                        r.def.resolve(response);
-                    }
-                    r = null;
-                })
-                .fail(function (xhr, textStatus, errorThrown) {
-                    that.trigger('stop fail', r.xhr);
-                    r.def.reject({ error: xhr.status + ' ' + (errorThrown || 'An unknown error occurred') }, xhr);
-                    r = null;
-                });
+                // slow?
+                var took = _.now() - t0;
+                log.took(took);
+                if (took > log.SLOW) {
+                    log.add({ error: 'Took: ' + (Math.round(took / 100) / 10) + 's', status: 200, took: took }, r.o);
+                }
+                // trigger event first since HTTP layer finishes work
+                that.trigger('stop done', r.xhr);
+                // process response
+                if (r.o.processData) {
+                    processResponse(r.def, response, r.o, r.o.type);
+                } else if (r.xhr.dataType === 'json' && response.error !== undefined) {
+                    // error handling if JSON (e.g. for UPLOAD)
+                    r.def.reject(response);
+                } else if (_.isArray(response.data)) {
+                    // Skip Warnings (category: 13)
+                    response.data = _(response.data).map(function (o) {
+                        if (o.category !== 13) {
+                            return o;
+                        }
+                    });
+                    r.def.resolve(response);
+                } else {
+                    r.def.resolve(response);
+                }
+                r = null;
+            })
+            .fail(function (xhr, textStatus, errorThrown) {
+                that.trigger('stop fail', r.xhr);
+                var message = xhr.status !== 0 ? xhr.status + ' ' : '';
+                message += errorThrown || (navigator.onLine ? that.messages.generic : that.messages.offline);
+                r.def.reject({ error: message }, xhr);
+                r = null;
+            });
         }
 
         //
@@ -859,7 +882,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             if (r.o.type === 'GET' || r.o.type === 'PUT') {
 
                 // get hash value - we just use stringify here (xhr contains payload for unique PUT requests)
-                try { hash = JSON.stringify(r.xhr); } catch (e) { }
+                try { hash = JSON.stringify(r.xhr); } catch (e) {}
 
                 if (r.o.consolidate !== false && hash && _.isArray(requests[hash])) {
                     // enqueue callbacks
@@ -963,7 +986,6 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             return def;
         };
     }());
-
 
     var wait = (function () {
 
@@ -1153,7 +1175,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
          * Fixes order of list requests (temp. fixes backend bug)
          * @param  {array} ids
          * @param  {deferred} deferred
-         * @return {deferred} resolve returns array
+         * @return { deferred} resolve returns array
          */
         fixList: function (ids, deferred) {
             return deferred.then(function (data) {
@@ -1239,6 +1261,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                             item = data[i];
                             if (_.isObject(item) && 'data' in item && 'timestamp' in item) {
                                 q[i].deferred.resolve(item.data, item.timestamp);
+                            } else if (item === undefined || item === null) {
+                                // sometimes the server just sends "null" in a mutliple request
+                                var gt = require('gettext!io.ox/core');
+                                q[i].deferred.reject({ error: gt('Server did not send a response'), code: '0000' });
                             } else if (item.error) {
                                 q[i].deferred.reject(item.error);
                             } else {
@@ -1284,13 +1310,19 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
         /**
          * returns failed calls
-         * @return {backbone.collection}
+         * @return { backbone.collection }
          */
         log: function () {
             return log.collection;
         },
 
-        statistics: log.statistics
+        statistics: log.statistics,
+
+        messages: {
+            // translation will be injected by http_error.js
+            generic: 'An unknown error occurred',
+            offline: 'Cannot connect to server. Please check your connection.'
+        }
     };
 
     Events.extend(that);

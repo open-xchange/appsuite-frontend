@@ -1,4 +1,3 @@
-// NOJSHINT
 /**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
@@ -12,20 +11,19 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
-
-define.async('io.ox/core/date',
-    ['io.ox/core/gettext',
-     'settings!io.ox/core',
-     'gettext!io.ox/core'
-    ], function (gettext, settings, gt) {
-
-    /*jshint white:false */
+define.async('io.ox/core/date', [
+    'io.ox/core/gettext',
+    'settings!io.ox/core',
+    'gettext!io.ox/core'
+], function (gettext, settings, gt) {
 
     'use strict';
 
-    var dateTimeFormats = ['', 'E', 'yMd', 'yMEd', 'Hm', 'yMEdHm', 'yMdHm',
-                           'yMEdHm', 'v', 'yMEdHmv', 'yMdHmv', 'yMEdHmv', 'Hmv',
-                           'yMEdHmv', 'yMdHmv', 'yMEdHmv', 'Md'];
+    var dateTimeFormats = [
+        '', 'E', 'yMd', 'yMEd', 'Hm', 'yMEdHm', 'yMdHm',
+        'yMEdHm', 'v', 'yMEdHmv', 'yMdHmv', 'yMEdHmv', 'Hmv',
+        'yMEdHmv', 'yMdHmv', 'yMEdHmv', 'Md'
+    ];
 
     // average ms / year
     var AVG_YEAR = 31556952000;
@@ -190,7 +188,7 @@ define.async('io.ox/core/date',
     };
 
     //@include api.locale = date/date.root.json
-    ;
+    ; // jshint ignore:line
 
     // TODO: Difference between server and client clocks.
     var offset = 0;
@@ -245,17 +243,17 @@ define.async('io.ox/core/date',
         return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
     }
 
-    var reLetters = "GyYMwWDdFEuaHkKhmsSzZvV".split("").join("+|") + "+";
-    var regex = new RegExp("(" + reLetters + ")|'((?:[^']|'')+)'|('')", "g");
+    var reLetters = 'GyYMwWDdFEuaHkKhmsSzZvV'.split('').join('+|') + '+';
+    var regex = new RegExp('(' + reLetters + ')|\'((?:[^\']|\'\')+)\'|(\'\')', 'g');
 
     function num(n, x) {
         var s = x.toString();
         n -= s.length;
         if (n <= 0) return s;
         var a = new Array(n + 1);
-        for (var i = 0; i < n; i++) a[i] = "0";
+        for (var i = 0; i < n; i++) a[i] = '0';
         a[n] = s;
-        return a.join("");
+        return a.join('');
     }
     function text(n, full, short) { return n >= 4 ? full : short; }
 
@@ -308,16 +306,16 @@ define.async('io.ox/core/date',
             if (y < 1) y = 1 - y;
             return num(n, n === 2 ? y % 100 : y);
         },
-        z: function (n, d) {
+        z: function () {
 
         },
-        Z: function (n, d) {
+        Z: function () {
 
         },
         v: function (n, d) {
             return d.getTimeZone();
         },
-        V: function (n, d) {
+        V: function () {
 
         }
         // TODO: z, Z, v and V
@@ -328,22 +326,22 @@ define.async('io.ox/core/date',
                 if (fmt) {
                     return funs[fmt.charAt(0)](fmt.length, date);
                 } else if (text) {
-                    return text.replace(/''/g, "'");
+                    return text.replace(/''/g, '\'');
                 } else if (quote) {
-                    return "'";
+                    return '\'';
                 }
             });
     }
 
-    var pregexStr = "(" + reLetters + ")(?!" + reLetters + ")|(" + reLetters +
-        ")(?=" + reLetters + ")|'((?:[^']|'')+)'|('')|([$^\\\\.*+?()[\\]{}|])";
-    var pregex = new RegExp(pregexStr, "g");
+    var pregexStr = '(' + reLetters + ')(?!' + reLetters + ')|(' + reLetters +
+        ')(?=' + reLetters + ')|\'((?:[^\']|\'\')+)\'|(\'\')|([$^\\\\.*+?()[\\]{}|])';
+    var pregex = new RegExp(pregexStr, 'g');
 
     function escape(rex) {
-        return String(rex).replace(/[$\^\\.*+?()\[\]{}|]/g, "\\$&");
+        return String(rex).replace(/[$\^\\.*+?()\[\]{}|]/g, '\\$&');
     }
     function makeRegex(names, shortNames) {
-        return "(" + _.map(names.concat(shortNames), escape).join("|") + ")";
+        return '(' + _.map(names.concat(shortNames), escape).join('|') + ')';
     }
     function makeMap(names, shortNames) {
         var map = {};
@@ -354,18 +352,20 @@ define.async('io.ox/core/date',
         return map;
     }
     var monthRegex, dayRegex, monthMap, dayMap;
-    var numRex = "([+-]?\\d+)";
-    function number(n) { return numRex; }
+
+    var numRex = '([+-]?\\d+)';
+
+    function number() { return numRex; }
 
     var prexs = {
-        a: function (n) {
-            return "(" + escape(api.locale.dayPeriods.am) + "|" +
-                         escape(api.locale.dayPeriods.pm) + ")";
+        a: function () {
+            return '(' + escape(api.locale.dayPeriods.am) + '|' +
+                         escape(api.locale.dayPeriods.pm) + ')';
         },
-        E: function (n) { return dayRegex; },
-        G: function (n) {
-            return "(" + escape(api.locale.eras[0]) + "|" +
-                         escape(api.locale.eras[1]) + ")";
+        E: function () { return dayRegex; },
+        G: function () {
+            return '(' + escape(api.locale.eras[0]) + '|' +
+                         escape(api.locale.eras[1]) + ')';
         },
         M: function (n) { return n >= 3 ? monthRegex : numRex; },
         D: number, d: number, F: number, H: number, h: number, K: number,
@@ -375,7 +375,7 @@ define.async('io.ox/core/date',
     };
 
     function mnum(n) {
-        return n > 1 ? "([-+\\d]\\d{1," + (n - 1) + "})" : "(\\d{1," + n + "})";
+        return n > 1 ? '([-+\\d]\\d{1,' + (n - 1) + '})' : '(\\d{1,' + n + '})';
     }
 
     var mrexs = {
@@ -387,30 +387,30 @@ define.async('io.ox/core/date',
     };
 
     function nfun(field) {
-        return function (n) {
+        return function () {
             return function (s, d) { d[field] = Number(s); };
         };
     }
 
     var pfuns = {
-        a: function (n) {
+        a: function () {
             return function (s, d) { d.pm = s === api.locale.dayPeriods.pm; };
         },
-        E: function (n) { return function (s, d) {  }; },
-        G: function (n) {
+        E: function () { return function () {  }; },
+        G: function () {
             return function (s, d) { d.bc = s === api.locale.eras[0]; };
         },
-        h: function (n) {
-            return function (s, d) { d.h2 = s === "12" ? 0 : Number(s); };
+        h: function () {
+            return function (s, d) { d.h2 = s === '12' ? 0 : Number(s); };
         },
-        k: function (n) {
-            return function (s, d) { d.h = s === "24" ? 0 : Number(s); };
+        k: function () {
+            return function (s, d) { d.h = s === '24' ? 0 : Number(s); };
         },
         M: function (n) {
             return n >= 3 ? function (s, d) { d.m = monthMap[s]; }
                           : function (s, d) { d.m = s - 1; };
         },
-        Y: function(n) {
+        Y: function (n) {
             return function (s, d) {
                 d.wcentury = n === 2 && s.match(/^\d\d$/);
                 d.wyStr = s.length;
@@ -424,9 +424,9 @@ define.async('io.ox/core/date',
                 d.y = Number(s);
             };
         },
-        D: nfun("yd"), d: nfun("d"), F: $.noop, H: nfun("h"), K: nfun("h2"),
-        m: nfun("min"), S: nfun("ms"), s: nfun("s"), u: $.noop, W: $.noop,
-        w: nfun("w")
+        D: nfun('yd'), d: nfun('d'), F: $.noop, H: nfun('h'), K: nfun('h2'),
+        m: nfun('min'), S: nfun('ms'), s: nfun('s'), u: $.noop, W: $.noop,
+        w: nfun('w')
         // TODO: z, Z and X
     };
 
@@ -446,22 +446,23 @@ define.async('io.ox/core/date',
                 } else if (text) {
                     return text;
                 } else if (quote) {
-                    return "'";
+                    return '\'';
                 } else if (escape) {
-                    return "\\" + escape;
+                    return '\\' + escape;
                 }
             });
-        var match = string.match(new RegExp("^\\s*" + rex + "\\s*$", "i"));
+        var match = string.match(new RegExp('^\\s*' + rex + '\\s*$', 'i'));
         if (!match) return null;
-        var d = { bc: false, century: false, pm: false,
+        var d = {
+            bc: false, century: false, pm: false,
             y: 1970, m: 0, d: 1, h: 0, h2: 0, min: 0, s: 0, ms: 0,
-            w: 1, wd: 0 };
+            w: 1, wd: 0
+        };
         for (var i = 0; i < handlers.length; i++)
             handlers[i](match[i + 1], d);
         if (!d.h) d.h = Number(d.h2) + (d.pm ? 12 : 0);
         if (d.h < 0 || d.h >= 24 || d.min < 0 || d.min >= 60 ||
-            d.s < 0 || d.s >= 60 || d.ms < 0 || d.ms >= 1000)
-        {
+            d.s < 0 || d.s >= 60 || d.ms < 0 || d.ms >= 1000) {
             return null;
         }
         function adjustYear(year, strLen) {
@@ -477,7 +478,7 @@ define.async('io.ox/core/date',
         }
         d.y = adjustYear(d.y, d.yStr);
         var date = new D(0);
-        if ("wy" in d) {
+        if ('wy' in d) {
             d.wy = adjustYear(d.wy, d.wyStr);
             date.setYear(d.wy);
             var jan1st = date.getDays(), start = getWeekStart(date);
@@ -486,11 +487,10 @@ define.async('io.ox/core/date',
                 (start + 7 * d.w - 7 + (d.wd - api.locale.weekStart + 7) % 7)));
             if (getWeekYear(date) !== Number(d.wy) ||
                 getWeek(date)     !== Number(d.w)  ||
-                date.getDay()     !== Number(d.wd))
-            {
+                date.getDay()     !== Number(d.wd)) {
                 return null;
             }
-        } else if ("yd" in d) {
+        } else if ('yd' in d) {
             if (d.yd < 0 || d.yd > (isLeapYear(d.y) ? 366 : 365)) return null;
             date.setYear(d.y);
             date.add(api.DAY * (d.yd - 1));
@@ -498,8 +498,7 @@ define.async('io.ox/core/date',
             date.setYear(d.y, d.m, d.d);
             if (date.getYear()  !== Number(d.y) ||
                 date.getMonth() !== Number(d.m) ||
-                date.getDate()  !== Number(d.d))
-            {
+                date.getDate()  !== Number(d.d)) {
                 return null;
             }
         }
@@ -511,15 +510,15 @@ define.async('io.ox/core/date',
 
     var tzRegExp = (function () {
         function opt(s) {
-            return "(?:" + s + ")?";
+            return '(?:' + s + ')?';
         }
-        var abbr = "([^\\d,+-]{3,})",
-            time = "(\\d+)(?::(\\d+)(?::(\\d+))?)?",
-            offset = "([+-])?" + time,
-            when = ",(?:J(\\d+)|(\\d+)|M(\\d+)\\.(\\d+)\\.(\\d+))(?:\\/" +
-                   time + ")?";
-        return new RegExp("^" + abbr + offset +
-                          opt(abbr + opt(offset) + when + when) + "$");
+        var abbr = '([^\\d,+-]{3,})',
+            time = '(\\d+)(?::(\\d+)(?::(\\d+))?)?',
+            offset = '([+-])?' + time,
+            when = ',(?:J(\\d+)|(\\d+)|M(\\d+)\\.(\\d+)\\.(\\d+))(?:\\/' +
+                   time + ')?';
+        return new RegExp('^' + abbr + offset +
+            opt(abbr + opt(offset) + when + when) + '$');
     }());
 
     function julian(day, time) {
@@ -560,7 +559,7 @@ define.async('io.ox/core/date',
                 (m[i] || 0) * api.SECOND;
         }
         function offset(i) {
-            return m[i] === "-" ? time(i + 1) : -time(i + 1);
+            return m[i] === '-' ? time(i + 1) : -time(i + 1);
         }
         function when(i) {
             var t = m[i + 5] ? time(i + 5) : 72e5;
@@ -595,18 +594,20 @@ define.async('io.ox/core/date',
     }
 
     function parseTZInfo(tzinfo) {
-        if (tzinfo.slice(0, 4) !== "TZif") {
-            throw new Error("Not a zoneinfo file.");
+        if (tzinfo.slice(0, 4) !== 'TZif') {
+            throw new Error('Not a zoneinfo file.');
         }
         // Some ISO-8859-1 characters are not mapped 1:1 in Unicode.
         // This is a map back from Unicode to the original byte values.
-        var map = { 8364: 128, 8218: 130, 402: 131, 8222: 132, 8230: 133,
-                    8224: 134, 8225: 135, 710: 136, 8240: 137, 352: 138,
-                    8249: 139, 338: 140, 381: 142, 8216: 145, 8217: 146,
-                    8220: 147, 8221: 148, 8226: 149, 8211: 150, 8212: 151,
-                    732: 152, 8482: 153, 353: 154, 8250: 155, 339: 156,
-                    382: 158, 376: 159 },
-            pos = 0, i;
+        var map = {
+            8364: 128, 8218: 130, 402: 131, 8222: 132, 8230: 133,
+            8224: 134, 8225: 135, 710: 136, 8240: 137, 352: 138,
+            8249: 139, 338: 140, 381: 142, 8216: 145, 8217: 146,
+            8220: 147, 8221: 148, 8226: 149, 8211: 150, 8212: 151,
+            732: 152, 8482: 153, 353: 154, 8250: 155, 339: 156,
+            382: 158, 376: 159
+        },
+        pos = 0, i;
 
         function byte() {
             var b = tzinfo.charCodeAt(pos++);
@@ -630,8 +631,8 @@ define.async('io.ox/core/date',
         // header
 
         function header() {
-            if (tzinfo.slice(pos, pos + 4) !== "TZif") {
-                throw new Error("Invalid zoneinfo header.");
+            if (tzinfo.slice(pos, pos + 4) !== 'TZif') {
+                throw new Error('Invalid zoneinfo header.');
             }
             pos += 20;
             return {
@@ -648,7 +649,7 @@ define.async('io.ox/core/date',
 
         // use 64 bit variant if available
 
-        var version2 = tzinfo.charAt(4) >= "2";
+        var version2 = tzinfo.charAt(4) >= '2';
 
         if (version2) {
             time = int64;
@@ -688,7 +689,7 @@ define.async('io.ox/core/date',
         for (i = 0; i < tzh.typecnt; i++) {
             var start = pos + ttinfos[i].abbr;
             ttinfos[i].abbr =
-                tzinfo.slice(start, tzinfo.indexOf("\x00", start));
+                tzinfo.slice(start, tzinfo.indexOf('\x00', start));
         }
         pos += tzh.charcnt;
 
@@ -704,7 +705,7 @@ define.async('io.ox/core/date',
         }) || _.first(ttinfos);
 
         var finalTTInfo = version2 && byte() === 10 ?
-                parseTZ(tzinfo.slice(pos, tzinfo.indexOf("\n", pos))) :
+                parseTZ(tzinfo.slice(pos, tzinfo.indexOf('\n', pos))) :
                 function () {
                     return _.last(transitions).ttinfo;
                 };
@@ -724,8 +725,8 @@ define.async('io.ox/core/date',
                 lastTransition = _.last(transitions).start;
                 firstTransition = _.first(transitions).start;
                 offset = _.find(transitions, function (t) {
-                        return lastTransition - t.start < 1000 * AVG_YEAR;
-                    }).start + AVG_YEAR / 4;
+                    return lastTransition - t.start < 1000 * AVG_YEAR;
+                }).start + AVG_YEAR / 4;
                 var bin = -1;
                 for (var i = 0; i < transitions.length; i++) {
                     var index = getBin(transitions[i].start);
@@ -748,7 +749,7 @@ define.async('io.ox/core/date',
 
         // time zone specific Date class
 
-        function LocalDate(y, m, d, h, min, s, ms) {
+        function LocalDate(y) {
             switch (arguments.length) {
                 case 0:
                     this.t = new Date().getTime() + offset;
@@ -819,7 +820,7 @@ define.async('io.ox/core/date',
         toString: function () {
             return this.format(api.FULL_DATE);
         },
-        add: function(time) {
+        add: function (time) {
             this.t = this.constructor.utc(this.local += time);
             return this;
         },
@@ -854,7 +855,7 @@ define.async('io.ox/core/date',
         getYear: function () {
             return new Date(this.local).getUTCFullYear();
         },
-        setYear: function (year, month, date) {
+        setYear: function () {
             var d = new Date(this.local);
             d.setUTCFullYear.apply(d, arguments);
             this.t = this.constructor.utc(this.local = d.getTime());
@@ -863,7 +864,7 @@ define.async('io.ox/core/date',
         getMonth: function () {
             return new Date(this.local).getUTCMonth();
         },
-        setMonth: function (month, date) {
+        setMonth: function () {
             var d = new Date(this.local);
             d.setUTCMonth.apply(d, arguments);
             this.t = this.constructor.utc(this.local = d.getTime());
@@ -872,7 +873,7 @@ define.async('io.ox/core/date',
         getDate: function () {
             return new Date(this.local).getUTCDate();
         },
-        setDate: function(date) {
+        setDate: function (date) {
             var d = new Date(this.local);
             d.setUTCDate(date);
             this.t = this.constructor.utc(this.local = d.getTime());
@@ -884,7 +885,7 @@ define.async('io.ox/core/date',
         getHours: function () {
             return new Date(this.local).getUTCHours();
         },
-        setHours: function (hour, min, sec, ms) {
+        setHours: function () {
             var d = new Date(this.local);
             d.setUTCHours.apply(d, arguments);
             this.t = this.constructor.utc(this.local = d.getTime());
@@ -893,7 +894,7 @@ define.async('io.ox/core/date',
         getMinutes: function () {
             return new Date(this.local).getUTCMinutes();
         },
-        setMinutes: function (min, sec, ms) {
+        setMinutes: function () {
             var d = new Date(this.local);
             d.setUTCMinutes.apply(d, arguments);
             this.t = this.constructor.utc(this.local = d.getTime());
@@ -902,7 +903,7 @@ define.async('io.ox/core/date',
         getSeconds: function () {
             return new Date(this.local).getUTCSeconds();
         },
-        setSeconds: function (sec, ms) {
+        setSeconds: function () {
             var d = new Date(this.local);
             d.setUTCSeconds.apply(d, arguments);
             this.t = this.constructor.utc(this.local = d.getTime());
@@ -924,11 +925,8 @@ define.async('io.ox/core/date',
             var L = api.locale;
             if (format & api.TIME) {
                 if (this.getDays() === end.getDays()) {
-                    var diff = L.intervals[(L.h12 ? 'hm' : 'Hm') +
-                                           (format & api.TIMEZONE ? 'v' : '')];
-                    if (L.h12 &&
-                        (this.getHours() < 12) !== (end.getHours() < 12))
-                    {
+                    var diff = L.intervals[(L.h12 ? 'hm' : 'Hm') + (format & api.TIMEZONE ? 'v' : '')];
+                    if (L.h12 && (this.getHours() < 12) !== (end.getHours() < 12)) {
                         return diff.a;
                     } else if (this.getHours() !== end.getHours()) {
                         return diff.h;
@@ -978,7 +976,7 @@ define.async('io.ox/core/date',
     };
 
     api.getTimeZone = _.memoize(function (name) {
-        return require(["raw!io.ox/core/date/tz/zoneinfo/" + name])
+        return require(['raw!io.ox/core/date/tz/zoneinfo/' + name])
             .pipe(parseTZInfo)
             .pipe(function (D) {
                 D.id = name;
@@ -989,16 +987,22 @@ define.async('io.ox/core/date',
     });
 
     var locale = gettext.language.pipe(function (lang) {
-        return require(["text!io.ox/core/date/date." + lang + ".json"]);
-    }).pipe(null, function (err) {
+        return require(['text!io.ox/core/date/date.' + lang + '.json']);
+    }).pipe(null, function () {
         return require(['text!io.ox/core/date/date.root.json']);
     }).done(function (locale) {
-        api.locale = JSON.parse(locale);
+        if (_.isObject(locale)) {
+            api.locale = locale; // in cordova based setups locale is already a JSON
+        } else {
+            api.locale = JSON.parse(locale);
+        }
         monthRegex = makeRegex(api.locale.months, api.locale.monthsShort);
         dayRegex = makeRegex(api.locale.days, api.locale.daysShort);
         monthMap = makeMap(api.locale.months, api.locale.monthsShort);
         dayMap = makeMap(api.locale.days, api.locale.daysShort);
     });
+
+    console.warn('date is deprecated: please use moment.js instead');
 
     // TODO: get default from local clock
     return $.when(

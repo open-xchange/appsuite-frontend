@@ -127,6 +127,11 @@ define(['io.ox/mail/detail/content', 'settings!io.ox/mail'], function (content, 
             expect(result.content.innerHTML).to.equal('<p>Link: <a role="button" href="http://localhost/appsuite/#app=io.ox/files&amp;perspective=fluid:icon&amp;folder=1337&amp;id=0" target="_blank" class="deep-link btn btn-primary btn-xs deep-link-files" style="font-family: Arial; color: white; text-decoration: none;">Datei</a>.</p>');
         });
 
+        it('should detect external file links (html)', function () {
+            var result = process('<p>Link: <a href="http://foobar/appsuite/#app=io.ox/files&folder=1337&id=0">http://foobar/appsuite/#app=io.ox/files&folder=1337&id=0</a>.</p>');
+            expect(result.content.innerHTML).to.equal('<p>Link: <a role="button" href="http://foobar/appsuite/#app=io.ox/files&amp;folder=1337&amp;id=0" target="_blank" class="deep-link btn btn-primary btn-xs" style="font-family: Arial; color: white; text-decoration: none;">Datei</a>.</p>');
+        });
+
         // Appointment
 
         it('should detect appointment links (html, old-school)', function () {

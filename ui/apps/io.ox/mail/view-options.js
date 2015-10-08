@@ -11,17 +11,17 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/view-options',
-    ['io.ox/core/extensions',
-     'io.ox/backbone/mini-views/dropdown',
-     'io.ox/core/api/account',
-     'gettext!io.ox/mail'
-    ], function (ext, Dropdown, account, gt) {
+define('io.ox/mail/view-options', [
+    'io.ox/core/extensions',
+    'io.ox/backbone/mini-views/dropdown',
+    'io.ox/core/api/account',
+    'gettext!io.ox/mail'
+], function (ext, Dropdown, account, gt) {
 
     'use strict';
 
     // no view options on smartphones
-    //if (_.device('small')) return;
+    //if (_.device('smartphone')) return;
 
     ext.point('io.ox/mail/view-options').extend({
         id: 'sort',
@@ -66,6 +66,7 @@ define('io.ox/mail/view-options',
         draw: function (baton) {
 
             var dropdown = new Dropdown({
+                caret: true,
                 //#. Sort options drop-down
                 label: gt.pgettext('dropdown', 'Sort by'),
                 model: baton.app.props
@@ -121,7 +122,8 @@ define('io.ox/mail/view-options',
 
     function toggleFolderView(e) {
         e.preventDefault();
-        e.data.app.folderView.toggle(e.data.state);
+        e.data.app.folderView.forceOpen = e.data.state;
+        e.data.app.props.set('folderview', e.data.state);
     }
 
     function onFolderViewOpen(app) {

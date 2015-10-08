@@ -10,21 +10,24 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define(['plugins/portal/tasks/register',
-        'io.ox/core/extensions',
-        'io.ox/core/date',
-        'fixture!io.ox/tasks/defaultTestData.json'], function (tasksPlugin, ext, date, testData) {
+define([
+    'plugins/portal/tasks/register',
+    'io.ox/core/extensions',
+    'io.ox/core/moment',
+    'fixture!io.ox/tasks/defaultTestData.json'
+], function (tasksPlugin, ext, moment, testData) {
+    'use strict';
 
     describe('portal Tasks plugin', function () {
 
         describe('should', function () {
             beforeEach(function () {
                 this.server.respondWith('PUT', /api\/tasks\?action=search/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                             '{ "timestamp":1368791630910,"data": ' + JSON.stringify(testData.testSearch) + '}');
                 });
                 this.server.respondWith('GET', /api\/tasks\?action=get/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                             '{ "timestamp":1368791630910,"data": {"id": 13371, "folder_id": 555123456, "title": "Pommes kaufen"}}');
                 });
                 this.node = $('<div>');
@@ -46,14 +49,14 @@ define(['plugins/portal/tasks/register',
                 expect(this.node.find('li.item')).to.have.length(2);
                 expect($(this.node.find('.bold')[0]).text()).to.equal('Pommes kaufen');
                 expect($(this.node.find('.bold')[1]).text()).to.equal('Nase putzen');
-                expect($(this.node.find('.accent')[0]).text()).to.equal('Fällig am ' + new date.Local(1368791630910).format(date.DATE));
-                expect($(this.node.find('.accent')[1]).text()).to.equal('Fällig am ' + new date.Local(1368791630910).format(date.DATE));
+                expect($(this.node.find('.accent')[0]).text()).to.equal('Fällig am 17.5.2013 11:53');
+                expect($(this.node.find('.accent')[1]).text()).to.equal('Fällig am 17.5.2013 11:53');
             });
         });
         describe('should not draw', function () {
             beforeEach(function () {
                 this.server.respondWith('PUT', /api\/tasks\?action=search/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                             '{ "timestamp":1368791630910,"data": ' + JSON.stringify(testData.testSearchEdge) + '}');
                 });
                 this.node = $('<div>');
@@ -83,7 +86,7 @@ define(['plugins/portal/tasks/register',
         describe('should', function () {
             beforeEach(function () {
                 this.server.respondWith('PUT', /api\/tasks\?action=search/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                             '{ "timestamp":1368791630910,"data": []}');
                 });
                 this.node = $('<div>');

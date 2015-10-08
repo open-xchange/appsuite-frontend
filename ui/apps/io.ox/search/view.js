@@ -11,11 +11,11 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/view',
-    ['io.ox/search/view-template',
-     'io.ox/core/extensions',
-     'io.ox/backbone/views'
-    ], function (template, ext, views) {
+define('io.ox/search/view', [
+    'io.ox/search/view-template',
+    'io.ox/core/extensions',
+    'io.ox/backbone/views'
+], function (template, ext, views) {
 
     'use strict';
 
@@ -27,14 +27,12 @@ define('io.ox/search/view',
                 this.baton.$ = this.$el;
             },
             render: function (node) {
-
                 var self = this,
                     node = node || self.$el;
 
-                if (_.device('small')) {
-                    // create new toolbar on bottom
-                    ext.point('io.ox/search/view/mobile').invoke('draw', node, self.baton);
-                }
+                self.baton.$container = node;
+                // create new toolbar on bottom
+                ext.point('io.ox/search/view/mobile').invoke('draw', node, self.baton);
 
                 //invoke extensions defined by io.ox/search/view-template
                 ext.point('io.ox/search/view').invoke('draw', node, self.baton);
@@ -76,7 +74,7 @@ define('io.ox/search/view',
                             p.invoke('draw', self.$el, self.baton);
                     });
                 });
-                if (_.device('small')) {
+                if (_.device('smartphone')) {
                     ext.point('io.ox/search/view/mobile').each(function (p) {
                         var list = ids.split(' ');
                         list.forEach(function (id) {

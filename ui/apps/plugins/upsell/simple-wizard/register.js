@@ -11,13 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/upsell/simple-wizard/register',
-    ['io.ox/core/extensions',
-     'io.ox/core/upsell',
-     'settings!io.ox/mail',
-     'settings!plugins/upsell/simple-wizard',
-     'gettext!plugins/upsell/simple-wizard'
-    ], function (ext, upsell, mailSettings, settings, gt) {
+define('plugins/upsell/simple-wizard/register', [
+    'io.ox/core/extensions',
+    'io.ox/core/upsell',
+    'settings!io.ox/mail',
+    'settings!plugins/upsell/simple-wizard',
+    'gettext!plugins/upsell/simple-wizard'
+], function (ext, upsell, mailSettings, settings, gt) {
 
     'use strict';
 
@@ -117,7 +117,7 @@ define('plugins/upsell/simple-wizard/register',
                 'language=$language,type=$type,id=$id,missing=$missing,hostname=$hostname#session=$session'
         }, settings.get()),
 
-        open: function (e, options) {
+        open: function (options) {
 
             if (instance) return;
 

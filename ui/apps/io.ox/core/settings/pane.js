@@ -11,38 +11,27 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/settings/pane',
-    ['io.ox/core/extensions',
-     'io.ox/backbone/basicModel',
-     'io.ox/backbone/views',
-     'io.ox/backbone/forms',
-     'io.ox/core/api/apps',
-     'io.ox/core/capabilities',
-     'io.ox/core/notifications',
-     'plugins/portal/userSettings/register',
-     'settings!io.ox/core',
-     'settings!io.ox/core/settingOptions',
-     'gettext!io.ox/core'
-    ], function (ext, BasicModel, views, forms, appAPI, capabilities, notifications, userSettings, settings, settingOptions, gt) {
+define('io.ox/core/settings/pane', [
+    'io.ox/core/extensions',
+    'io.ox/backbone/basicModel',
+    'io.ox/backbone/views',
+    'io.ox/backbone/mini-views/common',
+    'io.ox/core/api/apps',
+    'io.ox/core/capabilities',
+    'io.ox/core/notifications',
+    'io.ox/core/desktopNotifications',
+    'plugins/portal/userSettings/register',
+    'settings!io.ox/core',
+    'settings!io.ox/core/settingOptions',
+    'gettext!io.ox/core',
+    'io.ox/backbone/mini-views/timezonepicker'
+], function (ext, BasicModel, views, miniViews, appAPI, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker) {
 
     'use strict';
 
     var point = views.point('io.ox/core/settings/entry'),
-        SettingView = point.createView({ tagName: 'form', className: 'form-horizontal'}),
-        reloadMe = ['language', 'timezone', 'theme'],
-        // selectionGroup
-        defaults = {
-            index: 0,
-            labelCssClass: 'col-sm-5',
-            controlCssClass: 'col-sm-7 col-md-6'
-        },
-        createSelectonGroup = function (options)  {
-            // increase index
-            defaults.index = (defaults || options).index + 100;
-            // apply defaults and create group
-            options = _.extend({}, defaults, options);
-            return new forms.SelectControlGroup(options);
-        };
+        SettingView = point.createView({ tagName: 'form', className: 'form-horizontal' }),
+        reloadMe = ['language', 'timezone', 'theme'];
 
     ext.point('io.ox/core/settings/detail').extend({
         index: 50,
@@ -53,12 +42,13 @@ define('io.ox/core/settings/pane',
                 $('html').toggleClass('high-contrast', value);
             });
             model.on('change', function (model) {
-                settings.saveAndYell().then(
-                    function success() {
 
-                        var showNotice = _(reloadMe).any(function (attr) {
-                            return model.changed[attr];
-                        });
+                var showNotice = _(reloadMe).any(function (attr) {
+                    return model.changed[attr];
+                });
+
+                settings.saveAndYell(undefined, showNotice ? { force: true } : {}).then(
+                    function success() {
 
                         if (showNotice) {
                             notifications.yell(
@@ -72,177 +62,14 @@ define('io.ox/core/settings/pane',
             this.addClass('settings-container').append(
                 $('<h1>').text(gt('Basic settings'))
             );
-            new SettingView({model: model}).render().$el.attr('role', 'form').appendTo(this);
+            new SettingView({ model: model }).render().$el.attr('role', 'form').appendTo(this);
         }
     });
 
-    // Language
-    point.extend(createSelectonGroup({
-        id: 'language',
-        attribute: 'language',
-        label: gt('Language'),
-        selectOptions: ox.serverConfig.languages || {},
-        updateModel: function () {
-            var value = this.nodes.element.val();
-            this.model.set(this.attribute, value, {validate: true});
-            _.setCookie('language', value);
-        }
-    }));
+    //
+    // My contact data
+    //
 
-    // Timezones
-    (function () {
-        var available = settingOptions.get('availableTimeZones'),
-            technicalNames = _(available).keys(),
-            userTZ = settings.get('timezone', 'UTC'),
-            sorted = {};
-
-        // Sort the technical names by the GMT offset
-        technicalNames.sort(function (a, b) {
-            var va = available[a],
-                vb = available[b],
-                diff = Number(va.substr(4, 3)) - Number(vb.substr(4, 3));
-            if (diff === 0 || _.isNaN(diff)) {
-                return (vb === va) ? 0 : (va < vb) ? -1 : 1;
-            } else {
-                return diff;
-            }
-        });
-
-        // filter double entries and sum up results in 'sorted' array
-        for (var i = 0; i < technicalNames.length; i++) {
-            var key = technicalNames[i],
-                key2 = technicalNames[i + 1];
-            if (key2 && available[key] === available[key2]) {
-                if (key2 === userTZ) {
-                    sorted[key2] = available[key2];
-                } else {
-                    sorted[key] = available[key];
-                }
-                i++;
-            } else {
-                sorted[key] = available[key];
-            }
-        }
-
-        point.extend(createSelectonGroup({
-            id: 'timezones',
-            attribute: 'timezone',
-            label: gt('Time zone'),
-            selectOptions: sorted
-        }));
-
-    }());
-
-    // Refresh interval
-    (function () {
-        if (settings.isConfigurable('refreshInterval')) {
-            var MINUTES = 60000;
-            var options = {};
-
-            options[5 * MINUTES] = gt('5 minutes');
-            options[10 * MINUTES] = gt('10 minutes');
-            options[15 * MINUTES] = gt('15 minutes');
-            options[30 * MINUTES] = gt('30 minutes');
-
-            point.extend(createSelectonGroup({
-                id: 'refreshInterval',
-                attribute: 'refreshInterval',
-                label: gt('Refresh interval'),
-                selectOptions: options
-            }));
-        }
-    }());
-
-    // Themes
-    (function () {
-        var availableThemes = settingOptions.get('themes') || {};
-
-        //  until we get translated themes from backend
-        if (availableThemes['default']) {
-            availableThemes['default'] = gt('Default Theme');
-        }
-
-        if (!_(availableThemes).isEmpty() && settings.isConfigurable('theme')) {
-            point.extend(createSelectonGroup({
-                id: 'theme',
-                attribute: 'theme',
-                label: gt('Theme'),
-                selectOptions: availableThemes
-            }));
-        }
-
-        point.extend(new forms.CheckControlGroup({
-            id: 'highcontrast',
-            index: defaults.index + 1,
-            labelCssClass: defaults.labelCssClass,
-            controlCssClass: defaults.controlCssClass,
-            attribute: 'highcontrast',
-            label: gt('High contrast theme')
-        }));
-
-    }());
-
-    // Auto Start App
-    (function () {
-        if (settings.isConfigurable('autoStart')) {
-            var options = {};
-            _(appAPI.getFavorites()).each(function (app) {
-                options[app.path] = /*#, dynamic*/gt.pgettext('app', app.title);
-            });
-
-            options.none = gt('None');
-            point.extend(createSelectonGroup({
-                id: 'autoStart',
-                attribute: 'autoStart',
-                label: gt('Default app after sign in'),
-                selectOptions: options
-            }));
-        }
-    }());
-
-    // Auto Logout
-    (function () {
-        var MINUTES = 60000,
-            options = {};
-
-        options[0] = gt('Off');
-        options[5 * MINUTES] = gt('5 minutes');
-        options[10 * MINUTES] = gt('10 minutes');
-        options[15 * MINUTES] = gt('15 minutes');
-        options[30 * MINUTES] = gt('30 minutes');
-
-        point.extend(createSelectonGroup({
-            id: 'autoLogout',
-            attribute: 'autoLogout',
-            label: gt('Automatic sign out'),
-            selectOptions: options,
-            updateModel: function () {
-                this.setValueInModel(this.nodes.element.val());
-                ox.autoLogout.restart();
-            }
-        }));
-
-    }());
-
-    // Auto open notification area
-    (function () {
-        var options = {};
-
-        options.never = gt('Never');
-        options.noEmail = gt('On new notifications except mails');
-        options.always = gt('On every new notification');
-
-        if (settings.isConfigurable('autoOpenNotificationarea')) {
-            point.extend(createSelectonGroup({
-                id: 'autoOpenNotfication',
-                attribute: 'autoOpenNotification',
-                label: gt('Automatic opening of notification area'),
-                selectOptions: options
-            }));
-        }
-    }());
-
-    // Button: My contact data
     point.basicExtend({
         id: 'my-contact-data',
         index: '10000',
@@ -254,9 +81,8 @@ define('io.ox/core/settings/pane',
             this.append(
                 $('<div data-extension-id="my-contact-data">').append(
                     $('<div class="form-group">').append(
-                        $('<label class="control-label">')
-                            .addClass(defaults.labelCssClass),
-                        $('<div class="col-sm-4">').append(
+                        $('<label class="control-label col-sm-4">'),
+                        $('<div class="col-sm-6">').append(
                             $('<button type="button" class="btn btn-default" tabindex="1">')
                             .text(gt('My contact data') + ' ...')
                             .on('click', function () {
@@ -271,7 +97,10 @@ define('io.ox/core/settings/pane',
         }
     });
 
-    // Button: Change password
+    //
+    // Change password
+    //
+
     if (capabilities.has('edit_password')) {
         point.basicExtend({
             id: 'change-password',
@@ -280,9 +109,8 @@ define('io.ox/core/settings/pane',
                 this.append(
                     $('<div data-extension-id="change-password">').append(
                         $('<div class="form-group">').append(
-                            $('<label class="control-label">')
-                                .addClass(defaults.labelCssClass),
-                            $('<div class="col-sm-4">').append(
+                            $('<label class="control-label col-sm-4">'),
+                            $('<div class="col-sm-6">').append(
                                 $('<button type="button" class="btn btn-default" tabindex="1">')
                                 .text(gt('Change password') + ' ...')
                                 .on('click', userSettings.changePassword)
@@ -294,19 +122,274 @@ define('io.ox/core/settings/pane',
         });
     }
 
-    // DEBUGGING: Button: clear cache
-    // point.basicExtend({
-    //     id: 'clearCache',
-    //     index: 200000,
-    //     draw: function () {
-    //         this.append(
-    //             $('<button type="button" class="btn btn-default">').text(gt("Clear cache")).on("click", function (e) {
-    //                 e.preventDefault();
-    //                 require(["io.ox/core/cache"], function () {
-    //                     ox.cache.clear();
-    //                 });
-    //             })
-    //         );
-    //     }
-    // });
+    point.extend({
+        id: 'language',
+        index: 100,
+        className: 'form-group',
+        render: function () {
+            var guid = _.uniqueId('form-control-label-');
+            this.listenTo(this.baton.model, 'change:language', function (model, language) {
+                _.setCookie('language', language);
+            });
+            this.$el.append(
+                $('<label>').attr({
+                    class: 'control-label col-sm-4',
+                    for: guid
+                }).text(gt('Language')),
+                $('<div>').addClass('col-sm-6').append(
+                    new miniViews.SelectView({
+                        list: _.map(ox.serverConfig.languages, function (key, val) { return { label: key, value: val }; }),
+                        name: 'language',
+                        model: this.baton.model,
+                        id: guid,
+                        className: 'form-control'
+                    }).render().$el
+                )
+            );
+        }
+    });
+
+    // Timezones
+    (function () {
+        point.extend({
+            id: 'timezones',
+            index: 200,
+            className: 'form-group',
+            render: function () {
+                var guid = _.uniqueId('form-control-label-');
+                this.$el.append(
+                    $('<label>').attr({
+                        class: 'control-label col-sm-4',
+                        for: guid
+                    }).text(gt('Time zone')),
+                    $('<div>').addClass('col-sm-6').append(
+                        new TimezonePicker({
+                            name: 'timezone',
+                            model: this.baton.model,
+                            id: guid,
+                            className: 'form-control',
+                            showFavorites: true
+                        }).render().$el
+                    )
+                );
+            }
+        });
+    }());
+
+    // Themes
+    (function () {
+        var availableThemes = settingOptions.get('themes') || {};
+
+        //  until we get translated themes from backend
+        if (availableThemes['default']) {
+            availableThemes['default'] = gt('Default Theme');
+        }
+
+        if (!_(availableThemes).isEmpty() && settings.isConfigurable('theme')) {
+            point.extend({
+                id: 'theme',
+                index: 400,
+                className: 'form-group',
+                render: function () {
+                    var guid = _.uniqueId('form-control-label-');
+                    this.$el.append(
+                        $('<label>').attr({
+                            class: 'control-label col-sm-4',
+                            for: guid
+                        }).text(gt('Theme')),
+                        $('<div>').addClass('col-sm-6').append(
+                            new miniViews.SelectView({
+                                list: _.map(availableThemes, function (key, val) { return { label: key, value: val }; }),
+                                name: 'theme',
+                                model: this.baton.model,
+                                id: guid,
+                                className: 'form-control'
+                            }).render().$el
+                        )
+                    );
+                }
+            });
+        }
+
+        point.extend({
+            id: 'highcontrast',
+            index: 401,
+            className: 'form-group',
+            render: function () {
+                this.$el.append(
+                    $('<div class="col-sm-offset-4 col-sm-8">').append(
+                        $('<div class="checkbox">').addClass('').append(
+                            $('<label class="control-label">').text(gt('High contrast theme')).prepend(
+                                new miniViews.CheckboxView({ name: 'highcontrast', model: this.baton.model }).render().$el
+                            )
+                        )
+                    )
+                );
+            }
+        });
+
+    }());
+
+    (function () {
+        if (settings.isConfigurable('refreshInterval')) {
+            var MINUTES = 60000,
+                options = [
+                    { label: gt('5 minutes'), value: 5 * MINUTES },
+                    { label: gt('10 minutes'), value: 10 * MINUTES },
+                    { label: gt('15 minutes'), value: 15 * MINUTES },
+                    { label: gt('30 minutes'), value: 30 * MINUTES }
+                ];
+
+            point.extend({
+                id: 'refreshInterval',
+                index: 300,
+                className: 'form-group',
+                render: function () {
+                    var guid = _.uniqueId('form-control-label-');
+                    this.$el.append(
+                        $('<label>').attr({
+                            class: 'control-label col-sm-4',
+                            for: guid
+                        }).text(gt('Refresh interval')),
+                        $('<div>').addClass('col-sm-6').append(
+                            new miniViews.SelectView({
+                                list: options,
+                                name: 'refreshInterval',
+                                model: this.baton.model,
+                                id: guid,
+                                className: 'form-control'
+                            }).render().$el
+                        )
+                    );
+                }
+            });
+        }
+    }());
+
+    // Auto Start App
+    (function () {
+        if (settings.isConfigurable('autoStart')) {
+            var options =  _(appAPI.getFavorites()).map(function (app) {
+                return { label: /*#, dynamic*/gt.pgettext('app', app.title), value: app.path };
+            });
+            options.push({ label: gt('None'), value: 'none' });
+
+            if (options.length <= 2) return;
+
+            point.extend({
+                id: 'autoStart',
+                index: 500,
+                className: 'form-group',
+                render: function () {
+                    var guid = _.uniqueId('form-control-label-');
+                    this.$el.append(
+                        $('<label>').attr({
+                            class: 'control-label col-sm-4',
+                            for: guid
+                        }).text(gt('Default app after sign in')),
+                        $('<div>').addClass('col-sm-6').append(
+                            new miniViews.SelectView({
+                                list: options,
+                                name: 'autoStart',
+                                model: this.baton.model,
+                                id: guid,
+                                className: 'form-control'
+                            }).render().$el
+                        )
+                    );
+                }
+            });
+        }
+    }());
+
+    // Auto Logout
+    (function () {
+        var MINUTES = 60000,
+            options = [
+                { label: gt('disable'), value: 0 },
+                { label: gt('5 minutes'), value: 5 * MINUTES },
+                { label: gt('10 minutes'), value: 10 * MINUTES },
+                { label: gt('15 minutes'), value: 15 * MINUTES },
+                { label: gt('30 minutes'), value: 30 * MINUTES }
+            ];
+
+        point.extend({
+            id: 'autoLogout',
+            index: 600,
+            className: 'form-group',
+            render: function () {
+                var guid = _.uniqueId('form-control-label-');
+                this.$el.append(
+                    $('<label>').attr({
+                        class: 'control-label col-sm-4',
+                        for: guid
+                    }).text(gt('Automatic sign out')),
+                    $('<div>').addClass('col-sm-6').append(
+                        new miniViews.SelectView({
+                            list: options,
+                            name: 'autoLogout',
+                            model: this.baton.model,
+                            id: guid,
+                            className: 'form-control'
+                        }).render().$el
+                    )
+                );
+            }
+        });
+    }());
+
+    // Auto open notification area
+    (function () {
+        if (settings.isConfigurable('autoOpenNotificationarea')) {
+            point.extend({
+                id: 'autoOpenNotification',
+                index: 700,
+                className: 'form-group',
+                render: function () {
+
+                    //change old settings values to new ones
+                    var value = this.baton.model.get('autoOpenNotification');
+                    if (value === 'always' || value === 'noEmail') {
+                        this.baton.model.set('autoOpenNotification', true);
+                    } else if (value === 'Never') {
+                        this.baton.model.set('autoOpenNotification', false);
+                    }
+
+                    this.$el.append(
+                        $('<div class="col-sm-offset-4 col-sm-8">').append(
+                            $('<div>').addClass('checkbox').append(
+                                $('<label class="control-label">').text(gt('Automatic opening of notification area')).prepend(
+                                    new miniViews.CheckboxView({ name: 'autoOpenNotification', model: this.baton.model }).render().$el
+                                )
+                            )
+                        )
+                    );
+                }
+            });
+        }
+    }());
+    (function () {
+        point.extend({
+            id: 'showDesktopNotifications',
+            index: 800,
+            className: 'form-group',
+            render: function () {
+                this.baton.model.on('change:showDesktopNotifications', function (e, value) {
+                    if (value === true) {
+                        desktopNotifications.requestPermission();
+                    }
+                });
+
+                this.$el.append(
+                    $('<div class="col-sm-offset-4 col-sm-8">').append(
+                        $('<div>').addClass('checkbox').append(
+                            $('<label class="control-label">').text(gt('Show desktop notifications')).prepend(
+                                new miniViews.CheckboxView({ name: 'showDesktopNotifications', model: this.baton.model }).render().$el
+                            )
+                        )
+                    )
+                );
+            }
+        });
+    }());
 });

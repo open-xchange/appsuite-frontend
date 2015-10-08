@@ -4,9 +4,9 @@
 <title>7.7. Searching for Appointments</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Groupware">
 <link rel="up" href="ox.appsuite.user.chap.calendar.html" title="Chapter 7. Calendar">
-<link rel="prev" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.7. Editing multiple appointments at once">
+<link rel="prev" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.8. Editing multiple appointments at once">
 <link rel="next" href="ox.appsuite.user.sect.calendar.share.html" title="7.8. Appointments in teams">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
@@ -37,10 +37,24 @@
 <a name="ox.appsuite.user.concept.calendar.search"></a><p>In order to search for specific appointments, you can use the following search criteria:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>search terms for subject, description, location, attachments' names</p></li>
-<li class="listitem"><p>private, public or shared folders</p></li>
-<li class="listitem"><p>single or recurring appointment</p></li>
-<li class="listitem"><p>future or past appointments</p></li>
+<li class="listitem">
+<p>Search terms for a time range. Searches for appointments that take place within a specific time range. You define a valid time range with the following details.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>The key words <span class="guilabel"><strong>today</strong></span>, <span class="guilabel"><strong>yesterday</strong></span>, <span class="guilabel"><strong>last week</strong></span>, <span class="guilabel"><strong>last month</strong></span>, <span class="guilabel"><strong>last year</strong></span></p></li>
+<li class="listitem"><p>The key words for those time intervals: <span class="guilabel"><strong>last 7 days</strong></span>, <span class="guilabel"><strong>last 30 days</strong></span>, <span class="guilabel"><strong>last 365 days</strong></span></p></li>
+<li class="listitem"><p>A day of the week, e.g. <span class="guilabel"><strong>Monday</strong></span></p></li>
+<li class="listitem"><p>A specific month, e.g. <span class="guilabel"><strong>July</strong></span></p></li>
+<li class="listitem"><p>A four digit date, e.g. <span class="guilabel"><strong>2015</strong></span></p></li>
+<li class="listitem"><p>A date, e.g. <span class="guilabel"><strong>1/31/2015</strong></span></p></li>
+<li class="listitem"><p>A date range, e.g. <span class="guilabel"><strong>12/1/2014 - 1/31/2015</strong></span></p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="listitem"><p>Folders that are to be searched</p></li>
 <li class="listitem"><p>appointment confirmation status</p></li>
+<li class="listitem"><p>Type: all, series, single appointment</p></li>
+<li class="listitem"><p>Folder type: all, private, public, shared</p></li>
 </ul></div>
 <p>
     </p>
@@ -48,44 +62,43 @@
 <div class="task">
 <a name="ox.appsuite.user.task.calendar.search"></a><p class="title">How to search for appointments:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Enter a search term in the search bar's input field. The search menu opens.</p></li>
+<li class="step"><p>Click the <span class="guibutton"><strong>Start search</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> or in the input field in the search bar. A folder button and the <span class="guibutton"><strong>Options</strong></span> button are displayed in the search bar. The folder button indicates the folders to be searched.</p></li>
 <li class="step">
+<p>To define the folders that are to be searched, click on the folder button. Select a folder.</p>
+<p>If you select <span class="guibutton"><strong>All folders</strong></span>, all private, public, and shared folders and subfolders are searched. If you select a specific folder or the folder, only this folder is searched, but no subfolders.</p>
+</li>
+<li class="step">
+<p>Enter a search term in the input field. The search menu opens.</p>
 <p>Use one of the following methods:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p>In order to search in the subject or in the description, click on the search term in the search menu. You can also press Enter or click the <span class="guibutton"><strong>Search</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span>in the search bar. </p>
+<p>In order to search for appointments within a specific time frame, use a valid time range as search term. As soon as a valid time range is recognised in your input, the time range is displayed in the search menu. Click on the time frame in the search menu. You can also press Enter.</p>
+<p>In order to search in the subject or in the description, click on the search term in the search menu. You can also press Enter.</p>
 <p>In order to only search in the subject, click on <span class="guibutton"><strong>in subject</strong></span> in the search menu.</p>
 <p>Accordingly, you can limit the search to the description, location or the attachment's name.</p>
 </li></ul></div>
 <p>
           </p>
-<p><span class="phrase"><strong>Result:</strong></span> The search results are displayed in the list that is shown in the display area. The search criteria used are displayed below the search window.</p>
-</li>
-<li class="step">
-<p>You can further adjust the search result:</p>
+<p>Result:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>In order to display all search criteria, click on <span class="guibutton"><strong>Show Advanced Filters</strong></span>.</p>
-<p>In order to adjust a criterion, click the icon <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span>next to the search criterion. Select an entry from the menu. You can use the following search criteria:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>You can use the <span class="guilabel"><strong>Folder</strong></span> drop-down to search in a specific folder.</p>
-<p>If you select <span class="guibutton"><strong>All folders</strong></span>, all folders and subfolders are searched. If you select a specific folder or the folder, only this folder is searched, but not subfolders.</p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>The <span class="guilabel"><strong>Folder type</strong></span> drop-down allows limiting the search to private, public or shared folders.</p></li>
-<li class="listitem" style="list-style-type: none"><p>The <span class="guilabel"><strong>Type</strong></span> drop-down allows searching for single or recurring appointments.</p></li>
-<li class="listitem" style="list-style-type: none"><p>The <span class="guilabel"><strong>Date</strong></span> drop-down allows searching for future or past appointments.</p></li>
-<li class="listitem" style="list-style-type: none"><p>The <span class="guilabel"><strong>My Status</strong></span> drop-down allows searching for appointments with a specific confirmation status.</p></li>
-</ul></div>
-<p>
-                </p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>In order to enhance your search in the list of found objects, start an additional search.</p></li>
-<li class="listitem" style="list-style-type: none"><p>In order to remove a search criterion, click the icon <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>. If you remove all search criteria, the search will be finished.</p></li>
+<li class="listitem" style="list-style-type: none"><p>The search results are displayed in the list that is shown in the display area. </p></li>
+<li class="listitem" style="list-style-type: none"><p>The search term is displayed in the input field.</p></li>
 </ul></div>
 <p>
           </p>
 </li>
-<li class="step"><p>In order to finish the search, click on <span class="guibutton"><strong>Close search</strong></span>.</p></li>
+<li class="step">
+<p>You have the following options for adjusting the search results:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>To refine the search result, enter additional search terms: To remove a search term, click the icon <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>next to the search term. </p></li>
+<li class="listitem" style="list-style-type: none"><p>To search in another folder, click on the folder button. Select a folder.</p></li>
+<li class="listitem" style="list-style-type: none"><p>To limit the search to private, public or shared folders, click on <span class="guibutton"><strong>Options</strong></span>. Select a folder type.</p></li>
+<li class="listitem" style="list-style-type: none"><p>To limit the search to appointments with a specific confirmation status, click on <span class="guibutton"><strong>Options</strong></span>. Select a status.</p></li>
+<li class="listitem" style="list-style-type: none"><p>To limit the search to single or recurring appointments, click on <span class="guibutton"><strong>Options</strong></span>. Select a type.</p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="step"><p>In order to finish the search, click the <span class="guibutton"><strong>Cancel search</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>.</p></li>
 </ol></div>
 </div>
 </div>

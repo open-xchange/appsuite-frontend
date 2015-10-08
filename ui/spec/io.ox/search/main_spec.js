@@ -10,9 +10,13 @@
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
-define(['io.ox/mail/main',
-        'spec/shared/io.ox/search/util',
-        'beforeEachEnsure'], function (main, util, beforeEachEnsure) {
+
+define([
+    'io.ox/mail/main',
+    'spec/shared/io.ox/search/util',
+    'beforeEachEnsure'
+], function (main, util, beforeEachEnsure) {
+    'use strict';
 
     describe('Search', function () {
 
@@ -50,7 +54,7 @@ define(['io.ox/mail/main',
                                 var field = getField(this);
                                 field.val('test');
                                 field.trigger(
-                                    $.Event('keyup', { keyCode: 80})
+                                    $.Event('keyup', { keyCode: 80 })
                                 );
                                 util.dropdownLoaded(done);
                             });
@@ -62,7 +66,6 @@ define(['io.ox/mail/main',
                                 util.dropdownLoaded(done);
                             });
                         });
-
                     });
                 });
 
@@ -71,7 +74,7 @@ define(['io.ox/mail/main',
 
                     //beforeEach(util.openDropdown);
 
-                    function getDropdown ()  {
+                    function getDropdown () {
                         return $('.autocomplete-popup>.scrollable-pane').children();
                     }
 

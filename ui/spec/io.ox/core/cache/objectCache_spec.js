@@ -13,9 +13,10 @@
  *
  */
 
-define(['io.ox/core/extensions',
-       'io.ox/core/cache'], function (ext, cache) {
-
+define([
+    'io.ox/core/extensions',
+    'io.ox/core/cache'
+], function (ext, cache) {
     'use strict';
 
     describe('Cache', function () {
@@ -31,13 +32,13 @@ define(['io.ox/core/extensions',
             var newerTimeStamp = currentTimeStamp + 1000;
 
             var testKey = 'A.ABC';
-            var testData1 = {'folder_id': 'A', 'id': 'ABC', 'TEST': '1'};
-            var testData2 = {'folder_id': 'A', 'id': 'ABC', 'TEST': '2'};
-            var testData3 = {'folder_id': 'A', 'id': 'ABC', 'TEST': '3'};
+            var testData1 = { 'folder_id': 'A', 'id': 'ABC', 'TEST': '1' };
+            var testData2 = { 'folder_id': 'A', 'id': 'ABC', 'TEST': '2' };
+            var testData3 = { 'folder_id': 'A', 'id': 'ABC', 'TEST': '3' };
 
-            var testDataA = {'folder_id': 'A', 'id': 'ABD', 'TEST': '1'};
-            var testDataB = {'folder_id': 'A', 'id': 'ABE', 'TEST': '1'};
-            var testDataC = {'folder_id': 'A', 'id': 'ABF', 'TEST': '1'};
+            var testDataA = { 'folder_id': 'A', 'id': 'ABD', 'TEST': '1' };
+            var testDataB = { 'folder_id': 'A', 'id': 'ABE', 'TEST': '1' };
+            var testDataC = { 'folder_id': 'A', 'id': 'ABF', 'TEST': '1' };
 
             it('clearing cache', function (done) {
                 testStorage.clear().done(function (check) {
@@ -278,8 +279,8 @@ define(['io.ox/core/extensions',
                 var c = new cache.ObjectCache('my_cooltest', true, function (o) { return String(o.id); });
                 $.when(
                     // add objects (with id … values are strings)
-                    c.add({id: '100'}),
-                    c.add({id: '102'})
+                    c.add({ id: '100' }),
+                    c.add({ id: '102' })
                 ).then(function () {
                     return c.size();
                 }).then(function (r) {

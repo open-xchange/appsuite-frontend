@@ -11,10 +11,10 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/realtime/groups',
-    ['io.ox/realtime/rt',
-     'io.ox/core/event'
-    ], function (rt, Event) {
+define('io.ox/realtime/groups', [
+    'io.ox/realtime/rt',
+    'io.ox/core/event'
+], function (rt, Event) {
 
     'use strict';
 
@@ -33,6 +33,18 @@ define('io.ox/realtime/groups',
                 self.trigger('error:notMember');
                 clearInterval(heartbeat);
                 heartbeat = null;
+            } else if (error.data && error.data.code === 1010) {
+                self.trigger('error:disposed');
+                clearInterval(heartbeat);
+                heartbeat = null;
+            } else if (error.data && error.data.code === 1012) {
+                self.trigger('error:joinFailed', error);
+                clearInterval(heartbeat);
+                heartbeat = null;
+            } else if (error.data && error.data.code === 1013) {
+                self.trigger('error:leaveFailed', error);
+            } else if (error.data && error.data.code === 1011) {
+                self.trigger('error:stanzaProcessingFailed', error);
             }
             self.trigger('error', error);
         });
@@ -183,6 +195,10 @@ define('io.ox/realtime/groups',
             return (rt.send !== $.noop);
         };
 
+        this.getUuid = function () {
+            return rt.resource;
+        };
+
         Event.extend(this);
     }
 
@@ -195,7 +211,9 @@ define('io.ox/realtime/groups',
             }
             groups[id] = new RealtimeGroup(id);
             return groups[id];
-        }
+        },
+
+        rtId: rt.resource
     };
 
 });

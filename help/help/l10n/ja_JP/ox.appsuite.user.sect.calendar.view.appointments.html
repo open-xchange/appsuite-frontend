@@ -1,12 +1,12 @@
 <html lang="ja">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>7.2.3. アポイントの色</title>
+<title>7.2.4. アポイントの色</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Groupware">
 <link rel="up" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. アポイントの表示">
-<link rel="prev" href="ox.appsuite.user.sect.calendar.view.list.html" title="7.2.2. リスト ビューでのアポイントの表示">
+<link rel="prev" href="ox.appsuite.user.sect.calendar.view.list.html" title="7.2.3. リスト ビューでのアポイントの表示">
 <link rel="next" href="ox.appsuite.user.sect.calendar.attachments.html" title="7.3. アポイントの添付ファイルの表示、保存">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
@@ -29,25 +29,62 @@
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
-  <h1 class="sr-only">
-<span class="phrase">予定表</span>
-		
-		
-		</h1>
+  <h1 class="sr-only"><span class="phrase">予定表</span></h1>
 <h2 class="sr-only">アポイントの表示</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.calendar.view.appointments"></a>7.2.3. アポイントの色</h3></div></div></div>
-<a class="indexterm" name="id-1.8.9.7.2"></a><a class="indexterm" name="id-1.8.9.7.3"></a><div class="concept">
-<a name="ox.appsuite.user.concept.appointments.color"></a><p>予定表ビューでは、次のように公開方法に応じた色でアポイントが表示されます。</p>
+<a name="ox.appsuite.user.sect.calendar.view.appointments"></a>7.2.4. アポイントの色</h3></div></div></div>
+<a class="indexterm" name="id-1.8.9.8.2"></a><a class="indexterm" name="id-1.8.9.8.3"></a><a class="indexterm" name="id-1.8.9.8.4"></a><div class="concept">
+<a name="ox.appsuite.user.concept.appointments.color"></a><p>予定表ビューでは、アポイント表示は次のように指定されます。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>色スキームセット：クラシック、ダークカラー、カスタム</p></li>
+<li class="listitem"><p>アポイント期間の間の空き時間予定あり、仮の予定、欠席、空き時間</p></li>
+<li class="listitem"><p>アポイントの確認ステータス：承諾、仮の予定、辞退</p></li>
+<li class="listitem"><p>アポイントの件名および詳細の表示：プライベート、または他のユーザにも表示</p></li>
+</ul></div>
+<p>表示は、色、アイコン、濃淡の違いで区別されます。</p>
+</div>
+<p><a name="ox.appsuite.user.concept.appointments.show.classiccolors"></a></p>
+<p class="title"><b>色スキームの表示　クラシックまたはダークカラー</b></p>
+<p>時間が空いているかによって、アポイントが次の色で表示されます。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>仮の予定: 黄</p></li>
 <li class="listitem"><p>空き時間: 緑</p></li>
 <li class="listitem"><p>予定あり: 青</p></li>
 <li class="listitem"><p>欠席: 赤</p></li>
 </ul></div>
-<p>プライベートアポイントは杖にグレーで表示されます。</p>
-</div>
+<p>アポイントの確認ステータスによって、アポイントは次のように表示されます。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>承諾したアポイントは時間ありの色で表示されます。</p></li>
+<li class="listitem"><p>仮承諾のアポイントは、<span class="guilabel"><strong>仮の予定</strong></span>という文字付きで表示されます。</p></li>
+<li class="listitem">
+<p>辞退したアポイントは、件名に線を引いて、薄いグレーで表示されます。</p>
+<p><span class="phrase"><strong>ヒント：</strong></span>予定表の設定では、辞退したアポイントを表示するかどうかを指定できます。</p>
+</li>
+</ul></div>
+<p>プライベートアポイントは、グレーで表示され、アイコンも表示されます。</p>
+<p><a name="ox.appsuite.user.concept.appointments.show.customcolors"></a></p>
+<p class="title"><b>色スキームの表示　カスタム</b></p>
+<p>時間が空いているかによって、アポイントが次の色およびパターンで表示されます。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>仮の予定：細い斜線ストライプの入った選択した色</p></li>
+<li class="listitem"><p>空き時間：幅広の斜線ストライプの入った選択した色</p></li>
+<li class="listitem"><p>予定あり：選択した色</p></li>
+<li class="listitem">
+<p>欠席：選択した色</p>
+<p><span class="phrase"><strong>ヒント: </strong></span><span class="guilabel"><strong>欠席</strong></span>にはお好み色を使用できます。</p>
+</li>
+</ul></div>
+<p>色を選択しなければ、既定色の薄い青色が使われます。アポイントの確認ステータスによって、アポイントは次のように表示されます。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>承諾したアポイントは時間ありの色とパターンで表示されます。</p></li>
+<li class="listitem"><p>仮承諾のアポイントは、薄いグレーで表示されます。</p></li>
+<li class="listitem">
+<p>辞退したアポイントは、件名に線を引いて、薄いグレーで表示されます。</p>
+<p><span class="phrase"><strong>ヒント：</strong></span>予定表の設定では、辞退したアポイントを表示するかどうかを指定できます。</p>
+</li>
+</ul></div>
+<p>プライベートアポイントは、グレーで表示され、アイコンも表示されます。</p>
 </div>
           </div>
         </body>

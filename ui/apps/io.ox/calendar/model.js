@@ -17,10 +17,10 @@ define('io.ox/calendar/model', [
     'gettext!io.ox/calendar',
     'io.ox/backbone/validation',
     'io.ox/participants/model',
-    'io.ox/core/date',
     'io.ox/core/folder/api',
-    'settings!io.ox/calendar'
-], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, settings) {
+    'settings!io.ox/calendar',
+    'settings!io.ox/core'
+], function (api, ModelFactory, ext, gt, Validators, pModel, folderAPI, settings, coreSettings) {
 
     'use strict';
 
@@ -29,6 +29,7 @@ define('io.ox/calendar/model', [
     var factory = new ModelFactory({
         ref: 'io.ox/calendar/model',
         api: api,
+        toUniqueId: _.ecid,
         destroy: function (model) {
             var options = {
                 id: model.id,
@@ -46,15 +47,20 @@ define('io.ox/calendar/model', [
             defaults: {
                 recurrence_type: 0,
                 notification: true,
-                shown_as: 1
+                shown_as: 1,
+                timezone: coreSettings.get('timezone'),
+                endTimezone: coreSettings.get('timezone')
             },
 
             init: function () {
-                var defStart = new date.Local().setMinutes(0, 0, 0).add(date.HOUR);
+                var m = moment().startOf('hour').add(1, 'hours'),
+                    defStart = m.valueOf(),
+                    defEnd = m.add(1, 'hours').valueOf();
+
                 // set default time
                 this.attributes = _.extend({
-                    start_date: defStart.getTime(),
-                    end_date: defStart.getTime() + date.HOUR
+                    start_date: defStart,
+                    end_date: defEnd
                 }, this.attributes);
 
                 // End date automatically shifts with start date
@@ -62,8 +68,8 @@ define('io.ox/calendar/model', [
 
                 // internal storage for last timestamps
                 this.cache = {
-                    start: this.get('full_time') ? defStart.getTime() : this.get('start_date'),
-                    end: this.get('full_time') ? defStart.getTime() + date.HOUR : this.get('end_date')
+                    start: this.get('full_time') ? defStart : this.get('start_date'),
+                    end: this.get('full_time') ? defEnd : this.get('end_date')
                 };
 
                 // bind events
@@ -97,34 +103,28 @@ define('io.ox/calendar/model', [
                             model.set('shown_as', fulltime ? 4 : 1, { validate: true });
                         }
 
+                        var startDate, endDate;
+
                         if (fulltime === true) {
-                            // save to cache
-                            this.cache.start = model.get('start_date');
-                            this.cache.end = model.get('end_date');
-
-                            // handle time
-                            var startDate = new date.Local(this.cache.start).setHours(0, 0, 0, 0),
-                                endDate = new date.Local(this.cache.end).setHours(0, 0, 0, 0).add(date.DAY);
-
-                            // convert to UTC and save
-                            model.set('start_date', startDate.local, { validate: true });
-                            model.set('end_date', endDate.local, { validate: true });
+                            // save to cache, convert to UTC and save
+                            startDate = moment(this.cache.start = model.get('start_date')).startOf('day').utc(true).valueOf();
+                            endDate = moment(this.cache.end = model.get('end_date')).startOf('day').add(1, 'day').utc(true).valueOf();
                         } else {
-                            var oldStart = new date.Local(this.cache.start),
-                                oldEnd = new date.Local(this.cache.end);
+                            var oldStart = moment(this.cache.start),
+                                oldEnd = moment(this.cache.end);
 
                             // save to cache
-                            this.cache.start = date.Local.utc(model.get('start_date'));
-                            this.cache.end = date.Local.utc(model.get('end_date'));
+                            this.cache.start = moment.utc(model.get('start_date')).local(true).valueOf();
+                            this.cache.end = moment.utc(model.get('end_date')).local(true).valueOf();
 
                             // handle time
-                            var startDate = new date.Local(this.cache.start).setHours(oldStart.getHours(), oldStart.getMinutes(), 0, 0),
-                                endDate = new date.Local(this.cache.end).setHours(oldEnd.getHours(), oldEnd.getMinutes(), 0, 0).add(-date.DAY);
-
-                            // save
-                            model.set('start_date', startDate.getTime(), { validate: true });
-                            model.set('end_date', endDate.getTime(), { validate: true });
+                            startDate = moment(this.cache.start).startOf('day').hours(oldStart.hours()).minutes(oldStart.minutes()).valueOf();
+                            endDate = moment(this.cache.end).startOf('day').hours(oldEnd.hours()).minutes(oldEnd.minutes()).subtract(1, 'day').valueOf();
                         }
+                        // save
+                        length = endDate - startDate;
+                        model.set('start_date', startDate, { validate: true });
+                        model.set('end_date', endDate, { validate: true });
                     }
                 });
             },
@@ -133,11 +133,12 @@ define('io.ox/calendar/model', [
             getDate: function (attr) {
                 var time = this.get.apply(this, arguments);
                 if (this.get('full_time')) {
-                    time = date.Local.utc(time);
+                    time = moment.utc(time).local(true);
                     // fake end date for datepicker
                     if (attr === 'end_date') {
-                        time = new date.Local(time).add(-date.DAY).getTime();
+                        time.subtract(1, 'day');
                     }
+                    time = time.valueOf();
                 }
                 return time;
             },
@@ -145,11 +146,12 @@ define('io.ox/calendar/model', [
             // special set function for datepicker
             setDate: function (attr, time) {
                 if (this.get('full_time')) {
+                    time = moment(time);
                     // fix fake end date for model
                     if (attr === 'end_date') {
-                        time = new date.Local(time).add(date.DAY).getTime();
+                        time.add(1, 'day');
                     }
-                    arguments[1] = date.Local.localTime(time);
+                    arguments[1] = time.utc(true).valueOf();
                 }
                 return this.set.apply(this, arguments);
             },
@@ -160,62 +162,47 @@ define('io.ox/calendar/model', [
                 }
                 var self = this,
                     resetListUpdate = false,
-                    changeParticipantsUpdate = false,
-                    participants = this._participants = new pModel.Participants(this.get('participants'));
+                    changeParticipantsUpdate = false;
 
-                participants.invoke('fetch');
+                this._participants = new pModel.Participants(this.get('participants'), { silent: false });
 
-                function resetList() {
+                this._participants.on('add remove reset', function () {
                     if (changeParticipantsUpdate) {
                         return;
                     }
                     resetListUpdate = true;
-                    self.set('participants', participants.getAPIData(), { validate: true });
+                    self.set('participants', this.getAPIData(), { validate: true });
                     resetListUpdate = false;
-                }
-
-                participants.on('add remove reset', resetList);
+                });
 
                 this.on('change:participants', function () {
                     if (resetListUpdate) {
                         return;
                     }
                     changeParticipantsUpdate = true;
-                    participants.reset(self.get('participants'));
-                    participants.invoke('fetch');
+                    self._participants.reset(self.get('participants'));
                     changeParticipantsUpdate = false;
                 });
-
-                return participants;
+                return this._participants;
             },
 
             setDefaultParticipants: function (options) {
                 var self = this;
-                return folderAPI.get(self.get('folder_id')).done(function (folder) {
-                    var userID = ox.user_id;
+                if (this.get('participants').length > 0) return $.when();
+                return folderAPI.get(this.get('folder_id')).then(function (folder) {
                     if (folderAPI.is('private', folder)) {
                         if (options.create) {
-                            // it's a private folder for the current user, add him by default
-                            // as participant
-                            self.getParticipants().addUniquely({ id: userID, type: 1 });
-
-                            // use a new, custom and unused property in his model to specify that he can't be removed
-                            self.getParticipants().get(userID).set('ui_removable', false, { validate: true });
-                        } else {
-                            if (self.get('organizerId') === userID) {
-                                self.getParticipants().get(userID).set('ui_removable', false, { validate: true });
-                            }
+                            // if private folder, current user will be the organizer
+                            self.set('organizerId', ox.user_id);
+                            self.getParticipants().add({ id: ox.user_id, type: 1 });
                         }
                     } else if (folderAPI.is('public', folder)) {
-                        if (options.create) {
-                            // if public folder, current user will be added
-                            self.getParticipants().addUniquely({ id: userID, type: 1 });
-                        }
+                        // if public folder, current user will be added
+                        if (options.create) self.getParticipants().add({ id: ox.user_id, type: 1 });
                     } else if (folderAPI.is('shared', folder)) {
                         // in a shared folder the owner (created_by) will be added by default
-                        self.getParticipants().addUniquely({ id: folder.created_by, type: 1 });
+                        self.getParticipants().add({ id: folder.created_by, type: 1 });
                     }
-
                 });
             }
         },
@@ -264,7 +251,5 @@ define('io.ox/calendar/model', [
         end_date: { format: 'date', mandatory: true }
     });
 
-    return {
-        factory: factory
-    };
+    return factory;
 });

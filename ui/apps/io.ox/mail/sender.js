@@ -11,14 +11,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/sender',
-    ['io.ox/mail/util',
-     'io.ox/core/api/account',
-     'io.ox/core/api/user',
-     'io.ox/contacts/api',
-     'io.ox/core/capabilities',
-     'settings!io.ox/mail'
-    ], function (util, api, userAPI, contactsAPI, capabilities, settings) {
+define('io.ox/mail/sender', [
+    'io.ox/mail/util',
+    'io.ox/core/api/account',
+    'io.ox/core/api/user',
+    'io.ox/contacts/api',
+    'io.ox/core/capabilities',
+    'settings!io.ox/mail'
+], function (util, api, userAPI, contactsAPI, capabilities, settings) {
 
     'use strict';
 
@@ -38,7 +38,7 @@ define('io.ox/mail/sender',
      * returns sender object
      * considers potential existing telephone numbers
      * @param  {array} data
-     * @return {object} value, text, display_name, address
+     * @return { object} value, text, display_name, address
      */
     function getSender(data) {
         var sender = {
@@ -56,7 +56,6 @@ define('io.ox/mail/sender',
         getsender: function (data) {
             return getSender(data);
         },
-
 
         // get current sender
         get: function (select) {
@@ -95,7 +94,7 @@ define('io.ox/mail/sender',
         /**
          * user data
          * accessible for testing purposes
-         * @return {deferred} resolves as user object
+         * @return { deferred} resolves as user object
          */
         getUser: function () {
             return userAPI.get({ id: ox.user_id });
@@ -104,7 +103,7 @@ define('io.ox/mail/sender',
         /**
          * get mapped fields
          * accessible for testing purposes
-         * @return {array}
+         * @return { array }
          */
         getMapping: function () {
             return capabilities.has('msisdn') ? contactsAPI.getMapping('msisdn', 'names') : [];
@@ -118,7 +117,7 @@ define('io.ox/mail/sender',
             return $.trim(settings.get('defaultSendAddress', ''));
         },
 
-         /**
+        /**
          * default send adresse from settings
          * @return {string}
          */
@@ -131,7 +130,7 @@ define('io.ox/mail/sender',
         /**
          * primary address
          * accessible for testing purposes
-         * @return {deferred} resolves as array
+         * @return { deferred} resolves as array
          */
         getPrimaryAddress: function () {
             return api.getPrimaryAddress();
@@ -140,7 +139,7 @@ define('io.ox/mail/sender',
         /**
          * internal and external accounts
          * accessible for testing purposes
-         * @return {deferred} resolves as array of arrays
+         * @return { deferred} resolves as array of arrays
          */
         getAccounts: function () {
             return api.getAllSenderAddresses();
@@ -149,7 +148,7 @@ define('io.ox/mail/sender',
         /**
          * display name
          * accessible for testing purposes
-         * @return {deferred} resolves as string
+         * @return { deferred} resolves as string
          */
         getDisplayName: function () {
             return api.getDefaultDisplayName();
@@ -164,7 +163,7 @@ define('io.ox/mail/sender',
          *     └─ 1
          *        ├─ 0: Pierce Hawthorne
          *        └─ 1: +49195841148248
-         * @return {deferred} resolves as array of arrays
+         * @return { deferred} resolves as array of arrays
          */
         getNumbers: function () {
             return $.when(
@@ -192,7 +191,7 @@ define('io.ox/mail/sender',
         /**
          * list of normalised arrays (display_name, value)
          * accessible for testing purposes
-         * @return {deferred} resolves as array
+         * @return { deferred} resolves as array
          */
         getAddresses: function () {
             return $.when(
@@ -205,7 +204,7 @@ define('io.ox/mail/sender',
         /**
          * add all senders to <select> box
          * @param  {jquery} select node
-         * @return {undefined}
+         * @return { undefined }
          */
         drawOptions: function (select) {
             if (!select) return;
@@ -243,7 +242,7 @@ define('io.ox/mail/sender',
 
                 if (defaultValue) select.val(defaultValue);
             });
-                },
+        },
 
         drawDropdown: function () {
             // fallback address - if any other request fails we have the default send address
@@ -251,6 +250,7 @@ define('io.ox/mail/sender',
 
             // append options to select-box
             return that.getAddresses().then(function (addresses, numbers, primary) {
+
                 var defaultAddress = fallbackAddress || primary[1],
                     defaultValue,
                     list = [].concat(addresses, numbers);

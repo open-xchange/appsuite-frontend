@@ -10,8 +10,8 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
-], function (util, gt, date) {
+define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/moment'
+], function (util, gt, moment) {
     describe('Tasks Utilities', function () {
         var options = {
             testData: {
@@ -23,18 +23,18 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
                     'status': 3,
                     'title': 'Top Test'
                 }, {
-                    'end_date': 1895104800000,
+                    'end_time': 1895104800000,
                     'status': 1,
                     'title': 'Blabla'
                 },
                 {
-                    'end_date': 1895104800000,
+                    'end_time': 1895104800000,
                     'status': 1,
                     'title': 'Abc'
                 }, {
                     'status': 1,
                     'title': 'Test Title',
-                    'end_date': 1384999200000
+                    'end_time': 1384999200000
                 }
             ]
         };
@@ -61,7 +61,7 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
             });
 
             it('should add badges if detail parameter is set', function () {
-                var result = util.interpretTask(options.testData, {detail: true});
+                var result = util.interpretTask(options.testData, { detail: true });
                 expect(result.badge).to.equal('badge');
             });
         });
@@ -74,42 +74,41 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
             });
 
             it('should only contain full days if parameter is set', function () {
-                var result = _.object(util.buildOptionArray({daysOnly: true}));
+                var result = _.object(util.buildOptionArray({ daysOnly: true }));
                 expect(result[5]).not.to.exist;
                 result = _.object(util.buildOptionArray());
                 expect(result[5]).to.equal(gt('in 5 minutes'));
             });
 
             it('should not contain past daytimes', function () {
-                var myDate = new date.Local(),
+                var myDate = moment(),
                     result, stub;
 
-                myDate.setHours(7);
+                myDate.hours(7);
                 //super special UI time hack
-                stub = sinon.stub(date, 'Local');
+                stub = sinon.stub(window, 'moment');
                 stub.returns(myDate);
 
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.key('d0');
                 expect(result).to.include.key('5');
 
-                myDate.setHours(13);
+                myDate.hours(13);
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.key('d1');
                 expect(result).to.include.key('5');
 
-                myDate.setHours(16);
+                myDate.hours(16);
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.key('d2');
                 expect(result).to.include.key('5');
 
-
-                myDate.setHours(19);
+                myDate.hours(19);
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.key('d3');
                 expect(result).to.include.key('5');
 
-                myDate.setHours(23);
+                myDate.hours(23);
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.key('d4');
                 expect(result).to.include.key('5');
@@ -118,45 +117,45 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
             });
 
             it('should set weekdays correctly', function () {
-                var myDate = new date.Local(),
+                var myDate = moment(),
                     result, stub;
 
                 //super special UI time hack
-                stub = sinon.stub(date, 'Local');
+                stub = sinon.stub(window, 'moment');
                 stub.returns(myDate);
 
                 //today and tomorrow are special and should not be included in standard next ...day
-                myDate.setDate(myDate.getDate() - myDate.getDay());//sunday
+                myDate.day(0);//sunday
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.keys(['w0', 'w1']);
                 expect(result).to.include.keys(['w2', 'w3', 'w4', 'w5', 'w6']);
 
-                myDate.setDate(myDate.getDate() + 1);//monday
+                myDate.day(1);//monday
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.keys(['w1', 'w2']);
                 expect(result).to.include.keys(['w0', 'w3', 'w4', 'w5', 'w6']);
 
-                myDate.setDate(myDate.getDate() + 1);//tuesday
+                myDate.day(2);//tuesday
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.keys(['w2', 'w3']);
                 expect(result).to.include.keys(['w0', 'w1', 'w4', 'w5', 'w6']);
 
-                myDate.setDate(myDate.getDate() + 1);//wednesday
+                myDate.day(3);//wednesday
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.keys(['w3', 'w4']);
                 expect(result).to.include.keys(['w0', 'w1', 'w2', 'w5', 'w6']);
 
-                myDate.setDate(myDate.getDate() + 1);//thursday
+                myDate.day(4);//thursday
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.keys(['w4', 'w5']);
                 expect(result).to.include.keys(['w0', 'w1', 'w2', 'w3', 'w6']);
 
-                myDate.setDate(myDate.getDate() + 1);//friday
+                myDate.day(5);//friday
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.keys(['w5', 'w6']);
                 expect(result).to.include.keys(['w0', 'w1', 'w2', 'w3', 'w4']);
 
-                myDate.setDate(myDate.getDate() + 1);//saturday
+                myDate.day(6);//saturday
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.keys(['w6', 'w0']);
                 expect(result).to.include.keys(['w1', 'w2', 'w3', 'w4', 'w5']);
@@ -175,42 +174,42 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
             it('should return correct nodeTypes', function () {
                 var result = util.buildDropdownMenu();
                 expect(result[0].is('option')).be.true;
-                result = util.buildDropdownMenu({bootstrapDropdown: true});
+                result = util.buildDropdownMenu({ bootstrapDropdown: true });
                 expect(result[0].is('li')).to.be.true;
             });
         });
         describe('computePopupTime', function () {
 
             it('should only return full days', function () {
-                var result = new date.Local(util.computePopupTime('t').endDate);
+                var result = moment.utc(util.computePopupTime('t').endDate);
 
-                expect(result.getHours()).to.equal(0);
-                expect(result.getMinutes()).to.equal(0);
-                expect(result.getSeconds()).to.equal(0);
-                expect(result.getMilliseconds()).to.equal(0);
+                expect(result.hours()).to.equal(0);
+                expect(result.minutes()).to.equal(0);
+                expect(result.seconds()).to.equal(0);
+                expect(result.milliseconds()).to.equal(0);
             });
         });
         describe('sortTasks', function () {
 
             it('should work on a copy', function () {
                 util.sortTasks(options.testDataArray);
-                expect(options.testDataArray[0]).to.deep.equal({'status': 3, 'title': 'Top Test'});
+                expect(options.testDataArray[0]).to.deep.equal({ 'status': 3, 'title': 'Top Test' });
             });
 
             it('should sort overdue tasks to first position', function () {
                 var result = util.sortTasks(options.testDataArray);
-                expect(result[0]).to.deep.equal({'status': 1, 'title': 'Test Title', 'end_date': 1384999200000 });
+                expect(result[0]).to.deep.equal({ 'status': 1, 'title': 'Test Title', 'end_time': 1384999200000 });
             });
 
             it('should sort done tasks to last position', function () {
                 var result = util.sortTasks(options.testDataArray);
-                expect(result[3]).to.deep.equal({'status': 3, 'title': 'Top Test'});
+                expect(result[3]).to.deep.equal({ 'status': 3, 'title': 'Top Test' });
             });
 
             it('should sort same dates alphabetically', function () {
                 var result = util.sortTasks(options.testDataArray);
-                expect(result[1]).to.deep.equal({'end_date': 1895104800000, 'status': 1, 'title': 'Abc'});
-                expect(result[2]).to.deep.equal({'end_date': 1895104800000, 'status': 1, 'title': 'Blabla'});
+                expect(result[1]).to.deep.equal({ 'end_time': 1895104800000, 'status': 1, 'title': 'Abc' });
+                expect(result[2]).to.deep.equal({ 'end_time': 1895104800000, 'status': 1, 'title': 'Blabla' });
             });
         });
     });

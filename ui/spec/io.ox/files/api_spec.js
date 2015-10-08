@@ -6,348 +6,308 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
- * @author Frank Paczynski <frank.paczynski@open-xchange.com>
+ * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-define(['io.ox/files/api',
-    'shared/examples/for/api',
-    'sinon-wrapper',
-    'fixture!io.ox/files/file.json',
-    'fixture!io.ox/files/file-versions.json',
-    'waitsFor'
-], function (api, sharedExamplesFor, wrapper, unlocked, fileversions, waitsFor) {
-
-    function isRejected(def) {
-        return waitsFor( function () {
-            return (def.state() === 'rejected');
-        });
-    }
-
-    function isPromise(def) {
-        return (!def.reject && !!def.done);
-    }
-
-    var sinon = wrapper.create(),
-        locked = $.extend({}, unlocked, {
-            id: '4710',
-            //in 3 days
-            locked_until: _.now() + (604800000 / 2),
-            modified_by: ox.user_id
-        }),
-        lockedOther = $.extend({}, locked, {
-            id: 3,
-            locked_until: _.now() + (604800000 * 2),
-            modified_by: 'other'
-        }),
-        setupFakeServer = function (server) {
-            server.autoRespond = true;
-            server.respondWith('GET', /api\/files\?action=versions/, function (xhr) {
-                xhr.respond(200, {
-                        'Content-Type': 'text/javascript;charset=UTF-8'
-                    },
-                    JSON.stringify({
-                        timestamp: 1368791630910,
-                        data: fileversions
-                    })
-                );
-            });
-            server.respondWith('GET', /api\/files\?action=get/, function (xhr) {
-                xhr.respond(200, {
-                        'Content-Type': 'text/javascript;charset=UTF-8'
-                    },
-                    JSON.stringify({
-                        timestamp: 1368791630910,
-                        data: locked
-                    })
-                );
-            });
-            server.respondWith('PUT', /api\/files\?action=detach/, function (xhr) {
-                xhr.respond(200, {
-                        'Content-Type': 'text/javascript;charset=UTF-8'
-                    },
-                    JSON.stringify({
-                        timestamp: 1368791630910,
-                        data: fileversions
-                    })
-                );
-            });
-        };
+define([
+    'io.ox/files/api',
+    'settings!io.ox/core'
+], function (api, coreSettings) {
+    'use strict';
 
     describe('files API', function () {
-        //tracker
-        describe('has a tracker', function () {
-            var tracker = api.tracker;
-            describe('with setters', function () {
-                describe('fixing inconsistencies', function () {
-                    beforeEach(function () {
-                        //empty tracker
-                        tracker.clear();
-                        //add data
-                        tracker.addFile(locked);
-                        tracker.addFile(unlocked);
-                        //create/reset spies
-                        sinon.spy(tracker, 'addFile');
-                        sinon.spy(tracker, 'updateFile');
-                        sinon.spy(tracker, 'removeFile');
+        it('should exist', function () {
+            expect(api).to.exist;
+        });
 
-                    });
-                    it('of locked files', function () {
-                        //no changes
-                        tracker.updateFile(locked);
-                        expect(tracker.removeFile.notCalled).to.be.true;
-                        expect(tracker.addFile.notCalled).to.be.true;
-                        expect(tracker.isLocked(locked)).to.be.true;
-                        //unlocked
-                        tracker.updateFile($.extend({}, locked, { locked_until: 0 }));
-                        expect(tracker.removeFile.calledOnce).to.be.true;
-                        expect(tracker.addFile.notCalled).to.be.true;
-                        expect(tracker.isLocked(locked)).to.be.false;
-                    });
-                    it('of unlocked files', function () {
-                        //no changes
-                        tracker.updateFile(unlocked);
-                        expect(tracker.addFile.notCalled).to.be.true;
-                        expect(tracker.removeFile.notCalled).to.be.true;
-                        expect(tracker.isLocked(unlocked)).to.be.false;
-                        //locked
-                        tracker.updateFile($.extend({}, unlocked, { locked_until: 99384531810826 }));
-                        expect(tracker.addFile.calledOnce).to.be.true;
-                        expect(tracker.removeFile.notCalled).to.be.true;
-                        expect(tracker.isLocked(unlocked)).to.be.true;
-                    });
-                });
-                it('handle invalid files', function () {
-                    tracker.updateFile(undefined);
-                    tracker.updateFile({});
-                    tracker.updateFile([]);
-                    tracker.updateFile('');
-                });
-                describe('handle valid', function () {
-                    beforeEach(function () {
-                        tracker.clear();
-                    });
-                    it('locked files', function () {
-                        //locked
-                        tracker.clear();
-                        expect(tracker.isLocked(locked)).to.be.false;
-                        tracker.updateFile(locked);
-                        expect(tracker.isLocked(locked)).to.be.true;
-                    });
-                    it('unlocked files', function () {
-                        //locked
-                        tracker.clear();
-                        expect(tracker.isLocked(unlocked)).to.be.false;
-                        tracker.updateFile(locked);
-                        expect(tracker.isLocked(unlocked)).to.be.false;
-                    });
-                });
-                it('that resets tracker', function () {
-                    tracker.updateFile(locked);
-                    expect(tracker.isLocked(locked)).to.be.true;
-                    tracker.clear();
-                    expect(tracker.isLocked(locked)).to.be.false;
-                });
+        var testFiles = [
+            { id: '1337', folder_id: '4711', title: 'three', locked_until: 1337 },
+            { id: '1338', folder_id: '4711', title: 'four', locked_until: 1337 },
+            { id: '1339', folder_id: '4711', title: 'five' }
+        ];
 
+        var testVersions = [
+            { id: '1337', folder_id: '4711', version: 1 },
+            { id: '1337', folder_id: '4711', version: 2 }
+        ];
+
+        beforeEach(function () {
+            api.pool.get('detail').reset();
+            this.server.respondWith('GET', /api\/folders\?action=list/, function (xhr) {
+                expect(xhr.url).to.contain('parent=4711');
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+                    timestamp: 1368791630910,
+                    data: []
+                }));
             });
-            describe('with getters', function () {
-                it('handle invalid files', function () {
-                    expect(tracker.isLocked(undefined)).to.be.false;
-                    expect(tracker.isLocked({})).to.be.false;
-                    expect(tracker.isLocked([])).to.be.false;
-                    expect(tracker.isLocked('')).to.be.false;
-                });
-                describe('handle valid', function () {
-                    beforeEach(function () {
-                        //empty tracker
-                        tracker.clear();
-                        //add data
-                        tracker.addFile(locked);
-                        tracker.addFile(unlocked);
-                        tracker.addFile(lockedOther);
-                    });
-                    it('locked files', function () {
-                        //locked by myself till next week
-                        expect(tracker.isLocked(locked)).to.be.true;
-                        expect(tracker.isLockedByMe(locked)).to.be.true;
-                        expect(tracker.isLockedByOthers(locked)).to.be.false;
-                        expect(tracker.getLockTime(locked).length).to.be.least(14);
-                        //locked by someone with a timestamp breaking getLockTime
-                        expect(tracker.isLocked(lockedOther)).to.be.true;
-                        expect(tracker.isLockedByMe(lockedOther)).to.be.false;
-                        expect(tracker.isLockedByOthers(lockedOther)).to.be.true;
-                        expect(tracker.getLockTime(lockedOther)).to.be.false;
-                    });
-                    it('unlocked file', function () {
-                        expect(tracker.isLocked(unlocked)).to.be.false;
-                        expect(tracker.isLockedByOthers(unlocked)).to.be.false;
-                        expect(tracker.isLockedByMe(unlocked)).to.be.false;
-                    });
-                });
+            this.server.respondWith('GET', /api\/files\?action=all/, function (xhr) {
+                expect(xhr.url).to.contain('folder=4711');
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+                    timestamp: 1368791630910,
+                    data: testFiles
+                }));
+            });
 
+            this.server.respondWith('GET', /api\/files\?action=versions/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+                    timestamp: 1368791630910,
+                    data: testVersions
+                }));
+            });
+
+            this.server.respondWith('GET', /api\/files\?action=get/, function (xhr) {
+                var res = xhr.url.match(/id=(\d+).*folder=(\d+)/);
+                var data = testFiles.filter(function (item) {
+                    return String(item.id) === res[1] && String(item.folder_id) === res[2];
+                })[0];
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+                    timestamp: 1368791630910,
+                    data: data
+                }));
             });
         });
-        it('has a versions cache', function () {
-            expect((api.caches.versions).get).to.be.a('function');
-        });
-        describe('has some methods for single files', function () {
-            it('to gather file information', function () {
-                //for detailed tests check io.ox/files/mediasupport_spec
-                expect(api.checkMediaFile).to.be.a('function');
-            });
-            it('to handle caching and event firing', function () {
-                expect(api.propagate).to.be.a('function');
-            });
-            it('to create and update', function () {
-                //TODO
-            });
-            describe('to construct concrete api urls', function () {
-                it('to view a file', function () {
-                    var resp = api.getUrl(locked, 'view'),
-                        exp = '/api/files/my-test-file.txt?action=document&folder=0815&id=4710&version=3&context=1337%2C_%2C0&1384938624162&delivery=view';
-                    expect(resp).to.be.equal(exp);
-                    //alias
-                    expect(resp).to.be.equal(api.getUrl(locked, 'open'));
-                });
-                it('to play a file', function () {
-                    var exp = '/api/files?action=document&folder=0815&id=4710&version=3&context=1337%2C_%2C0&1384938624162&delivery=view';
-                    expect(api.getUrl(locked, 'play')).to.be.equal(exp);
-                });
-                it('to download a file', function () {
-                    var exp = '/api/files/my-test-file.txt?action=document&folder=0815&id=4710&version=3&context=1337%2C_%2C0&1384938624162&delivery=download';
-                    expect(api.getUrl(locked, 'download')).to.be.equal(exp);
-                });
-                it('to get a thumbnail of a file', function () {
-                    var exp = '/api/files?action=document&folder=0815&id=4710&version=3&context=1337%2C_%2C0&1384938624162&delivery=view&content_type=application/octet-stream';
-                    expect(api.getUrl(locked, 'thumbnail')).to.be.equal(exp);
-                });
-                it('to get a preview of a file', function () {
-                    var exp = '/api/files?action=document&folder=0815&id=4710&version=3&context=1337%2C_%2C0&1384938624162&delivery=view&format=preview_image&content_type=image/jpeg';
-                    expect(api.getUrl(locked, 'preview')).to.be.equal(exp);
-                });
-                it('to get a cover of a file', function () {
-                    var exp = '/api/image/file/mp3Cover?folder=0815&id=4710&content_type=image/jpeg&context=1337%2C_%2C0';
-                    expect(api.getUrl(locked, 'cover')).to.be.equal(exp);
-                });
-                it('to get a zip of a file', function () {
-                    var exp = '/api/files?action=zipdocuments&body=%5B%7B%7D%2C%7B%7D%2C%7B%7D%2C%7B%7D%2C%7B%7D%2C%7B%7D%2C%7B%7D%2C%7B%7D%2C%7B%7D%2C%7B%7D%2C%7B%7D%2C%7B%7D%2C%7B%7D%2C%7B%7D%2C%7B%7D%2C%7B%7D%2C%7B%7D%2C%7B%7D%5D&session=13371337133713371337133713371337&context=1337%2C_%2C0';
-                    expect(api.getUrl(locked, 'zip')).to.be.equal(exp);
-                });
-            });
-            describe('to handle different file versions', function () {
-                beforeEach(function () {
-                    var def = api.caches.versions.clear();
 
-                    //wait for caches to be clear, then procceed
-                    return def.then(function () {
-                        setupFakeServer(this.server);
-                    }.bind(this));
-                });
+        describe('Collection Loader', function () {
 
-                it('and use the provided versions cache', function () {
-                    sinon.spy(api.caches.versions, 'add');
-                    var def = api.versions(locked),
-                        first = $.Deferred();
-                    //first: cache add executed
-                    def.done(function (response) {
-                        var resp = (fileversions.toString() === response.toString()) &&
-                            (api.caches.versions.add.callCount === 1);
-                        first.resolve();
-                        return resp;
-                    });
-                    //second: cache add not executed
-                    return first.done(function () {
-                        var second = api.versions(locked);
-                        return second.done(function (response) {
-                            var resp = (fileversions.toString() === response.toString()) &&
-                                (api.caches.versions.add.callCount === 1);
-                            api.caches.versions.add.restore();
-                            expect(resp).to.be.true;
-                        });
-                    });
-                });
-                it('and use promises to finally return data', function () {
-                    expect(isPromise(api.versions(locked))).to.be.true;
-                    return isRejected(api.versions()).done(function () {
-                        return api.versions(locked).done(function (data) {
-                            expect(data).to.not.be.empty;
-                        });
-                    });
-                });
-                describe('calling api.propagete to update caches and fire events', function () {
-                    beforeEach(function () {
-                        sinon.spy(api, 'propagate');
-                    });
-                    it('after calling detach', function () {
-                        var def = api.detach($.extend({}, locked, { version: '1' }));
-                        return def.then(function () {
-                            expect(api.propagate.calledOnce).to.be.true;
-                        });
-                    });
-                    it('after calling lock', function () {
-                        this.server.respondWith('PUT', /api\/files\?action=list/, function (xhr) {
-                            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
-                                JSON.stringify({
-                                    timestamp: 1368791630910,
-                                    data: locked
-                                })
-                            );
-                        });
-                        var def = api.lock(locked);
-                        return def.then(function () {
-                            expect(api.propagate.calledOnce).to.be.true;
-                        });
-                    });
-                    it('after calling upload file', function () {
-                        this.server.respondWith('POST', /\/api\/files\?action=new/, function (xhr) {
-                            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
-                                JSON.stringify({
-                                    timestamp: 1368791630910,
-                                    data: locked
-                                })
-                            );
-                        });
-                        if (_.device('!phantomjs')) locked.file = new Blob();
-                        var def = api.uploadFile(locked);
-                        return def.then(function () {
-                            expect(api.propagate.calledOnce).to.be.true;
-                        });
-                    });
+            it('uses the files module', function () {
+                expect(api.collectionLoader.module).to.equal('files');
+            });
+
+            it('loads the default folder', function (done) {
+                //set default folder for files app
+                coreSettings.set('folder/infostore', '4711');
+                var c = api.collectionLoader.load();
+                ox.fakeServer.instance = this.server;
+                c.on('load', function (m) {
+                    expect(c).to.have.length(3);
+                    done();
                 });
             });
-            it('that return promises', function () {
-                expect(isPromise(api.detach(locked))).to.be.true;
-                expect(isPromise(api.uploadNewVersion(locked))).to.be.true;
-                expect(isPromise(api.uploadNewVersionOldSchool({ form: $('<div>'), json: '', file: '', id: '' }))).to.be.true;
-                expect(isPromise(api.update(locked))).to.be.true;
-                expect(isPromise(api.uploadFile(locked))).to.be.true;
-            });
-            it('that reject on missing arguments', function () {
-                return $.when(isRejected(api.detach()),
-                              isRejected(api.uploadNewVersion()),
-                              isRejected(api.uploadNewVersionOldSchool()),
-                              isRejected(api.update()),
-                              isRejected(api.uploadFile()));
+
+            it('serves a collection for a folder', function (done) {
+                var c = api.collectionLoader.load({
+                    id: '1337',
+                    folder: '4711'
+                });
+                c.on('load', function (m) {
+                    expect(c).to.have.length(3);
+                    done();
+                });
             });
         });
-        describe('has some methods for multiple files', function () {
-            it('to lock/unlock files', function () {
-                //TODO
+
+        describe('versions of files', function () {
+            beforeEach(function () {
+                return api.get({
+                    id: '1337',
+                    folder: '4711'
+                });
             });
-            it('to move/copy files within folder structure', function () {
-                //TODO
+
+            it('should be a list for each file', function () {
+                var server = this.server;
+                console.log(api.pool.get(_.cid({ id: '1337', folder_id: '4711' })));
+                return api.versions.load({
+                    id: '1337',
+                    folder: '4711'
+                }).then(function (versions) {
+                    expect(versions).to.be.an('array');
+                    expect(versions).to.have.length(2);
+                    expect(server.requests.filter(function (xhr) {
+                        return xhr.url.indexOf('action=versions') >= 0;
+                    })).to.have.length(1);
+                });
             });
-            it('that return promises', function () {
-                expect(isPromise(api.lock(locked))).to.be.true;
-                expect(isPromise(api.unlock(locked))).to.be.true;
-                expect(isPromise(api.copy(locked))).to.be.true;
-                expect(isPromise(api.move(locked))).to.be.true;
+            it('should cache versions', function () {
+                var server = this.server;
+                return api.versions.load({
+                    id: '1337',
+                    folder: '4711'
+                }).then(function () {
+                    return api.versions.load({
+                        id: '1337',
+                        folder: '4711'
+                    });
+                }).then(function (versions) {
+                    expect(versions).to.be.an('array');
+                    expect(versions).to.have.length(2);
+                    expect(server.requests.filter(function (xhr) {
+                        return xhr.url.indexOf('action=versions') >= 0;
+                    })).to.have.length(1);
+                });
             });
-            it('that reject on missing arguments', function () {
-                //TODO
+        });
+
+        describe('locking', function () {
+            var def1337, def1338;
+
+            beforeEach(function () {
+                def1337 = $.Deferred();
+                def1338 = $.Deferred();
+
+                return api.get({
+                    id: '1338',
+                    folder: '4711'
+                }).then(function (data) {
+                    var m = api.pool.get('detail').get(_.cid(data));
+                    m.set(testFiles[1]);
+                    m.on('change:locked_until', def1338.resolve);
+                    return api.get({
+                        id: '1337',
+                        folder: '4711'
+                    });
+                }).then(function (data) {
+                    var m = api.pool.get('detail').get(_.cid(data));
+                    m.set(testFiles[0]);
+                    m.on('change:locked_until', def1337.resolve);
+                });
+            });
+
+            it('should trigger "change:locked_until" when locking a single file', function () {
+                api.lock({
+                    id: '1337',
+                    folder: '4711'
+                });
+
+                return def1337.done(function (model, val) {
+                    expect(val).to.be.a('number').and.above(0);
+                });
+            });
+            it('should trigger "change:locked_until" when locking a list of files', function () {
+                api.lock([{
+                    id: '1337',
+                    folder: '4711'
+                },
+                {
+                    id: '1338',
+                    folder: '4711'
+                }]);
+
+                return $.when(def1337, def1338).done(function (val1337, val1338) {
+                    expect(val1337[1]).to.be.a('number').and.above(0);
+                    expect(val1338[1]).to.be.a('number').and.above(0);
+                });
+            });
+            it('should trigger "change:locked_until" when unlocking a single file', function () {
+                api.unlock({
+                    id: '1337',
+                    folder: '4711'
+                });
+
+                return def1337.done(function (model, val) {
+                    expect(val).to.be.a('number').and.eq(0);
+                });
+            });
+            it('should trigger "change:locked_until" when unlocking a list of files', function () {
+                api.unlock([{
+                    id: '1337',
+                    folder: '4711'
+                },
+                {
+                    id: '1338',
+                    folder: '4711'
+                }]);
+
+                return $.when(def1337, def1338).done(function (val1337, val1338) {
+                    expect(val1337[1]).to.be.a('number').and.eq(0);
+                    expect(val1338[1]).to.be.a('number').and.eq(0);
+                });
+            });
+        });
+
+        describe('clear folder', function () {
+            var clearSpy, def, folderReload;
+            beforeEach(function () {
+                clearSpy = sinon.spy(function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+                        timestamp: 1368791630910,
+                        data: []
+                    }));
+                });
+                def = $.Deferred();
+                folderReload = $.Deferred();
+
+                api.pool.getByFolder('4711').forEach(function (c) {
+                    c.on('reset', def.resolve);
+                });
+
+                this.server.respondWith('PUT', /api\/folders\?action=clear/, function (xhr) {
+                    clearSpy(xhr);
+                });
+                this.server.responses = this.server.responses.filter(function (r) {
+                    return !r.url.test('api/folders?action=get');
+                });
+                this.server.respondWith(/api\/folders\?action=get/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+                        timestamp: 1368791630910,
+                        data: {
+                            id: '4711',
+                            folder_id: '1'
+                        }
+                    }));
+                    folderReload.resolve();
+                });
+            });
+            it('should trigger reset event for folder collection', function () {
+                api.clear('4711').fail(function () {
+                    throw 'api.clear failed';
+                });
+                return def.then(function (c) {
+                    expect(c).to.have.length(0);
+                });
+            });
+
+            it('should reload the folder', function () {
+                api.clear('4711').fail(function () {
+                    throw 'api.clear failed';
+                });
+                return folderReload;
+            });
+
+            it('should send action=clear to folder module', function () {
+                return api.clear('4711').fail(function () {
+                    throw 'api.clear failed';
+                }).done(function () {
+                    expect(clearSpy.called, 'folder clear action sent to server').to.be.true;
+                });
+            });
+        });
+
+        describe('detach versions', function () {
+            it('should remove a single version', function () {
+                this.server.respondWith('PUT', /api\/files\?action=detach/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+                        timestamp: 1368791630910,
+                        data: []
+                    }));
+                });
+                var file, removedVersion;
+                return api.get({ id: '1337', folder_id: '4711' }).then(function (data) {
+                    file = data;
+                    var m = api.pool.get('detail').get(_.cid(file));
+                    var def = $.Deferred();
+                    m.on('change:versions', def.resolve);
+                    api.versions.load(data);
+                    return def;
+                }).then(function () {
+                    var m = api.pool.get('detail').get(_.cid(file));
+                    expect(m.get('versions')).to.have.length(2);
+                    //temporarily remove the version from the fakeserver response
+                    removedVersion = testVersions.pop();
+                    return api.versions.remove({
+                        id: '1337',
+                        folder_id: '4711',
+                        version: 1
+                    });
+                }).then(function () {
+                    testVersions.push(removedVersion);
+                    var m = api.pool.get('detail').get(_.cid(file));
+                    expect(m.get('versions')).to.have.length(1);
+                }, function () {
+                    throw 'api.detach failed';
+                });
             });
         });
     });
-
-    sinon.restore();
 });

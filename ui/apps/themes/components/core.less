@@ -1,0 +1,443 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+/* High contrast */
+html.high-contrast {
+
+    a:not(.btn) {
+        color: @hc-link-color;
+    }
+}
+
+body {
+    // add a bit of perfection
+    -webkit-font-feature-settings: "liga", "kern";
+    font-feature-settings: "liga", "kern";
+}
+
+/* OpenSans Font Face */
+@font-face {
+    font-family: 'OpenSans';
+    src: local('Open Sans Light'),
+         local('OpenSans-Light'),
+         url('apps/3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.woff') format('woff'),
+         url('apps/3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.ttf') format('truetype'),
+         url('apps/3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.svg#OpenSansLight') format('svg');
+    font-weight: 300;
+    font-style: normal;
+}
+
+textarea, .user-select-text {
+    .user-select(text);
+}
+
+textarea { resize: none; }
+
+
+span.hint {
+    font-size: 8pt;
+    text-align: left;
+}
+
+/* model.trigger('invalid:... */
+.help-block.error {
+    font-weight: bold;
+    color: red;
+}
+
+/* fail handling */
+.io-ox-fail {
+    padding: 4px;
+    font-weight: normal;
+    color: #888;
+}
+
+.io-ox-center {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.io-ox-center > div {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Bootstrap overrides BEGIN */
+legend, label {
+    color: @label-default-bg;
+    margin-bottom: 5px;
+    font-size: 13px;
+    line-height: 20px;
+    * {
+        font-weight: normal;
+    }
+}
+
+.radio-inline, .checkbox-inline, .checkbox label, .radio label {
+    font-size: @font-size-base;
+}
+
+legend {
+    padding-top: 8px;
+    font-weight: bold;
+
+    &.simple {
+        margin:0;
+        border-bottom: 0 none;
+    }
+
+    &.io-ox-label h2 {
+        display: inline;
+        font-size: 13px;
+    }
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+
+    input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        min-height: 100%;
+        font-size: 100px;
+        text-align: right;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        background: red;
+        cursor: inherit;
+        display: block;
+        outline: none;
+    }
+
+    i.fa-paperclip:after {
+        content: '\00a0';
+    }
+}
+
+/* medium large button, used on mobile since the bootstrap large button is to large */
+.btn-medium {
+    padding: 8px 19px;
+    font-size: 15.5px;
+}
+
+.cursor-pointer, .label.pointer { cursor: pointer; }
+
+.badge {
+
+    &.badge-success {
+        background-color: @green;
+    }
+
+    &.badge-important {
+        background-color: @blue;
+    }
+}
+
+/* fixes WBR handling in long character sequences, esp. for IE */
+wbr:after { content: "\00200B" }
+
+.alert {
+    padding: 8px 35px 8px 14px;
+    margin-bottom: 20px;
+}
+
+.row {
+    label { padding-top: 8px; }
+}
+/* Bootstrap overrides END */
+
+.clear-title {
+    font-family: @light-font-family;
+    font-weight: 300;
+    font-size: 20pt;
+    line-height: 1.15em;
+}
+
+/* Hopscotch overrides BEGIN */
+div.hopscotch-bubble {
+    * {
+        box-sizing: content-box;
+    }
+    div.hopscotch-bubble-content {
+        margin: 0;
+    }
+}
+/* Hopscotch overrides END */
+
+#background-loader.secure {
+
+    background-color: rgba(255, 255, 255, 0);
+    /* bug 27760 */
+    /* .transition(background-color 0.5 linear); */
+    &.block {
+        background-color: rgba(255, 255, 255, 0.5);
+        text-align: center;
+
+        button {
+            display: none;
+            position: relative;
+            top: 52%;
+        }
+
+    }
+
+}
+
+.io-ox-busy {
+    position: relative;
+
+    &:before {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -10px 0 0 -10px;
+        /* icon-refresh */
+        font-size: 20px;
+        font-family: 'FontAwesome';
+        content: '\f021';
+        color: #ccc;
+        /* icon-spin */
+        -moz-animation: fa-spin 1.5s infinite linear;
+        -o-animation: fa-spin 1.5s infinite linear;
+        -webkit-animation: fa-spin 1.5s infinite linear;
+        animation: fa-spin 1.5s infinite linear;
+    }
+}
+
+#io-ox-core {
+    // use explicit z-index (e.g. so that side-popups appear above)
+    z-index: 0;
+
+    // Bug 27436
+    -webkit-backface-visibility: hidden;
+
+    &.wallpaper {
+        .radial-gradient(@wallpaper-color-1, @wallpaper-color-2, @wallpaper-color-3);
+    }
+
+}
+
+#io-ox-offline {
+    position: absolute;
+    bottom: 0;
+    width: 240px;
+    left: 50%;
+    margin-left: -120px;
+    height: 40px;
+    font-weight: bold;
+    line-height: 40px;
+    text-align: center;
+    color: #fff;
+    border: 1px solid #FF7000;
+    border-width: 1px 1px 0 1px;
+    background-color: #EA4400;
+    cursor: default;
+    z-index: 650000;
+    .box-shadow(0 0 20px 0 rgba(0, 0, 0, 0.30));
+    .border-radius(5px 5px 0 0);
+}
+
+// defined in core CSS to guarantee an instant response
+.io-ox-viewer {
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 11; // just to one more than #io-ox-screens
+}
+
+/* scrollable for touch devices, esp. iOS */
+.scrollable {
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.blockscroll {
+    overflow: hidden !important;
+}
+
+.scrollable-pane {
+    position: relative;
+    width: 100%;
+    min-height: 100%;
+
+    &:after {
+        content: '\00a0'; /* make sure margins/paddings are applied properly */
+    }
+
+}
+
+.ui-disabled {
+    pointer-events: none;
+    color: @ui-disabled-color;
+}
+
+
+.atb, .abs {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}
+
+.abs {
+    left: 0;
+    right: 0;
+}
+
+.abs-lr {
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+
+.bright-text {
+    color: #888;
+    .fontWeight(300);
+
+    html.high-contrast & {
+        color: @hc-gray;
+    }
+
+}
+
+.person, .person-link {
+    color: @person-link-color;
+    word-break: normal;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.delimiter {
+    color: #ccc;
+
+    html.high-contrast & {
+        color: @black;
+    }
+}
+
+.default-content-padding { padding: 20px 30px; }
+
+a.n-more {
+    white-space: nowrap;
+    display: inline-block;
+    margin-right: 1em;
+}
+
+a.nolink {
+    color: @text-color;
+    text-decoration: none;
+}
+
+.border-top {
+    border-top: 1px solid @defaultBorderColor;
+
+    html.high-contrast & {
+        border-top: 1px solid @hc-border-color;
+    }
+}
+
+.border-right {
+    border-right: 1px solid @defaultBorderColor;
+
+    html.high-contrast & {
+        border-right: 1px solid @hc-border-color;
+    }
+}
+
+.border-bottom {
+    border-bottom: 1px solid @defaultBorderColor;
+
+    html.high-contrast & {
+        border-bottom: 1px solid @hc-border-color;
+    }
+
+}
+
+.border-left {
+    border-left: 1px solid @defaultBorderColor;
+
+    html.high-contrast & {
+        border-left: 1px solid @hc-border-color;
+    }
+}
+
+.touch {
+
+    body {
+        font-size: @font-size-touch;
+    }
+
+    .scrollable .scrollable-pane {
+        /*-webkit-transform: translate3d(0, 0, 0);*/
+    }
+}
+
+@media (max-width: 767px) {
+    body {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+}
+
+@media (max-width: 900px) {
+    .default-content-padding {
+        padding: 26px 13px 26px 13px;
+    }
+}
+
+.form-spacer { margin-top: 32px; }
+
+// small screens (mobile)
+// note that we have to target max-width and max-device-width
+// to target all devices which don't support the max-device-width
+// property
+@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
+
+    .default-content-padding {
+        padding: 5px 10px 5px 10px;
+    }
+    .form-control {
+        padding: 4px;
+    }
+
+    // flat input fields
+    textarea.flat, input.flat {
+        border-width: 0;
+        border-bottom-width: 1px;
+        .box-shadow(none);
+        .border-radius(0);
+
+        &:focus {
+            border-width: 0;
+            .box-shadow(none);
+            border-bottom-width: 1px;
+            border-color: initial;
+        }
+
+    }
+
+    .clear-title {
+        font-size: 15pt;
+    }
+
+    #background-loader.secure.block {
+        background-color: rgba(0,0,0,.6);
+        height: 150%;
+        position: fixed; // always center this
+    }
+}

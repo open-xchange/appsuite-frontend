@@ -10,6 +10,8 @@
 * @author David Bauer <david.bauer@open-xchange.com>
 */
 
+// Update like this: grunt tinymce_update --vs=4.1.5
+
 'use strict';
 
 module.exports = function (grunt) {
@@ -22,12 +24,6 @@ module.exports = function (grunt) {
                         expand: true,
                         src: ['**/*'],
                         cwd: 'lib/tinymce/',
-                        dest: 'build/apps/3rd.party/tinymce/'
-                    },
-                    {
-                        expand: true,
-                        src: ['**/*'],
-                        cwd: 'lib/tiny_mce_custom/',
                         dest: 'build/apps/3rd.party/tinymce/'
                     }
                 ]
@@ -42,8 +38,7 @@ module.exports = function (grunt) {
         return;
     }
 
-    var version = '4.1.3',
-        languages = ['ar', 'ar_SA', 'az', 'be', 'bg_BG', 'bn_BD', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'de_AT', 'dv', 'el', 'en_CA', 'en_GB', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr_FR', 'gd', 'gl', 'he_IL', 'hr', 'hu_HU', 'hy', 'id', 'is_IS', 'it', 'ja', 'ka_GE', 'kk', 'km_KH', 'ko_KR', 'lb', 'lt', 'lv', 'ml', 'ml_IN', 'mn_MN', 'nb_NO', 'nl', 'pl', 'pt_BR', 'pt_PT', 'ro', 'ru', 'si_LK', 'sk', 'sl_SI', 'sr', 'sv_SE', 'ta', 'ta_IN', 'tg', 'th_TH', 'tr_TR', 'tt', 'ug', 'uk', 'uk_UA', 'vi', 'vi_VN', 'zh_CN', 'zh_TW'],
+    var languages = ['ar', 'ar_SA', 'az', 'be', 'bg_BG', 'bn_BD', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'de_AT', 'dv', 'el', 'en_CA', 'en_GB', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr_FR', 'gd', 'gl', 'he_IL', 'hr', 'hu_HU', 'hy', 'id', 'is_IS', 'it', 'ja', 'ka_GE', 'kk', 'km_KH', 'ko_KR', 'lb', 'lt', 'lv', 'ml', 'ml_IN', 'mn_MN', 'nb_NO', 'nl', 'pl', 'pt_BR', 'pt_PT', 'ro', 'ru', 'si_LK', 'sk', 'sl_SI', 'sr', 'sv_SE', 'ta', 'ta_IN', 'tg', 'th_TH', 'tr_TR', 'tt', 'ug', 'uk', 'uk_UA', 'vi', 'vi_VN', 'zh_CN', 'zh_TW'],
         plugins = ['autolink', 'oximage', 'link', 'paste', 'textcolor', 'emoji'],
 
         path = require('path'),
@@ -72,17 +67,12 @@ module.exports = function (grunt) {
 
     grunt.config.merge({
         curl: {
-            tinymceMain: {
-                src: 'http://download.moxiecode.com/tinymce/tinymce_' + version + '_jquery.zip',
-                dest: 'tmp/tinymce.zip'
-            },
-
             tinymceLanguagePack: {
                 src: {
                     url: 'http://www.tinymce.com/i18n/download.php',
                     method: 'POST',
                     form: {
-                        'download': languages,
+                        'download': languages
                     }
                 },
                 dest: 'tmp/tinymce_language_pack.zip'
@@ -92,13 +82,6 @@ module.exports = function (grunt) {
 
     grunt.config.merge({
         unzip: {
-            tinymceMain: {
-                router: function (filepath) {
-                    return extractPart(filepath, 'tinymce/js/tinymce');
-                },
-                src: 'tmp/tinymce.zip',
-                dest: 'lib/tinymce/'
-            },
             tinymceLanguagePack: {
                 router: function (filepath) {
                     return extractPart(filepath, 'langs');
@@ -109,7 +92,7 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('tinymce_update', ['curl:tinymceMain', 'curl:tinymceLanguagePack', 'unzip:tinymceMain', 'unzip:tinymceLanguagePack', 'copy:build_tinymce']);
+    grunt.registerTask('tinymce_update', ['curl:tinymceLanguagePack', 'unzip:tinymceLanguagePack', 'copy:build_tinymce']);
 
     grunt.loadNpmTasks('grunt-curl');
     grunt.loadNpmTasks('grunt-zip');

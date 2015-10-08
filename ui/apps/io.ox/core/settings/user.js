@@ -11,15 +11,16 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/settings/user',
-    ['io.ox/core/extensions',
-     'io.ox/core/api/user',
-     'io.ox/contacts/model',
-     'io.ox/contacts/edit/view-form',
-     'io.ox/core/tk/dialogs',
-     'io.ox/contacts/util',
-     'gettext!io.ox/contacts'
-    ], function (ext, api, contactModel, ViewForm, dialogs, util, gt) {
+define('io.ox/core/settings/user', [
+    'io.ox/core/extensions',
+    'io.ox/core/api/user',
+    'io.ox/contacts/model',
+    'io.ox/contacts/edit/view-form',
+    'io.ox/core/tk/dialogs',
+    'io.ox/contacts/util',
+    'io.ox/core/yell',
+    'gettext!io.ox/contacts'
+], function (ext, api, contactModel, ViewForm, dialogs, util, yell, gt) {
 
     'use strict';
 
@@ -28,23 +29,55 @@ define('io.ox/core/settings/user',
 
     return {
 
-        editCurrentUser: function ($node) {
-            //$node.busy();
-            return factory.realm('edit').get({})
-                    .done(function (user) {
+        getCurrentUser: function () {
+            return factory.realm('default').get({});
+        },
+
+        openModalDialog: function () {
+
+            var dialog = new dialogs.ModalDialog({
+                top: 20,
+                width: 910,
+                center: false,
+                maximize: true,
+                async: true
+            })
+            .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: 1 })
+            .addButton('discard', gt('Discard'), 'discard', { tabIndex: 1 });
+
+            dialog.getContentControls()
+                .prepend(
+                    $('<label class="checkbox-inline pull-left">').append(
+                        $('<input>')
+                            .addClass('toggle-check')
+                            .attr({
+                                type: 'checkbox'
+                            })
+                            .on('change', function (e) {
+                                e.preventDefault();
+                                view.toggle.call(view.$el);
+                            }),
+                        $.txt(gt('Show all fields'))
+                    )
+                );
+
+            var self = this,
+                $node = dialog.getContentNode(),
+                usermodel,
+                view;
+
+            factory.realm('edit').get({})
+                .then(
+                    function success(user) {
+                        usermodel = user;
                         // The edit dialog
-                        var UserEdit = ViewForm.protectedMethods.createContactEdit('io.ox/core/user'),
-                            $userEditView = new UserEdit({ model: user }).render().$el;
-
-                        $userEditView.find('[data-id="private_flag"]').remove();
-
-                        $node.append($userEditView);
+                        var UserEdit = ViewForm.protectedMethods.createContactEdit('io.ox/core/user');
+                        view = new UserEdit({ model: user });
+                        $node.append(view.render().$el);
 
                         user.on('change:first_name change:last_name', function () {
-                            user.set('display_name', util.getFullName(user.toJSON(), {validate: true}));
-                            //app.setTitle(util.getFullName(contact.toJSON()));
+                            user.set('display_name', util.getFullName(user.toJSON(), { validate: true }));
                         });
-
                         user.on('sync:start', function () {
                             //if birthday is null on save, set selectors to empty. Otherwise the user might think a partially filled birthday is saved
                             if (user.get('birthday') === null) {
@@ -55,56 +88,28 @@ define('io.ox/core/settings/user',
                                 dialogs.busy($node);
                             }
                         });
-
                         user.on('sync:always', function () {
                             if (!_.browser.IE || _.browser.IE > 9) {
                                 dialogs.idle($node);
                             }
                         });
-                    });
-        },
-
-        getCurrentUser: function () {
-            return factory.realm('default').get({});
-        },
-
-        openModalDialog: function () {
-
-            var dialog = new dialogs.ModalDialog({
-                top: 20,
-                substract: 100,
-                width: 910,
-                center: false,
-                maximize: true,
-                async: true
-            })
-            .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: '1' })
-            .addButton('discard', gt('Discard'), 'discard', { tabIndex: '1' });
-
-            var $node = dialog.getContentNode();
-            var usermodel;
-            var self = this;
-
-            this.editCurrentUser($node).then(
-                function success(model) {
-                    usermodel = model;
-                },
-                function fail() {
-                    $node.append(
-                        $.fail(gt('Couldn\'t load your contact data.'), function () {
-                            self.editCurrentUser($node).done(function () {
-                                $node.find('[data-action="discard"]').hide();
-                            });
-                        })
-                    );
-                }
-            );
+                    },
+                    function fail() {
+                        $node.append(
+                            $.fail(gt('Couldn\'t load your contact data.'), function () {
+                                self.editCurrentUser($node).done(function () {
+                                    $node.find('[data-action="discard"]').hide();
+                                });
+                            })
+                        );
+                    }
+                );
 
             dialog.show();
 
             dialog.on('save', function () {
                 if (usermodel._valid) {
-                    usermodel.save();
+                    usermodel.save().fail(yell);
                     dialog.close();
                 } else {
                     dialog.idle();

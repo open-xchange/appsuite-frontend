@@ -42,14 +42,14 @@ define([
             });
 
             it('should have a default collection', function () {
-                settings.set({defaultCollection: 'unified'});
+                settings.set({ defaultCollection: 'unified' });
                 this.emoji = emoji.getInstance();
 
                 expect(this.emoji.getCollection()).to.equal('unified');
             });
 
             it('should be possible to have a user defined collection', function () {
-                settings.set({userCollection: 'unified'});
+                settings.set({ userCollection: 'unified' });
                 this.emoji = emoji.getInstance();
 
                 expect(this.emoji.getCollection()).to.equal('unified');
@@ -57,15 +57,15 @@ define([
 
             it('should parse the availableCollections setting', function () {
 
-                settings.set({availableCollections: ''});
+                settings.set({ availableCollections: '' });
 
                 expect(emoji.getInstance().collections).to.be.empty;
 
-                settings.set({availableCollections: 'unified'});
+                settings.set({ availableCollections: 'unified' });
 
                 expect(emoji.getInstance().collections).to.deep.equal(['unified']);
 
-                settings.set({availableCollections: 'unified,bar'});
+                settings.set({ availableCollections: 'unified,bar' });
 
                 expect(emoji.getInstance().collections).to.deep.equal(['unified', 'bar']);
             });
@@ -75,7 +75,7 @@ define([
                 settings.set('defaultCollection', 'unified');
                 settings.set('availableCollections', 'unified,softbank,japan_carrier');
 
-                var softbank = emoji.getInstance({collection: 'softbank'}),
+                var softbank = emoji.getInstance({ collection: 'softbank' }),
                     defaultCollection = emoji.getInstance();
 
                 expect(softbank.getCollection()).to.equal('softbank');

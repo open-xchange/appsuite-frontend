@@ -1,36 +1,28 @@
 # Antje Faber <antje.faber@open-xchange.com>, 2009, 2010, 2012.
-# Andres Herrera <andres@bureau-cornavin.com>, 2010, 2011, 2012, 2013, 2014.
+# Andres Herrera <andres@bureau-cornavin.com>, 2010, 2011, 2012, 2013, 2014, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-03-04 09:43+0100\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2015-08-25 19:08+0200\n"
+"Last-Translator: Andres Herrera <andres@bureau-cornavin.com>\n"
 "Language-Team: Spanish <es@bureau-cornavin.com>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Lokalize 1.5\n"
 
-#: apps/io.ox/tours/main.js:456 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:72 module:io.ox/tours
 msgid "Adding attachments"
 msgstr "Añadir adjuntos"
 
-#: apps/io.ox/tours/main.js:628 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:54 module:io.ox/tours
 msgid "Adding further details"
 msgstr "Añadir más detalles"
 
-#: apps/io.ox/tours/main.js:260 module:io.ox/tours
-msgid ""
-"Below the recipient you will find further functions, e.g. for sending copies "
-"to other recipients or for adding attachments."
-msgstr ""
-"Debajo del destinatario encontrará otras funciones, por ejemplo para enviar "
-"copias a otros destinatarios, o para añadir archivos adjuntos."
-
-#: apps/io.ox/tours/main.js:378 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:36 module:io.ox/tours
 msgid ""
 "Click on a letter on the left side of the navigation bar in order to display "
 "the corresponding contacts from the selected address book."
@@ -38,55 +30,55 @@ msgstr ""
 "Haga clic en una letra a la izquierda de la barra de navegación para mostrar "
 "los contactos correspondientes de la libreta de direcciones seleccionada."
 
-#: apps/io.ox/tours/main.js:202 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:45 module:io.ox/tours
 msgid "Closing a square"
 msgstr "Cerrar un panel"
 
-#: apps/io.ox/tours/main.js:228 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:33 module:io.ox/tours
 msgid "Composing a new E-Mail"
 msgstr "Componer una nuevo correo electrónico"
 
-#: apps/io.ox/tours/main.js:404 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:34 module:io.ox/tours
 msgid "Creating a new appointment"
 msgstr "Creación de una nueva cita"
 
-#: apps/io.ox/tours/main.js:368 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:30 module:io.ox/tours
 msgid "Creating a new contact"
 msgstr "Creación de un nuevo contacto"
 
-#: apps/io.ox/tours/main.js:603 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:32 module:io.ox/tours
 msgid "Creating a new task"
 msgstr "Creación de una nueva tarea"
 
-#: apps/io.ox/tours/main.js:575 module:io.ox/tours
+#: apps/io.ox/tours/files.js:60 module:io.ox/tours
 msgid "Creating a note"
 msgstr "Creación de una nota"
 
-#: apps/io.ox/tours/main.js:112 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:93 module:io.ox/tours
 msgid "Creating new items"
 msgstr "Creación de nuevos elementos"
 
-#: apps/io.ox/tours/main.js:433 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:57 module:io.ox/tours
 msgid "Creating recurring appointments"
 msgstr "Creación de citas periódicas"
 
-#: apps/io.ox/tours/main.js:639 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:62 module:io.ox/tours
 msgid "Creating recurring tasks"
 msgstr "Creación de tareas periódicas"
 
-#: apps/io.ox/tours/main.js:467 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:77 module:io.ox/tours
 msgid "Creating the appointment"
 msgstr "Creación de la cita"
 
-#: apps/io.ox/tours/main.js:683 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:87 module:io.ox/tours
 msgid "Creating the task"
 msgstr "Creación de la tarea"
 
-#: apps/io.ox/tours/main.js:210 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:51 module:io.ox/tours
 msgid "Customizing the Portal"
 msgstr "Personalización del Portal"
 
-#: apps/io.ox/tours/main.js:135 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:112 module:io.ox/tours
 msgid ""
 "Depending on the app, the toolbar contains various functions for creating, "
 "editing and organizing objects."
@@ -94,26 +86,26 @@ msgstr ""
 "Dependiendo de la aplicación, la barra de herramientas contiene varias "
 "funciones para crear, editar y organizar objetos."
 
-#: apps/io.ox/tours/main.js:162 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:132 module:io.ox/tours
 msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
 msgstr ""
 "Las instrucciones detalladas para las aplicaciones individuales se "
 "encuentran en el Menú del sistema > Ayuda."
 
-#: apps/io.ox/tours/main.js:587 module:io.ox/tours
+#: apps/io.ox/tours/files.js:67 module:io.ox/tours
 msgid "Displaying information"
 msgstr "Mostrar información"
 
-#: apps/io.ox/tours/main.js:88 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:75 module:io.ox/tours
 msgid "Displaying the help or the settings"
 msgstr "Visualización de la ayuda o de los ajustes"
 
-#: apps/io.ox/tours/main.js:190 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:40 module:io.ox/tours
 msgid "Drag and drop"
 msgstr "Arrastrar y soltar"
 
-#: apps/io.ox/tours/main.js:744 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:44 module:io.ox/tours
 msgid ""
 "Edit a setting on the right side. In most of the cases, the changes are "
 "activated immediately."
@@ -121,53 +113,48 @@ msgstr ""
 "Edite un ajuste en el lado derecho. En la mayoría de los casos, los cambios "
 "se activan inmediatamente."
 
-#: apps/io.ox/tours/main.js:342 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:106 module:io.ox/tours
 msgid "Editing multiple E-Mails"
 msgstr "Edición de múltiples correos electrónicos"
 
-#: apps/io.ox/tours/main.js:387 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:46 module:io.ox/tours
 msgid "Editing multiple contacts"
 msgstr "Edición de múltiples contactos"
 
-#: apps/io.ox/tours/main.js:711 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:99 module:io.ox/tours
 msgid "Editing multiple tasks"
 msgstr "Edición de múltiples tareas"
 
-#: apps/io.ox/tours/main.js:741 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:43 module:io.ox/tours
 msgid "Editing settings"
 msgstr "Edición de ajustes"
 
-#: apps/io.ox/tours/main.js:273 module:io.ox/tours
-msgid "Enter the E-Mail text below the subject."
-msgstr "Introduzca el texto del correo electrónico debajo del asunto"
-
-#: apps/io.ox/tours/main.js:272 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:69 module:io.ox/tours
 msgid ""
-"Enter the E-Mail text below the subject. If the text format was set to HTMl "
+"Enter the E-Mail text into the main area. If the text format was set to HTMl "
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
-"Introduzca el texto del correo electrónico bajo el asunto. Si ha establecido "
-"el formato de texto como HTML, puede dar formato al texto del correo. Para "
-"ello, seleccione una parte del texto y haga clic en un icono de la barra de "
-"formato."
+"Escriba el texto del correo en el área principal. Si el formato del texto se "
+"indicó como HTML en las opciones, puede dar formato al texto del correo. "
+"Para ello seleccione una parte del texto y pulse en algún icono de la barra "
+"de formato."
 
-#: apps/io.ox/tours/main.js:252 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:48 module:io.ox/tours
 msgid ""
-"Enter the recipient's name on the top left side. As soon as you typed the "
-"first letters, suggestions from the address books are displayed. To accept a "
-"recipient suggestion, click on it."
+"Enter the recipient's name into the recipients field. As soon as you typed "
+"the first letters, suggestions from the address books are displayed. To "
+"accept a recipient suggestion, click on it."
 msgstr ""
-"Introduzca el nombre del destinatario en la parte superior izquierda. Tan "
-"pronto como haya escrito las primeras letras, se mostrarán sugerencias de "
-"las libretas de direcciones. Para aceptar una sugerencia de destinatario, "
-"pulse en ella."
+"Escriba el nombre del destinatario en el campo de destinatarios. En cuanto "
+"escriba las primeras letras se mostrarán sugerencias a partir de las "
+"libretas de direcciones. Para aceptar una sugerencia, pulse en ella."
 
-#: apps/io.ox/tours/main.js:266 module:io.ox/tours
-msgid "Enter the subject on the right side of the recipient."
-msgstr "Introduzca el asunto a la derecha del destinatario."
+#: apps/io.ox/tours/mail.js:59 module:io.ox/tours
+msgid "Enter the subject into the subject field."
+msgstr "Escriba el asunto en el campo de asunto."
 
-#: apps/io.ox/tours/main.js:430 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:52 module:io.ox/tours
 msgid ""
 "Enter the subject, the start and the end date of the appointment. Other "
 "details are optional."
@@ -175,77 +162,68 @@ msgstr ""
 "Introduzca el asunto, y las fechas de inicio y y fin de la cita. Los otros "
 "detalles son opcionales."
 
-#: apps/io.ox/tours/main.js:625 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:49 module:io.ox/tours
 msgid "Enter the subject, the start date, and a description."
 msgstr "Introduzca el asunto, la fecha de inicio y una descripción."
 
-#: apps/io.ox/tours/main.js:676 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:82 module:io.ox/tours
 msgid "Entering billing information"
 msgstr "Introducción de información de facturación"
 
-#: apps/io.ox/tours/main.js:269 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:68 module:io.ox/tours
 msgid "Entering the E-Mail text"
 msgstr "Introducción del texto del correo electrónico"
 
-#: apps/io.ox/tours/main.js:427 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:51 module:io.ox/tours
 msgid "Entering the appointment's data"
 msgstr "Introducción de los datos de la cita"
 
-#: apps/io.ox/tours/main.js:249 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:47 module:io.ox/tours
 msgid "Entering the recipient's name"
 msgstr "Introducción del nombre del destinatario"
 
-#: apps/io.ox/tours/main.js:263 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:58 module:io.ox/tours
 msgid "Entering the subject"
 msgstr "Introducción del asunto"
 
-#: apps/io.ox/tours/main.js:622 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:48 module:io.ox/tours
 msgid "Entering the task's data"
 msgstr "Introducción de los datos de la tarea"
 
-#: apps/io.ox/tours/main.js:528 module:io.ox/tours
+#: apps/io.ox/tours/files.js:30 module:io.ox/tours
 msgid "Folder tree"
 msgstr "Árbol de carpetas"
 
-#: apps/io.ox/tours/main.js:464 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:73 module:io.ox/tours
 msgid "Further down you can add documents as attachments to the appointment."
 msgstr "Más abajo puede añadir documentos como adjuntos a la cita."
 
-#: apps/io.ox/tours/main.js:257 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:63 module:io.ox/tours
 msgid "Further functions"
 msgstr "Funciones adicionales"
 
-#: apps/io.ox/tours/main.js:159 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:131 module:io.ox/tours
 msgid "Further information"
 msgstr "Más información"
 
 #. Tour name; general introduction
-#: apps/io.ox/tours/main.js:803 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:46 module:io.ox/tours
 msgid "Getting started"
 msgstr "Primeros pasos"
 
-#: apps/io.ox/tours/main.js:829 module:io.ox/tours
+#: apps/io.ox/tours/main.js:77 module:io.ox/tours
 msgid "Guided tour for this app"
 msgstr "Visita guiada para esta aplicación"
 
-#: apps/io.ox/tours/main.js:334 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:101 module:io.ox/tours
 msgid "Halo view"
 msgstr "Vista Halo"
 
-#: apps/io.ox/tours/main.js:735 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:36 module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "Cómo están organizados los ajustes"
 
-#: apps/io.ox/tours/main.js:584 module:io.ox/tours
-msgid ""
-"If a folder contains images, you can display a slideshow. To do so click the "
-"View slideshow icon in the toolbar."
-msgstr ""
-"Si una carpeta contiene imágenes, puede mostrar una presentación de "
-"diapositivas. Para ello pulse en el icono Ver presentación en la barra de "
-"herramientas."
-
-#: apps/io.ox/tours/main.js:315 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:92 module:io.ox/tours
 msgid ""
 "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
 "separate window."
@@ -253,23 +231,19 @@ msgstr ""
 "Si hace doble clic en un correo electrónico en la lista, el correo "
 "electrónico se abre en una ventana separada."
 
-#: apps/io.ox/tours/main.js:205 module:io.ox/tours
-msgid ""
-"If you no longer want to display a square, click the cross on the upper "
-"right side."
-msgstr ""
-"Si no desea seguir mostrando un panel, pulse en la cruz de la parte superior "
-"derecha."
+#: apps/io.ox/tours/portal.js:46 module:io.ox/tours
+msgid "If you no longer want to display a square, click the cross."
+msgstr "Si ya no quiere ver más un panel, pulse en el aspa."
 
-#: apps/io.ox/tours/main.js:108 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:89 module:io.ox/tours
 msgid ""
 "In case of new notifications, e.g. appointment invitations, the info area is "
-"opened on the right side."
+"opened."
 msgstr ""
-"En caso de nuevas notificaciones, por ejemplo, invitaciones a citas, se abre "
-"el área de información en el lado derecho."
+"En caso de nuevas notificaciones, por ejemplo invitaciones a citas, se abre "
+"el área de información."
 
-#: apps/io.ox/tours/main.js:346 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:107 module:io.ox/tours
 msgid ""
 "In order to edit multiple E-Mails at once, enable the checkboxes on the left "
 "side of the E-Mails. If the checkboxes are not displayed, click on View > "
@@ -280,85 +254,87 @@ msgstr ""
 "verificación, pulse en Vista > Casillas de verificación a la derecha de la "
 "barra de herramientas."
 
-#: apps/io.ox/tours/main.js:445 module:io.ox/tours
-#: apps/io.ox/tours/main.js:662
+#: apps/io.ox/tours/mail.js:64 module:io.ox/tours
+msgid ""
+"In this area you can find further functions, e.g. for adding attachments."
+msgstr ""
+"En este área puede encontrar más funciones, por ejemplo para añadir adjuntos."
+
+#: apps/io.ox/tours/calendar.js:67 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:77
 msgid "Inviting other participants"
 msgstr "Invitar a otros participantes"
 
-#: apps/io.ox/tours/main.js:81 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:70 module:io.ox/tours
 msgid "Launching an app"
 msgstr "Lanzar una aplicación"
 
-#: apps/io.ox/tours/main.js:375 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:35 module:io.ox/tours
 msgid "Navigation bar"
 msgstr "Barra de navegación"
 
-#: apps/io.ox/tours/main.js:312 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:91 module:io.ox/tours
 msgid "Opening an E-Mail in a separate window"
 msgstr "Apertura de un correo electrónico en una ventana independiente"
 
-#: apps/io.ox/tours/main.js:120 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:101 module:io.ox/tours
 msgid "Opening or closing the folder tree"
 msgstr "Abrir o cerrar el árbol de carpetas"
 
-#: apps/io.ox/tours/main.js:350 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:112 module:io.ox/tours
 msgid "Opening the E-Mail settings"
 msgstr "Apertura de los ajustes de correo electrónico"
 
-#: apps/io.ox/tours/main.js:747 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:48 module:io.ox/tours
 msgid "Opening the help"
 msgstr "Abrir la ayuda"
 
-#: apps/io.ox/tours/main.js:729 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:30 module:io.ox/tours
 msgid "Opening the settings"
 msgstr "Abrir los ajustes"
 
-#: apps/io.ox/tours/main.js:319 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:96 module:io.ox/tours
 msgid "Reading E-Mail conversations"
 msgstr "Lectura de conversaciones recientes"
 
-#: apps/io.ox/tours/main.js:184 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:35 module:io.ox/tours
 msgid "Reading the details"
 msgstr "Lectura de los detalles"
 
-#: apps/io.ox/tours/main.js:126 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:106 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Búsqueda de objetos"
 
-#: apps/io.ox/tours/main.js:305 module:io.ox/tours
-#: apps/io.ox/tours/main.js:490 apps/io.ox/tours/main.js:534
+#: apps/io.ox/tours/calendar.js:83 module:io.ox/tours
+#: apps/io.ox/tours/files.js:35 apps/io.ox/tours/mail.js:86
 msgid "Selecting a view"
 msgstr "Selección de una vista"
 
-#: apps/io.ox/tours/main.js:381 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:40 module:io.ox/tours
 msgid "Sending an E-Mail to a contact"
 msgstr "Envío de un correo electrónico a un contacto"
 
-#: apps/io.ox/tours/main.js:278 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:74 module:io.ox/tours
 msgid "Sending the E-Mail"
 msgstr "Envío del correo electrónico"
 
-#: apps/io.ox/tours/main.js:753 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:54 module:io.ox/tours
 msgid "Signing out"
 msgstr "Cierre de sesión"
 
-#: apps/io.ox/tours/main.js:581 module:io.ox/tours
-msgid "Slideshow"
-msgstr "Presentación"
-
-#: apps/io.ox/tours/main.js:704 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:92 module:io.ox/tours
 msgid "Sorting tasks"
 msgstr "Ordenación de tareas"
 
-#: apps/io.ox/tours/main.js:296 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:79 module:io.ox/tours
 msgid "Sorting your E-Mails"
 msgstr "Ordenar sus correos electrónicos"
 
-#: apps/io.ox/tours/main.js:152 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:126 module:io.ox/tours
 msgid "The Detail view"
 msgstr "La Vista de detalle"
 
-#: apps/io.ox/tours/main.js:155 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:127 module:io.ox/tours
 msgid ""
 "The Detail view displays an object's content. Depending on the app, further "
 "functions for organizing objects can be found in the Detail view."
@@ -367,11 +343,11 @@ msgstr ""
 "aplicación, se pueden encontrar distintas funciones para la organización de "
 "los objetos en la Vista de detalle."
 
-#: apps/io.ox/tours/main.js:546 module:io.ox/tours
+#: apps/io.ox/tours/files.js:45 module:io.ox/tours
 msgid "The Icons view"
 msgstr "La vista Iconos"
 
-#: apps/io.ox/tours/main.js:549 module:io.ox/tours
+#: apps/io.ox/tours/files.js:46 module:io.ox/tours
 msgid ""
 "The Icons view displays an icon and the file name for each file. Click on an "
 "icon to view further details and functions in the pop-up."
@@ -379,12 +355,12 @@ msgstr ""
 "La Vista de iconos muestra un icono y el nombre de fichero por cada fichero. "
 "Pulse en un icono para ver más detalles y funciones en la ventana emergente."
 
-#: apps/io.ox/tours/main.js:501 module:io.ox/tours
-#: apps/io.ox/tours/main.js:540
+#: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
+#: apps/io.ox/tours/files.js:40
 msgid "The List view"
 msgstr "La vista Lista"
 
-#: apps/io.ox/tours/main.js:504 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:96 module:io.ox/tours
 msgid ""
 "The List view shows a list of the appointments in the current folder. If "
 "clicking on an appointment, the appointment's data and some functions are "
@@ -394,7 +370,7 @@ msgstr ""
 "pulsa en una cita, los datos de dicha cita y algunas funciones se muestran "
 "en la Vista de detalle."
 
-#: apps/io.ox/tours/main.js:543 module:io.ox/tours
+#: apps/io.ox/tours/files.js:41 module:io.ox/tours
 msgid ""
 "The List view shows details like the size and date of change. Use the "
 "checkboxes to select files. Click on a file to view further details and "
@@ -405,11 +381,11 @@ msgstr ""
 "ficheros. Pulse en un fichero para ver más detalles y funciones en la "
 "ventana emergente."
 
-#: apps/io.ox/tours/main.js:97 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:82 module:io.ox/tours
 msgid "The New objects icon"
 msgstr "El icono Nuevos objetos"
 
-#: apps/io.ox/tours/main.js:100 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:83 module:io.ox/tours
 msgid ""
 "The New objects icon shows the number of unread E-Mails or other "
 "notifications. If clicking the icon, the info area opens."
@@ -418,11 +394,11 @@ msgstr ""
 "u otras notificaciones. Si pulsa sobre el icono, se abre el área de "
 "información."
 
-#: apps/io.ox/tours/main.js:178 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:30 module:io.ox/tours
 msgid "The Portal"
 msgstr "El Portal"
 
-#: apps/io.ox/tours/main.js:181 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:31 module:io.ox/tours
 msgid ""
 "The Portal informs you about current E-Mails, appointments or social network "
 "news."
@@ -430,11 +406,11 @@ msgstr ""
 "El Portal le informa sobre correos actuales, citas o noticias de las redes "
 "sociales."
 
-#: apps/io.ox/tours/main.js:552 module:io.ox/tours
+#: apps/io.ox/tours/files.js:50 module:io.ox/tours
 msgid "The Tiles view"
 msgstr "La vista Recuadros"
 
-#: apps/io.ox/tours/main.js:555 module:io.ox/tours
+#: apps/io.ox/tours/files.js:51 module:io.ox/tours
 msgid ""
 "The Tiles view shows a big icon for each file. Click on an icon to view "
 "further details and functions in the pop-up."
@@ -442,11 +418,11 @@ msgstr ""
 "La vista Recuadros muestra un gran icono por cada fichero. Pulse en un icono "
 "para mostrar más detalles y funciones en la ventana emergente."
 
-#: apps/io.ox/tours/main.js:512 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
 msgid "The calendar views"
 msgstr "Las vistas Calendario"
 
-#: apps/io.ox/tours/main.js:515 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:106 module:io.ox/tours
 msgid ""
 "The calendar views display a calendar sheet with the appointments for the "
 "selected time range."
@@ -454,33 +430,31 @@ msgstr ""
 "Las vistas de calendario muestran una hoja de calendario con las citas para "
 "el intervalo de tiempo seleccionado."
 
-#: apps/io.ox/tours/main.js:138 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:116 module:io.ox/tours
 msgid "The folder tree"
 msgstr "El árbol de carpetas"
 
-#: apps/io.ox/tours/main.js:105 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:88 module:io.ox/tours
 msgid "The info area"
 msgstr "El área de información"
 
-#: apps/io.ox/tours/main.js:144 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:121 module:io.ox/tours
 msgid "The list"
 msgstr "La lista"
 
-#: apps/io.ox/tours/main.js:738 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:37 module:io.ox/tours
 msgid ""
 "The settings are organized in topics. Select the topic on the left side, e.g "
-"Basic settings or E-Mail. To view all settings, enable Advanced settings at "
-"the bottom."
+"Basic settings or E-Mail."
 msgstr ""
-"La configuración está organizada por temas. Seleccione el tema en la parte "
-"izquierda, por ejemplo, Ajustes básicos o Correo electrónico. Para ver todos "
-"los ajustes, active Ajustes avanzados en la parte inferior."
+"La configuración se organiza por temas. Seleccione el tema en la parte "
+"izquierda, por ejemplo Configuración básica o Correo."
 
-#: apps/io.ox/tours/main.js:132 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:111 module:io.ox/tours
 msgid "The toolbar"
 msgstr "La barra de herramientas"
 
-#: apps/io.ox/tours/main.js:74 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:67 module:io.ox/tours
 msgid ""
 "This guided tour will briefly introduce you to the product. Get more "
 "detailed information in the tours for the single apps or in the online help."
@@ -489,11 +463,11 @@ msgstr ""
 "información más detallada en las visitas guiadas de las aplicaciones "
 "individuales o en la ayuda en línea."
 
-#: apps/io.ox/tours/main.js:631 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:55 module:io.ox/tours
 msgid "To add further details, click on Expand form."
 msgstr "Para añadir más detalles, pulse Expandir formulario."
 
-#: apps/io.ox/tours/main.js:199 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:41 module:io.ox/tours
 msgid ""
 "To change the layout, drag a square's title to another position and drop it "
 "there."
@@ -501,7 +475,7 @@ msgstr ""
 "Para cambiar la distribución, arrastre un panel desde el título a otra "
 "posición y suéltela allí."
 
-#: apps/io.ox/tours/main.js:308 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:87 module:io.ox/tours
 msgid ""
 "To choose between the different views. click on View in the toolbar. Select "
 "a menu entry in the layout."
@@ -509,39 +483,39 @@ msgstr ""
 "Para elegir entre diferentes vistas, pulse en Vista en la barra de "
 "herramientas. Seleccione un elemento del menú en la presentación."
 
-#: apps/io.ox/tours/main.js:231 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:34 module:io.ox/tours
 msgid "To compose a new E-Mail, click on Compose in the toolbar."
 msgstr ""
 "Para redactar un nuevo correo electrónico, pulse el icono Redactar nuevo "
 "correo electrónico en la barra de herramientas."
 
-#: apps/io.ox/tours/main.js:115 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr ""
 "Para crear un nuevo correo electrónico, pulse el icono Redactar nuevo correo "
 "electrónico en la barra de herramientas."
 
-#: apps/io.ox/tours/main.js:410 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:35 module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."
 msgstr "Para crear una nueva cita, pulse en Nuevo en la barra de herramientas."
 
-#: apps/io.ox/tours/main.js:371 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:31 module:io.ox/tours
 msgid "To create a new contact, click on New > Add contact in the toolbar."
 msgstr ""
 "Para crear un nuevo contacto, pulse en Nuevo > Añadir contacto en la barra "
 "de herramientas."
 
-#: apps/io.ox/tours/main.js:606 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:33 module:io.ox/tours
 msgid "To create a new task, click on New in the toolbar."
 msgstr "Para crear una nueva tarea, pulse Nuevo en la barra de herramientas."
 
-#: apps/io.ox/tours/main.js:578 module:io.ox/tours
+#: apps/io.ox/tours/files.js:61 module:io.ox/tours
 msgid "To create a note, click on New > Add note in the toolbar."
 msgstr ""
 "Para crear una nota, pulse en Nuevo > Añadir nota en la barra de "
 "herramientas."
 
-#: apps/io.ox/tours/main.js:436 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:58 module:io.ox/tours
 msgid ""
 "To create recurring appointments, enable Repeat. Functions for setting the "
 "recurrence parameters are shown."
@@ -549,7 +523,7 @@ msgstr ""
 "Para crear citas periódicas, marque Repetir. Se muestran funciones para el "
 "establecimiento de los parámetros de repetición."
 
-#: apps/io.ox/tours/main.js:642 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:63 module:io.ox/tours
 msgid ""
 "To create recurring tasks, enable Repeat. Functions for setting the "
 "recurrence parameters are shown."
@@ -557,15 +531,15 @@ msgstr ""
 "Para crear tareas periódicas, marque Repetir. Se mostrarán funciones para "
 "establecer los parámetros repetición."
 
-#: apps/io.ox/tours/main.js:475 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:78 module:io.ox/tours
 msgid "To create the appointment, click on Create at the upper right side."
 msgstr "Para crear la cita, pulse Crear en la parte superior derecha."
 
-#: apps/io.ox/tours/main.js:691 module:io.ox/tours
-msgid "To create the task, click on Create on the upper right side."
-msgstr "Para crear la tarea, pulse Crear en la parte superior derecha."
+#: apps/io.ox/tours/tasks.js:88 module:io.ox/tours
+msgid "To create the task, click on Create."
+msgstr "Para crear la tarea, pulse en Crear."
 
-#: apps/io.ox/tours/main.js:213 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:52 module:io.ox/tours
 msgid ""
 "To display a square again or to display further information sources, click "
 "on Customize this page."
@@ -573,7 +547,7 @@ msgstr ""
 "Para mostrar un panel de nuevo, o para mostrar otras fuentes de información, "
 "pulse en Personalizar esta página."
 
-#: apps/io.ox/tours/main.js:91 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:76 module:io.ox/tours
 msgid ""
 "To display the help or the settings, click the System menu icon in the menu "
 "bar."
@@ -581,7 +555,7 @@ msgstr ""
 "Para mostrar la ayuda o los ajustes, pulse el icono Menú del sistema de la "
 "barra de menús."
 
-#: apps/io.ox/tours/main.js:390 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:47 module:io.ox/tours
 msgid ""
 "To edit multiple contacts at once, enable the checkboxes on the left side of "
 "the contacts. If the checkboxes are not displayed, click on View > "
@@ -592,7 +566,7 @@ msgstr ""
 "pulse en Vista > Casillas de verificación a la derecha de la barra de "
 "herramientas."
 
-#: apps/io.ox/tours/main.js:715 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:100 module:io.ox/tours
 msgid ""
 "To edit multiple tasks at once, enable the checkboxes at the left side of "
 "the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
@@ -603,11 +577,11 @@ msgstr ""
 "pulse en Vista > Casillas de verificación a la derecha de la barra de "
 "herramientas."
 
-#: apps/io.ox/tours/main.js:679 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:83 module:io.ox/tours
 msgid "To enter billing information, click on Show details."
 msgstr "Para introducir información de facturación, pulse en Mostrar detalles."
 
-#: apps/io.ox/tours/main.js:453 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:68 module:io.ox/tours
 msgid ""
 "To invite other participants, enter their names in the field below "
 "Participants. To avoid appointment conflicts, click on Find a free time at "
@@ -617,7 +591,7 @@ msgstr ""
 "debajo de Participantes. Para evitar conflictos entre citas, pulse en Buscar "
 "tiempo libre en la parte superior derecha."
 
-#: apps/io.ox/tours/main.js:670 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:78 module:io.ox/tours
 msgid ""
 "To invite other participants, enter their names in the field below "
 "Participants. You can add documents as attachment to the task."
@@ -625,21 +599,21 @@ msgstr ""
 "Para invitar a otros participantes, introduzca sus nombres en el campo que "
 "hay debajo de Participantes. Puede agregar documentos adjuntos a la tarea."
 
-#: apps/io.ox/tours/main.js:84 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:71 module:io.ox/tours
 msgid "To launch an app, click on an entry on the left side of the menu bar."
 msgstr ""
 "Para iniciar una aplicación, pulse en un elemento de la izquierda de la "
 "barra de menús."
 
-#: apps/io.ox/tours/main.js:442 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:63 module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
 msgstr "Para no olvidar la cita, utilice la función de recordatorio."
 
-#: apps/io.ox/tours/main.js:648 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:68 module:io.ox/tours
 msgid "To not miss the task, use the reminder function."
 msgstr "Para no olvidar la tarea, utilice la función de recordatorio."
 
-#: apps/io.ox/tours/main.js:329 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:97 module:io.ox/tours
 msgid ""
 "To open or close an E-Mail in a conversation, click on a free area in the "
 "header."
@@ -647,7 +621,7 @@ msgstr ""
 "Para abrir o cerrar un correo en una conversación, pulse en una zona libre "
 "del encabezado."
 
-#: apps/io.ox/tours/main.js:123 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:102 module:io.ox/tours
 msgid ""
 "To open or close the folder tree, click on View >  Folder view on the right "
 "side of the toolbar."
@@ -655,19 +629,16 @@ msgstr ""
 "Para abrir o cerrar el árbol de carpetas, pulse en Vista > Vista de carpeta "
 "en la parte derecha de la barra de herramientas."
 
-#: apps/io.ox/tours/main.js:353 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:113 module:io.ox/tours
 msgid ""
 "To open the E-Mail settings, click the System menu icon on the upper right "
-"side of the menu bar. Select Settings. Click on E-Mail on the left side. To "
-"display all settings, enable Advanced settings in the bottom left side"
+"side of the menu bar. Select Settings. Click on E-Mail on the left side."
 msgstr ""
-"Para abrir los ajustes de correo electrónico, pulse en el icono Menú de "
-"Sistema que hay en la parte superior derecha de la barra de menús. "
-"Seleccione Configuración. Pulse en Correo electrónico en el lado izquierdo. "
-"Para mostrar todos los ajustes, active Ajustes avanzados en la parte "
-"inferior izquierda."
+"Para abrir la configuración de Correo, pulse el icono Menú del sistema en la "
+"parte superior derecha de la barra de menús. Seleccione Configuración. Pulse "
+"en Correo en la parte izquierda."
 
-#: apps/io.ox/tours/main.js:750 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:49 module:io.ox/tours
 msgid ""
 "To open the help, click the System menu icon on the upper right side of the "
 "menu bar. Select Help. The help for the currently selected app is displayed. "
@@ -679,19 +650,19 @@ msgstr ""
 "aplicación actual. Para navegar por la ayuda completa, pulse en Página de "
 "inicio o Tabla de contenidos en la parte superior de la ventana. "
 
-#: apps/io.ox/tours/main.js:732 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:31 module:io.ox/tours
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings. "
+"the menu bar. Select Settings."
 msgstr ""
 "Para abrir los ajustes, pulse el icono Menú del sistema situado en la parte "
 "superior derecha de la barra de menús. Seleccione Configuración."
 
-#: apps/io.ox/tours/main.js:187 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:36 module:io.ox/tours
 msgid "To read the details, click on an entry in a square."
 msgstr "Para leer los detalles, pulse en un elemento de un panel."
 
-#: apps/io.ox/tours/main.js:337 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:102 module:io.ox/tours
 msgid ""
 "To receive information about the sender or other recipients, open the Halo "
 "view by clicking on a name."
@@ -699,11 +670,11 @@ msgstr ""
 "Para recibir información sobre el remitente o de otros destinatarios, abra "
 "la vista Halo pulsando en un nombre."
 
-#: apps/io.ox/tours/main.js:129 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:107 module:io.ox/tours
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr "Para buscar objetos, haga clic en el icono Buscar de la barra de menú."
 
-#: apps/io.ox/tours/main.js:537 module:io.ox/tours
+#: apps/io.ox/tours/files.js:36 module:io.ox/tours
 msgid ""
 "To select one of the views List, Icons or Squares, click on View on the "
 "right side of the toolbar."
@@ -711,7 +682,7 @@ msgstr ""
 "Para seleccionar una de las vistas Lista, Iconos o Paneles, pulse en Vista a "
 "la derecha de la barra de herramientas."
 
-#: apps/io.ox/tours/main.js:493 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:84 module:io.ox/tours
 msgid ""
 "To select one of the views like Day, Month or List, click on View in the "
 "toolbar. Select a menu entry from the Layout section."
@@ -720,7 +691,7 @@ msgstr ""
 "Vista en la barra de herramientas. Seleccione una entrada del menú desde la "
 "sección Disposición."
 
-#: apps/io.ox/tours/main.js:384 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:41 module:io.ox/tours
 msgid ""
 "To send an E-Mail to the contact, click on an E-Mail address or on Send "
 "email in the toolbar."
@@ -728,13 +699,11 @@ msgstr ""
 "Para enviar un correo electrónico al contacto, pulse en una dirección de "
 "correo electrónico o en Enviar correo en la barra de herramientas."
 
-#: apps/io.ox/tours/main.js:281 module:io.ox/tours
-msgid "To send the E-Mail, click on Send on the upper right side."
-msgstr ""
-"Para enviar el correo electrónico, pulse en Enviar en la parte superior "
-"derecha."
+#: apps/io.ox/tours/mail.js:75 module:io.ox/tours
+msgid "To send the E-Mail, click on Send"
+msgstr "Para enviar el correo, pulse en Enviar"
 
-#: apps/io.ox/tours/main.js:756 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:55 module:io.ox/tours
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
@@ -742,31 +711,31 @@ msgstr ""
 "Para cerrar la sesión, pulse el icono Menú del sistema situado a la derecha "
 "de la barra de menús. Seleccione Cerrar sesión."
 
-#: apps/io.ox/tours/main.js:299 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:80 module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
 msgstr ""
 "Para ordenar correos electrónicos, pulse en Ordenar por. Seleccione un "
 "criterio de ordenación."
 
-#: apps/io.ox/tours/main.js:707 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:93 module:io.ox/tours
 msgid "To sort the tasks, click on Sort by. Select a sort criteria."
 msgstr ""
 "Para ordenar las tareas, pulse en Ordenar por. Seleccione un criterio de "
 "ordenación."
 
-#: apps/io.ox/tours/main.js:659 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:73 module:io.ox/tours
 msgid "To track the editing status, enter the current progress."
 msgstr ""
 "Para realizar el seguimiento del estado de edición, introduzca el progreso "
 "actual."
 
-#: apps/io.ox/tours/main.js:567 module:io.ox/tours
+#: apps/io.ox/tours/files.js:56 module:io.ox/tours
 msgid "To upload a file, click on New > Upload new file in the toolbar."
 msgstr ""
 "Para subir un fichero, pulse en Nuevo > Subir nuevo fichero en la barra de "
 "herramientas."
 
-#: apps/io.ox/tours/main.js:590 module:io.ox/tours
+#: apps/io.ox/tours/files.js:68 module:io.ox/tours
 msgid ""
 "To view further information, click on a file. A pop-up window displays "
 "further details and functions."
@@ -774,15 +743,15 @@ msgstr ""
 "Para ver más información, pulse en un fichero. Una ventana emergente muestra "
 "más detalles y funciones."
 
-#: apps/io.ox/tours/main.js:651 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:72 module:io.ox/tours
 msgid "Tracking the editing status"
 msgstr "Seguimiento del estado de edición"
 
-#: apps/io.ox/tours/main.js:563 module:io.ox/tours
+#: apps/io.ox/tours/files.js:55 module:io.ox/tours
 msgid "Uploading a file"
 msgstr "Carga de un fichero"
 
-#: apps/io.ox/tours/main.js:531 module:io.ox/tours
+#: apps/io.ox/tours/files.js:31 module:io.ox/tours
 msgid ""
 "Use the folder tree to access own, public or shared files. If the folder "
 "tree is hidden, click on View > Folder view on the right side of the toolbar."
@@ -791,7 +760,7 @@ msgstr ""
 "compartidos. Si el árbol de carpetas está oculto, pulse en Vista > Vista de "
 "carpeta a la derecha de la barra de herramientas."
 
-#: apps/io.ox/tours/main.js:141 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:117 module:io.ox/tours
 msgid ""
 "Use the folder tree to open the folder containing the objects that you want "
 "to view in the list."
@@ -799,19 +768,19 @@ msgstr ""
 "Utilice el árbol de carpetas para abrir la carpeta que contiene los objetos "
 "que desea ver en la lista."
 
-#: apps/io.ox/tours/main.js:147 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:122 module:io.ox/tours
 msgid ""
 "Use the list to select an object, show its contents or activate functions."
 msgstr ""
 "Utilice la lista para seleccionar un objeto, para ver sus contenidos o "
 "aplicarle determinadas funciones."
 
-#: apps/io.ox/tours/main.js:439 module:io.ox/tours
-#: apps/io.ox/tours/main.js:645
+#: apps/io.ox/tours/calendar.js:62 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:67
 msgid "Using the reminder function"
 msgstr "Uso de la función de recordatorio"
 
-#: apps/io.ox/tours/main.js:71 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:66 module:io.ox/tours
 msgid "Welcome to %s"
 msgstr "Bienvenido a %s"
 
@@ -3558,6 +3527,13 @@ msgstr "Bienvenido a %s"
 #~ msgid "Below quoted text"
 #~ msgstr "Debajo del texto citado"
 
+#~ msgid ""
+#~ "Below the recipient you will find further functions, e.g. for sending "
+#~ "copies to other recipients or for adding attachments."
+#~ msgstr ""
+#~ "Debajo del destinatario encontrará otras funciones, por ejemplo para "
+#~ "enviar copias a otros destinatarios, o para añadir archivos adjuntos."
+
 #~ msgid "Benin"
 #~ msgstr "Benin"
 
@@ -5520,6 +5496,32 @@ msgstr "Bienvenido a %s"
 #~ msgid "Enter personal data"
 #~ msgstr "Introducir datos personales"
 
+#~ msgid "Enter the E-Mail text below the subject."
+#~ msgstr "Introduzca el texto del correo electrónico debajo del asunto"
+
+#~ msgid ""
+#~ "Enter the E-Mail text below the subject. If the text format was set to "
+#~ "HTMl in the options, you can format the E-Mail text. To do so select a "
+#~ "text part and then click an icon in the formatting bar."
+#~ msgstr ""
+#~ "Introduzca el texto del correo electrónico bajo el asunto. Si ha "
+#~ "establecido el formato de texto como HTML, puede dar formato al texto del "
+#~ "correo. Para ello, seleccione una parte del texto y haga clic en un icono "
+#~ "de la barra de formato."
+
+#~ msgid ""
+#~ "Enter the recipient's name on the top left side. As soon as you typed the "
+#~ "first letters, suggestions from the address books are displayed. To "
+#~ "accept a recipient suggestion, click on it."
+#~ msgstr ""
+#~ "Introduzca el nombre del destinatario en la parte superior izquierda. Tan "
+#~ "pronto como haya escrito las primeras letras, se mostrarán sugerencias de "
+#~ "las libretas de direcciones. Para aceptar una sugerencia de destinatario, "
+#~ "pulse en ella."
+
+#~ msgid "Enter the subject on the right side of the recipient."
+#~ msgstr "Introduzca el asunto a la derecha del destinatario."
+
 #~ msgid "Enter visible text"
 #~ msgstr "Indique el texto visible"
 
@@ -6559,6 +6561,14 @@ msgstr "Bienvenido a %s"
 #~ msgstr "Iconos"
 
 #~ msgid ""
+#~ "If a folder contains images, you can display a slideshow. To do so click "
+#~ "the View slideshow icon in the toolbar."
+#~ msgstr ""
+#~ "Si una carpeta contiene imágenes, puede mostrar una presentación de "
+#~ "diapositivas. Para ello pulse en el icono Ver presentación en la barra de "
+#~ "herramientas."
+
+#~ msgid ""
 #~ "If the authorization expired or was revoked, you can repeat the "
 #~ "authorization process by clicking on the button below. The authorization "
 #~ "will proceed in a separate window."
@@ -6573,6 +6583,13 @@ msgstr "Bienvenido a %s"
 #~ msgstr ""
 #~ "Si cambia la contraseña, se cerrará la sesión. Por favor, asegúrese de "
 #~ "quetodo está cerrado y guardado."
+
+#~ msgid ""
+#~ "If you no longer want to display a square, click the cross on the upper "
+#~ "right side."
+#~ msgstr ""
+#~ "Si no desea seguir mostrando un panel, pulse en la cruz de la parte "
+#~ "superior derecha."
 
 #~ msgid ""
 #~ "If you spot a free time, just select this area. To do this, move the "
@@ -6646,6 +6663,13 @@ msgstr "Bienvenido a %s"
 
 #~ msgid "In a public folder there must be at least one participant."
 #~ msgstr "En una carpeta pública debe haber al menos un participante."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened on the right side."
+#~ msgstr ""
+#~ "En caso de nuevas notificaciones, por ejemplo, invitaciones a citas, se "
+#~ "abre el área de información en el lado derecho."
 
 #~ msgid ""
 #~ "In order to assign categories to the objects selected, use the control "
@@ -10388,6 +10412,9 @@ msgstr "Bienvenido a %s"
 #~ msgid "Skip this step"
 #~ msgstr "Saltar este paso"
 
+#~ msgid "Slideshow"
+#~ msgstr "Presentación"
+
 #~ msgid "Slovakia"
 #~ msgstr "Eslovaquia"
 
@@ -11363,6 +11390,15 @@ msgstr "Bienvenido a %s"
 #~ msgstr "Se ha guardado el ajuste."
 
 #~ msgid ""
+#~ "The settings are organized in topics. Select the topic on the left side, "
+#~ "e.g Basic settings or E-Mail. To view all settings, enable Advanced "
+#~ "settings at the bottom."
+#~ msgstr ""
+#~ "La configuración está organizada por temas. Seleccione el tema en la "
+#~ "parte izquierda, por ejemplo, Ajustes básicos o Correo electrónico. Para "
+#~ "ver todos los ajustes, active Ajustes avanzados en la parte inferior."
+
+#~ msgid ""
 #~ "The settings for collecting contacts in this folder will become disabled "
 #~ "when you enter the application the next time."
 #~ msgstr ""
@@ -12092,8 +12128,23 @@ msgstr "Bienvenido a %s"
 #~ "Para crear una nota, pulse el icono de la parte superior. Seleccione "
 #~ "Añadir nota."
 
+#~ msgid "To create the task, click on Create on the upper right side."
+#~ msgstr "Para crear la tarea, pulse Crear en la parte superior derecha."
+
 #~ msgid "To launch an app, click on a tile's headline."
 #~ msgstr "Para iniciar una aplicación, haga clic en el título de una ficha."
+
+#~ msgid ""
+#~ "To open the E-Mail settings, click the System menu icon on the upper "
+#~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
+#~ "side. To display all settings, enable Advanced settings in the bottom "
+#~ "left side"
+#~ msgstr ""
+#~ "Para abrir los ajustes de correo electrónico, pulse en el icono Menú de "
+#~ "Sistema que hay en la parte superior derecha de la barra de menús. "
+#~ "Seleccione Configuración. Pulse en Correo electrónico en el lado "
+#~ "izquierdo. Para mostrar todos los ajustes, active Ajustes avanzados en la "
+#~ "parte inferior izquierda."
 
 #, fuzzy
 #~ msgid ""
@@ -12102,6 +12153,11 @@ msgstr "Bienvenido a %s"
 #~ msgstr ""
 #~ "Para abrir la ayuda, pulse el icono Menú del sistema situado a la derecha "
 #~ "de la barra de menús. Seleccione Ayuda."
+
+#~ msgid "To send the E-Mail, click on Send on the upper right side."
+#~ msgstr ""
+#~ "Para enviar el correo electrónico, pulse en Enviar en la parte superior "
+#~ "derecha."
 
 #~ msgid "To view attachment you must first save your e-mail as a draft."
 #~ msgstr "Para ver adjuntos antes debe guardar su e-mail como borrador."

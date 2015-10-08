@@ -11,18 +11,17 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/view-detail',
-    ['io.ox/tasks/util',
-     'io.ox/calendar/util',
-     'gettext!io.ox/tasks',
-     'io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/tasks/api',
-     'io.ox/calendar/participants',
-     'io.ox/tasks/actions',
-     'less!io.ox/tasks/style',
-     'less!io.ox/calendar/style'//participantsview needs this
-    ], function (util, calendarUtil, gt, ext, links, api, ParticipantsView) {
+define('io.ox/tasks/view-detail', [
+    'io.ox/tasks/util',
+    'io.ox/calendar/util',
+    'gettext!io.ox/tasks',
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/tasks/api',
+    'io.ox/participants/detail',
+    'io.ox/tasks/actions',
+    'less!io.ox/tasks/style'
+], function (util, calendarUtil, gt, ext, links, api, ParticipantsView) {
 
     'use strict';
 
@@ -36,7 +35,7 @@ define('io.ox/tasks/view-detail',
 
             if (!data) return $('<div>');
 
-            var task = util.interpretTask(data, {detail: true}), self = this;
+            var task = util.interpretTask(data), self = this;
 
             var node = $.createViewContainer(data, api)
                 .on('redraw', function (e, tmp) {
@@ -45,8 +44,10 @@ define('io.ox/tasks/view-detail',
                 })
                 .addClass('tasks-detailview');
             baton.interpretedData = task;
+
             // inline links
             ext.point('io.ox/tasks/detail-inline').invoke('draw', node, baton);
+
             //content
             ext.point('io.ox/tasks/detail-view').invoke('draw', node, baton);
 
@@ -59,12 +60,9 @@ define('io.ox/tasks/view-detail',
         index: 100,
         id: 'header',
         draw: function (baton) {
-            var infoPanel,
-                task = baton.interpretedData;
-            this.append(
-                $('<header role="heading">').append(
-                    infoPanel = $('<div>').addClass('info-panel'),
-                    $('<h1 class="title clear-title">').append(
+            var infoPanel = $('<div>').addClass('info-panel'),
+                task = baton.interpretedData,
+                title = $('<h1 class="title clear-title">').append(
                         // lock icon
                         baton.data.private_flag ? $('<i class="fa fa-lock private-flag">') : [],
                         // priority
@@ -73,7 +71,10 @@ define('io.ox/tasks/view-detail',
                         ),
                         // title
                         $.txt(gt.noI18n(task.title))
-                    )
+                    );
+            this.append(
+                $('<header role="heading">').append(
+                    _.device('smartphone') ? [title, infoPanel] : [infoPanel, title]
                 )
             );
             ext.point('io.ox/tasks/detail-view/infopanel').invoke('draw', infoPanel, task);
@@ -89,7 +90,7 @@ define('io.ox/tasks/view-detail',
                 this.append($('<div>').addClass('attachments-container')
                     .append(
                         $('<span>').text(gt('Attachments') + ' \u00A0\u00A0').addClass('attachments'),
-                        $('<div>').css({width: '70px', height: '12px', display: 'inline-block'}).busy()));
+                        $('<div>').css({ width: '70px', height: '12px', display: 'inline-block' }).busy()));
             } else if (task.number_of_attachments > 0) {
                 ext.point('io.ox/tasks/detail-attach').invoke('draw', this, task);
             }
@@ -99,11 +100,14 @@ define('io.ox/tasks/view-detail',
         index: 300,
         id: 'note',
         draw: function (baton) {
-            this.append(
-                $('<div class="note">').html(
-                    calendarUtil.getNote(baton.interpretedData)
-                )
-            );
+            var note = calendarUtil.getNote(baton.interpretedData);
+            if (note !== '') {
+                this.append(
+                    $('<div class="note">').html(
+                        note
+                    )
+                );
+            }
         }
     });
     ext.point('io.ox/tasks/detail-view').extend({
@@ -112,7 +116,7 @@ define('io.ox/tasks/view-detail',
         draw: function (baton) {
             var task = baton.interpretedData,
                 fields = {
-                    start_date: gt('Start date'),
+                    start_time: gt('Start date'),
                     target_duration: gt('Estimated duration in minutes'),
                     actual_duration: gt('Actual duration in minutes'),
                     target_costs: gt('Estimated costs'),
@@ -127,7 +131,7 @@ define('io.ox/tasks/view-detail',
 
             if (task.recurrence_type) {
                 $details.append(
-                    $('<dd class="detail-value">').text(gt('This task recurs')),
+                    $('<dt class="detail-value">').text(gt('This task recurs')),
                     $('<dd class="detail-value">').text(calendarUtil.getRecurrenceString(baton.data)));
                 hasDetails = true;
             }
@@ -146,7 +150,11 @@ define('io.ox/tasks/view-detail',
             });
 
             if (hasDetails) {
-                this.append($details);
+                this.append(
+                    $('<fieldset class="details">').append(
+                        $details
+                    )
+                );
             }
         }
     });
@@ -164,18 +172,18 @@ define('io.ox/tasks/view-detail',
         index: 100,
         id: 'infopanel',
         draw: function (task) {
-            if (task.end_date) {
+            if (task.end_time) {
                 this.append(
                         $('<div>').addClass('end-date').text(
                             //#. %1$s due date of a task
                             //#, c-format
-                            gt('Due %1$s', _.noI18n(task.end_date))
+                            gt('Due %1$s', _.noI18n(task.end_time))
                         )
                 );
             }
 
             //alarm makes no sense if reminders are disabled
-            if (task.alarm && !_.device('small')) {
+            if (task.alarm) {
                 this.append(
                         $('<div>').addClass('alarm-date').text(
                             //#. %1$s reminder date of a task
@@ -222,7 +230,7 @@ define('io.ox/tasks/view-detail',
             }
             $('<span>').text(gt('Attachments') + ' \u00A0\u00A0').addClass('attachments').appendTo(attachmentNode);
             require(['io.ox/core/api/attachment'], function (api) {
-                api.getAll({folder_id: task.folder_id, id: task.id, module: 4}).done(function (data) {
+                api.getAll({ folder_id: task.folder_id, id: task.id, module: 4 }).done(function (data) {
                     _(data).each(function (a) {
                         // draw
                         buildDropdown(attachmentNode, _.noI18n(a.filename), a);
@@ -250,11 +258,11 @@ define('io.ox/tasks/view-detail',
         var bla = new links.Dropdown({
                 label: label,
                 classes: 'attachment-item',
-                ref: 'io.ox/tasks/attachment/links'
+                ref: 'io.ox/core/tk/attachment/links'
             }).draw.call(container, data);
 
         //no inline style for mobile
-        if (_.device('small')) {
+        if (_.device('smartphone')) {
             $(bla).css('display', 'block');
         }
         return bla;

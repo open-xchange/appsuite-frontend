@@ -6,9 +6,9 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
- * @author Frank Paczynski <frank.paczynski@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 define(['io.ox/mail/detail/links'], function (links) {
 
@@ -49,6 +49,16 @@ define(['io.ox/mail/detail/links'], function (links) {
         it('recognizes a simple mail address', function () {
             var html = process('Lorem ipsum icke@domain.tld set ante');
             expect(html).to.equal('Lorem ipsum <a href="mailto:icke@domain.tld" class="mailto-link" target="_blank">icke@domain.tld</a> set ante');
+        });
+
+        it('recognizes a mail address with umlauts and accents correctly', function () {
+            var html = process('Lorem ipsum ické@domän.tld set ante');
+            expect(html).to.equal('Lorem ipsum <a href="mailto:ické@domän.tld" class="mailto-link" target="_blank">ické@domän.tld</a> set ante');
+        });
+
+        it('separates mail addresses inside Kanji correctly', function () {
+            var html = process('我给你的icke@domain.tld发了一封邮件');
+            expect(html).to.equal('我给你的<a href="mailto:icke@domain.tld" class="mailto-link" target="_blank">icke@domain.tld</a>发了一封邮件');
         });
 
         it('recognizes a mail address with display name', function () {

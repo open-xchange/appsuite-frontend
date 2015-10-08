@@ -10,11 +10,13 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/contacts/widgets/pictureUpload',
-    ['io.ox/core/notifications',
-     'gettext!io.ox/contacts',
-     'less!io.ox/contacts/widgets/widgets'
-    ], function (notifications, gt) {
+define('io.ox/contacts/widgets/pictureUpload', [
+    'io.ox/core/notifications',
+    'io.ox/contacts/api',
+    'gettext!io.ox/contacts',
+    'settings!io.ox/contacts',
+    'less!io.ox/contacts/widgets/widgets'
+], function (notifications, api, gt, settings) {
 
     'use strict';
 
@@ -28,13 +30,13 @@ define('io.ox/contacts/widgets/pictureUpload',
 
             className: 'picture-upload-view',
 
-            modelEvents: {
-                'change:image1_url': 'displayImageURL'
+            init: function () {
+                this.listenTo(this.model, 'change:image1_url', this.displayImageURL);
             },
 
             resetImage: function (e) {
                 e.stopImmediatePropagation();
-                this.model.set('image1', '', {validate: true});
+                this.model.set('image1', '', { validate: true });
                 this.closeBtn.hide();
                 this.addImgText.show();
                 this.setImageURL();
@@ -57,8 +59,21 @@ define('io.ox/contacts/widgets/pictureUpload',
                     notifications.yell('success', gt('Your selected picture will be displayed after saving'));
                 } else {
                     fileData = input.files[0];
+                    // check if the picture is small enough
+                    if (fileData && settings.get('maxImageSize') && fileData.size > settings.get('maxImageSize')) {
+                        require(['io.ox/core/strings'], function (strings) {
+                            //#. %1$s maximum file size
+                            notifications.yell('error', gt('Your selected picture exceeds the maximum allowed file size of %1$s', strings.fileSize(settings.get('maxImageSize'), 2)));
+                        });
+                        return;
+                    }
                 }
 
+                if (!fileData) {
+                    // may happen if a user first selects a picture and then when trying to choose a new one presses cancel
+                    // prevent js error and infinite loading
+                    return;
+                }
                 this.model.set('pictureFile', fileData);
                 this.model.unset('image1');
 
@@ -71,8 +86,20 @@ define('io.ox/contacts/widgets/pictureUpload',
                 this.setImageURL(this.model.get('image1_url'));
             },
 
-            setImageURL: function (url) {
-                this.imgCon.css('background-image', 'url(' + (url || ox.base + '/apps/themes/default/dummypicture.png') + ')');
+            setImageURL: function (url, callback) {
+                if (callback) {
+                    var self = this;
+                    //preload Image
+                    $('<img>').attr('src', url).load(function () {
+                        //no memory leaks
+                        $(this).remove();
+                        //image is cached now so no loading time for this
+                        self.imgCon.css('background-image', 'url(' + (url || api.getFallbackImage()) + ')');
+                        callback();
+                    });
+                } else {
+                    this.imgCon.css('background-image', 'url(' + (url || api.getFallbackImage()) + ')');
+                }
             },
 
             previewPictureFile: function () {
@@ -84,6 +111,9 @@ define('io.ox/contacts/widgets/pictureUpload',
 
                 var self = this, file = this.model.get('pictureFile');
 
+                self.imgCon.css('background-image', 'initial').busy();
+                self.addImgText.hide();
+
                 require(['io.ox/contacts/widgets/canvasresize'], function (canvasResize) {
                     canvasResize(file, {
                         width: 300,
@@ -91,9 +121,10 @@ define('io.ox/contacts/widgets/pictureUpload',
                         crop: false,
                         quality: 80,
                         callback: function (data) {
-                            self.setImageURL(data);
-                            self.addImgText.hide();
-                            self.closeBtn.show();
+                            self.setImageURL(data, function () {
+                                self.imgCon.idle();
+                                self.closeBtn.show();
+                            });
                         }
                     });
                 });
@@ -133,7 +164,7 @@ define('io.ox/contacts/widgets/pictureUpload',
                     ),
                     $('<form>').append(
                         $('<label class="sr-only">').attr('for', guid).text(gt('Click to upload image')),
-                        self.fileInput = $('<input type="file" name="file" accepts="image/*" tabindex="1">').attr('id', guid)
+                        self.fileInput = $('<input type="file" name="file" accept="image/*" tabindex="1">').attr('id', guid)
                             .on('change', function (e) {
                                 self.handleFileSelect(e, this);
                             })
@@ -147,7 +178,7 @@ define('io.ox/contacts/widgets/pictureUpload',
                 );
 
                 if (!self.oldMode || hasImage) {
-                    self.fileInput.css({ height: '1px', width: '1px', cursor: 'pointer'});
+                    self.fileInput.css({ height: '1px', width: '1px', cursor: 'pointer' });
                 }
 
                 self.imgCon.on('click', function () { self.fileInput.trigger('click'); });

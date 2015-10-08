@@ -11,26 +11,29 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/api',
-    ['io.ox/core/http',
-     'io.ox/core/event',
-     'io.ox/core/folder/util',
-     'io.ox/core/folder/sort',
-     'io.ox/core/folder/blacklist',
-     'io.ox/core/folder/title',
-     'io.ox/core/folder/bitmask',
-     'io.ox/core/api/account',
-     'io.ox/core/capabilities',
-     'settings!io.ox/core',
-     'settings!io.ox/mail',
-     'gettext!io.ox/core'], function (http, Events, util, sort, blacklist, getFolderTitle, Bitmask, account, capabilities, settings, mailSettings, gt) {
+define('io.ox/core/folder/api', [
+    'io.ox/core/http',
+    'io.ox/core/folder/util',
+    'io.ox/core/folder/sort',
+    'io.ox/core/folder/blacklist',
+    'io.ox/core/folder/title',
+    'io.ox/core/folder/bitmask',
+    'io.ox/core/api/account',
+    'io.ox/core/api/user',
+    'io.ox/core/capabilities',
+    'io.ox/contacts/util',
+    'settings!io.ox/core',
+    'settings!io.ox/mail',
+    'io.ox/core/api/filestorage',
+    'gettext!io.ox/core'
+], function (http, util, sort, blacklist, getFolderTitle, Bitmask, account, userAPI, capabilities, contactUtil, settings, mailSettings, filestorageApi, gt) {
 
     'use strict';
 
     var api = {}, pool;
 
     // add event hub
-    Events.extend(api);
+    _.extend(api, Backbone.Events);
 
     //
     // Utility functions
@@ -48,6 +51,42 @@ define('io.ox/core/folder/api',
         return item;
     }
 
+    function renameDefaultCalendarFolders(items) {
+
+        var renameItems = [].concat(items).filter(function (item) {
+                // only for calendar
+                if (!/^(contacts|calendar|tasks)$/.test(item.module)) return false;
+                // rename default calendar
+                if (item.id === String(settings.get('folder/calendar'))) return true;
+                // any shared folder
+                return util.is('shared', item);
+            }),
+            ids = _(renameItems)
+                .chain()
+                .pluck('created_by')
+                .compact()
+                .uniq()
+                .value();
+
+        if (ids.length === 0) return $.when(items);
+
+        return userAPI.getList(ids).then(function (list) {
+            var hash = _.object(ids, list);
+
+            _(renameItems).each(function (item) {
+                if (item.id === String(settings.get('folder/calendar')) || item.title === gt('Calendar')) {
+                    item.display_title = contactUtil.getFullName(hash[item.created_by]) || gt('Default calendar');
+                } else {
+                    //#. %1$s is the folder owner
+                    //#. %2$s is the folder title
+                    item.display_title = gt('%1$s: %2$s', contactUtil.getFullName(hash[item.created_by]), item.title);
+                }
+            });
+
+            return items;
+        });
+    }
+
     function onChangeModelId(model) {
         delete pool.models[model.previous('id')];
         pool.models[model.id] = model;
@@ -61,12 +100,66 @@ define('io.ox/core/folder/api',
         return /^virtual/.test(id);
     }
 
+    function isExternalFileStorage(data) {
+        //
+        var type = data.get ? data.get('type') : data.type;
+        return type === 14;
+    }
+
     function isFlat(id) {
         return /^(contacts|calendar|tasks)$/.test(id);
     }
 
+    function isNested(id) {
+        return /^(mail|infostore)$/.test(id);
+    }
+
     function getCollectionId(id, all) {
         return (all ? 'all/' : '') + String(id);
+    }
+
+    // no deep recursion needed here, children are sufficient
+    function calculateSubtotal(model) {
+        return pool.getCollection(model.id).reduce(function (total, model) {
+            return total + (model.get('subtotal') || 0) + (model.get('unread') || 0);
+        }, 0);
+    }
+
+    function bubbleSubtotal(model, value, attribute) {
+
+        // attribute may be subtotal or unread
+        var previous = model._previousAttributes[attribute] !== undefined && model._previousAttributes[attribute] !== null ? model._previousAttributes[attribute] : 0,
+            difference = value - previous,
+            parent = pool.models[model.get('folder_id')],
+            virtualParents = model.get('virtual_parents');
+
+        // system folders don't matter
+        // bubble through the tree in parent direction
+        if (difference !== 0 && parent && parent.get('module') !== 'system' && pool.collections[parent.get('id')]) {
+            parent.set('subtotal', calculateSubtotal(parent));
+        }
+
+        // if this is a subfolder of a virtual folder we must bubble there too
+        if (difference !== 0 && virtualParents && virtualParents.length > 0) {
+            _(virtualParents).each(function (virtualParentId) {
+                if (pool.models[virtualParentId] && pool.collections[virtualParentId]._byId[model.get('id')]) {
+                    pool.models[virtualParentId].set('subtotal', calculateSubtotal(pool.models[virtualParentId]));
+                } else {
+                    //virtual folder does not exist anymore or this folder is no longer part of it's collection
+                    model.set('virtual_parents', _(model.get('virtual_parents')).without(virtualParentId));
+                }
+            });
+        }
+    }
+
+    function onChangeSubtotal (model, value) {
+        bubbleSubtotal(model, value, 'subtotal');
+    }
+
+    function onChangeUnread (model, value) {
+        bubbleSubtotal(model, value, 'unread');
+        // forward event
+        api.trigger('change:unread', model, value);
     }
 
     //
@@ -74,22 +167,82 @@ define('io.ox/core/folder/api',
     //
 
     var FolderModel = Backbone.Model.extend({
+
         constructor: function () {
             Backbone.Model.apply(this, arguments);
-            this.on('change:id', onChangeModelId);
+            this.set('virtual_parents', []);
+            // only apply unread Events to mail or undefined folders (some virtual folders might have an undefined module)
+            if (this.get('module') === 'mail' || this.get('module') === undefined) {
+                this.on({
+                    'change:id': onChangeModelId,
+                    'change:subtotal': onChangeSubtotal,
+                    'change:unread': onChangeUnread
+                });
+            }
+        },
+
+        // check if the current user has admin privileges
+        isAdmin: function () {
+            var bits = new Bitmask(this.get('own_rights'));
+            return !!bits.get('admin');
+        },
+
+        // check if the folder can have shares
+        supportsShares: function () {
+            // for mail folders check "capabilities" bitmask
+            if (this.is('mail') && (this.get('capabilities') & 1) === 1) return true;
+            // for other folders check supported_capabilities
+            return this.supports('permissions');
+        },
+
+        // check if the folder can be shared (requires admin bit and the capability "permissions")
+        isShareable: function () {
+            return this.isAdmin() && this.supportsShares();
+        },
+
+        // checks if the folder supports a capability
+        supports: function (capability) {
+            return _(this.get('supported_capabilities')).indexOf(capability) > -1;
+        },
+
+        // convenience function / maps to folderAPI.is(type, folder)
+        is: function (type) {
+            return util.is(type, this.attributes);
+        },
+
+        // convenience function / maps to folderAPI.can(action, folder)
+        can: function (action) {
+            return util.can(action, this.attributes);
         }
     });
 
     var FolderCollection = Backbone.Collection.extend({
+
+        model: FolderModel,
+
         constructor: function (id) {
             Backbone.Collection.apply(this, arguments);
             this.id = id;
             this.fetched = false;
+            this.on('remove', this.onRemove, this);
+
+            // sort shared and hidden folders by title
+            if (/^flat\/(contacts|calendar|tasks)\/shared$/.test(this.id) || /^flat\/(contacts|calendar|tasks)\/hidden$/.test(this.id)) {
+                this.comparator = function (model) {
+                    return (model.get('display_title') || model.get('title')).toLowerCase();
+                };
+            }
         },
+
         comparator: function (model) {
-            return model.get('index/' + this.id) || 0;
+            return model.get('index/' + this.id) || 0;
         },
-        model: FolderModel
+
+        onRemove: function (model) {
+            if (isFlat(model.get('module'))) return;
+            pool.getModel(this.id).set('subfolders', this.length > 0);
+            api.trigger('collection:remove', this.id, model);
+        }
     });
 
     // collection pool
@@ -108,6 +261,7 @@ define('io.ox/core/folder/api',
             if (model === undefined) {
                 // add new model
                 this.models[id] = model = new FolderModel(data);
+                api.trigger('pool:add', model);
             } else {
                 // update existing model
                 model.set(data);
@@ -123,8 +277,27 @@ define('io.ox/core/folder/api',
             // update collection
             var collection = this.getCollection(id),
                 type = collection.fetched ? 'set' : 'reset';
+            // remove old virtual parent references
+            if (this.models[id] && isVirtual(id)) {
+                _(collection.models).each(function (model) {
+                    model.set('virtual_parents', _(model.get('virtual_parents')).without(id));
+                });
+            }
             collection[type](models);
             collection.fetched = true;
+            if (this.models[id] && this.models[id].get('module') !== 'system') {
+                var subtotal = 0;
+                for (var i = 0; i < models.length; i++) {
+                    subtotal += (models[i].get('subtotal') || 0) + (models[i].get('unread') || 0);
+                    // add virtual parent references
+                    if (isVirtual(id)) {
+                        var newParents = models[i].get('virtual_parents');
+                        newParents.push(id);
+                        models[i].set('virtual_parents', _.uniq(newParents));
+                    }
+                }
+                this.models[id].set('subtotal', subtotal);
+            }
 
             if (options.reset) collection.trigger('reset');
         },
@@ -174,8 +347,8 @@ define('io.ox/core/folder/api',
     // Use ramp-up data
     //
 
-    _(ox.rampup.folder).each(function (data) {
-        pool.addModel(data);
+    _(ox.rampup.folder).chain().keys().each(function (data) {
+        pool.addModel(ox.rampup.folder[data]);
     });
 
     var rampup = {};
@@ -185,6 +358,23 @@ define('io.ox/core/folder/api',
         rampup[id] = _(list).map(function (data) {
             return _.isArray(data) ? http.makeObject(data, 'folders') : data;
         });
+    });
+
+    //
+    // Define virtual folders
+    //
+
+    pool.addModel({
+        folder_id: '1',
+        id: 'virtual/all-my-appointments',
+        module: 'calendar',
+        own_rights: 403710016, // all rights but admin
+        permissions: [{ bits: 403710016, entity: ox.user_id, group: false }],
+        standard_folder: true,
+        supported_capabilities: [],
+        title: gt('All my appointments'),
+        total: -1,
+        type: 1
     });
 
     //
@@ -201,11 +391,12 @@ define('io.ox/core/folder/api',
 
             var model = arg, data = model.toJSON(), id = data.id;
 
-            if (model.changed.total) {
+            // use exact comparison here or changes to 0 are ignored
+            if (model.changed.total !== undefined && model.changed.total !== null) {
                 api.trigger('update:total', id, data);
                 api.trigger('update:total:' + id, data);
             }
-            if (model.changed.unread) {
+            if (model.changed.unread !== undefined && model.changed.unread !== null) {
                 api.trigger('update:unread', id, data);
                 api.trigger('update:unread:' + id, data);
             }
@@ -234,7 +425,7 @@ define('io.ox/core/folder/api',
 
     VirtualFolder.prototype.concat = function () {
         return $.when.apply($, arguments).then(function () {
-            return _(arguments).flatten();
+            return _(arguments).chain().flatten().compact().value();
         });
     };
 
@@ -270,6 +461,12 @@ define('io.ox/core/folder/api',
 
         refresh: function () {
             _(this.hash).invoke('list');
+        },
+
+        getCollections: function () {
+            return _(this.hash).keys().map(function (id) {
+                return api.pool.getCollection(id);
+            });
         }
     };
 
@@ -285,7 +482,7 @@ define('io.ox/core/folder/api',
         var model = pool.models[id];
         if (options.cache === true && model !== undefined && model.has('title')) return $.when(model.toJSON());
 
-        if (/^virtual/.test(id)) return $.when({ id: id });
+        if (isVirtual(id)) return $.when({ id: id });
 
         // fetch GAB but GAB is disabled?
         if (id === '6' && !capabilities.has('gab')) {
@@ -305,6 +502,9 @@ define('io.ox/core/folder/api',
             }
         })
         .then(function (data) {
+            return renameDefaultCalendarFolders(data);
+        })
+        .then(function (data) {
             // update/add model
             var model = pool.addModel(data);
             // propagate changes via api events
@@ -318,12 +518,19 @@ define('io.ox/core/folder/api',
     // Special case: Get multiple folders at once
     //
 
-    function multiple(ids) {
+    function multiple(ids, options) {
+        options = _.extend({ cache: true, errors: false }, options);
         try {
             http.pause();
             return $.when.apply($,
                 _(ids).map(function (id) {
-                    return get(id).then(null, function () { return $.when(undefined); });
+                    return get(id, { cache: options.cache }).then(
+                        null,
+                        function fail(error) {
+                            error.id = id;
+                            return $.when(options.errors ? error : undefined);
+                        }
+                    );
                 })
             )
             .then(function () {
@@ -351,9 +558,11 @@ define('io.ox/core/folder/api',
         // use rampup data?
         if (rampup[id] && !options.all) {
             var array = processListResponse(id, rampup[id]);
-            pool.addCollection(id, array);
             delete rampup[id];
-            return $.when(array);
+            return renameDefaultCalendarFolders(array).then(function (list) {
+                pool.addCollection(id, list);
+                return list;
+            });
         }
 
         // flat?
@@ -381,6 +590,7 @@ define('io.ox/core/folder/api',
             },
             appendColumns: true
         })
+        .then(renameDefaultCalendarFolders)
         .then(function (array) {
             array = processListResponse(id, array);
             pool.addCollection(collectionId, array);
@@ -431,7 +641,6 @@ define('io.ox/core/folder/api',
         });
     }
 
-
     //
     // Flat list
     //
@@ -452,6 +661,10 @@ define('io.ox/core/folder/api',
 
     function getFlatCollection(module, section) {
         return pool.getCollection(getFlatCollectionId(module, section));
+    }
+
+    function injectVirtualCalendarFolder(array) {
+        array.unshift(pool.getModel('virtual/all-my-appointments').toJSON());
     }
 
     function getFlatViews() {
@@ -483,11 +696,11 @@ define('io.ox/core/folder/api',
 
         if (collection.fetched && options.cache === true) {
             return $.when({
-                'private' : collection.toJSON(),
-                'public'  : getFlatCollection(module, 'public').toJSON(),
-                'shared'  : getFlatCollection(module, 'shared').toJSON(),
-                'sharing' : getFlatCollection(module, 'sharing').toJSON(),
-                'hidden'  : getFlatCollection(module, 'hidden').toJSON()
+                'private': collection.toJSON(),
+                'public':  getFlatCollection(module, 'public').toJSON(),
+                'shared':  getFlatCollection(module, 'shared').toJSON(),
+                'sharing': getFlatCollection(module, 'sharing').toJSON(),
+                'hidden':  getFlatCollection(module, 'hidden').toJSON()
             });
         }
 
@@ -503,27 +716,50 @@ define('io.ox/core/folder/api',
             }
         })
         .then(function (data) {
+            var list = [],
+                sections = _(data)
+                .chain()
+                .map(function (section, id) {
+                    var obj = _(section)
+                        .chain()
+                        .map(makeObject)
+                        .filter(function (folder) {
+                            // read access?
+                            if (!util.can('read', folder) && !util.can('change:permissions', folder)) return false;
+                            // otherwise
+                            return true;
+                        })
+                        .value();
+
+                    list.push(obj);
+                    return [id, obj];
+                })
+                .object()
+                .value();
+
+            return renameDefaultCalendarFolders(_(list).flatten()).then(function () {
+                return sections;
+            });
+        })
+        .then(function (data) {
             var sections = {},
                 hidden = [],
                 sharing = [],
                 hash = settings.get(['folder/hidden'], {}),
                 collectionId;
+
             // loop over results to get proper objects and sort out hidden folders
             _(data).each(function (section, id) {
-                var array = _(section)
-                    .chain()
-                    .map(makeObject)
-                    .filter(function (folder) {
-                        // read access?
-                        if (!util.can('read', folder)) return false;
+                var array = _(section).filter(function (folder) {
                         // store section / easier than type=1,2,3
                         if (hash[folder.id]) { hidden.push(folder); return false; }
                         // sharing?
                         if (util.is('shared-by-me', folder)) sharing.push(folder);
                         // otherwise
                         return true;
-                    })
-                    .value();
+                    });
+                // inject 'All my appointments' for calender/private
+                if (module === 'calendar' && id === 'private') injectVirtualCalendarFolder(array);
                 // process response and add to pool
                 collectionId = getFlatCollectionId(module, id);
                 array = processListResponse(collectionId, array);
@@ -554,15 +790,24 @@ define('io.ox/core/folder/api',
         options = _.extend({ silent: false }, options);
         var model = pool.getModel(id).set(changes, { silent: options.silent });
 
+        // build data object
+        var data = { folder: changes };
+
+        if (options.notification && !_.isEmpty(options.notification)) {
+            data.notification = options.notification;
+        }
+
         return http.PUT({
             module: 'folders',
             params: {
                 action: 'update',
                 id: id,
                 timezone: 'UTC',
-                tree: tree(id)
+                tree: tree(id),
+                cascadePermissions: options.cascadePermissions,
+                ignoreWarnings: options.ignoreWarnings
             },
-            data: changes,
+            data: data,
             appendColumns: false
         })
         .done(function () {
@@ -573,10 +818,17 @@ define('io.ox/core/folder/api',
             function success(newId) {
                 // id change? (caused by rename or move)
                 if (id !== newId) model.set('id', newId);
+                if (options.cascadePermissions) refresh();
                 // trigger event
-                if (!options.silent) api.trigger('update', id, newId, model.toJSON());
+                if (!options.silent) {
+                    api.trigger('update update:' + id, id, newId, model.toJSON());
+                    if ('permissions' in changes) api.trigger('change:permissions', id);
+                    // used by drive to respond to updated foldernames in icon/list view
+                    if ('title' in changes) api.trigger('rename', id, model.toJSON());
+                }
                 // fetch subfolders of parent folder to ensure proper order after rename/move
-                if (id !== newId) return list(model.get('folder_id'), { cache: false }).then(function () {
+                if (id !== newId || changes.title || changes.folder_id ) return list(model.get('folder_id'), { cache: false }).then(function () {
+                    pool.getCollection(model.get('folder_id')).sort();
                     return newId;
                 });
             },
@@ -598,21 +850,23 @@ define('io.ox/core/folder/api',
     // Move folder
     //
 
-    function move(id, target) {
+    function move(id, target, ignoreWarnings) {
 
         if (id === target) return;
 
         // prepare move
         var model = pool.getModel(id),
-            parent = model.get('folder_id'),
-            collection = pool.getCollection(parent);
+            folderId = model.get('folder_id');
 
-        // remove model from parent collection
-        collection.remove(model);
-        // update parent folder; subfolders might have changed
-        pool.getModel(parent).set('subfolders', collection.length > 0);
+        removeFromAllCollections(model);
 
-        return update(id, { folder_id: target }).done(function (newId) {
+        // trigger event
+        api.trigger('before:move', model.toJSON(), target);
+
+        //set unread to 0 to update subtotal attributes of parent folders (bubbles through the tree)
+        model.set('unread', 0);
+
+        return update(id, { folder_id: target }, { ignoreWarnings: ignoreWarnings }).then(function success(newId) {
             // update new parent folder
             pool.getModel(target).set('subfolders', true);
             // update all virtual folders
@@ -621,6 +875,14 @@ define('io.ox/core/folder/api',
             pool.getCollection(target).add(model);
             // trigger event
             api.trigger('move', id, newId);
+        }, function fail(error) {
+            // update new parent folder
+            pool.getModel(folderId).set('subfolders', true);
+            // update all virtual folders
+            virtual.refresh();
+            // add folder to collection
+            pool.getCollection(folderId).add(model);
+            return error;
         });
     }
 
@@ -630,6 +892,8 @@ define('io.ox/core/folder/api',
 
     function create(id, options) {
 
+        id = String(id);
+
         // get parent folder first - actually just to inherit 'module';
         return get(id).then(function (parent) {
             // default options
@@ -638,6 +902,13 @@ define('io.ox/core/folder/api',
                 subscribed: 1,
                 title: gt('New Folder')
             }, options);
+            // don't inherit permissions for private flat folders
+            if (isFlat(options.module) && !(parent.id === '2' || util.is('public', parent))) {
+                // empty array doesn't work; we heve to copy the admins
+                options.permissions = _(parent.permissions).filter(function (item) {
+                    return !!(item.bits & 268435456);
+                });
+            }
             // go!
             return http.PUT({
                 module: 'folders',
@@ -670,7 +941,7 @@ define('io.ox/core/folder/api',
                 pool.getModel(id).set('subfolders', true);
                 virtual.refresh();
                 api.trigger('create', data);
-                api.trigger('create:' + id, data);
+                api.trigger('create:' + id.replace(/\s/g, '_'), data);
             })
             .fail(function fail(error) {
                 api.trigger('create:fail', error, id);
@@ -682,22 +953,8 @@ define('io.ox/core/folder/api',
     // Remove folder
     //
 
-    function removeFromCollection(model) {
-        // flat folders are different
-        var module = model.get('module'), section, parent, collection;
-        if (isFlat(module)) {
-            // contacts, calendar, tasks
-            section = getSection(model.get('type'));
-            collection = getFlatCollection(module, section);
-            collection.remove(model);
-        } else {
-            // mail and drive
-            parent = model.get('folder_id');
-            collection = pool.getCollection(parent);
-            collection.remove(model);
-            // update parent folder; subfolders might have changed
-            pool.getModel(parent).set('subfolders', collection.length > 0);
-        }
+    function removeFromAllCollections(model) {
+        _(pool.collections).invoke('remove', model);
     }
 
     function remove(id) {
@@ -706,10 +963,13 @@ define('io.ox/core/folder/api',
         var model = pool.getModel(id), data = model.toJSON();
 
         // trigger event
-        api.trigger('remove:prepare', data);
+        api.trigger('before:remove', data);
+
+        //set unread to 0 to update subtotal attributes of parent folders (bubbles through the tree)
+        model.set('unread', 0);
 
         // update collection (now)
-        removeFromCollection(model);
+        removeFromAllCollections(model);
         model.trigger('destroy');
 
         // delete on server
@@ -770,6 +1030,14 @@ define('io.ox/core/folder/api',
         return node;
     }
 
+    function getDeepLink(data) {
+
+        var app = 'io.ox/' + (data.module === 'infostore' ? 'files' : data.module),
+            folder = encodeURIComponent(data.id);
+
+        return ox.abs + ox.root + '/#!&app=' + app + '&folder=' + folder;
+    }
+
     //
     // ignoreSentItems()
     // check a list of object if they originate from more than one folder
@@ -803,9 +1071,16 @@ define('io.ox/core/folder/api',
 
     function reload() {
         _.chain(arguments).flatten().map(getFolderId).compact().uniq().each(function (id) {
-            get(id, { cache: false });
+            // register function call once
+            if (!reload.hash[id]) reload.hash[id] = _.debounce(get.bind(null, id, { cache: false }), reload.wait);
+            reload.hash[id]();
         });
     }
+
+    // to debounce reloading folders
+    reload.hash = {};
+    // interval
+    reload.wait = 2000;
 
     //
     // Hide/show (flat) folder
@@ -878,10 +1153,15 @@ define('io.ox/core/folder/api',
     function refresh() {
         // pause http layer to get one multiple
         http.pause();
-        // loop over all folders, get all parent folders, apply unique, and reload if they have subfolders
-        _(api.pool.models).chain().invoke('get', 'folder_id').uniq().compact().without('0').each(function (id) {
-            list(id, { cache: false });
-        });
+        // loop over all non-flat folders, get all parent folders, apply unique, and reload if they have subfolders
+        _(api.pool.models).chain()
+            .filter(function (model) {
+                return !isFlat(model.get('module'));
+            })
+            .invoke('get', 'folder_id').uniq().compact().without('0')
+            .each(function (id) {
+                list(id, { cache: false });
+            });
         // loop over flat views
         _(getFlatViews()).each(function (module) {
             flat({ module: module, cache: false });
@@ -893,6 +1173,9 @@ define('io.ox/core/folder/api',
     }
 
     ox.on('please:refresh refresh^', refresh);
+
+    // If there is a new filestorage refresh the folders
+    $(filestorageApi).on('create delete update', refresh);
 
     //
     // Get standard mail folders
@@ -923,12 +1206,32 @@ define('io.ox/core/folder/api',
     // Check if "altnamespace" is enabled (mail server setting)
     var altnamespace = mailSettings.get('namespace', 'INBOX/') === '';
 
+    //
+    // Special lookup for
+    //
+
+    function getExistingFolder(type) {
+        var defaultId = util.getDefaultFolder(type);
+        if (defaultId) return defaultId;
+        if (type === 'mail') return 'default0' + mailSettings.get('defaultseparator') + 'INBOX';
+        if (type === 'infostore') return 10;
+        return flat({ module: type }).then(function (data) {
+            for (var section in data) {
+                if (section === 'hidden') continue;
+                var list = data[section];
+                if (list && list[0] && list[0].id) return list[0].id;
+            }
+            return null;
+        });
+    }
+
     // publish api
     _.extend(api, {
         FolderModel: FolderModel,
         FolderCollection: FolderCollection,
         Pool: Pool,
         pool: pool,
+        calculateSubtotal: calculateSubtotal,
         get: get,
         list: list,
         multiple: multiple,
@@ -948,13 +1251,17 @@ define('io.ox/core/folder/api',
         is: util.is,
         can: util.can,
         virtual: virtual,
-        isFlat: isFlat,
         isVirtual: isVirtual,
+        isExternalFileStorage: isExternalFileStorage,
+        isFlat: isFlat,
+        isNested: isNested,
         getFlatCollection: getFlatCollection,
         getFlatViews: getFlatViews,
         getDefaultFolder: util.getDefaultFolder,
+        getExistingFolder: getExistingFolder,
         getStandardMailFolders: getStandardMailFolders,
         getTextNode: getTextNode,
+        getDeepLink: getDeepLink,
         getFolderTitle: getFolderTitle,
         ignoreSentItems: ignoreSentItems,
         processListResponse: processListResponse,

@@ -11,20 +11,20 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/detail/view',
-    ['io.ox/backbone/disposable',
-     'io.ox/mail/common-extensions',
-     'io.ox/core/extensions',
-     'io.ox/mail/api',
-     'io.ox/mail/util',
-     'io.ox/core/api/collection-pool',
-     'io.ox/mail/detail/content',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/emoji/util',
-     'gettext!io.ox/mail',
-     'less!io.ox/mail/style',
-     'io.ox/mail/actions'
-    ], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, gt) {
+define('io.ox/mail/detail/view', [
+    'io.ox/backbone/disposable',
+    'io.ox/mail/common-extensions',
+    'io.ox/core/extensions',
+    'io.ox/mail/api',
+    'io.ox/mail/util',
+    'io.ox/core/api/collection-pool',
+    'io.ox/mail/detail/content',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/emoji/util',
+    'gettext!io.ox/mail',
+    'less!io.ox/mail/style',
+    'io.ox/mail/actions'
+], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, gt) {
 
     'use strict';
 
@@ -67,24 +67,18 @@ define('io.ox/mail/detail/view',
     ext.point('io.ox/mail/detail/header').extend({
         id: 'picture',
         index: INDEX_header += 100,
-        draw: extensions.picture
+        draw: extensions.senderPicture
     });
 
     ext.point('io.ox/mail/detail/header').extend({
         id: 'drag-support',
         index: INDEX_header += 100,
         draw: function (baton) {
-            this.attr({
+            this.find('.contact-picture').attr({
                 'data-drag-data': _.cid(baton.data),
                 'data-drag-message': util.getSubject(baton.data)
             });
         }
-    });
-
-    ext.point('io.ox/mail/detail/header').extend({
-        id: 'unread-toggle',
-        index: INDEX_header += 100,
-        draw: extensions.unreadToggle
     });
 
     /* move the actions menu to the top in sidepanel on smartphones */
@@ -93,7 +87,7 @@ define('io.ox/mail/detail/view',
     ext.point(extPoint).extend(new links.Dropdown({
         id: 'actions',
         index: _.device('smartphone') ? 50 : INDEX_header += 100,
-        classes: _.device('smartphone') ? '': 'actions pull-right',
+        classes: _.device('smartphone') ? '' : 'actions pull-right',
         label: gt('Actions'),
         ariaLabel: gt('Actions'),
         icon: _.device('smartphone') ? undefined : 'fa fa-bars',
@@ -101,6 +95,12 @@ define('io.ox/mail/detail/view',
         ref: 'io.ox/mail/links/inline',
         smart: true
     }));
+
+    ext.point('io.ox/mail/detail/header').extend({
+        id: 'unread-toggle',
+        index: INDEX_header += 100,
+        draw: extensions.unreadToggle
+    });
 
     ext.point('io.ox/mail/detail/header').extend({
         id: 'date',
@@ -174,12 +174,6 @@ define('io.ox/mail/detail/view',
         draw: extensions.externalImages
     });
 
-    ext.point('io.ox/mail/detail/notifications').extend({
-        index: INDEX_notifications += 100,
-        id: 'subscribe',
-        draw: extensions.subscriptionNotification
-    });
-
     ext.point('io.ox/mail/detail').extend({
         id: 'body',
         index: INDEX += 100,
@@ -243,7 +237,7 @@ define('io.ox/mail/detail/view',
             this.append(
                 $('<div class="max-size-warning">').append(
                     $.txt(gt('This message has been truncated due to size limitations.')), $.txt(' '),
-                    $('<a role="button" target="_blank">').attr('href', url).text('Show entire message')
+                    $('<a role="button" target="_blank">').attr('href', url).text(gt('Show entire message'))
                 )
             );
         }
@@ -303,8 +297,8 @@ define('io.ox/mail/detail/view',
             // ignore clicks on overlays
             if ($(e.target).hasClass('overlay')) return;
 
-            // don't toggle single messages
-            if (this.$el.siblings().length === 0) return;
+            // don't toggle single messages unless it's collapsed
+            if (this.$el.siblings().length === 0 && this.$el.hasClass('expanded')) return;
 
             // fix collapsed blockquotes
             this.$el.find('.collapsed-blockquote').hide();
@@ -343,7 +337,7 @@ define('io.ox/mail/detail/view',
                 this.onUnseen();
             } else {
                 //if this mail was read elsewhere notify other apps about it, for example the notification area (also manages new mail window title)
-                api.trigger('update:set-seen', [{id: this.model.get('id'), folder_id: this.model.get('folder_id')}]);
+                api.trigger('update:set-seen', [{ id: this.model.get('id'), folder_id: this.model.get('folder_id') }]);
             }
         },
 

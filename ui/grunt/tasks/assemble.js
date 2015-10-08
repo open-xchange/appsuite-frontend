@@ -15,14 +15,20 @@
 
 module.exports = function (grunt) {
 
+    var momentLanguages = [];
+    grunt.file.expand({ cwd: 'bower_components/moment/locale/' }, '*.js').forEach(function (file) {
+        momentLanguages.push(file.split('.').shift());
+    });
+
     grunt.config.merge({
         assemble: {
             options: {
-                version: '<%= pkg.version %>.' + grunt.template.date(new Date(), 'yyyymmdd.hhMMss'),
+                version: '<%= pkg.version %>.' + grunt.template.date(new Date(), 'yyyymmdd.HHMMss'),
                 revision: '<%= String(pkg.version.slice(pkg.version.indexOf("-") + 1)) %>',
                 enable_debug: '<%= String(local.debug) %>',
                 base: 'v=<%= assemble.options.version %>',
                 cap: '<%= String(local.cap || "") %>',
+                momentLanguages:  '["' + momentLanguages.join('","') + '"]'
             },
             base: {
                 options: {
@@ -32,17 +38,31 @@ module.exports = function (grunt) {
                 },
                 files: [
                     {
-                        src: ['index.html', 'signin.html'],
+                        src: ['index.html'],
                         expand: true,
                         cwd: 'html/',
-                        rename: function (dest, matchedSrcPath) {
-                            var map = {
-                                'index.html': 'core',
-                                'signin.html': 'signin'
-                            };
-                            return dest + map[matchedSrcPath];
+                        rename: function (dest) {
+                            return dest;
                         },
-                        dest: 'build/'
+                        dest: 'build/ui'
+                    },
+                    {
+                        src: ['index.html'],
+                        expand: true,
+                        cwd: 'html/',
+                        rename: function (dest) {
+                            return dest;
+                        },
+                        dest: 'build/core'
+                    },
+                    {
+                        src: ['index.html'],
+                        expand: true,
+                        cwd: 'html/',
+                        rename: function (dest) {
+                            return dest;
+                        },
+                        dest: 'build/signin'
                     }
                 ]
             },

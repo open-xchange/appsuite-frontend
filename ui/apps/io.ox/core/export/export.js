@@ -11,15 +11,15 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/core/export/export',
-    ['io.ox/core/extensions',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/api/export',
-     'io.ox/core/folder/api',
-     'io.ox/core/notifications',
-     'io.ox/formats/vcard',
-     'gettext!io.ox/core'
-    ], function (ext, dialogs, api, folderAPI, notifications, vcard, gt) {
+define('io.ox/core/export/export', [
+    'io.ox/core/extensions',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/api/export',
+    'io.ox/core/folder/api',
+    'io.ox/core/notifications',
+    'io.ox/formats/vcard',
+    'gettext!io.ox/core'
+], function (ext, dialogs, api, folderAPI, notifications, vcard, gt) {
 
     'use strict';
 
@@ -154,7 +154,7 @@ define('io.ox/core/export/export',
         show: function (module, id) {
             var folder = String(id),
                 dialog = new dialogs.ModalDialog({ width: 500 }),
-                baton = new ext.Baton({module: module, folder: folder});
+                baton = new ext.Baton({ module: module, folder: folder });
             // get folder and build dialog
             folderAPI.get(folder).done(function () {
                 dialog
@@ -176,7 +176,7 @@ define('io.ox/core/export/export',
                         if (action === 'export') {
                             var format = baton.$.select.val() || '',
                                 include = (baton.$.include || $()).prop('checked') || false,
-                                options = $.extend({include: include}, baton.options);
+                                options = $.extend({ include: include }, baton.options);
                             require(['io.ox/core/download'], function (download) {
                                 download.url(
                                         api.getUrl(format, baton.folder, options)

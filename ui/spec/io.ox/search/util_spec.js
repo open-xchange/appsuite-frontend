@@ -10,14 +10,17 @@
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
-define(['io.ox/search/util',
-        'fixture!io.ox/core/settings.json',
-        'spec/shared/capabilities',
-        'settings!io.ox/mail',
-        'settings!io.ox/core',
-        'io.ox/mail/main',
-        'spec/shared/io.ox/search/util',
-        'beforeEachEnsure'], function (util, settingsFixture, caputil, mailSettings, settings, main, testutil, beforeEachEnsure) {
+define([
+    'io.ox/search/util',
+    'fixture!io.ox/core/settings.json',
+    'spec/shared/capabilities',
+    'settings!io.ox/mail',
+    'settings!io.ox/core',
+    'io.ox/mail/main',
+    'spec/shared/io.ox/search/util',
+    'beforeEachEnsure'
+], function (util, settingsFixture, caputil, mailSettings, settings, main, testutil, beforeEachEnsure) {
+    'use strict';
 
     function isPromise(def) {
         return (!def.reject && !!def.done);

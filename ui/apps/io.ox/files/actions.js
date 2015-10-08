@@ -11,25 +11,19 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/files/actions',
-    ['io.ox/files/api',
-     'io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/extPatterns/actions',
-     'io.ox/core/capabilities',
-     'io.ox/core/notifications',
-     'io.ox/core/util',
-     'io.ox/core/folder/api',
-     'gettext!io.ox/files',
-     'settings!io.ox/files'
-    ], function (api, ext, links, actionPerformer, capabilities, notifications, util, folderAPI, gt, settings) {
+define('io.ox/files/actions', [
+    'io.ox/files/api',
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/capabilities',
+    'io.ox/files/util',
+    'io.ox/core/folder/api',
+    'gettext!io.ox/files'
+], function (api, ext, links, capabilities, util, folderAPI, gt) {
 
     'use strict';
 
-    var Action = links.Action,
-        ActionGroup = links.ActionGroup,
-        ActionLink = links.ActionLink,
-        POINT = 'io.ox/files';
+    var Action = links.Action;
 
     // actions
     new Action('io.ox/files/actions/upload', {
@@ -42,76 +36,32 @@ define('io.ox/files/actions',
             });
         },
         action: function (baton) {
-            require(['io.ox/files/views/create'], function (create) {
-                create.show(baton.app, {
-                    uploadedFile: function (data) {
-                        if ('invalidateFolder' in baton.app) {
-                            baton.app.invalidateFolder(data);
-                        }
-                    }
-                });
-            });
-        }
-    });
+            var elem = $(baton.e.target),
+                input;
 
-    new Action('io.ox/files/actions/layout-tile', {
-        require: true,
-        action: function (baton) {
-            ox.ui.Perspective.show(baton.app, 'fluid:tile');
-        }
-    });
+            // remove old input-tags resulting from 'add local file' -> 'cancel'
+            elem.siblings('input').remove();
 
-    new Action('io.ox/files/actions/layout-icon', {
-        require: true,
-        action: function (baton) {
-            ox.ui.Perspective.show(baton.app, 'fluid:icon');
-        }
-    });
+            elem.after(
+                input = $('<input type="file" name="file" capture="camera" multiple>')
+                .css('display', 'none')
+                .on('change', function (e) {
+                    var app = baton.app;
+                    require(['io.ox/files/upload/main'], function (fileUpload) {
+                        e.preventDefault();
 
-    new Action('io.ox/files/actions/layout-list', {
-        require: true,
-        action: function (baton) {
-            ox.ui.Perspective.show(baton.app, 'fluid:list');
-        }
-    });
+                        var list = [];
+                        _(e.target.files).each(function (file) {
+                            list.push(_.extend(file, { group: 'file' }));
+                        });
+                        fileUpload.setWindowNode(app.getWindowNode());
+                        fileUpload.create.offer(list, { folder: app.folder.get() });
+                    });
+                    input.remove();
+                })
+            );
 
-    new Action('io.ox/files/actions/publish', {
-        capabilities: 'publication',
-        requires: function (e) {
-            var check = function (data) {
-                    data = data || {};
-                    return e.collection.has('one') && !_.isEmpty(e.baton.data.filename) && !folderAPI.is('trash', data);
-                };
-            if (e.baton.app){
-                return e.baton.app.folder.getData().then(check);
-            } else if (e.baton.data.folder_id) {
-                //no app given, maybe the item itself has a folder
-                return folderAPI.get(e.baton.data.folder_id).then(check);
-            } else {
-                //continue without foldercheck
-                return check();
-            }
-        },
-        action: function (baton) {
-            require(['io.ox/core/pubsub/publications'], function (publications) {
-                publications.buildPublishDialog(baton);
-            });
-        }
-    });
-
-    new Action('io.ox/files/actions/videoplayer', {
-        requires: function (e) {
-            if (_.device('android')) return false;
-            if (e.collection.has('none')) return false;
-            return checkMedia(e, 'video');
-        },
-        action: function (baton) {
-            require(['io.ox/files/mediaplayer'], function (mediaplayer) {
-                mediaplayer.init({
-                    baton: baton,
-                    videoSupport: true
-                });
-            });
+            input.trigger('click');
         }
     });
 
@@ -120,44 +70,46 @@ define('io.ox/files/actions',
 
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
-                var check = function (data) {
-                        data = data || {};
-                        return e.collection.has('one') &&
-                            (/\.(txt|js|css|md|tmpl|html|csv?)$/i).test(e.context.filename) &&
-                            (e.baton.openedBy !== 'io.ox/mail/write') &&
-                            !folderAPI.is('trash', data);
-                    };
-                if (e.baton.app){
-                    return e.baton.app.folder.getData().then(check);
-                } else if (e.baton.data.folder_id) {
-                    //no app given, maybe the item itself has a folder
-                    return folderAPI.get(e.baton.data.folder_id).then(check);
-                } else {
-                    //continue without folderche    ck
-                    return check();
-                }
+                return util.conditionChain(
+                    e.collection.has('one'),
+                    !util.hasStatus('lockedByOthers', e),
+                    (/\.(csv|txt|js|css|md|tmpl|html?)$/i).test(e.context.filename),
+                    (e.baton.openedBy !== 'io.ox/mail/compose'),
+                    util.isFolderType('!trash', e.baton)
+                );
             },
             action: function (baton) {
-                if (ox.ui.App.reuse('io.ox/editor:edit.' + _.cid(baton.data))) return;
-                ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id });
+                if (ox.ui.App.reuse('io.ox/editor:edit.' + _.cid(baton.data))) {
+                    // if this was opened from the viewer, close it now
+                    if (baton.context && baton.context.viewerEvents) {
+                        baton.context.viewerEvents.trigger('viewer:close');
+                    }
+                    return;
+                }
+                ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id }).done(function () {
+                    // if this was opened from the viewer, close it now
+                    if (baton.context && baton.context.viewerEvents) {
+                        baton.context.viewerEvents.trigger('viewer:close');
+                    }
+                });
             }
         });
 
         new Action('io.ox/files/actions/editor-new', {
             requires: function (e) {
-                var check = function (data) {
-                        data = data || {};
-                        return e.baton.openedBy !== 'io.ox/mail/write' && !folderAPI.is('trash', data);
-                    };
-                if (e.baton.app){
-                    return e.baton.app.folder.getData().then(check);
-                } else if (e.baton.data.folder_id) {
-                    //no app given, maybe the item itself has a folder
-                    return folderAPI.get(e.baton.data.folder_id).then(check);
-                } else {
-                    //continue without foldercheck
-                    return check();
-                }
+                return e.baton.app.folder.getData().then(function (data) {
+                    //hide for virtual folders (other files root, public files root)
+                    var virtual = _.contains(['14', '15'], data.id);
+
+                    //no new files in trash folders
+                    if (folderAPI.is('trash', data)) return false;
+                    // no new files in virtual folders
+                    if (virtual) return false;
+                    // no new files in mail attachments
+                    if (e.baton.openedBy === 'io.ox/mail/compose') return false;
+
+                    return folderAPI.can('create', data);
+                });
             },
             action: function (baton) {
                 ox.launch('io.ox/editor/main').done(function () {
@@ -171,27 +123,38 @@ define('io.ox/files/actions',
         requires: function (e) {
             // no file-system, no download
             if (_.device('ios')) return false;
-            if (e.collection.has('multiple')) return true;
+
+            if (e.collection.has('multiple')) {
+                var result = true;
+                _.each(e.baton.data, function (obj) {
+                    if (!obj.filename || !obj.file_size) {
+                        result = false;
+                    }
+                });
+                return result;
+            }
+
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
         multiple: function (list) {
-            // loop over list, get full file object and trigger downloads
-            var filtered = filterUnsupported(list);
-            if (filtered.length === 1) {
-                var o = _.first(filtered);
-                require(['io.ox/core/download'], function (download) {
-                    download.file(o);
-                });
-            } else if (filtered.length > 1) {
-                require(['io.ox/core/download'], function (download) {
-                    download.files(filtered);
-                });
-            }
-            // 'description only' items
-            if (filtered.length === 0 || list.length !== filtered.length) {
-                notifications.yell('info', gt('Items without a file can not be downloaded.'));
-            }
+            ox.load(['io.ox/files/actions/download']).done(function (action) {
+                action(list);
+            });
+        }
+    });
+
+    new Action('io.ox/files/actions/download-folder', {
+        requires: function (e) {
+            // no file-system, no download
+            if (_.device('ios')) return false;
+            // single folders only
+            return e.collection.has('one', 'folders');
+        },
+        action: function (baton) {
+            require(['io.ox/files/api'], function (api) {
+                api.zip(baton.data.id);
+            });
         }
     });
 
@@ -213,9 +176,30 @@ define('io.ox/files/actions',
         }
     });
 
+    new Action('io.ox/files/actions/permissions', {
+        requires: function (e) {
+            if (_.device('smartphone')) return false;
+            if (!e.collection.has('one')) return false;
+            // get proper id
+            var id = e.collection.has('folders') ? e.baton.data.id : e.baton.data.folder_id;
+            return folderAPI.pool.getModel(id).isShareable();
+        },
+        action: function (baton) {
+            require(['io.ox/files/share/permissions'], function (controller) {
+                var model = baton.models[0];
+                if (model.isFile()) {
+                    controller.showFilePermissions(baton.data);
+                } else {
+                    controller.showFolderPermissions(baton.data.id);
+                }
+            });
+        }
+    });
+
     new Action('io.ox/files/actions/open', {
         requires: function (e) {
             if (e.collection.has('multiple')) return false;
+            if (e.collection.has('folders')) return false;
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
@@ -229,35 +213,17 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/sendlink', {
         capabilities: 'webmail !alone',
         requires: function (e) {
-            var check = function (data) {
-                    data = data || {};
-                    return _.device('!small') &&
-                        !_.isEmpty(e.baton.data) &&
-                        e.collection.has('some') &&
-                        e.baton.openedBy !== 'io.ox/mail/write' &&
-                        !folderAPI.is('trash', data);
-                };
-            if (e.baton.app){
-                return e.baton.app.folder.getData().then(check);
-            } else if (e.baton.data.folder_id) {
-                //no app given, maybe the item itself has a folder
-                return folderAPI.get(e.baton.data.folder_id).then(check);
-            } else {
-                //continue without foldercheck
-                return check();
-            }
+            return util.conditionChain(
+                _.device('!smartphone'),
+                !_.isEmpty(e.baton.data),
+                e.collection.has('some', 'items'),
+                e.baton.openedBy !== 'io.ox/mail/compose',
+                util.isFolderType('!trash', e.baton)
+            );
         },
         multiple: function (list) {
-            api.getList(list).done(function (list) {
-                //generate text and html content
-                var html = [], text = [];
-                _(list).each(function (file) {
-                    var url = ox.abs + ox.root + '/#!&app=io.ox/files&folder=' + file.folder_id + '&id=' + _.cid(file);
-                    var label = gt('File: %1$s', file.filename || file.title);
-                    html.push(_.escape(label) + '<br>' + gt('Direct link: %1$s', '<a data-mce-href="' + url + '" href="' + url + '">' + url + '</a>'));
-                    text.push(label + '\n' + gt('Direct link: %1$s', url));
-                });
-                ox.registry.call('mail-compose', 'compose', { attachments: { 'text': [{ content: text.join('\n\n') }], 'html': [{ content: html.join('<br>') }] } });
+            ox.load(['io.ox/files/actions/sendlink']).done(function (action) {
+                action(list);
             });
         }
     });
@@ -265,188 +231,104 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/send', {
         capabilities: 'webmail',
         requires: function (e) {
-            var check = function (data) {
-                    data = data || {};
-                    var list = _.getArray(e.context);
-                    return _.device('!small') &&
-                        !_.isEmpty(e.baton.data) &&
-                        e.collection.has('some') &&
-                        e.baton.openedBy !== 'io.ox/mail/write' &&
-                        !folderAPI.is('trash', data) &&
-                        _(list).reduce(function (memo, obj) {
-                            return memo || obj.file_size > 0;
-                        }, false);
-                };
-            if (e.baton.app){
-                return e.baton.app.folder.getData().then(check);
-            } else if (e.baton.data.folder_id) {
-                //no app given, maybe the item itself has a folder
-                return folderAPI.get(e.baton.data.folder_id).then(check);
-            } else {
-                //continue without foldercheck
-                return check();
-            }
+            var list = _.getArray(e.context);
+            return util.conditionChain(
+                _.device('!smartphone'),
+                !_.isEmpty(e.baton.data),
+                e.collection.has('some', 'items'),
+                e.baton.openedBy !== 'io.ox/mail/compose',
+                _(list).reduce(function (memo, obj) {
+                    return memo || obj.file_size > 0;
+                }, false),
+                util.isFolderType('!trash', e.baton)
+            );
         },
-        multiple: function (list) {
-            api.getList(list).done(function (list) {
+        multiple: function (array) {
+            api.getList(array).done(function (list) {
                 var filtered_list = _.filter(list, function (o) { return o.file_size !== 0; });
-                if (filtered_list.length > 0) {
-                    ox.registry.call('mail-compose', 'compose', { infostore_ids: filtered_list });
-                }
+                if (filtered_list.length === 0) return;
+                ox.registry.call('mail-compose', 'compose', { infostore_ids: filtered_list });
             });
         }
     });
 
     new Action('io.ox/files/actions/showlink', {
-        capabilities: '!alone',
         requires: function (e) {
-            var check = function (data) {
-                    data = data || {};
-                    return _.device('!small') &&
-                        !_.isEmpty(e.baton.data) &&
-                        e.collection.has('some') &&
-                        !folderAPI.is('trash', data);
-                };
-            if (e.baton.app){
-                return e.baton.app.folder.getData().then(check);
-            } else if (e.baton.data.folder_id) {
-                //no app given, maybe the item itself has a folder
-                return folderAPI.get(e.baton.data.folder_id).then(check);
-            } else {
-                //continue without foldercheck
-                return check();
-            }
+            return util.conditionChain(
+                capabilities.has('!alone !guest'),
+                _.device('!smartphone'),
+                !_.isEmpty(e.baton.data),
+                e.collection.has('some', 'items'),
+                util.isFolderType('!trash', e.baton)
+            );
         },
         multiple: function (list) {
-
-            api.getList(list).done(function (list) {
-
-                // create dialog
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({ width: 500 })
-                        .build(function () {
-                            // header
-                            this.header($('<h4>').text(gt('Direct link')));
-                            // content
-                            this.getContentNode().addClass('user-select-text max-height-200').append(
-
-                                _(list).map(function (file) {
-
-                                    var url = ox.abs + ox.root +
-                                        '/#!&app=io.ox/files' +
-                                        '&folder=' + encodeURIComponent(file.folder_id) +
-                                        '&id=' + encodeURIComponent(file.folder_id) + '.' + encodeURIComponent(file.id);
-
-                                    return $('<p>').append(
-                                        $('<div>').text(file.filename || file.title || ''),
-                                        $('<div>').append(
-                                            $('<a class="direct-link" target="_blank" tabindex="1">')
-                                            .attr('href', url)
-                                            .html(util.breakableHTML(url))
-                                        )
-                                    );
-                                })
-                            );
-                        })
-                        .addPrimaryButton('cancel', gt('Close'), 'cancel', {'tabIndex': '1'})
-                        .show(function () {
-                            this.find('a.direct-link').focus();
-                        });
-                });
+            ox.load(['io.ox/files/actions/showlink']).done(function (action) {
+                action(list);
             });
         }
     });
 
     new Action('io.ox/files/actions/delete', {
         requires: function (e) {
-            //hide in mail write preview
-            return e.collection.has('some') && e.collection.has('delete') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');
+            // hide in mail compose preview
+            if (e.baton.openedBy === 'io.ox/mail/compose') return false;
+            // not in standalone mode
+            if (e.context.standalone) return false;
+            return e.collection.has('some', 'delete') && util.hasStatus('!lockedByOthers', e);
         },
-        multiple: function (list) {
-
-            var question = gt.ngettext(
-                    'Do you really want to delete this file?',
-                    'Do you really want to delete these files?',
-                    list.length
-            ),
-            responseSuccess = gt.ngettext(
-                    'This file has been deleted',
-                    'These files have been deleted',
-                    list.length
-            ),
-            responseFail = gt.ngettext(
-                    'This file has not been deleted',
-                    'These files have not been deleted',
-                    list.length
-            ),
-            responseFailLocked = gt.ngettext(
-                    'This file has not been deleted, as it is locked by its owner.',
-                    'These files have not been deleted, as they are locked by their owner.',
-                    list.length
-            );
-
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                new dialogs.ModalDialog()
-                    .text(question)
-                    .addPrimaryButton('delete', gt('Delete'), 'delete', {'tabIndex': '1'})
-                    .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
-                    .show()
-                    .done(function (action) {
-                        if (action === 'delete') {
-                            api.remove(list).done(function () {
-                                api.propagate('delete', list[0]);
-                                notifications.yell('success', responseSuccess);
-                            }).fail(function (e) {
-                                if (e && e.code && e.code === 'IFO-0415') {
-                                    notifications.yell('error', responseFailLocked);
-                                } else {
-                                    notifications.yell('error', responseFail + '\n' + e.error);
-                                }
-                                api.trigger('refresh:all');
-                            });
-                        }
-                    });
+        multiple: function (list, baton) {
+            ox.load(['io.ox/files/actions/delete']).done(function (action) {
+                if (!baton.models) {
+                    api.pool.add(list);
+                    baton.models = api.pool.resolve(list);
+                }
+                action(baton.models);
             });
         }
     });
 
-    var isUnLocked = function (e) {
-        var list = _.getArray(e.context);
-        return _(list).reduce(function (memo, obj) {
-            return memo || !api.tracker.isLockedByOthers(obj);
-        }, false);
-    };
+    new Action('io.ox/files/actions/viewer', {
+        requires: function (e) {
+            return e.collection.has('some', 'items');
+        },
+        action: function (baton) {
+            ox.load(['io.ox/core/viewer/main']).done(function (Viewer) {
+                var viewer = new Viewer(),
+                    selection = [].concat(baton.data);
+
+                if (selection.length > 1) {
+                    // only show selected files - the first one is automatically selected
+                    viewer.launch({ files: selection });
+                } else {
+                    viewer.launch({ selection: _(selection).first(), files: baton.collection.models });
+                }
+            });
+        }
+    });
+
+    //drive action for double-click or enter in files
+    new Action('io.ox/files/actions/default', {
+        action: function (baton) {
+            require(['io.ox/core/extPatterns/actions']).done(function (actions) {
+                actions.invoke('io.ox/files/actions/viewer', null, baton);
+            });
+        }
+    });
 
     new Action('io.ox/files/actions/lock', {
         capabilities: '!alone',
         requires: function (e) {
-            var list = _.getArray(e.context);
-            return _.device('!small') &&
+            return _.device('!smartphone') &&
                 !_.isEmpty(e.baton.data) &&
-                e.collection.has('some') &&
-                // hide in mail write preview
-                (e.baton.openedBy !== 'io.ox/mail/write') &&
-                _(list).reduce(function (memo, obj) {
-                    return memo || !api.tracker.isLocked(obj);
-                }, false);
+                e.collection.has('some', 'modify', 'items') &&
+                // hide in mail compose preview
+                (e.baton.openedBy !== 'io.ox/mail/compose') &&
+                util.hasStatus('!locked', e);
         },
         multiple: function (list) {
-
-            var responseSuccess = gt.ngettext(
-                    'This file has been locked',
-                    'These files have been locked',
-                    list.length
-            ),
-            responseFail = gt.ngettext(
-                    'This file has not been locked',
-                    'These files have not been locked',
-                    list.length
-            );
-
-            api.lock(list).done(function () {
-                notifications.yell('success', responseSuccess);
-            }).fail(function () {
-                notifications.yell('error', responseFail);
+            ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
+                action.lock(list);
             });
         }
     });
@@ -454,196 +336,168 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/unlock', {
         capabilities: '!alone',
         requires: function (e) {
-            var list = _.getArray(e.context);
-            return _.device('!small') &&
-                e.collection.has('some') &&
-                // hide in mail write preview
-                (e.baton.openedBy !== 'io.ox/mail/write') &&
-                _(list).reduce(function (memo, obj) {
-                    return memo || api.tracker.isLockedByMe(obj);
-                }, false);
+            return _.device('!smartphone') &&
+                !_.isEmpty(e.baton.data) &&
+                e.collection.has('some', 'modify', 'items') &&
+                // hide in mail compose preview
+                (e.baton.openedBy !== 'io.ox/mail/compose') &&
+                util.hasStatus('lockedByMe', e);
         },
         multiple: function (list) {
-
-            var responseSuccess = gt.ngettext(
-                    'This file has been unlocked',
-                    'These files have been unlocked',
-                    list.length
-            ),
-            responseFail = gt.ngettext(
-                    'This file has not been unlocked',
-                    'These files have not been unlocked',
-                    list.length
-            );
-
-            api.unlock(list).done(function () {
-                notifications.yell('success', responseSuccess);
-            }).fail(function () {
-                notifications.yell('error', responseFail);
+            ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
+                action.unlock(list);
             });
         }
     });
 
-    new Action('io.ox/files/actions/rename', {
+    new Action('io.ox/files/actions/add-to-portal', {
+        capabilities: 'portal',
         requires: function (e) {
-            //hide in mail write preview
-            return e.collection.has('one') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');
+            return util.conditionChain(
+                e.collection.has('one', 'items'),
+                !_.isEmpty(e.baton.data),
+                util.isFolderType('!trash', e.baton)
+            );
         },
         action: function (baton) {
-
-            require(['io.ox/core/tk/dialogs', 'io.ox/files/util', 'io.ox/core/notifications'], function (dialogs, util, notifications) {
-
-                var filename = baton.data.filename || baton.data.title;
-
-                /**
-                 * @return {promise}
-                 */
-                function fnRename(name) {
-
-                    var update = {
-                            id: baton.data.id,
-                            folder_id: baton.data.folder_id
-                        };
-
-                    // 'title only' entries
-                    if (!baton.data.filename && baton.data.title) {
-                        update.title = name;
-                    } else {
-                        update.filename = name;
-                    }
-
-                    return api.update(update).fail(notifications.yell);
-                }
-
-                /**
-                 * user have to confirm if name doesn't contains a file extension
-                 * @return {promise}
-                 */
-                function process($input) {
-
-                    var name = $.trim($input.val()), invalid = false;
-
-                    // check for valid filename
-                    ext.point('io.ox/core/filename')
-                        .invoke('validate', null, name, 'file')
-                        .find(function (result) {
-                            if (result !== true) {
-                                notifications.yell('warning', result);
-                                return (invalid = true);
-                            }
-                        });
-
-                    if (invalid) return $.Deferred().reject();
-
-                    return util.confirmDialog(name, filename)
-                        .then(
-                            function yes() {
-                                return fnRename(name);
-                            },
-                            function no() {
-                                setTimeout(function () { $input.focus(); }, 0);
-                            }
-                        );
-                }
-
-                new dialogs.ModalDialog({ enter: 'rename', async: true })
-                    .header(
-                        $('<h4>').text(gt('Rename'))
-                    )
-                    .append(
-                        $('<input type="text" name="name" class="form-control" tabindex="1">')
-                    )
-                    .addPrimaryButton('rename', gt('Rename'), 'rename', {'tabIndex': '1'})
-                    .addButton('cancel', gt('Cancel'),  'cancel', {'tabIndex': '1'})
-                    .on('rename', function () {
-                        var $input = this.getContentNode().find('input[name="name"]');
-                        process($input).then(this.close, this.idle);
-                    })
-                    .show(function () {
-                        var $input = this.find('input[name="name"]').focus().val(filename);
-                        $input.get()[0].setSelectionRange(0, $input.val().lastIndexOf('.'));
-                    });
+            ox.load(['io.ox/files/actions/add-to-portal']).done(function (action) {
+                action(baton.data);
             });
+        }
+    });
+
+    function hasObjectWritePermissions(data) {
+        if (_.isArray(data)) data = _(data).first();
+        if (!_.isObject(data)) return false;
+        var array = data.object_permissions || data['com.openexchange.share.extendedObjectPermissions'],
+            myself = _(array).findWhere({ entity: ox.user_id });
+        return !!(myself && (myself.bits >= 2));
+    }
+
+    new Action('io.ox/files/actions/rename', {
+        requires: function (e) {
+            // one?
+            if (!e.collection.has('one')) return false;
+            if (util.hasStatus('lockedByOthers', e)) return false;
+            // hide in mail compose preview
+            if (e.baton.openedBy === 'io.ox/mail/compose') return false;
+            // case 1: folder?
+            if (e.collection.has('folders')) {
+                return e.collection.has('rename:folder');
+            }
+            // case 2: file
+            // access on folder?
+            if (e.collection.has('modify')) return true;
+            // check object permission
+            return hasObjectWritePermissions(e.baton.data);
+        },
+        action: function (baton) {
+            // if this is a folder use the folder rename action
+            if (baton.data.folder_id === 'folder') {
+                ox.load(['io.ox/core/folder/actions/rename']).done(function (action) {
+                    action(baton.data.id);
+                });
+            } else {
+                // files use the file rename action
+                ox.load(['io.ox/files/actions/rename']).done(function (action) {
+                    action(baton.data);
+                });
+            }
         }
     });
 
     new Action('io.ox/files/actions/edit-description', {
         requires: function (e) {
-            //hide in mail write preview
-            return e.collection.has('one') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');
+            if (!e.collection.has('one', 'items')) return false;
+            if (util.hasStatus('lockedByOthers', e)) return false;
+            // hide in mail compose preview
+            if (e.baton.openedBy === 'io.ox/mail/compose') return false;
+            // access on folder?
+            if (e.collection.has('modify')) return true;
+            // check object permission
+            return hasObjectWritePermissions(e.baton.data);
         },
         action: function (baton) {
-            require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/keys'], function (dialogs, KeyListener) {
-                var keys = new KeyListener($input),
-                    dialog = new dialogs.ModalDialog(),
-                    $input = $('<textarea rows="10" class="form-control" tabindex="1"></textarea>')
-                            .val(baton.data.description),
-                    $form = $('<form>')
-                            .css('margin', '0 0 0 0')
-                            .append(
-                                $input
-                            );
+            ox.load(['io.ox/files/actions/edit-description']).done(function (action) {
+                action(baton.data);
+            });
+        }
+    });
 
-                function fnSave() {
-
-                    var description = $input.val();
-                    var update = {
-                        id: baton.data.id,
-                        folder_id: baton.data.folder_id,
-                        description: description
-                    };
-
-                    return api.update(update).fail(require('io.ox/core/notifications').yell);
-                }
-
-                keys.on('shift+enter', function () {
-                    dialog.busy();
-                    fnSave().done(function () {
-                        dialog.close();
-                    });
-                });
-
-                dialog
-                .header($('<h4>').text(gt('Description')))
-                .append(
-                    $form
-                )
-                .addPrimaryButton('save', gt('Save'), 'save', {'tabIndex': '1'})
-                .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
-                .show(function () {
-                    $input.select();
-                    keys.include();
-                })
-                .done(function (action) {
-                    if (action === 'save') {
-                        fnSave();
-                    }
-                });
+    new Action('io.ox/files/actions/upload-new-version', {
+        requires: function (e) {
+            // hide in mail compose preview
+            return e.collection.has('one', 'modify', 'items') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
+        },
+        action: function (baton) {
+            ox.load(['io.ox/files/actions/upload-new-version']).done(function (action) {
+                action(baton.data);
             });
         }
     });
 
     function moveAndCopy(type, label, success) {
         new Action('io.ox/files/actions/' + type, {
-            id: type,
             requires:  function (e) {
-                return e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') && (type === 'move' ? e.collection.has('delete') && isUnLocked(e) : e.collection.has('read'));
+                if (!e.collection.has('some')) return false;
+                if (e.baton.openedBy === 'io.ox/mail/compose') return false;
+                if (util.hasStatus('lockedByOthers', e)) return false;
+                // copy
+                if (type === 'copy') return e.collection.has('some', 'items', 'read');
+                // move
+                return e.collection.has('delete');
             },
             multiple: function (list, baton) {
-
-                require(['io.ox/core/folder/actions/move'], function (move) {
-                    move.item({
-                        api: api,
-                        button: label,
-                        list: list,
-                        module: 'infostore',
-                        root: '9',
-                        settings: settings,
+                ox.load(['io.ox/files/actions/move-copy']).done(function (action) {
+                    var options = {
+                        type: type,
+                        label: label,
                         success: success,
-                        target: baton.target,
-                        title: label,
-                        type: type
-                    });
+                        successCallback: function (response) {
+                            if (!_.isString(response)) {
+                                var conflicts = { warnings: [] };
+                                if (_.isObject(response)) {
+                                    response = [response];
+                                }
+                                // find possible conflicts with filestorages and offer a dialog with ignore warnings option see(Bug 39039)
+                                _(response).each(function (error) {
+                                    if (error.error) {
+                                        if (error.error.categories === 'CONFLICT' && (error.error.code === 'FILE_STORAGE-0045' || error.error.code === 'FLD-1038')) {
+                                            if (!conflicts.title) {
+                                                conflicts.title = error.error.error;
+                                            }
+                                            if (_.isObject(error.error.warnings)) {
+                                                conflicts.warnings.push(error.error.warnings.error);
+                                            } else {
+                                                _(error.error.warnings).each(function (warning) {
+                                                    conflicts.warnings.push(warning.error);
+                                                });
+                                            }
+                                        }
+                                    }
+                                });
+                                if (conflicts.title) {
+                                    require(['io.ox/core/tk/filestorageUtil'], function (filestorageUtil) {
+                                        filestorageUtil.displayConflicts(conflicts, {
+                                            callbackIgnoreConflicts: function () {
+                                                api[type](list, baton.target, true);
+                                            }
+                                        });
+                                    });
+                                } else {
+                                    //no error, must be success
+                                    require(['io.ox/core/yell'], function (yell) {
+                                        yell('success', list.length > 1 ? success.multiple : success.single);
+                                    });
+                                }
+                            } else {
+                                require(['io.ox/core/yell'], function (yell) {
+                                    yell(response);
+                                });
+                            }
+                        }
+                    };
+                    action(list, baton, options);
                 });
             }
         });
@@ -652,34 +506,86 @@ define('io.ox/files/actions',
     moveAndCopy('move', gt('Move'), { single: gt('File has been moved'), multiple: gt('Files have been moved') });
     moveAndCopy('copy', gt('Copy'), { single: gt('File has been copied'), multiple: gt('Files have been copied') });
 
-    new Action('io.ox/files/actions/add-to-portal', {
-        capabilities: 'portal',
+    // folder based actions
+    new Action('io.ox/files/actions/invite', {
+        capabilities: 'invite_guests',
         requires: function (e) {
-            var check = function (data) {
-                    data = data || {};
-                    return e.collection.has('one') && !_.isEmpty(e.baton.data) && !folderAPI.is('trash', data);
-                };
-            if (e.baton.app){
-                return e.baton.app.folder.getData().then(check);
-            } else if (e.baton.data.folder_id) {
-                //no app given, maybe the item itself has a folder
-                return folderAPI.get(e.baton.data.folder_id).then(check);
-            } else {
-                //continue without foldercheck
-                return check();
+            var id;
+            if (e.baton.app) {
+                id = e.baton.app.folder.get();
+            } else if (e.collection.has('one')) {
+                id = e.baton.data.folder_id;
             }
+            return id ? folderAPI.pool.getModel(id).isShareable() : false;
         },
         action: function (baton) {
-            require(['io.ox/portal/widgets'], function (widgets) {
-                widgets.add('stickyfile', {
-                    plugin: 'files',
-                    props: {
-                        id: baton.data.id,
-                        folder_id: baton.data.folder_id,
-                        title: baton.data.filename || baton.data.title
-                    }
+            ox.load(['io.ox/files/actions/share']).done(function (action) {
+                if (baton.models && baton.models.length) {
+                    // share selected file
+                    action.invite(baton.models);
+                } else {
+                    // share current folder
+                    // convert folder model into file model
+                    var id = baton.app.folder.get(),
+                        model = new api.Model(folderAPI.pool.getModel(id).toJSON());
+                    action.invite([model]);
+                }
+            });
+        }
+    });
+
+    new Action('io.ox/files/actions/getalink', {
+        capabilities: 'share_links',
+        requires: function (e) {
+            var id;
+            if (e.baton.app) {
+                id = e.baton.app.folder.get();
+            } else if (e.collection.has('one')) {
+                id = e.baton.data.folder_id;
+            }
+            return id ? folderAPI.pool.getModel(id).isShareable() : false;
+        },
+        action: function (baton) {
+            ox.load(['io.ox/files/actions/share']).done(function (action) {
+                if (baton.models && baton.models.length) {
+                    action.link(baton.models);
+                } else {
+                    // share current folder
+                    // convert folder model into file model
+                    var id = baton.app.folder.get(),
+                        model = new api.Model(folderAPI.pool.getModel(id).toJSON());
+                    action.link([model]);
+                }
+            });
+        }
+    });
+
+    new Action('io.ox/files/icons/audioplayer', {
+        requires: function (e) {
+            if (_.device('android')) return false;
+            return util.checkMedia('audio', e);
+        },
+        action: function (baton) {
+            ox.load(['io.ox/files/mediaplayer']).done(function (mediaplayer) {
+                mediaplayer.init({
+                    baton: baton,
+                    videoSupport: false
                 });
-                notifications.yell('success', gt('This file has been added to the portal'));
+            });
+        }
+    });
+
+    new Action('io.ox/files/icons/videoplayer', {
+        requires: function (e) {
+            if (_.device('android')) return false;
+            return util.checkMedia('video', e);
+        },
+        action: function (baton) {
+            ox.load(['io.ox/files/mediaplayer']).done(function (mediaplayer) {
+                mediaplayer.init({
+                    baton: baton,
+                    videoSupport: true
+                });
             });
         }
     });
@@ -688,50 +594,44 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/versions/actions/makeCurrent', {
         requires: function (e) {
-            //hide in mail write preview
-            return !e.context.current_version && (e.baton.openedBy !== 'io.ox/mail/write');
+            // hide in mail compose preview
+            return e.collection.has('one', 'items', 'modify') && !e.context.current_version && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         action: function (baton) {
-            var data = baton.data;
-            api.update({
-                id: data.id,
-                last_modified: data.last_modified,
-                version: data.version
-            }, true);
+            api.versions.setCurrent(baton.data);
         }
     });
 
     new Action('io.ox/files/versions/actions/delete', {
         requires: function (e) {
-            //hide in mail write preview
-            return e.baton.openedBy !== 'io.ox/mail/write';
+            // hide in mail compose preview
+            return e.collection.has('one', 'items', 'delete') && e.baton.openedBy !== 'io.ox/mail/compose';
         },
         action: function (baton) {
-            var data = baton.data;
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                // get proper question
-                var question = gt.ngettext(
-                        'Do you really want to delete this file?',
-                        'Do you really want to delete these files?',
-                        _.isArray(data) ? data.length : 1
-                );
-                // ask
-                new dialogs.ModalDialog()
-                    .text(question)
-                    .addPrimaryButton('delete', gt('Delete'), 'delete', {'tabIndex': '1'})
-                    .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
-                    .show()
-                    .done(function (action) {
-                        if (action === 'delete') {
-                            api.detach(data);
-                        }
-                    });
+            ox.load(['io.ox/files/actions/versions-delete']).done(function (action) {
+                action(baton.data);
             });
         }
     });
 
-    //guidance
+    //
+    // Add new folder
+    //
 
+    new Action('io.ox/files/actions/add-folder', {
+        requires: function (e) {
+            var model = folderAPI.pool.getModel(e.baton.app.folder.get());
+            return folderAPI.can('create:folder', model.toJSON());
+        },
+        action: function (baton) {
+            var id = baton.app.folder.get(), model = folderAPI.pool.getModel(id);
+            ox.load(['io.ox/core/folder/actions/add']).done(function (add) {
+                add(id, { module: model.get('module') });
+            });
+        }
+    });
+
+    // guidance
     new Action('io.ox/files/actions/guidance', {
         action: function (baton) {
             require(['io.ox/files/guidance/main'], function (guidance) {
@@ -748,99 +648,51 @@ define('io.ox/files/actions',
         }
     });
 
-    // groups
-
-    new ActionGroup(POINT + '/links/toolbar', {
-        id: 'default',
-        index: 100,
-        icon: function () {
-            return $('<i class="fa fa-plus accent-color">');
-        }
-    });
-
-    new ActionLink(POINT + '/links/toolbar/default', {
+    // 'new' dropdown
+    new links.ActionLink('io.ox/files/links/toolbar/default', {
         index: 100,
         id: 'upload',
-        label: gt('Upload new file'),
-        ref: POINT + '/actions/upload'
+        label: gt('Add local file'),
+        ref: 'io.ox/files/actions/upload'
     });
 
-    new ActionLink(POINT + '/links/toolbar/default', {
+    new links.ActionLink('io.ox/files/links/toolbar/default', {
         index: 200,
         id: 'note',
         label:
             //#. Please translate like "take a note", "Notiz" in German, for example.
             //#. more like "to notice" than "to notify".
             gt('Add note'),
-        ref: POINT + '/actions/editor-new'
+        ref: 'io.ox/files/actions/editor-new'
     });
 
-    // VIEWS
-
-    new ActionGroup(POINT + '/links/toolbar', {
-        id: 'view',
-        index: 400,
-        icon: function () {
-            return $('<i class="fa fa-eye">').attr('aria-label', gt('Change View'));
-        }
-    });
-
-    new ActionLink(POINT + '/links/toolbar/view', {
-        id: 'list',
-        index: 100,
-        label: gt('List'),
-        ref: 'io.ox/files/actions/layout-list'
-    });
-
-    new ActionLink(POINT + '/links/toolbar/view', {
-        id: 'icon',
-        index: 200,
-        label: gt('Icons'),
-        ref: 'io.ox/files/actions/layout-icon'
-    });
-
-    new ActionLink(POINT + '/links/toolbar/view', {
-        id: 'tile',
+    new links.ActionLink('io.ox/files/links/toolbar/default', {
         index: 300,
-        label: gt('Tile'),
-        ref: 'io.ox/files/actions/layout-tile'
+        id: 'add-folder',
+        label: gt('Add new folder'),
+        ref: 'io.ox/files/actions/add-folder'
     });
 
-    //guidance
-
-    new links.ActionGroup(POINT + '/links/toolbar', {
-        id: 'guidance',
-        index: 500,
-        icon: function () {
-            return $('<i class="fa fa-question-circle">');
-        }
+    // share dropdown
+    new links.ActionLink('io.ox/files/links/toolbar/share', {
+        index: 100,
+        id: 'invite',
+        label: gt('Invite people'),
+        //#. sharing: a guest user will be created for the owner of that email address
+        description: gt('Every recipient gets an individual link. Guests can also create and change files.'),
+        ref: 'io.ox/files/actions/invite'
     });
 
-    new links.ActionLink(POINT + '/links/toolbar/guidance', {
-        label: gt('Guidance'),
-        ref: POINT + '/actions/guidance'
+    new links.ActionLink('io.ox/files/links/toolbar/share', {
+        index: 200,
+        id: 'getalink',
+        label: gt('Get link'),
+        //#. sharing: a link will be created
+        description: gt('Everybody gets the same link. The link just allows to view the file or folder.'),
+        ref: 'io.ox/files/actions/getalink'
     });
 
-    // PUBLISH
-
-    // disabled until we have full pub/sub support
-    // new ActionGroup(POINT + '/links/toolbar', {
-    //     id: 'publish',
-    //     index: 150,
-    //     label: gt('Publish'),
-    //     icon: function () {
-    //         return $('<i class="fa fa-rss">');
-    //     }
-    // });
-
-    // new ActionLink(POINT + '/links/toolbar/publish', {
-    //     id: 'publish',
-    //     label: gt('Publish current folder'),
-    //     ref: 'io.ox/files/actions/publish'
-    // });
-
-    // INLINE
-
+    // INLINE (only used by mobile toolbar atm)
     var index = 100;
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
@@ -848,13 +700,23 @@ define('io.ox/files/actions',
         index: index += 100,
         prio: 'hi',
         mobile: 'hi',
-        label: gt('Open'),
-        ref: 'io.ox/files/actions/open'
+        label: gt('View'),
+        ref: 'io.ox/files/actions/viewer'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'editor',
         index: index += 100,
+        prio: 'hi',
+        mobile: 'lo',
+        label: gt('Edit'),
+        ref: 'io.ox/files/actions/editor'
+    }));
+
+    // add another link for the viewer
+    ext.point('io.ox/core/viewer/toolbar/links/drive').extend(new links.Link({
+        id: 'editor',
+        index: 100,
         prio: 'hi',
         mobile: 'lo',
         label: gt('Edit'),
@@ -871,6 +733,14 @@ define('io.ox/files/actions',
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id:'download-folder',
+        prio: 'hi',
+        mobile: 'lo',
+        label: gt('Download'),
+        ref: 'io.ox/files/actions/download-folder'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'delete',
         index: index += 100,
         prio: 'hi',
@@ -880,16 +750,6 @@ define('io.ox/files/actions',
     }));
 
     // low
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'publish',
-        index: index += 100,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Share this file'),
-        ref: 'io.ox/files/actions/publish',
-        section: 'share'
-    }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'send',
@@ -932,10 +792,31 @@ define('io.ox/files/actions',
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'invite',
+        index: index += 100,
+        prio: 'lo',
+        mobile: 'lo',
+        label: gt('Invite people'),
+        ref: 'io.ox/files/actions/invite',
+        section: 'share'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'getalink',
+        index: index += 100,
+        prio: 'lo',
+        mobile: 'lo',
+        label: gt('Get link'),
+        ref: 'io.ox/files/actions/getalink',
+        section: 'share'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'rename',
         index: index += 100,
-        label: gt('Rename'),
+        prio: 'lo',
         mobile: 'lo',
+        label: gt('Rename'),
         ref: 'io.ox/files/actions/rename',
         section: 'edit'
     }));
@@ -943,8 +824,9 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'edit-description',
         index: index += 100,
-        label: gt('Edit description'),
+        prio: 'lo',
         mobile: 'lo',
+        label: gt('Edit description'),
         ref: 'io.ox/files/actions/edit-description',
         section: 'edit'
     }));
@@ -952,9 +834,9 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'move',
         index: index += 100,
-        label: gt('Move'),
         prio: 'lo',
         mobile: 'lo',
+        label: gt('Move'),
         ref: 'io.ox/files/actions/move',
         section: 'file-op'
     }));
@@ -982,25 +864,11 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'unlock',
         index: index += 100,
+        prio: 'lo',
+        mobile: 'lo',
         label: gt('Unlock'),
         ref: 'io.ox/files/actions/unlock',
         section: 'file-op'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        index: index += 100,
-        id: 'mediaplayer-audio',
-        label: gt('Play audio files'),
-        ref: 'io.ox/files/actions/audioplayer',
-        section: 'media'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        index: index += 100,
-        id: 'mediaplayer-video',
-        label: gt('Play video files'),
-        ref: 'io.ox/files/actions/videoplayer',
-        section: 'media'
     }));
 
     // version links
@@ -1008,6 +876,8 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'open',
         index: 100,
+        prio: 'lo',
+        mobile: 'lo',
         label: gt('Open'),
         ref: 'io.ox/files/actions/open'
     }));
@@ -1015,6 +885,8 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'download',
         index: 200,
+        prio: 'lo',
+        mobile: 'lo',
         label: gt('Download'),
         ref: 'io.ox/files/actions/downloadversion'
     }));
@@ -1022,6 +894,8 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'makeCurrent',
         index: 250,
+        prio: 'lo',
+        mobile: 'lo',
         label: gt('Make this the current version'),
         ref: 'io.ox/files/versions/actions/makeCurrent'
     }));
@@ -1029,6 +903,8 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'delete',
         index: 300,
+        prio: 'lo',
+        mobile: 'lo',
         label: gt('Delete version'),
         ref: 'io.ox/files/versions/actions/delete',
         special: 'danger'
@@ -1041,7 +917,9 @@ define('io.ox/files/actions',
         index: 10,
         label: gt('Drop here to upload a <b class="dndignore">new file</b>'),
         multiple: function (files, app) {
-            app.queues.create.offer(files, { folder: app.folder.get() });
+            require(['io.ox/files/upload/main'], function (fileUpload) {
+                fileUpload.create.offer(files, { folder: app.folder.get() });
+            });
         }
     });
 
@@ -1063,358 +941,9 @@ define('io.ox/files/actions',
             }
         },
         action: function (file, app) {
-            app.queues.update.offer(file, { folder: app.folder.get() });
-        }
-    });
-
-    // Iconview Inline Links
-
-    new Action('io.ox/files/icons/share', {
-        capabilities: 'publication',
-        requires: function (e) {
-            var check = function (data) {
-                data = data || {};
-                return folderAPI.can('publish', data) && !folderAPI.is('trash', data);
-            };
-            if (e.baton.app){
-                return e.baton.app.folder.getData().then(check);
-            } else if (e.baton.data.folder_id) {
-                //no app given, maybe the item itself has a folder
-                return folderAPI.get(e.baton.data.folder_id).then(check);
-            } else {
-                //continue without foldercheck
-                return check();
-            }
-        },
-        action: function (baton) {
-            require(['io.ox/core/pubsub/publications'], function (publications) {
-                baton.app.folder.getData().then(function (data) {
-                    baton = ext.Baton({ data: data });
-                    publications.buildPublishDialog(baton);
-                });
+            require(['io.ox/files/upload/main'], function (fileUpload) {
+                fileUpload.update.offer(file, { folder: app.folder.get() });
             });
         }
     });
-
-    new Action('io.ox/files/icons/slideshow', {
-        requires: function (e) {
-            return _(e.baton.allIds).reduce(function (memo, obj) {
-                return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
-            }, false);
-        },
-        action: function (baton) {
-            require(['io.ox/files/carousel'], function (carousel) {
-                carousel.init({
-                    fullScreen: false,
-                    baton: baton,
-                    attachmentMode: false,
-                    //tries to start with first displayable item in the current selection
-                    useSelectionAsStart: true
-                });
-            });
-        }
-    });
-
-    new Action('io.ox/files/icons/slideshow-fullscreen', {
-        requires: function (e) {
-            return BigScreen.enabled && _(e.baton.allIds).reduce(function (memo, obj) {
-                return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
-            }, false);
-        },
-        action: function (baton) {
-            BigScreen.request($('.io-ox-files-main .carousel')[0]);
-            require(['io.ox/files/carousel'], function (carousel) {
-                carousel.init({
-                    fullScreen: true,
-                    baton: baton,
-                    attachmentMode: false,
-                    //tries to start with first displayable item in the current selection
-                    useSelectionAsStart: true
-                });
-            });
-        }
-    });
-
-    /**
-     * filters 'description only files'
-     * @param  {object|array} list or single item
-     * @return {deferred} resolves as array
-     */
-    function filterUnsupported(list) {
-        return _(list).filter(function (obj) {
-            return !_.isEmpty(obj.filename) || obj.file_size > 0;
-        });
-    }
-
-    function checkMedia(e, type) {
-
-        if (!e.collection.has('some') && !settings.get(type + 'Enabled')) {
-            return false;
-        }
-
-        var list = _.copy(e.baton.allIds, true),
-            incompleteHash = {},
-            incompleteItems = [],
-            def = $.Deferred(),
-            index, folder;
-
-        if (_.isUndefined(e.baton.allIds)) {
-            e.baton.allIds = e.baton.data;
-            list = [e.baton.allIds];
-        }
-
-        // avoid runtime errors
-        if (!_.isArray(list)) return false;
-
-        //identify incomplete items
-        _(list).each(function (item) {
-            if (_.isUndefined(item.filename)) {
-                // collect all incomplete items grouped by folder ID
-                incompleteHash[item.folder_id] = (incompleteHash[item.folder_id] || []).concat(item);
-                // all incomplete items
-                incompleteItems.push(item);
-                index = list.indexOf(item);
-                if (index !== -1) {
-                    list.splice(index, 1);
-                }
-            }
-        });
-
-        //complement data from server/cache
-        folder = Object.keys(incompleteHash);
-        if (folder.length === 1) {
-            // get only this folder
-            def = api.getAll({ folder: folder[0] });
-        } else if (folder.length > 1) {
-            // multiple folder -> use getList
-            def = api.getList(incompleteItems).then(function (data) {
-                return list.concat(data);
-            });
-        } else {
-            // nothing to do
-            def.resolve(list);
-        }
-
-        return def.then(function (data) {
-            //update baton
-            e.baton.allIds = data;
-            return _(data).reduce(function (memo, obj) {
-                return memo || !!(obj && api.checkMediaFile(type, obj.filename));
-            }, false);
-        });
-    }
-
-    new Action('io.ox/files/icons/audioplayer', {
-        requires: function (e) {
-            if (_.device('android')) return false;
-            return checkMedia(e, 'audio');
-        },
-        action: function (baton) {
-            require(['io.ox/files/mediaplayer'], function (mediaplayer) {
-                mediaplayer.init({
-                    baton: baton,
-                    videoSupport: false
-                });
-            });
-        }
-    });
-
-    new Action('io.ox/files/icons/videoplayer', {
-        requires: function (e) {
-            if (_.device('android')) return false;
-            return checkMedia(e, 'video');
-        },
-        action: function (baton) {
-            require(['io.ox/files/mediaplayer'], function (mediaplayer) {
-                mediaplayer.init({
-                    baton: baton,
-                    videoSupport: true
-                });
-            });
-        }
-    });
-
-    ext.point('io.ox/files/icons/actions').extend(new links.InlineLinks({
-        index: 100,
-        id: 'inline-links',
-        dropdown: true,
-        ref: 'io.ox/files/icons/inline'
-    }));
-
-    ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        index: 100,
-        prio: 'hi',
-        id: 'upload',
-        label: gt('Upload new file'),
-        ref: 'io.ox/files/actions/upload',
-        cssClasses: 'io-ox-action-link btn btn-primary'
-    }));
-
-    ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        index: 200,
-        prio: 'hi',
-        mobile: 'lo',
-        id: 'share',
-        label: gt('Share this folder'),
-        ref: 'io.ox/files/icons/share'
-    }));
-
-    ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        index: 300,
-        prio: 'hi',
-        mobile: 'lo',
-        id: 'slideshow',
-        label: gt('View Slideshow'),
-        ref: 'io.ox/files/icons/slideshow'
-    }));
-
-    ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        index: 500,
-        id: 'mediaplayer-audio',
-        label: gt('Play audio files'),
-        ref: 'io.ox/files/icons/audioplayer'
-    }));
-
-    ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        index: 500,
-        id: 'mediaplayer-video',
-        label: gt('Play video files'),
-        ref: 'io.ox/files/icons/videoplayer'
-    }));
-
-    ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        id: 'download',
-        index: 600,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Download'),
-        ref: 'io.ox/files/actions/download'
-    }));
-
-    ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        id: 'delete',
-        index: 700,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Delete'),
-        ref: 'io.ox/files/actions/delete'
-    }));
-
-    ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        id: 'send',
-        index: 800,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Send by mail'),
-        ref: 'io.ox/files/actions/send',
-        section: 'share'
-    }));
-
-    ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        id: 'sendlink',
-        index: 900,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Send as internal link'),
-        ref: 'io.ox/files/actions/sendlink',
-        section: 'share'
-    }));
-
-    ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        id: 'showlink',
-        index: 1000,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Show internal link'),
-        ref: 'io.ox/files/actions/showlink',
-        section: 'share'
-    }));
-
-    ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        id: 'add-to-portal',
-        index: 1100,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Add to portal'),
-        ref: 'io.ox/files/actions/add-to-portal',
-        section: 'share'
-    }));
-
-    ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        id: 'move',
-        index: 1200,
-        label: gt('Move'),
-        prio: 'lo',
-        mobile: 'lo',
-        ref: 'io.ox/files/actions/move',
-        section: 'file-op'
-    }));
-
-    ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        id: 'copy',
-        index: 1300,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Copy'),
-        ref: 'io.ox/files/actions/copy',
-        section: 'file-op'
-    }));
-
-    ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        id: 'lock',
-        index: 1400,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Lock'),
-        ref: 'io.ox/files/actions/lock',
-        section: 'file-op'
-    }));
-
-    ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        id: 'unlock',
-        index: 1500,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Unlock'),
-        ref: 'io.ox/files/actions/unlock',
-        section: 'file-op'
-    }));
-
-    //rightside
-    ext.point('io.ox/files/icons/actions-right').extend(new links.InlineButtonGroup({
-        index: 100,
-        id: 'inline-links',
-        ref: 'io.ox/files/icons/inline-right'
-    }));
-
-    ext.point('io.ox/files/icons/inline-right').extend(new links.Link({
-        index: 100,
-        prio: 'hi',
-        id: 'layout-list',
-        ref: 'io.ox/files/actions/layout-list',
-        title: gt('List'),
-        icon: 'fa fa-align-justify',
-        cssClasses: 'io-ox-action-link btn layout'
-    }));
-
-    ext.point('io.ox/files/icons/inline-right').extend(new links.Link({
-        index: 200,
-        prio: 'hi',
-        id: 'layout-icon',
-        ref: 'io.ox/files/actions/layout-icon',
-        title: gt('Icons'),
-        icon: 'fa fa-th',
-        cssClasses: 'io-ox-action-link btn layout'
-    }));
-
-    ext.point('io.ox/files/icons/inline-right').extend(new links.Link({
-        index: 300,
-        prio: 'hi',
-        id: 'layout-tile',
-        ref: 'io.ox/files/actions/layout-tile',
-        title: gt('Tile'),
-        icon: 'fa fa-th-large',
-        cssClasses: 'io-ox-action-link btn layout'
-    }));
-
 });

@@ -1,4 +1,4 @@
-{
+[{
     "title": "Mail",
     "company": "Open-Xchange",
     "icon": "mail.png",
@@ -6,9 +6,11 @@
     "settings": true,
     "requires": "webmail",
     "refreshable": true,
-    "index": 200,
-    "help": {
-        "base": "help",
-        "target": "ox.appsuite.user.chap.email.html"
-    }
-}
+    "index": 200
+}, {
+    "namespace": "io.ox/mail/compose/editor/text",
+    "path": "io.ox/core/tk/text-editor"
+}, {
+    "namespace": "io.ox/mail/compose/editor/html",
+    "path": "io.ox/core/tk/contenteditable-editor"
+}]

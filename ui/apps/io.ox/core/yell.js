@@ -32,7 +32,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             info: 10000,
             success: 4000,
             warning: 10000,
-            screenreader: 5000,
+            screenreader: 5000
         },
 
         ariaText = {
@@ -73,43 +73,22 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
     }
 
     function screenreaderMessage(message) {
+        // this is for cross browser yells
+        // please don't touch and see:
+        // http://www.paciellogroup.com/blog/2012/06/html5-accessibility-chops-aria-rolealert-browser-support/
+        var textCon = $('#sr-alert-text').removeAttr('role').attr('role', 'alert'),
+            textNode = $.txt(message);
 
-        var alert = $('.io-ox-alert');
-            function show (text) {
-                var duration = durations.screenreader || 5000,
-                    node = $.find('.io-ox-alert-screenreader'),
-                    alertmessage;
-                if (!node.length) {
-                    node = $('<div tabindex="-1" class="io-ox-alert-screenreader sr-only">');
-                    $('#io-ox-core').append(node);
-                }
+        // cleanup text nodes
+        textCon
+            .contents()
+            .filter(function () {
+                return this.nodeType == 3; //Node.TEXT_NODE
+            }).remove();
 
-                // DO NOT REMOVE! We need to use defer here, otherwise screenreaders don't read the alert correctly.
-                _.defer(function () {
-                    $(node).append(
-                        alertmessage = $('<div role="alert" aria-live="polite">').append(
-                            $('<span>').text(text)
-                        )
-                    );
-                });
-                setTimeout(function () {
-                   //remove message
-                   alertmessage.remove();
-                   //if the container is empty remove it too
-                   if (!$(node).children.length) {
-                       $(node).remove();
-                   }
-                }, duration);
-            }
+        $('#io-ox-alert-screenreader').css('clip', 'auto');
 
-        //if an alert message exists we wait until it disappears
-        if (alert.length) {
-            alert.one('notification:removed', function () {
-                show(message);
-            });
-        } else {
-            show(message);
-        }
+        textCon.append(textNode).hide().css('display', 'inline');
     }
 
     function yell(type, message, focus) {
@@ -117,18 +96,31 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         if (type === 'destroy' || type === 'close') return remove();
 
         var o = {
-            duration: 0,
-            html: false,
-            type: 'info',
-            focus: false
-        };
+                duration: 0,
+                html: false,
+                type: 'info',
+                focus: false
+            },
+            // there is a special yell for displaying conflicts for filestorages correctly
+            useConflictsView = false,
+            conflicts = { warnings: [] };
 
         if (_.isObject(type)) {
             // catch server error?
             if ('error' in type) {
-                o.type = 'error';
-                o.message = type.message || type.error;
-                o.headline = gt('Error');
+                // find possible conflicts with filestorages and offer a dialog to display all conflicts
+                if (type.categories === 'CONFLICT' && (type.code === 'FILE_STORAGE-0045' || type.code === 'FLD-1038')) {
+                    useConflictsView = true;
+                    o.type = 'error';
+                    if (!conflicts.title) {
+                        conflicts.title = type.error;
+                    }
+                    conflicts.warnings.push(type.warnings.error);
+                } else {
+                    o.type = 'error';
+                    o.message = type.message || type.error;
+                    o.headline = gt('Error');
+                }
             } else {
                 o = _.extend(o, type);
             }
@@ -145,6 +137,10 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         //screenreader only messages can be much simpler and don't need styling or formating (audio only)
         if (o.type === 'screenreader') {
             return screenreaderMessage(o.message);
+        } else if (useConflictsView) {
+            require(['io.ox/core/tk/filestorageUtil'], function (filestorageUtil) {
+                filestorageUtil.displayConflicts(conflicts);
+            });
         } else {
             clearTimeout(timer);
             timer = o.duration === -1 ? null : setTimeout(remove, o.duration || durations[o.type] || 5000);
@@ -193,24 +189,18 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             );
 
             $('#io-ox-core').append(node);
-    
+
             // put at end of stack not to run into opening click
             setTimeout(function () {
                 // might be already added
                 node.trigger('notification:appear').addClass('appear');
                 if (o.focus) node.attr('tabindex', 1).focus();
-    
-            }, _.device('touch') ? 300 : 0);
+
+            }, _.device('touch') ? 300 : 2); // _.defer uses setTimeout(..., 1) internally so use at least 2ms
 
             return node;
         }
     }
-
-    // add convenience functions
-    yell.busy = function (str) {
-        // use this to standardize messages (be patient, take a few seconds, take a while etc.)
-        yell('busy', str + '. ' + gt('This may take some seconds') + ' ...');
-    };
 
     yell.done = function () {
         yell('success', gt('Done'));

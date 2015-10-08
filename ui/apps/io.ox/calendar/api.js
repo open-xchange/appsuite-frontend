@@ -12,24 +12,19 @@
  *
  */
 
-define('io.ox/calendar/api',
-    ['io.ox/core/http',
-     'io.ox/core/event',
-     'settings!io.ox/core',
-     'io.ox/core/notifications',
-     'io.ox/core/date',
-     'io.ox/core/api/factory',
-     'io.ox/core/capabilities'
-    ], function (http, Events, coreConfig, notifications, date, factory, capabilities) {
+define('io.ox/calendar/api', [
+    'io.ox/core/http',
+    'io.ox/core/event',
+    'settings!io.ox/core',
+    'io.ox/core/notifications',
+    'io.ox/core/folder/api',
+    'io.ox/core/api/factory',
+    'io.ox/core/capabilities'
+], function (http, Events, coreConfig, notifications, folderAPI, factory, capabilities) {
 
     'use strict';
 
     var api = {
-
-        MINUTE: date.MINUTE,
-        HOUR: date.HOUR,
-        DAY: date.DAY,
-        WEEK: date.WEEK,
 
         // fluent caches
         caches: {
@@ -61,12 +56,12 @@ define('io.ox/calendar/api',
 
             if (api.caches.get[key] === undefined || !useCache) {
                 return http.GET({
-                        module: 'calendar',
-                        params: params
-                    })
-                    .done(function (data) {
-                        api.caches.get[key] = data;
-                    });
+                    module: 'calendar',
+                    params: params
+                })
+                .done(function (data) {
+                    api.caches.get[key] = data;
+                });
             } else {
                 return $.Deferred().resolve(api.caches.get[key]);
             }
@@ -76,17 +71,17 @@ define('io.ox/calendar/api',
 
             o = $.extend({
                 start: _.now(),
-                end: _.now() + (28 * date.DAY),
+                end: moment().add(28, 'days').valueOf(),
                 order: 'asc'
             }, o || {});
             useCache = useCache === undefined ? true : !!useCache;
             var key = (o.folder || o.folder_id) + '.' + o.start + '.' + o.end + '.' + o.order,
                 params = {
                     action: 'all',
-                    // id, folder_id, private_flag, recurrence_id, recurrence_position, start_date,
+                    // id, folder_id, last_modified, private_flag, color_label, recurrence_id, recurrence_position, start_date,
                     // title, end_date, location, full_time, shown_as, users, organizer, organizerId, created_by,
                     // participants, recurrence_type, days, day_in_month, month, interval, until, occurrences
-                    columns: '1,20,101,206,207,201,200,202,400,401,402,221,224,227,2,209,212,213,214,215,222,216,220',
+                    columns: '1,20,5,101,102,206,207,201,200,202,400,401,402,221,224,227,2,209,212,213,214,215,222,216,220',
                     start: o.start,
                     end: o.end,
                     showPrivate: true,
@@ -101,12 +96,12 @@ define('io.ox/calendar/api',
             }
             if (api.caches.all[key] === undefined || !useCache) {
                 return http.GET({
-                        module: 'calendar',
-                        params: params
-                    })
-                    .done(function (data) {
-                        api.caches.all[key] = JSON.stringify(data);
-                    });
+                    module: 'calendar',
+                    params: params
+                })
+                .done(function (data) {
+                    api.caches.all[key] = JSON.stringify(data);
+                });
             } else {
                 return $.Deferred().resolve(JSON.parse(api.caches.all[key]));
             }
@@ -128,8 +123,8 @@ define('io.ox/calendar/api',
         getUpdates: function (o) {
             o = $.extend({
                 start: _.now(),
-                end: _.now() + 28 * 1 * date.DAY,
-                timestamp:  _.now() - (2 * date.DAY),
+                end: moment().add(28, 'days').valueOf(),
+                timestamp:  moment().subtract(2, 'days').valueOf(),
                 ignore: 'deleted',
                 recurrence_master: false
             }, o || {});
@@ -137,9 +132,9 @@ define('io.ox/calendar/api',
             var key = (o.folder || o.folder_id) + '.' + o.start + '.' + o.end,
                 params = {
                     action: 'updates',
-                    // id, folder_id, private_flag, recurrence_id, recurrence_position, start_date,
+                    // id, folder_id, private_flag, color_label, recurrence_id, recurrence_position, start_date,
                     // title, end_date, location, full_time, shown_as, users, organizer, organizerId, created_by, recurrence_type
-                    columns: '1,20,101,206,207,201,200,202,400,401,402,221,224,227,2,209,212,213,214,215,222,216,220',
+                    columns: '1,20,101,102,206,207,201,200,202,400,401,402,221,224,227,2,209,212,213,214,215,222,216,220',
                     start: o.start,
                     end: o.end,
                     showPrivate: true,
@@ -158,12 +153,12 @@ define('io.ox/calendar/api',
             // do not know if cache is a good idea
             if (api.caches.all[key] === undefined) {
                 return http.GET({
-                        module: 'calendar',
-                        params: params
-                    })
-                    .done(function (data) {
-                        api.caches.all[key] = JSON.stringify(data);
-                    });
+                    module: 'calendar',
+                    params: params
+                })
+                .done(function (data) {
+                    api.caches.all[key] = JSON.stringify(data);
+                });
             } else {
                 return $.Deferred().resolve(JSON.parse(api.caches.all[key]));
             }
@@ -171,18 +166,18 @@ define('io.ox/calendar/api',
 
         search: function (query) {
             return http.PUT({
-                    module: 'calendar',
-                    params: {
-                        action: 'search',
-                        sort: '201',
-                        // top-down makes more sense
-                        order: 'desc',
-                        timezone: 'UTC'
-                    },
-                    data: {
-                        pattern: query
-                    }
-                });
+                module: 'calendar',
+                params: {
+                    action: 'search',
+                    sort: '201',
+                    // top-down makes more sense
+                    order: 'desc',
+                    timezone: 'UTC'
+                },
+                data: {
+                    pattern: query
+                }
+            });
         },
 
         needsRefresh: function (folder) {
@@ -195,7 +190,7 @@ define('io.ox/calendar/api',
          * @param  {object} o (id, folder and changed attributes/values)
          * @fires  api#update (data)
          * @fires  api#update: + cid
-         * @return {deferred} returns current appointment object
+         * @return { deferred} returns current appointment object
          */
         update: function (o) {
             var folder_id = o.folder_id || o.folder,
@@ -213,7 +208,7 @@ define('io.ox/calendar/api',
                         action: 'update',
                         id: o.id,
                         folder: folder_id,
-                        timestamp: o.timestamp || _.then(),
+                        timestamp: o.last_modified || o.timestamp || _.then(),
                         timezone: 'UTC'
                     },
                     data: o,
@@ -269,7 +264,7 @@ define('io.ox/calendar/api',
          * used to cleanup Cache and trigger refresh after attachmentHandling
          * @param  {object} o (appointment object)
          * @fires  api#update (data)
-         * @return {deferred}
+         * @return { deferred }
          */
         attachmentCallback: function (o) {
             var doCallback = api.uploadInProgress(_.ecid(o)),
@@ -305,7 +300,7 @@ define('io.ox/calendar/api',
          * @param  {object} o
          * @fires  api#create (data)
          * @fires  api#update: + cid
-         * @return {deferred} returns appointment
+         * @return { deferred} returns appointment
          */
         create: function (o) {
             var attachmentHandlingNeeded = o.tempAttachmentIndicator;
@@ -320,6 +315,8 @@ define('io.ox/calendar/api',
                 appendColumns: false
             })
             .then(function (obj) {
+                // update foldermodel so total attribute is correct (export option uses this)
+                folderAPI.reload(o);
                 if (!_.isUndefined(obj.conflicts)) {
                     return $.Deferred().reject(obj);
                 }
@@ -337,22 +334,22 @@ define('io.ox/calendar/api',
                 }
 
                 return api.get(getObj)
-                        .then(function (data) {
-                            if (attachmentHandlingNeeded) {
-                                //to make the detailview show the busy animation
-                                api.addToUploadList(_.ecid(data));
-                            }
-                            api.trigger('create', data);
-                            api.trigger('update:' + _.ecid(data), data);
-                            return data;
-                        });
+                    .then(function (data) {
+                        if (attachmentHandlingNeeded) {
+                            //to make the detailview show the busy animation
+                            api.addToUploadList(_.ecid(data));
+                        }
+                        api.trigger('create', data);
+                        api.trigger('update:' + _.ecid(data), data);
+                        return data;
+                    });
             });
         },
 
-        // delete is a reserved word :( - but this will delete the
         // appointment on the server
         remove: function (o) {
-            var keys = [];
+            var keys = [],
+                folders = [];
 
             o = _.isArray(o) ? o : [o];
 
@@ -373,6 +370,8 @@ define('io.ox/calendar/api',
                     appendColumns: false
                 })
                 .done(function () {
+                    // gather folders to refresh
+                    folders.push(String(obj.folder_id || obj.folder));
                     api.caches.all = {};
                     _(keys).each(function (key) {
                         delete api.caches.get[key];
@@ -388,6 +387,7 @@ define('io.ox/calendar/api',
             });
 
             return http.resume().then(function () {
+                folderAPI.reload(folders);
                 api.trigger('refresh.all');
             });
         },
@@ -396,7 +396,7 @@ define('io.ox/calendar/api',
          * move appointments to a folder
          * @param  {array} list
          * @param  {string} targetFolderId
-         * @return {deferred}
+         * @return { deferred }
          */
         move: function (list, targetFolderId) {
             return copymove(list, 'update', targetFolderId);
@@ -406,7 +406,7 @@ define('io.ox/calendar/api',
          * copy appointments to a folder
          * @param  {array} list
          * @param  {string} targetFolderId
-         * @return {deferred}
+         * @return { deferred }
          */
         copy: function (list, targetFolderId) {
             return copymove(list, 'copy', targetFolderId);
@@ -419,7 +419,7 @@ define('io.ox/calendar/api',
         checkConflicts: function (appointment) {
             var data = appointment,
                 //conflicts with appointments in the past are of no interest
-                start = Math.max(_.now() , appointment.start_date);
+                start = Math.max(_.now(), appointment.start_date);
 
             return http.GET({
                 module: 'calendar',
@@ -435,7 +435,9 @@ define('io.ox/calendar/api',
                     order: 'asc',
                     timezone: 'UTC'
                 }
-            }).then(function (items) {
+            })
+            .then(function (items) {
+
                 var conflicts = [],
                     //maximum number of conflicts to return (to reduce calculations and prevent cases with really high numbers of appointments)
                     max = 50;
@@ -466,7 +468,7 @@ define('io.ox/calendar/api',
          * @fires  api#mark:invite:confirmed (o)
          * @fires  api#update (data)
          * @fires  api#update: + cid
-         * @return {deferred}
+         * @return { deferred }
          */
         confirm: function (o) {
 
@@ -477,7 +479,7 @@ define('io.ox/calendar/api',
                     action: 'confirm',
                     folder: folder_id,
                     id: o.id,
-                    timestamp: _.now(),
+                    timestamp: _.then(),
                     timezone: 'UTC'
                 };
 
@@ -515,6 +517,13 @@ define('io.ox/calendar/api',
                 api.trigger('mark:invite:confirmed', o);
                 delete api.caches.get[key];
                 return api.get(o).then(function (data) {
+                    // fix confirmation data
+                    // this is necessary when changing the confirmation for a single appointment
+                    // within a series as it becomes an exception.
+                    // the series does not update, however (see bug 40137)
+                    var user = _(data.users).findWhere({ id: ox.user_id });
+                    if (user) user.confirmation = o.data.confirmation;
+                    // events
                     api.trigger('update', data);
                     api.trigger('update:' + _.ecid(data), data);
                     return data;
@@ -525,7 +534,7 @@ define('io.ox/calendar/api',
         /**
          * removes recurrence information
          * @param  {object} obj (appointment object)
-         * @return {object} reduced copy of appointment object
+         * @return { object} reduced copy of appointment object
          */
         removeRecurrenceInformation: function (obj) {
             var recAttr = ['change_exceptions', 'delete_exceptions', 'days',
@@ -540,16 +549,16 @@ define('io.ox/calendar/api',
             return ret;
         },
 
-         /**
+        /**
          * get invites
          * @fires  api#new-invites (invites)
-         * @return {deferred} returns sorted array of appointments
+         * @return { deferred} returns sorted array of appointments
          */
         getInvites: function () {
 
             var now = _.now(),
-                start = now - 2 * date.HOUR,
-                end = new date.Local().addYears(5).getTime();
+                start = moment(now).subtract(2, 'hours').valueOf(),
+                end = moment(now).add(5, 'years').valueOf();
 
             return this.getUpdates({
                 folder: 'all',
@@ -590,9 +599,9 @@ define('io.ox/calendar/api',
          * @param  {array} list  (participants)
          * @param  {object} options
          * @param  {boolean} useCache [optional]
-         * @return {deferred} returns a nested array with participants and their appointments
+         * @return { deferred} returns a nested array with participants and their appointments
          */
-         freebusy: function (list, options, useCache) {
+        freebusy: function (list, options, useCache) {
             list = [].concat(list);
             useCache = useCache === undefined ? true : !!useCache;
 
@@ -602,7 +611,7 @@ define('io.ox/calendar/api',
 
             options = _.extend({
                 start: _.now(),
-                end: _.now() + date.DAY
+                end: moment().add(1, 'day').valueOf()
             }, options);
 
             var result = [], requests = [];
@@ -627,7 +636,7 @@ define('io.ox/calendar/api',
                         });
                     }
                 } else {
-                    result.push({data: []});
+                    result.push({ data: [] });
                 }
             });
 
@@ -657,7 +666,7 @@ define('io.ox/calendar/api',
         /**
          * ask if this appointment has attachments uploading at the moment (busy animation in detail View)
          * @param  {string} key (task id)
-         * @return {boolean}
+         * @return { boolean }
          */
         uploadInProgress: function (key) {
             // return true boolean
@@ -667,7 +676,7 @@ define('io.ox/calendar/api',
         /**
          * add appointment to the list
          * @param {string} key (task id)
-         * @return {undefined}
+         * @return { undefined }
          */
         addToUploadList: function (key) {
             this.caches.upload[key] = true;
@@ -677,7 +686,7 @@ define('io.ox/calendar/api',
          * remove appointment from the list
          * @param  {string} key (task id)
          * @fires  api#update: + key
-         * @return {undefined}
+         * @return { undefined }
          */
         removeFromUploadList: function (key) {
             delete this.caches.upload[key];
@@ -688,7 +697,7 @@ define('io.ox/calendar/api',
         /**
          * bind to global refresh; clears caches and trigger refresh.all
          * @fires  api#refresh.all
-         * @return {promise}
+         * @return { promise }
          */
         refresh: function () {
             // check capabilities
@@ -708,12 +717,14 @@ define('io.ox/calendar/api',
     Events.extend(api);
 
     var copymove = function (list, action, targetFolderId) {
+        var folders = [String(targetFolderId)];
         // allow single object and arrays
         list = _.isArray(list) ? list : [list];
         // pause http layer
         http.pause();
         // process all updates
         _(list).map(function (o) {
+            folders.push(String(o.folder_id || o.folder));
             return http.PUT({
                 module: 'calendar',
                 params: {
@@ -721,7 +732,7 @@ define('io.ox/calendar/api',
                     id: o.id,
                     folder: o.folder_id || o.folder,
                     // mandatory for 'update'
-                    timestamp: o.timestamp || _.now()
+                    timestamp: o.last_modified || o.timestamp || _.then()
                 },
                 data: { folder_id: targetFolderId },
                 appendColumns: false
@@ -731,15 +742,14 @@ define('io.ox/calendar/api',
         return http.resume()
             .then(function (result) {
 
+                folderAPI.reload(folders);
                 var def = $.Deferred();
 
-                _(result).each(function (val) {
-                    if (val.error) { notifications.yell(val.error); def.reject(val.error); }
+                _(result).each(function (item) {
+                    if (item.error) def.reject(item.error);
                 });
 
-                if (def.state() === 'rejected') {
-                    return def;
-                }
+                if (def.state() === 'rejected') return def;
 
                 return def.resolve();
             })
@@ -769,6 +779,21 @@ define('io.ox/calendar/api',
             });
         }
     };
+
+    api.on('create update', function (e, obj) {
+        // has participants?
+        if (obj && _.isArray(obj.participants) && obj.participants.length > 0) {
+            // check for external participants
+            var hasExternalParticipants = _(obj.participants).some(function (participant) {
+                return participant.type === 5;
+            });
+            if (hasExternalParticipants) {
+                require(['io.ox/contacts/api'], function (contactsApi) {
+                    contactsApi.trigger('maybyNewContact');
+                });
+            }
+        }
+    });
 
     ox.on('refresh^', function () {
         api.refresh();

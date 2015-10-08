@@ -11,23 +11,22 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/edit/view-template',
-    ['gettext!io.ox/tasks/edit',
-     'io.ox/backbone/views',
-     'io.ox/core/date',
-     'io.ox/core/notifications',
-     'io.ox/backbone/forms',
-     'io.ox/backbone/mini-views/datepicker',
-     'io.ox/calendar/util',
-     'io.ox/tasks/edit/util',
-     'io.ox/calendar/edit/recurrence-view',
-     'io.ox/participants/views',
-     'io.ox/core/tk/attachments',
-     'io.ox/tasks/api',
-     'io.ox/core/extensions',
-     'io.ox/tasks/util',
-     'settings!io.ox/tasks'
-    ], function (gt, views, date, notifications, forms, DatePicker, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, taskUtil, settings) {
+define('io.ox/tasks/edit/view-template', [
+    'gettext!io.ox/tasks/edit',
+    'io.ox/backbone/views',
+    'io.ox/core/notifications',
+    'io.ox/backbone/mini-views',
+    'io.ox/backbone/mini-views/datepicker',
+    'io.ox/tasks/edit/util',
+    'io.ox/calendar/edit/recurrence-view',
+    'io.ox/participants/add',
+    'io.ox/participants/views',
+    'io.ox/core/tk/attachments',
+    'io.ox/tasks/api',
+    'io.ox/core/extensions',
+    'io.ox/tasks/util',
+    'settings!io.ox/tasks'
+], function (gt, views, notifications, mini, DatePicker, util, RecurrenceView, AddParticipant, pViews, attachments, api, ext, taskUtil, settings) {
 
     'use strict';
 
@@ -41,50 +40,41 @@ define('io.ox/tasks/edit/view-template',
         draw: function (baton) {
             var saveBtnText = gt('Create'),
                 headlineText = gt('Create task'),
-                headline,
-                saveBtn,
+                headline, saveBtn, row,
                 app = baton.app;
             if (baton.model.attributes.id) {
                 saveBtnText = gt('Save');
                 headlineText = gt('Edit task');
             }
-            this.append($('<div class="col-lg-12">').append(
-                    headline = $('<h1 class="clear-title">').text(headlineText),
-                    saveBtn = $('<button type="button" data-action="save" class="btn btn-primary task-edit-save">')
-                        .text(saveBtnText)
-                        .on('click', function () {
-                            app.getWindow().busy();
 
-                            // check if waiting for attachmenthandling is needed
-                            var list = baton.attachmentList;
-                            if (list && (list.attachmentsToAdd.length + list.attachmentsToDelete.length) > 0) {
-                                //temporary indicator so the api knows that attachments need to be handled even if nothing else changes
-                                baton.model.attributes.tempAttachmentIndicator = true;
-                            }
-                            //accept any formating
-                            if (baton.model.get('actual_costs')) {
-                                baton.model.set('actual_costs', (String(baton.model.get('actual_costs'))).replace(/,/g, '.'));
-                            }
-                            if (baton.model.get('target_costs')) {
-                                baton.model.set('target_costs', (String(baton.model.get('target_costs'))).replace(/,/g, '.'));
-                            }
+            row = $('<div class="header">').append(
+                //title
+                headline = $('<h1 class="sr-only">').text(headlineText),
+                //save button
+                saveBtn = $('<button type="button" data-action="save" class="btn btn-primary task-edit-save">')
+                    .text(saveBtnText)
+                    .on('click', function () {
+                        app.getWindow().busy();
+                        util.sanitizeBeforeSave(baton);
 
-                            baton.model.save().done(function () {
-                                app.markClean();
-                                app.quit();
-                            }).fail(function (response) {
-                                setTimeout(function () {
-                                    app.getWindow().idle();
-                                    notifications.yell(response);
-                                }, 300);
-                            });
+                        baton.model.save().done(function () {
+                            app.markClean();
+                            app.quit();
+                        }).fail(function (response) {
+                            setTimeout(function () {
+                                app.getWindow().idle();
+                                notifications.yell(response);
+                            }, 300);
+                        });
 
-                        }),
-                    //cancel button
-                    $('<button type="button" data-action="discard" class="btn btn-default cancel task-edit-cancel">')
-                        .text(gt('Discard'))
-                        .on('click', function () { app.quit(); })
-                    ));
+                    }),
+                //cancel button
+                $('<button type="button" data-action="discard" class="btn btn-default cancel task-edit-cancel">')
+                    .text(gt('Discard'))
+                    .on('click', function () { app.quit(); })
+                );
+
+            app.getWindow().setHeader(row);
 
             baton.parentView.on('changeMode', function (e, mode) {
                 if (mode === 'edit') {
@@ -98,27 +88,33 @@ define('io.ox/tasks/edit/view-template',
         }
     });
 
-    point.extend(new forms.InputField({
+    // title
+    point.extend({
         id: 'title',
         index: 200,
         className: 'col-sm-12',
-        control: '<input type="text" class="title-field form-control" tabindex="1">',
-        attribute: 'title',
-        label: gt('Subject')
-    }), {
-        row: '1'
-    });
+        render: function () {
+            var guid = _.uniqueId('form-control-label-');
+            this.$el.append(
+                $('<label class="control-label">').text(gt('Subject')).attr({ for: guid }),
+                new mini.InputView({ name: 'title', model: this.model }).render().$el.attr({ id: guid }).addClass('title-field')
+            );
+        }
+    }, { row: '1' });
 
-    point.extend(new forms.InputField({
+    // note
+    point.extend({
         id: 'note',
         index: 300,
         className: 'col-sm-12',
-        control: '<textarea class="note-field form-control" tabindex="1">',
-        attribute: 'note',
-        label: gt('Description')
-    }), {
-        row: '2'
-    });
+        render: function () {
+            var guid = _.uniqueId('form-control-label-');
+            this.$el.append(
+                $('<label class="control-label">').text(gt('Description')).attr({ for: guid }),
+                new mini.TextView({ name: 'note', model: this.model }).render().$el.attr({ id: guid }).addClass('note-field')
+            );
+        }
+    }, { row: '2' });
 
     point.basicExtend({
         id: 'expand_link',
@@ -164,10 +160,17 @@ define('io.ox/tasks/edit/view-template',
                 new DatePicker({
                     model: baton.model,
                     className: 'col-xs-6 collapsed',
-                    attribute: 'start_date',
+                    attribute: 'start_time',
                     label: gt('Start date'),
-                    clearButton: true
-                }).render().$el.attr('data-extension-id', 'start_date')
+                    clearButton: true,
+                    display: baton.model.get('full_time') ? 'DATE' : 'DATETIME'
+                }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
+                    this.toggleTimeInput(!fulltime);
+                    if (_.device('smartphone')) {
+                        // trigger change to update input fields on mobile
+                        baton.model.trigger('change:start_time change:end_time');
+                    }
+                }).render().$el.attr('data-extension-id', 'start_time')
             );
         }
     });
@@ -181,28 +184,50 @@ define('io.ox/tasks/edit/view-template',
                 new DatePicker({
                     model: baton.model,
                     className: 'col-xs-6 collapsed',
-                    attribute: 'end_date',
+                    attribute: 'end_time',
                     label: gt('Due date'),
-                    clearButton: true
-                }).render().$el.attr('data-extension-id', 'end_date')
+                    clearButton: true,
+                    display: baton.model.get('full_time') ? 'DATE' : 'DATETIME'
+                }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
+                    this.toggleTimeInput(!fulltime);
+                    if (_.device('smartphone')) {
+                        // trigger change to update input fields on mobile
+                        baton.model.trigger('change:start_time change:end_time');
+                    }
+                }).render().$el.attr('data-extension-id', 'end_time')
             );
         }
     });
+
+    // full time
+    point.extend({
+        id: 'full_time',
+        index: 700,
+        className: 'col-md-6 collapsed',
+        render: function () {
+            this.$el.append(
+                $('<div>').addClass('checkbox').append(
+                    $('<label class="control-label">').append(
+                        new mini.CheckboxView({ name: 'full_time', model: this.model }).render().$el,
+                        $.txt(gt('All day'))
+                    )
+                )
+            );
+        }
+    }, { row: '5' });
 
     point.extend(new RecurrenceView({
         id: 'recurrence',
         className: 'col-sm-12 collapsed',
         tabindex: 1,
-        index: 700
-    }), {
-        row: '5'
-    });
+        index: 800
+    }), { row: '6' });
 
     //reminder selection
     point.basicExtend({
         id: 'alarm_select',
-        index: 800,
-        row: '6',
+        index: 900,
+        row: '7',
         draw: function (baton) {
             var selector;
             this.append($('<div class="col-sm-6 collapsed">').append(
@@ -224,8 +249,8 @@ define('io.ox/tasks/edit/view-template',
     // reminder date
     point.basicExtend({
         id: 'alarm',
-        index: 900,
-        row: '6',
+        index: 1000,
+        row: '7',
         draw: function (baton) {
             this.append(
                 new DatePicker({
@@ -241,51 +266,52 @@ define('io.ox/tasks/edit/view-template',
         }
     });
 
-    point.extend(new forms.SelectBoxField({
+    // status
+    point.extend({
         id: 'status',
-        index: 1000,
+        index: 1100,
         className: 'col-sm-3 collapsed',
         render: function () {
-            var self = this,
-                guid = _.uniqueId('form-control-label-');
-            this.nodes = {};
-            this.nodes.select = $('<select tabindex="1">').addClass('status-selector form-control').attr('id', guid);
-            _(this.selectOptions).each(function (label, value) {
-                self.nodes.select.append(
-                    $('<option>', {value: value}).text(label)
-                );
-            });
-            this.$el.append($('<label for="' + guid + '">').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
-            this.updateChoice();
-            this.nodes.select.on('change', function () {
-                if (self.nodes.select.prop('selectedIndex') === 0) {
-                    self.model.set('percent_completed', 0, {validate: true});
-                } else if (self.nodes.select.prop('selectedIndex') === 2) {
-                    self.model.set('percent_completed', 100, {validate: true});
-                } else if (self.nodes.select.prop('selectedIndex') === 1 && (self.model.get('percent_completed') === 0 || self.model.get('percent_completed') === 100)) {
-                    self.model.set('percent_completed', 25, {validate: true});
+            var guid = _.uniqueId('form-control-label-'),
+                self = this,
+                options = [
+                    { label: gt('Not started'), value: 1 },
+                    { label: gt('In progress'), value: 2 },
+                    { label: gt('Done'), value: 3 },
+                    { label: gt('Waiting'), value: 4 },
+                    { label: gt('Deferred'), value: 5 }
+                ], selectInput;
+            this.$el.append(
+                $('<label>').attr({
+                    class: 'control-label',
+                    for: guid
+                }).text(gt('Status')),
+                $('<div>').append(
+                    selectInput = new mini.SelectView({
+                        list: options,
+                        name: 'status',
+                        model: this.baton.model,
+                        id: guid,
+                        className: 'form-control'
+                    }).render().$el
+                )
+            );
+            selectInput.on('change', function () {
+                if ($(this).prop('selectedIndex') === 0) {
+                    self.model.set('percent_completed', 0, { validate: true });
+                } else if ($(this).prop('selectedIndex') === 2) {
+                    self.model.set('percent_completed', 100, { validate: true });
+                } else if ($(this).prop('selectedIndex') === 1 && (self.model.get('percent_completed') === 0 || self.model.get('percent_completed') === 100)) {
+                    self.model.set('percent_completed', 25, { validate: true });
                 }
-
-                self.model.set(self.attribute, parseInt(self.nodes.select.val(), 10), {validate: true});
             });
-        },
-        attribute: 'status',
-        selectOptions: {
-            1: gt('Not started'),
-            2: gt('In progress'),
-            3: gt('Done'),
-            4: gt('Waiting'),
-            5: gt('Deferred')
-        },
-        label: gt('Status')
-    }), {
-        row: '7'
-    });
+        }
+    }, { row: '8' });
 
     point.basicExtend({
         id: 'progress',
-        index: 1100,
-        row: '7',
+        index: 1200,
+        row: '8',
         draw: function (baton) {
             var progressField = util.buildProgress(baton.model.get('percent_completed'));
             this.append($('<div class="col-sm-3 collapsed">')
@@ -297,17 +323,17 @@ define('io.ox/tasks/edit/view-template',
                         if (value !== 'NaN' && value >= 0 && value <= 100) {
                             if (progressField.progress.val() === '') {
                                 progressField.progress.val(0);
-                                baton.model.set('status', 1, {validate: true});
+                                baton.model.set('status', 1, { validate: true });
                             } else if (progressField.progress.val() === '0' && baton.model.get('status') === 2) {
-                                baton.model.set('status', 1, {validate: true});
+                                baton.model.set('status', 1, { validate: true });
                             } else if (progressField.progress.val() === '100' && baton.model.get('status') !== 3) {
-                                baton.model.set('status', 3, {validate: true});
+                                baton.model.set('status', 3, { validate: true });
                             } else if (baton.model.get('status') === 3) {
-                                baton.model.set('status', 2, {validate: true});
+                                baton.model.set('status', 2, { validate: true });
                             } else if (baton.model.get('status') === 1) {
-                                baton.model.set('status', 2, {validate: true});
+                                baton.model.set('status', 2, { validate: true });
                             }
-                            baton.model.set('percent_completed', value, {validate: true});
+                            baton.model.set('percent_completed', value, { validate: true });
                         } else {
                             notifications.yell('error', gt('Please enter value between 0 and 100.'));
                             baton.model.trigger('change:percent_completed');
@@ -321,179 +347,112 @@ define('io.ox/tasks/edit/view-template',
         }
     });
 
-    point.extend(new forms.SelectBoxField({
+    // priority
+    point.extend({
         id: 'priority',
-        index: 1200,
+        index: 1300,
         className: 'col-sm-3 collapsed',
         render: function () {
-            var self = this,
-                guid = _.uniqueId('form-control-label-');
-            this.nodes = {};
-            this.nodes.select = $('<select tabindex="1">').addClass('priority-selector form-control').attr('id', guid);
-            self.nodes.select.append(
-                    $('<option>', {value: 'null'}).text(gt('None'))
-                );
-            _(this.selectOptions).each(function (label, value) {
-                self.nodes.select.append(
-                    $('<option>', {value: value}).text(label)
-                );
-            });
-            this.$el.append($('<label for="' + guid + '">').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
-            this.updateChoice();
-            this.nodes.select.on('change', function () {
-                self.model.set(self.attribute, self.nodes.select.val(), {validate: true});
-            });
-        },
-        attribute: 'priority',
-        selectOptions: {
-            1: gt('Low'),
-            2: gt('Medium'),
-            3: gt('High')
-        },
-        label: gt('Priority')
-    }), {
-        row: '7'
-    });
+            var guid = _.uniqueId('form-control-label-'),
+                options = [
+                    { label: gt('None'), value: 'null' },
+                    { label: gt('Low'), value: 1 },
+                    { label: gt('Medium'), value: 2 },
+                    { label: gt('High'), value: 3 }
+                ];
+            this.$el.append(
+                $('<label>').attr({
+                    class: 'control-label',
+                    for: guid
+                }).text(gt('Priority')),
+                $('<div>').append(
+                    new mini.SelectView({
+                        list: options,
+                        name: 'priority',
+                        model: this.baton.model,
+                        id: guid,
+                        className: 'form-control'
+                    }).render().$el
+                )
+            );
+        }
+    }, { row: '8' });
 
-    point.extend(new forms.CheckBoxField({
+    //privateflag
+    point.extend({
         id: 'private_flag',
-        index: 1300,
-        labelClassName: 'private-flag',
-        className: 'col-sm-3 collapsed',
-        label: gt('Private'),
-        attribute: 'private_flag'
-    }), {
-        row: '7'
-    });
-
-    point.extend(new forms.SectionLegend({
-        id: 'participants_legend',
-        className: 'col-md-12 collapsed',
-        label: gt('Participants'),
-        index: 1400
-    }), {
-        row: '8'
-    });
+        index: 1400,
+        className: 'checkbox col-sm-3 collapsed',
+        render: function () {
+            this.$el.append(
+                $('<fieldset>').append(
+                    $('<legend>').addClass('simple').text(gt('Type')),
+                    $('<label class="checkbox-inline control-label">').append(
+                        new mini.CheckboxView({ name: 'private_flag', model: this.model }).render().$el,
+                        $.txt(gt('Private'))
+                    )
+                )
+            );
+        }
+    }, { row: '8' });
 
     point.basicExtend({
         id: 'participants_list',
-        index: 1500,
-        row: '9',
+        index: 1600,
+        row: '10',
         draw: function (baton) {
             this.append(
                 new pViews.UserContainer({
                     collection: baton.model.getParticipants(),
-                    baton: baton,
-                    className: 'participantsrow col-xs-12 collapsed'
-                }).render().$el
+                    baton: baton
+                }).render().$el.addClass('collapsed')
             );
         }
     });
 
     point.basicExtend({
         id: 'add_participant',
-        index: 1600,
-        row: '10',
-        draw: function (options) {
-            var node = $('<div class="col-sm-6 collapsed">').appendTo(this),
-                guid = _.uniqueId('form-control-label-');
-            require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
-
-                var collection = options.model.getParticipants();
-
-                node.append(
-                    $('<div class="input-group">').append(
-                        $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid),
-                        $('<input type="text" class="add-participant task-participant-input-field form-control">')
-                        .attr({placeholder: gt('Add participant/resource'),
-                               id: guid,
-                               tabindex: 1}),
-                        $('<span class="input-group-btn">').append(
-                            $('<button type="button" class="btn btn-default" data-action="add" tabindex="1">')
-                                .append(
-                                    $('<i class="fa fa-plus" aria-hidden="true">'),
-                                    $('<span class="sr-only">').text(gt('Plus'))
-                                )
-                        )
-                    )
-                );
-
-                var autocomplete = new AddParticipantsView({el: node});
-                autocomplete.render({
-                    parentSelector: '.io-ox-tasks-edit',
-                    //adding resources throws a backend error
-                    resources: false
-                });
-
-                //add recipents to baton-data-node; used to filter sugestions list in view
-                autocomplete.on('update', function () {
-                    var baton = {list: []};
-                    collection.any(function (item) {
-                        //participant vs. organizer
-                        var email = item.get('email1') || item.get('email2');
-                        if (email !== null)
-                            baton.list.push({email: email, id: item.get('user_id') || item.get('internal_userid') || item.get('id'), type: item.get('type')});
-                    });
-                    $.data(node, 'baton', baton);
-                });
-
-                autocomplete.on('select', function (data) {
-                    var alreadyParticipant = false, obj,
-                    userId;
-                    alreadyParticipant = collection.any(function (item) {
-                        if (data.type === 5) {
-                            return item.getEmail() === (data.mail || data.email1) && item.get('type') === data.type;
-                        } else if (data.type === 1) {
-                            return item.get('id') ===  data.internal_userid;
-                        } else {
-                            return (item.id === data.id && item.get('type') === data.type);
-                        }
-                    });
-                    if (!alreadyParticipant) {
-                        if (data.type !== 5) {
-
-                            if (data.mark_as_distributionlist) {
-                                _.each(data.distribution_list, function (val) {
-                                    if (val.folder_id === 6) {
-                                        calendarUtil.getUserIdByInternalId(val.id).done(function (id) {
-                                            userId = id;
-                                            obj = {id: userId, type: 1 };
-                                            collection.add(obj);
-                                        });
-                                    } else {
-                                        obj = {type: 5, mail: val.mail, display_name: val.display_name};
-                                        collection.add(obj);
-                                    }
-                                });
-                            } else {
-                                collection.add(data);
-                            }
-
-                        } else {
-                            obj = {type: data.type, mail: data.mail || data.email1, display_name: data.display_name, image1_url: data.image1_url || ''};
-                            collection.add(obj);
-                        }
-                    }
-                });
+        index: 1700,
+        row: '11',
+        draw: function (baton) {
+            var view = new AddParticipant({
+                apiOptions: {
+                    contacts: true,
+                    users: true,
+                    groups: true,
+                    resources: false,
+                    distributionlists: true
+                },
+                collection: baton.model.getParticipants()
             });
+            this.append(
+                view.$el
+            );
+            view.render().$el.addClass('col-xs-12 collapsed');
+            view.$el.find('input.add-participant').addClass('task-participant-input-field');
         }
     });
 
     // Attachments
 
-    point.extend(new forms.SectionLegend({
+    // attachments label
+    point.extend({
         id: 'attachments_legend',
+        index: 1800,
         className: 'col-md-12 collapsed',
-        label: gt('Attachments'),
-        index: 1700
-    }), {
-        row: '11'
-    });
+        render: function () {
+            this.$el.append(
+                $('<fieldset>').append(
+                    $('<legend>').text(gt('Attachments'))
+                )
+            );
+        }
+    }, { row: '12' });
 
     point.extend(new attachments.EditableAttachmentList({
         id: 'attachment_list',
         registerAs: 'attachmentList',
-        index: 1800,
+        index: 1900,
         module: 4,
         className: 'collapsed',
         finishedCallback: function (model, id, errors) {
@@ -523,13 +482,13 @@ define('io.ox/tasks/edit/view-template',
             }
         }
     }), {
-        row: '12'
+        row: '13'
     });
 
     point.basicExtend({
         id: 'attachment_upload',
-        index: 1900,
-        row: '13',
+        index: 2000,
+        row: '14',
         draw: function (baton) {
             var guid = _.uniqueId('form-control-label-'),
                 $node = $('<form class="attachments-form">').appendTo(this).attr('id', guid).addClass('col-sm-12 collapsed'),
@@ -574,8 +533,8 @@ define('io.ox/tasks/edit/view-template',
 
     point.basicExtend({
         id: 'expand_detail_link',
-        index: 2000,
-        row: '14',
+        index: 2100,
+        row: '15',
         draw: function (baton) {
             var text = gt('Hide details');
             if (baton.parentView.detailsCollapsed) {
@@ -595,128 +554,129 @@ define('io.ox/tasks/edit/view-template',
     });
 
     //estimated duration
-    point.extend(new forms.InputField({
+    point.extend({
         id: 'target_duration',
-        index: 2100,
-        className: 'col-sm-6 task-edit-details',
-        control: '<input type="text" class="target_duration form-control" id="task-edit-target-duration" tabindex="1">',
-        attribute: 'target_duration',
-        label: gt('Estimated duration in minutes')
-    }), {
-        row: '15'
-    });
-
-    point.extend(new forms.InputField({
-        id: 'actual_duration',
         index: 2200,
         className: 'col-sm-6 task-edit-details',
-        control: '<input type="text" class="actual_duration form-control" id="task-edit-actual-duration" tabindex="1">',
-        attribute: 'actual_duration',
-        label: gt('Actual duration in minutes')
-    }), {
-        row: '15'
-    });
+        render: function () {
+            var guid = _.uniqueId('form-control-label-');
+            this.$el.append(
+                $('<label class="control-label">').text(gt('Estimated duration in minutes')).attr({ for: guid }),
+                new mini.InputView({ name: 'target_duration', model: this.model }).render().$el.attr({ id: guid })
+            );
+        }
+    }, { row: '16' });
 
-    //estimated costs
-    point.extend(new forms.InputField({
-        id: 'target_costs',
+    //actual duration
+    point.extend({
+        id: 'actual_duration',
         index: 2300,
         className: 'col-sm-6 task-edit-details',
-        control: '<input type="text" class="target_costs form-control" id="task-edit-target-costs" tabindex="1">',
-        attribute: 'target_costs',
-        label: gt('Estimated costs')
-    }), {
-        row: '16'
-    });
+        render: function () {
+            var guid = _.uniqueId('form-control-label-');
+            this.$el.append(
+                $('<label class="control-label">').text(gt('Actual duration in minutes')).attr({ for: guid }),
+                new mini.InputView({ name: 'actual_duration', model: this.model }).render().$el.attr({ id: guid })
+            );
+        }
+    }, { row: '16' });
 
-    point.extend(new forms.InputField({
-        id: 'actual_costs',
+    //estimated costs
+    point.extend({
+        id: 'target_costs',
         index: 2400,
-        className: 'col-sm-4 task-edit-details',
-        control: '<input type="text" class="actual_costs form-control" id="task-edit-actual-costs" tabindex="1">',
-        attribute: 'actual_costs',
-        label: gt('Actual costs')
-    }), {
-        row: '16'
-    });
+        className: 'col-sm-6 task-edit-details',
+        render: function () {
+            var guid = _.uniqueId('form-control-label-');
+            this.$el.append(
+                $('<label class="control-label">').text(gt('Estimated costs')).attr({ for: guid }),
+                new mini.InputView({ name: 'target_costs', model: this.model }).render().$el.attr({ id: guid })
+            );
+        }
+    }, { row: '17' });
 
-    point.extend(new forms.SelectBoxField({
-        id: 'currency',
+    //actual costs
+    point.extend({
+        id: 'actual_costs',
         index: 2500,
+        className: 'col-sm-4 task-edit-details',
+        render: function () {
+            var guid = _.uniqueId('form-control-label-');
+            this.$el.append(
+                $('<label class="control-label">').text(gt('Actual costs')).attr({ for: guid }),
+                new mini.InputView({ name: 'actual_costs', model: this.model }).render().$el.attr({ id: guid })
+            );
+        }
+    }, { row: '17' });
+
+    //currency
+    point.extend({
+        id: 'currency',
+        index: 2600,
         className: 'col-sm-2 task-edit-details',
         render: function () {
-            var self = this;
-            this.nodes = {};
-            this.nodes.select = $('<select tabindex="1">').addClass('currency form-control').attr('id', 'task-edit-currency');
-
-            //add empty currency
-            self.nodes.select.append(
-                    $('<option>', {value: ''})
-                );
-            _(this.selectOptions).each(function (value) {
-                self.nodes.select.append(
-                    $('<option>', {value: value}).text(_.noI18n(value))
-                );
-            });
-            this.$el.append($('<label for="task-edit-currency">').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
-            this.updateChoice();
-            this.nodes.select.on('change', function () {
-                self.model.set(self.attribute, self.nodes.select.val(), {validate: true});
-            });
-        },
-        attribute: 'currency',
-        selectOptions: settings.get('currencies', ['CAD', 'CHF', 'DKK', 'EUR', 'GBP', 'JPY', 'PLN', 'RMB', 'RUB', 'SEK', 'USD']),
-        label: gt('Currency')
-    }), {
-        row: '16'
-    });
+            var guid = _.uniqueId('form-control-label-'),
+                currencies = settings.get('currencies', ['CAD', 'CHF', 'DKK', 'EUR', 'GBP', 'JPY', 'PLN', 'RMB', 'RUB', 'SEK', 'USD']);
+            currencies.unshift('');
+            this.$el.append(
+                $('<label>').attr({
+                    class: 'control-label',
+                    for: guid
+                }).text(gt('Currency')),
+                $('<div>').append(
+                    new mini.SelectView({
+                        list: _.map(currencies, function (key) { return { label: key, value: key }; }),
+                        name: 'currency',
+                        model: this.baton.model,
+                        id: guid,
+                        className: 'form-control'
+                    }).render().$el
+                )
+            );
+        }
+    }, { row: '17' });
 
     // distance
-    point.extend(new forms.InputField({
+    point.extend({
         id: 'trip_meter',
-        index: 2600,
-        className: 'col-sm-12 task-edit-details',
-        control: '<input type="text" class="trip-meter form-control" id="task-edit-trip-meter" tabindex="1">',
-        attribute: 'trip_meter',
-        label: gt('Distance')
-    }), {
-        row: '17'
-    });
-
-    point.extend(new forms.InputField({
-        id: 'billing_information',
         index: 2700,
         className: 'col-sm-12 task-edit-details',
-        control: '<input type="text" class="billing-information form-control" id="task-edit-billing-information" tabindex="1">',
-        attribute: 'billing_information',
-        label: gt('Billing information')
-    }), {
-        row: '18'
-    });
+        render: function () {
+            var guid = _.uniqueId('form-control-label-');
+            this.$el.append(
+                $('<label class="control-label">').text(gt('Distance')).attr({ for: guid }),
+                new mini.InputView({ name: 'trip_meter', model: this.model }).render().$el.attr({ id: guid })
+            );
+        }
+    }, { row: '18' });
 
-    point.extend(new forms.InputField({
-        id: 'companies',
+    // billing information
+    point.extend({
+        id: 'billing_information',
         index: 2800,
         className: 'col-sm-12 task-edit-details',
-        control: '<input type="text" class="companies form-control" id="task-edit-companies" tabindex="1">',
-        attribute: 'companies',
-        label: gt('Companies')
-    }), {
-        row: '19'
-    });
-
-    // bottom toolbar for mobile only
-    ext.point('io.ox/tasks/edit/bottomToolbar').extend({
-        id: 'toolbar',
-        index: 2900,
-        draw: function (baton) {
-            // must be on a non overflow container to work with position:fixed
-            var node = $(baton.app.attributes.window.nodes.body),
-                save = baton.parentView.$el.find('.task-edit-save'),
-                cancel = baton.parentView.$el.find('.task-edit-cancel');
-            node.append($('<div class="app-bottom-toolbar">').append(save, cancel));
+        render: function () {
+            var guid = _.uniqueId('form-control-label-');
+            this.$el.append(
+                $('<label class="control-label">').text(gt('Billing information')).attr({ for: guid }),
+                new mini.InputView({ name: 'billing_information', model: this.model }).render().$el.attr({ id: guid })
+            );
         }
-    });
+    }, { row: '19' });
+
+    // companies
+    point.extend({
+        id: 'companies',
+        index: 2900,
+        className: 'col-sm-12 task-edit-details',
+        render: function () {
+            var guid = _.uniqueId('form-control-label-');
+            this.$el.append(
+                $('<label class="control-label">').text(gt('Companies')).attr({ for: guid }),
+                new mini.InputView({ name: 'companies', model: this.model }).render().$el.attr({ id: guid })
+            );
+        }
+    }, { row: '20' });
 
     ext.point('io.ox/tasks/edit/dnd/actions').extend({
         id: 'attachment',

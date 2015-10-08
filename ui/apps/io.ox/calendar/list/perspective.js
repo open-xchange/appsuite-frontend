@@ -11,18 +11,18 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/list/perspective',
-    ['io.ox/calendar/api',
-     'io.ox/calendar/list/view-grid-template',
-     'io.ox/calendar/view-detail',
-     'io.ox/core/commons',
-     'io.ox/core/extensions',
-     'io.ox/core/date',
-     'io.ox/calendar/util',
-     'io.ox/core/extPatterns/actions',
-     'settings!io.ox/calendar',
-     'gettext!io.ox/calendar'
-    ], function (api, tmpl, viewDetail, commons, ext, date, util, actions, settings, gt) {
+define('io.ox/calendar/list/perspective', [
+    'io.ox/calendar/api',
+    'io.ox/calendar/list/view-grid-template',
+    'io.ox/calendar/view-detail',
+    'io.ox/core/commons',
+    'io.ox/core/extensions',
+    'io.ox/calendar/util',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/core/folder/api',
+    'settings!io.ox/calendar',
+    'gettext!io.ox/calendar'
+], function (api, tmpl, viewDetail, commons, ext, util, actions, folderAPI, settings, gt) {
 
     'use strict';
 
@@ -34,6 +34,16 @@ define('io.ox/calendar/list/perspective',
         this.grid.refresh(true);
     };
 
+    perspective.updateColor = function (model) {
+        $('[data-folder="' + model.get('id') + '"]', this.pane).each(function () {
+            this.className = this.className.replace(/color-label-\d{1,2}/, 'color-label-' + model.get('meta').color_label);
+        });
+    };
+
+    perspective.selectAppointment = function (obj) {
+        this.grid.selection.set(obj);
+    };
+
     perspective.render = function (app) {
 
         var win = app.getWindow(),
@@ -42,9 +52,10 @@ define('io.ox/calendar/list/perspective',
             right,
             grid,
             findRecurrence = false,
-            optDropdown = null,
             // how many months do we display
             months = 1;
+
+        this.app = app;
 
         if (_.device('smartphone')) {
             app.left.addClass('calendar-list-view vsplit');
@@ -102,11 +113,6 @@ define('io.ox/calendar/list/perspective',
             if (app.folder.get() === data.folder) {
                 grid.selection.set(data);
             }
-        });
-
-        // special search: list request
-        grid.setListRequest('search', function (ids) {
-            return $.Deferred().resolve(ids);
         });
 
         //directly linked appointments are stored here
@@ -169,6 +175,7 @@ define('io.ox/calendar/list/perspective',
                 app.pages.getToolbar('detailView').setBaton(baton);
 
             } else {
+                baton.disable('io.ox/calendar/detail', 'inline-actions');
                 right.idle().empty().append(viewDetail.draw(baton));
             }
         }
@@ -181,102 +188,45 @@ define('io.ox/calendar/list/perspective',
             );
         }
 
-        function buildOption(value, text) {
-            return $('<li role="presentation">')
-                .append(
-                    $('<a>').attr({
-                        href: '#',
-                        role: 'menuitem',
-                        'data-option': value
-                    }).text(text)
-                );
-        }
-
         this.updateGridOptions = function () {
+
             var dropdown = grid.getToolbar().find('.grid-options'),
                 list = dropdown.find('ul'),
-                showAll = $('[data-option="all"]', list).parent(),
                 props = grid.prop();
+
             // uncheck all
             list.find('i').attr('class', 'fa fa-fw');
 
-            app.folder.getData().done(function (folder) {
-                showAll[folder.type === 1 ? 'show' : 'hide']();
-            });
-
             // sort & showall
-            list.find(
-                '[data-option="' + props.order + '"], ' +
-                '[data-option="' + (settings.get('showAllPrivateAppointments', false) ? 'all' : '~all') + '"]')
-                .find('i').attr('class', 'fa fa-check');
+            list.find('[data-option="' + props.order + '"]').find('i').attr('class', 'fa fa-check');
+
             // order
             var opacity = [1, 0.4][props.order === 'asc' ? 'slice' : 'reverse']();
             dropdown.find('.fa-arrow-down').css('opacity', opacity[0]).end()
                 .find('.fa-arrow-up').css('opacity', opacity[1]).end();
         };
 
-        ext.point('io.ox/calendar/vgrid/toolbar').extend({
-            id: 'dropdown',
-            index: 100,
-            draw: function () {
-                this.append(
-                    optDropdown = $('<div class="grid-options dropdown">')
-                        .append(
-                            $('<a>').attr({
-                                    href: '#',
-                                    tabindex: 1,
-                                    'data-toggle': 'dropdown',
-                                    'aria-haspopup': true,
-                                    'aria-expandet': false,
-                                    'aria-label': gt('Sort options')
-                                }).append(
-                                    $('<i class="fa fa-arrow-down" aria-hidden="true">'),
-                                    $('<i class="fa fa-arrow-up" aria-hidden="true">')
-                                )
-                                .dropdown(),
-                            $('<ul class="dropdown-menu" role="menu">')
-                                .append(
-                                    buildOption('asc', gt('Ascending')),
-                                    buildOption('desc', gt('Descending'))
-                                )
-                                .on('click', 'a', { grid: grid }, function () {
-                                    var option = $(this).attr('data-option');
-                                    switch (option) {
-                                    case 'asc':
-                                    case 'desc':
-                                        grid.prop('order', option).refresh(true);
-                                        break;
-                                    }
-                                })
-                        )
-                );
-            }
-        });
-
         /**
          * returns the all request for the vgrid
          * @param  {Object} dates   contains a start end end date
-         * @return {function}       the all request function for the vgrid
+         * @return { function}       the all request function for the vgrid
          */
         var generateAllRequest = function (dates) {
-            //var timeframe = util.getDateInterval({start_date: dates.start, end_date: dates.end});
-            var endDate = new date.Local(dates.end).format(date.DATE);
             grid.setEmptyMessage(function () {
-                return gt.format(gt('No appointments found until %s'), endDate);
+                return gt.format(gt('No appointments found until %s'), moment(dates.end).format('LLL'));
             });
             return function () {
-                var prop = grid.prop(),
-                    start = dates.start,
-                    end = dates.end;
+                var prop = grid.prop();
 
-                return app.folder.getData().pipe(function (folder) {
+                return app.folder.getData().then(function () {
                     // set folder data to view and update
                     return api.getAll({
-                        start: start.getTime(),
-                        end: end.getTime(),
-                        folder: settings.get('showAllPrivateAppointments', false) && folder.type === 1 ? undefined : prop.folder,
+                        start: dates.start,
+                        end: dates.end,
+                        folder: prop.folder === 'virtual/all-my-appointments' ? 0 : prop.folder,
                         order: prop.order
-                    }).then(function (data) {
+                    })
+                    .then(function (data) {
                         if (!settings.get('showDeclinedAppointments', false)) {
                             data = _.filter(data, function (obj) {
                                 return util.getConfirmationStatus(obj) !== 2;
@@ -302,10 +252,10 @@ define('io.ox/calendar/list/perspective',
 
                             //found valid recurrence, append it
                             if (foundRecurrence !== false) {
-                                _.url.hash({id: _.url.hash('id') + '.' + foundRecurrence});
+                                _.url.hash({ id: _.url.hash('id') + '.' + foundRecurrence });
                             } else {
                                 //ok its not in the list lets show it directly
-                                app.trigger('show:appointment', {id: searchItem[1], folder_id: searchItem[0], recurrence_position: 0}, true);
+                                app.trigger('show:appointment', { id: searchItem[1], folder_id: searchItem[0], recurrence_position: 0 }, true);
                             }
 
                             //only search once
@@ -321,11 +271,11 @@ define('io.ox/calendar/list/perspective',
         // based on the months variable which will be increased each time
         // this gets called
         var getIncreasedTimeFrame = function () {
-            start = new date.Local().setHours(0, 0, 0, 0);
-            end = new date.Local(start).setMonth(start.getMonth() + months);
+            start = moment().startOf('day').valueOf();
+            end = moment(start).add(months, 'months');
             // increase for next run
             months++;
-            return {start: start, end: end};
+            return { start: start.valueOf(), end: end.valueOf() };
         };
 
         // standard call will get the first month
@@ -353,9 +303,22 @@ define('io.ox/calendar/list/perspective',
             return $.Deferred().resolve(ids);
         });
 
+        self.app.folder.getData().done(function (data) {
+            self.folderModel = folderAPI.pool.getModel(data.id);
+            self.folderModel.on('change:meta', self.updateColor, self);
+        });
+
         grid.prop('folder', app.folder.get());
         app.on('folder:change', function () {
             self.updateGridOptions();
+
+            self.app.folder.getData().done(function (data) {
+                if (this.folderModel) {
+                    this.folderModel.off('change:meta', this.updateColor);
+                }
+                self.folderModel = folderAPI.pool.getModel(data.id);
+                self.folderModel.on('change:meta', self.updateColor, self);
+            });
         });
 
         // jump to newly created items
@@ -363,8 +326,8 @@ define('io.ox/calendar/list/perspective',
             grid.selection.set(data);
         });
 
-        // refresh grid on all update events
-        api.on('update', grid.refresh);
+        // refresh grid on all update/delete events
+        api.on('update delete', grid.refresh);
 
         // to show an appointment without it being in the grid, needed for direct links
         app.on('show:appointment', showAppointment);

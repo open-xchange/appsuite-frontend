@@ -8,7 +8,6 @@
     "bitwise"       : false,   // true: Prohibit bitwise operators (&, |, ^, etc.)
     "forin"         : false,   // true: Require filtering for..in loops with obj.hasOwnProperty()
     "immed"         : true,    // true: Require immediate invocations to be wrapped in parens e.g. `(function () { } ());`,
-    "quotmark"      : "single",
     "undef"         : true,
     "unused"        : true,
 
@@ -23,20 +22,18 @@
 
     // Environments
 
-    "trailing"      : true,    // true: Prohibit trailing whitespaces
     "node"          : true,    // Node.js
     "nonstandard"   : true,    // Widely adopted globals (escape, unescape, etc)
 
-    // Legacy
-    "white"         : true,    // true: Check against strict whitespace and indentation rules
-
     // Custom Globals
     "globals": {
+        "_paq": false,
         "$": false,
         "ox": false,
         "_": false,
         "Modernizr": false,
         "define": false,
+        "moment": false,
         "require": false,
         "requirejs": false,
         "assert": false,
@@ -44,6 +41,7 @@
         "Backbone": false,
         "BigScreen": false,
         "MediaElementPlayer": false,
-        "tinyMCE": false
+        "tinyMCE": false,
+        "Notification": false
     }
 }

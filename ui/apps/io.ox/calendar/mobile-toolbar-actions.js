@@ -11,12 +11,12 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/calendar/mobile-toolbar-actions',
-   ['io.ox/core/extensions',
+define('io.ox/calendar/mobile-toolbar-actions', [
+    'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/calendar/api',
-    'gettext!io.ox/calendar'],
-    function (ext, links, api, gt) {
+    'gettext!io.ox/calendar'
+], function (ext, links, api, gt) {
 
     'use strict';
 
@@ -156,7 +156,7 @@ define('io.ox/calendar/mobile-toolbar-actions',
         // extract single object if length === 1
         list = list.length === 1 ? list[0] : list;
         // draw toolbar
-        var baton = ext.Baton({data: list, app: this });
+        var baton = ext.Baton({ data: list, app: this });
         this.pages.getToolbar('month').setBaton(baton);
         this.pages.getToolbar('week').setBaton(baton);
         this.pages.getToolbar('list').setBaton(baton);
@@ -200,7 +200,7 @@ define('io.ox/calendar/mobile-toolbar-actions',
         }
     });
 
-     ext.point('io.ox/calendar/mediator').extend({
+    ext.point('io.ox/calendar/mediator').extend({
         id: 'change-mode-toolbar-mobile',
         index: 10400,
         setup: function (app) {

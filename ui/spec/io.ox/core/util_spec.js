@@ -46,15 +46,15 @@ define(['io.ox/core/util'], function (util) {
         describe('isValidMailAddress()', function () {
 
             it('handles domain part properly', function () {
-                expect(util.isValidMailAddress('name@domain.com')).to.be.true;
-                expect(util.isValidMailAddress('name@host')).to.be.true;
-                expect(util.isValidMailAddress('name@1337')).to.be.true;
-                expect(util.isValidMailAddress('name@[1.2.3.4]')).to.be.true;
-                expect(util.isValidMailAddress('name@[1.2.3.4.5]')).to.be.false;
-                expect(util.isValidMailAddress('name@[1.2.3.A]')).to.be.false;
-                expect(util.isValidMailAddress('name@[1.2.3.4444]')).to.be.false;
-                expect(util.isValidMailAddress('name@[IPv6:2001:db8:1ff::a0b:dbd0]')).to.be.true;
-                expect(util.isValidMailAddress('name@[2001:db8:1ff::a0b:dbd0]')).to.be.false;
+                expect(util.isValidMailAddress('name@domain.com'), 'name@domain.com is valid').to.be.true;
+                expect(util.isValidMailAddress('name@host'), 'name@host is valid').to.be.true;
+                expect(util.isValidMailAddress('name@1337'), 'name@1337 is valid').to.be.true;
+                expect(util.isValidMailAddress('name@[1.2.3.4]'), 'name@[1.2.3.4] is valid').to.be.true;
+                expect(util.isValidMailAddress('name@[1.2.3.4.5]'), 'name@[1.2.3.4.5] is valid').to.be.false;
+                expect(util.isValidMailAddress('name@[1.2.3.A]'), 'name@[1.2.3.A] is valid').to.be.false;
+                expect(util.isValidMailAddress('name@[1.2.3.4444]'), 'name@[1.2.3.4444] is valid').to.be.false;
+                expect(util.isValidMailAddress('name@[IPv6:2001:db8:1ff::a0b:dbd0]'), 'name@[IPv6:2001:db8:1ff::a0b:dbd0] is valid').to.be.true;
+                expect(util.isValidMailAddress('name@[2001:db8:1ff::a0b:dbd0]'), 'name@[2001:db8:1ff::a0b:dbd0] is valid').to.be.false;
             });
 
             it('handles partial addresses properly', function () {

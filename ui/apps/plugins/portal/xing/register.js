@@ -22,20 +22,18 @@
  * - error handling when looking up e-mails for add/invite-to
  */
 
-define('plugins/portal/xing/register',
-    ['io.ox/core/extensions',
-     'plugins/portal/xing/actions',
-     'plugins/portal/xing/activities',
-     'io.ox/xing/api',
-     'io.ox/core/api/user',
-     'io.ox/core/notifications',
-     'io.ox/core/tk/dialogs',
-     'io.ox/keychain/api',
-     'io.ox/core/date',
-     'gettext!plugins/portal',
-     'less!plugins/portal/xing/xing'
-    ], function (ext, eventActions, activityParsers, api, userApi,
-        notifications, dialogs, keychain, date, gt) {
+define('plugins/portal/xing/register', [
+    'io.ox/core/extensions',
+    'plugins/portal/xing/actions',
+    'plugins/portal/xing/activities',
+    'io.ox/xing/api',
+    'io.ox/core/api/user',
+    'io.ox/core/notifications',
+    'io.ox/core/tk/dialogs',
+    'io.ox/keychain/api',
+    'gettext!plugins/portal',
+    'less!plugins/portal/xing/xing'
+], function (ext, eventActions, activityParsers, api, userApi, notifications, dialogs, keychain, gt) {
 
     'use strict';
 
@@ -72,7 +70,6 @@ define('plugins/portal/xing/register',
                 var menu, availableLangs;
 
                 availableLangs = 'de en es fr it nl pl pt ru tr zh'.split(' ');
-
 
                 this.append(
                     menu = $('<div class="io-ox-xing submitted-data">').append(
@@ -111,8 +108,8 @@ define('plugins/portal/xing/register',
                 });
             })
 
-            .addAlternativeButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
-            .addSuccessButton('accepted', gt('Accept'), 'accepted', {tabIndex: '1'})
+            .addAlternativeButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+            .addSuccessButton('accepted', gt('Accept'), 'accepted', { tabIndex: 1 })
 
             .show()
 
@@ -154,7 +151,7 @@ define('plugins/portal/xing/register',
 
     statusUpdateForm = function () {
         var form = $('<div>').addClass('xing comment').append(
-            $('<textarea>').attr({rows: 3, cols: 40}),
+            $('<textarea>').attr({ rows: 3, cols: 40 }),
             $('<button>').addClass('btn btn-primary').text(gt('Post a status update'))
         );
 
@@ -208,7 +205,6 @@ define('plugins/portal/xing/register',
                 activityNode.attr('data-activity-id', id);
             }
 
-
             ext.point('io.ox/portal/widget/xing/activityhandler').each(function (handler) {
                 if (handler.accepts(activity, options)) {
                     foundHandler = true;
@@ -219,8 +215,8 @@ define('plugins/portal/xing/register',
             if (foundHandler) {
                 // Date
                 if (activity.created_at) {
-                    var creationDate = new date.Local(activity.created_at);
-                    dateNode.text(creationDate.format(date.DATE_TIME)).appendTo(activityNode);
+                    var creationDate = moment(activity.created_at);
+                    dateNode.text(creationDate.format('l LT')).appendTo(activityNode);
                 }
 
                 //reactions like comment, share, like
@@ -304,21 +300,21 @@ define('plugins/portal/xing/register',
         load: function (baton) {
             var def = $.Deferred();
             api.getUserfeed({
-                    //name variations, page_name and picture
-                    user_fields: '0,1,2,3,4,8,23'
-                }).then(function (xingResponse) {
-                    baton.data = xingResponse;
-                    def.resolve(xingResponse);
-                }).fail(function (error) {
-                    if (error.error_params[0] === 'Invalid OAuth token') {
-                        if(keychain.getStandardAccount('xing')) {
-                            baton.reauthorize = true;
-                            def.resolve();
-                            return;
-                        }
+                //name variations, page_name and picture
+                user_fields: '0,1,2,3,4,8,23'
+            }).then(function (xingResponse) {
+                baton.data = xingResponse;
+                def.resolve(xingResponse);
+            }).fail(function (error) {
+                if (error.error_params[0] === 'Invalid OAuth token') {
+                    if (keychain.getStandardAccount('xing')) {
+                        baton.reauthorize = true;
+                        def.resolve();
+                        return;
                     }
-                    def.reject(error);
-                });
+                }
+                def.reject(error);
+            });
             return def;
         },
 
@@ -335,7 +331,7 @@ define('plugins/portal/xing/register',
             } else {
                 this.append(
                     $('<div class="content preview io-ox-xing pointer">').append(
-                        makeNewsfeed(baton.data.network_activities, {maxCount: MAX_ITEMS_PREVIEW, limitLength: true})
+                        makeNewsfeed(baton.data.network_activities, { maxCount: MAX_ITEMS_PREVIEW, limitLength: true })
                     ).on('click', 'a.external.xing', function (e) { e.stopPropagation(); })
                 );
             }

@@ -12,15 +12,19 @@
  */
 
 // Bootstrap Tokenfield overrides
+
+@tokenfield-menu-width: 320px;
+
 .tokenfield {
 
     &.form-control {
-        padding: 3px 3px 0px 3px;
+        padding: 3px 3px 0 3px;
         height: auto;
     }
 
     .token {
         margin: 0 5px 3px 0;
+        border-radius: @border-radius-small;
 
         &.ui-sortable-helper {
             background-color: @white;
@@ -38,26 +42,6 @@
         }
     }
 
-    .twitter-typeahead {
-
-        & > .token-input.tt-input, & > .token-input.tt-hint {
-            height: 22px;
-            border: 0;
-            padding: 0px 5px;
-        }
-
-        & > .token-input.tt-hint {
-            width: 100% !important;
-        }
-
-        .tt-dropdown-menu {
-            min-width: 320px;
-            max-height: 200px;
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
-    }
-
     // background color if dropable widget is active
     &.drophover {
 
@@ -65,9 +49,33 @@
 
         .token-input {
             // temporary override style attribute
-            width: 0px !important;
+            width: 0 !important;
             background-color: #eee;
         }
 
     }
+
+    .twitter-typeahead {
+
+        & > .token-input.tt-input, & > .token-input.tt-hint {
+            height: 22px;
+            border: 0;
+            padding: 0 5px;
+        }
+
+        & > .token-input.tt-hint, & > .token-input.tt-input,{
+            min-width: @tokenfield-menu-width !important;
+        }
+
+        .tt-dropdown-menu {
+            width: @tokenfield-menu-width;
+            min-width: @tokenfield-menu-width;
+            @media all and (min-width: 320px) and (max-width: 480px) {
+                border-radius: 0;
+                border: 1px solid #fff;
+                border-top-color: #ccc;
+            }
+        }
+    }
 }
+

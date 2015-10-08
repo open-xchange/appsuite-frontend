@@ -1,0 +1,231 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+.io-ox-sidepopup {
+    background-color: white;
+    z-index: 3; /* above .window-content */
+
+    @shadowColor: rgba(0, 0, 0, 0.50);
+    @margin: 50px;
+
+    top: @margin;
+    right: @margin;
+    bottom: @margin;
+    left: @margin;
+
+    // shadow for better contrast
+
+    &.right {
+        left: 49.5%;
+        .box-shadow(+20px 0 100px 0 @shadowColor);
+    }
+
+    &.left {
+        right: 49.5%;
+        .box-shadow(-20px 0 100px 0 @shadowColor);
+    }
+
+    &.first {
+        left: auto;
+        right: auto;
+        width: 800px;
+        max-width: 45%;
+    }
+
+    // no margins inside notifications overlay
+    .notifications-overlay & {
+        top: 0; right: 0; bottom: 0; left: 0;
+    }
+
+    // larger popups for notification overlay
+    @media (min-width: 480px), (min-device-width: 480px) {
+        .notifications-overlay &.right { left: 39.5%; }
+        .notifications-overlay &.left { right: 39.5%; }
+    }
+
+    // no margins on smartphones (using 540 otherwise 500, for example, could only use 450 due to margins)
+    @media (max-width: 540px), (max-device-width: 540px) {
+        & { top: 0; right: 0; bottom: 0; left: 0; }
+        &.first { max-width: 100%; }
+    }
+}
+
+.io-ox-sidepopup-arrow {
+    position: absolute;
+    z-index: 4;
+
+    .border, .triangle {
+        position: absolute;
+        height: 0;
+        width: 0;
+        border: 20px solid transparent;
+        top: -20px;
+    }
+
+    &.left {
+        left: 0;
+        right: 49.5%;
+        .border {
+            border-left-color: #eee;
+            right: -40px;
+        }
+        .triangle {
+            border-left-color: #fff;
+            right: -39px;
+        }
+    }
+
+    &.right {
+        left: 49.5%;
+        right: 0;
+        .border {
+            border-right-color: #eee;
+            left: -40px;
+        }
+        .triangle {
+            border-right-color: #fff;
+            left: -39px;
+        }
+    }
+
+    // larger popups for notification overlay
+    .notifications-overlay &.right { left: 39.5%; }
+    .notifications-overlay &.left { right: 39.5%; }
+}
+
+.content-v-shift .io-ox-sidepopup {
+    padding-top: 40px;
+    // see https://bugs.open-xchange.com/show_bug.cgi?id=30833
+    // .io-ox-sidepopup-close {
+    //     background-color: #eee;
+    //     margin: 0;
+    //     padding-left: 14px;
+    //     border-bottom: 1px solid #ccc;
+    //     text-align: left;
+    //     .btn-sidepopup {
+    //         background-color: #EEE;
+    //         color: #555;
+    //         padding: 4px 12px;
+    //         border-radius: 4px;
+    //         border: 1px solid #CCC;
+    //         margin: 5px;
+    //     }
+    //     .btn-sidepopup:hover {
+    //         color: #555;
+    //         background-color: #D5D5D5;
+    //     }
+    // }
+}
+
+.io-ox-sidepopup-overlay {
+    z-index: 3;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.io-ox-sidepopup-pane {
+    top: 45px;
+    padding-top: 0;
+    outline: 0;
+}
+
+.io-ox-sidepopup-close {
+    padding: 10px 15px;
+    text-align: right;
+    margin: 10px 10px 0;
+
+    .btn {
+        margin-left: 13px;
+        .user-select(none);
+    }
+
+    .btn-sidepopup {
+        display: inline-block;
+        background-color: #eee;
+        color: #676767;
+        padding: 6px 13px;
+        margin-left: 7px;
+        border-radius: 0 0 @border-radius-base @border-radius-base;
+        cursor: pointer;
+
+        html.high-contrast & {
+            background-color: @hc-gray;
+            color: @white;
+        }
+
+        &:hover, &:focus {
+            background-color: #676767;
+            color: #eee;
+            text-decoration: none;
+
+            html.high-contrast & {
+                background-color: @black;
+                color: @white;
+            }
+        }
+    }
+}
+
+@media (max-width: 900px) {
+
+    .io-ox-sidepopup.right, .io-ox-sidepopup.left {
+        left: 0; right: 0;
+        border-left: 0 none; border-right: 0 none;
+        .box-shadow(none);
+    }
+
+    .io-ox-sidepopup-arrow {
+        display: none;
+    }
+
+    .io-ox-sidepopup-pane {
+        top: 35px;
+
+        .default-content-padding {
+            padding: 0 13px 13px 13px;
+        }
+    }
+
+    .io-ox-sidepopup-close {
+        margin: 0 13px;
+    }
+
+    .simple-window {
+
+        .io-ox-sidepopup {
+            position: static;
+            min-height: 200px;
+        }
+
+        .io-ox-sidepopup-pane {
+            position: static;
+
+            .io-ox-busy {
+                min-height: 20px;
+            }
+
+            .default-content-padding {
+                padding-top: 7px;
+            }
+        }
+    }
+}
+@media all and (max-width: 480px), all and (max-device-width: 480px) {
+    .io-ox-sidepopup-close {
+        margin: 0;
+        .close {
+            float: none;
+        }
+    }
+}

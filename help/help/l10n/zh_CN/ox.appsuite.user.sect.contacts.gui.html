@@ -1,12 +1,12 @@
-<html lang="en">
+<html lang="zh_cn">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>6.1. 地址簿元件</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="">
-<link rel="up" href="ox.appsuite.user.chap.contacts.html" title="Chapter 6. 地址簿">
-<link rel="prev" href="ox.appsuite.user.chap.contacts.html" title="Chapter 6. 地址簿">
+<link rel="up" href="ox.appsuite.user.chap.contacts.html" title="第 6 章 地址簿">
+<link rel="prev" href="ox.appsuite.user.chap.contacts.html" title="第 6 章 地址簿">
 <link rel="next" href="ox.appsuite.user.sect.contacts.view.html" title="6.2. 显示联系人">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
@@ -19,13 +19,13 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only"></span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.chap.contacts.html">Prev</a></li>
-<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
-<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.contacts.view.html">Next</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.chap.contacts.html">上一页</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">起始页</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目录</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.contacts.view.html">下一页</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -34,47 +34,98 @@
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ox.appsuite.user.sect.contacts.gui"></a>6.1. <span class="phrase"><span class="guilabel"><strong>地址簿</strong></span></span>元件</h2></div></div></div>
 <a class="indexterm" name="id-1.7.7.2"></a><div class="reference">
-<a name="ox.appsuite.user.reference.contacts.gui.hint"></a><p>用户界面的介绍可以在<a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. 用户界面">用户界面</a>找到。</p>
+<a name="ox.appsuite.user.reference.contacts.elements"></a><p><span class="phrase"><span class="guilabel"><strong>地址簿</strong></span></span>应用程序包括以下元件。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.gui.search" title="搜寻条">搜寻条</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.gui.foldertree" title="文件夹树">文件夹树</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.gui.toolbar" title="工具栏">工具栏</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.gui.navbar" title="导航栏">导航栏</a></p></li>
+<li class="listitem">
+<p><a class="xref" href="ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.gui.content" title="显示区域">显示区域</a></p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.gui.list" title="列表">列表</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.gui.detailview" title="详细信息视图">详细信息视图</a></p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.gui.create" title="创建或编辑的视图">创建或编辑的视图</a></p></li>
+</ul></div>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.contacts.gui.search"></a><p class="title"><b>搜寻条</b></p>
+<p>让您<a class="link" href="ox.appsuite.user.sect.contacts.search.html" title="6.8. 搜寻联系人">搜寻</a>联系人。</p>
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.contacts.gui.foldertree"></a><p class="title"><b>文件夹树</b></p>
-<p>显示联系人文件夹，和允许您<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.concept.folder.navigate">在文件夹结构里导航</a>。为了打开文件夹树，单击<span class="guibutton"><strong>视图</strong></span>按钮（在<a class="link" href="ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.gui.toolbar" title="工具栏">工具条</a>里）。启用<span class="guibutton"><strong>文件夹视图</strong></span>。以下功能可供使用：</p>
+<p>显示联系人文件夹，和让您在文件夹结构里导航。为了打开文件夹树，单击<span class="guibutton"><strong>视图</strong></span>按钮（在<a class="link" href="ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.gui.toolbar" title="工具栏">工具条</a>里）。启用<span class="guibutton"><strong>文件夹视图</strong></span>。视组件配置而定，文件夹树包括以下项目：</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p><span class="guilabel"><strong>我的地址簿</strong></span>. 包括您的个人地址簿。默认是包括文件夹<span class="guilabel"><strong>联系人</strong></span>和<span class="guilabel"><strong>已收集地址</strong></span>。</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>公共地址簿</strong></span>。包括与所有用户分享的地址簿。</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>共享地址簿</strong></span>。包括与其他用户分享的地址簿。</p></li>
+</ul></div>
+<p>以下功能可供使用：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>如果单击一个文件夹，会显示联系人。</p></li>
-<li class="listitem"><p>当前选择文件夹旁边的<span class="guibutton"><strong>文件夹指定动作</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.contacts.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span>提供<a class="link" href="ox.appsuite.user.chap.dataorganisation.html#ox.appsuite.user.concept.dataorganisation">组织数据</a>和<a class="link" href="ox.appsuite.user.chap.datainterchange.html#ox.appsuite.user.concept.datainterchange">交换数据</a>的功能。</p></li>
-<li class="listitem"><p>文件夹里的按钮提供<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.create.html#ox.appsuite.user.concept.folder.create">创建文件夹</a>功能。</p></li>
+<li class="listitem"><p>在选中文件夹旁边的<span class="guibutton"><strong>文件夹指定动作</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.contacts.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span>提供组织和交换数据的功能。</p></li>
+<li class="listitem"><p>文件夹里的按钮提供创建文件夹功能。</p></li>
 </ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.contacts.gui.foldertree.related"></a><p class="title">有关主题</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>文件夹的信息可以在<a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.html" title="11.1. 文件夹">文件夹</a>里找到。</p></li>
+<li class="listitem" style="list-style-type: none"><p>常用动作的信息可以在此找到：<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html" title="11.1.2. 在文件夹结构里导航">在文件夹结构里导航</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.create.html" title="11.1.5. 创建文件夹">创建文件夹</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.rename.html" title="11.1.6. 重命名文件夹">重命名文件夹</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.move.html" title="11.1.7. 移动文件夹">移动文件夹</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html" title="11.1.8. 删除文件夹">删除文件夹</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>上义词主题：<a class="xref" href="ox.appsuite.user.sect.contacts.gui.html" title="6.1. 地址簿元件"><span class="phrase"><span class="guilabel"><strong>地址簿</strong></span></span>元件</a></p></li>
+</ul>
+</div>
 <p>
       </p>
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.contacts.gui.toolbar"></a><p class="title"><b>工具栏</b></p>
-<p>包含以下按钮：</p>
+<p>包含以下的：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p><span class="guibutton"><strong>新建</strong></span> button. 创建一个<a class="link" href="ox.appsuite.user.sect.contacts.add.create.html#ox.appsuite.user.concept.contacts.new">新联系人</a>或一个<a class="link" href="ox.appsuite.user.sect.contacts.add.create.html#ox.appsuite.user.concept.contacts.new">新通讯组列表</a>。</p>
+<p><span class="guibutton"><strong>新建</strong></span> button. 创建一个新联系人或一个新通讯组列表。</p>
 <p><span class="phrase"><strong>备注：</strong></span>此功能只能在您打开一个您有权限创建对象的地址簿时打开。</p>
 </li>
-<li class="listitem"><p><span class="guibutton"><strong>发送邮件</strong></span>按钮。发送一个<a class="link" href="ox.appsuite.user.sect.contacts.manage.sendmail.html#ox.appsuite.user.concept.contacts.sendmail">电子邮件到联系人</a>。</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>邀请</strong></span>按钮。邀请联系人<a class="link" href="ox.appsuite.user.sect.contacts.manage.sendmail.html#ox.appsuite.user.concept.contacts.sendmail">到一个约会</a>。</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>编辑</strong></span>按键。编辑一个<a class="link" href="ox.appsuite.user.sect.contacts.manage.edit.html#ox.appsuite.user.concept.contacts.edit">联系人的数据</a>。</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>删除</strong></span>按钮。把您选择的<a class="link" href="ox.appsuite.user.sect.contacts.manage.delete.html#ox.appsuite.user.concept.contacts.delete">联系人删除</a>。</p></li>
-<li class="listitem"><p><a name="ox.appsuite.user.reference.contacts.gui.toolbar.messenger"></a>视组件配置而定，按钮<span class="phrase"><span class="guibutton"><strong>即时通讯器</strong></span></span></p></li>
+<li class="listitem"><p><span class="guibutton"><strong>发送邮件</strong></span>按钮。发送一个电子邮件到联系人。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>邀请</strong></span>按钮。邀请联系人到一个约会。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>编辑</strong></span>按键。编辑联系人数据。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>删除</strong></span>按钮。把您选择的联系人删除。</p></li>
+<li class="listitem"><p><a name="ox.appsuite.user.reference.contacts.gui.toolbar.messenger"></a>视组件配置而定，<span class="phrase"><span class="guibutton"><strong>Messenger</strong></span></span></p></li>
 <li class="listitem">
-<p><span class="guibutton"><strong>更多</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.contacts.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span>。打印以 vCard 发送打开一个有以下项目的菜单：<a class="link" href="ox.appsuite.user.sect.contacts.manage.sendvcard.html#ox.appsuite.user.concept.contacts.sendvcard"><span class="guibutton"><strong>以 vCard 发送</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.contacts.manage.print.html#ox.appsuite.user.concept.contacts.print"><span class="guibutton"><strong>打印</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.contacts.manage.move.html#ox.appsuite.user.concept.contacts.move"><span class="guibutton"><strong>移动</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.contacts.manage.copy.html#ox.appsuite.user.concept.contacts.copy"><span class="guibutton"><strong>复制</strong></span></a>。</p>
+<p><span class="guibutton"><strong>删除</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.contacts.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span>。打开带有更多功能的菜单：</p>
 <p><span class="phrase"><strong>备注：</strong></span>如果您没有适当权限，有些按钮可能不会显示。</p>
 <p><span class="phrase"><strong>备注：</strong></span>视地址或联系人的数据而定，有些按钮可能顺序不同或不可用。</p>
 </li>
 <li class="listitem">
-<p><span class="guibutton"><strong>视图</strong></span>按钮。使用以下项目打开菜单：</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<p><span class="guibutton"><strong>视图</strong></span>按钮。打开一个带有选择框的菜单，以控制视图。</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.contacts.gui.toolbar.view"></a><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p><span class="guibutton"><strong>文件夹视图</strong></span>选择框。打开或关闭<a class="link" href="ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.gui.foldertree" title="文件夹树">文件夹树</a>。</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>选择框</strong></span>选择框。在列表里每一个联系人旁边显示一个选择框。此允许您选择多个联系人后<a class="link" href="ox.appsuite.user.sect.contacts.manage.multiple.html#ox.appsuite.user.concept.contacts.multiple">一次编辑它们</a>。</p></li>
-</ul></div>
+<li class="listitem"><p><span class="guibutton"><strong>选择框</strong></span>选择框。在列表里每一个联系人旁边显示一个选择框。此允许您选择多个联系人后一次编辑它们。</p></li>
+</ul>
+</div>
 <p>
             </p>
 </li>
 </ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.contacts.gui.toolbar.related"></a><p class="title">有关主题</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>按钮和图标的信息可以在此找到：<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.contacts.add.create.html" title="6.5.1. 创建一个新联系人">创建一个新联系人</a>, <a class="xref" href="ox.appsuite.user.sect.contacts.manage.sendmail.html" title="6.7.1. 从地址簿选择电子邮件">从地址簿选择电子邮件</a>, <a class="xref" href="ox.appsuite.user.sect.contacts.manage.inviteappointment.html" title="6.7.2. 邀请联系人到一个约会">邀请联系人到一个约会</a>, <a class="xref" href="ox.appsuite.user.sect.contacts.manage.edit.html" title="6.7.3. 编辑联系人">编辑联系人</a>, <a class="xref" href="ox.appsuite.user.sect.contacts.manage.delete.html" title="6.7.10. 删除联系人">删除联系人</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>动作</strong></span>菜单<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.contacts.gui.toolbar.related.more"></a><img src="../../images/appsuite_user_icon_more.png"></span>里功能的信息可以在此找到：<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.contacts.manage.sendvcard.html" title="6.7.6. 作为 vCard 发送联系人">作为 vCard 发送联系人</a>, <a class="xref" href="ox.appsuite.user.sect.contacts.manage.print.html" title="6.7.9. 打印联系人">打印联系人</a>, <a class="xref" href="ox.appsuite.user.sect.contacts.manage.move.html" title="6.7.4. 移动联系人">移动联系人</a>, <a class="xref" href="ox.appsuite.user.sect.contacts.manage.multiple.html" title="6.7.11. 同时编辑多个联系人">同时编辑多个联系人</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>上义词主题：<a class="xref" href="ox.appsuite.user.sect.contacts.gui.html" title="6.1. 地址簿元件"><span class="phrase"><span class="guilabel"><strong>地址簿</strong></span></span>元件</a></p></li>
+</ul>
+</div>
 <p>
       </p>
 </div>
@@ -89,17 +140,32 @@
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.contacts.gui.list"></a><p class="title"><b>列表</b></p>
-<p>显示打开的地址簿里联系人的名称。显示名称和第一个电子邮件地址。以下功能可供使用：</p>
+<p>显示打开的地址簿里联系人的名称。列表包括以下项目：</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>以下详情会为每一个联系人显示：名称、主要电子邮件地址。</p></li>
+<li class="listitem"><p><a name="ox.appsuite.user.reference.contacts.gui.list.messenger"></a>视组件配置而定，一个名称旁边的颜色点表示联系人的<span class="phrase">Messenger</span>状态。</p></li>
+<li class="listitem"><p>列表上面的文本包含选择文件夹的名字。数值对应选择文件夹里的对象数量。</p></li>
+</ul></div>
+<p>以下功能可供使用：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>您可以选择多个联系人<a class="link" href="ox.appsuite.user.sect.contacts.manage.multiple.html#ox.appsuite.user.concept.contacts.multiple">一次编辑它们</a>。为此启用在<span class="guibutton"><strong>选择框</strong></span>选项（可从工具条下拉的<span class="guibutton"><strong>视图</strong></span>找到），以启用联系人旁边的选择框。</p>
+<p>您可以选择多个联系人一次编辑。为此启用在<span class="guibutton"><strong>选择框</strong></span>选项(可从工具条下拉的<span class="guibutton"><strong>视图</strong></span>找到），以启用联系人旁边的选择框。</p>
 <p>您可以使用您系统的多重选择功能：</p>
 <p>为了选择当前选择文件夹的所有联系人，启用在列表上面的<span class="guibutton"><strong>选择所有</strong></span>选择框。</p>
 </li>
 <li class="listitem"><p>如果单击一个联系人，会在<a class="link" href="ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.gui.detailview" title="详细信息视图">详细视图</a>显示数据。</p></li>
-<li class="listitem"><p>列表上面的文本包含选择文件夹的名字。数值对应选择文件夹里的对象数量。</p></li>
-<li class="listitem"><p><a name="ox.appsuite.user.reference.contacts.gui.list.messenger"></a>视组件配置而定，一个名称旁边的颜色点表示联系人的<span class="phrase">即时通讯器</span>状态。</p></li>
 </ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.contacts.gui.list.related"></a><p class="title">有关主题</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>
+              <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.contacts.search.html" title="6.8. 搜寻联系人">搜寻联系人</a>, <a class="xref" href="ox.appsuite.user.sect.contacts.manage.multiple.html" title="6.7.11. 同时编辑多个联系人">同时编辑多个联系人</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>上义词主题：<a class="xref" href="ox.appsuite.user.sect.contacts.gui.html" title="6.1. 地址簿元件"><span class="phrase"><span class="guilabel"><strong>地址簿</strong></span></span>元件</a></p></li>
+</ul>
+</div>
 <p>
       </p>
 </div>
@@ -108,12 +174,58 @@
 <p>显示您从列表选择联系人的数据。详细信息视图包括以下元件：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>图像、名称、岗位、专业</p></li>
-<li class="listitem"><p><a name="ox.appsuite.user.reference.contacts.gui.detailview.messenger"></a>视组件配置而定，一个名称旁边的颜色点表示联系人的<span class="phrase">即时通讯器</span>状态。</p></li>
+<li class="listitem"><p><a name="ox.appsuite.user.reference.contacts.gui.detailview.messenger"></a>视组件配置而定，一个名称旁边的颜色点表示联系人的<span class="phrase">Messenger</span>状态。</p></li>
 <li class="listitem"><p>业务和私人地址</p></li>
 <li class="listitem"><p>业务和私人电话号码</p></li>
-<li class="listitem"><p>电子邮件地址。如果单击一个电子邮件，会打开一个<a class="link" href="ox.appsuite.user.sect.email.send.new.html#ox.appsuite.user.concept.email.new">发送一个新电子邮件</a>页面。</p></li>
+<li class="listitem"><p>电子邮件地址。如果单击一个电子邮件，会打开一个发送一个新电子邮件页面。</p></li>
 </ul></div>
 <p>显示的延伸信息可能有所不同。</p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.contacts.gui.create"></a><p class="title"><b>创建或编辑的视图</b></p>
+<p>在撰写一封新联系人或编辑一个现有联系人时，会在一个新页面显示以下元件。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p><span class="guibutton"><strong>保存</strong></span>按钮。如果单击此按钮，会保存当前联系人数据后关闭编辑页面。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>丢弃</strong></span>按钮。为了取消创建或编辑，单击此按钮。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>显示所有字段</strong></span>选择框。默认时，只有最常用的数据字段会显示。为了显示所有可用数据字段，启用此检查框。</p></li>
+<li class="listitem">
+<p><span class="guibutton"><strong>个人信息</strong></span>输入字段。输入标题、名称、生日、和额外个人信息。</p>
+<p>如果您启用页面顶部的检查框<span class="guibutton"><strong>显示所有字段</strong></span>，会显示额外元素。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>中间名字、名字延伸、url 的输入字段。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>此联系人为私人</strong></span>选择框。如果联系人不要在他的文件夹分享时显示，启用此检查框。</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem">
+<p><span class="guibutton"><strong>工作描述</strong></span>输入字段。输入联系人的商业数据在此字段。</p>
+<p>如果您启用页面顶部的检查框<span class="guibutton"><strong>显示所有字段</strong></span>，会显示额外输入字段。</p>
+</li>
+<li class="listitem">
+<p>输入字段<span class="guibutton"><strong>短信</strong></span>、<span class="guibutton"><strong>电话和传真机</strong></span>。在那些字段里，输入电子邮件地址、其他短信地址、电话号码、和传真机号码。</p>
+<p>如果您启用页面顶部的检查框<span class="guibutton"><strong>显示所有字段</strong></span>，会显示额外输入字段。</p>
+</li>
+<li class="listitem">
+<p><span class="guibutton"><strong>住所地址</strong></span>输入字段。在那些字段里输入联系人的私人地址。</p>
+<p>如果您启用页面顶部的检查框<span class="guibutton"><strong>显示所有字段</strong></span>，会显示输入字段<span class="guibutton"><strong>商业地址</strong></span>和<span class="guibutton"><strong>额外地址</strong></span>。</p>
+</li>
+<li class="listitem"><p><span class="guibutton"><strong>批注</strong></span>输入字段。使用此字段以输入信息。</p></li>
+<li class="listitem"><p>如果您启用页面顶部的检查框<span class="guibutton"><strong>显示所有字段</strong></span>，会为<span class="guibutton"><strong>自定义字段</strong></span>下面显示的单独项目额外的数据字段。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>添加附件</strong></span>按钮（在<span class="guibutton"><strong>附件</strong></span>下面）。单击按钮以附上一个或多个文件到联系人数据。</p></li>
+</ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.contacts.gui.create.related"></a><p class="title">有关主题</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>此视图用作以下动作：<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.contacts.add.create.html" title="6.5.1. 创建一个新联系人">创建一个新联系人</a>, <a class="xref" href="ox.appsuite.user.sect.contacts.manage.edit.html" title="6.7.3. 编辑联系人">编辑联系人</a></span>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p>上义词主题：<a class="xref" href="ox.appsuite.user.sect.contacts.gui.html" title="6.1. 地址簿元件"><span class="phrase"><span class="guilabel"><strong>地址簿</strong></span></span>元件</a></p></li>
+</ul>
+</div>
+<p>
+      </p>
 </div>
 </div>
           </div>

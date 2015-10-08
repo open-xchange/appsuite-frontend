@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.ant.AntBuilderLaunchConfigurationType">
+<stringAttribute key="org.eclipse.ant.ui.ATTR_ANT_AFTER_CLEAN_TARGETS" value="build-full,"/>
+<stringAttribute key="org.eclipse.ant.ui.ATTR_ANT_AUTO_TARGETS" value="build-incremental,"/>
+<stringAttribute key="org.eclipse.ant.ui.ATTR_ANT_CLEAN_TARGETS" value="clean,"/>
+<stringAttribute key="org.eclipse.ant.ui.ATTR_ANT_MANUAL_TARGETS" value="build-full,"/>
+<booleanAttribute key="org.eclipse.ant.ui.ATTR_TARGETS_UPDATED" value="true"/>
+<booleanAttribute key="org.eclipse.ant.ui.DEFAULT_VM_INSTALL" value="false"/>
+<stringAttribute key="org.eclipse.debug.core.ATTR_REFRESH_SCOPE" value="${project}"/>
+<booleanAttribute key="org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND" value="false"/>
+<booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
+<stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.ant.ui.AntClasspathProvider"/>
+<booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="true"/>
+<stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.ant.internal.launching.remote.InternalAntRunner"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value=""/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xms64m -Xmx2048m"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_BUILD_SCOPE" value="${working_set:&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#10;&lt;resources&gt;&#10;&lt;item path=&quot;/ui/.editorconfig&quot; type=&quot;1&quot;/&gt;&#10;&lt;item path=&quot;/ui/.externalToolBuilders&quot; type=&quot;2&quot;/&gt;&#10;&lt;item path=&quot;/ui/.gitignore&quot; type=&quot;1&quot;/&gt;&#10;&lt;item path=&quot;/ui/.jscs.json&quot; type=&quot;1&quot;/&gt;&#10;&lt;item path=&quot;/ui/.jshintrc&quot; type=&quot;1&quot;/&gt;&#10;&lt;item path=&quot;/ui/.lessrc&quot; type=&quot;1&quot;/&gt;&#10;&lt;item path=&quot;/ui/.project&quot; type=&quot;1&quot;/&gt;&#10;&lt;item path=&quot;/ui/.settings&quot; type=&quot;2&quot;/&gt;&#10;&lt;item path=&quot;/ui/Gruntfile.js&quot; type=&quot;1&quot;/&gt;&#10;&lt;item path=&quot;/ui/apps&quot; type=&quot;2&quot;/&gt;&#10;&lt;item path=&quot;/ui/bin&quot; type=&quot;2&quot;/&gt;&#10;&lt;item path=&quot;/ui/bower.json&quot; type=&quot;1&quot;/&gt;&#10;&lt;item path=&quot;/ui/build.bat&quot; type=&quot;1&quot;/&gt;&#10;&lt;item path=&quot;/ui/build.sh&quot; type=&quot;1&quot;/&gt;&#10;&lt;item path=&quot;/ui/build.xml&quot; type=&quot;1&quot;/&gt;&#10;&lt;item path=&quot;/ui/conf&quot; type=&quot;2&quot;/&gt;&#10;&lt;item path=&quot;/ui/debian&quot; type=&quot;2&quot;/&gt;&#10;&lt;item path=&quot;/ui/doc&quot; type=&quot;2&quot;/&gt;&#10;&lt;item path=&quot;/ui/grunt&quot; type=&quot;2&quot;/&gt;&#10;&lt;item path=&quot;/ui/help&quot; type=&quot;2&quot;/&gt;&#10;&lt;item path=&quot;/ui/help-drive&quot; type=&quot;2&quot;/&gt;&#10;&lt;item path=&quot;/ui/html&quot; type=&quot;2&quot;/&gt;&#10;&lt;item path=&quot;/ui/i18n&quot; type=&quot;2&quot;/&gt;&#10;&lt;item path=&quot;/ui/karma.conf.js&quot; type=&quot;1&quot;/&gt;&#10;&lt;item path=&quot;/ui/lib&quot; type=&quot;2&quot;/&gt;&#10;&lt;item path=&quot;/ui/open-xchange-appsuite.spec.hbs&quot; type=&quot;1&quot;/&gt;&#10;&lt;item path=&quot;/ui/package.json&quot; type=&quot;1&quot;/&gt;&#10;&lt;item path=&quot;/ui/spec&quot; type=&quot;2&quot;/&gt;&#10;&lt;item path=&quot;/ui/src&quot; type=&quot;2&quot;/&gt;&#10;&lt;/resources&gt;}"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${workspace_loc:/ui}/../oxbuild-binding/oxbuild-binding.xml"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_RUN_BUILD_KINDS" value="full,incremental,auto,clean"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-Dmodule=web&#10;-Dworkspace-root=${workspace_loc}/.."/>
+<booleanAttribute key="org.eclipse.ui.externaltools.ATTR_TRIGGERS_CONFIGURED" value="true"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${workspace_loc:/ui}"/>
+<stringAttribute key="process_factory_id" value="org.eclipse.ant.ui.remoteAntProcessFactory"/>
+</launchConfiguration>

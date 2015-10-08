@@ -12,16 +12,16 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('io.ox/core/import/import',
-    ['io.ox/core/extensions',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/tk/attachments',
-     'io.ox/core/folder/api',
-     'io.ox/core/api/import',
-     'io.ox/core/notifications',
-     'gettext!io.ox/core',
-     'less!io.ox/core/import/style'
-    ], function (ext, dialogs, attachments, folderAPI, api, notifications, gt) {
+define('io.ox/core/import/import', [
+    'io.ox/core/extensions',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/tk/attachments',
+    'io.ox/core/folder/api',
+    'io.ox/core/api/import',
+    'io.ox/core/notifications',
+    'gettext!io.ox/core',
+    'less!io.ox/core/import/style'
+], function (ext, dialogs, attachments, folderAPI, api, notifications, gt) {
 
     'use strict';
 
@@ -94,7 +94,11 @@ define('io.ox/core/import/import',
         draw: function (baton) {
             var label = $('<span class="filename">');
             this.append(
-                baton.nodes.file_upload = attachments.fileUploadWidget({ tabindex: 0, multi: false }).append(label)
+                baton.nodes.file_upload = attachments.fileUploadWidget({
+                    tabindex: 0,
+                    multi: false,
+                    buttontext: gt('Upload file')
+                }).append(label)
             );
             var $input = baton.nodes.file_upload.find('input[type="file"]');
             $input.on('change', function (e) {
@@ -163,7 +167,9 @@ define('io.ox/core/import/import',
             //get folder and process
             folderAPI.get(id).done(function () {
 
-                new dialogs.ModalDialog()
+                new dialogs.ModalDialog({
+                    help: 'ox.appsuite.user.sect.datainterchange.import.contactscsv.html#ox.appsuite.user.sect.datainterchange.import.contactscsv'
+                })
                 .build(function () {
 
                     this.getHeader().append(
@@ -175,8 +181,8 @@ define('io.ox/core/import/import',
 
                     ext.point('io.ox/core/import').invoke('draw', this.form, baton);
 
-                    this.addPrimaryButton('import', gt('Import'), 'import', {'tabIndex': '1'})
-                        .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
+                    this.addPrimaryButton('import', gt('Import'), 'import', { 'tabIndex': '1' })
+                        .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' });
 
                     this.getPopup().addClass('import-dialog');
                 })
@@ -196,13 +202,22 @@ define('io.ox/core/import/import',
                                     return item && item.error;
                                 })
                                 .compact()
-                                .value();
+                                .value(),
+                                defaultMessage = //#. Error message if calendar import failed
+                                                 gt('There was no appointment data to import');
+                            if ( module === 'contacts' ) {
+                                defaultMessage = //#. Error message if contact import failed
+                                                 gt('There was no contact data to import');
+                            } else if ( module === 'tasks' ) {
+                                defaultMessage = //#. Error message if task import failed
+                                    gt('There was no task data to import');
+                            }
+
                             notifications.yell({
                                 type: 'error',
                                 message: list.length ?
                                     list.join('\n\n') :
-                                    //#. Error message if calender import failed
-                                    gt('There was no appointment data to import'),
+                                    defaultMessage,
                                 duration: -1
                             });
                             popup.idle();
@@ -226,11 +241,13 @@ define('io.ox/core/import/import',
                         folder: id
                     })
                     .done(function (data) {
-                        //get failed records
+
+                        // get failed records
                         var failed = _.filter(data, function (item) {
                             return item && item.error;
                         });
-                        //cache
+
+                        // cache
                         try {
                             // todo: clean that up; fails for calendar
                             if (baton.api.caches.all.grepRemove) {
@@ -245,13 +262,22 @@ define('io.ox/core/import/import',
                             if (ox.debug) console.warn('import triggering global refresh because of unknown API', e);
                             ox.trigger('refresh^');
                         }
-                        //partially failed?
+
+                        // partially failed?
                         if (failed.length === 0) {
+                            // all good; no failures
                             notifications.yell('success', gt('Data imported successfully'));
+                        } else if (data.length === failed.length) {
+                            // failed
+                            // #. Failure message if no data (e.g. appointments) could be imported
+                            var custom = { error: gt('Failed to import any data') };
+                            failHandler([].concat(custom, failed));
                         } else {
-                            var custom = { error: gt('Data only partially imported ( %1$s of %2$s records)', (data.length - failed.length), data.length)};
+                            // partially failed
+                            var custom = { error: gt('Data only partially imported (%1$s of %2$s records)', (data.length - failed.length), data.length) };
                             failHandler([].concat(custom, failed));
                         }
+
                         popup.close();
                     })
                     .fail(failHandler);

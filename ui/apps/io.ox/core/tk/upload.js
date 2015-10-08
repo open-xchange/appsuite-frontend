@@ -11,11 +11,11 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/tk/upload',
-    ['io.ox/core/event',
-     'io.ox/core/notifications',
-     'gettext!io.ox/core'
-    ], function (Events, notifications, gt) {
+define('io.ox/core/tk/upload', [
+    'io.ox/core/event',
+    'io.ox/core/notifications',
+    'gettext!io.ox/core'
+], function (Events, notifications, gt) {
 
     'use strict';
 
@@ -32,7 +32,7 @@ define('io.ox/core/tk/upload',
 
     // options should contain a list of actions. The action id will be the first parameter to the event handlers
     // { actions: [
-    //      {id: 'action1', label: 'Some cool Action'}, {id: 'action2', label: 'Some other cool action'}
+    //      {id: 'action1', label: 'Some cool Action' }, { id: 'action2', label: 'Some other cool action' }
     // ]}
     function DropZone(options) {
         require(['less!io.ox/core/tk/upload']);
@@ -151,7 +151,7 @@ define('io.ox/core/tk/upload',
                     try {
                         effectAllowed = origEvt.dataTransfer.effectAllowed;
                     } catch (err) {}
-                    origEvt.dataTransfer.dropEffect = 'move' === effectAllowed || 'linkMove' === effectAllowed ? 'move' : 'copy';
+                    origEvt.dataTransfer.dropEffect = effectAllowed === 'move' || effectAllowed === 'linkMove' ? 'move' : 'copy';
 
                     clearTimeout(dragLeaveTimer);
                     e.preventDefault();
@@ -204,6 +204,7 @@ define('io.ox/core/tk/upload',
         delegate = _.extend({
             start: $.noop,
             stop: $.noop,
+            changed: $.noop,
             progress: function () { return $.when(); },
             type: false
         }, delegate || {});
@@ -238,48 +239,83 @@ define('io.ox/core/tk/upload',
 
         this.offer = function (file, options) {
 
-            var fileTitle, proceed = true, self = this;
-
-            // add to queue - handles both arrays and single objects properly
-            _([].concat(file)).each(function (file) {
-                files.push({ file: file, options: options || {} });
-            });
+            var self = this;
 
             require(['settings!io.ox/core', 'io.ox/core/strings'], function (settings, strings) {
-                var properties = settings.get('properties');
+                var properties = settings.get('properties'),
+                    newFiles = [].concat(file),
+                    validFiles;
+
                 if (properties && delegate.type !== 'importEML') {
-                    var total = 0,
+                    var totalUploadSize = 0,
                         maxSize = properties.infostoreMaxUploadSize,
                         quota = properties.infostoreQuota;
-                    _.each(files, function (item) {
-                        var f = item.file;
-                        fileTitle = f.name;
-                        total += f.size;
-                        if (maxSize > 0 && f.size > maxSize) {
-                            proceed = false;
-                            notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxSize)));
-                            self.stop();
-                            return;
-                        }
-                        if (quota > 0) {
-                            if (total > quota - properties.infostoreUsage) {
-                                proceed = false;
-                                notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(quota)));
-                                self.stop();
-                                return;
-                            }
-                        }
+
+                    validFiles = _(newFiles).filter(function (f) {
+                        var exceedMaximum = maxSize > 0 && f.size > maxSize;
+                        if (!exceedMaximum) totalUploadSize += f.size;
+                        return !exceedMaximum;
                     });
+
+                    if (quota > 0 && totalUploadSize > quota - properties.infostoreUsage) {
+                        notifications.yell('error',
+                            gt.format(
+                                //#. %1$s quota limit
+                                gt.ngettext(
+                                    'The file cannot be uploaded because it exceeds the quota limit of %1$s',
+                                    'The files cannot be uploaded because they exceed the quota limit of %1$s',
+                                    newFiles.length
+                                ),
+                                strings.fileSize(quota)
+                            )
+                        );
+                        return;
+                    }
+
+                    if (validFiles.length < newFiles.length) {
+                        if (newFiles.length - validFiles.length === 1) {
+                            var f = _.without.apply(_, [newFiles].concat(validFiles))[0];
+                            notifications.yell('error',
+                                //#. %1$s the filename
+                                //#. %2$s the maximum file size
+                                gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', f.name, strings.fileSize(maxSize))
+                            );
+                        } else if (validFiles.length === 0) {
+                            notifications.yell('error',
+                                //#. %1$s the maximum file size
+                                gt('The files cannot be uploaded because each file exceeds the maximum file size of %1$s', strings.fileSize(maxSize))
+                            );
+                        } else {
+                            notifications.yell('warning',
+                                //#. %1$s the maximum file size
+                                gt('Some files cannot be uploaded because they exceed the maximum file size of %1$s', strings.fileSize(maxSize))
+                            );
+                        }
+                    }
                 }
-                if (proceed) self.queueChanged();
+
+                _(validFiles || newFiles).each(function (file) {
+                    files.push({ file: file, options: options });
+                });
+                self.queueChanged();
             });
         };
 
         this.length = 0;
 
+        this.remove = function (index) {
+            files.splice(index, 1);
+
+            //if current file is removed, decrement position
+            if (index === position) {
+                position--;
+            }
+        };
+
         this.queueChanged = function () {
             this.length = files.length;
-            this.trigger('changed', this);
+            delegate.changed(files[position], position, files);
+            this.trigger('changed', files[position], position, files);
             this.next();
         };
 

@@ -11,10 +11,10 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('plugins/portal/updater/register',
-    ['io.ox/core/extensions',
-     'gettext!plugins/portal'
-    ], function (ext, gt) {
+define('plugins/portal/updater/register', [
+    'io.ox/core/extensions',
+    'gettext!plugins/portal'
+], function (ext, gt) {
 
     'use strict';
 

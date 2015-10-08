@@ -11,13 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/favorites',
-    ['io.ox/core/folder/node',
-     'io.ox/core/folder/api',
-     'io.ox/core/extensions',
-     'settings!io.ox/core',
-     'gettext!io.ox/core'
-     ], function (TreeNodeView, api, ext, settings, gt) {
+define('io.ox/core/folder/favorites', [
+    'io.ox/core/folder/node',
+    'io.ox/core/folder/api',
+    'io.ox/core/extensions',
+    'settings!io.ox/core',
+    'gettext!io.ox/core'
+], function (TreeNodeView, api, ext, settings, gt) {
 
     'use strict';
 
@@ -27,46 +27,71 @@ define('io.ox/core/folder/favorites',
         var id = 'virtual/favorites/' + module,
             model = api.pool.getModel(id),
             collection = api.pool.getCollection(id),
-            favorites = settings.get('favorites/' + module, []);
+            // track folders without permission or that no longer exist
+            invalid = {};
 
         function store(ids) {
             settings.set('favorites/' + module, ids).save();
         }
 
         function storeCollection() {
-            store(collection.pluck('id'));
+            var ids = _(collection.pluck('id')).filter(function (id) {
+                return !invalid[id];
+            });
+            store(ids);
         }
 
         // define virtual folder
         api.virtual.add(id, function () {
-            return api.multiple(favorites).then(function (response) {
-                // compact() removes non-existent entries
-                var list = _(response).compact();
+            return api.multiple(settings.get('favorites/' + module, []), { errors: true }).then(function (response) {
+                // remove non-existent entries
+                var list = _(response).filter(function (item) {
+                    // FLD-0008 -> not found
+                    // FLD-0003 -> permission denied
+                    if (item.error && (item.code === 'FLD-0008' || item.code === 'FLD-0003')) {
+                        invalid[item.id] = true;
+                        return false;
+                    } else {
+                        delete invalid[item.id];
+                        return true;
+                    }
+                });
                 _(list).each(api.injectIndex.bind(api, id));
                 model.set('subfolders', list.length > 0);
                 // if there was an error we update settings
-                if (list.length !== response.length) storeCollection();
+                if (list.length !== response.length) _.defer(storeCollection);
                 return list;
             });
         });
 
         // respond to change events
+        collection.on('add', function (model) {
+            delete invalid[model.id];
+        });
+
         collection.on('add remove', storeCollection);
+
+        // respond to collection remove event to sync favorites
+        api.on('collection:remove', function (id, model) {
+            collection.remove(model);
+        });
 
         var extension = {
             id: 'favorites',
-            index: 'first',
+            index: 1,
             draw: function (tree) {
 
                 this.append(
                     new TreeNodeView({
                         empty: false,
                         folder: id,
+                        indent: !api.isFlat(module),
                         open: false,
                         parent: tree,
                         sortable: true,
                         title: gt('Favorites'),
-                        tree: tree
+                        tree: tree,
+                        icons: tree.options.icons
                     })
                     .render().$el.addClass('favorites')
                 );
@@ -123,13 +148,17 @@ define('io.ox/core/folder/favorites',
 
     ext.point('io.ox/core/foldertree/contextmenu/default').extend({
         id: 'toggle-favorite',
-        index: 1000,
+        // place after "Add new folder"
+        index: 1010,
         draw: function (baton) {
 
             var id = baton.data.id,
                 module = baton.module,
                 favorites = settings.get('favorites/' + module, []),
                 isFavorite = _(favorites).indexOf(id) > -1;
+
+            // don't offer for trash folders
+            if (api.is('trash', baton.data)) return;
 
             addLink(this, {
                 action: 'toggle-favorite',

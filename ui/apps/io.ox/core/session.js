@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/session',
-    ['io.ox/core/http',
-     'io.ox/core/manifests',
-     'io.ox/core/uuids'
-    ], function (http, manifests, uuids) {
+define('io.ox/core/session', [
+    'io.ox/core/http',
+    'io.ox/core/manifests',
+    'io.ox/core/uuids'
+], function (http, manifests, uuids) {
 
     'use strict';
 
@@ -24,9 +24,11 @@ define('io.ox/core/session',
     var getBrowserLanguage = function () {
         var language = (navigator.language || navigator.userLanguage).substr(0, 2),
             languages = ox.serverConfig.languages || {};
+        // special treatment for 'en' (return en_US instead of en_UK which comes first in the list)
+        if (language === 'en') return 'en_US';
         return _.chain(languages).keys().find(function (id) {
-                return id.substr(0, 2) === language;
-            }).value();
+            return id.substr(0, 2) === language;
+        }).value();
     };
 
     var check = function (language) {
@@ -42,6 +44,7 @@ define('io.ox/core/session',
         if ('context_id' in data) ox.context_id = data.context_id || 0;
         // if the user has set the language on the login page, use this language instead of server settings lang
         ox.language = language || check(data.locale) || check(getBrowserLanguage()) || 'en_US';
+        _.setCookie('language', ox.language);
         manifests.reset();
         $('html').attr('lang', ox.language.split('_')[0]);
         // should not hide store() request here; made debugging hard
@@ -121,77 +124,69 @@ define('io.ox/core/session',
 
             var pending = null;
 
-            return function (username, password, store, language, forceLanguage) {
+            return function (options) {
 
-                var def = $.Deferred(), multiple = [];
+                if (!ox.online) {
+                    // don't try when offline
+                    set({ session: 'offline', user: options.username }, options.language);
+                    return $.when({ session: ox.session, user: ox.user });
+                }
 
-                // online?
-                if (ox.online) {
-                    // pending?
-                    if (pending !== null) {
-                        return pending;
-                    } else {
-                        // mark as pending
-                        pending = def.always(function () {
-                            pending = null;
-                        });
-                        // POST request
-                        if (forceLanguage) {
-                            multiple.push({
-                                module: 'jslob',
-                                action: 'update',
-                                id: 'io.ox/core',
-                                data: {
-                                    // permanent language change
-                                    language: forceLanguage
-                                }
-                            });
-                        }
-                        http.POST({
-                            module: 'login',
-                            appendColumns: false,
-                            appendSession: false,
-                            processResponse: false,
-                            params: {
-                                action: 'login',
-                                name: username,
-                                password: password,
-                                // current browser language; required for proper error messages
-                                language: language || 'en_US',
-                                client: that.client(),
-                                version: that.version(),
-                                timeout: TIMEOUTS.LOGIN,
-                                multiple: JSON.stringify(multiple)
-                            }
-                        })
-                        .done(function (data) {
+                // pending?
+                if (pending !== null) return pending;
 
+                var params = _.extend(
+                    {
+                        action: 'login',
+                        name: '',
+                        password: '',
+                        // current browser language; required for proper error messages
+                        language: 'en_US',
+                        client: that.client(),
+                        version: that.version(),
+                        timeout: TIMEOUTS.LOGIN,
+                        rampup: true,
+                        rampupFor: 'open-xchange-appsuite'
+                    },
+                    _(options).pick('action', 'name', 'password', 'language', 'rampup', 'rampupFor', 'share', 'target')
+                );
+
+                if (options.forceLanguage) params.storeLanguage = true;
+
+                return (
+                    pending = http.POST({
+                        module: 'login',
+                        appendColumns: false,
+                        appendSession: false,
+                        processResponse: false,
+                        params: params
+                    })
+                    .then(
+                        function success(data) {
+                            // store rampup data
+                            ox.rampup = data.rampup || ox.rampup || {};
                             // store session
                             // we pass forceLanguage (might be undefined); fallback is data.locale
-                            set(data, forceLanguage);
+                            set(data, options.forceLanguage);
 
                             // global event
                             ox.trigger('login', data);
 
-                            if (store) {
-                                that.store().done(function () { def.resolve(data); });
+                            if (options.store) {
+                                return that.store().then(function () { return data; });
                             } else {
-                                def.resolve(data);
+                                return data;
                             }
-                        })
-                        .fail(function (response) {
-                            if (console && console.error) {
-                                console.error('Login failed!', response.error, response.error_desc || '');
-                            }
-                            def.reject(response);
-                        });
-                    }
-                } else {
-                    // offline
-                    set({ session: 'offline', user: username }, language);
-                    def.resolve({ session: ox.session, user: ox.user });
-                }
-                return def;
+                        },
+                        function fail(e) {
+                            if (ox.debug) console.error('Login failed!', e.error, e.error_desc || '');
+                            return e;
+                        }
+                    )
+                    .always(function () {
+                        pending = null;
+                    })
+                );
             };
         }()),
 
@@ -258,6 +253,10 @@ define('io.ox/core/session',
             }
         },
 
+        setClient: function (client) {
+            if (client) CLIENT = client;
+        },
+
         client: function () {
             return CLIENT;
         },
@@ -265,7 +264,9 @@ define('io.ox/core/session',
         version: function () {
             // need to work with ox.version since we don't have the server config for auto-login
             return String(ox.version).split('.').slice(0, 3).join('.');
-        }
+        },
+
+        getBrowserLanguage: getBrowserLanguage
     };
 
     return that;

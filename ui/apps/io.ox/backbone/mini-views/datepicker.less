@@ -1,0 +1,66 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
+ */
+
+.dateinput {
+    input {
+        text-align: center;
+    }
+    .time-field {
+        width: 100px;
+        border-left: none;
+    }
+    .typeahead.calendaredit {
+        height: 200px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        min-width: 85px;
+        a {
+            text-align: right;
+            padding: 3px 15px 3px 3px;
+        }
+    }
+    &.dateonly .datepicker-day-field {
+        border-radius: @border-radius-base;
+    }
+    .datepicker-day-field {
+        width: 120px;
+    }
+    .timezone {
+        width: auto;
+        font-size: 12px;
+
+        &.btn {
+            cursor: pointer;
+        }
+
+        &:hover, &:active, &:focus {
+            color: #555;
+            text-decoration: none;
+        }
+    }
+}
+
+/* Mobile */
+@media all and (max-width: 480px), all and (max-device-width: 480px) {
+
+    .dateinput {
+        .input-group {
+            display: block;
+        }
+        .datepicker-day-field {
+            padding: 4px 6px;
+            width: 100%;
+            border-radius: @border-radius-base;
+        }
+    }
+}

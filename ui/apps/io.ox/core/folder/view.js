@@ -11,12 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/view',
-    ['io.ox/core/extensions',
-     'io.ox/core/folder/api',
-     'settings!io.ox/core',
-     'gettext!io.ox/core'
-    ], function (ext, api, settings, gt) {
+define('io.ox/core/folder/view', [
+    'io.ox/core/extensions',
+    'io.ox/core/folder/api',
+    'settings!io.ox/core',
+    'gettext!io.ox/core'
+], function (ext, api, settings, gt) {
 
     'use strict';
 
@@ -35,7 +35,9 @@ define('io.ox/core/folder/view',
             open = app.settings.get('folderview/open', {}),
             nodes = app.getWindow().nodes,
             sidepanel = nodes.sidepanel,
-            hiddenByWindowResize = false;
+            hiddenByWindowResize = false,
+            forceOpen = false,
+            DEFAULT_WIDTH = 250;
 
         //
         // Utility functions
@@ -55,7 +57,7 @@ define('io.ox/core/folder/view',
         }
 
         function getWidth() {
-            return app.settings.get('folderview/width/' + _.display());
+            return app.settings.get('folderview/width/' + _.display(), DEFAULT_WIDTH);
         }
 
         function applyWidth(x) {
@@ -75,6 +77,11 @@ define('io.ox/core/folder/view',
             nodes.body.css('left', chromeless || tooSmall ? 0 : 50);
         }
 
+        var populateResize = _.throttle(function () {
+            // trigger generic resize event so that other components can respond to it
+            $(document).trigger('resize');
+        }, 50);
+
         //
         // Add API
         //
@@ -82,6 +89,7 @@ define('io.ox/core/folder/view',
         app.folderView = {
 
             tree: tree,
+            forceOpen: forceOpen,
 
             isVisible: function () {
                 return visible;
@@ -93,14 +101,17 @@ define('io.ox/core/folder/view',
                 applyInitialWidth();
                 sidepanel.addClass('visible');
                 app.trigger('folderview:open');
+                populateResize();
             },
 
             hide: function () {
                 visible = false;
+                forceOpen = false;
                 if (!hiddenByWindowResize) storeVisibleState();
                 resetLeftPosition();
                 sidepanel.removeClass('visible').css('width', '');
                 app.trigger('folderview:close');
+                populateResize();
             },
 
             toggle: function (state) {
@@ -120,15 +131,17 @@ define('io.ox/core/folder/view',
                     if (x > maxSidePanelWidth || x < minSidePanelWidth) return;
                     app.trigger('folderview:resize');
                     applyWidth(width = x);
+                    populateResize();
                 }
 
                 function mouseup(e) {
                     $(this).off('mousemove.resize mouseup.resize');
+                    populateResize();
                     // auto-close?
                     if (e.pageX - base < minSidePanelWidth * 0.75) {
                         app.folderView.hide();
                     } else {
-                        storeWidth(width);
+                        storeWidth(width || DEFAULT_WIDTH);
                     }
                 }
 
@@ -168,7 +181,7 @@ define('io.ox/core/folder/view',
             if (!nodes.outer.is(':visible')) return;
             // respond to current width
             var threshold = app.folderView.resize.autoHideThreshold;
-            if (!hiddenByWindowResize && visible && width <= threshold) {
+            if (!app.folderView.forceOpen && !hiddenByWindowResize && visible && width <= threshold) {
                 app.folderView.hide();
                 hiddenByWindowResize = true;
             } else if (hiddenByWindowResize && width > threshold) {
@@ -191,7 +204,7 @@ define('io.ox/core/folder/view',
             type: undefined,
             view: 'ApplicationFolderTree',
             // disable folder popup as it takes to much space for startup on small screens
-            visible: _.device('small') ? false : app.settings.get('folderview/visible/' + _.display(), true)
+            visible: _.device('smartphone') ? false : app.settings.get('folderview/visible/' + _.display(), true)
         });
 
         //
@@ -219,16 +232,22 @@ define('io.ox/core/folder/view',
         var id = app.folder.get();
 
         if (_.device('smartphone')) {
-            // respond to tab event for better responsiveness
-            // does not work reliable on iOS, use click instead
-            // Safari removes the 300ms click delay, so it's fine to use
-            // click on iOS
-            tree.$el.on(_.device('ios') ? 'click' : 'tap', '.folder', _.debounce(function (e) {
+            // due to needed support for older androids we use click here
+            tree.$el.on('click', '.folder', _.debounce(function (e) {
                 // use default behavior for arrow
                 if ($(e.target).is('.folder-arrow, .fa')) return;
+                // use default behavior for non-selectable virtual folders
+                var targetFolder = $(e.target).closest('.folder'),
+                    selectable = tree.selection && tree.selection.selectableVirtualFolders[targetFolder.data('id')],
+                    mobileSelectMode = app.props.get('mobileFolderSelectMode');
+                if (targetFolder.is('.virtual') && (!selectable || mobileSelectMode === true)) return;
                 // edit mode?
-                if (app.props.get('mobileFolderSelectMode') === true) {
-                    return tree.$dropdown.find('.dropdown-toggle').click();
+                if (mobileSelectMode === true) {
+                    // ignore selection of non-labels in mobile edit mode
+                    if ($(e.target).parent().hasClass('folder-label')) {
+                        tree.$dropdown.find('.dropdown-toggle').trigger('click', 'foldertree');
+                    }
+                    return;
                 }
                 // otherwise
                 // default 'listView'
@@ -252,7 +271,13 @@ define('io.ox/core/folder/view',
                 _.defer(function () {
                     api.path(id).done(function (path) {
                         // get all ids except the folder itself, therefore slice(0, -1);
-                        var ids = _(path).pluck('id').slice(0, -1);
+                        var ids = _(path).pluck('id').slice(0, -1),
+                            // in our apps folders are organized in virtual folders, we need to open the matching section too (private, shared, public)
+                            section = api.getSection(_(path).where({ 'id': id })[0].type);
+
+                        if (section && _(['mail','contacts', 'calendar', 'tasks', 'infostore']).contains(tree.module) && tree.flat && tree.context === 'app') {
+                            ids.push('virtual/flat/' + tree.module + '/' + section );
+                        }
                         tree.open = _(tree.open.concat(ids)).uniq();
                     })
                     .always(function () {
@@ -263,8 +288,11 @@ define('io.ox/core/folder/view',
                         }
                         // and on appear
                         tree.once('appear:' + id, function () {
-                            tree.selection.preselect(id);
-                            tree.selection.scrollIntoView(id);
+                            // defer selection; might be too fast otherwise
+                            _.defer(function () {
+                                tree.selection.preselect(id);
+                                tree.selection.scrollIntoView(id);
+                            });
                         });
                         // render now
                         tree.render();
@@ -279,6 +307,9 @@ define('io.ox/core/folder/view',
         tree.$('.tree-container').attr({
             'aria-label': gt('Folders')
         });
+
+        // add "flat" class to allow specific CSS rules
+        tree.$('.tree-container').toggleClass('flat-tree', api.isFlat(tree.options.module));
 
         // apply all options
         _(ext.point(POINT + '/options').all()).each(function (obj) {
@@ -305,14 +336,14 @@ define('io.ox/core/folder/view',
         }());
 
         // respond to folder removal
-        api.on('remove:prepare', function (e, data) {
+        api.on('before:remove', function (data) {
             // select parent or default folder
             var id = data.folder_id === '1' ? api.getDefaultFolder(data.module) || '1' : data.folder_id;
             tree.selection.set(id);
         });
 
         // respond to folder move
-        api.on('move', function (e, id, newId) {
+        api.on('move', function (id, newId) {
             tree.selection.set(newId);
         });
 

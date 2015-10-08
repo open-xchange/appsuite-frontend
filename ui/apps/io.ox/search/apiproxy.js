@@ -11,11 +11,12 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/apiproxy',
-    ['io.ox/core/extensions',
-     'gettext!io.ox/core',
-     'io.ox/search/api',
-     'io.ox/core/notifications'], function (ext, gt, api, notifications) {
+define('io.ox/search/apiproxy',[
+    'io.ox/core/extensions',
+    'gettext!io.ox/core',
+    'io.ox/search/api',
+    'io.ox/core/notifications'
+], function (ext, gt, api, notifications) {
 
     'use strict';
 
@@ -28,77 +29,25 @@ define('io.ox/search/apiproxy',
         var POINT = ext.point('io.ox/search/api/autocomplete');
 
         POINT.extend({
-            id: 'exclusive',
+            id: 'filter',
             index: 100,
             customize: function (baton) {
-                _.each(baton.data, function (facet) {
-                    // handle 'exclusive' facets (use options as values also)
-                    if (facet.style === 'exclusive' && !facet.values) {
-                        facet.values = [];
-                        _.each(facet.options, function (option) {
-                            var value = _.extend({}, option, {options: facet.options});
-                            delete value.filter;
-                            facet.values.push(value);
-                        });
-                    }
+                baton.data = _.filter(baton.data, function (facet) {
+                    return facet.style === 'simple' || ['contacts', 'contact', 'participant', 'task_participants'].indexOf(facet.id) > -1;
                 });
             }
         });
 
         POINT.extend({
-            id: 'custom-facet-daterange',
-            index: 200,
+            id: 'contact-all-option',
+            index: 100,
             customize: function (baton) {
-                if (_.device('small')) return;
-                if (baton.args[0].params.module !== 'mail') return;
-
-                // for mail only
-                _.each(baton.data, function (facet) {
-                    // hack to add custom timespan value
-                    if (facet.id === 'date') {
-
-                        // new id
-                        facet.id = facet.id + '.custom';
-                        var tmp = _.copy(facet.values[0]);
-
-                        delete tmp.filter;
-                        tmp.facet = facet.id;
-                        tmp.name = gt('date range');
-                        tmp.id = 'daterange';
-                        tmp.point = 'daterange';
-                        tmp.options = [];
-
-                        delete facet.options;
-                        facet.values = [tmp];
-                    }
-                });
-            }
-        });
-
-        POINT.extend({
-            id: 'only-once',
-            index: 300,
-            customize: function (baton) {
-
-                if (_.device('small')) return;
-
-                var whitelist = {
-                        style: ['simple'],
-                        id: ['contacts', 'contact', 'participant', 'task_participants']
-                    };
-
-                // flag  facet
-                _.each(baton.data, function (facet) {
-                    var style = _.contains(whitelist.style, facet.style),
-                        id = _.contains(whitelist.id, facet.id),
-                        advanced = !(style || id);
-
-                    // flag when not in whitelist
-                    if (advanced)
-                        facet.flags.push('advanced');
-                    else if (style) {
-                        facet.flags.push('highlander');
-                    }
+                baton.data = _.each(baton.data, function (facet) {
+                    if (['contacts', 'contact', 'participant', 'task_participants'].indexOf(facet.id) < 0) return;
+                    // use 'all' option als default (in contrast to 'from' or 'to')
+                    _.each(facet.values, function (value) {
+                        (value.options || []).reverse();
+                    });
                 });
             }
         });
@@ -119,7 +68,7 @@ define('io.ox/search/apiproxy',
          * @return {deferred} returns available facets
          */
         function extend (args, data) {
-            var baton = ext.Baton.ensure({app: app, data: data.facets, args: args});
+            var baton = ext.Baton.ensure({ app: app, data: data.facets, args: args });
             POINT.invoke('customize', this, baton);
             return baton.data;
         }
@@ -137,6 +86,31 @@ define('io.ox/search/apiproxy',
             return api.autocomplete(opt).then(extend.bind(this, args));
         }
 
+        /**
+         * add static account facet
+         * @param {object} request data
+         */
+        function addAccountFacet (request) {
+            var folder = _.findWhere(request.data.facets, { facet: 'folder' }),
+                def = $.Deferred();
+
+            if (!folder || !folder.value || !model.isMandatory('account')) return def.resolve();
+
+            // get account_id of current folder for account facet
+            require(['io.ox/core/folder/api'], function (folderAPI) {
+                folderAPI.get(folder.value)
+                    .then(function (data) {
+                        request.data.facets.push({
+                            facet: 'account',
+                            filter: null,
+                            value: data.account_id
+                        });
+                        def.resolve();
+                    });
+            });
+            return def;
+        }
+
         var model = app.getModel(),
             proxy = {
                 // alias for autocomplete tk
@@ -148,13 +122,15 @@ define('io.ox/search/apiproxy',
                             data: {
                                 prefix: query
                             }
-                        };
+                        },
+                        addAccount = _.partial(addAccountFacet, standard);
 
                     return model.getFacets()
                             .then(function (facets) {
                                 // extend standard options
                                 standard.data.facets = facets;
                             })
+                            .then(addAccount)
                             .then(function () {
                                 // call server
                                 return autocomplete(standard, options);
@@ -165,7 +141,7 @@ define('io.ox/search/apiproxy',
                                     var app = model.getApp();
                                     // add temporary mapping (default app)
                                     model.defaults.options.mapping[app] = model.defaults.options.defaultApp;
-                                    return autocomplete(standard, options, { params: {module: model.getModule()} });
+                                    return autocomplete(standard, options, { params: { module: model.getModule() } });
                                 }
                                 return error;
                             })
@@ -242,6 +218,7 @@ define('io.ox/search/apiproxy',
                         app.view.model.trigger('query:start');
                         return model.getFacets()
                             .done(filterFacets.bind(this, opt, app.view))
+                            .then(addAccountFacet.bind(this, opt, app.view))
                             .then(getResults.bind(this, opt))
                             .then(enrich.bind(this, opt))
                             .then(

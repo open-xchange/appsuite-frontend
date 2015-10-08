@@ -55,7 +55,7 @@ define([
 
                 it('paints an empty unordered list without any link extensions', function (done) {
                     var node = $('<div class="testNode">').appendTo($('body', document));
-                    this.baton = {id: 1};
+                    this.baton = { id: 1 };
 
                     this.point.invoke('draw', node, this.baton);
                     waitsFor(function () {
@@ -69,7 +69,7 @@ define([
 
                 it('work with one link extensions', function (done) {
                     var node = $('<div class="testNode">').appendTo($('body', document));
-                    this.baton = {id: 1};
+                    this.baton = { id: 1 };
 
                     ext.point('spec/io.ox/core/extPatterns/default').extend(new Link({
                         id: 'testLink',
@@ -89,7 +89,7 @@ define([
 
                 it('work with a few link extensions', function (done) {
                     var node = $('<div class="testNode">').appendTo($('body', document));
-                    this.baton = {id: 1};
+                    this.baton = { id: 1 };
 
                     ext.point('spec/io.ox/core/extPatterns/default').extend(new Link({
                         id: 'testLink1',

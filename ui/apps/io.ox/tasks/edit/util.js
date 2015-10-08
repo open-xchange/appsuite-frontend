@@ -16,27 +16,10 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
     'use strict';
 
     var util = {
-        splitExtensionsByRow: function (extensions, rows) {
-            _(extensions).each(function (extension) {
-                //seperate extensions with rows
-                if (extension.row) {
-                    if (!rows[extension.row]) {
-                        rows[extension.row] = [];
-                    }
-                    rows[extension.row].push(extension);
-                } else {
-                    //rest is used for extension points without row
-                    if (!rows.rest) {
-                        rows.rest = [];
-                    }
-                    rows.rest.push(extension);
-                }
-            });
-        },
         //build progressField and buttongroup
         buildProgress: function (val) {
             var val = val || 0,
-                progress = $('<input class="form-control progress-field">').attr({type: 'text', id: 'task-edit-progress-field', tabindex: 1}).val(val),
+                progress = $('<input class="form-control progress-field">').attr({ type: 'text', id: 'task-edit-progress-field', tabindex: 1 }).val(val),
                 wrapper = $('<div class="input-group">').append(
                     progress,
                     $('<div class="input-group-btn">').append(
@@ -73,51 +56,33 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
                     )
                 );
 
-            return {progress: progress, wrapper: wrapper};
+            return { progress: progress, wrapper: wrapper };
         },
-        buildExtensionRow: function (parent, extensions, baton) {
-            var row = $('<div class="row">').appendTo(parent);
-            for (var i = 0; i < extensions.length; i++) {
-                extensions[i].invoke('draw', row, baton);
+        sanitizeBeforeSave: function (baton) {
+
+            // check if waiting for attachmenthandling is needed
+            var list = baton.attachmentList;
+            if (list && (list.attachmentsToAdd.length + list.attachmentsToDelete.length) > 0) {
+                //temporary indicator so the api knows that attachments need to be handled even if nothing else changes
+                baton.model.attributes.tempAttachmentIndicator = true;
             }
-            //find labels and make them focus the inputfield
-            /*row.find('label').each(function () {
-                if (this) {
-                    $(this).attr('for', $(this).next().attr('id'));
+
+            // remove hours and minutes when full_time attribute it set
+            if (baton.model.get('full_time')) {
+                if (baton.model.get('end_time')) {
+                    baton.model.set('end_time', moment.utc(baton.model.get('end_time')).startOf('day').valueOf(), { silent: true });
                 }
-            });*/
-            return row;
-        },
-        buildRow: function (parent, nodes, widths, fillGrid) {
-
-            //check for impossible number of rows to avoid dividing by 0 or overflowing rows
-            if (!nodes || nodes.length === 0 || nodes.length > 12) {
-                return;
-            }
-
-            //check for valid widths
-            if (!widths || nodes.length !== widths.length) {
-                var temp = 12 / nodes.length;
-                //we don't want floats
-                temp = parseInt(temp, 10);
-                widths = [];
-                for (var i = 0; i < nodes.length; i++) {
-                    widths.push(temp);
+                if (baton.model.get('start_time')) {
+                    baton.model.set('start_time', moment.utc(baton.model.get('start_time')).startOf('day').valueOf(), { silent: true });
                 }
             }
 
-            var row = $('<div class="row">').appendTo(parent);
-            for (var i = 0; i < nodes.length; i++) {
-                if (_.isArray(widths[i])) {
-                    $('<div>').addClass('span' + widths[i][0] + ' offset' + widths[i][1]).append(nodes[i]).appendTo(row);
-                } else {
-                    $('<div>').addClass('span' + widths[i]).append(nodes[i]).appendTo(row);
-                }
+            // accept any formating
+            if (baton.model.get('actual_costs')) {
+                baton.model.set('actual_costs', (String(baton.model.get('actual_costs'))).replace(/,/g, '.'));
             }
-
-            //fillout gridCells
-            if (fillGrid || fillGrid === undefined) {
-                row.children().children().not('label').addClass('col-md-12');
+            if (baton.model.get('target_costs')) {
+                baton.model.set('target_costs', (String(baton.model.get('target_costs'))).replace(/,/g, '.'));
             }
         }
     };

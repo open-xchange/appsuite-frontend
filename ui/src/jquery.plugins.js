@@ -166,20 +166,6 @@
         return $('<div>').addClass('scrollable-pane').appendTo(this.addClass('scrollable'));
     };
 
-    $.labelize = (function () {
-
-        var guid = 1;
-
-        return function (node, id) {
-            if (node.attr('id')) {
-                id = node.attr('id');
-            } else {
-                id = (id || 'field') + '_' + (guid++);
-            }
-            return $('<label>', { 'for': id }).addClass('wrapping-label').append(node.attr('id', id));
-        };
-    }());
-
     $.alert = function (o) {
         o = _.extend({
             title: false,
@@ -215,5 +201,94 @@
 
         return alert.alert();
     };
+
+    //
+    // Queued image loader. Works with lazyload.
+    //
+    (function () {
+
+        // need to do this manually because jQuery doesn't support request.responseType = 'blob';
+        function xhr(def, url) {
+
+            var request = new XMLHttpRequest();
+
+            function cleanup() {
+                request = request.onload = request.onerror = def = null;
+            }
+
+            request.onload = function () {
+                if (request.status === 200) def.resolve(request.response); else def.reject();
+                cleanup();
+            };
+
+            request.onerror = function () {
+                def.reject();
+                cleanup();
+            };
+
+            request.open('GET', url, true);
+            request.responseType = 'blob';
+            request.send(null);
+        }
+
+        var queue = [], pending = 0, MAX = 4;
+
+        function tick() {
+            if (!queue.length || pending > MAX) return;
+            var item = queue.shift();
+            pending++;
+            xhr(item.def, item.url);
+        }
+
+        function load(url) {
+            var def = $.Deferred();
+            queue.push({ def: def, url: url });
+            tick();
+            return def.promise().always(function () {
+                pending--;
+                tick();
+            });
+        }
+
+        $.fn.queueload = function (options) {
+
+            return this.lazyload(options).each(function () {
+                // re-define appear; we use "one" to try only once (don't need to track via this.loaded)
+                $(this).off('appear').one('appear', function () {
+                    var $self = $(this), original = $self.attr('data-original');
+                    load(original).then(
+                        function success(response) {
+                            var url = window.URL.createObjectURL(response);
+                            if ($self.is('img')) $self.attr('src', url); else $self.css('background-image', 'url("' + url + '")');
+                            $self.trigger('queue:load', original, url);
+                        },
+                        function fail() {
+                            $self.trigger('queue:error', original);
+                        }
+                    );
+                });
+            });
+        };
+
+        // window.testQueueLoad = function () {
+
+        //     var container = $('<div class="abs">').css({ zIndex: 1000, background: 'white', border: '1px solid #ddd', padding: '10px', overflow: 'auto' });
+
+        //     $('.window-content:visible').first().append(
+        //         container.append(
+        //             _(_.range(100)).map(function (i) {
+        //                 return $('<div class="pull-left">')
+        //                     .css({ width: 120, height: 120, margin: '0 10px 10px 0', background: '#ccc' })
+        //                     .attr('data-original', 'lorempixel/lorempixel-' + (i % 20) + '.jpg')
+        //                     .queueload({ container: container, event: 'scrollstop' })
+        //                     .text(i);
+        //             })
+        //         )
+        //     );
+
+        //     _.defer(function () { container.trigger('scrollstop'); });
+        // };
+
+    }());
 
 }());

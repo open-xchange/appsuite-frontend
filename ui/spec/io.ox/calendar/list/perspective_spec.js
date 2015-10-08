@@ -11,27 +11,32 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define(['io.ox/calendar/main',
+define([
+    'io.ox/calendar/main',
     'fixture!io.ox/calendar/list/calendar-list.json',
-    'waitsFor'], function (main, fixture, waitsFor) {
+    'waitsFor',
+    //pre-load list perspective for faster tests
+    'io.ox/calendar/list/perspective'
+], function (main, fixture, waitsFor) {
+    'use strict';
 
     describe('calendar app and the corresponding listview', function () {
 
         beforeEach(function () {
             this.server.respondWith('GET', /api\/calendar\?action=all/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.getList));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(fixture.getList));
             });
 
             this.server.respondWith('GET', /api\/calendar\?action=get.+id=1337/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.get1337));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(fixture.get1337));
             });
 
             this.server.respondWith('PUT', /api\/user\?action=list/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.userList));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(fixture.userList));
             });
 
             this.server.respondWith('GET', /api\/user\?action=get/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.userGet));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(fixture.userGet));
             });
         });
 
@@ -53,7 +58,6 @@ define(['io.ox/calendar/main',
         });
 
         it('should open the listview perspective', function () {
-            this.timeout(10000);
             var app = main.getApp();
             return app.launch().then(function () {
                 return ox.ui.Perspective.show(app, 'list');
@@ -166,7 +170,7 @@ define(['io.ox/calendar/main',
                 it(' and it should show the title of the appointment', function () {
                     var right = this.nodes.body.find('.rightside');
 
-                    expect(right.find('.title').text()).to.equal('Termin 1');
+                    expect(right.find('.subject').text()).to.equal('Termin 1');
                 });
 
                 it('and it should show the locations of the appointment', function () {
@@ -176,12 +180,12 @@ define(['io.ox/calendar/main',
 
                 it('and it should show the day and date of the appointment', function () {
                     var right = this.nodes.body.find('.rightside');
-                    expect(right.find('.day').text()).to.equal('Do., 28.11.2013');
+                    expect(right.find('.date').text()).to.equal('Do., 28.11.2013');
                 });
 
                 it('and it should show the duration of the appointment', function () {
                     var right = this.nodes.body.find('.rightside');
-                    expect(right.find('.interval').text()).to.equal('13:00-14:00UTC');
+                    expect(right.find('.time').text()).to.equal('14:00–15:00');
                 });
 
                 it('and it should show the notes of the appointment', function () {

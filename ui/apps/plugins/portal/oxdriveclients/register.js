@@ -11,13 +11,13 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('plugins/portal/oxdriveclients/register',
-    ['io.ox/core/extensions',
+define('plugins/portal/oxdriveclients/register', [
+    'io.ox/core/extensions',
     'gettext!plugins/portal',
     'io.ox/core/capabilities',
     'settings!plugins/portal/oxdriveclients',
     'less!plugins/portal/oxdriveclients/style'
-    ], function (ext, gt, capabilities, settings) {
+], function (ext, gt, capabilities, settings) {
 
     'use strict';
 
@@ -42,7 +42,7 @@ define('plugins/portal/oxdriveclients/register',
             isWindows = _.device('windows');
 
         if (isWindows) return ['Android', 'iOS', 'Mac OS'];
-        if (isAndroid) return  ['Windows', 'iOS', 'Mac OS'];
+        if (isAndroid) return ['Windows', 'iOS', 'Mac OS'];
         if (isIOS) return ['Mac OS', 'Windows', 'Android'];
         if (isMac) return ['iOS', 'Android', 'Windows'];
         // fallback for others
@@ -105,7 +105,6 @@ define('plugins/portal/oxdriveclients/register',
             var def = $.Deferred();
             // .# String will include a product name and a platform forming a sentence like "Download OX Drive for Windows now."
             baton.message = gt.format(gt('Download %s for %s now'), settings.get('productName'), getPlatform());
-
             baton.teaser = gt.format(gt('The %s client lets you store and share your photos, files, documents and videos, anytime, ' +
                 'anywhere. Access any file you save to %s from all your computers, iPhone, iPad or from within %s itself.'), settings.get('productName'), settings.get('productName'), ox.serverConfig.productName);
             baton.link = settings.get('linkTo/' + getPlatform());

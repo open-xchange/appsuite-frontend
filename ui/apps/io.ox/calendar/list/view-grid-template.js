@@ -11,13 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/list/view-grid-template',
-    ['io.ox/calendar/util',
-     'io.ox/core/extensions',
-     'io.ox/core/folder/api',
-     'gettext!io.ox/calendar',
-     'less!io.ox/calendar/list/style'
-    ], function (util, ext, folderAPI, gt) {
+define('io.ox/calendar/list/view-grid-template', [
+    'io.ox/calendar/util',
+    'io.ox/core/extensions',
+    'io.ox/core/folder/api',
+    'gettext!io.ox/calendar',
+    'less!io.ox/calendar/list/style'
+], function (util, ext, folderAPI, gt) {
 
     'use strict';
 
@@ -58,14 +58,24 @@ define('io.ox/calendar/list/view-grid-template',
                 var self = this,
                     a11yLabel = '',
                     tmpStr = '',
+                    startDate,
+                    endDate,
                     timeSplits = util.getStartAndEndTime(data);
+
+                // clear classes of time to prevent adding multiple classes on reuse
+                fields.time.removeClass().addClass('time');
 
                 if (data.folder_id) {
                     //conflicts with appointments, where you aren't a participant don't have a folder_id.
                     var folder = folderAPI.get(data.folder_id);
                     folder.done(function (folder) {
                         var conf = util.getConfirmationStatus(data, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+
                         self.addClass(util.getConfirmationClass(conf) + (data.hard_conflict ? ' hardconflict' : ''));
+                        fields.time.addClass(util.getAppointmentColorClass(folder, data))
+                            .attr({
+                                'data-folder': util.canAppointmentChangeColor(folder, data) ? folder.id : ''
+                            });
                     });
                 }
 
@@ -82,17 +92,34 @@ define('io.ox/calendar/list/view-grid-template',
                     $('<div class="fragment">').text(gt.noI18n(timeSplits[1]))
                 ).addClass('custom_shown_as ' + util.getShownAsClass(data));
 
+                a11yLabel += ', ' + util.getShownAs(data);
+
                 fields.date.empty().text(util.getDateInterval(data));
 
                 if (!data.full_time && (util.getDurationInDays(data) > 0)) {
                     fields.date.show();
+                } else {
+                    fields.date.hide();
                 }
 
-                tmpStr = gt.noI18n(util.getTimeIntervalA11y(data));
+                if (data.full_time) {
+                    startDate = moment.utc(data.start_date).local(true);
+                    endDate = moment.utc(data.end_date).local(true).subtract(1, 'days');
+                } else {
+                    startDate = moment(data.start_date);
+                    endDate = moment(data.end_date);
+                }
+
+                if (startDate.isSame(endDate, 'day')) {
+                    tmpStr = gt.noI18n(util.getEvenSmarterDate(data));
+                } else {
+                    tmpStr = gt.noI18n(util.getDateIntervalA11y(data));
+                }
 
                 a11yLabel += ', ' + tmpStr;
 
-                tmpStr = gt.noI18n(util.getDateIntervalA11y(data));
+                tmpStr = gt.noI18n(util.getTimeIntervalA11y(data));
+
                 a11yLabel += ', ' + tmpStr;
 
                 if (data.private_flag === true) {
@@ -106,6 +133,9 @@ define('io.ox/calendar/list/view-grid-template',
 
         // template for labels
         label: {
+            getHeight: function () {
+                return 42;
+            },
             build: function () {
                 this.addClass('calendar-label');
             },

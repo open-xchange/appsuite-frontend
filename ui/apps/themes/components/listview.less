@@ -1,0 +1,338 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+/* List View */
+.list-view-control {
+
+    @height-default: @toolbar-height;
+    @height-small: 35px;
+    background-color: #fff;
+
+    .top-toolbar() {
+        display: none;
+    }
+
+    .bottom-toolbar() {
+        display: none;
+        .dropdown-menu {
+            top: auto;
+            bottom: 100%;
+            right: 0;
+            left: auto;
+        }
+    }
+
+    .toolbar {
+
+        .user-select(none);
+
+        &.top { .top-toolbar(); }
+        &.bottom { .bottom-toolbar(); }
+
+        .grid-options > a {
+            color: #777;
+        }
+
+        .select-all {
+            color: #777;
+            cursor: pointer;
+            white-space: nowrap;
+            i {
+                color: #ccc;
+                margin-right: 8px;
+                width: 16px;
+                font-size: 18px;
+                position: relative;
+                top: 2px;
+            }
+        }
+
+        .dropdown-menu {
+            font-size: 14px;
+        }
+    }
+
+    &.upside-down .toolbar {
+
+        &.top {
+            .bottom-toolbar();
+            top: auto;
+            border-bottom: 0;
+        }
+
+        &.bottom {
+            .top-toolbar();
+            bottom: auto;
+            border-top: 0;
+            .dropdown-menu {
+                top: 90%;
+                bottom: auto;
+            }
+        }
+    }
+
+    &.toolbar-top-visible .toolbar.top,
+    &.toolbar-bottom-visible .toolbar.bottom { display: block; }
+
+    &:not(.upside-down) {
+        &.toolbar-top-visible .list-view { top: @height-default; }
+        &.toolbar-bottom-visible .list-view { bottom: @height-small; }
+    }
+
+    &.upside-down {
+        &.toolbar-top-visible .list-view { bottom: @height-default; }
+        &.toolbar-bottom-visible .list-view { top: @height-small; }
+    }
+
+    .list-view {
+        height: auto;
+        z-index: 1;
+    }
+
+    .resizebar {
+        background: transparent;
+        width: 5px;
+        height: 100%;
+        position: relative;
+        z-index: 10000;
+        float: right;
+        cursor: e-resize;
+        cursor: ew-resize;
+        cursor: col-resize;
+        right: -3px;
+        &.vertical {
+            display: none;
+        }
+    }
+}
+
+.ios {
+    .list-view {
+        &.scrollpane {
+            overflow-x: hidden;
+        }
+    }
+}
+
+.list-view {
+
+    height: 100%;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    outline: 0;
+    .user-select(none);
+
+    &:focus {
+        .box-shadow(0 0 1px #aaa inset);
+    }
+
+    &.scrollpane {
+        .overflow-y(auto);
+        // optimize repaint behavior; see bug 39931
+        // http://stackoverflow.com/questions/20671729/chrome-repaints-div-on-scroll-differently-on-low-and-high-dpi-displays
+        -webkit-transform: translateZ(0);
+    }
+
+    .list-item, .list-header {
+        position: relative;
+        font-size: 13px;
+        line-height: 20px;
+        padding: 6px (@list-view-padding - 1px) 5px (@list-view-padding + 32px);
+        cursor: pointer;
+        outline: 0;
+    }
+
+    .list-item {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+    }
+
+    .list-item .list-item-checkmark {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: @list-view-padding + 30;
+
+        .fa-checkmark {
+            color: #ccc;
+            position: absolute;
+            left: @default-padding;
+            top: 12px;
+            font-size: 18px;
+            &:before { content: "\f096"; } // fa-square-o
+        }
+    }
+
+    &.hide-checkboxes .list-item {
+        padding-left: @list-view-padding;
+        .list-item-checkmark {
+            display: none;
+        }
+    }
+
+    &.compact .list-item {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .list-item.selected:not(.no-checkbox) {
+        .fa-checkmark {
+            color: #08c;
+
+            html.high-contrast & {
+                color: @hc-link-color;
+            }
+
+            &:before {
+                content: "\f14a"; // fa-check-square-o
+            }
+        }
+    }
+
+    &.visible-selection .list-item.selected {
+        background-color: #ddd;
+        -webkit-font-smoothing: antialiased;
+        .fa-checkmark {
+            color: #aaa;
+        }
+    }
+
+    &.visible-selection.has-focus .list-item.selected {
+        color: white;
+        background-color: @selected-background;
+
+        html.high-contrast & {
+            background-color: @hc-link-color;
+        }
+    }
+
+    .list-item-row {
+        clear: right;
+    }
+
+    .list-item-row + .list-item-row {
+        position: relative;
+        top: -4px;
+    }
+
+    & > .list-item:last-child {
+        margin-bottom: 100px;
+    }
+
+    &.complete > .list-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .busy-indicator {
+        .list-item();
+        color: #aaa;
+        background-color: #f5f5f5;
+        font-size: 20px;
+        line-height: 20px;
+        height: 100px;
+        text-align: center;
+        padding: 40px 0;
+        margin-bottom: 0;
+    }
+
+    .busy-indicator.io-ox-busy {
+        text-align: left;
+    }
+
+    // use this for empty list
+    .busy-indicator:first-child {
+        width: 100% !important;
+        height: 100% !important;
+        background-color: transparent;
+        i { display: none; }
+    }
+
+    // swipe animation
+
+    @swipe-position: 80px;
+
+    .list-item {
+        left: 0;
+        .transition(e('left 0.40s cubic-bezier(0.1, 0.7, 0.1, 1)'));
+        &.swipe-left {
+            left: -@swipe-position;
+        }
+        z-index: 2;
+    }
+
+    &.no-transition .list-item {
+        .transition(none);
+    }
+
+    .swipe-left-content {
+        background-color: #FF4105; /* quite red */
+        position: absolute;
+        top: 0;
+        right: -@swipe-position;
+        bottom: 0;
+        width: @swipe-position;
+        i {
+            font-size: 20px;
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -7px;
+        }
+        z-index: 1;
+    }
+
+    // just for debugging
+    // .list-item:focus {
+    //     border-color: rgba(0, 0, 0, 0.50);
+    // }
+
+    .list-item {
+        .bold { font-weight: bold; }
+        .gray { opacity: 0.50; } // 0.50 has enough color contrast
+    }
+    .pull-to-refresh {
+        position: absolute;
+        top: 8px;
+        z-index: 3;
+        width: 100%;
+        .spinner {
+            width: 50px;
+            height: 50px;
+            background-color: #c80000;
+            border-radius: 25px;
+            text-align: center;
+            line-height: 50px;
+            color: #fff;
+            font-size: 24px;
+            margin: 0 auto;
+        }
+    }
+    .scale-down {
+        animation: scaleDown 120ms;
+        -webkit-animation: scaleDown 120ms;
+    }
+
+    @-webkit-keyframes scaleDown {
+        from { -webkit-transform: scale(1); }
+        to { -webkit-transform: scale(0); }
+    }
+
+    @keyframes scaleDown {
+        from { transform: scale(1); }
+        to { transform: scale(0); }
+    }
+}

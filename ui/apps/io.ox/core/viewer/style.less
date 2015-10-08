@@ -1,0 +1,902 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Mario Schroeder <mario.schroeder@open-xchange.com>
+ * @author Edy Haryono <edy.haryono@open-xchange.com>
+ */
+@viewer-toolbar-height: 40px;
+@viewer-toolbar-filename-width: 400px;
+@viewer-toolbar-filename-width-smartphone-portrait: 130px;
+@viewer-toolbar-filename-width-smartphone-landscape: 320px;
+@viewer-toolbar-link-width: 48px;
+@viewer-toolbar-link-width-smartphone: 50px;
+@viewer-sidebar-width: 360px;
+@viewer-sidebar-width-smartphone: 100%;
+@viewer-audio-cover-size: 280px;
+
+.viewer-dark-colors () {
+    @viewer-text-color: #ffffff;
+    @viewer-scrollbar-track-color: @viewer-sidebar-bgcolor;
+    @viewer-scrollbar-thumb-color: #555555;
+    @viewer-scrollbar-thumb-hover-color: #777777;
+    @viewer-scrollbar-base-color: #666666;
+    @viewer-scrollbar-arrow-color: @viewer-sidebar-label-text-color;
+    @viewer-background-color: rgba(0, 0, 0, 0.85);
+    @viewer-busy-color: rgba(255, 255, 255, 0.3);
+    @viewer-toolbar-bgcolor: #000000;
+    @viewer-toolbar-color: #999999;
+    @viewer-toolbar-border-color: #000000;
+    @viewer-toolbar-hover-color: #999;
+    @viewer-toolbar-hover-bgcolor: #333333;
+    @viewer-toolbar-focus-color: #FFFFFF;
+    @viewer-toolbar-focus-bgcolor: #222222;
+    @viewer-toolbar-active-color: #FFFFFF;
+    @viewer-toolbar-active-bgcolor: #222222;
+    @viewer-displayer-navigation-color: rgba(255, 255, 255, 0.5);
+    @viewer-displayer-navigation-bgcolor: rgba(0, 0, 0, 0.5);
+    @viewer-displayer-caption-color: #FFFFFF;
+    @viewer-displayer-caption-bgcolor: rgba(0, 0, 0, 0.7);
+    @viewer-displayer-document-shadowcolor: rgba(255, 255, 255, 0.2);
+    @viewer-control-color: @viewer-toolbar-color;
+    @viewer-sidebar-bgcolor: rgba(0, 0, 0, 0.40);
+    @viewer-sidebar-border-color: #000000;
+    @viewer-sidebar-active-bgcolor: #333333;
+    @viewer-sidebar-label-text-color: #999999;
+    @viewer-sidebar-uploadnewversion-bgcolor: #333;
+    @viewer-sidebar-uploadnewversion-bordercolor: #444;
+    @viewer-sidebar-uploadnewversion-hovercolor: #777777;
+    @viewer-sidebar-versions-text-color: #CCCCCC;
+    @viewer-sidebar-versions-comment-color: lightgrey;
+    @viewer-sidebar-versions-dropdown-color: #FFFFFF;
+    @viewer-sidebar-versions-dropdown-active-bgcolor: #444444;
+    @viewer-sidebar-description-outline-color: #444444;
+    @viewer-sidebar-tab-color: #ffffff;
+    @viewer-sidebar-tab-bordercolor: #555555;
+    @viewer-sidebar-activetab-bordercolor: #3c73aa;
+    @viewer-sidebar-activetab-bgcolor: rgba(255,255,255,0.1);
+    @viewer-sidebar-tab-hovercolor: rgba(255,255,255,0.2);
+    @document-thumbnail-link-focus-color: #777777;
+    @document-thumbnail-link-hover-color: #444444;
+    @document-thumbnail-link-selected-color: #777777;
+    @document-thumbnail-bgcolor: #FFFFFF;
+    @document-thumbnail-border-color: #e0e0e0;
+    @document-thumbnail-number-color: #999999;
+    @document-thumbnail-number-hover-color: #FFFFFF;
+}
+
+.viewer-light-colors () {
+    @viewer-text-color: #333333;
+    @viewer-scrollbar-track-color: #DDDDDD;
+    @viewer-scrollbar-thumb-color: #AAAAAA;
+    @viewer-scrollbar-thumb-hover-color: #777777;
+    @viewer-scrollbar-base-color: #666666;
+    @viewer-scrollbar-arrow-color: @viewer-sidebar-label-text-color;
+    @viewer-background-color: #f5f5f5;
+    @viewer-busy-color: rgba(0, 0, 0, 0.3);
+    @viewer-toolbar-bgcolor: #ffffff;
+    @viewer-toolbar-color: #3c73aa;
+    @viewer-toolbar-border-color: #DDDDDD;
+    @viewer-toolbar-hover-color: #284d71;
+    @viewer-toolbar-hover-bgcolor: #EEEEEE;
+    @viewer-toolbar-focus-color: #FFFFFF;
+    @viewer-toolbar-focus-bgcolor: #DDDDDD;
+    @viewer-toolbar-active-color: #284d71;
+    @viewer-toolbar-active-bgcolor: #AAAAAA;
+    @viewer-displayer-navigation-color: rgba(255, 255, 255, 0.5);
+    @viewer-displayer-navigation-bgcolor: rgba(0, 0, 0, 0.2);
+    @viewer-displayer-caption-color: #FFFFFF;
+    @viewer-displayer-caption-bgcolor: rgba(0, 0, 0, 0.6);
+    @viewer-displayer-document-shadowcolor: rgba(0, 0, 0, 0.2);
+    @viewer-control-color: @viewer-toolbar-color;
+    @viewer-sidebar-bgcolor: #f5f5f5;
+    @viewer-sidebar-border-color: #DDDDDD;
+    @viewer-sidebar-active-bgcolor: rgba(0,0,0, 0.2);
+    @viewer-sidebar-label-text-color: #999999;
+    @viewer-sidebar-uploadnewversion-bgcolor: rgba(0,0,0,.1);
+    @viewer-sidebar-uploadnewversion-bordercolor: rgba(0,0,0,0.1);
+    @viewer-sidebar-uploadnewversion-hovercolor: rgba(0,0,0,0.5);
+    @viewer-sidebar-versions-text-color: #333333;
+    @viewer-sidebar-versions-comment-color: darkgrey;
+    @viewer-sidebar-versions-dropdown-color: #222222;
+    @viewer-sidebar-versions-dropdown-active-bgcolor: transparent;
+    @viewer-sidebar-description-outline-color: #777777;
+    @viewer-sidebar-tab-color: #333333;
+    @viewer-sidebar-tab-bordercolor: rgba(0,0,0,0.2);
+    @viewer-sidebar-activetab-bordercolor: #3c73aa;
+    @viewer-sidebar-activetab-bgcolor: rgba(0,0,0,0.1);
+    @viewer-sidebar-tab-hovercolor: rgba(0,0,0,0.2);
+    @document-thumbnail-link-focus-color: rgba(0,0,0,0.1);
+    @document-thumbnail-link-hover-color: rgba(0,0,0,0.05);
+    @document-thumbnail-link-selected-color: rgba(0,0,0,0.15);
+    @document-thumbnail-bgcolor: #FFFFFF;
+    @document-thumbnail-border-color: #e0e0e0;
+    @document-thumbnail-number-color: #333333;
+    @document-thumbnail-number-hover-color: #333333;
+}
+
+
+/* OX Viewer Sidebar generic styles */
+.viewer-sidebar {
+
+    /* set the text context of responsive labels according to the device and it's orientation */
+    /* the default */
+    *.viewer-responsive-label[data-label-normal]:before {
+        content: attr(data-label-normal);
+    }
+    /* for smartphones with orientation portrait */
+    *.smartphone *.viewer-responsive-label[data-label-normal]:before {
+        @media (orientation: portrait) {
+            content: attr(data-label-short);
+        }
+    }
+
+    position: absolute;
+    width: @viewer-sidebar-width;
+    padding: 16px;
+    display: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    &.open {
+        display: block;
+    }
+
+    .viewer-uploadnewversion > .form-group {
+        margin-top: 5px;
+        & > .btn-default {
+            background-color: transparent;
+            width: 100%;
+        }
+    }
+
+    .breadcrumb-view {
+        margin: 0;
+    }
+
+    .breadcrumb-tail {
+        font-weight: normal;
+    }
+}
+
+/* OX Viewer Sidebar section panel generic styles */
+
+.sidebar-panel {
+
+    margin-bottom: 16px;
+
+    .close {
+        position: relative;
+        top: -5px;
+    }
+
+    .sidebar-panel-heading {
+
+        position: relative;
+        padding: 12px 0 5px 0;
+
+        .panel-toggle-btn {
+            color: inherit;
+            position: absolute;
+            top: 10px;
+            right: 0;
+        }
+
+        h3 {
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 0;
+            margin-bottom: 0;
+            cursor: default;
+        }
+
+        &.io-ox-busy:before {
+            top: 185%;
+        }
+    }
+
+    .sidebar-panel-body {
+
+        padding: 12px 0 5px 0;
+
+        &.panel-collapsed {
+            display: none;
+        }
+
+        &:after {
+            content: " ";
+            display: table;
+            clear: both;
+        }
+
+        dd, dt {
+            line-height: 16px;
+            margin-bottom: 8px;
+            float: left;
+        }
+
+        dt {
+            width: 33%;
+            font-weight: normal;
+            cursor: default;
+            clear: both;
+        }
+
+        dd {
+            width: 66%;
+            .user-select(text);
+            word-wrap: break-word;
+
+            &.io-ox-busy:before {
+                font-size: inherit;
+                left: 0px;
+                margin-left: 0px;
+            }
+        }
+
+        .versiontable {
+
+            white-space: nowrap;
+            margin-bottom: 0;
+
+            td {
+                padding: 0;
+                border-top: none;
+                line-height: 16px;
+            }
+
+            .version-content {
+
+                padding: 0 0 8px 0;
+
+                .last_modified {
+                    float: right;
+                }
+                .size {
+                    text-align: left;
+                }
+            }
+
+            .dropdown > a.current {
+                font-weight: bold;
+            }
+        }
+
+        .description {
+            display: block;
+            white-space: pre-wrap;
+            line-height: 16px;
+            .user-select(text);
+
+            &.description-empty {
+                .user-select(none);
+                cursor: default;
+            }
+        }
+    }
+
+    &.viewer-fileinfo {
+        margin-bottom: 0;
+    }
+}
+
+// a mixin containing all styles for viewer
+.viewer-styles() {
+
+    font-size: 13px;
+    background-color: @viewer-background-color;
+    color: @viewer-text-color;
+    outline: none;
+    z-index: 1000;
+
+    ::-webkit-scrollbar {
+        width: 12px;
+    }
+    ::-webkit-scrollbar-track {
+        background: @viewer-scrollbar-track-color;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: @viewer-scrollbar-thumb-color;
+        width: 12px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: @viewer-scrollbar-thumb-hover-color;
+    }
+
+    scrollbar-base-color: @viewer-scrollbar-base-color;
+    scrollbar-track-color: @viewer-scrollbar-track-color;
+    scrollbar-arrow-color: @viewer-sidebar-label-text-color @viewer-scrollbar-arrow-color;
+
+    .viewer-toolbar {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: @viewer-toolbar-height;
+        line-height: @viewer-toolbar-height;
+        background: @viewer-toolbar-bgcolor;
+        list-style: none;
+        padding-left: 0;
+        text-align: right;
+        z-index: 2;
+        border-bottom: 1px solid @viewer-toolbar-border-color;
+        .user-select(none);
+        i.fa {
+            font-size: 14px;
+        }
+        > li {
+            display: inline-block;
+            height: @viewer-toolbar-height;
+            text-align: center;
+            > a {
+                display: inline-block;
+                height: @viewer-toolbar-height;
+                min-width: @viewer-toolbar-link-width;
+                padding: 0 16px;
+                outline: none;
+                text-align: center;
+                text-decoration: none;
+                color: @viewer-toolbar-color;
+                border-bottom: 1px solid @viewer-toolbar-border-color;
+                &:not(.disabled) {
+                    &:hover {
+                        color: @viewer-toolbar-hover-color;
+                        background-color: @viewer-toolbar-hover-bgcolor;
+                    }
+                    &:focus,
+                    &:active {
+                        color: @viewer-toolbar-focus-color;
+                        background-color: @viewer-toolbar-focus-bgcolor;
+                    }
+                }
+            }
+            > a.active {
+                color: @viewer-toolbar-active-color;
+                background-color: @viewer-toolbar-active-bgcolor;
+            }
+            &.dropdown {
+                margin-right: @viewer-toolbar-link-width;
+                @media (max-width: 1023px) {
+                    margin-right: 0;
+                }
+            }
+            &.dropdown.open {
+                background-color: @viewer-toolbar-active-bgcolor;
+            }
+            .dropdown-menu {
+                margin: 0;
+            }
+        }
+
+        .viewer-toolbar-filename {
+            max-width: @viewer-toolbar-filename-width;
+            padding: 0 16px;
+            text-align: left;
+            cursor: pointer;
+            .ellipsis();
+            i {
+                margin-right: 16px;
+                font-size: 14px;
+            }
+            i.fa-file-excel-o {
+                color: #44B957;
+            }
+            i.fa-file-word-o {
+                color: #1A9DD4;
+            }
+            i.fa-file-powerpoint-o {
+                color: #EE5F37;
+            }
+            i.fa-file-pdf-o {
+                color: #CF1E28;
+            }
+            i.fa-file-image-o {
+                color: #EE5F37;
+            }
+            i.fa-file-text-o {
+                color: #4285f4;
+            }
+            &:not(.disabled) {
+                &:hover, &:active, &:focus {
+                    color: @viewer-toolbar-color;
+                    background: @viewer-toolbar-hover-bgcolor;
+                }
+            }
+            &.disabled {
+                cursor: default;
+            }
+            @media (orientation: portrait) and (min-width: 320px) {
+                i {
+                    margin-right: 5px;
+                }
+                @media (min-width: 320px) {
+                    width: 115px;
+                }
+                @media (min-width: 1024px) {
+                    width: 215px;
+                }
+            }
+            @media (orientation: landscape) {
+                width: @viewer-toolbar-filename-width-smartphone-landscape;
+            }
+        }
+
+        .viewer-toolbar-navigation {
+            position: absolute;
+            top: 0;
+            left: ~"calc(50% - 280px)";
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+
+            @media (max-width: 1023px) {
+                left: 135px;
+            }
+
+            @media (max-width: 767px) {
+                display: none;
+            }
+        }
+
+        @viewer-toolbar-link-disabled-color: #CCCCCC;
+        .viewer-toolbar-navigation-button {
+            cursor: pointer;
+            &.disabled {
+                color: @viewer-toolbar-link-disabled-color;
+                cursor: auto;
+                @viewer-toolbar-disabled-hover: #FFFFFF;
+                &:hover, &:focus, &:active {
+                    background: @viewer-toolbar-disabled-hover;
+                }
+            }
+        }
+
+        @viewer-toolbar-page-bordercolor: #e0e0e0;
+        .viewer-toolbar-page-wrapper {
+            display: inline-block;
+            outline: 1px solid @viewer-toolbar-page-bordercolor;
+            height: 30px;
+            margin: 5px 10px;
+        }
+        .viewer-toolbar-page {
+            display: block;
+            height: 28px;
+            line-height: 28px;
+            width: 40px;
+            padding-right: 5px;
+            text-align: right;
+            -webkit-appearance:none;
+            border: 0;
+        }
+        .viewer-toolbar-page-total {
+            color: @link-color;
+            display: inline-block;
+        }
+
+        .fitzoom-check {
+            display: none;
+        }
+    }
+
+    // show active sidebar button in toolbar when sidebar is open
+    .viewer-sidebar.open ~ .viewer-toolbar a.viewer-toolbar-togglesidebar {
+        color: @viewer-toolbar-color;
+    }
+
+    .viewer-displayer {
+        position: absolute;
+        top: @viewer-toolbar-height;
+        width: 100%;
+        bottom: 0;
+        outline: none;
+
+        #viewer-carousel,
+        .carousel-inner,
+        .item {
+            height: 100%;
+        }
+
+        .swiper-container {
+            width: 100%;
+            height: 100%;
+            .swiper-slide {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: -webkit-flex;
+                display: flex;
+                -webkit-box-pack: center;
+                -ms-flex-pack: center;
+                -webkit-justify-content: center;
+                justify-content: center;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                -webkit-align-items: center;
+                align-items: center;
+                outline: none;
+                .user-select(none);
+                &.swiper-slide-document {
+                    display: block;
+                    height: 100%;
+                }
+            }
+            .io-ox-busy::before {
+                color: @viewer-busy-color;
+            }
+        }
+
+        .viewer-displayer-item {
+            max-height: 100%;
+            max-width: 100%;
+        }
+
+        .viewer-displayer-image {
+
+            display: none;
+
+            // fix transparent images; see e.g. http://lea.verou.me/css3patterns/#checkerboard
+            @g: #eee;
+            @t: transparent;
+            background-color: #fff;
+            background-image: -webkit-linear-gradient(45deg, @g 25%, @t 25%, @t 75%, @g 75%, @g),
+                -webkit-linear-gradient(45deg, @g 25%, @t 25%, @t 75%, @g 75%, @g);
+            background-image: linear-gradient(45deg, @g 25%, @t 25%, @t 75%, @g 75%, @g),
+                linear-gradient(45deg, @g 25%, @t 25%, @t 75%, @g 75%, @g);
+            background-position: 0 0, 16px 16px;
+            background-size: 32px 32px;
+        }
+
+        .viewer-displayer-audio {
+            &.player-hidden {
+                display: none;
+            }
+
+            img {
+                display: block;
+                max-width: @viewer-audio-cover-size;
+                max-height: @viewer-audio-cover-size;
+                margin-bottom: 4px;
+                border-radius: 6px;
+            }
+
+            audio {
+                width: @viewer-audio-cover-size;
+                min-height: 34px;
+            }
+        }
+
+        .viewer-displayer-video {
+            min-height: 34px;
+            &.player-hidden {
+                display: none;
+            }
+        }
+
+        .document-container {
+            .document-page {
+                margin: 20px auto;
+                width: 450px;
+                background: #ffffff;
+                color: #000000;
+                box-shadow: 0 0 8px @viewer-displayer-document-shadowcolor;
+            }
+        }
+
+        .white-page {
+            color: #333;
+            background-color: #fff;
+            width: 100%;
+            max-width: 21cm;
+            padding: 16px;
+            margin: 32px auto;
+            min-height: 90%;
+            .user-select(text);
+        }
+
+        .letter {
+            padding: 77px 3cm;
+        }
+
+        .plain-text {
+            font: 13px/1.23077em monospace;
+            white-space: pre-wrap;
+        }
+
+        .viewer-displayer-caption {
+            position: absolute;
+            z-index: 1;
+            left: 0;
+            right: 0;
+            bottom: 40px;
+            text-align: center;
+            display: none;
+            pointer-events: none;
+            .caption-content {
+                display: inline-block;
+                min-height: 24px;
+                line-height: 24px;
+                padding: 0 15px;
+                color: @viewer-displayer-caption-color;
+                background: @viewer-displayer-caption-bgcolor;
+                .border-radius(4px);
+            }
+            &.smartphone {
+                bottom: 6px;
+            }
+        }
+
+        .swiper-button-control {
+            display: none;
+            margin-top: -50px;
+            color: @viewer-displayer-navigation-color;
+            background: @viewer-displayer-navigation-bgcolor;
+            outline: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 2px;
+            text-align: center;
+            i {
+                line-height: 50px;
+                font-size: 3rem;
+            }
+            &:hover, &:focus {
+                color: #FFFFFF;
+            }
+        }
+
+        .viewer-displayer-notification {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            margin-top: -50px;
+            height: 100px;
+            width: 100%;
+            padding: 0 40px;
+            text-align: center;
+            color: @viewer-toolbar-color;
+            i {
+                font-size: 4rem;
+            }
+            .apology {
+                margin-top: 20px;
+            }
+        }
+    }
+
+    /* OX Viewer Sidebar specific styles */
+
+    .viewer-sidebar {
+        position: absolute;
+        top: @viewer-toolbar-height;
+        right: 0;
+        bottom: 0;
+        width: @viewer-sidebar-width;
+        background-color: @viewer-sidebar-bgcolor;
+        border-left: 1px solid @viewer-sidebar-border-color;
+        outline: none;
+        z-index: 2;     // hide captions when sidebar is 100% width
+        &.open {
+            display: block;
+        }
+        &.smartphone {
+            width: @viewer-sidebar-width-smartphone;
+        }
+
+        .inplace-dropzone {
+            background-color: @viewer-sidebar-bgcolor;
+
+            .dropzone-caption {
+                color: @viewer-sidebar-label-text-color;
+            }
+        }
+
+        .viewer-uploadnewversion > .form-group > .btn-default {
+            color: @viewer-text-color;
+            background-color: @viewer-sidebar-uploadnewversion-bgcolor;
+            border-color: @viewer-sidebar-uploadnewversion-bordercolor;
+            &:active, &:hover {
+                border-color: @viewer-sidebar-uploadnewversion-hovercolor;
+            }
+        }
+
+
+        .viewer-sidebar-tabs {
+            display: none;
+            list-style: none;
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 0;
+            .user-select(none);
+            li {
+                display: inline-block;
+                width: 50%;
+            }
+            a {
+                display: block;
+                font-weight: bold;
+                color: @viewer-sidebar-tab-color;
+                height: 40px;
+                line-height: 40px;
+                text-align: center;
+                cursor: pointer;
+                text-decoration: none;
+                border-bottom: 2px solid @viewer-sidebar-tab-bordercolor;
+                &.selected {
+                    border-bottom: 2px solid @viewer-sidebar-activetab-bordercolor;
+                    background-color: @viewer-sidebar-activetab-bgcolor;
+                }
+                &:hover {
+                    background-color: @viewer-sidebar-tab-hovercolor;
+                }
+            }
+        }
+
+        .viewer-sidebar-pane {
+            &.thumbnail-pane {
+                &.io-ox-busy::before {
+                    top: 100px;
+                    color: @viewer-busy-color;
+                }
+            }
+            &.detail-pane {
+                display: none;
+            }
+        }
+
+        .document-thumbnail-link {
+            display: inline-block;
+            width: 150px;
+            height: 180px;
+            padding: 10px 0 0 0;
+            margin: 0 5px 5px 0;
+            cursor: pointer;
+            vertical-align: top;
+            &:hover {
+                background: @document-thumbnail-link-hover-color;
+                text-decoration: none;
+                .page-number {
+                    color: @document-thumbnail-number-hover-color;
+                }
+            }
+            &:active, &:focus {
+                background: @document-thumbnail-link-focus-color;
+            }
+            &.selected {
+                background: @document-thumbnail-link-selected-color;
+                .page-number {
+                    color: @document-thumbnail-number-hover-color;
+                }
+            }
+        }
+
+        .document-thumbnail {
+            width: 100px;
+            height: 140px;
+            margin: 0 auto;
+            background: @document-thumbnail-bgcolor;
+            border: 1px solid @document-thumbnail-border-color;
+            overflow: hidden;
+            .thumbnail-image {
+                width: 100%;
+                height: auto;
+            }
+            &.landscape {
+                width: 140px;
+                height: 100px;
+            }
+        }
+
+        .page-number {
+            color: @document-thumbnail-number-color;
+            text-align:center;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+    }
+
+    /* OX Viewer Sidebar section panel specific styles */
+
+    .sidebar-panel {
+
+        a.btn, div.dropdown > a {
+            outline: none;
+        }
+        a.btn, div.dropdown > a {
+            outline: none;
+        }
+
+        .sidebar-panel-heading {
+
+            color: @viewer-sidebar-label-text-color;
+
+            .panel-toggle-btn {
+                color: @viewer-control-color;
+                &:active, &:focus, &:hover {
+                    background-color: @viewer-sidebar-active-bgcolor
+                }
+            }
+
+            h3 {
+                font-size: 13px;
+                font-weight: bold;
+                margin-top: 0;
+                margin-bottom: 0;
+                cursor: default;
+            }
+
+            &.io-ox-busy:before {
+                top: 185%;
+            }
+        }
+
+        .sidebar-panel-body {
+
+            dt {
+                color: @viewer-sidebar-label-text-color;
+            }
+
+            .versiontable {
+
+                td {
+                    color: @viewer-sidebar-versions-text-color;
+                }
+
+                .version-comment {
+                    color: @viewer-sidebar-versions-comment-color;
+                }
+
+                .dropdown > a {
+                    color: @viewer-sidebar-versions-dropdown-color;
+                    &:hover {
+                        color: @viewer-sidebar-versions-dropdown-color;
+                    }
+                    &:active, &:focus {
+                        background-color: @viewer-sidebar-versions-dropdown-active-bgcolor;
+                    }
+                }
+            }
+
+            .description {
+                &:active, &:focus {
+                    outline: 2px solid @viewer-sidebar-description-outline-color;
+                    outline-offset: 2px;
+                }
+            }
+        }
+    }
+}
+
+// generate dark and light themes
+.io-ox-viewer {
+
+    &.viewer-dark-theme {
+
+        .viewer-dark-colors();
+        .viewer-styles();
+
+        .viewer-sidebar {
+            a:link, a:visited { color: lighten(@link-color, 20%); }
+            a:hover, a:focus { color: @link-color; }
+        }
+
+        .breadcrumb-tail {
+            color: white;
+        }
+    }
+
+    &.viewer-light-theme {
+        .viewer-light-colors();
+        .viewer-styles();
+    }
+}
+
+/* enable iOS momentum scrolling */
+html.ios .io-ox-viewer {
+    .viewer-sidebar, .swiper-slide.swiper-slide-active { -webkit-overflow-scrolling: touch; }
+}
+

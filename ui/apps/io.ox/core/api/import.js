@@ -11,8 +11,7 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('io.ox/core/api/import',
-    ['io.ox/core/http'], function (http) {
+define('io.ox/core/api/import', ['io.ox/core/http'], function (http) {
 
     'use strict';
 

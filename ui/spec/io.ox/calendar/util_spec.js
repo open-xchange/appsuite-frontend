@@ -11,90 +11,36 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
-define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
+define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
+
+    'use strict';
 
     describe('Util for calendar', function () {
 
-        describe('can convert timestamp to smart dates', function () {
-
-            var testDate = new date.Local(),
-                data = {
-                    full_time: false,
-                    start_date: testDate.setHours(0, 0, 0, 0).getTime()
-                };
-
-
-            it('last week', function () {
-                data.start_date = testDate.add(-7 * date.DAY).getTime();
-                expect(util.getSmartDate(data, true)).to.equal('Letzte Woche');
-            });
-
-            it('yesterday', function () {
-                data.start_date = testDate.add(6 * date.DAY).getTime();
-                expect(util.getSmartDate(data, true)).to.equal('Gestern');
-            });
-
-            it('same day', function () {
-                data.start_date = testDate.add(date.DAY).getTime();
-                expect(util.getSmartDate(data, false)).to.equal('Heute');
-            });
-
-            it('tomorrow', function () {
-                data.start_date = testDate.add(date.DAY).getTime();
-                expect(util.getSmartDate(data, false)).to.equal('Morgen');
-            });
-
-            it('next week', function () {
-                data.start_date = testDate.add(6 * date.DAY).getTime();
-                expect(util.getSmartDate(data, false)).to.equal('Nächste Woche');
-            });
-
-            it('next week with showdate option', function () {
-                data.start_date = testDate.getTime();
-                expect(util.getSmartDate(data, true)).to.equal(testDate.format(date.DATE));
-            });
-
-            it('after next week', function () {
-                data.start_date = testDate.add(7 * date.DAY).getTime();
-                expect(util.getSmartDate(data, false)).to.equal(date.locale.months[testDate.getMonth()] + ' ' + testDate.getYear());
-            });
-
-            it('date in the past', function () {
-                data.start_date = testDate.setYear(2012, 10, 11).getTime();
-                expect(util.getSmartDate(data, false)).to.equal('November 2012');
-            });
-
-            it('date in the past with showdate option', function () {
-                expect(util.getSmartDate(data, true)).to.equal('11.11.2012');
-            });
-
-        });
-
         describe('can convert timestamp to even smarter dates', function () {
 
-            var testDate = new date.Local(),
+            var testDate = moment(),
                 data = {
-                    full_time: false,
-                    start_date: testDate.setHours(0, 0, 0, 0).getTime()
+                    full_time: false
                 };
 
             it('yesterday', function () {
-                data.start_date = testDate.add(-date.DAY).getTime();
-                expect(util.getEvenSmarterDate(data)).to.equal('Gestern, ' + testDate.format(date.DATE));
+                data.start_date = testDate.subtract(1, 'day').valueOf();
+                expect(util.getEvenSmarterDate(data)).to.equal('Gestern, ' + testDate.format('l'));
             });
 
             it('same day', function () {
-                data.start_date = testDate.add(date.DAY).getTime();
-                expect(util.getEvenSmarterDate(data)).to.equal('Heute, ' + testDate.format(date.DATE));
+                data.start_date = testDate.add(1, 'day').valueOf();
+                expect(util.getEvenSmarterDate(data)).to.equal('Heute, ' + testDate.format('l'));
             });
 
             it('tomorrow', function () {
-                data.start_date = testDate.add(date.DAY).getTime();
-                expect(util.getEvenSmarterDate(data)).to.equal('Morgen, ' + testDate.format(date.DATE));
+                data.start_date = testDate.add(1, 'day').valueOf();
+                expect(util.getEvenSmarterDate(data)).to.equal('Morgen, ' + testDate.format('l'));
             });
 
             it('date in the past', function () {
-                data.start_date = testDate.setYear(2012, 10, 11).getTime();
+                data.start_date = testDate.set({ 'year': 2012, 'month': 10, 'date': 11 }).valueOf();
                 expect(util.getEvenSmarterDate(data)).to.equal('So., 11.11.2012');
             });
 
@@ -107,13 +53,13 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
             });
 
             it('same day', function () {
-                var start = new date.Local(2012, 10, 11).getTime();
-                expect(util.getDateInterval({ start_date: start, end_date: start })).to.equal('So., 11.11.2012');
+                var start = moment([2012, 10, 11]);
+                expect(util.getDateInterval({ start_date: start.valueOf(), end_date: start.valueOf() })).to.equal('So., 11.11.2012');
             });
 
-            it('same day', function () {
-                var start = new date.Local(2012, 10, 11).getTime();
-                expect(util.getDateInterval({ start_date: start, end_date: start + date.WEEK})).to.equal('So., 11.11.2012 – So., 18.11.2012');
+            it('one week difference', function () {
+                var start = moment([2012, 10, 11]);
+                expect(util.getDateInterval({ start_date: start.valueOf(), end_date: start.add(1, 'week').valueOf() })).to.equal('11.–18. Nov. 2012');
             });
 
         });
@@ -125,13 +71,13 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
             });
 
             it('same time', function () {
-                var start = new date.Local(2012, 10, 11, 11, 11, 0).getTime();
-                expect(util.getTimeInterval({ start_date: start, end_date: start })).to.equal('11:11-11:11');
+                var start = moment([2012, 10, 11, 11, 11, 0]);
+                expect(util.getTimeInterval({ start_date: start.valueOf(), end_date: start.valueOf() })).to.equal('11:11');
             });
 
             it('same day', function () {
-                var start = new date.Local(2012, 10, 11, 11, 11, 0).getTime();
-                expect(util.getTimeInterval({ start_date: start, end_date: start + date.HOUR})).to.equal('11:11-12:11');
+                var start = moment([2012, 10, 11, 11, 11, 0]);
+                expect(util.getTimeInterval({ start_date: start.valueOf(), end_date: start.add(1, 'hour').valueOf() })).to.equal('11:11\u201312:11');
             });
 
         });
@@ -140,29 +86,29 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
 
             it('object', function () {
                 var result = {
-                    '-1' : 'Keine Erinnerung',
-                    0 : '0 Minuten',
-                    5 : '5 Minuten',
-                    10 : '10 Minuten',
-                    15 : '15 Minuten',
-                    30 : '30 Minuten',
-                    45 : '45 Minuten',
-                    60 : '1 Stunde',
-                    120 : '2 Stunden',
-                    240 : '4 Stunden',
-                    360 : '6 Stunden',
-                    480 : '8 Stunden',
-                    720 : '12 Stunden',
-                    1440 : '1 Tag',
-                    2880 : '2 Tage',
-                    4320 : '3 Tage',
-                    5760 : '4 Tage',
-                    7200 : '5 Tage',
-                    8640 : '6 Tage',
-                    10080 : '1 Woche',
-                    20160 : '2 Wochen',
-                    30240 : '3 Wochen',
-                    40320 : '4 Wochen'
+                    '-1': 'Keine Erinnerung',
+                    0: '0 Minuten',
+                    5: '5 Minuten',
+                    10: '10 Minuten',
+                    15: '15 Minuten',
+                    30: '30 Minuten',
+                    45: '45 Minuten',
+                    60: '1 Stunde',
+                    120: '2 Stunden',
+                    240: '4 Stunden',
+                    360: '6 Stunden',
+                    480: '8 Stunden',
+                    720: '12 Stunden',
+                    1440: '1 Tag',
+                    2880: '2 Tage',
+                    4320: '3 Tage',
+                    5760: '4 Tage',
+                    7200: '5 Tage',
+                    8640: '6 Tage',
+                    10080: '1 Woche',
+                    20160: '2 Wochen',
+                    30240: '3 Wochen',
+                    40320: '4 Wochen'
                 };
                 expect(util.getReminderOptions()).to.deep.equal(result);
             });
@@ -346,26 +292,26 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
             var userList = {
                 'timestamp': 1385422043857,
                 'data': [
-                    [1, 6, 'Max Muster1', 'Max', 'Muster1', 'Founder', 1, 'maxmuster1@open-xchange.com', null, 0],
-                    [2, 6, 'Max Muster2', 'Max', 'Muster1', '', 2, 'maxmuster2@open-xchange.com', null, 1],
-                    [3, 6, 'Max Muster3', 'Max', 'Muster1', null, 3, 'maxmuster3@open-xchange.com', null, 2],
-                    [4, 6, 'Max Muster4', 'Max', 'Muster1', 'CEO', 4, 'maxmuster4@open-xchange.com', null, 3]
+                    [1, 6, 'Max Muster1', 'Max', 'Muster1', 'Founder', 21, 'maxmuster1@open-xchange.com', null, 10],
+                    [2, 6, 'Max Muster2', 'Max', 'Muster1', '', 22, 'maxmuster2@open-xchange.com', null, 11],
+                    [3, 6, 'Max Muster3', 'Max', 'Muster1', null, 23, 'maxmuster3@open-xchange.com', null, 12],
+                    [4, 6, 'Max Muster4', 'Max', 'Muster1', 'CEO', 24, 'maxmuster4@open-xchange.com', null, 13]
                 ]
             };
 
             beforeEach(function () {
                 this.server.respondWith('PUT', /api\/user\?action=list/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(userList));
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(userList));
                 });
                 this.server.respondWith('PUT', /api\/group\?action=list/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                        '{"timestamp":1383694139525,"data":[{"id":1337,"display_name":"dream-team","members":[1,2,3],"last_modified_utc":1383694139525,"name":"dream-team"}]}'
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
+                        '{"timestamp":1383694139525,"data":[{"id":1337,"display_name":"dream-team","members":[21,22,23,24],"last_modified_utc":1383694139525,"name":"dream-team"}]}'
                     );
                 });
             });
 
             it('for test group', function (done) {
-                util.resolveGroupMembers([{id: 1337}], [4]).then(function (result) {
+                util.resolveParticipants({ participants: [{ id: 1337, type: 2 }] }).then(function (result) {
                     var expectedResult = [{
                         'id': 1,
                         'folder_id': 6,
@@ -373,10 +319,10 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                         'first_name': 'Max',
                         'last_name': 'Muster1',
                         'title': 'Founder',
-                        'internal_userid': 1,
+                        'internal_userid': 21,
                         'email1': 'maxmuster1@open-xchange.com',
                         'image1_url': null,
-                        'contact_id': 0,
+                        'contact_id': 10,
                         'mail': 'maxmuster1@open-xchange.com',
                         'mail_field': 1
                     }, {
@@ -386,10 +332,10 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                         'first_name': 'Max',
                         'last_name': 'Muster1',
                         'title': '',
-                        'internal_userid': 2,
+                        'internal_userid': 22,
                         'email1': 'maxmuster2@open-xchange.com',
                         'image1_url': null,
-                        'contact_id': 1,
+                        'contact_id': 11,
                         'mail': 'maxmuster2@open-xchange.com',
                         'mail_field': 1
                     }, {
@@ -399,10 +345,10 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                         'first_name': 'Max',
                         'last_name': 'Muster1',
                         'title': null,
-                        'internal_userid': 3,
+                        'internal_userid': 23,
                         'email1': 'maxmuster3@open-xchange.com',
                         'image1_url': null,
-                        'contact_id': 2,
+                        'contact_id': 12,
                         'mail': 'maxmuster3@open-xchange.com',
                         'mail_field': 1
                     }, {
@@ -412,10 +358,10 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                         'first_name': 'Max',
                         'last_name': 'Muster1',
                         'title': 'CEO',
-                        'internal_userid': 4,
+                        'internal_userid': 24,
                         'email1': 'maxmuster4@open-xchange.com',
                         'image1_url': null,
-                        'contact_id': 3,
+                        'contact_id': 13,
                         'mail': 'maxmuster4@open-xchange.com',
                         'mail_field': 1
                     }];
@@ -423,9 +369,93 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                     done();
                 });
             });
-
         });
 
+        describe('can compute folder color', function () {
+            describe('resolves folder color', function () {
+                it('without meta', function () {
+                    expect(util.getFolderColor({})).to.equal(1);
+                });
+                it('with meta but without color label', function () {
+                    expect(util.getFolderColor({ meta: {} })).to.equal(1);
+                });
+                it('with meta and color label', function () {
+                    expect(util.getFolderColor({ meta: { color_label: 4 } })).to.equal(4);
+                });
+            });
+            describe('resolve appointment color class', function () {
+                it('with appointment without color', function () {
+                    var folder = { meta: { color_label: 2 } },
+                        appointment = { color_label: 0 };
+
+                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-2');
+                });
+                it('with appointment with color', function () {
+                    var folder = { meta: { color_label: 2 } },
+                        appointment = { color_label: 6 };
+
+                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-6');
+                });
+                it('with private appointment without color', function () {
+                    var folder = { meta: { color_label: 2 } },
+                        appointment = { private_flag: true, color_label: 0 };
+
+                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-10');
+                });
+
+                it('with private appointment with color', function () {
+                    var folder = { meta: { color_label: 2 } },
+                        appointment = { private_flag: true, color_label: 5 };
+
+                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-5');
+                });
+                it('with shared unconfirmed appointment', function () {
+                    var folder = { meta: { color_label: 2 }, type: 3 },
+                        appointment = { color_label: 0, created_by: 377, users: [{ id: 1337, confirmmessage: 'unconfirmed' }] };
+
+                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('');
+                });
+                it('with public folder', function () {
+                    var folder = { meta: { color_label: 2 }, type: 2 },
+                        appointment = { color_label: 0, created_by: 377 };
+
+                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-2');
+                });
+            });
+            describe('detects, if appointment is editable', function () {
+                it('with appointment without color', function () {
+                    var folder = { meta: { color_label: 2 } },
+                        appointment = { color_label: 0 };
+
+                    expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(true);
+                });
+                it('with appointment with color', function () {
+                    var folder = { meta: { color_label: 2 } },
+                        appointment = { color_label: 6 };
+
+                    expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
+                });
+                it('with private appointment without color', function () {
+                    var folder = { meta: { color_label: 2 } },
+                        appointment = { private_flag: true, color_label: 0 };
+
+                    expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
+                });
+
+                it('with private appointment with color', function () {
+                    var folder = { meta: { color_label: 2 } },
+                        appointment = { private_flag: true, color_label: 5 };
+
+                    expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
+                });
+                it('with shared unconfirmed appointment', function () {
+                    var folder = { meta: { color_label: 2 }, type: 3 },
+                        appointment = { color_label: 2, created_by: 377, users: [{ id: 1337, confirmmessage: 'unconfirmed' }] };
+
+                    expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
+                });
+            });
+        });
     });
 
 });

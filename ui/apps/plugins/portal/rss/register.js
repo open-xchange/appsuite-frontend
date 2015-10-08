@@ -11,18 +11,17 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('plugins/portal/rss/register',
-    ['io.ox/core/extensions',
-     'io.ox/core/strings',
-     'io.ox/messaging/accounts/api',
-     'io.ox/messaging/services/api',
-     'io.ox/messaging/messages/api',
-     'io.ox/keychain/api',
-     'io.ox/rss/api',
-     'io.ox/core/date',
-     'io.ox/core/tk/dialogs',
-     'gettext!io.ox/portal'
-    ], function (ext, strings, accountAPI, serviceAPI, messageAPI, keychain, rss, date, dialogs, gt) {
+define('plugins/portal/rss/register', [
+    'io.ox/core/extensions',
+    'io.ox/core/strings',
+    'io.ox/messaging/accounts/api',
+    'io.ox/messaging/services/api',
+    'io.ox/messaging/messages/api',
+    'io.ox/keychain/api',
+    'io.ox/rss/api',
+    'io.ox/core/tk/dialogs',
+    'gettext!io.ox/portal'
+], function (ext, strings, accountAPI, serviceAPI, messageAPI, keychain, rss, dialogs, gt) {
 
     'use strict';
 
@@ -93,12 +92,7 @@ define('plugins/portal/rss/register',
         draw: (function () {
 
             function drawItem(item) {
-
-                var publishedDate = new date.Local(item.date).format(date.DATE),
-                    $body = $('<div class="text-body noI18n">').html(item.body);
-
-                // replace img tags with empty src
-                $body.find('img[src=""]').replaceWith(gt('show image'));
+                var $body = $('<div class="text-body noI18n">').html(item.body);
 
                 // add target to a tags
                 $body.find('a').attr('target', '_blank');
@@ -108,7 +102,7 @@ define('plugins/portal/rss/register',
                         $('<h4>').text(_.noI18n(item.subject)),
                         $body,
                         $('<div class="rss-url">').append(
-                            $('<a>').attr({ href: item.url, target: '_blank' }).text(_.noI18n(item.feedTitle + ' - ' + publishedDate))
+                            $('<a>').attr({ href: item.url, target: '_blank' }).text(_.noI18n(item.feedTitle + ' - ' + moment(item.date).format('l')))
                         )
                     )
                 );
@@ -137,7 +131,7 @@ define('plugins/portal/rss/register',
         model.set('candidate', true, { silent: true, validate: true });
 
         var dialog = new dialogs.ModalDialog({ async: true }),
-            $url = $('<textarea id="rss_url" class="form-control" rows="5">').attr({ placeholder: 'http://', tabindex: 1 }).placeholder(),
+            $url = $('<textarea id="rss_url" class="form-control" rows="5">').attr({ placeholder: 'http://', tabindex: 1 }),
             $description = $('<input id="rss_desc" type="text" class="form-control" tabindex="1">'),
             $error = $('<div class="alert alert-danger">').css('margin-top', '15px').hide(),
             props = model.get('props') || {};

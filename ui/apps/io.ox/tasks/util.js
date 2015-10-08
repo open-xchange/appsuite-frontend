@@ -10,150 +10,88 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define('io.ox/tasks/util',
-    ['io.ox/core/date',
-     'settings!io.ox/tasks',
-     'gettext!io.ox/tasks'
-    ], function (date, settings, gt) {
+define('io.ox/tasks/util', [
+    'gettext!io.ox/tasks',
+    'settings!io.ox/core'
+], function (gt, coreSettings) {
 
     'use strict';
 
-    var lookupDaytimeStrings = [gt('this morning'),
-                                gt('by noon'),
-                                gt('this afternoon'),
-                                gt('tonight'),
-                                gt('late in the evening')],
-
-        lookupWeekdayStrings = [gt('next Sunday'),
-                                gt('next Monday'),
-                                gt('next Tuesday'),
-                                gt('next Wednesday'),
-                                gt('next Thursday'),
-                                gt('next Friday'),
-                                gt('next Saturday')];
-
-    var util = {
+    var lookupDaytimeStrings = [
+            gt('this morning'),
+            gt('by noon'),
+            gt('this afternoon'),
+            gt('tonight'),
+            gt('late in the evening')
+        ],
+        hours = [
+            //this morning
+            6,
+            // by noon
+            12,
+            // this afternoon
+            15,
+            // tonight
+            18,
+            // late in the evening
+            22
+        ],
+        util = {
             computePopupTime: function (value, smartEndDate) {
                 smartEndDate = smartEndDate || false;
-                var alarmDate = new date.Local(),
+                var alarmDate = moment(),
                     endDate;
 
-                switch (value) {
-                // in 5 minutes
-                case '5':
-                    alarmDate.add(date.MINUTE * 5);
-                    break;
-                // in 15 minutes
-                case '15':
-                    alarmDate.add(date.MINUTE * 15);
-                    break;
-                // in 30 minutes
-                case '30':
-                    alarmDate.add(date.MINUTE * 30);
-                    break;
-                // in 60 minutes
-                case '60':
-                    alarmDate.add(date.HOUR);
-                    break;
-                default:
-                    alarmDate.setMinutes(0, 0, 0);
-                    switch (value) {
-                    // this morning
-                    case 'd0':
-                        alarmDate.setHours(6);
-                        break;
-                    // by noon
-                    case 'd1':
-                        alarmDate.setHours(12);
-                        break;
-                    // this afternoon
-                    case 'd2':
-                        alarmDate.setHours(15);
-                        break;
-                    // tonight
-                    case 'd3':
-                        alarmDate.setHours(18);
-                        break;
-                    // late in the evening
-                    case 'd4':
-                        alarmDate.setHours(22);
-                        break;
-                    default:
-                        alarmDate.setHours(6);
-                        switch (value) {
-                        // tomorrow
-                        case 't':
-                            alarmDate.add(date.DAY);
-                            break;
-                        // next week
-                        case 'ww':
-                            alarmDate.add(date.WEEK);
-                            break;
-                        // next Sunday
-                        case 'w0':
-                            alarmDate.add(date.DAY * (7 - alarmDate.getDay()));
-                            break;
-                        // next Monday
-                        case 'w1':
-                            alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 6) % 7)));
-                            break;
-                        // next Tuesday
-                        case 'w2':
-                            alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 5) % 7)));
-                            break;
-                        // next Wednesday
-                        case 'w3':
-                            alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 4) % 7)));
-                            break;
-                        // next Thursday
-                        case 'w4':
-                            alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 3) % 7)));
-                            break;
-                        // next Friday
-                        case 'w5':
-                            alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 2) % 7)));
-                            break;
-                        // next Saturday
-                        case 'w6':
-                            alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 1) % 7)));
-                            break;
-                        default:
-                            //cannot identify selector...set time now
-                            break;
+                if (!isNaN(parseInt(value, 10))) {
+                    //in x minutes
+                    alarmDate.add(parseInt(value, 10), 'minutes');
+                } else {
+                    alarmDate.startOf('hour');
+                    if (value.indexOf('d') === 0) {
+                        //this morning, by noon etc
+                        alarmDate.hours(hours[parseInt(value.charAt(1), 10)]);
+                    } else {
+                        alarmDate.hours(6);
+                        if (value === 't') {
+                            //tomorow
+                            alarmDate.add(1, 'day');
+                        } else if ( value === 'ww') {
+                            // next week
+                            alarmDate.add(1, 'week');
+                        } else if (value.indexOf('w') === 0) {
+                            //next sunday - saturday
+                            alarmDate.day(parseInt(value.charAt(1), 10));
+                            //day selects the weekday of the current week, this might be in the past, for example selecting sunday on a wednesday
+                            if (alarmDate.valueOf() < _.now()) {
+                                alarmDate.add(1, 'week');
+                            }
                         }
-                        break;
                     }
-                    break;
                 }
 
                 // set endDate
-                endDate = new date.Local(alarmDate.getTime());
+                endDate = moment(alarmDate);
 
                 if (smartEndDate) {
                     // 0 for Sunday to 6 for Saturday
-                    var weekDay = endDate.getDay();
-                    // if weekend, shift to next Monday
-                    if (weekDay < 1 || weekDay > 5) {
-                        endDate.add(date.DAY * (7 - ((endDate.getDay() + 6) % 7)));
-                    // next Friday
-                    } else {
-                        endDate.add(date.DAY * (7 - ((endDate.getDay() + 2) % 7)));
-                    }
+                    var weekDay = endDate.day();
+                    // if weekend, shift to next Monday, otherwise to Friday
+                    endDate.day(weekDay < 1 || weekDay > 5 ? 8 : 12);
                 }
 
                 // endDate should not be before alarmDate
-                if (alarmDate.getTime() > endDate.getTime()) {
-                    endDate.add(date.WEEK);
+                if (alarmDate.valueOf() > endDate.valueOf()) {
+                    endDate.add(1, 'week');
                 }
 
                 // end Date does not have a time
-                endDate.setHours(0, 0, 0, 0);
+                endDate.startOf('day');
 
                 return {
                     // UTC
-                    endDate: endDate.local,
+                    endDate: endDate.utc(true).valueOf(),
                     // Localtime
-                    alarmDate: alarmDate.getTime()
+                    alarmDate: alarmDate.valueOf()
                 };
             },
 
@@ -182,8 +120,8 @@ define('io.ox/tasks/util',
             buildOptionArray: function (o) {
                 o = o || {};
                 var result = [],
-                    now = new date.Local(),
-                    i = now.getHours();
+                    now = moment(),
+                    i = now.hours();
 
                 if (!o.daysOnly) {
                     result = [
@@ -214,8 +152,10 @@ define('io.ox/tasks/util',
                 // tomorrow
                 result.push(['t', gt('tomorrow')]);
 
-                for (i = (now.getDay() + 2) % 7;i !== now.getDay(); i = ++i % 7) {
-                    result.push(['w' + i, lookupWeekdayStrings[i]]);
+                for (i = (now.day() + 2) % 7;i !== now.day(); i = ++i % 7) {
+                    //#. reminder date selection
+                    //#. %1$s is a weekday, like 'next Monday'
+                    result.push(['w' + i, gt('next %1$s', moment.weekdays(i))]);
                 }
 
                 result.push(['ww', gt('in one week')]);
@@ -223,15 +163,42 @@ define('io.ox/tasks/util',
                 return result;
             },
 
+            isOverdue: function (task) {
+                return ( task.end_time !== undefined && task.end_time !== null && task.end_time < _.now() && task.status !== 3 );
+            },
+
+            getSmartEnddate: function (data) {
+                var m = data.full_time ? moment.utc(data.end_time).local(true) : moment(data.end_time),
+                    startOfDay = moment().startOf('day');
+                // past?
+                if (m.isBefore(startOfDay)) {
+                    if (m.isAfter(startOfDay.subtract(1, 'day'))) {
+                        return gt('Yesterday') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
+                    } else {
+                        return m.format('ddd, ' + m.format(data.full_time ? 'l' : 'l, LT'));
+                    }
+                } else {
+                    // future
+                    if (m.isBefore(startOfDay.add(1,'days'))) {
+                        return gt('Today') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
+                    } else if (m.isBefore(startOfDay.add(1, 'day'))) {
+                        return gt('Tomorrow') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
+                    } else {
+                        return m.format('ddd, ' + m.format(data.full_time ? 'l' : 'l, LT'));
+                    }
+                }
+            },
+
             //change status number to status text. format enddate to presentable string
             //if detail is set, alarm and startdate get converted too and status text is set for more states than overdue and success
             interpretTask: function (task, options) {
                 options = options || {};
                 task = _.copy(task, true);
+
                 //no state for task over time, so manual check is needed
-                if (!options.noOverdue && (task.status !== 3 && task.end_date !== undefined && task.end_date !== null && _.now() > task.end_date)) {
-                        task.status = gt('Overdue');
-                        task.badge = 'badge badge-important';
+                if (!options.noOverdue && this.isOverdue(task)) {
+                    task.status = gt('Overdue');
+                    task.badge = 'badge badge-important';
                 } else if (task.status) {
                     switch (task.status) {
                         case 1:
@@ -254,7 +221,7 @@ define('io.ox/tasks/util',
                             task.status = gt('Deferred');
                             task.badge = 'badge';
                             break;
-                        }
+                    }
                 } else {
                     task.status = '';
                     task.badge = '';
@@ -264,29 +231,17 @@ define('io.ox/tasks/util',
                     task.title = '\u2014';
                 }
 
-                if (task.end_date !== undefined && task.end_date !== null) {
-                    // convert UTC timestamp to local time
-                    task.end_date = new date.Local(date.Local.utc(task.end_date)).format(date.DATE);
-                } else {
-                    task.end_date = '';
+                function formatTime(value, format) {
+                    if (value === undefined || value === null) return '';
+
+                    return moment.tz(value, coreSettings.get('timezone')).format(format);
                 }
 
-                if (options.detail) {
-                    if (task.start_date !== undefined && task.start_date !== null) {
-                        task.start_date = new date.Local(date.Local.utc(task.start_date)).format(date.DATE);
-                    } else {
-                        task.start_date = '';
-                    }
-                    if (task.date_completed) {
-                        task.date_completed = new date.Local(task.date_completed).format();
-                    }
-
-                    if (task.alarm !== undefined && task.alarm !== null) {
-                        task.alarm = new date.Local(task.alarm).format();
-                    } else {
-                        task.alarm = '';
-                    }
-                }
+                // convert UTC timestamps to local time
+                task.end_time = formatTime(task.end_time, task.full_time ? 'l' : 'l, LT');
+                task.start_time = formatTime(task.start_time, task.full_time ? 'l' : 'l, LT');
+                task.alarm = formatTime(task.alarm, 'l, LT');
+                task.date_completed = formatTime(task.date_completed, 'l, LT');
 
                 return task;
             },
@@ -318,35 +273,34 @@ define('io.ox/tasks/util',
                     },
                     //sort by endDate. If equal, sort by alphabet
                     dateSort = function (a, b) {
-                            /* jshint eqeqeq: false */
-                            if (a.end_date > b.end_date) {
-                                return 1;
-                            // use == here so end_date=null and end_date=undefined are equal. may happen with done tasks
-                            } else if (a.end_date == b.end_date) {
-                                return alphabetSort(a, b);
-                            }
-                            else {
-                                return -1;
-                            }
-                            /* jshint eqeqeq: true */
-                        };
+                        /* jshint eqeqeq: false */
+                        if (a.end_time > b.end_time) {
+                            return 1;
+                        // use == here so end_time=null and end_time=undefined are equal. may happen with done tasks
+                        } else if (a.end_time == b.end_time) {
+                            return alphabetSort(a, b);
+                        } else {
+                            return -1;
+                        }
+                        /* jshint eqeqeq: true */
+                    };
 
                 for (var i = 0; i < tasks.length; i++) {
                     if (tasks[i].status === 3) {
                         resultArray.push(tasks[i]);
-                    } else if (tasks[i].end_date === null || tasks[i].end_date === undefined) {
-                        //tasks without end_date
+                    } else if (tasks[i].end_time === null || tasks[i].end_time === undefined) {
+                        //tasks without end_time
                         emptyDateArray.push(tasks[i]);
                     } else {
-                        // tasks with end_date
+                        // tasks with end_time
                         dateArray.push(tasks[i]);
                     }
                 }
-                //sort by end_date and alphabet
+                //sort by end_time and alphabet
                 resultArray.sort(dateSort);
                 //sort by alphabet
                 emptyDateArray.sort(alphabetSort);
-                //sort by end_date and alphabet
+                //sort by end_time and alphabet
                 dateArray.sort(dateSort);
 
                 if (order === 'desc') {

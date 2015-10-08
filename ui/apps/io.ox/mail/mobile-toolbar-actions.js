@@ -11,12 +11,12 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/mail/mobile-toolbar-actions',
-   ['io.ox/core/extensions',
+define('io.ox/mail/mobile-toolbar-actions', [
+    'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/mail/api',
-    'gettext!io.ox/mail'],
-    function (ext, links, api, gt) {
+    'gettext!io.ox/mail'
+], function (ext, links, api, gt) {
 
     'use strict';
 
@@ -85,20 +85,20 @@ define('io.ox/mail/mobile-toolbar-actions',
             section: 'file-op',
             cssClasses: 'io-ox-action-link mobile-toolbar-action'
         },
-        'markunread': {
-            prio: 'hi',
-            mobile: 'hi',
-            drawDisabled: true,
-            label: gt('Mark as unread'),
-            ref: 'io.ox/mail/actions/markunread',
-            section: 'flags'
-        },
-        'markread': {
+        'mark-read': {
             prio: 'hi',
             mobile: 'hi',
             drawDisabled: true,
             label: gt('Mark as read'),
-            ref: 'io.ox/mail/actions/markread',
+            ref: 'io.ox/mail/actions/mark-read',
+            section: 'flags'
+        },
+        'mark-unread': {
+            prio: 'hi',
+            mobile: 'hi',
+            drawDisabled: true,
+            label: gt('Mark as unread'),
+            ref: 'io.ox/mail/actions/mark-unread',
             section: 'flags'
         },
         'copy': {
@@ -107,6 +107,16 @@ define('io.ox/mail/mobile-toolbar-actions',
             label: gt('Copy'),
             ref: 'io.ox/mail/actions/copy',
             section: 'file-op'
+        },
+        'archive': {
+            prio: 'hi',
+            mobile: 'hi',
+            icon: 'fa fa-archive',
+            //#. Verb: (to) archive messages
+            label: gt.pgettext('verb', 'Archive'),
+            section: 'file-op',
+            ref: 'io.ox/mail/actions/archive',
+            cssClasses: 'io-ox-action-link mobile-toolbar-action'
         }
     };
 
@@ -121,7 +131,7 @@ define('io.ox/mail/mobile-toolbar-actions',
         index = 0;
     }
 
-    addAction(submenu, ['markread', 'markunread']);
+    addAction(submenu, ['mark-read', 'mark-unread']);
 
     addAction(pointListView, ['compose']);
 
@@ -130,7 +140,7 @@ define('io.ox/mail/mobile-toolbar-actions',
     addAction(pointDetailView, ['reply', 'reply-all', 'delete', 'forward']);
 
     //multiselect in listview
-    addAction(pointListViewMultiSelect, ['delete', 'forward', 'move']);
+    addAction(pointListViewMultiSelect, ['delete', 'forward', 'move', 'archive']);
 
     pointDetailView.extend(new links.Dropdown({
         id: 'test',
@@ -171,22 +181,22 @@ define('io.ox/mail/mobile-toolbar-actions',
         ref: 'io.ox/mail/mobile/navbar/links'
     }));
 
-    var updateToolbar = _.debounce(function (list) {
+    var updateToolbar = _.debounce(function (selection) {
 
-        if (!list) return;
+        if (!selection) return;
 
         // remember if this list is based on a single thread
         var isThread = this.props.get('thread');
 
         // resolve thread
-        list = api.resolve(list, isThread);
+        var list = api.resolve(selection, isThread);
         if (list.length === 0) isThread = false;
 
         // extract single object if length === 1
         list = list.length === 1 ? list[0] : list;
 
         // draw toolbar
-        var baton = ext.Baton({data: list, isThread: isThread, app: this });
+        var baton = ext.Baton({ data: list, isThread: isThread, selection: selection, app: this });
 
         // handle updated baton to pageController
         var current = this.pages.getCurrentPage();
@@ -198,7 +208,7 @@ define('io.ox/mail/mobile-toolbar-actions',
         if (current.toolbar) current.toolbar.setBaton(baton);
         if (current.secondaryToolbar) current.secondaryToolbar.setBaton(baton);
 
-    }, 10);
+    }, 50);
 
     // multi select toolbar links need some attention
     // in case nothing is selected disabled buttons
@@ -236,16 +246,20 @@ define('io.ox/mail/mobile-toolbar-actions',
             if (!_.device('smartphone')) return;
             app.updateToolbar();
             // update toolbar on selection change as well as any model change (seen/unseen flag)
-            app.listView.on('selection:change change', function () {
+            // selection:action also triggers if the same mail is opened again, so the toolbar has to be drawn
+            app.listView.on('selection:change change selection:action', function () {
                 // don't update in folderview
-                if (app.pages.getCurrentPage().name === 'folderView') return;
+                if (app.pages.getCurrentPage().name === 'folderTree') return;
+                // if there's a thread-mail baton already set, don't overwrite it
+                // Happens becuase the change event occurs later than the "showmail" event
+                if (app.pages.getCurrentPage().toolbar.baton.threadMember) return;
                 app.updateToolbar(app.listView.selection.get());
             });
 
             app.threadView.$el.on('showmail', function () {
-                var baton = ext.Baton({data: app.threadView.mail, isThread: false, app: app });
+                var baton = ext.Baton({ threadMember: true, data: app.threadView.mail, isThread: false, app: app });
                 // handle updated baton to pageController
-                app.pages.getCurrentPage().toolbar.setBaton(baton);
+                app.pages.getPageObject('detailView').toolbar.setBaton(baton);
             });
         }
     });

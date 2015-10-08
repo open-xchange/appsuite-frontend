@@ -10,23 +10,26 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define(['plugins/portal/birthdays/register',
-        'io.ox/core/extensions',
-        'io.ox/core/date',
-        'waitsFor',
-        'fixture!plugins/portal/birthdays/birthdaysTestData.json'], function (birthdayPlugin, ext, date, waitsFor, testData) {
+define([
+    'plugins/portal/birthdays/register',
+    'io.ox/core/extensions',
+    'io.ox/core/moment',
+    'waitsFor',
+    'fixture!plugins/portal/birthdays/birthdaysTestData.json'
+], function (birthdayPlugin, ext, moment, waitsFor, testData) {
+    'use strict';
 
     //update testdata
-    testData[0].birthday = new date.UTC().getTime() - date.DAY;//yesterday
-    testData[1].birthday = new date.UTC().getTime();//today
-    testData[2].birthday = new date.UTC().getTime() + date.DAY;//tomorrow
+    testData[0].birthday = new moment.utc().subtract(1, 'day').valueOf();   //yesterday
+    testData[1].birthday = new moment.utc().valueOf();                      //today
+    testData[2].birthday = new moment.utc().add(1, 'day').valueOf();        //tomorrow
 
     describe('portal Birthday plugin', function () {
 
         describe('should', function () {
             beforeEach(function (done) {
                 this.server.respondWith('GET', /api\/contacts\?action=birthdays/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                             '{ "timestamp":1368791630910,"data": ' + JSON.stringify(testData) + '}');
                 });
                 this.node = $('<div>');
@@ -34,11 +37,11 @@ define(['plugins/portal/birthdays/register',
                 var def = ext.point('io.ox/portal/widget/birthdays').invoke('load', this.node, this.baton);
 
                 def._wrapped[0].then(function () {
-                        return ext.point('io.ox/portal/widget/birthdays').invoke('preview', this.node, this.baton);
-                    }.bind(this))
-                    .then(function () {
-                        done();
-                    });
+                    return ext.point('io.ox/portal/widget/birthdays').invoke('preview', this.node, this.baton);
+                }.bind(this))
+                .then(function () {
+                    done();
+                });
             });
 
             afterEach(function () {
@@ -71,7 +74,7 @@ define(['plugins/portal/birthdays/register',
         describe('should', function () {
             beforeEach(function (done) {
                 this.server.respondWith('GET', /api\/contacts\?action=birthdays/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                             '{ "timestamp":1368791630910,"data": []}');
                 });
                 this.node = $('<div>');

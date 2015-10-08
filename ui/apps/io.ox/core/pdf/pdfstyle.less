@@ -1,0 +1,158 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Kai Ahrens <kai.ahrens@open-xchange.com>
+ */
+
+/* restrict all definitions to OX Documents applications */
+.io-ox-core-pdf {
+
+.text-wrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    opacity: 0.2;
+    line-height: normal;
+
+    > div {
+        color: transparent;
+        position: absolute;
+        white-space: pre;
+        cursor: text;
+        -webkit-transform-origin: 0% 0%;
+        -moz-transform-origin: 0% 0%;
+        -o-transform-origin: 0% 0%;
+        -ms-transform-origin: 0% 0%;
+        transform-origin: 0% 0%;
+    }
+
+    .highlight {
+        margin: -1px;
+        padding: 1px;
+        background-color: rgb(180, 0, 170);
+        border-radius: 4px;
+    }
+
+    .highlight.begin {
+        border-radius: 4px 0px 0px 4px;
+    }
+
+    .highlight.end {
+        border-radius: 0px 4px 4px 0px;
+    }
+
+    .highlight.middle {
+        border-radius: 0px;
+    }
+
+    .highlight.selected {
+        background-color: rgb(0, 100, 0);
+    }
+
+    ::selection {
+        background: rgb(0,0,255);
+    }
+
+    ::-moz-selection {
+        background: rgb(0,0,255);
+    }
+}
+
+.canvas-wrapper {
+    overflow: hidden;
+}
+
+.pdf-page {
+    direction: ltr;
+    margin: 0px auto 0px auto;
+    position: relative;
+    overflow: visible;
+    background-clip: content-box;
+    background-color: white;
+
+    canvas {
+        margin: 0;
+        display: block;
+    }
+
+    .annotLink > a:hover {
+        opacity: 0.2;
+        background: #ff0;
+        box-shadow: 0px 2px 10px #ff0;
+    }
+
+    :-webkit-full-screen {
+        margin-bottom: 100%;
+        border: 0;
+    }
+
+    :-moz-full-screen {
+        margin-bottom: 100%;
+        border: 0;
+    }
+
+    :-ms-fullscreen {
+        margin-bottom: 100% !important;
+        border: 0;
+    }
+
+    :fullscreen {
+        margin-bottom: 100%;
+        border: 0;
+    }
+
+    .annotText > img {
+        position: absolute;
+        cursor: pointer;
+    }
+
+    .annotTextContentWrapper {
+        position: absolute;
+        width: 20em;
+    }
+
+    .annotTextContent {
+        z-index: 200;
+        float: left;
+        max-width: 20em;
+        background-color: #FFFF99;
+        box-shadow: 0px 2px 5px #333;
+        border-radius: 2px;
+        padding: 0.6em;
+        cursor: pointer;
+
+        > h1 {
+            font-size: 1em;
+            border-bottom: 1px solid #000000;
+            padding-bottom: 0.2em;
+        }
+
+        > p {
+            padding-top: 0.2em;
+        }
+    }
+
+    .annotLink {
+        > a {
+            position: absolute;
+            font-size: 1em;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7") 0 0 repeat;
+        }
+    }
+}
+
+} /* end of .io-ox-core-pdf */

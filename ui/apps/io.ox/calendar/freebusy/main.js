@@ -11,10 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/freebusy/main',
-    ['io.ox/calendar/freebusy/controller',
-     'settings!io.ox/core'
-    ], function (controller, settings) {
+define('io.ox/calendar/freebusy/main', [
+    'io.ox/calendar/freebusy/controller',
+    'settings!io.ox/core'
+], function (controller, settings) {
 
     'use strict';
 
@@ -80,11 +80,11 @@ define('io.ox/calendar/freebusy/main',
                         options.model.set({
                             start_date: data.start_date,
                             participants: data.participants
-                        }, {validate: true});
+                        }, { validate: true });
                         // set end_date in a seperate call to avoid the appointment model applyAutoLengthMagic (Bug 27259)
                         options.model.set({
                             end_date: data.end_date
-                        }, {validate: true});
+                        }, { validate: true });
                         /* falls through */
                     case 'cancel':
                         options.app.getWindow().show();

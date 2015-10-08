@@ -10,11 +10,12 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-define(['io.ox/core/api/account',
-        'io.ox/mail/sender',
-        'fixture!io.ox/core/api/user.json',
-        'fixture!io.ox/mail/write/accounts.json'
-       ], function (api, sender, fixtureUser, fixtureAccounts) {
+define([
+    'io.ox/core/api/account',
+    'io.ox/mail/sender',
+    'fixture!io.ox/core/api/user.json',
+    'fixture!io.ox/mail/compose/accounts.json'
+], function (api, sender, fixtureUser, fixtureAccounts) {
 
     'use strict';
 
@@ -65,7 +66,7 @@ define(['io.ox/core/api/account',
                 pop3_expunge_on_quit: false,
                 pop3_path: 'INBOX/EMail',
                 pop3_refresh_rate: null,
-                pop3_storage : null,
+                pop3_storage: null,
                 primary_address: 'otto.xentner@OPEN-XCHANGE.COM', // uppercase!
                 reply_to: null,
                 sent: 'Gesendete Objekte',

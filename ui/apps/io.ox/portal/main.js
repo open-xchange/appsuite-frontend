@@ -12,19 +12,19 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/portal/main',
-    ['io.ox/core/extensions',
-     'io.ox/core/api/user',
-     'io.ox/contacts/api',
-     'io.ox/core/date',
-     'io.ox/core/tk/dialogs',
-     'io.ox/portal/widgets',
-     'io.ox/portal/util',
-     'io.ox/portal/settings/pane',
-     'gettext!io.ox/portal',
-     'settings!io.ox/portal',
-     'less!io.ox/portal/style'
-    ], function (ext, userAPI, contactAPI, date, dialogs, widgets, util, settingsPane, gt, settings) {
+define('io.ox/portal/main', [
+    'io.ox/core/extensions',
+    'io.ox/core/capabilities',
+    'io.ox/core/api/user',
+    'io.ox/contacts/api',
+    'io.ox/core/tk/dialogs',
+    'io.ox/portal/widgets',
+    'io.ox/portal/util',
+    'io.ox/portal/settings/pane',
+    'gettext!io.ox/portal',
+    'settings!io.ox/portal',
+    'less!io.ox/portal/style'
+], function (ext, capabilities, userAPI, contactAPI, dialogs, widgets, util, settingsPane, gt, settings) {
 
     'use strict';
 
@@ -51,7 +51,7 @@ define('io.ox/portal/main',
             var tasks;
             if (type === 'tasks') {
                 tasks = _(baton.data).filter(function (task) {
-                    return task.end_date !== null && task.status !== 3;
+                    return task.end_time !== null && task.status !== 3;
                 });
                 if (_.isEmpty(tasks)) return false;
             }
@@ -66,8 +66,7 @@ define('io.ox/portal/main',
                 if (!hasDataShown(type)) hadData.push(type);
                 settings.set('settings/hadData', hadData).save();
                 return false;
-            }
-            else if (!containsData(type)) {
+            } else if (!containsData(type)) {
                 if (hasDataShown(type)) {
                     // reset for debugging
                     // settings.set('settings/hadData', []).save();
@@ -83,7 +82,7 @@ define('io.ox/portal/main',
 
     // time-based greeting phrase
     function getGreetingPhrase(name) {
-        var hour = new date.Local().getHours();
+        var hour = moment().hour();
         // find proper phrase
         if (hour >= 4 && hour <= 11) {
             return gt('Good morning, %s', name);
@@ -95,10 +94,9 @@ define('io.ox/portal/main',
     }
 
     function openSettings() {
-        require(['io.ox/settings/main'], function (m) {
-            m.getApp().launch().done(function () {
-                this.getGrid().selection.set({ id: 'io.ox/portal' });
-            });
+        var options = { id: app.get('name') };
+        ox.launch('io.ox/settings/main', options).done(function () {
+            this.setSettingsPane(options);
         });
     }
 
@@ -121,7 +119,7 @@ define('io.ox/portal/main',
             );
 
             if (_.device('!smartphone')) {
-                widgets.loadAllPlugins().done(function () {
+                widgets.loadUsedPlugins().done(function () {
                     // add widgets
                     ext.point('io.ox/portal/settings/detail/pane').map(function (point) {
                         if (point && point.id === 'add') {
@@ -153,6 +151,59 @@ define('io.ox/portal/main',
             this.append(
                 baton.$.widgets = $('<ol class="widgets">')
             );
+        }
+    });
+
+    // widget container
+    ext.point('io.ox/portal/sections').extend({
+        id: 'metrics',
+        index: 300,
+        draw: function () {
+            var self = this;
+            // TODO: check for metric capability
+            require(['io.ox/metrics/main'], function (metrics) {
+                // track click on concrete dropdown entry to add a widget
+                self.delegate('.io-ox-portal-settings-dropdown', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'portal',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: 'add',
+                        detail: $(e.target).attr('data-type')
+                    });
+                });
+                // track click on concrete widget
+                self.delegate('ol.widgets > .widget .content', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'portal',
+                        target: 'widgets',
+                        type: 'click',
+                        action: 'show-detail',
+                        detail: $(e.target).closest('.widget').attr('data-widget-type')
+                    });
+                });
+                // track removing of concret widget
+                self.delegate('ol.widgets .disable-widget', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'portal',
+                        target: 'widget',
+                        type: 'click',
+                        action: 'disable',
+                        detail: $(e.target).closest('.widget').attr('data-widget-type')
+                    });
+                });
+                // track reordering of widgets
+                widgets.getCollection().on('order-changed', function (type) {
+                    metrics.trackEvent({
+                        app: 'portal',
+                        target: 'widget',
+                        type: 'click',
+                        action: 'change-order',
+                        detail: type
+                    });
+                });
+
+            });
         }
     });
 
@@ -222,7 +273,7 @@ define('io.ox/portal/main',
         win,
         scrollPos = window.innerHeight,
         appBaton = ext.Baton({ app: app }),
-        sidepopup = new dialogs.SidePopup({tabTrap: true}),
+        sidepopup = new dialogs.SidePopup({ tabTrap: true }),
         collection = widgets.getCollection();
 
     app.settings = settings;
@@ -234,7 +285,7 @@ define('io.ox/portal/main',
             // clean up
             if (model.has('baton')) {
                 delete model.get('baton').model;
-                model.set('baton', null, {validate: true});
+                model.set('baton', null, { validate: true });
                 model.isDeleted = true;
             }
             widgets.save(appBaton.$.widgets);
@@ -287,6 +338,13 @@ define('io.ox/portal/main',
         var needle = model.cid,
             haystack = this.models;
         return !_(haystack).some(function (suspiciousHay) {return suspiciousHay.cid === needle; });
+    };
+
+    app.getTour = function () {
+        //no tours for guests, yet. See bug 41542
+        if (capabilities.has('guest')) return;
+
+        return { id: 'default/io.ox/portal', path: 'io.ox/tours/portal' };
     };
 
     app.getWidgetCollection = function () {
@@ -414,7 +472,7 @@ define('io.ox/portal/main',
     }
 
     function reduceBool(memo, bool) {
-        return memo && bool;
+        return memo || bool;
     }
 
     function runAction(e) {
@@ -433,8 +491,7 @@ define('io.ox/portal/main',
                     if (point.all()[0].summary) {
                         //invoke special summary if there is one
                         point.invoke('summary', node, baton);
-                    }
-                    else if(!node.hasClass('generic-summary')) {
+                    } else if (!node.hasClass('generic-summary')) {
                         //add generic open close if it's not added yet
                         node.addClass('with-summary show-summary generic-summary');
                         node.on('tap', 'h2', function (e) {
@@ -486,7 +543,7 @@ define('io.ox/portal/main',
     app.drawWidget = function (model, index) {
 
         var node = model.node,
-            load = _.device('small') ? (node.offset().top < scrollPos) : true;
+            load = _.device('smartphone') ? (node.offset().top < scrollPos) : true;
 
         if (!model.drawn && load) {
 
@@ -504,12 +561,12 @@ define('io.ox/portal/main',
                 point = ext.point(baton.point),
                 title = widgets.getTitle(model.toJSON(), point.prop('title')),
                 $title = node.find('h2 .title').text(_.noI18n(title)),
-                requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value();
+                requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, false).value();
             // remember
             model.set('baton', baton, { validate: true, silent: true });
             node.attr('aria-label', title);
             node.find('a.disable-widget').attr({
-                'aria-label': title + ', ' + gt('Disable widget'),
+                'aria-label': title + ', ' + gt('Disable widget')
             });
             // setup?
             if (requiresSetUp) {
@@ -568,6 +625,10 @@ define('io.ox/portal/main',
         app.refresh();
     });
 
+    app.getContextualHelp = function () {
+        return 'ox.appsuite.user.sect.portal.gui.html#ox.appsuite.user.sect.portal.gui';
+    };
+
     // launcher
     app.setLauncher(function () {
 
@@ -590,7 +651,7 @@ define('io.ox/portal/main',
         _.tick(1, 'hour', app.updateTitle);
         //change name if username changes
         userAPI.get(ox.user_id).done(function (userData) {
-            contactAPI.on('update:' + _.ecid({folder_id: userData.folder_id, id: userData.contact_id}), app.updateTitle);
+            contactAPI.on('update:' + _.ecid({ folder_id: userData.folder_id, id: userData.contact_id }), app.updateTitle);
         });
 
         win.show(function () {
@@ -620,13 +681,13 @@ define('io.ox/portal/main',
                         .append($('<span>').text(gt('Do you really want to delete this widget?')))
                         .addPrimaryButton('delete',
                             //#. Really delete portal widget - in contrast to "just disable"
-                            gt('Delete'), 'delete', {tabIndex: '1'}
+                            gt('Delete'), 'delete', { tabIndex: 1 }
                         )
-                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
+                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
                         if (model.get('enabled')) {
                             dialog.addAlternativeButton('disable',
                                 //#. Just disable portal widget - in contrast to delete
-                                gt('Just disable widget'), 'disable', {tabIndex: '1'}
+                                gt('Just disable widget'), 'disable', { tabIndex: 1 }
                             );
                         }
                         dialog.show().done(function (action) {
@@ -673,6 +734,7 @@ define('io.ox/portal/main',
                         // default 'intersect' by 50%
                         tolerance: 'pointer',
                         update: function () {
+                            widgets.getCollection().trigger('order-changed', 'portal');
                             widgets.save(appBaton.$.widgets);
                         }
                     });

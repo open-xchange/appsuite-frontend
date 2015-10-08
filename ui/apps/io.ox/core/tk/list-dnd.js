@@ -32,6 +32,9 @@ define('io.ox/core/tk/list-dnd', [
         return title || gt.format(gt.ngettext('1 item', '%1$d items', items.length), items.length);
     }
 
+    //toggleTime must be defined here to give over and drop event handlers the same scope, see Bug 37605
+    var toggleTimer;
+
     function enable(options) {
 
         options = _.extend({
@@ -52,9 +55,9 @@ define('io.ox/core/tk/list-dnd', [
             data,
             source,
             selected,
+            dragged = false,
             helper = null,
             fast,
-            toggleTimer,
             deltaLeft = 15,
             deltaTop = 15,
             // move helper
@@ -87,7 +90,8 @@ define('io.ox/core/tk/list-dnd', [
             // avoid handling bubbling events
             if (e.isDefaultPrevented()) return; else e.preventDefault();
 
-            var arrow = $(this).find('.folder-arrow');
+            // use first here or we get the arrows of the subfolder nodes as well
+            var arrow = $(this).find('.folder-arrow:first');
 
             // css hover doesn't work!
             $(this).addClass('dnd-over');
@@ -158,6 +162,7 @@ define('io.ox/core/tk/list-dnd', [
             move(e);
             // replace in DOM
             helper.appendTo(document.body);
+            dragged = true;
             // bind
             $(document)
                 .one('mousemove.dnd', firstMove)
@@ -204,6 +209,8 @@ define('io.ox/core/tk/list-dnd', [
             if (e.isDefaultPrevented()) return; else e.preventDefault();
             // process drop
             clearTimeout(toggleTimer);
+            // abort unless it was a real drag move
+            if (!dragged) return;
             var target = $(this).attr('data-model') || $(this).attr('data-id') || $(this).attr('data-cid') || $(this).attr('data-obj-id'),
                 baton = new ext.Baton({ data: data, dragType: options.dragType, dropzone: this, target: target });
             $(this).trigger('selection:drop', [baton]);
@@ -223,6 +230,7 @@ define('io.ox/core/tk/list-dnd', [
 
         function start(e) {
             // get source, selected items, and data
+            dragged = false;
             source = $(this);
             selected = _(container.find('.selected'));
             data = source.attr('data-drag-data') ?

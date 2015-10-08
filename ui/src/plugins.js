@@ -57,8 +57,8 @@
 
             request.onupgradeneeded = function (e) {
                 db = e.target.result;
-                db.createObjectStore('filecache', {keyPath: 'name'});
-                db.createObjectStore('version', {keyPath: 'name'});
+                db.createObjectStore('filecache', { keyPath: 'name' });
+                db.createObjectStore('version', { keyPath: 'name' });
             };
 
             request.onsuccess = function (e) {
@@ -141,8 +141,7 @@
             };
 
         })();
-    }
-    else if (Modernizr.websqldatabase && _.device('!android')) {
+    } else if (Modernizr.websqldatabase && _.device('!android')) {
 
         // Web SQL
         (function () {
@@ -261,8 +260,7 @@
 
         })();
 
-    }
-    else if (_.device('android') && Modernizr.localstorage) {
+    } else if (_.device('android') && Modernizr.localstorage) {
 
         // use localstorage on android as this is still the fastest storage
         (function () {
@@ -335,30 +333,12 @@
                            'url($1' + path);
     }
 
-    // IE9 fix. Cannot handle more than 30 <style> tags at once.
-    // see e.g. http://dean.edwards.name/weblog/2010/02/bug85/
-
-    var concatCSS = {}, nodes = {};
-
-    function insertCommon(name, css, selector, node) {
+    function insert(name, css, selector, node) {
         if (node) return node.text(css);
         return $('<style type="text/css">').text(css)
             .attr('data-require-src', name)
             .insertBefore(selector);
     }
-
-    function insertIE9(name, css, selector, node) {
-        if (node) return node.text(css);
-        // need new node?
-        if (!nodes[selector]) nodes[selector] = $('<style type="text/css">').insertBefore(selector);
-        if (!concatCSS[selector]) concatCSS[selector] = '';
-        // append css
-        concatCSS[selector] += '/* ' + name + ' */\n\n' + css + '\n\n';
-        // update
-        return nodes[selector].text(concatCSS[selector]);
-    }
-
-    var insert = _.device('IE === 9') ? insertIE9 : insertCommon;
 
     // Replace the load function of RequireJS with our own, which fetches
     // dynamically concatenated files.
@@ -385,7 +365,7 @@
                         $.ajax({
                             url: url,
                             type: 'get',
-                            contentType: 'text'
+                            dataType: 'text'
                         }).done(function (sourceText) {
                             if (_.url.hash('debug-filecache')) console.log('FileCache: Cache MISS for static file: ', modulename);
                             runCode(modulename, sourceText);
@@ -429,7 +409,9 @@
                 queue.push(url);
             }
 
-            // Try file cache
+            // call nextTick to delay bulk loading to have some time for cache lookup
+            if (queue.length) req.delayTick();
+            // now try file cache
             fileCache.retrieve(modulename).then(
                 function hit(contents) {
                     // bad?
@@ -455,30 +437,30 @@
             function load(module, modulename) {
                 $.ajax({ url: [ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), dataType: 'text' })
                     .done(function (concatenatedText) {
-                    runCode([ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), concatenatedText);
-                    context.completeLoad(modulename);
-                    // Chop up the concatenated modules and put them into file cache
-                    _(concatenatedText.split('/*:oxsep:*/')).each(function (moduleText) {
-                        (function () {
-                            var name = null;
-                            var match = moduleText.match(/define(\.async)?\(([^,]+),/);
-                            if (match) {
-                                name = match[2].substr(1, match[2].length - 2);
-                            }
-                            if (name) {
-                                // cache file?
-                                if (badSource(moduleText)) {
-                                    if (_.url.hash('debug-filecache')) console.warn('FileCache: NOT Caching ' + name);
-                                    return;
+                        runCode([ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), concatenatedText);
+                        context.completeLoad(modulename);
+                        // Chop up the concatenated modules and put them into file cache
+                        _(concatenatedText.split('/*:oxsep:*/')).each(function (moduleText) {
+                            (function () {
+                                var name = null;
+                                var match = moduleText.match(/define(\.async)?\(([^,]+),/);
+                                if (match) {
+                                    name = match[2].substr(1, match[2].length - 2);
                                 }
-                                if (_.url.hash('debug-filecache')) console.log('FileCache: Caching ' + name);
-                                fileCache.cache(name, moduleText);
-                            } else if (_.url.hash('debug-filecache')) {
-                                console.log('FileCache: Could not determine name for ' + moduleText);
-                            }
-                        })();
+                                if (name) {
+                                    // cache file?
+                                    if (badSource(moduleText)) {
+                                        if (_.url.hash('debug-filecache')) console.warn('FileCache: NOT Caching ' + name);
+                                        return;
+                                    }
+                                    if (_.url.hash('debug-filecache')) console.log('FileCache: Caching ' + name);
+                                    fileCache.cache(name, moduleText);
+                                } else if (_.url.hash('debug-filecache')) {
+                                    console.log('FileCache: Could not determine name for ' + moduleText);
+                                }
+                            })();
+                        });
                     });
-                });
             }
         };
 
@@ -500,18 +482,16 @@
         }
     });
 
-        // Name of the current theme, or falsy before a theme is set.
-    var theme = '',
-        // LessCSS files of the current theme.
-        themeCommon = { name: 'common', selector: '#theme' },
+    // LessCSS files of the current theme.
+    var themeCommon = { name: 'common', selector: '#theme' },
         themeStyle = { name: 'style', selector: '#custom' },
         // List of LessCSS files to update for theme changes.
         lessFiles = [themeCommon, themeStyle];
 
     function insertLess(file) {
-        return require(['text!themes/' + theme + '/' + file.name + '.css'], function (css) {
-                file.node = insert(file.path, css, file.selector, file.node);
-            });
+        return require(['text!themes/' + ox.theme + '/' + file.name + '.css'], function (css) {
+            file.node = insert(file.path, css, file.selector, file.node);
+        });
     }
 
     define('less', {
@@ -523,7 +503,7 @@
                 selector: '#css'
             };
             lessFiles.push(file);
-            if (theme) {
+            if (ox.theme) {
                 insertLess(file).then(load, load.error);
             } else {
                 load();
@@ -544,7 +524,7 @@
             if (ox.offline) {
                 name = 'default'; // FIXME: App Cache manifest may have to be generated by backend
             }
-            theme = name;
+            ox.theme = name;
             var path = ox.base + '/apps/themes/' + name + '/',
             icons = {
                 favicon: 'favicon.ico',
@@ -561,8 +541,7 @@
                 win8Icon: 'icon144_win.png'
             };
             for (var i in icons) {
-                $('head #' + i).attr({ href: path + icons[i] })
-                               .detach().appendTo('head');
+                $('head #' + i).attr({ href: path + icons[i] }).detach().appendTo('head');
             }
             if (name !== 'login') {
                 themeCommon.path = path + 'common';
@@ -571,12 +550,6 @@
             } else {
                 return $.when();
             }
-        },
-
-        //FIXME: this function might be broken. Not sure, what it is doing!
-        //only used by theme-maker, as far as I can see
-        getDefinitions: function () {
-            return (this.currentTheme || '').replace(/:/g, ': ');
         }
     });
 }());
@@ -632,7 +605,7 @@
                     f2[i] = function () { f[i].apply(f, arguments); };
                 };
                 for (var i in f) {
-                   f3(i);
+                    f3(i);
                 }
                 callbacks[name] = function (newF) { f = newF; };
                 load(f2);

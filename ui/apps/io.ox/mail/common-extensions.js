@@ -11,26 +11,25 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/common-extensions',
-    ['io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/extPatterns/actions',
-     'io.ox/core/emoji/util',
-     'io.ox/mail/util',
-     'io.ox/mail/api',
-     'io.ox/core/api/account',
-     'io.ox/core/date',
-     'io.ox/core/strings',
-     'io.ox/core/folder/api',
-     'io.ox/core/folder/title',
-     'io.ox/core/notifications',
-     'io.ox/contacts/api',
-     'io.ox/core/api/collection-pool',
-     'io.ox/core/tk/flag-picker',
-     'io.ox/core/capabilities',
-     'settings!io.ox/mail',
-     'gettext!io.ox/mail'
-    ], function (ext, links, actions, emoji, util, api, account, date, strings, folderAPI, shortTitle, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, gt) {
+define('io.ox/mail/common-extensions', [
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/core/emoji/util',
+    'io.ox/mail/util',
+    'io.ox/mail/api',
+    'io.ox/core/api/account',
+    'io.ox/core/strings',
+    'io.ox/core/folder/api',
+    'io.ox/core/folder/title',
+    'io.ox/core/notifications',
+    'io.ox/contacts/api',
+    'io.ox/core/api/collection-pool',
+    'io.ox/core/tk/flag-picker',
+    'io.ox/core/capabilities',
+    'settings!io.ox/mail',
+    'gettext!io.ox/mail'
+], function (ext, links, actions, emoji, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, gt) {
 
     'use strict';
 
@@ -54,23 +53,45 @@ define('io.ox/mail/common-extensions',
         },
 
         picture: function (baton) {
-            var data = baton.data, from = data.from,
-                size = _.device('retina') ? 80 : 40;
+
+            // show picture of sender or first recipient
+            // special cases:
+            // - show picture of first recipient in "Sent items" and "Drafts"
+            // - exception: always show sender in threaded messages
+
+            var data = baton.data,
+                size = api.threads.size(data),
+                single = size <= 1,
+                addresses = single && account.is('sent|drafts', data.folder_id) ? data.to : data.from;
             this.append(
                 contactsAPI.pictureHalo(
                     $('<div class="contact-picture" aria-hidden="true">'),
-                    { email: data.picture || (from && from[0] && from[0][1]), width: size, height: size, scaleType: 'cover' }
+                    { email: data.picture || (addresses && addresses[0] && addresses[0][1]) },
+                    { width: 40, height: 40, effect: 'fadeIn' }
+                )
+            );
+        },
+
+        senderPicture: function (baton) {
+
+            // shows picture of sender see Bug 41023
+
+            var addresses = baton.data.from;
+            this.append(
+                contactsAPI.pictureHalo(
+                    $('<div class="contact-picture" aria-hidden="true">'),
+                    { email: addresses && addresses[0] && addresses[0][1] },
+                    { width: 40, height: 40, effect: 'fadeIn' }
                 )
             );
         },
 
         date: function (baton, options) {
-            var data = baton.data, t = data.received_date, d;
+            var data = baton.data, t = data.received_date;
             if (!_.isNumber(t)) return;
-            d = new date.Local(t);
             this.append(
                 $('<time class="date">')
-                .attr('datetime', d.format('yyyy-MM-dd hh:mm'))
+                .attr('datetime', moment(t).toISOString())
                 .text(_.noI18n(util.getDateTime(t, options)))
             );
         },
@@ -91,14 +112,11 @@ define('io.ox/mail/common-extensions',
                 // get folder data to check capabilities:
                 // if bit 4096 is set, the server sort by local part not display name
                 capabilities = folderAPI.pool.getModel(data.folder_id).get('capabilities') || 0,
-                bit4096 = capabilities & 4096,
-                sortByRecipients = baton.options.sort === 'from-to',
-                useDisplayName = !sortByRecipients || !bit4096,
-                unescapeDisplayName = !sortByRecipients;
+                useDisplayName = baton.options.sort !== 'from-to' || !(capabilities & 4096);
 
             this.append(
                 $('<div class="from">').append(
-                    util.getFrom(data, { field: field, showDisplayName: useDisplayName, unescapeDisplayName: unescapeDisplayName })
+                    util.getFrom(data, { field: field, reorderDisplayName: useDisplayName, showDisplayName: useDisplayName })
                 )
             );
         },
@@ -133,7 +151,8 @@ define('io.ox/mail/common-extensions',
 
         threadSize: function (baton) {
             // only consider thread-size if app is in thread-mode
-            if (!baton.app.isThreaded()) return;
+            var isThreaded = baton.app && baton.app.isThreaded();
+            if (!isThreaded) return;
             if (baton.options.threaded !== true && (!baton.app || baton.app.props.get('thread') === false)) return;
 
             var size = api.threads.size(baton.data);
@@ -151,6 +170,25 @@ define('io.ox/mail/common-extensions',
             this.append(
                 $('<i class="fa fa-paperclip has-attachments" aria-hidden="true">')
             );
+        },
+
+        pgp: {
+            encrypted: function (baton) {
+                //simple check for encrypted mail
+                if (!/^multipart\/encrypted/.test(baton.data.content_type)) return;
+
+                this.append(
+                    $('<i class="fa fa-lock encrypted" aria-hidden="true">')
+                );
+            },
+            signed: function (baton) {
+                //simple check for signed mail
+                if (!/^multipart\/signed/.test(baton.data.content_type)) return;
+
+                this.append(
+                    $('<i class="fa fa-pencil-square-o signed" aria-hidden="true">')
+                );
+            }
         },
 
         priority: function (baton) {
@@ -216,6 +254,35 @@ define('io.ox/mail/common-extensions',
             );
         },
 
+        // add orignal folder as label to search result items
+        folder: function (baton) {
+            // missing data or find currently inactive
+            if (!baton.data.original_folder_id || !(baton.app && baton.app.get('find') && baton.app.get('find').isActive())) return;
+            // add container
+            var node;
+            this.append(
+                node = $('<span class="original-folder">')
+            );
+            // add breadcrumb
+            require(['io.ox/core/folder/breadcrumb'], function (BreadcrumbView) {
+                var view = new BreadcrumbView({
+                        folder: baton.data.original_folder_id,
+                        app: baton.app,
+                        exclude: [ 'default0' ]
+                    }), renderPathOrig;
+                // not need for this here
+                view.computeWidth = $.noop;
+                // show only folder paths tail
+                renderPathOrig = view.renderPath;
+                view.renderPath = function (path) {
+                    return renderPathOrig.call(this, [].concat(_.last(path)) );
+                };
+
+                // append to dom
+                node.append( view.render().$el );
+            });
+        },
+
         recipients: (function () {
 
             // var drawAllDropDown = function (node, label, data) {
@@ -229,8 +296,8 @@ define('io.ox/mail/common-extensions',
 
             var showAllRecipients = function (e) {
                 e.preventDefault();
-                $(this).find('.show-all-recipients').remove();
-                $(this).children().show();
+                $(this).parent().children().show();
+                $(this).hide();
             };
 
             return function (baton) {
@@ -276,7 +343,7 @@ define('io.ox/mail/common-extensions',
                     container.append(
                         // BCC
                         $('<span class="io-ox-label">').append(
-                            $.txt(gt('Bcc')),
+                            $.txt(gt('Blind copy')),
                             _.noI18n('\u00A0\u00A0')
                         ),
                         util.serializeList(data, 'bcc'),
@@ -292,8 +359,8 @@ define('io.ox/mail/common-extensions',
                     container.append(
                         //#. %1$d - number of other recipients (names will be shown if string is clicked)
                         $('<a href="#" class="show-all-recipients">').text(gt('and %1$d others', items.length - 2))
+                        .on('click', showAllRecipients)
                     );
-                    container.on('click', showAllRecipients);
                 }
             };
         }()),
@@ -365,7 +432,6 @@ define('io.ox/mail/common-extensions',
                 };
 
             return function (baton) {
-
                 if (baton.attachments.length === 0) return $.when();
 
                 var $el = this,
@@ -412,7 +478,7 @@ define('io.ox/mail/common-extensions',
                         data = collection.get(id).toJSON();
                         baton = ext.Baton({ startItem: data, data: list });
 
-                        actions.invoke('io.ox/mail/actions/slideshow-attachment', null, baton);
+                        actions.invoke('io.ox/mail/actions/view-attachment', null, baton);
                     });
 
                     def.resolve(view);
@@ -428,27 +494,30 @@ define('io.ox/mail/common-extensions',
 
         unreadToggle: (function () {
 
+            function getAriaLabel(data) {
+                return util.isUnseen(data) ?
+                    gt('This message is unread, press this button to mark it as read.') :
+                    gt('This message is read, press this button to mark it as unread.');
+
+            }
+
             function toggle(e) {
                 e.preventDefault();
-                var view = e.data.view, data = view.model.toJSON(), node = e.data.node;
+                var data = e.data.model.toJSON();
                 // toggle 'unseen' bit
-
-                if (util.isUnseen(data)) {
-                    api.markRead(data);
-                    node.attr('aria-label', gt('This E-mail is read, press to mark it as unread.'));
-                } else {
-                    api.markUnread(data);
-                    node.attr('aria-label', gt('This E-mail is unread, press to mark it as read.'));
-                }
+                if (util.isUnseen(data)) api.markRead(data); else api.markUnread(data);
+                $(this).attr('aria-label', getAriaLabel(data));
             }
 
             return function (baton) {
 
                 if (util.isEmbedded(baton.data)) return;
 
-                var a11y = util.isUnseen(baton.data) ? gt('This E-mail is unread, press to mark it as read.') : gt('This E-mail is read, press to mark it as unread.'),
-                    button = $('<a href="#" role="button" class="unread-toggle" tabindex="1" aria-label="' + a11y + '"><i class="fa" aria-hidden="true"/></a>');
-                this.append(button.on('click', { view: baton.view, node: button }, toggle)
+                this.append(
+                    $('<a href="#" role="button" class="unread-toggle" tabindex="1">')
+                    .attr('aria-label', getAriaLabel(baton.data))
+                    .append('<i class="fa" aria-hidden="true">')
+                    .on('click', { model: baton.view.model }, toggle)
                 );
             };
         }()),
@@ -577,30 +646,6 @@ define('io.ox/mail/common-extensions',
                 this.on('click', '.disposition-notification .close', { view: baton.view }, cancel);
                 baton.view.listenTo(baton.model, 'change:disp_notification_to', draw.bind(this));
             };
-
-        }()),
-
-        subscriptionNotification: (function () {
-
-            // respond to publication invitation mails
-
-            function draw(model) {
-
-                if (!model.has('headers')) return;
-                if (!model.get('headers')['X-OX-PubURL']) return;
-
-                var self = this;
-
-                require(['io.ox/core/pubsub/notifications/subscription'], function (draw) {
-                    draw.call(self, model);
-                });
-            }
-
-            return function (baton) {
-                draw.call(this, baton.model);
-                baton.view.listenToOnce(baton.model, 'change:headers', draw.bind(this));
-            };
-
         }())
     };
 

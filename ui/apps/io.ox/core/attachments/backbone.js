@@ -11,10 +11,11 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('io.ox/core/attachments/backbone',
-    ['io.ox/core/folder/title',
-     'io.ox/core/capabilities'
-    ], function (shortTitle, capabilities) {
+define('io.ox/core/attachments/backbone', [
+    'io.ox/core/folder/title',
+    'io.ox/core/capabilities',
+    'io.ox/contacts/api'
+], function (shortTitle, capabilities, api) {
 
     'use strict';
 
@@ -29,7 +30,7 @@ define('io.ox/core/attachments/backbone',
                 total: total
             });
             if (loaded / total >= 1) {
-                def.resolve({data: ['133713371337']});
+                def.resolve({ data: ['133713371337'] });
             } else {
                 _.delay(wait, 1000);
             }
@@ -41,7 +42,7 @@ define('io.ox/core/attachments/backbone',
         };
     };
 
-    var regIsDocument = /\.(pdf|do[ct]x?|xlsx?|p[po]tx?)$/i,
+    var regIsDocument = /\.(pdf|do[ct]x?|xlsx?|o[dt]s|p[po]tx?)$/i,
         regIsImage = /\.(gif|bmp|tiff|jpe?g|gmp|png)$/i;
 
     var previewFetcher = {
@@ -121,8 +122,8 @@ define('io.ox/core/attachments/backbone',
             return this.get('filename');
         },
 
-        getShortTitle: function () {
-            return shortTitle(this.getTitle(), 30);
+        getShortTitle: function (length) {
+            return shortTitle(this.getTitle(), length || 30);
         },
 
         getSize: function () {
@@ -137,6 +138,18 @@ define('io.ox/core/attachments/backbone',
         isFileAttachment: function () {
             return this.get('disp') === 'attachment' ||
                 this.get('disp') === 'inline' && this.get('filename');
+        },
+
+        isContact: function () {
+            return this.get('group') === 'contact';
+        },
+
+        isDriveFile: function () {
+            return this.get('group') === 'file';
+        },
+
+        isLocalFile: function () {
+            return this.get('group') === 'localFile';
         },
 
         needsUpload: function () {
@@ -167,7 +180,7 @@ define('io.ox/core/attachments/backbone',
                 var def = new UploadSimulator().upload(this.fileObj);
                 var model = this;
                 def.then(function uploadDone() {
-                    var url = 'appsuite/v=7.6.0.20140716.154321/apps/themes/default/dummypicture.png';
+                    var url = api.getFallbackImage();
                     var meta = _.clone(model.get('meta'));
                     meta.previewUrl = meta.previewUrl || url;
                     model.set('meta', meta);
@@ -187,6 +200,38 @@ define('io.ox/core/attachments/backbone',
             return this.filter(function (model) {
                 return model.isFileAttachment();
             });
+        },
+        mailAttachments: function () {
+            return this.filter(function (model) {
+                return model.get('disp') === 'inline' || model.get('disp') === 'attachment';
+            }).map(function (m, i) {
+                var attr;
+                if (i === 0 && m.attributes.content_type === 'text/plain') {
+                    attr = m.pick('content_type', 'content');
+                    // For "text/plain" mail bodies, the JSON boolean field "raw" may be specified inside the body's JSON representation to signal that the text content shall be kept as-is; meaning to keep all formatting intact
+                    attr.raw = true;
+                } else {
+                    attr = m.attributes;
+                }
+                return attr;
+            });
+        },
+        contactsIds: function () {
+            return this.filter(function (model) {
+                return model.isContact();
+            }).map(function (o) {
+                return o.pick('folder_id', 'id');
+            });
+        },
+        driveFiles: function () {
+            return _(this.filter(function (model) {
+                return model.isDriveFile();
+            })).pluck('id');
+        },
+        localFiles: function () {
+            return _(this.filter(function (model) {
+                return model.isLocalFile();
+            })).pluck('fileObj');
         }
     });
 

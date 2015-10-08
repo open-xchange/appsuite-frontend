@@ -4,7 +4,7 @@
 <title>5.4.1. 新規メールの送信</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Groupware">
 <link rel="up" href="ox.appsuite.user.sect.email.send.html" title="5.4. メールの送信">
 <link rel="prev" href="ox.appsuite.user.sect.email.send.html" title="5.4. メールの送信">
 <link rel="next" href="ox.appsuite.user.sect.email.send.reply.html" title="5.4.2. メールの返信">
@@ -38,19 +38,17 @@
 <a name="ox.appsuite.user.concept.email.new"></a><p>メールを作成するには、次の手順に従います。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>宛先、件名、本文を入力し、<a class="link" href="ox.appsuite.user.sect.email.send.new.html#ox.appsuite.user.task.email.send" title="新規メールを送信する">メールの作成</a> を行います。</p></li>
-<li class="listitem"><p>コピーの送信、ファイルの添付、vCard の添付、重要度の設定などの <a class="link" href="ox.appsuite.user.sect.email.send.new.html#ox.appsuite.user.task.email.send.more" title="メールの送信時に詳細機能を使用する">詳細機能の使用</a> も可能です。</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.send.new.html#ox.appsuite.user.task.email.send.more" title="メール作成時の追加機能の使い方：">詳細機能の使用</a>：コピーの送信、ファイルの添付、vCard の添付、開封確認の要求、重要度の設定</p></li>
 </ul></div>
-<p>
-      </p>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.email.send"></a><p class="title">新規メールを送信する</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p>ツールバーで、<span class="guibutton"><strong>作成</strong></span> をクリックします。</p></li>
 <li class="step">
-<p>宛先のメール アドレスをサイドバーの <span class="guilabel"><strong>宛先</strong></span> フィールドに入力し、Enter キーを押します。</p>
+<p>宛先のメール アドレスを<span class="guilabel"><strong>宛先</strong></span> フィールドに入力します。Enter キーをクリック</p>
 <p>宛先が複数ある場合には、上記の操作を繰り返します。この他、<a class="link" href="ox.appsuite.user.sect.contacts.distributionlist.html#ox.appsuite.user.concept.distributionlist.new">配布リスト</a> を入力する方法もあります。</p>
-<p>宛先を削除するには、<span class="guibutton"><strong>削除</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.delete.recipient"></a><img src="../../images/appsuite_user_icon_trash.png"></span> をクリックします。</p>
+<p>宛先を削除するには、<span class="guibutton"><strong>削除</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.delete.recipient"></a><img src="../../images/appsuite_user_icon_close_setting.png"></span> をクリックします。</p>
 <div class="more">
 <a name="ox.appsuite.user.task.email.send.recipient.more"></a><p><span class="phrase"><strong>ヒント: </strong></span>メール アドレスの入力中に宛先の候補が表示されます。候補を選択するには、次のいずれかの方法を使用します。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
@@ -60,59 +58,93 @@
 <p>
             </p>
 </div>
+<div class="more">
+<a name="ox.appsuite.user.task.email.send.sender.more"></a><p><span class="phrase"><strong>ヒント: </strong></span>完全名ではなく、宛先がメールアドレスを見れるように指定できます。これを行うには、次の手順に従います。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>From:</strong></span>の隣の差出人アドレスをクリックします。</p></li>
+<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>名前を隠す</strong></span> を有効にします。</p></li>
+</ul></div>
+<p>
+            </p>
+</div>
 </li>
 <li class="step"><p>件名を入力します。</p></li>
 <li class="step">
 <p>メールの本文を入力します。</p>
-<p>メールをテキスト フォーマットで作成するには、<span class="guibutton"><strong>本文のフォーマット</strong></span> の下にある <span class="guilabel"><strong>テキスト</strong></span> を選択します。</p>
-<p>メールを HTML フォーマットで作成するには、<span class="guibutton"><strong>HTML</strong></span> を選択します。この場合、書式バーが表示されます。本文の書式は次のように設定します。</p>
-<div class="orderedlist">
-<a name="ox.appsuite.user.task.email.send.text.more"></a><ol class="orderedlist" type="a">
-<li class="listitem"><p>本文の内容を選択します。</p></li>
-<li class="listitem"><p>書式バーで、目的の要素をクリックします。</p></li>
-</ol>
+<p>メールをテキスト フォーマットで作成するには、<span class="guibutton"><strong>オプション</strong></span> をせんたくします。そして <span class="guilabel"><strong>テキスト</strong></span> を選択します。</p>
+<p>メールを HTML フォーマットで作成するには、<span class="guibutton"><strong>オプション</strong></span> を選択します。そして、<span class="guibutton"><strong>HTML</strong></span>を選択します。この場合、書式バーが表示されます。本文の書式は次のように設定します。</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.task.email.send.text.more"></a><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>本文の内容を選択します。</p></li>
+<li class="listitem" style="list-style-type: none"><p>書式バーで、目的の要素をクリックします。</p></li>
+</ul>
 </div>
 <p>
             </p>
-<p>HTML フォーマットの場合、クリップボードから画像を追加できます。</p>
 </li>
-<li class="step"><p>ここでは、コピーの送信、差出人アドレスの選択、ファイルの添付、署名の挿入、vCard の添付、開封通知の要求、重要度の設定などの <a class="link" href="ox.appsuite.user.sect.email.send.new.html#ox.appsuite.user.task.email.send.more" title="メールの送信時に詳細機能を使用する">詳細機能の使用</a> も可能です。</p></li>
+<li class="step">
+<p>HTML 形式の場合、画像を本文に挿入できます。これを行うには、次の手順に従います。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>画像を挿入したい位置にカーソルを合わせてください。</p></li>
+<li class="listitem" style="list-style-type: none"><p>画像を１枚または複数、ファイルブラウザまたはデスクトップからメールウィンドウにドラッグします。画像をメールの本文入力フィールドにドロップします。</p></li>
+</ul></div>
+<p>テキストから画像を削除するには、削除する画像を選択します。キーボードの削除キーを押してください。</p>
+</li>
+<li class="step"><p>ここでは、コピーの送信、差出人アドレスの選択、ファイルの添付、署名の挿入、vCard の添付、開封通知の要求、重要度の設定などの 詳細機能の使用も可能です。</p></li>
 <li class="step"><p><span class="guibutton"><strong>送信</strong></span> をクリックします。</p></li>
 </ol></div>
 <div class="taskrelated">
           <p><span class="phrase"><strong>結果: </strong></span> 転送メールが送信されます。</p>
-        </div>
+          <div class="itemizedlist">
+<a name="ox.appsuite.user.task.email.send.related"></a><p class="title">同等アクション</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p>
+                <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.email.send.new.html#ox.appsuite.user.task.email.send.more" title="メール作成時の追加機能の使い方：">メール作成時の追加機能の使い方：</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.reply.html" title="5.4.2. メールの返信">メールの返信</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.forward.html" title="5.4.3. メールの転送">メールの転送</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.autoforward.html" title="5.4.4. メールの自動転送">メールの自動転送</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.vacationnotice.html" title="5.4.5. 休暇通知の送信">休暇通知の送信</a></span>
+              </p></li></ul>
+</div>
+</div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.email.send.more"></a><p class="title">メールの送信時に詳細機能を使用する</p>
+<a name="ox.appsuite.user.task.email.send.more"></a><p class="title">メール作成時の追加機能の使い方：</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step">
-<p>メールを他の宛先にも送信するには、次の手順に従います。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>メールの宛先を他の受取人に通知する場合、<span class="guibutton"><strong>CC:</strong></span> をクリックし、カーボン コピーを送信する宛先のメール アドレスを入力します。</p></li>
-<li class="listitem" style="list-style-type: none"><p>メールの宛先を他の受取人に通知しない場合、<span class="guibutton"><strong>BCC:</strong></span> をクリックし、ブラインド カーボン コピーを送信する宛先のメール アドレスを入力します。</p></li>
-</ul></div>
-<p>
-            </p>
-<p>複数の宛先に送信する場合、上記の方法以外に <a class="link" href="ox.appsuite.user.sect.contacts.distributionlist.html#ox.appsuite.user.concept.distributionlist.new">配布リスト</a> の名前を入力する方法もあります。</p>
-<p>入力フィールドを隠すには、<span class="guibutton"><strong>CC:</strong></span> や <span class="guibutton"><strong>BCC:</strong></span> を再度クリックします。この場合、入力したデータは維持されます。</p>
-</li>
 <li class="step">
 <p><a class="link" href="ox.appsuite.user.sect.email.externalaccounts.html#ox.appsuite.user.concept.email.externalaccounts">外部メール アカウント</a> をセットアップしている場合、これらのアカウントのアドレスを差出人アドレスとして使用することもできます。これを行うには、次の手順に従います。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>差出人</strong></span> をクリックします。</p></li>
+<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>From:</strong></span>の隣の差出人アドレスをクリックします。</p></li>
 <li class="listitem" style="list-style-type: none"><p>使用するメール アドレスをリストから選択します。</p></li>
 </ul></div>
-<p>リストを隠すには、<span class="guibutton"><strong>差出人</strong></span> を再度クリックします。</p>
+<p>
+            </p>
 <p><span class="phrase"><strong>注: </strong></span> 選択したフォルダごとに、既定の差出人のメール アドレスが表示されます。</p>
+<div class="more">
+<a name="ox.appsuite.user.task.email.send.more.names"></a><p>メールアドレスに表示させる名前を指定できます。これを行うには、次の手順に従います。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>名前を編集</strong></span> をクリックします。<span class="guilabel"><strong>実名を編集</strong></span> ウィンドウが表示されます。</p></li>
+<li class="listitem" style="list-style-type: none"><p>編集したい名前のチェックボックスを有効にします。名前を編集します。<span class="guibutton"><strong>保存</strong></span> をクリックします。</p></li>
+</ul></div>
+<p>名前のない差出人アドレスを表示するには、<span class="guibutton"><strong>名前を隠す</strong></span>をクリックします。</p>
+</div>
 </li>
 <li class="step">
-<p>メールにファイルを添付するには、<span class="guibutton"><strong>添付ファイル</strong></span> をクリックし、<span class="guibutton"><strong>添付ファイルを追加</strong></span> をクリックします。次に、ファイルを 1 つ以上選択します。</p>
-<p><span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> アプリケーションにある最新バージョンのファイルを添付ファイルとして使用するには、<span class="guibutton"><strong>ファイル</strong></span> をクリックします。<span class="guilabel"><strong>ファイルを追加</strong></span> ウィンドウで、フォルダを開きます。添付ファイルとして追加するファイルのチェックボックスを有効にします。<span class="guibutton"><strong>追加</strong></span> をクリックします。</p>
+<p>メールを他の宛先にも送信するには、次の手順に従います。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>メールの宛先を他の受取人に通知する場合、<span class="guibutton"><strong>To</strong></span> フィールドの右側の<span class="guilabel"><strong>CC</strong></span>をクリックします。<span class="guibutton"><strong>CC</strong></span>フィールドに、カーボン コピーを送信する宛先のメール アドレスを入力します。</p></li>
+<li class="listitem" style="list-style-type: none"><p>メールの宛先を他の受取人に通知する場合、<span class="guibutton"><strong>To</strong></span> フィールドの右側の<span class="guilabel"><strong>BCC</strong></span>をクリックします。<span class="guibutton"><strong>BCC</strong></span>フィールドに、ブラインドカーボン コピーを送信する宛先のメール アドレスを入力します。</p></li>
+</ul></div>
+<p><span class="phrase"><strong>ヒント：</strong></span>ドラッグ アンド ドロップで宛先を<span class="guilabel"><strong>To</strong></span>、<span class="guilabel"><strong>CC</strong></span>、<span class="guilabel"><strong>BCC</strong></span>フィールドに選択できます。</p>
+<p>複数の宛先に送信する場合、上記の方法以外に 
+            
+            <a class="link" href="ox.appsuite.user.sect.contacts.distributionlist.html#ox.appsuite.user.concept.distributionlist.new">配布リスト</a> の名前を入力する方法もあります。</p>
+</li>
+<li class="step">
+<p>メールにファイルを添付するには、<span class="guibutton"><strong>添付ファイル</strong></span>をクリックします。<span class="guibutton"><strong>ローカルファイルを追加</strong></span>をクリックします。次に、ファイルを 1 つ以上選択します。</p>
+<p>アプリケーションにある最新バージョンのファイルを添付ファイルとして使用するには、 <span class="phrase"><span class="guilabel"><strong>ドライブ</strong></span></span> <span class="guibutton"><strong>添付ファイル</strong></span>をクリックします。<span class="phrase"><span class="guibutton"><strong>追加 </strong></span></span>をクリックします。
+            
+            
+            <span class="guilabel"><strong>添付ファイル</strong></span>ウィンドウでフォルダーを開けます。添付ファイルとして追加するファイルのチェックボックスを有効にします。<span class="guibutton"><strong>追加</strong></span>をクリックします。</p>
 <p>添付ファイルを削除するには、<span class="guibutton"><strong>削除</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.delete.attachment"></a><img src="../../images/appsuite_user_icon_trash.png"></span> をクリックします。</p>
-<p>入力フィールドを隠すには、<span class="guibutton"><strong>添付ファイル</strong></span> を再度クリックします。この場合、添付したファイルは維持されます。</p>
+<p>添付ファイルを表示または隠すには、添付ファイルアイコンをクリックします。</p>
 <div class="more">
-<a name="ox.appsuite.user.task.email.send.attachment.more"></a><p><span class="phrase"><strong>ヒント: </strong></span>ファイル ブラウザやデスクトップからドキュメントをドラッグしてメール ウィンドウ上にドロップしてもファイルを添付できます。</p>
+<a name="ox.appsuite.user.task.email.send.attachment.more"></a><p><span class="phrase"><strong>ヒント: </strong></span>ファイル ブラウザやデスクトップから一つまたは複数のファイルをファイルブラウザまたは、デスクトップからメールウィンドウにドラッグし、<span class="guibutton"><strong>添付ファイル</strong></span>下にドロップしてもファイルを添付できます。</p>
 </div>
 <div class="more">
 <a name="ox.appsuite.user.task.email.send.attachment.publish"></a><p><span class="phrase"><strong>注: </strong></span> グループウェアの構成によっては、サイズの上限に達すると添付ファイルが送信されないことがあります。この場合、 添付ファイルは個人用ファイル フォルダの配下に保存されます。メールには、この添付ファイルへのリンクが挿入されます。</p>
@@ -124,19 +156,18 @@
 <li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>署名</strong></span> をクリックします。</p></li>
 <li class="listitem" style="list-style-type: none"><p>リストから署名を選択します。</p></li>
 </ul></div>
-<p>リストを隠すには、<span class="guibutton"><strong>署名</strong></span> を再度クリックします。</p>
+<p>
+            </p>
 </li>
 <li class="step">
-<p>オプションの機能を表示するには、サイドバーで <span class="guibutton"><strong>さらに表示</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.more"></a><img src="../../images/appsuite_user_icon_more.png"></span> をクリックします。次のオプションを使用できます。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>重要度の設定</p></li>
-<li class="listitem"><p>vCard の添付</p></li>
-<li class="listitem"><p>開封通知の要求</p></li>
+<p>追加オプションを表示するには、<span class="guibutton"><strong>オプション</strong></span>をクリックします。次のようなオプションの機能があります。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>重要度の設定</p></li>
+<li class="listitem" style="list-style-type: none"><p>vCard の添付</p></li>
+<li class="listitem" style="list-style-type: none"><p>開封通知の要求</p></li>
 </ul></div>
 <p>
             </p>
-<p>オプションの機能を隠すには、<span class="guibutton"><strong>オプション</strong></span> を再度クリックします。この場合、オプションの設定は維持されます。</p>
-<p><span class="phrase"><strong>ヒント: </strong></span><span class="guibutton"><strong>件名</strong></span> フィールドの右側にあるアイコンをクリックしても、重要度を設定できます。</p>
 </li>
 </ol></div>
 </div>

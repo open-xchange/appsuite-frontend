@@ -11,13 +11,11 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/core/tk/mobiscroll',
-    ['apps/3rd.party/mobiscroll/mobiscroll.js',
-     'gettext!io.ox/core',
-     'io.ox/core/date',
-     'css!3rd.party/mobiscroll/css/mobiscroll.core.css',
-     'css!3rd.party/mobiscroll/css/mobiscroll.ios7.css'
-    ], function (mobi, gt, date) {
+define('io.ox/core/tk/mobiscroll', [
+    'gettext!io.ox/core',
+    'static/3rd.party/mobiscroll/mobiscroll.js',
+    'css!3rd.party/mobiscroll/mobiscroll.css'
+], function (gt) {
 
     'use strict';
 
@@ -25,26 +23,26 @@ define('io.ox/core/tk/mobiscroll',
 
     //put some defaults in to reduce code duplications
     if ($.mobiscroll) {
-        var settings = {
+        settings = {
             cancelText: gt('Cancel'),
             clearText: gt('Clear'),
-            dateOrder: date.getFormat(date.DATE).replace(/\W/g, '').toLowerCase(),
-            dateFormat: date.getFormat(date.DATE).replace(/\by\b/, 'yy').toLowerCase(),
             dayText: gt('Days'),
-            display: 'bottom',
-            endYear: new Date().getFullYear() + 100,
             hourText: gt('Hours'),
             minuteText: gt('Minutes'),
-            monthNamesShort: date.locale.monthsShort,
             monthText: gt('Months'),
-            preset: 'date',
-            separator: ' ',
             setText: gt('Ok'),
+            yearText: gt('Years'),
+            display: 'bottom',
+            preset: 'date',
+            theme: 'ios',
+            separator: ' ',
             showLabel: true,
-            theme: 'ios7',
-            timeFormat: date.getFormat(date.TIME).replace(/m/g, 'i').replace(/a/g, 'A'),
-            yearText: gt('Years')
+            endYear: moment().year() + 100,
+            monthNamesShort: moment.monthsShort(),
+            dateFormat: moment.localeData().longDateFormat('l').toLowerCase().replace(/yy/g, 'y'),
+            timeFormat: moment.localeData().longDateFormat('LT').replace(/m/g, 'i')
         };
+        settings.dateOrder = settings.dateFormat.replace(/\W/g, '').replace(/yy/g, 'y');
         settings.timeWheels = settings.timeFormat.replace(/\W/g, '');
         $.mobiscroll.setDefaults(settings);
     }

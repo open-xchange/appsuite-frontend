@@ -11,17 +11,17 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/dialogs',
-    ['io.ox/core/event',
-     'gettext!io.ox/core',
-     'less!io.ox/core/tk/dialog'
-    ], function (Events, gt) {
+define('io.ox/core/tk/dialogs', [
+    'io.ox/core/event',
+    'io.ox/core/extensions',
+    'io.ox/backbone/mini-views/help'
+], function (Events, ext, HelpView) {
 
     'use strict';
 
     // scaffolds
     function getUnderlay() {
-        return $('<div class="abs io-ox-dialog-underlay">').hide();
+        return $('<div class="abs io-ox-dialog-underlay" tabindex="-1">').hide();
     }
 
     function getPopup() {
@@ -106,6 +106,8 @@ define('io.ox/core/tk/dialogs',
                 for (var prop in self) {
                     delete self[prop];
                 }
+                // remove mobile resize listener
+                $(window).off('resize.mobile-dialog');
                 self.close = self.idle = $.noop;
                 nodes.header = nodes.body = nodes.footer = nodes.underlay = nodes.wrapper = null;
                 nodes.buttons = lastFocus = innerFocus = null;
@@ -179,7 +181,7 @@ define('io.ox/core/tk/dialogs',
                 switch (e.which || e.keyCode) {
                 case 27:
                     // ESC
-                    if (!isBusy) {
+                    if (!isBusy && self.getBody().find('.open > .dropdown-menu').length === 0) {
                         // prevent other elements to trigger close
                         e.stopPropagation();
                         if (o.easyOut) invoke('cancel');
@@ -218,7 +220,8 @@ define('io.ox/core/tk/dialogs',
                     break;
                 }
             };
-
+        // pass options to ext point
+        ext.point('io.ox/core/dialogs').invoke('customize', this, o);
         // append all elements
         o.container.append(
             nodes.wrapper
@@ -232,6 +235,7 @@ define('io.ox/core/tk/dialogs',
         if (o.addClass) {
             nodes.popup.addClass(o.addClass);
         }
+
         // add event hub
         Events.extend(this);
 
@@ -364,7 +368,7 @@ define('io.ox/core/tk/dialogs',
         };
 
         this.close = function () {
-            if (!o || o.async)  {
+            if (!o || o.async) {
                 close();
             } else {
                 invoke('cancel');
@@ -402,6 +406,19 @@ define('io.ox/core/tk/dialogs',
                 nodes.header.remove();
             }
 
+            if (o.help) {
+                nodes.header.addClass('help');
+                nodes.header.append(new HelpView({
+                    href: o.help,
+                    tabindex: '1'
+                }).render().$el);
+            }
+
+            // show but keep invisible
+            // this speeds up calculation of dimenstions
+            nodes.underlay.show().addClass('in');
+            nodes.popup.addClass('invisible').show();
+
             var fnSetDimensions = function () {
                 var dim = {
                     width: parseInt(o.width || nodes.popup.width() * 1.1, 10),
@@ -430,8 +447,8 @@ define('io.ox/core/tk/dialogs',
                         'max-width': dim.width,
                         top: o.top || 0
                     });
-                    //not window here, or we might overlap ads or sth
-                    var height = o.substract ? $('#io-ox-core').height() - o.substract - o.top : $('#io-ox-core').height() - 170 - o.top;
+                    // not window here, or we might overlap ads or sth
+                    var height = $('#io-ox-core').height() - (2 * o.top) - nodes.header.outerHeight() - nodes.footer.outerHeight();
                     nodes.body.css({
                         'height': height,
                         'max-height': height
@@ -442,7 +459,7 @@ define('io.ox/core/tk/dialogs',
             var dim = fnSetDimensions();
 
             // apply dimensions, only on desktop and pad
-            if (_.device('!small')) {
+            if (_.device('!smartphone')) {
                 var css = { 'max-width': dim.width + 'px' };
                 if (o.center) {
                     // center vertically
@@ -494,13 +511,23 @@ define('io.ox/core/tk/dialogs',
 
             this.trigger('beforeshow');
 
-            nodes.underlay.show().addClass('in');
-            nodes.popup.show();
+            nodes.popup.removeClass('invisible');
+
+            // make sure, that the maximum height of the dialog does not exceed the screen height
+            function fnMobileMaxHeight() {
+                nodes.body.css('max-height', $('#io-ox-core').height() - 40 - nodes.header.outerHeight() - nodes.footer.outerHeight());
+            }
+            if (_.device('smartphone')) {
+                fnMobileMaxHeight();
+                $(window).on('resize.mobile-dialog', fnMobileMaxHeight);
+            }
 
             // focus button (if available)
-            var button = nodes.popup.find('.btn-primary').first().focus();
-            if (!button.length) {
-                nodes.popup.find('.btn').not('.btn-danger').first().focus();
+            if (_.device('!smartphone')) {
+                var button = nodes.popup.find('.btn-primary').first().focus();
+                if (!button.length) {
+                    nodes.popup.find('.btn').not('.btn-danger').first().focus();
+                }
             }
 
             nodes.popup.on('keydown', fnKey);
@@ -551,12 +578,33 @@ define('io.ox/core/tk/dialogs',
     var CreateDialog = function (options) {
 
         options = $.extend(
-            {top: '50px', center: false},
+            { top: '50px', center: false },
             options || {}
         );
 
         Dialog.call(this, options);
     };
+
+    //
+    // global click handler to properly close side-popups
+    $(document).on('click', function (e) {
+
+        var popups = $('.io-ox-sidepopup');
+        if (popups.length === 0) return;
+        //check if we are inside a modal dialog or pressed a button in the footer (footer buttons usually close the dialog so check with .io-ox-dialog-popup would fail)
+        if ($(e.target).closest('.io-ox-dialog-popup, .io-ox-dialog-underlay, .modal-footer').length > 0) {
+            return;
+        }
+
+        var inside = $(e.target).closest('.io-ox-sidepopup'),
+            index = popups.index(inside);
+
+        popups.slice(index + 1).trigger('close');
+    });
+
+    $(document).on('keydown', function (e) {
+        if (e.which === 27) $('.io-ox-sidepopup').trigger('close');
+    });
 
     var SidePopup = function (options) {
 
@@ -568,13 +616,9 @@ define('io.ox/core/tk/dialogs',
             tabTrap: true
         }, options || {});
 
-        var processEvent,
-            isProcessed,
-            open,
+        var open,
             close,
             closeAll,
-            closeByEscapeKey,
-            closeByClick,
             // for example: The view within this SidePopup closes itself
             closeByEvent,
             previousProp,
@@ -586,8 +630,9 @@ define('io.ox/core/tk/dialogs',
             pane = $('<div class="io-ox-sidepopup-pane f6-target default-content-padding abs" tabindex="1">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
-                    $('<a class="btn-sidepopup" data-action="close" role="button" tabindex="1">')
-                        .text(options.saveOnClose ? gt('Save') : gt('Close'))
+                    $('<a href="#" class="close" data-action="close" role="button" tabindex="1">').append(
+                        $('<i class="fa fa-times">')
+                    )
                 ),
 
             popup = $('<div class="io-ox-sidepopup abs">').attr('role', 'complementary').append(closer, pane),
@@ -636,34 +681,12 @@ define('io.ox/core/tk/dialogs',
         this.nodes = {};
         this.lastTrigger = null;
 
-        processEvent = function (e) {
-            if (!(e.target && $(e.target).attr('data-process-event') === 'true')) {
-                (e.originalEvent || e).processed = true;
-            }
-        };
-
-        isProcessed = function (e) {
-            return (e.originalEvent || e).processed === true;
-        };
-
-        closeByEscapeKey = function (e) {
-            if (e.which === 27) {
-                close(e);
-            }
-        };
-
-        closeByClick = function (e) {
-            if (!(e.target && $(e.target).attr('data-process-event') === 'true') && !isProcessed(e)) {
-                processEvent(e);
-                close(e);
-            }
-        };
-
         closeByEvent = function (e) {
             close(e);
         };
 
         close = function () {
+
             // use this to check if it's open
             if (self.nodes.closest) {
 
@@ -672,10 +695,8 @@ define('io.ox/core/tk/dialogs',
                 }
 
                 // remove handlers & avoid leaks
-                $(document).off('keydown', closeByEscapeKey);
                 self.nodes.closest.prop('sidepopup', previousProp);
-                self.nodes.click.off('click', closeByClick);
-                popup.off('view:remove remove', closeByEvent);
+                popup.off('view:remove remove close', closeByEvent);
                 self.lastTrigger = previousProp = null;
                 // use time to avoid flicker
                 timer = setTimeout(function () {
@@ -722,7 +743,7 @@ define('io.ox/core/tk/dialogs',
 
         popup.on('keydown', fnKey);
 
-        closer.find('.btn-sidepopup')
+        closer.find('.close')
             .on('click', function (e) {
                 // route click to 'pane' since closer is above pane
                 pane.trigger('click');
@@ -737,7 +758,11 @@ define('io.ox/core/tk/dialogs',
                 }
             });
 
-        popup.on('click', processEvent);
+        function getPct(x) {
+            var pct = x / $('body').width() * 100 >> 0;
+            // ensure 0-100 range
+            return Math.max(0, Math.min(100, pct));
+        }
 
         open = function (e, handler) {
             // get proper elements
@@ -746,9 +771,9 @@ define('io.ox/core/tk/dialogs',
             lastFocus = $(document.activeElement);
 
             self.nodes = {
-                closest: target || my.parents('.io-ox-sidepopup-pane, .window-content, .window-container-center, .io-ox-dialog-popup, .notifications-overlay').first(),
-                click: my.parents('.io-ox-sidepopup-pane, .window-body, .window-container-center, .io-ox-dialog-popup, .notifications-overlay').first(),
-                target: target || my.parents('.window-body, .simple-window, .window-container-center, .notifications-overlay').first(),
+                closest: target || my.parents('.io-ox-sidepopup-pane, .window-content, .window-container-center, .io-ox-dialog-popup, .notifications-overlay, body').first(),
+                click: my.parents('.io-ox-sidepopup-pane, .io-ox-dialog-popup, .notifications-overlay, body').first(),
+                target: target || my.parents('.simple-window, .window-container-center, .notifications-overlay, body').first(),
                 simple: my.closest('.simple-window')
             };
 
@@ -756,7 +781,7 @@ define('io.ox/core/tk/dialogs',
             sidepopup = self.nodes.closest.prop('sidepopup') || null;
             self.lastTrigger = sidepopup ? sidepopup.lastTrigger : null;
             // get zIndex for visual stacking
-            zIndex = my.parents('.io-ox-sidepopup, .window-content, .io-ox-dialog-popup, .window-container-center, .notifications-overlay').css('zIndex');
+            zIndex = my.parents('.io-ox-sidepopup, .window-content, .io-ox-dialog-popup, .window-container-center, .notifications-overlay, body').css('zIndex');
             zIndex = parseInt(zIndex, 10);
             zIndex = _.isNumber(zIndex) ? zIndex + 2 : 100;
             // second click?
@@ -774,48 +799,48 @@ define('io.ox/core/tk/dialogs',
                 previousProp = sidepopup;
                 self.nodes.closest.prop('sidepopup', self);
 
-                // prevent default to avoid close
-                processEvent(e);
                 // clear timer
                 clearTimeout(timer);
 
-                // add "Close all"
-                if (self.nodes.closest.is('.io-ox-sidepopup-pane')) {
-                    closer.find('.close-all').remove();
-                    closer.prepend(
-                        $('<a class="btn-sidepopup close-all" role="button" tabindex="1" data-action="close-all">').text(gt('Close all'))
-                        .on('click', { target: self.nodes.target }, closeAll)
-                        .on('keypress', { target: self.nodes.target }, function (e) {
-                            if (e.which === 13) {
-                                closeAll(e);
-                            }
-                        })
-                    );
-                }
-
                 // add handlers to close popup
-                self.nodes.click.on('click', closeByClick);
                 popup.on('view:remove remove', closeByEvent);
-                $(document).on('keydown', closeByEscapeKey);
 
                 // decide for proper side
-                var docWidth = $('body').width(), mode,
+                var docWidth = $('body').width(), mode, pct, left, right,
                     parentPopup = my.parents('.io-ox-sidepopup').first(),
                     firstPopup = parentPopup.length === 0;
 
                 // get side
                 if (/^(left|right)$/.test(options.side)) {
                     mode = options.side;
+                } else if (self.nodes.target.is('.notifications-overlay')) {
+                    // classic behavior: consider position of previous popup
+                    mode = parentPopup.hasClass('right') ? 'left' : 'right';
                 } else {
-                    mode = (firstPopup && e.pageX > docWidth / 2) ||
-                        parentPopup.hasClass('right')  ? 'left' : 'right';
+                    // use click position to determine which side to appear
+                    mode = e.pageX > docWidth / 2 ? 'left' : 'right';
+                    if (firstPopup) {
+                        options.closely = true;
+                        popup.add(arrow).addClass('first');
+                    }
                 }
 
                 popup.add(arrow).removeClass('left right').addClass(mode).css('z-index', zIndex);
                 arrow.css('zIndex', zIndex + 1);
 
-                if (options.closely && _.device('!small')) {
-                    popup.add(arrow).css(mode === 'left' ? 'right' : 'left', '20%');
+                if (options.closely && _.device('!smartphone')) {
+                    if (mode === 'left') {
+                        // sidepopup's max-width is 45%, so we limit to 54%
+                        pct = Math.min(54, 100 - getPct(e.pageX - 100));
+                        left = '';
+                        right = pct + '%';
+                    } else {
+                        pct = Math.min(54, getPct(e.pageX + 100));
+                        left = pct + '%';
+                        right = '';
+                    }
+                    // we need to set left AND right because the popup might be reused (delegate mode)
+                    popup.add(arrow).css({ left: left, right: right });
                 }
 
                 // is inside simple-window?
@@ -830,28 +855,34 @@ define('io.ox/core/tk/dialogs',
                     $('body').scrollTop(0);
                 }
 
-                // add popup to proper element
-                self.nodes.target.append(
-                    (options.modal ? overlay : popup).css('visibility', 'hidden')
-                );
+                // defer to avoid being closed directly
+                _.defer(function () {
 
-                // call custom handler
-                (handler || $.noop).call(self, pane.empty(), e, my);
+                    // add popup to proper element
+                    self.nodes.target.append(
+                        (options.modal ? overlay : popup).css('visibility', 'hidden')
+                    );
 
-                // set arrow top
-                var halfHeight = (my.outerHeight(true) / 2 >> 0),
-                    targetOffset = self.nodes.target.offset() ? self.nodes.target.offset().top : 0,
-                    top = my.offset().top + halfHeight - targetOffset;
-                arrow.css('top', top);
+                    // call custom handler
+                    (handler || $.noop).call(self, pane.empty(), e, my);
 
-                // finally, add arrow
-                (options.modal ? overlay : popup).css('visibility', '');
-                if (!options.modal) {
-                    self.nodes.target.append(arrow);
-                }
+                    // set arrow top
+                    var halfHeight = (my.outerHeight(true) / 2 >> 0),
+                        targetOffset = self.nodes.target.offset() ? self.nodes.target.offset().top : 0,
+                        top = my.offset().top + halfHeight - targetOffset;
 
-                pane.parent().focus();
-                self.trigger('show');
+                    //
+                    arrow.css('top', top);
+
+                    // finally, add arrow
+                    (options.modal ? overlay : popup).css('visibility', '');
+                    if (!options.modal) {
+                        self.nodes.target.append(arrow);
+                    }
+
+                    pane.parent().focus();
+                    self.trigger('show');
+                });
             }
         };
 

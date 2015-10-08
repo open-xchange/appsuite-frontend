@@ -11,104 +11,40 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-.io-ox-mail-compose-window .window-header {
-
-    h1.title {
-        font-size: 20px;
-        line-height: 0;
-    }
-
-    .btn {
-        margin-left: 13px;
-    }
-}
-
 .io-ox-mail-compose {
 
-    padding-top: 10px;
+    // baseline adjustment
+    padding-top: 16px;
 
     & > .mail-compose-fields > .row {
 
         margin-bottom: 10px;
 
-        .maillabel {
-            font-weight: 500;
-        }
-
-        &.sender .dropdown {
-            padding-top: 8px;
+        &.sender {
+            .dropdown { padding-top: 8px; }
         }
 
         div.dropdown {
             display: inline-block;
             margin-bottom: 5px;
 
-            &.signatures {
-                margin-right: 15px;
-            }
+            &.signatures { margin-right: 15px; }
         }
 
-        &.subject input {
-            font-weight: bold;
-        }
+        &.subject input { font-weight: bold; }
 
-        &.attachments .inplace-dropzone {
-            margin: 0 15px;
-        }
+        &.attachments .inplace-dropzone { margin: 0 15px; }
 
-        &.attachments .io-ox-core-tk-attachment-list {
-            clear: both;
-        }
+        &.attachments .io-ox-core-tk-attachment-list { clear: both; }
 
         .token-input, &.subject input {
-            &::-webkit-input-placeholder {
-                color: transparent;
-            }
-            &:-moz-placeholder {
-                color: transparent;
-            }
-            &::-moz-placeholder {
-                color: transparent;
-            }
+            &::-webkit-input-placeholder,
+            &:-moz-placeholder,
+            &::-moz-placeholder,
             &:-ms-input-placeholder {
                 color: transparent;
             }
         }
-
-        @media (max-width: 767px) {
-
-            &.subject input {
-                padding-left: 8px;
-            }
-
-            .token-input, &.subject input {
-                &::-webkit-input-placeholder {
-                    color: #aaa;
-                    font-weight: normal;
-                }
-                &:-moz-placeholder {
-                    color: #aaa;
-                    font-weight: normal;
-                }
-                &::-moz-placeholder {
-                    color: #aaa;
-                    font-weight: normal;
-                }
-                &:-ms-input-placeholder {
-                    color: #aaa;
-                    font-weight: normal;
-                }
-            }
-
-            .form-control {
-                border: none;
-                border-bottom: 1px solid #aaa;
-                border-radius: 0;
-                box-shadow: none;
-            }
-
-        }
-
     }
 
     .sender {
@@ -117,7 +53,6 @@
     }
 
     .header {
-
         margin-bottom: 5px;
 
         h1 {
@@ -125,9 +60,7 @@
             font-size: 20px;
         }
 
-        .btn {
-            margin-left: 10px;
-        }
+        .btn { margin-left: 10px; }
     }
 
     .recipient-actions {
@@ -139,7 +72,8 @@
         margin-top: 5px;
 
         a {
-            padding-right: 7px;
+            margin-right: 3px;
+            padding: 2px;
             color: @label-default-bg;
             text-decoration: none;
         }
@@ -149,38 +83,20 @@
         }
     }
 
-    .autocomplete-item {
-
-        .contact-image {
-            margin-right: 14px;
-            display: inline-block;
-            float: left;
-            .picture(42px, 42px);
-        }
-
-        .recipient-name {
-            font-weight: bold;
-            .ellipsis();
-        }
-
-        .email {
-            .ellipsis();
-        }
+    .contenteditable-editor {
+        position: relative;
+        z-index: 3;
     }
 
-
     .editable-toolbar {
+
         position: relative;
         height: 100%;
 
         &.fixed{
             position: fixed;
-            width: auto;
             min-height: 34px;
-            height: 34px;
-            top: 90px;
             z-index: 1;
-            //box-shadow: 0 1px 5px rgba(0,0,0,0.75);
             border-bottom: 1px solid #ccc;
             opacity: 0.9;
         }
@@ -197,6 +113,7 @@
         input.file-input:hover { cursor: pointer; }
         .mce-panel.mce-container:not(.mce-floatpanel):not(.mce-edit-area) { background-color: #fff; }
         .mce-panel.mce-edit-area { border:1px solid #fff !important; }
+
     }
 
     textarea.editable, .mce-content-body.editable {
@@ -217,11 +134,19 @@
                 text-decoration: underline;
             }
         }
+
         table {
+
             border: 0 none;
             line-height: normal;
+
             td, th { padding: 8px; }
         }
+
+        div {
+            word-wrap: break-word;
+        }
+
         blockquote {
             font-size: 14px;
             border-left: 1px solid #08C;
@@ -230,26 +155,23 @@
             opacity: 0.5;
             blockquote { opacity: 1.0; }
         }
+
     }
 
     .plain-text {
+        //overflow-y: hidden;
         width: 100%;
         border: 1px solid #ccc;
         padding: 18px 21px;
 
-        &.monospace {
-            font-family: monospace;
-        }
+        &.monospace { font-family: monospace; }
     }
 
     // Bootstrap Tokenfield overrides
     .tokenfield {
-
         &.form-control {
             // space for cc/bcc toggle
-            &.to {
-                padding-right: 65px;
-            }
+            &.to { padding-right: 65px; }
         }
 
     }
@@ -296,12 +218,138 @@
     }
 }
 
-@media (min-width: 1200px) {
-    // set max with for main window content
-    .container {
-        width: 1000px;
+.smartphone {
+    .io-ox-mail-compose {
+        padding-top: 8px;
+
+        padding: 0;
+        margin:0;
+
+        textarea {
+            padding:8px 16px;
+            border:0;
+            &:focus {
+                outline: none;
+            }
+        }
+
+        & > .mail-compose-fields > .row {
+            font-size:16px;
+            label {
+                font-size: 16px;
+                font-weight: 400;
+                color: #aaa;
+            }
+            margin:0;
+
+            &.sender { display: none; }
+
+            &[data-extension-id=to],&[data-extension-id=cc],&[data-extension-id=bcc] {
+                padding-top: 2px;
+                padding-bottom: 2px;
+                .col-xs-11 {
+                    width: 90%;
+                    margin-right: -5px;
+                }
+            }
+            &[data-extension-id=subject] {
+                .col-xs-12 { padding-left: 7px; }
+            }
+            &[data-extension-id=composetoolbar] {
+                padding-top:8px;
+                padding-bottom:4px;
+            }
+
+            .maillabel {
+                &.col-xs-1 {
+                    width: 10%;
+                }
+            }
+
+            &.subject {
+                padding-bottom: 6px;
+                padding-top:3px;
+                input { padding-left: 8px; font-size: 16px; font-weight:300; }
+            }
+
+            &:not(.attachments) {
+                border-bottom: 1px solid #ccc;
+            }
+            .token-input, &.subject input {
+                &::-webkit-input-placeholder {
+                    color: #aaa;
+                    font-weight: normal;
+                }
+                &:-moz-placeholder {
+                    color: #aaa;
+                    font-weight: normal;
+                }
+                &::-moz-placeholder {
+                    color: #aaa;
+                    font-weight: normal;
+                }
+                &:-ms-input-placeholder {
+                    color: #aaa;
+                    font-weight: normal;
+                }
+            }
+
+            .twitter-typeahead {
+                // This should be removed when autocomplete is rendered inplace
+                display:block !important;
+            }
+
+            .form-control {
+                padding-top: 7px;
+                border: none;
+                //border-bottom: 1px solid #aaa;
+                border-radius: 0;
+                box-shadow: none;
+                &.focus, &:focus {
+                    //border-color: #66afe9;
+                }
+            }
+        }
+
+        .tokenfield.form-control.to { padding-right: 20px; }
+
+        .recipient-actions a { outline: 0; }
+
+        textarea.editable, .mce-content-body.editable {
+            border-top:0;
+            padding: 8px 16px;
+            margin-top: 0;
+        }
+        .mail-attachment-list {
+            margin-left: -15px;
+            margin-right: -15px;
+            padding: 8px 15px 9px;
+            border-bottom: 1px solid #ccc;
+            &.open { border-bottom: 1px solid #ccc; }
+            &.empty { border-bottom: 0; }
+        }
+        .hidden-file-picker {
+            font-size: 15px;
+            line-height: initial;
+            color: @link-color;
+            padding: 0;
+            padding-top: 1px;
+            &:focus, &:hover {
+                color: @link-color;
+                background-color: transparent;
+            }
+        }
+        textarea.editable, .mce-content-body.editable {
+            border: none;
+            outline: none;
+            &.mce-edit-focus {
+                &:focus {
+                    box-shadow: none;
+                }
+            }
+        }
     }
+
+    .io-ox-mail-compose-window.header-top .window-header .btn[data-action="save"],
+    .editable-toolbar { display:none; }
 }
-
-
-

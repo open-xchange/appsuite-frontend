@@ -66,7 +66,7 @@ if (sinon) {
          * @param  {string}  module id
          * @param  {object}  target
          * @param  {numeric} level level of recursion
-         * @return {object}  root target
+         * @return { object}  root target
          */
         traverse = function (module, target, level) {
             //reset when called without target
@@ -101,7 +101,7 @@ if (sinon) {
          * ids of (directly/indirectly) consuming modules
          * @param  {string} module id
          * @param  {object} hash
-         * @return {object} hash
+         * @return { object} hash
          */
         getConsumers = function (module, hash) {
             var children = Object.keys(tree[module] || {});
@@ -122,7 +122,7 @@ if (sinon) {
             /**
              * list consumers
              * @param  {string} module id
-             * @return {string} deep
+             * @return { string} deep
              */
             list: function (id, deep) {
                 traverse(id);

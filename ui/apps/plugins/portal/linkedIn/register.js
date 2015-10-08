@@ -11,16 +11,16 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('plugins/portal/linkedIn/register',
-    ['io.ox/core/extensions',
-     'io.ox/core/http',
-     'io.ox/oauth/proxy',
-     'io.ox/core/strings',
-     'io.ox/keychain/api',
-     'io.ox/core/capabilities',
-     'gettext!plugins/portal',
-     'less!io.ox/linkedIn/style'
-    ], function (ext, http, proxy, strings, keychain, capabilities, gt) {
+define('plugins/portal/linkedIn/register', [
+    'io.ox/core/extensions',
+    'io.ox/core/http',
+    'io.ox/oauth/proxy',
+    'io.ox/core/strings',
+    'io.ox/keychain/api',
+    'io.ox/core/capabilities',
+    'gettext!plugins/portal',
+    'less!io.ox/linkedIn/style'
+], function (ext, http, proxy, strings, keychain, capabilities, gt) {
 
     'use strict';
 
@@ -41,23 +41,23 @@ define('plugins/portal/linkedIn/register',
                     .append(viewer.draw(person))
                     .append(busy);
 
-            new dialogs.SidePopup(({ modal: true, tabTrap: true}))
+            new dialogs.SidePopup(({ modal: true, tabTrap: true }))
                 .show(e, function (popup) {
                     popup.append(node);
                 });
 
             return http.GET({
-                    module: 'integrations/linkedin/portal',
-                    params: {
-                        action: 'fullProfile',
-                        id: person.id
-                    }
-                })
-                .done(function (completeProfile) {
-                    busy.idle();
-                    node.empty()
-                        .append(viewer.draw(completeProfile));
-                });
+                module: 'integrations/linkedin/portal',
+                params: {
+                    action: 'fullProfile',
+                    id: person.id
+                }
+            })
+            .done(function (completeProfile) {
+                busy.idle();
+                node.empty()
+                    .append(viewer.draw(completeProfile));
+            });
         });
     };
 
@@ -245,8 +245,7 @@ define('plugins/portal/linkedIn/register',
                         return (baton.data = data);
                     }
                     return (baton.data = data.values);
-                })
-                .fail(require('io.ox/core/notifications').yell);
+                });
 
             } else {
 

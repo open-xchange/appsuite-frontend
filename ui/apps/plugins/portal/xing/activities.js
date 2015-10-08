@@ -14,14 +14,14 @@
  * feed of a user.
  */
 
-define('plugins/portal/xing/activities',
-    ['io.ox/core/extensions',
-     'io.ox/xing/api',
-     'io.ox/core/notifications',
-     'io.ox/core/extPatterns/links',
-     'gettext!plugins/portal',
-     'less!plugins/portal/xing/xing'
-    ], function (ext, api, notifications, links, gt) {
+define('plugins/portal/xing/activities', [
+    'io.ox/core/extensions',
+    'io.ox/xing/api',
+    'io.ox/core/notifications',
+    'io.ox/core/extPatterns/links',
+    'gettext!plugins/portal',
+    'less!plugins/portal/xing/xing'
+], function (ext, api, notifications, links, gt) {
 
     'use strict';
 
@@ -29,13 +29,13 @@ define('plugins/portal/xing/activities',
 
     linkXingContact = function (contact) {
         var contactNode = $('<a>')
-            .attr({href: 'https://www.xing.com/profile/' + contact.page_name, target: '_blank'})
+            .attr({ href: 'https://www.xing.com/profile/' + contact.page_name, target: '_blank' })
             .addClass('external xing');
         if (contact.photo_urls) {
             var ps = contact.photo_urls,
                 photoUrl = ps.maxi_thumb || ps.medium_thumb || ps.mini_thumb || ps.thumb || ps.large;
 
-            $('<img>').attr({href: photoUrl, 'class': 'photo'}).appendTo(contactNode);
+            $('<img>').attr({ href: photoUrl, 'class': 'photo' }).appendTo(contactNode);
         }
         contactNode.append($.txt(makeName(contact)));
         return contactNode;
@@ -46,12 +46,10 @@ define('plugins/portal/xing/activities',
     };
 
     very_short_middle_ellipsis = function (text, options) {
-        console.log('very_short_middle_ellipsis', text, options);
         if (!options || !options.limitLength) {
             return text;
         }
-        console.log('Shortened: ', _.ellipsis(text, {max: 20, charpos: 'middle'}));
-        return _.ellipsis(text, {max: 30, charpos: 'middle'});
+        return _.ellipsis(text, { max: 30, charpos: 'middle' });
 
     };
 
@@ -59,18 +57,15 @@ define('plugins/portal/xing/activities',
         if (!options || !options.limitLength) {
             return text;
         }
-        return _.ellipsis(text, {max: 30});
+        return _.ellipsis(text, { max: 30 });
     };
 
     shorter = function (text, options) {
         if (!options || !options.limitLength) {
             return text;
         }
-        return _.ellipsis(text, {max: 50});
+        return _.ellipsis(text, { max: 50 });
     };
-
-
-
 
     ext.point('io.ox/portal/widget/xing/activityhandler').extend({
         id: 'link',
@@ -81,7 +76,7 @@ define('plugins/portal/xing/activities',
             return $('<div class="xing activityObj">').append(
                 $('<div class="actionDesc">').text(gt('%1$s recommends this link:', makeName(activityObj.creator))),
                 $('<div class="actionContent">').append(
-                    $('<a>').attr({href: activityObj.url}).text(very_short_middle_ellipsis(activityObj.url, options)).addClass('external xing'),
+                    $('<a>').attr({ href: activityObj.url }).text(very_short_middle_ellipsis(activityObj.url, options)).addClass('external xing'),
                     $('<div class="title">').text(very_short(activityObj.title, options)),
                     $('<div class="description">').text(shorter(activityObj.description, options))
                 )
@@ -89,7 +84,6 @@ define('plugins/portal/xing/activities',
 
         }
     });
-
 
     ext.point('io.ox/portal/widget/xing/activityhandler').extend({
         id: 'singleBookmarkPost',
@@ -103,14 +97,13 @@ define('plugins/portal/xing/activities',
             return $('<div class="xing activityObj">').append(
                 $('<div class="actionDesc">').text(gt('%1$s posted a link:', makeName(linkActivity.creator))),
                 $('<div class="actionContent">').append(
-                    $('<a>').attr({'href': linkActivity.url, 'target': '_blank'})
+                    $('<a>').attr({ 'href': linkActivity.url, 'target': '_blank' })
                     .addClass('external xing')
                     .text(shorter(linkActivity.description, options) || very_short_middle_ellipsis(linkActivity.url, options))
                 )
             );
         }
     });
-
 
     ext.point('io.ox/portal/widget/xing/activityhandler').extend({
         id: 'singleStatusPost',
@@ -128,7 +121,6 @@ define('plugins/portal/xing/activities',
             );
         }
     });
-
 
     ext.point('io.ox/portal/widget/xing/activityhandler').extend({
         id: 'friend',
@@ -160,7 +152,6 @@ define('plugins/portal/xing/activities',
             );
         }
     });
-
 
     ext.point('io.ox/portal/widget/xing/activityhandler').extend({
         id: 'singleActivityPost',
@@ -195,7 +186,6 @@ define('plugins/portal/xing/activities',
             );
         }
     });
-
 
     ext.point('io.ox/portal/widget/xing/activityhandler').extend({
         id: 'singleUpdate',

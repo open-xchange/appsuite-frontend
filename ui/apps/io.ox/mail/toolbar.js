@@ -11,22 +11,19 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/toolbar',
-    ['io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/extPatterns/actions',
-     'io.ox/core/tk/flag-picker',
-     'io.ox/mail/api',
-     'io.ox/backbone/mini-views/dropdown',
-     'io.ox/backbone/mini-views/toolbar',
-     'io.ox/core/tk/upload',
-     'io.ox/core/dropzone',
-     'io.ox/core/notifications',
-     'gettext!io.ox/mail',
-     'io.ox/mail/actions',
-     'less!io.ox/mail/style',
-     'io.ox/mail/folderview-extensions'
-    ], function (ext, links, actions, flagPicker, api, Dropdown, Toolbar, upload, dropzone, notifications, gt) {
+define('io.ox/mail/toolbar', [
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/core/tk/flag-picker',
+    'io.ox/mail/api',
+    'io.ox/backbone/mini-views/dropdown',
+    'io.ox/backbone/mini-views/toolbar',
+    'gettext!io.ox/mail',
+    'io.ox/mail/actions',
+    'less!io.ox/mail/style',
+    'io.ox/mail/folderview-extensions'
+], function (ext, links, actions, flagPicker, api, Dropdown, Toolbar, gt) {
 
     'use strict';
 
@@ -44,6 +41,12 @@ define('io.ox/mail/toolbar',
             title: gt('Compose new email'),
             drawDisabled: true,
             ref: 'io.ox/mail/actions/compose'
+        },
+        'edit': {
+            prio: 'hi',
+            mobile: 'lo',
+            label: gt('Edit draft'),
+            ref: 'io.ox/mail/actions/edit'
         },
         'reply': {
             prio: 'hi',
@@ -102,27 +105,29 @@ define('io.ox/mail/toolbar',
                 flagPicker.attach(this, { data: baton.data });
             }
         },
-        'edit': {
+        'archive': {
             prio: 'hi',
             mobile: 'lo',
-            label: gt('Edit draft'),
-            ref: 'io.ox/mail/actions/edit'
+            icon: 'fa fa-archive',
+            //#. Verb: (to) archive messages
+            label: gt.pgettext('verb', 'Archive'),
+            ref: 'io.ox/mail/actions/archive'
         },
         //
         // --- LO ----
         //
-        'markunread': {
-            prio: 'lo',
-            mobile: 'lo',
-            label: gt('Mark as unread'),
-            ref: 'io.ox/mail/actions/markunread',
-            section: 'flags'
-        },
-        'markread': {
+        'mark-read': {
             prio: 'lo',
             mobile: 'lo',
             label: gt('Mark as read'),
-            ref: 'io.ox/mail/actions/markread',
+            ref: 'io.ox/mail/actions/mark-read',
+            section: 'flags'
+        },
+        'mark-unread': {
+            prio: 'lo',
+            mobile: 'lo',
+            label: gt('Mark as unread'),
+            ref: 'io.ox/mail/actions/mark-unread',
             section: 'flags'
         },
         'move': {
@@ -146,7 +151,7 @@ define('io.ox/mail/toolbar',
             ref: 'io.ox/mail/actions/print',
             section: 'export'
         },
-        'saveEML': {
+        'save-as-eml': {
             prio: 'lo',
             mobile: 'lo',
             label: gt('Save as file'),
@@ -230,11 +235,12 @@ define('io.ox/mail/toolbar',
             if (_.device('smartphone')) return;
 
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-            var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li' })
+            var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li' })
             .header(gt('Layout'))
-            .option('layout', 'vertical', gt('Vertical'))
-            .option('layout', 'compact', gt('Compact'))
-            .option('layout', 'horizontal', gt('Horizontal'))
+            .option('layout', 'vertical', gt('Vertical'));
+            // offer compact view only on desktop
+            if (_.device('desktop')) dropdown.option('layout', 'compact', gt('Compact'));
+            dropdown.option('layout', 'horizontal', gt('Horizontal'))
             .option('layout', 'list', gt('List'))
             .divider()
             .header(gt('Options'))
@@ -265,15 +271,15 @@ define('io.ox/mail/toolbar',
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbar.render().$el
             );
-            app.updateToolbar = _.queued(function (list) {
-                if (!list) return $.when();
+            app.updateToolbar = _.queued(function (selection) {
+                if (!selection) return $.when();
                 var isThread = this.props.get('thread');
                 // resolve thread
-                list = api.resolve(list, isThread);
+                var list = api.resolve(selection, isThread);
                 // extract single object if length === 1
                 list = list.length === 1 ? list[0] : list;
                 // draw toolbar
-                var baton = ext.Baton({ $el: toolbar.$list, data: list, isThread: isThread, app: this }),
+                var baton = ext.Baton({ $el: toolbar.$list, data: list, isThread: isThread, selection: selection, app: this }),
                     ret = ext.point('io.ox/mail/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
                 return $.when.apply($, ret.value()).then(function () {
                     toolbar.initButtons();

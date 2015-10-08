@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
- define('io.ox/core/metrics/settings/defaults', function () {
+define('io.ox/core/metrics/settings/defaults', function () {
 
     'use strict';
 

@@ -11,80 +11,131 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/flag-picker',
-    ['io.ox/mail/api',
-     'io.ox/core/folder/api',
-     'gettext!io.ox/mail'
-    ], function (api, folderAPI, gt) {
+define('io.ox/core/tk/flag-picker', [
+    'io.ox/mail/api',
+    'io.ox/core/folder/api',
+    'gettext!io.ox/mail'
+], function (api, folderAPI, gt) {
 
     'use strict';
 
     // appends a listener for dropdowns to center them in scrollpane.
     // move this code to another file if this should be used globally.
-    $(document).on('click', '.smart-dropdown', function () {
-        var $this = $(this),
-            $parent = $this.parent(),
-            $ul = $('ul', $parent).first(),
-            $zIndex = $parent.parents('[style*="z-index"]'),
-            transformOffset = $parent.closest('[style*="translate3d"]').offset() || { top: 0, left: 0 },
-            $container = $this.closest('.scrollable'),
-            margin = 7;
+    (function () {
 
-        if (!$parent.hasClass('open') || _.device('smartphone')) return;
+        if (_.device('smartphone')) return;
 
-        function computeBounds() {
-            var positions = {
-                top: Math.max($container.offset().top + margin, Math.min($this.offset().top, $container.offset().top + $container.innerHeight() - $ul.outerHeight() - margin)) - transformOffset.top,
-                right: ($(window).width() - $this.offset().left - $this.outerWidth() + $this.width() + margin) + transformOffset.left,
-                left: 'initial',
-                bottom: 'initial'
-            };
+        function handler() {
 
-            if (positions.top + $ul.outerHeight() > $container.offset().top + $container.innerHeight() - margin) {
-                positions.bottom = $(window).height() - $container.offset().top - $container.innerHeight() + margin;
+            var $this = $(this),
+                $parent = $this.parent(),
+                $ul = $('ul', $parent).first(),
+                $zIndex = $parent.parents('[style*="z-index"]'),
+                transformOffset = $parent.closest('[style*="translate3d"]').offset() || { top: 0, left: 0 },
+                margin = 8,
+            $scrollContainer = $parent.closest('.ios .io-ox-sidepopup-pane, .ios .io-ox-dialog-popup');
+
+            $scrollContainer.css('-webkit-overflow-scrolling', 'auto');
+
+            function computeBounds() {
+
+                var positions = { top: 'auto', right: 'auto', bottom: 'auto', left: 'auto' },
+                    offset = $this.offset(),
+                    width = $this.width(),
+                    height = $this.height(),
+                    dropdownWidth = $ul.outerWidth(),
+                    dropdownHeight = $ul.outerHeight(),
+                    availableWidth = $(window).width(),
+                    availableHeight = $(window).height();
+
+                // check potential positions
+                if ((offset.top + height + dropdownHeight) < availableHeight) {
+                    // enough room below
+                    positions.top = offset.top + height;
+                    // right aligned?
+                    if ($parent.hasClass('pull-right') || (offset.left + dropdownWidth + margin) > availableWidth) {
+                        positions.left = offset.left + width - dropdownWidth;
+                    }
+                } else {
+                    // same top position
+                    positions.top = offset.top;
+                    // left or right?
+                    if ((offset.left + width + dropdownWidth + margin) < availableWidth) {
+                        // enough room on right side
+                        positions.left = offset.left + width + margin;
+                    } else {
+                        // position of left side
+                        positions.left = offset.left - dropdownWidth - margin;
+                    }
+                    // hits bottom?
+                    if (positions.top + dropdownHeight > availableHeight - margin) {
+                        // apply bottom limit
+                        positions.bottom = margin;
+                        // enough room above?
+                        if ((dropdownHeight + 2 * margin) < availableHeight) {
+                            positions.top = 'auto';
+                        } else {
+                            positions.top = margin;
+                        }
+                    }
+                }
+
+                $ul.css(positions);
             }
 
-            $ul.css(positions);
-        }
+            function reset() {
+                $zIndex.each(function () {
+                    var z = $(this);
+                    z.css('z-index', z.data('oldIndex'));
+                    z.removeData('oldIndex');
+                });
+                $parent.removeClass('smart-dropdown-container');
+                $parent.find('.abs').remove();
+                $ul.css({ top: '', left: '', bottom: '', right: '' });
+                $parent.off('ready', computeBounds);
+                $scrollContainer.css('-webkit-overflow-scrolling', '');
+            }
 
-        computeBounds();
-        $parent.on('ready', computeBounds);
-        $zIndex.each(function () {
-            var z = $(this);
-            z.data('oldIndex', z.css('z-index'));
-            z.css('z-index', 10000);
-        });
+            if (!$parent.hasClass('open')) return;
 
-        function reset() {
+            computeBounds();
+
             $zIndex.each(function () {
                 var z = $(this);
-                z.css('z-index', z.data('oldIndex'));
-                z.removeData('oldIndex');
+                //prevent accidentally overwriting of old z Index
+                if (z.data('oldIndex') === undefined) {
+                    z.data('oldIndex', z.css('z-index'));
+                }
+                z.css('z-index', 10000);
             });
-            $parent.removeClass('smart-dropdown-container');
-            $parent.find('.abs').remove();
-            $ul.css({ top: '', left: '', bottom: '', right: '' });
-            $parent.off('ready', computeBounds);
+
+            $parent
+                .on('ready', computeBounds)
+                .one('hidden.bs.dropdown', reset)
+                .addClass('smart-dropdown-container')
+                .append(
+                    $('<div class="abs overlay">')
+                        .css({
+                            left: -transformOffset.left,
+                            right: transformOffset.left
+                        })
+                        .on('mousewheel touchmove', false)
+                        .on('click', function () {
+                            $parent.removeClass('open');
+                            reset();
+                            return false;
+                        })
+                );
         }
 
-        $parent.one('hidden.bs.dropdown', reset);
+        $(document).on('shown.bs.dropdown', function (e, arg) {
+            if (!$(arg.relatedTarget).hasClass('smart-dropdown')) return;
+            return handler.call(arg.relatedTarget, e);
+        });
 
-        $parent.addClass('smart-dropdown-container');
-        $parent.append(
-            $('<div class="abs overlay">')
-                .css({
-                    left: -transformOffset.left,
-                    right: transformOffset.left
-                })
-                .on('mousewheel touchmove', false)
-                .on('click', function (e) {
-                    $parent.removeClass('open');
-                    reset();
-                    e.preventDefault();
-                    e.stopPropagation();
-                })
-        );
-    });
+        $(document).on('click', '.smart-dropdown', handler);
+
+    }());
 
     var colorNames = {
         NONE:       gt('None'),

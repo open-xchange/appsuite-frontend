@@ -12,6 +12,7 @@
  */
 
 define('io.ox/mail/compose/extensions', [
+    'io.ox/contacts/api',
     'io.ox/mail/sender',
     'io.ox/backbone/mini-views/common',
     'io.ox/backbone/mini-views/dropdown',
@@ -22,25 +23,7 @@ define('io.ox/mail/compose/extensions', [
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'static/3rd.party/jquery-ui.min.js'
-], function (sender, mini, Dropdown, ext, Tokenfield, dropzone, capabilities, settings, gt) {
-
-    function renderFrom(array) {
-        if (!array) return;
-        var name = _(array).first(),
-            address = _(array).last();
-        return [
-            $('<span class="name">').text(name ? name + ' ' : ''),
-            $('<span class="address">').text('<' + address + '>')
-        ];
-    }
-
-    var SenderDropdown = Dropdown.extend({
-
-        label: function () {
-            var from = _(this.model.get('from')).first();
-            this.$('.dropdown-label').empty().append(renderFrom(from));
-        }
-    });
+], function (contactAPI, sender, mini, Dropdown, ext, Tokenfield, dropzone, capabilities, settings, gt) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -48,76 +31,148 @@ define('io.ox/mail/compose/extensions', [
     var tokenfieldTranslations = {
         to: gt('To'),
         cc: gt('CC'),
-        bcc: gt('BCC')
+        bcc: gt('BCC'),
+        reply_to: /*#. Must not exceed 8 characters. e.g. German would be: "Antworten an", needs to be abbreviated like "Antw. an" as space is very limited */ gt.pgettext('compose', 'Reply to')
     };
 
     var extensions = {
 
         header: function (baton) {
             if (!baton.view.app.getWindow()) return;
-            var header = $('<div class="row" data-extension-id="header">');
+            var header = $('<div data-extension-id="header">');
             ext.point(POINT + '/header').invoke('draw', header, baton);
-            baton.view.app.getWindow().setHeader(header).addClass('container default-header-padding');
+            baton.view.app.getWindow().setHeader(header);
         },
 
         title: function () {
             this.append(
-                $('<h1 class="col-sm-6 hidden-xs clear-title title">').text(gt('Compose new mail'))
+                $('<h1 class="sr-only">').text(gt('Compose new mail'))
             );
         },
 
-        buttons: function (baton) {
-            this.append(
-                $('<div class="col-xs-12 col-sm-6 text-right">').append(
+        buttons: {
+            discard: function (baton) {
+                this.append(
                     $('<button type="button" class="btn btn-default" data-action="discard">')
                         .on('click', function () { baton.view.app.quit(); })
-                        .text(gt('Discard')),
-                    $('<button type="button" class="btn btn-default" data-action="save">')
-                        .on('click', function () {
-                            if (baton.view.isSaving === true) return false;
-                            baton.view.isSaving = true;
-                            baton.view.saveDraft().done(function () {
-                                baton.view.isSaving = false;
-                            }).fail(function () {
-                                baton.view.isSaving = false;
-                            });
-                        })
-                        .text(gt('Save')),
-                    $('<button type="button" class="btn btn-primary" data-action="send">')
-                        .on('click', function () { baton.view.send(); })
-                        .text(gt('Send'))
-                )
-            );
+                        .text(gt('Discard')));
+            },
+            save: function (baton) {
+                this.append($('<button type="button" class="btn btn-default" data-action="save">')
+                    .on('click', function () {
+                        if (baton.view.isSaving === true) return false;
+                        baton.view.isSaving = true;
+                        baton.view.saveDraft().done(function () {
+                            baton.view.isSaving = false;
+                        }).fail(function () {
+                            baton.view.isSaving = false;
+                        });
+                    })
+                    .text(gt('Save')));
+            },
+            send: function (baton) {
+                this.append($('<button type="button" class="btn btn-primary" data-action="send">')
+                    .on('click', function () { baton.view.send(); })
+                    .text(gt('Send')));
+            }
         },
 
         sender: function (baton) {
 
+            function editNames() {
+                require(['io.ox/mail/compose/names'], function (names) {
+                    names.open();
+                });
+            }
+
             var node = $('<div class="row sender" data-extension-id="sender">'),
                 render = function () {
+                    function renderFrom(array) {
+                        if (!array) return;
+                        var name = _(array).first(), address = _(array).last();
+                        // consider custom settings
+                        if (!settings.get('sendDisplayName', true)) {
+                            name = null;
+                        } else if (settings.get(['customDisplayNames', address, 'overwrite'])) {
+                            name = settings.get(['customDisplayNames', address, 'name'], '');
+                        }
+                        return [
+                            $('<span class="name">').text(name ? name + ' ' : ''),
+                            $('<span class="address">').text(name ? '<' + address + '>' : address)
+                        ];
+                    }
+
                     var defaultSender = _(baton.model.get('from')).first(),
-                        dropdown = new SenderDropdown({
+                        dropdown = new Dropdown({
                             model: baton.model,
-                            label: _(defaultSender).first() + ' <' + _(defaultSender).last() + '>',
+                            label: renderFrom(defaultSender),
                             aria: gt('From'),
                             caret: true
                         });
 
                     sender.drawDropdown().done(function (list) {
 
-                        if (list.sortedAddresses.length >= 1) {
-                            _.each(_(list.sortedAddresses).pluck('option'), function (item) {
+                        function toggleNames() {
+                            var value = !!settings.get('sendDisplayName', true);
+                            settings.set('sendDisplayName', !value).save();
+                            baton.model.set('sendDisplayName', !value);
+                            redraw();
+                            // stop propagation to keep drop-down open
+                            return false;
+                        }
+
+                        function redraw() {
+                            var from = _(baton.model.get('from')).first();
+                            dropdown.$('ul').empty();
+                            drawOptions();
+
+                            dropdown.$('.dropdown-label').empty().append(renderFrom(from));
+                            // re-focus element otherwise the bootstap a11y closes the drop-down
+                            dropdown.$ul.find('[data-name="toggle-display"]').focus();
+                        }
+
+                        function drawOptions() {
+
+                            if (!list.sortedAddresses.length) return;
+                            var options = _(list.sortedAddresses).pluck('option');
+
+                            _(options).each(function (item) {
                                 dropdown.option('from', [item], function () {
                                     return renderFrom(item);
                                 });
                             });
+
+                            if (_.device('smartphone')) return;
+
+                            // append options to toggle and edit names
+                            var state = !!settings.get('sendDisplayName', true);
+                            dropdown
+                                .divider()
+                                .link('toggle-display', state ? gt('Hide names') : gt('Show names'), toggleNames)
+                                .link('edit-real-names', gt('Edit names'), editNames);
                         }
 
+                        function updateDisplayName(names) {
+                            // clone 'from'
+                            var from = [].concat(_(baton.model.get('from')).first());
+                            _.each(names, function (data, id) {
+                                if (from[1] !== id) return;
+                                from[0] = data.overwrite ? data.name : data.defaultName;
+                            });
+                            baton.model.set('from', [ from ]);
+                        }
+
+                        drawOptions();
+
                         node.append(
-                            $('<label class="maillabel col-xs-2 col-sm-1">').text(gt('From')),
-                            $('<div class="col-xs-10 col-sm-11">').append(
+                            $('<label class="maillabel col-xs-1">').text(gt('From')),
+                            $('<div class="col-xs-11">').append(
                                 dropdown.render().$el.attr({ 'data-dropdown': 'from' })
                             )
                         );
+
+                        ox.on('change:customDisplayNames', updateDisplayName);
+                        baton.view.listenTo(baton.model, 'change:from', redraw);
                     });
                 };
 
@@ -132,62 +187,81 @@ define('io.ox/mail/compose/extensions', [
             this.append(node);
         },
 
-        tokenfield: function (label) {
+        // TODO: only used by search
+        tokenPicture: function (model) {
+            // add contact picture
+            $(this).prepend(
+                contactAPI.pictureHalo(
+                    $('<div class="contact-image">'),
+                    model.toJSON(),
+                    { width: 16, height: 16, scaleType: 'contain' }
+                )
+            );
+        },
 
-            var attr = String(label).toLowerCase();
+        recipientActionLink: function (type) {
+            return function () {
+                var node = $('<a href="#" tabindex="1" data-action="add" role="checkbox" aria-checked="false">');
+                if (type === 'cc') {
+                    node.attr({ 'data-type': 'cc', 'aria-label': gt('Show carbon copy input field') }).text(gt('CC'));
+                } else {
+                    node.attr({ 'data-type': 'bcc', 'aria-label': gt('Show blind carbon copy input field') }).text(gt('BCC'));
+                }
+                this.append(node);
+            };
+        },
+
+        recipientActionLinkMobile: function () {
+            var node = $('<a href="#" tabindex="1" data-action="add" role="checkbox" aria-checked="false">').append($('<span class="fa fa-angle-right">'));
+            this.append(node);
+        },
+
+        recipientActions: function () {
+            var node = $('<div class="recipient-actions">');
+            if (_.device('!smartphone')) {
+                ext.point(POINT + '/recipientActionLink').invoke('draw', node);
+            } else {
+                ext.point(POINT + '/recipientActionLinkMobile').invoke('draw', node);
+            }
+
+            this.append(node);
+        },
+
+        tokenfield: function (attr) {
+
+            if (attr === 'reply_to' && settings.get('showReplyTo/configurable', false) === false) return;
 
             return function (baton) {
                 var guid = _.uniqueId('form-control-label-'),
                     value = baton.model.get(attr) || [],
-                    // display tokeninputfields if necessary
-                    cls = 'row' + (attr === 'to' || value.length ? '' : ' hidden'),
+                    // hide tokeninputfields if necessary (empty cc/bcc)
+                    cls = 'row' + (/cc$/.test(attr) && !value.length ? ' hidden' : ''),
+                    redrawLock = false,
                     tokenfieldView = new Tokenfield({
                         id: guid,
                         className: attr,
-                        placeholder: tokenfieldTranslations[attr],
+                        extPoint: POINT,
                         apiOptions: {
                             contacts: true,
                             distributionlists: true,
                             msisdn: true,
                             emailAutoComplete: true
                         },
-                        maxResults: 20,
-                        draw: function (token) {
-                            baton.participantModel = token.model;
-                            ext.point(POINT + '/autoCompleteItem').invoke('draw', this, baton);
-                        }
+                        maxResults: 20
                     });
 
+                var node = $('<div class="col-xs-11">').append(
+                    tokenfieldView.$el
+                );
+                if (attr === 'to') {
+                    ext.point(POINT + '/recipientActions').invoke('draw', node);
+                }
+
                 this.append(
-                    $('<div data-extension-id="' + attr + '">')
-                        .addClass(cls)
+                    $('<div data-extension-id="' + attr + '">').addClass(cls)
                         .append(
-                            $('<label class="maillabel hidden-xs col-sm-1">').text(tokenfieldTranslations[attr]).attr({
-                                'for': guid
-                            }),
-                            $('<div class="col-xs-12 col-sm-11">').append(
-                                tokenfieldView.$el,
-                                attr === 'to' ? $('<div class="recipient-actions">').append(
-                                    $('<a>').attr({
-                                        href: '#',
-                                        tabindex: 1,
-                                        'data-action': 'add',
-                                        'data-type': 'cc',
-                                        role: 'checkbox',
-                                        'aria-checked': false,
-                                        'aria-label': gt('Show carbon copy input field')
-                                    }).text(gt('CC')),
-                                    $('<a>').attr({
-                                        href: '#',
-                                        tabindex: 1,
-                                        'data-action': 'add',
-                                        'data-type': 'bcc',
-                                        role: 'checkbox',
-                                        'aria-checked': false,
-                                        'aria-label': gt('Show blind carbon copy input field')
-                                    }).text(gt('BCC'))
-                                ) : $()
-                            )
+                            $('<label class="maillabel col-xs-1">').text(tokenfieldTranslations[attr]).attr({ 'for': guid }),
+                            node
                         )
                     );
 
@@ -196,8 +270,9 @@ define('io.ox/mail/compose/extensions', [
                     ext.point(POINT + '/createtoken').invoke('action', this, _.extend(baton, { event: e }));
                 });
 
-                // bind model to collection
+                // bind mail-model to collection
                 tokenfieldView.listenTo(baton.model, 'change:' + attr, function (mailModel, recipients) {
+                    if (redrawLock) return;
                     var recArray = _(recipients).map(function (recipient) {
                         return {
                             type: 5,
@@ -212,14 +287,17 @@ define('io.ox/mail/compose/extensions', [
                     this.collection.reset(recArray);
                 });
 
+                // trigger change to fill tokenfield
                 baton.model.trigger('change:' + attr, baton.model, baton.model.get(attr));
 
-                tokenfieldView.collection.on('change add remove sort', function () {
+                tokenfieldView.collection.on('change reset add remove sort', function () {
                     var recipients = this.map(function (model) {
                         var token = model.get('token');
                         return [token.label, token.value];
                     });
-                    baton.model.set(attr, recipients, { silent: true });
+                    redrawLock = true;
+                    baton.model.set(attr, recipients);
+                    redrawLock = false;
                 });
             };
         },
@@ -227,7 +305,7 @@ define('io.ox/mail/compose/extensions', [
         subject: function (baton) {
             var guid = _.uniqueId('form-control-label-');
             this.append(
-                $('<div class="row subject" data-extension-id="subject">').append(
+                $('<div data-extension-id="subject" class="row subject">').append(
                     $('<label class="maillabel hidden-xs col-sm-1">').text(gt('Subject')).attr({
                         'for': guid
                     }),
@@ -239,23 +317,69 @@ define('io.ox/mail/compose/extensions', [
         },
 
         signature: function (baton) {
+            if (_.device('smartphone')) return;
             var self = this;
             baton.view.signaturesLoading = $.Deferred();
             require(['io.ox/core/api/snippets'], function (snippetAPI) {
                 snippetAPI.getAll('signature').always(function (signatures) {
-                    baton.view.signatures = signatures;
-                    baton.view.signaturesLoading.resolve(signatures);
+                    var oldSignatures = baton.model.get('signatures') || [],
+                        allSignatures = _.uniq(signatures.concat(oldSignatures), false, function (o) { return o.id; });
+                    baton.model.set('signatures', allSignatures);
                     var sa = _.map(signatures, function (o) {
                         return { 'id': o.id, 'displayName': o.displayname };
                     });
 
                     if (sa.length >= 1) {
                         _.each(sa, function (item) {
-                            self.data('view').option('signature', item.id, item.displayName);
+                            self.data('view').option('defaultSignatureId', item.id, item.displayName);
                         });
                     }
+                    baton.view.signaturesLoading.resolve(allSignatures);
                 });
             });
+        },
+
+        signaturemenu: function (baton) {
+            if (_.device('smartphone')) return;
+
+            var self = this,
+                container = $('<div class="dropdown signatures text-left">');
+
+            function draw() {
+                var dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true, el: container })
+                    .option('defaultSignatureId', '', gt('No signature'));
+
+                ext.point(POINT + '/signatures').invoke('draw', dropdown.$el, baton);
+                dropdown.$ul.addClass('pull-right');
+                baton.view.signaturesLoading.done(function () {
+                    dropdown.divider();
+                    dropdown.link('settings', gt('Manage signatures'), function () {
+                        var options = { id: 'io.ox/mail/settings/signatures' };
+                        ox.launch('io.ox/settings/main', options).done(function () {
+                            this.setSettingsPane(options);
+                        });
+                    });
+                    dropdown.$ul.addClass('pull-right');
+                    dropdown.render();
+                });
+
+                container.empty().append(dropdown.$el);
+            }
+
+            require(['io.ox/core/api/snippets'], function (snippetAPI) {
+                baton.view.listenTo(snippetAPI, 'refresh.all', draw);
+                draw();
+            });
+            self.append(container);
+        },
+
+        optionsmenu: function (baton) {
+            var dropdown = new Dropdown({ model: baton.model, label: gt('Options'), caret: true });
+            ext.point(POINT + '/menuoptions').invoke('draw', dropdown.$el, baton);
+
+            dropdown.$ul.addClass('pull-right');
+
+            this.append(dropdown.render().$el.addClass('text-left'));
         },
 
         attachmentPreviewList: function (baton) {
@@ -276,9 +400,11 @@ define('io.ox/mail/compose/extensions', [
                 zone.on({
                     'show': function () {
                         $el.css('minHeight', '100px');
+                        $(window).trigger('resize');
                     },
                     'hide': function () {
                         $el.css('minHeight', 0);
+                        $(window).trigger('resize');
                     },
                     'drop': function (files) {
                         baton.model.attachFiles(
@@ -286,13 +412,23 @@ define('io.ox/mail/compose/extensions', [
                                 return _.extend(file, { group: 'localFile' });
                             })
                         );
+                        $(window).trigger('resize');
                     }
+                });
+
+                view.listenTo(baton.model, 'change:attachments', function () {
+                    view.$list.empty();
+                    view.$preview.empty();
+                    view.renderList();
                 });
 
                 view.listenToOnce(view.collection, 'add remove reset', _.debounce(function () {
                     if (this.getValidModels().length > 0) {
                         this.$el.addClass('open');
-                        if (!this.isListRendered) this.renderList();
+                        if (!this.isListRendered) {
+                            this.renderList();
+                        }
+                        $(window).trigger('resize');
                     }
                 }));
 
@@ -341,12 +477,13 @@ define('io.ox/mail/compose/extensions', [
             }
 
             return function (baton) {
-                if (capabilities.has('infostore')) {
-                    var dropdown = new Dropdown({ label: gt('Attachments'), caret: true }),
-                        fileInput = $('<input type="file" name="file">').css('display', 'none')
-                            .on('change', addLocalFile.bind(this, baton.model))
-                            .prop('multiple', true);
+                var fileInput = $('<input type="file" name="file" capture="camera">').css('display', 'none')
+                        .on('change', addLocalFile.bind(this, baton.model))
+                        // multiple is off on smartphones in favor of camera roll/capture selection
+                        .prop('multiple', _.device('!smartphone'));
 
+                if (capabilities.has('infostore')) {
+                    var dropdown = new Dropdown({ label: gt('Attachments'), caret: true });
                     this.append(
                         fileInput,
                         dropdown.append(
@@ -361,14 +498,18 @@ define('io.ox/mail/compose/extensions', [
                         .render().$el
                     );
                 } else {
-                    this.append($('<button type="button" class="btn btn-link hidden-file-picker">').append(
-                        $('<span class="hidden">'),
-                        $.txt(gt('Attachments')),
+                    this.append(
                         // file input
-                        $('<input type="file" name="file" tabindex="1">')
-                            .on('change', addLocalFile.bind(this, baton.model))
-                            .prop('multiple', true)
-                    ));
+                        fileInput,
+                        $('<button type="button" class="btn btn-link">')
+                            .text(gt('Attachments'))
+                            .on('click', function () {
+                                //WORKAROUND "bug" in Chromium (no change event triggered when selecting the same file again,
+                                //in file picker dialog - other browsers still seem to work)
+                                fileInput[0].value = '';
+                                fileInput.trigger('click');
+                            })
+                    );
                 }
             };
 
@@ -389,10 +530,7 @@ define('io.ox/mail/compose/extensions', [
         mailto: function () {
             // register mailto!
             if (settings.get('features/registerProtocolHandler', true)) {
-                // only for browsers != firefox due to a bug in firefox
-                // https://bugzilla.mozilla.org/show_bug.cgi?id=440620
-                // maybe this will be fixed in the future by mozilla
-                if (navigator.registerProtocolHandler && !_.browser.Firefox) {
+                if (navigator.registerProtocolHandler) {
                     var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
                     navigator.registerProtocolHandler(
                         'mailto', url + '#app=' + ox.registry.get('mail-compose') + ':compose&mailto=%s', ox.serverConfig.productNameMail

@@ -12,24 +12,12 @@
  */
 
 define('io.ox/backbone/mini-views/datepicker', [
-    'io.ox/core/date',
     'settings!io.ox/calendar',
-    'gettext!io.ox/core'
-], function (date, settings, gt) {
+    'gettext!io.ox/core',
+    'less!io.ox/backbone/mini-views/datepicker'
+], function (settings, gt) {
 
     'use strict';
-
-    //customize datepicker
-    //just localize the picker, use en as default with current languages
-    $.fn.datepicker.dates.en = {
-        days: date.locale.days,
-        daysShort: date.locale.daysShort,
-        daysMin: date.locale.daysStandalone,
-        months: date.locale.months,
-        monthsShort: date.locale.monthsShort,
-        today: gt('Today'),
-        clear: gt('Clear')
-    };
 
     // Bootstrap DatePicker
     var DatePickerView = Backbone.View.extend({
@@ -41,37 +29,44 @@ define('io.ox/backbone/mini-views/datepicker', [
                 display: 'DATE',
                 clearButton: false,
                 ignoreToggle: false,
+                timezoneButton: false,
+                timezoneAttribute: 'timezone',
                 label: ''
             }, options);
 
             this.attribute = this.options.attribute;
             this.nodes = {};
             this.mobileSettings = {};
-            this.mobileMode = _.device('smartphone');
+            this.mobileMode = _.device('touch');
 
             this.listenTo(this.model, 'change:' + this.attribute, this.updateView);
             this.listenTo(this.model, 'invalid:' + this.attribute, this.onError);
             this.listenTo(this.model, 'valid', this.onValid);
+            this.listenTo(this.model, 'change:' + this.options.timezoneAttribute, this.updateView);
+        },
+
+        events: {
+            'click .timezone button': 'clickTimezone'
         },
 
         render: function () {
-            var self = this;
+            var self = this,
+                def = $.Deferred();
 
-            this.$el.append(
-                $('<legend>').addClass('control-label').text(this.options.label),
-                $('<div class="form-inline">').append(
+            this.$el.addClass('dateinput').append(
+                $('<legend>').addClass('simple control-label').text(this.options.label),
+                $('<div class="input-group form-inline">').append(
                     function () {
                         // render date input
                         var guid = _.uniqueId('form-control-label-'),
                             ariaID = guid + '-aria',
-                            dayFieldLabel = $('<label class="sr-only">').attr('for', guid).text(gt('Date') + ' (' + date.getInputFormat(date.DATE) + ')');
+                            dayFieldLabel = $('<label class="sr-only">').attr('for', guid).text(gt('Date') + ' (' + moment.localeData().longDateFormat('l') + ')'),
+                            timezoneContainer;
 
-                        self.nodes.dayField = $('<input>').attr({
+                        self.nodes.dayField = $('<input type="text" tabindex="1" class="form-control datepicker-day-field">').attr({
                             id: guid,
-                            'aria-describedby': ariaID,
-                            tabindex: 1,
-                            type: 'text'
-                        }).addClass('form-control datepicker-day-field');
+                            'aria-describedby': ariaID
+                        });
 
                         if (self.mobileMode) {
                             // render date input only on mobile devices
@@ -82,15 +77,34 @@ define('io.ox/backbone/mini-views/datepicker', [
                         }
 
                         // render time input
-                        self.nodes.timeField = $('<input>').attr({
-                            id: guid = _.uniqueId('form-control-label-'),
+                        guid = _.uniqueId('form-control-label-');
+                        self.nodes.timeField = $('<input class="form-control time-field">').attr({
                             type: 'text',
-                            'aria-describedby': guid + '-aria',
-                            tabindex: 1
-                        }).addClass('form-control');
+                            tabindex: 1,
+                            id: guid,
+                            'aria-describedby': guid + '-aria'
+                        });
 
                         // render timezone badge
-                        self.nodes.timezoneField = $('<span class="label label-default">');
+                        var timezoneAbbreviation = gt.noI18n(moment.tz(self.model.get(self.options.timezoneAttribute)).zoneAbbr());
+
+                        if (!self.options.timezoneButton && !self.mobileMode) {
+                            timezoneContainer = self.nodes.timezoneField  = $('<div class="timezone input-group-addon">').text(timezoneAbbreviation);
+                        } else {
+                            timezoneContainer = self.nodes.timezoneField = $('<a class="timezone input-group-addon btn" data-toggle="popover" tabindex="1">').text(timezoneAbbreviation);
+                            if (self.model.has('start_date') && self.model.has('end_date')) {
+                                require(['io.ox/calendar/util'], function (calendarUtil) {
+                                    calendarUtil.addTimezonePopover(
+                                        timezoneContainer,
+                                        self.model.attributes,
+                                        {
+                                            placement: 'top',
+                                            trigger: 'focus'
+                                        }
+                                    );
+                                });
+                            }
+                        }
 
                         // add a11y
                         self.nodes.a11yDate = $('<p>')
@@ -103,24 +117,25 @@ define('io.ox/backbone/mini-views/datepicker', [
                             .text(gt('Use up and down keys to change the time. Close selection by pressing ESC key.'));
 
                         return [
-                            dayFieldLabel,
                             self.nodes.dayField,
+                            dayFieldLabel,
                             self.nodes.a11yDate,
-                            '&nbsp;',
-                            $('<label class="sr-only">').attr('for', guid).text(gt('Time') + ' (' + date.getInputFormat(date.TIME) + ')'),
                             self.nodes.timeField,
+                            $('<label class="sr-only">').attr('for', guid).text(gt('Time') + ' (' + moment.localeData().longDateFormat('LT') + ')'),
                             self.nodes.a11yTime,
-                           '&nbsp;',
-                            self.nodes.timezoneField
+                            timezoneContainer
                         ];
                     }
                 )
             );
 
+            this.updateView();
+
             if (this.mobileMode) {
                 require(['io.ox/core/tk/mobiscroll'], function (mobileSettings) {
 
-                    self.mobileSettings = mobileSettings;
+                    //don't overwrite default settings (see Bug 38847)
+                    self.mobileSettings = _.copy(mobileSettings);
 
                     if (self.options.clearButton) {
                         self.mobileSettings.buttons = ['set', 'clear', 'cancel'];
@@ -130,51 +145,56 @@ define('io.ox/backbone/mini-views/datepicker', [
                     }
 
                     // initialize mobiscroll plugin
-                    self.nodes.dayField.mobiscroll(mobileSettings);
+                    self.nodes.dayField.mobiscroll(self.mobileSettings);
                     self.nodes.dayField.on('change', _.bind(self.updateModel, self));
+
+                    def.resolve();
                 });
             } else {
-                // get the right date format and init datepicker
-                this.nodes.dayField.datepicker({
-                    autoclose: true,
-                    clearBtn: self.options.clearButton,
-                    format: date.getFormat(date.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
-                    parentEl: self.$el,
-                    todayBtn: 'linked', // today button should insert and select. See Bug #34381
-                    todayHighlight: true,
-                    weekStart: date.locale.weekStart
+                require(['io.ox/core/tk/datepicker'], function () {
+                    // get the right date format and init datepicker
+                    self.nodes.dayField.datepicker({
+                        clearBtn: self.options.clearButton,
+                        parentEl: self.$el
+                    }).on('clearDate', function () {
+                        // clear the timefield too if the clearbutton is pressed
+                        self.nodes.timeField.val('');
+                    });
+
+                    // build and init timepicker based on combobox plugin
+                    var hours_typeahead = [],
+                        filldate = moment().startOf('day'),
+                        interval = parseInt(settings.get('interval'), 10) || 30;
+                    for (var i = 0; i < 1440; i += interval) {
+                        hours_typeahead.push(filldate.format('LT'));
+                        filldate.add(interval, 'minutes');
+                    }
+
+                    var comboboxHours = {
+                        source: hours_typeahead,
+                        items: hours_typeahead.length,
+                        menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
+                        sorter: function (items) {
+                            items = _(items).sortBy(function (item) {
+                                return +moment(item, 'LT');
+                            });
+                            return items;
+                        }
+                    };
+
+                    self.nodes.timeField.combobox(comboboxHours).addClass('');
+                    self.nodes.timeField.on('change', _.bind(self.updateModel, self));
+                    self.toggleTimeInput(!self.isFullTime());
+
+                    def.resolve();
                 });
-
-                // build and init timepicker based on combobox plugin
-                var hours_typeahead = [],
-                    filldate = new date.Local().setHours(0, 0, 0, 0),
-                    interval = parseInt(settings.get('interval'), 10) || 30;
-                for (var i = 0; i < 1440; i += interval) {
-                    hours_typeahead.push(filldate.format(date.TIME));
-                    filldate.add(interval * date.MINUTE);
-                }
-
-                var comboboxHours = {
-                    source: hours_typeahead,
-                    items: hours_typeahead.length,
-                    menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
-                    sorter: function (items) {
-                        items = _(items).sortBy(function (item) {
-                            var pd = date.Local.parse(item, date.TIME);
-                            return pd.getTime();
-                        });
-                        return items;
-                    },
-                    autocompleteBehaviour: false
-                };
-                this.nodes.timeField.combobox(comboboxHours);
-                this.nodes.timeField.on('change', _.bind(this.updateModel, this));
-                this.nodes.dayField.on('change', _.bind(this.updateModel, this));
-                this.toggleTimeInput(!self.isFullTime());
             }
 
-            // insert initial values
-            this.updateView();
+            def.then(function () {
+                // insert initial values
+                self.updateView();
+                self.nodes.dayField.on('change', _.bind(self.updateModel, self));
+            });
 
             return this;
         },
@@ -182,10 +202,15 @@ define('io.ox/backbone/mini-views/datepicker', [
         updateView: function () {
             var timestamp = parseInt(this.model[this.model.getDate ? 'getDate' : 'get'](this.attribute), 10);
             if (_.isNaN(timestamp)) return;
+            timestamp = moment.tz(timestamp, this.model.get(this.options.timezoneAttribute));
             if (!this.mobileMode) {
-                this.nodes.timeField.val(new date.Local(timestamp).format(date.TIME));
-                this.nodes.dayField.datepicker('update', this.getDateStr(timestamp));
-                this.nodes.timezoneField.text(gt.noI18n(date.Local.getTTInfoLocal(timestamp || _.now()).abbr));
+                this.nodes.timeField.val(timestamp.format('LT'));
+                if (this.nodes.dayField.datepicker) {
+                    this.nodes.dayField.datepicker('update', this.getDateStr(timestamp));
+                } else {
+                    this.nodes.dayField.val(this.getDateStr(timestamp));
+                }
+                this.nodes.timezoneField.text(gt.noI18n(timestamp.zoneAbbr()));
             } else {
                 this.nodes.dayField.val(this.getDateStr(timestamp));
             }
@@ -209,37 +234,36 @@ define('io.ox/backbone/mini-views/datepicker', [
             }
         },
 
-        getDateStr: function (timestamp) {
-            var val = new date.Local(timestamp);
+        getDateStr: function (val) {
             if (!this.isFullTime() && this.mobileMode) {
-                return val.format(date.DATE) + ' ' + val.format(date.TIME);
+                return val.format('l') + ' ' + val.format('LT');
             }
-            return val.format(date.DATE);
+            return val.format('l');
         },
 
         getTimestamp: function () {
             var dateStr = this.nodes.dayField.val(),
-                formatStr = date.getFormat(date.DATE);
+                formatStr = 'l';
 
             // empty?
             if (dateStr === '')  return null;
 
             // change format string for datetime if timefield is present
             if (!this.isFullTime()) {
-                formatStr += ' ' + date.getFormat(date.TIME);
+                formatStr += ' ' + 'LT';
                 if (!this.mobileMode) {
                     if (this.nodes.timeField && this.nodes.timeField.val() !== '') {
                         dateStr += ' ' + this.nodes.timeField.val();
                     } else {
-                        formatStr = date.getFormat(date.DATE);
+                        formatStr = 'l';
                     }
                 }
             }
 
             // parse string to timestamp
-            var parsedDate = date.Local.parse(dateStr.toUpperCase(), formatStr);
+            var parsedDate = moment.tz(dateStr, formatStr, this.model.get(this.options.timezoneAttribute));
             // on parse error return null
-            return !parsedDate ? undefined : parsedDate.getTime();
+            return !parsedDate ? undefined : parsedDate.valueOf();
         },
 
         onError: function (messages) {
@@ -262,11 +286,19 @@ define('io.ox/backbone/mini-views/datepicker', [
             }
         },
 
+        clickTimezone: function () {
+            this.trigger('click:timezone');
+        },
+
         // toggle time input fields
         toggleTimeInput: function (show) {
             if (this.mobileMode) {
-                this.nodes.dayField.mobiscroll('option', { preset: show ? 'datetime' : 'date' });
+                // mobiscroll may not be initialized yet, due to async loading.
+                if (this.nodes.dayField.mobiscroll) {
+                    this.nodes.dayField.mobiscroll('option', { preset: show ? 'datetime' : 'date' });
+                }
             } else {
+                this.$el.toggleClass('dateonly', !show);
                 this.nodes.timeField.add(this.nodes.timezoneField).css('display', show ? '' : 'none');
             }
         }

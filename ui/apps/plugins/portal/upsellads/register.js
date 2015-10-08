@@ -11,11 +11,12 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('plugins/portal/upsellads/register',
-    ['io.ox/core/extensions',
-     'gettext!plugins/portal',
-     'settings!plugins/upsell',
-     'less!plugins/portal/upsellads/style'], function (ext, gt, settings) {
+define('plugins/portal/upsellads/register', [
+    'io.ox/core/extensions',
+    'gettext!plugins/portal',
+    'settings!plugins/upsell',
+    'less!plugins/portal/upsellads/style'
+], function (ext, gt, settings) {
 
     'use strict';
 
@@ -63,18 +64,18 @@ define('plugins/portal/upsellads/register',
         } else if (type === 'text-top') {
             toTarget.append(
                 $('<div class="text upsell-top">').html(fromAd.text),
-                $('<div class="image upsell-bottom">').css({'background-image': 'url(' + fromAd.image + ')'})
+                $('<div class="image upsell-bottom">').css({ 'background-image': 'url(' + fromAd.image + ')' })
             );
 
         } else if (type === 'text-bottom') {
             toTarget.append(
-                $('<div class="image upsell-top">').css({'background-image': 'url(' + fromAd.image + ')'}),
+                $('<div class="image upsell-top">').css({ 'background-image': 'url(' + fromAd.image + ')' }),
                 $('<div class="text upsell-bottom">').html(fromAd.text)
             );
 
         } else if (type === 'image-only') {
             toTarget.append(
-                $('<div class="image upsell-full">').css({'background-image': 'url(' + fromAd.image + ')'})
+                $('<div class="image upsell-full">').css({ 'background-image': 'url(' + fromAd.image + ')' })
             );
 
         } else {
@@ -123,7 +124,7 @@ define('plugins/portal/upsellads/register',
             content.on('click', function () {
                 var def = $.Deferred();
                 require(['io.ox/wizards/upsell'], function (w) {
-                    w.getInstance().start({cssClass: 'upsell-wizard-container'})
+                    w.getInstance().start({ cssClass: 'upsell-wizard-container' })
                         .done(function () {})
                         .fail(def.reject);
                 });

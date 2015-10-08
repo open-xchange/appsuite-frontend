@@ -11,10 +11,10 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/contacts/common-extensions',
-    ['io.ox/contacts/util',
-     'gettext!io.ox/contacts'
-    ], function (util, gt) {
+define('io.ox/contacts/common-extensions', [
+    'io.ox/contacts/util',
+    'gettext!io.ox/contacts'
+], function (util, gt) {
 
     'use strict';
 

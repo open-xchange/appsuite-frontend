@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-03-04 09:44+0100\n"
+"PO-Revision-Date: 2015-08-20 13:52+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -13,25 +13,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 1.7.7\n"
 
-#: apps/io.ox/tours/main.js:456 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:72 module:io.ox/tours
 msgid "Adding attachments"
 msgstr "添付ファイルの追加"
 
-#: apps/io.ox/tours/main.js:628 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:54 module:io.ox/tours
 msgid "Adding further details"
 msgstr "詳細情報の追加"
 
-#: apps/io.ox/tours/main.js:260 module:io.ox/tours
-msgid ""
-"Below the recipient you will find further functions, e.g. for sending copies "
-"to other recipients or for adding attachments."
-msgstr ""
-"他の人に CC を送信したり、添付ファイルを追加するなどの詳細機能は宛先の下に表"
-"示されます。"
-
-#: apps/io.ox/tours/main.js:378 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:36 module:io.ox/tours
 msgid ""
 "Click on a letter on the left side of the navigation bar in order to display "
 "the corresponding contacts from the selected address book."
@@ -39,55 +31,55 @@ msgstr ""
 "選択したアドレス帳にある連絡先を表示するには、ナビゲーション バーの左側にある"
 "該当する文字をクリックします。"
 
-#: apps/io.ox/tours/main.js:202 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:45 module:io.ox/tours
 msgid "Closing a square"
 msgstr "タイルを閉じる"
 
-#: apps/io.ox/tours/main.js:228 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:33 module:io.ox/tours
 msgid "Composing a new E-Mail"
 msgstr "新規メールの作成"
 
-#: apps/io.ox/tours/main.js:404 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:34 module:io.ox/tours
 msgid "Creating a new appointment"
 msgstr "新規アポイントの作成"
 
-#: apps/io.ox/tours/main.js:368 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:30 module:io.ox/tours
 msgid "Creating a new contact"
 msgstr "新規連絡先の作成"
 
-#: apps/io.ox/tours/main.js:603 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:32 module:io.ox/tours
 msgid "Creating a new task"
 msgstr "新規の仕事の作成"
 
-#: apps/io.ox/tours/main.js:575 module:io.ox/tours
+#: apps/io.ox/tours/files.js:60 module:io.ox/tours
 msgid "Creating a note"
 msgstr "メモの作成"
 
-#: apps/io.ox/tours/main.js:112 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:93 module:io.ox/tours
 msgid "Creating new items"
 msgstr "新規アイテムの作成"
 
-#: apps/io.ox/tours/main.js:433 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:57 module:io.ox/tours
 msgid "Creating recurring appointments"
 msgstr "定期的なアポイントの作成"
 
-#: apps/io.ox/tours/main.js:639 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:62 module:io.ox/tours
 msgid "Creating recurring tasks"
 msgstr "定期的なアポイントの作成"
 
-#: apps/io.ox/tours/main.js:467 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:77 module:io.ox/tours
 msgid "Creating the appointment"
 msgstr "アポイントの作成"
 
-#: apps/io.ox/tours/main.js:683 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:87 module:io.ox/tours
 msgid "Creating the task"
 msgstr "仕事の作成"
 
-#: apps/io.ox/tours/main.js:210 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:51 module:io.ox/tours
 msgid "Customizing the Portal"
 msgstr "ポータルのカスタマイズ"
 
-#: apps/io.ox/tours/main.js:135 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:112 module:io.ox/tours
 msgid ""
 "Depending on the app, the toolbar contains various functions for creating, "
 "editing and organizing objects."
@@ -95,75 +87,72 @@ msgstr ""
 "アプリケーションによっては、オブジェクトを作成、編集、整理するための機能が"
 "ツールバーに表示されます。"
 
-#: apps/io.ox/tours/main.js:162 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:132 module:io.ox/tours
 msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
 msgstr ""
 "各アプリケーションの詳細な使用方法を表示するには、[システム　メニュー] → [ヘ"
 "ルプ] の順に選択します。"
 
-#: apps/io.ox/tours/main.js:587 module:io.ox/tours
+#: apps/io.ox/tours/files.js:67 module:io.ox/tours
 msgid "Displaying information"
 msgstr "情報の表示"
 
-#: apps/io.ox/tours/main.js:88 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:75 module:io.ox/tours
 msgid "Displaying the help or the settings"
 msgstr "ヘルプや設定の表示"
 
-#: apps/io.ox/tours/main.js:190 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:40 module:io.ox/tours
 msgid "Drag and drop"
 msgstr "ドラッグ アンド ドロップ"
 
-#: apps/io.ox/tours/main.js:744 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:44 module:io.ox/tours
 msgid ""
 "Edit a setting on the right side. In most of the cases, the changes are "
 "activated immediately."
 msgstr "右ペインで設定を編集します。通常変更はすぐに有効になります。"
 
-#: apps/io.ox/tours/main.js:342 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:106 module:io.ox/tours
 msgid "Editing multiple E-Mails"
 msgstr "複数のメールの編集"
 
-#: apps/io.ox/tours/main.js:387 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:46 module:io.ox/tours
 msgid "Editing multiple contacts"
 msgstr "複数の連絡先の編集"
 
-#: apps/io.ox/tours/main.js:711 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:99 module:io.ox/tours
 msgid "Editing multiple tasks"
 msgstr "複数の仕事の編集"
 
-#: apps/io.ox/tours/main.js:741 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:43 module:io.ox/tours
 msgid "Editing settings"
 msgstr "設定の編集"
 
-#: apps/io.ox/tours/main.js:273 module:io.ox/tours
-msgid "Enter the E-Mail text below the subject."
-msgstr "件名の下にメールの本文を入力してください。"
-
-#: apps/io.ox/tours/main.js:272 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:69 module:io.ox/tours
 msgid ""
-"Enter the E-Mail text below the subject. If the text format was set to HTMl "
+"Enter the E-Mail text into the main area. If the text format was set to HTMl "
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
-"メールの本文を件名の下に入力します。オプションでテキスト フォーマットが HTML "
-"に設定されている場合は、メールの本文に書式を設定できます。"
+"本文エリアにメールの本文を入力します。テキストフォーマットがオプションでHTML"
+"に設定されると、メールテキストのフォーマットができます。テキストをフォーマッ"
+"トするには、テキスト部分を選択して、書式バーのアイコンをクリックします。"
 
-#: apps/io.ox/tours/main.js:252 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:48 module:io.ox/tours
 msgid ""
-"Enter the recipient's name on the top left side. As soon as you typed the "
-"first letters, suggestions from the address books are displayed. To accept a "
-"recipient suggestion, click on it."
+"Enter the recipient's name into the recipients field. As soon as you typed "
+"the first letters, suggestions from the address books are displayed. To "
+"accept a recipient suggestion, click on it."
 msgstr ""
-"画面左上にある宛先に宛先の名前を入力します。最初の文字を入力すると、アドレス"
-"帳に保存されている該当する連絡先の候補が表示されます。候補を宛先として選択す"
-"るには、その候補をクリックします。"
+"宛先フィールドに宛先の名前を入力します。最初の文字を打つとすぐに、アドレス帳"
+"から候補が表示されます。候補の宛先を選択するには、その候補をクリックしてくだ"
+"さい。"
 
-#: apps/io.ox/tours/main.js:266 module:io.ox/tours
-msgid "Enter the subject on the right side of the recipient."
-msgstr "宛先の右側にある件名フィールドに件名を入力します。"
+#: apps/io.ox/tours/mail.js:59 module:io.ox/tours
+msgid "Enter the subject into the subject field."
+msgstr "件名フィールドに件名を入力します。"
 
-#: apps/io.ox/tours/main.js:430 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:52 module:io.ox/tours
 msgid ""
 "Enter the subject, the start and the end date of the appointment. Other "
 "details are optional."
@@ -171,97 +160,85 @@ msgstr ""
 "件名、アポイントの開始日時と終了日時を入力します。その他の情報はオプションで"
 "す。"
 
-#: apps/io.ox/tours/main.js:625 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:49 module:io.ox/tours
 msgid "Enter the subject, the start date, and a description."
 msgstr "件名、開始日時、説明を入力します。"
 
-#: apps/io.ox/tours/main.js:676 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:82 module:io.ox/tours
 msgid "Entering billing information"
 msgstr "支払条件の入力"
 
-#: apps/io.ox/tours/main.js:269 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:68 module:io.ox/tours
 msgid "Entering the E-Mail text"
 msgstr "メールの本文の入力"
 
-#: apps/io.ox/tours/main.js:427 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:51 module:io.ox/tours
 msgid "Entering the appointment's data"
 msgstr "アポイントのデータの入力"
 
-#: apps/io.ox/tours/main.js:249 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:47 module:io.ox/tours
 msgid "Entering the recipient's name"
 msgstr "宛先の名前の入力"
 
-#: apps/io.ox/tours/main.js:263 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:58 module:io.ox/tours
 msgid "Entering the subject"
 msgstr "件名の入力"
 
-#: apps/io.ox/tours/main.js:622 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:48 module:io.ox/tours
 msgid "Entering the task's data"
 msgstr "仕事のデータの入力"
 
-#: apps/io.ox/tours/main.js:528 module:io.ox/tours
+#: apps/io.ox/tours/files.js:30 module:io.ox/tours
 msgid "Folder tree"
 msgstr "フォルダ ツリー"
 
-#: apps/io.ox/tours/main.js:464 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:73 module:io.ox/tours
 msgid "Further down you can add documents as attachments to the appointment."
 msgstr "アポイントには、添付ファイルを追加することができます。"
 
-#: apps/io.ox/tours/main.js:257 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:63 module:io.ox/tours
 msgid "Further functions"
 msgstr "詳細機能"
 
-#: apps/io.ox/tours/main.js:159 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:131 module:io.ox/tours
 msgid "Further information"
 msgstr "詳細情報"
 
 #. Tour name; general introduction
-#: apps/io.ox/tours/main.js:803 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:46 module:io.ox/tours
 msgid "Getting started"
 msgstr "はじめに"
 
-#: apps/io.ox/tours/main.js:829 module:io.ox/tours
+#: apps/io.ox/tours/main.js:77 module:io.ox/tours
 msgid "Guided tour for this app"
 msgstr "このアプリケーションのガイドツアー"
 
-#: apps/io.ox/tours/main.js:334 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:101 module:io.ox/tours
 msgid "Halo view"
 msgstr "ハロー ビュー"
 
-#: apps/io.ox/tours/main.js:735 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:36 module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "設定の項目について"
 
-#: apps/io.ox/tours/main.js:584 module:io.ox/tours
-msgid ""
-"If a folder contains images, you can display a slideshow. To do so click the "
-"View slideshow icon in the toolbar."
-msgstr ""
-"フォルダに画像が含まれている場合、スライドショーを表示できます。これを行うに"
-"は、ツールバーで、[スライドショーを表示] アイコンをクリックします。"
-
-#: apps/io.ox/tours/main.js:315 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:92 module:io.ox/tours
 msgid ""
 "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
 "separate window."
 msgstr ""
 "一覧でメールをダブルクリックすると、別のウィンドウにメールが表示されます。"
 
-#: apps/io.ox/tours/main.js:205 module:io.ox/tours
-msgid ""
-"If you no longer want to display a square, click the cross on the upper "
-"right side."
-msgstr "今後タイルを表示しない場合は、右上の×印をクリックします。"
+#: apps/io.ox/tours/portal.js:46 module:io.ox/tours
+msgid "If you no longer want to display a square, click the cross."
+msgstr "タイルを表示しない場合は、バツをクリックします。"
 
-#: apps/io.ox/tours/main.js:108 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:89 module:io.ox/tours
 msgid ""
 "In case of new notifications, e.g. appointment invitations, the info area is "
-"opened on the right side."
-msgstr ""
-"アポイントの出席依頼など、新規の通知があると、画面右側に情報エリアが表示され"
-"ます。"
+"opened."
+msgstr "アポイントの招待などの新規通知の場合は、情報エリアが表示されます。"
 
-#: apps/io.ox/tours/main.js:346 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:107 module:io.ox/tours
 msgid ""
 "In order to edit multiple E-Mails at once, enable the checkboxes on the left "
 "side of the E-Mails. If the checkboxes are not displayed, click on View > "
@@ -271,85 +248,86 @@ msgstr ""
 "します。チェックボックスが表示されていない場合は、ツールバーの右側にある "
 "[ビュー] → [チェックボックス] の順にクリックします。"
 
-#: apps/io.ox/tours/main.js:445 module:io.ox/tours
-#: apps/io.ox/tours/main.js:662
+#: apps/io.ox/tours/mail.js:64 module:io.ox/tours
+msgid ""
+"In this area you can find further functions, e.g. for adding attachments."
+msgstr "このエリアには、添付ファイルの追加などの詳細機能があります。"
+
+#: apps/io.ox/tours/calendar.js:67 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:77
 msgid "Inviting other participants"
 msgstr "アポイントへの出席依頼"
 
-#: apps/io.ox/tours/main.js:81 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:70 module:io.ox/tours
 msgid "Launching an app"
 msgstr "アプリケーションの起動"
 
-#: apps/io.ox/tours/main.js:375 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:35 module:io.ox/tours
 msgid "Navigation bar"
 msgstr "ナビゲーション バー"
 
-#: apps/io.ox/tours/main.js:312 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:91 module:io.ox/tours
 msgid "Opening an E-Mail in a separate window"
 msgstr "メールを別のウィンドウで開く"
 
-#: apps/io.ox/tours/main.js:120 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:101 module:io.ox/tours
 msgid "Opening or closing the folder tree"
 msgstr "フォルダ ツリーを開く、閉じる"
 
-#: apps/io.ox/tours/main.js:350 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:112 module:io.ox/tours
 msgid "Opening the E-Mail settings"
 msgstr "メール設定を開く"
 
-#: apps/io.ox/tours/main.js:747 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:48 module:io.ox/tours
 msgid "Opening the help"
 msgstr "ヘルプを開く"
 
-#: apps/io.ox/tours/main.js:729 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:30 module:io.ox/tours
 msgid "Opening the settings"
 msgstr "設定を開く"
 
-#: apps/io.ox/tours/main.js:319 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:96 module:io.ox/tours
 msgid "Reading E-Mail conversations"
 msgstr "メールスレッドの表示"
 
-#: apps/io.ox/tours/main.js:184 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:35 module:io.ox/tours
 msgid "Reading the details"
 msgstr "詳細情報の閲覧"
 
-#: apps/io.ox/tours/main.js:126 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:106 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "オブジェクトの検索"
 
-#: apps/io.ox/tours/main.js:305 module:io.ox/tours
-#: apps/io.ox/tours/main.js:490 apps/io.ox/tours/main.js:534
+#: apps/io.ox/tours/calendar.js:83 module:io.ox/tours
+#: apps/io.ox/tours/files.js:35 apps/io.ox/tours/mail.js:86
 msgid "Selecting a view"
 msgstr "ビューの選択"
 
-#: apps/io.ox/tours/main.js:381 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:40 module:io.ox/tours
 msgid "Sending an E-Mail to a contact"
 msgstr "連絡先へのメールの送信"
 
-#: apps/io.ox/tours/main.js:278 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:74 module:io.ox/tours
 msgid "Sending the E-Mail"
 msgstr "メールの送信"
 
-#: apps/io.ox/tours/main.js:753 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:54 module:io.ox/tours
 msgid "Signing out"
 msgstr "サイン アウト"
 
-#: apps/io.ox/tours/main.js:581 module:io.ox/tours
-msgid "Slideshow"
-msgstr "スライドショー"
-
-#: apps/io.ox/tours/main.js:704 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:92 module:io.ox/tours
 msgid "Sorting tasks"
 msgstr "仕事のソート"
 
-#: apps/io.ox/tours/main.js:296 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:79 module:io.ox/tours
 msgid "Sorting your E-Mails"
 msgstr "メールのソート"
 
-#: apps/io.ox/tours/main.js:152 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:126 module:io.ox/tours
 msgid "The Detail view"
 msgstr "詳細ビュー"
 
-#: apps/io.ox/tours/main.js:155 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:127 module:io.ox/tours
 msgid ""
 "The Detail view displays an object's content. Depending on the app, further "
 "functions for organizing objects can be found in the Detail view."
@@ -357,11 +335,11 @@ msgstr ""
 "詳細ビューには、オブジェクトの内容が表示されます。オブジェクトを整理するため"
 "の機能が詳細ビューに表示されます。"
 
-#: apps/io.ox/tours/main.js:546 module:io.ox/tours
+#: apps/io.ox/tours/files.js:45 module:io.ox/tours
 msgid "The Icons view"
 msgstr "アイコン ビュー"
 
-#: apps/io.ox/tours/main.js:549 module:io.ox/tours
+#: apps/io.ox/tours/files.js:46 module:io.ox/tours
 msgid ""
 "The Icons view displays an icon and the file name for each file. Click on an "
 "icon to view further details and functions in the pop-up."
@@ -369,12 +347,12 @@ msgstr ""
 "アイコン ビューには、各ファイルのアイコンとファイル名が表示されます。アイコン"
 "をクリックすると、詳細と機能がポップアップに表示されます。"
 
-#: apps/io.ox/tours/main.js:501 module:io.ox/tours
-#: apps/io.ox/tours/main.js:540
+#: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
+#: apps/io.ox/tours/files.js:40
 msgid "The List view"
 msgstr "リスト ビュー"
 
-#: apps/io.ox/tours/main.js:504 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:96 module:io.ox/tours
 msgid ""
 "The List view shows a list of the appointments in the current folder. If "
 "clicking on an appointment, the appointment's data and some functions are "
@@ -384,7 +362,7 @@ msgstr ""
 "ントをクリックすると、そのアポイントのデータと機能が詳細ビューに表示されま"
 "す。"
 
-#: apps/io.ox/tours/main.js:543 module:io.ox/tours
+#: apps/io.ox/tours/files.js:41 module:io.ox/tours
 msgid ""
 "The List view shows details like the size and date of change. Use the "
 "checkboxes to select files. Click on a file to view further details and "
@@ -394,11 +372,11 @@ msgstr ""
 "には、チェックボックスを使用します。ファイルをクリックすると、その詳細と機能"
 "がポップアップに表示されます。"
 
-#: apps/io.ox/tours/main.js:97 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:82 module:io.ox/tours
 msgid "The New objects icon"
 msgstr "新規オブジェクト アイコン"
 
-#: apps/io.ox/tours/main.js:100 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:83 module:io.ox/tours
 msgid ""
 "The New objects icon shows the number of unread E-Mails or other "
 "notifications. If clicking the icon, the info area opens."
@@ -406,11 +384,11 @@ msgstr ""
 "新規オブジェクト アイコンは、未読のメール/通知の数を表します。このアイコンを"
 "クリックすると、情報エリアが表示されます。"
 
-#: apps/io.ox/tours/main.js:178 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:30 module:io.ox/tours
 msgid "The Portal"
 msgstr "ポータル"
 
-#: apps/io.ox/tours/main.js:181 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:31 module:io.ox/tours
 msgid ""
 "The Portal informs you about current E-Mails, appointments or social network "
 "news."
@@ -418,11 +396,11 @@ msgstr ""
 "ポータルでは、最新のメール、アポイント、ソーシャル ネットワーク ニュースが表"
 "示されます。"
 
-#: apps/io.ox/tours/main.js:552 module:io.ox/tours
+#: apps/io.ox/tours/files.js:50 module:io.ox/tours
 msgid "The Tiles view"
 msgstr "タイル ビュー"
 
-#: apps/io.ox/tours/main.js:555 module:io.ox/tours
+#: apps/io.ox/tours/files.js:51 module:io.ox/tours
 msgid ""
 "The Tiles view shows a big icon for each file. Click on an icon to view "
 "further details and functions in the pop-up."
@@ -430,11 +408,11 @@ msgstr ""
 "タイル ビューには、各ファイルの大型のアイコンが表示されます。アイコンをクリッ"
 "クすると、詳細と機能がポップアップに表示されます。"
 
-#: apps/io.ox/tours/main.js:512 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
 msgid "The calendar views"
 msgstr "予定表ビュー"
 
-#: apps/io.ox/tours/main.js:515 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:106 module:io.ox/tours
 msgid ""
 "The calendar views display a calendar sheet with the appointments for the "
 "selected time range."
@@ -442,33 +420,31 @@ msgstr ""
 "予定表ビューでは、選択された時間軸で、予定表シートにアポイントが表示されま"
 "す。"
 
-#: apps/io.ox/tours/main.js:138 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:116 module:io.ox/tours
 msgid "The folder tree"
 msgstr "フォルダ ツリー"
 
-#: apps/io.ox/tours/main.js:105 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:88 module:io.ox/tours
 msgid "The info area"
 msgstr "情報エリア"
 
-#: apps/io.ox/tours/main.js:144 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:121 module:io.ox/tours
 msgid "The list"
 msgstr "リスト"
 
-#: apps/io.ox/tours/main.js:738 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:37 module:io.ox/tours
 msgid ""
 "The settings are organized in topics. Select the topic on the left side, e.g "
-"Basic settings or E-Mail. To view all settings, enable Advanced settings at "
-"the bottom."
+"Basic settings or E-Mail."
 msgstr ""
-"設定はトピックごとに分かれています。左ペインでトピック (例: 基本設定、メー"
-"ル) を選択します。すべての設定を表示するには、画面下にある [詳細設定] を有効"
-"にします。"
+"設定はトピックで構成されています。左側にある、基本設定やメールなどのトピック"
+"を選択します。"
 
-#: apps/io.ox/tours/main.js:132 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:111 module:io.ox/tours
 msgid "The toolbar"
 msgstr "ツールバー"
 
-#: apps/io.ox/tours/main.js:74 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:67 module:io.ox/tours
 msgid ""
 "This guided tour will briefly introduce you to the product. Get more "
 "detailed information in the tours for the single apps or in the online help."
@@ -476,11 +452,11 @@ msgstr ""
 "このガイドツアーでは、製品の概要をご紹介します。各アプリケーションのツアーや"
 "オンラインヘルプで詳細をご覧になれます。"
 
-#: apps/io.ox/tours/main.js:631 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:55 module:io.ox/tours
 msgid "To add further details, click on Expand form."
 msgstr "詳細情報を追加するには、[フォームを展開] をクリックします。"
 
-#: apps/io.ox/tours/main.js:199 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:41 module:io.ox/tours
 msgid ""
 "To change the layout, drag a square's title to another position and drop it "
 "there."
@@ -488,43 +464,43 @@ msgstr ""
 "レイアウトを変更するには、タイルのタイトルをドラッグし、目的の位置にドロップ"
 "します。"
 
-#: apps/io.ox/tours/main.js:308 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:87 module:io.ox/tours
 msgid ""
 "To choose between the different views. click on View in the toolbar. Select "
 "a menu entry in the layout."
 msgstr ""
-"異なるビューを選択するには、ツールバーの [ビュー] をクリックしてください。レ"
-"イアウトでメニューから目的の項目を選択してください。"
+"ビューの選択は次で行えます。ツールバーで、ビュー をクリックします。レイアウト"
+"のメニュー入力を選択します。"
 
-#: apps/io.ox/tours/main.js:231 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:34 module:io.ox/tours
 msgid "To compose a new E-Mail, click on Compose in the toolbar."
 msgstr "新規メールを作成するには、ツールバーで [作成] をクリックします。"
 
-#: apps/io.ox/tours/main.js:115 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr ""
 "新規メールを作成するには、ツールバーの [新規メールを作成] をクリックします。"
 
-#: apps/io.ox/tours/main.js:410 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:35 module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."
 msgstr "新規アポイントを作成するには、ツールバーで、[新規] をクリックします。"
 
-#: apps/io.ox/tours/main.js:371 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:31 module:io.ox/tours
 msgid "To create a new contact, click on New > Add contact in the toolbar."
 msgstr ""
 "新規の連絡先を作成するには、ツールバーで、[新規] → [連絡先を追加] の順にク"
 "リックします。"
 
-#: apps/io.ox/tours/main.js:606 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:33 module:io.ox/tours
 msgid "To create a new task, click on New in the toolbar."
 msgstr "新規の仕事を作成するには、ツールバーで、[新規] をクリックします。"
 
-#: apps/io.ox/tours/main.js:578 module:io.ox/tours
+#: apps/io.ox/tours/files.js:61 module:io.ox/tours
 msgid "To create a note, click on New > Add note in the toolbar."
 msgstr ""
 "メモを作成するには、ツールバーで、[新規] → [メモを追加] をクリックします。"
 
-#: apps/io.ox/tours/main.js:436 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:58 module:io.ox/tours
 msgid ""
 "To create recurring appointments, enable Repeat. Functions for setting the "
 "recurrence parameters are shown."
@@ -532,7 +508,7 @@ msgstr ""
 "定期的なアポイントを作成するには、[定期的なアポイント] を有効にします。繰り返"
 "しのパラメータを設定するための機能が表示されます。"
 
-#: apps/io.ox/tours/main.js:642 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:63 module:io.ox/tours
 msgid ""
 "To create recurring tasks, enable Repeat. Functions for setting the "
 "recurrence parameters are shown."
@@ -540,17 +516,17 @@ msgstr ""
 "定期的なアポイントを作成するには、[定期的なアポイント] を有効にします。繰り返"
 "しのパラメータを設定するための機能が表示されます。"
 
-#: apps/io.ox/tours/main.js:475 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:78 module:io.ox/tours
 msgid "To create the appointment, click on Create at the upper right side."
 msgstr ""
 "アポイントを作成するには、画面左側にある [アポイントを作成] をクリックしま"
-"す。 "
+"す。"
 
-#: apps/io.ox/tours/main.js:691 module:io.ox/tours
-msgid "To create the task, click on Create on the upper right side."
-msgstr "仕事を作成するには、右上にある [作成] をクリックします。"
+#: apps/io.ox/tours/tasks.js:88 module:io.ox/tours
+msgid "To create the task, click on Create."
+msgstr "仕事の作成には、作成をクリックします。"
 
-#: apps/io.ox/tours/main.js:213 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:52 module:io.ox/tours
 msgid ""
 "To display a square again or to display further information sources, click "
 "on Customize this page."
@@ -558,7 +534,7 @@ msgstr ""
 "タイルを再表示したり、他の情報ソースを表示するには、[このページをカスタマイ"
 "ズ] をクリックします。"
 
-#: apps/io.ox/tours/main.js:91 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:76 module:io.ox/tours
 msgid ""
 "To display the help or the settings, click the System menu icon in the menu "
 "bar."
@@ -566,7 +542,7 @@ msgstr ""
 "ヘルプや設定を表示するには、メニュー バーで、システム メニューをクリックしま"
 "す。"
 
-#: apps/io.ox/tours/main.js:390 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:47 module:io.ox/tours
 msgid ""
 "To edit multiple contacts at once, enable the checkboxes on the left side of "
 "the contacts. If the checkboxes are not displayed, click on View > "
@@ -576,7 +552,7 @@ msgstr ""
 "します。チェックボックスが表示されていない場合は、ツールバーの右側にある "
 "[ビュー] → [チェックボックス] の順にクリックします。"
 
-#: apps/io.ox/tours/main.js:715 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:100 module:io.ox/tours
 msgid ""
 "To edit multiple tasks at once, enable the checkboxes at the left side of "
 "the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
@@ -586,11 +562,11 @@ msgstr ""
 "ます。チェックボックスが表示されていない場合は、ツールバーの右側にある "
 "[ビュー] → [チェックボックス] の順にクリックします。"
 
-#: apps/io.ox/tours/main.js:679 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:83 module:io.ox/tours
 msgid "To enter billing information, click on Show details."
 msgstr "支払条件を入力するには、[詳細を表示] をクリックします。"
 
-#: apps/io.ox/tours/main.js:453 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:68 module:io.ox/tours
 msgid ""
 "To invite other participants, enter their names in the field below "
 "Participants. To avoid appointment conflicts, click on Find a free time at "
@@ -600,7 +576,7 @@ msgstr ""
 "する人の名前を入力します。アポイントの競合を避けるには、右上の [空き時間を検"
 "索] をクリックします。"
 
-#: apps/io.ox/tours/main.js:670 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:78 module:io.ox/tours
 msgid ""
 "To invite other participants, enter their names in the field below "
 "Participants. You can add documents as attachment to the task."
@@ -609,21 +585,21 @@ msgstr ""
 "する人の名前を入力します。仕事にドキュメントを追加すれば、添付ファイルを作成"
 "できます。"
 
-#: apps/io.ox/tours/main.js:84 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:71 module:io.ox/tours
 msgid "To launch an app, click on an entry on the left side of the menu bar."
 msgstr ""
 "アプリケーションを起動するには、メニュー バーの左側にある項目をクリックしま"
 "す。"
 
-#: apps/io.ox/tours/main.js:442 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:63 module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
 msgstr "アポイントを見逃さないようにするには、アラーム機能を使用します。"
 
-#: apps/io.ox/tours/main.js:648 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:68 module:io.ox/tours
 msgid "To not miss the task, use the reminder function."
 msgstr "仕事を見逃さないようにするには、アラーム機能を使用します。"
 
-#: apps/io.ox/tours/main.js:329 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:97 module:io.ox/tours
 msgid ""
 "To open or close an E-Mail in a conversation, click on a free area in the "
 "header."
@@ -631,7 +607,7 @@ msgstr ""
 "スレッドのメールを開いたり閉じるには、ヘッダの空いている領域をクリックしま"
 "す。"
 
-#: apps/io.ox/tours/main.js:123 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:102 module:io.ox/tours
 msgid ""
 "To open or close the folder tree, click on View >  Folder view on the right "
 "side of the toolbar."
@@ -639,41 +615,39 @@ msgstr ""
 "フォルダ ツリーを開いたり閉じるには、ツールバーの右側にある [ビュー] → [フォ"
 "ルダ ビュー] の順にクリックします。"
 
-#: apps/io.ox/tours/main.js:353 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:113 module:io.ox/tours
 msgid ""
 "To open the E-Mail settings, click the System menu icon on the upper right "
-"side of the menu bar. Select Settings. Click on E-Mail on the left side. To "
-"display all settings, enable Advanced settings in the bottom left side"
+"side of the menu bar. Select Settings. Click on E-Mail on the left side."
 msgstr ""
-"メール設定を開くには、メニュー バーの右上にあるシステム メニュー アイコンをク"
-"リックします。次に、[設定] を選択し、左ペインで [メール] をクリックします。す"
-"べての設定を表示するには、左下にある [詳細設定] を有効にします。"
+"メール設定を表示するには、メニューバーの右上のシステムメニューアイコンをク"
+"リックします。設定 を選択します。左側のメールをクリックします。"
 
-#: apps/io.ox/tours/main.js:750 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:49 module:io.ox/tours
 msgid ""
 "To open the help, click the System menu icon on the upper right side of the "
 "menu bar. Select Help. The help for the currently selected app is displayed. "
 "To browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"ヘルプを開くには、メニュー バーの右上にあるシステム メニュー アイコンをクリッ"
-"クし、ヘルプを選択します。現在選択されているアプリケーションのヘルプが表示さ"
-"れます。ヘルプ全体を表示するには、ウィンドウの上にある [スタート ページ] また"
-"は [目次] をクリックします。"
+"ヘルプを表示するには、メニューバーの右上のシステムメニューアイコンをクリック"
+"します。ヘルプを選択します。現在選択されているアプリケーションのヘルプを表示"
+"します。ヘルプをすべてブラウズするには、ウィンドウの上にあるスタートページま"
+"たは目次をクリックします。"
 
-#: apps/io.ox/tours/main.js:732 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:31 module:io.ox/tours
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings. "
+"the menu bar. Select Settings."
 msgstr ""
-"メール設定を開くには、メニュー バーの右上にあるシステム メニュー アイコンをク"
-"リックします。次に、[設定] を選択します。"
+"設定を表示するには、メニューバーの右上のシステムメニューアイコンをクリックし"
+"ます。設定 を選択します。"
 
-#: apps/io.ox/tours/main.js:187 module:io.ox/tours
+#: apps/io.ox/tours/portal.js:36 module:io.ox/tours
 msgid "To read the details, click on an entry in a square."
 msgstr "詳細を閲覧するには、該当するタイルの項目をクリックします。"
 
-#: apps/io.ox/tours/main.js:337 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:102 module:io.ox/tours
 msgid ""
 "To receive information about the sender or other recipients, open the Halo "
 "view by clicking on a name."
@@ -681,12 +655,12 @@ msgstr ""
 "差出人や宛先に関する情報を閲覧するには、その名前をクリックしてハロー ビューを"
 "開きます。"
 
-#: apps/io.ox/tours/main.js:129 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:107 module:io.ox/tours
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr ""
 "オブジェクトを検索するには、メニュー バーで、検索アイコンをクリックします。"
 
-#: apps/io.ox/tours/main.js:537 module:io.ox/tours
+#: apps/io.ox/tours/files.js:36 module:io.ox/tours
 msgid ""
 "To select one of the views List, Icons or Squares, click on View on the "
 "right side of the toolbar."
@@ -694,16 +668,15 @@ msgstr ""
 "リスト ビュー、アイコン ビュー、またはタイル ビューのいずれかを選択するには、"
 "ツールバー右側にある [ビュー] をクリックします。"
 
-#: apps/io.ox/tours/main.js:493 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:84 module:io.ox/tours
 msgid ""
 "To select one of the views like Day, Month or List, click on View in the "
 "toolbar. Select a menu entry from the Layout section."
 msgstr ""
-"日ビュー、月ビュー、リスト ビューのいずれかを選択するには、ツールバーで、"
-"[ビュー] をクリックし、レイアウト セクションでメニューから目的のビューをク"
-"リックします。"
+"Enter the subject, the start and the end date of the appointment. レイアウト"
+"セクションのメニュー入力を選択します。"
 
-#: apps/io.ox/tours/main.js:384 module:io.ox/tours
+#: apps/io.ox/tours/contacts.js:41 module:io.ox/tours
 msgid ""
 "To send an E-Mail to the contact, click on an E-Mail address or on Send "
 "email in the toolbar."
@@ -711,39 +684,39 @@ msgstr ""
 "連絡先にメールを送信するには、そのメール アドレスをクリックするか、ツールバー"
 "で、[メールを送信] をクリックします。"
 
-#: apps/io.ox/tours/main.js:281 module:io.ox/tours
-msgid "To send the E-Mail, click on Send on the upper right side."
-msgstr "メールを送信するには、画面右上にある [送信] をクリックします。"
+#: apps/io.ox/tours/mail.js:75 module:io.ox/tours
+msgid "To send the E-Mail, click on Send"
+msgstr "メールを送信するには、送信をクリックします。"
 
-#: apps/io.ox/tours/main.js:756 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:55 module:io.ox/tours
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
 msgstr ""
-"サイン アウトするには、メニュー バーの右上にある歯車のアイコンをクリックし、"
-"[サイン アウト] を選択します。"
+"サインアウトするには、メニューバーの右上のシステムメニューアイコンをクリック"
+"します。サインアウトを選択します。"
 
-#: apps/io.ox/tours/main.js:299 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:80 module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
 msgstr ""
-"メールをソートするには、[ソート条件] をクリックし、条件をクリックします。"
+"メールをソートするには、ソート条件をクリックします。ソート条件を選択します。"
 
-#: apps/io.ox/tours/main.js:707 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:93 module:io.ox/tours
 msgid "To sort the tasks, click on Sort by. Select a sort criteria."
 msgstr ""
-"仕事をソートするには、[ソート条件] をクリックし、条件をクリックします。"
+"仕事をソートするには、ソート条件をクリックします。ソート条件を選択します。"
 
-#: apps/io.ox/tours/main.js:659 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:73 module:io.ox/tours
 msgid "To track the editing status, enter the current progress."
 msgstr "進捗状況を記録するには、現在の達成率を入力します。"
 
-#: apps/io.ox/tours/main.js:567 module:io.ox/tours
+#: apps/io.ox/tours/files.js:56 module:io.ox/tours
 msgid "To upload a file, click on New > Upload new file in the toolbar."
 msgstr ""
 "ファイルをアップロードするには、ツールバーで、[新規] → [新規ファイルをアップ"
 "ロード] の順にクリックします。"
 
-#: apps/io.ox/tours/main.js:590 module:io.ox/tours
+#: apps/io.ox/tours/files.js:68 module:io.ox/tours
 msgid ""
 "To view further information, click on a file. A pop-up window displays "
 "further details and functions."
@@ -751,15 +724,15 @@ msgstr ""
 "詳細を閲覧するには、目的のファイルをクリックします。詳細と機能がポップアップ "
 "ウィンドウに表示されます。"
 
-#: apps/io.ox/tours/main.js:651 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:72 module:io.ox/tours
 msgid "Tracking the editing status"
 msgstr "進捗状況の記録"
 
-#: apps/io.ox/tours/main.js:563 module:io.ox/tours
+#: apps/io.ox/tours/files.js:55 module:io.ox/tours
 msgid "Uploading a file"
 msgstr "ファイルのアップロード"
 
-#: apps/io.ox/tours/main.js:531 module:io.ox/tours
+#: apps/io.ox/tours/files.js:31 module:io.ox/tours
 msgid ""
 "Use the folder tree to access own, public or shared files. If the folder "
 "tree is hidden, click on View > Folder view on the right side of the toolbar."
@@ -768,7 +741,7 @@ msgstr ""
 "ダ ツリーを使用します。フォルダ ツリーが隠れている場合は、ツールバーの右側に"
 "ある [ビュー] → [フォルダ ビュー] の順にクリックします。"
 
-#: apps/io.ox/tours/main.js:141 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:117 module:io.ox/tours
 msgid ""
 "Use the folder tree to open the folder containing the objects that you want "
 "to view in the list."
@@ -776,19 +749,19 @@ msgstr ""
 "目的のオブジェクトを一覧に表示するには、フォルダ ツリーでそのオブジェクトが保"
 "存されているフォルダを開きます。"
 
-#: apps/io.ox/tours/main.js:147 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:122 module:io.ox/tours
 msgid ""
 "Use the list to select an object, show its contents or activate functions."
 msgstr ""
 "オブジェクトの選択やその内容の閲覧、機能を有効にするには、一覧でそのオブジェ"
 "クトを選択します。"
 
-#: apps/io.ox/tours/main.js:439 module:io.ox/tours
-#: apps/io.ox/tours/main.js:645
+#: apps/io.ox/tours/calendar.js:62 module:io.ox/tours
+#: apps/io.ox/tours/tasks.js:67
 msgid "Using the reminder function"
 msgstr "アラーム機能の使用"
 
-#: apps/io.ox/tours/main.js:71 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:66 module:io.ox/tours
 msgid "Welcome to %s"
 msgstr "%s へようこそ"
 
@@ -868,11 +841,9 @@ msgstr "%s へようこそ"
 #~ msgid_plural "%1$d mails"
 #~ msgstr[0] "%1$d 通のメール"
 
-#, fuzzy
 #~ msgid "%1$d messages in this conversation"
 #~ msgstr "最近のスレッド"
 
-#, fuzzy
 #~ msgid "%1$d messages selected"
 #~ msgstr "<b>%1$d</b> 個の要素が選択されています。"
 
@@ -893,7 +864,6 @@ msgstr "%s へようこそ"
 #~ msgid "%1$s %2$s"
 #~ msgstr "%1$s %2$s"
 
-#, fuzzy
 #~ msgid "%1$s (Tentative)"
 #~ msgstr "%1$s (仮の予定)"
 
@@ -917,7 +887,6 @@ msgstr "%s へようこそ"
 #~ msgid "%1$s of %2$s"
 #~ msgstr "%2$s 中の %1$s"
 
-#, fuzzy
 #~ msgid "%1$s%2$s %3$s%4$s%5$s"
 #~ msgstr ""
 #~ "%2$s %4$s\n"
@@ -1191,7 +1160,6 @@ msgstr "%s へようこそ"
 #~ "更新には時間がかかります。バックグラウンドで更新を実行している間、しばらく"
 #~ "お待ちください。更新は、登録およびセッションごとに 1 回しかできません。"
 
-#, fuzzy
 #~ msgid "A return receipt has been sent"
 #~ msgstr "開封通知が送信されました。"
 
@@ -1512,7 +1480,6 @@ msgstr "%s へようこそ"
 #~ msgid "Administrator"
 #~ msgstr "管理者"
 
-#, fuzzy
 #~ msgid "Advanced Settings"
 #~ msgstr "Drive の設定"
 
@@ -1947,7 +1914,6 @@ msgstr "%s へようこそ"
 #~ msgid "An error occurred while loading the document."
 #~ msgstr "ドキュメントの読み込み中にエラーが発生しました。"
 
-#, fuzzy
 #~ msgid "An error occurred while loading the page."
 #~ msgstr "ページの読み込み中にエラーが発生しました。"
 
@@ -2372,7 +2338,6 @@ msgstr "%s へようこそ"
 #~ msgid "Ask for new invitation"
 #~ msgstr "新規の出席依頼を要求"
 
-#, fuzzy
 #~ msgid "Ask for return receipt"
 #~ msgstr "開封通知を要求"
 
@@ -2644,6 +2609,13 @@ msgstr "%s へようこそ"
 #~ msgid "Below quoted text"
 #~ msgstr "引用文の下"
 
+#~ msgid ""
+#~ "Below the recipient you will find further functions, e.g. for sending "
+#~ "copies to other recipients or for adding attachments."
+#~ msgstr ""
+#~ "他の人に CC を送信したり、添付ファイルを追加するなどの詳細機能は宛先の下に"
+#~ "表示されます。"
+
 #~ msgid "Benin"
 #~ msgstr "ベナン"
 
@@ -2713,7 +2685,6 @@ msgstr "%s へようこそ"
 #~ msgid "Botswana"
 #~ msgstr "ボツワナ"
 
-#, fuzzy
 #~ msgid "Bottom"
 #~ msgstr "下罫線"
 
@@ -2939,7 +2910,6 @@ msgstr "%s へようこそ"
 #~ msgid "Change"
 #~ msgstr "変更"
 
-#, fuzzy
 #~ msgid "Change Name"
 #~ msgstr "名前を変更"
 
@@ -3006,7 +2976,6 @@ msgstr "%s へようこそ"
 #~ msgid "Check for:"
 #~ msgstr "チェック間隔:"
 
-#, fuzzy
 #~ msgid "Checkboxes"
 #~ msgstr "チェックボックスを表示"
 
@@ -3037,11 +3006,9 @@ msgstr "%s へようこそ"
 #~ msgid "City"
 #~ msgstr "市区町村"
 
-#, fuzzy
 #~ msgid "City (Business)"
 #~ msgstr "市区町村 (ビジネス)"
 
-#, fuzzy
 #~ msgid "City (Home)"
 #~ msgstr "市区町村 (自宅)"
 
@@ -3224,7 +3191,6 @@ msgstr "%s へようこそ"
 #~ msgid "Compose"
 #~ msgstr "作成"
 
-#, fuzzy
 #~ msgid "Compose new email"
 #~ msgstr "新規メールを作成"
 
@@ -3255,7 +3221,6 @@ msgstr "%s へようこそ"
 #~ msgid "Confirmation status"
 #~ msgstr "確認ステータス"
 
-#, fuzzy
 #~ msgid "Confirmation status for new appointments in a personal folder"
 #~ msgstr "個人用フォルダにある新規アポイントの確認ステータス"
 
@@ -3292,7 +3257,6 @@ msgstr "%s へようこそ"
 #~ msgid "Contact overview"
 #~ msgstr "連絡先の概要"
 
-#, fuzzy
 #~ msgid "Contact pictures"
 #~ msgstr "メンバ"
 
@@ -3942,7 +3906,6 @@ msgstr "%s へようこそ"
 #~ msgid "Display name"
 #~ msgstr "表示名"
 
-#, fuzzy
 #~ msgid "Display name *"
 #~ msgstr "表示名 *"
 
@@ -4151,7 +4114,6 @@ msgstr "%s へようこそ"
 #~ msgid "Double"
 #~ msgstr "2 行"
 
-#, fuzzy
 #~ msgid "Doubleclick in this row for whole day appointment"
 #~ msgstr "終日のアポイントを作成するには、クリックしてください。"
 
@@ -4196,7 +4158,6 @@ msgstr "%s へようこそ"
 #~ msgid "Drive Settings"
 #~ msgstr "Drive の設定"
 
-#, fuzzy
 #~ msgid "Drop EML file here for import"
 #~ msgstr "このメールをインポートするには、ここにドロップしてください。"
 
@@ -4424,7 +4385,6 @@ msgstr "%s へようこそ"
 #~ msgid "Email addresses"
 #~ msgstr "メール アドレス"
 
-#, fuzzy
 #~ msgid "Email from %1$s: %2$s"
 #~ msgstr "毎年 %1$s %2$d 日"
 
@@ -4598,6 +4558,29 @@ msgstr "%s へようこそ"
 
 #~ msgid "Enter personal data"
 #~ msgstr "個人データを入力"
+
+#~ msgid "Enter the E-Mail text below the subject."
+#~ msgstr "件名の下にメールの本文を入力してください。"
+
+#~ msgid ""
+#~ "Enter the E-Mail text below the subject. If the text format was set to "
+#~ "HTMl in the options, you can format the E-Mail text. To do so select a "
+#~ "text part and then click an icon in the formatting bar."
+#~ msgstr ""
+#~ "メールの本文を件名の下に入力します。オプションでテキスト フォーマットが "
+#~ "HTML に設定されている場合は、メールの本文に書式を設定できます。"
+
+#~ msgid ""
+#~ "Enter the recipient's name on the top left side. As soon as you typed the "
+#~ "first letters, suggestions from the address books are displayed. To "
+#~ "accept a recipient suggestion, click on it."
+#~ msgstr ""
+#~ "画面左上にある宛先に宛先の名前を入力します。最初の文字を入力すると、アドレ"
+#~ "ス帳に保存されている該当する連絡先の候補が表示されます。候補を宛先として選"
+#~ "択するには、その候補をクリックします。"
+
+#~ msgid "Enter the subject on the right side of the recipient."
+#~ msgstr "宛先の右側にある件名フィールドに件名を入力します。"
 
 #~ msgid "Enter visible text"
 #~ msgstr "テキストを入力"
@@ -4931,7 +4914,6 @@ msgstr "%s へようこそ"
 #~ msgid "Fax"
 #~ msgstr "FAX"
 
-#, fuzzy
 #~ msgid "Fax (Business)"
 #~ msgstr "FAX (ビジネス)"
 
@@ -4971,7 +4953,6 @@ msgstr "%s へようこそ"
 #~ msgid "Feed URL"
 #~ msgstr "フィード URL"
 
-#, fuzzy
 #~ msgid "Feedback"
 #~ msgstr "戻る"
 
@@ -5155,7 +5136,6 @@ msgstr "%s へようこそ"
 #~ msgid "Food"
 #~ msgstr "食べ物"
 
-#, fuzzy
 #~ msgid "For best results, please use"
 #~ msgstr "最良の結果を得るには、使用することをお勧めします。"
 
@@ -5440,7 +5420,6 @@ msgstr "%s へようこそ"
 #~ msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
 #~ msgstr "お知らせ<br><br>あなたは %1$s と次の公開を共有しています。<br>%2$s"
 
-#, fuzzy
 #~ msgid "Hidden folders"
 #~ msgstr "フォルダを追加"
 
@@ -5576,6 +5555,13 @@ msgstr "%s へようこそ"
 #~ msgstr "アイコン"
 
 #~ msgid ""
+#~ "If a folder contains images, you can display a slideshow. To do so click "
+#~ "the View slideshow icon in the toolbar."
+#~ msgstr ""
+#~ "フォルダに画像が含まれている場合、スライドショーを表示できます。これを行う"
+#~ "には、ツールバーで、[スライドショーを表示] アイコンをクリックします。"
+
+#~ msgid ""
 #~ "If the authorization expired or was revoked, you can repeat the "
 #~ "authorization process by clicking on the button below. The authorization "
 #~ "will proceed in a separate window."
@@ -5589,6 +5575,11 @@ msgstr "%s へようこそ"
 #~ msgstr ""
 #~ "パスワードを変更すると、サインアウトされます。作業中のすべてのファイルを保"
 #~ "存し、閉じてください。"
+
+#~ msgid ""
+#~ "If you no longer want to display a square, click the cross on the upper "
+#~ "right side."
+#~ msgstr "今後タイルを表示しない場合は、右上の×印をクリックします。"
 
 #~ msgid ""
 #~ "If you spot a free time, just select this area. To do this, move the "
@@ -5662,6 +5653,13 @@ msgstr "%s へようこそ"
 
 #~ msgid "In a public folder there must be at least one participant."
 #~ msgstr "パブリック フォルダには、1 名以上の出席者が必要です。"
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened on the right side."
+#~ msgstr ""
+#~ "アポイントの出席依頼など、新規の通知があると、画面右側に情報エリアが表示さ"
+#~ "れます。"
 
 #~ msgid ""
 #~ "In order to assign categories to the objects selected, use the control "
@@ -5777,7 +5775,6 @@ msgstr "%s へようこそ"
 #~ msgid "Inline With Text"
 #~ msgstr "インラインにテキストを表示"
 
-#, fuzzy
 #~ msgid "Inline menu %1$s"
 #~ msgstr "サイン イン ユーザ: %1$s"
 
@@ -6130,15 +6127,12 @@ msgstr "%s へようこそ"
 #~ msgid "Line wrap after:"
 #~ msgstr "行を折り返す文字数:"
 
-#, fuzzy
 #~ msgid "Line wrap when sending text mails after"
 #~ msgstr "送信メールの本文を折り返す文字数:"
 
-#, fuzzy
 #~ msgid "Line wrap when sending text mails after how much characters"
 #~ msgstr "送信メールの本文を折り返す文字数:"
 
-#, fuzzy
 #~ msgid "Line wrap when sending text mails after: "
 #~ msgstr "送信メールの本文を折り返す文字数:"
 
@@ -6360,7 +6354,6 @@ msgstr "%s へようこそ"
 #~ msgstr ""
 #~ "メールはインポートされませんでした。.eml ファイルのみがサポートされます。"
 
-#, fuzzy
 #~ msgid "Mail was not imported. Only .eml files are supported."
 #~ msgstr ""
 #~ "メールはインポートされませんでした。.eml ファイルのみがサポートされます。"
@@ -6454,18 +6447,15 @@ msgstr "%s へようこそ"
 #~ msgid "Mark as distributionlist"
 #~ msgstr "配布リストにする"
 
-#, fuzzy
 #~ msgid "Mark as done"
 #~ msgstr "完了の印を付ける"
 
-#, fuzzy
 #~ msgid "Mark as read"
 #~ msgstr "既読にする"
 
 #~ msgid "Mark as spam"
 #~ msgstr "スパム メールの印を付ける"
 
-#, fuzzy
 #~ msgid "Mark as unread"
 #~ msgstr "未読にする"
 
@@ -6517,7 +6507,6 @@ msgstr "%s へようこそ"
 #~ msgid "Medium"
 #~ msgstr "中"
 
-#, fuzzy
 #~ msgid "Medium priority"
 #~ msgstr "優先度 (高)"
 
@@ -6560,7 +6549,6 @@ msgstr "%s へようこそ"
 #~ msgid "Minimize"
 #~ msgstr "最小化"
 
-#, fuzzy
 #~ msgid "Minimum password length is %1$d."
 #~ msgstr "パスワードは最低 %1$s 文字必要です。"
 
@@ -6579,7 +6567,6 @@ msgstr "%s へようこそ"
 #~ msgid "Mobile (private):"
 #~ msgstr "携帯電話 (プライベート):"
 
-#, fuzzy
 #~ msgid "Mobile device settings:"
 #~ msgstr "フォルダ設定"
 
@@ -6895,11 +6882,9 @@ msgstr "%s へようこそ"
 #~ msgid "No addresses available"
 #~ msgstr "利用可能な住所はありません。"
 
-#, fuzzy
 #~ msgid "No appointments found for \"%s\""
 #~ msgstr "\"%s\" のメールは見つかりませんでした。"
 
-#, fuzzy
 #~ msgid "No appointments found until %s"
 #~ msgstr "今日はアポイントがありません。"
 
@@ -6964,7 +6949,6 @@ msgstr "%s へようこそ"
 #~ msgid "No matching templates on this Server"
 #~ msgstr "このサーバには、一致するテンプレートがありません。"
 
-#, fuzzy
 #~ msgid "No message selected"
 #~ msgstr "項目が選択されていません。"
 
@@ -6977,7 +6961,6 @@ msgstr "%s へようこそ"
 #~ msgid "No preview available"
 #~ msgstr "表示できるプレビューがありません。"
 
-#, fuzzy
 #~ msgid "No priority"
 #~ msgstr "優先度 (低)"
 
@@ -7273,7 +7256,6 @@ msgstr "%s へようこそ"
 #~ msgid "Open in new tab"
 #~ msgstr "新規タブで開く"
 
-#, fuzzy
 #~ msgid "Open on LinkedIn"
 #~ msgstr "LinkedIn"
 
@@ -7611,39 +7593,30 @@ msgstr "%s へようこそ"
 #~ msgid "Password has changed"
 #~ msgstr "パスワードが変更されました。"
 
-#, fuzzy
 #~ msgid "Password length must be between %1$d and %2$d characters."
 #~ msgstr "パスワードは %1$s 以上 %2$s 以内の文字数にする必要がある。"
 
-#, fuzzy
 #~ msgid "Password strength: Good"
 #~ msgstr "パスワードの長さ"
 
-#, fuzzy
 #~ msgid "Password strength: Legendary!"
 #~ msgstr "パスワードの長さ"
 
-#, fuzzy
 #~ msgid "Password strength: Strong"
 #~ msgstr "パスワードの長さ"
 
-#, fuzzy
 #~ msgid "Password strength: Too short"
 #~ msgstr "パスワードの長さ"
 
-#, fuzzy
 #~ msgid "Password strength: Very strong"
 #~ msgstr "パスワードの長さ"
 
-#, fuzzy
 #~ msgid "Password strength: Very weak"
 #~ msgstr "パスワードの長さ"
 
-#, fuzzy
 #~ msgid "Password strength: Weak"
 #~ msgstr "パスワードの長さ"
 
-#, fuzzy
 #~ msgid "Password strength: Wrong length"
 #~ msgstr "パスワードの長さ"
 
@@ -7821,7 +7794,6 @@ msgstr "%s へようこそ"
 #~ msgid "Please enter a valid name"
 #~ msgstr "有効な名前を入力してください。"
 
-#, fuzzy
 #~ msgid "Please enter a valid number"
 #~ msgstr "有効な名前を入力してください。"
 
@@ -7938,7 +7910,6 @@ msgstr "%s へようこそ"
 #~ msgid "Please sign in again to continue"
 #~ msgstr "続行するには、再度サイン インしてください。"
 
-#, fuzzy
 #~ msgid "Please specify these missing variables:"
 #~ msgstr "次の変数を指定してください: "
 
@@ -7990,7 +7961,6 @@ msgstr "%s へようこそ"
 #~ msgid "Position:"
 #~ msgstr "役職:"
 
-#, fuzzy
 #~ msgid "Postal Code (Business)"
 #~ msgstr "郵便番号 (ビジネス)"
 
@@ -8009,7 +7979,6 @@ msgstr "%s へようこそ"
 #~ msgid "Press [enter] to close this alertbox."
 #~ msgstr "このアラートボックスを閉じるには、Enter キーを押してください。"
 
-#, fuzzy
 #~ msgid "Press [enter] to jump to"
 #~ msgstr "次にアクセスするには、Enter キーを押してください。"
 
@@ -8062,7 +8031,6 @@ msgstr "%s へようこそ"
 #~ msgid "Preview could not be loaded"
 #~ msgstr "プレビューを読み込めませんでした。"
 
-#, fuzzy
 #~ msgid "Preview pane"
 #~ msgstr "プレビュー"
 
@@ -8376,7 +8344,6 @@ msgstr "%s へようこそ"
 #~ msgid "Recurring task"
 #~ msgstr "定期的な仕事"
 
-#, fuzzy
 #~ msgid "Recurring tasks need a valid due date."
 #~ msgstr "定期的な仕事には、有効な終了日が必要です。"
 
@@ -8500,11 +8467,9 @@ msgstr "%s へようこそ"
 #~ msgid "Reply to"
 #~ msgstr "返信先:"
 
-#, fuzzy
 #~ msgid "Reply to all recipients"
 #~ msgstr "すべての宛先"
 
-#, fuzzy
 #~ msgid "Reply to sender"
 #~ msgstr "返信先:"
 
@@ -8550,7 +8515,6 @@ msgstr "%s へようこそ"
 #~ msgid "Retry"
 #~ msgstr "再試行"
 
-#, fuzzy
 #~ msgid "Return Receipt"
 #~ msgstr "開封通知"
 
@@ -8705,18 +8669,15 @@ msgstr "%s へようこそ"
 #~ msgid "Save in file store"
 #~ msgstr "ファイル ストアに保存"
 
-#, fuzzy
 #~ msgid "Save to Drive"
 #~ msgstr "Drive に保存"
 
 #~ msgid "Saved in"
 #~ msgstr "保存先:"
 
-#, fuzzy
 #~ msgid "Saved mail attachment"
 #~ msgstr "添付ファイルを保存"
 
-#, fuzzy
 #~ msgid "Saving attachment to Drive"
 #~ msgid_plural "Saving attachments to Drive"
 #~ msgstr[0] "Drive に添付ファイルを保存"
@@ -8743,7 +8704,6 @@ msgstr "%s へようこそ"
 #~ msgid "Search here"
 #~ msgstr "ここを検索"
 
-#, fuzzy
 #~ msgid "Search in"
 #~ msgstr "検索先:"
 
@@ -8759,7 +8719,6 @@ msgstr "%s へようこそ"
 #~ msgid "Searched in all folders"
 #~ msgstr "すべてのフォルダを検索しました。"
 
-#, fuzzy
 #~ msgid "Second name"
 #~ msgstr "姓"
 
@@ -8865,7 +8824,6 @@ msgstr "%s へようこそ"
 #~ msgid "Send E-Mail to all"
 #~ msgstr "全員にメールを送信"
 
-#, fuzzy
 #~ msgid "Send a return receipt"
 #~ msgstr "開封通知を送信"
 
@@ -8887,7 +8845,6 @@ msgstr "%s へようこそ"
 #~ msgid "Send by mail"
 #~ msgstr "メールで送信"
 
-#, fuzzy
 #~ msgid "Send feedback"
 #~ msgstr "メールを送信"
 
@@ -8983,7 +8940,6 @@ msgstr "%s へようこそ"
 #~ msgid "Set as default"
 #~ msgstr "既定として設定"
 
-#, fuzzy
 #~ msgid "Set color"
 #~ msgstr "テキストの色"
 
@@ -9039,7 +8995,6 @@ msgstr "%s へようこそ"
 #~ msgid "Shopping cart"
 #~ msgstr "ショッピング カート"
 
-#, fuzzy
 #~ msgid "Show"
 #~ msgstr "表示"
 
@@ -9096,7 +9051,6 @@ msgstr "%s へようこそ"
 #~ msgid "Show all my appointments from all calendars"
 #~ msgstr "予定表全体から自分のアポイントすべてを表示"
 
-#, fuzzy
 #~ msgid "Show appointment details"
 #~ msgstr "アポイントを表示"
 
@@ -9183,7 +9137,6 @@ msgstr "%s へようこそ"
 #~ msgid "Show previous page"
 #~ msgstr "前のページを表示"
 
-#, fuzzy
 #~ msgid "Show quoted text"
 #~ msgstr "引用文の下"
 
@@ -9202,14 +9155,12 @@ msgstr "%s へようこそ"
 #~ msgid "Show task"
 #~ msgstr "仕事を表示"
 
-#, fuzzy
 #~ msgid "Show task details"
 #~ msgstr "詳細を表示"
 
 #~ msgid "Show version history"
 #~ msgstr "バージョン履歴を表示"
 
-#, fuzzy
 #~ msgid "Show/hide folder"
 #~ msgstr "フォルダを移動"
 
@@ -9272,6 +9223,9 @@ msgstr "%s へようこそ"
 
 #~ msgid "Skip this step"
 #~ msgstr "この手順をスキップ"
+
+#~ msgid "Slideshow"
+#~ msgstr "スライドショー"
 
 #~ msgid "Slovakia"
 #~ msgstr "スロヴァキア"
@@ -9440,7 +9394,6 @@ msgstr "%s へようこそ"
 #~ msgid "State"
 #~ msgstr "都道府県"
 
-#, fuzzy
 #~ msgid "State (Home)"
 #~ msgstr "都道府県 (自宅)"
 
@@ -9480,11 +9433,9 @@ msgstr "%s へようこそ"
 #~ msgid "Street"
 #~ msgstr "番地"
 
-#, fuzzy
 #~ msgid "Street (Business)"
 #~ msgstr "番地 (ビジネス)"
 
-#, fuzzy
 #~ msgid "Street (Home)"
 #~ msgstr "番地 (自宅)"
 
@@ -9605,7 +9556,6 @@ msgstr "%s へようこそ"
 #~ msgid "Suriname"
 #~ msgstr "スリナム"
 
-#, fuzzy
 #~ msgid "Surname"
 #~ msgstr "姓"
 
@@ -9813,7 +9763,6 @@ msgstr "%s へようこそ"
 #~ msgid "Team workweek view"
 #~ msgstr "チーム稼働日ビュー"
 
-#, fuzzy
 #~ msgid "Telephone (Business)"
 #~ msgstr "電話番号 (ビジネス)"
 
@@ -9871,7 +9820,6 @@ msgstr "%s へようこそ"
 #~ msgid "Thailand"
 #~ msgstr "タイ"
 
-#, fuzzy
 #~ msgid "Thank you for your feedback"
 #~ msgstr "フィード用に新規グループを追加"
 
@@ -9949,7 +9897,6 @@ msgstr "%s へようこそ"
 #~ msgid "The appointment has been updated"
 #~ msgstr "アポイントが更新されました。"
 
-#, fuzzy
 #~ msgid ""
 #~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
 #~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
@@ -9959,7 +9906,6 @@ msgstr "%s へようこそ"
 #~ "attribute=\"interval\"><span class=\"number-control\">2</span> 日ごとに</"
 #~ "a> 繰り返されます。"
 
-#, fuzzy
 #~ msgid ""
 #~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
 #~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
@@ -9978,7 +9924,6 @@ msgstr "%s へようこそ"
 #~ "この定期的なアポイントは <a href=\"#\" data-attribute=\"recurrenceType\" "
 #~ "data-widget=\"options\">毎週</a> 繰り返されます。"
 
-#, fuzzy
 #~ msgid ""
 #~ "The appointment is repeated every <a href=\"#\" data-widget=\"options\" "
 #~ "data-attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options"
@@ -9990,7 +9935,6 @@ msgstr "%s へようこそ"
 #~ "data-attribute=\"ordinal\">第 1</a> <a href=\"#\" data-widget=\"options\" "
 #~ "data-attribute=\"day\">水曜日</a> に繰り返されます。"
 
-#, fuzzy
 #~ msgid ""
 #~ "The appointment is repeated every year on day <a href=\"#\" data-widget="
 #~ "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control"
@@ -10002,7 +9946,6 @@ msgstr "%s へようこそ"
 #~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></"
 #~ "a> 日に繰り返されます。"
 
-#, fuzzy
 #~ msgid ""
 #~ "The appointment is repeated on day <a href=\"#\" data-widget=\"number\" "
 #~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></"
@@ -10014,7 +9957,6 @@ msgstr "%s へようこそ"
 #~ "a> の <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth"
 #~ "\"><span class=\"number-control\">10</span></a> 日に繰り返されます。"
 
-#, fuzzy
 #~ msgid ""
 #~ "The appointment is repeated the <a href=\"#\" data-widget=\"options\" "
 #~ "data-attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options"
@@ -10184,7 +10126,6 @@ msgstr "%s へようこそ"
 #~ msgid "The selected filter rule refers to an unknown folder '%s'."
 #~ msgstr "選択されたフィルタ ルールは不明なフォルダ '%s' を参照しています。"
 
-#, fuzzy
 #~ msgid "The sender wants to get notified when you have read this email"
 #~ msgstr ""
 #~ "このメールをお読みになった後、差出人に連絡するよう、差出人から求められてい"
@@ -10229,6 +10170,15 @@ msgstr "%s へようこそ"
 #~ msgstr "設定が保存されました。"
 
 #~ msgid ""
+#~ "The settings are organized in topics. Select the topic on the left side, "
+#~ "e.g Basic settings or E-Mail. To view all settings, enable Advanced "
+#~ "settings at the bottom."
+#~ msgstr ""
+#~ "設定はトピックごとに分かれています。左ペインでトピック (例: 基本設定、メー"
+#~ "ル) を選択します。すべての設定を表示するには、画面下にある [詳細設定] を有"
+#~ "効にします。"
+
+#~ msgid ""
 #~ "The settings for collecting contacts in this folder will become disabled "
 #~ "when you enter the application the next time."
 #~ msgstr ""
@@ -10242,7 +10192,6 @@ msgstr "%s へようこそ"
 #~ "共有されたデータは、インターネット経由で誰からでもアクセスが可能です。デー"
 #~ "タの共有は十分検討してから行ってください。"
 
-#, fuzzy
 #~ msgid "The start date must be before the due date."
 #~ msgstr "開始日は終了日より前の日付でなければなりません。"
 
@@ -10597,17 +10546,32 @@ msgstr "%s へようこそ"
 #~ "メモを作成するには、最上部のアイコンをクリックし、[メモを追加] を選択しま"
 #~ "す。"
 
+#~ msgid "To create the task, click on Create on the upper right side."
+#~ msgstr "仕事を作成するには、右上にある [作成] をクリックします。"
+
 #~ msgid "To launch an app, click on a tile's headline."
 #~ msgstr ""
 #~ "アプリケーションを起動するには、該当するタイルの見出しをクリックします。"
 
-#, fuzzy
+#~ msgid ""
+#~ "To open the E-Mail settings, click the System menu icon on the upper "
+#~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
+#~ "side. To display all settings, enable Advanced settings in the bottom "
+#~ "left side"
+#~ msgstr ""
+#~ "メール設定を開くには、メニュー バーの右上にあるシステム メニュー アイコン"
+#~ "をクリックします。次に、[設定] を選択し、左ペインで [メール] をクリックし"
+#~ "ます。すべての設定を表示するには、左下にある [詳細設定] を有効にします。"
+
 #~ msgid ""
 #~ "To open the help, click the System menu icon on the upper right side of "
 #~ "the menu bar. Select Help."
 #~ msgstr ""
 #~ "ヘルプを開くには、メニュー バーの右上にある歯車のアイコンをクリックし、[ヘ"
 #~ "ルプ] を選択します。"
+
+#~ msgid "To send the E-Mail, click on Send on the upper right side."
+#~ msgstr "メールを送信するには、画面右上にある [送信] をクリックします。"
 
 #~ msgid "To view attachment you must first save your e-mail as a draft."
 #~ msgstr ""
@@ -10830,7 +10794,6 @@ msgstr "%s へようこそ"
 #~ msgid "Unknown error while checking tumblr-blog."
 #~ msgstr "Tumblr ブログのチェック中に不明なエラーが発生しました。"
 
-#, fuzzy
 #~ msgid "Unknown sender"
 #~ msgstr "差出人がありません。"
 
@@ -10849,7 +10812,6 @@ msgstr "%s へようこそ"
 #~ msgid "Unselect all"
 #~ msgstr "すべてを選択解除"
 
-#, fuzzy
 #~ msgid "Unset default signature"
 #~ msgstr "既定の署名:"
 
@@ -11041,7 +11003,6 @@ msgstr "%s へようこそ"
 #~ msgid "Version history"
 #~ msgstr "バージョン履歴"
 
-#, fuzzy
 #~ msgid "Versions (%s)"
 #~ msgstr "バージョン (%s)"
 
@@ -11288,7 +11249,6 @@ msgstr "%s へようこそ"
 #~ "確認ステータスを変更しようとしています。変更する場合は、他の出席者にコメン"
 #~ "トを送信してください。"
 
-#, fuzzy
 #~ msgid ""
 #~ "You are currently using %1$s of your %2$s available disk space. You have "
 #~ "%3$s left."
@@ -11549,7 +11509,6 @@ msgstr "%s へようこそ"
 #~ msgstr ""
 #~ "ご利用のブラウザの Cookie 機能が無効になっています。有効にしてください。"
 
-#, fuzzy
 #~ msgid ""
 #~ "Your capacity is shared with all members of your group. Your group is "
 #~ "currently using %1$s of its %2$s available disk space. The amount of free "
@@ -11599,7 +11558,6 @@ msgstr "%s へようこそ"
 #~ msgid "Your password has been changed"
 #~ msgstr "パスワードが変更されました。"
 
-#, fuzzy
 #~ msgid ""
 #~ "Your password is more secure if it also contains capital letters, "
 #~ "numbers, and special characters like $, _, %"
@@ -11742,7 +11700,6 @@ msgstr "%s へようこそ"
 #~ msgid "bytes"
 #~ msgstr "bytes"
 
-#, fuzzy
 #~ msgid "characters"
 #~ msgstr " 文字"
 
@@ -11830,7 +11787,6 @@ msgstr "%s へようこそ"
 #~ msgid "edit own objects"
 #~ msgstr "自分のオブジェクトのみを編集"
 
-#, fuzzy
 #~ msgid "end date"
 #~ msgstr "終了日"
 
@@ -11938,7 +11894,6 @@ msgstr "%s へようこそ"
 #~ msgid "in one week"
 #~ msgstr "1 週間後"
 
-#, fuzzy
 #~ msgid "is not a valid user or group."
 #~ msgstr " は、有効なユーザ/グループではありません。"
 
@@ -12093,7 +12048,6 @@ msgstr "%s へようこそ"
 #~ msgid "show image"
 #~ msgstr "画像を表示"
 
-#, fuzzy
 #~ msgid "status"
 #~ msgstr "進捗状況"
 
@@ -12118,7 +12072,6 @@ msgstr "%s へようこそ"
 #~ msgid "street,postal_code/city,country,state"
 #~ msgstr "postal_code/state,city,street,country"
 
-#, fuzzy
 #~ msgid "subfolders of %s"
 #~ msgstr "%sのメンバ"
 

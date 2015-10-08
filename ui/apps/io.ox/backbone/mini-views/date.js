@@ -11,11 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/backbone/mini-views/date',
-    ['io.ox/backbone/mini-views/abstract',
-     'io.ox/core/date',
-     'gettext!io.ox/core'
-    ], function (AbstractView, date, gt) {
+define('io.ox/backbone/mini-views/date', [
+    'io.ox/backbone/mini-views/abstract',
+    'gettext!io.ox/core'
+], function (AbstractView, gt) {
 
     'use strict';
 
@@ -44,7 +43,8 @@ define('io.ox/backbone/mini-views/date',
         var node = $('<select tabindex="1">').attr({ name: name, title: titles[name] }).addClass('form-control'),
             i = Math.min(from, to),
             $i = Math.max(from, to),
-            d = new date.UTC(0),
+            // see bug 41106 - the initial date is set to 1.1.1970 so the options can always be filled with 31 days
+            d = moment.utc(0),
             options = [],
             empty, text;
 
@@ -74,21 +74,19 @@ define('io.ox/backbone/mini-views/date',
         events: { 'change select': 'onChange' },
 
         onChange: function () {
-
             var d = this.getDate();
-
             if (d !== null) {
                 // check if date is invalid (like feb 30) and prevent month jump
                 // phantomjs doesn't handle invalid dates in YYYY-MM-DD so we use MM/DD/YYYY
-                if (this.$el.find('.month').val() !== String(d.getUTCMonth())) {
+                if (!d.isValid()) {
                     // jump back to last valid day of previous month
-                    d.setUTCDate(0);
+                    d.date(0);
                     // set date field to right day
                     // needs to be done or an invalid date can be selected
                     // if model already has the corrected date
-                    this.$el.find('.date').val(d.getUTCDate());
+                    this.$el.find('.date').val(d.date());
                 }
-                this.model.set(this.name, d.getTime());
+                this.model.set(this.name, d.valueOf());
             } else {
                 this.model.set(this.name, null);
                 //enable all
@@ -97,28 +95,30 @@ define('io.ox/backbone/mini-views/date',
         },
 
         getDate: function () {
-
             var year = this.$el.find('.year').val(),
                 month = this.$el.find('.month').val(),
                 date = this.$el.find('.date').val();
 
             // look for month and date; year doesn't matter, it's always set
             if (month === '' || month === null || date === '' || date === null) return null;
-
-            return DateView.utc(year, month, date);
+            return moment.utc({
+                year: parseInt(year, 10),
+                month: parseInt(month, 10),
+                date: parseInt(date, 10)
+            });
         },
 
         value: function () {
             var d = this.getDate();
-            return d && _.pad(d.getUTCFullYear(), 4) + '-' + _.pad(d.getUTCMonth() + 1, 2) + '-' + _.pad(d.getUTCDate(), 2);
+            return d && _.pad(d.year(), 4) + '-' + _.pad(d.month() + 1, 2) + '-' + _.pad(d.date(), 2);
         },
 
         update: function () {
             var value = this.model.get(this.name), d, year, text;
             // change boxes only for valid dates
             if (_.isNumber(value)) {
-                d = new Date(value);
-                year = String(d.getUTCFullYear());
+                d = moment.utc(value);
+                year = String(d.year());
                 if (year !== '1') {
                     // if the year is not our dropdown we add it
                     var yearValues = [];
@@ -133,13 +133,13 @@ define('io.ox/backbone/mini-views/date',
                     }
                 }
                 this.$el.find('.year').val(_.pad(year, 4));
-                this.$el.find('.month').val(d.getUTCMonth());
-                this.$el.find('.date').val(d.getUTCDate());
+                this.$el.find('.month').val(d.month());
+                this.$el.find('.date').val(d.date());
                 // disable invalid dayfields
-                d.setUTCDate(1);
-                d.setUTCMonth(d.getUTCMonth() + 1);
-                d.setUTCDate(0);
-                var validDays = d.getUTCDate(),
+                d.date(1);
+                d.add(1, 'month');
+                d.date(0);
+                var validDays = d.date(),
                     options = this.$el.find('.date').children().prop('disabled', false);
                 options = options.slice(validDays + 1, options.length);
                 options.prop('disabled', true);
@@ -154,25 +154,23 @@ define('io.ox/backbone/mini-views/date',
         },
 
         render: function () {
-
             var self = this;
-
-            date.getFormat(date.locale.formats.yMMMd).replace(
-                /(Y+|y+|u+)|(M+|L+)|(d+)|(?:''|'(?:[^']|'')*'|[^A-Za-z'])+/g,
+            moment.localeData().longDateFormat('LL').replace(
+                /(Y+)|(M+)|(D+)|(?:''|'(?:[^']|'')*'|[^A-Za-z'])+/g,
                 function (match, y, m, d) {
-                    var proto = date.Local.prototype, node, year;
+                    var proto = moment.fn, node, year;
                     if (y) {
-                        year = (new date.Local()).getYear();
+                        year = moment().year();
                         node = $('<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">').append(
-                            createSelect('year', year + self.future, year - self.past, proto.setYear, y).addClass('year')
+                            createSelect('year', year + self.future, year - self.past, proto.year, y).addClass('year')
                         );
                     } else if (m) {
                         node = $('<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">').append(
-                            createSelect('month', 0, 11, proto.setMonth, 'MMMM').addClass('month')
+                            createSelect('month', 0, 11, proto.month, 'MMMM').addClass('month')
                         );
                     } else if (d) {
                         node = $('<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">').append(
-                            createSelect('date', 1, 31, proto.setDate, match).addClass('date')
+                            createSelect('date', 1, 31, proto.date, match).addClass('date')
                         );
                     }
                     self.$el.append(node);
@@ -183,13 +181,6 @@ define('io.ox/backbone/mini-views/date',
             return this;
         }
     });
-
-    DateView.utc = function (year, month, date) {
-        var d = new Date(Date.UTC(year, month, date));
-        // fix: if year if < 100, e.g. 99, it's 1900 + year, so we set the year again
-        d.setUTCFullYear(year);
-        return d;
-    };
 
     return {
         DateView: DateView

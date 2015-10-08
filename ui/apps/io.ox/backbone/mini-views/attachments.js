@@ -11,13 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/backbone/mini-views/attachments',
-    ['io.ox/backbone/mini-views/abstract',
-     'io.ox/core/api/attachment',
-     'io.ox/core/tk/attachments',
-     'io.ox/core/strings',
-     'gettext!io.ox/core/tk/attachments'
-    ], function (AbstractView, api, attachments, strings, gt) {
+define('io.ox/backbone/mini-views/attachments', [
+    'io.ox/backbone/mini-views/abstract',
+    'io.ox/core/api/attachment',
+    'io.ox/core/tk/attachments',
+    'io.ox/core/strings',
+    'gettext!io.ox/core'
+], function (AbstractView, api, attachments, strings, gt) {
 
     'use strict';
 
@@ -99,7 +99,7 @@ define('io.ox/backbone/mini-views/attachments',
         loadAttachments: function () {
             var self = this;
             if (this.model.id) {
-                api.getAll({ module: this.options.module, id: this.model.id, folder: this.model.get('folder') || this.model.get('folder_id')})
+                api.getAll({ module: this.options.module, id: this.model.id, folder: this.model.get('folder') || this.model.get('folder_id') })
                 .done(function (attachments) {
                     self.attachmentsOnServer = attachments;
                     self.updateState();
@@ -124,9 +124,9 @@ define('io.ox/backbone/mini-views/attachments',
 
         addFile: function (file) {
             if (this.oldMode) {
-                this.addAttachment({file: file.hiddenField, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size});
+                this.addAttachment({ file: file.hiddenField, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size });
             } else {
-                this.addAttachment({file: file, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size});
+                this.addAttachment({ file: file, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size });
             }
         },
 
@@ -157,10 +157,10 @@ define('io.ox/backbone/mini-views/attachments',
                 //store errormessages
                 errors = [],
                 apiOptions = {
-                module: this.options.module,
-                id: id || this.model.id,
-                folder: folderId || this.model.get('folder') || this.model.get('folder_id')
-            };
+                    module: this.options.module,
+                    id: id || this.model.id,
+                    folder: folderId || this.model.get('folder') || this.model.get('folder_id')
+                };
 
             function done() {
                 if (self.options.changeCallback) {

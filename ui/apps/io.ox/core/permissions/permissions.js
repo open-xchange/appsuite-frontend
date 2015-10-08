@@ -11,21 +11,22 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/core/permissions/permissions',
-    ['io.ox/core/extensions',
-     'io.ox/core/notifications',
-     'io.ox/core/folder/api',
-     'io.ox/core/folder/breadcrumb',
-     'io.ox/core/api/user',
-     'io.ox/core/api/group',
-     'io.ox/core/tk/dialogs',
-     'io.ox/contacts/api',
-     'io.ox/contacts/util',
-     'io.ox/calendar/edit/view-addparticipants',
-     'io.ox/core/http',
-     'gettext!io.ox/core',
-     'less!io.ox/core/permissions/style'
-    ], function (ext, notifications, api, getBreadcrumb, userAPI, groupAPI, dialogs, contactsAPI, contactsUtil, AddParticipantsView, http, gt) {
+define('io.ox/core/permissions/permissions', [
+    'io.ox/core/extensions',
+    'io.ox/core/notifications',
+    'io.ox/core/folder/breadcrumb',
+    'io.ox/core/folder/api',
+    'io.ox/core/api/user',
+    'io.ox/core/api/group',
+    'io.ox/contacts/api',
+    'io.ox/core/tk/dialogs',
+    'io.ox/contacts/util',
+    'io.ox/core/tk/typeahead',
+    'io.ox/participants/model',
+    'io.ox/participants/views',
+    'gettext!io.ox/core',
+    'less!io.ox/core/permissions/style'
+], function (ext, notifications, BreadcrumbView, api, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, gt) {
 
     'use strict';
 
@@ -63,12 +64,16 @@ define('io.ox/core/permissions/permissions',
         }),
 
         PermissionsView = Backbone.View.extend({
-            initialize: function () {
-            //TODO:switch to listenTo here, once backbone is up to date
-            //see [1](http://blog.rjzaworski.com/2013/01/why-listento-in-backbone/)
+
+            initialize: function (options) {
+
+                this.options = options;
+
+                //TODO:switch to listenTo here, once backbone is up to date
+                //see [1](http://blog.rjzaworski.com/2013/01/why-listento-in-backbone/)
+
                 this.model.off('change', performRender);
                 this.model.on('change', performRender, this);
-
                 this.model.off('remove', performRemove, this);
                 this.model.on('remove', performRemove, this);
             },
@@ -102,14 +107,14 @@ define('io.ox/core/permissions/permissions',
                     type    = link.attr('data-type'),
                     newbits = api.Bitmask(this.model.get('bits')).set(type, value).get();
                 link.text($el.text());
-                this.model.set('bits', newbits, {validate: true});
+                this.model.set('bits', newbits, { validate: true });
                 this.updateRole();
             },
 
             applyRole: function (e) {
                 e.preventDefault();
                 var node = $(e.target), bits = node.attr('data-value');
-                this.model.set('bits', parseInt(bits, 10), {validate: true});
+                this.model.set('bits', parseInt(bits, 10), { validate: true });
             },
 
             updateRole: function () {
@@ -211,7 +216,8 @@ define('io.ox/core/permissions/permissions',
                 this.append(
                     contactsAPI.pictureHalo(
                         $('<div class="pull-left contact-picture">'),
-                        $.extend(baton.user, { width: 64, height: 64, scaleType: 'cover' })
+                        baton.user,
+                        { width: 64, height: 64 }
                     )
                 );
             } else {
@@ -257,7 +263,7 @@ define('io.ox/core/permissions/permissions',
             } else {
                 options.addClass('readonly');
                 //disable dropdown
-                options.find('span.dropdown a').attr({'aria-haspopup': false, 'data-toggle': null, 'disabled': 'disabled'});
+                options.find('span.dropdown a').attr({ 'aria-haspopup': false, 'data-toggle': null, 'disabled': 'disabled' });
             }
             node.append(
                 addRemoveButton(baton.model.get('entity')),
@@ -314,7 +320,7 @@ define('io.ox/core/permissions/permissions',
             if (value === '64') return true;
             ul.append(
                 $('<li>').append(
-                    $('<a>', { href: '#', 'data-value': value, role: 'menuitem'}).addClass('bit').text(item)
+                    $('<a>', { href: '#', 'data-value': value, role: 'menuitem' }).addClass('bit').text(item)
                 )
             );
         });
@@ -338,6 +344,7 @@ define('io.ox/core/permissions/permissions',
 
     return {
         show: function (folder) {
+            var promise = $.Deferred();
             folder_id = String(folder);
             api.get(folder_id, { cache: false }).done(function (data) {
                 try {
@@ -350,13 +357,14 @@ define('io.ox/core/permissions/permissions',
                         isFolderAdmin = false;
                     }
 
-                    var options = {top: 60, width: 800, center: false, maximize: true, async: true };
+                    var options = { top: 60, width: 800, center: false, maximize: true, async: true, help: 'ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles' };
                     if (_.device('!desktop')) {
-                        options = {top: '40px', center: false, async: true };
+                        options = { top: '40px', center: false, async: true };
                     }
                     var dialog = new dialogs.ModalDialog(options);
                     dialog.getHeader().append(
-                        getBreadcrumb(data.id, { subfolders: false, prefix: gt('Folder permissions') })
+                        $('<h4>').text(gt('Folder permissions')),
+                        new BreadcrumbView({ folder: data.id }).render().$el
                     );
                     if (_.device('!desktop')) {
                         dialog.getHeader().append(
@@ -397,62 +405,87 @@ define('io.ox/core/permissions/permissions',
                             dialog.addPrimaryButton('save', gt('Save'), 'save', { tabindex: 1 }).addButton('cancel', gt('Cancel'), 'cancel', { tabindex: 1 });
                         }
 
-                        var node =  $('<div class="autocomplete-controls input-group">').append(
-                                $('<input type="text" tabindex="1" class="add-participant permissions-participant-input-field form-control">').on('focus', function () {
-                                    autocomplete.trigger('update');
-                                }),
-                                $('<span class="input-group-btn">').append(
-                                    $('<button type="button" class="btn btn-default" data-action="add">')
-                                        .append($('<i class="fa fa-plus">'))
-                                )
-                            ),
-                            autocomplete = new AddParticipantsView({ el: node });
-
-                        autocomplete.render({
-                            autoselect: true,
-                            parentSelector: (_.device('desktop') ? '.permissions-dialog > .modal-footer' : '.permissions-dialog > .modal-header'),
-                            placement: (_.device('desktop') ? 'top' : 'bottom'),
-                            contacts: false,
-                            distributionlists: false,
-                            groups: true,
-                            resources: false,
-                            users: true,
-                            split: false
-                        });
-                        //add recipents to baton-data-node; used to filter sugestions list in view
-                        autocomplete.on('update', function () {
-                            var baton = {list: []};
-                            collection.any(function (item) {
-                                baton.list.push({id: item.get('entity'), type: item.get('group') ? 2 : 1});
-                            });
-                            $.data(node, 'baton', baton);
-                        });
-                        autocomplete.on('select', function (data) {
-                            var isGroup = data.type === 2,
-                                obj = {
-                                    entity: isGroup ? data.id : data.internal_userid,
-                                    // default is 'view folder' plus 'read all'
-                                    bits: 257,
-                                    group: isGroup
-                                };
-                            if (!('entity' in obj)) {
-                                notifications.yell(
-                                    'error',
-                                    //#. permissions dialog
-                                    //#. error message when selected user or group can not be used
-                                    gt('This is not a valid user or group.')
-                                );
-                            } else {
-                                // duplicate check
-                                if (!collection.any(function (item) { return item.entity === obj.entity; })) {
-                                    collection.add(new Permission(obj));
-                                }
+                        /*
+                         * extension point for autocomplete item
+                         */
+                        ext.point('io.ox/core/permissions/permissions/autoCompleteItem').extend({
+                            id: 'view',
+                            index: 100,
+                            draw: function (participant) {
+                                this.append(new pViews.ParticipantEntryView({
+                                    model: participant,
+                                    closeButton: false,
+                                    halo: false,
+                                    field: true
+                                }).render().$el);
                             }
                         });
+
+                        var cascadePermissionsFlag = false,
+                            buildCheckbox = function () {
+                                var checkbox = $('<input type="checkbox" tabindex="1">')
+                                .on('change', function () {
+                                    cascadePermissionsFlag = checkbox.prop('checked');
+                                });
+                                checkbox.prop('checked', cascadePermissionsFlag);
+                                return checkbox;
+
+                            },
+                            checkboxNode = $('<div>').addClass('checkbox control-group cascade').append(
+                                $('<label>').text(gt('Apply to all subfolders')).prepend(
+                                    buildCheckbox()
+                                )
+                            ),
+                            view = new Typeahead({
+                                apiOptions: {
+                                    users: true,
+                                    groups: true,
+                                    split: false
+                                },
+                                placeholder: gt('Add user/group'),
+                                harmonize: function (data) {
+                                    data = _(data).map(function (m) {
+                                        return new pModel.Participant(m);
+                                    });
+                                    // remove duplicate entries from typeahead dropdown
+                                    return _(data).filter(function (model) {
+                                        return !collection.get(model.id);
+                                    });
+                                },
+                                click: function (e, member) {
+                                    var obj = {
+                                        entity: member.get('id'),
+                                        // default is 'view folder' plus 'read all'
+                                        bits: 257,
+                                        group: member.get('type') === 2
+                                    };
+                                    if (!_.isNumber(obj.entity)) {
+                                        notifications.yell(
+                                            'error',
+                                            //#. permissions dialog
+                                            //#. error message when selected user or group can not be used
+                                            gt('This is not a valid user or group.')
+                                        );
+                                    } else {
+                                        // duplicate check
+                                        collection.add(new Permission(obj));
+                                    }
+                                },
+                                extPoint: 'io.ox/core/permissions/permissions'
+                            }),
+                            guid = _.uniqueId('input'),
+                            node =  $('<div class="autocomplete-controls">').append(
+                                $('<div class="form-group">').append(
+                                    $('<label class="sr-only">', { 'for': guid }).text(gt('Start typing to search for user names')),
+                                    view.$el.attr({ id: guid })
+                                )
+                            );
+                        view.render();
                         if (_.device('desktop')) {
-                            dialog.getFooter().prepend(node);
-                        } else {
                             dialog.getHeader().append(node);
+                            dialog.getFooter().prepend(checkboxNode);
+                        } else {
+                            dialog.getHeader().append(node, checkboxNode);
                         }
 
                     } else {
@@ -461,20 +494,26 @@ define('io.ox/core/permissions/permissions',
 
                     dialog.getPopup().addClass('permissions-dialog');
                     dialog.on('save', function () {
-                        if (!isFolderAdmin) return dialog.idle();
-                        api.update(folder_id, { permissions: collection.toJSON() }).then(
-                            function success () {
+                        if (!isFolderAdmin) {
+                            promise.reject();
+                            return dialog.idle();
+                        }
+                        api.update(folder_id, { permissions: collection.toJSON() }, { cascadePermissions: cascadePermissionsFlag }).then(
+                            function success() {
                                 collection.off();
                                 dialog.close();
+                                promise.resolve();
                             },
-                            function fail (error) {
+                            function fail(error) {
                                 dialog.idle();
                                 notifications.yell(error);
+                                promise.reject();
                             }
                         );
                     })
                     .on('cancel', function () {
                         collection.off();
+                        promise.reject();
                     })
                     .show();
 
@@ -493,6 +532,7 @@ define('io.ox/core/permissions/permissions',
                     console.error('Error', e);
                 }
             });
+            return promise;
         }
     };
 });

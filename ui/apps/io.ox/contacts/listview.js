@@ -11,11 +11,11 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/contacts/listview',
-    ['io.ox/contacts/common-extensions',
-     'io.ox/core/extensions',
-     'less!io.ox/contacts/style'
-    ], function (extensions, ext) {
+define('io.ox/contacts/listview', [
+    'io.ox/contacts/common-extensions',
+    'io.ox/core/extensions',
+    'less!io.ox/contacts/style'
+], function (extensions, ext) {
 
     'use strict';
 
@@ -44,7 +44,6 @@ define('io.ox/contacts/listview',
         index: 200,
         draw: extensions.fullname
     });
-
 
     ext.point('io.ox/contacts/listview/item/default').extend({
         id: 'row2',

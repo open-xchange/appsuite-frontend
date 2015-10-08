@@ -1,0 +1,435 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+.toolbar-button {
+    font-size: 22px;
+    line-height: 52px;
+    margin: 4px 0 8px 0;
+    display: block;
+
+    ul {
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    & > a {
+        width: 50px;
+        text-align: center;
+        height: 52px;
+        display: inline-block;
+        outline: 0;
+
+        i {
+            color: @toolbar-button-color;
+
+            html.high-contrast & {
+                color: @black; // HC
+            }
+
+            &.accent-color {
+                background-color: @toolbar-button-accent;
+                color: @white;
+                border: 2px solid @toolbar-button-accent;
+                width: 29px;
+                border-radius: @border-radius-base;
+                padding-top: 2px;
+                display: inline-block;
+            }
+        }
+
+        &:hover {
+
+            text-decoration:none !important; // IE 10 needs important otherwise it will be ignored See: #27913
+
+            html.high-contrast & {
+                background-color: @black; // HC
+            }
+
+            i {
+
+                color: darken(@toolbar-button-color, 20%);
+                text-decoration: none;
+
+                html.high-contrast & {
+                    color: @white; // HC
+                }
+
+                &.accent-color {
+                    background-color: darken(@toolbar-button-accent, 10%);
+                    border-color: darken(@toolbar-button-accent, 10%);
+                }
+            }
+        }
+
+        @media (min-width: 481px), (min-device-width: 481px) {
+            &:focus {
+
+                color: darken(@toolbar-button-color, 20%);
+                text-decoration: none;
+                background-color: @toolbar-focus-color;
+
+                i {
+
+                    color: white;
+                    text-decoration: none;
+
+                    &.accent-color {
+                        background-color: @toolbar-focus-color;
+                        border-color: @toolbar-focus-color;
+                    }
+                }
+            }
+        }
+
+        &.disabled {
+
+            i {
+
+                color: #eee;
+                cursor: default;
+
+                html.high-contrast & {
+                    color: @hc-gray; // HC
+                }
+
+                &.accent-color {
+                    background-color: #fff;
+                    border-color: #fff;
+                }
+            }
+        }
+    }
+}
+
+//
+// Classic and mobile toolbars
+//
+
+.mobile-navbar {
+    text-align: center;
+    font-size: 15px;
+    .navbar-action {
+        .ellipsis();
+        max-width: 24%;
+        top: 10px;
+        position: absolute;
+        &.left {
+            .fa-chevron-left {
+                margin-right: 3px;
+            }
+            left: 3px;
+        }
+        &.right {
+            right: 16px;
+        }
+    }
+    .navbar-title {
+        .ellipsis();
+        margin: 10px 24%;
+        font-weight: 500;
+    }
+}
+
+.mobile-toolbar {
+    position: fixed;
+    bottom: 0;
+    background-color: #fff;
+    height: @toolbar-height;
+    z-index: 10;
+    margin: 0;
+    border-top: 1px solid #ccc;
+    width: 100%;
+    .list-unstyled > li, .io-ox-action-link.mobile-toolbar-action {
+        display: inline-block;
+        font-size: 20px;
+        line-height: @toolbar-height;
+        width: 19.9%;
+        height: @toolbar-height;
+        text-align: center;
+        margin: 0;
+        vertical-align: middle;
+    }
+    .dropdown {
+        display: inline-block;
+        position: static;
+        line-height: 45px;
+        margin-left: 5px;
+    }
+}
+
+.classic-toolbar-visible .window-content, .abs.below-toolbar { top: @toolbar-height; }
+
+.chromeless-window .window-body:not(.mobile-toolbar-visible) { bottom: 0;}
+.chromeless-window .window-body.mobile-toolbar-visible { bottom: @toolbar-height; }
+
+.classic-toolbar, .inline-toolbar, .mobile-navbar {
+
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: @toolbar-height;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    margin: 0;
+    padding: 0;
+    .user-select(none);
+
+    html.high-contrast & {
+        border-color: @hc-border-color;
+    }
+
+    & > li {
+
+        list-style: none;
+        display: inline-block;
+        padding: 0;
+        float: left; // to support pull-right while keeping items in-order (a11y)
+
+        & > a {
+
+            display: inline-block;
+            line-height: @toolbar-line-height - 2;
+            padding: @toolbar-vertical-padding @default-padding;
+            text-decoration: none;
+            float: left;
+            outline: 0;
+
+            i { text-decoration: none; }
+            &:focus { background-color: #eee; }
+        }
+    }
+
+    & > li.pull-right {
+        float: right;
+        & > .dropdown-menu { right: 4px; }
+    }
+}
+
+.window-toolbar {
+
+    & > ul{
+        margin: 0;
+    }
+
+    & > a {
+
+        color: @toolbar-link-color;
+        display: inline-block;
+        margin: 0 1em 0 0;
+        cursor: pointer;
+        white-space: nowrap;
+        text-decoration: none;
+        outline: 0;
+
+        &:hover {
+            color: darken(@toolbar-link-color, 10%);
+        }
+
+    }
+
+    .dropdown-menu {
+
+        text-align: left;
+
+        a {
+            margin-right: 0;
+        }
+
+    }
+
+    .touch & a {
+        outline: 0;
+    }
+
+    .btn {
+        font-size: 13px;
+    }
+
+    .btn-group + .btn-group {
+        margin-left: 15px;
+    }
+
+    .btn-primary + .btn-primary {
+        margin-left: 10px;
+    }
+
+    a.btn-primary, a.btn-primary:hover {
+        color: white;
+        font-size: 13px;
+        line-height: 18px;
+        text-decoration: none;
+    }
+
+    a:hover, a.button:hover {
+        text-decoration: underline;
+    }
+}
+
+//
+// Generic toolbar
+//
+.generic-toolbar {
+
+    @height-default: @toolbar-height;
+    @height-small: 30px;
+
+    position: absolute;
+    z-index: 2;
+
+    width: 100%;
+    height: @height-default;
+    padding: 0;
+    background-color: #fff;
+    border: 0 solid mix(@text-color, @background, 200%/15);
+
+    font-size: 14px;
+    line-height: @height-default - 1;
+
+    &.top {
+        top: 0;
+        border-bottom-width: 1px;
+    }
+
+    &.bottom {
+        bottom: 0;
+        border-top-width: 1px;
+    }
+
+    .toolbar-item {
+        color: #333;
+        display: inline-block;
+        float: left;
+        line-height: @height-default - 2;
+        padding: 0 @default-padding;
+        text-decoration: none;
+
+        .folder-up {
+            &.fa-stack {
+                .fa-level-up {
+                    -webkit-transform: scale(-1.2, 1) translate(4px, 0);
+                    -ms-transform: scale(-1.2, 1) translate(4px, 0);
+                    transform: scale(-1.2, 1) translate(4px, 0);
+                }
+            }
+        }
+    }
+
+    &.over-bottom {
+
+        bottom: @height-default;
+        border-top-width: 1px;
+        height: 72px;
+        padding-left: 16px;
+        line-height: 30px;
+        overflow: hidden;
+
+        .add-acc-label {
+            color: #555;
+            margin: 0;
+        }
+
+        .toolbar-item {
+
+            float: none;
+            margin: 0 4px 10px 0;
+            background-size: cover;
+            width: 32px;
+            height: 32px;
+            padding: 0;
+
+            &.logo-google {
+                background-image: url(apps/themes/default/googledrive_logo64.png);
+            }
+            &.logo-boxcom {
+                background-image: url(apps/themes/default/box_logo64.png);
+            }
+            &.logo-onedrive {
+                background-image: url(apps/themes/default/onedrive_logo64.png);
+            }
+            &.logo-dropbox {
+                background-image: url(apps/themes/default/dropbox_logo64.png);
+            }
+        }
+    }
+
+    &.visual-focus .toolbar-item {
+
+        outline: 0;
+
+        &:hover {
+            color: #555;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        &:focus {
+            color: #fff;
+            background-color: @toolbar-focus-color;
+        }
+
+        &:focus > i { color: #fff; }
+    }
+
+    .toolbar-item.pull-right > .dropdown-menu { right: 4px; }
+
+    &.toolbar-small {
+        height: @height-small;
+        line-height: @height-small - 1;
+        .toolbar-item {
+            line-height: @height-small - 1;
+        }
+    }
+}
+
+.window-sidepanel .generic-toolbar {
+    &.bottom, &.over-bottom {
+        background-color: @foldertree-sidepanel-background;
+    }
+}
+
+.secondary-toolbar {
+    font-size: 13px;
+}
+
+// landscape fullscreen on iPhone
+// iOS will go fullscreen and show an overaly with own buttons
+// we need to position our buttons around them
+@media (height: 320px) and (orientation:landscape) {
+
+    .window-head {
+        .toolbar-button {
+            float: right;
+        }
+    }
+}
+
+// small screens (mobile)
+// note that we have to target max-width and max-device-width
+// to target all devices which don't support the max-device-width
+// property
+@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
+
+    .toolbar-button {
+        margin: 0;
+    }
+
+    #multi-select-toolbar {
+
+        .select-counter {
+            margin-left: 15px;
+            font-weight: bold;
+            color: #aaa;
+        }
+    }
+}

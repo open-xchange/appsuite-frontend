@@ -11,11 +11,11 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/util',
-    ['io.ox/core/http',
-     'io.ox/core/folder/api',
-     'io.ox/core/api/account',
-    ], function (http, folderAPI, accountAPI) {
+define('io.ox/search/util', [
+    'io.ox/core/http',
+    'io.ox/core/folder/api',
+    'io.ox/core/api/account'
+], function (http, folderAPI, accountAPI) {
 
     'use strict';
 
@@ -25,45 +25,44 @@ define('io.ox/search/util',
     var whenResolved = function (list, def) {
         // remove failed deferreds until when resolves
         def = def || $.Deferred();
-        $.when.apply($, list)
-            .then(
-                function () {
-                    def.resolve.apply(this, arguments);
-                },
-                function () {
-                    // kick rejected
-                    var valid = _.filter(list, function (item) {
-                        return item.state() !== 'rejected';
-                    });
-                    // when again
-                    whenResolved(valid, def);
-                }
-            );
+        $.when.apply($, list).then(
+            function () {
+                def.resolve.apply(this, arguments);
+            },
+            function () {
+                // kick rejected
+                var valid = _.filter(list, function (item) {
+                    return item.state() !== 'rejected';
+                });
+                // when again
+                whenResolved(valid, def);
+            }
+        );
         return def;
     };
 
     return {
         addTooltip: function (node, title) {
-            if(!_.device('touch')) {
+            if (!_.device('touch')) {
                 node.attr({
                     'data-toggle': 'tooltip',
                     'data-placement': 'bottom',
                     'data-animation': 'false',
                     'data-container': 'body',
                     'data-original-title': title
-                    })
-                    .tooltip(/*{delay: { 'show': 500, 'hide': 200 }}*/)
-                    .on('click', function () {
-                        if (node.tooltip)
-                            node.tooltip('hide');
-                    });
+                })
+                .tooltip()
+                .on('click', function () {
+                    if (node.tooltip)
+                        node.tooltip('hide');
+                });
             }
             return node;
         },
         getOptionLabel: function (options, id) {
             var current = _.find(options, function (item) {
-                    return item.id === id;
-                });
+                return item.id === id;
+            });
             return (current || {}).name;
         },
         getFolders: function (model) {
@@ -81,9 +80,17 @@ define('io.ox/search/util',
 
             http.pause();
 
+            // add folder id of active folder facet
+            var folderFacet = model.get('pool').folder;
+            if (folderFacet && folderFacet.values.custom.custom) {
+                mapping[folderFacet.values.custom.custom] = 'current';
+            }
+
             // standard folders for mail
             if (module === 'mail') {
-                _.each(folderAPI.getStandardMailFolders(), function (id) {
+                // TMP: show only folders of primary account
+                _(accountAPI.getStandardFolders()).each(function (id) {
+                    if (!/^default0/.test(id)) return;
                     mapping[id] = 'standard';
                 });
                 req.push(accountAPI.all());
@@ -111,56 +118,60 @@ define('io.ox/search/util',
             http.resume();
 
             return whenResolved(req)
-                    .then(function () {
-                        var args = Array.prototype.slice.apply(arguments);
+                .then(function () {
+                    var args = Array.prototype.slice.apply(arguments);
 
-                        // store account data
-                        if (_.isArray(args[0])) {
-                            var list = args.shift();
-                            _.each(list, function (account) {
-                                accounts[account.id] = account;
-                            });
-                        }
+                    // store account data
+                    if (_.isArray(args[0])) {
+                        var list = args.shift();
+                        _.each(list, function (account) {
+                            // TMP: show only folders of primary account
+                            if (!accountAPI.isPrimary(account.sent_fullname)) return;
+                            accounts[account.id] = account;
+                        });
+                    }
 
-                        // simplifiy
-                        return _.map(args, function (folder) {
-                            return {
-                                id: folder.id,
-                                title: folder.title || folder.id,
-                                type: mapping[folder.id],
-                                data: folder
-                            };
-                        });
-                    })
-                    .then(function (list) {
-                        var qualified = {}, id;
-                        _.each(list, function (item) {
-                            id = accountAPI.parseAccountId(item.id);
-                            qualified[id] = qualified[id] || {list: []};
-                            qualified[id].list.push(item);
-                            qualified[id].name = (accounts[id] || {}).name;
-                        });
-                        return qualified;
+                    // simplifiy
+                    return _.map(args, function (folder) {
+                        return {
+                            id: folder.id,
+                            title: folder.title || folder.id,
+                            type: mapping[folder.id],
+                            data: folder
+                        };
                     });
+                })
+                .then(function (list) {
+                    var qualified = {}, id;
+                    _.each(list, function (item) {
+                        id = accountAPI.parseAccountId(item.id);
+                        qualified[id] = qualified[id] || { list: [] };
+                        qualified[id].list.push(item);
+                        qualified[id].name = (accounts[id] || {}).name;
+                    });
+                    return qualified;
+                });
         },
 
         getFirstChoice: function (model) {
             var module = model.getModule(),
                 id = model.getFolder(),
                 def = $.Deferred(),
-                defaultfolder = (folderAPI.getDefaultFolder(module) || '').toString(),
-                isMandatory = model.isMandatory('folder');
+                isMandatory = model.isMandatory('folder') || model.isMandatory('account'),
+                defaultfolder;
 
             // infostore hack
             module = module === 'files' ? 'infostore' : module;
+
+            defaultfolder = (folderAPI.getDefaultFolder(module) || '').toString();
 
             function cont (type, data) {
                 var types = {
                     'all': def.resolve.bind(this, {}),
                     'selected': def.resolve.bind(this, {
-                                custom: data.id || id,
-                                name: data.title || id
-                            }),
+                        custom: data.id || id,
+                        name: data.title || id
+                    }),
                     'invalid': def.reject
                 };
                 types[type]();

@@ -35,21 +35,6 @@ module.exports = function (grunt) {
                         src: ['src/browser.js'],
                         expand: true,
                         dest: 'build/'
-                    },
-                    {
-                        expand: true,
-                        src: ['apps/**/*.*', '!apps/io.ox/core/date/*.json', '!apps/**/manifest.json'],
-                        dest: 'build/'
-                    }
-                ]
-            },
-            build_dateData: {
-                files: [
-                    {
-                        src: ['apps/io.ox/core/date/*.json'],
-                        expand: true,
-                        filter: 'isFile',
-                        dest: 'build/'
                     }
                 ]
             }

@@ -11,20 +11,20 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/mailfilter/settings/register',
-    ['io.ox/core/extensions',
-     'gettext!io.ox/mail',
-     'less!io.ox/mail/mailfilter/settings/style'
-    ], function (ext, gt) {
+define('io.ox/mail/mailfilter/settings/register', [
+    'io.ox/core/extensions',
+    'gettext!io.ox/mail',
+    'less!io.ox/mail/mailfilter/settings/style'
+], function (ext, gt) {
 
     'use strict';
 
-    ext.point('io.ox/settings/pane').extend({
+    ext.point('io.ox/settings/pane/main/io.ox/mail').extend({
         id: 'io.ox/mailfilter',
-        title: gt('Mail Filter Rules'),
+        title: gt('Filter Rules'),
         ref: 'io.ox/mailfilter',
         loadSettingPane: false,
-        index: 500,
+        index: 300,
         advancedMode: true
     });
 

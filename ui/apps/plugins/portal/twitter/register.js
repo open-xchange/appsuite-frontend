@@ -12,17 +12,17 @@
  * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
-define('plugins/portal/twitter/register',
-    ['io.ox/core/extensions',
-     'io.ox/core/strings',
-     'io.ox/keychain/api',
-     'gettext!plugins/portal',
-     'io.ox/core/notifications',
-     'plugins/portal/twitter/network',
-     'io.ox/core/cache',
-     'plugins/portal/twitter/util',
-     'less!plugins/portal/twitter/style'
-    ], function (ext, strings, keychain, gt, notifications, network, cache, util) {
+define('plugins/portal/twitter/register', [
+    'io.ox/core/extensions',
+    'io.ox/core/strings',
+    'io.ox/keychain/api',
+    'gettext!plugins/portal',
+    'io.ox/core/notifications',
+    'plugins/portal/twitter/network',
+    'io.ox/core/cache',
+    'plugins/portal/twitter/util',
+    'less!plugins/portal/twitter/style'
+], function (ext, strings, keychain, gt, notifications, network, cache, util) {
 
     'use strict';
 
@@ -34,7 +34,7 @@ define('plugins/portal/twitter/register',
         composeBox,
         offline = false;
 
-    util.setup({$tweets: $tweets, tweetCache: tweetCache});
+    util.setup({ $tweets: $tweets, tweetCache: tweetCache });
 
     var setOffline = function (options) {
         if (options !== undefined && options.offline !== undefined && options.offline !== offline) {
@@ -59,7 +59,7 @@ define('plugins/portal/twitter/register',
                             var values = _(arguments).toArray().filter(function (e) { return e; });
 
                             if (values.length > 0) {
-                                setOffline({offline: true});
+                                setOffline({ offline: true });
                                 deferred.resolve(values);
                             } else {
                                 deferred.reject(response);
@@ -79,7 +79,7 @@ define('plugins/portal/twitter/register',
                     _(response).each(function (tweet) {
                         tweetCache.add(tweet.id_str, tweet);
                     });
-                    setOffline({offline: false});
+                    setOffline({ offline: false });
                     deferred.resolve(response);
                 });
             }
@@ -91,7 +91,7 @@ define('plugins/portal/twitter/register',
     };
 
     var loadTweets = function (count, offset, newerThanId) {
-        var params = {'include_entities': true};
+        var params =  { 'include_entities': true };
 
         if (offset) {
             params.max_id = offset;
@@ -119,24 +119,24 @@ define('plugins/portal/twitter/register',
 
         _(timeline).each(function (tweet) {
             offset = tweet.id_str;
-            util.showTweet(tweet, {offline: offline}).appendTo($tweets);
+            util.showTweet(tweet, { offline: offline }).appendTo($tweets);
         });
     };
 
     var getComposeBox = function () {
         if (offline) {
-            composeBox = $('<div>').attr({style: 'color: #FF0000; padding: 15px; '}).text(gt('This widget is currently offline because the twitter rate limit exceeded.'));
+            composeBox = $('<div>').attr({ style: 'color: #FF0000; padding: 15px; ' }).text(gt('This widget is currently offline because the twitter rate limit exceeded.'));
         } else {
             composeBox = new util.TwitterTextBox('Tweet', {
                 open: function (options) {
                     options.textArea
-                        .attr({rows: '4', placeholder: ''})
+                        .attr({ rows: '4', placeholder: '' })
                         .removeClass('io-ox-twitter-tweet-textarea-small');
                     options.buttonContainer.removeClass('io-ox-twitter-hidden');
                 },
                 close: function (options) {
                     if (options.textArea.val() === '') {
-                        options.textArea.attr({rows: '1', placeholder: 'Compose new tweet...'})
+                        options.textArea.attr({ rows: '1', placeholder: 'Compose new tweet...' })
                             .addClass('io-ox-twitter-tweet-textarea-small')
                             .css('height', '');
                         options.buttonContainer.addClass('io-ox-twitter-hidden');
@@ -157,7 +157,7 @@ define('plugins/portal/twitter/register',
                             }
                         }
 
-                        options.textArea.attr({rows: '1', placeholder: 'Compose new tweet...'})
+                        options.textArea.attr({ rows: '1', placeholder: 'Compose new tweet...' })
                             .addClass('io-ox-twitter-tweet-textarea-small')
                             .css('height', '');
                         options.buttonContainer.addClass('io-ox-twitter-hidden');
@@ -182,12 +182,12 @@ define('plugins/portal/twitter/register',
             .done(function (j) {
                 j.reverse();
                 _(j).each(function (tweet) {
-                    util.showTweet(tweet, {offline: offline}).prependTo($tweets);
+                    util.showTweet(tweet, { offline: offline }).prependTo($tweets);
                 });
 
                 var $o = $('div.io-ox-sidepopup-pane');
                 var top = $o.scrollTop() - $o.offset().top + $first.offset().top;
-                $o.animate({scrollTop: top}, 250, 'swing');
+                $o.animate({ scrollTop: top }, 250, 'swing');
                 $tweets.removeClass('pulltorefresh-refreshing');
             })
             .fail(function () {
@@ -343,7 +343,7 @@ define('plugins/portal/twitter/register',
 
             var script = document.createElement('script');
             if (!window.twttr) {
-                script.onload= function () {
+                script.onload = function () {
                     window.twttr.ready(function (twttr) {
                         twttr.events.bind('tweet', function () {
                             loadFromTwitter({ count: loadEntriesPerPage, include_entities: true }).done(function (data) {
@@ -377,7 +377,7 @@ define('plugins/portal/twitter/register',
                     j = j.slice(1);
                     _(j).each(function (tweet) {
                         offset = tweet.id_str;
-                        util.showTweet(tweet, {offline: offline}).appendTo($tweets);
+                        util.showTweet(tweet, { offline: offline }).appendTo($tweets);
                     });
                     finishFn($busyIndicator);
                 })

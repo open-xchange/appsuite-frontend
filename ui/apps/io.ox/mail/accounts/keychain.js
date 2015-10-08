@@ -11,29 +11,31 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define.async('io.ox/mail/accounts/keychain',
-    ['io.ox/core/extensions',
-     'io.ox/core/api/account',
-     'io.ox/core/api/user',
-     'io.ox/core/capabilities',
-     'io.ox/core/event',
-     'gettext!io.ox/core'
-    ], function (ext, accountAPI, userAPI, capabilities, Events, gt) {
+define.async('io.ox/mail/accounts/keychain', [
+    'io.ox/core/extensions',
+    'io.ox/core/api/account',
+    'io.ox/core/api/user',
+    'io.ox/core/capabilities',
+    'io.ox/core/event',
+    'io.ox/mail/accounts/model',
+    'gettext!io.ox/keychain',
+    //pre fetch dependencies for io.ox/mail/accounts/model - saves 1 request
+    'io.ox/backbone/validation',
+    'io.ox/keychain/model'
+], function (ext, accountAPI, userAPI, capabilities, Events, AccountModel, gt) {
 
     'use strict';
 
     var moduleDeferred = $.Deferred(),
         extension;
 
-    require(['io.ox/mail/accounts/model'], function (AccountModel) {
-        ext.point('io.ox/keychain/model').extend({
-            id: 'mail',
-            index: 100,
-            accountType: 'mail',
-            wrap: function (thing) {
-                return new AccountModel(thing);
-            }
-        });
+    ext.point('io.ox/keychain/model').extend({
+        id: 'mail',
+        index: 100,
+        accountType: 'mail',
+        wrap: function (thing) {
+            return new AccountModel(thing);
+        }
     });
 
     var accounts = {};
@@ -75,7 +77,7 @@ define.async('io.ox/mail/accounts/keychain',
     }
 
     init().done(function () {
-        moduleDeferred.resolve({message: 'Loaded mail keychain'});
+        moduleDeferred.resolve({ message: 'Loaded mail keychain' });
     });
     accountAPI.on('create:account refresh.all refresh.list', init);
 

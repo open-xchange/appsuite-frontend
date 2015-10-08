@@ -12,14 +12,13 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('plugins/portal/calendar/register',
-    ['io.ox/core/extensions',
-     'io.ox/core/date',
-     'io.ox/calendar/util',
-     'gettext!plugins/portal',
-     'settings!io.ox/calendar',
-     'io.ox/calendar/api'
-    ], function (ext, date, util, gt, settings, api) {
+define('plugins/portal/calendar/register', [
+    'io.ox/core/extensions',
+    'io.ox/calendar/api',
+    'io.ox/calendar/util',
+    'gettext!plugins/portal',
+    'settings!io.ox/calendar'
+], function (ext, api, util, gt, settings) {
 
     'use strict';
 
@@ -27,12 +26,12 @@ define('plugins/portal/calendar/register',
 
         title: gt('Appointments'),
 
-        initialize: function () {
+        initialize: function (baton) {
             api.on('update create delete', function () {
                 //refresh portal
                 require(['io.ox/portal/main'], function (portal) {
                     var portalApp = portal.getApp(),
-                        portalModel = portalApp.getWidgetCollection()._byId.calendar_0;
+                        portalModel = portalApp.getWidgetCollection()._byId[baton.model.id];
                     if (portalModel) {
                         portalApp.refreshWidget(portalModel, 0);
                     }
@@ -43,7 +42,7 @@ define('plugins/portal/calendar/register',
 
         load: function (baton) {
             return api.getAll().pipe(function (ids) {
-                var numOfItems = _.device('small') ? 5 : 10;
+                var numOfItems = _.device('smartphone') ? 5 : 10;
                 return api.getList(ids.slice(0, numOfItems)).done(function (data) {
                     baton.data = data;
                 });
@@ -60,13 +59,10 @@ define('plugins/portal/calendar/register',
             if (baton.data.length === 0) {
                 sum.text(gt('You don\'t have any appointments in the near future.'));
             } else {
-                var obj = _(baton.data).first(),
-                    start = new date.Local(obj.start_date),
-                    timespan = util.getSmartDate(obj, true);
-                if (!obj.full_time) timespan += ' ' + start.format(date.TIME);
+                var obj = _(baton.data).first();
 
                 sum.append(
-                    $('<span class="normal accent">').text(_.noI18n(timespan)), $.txt(gt.noI18n('\u00A0')),
+                    $('<span class="normal accent">').text(_.noI18n(util.getSmartDate(obj, true))), $.txt(gt.noI18n('\u00A0')),
                     $('<span class="bold">').text(_.noI18n(obj.title || '')), $.txt(gt.noI18n('\u00A0')),
                     $('<span class="gray">').text(_.noI18n(obj.location || ''))
                 );
@@ -94,10 +90,6 @@ define('plugins/portal/calendar/register',
                     if (settings.get('showDeclinedAppointments', false) || !declined) {
                         var timespan = util.getSmartDate(nextApp, true);
 
-                        if (!nextApp.full_time) {
-                            timespan += ' ' + new date.Local(nextApp.start_date).format(date.TIME);
-                        }
-
                         $content.append(
                             $('<li class="item" tabindex="1">')
                             .css('text-decoration', declined ? 'line-through' : 'none')
@@ -120,7 +112,7 @@ define('plugins/portal/calendar/register',
             require(['io.ox/calendar/view-detail'], function (view) {
                 var obj = api.reduce(baton.item);
                 api.get(obj).done(function (data) {
-                    popup.idle().append(view.draw(data, {deeplink: true}));
+                    popup.idle().append(view.draw(data, { deeplink: true }));
                 });
             });
         },

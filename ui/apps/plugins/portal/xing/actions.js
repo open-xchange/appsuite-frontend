@@ -17,14 +17,14 @@
  * - Too many on-click-handlers for actions
  */
 
-define('plugins/portal/xing/actions',
-    ['io.ox/core/extensions',
-     'io.ox/xing/api',
-     'io.ox/core/notifications',
-     'io.ox/core/extPatterns/links',
-     'gettext!plugins/portal',
-     'less!plugins/portal/xing/xing'
-    ], function (ext, api, notifications, links, gt) {
+define('plugins/portal/xing/actions', [
+    'io.ox/core/extensions',
+    'io.ox/xing/api',
+    'io.ox/core/notifications',
+    'io.ox/core/extPatterns/links',
+    'gettext!plugins/portal',
+    'less!plugins/portal/xing/xing'
+], function (ext, api, notifications, links, gt) {
 
     'use strict';
 
@@ -68,7 +68,7 @@ define('plugins/portal/xing/actions',
                     $.txt(gt('Comment'))
                 ).on('click', commentToggle),
                 container = $('<div>').addClass('comment-form').append(
-                    textarea = $('<textarea>').attr({rows: 3, cols: 40}),
+                    textarea = $('<textarea>').attr({ rows: 3, cols: 40 }),
                     $('<button>').addClass('btn btn-primary').text(gt('Submit comment'))
                 ).on('click', '.btn', formSubmission).hide()
             );
@@ -177,7 +177,6 @@ define('plugins/portal/xing/actions',
             }
         }
     });
-
 
     ext.point('io.ox/portal/widget/xing/reaction').extend({
         id: 'share',

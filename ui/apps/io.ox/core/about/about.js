@@ -11,12 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/about/about',
-    ['io.ox/core/extensions',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/capabilities',
-     'gettext!io.ox/core'
-    ], function (ext, dialogs, cap, gt) {
+define('io.ox/core/about/about', [
+    'io.ox/core/extensions',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/capabilities',
+    'gettext!io.ox/core'
+], function (ext, dialogs, cap, gt) {
 
     'use strict';
 

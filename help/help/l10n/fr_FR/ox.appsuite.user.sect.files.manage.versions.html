@@ -1,13 +1,13 @@
 <html lang="fr">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.5.11. Travailler avec des versions</title>
+<title>9.4.11. Travailler avec des versions</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
-<link rel="up" href="ox.appsuite.user.sect.files.manage.html" title="9.5. Gérer les fichiers">
-<link rel="prev" href="ox.appsuite.user.sect.files.manage.lock.html" title="9.5.10. Verrouiller et déverrouiller des fichiers">
-<link rel="next" href="ox.appsuite.user.sect.files.manage.multiple.html" title="9.5.12. Modifier plusieurs fichiers à la fois">
+<link rel="home" href="index.html" title="Collecticiel">
+<link rel="up" href="ox.appsuite.user.sect.files.manage.html" title="9.4. Gérer les fichiers">
+<link rel="prev" href="ox.appsuite.user.sect.files.manage.lock.html" title="9.4.10. Verrouiller et déverrouiller des fichiers">
+<link rel="next" href="ox.appsuite.user.sect.files.search.html" title="9.5. Recherche de fichiers">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Note légale">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -25,7 +25,7 @@
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.manage.lock.html">Précédent</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Sommaire</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">TdM</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.manage.multiple.html">Suivant</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.search.html">Suivant</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -33,8 +33,8 @@
 <h2 class="sr-only">Gérer les fichiers</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.files.manage.versions"></a>9.5.11. Travailler avec des versions</h3></div></div></div>
-<a class="indexterm" name="id-1.10.11.15.2"></a><a class="indexterm" name="id-1.10.11.15.3"></a><div class="concept">
+<a name="ox.appsuite.user.sect.files.manage.versions"></a>9.4.11. Travailler avec des versions</h3></div></div></div>
+<a class="indexterm" name="id-1.10.10.15.2"></a><a class="indexterm" name="id-1.10.10.15.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.files.versions"></a><p>Pour travailler avec des versions, vous disposez des options suivantes : </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.open" title="Pour ouvrir ou sauvegarder une version donnée :">ouvrir ou enregistrer la version courante</a></p></li>
@@ -48,41 +48,82 @@
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.files.versions.opencurrent"></a><p class="title">Pour ouvrir ou enregistrer la version courante :</p>
-<div class="procedure"><ul class="procedure"><li class="step"><p>Cliquez sur un fichier dans la vue détaillée. Pour ouvrir la version, cliquez sur <span class="guibutton"><strong>Ouvrir</strong></span> dans la fenêtre qui s'ouvre. Pour enregistrer la version, cliquez sur <span class="guibutton"><strong>Télécharger</strong></span> dans cette fenêtre.</p></li></ul></div>
-<div class="taskrelated">
-          <p><span class="phrase"><strong>Conseil :</strong></span> s'il existe un aperçu du document, vous pouvez aussi enregistrer la version courante en faisant glisser-déposer l'aperçu sur le bureau.</p>
-        </div>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p>Sélectionnez un fichier dans la zone d'affichage. Cliquez sur l'icône <span class="guibutton"><strong>Télécharger</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.files.download"></a><img src="../../images/appsuite_user_icon_download.png"></span> dans la barre d'outils.</p></li>
+<li class="step"><p>Complétez les étapes restantes pour l'ouverture ou le téléchargement.</p></li>
+</ol></div>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.files.versions.add"></a><p class="title">Pour mettre en ligne une nouvelle version :</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Cliquez sur un fichier dans la vue détaillée. Dans la fenêtre qui s'ouvre, cliquez sur <span class="guilabel"><strong>Télécharger une nouvelle version</strong></span>. Choisissez un fichier.</p></li>
+<li class="step">
+<p>Sélectionnez un fichier dans la zone d'affichage. Si aucun détail n'est affiché, cliquez sur <span class="guibutton"><strong>Affichage</strong></span> dans la barre d'outils. Activez <span class="guibutton"><strong>Détails du fichier</strong></span>.</p>
+<p>Vous pouvez également utiliser l'une des options suivantes pour ouvrir un fichier dans l'<span class="guilabel"><strong>Afficheur</strong></span>:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Double-cliquez sur un fichier dans la zone d'affichage.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Sélectionnez un fichier dans la zone d'affichage. Cliquez sur l'icône<span class="guibutton"><strong>Afficher</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.add.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span> dans la barre d'outils.</p></li>
+</ul></div>
+<p>Si la barre latérale n'est pas affichée, cliquez sur l'icône <span class="guibutton"><strong>Afficher les détails</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.add.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span> .</p>
+</li>
+<li class="step"><p>Cliquez sur <span class="guibutton"><strong>Envoyer une nouvelle version</strong></span> Sélectionnez un fichier.</p></li>
 <li class="step"><p>Saisissez un commentaire pour la version.</p></li>
 <li class="step"><p>Cliquez sur <span class="guibutton"><strong>Télécharger</strong></span>.</p></li>
 </ol></div>
 <div class="taskrelated">
-          <p><span class="phrase"><strong>Conseil :</strong></span> vous pouvez aussi télécharger une nouvelle version en faisant glisser un fichier depuis votre bureau vers la zone d'affichage et en le déposant dans la partie inférieure.</p>
+          <p><span class="phrase"><strong>Conseil :</strong></span> vous pouvez aussi envoyer une nouvelle version en faisant glisser un fichier depuis un navigateur de fichiers ou depuis lebureau vers la barre latérale de l'afficheur et l'y déposer.</p>
         </div>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.files.versions.open"></a><p class="title">Pour ouvrir ou sauvegarder une version donnée :</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Cliquez sur un fichier dans la vue détaillée. Dans la fenêtre qui s'ouvre, cliquez sur <span class="guilabel"><strong>Afficher l'historique des versions</strong></span>. Cliquez sur un nom de version. Un menu s'ouvre.</p></li>
-<li class="step"><p>Pour ouvrir la version, cliquez sur l'élément de menu <span class="guibutton"><strong>Ouvrir</strong></span>. Pour enregistrer la version, cliquez sur l'élément de menu <span class="guibutton"><strong>Télécharger</strong></span>.</p></li>
+<li class="step">
+<p>Sélectionnez un fichier dans la zone d'affichage. Si aucun détail n'est affiché, cliquez sur <span class="guibutton"><strong>Affichage</strong></span> dans la barre d'outils. Activez <span class="guibutton"><strong>Détails du fichier</strong></span>.</p>
+<p>Vous pouvez également utiliser l'une des options suivantes pour ouvrir un fichier dans l'<span class="guilabel"><strong>Afficheur</strong></span>:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Double-cliquez sur un fichier dans la zone d'affichage.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Sélectionnez un fichier dans la zone d'affichage. Cliquez sur l'icône<span class="guibutton"><strong>Afficher</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.open.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span> dans la barre d'outils.</p></li>
+</ul></div>
+<p>Si la barre latérale n'est pas affichée, cliquez sur l'icône <span class="guibutton"><strong>Afficher les détails</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.open.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span> .</p>
+</li>
+<li class="step">
+<p>Cliquez sur l'icône <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.open.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span> à côté de <span class="guilabel"><strong>Versions</strong></span>. La liste des versions est affichée.</p>
+<p>Cliquez sur une version. Cliquez sur le menu <span class="guibutton"><strong>Télécharger</strong></span>.</p>
+</li>
+<li class="step"><p>Complétez les étapes restantes pour l'ouverture ou le téléchargement.</p></li>
 </ol></div>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.files.versions.current"></a><p class="title">Pour définir une version donnée d'un fichier comme la version courante :</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Cliquez sur un fichier dans la vue détaillée. Dans la fenêtre qui s'ouvre, cliquez sur <span class="guilabel"><strong>Afficher l'historique des versions</strong></span>. Cliquez sur un nom de version. Un menu s'ouvre.</p></li>
-<li class="step"><p>Cliquez sur l'élément <span class="guibutton"><strong>Faire de cette version la version actuelle</strong></span> du menu.</p></li>
+<li class="step">
+<p>Sélectionnez un fichier dans la zone d'affichage. Si aucun détail n'est affiché, cliquez sur <span class="guibutton"><strong>Affichage</strong></span> dans la barre d'outils. Activez <span class="guibutton"><strong>Détails du fichier</strong></span>.</p>
+<p>Vous pouvez également utiliser l'une des options suivantes pour ouvrir un fichier dans l'<span class="guilabel"><strong>Afficheur</strong></span>:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Double-cliquez sur un fichier dans la zone d'affichage.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Sélectionnez un fichier dans la zone d'affichage. Cliquez sur l'icône<span class="guibutton"><strong>Afficher</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.current.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span> dans la barre d'outils.</p></li>
+</ul></div>
+<p>Si la barre latérale n'est pas affichée, cliquez sur l'icône <span class="guibutton"><strong>Afficher les détails</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.current.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span>.</p>
+</li>
+<li class="step">
+<p>Cliquez sur l'icône <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.current.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span> à côté des <span class="guilabel"><strong>Versions</strong></span>. La liste des versions est affichée.</p>
+<p>Cliquez sur une version. Cliquez sur l'entrée de menu <span class="guibutton"><strong>Marquer cette version comme la version actuelle</strong></span> .</p>
+</li>
 </ol></div>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.files.versions.delete"></a><p class="title">Pour supprimer une version donnée :</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Cliquez sur un fichier dans la vue détaillée. Dans la fenêtre qui s'ouvre, cliquez sur <span class="guilabel"><strong>Afficher l'historique des versions</strong></span>. Cliquez sur un nom de version. Un menu s'ouvre.</p></li>
-<li class="step"><p>Cliquez sur <span class="guibutton"><strong>Supprimer la version</strong></span> dans le menu.</p></li>
+<li class="step">
+<p>Sélectionnez un fichier dans la zone d'affichage. Si aucun détail n'est affiché, cliquez sur <span class="guibutton"><strong>Affichage</strong></span> dans la barre d'outils. Activez <span class="guibutton"><strong>Détails du fichier</strong></span>.</p>
+<p>Vous pouvez également utiliser l'une des options suivantes pour ouvrir un fichier dans l'<span class="guilabel"><strong>Afficheur</strong></span>:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Double-cliquez sur un fichier dans la zone d'affichage.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Sélectionnez un fichier dans la zone d'affichage. Cliquez sur l'icône<span class="guibutton"><strong>Afficher</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.delete.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span> dans la barre d'outils.</p></li>
+</ul></div>
+<p>Si la barre latérale n'est pas affichée, cliquez sur l'icône <span class="guibutton"><strong>Afficher les détails</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.delete.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span>.</p>
+</li>
+<li class="step"><p>Cliquez sur l'icône <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.delete.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span> à côté des <span class="guilabel"><strong>Versions</strong></span>. La liste des versions est affichée.</p></li>
+<li class="step"><p>Cliquez sur une version. Cliquez sur <span class="guibutton"><strong>Supprimer la version</strong></span> dans le menu.</p></li>
 </ol></div>
 </div>
 </div>

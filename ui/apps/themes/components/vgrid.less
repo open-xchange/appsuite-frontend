@@ -1,0 +1,301 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+/* vGrid */
+.vgrid {
+
+    .user-select(none);
+    outline: none;
+
+    .vgrid-scrollpane {
+
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        -webkit-tap-highlight-color: transparent;
+        z-index: 1;
+
+        &.has-focus > div {
+
+            outline: none;
+
+            & .vgrid-cell{
+                outline: none;
+            }
+
+            & .vgrid-cell.selected {
+
+                background-color: @selected-background;
+
+                * {
+                    color: #fff !important;
+                }
+
+            }
+
+        }
+
+        > div:focus {
+
+            & .vgrid-cell.selected {
+
+                background-color: @selected-background;
+
+                * {
+                    color: #fff !important;
+                }
+
+            }
+
+        }
+    }
+
+    @toolbar-height: 45px;
+
+    .vgrid-toolbar {
+
+        position: absolute;
+        display: none;
+        right: 0;
+        left: 0;
+        height: @toolbar-height;
+        line-height: @toolbar-height - 1;
+        background-color: #fff;
+        z-index: 2;
+
+        a {
+            i { color: black; display: inline-block; }
+            text-decoration: none;
+        }
+
+        &.top {
+
+            top: 0;
+
+            & .dropdown-menu {
+                top: 110%;
+                bottom: auto;
+                right: 0;
+                left: auto;
+            }
+
+        }
+
+        &.bottom {
+
+            bottom: 0;
+
+            & .dropdown-menu {
+                top: auto;
+                bottom: 110%;
+                right: 0;
+                left: auto;
+            }
+
+        }
+
+        .grid-info {
+
+            text-align: center;
+            margin: 0 30px;
+            .ellipsis();
+
+            .folder-count {
+                font-size: 13px;
+                color: #888;
+
+                html.high-contrast & {
+                    color: @hc-gray;
+                }
+            }
+
+        }
+
+        .grid-options.dropdown {
+            position: absolute;
+            right: 18px;
+            top: 0;
+        }
+
+        .select-all {
+            float: left;
+            width: 40px;
+            height: 44px;
+            line-height: 40px;
+            padding-left: 18px;
+            display: none;
+            input {
+                // proper alignment for IE (see bug 35940)
+                margin: 0;
+                vertical-align: middle;
+            }
+        }
+
+        .select-all-toggle {
+            float: left;
+            padding: 0 8px;
+        }
+
+    }
+
+    &.editable .select-all {
+        display: inline-block;
+    }
+
+    &.top-toolbar .vgrid-toolbar.top, &.bottom-toolbar .vgrid-toolbar.bottom {
+        display: block;
+    }
+
+    &.top-toolbar .vgrid-scrollpane {
+        top: @toolbar-height;
+    }
+
+    &.bottom-toolbar .vgrid-scrollpane {
+        bottom: @toolbar-height;
+    }
+
+    &.editable {
+
+        .vgrid-cell-checkbox {
+            display: block;
+        }
+
+        .vgrid-cell {
+            padding-left: 48px; /* width + padding of .vgrid-cell-checkbox */
+        }
+
+    }
+
+}
+
+.vgrid-cell {
+
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    left: 0;
+    font-size: @vgrid-font-size;
+    padding: 10px 18px;
+    color: @text-color;
+    background-color: @background; /* resolves hw accel anti-aliasing */
+
+    * {
+        .ellipsis();
+    }
+
+    &.selectable, &.hover {
+        cursor: pointer;
+    }
+
+    &.hover:hover {
+        background-color: mix(@text-color, @background, 1000%/255);
+    }
+
+    &.vgrid-label {
+        font-weight: bold;
+        text-align: center;
+        line-height: 1em;
+        padding: 5px 13px 4px 13px;
+        background-color: mix(@text-color, @background, 100%/15);
+        border-bottom: 1px solid mix(@text-color, @background, 300%/15);
+        cursor: pointer;
+        .vertical-gradient(@background, mix(@text-color, @background, 1500%/255));
+
+        &.left {
+            text-align: left;
+        }
+
+    }
+
+    &.selected {
+
+        background-color: #ddd;
+
+        * {
+            -webkit-font-smoothing: antialiased;
+        }
+
+    }
+
+    &.relative {
+        position: relative;
+    }
+
+    &.no-border {
+        border-bottom: 0 none;
+    }
+
+    &.tail {
+
+        border-bottom: 0 none;
+        padding-top: 1em;
+        padding-bottom: 1em;
+
+        * {
+            white-space: normal;
+            line-height: 1.1em;
+        }
+
+    }
+
+    .title {
+        //show whitespace to visually match backend sort order
+        white-space: pre;
+    }
+
+    .vgrid-cell-checkbox {
+
+        position: absolute;
+        top: 3px;
+        bottom: 0;
+        left: 0;
+        width: 48px;
+        display: none;
+        cursor: pointer;
+        padding: 7px 0 0 18px;
+
+        label {
+            display: inline;
+        }
+
+        input {
+            border: 0 none;
+        }
+
+    }
+
+    .swipeDelete {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 0 10px 0 10px;
+        line-height: 61px;
+        height: 100%;
+        background-color: #FF4105;
+        color: #FFF;
+        font-size: 22px;
+        width: 80px;
+        text-align: center;
+        &:active {
+            background-color: darken(#DA4F49, 10%);
+        };
+    }
+
+}
+
+.io-ox-sidepopup .vgrid-cell {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}

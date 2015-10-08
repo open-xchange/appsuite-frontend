@@ -1,4 +1,3 @@
-
 /**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
@@ -12,23 +11,21 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('plugins/xing/main',
-    ['io.ox/core/extPatterns/stage',
-     'io.ox/core/extensions',
-     'io.ox/core/date',
-     'io.ox/xing/api',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/notifications',
-     'io.ox/keychain/api',
-     'gettext!plugins/portal'
-    ], function (Stage, ext, date, api, links, notifications, keychain, gt) {
+define('plugins/xing/main', [
+    'io.ox/core/extPatterns/stage',
+    'io.ox/core/extensions',
+    'io.ox/xing/api',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/notifications',
+    'io.ox/keychain/api',
+    'gettext!plugins/portal'
+], function (Stage, ext, api, links, notifications, keychain, gt) {
 
     'use strict';
 
     var XING_NAME = gt('XING'),
         isAlreadyOnXing,
         hasXingAccount;
-
 
     hasXingAccount = function () {
         return keychain.isEnabled('xing') && keychain.hasStandardAccount('xing');
@@ -43,8 +40,6 @@ define('plugins/xing/main',
             });
         });
     };
-
-
 
     new links.Action('io.ox/xing/actions/invite', {
         id: 'invite-xing',
@@ -114,7 +109,6 @@ define('plugins/xing/main',
             });
         }
     });
-
 
     new Stage('io.ox/core/stages', {
         id: 'xing-toolbar-addons',

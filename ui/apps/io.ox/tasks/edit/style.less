@@ -11,158 +11,35 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-.io-ox-tasks-edit-main {
-
-    label, legend , .sectiontitle{
-		margin-bottom: 5px;
-		font-size: 13px;
-		font-weight: 700;
-		font-family: @normal-font-family;
-		color: #888;
-		border: 0;
-    }
-    .row legend {
-        padding-top: 8px;
-    }
-
-    .form-inline input{
-        width: 90px;
-        &.datepicker-day-field {
-            width: 107px;
-        }
-    }
-
-    .typeahead.calendaredit {
-
-        height: 200px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        min-width: 85px;
-
-        a {
-            text-align: right;
-            padding: 3px 15px 3px 3px;
-        }
-
-    }
-
-    .nav-tabs { margin-top: 20px; }
-    .tab-content { margin-top: 13px; }
-
-    //hide collapsed and details on startup
-    .collapsed, .task-edit-details {
-        display: none;
-    }
-    .cancel         { float: right;       }
-    .progress-field { text-align: center; }
-
-    .private-flag {
-        margin: 0 5px 0 0;
-        top: 26px;
-        position: relative;
-    }
-    .io-ox-tasks-edit {
-
-        .participantsrow {
-            margin-bottom: 30px;
-        }
-        h1.clear-title {
-            line-height:0;
-            font-size: 20px;
-            float: left;
-            padding-bottom: 10px;
-        }
-    }
-
-    .attachment-edit-row,
-    .task-edit-row { margin-bottom: 9px; }
-
-    .expand-link, .expand-details-link {
-        margin-bottom: 9px;
-        padding-left: 0px;
-        display: block;
-    }
-
-    .tab-pane { margin-bottom: 85px; }
-
-    .tab-content {
-        min-height: 364px;
-        overflow: visible;
-    }
-
-    .note-field {
-        height: 120px;
-        min-height: 120px;
-        resize: vertical;
-    }
-    .task-edit-save{
-        margin-left: 13px;
-        float: right;
-        @media (max-device-width: 480px), (max-width: 480px) {
-            float: none;
-        }
-     }
-
-    .info-wrapper .task-attachment-link { margin-bottom: 9px; }
-    .tab-link {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .task-add-attachments-button,
-    .task-add-attachments-input {
-        position: relative;
-        display: inline;
-    }
-
-    .task-add-attachments-input { margin-left: 10px; }
-
-    /* Mobile */
-    @media all and (max-width: 980px) {
-        .progress-field { width: 49px; }
-    }
-    @media all and (max-width: 480px), all and (max-device-width: 480px) {
-
-	//datepickers become readonly on mobile but they are still editable with mobiscroll, so don't make them grey
-    .form-inline input {
-        padding: 4px 6px;
-        &.datepicker-day-field {
-            width: 100%;
-        }
-    }
-
-    .form-control[readonly] {
-		background-color: #fff;
-    	}
-
-        .clear-title {
-            //to push the buttons under the title
-            width: 100%;
-        }
-        .cancel {
-            float: none;
-        }
-        .task-edit-headline {
-            margin-bottom: 9px;
-        }
-        .tab-content {
-            min-height: 0;
-        }
-        .io-ox-tasks-edit {
-            margin-top: 0;
-            padding-bottom: 40px;
-        }
-        //datepickers become readonly on mobile but they are still editable with mobiscroll, so don't make them grey
-        .form-control[readonly] { background-color: #fff; }
-    }
+.io-ox-tasks-edit {
+    // baseline adjustments
+    padding-top: 16px;
+    padding-bottom: 16px;
 }
 
-@media (max-width: 767px) {
-    .col-md-3.btn.fluid-grid-fix {
-        width: auto;
+.io-ox-tasks-edit-main {
+    //hide collapsed and details on startup
+    .collapsed, .task-edit-details { display: none; }
+
+    .progress-field { text-align: center; }
+
+    .note-field {
+        resize: vertical;
+        padding: 10px;
+        min-height: 120px;
     }
-    .io-ox-tasks-edit-main .private-flag {
-        top: 5px;
+
+    .btn.btn-link {
+        padding-left: 0;
+        margin-bottom: 9px;
+    }
+
+    //add temporariily higher z index to fix the focus outline (Bug 41266)
+    .input-group {
+        .progress-field:focus,
+        button[data-action='minus']:focus,
+        button[data-action='plus']:focus {
+            z-index: 3;
+        }
     }
 }

@@ -11,167 +11,223 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/files/toolbar',
-    ['io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/extPatterns/actions',
-     'io.ox/backbone/mini-views/dropdown',
-     'io.ox/backbone/mini-views/toolbar',
-     'io.ox/core/notifications',
-     'gettext!io.ox/files',
-     'io.ox/files/api',
-     'io.ox/files/actions',
-     'less!io.ox/files/style'
-    ], function (ext, links, actions, Dropdown, Toolbar, notifications, gt, api) {
+define('io.ox/files/toolbar', [
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/backbone/mini-views/dropdown',
+    'io.ox/backbone/mini-views/toolbar',
+    'io.ox/core/notifications',
+    'gettext!io.ox/files',
+    'io.ox/files/api',
+    'io.ox/files/actions',
+    'less!io.ox/files/style'
+], function (ext, links, actions, Dropdown, Toolbar, notifications, gt, api) {
 
     'use strict';
 
     // define links for classic toolbar
-    var point = ext.point('io.ox/files/classic-toolbar/links');
+    var point = ext.point('io.ox/files/classic-toolbar/links'),
 
-    var meta = {
-        //
-        // --- HI ----
-        //
-        'create': {
-            prio: 'hi',
-            mobile: 'hi',
-            label: gt('New'),
-            title: gt('New file'),
-            drawDisabled: true,
-            ref: 'io.ox/files/dropdown/new',
-            customize: function (baton) {
-                var self = this;
+        meta = {
+            //
+            // --- HI ----
+            //
+            'create': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('New'),
+                title: gt('New file'),
+                ref: 'io.ox/files/dropdown/new',
+                customize: function (baton) {
+                    var self = this;
 
-                this.append('<i class="fa fa-caret-down">');
+                    this.append('<i class="fa fa-caret-down">');
 
-                this.after(
-                    links.DropdownLinks({ ref: 'io.ox/files/links/toolbar/default',
-                        wrap: false,
-                        //function to call when dropdown is empty
-                        emptyCallback: function () {
-                            self.addClass('disabled')
-                                .attr({ 'aria-disabled': true })
-                                .removeAttr('href');
-                        }}, baton)
-                );
+                    this.after(
+                        links.DropdownLinks({
+                            ref: 'io.ox/files/links/toolbar/default',
+                            wrap: false,
+                            //function to call when dropdown is empty
+                            emptyCallback: function () {
+                                self.addClass('disabled')
+                                    .attr({ 'aria-disabled': true })
+                                    .removeAttr('href');
+                            }
+                        }, baton)
+                    );
 
-                this.addClass('dropdown-toggle').attr({
-                    'aria-haspopup': 'true',
-                    'data-toggle': 'dropdown',
-                    'role': 'button'
-                }).dropdown();
+                    this.addClass('dropdown-toggle').attr({
+                        'aria-haspopup': 'true',
+                        'data-toggle': 'dropdown',
+                        'role': 'button'
+                    }).dropdown();
 
-                this.parent().addClass('dropdown');
+                    this.parent().addClass('dropdown');
+                }
+            },
+            'edit': {
+                prio: 'hi',
+                mobile: 'lo',
+                label: gt('Edit'),
+                ref: 'io.ox/files/actions/editor'
+            },
+            'share': {
+                prio: 'hi',
+                mobile: 'lo',
+                icon: 'fa fa-user-plus',
+                label: gt('Share'),
+                title: gt('Share selected files'),
+                ref: 'io.ox/files/dropdown/share',
+                customize: function (baton) {
+                    var self = this;
+                    this.append('<i class="fa fa-caret-down">');
+
+                    this.after(
+                        links.DropdownLinks({
+                            ref: 'io.ox/files/links/toolbar/share',
+                            wrap: false,
+                            //function to call when dropdown is empty
+                            emptyCallback: function () {
+                                self.remove();
+                            }
+                        }, baton)
+                    );
+
+                    this.addClass('dropdown-toggle').attr({
+                        'aria-haspopup': 'true',
+                        'data-toggle': 'dropdown',
+                        'role': 'button'
+                    }).dropdown();
+
+                    this.parent().addClass('dropdown');
+                }
+            },
+            'mediaplayer-audio': {
+                prio: 'hi',
+                mobile: 'lo',
+                icon: 'fa fa-music',
+                label: gt('Play audio files'),
+                ref: 'io.ox/files/icons/audioplayer'
+            },
+            'mediaplayer-video': {
+                prio: 'hi',
+                mobile: 'lo',
+                icon: 'fa fa-film',
+                label: gt('Play video files'),
+                ref: 'io.ox/files/icons/videoplayer'
+            },
+            'viewer': {
+                prio: 'hi',
+                mobile: 'lo',
+                icon: 'fa fa-eye',
+                label: gt('View'),
+                ref: 'io.ox/files/actions/viewer'
+            },
+            'download': {
+                prio: 'hi',
+                mobile: 'lo',
+                icon: 'fa fa-download',
+                label: gt('Download'),
+                ref: 'io.ox/files/actions/download'
+            },
+            'download-folder': {
+                prio: 'hi',
+                mobile: 'lo',
+                icon: 'fa fa-download',
+                label: gt('Download'),
+                ref: 'io.ox/files/actions/download-folder'
+            },
+            'delete': {
+                prio: 'hi',
+                mobile: 'lo',
+                icon: 'fa fa-trash-o',
+                label: gt('Delete'),
+                ref: 'io.ox/files/actions/delete'
+            },
+            //
+            // --- LO ----
+            //
+            'rename': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Rename'),
+                ref: 'io.ox/files/actions/rename',
+                section: 'edit'
+            },
+            'edit-description': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Edit description'),
+                ref: 'io.ox/files/actions/edit-description',
+                section: 'edit'
+            },
+            'send': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Send by mail'),
+                ref: 'io.ox/files/actions/send',
+                section: 'share'
+            },
+            'sendlink': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Send as internal link'),
+                ref: 'io.ox/files/actions/sendlink',
+                section: 'share'
+            },
+            'showlink': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Show internal link'),
+                ref: 'io.ox/files/actions/showlink',
+                section: 'share'
+            },
+            'add-to-portal': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Add to portal'),
+                ref: 'io.ox/files/actions/add-to-portal',
+                section: 'share'
+            },
+            'move': {
+                label: gt('Move'),
+                prio: 'lo',
+                mobile: 'lo',
+                ref: 'io.ox/files/actions/move',
+                section: 'file-op'
+            },
+            'copy': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Copy'),
+                ref: 'io.ox/files/actions/copy',
+                section: 'file-op'
+            },
+            'lock': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Lock'),
+                ref: 'io.ox/files/actions/lock',
+                section: 'file-op'
+            },
+            'unlock': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Unlock'),
+                ref: 'io.ox/files/actions/unlock',
+                section: 'file-op'
             }
-        },
-        'share': {
-            prio: 'hi',
-            mobile: 'lo',
-            label: gt('Share'),
-            title: gt('Share this folder'),
-            ref: 'io.ox/files/icons/share'
-        },
-        'slideshow': {
-            prio: 'hi',
-            mobile: 'lo',
-            icon: 'fa fa-picture-o',
-            label: gt('Slideshow'),
-            title: gt('View Slideshow'),
-            ref: 'io.ox/files/icons/slideshow'
-        },
-        'mediaplayer-audio': {
-            prio: 'hi',
-            mobile: 'lo',
-            icon: 'fa fa-music',
-            label: gt('Play audio files'),
-            ref: 'io.ox/files/icons/audioplayer'
-        },
-        'mediaplayer-video': {
-            prio: 'hi',
-            mobile: 'lo',
-            icon: 'fa fa-film',
-            label: gt('Play video files'),
-            ref: 'io.ox/files/icons/videoplayer'
-        },
-        'download': {
-            prio: 'hi',
-            mobile: 'lo',
-            icon: 'fa fa-download',
-            label: gt('Download'),
-            ref: 'io.ox/files/actions/download'
-        },
-        'delete': {
-            prio: 'hi',
-            mobile: 'lo',
-            icon: 'fa fa-trash-o',
-            label: gt('Delete'),
-            ref: 'io.ox/files/actions/delete'
-        },
-        //
-        // --- LO ----
-        //
-        'send': {
-            prio: 'lo',
-            mobile: 'lo',
-            label: gt('Send by mail'),
-            ref: 'io.ox/files/actions/send',
-            section: 'share'
-        },
-        'sendlink': {
-            prio: 'lo',
-            mobile: 'lo',
-            label: gt('Send as internal link'),
-            ref: 'io.ox/files/actions/sendlink',
-            section: 'share'
-        },
-        'showlink': {
-            prio: 'lo',
-            mobile: 'lo',
-            label: gt('Show internal link'),
-            ref: 'io.ox/files/actions/showlink',
-            section: 'share'
-        },
-        'add-to-portal': {
-            prio: 'lo',
-            mobile: 'lo',
-            label: gt('Add to portal'),
-            ref: 'io.ox/files/actions/add-to-portal',
-            section: 'share'
-        },
-        'move': {
-            label: gt('Move'),
-            prio: 'lo',
-            mobile: 'lo',
-            ref: 'io.ox/files/actions/move',
-            section: 'file-op'
-        },
-        'copy': {
-            prio: 'lo',
-            mobile: 'lo',
-            label: gt('Copy'),
-            ref: 'io.ox/files/actions/copy',
-            section: 'file-op'
-        },
-        'lock': {
-            prio: 'lo',
-            mobile: 'lo',
-            label: gt('Lock'),
-            ref: 'io.ox/files/actions/lock',
-            section: 'file-op'
-        },
-        'unlock': {
-            prio: 'lo',
-            mobile: 'lo',
-            label: gt('Unlock'),
-            ref: 'io.ox/files/actions/unlock',
-            section: 'file-op'
-        }
-    };
+        };
 
     // local dummy action
 
     new actions.Action('io.ox/files/dropdown/new', {
+        requires: function () { return true; },
+        action: $.noop
+    });
+
+    new actions.Action('io.ox/files/dropdown/share', {
         requires: function () { return true; },
         action: $.noop
     });
@@ -205,14 +261,17 @@ define('io.ox/files/toolbar',
             if (_.device('smartphone')) return;
 
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-            var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li' })
-            .header(gt('Layout'))
-            .option('layout', 'fluid:list', gt('List'))
-            .option('layout', 'fluid:icon', gt('Icons'))
-            .option('layout', 'fluid:tile', gt('Tiles'))
-            .divider()
-            .header(gt('Options'))
-            .option('folderview', true, gt('Folder view'));
+            var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li', caret: true })
+                .header(gt('Layout'))
+                .option('layout', 'list', gt('List'))
+                .option('layout', 'icon', gt('Icons'))
+                .option('layout', 'tile', gt('Tiles'))
+                .divider()
+                .header(gt('Options'))
+                .option('checkboxes', true, gt('Checkboxes'))
+                .option('folderview', true, gt('Folder view'));
+
+            if (_.device('!touch')) dropdown.option('details', true, gt('File details'));
 
             this.append(
                 dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
@@ -228,21 +287,18 @@ define('io.ox/files/toolbar',
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbar.render().$el
             );
-            app.updateToolbar = _.queued(function (list) {
-                if (!list) return $.when();
-                var self = this,
-                    ids = this.getIds ? this.getIds() : [];
-
-                //get full data, needed for require checks for example
-                return api.getList(list).then(function (data) {
-                    // extract single object if length === 1
-                    data = data.length === 1 ? data[0] : data;
-                    // draw toolbar
-                    var baton = ext.Baton({ $el: toolbar.$list, data: data, app: self, allIds: ids}),
-                        ret = ext.point('io.ox/files/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
-                    return $.when.apply($, ret.value()).then(function () {
-                        toolbar.initButtons();
-                    });
+            app.updateToolbar = _.debounce(function (list) {
+                if (!list) return;
+                // turn cids into proper objects
+                var cids = list, models = api.resolve(cids, false);
+                list = _(models).invoke('toJSON');
+                // extract single object if length === 1
+                var data = list.length === 1 ? list[0] : list;
+                // draw toolbar
+                var baton = ext.Baton({ $el: toolbar.$list, data: data, models: models, collection: app.listView.collection, app: this, allIds: [] }),
+                    ret = ext.point('io.ox/files/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
+                $.when.apply($, ret.value()).then(function () {
+                    toolbar.initButtons();
                 });
             }, 10);
         }
@@ -253,17 +309,9 @@ define('io.ox/files/toolbar',
         index: 10200,
         setup: function (app) {
             app.updateToolbar([]);
-            // update toolbar on selection change
-            app.on('selection:change', function () {
-                app.updateToolbar(app.selection.get());
-            });
-            // folder change
-            app.on('folder:change', function () {
-                app.updateToolbar(app.selection.get());
-            });
-            // file change
-            api.on('update', function () {
-                app.updateToolbar(app.selection.get());
+            // update toolbar on selection change as well as any model change
+            app.listView.on('selection:change change', function () {
+                app.updateToolbar(app.listView.selection.get());
             });
         }
     });

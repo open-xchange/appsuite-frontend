@@ -11,11 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/list',
-    ['io.ox/core/tk/list-selection',
-     'io.ox/core/tk/list-dnd',
-     'io.ox/core/extensions'
-    ], function (Selection, dnd, ext) {
+define('io.ox/core/tk/list', [
+    'io.ox/backbone/disposable',
+    'io.ox/core/tk/list-selection',
+    'io.ox/core/tk/list-dnd',
+    'io.ox/core/extensions'
+], function (DisposableView, Selection, dnd, ext) {
 
     'use strict';
 
@@ -27,34 +28,35 @@ define('io.ox/core/tk/list',
         38: 'cursor:up',
         39: 'cursor:right',
         40: 'cursor:down'
-    };
+    },
+    // PULL TO REFRESH constants
+    PTR_START =           5,    // Threshold when pull-to-refresh starts
+    PTR_TRIGGER =       150,    // threshold when refresh is done
+    PTR_MAX_PULLDOWM =  300,    // max distance where the PTR node can be dragged to
+    PTR_ROTATE_ANGLE =  360;    // total rotation angle of the spinner while pulled down
 
     // helper
     function NOOP() { return $.when(); }
 
-    var ListView = Backbone.View.extend({
+    var ListView = DisposableView.extend({
 
         tagName: 'ul',
-        className: 'list-view scrollpane f6-target',
+        className: 'list-view',
 
-        // a11y: use role=option and aria-selected here; no need for "aria-posinset" or "aria-setsize"
-        // see http://blog.paciellogroup.com/2010/04/html5-and-the-myth-of-wai-aria-redundance/
         scaffold: $(
-            '<li class="list-item selectable" tabindex="-1" role="option" aria-selected="false">' +
+            '<li class="list-item">' +
             '<div class="list-item-checkmark"><i class="fa fa-checkmark" aria-hidden="true"/></div>' +
-            '<div class="list-item-content"></div>' +
+            '<div class="list-item-content"></div><div class="list-item-swipe-conent"></div>' +
             '</li>'
         ),
 
         busyIndicator: $('<li class="busy-indicator"><i class="fa fa-chevron-down"/></li>'),
 
-        events: {
-            'focus .list-item': 'onItemFocus',
-            'blur .list-item': 'onItemBlur',
-            'click': 'onKeepFocus',
-            'keydown .list-item': 'onItemKeydown',
-            'scroll': 'onScroll'
-        },
+        pullToRefreshIndicator: $(
+            '<div class="pull-to-refresh" style="transform: translate3d(0, -70px,0)">' +
+            '<div class="spinner slight-drop-shadow" style="opacity: 1">' +
+            '<i id="ptr-spinner" class="fa fa-refresh"/></div></div>'
+        ),
 
         onItemFocus: function () {
             this.$el.removeAttr('tabindex');
@@ -74,7 +76,20 @@ define('io.ox/core/tk/list',
             // ignore fake clicks
             if (!e.pageX) return;
             // restore focus
-            this.getItems().filter('.selected').focus();
+            // try to find the correct item to focus
+            var selectedItems = this.getItems().filter('.selected');
+            if (selectedItems.length !== 0) {
+                if (selectedItems.length === 1) {
+                    // only one item, just focus that
+                    selectedItems.focus();
+                } else if (selectedItems.filter(document.activeElement).length === 1) {
+                    // the activeElement is in the list, focus it
+                    selectedItems.filter(document.activeElement).focus();
+                } else {
+                    // just use the last selected item to focus
+                    selectedItems.last().focus();
+                }
+            }
         },
 
         onItemKeydown: function (e) {
@@ -83,11 +98,11 @@ define('io.ox/core/tk/list',
 
         onScroll: _.debounce(function () {
 
-            if (!this.options.pagination || this.isBusy || this.complete) return;
+            if (this.isBusy || this.complete || !this.$el.is(':visible')) return;
 
-            var height = this.$el.height(),
-                scrollTop = this.$el.scrollTop(),
-                scrollHeight = this.$el.prop('scrollHeight'),
+            var height = this.$el.outerHeight(),
+                scrollTop = this.el.scrollTop,
+                scrollHeight = this.el.scrollHeight,
                 tail = scrollHeight - (scrollTop + height);
 
             // do anything?
@@ -95,11 +110,22 @@ define('io.ox/core/tk/list',
             // show indicator
             this.addBusyIndicator();
             // really refresh?
-            if (tail > 1) return;
-            // load more
+            // two competing concepts:
+            // a) the user wants to see the end of the list; some users feel better; more orientation. Less load on server.
+            // b) powers users hate to wait; never want to see the end of the list. More load on server.
+            // Uncommented next line with 7.8.0:
+            // if (tail > 1) return;
+            // immediately load more
             this.processPaginate();
 
         }, 50),
+
+        onLoad: function () {
+            this.idle();
+            // trigger scroll event after initial load
+            // takes care of the edge-case that the initial list cannot fill the viewport (see bug 37728)
+            if (!this.complete) this.onScroll();
+        },
 
         onComplete: function () {
             this.toggleComplete(true);
@@ -111,9 +137,8 @@ define('io.ox/core/tk/list',
             this.paginate();
         },
 
-        // support for custom cid attributes
-        // needed to identify threads
-        getCID: function (model) {
+        // support for custom keys, e.g. needed to identify threads or folders
+        getCompositeKey: function (model) {
             return model.cid;
         },
 
@@ -126,7 +151,7 @@ define('io.ox/core/tk/list',
             this.idle();
             this.toggleComplete(false);
             this.$el.empty();
-            this.selection.reset();
+            if (this.selection) this.selection.reset();
             this.$el.scrollTop(0);
         },
 
@@ -143,7 +168,6 @@ define('io.ox/core/tk/list',
         },
 
         onAdd: function (model) {
-
             this.idle();
 
             var index = model.has('index') ? model.get('index') : this.collection.indexOf(model),
@@ -161,9 +185,6 @@ define('io.ox/core/tk/list',
                 this.$el.append(li);
             }
 
-            // add to selection
-            this.selection.add(this.getCID(model), li);
-
             // forward event
             this.trigger('add', model, index);
         },
@@ -171,7 +192,7 @@ define('io.ox/core/tk/list',
         onRemove: function (model) {
 
             var children = this.getItems(),
-                cid = this.getCID(model),
+                cid = this.getCompositeKey(model),
                 li = children.filter('[data-cid="' + $.escape(cid) + '"]'),
                 isSelected = li.hasClass('selected');
 
@@ -191,9 +212,10 @@ define('io.ox/core/tk/list',
                 this.el.scrollTop -= li.outerHeight(true);
             }
 
-            this.selection.remove(cid, li);
+            if (this.selection) this.selection.remove(cid, li);
             li.remove();
 
+            this.trigger('remove-mobile');
             // selection changes if removed item was selected
             if (isSelected) this.selection.triggerChange();
 
@@ -204,6 +226,37 @@ define('io.ox/core/tk/list',
 
             // forward event
             this.trigger('remove', model);
+        },
+
+        onBatchRemove: function (list) {
+
+            // build hash of all composite keys
+            var hash = {};
+            _(list).each(function (obj) {
+                var cid = obj.cid || _.cid(obj);
+                hash[cid] = true;
+            });
+
+            // get all DOM nodes
+            var items = this.getItems();
+            if (items.length === 0) return;
+
+            // get first selected item and its offset
+            var selected = items.filter('.selected')[0];
+
+            // get affected DOM nodes and remove them
+            items.filter(function () {
+                    var cid = $(this).attr('data-cid');
+                    return !!hash[cid];
+                })
+                .remove();
+
+            if (!selected) return;
+
+            // make sure the first selected item is visible (if out of viewport)
+            var top = $(selected).position().top,
+                outOfViewport = top < 0 || top > this.el.offsetHeight;
+            if (outOfViewport) selected.scrollIntoView();
         },
 
         onSort: (function () {
@@ -231,7 +284,7 @@ define('io.ox/core/tk/list',
                     // same element?
                     if (node === reference) {
                         // fast forward "j" if pointing at processed items
-                        do index = getIndex(dom[++j]); while (done[index]);
+                        do { index = getIndex(dom[++j]); } while (done[index]);
                     } else if (reference) {
                         // change position in dom
                         this.el.insertBefore(node, reference);
@@ -240,11 +293,128 @@ define('io.ox/core/tk/list',
             };
         }()),
 
+        onTouchStart: function (e) {
+            if (this.options.noPullToRefresh) return;
+            var atTop = this.$el.scrollTop() === 0,
+                touches = e.originalEvent.touches[0],
+                currentY = touches.pageY,
+                currentX = touches.pageX;
+            if (atTop) {
+                this.pullToRefreshStartY = currentY;
+                this.pullToRefreshStartX = currentX;
+            }
+        },
+
+        onTouchMove: function (e) {
+
+            var touches = e.originalEvent.touches[0],
+                currentY = touches.pageY,
+                distance = currentY - this.pullToRefreshStartY;
+
+            if (this.pullToRefreshStartY && !this.isPulling && !this.isSwiping) {
+                if ((currentY - this.pullToRefreshStartY) >= PTR_START) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    // mark the list as scrolling, this will prevent selection from
+                    // performing cell swipes but only if we are not performing a cell swipe
+                    this.selection.isScrolling = true;
+                    this.isPulling = true;
+                    this.$el.prepend(
+                        this.pullToRefreshIndicator
+                    );
+                }
+            }
+
+            if (this.isPulling && distance <= PTR_MAX_PULLDOWM /*&& !this.pullToRefreshTriggerd*/) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var rotationAngle = (PTR_ROTATE_ANGLE / PTR_MAX_PULLDOWM) * distance,
+                    top = -70 + ((70 / PTR_TRIGGER) * distance);
+
+                this.pullToRefreshIndicator
+                    .css('-webkit-transform', 'translate3d(0,' + top +  'px,0)');
+
+                $('#ptr-spinner').css('-webkit-transform', 'rotateZ(' + rotationAngle + 'deg)');
+
+                this.selection.isScrolling = true;
+
+                if ((currentY - this.pullToRefreshStartY) >= PTR_TRIGGER) {
+                    this.pullToRefreshTriggerd = true;
+                }
+            } else if (this.isPulling && distance >= PTR_MAX_PULLDOWM) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        },
+
+        onTouchEnd: function (e) {
+            if (this.pullToRefreshTriggerd) {
+                // bring the indicator in position
+                this.pullToRefreshIndicator.css({
+                    'transition': 'transform 50ms',
+                    '-webkit-transform': 'translate3d(0,0,0)'
+                });
+                // let it spin
+                $('#ptr-spinner').addClass('fa-spin');
+                // trigger event to do the refresh elsewhere
+                this.options.app.trigger('pull-to-refresh', this);
+
+                e.preventDefault();
+                e.stopPropagation();
+                // reset
+                this.selection.isScrolling = false;
+
+            } else {
+                if (this.isPulling) {
+                    // threshold was not reached, just remove the ptr indicator
+                    this.removePullToRefreshIndicator(true);
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.selection.isScrolling = true;
+                }
+            }
+            // reset everything
+            this.pullToRefreshStartY = null;
+            this.isPulling = false;
+            this.pullToRefreshTriggerd = false;
+            this.pullToRefreshStartY = null;
+        },
+
+        removePullToRefreshIndicator: function (simple) {
+            var self = this;
+            // simple remove for unfinished ptr-drag
+            if (simple) {
+                self.pullToRefreshIndicator.css({
+                    'transition': 'transform 50ms',
+                    '-webkit-transform': 'translate3d(0,-70px,0)'
+                });
+                setTimeout(function () {
+                    self.pullToRefreshIndicator.removeAttr('style').remove();
+                }, 100);
+
+            } else {
+                // fancy remove with scale-out animation
+                setTimeout(function () {
+                    self.pullToRefreshIndicator.addClass('scale-down');
+                    setTimeout(function () {
+                        self.pullToRefreshIndicator
+                            .removeAttr('style')
+                            .removeClass('scale-down');
+                        $('#ptr-spinner').removeClass('fa-spin');
+                        self.pullToRefreshIndicator.remove();
+                    }, 100);
+                }, 250);
+            }
+        },
+
         // called whenever a model inside the collection changes
         onChange: function (model) {
-            var li = this.$el.find('li[data-cid="' + $.escape(this.getCID(model)) + '"]'),
+
+            var li = this.$el.find('li[data-cid="' + $.escape(this.getCompositeKey(model)) + '"]'),
                 baton = this.getBaton(model),
                 index = model.changed.index;
+
             // change position?
             if (index !== undefined) li.attr('data-index', index);
             // draw via extensions
@@ -261,18 +431,70 @@ define('io.ox/core/tk/list',
             // pagination: use pagination (default is true)
             // draggable: add drag'n'drop support
             // preserve: don't remove selected items (e.g. for unseen messages)
-            this.options = _.extend({ pagination: true, draggable: false, preserve: false }, options);
+            // swipe: enables swipe handling (swipe to delete etc)
+            this.options = _.extend({
+                pagination: true,
+                draggable: false,
+                preserve: false,
+                selection: true,
+                scrollable: true,
+                swipe: false
+            }, options);
+
+            var events = {}, dndEnabled = false;
+
+            // selection?
+            if (this.options.selection) {
+                this.selection = new Selection(this);
+                events = {
+                    'focus .list-item': 'onItemFocus',
+                    'blur .list-item': 'onItemBlur',
+                    'click': 'onKeepFocus',
+                    'keydown .list-item': 'onItemKeydown',
+                    'touchstart': 'onTouchStart',
+                    'touchend': 'onTouchEnd',
+                    'touchmove': 'onTouchMove'
+                };
+                // set special class if not on smartphones (different behavior)
+                if (_.device('!smartphone')) this.$el.addClass('visible-selection');
+                // enable drag & drop
+                dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
+                dndEnabled = true;
+                // a11y
+                this.$el.addClass('f6-target');
+            } else {
+                this.toggleCheckboxes(false);
+            }
+
+            // scroll?
+            if (this.options.scrollable) {
+                this.$el.addClass('scrollpane');
+            }
+
+            // pagination?
+            if (this.options.pagination) {
+                events.scroll = 'onScroll';
+            }
+
+            // initial collection?
+            if (this.options.collection) {
+                this.setCollection(this.collection);
+                if (this.collection.length) this.onReset();
+            }
+
+            // enable drag & drop; avoid enabling dnd twice
+            if (this.options.draggable && !dndEnabled) {
+                dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
+            }
 
             this.ref = this.ref || options.ref;
             this.app = options.app;
-            this.selection = new Selection(this);
             this.model = new Backbone.Model();
             this.isBusy = false;
             this.complete = false;
             this.firstReset = true;
 
-            // enable drag & drop
-            if (this.options.draggable) dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
+            this.delegateEvents(events);
 
             // don't know why but listenTo doesn't work here
             this.model.on('change', _.debounce(this.onModelChange, 10), this);
@@ -281,7 +503,34 @@ define('io.ox/core/tk/list',
             _.bindAll(this, 'busy', 'idle');
 
             // set special class if not on smartphones (different behavior)
-            if (_.device('!smartphone')) this.$el.addClass('visible-selection');
+            if (_.device('!smartphone')) {
+                this.$el.addClass('visible-selection');
+            }
+
+            // helper to detect scrolling in action, only used by mobiles
+            if (_.device('smartphone')) {
+                var self = this,
+                    timer,
+                    scrollPos = 0;
+                this.selection.isScrolling = false;
+                this.$el.scroll(function () {
+                    if (self.$el.scrollTop() !== scrollPos) {
+                        self.selection.isScrolling = true;
+                        scrollPos = self.$el.scrollTop();
+                    }
+                    if (timer) clearTimeout(timer);
+                    timer = setTimeout(function () {
+                        self.selection.isScrolling = false;
+                    }, 500);
+                });
+            }
+
+            // respond to window resize (see bug 37728)
+            $(window).on('resize.list-view', this.onScroll.bind(this));
+
+            this.on('dispose', function () {
+                $(window).off('resize.list-view');
+            });
         },
 
         forwardCollectionEvents: function (name) {
@@ -306,7 +555,7 @@ define('io.ox/core/tk/list',
                 'sort': this.onSort,
                 // load
                 'before:load': this.busy,
-                'load': this.idle,
+                'load': this.onLoad,
                 'load:fail': this.idle,
                 // paginate
                 'before:paginate': this.busy,
@@ -316,7 +565,7 @@ define('io.ox/core/tk/list',
                 // reload
                 'reload': this.idle
             });
-            this.selection.reset();
+            if (this.selection) this.selection.reset();
             this.trigger('collection:set');
             return this;
         },
@@ -338,7 +587,23 @@ define('io.ox/core/tk/list',
         // the filter is important, as we might have a header
         // although we could use children(), we use find() as it's still faster (see http://jsperf.com/jquery-children-vs-find/8)
         getItems: function () {
-            return this.$el.find('.list-item');
+            var items = this.$el.find('.list-item');
+            if (this.filter) items = items.filter(this.filter);
+            return items;
+        },
+
+        // optional: filter items
+        setFilter: function (selector) {
+            this.filter = selector;
+            var items = this.$el.find('.list-item');
+            items.removeClass('hidden');
+            if (this.filter) {
+                items.not(this.filter).addClass('hidden');
+                // we need to have manual control over odd/even because nth-child doesn't work with hidden elements
+                items.filter(this.filter).each(function (index) { $(this).addClass(index % 2 ? 'even' : 'odd'); });
+            } else {
+                items.removeClass('even odd');
+            }
         },
 
         connect: function (loader) {
@@ -368,13 +633,19 @@ define('io.ox/core/tk/list',
         paginate: NOOP,
         reload: NOOP,
 
+        map: function (model) {
+            return model.toJSON();
+        },
+
         render: function () {
-            this.$el.attr({
-                'aria-multiselectable': true,
-                'data-ref': this.ref,
-                'role': 'listbox',
-                'tabindex': 1
-            });
+            if (this.options.selection) {
+                this.$el.attr({
+                    'aria-multiselectable': true,
+                    'role': 'listbox',
+                    'tabindex': 1
+                });
+            }
+            this.$el.attr('data-ref', this.ref);
             // fix evil CSS transition issue with phantomJS
             if (_.device('phantomjs')) this.$el.addClass('no-transition');
             return this;
@@ -391,17 +662,25 @@ define('io.ox/core/tk/list',
             }.bind(this));
         },
 
+        createListItem: function () {
+            var li = this.scaffold.clone();
+            if (this.options.selection) {
+                // a11y: use role=option and aria-selected here; no need for "aria-posinset" or "aria-setsize"
+                // see http://blog.paciellogroup.com/2010/04/html5-and-the-myth-of-wai-aria-redundance/
+                li.addClass('selectable').attr({ 'aria-selected': false, role: 'option', 'tabindex': '-1' });
+            }
+            return li;
+        },
+
         renderListItem: function (model) {
-            var li = this.scaffold.clone(),
+            var li = this.createListItem(),
                 baton = this.getBaton(model);
             // add cid and full data
-            li.attr({ 'data-cid': this.getCID(model), 'data-index': model.get('index') });
+            li.attr({ 'data-cid': this.getCompositeKey(model), 'data-index': model.get('index') });
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li.children().eq(1), baton);
             return li;
         },
-
-        map: _.identity,
 
         getBaton: function (model) {
             var data = this.map(model);
@@ -414,6 +693,8 @@ define('io.ox/core/tk/list',
 
         addBusyIndicator: function () {
             var indicator = this.getBusyIndicator();
+            // ensure the indicator is the last element in the list
+            if (indicator.index() < this.$el.children().length) indicator.appendTo(this.$el);
             return indicator.length ? indicator : this.busyIndicator.clone().appendTo(this.$el);
         },
 
@@ -428,7 +709,13 @@ define('io.ox/core/tk/list',
             return this;
         },
 
-        idle: function () {
+        idle: function (e) {
+            // if idle is called as an error callback we should display it (load:fail for example)
+            if (e && e.error) {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell(e);
+                });
+            }
             if (!this.isBusy) return;
             this.removeBusyIndicator();
             this.isBusy = false;

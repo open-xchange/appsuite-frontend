@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/util',
-    ['io.ox/core/api/account',
-     'settings!io.ox/mail',
-     'settings!io.ox/core'
-     ], function (account, mailSettings, coreSettings) {
+define('io.ox/core/folder/util', [
+    'io.ox/core/api/account',
+    'settings!io.ox/mail',
+    'settings!io.ox/core'
+], function (account, mailSettings, coreSettings) {
 
     'use strict';
 
@@ -117,8 +117,7 @@ define('io.ox/core/folder/util',
             // maybe need a better word. It's shared TO others
             if (!data.permissions || data.permissions.length <= 1) return false;
             // only shared BY me, not TO me
-            return data.type === 1 || data.type === 7 ||
-                (data.module === 'infostore' && data.created_by === ox.user_id);
+            return data.type === 1 || data.type === 7 || (data.module === 'infostore' && data.created_by === ox.user_id);
         case 'hidden':
             var hash = coreSettings.get(['folder/hidden'], {}),
                 id = _.isObject(data) ? data.id : data;
@@ -188,7 +187,10 @@ define('io.ox/core/folder/util',
             // please use parantheses properly OR OR AND or OR AND AND?
         case 'create':
             // can create objects?
-            return perm(rights, 0) > 1;
+            // only folder creation is allowed in system folders
+            // even if permission bit is 4 "create objects and subfolders" because ther is no bit for only create subfolders, see Bug 39598
+            // don't use the isSystem variable because it is also true for standard folders
+            return (perm(rights, 0) > 1 && !is('system', data));
         case 'write':
             // can write objects
             return perm(rights, 14) > compareValue;
@@ -196,14 +198,13 @@ define('io.ox/core/folder/util',
             // can delete objects
             return perm(rights, 21) > compareValue;
         case 'rename':
+        case 'rename:folder':
             // can rename?
-            // missing admin privileges or system folder
-            if (!isAdmin || isSystem) return false;
-            // special new rename bit
-            if (perm(rights, 30) === 1) return true;
-            if (!isMail) return true;
-            // default folder cannot be renamed
-            return !is('defaultfolder', data);
+            // for mail we can check bit 30
+            if (isMail) return perm(rights, 30) === 1;
+            // for all other apps: if we have admin privileges
+            // and it's not a system folder, we can rename the folder
+            return isAdmin && !isSystem;
         case 'create:folder':
             // check 3rd bit (value is 4! see http://oxpedia.org/wiki/index.php?title=HTTP_API#PermissionFlags)
             // backend promised that it's sufficient to check this bit; isAdmin would be wrong here
@@ -225,6 +226,7 @@ define('io.ox/core/folder/util',
             // empty folder
             return (rights >> 21 & 127) && is('mail', data);
         case 'changepermissions':
+        case 'change:permissions':
             return isAdmin;
         case 'viewproperties':
             // view properties
@@ -251,10 +253,23 @@ define('io.ox/core/folder/util',
         }
     }
 
+    /*
+     * Expects a TreeNodeView and expands this view and all parent views.
+     */
+    function open(view) {
+        if (!view) return;
+        if (!view.toggle) return;
+
+        view.toggle('open');
+        if (view.options) open(view.options.parent);
+    }
+
     return {
+        perm: perm,
         bits: bits,
         is: is,
         can: can,
-        getDefaultFolder: getDefaultFolder
+        getDefaultFolder: getDefaultFolder,
+        open: open
     };
 });

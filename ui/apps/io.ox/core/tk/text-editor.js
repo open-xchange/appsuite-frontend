@@ -11,16 +11,23 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/text-editor', function () {
+define('io.ox/core/tk/text-editor', [], function () {
 
     'use strict';
 
     // save jQuery val() - since tinyMCE is a bit too aggressive
     var val = $.original.val;
 
-    function Editor(textarea) {
+    function Editor(textarea, opt) {
 
-        textarea = $(textarea);
+        opt = _.extend({
+            useFixedWithFont: false
+        }, opt);
+
+        $(textarea).append(
+            textarea = $('<textarea>').attr('tabindex', 1).addClass('plain-text')
+        );
+        textarea.toggleClass('monospace', opt.useFixedWidthFont);
 
         if (_.device('tablet && iOS >= 6')) {
             textarea.on('click', function () {
@@ -33,7 +40,7 @@ define('io.ox/core/tk/text-editor', function () {
             });
         }
 
-        var def = $.when(),
+        var def = $.when(this),
 
             trimEnd = function (str) {
                 // ensure we have a string
@@ -72,14 +79,15 @@ define('io.ox/core/tk/text-editor', function () {
                 return trim(val.call(textarea));
             };
 
+        this.content_type = 'text/plain';
+
         this.getMode = function () {
             return 'text';
         };
 
         // publish internal 'done'
         this.done = function (fn) {
-            def.done(fn);
-            return def;
+            return def.done(fn);
         };
 
         this.focus = function () {
@@ -108,10 +116,11 @@ define('io.ox/core/tk/text-editor', function () {
         };
 
         this.setCaretPosition = function () {
+            if (!textarea) return;
             var el = textarea.get(0);
-            // Prevent NS_ERROR_FAILURE in Firefox
-            _.defer(function () {
-                if (document.activeElement !== el) return;
+            function fnSetCaretPosition() {
+                // Prevent NS_ERROR_FAILURE in Firefox
+                if (document.activeElement && document.activeElement.nodeName.toLowerCase() !== 'textarea') return;
                 if (el.setSelectionRange) {
                     el.setSelectionRange(0, 0);
                 } else if (el.createTextRange) {
@@ -119,18 +128,24 @@ define('io.ox/core/tk/text-editor', function () {
                     range.moveStart('character', 0);
                     range.select();
                 }
-                textarea.scrollTop(0);
-            });
+            }
+            fnSetCaretPosition();
+            // Defer is needed on Chrome, but causes Error in Firefox
+            if (_.browser.Chrome) _.defer(fnSetCaretPosition);
+            textarea.scrollTop(0);
         };
 
         this.appendContent = function (str) {
             var content = this.getContent();
+            // Remove whitespace above and below content and add newline before appended string
+            content = this.getContent().replace(/\n+$/, '').replace(/^\n+/, '');
             this.setContent(content + '\n\n' + str);
         };
 
         this.prependContent = function (str) {
-            var content = this.getContent();
-            this.setContent(str + '\n\n' + content);
+            // Remove whitespace above and below content and add newline before prepended string
+            var content = this.getContent().replace(/^\n+/, '').replace(/\n+$/, '');
+            this.setContent('\n' + str + '\n\n' + content);
         };
 
         this.replaceParagraph = function (str, rep) {
@@ -147,32 +162,24 @@ define('io.ox/core/tk/text-editor', function () {
             }
         };
 
-        var resizeEditorMargin = (function () {
-            return _.debounce(function () {
-                //textarea might be destroyed already
-                if (!textarea) return;
-                var h = $(window).height(),
-                    top = textarea.offset().top;
-                textarea.css('minHeight', (h - top - 40));
-            }, 100);
-        }());
+        this.show = function () {
+            textarea.prop('disabled', false).show();
 
-        this.handleShow = function (compose) {
-            textarea.prop('disabled', false).idle().show();
-            if (!compose) {
-                textarea.next().hide();
-                textarea.parents('.window-content').find('.mce-tinymce').hide();
-                resizeEditorMargin();
-                $(window).on('resize.text-editor', resizeEditorMargin);
-            } else {
-                textarea.parents('.window-content').find('.editable-toolbar').hide().next().hide();
-                resizeEditorMargin();
-                $(window).on('resize.text-editor', resizeEditorMargin);
+            _.defer(function () {
+                textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - $('#io-ox-topbar').height())));
+                //autosize(textarea);
+            });
+
+            function resizeEditor () {
+                textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - $('#io-ox-topbar').height())));
+                //autosize.update(textarea);
             }
 
+            $(window).on('resize.text-editor', resizeEditor);
         };
 
-        this.handleHide = function () {
+        this.hide = function () {
+            textarea.prop('disabled', true).hide();
             $(window).off('resize.text-editor');
         };
 
@@ -181,7 +188,7 @@ define('io.ox/core/tk/text-editor', function () {
         };
 
         this.destroy = function () {
-            this.handleHide();
+            this.hide();
             this.setContent('');
             textarea = def = null;
         };

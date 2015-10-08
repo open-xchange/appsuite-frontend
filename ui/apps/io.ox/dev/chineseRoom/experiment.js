@@ -11,10 +11,10 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/dev/chineseRoom/experiment',
-    ['io.ox/dev/chineseRoom/room',
-     'io.ox/realtime/rt'
-    ], function (rooms, rt) {
+define('io.ox/dev/chineseRoom/experiment', [
+    'io.ox/dev/chineseRoom/room',
+    'io.ox/realtime/rt'
+], function (rooms, rt) {
 
     'use strict';
 

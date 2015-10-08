@@ -11,86 +11,17 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-.fa-plus-circle, .fa-minus-circle {
-    margin-right: 5px;
-}
-
 .edit-contact {
 
-    .settings-detail-pane & {
-        margin: 0;
-        padding: 0;
-    }
-
-    .btn.control {
-        float: right;
-        margin-left: 14px;
-    }
-
-    button[data-action="save"] {
-        margin-right:15px;
-    }
-    .toggle-compact {
-        padding-left:15px;
-        padding-right:15px;
-    }
-
-    .picture-upload-view {
-        padding-left: 15px;
-        position: relative;
-        display: inline-block;
-        float: left;
-
-        form {
-            position: absolute;
-            z-index: 1;
-        }
-
-        input[type=file] {
-            position: absolute;
-            top: 24px;
-            width: 90px;
-            height: 90px;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .picture-uploader {
-            z-index: 0;
-        }
-    }
-
-    .native-date-picker {
-        div:nth-child(1), div:nth-child(2) { padding-right:0; }
-    }
-
-    .contact-picture-upload {
-
-        margin: 0 30px 10px 0;
-        position: relative;
-
-        .picture-uploader {
-            width: 90px;
-            height: 90px;
-        }
-
-        .add-img-text {
-            font-size: 12px;
-            line-height: 12px;
-        }
-    }
-
-    .block {
-        margin-bottom:28px;
-        .attachment-list { margin-left: 15px; }
-    }
+    // baseline adjustment
+    padding: 16px 0 0 0;
 
     h1.name {
-        font-family: @light-font-family;
         font-weight: 300;
         font-size: 24px;
         line-height: 32px;
         margin: 0;
+        .ellipsis();
     }
 
     h2.job {
@@ -99,21 +30,7 @@
         line-height: 20px;
         margin: 0 0 14px 0;
         color: #888;
-    }
-
-    nav {
-        text-align: right;
-        margin: 33px 0;
-    }
-
-    legend.group {
-        font-size: 18px;
-        line-height: 24px;
-        font-weight: 300;
-        margin-bottom: 8px;
-        display: block;
-        border-bottom: 0;
-        color: #DF5119; /* burning orange */
+        .ellipsis();
     }
 
     & div.field.rare,
@@ -126,32 +43,19 @@
         display: block;
     }
 
-    legend.simple,
-    label {
-        font-size: 12px;
-        line-height: 20px;
-        color: #777;
-        border-bottom: 0 none;
-    }
-
-    legend.simple {
-        margin:0;
-        padding:0;
-        padding-top:8px;
+    .block {
+        margin-bottom:28px;
+        .attachment-list { margin-left: 15px; }
+        legend.group { color: @brand-primary }
     }
 
     textarea {
         height: 221px;
-        resize: none;
     }
 
-    .attachment-edit-row {
-        margin-bottom: 9px;
-    }
-
-    label.private-flag input {
-        position: absolute;
-        float: none;
+    .native-date-picker div {
+        &:first-child { padding-right: 0; }
+        &:last-child { padding-left: 0; }
     }
 
     .inline-error { display: none; }
@@ -170,16 +74,6 @@
             margin-bottom: 14px;
             display: block;
         }
-    }
-
-    .btn-group {
-        margin-bottom: 20px;
-        margin-top: 10px;
-    }
-
-    button[data-action="imagereset"] {
-        float: left;
-        margin-left: 15px;
     }
 
     .attachment-list {
@@ -243,29 +137,6 @@
             .row-1, .row-2 {
                 .ellipsis();
             }
-        }
-    }
-
-    .contact_attachments_buttons {
-        padding-top: 10px;
-        padding-left: 15px;
-        padding-right: 15px;
-        clear: both;
-    }
-
-    @media (max-width: 480px), (max-device-width: 480px) {
-
-        margin-top: 25px;
-
-        nav {
-            margin: 10px 0;
-        }
-        .btn-primary {
-            margin-bottom: 7px;
-        }
-        .toggle-compact {
-            clear: both;
-            text-align: left;
         }
     }
 }

@@ -11,12 +11,12 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/core/api/attachment',
-    ['io.ox/core/http',
-     'io.ox/core/event',
-     'settings!io.ox/core',
-     'gettext!io.ox/core'
-    ], function (http, Events, coreConfig, gt) {
+define('io.ox/core/api/attachment', [
+    'io.ox/core/http',
+    'io.ox/core/event',
+    'settings!io.ox/core',
+    'gettext!io.ox/core'
+], function (http, Events, coreConfig, gt) {
 
     'use strict';
 
@@ -24,7 +24,7 @@ define('io.ox/core/api/attachment',
         /**
          * gets all attachments for a specific object, for exsample a task
          * @param  {object} options
-         * @return {deferred}
+         * @return { deferred }
          */
         getAll: function (options) {
 
@@ -51,7 +51,7 @@ define('io.ox/core/api/attachment',
          * removes attachments
          * @param  {object} options
          * @param  {object} data (id properties)
-         * @return {deferred}
+         * @return { deferred }
          */
         remove: function (options, data) {
             var self = this;
@@ -77,14 +77,16 @@ define('io.ox/core/api/attachment',
          * create attachment
          * @param  {object} options
          * @param  {object} data (attachment)
-         * @return {deferred}
+         * @return { deferred }
          */
         create: function (options, data) {
             var self = this;
-            var params = {action: 'attach'},
-                json = {module: options.module,
-                        attached: options.id,
-                        folder: options.folder || options.folder_id},
+            var params = { action: 'attach' },
+                json = {
+                    module: options.module,
+                    attached: options.id,
+                    folder: options.folder || options.folder_id
+                },
                 formData = new FormData();
 
             data = data || [];
@@ -111,28 +113,30 @@ define('io.ox/core/api/attachment',
          * create attachment
          * @param  {object} options
          * @param  {object} form
-         * @return {deferred}
+         * @return { deferred }
          */
         createOldWay: function (options, form) {
 
-            var json = {module: options.module,
-                        attached: options.id,
-                        folder: options.folder || options.folder_id},
-                uploadCounter = 0,
-                self = this,
-                deferred = $.Deferred();
+            var json = {
+                module: options.module,
+                attached: options.id,
+                folder: options.folder || options.folder_id
+            },
+            uploadCounter = 0,
+            self = this,
+            deferred = $.Deferred();
 
             $(':input.add-attachment', form).each(function (index, field) {
                 var jqField = $(field);
                 if (jqField.attr('type') === 'file') {
                     jqField.attr('name', 'file_' + uploadCounter);
-                    $(form).append($('<input>', {'type': 'hidden', 'name': 'json_' + uploadCounter, 'value': JSON.stringify(json)}));
+                    $(form).append($('<input>',  { 'type': 'hidden', 'name': 'json_' + uploadCounter, 'value': JSON.stringify(json) }));
                     uploadCounter++;
                 }
             });
 
             var tmpName = 'iframe_' + _.now(),
-                frame = $('<iframe>', {'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1 });
+                frame = $('<iframe>',  { 'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1 });
 
             $('#tmp').append(frame);
             window.callback_attach = function (response) {
@@ -161,7 +165,7 @@ define('io.ox/core/api/attachment',
          * builds URL to download/preview File
          * @param  {object} data
          * @param  {string} mode
-         * @return {string} url
+         * @return { string} url
          */
         getUrl: function (data, mode) {
 
@@ -193,7 +197,7 @@ define('io.ox/core/api/attachment',
          * save attachment
          * @param  {object} data
          * @param  {string} target (folder_id)
-         * @return {deferred}
+         * @return { deferred }
          */
         save: function (data, target) {
             //multiple does not work, because module overides module
@@ -208,7 +212,7 @@ define('io.ox/core/api/attachment',
             };
 
             //make sure we have a string or target + api.DELIM results in NaN
-                target = (target || coreConfig.get('folder/infostore')).toString();
+            target = (target || coreConfig.get('folder/infostore')).toString();
 
             http.PUT({
                 module: 'files',
@@ -221,10 +225,11 @@ define('io.ox/core/api/attachment',
                 },
                 data: { folder_id: target, description: descriptionText[data.module] || gt('Saved attachment') },
                 appendColumns: false
-            }).done(function () {
-                require(['io.ox/files/api'], function (fileAPI) {
-                    fileAPI.caches.all.grepRemove(target + (api.DELIM || '//'));
-                    fileAPI.trigger('refresh.all');
+            })
+            .done(function () {
+                require(['io.ox/files/api'], function (api) {
+                    api.pool.resetFolder(target);
+                    api.trigger('add:file');
                 });
             });
         }

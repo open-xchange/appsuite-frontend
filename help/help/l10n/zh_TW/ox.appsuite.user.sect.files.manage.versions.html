@@ -1,13 +1,13 @@
 <html lang="zh_tw">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.5.11. 處理版本</title>
+<title>9.4.11. 處理版本</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="">
-<link rel="up" href="ox.appsuite.user.sect.files.manage.html" title="9.5. 管理檔案">
-<link rel="prev" href="ox.appsuite.user.sect.files.manage.lock.html" title="9.5.10. 鎖定或解鎖檔案">
-<link rel="next" href="ox.appsuite.user.sect.files.manage.multiple.html" title="9.5.12. 一次編輯多個檔案">
+<link rel="up" href="ox.appsuite.user.sect.files.manage.html" title="9.4. 管理檔案">
+<link rel="prev" href="ox.appsuite.user.sect.files.manage.lock.html" title="9.4.10. 鎖定或解鎖檔案">
+<link rel="next" href="ox.appsuite.user.sect.files.search.html" title="9.5. 搜尋檔案">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律聲明">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -25,16 +25,16 @@
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.manage.lock.html">前一頁</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">起始頁</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目錄</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.manage.multiple.html">下一頁</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.search.html">下一頁</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
-  <h1 class="sr-only"><span class="phrase">雲端硬碟</span></h1>
+  <h1 class="sr-only"><span class="phrase">Drive</span></h1>
 <h2 class="sr-only">管理檔案</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.files.manage.versions"></a>9.5.11. 處理版本</h3></div></div></div>
-<a class="indexterm" name="id-1.10.11.15.2"></a><a class="indexterm" name="id-1.10.11.15.3"></a><div class="concept">
+<a name="ox.appsuite.user.sect.files.manage.versions"></a>9.4.11. 處理版本</h3></div></div></div>
+<a class="indexterm" name="id-1.10.10.15.2"></a><a class="indexterm" name="id-1.10.10.15.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.files.versions"></a><p>可以通過以下幾種可能的方式處理版本：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.open" title="如何開啟或儲存某個特定版本:">開啟或儲存目前版本</a></p></li>
@@ -48,41 +48,82 @@
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.files.versions.opencurrent"></a><p class="title">如何開啟或儲存目前版本:</p>
-<div class="procedure"><ul class="procedure"><li class="step"><p>點選詳細視圖中的檔案。要開啟版本，點選彈出視窗中的 <span class="guibutton"><strong>開啟</strong></span>。要儲存版本，點選彈出視窗中的 <span class="guibutton"><strong>下載</strong></span>。</p></li></ul></div>
-<div class="taskrelated">
-          <p><span class="phrase"><strong>提示:</strong></span> 若有文件顯示，您也可以透過拖曳預覽到桌面儲存最新版本。</p>
-        </div>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p>點選顯示區域中的檔案。點下工具列中的 <span class="guibutton"><strong>下載</strong></span>圖示<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.files.download"></a><img src="../../images/appsuite_user_icon_download.png"></span>。</p></li>
+<li class="step"><p>完成開啟或下載的步驟。</p></li>
+</ol></div>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.files.versions.add"></a><p class="title">如何上傳新版本:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>點選詳細視圖中的檔案。在彈出視窗中點選 <span class="guibutton"><strong>上傳新版本</strong></span>。選擇檔案。</p></li>
-<li class="step"><p>輸入版本註釋。.</p></li>
+<li class="step">
+<p>點選顯示區域中的檔案。若未顯示詳情，點擊工具列中的 <span class="guibutton"><strong>檢視</strong></span>。勾選 <span class="guibutton"><strong>檔案詳情</strong></span>。</p>
+<p>您也使用下列一個方式來在 <span class="guilabel"><strong>檢視器</strong></span> 中開啟檔案。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>雙擊顯示區域中的檔案。</p></li>
+<li class="listitem" style="list-style-type: none"><p>點選顯示區域中的檔案。點下工具列中的 <span class="guibutton"><strong>檢視</strong></span> 圖示。<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.add.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span></p></li>
+</ul></div>
+<p>若側邊欄未顯示，點擊 <span class="guibutton"><strong>檢視詳細資訊</strong></span> 圖示<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.add.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span> 。</p>
+</li>
+<li class="step"><p>點選 <span class="guibutton"><strong>上傳新版本</strong></span>。選擇檔案。</p></li>
+<li class="step"><p>輸入版本註釋。</p></li>
 <li class="step"><p>點選 <span class="guibutton"><strong>上傳</strong></span>。</p></li>
 </ol></div>
 <div class="taskrelated">
-          <p><span class="phrase"><strong>提示:</strong></span> 您也可以透過將檔案從桌面拖曳到檔案的顯示區域下方上傳新版本。</p>
+          <p><span class="phrase"><strong>秘訣:</strong></span> 您也可以透過從檔案瀏覽器或桌面拖曳來上傳檔案到側邊欄。</p>
         </div>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.files.versions.open"></a><p class="title">如何開啟或儲存某個特定版本:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>點選詳細視圖中的檔案。在彈出視窗中點選 <span class="guibutton"><strong>顯示版本歷史</strong></span>。點選版本名稱。選單開啟。</p></li>
-<li class="step"><p>要開啟版本，點選選單項目 <span class="guibutton"><strong>開啟</strong></span>。要開啟版本，點選選單項目 <span class="guibutton"><strong>下載</strong></span>。</p></li>
+<li class="step">
+<p>點選顯示區域中的檔案。若未顯示詳情，點擊工具列中的 <span class="guibutton"><strong>檢視</strong></span>。勾選 <span class="guibutton"><strong>檔案詳情</strong></span>。</p>
+<p>您也使用下列一個方式來在 <span class="guilabel"><strong>檢視器</strong></span> 中開啟檔案。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>雙擊顯示區域中的檔案。</p></li>
+<li class="listitem" style="list-style-type: none"><p>點選顯示區域中的檔案。點下工具列中的 <span class="guibutton"><strong>檢視</strong></span> 圖示。<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.open.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span></p></li>
+</ul></div>
+<p>若側邊欄未顯示，點擊 <span class="guibutton"><strong>檢視詳細資訊</strong></span> 圖示<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.open.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span> 。</p>
+</li>
+<li class="step">
+<p>點擊 <span class="guilabel"><strong>版本</strong></span> 旁的圖示 <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.open.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span>。將顯示版本清單</p>
+<p>點選一個版本。點選選單的 <span class="guibutton"><strong>下載</strong></span> 項目。</p>
+</li>
+<li class="step"><p>完成開啟或下載的步驟。</p></li>
 </ol></div>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.files.versions.current"></a><p class="title">如何將一個檔案版本設置為當前版本：</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>點選詳細視圖中的檔案。在彈出視窗中點選 <span class="guibutton"><strong>顯示版本歷史</strong></span>。點選版本名稱。選單開啟。</p></li>
-<li class="step"><p>點選選單項目 <span class="guibutton"><strong>將此設為目前版本</strong></span>。</p></li>
+<li class="step">
+<p>點選顯示區域中的檔案。若未顯示詳情，點擊工具列中的 <span class="guibutton"><strong>檢視</strong></span>。勾選 <span class="guibutton"><strong>檔案詳情</strong></span>。</p>
+<p>您也使用下列一個方式來在 <span class="guilabel"><strong>檢視器</strong></span> 中開啟檔案。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>雙擊顯示區域中的檔案。</p></li>
+<li class="listitem" style="list-style-type: none"><p>點選顯示區域中的檔案。點下工具列中的 <span class="guibutton"><strong>檢視</strong></span> 圖示。<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.current.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span></p></li>
+</ul></div>
+<p>若側邊欄未顯示，點擊 <span class="guibutton"><strong>檢視詳細資訊</strong></span> 圖示<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.current.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span> 。</p>
+</li>
+<li class="step">
+<p>點擊 <span class="guilabel"><strong>版本</strong></span> 旁的圖示 <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.current.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span>。將顯示版本清單</p>
+<p>點選一個版本。點選選單項目 <span class="guibutton"><strong>將此設為目前版本</strong></span>。</p>
+</li>
 </ol></div>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.files.versions.delete"></a><p class="title">如何刪除某個版本:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>點選詳細視圖中的檔案。在彈出視窗中點選 <span class="guibutton"><strong>顯示版本歷史</strong></span>。點選版本名稱。選單開啟。</p></li>
-<li class="step"><p>點選選單中的 <span class="guibutton"><strong>刪除版本</strong></span>。</p></li>
+<li class="step">
+<p>點選顯示區域中的檔案。若未顯示詳情，點擊工具列中的 <span class="guibutton"><strong>檢視</strong></span>。勾選 <span class="guibutton"><strong>檔案詳情</strong></span>。</p>
+<p>您也使用下列一個方式來在 <span class="guilabel"><strong>檢視器</strong></span> 中開啟檔案。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>雙擊顯示區域中的檔案。</p></li>
+<li class="listitem" style="list-style-type: none"><p>點選顯示區域中的檔案。點下工具列中的 <span class="guibutton"><strong>檢視</strong></span> 圖示。<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.delete.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span></p></li>
+</ul></div>
+<p>若側邊欄未顯示，點擊 <span class="guibutton"><strong>檢視詳細資訊</strong></span> 圖示<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.delete.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span> 。</p>
+</li>
+<li class="step"><p>點擊 <span class="guilabel"><strong>版本</strong></span> 旁的圖示 <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.delete.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span>。將顯示版本清單</p></li>
+<li class="step"><p>點選一個版本。點選選單中的 <span class="guibutton"><strong>刪除版本</strong></span>。</p></li>
 </ol></div>
 </div>
 </div>

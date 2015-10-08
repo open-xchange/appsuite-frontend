@@ -34,15 +34,15 @@ define([
             });
 
             it('should return undefined for unknown conversions', function () {
-                expect(emoji.converterFor({from: 'someThingStupid', to: 'nothing'})).not.to.exist;
+                expect(emoji.converterFor({ from: 'someThingStupid', to: 'nothing' })).not.to.exist;
             });
 
             it('should return a conversion method', function () {
-                expect(emoji.converterFor({from: 'unified', to: 'unified'})).to.be.a('function');
+                expect(emoji.converterFor({ from: 'unified', to: 'unified' })).to.be.a('function');
             });
 
             describe('unified -> pua', function () {
-                var convert = emoji.converterFor({from: 'unified', to: 'pua'});
+                var convert = emoji.converterFor({ from: 'unified', to: 'pua' });
 
                 it('should provide a converter', function () {
                     expect(convert).to.be.a('function');
@@ -105,7 +105,7 @@ define([
             });
 
             describe('all -> unified', function () {
-                var convert = emoji.converterFor({from: 'all', to: 'unified'});
+                var convert = emoji.converterFor({ from: 'all', to: 'unified' });
 
                 it('should convert all known encodings to unified', function () {
                     var text = 'softbank: \ue04a; shift_jis: \uf98b; unified: \u2600';

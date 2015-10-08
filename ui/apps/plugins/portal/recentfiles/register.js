@@ -11,24 +11,23 @@
  * @author  Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('plugins/portal/recentfiles/register',
-    ['io.ox/core/extensions',
-     'io.ox/files/api',
-     'io.ox/core/api/user',
-     'io.ox/core/date',
-     'gettext!plugins/portal',
-     'settings!io.ox/core',
-     'less!plugins/portal/recentfiles/style'
-    ], function (ext, filesAPI, userAPI, date, gt, settings) {
+define('plugins/portal/recentfiles/register', [
+    'io.ox/core/extensions',
+    'io.ox/files/api',
+    'io.ox/core/api/user',
+    'gettext!plugins/portal',
+    'settings!io.ox/core',
+    'less!plugins/portal/recentfiles/style'
+], function (ext, filesAPI, userAPI, gt, settings) {
 
     'use strict';
 
     _(['recentfiles', 'myfiles']).each(function (type) {
 
-        var searchOptions = { sort: 5, order: 'desc', limit: _.device('smartphone') ? 5: 10, columns: '1,3,4,5,20,700,701,702,703,704' };
+        var searchOptions = { sort: 5, order: 'desc', limit: _.device('smartphone') ? 5 : 10 };
+
         if (type === 'myfiles') {
             searchOptions.folder = settings.get('folder/infostore');
-            searchOptions.omitFolder = false;
         }
 
         var title = type === 'recentfiles' ? gt('Recently changed files') : gt('My latest files');
@@ -92,38 +91,51 @@ define('plugins/portal/recentfiles/register',
                     return;
                 }
 
-                _(data).each(function (file) {
-                    var filename = String(file.filename || file.title || '');
-                    // create nice filename for long names
-                    if (filename.length > 20) {
-                        // remove leading & tailing date stufff
-                        filename = filename
-                            .replace(/^[0-9_\-\.]{5,}(\D)/i, '\u2026$1')
-                            .replace(/[0-9_\-\.]{5,}(\.\w+)?$/, '\u2026$1');
-                    }
-                    content.append(
-                        $('<li class="item" tabindex="1">').data('item', file).append(
-                            $('<b>').text(_.noI18n(filename)), $.txt(' '),
-                            $('<span class="gray">').text(
-                                type === 'recentfiles' ?
-                                    // show WHO changed it
-                                    _.noI18n(file.modified_by.display_name) :
-                                    // show WHEN it was changed
-                                    new date.Local(file.last_modified).format(date.DATE_TIME)
-                            )
-                        )
-                    );
+                content.append(
+                    _(data).map(function (file) {
+                        var filename = String(file.filename || file.title || '');
+                        // create nice filename for long names
+                        if (filename.length > 20) {
+                            // remove leading & tailing date stufff
+                            filename = filename
+                                .replace(/^[0-9_\-\.]{5,}(\D)/i, '\u2026$1')
+                                .replace(/[0-9_\-\.]{5,}(\.\w+)?$/, '\u2026$1');
+                        }
+                        return $('<li class="item" tabindex="1">')
+                            .data('item', file)
+                            .append(
+                                $('<b>').text(_.noI18n(filename)), $.txt(' '),
+                                $('<span class="gray">').text(
+                                    type === 'recentfiles' ?
+                                        // show WHO changed it
+                                        _.noI18n(file.modified_by.display_name) :
+                                        // show WHEN it was changed
+                                        moment(file.last_modified).format('l LT')
+                                )
+                            );
+                    })
+                );
+
+                // store a copy of all items
+                content.data('items', _(data).map(_.cid));
+
+                content.on('click', 'li.item', function (e) {
+                    e.stopPropagation();
+                    var items = $(e.delegateTarget).data('items'),
+                        item = $(e.currentTarget).data('item');
+                    require(['io.ox/core/viewer/main'], function (Viewer) {
+                        filesAPI.get(item).done(function (data) {
+                            var models = filesAPI.resolve(items, false),
+                                collection = new Backbone.Collection(models),
+                                viewer = new Viewer();
+                            baton = new ext.Baton({ data: data, collection: collection });
+                            viewer.launch({ selection: baton.data, files: baton.collection.models });
+                        });
+                    });
                 });
             },
 
-            draw: function (baton) {
-                var popup = this.busy();
-                require(['io.ox/files/fluid/view-detail'], function (view) {
-                    var obj = filesAPI.reduce(baton.item);
-                    filesAPI.get(obj).done(function (data) {
-                        popup.idle().append(view.draw(data));
-                    });
-                });
+            draw: function () {
             }
         });
 

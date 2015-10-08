@@ -25,12 +25,19 @@
 
 @light-font-family:                     "Helvetica Neue", OpenSans, Helvetica, Arial, sans-serif;
 @normal-font-family:                    @font-family-sans-serif;
-@font-size-touch:                       15px;
+@font-size-touch:                       16px;
 @topbar-font-size:                      13px;
 @window-head-font-size:                 13px;
 @vgrid-font-size:                       13px;
 @inline-link-font-size:                 14px;
-@list-view-padding:                     18px;
+
+@base-padding:                          4px;
+@default-padding:                       @base-padding * 4;
+@list-view-padding:                     @default-padding;
+
+@border-radius-large:                   3px;
+@border-radius-base:                    3px;
+@border-radius-small:                   3px;
 
 // Accent colors
 //----------------------
@@ -102,17 +109,18 @@
 //----------------------
 
 // window head (side toolbar)
+@window-header-color:                   #f5f5f5;
 @window-head-color:                     #fff;
 @window-head-border-color:              #eee;
 @window-head-width:                     50px;
 @window-title-color:                    #fff;
 
 // badge
-@notification-icon-color:               rgba(255, 255, 255, 0.50);
-@notification-icon-background: 			rgba(0, 0, 0, 0.30);
+@notification-icon-color:               rgba(255, 255, 255, 1);
+@notification-icon-background: 			rgba(200, 0, 0, 1);
 @notification-icon-color-active:        #333;
 @notification-icon-background-active: 	#fff; 	// alt. bright orange: #ff4700
-@notification-pane-background:          rgba(255, 255, 255, 0.95);
+@notification-pane-background:          rgba(255, 255, 255, 1);
 @notification-pane-item-background:     rgba(0, 0, 0, 0.10);
 
 // foldertree
@@ -128,13 +136,15 @@
 @foldertree-badge-background:           @badge-bg;
 @foldertree-badge-focus-background:     #006597;
 @foldertree-badge-color:                @badge-color;
+@foldertree-selected-focus-counter-color: rgba(255, 255, 255, 0.95);
+@foldertree-selected-focus-options-background: rgba(0, 0, 0, 0.20);
 
 // topbar
 @topbar-launcher-color:                 rgba(255, 255, 255, 0.95);
 @topbar-launcher-color-hover:           #fff;
 @topbar-launcher-color-active:          #fff;
-@topbar-launcher-background-hover:      rgba(0, 0, 0, 0.20);
-@topbar-launcher-background-active:     rgba(0, 0, 0, 0.30);
+@topbar-launcher-background-hover:      rgba(0, 0, 0, 0.15);
+@topbar-launcher-background-active:     rgba(0, 0, 0, 0.25);
 @topbar-icon-color:                     #fff;
 @topbar-background:                     #3C73AA;
 
@@ -147,8 +157,8 @@
 @toolbar-background:                    #333;
 @toolbar-background-alt:                lighten(@toolbar-background, 10%);
 @toolbar-line-height:                   24px;
-@toolbar-vertical-padding:              10px;
-@toolbar-height:                        @toolbar-line-height + 2 * @toolbar-vertical-padding + 1;
+@toolbar-vertical-padding:              8px;
+@toolbar-height:                        @toolbar-line-height + 2 * @toolbar-vertical-padding;
 @link-accent-color:                     #ffad00;
 
 // mail app
@@ -177,28 +187,69 @@
 @appointment-hover-pct:                 15%;
 
 @weekview-appointment-lasso:            #D0EAFF;    /* light blue */
-@weekview-day-in:                       #fff;       /* white */
-@weekview-day-out:                      #f5f5f5;    /* grey */
-@weekview-timeline:                     rgba(255, 0, 0, 0.60);
+@weekview-background:                   #fff;       /* white */
 @weekview-border:                       #ccc;
-@monthview-border:                      #ddd;
-
-@monthview-appointment-out:             #aaa;       /* light gray */
-@monthview-today:                       #f2f2f2;    /* light blue */
-@weekview-today:                        #eee;       /* light gray */
-
-@calendar-toolbar-height:               47px;
-@calendar-toolbar-top-padding:          13px;
-@weekview-time-width:                   58px;
+@weekview-time-width:                   80px;
 @weekview-footer-height:                34px;
+@weekview-working-time-border:          #333;
+
+@monthview-border:                      #ddd;
+@monthview-appointment-out:             #aaa;       /* light gray */
+@monthview-cw-width:                    80px;
+
+@calendar-today-background:             #f5f5f5;    /* gray */
+@calendar-today:                        #CF3239;    /* red */
+@calendar-toolbar-height:               35px;
+@calendar-toolbar-top-padding:          13px;
+
+// calender custom colors (ordered by spectrum)
+
+@color-label-bg-1:                      #CEE7FF;     /* light blue */
+@color-label-bg-2:                      #96BBE8;     /* blue */
+@color-label-bg-3:                      #C4AFE3;     /* purple */
+@color-label-bg-4:                      #F0D8F0;     /* pink */
+@color-label-bg-5:                      #F2D1D2;     /* red */
+@color-label-bg-6:                      #FFD1A3;     /* orange */
+@color-label-bg-7:                      #F7EBB6;     /* yellow */
+@color-label-bg-8:                      #D4DEA7;     /* light green */
+@color-label-bg-9:                      #99AF6E;     /* green */
+@color-label-bg-10:                     #666666;     /* dark gray */
+
+@color-label-fg-1:                      #2A4B6C;     /* light blue */
+@color-label-fg-2:                      #0B1624;     /* blue */
+@color-label-fg-3:                      #3F0E84;     /* purple */
+@color-label-fg-4:                      #8A1C8C;     /* pink */
+@color-label-fg-5:                      #A83336;     /* red */
+@color-label-fg-6:                      #622906;     /* orange */
+@color-label-fg-7:                      #5C4209;     /* yellow */
+@color-label-fg-8:                      #526107;     /* light green */
+@color-label-fg-9:                      #28350F;     /* green */
+@color-label-fg-10:                     #FFFFFF;     /* dark gray */
+
+@custom-color-hover-pct:                10%;
+@custom-color-pattern-pct:              3%;
+
+// wizard & tours
+@wizard-backdrop-color: rgba(90, 186, 255, 0.20);
+@wizard-hotspot-color: rgba(92, 199, 255, 1.00);
+@wizard-pulse-color: rgba(92, 199, 255, 0.70);
+@wizard-pulse-border-color: rgba(92, 199, 255, 1.00);
 
 // mobile
 //----------------------
 @pagecontroller-animation-duration:     350ms;
 // size of the menu launcher in the top left
-@mobile-launcher-icon-size:             19px;
+@mobile-launcher-icon-size:             18px;
 
 // misc
 //----------------------
 @ui-disabled-color:                     #ccc;
 
+@container-desktop:                     (870px + @grid-gutter-width);
+@container-large-desktop:               @container-desktop;
+
+// fallback images
+@theme:                                 'default';
+@fallback-image-contact:                'apps/themes/@{theme}/fallback-image-contact.png';
+@fallback-image-group:                  'apps/themes/@{theme}/fallback-image-group.png';
+@fallback-image-resource:               'apps/themes/@{theme}/fallback-image-resource.png';

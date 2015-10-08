@@ -3,13 +3,11 @@
     "company": "Open-Xchange",
     "icon": "files.png",
     "category": "Productivity",
-    "settings": true,
     "requires": "infostore",
+    "settings": true,
+    "settingsRequires": "!guest",
+    "settingsDevice": "!smartphone",
     "refreshable": true,
     "index": 1000,
-    "advancedMode": true,
-    "help": {
-        "base": "help",
-        "target": "ox.appsuite.user.chap.files.html"
-    }
+    "advancedMode": true
 }

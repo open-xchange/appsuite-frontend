@@ -11,9 +11,7 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-
-define('io.ox/core/toolbars-mobile',
-    ['io.ox/core/extensions'], function (ext) {
+define('io.ox/core/toolbars-mobile', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
 
@@ -57,19 +55,20 @@ define('io.ox/core/toolbars-mobile',
         },
 
         initialize: function (opt) {
-            this.app = opt.app;
             this.title = (opt.title) ? opt.title : '';
             this.left = (opt.left) ? opt.left : false;
             this.right = (opt.right) ? opt.right : false;
-            this.baton = opt.baton || ext.Baton({app: opt.app});
+            this.baton = opt.baton;// || ext.Baton({ app: opt.app });
             this.extension = opt.extension;
             this.hiddenElements = [];
+            this.rendered = false;
+
         },
 
         render: function () {
 
             this.$el.empty();
-
+            this.rendered = true;
             ext.point(this.extension).invoke('draw', this, {
                 left: this.left,
                 right: this.right,
@@ -130,9 +129,12 @@ define('io.ox/core/toolbars-mobile',
             this.baton = baton;
             this.render();
             return this;
+        },
+
+        toggle: function (state) {
+            this.$el.toggle(state);
         }
     });
-
 
     /*
      * Toolbars
@@ -142,9 +144,8 @@ define('io.ox/core/toolbars-mobile',
     var ToolbarView = BarView.extend({
 
         initialize: function (opt) {
-            this.app = opt.app;
             this.page = opt.page;
-            this.baton = opt.baton || ext.Baton({app: opt.app});
+            this.baton = opt.baton;// || ext.Baton({ app: opt.app });
             this.extension = opt.extension;
         },
         render: function () {

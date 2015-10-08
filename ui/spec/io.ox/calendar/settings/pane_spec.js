@@ -10,12 +10,13 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-define(['io.ox/core/extensions',
-        'gettext!io.ox/calendar',
-        'io.ox/calendar/settings/pane'
-        ], function (ext, gt) {
+define([
+    'io.ox/core/extensions',
+    'gettext!io.ox/calendar',
+    'io.ox/calendar/settings/pane'
+], function (ext, gt) {
 
-	describe('calendarsettings', function () {
+    describe('calendarsettings', function () {
         beforeEach(function () {
 
             $('body', document).append(this.node = $('<div id="calendarsettingsNode">'));
@@ -24,7 +25,7 @@ define(['io.ox/core/extensions',
         });
 
         afterEach(function () {
-            $('#calendarsettingsNode', document).remove();
+            this.node.remove();
         });
 
         it('should draw the form', function () {
@@ -50,17 +51,21 @@ define(['io.ox/core/extensions',
             this.node.find('input[name="markFulltimeAppointmentsAsFree"]').parent().text().should.be.equal(gt('Mark all day appointments as free'));
 
             this.node.find('input[name="notifyNewModifiedDeleted"]').should.have.length(1);
-            this.node.find('input[name="notifyNewModifiedDeleted"]').parent().text().should.be.equal(gt('Email notification for New, Changed, Deleted?'));
+            this.node.find('input[name="notifyNewModifiedDeleted"]').parent().text().should.be.equal(gt('Receive notification for appointment changes'));
 
             this.node.find('input[name="notifyAcceptedDeclinedAsCreator"]').should.have.length(1);
-            this.node.find('input[name="notifyAcceptedDeclinedAsCreator"]').parent().text().should.be.equal(gt('Email notification for appointment creator?'));
+            this.node.find('input[name="notifyAcceptedDeclinedAsCreator"]').parent().text().should.be.equal(gt('Receive notification as appointment creator when participants accept or decline'));
 
             this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').should.have.length(1);
-            this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').parent().text().should.be.equal(gt('Email notification for appointment participant?'));
+            this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').parent().text().should.be.equal(gt('Receive notification as appointment participant when other participants accept or decline'));
 
             this.node.find('input[name="deleteInvitationMailAfterAction"]').should.have.length(1);
-            this.node.find('input[name="deleteInvitationMailAfterAction"]').parent().text().should.be.equal(gt('Automatically delete a notification mail after it has been accepted or declined?'));
+            this.node.find('input[name="deleteInvitationMailAfterAction"]').parent().text().should.be.equal(gt('Automatically delete incoming notifications after the appointment has been accepted or declined'));
 
+            //wait for deferred painting to happen
+            var def = new $.Deferred();
+            _.defer(def.resolve);
+            return def;
         });
 
     });

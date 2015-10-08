@@ -20,20 +20,20 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
             // remove comments
             .replace(/<!--(.*?)-->/g, '')
             // remove emoji images and convert them back to unicode characters
-            .replace(/<img[^>]* data-emoji-unicode=\"([^\"]*)\"[^>]*>/gi, '$1')
-            // remove class attribute and custom attributes
-            .replace(/(data-[^=]+|class)="[^"]*"/ig, '')
-            // remove relative links (remove if links don't start with a protocol)
-            .replace(/<a[^>]+href="(?!.+:)[^"].+?">(.+)<\/\s?a>/gi, '$1')
-            // remove &nbsp;
-            .replace(/&nbsp;/ig, ' ')
-            // fix missing white-space before/after links
-            .replace(/([^>\s])<a/ig, '$1 <a')
-            .replace(/<\/\s?a>([^<\s,\.:;])/ig, '</a> $1')
-            // beautify simple quotes
-            .replace(/([^=])"([\w\- ]+)"/g, '$1\u201C$2\u201D')
-            // beautify dashes
-            .replace(/(\w\s)-(\s\w)/g, '$1\u2013$2');
+            .replace(/<img[^>]* data-emoji-unicode=\"([^\"]*)\"[^>]*>/gi, '$1');
+        // remove class attribute and custom attributes
+        //.replace(/(data-[^=]+|class)="[^"]*"/ig, '')
+        // remove relative links (remove if links don't start with a protocol)
+        //.replace(/<a[^>]+href="(?!.+:)[^"].+?">(.+)<\/\s?a>/gi, '$1')
+        // remove &nbsp;
+        //.replace(/&nbsp;/ig, ' ');
+        // fix missing white-space before/after links
+        //.replace(/([^>\s])<a/ig, '$1 <a')
+        //.replace(/<\/\s?a>([^<\s,\.:;])/ig, '</a> $1')
+        // beautify simple quotes
+        //.replace(/([^=])"([\w\- ]+)"/g, '$1\u201C$2\u201D')
+        // beautify dashes
+        //.replace(/(\w\s)-(\s\w)/g, '$1\u2013$2');
 
         o.content = emoji.processEmoji(o.content);
     },
@@ -218,7 +218,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
     htmltotext = function (string) {
         var ELEMENTS = [{
             patterns: 'p',
-            replacement: function(str, attrs, innerHTML) {
+            replacement: function (str, attrs, innerHTML) {
                 return innerHTML ? '\n\n' + innerHTML + '\n' : '';
             }
         },
@@ -229,7 +229,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
         },
         {
             patterns: 'h([1-6])',
-            replacement: function(str, hLevel, attrs, innerHTML) {
+            replacement: function (str, hLevel, attrs, innerHTML) {
                 return '\n\n' + innerHTML + '\n';
             }
         },
@@ -240,7 +240,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
         },
         {
             patterns: 'a',
-            replacement: function(str, attrs, innerHTML) {
+            replacement: function (str, attrs, innerHTML) {
                 var href = attrs.match(attrRegExp('href'));
                 if (/^mailto:/.test(href[1])) return href[1].substr(7).length ? href[1].substr(7) : '';
                 return href ? (innerHTML ? innerHTML : href[1]) : '';
@@ -268,7 +268,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
             if (typeof el.replacement === 'string') {
                 markdown = html.replace(regex, el.replacement);
             } else {
-                markdown = html.replace(regex, function(str, p1, p2, p3) {
+                markdown = html.replace(regex, function (str, p1, p2, p3) {
                     return el.replacement.call(this, str, p1, p2, p3);
                 });
             }
@@ -281,7 +281,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
 
         // Pre code blocks
 
-        string = string.replace(/<pre\b[^>]*>`([\s\S]*?)`<\/pre>/gi, function(str, innerHTML) {
+        string = string.replace(/<pre\b[^>]*>`([\s\S]*?)`<\/pre>/gi, function (str, innerHTML) {
             var text = innerHTML;
             text = text.replace(/^\t+/g, '  '); // convert tabs to spaces (you know it makes sense)
             text = text.replace(/\n/g, '\n    ');
@@ -303,7 +303,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
 
         function replaceLists(html) {
 
-            html = html.replace(/<(ul|ol)\b[^>]*>([\s\S]*?)<\/\1>/gi, function(str, listType, innerHTML) {
+            html = html.replace(/<(ul|ol)\b[^>]*>([\s\S]*?)<\/\1>/gi, function (str, listType, innerHTML) {
                 var lis = innerHTML.split('</li>');
                 lis.splice(lis.length - 1, 1);
 
@@ -311,7 +311,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
                     if (lis[i]) {
                         /* jshint ignore:start */
                         var prefix = (listType === 'ol') ? (i + 1) + '.  ' : '*   ';
-                        lis[i] = lis[i].replace(/\s*<li[^>]*>([\s\S]*)/i, function(str, innerHTML) {
+                        lis[i] = lis[i].replace(/\s*<li[^>]*>([\s\S]*)/i, function (str, innerHTML) {
                             innerHTML = innerHTML
                                 .replace(/^\s+/, '')
                                 .replace(/\n\n/g, '\n\n    ')
@@ -336,7 +336,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
         }
 
         function replaceBlockquotes(html) {
-            return html.replace(/<blockquote\b[^>]*>([\s\S]*?)<\/blockquote>/gi, function(string,  inner) {
+            return html.replace(/<blockquote\b[^>]*>([\s\S]*?)<\/blockquote>/gi, function (string,  inner) {
                 inner = inner.replace(/^\s+|\s+$/g, '');
                 inner = cleanUp(inner);
                 inner = inner
@@ -356,7 +356,8 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
                 .replace(/(<\/?\w+(\s[^<>]*)?\/?>)/g, '') // Remove all remaining tags except mail addresses
                 .replace(/^[\t\r\n]+|[\t\r\n]+$/g, '')    // Trim leading/trailing whitespace
                 .replace(/\n\s+\n/g, '\n\n')
-                .replace(/\n{3,}/g, '\n\n');              // limit consecutive linebreaks to 2
+                .replace(/\n{3,}/g, '\n\n')              // limit consecutive linebreaks to 2
+                .replace(/&amp;/g, '&');
         }
 
         string = cleanUp(string);
@@ -410,7 +411,8 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
             _.extend(lexer.rules, {
                 heading:  noop,
                 code: noop,
-                hr: noop
+                hr: noop,
+                lheading: noop
             });
 
             def.resolve(marked.parser(lexer.lex(string)));

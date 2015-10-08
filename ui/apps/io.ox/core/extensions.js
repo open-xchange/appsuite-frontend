@@ -39,12 +39,12 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
             return a.index - b.index;
         };
 
-        // for debugging purposes
-        /*
-        randomSorter = function () {
-            return Math.random() > 0.5 ? -1 : +1;
-        };
-        */
+    // for debugging purposes
+    /*
+    randomSorter = function () {
+        return Math.random() > 0.5 ? -1 : +1;
+    };
+    */
 
     // never leak
     $(window).on('unload', function () {
@@ -152,8 +152,8 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
         /**
          * registers extension if id is not taken yet
          * @chainable
-         * @param  {extension}
-         * @return {point}
+         * @param  {extension }
+         * @return { point }
          */
         this.extend = function () {
 
@@ -208,8 +208,8 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
          * extends existing extension OR registers extension if id is not taken yet
          * registers extension (for point) if id is not taken yet
          * @chainable
-         * @param  {extension}
-         * @return {point}
+         * @param  {extension }
+         * @return { point }
          */
         this.replace = function (extension) {
 
@@ -241,7 +241,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
 
         /**
          * get all extensions
-         * @return {array}
+         * @return { array }
          */
         this.all = function () {
             return extensions;
@@ -259,7 +259,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
 
         /**
          * get all extension ids
-         * @return {array}
+         * @return { array }
          */
         this.keys = function () {
             return _(extensions).pluck('id');
@@ -273,7 +273,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
 
         /**
          * get all enabled extensions
-         * @return {array}
+         * @return { array }
          */
         this.list = function () {
             return list().value();
@@ -364,7 +364,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
 
         /**
          * get number of enabled extensions
-         * @return {integer}
+         * @return { integer }
          */
         this.count = function () {
             return list().value().length;
@@ -474,6 +474,14 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
             this.disposed = true;
         },
 
+        enable: function (pointId, extensionId) {
+            // typical developer mistake (forget pointId actually)
+            if (arguments.length < 2) console.warn('Baton.enable(pointId, extensionId) needs two arguments!');
+            var hash = this.flow.disable;
+            if (!hash[pointId]) return;
+            hash[pointId] = _(hash[pointId]).without(extensionId);
+        },
+
         disable: function (pointId, extensionId) {
             // typical developer mistake (forget pointId actually)
             if (arguments.length < 2) console.warn('Baton.disable(pointId, extensionId) needs two arguments!');
@@ -497,7 +505,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
         /**
          * get point (if necessary also created and registered before)
          * @param  {string} id
-         * @return {point}
+         * @return { point }
          */
         point: function (id) {
             id = id || '';
@@ -510,7 +518,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
 
         /**
          * get extension ids
-         * @return {array} ids
+         * @return { array} ids
          */
         keys: function () {
             return _.keys(registry);
@@ -520,16 +528,16 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
             // get options
             var o = _.extend({
                     name: ox.signin ? 'signin' : 'core',
-                    prefix: 'plugins/',
-                    suffix: 'register',
-                    nameOnly : false
+                    prefix:  'plugins/',
+                    suffix:  'register',
+                    nameOnly: false
                 }, options),
                 // all plugins
                 plugins = ox.serverConfig.plugins || {};
             // transform to proper URLs
             return _(plugins[o.name] || []).map(function (i) {
-                    return o.nameOnly ? i : o.prefix + i + '/' + o.suffix;
-                });
+                return o.nameOnly ? i : o.prefix + i + '/' + o.suffix;
+            });
         },
 
         // plugin loader

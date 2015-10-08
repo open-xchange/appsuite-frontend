@@ -10,9 +10,12 @@
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
-define(['shared/examples/for/api',
-        'io.ox/mail/api',
-        'io.ox/core/api/factory'], function (sharedExamplesFor, api, factory) {
+define([
+    'shared/examples/for/api',
+    'io.ox/mail/api',
+    'io.ox/core/api/factory'
+], function (sharedExamplesFor, api, factory) {
+    'use strict';
 
     return describe('mail API', function () {
         var apiFactory = factory({}),

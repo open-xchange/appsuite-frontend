@@ -11,12 +11,12 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/tasks/mobile-toolbar-actions',
-   ['io.ox/core/extensions',
+define('io.ox/tasks/mobile-toolbar-actions', [
+    'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/tasks/api',
-    'gettext!io.ox/tasks'],
-    function (ext, links, api, gt) {
+    'gettext!io.ox/tasks'
+], function (ext, links, api, gt) {
 
     'use strict';
 
@@ -60,7 +60,7 @@ define('io.ox/tasks/mobile-toolbar-actions',
             'undone': {
                 prio: 'hi',
                 mobile: 'hi',
-                label: gt('Undone'),
+                label: gt('Mark as undone'),
                 drawDisabled: true,
                 ref: 'io.ox/tasks/actions/undone'
             },
@@ -115,7 +115,6 @@ define('io.ox/tasks/mobile-toolbar-actions',
         ref: 'io.ox/tasks/mobile/actions'
     }));
 
-
     var updateToolbar = _.debounce(function (task) {
         var self = this;
         //get full data, needed for require checks for example
@@ -151,7 +150,7 @@ define('io.ox/tasks/mobile-toolbar-actions',
         id: 'toolbar-mobile',
         index: 10100,
         setup: function (app) {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             app.updateToolbar = updateToolbar;
         }
     });
@@ -160,7 +159,11 @@ define('io.ox/tasks/mobile-toolbar-actions',
         id: 'update-toolbar-mobile',
         index: 10300,
         setup: function (app) {
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
+
+            api.on('update', function (e, data) {
+                app.updateToolbar(data);
+            });
 
             // folder change
             app.grid.on('change:ids', function () {
@@ -172,13 +175,13 @@ define('io.ox/tasks/mobile-toolbar-actions',
             });
 
             // multiselect
-            app.grid.selection.on('change', function  (e, list) {
+            function updateSecondaryToolbar(list) {
                 if (app.props.get('checkboxes') !== true ) return;
                 if (list.length === 0) {
                     // reset to remove old baton
-                     app.pages.getSecondaryToolbar('listView')
-                        .setBaton(ext.Baton({data: [], app: app}));
-                     return;
+                    app.pages.getSecondaryToolbar('listView')
+                        .setBaton(ext.Baton({ data: [], app: app }));
+                    return;
                 }
                 api.getList(list).done(function (data) {
                     if (!data) return;
@@ -186,7 +189,7 @@ define('io.ox/tasks/mobile-toolbar-actions',
                     // handle updated baton to pageController
                     app.pages.getSecondaryToolbar('listView').setBaton(baton);
                 });
-            });
+            }
 
             // simple select
             app.grid.selection.on('pagechange:detailView', function () {
@@ -195,6 +198,8 @@ define('io.ox/tasks/mobile-toolbar-actions',
                 app.updateToolbar(data[0]);
             });
 
+            app.grid.selection.on('change', function (e, list) { updateSecondaryToolbar(list); });
+            app.props.on('change:checkboxes', function () { updateSecondaryToolbar(app.grid.selection.get()); });
         }
     });
 
@@ -202,7 +207,7 @@ define('io.ox/tasks/mobile-toolbar-actions',
         id: 'change-mode-toolbar-mobile',
         index: 10400,
         setup: function (app) {
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
             // if multiselect is triggered, show secondary toolbar with other options based on selection
             app.props.on('change:checkboxes', function (model, state) {
                 app.pages.toggleSecondaryToolbar('listView', state);

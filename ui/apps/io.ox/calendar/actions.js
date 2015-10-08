@@ -11,26 +11,18 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/actions',
-    ['io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/calendar/api',
-     'io.ox/calendar/util',
-     'io.ox/core/notifications',
-     'io.ox/core/print',
-     'settings!io.ox/calendar',
-     'settings!io.ox/core',
-     'io.ox/core/extPatterns/actions',
-     'gettext!io.ox/calendar'
-    ], function (ext, links, api, util, notifications, print, settings, coreSettings, actions, gt) {
+define('io.ox/calendar/actions', [
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/calendar/api',
+    'io.ox/calendar/util',
+    'io.ox/core/extPatterns/actions',
+    'gettext!io.ox/calendar'
+], function (ext, links, api, util, actions, gt) {
 
     'use strict';
 
-    var Action = links.Action,
-        ActionGroup = links.ActionGroup,
-        ActionLink = links.ActionLink,
-
-        POINT = 'io.ox/calendar';
+    var Action = links.Action;
 
     // Actions
     new Action('io.ox/calendar/actions/switch-to-list-view', {
@@ -51,7 +43,7 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/actions/switch-to-fullweek-view', {
         requires: function () {
-            return _.device('!small');
+            return _.device('!smartphone');
         },
         action: function (baton) {
             ox.ui.Perspective.show(baton.app, 'week:week');
@@ -60,7 +52,7 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/actions/switch-to-week-view', {
         requires: function () {
-            return _.device('!small');
+            return _.device('!smartphone');
         },
         action: function (baton) {
             ox.ui.Perspective.show(baton.app, 'week:workweek');
@@ -97,27 +89,8 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/invite', {
         capabilities: 'calendar',
         action: function (baton) {
-            require(['io.ox/calendar/edit/main'], function (m) {
-                m.getApp().launch().done(function () {
-                    // include external organizer
-                    var data = baton.data,
-                        participants = data.participants.slice();
-                    if (!data.organizerId && _.isString(data.organizer)) {
-                        participants.unshift({
-                            display_name: data.organizer,
-                            email1: data.organizer,
-                            mail: data.organizer,
-                            type: 5
-                        });
-                    }
-                    // open create dialog with same participants
-                    data = {
-                        folder_id: coreSettings.get('folder/calendar'),
-                        participants: participants
-                    };
-                    this.create(data);
-                    this.model.toSync = data;
-                });
+            ox.load(['io.ox/calendar/actions/invite']).done(function (action) {
+                action(baton);
             });
         }
     });
@@ -136,7 +109,6 @@ define('io.ox/calendar/actions',
     });
 
     new Action('io.ox/calendar/detail/actions/edit', {
-        id: 'edit',
         requires: function (e) {
             var exists = e.baton && e.baton.data ? e.baton.data.id !== undefined : true,
                 allowed = e.collection.has('one', 'modify');
@@ -152,185 +124,37 @@ define('io.ox/calendar/actions',
             });
         },
         action: function (baton) {
-            var params = baton.data,
-                o = {
-                    id: params.id,
-                    folder: params.folder_id
-                };
-
-            if (!!params.recurrence_position) {
-                o.recurrence_position = params.recurrence_position;
-            }
-
-            ox.load(['io.ox/calendar/edit/main']).done(function (m) {
-                if (params.recurrence_type > 0 || params.recurrence_position) {
-                    ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
-                        new dialogs.ModalDialog()
-                            .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
-                            .addPrimaryButton('series',
-                                //#. Use singular in this context
-                                gt('Series'), 'series', {tabIndex: '1'})
-                            .addButton('appointment', gt('Appointment'), 'appointment', {tabIndex: '1'})
-                            .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
-                            .show()
-                            .done(function (action) {
-
-                                if (action === 'cancel') {
-                                    return;
-                                }
-                                if (action === 'series') {
-                                    // edit the series, discard recurrence position
-                                    if (params.recurrence_id) {
-                                        o.id = params.recurrence_id;
-                                    }
-                                    delete o.recurrence_position;
-                                }
-
-                                // disable cache with second param
-                                api.get(o, false).then(
-                                    function (data) {
-                                        if (m.reuse('edit', data, {action: action})) return;
-                                        m.getApp().launch().done(function () {
-                                            if (action === 'appointment') {
-                                                data = api.removeRecurrenceInformation(data);
-                                            }
-                                            this.edit(data, {action: action});
-                                        });
-                                    },
-                                    notifications.yell
-                                );
-                            });
-                    });
-                } else {
-                    api.get(o, false).then(
-                        function (data) {
-                            if (m.reuse('edit', data)) return;
-                            m.getApp().launch().done(function () {
-                                this.edit(data);
-                            });
-                        },
-                        notifications.yell
-                    );
-                }
+            ox.load(['io.ox/calendar/actions/edit']).done(function (action) {
+                action(baton);
             });
         }
     });
 
     new Action('io.ox/calendar/detail/actions/delete', {
-        id: 'delete',
         requires: function (e) {
             return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
                 return e.collection.has('delete') && isBossy;
             });
         },
         multiple: function (list) {
-
-            var apiCalls = [];
-
-            // build array with full identifier for an appointment and collect API get calls
-            _(list).each(function (obj) {
-                var o = {
-                    id: obj.id,
-                    folder: obj.folder_id
-                };
-                if (!!obj.recurrence_position) {
-                    o.recurrence_position = obj.recurrence_position;
-                }
-
-                apiCalls.push(api.get(o));
+            ox.load(['io.ox/calendar/actions/delete']).done(function (action) {
+                action(list);
             });
-
-            $.when.apply($, apiCalls)
-                .pipe(function () {
-                    return _.chain(arguments)
-                        .flatten(true)
-                        .filter(function (app) {
-                            return _.isObject(app);
-                        }).value();
-                })
-                .then(function (appList) {
-
-                    // check if appointment list contains recurring appointments
-                    var hasRec = _(appList).some(function (app) {
-                        return app.recurrence_type > 0;
-                    });
-
-                    ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
-
-                        var cont = function (series) {
-                            var data = _(appList).chain().map(function (obj) {
-                                var options = {
-                                    id: obj.id,
-                                    folder: obj.folder_id || obj.folder
-                                };
-                                if (!series && obj.recurrence_position) {
-                                    _.extend(options, {recurrence_position: obj.recurrence_position});
-                                }
-                                return options;
-                            }).uniq(function (obj) {
-                                return JSON.stringify(obj);
-                            }).value();
-                            api.remove(data).fail(notifications.yell);
-                        };
-
-                        // different warnings especially for events with
-                        // recurrence_type > 0 should handled here
-                        if (hasRec) {
-                            new dialogs.ModalDialog()
-                                .text(gt('Do you want to delete the whole series or just one appointment within the series?'))
-                                .addPrimaryButton('series', gt('Delete whole series'), 'series', {tabIndex: '1'})
-                                .addButton('appointment', gt('Delete appointment'), 'appointment', {tabIndex: '1'})
-                                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
-                                .show()
-                                .done(function (action) {
-                                    if (action === 'cancel') {
-                                        return;
-                                    }
-                                    cont(action === 'series');
-                                });
-                        } else {
-                            new dialogs.ModalDialog()
-                                .text(gt('Do you want to delete this appointment?'))
-                                .addPrimaryButton('ok', gt('Delete'), 'ok', {tabIndex: '1'})
-                                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
-                                .show()
-                                .done(function (action) {
-                                    if (action === 'cancel') {
-                                        return;
-                                    }
-                                    cont();
-                                });
-                        }
-                    });
-                });
         }
     });
 
     new Action('io.ox/calendar/detail/actions/create', {
-        id: 'create',
         requires: function (e) {
             return e.baton.app.folder.can('create');
         },
         action: function (baton, obj) {
-            // FIXME: if this action is invoked by the menu button, both
-            // arguments are the same (the app)
-            var params = {
-                folder_id: baton.app.folder.get(),
-                participants: []
-            };
-            if (obj && obj.start_date) {
-                _.extend(params, obj);
-            }
-            ox.load(['io.ox/calendar/edit/main']).done(function (editmain) {
-                editmain.getApp().launch().done(function () {
-                    this.create(params);
-                });
+            ox.load(['io.ox/calendar/actions/create']).done(function (action) {
+                action(baton, obj);
             });
         }
     });
 
     new Action('io.ox/calendar/detail/actions/changestatus', {
-        id: 'change_status',
         requires: function (e) {
 
             function cont(app) {
@@ -357,7 +181,7 @@ define('io.ox/calendar/actions',
         },
         action: function (baton) {
             // load & call
-            ox.load(['io.ox/calendar/acceptdeny']).done(function (acceptdeny) {
+            ox.load(['io.ox/calendar/actions/acceptdeny']).done(function (acceptdeny) {
                 acceptdeny(baton.data);
             });
         }
@@ -366,19 +190,33 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/print-appointment', {
         capabilities: 'printing',
         requires: function (e) {
-            return e.collection.has('some', 'read') && _.device('!small');
+            return e.collection.has('some', 'read') && _.device('!smartphone');
         },
         multiple: function (list) {
-            print.request('io.ox/calendar/print', list);
+            ox.load(['io.ox/core/print']).done(function (print) {
+                print.request('io.ox/calendar/print', list);
+            });
+        }
+    });
+
+    new Action('io.ox/calendar/detail/actions/print-appointment-disabled', {
+        requires: 'one',
+        capabilities: 'printing',
+        action: function (baton) {
+            ox.load(['io.ox/core/print']).done(function (print) {
+                var options = { template: 'print.appointment.tmpl' },
+                    POS = 'recurrence_position';
+                if (baton.data[POS]) options[POS] = baton.data[POS];
+                print.open('calendar', baton.data, options);
+            });
         }
     });
 
     new Action('io.ox/calendar/detail/actions/print', {
         capabilities: 'printing',
-        id: 'print',
         requires: function (e) {
             var win = e.baton.window;
-            if (_.device('!small') && win && win.getPerspective) {
+            if (_.device('!smartphone') && win && win.getPerspective) {
                 var pers = win.getPerspective();
                 return pers && pers.print;
             } else {
@@ -395,7 +233,6 @@ define('io.ox/calendar/actions',
     });
 
     new Action('io.ox/calendar/detail/actions/move', {
-        id: 'move',
         requires: function (e) {
             return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
                 var isSeries = e.baton.data.recurrence_type > 0;
@@ -406,10 +243,13 @@ define('io.ox/calendar/actions',
 
             var vgrid = baton.grid || (baton.app && baton.app.getGrid());
 
-            require(['io.ox/core/folder/actions/move'], function (move) {
+            ox.load(['io.ox/core/folder/actions/move', 'settings!io.ox/calendar']).done(function (move, settings) {
                 move.item({
                     api: api,
                     button: gt('Move'),
+                    filter: function (id, model) {
+                        return model.id !== 'virtual/all-my-appointments';
+                    },
                     flat: true,
                     indent: false,
                     list: list,
@@ -429,24 +269,42 @@ define('io.ox/calendar/actions',
         }
     });
 
-    new Action('io.ox/calendar/actions/freebusy', {
-        capabilities: 'freebusy !alone',
-        requires: function () {
-            return _.device('!small');
+    new Action('io.ox/calendar/actions/today', {
+        requires: function (baton) {
+            var p = baton.baton.app.getWindow().getPerspective();
+
+            return !!p && (p.name === 'month' || p.name === 'week');
         },
         action: function (baton) {
+            var p = baton.app.getWindow().getPerspective();
+
+            if (p.view && p.view.setStartDate) {
+                p.view.setStartDate();
+                p.view.trigger('onRefresh');
+            } else if (p.gotoMonth) {
+                p.gotoMonth('today');
+            }
+        }
+    });
+
+    new Action('io.ox/calendar/actions/freebusy', {
+        capabilities: 'freebusy !alone !guest',
+        requires: function () {
+            return _.device('!smartphone');
+        },
+        action: function (baton) {
+            var perspective = baton.app.getWindow().getPerspective(),
+                start_date = perspective && perspective.getStartDate ? perspective.getStartDate() : _.now();
             ox.launch('io.ox/calendar/freebusy/main', {
                 baton: baton,
                 folder: baton.app.folder.get(),
-                participants: [{ id: ox.user_id, type: 1 }]
+                participants: [{ id: ox.user_id, type: 1 }],
+                start_date: start_date
             });
         }
     });
 
-
-    /* new actions for mobile */
-
-    // Actions
+    // Actions mobile
     new Action('io.ox/calendar/actions/dayview/showNext', {
         requires: true,
         action: function (baton) {
@@ -457,7 +315,6 @@ define('io.ox/calendar/actions',
         }
     });
 
-     // Actions
     new Action('io.ox/calendar/actions/dayview/showPrevious', {
         requires: true,
         action: function (baton) {
@@ -468,7 +325,6 @@ define('io.ox/calendar/actions',
         }
     });
 
-     // Actions
     new Action('io.ox/calendar/actions/dayview/showToday', {
         requires: true,
         action: function (baton) {
@@ -479,19 +335,14 @@ define('io.ox/calendar/actions',
         }
     });
 
-   // Actions
     new Action('io.ox/calendar/actions/month/showToday', {
         requires: true,
         action: function (baton) {
             var p = baton.app.getWindow().getPerspective();
             if (!p) return;
-            p.gotoMonth({
-                duration: 0,
-                date: 'today'
-            });
+            p.gotoMonth('today');
         }
     });
-
 
     // Mobile multi select extension points
     // delete appointment(s)
@@ -499,12 +350,12 @@ define('io.ox/calendar/actions',
         id: 'delete',
         index: 10,
         draw: function (data) {
-            var baton = new ext.Baton({data: data.data});
+            var baton = new ext.Baton({ data: data.data });
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
                         $('<i class="fa fa-trash-o">')
-                            .on('click', {grid: data.grid}, function (e) {
+                            .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 actions.invoke('io.ox/calendar/detail/actions/delete', null, baton);
@@ -521,12 +372,12 @@ define('io.ox/calendar/actions',
         id: 'move',
         index: 20,
         draw: function (data) {
-            var baton = new ext.Baton({data: data.data});
+            var baton = new ext.Baton({ data: data.data });
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
                         $('<i class="fa fa-sign-in">')
-                            .on('click', {grid: data.grid}, function (e) {
+                            .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 actions.invoke('io.ox/calendar/detail/actions/move', null, baton);
@@ -537,97 +388,6 @@ define('io.ox/calendar/actions',
                 )
             );
         }
-    });
-
-    // Links - toolbar
-    new ActionGroup(POINT + '/links/toolbar', {
-        id: 'default',
-        index: 100,
-        icon: function () {
-            return $('<i class="fa fa-plus accent-color">');
-        }
-    });
-
-    new ActionLink(POINT + '/links/toolbar/default', {
-        index: 100,
-        id: 'create',
-        label: gt('New appointment'),
-        ref: 'io.ox/calendar/detail/actions/create'
-    });
-
-    // VIEWS
-
-    new ActionGroup(POINT + '/links/toolbar', {
-        id: 'view',
-        index: 400,
-        icon: function () {
-            return $('<i class="fa fa-eye">');
-        }
-    });
-
-    new ActionLink(POINT + '/links/toolbar/view', {
-        id: 'day',
-        index: 100,
-        label: gt('Day'),
-        ref: 'io.ox/calendar/actions/switch-to-day-view'
-    });
-
-    new ActionLink(POINT + '/links/toolbar/view', {
-        id: 'week',
-        index: 200,
-        label: gt('Workweek'),
-        ref: 'io.ox/calendar/actions/switch-to-week-view'
-    });
-
-    new ActionLink(POINT + '/links/toolbar/view', {
-        id: 'fullweek',
-        index: 300,
-        label: gt('Week'),
-        ref: 'io.ox/calendar/actions/switch-to-fullweek-view'
-    });
-
-    new ActionLink(POINT + '/links/toolbar/view', {
-        id: 'month',
-        index: 400,
-        label: gt('Month'),
-        ref: 'io.ox/calendar/actions/switch-to-month-view'
-    });
-
-    new ActionLink(POINT + '/links/toolbar/view', {
-        id: 'list',
-        index: 500,
-        label: gt('List'),
-        ref: 'io.ox/calendar/actions/switch-to-list-view'
-    });
-
-    // scheduling
-
-    new ActionGroup(POINT + '/links/toolbar', {
-        id: 'freebusy',
-        index: 500,
-        icon: function () {
-            return $('<i class="fa fa-group">');
-        }
-    });
-
-    new ActionLink(POINT + '/links/toolbar/freebusy', {
-        label: gt('Scheduling'),
-        ref: 'io.ox/calendar/actions/freebusy'
-    });
-
-    // print
-
-    new ActionGroup(POINT + '/links/toolbar', {
-        id: 'print',
-        index: 600,
-        icon: function () {
-            return $('<i class="fa fa-print">');
-        }
-    });
-
-    new ActionLink(POINT + '/links/toolbar/print', {
-        label: gt('Print'),
-        ref: 'io.ox/calendar/detail/actions/print'
     });
 
     // FIXME: should only be visible if rights are ok

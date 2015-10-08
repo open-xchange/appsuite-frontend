@@ -16,18 +16,24 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
     describe('Mail Compose', function () {
 
         describe('main app', function () {
-            var app;
+            var app, pictureHalo, snippetsGetAll;
             beforeEach(function () {
-                this.server.respondWith('GET', /api\/halo\/contact\/picture/, function (xhr) {
-                    xhr.respond(200, 'image/gif', '');
+                return require(['io.ox/core/api/snippets', 'io.ox/contacts/api', 'settings!io.ox/mail'], function (snippetAPI, contactsAPI, settings) {
+                    snippetsGetAll = sinon.stub(snippetAPI, 'getAll', function () { return $.when([]); });
+                    pictureHalo = sinon.stub(contactsAPI, 'pictureHalo', _.noop);
+                    //load plaintext editor, much faster than spinning up tinymce all the time
+                    settings.set('messageFormat', 'text');
+                }).then(function () {
+                    app = compose.getApp();
+                    return app.launch();
                 });
-                app = compose.getApp();
-                return app.launch();
             });
             afterEach(function () {
                 if (app.view && app.view.model) {
                     app.view.model.dirty(false);
                 }
+                snippetsGetAll.restore();
+                pictureHalo.restore();
                 return app.quit();
             });
 
@@ -40,7 +46,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
             });
 
             it('should provide an edit window', function () {
-                this.server.respondWith('PUT', /api\/mail\?action=edit/, function (xhr) {
+                this.server.respondWith('PUT', /api\/mail\?action=get/, function (xhr) {
                     xhr.respond(200, 'content-type:text/javascript;', JSON.stringify({
                         data: {}
                     }));
@@ -114,8 +120,12 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                 });
                 it('should change editor mode from text to html', function () {
                     app.view.model.set('editorMode', 'html');
-                    expect(app.view.$el.find('.editable-toolbar').is(':visible'), 'tinymce toolbar element is visible').to.be.true;
-                    expect(app.view.$el.find('.editable.mce-content-body').is(':visible'), 'tinymce contenteditable editor element is visible').to.be.true;
+                    return waitsFor(function () {
+                        //need to wait, until it is painted, because we started in text mode
+                        return app.view.$el.find('.editable-toolbar').is(':visible');
+                    }).done(function () {
+                        expect(app.view.$el.find('.editable.mce-content-body').is(':visible'), 'tinymce contenteditable editor element is visible').to.be.true;
+                    });
                 });
                 it('should change editor mode from html to text', function () {
                     app.view.model.set('editorMode', 'text');

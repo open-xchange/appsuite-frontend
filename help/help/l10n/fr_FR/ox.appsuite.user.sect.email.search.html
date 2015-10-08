@@ -4,7 +4,7 @@
 <title>5.6. Rechercher des courriels</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Collecticiel">
 <link rel="up" href="ox.appsuite.user.chap.email.html" title="Chapitre 5. Courriel">
 <link rel="prev" href="ox.appsuite.user.sect.email.manage.mailfilter.html" title="5.5.18. Utiliser les filtres de courriel">
 <link rel="next" href="ox.appsuite.user.sect.email.share.html" title="5.7. Courriels au sein d'une équipe">
@@ -37,8 +37,21 @@
 <a name="ox.appsuite.user.concept.email.search"></a><p>Pour rechercher des courriels particuliers, vous pouvez utiliser les critères de recherche suivants :</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>des termes de recherche portant sur le sujet, le texte du message, l'expéditeur ou les destinataires</p></li>
-<li class="listitem"><p>Dossiers</p></li>
-<li class="listitem"><p>intervalle de temps pour la réception</p></li>
+<li class="listitem">
+<p>Critères de recherche avec une période dans le temps. Recherche les courrielsayant été reçus dans l'intervalle de temps saisi. Vous définissez un intervalle de temps valide avec les détails suivants.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>Les mots clés <span class="guilabel"><strong>aujourd'hui</strong></span>, <span class="guilabel"><strong>hier</strong></span>, <span class="guilabel"><strong>la semaine dernière</strong></span>, <span class="guilabel"><strong>le mois dernier</strong></span>, <span class="guilabel"><strong>l'année dernière</strong></span></p></li>
+<li class="listitem"><p>Les mots clés pour ce type d'intervalles de temps  : <span class="guilabel"><strong>les 7 derniers jours</strong></span>, <span class="guilabel"><strong>les 30 derniers jours</strong></span>, <span class="guilabel"><strong>les 365 derniers jours</strong></span></p></li>
+<li class="listitem"><p>Un jour de la semaine, par ex. <span class="guilabel"><strong>Lundi</strong></span></p></li>
+<li class="listitem"><p>Un mois spécifique, par ex. <span class="guilabel"><strong>Juillet</strong></span></p></li>
+<li class="listitem"><p>Une année à quatre chiffres, par ex. <span class="guilabel"><strong>2015</strong></span></p></li>
+<li class="listitem"><p>Une date, par ex. <span class="guilabel"><strong>31/01/2015</strong></span></p></li>
+<li class="listitem"><p>Un intervalle de date, par ex. <span class="guilabel"><strong>01/12/2014 - 31/01/2015</strong></span></p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="listitem"><p>Dossiers devant être ciblés par la recherche</p></li>
 </ul></div>
 <p>
     </p>
@@ -46,42 +59,43 @@
 <div class="task">
 <a name="ox.appsuite.user.task.email.search"></a><p class="title">Pour rechercher un courriel :</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Saisissez un terme de recherche dans le champ de saisie de la barre de recherche. Le menu de recherche s'ouvre.</p></li>
+<li class="step"><p>Cliquez sur l'icône <span class="guibutton"><strong>Lancer la recherche</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> ou dans le champ de saisie de la barre de recherche. Un bouton de dossier apparaît dans la barre de recherche. Ce bouton indique les dossiers devant être ciblés par la recherche.</p></li>
 <li class="step">
+<p>Pour définir les dossiers dans lesquels effectuer la recherche, cliquez sur le bouton du dossier. Sélectionnez un dossier.</p>
+<p>Si vous sélectionnez <span class="guibutton"><strong>Tous les dossiers</strong></span>, la recherche s'effectue dans l'ensemble des dossiers et sous-dossiers du compte de courriel interne. Si vous choisissez un dossier particulier ou le dossier associé à un compte de courriel externe, la recherche s'effectue uniquement dans ce dossier et aucun des sous-dossiers.</p>
+</li>
+<li class="step">
+<p>Saisissez un terme de recherche dans le champ de saisie de la barre de recherche. Le menu de recherche s'ouvre.</p>
 <p>Utilisez l'une des méthodes suivantes :</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p>Pour effectuer une recherche sur l'expéditeur, le destinataire, le sujet ou le texte du message, cliquez sur le terme de recherche dans le menu de recherche. Vous pouvez aussi appuyer sur la touche Entrée ou cliquer sur l'icône <span class="guibutton"><strong>Chercher</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> de la barre de recherche. </p>
+<p>Afin de chercher uniquement parmi les expéditeurs, destinataires, sujets ou texte du courriel,cliquez sur le terme recherché dans le menu de recherche. Vous pouvez également appuyer sur « Entrée ».</p>
 <p>Pour effectuer la recherche uniquement sur le sujet, cliquez sur <span class="guibutton"><strong>dans le sujet</strong></span> dans le menu de recherche.</p>
 <p>Pour effectuer la recherche uniquement sur le texte du message, cliquez sur <span class="guibutton"><strong>dans le texte du courriel</strong></span> dans le menu de recherche.</p>
 <p>Pour rechercher les expéditeurs et destinataires correspondant au terme de recherche, cliquez sur un nom apparaissant sous <span class="guilabel"><strong>Personnes</strong></span>.</p>
+<p>Afin de rechercher des courriels dans un intervalle de temps particulier, utilisez comme critère de recherche un intervalle de temps valide. Dès qu'une période valide est reconnue dans le champ, celle-ci est affichée dans le menu de recherche. Cliquez sur l'intervalle dans le menu de recherche. Vous pouvez également appuyer sur « Entrée ».</p>
 </li></ul></div>
 <p>
           </p>
-<p><span class="phrase"><strong>Résultat :</strong></span> les résultats de recherche sont présentés dans la liste apparaissant dans la zone d'affichage. Les critères de recherche utilisés sont affichés sous la fenêtre de recherche.</p>
-</li>
-<li class="step">
-<p>Vous pouvez affiner les résultats de recherche :</p>
+<p>Résultat :</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>Pour afficher tous les critères de recherche, cliquez sur <span class="guibutton"><strong>Afficher les filtres avancés</strong></span>.</p>
-<p>Pour ajuster un critère, cliquez sur l'icône <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span> à côté du critère de recherche. Dans le menu, choisissez un élément. Vous pouvez utiliser les critères de recherche suivants :</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>Vous pouvez utiliser la liste déroulante <span class="guilabel"><strong>Dossier</strong></span> pour rechercher dans un dossier particulier.</p>
-<p>Si vous sélectionnez <span class="guibutton"><strong>Tous les dossiers</strong></span>, la recherche s'effectue dans l'ensemble des dossiers et sous-dossiers du compte de courriel interne. Si vous choisissez un dossier particulier ou le dossier associé à un compte de courriel externe, la recherche s'effectue uniquement dans ce dossier et aucun des sous-dossiers.</p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>La liste déroulante <span class="guilabel"><strong>Date</strong></span> permet de restreindre la recherche à un intervalle de temps donné.</p></li>
-</ul></div>
-<p>
-                </p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>Pour affiner davantage votre recherche sur la liste des éléments trouvés, lancez une nouvelle recherche.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Pour supprimer un critère de recherche, cliquez sur l'icône <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>. Si vous supprimez tous les critères de recherche, cela met fin à la recherche.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Les résultats de la recherche sont affichés dans la liste disponible dans la zone d'affichage. </p></li>
+<li class="listitem" style="list-style-type: none"><p>Pour chaque résultat de recherche, le dossier contenant l'objet trouvé est affiché. Pour conclure la recherche et afficher le contenu du dossier, cliquez sur ce dossier.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Le terme recherché est affiché dans le champ de saisie.</p></li>
 </ul></div>
 <p>
           </p>
 </li>
-<li class="step"><p>Pour conclure la recherche, cliquez sur <span class="guibutton"><strong>Fermer la recherche</strong></span>.</p></li>
+<li class="step">
+<p>Vous avez les options suivantes pour affiner les résultats de la recherche :</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Si vous utiliser le nom d'une personne comme critère de recherche, vous pouvez définir si la recherche doit porter sur le nom d'expéditeur, le nom de destinataire, ou les deux. Pour cela, cliquez sur l'icône <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span> à côté du nom. Choisissez un élément dans le menu.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Pour affiner les résultats de la recherche, saisissez des termes complémentaires : pour supprimer un terme recherché, cliquez sur l'icône <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span> à côté du terme recherché. </p></li>
+<li class="listitem" style="list-style-type: none"><p>Pour rechercher dans un autre dossier, cliquez sur le bouton du dossier. Sélectionnez un dossier.</p></li>
+</ul></div>
+<p>
+          </p>
+</li>
+<li class="step"><p>Pour terminer la recherche, cliquez sur l'icône <span class="guibutton"><strong>Annuler la recherche</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span> dans le champ de saisie.</p></li>
 </ol></div>
 </div>
 </div>

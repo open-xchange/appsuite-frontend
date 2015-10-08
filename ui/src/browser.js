@@ -19,6 +19,7 @@
         isOpera,
         webkit,
         chrome,
+        edge,
         phantom,
         MacOS,
         Windows,
@@ -35,23 +36,18 @@
 
     // supported browsers
     us.browserSupport = {
-        'Chrome'  :   37,
-        'Safari'  :    7,
-        'Firefox' :   32,
-        'IE'      :   10,
-        'Android' :  4.1,
-        'iOS'     :  6.0
+        'Chrome':    39,
+        'Safari':     7,
+        'Firefox':   33,
+        'IE':        10,
+        'Android':  4.2,
+        'iOS':      6.0
     };
 
     // helpers
     function allFalsy(d) {
-        var allfalse = true;
-        for (var i in d) {
-            if (!!d[i]) {
-                allfalse = false;
-            }
-        }
-        return allfalse;
+        for (var i in d) if (d[i]) return false;
+        return true;
     }
 
     function extend() {
@@ -93,12 +89,11 @@
                         cssrule = '@media ' + q + ' { #ejs-qtest { position: absolute; } }';
                     //must set type for IE!
                     styleBlock.type = 'text/css';
-                        if (styleBlock.styleSheet) {
-                            styleBlock.styleSheet.cssText = cssrule;
-                        }
-                        else {
-                            styleBlock.appendChild(doc.createTextNode(cssrule));
-                        }
+                    if (styleBlock.styleSheet) {
+                        styleBlock.styleSheet.cssText = cssrule;
+                    } else {
+                        styleBlock.appendChild(doc.createTextNode(cssrule));
+                    }
                     docElem.insertBefore(fakeBody, docElem.firstChild);
                     docElem.insertBefore(styleBlock, docElem.firstChild);
                     cache[q] = ((window.getComputedStyle ? window.getComputedStyle(testDiv,null) : testDiv.currentStyle).position == 'absolute');
@@ -116,9 +111,13 @@
         try {
             // browser detection - adopted from prototype.js
             ua = nav.userAgent;
+
             isOpera = Object.prototype.toString.call(window.opera) === '[object Opera]';
             webkit = ua.indexOf('AppleWebKit/') > -1;
             chrome = ua.indexOf('Chrome/') > -1;
+            // TODO: This needs to be updated, if better user agent is available
+            // http://dev.modern.ie/platform/faq/what-is-the-microsoft-edge-user-agent-st
+            edge = ua.indexOf('Edge/') > -1;
             phantom = ua.indexOf('PhantomJS/') > -1;
             MacOS = ua.indexOf('Macintosh') > -1;
             Windows = ua.indexOf('Windows') > -1;
@@ -131,20 +130,33 @@
             uiwebview = ua.indexOf('AppleWebKit/') > -1 && ua.indexOf('Mobile/11B508') > -1;
             chromeIOS = ua.indexOf('CriOS/') > -1;
 
+            // TODO: This needs to be updated, if better user agent is available
+            // Edge is no Chrome and no Webkit.
+            if (edge) {
+                chrome = false;
+                webkit = false;
+            }
+
             // add namespaces, just sugar
             us.browser = {
                 /** is IE? */
-                IE: nav.appName === 'Microsoft Internet Explorer' ?
-                    Number(nav.appVersion.match(/MSIE (\d+\.\d+)/)[1]) : (
-                        !!nav.userAgent.match(/Trident/) ? Number(nav.userAgent.match(/rv(:| )(\d+.\d+)/)[2]) : undefined
-                    ),
+                IE: edge ?
+                    // TODO: Handle Edge as IE 12. Is this really wanted?
+                    Number(ua.match(/Edge\/(\d+.\d)\d+$/)[1]) : (
+                        nav.appName === 'Microsoft Internet Explorer' ?
+                            Number(nav.appVersion.match(/MSIE (\d+\.\d+)/)[1]) : (
+                                !!nav.userAgent.match(/Trident/) ? Number(nav.userAgent.match(/rv(:| )(\d+.\d+)/)[2]) : undefined)),
+                /** is Edge browser? */
+                Edge: edge ?
+                    // TODO: If Edge is handled as IE 12, a specific 'Edge' property is not required.
+                    Number(ua.match(/Edge\/(\d+.\d+)$/)[1]) : undefined,
                 /** is Opera? */
                 Opera: isOpera ?
                     ua.split('Opera/')[1].split(' ')[0].split('.')[0] : undefined,
                 /** is WebKit? */
                 WebKit: webkit,
                 /** Safari */
-                Safari: !Android && webkit && !chrome && !phantom && !uiwebview ?
+                Safari: webkit && !Android && !chrome && !phantom && !uiwebview && !Blackberry ?
                     (standalone ? iOS : ua.split('Version/')[1].split(' Safari')[0]) : undefined,
                 /** PhantomJS (needed for headless spec runner) */
                 PhantomJS: webkit && phantom ?
@@ -163,7 +175,7 @@
                 WindowsPhone: (WindowsPhone && (ua.indexOf('IEMobile/10.0') > -1)) ? true : undefined, // no version here yet
                 iOS: iOS,
                 MacOS: MacOS,
-                Android : Android,
+                Android: Android,
                 Windows: Windows,
                 Windows8: Windows8
             };
@@ -227,14 +239,14 @@
         large: '(min-width: 1025px)',
         landscape: '(orientation: landscape)',
         portrait: '(orientation: portrait)',
-        retina: 'only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 240dppx)'
+        retina: 'only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 2dppx)'
     };
 
     var display = {};
 
     function queryScreen() {
         for (var q in queries) {
-             display[q] = matchMedia(queries[q]).matches;
+            display[q] = matchMedia(queries[q]).matches;
         }
         if (display.large) {
             display.small = display.medium = false;
@@ -246,7 +258,14 @@
     queryScreen();
 
     function isSmartphone() {
-        return Math.min(screen.width, screen.height) < 480 && mobileOS;
+        var android = window.navigator.userAgent.match(/Android.*AppleWebKit\/([\d.]+)/),
+            stockBrowser = android && android[1] < 537,
+            ratio = stockBrowser ? (window.devicePixelRatio || 1) : 1,
+            size = Math.min(screen.width / ratio, screen.height / ratio) < 540,
+            touch = (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch),
+            razrHD = navigator.userAgent.indexOf('RAZR 4G') >= 0;
+
+        return (size && touch && mobileOS) || razrHD;
     }
 
     var mobileOS = !!(us.browser.ios || us.browser.android || us.browser.blackberry || us.browser.windowsphone);

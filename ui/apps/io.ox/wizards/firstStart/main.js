@@ -19,9 +19,6 @@ define('io.ox/wizards/firstStart/main', [
 
     'use strict';
 
-    var point = ext.point('io.ox/wizards/firstStart'),
-        topbar = $('#io-ox-topbar');
-
     new Stage('io.ox/core/stages', {
         id: 'firstStartWizard',
         index: 550,
@@ -30,40 +27,17 @@ define('io.ox/wizards/firstStart/main', [
                 settings.get('wizards/firstStart/finished', false)) {
                 return $.when();
             }
-            var def = $.Deferred();
+            var def = $.Deferred(),
+                topbar = $('#io-ox-topbar');
+
             topbar.hide();
             ox.idle();
             ox.manifests.loadPluginsFor('io.ox/wizards/firstStart')
                 .then(function () {
-                    if (point.all().length === 0) {
-                        def.resolve();
-                        return $.Deferred().reject();
-                    }
-                    return require(['io.ox/core/wizard/registry', 'less!io.ox/wizards/firstStart/style']);
+                    return require(['io.ox/core/tk/wizard']);
                 })
-                .then(function (registry) {
-                    return $.when(
-                        registry.getWizard({
-                            id: 'io.ox/wizards/firstStart'
-                        }),
-                        require(['gettext!io.ox/core/wizard'])
-                    );
-                })
-                .then(function (wizard, gt) {
-                    wizard.navButtons.append(
-                        $('<button class="btn wizard-close pull-left" tabindex="1">')
-                            .text(gt('Back to sign in'))
-                            .on('click', function () {
-                                def.reject();
-                                wizard.close();
-                            })
-                     );
-                    wizard.start({cssClass: 'first-start-wizard'}).done(function () {
-                        if (def.state() === 'pending') {
-                            def.resolve();
-                        }
-                    });
-                    return def;
+                .then(function (Tour) {
+                    return Tour.registry.get('firstStartWizard').get('run')();
                 })
                 .done(function () {
                     settings.set('wizards/firstStart/finished', true).save();

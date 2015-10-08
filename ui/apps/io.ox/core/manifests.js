@@ -11,10 +11,10 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define.async('io.ox/core/manifests',
-    ['io.ox/core/extensions',
-     'io.ox/core/capabilities'
-    ], function (ext, capabilities) {
+define.async('io.ox/core/manifests', [
+    'io.ox/core/extensions',
+    'io.ox/core/capabilities'
+], function (ext, capabilities) {
 
     'use strict';
 
@@ -39,21 +39,21 @@ define.async('io.ox/core/manifests',
             return require(requirements, cb);
         },
 
-        withPluginsFor: function (pointName, requirements) {
-            requirements = requirements || [];
-            validate();
-            if (!this.pluginPoints[pointName] || this.pluginPoints[pointName].length === 0) {
-                return requirements;
-            }
-            return requirements.concat(_(this.pluginPoints[pointName]).chain().pluck('path').uniq().value());
+        withPluginsFor: function (name, deps) {
+            return (deps || []).concat(this.pluginsFor(name));
         },
 
-        pluginsFor: function (pointName) {
+        hasPluginsFor: function (name) {
             validate();
-            if (!this.pluginPoints[pointName] || this.pluginPoints[pointName].length === 0) {
-                return [];
-            }
-            return [].concat(_(this.pluginPoints[pointName]).pluck('path'));
+            var plugins = this.pluginPoints[name];
+            return plugins && plugins.length > 0;
+        },
+
+        pluginsFor: function (name) {
+            validate();
+            var plugins = this.pluginPoints[name];
+            if (!plugins || plugins.length === 0) return [];
+            return [].concat(_(plugins).chain().pluck('path').uniq().value());
         },
 
         wrapperFor: function (pointName, dependencies, definitionFunction) {
@@ -161,6 +161,7 @@ define.async('io.ox/core/manifests',
     };
 
     function validate() {
+
         if (manifestManager.apps) return;
 
         manifestManager.pluginPoints = {};
@@ -173,12 +174,14 @@ define.async('io.ox/core/manifests',
         if (_.url.hash('customManifests')) {
             _(custom).each(process);
         }
+
+        if (!_.isEmpty(manifestManager.pluginPoints)) ox.trigger('manifests');
     }
 
     var def = $.Deferred();
 
     if (_.url.hash('customManifests')) {
-        require([ox.base + '/src/manifests.js?t=' + ts], function (list) {
+        require([ox.base + '/manifests/open-xchange-appsuite.json?t=' + ts], function (list) {
             custom = list;
             console.info('Loading custom manifests', _(list).pluck('path'), list);
             def.resolve(self);

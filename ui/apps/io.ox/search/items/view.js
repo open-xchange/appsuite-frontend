@@ -11,8 +11,7 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/items/view',
-        ['io.ox/core/extensions'], function (ext) {
+define('io.ox/search/items/view', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
 

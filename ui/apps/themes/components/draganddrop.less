@@ -1,0 +1,84 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+@drag-size: 40px;
+
+.drag-helper {
+    position: absolute;
+    z-index: 65000;
+    width: 300px;
+    height: @drag-size;
+    line-height: @drag-size;
+    color: #333;
+    background-color: rgba(240, 240, 240, 0.80);
+    padding: 0 14px 0 @drag-size + 14px;
+    .ellipsis();
+}
+
+.drag-counter {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: @drag-size;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.50);
+}
+
+.inplace-dropzone {
+
+    margin: 7px;
+    border: 2px dashed #ccc;
+    background-color: #fff;
+
+    position: relative;
+    &.abs { position: absolute; z-index: 2; }
+
+    .dropzone-caption, .dropzone-dragover {
+        color: #333;
+        font-weight: bold;
+        text-align: center;
+        padding: 0 24px;
+        top: 50%;
+        width: 100%;
+        margin-top: -10px;
+        z-index: 1;
+        html.high-contrast & {
+            color: @black;
+        }
+    }
+
+    .dropzone-dragover {
+        color: #777;
+        font-size: 60px;
+        line-height: 80px;
+        margin-top: -60px;
+        display: none;
+    }
+
+    .dropzone-overlay {
+        background-color: white;
+        opacity: 0.01;
+        z-index: 2;
+    }
+
+    &.dragover {
+        border-color: #777;
+        .dropzone-caption { color: #aaa; margin-top: 20px; }
+        .dropzone-dragover { display: block; }
+    }
+}

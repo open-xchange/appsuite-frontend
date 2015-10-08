@@ -1,12 +1,12 @@
 <html lang="es">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>11.3.3. Gestión de carpetas suscritas y publicadas</title>
+<title>11.4.2. Gestión de carpetas suscritas</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
-<link rel="up" href="ox.appsuite.user.sect.dataorganisation.pubsub.html" title="11.3. Publicar&amp;Suscribirse">
-<link rel="prev" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html" title="11.3.2. Publicación de datos">
+<link rel="home" href="index.html" title="Software colaborativo">
+<link rel="up" href="ox.appsuite.user.sect.dataorganisation.pubsub.html" title="11.4. Suscripciones">
+<link rel="prev" href="ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html" title="11.4.1. Suscripción a datos">
 <link rel="next" href="ox.appsuite.user.chap.datainterchange.html" title="Capítulo 12. Intercambio de datos">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Aviso Legal">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
@@ -22,7 +22,7 @@
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html">Anterior</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html">Anterior</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Inicio</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">TdC</a></li>
 <li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.chap.datainterchange.html">Siguiente</a></li>
@@ -30,79 +30,73 @@
 </div></nav></div>
 <div class="oxhelp-content">
   <h1 class="sr-only">Organización de los datos</h1>
-<h2 class="sr-only">Publicar&amp;Suscribirse</h2>
+<h2 class="sr-only">Suscripciones</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.dataorganisation.pubsub.manage"></a>11.3.3. Gestión de carpetas suscritas y publicadas</h3></div></div></div>
-<a class="indexterm" name="id-1.12.6.7.2"></a><a class="indexterm" name="id-1.12.6.7.3"></a><div class="concept">
-<a name="ox.appsuite.user.concept.pubsub.manage"></a><p>Para obtener una visión general de los datos suscritos y publicados, y para administrarlos, puede:</p>
+<a name="ox.appsuite.user.sect.dataorganisation.pubsub.manage"></a>11.4.2. Gestión de carpetas suscritas</h3></div></div></div>
+<a class="indexterm" name="id-1.12.7.5.2"></a><a class="indexterm" name="id-1.12.7.5.3"></a><div class="concept">
+<a name="ox.appsuite.user.concept.pubsub.manage"></a><p>Para obtener una visión general de los datos suscritos y administrarlos, puede:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.show" title="Cómo mostrar todas las suscripciones o publicaciones:">mostrar</a> todas las suscripciones o publicaciones</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.activate" title="Cómo deshabilitar o habilitar las publicaciones o suscripciones:">activar o desactivar</a> suscripciones o publicaciones</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.edit" title="Cómo editar los ajustes de suscripciones o publicaciones:">editar</a> los ajustes de una publicación or suscripción</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.remove" title="Cómo eliminar publicaciones o suscripciones:">eliminar</a> suscripciones o publicaciones</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.show" title="Cómo mostrar todas las suscripciones:">mostrar</a> todas las suscripciones</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.activate" title="Cómo desactivar o activar una suscripción:">activar o desactivar</a> una suscripción</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.edit" title="Cómo editar los ajustes de una suscripción:">editar</a> los ajustes de una suscripción</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.remove" title="Cómo eliminar una suscripción:">eliminar</a> una suscripción</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html#ox.appsuite.user.task.pubsub.manage.account.edit" title="Cómo configurar una cuenta para acceder a redes sociales:">editar or suprimir</a> una cuenta de redes sociales</p></li>
 </ul></div>
 <p>
       </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.pubsub.manage.show"></a><p class="title">Cómo mostrar todas las suscripciones o publicaciones:</p>
+<a name="ox.appsuite.user.task.pubsub.manage.show"></a><p class="title">Cómo mostrar todas las suscripciones:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Presione el icono <span class="guibutton"><strong>Menú del sistema</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.show"></a><img src="../../images/appsuite_user_icon_settings.png"></span> a la derecha de la barra de menús. Presione en <span class="guibutton"><strong>Configuración</strong></span> en el menú. </p></li>
-<li class="step"><p>Presione en <span class="guibutton"><strong>Publicaciones y Suscripciones</strong></span> en la barra lateral.</p></li>
+<li class="step"><p>Presione el icono <span class="guibutton"><strong>Menú del sistema</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.show"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> a la derecha de la barra de menús. Presione en el elemento del menú <span class="guibutton"><strong>Configuración</strong></span>. </p></li>
+<li class="step"><p>En la barra lateral, presione en <span class="guibutton"><strong>Suscripciones</strong></span>.</p></li>
 <li class="step">
 <p>Use las siguientes funciones para ver más detalles:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Para mostrar la carpeta de la publicación o suscripción, presione en la ruta de navegación debajo del nombre de la publicación o de la suscripción.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Para mostrar una página web con la publicación, presione en el enlace que hay debajo del nombre de la publicación.</p></li>
-</ul></div>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p>Para mostrar la carpeta de la suscripción, presione en la ruta de navegación debajo del nombre de la suscripción.</p></li></ul></div>
 <p>
             </p>
 </li>
 </ol></div>
 <div class="taskrelated">
-          <p><span class="phrase"><strong>Consejo:</strong></span> Sólo puede ver información de una carpeta concreta. Para ello, presione en el icono <span class="guibutton"><strong>Publicaciones y Suscripciones</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.show.folder"></a><img src="../../images/appsuite_user_icon_folder_cloud.png"></span> que hay junto a cada carpeta con alguna publicación o suscripción en el árbol de carpetas.</p>
+          <p><span class="phrase"><strong>Consejo:</strong></span> Sólo puede ver información de una carpeta concreta. Para ello, presione en el icono <span class="guibutton"><strong> Suscripciones</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.show.folder"></a><img src="../../images/appsuite_user_icon_folder_cloud.png"></span> que hay junto a una carpeta con suscripciones.</p>
         </div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.pubsub.manage.activate"></a><p class="title">Cómo deshabilitar o habilitar las publicaciones o suscripciones:</p>
+<a name="ox.appsuite.user.task.pubsub.manage.activate"></a><p class="title">Cómo desactivar o activar una suscripción:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Presione en el icono <span class="guibutton"><strong>Menú del sistema</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.activate"></a><img src="../../images/appsuite_user_icon_settings.png"></span> a la derecha de la barra de menús. Presione en <span class="guibutton"><strong>Configuración</strong></span> en el menú. </p></li>
-<li class="step"><p>Presione en <span class="guibutton"><strong>Publicaciones y Suscripciones</strong></span> en la barra lateral.</p></li>
-<li class="step"><p>Presione en <span class="guimenu"><strong>Desactivar</strong></span> o <span class="guimenu"><strong>Activar</strong></span> en el área de visualización junto a una publicación o suscripción.</p></li>
+<li class="step"><p>Presione en el icono <span class="guibutton"><strong>Menú del sistema</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.activate"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> a la derecha de la barra de menús. Presione en el elemento del menú <span class="guibutton"><strong>Configuración</strong></span>. </p></li>
+<li class="step"><p>En la barra lateral, presione en <span class="guibutton"><strong>Suscripciones</strong></span>.</p></li>
+<li class="step"><p>Presione en <span class="guimenu"><strong>Desactivar</strong></span> o <span class="guimenu"><strong>Activar</strong></span> en el área de visualización junto a una suscripción.</p></li>
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.pubsub.manage.edit"></a><p class="title">Cómo editar los ajustes de suscripciones o publicaciones:</p>
+<a name="ox.appsuite.user.task.pubsub.manage.edit"></a><p class="title">Cómo editar los ajustes de una suscripción:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Presione el icono <span class="guibutton"><strong>Menú del sistema</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.edit"></a><img src="../../images/appsuite_user_icon_settings.png"></span> a la derecha de la barra de menús. Presione en <span class="guibutton"><strong>Configuración</strong></span> en el menú. </p></li>
-<li class="step"><p>Presione en <span class="guibutton"><strong>Publicaciones y Suscripciones</strong></span> en la barra lateral.</p></li>
-<li class="step"><p>Presione en <span class="guimenu"><strong>Editar</strong></span> junto a una publicación o suscripción en el área de visualización.</p></li>
-<li class="step"><p>Cambie los ajustes. Para completar el proceso, presione en <span class="guibutton"><strong>Publicar</strong></span> o en <span class="guibutton"><strong>Suscribirse</strong></span>.</p></li>
+<li class="step"><p>Presione el icono <span class="guibutton"><strong>Menú del sistema</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.edit"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> a la derecha de la barra de menús. Presione en el elemento del menú <span class="guibutton"><strong>Configuración</strong></span>. </p></li>
+<li class="step"><p>En la barra lateral, presione en <span class="guibutton"><strong>Suscripciones</strong></span>.</p></li>
+<li class="step"><p>Presione en <span class="guimenu"><strong>Editar</strong></span> junto a una suscripción en el área de visualización.</p></li>
+<li class="step"><p>Cambie los ajustes. Para terminar el proceso, presione en <span class="guibutton"><strong>Suscribirse</strong></span>.</p></li>
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.pubsub.manage.remove"></a><p class="title">Cómo eliminar publicaciones o suscripciones:</p>
+<a name="ox.appsuite.user.task.pubsub.manage.remove"></a><p class="title">Cómo eliminar una suscripción:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Presione el icono <span class="guibutton"><strong>Menú del sistema</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.remove.systemmenue"></a><img src="../../images/appsuite_user_icon_settings.png"></span> a la derecha de la barra de menús. Presione en <span class="guibutton"><strong>Configuración</strong></span> en el menú. </p></li>
-<li class="step"><p>Presione en <span class="guibutton"><strong>Publicaciones y Suscripciones</strong></span> en la barra lateral.</p></li>
-<li class="step"><p>Presione el icono <span class="guibutton"><strong>Borrar</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.remove.delete"></a><img src="../../images/appsuite_user_icon_trash.png"></span> situado junto a una publicación o suscripción en el área de visualización.</p></li>
+<li class="step"><p>Presione el icono <span class="guibutton"><strong>Menú del sistema</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.remove.systemmenue"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> a la derecha de la barra de menús. Presione en el elemento del menú <span class="guibutton"><strong>Configuración</strong></span>. </p></li>
+<li class="step"><p>En la barra lateral, presione en <span class="guibutton"><strong>Suscripciones</strong></span>.</p></li>
+<li class="step"><p>Presione el icono <span class="guibutton"><strong>Borrar</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.pubsub.manage.remove.delete"></a><img src="../../images/appsuite_user_icon_trash.png"></span> situado junto a una suscripción en el área de visualización.</p></li>
 </ol></div>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.pubsub.manage.account.edit"></a><p class="title">Cómo configurar una cuenta para acceder a redes sociales:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Presione el icono <span class="guibutton"><strong>Menú del sistema</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.pubsub.subscribe.edit"></a><img src="../../images/appsuite_user_icon_settings.png"></span> situado a la derecha de la barra de menú. Presione en <span class="guibutton"><strong>Configuración</strong></span> en el menú. </p></li>
+<li class="step"><p>Presione el icono <span class="guibutton"><strong>Menú del sistema</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.pubsub.subscribe.edit"></a><img src="../../images/appsuite_user_icon_menuebars.png"></span> situado a la derecha de la barra de menú. Presione en el elemento del menú <span class="guibutton"><strong>Configuración</strong></span>. </p></li>
 <li class="step"><p>Presione en <span class="guibutton"><strong>Correo electrónico y cuentas de redes sociales</strong></span> en la barra lateral.</p></li>
 <li class="step">
 <p>Presione en <span class="guibutton"><strong>Editar</strong></span> junto a una cuenta en el área de visualización. Cambie los ajustes en la ventana <span class="guilabel"><strong>Ajustes de cuenta</strong></span>.</p>
 <p>Para borrar una cuenta, presione el icono <span class="guibutton"><strong>Borrar</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.pubsub.manage.account.delete"></a><img src="../../images/appsuite_user_icon_trash.png"></span> situado junto a la cuenta.</p>
 </li>
 </ol></div>
-<div class="taskrelated">
-          <p>Puede encontrar instrucciones para configurar una cuenta <a class="link" href="ox.appsuite.user.sect.firststeps.socialaccounts.html#ox.appsuite.user.task.socialaccounts.add" title="Cómo configurar una cuenta para acceder a redes sociales:">aquí</a>.</p>
-        </div>
 </div>
 </div>
           </div>

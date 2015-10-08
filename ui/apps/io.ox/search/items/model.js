@@ -11,19 +11,18 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/items/model',
-    ['io.ox/backbone/basicModel'], function (BasicModel) {
+define('io.ox/search/items/model', ['io.ox/backbone/basicModel'], function (BasicModel) {
 
     'use strict';
 
     return BasicModel.extend({
-            model: {
-                defaults: {
-                    id: '',
-                    folder: '',
-                    application: '',
-                    data: {}
-                }
+        model: {
+            defaults: {
+                id: '',
+                folder: '',
+                application: '',
+                data: {}
             }
-        });
+        }
+    });
 });
