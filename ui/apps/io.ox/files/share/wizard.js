@@ -189,7 +189,7 @@ define('io.ox/files/share/wizard', [
 
             this.append(
                 $('<div>').addClass('form-group expiresgroup').append(
-                    $('<label>').addClass('checkbox-inline').text(gt('Expires on')).prepend(
+                    $('<label>').addClass('checkbox-inline').text(gt('Expires in')).prepend(
                         new miniViews.CheckboxView({ name: 'temporary', model: baton.model }).render().$el
                     ),
                     $.txt(' '),
@@ -199,6 +199,7 @@ define('io.ox/files/share/wizard', [
 
             baton.model.on('change:expiry_date', function (model, val) {
                 dropdown.$el.find('.dropdown-label').text(new moment(val).format('L'));
+                dropdown.$el.closest('.expiresgroup').find('label')[0].childNodes[1].data = gt('Expires on');
                 model.set('temporary', true);
             });
 
