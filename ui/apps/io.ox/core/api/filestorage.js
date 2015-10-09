@@ -29,7 +29,19 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
         accountsCache = new Backbone.Collection(),
         // stores the qualified account ids so it's easy to see if a folder belongs to a folderstorage account
         idsCache = [],
-
+        //utility function to add to idsCache
+        addToIdsCache = function (accounts) {
+            _(accounts).each(function (account) {
+                // unfortunately we need this hardcoded for now or the standard infostore folders could be recognized as external storages because it has a qualified id too
+                // this would cause some actions to be disabled
+                if (account.filestorageService === 'dropbox' || account.filestorageService === 'googledrive' ||
+                    account.filestorageService === 'onedrive' || account.filestorageService === 'boxcom') {
+                    idsCache.push(account.qualifiedId);
+                }
+            });
+            // we don't want duplicates
+            idsCache = _.uniq(idsCache);
+        },
         api = {
             // if the api is ready to use or rampup function must be called
             rampupDone: false,
@@ -147,14 +159,7 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                 })
                 .then( function (accounts) {
                     accountsCache.reset(accounts);
-                    _(accounts).each(function (account) {
-                        // unfortunately we need this hardcoded for now or the standard infostore folders could be recognized as external storages because it has a qualified id too
-                        // this would cause some actions to be disabled
-                        if (account.filestorageService === 'dropbox' || account.filestorageService === 'googledrive' ||
-                            account.filestorageService === 'onedrive' || account.filestorageService === 'boxcom') {
-                            idsCache.push(account.qualifiedId);
-                        }
-                    });
+                    addToIdsCache(accounts);
                     return accountsCache;
                 });
             },
@@ -198,6 +203,7 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                     return api.getAccount({ id: accountId, filestorageService: options.filestorageService }).then(function (account) {
 
                         accountsCache.add(account);
+                        addToIdsCache([account]);
                         $(api).trigger('create', accountsCache.get(account));
 
                         return accountsCache.get(account);
@@ -244,6 +250,7 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                 .then(
                     function success(response) {
                         accountsCache.remove(options);
+                        idsCache = _(idsCache).without(options.qualifiedId);
                         $(api).trigger('delete', model || options);
 
                         return response;
