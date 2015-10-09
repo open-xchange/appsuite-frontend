@@ -1073,7 +1073,7 @@ msgid "Apply to all subfolders"
 msgstr "套用至所有子資料夾"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:225 module:io.ox/calendar
-#: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:365
+#: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:366
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js:281
 #: apps/io.ox/calendar/week/perspective.js:161
 #: apps/io.ox/mail/detail/links.js:73 module:io.ox/mail
@@ -1419,8 +1419,8 @@ msgstr "行事曆:"
 #: apps/io.ox/calendar/actions/create.js:51
 #: apps/io.ox/calendar/actions/delete.js:79
 #: apps/io.ox/calendar/actions/delete.js:91
-#: apps/io.ox/calendar/actions/edit.js:42 apps/io.ox/calendar/edit/main.js:154
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:405
+#: apps/io.ox/calendar/actions/edit.js:42 apps/io.ox/calendar/edit/main.js:155
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:406
 #: apps/io.ox/calendar/edit/timezone-dialog.js:141
 #: apps/io.ox/calendar/main.js:256 apps/io.ox/calendar/main.js:322
 #: apps/io.ox/calendar/month/perspective.js:114
@@ -1846,7 +1846,7 @@ msgstr "衝突"
 msgid "Conflicts detected"
 msgstr "檢測到衝突"
 
-#: apps/io.ox/calendar/edit/main.js:149 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:150 module:io.ox/calendar/edit/main
 msgid "Conflicts with resources cannot be ignored"
 msgstr "無法忽略的資源衝突"
 
@@ -2047,7 +2047,7 @@ msgid "Create"
 msgstr "建立"
 
 #: apps/io.ox/calendar/edit/extensions.js:55 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:170 apps/io.ox/calendar/edit/main.js:316
+#: apps/io.ox/calendar/edit/main.js:171 apps/io.ox/calendar/edit/main.js:317
 msgid "Create appointment"
 msgstr "建立約會"
 
@@ -2378,7 +2378,7 @@ msgstr "降冪"
 msgid "Description"
 msgstr "描述"
 
-#: apps/io.ox/calendar/edit/main.js:62 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:63 module:io.ox/calendar/edit/main
 msgid "Description has been copied"
 msgstr "已複製描述"
 
@@ -2434,7 +2434,7 @@ msgstr "放棄"
 
 #. "Discard changes" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/calendar/edit/main.js:404 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:405 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:202 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:257 apps/io.ox/editor/main.js:349
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:181 module:io.ox/tasks
@@ -2569,7 +2569,7 @@ msgstr[1] "您確定要刪除此任務嗎？"
 msgid "Do you really want to delete this widget?"
 msgstr "確定要刪除此小工具嗎？"
 
-#: apps/io.ox/calendar/edit/main.js:401 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:402 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:199 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:254 apps/io.ox/editor/main.js:346
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:178 module:io.ox/tasks
@@ -2845,7 +2845,7 @@ msgid "Edit all objects"
 msgstr "編輯所有物件"
 
 #: apps/io.ox/calendar/edit/extensions.js:55 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:170 apps/io.ox/calendar/edit/main.js:314
+#: apps/io.ox/calendar/edit/main.js:171 apps/io.ox/calendar/edit/main.js:315
 #: apps/io.ox/calendar/toolbar.js:65 module:io.ox/calendar
 msgid "Edit appointment"
 msgstr "編輯約會"
@@ -3043,7 +3043,7 @@ msgstr "結束簡報"
 msgid "Ends on"
 msgstr "結束於"
 
-#: apps/io.ox/files/share/wizard.js:253 module:io.ox/files
+#: apps/io.ox/files/share/wizard.js:254 module:io.ox/files
 msgid "Enter Password"
 msgstr "請輸入密碼"
 
@@ -3205,6 +3205,12 @@ msgid "Expand timeframe by one month"
 msgstr "展開時間範圍一個月"
 
 #: apps/io.ox/files/share/wizard.js:192 module:io.ox/files
+#, fuzzy
+#| msgid "Expires on"
+msgid "Expires in"
+msgstr "過期於"
+
+#: apps/io.ox/files/share/wizard.js:202 module:io.ox/files
 msgid "Expires on"
 msgstr "過期於"
 
@@ -3889,7 +3895,7 @@ msgid "Ignore Warnings"
 msgstr "忽略警告"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:191 module:io.ox/calendar
-#: apps/io.ox/calendar/edit/main.js:152 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:153 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/month/perspective.js:113
 #: apps/io.ox/calendar/week/perspective.js:118
 #: apps/plugins/notifications/calendar/register.js:83
@@ -5406,7 +5412,7 @@ msgstr "參與者"
 
 #: apps/io.ox/core/boot/i18n.js:24 module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js:83 module:io.ox/core
-#: apps/io.ox/files/share/wizard.js:256 module:io.ox/files
+#: apps/io.ox/files/share/wizard.js:257 module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js:455 module:io.ox/settings
 #: apps/io.ox/mail/accounts/view-form.js:534
 msgid "Password"
@@ -5424,7 +5430,7 @@ msgstr "密碼長度必須在 %1$d 到 %2$d 字元之間。"
 msgid "Password recovery"
 msgstr "密碼救援"
 
-#: apps/io.ox/files/share/wizard.js:247 module:io.ox/files
+#: apps/io.ox/files/share/wizard.js:248 module:io.ox/files
 msgid "Password required"
 msgstr "需要輸入密碼"
 
@@ -6141,7 +6147,7 @@ msgstr "最近修改的檔案"
 msgid "Recently used"
 msgstr "最近使用"
 
-#: apps/io.ox/files/share/wizard.js:227 module:io.ox/files
+#: apps/io.ox/files/share/wizard.js:228 module:io.ox/files
 msgid "Recipients can edit"
 msgstr "收件人可編輯"
 

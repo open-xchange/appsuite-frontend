@@ -1105,7 +1105,7 @@ msgid "Apply to all subfolders"
 msgstr "Použiť na všetky podpriečinky"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:225 module:io.ox/calendar
-#: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:365
+#: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:366
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js:281
 #: apps/io.ox/calendar/week/perspective.js:161
 #: apps/io.ox/mail/detail/links.js:73 module:io.ox/mail
@@ -1461,8 +1461,8 @@ msgstr "Kalendár:"
 #: apps/io.ox/calendar/actions/create.js:51
 #: apps/io.ox/calendar/actions/delete.js:79
 #: apps/io.ox/calendar/actions/delete.js:91
-#: apps/io.ox/calendar/actions/edit.js:42 apps/io.ox/calendar/edit/main.js:154
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:405
+#: apps/io.ox/calendar/actions/edit.js:42 apps/io.ox/calendar/edit/main.js:155
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:406
 #: apps/io.ox/calendar/edit/timezone-dialog.js:141
 #: apps/io.ox/calendar/main.js:256 apps/io.ox/calendar/main.js:322
 #: apps/io.ox/calendar/month/perspective.js:114
@@ -1891,7 +1891,7 @@ msgstr "Konflikty"
 msgid "Conflicts detected"
 msgstr "Zistené konflikty"
 
-#: apps/io.ox/calendar/edit/main.js:149 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:150 module:io.ox/calendar/edit/main
 msgid "Conflicts with resources cannot be ignored"
 msgstr "Konflikty zdrojov nie je možné ignorovať"
 
@@ -2096,7 +2096,7 @@ msgid "Create"
 msgstr "Vytvoriť"
 
 #: apps/io.ox/calendar/edit/extensions.js:55 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:170 apps/io.ox/calendar/edit/main.js:316
+#: apps/io.ox/calendar/edit/main.js:171 apps/io.ox/calendar/edit/main.js:317
 msgid "Create appointment"
 msgstr "Vytvoriť schôdzku"
 
@@ -2427,7 +2427,7 @@ msgstr "zostupne"
 msgid "Description"
 msgstr "Popis"
 
-#: apps/io.ox/calendar/edit/main.js:62 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:63 module:io.ox/calendar/edit/main
 msgid "Description has been copied"
 msgstr "Popis bol skopírovaný"
 
@@ -2483,7 +2483,7 @@ msgstr "Zahodiť"
 
 #. "Discard changes" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/calendar/edit/main.js:404 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:405 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:202 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:257 apps/io.ox/editor/main.js:349
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:181 module:io.ox/tasks
@@ -2624,7 +2624,7 @@ msgstr[2] "Ste si istý, že chcete tieto úlohy zmazať?"
 msgid "Do you really want to delete this widget?"
 msgstr "Skutočne chcete zmazať túto miniaplikáciu?"
 
-#: apps/io.ox/calendar/edit/main.js:401 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:402 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:199 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:254 apps/io.ox/editor/main.js:346
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:178 module:io.ox/tasks
@@ -2904,7 +2904,7 @@ msgid "Edit all objects"
 msgstr "Upravovať všetky objekty"
 
 #: apps/io.ox/calendar/edit/extensions.js:55 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:170 apps/io.ox/calendar/edit/main.js:314
+#: apps/io.ox/calendar/edit/main.js:171 apps/io.ox/calendar/edit/main.js:315
 #: apps/io.ox/calendar/toolbar.js:65 module:io.ox/calendar
 msgid "Edit appointment"
 msgstr "Upraviť schôdzku"
@@ -3103,7 +3103,7 @@ msgstr "Koniec prezentácie"
 msgid "Ends on"
 msgstr "končí"
 
-#: apps/io.ox/files/share/wizard.js:253 module:io.ox/files
+#: apps/io.ox/files/share/wizard.js:254 module:io.ox/files
 msgid "Enter Password"
 msgstr "Zadajte heslo"
 
@@ -3268,6 +3268,12 @@ msgid "Expand timeframe by one month"
 msgstr "Rozšíriť časový rozsah o jeden mesiac"
 
 #: apps/io.ox/files/share/wizard.js:192 module:io.ox/files
+#, fuzzy
+#| msgid "Expires on"
+msgid "Expires in"
+msgstr "Vyprší"
+
+#: apps/io.ox/files/share/wizard.js:202 module:io.ox/files
 msgid "Expires on"
 msgstr "Vyprší"
 
@@ -3969,7 +3975,7 @@ msgid "Ignore Warnings"
 msgstr "Ignorovať upozornenia"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:191 module:io.ox/calendar
-#: apps/io.ox/calendar/edit/main.js:152 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:153 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/month/perspective.js:113
 #: apps/io.ox/calendar/week/perspective.js:118
 #: apps/plugins/notifications/calendar/register.js:83
@@ -5502,7 +5508,7 @@ msgstr "Účastníci"
 
 #: apps/io.ox/core/boot/i18n.js:24 module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js:83 module:io.ox/core
-#: apps/io.ox/files/share/wizard.js:256 module:io.ox/files
+#: apps/io.ox/files/share/wizard.js:257 module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js:455 module:io.ox/settings
 #: apps/io.ox/mail/accounts/view-form.js:534
 msgid "Password"
@@ -5520,7 +5526,7 @@ msgstr "Heslo musí mať dĺžku medzi %1$d a %2$d znakmi."
 msgid "Password recovery"
 msgstr "Obnovenie hesla"
 
-#: apps/io.ox/files/share/wizard.js:247 module:io.ox/files
+#: apps/io.ox/files/share/wizard.js:248 module:io.ox/files
 msgid "Password required"
 msgstr "Je potrebné heslo"
 
@@ -6258,7 +6264,7 @@ msgstr "Nedávno zmenené súbory"
 msgid "Recently used"
 msgstr "Nedávno použité"
 
-#: apps/io.ox/files/share/wizard.js:227 module:io.ox/files
+#: apps/io.ox/files/share/wizard.js:228 module:io.ox/files
 msgid "Recipients can edit"
 msgstr "Príjemca môže upravovať"
 
