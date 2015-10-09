@@ -11,8 +11,9 @@
  */
 define('io.ox/presenter/views/thumbnailview', [
     'io.ox/backbone/disposable',
+    'io.ox/core/tk/doc-converter-utils',
     'io.ox/presenter/util'
-], function (DisposableView, Util) {
+], function (DisposableView, DocConverterUtils, Util) {
 
     'use strict';
 
@@ -73,7 +74,7 @@ define('io.ox/presenter/views/thumbnailview', [
 
             this.app.mainView.presentationView.$el.addClass('thumbnails-opened');
 
-            this.thumbnailLoadDef = Util.beginConvert(this.model.toJSON())
+            this.thumbnailLoadDef = DocConverterUtils.beginConvert(this.model)
                 .done(beginConvertSuccess)
                 .fail(beginConvertError)
                 .always(beginConvertFinished);
@@ -121,20 +122,21 @@ define('io.ox/presenter/views/thumbnailview', [
                     target_zoom: 1,
                     job_id: convertData.jobID,
                     page_number: convertData.pageNumber,
-                    id: encodeURIComponent(this.model.get('id')),
+                    id: this.model.get('id'),
                     folder_id: this.model.get('folder_id'),
-                    filename: encodeURIComponent(this.model.get('filename')),
+                    filename: this.model.get('filename'),
                     version: this.model.get('version')
                 },
                 thumbnailNodes = this.$('.presenter-thumbnail'),
                 thumbnailsToLoad = Util.getVisibleNodes(thumbnailNodes);
+
             _.each(thumbnailsToLoad, function (pageNumber) {
                 var image = this.thumbnailImages[pageNumber - 1];
                 if (image.src) {
                     return;
                 }
                 params.page_number = pageNumber;
-                var thumbnailUrl = Util.getConverterUrl(params);
+                var thumbnailUrl = DocConverterUtils.getConverterUrl(params, { encodeUrl: true });
                 image.src = thumbnailUrl;
             }.bind(this));
         },
@@ -285,7 +287,7 @@ define('io.ox/presenter/views/thumbnailview', [
             }
             // close convert jobs while quitting
             def.done(function (response) {
-                Util.endConvert(this.model.toJSON(), response.jobID);
+                DocConverterUtils.endConvert(this.model, response.jobID);
             }.bind(this));
             // unbind image on load handlers
             _.each(this.thumbnailImages, function (image) {

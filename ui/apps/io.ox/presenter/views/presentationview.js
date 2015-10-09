@@ -16,12 +16,12 @@ define('io.ox/presenter/views/presentationview', [
     'io.ox/core/pdf/pdfdocument',
     'io.ox/core/pdf/pdfview',
     'io.ox/presenter/views/navigationview',
-    // TODO: move code to document converter utils
+    'io.ox/core/tk/doc-converter-utils',
     'io.ox/presenter/util',
     'gettext!io.ox/presenter',
     'static/3rd.party/swiper/swiper.jquery.js',
     'css!3rd.party/swiper/swiper.css'
-], function (DisposableView, PDFDocument, PDFView, NavigationView, Util, gt) {
+], function (DisposableView, PDFDocument, PDFView, NavigationView, DocConverterUtils, Util, gt) {
 
     'use strict';
 
@@ -167,13 +167,10 @@ define('io.ox/presenter/views/presentationview', [
          * @returns {PresentationView}
          */
         render: function () {
-            console.info('Presenter - render()');
+            //console.info('Presenter - render()');
 
-            // TODO: move to document converter utils
-            var convertParams = Util.getConvertParams(this.model),
-                documentUrl = Util.getConverterUrl(convertParams);
-
-            var carouselRoot = $('<div id="presenter-carousel" class="swiper-container" role="listbox">'),
+            var documentUrl = DocConverterUtils.getEncodedConverterUrl(this.model),
+                carouselRoot = $('<div id="presenter-carousel" class="swiper-container" role="listbox">'),
                 carouselInner = $('<div class="swiper-wrapper document-container io-ox-core-pdf">'),
                 caption = $('<div class="presentation-caption">');
 

@@ -12,9 +12,10 @@
  */
 define('io.ox/presenter/views/sidebar/slidepeekview', [
     'io.ox/backbone/disposable',
+    'io.ox/core/tk/doc-converter-utils',
     'io.ox/presenter/util',
     'gettext!io.ox/presenter'
-], function (DisposableView, Util, gt) {
+], function (DisposableView, DocConverterUtils, Util, gt) {
 
     var slidepeekView = DisposableView.extend({
 
@@ -50,7 +51,7 @@ define('io.ox/presenter/views/sidebar/slidepeekview', [
             }
 
             this.$el.empty().addClass('io-ox-busy');
-            this.slidePeekLoadDef = Util.beginConvert(this.model.toJSON())
+            this.slidePeekLoadDef = DocConverterUtils.beginConvert(this.model)
                 .done(beginConvertSuccess.bind(this))
                 .fail(beginConvertError.bind(this))
                 .always(beginConvertFinished.bind(this));
@@ -98,7 +99,7 @@ define('io.ox/presenter/views/sidebar/slidepeekview', [
 
             // load the preview image
             params.page_number = peekPageNumber;
-            var thumbnailUrl = Util.getConverterUrl(params);
+            var thumbnailUrl = DocConverterUtils.getConverterUrl(params);
             slidePeekImage.attr('src', thumbnailUrl)
                 .on('load', function () {
                     $(this).show();
@@ -117,7 +118,7 @@ define('io.ox/presenter/views/sidebar/slidepeekview', [
             }
             // close convert jobs while quitting
             def.done(function (response) {
-                Util.endConvert(this.model.toJSON(), response.jobID);
+                DocConverterUtils.endConvert(this.model, response.jobID);
             }.bind(this));
         }
     });

@@ -137,8 +137,12 @@ define('io.ox/files/api', [
             return /^application\/vnd.(ms-powerpoint|openxmlformats-officedocument.presentationml|oasis.opendocument.presentation)/.test(type || this.getMimeType());
         },
 
+        isGuard: function () {
+            return this.get('source') === 'guard';
+        },
+
         isEncrypted: function () {
-            if (this.get('source') === 'guard') return (true);
+            if (this.isGuard()) return (true);
             // check if file has "guard" file extension
             return /\.(grd|grd2|pgp)$/.test(this.get('filename'));
         },

@@ -18,10 +18,11 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/extPatterns/actions',
     'io.ox/files/api',
     'io.ox/mail/api',
+    'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
     'gettext!io.ox/core'
-], function (Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, MailAPI, Util, Settings, gt) {
+], function (Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, MailAPI, DocConverterUtils, Util, Settings, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -359,8 +360,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             return e.baton.context.standalone && (model.isOffice() || model.isPDF() || model.isText());
         },
         action: function (baton) {
-            var convertParams = Util.getConvertParams(baton.context.model),
-                documentPDFUrl = Util.getConverterUrl(convertParams);
+            var documentPDFUrl = DocConverterUtils.getEncodedConverterUrl(baton.context.model);
             window.open(documentPDFUrl, '_blank');
         }
     });

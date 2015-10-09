@@ -15,10 +15,11 @@ define('io.ox/core/viewer/views/types/documentview', [
     'io.ox/core/viewer/views/document/thumbnailview',
     'io.ox/core/pdf/pdfdocument',
     'io.ox/core/pdf/pdfview',
+    'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core',
     'less!io.ox/core/pdf/pdfstyle'
-], function (ActionsPattern, BaseView, ThumbnailView, PDFDocument, PDFView, Util, gt) {
+], function (ActionsPattern, BaseView, ThumbnailView, PDFDocument, PDFView, DocConverterUtils, Util, gt) {
 
     'use strict';
 
@@ -43,12 +44,6 @@ define('io.ox/core/viewer/views/types/documentview', [
             _.extend(this, options);
             // amount of page side margins in pixels
             this.PAGE_SIDE_MARGIN = _.device('desktop') ? 20 : 10;
-            // magic module id to source map
-            this.MODULE_SOURCE_MAP = {
-                1: 'calendar',
-                4: 'tasks',
-                7: 'contacts'
-            };
             // predefined zoom factors.
             // iOS Limits are handled by pdfview.js
             this.ZOOM_FACTORS = [25, 35, 50, 75, 100, 125, 150, 200, 300, 400, 600, 800];
@@ -278,7 +273,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         prefetch: function (priority) {
             // check for highest priority
             if (priority === 1) {
-                $.ajax({ url: Util.getConverterUrl(Util.getConvertParams(this.model, { async: true })) });
+                $.ajax({ url: DocConverterUtils.getEncodedConverterUrl(this.model, { async: true }) });
                 this.isPrefetched = true;
             }
 
@@ -348,8 +343,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 return;
             }
             var documentContainer = this.documentContainer,
-                convertParams = Util.getConvertParams(this.model),
-                documentUrl = Util.getConverterUrl(convertParams);
+                documentUrl = DocConverterUtils.getEncodedConverterUrl(this.model);
 
             /**
              * Returns the pageNode with the given pageNumber.

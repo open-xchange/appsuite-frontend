@@ -12,8 +12,9 @@
 define('io.ox/core/viewer/views/document/thumbnailview', [
     'io.ox/backbone/disposable',
     'io.ox/core/capabilities',
+    'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/viewer/util'
-], function (DisposableView, Capabilities, Util) {
+], function (DisposableView, Capabilities, DocConverterUtils, Util) {
 
     'use strict';
 
@@ -62,7 +63,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
             function beginConvertFinished() {
                 self.$el.removeClass('io-ox-busy');
             }
-            this.thumbnailLoadDef = Util.beginConvert(this.model)
+            this.thumbnailLoadDef = DocConverterUtils.beginConvert(this.model)
                 .done(beginConvertSuccess)
                 .fail(beginConvertError)
                 .always(beginConvertFinished);
@@ -108,20 +109,21 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
                     target_zoom: 1,
                     job_id: convertData.jobID,
                     page_number: convertData.pageNumber,
-                    id: encodeURIComponent(this.model.get('id')),
+                    id: this.model.get('id'),
                     folder_id: this.model.get('folder_id'),
-                    filename: encodeURIComponent(this.model.get('filename')),
+                    filename: this.model.get('filename'),
                     version: this.model.get('version')
                 },
                 thumbnailNodes = this.$('.document-thumbnail'),
                 thumbnailsToLoad = Util.getVisibleNodes(thumbnailNodes);
+
             _.each(thumbnailsToLoad, function (pageNumber) {
                 var image = this.thumbnailImages[pageNumber - 1];
                 if (image.src) {
                     return;
                 }
                 params.page_number = pageNumber;
-                var thumbnailUrl = Util.getConverterUrl(params);
+                var thumbnailUrl = DocConverterUtils.getConverterUrl(params, { encodeUrl: true });
                 image.src = thumbnailUrl;
             }.bind(this));
         },
@@ -220,7 +222,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
             }
             // close convert jobs while quitting
             def.done(function (response) {
-                Util.endConvert(this.model, response.jobID);
+                DocConverterUtils.endConvert(this.model, response.jobID);
             }.bind(this));
             // unbind image on load handlers
             _.each(this.thumbnailImages, function (image) {
