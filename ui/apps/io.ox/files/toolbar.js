@@ -305,12 +305,23 @@ define('io.ox/files/toolbar', [
         id: 'toolbar',
         index: 10000,
         setup: function (app) {
-            var toolbar = new Toolbar({ title: app.getTitle(), tabindex: 1 });
+            var toolbar = new Toolbar({ title: app.getTitle(), tabindex: 1 }),
+                drawing = false,
+                pending = null;
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbar.render().$el
             );
             app.updateToolbar = _.debounce(function (list) {
                 if (!list) return;
+                // sometimes drawing is slow then we might get doubled toolbar items, prevent this see Bug 41619
+                if (drawing) {
+                    // remember the last selection so it is drawn when the toolbar is ready again
+                    pending = list;
+                    return;
+                }
+                drawing = true;
+                // clear pending selections from drawing
+                pending = null;
                 // turn cids into proper objects
                 var cids = list, models = api.resolve(cids, false);
                 list = _(models).invoke('toJSON');
@@ -320,9 +331,17 @@ define('io.ox/files/toolbar', [
                 var baton = ext.Baton({ $el: toolbar.$list, data: data, models: models, collection: app.listView.collection, app: this, allIds: [] }),
                     ret = ext.point('io.ox/files/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
                 $.when.apply($, ret.value()).then(function () {
+                    drawing = false;
+                    toolbar.$list.trigger('ready');
                     toolbar.initButtons();
                 });
             }, 10);
+            // if there is a pending selection to be drawn, draw it when ready again
+            toolbar.$list.on('ready', function () {
+                if (pending !== null) {
+                    app.updateToolbar(pending);
+                }
+            });
         }
     });
 
