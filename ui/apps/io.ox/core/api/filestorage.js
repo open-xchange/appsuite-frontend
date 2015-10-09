@@ -27,6 +27,8 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
         servicesCache = new Backbone.Collection(),
         // stores all filestorage accounts is filled after getAllAccounts was called
         accountsCache = new Backbone.Collection(),
+        // stores the qualified account ids so it's easy to see if a folder belongs to a folderstorage account
+        idsCache = [],
 
         api = {
             // if the api is ready to use or rampup function must be called
@@ -145,6 +147,14 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                 })
                 .then( function (accounts) {
                     accountsCache.reset(accounts);
+                    _(accounts).each(function (account) {
+                        // unfortunately we need this hardcoded for now or the standard infostore folders could be recognized as external storages because it has a qualified id too
+                        // this would cause some actions to be disabled
+                        if (account.filestorageService === 'dropbox' || account.filestorageService === 'googledrive' ||
+                            account.filestorageService === 'onedrive' || account.filestorageService === 'boxcom') {
+                            idsCache.push(account.qualifiedId);
+                        }
+                    });
                     return accountsCache;
                 });
             },
@@ -332,11 +342,7 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
             isExternal: function (folder) {
                 var isExternal = false;
                 if (api.rampupDone && folder && folder.account_id) {
-                    isExternal = _(accountsCache.models).find(function (model) {
-                        var filestorageService = model.get('filestorageService');
-                        return model.get('qualifiedId') === folder.account_id && (filestorageService === 'dropbox' || filestorageService === 'googledrive' ||
-                            filestorageService === 'onedrive' ||filestorageService === 'boxcom');
-                    }) !== undefined;
+                    isExternal = _(idsCache).indexOf(folder.account_id) !== -1;
                 }
                 return isExternal;
             }
