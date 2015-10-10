@@ -16,7 +16,7 @@ msgstr ""
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
 #. %1$d is the zoom level
-#: apps/io.ox/presenter/views/presentationview.js:925 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:922 module:io.ox/presenter
 msgid "%1$d %"
 msgstr "%1$d %"
 
@@ -146,7 +146,7 @@ msgstr[1] "%1$d 分钟"
 #. text of a presentation slide caption
 #: apps/io.ox/core/viewer/views/displayerview.js:139 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:544
-#: apps/io.ox/presenter/views/presentationview.js:358 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:355 module:io.ox/presenter
 msgid "%1$d of %2$d"
 msgstr "%2$s 的 %1$s"
 
@@ -860,7 +860,7 @@ msgstr "添加到我的最爱"
 
 #: apps/io.ox/contacts/actions.js:436 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:125
-#: apps/io.ox/core/viewer/views/toolbarview.js:264 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:265 module:io.ox/core
 #: apps/io.ox/files/actions.js:791 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:211 apps/io.ox/mail/actions.js:674
 #: module:io.ox/mail apps/io.ox/mail/toolbar.js:179
@@ -1717,8 +1717,8 @@ msgstr "点击上载图像"
 #: apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/tk/wizard.js:359
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:161
-#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:180
-#: apps/io.ox/core/viewer/views/toolbarview.js:186
+#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:181
+#: apps/io.ox/core/viewer/views/toolbarview.js:187
 #: apps/io.ox/core/wizard/registry.js:60 module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js:159 module:io.ox/editor
 #: apps/io.ox/files/actions/showlink.js:48 module:io.ox/files
@@ -2254,7 +2254,7 @@ msgstr "延迟"
 #: apps/io.ox/core/folder/contextmenu.js:289
 #: apps/io.ox/core/sub/settings/pane.js:158 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:160
-#: apps/io.ox/core/viewer/views/toolbarview.js:278
+#: apps/io.ox/core/viewer/views/toolbarview.js:279
 #: apps/io.ox/files/actions.js:750 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
@@ -2654,9 +2654,9 @@ msgid "Doubleclick in this row for whole day appointment"
 msgstr "在此行里双击以查看全天约会"
 
 #: apps/io.ox/core/pim/actions.js:79 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:213
-#: apps/io.ox/core/viewer/views/toolbarview.js:294
-#: apps/io.ox/core/viewer/views/toolbarview.js:321
+#: apps/io.ox/core/viewer/views/toolbarview.js:214
+#: apps/io.ox/core/viewer/views/toolbarview.js:295
+#: apps/io.ox/core/viewer/views/toolbarview.js:322
 #: apps/io.ox/files/actions.js:733 module:io.ox/files
 #: apps/io.ox/files/actions.js:741 apps/io.ox/files/actions.js:892
 #: apps/io.ox/files/toolbar.js:153 apps/io.ox/files/toolbar.js:160
@@ -2856,7 +2856,7 @@ msgstr "编辑约会"
 msgid "Edit contact"
 msgstr "编辑联系人"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:205 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:206 module:io.ox/core
 #: apps/io.ox/files/actions.js:831 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:183
 msgid "Edit description"
@@ -3024,7 +3024,7 @@ msgid "End date timezone"
 msgstr "结束日期时区"
 
 #. info text on the next slide preview, which means the presenting user reached the last slide.
-#: apps/io.ox/presenter/views/sidebar/slidepeekview.js:89
+#: apps/io.ox/presenter/views/sidebar/slidepeekview.js:90
 #: module:io.ox/presenter
 msgid "End of Slides"
 msgstr "幻灯片结尾"
@@ -3392,11 +3392,11 @@ msgstr "文档已复制"
 msgid "File has been moved"
 msgstr "文档已被移动"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:48 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:49 module:io.ox/core
 msgid "File name"
 msgstr "文件名称"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:66 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:67 module:io.ox/core
 msgid "File name, click to rename"
 msgstr "文件名称、单击以更名"
 
@@ -3458,13 +3458,13 @@ msgstr "名字"
 msgid "First name Last name"
 msgstr "名字 姓氏"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:123 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:130
+#: apps/io.ox/core/viewer/views/toolbarview.js:124 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:131
 msgid "Fit to screen size"
 msgstr "调整成屏幕大小"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:106 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:116
+#: apps/io.ox/core/viewer/views/toolbarview.js:107 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:117
 msgid "Fit to screen width"
 msgstr "调整成屏幕宽度"
 
@@ -4246,15 +4246,15 @@ msgid "Learn more"
 msgstr "了解更多"
 
 #. label for the leave presentation button
-#: apps/io.ox/presenter/views/presentationview.js:231 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:228 module:io.ox/presenter
 msgid "Leave"
 msgstr "离开"
 
 #. tooltip for the leave presentation button
 #. button label for leaving the presentation
 #. button tooltip for leaving the presentation
-#: apps/io.ox/presenter/views/presentationview.js:227 module:io.ox/presenter
-#: apps/io.ox/presenter/views/presentationview.js:228
+#: apps/io.ox/presenter/views/presentationview.js:224 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:225
 #: apps/io.ox/presenter/views/toolbarview.js:144
 #: apps/io.ox/presenter/views/toolbarview.js:151
 #: apps/io.ox/presenter/views/toolbarview.js:152
@@ -5232,8 +5232,8 @@ msgstr "打开文件夹视图"
 msgid "Open in browser"
 msgstr "在浏览器打开"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:287 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:315
+#: apps/io.ox/core/viewer/views/toolbarview.js:288 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:316
 msgid "Open in browser tab"
 msgstr "在浏览器选项卡打开"
 
@@ -5393,7 +5393,7 @@ msgstr "PDFs"
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:245 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:240 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "第 %1$d 页（共 %2$d 页）"
 
@@ -5751,11 +5751,11 @@ msgstr "请更新您的浏览器。"
 msgid "Plus"
 msgstr "额外"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:165 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:166 module:io.ox/core
 msgid "Pop out"
 msgstr "弹出"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:172 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:173 module:io.ox/core
 msgid "Pop out standalone viewer"
 msgstr "弹出独立检视器"
 
@@ -5787,8 +5787,8 @@ msgid "Postcode"
 msgstr "邮寄编号"
 
 #. launch the presenter app
-#: apps/io.ox/core/viewer/views/toolbarview.js:137 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:144
+#: apps/io.ox/core/viewer/views/toolbarview.js:138 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:145
 msgctxt "presenter"
 msgid "Present"
 msgstr "演讲"
@@ -5799,7 +5799,7 @@ msgid "Presentation end"
 msgstr "演讲结束"
 
 #. Info text that says the presentation is paused.
-#: apps/io.ox/presenter/views/presentationview.js:222 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:219 module:io.ox/presenter
 msgid "Presentation is paused."
 msgstr "演讲暂停中。"
 
@@ -5914,7 +5914,7 @@ msgstr "主要户口"
 #: apps/io.ox/calendar/toolbar.js:88 apps/io.ox/calendar/toolbar.js:176
 #: apps/io.ox/contacts/actions.js:400 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:102 apps/io.ox/core/print.js:108
-#: module:io.ox/core apps/io.ox/core/viewer/views/toolbarview.js:220
+#: module:io.ox/core apps/io.ox/core/viewer/views/toolbarview.js:221
 #: apps/io.ox/mail/actions.js:633 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:150 apps/io.ox/tasks/actions.js:335
 #: module:io.ox/tasks apps/io.ox/tasks/toolbar.js:101
@@ -6302,7 +6302,7 @@ msgstr "移除成员"
 
 #: apps/io.ox/core/folder/actions/rename.js:65 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:264
-#: apps/io.ox/core/viewer/views/toolbarview.js:198
+#: apps/io.ox/core/viewer/views/toolbarview.js:199
 #: apps/io.ox/files/actions.js:821 module:io.ox/files
 #: apps/io.ox/files/actions/rename.js:68 apps/io.ox/files/actions/rename.js:73
 #: apps/io.ox/files/toolbar.js:176
@@ -6509,8 +6509,8 @@ msgid "Save attachment"
 msgstr "保存附件"
 
 #: apps/io.ox/core/pim/actions.js:80 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:300
-#: apps/io.ox/core/viewer/views/toolbarview.js:327
+#: apps/io.ox/core/viewer/views/toolbarview.js:301
+#: apps/io.ox/core/viewer/views/toolbarview.js:328
 #: apps/io.ox/mail/actions.js:725 module:io.ox/mail
 msgid "Save to Drive"
 msgstr "保存到 Drive"
@@ -6644,7 +6644,7 @@ msgstr "发送一个送达回执"
 msgid "Send as internal link"
 msgstr "作为内部链接发送"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:307 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:308 module:io.ox/core
 msgid "Send as mail"
 msgstr "以邮件方式发送"
 
@@ -6654,7 +6654,7 @@ msgstr "以邮件方式发送"
 msgid "Send as vCard"
 msgstr "以 vCard 发送"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:257 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:258 module:io.ox/core
 #: apps/io.ox/files/actions.js:761 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:190
 msgid "Send by mail"
@@ -6754,7 +6754,7 @@ msgctxt "app"
 msgid "Settings"
 msgstr "设定"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:228 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:229 module:io.ox/core
 #: apps/io.ox/files/share/permissions.js:802 apps/io.ox/files/toolbar.js:79
 #: module:io.ox/files apps/plugins/portal/xing/actions.js:209
 #: module:plugins/portal
@@ -6807,7 +6807,7 @@ msgid_plural "Share %1$d items"
 msgstr[0] "分享文件夹 \"%1$d\""
 msgstr[1] "分享 %1$d 个文件夹"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:229 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:230 module:io.ox/core
 #, fuzzy
 #| msgid "Save as file"
 msgid "Share this file"
@@ -7051,7 +7051,7 @@ msgstr "抱歉，现在无法连接到 %s。"
 msgid "Sorry, there is no data available for you on %s."
 msgstr "抱歉，%s 没有您的可用数据。"
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:26 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:27 module:io.ox/core
 msgid "Sorry, there is no preview available for this file."
 msgstr "抱歉，此文件没有预览可用。"
 
@@ -7412,7 +7412,7 @@ msgstr "户口必须命名"
 msgid "The activity has been deleted successfully"
 msgstr "已成功删除活动"
 
-#: apps/io.ox/files/api.js:376 module:io.ox/files
+#: apps/io.ox/files/api.js:380 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "已到达允许额度。"
@@ -7635,7 +7635,7 @@ msgstr "通知区域开放"
 msgid "The notification has been resent"
 msgstr "通知已再发送"
 
-#: apps/io.ox/files/api.js:371 module:io.ox/files
+#: apps/io.ox/files/api.js:375 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "提供的文件名称超过允许长度。"
@@ -7860,7 +7860,7 @@ msgstr "此联系人为私人，不能予以分享。"
 msgid "This distribution list has been added to the portal"
 msgstr "此通讯组列表已添加到门户"
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:27 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:28 module:io.ox/core
 msgid "This document is password protected and cannot be displayed."
 msgstr "此文档由密码保护因而未能显示。"
 
@@ -7889,7 +7889,7 @@ msgstr "此特性不可用。您必须先升级您的户口才能使用。"
 msgid "This field has to be filled"
 msgstr "此栏必填"
 
-#: apps/io.ox/files/api.js:383 module:io.ox/files
+#: apps/io.ox/files/api.js:387 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "无法上载此文件。"
@@ -8299,7 +8299,7 @@ msgid "Upload local file"
 msgstr "上载本地文件"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:166
-#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:271
+#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:272
 #: module:io.ox/core apps/io.ox/files/actions/upload-new-version.js:64
 #: module:io.ox/files
 msgid "Upload new version"
@@ -8441,8 +8441,8 @@ msgstr "视图"
 msgid "View attachment"
 msgstr "检视附件"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:152 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:158
+#: apps/io.ox/core/viewer/views/toolbarview.js:153 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:159
 msgid "View details"
 msgstr "检视详情"
 
@@ -9044,14 +9044,14 @@ msgstr "您的时区"
 msgid "ZB"
 msgstr "ZB"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:110 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:111 module:io.ox/core
 msgid "Zoom"
 msgstr "放大"
 
 #. button label for zooming in the presentation
 #. button tooltip for zooming in the presentation
-#: apps/io.ox/core/viewer/views/toolbarview.js:94 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:99
+#: apps/io.ox/core/viewer/views/toolbarview.js:95 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:100
 #: apps/io.ox/presenter/views/toolbarview.js:179 module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js:185
 #: apps/io.ox/presenter/views/toolbarview.js:186
@@ -9060,8 +9060,8 @@ msgstr "放大"
 
 #. button label for zooming out the presentation
 #. button tooltip for zooming out the presentation
-#: apps/io.ox/core/viewer/views/toolbarview.js:82 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:86
+#: apps/io.ox/core/viewer/views/toolbarview.js:83 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:87
 #: apps/io.ox/presenter/views/toolbarview.js:164 module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js:169
 #: apps/io.ox/presenter/views/toolbarview.js:170

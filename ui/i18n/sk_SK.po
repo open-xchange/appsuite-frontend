@@ -19,7 +19,7 @@ msgstr ""
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
 #. %1$d is the zoom level
-#: apps/io.ox/presenter/views/presentationview.js:925 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:922 module:io.ox/presenter
 msgid "%1$d %"
 msgstr "%1$d %"
 
@@ -162,7 +162,7 @@ msgstr[2] "%1$d minút"
 #. text of a presentation slide caption
 #: apps/io.ox/core/viewer/views/displayerview.js:139 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:544
-#: apps/io.ox/presenter/views/presentationview.js:358 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:355 module:io.ox/presenter
 msgid "%1$d of %2$d"
 msgstr "%1$d z %2$d"
 
@@ -890,7 +890,7 @@ msgstr "Pridať medzi obľúbené"
 
 #: apps/io.ox/contacts/actions.js:436 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:125
-#: apps/io.ox/core/viewer/views/toolbarview.js:264 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:265 module:io.ox/core
 #: apps/io.ox/files/actions.js:791 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:211 apps/io.ox/mail/actions.js:674
 #: module:io.ox/mail apps/io.ox/mail/toolbar.js:179
@@ -1761,8 +1761,8 @@ msgstr "Kliknite nahráte obrázok"
 #: apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/tk/wizard.js:359
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:161
-#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:180
-#: apps/io.ox/core/viewer/views/toolbarview.js:186
+#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:181
+#: apps/io.ox/core/viewer/views/toolbarview.js:187
 #: apps/io.ox/core/wizard/registry.js:60 module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js:159 module:io.ox/editor
 #: apps/io.ox/files/actions/showlink.js:48 module:io.ox/files
@@ -2302,7 +2302,7 @@ msgstr "Odložené"
 #: apps/io.ox/core/folder/contextmenu.js:289
 #: apps/io.ox/core/sub/settings/pane.js:158 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:160
-#: apps/io.ox/core/viewer/views/toolbarview.js:278
+#: apps/io.ox/core/viewer/views/toolbarview.js:279
 #: apps/io.ox/files/actions.js:750 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
@@ -2710,9 +2710,9 @@ msgid "Doubleclick in this row for whole day appointment"
 msgstr "Dvojitým kliknutím v tomto riadku zobrazíte celodennú schôdzku"
 
 #: apps/io.ox/core/pim/actions.js:79 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:213
-#: apps/io.ox/core/viewer/views/toolbarview.js:294
-#: apps/io.ox/core/viewer/views/toolbarview.js:321
+#: apps/io.ox/core/viewer/views/toolbarview.js:214
+#: apps/io.ox/core/viewer/views/toolbarview.js:295
+#: apps/io.ox/core/viewer/views/toolbarview.js:322
 #: apps/io.ox/files/actions.js:733 module:io.ox/files
 #: apps/io.ox/files/actions.js:741 apps/io.ox/files/actions.js:892
 #: apps/io.ox/files/toolbar.js:153 apps/io.ox/files/toolbar.js:160
@@ -2914,7 +2914,7 @@ msgstr "Upraviť schôdzku"
 msgid "Edit contact"
 msgstr "Upraviť Kontakt"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:205 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:206 module:io.ox/core
 #: apps/io.ox/files/actions.js:831 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:183
 msgid "Edit description"
@@ -3083,7 +3083,7 @@ msgid "End date timezone"
 msgstr "Časové pásmo dátumu konca "
 
 #. info text on the next slide preview, which means the presenting user reached the last slide.
-#: apps/io.ox/presenter/views/sidebar/slidepeekview.js:89
+#: apps/io.ox/presenter/views/sidebar/slidepeekview.js:90
 #: module:io.ox/presenter
 msgid "End of Slides"
 msgstr "Koniec snímkov"
@@ -3463,11 +3463,11 @@ msgstr "Súbory boli skopírované"
 msgid "File has been moved"
 msgstr "Súbory boli presunuté"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:48 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:49 module:io.ox/core
 msgid "File name"
 msgstr "Názov súboru"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:66 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:67 module:io.ox/core
 msgid "File name, click to rename"
 msgstr "Názov súboru; premenujte kliknutím"
 
@@ -3529,13 +3529,13 @@ msgstr "Krstné meno"
 msgid "First name Last name"
 msgstr "Krstné meno Priezvisko"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:123 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:130
+#: apps/io.ox/core/viewer/views/toolbarview.js:124 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:131
 msgid "Fit to screen size"
 msgstr "Prispôsobiť veľkosti obrazovky"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:106 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:116
+#: apps/io.ox/core/viewer/views/toolbarview.js:107 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:117
 msgid "Fit to screen width"
 msgstr "Prispôsobiť šírke obrazovky"
 
@@ -4333,15 +4333,15 @@ msgid "Learn more"
 msgstr "Zistite viac"
 
 #. label for the leave presentation button
-#: apps/io.ox/presenter/views/presentationview.js:231 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:228 module:io.ox/presenter
 msgid "Leave"
 msgstr "Opustiť"
 
 #. tooltip for the leave presentation button
 #. button label for leaving the presentation
 #. button tooltip for leaving the presentation
-#: apps/io.ox/presenter/views/presentationview.js:227 module:io.ox/presenter
-#: apps/io.ox/presenter/views/presentationview.js:228
+#: apps/io.ox/presenter/views/presentationview.js:224 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:225
 #: apps/io.ox/presenter/views/toolbarview.js:144
 #: apps/io.ox/presenter/views/toolbarview.js:151
 #: apps/io.ox/presenter/views/toolbarview.js:152
@@ -5327,8 +5327,8 @@ msgstr "Otvoriť zobrazenie priečinka"
 msgid "Open in browser"
 msgstr "Otvoriť v prehliadači"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:287 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:315
+#: apps/io.ox/core/viewer/views/toolbarview.js:288 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:316
 msgid "Open in browser tab"
 msgstr "Otvoriť v karte prehliadača"
 
@@ -5488,7 +5488,7 @@ msgstr "PDFs"
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:245 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:240 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "Strana %1$d z %2$d"
 
@@ -5853,11 +5853,11 @@ msgstr "Prosím aktualizujte svoj prehliadač."
 msgid "Plus"
 msgstr "Plus"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:165 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:166 module:io.ox/core
 msgid "Pop out"
 msgstr "Oddeliť"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:172 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:173 module:io.ox/core
 msgid "Pop out standalone viewer"
 msgstr "Oddeliť samostatný prehliadač"
 
@@ -5889,8 +5889,8 @@ msgid "Postcode"
 msgstr "PSČ"
 
 #. launch the presenter app
-#: apps/io.ox/core/viewer/views/toolbarview.js:137 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:144
+#: apps/io.ox/core/viewer/views/toolbarview.js:138 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:145
 msgctxt "presenter"
 msgid "Present"
 msgstr "Prezentovať"
@@ -5901,7 +5901,7 @@ msgid "Presentation end"
 msgstr "Koniec prezentácie"
 
 #. Info text that says the presentation is paused.
-#: apps/io.ox/presenter/views/presentationview.js:222 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:219 module:io.ox/presenter
 msgid "Presentation is paused."
 msgstr "Prezentácia je pozastavená."
 
@@ -6016,7 +6016,7 @@ msgstr "Primárny účet"
 #: apps/io.ox/calendar/toolbar.js:88 apps/io.ox/calendar/toolbar.js:176
 #: apps/io.ox/contacts/actions.js:400 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:102 apps/io.ox/core/print.js:108
-#: module:io.ox/core apps/io.ox/core/viewer/views/toolbarview.js:220
+#: module:io.ox/core apps/io.ox/core/viewer/views/toolbarview.js:221
 #: apps/io.ox/mail/actions.js:633 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:150 apps/io.ox/tasks/actions.js:335
 #: module:io.ox/tasks apps/io.ox/tasks/toolbar.js:101
@@ -6417,7 +6417,7 @@ msgstr "Odstrániť člena"
 
 #: apps/io.ox/core/folder/actions/rename.js:65 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:264
-#: apps/io.ox/core/viewer/views/toolbarview.js:198
+#: apps/io.ox/core/viewer/views/toolbarview.js:199
 #: apps/io.ox/files/actions.js:821 module:io.ox/files
 #: apps/io.ox/files/actions/rename.js:68 apps/io.ox/files/actions/rename.js:73
 #: apps/io.ox/files/toolbar.js:176
@@ -6624,8 +6624,8 @@ msgid "Save attachment"
 msgstr "Uložiť prílohu"
 
 #: apps/io.ox/core/pim/actions.js:80 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:300
-#: apps/io.ox/core/viewer/views/toolbarview.js:327
+#: apps/io.ox/core/viewer/views/toolbarview.js:301
+#: apps/io.ox/core/viewer/views/toolbarview.js:328
 #: apps/io.ox/mail/actions.js:725 module:io.ox/mail
 msgid "Save to Drive"
 msgstr "Uložiť na Drive"
@@ -6763,7 +6763,7 @@ msgstr "Poslať potvrdenie o prečítaní"
 msgid "Send as internal link"
 msgstr "Poslať ako interný odkaz"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:307 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:308 module:io.ox/core
 msgid "Send as mail"
 msgstr "Poslať ako email"
 
@@ -6773,7 +6773,7 @@ msgstr "Poslať ako email"
 msgid "Send as vCard"
 msgstr "Poslať ako vCard"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:257 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:258 module:io.ox/core
 #: apps/io.ox/files/actions.js:761 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:190
 msgid "Send by mail"
@@ -6873,7 +6873,7 @@ msgctxt "app"
 msgid "Settings"
 msgstr "Nastavenia"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:228 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:229 module:io.ox/core
 #: apps/io.ox/files/share/permissions.js:802 apps/io.ox/files/toolbar.js:79
 #: module:io.ox/files apps/plugins/portal/xing/actions.js:209
 #: module:plugins/portal
@@ -6930,7 +6930,7 @@ msgstr[0] "Zdieľať priečinok „%1$d“"
 msgstr[1] "Zdieľať „%1$d“ položky"
 msgstr[2] "Zdieľať „%1$d“ položiek"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:229 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:230 module:io.ox/core
 #, fuzzy
 #| msgid "Save as file"
 msgid "Share this file"
@@ -7176,7 +7176,7 @@ msgstr "Ľutujeme, ale momentálne nie je možné pripojiť sa k %s."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Ľutujeme, nie sú pre vás k dispozícii žiadne údaje o %s."
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:26 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:27 module:io.ox/core
 msgid "Sorry, there is no preview available for this file."
 msgstr "Ľutujeme, nie je k dispozícii náhľad tohto súboru."
 
@@ -7542,7 +7542,7 @@ msgstr "Účet musí byť pomenovaný"
 msgid "The activity has been deleted successfully"
 msgstr "Aktivita bola úspešne zmazaná"
 
-#: apps/io.ox/files/api.js:376 module:io.ox/files
+#: apps/io.ox/files/api.js:380 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "Bola dosiahnutá povolená kvóta."
@@ -7780,7 +7780,7 @@ msgstr "Oznamovacia oblasť je otvorená"
 msgid "The notification has been resent"
 msgstr "Oznámenie bolo znova odoslané"
 
-#: apps/io.ox/files/api.js:371 module:io.ox/files
+#: apps/io.ox/files/api.js:375 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "Poskytnutý názov súboru prekračuje povolenú dĺžku."
@@ -8022,7 +8022,7 @@ msgstr "Tento kontakt je súkromný a nie je možné ho zdieľať"
 msgid "This distribution list has been added to the portal"
 msgstr "Tento distribučný zoznam bol pridaný na portál"
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:27 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:28 module:io.ox/core
 msgid "This document is password protected and cannot be displayed."
 msgstr "Tento dokument je chránený heslom a nie je možné ho zobraziť."
 
@@ -8053,7 +8053,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Toto pole musí byť vyplnené"
 
-#: apps/io.ox/files/api.js:383 module:io.ox/files
+#: apps/io.ox/files/api.js:387 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "Tento súbor nebolo možné nahrať."
@@ -8479,7 +8479,7 @@ msgid "Upload local file"
 msgstr "Nahrať lokálny súbor"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:166
-#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:271
+#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:272
 #: module:io.ox/core apps/io.ox/files/actions/upload-new-version.js:64
 #: module:io.ox/files
 msgid "Upload new version"
@@ -8627,8 +8627,8 @@ msgstr "Zobraziť"
 msgid "View attachment"
 msgstr "Zobraziť prílohu"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:152 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:158
+#: apps/io.ox/core/viewer/views/toolbarview.js:153 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:159
 msgid "View details"
 msgstr "Zobraziť podrobnosti"
 
@@ -9254,14 +9254,14 @@ msgstr "Vaše časové pásmo"
 msgid "ZB"
 msgstr "ZB"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:110 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:111 module:io.ox/core
 msgid "Zoom"
 msgstr "Priblížiť"
 
 #. button label for zooming in the presentation
 #. button tooltip for zooming in the presentation
-#: apps/io.ox/core/viewer/views/toolbarview.js:94 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:99
+#: apps/io.ox/core/viewer/views/toolbarview.js:95 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:100
 #: apps/io.ox/presenter/views/toolbarview.js:179 module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js:185
 #: apps/io.ox/presenter/views/toolbarview.js:186
@@ -9270,8 +9270,8 @@ msgstr "Priblížiť"
 
 #. button label for zooming out the presentation
 #. button tooltip for zooming out the presentation
-#: apps/io.ox/core/viewer/views/toolbarview.js:82 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:86
+#: apps/io.ox/core/viewer/views/toolbarview.js:83 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:87
 #: apps/io.ox/presenter/views/toolbarview.js:164 module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js:169
 #: apps/io.ox/presenter/views/toolbarview.js:170

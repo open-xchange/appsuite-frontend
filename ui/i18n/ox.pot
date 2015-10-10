@@ -305,7 +305,7 @@ msgstr ""
 #: apps/io.ox/core/sub/settings/pane.js:158
 #: module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:160
-#: apps/io.ox/core/viewer/views/toolbarview.js:278
+#: apps/io.ox/core/viewer/views/toolbarview.js:279
 #: apps/io.ox/files/actions.js:750
 #: module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
@@ -347,7 +347,7 @@ msgstr ""
 #: apps/io.ox/contacts/toolbar.js:102
 #: apps/io.ox/core/print.js:108
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:220
+#: apps/io.ox/core/viewer/views/toolbarview.js:221
 #: apps/io.ox/mail/actions.js:633
 #: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:150
@@ -2485,7 +2485,7 @@ msgstr ""
 #: apps/io.ox/contacts/actions.js:436
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:125
-#: apps/io.ox/core/viewer/views/toolbarview.js:264
+#: apps/io.ox/core/viewer/views/toolbarview.js:265
 #: module:io.ox/core
 #: apps/io.ox/files/actions.js:791
 #: module:io.ox/files
@@ -3408,8 +3408,8 @@ msgstr ""
 #: apps/io.ox/core/tk/wizard.js:359
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:161
 #: module:io.ox/core/viewer
-#: apps/io.ox/core/viewer/views/toolbarview.js:180
-#: apps/io.ox/core/viewer/views/toolbarview.js:186
+#: apps/io.ox/core/viewer/views/toolbarview.js:181
+#: apps/io.ox/core/viewer/views/toolbarview.js:187
 #: apps/io.ox/core/wizard/registry.js:60
 #: module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js:159
@@ -4055,7 +4055,7 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/rename.js:65
 #: module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:264
-#: apps/io.ox/core/viewer/views/toolbarview.js:198
+#: apps/io.ox/core/viewer/views/toolbarview.js:199
 #: apps/io.ox/files/actions.js:821
 #: module:io.ox/files
 #: apps/io.ox/files/actions/rename.js:68
@@ -4865,9 +4865,9 @@ msgstr ""
 
 #: apps/io.ox/core/pim/actions.js:79
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:213
-#: apps/io.ox/core/viewer/views/toolbarview.js:294
-#: apps/io.ox/core/viewer/views/toolbarview.js:321
+#: apps/io.ox/core/viewer/views/toolbarview.js:214
+#: apps/io.ox/core/viewer/views/toolbarview.js:295
+#: apps/io.ox/core/viewer/views/toolbarview.js:322
 #: apps/io.ox/files/actions.js:733
 #: module:io.ox/files
 #: apps/io.ox/files/actions.js:741
@@ -4883,8 +4883,8 @@ msgstr ""
 
 #: apps/io.ox/core/pim/actions.js:80
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:300
-#: apps/io.ox/core/viewer/views/toolbarview.js:327
+#: apps/io.ox/core/viewer/views/toolbarview.js:301
+#: apps/io.ox/core/viewer/views/toolbarview.js:328
 #: apps/io.ox/mail/actions.js:725
 #: module:io.ox/mail
 msgid "Save to Drive"
@@ -5856,7 +5856,7 @@ msgstr ""
 #: apps/io.ox/core/viewer/views/displayerview.js:139
 #: module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:544
-#: apps/io.ox/presenter/views/presentationview.js:358
+#: apps/io.ox/presenter/views/presentationview.js:355
 #: module:io.ox/presenter
 msgid "%1$d of %2$d"
 msgstr ""
@@ -5950,7 +5950,7 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:166
 #: module:io.ox/core/viewer
-#: apps/io.ox/core/viewer/views/toolbarview.js:271
+#: apps/io.ox/core/viewer/views/toolbarview.js:272
 #: module:io.ox/core
 #: apps/io.ox/files/actions/upload-new-version.js:64
 #: module:io.ox/files
@@ -5973,21 +5973,21 @@ msgstr ""
 msgid "Drop only a single file as new version."
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:48
+#: apps/io.ox/core/viewer/views/toolbarview.js:49
 #: module:io.ox/core
 msgid "File name"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:66
+#: apps/io.ox/core/viewer/views/toolbarview.js:67
 #: module:io.ox/core
 msgid "File name, click to rename"
 msgstr ""
 
 #. button label for zooming out the presentation
 #. button tooltip for zooming out the presentation
-#: apps/io.ox/core/viewer/views/toolbarview.js:82
+#: apps/io.ox/core/viewer/views/toolbarview.js:83
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:86
+#: apps/io.ox/core/viewer/views/toolbarview.js:87
 #: apps/io.ox/presenter/views/toolbarview.js:164
 #: module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js:169
@@ -5997,9 +5997,9 @@ msgstr ""
 
 #. button label for zooming in the presentation
 #. button tooltip for zooming in the presentation
-#: apps/io.ox/core/viewer/views/toolbarview.js:94
+#: apps/io.ox/core/viewer/views/toolbarview.js:95
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:99
+#: apps/io.ox/core/viewer/views/toolbarview.js:100
 #: apps/io.ox/presenter/views/toolbarview.js:179
 #: module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js:185
@@ -6007,48 +6007,48 @@ msgstr ""
 msgid "Zoom in"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:106
+#: apps/io.ox/core/viewer/views/toolbarview.js:107
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:116
+#: apps/io.ox/core/viewer/views/toolbarview.js:117
 msgid "Fit to screen width"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:110
+#: apps/io.ox/core/viewer/views/toolbarview.js:111
 #: module:io.ox/core
 msgid "Zoom"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:123
+#: apps/io.ox/core/viewer/views/toolbarview.js:124
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:130
+#: apps/io.ox/core/viewer/views/toolbarview.js:131
 msgid "Fit to screen size"
 msgstr ""
 
 #. launch the presenter app
-#: apps/io.ox/core/viewer/views/toolbarview.js:137
+#: apps/io.ox/core/viewer/views/toolbarview.js:138
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:144
+#: apps/io.ox/core/viewer/views/toolbarview.js:145
 msgctxt "presenter"
 msgid "Present"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:152
+#: apps/io.ox/core/viewer/views/toolbarview.js:153
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:158
+#: apps/io.ox/core/viewer/views/toolbarview.js:159
 msgid "View details"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:165
+#: apps/io.ox/core/viewer/views/toolbarview.js:166
 #: module:io.ox/core
 msgid "Pop out"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:172
+#: apps/io.ox/core/viewer/views/toolbarview.js:173
 #: module:io.ox/core
 msgid "Pop out standalone viewer"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:205
+#: apps/io.ox/core/viewer/views/toolbarview.js:206
 #: module:io.ox/core
 #: apps/io.ox/files/actions.js:831
 #: module:io.ox/files
@@ -6056,7 +6056,7 @@ msgstr ""
 msgid "Edit description"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:228
+#: apps/io.ox/core/viewer/views/toolbarview.js:229
 #: module:io.ox/core
 #: apps/io.ox/files/share/permissions.js:802
 #: apps/io.ox/files/toolbar.js:79
@@ -6066,12 +6066,12 @@ msgstr ""
 msgid "Share"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:229
+#: apps/io.ox/core/viewer/views/toolbarview.js:230
 #: module:io.ox/core
 msgid "Share this file"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:257
+#: apps/io.ox/core/viewer/views/toolbarview.js:258
 #: module:io.ox/core
 #: apps/io.ox/files/actions.js:761
 #: module:io.ox/files
@@ -6079,13 +6079,13 @@ msgstr ""
 msgid "Send by mail"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:287
+#: apps/io.ox/core/viewer/views/toolbarview.js:288
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:315
+#: apps/io.ox/core/viewer/views/toolbarview.js:316
 msgid "Open in browser tab"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:307
+#: apps/io.ox/core/viewer/views/toolbarview.js:308
 #: module:io.ox/core
 msgid "Send as mail"
 msgstr ""
@@ -6126,12 +6126,12 @@ msgstr ""
 msgid "There is no preview for this file type"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:26
+#: apps/io.ox/core/viewer/views/types/documentview.js:27
 #: module:io.ox/core
 msgid "Sorry, there is no preview available for this file."
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:27
+#: apps/io.ox/core/viewer/views/types/documentview.js:28
 #: module:io.ox/core
 msgid "This document is password protected and cannot be displayed."
 msgstr ""
@@ -6140,7 +6140,7 @@ msgstr ""
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:245
+#: apps/io.ox/core/viewer/views/types/documentview.js:240
 #: module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr ""
@@ -6535,19 +6535,19 @@ msgctxt "One file only"
 msgid "Do you really want to delete this file?"
 msgstr ""
 
-#: apps/io.ox/files/api.js:371
+#: apps/io.ox/files/api.js:375
 #: module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr ""
 
-#: apps/io.ox/files/api.js:376
+#: apps/io.ox/files/api.js:380
 #: module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr ""
 
-#: apps/io.ox/files/api.js:383
+#: apps/io.ox/files/api.js:387
 #: module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
@@ -9417,7 +9417,7 @@ msgid "Presenter navigation bar"
 msgstr ""
 
 #. Info text that says the presentation is paused.
-#: apps/io.ox/presenter/views/presentationview.js:222
+#: apps/io.ox/presenter/views/presentationview.js:219
 #: module:io.ox/presenter
 msgid "Presentation is paused."
 msgstr ""
@@ -9425,9 +9425,9 @@ msgstr ""
 #. tooltip for the leave presentation button
 #. button label for leaving the presentation
 #. button tooltip for leaving the presentation
-#: apps/io.ox/presenter/views/presentationview.js:227
+#: apps/io.ox/presenter/views/presentationview.js:224
 #: module:io.ox/presenter
-#: apps/io.ox/presenter/views/presentationview.js:228
+#: apps/io.ox/presenter/views/presentationview.js:225
 #: apps/io.ox/presenter/views/toolbarview.js:144
 #: apps/io.ox/presenter/views/toolbarview.js:151
 #: apps/io.ox/presenter/views/toolbarview.js:152
@@ -9435,7 +9435,7 @@ msgid "Leave presentation"
 msgstr ""
 
 #. label for the leave presentation button
-#: apps/io.ox/presenter/views/presentationview.js:231
+#: apps/io.ox/presenter/views/presentationview.js:228
 #: module:io.ox/presenter
 msgid "Leave"
 msgstr ""
@@ -9443,7 +9443,7 @@ msgstr ""
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
 #. %1$d is the zoom level
-#: apps/io.ox/presenter/views/presentationview.js:925
+#: apps/io.ox/presenter/views/presentationview.js:922
 #: module:io.ox/presenter
 msgid "%1$d %"
 msgstr ""
@@ -9455,7 +9455,7 @@ msgid "There are currently no participants."
 msgstr ""
 
 #. info text on the next slide preview, which means the presenting user reached the last slide.
-#: apps/io.ox/presenter/views/sidebar/slidepeekview.js:89
+#: apps/io.ox/presenter/views/sidebar/slidepeekview.js:90
 #: module:io.ox/presenter
 msgid "End of Slides"
 msgstr ""
