@@ -142,15 +142,25 @@
 
 }
 
+.subscribe-imap-folder .modal-body {
+    padding: 0;
+}
+
+// filepicker shoudl always be 100% in width, also in landscape mode
+.ios.smartphone, .android.smartphone {
+    .picker-pc-container {
+        .modal-body {
+            &>div, &>ul {
+                width: 100%;
+            }
+        }
+    }
+}
 // filepicker mobile
 .picker-pc-container {
     .io-ox-pagecontroller.page {
         padding-top: 40px;
     }
-}
-
-.subscribe-imap-folder .modal-body {
-    padding: 0;
 }
 
 .add-infostore-file {
