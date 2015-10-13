@@ -11,9 +11,7 @@
  * @author Stefan Eckert <stefan.eckert@open-xchange.com>
  */
 
-define('io.ox/presenter/sessionrestore', [
-    'io.ox/core/extensions'
-], function (ext) {
+define('io.ox/core/tk/sessionrestore', function () {
 
     // private static methods ----------------------------------------------------
 
@@ -83,7 +81,7 @@ define('io.ox/presenter/sessionrestore', [
          *  if state has the entry "module" SessionRestore tries to load that module after a reload.
          *  ox.launch(state.module, state)
          *
-         * @return {Object}
+         * @returns {Object}
          *  returns old state to assigned id or null if there is was no state before
          *
          */
@@ -118,35 +116,36 @@ define('io.ox/presenter/sessionrestore', [
     // initialization -----------------------------------------------------
 
     if (isActive()) {
-        /*
         var lastStates = getAllData();
-        */
-        _.defer(function () {
-            require(['io.ox/core/desktop']).done(function () {
-                ext.point('io.ox/core/logout').extend({
-                    id: 'sessionrestore',
-                    logout: resetAllData
-                });
 
-                /*
-                var allModules = _.uniq(_.pluck(lastStates, 'module'));
-                require(allModules).done(function () {
-                    var promises = [];
-                    _.each(lastStates, function (state) {
-                        if (state.module) {
-                            promises.push(ox.launch(state.module, state));
-                        }
+        require(['io.ox/core/extensions', 'io.ox/core/extPatterns/stage']).done(function (ext, Stage) {
+            new Stage('io.ox/core/stages', {
+                id: 'documents-session-restore',
+                index: 2000,
+                run: function () {
+                    ext.point('io.ox/core/logout').extend({
+                        id: 'sessionrestore',
+                        logout: resetAllData
                     });
-                    $.when.apply($, promises).done(function () {
-                        //workaround for wrong 'active-app' in top bar
-                        var currentWindow = ox.ui.App.getCurrentWindow();
-                        if (currentWindow) {
-                            currentWindow.hide();
-                            currentWindow.show();
-                        }
+
+                    var allModules = _.uniq(_.pluck(lastStates, 'module'));
+                    require(allModules).done(function () {
+                        var promises = [];
+                        _.each(lastStates, function (state) {
+                            if (state.module) {
+                                promises.push(ox.launch(state.module, state));
+                            }
+                        });
+                        $.when.apply($, promises).done(function () {
+                            //workaround for wrong 'active-app' in top bar
+                            var currentWindow = ox.ui.App.getCurrentWindow();
+                            if (currentWindow) {
+                                currentWindow.hide();
+                                currentWindow.show();
+                            }
+                        });
                     });
-                });
-                */
+                }
             });
         });
 

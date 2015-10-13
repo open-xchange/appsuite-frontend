@@ -15,7 +15,7 @@ define('io.ox/presenter/views/mainview', [
     'io.ox/core/notifications',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/actions',
-    'io.ox/presenter/sessionrestore',
+    'io.ox/core/tk/sessionrestore',
     'io.ox/presenter/views/presentationview',
     'io.ox/presenter/views/sidebarview',
     'io.ox/presenter/views/toolbarview',

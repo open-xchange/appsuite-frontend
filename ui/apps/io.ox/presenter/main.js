@@ -18,7 +18,7 @@ define('io.ox/presenter/main', [
     'io.ox/presenter/rtconnection',
     'io.ox/presenter/rtmodel',
     'io.ox/presenter/views/mainview',
-    'io.ox/presenter/sessionrestore',
+    'io.ox/core/tk/sessionrestore',
     'less!io.ox/presenter/style'
 ], function (FilesAPI, PageController, RTConnection, RTModel, MainView, SessionRestore) {
 
