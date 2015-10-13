@@ -87,7 +87,8 @@ define('io.ox/core/tk/tokenfield', [
                         var model = new pModel.Participant(m);
                         return {
                             value: model.getTarget({ fallback: true }),
-                            label: model.getDisplayName(),
+                            // fallback when firstname and lastname are empty strings
+                            label: model.getDisplayName().trim() || model.getEmail(),
                             model: model
                         };
                     });
