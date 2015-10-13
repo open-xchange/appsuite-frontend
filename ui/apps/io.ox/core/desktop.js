@@ -42,6 +42,15 @@ define('io.ox/core/desktop', [
     // Apps collection
     ox.ui.apps = new Backbone.Collection();
 
+    function supportsFind (name) {
+        // enabled apps
+        var list = coreConfig.get('search/modules', []),
+            name = name.replace(/^io\.ox\//, '');
+        // drive alias
+        name = name === 'files' ? 'drive' : name;
+        return list.indexOf(name) > -1;
+    }
+
     var AbstractApp = Backbone.Model.extend({
 
         defaults: {
@@ -371,6 +380,9 @@ define('io.ox/core/desktop', [
 
         searchable: function () {
             if (this.get('find')) return;
+
+            // break for non supported apps
+            if (!supportsFind(this.getName())) return;
 
             var find = findFactory.getApp({ parent: this });
             //TODO: bottleneck
@@ -1467,7 +1479,7 @@ define('io.ox/core/desktop', [
                 console.warn('io.ox/search is deprecated with 7.8.0. Please use io.ox/find instead');
             }
 
-            if (opt.find) {
+            if (opt.find && supportsFind(opt.name)) {
 
                 ext.point('io.ox/find/view').extend({
                     id: 'view',
