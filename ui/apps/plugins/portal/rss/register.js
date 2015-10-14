@@ -28,6 +28,8 @@ define('plugins/portal/rss/register', [
     ext.point('io.ox/portal/widget/rss').extend({
 
         title: gt('RSS Feed'),
+        // prevent loading on refresh when error occurs to not bloat logs (see Bug 41740)
+        stopLoadingOnError: true,
 
         load: function (baton) {
             var urls = baton.model.get('props').url || [],

@@ -40,6 +40,8 @@ define('plugins/portal/flickr/register', [
     ext.point('io.ox/portal/widget/flickr').extend({
 
         title: 'Flickr',
+        // prevent loading on refresh when error occurs to not bloat logs (see Bug 41740)
+        stopLoadingOnError: true,
 
         initialize: function (baton) {
 

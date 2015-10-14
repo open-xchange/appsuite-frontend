@@ -196,6 +196,8 @@ define('plugins/portal/linkedIn/register', [
     ext.point('io.ox/portal/widget/linkedIn').extend({
 
         title: 'LinkedIn',
+        // prevent loading on refresh when error occurs to not bloat logs (see Bug 41740)
+        stopLoadingOnError: true,
 
         initialize: function () {
             keychain.submodules.linkedin.on('delete', refreshWidget);

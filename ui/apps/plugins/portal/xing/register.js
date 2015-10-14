@@ -260,6 +260,8 @@ define('plugins/portal/xing/register', [
     point.extend({
 
         title: title,
+        // prevent loading on refresh when error occurs to not bloat logs (see Bug 41740)
+        stopLoadingOnError: true,
 
         isEnabled: function () {
             return keychain.isEnabled('xing');

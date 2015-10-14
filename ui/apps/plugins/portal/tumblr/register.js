@@ -33,6 +33,8 @@ define('plugins/portal/tumblr/register', [
     ext.point('io.ox/portal/widget/tumblr').extend({
 
         title: 'Tumblr',
+        // prevent loading on refresh when error occurs to not bloat logs (see Bug 41740)
+        stopLoadingOnError: true,
 
         initialize: function (baton) {
 

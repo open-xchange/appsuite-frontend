@@ -484,6 +484,7 @@ define('io.ox/portal/main', [
             decoration = node.find('.decoration');
         return $.when.apply($, defs).then(
             function success() {
+                baton.options.loadingError = false;
                 var widgetType = _.last(baton.point.split('/'));
                 node.find('.content').remove();
                 // draw summary only on smartphones (please adjust settings pane when adjusting this check)
@@ -531,6 +532,9 @@ define('io.ox/portal/main', [
                             })
                         )
                     );
+                    if (point.prop('stopLoadingOnError')) {
+                        baton.options.loadingError = true;
+                    }
                     point.invoke('error', node, e, baton);
                 } else {
                     // missing oAuth account
@@ -618,7 +622,10 @@ define('io.ox/portal/main', [
 
     // can be called every 30 seconds
     app.refresh = _.throttle(function () {
-        widgets.getEnabled().each(app.refreshWidget);
+        _(widgets.getEnabled()).chain().filter(function (model) {
+            // don't refresh widgets with loading errors automatically so logs don't get spammed (see bug 41740)
+            return ! model.attributes.baton.options.loadingError;
+        }).each(app.refreshWidget);
     }, 30000);
 
     ox.on('refresh^', function () {

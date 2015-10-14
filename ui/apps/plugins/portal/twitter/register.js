@@ -258,6 +258,8 @@ define('plugins/portal/twitter/register', [
     ext.point('io.ox/portal/widget/twitter').extend({
 
         title: gt('Twitter'),
+        // prevent loading on refresh when error occurs to not bloat logs (see Bug 41740)
+        stopLoadingOnError: true,
 
         initialize: function () {
             keychain.submodules.twitter.on('update delete', refreshWidget);
