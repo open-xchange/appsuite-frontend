@@ -94,6 +94,10 @@ define('io.ox/core/folder/util', [
         case 'external':
             return (/^default[1-9]/).test(String(data.id)) && !is('unifiedmail', data);
         case 'defaultfolder':
+            // standardfolders of external accounts are not in the settings, so use account api first
+            if (account.getType(data.id)) {
+                return true;
+            }
             // get default folder
             var folders = mailSettings.get('folder');
             for (id in folders) {
