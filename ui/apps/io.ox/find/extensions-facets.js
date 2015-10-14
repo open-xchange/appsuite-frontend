@@ -168,6 +168,7 @@ define('io.ox/find/extensions-facets', [
 
             // activate
             ddmodel.on('change:option', function (model, option) {
+                baton.view.userchange();
                 value.activate(option);
             });
 

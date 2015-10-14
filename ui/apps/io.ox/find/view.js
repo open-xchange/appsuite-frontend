@@ -30,7 +30,8 @@ define('io.ox/find/view', [
         },
 
         classes: {
-            active: 'io-ox-find-active'
+            active: 'io-ox-find-active',
+            userchange: 'changed-by-user'
         },
 
         /**
@@ -153,6 +154,8 @@ define('io.ox/find/view', [
             this.ui.facets.reset();
             // keep search field focused
             this.setFocus();
+            // remove flags
+            this.ui.container.removeClass(this.classes.userchange);
             // throw event
             this.trigger('reset');
         },
@@ -166,12 +169,21 @@ define('io.ox/find/view', [
             this.trigger('cancel');
         },
 
+        userchange: function () {
+            this.ui.container.addClass(this.classes.userchange);
+            this.setFocus();
+        },
+
+        hasChanged: function () {
+            return this.ui.container.hasClass(this.classes.userchange);
+        },
+
         // on focusout
         smartCancel: function () {
             var self = this;
             // ensures click event in toolbar resolves before cancel is executed
             _.delay(function () {
-                if (!self.hasFocus() && self.isEmpty()) {
+                if (!self.hasFocus() && self.isEmpty() && !self.hasChanged()) {
                     self.cancel();
                 }
             }, 150);
