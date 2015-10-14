@@ -309,6 +309,21 @@ define('io.ox/files/actions', [
         }
     });
 
+    new Action('io.ox/files/actions/launchpresenter', {
+        capabilities: 'presenter document_preview',
+        requires: function (e) {
+            if (!e.collection.has('one')) {
+                return false;
+            }
+            var model = e.baton.models[0];
+            return (model.isPresentation() && model.isFile());
+        },
+        action: function (baton) {
+            var fileModel = baton.models[0];
+            ox.launch('io.ox/presenter/main', fileModel);
+        }
+    });
+
     //drive action for double-click or enter in files
     new Action('io.ox/files/actions/default', {
         action: function (baton) {
