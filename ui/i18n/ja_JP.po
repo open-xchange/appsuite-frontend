@@ -196,8 +196,8 @@ msgstr "%2$s %1$s"
 #. Title of the browser window
 #. %1$s is the name of the page, e.g. OX App Suite
 #. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1153 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1322
+#: apps/io.ox/core/desktop.js:1165 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1334
 msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr "%2$s %1$s"
@@ -1020,7 +1020,7 @@ msgstr "すべての宛先"
 msgid "Append vCard"
 msgstr "vCard を添付"
 
-#: apps/io.ox/core/desktop.js:1067 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1079 module:io.ox/core
 msgid "Application Toolbar"
 msgstr "アプリケーション ツールバー"
 
@@ -1416,7 +1416,7 @@ msgstr "予定表："
 #: apps/io.ox/contacts/actions/delete.js:38 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:203
 #: apps/io.ox/contacts/edit/main.js:258 apps/io.ox/contacts/main.js:412
-#: apps/io.ox/contacts/main.js:744 apps/io.ox/core/desktop.js:1645
+#: apps/io.ox/contacts/main.js:744 apps/io.ox/core/desktop.js:1657
 #: module:io.ox/core apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:109
 #: apps/io.ox/core/folder/actions/archive.js:44
@@ -1477,8 +1477,8 @@ msgstr "予定表："
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: apps/io.ox/core/desktop.js:1553 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1554
+#: apps/io.ox/core/desktop.js:1565 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1566
 msgid "Cancel search"
 msgstr "検索をキャンセル"
 
@@ -1953,7 +1953,7 @@ msgstr "コストは -%1$d から %1$d までの数字でなければなりま�
 msgid "Costs must only have two decimal places."
 msgstr "コストは小数第 2 位まで入力する必要があります。"
 
-#: apps/io.ox/core/desktop.js:292 module:io.ox/core
+#: apps/io.ox/core/desktop.js:301 module:io.ox/core
 msgid "Could not get a default folder for this application."
 msgstr "このアプリケーションの既定のフォルダを取得できませんでした。"
 
@@ -3268,7 +3268,7 @@ msgid "Failed to add. Maybe the vCard attachment is invalid."
 msgstr ""
 "追加できませんでした。添付されている vCard が無効である可能性があります。"
 
-#: apps/io.ox/core/desktop.js:156 module:io.ox/core
+#: apps/io.ox/core/desktop.js:165 module:io.ox/core
 msgid ""
 "Failed to automatically save current stage of work. Please save your work to "
 "avoid data loss in case the browser closes unexpectedly."
@@ -3299,7 +3299,7 @@ msgstr "配布リストの保存に失敗しました。"
 msgid "Failed to sign in"
 msgstr "再サイン インに失敗しました。"
 
-#: apps/io.ox/core/desktop.js:1721 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1733 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -4522,7 +4522,7 @@ msgstr "1 時間あたりのメール数 (%)"
 msgid "Mails per week-day (%)"
 msgstr "1 日あたりのメール数 (%)"
 
-#: apps/io.ox/core/desktop.js:1439 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1451 module:io.ox/core
 msgid "Main window"
 msgstr "メイン ウィンドウ"
 
@@ -6596,7 +6596,7 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "スケジューリング"
 
-#: apps/io.ox/core/desktop.js:1502 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1514 module:io.ox/core
 #: apps/io.ox/core/main.js:817 apps/io.ox/find/extensions-facets.js:30
 #: apps/io.ox/find/main.js:47 apps/io.ox/find/view-tokenfield.js:119
 #: apps/io.ox/search/autocomplete/extensions.js:52
@@ -6615,7 +6615,7 @@ msgid "Search results"
 msgstr "検索結果"
 
 #. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js:1574 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1586 module:io.ox/core
 msgid ""
 "Search results page lists all active facets to allow them to be easly "
 "adjustable/removable. Below theses common facets additonal advanced facets "
@@ -7187,8 +7187,8 @@ msgstr "プレゼンテーションを開始"
 msgid "Start remote presentation"
 msgstr "リモートプレゼンテーションを開始します。"
 
-#: apps/io.ox/core/desktop.js:1540 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1541
+#: apps/io.ox/core/desktop.js:1552 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1553
 msgid "Start search"
 msgstr "検索を開始"
 
@@ -7840,7 +7840,7 @@ msgid ""
 "There are no external applications/services which can access your account."
 msgstr "アカウントへアクセス可能な外部アプリケーション/サービスはありません。"
 
-#: apps/io.ox/core/desktop.js:755 module:io.ox/core
+#: apps/io.ox/core/desktop.js:767 module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "まだ保存されていない変更があります。"
 

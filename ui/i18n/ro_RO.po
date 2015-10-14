@@ -226,8 +226,8 @@ msgstr "%1$s %2$s"
 #. Title of the browser window
 #. %1$s is the name of the page, e.g. OX App Suite
 #. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1153 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1322
+#: apps/io.ox/core/desktop.js:1165 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1334
 msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
@@ -1070,7 +1070,7 @@ msgstr "Toți destinatarii"
 msgid "Append vCard"
 msgstr "Adaugă un vCard"
 
-#: apps/io.ox/core/desktop.js:1067 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1079 module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Bară de unelte pentru aplicații"
 
@@ -1472,7 +1472,7 @@ msgstr "Calendar:"
 #: apps/io.ox/contacts/actions/delete.js:38 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:203
 #: apps/io.ox/contacts/edit/main.js:258 apps/io.ox/contacts/main.js:412
-#: apps/io.ox/contacts/main.js:744 apps/io.ox/core/desktop.js:1645
+#: apps/io.ox/contacts/main.js:744 apps/io.ox/core/desktop.js:1657
 #: module:io.ox/core apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:109
 #: apps/io.ox/core/folder/actions/archive.js:44
@@ -1533,8 +1533,8 @@ msgstr "Calendar:"
 msgid "Cancel"
 msgstr "Renunță"
 
-#: apps/io.ox/core/desktop.js:1553 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1554
+#: apps/io.ox/core/desktop.js:1565 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1566
 msgid "Cancel search"
 msgstr "Anulează căutarea"
 
@@ -2013,7 +2013,7 @@ msgstr "Costurile trebuie să fie cuprinse între -%1$d și %1$d."
 msgid "Costs must only have two decimal places."
 msgstr "Costurile pot avea doar două zecimale."
 
-#: apps/io.ox/core/desktop.js:292 module:io.ox/core
+#: apps/io.ox/core/desktop.js:301 module:io.ox/core
 msgid "Could not get a default folder for this application."
 msgstr "Nu s-a putut obține un dosar implicit pentru această aplicație."
 
@@ -3330,7 +3330,7 @@ msgstr "Față"
 msgid "Failed to add. Maybe the vCard attachment is invalid."
 msgstr "Adăugarea a eșuat. Probabil că fișierul VCard atașat este incorect."
 
-#: apps/io.ox/core/desktop.js:156 module:io.ox/core
+#: apps/io.ox/core/desktop.js:165 module:io.ox/core
 msgid ""
 "Failed to automatically save current stage of work. Please save your work to "
 "avoid data loss in case the browser closes unexpectedly."
@@ -3362,7 +3362,7 @@ msgstr "Salvarea listei de distribuție a eșuat."
 msgid "Failed to sign in"
 msgstr "Autentificarea a eșuat"
 
-#: apps/io.ox/core/desktop.js:1721 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1733 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -4585,7 +4585,7 @@ msgstr "Mesaje pe oră (%)"
 msgid "Mails per week-day (%)"
 msgstr "Mesaje pe zi din săptămână (%)"
 
-#: apps/io.ox/core/desktop.js:1439 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1451 module:io.ox/core
 msgid "Main window"
 msgstr "Fereastră principală"
 
@@ -6680,7 +6680,7 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Programare"
 
-#: apps/io.ox/core/desktop.js:1502 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1514 module:io.ox/core
 #: apps/io.ox/core/main.js:817 apps/io.ox/find/extensions-facets.js:30
 #: apps/io.ox/find/main.js:47 apps/io.ox/find/view-tokenfield.js:119
 #: apps/io.ox/search/autocomplete/extensions.js:52
@@ -6699,7 +6699,7 @@ msgid "Search results"
 msgstr "Rezultate căutare"
 
 #. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js:1574 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1586 module:io.ox/core
 msgid ""
 "Search results page lists all active facets to allow them to be easly "
 "adjustable/removable. Below theses common facets additonal advanced facets "
@@ -7280,8 +7280,8 @@ msgstr "Pornește prezentarea"
 msgid "Start remote presentation"
 msgstr "Pornește o prezentare la distanță"
 
-#: apps/io.ox/core/desktop.js:1540 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1541
+#: apps/io.ox/core/desktop.js:1552 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1553
 msgid "Start search"
 msgstr "Pornește căutarea"
 
@@ -7950,7 +7950,7 @@ msgstr ""
 "Nu există nicio aplicație/serviciu extern ce poate accesa contul "
 "dumneavoastră."
 
-#: apps/io.ox/core/desktop.js:755 module:io.ox/core
+#: apps/io.ox/core/desktop.js:767 module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "Unele modificări nu au fost salvate."
 

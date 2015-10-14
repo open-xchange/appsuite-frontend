@@ -224,8 +224,8 @@ msgstr "%1$s %2$s"
 #. Title of the browser window
 #. %1$s is the name of the page, e.g. OX App Suite
 #. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1153 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1322
+#: apps/io.ox/core/desktop.js:1165 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1334
 msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
@@ -1068,7 +1068,7 @@ msgstr "Jebkurš saņēmējs"
 msgid "Append vCard"
 msgstr "Pievienot vCard"
 
-#: apps/io.ox/core/desktop.js:1067 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1079 module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Aplikācijas rīkjosla"
 
@@ -1471,7 +1471,7 @@ msgstr "Kalendārs:"
 #: apps/io.ox/contacts/actions/delete.js:38 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:203
 #: apps/io.ox/contacts/edit/main.js:258 apps/io.ox/contacts/main.js:412
-#: apps/io.ox/contacts/main.js:744 apps/io.ox/core/desktop.js:1645
+#: apps/io.ox/contacts/main.js:744 apps/io.ox/core/desktop.js:1657
 #: module:io.ox/core apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:109
 #: apps/io.ox/core/folder/actions/archive.js:44
@@ -1532,8 +1532,8 @@ msgstr "Kalendārs:"
 msgid "Cancel"
 msgstr "Atcelt"
 
-#: apps/io.ox/core/desktop.js:1553 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1554
+#: apps/io.ox/core/desktop.js:1565 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1566
 msgid "Cancel search"
 msgstr "Atcelt meklešanu"
 
@@ -2010,7 +2010,7 @@ msgstr "Izmaksām ir jābūt starp -%1$d un %1$d."
 msgid "Costs must only have two decimal places."
 msgstr "Izmaksām var būt tikai divas decimālās zīmes."
 
-#: apps/io.ox/core/desktop.js:292 module:io.ox/core
+#: apps/io.ox/core/desktop.js:301 module:io.ox/core
 msgid "Could not get a default folder for this application."
 msgstr "Nevar iegūt šīs aplikācijas noklusēto mapi."
 
@@ -3327,7 +3327,7 @@ msgstr "Seja"
 msgid "Failed to add. Maybe the vCard attachment is invalid."
 msgstr "Kļūda pie pievienošanas. Iespējams, ka VCard pielikums ir bojāts."
 
-#: apps/io.ox/core/desktop.js:156 module:io.ox/core
+#: apps/io.ox/core/desktop.js:165 module:io.ox/core
 msgid ""
 "Failed to automatically save current stage of work. Please save your work to "
 "avoid data loss in case the browser closes unexpectedly."
@@ -3359,7 +3359,7 @@ msgstr "Kļūda pie izplatīšanas saraksta saglabāšanas."
 msgid "Failed to sign in"
 msgstr "Kļūda pieslēdzoties"
 
-#: apps/io.ox/core/desktop.js:1721 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1733 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -4580,7 +4580,7 @@ msgstr "Vēstules stundā (%)"
 msgid "Mails per week-day (%)"
 msgstr "Vēstules dienā (%)"
 
-#: apps/io.ox/core/desktop.js:1439 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1451 module:io.ox/core
 msgid "Main window"
 msgstr "Pasta logs"
 
@@ -6674,7 +6674,7 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Plānošana"
 
-#: apps/io.ox/core/desktop.js:1502 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1514 module:io.ox/core
 #: apps/io.ox/core/main.js:817 apps/io.ox/find/extensions-facets.js:30
 #: apps/io.ox/find/main.js:47 apps/io.ox/find/view-tokenfield.js:119
 #: apps/io.ox/search/autocomplete/extensions.js:52
@@ -6693,7 +6693,7 @@ msgid "Search results"
 msgstr "Meklēšanas rezultāti"
 
 #. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js:1574 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1586 module:io.ox/core
 msgid ""
 "Search results page lists all active facets to allow them to be easly "
 "adjustable/removable. Below theses common facets additonal advanced facets "
@@ -7274,8 +7274,8 @@ msgstr "Sākt prezentāciju"
 msgid "Start remote presentation"
 msgstr "Sākt attālināto prezentāciju"
 
-#: apps/io.ox/core/desktop.js:1540 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1541
+#: apps/io.ox/core/desktop.js:1552 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1553
 msgid "Start search"
 msgstr "Sākt meklēšanu"
 
@@ -7942,7 +7942,7 @@ msgid ""
 "There are no external applications/services which can access your account."
 msgstr "Nav nevienas ārējas aplikācijas vai servisa ar piekļuvi jūsu kontam."
 
-#: apps/io.ox/core/desktop.js:755 module:io.ox/core
+#: apps/io.ox/core/desktop.js:767 module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "Atrastas nesaglabātas izmaiņas."
 

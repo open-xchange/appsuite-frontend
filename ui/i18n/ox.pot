@@ -468,7 +468,7 @@ msgstr ""
 #: apps/io.ox/contacts/edit/main.js:258
 #: apps/io.ox/contacts/main.js:412
 #: apps/io.ox/contacts/main.js:744
-#: apps/io.ox/core/desktop.js:1645
+#: apps/io.ox/core/desktop.js:1657
 #: module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:109
@@ -3764,22 +3764,22 @@ msgid_plural "%d minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/io.ox/core/desktop.js:156
+#: apps/io.ox/core/desktop.js:165
 #: module:io.ox/core
 msgid "Failed to automatically save current stage of work. Please save your work to avoid data loss in case the browser closes unexpectedly."
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:292
+#: apps/io.ox/core/desktop.js:301
 #: module:io.ox/core
 msgid "Could not get a default folder for this application."
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:755
+#: apps/io.ox/core/desktop.js:767
 #: module:io.ox/core
 msgid "There are unsaved changes."
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1067
+#: apps/io.ox/core/desktop.js:1079
 #: module:io.ox/core
 msgid "Application Toolbar"
 msgstr ""
@@ -3787,19 +3787,19 @@ msgstr ""
 #. Title of the browser window
 #. %1$s is the name of the page, e.g. OX App Suite
 #. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1153
+#: apps/io.ox/core/desktop.js:1165
 #: module:io.ox/core
-#: apps/io.ox/core/desktop.js:1322
+#: apps/io.ox/core/desktop.js:1334
 msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1439
+#: apps/io.ox/core/desktop.js:1451
 #: module:io.ox/core
 msgid "Main window"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1502
+#: apps/io.ox/core/desktop.js:1514
 #: module:io.ox/core
 #: apps/io.ox/core/main.js:817
 #: apps/io.ox/find/extensions-facets.js:30
@@ -3814,25 +3814,25 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1540
+#: apps/io.ox/core/desktop.js:1552
 #: module:io.ox/core
-#: apps/io.ox/core/desktop.js:1541
+#: apps/io.ox/core/desktop.js:1553
 msgid "Start search"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1553
+#: apps/io.ox/core/desktop.js:1565
 #: module:io.ox/core
-#: apps/io.ox/core/desktop.js:1554
+#: apps/io.ox/core/desktop.js:1566
 msgid "Cancel search"
 msgstr ""
 
 #. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js:1574
+#: apps/io.ox/core/desktop.js:1586
 #: module:io.ox/core
 msgid "Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1721
+#: apps/io.ox/core/desktop.js:1733
 #: module:io.ox/core
 msgid "Failed to start application. Maybe you have connection problems. Please try again."
 msgstr ""

@@ -213,8 +213,8 @@ msgstr "%1$s %2$s"
 #. Title of the browser window
 #. %1$s is the name of the page, e.g. OX App Suite
 #. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1153 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1322
+#: apps/io.ox/core/desktop.js:1165 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1334
 msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr "%2$s %1$s"
@@ -1051,7 +1051,7 @@ msgstr "N'importe quel destinataire"
 msgid "Append vCard"
 msgstr "Ajouter une carte de visite au format vCard"
 
-#: apps/io.ox/core/desktop.js:1067 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1079 module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Barre d'outils de l'application"
 
@@ -1454,7 +1454,7 @@ msgstr "Agenda :"
 #: apps/io.ox/contacts/actions/delete.js:38 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:203
 #: apps/io.ox/contacts/edit/main.js:258 apps/io.ox/contacts/main.js:412
-#: apps/io.ox/contacts/main.js:744 apps/io.ox/core/desktop.js:1645
+#: apps/io.ox/contacts/main.js:744 apps/io.ox/core/desktop.js:1657
 #: module:io.ox/core apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:109
 #: apps/io.ox/core/folder/actions/archive.js:44
@@ -1515,8 +1515,8 @@ msgstr "Agenda :"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: apps/io.ox/core/desktop.js:1553 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1554
+#: apps/io.ox/core/desktop.js:1565 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1566
 msgid "Cancel search"
 msgstr "Annuler la recherche"
 
@@ -1993,7 +1993,7 @@ msgstr "Les coûts doivent se situer entre -%1$d et %1$d."
 msgid "Costs must only have two decimal places."
 msgstr "Les coûts ne doivent avoir que deux décimales."
 
-#: apps/io.ox/core/desktop.js:292 module:io.ox/core
+#: apps/io.ox/core/desktop.js:301 module:io.ox/core
 msgid "Could not get a default folder for this application."
 msgstr "Impossible d'obtenir un dossier par défaut pour cette application."
 
@@ -3324,7 +3324,7 @@ msgstr ""
 "L'ajout a échoué. Il se peut que la pièce jointe au format vCard soit "
 "invalide."
 
-#: apps/io.ox/core/desktop.js:156 module:io.ox/core
+#: apps/io.ox/core/desktop.js:165 module:io.ox/core
 msgid ""
 "Failed to automatically save current stage of work. Please save your work to "
 "avoid data loss in case the browser closes unexpectedly."
@@ -3356,7 +3356,7 @@ msgstr "L'enregistrement de la liste de distribution a échoué."
 msgid "Failed to sign in"
 msgstr "La connexion a échoué"
 
-#: apps/io.ox/core/desktop.js:1721 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1733 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -4586,7 +4586,7 @@ msgstr "Messages par heure (%)"
 msgid "Mails per week-day (%)"
 msgstr "Messages par jour ouvré (%)"
 
-#: apps/io.ox/core/desktop.js:1439 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1451 module:io.ox/core
 msgid "Main window"
 msgstr "Fenêtre principale"
 
@@ -6690,7 +6690,7 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Planification"
 
-#: apps/io.ox/core/desktop.js:1502 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1514 module:io.ox/core
 #: apps/io.ox/core/main.js:817 apps/io.ox/find/extensions-facets.js:30
 #: apps/io.ox/find/main.js:47 apps/io.ox/find/view-tokenfield.js:119
 #: apps/io.ox/search/autocomplete/extensions.js:52
@@ -6709,7 +6709,7 @@ msgid "Search results"
 msgstr "Résultats de recherche"
 
 #. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js:1574 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1586 module:io.ox/core
 msgid ""
 "Search results page lists all active facets to allow them to be easly "
 "adjustable/removable. Below theses common facets additonal advanced facets "
@@ -7288,8 +7288,8 @@ msgstr "Démarrer la présentation"
 msgid "Start remote presentation"
 msgstr "Démarrer une présentation à distance"
 
-#: apps/io.ox/core/desktop.js:1540 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1541
+#: apps/io.ox/core/desktop.js:1552 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1553
 msgid "Start search"
 msgstr "Démarrer la recherche"
 
@@ -7960,7 +7960,7 @@ msgid ""
 "There are no external applications/services which can access your account."
 msgstr "Aucun service ou application externe ne peut accéder à votre compte."
 
-#: apps/io.ox/core/desktop.js:755 module:io.ox/core
+#: apps/io.ox/core/desktop.js:767 module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "Certaines modifications n'ont pas été enregistrées."
 
