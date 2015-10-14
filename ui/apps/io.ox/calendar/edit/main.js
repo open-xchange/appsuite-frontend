@@ -161,6 +161,13 @@ define('io.ox/calendar/edit/main', [
                                                 return;
                                             }
                                             if (action === 'ignore') {
+                                                if (self.moveAfterSave) {
+                                                    // prevent some onChange event handlers that would be called on the first save
+                                                    // causes problems, like the change fulltime handler changing the endtime (see Bug 41710)
+                                                    self.model.silentMode = true;
+                                                    // save correct endTimezone (also gets lost on save)
+                                                    self.model.endTimezone = self.model.previousAttributes().endTimezone;
+                                                }
                                                 self.model.set('ignore_conflicts', true, { validate: true });
                                                 self.model.save().then(_.bind(self.onSave, self));
                                             }
@@ -337,6 +344,11 @@ define('io.ox/calendar/edit/main', [
             },
 
             onSave: function (data) {
+                this.model.silentMode = false;
+                if (this.model.endTimezone) {
+                    this.model.set('endTimezone', this.model.endTimezone);
+                    delete this.model.endTimezone;
+                }
                 if (this.moveAfterSave) {
                     var save = _.bind(this.onSave, this),
                         fail = _.bind(this.onError, this),
@@ -355,6 +367,12 @@ define('io.ox/calendar/edit/main', [
             },
 
             onError: function (error) {
+                this.model.silentMode = false;
+                if (this.model.endTimezone) {
+                    this.model.set('endTimezone', this.model.endTimezone);
+                    delete this.model.endTimezone;
+                }
+                delete this.moveAfterSave;
                 this.getWindow().idle();
                 if (error) notifications.yell(error);
             },

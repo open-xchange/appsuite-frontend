@@ -98,6 +98,11 @@ define('io.ox/calendar/model', [
                         }
                     },
                     'change:full_time': function (model, fulltime) {
+                        // silentMode is used when performing a folderchange in the edit dialog
+                        // this listener would change the endtime to a wrong time otherwise
+                        if (model.silentMode) {
+                            return;
+                        }
                         // handle shown as
                         if (settings.get('markFulltimeAppointmentsAsFree', false)) {
                             model.set('shown_as', fulltime ? 4 : 1, { validate: true });
