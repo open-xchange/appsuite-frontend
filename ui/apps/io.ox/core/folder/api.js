@@ -987,6 +987,10 @@ define('io.ox/core/folder/api', [
             api.trigger('remove', id, data);
             api.trigger('remove:' + id, data);
             api.trigger('remove:' + data.module, data);
+            if (account.is('trash', id)) {
+                // if this is a trash folder trigger special event (quota updates)
+                api.trigger('cleared-trash');
+            }
         })
         .fail(function () {
             api.trigger('remove:fail', id);
@@ -1011,6 +1015,10 @@ define('io.ox/core/folder/api', [
             data: [id]
         })
         .done(function () {
+            if (account.is('trash', id)) {
+                // if this is a trash folder trigger special event (quota updates)
+                api.trigger('cleared-trash');
+            }
             api.trigger('clear', id);
             refresh();
         });

@@ -49,14 +49,16 @@ define('io.ox/backbone/mini-views/quota', [
             $(quotaAPI).off('quota-update', this.updateQuota);
         },
 
-        getQuota: function () {
+        getQuota: function (forceReload) {
 
             var o = this.options,
                 module = o.module,
                 quotaField = o.quotaField,
                 usageField = o.usageField;
 
-            if (o.quota && o.usage) {
+            // use forceReload to prevent using the cashed data
+            // quotaAPI.get will trigger an automated redraw
+            if (!forceReload && o.quota && o.usage) {
                 return $.when({
                     quota: o.quota,
                     usage: o.usage

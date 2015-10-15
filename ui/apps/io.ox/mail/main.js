@@ -238,8 +238,7 @@ define('io.ox/mail/main', [
 
             if (_.device('smartphone')) return;
 
-            app.treeView.$el.append(
-                new QuotaView({
+            var quota = new QuotaView({
                     title: gt('Mail quota'),
                     renderUnlimited: false,
                     upsell: {
@@ -249,13 +248,22 @@ define('io.ox/mail/main', [
                         icon: ''
                     },
                     upsellLimit: 5 * 1024 * 1024 // default upsell limit of 5 mb
-                })
-                .render().$el
+                });
+            // add some listeners
+            folderAPI.on('cleared-trash', function () {
+                quota.getQuota(true);
+            });
+            api.on('deleted-mails-from-trash', function () {
+                quota.getQuota(true);
+            });
+
+            app.treeView.$el.append(
+                quota.render().$el
             );
         },
 
         /*
-         * Convenience functin to toggle folder view
+         * Convenience function to toggle folder view
          */
         'folder-view-toggle': function (app) {
             if (_.device('smartphone')) return;
