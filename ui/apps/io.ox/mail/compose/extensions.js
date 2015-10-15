@@ -442,6 +442,9 @@ define('io.ox/mail/compose/extensions', [
                     view.$el
                 );
 
+                // needed when adding several contacts via 'send as vcard'
+                view.updateScrollControls();
+
                 def.resolve(view);
             }, def.reject);
 
