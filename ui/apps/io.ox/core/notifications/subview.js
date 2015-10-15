@@ -67,11 +67,10 @@ define('io.ox/core/notifications/subview', [
                                 .attr({
                                     tabindex: 1,
                                     'data-action': 'clear-single',
-                                    'aria-label': gt ('Hide this notification')
+                                    'aria-label': gt('Hide this notification')
                                 }).on('click', function () {
-                                        view.hide(requestedModel);
-                                    }
-                                )
+                                    view.hide(requestedModel);
+                                })
                             )
                         );
                 }
@@ -133,7 +132,7 @@ define('io.ox/core/notifications/subview', [
     });
 
     //use function here to not override defaults on extending
-    function defaults () {
+    function defaults() {
         return {
             id: '',
             title: '',

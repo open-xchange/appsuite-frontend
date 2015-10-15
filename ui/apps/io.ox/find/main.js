@@ -188,8 +188,8 @@ define('io.ox/find/main', [
                                 fetch: function (params) {
                                     var self = this,
                                         limit = params.limit.split(','),
-                                        start = parseInt(limit[0]),
-                                        size = parseInt(limit[1]) - start;
+                                        start = parseInt(limit[0], 10),
+                                        size = parseInt(limit[1], 10) - start;
 
                                     app.model.set({
                                         'start': start,
@@ -345,7 +345,7 @@ define('io.ox/find/main', [
         };
 
         // register event listeners
-        function register () {
+        function register() {
             var model = app.model,
                 manager = model.manager;
 
@@ -462,7 +462,7 @@ define('io.ox/find/main', [
             });
         };
 
-        function configPreprocess () {
+        function configPreprocess() {
             var parent = app.get('parent');
 
             return $.when(parent.folder.getData(), parent.folder.isDefault())

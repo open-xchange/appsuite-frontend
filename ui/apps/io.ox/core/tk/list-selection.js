@@ -592,7 +592,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         onTouchStart: function (e) {
             var touches = e.originalEvent.touches[0],
                 currentX = touches.pageX, currentY = touches.pageY,
-                t = $(this).css('transition','');
+                t = $(this).css('transition', '');
             // var unfold indicates if any node is unfolded
             // var unfolded indicates if currently touched node is unfolded
             this.startX = currentX;

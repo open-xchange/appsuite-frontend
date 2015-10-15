@@ -731,7 +731,7 @@ define('io.ox/calendar/main', [
             addFolderSupport(defaultFolder);
         }
 
-        function addFolderSupport (folder) {
+        function addFolderSupport(folder) {
             commons.addFolderSupport(app, null, 'calendar', folder)
                 .always(function () {
                     app.mediate();

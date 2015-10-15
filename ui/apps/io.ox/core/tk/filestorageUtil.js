@@ -46,7 +46,7 @@ define('io.ox/core/tk/filestorageUtil', [
                 popup.getBody().append(
                     $('<h4>').text(gt('Conflicts')),
                     $('<div>').text(conflicts.title),
-                    warnings.length ? $('<div class="filestorage-conflict-container">').append($('<h4>').text(gt('Warnings:')),warnings) : ''
+                    warnings.length ? $('<div class="filestorage-conflict-container">').append($('<h4>').text(gt('Warnings:')), warnings) : ''
                 );
                 popup.show().done(function (action) {
                     if (action === 'ignorewarnings') {

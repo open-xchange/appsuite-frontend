@@ -152,7 +152,7 @@ define('io.ox/tasks/util', [
                 // tomorrow
                 result.push(['t', gt('tomorrow')]);
 
-                for (i = (now.day() + 2) % 7;i !== now.day(); i = ++i % 7) {
+                for (i = (now.day() + 2) % 7; i !== now.day(); i = ++i % 7) {
                     //#. reminder date selection
                     //#. %1$s is a weekday, like 'next Monday'
                     result.push(['w' + i, gt('next %1$s', moment.weekdays(i))]);
@@ -179,7 +179,7 @@ define('io.ox/tasks/util', [
                     }
                 } else {
                     // future
-                    if (m.isBefore(startOfDay.add(1,'days'))) {
+                    if (m.isBefore(startOfDay.add(1, 'days'))) {
                         return gt('Today') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
                     } else if (m.isBefore(startOfDay.add(1, 'day'))) {
                         return gt('Tomorrow') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
@@ -273,6 +273,7 @@ define('io.ox/tasks/util', [
                     },
                     //sort by endDate. If equal, sort by alphabet
                     dateSort = function (a, b) {
+                        /* eslint eqeqeq: 0 */
                         /* jshint eqeqeq: false */
                         if (a.end_time > b.end_time) {
                             return 1;

@@ -23,7 +23,7 @@ define('io.ox/calendar/settings/pane', [
     var POINT = 'io.ox/calendar/settings/detail',
 
         optionsInterval = function () {
-            return _.map([5,10,15,20,30,60], function (i) {
+            return _.map([5, 10, 15, 20, 30, 60], function (i) {
                 i = String(i);
                 return { label: gt.noI18n(i), value: i };
             });
@@ -43,7 +43,7 @@ define('io.ox/calendar/settings/pane', [
         },
 
         optionsReminder =  function () {
-            var minInt = [15,30,45,60,120,240,360,480,720,1440,2880,4320,5760,7200,8640,10080,20160,30240,40320],
+            var minInt = [15, 30, 45, 60, 120, 240, 360, 480, 720, 1440, 2880, 4320, 5760, 7200, 8640, 10080, 20160, 30240, 40320],
                 list = [
                     { label: gt('No reminder'), value: '-1' },
                     { label: gt.format(gt.ngettext('%d minute', '%d minutes', 0), 0), value: '0' }

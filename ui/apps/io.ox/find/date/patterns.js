@@ -11,7 +11,7 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/find/date/patterns',[
+define('io.ox/find/date/patterns', [
     'io.ox/core/extensions',
     'gettext!io.ox/core'
 ], function (ext, gt) {
@@ -80,7 +80,7 @@ define('io.ox/find/date/patterns',[
             if (!self.regex.test(value)) return;
 
             // split and get formats
-            parts = value.match(reParts).slice(0,2);
+            parts = value.match(reParts).slice(0, 2);
             list = _.map(parts, function (part) {
                 return {
                     value: part,

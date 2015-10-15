@@ -11,7 +11,7 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/autocomplete/extensions',[
+define('io.ox/search/autocomplete/extensions', [
     'io.ox/core/extensions',
     'io.ox/contacts/api',
     'settings!io.ox/contacts',

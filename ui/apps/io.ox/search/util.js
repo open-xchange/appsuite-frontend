@@ -165,7 +165,7 @@ define('io.ox/search/util', [
 
             defaultfolder = (folderAPI.getDefaultFolder(module) || '').toString();
 
-            function cont (type, data) {
+            function cont(type, data) {
                 var types = {
                     'all': def.resolve.bind(this, {}),
                     'selected': def.resolve.bind(this, {

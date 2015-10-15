@@ -649,7 +649,7 @@ define('io.ox/calendar/week/view', [
 
             if (_.device('!large')) return;
 
-            function drawOption () {
+            function drawOption() {
                 var timezone = moment.tz(this);
 
                 return $('<span class="offset">').text(timezone.format('Z')).prop('outerHTML') + $('<span class="timezone-abbr">').text(timezone.zoneAbbr()).prop('outerHTML') + this;
@@ -916,7 +916,7 @@ define('io.ox/calendar/week/view', [
          * @return { View } thie view
          */
         adjustCellHeight: function () {
-            var cells = Math.min(Math.max(4, (this.workEnd - this.workStart + 1)),18);
+            var cells = Math.min(Math.max(4, (this.workEnd - this.workStart + 1)), 18);
             this.paneHeight = this.pane.height() || this.paneHeight;
             this.cellHeight = Math.floor(
                 Math.max(this.paneHeight / (cells * this.fragmentation),

@@ -28,7 +28,7 @@ define('io.ox/files/util', [
         REJECT = $.Deferred().reject();
 
     // pseudo reject -> real reject
-    function normalize (val) {
+    function normalize(val) {
         // consider: fc
         if (!_.isUndefined(val) && val === false) {
             return $.Deferred().reject();
@@ -85,7 +85,7 @@ define('io.ox/files/util', [
         isFolderType: (function () {
             // tries to get data from current/provided folder
             // hint: may returns a empty objec in case no usable data is provided
-            function getFolder (baton) {
+            function getFolder(baton) {
                 var app = baton.app,
                     data = baton.data || {};
                 if (app) {

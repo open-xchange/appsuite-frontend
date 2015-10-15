@@ -168,7 +168,7 @@ define('io.ox/search/model', [
         this.set('poollist', list);
     };
 
-    function isFolderSet (model) {
+    function isFolderSet(model) {
         var folder = model.get('pool').folder,
             value = folder ? folder.values.custom.custom || !model.isMandatory('folder') : undefined,
             disabled = model.get('pooldisabled').folder;

@@ -170,7 +170,7 @@ define('io.ox/core/tk/text-editor', [], function () {
                 //autosize(textarea);
             });
 
-            function resizeEditor () {
+            function resizeEditor() {
                 textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - $('#io-ox-topbar').height())));
                 //autosize.update(textarea);
             }

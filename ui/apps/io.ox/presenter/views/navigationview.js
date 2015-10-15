@@ -40,7 +40,7 @@ define('io.ox/presenter/views/navigationview', [
      * @returns {jQuery}
      *  the button node.
      */
-    function createNavigationButton (type) {
+    function createNavigationButton(type) {
         var button = $('<a href="#" class="presenter-navigation-slide-button" tabindex="1" role="menuitem" aria-disabled="false">'),
             icon = $('<i class="fa" aria-hidden="true">');
 
@@ -149,7 +149,7 @@ define('io.ox/presenter/views/navigationview', [
             if (!baton.context) { return; }
             //if (_.device('smartphone')) return;
 
-            function quoteId (id) {
+            function quoteId(id) {
                 return id.replace( /(:|@|\/|\.|\[|\]|,)/g, '\\$1' );
             }
 
@@ -280,11 +280,11 @@ define('io.ox/presenter/views/navigationview', [
                 safariFullscreen = this.app.mainView.fullscreen && _.device('safari'),
                 self = this;
 
-            function onPrevSlide (event) {
+            function onPrevSlide(event) {
                 event.preventDefault();
                 self.app.mainView.showPreviousSlide();
             }
-            function onNextSlide (event) {
+            function onNextSlide(event) {
                 event.preventDefault();
                 self.app.mainView.showNextSlide();
             }
@@ -296,7 +296,7 @@ define('io.ox/presenter/views/navigationview', [
                 }
             }
             function onInputChange() {
-                var newValue = parseInt($(this).val());
+                var newValue = parseInt($(this).val(), 10);
 
                 if (isNaN(newValue)) {
                     $(this).val(slideNumber);

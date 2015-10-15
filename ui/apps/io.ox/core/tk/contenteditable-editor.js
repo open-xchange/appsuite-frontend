@@ -203,7 +203,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             skin: 'lightgray'
         }, opt);
 
-        editor.addClass(opt.class);
+        editor.addClass(opt['class']);
 
         opt.toolbar1 += ' | ' + opt.advanced;
 
@@ -545,7 +545,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         this.show = function () {
             el.show();
             // set display to empty sting because of overide 'display' property in css
-            $(fixed_toolbar).css('display','');
+            $(fixed_toolbar).css('display', '');
             resizeEditor();
             $(window).on('resize.tinymce', resizeEditor);
             $(window).on('orientationchange.tinymce', function () {

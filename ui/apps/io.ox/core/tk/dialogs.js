@@ -140,7 +140,7 @@ define('io.ox/core/tk/dialogs', [
                     .find('input, select, button')
                     .add(
                         nodes.body
-                            .css('opacity','')
+                            .css('opacity', '')
                             .find('input, select, button, textarea')
                     )
                     .each(function (key, val) {
@@ -251,9 +251,9 @@ define('io.ox/core/tk/dialogs', [
                 var overSize = docHeight - neededHeight,
                     heightVal = bodyHeight + overSize;
                 if (heightVal >= cellHeight) {
-                    self.getBody().css('height', heightVal +'px');
+                    self.getBody().css('height', heightVal + 'px');
                 } else {
-                    self.getBody().css('height', cellHeight +'px');
+                    self.getBody().css('height', cellHeight + 'px');
                 }
             }
         };

@@ -804,7 +804,7 @@ define('io.ox/files/api', [
     //
     api.update = function (file, changes, options) {
 
-        function process (prev, model, response) {
+        function process(prev, model, response) {
             // success
             if (!(response && response.error)) return;
             // restore old attribute properties

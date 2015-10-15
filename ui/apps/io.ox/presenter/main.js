@@ -71,7 +71,7 @@ define('io.ox/presenter/main', [
                     }
 
                     // Handler update events of the RT connection
-                    function rtUpdateHandler (event, data) {
+                    function rtUpdateHandler(event, data) {
                         //console.info('Presenter - rtUpdateHandler()', data);
                         app.rtModel.set(app.rtModel.parse(data));
                     }

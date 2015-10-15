@@ -11,13 +11,13 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/find/extensions-api',[
+define('io.ox/find/extensions-api', [
     'gettext!io.ox/core'
 ], function (gt) {
 
     'use strict';
 
-    function isVirtualFolder (data) {
+    function isVirtualFolder(data) {
         return /^virtual/.test(data.id);
     }
 
@@ -133,7 +133,7 @@ define('io.ox/find/extensions-api',[
                     return def;
                 }
 
-                function compact (accounts, folders) {
+                function compact(accounts, folders) {
                     // store account data
                     _.each(accounts, function (account) {
                         accountdata[account.id] = account;
@@ -153,7 +153,7 @@ define('io.ox/find/extensions-api',[
                             .value();
                 }
 
-                function unify (list) {
+                function unify(list) {
                     // cluster folders into account hash
                     var accounts = {}, id;
                     _.each(list, function (item) {
@@ -165,7 +165,7 @@ define('io.ox/find/extensions-api',[
                     return accounts;
                 }
 
-                function cleanup (accounts) {
+                function cleanup(accounts) {
                     // handle account folders inplace: reduce, sort, hide
                     _.each(accounts, function (account, key) {
 
@@ -192,7 +192,7 @@ define('io.ox/find/extensions-api',[
                     return accounts;
                 }
 
-                function create (accounts) {
+                function create(accounts) {
                     // create facet/value/option structure
                     var options = folder.values[0].options;
 
@@ -244,7 +244,7 @@ define('io.ox/find/extensions-api',[
                     }
                 }
 
-                function preselect () {
+                function preselect() {
                     //preselect
                     var options = folder.values[0].options,
                         preselect, isMandatory, isDefault, isVirtual,
@@ -375,7 +375,7 @@ define('io.ox/find/extensions-api',[
             if (baton.app.getModuleParam() !== 'files') return def.resolve();
             var req = [];
 
-            function create () {
+            function create() {
                 // shorthand
                 var options = facet.values[0].options;
                 // for each filestorage type (e.g. dropbox)
@@ -403,7 +403,7 @@ define('io.ox/find/extensions-api',[
                 });
             }
 
-            function preselect () {
+            function preselect() {
                 // preselect account matching currently selected folder
                 return baton.app.get('parent').folder.getData()
                     .then(function (data) {

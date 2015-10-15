@@ -98,7 +98,7 @@ define('io.ox/core/settings/downloads/pane', [
             // fallback
             if (_.indexOf(langs, lang) === -1) lang = 'en';
 
-            var $img = $('<div aria-hidden="true" class="oxdrive-shop-image ' + platform +'">')
+            var $img = $('<div aria-hidden="true" class="oxdrive-shop-image ' + platform + '">')
                 .css('background-image', 'url(' + imagePath + lang + '_'  + platform + '.png)');
 
             return $('<a class="shoplink">').attr({

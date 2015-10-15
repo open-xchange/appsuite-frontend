@@ -1020,7 +1020,7 @@ define('io.ox/files/main', [
                         action = node.attr('data-name'),
                         detail = node.attr('data-value');
                     // special handling for select 'links'
-                    if (['all','files','none'].indexOf(action) > -1) {
+                    if (['all', 'files', 'none'].indexOf(action) > -1) {
                         detail = action;
                         action = 'select';
                     }

@@ -201,7 +201,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 _.each(conditionsMapping, function (list, conditionGroup) {
                     if (!_.has(testCapabilities, conditionGroup)) {
                         _.each(conditionsMapping[conditionGroup], function (condition) {
-                            delete headerTranslation[condition] ;
+                            delete headerTranslation[condition];
                         });
                     }
                 });
@@ -820,7 +820,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             drawDeleteButton('action')
                         );
                     } else if (/discard_/g.test(inputId) || /keep_/g.test(inputId)) {
-                        return $('<li>').addClass('filter-settings-view ' +  o.addClass +' row').attr('data-action-id', num).append(
+                        return $('<li>').addClass('filter-settings-view ' +  o.addClass + ' row').attr('data-action-id', num).append(
                             $('<div>').addClass('col-sm-4 singleline').append(
                                 $('<span>').addClass('list-title').text(o.title)
                             ),

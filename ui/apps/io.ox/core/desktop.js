@@ -42,7 +42,7 @@ define('io.ox/core/desktop', [
     // Apps collection
     ox.ui.apps = new Backbone.Collection();
 
-    function supportsFind (name) {
+    function supportsFind(name) {
         // enabled apps
         var list = coreConfig.get('search/modules', []),
             name = name.replace(/^io\.ox\//, '');

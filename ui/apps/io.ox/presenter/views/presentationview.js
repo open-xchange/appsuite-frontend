@@ -73,7 +73,7 @@ define('io.ox/presenter/views/presentationview', [
      * @returns {jQuery}
      *  the button node.
      */
-    function createNavigationButton (type, id) {
+    function createNavigationButton(type, id) {
         var button = $('<a href="#" class="swiper-button-control" tabindex="1" role="button" aria-controls="presenter-carousel">'),
             icon = $('<i class="fa" aria-hidden="true">');
 

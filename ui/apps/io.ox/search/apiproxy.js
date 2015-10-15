@@ -11,7 +11,7 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/apiproxy',[
+define('io.ox/search/apiproxy', [
     'io.ox/core/extensions',
     'gettext!io.ox/core',
     'io.ox/search/api',
@@ -67,7 +67,7 @@ define('io.ox/search/apiproxy',[
          * @param  {[type]} data [description]
          * @return {deferred} returns available facets
          */
-        function extend (args, data) {
+        function extend(args, data) {
             var baton = ext.Baton.ensure({ app: app, data: data.facets, args: args });
             POINT.invoke('customize', this, baton);
             return baton.data;
@@ -79,7 +79,7 @@ define('io.ox/search/apiproxy',[
          * @return {deferred} returns available facets
          * extended into one new options object
          */
-        function autocomplete () {
+        function autocomplete() {
             var args = [{}].concat(Array.prototype.slice.call(arguments)),
                 opt = $.extend.apply(undefined, [true].concat(args));
             // call api
@@ -90,7 +90,7 @@ define('io.ox/search/apiproxy',[
          * add static account facet
          * @param {object} request data
          */
-        function addAccountFacet (request) {
+        function addAccountFacet(request) {
             var folder = _.findWhere(request.data.facets, { facet: 'folder' }),
                 def = $.Deferred();
 

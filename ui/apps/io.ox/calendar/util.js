@@ -125,7 +125,7 @@ define('io.ox/calendar/util', [
                 }
             } else {
                 // future
-                if (m.isBefore(startOfDay.add(1,'days'))) {
+                if (m.isBefore(startOfDay.add(1, 'days'))) {
                     return gt('Today') + ', ' + m.format('l');
                 } else if (m.isBefore(startOfDay.add(1, 'day'))) {
                     return gt('Tomorrow') + ', ' + m.format('l');

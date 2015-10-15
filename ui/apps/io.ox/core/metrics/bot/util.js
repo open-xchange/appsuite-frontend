@@ -126,7 +126,7 @@ define('io.ox/core/metrics/bot/util', [], function () {
             xhr.onload = function () {
                 if (this.status === 200) {
                     var blob = new window.Blob([this.response], { type: 'image/jpg' });
-                    if (callback) callback (blob);
+                    if (callback) callback(blob);
                 } else {
                     console.error('Failed to load image', url);
                 }

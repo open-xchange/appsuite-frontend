@@ -216,7 +216,7 @@ define('io.ox/presenter/views/mainview', [
                 tabableActions.eq(nextElementIndex).focus();
             }
 
-            function togglePause () {
+            function togglePause() {
                 var app = self.app,
                     userId = app.rtConnection.getRTUuid();
                 if (app.rtModel.canPause(userId)) {
@@ -394,7 +394,7 @@ define('io.ox/presenter/views/mainview', [
             var // the notification DOM element
                 yellNode = null;
 
-            function onNotificationAppear () {
+            function onNotificationAppear() {
                 // add action button to the message
                 var // the button label
                     label = yellOptions.action.label,

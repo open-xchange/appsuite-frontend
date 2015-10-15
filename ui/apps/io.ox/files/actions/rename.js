@@ -32,7 +32,7 @@ define('io.ox/files/actions/rename', [
         }
 
         // notifications lazy load
-        function notify () {
+        function notify() {
             var self = this, args = arguments;
             require(['io.ox/core/notifications'], function (notifications) {
                 notifications.yell.apply(self, args);

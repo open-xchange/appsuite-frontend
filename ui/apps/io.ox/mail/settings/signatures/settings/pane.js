@@ -18,7 +18,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
      * By updating the last access timestamp the referenced file is prevented from being deleted from both session and disk storage.
      * Needed for inline images
      */
-    function keepAlive (id) {
+    function keepAlive(id) {
         return http.GET({
             module: 'file',
             params: { action: 'keepalive', id: id }

@@ -99,7 +99,7 @@ define('io.ox/core/viewer/util', [
      */
     Util.setClippedLabel = function (node, str, charpos) {
 
-        var attr = Util.getClippedLabels (str, charpos);
+        var attr = Util.getClippedLabels(str, charpos);
 
         node = (node instanceof $) ? node : $(node);
         node.attr(attr).addClass('viewer-responsive-label');

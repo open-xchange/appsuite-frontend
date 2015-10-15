@@ -45,7 +45,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 });
             }
 
-            function versionSorter (version1, version2) {
+            function versionSorter(version1, version2) {
                 // current version always on top
                 if (version1.current_version) {
                     return -versions.length;

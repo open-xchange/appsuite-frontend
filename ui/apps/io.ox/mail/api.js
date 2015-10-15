@@ -1598,7 +1598,7 @@ define('io.ox/mail/api', [
         return !util.isDeleted(item);
     }
 
-    function getThreadList (obj) {
+    function getThreadList(obj) {
         // thread references returned within object
         if (obj.thread) return obj.thread;
         // may thread references already available in pool

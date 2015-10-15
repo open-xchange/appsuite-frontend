@@ -191,7 +191,7 @@ define('io.ox/metrics/util', function () {
             return (a + b) & 0xFFFFFFFF;
         };
 
-        if (md5('hello') != '5d41402abc4b2a76b9719d911017c592') {
+        if (md5('hello') !== '5d41402abc4b2a76b9719d911017c592') {
             add32 = function (x, y) {
                 var lsw = (x & 0xFFFF) + (y & 0xFFFF),
                     msw = (x >> 16) + (y >> 16) + (lsw >> 16);
@@ -201,7 +201,7 @@ define('io.ox/metrics/util', function () {
     })();
 
     // https://developer.mozilla.org/de/docs/Web/API/navigator/doNotTrack
-    function doNotTrack () {
+    function doNotTrack() {
         return [
             navigator.doNotTrack,
             navigator.msDoNotTrack,
@@ -210,7 +210,7 @@ define('io.ox/metrics/util', function () {
     }
 
     // hash of userdata + salt
-    function getUserHash () {
+    function getUserHash() {
         var userhash = _.getCookie('metrics-userhash');
         if (!userhash) {
             var salt = (Math.random() + 1).toString(36).substring(2),

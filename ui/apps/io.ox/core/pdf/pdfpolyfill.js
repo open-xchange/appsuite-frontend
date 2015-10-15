@@ -21,7 +21,7 @@ define('io.ox/core/pdf/pdfpolyfill', function () {
         }
 
         function toCamelCase(s) {
-            return s.replace(dashChar, function (m,l) { return l.toUpperCase(); });
+            return s.replace(dashChar, function (m, l) { return l.toUpperCase(); });
         }
 
         function updateDataset() {
@@ -39,9 +39,9 @@ define('io.ox/core/pdf/pdfpolyfill', function () {
         el.addEventListener('DOMAttrModified', detectMutation, false);
         el.setAttribute('foo', 'bar');
 
-        function defineElementGetter (obj, prop, getter) {
+        function defineElementGetter(obj, prop, getter) {
             if (Object.defineProperty) {
-                Object.defineProperty(obj, prop,{
+                Object.defineProperty(obj, prop, {
                     get: getter
                 });
             } else {

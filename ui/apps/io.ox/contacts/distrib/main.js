@@ -64,7 +64,7 @@ define('io.ox/contacts/distrib/main', [
                 app: this
             });
 
-            function quit () {
+            function quit() {
                 app.quit();
             }
 

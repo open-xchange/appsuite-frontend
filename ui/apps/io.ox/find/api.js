@@ -84,7 +84,7 @@ define('io.ox/find/api', [
         },
         simpleCache = new cache.SimpleCache('find/autocomplete');
 
-    function getColumns (options) {
+    function getColumns(options) {
         var module = options.params.module,
             data = columns[module],
             obj = {

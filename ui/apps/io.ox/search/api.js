@@ -84,7 +84,7 @@ define('io.ox/search/api', [
         },
         simpleCache = new cache.SimpleCache('search-find');
 
-    function getColumns (options) {
+    function getColumns(options) {
         var module = options.params.module,
             data = _.extend(columns[module]);
         // merge columnlist strings (see bug #38853)

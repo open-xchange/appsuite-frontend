@@ -24,7 +24,7 @@ define('io.ox/core/tk/typeahead', [
 
     // https://github.com/twitter/typeahead.js/blob/master/doc/jquery_typeahead.md
 
-    function customEvent (state, data) {
+    function customEvent(state, data) {
         this.model.set({
             source: state
         });

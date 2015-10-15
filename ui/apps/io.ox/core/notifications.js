@@ -350,11 +350,11 @@ define('io.ox/core/notifications', [
 
             //adjust top if theres a banner (cannot be done before because its not attached when the banner is drawn)
             var bannerHeight = $('#io-ox-banner:visible').css('height'),
-                nodeHeight = parseInt(self.nodes.main.css('top').replace('px',''), 10);
+                nodeHeight = parseInt(self.nodes.main.css('top').replace('px', ''), 10);
 
             if (bannerHeight) {
 
-                bannerHeight = parseInt(bannerHeight.replace('px',''), 10);
+                bannerHeight = parseInt(bannerHeight.replace('px', ''), 10);
                 self.bannerHeight = bannerHeight;
                 var newHeight = nodeHeight + bannerHeight;
                 self.nodes.main.css('top', newHeight + 'px');

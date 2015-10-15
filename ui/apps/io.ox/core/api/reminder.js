@@ -194,7 +194,7 @@ define('io.ox/core/api/reminder', [
         api.refresh();
     });
 
-    function handleDelete (item, type) {
+    function handleDelete(item, type) {
         if (!(item || item.length)) {
             return;
         }

@@ -259,10 +259,8 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
 
         function replaceEls(html, el) {
 
-            var pattern, regex, markdown;
-            /* jshint ignore:start */
+            var markdown,
             pattern = el.type === 'void' ? '<' + el.tag + '\\b([^>]*)\\/?>' : '<' + el.tag + '\\b([^>]*)>([\\s\\S]*?)<\\/' + el.tag + '>',
-            /* jshint ignore:end */
             regex = new RegExp(pattern, 'gi');
 
             if (typeof el.replacement === 'string') {
@@ -307,19 +305,19 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
                 var lis = innerHTML.split('</li>');
                 lis.splice(lis.length - 1, 1);
 
+                function fixupList(str, innerHTML) {
+                    innerHTML = innerHTML
+                        .replace(/^\s+/, '')
+                        .replace(/\n\n/g, '\n\n    ')
+                        // indent nested lists
+                        .replace(/\n([ ]*)+(\*|\d+\.) /g, '\n$1    $2 ');
+                    return innerHTML;
+                }
+
                 for (i = 0, len = lis.length; i < len; i++) {
                     if (lis[i]) {
-                        /* jshint ignore:start */
                         var prefix = (listType === 'ol') ? (i + 1) + '.  ' : '*   ';
-                        lis[i] = lis[i].replace(/\s*<li[^>]*>([\s\S]*)/i, function (str, innerHTML) {
-                            innerHTML = innerHTML
-                                .replace(/^\s+/, '')
-                                .replace(/\n\n/g, '\n\n    ')
-                                // indent nested lists
-                                .replace(/\n([ ]*)+(\*|\d+\.) /g, '\n$1    $2 ');
-                            return prefix + innerHTML;
-                        });
-                        /* jshint ignore:end */
+                        lis[i] = prefix + lis[i].replace(/\s*<li[^>]*>([\s\S]*)/i, fixupList);
                     }
                     lis[i] = lis[i].replace(/(.) +$/m, '$1');
                 }
@@ -361,7 +359,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
         }
 
         string = cleanUp(string);
-        string = string.replace(/^\s+\n\n/,'\n');
+        string = string.replace(/^\s+\n\n/, '\n');
         // only insert newline when content starts with quote
         if (!/^\n\>\s/.test(string)) {
             string = string.replace(/^\n/, '');

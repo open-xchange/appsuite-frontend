@@ -24,7 +24,7 @@ define('io.ox/files/actions/upload-new-version', [
         /**
          * notifications lazy load
          */
-        function notify () {
+        function notify() {
             var self = this, args = arguments;
             require(['io.ox/core/yell'], function (yell) {
                 yell.apply(self, args);

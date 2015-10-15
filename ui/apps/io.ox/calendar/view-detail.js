@@ -248,7 +248,7 @@ define('io.ox/calendar/view-detail', [
         }
     });
 
-    function getDeepLink (data) {
+    function getDeepLink(data) {
         return [
             ox.abs,
             ox.root,

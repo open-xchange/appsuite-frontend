@@ -31,7 +31,7 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
     /**
      * notifications lazy load
      */
-    function notify () {
+    function notify() {
         var self = this, args = arguments;
         require(['io.ox/core/notifications'], function (notifications) {
             notifications.yell.apply(self, args);

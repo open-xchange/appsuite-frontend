@@ -152,11 +152,11 @@ define('io.ox/core/folder/api', [
         }
     }
 
-    function onChangeSubtotal (model, value) {
+    function onChangeSubtotal(model, value) {
         bubbleSubtotal(model, value, 'subtotal');
     }
 
-    function onChangeUnread (model, value) {
+    function onChangeUnread(model, value) {
         bubbleSubtotal(model, value, 'unread');
         // forward event
         api.trigger('change:unread', model, value);

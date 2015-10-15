@@ -264,7 +264,7 @@ define('io.ox/find/view-tokenfield', [
         // register additional handlers
         register: function () {
             var self = this;
-            function preventOnCancel (e) {
+            function preventOnCancel(e) {
                 if ($(document.activeElement).is('body')) e.preventDefault();
             }
             //retrigger events on view

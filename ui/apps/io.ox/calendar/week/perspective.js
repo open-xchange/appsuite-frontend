@@ -364,7 +364,7 @@ define('io.ox/calendar/week/perspective', [
         followDeepLink: function () {
             var cid = _.url.hash('id'), e;
             if (cid) {
-                cid = cid.split(',',1)[0];
+                cid = cid.split(',', 1)[0];
 
                 if (_.device('smartphone')) {
                     ox.launch('io.ox/calendar/detail/main', { cid: cid });

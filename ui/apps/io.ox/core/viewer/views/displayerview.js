@@ -253,11 +253,11 @@ define('io.ox/core/viewer/views/displayerview', [
             var slideIndex = slideIndex || 0,
                 loadRange;
 
-            function getLeftRange () {
+            function getLeftRange() {
                 return _.range(slideIndex, slideIndex - (offset + 1), -1);
             }
 
-            function getRigthRange () {
+            function getRigthRange() {
                 return _.range(slideIndex, slideIndex + offset + 1, 1);
             }
 

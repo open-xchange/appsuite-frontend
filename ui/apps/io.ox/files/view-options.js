@@ -235,9 +235,9 @@ define('io.ox/files/view-options', [
                                 return !submodule.canAdd || submodule.canAdd.apply(this);
                             }),
                             buttonTemplates = {
-                                'google': [gt('Add Google Drive account'),'logo-google'],
-                                'dropbox': [gt('Add Dropbox account'),'logo-dropbox'],
-                                'msliveconnect': [gt('Add OneDrive account'),'logo-onedrive'],
+                                'google': [gt('Add Google Drive account'), 'logo-google'],
+                                'dropbox': [gt('Add Dropbox account'), 'logo-dropbox'],
+                                'msliveconnect': [gt('Add OneDrive account'), 'logo-onedrive'],
                                 'boxcom': [gt('Add Box account'), 'logo-boxcom']
                             },
                             buttons = {},
@@ -256,7 +256,7 @@ define('io.ox/files/view-options', [
                             container.hide();
                             return;
                         }
-                        function buildbutton (text, customclass, service) {
+                        function buildbutton(text, customclass, service) {
                             var node = $('<a href="#" class="toolbar-item" role="button">').addClass(customclass)
                                 .append(
                                     $('<span class="sr-only">').text(text)

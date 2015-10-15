@@ -129,7 +129,7 @@ define('io.ox/find/view-facets', [
             var self = this,
                 is = self.is;
 
-            function isAccount (data) {
+            function isAccount(data) {
                 var account = self.model.manager.get('account');
                 if (!account) return true;
                 return data.account_id === account.getValue().getOption().value;

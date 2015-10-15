@@ -29,7 +29,7 @@ define('io.ox/metrics/main', [
         userhash = util.getUserHash(),
         metrics;
 
-    function isEnabled () {
+    function isEnabled() {
         // disable when doNotTrack is enabled
         if (settings.get('tracking/donottrack', false) && util.doNotTrack()) return false;
         // disable for tests
@@ -42,7 +42,7 @@ define('io.ox/metrics/main', [
     }
 
     // add generated id to baton (based on baton.data)
-    function qualify (baton) {
+    function qualify(baton) {
         var data = baton.data,
             // remove leading 'io.ox/' to flatten the id a little bit
             action = data.action ? data.action.replace(/^io\.ox\//, '') : data.action,
@@ -53,14 +53,14 @@ define('io.ox/metrics/main', [
         return baton;
     }
 
-    function createBaton (obj) {
+    function createBaton(obj) {
         // obj can be data or event with data property
         var isEvent = !!obj.preventDefault,
             baton = ext.Baton.ensure(isEvent ? { data: obj.data, event: obj } : { data: obj });
         return qualify(baton);
     }
 
-    function mapColumns (data) {
+    function mapColumns(data) {
         var app = data.app === 'drive' ? 'files' : data.app,
             mapping = http.getColumnMapping(app);
         return data.detail = mapping[data.detail] || data.detail;
