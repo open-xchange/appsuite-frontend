@@ -50,6 +50,22 @@ define('io.ox/editor/main', [
         },
 
         onContentKeydown: function (e) {
+            // chrome has some problems with page up and down keys (https://groups.google.com/a/chromium.org/forum/#!topic/chromium-bugs/AqNbWLzzIW8 https://bugs.webkit.org/show_bug.cgi?id=64143)
+            // use a workaround to fake the page up and down behaviour
+            if (_.device('chrome') && (e.which === 33 || e.which === 34)) {
+                e.preventDefault();
+                if (e.which === 33) {
+                    // cursor to first position
+                    e.target.setSelectionRange(0,0);
+                    e.target.scrollTop = 0;
+                } else {
+                    // cursor to last position
+                    var v = e.target.value;
+                    e.target.value = '';
+                    e.target.value = v;
+                    e.target.scrollTop = e.target.scrollHeight;
+                }
+            }
             if (e.which === 13 && e.ctrlKey) {
                 e.preventDefault();
                 this.app.save();
