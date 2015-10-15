@@ -534,7 +534,7 @@ msgstr "深刻なエラーが発生しました。"
 msgid "About"
 msgstr "バージョン情報"
 
-#: apps/io.ox/calendar/edit/extensions.js:385 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:387 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Absent"
 msgstr "欠席"
@@ -735,7 +735,7 @@ msgstr "ファイルを追加"
 msgid "Add from Drive"
 msgstr "Drive から追加"
 
-#: apps/io.ox/files/actions.js:657 module:io.ox/files
+#: apps/io.ox/files/actions.js:672 module:io.ox/files
 #: apps/io.ox/mail/compose/extensions.js:495 module:io.ox/mail
 msgid "Add local file"
 msgstr "ローカル ファイルを追加"
@@ -758,7 +758,7 @@ msgstr "予定表に追加"
 
 #: apps/io.ox/core/folder/actions/add.js:57 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:239
-#: apps/io.ox/core/folder/extensions.js:591 apps/io.ox/files/actions.js:674
+#: apps/io.ox/core/folder/extensions.js:591 apps/io.ox/files/actions.js:689
 #: module:io.ox/files
 msgid "Add new folder"
 msgstr "新規フォルダを追加"
@@ -781,7 +781,7 @@ msgstr "新規の署名を追加"
 
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
-#: apps/io.ox/files/actions.js:667 module:io.ox/files
+#: apps/io.ox/files/actions.js:682 module:io.ox/files
 msgid "Add note"
 msgstr "メモを追加"
 
@@ -841,8 +841,8 @@ msgstr "お気に入りに追加"
 #: apps/io.ox/contacts/actions.js:436 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:125
 #: apps/io.ox/core/viewer/views/toolbarview.js:265 module:io.ox/core
-#: apps/io.ox/files/actions.js:791 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:211 apps/io.ox/mail/actions.js:674
+#: apps/io.ox/files/actions.js:806 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:218 apps/io.ox/mail/actions.js:674
 #: module:io.ox/mail apps/io.ox/mail/toolbar.js:179
 msgid "Add to portal"
 msgstr "ポータルに追加"
@@ -860,8 +860,8 @@ msgstr "ウィジェットを追加"
 msgid "Add your %1$s account"
 msgstr "アカウント %1$s を追加"
 
-#: apps/plugins/portal/linkedIn/register.js:382 module:plugins/portal
-#: apps/plugins/portal/twitter/register.js:394
+#: apps/plugins/portal/linkedIn/register.js:384 module:plugins/portal
+#: apps/plugins/portal/twitter/register.js:396
 msgid "Add your account"
 msgstr "アカウントを追加"
 
@@ -939,7 +939,7 @@ msgstr "すべてのフォルダ"
 msgid "All attachments"
 msgstr "すべての添付ファイル"
 
-#: apps/io.ox/calendar/edit/extensions.js:280 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:282 module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js:212 module:io.ox/tasks/edit
 msgid "All day"
 msgstr "終日"
@@ -979,7 +979,7 @@ msgstr "HTML フォーマットのメールを許可"
 msgid "Allow pre-loading of externally linked images"
 msgstr "外部リンク先の画像の事前読み込みを許可"
 
-#: apps/io.ox/portal/main.js:525 module:io.ox/portal
+#: apps/io.ox/portal/main.js:526 module:io.ox/portal
 msgid "An error occurred."
 msgstr "エラーが発生しました。"
 
@@ -1056,7 +1056,7 @@ msgid "Apply to all subfolders"
 msgstr "全てのサブフォルダに適用"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:225 module:io.ox/calendar
-#: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:366
+#: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:384
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js:281
 #: apps/io.ox/calendar/week/perspective.js:161
 #: apps/io.ox/mail/detail/links.js:73 module:io.ox/mail
@@ -1168,7 +1168,7 @@ msgid "Attachment has been saved"
 msgid_plural "Attachments have been saved"
 msgstr[0] "添付ファイルを保存しました。"
 
-#: apps/io.ox/calendar/edit/extensions.js:541 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:543 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:381 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:130 module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js:491 module:io.ox/mail
@@ -1395,7 +1395,7 @@ msgstr "予定表"
 msgid "Calendar view"
 msgstr "予定表ビュー"
 
-#: apps/io.ox/calendar/edit/extensions.js:148 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:150 module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "予定表："
 
@@ -1406,7 +1406,7 @@ msgstr "予定表："
 #: apps/io.ox/calendar/actions/delete.js:79
 #: apps/io.ox/calendar/actions/delete.js:91
 #: apps/io.ox/calendar/actions/edit.js:42 apps/io.ox/calendar/edit/main.js:155
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:406
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:424
 #: apps/io.ox/calendar/edit/timezone-dialog.js:141
 #: apps/io.ox/calendar/main.js:256 apps/io.ox/calendar/main.js:322
 #: apps/io.ox/calendar/month/perspective.js:114
@@ -1453,7 +1453,7 @@ msgstr "予定表："
 #: apps/io.ox/mail/main.js:299 apps/io.ox/mail/main.js:1240
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:149
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:253
-#: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:686
+#: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:121
 #: apps/io.ox/settings/accounts/settings/pane.js:134
 #: module:io.ox/settings/accounts apps/io.ox/settings/apps/settings/pane.js:54
@@ -1466,10 +1466,10 @@ msgstr "予定表："
 #: apps/plugins/administration/resources/settings/toolbar.js:63
 #: apps/plugins/core/feedback/register.js:140
 #: apps/plugins/notifications/calendar/register.js:85
-#: module:plugins/notifications apps/plugins/portal/flickr/register.js:235
+#: module:plugins/notifications apps/plugins/portal/flickr/register.js:237
 #: module:plugins/portal apps/plugins/portal/mail/register.js:228
-#: apps/plugins/portal/rss/register.js:154
-#: apps/plugins/portal/tumblr/register.js:260
+#: apps/plugins/portal/rss/register.js:156
+#: apps/plugins/portal/tumblr/register.js:262
 #: apps/plugins/portal/twitter/util.js:122
 #: apps/plugins/portal/twitter/util.js:412
 #: apps/plugins/portal/userSettings/register.js:111
@@ -1500,8 +1500,8 @@ msgstr "この連絡先があなたに送信したメッセージが見つかり
 msgid "Cannot find any messages you sent to this contact."
 msgstr "この連絡先に送信したメッセージが見つかりません。"
 
-#: apps/plugins/portal/flickr/register.js:184 module:plugins/portal
-#: apps/plugins/portal/flickr/register.js:189
+#: apps/plugins/portal/flickr/register.js:186 module:plugins/portal
+#: apps/plugins/portal/flickr/register.js:191
 msgid "Cannot find user with given name."
 msgstr "指定した名前のユーザが見つかりません。"
 
@@ -1594,7 +1594,7 @@ msgstr "キャラクター"
 
 #: apps/io.ox/calendar/toolbar.js:169 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:170 module:io.ox/contacts
-#: apps/io.ox/files/toolbar.js:293 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:300 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:248 module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js:145
 msgid "Checkboxes"
@@ -1642,7 +1642,7 @@ msgstr "終日のアポイントを作成するには、クリックしてくだ
 msgid "Click here to quit the help center"
 msgstr "ヘルプ センターを終了するには、ここをクリックします。"
 
-#: apps/plugins/portal/xing/register.js:326 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:328 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
 "アクティビティを閲覧するには、こちらをクリックし Xing アカウントへ接続し直し"
@@ -1689,7 +1689,7 @@ msgstr "再試行"
 msgid "Click to retry later."
 msgstr "後で再試行"
 
-#: apps/io.ox/portal/main.js:528 module:io.ox/portal
+#: apps/io.ox/portal/main.js:529 module:io.ox/portal
 msgid "Click to try again."
 msgstr "クリックして再試行"
 
@@ -1732,13 +1732,13 @@ msgstr "フォルダ ビューを閉じる"
 msgid "Close this reminder"
 msgstr "このアラームを閉じる"
 
-#: apps/io.ox/calendar/edit/extensions.js:340 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:342 module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js:124 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:147
 msgid "Collapse form"
 msgstr "フォームを折りたたむ"
 
-#: apps/io.ox/calendar/edit/extensions.js:433 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:435 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/view-options.js:36 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:170 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:172
@@ -1924,9 +1924,9 @@ msgstr ""
 #: apps/io.ox/contacts/actions.js:129 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:452
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:90 module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js:117 apps/io.ox/files/actions.js:509
-#: module:io.ox/files apps/io.ox/files/actions.js:851
-#: apps/io.ox/files/toolbar.js:225 apps/io.ox/mail/actions.js:226
+#: apps/io.ox/contacts/toolbar.js:117 apps/io.ox/files/actions.js:524
+#: module:io.ox/files apps/io.ox/files/actions.js:866
+#: apps/io.ox/files/toolbar.js:232 apps/io.ox/mail/actions.js:226
 #: apps/io.ox/mail/actions.js:612
 #: apps/io.ox/mail/mobile-toolbar-actions.js:107
 #: apps/io.ox/mail/toolbar.js:143
@@ -1965,7 +1965,7 @@ msgstr "この連絡先の添付ファイルを読み込めませんでした。
 msgid "Could not load attachments for this task."
 msgstr "この仕事の添付ファイルを読み込めませんでした。"
 
-#: apps/plugins/portal/flickr/register.js:54 module:plugins/portal
+#: apps/plugins/portal/flickr/register.js:56 module:plugins/portal
 msgid "Could not load data"
 msgstr "データを読み込めませんでした。"
 
@@ -2037,7 +2037,7 @@ msgid "Create"
 msgstr "作成"
 
 #: apps/io.ox/calendar/edit/extensions.js:55 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:171 apps/io.ox/calendar/edit/main.js:317
+#: apps/io.ox/calendar/edit/main.js:178 apps/io.ox/calendar/edit/main.js:324
 msgid "Create appointment"
 msgstr "アポイントを作成"
 
@@ -2056,7 +2056,7 @@ msgid "Create list"
 msgstr "リストを作成"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/plugins/portal/xing/register.js:289 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:291 module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "次の新規アカウントを作成: %1$s"
 
@@ -2245,15 +2245,15 @@ msgstr "延期"
 #: apps/io.ox/core/sub/settings/pane.js:158 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:160
 #: apps/io.ox/core/viewer/views/toolbarview.js:279
-#: apps/io.ox/files/actions.js:750 module:io.ox/files
+#: apps/io.ox/files/actions.js:765 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
-#: apps/io.ox/files/toolbar.js:167 apps/io.ox/mail/actions.js:507
+#: apps/io.ox/files/toolbar.js:174 apps/io.ox/mail/actions.js:507
 #: apps/io.ox/mail/actions/delete.js:67 apps/io.ox/mail/actions/delete.js:86
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:374
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:375
-#: apps/io.ox/mail/toolbar.js:79 apps/io.ox/portal/main.js:684
+#: apps/io.ox/mail/toolbar.js:79 apps/io.ox/portal/main.js:691
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:119
 #: apps/io.ox/settings/accounts/settings/pane.js:111
 #: module:io.ox/settings/accounts apps/io.ox/settings/apps/settings/pane.js:96
@@ -2322,7 +2322,7 @@ msgstr "設備を削除"
 msgid "Delete task"
 msgstr "仕事を削除"
 
-#: apps/io.ox/files/actions.js:910 module:io.ox/files
+#: apps/io.ox/files/actions.js:925 module:io.ox/files
 msgid "Delete version"
 msgstr "バージョンを削除"
 
@@ -2330,7 +2330,7 @@ msgstr "バージョンを削除"
 msgid "Delete whole series"
 msgstr "アポイント全体を削除"
 
-#: apps/io.ox/portal/main.js:680 module:io.ox/portal
+#: apps/io.ox/portal/main.js:687 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:115
 msgid "Delete widget"
 msgstr "ウィジェットを削除"
@@ -2356,16 +2356,16 @@ msgstr "部署"
 msgid "Descending"
 msgstr "降順"
 
-#: apps/io.ox/calendar/edit/extensions.js:318 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:320 module:io.ox/calendar/edit/main
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:94
 #: module:io.ox/core/viewer apps/io.ox/files/actions/edit-description.js:31
 #: module:io.ox/files apps/io.ox/tasks/edit/view-template.js:113
 #: module:io.ox/tasks/edit
 #: apps/plugins/administration/resources/settings/edit.js:50 module:io.ox/core
-#: apps/plugins/portal/flickr/register.js:227 module:plugins/portal
+#: apps/plugins/portal/flickr/register.js:229 module:plugins/portal
 #: apps/plugins/portal/mail/register.js:221
-#: apps/plugins/portal/rss/register.js:147 module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:252
+#: apps/plugins/portal/rss/register.js:149 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:254
 msgid "Description"
 msgstr "説明"
 
@@ -2408,11 +2408,11 @@ msgid "Disable"
 msgstr "無効"
 
 #: apps/io.ox/portal/main.js:251 module:io.ox/portal
-#: apps/io.ox/portal/main.js:252 apps/io.ox/portal/main.js:569
+#: apps/io.ox/portal/main.js:252 apps/io.ox/portal/main.js:573
 msgid "Disable widget"
 msgstr "ウィジェットを無効化"
 
-#: apps/io.ox/calendar/edit/extensions.js:95 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:97 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js:54 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js:253
 #: apps/io.ox/core/settings/user.js:46
@@ -2425,7 +2425,7 @@ msgstr "破棄"
 
 #. "Discard changes" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/calendar/edit/main.js:405 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:423 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:202 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:257 apps/io.ox/editor/main.js:349
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:181 module:io.ox/tasks
@@ -2553,12 +2553,12 @@ msgid "Do you really want to delete this task?"
 msgid_plural "Do you really want to delete these tasks?"
 msgstr[0] "この仕事を削除しますか？"
 
-#: apps/io.ox/portal/main.js:681 module:io.ox/portal
+#: apps/io.ox/portal/main.js:688 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
 msgid "Do you really want to delete this widget?"
 msgstr "このウィジェットを削除しますか？"
 
-#: apps/io.ox/calendar/edit/main.js:402 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:420 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:199 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:254 apps/io.ox/editor/main.js:346
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:178 module:io.ox/tasks
@@ -2650,9 +2650,9 @@ msgstr "終日のアポイントを作成するには、この行をダブル �
 #: apps/io.ox/core/viewer/views/toolbarview.js:214
 #: apps/io.ox/core/viewer/views/toolbarview.js:295
 #: apps/io.ox/core/viewer/views/toolbarview.js:322
-#: apps/io.ox/files/actions.js:733 module:io.ox/files
-#: apps/io.ox/files/actions.js:741 apps/io.ox/files/actions.js:892
-#: apps/io.ox/files/toolbar.js:153 apps/io.ox/files/toolbar.js:160
+#: apps/io.ox/files/actions.js:748 module:io.ox/files
+#: apps/io.ox/files/actions.js:756 apps/io.ox/files/actions.js:907
+#: apps/io.ox/files/toolbar.js:160 apps/io.ox/files/toolbar.js:167
 #: apps/io.ox/mail/actions.js:717 module:io.ox/mail
 #: apps/plugins/portal/updater/register.js:38 module:plugins/portal
 msgid "Download"
@@ -2731,7 +2731,7 @@ msgstr "アップロードするには、ここにファイルをドロップし
 msgid "Drop here to import this mail"
 msgstr "このメールをインポートするには、ここにドロップしてください。"
 
-#: apps/io.ox/calendar/edit/extensions.js:615 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:617 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/edit/view-form.js:389 module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js:684 module:io.ox/tasks/edit
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
@@ -2739,19 +2739,19 @@ msgstr ""
 "<b class=\"dndignore\">新規の添付ファイル</b> をアップロードするには、ここに"
 "ドロップしてください。"
 
-#: apps/io.ox/files/actions.js:920 module:io.ox/files
+#: apps/io.ox/files/actions.js:935 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
 msgstr ""
 "<b class=\"dndignore\">新規ファイル</b> をアップロードするには、ここにドロッ"
 "プしてください。"
 
-#: apps/io.ox/files/actions.js:942 module:io.ox/files
+#: apps/io.ox/files/actions.js:957 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
 msgstr ""
 "<b class=\"dndignore\">新規バージョン</b> をアップロードするには、ここにド"
 "ロップしてください。"
 
-#: apps/io.ox/files/actions.js:936 module:io.ox/files
+#: apps/io.ox/files/actions.js:951 module:io.ox/files
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr ""
@@ -2804,8 +2804,8 @@ msgstr "EB"
 #: apps/io.ox/contacts/main.js:378 apps/io.ox/contacts/main.js:410
 #: apps/io.ox/contacts/main.js:744
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:68 module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:714
-#: module:io.ox/files apps/io.ox/files/actions.js:724
+#: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:729
+#: module:io.ox/files apps/io.ox/files/actions.js:739
 #: apps/io.ox/files/main.js:164 apps/io.ox/files/main.js:170
 #: apps/io.ox/files/main.js:872 apps/io.ox/files/main.js:920
 #: apps/io.ox/files/share/permissions.js:693 module:io.ox/core
@@ -2834,11 +2834,11 @@ msgstr "編集"
 msgid "Edit Contact"
 msgstr "連絡先を編集"
 
-#: apps/plugins/portal/flickr/register.js:210 module:plugins/portal
+#: apps/plugins/portal/flickr/register.js:212 module:plugins/portal
 msgid "Edit Flickr photo stream"
 msgstr "Flickr フォト ストリームを編集"
 
-#: apps/plugins/portal/tumblr/register.js:241 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:243 module:io.ox/portal
 msgid "Edit Tumblr feed"
 msgstr "Tumblr フィードを編集"
 
@@ -2848,7 +2848,7 @@ msgid "Edit all objects"
 msgstr "すべてのオブジェクトを編集"
 
 #: apps/io.ox/calendar/edit/extensions.js:55 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:171 apps/io.ox/calendar/edit/main.js:315
+#: apps/io.ox/calendar/edit/main.js:178 apps/io.ox/calendar/edit/main.js:322
 #: apps/io.ox/calendar/toolbar.js:65 module:io.ox/calendar
 msgid "Edit appointment"
 msgstr "アポイントを編集"
@@ -2859,8 +2859,8 @@ msgid "Edit contact"
 msgstr "連絡先を編集"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js:206 module:io.ox/core
-#: apps/io.ox/files/actions.js:831 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:183
+#: apps/io.ox/files/actions.js:846 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:190
 msgid "Edit description"
 msgstr "説明を編集"
 
@@ -3042,7 +3042,7 @@ msgstr "稼働時間の終了時刻"
 msgid "End presentation"
 msgstr "プレゼンテーション終了"
 
-#: apps/io.ox/calendar/edit/extensions.js:241 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:243 module:io.ox/calendar/edit/main
 msgid "Ends on"
 msgstr "終了日時"
 
@@ -3168,7 +3168,7 @@ msgid "Every day"
 msgstr "毎日"
 
 #. sharing: a guest user will be created for the owner of that email address
-#: apps/io.ox/files/actions.js:684 module:io.ox/files
+#: apps/io.ox/files/actions.js:699 module:io.ox/files
 msgid ""
 "Every recipient gets an individual link. Guests can also create and change "
 "files."
@@ -3177,7 +3177,7 @@ msgstr ""
 "きます。"
 
 #. sharing: a link will be created
-#: apps/io.ox/files/actions.js:693 module:io.ox/files
+#: apps/io.ox/files/actions.js:708 module:io.ox/files
 msgid ""
 "Everybody gets the same link. The link just allows to view the file or "
 "folder."
@@ -3197,8 +3197,8 @@ msgstr "役員"
 msgid "Exit Fullscreen"
 msgstr "全画面表示を終了"
 
-#: apps/io.ox/calendar/edit/extensions.js:331 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/extensions.js:337
+#: apps/io.ox/calendar/edit/extensions.js:333 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:339
 #: apps/io.ox/tasks/edit/view-template.js:127 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:147
 msgid "Expand form"
@@ -3365,7 +3365,7 @@ msgstr "FAX (予備)"
 msgid "February"
 msgstr "2 月"
 
-#: apps/plugins/portal/tumblr/register.js:246 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:248 module:io.ox/portal
 msgid "Feed URL"
 msgstr "フィード URL"
 
@@ -3392,15 +3392,15 @@ msgstr "ファイル"
 msgid "File Details"
 msgstr "ファイルの詳細"
 
-#: apps/io.ox/files/toolbar.js:296 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:303 module:io.ox/files
 msgid "File details"
 msgstr "ファイルの詳細"
 
-#: apps/io.ox/files/actions.js:509 module:io.ox/files
+#: apps/io.ox/files/actions.js:524 module:io.ox/files
 msgid "File has been copied"
 msgstr "ファイルをコピーしました。"
 
-#: apps/io.ox/files/actions.js:508 module:io.ox/files
+#: apps/io.ox/files/actions.js:523 module:io.ox/files
 msgid "File has been moved"
 msgstr "ファイルを移動しました。"
 
@@ -3430,11 +3430,11 @@ msgstr "ファイル: %1$s"
 msgid "Files"
 msgstr "ファイル"
 
-#: apps/io.ox/files/actions.js:509 module:io.ox/files
+#: apps/io.ox/files/actions.js:524 module:io.ox/files
 msgid "Files have been copied"
 msgstr "ファイルをコピーしました。"
 
-#: apps/io.ox/files/actions.js:508 module:io.ox/files
+#: apps/io.ox/files/actions.js:523 module:io.ox/files
 msgid "Files have been moved"
 msgstr "ファイルを移動しました。"
 
@@ -3448,7 +3448,7 @@ msgstr "フィルタ"
 msgid "Filter Rules"
 msgstr "フィルタ ルール"
 
-#: apps/io.ox/calendar/edit/extensions.js:659 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:661 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:51 module:io.ox/calendar
 msgid "Find a free time"
@@ -3485,7 +3485,7 @@ msgstr "画面サイズに合わせる"
 msgid "Flag mail with"
 msgstr "次のフラグをメールに付ける"
 
-#: apps/plugins/portal/flickr/register.js:289 module:plugins/portal
+#: apps/plugins/portal/flickr/register.js:291 module:plugins/portal
 msgid "Flickr"
 msgstr "Flickr"
 
@@ -3516,7 +3516,7 @@ msgstr "フォルダ タイプ"
 
 #: apps/io.ox/calendar/toolbar.js:168 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:169 module:io.ox/contacts
-#: apps/io.ox/files/toolbar.js:294 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:301 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:247 module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js:144
 msgid "Folder view"
@@ -3609,7 +3609,7 @@ msgstr "すべての受信メールを次のアドレスに転送"
 msgid "Forward emails as"
 msgstr "メールの転送方法:"
 
-#: apps/io.ox/calendar/edit/extensions.js:386 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:388 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Free"
 msgstr "空き時間"
@@ -3659,12 +3659,12 @@ msgid "Get free upgrade"
 msgstr "無償のアップグレードを入手"
 
 #: apps/io.ox/core/folder/contextmenu.js:464 module:io.ox/core
-#: apps/io.ox/files/actions.js:691 module:io.ox/files
-#: apps/io.ox/files/actions.js:811
+#: apps/io.ox/files/actions.js:706 module:io.ox/files
+#: apps/io.ox/files/actions.js:826
 msgid "Get link"
 msgstr "リンク"
 
-#: apps/plugins/portal/xing/register.js:285 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:287 module:plugins/portal
 msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
 "about new business opportunities."
@@ -3874,7 +3874,7 @@ msgstr "アポイントの作成方法について"
 msgid "IP phone"
 msgstr "IP 電話"
 
-#: apps/io.ox/files/toolbar.js:289 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:296 module:io.ox/files
 msgid "Icons"
 msgstr "アイコン"
 
@@ -4073,8 +4073,8 @@ msgid "Invite owner"
 msgstr "所有者を招待"
 
 #: apps/io.ox/core/folder/contextmenu.js:453 module:io.ox/core
-#: apps/io.ox/files/actions.js:682 module:io.ox/files
-#: apps/io.ox/files/actions.js:801
+#: apps/io.ox/files/actions.js:697 module:io.ox/files
+#: apps/io.ox/files/actions.js:816
 msgid "Invite people"
 msgstr "出席依頼"
 
@@ -4183,7 +4183,7 @@ msgid "June"
 msgstr "6 月"
 
 #. Just disable portal widget - in contrast to delete
-#: apps/io.ox/portal/main.js:690 module:io.ox/portal
+#: apps/io.ox/portal/main.js:697 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:125
 msgid "Just disable widget"
 msgstr "ウィジェットを無効化"
@@ -4263,7 +4263,7 @@ msgstr ""
 "ランチャー ドロップダウンです。Enter キーでドロップダウンに移動します。"
 
 #: apps/io.ox/calendar/toolbar.js:160 module:io.ox/calendar
-#: apps/io.ox/files/toolbar.js:287 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:294 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:239 module:io.ox/mail
 msgid "Layout"
 msgstr "レイアウト"
@@ -4333,12 +4333,12 @@ msgstr "いいね！を付けられたコメント"
 msgid "Link"
 msgstr "リンク"
 
-#: apps/plugins/portal/linkedIn/register.js:215 module:plugins/portal
-#: apps/plugins/portal/linkedIn/register.js:389
+#: apps/plugins/portal/linkedIn/register.js:217 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:391
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: apps/plugins/portal/linkedIn/register.js:324 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:326 module:plugins/portal
 msgid "LinkedIn Network Updates"
 msgstr "LinkedIn ネットワーク アップデート"
 
@@ -4351,7 +4351,7 @@ msgid "Links"
 msgstr "リンク"
 
 #: apps/io.ox/calendar/toolbar.js:165 module:io.ox/calendar
-#: apps/io.ox/files/toolbar.js:288 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:295 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:244 module:io.ox/mail
 msgid "List"
 msgstr "リスト"
@@ -4360,12 +4360,12 @@ msgstr "リスト"
 msgid "Listview"
 msgstr "リスト ビュー"
 
-#: apps/io.ox/calendar/edit/extensions.js:193 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:195 module:io.ox/calendar/edit/main
 msgid "Location"
 msgstr "場所"
 
-#: apps/io.ox/files/actions.js:861 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:232
+#: apps/io.ox/files/actions.js:876 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:239
 msgid "Lock"
 msgstr "ロック"
 
@@ -4526,7 +4526,7 @@ msgstr "1 日あたりのメール数 (%)"
 msgid "Main window"
 msgstr "メイン ウィンドウ"
 
-#: apps/io.ox/files/actions.js:901 module:io.ox/files
+#: apps/io.ox/files/actions.js:916 module:io.ox/files
 msgid "Make this the current version"
 msgstr "これを最新のバージョンにする"
 
@@ -4745,8 +4745,8 @@ msgstr ""
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:84 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:109
 #: apps/io.ox/core/folder/contextmenu.js:316 module:io.ox/core
-#: apps/io.ox/files/actions.js:508 module:io.ox/files
-#: apps/io.ox/files/actions.js:841 apps/io.ox/files/toolbar.js:216
+#: apps/io.ox/files/actions.js:523 module:io.ox/files
+#: apps/io.ox/files/actions.js:856 apps/io.ox/files/toolbar.js:223
 #: apps/io.ox/mail/actions.js:225 apps/io.ox/mail/actions.js:602
 #: apps/io.ox/mail/mobile-toolbar-actions.js:81 apps/io.ox/mail/toolbar.js:136
 #: apps/io.ox/tasks/actions.js:317 module:io.ox/tasks
@@ -5001,7 +5001,7 @@ msgstr "ニックネーム"
 msgid "No"
 msgstr "いいえ"
 
-#: apps/plugins/portal/rss/register.js:71 module:io.ox/portal
+#: apps/plugins/portal/rss/register.js:73 module:io.ox/portal
 msgid "No RSS feeds found."
 msgstr "RSS フィードが見つかりません。"
 
@@ -5175,7 +5175,7 @@ msgstr "通知"
 msgid "Notifier"
 msgstr "Notifier"
 
-#: apps/io.ox/calendar/edit/extensions.js:522 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:524 module:io.ox/calendar/edit/main
 msgid "Notify all participants by email."
 msgstr "メールですべての出席者に通知"
 
@@ -5244,11 +5244,11 @@ msgstr "所有者の代理で"
 msgid "On work days"
 msgstr "稼働日"
 
-#: apps/io.ox/files/actions.js:883 module:io.ox/files
+#: apps/io.ox/files/actions.js:898 module:io.ox/files
 msgid "Open"
 msgstr "開く"
 
-#: apps/plugins/portal/tumblr/register.js:191 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:193 module:io.ox/portal
 msgid "Open external link"
 msgstr "外部リンクを開く"
 
@@ -5360,7 +5360,7 @@ msgstr "オプション 20"
 #: apps/io.ox/calendar/toolbar.js:167 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:168 module:io.ox/contacts
 #: apps/io.ox/core/emoji/view.js:121 module:io.ox/mail/emoji
-#: apps/io.ox/files/toolbar.js:292 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:299 module:io.ox/files
 #: apps/io.ox/find/extensions-facets.js:83 module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js:377 module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js:225 apps/io.ox/mail/compose/view.js:226
@@ -5652,19 +5652,19 @@ msgstr "確認ステータスについてコメントください。"
 msgid "Please enter a date in the past"
 msgstr "過去の日付を入力してください。"
 
-#: apps/plugins/portal/flickr/register.js:267 module:plugins/portal
+#: apps/plugins/portal/flickr/register.js:269 module:plugins/portal
 msgid "Please enter a description"
 msgstr "説明を入力してください。"
 
-#: apps/plugins/portal/tumblr/register.js:290 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:292 module:io.ox/portal
 msgid "Please enter a description."
 msgstr "説明を入力してください。"
 
-#: apps/plugins/portal/rss/register.js:174 module:io.ox/portal
+#: apps/plugins/portal/rss/register.js:176 module:io.ox/portal
 msgid "Please enter a feed URL."
 msgstr "フィードの URL を入力してください。"
 
-#: apps/plugins/portal/flickr/register.js:263 module:plugins/portal
+#: apps/plugins/portal/flickr/register.js:265 module:plugins/portal
 msgid "Please enter a search query"
 msgstr "検索クエリを入力してください。"
 
@@ -5704,7 +5704,7 @@ msgstr "有効な電話番号を入力してください。許可された文字
 msgid "Please enter a value"
 msgstr "値を入力してください。"
 
-#: apps/plugins/portal/tumblr/register.js:287 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:289 module:io.ox/portal
 msgid "Please enter an blog url."
 msgstr "ブログの URL を入力してください。"
 
@@ -5796,7 +5796,7 @@ msgstr "ポップアウト"
 msgid "Pop out standalone viewer"
 msgstr "スタンドアロンビューアをポップアウト"
 
-#: apps/io.ox/portal/main.js:646 module:io.ox/portal
+#: apps/io.ox/portal/main.js:653 module:io.ox/portal
 msgid "Portal"
 msgstr "ポータル"
 
@@ -5822,6 +5822,13 @@ msgstr "ステータスのアップデートを投稿"
 #: apps/io.ox/contacts/model.js:213 apps/io.ox/contacts/model.js:228
 msgid "Postcode"
 msgstr "郵便番号"
+
+#: apps/io.ox/files/toolbar.js:153 module:io.ox/files
+#, fuzzy
+#| msgctxt "presenter"
+#| msgid "Present"
+msgid "Present"
+msgstr "プレゼント"
 
 #. launch the presenter app
 #: apps/io.ox/core/viewer/views/toolbarview.js:138 module:io.ox/core
@@ -5871,24 +5878,24 @@ msgstr "プレゼンターツールバー"
 msgid "Press [enter] to jump to complete list of Birthdays."
 msgstr "すべての誕生日のリストにアクセスするには、Enter キーを押してください。"
 
-#: apps/plugins/portal/flickr/register.js:105 module:plugins/portal
+#: apps/plugins/portal/flickr/register.js:107 module:plugins/portal
 msgid "Press [enter] to jump to the flicker stream."
 msgstr "Flickr ストリームにアクセスするには、Enter キーを押してください。"
 
-#: apps/plugins/portal/linkedIn/register.js:267 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:269 module:plugins/portal
 msgid "Press [enter] to jump to the linkedin stream."
 msgstr "LinkedIn ストリームにアクセスするには、Enter キーを押してください。"
 
-#: apps/plugins/portal/rss/register.js:68 module:io.ox/portal
+#: apps/plugins/portal/rss/register.js:70 module:io.ox/portal
 msgid "Press [enter] to jump to the rss stream."
 msgstr "RSS ストリームにアクセスするには、Enter キーを押してください。"
 
-#: apps/plugins/portal/tumblr/register.js:94 module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:115
+#: apps/plugins/portal/tumblr/register.js:96 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:117
 msgid "Press [enter] to jump to the tumblr feed."
 msgstr "Tumblr フィードにアクセスするには、Enter キーを押してください。"
 
-#: apps/plugins/portal/twitter/register.js:314 module:plugins/portal
+#: apps/plugins/portal/twitter/register.js:316 module:plugins/portal
 msgid "Press [enter] to jump to the twitter feed."
 msgstr "Twitter フィードにアクセスするには、Enter キーを押してください。"
 
@@ -5975,7 +5982,7 @@ msgstr "印刷"
 msgid "Priority"
 msgstr "優先度"
 
-#: apps/io.ox/calendar/edit/extensions.js:466 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:468 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js:83 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:75
 #: apps/io.ox/contacts/view-detail.js:154 module:io.ox/contacts
@@ -6082,12 +6089,12 @@ msgid "Quota"
 msgstr "割当量"
 
 #: apps/plugins/portal/rss/register.js:30 module:io.ox/portal
-#: apps/plugins/portal/rss/register.js:58
-#: apps/plugins/portal/rss/register.js:201
+#: apps/plugins/portal/rss/register.js:60
+#: apps/plugins/portal/rss/register.js:203
 msgid "RSS Feed"
 msgstr "RSS フィード"
 
-#: apps/plugins/portal/rss/register.js:139 module:io.ox/portal
+#: apps/plugins/portal/rss/register.js:141 module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS フィード"
 
@@ -6117,7 +6124,7 @@ msgstr ""
 msgid "Read all objects"
 msgstr "すべてのオブジェクトを表示"
 
-#: apps/plugins/portal/tumblr/register.js:188 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:190 module:io.ox/portal
 msgid "Read article on tumblr.com"
 msgstr "tumblr.com の記事を閲覧"
 
@@ -6290,7 +6297,7 @@ msgid "Remind me again "
 msgstr "再通知 "
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:50 module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js:359 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:361 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/invitations/register.js:605 module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js:664 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:172
@@ -6344,9 +6351,9 @@ msgstr "メンバを削除"
 #: apps/io.ox/core/folder/actions/rename.js:65 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:264
 #: apps/io.ox/core/viewer/views/toolbarview.js:199
-#: apps/io.ox/files/actions.js:821 module:io.ox/files
+#: apps/io.ox/files/actions.js:836 module:io.ox/files
 #: apps/io.ox/files/actions/rename.js:68 apps/io.ox/files/actions/rename.js:73
-#: apps/io.ox/files/toolbar.js:176
+#: apps/io.ox/files/toolbar.js:183
 msgid "Rename"
 msgstr "名前を変更"
 
@@ -6398,7 +6405,7 @@ msgstr "開封確認メッセージを要求"
 msgid "Resend invitation"
 msgstr "出席依頼を再送する"
 
-#: apps/io.ox/calendar/edit/extensions.js:383 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:385 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Reserved"
 msgstr "予定あり"
@@ -6524,10 +6531,10 @@ msgstr "売上規模"
 #: apps/io.ox/tasks/edit/view-template.js:82
 #: apps/plugins/administration/groups/settings/edit.js:130
 #: apps/plugins/administration/resources/settings/edit.js:89
-#: apps/plugins/portal/flickr/register.js:234 module:plugins/portal
+#: apps/plugins/portal/flickr/register.js:236 module:plugins/portal
 #: apps/plugins/portal/mail/register.js:227
-#: apps/plugins/portal/rss/register.js:153 module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:259
+#: apps/plugins/portal/rss/register.js:155 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:261
 msgid "Save"
 msgstr "保存"
 
@@ -6601,7 +6608,7 @@ msgstr "スケジューリング"
 #: apps/io.ox/find/main.js:47 apps/io.ox/find/view-tokenfield.js:119
 #: apps/io.ox/search/autocomplete/extensions.js:52
 #: apps/io.ox/search/main.js:197 module:io.ox/search
-#: apps/io.ox/search/main.js:258 apps/plugins/portal/flickr/register.js:215
+#: apps/io.ox/search/main.js:258 apps/plugins/portal/flickr/register.js:217
 #: module:plugins/portal
 msgid "Search"
 msgstr "検索"
@@ -6662,7 +6669,7 @@ msgstr "お気に入りのタイムゾーンを選択する"
 msgid "Select file"
 msgstr "ファイルを選択"
 
-#: apps/io.ox/calendar/edit/extensions.js:126 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:128 module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/picker.js:74 module:io.ox/core
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:797
 #: module:io.ox/settings
@@ -6682,8 +6689,8 @@ msgstr "送信"
 msgid "Send a read receipt"
 msgstr "開封通知を送信"
 
-#: apps/io.ox/files/actions.js:771 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:197
+#: apps/io.ox/files/actions.js:786 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:204
 msgid "Send as internal link"
 msgstr "内部リンクとして送信"
 
@@ -6698,8 +6705,8 @@ msgid "Send as vCard"
 msgstr "vCard を送信"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js:258 module:io.ox/core
-#: apps/io.ox/files/actions.js:761 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:190
+#: apps/io.ox/files/actions.js:776 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:197
 msgid "Send by mail"
 msgstr "メールで送信"
 
@@ -6949,8 +6956,8 @@ msgstr "アイコンを表示"
 msgid "Show images"
 msgstr "画像を表示"
 
-#: apps/io.ox/files/actions.js:781 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:204
+#: apps/io.ox/files/actions.js:796 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:211
 msgid "Show internal link"
 msgstr "内部リンクを表示"
 
@@ -6996,7 +7003,7 @@ msgstr "仕事の詳細を表示"
 msgid "Show tiles"
 msgstr "タイルを表示"
 
-#: apps/io.ox/calendar/edit/extensions.js:392 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:394 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:222 module:io.ox/calendar
 msgid "Shown as"
 msgstr "公開方法"
@@ -7202,7 +7209,7 @@ msgstr "ツアーを開始"
 msgid "Start typing to search for user names"
 msgstr "ユーザー名を検索するために入力を開始してください"
 
-#: apps/io.ox/calendar/edit/extensions.js:219 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:221 module:io.ox/calendar/edit/main
 msgid "Starts on"
 msgstr "開始日時"
 
@@ -7234,7 +7241,7 @@ msgstr "番地"
 msgid "Student"
 msgstr "学生"
 
-#: apps/io.ox/calendar/edit/extensions.js:174 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:176 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions/reminder.js:47 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:309
 #: apps/io.ox/mail/compose/extensions.js:313
@@ -7405,7 +7412,7 @@ msgstr "無線電話"
 msgid "Telex"
 msgstr "テレックス"
 
-#: apps/io.ox/calendar/edit/extensions.js:384 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:386 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Temporary"
 msgstr "仮の予定"
@@ -7777,8 +7784,8 @@ msgstr "設定を有効にするには、再読み込みするかログオンし
 msgid "The start date must be before the due date."
 msgstr "開始日は終了日より前の日付でなければなりません。"
 
-#: apps/io.ox/calendar/model.js:242 module:io.ox/calendar
-#: apps/io.ox/calendar/model.js:243
+#: apps/io.ox/calendar/model.js:247 module:io.ox/calendar
+#: apps/io.ox/calendar/model.js:248
 #: apps/io.ox/mail/vacationnotice/settings/filter.js:90 module:io.ox/mail
 #: apps/io.ox/mail/vacationnotice/settings/filter.js:91
 msgid "The start date must be before the end date."
@@ -7795,7 +7802,7 @@ msgstr[0] "仕事を削除できませんでした。"
 
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
-#: apps/io.ox/calendar/edit/extensions.js:265 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:267 module:io.ox/calendar/edit/main
 msgid ""
 "The timezone of this appointment (%1$s) differs from your default timezone "
 "(%2$s)."
@@ -7898,7 +7905,7 @@ msgstr "このメールとパスワードの組み合わせが保存されてい
 msgid "There was no task data to import"
 msgstr "インポートする仕事データがありません。"
 
-#: apps/plugins/portal/linkedIn/register.js:310 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:312 module:plugins/portal
 msgid "There were not activities in your network"
 msgstr "ご利用のネットワークでは、アクティビティがありません。"
 
@@ -8098,7 +8105,7 @@ msgstr "スレッド"
 msgid "Thumbnails"
 msgstr "サムネイル"
 
-#: apps/io.ox/files/toolbar.js:290 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:297 module:io.ox/files
 msgid "Tiles"
 msgstr "タイル"
 
@@ -8218,13 +8225,13 @@ msgstr "市区町村"
 msgid "Trying to auto-configure your mail account"
 msgstr "メール アカウントを自動構成しています。"
 
-#: apps/plugins/portal/tumblr/register.js:333 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:335 module:io.ox/portal
 msgid "Tumblr"
 msgstr "Tumblr"
 
 #: apps/plugins/portal/twitter/register.js:260 module:plugins/portal
-#: apps/plugins/portal/twitter/register.js:285
-#: apps/plugins/portal/twitter/register.js:401
+#: apps/plugins/portal/twitter/register.js:287
+#: apps/plugins/portal/twitter/register.js:403
 msgid "Twitter"
 msgstr "Twitter"
 
@@ -8232,9 +8239,9 @@ msgstr "Twitter"
 msgid "Twitter reported the following errors:"
 msgstr "Twitter が次のエラーを報告しました:"
 
-#: apps/io.ox/calendar/edit/extensions.js:463 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:465 module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js:389 module:io.ox/tasks/edit
-#: apps/plugins/portal/flickr/register.js:221 module:plugins/portal
+#: apps/plugins/portal/flickr/register.js:223 module:plugins/portal
 msgid "Type"
 msgstr "タイプ"
 
@@ -8244,7 +8251,7 @@ msgid "UI version"
 msgstr "UI バージョン"
 
 #: apps/io.ox/contacts/model.js:246 module:io.ox/contacts
-#: apps/plugins/portal/rss/register.js:143 module:io.ox/portal
+#: apps/plugins/portal/rss/register.js:145 module:io.ox/portal
 msgid "URL"
 msgstr "URL"
 
@@ -8295,8 +8302,8 @@ msgstr "統合"
 msgid "Unknown"
 msgstr "不明"
 
-#: apps/plugins/portal/tumblr/register.js:303 module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:308
+#: apps/plugins/portal/tumblr/register.js:305 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:310
 msgid "Unknown error while checking tumblr-blog."
 msgstr "Tumblr ブログのチェック中に不明なエラーが発生しました。"
 
@@ -8304,8 +8311,8 @@ msgstr "Tumblr ブログのチェック中に不明なエラーが発生しま�
 msgid "Unknown sender"
 msgstr "差出人が不明です。"
 
-#: apps/io.ox/files/actions.js:871 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:239
+#: apps/io.ox/files/actions.js:886 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:246
 msgid "Unlock"
 msgstr "ロックを解除"
 
@@ -8513,8 +8520,8 @@ msgstr "ビデオ"
 #: apps/io.ox/calendar/toolbar.js:159 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:167 module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js:77 module:io.ox/core
-#: apps/io.ox/files/actions.js:705 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:146 apps/io.ox/files/toolbar.js:286
+#: apps/io.ox/files/actions.js:720 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:146 apps/io.ox/files/toolbar.js:293
 #: apps/io.ox/mail/actions.js:701 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:238 apps/io.ox/tasks/toolbar.js:142
 msgid "View"
@@ -8898,7 +8905,7 @@ msgstr "強制的にサイン アウトされました。"
 msgid "You have declined the appointment"
 msgstr "アポイントを辞退しました。"
 
-#: apps/plugins/portal/linkedIn/register.js:286 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:288 module:plugins/portal
 msgid "You have no new messages"
 msgstr "新規メッセージはありません。"
 
@@ -9008,7 +9015,7 @@ msgstr "仕事への出席依頼があります。"
 msgid "You've got task reminders"
 msgstr "仕事のアラームがあります。"
 
-#: apps/plugins/portal/xing/register.js:344 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:346 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "%s のニュースフィード"
 
@@ -9074,7 +9081,7 @@ msgstr "フィードバックの送信時にご利用のメール アドレス�
 msgid "Your mail address"
 msgstr "ご利用のメールアドレス"
 
-#: apps/plugins/portal/linkedIn/register.js:329 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:331 module:plugins/portal
 msgid "Your messages"
 msgstr "メッセージ"
 
@@ -9383,11 +9390,11 @@ msgstr "毎週"
 msgid "first"
 msgstr "第 1"
 
-#: apps/plugins/portal/flickr/register.js:205 module:plugins/portal
+#: apps/plugins/portal/flickr/register.js:207 module:plugins/portal
 msgid "flickr.people.getPublicPhotos"
 msgstr "flickr.people.getPublicPhotos"
 
-#: apps/plugins/portal/flickr/register.js:204 module:plugins/portal
+#: apps/plugins/portal/flickr/register.js:206 module:plugins/portal
 msgid "flickr.photos.search"
 msgstr "flickr.photos.search"
 

@@ -208,10 +208,10 @@ msgstr ""
 #: apps/io.ox/contacts/toolbar.js:109
 #: apps/io.ox/core/folder/contextmenu.js:316
 #: module:io.ox/core
-#: apps/io.ox/files/actions.js:508
+#: apps/io.ox/files/actions.js:523
 #: module:io.ox/files
-#: apps/io.ox/files/actions.js:841
-#: apps/io.ox/files/toolbar.js:216
+#: apps/io.ox/files/actions.js:856
+#: apps/io.ox/files/toolbar.js:223
 #: apps/io.ox/mail/actions.js:225
 #: apps/io.ox/mail/actions.js:602
 #: apps/io.ox/mail/mobile-toolbar-actions.js:81
@@ -242,9 +242,9 @@ msgstr ""
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:68
 #: module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:77
-#: apps/io.ox/files/actions.js:714
+#: apps/io.ox/files/actions.js:729
 #: module:io.ox/files
-#: apps/io.ox/files/actions.js:724
+#: apps/io.ox/files/actions.js:739
 #: apps/io.ox/files/main.js:164
 #: apps/io.ox/files/main.js:170
 #: apps/io.ox/files/main.js:872
@@ -306,11 +306,11 @@ msgstr ""
 #: module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:160
 #: apps/io.ox/core/viewer/views/toolbarview.js:279
-#: apps/io.ox/files/actions.js:750
+#: apps/io.ox/files/actions.js:765
 #: module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
-#: apps/io.ox/files/toolbar.js:167
+#: apps/io.ox/files/toolbar.js:174
 #: apps/io.ox/mail/actions.js:507
 #: apps/io.ox/mail/actions/delete.js:67
 #: apps/io.ox/mail/actions/delete.js:86
@@ -318,7 +318,7 @@ msgstr ""
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:374
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:375
 #: apps/io.ox/mail/toolbar.js:79
-#: apps/io.ox/portal/main.js:684
+#: apps/io.ox/portal/main.js:691
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:119
 #: apps/io.ox/settings/accounts/settings/pane.js:111
@@ -376,7 +376,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:50
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js:359
+#: apps/io.ox/calendar/edit/extensions.js:361
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/invitations/register.js:605
 #: module:io.ox/calendar/main
@@ -454,7 +454,7 @@ msgstr ""
 #: apps/io.ox/calendar/actions/edit.js:42
 #: apps/io.ox/calendar/edit/main.js:155
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:406
+#: apps/io.ox/calendar/edit/main.js:424
 #: apps/io.ox/calendar/edit/timezone-dialog.js:141
 #: apps/io.ox/calendar/main.js:256
 #: apps/io.ox/calendar/main.js:322
@@ -526,7 +526,7 @@ msgstr ""
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:149
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:253
 #: apps/io.ox/oauth/settings.js:82
-#: apps/io.ox/portal/main.js:686
+#: apps/io.ox/portal/main.js:693
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:121
 #: apps/io.ox/settings/accounts/settings/pane.js:134
@@ -545,11 +545,11 @@ msgstr ""
 #: apps/plugins/core/feedback/register.js:140
 #: apps/plugins/notifications/calendar/register.js:85
 #: module:plugins/notifications
-#: apps/plugins/portal/flickr/register.js:235
+#: apps/plugins/portal/flickr/register.js:237
 #: module:plugins/portal
 #: apps/plugins/portal/mail/register.js:228
-#: apps/plugins/portal/rss/register.js:154
-#: apps/plugins/portal/tumblr/register.js:260
+#: apps/plugins/portal/rss/register.js:156
+#: apps/plugins/portal/tumblr/register.js:262
 #: apps/plugins/portal/twitter/util.js:122
 #: apps/plugins/portal/twitter/util.js:412
 #: apps/plugins/portal/userSettings/register.js:111
@@ -584,7 +584,7 @@ msgstr ""
 #: apps/io.ox/calendar/actions/acceptdeny.js:225
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js:41
-#: apps/io.ox/calendar/edit/main.js:366
+#: apps/io.ox/calendar/edit/main.js:384
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:281
 #: apps/io.ox/calendar/week/perspective.js:161
@@ -668,8 +668,8 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js:55
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:171
-#: apps/io.ox/calendar/edit/main.js:315
+#: apps/io.ox/calendar/edit/main.js:178
+#: apps/io.ox/calendar/edit/main.js:322
 #: apps/io.ox/calendar/toolbar.js:65
 #: module:io.ox/calendar
 msgid "Edit appointment"
@@ -677,8 +677,8 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js:55
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:171
-#: apps/io.ox/calendar/edit/main.js:317
+#: apps/io.ox/calendar/edit/main.js:178
+#: apps/io.ox/calendar/edit/main.js:324
 msgid "Create appointment"
 msgstr ""
 
@@ -714,12 +714,12 @@ msgstr ""
 #: apps/io.ox/tasks/edit/view-template.js:82
 #: apps/plugins/administration/groups/settings/edit.js:130
 #: apps/plugins/administration/resources/settings/edit.js:89
-#: apps/plugins/portal/flickr/register.js:234
+#: apps/plugins/portal/flickr/register.js:236
 #: module:plugins/portal
 #: apps/plugins/portal/mail/register.js:227
-#: apps/plugins/portal/rss/register.js:153
+#: apps/plugins/portal/rss/register.js:155
 #: module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:259
+#: apps/plugins/portal/tumblr/register.js:261
 msgid "Save"
 msgstr ""
 
@@ -736,7 +736,7 @@ msgstr ""
 msgid "Create"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:95
+#: apps/io.ox/calendar/edit/extensions.js:97
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js:54
 #: module:io.ox/contacts
@@ -751,7 +751,7 @@ msgstr ""
 msgid "Discard"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:126
+#: apps/io.ox/calendar/edit/extensions.js:128
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/picker.js:74
 #: module:io.ox/core
@@ -760,12 +760,12 @@ msgstr ""
 msgid "Select folder"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:148
+#: apps/io.ox/calendar/edit/extensions.js:150
 #: module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:174
+#: apps/io.ox/calendar/edit/extensions.js:176
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions/reminder.js:47
 #: module:io.ox/mail
@@ -782,36 +782,36 @@ msgstr ""
 msgid "Subject"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:193
+#: apps/io.ox/calendar/edit/extensions.js:195
 #: module:io.ox/calendar/edit/main
 msgid "Location"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:219
+#: apps/io.ox/calendar/edit/extensions.js:221
 #: module:io.ox/calendar/edit/main
 msgid "Starts on"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:241
+#: apps/io.ox/calendar/edit/extensions.js:243
 #: module:io.ox/calendar/edit/main
 msgid "Ends on"
 msgstr ""
 
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
-#: apps/io.ox/calendar/edit/extensions.js:265
+#: apps/io.ox/calendar/edit/extensions.js:267
 #: module:io.ox/calendar/edit/main
 msgid "The timezone of this appointment (%1$s) differs from your default timezone (%2$s)."
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:280
+#: apps/io.ox/calendar/edit/extensions.js:282
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js:212
 #: module:io.ox/tasks/edit
 msgid "All day"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:318
+#: apps/io.ox/calendar/edit/extensions.js:320
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:94
 #: module:io.ox/core/viewer
@@ -821,25 +821,25 @@ msgstr ""
 #: module:io.ox/tasks/edit
 #: apps/plugins/administration/resources/settings/edit.js:50
 #: module:io.ox/core
-#: apps/plugins/portal/flickr/register.js:227
+#: apps/plugins/portal/flickr/register.js:229
 #: module:plugins/portal
 #: apps/plugins/portal/mail/register.js:221
-#: apps/plugins/portal/rss/register.js:147
+#: apps/plugins/portal/rss/register.js:149
 #: module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:252
+#: apps/plugins/portal/tumblr/register.js:254
 msgid "Description"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:331
+#: apps/io.ox/calendar/edit/extensions.js:333
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/extensions.js:337
+#: apps/io.ox/calendar/edit/extensions.js:339
 #: apps/io.ox/tasks/edit/view-template.js:127
 #: module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:147
 msgid "Expand form"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:340
+#: apps/io.ox/calendar/edit/extensions.js:342
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js:124
 #: module:io.ox/tasks/edit
@@ -847,42 +847,42 @@ msgstr ""
 msgid "Collapse form"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:383
+#: apps/io.ox/calendar/edit/extensions.js:385
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30
 #: module:io.ox/calendar
 msgid "Reserved"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:384
+#: apps/io.ox/calendar/edit/extensions.js:386
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30
 #: module:io.ox/calendar
 msgid "Temporary"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:385
+#: apps/io.ox/calendar/edit/extensions.js:387
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30
 #: module:io.ox/calendar
 msgid "Absent"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:386
+#: apps/io.ox/calendar/edit/extensions.js:388
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30
 #: module:io.ox/calendar
 msgid "Free"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:392
+#: apps/io.ox/calendar/edit/extensions.js:394
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:222
 #: module:io.ox/calendar
 msgid "Shown as"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:433
+#: apps/io.ox/calendar/edit/extensions.js:435
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/view-options.js:36
 #: module:io.ox/mail
@@ -892,16 +892,16 @@ msgstr ""
 msgid "Color"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:463
+#: apps/io.ox/calendar/edit/extensions.js:465
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js:389
 #: module:io.ox/tasks/edit
-#: apps/plugins/portal/flickr/register.js:221
+#: apps/plugins/portal/flickr/register.js:223
 #: module:plugins/portal
 msgid "Type"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:466
+#: apps/io.ox/calendar/edit/extensions.js:468
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js:83
 #: module:io.ox/calendar
@@ -913,12 +913,12 @@ msgstr ""
 msgid "Private"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:522
+#: apps/io.ox/calendar/edit/extensions.js:524
 #: module:io.ox/calendar/edit/main
 msgid "Notify all participants by email."
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:541
+#: apps/io.ox/calendar/edit/extensions.js:543
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:381
 #: module:io.ox/calendar
@@ -935,7 +935,7 @@ msgstr ""
 msgid "Attachments"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:615
+#: apps/io.ox/calendar/edit/extensions.js:617
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/edit/view-form.js:389
 #: module:io.ox/contacts
@@ -944,7 +944,7 @@ msgstr ""
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/extensions.js:659
+#: apps/io.ox/calendar/edit/extensions.js:661
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freebusy/templates.js:31
 #: module:io.ox/calendar/freebusy
@@ -963,7 +963,7 @@ msgstr ""
 msgid "Conflicts with resources cannot be ignored"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/main.js:402
+#: apps/io.ox/calendar/edit/main.js:420
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:199
 #: module:io.ox/contacts
@@ -977,7 +977,7 @@ msgstr ""
 
 #. "Discard changes" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/calendar/edit/main.js:405
+#: apps/io.ox/calendar/edit/main.js:423
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:202
 #: module:io.ox/contacts
@@ -1654,9 +1654,9 @@ msgstr ""
 msgid "Today"
 msgstr ""
 
-#: apps/io.ox/calendar/model.js:242
+#: apps/io.ox/calendar/model.js:247
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/model.js:243
+#: apps/io.ox/calendar/model.js:248
 #: apps/io.ox/mail/vacationnotice/settings/filter.js:90
 #: module:io.ox/mail
 #: apps/io.ox/mail/vacationnotice/settings/filter.js:91
@@ -1906,10 +1906,10 @@ msgstr ""
 #: module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js:77
 #: module:io.ox/core
-#: apps/io.ox/files/actions.js:705
+#: apps/io.ox/files/actions.js:720
 #: module:io.ox/files
 #: apps/io.ox/files/toolbar.js:146
-#: apps/io.ox/files/toolbar.js:286
+#: apps/io.ox/files/toolbar.js:293
 #: apps/io.ox/mail/actions.js:701
 #: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:238
@@ -1919,7 +1919,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/toolbar.js:160
 #: module:io.ox/calendar
-#: apps/io.ox/files/toolbar.js:287
+#: apps/io.ox/files/toolbar.js:294
 #: module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:239
 #: module:io.ox/mail
@@ -1928,7 +1928,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/toolbar.js:165
 #: module:io.ox/calendar
-#: apps/io.ox/files/toolbar.js:288
+#: apps/io.ox/files/toolbar.js:295
 #: module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:244
 #: module:io.ox/mail
@@ -1941,7 +1941,7 @@ msgstr ""
 #: module:io.ox/contacts
 #: apps/io.ox/core/emoji/view.js:121
 #: module:io.ox/mail/emoji
-#: apps/io.ox/files/toolbar.js:292
+#: apps/io.ox/files/toolbar.js:299
 #: module:io.ox/files
 #: apps/io.ox/find/extensions-facets.js:83
 #: module:io.ox/core
@@ -1959,7 +1959,7 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:169
 #: module:io.ox/contacts
-#: apps/io.ox/files/toolbar.js:294
+#: apps/io.ox/files/toolbar.js:301
 #: module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:247
 #: module:io.ox/mail
@@ -1971,7 +1971,7 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:170
 #: module:io.ox/contacts
-#: apps/io.ox/files/toolbar.js:293
+#: apps/io.ox/files/toolbar.js:300
 #: module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:248
 #: module:io.ox/mail
@@ -2423,10 +2423,10 @@ msgstr ""
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:90
 #: module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:117
-#: apps/io.ox/files/actions.js:509
+#: apps/io.ox/files/actions.js:524
 #: module:io.ox/files
-#: apps/io.ox/files/actions.js:851
-#: apps/io.ox/files/toolbar.js:225
+#: apps/io.ox/files/actions.js:866
+#: apps/io.ox/files/toolbar.js:232
 #: apps/io.ox/mail/actions.js:226
 #: apps/io.ox/mail/actions.js:612
 #: apps/io.ox/mail/mobile-toolbar-actions.js:107
@@ -2487,9 +2487,9 @@ msgstr ""
 #: apps/io.ox/contacts/toolbar.js:125
 #: apps/io.ox/core/viewer/views/toolbarview.js:265
 #: module:io.ox/core
-#: apps/io.ox/files/actions.js:791
+#: apps/io.ox/files/actions.js:806
 #: module:io.ox/files
-#: apps/io.ox/files/toolbar.js:211
+#: apps/io.ox/files/toolbar.js:218
 #: apps/io.ox/mail/actions.js:674
 #: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:179
@@ -2989,7 +2989,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/model.js:246
 #: module:io.ox/contacts
-#: apps/plugins/portal/rss/register.js:143
+#: apps/plugins/portal/rss/register.js:145
 #: module:io.ox/portal
 msgid "URL"
 msgstr ""
@@ -3809,7 +3809,7 @@ msgstr ""
 #: apps/io.ox/search/main.js:197
 #: module:io.ox/search
 #: apps/io.ox/search/main.js:258
-#: apps/plugins/portal/flickr/register.js:215
+#: apps/plugins/portal/flickr/register.js:217
 #: module:plugins/portal
 msgid "Search"
 msgstr ""
@@ -3893,7 +3893,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:239
 #: apps/io.ox/core/folder/extensions.js:591
-#: apps/io.ox/files/actions.js:674
+#: apps/io.ox/files/actions.js:689
 #: module:io.ox/files
 msgid "Add new folder"
 msgstr ""
@@ -4056,11 +4056,11 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:264
 #: apps/io.ox/core/viewer/views/toolbarview.js:199
-#: apps/io.ox/files/actions.js:821
+#: apps/io.ox/files/actions.js:836
 #: module:io.ox/files
 #: apps/io.ox/files/actions/rename.js:68
 #: apps/io.ox/files/actions/rename.js:73
-#: apps/io.ox/files/toolbar.js:176
+#: apps/io.ox/files/toolbar.js:183
 msgid "Rename"
 msgstr ""
 
@@ -4145,17 +4145,17 @@ msgstr ""
 
 #: apps/io.ox/core/folder/contextmenu.js:453
 #: module:io.ox/core
-#: apps/io.ox/files/actions.js:682
+#: apps/io.ox/files/actions.js:697
 #: module:io.ox/files
-#: apps/io.ox/files/actions.js:801
+#: apps/io.ox/files/actions.js:816
 msgid "Invite people"
 msgstr ""
 
 #: apps/io.ox/core/folder/contextmenu.js:464
 #: module:io.ox/core
-#: apps/io.ox/files/actions.js:691
+#: apps/io.ox/files/actions.js:706
 #: module:io.ox/files
-#: apps/io.ox/files/actions.js:811
+#: apps/io.ox/files/actions.js:826
 msgid "Get link"
 msgstr ""
 
@@ -4868,12 +4868,12 @@ msgstr ""
 #: apps/io.ox/core/viewer/views/toolbarview.js:214
 #: apps/io.ox/core/viewer/views/toolbarview.js:295
 #: apps/io.ox/core/viewer/views/toolbarview.js:322
-#: apps/io.ox/files/actions.js:733
+#: apps/io.ox/files/actions.js:748
 #: module:io.ox/files
-#: apps/io.ox/files/actions.js:741
-#: apps/io.ox/files/actions.js:892
-#: apps/io.ox/files/toolbar.js:153
+#: apps/io.ox/files/actions.js:756
+#: apps/io.ox/files/actions.js:907
 #: apps/io.ox/files/toolbar.js:160
+#: apps/io.ox/files/toolbar.js:167
 #: apps/io.ox/mail/actions.js:717
 #: module:io.ox/mail
 #: apps/plugins/portal/updater/register.js:38
@@ -6050,9 +6050,9 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js:206
 #: module:io.ox/core
-#: apps/io.ox/files/actions.js:831
+#: apps/io.ox/files/actions.js:846
 #: module:io.ox/files
-#: apps/io.ox/files/toolbar.js:183
+#: apps/io.ox/files/toolbar.js:190
 msgid "Edit description"
 msgstr ""
 
@@ -6073,9 +6073,9 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js:258
 #: module:io.ox/core
-#: apps/io.ox/files/actions.js:761
+#: apps/io.ox/files/actions.js:776
 #: module:io.ox/files
-#: apps/io.ox/files/toolbar.js:190
+#: apps/io.ox/files/toolbar.js:197
 msgid "Send by mail"
 msgstr ""
 
@@ -6362,27 +6362,27 @@ msgstr ""
 msgid "All Emoji"
 msgstr ""
 
-#: apps/io.ox/files/actions.js:508
+#: apps/io.ox/files/actions.js:523
 #: module:io.ox/files
 msgid "File has been moved"
 msgstr ""
 
-#: apps/io.ox/files/actions.js:508
+#: apps/io.ox/files/actions.js:523
 #: module:io.ox/files
 msgid "Files have been moved"
 msgstr ""
 
-#: apps/io.ox/files/actions.js:509
+#: apps/io.ox/files/actions.js:524
 #: module:io.ox/files
 msgid "File has been copied"
 msgstr ""
 
-#: apps/io.ox/files/actions.js:509
+#: apps/io.ox/files/actions.js:524
 #: module:io.ox/files
 msgid "Files have been copied"
 msgstr ""
 
-#: apps/io.ox/files/actions.js:657
+#: apps/io.ox/files/actions.js:672
 #: module:io.ox/files
 #: apps/io.ox/mail/compose/extensions.js:495
 #: module:io.ox/mail
@@ -6391,73 +6391,73 @@ msgstr ""
 
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
-#: apps/io.ox/files/actions.js:667
+#: apps/io.ox/files/actions.js:682
 #: module:io.ox/files
 msgid "Add note"
 msgstr ""
 
 #. sharing: a guest user will be created for the owner of that email address
-#: apps/io.ox/files/actions.js:684
+#: apps/io.ox/files/actions.js:699
 #: module:io.ox/files
 msgid "Every recipient gets an individual link. Guests can also create and change files."
 msgstr ""
 
 #. sharing: a link will be created
-#: apps/io.ox/files/actions.js:693
+#: apps/io.ox/files/actions.js:708
 #: module:io.ox/files
 msgid "Everybody gets the same link. The link just allows to view the file or folder."
 msgstr ""
 
-#: apps/io.ox/files/actions.js:771
+#: apps/io.ox/files/actions.js:786
 #: module:io.ox/files
-#: apps/io.ox/files/toolbar.js:197
+#: apps/io.ox/files/toolbar.js:204
 msgid "Send as internal link"
 msgstr ""
 
-#: apps/io.ox/files/actions.js:781
+#: apps/io.ox/files/actions.js:796
 #: module:io.ox/files
-#: apps/io.ox/files/toolbar.js:204
+#: apps/io.ox/files/toolbar.js:211
 msgid "Show internal link"
 msgstr ""
 
-#: apps/io.ox/files/actions.js:861
+#: apps/io.ox/files/actions.js:876
 #: module:io.ox/files
-#: apps/io.ox/files/toolbar.js:232
+#: apps/io.ox/files/toolbar.js:239
 msgid "Lock"
 msgstr ""
 
-#: apps/io.ox/files/actions.js:871
+#: apps/io.ox/files/actions.js:886
 #: module:io.ox/files
-#: apps/io.ox/files/toolbar.js:239
+#: apps/io.ox/files/toolbar.js:246
 msgid "Unlock"
 msgstr ""
 
-#: apps/io.ox/files/actions.js:883
+#: apps/io.ox/files/actions.js:898
 #: module:io.ox/files
 msgid "Open"
 msgstr ""
 
-#: apps/io.ox/files/actions.js:901
+#: apps/io.ox/files/actions.js:916
 #: module:io.ox/files
 msgid "Make this the current version"
 msgstr ""
 
-#: apps/io.ox/files/actions.js:910
+#: apps/io.ox/files/actions.js:925
 #: module:io.ox/files
 msgid "Delete version"
 msgstr ""
 
-#: apps/io.ox/files/actions.js:920
+#: apps/io.ox/files/actions.js:935
 #: module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
 msgstr ""
 
-#: apps/io.ox/files/actions.js:936
+#: apps/io.ox/files/actions.js:951
 #: module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr ""
 
-#: apps/io.ox/files/actions.js:942
+#: apps/io.ox/files/actions.js:957
 #: module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
 msgstr ""
@@ -7045,17 +7045,22 @@ msgstr ""
 msgid "Play video files"
 msgstr ""
 
-#: apps/io.ox/files/toolbar.js:289
+#: apps/io.ox/files/toolbar.js:153
+#: module:io.ox/files
+msgid "Present"
+msgstr ""
+
+#: apps/io.ox/files/toolbar.js:296
 #: module:io.ox/files
 msgid "Icons"
 msgstr ""
 
-#: apps/io.ox/files/toolbar.js:290
+#: apps/io.ox/files/toolbar.js:297
 #: module:io.ox/files
 msgid "Tiles"
 msgstr ""
 
-#: apps/io.ox/files/toolbar.js:296
+#: apps/io.ox/files/toolbar.js:303
 #: module:io.ox/files
 msgid "File details"
 msgstr ""
@@ -9174,7 +9179,7 @@ msgstr ""
 #: apps/io.ox/portal/main.js:251
 #: module:io.ox/portal
 #: apps/io.ox/portal/main.js:252
-#: apps/io.ox/portal/main.js:569
+#: apps/io.ox/portal/main.js:573
 msgid "Disable widget"
 msgstr ""
 
@@ -9196,35 +9201,35 @@ msgstr ""
 msgid "Add your %1$s account"
 msgstr ""
 
-#: apps/io.ox/portal/main.js:525
+#: apps/io.ox/portal/main.js:526
 #: module:io.ox/portal
 msgid "An error occurred."
 msgstr ""
 
-#: apps/io.ox/portal/main.js:528
+#: apps/io.ox/portal/main.js:529
 #: module:io.ox/portal
 msgid "Click to try again."
 msgstr ""
 
-#: apps/io.ox/portal/main.js:646
+#: apps/io.ox/portal/main.js:653
 #: module:io.ox/portal
 msgid "Portal"
 msgstr ""
 
-#: apps/io.ox/portal/main.js:680
+#: apps/io.ox/portal/main.js:687
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:115
 msgid "Delete widget"
 msgstr ""
 
-#: apps/io.ox/portal/main.js:681
+#: apps/io.ox/portal/main.js:688
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
 msgid "Do you really want to delete this widget?"
 msgstr ""
 
 #. Just disable portal widget - in contrast to delete
-#: apps/io.ox/portal/main.js:690
+#: apps/io.ox/portal/main.js:697
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:125
 msgid "Just disable widget"
@@ -10715,48 +10720,48 @@ msgstr ""
 msgid "You don't have any appointments in the near future."
 msgstr ""
 
-#: apps/plugins/portal/flickr/register.js:54
+#: apps/plugins/portal/flickr/register.js:56
 #: module:plugins/portal
 msgid "Could not load data"
 msgstr ""
 
-#: apps/plugins/portal/flickr/register.js:105
+#: apps/plugins/portal/flickr/register.js:107
 #: module:plugins/portal
 msgid "Press [enter] to jump to the flicker stream."
 msgstr ""
 
-#: apps/plugins/portal/flickr/register.js:184
+#: apps/plugins/portal/flickr/register.js:186
 #: module:plugins/portal
-#: apps/plugins/portal/flickr/register.js:189
+#: apps/plugins/portal/flickr/register.js:191
 msgid "Cannot find user with given name."
 msgstr ""
 
-#: apps/plugins/portal/flickr/register.js:204
+#: apps/plugins/portal/flickr/register.js:206
 #: module:plugins/portal
 msgid "flickr.photos.search"
 msgstr ""
 
-#: apps/plugins/portal/flickr/register.js:205
+#: apps/plugins/portal/flickr/register.js:207
 #: module:plugins/portal
 msgid "flickr.people.getPublicPhotos"
 msgstr ""
 
-#: apps/plugins/portal/flickr/register.js:210
+#: apps/plugins/portal/flickr/register.js:212
 #: module:plugins/portal
 msgid "Edit Flickr photo stream"
 msgstr ""
 
-#: apps/plugins/portal/flickr/register.js:263
+#: apps/plugins/portal/flickr/register.js:265
 #: module:plugins/portal
 msgid "Please enter a search query"
 msgstr ""
 
-#: apps/plugins/portal/flickr/register.js:267
+#: apps/plugins/portal/flickr/register.js:269
 #: module:plugins/portal
 msgid "Please enter a description"
 msgstr ""
 
-#: apps/plugins/portal/flickr/register.js:289
+#: apps/plugins/portal/flickr/register.js:291
 #: module:plugins/portal
 msgid "Flickr"
 msgstr ""
@@ -10809,40 +10814,40 @@ msgstr ""
 msgid "Sorry, we cannot help you here. Your provider needs to obtain a key from LinkedIn with the permission to do read messages."
 msgstr ""
 
-#: apps/plugins/portal/linkedIn/register.js:215
+#: apps/plugins/portal/linkedIn/register.js:217
 #: module:plugins/portal
-#: apps/plugins/portal/linkedIn/register.js:389
+#: apps/plugins/portal/linkedIn/register.js:391
 msgid "LinkedIn"
 msgstr ""
 
-#: apps/plugins/portal/linkedIn/register.js:267
+#: apps/plugins/portal/linkedIn/register.js:269
 #: module:plugins/portal
 msgid "Press [enter] to jump to the linkedin stream."
 msgstr ""
 
-#: apps/plugins/portal/linkedIn/register.js:286
+#: apps/plugins/portal/linkedIn/register.js:288
 #: module:plugins/portal
 msgid "You have no new messages"
 msgstr ""
 
-#: apps/plugins/portal/linkedIn/register.js:310
+#: apps/plugins/portal/linkedIn/register.js:312
 #: module:plugins/portal
 msgid "There were not activities in your network"
 msgstr ""
 
-#: apps/plugins/portal/linkedIn/register.js:324
+#: apps/plugins/portal/linkedIn/register.js:326
 #: module:plugins/portal
 msgid "LinkedIn Network Updates"
 msgstr ""
 
-#: apps/plugins/portal/linkedIn/register.js:329
+#: apps/plugins/portal/linkedIn/register.js:331
 #: module:plugins/portal
 msgid "Your messages"
 msgstr ""
 
-#: apps/plugins/portal/linkedIn/register.js:382
+#: apps/plugins/portal/linkedIn/register.js:384
 #: module:plugins/portal
-#: apps/plugins/portal/twitter/register.js:394
+#: apps/plugins/portal/twitter/register.js:396
 msgid "Add your account"
 msgstr ""
 
@@ -10957,27 +10962,27 @@ msgstr ""
 
 #: apps/plugins/portal/rss/register.js:30
 #: module:io.ox/portal
-#: apps/plugins/portal/rss/register.js:58
-#: apps/plugins/portal/rss/register.js:201
+#: apps/plugins/portal/rss/register.js:60
+#: apps/plugins/portal/rss/register.js:203
 msgid "RSS Feed"
 msgstr ""
 
-#: apps/plugins/portal/rss/register.js:68
+#: apps/plugins/portal/rss/register.js:70
 #: module:io.ox/portal
 msgid "Press [enter] to jump to the rss stream."
 msgstr ""
 
-#: apps/plugins/portal/rss/register.js:71
+#: apps/plugins/portal/rss/register.js:73
 #: module:io.ox/portal
 msgid "No RSS feeds found."
 msgstr ""
 
-#: apps/plugins/portal/rss/register.js:139
+#: apps/plugins/portal/rss/register.js:141
 #: module:io.ox/portal
 msgid "RSS Feeds"
 msgstr ""
 
-#: apps/plugins/portal/rss/register.js:174
+#: apps/plugins/portal/rss/register.js:176
 #: module:io.ox/portal
 msgid "Please enter a feed URL."
 msgstr ""
@@ -10995,49 +11000,49 @@ msgstr ""
 msgid "Due on %1$s"
 msgstr ""
 
-#: apps/plugins/portal/tumblr/register.js:94
+#: apps/plugins/portal/tumblr/register.js:96
 #: module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:115
+#: apps/plugins/portal/tumblr/register.js:117
 msgid "Press [enter] to jump to the tumblr feed."
 msgstr ""
 
-#: apps/plugins/portal/tumblr/register.js:188
+#: apps/plugins/portal/tumblr/register.js:190
 #: module:io.ox/portal
 msgid "Read article on tumblr.com"
 msgstr ""
 
-#: apps/plugins/portal/tumblr/register.js:191
+#: apps/plugins/portal/tumblr/register.js:193
 #: module:io.ox/portal
 msgid "Open external link"
 msgstr ""
 
-#: apps/plugins/portal/tumblr/register.js:241
+#: apps/plugins/portal/tumblr/register.js:243
 #: module:io.ox/portal
 msgid "Edit Tumblr feed"
 msgstr ""
 
-#: apps/plugins/portal/tumblr/register.js:246
+#: apps/plugins/portal/tumblr/register.js:248
 #: module:io.ox/portal
 msgid "Feed URL"
 msgstr ""
 
-#: apps/plugins/portal/tumblr/register.js:287
+#: apps/plugins/portal/tumblr/register.js:289
 #: module:io.ox/portal
 msgid "Please enter an blog url."
 msgstr ""
 
-#: apps/plugins/portal/tumblr/register.js:290
+#: apps/plugins/portal/tumblr/register.js:292
 #: module:io.ox/portal
 msgid "Please enter a description."
 msgstr ""
 
-#: apps/plugins/portal/tumblr/register.js:303
+#: apps/plugins/portal/tumblr/register.js:305
 #: module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:308
+#: apps/plugins/portal/tumblr/register.js:310
 msgid "Unknown error while checking tumblr-blog."
 msgstr ""
 
-#: apps/plugins/portal/tumblr/register.js:333
+#: apps/plugins/portal/tumblr/register.js:335
 #: module:io.ox/portal
 msgid "Tumblr"
 msgstr ""
@@ -11084,12 +11089,12 @@ msgstr ""
 
 #: apps/plugins/portal/twitter/register.js:260
 #: module:plugins/portal
-#: apps/plugins/portal/twitter/register.js:285
-#: apps/plugins/portal/twitter/register.js:401
+#: apps/plugins/portal/twitter/register.js:287
+#: apps/plugins/portal/twitter/register.js:403
 msgid "Twitter"
 msgstr ""
 
-#: apps/plugins/portal/twitter/register.js:314
+#: apps/plugins/portal/twitter/register.js:316
 #: module:plugins/portal
 msgid "Press [enter] to jump to the twitter feed."
 msgstr ""
@@ -11407,23 +11412,23 @@ msgstr ""
 msgid "There is no recent activity in your Xing network."
 msgstr ""
 
-#: apps/plugins/portal/xing/register.js:285
+#: apps/plugins/portal/xing/register.js:287
 #: module:plugins/portal
 msgid "Get news from your XING network delivered to you. Stay in touch and find out about new business opportunities."
 msgstr ""
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/plugins/portal/xing/register.js:289
+#: apps/plugins/portal/xing/register.js:291
 #: module:plugins/portal
 msgid "Create new %1$s account"
 msgstr ""
 
-#: apps/plugins/portal/xing/register.js:326
+#: apps/plugins/portal/xing/register.js:328
 #: module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
 
-#: apps/plugins/portal/xing/register.js:344
+#: apps/plugins/portal/xing/register.js:346
 #: module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr ""
