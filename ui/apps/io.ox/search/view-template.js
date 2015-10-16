@@ -151,8 +151,9 @@ define('io.ox/search/view-template', [
                 var cell = $(e.target),
                     next = cell.closest('a').attr('data-app');
 
-                if (next && next !== id)
+                if (next && next !== id) {
                     baton.model.setModule(next);
+                }
             });
 
             //append or replace

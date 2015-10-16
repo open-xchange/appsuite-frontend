@@ -46,8 +46,9 @@ define('io.ox/mail/accounts/model', [
             ],
             login: function (value) {
                 //for setups without any explicit login name for primary account
-                if (this.attributes.id !== 0 && $.trim(value) === '')
+                if (this.attributes.id !== 0 && $.trim(value) === '') {
                     return gt('This field has to be filled');
+                }
             },
             password: function (value) {
                 //if we have an id we are in edit mode, not create new account mode. Here we don't get the password from the server, so this field may be empty.

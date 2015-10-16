@@ -488,8 +488,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         // flatten this array
         var tmp = [], column = '';
         for (column in ids) {
-            if ( idMappingExcludes.indexOf(column) === -1 )
+            if ( idMappingExcludes.indexOf(column) === -1 ) {
                 tmp.push(column);
+            }
         }
         tmp.sort(function (a, b) {
             return a - b;
@@ -797,8 +798,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 ox.trigger('connection:online connection:up');
 
                 //write response to console
-                if (ox.debug)
+                if (ox.debug) {
                     extract(r.o, response);
+                }
 
                 // slow?
                 var took = _.now() - t0;

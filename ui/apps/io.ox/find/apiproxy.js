@@ -91,8 +91,9 @@ define('io.ox/find/apiproxy', [
             // request.data.options.folder = app.get('parent').folder.get();
 
             // ignore virtual folders
-            if (/^virtual/.test(request.data.options.folder) && !app.isMandatory('folder'))
+            if (/^virtual/.test(request.data.options.folder) && !app.isMandatory('folder')) {
                 request.data.options.folder = undefined;
+            }
 
             // call api
             return api.autocomplete(request).then(extend.bind(this, request));

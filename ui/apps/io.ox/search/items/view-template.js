@@ -70,7 +70,7 @@ define('io.ox/search/items/view-template', [
     ext.point('io.ox/search/main/items').invoke('config', $, config);
 
     var refresh = _.debounce(function (e) {
-                    if (ox.ui.App.getCurrentApp().get('name') === 'io.ox/search')
+                    if (ox.ui.App.getCurrentApp().get('name') === 'io.ox/search') {
                         if (e && e.data && e.data.trigger) {
                             //jQuery event
                             e.data.trigger('needs-refresh');
@@ -78,9 +78,11 @@ define('io.ox/search/items/view-template', [
                             //backbone event
                             this.trigger('needs-refresh');
                         }
+                    }
                     // hide sidepanel
-                    if (e && e.type && (e.type.indexOf('delete') >= 0 || e.type.indexOf('move') >= 0))
+                    if (e && e.type && (e.type.indexOf('delete') >= 0 || e.type.indexOf('move') >= 0)) {
                         $('.io-ox-sidepopup', '#io-ox-windowmanager-pane>.io-ox-search-window').detach();
+                    }
                 }, 100);
 
     ext.point('io.ox/search/view/items').extend({

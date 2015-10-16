@@ -289,8 +289,9 @@ define('io.ox/core/sub/subscriptions', [
 
                     enabled = keychainAPI.isEnabled(accountType);
 
-                    if (!enabled)
+                    if (!enabled) {
                         console.error('I do not know keys of accountType ' + accountType + '! I suppose a needed plugin was not registered in the server configuration.');
+                    }
 
                     // remove formdescription entry when oauth service isn't available
                     return enabled;

@@ -1472,8 +1472,9 @@ define('io.ox/core/desktop', [
             // add event hub
             Events.extend(win);
 
-            if (opt.search)
+            if (opt.search) {
                 console.warn('search is deprecated with 7.6.0. Please use io.ox/find instead');
+            }
 
             if (opt.facetedsearch) {
                 console.warn('io.ox/search is deprecated with 7.8.0. Please use io.ox/find instead');

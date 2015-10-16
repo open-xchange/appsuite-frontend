@@ -335,8 +335,9 @@ define('io.ox/contacts/edit/view-form', [
                 delete mod.display_name;
                 this.$el.text(util.getFullName(mod) || '\u00A0');
                 //fix top margin if picture upload was removed
-                if (isMyContactData && !capabilities.has('gab'))
+                if (isMyContactData && !capabilities.has('gab')) {
                     this.$el.css('margin-top', '0px');
+                }
                 return this;
             }
         });

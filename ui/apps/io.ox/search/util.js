@@ -53,8 +53,9 @@ define('io.ox/search/util', [
                 })
                 .tooltip()
                 .on('click', function () {
-                    if (node.tooltip)
+                    if (node.tooltip) {
                         node.tooltip('hide');
+                    }
                 });
             }
             return node;

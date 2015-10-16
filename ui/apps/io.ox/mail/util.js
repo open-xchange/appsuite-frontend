@@ -178,8 +178,9 @@ define('io.ox/mail/util', [
                             message = that.removeChannelSuffix(message);
                         });
                     } else if (_.isObject(mail)) {
-                        if (mail.from && _.isArray(mail.from[0]) && mail.from[0][1])
+                        if (mail.from && _.isArray(mail.from[0]) && mail.from[0][1]) {
                             mail.from[0][1] = remove(mail.from[0][1]);
+                        }
                         if (_.isArray(mail.to)) {
                             _.each(mail.to, function (recipient) {
                                 recipient[1] = remove(recipient[1]);
@@ -396,8 +397,9 @@ define('io.ox/mail/util', [
             if (subject === '') return gt('No subject');
 
             // remove mailing list stuff (optional)
-            if (settings.get('features/cleanSubjects', false))
+            if (settings.get('features/cleanSubjects', false)) {
                 subject = subject.replace(/\[[^\[]*\]\s*/g, '');
+            }
 
             return keepFirstPrefix ?
                 subject.replace(/^((re|fwd|aw|wg):\s?)((re|fwd|aw|wg):\s?)*/i, '$1') :
@@ -428,8 +430,7 @@ define('io.ox/mail/util', [
         },
 
         getFullDate: function (timestamp) {
-            if (!_.isNumber(timestamp))
-                return gt('unknown');
+            if (!_.isNumber(timestamp)) return gt('unknown');
             return moment(timestamp).format('l LT');
         },
 
@@ -443,8 +444,7 @@ define('io.ox/mail/util', [
                 MINUTE = 60 * 1000,
                 HOUR = MINUTE * 60;
             console.warn('This method is deprecated and will be removed with 7.6.0 or at any random date later');
-            if (!_.isNumber(timestamp))
-                return gt('unknown');
+            if (!_.isNumber(timestamp)) return gt('unknown');
             var now = new Date(),
                 zone = now.getTimezoneOffset(),
                 time = now.getTime() - zone * 60 * 1000,

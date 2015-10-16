@@ -132,8 +132,7 @@ define.async('io.ox/core/manifests', [
 
         // check capabilities. skip this if upsell=true.
         // Such plugins take care of missing capabilities own their own
-        if (isDisabled(manifest))
-            return;
+        if (isDisabled(manifest)) return;
 
         // loop over namespaces (might be multiple)
         // supports: 'one', ['array'] or 'one two three'

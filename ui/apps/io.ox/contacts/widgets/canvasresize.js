@@ -201,8 +201,9 @@ define('io.ox/contacts/widgets/canvasresize', ['io.ox/contacts/widgets/exif'], f
                 for (; a < al; a++) {
                     if ((prop = arguments[a]) !== null) {
                         for (var i in prop) {
-                            if (target === prop[i])
+                            if (target === prop[i]) {
                                 continue;
+                            }
                             if (deep && typeof prop[i] === 'object' && target[i]) {
                                 methods.extend(target[i], prop[i]);
                             } else if (prop[i] !== undefined) {

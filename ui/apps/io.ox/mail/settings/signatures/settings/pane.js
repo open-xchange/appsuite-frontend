@@ -382,8 +382,9 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                                     )
                                 );
 
-                        if (isDefault)
+                        if (isDefault) {
                             $item.addClass('default');
+                        }
                         $list.append($item);
                         defaultSignatureView.trigger('appendOption', { value: signature.id, label: signature.displayname, isDefault: settings.get('defaultSignature') === signature.id });
                         defaultReplyForwardView.trigger('appendOption', { value: signature.id, label: signature.displayname, isDefault: settings.get('defaultReplyForwardSignature') === signature.id });

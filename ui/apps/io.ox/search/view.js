@@ -70,16 +70,18 @@ define('io.ox/search/view', [
                 ext.point('io.ox/search/view').each(function (p) {
                     var list = ids.split(' ');
                     list.forEach(function (id) {
-                        if (id === p.id)
+                        if (id === p.id) {
                             p.invoke('draw', self.$el, self.baton);
+                        }
                     });
                 });
                 if (_.device('smartphone')) {
                     ext.point('io.ox/search/view/mobile').each(function (p) {
                         var list = ids.split(' ');
                         list.forEach(function (id) {
-                            if (id === p.id)
+                            if (id === p.id) {
                                 p.invoke('draw', self.$el, self.baton);
+                            }
                         });
                     });
                 }
@@ -99,8 +101,9 @@ define('io.ox/search/view', [
                 this.$el.empty();
                 this.$el.append(node.children());
 
-                if (options.closeSidepanel)
+                if (options.closeSidepanel) {
                     $('.io-ox-sidepopup', '#io-ox-windowmanager-pane>.io-ox-search-window').detach();
+                }
 
                 return this;
             },

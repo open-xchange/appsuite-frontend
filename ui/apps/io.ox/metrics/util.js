@@ -15,6 +15,8 @@ define('io.ox/metrics/util', function () {
 
     'use strict';
 
+    /*eslint-disable */
+
     // TODO: bower
     // https://github.com/wbond/md5-js
     /*!
@@ -225,5 +227,7 @@ define('io.ox/metrics/util', function () {
         doNotTrack: doNotTrack,
         getUserHash: getUserHash
     };
+
+    /*eslint-enable */
 
 });

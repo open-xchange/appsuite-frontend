@@ -27,8 +27,9 @@ define('io.ox/core/pdf/pdfpolyfill', function () {
         function updateDataset() {
             var dataset = {};
             forEach.call(this.attributes, function (attr) {
-                if (match = attr.name.match(regex))
+                if (match = attr.name.match(regex)) {
                     dataset[toCamelCase(match[1])] = attr.value;
+                }
             });
             return dataset;
         }

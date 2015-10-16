@@ -429,8 +429,9 @@ define('io.ox/core/tk/attachments', [
                             _(attachments).each(function (a) {
                                 drawAttachment(a, _.noI18n(a.filename));
                             });
-                            if (attachments.length > 1)
+                            if (attachments.length > 1) {
                                 drawAttachment(attachments, gt('All attachments')).find('a').removeClass('attachment-link');
+                            }
                         } else {
                             $node.append(gt('None'));
                         }

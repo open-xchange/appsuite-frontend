@@ -827,10 +827,13 @@ define('io.ox/core/folder/api', [
                     if ('title' in changes) api.trigger('rename', id, model.toJSON());
                 }
                 // fetch subfolders of parent folder to ensure proper order after rename/move
-                if (id !== newId || changes.title || changes.folder_id ) return list(model.get('folder_id'), { cache: false }).then(function () {
-                    pool.getCollection(model.get('folder_id')).sort();
-                    return newId;
-                });
+                if (id !== newId || changes.title || changes.folder_id ) {
+                    return list(model.get('folder_id'), { cache: false })
+                            .then(function () {
+                                pool.getCollection(model.get('folder_id')).sort();
+                                return newId;
+                            });
+                }
             },
             function fail(error) {
                 //get fresh data for the model (the current ones are wrong since we applied the changes early to be responsive)

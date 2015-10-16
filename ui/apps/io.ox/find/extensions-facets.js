@@ -70,8 +70,9 @@ define('io.ox/find/extensions-facets', [
                 }
             });
 
-            if (advanced.length)
-                 ext.point('io.ox/find/facets/dropdown/default').invoke('draw', this, baton, advanced);
+            if (advanced.length) {
+                ext.point('io.ox/find/facets/dropdown/default').invoke('draw', this, baton, advanced);
+            }
         },
 
         dropdownDefault: function (baton, list) {
@@ -132,8 +133,9 @@ define('io.ox/find/extensions-facets', [
                     // option vs. link
                     dropdown.option(id, option.id, label);
 
-                    if (conflicting)
+                    if (conflicting) {
                         dropdown.$ul.children().last().addClass('conflicting');
+                    }
                 });
             });
         },

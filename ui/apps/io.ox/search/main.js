@@ -143,8 +143,9 @@ define('io.ox/search/main', [
     });
     // ensure launchbar entry
     win.on('show', function () {
-        if (!ox.ui.apps.get(app))
+        if (!ox.ui.apps.get(app)) {
             ox.ui.apps.add(app);
+        }
     });
 
     app.busy = function () {
@@ -289,8 +290,9 @@ define('io.ox/search/main', [
             // reset model and update current app
             model.reset({ silent: true });
             current = ox.ui.App.getCurrentApp().get('name');
-            if (current !== 'io.ox/search')
+            if (current !== 'io.ox/search') {
                 model.set('app', current, { silent: true });
+            }
             // update state
             app.set('state', 'running');
             // reset view

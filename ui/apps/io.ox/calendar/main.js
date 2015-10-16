@@ -516,8 +516,9 @@ define('io.ox/calendar/main', [
                 'find:cancel': function () {
                     // switch back to perspective used before
                     var currentPerspective = _.url.hash('perspective') || app.props.get('layout');
-                    if (lastPerspective && lastPerspective !== currentPerspective)
+                    if (lastPerspective && lastPerspective !== currentPerspective) {
                         app.props.set('layout', lastPerspective);
+                    }
                     // show sort options again
                     app.grid.getToolbar().find('.grid-options:first').show();
                     // disable

@@ -1067,8 +1067,7 @@ define('io.ox/mail/api', [
                     api.trigger('refresh.all');
                 }, 3000);
                 // IE9
-                if (_.isObject(text))
-                    return text;
+                if (_.isObject(text)) return text;
                 // process HTML-ish non-JSONP response
                 var a = text.indexOf('{'),
                     b = text.lastIndexOf('}');

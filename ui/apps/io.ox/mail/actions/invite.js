@@ -46,8 +46,9 @@ define('io.ox/mail/actions/invite', [
                 .done(function () {
                     // remove participants received mail via msisdn
                     participants = _.filter(participants, function (participant) {
-                        if (participant.mail)
+                        if (participant.mail) {
                             return util.getChannel(participant.mail, false) !== 'phone';
+                        }
                         return true;
                     });
                     var initData = { participants: participants, title: notetext, folder_id: currentFolder };

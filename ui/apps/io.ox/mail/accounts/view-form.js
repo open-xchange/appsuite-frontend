@@ -168,8 +168,9 @@ define.async('io.ox/mail/accounts/view-form', [
                         } else {
                             //conditional defaults
                             _.each(defaults.pop3, function (value, key) {
-                                if (!model.has(key))
+                                if (!model.has(key)) {
                                     model.set(key, value);
+                                }
                             });
                             pop3nodes.show();
                         }

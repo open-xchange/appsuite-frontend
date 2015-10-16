@@ -326,8 +326,9 @@ define('io.ox/find/extensions-api', [
                         // use only primary here cause of the slow fetching folder data from externals accounts
                         var isPrimary = id.indexOf('default0') > -1,
                             isValid = ['inbox', 'sent', 'drafts', 'trash'].indexOf(accountAPI.getType(id)) > -1;
-                        if (isPrimary && isValid)
+                        if (isPrimary && isValid) {
                             mapping[id] = 'standard';
+                        }
                     });
                     // add account data to multiple
                     req.push(accountAPI.all());
@@ -396,10 +397,11 @@ define('io.ox/find/extensions-api', [
                             filter: null
                         };
                     // ensure primary is listed first
-                    if (isPrimary)
+                    if (isPrimary) {
                         options.splice(0, 0, option);
-                    else
+                    } else {
                         options.push(option);
+                    }
                 });
             }
 
@@ -408,8 +410,9 @@ define('io.ox/find/extensions-api', [
                 return baton.app.get('parent').folder.getData()
                     .then(function (data) {
                         _.each(facet.values[0].options, function (option) {
-                            if (option.data.qualifiedId === data.account_id)
+                            if (option.data.qualifiedId === data.account_id) {
                                 option.active = true;
+                            }
                         });
                     });
             }

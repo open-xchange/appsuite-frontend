@@ -40,8 +40,9 @@ define('io.ox/core/import/import', [
             //add option
             formats = ext.point('io.ox/core/import/format').invoke('draw', null, baton)._wrapped;
             formats.forEach(function (node) {
-                if (node)
+                if (node) {
                     node.appendTo(nodes.select);
+                }
             });
 
             //avoid find

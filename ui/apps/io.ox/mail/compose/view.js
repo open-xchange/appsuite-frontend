@@ -992,8 +992,9 @@ define('io.ox/mail/compose/view', [
 
         unblockReuse: function (sendtype) {
             this.blocked[sendtype] = (this.blocked[sendtype] || 0) - 1;
-            if (this.blocked[sendtype] <= 0)
+            if (this.blocked[sendtype] <= 0) {
                 delete this.blocked[sendtype];
+            }
         },
 
         render: function () {

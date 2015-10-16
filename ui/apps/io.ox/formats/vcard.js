@@ -41,8 +41,9 @@ define('io.ox/formats/vcard', function () {
         data[tmp.key][tmp.type] = {};
 
         //adjustments
-        if (tmp.key === 'fn')
+        if (tmp.key === 'fn') {
             tmp.values[0] = tmp.values[0];
+        }
 
         if (tmp.key === 'bday') {
             tmp.values[0] = tmp.values[0].slice(0, 4) + '-' + tmp.values[0].slice(4, 6) + '-' + tmp.values[0].slice(6, 8);

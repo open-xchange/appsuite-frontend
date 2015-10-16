@@ -458,8 +458,9 @@ define.async('io.ox/core/date', [
             y: 1970, m: 0, d: 1, h: 0, h2: 0, min: 0, s: 0, ms: 0,
             w: 1, wd: 0
         };
-        for (var i = 0; i < handlers.length; i++)
+        for (var i = 0; i < handlers.length; i++) {
             handlers[i](match[i + 1], d);
+        }
         if (!d.h) d.h = Number(d.h2) + (d.pm ? 12 : 0);
         if (d.h < 0 || d.h >= 24 || d.min < 0 || d.min >= 60 ||
             d.s < 0 || d.s >= 60 || d.ms < 0 || d.ms >= 1000) {

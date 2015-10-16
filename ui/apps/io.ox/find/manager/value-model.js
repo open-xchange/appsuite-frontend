@@ -70,8 +70,9 @@ define('io.ox/find/manager/value-model', [
                     dynamic.item.name = option.name;
                     option = 'dynamic';
                     // we have to trigger this change event manually!
-                    if (option === 'dynamic')
+                    if (option === 'dynamic') {
                         this.trigger('change:option', this);
+                    }
                 }
                 // set option value
                 option = isDynamic ? 'dynamic' : option.id;
@@ -159,8 +160,9 @@ define('io.ox/find/manager/value-model', [
         },
 
         getName: function () {
-            if (this.get('facet').get('id') === 'folder')
+            if (this.get('facet').get('id') === 'folder') {
                 return (this.getOption().item || this.getOption()).name;
+            }
             return this.get('name') || gt('All');
         },
 

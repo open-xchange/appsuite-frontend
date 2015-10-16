@@ -263,8 +263,9 @@ define('io.ox/core/tk/selection', [
                 }
                 break;
             case 9:
-                if (options.markable)
+                if (options.markable) {
                     clearMarks();
+                }
                 break;
             // [Del], [Backspace] or [fn+Backspace] (MacOS) > delete item
             case 8:

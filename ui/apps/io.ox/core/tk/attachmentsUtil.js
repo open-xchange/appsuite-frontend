@@ -231,8 +231,9 @@ define('io.ox/core/tk/attachmentsUtil', [
                             )
                             .on('click', function (e) {
                                 e.preventDefault();
-                                if (!('remove' in caller))
+                                if (!('remove' in caller)) {
                                     console.error('Caller should provide a remove function.');
+                                }
                                 caller.remove(obj);
                             })
                     )

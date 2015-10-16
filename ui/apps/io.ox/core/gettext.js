@@ -33,8 +33,9 @@ define('io.ox/core/gettext', function () {
     }
 
     function debugAttr(e) {
-        if (e.originalEvent.attrName in { title: 1, value: 1 })
+        if (e.originalEvent.attrName in { title: 1, value: 1 }) {
             verify(e.originalEvent.newValue, e.target);
+        }
     }
 
     function debugData(e) {

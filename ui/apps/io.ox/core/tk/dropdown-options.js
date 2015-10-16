@@ -101,8 +101,9 @@ define('io.ox/core/tk/dropdown-options', [
                 //store in node
                 $anchor.data(_.extend($anchor.data(), { options: data }));
                 //store setting
-                if (opt.settings)
+                if (opt.settings) {
                     opt.settings.set('options/' + opt.id, data).save();
+                }
             },
 
             toggleValue = function (item) {

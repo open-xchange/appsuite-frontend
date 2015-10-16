@@ -205,8 +205,9 @@ define('io.ox/search/model', [
                     autocomplete = this.get('autocomplete');
 
                 // in case folder is man
-                if (!autocomplete.length)
+                if (!autocomplete.length) {
                     autocomplete = _.copy(options.sticky, true);
+                }
 
                 // add facet to pool
                 _.each(autocomplete, function (data) {
@@ -266,8 +267,9 @@ define('io.ox/search/model', [
 
                 this.trigger('facet:add', facet, value, option);
 
-                if (facet !== 'folder' && !silent)
+                if (facet !== 'folder' && !silent) {
                     this.trigger('query', this.getApp());
+                }
             },
             remove: function (facet, value) {
                 var pool = this.get('pool'),
@@ -402,10 +404,11 @@ define('io.ox/search/model', [
                 return def.then(function (data) {
                     data = data || {};
                     if (!isFolderSet(self)) {
-                        if (self.get('pool').folder && data.id)
+                        if (self.get('pool').folder && data.id) {
                             self.update('folder', 'custom', data);
-                        else
+                        } else {
                             self.add('folder', 'custom', data);
+                        }
                     }
                 }, function () {
                     return {
