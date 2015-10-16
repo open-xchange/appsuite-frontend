@@ -273,17 +273,14 @@ define('io.ox/tasks/util', [
                     },
                     //sort by endDate. If equal, sort by alphabet
                     dateSort = function (a, b) {
-                        /* eslint eqeqeq: 0 */
-                        /* jshint eqeqeq: false */
                         if (a.end_time > b.end_time) {
                             return 1;
-                        // use == here so end_time=null and end_time=undefined are equal. may happen with done tasks
-                        } else if (a.end_time == b.end_time) {
+                        // treat end_time=null and end_time=undefined equally. may happen with done tasks
+                        } else if (a.end_time === b.end_time || (a.end_time === undefined && b.end_time === null) || (a.end_time === null && b.end_time === undefined)) {
                             return alphabetSort(a, b);
                         } else {
                             return -1;
                         }
-                        /* jshint eqeqeq: true */
                     };
 
                 for (var i = 0; i < tasks.length; i++) {
