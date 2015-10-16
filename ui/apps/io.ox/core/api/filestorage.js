@@ -78,8 +78,8 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
             },
             // returns a collection with all available file storage services
             getAllServices: function (filestorageService, useCache) {
-                // only ignore cache if useCache is set to false, undefined results in using the cache
-                useCache  = useCache === false ? false : true;
+
+                useCache = useCache === undefined ? true : useCache;
 
                 if (useCache && servicesCache.length) {
                     return $.Deferred().resolve(servicesCache);
