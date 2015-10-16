@@ -757,7 +757,11 @@ define('io.ox/mail/main', [
                             )
                             .on('click', 'a', function (e) {
                                 e.preventDefault();
-                                alert('TBD');
+                                if (ox.debug) {
+                                    /*eslint-disable no-alert*/
+                                    alert('TBD');
+                                    /*eslint-enable no-alert */
+                                }
                             })
                             : $()
                     );

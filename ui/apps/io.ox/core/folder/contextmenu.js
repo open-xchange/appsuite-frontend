@@ -142,7 +142,11 @@ define('io.ox/core/folder/contextmenu', [
                 data: { folder: baton.data.id, app: baton.app },
                 enabled: true,
                 handler: function () {
-                    alert('Available once we get the proper API action');
+                    if (ox.debug) {
+                        /*eslint-disable no-alert*/
+                        alert('Available once we get the proper API action');
+                        /*eslint-enable no-alert */
+                    }
                 },
                 text: gt('Move all messages')
             });

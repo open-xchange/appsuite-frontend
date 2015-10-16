@@ -55,7 +55,9 @@ define('io.ox/core/upsell', [
     function upgrade(options) {
         console.debug('upsell:upgrade', options);
         // needs no translation; just for demo purposes
+        /*eslint-disable no-alert*/
         alert('User decided to upgrade! (global event: upsell:upgrade)');
+        /*eslint-enable no-alert */
     }
 
     // local copy for speed
