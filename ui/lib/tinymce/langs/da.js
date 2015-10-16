@@ -123,7 +123,7 @@ tinymce.addI18n('da',{
 "None": "Ingen",
 "The URL you entered seems to be an external link. Do you want to add the required http:\/\/ prefix?": "URLen som du angav ser ud til at v\u00e6re et eksternt link. \u00d8nsker du at tilf\u00f8je det kr\u00e6vede prefiks http:\/\/ ?",
 "Target": "Target",
-"The URL you entered seems to be an email address. Do you want to add the required mailto: prefix?": "URLen som du angav ser ud til at v\u00e6re en email adresse. \u00d8nsker du at tilf\u00f8je det kr\u00e6vede prefiks  mailto:",
+"The URL you entered seems to be an email address. Do you want to add the required mailto: prefix?": "URLen som du angav ser ud til at v\u00e6re en email adresse. \u00d8nsker du at tilf\u00f8je det kr\u00e6vede prefiks  mailto: ?",
 "Insert\/edit link": "Inds\u00e6t\/ret link",
 "Insert\/edit video": "Inds\u00e6t\/ret video",
 "Poster": "Poster",
