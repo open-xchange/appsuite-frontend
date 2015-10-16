@@ -28,7 +28,7 @@
     "mobiscroll": "2.16.1",
     "moment": "2.10.6",
     "moment-interval": "https://github.com/Open-Xchange-Frontend/moment-interval.git",
-    "moment-timezone": "0.4.0",
+    "moment-timezone": "0.4.1",
     "open-sans-fontface": "1.2.1",
     "pdfjs-dist": "1.1.303",
     "requirejs": "2.1.20",
