@@ -56,7 +56,7 @@ define('io.ox/editor/main', [
                 e.preventDefault();
                 if (e.which === 33) {
                     // cursor to first position
-                    e.target.setSelectionRange(0,0);
+                    e.target.setSelectionRange(0, 0);
                     e.target.scrollTop = 0;
                 } else {
                     // cursor to last position

@@ -380,7 +380,7 @@ define('io.ox/mail/api', [
                     api.trigger('deleted-mails', ids);
                     // if this is a trash folder trigger special event (quota updates)
                     // checking the first id is enough, all id's must be from the same folder anyway when using our UI
-                    if (accountAPI.is('trash',ids[0].folder_id)) {
+                    if (accountAPI.is('trash', ids[0].folder_id)) {
                         api.trigger('deleted-mails-from-trash');
                     }
                 })
