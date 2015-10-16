@@ -1605,30 +1605,6 @@ define('io.ox/core/desktop', [
                     id: 'links',
                     ref: opt.name + '/links/toolbar'
                 }));
-
-                // add fullscreen handler
-                if (opt.fullscreen === true) {
-
-                    new links.Action(opt.name + '/actions/fullscreen', {
-                        action:  function (baton) {
-                            if (BigScreen.enabled) {
-                                BigScreen.toggle(baton.$.outer.get(0));
-                            }
-                        }
-                    });
-
-                    new links.ActionLink(opt.name + '/links/toolbar/fullscreen', {
-                        ref: opt.name + '/actions/fullscreen'
-                    });
-
-                    new links.ActionGroup(opt.name + '/links/toolbar', {
-                        id: 'fullscreen',
-                        index: 1000,
-                        icon: function () {
-                            return $('<i class="fa fa-expand">');
-                        }
-                    });
-                }
             }
             // inc
             guid++;

@@ -55,6 +55,7 @@ module.exports = function (grunt) {
                         // static bower_components
                         expand: true,
                         src: [
+                            'bigscreen/bigscreen.min.js',
                             'bootstrap-datepicker/js/bootstrap-datepicker.js',
                             'jquery-imageloader/jquery.imageloader.js',
                             'Chart.js/Chart.js',

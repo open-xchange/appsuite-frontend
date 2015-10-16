@@ -959,7 +959,7 @@ define('io.ox/core/main', [
         });
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
-            id: 'divider-before-fullscreen',
+            id: 'divider-before-about',
             index: 290,
             draw: function () {
                 this.append(
@@ -967,34 +967,6 @@ define('io.ox/core/main', [
                 );
             }
         });
-
-        // fullscreen doesn't work for safari (see )
-        if (_.device('desktop && !safari')) {
-            ext.point('io.ox/core/topbar/right/dropdown').extend({
-                id: 'fullscreen',
-                index: 300,
-                draw: function () {
-                    if (BigScreen.enabled) {
-                        var fullscreenButton;
-                        BigScreen.onenter = function () {
-                            fullscreenButton.text(gt('Exit Fullscreen'));
-                        };
-                        BigScreen.onexit = function () {
-                            fullscreenButton.text(gt('Fullscreen'));
-                        };
-                        this.append(
-                            $('<li role="presentation">').append(
-                                fullscreenButton = $('<a href="#" data-action="fullscreen" role="menuitem" tabindex="-1">').text(gt('Fullscreen'))
-                            )
-                            .on('click', function (e) {
-                                e.preventDefault();
-                                BigScreen.toggle();
-                            })
-                        );
-                    }
-                }
-            });
-        }
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'about',

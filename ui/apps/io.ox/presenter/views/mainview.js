@@ -20,9 +20,10 @@ define('io.ox/presenter/views/mainview', [
     'io.ox/presenter/views/sidebarview',
     'io.ox/presenter/views/toolbarview',
     'io.ox/presenter/views/thumbnailview',
+    'static/3rd.party/bigscreen/bigscreen.min.js',
     'gettext!io.ox/presenter',
     'io.ox/core/tk/nodetouch'
-], function (DisposableView, Notifications, Ext, ActionsPattern, SessionRestore, PresentationView, SidebarView, ToolbarView, ThumbnailView, gt) {
+], function (DisposableView, Notifications, Ext, ActionsPattern, SessionRestore, PresentationView, SidebarView, ToolbarView, ThumbnailView, BigScreen, gt) {
 
     'use strict';
 

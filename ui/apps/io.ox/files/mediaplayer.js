@@ -126,7 +126,7 @@ define('io.ox/files/mediaplayer', [
             this.container.on('keydown', function (e) {
                 // close on ESC unless in fullscreen mode
                 // note: macos' native fullscreen mode does not close on ESC (same for Chrome & Firefox)
-                if (e.keyCode === 27 && BigScreen.element === null && !MediaElementPlayer.fullscreen) self.close();
+                if (e.keyCode === 27 && !MediaElementPlayer.fullscreen) self.close();
             });
         },
 
