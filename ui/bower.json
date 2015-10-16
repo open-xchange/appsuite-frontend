@@ -12,7 +12,6 @@
   ],
   "dependencies": {
     "Chart.js": "https://github.com/nnnick/Chart.js.git#8f025f33c08c66991a12f02f908bab156a963aef",
-    "autosize": "~3.0.9",
     "backbone": "1.1.2",
     "backbone-validation": "0.11.5",
     "bigscreen": "2.0.5",

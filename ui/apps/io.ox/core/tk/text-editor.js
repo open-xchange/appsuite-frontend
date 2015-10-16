@@ -167,12 +167,10 @@ define('io.ox/core/tk/text-editor', [], function () {
 
             _.defer(function () {
                 textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - $('#io-ox-topbar').height())));
-                //autosize(textarea);
             });
 
             function resizeEditor() {
                 textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - $('#io-ox-topbar').height())));
-                //autosize.update(textarea);
             }
 
             $(window).on('resize.text-editor', resizeEditor);
