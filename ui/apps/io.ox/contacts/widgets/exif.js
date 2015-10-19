@@ -190,6 +190,7 @@ define('io.ox/contacts/widgets/exif', function () {
                 }
                 return vals;
             }
+        // no default
         }
     }
 

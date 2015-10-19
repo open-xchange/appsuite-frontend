@@ -179,6 +179,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
                     event.stopPropagation();
                     this.onThumbnailClicked(event);
                     break;
+                // no default
             }
         },
 

@@ -51,6 +51,7 @@ define('io.ox/core/dropzone', [], function () {
                 this.stop(e);
                 this.hide();
                 return false;
+            // no default
             }
         },
 

@@ -81,6 +81,7 @@ define('io.ox/participants/model', [
                             newType = this.TYPE_EXTERNAL_USER;
                         }
                         break;
+                    // no default
                 }
                 this.set('type', newType);
             }
@@ -229,6 +230,7 @@ define('io.ox/participants/model', [
                 case this.TYPE_DISTLIST:
                     if (this.get('display_name') && 'distribution_list' in this.attributes) break;
                     return contactAPI.get(this.pick('id', 'folder_id')).then(update);
+                // no default
             }
 
             return $.when();

@@ -86,6 +86,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
                 this.editDescription();
                 event.preventDefault();
                 break;
+            // no default
             }
         },
 

@@ -221,6 +221,7 @@ define('io.ox/tasks/util', [
                             task.status = gt('Deferred');
                             task.badge = 'badge badge-deferred';
                             break;
+                        // no default
                     }
                 } else {
                     task.status = '';
@@ -328,6 +329,7 @@ define('io.ox/tasks/util', [
                         case 3:
                             $span.addClass('high').attr('title', gt('High priority'));
                             break;
+                        // no default
                     }
                     for (var i = 0; i < p; i++) {
                         $span.append($('<i class="fa fa-exclamation">'));

@@ -194,6 +194,7 @@ define('io.ox/presenter/views/thumbnailview', [
                     event.stopPropagation();
                     this.onThumbnailClicked(event);
                     break;
+                // no default
             }
         },
 

@@ -343,6 +343,7 @@ define('io.ox/mail/threadview', [
                     if (e.shiftKey) this.onPrevious(e);
                     if (e.altKey) this.focusMessage(e, +1);
                     break;
+                // no default
             }
         },
 

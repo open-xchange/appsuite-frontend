@@ -182,6 +182,7 @@ define('io.ox/core/viewer/views/mainview', [
                         this.onToggleSidebar();
                     }
                     break;
+                // no default
             }
         },
 

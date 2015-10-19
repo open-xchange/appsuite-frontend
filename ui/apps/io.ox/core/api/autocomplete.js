@@ -101,19 +101,18 @@ define('io.ox/core/api/autocomplete', [
                     )
                     .then(function () {
                         // unify and process
-                        var retData = [], data = _(arguments).toArray();
+                        // TODO: Review / Refactor this!
+                        var retData = [],
+                            data = _(arguments).toArray();
                         _(self.apis).each(function (module, index) {
                             var items = _(data[index]).map(function (data) {
-                                    data.type = module.type;
-                                    return data;
-                                });
+                                data.type = module.type;
+                                return data;
+                            });
                             retData = retData.concat(items);
-                            switch (module.type) {
-                                case 'custom':
-                                case 'user':
-                                case 'contact':
-                                    retData = self.processContactResults(retData, query);
-                                    break;
+
+                            if (/contact|custom|user/.test(module.type)) {
+                                retData = self.processContactResults(retData, query);
                             }
                         });
                         // add to cache

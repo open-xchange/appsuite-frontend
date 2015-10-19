@@ -168,6 +168,7 @@ define('io.ox/calendar/invitations/register', [
                         gt('You tentatively accepted this task');
                     className = 'tentative';
                     break;
+                // no default
                 }
                 return $('<div class="confirmation-status">').addClass(className).text(message);
             }

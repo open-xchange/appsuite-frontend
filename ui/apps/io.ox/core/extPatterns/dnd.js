@@ -118,6 +118,7 @@ define('io.ox/core/extPatterns/dnd', [
             case 'dragleave':
                 this.hide();
                 break;
+            // no default
             }
         },
 

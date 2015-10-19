@@ -308,6 +308,7 @@ define('io.ox/core/tk/wizard', [
                 case 37: if (this.$('[data-action="back"]:enabled').length) this.trigger('back'); break;
                 // check if "next" button is enabled and available
                 case 39: if (this.$('[data-action="next"]:enabled').length) this.trigger('next'); break;
+                // no default
             }
         },
 

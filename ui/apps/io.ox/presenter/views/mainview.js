@@ -273,6 +273,7 @@ define('io.ox/presenter/views/mainview', [
                         this.toggleFullscreen();
                     }
                     break;
+                // no default
             }
         },
 

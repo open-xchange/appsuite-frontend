@@ -177,7 +177,7 @@ define('io.ox/core/boot/form', [
                             case 'reset_password':
                                 resetPassword();
                                 break;
-
+                            // no default
                         }
                         break;
 

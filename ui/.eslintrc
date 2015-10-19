@@ -13,7 +13,7 @@
         // specify curly brace conventions for all control statements
         'curly': [2, 'multi-line'],
         // require default case in switch statements
-        'default-case': 0, // NEEDS CODE REFACTORING
+        'default-case': 2,
         // encourages use of dot notation whenever possible
         'dot-notation': [2, { 'allowKeywords': false }],
         // enforces consistent newlines before or after dots

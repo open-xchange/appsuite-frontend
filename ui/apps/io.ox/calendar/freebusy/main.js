@@ -91,6 +91,7 @@ define('io.ox/calendar/freebusy/main', [
                         if (options.callback) options.callback();
                         quit();
                         break;
+                    // no default
                     }
                 });
             });

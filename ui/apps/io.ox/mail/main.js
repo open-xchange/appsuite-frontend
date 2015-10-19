@@ -864,6 +864,7 @@ define('io.ox/mail/main', [
                     resetRight('selection-multiple');
                     app.showMultiple(list);
                     break;
+                // no default
                 }
             }, 1);
 

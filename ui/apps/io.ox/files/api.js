@@ -1242,6 +1242,7 @@ define('io.ox/files/api', [
                 case 'unlock':
                     // nothing to do for unlock
                     break;
+                // no default
             }
         };
 

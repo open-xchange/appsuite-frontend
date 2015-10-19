@@ -267,6 +267,7 @@ define('io.ox/calendar/util', [
                     i = Math.floor(item.value / 60 / 24 / 7);
                     options[item.value] = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), gt.noI18n(i));
                     break;
+                // no default
                 }
             });
 
@@ -528,6 +529,7 @@ define('io.ox/calendar/util', [
                 }
 
                 break;
+            // no default
             }
 
             if (data.recurrence_type > 0) {
@@ -676,6 +678,7 @@ define('io.ox/calendar/util', [
                             mail_field: 0
                         });
                         break;
+                    // no default
                 }
             });
 

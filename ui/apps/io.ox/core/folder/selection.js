@@ -109,6 +109,7 @@ define('io.ox/core/folder/selection', [], function () {
             case 40:
                 this.onCursorUpDown(e);
                 break;
+            // no default
             }
         },
 

@@ -121,6 +121,7 @@
                         return data[data.field] || data.email1;
                     case 'anonymous':
                         return gt('Public link');
+                    // no default
                 }
             },
 
@@ -141,6 +142,7 @@
                         return data[data.field] || data.email1;
                     case 'anonymous':
                         return '';
+                    // no default
                 }
             },
 
@@ -179,6 +181,7 @@
                         case 'anonymous':
                             data.type = type;
                             break;
+                        // no default
                     }
                 }
 
@@ -354,6 +357,7 @@
                         this.display_name = gt('Public link');
                         this.description = this.model.get('share_url');
                         break;
+                    // no default
                 }
             },
 
@@ -734,6 +738,7 @@
                         }
                         dropdown.link('revoke', gt('Revoke access'));
                         break;
+                    // no default
                 }
 
                 this.append(

@@ -1116,6 +1116,7 @@ define('io.ox/presenter/views/presentationview', [
                             this.showNextSlide();
                         }
                         break;
+                    // no default
                 }
             };
         })(),

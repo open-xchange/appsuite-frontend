@@ -1770,6 +1770,7 @@ define('io.ox/core/main', [
                 // redirect based on error message; who had the brilliant idea to name the message of the error object 'error'?
                 location.href = error.error;
                 break;
+            // no default
         }
     });
 

@@ -682,6 +682,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             })
                         );
                         break;
+                    // no default
                 }
                 // inintial validation to disable save button
                 if (!cmodel.isValid()) {
@@ -951,6 +952,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                 })
                             );
                             break;
+                        // no default
                     }
                     // inintial validation to disable save button
                     if (!amodel.isValid()) {

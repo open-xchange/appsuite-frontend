@@ -472,6 +472,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             case 34:
                 this.onPageUpDown(e);
                 break;
+            // no default
             }
         },
 

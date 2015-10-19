@@ -161,6 +161,7 @@ define('io.ox/participants/views', [
                     this.nodes.$extra = link;
                 }
                 break;
+            // no default
             }
 
             this.setRows(mail, extra);

@@ -273,6 +273,7 @@ define('io.ox/core/tk/selection', [
                 e.preventDefault();
                 self.trigger('selection:delete', self.get());
                 break;
+            // no default
             }
         };
 

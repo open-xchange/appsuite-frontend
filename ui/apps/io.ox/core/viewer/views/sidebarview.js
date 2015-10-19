@@ -167,6 +167,7 @@ define('io.ox/core/viewer/views/sidebarview', [
                 case 32: // space
                     this.onTabClicked(event);
                     break;
+                // no default
             }
         },
 

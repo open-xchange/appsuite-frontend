@@ -143,6 +143,7 @@ define('io.ox/files/share/model', [
                             }
                             recipientData.email_address = recipientModel.get('token').value;
                             break;
+                        // no default
 
                     }
                     data.recipients.push(recipientData);
@@ -226,6 +227,7 @@ define('io.ox/files/share/model', [
                         return api.deleteLink(model.toJSON(), model.get('lastModified')).fail(yell);
                     }
                     break;
+                // no default
             }
         },
 

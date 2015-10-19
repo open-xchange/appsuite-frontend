@@ -909,6 +909,8 @@ define('io.ox/calendar/edit/recurrence-view', [
                             this.setChoice(null);
                         }
                         break;
+
+                        // no default
                     }
 
                     this.nodes.endsChoice.children().detach();
@@ -1051,6 +1053,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                                 occurrences: this.endsChoice.occurrences
                             }, { validate: true });
                             break;
+                        // no default
                         }
                     }
                 } else {
@@ -1086,6 +1089,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                 case '3':
                     this.endsChoice = this.ends.after;
                     break;
+                    // no default
                 }
                 this.updateModel();
             },
