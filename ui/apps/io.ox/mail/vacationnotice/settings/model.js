@@ -26,7 +26,8 @@ define('io.ox/mail/vacationnotice/settings/model', [
                 days: attributes.days,
                 id: attributes.internal_id,
                 subject: attributes.subject,
-                text: attributes.text
+                text: attributes.text,
+                from: attributes.from
             },
 
             preparedData = {
