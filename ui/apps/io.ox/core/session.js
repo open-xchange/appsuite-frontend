@@ -59,20 +59,26 @@ define('io.ox/core/session', [
             // store
             var store = false;
             // GET request
-            return http.GET({
-                module: 'login',
-                appendColumns: false,
-                appendSession: false,
-                processResponse: false,
-                timeout: TIMEOUTS.AUTOLOGIN,
-                params: {
-                    action: 'autologin',
-                    client: that.client(),
-                    rampup: true,
-                    rampupFor: CLIENT,
-                    version: that.version()
-                }
-            })
+            return (
+                _.url.hash('token.autologin') === 'false' && _.url.hash('serverToken') ?
+                // no auto-login for server-token-based logins
+                $.Deferred().reject({}) :
+                // try auto-login
+                http.GET({
+                    module: 'login',
+                    appendColumns: false,
+                    appendSession: false,
+                    processResponse: false,
+                    timeout: TIMEOUTS.AUTOLOGIN,
+                    params: {
+                        action: 'autologin',
+                        client: that.client(),
+                        rampup: true,
+                        rampupFor: CLIENT,
+                        version: that.version()
+                    }
+                })
+            )
             .then(
                 function success(data) {
                     ox.secretCookie = true;
@@ -94,7 +100,9 @@ define('io.ox/core/session', [
                             client: that.client(),
                             version: that.version(),
                             serverToken: _.url.hash('serverToken'),
-                            clientToken: _.url.hash('clientToken')
+                            clientToken: _.url.hash('clientToken'),
+                            rampup: true,
+                            rampupFor: CLIENT
                         }
                     })
                     .then(function (response) {
@@ -108,7 +116,8 @@ define('io.ox/core/session', [
                     jsessionid: null,
                     serverToken: null,
                     clientToken: null,
-                    store: null
+                    store: null,
+                    'token.autologin': null
                 });
             })
             .then(function (data) {
