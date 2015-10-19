@@ -1230,7 +1230,7 @@ define('io.ox/calendar/week/view', [
 
             // init drag and resize widget on appointments
             var colWidth = $('.day:first', this.$el).outerWidth(),
-                paneOffset = self.pane.children().first().width() + this.$el.offset().left,
+                paneOffset = this.$('.week-container').offset().left,
                 paneHeight = self.height();
 
             // add resizable and draggable plugin to all appointments with modify class
