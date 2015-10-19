@@ -138,7 +138,7 @@ define('io.ox/core/upsell', [
                     match = match.toLowerCase();
                     return isEnabled(match);
                 });
-
+                /*eslint no-new-func: 0*/
                 return new Function('return !!(' + condition + ')')();
             };
 

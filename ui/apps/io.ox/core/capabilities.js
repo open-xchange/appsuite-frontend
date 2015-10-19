@@ -45,6 +45,7 @@ define('io.ox/core/capabilities', function () {
                 });
 
             try {
+                /*eslint no-new-func: 0*/
                 return new Function('return !!(' + condition + ')')();
             } catch (e) {
                 console.error('capabilities.has()', str, e);

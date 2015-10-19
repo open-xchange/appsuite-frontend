@@ -74,6 +74,7 @@ define('io.ox/core/gettext', function () {
 
     function gt(id, po) {
 
+        /*eslint no-new-func: 0*/
         po.plural = new Function('n', 'return ' + po.plural + ';');
 
         function gettext(text) {
