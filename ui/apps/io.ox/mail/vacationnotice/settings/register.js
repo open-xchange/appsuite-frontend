@@ -15,8 +15,9 @@ define('io.ox/mail/vacationnotice/settings/register', [
     'io.ox/core/extensions',
     'io.ox/core/notifications',
     'io.ox/core/api/user',
+    'io.ox/contacts/util',
     'gettext!io.ox/mail'
-], function (ext, notifications, userAPI, gt) {
+], function (ext, notifications, userAPI, contactsUtil, gt) {
 
     'use strict';
 
@@ -57,7 +58,8 @@ define('io.ox/mail/vacationnotice/settings/register', [
 
                     var multiValues = {
                         aliases: _.object(user.aliases, user.aliases),
-                        days: createDaysObject(1, 31)
+                        days: createDaysObject(1, 31),
+                        from: contactsUtil.getMailFullName(user) + ' <' + _.first(user.aliases) + '>'
                     };
 
                     filters.editVacationtNotice($container, multiValues, user.email1).done(function (filter) {
