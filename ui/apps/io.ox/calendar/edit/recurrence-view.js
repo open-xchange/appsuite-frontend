@@ -1034,7 +1034,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                     if (this.endsChoice) {
                         switch (this.endsChoice.id) {
                         case 'never':
-                            // remove this when backend bug 24870 is fixed
+                            // TODO: remove this when backend bug 24870 is fixed
                             this.model.set({
                                 until: null
                             }, { validate: true });
