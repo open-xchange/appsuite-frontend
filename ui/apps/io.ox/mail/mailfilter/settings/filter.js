@@ -317,28 +317,39 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         e.preventDefault();
                         var self = this,
                             id = self.model.get('id');
-                        if (id !== false) {
-                            //yell on reject
-                            settingsUtil.yellOnReject(
-                                api.deleteRule(id).done(function () {
-                                    var arrayOfFilters,
-                                        data;
-                                    self.model.collection.remove(id);
-                                    $node.find('.controls [data-action="add"]').focus();
 
-                                    arrayOfFilters = $node.find('li[data-id]');
-                                    data = _.map(arrayOfFilters, function (single) {
-                                        return parseInt($(single).attr('data-id'), 10);
-                                    });
+                        new dialogs.ModalDialog()
+                        .text(gt('Do you really want to delete this filter rule?'))
+                        .addPrimaryButton('delete', gt('Delete'), 'delete',  { 'tabIndex': '1' })
+                        .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
+                        .show()
+                        .done(function (action) {
+                            if (action === 'delete') {
+                                if (id !== false) {
                                     //yell on reject
                                     settingsUtil.yellOnReject(
-                                        api.reorder(data)
-                                    );
-                                    updatePositionInCollection(collection, data);
+                                        api.deleteRule(id).done(function () {
+                                            var arrayOfFilters,
+                                                data;
+                                            self.model.collection.remove(id);
+                                            $node.find('.controls [data-action="add"]').focus();
 
-                                })
-                            );
-                        }
+                                            arrayOfFilters = $node.find('li[data-id]');
+                                            data = _.map(arrayOfFilters, function (single) {
+                                                return parseInt($(single).attr('data-id'), 10);
+                                            });
+                                            //yell on reject
+                                            settingsUtil.yellOnReject(
+                                                api.reorder(data)
+                                            );
+                                            updatePositionInCollection(collection, data);
+
+                                        })
+                                    );
+                                }
+                            }
+                        });
+
                     },
 
                     onEdit: function (e) {
