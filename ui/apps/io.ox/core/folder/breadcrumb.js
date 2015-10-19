@@ -28,6 +28,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             this.folder = options.folder;
             this.label = options.label;
             this.exclude = options.exclude;
+            this.disable = options.disable;
             this.ellipsisCount = 4;
             this.ownWidth = 0;
 
@@ -133,6 +134,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
 
             var length = all.length,
                 isLast = index === length - 1,
+                isDisabled = this.disable && _(this.disable).indexOf(data.id) > -1,
                 node;
 
             // add ellipsis for more than four items
@@ -144,7 +146,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
 
             // add plain text tail or clickable link
             if (isLast && !this.notail) node = $('<span class="breadcrumb-tail">');
-            else if (!this.handler) node = $('<span class="breadcrumb-item">');
+            else if (!this.handler || isDisabled) node = $('<span class="breadcrumb-item">');
             else node = $('<a href="#" role="button" class="breadcrumb-link" tabindex="1">').attr('href', api.getDeepLink(data));
 
             node.attr('data-id', data.id).text(
