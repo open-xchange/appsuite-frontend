@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
-"PO-Revision-Date: 2015-10-12 15:48+0000\n"
+"PO-Revision-Date: 2015-10-19 10:29+0000\n"
 "Last-Translator: hv@webhuset.no <hv@webhuset.no>\n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: nb_NO\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1444664915.000000\n"
+"X-POOTLE-MTIME: 1445250572.000000\n"
 
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
@@ -2302,11 +2302,10 @@ msgstr "Slett konto"
 
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js:756 module:io.ox/mail
-#, fuzzy
 #| msgctxt "folder"
 #| msgid "Deleted messages"
 msgid "Delete all %1$d messages"
-msgstr "Slettede meldinger"
+msgstr "Slett alle %1$d meldinger"
 
 #. object permissions - delete
 #: apps/io.ox/files/share/permissions.js:632 module:io.ox/core
@@ -3106,7 +3105,7 @@ msgstr "Feillogg"
 
 #: apps/io.ox/mail/actions/invite.js:99 module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
-msgstr ""
+msgstr "Kunne ikke verifisere epostadressene. Prøv igjen. "
 
 #: apps/io.ox/core/sub/subscriptions.js:86 module:io.ox/core/sub
 #: apps/io.ox/core/sub/subscriptions.js:110
@@ -4769,10 +4768,9 @@ msgstr "Flytt"
 
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js:753 module:io.ox/mail
-#, fuzzy
 #| msgid "Show all %1$d messages in inbox"
 msgid "Move all %1$d messages to another folder"
-msgstr "Vis alle %1$d meldingene i innboksen"
+msgstr "Flytt alle %1$d meldingene til en annen mappe"
 
 #: apps/io.ox/core/folder/contextmenu.js:151 module:io.ox/core
 msgid "Move all messages"
@@ -5211,10 +5209,9 @@ msgstr "Antall elementer"
 
 #. number of items in a folder
 #: apps/io.ox/core/folder/actions/properties.js:56 module:io.ox/core
-#, fuzzy
 #| msgid "Number of items"
 msgid "Number of messages"
-msgstr "Antall elementer"
+msgstr "Antall meldinger"
 
 #: apps/io.ox/core/tk/reminder-util.js:34 module:io.ox/core
 #: apps/io.ox/core/tk/reminder-util.js:65
@@ -6404,11 +6401,10 @@ msgstr "Svar alle"
 
 #. Must not exceed 8 characters. e.g. German would be: "Antworten an", needs to be abbreviated like "Antw. an" as space is very limited
 #: apps/io.ox/mail/compose/extensions.js:35 module:io.ox/mail
-#, fuzzy
 #| msgid "Reply"
 msgctxt "compose"
 msgid "Reply to"
-msgstr "Svar"
+msgstr "Svar til"
 
 #: apps/io.ox/mail/mobile-toolbar-actions.js:55 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:63
@@ -6841,32 +6837,28 @@ msgstr "Del \"%1$s\""
 
 #: apps/io.ox/files/toolbar.js:80 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:124
-#, fuzzy
 #| msgid "Select folder"
 msgid "Share current folder"
-msgstr "Velg mappe"
+msgstr "Del gjeldende mappe"
 
 #: apps/io.ox/files/toolbar.js:122 module:io.ox/files
-#, fuzzy
 #| msgid "Share selected files"
 msgid "Share selected file"
 msgid_plural "Share selected files"
-msgstr[0] "Del valgte filer"
+msgstr[0] "Del valgt fil"
 msgstr[1] "Del valgte filer"
 
 #: apps/io.ox/files/toolbar.js:119 module:io.ox/files
-#, fuzzy
 #| msgid "Share selected files"
 msgid "Share selected folder"
 msgid_plural "Share selected folders"
-msgstr[0] "Del valgte filer"
-msgstr[1] "Del valgte filer"
+msgstr[0] "Del valgt mappe"
+msgstr[1] "Del valgte mapper"
 
 #: apps/io.ox/files/toolbar.js:117 module:io.ox/files
-#, fuzzy
 #| msgid "Share selected files"
 msgid "Share selected objects"
-msgstr "Del valgte filer"
+msgstr "Del valgte elementer"
 
 #. if only one item -> insert filename / on more than one item -> item count
 #: apps/io.ox/files/actions/share.js:36 module:io.ox/files
@@ -6882,10 +6874,9 @@ msgstr[0] "Del mappen \"%1$d\""
 msgstr[1] "Del %1$d elementer"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js:230 module:io.ox/core
-#, fuzzy
 #| msgid "Save as file"
 msgid "Share this file"
-msgstr "Lagre som fil"
+msgstr "Del denne filen"
 
 #: apps/plugins/halo/appointments/register.js:38 module:plugins/halo
 msgid "Shared Appointments"
@@ -8984,10 +8975,9 @@ msgid "You have to enter a username and password to subscribe."
 msgstr "Du må skrive inn brukernavn og passord for å abonnere."
 
 #: apps/io.ox/files/actions/upload-new-version.js:87 module:io.ox/files
-#, fuzzy
 #| msgid "Please select a file to import"
 msgid "You have to select a file to upload."
-msgstr "Velg en fil som skal importeres"
+msgstr "Du må velge en fil som skal lastes opp."
 
 #: apps/io.ox/core/relogin.js:56 module:io.ox/core
 msgid "You have to sign in again"
