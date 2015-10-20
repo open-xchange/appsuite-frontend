@@ -32,6 +32,12 @@ define('io.ox/files/upload/dropzone', [
             });
 
             zone.on({
+                'show': function () {
+                    app.listView.$el.stop().hide();
+                },
+                'hide': function () {
+                    app.listView.$el.fadeIn('fast');
+                },
                 'drop': function (files) {
                     require(['io.ox/files/upload/main'], function (fileUpload) {
                         fileUpload.setWindowNode(app.getWindowNode());
