@@ -57,6 +57,7 @@ define('io.ox/mail/print',
             from: getList(data, 'from'),
             to: getList(data, 'to'),
             cc: getList(data, 'cc'),
+            bcc: getList(data, 'bcc'),
             subject: data.subject,
             date: util.getFullDate(data.received_date || data.sent_date),
             sort_date: -(data.received_date || data.sent_date),
@@ -82,7 +83,8 @@ define('io.ox/mail/print',
 
                 i18n: {
                     to: gt('To'),
-                    copy: gt.pgettext('CC', 'Copy')
+                    copy: gt.pgettext('CC', 'Copy'),
+                    blindcopy: gt.pgettext('BCC', 'Blind copy')
                 },
 
                 process: process,
