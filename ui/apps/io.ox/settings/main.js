@@ -393,17 +393,14 @@ define('io.ox/settings/main', [
 
         // Create extensions for the config jump pages
         _(configJumpSettings.get()).chain().keys().each(function (id) {
+
             var declaration = configJumpSettings.get(id);
-            if (declaration.requires) {
-                if (!capabilities.has(declaration.requires)) {
-                    return;
-                }
-            }
+            if (declaration.requires && !capabilities.has(declaration.requires)) return;
 
             // try to get a translated title
             var title = declaration['title_' + ox.language] || /*#, dynamic*/gt(declaration.title) || '';
 
-            ext.point('io.ox/settings/pane').extend(_.extend({
+            ext.point('io.ox/settings/pane/' + (declaration.group || 'tools')).extend(_.extend({
                 id: id,
                 ref: 'io.ox/configjump/' + id,
                 loadSettingPane: false
