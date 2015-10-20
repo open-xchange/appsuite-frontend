@@ -248,8 +248,10 @@ define('io.ox/files/main', [
          * Get folder-based view options
          */
         'get-view-options': function (app) {
+
             app.getViewOptions = function (folder) {
-                var options = app.settings.get(['viewOptions', folder]);
+                var options = app.settings.get(['viewOptions', folder], {});
+                if (!/^(list|icon|tile)/.test(options.layout)) options.layout = 'list';
                 return _.extend({ sort: 702, order: 'asc', layout: 'list' }, options);
             };
         },
