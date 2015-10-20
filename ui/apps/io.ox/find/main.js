@@ -21,6 +21,7 @@ define('io.ox/find/main', [
     'use strict';
 
     var INVALID = $.Deferred().reject('please launch app first'),
+        FOLDERWHITELIST = { 'virtual/all-my-appointments': true },
         cid = function (app) {
             var parts = [
                 app.getName(),
@@ -318,7 +319,9 @@ define('io.ox/find/main', [
         };
 
         app.toggle = function (folderid) {
-            app.trigger( folderAPI.isVirtual(folderid) ? 'view:disable' : 'view:enable');
+            var notWhitelisted = !FOLDERWHITELIST[folderid];
+            // is folder unsupported?
+            app.trigger( folderAPI.isVirtual(folderid) && notWhitelisted ? 'view:disable' : 'view:enable');
         };
 
         // parent app id
