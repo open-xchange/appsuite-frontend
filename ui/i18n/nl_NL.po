@@ -802,7 +802,7 @@ msgstr "Nieuwe map voor dit abonnement toevoegen"
 msgid "Add new participant"
 msgstr "Nieuwe deelnemer toevoegen"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:423 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:434 module:io.ox/mail
 msgid "Add new rule"
 msgstr "Een nieuwe regel toevoegen"
 
@@ -1490,6 +1490,7 @@ msgstr "Agenda:"
 #: apps/io.ox/mail/compose/inline-images.js:80
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:645
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
+#: apps/io.ox/mail/mailfilter/settings/filter.js:324
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1252
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:149
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:253
@@ -2062,7 +2063,7 @@ msgstr "Kan uw contactgegevens niet laden"
 msgid "Couldn't load your mail filter rules."
 msgstr "Kan uw e-mailfilter regels niet laden."
 
-#: apps/io.ox/mail/vacationnotice/settings/register.js:72 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/register.js:74 module:io.ox/mail
 msgid "Couldn't load your vacation notice."
 msgstr "Kan uw afwezigheidsmelding niet laden."
 
@@ -2293,6 +2294,7 @@ msgstr "Uitgesteld"
 #: apps/io.ox/files/actions/versions-delete.js:25
 #: apps/io.ox/files/toolbar.js:174 apps/io.ox/mail/actions.js:507
 #: apps/io.ox/mail/actions/delete.js:67 apps/io.ox/mail/actions/delete.js:86
+#: apps/io.ox/mail/mailfilter/settings/filter.js:323
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:374
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:375
@@ -2591,6 +2593,13 @@ msgstr "Weet u zeker dat u de geselecteerde distributielijst wilt verwijderen?"
 #: apps/io.ox/files/actions/versions-delete.js:24 module:io.ox/files
 msgctxt "One file only"
 msgid "Do you really want to delete this file?"
+msgstr "Weet u zeker dat u dit bestand wilt verwijderen?"
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js:322 module:io.ox/mail
+#, fuzzy
+#| msgctxt "One file only"
+#| msgid "Do you really want to delete this file?"
+msgid "Do you really want to delete this filter rule?"
 msgstr "Weet u zeker dat u dit bestand wilt verwijderen?"
 
 #: apps/io.ox/files/actions/delete.js:62 module:io.ox/files
@@ -2999,7 +3008,7 @@ msgstr "E-mail 3"
 msgid "Email address"
 msgstr "E-mailadres"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:176 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:177 module:io.ox/mail
 msgid "Email addresses"
 msgstr "E-mailadressen"
 
@@ -3065,11 +3074,11 @@ msgid "Enabled"
 msgstr "Activeren"
 
 # (Reinout) Portal = portaal, niet portable
-#: apps/io.ox/mail/vacationnotice/settings/model.js:175 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:176 module:io.ox/mail
 msgid "Enabled for the following addresses"
 msgstr "Ingeschakeld voor de volgende e-mailadressen"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:178 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:179 module:io.ox/mail
 msgid "End"
 msgstr "Einde"
 
@@ -4464,7 +4473,7 @@ msgstr "E-mail"
 msgid "Mail Details"
 msgstr "E-mail details"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:421 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:432 module:io.ox/mail
 msgid "Mail Filter Rules"
 msgstr "Mailfilter regels"
 
@@ -5237,7 +5246,7 @@ msgstr "Alle deelnemers informeren via e-mail."
 msgid "November"
 msgstr "november"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:174 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:175 module:io.ox/mail
 msgid "Number of days between vacation notices to the same sender"
 msgstr "Aantal dagen tussen afwezigheidsmeldingen naar dezelfde afzender"
 
@@ -6801,7 +6810,7 @@ msgstr "Verstuur een e-mail naar alle deelnemers"
 msgid "Send new mail"
 msgstr "Verzend nieuw e-mailbericht"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:179 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:180 module:io.ox/mail
 msgid "Send vacation notice during this time only"
 msgstr "Stuur alleen een afwezigheidsmelding gedurende deze tijd"
 
@@ -7235,7 +7244,7 @@ msgstr "Standaard mappen"
 msgid "Standard timezone"
 msgstr "Standaard tijdzone"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:177 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:178 module:io.ox/mail
 #: apps/io.ox/tasks/print.js:90 module:io.ox/tasks
 msgid "Start"
 msgstr "Begin"
@@ -7323,7 +7332,7 @@ msgstr "Student"
 #: apps/io.ox/mail/compose/extensions.js:309
 #: apps/io.ox/mail/compose/extensions.js:313
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:56
-#: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js:172
+#: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js:173
 #: apps/io.ox/mail/view-options.js:35
 #: apps/io.ox/tasks/edit/view-template.js:99 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:788 module:io.ox/tasks
@@ -7511,7 +7520,7 @@ msgstr "Voorlopig"
 msgid "Tentatively accepted"
 msgstr "Voorlopig geaccepteerd"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:173 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:174 module:io.ox/mail
 msgid "Text"
 msgstr "Tekst"
 
@@ -7883,8 +7892,8 @@ msgstr "De startdatum moet voor de einddatum liggen."
 
 #: apps/io.ox/calendar/model.js:247 module:io.ox/calendar
 #: apps/io.ox/calendar/model.js:248
-#: apps/io.ox/mail/vacationnotice/settings/filter.js:90 module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/filter.js:91
+#: apps/io.ox/mail/vacationnotice/settings/filter.js:92 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/filter.js:93
 msgid "The start date must be before the end date."
 msgstr "De startdatum moet voor de einddatum."
 
@@ -7965,7 +7974,7 @@ msgstr "Er is geen voorbeeld beschikbaar voor dit bestandstype."
 msgid "There is no recent activity in your Xing network."
 msgstr "Er waren geen recente activiteit in uw Xing netwerk."
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:441 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:452 module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "Er zijn geen regels gedefinieerd"
 
@@ -8380,7 +8389,7 @@ msgid "Unable to load mail filter rules settings."
 msgstr "Mailfilter regels kunnen niet worden geladen."
 
 #: apps/io.ox/mail/autoforward/settings/register.js:50 module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/register.js:69
+#: apps/io.ox/mail/vacationnotice/settings/register.js:71
 #: apps/io.ox/settings/util.js:61 module:io.ox/core
 msgid "Unable to load mail filter settings."
 msgstr "Mailfilter instellingen kunnen niet geladen worden."
@@ -8605,8 +8614,8 @@ msgstr "Gebruikersnaam"
 msgid "Username must not be empty."
 msgstr "Gebruikersnaam mag niet leeg zijn."
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:171 module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/register.js:41
+#: apps/io.ox/mail/vacationnotice/settings/model.js:172 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/register.js:42
 msgid "Vacation Notice"
 msgstr "Afwezigheidsmelding"
 
@@ -9748,7 +9757,7 @@ msgstr "status "
 msgid "tentative"
 msgstr "voorlopig"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:382 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:393 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:213 module:io.ox/portal
 msgid "the item has been moved"
 msgstr "het item is verplaatst"
@@ -9809,7 +9818,7 @@ msgstr "ongelimiteerd"
 msgid "vCard"
 msgstr "vCard"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:146 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:147 module:io.ox/mail
 msgid "vacation notice"
 msgstr "afwezigheidsmelding"
 

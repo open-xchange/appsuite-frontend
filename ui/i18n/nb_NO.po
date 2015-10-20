@@ -793,7 +793,7 @@ msgstr "Legg til ny mappe for dette abonnementet"
 msgid "Add new participant"
 msgstr "Legg til deltaker"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:423 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:434 module:io.ox/mail
 msgid "Add new rule"
 msgstr "Legg til ny regel"
 
@@ -1473,6 +1473,7 @@ msgstr "Kalender:"
 #: apps/io.ox/mail/compose/inline-images.js:80
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:645
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
+#: apps/io.ox/mail/mailfilter/settings/filter.js:324
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1252
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:149
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:253
@@ -2043,7 +2044,7 @@ msgstr "Kunne ikke laste inn kontaktdata."
 msgid "Couldn't load your mail filter rules."
 msgstr "Kunne ikke laste inn e-postfilterreglene."
 
-#: apps/io.ox/mail/vacationnotice/settings/register.js:72 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/register.js:74 module:io.ox/mail
 msgid "Couldn't load your vacation notice."
 msgstr "Kunne ikke laste inn ditt ferievarsel."
 
@@ -2274,6 +2275,7 @@ msgstr "Utsatt"
 #: apps/io.ox/files/actions/versions-delete.js:25
 #: apps/io.ox/files/toolbar.js:174 apps/io.ox/mail/actions.js:507
 #: apps/io.ox/mail/actions/delete.js:67 apps/io.ox/mail/actions/delete.js:86
+#: apps/io.ox/mail/mailfilter/settings/filter.js:323
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:374
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:375
@@ -2566,6 +2568,13 @@ msgstr "Ønsker du virkelig å slette denne distribusjonslisten?"
 msgctxt "One file only"
 msgid "Do you really want to delete this file?"
 msgstr "Ønsker du å slette denne filen?"
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js:322 module:io.ox/mail
+#, fuzzy
+#| msgid "Do you really want to delete this file?"
+#| msgid_plural "Do you really want to delete these files?"
+msgid "Do you really want to delete this filter rule?"
+msgstr "Er du sikker på at du vil slette denne filen?"
 
 #: apps/io.ox/files/actions/delete.js:62 module:io.ox/files
 msgid "Do you really want to delete this item?"
@@ -2963,7 +2972,7 @@ msgstr "E-post 3"
 msgid "Email address"
 msgstr "E-postadresse"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:176 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:177 module:io.ox/mail
 msgid "Email addresses"
 msgstr "E-postadresser"
 
@@ -3027,11 +3036,11 @@ msgstr "Aktiver"
 msgid "Enabled"
 msgstr "Aktivert"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:175 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:176 module:io.ox/mail
 msgid "Enabled for the following addresses"
 msgstr "Aktivert for følgende adresser"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:178 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:179 module:io.ox/mail
 msgid "End"
 msgstr "Slutt"
 
@@ -4421,7 +4430,7 @@ msgstr "E-post"
 msgid "Mail Details"
 msgstr "E-postdetaljer"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:421 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:432 module:io.ox/mail
 msgid "Mail Filter Rules"
 msgstr "E-postfilterregler"
 
@@ -5191,7 +5200,7 @@ msgstr "Varsle alle deltakerne via e-post."
 msgid "November"
 msgstr "november"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:174 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:175 module:io.ox/mail
 msgid "Number of days between vacation notices to the same sender"
 msgstr "Antall dager mellom feriemerknader til samme avsender"
 
@@ -6743,7 +6752,7 @@ msgstr "Send epost til alle deltakere"
 msgid "Send new mail"
 msgstr "Send ny e-post"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:179 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:180 module:io.ox/mail
 msgid "Send vacation notice during this time only"
 msgstr "Send ferievarsel bare i løpet av denne tiden"
 
@@ -7177,7 +7186,7 @@ msgstr "Standardmapper"
 msgid "Standard timezone"
 msgstr "Standard tidssone"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:177 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:178 module:io.ox/mail
 #: apps/io.ox/tasks/print.js:90 module:io.ox/tasks
 msgid "Start"
 msgstr "Start"
@@ -7265,7 +7274,7 @@ msgstr "Student"
 #: apps/io.ox/mail/compose/extensions.js:309
 #: apps/io.ox/mail/compose/extensions.js:313
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:56
-#: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js:172
+#: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js:173
 #: apps/io.ox/mail/view-options.js:35
 #: apps/io.ox/tasks/edit/view-template.js:99 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:788 module:io.ox/tasks
@@ -7449,7 +7458,7 @@ msgstr "Tentativ"
 msgid "Tentatively accepted"
 msgstr "Foreløpig godtatt"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:173 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:174 module:io.ox/mail
 msgid "Text"
 msgstr "Tekst"
 
@@ -7812,8 +7821,8 @@ msgstr "Startdatoen må være før forfallsdato."
 
 #: apps/io.ox/calendar/model.js:247 module:io.ox/calendar
 #: apps/io.ox/calendar/model.js:248
-#: apps/io.ox/mail/vacationnotice/settings/filter.js:90 module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/filter.js:91
+#: apps/io.ox/mail/vacationnotice/settings/filter.js:92 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/filter.js:93
 msgid "The start date must be before the end date."
 msgstr "Startdatoen må være før sluttdatoen."
 
@@ -7896,7 +7905,7 @@ msgstr "Ingen forhåndsvisning er tilgjengelig for denne filtypen"
 msgid "There is no recent activity in your Xing network."
 msgstr "Det er ingen nylig aktivitet i ditt Xing nettverk."
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:441 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:452 module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "Det er ingen regel definert"
 
@@ -8306,7 +8315,7 @@ msgid "Unable to load mail filter rules settings."
 msgstr "Kan ikke laste e-postfilterregler innstillinger."
 
 #: apps/io.ox/mail/autoforward/settings/register.js:50 module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/register.js:69
+#: apps/io.ox/mail/vacationnotice/settings/register.js:71
 #: apps/io.ox/settings/util.js:61 module:io.ox/core
 msgid "Unable to load mail filter settings."
 msgstr "Kan ikke laste e-postfilterinnstillingene."
@@ -8530,8 +8539,8 @@ msgstr "Brukernavn"
 msgid "Username must not be empty."
 msgstr "Brukernavn kan ikke være tomt."
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:171 module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/register.js:41
+#: apps/io.ox/mail/vacationnotice/settings/model.js:172 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/register.js:42
 msgid "Vacation Notice"
 msgstr "Ferievarsel"
 
@@ -9676,7 +9685,7 @@ msgstr "status"
 msgid "tentative"
 msgstr "foreløpig"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:382 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:393 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:213 module:io.ox/portal
 msgid "the item has been moved"
 msgstr "elementet har blitt flyttet"
@@ -9737,7 +9746,7 @@ msgstr "ubegrenset"
 msgid "vCard"
 msgstr "vCard"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:146 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:147 module:io.ox/mail
 msgid "vacation notice"
 msgstr "ferievarsel"
 
@@ -9879,11 +9888,6 @@ msgstr "yyyy"
 #~| msgid "Details"
 #~ msgid "Detail"
 #~ msgstr "Detaljer"
-
-#~ msgid "Do you really want to delete this file?"
-#~ msgid_plural "Do you really want to delete these files?"
-#~ msgstr[0] "Er du sikker på at du vil slette denne filen?"
-#~ msgstr[1] "Er du sikker på at du vil slette disse filene?"
 
 #~ msgid "Email notification for Accept/Declined"
 #~ msgstr "E-postvarsling for godkjente / avviste"

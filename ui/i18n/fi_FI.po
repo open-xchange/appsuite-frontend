@@ -792,7 +792,7 @@ msgstr "Lisää uusi kansio tähän tilaukseen"
 msgid "Add new participant"
 msgstr "Lisää uusi osallistuja"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:423 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:434 module:io.ox/mail
 msgid "Add new rule"
 msgstr "Lisää uusi sääntö"
 
@@ -1477,6 +1477,7 @@ msgstr "Kalenteri:"
 #: apps/io.ox/mail/compose/inline-images.js:80
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:645
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
+#: apps/io.ox/mail/mailfilter/settings/filter.js:324
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1252
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:149
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:253
@@ -2046,7 +2047,7 @@ msgstr "Yhteystietojasi ei voitu ladata."
 msgid "Couldn't load your mail filter rules."
 msgstr "Postisuodatinsääntöjäsi ei voitu ladata."
 
-#: apps/io.ox/mail/vacationnotice/settings/register.js:72 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/register.js:74 module:io.ox/mail
 msgid "Couldn't load your vacation notice."
 msgstr "Lomailmoitustasi ei voitu ladata."
 
@@ -2277,6 +2278,7 @@ msgstr "Lykätty"
 #: apps/io.ox/files/actions/versions-delete.js:25
 #: apps/io.ox/files/toolbar.js:174 apps/io.ox/mail/actions.js:507
 #: apps/io.ox/mail/actions/delete.js:67 apps/io.ox/mail/actions/delete.js:86
+#: apps/io.ox/mail/mailfilter/settings/filter.js:323
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:374
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:375
@@ -2571,6 +2573,13 @@ msgstr "Haluatko varmasti poistaa tämän jakelulistan?"
 #: apps/io.ox/files/actions/versions-delete.js:24 module:io.ox/files
 msgctxt "One file only"
 msgid "Do you really want to delete this file?"
+msgstr "Haluatko varmasti poistaa tämän tiedoston?"
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js:322 module:io.ox/mail
+#, fuzzy
+#| msgctxt "One file only"
+#| msgid "Do you really want to delete this file?"
+msgid "Do you really want to delete this filter rule?"
 msgstr "Haluatko varmasti poistaa tämän tiedoston?"
 
 #: apps/io.ox/files/actions/delete.js:62 module:io.ox/files
@@ -2967,7 +2976,7 @@ msgstr "Sähköposti 3"
 msgid "Email address"
 msgstr "Sähköpostiosoite"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:176 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:177 module:io.ox/mail
 msgid "Email addresses"
 msgstr "Sähköpostiosoitteet"
 
@@ -3031,11 +3040,11 @@ msgstr "Kytke päälle"
 msgid "Enabled"
 msgstr "Käytössä"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:175 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:176 module:io.ox/mail
 msgid "Enabled for the following addresses"
 msgstr "Käytössä seuraaville osoitteille"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:178 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:179 module:io.ox/mail
 msgid "End"
 msgstr "Loppu"
 
@@ -4425,7 +4434,7 @@ msgstr "Sähköposti"
 msgid "Mail Details"
 msgstr "Viestin yksityiskohdat"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:421 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:432 module:io.ox/mail
 msgid "Mail Filter Rules"
 msgstr "Postisuodatinsäännöt"
 
@@ -5193,7 +5202,7 @@ msgstr "Ilmoita osallistujille sähköpostitse."
 msgid "November"
 msgstr "marraskuu"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:174 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:175 module:io.ox/mail
 msgid "Number of days between vacation notices to the same sender"
 msgstr "Kuinka monen päivän välein lomailmoitus samalle lähettäjälle"
 
@@ -6748,7 +6757,7 @@ msgstr "Lähetä postia kaikille osallistujille"
 msgid "Send new mail"
 msgstr "Lähetä uusi viesti"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:179 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:180 module:io.ox/mail
 msgid "Send vacation notice during this time only"
 msgstr "Lähetä lomailmoitus vain tänä aikana"
 
@@ -7181,7 +7190,7 @@ msgstr "Vakiokansiot"
 msgid "Standard timezone"
 msgstr "Vakioaikavyöhyke"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:177 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:178 module:io.ox/mail
 #: apps/io.ox/tasks/print.js:90 module:io.ox/tasks
 msgid "Start"
 msgstr "Aloitus"
@@ -7269,7 +7278,7 @@ msgstr "Opiskelija"
 #: apps/io.ox/mail/compose/extensions.js:309
 #: apps/io.ox/mail/compose/extensions.js:313
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:56
-#: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js:172
+#: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js:173
 #: apps/io.ox/mail/view-options.js:35
 #: apps/io.ox/tasks/edit/view-template.js:99 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:788 module:io.ox/tasks
@@ -7453,7 +7462,7 @@ msgstr "Alustava"
 msgid "Tentatively accepted"
 msgstr "Alustavasti hyväksytty"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:173 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:174 module:io.ox/mail
 msgid "Text"
 msgstr "Teksti"
 
@@ -7813,8 +7822,8 @@ msgstr "Alkupäivämäärän tulee olla ennen valmistumispäivämäärää."
 
 #: apps/io.ox/calendar/model.js:247 module:io.ox/calendar
 #: apps/io.ox/calendar/model.js:248
-#: apps/io.ox/mail/vacationnotice/settings/filter.js:90 module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/filter.js:91
+#: apps/io.ox/mail/vacationnotice/settings/filter.js:92 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/filter.js:93
 msgid "The start date must be before the end date."
 msgstr "Alkupäivämäärän tulee olla ennen loppupäivämäärää."
 
@@ -7895,7 +7904,7 @@ msgstr "Tälle tiedostotyypille ei ole esikatselumahdollisuutta"
 msgid "There is no recent activity in your Xing network."
 msgstr "Xing-verkostossasi ei ole viimeaikaisia tapahtumia"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:441 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:452 module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "Ei sääntöjä määriteltynä"
 
@@ -8300,7 +8309,7 @@ msgid "Unable to load mail filter rules settings."
 msgstr "Postisuodattimien sääntöasetuksia ei voitu ladata."
 
 #: apps/io.ox/mail/autoforward/settings/register.js:50 module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/register.js:69
+#: apps/io.ox/mail/vacationnotice/settings/register.js:71
 #: apps/io.ox/settings/util.js:61 module:io.ox/core
 msgid "Unable to load mail filter settings."
 msgstr "Postisuodattimien asetuksia ei voitu ladata."
@@ -8521,8 +8530,8 @@ msgstr "Käyttäjätunnus"
 msgid "Username must not be empty."
 msgstr "Käyttäjätunnus ei voi olla tyhjä."
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:171 module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/register.js:41
+#: apps/io.ox/mail/vacationnotice/settings/model.js:172 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/register.js:42
 msgid "Vacation Notice"
 msgstr "Lomailmoitus"
 
@@ -9660,7 +9669,7 @@ msgstr "tila"
 msgid "tentative"
 msgstr "alustava"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:382 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:393 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:213 module:io.ox/portal
 msgid "the item has been moved"
 msgstr "Kohde  on siirretty"
@@ -9721,7 +9730,7 @@ msgstr "rajoitukseton"
 msgid "vCard"
 msgstr "vCard"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:146 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:147 module:io.ox/mail
 msgid "vacation notice"
 msgstr "lomailmoitus"
 

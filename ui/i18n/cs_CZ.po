@@ -820,7 +820,7 @@ msgstr "Přidat novou složku pro tento odběr"
 msgid "Add new participant"
 msgstr "Přidat nového účastníka"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:423 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:434 module:io.ox/mail
 msgid "Add new rule"
 msgstr "Přidat nové pravidlo"
 
@@ -1501,6 +1501,7 @@ msgstr "Kalendář:"
 #: apps/io.ox/mail/compose/inline-images.js:80
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:645
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
+#: apps/io.ox/mail/mailfilter/settings/filter.js:324
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1252
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:149
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:253
@@ -2070,7 +2071,7 @@ msgstr "Nepodařilo se načíst vaše kontaktní údaje."
 msgid "Couldn't load your mail filter rules."
 msgstr "Nepodařilo se načíst vaše pravidla pro filtry zpráv."
 
-#: apps/io.ox/mail/vacationnotice/settings/register.js:72 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/register.js:74 module:io.ox/mail
 msgid "Couldn't load your vacation notice."
 msgstr "Nepodařilo se načíst vaše oznámení o nepřítomnosti."
 
@@ -2301,6 +2302,7 @@ msgstr "Odloženo"
 #: apps/io.ox/files/actions/versions-delete.js:25
 #: apps/io.ox/files/toolbar.js:174 apps/io.ox/mail/actions.js:507
 #: apps/io.ox/mail/actions/delete.js:67 apps/io.ox/mail/actions/delete.js:86
+#: apps/io.ox/mail/mailfilter/settings/filter.js:323
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:374
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:375
@@ -2592,6 +2594,13 @@ msgstr "Opravdu chcete smazat tento distribuční seznam?"
 #: apps/io.ox/files/actions/versions-delete.js:24 module:io.ox/files
 msgctxt "One file only"
 msgid "Do you really want to delete this file?"
+msgstr "Opravdu chcete smazat tento soubor?"
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js:322 module:io.ox/mail
+#, fuzzy
+#| msgctxt "One file only"
+#| msgid "Do you really want to delete this file?"
+msgid "Do you really want to delete this filter rule?"
 msgstr "Opravdu chcete smazat tento soubor?"
 
 #: apps/io.ox/files/actions/delete.js:62 module:io.ox/files
@@ -2991,7 +3000,7 @@ msgstr "E-mail 3"
 msgid "Email address"
 msgstr "E-mailová adresa"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:176 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:177 module:io.ox/mail
 msgid "Email addresses"
 msgstr "E-mailové adresy"
 
@@ -3055,11 +3064,11 @@ msgstr "Povolit"
 msgid "Enabled"
 msgstr "Povoleno"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:175 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:176 module:io.ox/mail
 msgid "Enabled for the following addresses"
 msgstr "Povoleno pro následující adresy"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:178 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:179 module:io.ox/mail
 msgid "End"
 msgstr "Konec"
 
@@ -4446,7 +4455,7 @@ msgstr "Pošta"
 msgid "Mail Details"
 msgstr "Podrobnosti o zprávě"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:421 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:432 module:io.ox/mail
 msgid "Mail Filter Rules"
 msgstr "Pravidla pro filtr zpráv"
 
@@ -5218,7 +5227,7 @@ msgstr "Upozornit všechny účastníky e-mailem."
 msgid "November"
 msgstr "Listopad"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:174 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:175 module:io.ox/mail
 msgid "Number of days between vacation notices to the same sender"
 msgstr "Počet dní mezi oznámeními o nepřítomnosti pro stejného odesílatele"
 
@@ -6771,7 +6780,7 @@ msgstr "Poslat zprávu všem účastníkům"
 msgid "Send new mail"
 msgstr "Poslat novou zprávu"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:179 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:180 module:io.ox/mail
 msgid "Send vacation notice during this time only"
 msgstr "Oznámení o nepřítomnosti posílat pouze v tuto dobu"
 
@@ -7209,7 +7218,7 @@ msgstr "Standardní složky"
 msgid "Standard timezone"
 msgstr "Standardní časová pásma"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:177 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:178 module:io.ox/mail
 #: apps/io.ox/tasks/print.js:90 module:io.ox/tasks
 msgid "Start"
 msgstr "Start"
@@ -7297,7 +7306,7 @@ msgstr "Student"
 #: apps/io.ox/mail/compose/extensions.js:309
 #: apps/io.ox/mail/compose/extensions.js:313
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:56
-#: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js:172
+#: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js:173
 #: apps/io.ox/mail/view-options.js:35
 #: apps/io.ox/tasks/edit/view-template.js:99 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:788 module:io.ox/tasks
@@ -7484,7 +7493,7 @@ msgstr "Předběžně"
 msgid "Tentatively accepted"
 msgstr "Předběžně přijal(a)"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:173 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:174 module:io.ox/mail
 msgid "Text"
 msgstr "Text"
 
@@ -7842,8 +7851,8 @@ msgstr "Datum začátku musí být před datem konce."
 
 #: apps/io.ox/calendar/model.js:247 module:io.ox/calendar
 #: apps/io.ox/calendar/model.js:248
-#: apps/io.ox/mail/vacationnotice/settings/filter.js:90 module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/filter.js:91
+#: apps/io.ox/mail/vacationnotice/settings/filter.js:92 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/filter.js:93
 msgid "The start date must be before the end date."
 msgstr "Datum začátku musí být před datem konce."
 
@@ -7926,7 +7935,7 @@ msgstr "Pro soubor tohoto druhu není k dispozici náhled"
 msgid "There is no recent activity in your Xing network."
 msgstr "Ve vaší síti Xing se nic nového neudálo."
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:441 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:452 module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "Není určeno žádné pravidlo"
 
@@ -8338,7 +8347,7 @@ msgid "Unable to load mail filter rules settings."
 msgstr "Nepodařilo se načíst nastavení pro filtrování pošty."
 
 #: apps/io.ox/mail/autoforward/settings/register.js:50 module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/register.js:69
+#: apps/io.ox/mail/vacationnotice/settings/register.js:71
 #: apps/io.ox/settings/util.js:61 module:io.ox/core
 msgid "Unable to load mail filter settings."
 msgstr "Nepodařilo se načíst nastavení pro filtrování pošty."
@@ -8561,8 +8570,8 @@ msgstr "Uživatelské jméno"
 msgid "Username must not be empty."
 msgstr "Uživatelské jméno nemůže být prázdné."
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:171 module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/register.js:41
+#: apps/io.ox/mail/vacationnotice/settings/model.js:172 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/register.js:42
 msgid "Vacation Notice"
 msgstr "Oznámení o nepřítomnosti"
 
@@ -9705,7 +9714,7 @@ msgstr "stav "
 msgid "tentative"
 msgstr "předběžně"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:382 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:393 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:213 module:io.ox/portal
 msgid "the item has been moved"
 msgstr "položka byla přesunuta"
@@ -9766,7 +9775,7 @@ msgstr "neomezené"
 msgid "vCard"
 msgstr "vCard"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:146 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:147 module:io.ox/mail
 msgid "vacation notice"
 msgstr "oznámení o nepřítomnosti"
 
