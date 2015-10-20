@@ -140,18 +140,19 @@ define('io.ox/mail/detail/links', [
     // URL
     //
 
-    var regUrl = /^([\s\S]*)((http|https|ftp|ftps)\:\/\/\S+)([\s\S]*)$/i,
-        regUrlMatch = /^([\s\S]*)((http|https|ftp|ftps)\:\/\/\S+)([\s\S]*)$/i; /* dedicated one to avoid strange side effects */
+    var regUrl = /^([\s\S]*?)(((http|https|ftp|ftps)\:\/\/|www\.)\S+)([\s\S]*)$/i,
+        regUrlMatch = /^([\s\S]*?)(((http|https|ftp|ftps)\:\/\/|www\.)\S+)([\s\S]*)$/i; /* dedicated one to avoid strange side effects */
 
     function processUrl(node) {
 
         var matches = node.nodeValue.match(regUrlMatch);
         if (matches === null || matches.length === 0) return node;
-        var prefix = matches[1], url = matches[2], suffix = matches[4];
+        var prefix = matches[1], url = matches[2], suffix = matches[5];
 
         // fix punctuation marks and brackets
-        var fix = util.fixUrlSuffix(url, suffix);
-        var link = $('<a href="#" target="_blank">').attr('href', fix.url).text(fix.url);
+        var fix = util.fixUrlSuffix(url, suffix), href = fix.url;
+        if (!/^http/i.test(href)) href = 'http://' + href;
+        var link = $('<a href="#" target="_blank">').attr('href', href).text(fix.url);
 
         return { node: node, prefix: prefix, replacement: link, suffix: fix.suffix };
     }
@@ -243,7 +244,7 @@ define('io.ox/mail/detail/links', [
         'url': {
             test: function (node) {
                 // quick check
-                if (node.nodeValue.indexOf('http') === -1) return false;
+                if (!/(http|www\.)/.test(node.nodeValue)) return false;
                 // precise check
                 return regUrl.test(node.nodeValue) && $(node).closest('a').length === 0;
             },
