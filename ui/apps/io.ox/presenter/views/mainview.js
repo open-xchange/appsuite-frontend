@@ -612,7 +612,7 @@ define('io.ox/presenter/views/mainview', [
                 this.toggleFullscreen(false);
 
                 // show an alert box for known errors
-                if (_.isObject(error) && (error.error === 'GENERAL_MAX_PARTICIPANTS_FOR_PRESENTATION_REACHED_ERROR')) {
+                if (_.isObject(error) && (error.error === 'PRESENTER_MAX_PARTICIPANTS_FOR_PRESENTATION_REACHED_ERROR')) {
                     this.showNotification({
                         type: 'error',
                         //#. message text of an alert box if joining a presentation fails
