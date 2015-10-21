@@ -5,6 +5,5 @@
     "category": "Productivity",
     "settings": false,
     "requires": "infostore",
-    "refreshable": true,
     "visible": false
 }
