@@ -124,10 +124,15 @@ define('io.ox/core/notifications', [
         drawNotificationInfo: function () {
 
             // only show if there was no decision yet
-            if (desktopNotifications.getPermissionStatus() === 'default' && !this.handledNotificationInfo) {
+            if (desktopNotifications.getPermissionStatus() === 'default' && settings.get('showDesktopNotifications', true) !== false && !this.handledNotificationInfo) {
                 var self = this,
                     textNode = $('<div>').text(gt('Would you like to enable desktop notifications?')),
-                    laterButton = $('<button class="later-button btn btn-danger">').text(gt('Later')).on('click', function (e) {
+                    laterButton = $('<button class="later-button btn btn-warning">').text(gt('Later')).on('click', function (e) {
+                        e.stopPropagation();
+                        cleanup();
+                    }),
+                    disableButton = $('<button class="disable-button btn btn-danger">').text(gt('Disable')).on('click', function (e) {
+                        settings.set('showDesktopNotifications', false).save();
                         e.stopPropagation();
                         cleanup();
                     }),
@@ -153,9 +158,10 @@ define('io.ox/core/notifications', [
                         containerNode.addClass('clickable');
                         laterButton.remove();
                         enableButton.remove();
+                        disableButton.remove();
                         self.hideNotificationInfo = true;
                     },
-                    containerNode = $('<div class="desktop-notification-info clearfix">').append( textNode, enableButton, laterButton );
+                    containerNode = $('<div class="desktop-notification-info clearfix">').append( textNode, enableButton, disableButton, laterButton );
 
                 if (self.hideNotificationInfo) {
                     cleanup();
