@@ -130,8 +130,7 @@ define('io.ox/search/main', [
             closable: true,
             window: win
         }),
-        sidepopup,
-        win, model, run;
+        sidepopup, model, run;
 
     // hide/show topbar search field
     win.on('show', function () {

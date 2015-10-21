@@ -276,8 +276,9 @@ define('io.ox/core/viewer/views/displayerview', [
          *      'both': [4,5,6,7,8,9,10]
          */
         getSlideLoadRange: function (slideIndex, offset, prefetchDirection) {
-            var slideIndex = slideIndex || 0,
-                loadRange;
+            var loadRange;
+
+            slideIndex = slideIndex || 0;
 
             function getLeftRange() {
                 return _.range(slideIndex, slideIndex - (offset + 1), -1);
@@ -339,7 +340,8 @@ define('io.ox/core/viewer/views/displayerview', [
             }
 
             return this.createView(insertIndex).done(function (view) {
-                var swiper = self.swiper;
+                var swiper = self.swiper,
+                    neighbour;
                 swiper.destroyLoop();
 
                 // remove old slide
@@ -349,7 +351,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
                 // add new slide at correct position
                 if (direction === 'right') {
-                    var neighbour = swiper.wrapper.find('*[data-index=' + (insertIndex - 1) + ']');
+                    neighbour = swiper.wrapper.find('*[data-index=' + (insertIndex - 1) + ']');
 
                     if (neighbour.length > 0) {
                         neighbour.after(view.$el);
@@ -357,7 +359,7 @@ define('io.ox/core/viewer/views/displayerview', [
                         swiper.wrapper.prepend(view.$el);
                     }
                 } else if (direction === 'left') {
-                    var neighbour = swiper.wrapper.find('*[data-index=' + (insertIndex + 1) + ']');
+                    neighbour = swiper.wrapper.find('*[data-index=' + (insertIndex + 1) + ']');
 
                     if (neighbour.length > 0) {
                         neighbour.before(view.$el);
@@ -369,7 +371,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 swiper.createLoop();
 
                 // recalculate swiper index
-                swiper.activeIndex = parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index')) + 1;
+                swiper.activeIndex = parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index'), 10) + 1;
                 swiper.update(true);
             });
         },
@@ -420,9 +422,11 @@ define('io.ox/core/viewer/views/displayerview', [
          *  Duration of the blend-in in milliseconds. Defaults to 3000 ms.
          */
         blendCaption: function (text, duration) {
-            var duration = duration || 3000,
-                slideCaption = this.$el.find('.viewer-displayer-caption'),
+            duration = duration || 3000;
+
+            var slideCaption = this.$el.find('.viewer-displayer-caption'),
                 captionContent = $('<div class="caption-content">').text(text);
+
             slideCaption.empty().append(captionContent);
             window.clearTimeout(this.captionTimeoutId);
             slideCaption.show();

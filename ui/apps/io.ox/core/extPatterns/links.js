@@ -341,7 +341,7 @@ define('io.ox/core/extPatterns/links', [
         // loop over all items and visually group by "section"
         var list = node.children('li');
         node.children('li').each(function (index, node) {
-            var node = $(node);
+            node = $(node);
             // get descriptions
             if (!node.hasClass('dropdown-description')) return;
             // related link is not first child && divider not already added
@@ -575,7 +575,7 @@ define('io.ox/core/extPatterns/links', [
     var DropdownLinks = function (options, baton, wrap) {
         options = options || {};
         baton.$el = $('<ul class="dropdown-menu" role="menu">');
-        var wrap = options.wrap === undefined ? true : !!options.wrap;
+        wrap = options.wrap === undefined ? true : !!options.wrap;
         drawLinks(options || {}, new Collection(baton.data), null, baton, [], wrap).done(function () {
             // if dropdown is emtpy and we have an empty-callback, execute it(some async drawing methods use this)
             if (!baton.$el) return;

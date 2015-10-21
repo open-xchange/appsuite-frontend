@@ -95,7 +95,6 @@ define('io.ox/search/view-template', [
                 row = $('<div class="row applications">').append(cell),
                 id = baton.model.getApp(),
                 opt = baton.model.getOptions(),
-                row, cell,
                 items = [],
                 titles = {},
                 apps = settings.get('search/modules', []),

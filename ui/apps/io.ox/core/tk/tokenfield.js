@@ -211,10 +211,11 @@ define('io.ox/core/tk/tokenfield', [
                     }
 
                     // edit
-                    var inputData = self.getInput().data();
+                    var inputData = self.getInput().data(),
+                        newAttrs;
                     if (inputData.edit === true) {
                         // edit mode
-                        var newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
+                        newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
                         if (_.isArray(newAttrs)) {
                             e.attrs.label = newAttrs[1];
                         } else {
@@ -238,7 +239,7 @@ define('io.ox/core/tk/tokenfield', [
 
                     // create model for unknown participants
                     if (!e.attrs.model) {
-                        var newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
+                        newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
                         if (_.isArray(newAttrs)) {
                             e.attrs.label = newAttrs[1];
                             e.attrs.value = newAttrs[3];

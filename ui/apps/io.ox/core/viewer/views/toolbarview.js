@@ -719,8 +719,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
             }
             function onInputChange(event, options) {
-                var options = _.extend({ preventPageScroll: false }, options),
-                    newValue = parseInt($(this).val(), 10),
+                options = _.extend({ preventPageScroll: false }, options);
+                var newValue = parseInt($(this).val(), 10),
                     oldValue = parseInt($(this).attr('data-page-number'), 10),
                     pageTotal = parseInt($(this).attr('data-page-total'), 10);
                 if (isNaN(newValue)) {

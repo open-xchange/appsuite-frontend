@@ -494,7 +494,7 @@ define('io.ox/core/tk/selection', [
             isMarker = function (e) {
                 return multiple && e && (e.which === 38 || e.which === 40);
             };
-
+            /* eslint no-redeclare: 0 */
             var clearOrginal = clear,
                 markedItem,
                 // clear wrapper

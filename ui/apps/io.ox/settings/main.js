@@ -78,11 +78,11 @@ define('io.ox/settings/main', [
             ignoreChangeEvent,
 
             saveSettings = function (triggeredBy) {
-
+                var settingsID;
                 switch (triggeredBy) {
                     case 'changeMain':
                         if (currentSelection !== null && currentSelection.lazySaveSettings !== true) {
-                            var settingsID = currentSelection.id + '/settings';
+                            settingsID = currentSelection.id + '/settings';
                             ext.point(settingsID + '/detail').invoke('save');
                         } else if (currentSelection !== null && currentSelection.lazySaveSettings === true) {
                             changeStatus = true;
@@ -90,14 +90,14 @@ define('io.ox/settings/main', [
                         break;
                     case 'changeGrid':
                         if (previousSelection !== null && previousSelection.lazySaveSettings === true && changeStatus === true) {
-                            var settingsID = previousSelection.id + '/settings';
+                            settingsID = previousSelection.id + '/settings';
                             ext.point(settingsID + '/detail').invoke('save');
                             changeStatus = false;
                         }
                         break;
                     case 'changeGridMobile':
                         if (currentSelection.lazySaveSettings === true && changeStatus === true) {
-                            var settingsID = currentSelection.id + '/settings';
+                            settingsID = currentSelection.id + '/settings';
                             ext.point(settingsID + '/detail').invoke('save');
                             changeStatus = false;
                         }
@@ -105,14 +105,14 @@ define('io.ox/settings/main', [
                     case 'hide':
                     case 'logout':
                         if (currentSelection !== null && currentSelection.lazySaveSettings === true && changeStatus === true) {
-                            var settingsID = currentSelection.id + '/settings',
-                                defs = ext.point(settingsID + '/detail').invoke('save').compact().value();
+                            settingsID = currentSelection.id + '/settings';
+                            var defs = ext.point(settingsID + '/detail').invoke('save').compact().value();
                             changeStatus = false;
                             return $.when.apply($, defs);
                         }
                         break;
                     default:
-                        var settingsID = currentSelection.id + '/settings';
+                        settingsID = currentSelection.id + '/settings';
                         ext.point(settingsID + '/detail').invoke('save');
                 }
 
@@ -262,8 +262,9 @@ define('io.ox/settings/main', [
             tree.selection.preselect(id);
             app.folder.set(id);
 
-            var item = tree.selection.byId(id),
-                view = item.closest('li').data('view');
+            item = tree.selection.byId(id);
+
+            var view = item.closest('li').data('view');
 
             // view may not exists if the user does not have this setting
             if (!view) return;

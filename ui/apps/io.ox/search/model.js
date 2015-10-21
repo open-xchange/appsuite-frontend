@@ -130,9 +130,10 @@ define('io.ox/search/model', [
 
         // FLAG: highlander
         // keep only last added value of highlander facets
+        var data, facet;
         for (i = list.length - 1; i >= 0; i--) {
-            var data = list[i],
-                facet = pool[data.facet];
+            data = list[i];
+            facet = pool[data.facet];
             if (_.contains(facet.flags, 'highlander') && Object.keys(facet.values).length > 1) {
                 if (!hash[data.facet]) {
                     // keep latest value (negative loop)
@@ -148,8 +149,8 @@ define('io.ox/search/model', [
         var last;
         if (_.contains(this.getOptions().flags, 'singleton')) {
             for (i = list.length - 1; i >= 0; i--) {
-                var data = list[i],
-                    facet = pool[data.facet];
+                data = list[i];
+                facet = pool[data.facet];
                 if (facet.id !== 'folder' && !_.contains(facet.flags, 'advanced')) {
                     if (last) {
                         list.splice(i, 1);

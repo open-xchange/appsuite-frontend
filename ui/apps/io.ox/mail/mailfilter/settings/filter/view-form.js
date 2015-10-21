@@ -440,14 +440,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     return $('<a href="#" class="remove" tabindex="1" data-action="remove-' + type + '">').append($('<i class="fa fa-trash-o">'));
                 };
 
-            if (appliedConditions.tests) {
-                appliedConditions = appliedConditions.tests;
-            } else {
-                appliedConditions = [appliedConditions];
-            }
+            appliedConditions = appliedConditions.tests ? appliedConditions.tests : [appliedConditions];
 
             _(appliedConditions).each(function (condition, num) {
-                var ConditionModel = Backbone.Model.extend({
+                var inputId,
+                    ConditionModel = Backbone.Model.extend({
                         validate: function (attrs) {
                             if (_.has(attrs, 'size')) {
                                 if (_.isNaN(attrs.size) || attrs.size === '') {
@@ -563,7 +560,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                 switch (cmodel.get('id')) {
                     case 'size':
-                        var inputId = _.uniqueId('size');
+                        inputId = _.uniqueId('size');
                         conditionList.append(
                             drawCondition({
                                 inputId: inputId,
@@ -576,7 +573,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         );
                         break;
                     case 'body':
-                        var inputId = _.uniqueId('values');
+                        inputId = _.uniqueId('values');
                         conditionList.append(
                             drawCondition({
                                 inputId: inputId,
@@ -631,8 +628,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         break;
                     case 'header':
                         var title,
-                            inputId = _.uniqueId('headers'),
                             secondInputId = _.uniqueId('values');
+
+                        inputId = _.uniqueId('headers');
+
                         if (cmodel.get('headers').length === 4) {
                             title = headerTranslation.mailingList;
                         } else if (cmodel.get('headers').length === 2) {
@@ -670,7 +669,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         }
                         break;
                     case 'envelope':
-                        var inputId = _.uniqueId('values');
+                        inputId = _.uniqueId('values');
                         conditionList.append(
                             drawCondition({
                                 inputId: inputId,
@@ -860,7 +859,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 if (action.id !== 'stop') {
                     switch (action.id) {
                         case 'redirect':
-                            var inputId = _.uniqueId('redirect');
+                            inputId = _.uniqueId('redirect');
                             actionList.append(
                                 drawAction({
                                     inputId: inputId,
@@ -872,7 +871,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             );
                             break;
                         case 'move':
-                            var inputId = _.uniqueId('move_');
+                            inputId = _.uniqueId('move_');
                             actionList.append(
                                 drawAction({
                                     inputId: inputId,
@@ -884,7 +883,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             );
                             break;
                         case 'reject':
-                            var inputId = _.uniqueId('reject');
+                            inputId = _.uniqueId('reject');
                             actionList.append(
                                 drawAction({
                                     inputId: inputId,
@@ -897,7 +896,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             break;
                         case 'addflags':
                             if (/delete|seen/.test(action.flags[0])) {
-                                var inputId = _.uniqueId('markas_');
+                                inputId = _.uniqueId('markas_');
                                 actionList.append(
                                     drawAction({
                                         inputId: inputId,
@@ -906,7 +905,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                     })
                                 );
                             } else if (/^\$cl/.test(action.flags[0])) {
-                                var inputId = _.uniqueId('colorflag_');
+                                inputId = _.uniqueId('colorflag_');
                                 actionList.append($('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num }).append(
                                     $('<div>').addClass('col-sm-4 singleline').append(
                                         $('<span>').addClass('list-title').text(actionsTranslations.flag)
@@ -921,7 +920,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                     drawDeleteButton('action')
                                 ));
                             } else {
-                                var inputId = _.uniqueId('customflag_');
+                                inputId = _.uniqueId('customflag_');
                                 actionList.append(
                                     drawAction({
                                         inputId: inputId,
@@ -934,7 +933,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             }
                             break;
                         case 'discard':
-                            var inputId = _.uniqueId('discard_');
+                            inputId = _.uniqueId('discard_');
                             actionList.append(
                                 drawAction({
                                     inputId: inputId,
@@ -944,7 +943,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             );
                             break;
                         case 'keep':
-                            var inputId = _.uniqueId('keep_');
+                            inputId = _.uniqueId('keep_');
                             actionList.append(
                                 drawAction({
                                     inputId: inputId,

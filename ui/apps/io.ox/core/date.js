@@ -768,9 +768,8 @@ define.async('io.ox/core/date', [
 
         $.extend(LocalDate.prototype, DatePrototype);
         if (Object.defineProperty) {
-            for (var i in DatePrototype) {
-                Object.defineProperty(LocalDate.prototype, i,
-                                      { enumerable: false });
+            for (var o in DatePrototype) {
+                Object.defineProperty(LocalDate.prototype, o, { enumerable: false });
             }
         }
 
@@ -923,10 +922,11 @@ define.async('io.ox/core/date', [
             return formatDateTime(api.getFormat(format), this);
         },
         getIntervalFormat: function (end, format) {
-            var L = api.locale;
+            var L = api.locale,
+                diff;
             if (format & api.TIME) {
                 if (this.getDays() === end.getDays()) {
-                    var diff = L.intervals[(L.h12 ? 'hm' : 'Hm') + (format & api.TIMEZONE ? 'v' : '')];
+                    diff = L.intervals[(L.h12 ? 'hm' : 'Hm') + (format & api.TIMEZONE ? 'v' : '')];
                     if (L.h12 && (this.getHours() < 12) !== (end.getHours() < 12)) {
                         return diff.a;
                     } else if (this.getHours() !== end.getHours()) {
@@ -940,8 +940,7 @@ define.async('io.ox/core/date', [
                     format |= api.DATE;
                 }
             } else {
-                var diff = format & api.DAYOFWEEK ? L.intervals.yMMMEd :
-                                                    L.intervals.yMMMd;
+                diff = format & api.DAYOFWEEK ? L.intervals.yMMMEd : L.intervals.yMMMd;
                 if (this.getYear() !== end.getYear()) {
                     return diff.y;
                 } else if (this.getMonth() !== end.getMonth()) {

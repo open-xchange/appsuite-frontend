@@ -147,17 +147,9 @@ define('io.ox/search/apiproxy', [
                             })
                             .then(function (data) {
                                 // match convention in autocomplete tk
-                                var data = {
-                                    list: data,
-                                    hits: 0
-                                };
-                                model.set({
-                                    query: query,
-                                    autocomplete: data.list
-                                }, {
-                                    silent: true
-                                });
-                                return data;
+                                model.set({ query: query, autocomplete: data }, { silent: true });
+                                return { list: data, hits: 0 };
+
                             }, notifications.yell);
                 },
                 query: (function () {

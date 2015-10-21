@@ -326,7 +326,8 @@ define('io.ox/mail/compose/view', [
                 };
                 // remove 'mailto:'' prefix and split at '?''
                 var tmp = mailto.replace(/^mailto:/, '').split(/\?/, 2);
-                var to = unescape(tmp[0]), params = _.deserialize(tmp[1]);
+                var to = unescape(tmp[0]);
+                params = _.deserialize(tmp[1]);
                 // see Bug 31345 - [L3] Case sensitivity issue with Richmail while rendering Mailto: link parameters
                 for (var key in params) params[key.toLowerCase()] = params[key];
                 // save data
@@ -709,11 +710,12 @@ define('io.ox/mail/compose/view', [
 
         toggleTokenfield: function (e) {
             var isString = typeof e === 'string',
-                type = isString ? e : $(e.target).attr('data-type');
+                type = isString ? e : $(e.target).attr('data-type'),
+                input;
 
             if (_.device('smartphone')) {
                 if (!isString) e.preventDefault();
-                var input = this.$el.find('[data-extension-id="cc"], [data-extension-id="bcc"]');
+                input = this.$el.find('[data-extension-id="cc"], [data-extension-id="bcc"]');
                 if (input.hasClass('hidden')) {
                     input.removeClass('hidden');
                     this.$el.find('[data-action="add"] span').removeClass('fa-angle-right').addClass('fa-angle-down');
@@ -728,8 +730,8 @@ define('io.ox/mail/compose/view', [
                 return input;
             }
 
-            var button = this.$el.find('[data-type="' + type + '"]'),
-                input = this.$el.find('[data-extension-id="' + type + '"]');
+            var button = this.$el.find('[data-type="' + type + '"]');
+            input = this.$el.find('[data-extension-id="' + type + '"]');
             if (!isString) e.preventDefault();
             if (input.hasClass('hidden') || isString) {
                 input.removeClass('hidden');

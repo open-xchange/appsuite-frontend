@@ -105,7 +105,7 @@ define('io.ox/core/notifications/subview', [
                     });
                 }
             } else {
-                for (var i = 0; i < max && items[i]; i++) {
+                for (i = 0; i < max && items[i]; i++) {
                     drawItem(items[i], items[i]);
                 }
                 itemNode.idle();

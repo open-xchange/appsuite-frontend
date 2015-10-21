@@ -108,7 +108,7 @@ define('io.ox/portal/settings/widgetview', [
 
         onDelete: function (e) {
             e.preventDefault();
-            var self = this, dialog;
+            var self = this;
             // do we have custom data that might be lost?
             if (!_.isEmpty(this.model.get('props'))) {
                 var dialog = new dialogs.ModalDialog()

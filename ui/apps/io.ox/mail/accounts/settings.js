@@ -227,7 +227,7 @@ define('io.ox/mail/accounts/settings', [
                     delete data.transport_password;
                     validateMailaccount(data, popup, def);
                 } else {
-                    var data = {};
+                    data = {};
                     data.primary_address = newMailaddress;
                     if (args) {
                         args.data = data;

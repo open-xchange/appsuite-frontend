@@ -415,7 +415,7 @@ define('io.ox/mail/main', [
          */
         'change:sort': function (app) {
             app.props.on('change:sort', function (model, value) {
-                var model = app.listView.model;
+                model = app.listView.model;
                 // resolve from-to
                 if (value === 'from-to') value = account.is('sent|drafts', model.get('folder')) ? 604 : 603;
                 // do not accidentally overwrite other attributes on folderchange

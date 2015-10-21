@@ -31,7 +31,9 @@ define('io.ox/core/folder/actions/add', [
      */
     function add(folder, title, opt) {
 
-        var opt = opt || {}, invalid = false;
+        opt = opt || {};
+
+        var invalid = false;
 
         // check for valid filename
         ext.point('io.ox/core/filename')

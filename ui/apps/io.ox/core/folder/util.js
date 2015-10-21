@@ -39,7 +39,7 @@ define('io.ox/core/folder/util', [
 
     function is(type, data) {
 
-        var result, i = 0, $i, id;
+        var result, i = 0, $i, id, folders;
 
         // check multiple folder?
         if (_.isArray(data)) {
@@ -100,14 +100,14 @@ define('io.ox/core/folder/util', [
                 return true;
             }
             // get default folder
-            var folders = mailSettings.get('folder');
+            folders = mailSettings.get('folder');
             for (id in folders) {
                 if (folders[id] === data.id) return true;
             }
             return false;
         case 'insideDefaultfolder':
             // get default folder
-            var folders = mailSettings.get('folder');
+            folders = mailSettings.get('folder');
             for (id in folders) {
                 // folder starts with defaultfolder id
                 if (data.id.indexOf(folders[id]) === 0) return true;
@@ -124,8 +124,8 @@ define('io.ox/core/folder/util', [
             // only shared BY me, not TO me
             return data.type === 1 || data.type === 7 || (data.module === 'infostore' && data.created_by === ox.user_id);
         case 'hidden':
-            var hash = coreSettings.get(['folder/hidden'], {}),
-                id = _.isObject(data) ? data.id : data;
+            var hash = coreSettings.get(['folder/hidden'], {});
+            id = _.isObject(data) ? data.id : data;
             return hash[id] === true;
         default:
             return false;

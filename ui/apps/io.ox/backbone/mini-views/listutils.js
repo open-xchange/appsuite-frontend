@@ -115,7 +115,7 @@ var appendIconText = function (target, text, type, activeColor) {
         });
     },
     controlsToggle = function (label) {
-        var label = label ? label : '';
+        label = label ? label : '';
         return $('<a class="action">').text(label).attr({
             href: '#',
             tabindex: 1,

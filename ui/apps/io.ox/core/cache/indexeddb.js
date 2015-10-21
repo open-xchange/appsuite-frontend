@@ -366,7 +366,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     // Open the Meta-Database
     try {
 
-        var opened = window.indexedDB.open('appsuite.cache.metadata', SCHEMA);
+        opened = window.indexedDB.open('appsuite.cache.metadata', SCHEMA);
 
         opened.onupgradeneeded = function (e) {
             // Set up object stores

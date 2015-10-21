@@ -18,8 +18,8 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
     var util = {
         //build progressField and buttongroup
         buildProgress: function (val) {
-            var val = val || 0,
-                progress = $('<input class="form-control progress-field">').attr({ type: 'text', id: 'task-edit-progress-field', tabindex: 1 }).val(val),
+            val = val || 0;
+            var progress = $('<input class="form-control progress-field">').attr({ type: 'text', id: 'task-edit-progress-field', tabindex: 1 }).val(val),
                 wrapper = $('<div class="input-group">').append(
                     progress,
                     $('<div class="input-group-btn">').append(

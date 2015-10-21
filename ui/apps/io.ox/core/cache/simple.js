@@ -33,7 +33,7 @@ define('io.ox/core/cache/simple', ['io.ox/core/extensions'], function (ext) {
                 return resolve();
             },
             get: function (key) {
-                var key = String(key);
+                key = String(key);
                 return resolve(
                     key in storage[id] ? JSON.parse(storage[id][key]) : null
                 );

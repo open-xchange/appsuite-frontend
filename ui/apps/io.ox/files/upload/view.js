@@ -31,7 +31,7 @@ define('io.ox/files/upload/view', [
                 this.model = baton.model;
                 this.index = baton.index;
 
-                this.model.on('change:progress', function (object, val) {
+                this.model.on('change:progress', function () {
                     var val = Math.round(self.model.get('progress') * 100);
 
                     if (self.model.get('progress') === 1) {

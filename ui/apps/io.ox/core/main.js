@@ -603,6 +603,8 @@ define('io.ox/core/main', [
 
     function launch() {
 
+        var dedicatedLogoutButton;
+
         debug('Launching ...');
 
         /**
@@ -1035,7 +1037,7 @@ define('io.ox/core/main', [
             }
         });
 
-        var dedicatedLogoutButton = settings.get('features/dedicatedLogoutButton', false) === true && _.device('!small');
+        dedicatedLogoutButton = settings.get('features/dedicatedLogoutButton', false) === true && _.device('!small');
         if (dedicatedLogoutButton) {
             ext.point('io.ox/core/topbar/right').extend({
                 id: 'logout-button',
@@ -1298,7 +1300,8 @@ define('io.ox/core/main', [
         function appCheck(baton) {
 
             var hash = _.url.hash(),
-                looksLikeDeepLink = !('!!' in hash);
+                looksLikeDeepLink = !('!!' in hash),
+                usesDetailPage;
             // fix old infostore
             if (hash.m === 'infostore') hash.m = 'files';
 
@@ -1308,8 +1311,8 @@ define('io.ox/core/main', [
 
                 // new-school: app + folder + id
                 // replace old IDs with a dot by 'folder_id SLASH id'
-                var id = /^\d+\./.test(hash.id) ? hash.id.replace(/\./, '/') : hash.id,
-                    usesDetailPage = /^io.ox\/(mail|contacts|calendar|tasks)$/.test(hash.app);
+                var id = /^\d+\./.test(hash.id) ? hash.id.replace(/\./, '/') : hash.id;
+                usesDetailPage = /^io.ox\/(mail|contacts|calendar|tasks)$/.test(hash.app);
 
                 _.url.hash({
                     app: usesDetailPage ? hash.app + '/detail' : hash.app,
@@ -1322,7 +1325,7 @@ define('io.ox/core/main', [
             } else if (hash.m && hash.f && hash.i) {
 
                 // old-school: module + folder + id
-                var usesDetailPage = /^(mail|contacts|calendar|tasks)$/.test(hash.m);
+                usesDetailPage = /^(mail|contacts|calendar|tasks)$/.test(hash.m);
 
                 _.url.hash({
                     // special treatment for files (viewer + drive app)

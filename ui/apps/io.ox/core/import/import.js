@@ -248,7 +248,8 @@ define('io.ox/core/import/import', [
                         // get failed records
                         var failed = _.filter(data, function (item) {
                             return item && item.error;
-                        });
+                        }),
+                        custom;
 
                         // cache
                         try {
@@ -273,11 +274,11 @@ define('io.ox/core/import/import', [
                         } else if (data.length === failed.length) {
                             // failed
                             // #. Failure message if no data (e.g. appointments) could be imported
-                            var custom = { error: gt('Failed to import any data') };
+                            custom = { error: gt('Failed to import any data') };
                             failHandler([].concat(custom, failed));
                         } else {
                             // partially failed
-                            var custom = { error: gt('Data only partially imported (%1$s of %2$s records)', (data.length - failed.length), data.length) };
+                            custom = { error: gt('Data only partially imported (%1$s of %2$s records)', (data.length - failed.length), data.length) };
                             failHandler([].concat(custom, failed));
                         }
 

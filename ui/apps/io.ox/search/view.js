@@ -27,8 +27,8 @@ define('io.ox/search/view', [
                 this.baton.$ = this.$el;
             },
             render: function (node) {
-                var self = this,
-                    node = node || self.$el;
+                var self = this;
+                node = node || self.$el;
 
                 self.baton.$container = node;
                 // create new toolbar on bottom

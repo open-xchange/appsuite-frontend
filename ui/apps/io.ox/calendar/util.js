@@ -138,8 +138,9 @@ define('io.ox/calendar/util', [
         getDateInterval: function (data, a11y) {
             if (data && data.start_date && data.end_date) {
                 var startDate, endDate,
-                    a11y = a11y || false,
                     fmtstr = a11y ? 'dddd, l' : 'ddd, l';
+
+                a11y = a11y || false;
 
                 if (data.full_time) {
                     startDate = moment.utc(data.start_date).local(true);

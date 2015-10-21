@@ -973,7 +973,7 @@ define('io.ox/files/legacy_api', [
                 api.trigger('refresh.all');
             });
         },
-        'remove:infostore': function (e, id) {
+        'remove:infostore': function () {
             var id = settings.get('folder/trash');
             if (id) folderAPI.list(id, { cache: false });
         }

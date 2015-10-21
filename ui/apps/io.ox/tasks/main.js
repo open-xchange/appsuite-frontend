@@ -357,7 +357,7 @@ define('io.ox/tasks/main', [
 
             drawTask = function (data) {
                 var baton = ext.Baton({ data: data });
-                // since we use a classic toolbar on non-smartphone devices, we disable inline links in this case
+                // since we use a classic toolbar on non-smartphone devices, we disable inline ox.ui.createApps in this case
                 baton.disable('io.ox/tasks/detail-inline', 'inline-links');
                 app.right.idle().empty().append(viewDetail.draw(baton));
             };
@@ -711,9 +711,6 @@ define('io.ox/tasks/main', [
         }
     });
 
-    // application object
-    var app = ox.ui.createApp({ name: 'io.ox/tasks', title: 'Tasks' });
-
     // launcher
     app.setLauncher(function (options) {
 
@@ -785,7 +782,7 @@ define('io.ox/tasks/main', [
         };
         app.gridContainer = $('<div class="border-right">');
 
-        var grid = new VGrid(app.gridContainer, {
+        grid = new VGrid(app.gridContainer, {
             settings: settings,
             swipeLeftHandler: swipeRightHandler,
             showToggle: _.device('smartphone'),

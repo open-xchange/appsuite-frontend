@@ -109,7 +109,8 @@ define('io.ox/contacts/widgets/exif', function () {
             numValues = file.getLongAt(entryOffset + 4, bigEnd),
             valueOffset = file.getLongAt(entryOffset + 8, bigEnd) + tiffStart,
             offset,
-            vals, n;
+            vals,
+            n;
 
         switch (type) {
         case 1:
@@ -150,7 +151,7 @@ define('io.ox/contacts/widgets/exif', function () {
                 return file.getLongAt(entryOffset + 8, bigEnd);
             } else {
                 vals = [];
-                for (var n = 0; n < numValues; n++) {
+                for (n = 0; n < numValues; n++) {
                     vals[n] = file.getLongAt(valueOffset + 4 * n, bigEnd);
                 }
                 return vals;
@@ -161,7 +162,7 @@ define('io.ox/contacts/widgets/exif', function () {
                 return file.getLongAt(valueOffset, bigEnd) / file.getLongAt(valueOffset + 4, bigEnd);
             } else {
                 var aVals = [];
-                for (var n = 0; n < numValues; n++) {
+                for (n = 0; n < numValues; n++) {
                     aVals[n] = file.getLongAt(valueOffset + 8 * n, bigEnd) / file.getLongAt(valueOffset + 4 + 8 * n, bigEnd);
                 }
                 return aVals;

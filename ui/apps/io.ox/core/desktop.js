@@ -33,10 +33,8 @@ define('io.ox/core/desktop', [
      */
 
     // current window
-    var currentWindow = null;
-
-    // top bar
-    var appGuid = 0,
+    var currentWindow = null,
+        appGuid = 0,
         appCache = new cache.SimpleCache('app-cache', true);
 
     // Apps collection
@@ -44,10 +42,11 @@ define('io.ox/core/desktop', [
 
     function supportsFind(name) {
         // enabled apps
-        var list = coreConfig.get('search/modules', []),
-            name = name.replace(/^io\.ox\//, '');
-        // drive alias
-        name = name === 'files' ? 'drive' : name;
+        var list = coreConfig.get('search/modules', []);
+
+        name = name.replace(/^io\.ox\//, '')
+            .replace(/files/, 'drive'); // drive alias
+
         return list.indexOf(name) > -1;
     }
 
@@ -255,8 +254,9 @@ define('io.ox/core/desktop', [
                             var def = $.Deferred();
                             if (id !== undefined && id !== null && String(id) !== folder) {
 
-                                var app = _.url.hash('app');
-                                var model = api.pool.getModel(id), data = model.toJSON();
+                                var app = _.url.hash('app'),
+                                    model = api.pool.getModel(id),
+                                    data = model.toJSON();
 
                                 if (model.has('title')) {
                                     change(id, data, app, def);
@@ -273,8 +273,7 @@ define('io.ox/core/desktop', [
                                 }
                             } else if (String(id) === folder) {
                                 // see Bug 34927 - [L3] unexpected application error when clicking on "show all messages in inbox" in notification area
-                                var model = api.pool.getModel(id), data = model.toJSON();
-                                def.resolve(data, false);
+                                def.resolve(api.pool.getModel(id).toJSON(), false);
                             } else {
                                 def.reject();
                             }

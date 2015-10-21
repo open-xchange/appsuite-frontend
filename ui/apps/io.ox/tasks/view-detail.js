@@ -30,8 +30,8 @@ define('io.ox/tasks/view-detail', [
         draw: function (baton) {
 
             // make sure we have a baton
-            var baton = ext.Baton.ensure(baton),
-                data = baton.data;
+            baton = ext.Baton.ensure(baton);
+            var data = baton.data;
 
             if (!data) return $('<div>');
 

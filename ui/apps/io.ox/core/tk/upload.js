@@ -81,7 +81,7 @@ define('io.ox/core/tk/upload', [
                 drop: function (e) {
 
                     e = e.originalEvent || e;
-                    var files = e.dataTransfer.files;
+                    var files = e.dataTransfer.files, i;
 
                     // And the pass them on
                     if (highlightedAction) highlightedAction.removeClass('io-ox-dropzone-hover');
@@ -89,7 +89,7 @@ define('io.ox/core/tk/upload', [
                     // Fix for Bug 26235
                     if (_.browser.Chrome && _.browser.Chrome > 21) {
                         var items = e.dataTransfer.items;
-                        for (var i = 0; i < items.length; i++) {
+                        for (i = 0; i < items.length; i++) {
                             var entry = items[i].webkitGetAsEntry();
                             if (entry.isDirectory) {
                                 notifications.yell('error', gt('Uploading folders is not supported.'));
@@ -100,7 +100,7 @@ define('io.ox/core/tk/upload', [
                     }
 
                     if (options.actions[0].id === 'importEML') {
-                        for (var i = 0; i < files.length; i++) {
+                        for (i = 0; i < files.length; i++) {
                             var valid_extensions = /(\.eml)$/i;
                             if (!valid_extensions.test(files[i].name)) {
                                 notifications.yell('error', gt('Mail was not imported. Only .eml files are supported.'));
@@ -110,7 +110,7 @@ define('io.ox/core/tk/upload', [
                         }
                     }
 
-                    for (var i = 0, l = files.length; i < l; i++) {
+                    for (i = 0; i < files.length; i++) {
                         if (options.actions[0].id === 'mailAttachment') {
                             self.trigger('drop', files[i]);
                         } else {

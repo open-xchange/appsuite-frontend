@@ -82,7 +82,7 @@
         // disallow usage of __proto__ property
         'no-proto': 2,
         // disallow declaring the same variable more then once
-        'no-redeclare': 0, // NEEDS CODE REFACTORING // 2
+        'no-redeclare': 2,
         // disallow use of assignment in return statement
         'no-return-assign': 0, // NEEDS CODE REFACTORING // 2
         // disallow use of `javascript:` urls.

@@ -1052,7 +1052,7 @@ define('io.ox/calendar/week/view', [
                     // is fulltime?
                     if (model.get('full_time') && this.options.showFulltime) {
                         fulltimeCount++;
-                        var app = this.renderAppointment(model),
+                        var node = this.renderAppointment(model),
                             fulltimePos = moment(model.getDate('start_date')).diff(this.startDate, 'days'),
                             fulltimeWidth = Math.max((moment(model.get('end_date')).diff(moment(model.get('start_date')), 'days') + Math.min(0, fulltimePos)), 1);
                         // loop over all column positions
@@ -1066,14 +1066,14 @@ define('io.ox/calendar/week/view', [
                         if (row === fulltimeColPos.length) {
                             fulltimeColPos.push(model.get('end_date'));
                         }
-                        app.css({
+                        node.css({
                             height: this.fulltimeHeight,
                             lineHeight: this.fulltimeHeight + 'px',
                             width: (100 / this.columns) * fulltimeWidth + '%',
                             left: (100 / this.columns) * Math.max(0, fulltimePos) + '%',
                             top: row * (this.fulltimeHeight + 1)
                         });
-                        this.fulltimePane.append(app);
+                        this.fulltimePane.append(node);
                     } else {
                         // fix fulltime appointments to local time when this.showFulltime === false
                         if (model.get('full_time')) {
@@ -1206,15 +1206,15 @@ define('io.ox/calendar/week/view', [
 
                 // loop over all appointments to draw them
                 for (var j = 0; j < apps.length; j++) {
-                    var app = apps[j],
-                        pos = self.calcPos(app.pos),
-                        idx = Math.min(app.pos.max, positions.length),
+                    var node = apps[j],
+                        pos = self.calcPos(node.pos),
+                        idx = Math.min(node.pos.max, positions.length),
                         width = Math.min((self.appWidth / idx) * (1 + (self.overlap * (idx - 1))), self.appWidth),
-                        left = idx > 1 ? ((self.appWidth - width) / (idx - 1)) * app.pos.index : 0,
+                        left = idx > 1 ? ((self.appWidth - width) / (idx - 1)) * node.pos.index : 0,
                         border = (left > 0 || (left === 0 && width < self.appWidth)),
                         height = Math.max(pos.height, self.minCellHeight - 1) - (border ? 1 : 0);
 
-                    app.css({
+                    node.css({
                         top: pos.top,
                         left: left + '%',
                         height: height + 'px',

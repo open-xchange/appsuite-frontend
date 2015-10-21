@@ -108,7 +108,7 @@ define('io.ox/search/facets/extensions', [
                 // select option
                 if (option === 'dialog') {
                     // open folder dialog
-                    var facet = baton.model.get('pool').folder;
+                    facet = baton.model.get('pool').folder;
                     folderDialog(facet, baton);
                 } else if (link.attr('data-point')) {
                     ext.point('io.ox/search/facets/custom/' + link.attr('data-point')).invoke('draw', this, baton, facet, value, { option: link.attr('data-point') });
@@ -132,7 +132,8 @@ define('io.ox/search/facets/extensions', [
                 button = $('<div class="col-xs-6 dropdown">'),
                 current = value.custom,
                 action,
-                option, link,// action,
+                option,
+                link,// action,
                 menu = $('<ul class="dropdown dropdown-menu facet-dropdown">')
                     .attr({
                         'data-facet': 'folder',
@@ -149,7 +150,6 @@ define('io.ox/search/facets/extensions', [
             );
 
             // add 'all folders'
-            var link;
             // do not show 'all folder' for drive when multiple accounts are defined
             if (!baton.model.isMandatory('folder') && !baton.model.isMandatory('account')) {
                 menu.prepend(

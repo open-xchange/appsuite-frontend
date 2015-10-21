@@ -192,8 +192,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 };
 
             return $.when(api.getRules(), api.getConfig()).then(function (data, config) {
-                var data = data[0],
-                    config = config[0];
+                data = data[0];
+                config = config[0];
 
                 collection = factory.createCollection(data);
                 collection.comparator = function (model) {

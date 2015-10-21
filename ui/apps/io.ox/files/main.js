@@ -465,7 +465,7 @@ define('io.ox/files/main', [
          * Respond to changed sort option
          */
         'change:sort': function (app) {
-            app.props.on('change:sort', function (model, value) {
+            app.props.on('change:sort', function (m, value) {
                 // set proper order first
                 var model = app.listView.model;
                 model.set('order', (/^(5|704)$/).test(value) ? 'desc' : 'asc', { silent: true });

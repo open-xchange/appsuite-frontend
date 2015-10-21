@@ -203,7 +203,7 @@ define('io.ox/core/attachments/view', [
             return Math.max(0, Math.ceil((scrollWidth - width) / this.scrollStep));
         },
 
-        updateScrollControls: function (index, max) {
+        updateScrollControls: function (index) {
             if (index === undefined) index = this.getScrollIndex();
             var max = this.getMaxScrollIndex();
             this.$('.scroll-left').attr('disabled', index <= 0 ? 'disabled' : null);

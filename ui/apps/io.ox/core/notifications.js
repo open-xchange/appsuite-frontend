@@ -320,7 +320,7 @@ define('io.ox/core/notifications', [
         },
 
         hide: function (opt) {
-            var opt = _.extend({ refocus: true }, opt || {});
+            opt = _.extend({ refocus: true }, opt || {});
             $(document).off('keydown.notification');
             var badgeview = this.badgeview;
             // if it's closed already we're done

@@ -138,7 +138,7 @@
                     case 'group':
                         return this.get('display_name');
                     case 'guest':
-                        var data = this.get('contact');
+                        data = this.get('contact');
                         return data[data.field] || data.email1;
                     case 'anonymous':
                         return '';

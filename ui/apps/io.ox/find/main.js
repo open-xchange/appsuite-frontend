@@ -188,9 +188,9 @@ define('io.ox/find/main', [
                                 mode: 'search',
                                 PRIMARY_PAGE_SIZE: defaultLoader.PRIMARY_PAGE_SIZE,
                                 SECONDARY_PAGE_SIZE: defaultLoader.SECONDARY_PAGE_SIZE,
-                                fetch: function (params) {
+                                fetch: function (p) {
                                     var self = this,
-                                        limit = params.limit.split(','),
+                                        limit = p.limit.split(','),
                                         start = parseInt(limit[0], 10),
                                         size = parseInt(limit[1], 10) - start;
 

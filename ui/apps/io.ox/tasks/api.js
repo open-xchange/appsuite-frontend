@@ -87,7 +87,7 @@ define('io.ox/tasks/api', [
          */
         updateAllCache = function (tasks, folder, modifications) {
 
-            var list = _.copy(tasks, true),
+            var list = _.copy(tasks, true);
             //make sure we have an array
             list = list || [];
             list = _.isArray(list) ? list : [list];

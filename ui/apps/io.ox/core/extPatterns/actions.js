@@ -181,11 +181,12 @@ define('io.ox/core/extPatterns/actions', [
     var updateCustomControls = function (container, selection, options) {
         var deferred = $.Deferred(),
             collection = new Collection(selection),
-            controls = container.find('[data-action]'),
-            options = $.extend({
-                cssDisable: false,
-                eventType: 'click'
-            }, options);
+            controls = container.find('[data-action]');
+
+        options = $.extend({
+            cssDisable: false,
+            eventType: 'click'
+        }, options);
 
         collection.getProperties().done(function () {
             // find nodes that refer to an action

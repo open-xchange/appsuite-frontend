@@ -93,8 +93,10 @@ define('io.ox/core/settings/downloads/pane', [
             var lang = ox.language.split('_')[0],
                 // languages we have custom shop icons for
                 langs = driveClientsSettings.get('l10nImages'),
-                imagePath = ox.abs + ox.root + '/apps/plugins/portal/oxdriveclients/img/',
-                platform = platform.toLowerCase();
+                imagePath = ox.abs + ox.root + '/apps/plugins/portal/oxdriveclients/img/';
+
+            platform = platform.toLowerCase();
+
             // fallback
             if (_.indexOf(langs, lang) === -1) lang = 'en';
 

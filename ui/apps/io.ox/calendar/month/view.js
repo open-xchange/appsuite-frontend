@@ -156,7 +156,6 @@ define('io.ox/calendar/month/view', [
                 if ((this.weekType === 'first' && !firstFound) || (this.weekType === 'last' && firstFound)) {
                     this.$el.append(dayCell.addClass('day-filler'));
                 } else {
-                    var dayCell;
                     this.$el.append(
                         dayCell
                         .addClass('day')

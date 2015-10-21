@@ -51,8 +51,8 @@ define('io.ox/tasks/edit/view', [
         },
 
         autoOpen: function (data) {
-            var data = data || this.model.attributes,
-                expandLink = this.$el.find('.expand-link'),
+            data = data || this.model.attributes;
+            var expandLink = this.$el.find('.expand-link'),
                 expandDetailsLink = this.$el.find('.expand-details-link');
             if (expandLink.length === 0 || !this.collapsed) {
                 return;
