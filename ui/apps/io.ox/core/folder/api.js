@@ -74,9 +74,20 @@ define('io.ox/core/folder/api',
     //
 
     var FolderModel = Backbone.Model.extend({
+
         constructor: function () {
             Backbone.Model.apply(this, arguments);
             this.on('change:id', onChangeModelId);
+        },
+
+        // convenience function / maps to folderAPI.is(type, folder)
+        is: function (type) {
+            return util.is(type, this.attributes);
+        },
+
+        // convenience function / maps to folderAPI.can(action, folder)
+        can: function (action) {
+            return util.can(action, this.attributes);
         }
     });
 
