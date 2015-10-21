@@ -8,6 +8,7 @@
  * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Edy Haryono <edy.haryono@open-xchange.com>
+ * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/types/documentview', [
     'io.ox/core/extPatterns/actions',
@@ -16,10 +17,11 @@ define('io.ox/core/viewer/views/types/documentview', [
     'io.ox/core/pdf/pdfdocument',
     'io.ox/core/pdf/pdfview',
     'io.ox/core/tk/doc-converter-utils',
+    'io.ox/core/tk/doc-utils/pageloader',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core',
     'less!io.ox/core/pdf/pdfstyle'
-], function (ActionsPattern, BaseView, ThumbnailView, PDFDocument, PDFView, DocConverterUtils, Util, gt) {
+], function (ActionsPattern, BaseView, ThumbnailView, PDFDocument, PDFView, DocConverterUtils, PageLoader, Util, gt) {
 
     'use strict';
 
@@ -28,11 +30,14 @@ define('io.ox/core/viewer/views/types/documentview', [
         passwordProtected: gt('This document is password protected and cannot be displayed.')
     };
 
+    // defines how many pages are loaded before and after the visible pages
+    var NON_VISIBLE_PAGES_TO_LOAD_BESIDE = 1;
+
     /**
-     * The image file type. Implements the ViewerType interface.
+     * The document file type. Implements the ViewerType interface.
      *
      * interface ViewerType {
-     *    function render({model: model, modelIndex: modelIndex});
+     *    function render();
      *    function load();
      *    function unload();
      * }
@@ -56,8 +61,14 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.pdfView = null;
             // the PDFDocument instance
             this.pdfDocument = null;
+            // the PDF page rendering queue
+            this.pageLoader = null;
             // a Deferred object indicating the load process of this document view.
             this.documentLoad = $.Deferred();
+            // all page nodes with contents, keyed by one-based page number
+            this.loadedPageNodes = {};
+            // the timer that loads more pages above and below the visible ones
+            this.loadMorePagesTimerId = null;
             // call view destroyer on viewer global dispose event
             this.on('dispose', this.disposeView.bind(this));
             // bind resize, zoom and close handler
@@ -72,13 +83,15 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.listenTo(this.viewerEvents, 'viewer:document:previous', this.onPreviousPage);
             // create a debounced version of zoom function
             this.setZoomLevelDebounced = _.debounce(this.setZoomLevel.bind(this), 1000);
+            // create a debounced version of refresh function
+            this.refreshDebounced = _.debounce(this.refresh.bind(this), 500);
             // defaults
             this.currentDominantPageIndex = 1;
             this.numberOfPages = 1;
             this.disposed = null;
             // disable display flex styles, for pinch to zoom
             this.$el.addClass('swiper-slide-document');
-            // wheter double tap zoom is already triggered
+            // whether double tap zoom is already triggered
             this.doubleTapZoomed = false;
             // indicates if the document was prefetched
             this.isPrefetched = false;
@@ -172,12 +185,15 @@ define('io.ox/core/viewer/views/types/documentview', [
         /**
          * Scroll-to-page handler:
          * - scrolls to the desired page number.
+         *
          * @param {Number} pageNumber
+         *  The 1-based page number.
          */
         onScrollToPage: function (pageNumber) {
-            if (this.isVisible() && _.isNumber(pageNumber) && pageNumber > 0 && pageNumber <= this.pages.length) {
-                var targetPageNode = this.documentContainer.find('.document-page[data-page=' + pageNumber + ']');
-                if (targetPageNode.length !== 0) {
+            if (this.isVisible()) {
+                var targetPageNode = this.getPageNode(pageNumber);
+
+                if (targetPageNode.length > 0) {
                     var targetScrollTop = targetPageNode[0].offsetTop - this.PAGE_SIDE_MARGIN;
                     this.$el.scrollTop(targetScrollTop);
                     this.viewerEvents.trigger('viewer:document:pagechange', pageNumber);
@@ -188,8 +204,6 @@ define('io.ox/core/viewer/views/types/documentview', [
         /**
          * Next page handler:
          * - scrolls to the next page
-         *
-         * @param {Number} pageNumber
          */
         onNextPage: function () {
             var nextPage = this.getDominantPage() + 1;
@@ -199,8 +213,6 @@ define('io.ox/core/viewer/views/types/documentview', [
         /**
          * Previous page handler:
          * - scrolls to the previous page
-         *
-         * @param {Number} pageNumber
          */
         onPreviousPage: function () {
             var previousPage = this.getDominantPage() - 1;
@@ -220,7 +232,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         },
 
         /**
-         *  Scroll event handler:
+         * Scroll event handler:
          *  -shows the current page in the caption on scroll.
          *  -blends in navigation controls.
          *  -selects the corresponding thumbnail in the thumbnail pane.
@@ -231,6 +243,7 @@ define('io.ox/core/viewer/views/types/documentview', [
             if (!newDominantPageIndex) {
                 return;
             }
+
             if (currentDominantPageIndex !== newDominantPageIndex) {
                 this.currentDominantPageIndex = newDominantPageIndex;
                 //#. text of a viewer document page caption
@@ -241,7 +254,151 @@ define('io.ox/core/viewer/views/types/documentview', [
                     .trigger('viewer:document:selectthumbnail', this.currentDominantPageIndex)
                     .trigger('viewer:document:pagechange', this.currentDominantPageIndex);
             }
+
+            this.loadVisiblePages();
             this.viewerEvents.trigger('viewer:blendnavigation');
+        },
+
+        /**
+         * Loads all pages that are currently visible in the DocumentView plus
+         * one page before the visible pages and one page after the visible pages;
+         * the non visible pages are loaded with lower priority, if necessary.
+         */
+        loadVisiblePages: function () {
+
+            var pagesToRender = this.getPagesToRender(),
+                beginPageNumber = _.first(pagesToRender),
+                endPageNumber = _.last(pagesToRender);
+
+            // fail safety: do nothing if called while view is hidden (e.g. scroll handlers)
+            if (this.isVisible()) {
+                // abort old requests not yet running
+                this.pageLoader.abortQueuedRequests();
+                this.cancelMorePagesTimer();
+
+                // load visible pages with high priority
+                _.each(pagesToRender, function (pageNumber) {
+                    this.loadPage(pageNumber, 'high');
+                }, this);
+
+                // load the invisible pages above and below the visible area with medium priority after a short delay
+                this.loadMorePagesTimerId = window.setTimeout(function () {
+                    for (var i = 1; i <= NON_VISIBLE_PAGES_TO_LOAD_BESIDE; i++) {
+                        // pages before the visible pages
+                        if ((beginPageNumber - i) > 0) {
+                            this.loadPage(beginPageNumber - i, 'medium');
+                        }
+                        // pages after the visible pages
+                        if ((endPageNumber + i) <= this.numberOfPages) {
+                            this.loadPage(endPageNumber + i, 'medium');
+                        }
+                    }
+                }.bind(this), 50);
+
+                // clear all other pages
+                _.each(this.loadedPageNodes, function (pageNode, pageNumber) {
+                    if ((pageNumber < (beginPageNumber - NON_VISIBLE_PAGES_TO_LOAD_BESIDE)) || (pageNumber > (endPageNumber + NON_VISIBLE_PAGES_TO_LOAD_BESIDE))) {
+                        this.emptyPageNode(pageNode);
+                        delete this.loadedPageNodes[pageNumber];
+                    }
+                }, this);
+            }
+        },
+
+        /**
+         * Loads the specified page, and stores the original page size at the
+         * page node.
+         *
+         * @param {Number} pageNumber
+         *  The 1-based page number.
+         *
+         * @param {String} priority
+         *  The priority to load the page with.
+         *  Supported are 'high', 'medium' and 'low'.
+         */
+        loadPage: function (pageNumber, priority) {
+            var // the page node of the specified page
+                pageNode = this.getPageNode(pageNumber);
+
+            console.info('AAAAA', 'load page', pageNumber, ', priority', priority, ', already loaded', (pageNode.children().length > 0));
+
+            // do not load correctly initialized page again
+            if (pageNode.children().length === 0) {
+                // format 'pdf' is rendered via the PDF.js library onto HTML5 canvas elements
+                this.pageLoader.loadPage(pageNode, pageNumber, { format: 'pdf', priority: priority, pageZoom: this.currentZoomFactor / 100 }).done(function () {
+                    this.loadedPageNodes[pageNumber] = pageNode;
+                    this.refresh(pageNumber);
+
+                }.bind(this)).fail(function () {
+                    pageNode.append($('<div>').addClass('error-message').text(gt('Sorry, this page is not available at the moment.')));
+                    console.error('AAAAA', 'load page failed');
+                });
+            }
+        },
+
+        /**
+         * Refreshes the specified pages or all.
+         *
+         * @param {Number} [pageNumberToRefresh]
+         *  The 1-based page number to refresh.
+         *  If not set all pages were refreshed.
+         *
+         * @param {Number} [pageNumberToSelect]
+         *  The 1-based page number to select after refreshing.
+         */
+        refresh: function (pageNumberToRefresh, pageNumberToSelect) {
+            if (this.numberOfPages > 0) {
+
+                var self = this;
+
+                if (_.isNumber(pageNumberToRefresh)) {
+                    // Process the page node
+                    var pageNode = this.getPageNode(pageNumberToRefresh);
+                    this.pageLoader.setPageZoom(pageNode, this.currentZoomFactor / 100);
+
+                } else {
+                    // empty all pages in case of a complete refresh request
+                    this.pages.detach().each(function () {
+                        self.emptyPageNode($(this));
+                        self.pageLoader.setPageZoom($(this), self.currentZoomFactor / 100);
+
+                    }).appendTo(self.documentContainer);
+                }
+
+                if (_.isNumber(pageNumberToSelect)) {
+                    this.onScrollToPage(pageNumberToSelect);
+                }
+
+                if (!pageNumberToRefresh) {
+                    this.loadVisiblePages();
+                }
+            }
+        },
+
+        /**
+         * Cancels all running background tasks regarding updating the page
+         * nodes in the visible area.
+         */
+        cancelMorePagesTimer: function () {
+            // cancel the timer that loads more pages above and below the visible
+            // area, e.g. to prevent (or defer) out-of-memory situations on iPad
+            if (this.loadMorePagesTimerId) {
+                window.clearTimeout(this.loadMorePagesTimerId);
+                this.loadMorePagesTimerId = null;
+            }
+        },
+
+        /**
+         * Clears a page node
+         *
+         * @param {jquery.Node} pageNode
+         *  The jQuery page node to clear.
+         */
+        emptyPageNode: function (pageNode) {
+            if (pageNode) {
+                console.info('AAAAA', 'empty page', pageNode.attr('data-page'));
+                pageNode.data('data-rendertype', '').css({ visibility: 'visible' }).empty();
+            }
         },
 
         /**
@@ -305,7 +462,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         },
 
         /**
-         * Calculates document page numbers to render depending on visilbility of the pages
+         * Calculates document page numbers to render depending on visibility of the pages
          * in the viewport (window).
          *
          * @returns {Array} pagesToRender
@@ -332,6 +489,33 @@ define('io.ox/core/viewer/views/types/documentview', [
         },
 
         /**
+         * Returns the pageNode with the given pageNumber.
+         *
+         * @param {Number} pageNumber
+         *  The 1-based number of the page node to return.
+         *
+         * @returns {jquery.Node} pageNode
+         *  The jQuery page node for the requested page number.
+         */
+        getPageNode: function (pageNumber) {
+            return (pageNumber > 0) ? this.documentContainer.children().eq(pageNumber - 1) : $();
+        },
+
+        /**
+         * Returns the 1-based number of the page node.
+         *
+         * @param {jquery.Node} pageNode
+         *  The jQuery page node to get the page number for.
+         *
+         * @returns {Number}
+         *  The 1-based number of the page node.
+         */
+        getPageNumber: function (pageNode) {
+            var pageNumber = pageNode && pageNode.attr('data-page');
+            return parseInt(pageNumber, 10);
+        },
+
+        /**
          * "Shows" the document (Office, PDF) with the PDF.js library.
          *
          * @returns {DocumentView}
@@ -341,41 +525,6 @@ define('io.ox/core/viewer/views/types/documentview', [
             // ignore already loaded documents
             if (this.$el.find('.document-page').length > 0) {
                 return;
-            }
-            var documentContainer = this.documentContainer,
-                documentUrl = DocConverterUtils.getEncodedConverterUrl(this.model);
-
-            /**
-             * Returns the pageNode with the given pageNumber.
-             *
-             * @param pageNumber
-             *  The 1-based number of the page nod to return
-             *
-             * @returns {jquery.Node} pageNode
-             *  The jquery page node for the requested page number.
-             */
-            function getPageNode(pageNumber) {
-                return (_.isNumber(pageNumber) && (pageNumber >= 1)) ? documentContainer.children().eq(pageNumber - 1) : null;
-            }
-
-            /**
-             * Gets called just before pages get rendered.
-             *
-             * @param pageNumbers
-             *  The array of 1-based page numbers to be rendered
-             */
-            function beginPageRendering(/*pageNumbers*/) {
-                //console.log('Begin PDF rendering: ' + pageNumbers);
-            }
-
-            /**
-             * Gets called just after pages are rendered.
-             *
-             * @param pageNumbers
-             *  The array of 1-based page numbers that have been rendered
-             */
-            function endPageRendering(/*pageNumbers*/) {
-                //console.log('End PDF rendering: ' + pageNumbers);
             }
 
             /**
@@ -393,39 +542,40 @@ define('io.ox/core/viewer/views/types/documentview', [
                     pdfDocumentLoadError.call(this, pageCount);
                     return;
                 }
-                //console.warn('DocumentView.pdfDocumentLoadSuccess()', convertData);
-                var pdfDocument = this.pdfDocument,
-                    self = this;
+
+                var // the stored scroll position
+                    lastScrollPosition = this.getInitialScrollPosition(this.model.get('id')) || 0;
+
+                // store number of pages
+                this.numberOfPages = pageCount;
                 // create the PDF view after successful loading
-                this.pdfView = new PDFView(pdfDocument, { textOverlay: true });
+                this.pdfView = new PDFView(this.pdfDocument, { textOverlay: true });
+                // the PDF page rendering queue
+                this.pageLoader = new PageLoader(this.pdfDocument, this.pdfView);
+                // set zoom factor to stored value or default zoom
+                this.currentZoomFactor = this.getInitialZoomLevel(this.model.get('id')) || this.getDefaultZoomFactor();
+
                 // draw page nodes and apply css sizes
                 _.times(pageCount, function (index) {
                     var documentPage = $('<div class="document-page">'),
-                        pageSize = self.pdfView.getRealPageSize(index + 1);
+                        pageSize = this.pdfView.getRealPageSize(index + 1, this.currentZoomFactor / 100);
                     documentPage.attr('data-page', index + 1);
-                    documentContainer.append(documentPage.attr(pageSize).css(pageSize));
-                });
+                    this.documentContainer.append(documentPage.attr(pageSize).css(pageSize));
+                }, this);
+
                 // save values to the view instance, for performance
-                this.numberOfPages = pageCount;
                 this.pages = this.$el.find('.document-page');
-                // set callbacks at this.pdfView to start rendering
-                var renderCallbacks = {
-                    getVisiblePageNumbers: this.getPagesToRender.bind(this),
-                    getPageNode: getPageNode,
-                    beginRendering: beginPageRendering,
-                    endRendering: endPageRendering.bind(this)
-                };
-                this.pdfView.setRenderCallbacks(renderCallbacks);
+
+                // render visible PDF pages
+                this.loadVisiblePages();
+
                 // disable slide swiping per default on documents
                 this.$el.addClass('swiper-no-swiping');
+                // register scroll handler
                 this.$el.on('scroll', _.debounce(this.onScrollHandler.bind(this), 500));
-                // set scale/zoom and scroll position, with stored or default values
-                var zoomLevel = this.getInitialZoomLevel(this.model.get('id')) || this.getDefaultZoomFactor();
-                this.setZoomLevel(zoomLevel);
-                var lastScrollPosition = this.getInitialScrollPosition(this.model.get('id'));
-                if (lastScrollPosition) {
-                    this.$el.scrollTop(lastScrollPosition);
-                }
+                // set scroll position
+                this.$el.scrollTop(lastScrollPosition);
+
                 // select/highlight the corresponding thumbnail according to displayed document page
                 this.viewerEvents.trigger('viewer:document:selectthumbnail', this.getDominantPage())
                     .trigger('viewer:document:loaded')
@@ -449,6 +599,8 @@ define('io.ox/core/viewer/views/types/documentview', [
                 // resolve the document load Deferred: thsi document view is fully loaded.
                 this.documentLoad.reject();
             }
+
+            var documentUrl = DocConverterUtils.getEncodedConverterUrl(this.model);
 
             // create a pdf document object with the document PDF url
             this.pdfDocument = new PDFDocument(documentUrl);
@@ -585,30 +737,38 @@ define('io.ox/core/viewer/views/types/documentview', [
          *  zoom level numbers between 25 and 800 (supported zoom factors)
          */
         setZoomLevel: function (zoomLevel) {
-            if (!_.isNumber(zoomLevel) || !this.pdfView || !this.isVisible ||
-                (zoomLevel < this.getMinZoomFactor()) || (zoomLevel > this.getMaxZoomFactor())) {
+            if (!_.isNumber(zoomLevel) || !this.pdfView || !this.isVisible()) {
                 return;
             }
-            var pdfView = this.pdfView,
+
+            var // the vertical scroll position before zooming
                 documentTopPosition = this.$el.scrollTop(),
+                // the horizontal scroll position before zooming
                 documentLeftPosition = this.$el.scrollLeft(),
                 pageMarginHeight = 20,
                 pageMarginCount = this.getDominantPage() - 1,
                 pageMarginTotal = pageMarginHeight * pageMarginCount,
+                zoomLevelBeforeZoom = this.currentZoomFactor,
                 pagesHeightBeforeZoom = documentTopPosition - pageMarginTotal;
-            // set page zoom to all pages and apply the new size to all page wrappers
-            pdfView.setPageZoom(zoomLevel / 100);
-            var currentPage = this.getDominantPage(),
-                pageSizeAfterZoom = pdfView.getRealPageSize(currentPage);
-            this.pages.css(pageSizeAfterZoom);
-            // adjust document scroll position according to new zoom
-            var pagesHeightAfterZoom = pagesHeightBeforeZoom * zoomLevel / this.currentZoomFactor,
+
+            var pagesHeightAfterZoom = pagesHeightBeforeZoom * zoomLevel / zoomLevelBeforeZoom,
+                // the vertical scroll position after zooming
                 scrollTopAfterZoom = pagesHeightAfterZoom + pageMarginTotal,
-                scrollLeftAfterZoom = documentLeftPosition * zoomLevel / this.currentZoomFactor;
+                // the horizontal scroll position after zooming
+                scrollLeftAfterZoom = documentLeftPosition * zoomLevel / zoomLevelBeforeZoom;
+
+            zoomLevel = Util.minMax(zoomLevel, this.getMinZoomFactor(), this.getMaxZoomFactor());
+            this.currentZoomFactor = zoomLevel;
+
+            // set page zoom to all pages and apply the new size to all page wrappers
+            this.refreshDebounced();
+            console.log('AAAAA', 'zoom from', zoomLevelBeforeZoom + '%', 'to', zoomLevel + '%', ', top position before', documentTopPosition, ', top position after', scrollTopAfterZoom, ', left position before', documentLeftPosition, ', left position after', scrollLeftAfterZoom);
+
+            // adjust document scroll position according to new zoom
             this.$el.scrollTop(scrollTopAfterZoom);
             this.$el.scrollLeft(scrollLeftAfterZoom);
+
             // save new zoom level to view
-            this.currentZoomFactor = zoomLevel;
             this.setInitialZoomLevel(this.model.get('id'), zoomLevel);
             // blend zoom caption
             this.viewerEvents.trigger('viewer:blendcaption', Math.round(zoomLevel) + ' %');
@@ -638,6 +798,11 @@ define('io.ox/core/viewer/views/types/documentview', [
 
             // never unload slide duplicates
             if (!this.$el.hasClass('swiper-slide-duplicate') || dispose) {
+                if (this.pageLoader) {
+                    this.pageLoader.abortQueuedRequests();
+                    this.cancelMorePagesTimer();
+                    this.pageLoader.destroy();
+                }
                 if (this.pdfView) {
                     this.pdfView.destroy();
                     this.pdfView = null;
@@ -662,7 +827,7 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         onResize: function () {
             this.documentLoad.done(function () {
-                if (this.isVisible) {
+                if (this.isVisible()) {
                     var zoomFactor = this.getDefaultZoomFactor();
                     if (this.fitWidthZoomed) {
                         zoomFactor = this.getModeZoomFactor('fitwidth');
