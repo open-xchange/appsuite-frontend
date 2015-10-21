@@ -38,6 +38,9 @@ define('plugins/halo/appointments/register', [
                 node.append($('<div>').addClass('widget-title clear-title').text(gt('Shared Appointments')));
                 viewGrid.drawSimpleGrid(baton.data).appendTo(node);
 
+                // mark vgrid cells to prevent unwanted close event (bug 41822)
+                node.find('.vgrid-cell').addClass('io-ox-dialog-sidepopup-toggle');
+
                 new dialogs.SidePopup().delegate(node, '.vgrid-cell', function (popup, e, target) {
                     var data = target.data('appointment');
                     require(['io.ox/calendar/view-detail'], function (view) {

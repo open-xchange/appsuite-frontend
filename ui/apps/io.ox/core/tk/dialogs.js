@@ -585,16 +585,15 @@ define('io.ox/core/tk/dialogs', [
         Dialog.call(this, options);
     };
 
-    //
     // global click handler to properly close side-popups
     $(document).on('click', function (e) {
 
-        var popups = $('.io-ox-sidepopup');
+        var popups = $('.io-ox-sidepopup'), target = $(e.target);
         if (popups.length === 0) return;
         //check if we are inside a modal dialog or pressed a button in the footer (footer buttons usually close the dialog so check with .io-ox-dialog-popup would fail)
-        if ($(e.target).closest('.io-ox-dialog-popup, .io-ox-dialog-underlay, .modal-footer').length > 0) {
-            return;
-        }
+        if (target.closest('.io-ox-dialog-popup, .io-ox-dialog-underlay, .modal-footer').length > 0) return;
+        // see bug 41822
+        if (target.closest('.io-ox-dialog-sidepopup-toggle').length > 0) return;
 
         var inside = $(e.target).closest('.io-ox-sidepopup'),
             index = popups.index(inside);
