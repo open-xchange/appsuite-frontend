@@ -71,7 +71,7 @@ define('io.ox/core/taskQueue', function () {
         };
 
         this.chainTask = function (taskDef) {
-            return this.nextTask = new Task(taskDef);
+            return (this.nextTask = new Task(taskDef));
         };
 
         this.destroy = function () {

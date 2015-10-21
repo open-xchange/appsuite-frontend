@@ -215,7 +215,7 @@ define('io.ox/core/cache/localstorage', ['io.ox/core/extensions'], function (ext
             return function (id) {
                 if (firstRun) clear();
                 if (!instances[id]) {
-                    return instances[id] = new WebStorage(id);
+                    return (instances[id] = new WebStorage(id));
                 }
                 return instances[id];
             };

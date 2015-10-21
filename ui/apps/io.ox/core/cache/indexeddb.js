@@ -235,7 +235,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         index: 100,
         getInstance: function (id) {
             if (!instances[id]) {
-                return instances[id] = new IndexeddbStorage(id);
+                return (instances[id] = new IndexeddbStorage(id));
             }
             return instances[id];
         },

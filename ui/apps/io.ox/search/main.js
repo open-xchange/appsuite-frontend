@@ -312,7 +312,7 @@ define('io.ox/search/main', [
         run: run,
 
         getView: function () {
-            return app.view = SearchView.factory.create(app, model);
+            return (app.view = SearchView.factory.create(app, model));
         },
 
         model: model,

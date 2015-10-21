@@ -116,7 +116,7 @@ define('io.ox/find/view-facets', [
                         return api.isVirtual(data.id);
                     },
                     'account': function (data, option) {
-                        return data.account = option.account;
+                        return (data.account = option.account);
                     }
                 }, match;
 

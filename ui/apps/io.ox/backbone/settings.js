@@ -49,7 +49,7 @@ define('io.ox/backbone/settings', ['io.ox/backbone/basicModel'], function (Basic
                 }
             }, options));
 
-            return cache[ref] = settings.createModel(ModelClass);
+            return (cache[ref] = settings.createModel(ModelClass));
         }
     };
 });

@@ -299,7 +299,9 @@ define('io.ox/find/view-tokenfield', [
         },
 
         updateSelection: function (action, e, item) {
-            if (action !== 'add' || !item) return this.ui.selected = undefined;
+            if (action !== 'add' || !item) {
+                return (this.ui.selected = undefined);
+            }
             this.ui.selected = item.model.get('id');
         },
 
@@ -307,7 +309,9 @@ define('io.ox/find/view-tokenfield', [
         restoreSelection: function () {
             if (!this.ui.selected) return;
             var node = $('.tt-suggestion> [data-id="' + this.ui.selected + '"]');
-            if (!node.length) return this.ui.selected = undefined;
+            if (!node.length) {
+                return (this.ui.selected = undefined);
+            }
             node.parent().addClass('tt-cursor');
         },
 

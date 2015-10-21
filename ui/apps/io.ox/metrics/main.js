@@ -63,7 +63,7 @@ define('io.ox/metrics/main', [
     function mapColumns(data) {
         var app = data.app === 'drive' ? 'files' : data.app,
             mapping = http.getColumnMapping(app);
-        return data.detail = mapping[data.detail] || data.detail;
+        return (data.detail = mapping[data.detail] || data.detail);
     }
 
     metrics = {

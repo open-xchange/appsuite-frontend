@@ -221,7 +221,7 @@ define('io.ox/formats/vcard', function () {
     var hCard = function (contacts) {
         var content = '';
         _.each(contacts, function (contact) {
-            return content += hCardContact(contact);
+            return (content += hCardContact(contact));
         });
         return '<body style="font: 14px/20px Arial; padding: 30px;">' + content + '</body>';
     };
