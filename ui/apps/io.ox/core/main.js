@@ -1345,9 +1345,13 @@ define('io.ox/core/main', [
                 manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app],
                 mailto = _.url.hash('mailto') !== undefined && (appURL === ox.registry.get('mail-compose').split('/').slice(0, -1).join('/') + ':compose');
 
-            baton.autoLaunch = (manifest && (manifest.refreshable || mailto)) ?
-                appURL.split(/,/) :
-                autoLaunchArray();
+            if (manifest && (manifest.refreshable || mailto)) {
+                baton.autoLaunch = appURL.split(/,/);
+            } else {
+                // clear typical parameter?
+                if (manifest) _.url.hash({ app: null, folder: null, id: null });
+                baton.autoLaunch = autoLaunchArray();
+            }
         }
 
         var baton = ext.Baton({ block: $.Deferred() });
