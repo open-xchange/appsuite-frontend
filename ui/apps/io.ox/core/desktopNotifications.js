@@ -85,6 +85,8 @@ define('io.ox/core/desktopNotifications', [
         requestPermission: function (callback) {
             if (supported) {
                 Notification.requestPermission(callback);
+            } else {
+                callback('unsupported');
             }
         },
 

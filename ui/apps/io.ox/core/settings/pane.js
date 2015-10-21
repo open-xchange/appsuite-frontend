@@ -376,10 +376,14 @@ define('io.ox/core/settings/pane', [
             render: function () {
                 this.baton.model.on('change:showDesktopNotifications', function (e, value) {
                     if (value === true) {
-                        desktopNotifications.requestPermission();
+                        desktopNotifications.requestPermission(function (result) {
+                            // revert if user denied the permission
+                            if (result === 'denied') {
+                                this.baton.model.set('showDesktopNotifications', false);
+                            }
+                        });
                     }
                 });
-
                 this.$el.append(
                     $('<div class="col-sm-offset-4 col-sm-8">').append(
                         $('<div>').addClass('checkbox').append(
