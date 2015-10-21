@@ -442,9 +442,9 @@ define('io.ox/calendar/edit/extensions', [
                             return $('<div class="color-label pull-left" tabindex="1" role="checkbox">')
                                 .addClass(color_label > 0 ? 'color-label-' + color_label : 'no-color')
                                 .addClass(color_label === 0 && this.model.get('private_flag') ? 'color-label-10' : '')
-                                .addClass(activeColor == color_label ? 'active' : '')
+                                .addClass(activeColor === color_label ? 'active' : '')
                                 .attr({
-                                    'aria-checked': activeColor == color_label,
+                                    'aria-checked': activeColor === color_label,
                                     'aria-label': calendarUtil.getColorLabel(color_label)
                                 })
                                 .append('<i class="fa fa-check">')

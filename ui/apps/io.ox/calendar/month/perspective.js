@@ -251,7 +251,7 @@ define('io.ox/calendar/month/perspective', [
                     views.push($('<div class="week month-name">').attr('id', endDate.year() + '-' + endDate.month()).append($('<div>').text(gt.noI18n(endDate.format('MMMM YYYY')))));
                     view.$el.addClass('no-border');
 
-                    if (endDate.date() != 1) {
+                    if (endDate.date() !== 1) {
                         views.push(createView({
                             collection: self.collections[day],
                             day: day,
@@ -538,7 +538,7 @@ define('io.ox/calendar/month/perspective', [
                         month = this.tops[y].data('date');
                     }
 
-                    if (prevMonth != this.previous.valueOf()) {
+                    if (prevMonth !== this.previous.valueOf()) {
                         this.previous = moment(prevMonth);
                     }
 

@@ -96,10 +96,10 @@ define('io.ox/core/folder/contextmenu', [
                 self.$el.append(
                     $('<div class="color-label pull-left" tabindex="1" role="checkbox">')
                     .addClass('color-label-' + colorNumber)
-                    .addClass(folderColor == colorNumber ? 'active' : '')
+                    .addClass(folderColor === colorNumber ? 'active' : '')
                     .attr({
                         'data-index': colorNumber,
-                        'aria-checked': folderColor == colorNumber,
+                        'aria-checked': folderColor === colorNumber,
                         'aria-label': util.getColorLabel(colorNumber)
                     })
                     .append('<i class="fa fa-check">')
