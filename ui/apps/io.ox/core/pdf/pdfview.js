@@ -45,7 +45,8 @@ define('io.ox/core/pdf/pdfview', [
         MAXIMUM_SIDE_SIZE = (_.browser.iOS || _.browser.Android || _.browser.Safari || _.browser.IE <= 10) ? 2156 : 4096,
 
         /**
-         * Queues the render calls for execution. The last call added is the first one to be executed (last in, first out).
+         * Queues the render calls for execution. The first call added
+         * is the first one to be executed (first in, first out).
          * Waits after every render call an amount of 250ms before executing the next one.
          */
         handleRenderQueue = (function () {
@@ -53,8 +54,8 @@ define('io.ox/core/pdf/pdfview', [
                 queue = [];
 
             return function (deferred) {
-                // add the deferred to the beginning of the queue
-                queue.unshift(deferred);
+                // add the deferred to the end of the queue
+                queue.push(deferred);
 
                 lastDef = lastDef.then(function () {
                     var def = $.Deferred(),
@@ -528,7 +529,7 @@ define('io.ox/core/pdf/pdfview', [
          */
         this.getRealPageSize = function (pageNumber, pageZoom) {
             var pageSize = _.isObject(pdfDocument) ? (_.isNumber(pageNumber) ? pdfDocument.getOriginalPageSize(pageNumber) : pdfDocument.getDefaultPageSize()) : null,
-                curPageZoom = this.getPageZoom(pageNumber, pageZoom);
+                curPageZoom = _.isNumber(pageZoom) ? pageZoom : this.getPageZoom(pageNumber);
 
             return _.isObject(pageSize) ? { width: Math.ceil(curPageZoom * pageSize.width), height: Math.ceil(curPageZoom * pageSize.height) } : { width: 0, height: 0 };
         };
