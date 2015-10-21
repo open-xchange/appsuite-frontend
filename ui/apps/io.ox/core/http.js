@@ -992,7 +992,14 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         var wait = $.when();
 
         return function (def) {
+<<<<<<< HEAD
             if (def) def.always((wait = $.Deferred()).resolve);
+=======
+            if (def) {
+                wait = $.Deferred();
+                def.then(wait.resolve, wait.reject);
+            }
+>>>>>>> 9e3602d... Addition to Bug 41689 - deleting mails fails silently if quota is limit
             return wait.promise();
         };
     }());
