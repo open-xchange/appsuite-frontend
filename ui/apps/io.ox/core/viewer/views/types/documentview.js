@@ -320,8 +320,6 @@ define('io.ox/core/viewer/views/types/documentview', [
             var // the page node of the specified page
                 pageNode = this.getPageNode(pageNumber);
 
-            console.info('AAAAA', 'load page', pageNumber, ', priority', priority, ', already loaded', (pageNode.children().length > 0));
-
             // do not load correctly initialized page again
             if (pageNode.children().length === 0) {
                 // format 'pdf' is rendered via the PDF.js library onto HTML5 canvas elements
@@ -331,7 +329,6 @@ define('io.ox/core/viewer/views/types/documentview', [
 
                 }.bind(this)).fail(function () {
                     pageNode.append($('<div>').addClass('error-message').text(gt('Sorry, this page is not available at the moment.')));
-                    console.error('AAAAA', 'load page failed');
                 });
             }
         },
@@ -396,7 +393,6 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         emptyPageNode: function (pageNode) {
             if (pageNode) {
-                console.info('AAAAA', 'empty page', pageNode.attr('data-page'));
                 pageNode.data('data-rendertype', '').css({ visibility: 'visible' }).empty();
             }
         },
@@ -575,11 +571,13 @@ define('io.ox/core/viewer/views/types/documentview', [
                 this.$el.on('scroll', _.debounce(this.onScrollHandler.bind(this), 500));
                 // set scroll position
                 this.$el.scrollTop(lastScrollPosition);
+                // update stored index of the dominant page
+                this.currentDominantPageIndex = this.getDominantPage() || 1;
 
                 // select/highlight the corresponding thumbnail according to displayed document page
-                this.viewerEvents.trigger('viewer:document:selectthumbnail', this.getDominantPage())
+                this.viewerEvents.trigger('viewer:document:selectthumbnail', this.currentDominantPageIndex)
                     .trigger('viewer:document:loaded')
-                    .trigger('viewer:document:pagechange', this.getDominantPage(), pageCount);
+                    .trigger('viewer:document:pagechange', this.currentDominantPageIndex, pageCount);
                 this.$el.removeClass('io-ox-busy');
                 // resolve the document load Deferred: thsi document view is fully loaded.
                 this.documentLoad.resolve();
@@ -596,7 +594,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                     notificationIconClass = 'fa-lock';
                 }
                 this.displayNotification(notificationText, notificationIconClass);
-                // resolve the document load Deferred: thsi document view is fully loaded.
+                // resolve the document load Deferred: this document view is fully loaded.
                 this.documentLoad.reject();
             }
 
@@ -741,6 +739,8 @@ define('io.ox/core/viewer/views/types/documentview', [
                 return;
             }
 
+            zoomLevel = Util.minMax(zoomLevel, this.getMinZoomFactor(), this.getMaxZoomFactor());
+
             var // the vertical scroll position before zooming
                 documentTopPosition = this.$el.scrollTop(),
                 // the horizontal scroll position before zooming
@@ -757,12 +757,9 @@ define('io.ox/core/viewer/views/types/documentview', [
                 // the horizontal scroll position after zooming
                 scrollLeftAfterZoom = documentLeftPosition * zoomLevel / zoomLevelBeforeZoom;
 
-            zoomLevel = Util.minMax(zoomLevel, this.getMinZoomFactor(), this.getMaxZoomFactor());
-            this.currentZoomFactor = zoomLevel;
-
             // set page zoom to all pages and apply the new size to all page wrappers
+            this.currentZoomFactor = zoomLevel;
             this.refreshDebounced();
-            console.log('AAAAA', 'zoom from', zoomLevelBeforeZoom + '%', 'to', zoomLevel + '%', ', top position before', documentTopPosition, ', top position after', scrollTopAfterZoom, ', left position before', documentLeftPosition, ', left position after', scrollLeftAfterZoom);
 
             // adjust document scroll position according to new zoom
             this.$el.scrollTop(scrollTopAfterZoom);

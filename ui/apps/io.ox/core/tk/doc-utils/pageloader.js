@@ -109,11 +109,7 @@ define('io.ox/core/tk/doc-utils/pageloader', [
                 jqPageNode.data('data-rendertype', 'pdf');
                 jqPageNode.data('data-pagezoom', options.pageZoom);
 
-                options = $.extend({ textOverlay: !_.device('smartphone') }, options);
                 var pageSize = pdfView.createPDFPageNode(jqPageNode, options);
-
-                console.log('AAAAA', 'loadPageIntoNode', 'page', pageNumber, 'options', options);
-
                 def = (pageSize ? $.Deferred().resolve(pageSize) : $.Deferred().reject());
             }
 
@@ -320,9 +316,6 @@ define('io.ox/core/tk/doc-utils/pageloader', [
 
             if (renderType === 'pdf') {
                 // <canvas> element: render page into canvas and create text overlay
-
-                console.log('AAAAA', 'render page', getElementAttributeAsInteger(jqPageNode, 'data-page'));
-
                 pdfView.renderPDFPage(jqPageNode, getElementAttributeAsInteger(jqPageNode, 'data-page', 1), pageZoom).then( function () {
                     jqPageNode.data('page-zoom', pageZoom).attr(newPageSize).css(ACTIVE_STYLE);
                 });
