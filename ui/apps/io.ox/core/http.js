@@ -994,7 +994,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         var wait = $.when();
 
         return function (def) {
-            if (def) def.done((wait = $.Deferred()).resolve).fail((wait = $.Deferred()).reject);
+            if (def) {
+                wait = $.Deferred();
+                def.then(wait.resolve, wait.reject);
+            }
             return wait.promise();
         };
     }());
