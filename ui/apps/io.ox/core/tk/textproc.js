@@ -242,8 +242,8 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
             patterns: 'a',
             replacement: function (str, attrs, innerHTML) {
                 var href = attrs.match(attrRegExp('href'));
-                if (/^mailto:/.test(href[1])) return href[1].substr(7).length ? href[1].substr(7) : '';
-                return href ? (innerHTML ? innerHTML : href[1]) : '';
+
+                return '[' + (innerHTML || '') + '](' + (href && href[1] || '') + ')';
             }
         }];
 
@@ -346,15 +346,16 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
 
         function cleanUp(string) {
             return string
-                .replace(/&nbsp;/g, ' ')
-                .replace(/&gt;/g, '>')
-                .replace(/&lt;/g, '<')
                 .replace(/<!--(.*?)-->/g, '')             // Remove comments
                 .replace(/<img[^>]* data-emoji-unicode=\"([^\"]*)\"[^>]*>/gi, '$1')
                 .replace(/(<\/?\w+(\s[^<>]*)?\/?>)/g, '') // Remove all remaining tags except mail addresses
                 .replace(/^[\t\r\n]+|[\t\r\n]+$/g, '')    // Trim leading/trailing whitespace
                 .replace(/\n\s+\n/g, '\n\n')
                 .replace(/\n{3,}/g, '\n\n')              // limit consecutive linebreaks to 2
+                //replace html entities last, because things like &gt; and &lt; might get removed otherwise
+                .replace(/&nbsp;/g, ' ')
+                .replace(/&gt;/g, '>')
+                .replace(/&lt;/g, '<')
                 .replace(/&amp;/g, '&');
         }
 
