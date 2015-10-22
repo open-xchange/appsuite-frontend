@@ -19,6 +19,21 @@ define([
                 var text = textproc.htmltotext('&lt;notag&gt; should be preserved');
                 expect(text).to.equal('<notag> should be preserved');
             });
+
+            it('should add newline characters for paragraph elements', function () {
+                var text = textproc.htmltotext('Text<p>new paragraph text</p>');
+                expect(text).to.equal('Text\n\nnew paragraph text');
+            });
+
+            it('should add newline characters for br elements', function () {
+                var text = textproc.htmltotext('Text<br />next line text');
+                expect(text).to.equal('Text\nnext line text');
+            });
+
+            it('should add some dashes instead of hr elements', function () {
+                var text = textproc.htmltotext('Text<hr />new paragraph text');
+                expect(text).to.equal('Text\n\n---\nnew paragraph text');
+            });
         });
     });
 });

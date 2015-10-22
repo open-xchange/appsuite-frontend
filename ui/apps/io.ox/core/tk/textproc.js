@@ -236,7 +236,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
         {
             patterns: 'hr',
             type: 'void',
-            replacement: '\n\n- - -\n'
+            replacement: '\n\n---\n'
         },
         {
             patterns: 'a',
