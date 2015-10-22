@@ -737,12 +737,13 @@ define.async('io.ox/core/date', [
             }
 
             return function (t) {
+                var i;
                 if (t < firstTransition) {
                     return initialTTInfo;
                 } else if (t >= lastTransition) {
                     return finalTTInfo(t, local);
                 } else {
-                    for (var i = hash[getBin(t)]; transitions[i].start > t; --i) {}
+                    for (i = hash[getBin(t)]; transitions[i].start > t; --i) {}
                     return transitions[i].ttinfo;
                 }
             };

@@ -251,9 +251,9 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
 
                 return '[' + (innerHTML || '') + '](' + (href && href[1] || '') + ')';
             }
-        }];
+        }], i;
 
-        for (var i = 0, len = ELEMENTS.length; i < len; i++) {
+        for (i = 0, len = ELEMENTS.length; i < len; i++) {
             if (typeof ELEMENTS[i].patterns === 'string') {
                 string = replaceEls(string, { tag: ELEMENTS[i].patterns, replacement: ELEMENTS[i].replacement, type:  ELEMENTS[i].type });
             } else {

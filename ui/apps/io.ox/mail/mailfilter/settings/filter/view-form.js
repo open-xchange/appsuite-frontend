@@ -505,10 +505,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         this.model.trigger(state + this.name);
                         toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
                     }
-                });
+                }), secondInputId;
 
                 function drawCondition(o) {
-
                     if (o.secondInputId) {
                         return $('<li>').addClass('filter-settings-view row').attr({ 'data-test-id': num }).append(
                             $('<div>').addClass('col-sm-4 doubleline').append(
@@ -627,8 +626,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         if (cmodel.get('datevalue')[0] === null || cmodel.get('datevalue').length === 0) conditionList.find('[data-test-id="' + num + '"] input.datepicker-day-field').closest('.row').addClass('has-error');
                         break;
                     case 'header':
-                        var title,
-                            secondInputId = _.uniqueId('values');
+                        var title;
+                        secondInputId = _.uniqueId('values');
 
                         inputId = _.uniqueId('headers');
 

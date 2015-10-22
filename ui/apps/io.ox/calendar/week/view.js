@@ -1052,11 +1052,11 @@ define('io.ox/calendar/week/view', [
                     // is fulltime?
                     if (model.get('full_time') && this.options.showFulltime) {
                         fulltimeCount++;
-                        var node = this.renderAppointment(model),
+                        var node = this.renderAppointment(model), row,
                             fulltimePos = moment(model.getDate('start_date')).diff(this.startDate, 'days'),
                             fulltimeWidth = Math.max((moment(model.get('end_date')).diff(moment(model.get('start_date')), 'days') + Math.min(0, fulltimePos)), 1);
                         // loop over all column positions
-                        for (var row = 0; row < fulltimeColPos.length; row++) {
+                        for (row = 0; row < fulltimeColPos.length; row++) {
                             if (fulltimeColPos[row] <= model.get('start_date')) {
                                 fulltimeColPos[row] = model.get('end_date');
                                 break;
@@ -1171,9 +1171,9 @@ define('io.ox/calendar/week/view', [
                 // loop over all appointments per day to calculate position
                 for (var i = 0; i < apps.length; i++) {
                     var app = apps[i],
-                        collisions = 0;
+                        collisions = 0, p;
                     // loop over all column positions
-                    for (var p = 0; p < positions.length; p++) {
+                    for (p = 0; p < positions.length; p++) {
                         // workaround for appointments with length 0
                         if (app.pos.start === app.pos.end) {
                             app.pos.end++;

@@ -25,7 +25,7 @@ define('io.ox/core/notifications/subview', [
                 viewNode = view.$el,
                 model = view.model,
                 api = model.get('api'),
-                items = view.collection.models,
+                items = view.collection.models, i,
                 max = model.get('max') || items.length,
                 itemNode = $('<ul class="items list-unstyled">'),
                 extensionPoints = model.get('extensionPoints'),
@@ -88,14 +88,14 @@ define('io.ox/core/notifications/subview', [
                         return obj.attributes;
                     });
                     api.getList(requestData).then(function (data) {
-                        for (var i = 0; i < max && items[i]; i++) {
+                        for (i = 0; i < max && items[i]; i++) {
                             drawItem(data[i], items[i]);
                         }
                         itemNode.idle();
                     });
                 } else {
                     var defs = [];
-                    for (var i = 0; i < max && items[i]; i++) {
+                    for (i = 0; i < max && items[i]; i++) {
                         //mail needs unseen attribute, shouldn't bother other apis
                         //extend with empty object to not overwrite the model
                         defs.push(api.get(_.extend({}, items[i].attributes, { unseen: true })).then(_.partial( drawItem, _, items[i])));
