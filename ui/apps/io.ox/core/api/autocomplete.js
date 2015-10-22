@@ -18,8 +18,9 @@ define('io.ox/core/api/autocomplete', [
     'io.ox/contacts/api',
     'io.ox/core/api/resource',
     'io.ox/core/api/group',
-    'settings!io.ox/contacts'
-], function (http, capabilities, util, contactsAPI, resourceAPI, groupAPI, settings) {
+    'settings!io.ox/contacts',
+    'gettext!io.ox/core'
+], function (http, capabilities, util, contactsAPI, resourceAPI, groupAPI, settings, gt) {
 
     'use strict';
 
@@ -140,7 +141,7 @@ define('io.ox/core/api/autocomplete', [
                     tmp.push({
                         type: obj.type,
                         display_name: obj.data.display_name || '',
-                        email: 'Distribution List',
+                        email: gt('Distribution List'),
                         data: obj.data
                     });
                 } else {
