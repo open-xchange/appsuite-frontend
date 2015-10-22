@@ -200,7 +200,7 @@ define('io.ox/core/folder/contextmenu', [
         //
         empty: function (baton) {
 
-            if (baton.module !== 'mail' && baton.module !== 'infostore') return;
+            if (baton.module !== 'mail' && baton.module !== 'infostore' || (baton.module === 'infostore' && !api.is('trash', baton.data))) return;
 
             addLink(this, {
                 action: 'clearfolder',
