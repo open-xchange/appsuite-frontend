@@ -765,6 +765,7 @@ define('io.ox/mail/compose/view', [
             options.app = this.app;
             options.view = this;
             options.model = this.model;
+            options.oxContext = { view: this };
 
             ox.manifests.loadPluginsFor('io.ox/mail/compose/editor/' + this.model.get('editorMode')).then(function (Editor) {
                 new Editor(self.editorContainer, options).done(function (editor) {
