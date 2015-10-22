@@ -480,7 +480,7 @@ msgstr ""
 #: apps/io.ox/core/folder/picker.js:97
 #: apps/io.ox/core/import/import.js:186
 #: apps/io.ox/core/main.js:515
-#: apps/io.ox/core/main.js:1501
+#: apps/io.ox/core/main.js:1505
 #: apps/io.ox/core/permissions/permissions.js:372
 #: apps/io.ox/core/permissions/permissions.js:405
 #: apps/io.ox/core/print.js:113
@@ -492,7 +492,7 @@ msgstr ""
 #: apps/io.ox/core/upsell.js:36
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:83
 #: module:io.ox/core/viewer
-#: apps/io.ox/editor/main.js:366
+#: apps/io.ox/editor/main.js:367
 #: module:io.ox/editor
 #: apps/io.ox/files/actions/delete.js:68
 #: module:io.ox/files
@@ -970,7 +970,7 @@ msgstr ""
 #: apps/io.ox/contacts/distrib/main.js:199
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:254
-#: apps/io.ox/editor/main.js:362
+#: apps/io.ox/editor/main.js:363
 #: module:io.ox/editor
 #: apps/io.ox/tasks/edit/main.js:178
 #: module:io.ox/tasks
@@ -984,7 +984,7 @@ msgstr ""
 #: apps/io.ox/contacts/distrib/main.js:202
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:257
-#: apps/io.ox/editor/main.js:365
+#: apps/io.ox/editor/main.js:366
 #: module:io.ox/editor
 #: apps/io.ox/tasks/edit/main.js:181
 #: module:io.ox/tasks
@@ -4591,30 +4591,30 @@ msgstr ""
 msgid "Please sign in again to continue"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1494
+#: apps/io.ox/core/main.js:1498
 #: module:io.ox/core
 msgid "Restore applications"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1496
+#: apps/io.ox/core/main.js:1500
 #: module:io.ox/core
 msgid "The following applications can be restored. Just remove the restore point if you don't want it to be restored."
 msgstr ""
 
-#: apps/io.ox/core/main.js:1502
+#: apps/io.ox/core/main.js:1506
 #: module:io.ox/core
 msgid "Continue"
 msgstr ""
 
 #. %1$s is the filename
-#: apps/io.ox/core/main.js:1738
+#: apps/io.ox/core/main.js:1742
 #: module:io.ox/core
 msgid "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files and folders\" to access this folder again."
 msgstr ""
 
 #: apps/io.ox/core/notifications.js:105
 #: module:io.ox/core
-#: apps/io.ox/core/notifications.js:374
+#: apps/io.ox/core/notifications.js:380
 msgid "No notifications"
 msgstr ""
 
@@ -4643,12 +4643,22 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter.js:142
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:284
+#: apps/io.ox/portal/settings/pane.js:301
+#: module:io.ox/portal
+msgid "Disable"
+msgstr ""
+
+#: apps/io.ox/core/notifications.js:139
+#: module:io.ox/core
+#: apps/io.ox/mail/mailfilter/settings/filter.js:142
+#: module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:284
 #: apps/io.ox/portal/settings/pane.js:306
 #: module:io.ox/portal
 msgid "Enable"
 msgstr ""
 
-#: apps/io.ox/core/notifications.js:146
+#: apps/io.ox/core/notifications.js:151
 #: module:io.ox/core
 msgid "You can manage desktop notifications at any time, by vitising your settings"
 msgstr ""
@@ -5214,7 +5224,7 @@ msgstr ""
 msgid "Automatic opening of notification area"
 msgstr ""
 
-#: apps/io.ox/core/settings/pane.js:386
+#: apps/io.ox/core/settings/pane.js:390
 #: module:io.ox/core
 msgid "Show desktop notifications"
 msgstr ""
@@ -5901,6 +5911,8 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:65
 #: module:io.ox/core/viewer
+#: apps/io.ox/editor/main.js:385
+#: module:io.ox/editor
 #: apps/io.ox/mail/detail/links.js:75
 #: module:io.ox/mail
 #: apps/io.ox/mail/detail/links.js:76
@@ -6196,7 +6208,7 @@ msgstr ""
 #: module:io.ox/editor
 #: apps/io.ox/editor/main.js:223
 #: apps/io.ox/editor/main.js:226
-#: apps/io.ox/editor/main.js:332
+#: apps/io.ox/editor/main.js:316
 #: apps/io.ox/mail/compose/view.js:201
 #: module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js:205
@@ -8304,14 +8316,6 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter.js:54
 #: module:io.ox/mail
 msgid "Edit rule"
-msgstr ""
-
-#: apps/io.ox/mail/mailfilter/settings/filter.js:142
-#: module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:284
-#: apps/io.ox/portal/settings/pane.js:301
-#: module:io.ox/portal
-msgid "Disable"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:158

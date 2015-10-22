@@ -1431,14 +1431,14 @@ msgstr "予定表："
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
 #: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:186
-#: apps/io.ox/core/main.js:515 apps/io.ox/core/main.js:1501
+#: apps/io.ox/core/main.js:515 apps/io.ox/core/main.js:1505
 #: apps/io.ox/core/permissions/permissions.js:372
 #: apps/io.ox/core/permissions/permissions.js:405 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/relogin.js:88 apps/io.ox/core/sub/subscriptions.js:57
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js:39
 #: apps/io.ox/core/tk/mobiscroll.js:27 apps/io.ox/core/upsell.js:36
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:83
-#: module:io.ox/core/viewer apps/io.ox/editor/main.js:366 module:io.ox/editor
+#: module:io.ox/core/viewer apps/io.ox/editor/main.js:367 module:io.ox/editor
 #: apps/io.ox/files/actions/delete.js:68 module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js:36
 #: apps/io.ox/files/actions/rename.js:74 apps/io.ox/files/actions/share.js:49
@@ -1898,7 +1898,7 @@ msgstr "次の文字列を含む"
 msgid "Content"
 msgstr "コンテンツ"
 
-#: apps/io.ox/core/main.js:1502 module:io.ox/core
+#: apps/io.ox/core/main.js:1506 module:io.ox/core
 msgid "Continue"
 msgstr "続行"
 
@@ -2410,6 +2410,7 @@ msgstr "ダイレクト リンク"
 msgid "Direct link: %1$s"
 msgstr "ダイレクト リンク: %1$s"
 
+#: apps/io.ox/core/notifications.js:134 module:io.ox/core
 #: apps/io.ox/mail/mailfilter/settings/filter.js:142 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:284
 #: apps/io.ox/portal/settings/pane.js:301 module:io.ox/portal
@@ -2436,7 +2437,7 @@ msgstr "破棄"
 #. Translation should be distinguishable for the user
 #: apps/io.ox/calendar/edit/main.js:423 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:202 module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js:257 apps/io.ox/editor/main.js:365
+#: apps/io.ox/contacts/edit/main.js:257 apps/io.ox/editor/main.js:366
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:181 module:io.ox/tasks
 msgctxt "dialog"
 msgid "Discard changes"
@@ -2576,7 +2577,7 @@ msgstr "このウィジェットを削除しますか？"
 
 #: apps/io.ox/calendar/edit/main.js:420 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:199 module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js:254 apps/io.ox/editor/main.js:362
+#: apps/io.ox/contacts/edit/main.js:254 apps/io.ox/editor/main.js:363
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:178 module:io.ox/tasks
 msgid "Do you really want to discard your changes?"
 msgstr "変更を破棄しますか？"
@@ -2936,7 +2937,7 @@ msgstr "編集して名前を設定"
 
 #: apps/io.ox/editor/main.js:205 module:io.ox/editor
 #: apps/io.ox/editor/main.js:223 apps/io.ox/editor/main.js:226
-#: apps/io.ox/editor/main.js:332 apps/io.ox/mail/compose/view.js:201
+#: apps/io.ox/editor/main.js:316 apps/io.ox/mail/compose/view.js:201
 #: module:io.ox/mail apps/io.ox/mail/compose/view.js:205
 msgid "Editor"
 msgstr "エディタ"
@@ -3017,7 +3018,7 @@ msgstr "フォルダを空にする"
 msgid "Empty name and description found."
 msgstr "名前と説明が未入力です。"
 
-#: apps/io.ox/core/notifications.js:134 module:io.ox/core
+#: apps/io.ox/core/notifications.js:139 module:io.ox/core
 #: apps/io.ox/mail/mailfilter/settings/filter.js:142 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:284
 #: apps/io.ox/portal/settings/pane.js:306 module:io.ox/portal
@@ -3395,8 +3396,9 @@ msgid "Feeling • Decoration"
 msgstr "気持ち・装飾"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:65
-#: module:io.ox/core/viewer apps/io.ox/mail/detail/links.js:75
-#: module:io.ox/mail apps/io.ox/mail/detail/links.js:76
+#: module:io.ox/core/viewer apps/io.ox/editor/main.js:385 module:io.ox/editor
+#: apps/io.ox/mail/detail/links.js:75 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:76
 msgid "File"
 msgstr "ファイル"
 
@@ -3535,7 +3537,7 @@ msgid "Folder view"
 msgstr "フォルダ ビュー"
 
 #. %1$s is the filename
-#: apps/io.ox/core/main.js:1738 module:io.ox/core
+#: apps/io.ox/core/main.js:1742 module:io.ox/core
 msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
@@ -5064,7 +5066,7 @@ msgid "No message selected"
 msgstr "メッセージが選択されていません。"
 
 #: apps/io.ox/core/notifications.js:105 module:io.ox/core
-#: apps/io.ox/core/notifications.js:374
+#: apps/io.ox/core/notifications.js:380
 msgid "No notifications"
 msgstr "通知はありません。"
 
@@ -6441,7 +6443,7 @@ msgstr "設備名"
 msgid "Resources"
 msgstr "設備"
 
-#: apps/io.ox/core/main.js:1494 module:io.ox/core
+#: apps/io.ox/core/main.js:1498 module:io.ox/core
 msgid "Restore applications"
 msgstr "アプリケーションを復元"
 
@@ -6934,7 +6936,7 @@ msgstr "競合を表示"
 msgid "Show declined appointments"
 msgstr "辞退したアポイントを表示"
 
-#: apps/io.ox/core/settings/pane.js:386 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:390 module:io.ox/core
 msgid "Show desktop notifications"
 msgstr "デスクトップ通知を表示"
 
@@ -7665,7 +7667,7 @@ msgstr "フォルダのクリーン アップが完了しました。"
 msgid "The folder has been emptied"
 msgstr "フォルダを空にしました。"
 
-#: apps/io.ox/core/main.js:1496 module:io.ox/core
+#: apps/io.ox/core/main.js:1500 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -8831,7 +8833,7 @@ msgid ""
 "You can import existing signatures from the previous product generation."
 msgstr "前の製品世代から既存の署名をインポートできます。"
 
-#: apps/io.ox/core/notifications.js:146 module:io.ox/core
+#: apps/io.ox/core/notifications.js:151 module:io.ox/core
 msgid ""
 "You can manage desktop notifications at any time, by vitising your settings"
 msgstr "設定を開くことでいつでもデスクトップ通知を管理できます。"
