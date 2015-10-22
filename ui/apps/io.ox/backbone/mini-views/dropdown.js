@@ -27,13 +27,26 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             var node = $(e.currentTarget),
                 name = node.attr('data-name'),
                 value = node.data('value'),
+                toggleValue = node.data('togglevalue'),
                 toggle = node.data('toggle'),
                 keep = this.options.keep || node.attr('data-keep-open') === 'true';
             // keep drop-down open?
             if (keep) e.stopPropagation();
             // ignore plain links
             if (value === undefined) return;
-            if (this.model) this.model.set(name, toggle === true ? !this.model.get(name) : value);
+            if (this.model) {
+                var nextValue = value;
+                if (toggle) {
+                    if (toggleValue = undefined) {
+                        // boolean toggle
+                        nextValue = !this.model.get(name);
+                    } else {
+                        // alternate between 2 non boolean values
+                        nextValue = this.model.get(name) === value ? toggleValue : value;
+                    }
+                }
+                this.model.set(name, nextValue);
+            }
         },
 
         setup: function () {
@@ -74,7 +87,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             return this;
         },
 
-        option: function (name, value, text, header) {
+        option: function (name, value, text, header, toggleValue) {
             var link, currentValue = this.model ? this.model.get(name) : undefined;
             this.append(
                 link = $('<a href="#">')
@@ -84,7 +97,9 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     'data-name': name,
                     'draggable': false,
                     'data-value': this.stringify(value),
-                    'data-toggle': _.isBoolean(value),
+                    // you may use toggle with boolean values or provide a toggleValue ('togglevalue' is the option not checked value, 'value' is the option checked value)
+                    'data-toggle': _.isBoolean(value) || toggleValue !== undefined,
+                    'data-togglevalue': toggleValue,
                     'aria-label': [header, text].join(' ')
                 })
                 // store original value
