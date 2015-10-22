@@ -834,7 +834,10 @@ define('io.ox/mail/compose/view', [
                 editorSrc = 'io.ox/core/tk/' + (this.editorMode === 'text' ? 'text-editor' : 'contenteditable-editor');
 
             return require([editorSrc]).then(function (Editor) {
-                return (self.editorHash[self.editorMode] = new Editor(self.editorMode === 'text' ? self.textarea : self.contentEditable))
+                return (self.editorHash[self.editorMode] = new Editor(
+                            self.editorMode === 'text' ? self.textarea
+                                                       : self.contentEditable,
+                            { oxContext: { view: self } }))
                     .done(function () {
                         self.editor = self.editorHash[self.editorMode];
                         self.editor.setPlainText(content);

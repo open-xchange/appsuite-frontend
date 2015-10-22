@@ -75,7 +75,8 @@ define('io.ox/mail/settings/signatures/register', [
                         'min-height': '230px', //overwrite min-height of editor
                         'height': '230px',
                         'overflow-y': 'auto'
-                    }
+                    },
+                    oxContext: { signature: true }
                 })).done(function () {
                     baton.editor = ed;
                     baton.editor.handleShow(true);

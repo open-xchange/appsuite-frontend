@@ -268,6 +268,7 @@ define.async('io.ox/core/tk/contenteditable-editor',
             paste_postprocess: textproc.paste_postprocess,
 
             setup: function (ed) {
+                if (opt.oxContext) ed.oxContext = opt.oxContext;
                 ext.point(POINT + '/setup').invoke('draw', this, ed);
                 ed.on('BeforeRenderUI', function () {
                     rendered.resolve();
@@ -277,7 +278,7 @@ define.async('io.ox/core/tk/contenteditable-editor',
 
         el = $(el);
 
-        ext.point(POINT + '/options').invoke('config', options);
+        ext.point(POINT + '/options').invoke('config', options, opt.oxContext);
 
         el.tinymce(options);
 
