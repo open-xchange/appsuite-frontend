@@ -488,71 +488,70 @@ define('io.ox/core/tk/selection', [
 
         // mark option block
         if (options.markable) {
+            var clearOrginal = clear, markedItem;
 
             this.classMarked = 'marked';
 
+            // overwrite
             isMarker = function (e) {
                 return multiple && e && (e.which === 38 || e.which === 40);
             };
-            /* eslint no-redeclare: 0 */
-            var clearOrginal = clear,
-                markedItem,
-                // clear wrapper
-                clear = function (e) {
-                    // clear mark
-                    clearMarks();
-                    if (isMarker(e)) return;
-                    // call orignale clear
-                    clearOrginal(e);
-                },
-                fastMark = function (id, node) {
-                    var key = self.serialize(id);
-                    markedItem = id;
-                    var $node = (node || getNode(key));
-                    // set focus?
-                    if (container.has(document.activeElement).length && options.tabFix !== false) $node.focus();
-                    var guid = $node.attr('id') || _.uniqueId('option-');
+            // clear wrapper
+            clear = function (e) {
+                // clear mark
+                clearMarks();
+                if (isMarker(e)) return;
+                // call orignale clear
+                clearOrginal(e);
+            };
+            fastMark = function (id, node) {
+                var key = self.serialize(id);
+                markedItem = id;
+                var $node = (node || getNode(key));
+                // set focus?
+                if (container.has(document.activeElement).length && options.tabFix !== false) $node.focus();
+                var guid = $node.attr('id') || _.uniqueId('option-');
 
-                    return $node
-                            .addClass(self.classMarked)
-                            .attr({
-                                'tabindex': options.tabFix !== false ? options.tabFix : null,
-                                id: guid
-                            })
-                            // apply a11y
-                            // TODO: when descent attribute was set voiceover doesn't notifies user about changed selection when using 'select with space'
-                            .parent('[role="listbox"]')
-                            .attr('aria-activedescendant', guid)
-                            .end();
-                },
-                mark = function (id, silent) {
-                    if (id) {
-                        fastMark(id).intoViewport(options.scrollpane);
-                        last = id;
-                        lastIndex = getIndex(id);
-                        if (prev === empty) {
-                            prev = id;
-                            lastValidIndex = lastIndex;
-                        }
-                        if (silent !== true) {
-                            self.trigger('mark', self.serialize(id));
-                        }
+                return $node
+                        .addClass(self.classMarked)
+                        .attr({
+                            'tabindex': options.tabFix !== false ? options.tabFix : null,
+                            id: guid
+                        })
+                        // apply a11y
+                        // TODO: when descent attribute was set voiceover doesn't notifies user about changed selection when using 'select with space'
+                        .parent('[role="listbox"]')
+                        .attr('aria-activedescendant', guid)
+                        .end();
+            };
+            mark = function (id, silent) {
+                if (id) {
+                    fastMark(id).intoViewport(options.scrollpane);
+                    last = id;
+                    lastIndex = getIndex(id);
+                    if (prev === empty) {
+                        prev = id;
+                        lastValidIndex = lastIndex;
                     }
-                },
-                clearMarks = function () {
-                    if (markedItem) {
-                        var key = self.serialize(markedItem);
-                        markedItem = undefined;
-                        getNode(key)
-                            .removeClass(self.classMarked)
-                            .attr({
-                                tabindex: options.tabFix !== false ? -1 : null
-                            })
-                            .parent('[role="listbox"]')
-                            .removeAttr('aria-activedescendant');
-                        markedItem = undefined;
+                    if (silent !== true) {
+                        self.trigger('mark', self.serialize(id));
                     }
-                };
+                }
+            };
+            clearMarks = function () {
+                if (markedItem) {
+                    var key = self.serialize(markedItem);
+                    markedItem = undefined;
+                    getNode(key)
+                        .removeClass(self.classMarked)
+                        .attr({
+                            tabindex: options.tabFix !== false ? -1 : null
+                        })
+                        .parent('[role="listbox"]')
+                        .removeAttr('aria-activedescendant');
+                    markedItem = undefined;
+                }
+            };
         }
 
         /**
