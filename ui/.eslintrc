@@ -167,7 +167,7 @@
         // disallow multiple empty lines
         'no-multiple-empty-lines': [2, {'max': 2}],
         // disallow nested ternary expressions
-        'no-nested-ternary': 0, // NEEDS CODE REFACTORING // 2
+        'no-nested-ternary': 2,
         // disallow use of the Object constructor
         'no-new-object': 2,
         // disallow space between function identifier and application

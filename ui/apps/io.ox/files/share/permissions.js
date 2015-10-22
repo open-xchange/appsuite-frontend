@@ -215,8 +215,12 @@
                 if (a.isMyself()) return -1;
                 if (b.isMyself()) return +1;
                 var snA = a.getSortName(),
-                    snB = b.getSortName(),
-                    lexic = snA < snB ? -1 : snA > snB ? +1 : 0;
+                    snB = b.getSortName(), lexic;
+
+                /*eslint-disable no-nested-ternary */
+                lexic = snA === snB ? 0 : (snA > snB ? +1 : -1);
+                /*eslint-enable no-nested-ternary */
+
                 if (a.isGroup() && b.isGroup()) return lexic;
                 if (a.isGroup()) return -1;
                 if (b.isGroup()) return +1;
@@ -750,6 +754,11 @@
         }
     );
 
+    // helper
+    function getBitsExternal(model) {
+        return model.isFolder() ? 257 : 1;
+    }
+
     var that = {
 
         Permission: Permission,
@@ -910,7 +919,7 @@
                             var isInternal = member.get('type') === 2 || member.get('type') === 1,
                                 isGuest = member.get('type') === 5,
                                 obj = {
-                                    bits: isInternal ? 4227332 : objModel.isFolder() ? 257 : 1, // Author : (Viewer for folders: Viewer for files)
+                                    bits: isInternal ? 4227332 : getBitsExternal(objModel), // Author : (Viewer for folders: Viewer for files)
                                     group: member.get('type') === 2,
                                     type: member.get('type') === 2 ? 'group' : 'user',
                                     new: true
@@ -970,7 +979,7 @@
 
                                 // add to collection
                                 permissionsView.collection.add(new Permission({
-                                    bits: objModel.isFolder() ? 257 : 1,
+                                    bits: getBitsExternal(objModel),
                                     contact: { email1: value },
                                     type: 'guest',
                                     new: true

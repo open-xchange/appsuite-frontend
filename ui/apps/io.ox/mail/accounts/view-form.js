@@ -33,6 +33,11 @@ define.async('io.ox/mail/accounts/view-form', [
             { label: gt.noI18n('POP3'), value: 'pop3' }
         ],
 
+        serverTypePorts = {
+            'imap': { common: '143', secure: '993' },
+            'pop3': { common: '110', secure: '995' }
+        },
+
         optionsRefreshRatePop = [
             { label: gt.noI18n('3'), value: '3' },
             { label: gt.noI18n('5'), value: '5' },
@@ -91,8 +96,7 @@ define.async('io.ox/mail/accounts/view-form', [
 
             var secure = model.get('mail_secure'),
                 protocol = model.get('mail_protocol') || 'imap';
-
-            return protocol === 'imap' ? (secure ? '993' : '143') : (secure ? '995' : '110');
+            return serverTypePorts[protocol][secure ? 'secure' : 'common'];
         },
 
         defaultDisplayName = '',

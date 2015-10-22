@@ -15,6 +15,12 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
     'use strict';
 
+    function getLabel(value) {
+        if (_.isFunction(value)) return value();
+        if (_.isObject(value)) return value;
+        return $.txt(value);
+    }
+
     // Bootstrap dropdown
 
     var Dropdown = AbstractView.extend({
@@ -141,7 +147,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         render: function () {
-            var label = _.isFunction(this.options.label) ? this.options.label() : (_.isObject(this.options.label) ? this.options.label : $.txt(this.options.label)),
+            var label = getLabel(this.options.label),
                 ariaLabel = this.options.aria ? this.options.aria : null,
                 toggle;
             if (_.isString(label)) {

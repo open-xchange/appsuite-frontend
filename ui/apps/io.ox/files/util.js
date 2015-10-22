@@ -61,10 +61,10 @@ define('io.ox/files/util', [
             // conditions
             _.each(list, function (cond) {
                 var async = !!cond.then,
-                    def = async ? cond.then(normalize) : (cond ? RESOLVE : REJECT);
+                    def = cond ? RESOLVE : REJECT;
                 // line up conditions
                 chain = chain.then(function () {
-                    return def;
+                    return async ? cond.then(normalize) : def;
                 });
             });
 

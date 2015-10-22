@@ -398,7 +398,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             e.preventDefault();
 
             // jump to top/bottom OR range select / single select
-            index = this.isMultiple(e) ? (e.which === 38 ? 0 : -1) : index;
+            if (this.isMultiple(e)) {
+                index = (e.which === 38 ? 0 : -1);
+            }
 
             this.resetTabIndex(items, items.eq(index));
             this.resetCheckmark(items);

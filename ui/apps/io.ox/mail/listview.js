@@ -185,12 +185,7 @@ define('io.ox/mail/listview', [
     ext.point('io.ox/mail/listview/item/small/col6').extend({
         id: 'date/size',
         index: 100,
-        draw: function (baton) {
-            // show date or size depending on sort option
-            var fn = baton.app.props.get('sort') === 608 ? 'size' :
-                baton.app && baton.app.props.get('exactDates') ? 'fulldate' : 'smartdate';
-            extensions[fn].call(this, baton);
-        }
+        draw: extensions.dataOrSize
     });
 
     /* default */
@@ -239,12 +234,7 @@ define('io.ox/mail/listview', [
         {
             id: 'date/size',
             index: 100,
-            draw: function (baton) {
-                // show date or size depending on sort option
-                var fn = baton.app && baton.app.props.get('sort') === 608 ? 'size' :
-                    baton.app && baton.app.props.get('exactDates') ? 'fulldate' : 'smartdate';
-                extensions[fn].call(this, baton);
-            }
+            draw: extensions.dataOrSize
         },
         {
             id: 'from',

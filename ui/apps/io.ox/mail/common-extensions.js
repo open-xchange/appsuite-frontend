@@ -103,6 +103,15 @@ define('io.ox/mail/common-extensions', [
             );
         },
 
+        dateOrSize: function (baton) {
+            // show date or size depending on sort option
+            var fn = 'size';
+            if (baton.app && baton.app.props.get('sort') !== 608) {
+                fn = baton.app.props.get('exactDates') ? 'fulldate' : 'smartdate';
+            }
+            extensions[fn].call(this, baton);
+        },
+
         smartdate: function (baton) {
             extensions.date.call(this, baton, { fulldate: false, smart: true });
         },

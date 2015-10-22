@@ -39,7 +39,7 @@ define('io.ox/core/folder/util', [
 
     function is(type, data) {
 
-        var result, i = 0, $i, id, folders;
+        var result, i = 0, id = '', $i, folders;
 
         // check multiple folder?
         if (_.isArray(data)) {
@@ -90,7 +90,9 @@ define('io.ox/core/folder/util', [
         case 'account':
             return data.module === 'system' && /^default(\d+)?/.test(String(data.id));
         case 'unifiedfolder':
-            id = data ? (data.id !== undefined ? data.id : data) : '';
+            if (data) {
+                id = data.id !== undefined ? data.id : data;
+            }
             return account.isUnifiedFolder(id);
         case 'external':
             return (/^default[1-9]/).test(String(data.id)) && !is('unifiedmail', data);

@@ -166,7 +166,10 @@ define('io.ox/mail/api', [
      * updates the view used for get requests, used on mail settings save to be responsive
      */
     api.updateViewSettings = function () {
-        api.options.requests.get.view = settings.get('allowHtmlMessages', true) ? (settings.get('allowHtmlImages', false) ? 'html' : 'noimg') : 'text';
+        api.options.requests.get.view = 'text';
+        if (settings.get('allowHtmlMessages', true)) {
+            api.options.requests.get.view = settings.get('allowHtmlImages', false) ? 'html' : 'noimg';
+        }
         //special event to redraw current detailview
         api.trigger('viewChanged');
     };

@@ -559,7 +559,10 @@ define('io.ox/core/tk/selection', [
          * Serialize object to get a flat key
          */
         this.serialize = function (obj) {
-            return typeof obj === 'object' ? (obj.folder_id !== undefined) ? _.cid(obj) : obj.id : obj;
+            if (typeof obj === 'object') {
+                return (obj.folder_id !== undefined) ? _.cid(obj) : obj.id;
+            }
+            return  obj;
         };
 
         this.setSerializer = function (fn) {

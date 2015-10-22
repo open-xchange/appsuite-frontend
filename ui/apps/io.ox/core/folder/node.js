@@ -207,9 +207,11 @@ define('io.ox/core/folder/node', [
             this.$.arrow
             .toggleClass('invisible', !hasSubFolders)
             .html(
+                /*eslint-disable no-nested-ternary */
                 hasSubFolders ?
                     (isOpen ? '<i class="fa fa-' + ICON + '-down">' : '<i class="fa fa-' + ICON + '-right">') :
                     '<i class="fa fa-fw">'
+                /*eslint-enable no-nested-ternary */
             );
             // a11y
             if (hasSubFolders) this.$el.attr('aria-expanded', isOpen); else this.$el.removeAttr('aria-expanded');

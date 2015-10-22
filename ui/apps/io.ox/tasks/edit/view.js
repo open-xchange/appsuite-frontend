@@ -149,8 +149,11 @@ define('io.ox/tasks/edit/view', [
             }
             //delegate some events
             self.$el.delegate('.title-field', 'keyup blur', function () {
-                var value = $(this).val();
-                var title = value ? value : (self.model.get('id') ? gt('Edit task') : gt('Create task'));
+                var value = $(this).val(),
+                    title = value;
+                if (!title) {
+                    title = self.model.get('id') ? gt('Edit task') : gt('Create task');
+                }
                 app.setTitle(title);
                 fnToggleSave(value);
             });

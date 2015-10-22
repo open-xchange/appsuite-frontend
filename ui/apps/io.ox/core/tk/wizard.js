@@ -871,7 +871,9 @@ define('io.ox/core/tk/wizard', [
             touchend: function () {
                 if (!moved) return;
                 var pct = x / width * 100;
+                /*eslint-disable no-nested-ternary */
                 self.shift(pct < 0 ? (pct > -50 ? 0 : +1) : (pct < +50 ? 0 : -1));
+                /*eslint-enable no-nested-ternary */
             }
         });
     }

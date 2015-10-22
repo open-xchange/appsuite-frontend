@@ -517,8 +517,7 @@ define('io.ox/core/pdf/pdfview', [
          */
         this.getPageZoom = function (pageNumber) {
             var curPageData = getPageData(pageNumber - 1);
-
-            return _.isNumber(pageNumber) ? (curPageData.pageZoom ? curPageData.pageZoom : 1.0) : 1.0;
+            return _.isNumber(pageNumber) && curPageData.pageZoom ? curPageData.pageZoom : 1.0;
         };
 
         // ---------------------------------------------------------------------
@@ -538,9 +537,13 @@ define('io.ox/core/pdf/pdfview', [
          *   The real size of the page in pixels, based on the original size and the pageZoom
          */
         this.getRealPageSize = function (pageNumber, pageZoom) {
-            var pageSize = _.isObject(pdfDocument) ? (_.isNumber(pageNumber) ? pdfDocument.getOriginalPageSize(pageNumber) : pdfDocument.getDefaultPageSize()) : null,
+            var pageSize = null,
                 curPageZoom = _.isNumber(pageZoom) ? pageZoom : this.getPageZoom(pageNumber);
-
+            if (_.isObject(pdfDocument)) {
+                pageSize = _.isNumber(pageNumber) ?
+                            pdfDocument.getOriginalPageSize(pageNumber) :
+                            pdfDocument.getDefaultPageSize();
+            }
             return _.isObject(pageSize) ? { width: Math.ceil(curPageZoom * pageSize.width), height: Math.ceil(curPageZoom * pageSize.height) } : { width: 0, height: 0 };
         };
 

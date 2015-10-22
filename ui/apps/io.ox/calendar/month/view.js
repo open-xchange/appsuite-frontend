@@ -149,7 +149,9 @@ define('io.ox/calendar/month/view', [
                     (day.isWeekend ? ' weekend' : '') +
                     (day.isFirst || i === 0 ? ' borderleft' : '') +
                     (day.isLast ? ' borderright' : '') +
+                    /*eslint-disable no-nested-ternary */
                     (list.hasFirst ? (firstFound ? ' bordertop' : ' borderbottom') : '') +
+                    /*eslint-enable no-nested-ternary */
                     (list.hasLast && !firstFound ? ' borderbottom' : '')
                 );
 

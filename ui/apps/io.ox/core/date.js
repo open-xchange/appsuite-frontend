@@ -72,10 +72,10 @@ define.async('io.ox/core/date', [
                 //#. Strings to build input formats to be more accessible
                 //#. yyyy: 4-digit year | MM: 2-digit month | dd: 2-digit day
                 //#. Sample for de_DE: TT.MM.JJJJ
-                return y ? gt('yyyy') :
-                       m ? gt('MM') :
-                       d ? gt('dd') :
-                       _;
+                if (y) return gt('yyyy');
+                if (m) return gt('MM');
+                if (d) return gt('dd');
+                return _;
             });
         },
 
@@ -564,9 +564,9 @@ define.async('io.ox/core/date', [
         }
         function when(i) {
             var t = m[i + 5] ? time(i + 5) : 72e5;
-            return m[i]     ? julian(m[i], t) :
-                   m[i + 1] ? gregorian(m[i + 1], t) :
-                              monthly(m[i + 2], m[i + 3], m[i + 4], t);
+            if (m[i])     return julian(m[i], t);
+            if (m[i + 1]) return gregorian(m[i + 1], t);
+                          return monthly(m[i + 2], m[i + 3], m[i + 4], t);
         }
         if (m) {
             var std = {
@@ -1002,7 +1002,7 @@ define.async('io.ox/core/date', [
         dayMap = makeMap(api.locale.days, api.locale.daysShort);
     });
 
-    console.warn('date is deprecated: please use moment.js instead');
+    console.warn('date is deprecated and will be removed with 7.10.0. Please use moment.js instead');
 
     // TODO: get default from local clock
     return $.when(

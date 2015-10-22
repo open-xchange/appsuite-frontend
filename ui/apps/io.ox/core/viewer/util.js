@@ -114,7 +114,8 @@ define('io.ox/core/viewer/util', [
      */
     Util.setDeviceClass = function (node) {
         node = (node instanceof $) ? node : $(node);
-        node.addClass( _.device('smartphone') ? 'smartphone' : (_.device('tablet') ? 'tablet' : '') );
+        if (_.device('smartphone')) return node.addClass('smartphone');
+        if (_.device('tablet')) return node.addClass('tablet');
     };
 
     /**

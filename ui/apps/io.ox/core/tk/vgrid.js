@@ -1091,7 +1091,8 @@ define('io.ox/core/tk/vgrid', [
 
         this.refresh = function (force) {
             // load all (if painted before)
-            return !firstRun ? loadAll() : (force === true ? this.paint() : DONE);
+            if (!firstRun) return loadAll();
+            return force === true ? this.paint() : DONE;
         };
 
         this.pending = function () {

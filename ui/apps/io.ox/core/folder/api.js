@@ -1095,7 +1095,8 @@ define('io.ox/core/folder/api', [
     //
 
     function getFolderId(arg) {
-        return _.isString(arg) ? arg : (arg ? arg.folder_id : null);
+        if (_.isString(arg)) return arg;
+        return arg ? arg.folder_id : null;
     }
 
     function reload() {
