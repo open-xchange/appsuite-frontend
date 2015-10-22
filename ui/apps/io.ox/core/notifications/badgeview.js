@@ -61,7 +61,7 @@ define('io.ox/core/notifications/badgeview', [
             var a11yState = open ? gt('The notification area is open') : gt('The notification area is closed');
 
             this.$el.attr({
-                'aria-pressed': open ? true : false,
+                'aria-pressed': !!open,
                 'aria-label': this.model.get('a11y') + ' ' + a11yState
             });
         },

@@ -575,7 +575,7 @@ define('io.ox/core/extPatterns/links', [
     var DropdownLinks = function (options, baton, wrap) {
         options = options || {};
         baton.$el = $('<ul class="dropdown-menu" role="menu">');
-        wrap = options.wrap === undefined ? true : !!options.wrap;
+        wrap = !!_.defaultValue(options.wrap, true);
         drawLinks(options || {}, new Collection(baton.data), null, baton, [], wrap).done(function () {
             // if dropdown is emtpy and we have an empty-callback, execute it(some async drawing methods use this)
             if (!baton.$el) return;

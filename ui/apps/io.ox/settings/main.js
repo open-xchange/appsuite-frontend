@@ -69,7 +69,7 @@ define('io.ox/settings/main', [
 
         function disableListetSettingsPanes(subgroup) {
             _.each(ext.point(subgroup).list(), function (p) {
-                var result = _.indexOf(disabledSettingsPanes, p.id) === -1 ? false : true;
+                var result = _.indexOf(disabledSettingsPanes, p.id) >= 0;
                 if (result) ext.point(subgroup).disable(p.id);
             });
         }
@@ -178,7 +178,7 @@ define('io.ox/settings/main', [
 
             disabledSettingsPanes = coreSettings.get('disabledSettingsPanes') ? coreSettings.get('disabledSettingsPanes').split(',') : [];
             function filterAvailableSettings(point) {
-                var shown = _.indexOf(disabledSettingsPanes, point.id) === -1 ? true : false;
+                var shown = _.indexOf(disabledSettingsPanes, point.id) === -1;
                 if (expertmode && shown) {
                     return true;
                 } else if (!point.advancedMode && shown) {

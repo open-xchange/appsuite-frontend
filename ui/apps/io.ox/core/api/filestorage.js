@@ -138,11 +138,11 @@ define('io.ox/core/api/filestorage', [
             },
             // returns a model of the file storage service
             getService: function (id, useCache) {
+                useCache = _.defaultValue(useCache, true);
+
                 if (!id) {
                     return $.Deferred().reject();
                 }
-                // only ignore cache if useCache is set to false, undefined results in using the cache
-                useCache  = useCache === false ? false : true;
 
                 if (useCache && servicesCache.length) {
                     var service = servicesCache.get(id);
@@ -164,8 +164,7 @@ define('io.ox/core/api/filestorage', [
 
             // returns a collection with all file storage accounts
             getAllAccounts: function (useCache) {
-                // only ignore cache if useCache is set to false, undefined results in using the cache
-                useCache  = useCache === false ? false : true;
+                useCache = _.defaultValue(useCache, true);
 
                 if (useCache && accountsCache.length > 0) {
                     return $.Deferred().resolve(accountsCache);
@@ -184,11 +183,11 @@ define('io.ox/core/api/filestorage', [
             },
             // returns a model of the file storage account
             getAccount: function (options, useCache) {
+                useCache = _.defaultValue(useCache, true);
+
                 if (!options.id || !options.filestorageService) {
                     return $.Deferred().reject();
                 }
-                // only ignore cache if useCache is set to false, undefined results in using the cache
-                useCache  = useCache === false ? false : true;
 
                 if (useCache && accountsCache.length > 0) {
                     var data = accountsCache.get(options.id);

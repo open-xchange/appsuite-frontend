@@ -44,7 +44,7 @@ define('io.ox/portal/main', [
     function isFirstVisitWidget(type, baton) {
 
         function hasDataShown(type) {
-            return _.contains(hadData, type) ? true : false;
+            return _.contains(hadData, type);
         }
 
         function containsData(type) {

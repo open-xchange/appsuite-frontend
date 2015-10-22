@@ -399,6 +399,11 @@
             return _.copy(elem, true);
         },
 
+        // until es6 default parameters
+        defaultValue: function (value, defaultvalue) {
+            return _.isUndefined(value) ? defaultvalue : value;
+        },
+
         /**
          * Lastest function only
          * Works with non-anonymous functions only
