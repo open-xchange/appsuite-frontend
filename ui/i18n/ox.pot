@@ -5070,8 +5070,9 @@ msgstr ""
 #: apps/io.ox/core/pubsub/settings/pane.js:237
 #: module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:238
-#: apps/io.ox/mail/mailfilter/settings/filter.js:140
+#: apps/io.ox/mail/autoforward/settings/model.js:94
 #: module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:140
 #: apps/io.ox/mail/mailfilter/settings/filter.js:310
 #: apps/io.ox/portal/settings/pane.js:344
 #: module:io.ox/portal
@@ -7184,11 +7185,6 @@ msgstr ""
 msgid "Forward all incoming emails to this address"
 msgstr ""
 
-#: apps/io.ox/mail/autoforward/settings/model.js:94
-#: module:io.ox/mail
-msgid "Enabled"
-msgstr ""
-
 #: apps/io.ox/mail/autoforward/settings/model.js:95
 #: module:io.ox/mail
 msgid "Keep a copy of the message"
@@ -8209,7 +8205,7 @@ msgstr ""
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js:138
 #: module:io.ox/mail
-msgid "Enabled for the following addresses"
+msgid "Enable for the following addresses"
 msgstr ""
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js:139
