@@ -263,7 +263,7 @@ define('io.ox/core/notifications/subview', [
                         self.hiddenCollection.remove(obj);
                         //don't add twice
                         if (!self.collection.get(obj.get('id'))) {
-                            self.collection.add(obj);
+                            self.addNotifications([obj]);
                         }
                     }, time);
                 }
