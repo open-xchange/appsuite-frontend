@@ -286,7 +286,7 @@ define('io.ox/search/main', [
 
         if (app.is('ready')) {
             // not started yet use app callback for inital stuff
-            app.launch.call(app);
+            app.launch();
         } else {
             // reset model and update current app
             model.reset({ silent: true });

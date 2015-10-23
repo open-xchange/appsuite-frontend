@@ -375,7 +375,7 @@ define('io.ox/backbone/modelFactory', [
             if (options.id) {
                 // Assume this was loaded
                 var realm = this.realm('default');
-                return realm.create.call(realm, options);
+                return realm.create(options);
             }
             return new this.model(options);
         };

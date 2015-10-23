@@ -854,7 +854,7 @@ define('io.ox/presenter/views/presentationview', [
             }
             // forward 'resolved' errors to error handler
             if (_.isObject(pageCount) && (pageCount.cause.length > 0)) {
-                this.pdfDocumentLoadError.call(this, pageCount);
+                this.pdfDocumentLoadError(pageCount);
                 return;
             }
 

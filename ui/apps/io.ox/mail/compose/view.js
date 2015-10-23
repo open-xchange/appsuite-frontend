@@ -767,7 +767,7 @@ define('io.ox/mail/compose/view', [
             });
             return def.then(function (editor) {
                 self.editorHash[self.model.get('editorMode')] = editor;
-                return self.reuseEditor.apply(self, [content]);
+                return self.reuseEditor(content);
             });
         },
 

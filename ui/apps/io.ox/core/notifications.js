@@ -73,7 +73,7 @@ define('io.ox/core/notifications', [
                         collection = collection.collection;
                     }
                     self.model.get('markedForRedraw')[collection.subviewId] = true;
-                    self.delayedUpdate.call(self);
+                    self.delayedUpdate();
                 });
 
                 subview.on('autoopen', _.bind(self.show, self));

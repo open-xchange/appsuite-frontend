@@ -400,17 +400,17 @@ define('io.ox/core/tk/tokenfield', [
                     forcePlaceholderSize: true,
                     // update: _.bind(this.resort, this),
                     stop: function () {
-                        self.resort.call(self);
+                        self.resort();
                     },
                     receive: function (e, ui) {
                         var tokenData = ui.item.data();
                         self.collection.add(tokenData.attrs.model);
-                        self.resort.call(self);
+                        self.resort();
                     },
                     remove: function (e, ui) {
                         var tokenData = ui.item.data();
                         self.collection.remove(tokenData.attrs.model);
-                        self.resort.call(self);
+                        self.resort();
                     }
                 }).droppable({
                     hoverClass: 'drophover'
