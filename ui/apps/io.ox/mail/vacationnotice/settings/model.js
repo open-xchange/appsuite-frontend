@@ -173,7 +173,7 @@ define('io.ox/mail/vacationnotice/settings/model', [
         subject: gt('Subject'),
         text: gt('Text'),
         days: gt('Number of days between vacation notices to the same sender'),
-        headlineAdresses: gt('Enabled for the following addresses'),
+        headlineAdresses: gt('Enable for the following addresses'),
         addresses: gt('Email addresses'),
         dateFrom: gt('Start'),
         dateUntil: gt('End'),
