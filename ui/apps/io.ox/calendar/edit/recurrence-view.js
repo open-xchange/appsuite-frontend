@@ -294,6 +294,9 @@ define('io.ox/calendar/edit/recurrence-view', [
                                     drawState();
                                 }
                                 return false;
+                            }).on('focusout', function (e) {
+                                // dont close the dropdown after selection
+                                e.stopPropagation();
                             })
                         ));
                     })
