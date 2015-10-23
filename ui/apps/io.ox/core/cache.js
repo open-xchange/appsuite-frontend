@@ -129,7 +129,7 @@ define('io.ox/core/cache', [
 
         if (!name) {
             // not funny!
-            throw 'Each object cache needs a unique name!';
+            throw new Error('Each object cache needs a unique name!');
         }
 
         // clear cache

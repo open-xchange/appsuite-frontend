@@ -109,7 +109,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
 
                 function fnAddExtension(ext) {
                     if (circleGuard[ext.id]) {
-                        throw 'Circular References detected for extension point ' + self.id + ' and extension ' + ext.id;
+                        throw new Error('Circular References detected for extension point ' + self.id + ' and extension ' + ext.id);
                     }
                     circleGuard[ext.id] = true;
                     var before = befores[ext.id];
@@ -161,7 +161,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
 
                 if (extension.invoke) {
                     console.error(extension);
-                    throw 'Extensions must not have their own invoke method';
+                    throw new Error('Extensions must not have their own invoke method');
                 }
 
                 if (!extension.id) {
@@ -214,7 +214,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
         this.replace = function (extension) {
 
             if (!extension.id) {
-                throw 'Replacements must have an id!';
+                throw new Error('Replacements must have an id!');
             }
 
             var replaced = false;

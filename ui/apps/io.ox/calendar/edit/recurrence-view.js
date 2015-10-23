@@ -64,7 +64,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                 var dayConst = DAYS[day.toUpperCase()];
 
                 if (_.isUndefined(dayConst)) {
-                    throw 'Invalid day: ' + day;
+                    throw new Error('Invalid day: ' + day);
                 }
                 result = result | dayConst;
             });

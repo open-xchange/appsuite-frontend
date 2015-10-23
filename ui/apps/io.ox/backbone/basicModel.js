@@ -153,7 +153,7 @@ define('io.ox/backbone/basicModel', [
                         self.trigger('sync:always');
                     });
             }
-            throw 'No Syncer specified!';
+            throw new Error('No Syncer specified!');
         },
         isSet: function () {
             var self = this;

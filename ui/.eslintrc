@@ -92,7 +92,7 @@
         // disallow use of comma operator
         'no-sequences': 2,
         // restrict what can be thrown as an exception
-        'no-throw-literal': 0,
+        'no-throw-literal': 2,
         // disallow usage of expressions in statement position
         'no-unused-expressions': 2,
         // disallow unnecessary .call() and .apply()
