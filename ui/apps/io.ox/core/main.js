@@ -1014,25 +1014,22 @@ define('io.ox/core/main', [
             }
         });
 
-        var dedicatedLogoutButton = settings.get('features/dedicatedLogoutButton', false) === true && _.device('!smartphone');
-        if (!dedicatedLogoutButton) {
-            ext.point('io.ox/core/topbar/right/dropdown').extend({
-                id: 'logout',
-                index: 1000,
-                draw: function () {
-                    this.append(
-                        $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
-                        $('<li role="presentation">').append(
-                            $('<a href="#" data-action="logout" role="menuitem" tabindex="-1">').text(gt('Sign out'))
-                        )
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            logout();
-                        })
-                    );
-                }
-            });
-        }
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'logout',
+            index: 1000,
+            draw: function () {
+                this.append(
+                    $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
+                    $('<li role="presentation">').append(
+                        $('<a href="#" data-action="logout" role="menuitem" tabindex="-1">').text(gt('Sign out'))
+                    )
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        logout();
+                    })
+                );
+            }
+        });
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'dropdown',
