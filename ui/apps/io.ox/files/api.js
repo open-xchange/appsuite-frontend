@@ -717,13 +717,29 @@ define('io.ox/files/api', [
     //
 
     function move(list, targetFolderId, ignoreWarnings) {
+
         http.pause();
-        _(list).map(function (item) {
-            // move files and folders
-            return item.folder_id === 'folder' ?
-                folderAPI.move(item.id, targetFolderId, ignoreWarnings) :
-                api.update(item, { folder_id: targetFolderId }, { silent: true,  ignoreWarnings: ignoreWarnings });
+
+        var folders = _(list).where({ folder_id: 'folder' }),
+            items = _(list).difference(folders);
+
+        // move all files
+        if (items) {
+            http.PUT({
+                module: 'files',
+                params: {
+                    action: 'move',
+                    folder: targetFolderId
+                },
+                data: items,
+                appendColumns: false
+            });
+        }
+
+        _(folders).each(function (item) {
+            folderAPI.move(item.id, targetFolderId, ignoreWarnings);
         });
+
         return http.resume();
     }
 
@@ -747,6 +763,7 @@ define('io.ox/files/api', [
     }
 
     function transfer(type, list, targetFolderId, ignoreWarnings) {
+
         var fn = type === 'move' ? move : copy;
 
         return http.wait(fn(list, targetFolderId, ignoreWarnings)).then(function (response) {
