@@ -193,7 +193,6 @@ define('io.ox/calendar/model', [
 
             setDefaultParticipants: function (options) {
                 var self = this;
-                if (this.get('participants').length > 0) return $.when();
                 return folderAPI.get(this.get('folder_id')).then(function (folder) {
                     if (folderAPI.is('private', folder)) {
                         if (options.create) {
