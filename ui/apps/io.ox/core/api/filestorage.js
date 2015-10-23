@@ -346,10 +346,23 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
             },
             // function to check if a folder is a folder from an external Storage
             // folder.account_id must be present
-            isExternal: function (folder) {
-                var isExternal = false;
+            // if options.type is true, isExternal returns the type of folderstorage instead of a boolean
+            // options.root checks if the folder is also the root folder
+            isExternal: function (folder, options) {
+                var isExternal = false,
+                    options = options || {};
+
                 if (api.rampupDone && folder && folder.account_id) {
                     isExternal = _(idsCache).indexOf(folder.account_id) !== -1;
+                }
+                if (isExternal && (options.type || options.root)) {
+                    var model = accountsCache.findWhere({ qualifiedId: folder.account_id });
+                    if (options.root) {
+                        isExternal = folder.id === model.get('rootFolder');
+                    }
+                    if (isExternal && options.type) {
+                        isExternal = model.get('filestorageService');
+                    }
                 }
                 return isExternal;
             }

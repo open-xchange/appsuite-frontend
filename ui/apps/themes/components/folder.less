@@ -180,6 +180,21 @@
             &.spam { i:before { content: '\f05e'; }} // fa-ban
             &.archive { i:before { content: '\f187'; }} // fa-archive
             &.default { i { color: #aaa; }}
+
+            &.external-filestorage-root {
+                i {
+                    background-size: cover;
+                    height: 14px;
+                    width: 14px;
+                    &:before { content: ''; }
+                    vertical-align: middle;
+                }
+            };
+
+            &.dropbox { i:before { content: '\f16b'; }} // fa-dropbox
+            &.googledrive { i { background-image: url(apps/themes/default/googledrive_logo32.png); }}
+            &.boxcom { i { background-image: url(apps/themes/default/box_logo36.png); }}
+            &.onedrive { i { background-image: url(apps/themes/default/onedrive_logo32.png); }}
         }
 
         .folder-checkbox {

@@ -502,9 +502,19 @@ define('io.ox/core/folder/node', [
 
         renderIcon: function () {
             var o = this.options, type;
-            if (!o.icons || o.tree.module !== 'mail') return;
-            type = account.getType(this.folder) || 'default';
-            this.$.icon.addClass('visible ' + type);
+            if (!o.icons || (o.tree.module !== 'mail' && o.tree.module !== 'infostore')) return;
+            if (o.tree.module === 'mail') {
+                type = account.getType(this.folder) || 'default';
+                this.$.icon.addClass('visible ' + type);
+            } else {
+                var self = this;
+                require(['io.ox/core/api/filestorage'], function (filestorageApi) {
+                    var externalRoot = filestorageApi.isExternal(self.model.attributes, { type: true, root: true });
+                    if (externalRoot) {
+                        self.$.icon.addClass('visible external-filestorage-root ' + externalRoot);
+                    }
+                });
+            }
         },
 
         render: function () {
