@@ -252,7 +252,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
                 if (app.pages.getCurrentPage().name === 'folderTree') return;
                 // if there's a thread-mail baton already set, don't overwrite it
                 // Happens becuase the change event occurs later than the "showmail" event
-                if (app.pages.getCurrentPage().toolbar.baton.threadMember) return;
+                if (app.pages.getCurrentPage().toolbar && app.pages.getCurrentPage().toolbar.baton.threadMember) return;
                 app.updateToolbar(app.listView.selection.get());
             });
 
