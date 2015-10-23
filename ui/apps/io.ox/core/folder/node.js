@@ -507,13 +507,17 @@ define('io.ox/core/folder/node', [
                 type = account.getType(this.folder) || 'default';
                 this.$.icon.addClass('visible ' + type);
             } else {
-                var self = this;
-                require(['io.ox/core/api/filestorage'], function (filestorageApi) {
-                    var externalRoot = filestorageApi.isExternal(self.model.attributes, { type: true, root: true });
-                    if (externalRoot) {
-                        self.$.icon.addClass('visible external-filestorage-root ' + externalRoot);
-                    }
-                });
+                if (this.folder === 'virtual/myshares') {
+                    this.$.icon.addClass('visible myshares');
+                } else {
+                    var self = this;
+                    require(['io.ox/core/api/filestorage'], function (filestorageApi) {
+                        var externalRoot = filestorageApi.isExternal(self.model.attributes, { type: true, root: true });
+                        if (externalRoot) {
+                            self.$.icon.addClass('visible external-filestorage-root ' + externalRoot);
+                        }
+                    });
+                }
             }
         },
 
