@@ -48,9 +48,8 @@ define('io.ox/contacts/widgets/exif', function () {
                 // 0xE1 = Application-specific 1 (for EXIF)
                 if (debug) console.log('Found 0xFFE1 marker');
                 return readEXIFData(file, offset + 4, file.getShortAt(offset + 2, true) - 2);
-            } else {
-                offset += 2 + file.getShortAt(offset + 2, true);
             }
+            offset += 2 + file.getShortAt(offset + 2, true);
         }
     }
 
@@ -119,14 +118,13 @@ define('io.ox/contacts/widgets/exif', function () {
             // undefined, 8-bit byte, value depending on field
             if (numValues === 1) {
                 return file.getByteAt(entryOffset + 8, bigEnd);
-            } else {
-                offset = numValues > 4 ? valueOffset : (entryOffset + 8);
-                vals = [];
-                for (n = 0; n < numValues; n++) {
-                    vals[n] = file.getByteAt(offset + n);
-                }
-                return vals;
             }
+            offset = numValues > 4 ? valueOffset : (entryOffset + 8);
+            vals = [];
+            for (n = 0; n < numValues; n++) {
+                vals[n] = file.getByteAt(offset + n);
+            }
+            return vals;
             break;
         case 2:
             // ascii, 8-bit byte
@@ -136,61 +134,56 @@ define('io.ox/contacts/widgets/exif', function () {
             // short, 16 bit int
             if (numValues === 1) {
                 return file.getShortAt(entryOffset + 8, bigEnd);
-            } else {
-                offset = numValues > 2 ? valueOffset : (entryOffset + 8);
-                vals = [];
-                for (n = 0; n < numValues; n++) {
-                    vals[n] = file.getShortAt(offset + 2 * n, bigEnd);
-                }
-                return vals;
             }
+            offset = numValues > 2 ? valueOffset : (entryOffset + 8);
+            vals = [];
+            for (n = 0; n < numValues; n++) {
+                vals[n] = file.getShortAt(offset + 2 * n, bigEnd);
+            }
+            return vals;
             break;
         case 4:
             // long, 32 bit int
             if (numValues === 1) {
                 return file.getLongAt(entryOffset + 8, bigEnd);
-            } else {
-                vals = [];
-                for (n = 0; n < numValues; n++) {
-                    vals[n] = file.getLongAt(valueOffset + 4 * n, bigEnd);
-                }
-                return vals;
             }
+            vals = [];
+            for (n = 0; n < numValues; n++) {
+                vals[n] = file.getLongAt(valueOffset + 4 * n, bigEnd);
+            }
+            return vals;
             break;
         case 5: // rational = two long values, first is numerator, second is denominator
             if (numValues === 1) {
                 return file.getLongAt(valueOffset, bigEnd) / file.getLongAt(valueOffset + 4, bigEnd);
-            } else {
-                var aVals = [];
-                for (n = 0; n < numValues; n++) {
-                    aVals[n] = file.getLongAt(valueOffset + 8 * n, bigEnd) / file.getLongAt(valueOffset + 4 + 8 * n, bigEnd);
-                }
-                return aVals;
             }
+            var aVals = [];
+            for (n = 0; n < numValues; n++) {
+                aVals[n] = file.getLongAt(valueOffset + 8 * n, bigEnd) / file.getLongAt(valueOffset + 4 + 8 * n, bigEnd);
+            }
+            return aVals;
             break;
         case 9:
             // slong, 32 bit signed int
             if (numValues === 1) {
                 return file.getSLongAt(entryOffset + 8, bigEnd);
-            } else {
-                vals = [];
-                for (n = 0; n < numValues; n++) {
-                    vals[n] = file.getSLongAt(valueOffset + 4 * n, bigEnd);
-                }
-                return vals;
             }
+            vals = [];
+            for (n = 0; n < numValues; n++) {
+                vals[n] = file.getSLongAt(valueOffset + 4 * n, bigEnd);
+            }
+            return vals;
             break;
         case 10:
             // signed rational, two slongs, first is numerator, second is denominator
             if (numValues === 1) {
                 return file.getSLongAt(valueOffset, bigEnd) / file.getSLongAt(valueOffset + 4, bigEnd);
-            } else {
-                vals = [];
-                for (n = 0; n < numValues; n++) {
-                    vals[n] = file.getSLongAt(valueOffset + 8 * n, bigEnd) / file.getSLongAt(valueOffset + 4 + 8 * n, bigEnd);
-                }
-                return vals;
             }
+            vals = [];
+            for (n = 0; n < numValues; n++) {
+                vals[n] = file.getSLongAt(valueOffset + 8 * n, bigEnd) / file.getSLongAt(valueOffset + 4 + 8 * n, bigEnd);
+            }
+            return vals;
         // no default
         }
     }
@@ -228,9 +221,8 @@ define('io.ox/contacts/widgets/exif', function () {
             var iByte = this.getByteAt(iOffset);
             if (iByte > 127) {
                 return iByte - 256;
-            } else {
-                return iByte;
             }
+            return iByte;
         };
 
         this.getShortAt = function (iOffset, bBigEndian) {
@@ -244,9 +236,8 @@ define('io.ox/contacts/widgets/exif', function () {
             var iUShort = this.getShortAt(iOffset, bBigEndian);
             if (iUShort > 32767) {
                 return iUShort - 65536;
-            } else {
-                return iUShort;
             }
+            return iUShort;
         };
         this.getLongAt = function (iOffset, bBigEndian) {
             var iByte1 = this.getByteAt(iOffset),
@@ -264,9 +255,8 @@ define('io.ox/contacts/widgets/exif', function () {
             var iULong = this.getLongAt(iOffset, bBigEndian);
             if (iULong > 2147483647) {
                 return iULong - 4294967296;
-            } else {
-                return iULong;
             }
+            return iULong;
         };
 
         this.getStringAt = function (iOffset, iLength) {

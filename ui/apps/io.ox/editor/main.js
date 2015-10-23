@@ -291,19 +291,18 @@ define('io.ox/editor/main', [
                                                 // file no longer exists
                                                 if (error.code === 'IFO-0300') model.unset('id');
                                             });
-                                    } else {
-                                        // create
-                                        return api.upload({ folder: data.folder_id, file: blob, filename: data.filename })
-                                            .done(function (data) {
-                                                delete data.content;
-                                                app.setState({ folder: data.folder_id, id: data.id });
-                                                model.set(data);
-                                                previous = model.toJSON();
-                                                view.idle();
-                                            })
-                                            .always(function () { view.idle(); })
-                                            .fail(notifications.yell);
                                     }
+                                    // create
+                                    return api.upload({ folder: data.folder_id, file: blob, filename: data.filename })
+                                        .done(function (data) {
+                                            delete data.content;
+                                            app.setState({ folder: data.folder_id, id: data.id });
+                                            model.set(data);
+                                            previous = model.toJSON();
+                                            view.idle();
+                                        })
+                                        .always(function () { view.idle(); })
+                                        .fail(notifications.yell);
                                 }, function () {
                                     view.idle.apply(app.view);
                                 })

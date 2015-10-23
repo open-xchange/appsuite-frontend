@@ -81,14 +81,13 @@ define.async('io.ox/core/manifests', [
                         return moduleDef;
                     }
                 };
-            } else {
-                // Not explicitely plugin aware, so, let's require everything beforehand
-                return {
-                    dependencies: this.withPluginsFor(pointName, dependencies),
-                    definitionFunction: definitionFunction,
-                    after: this.pluginsFor('after:' + pointName)
-                };
             }
+            // Not explicitely plugin aware, so, let's require everything beforehand
+            return {
+                dependencies: this.withPluginsFor(pointName, dependencies),
+                definitionFunction: definitionFunction,
+                after: this.pluginsFor('after:' + pointName)
+            };
         },
         isDisabled: function (id) {
             validate();

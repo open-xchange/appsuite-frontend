@@ -40,11 +40,10 @@ define('io.ox/contacts/model', [
                         return yell(
                                 api.editNewImage({ id: model.id, folder_id: model.get('folder_id') }, data, file)
                             );
-                    } else {
-                        return yell(
-                            api.update({ id: model.id, folder: model.get('folder_id'), last_modified: model.get('last_modified'), data: data })
-                        );
                     }
+                    return yell(
+                        api.update({ id: model.id, folder: model.get('folder_id'), last_modified: model.get('last_modified'), data: data })
+                    );
                 },
 
                 updateEvents: ['edit'],

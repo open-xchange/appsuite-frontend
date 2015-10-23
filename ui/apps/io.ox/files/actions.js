@@ -955,9 +955,8 @@ define('io.ox/files/actions', [
                     'Drop here to upload a <b class="dndignore">new version</b> of "%1$s"',
                     String(app.currentFile.filename || app.currentFile.title).replace(/</g, '&lt;')
                 );
-            } else {
-                return gt('Drop here to upload a <b class="dndignore">new version</b>');
             }
+            return gt('Drop here to upload a <b class="dndignore">new version</b>');
         },
         action: function (file, app) {
             require(['io.ox/files/upload/main'], function (fileUpload) {

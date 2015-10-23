@@ -25,9 +25,8 @@ define('io.ox/mail/settings/model', [
             if (!/^[0-9]*$/.test(attrs.lineWrapAfter)) {
                 this.trigger('invalid:lineWrapAfter', gt('the line length must be a number'));
                 return gt('the line length must be a number');
-            } else {
-                this.trigger('valid:lineWrapAfter');
             }
+            this.trigger('valid:lineWrapAfter');
         },
 
         save: function () {

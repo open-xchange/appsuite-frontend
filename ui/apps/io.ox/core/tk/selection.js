@@ -721,12 +721,9 @@ define('io.ox/core/tk/selection', [
             // rebuild list
             observedItems = _(observedItems).filter(function (item) {
                 var cid = item.cid;
-                if (cid in hash) {
-                    return false;
-                } else {
-                    observedItemsIndex[cid] = index++;
-                    return true;
-                }
+                if (cid in hash) return false;
+                observedItemsIndex[cid] = index++;
+                return true;
             });
         };
 
@@ -1093,8 +1090,9 @@ define('io.ox/core/tk/selection', [
             function over(e) {
 
                 // avoid handling bubbling events
-                if (e.isDefaultPrevented()) return; else e.preventDefault();
+                if (e.isDefaultPrevented()) return;
 
+                e.preventDefault();
                 var arrow = $(this).find('.folder-arrow');
 
                 // css hover doesn't work!
@@ -1197,7 +1195,8 @@ define('io.ox/core/tk/selection', [
 
             function drop(e) {
                 // avoid multiple events on parent tree nodes
-                if (e.isDefaultPrevented()) return; else e.preventDefault();
+                if (e.isDefaultPrevented()) return;
+                e.preventDefault();
                 // process drop
                 clearTimeout(expandTimer);
                 var target = $(this).attr('data-obj-id') || $(this).attr('data-cid') || $(this).attr('data-id'),

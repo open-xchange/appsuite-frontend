@@ -602,9 +602,8 @@ define('io.ox/core/pdf/pdfview', [
                                 getScale = function (orgSize) {
                                     if (orgSize * DEVICE_OUTPUTSCALING > MAXIMUM_SIDE_SIZE) {
                                         return MAXIMUM_SIDE_SIZE / (orgSize * DEVICE_OUTPUTSCALING);
-                                    } else {
-                                        return DEVICE_OUTPUTSCALING;
                                     }
+                                    return DEVICE_OUTPUTSCALING;
                                 },
                                 xScale = getScale(scaledSize.width),
                                 yScale = getScale(scaledSize.height);
@@ -655,13 +654,11 @@ define('io.ox/core/pdf/pdfview', [
                                         prepareTextLayerForTextSelection(textWrapperNode);
                                         return def.resolve();
                                     });
-                                } else {
-                                    def.resolve();
                                 }
+                                def.resolve();
                             });
-                        } else {
-                            return def.reject();
                         }
+                        return def.reject();
                     });
                 });
                 handleRenderQueue(renderDef);

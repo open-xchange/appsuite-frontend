@@ -231,9 +231,8 @@ define('io.ox/backbone/mini-views/datepicker', [
         isFullTime: function () {
             if (!this.options.ignoreToggle && this.model.has('full_time')) {
                 return !!this.model.get('full_time');
-            } else {
-                return this.options.display === 'DATE';
             }
+            return this.options.display === 'DATE';
         },
 
         getDateStr: function (val) {

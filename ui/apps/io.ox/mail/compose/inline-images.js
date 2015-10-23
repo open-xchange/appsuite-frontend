@@ -33,13 +33,12 @@ define('io.ox/mail/compose/inline-images', [
                     data: formData,
                     fixPost: true
                 });
-            } else {
-                return http.FORM({
-                    module: 'file',
-                    form: data.form,
-                    params: { module: 'mail', type: 'image' }
-                });
             }
+            return http.FORM({
+                module: 'file',
+                form: data.form,
+                params: { module: 'mail', type: 'image' }
+            });
         },
         getInsertedImageUrl: function (data) {
             var url = ox.apiRoot + '/file',

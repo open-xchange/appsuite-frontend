@@ -72,9 +72,8 @@ define('io.ox/mail/accounts/model', [
                 if (temp === true) {
                     // strangely if the validation returns true here, it is marked as invalid...
                     return false;
-                } else {
-                    return temp;
                 }
+                return temp;
             }}],
             transport_server: {
                 required: function () {
@@ -92,9 +91,8 @@ define('io.ox/mail/accounts/model', [
                 if (temp === true) {
                     // strangely if the validation returns true here, it is marked as invalid...
                     return false;
-                } else {
-                    return temp;
                 }
+                return temp;
             }}]
         },
 
@@ -164,16 +162,15 @@ define('io.ox/mail/accounts/model', [
                     });
 
                 }.bind(this));
-
-            } else {
-                if (obj) {
-                    obj = _.extend({ unified_inbox_enabled: false }, obj);
-                    obj.name = obj.personal = obj.primary_address;
-                    this.attributes = obj;
-                    this.attributes.spam_handler = 'NoSpamHandler';
-                }
-                return AccountAPI.create(this.attributes);
             }
+
+            if (obj) {
+                obj = _.extend({ unified_inbox_enabled: false }, obj);
+                obj.name = obj.personal = obj.primary_address;
+                this.attributes = obj;
+                this.attributes.spam_handler = 'NoSpamHandler';
+            }
+            return AccountAPI.create(this.attributes);
         },
 
         destroy: function () {

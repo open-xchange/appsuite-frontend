@@ -136,17 +136,15 @@ define.async('io.ox/mail/compose/model', [
                 this._shadowAttributes = {};
             } else if (flag === false) {
                 this.updateShadow();
-            } else {
-                return !_.isEqual(this._shadowAttributes, this.getCopy());
             }
+            return !_.isEqual(this._shadowAttributes, this.getCopy());
         },
 
         getContentType: function () {
             if (this.get('editorMode') === 'text') {
                 return 'text/plain';
-            } else {
-                return this.get('editorMode') === 'html' ? 'text/html' : 'alternative';
             }
+            return this.get('editorMode') === 'html' ? 'text/html' : 'alternative';
         },
 
         setInitialMailContentType: function () {

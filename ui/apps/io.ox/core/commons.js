@@ -461,9 +461,8 @@ define('io.ox/core/commons', [
                     if (id === null) return app.folder.setDefault();
                     return apply(id);
                 });
-            } else {
-                return app.folder.setDefault();
             }
+            return app.folder.setDefault();
         },
 
         /**

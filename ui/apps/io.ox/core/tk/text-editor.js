@@ -189,9 +189,8 @@ define('io.ox/core/tk/text-editor', [], function () {
                 this.setContent(content.substr(0, pos) + (rep || '') + content.substr(pos + str.length));
                 this.scrollTop(top);
                 return true;
-            } else {
-                return false;
             }
+            return false;
         };
 
         this.show = function () {

@@ -44,9 +44,8 @@ define('io.ox/core/moment', [
             iso = l[0] !== l[1] ? l[0] + '-' + l[1] : l[0];
         if (isMomentLanguage(iso)) {
             return iso;
-        } else {
-            return isMomentLanguage(l[0]) ? l[0] : defaultLang;
         }
+        return isMomentLanguage(l[0]) ? l[0] : defaultLang;
     }
 
     // set locale

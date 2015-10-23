@@ -461,9 +461,8 @@ define('io.ox/mail/detail/content', [
                     if ((/^text\/(plain|html)$/i).test(obj.content_type)) {
                         baton.type = obj.content_type;
                         return true;
-                    } else {
-                        return false;
                     }
+                    return false;
                 });
 
                 // add other parts?

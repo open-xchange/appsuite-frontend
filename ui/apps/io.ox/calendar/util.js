@@ -63,27 +63,24 @@ define('io.ox/calendar/util', [
             }, opt);
 
             if (settings.get('bossyAppointmentHandling', false)) {
-
                 var check = function (data) {
                     if (folderAPI.is('private', data)) {
                         var isOrganizer = opt.app.organizerId === ox.user_id;
                         return opt.invert ? !isOrganizer : isOrganizer;
-                    } else {
-                        return true;
                     }
+                    return true;
                 };
 
                 if (opt.folderData) {
                     return $.Deferred().resolve(check(opt.folderData));
-                } else {
-                    return folderAPI.get(opt.app.folder_id).then(function (data) {
-                        return check(data);
-                    });
                 }
+                return folderAPI.get(opt.app.folder_id)
+                                .then(function (data) {
+                                    return check(data);
+                                });
 
-            } else {
-                return $.Deferred().resolve(true);
             }
+            return $.Deferred().resolve(true);
         },
 
         getFirstWeekDay: function () {
@@ -120,19 +117,17 @@ define('io.ox/calendar/util', [
             if (m.isBefore(startOfDay)) {
                 if (m.isAfter(startOfDay.subtract(1, 'day'))) {
                     return gt('Yesterday') + ', ' + m.format('l');
-                } else {
-                    return m.format('ddd, l');
                 }
-            } else {
-                // future
-                if (m.isBefore(startOfDay.add(1, 'days'))) {
-                    return gt('Today') + ', ' + m.format('l');
-                } else if (m.isBefore(startOfDay.add(1, 'day'))) {
-                    return gt('Tomorrow') + ', ' + m.format('l');
-                } else {
-                    return m.format('ddd, l');
-                }
+                return m.format('ddd, l');
             }
+            // future
+            if (m.isBefore(startOfDay.add(1, 'days'))) {
+                return gt('Today') + ', ' + m.format('l');
+            }
+            if (m.isBefore(startOfDay.add(1, 'day'))) {
+                return gt('Tomorrow') + ', ' + m.format('l');
+            }
+            return m.format('ddd, l');
         },
 
         getDateInterval: function (data, a11y) {
@@ -151,21 +146,18 @@ define('io.ox/calendar/util', [
                 }
                 if (startDate.isSame(endDate, 'day')) {
                     return startDate.format(fmtstr);
-                } else {
-
-                    if (a11y && data.full_time) {
-                        //#. date intervals for screenreaders
-                        //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
-                        //#. %1$s is the start date
-                        //#. %2$s is the end date
-                        //#, c-format
-                        return gt('%1$s to %2$s', startDate.format(fmtstr), endDate.format(fmtstr));
-                    }
-                    return startDate.formatInterval(endDate, 'date');
                 }
-            } else {
-                return '';
+                if (a11y && data.full_time) {
+                    //#. date intervals for screenreaders
+                    //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
+                    //#. %1$s is the start date
+                    //#. %2$s is the end date
+                    //#, c-format
+                    return gt('%1$s to %2$s', startDate.format(fmtstr), endDate.format(fmtstr));
+                }
+                return startDate.formatInterval(endDate, 'date');
             }
+            return '';
         },
 
         getDateIntervalA11y: function (data) {
@@ -176,23 +168,22 @@ define('io.ox/calendar/util', [
             if (!data || !data.start_date || !data.end_date) return '';
             if (data.full_time) {
                 return this.getFullTimeInterval(data, true);
-            } else {
-                var start = moment(data.start_date),
-                    end = moment(data.end_date);
-                if (zone) {
-                    start.tz(zone);
-                    end.tz(zone);
-                }
-                if (a11y) {
-                    //#. date intervals for screenreaders
-                    //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
-                    //#. %1$s is the start date
-                    //#. %2$s is the end date
-                    //#, c-format
-                    return gt('%1$s to %2$s', start.format('LT'), end.format('LT'));
-                }
-                return start.formatInterval(end, 'time');
             }
+            var start = moment(data.start_date),
+                end = moment(data.end_date);
+            if (zone) {
+                start.tz(zone);
+                end.tz(zone);
+            }
+            if (a11y) {
+                //#. date intervals for screenreaders
+                //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
+                //#. %1$s is the start date
+                //#. %2$s is the end date
+                //#, c-format
+                return gt('%1$s to %2$s', start.format('LT'), end.format('LT'));
+            }
+            return start.formatInterval(end, 'time');
         },
 
         getTimeIntervalA11y: function (data, zone) {
@@ -743,12 +734,10 @@ define('io.ox/calendar/util', [
             if (folderAPI.is('public', folder) && ox.user_id !== appointment.created_by) {
                 // public appointments which are not from you are always colored in the calendar color
                 return 'color-label-' + folderColor;
-            } else {
-                // set color of appointment. if color is 0, then use color of folder
-                var color = appointmentColor === 0 ? folderColor : appointmentColor;
-
-                return 'color-label-' + color;
             }
+            // set color of appointment. if color is 0, then use color of folder
+            var color = appointmentColor === 0 ? folderColor : appointmentColor;
+            return 'color-label-' + color;
         },
 
         canAppointmentChangeColor: function (folder, appointment) {

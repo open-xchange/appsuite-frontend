@@ -127,10 +127,9 @@ define('io.ox/core/desktop', [
                 return ox.launch(id, { launched: def.promise() })
                          .then(function () { self.quit(); })
                          .always(def.resolve);
-            } else {
-                upsell.trigger({ type: 'app', id: id, missing: upsell.missing(requires) });
-                return $.when();
             }
+            upsell.trigger({ type: 'app', id: id, missing: upsell.missing(requires) });
+            return $.when();
         },
 
         quit: function () {
@@ -291,16 +290,15 @@ define('io.ox/core/desktop', [
                             var defaultFolder = type === 'mail' ? mailConfig.get('folder/inbox') : coreConfig.get('folder/' + type);
                             if (defaultFolder) {
                                 return that.set(defaultFolder);
-                            } else {
-                                return api.getExistingFolder(type).then(
-                                    function (id) {
-                                        return that.set(id);
-                                    },
-                                    function () {
-                                        return $.Deferred().reject({ error: gt('Could not get a default folder for this application.') });
-                                    }
-                                );
                             }
+                            return api.getExistingFolder(type).then(
+                                function (id) {
+                                    return that.set(id);
+                                },
+                                function () {
+                                    return $.Deferred().reject({ error: gt('Could not get a default folder for this application.') });
+                                }
+                            );
                         });
                     },
 
@@ -615,13 +613,11 @@ define('io.ox/core/desktop', [
                     }
                     if (list.length > 0) {
                         return ox.ui.App.setSavePoints(list);
-                    } else {
-                        return $.when();
                     }
+                    return $.when();
                 });
-            } else {
-                return $.when();
             }
+            return $.when();
         },
 
         removeRestorePoint: function () {

@@ -284,10 +284,9 @@ define('io.ox/calendar/month/view', [
                         //revert the peg by returning true
                         $(this).show();
                         return true;
-                    } else {
-                        //return false so that the peg does not revert
-                        return false;
                     }
+                    //return false so that the peg does not revert
+                    return false;
                 },
                 start: function () {
                     $(this).hide();

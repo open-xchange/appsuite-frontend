@@ -456,16 +456,14 @@ define('io.ox/mail/util', [
                 if (delta < HOUR) {
                     n = Math.ceil(delta / MINUTE);
                     return String(format(ngettext('%d minute ago', '%d minutes ago', n), n)); /*i18n*/
-                } else {
-                    n = Math.ceil(delta / HOUR);
-                    return String(format(ngettext('%d hour ago', '%d hours ago', n), n)); /*i18n*/
                 }
+                n = Math.ceil(delta / HOUR);
+                return String(format(ngettext('%d hour ago', '%d hours ago', n), n)); /*i18n*/
             } else if (d.getDate() === now.getDate() - 1) {
                 // yesterday
                 return 'Yesterday';
-            } else {
-                return d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear();
             }
+            return d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear();
         },
 
         count: function (data) {
@@ -564,18 +562,17 @@ define('io.ox/mail/util', [
                             $parsed.text(clean);
                         }
                         return $parsed.html();
-                    } else {
-                        if (!looksLikeHTML(clean)) {
-                            $parsed.text(clean);
-                        }
-                        $parsed.find('p').replaceWith(function () {
-                            return $(this).html() + '\n\n';
-                        });
-                        $parsed.find('br').replaceWith(function () {
-                            return $(this).html() + '\n';
-                        });
-                        return $parsed.text().trim();
                     }
+                    if (!looksLikeHTML(clean)) {
+                        $parsed.text(clean);
+                    }
+                    $parsed.find('p').replaceWith(function () {
+                        return $(this).html() + '\n\n';
+                    });
+                    $parsed.find('br').replaceWith(function () {
+                        return $(this).html() + '\n';
+                    });
+                    return $parsed.text().trim();
                 },
                 preview = function (text) {
                     return general(text)
@@ -601,18 +598,16 @@ define('io.ox/mail/util', [
                         // consider changes applied by appsuite
                         var clean = add(signature.content, !!isHTML);
                         // consider changes applied by tiny
-                        if (clean === '') {
-                            return '<br>';
-                        } else {
-                            return clean
-                                // set breaks
-                                .replace(/(\r\n|\n|\r)/g, '<br>')
-                                // replace surrounding white-space (except linebreaks)
-                                .replace(/>[\t\f\v ]+/g, '>')
-                                .replace(/[\t\f\v ]+</g, '<')
-                                // remove empty alt attribute(added by tiny)
-                                .replace(/ alt=""/, '');
-                        }
+                        if (clean === '')  return '<br>';
+
+                        return clean
+                            // set breaks
+                            .replace(/(\r\n|\n|\r)/g, '<br>')
+                            // replace surrounding white-space (except linebreaks)
+                            .replace(/>[\t\f\v ]+/g, '>')
+                            .replace(/[\t\f\v ]+</g, '<')
+                            // remove empty alt attribute(added by tiny)
+                            .replace(/ alt=""/, '');
                     });
                     return _(signatures).indexOf(add(text, !!isHTML)) > - 1;
                 }

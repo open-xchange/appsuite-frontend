@@ -51,10 +51,9 @@ define('io.ox/core/folder/favorites', [
                     if (item.error && (item.code === 'FLD-0008' || item.code === 'FLD-0003')) {
                         invalid[item.id] = true;
                         return false;
-                    } else {
-                        delete invalid[item.id];
-                        return true;
                     }
+                    delete invalid[item.id];
+                    return true;
                 });
                 _(list).each(api.injectIndex.bind(api, id));
                 model.set('subfolders', list.length > 0);

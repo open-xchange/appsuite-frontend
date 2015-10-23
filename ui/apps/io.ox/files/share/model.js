@@ -179,16 +179,14 @@ define('io.ox/files/share/model', [
                 }
 
                 // create or update ?
-                if (!this.has('url')) {
-                    return data;
+                if (!this.has('url')) return data;
+
+                if (this.get('temporary')) {
+                    data.expiry_date = this.getExpiryDate();
                 } else {
-                    if (this.get('temporary')) {
-                        data.expiry_date = this.getExpiryDate();
-                    } else {
-                        data.expiry_date = null;
-                    }
-                    return data;
+                    data.expiry_date = null;
                 }
+                return data;
             }
 
         },

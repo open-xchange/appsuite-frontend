@@ -98,13 +98,12 @@ define('io.ox/contacts/distrib/create-dist-view', [
                             mail: m.getTarget(),
                             mail_field: m.getFieldNumber()
                         };
-                    } else {
-                        return {
-                            display_name: m.getDisplayName(),
-                            mail: m.getTarget(),
-                            mail_field: 0
-                        };
                     }
+                    return {
+                        display_name: m.getDisplayName(),
+                        mail: m.getTarget(),
+                        mail_field: 0
+                    };
                 });
                 self.baton.model.set('distribution_list', all);
             });

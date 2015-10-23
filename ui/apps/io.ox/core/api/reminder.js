@@ -169,10 +169,9 @@ define('io.ox/core/api/reminder', [
             if (reminder.module === 4) {
                 //task
                 return taskAPI.get(obj);
-            } else {
-                //appointment
-                return calendarAPI.get(obj);
             }
+            //appointment
+            return calendarAPI.get(obj);
         }
     };
 

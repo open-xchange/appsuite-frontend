@@ -173,9 +173,8 @@ define('io.ox/tasks/toolbar', [
                 // draw toolbar
                 if (list.length <= 100) {
                     return api.getList(list).done(cont.bind(this));
-                } else {
-                    return cont.call(this, list);
                 }
+                return cont.call(this, list);
             }, 10);
         }
     });

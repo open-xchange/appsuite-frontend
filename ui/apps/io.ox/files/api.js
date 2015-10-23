@@ -482,10 +482,9 @@ define('io.ox/files/api', [
                 var data = folderAPI.pool.getModel(cid.substr(7)).toJSON();
                 data.folder_id = 'folder';
                 return new api.Model(data);
-            } else {
-                // return existing file model
-                return pool.get('detail').get(cid);
             }
+            // return existing file model
+            return pool.get('detail').get(cid);
         }
 
         return function (list, json) {

@@ -71,6 +71,12 @@ define('io.ox/backbone/mini-views/quota', [
                     };
                 });
             }
+            return quotaAPI.get().then(function (result) {
+                return {
+                    quota: result[module][quotaField],
+                    usage: result[module][usageField]
+                };
+            });
         },
 
         updateQuota: function () {

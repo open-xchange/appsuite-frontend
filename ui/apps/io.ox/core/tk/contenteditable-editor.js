@@ -173,10 +173,9 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         if (tinymce_lang > -1) {
             return tinymce_langpacks[tinymce_lang];
-        } else {
-            tinymce_lang = _.indexOf(tinymce_langpacks, lookup_lang.substr(0, 2), true);
-            return (tinymce_lang > -1) ? tinymce_langpacks[tinymce_lang] : 'en';
         }
+        tinymce_lang = _.indexOf(tinymce_langpacks, lookup_lang.substr(0, 2), true);
+        return (tinymce_lang > -1) ? tinymce_langpacks[tinymce_lang] : 'en';
     }
 
     function Editor(el, opt) {
@@ -525,9 +524,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                 this.setContent(content.substr(0, pos) + (rep || '') + content.substr(pos + str.length));
                 this.scrollTop(top);
                 return true;
-            } else {
-                return false;
             }
+            return false;
         };
 
         this.removeContent = function (str) {
@@ -648,7 +646,6 @@ define.async('io.ox/core/tk/contenteditable-editor', [
     if (!window.tinyMCE) {
         return require(['3rd.party/tinymce/jquery.tinymce.min'])
             .then(function () { return Editor; });
-    } else {
-        return $.Deferred().resolve(Editor);
     }
+    return $.Deferred().resolve(Editor);
 });

@@ -28,10 +28,9 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
             } else if (bits === 1) {
                 // only own objects
                 return owner === ox.user_id;
-            } else {
-                // all objects or admin
-                return true;
             }
+            // all objects or admin
+            return true;
         },
 
         isFolder = function (obj) {

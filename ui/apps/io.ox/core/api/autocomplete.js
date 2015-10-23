@@ -89,38 +89,37 @@ define('io.ox/core/api/autocomplete', [
             if (query in this.cache) {
                 // cache hit
                 return $.Deferred().resolve(this.cache[query]);
-            } else {
-                // cache miss
-                try {
-                    http.pause();
-                    return $.when.apply($,
-                        _(self.apis).map(function (module) {
-                            // prefer autocomplete over search
-                            return (module.api.autocomplete || module.api.search)(query, options);
-                        })
-                    )
-                    .then(function () {
-                        // unify and process
-                        // TODO: Review / Refactor this!
-                        var retData = [],
-                            data = _(arguments).toArray();
-                        _(self.apis).each(function (module, index) {
-                            var items = _(data[index]).map(function (data) {
-                                data.type = module.type;
-                                return data;
-                            });
-                            retData = retData.concat(items);
-
-                            if (/contact|custom|user/.test(module.type)) {
-                                retData = self.processContactResults(retData, query);
-                            }
+            }
+            // cache miss
+            try {
+                http.pause();
+                return $.when.apply($,
+                    _(self.apis).map(function (module) {
+                        // prefer autocomplete over search
+                        return (module.api.autocomplete || module.api.search)(query, options);
+                    })
+                )
+                .then(function () {
+                    // unify and process
+                    // TODO: Review / Refactor this!
+                    var retData = [],
+                        data = _(arguments).toArray();
+                    _(self.apis).each(function (module, index) {
+                        var items = _(data[index]).map(function (data) {
+                            data.type = module.type;
+                            return data;
                         });
-                        // add to cache
-                        return (self.cache[query] = retData);
+                        retData = retData.concat(items);
+
+                        if (/contact|custom|user/.test(module.type)) {
+                            retData = self.processContactResults(retData, query);
+                        }
                     });
-                } finally {
-                    http.resume();
-                }
+                    // add to cache
+                    return (self.cache[query] = retData);
+                });
+            } finally {
+                http.resume();
             }
         },
 

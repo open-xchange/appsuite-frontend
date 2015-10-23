@@ -525,9 +525,8 @@ define('io.ox/contacts/edit/view-form', [
                             api.removeFromUploadList(_.ecid(data));
                             api.trigger('refresh.list');
                         });
-                    } else {
-                        return $.when();
                     }
+                    return $.when();
                 });
         }
 

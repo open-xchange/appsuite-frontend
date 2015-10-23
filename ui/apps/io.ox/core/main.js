@@ -346,9 +346,8 @@ define('io.ox/core/main', [
                     role: 'button',
                     'aria-label': arialabel ? _.escape(arialabel) : null
                 }).append(label);
-            } else {
-                return label;
             }
+            return label;
         });
 
         return node.appendTo(side === 'left' ? launchers : topbar);
@@ -1693,11 +1692,10 @@ define('io.ox/core/main', [
                     // instant fade out
                     $('#background-loader').idle().hide();
                     return $.when();
-                } else {
-                    var def = $.Deferred();
-                    $('#background-loader').idle().fadeOut(DURATION, def.resolve);
-                    return def;
                 }
+                var def = $.Deferred();
+                $('#background-loader').idle().fadeOut(DURATION, def.resolve);
+                return def;
             }
         });
 

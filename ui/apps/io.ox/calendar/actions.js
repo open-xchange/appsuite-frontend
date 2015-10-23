@@ -175,9 +175,8 @@ define('io.ox/calendar/actions', [
             // incomplete
             if (app.id && !app.users) {
                 return api.get(app).then(cont);
-            } else {
-                return cont(app);
             }
+            return cont(app);
         },
         action: function (baton) {
             // load & call
@@ -219,9 +218,8 @@ define('io.ox/calendar/actions', [
             if (_.device('!smartphone') && win && win.getPerspective) {
                 var pers = win.getPerspective();
                 return pers && pers.print;
-            } else {
-                return false;
             }
+            return false;
         },
         action: function (baton) {
             var win = baton.app.getWindow(),

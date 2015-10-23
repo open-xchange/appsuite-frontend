@@ -30,17 +30,16 @@ define('io.ox/core/api/user', [
                 response.birthday = util.julianToGregorian(response.birthday);
             }
             return response;
-        //we have an array of users
-        } else {
-            //convert birthdays with year 1 from julian to gregorian calendar
-            _(response).each(function (contact) {
-                //birthday without year
-                if (contact.birthday && moment.utc(contact.birthday).local(true).year() === 1) {
-                    contact.birthday = util.julianToGregorian(contact.birthday);
-                }
-            });
-            return response;
         }
+        //we have an array of users
+        //convert birthdays with year 1 from julian to gregorian calendar
+        _(response).each(function (contact) {
+            //birthday without year
+            if (contact.birthday && moment.utc(contact.birthday).local(true).year() === 1) {
+                contact.birthday = util.julianToGregorian(contact.birthday);
+            }
+        });
+        return response;
     };
 
     // generate basic API
@@ -97,7 +96,6 @@ define('io.ox/core/api/user', [
      * @return { deferred} done returns object with timestamp, data
      */
     api.update =  function (o) {
-
         if (_.isEmpty(o.data)) return $.when();
 
         return require(['io.ox/contacts/api']).then(function (contactsApi) {
@@ -188,16 +186,15 @@ define('io.ox/core/api/user', [
                 fixPost: true
             })
             .pipe(filter);
-        } else {
-            return http.FORM({
-                module: 'user',
-                action: 'update',
-                form: file,
-                data: changes,
-                params: { id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.then() }
-            })
-            .pipe(filter);
         }
+        return http.FORM({
+            module: 'user',
+            action: 'update',
+            form: file,
+            data: changes,
+            params: { id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.then() }
+        })
+        .pipe(filter);
     };
 
     /**

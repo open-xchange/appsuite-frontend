@@ -24,34 +24,33 @@ define('io.ox/mail/autoforward/settings/model', [
     function providePreparedData(attributes) {
         if (!attributes.forwardmail) {
             return {};
-        } else {
-            var preparedData = {
-                    'rulename': 'autoforward',
-
-                    'position': attributes.position,
-
-                    'test': {
-                        'id': 'true'
-                    },
-                    'actioncmds': [
-                        {
-                            'id': 'redirect',
-                            'to': attributes.forwardmail
-                        }
-                    ],
-                    'flags': ['autoforward'],
-                    'active': !!attributes.active
-                };
-            if (attributes.keep) {
-                preparedData.actioncmds.push({ 'id': 'keep' });
-            }
-            //first rule gets 0
-            if (!_.isUndefined(attributes.id) && !_.isNull(attributes.id)) {
-                preparedData.id = attributes.id;
-            }
-
-            return preparedData;
         }
+        var preparedData = {
+                'rulename': 'autoforward',
+
+                'position': attributes.position,
+
+                'test': {
+                    'id': 'true'
+                },
+                'actioncmds': [
+                    {
+                        'id': 'redirect',
+                        'to': attributes.forwardmail
+                    }
+                ],
+                'flags': ['autoforward'],
+                'active': !!attributes.active
+            };
+        if (attributes.keep) {
+            preparedData.actioncmds.push({ 'id': 'keep' });
+        }
+        //first rule gets 0
+        if (!_.isUndefined(attributes.id) && !_.isNull(attributes.id)) {
+            preparedData.id = attributes.id;
+        }
+
+        return preparedData;
 
     }
 
@@ -69,11 +68,10 @@ define('io.ox/mail/autoforward/settings/model', [
                     return settingsUtil.yellOnReject(
                         api.deleteRule(model.attributes.id)
                     );
-                } else {
-                    return settingsUtil.yellOnReject(
-                        api.update(providePreparedData(model.attributes))
-                    );
                 }
+                return settingsUtil.yellOnReject(
+                    api.update(providePreparedData(model.attributes))
+                );
             },
             create: function (model) {
                 //make the active element lose focus to get the changes of the field a user was editing

@@ -83,9 +83,8 @@ define('io.ox/search/model', [
             var facet = pool[value.facet];
             if (value.facet === 'folder' && (facet.values.custom.custom === 'custom' || !facet.values.custom.custom)) {
                 return false;
-            } else {
-                return true;
             }
+            return true;
         });
 
         // collect facets that should be disabled/
@@ -111,9 +110,8 @@ define('io.ox/search/model', [
                         compact.custom = 'custom';
                         tmp = compact;
                         return false;
-                    } else {
-                        return true;
                     }
+                    return true;
                 });
                 list.unshift(tmp);
             } else {

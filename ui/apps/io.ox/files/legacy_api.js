@@ -28,6 +28,7 @@ define('io.ox/files/legacy_api', [
 
     'use strict';
 
+    /* eslint-disable */
     var tracker = (function () {
 
         var fileLocks = {},
@@ -992,5 +993,5 @@ define('io.ox/files/legacy_api', [
     };
 
     return api;
-
+    /* eslint-enable */
 });

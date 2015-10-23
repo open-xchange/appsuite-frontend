@@ -277,9 +277,8 @@ define('io.ox/core/permissions/permissions', [
     addRemoveButton = function (entity) {
         if (isFolderAdmin && entity !== ox.user_id) {
             return $('<a href="# "data-action="remove">').append($('<i class="fa fa-trash-o">'));
-        } else {
-            return $();
         }
+        return $();
     };
 
     preventAdminPermissions = function (permission, baton) {

@@ -162,8 +162,6 @@ define('io.ox/core/api/factory', [
                                 })
                             )
                             .then(function () { return data; });
-                        } else {
-                            return data;
                         }
                     }, function (error) {
                         api.trigger('error error:' +  error.code, error );
@@ -259,12 +257,11 @@ define('io.ox/core/api/factory', [
                 //         .then(function (data) { return [data]; })
                 //         .then(o.pipe.listPost)
                 //         .done(o.done.list || $.noop);
-                } else {
-                    // cache miss?
-                    return (useCache ? caches.list.get(ids, getter) : getter())
-                        .then(o.pipe.listPost)
-                        .done(o.done.list || $.noop);
                 }
+                // cache miss?
+                return (useCache ? caches.list.get(ids, getter) : getter())
+                    .then(o.pipe.listPost)
+                    .done(o.done.list || $.noop);
             },
 
             /**
@@ -305,9 +302,8 @@ define('io.ox/core/api/factory', [
                             ).then(function () {
                                 return data;
                             });
-                        } else {
-                            return data;
                         }
+                        return data;
                     })
                     .fail(function (e) {
                         _.call(o.fail.get, e, opt, o);
@@ -370,9 +366,8 @@ define('io.ox/core/api/factory', [
                                             data = api.localRemove(data, hash, getKey);
                                         }
                                         return cache.add(key, data);
-                                    } else {
-                                        return $.when();
                                     }
+                                    return $.when();
                                 });
                             }));
                         });
@@ -463,9 +458,8 @@ define('io.ox/core/api/factory', [
                         })
                         .then(update, update)
                         .always(done);
-                    } else {
-                        return done();
                     }
+                    return done();
                 });
             },
 
@@ -611,9 +605,8 @@ define('io.ox/core/api/factory', [
                     // trigger local refresh
                     api.trigger('refresh.all');
                 });
-            } else {
-                return $.when();
             }
+            return $.when();
         };
 
         ox.on('refresh^', function () {

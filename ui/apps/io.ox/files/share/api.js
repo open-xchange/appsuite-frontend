@@ -82,9 +82,8 @@ define('io.ox/files/share/api', [
         getPermissions: function () {
             if (this.isFolder()) {
                 return this.get('com.openexchange.share.extendedPermissions') || this.get('permissions');
-            } else {
-                return this.get('com.openexchange.share.extendedObjectPermissions') || this.get('object_permissions');
             }
+            return this.get('com.openexchange.share.extendedObjectPermissions') || this.get('object_permissions');
         },
 
         loadExtendedPermissions: (function () {
@@ -374,10 +373,9 @@ define('io.ox/files/share/api', [
                 collection.reset(_(model.getPermissions()).where({ entity: ox.user_id }));
                 changes = { permissions: collection.toJSON() };
                 return folderAPI.update(model.get('id'), changes);
-            } else {
-                changes = { object_permissions: [], 'com.openexchange.share.extendedObjectPermissions': [] };
-                return filesAPI.update(model.pick('folder_id', 'id'), changes);
             }
+            changes = { object_permissions: [], 'com.openexchange.share.extendedObjectPermissions': [] };
+            return filesAPI.update(model.pick('folder_id', 'id'), changes);
         },
 
         // resend invitation/notification

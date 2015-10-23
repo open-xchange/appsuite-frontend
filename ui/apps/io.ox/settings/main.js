@@ -512,16 +512,15 @@ define('io.ox/settings/main', [
                     // updateExpertMode();
                     if (focus) vsplit.right.focus();
                 });
-            } else {
-                return require(['io.ox/contacts/settings/pane', 'io.ox/mail/vacationnotice/settings/filter', 'io.ox/mail/autoforward/settings/filter'], function () {
-                    // again, since require makes this async
-                    right.empty().idle();
-                    vsplit.right.attr('aria-label', /*#, dynamic*/gt.pgettext('app', baton.data.title));
-                    ext.point(extPointPart).invoke('draw', right, baton);
-                    // updateExpertMode();
-                    if (focus) vsplit.right.focus();
-                });
             }
+            return require(['io.ox/contacts/settings/pane', 'io.ox/mail/vacationnotice/settings/filter', 'io.ox/mail/autoforward/settings/filter'], function () {
+                // again, since require makes this async
+                right.empty().idle();
+                vsplit.right.attr('aria-label', /*#, dynamic*/gt.pgettext('app', baton.data.title));
+                ext.point(extPointPart).invoke('draw', right, baton);
+                // updateExpertMode();
+                if (focus) vsplit.right.focus();
+            });
         };
 
         // trigger auto save on any change
@@ -555,13 +554,12 @@ define('io.ox/settings/main', [
                         baton = new ext.Baton({ data: pool.getModel(id).get('meta'), options: options || {} });
                     tree.trigger('virtual', id, {}, baton);
                 });
-            } else {
-                if (!_.device('smartphone')) {
-                    tree.selection.resetSelected(tree.selection.getItems());
-                    tree.selection.pick(0);
-                }
-                return $.when();
             }
+            if (!_.device('smartphone')) {
+                tree.selection.resetSelected(tree.selection.getItems());
+                tree.selection.pick(0);
+            }
+            return $.when();
         };
 
         // go!

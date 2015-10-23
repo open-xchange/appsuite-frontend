@@ -415,15 +415,14 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         // defines behaviour when index out of bounds should be selected by arrow keys
         outOfBounds: function (index, items) {
-            if (index < 0) {
-                return false;
-            } else if (index >= items.length) {
+            if (index < 0) return false;
+
+            if (index >= items.length) {
                 // scroll to very bottom if at end of list (to keep a11y support)
                 this.view.$el.scrollTop(0xFFFFFF);
                 return false;
-            } else {
-                return index;
             }
+            return index;
         },
 
         onPageUpDown: function (e) {
@@ -847,16 +846,14 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         outOfBounds: function (index, items) {
-            if (index < 0) {
-                return 0;
-            } else if (index >= items.length) {
+            if (index < 0) return 0;
+
+            if (index >= items.length) {
                 index = items.length - 1;
                 // scroll to very bottom if at end of list (to keep a11y support)
                 this.view.$el.scrollTop(0xFFFFFF);
-                return index;
-            } else {
-                return index;
             }
+            return index;
         },
 
         onClick: function (e) {

@@ -245,10 +245,9 @@ define('io.ox/mail/threadview', [
             if (this.collection.length === 0) {
                 this.empty();
                 return;
-            } else {
-                this.$messages.empty();
-                this.$el.scrollTop(0);
             }
+            this.$messages.empty();
+            this.$el.scrollTop(0);
 
             this.updateHeader();
 

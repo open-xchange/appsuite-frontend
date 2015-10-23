@@ -66,14 +66,12 @@ define('io.ox/core/tk/vgrid', [
         this.getHeight = function () {
             if (isEmpty) {
                 return 0;
-            } else {
-                // not sure if template ever contains more than one element
-                if (template[0].getHeight) {
-                    return template[0].getHeight();
-                } else {
-                    return getHeight(this.getClone().node);
-                }
             }
+            // not sure if template ever contains more than one element
+            if (template[0].getHeight) {
+                return template[0].getHeight();
+            }
+            return getHeight(this.getClone().node);
 
         };
 
@@ -666,9 +664,8 @@ define('io.ox/core/tk/vgrid', [
                 offset = Math.max(offset >> 0, 0);
                 if (offset === currentOffset) {
                     return DONE;
-                } else {
-                    currentOffset = offset;
                 }
+                currentOffset = offset;
 
                 // get all items
                 return loader.load(offset, all).then(
@@ -822,9 +819,8 @@ define('io.ox/core/tk/vgrid', [
                         //console.debug('case #1 restoreHashSelection()', ids);
                         restoreHashSelection(ids, changed);
                         return;
-                    } else {
-                        _.url.hash('id', null);
                     }
+                    _.url.hash('id', null);
                 }
 
                 if (autoSelectAllowed()) {
@@ -884,21 +880,21 @@ define('io.ox/core/tk/vgrid', [
                 // always reset loader since header data (e.g. flags) might have changed
                 loader.reset();
 
-                if (isArray(list)) {
-                    return apply(list)
-                        .always(function () {
-                            self.idle();
-                        })
-                        .done(function () {
-                            var hasChanged = !_.isEqual(all, list);
-                            updateSelection(hasChanged);
-                            // global event
-                            ox.trigger('grid:stop', _.clone(props.toJSON()), list);
-                        });
-                } else {
+                if (!_.isArray(list)) {
                     console.warn('VGrid.all() must provide an array!');
                     return $.Deferred().reject();
                 }
+
+                return apply(list)
+                    .always(function () {
+                        self.idle();
+                    })
+                    .done(function () {
+                        var hasChanged = !_.isEqual(all, list);
+                        updateSelection(hasChanged);
+                        // global event
+                        ox.trigger('grid:stop', _.clone(props.toJSON()), list);
+                    });
             }
 
             return function () {
@@ -1203,12 +1199,10 @@ define('io.ox/core/tk/vgrid', [
                         responsiveChange = true;
                     }
                     return this;
-                } else {
-                    return options[key];
                 }
-            } else {
-                return options;
+                return options[key];
             }
+            return options;
         };
 
         this.props = props;
@@ -1227,12 +1221,10 @@ define('io.ox/core/tk/vgrid', [
                         responsiveChange = true;
                     }
                     return this;
-                } else {
-                    return props.get(key);
                 }
-            } else {
-                return props.toJSON();
+                return props.get(key);
             }
+            return props.toJSON();
         };
 
         this.scrollTop = function (t) {

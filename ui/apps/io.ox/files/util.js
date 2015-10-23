@@ -32,9 +32,8 @@ define('io.ox/files/util', [
         // consider: fc
         if (!_.isUndefined(val) && val === false) {
             return $.Deferred().reject();
-        } else {
-            return $.Deferred().resolve();
         }
+        return $.Deferred().resolve();
     }
 
     return {
@@ -93,10 +92,9 @@ define('io.ox/files/util', [
                 } else if (data.folder_id) {
                     // no app given, maybe the item itself has a folder
                     return folderAPI.get(data.folder_id);
-                } else {
-                    // continue without getFolder
-                    return $.Deferred().resolveWith(data);
                 }
+                // continue without getFolder
+                return $.Deferred().resolveWith(data);
             }
             return function (type, baton) {
                 return getFolder(baton)
@@ -111,9 +109,8 @@ define('io.ox/files/util', [
                                 // reject/resolve
                                 if (inverse ? !result : result) {
                                     return RESOLVE;
-                                } else {
-                                    return REJECT;
                                 }
+                                return REJECT;
                             });
             };
         })(),
@@ -296,10 +293,9 @@ define('io.ox/files/util', [
                 } else if (type) {
                     //e.g. /^image\/.*(gif|png|jpe?g|bmp|tiff).*$/i
                     return (regexp[key] = new RegExp('^' + type + '\\/.*' + list + '.*$', 'i')).test(file.file_mimetype);
-                } else {
-                    //e.g. /^.*\.(gif|png|jpe?g|bmp|tiff)$/i
-                    return (regexp[key] = new RegExp('^.*\\.' + list + '$', 'i')).test(file.filename);
                 }
+                //e.g. /^.*\.(gif|png|jpe?g|bmp|tiff)$/i
+                return (regexp[key] = new RegExp('^.*\\.' + list + '$', 'i')).test(file.filename);
             }
 
             //identify mode

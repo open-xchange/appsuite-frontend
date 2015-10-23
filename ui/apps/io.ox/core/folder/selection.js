@@ -78,7 +78,8 @@ define('io.ox/core/folder/selection', [], function () {
             if ($(e.target).is(':checkbox')) return;
 
             // avoid double selections
-            if (e.isDefaultPrevented()) return; else e.preventDefault();
+            if (e.isDefaultPrevented()) return;
+            e.preventDefault();
 
             // only select in mobile edit mode when clicking on the label
             if (this.view.app && this.view.app.props && this.view.app.props.get('mobileFolderSelectMode') === true && !$(e.target).parent().hasClass('folder-label')) return;
@@ -123,7 +124,8 @@ define('io.ox/core/folder/selection', [], function () {
             if (index >= items.length || index < 0) return;
 
             // avoid duplicates and unwanted scrolling
-            if (e.isDefaultPrevented()) return; else e.preventDefault();
+            if (e.isDefaultPrevented()) return;
+            e.preventDefault();
 
             // sort?
             if (e.altKey && current.parent().parent().attr('data-sortable') === 'true') {

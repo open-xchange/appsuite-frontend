@@ -28,9 +28,8 @@ define('io.ox/core/cache', [
             if (typeof data === 'object' && data) {
                 data = 'data' in data ? data.data : data;
                 return (data.folder_id || data.folder || 0) + '.' + data.id;
-            } else {
-                return '';
             }
+            return '';
         };
 
     ox.cache = {
@@ -152,18 +151,16 @@ define('io.ox/core/cache', [
                         .then(function () {
                             return data;
                         });
-                    } else {
-                        return getdata.data;
                     }
-                } else {
-                    return index.set(key, {
-                        data: data,
-                        timestamp: timestamp
-                    })
-                    .then(function () {
-                        return data;
-                    });
+                    return getdata.data;
                 }
+                return index.set(key, {
+                    data: data,
+                    timestamp: timestamp
+                })
+                .then(function () {
+                    return data;
+                });
             });
         };
 
@@ -173,9 +170,8 @@ define('io.ox/core/cache', [
                 if (o !== null) {
                     if (readThroughHandler) { readThroughHandler(o.data); }
                     return o.data;
-                } else {
-                    return getter ? getter() : null;
                 }
+                return getter ? getter() : null;
             });
         };
 
@@ -196,9 +192,8 @@ define('io.ox/core/cache', [
                 }
 
                 return $.when.apply(null, c);
-            } else {
-                return index.remove(key);
             }
+            return index.remove(key);
         };
 
         // grep remove
@@ -317,16 +312,14 @@ define('io.ox/core/cache', [
                     }
                 });
                 return def;
-            } else {
-                // simple value
-                var tmpKey;
-                if (typeof key === 'string' || typeof key === 'number') {
-                    tmpKey = key;
-                } else {
-                    tmpKey = this.keyGenerator(key);
-                }
-                return get(tmpKey, getter, readThroughHandler);
             }
+            // simple value
+            var tmpKey;
+            if (typeof key === 'string' || typeof key === 'number') {
+                tmpKey = key;
+            }
+            tmpKey = this.keyGenerator(key);
+            return get(tmpKey, getter, readThroughHandler);
         };
 
         // add to cache
@@ -351,14 +344,13 @@ define('io.ox/core/cache', [
                 return $.when.apply($, c).then(function () {
                     return _(arguments).without(null);
                 });
-            } else {
-                // get key
-                key = String(this.keyGenerator(data));
-
-                return add(key, data, timestamp).then(function () {
-                    return key;
-                });
             }
+            // get key
+            key = String(this.keyGenerator(data));
+
+            return add(key, data, timestamp).then(function () {
+                return key;
+            });
         };
 
         this.merge = function (data, timestamp) {
@@ -380,29 +372,26 @@ define('io.ox/core/cache', [
                 return $.when.apply(null, c).then(function () {
                     return changed;
                 });
-            } else {
-                key = String(this.keyGenerator(data));
-                return get(key).then(function (target) {
-                    if (target !== null) {
-                        var id;
-                        for (id in target) {
-                            if (data[id] !== undefined) {
-                                changed = changed || !_.isEqual(target[id], data[id]);
-                                target[id] = data[id];
-                            }
-                        }
-                        if (changed) {
-                            return self.add(target, timestamp).then(function () {
-                                return changed;
-                            });
-                        } else {
-                            return changed;
-                        }
-                    } else {
-                        return false;
-                    }
-                });
             }
+            key = String(this.keyGenerator(data));
+            return get(key).then(function (target) {
+                if (target !== null) {
+                    var id;
+                    for (id in target) {
+                        if (data[id] !== undefined) {
+                            changed = changed || !_.isEqual(target[id], data[id]);
+                            target[id] = data[id];
+                        }
+                    }
+                    if (changed) {
+                        return self.add(target, timestamp).then(function () {
+                            return changed;
+                        });
+                    }
+                    return changed;
+                }
+                return false;
+            });
         };
 
         var remove = this.remove;
@@ -413,10 +402,9 @@ define('io.ox/core/cache', [
                 // simple value
                 if (typeof data === 'string' || typeof data === 'number') {
                     return data;
-                } else {
-                    // object, so get key
-                    return String(tmpGenerator(data));
                 }
+                // object, so get key
+                return String(tmpGenerator(data));
             };
 
             if (_.isArray(data)) {
@@ -436,9 +424,8 @@ define('io.ox/core/cache', [
                 for (; i < $i; i++) {
                     remover(data[i]);
                 }
-            } else {
-                remove(keygen(data)).done(def.resolve).fail(def.reject);
             }
+            remove(keygen(data)).done(def.resolve).fail(def.reject);
 
             return def;
         };
@@ -451,9 +438,8 @@ define('io.ox/core/cache', [
             return get(cid).then(function (co) {
                 if (co !== null && co[prop] !== data[prop]) {
                     return remove(cid);
-                } else {
-                    return $.when();
                 }
+                return $.when();
             });
         };
     };

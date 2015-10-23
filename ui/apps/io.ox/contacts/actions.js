@@ -81,11 +81,8 @@ define('io.ox/contacts/actions', [
     new Action('io.ox/contacts/actions/distrib', {
         index: 100,
         requires: function (e) {
-            if (_.device('smartphone')) {
-                return false;
-            } else {
-                return e.baton.app.folder.can('create');
-            }
+            if (_.device('smartphone')) return false;
+            return e.baton.app.folder.can('create');
         },
         action: function (baton) {
             ox.load(['io.ox/contacts/distrib/main']).done(function (m) {
@@ -136,20 +133,19 @@ define('io.ox/contacts/actions', [
             if (contact.id === 0 || contact.folder_id === 0) {
                 // check if contains mail
                 return !!(contact.email1 || contact.email2 || contact.email3);
-            } else {
-                var list = [].concat(contact);
-                // is request needed?
-                return api.getList(list, true, {
-                    check: function (obj) {
-                        return obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3;
-                    }
-                }).then(function (list) {
-                    var test = (e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
-                        return memo + (obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
-                    }, 0).value() > 0);
-                    return test;
-                });
             }
+            var list = [].concat(contact);
+            // is request needed?
+            return api.getList(list, true, {
+                check: function (obj) {
+                    return obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3;
+                }
+            }).then(function (list) {
+                var test = (e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
+                    return memo + (obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
+                }, 0).value() > 0);
+                return test;
+            });
         },
         multiple: function (list) {
             require(['io.ox/contacts/actions/send'], function (action) {
@@ -178,18 +174,17 @@ define('io.ox/contacts/actions', [
             if (contact.id === 0 || contact.folder_id === 0) {
                 // check if contains mail
                 return !!(contact.email1 || contact.email2 || contact.email3);
-            } else {
-                var list = [].concat(contact);
-                return api.getList(list, true, {
-                    check: function (obj) {
-                        return obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3;
-                    }
-                }).then(function (list) {
-                    return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
-                        return memo + (obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
-                    }, 0).value() > 0;
-                });
             }
+            var list = [].concat(contact);
+            return api.getList(list, true, {
+                        check: function (obj) {
+                            return obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3;
+                        }
+                    }).then(function (list) {
+                        return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
+                            return memo + (obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
+                        }, 0).value() > 0;
+                    });
         },
         multiple: function (list) {
             require(['io.ox/contacts/actions/invite'], function (action) {

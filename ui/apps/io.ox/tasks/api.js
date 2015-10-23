@@ -128,13 +128,11 @@ define('io.ox/tasks/api', [
                     });
                     if (found) {
                         return api.caches.all.add(cacheKey, cachevalue);
-                    } else {
-                        return $.when();
                     }
-                } else {
-                    //just leave it to the next all request, no need to do it here
                     return $.when();
                 }
+                //just leave it to the next all request, no need to do it here
+                return $.when();
             });
         },
 
@@ -201,9 +199,8 @@ define('io.ox/tasks/api', [
                     list.push(tmp);
                 });
                 return list;
-            } else {
-                return participants;
             }
+            return participants;
         };
 
     // generate basic API
@@ -513,9 +510,8 @@ define('io.ox/tasks/api', [
                 return api.update(task, newFolder);
             } else if (task.length === 1) {
                 return api.update(task[0], newFolder);
-            } else {
-                return api.updateMultiple(task, { folder_id: newFolder });
             }
+            return api.updateMultiple(task, { folder_id: newFolder });
         });
     };
 

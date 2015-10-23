@@ -335,12 +335,11 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
                             error(e);
                         }
                     });
-            } else {
-                try {
-                    return o.invoke.apply(o, args);
-                } catch (e) {
-                    error(e);
-                }
+            }
+            try {
+                return o.invoke.apply(o, args);
+            } catch (e) {
+                error(e);
             }
         };
 
@@ -511,9 +510,8 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
             id = id || '';
             if (registry[id] !== undefined) {
                 return registry[id];
-            } else {
-                return (registry[id] = new Point({ id: id }));
             }
+            return (registry[id] = new Point({ id: id }));
         },
 
         /**

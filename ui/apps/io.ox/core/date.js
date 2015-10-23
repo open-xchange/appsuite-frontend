@@ -18,7 +18,7 @@ define.async('io.ox/core/date', [
 ], function (gettext, settings, gt) {
 
     'use strict';
-
+    /* eslint-disable */
     var dateTimeFormats = [
         '', 'E', 'yMd', 'yMEd', 'Hm', 'yMEdHm', 'yMdHm',
         'yMEdHm', 'v', 'yMEdHmv', 'yMdHmv', 'yMEdHmv', 'Hmv',
@@ -1016,4 +1016,5 @@ define.async('io.ox/core/date', [
         api.Local = tz;
         return api;
     });
+    /* eslint-enable */
 });

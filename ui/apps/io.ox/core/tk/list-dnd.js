@@ -88,7 +88,9 @@ define('io.ox/core/tk/list-dnd', [
         function over(e) {
 
             // avoid handling bubbling events
-            if (e.isDefaultPrevented()) return; else e.preventDefault();
+            if (e.isDefaultPrevented()) return;
+
+            e.preventDefault();
 
             // use first here or we get the arrows of the subfolder nodes as well
             var arrow = $(this).find('.folder-arrow:first');
@@ -206,7 +208,9 @@ define('io.ox/core/tk/list-dnd', [
 
         function drop(e) {
             // avoid multiple events on parent tree nodes
-            if (e.isDefaultPrevented()) return; else e.preventDefault();
+            if (e.isDefaultPrevented()) return;
+
+            e.preventDefault();
             // process drop
             clearTimeout(toggleTimer);
             // abort unless it was a real drag move

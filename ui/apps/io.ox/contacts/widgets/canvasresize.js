@@ -58,7 +58,8 @@ define('io.ox/contacts/widgets/canvasresize', ['io.ox/contacts/widgets/exif'], f
              */
             detectSubsampling: function (img) {
                 var iw = img.width, ih = img.height;
-                if (iw * ih > 1048576) { // subsampling may happen over megapixel image
+                // subsampling may happen over megapixel image
+                if (iw * ih > 1048576) {
                     var canvas = document.createElement('canvas');
                     canvas.width = canvas.height = 1;
                     var ctx = canvas.getContext('2d');
@@ -67,9 +68,8 @@ define('io.ox/contacts/widgets/canvasresize', ['io.ox/contacts/widgets/exif'], f
                     // check alpha channel value to confirm image is covering edge pixel or not.
                     // if alpha value is 0 image is not covering, hence subsampled.
                     return ctx.getImageData(0, 0, 1, 1).data[3] === 0;
-                } else {
-                    return false;
                 }
+                return false;
             },
             /**
              * Update the orientation according to the specified rotation angle
@@ -321,9 +321,8 @@ define('io.ox/contacts/widgets/canvasresize', ['io.ox/contacts/widgets/exif'], f
     return function (file, options) {
         if (typeof file === 'string') {
             return methods[file](options);
-        } else {
-            new Plugin(file, options);
         }
+        new Plugin(file, options);
     };
 
 });

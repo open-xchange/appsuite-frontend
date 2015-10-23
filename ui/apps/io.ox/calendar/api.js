@@ -65,9 +65,8 @@ define('io.ox/calendar/api', [
                     api.trigger('error error:' +  error.code, error );
                     return error;
                 });
-            } else {
-                return $.Deferred().resolve(api.caches.get[key]);
             }
+            return $.Deferred().resolve(api.caches.get[key]);
         },
 
         getAll: function (o, useCache) {
@@ -108,9 +107,8 @@ define('io.ox/calendar/api', [
                     api.trigger('error error:' +  error.code, error );
                     return error;
                 });
-            } else {
-                return $.Deferred().resolve(JSON.parse(api.caches.all[key]));
             }
+            return $.Deferred().resolve(JSON.parse(api.caches.all[key]));
         },
 
         getList: function (ids) {
@@ -165,9 +163,8 @@ define('io.ox/calendar/api', [
                 .done(function (data) {
                     api.caches.all[key] = JSON.stringify(data);
                 });
-            } else {
-                return $.Deferred().resolve(JSON.parse(api.caches.all[key]));
             }
+            return $.Deferred().resolve(JSON.parse(api.caches.all[key]));
         },
 
         search: function (query) {
@@ -206,65 +203,63 @@ define('io.ox/calendar/api', [
             delete o.cid;
             delete o.tempAttachmentIndicator;
 
-            if (_.isEmpty(o)) {
-                return $.when();
-            } else {
-                return http.PUT({
-                    module: 'calendar',
-                    params: {
-                        action: 'update',
-                        id: o.id,
-                        folder: folder_id,
-                        timestamp: o.last_modified || o.timestamp || _.then(),
-                        timezone: 'UTC'
-                    },
-                    data: o,
-                    appendColumns: false
-                })
-                .then(function (obj) {
-                    // check for conflicts
-                    if (!_.isUndefined(obj.conflicts)) {
-                        return $.Deferred().reject(obj);
+            if (_.isEmpty(o)) return $.when();
+
+            return http.PUT({
+                module: 'calendar',
+                params: {
+                    action: 'update',
+                    id: o.id,
+                    folder: folder_id,
+                    timestamp: o.last_modified || o.timestamp || _.then(),
+                    timezone: 'UTC'
+                },
+                data: o,
+                appendColumns: false
+            })
+            .then(function (obj) {
+                // check for conflicts
+                if (!_.isUndefined(obj.conflicts)) {
+                    return $.Deferred().reject(obj);
+                }
+
+                checkForNotification(o);
+
+                var getObj = {
+                    id: obj.id || o.id,
+                    folder: folder_id
+                };
+
+                if (o.recurrence_position && o.recurrence_position !== null && obj.id === o.id) {
+                    getObj.recurrence_position = o.recurrence_position;
+                }
+
+                // clear caches
+                api.caches.all = {};
+                delete api.caches.get[key];
+                // if master, delete all appointments from cache
+                if (o.recurrence_type > 0 && !o.recurrence_position) {
+                    var deleteKey = folder_id + '.' + o.id;
+                    for ( var i in api.caches.get ) {
+                        if (i.indexOf(deleteKey) === 0) delete api.caches.get[i];
                     }
+                }
 
-                    checkForNotification(o);
-
-                    var getObj = {
-                        id: obj.id || o.id,
-                        folder: folder_id
-                    };
-
-                    if (o.recurrence_position && o.recurrence_position !== null && obj.id === o.id) {
-                        getObj.recurrence_position = o.recurrence_position;
-                    }
-
-                    // clear caches
-                    api.caches.all = {};
-                    delete api.caches.get[key];
-                    // if master, delete all appointments from cache
-                    if (o.recurrence_type > 0 && !o.recurrence_position) {
-                        var deleteKey = folder_id + '.' + o.id;
-                        for ( var i in api.caches.get ) {
-                            if (i.indexOf(deleteKey) === 0) delete api.caches.get[i];
+                return api.get(getObj)
+                    .then(function (data) {
+                        if (attachmentHandlingNeeded) {
+                            //to make the detailview show the busy animation
+                            api.addToUploadList(_.ecid(data));
                         }
-                    }
-
-                    return api.get(getObj)
-                        .then(function (data) {
-                            if (attachmentHandlingNeeded) {
-                                //to make the detailview show the busy animation
-                                api.addToUploadList(_.ecid(data));
-                            }
-                            api.trigger('update', data);
-                            api.trigger('update:' + _.ecid(o), data);
-                            return data;
-                        });
-                }, function (error) {
-                    api.caches.all = {};
-                    api.trigger('delete', o);
-                    return error;
-                });
-            }
+                        api.trigger('update', data);
+                        api.trigger('update:' + _.ecid(o), data);
+                        return data;
+                    });
+            }, function (error) {
+                api.caches.all = {};
+                api.trigger('delete', o);
+                return error;
+            });
         },
 
         /**
@@ -667,10 +662,9 @@ define('io.ox/calendar/api', [
                     if (_.isString(obj)) {
                         // use fresh server data
                         return (api.caches.freebusy[obj] = response.shift());
-                    } else {
-                        // use cached data
-                        return obj;
                     }
+                    // use cached data
+                    return obj;
                 });
             });
         },

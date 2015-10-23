@@ -174,19 +174,16 @@ define('io.ox/tasks/util', [
                 if (m.isBefore(startOfDay)) {
                     if (m.isAfter(startOfDay.subtract(1, 'day'))) {
                         return gt('Yesterday') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
-                    } else {
-                        return m.format('ddd, ' + m.format(data.full_time ? 'l' : 'l, LT'));
                     }
-                } else {
-                    // future
-                    if (m.isBefore(startOfDay.add(1, 'days'))) {
-                        return gt('Today') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
-                    } else if (m.isBefore(startOfDay.add(1, 'day'))) {
-                        return gt('Tomorrow') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
-                    } else {
-                        return m.format('ddd, ' + m.format(data.full_time ? 'l' : 'l, LT'));
-                    }
+                    return m.format('ddd, ' + m.format(data.full_time ? 'l' : 'l, LT'));
                 }
+                // future
+                if (m.isBefore(startOfDay.add(1, 'days'))) {
+                    return gt('Today') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
+                } else if (m.isBefore(startOfDay.add(1, 'day'))) {
+                    return gt('Tomorrow') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
+                }
+                return m.format('ddd, ' + m.format(data.full_time ? 'l' : 'l, LT'));
             },
 
             //change status number to status text. format enddate to presentable string
@@ -268,9 +265,8 @@ define('io.ox/tasks/util', [
                         }
                         if (a.title.toLowerCase() > b.title.toLowerCase()) {
                             return 1;
-                        } else {
-                            return -1;
                         }
+                        return -1;
                     },
                     //sort by endDate. If equal, sort by alphabet
                     dateSort = function (a, b) {
@@ -279,9 +275,8 @@ define('io.ox/tasks/util', [
                         // treat end_time=null and end_time=undefined equally. may happen with done tasks
                         } else if (a.end_time === b.end_time || (a.end_time === undefined && b.end_time === null) || (a.end_time === null && b.end_time === undefined)) {
                             return alphabetSort(a, b);
-                        } else {
-                            return -1;
                         }
+                        return -1;
                     };
 
                 for (var i = 0; i < tasks.length; i++) {

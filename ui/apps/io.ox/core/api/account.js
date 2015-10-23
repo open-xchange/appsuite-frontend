@@ -169,13 +169,12 @@ define('io.ox/core/api/account', [
                 return Boolean(re && re.test(id));
             } else if (type === 'inbox') {
                 return typeHash[id] === type;
-            } else {
-                // loop of all types to also check if a subfolder is of a type
-                return _(typeHash).some(function (defaultType, defaultId) {
-                    var isSubfolder = (id).indexOf(defaultId) === 0;
-                    return defaultType === type && (defaultId === id || isSubfolder);
-                });
             }
+            // loop of all types to also check if a subfolder is of a type
+            return _(typeHash).some(function (defaultType, defaultId) {
+                var isSubfolder = (id).indexOf(defaultId + separator) === 0;
+                return defaultType === type && (defaultId === id || isSubfolder);
+            });
         }
 
         // use memoize to speed things up (yep, no reset if someone changes default folders)
@@ -244,24 +243,20 @@ define('io.ox/core/api/account', [
             // is not unified mail?
             if (!api.isUnified(str)) {
                 return parseInt(str.replace(/^default(\d+)(.*)$/, '$1'), 10);
-            } else {
-                // strip off unified prefix
-                var tail = str.replace(regParseAccountId, '');
-                if (tail !== str && /^default\d+/.test(tail)) {
-                    return api.parseAccountId(tail, strict);
-                } else {
-                    if (!strict) {
-                        return 0;
-                    } else {
-                        var m = str.match(/^default(\d+)/);
-                        return m && m.length ? parseInt(m[1], 10) : 0;
-                    }
-                }
             }
-        } else {
-            // default account
-            return 0;
+            // strip off unified prefix
+            var tail = str.replace(regParseAccountId, '');
+            if (tail !== str && /^default\d+/.test(tail)) {
+                return api.parseAccountId(tail, strict);
+            }
+            if (!strict) {
+                return 0;
+            }
+            var m = str.match(/^default(\d+)/);
+            return m && m.length ? parseInt(m[1], 10) : 0;
         }
+        // default account
+        return 0;
     };
 
     /**
@@ -443,24 +438,23 @@ define('io.ox/core/api/account', [
             if (_(api.cache).size() > 0) {
                 // cache hit
                 return $.Deferred().resolve(_(api.cache).values());
-            } else {
-                // cache miss
-                return http.GET({
-                    module: 'account',
-                    params: { action: 'all' },
-                    appendColumns: true,
-                    processResponse: true
-                })
-                .then(function (data) {
-                    // process and add to cache
-                    data = process(data);
-                    api.cache = {};
-                    _(data).each(function (account) {
-                        api.cache[account.id] = process(account);
-                    });
-                    return data;
-                });
             }
+            // cache miss
+            return http.GET({
+                module: 'account',
+                params: { action: 'all' },
+                appendColumns: true,
+                processResponse: true
+            })
+            .then(function (data) {
+                // process and add to cache
+                data = process(data);
+                api.cache = {};
+                _(data).each(function (account) {
+                    api.cache[account.id] = process(account);
+                });
+                return data;
+            });
         }
 
         return load().done(function (list) {

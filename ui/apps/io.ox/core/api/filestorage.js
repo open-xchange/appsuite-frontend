@@ -238,17 +238,15 @@ define('io.ox/core/api/filestorage', [
                 // allow only one account per Oauth, 2 storages for the same Oauth account don't make sense
                 if (account) {
                     return $.Deferred().reject();
-                } else {
-                    var config = _.copy(serviceConfigsCache[oauthAccount.serviceId], true);
-                    if (config) {
-                        config.displayName = oauthAccount.displayName;
-                        config.configuration.account = String(oauthAccount.id);
-                        return api.createAccount(config);
-                    } else {
-                        //no config found
-                        return $.Deferred().reject();
-                    }
                 }
+                var config = _.copy(serviceConfigsCache[oauthAccount.serviceId], true);
+                if (config) {
+                    config.displayName = oauthAccount.displayName;
+                    config.configuration.account = String(oauthAccount.id);
+                    return api.createAccount(config);
+                }
+                //no config found
+                return $.Deferred().reject();
             },
             deleteAccount: function (data, options) {
                 var model,

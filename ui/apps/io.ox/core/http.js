@@ -586,16 +586,15 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         if (!_.isArray(data) || !columns) {
             // typically from "action=get" (already sanitized)
             return data;
-        } else {
-            // POST/PUT - sanitize data
-            var i = 0, $l = data.length, sanitized = [], obj,
-                columnList = columns.split(',');
-            for (; i < $l; i++) {
-                obj = data[i];
-                sanitized.push(_.isArray(obj) ? makeObject(obj, module, columnList) : obj);
-            }
-            return sanitized;
         }
+        // POST/PUT - sanitize data
+        var i = 0, $l = data.length, sanitized = [], obj,
+            columnList = columns.split(',');
+        for (; i < $l; i++) {
+            obj = data[i];
+            sanitized.push(_.isArray(obj) ? makeObject(obj, module, columnList) : obj);
+        }
+        return sanitized;
     };
 
     var processResponse = function (deferred, response, o) {
@@ -622,11 +621,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 ox.session = '';
                 ox.trigger('relogin:required', o, deferred, response);
                 return;
-            } else {
-                // genereal error
-                deferred.reject(response);
-                return;
             }
+            // genereal error
+            deferred.reject(response);
+            return;
         }
 
         if (isWarning) {
@@ -788,9 +786,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     // Extract the JSON text
                     var matches = /\((\{.*?\})\)/.exec(response);
                     return matches && matches[1] ? JSON.parse(matches[1]) : JSON.parse(response);
-                } else {
-                    return response;
                 }
+                return response;
             })
             .done(function (response) {
 

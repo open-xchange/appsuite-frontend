@@ -169,10 +169,9 @@ define('io.ox/core/tk/attachmentsUtil', [
             //office
             } else if (isOffice) {
                 return true;
-            //stored file
-            } else {
-                return (/(png|gif|jpe?g|bmp)$/i).test(data.type) || (/(txt)$/i).test(data.type);
             }
+            //stored file
+            return (/(png|gif|jpe?g|bmp)$/i).test(data.type) || (/(txt)$/i).test(data.type);
         },
         /**
          * returns node

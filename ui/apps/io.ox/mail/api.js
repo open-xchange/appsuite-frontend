@@ -933,16 +933,14 @@ define('io.ox/mail/api', [
                         if (obj.id === id) {
                             obj.parent = parent;
                             return true;
-                        } else {
-                            return false;
                         }
+                        return false;
                     })
                     .first().value();
             });
-        } else {
-            console.error('api.getUnmodified(). Invalid case.', obj);
-            return $.Deferred().resolve(obj);
         }
+        console.error('api.getUnmodified(). Invalid case.', obj);
+        return $.Deferred().resolve(obj);
     };
 
     /**
@@ -1076,9 +1074,8 @@ define('io.ox/mail/api', [
                     b = text.lastIndexOf('}');
                 if (a > -1 && b > -1) {
                     return JSON.parse(text.substr(a, b - a + 1));
-                } else {
-                    return {};
                 }
+                return {};
             })
             .then(function (result) {
                 if (result.data) {
@@ -1195,36 +1192,34 @@ define('io.ox/mail/api', [
                     id: _(data).pluck('id').join(','),
                     session: ox.session
                 });
-            } else {
-                // single EML
-                url += (first.subject ? '/' + encodeURIComponent(first.subject.replace(/[\\:\/]/g, '_') + '.eml') : '') + '?' +
-                    $.param($.extend(api.reduce(first), {
-                        action: 'get',
-                        src: 1,
-                        save: 1,
-                        session: ox.session
-                    }));
-                return url;
             }
-        } else {
-            // inject filename for more convenient file downloads
-            var filename = data.filename ? data.filename.replace(/[\\:\/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined;
-            url += (data.filename ? '/' + encodeURIComponent(filename) : '') + '?' +
-                $.param({
-                    action: 'attachment',
-                    folder: (data.parent || data.mail).folder_id,
-                    id: (data.parent || data.mail).id,
-                    attachment: data.id
-                });
-            switch (mode) {
-            case 'view':
-            case 'open':
-                return url + '&delivery=view';
-            case 'download':
-                return url + '&delivery=download';
-            default:
-                return url;
-            }
+            // single EML
+            url += (first.subject ? '/' + encodeURIComponent(first.subject.replace(/[\\:\/]/g, '_') + '.eml') : '') + '?' +
+                $.param($.extend(api.reduce(first), {
+                    action: 'get',
+                    src: 1,
+                    save: 1,
+                    session: ox.session
+                }));
+            return url;
+        }
+        // inject filename for more convenient file downloads
+        var filename = data.filename ? data.filename.replace(/[\\:\/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined;
+        url += (data.filename ? '/' + encodeURIComponent(filename) : '') + '?' +
+            $.param({
+                action: 'attachment',
+                folder: (data.parent || data.mail).folder_id,
+                id: (data.parent || data.mail).id,
+                attachment: data.id
+            });
+        switch (mode) {
+        case 'view':
+        case 'open':
+            return url + '&delivery=view';
+        case 'download':
+            return url + '&delivery=download';
+        default:
+            return url;
         }
     };
 
@@ -1581,16 +1576,15 @@ define('io.ox/mail/api', [
                     max: (params.offset || 0) + 300,
                     timezone: 'utc'
                 };
-            } else {
-                return {
-                    action: 'all',
-                    folder: params.folder,
-                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656',
-                    sort: params.sort || '610',
-                    order: params.order || 'desc',
-                    timezone: 'utc'
-                };
             }
+            return {
+                action: 'all',
+                folder: params.folder,
+                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656',
+                sort: params.sort || '610',
+                order: params.order || 'desc',
+                timezone: 'utc'
+            };
         },
         fail: function (error) {
             api.trigger('error error:' +  error.code, error );

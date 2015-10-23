@@ -232,8 +232,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                     _.defer(cont, action === 'series');
                     return;
                 });
-        } else {
-            return cont();
         }
+        return cont();
     };
 });

@@ -71,9 +71,8 @@ define('io.ox/portal/main', [
                     // reset for debugging
                     // settings.set('settings/hadData', []).save();
                     return false;
-                } else {
-                    return true;
                 }
+                return true;
             }
         } else {
             return false;
@@ -88,9 +87,8 @@ define('io.ox/portal/main', [
             return gt('Good morning, %s', name);
         } else if (hour >= 18 && hour <= 23) {
             return gt('Good evening, %s', name);
-        } else {
-            return gt('Hello %s', name);
         }
+        return gt('Hello %s', name);
     }
 
     function openSettings() {

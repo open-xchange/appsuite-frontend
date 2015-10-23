@@ -82,11 +82,10 @@ define('io.ox/core/gettext', function () {
             text = gettext.pgettext('', text);
             if (arguments.length < 2) {
                 return text;
-            } else {
-                args = Array.prototype.slice.call(arguments);
-                args.splice(0, 1, text);
-                return gettext.format.apply(gettext, args);
             }
+            args = Array.prototype.slice.call(arguments);
+            args.splice(0, 1, text);
+            return gettext.format.apply(gettext, args);
         }
 
         if (_.url.hash('debug-i18n')) {

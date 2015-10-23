@@ -42,16 +42,15 @@ define('io.ox/contacts/api', [
                     response.birthday = util.julianToGregorian(response.birthday);
                 }
                 return response;
-            } else {
-                // array of contacts: convert birthdays with year 1 from julian to gregorian calendar
-                _(response).each(function (contact) {
-                    if (contact.birthday && moment.utc(contact.birthday).year() === 1) {
-                        // birthday without year
-                        contact.birthday = util.julianToGregorian(contact.birthday);
-                    }
-                });
-                return response;
             }
+            // array of contacts: convert birthdays with year 1 from julian to gregorian calendar
+            _(response).each(function (contact) {
+                if (contact.birthday && moment.utc(contact.birthday).year() === 1) {
+                    // birthday without year
+                    contact.birthday = util.julianToGregorian(contact.birthday);
+                }
+            });
+            return response;
         };
 
     // mapped ids for msisdn
@@ -260,9 +259,8 @@ define('io.ox/contacts/api', [
             if (missingData) {
                 delete opt.check;
                 return apiGetList.apply(this, arguments);
-            } else {
-                return new $.Deferred().resolve(list);
             }
+            return new $.Deferred().resolve(list);
         }
         return apiGetList.apply(this, arguments);
     };
@@ -395,50 +393,48 @@ define('io.ox/contacts/api', [
                     api.trigger('update', o);
                     return { folder_id: o.folder, id: o.id };
                 });
-            } else {
-                return $.when();
             }
-        } else {
-            // convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
-            if (o.data.birthday && moment.utc(o.data.birthday).local(true).year() === 1) {
-                o.data.birthday = util.gregorianToJulian(o.data.birthday);
-            }
-            // go!
-            return http.PUT({
-                module: 'contacts',
-                params: {
-                    action: 'update',
-                    id: o.id,
-                    folder: o.folder,
-                    timestamp: o.last_modified || _.then(),
-                    timezone: 'UTC'
-                },
-                data: o.data,
-                appendColumns: false
-            })
-            .then(function () {
-                // get updated contact
-                return api.get({ id: o.id, folder: o.folder }, false).then(function (data) {
-                    return $.when(
-                        api.caches.get.add(data),
-                        api.caches.all.grepRemove(o.folder + api.DELIM),
-                        api.caches.list.remove({ id: o.id, folder: o.folder }),
-                        fetchCache.clear(),
-                        data.user_id ? clearUserApiCache(data) : ''
-                    )
-                    .done(function () {
-                        if (attachmentHandlingNeeded) {
-                            // to make the detailview show the busy animation
-                            api.addToUploadList(_.ecid(data));
-                        }
-                        api.trigger('update:' + _.ecid(data), data);
-                        api.trigger('update', data);
-                        // trigger refresh.all, since position might have changed
-                        api.trigger('refresh.all');
-                    });
+            return $.when();
+        }
+        // convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
+        if (o.data.birthday && moment.utc(o.data.birthday).local(true).year() === 1) {
+            o.data.birthday = util.gregorianToJulian(o.data.birthday);
+        }
+        // go!
+        return http.PUT({
+            module: 'contacts',
+            params: {
+                action: 'update',
+                id: o.id,
+                folder: o.folder,
+                timestamp: o.last_modified || _.then(),
+                timezone: 'UTC'
+            },
+            data: o.data,
+            appendColumns: false
+        })
+        .then(function () {
+            // get updated contact
+            return api.get({ id: o.id, folder: o.folder }, false).then(function (data) {
+                return $.when(
+                    api.caches.get.add(data),
+                    api.caches.all.grepRemove(o.folder + api.DELIM),
+                    api.caches.list.remove({ id: o.id, folder: o.folder }),
+                    fetchCache.clear(),
+                    data.user_id ? clearUserApiCache(data) : ''
+                )
+                .done(function () {
+                    if (attachmentHandlingNeeded) {
+                        // to make the detailview show the busy animation
+                        api.addToUploadList(_.ecid(data));
+                    }
+                    api.trigger('update:' + _.ecid(data), data);
+                    api.trigger('update', data);
+                    // trigger refresh.all, since position might have changed
+                    api.trigger('refresh.all');
                 });
             });
-        }
+        });
     };
 
     /**
@@ -483,16 +479,15 @@ define('io.ox/contacts/api', [
                 fixPost: true
             })
             .then(filter);
-        } else {
-            return http.FORM({
-                module: 'contacts',
-                action: 'update',
-                form: file,
-                data: changes,
-                params: { id: o.id, folder: o.folder_id, timestamp: _.then() }
-            })
-            .then(filter);
         }
+        return http.FORM({
+            module: 'contacts',
+            action: 'update',
+            form: file,
+            data: changes,
+            params: { id: o.id, folder: o.folder_id, timestamp: _.then() }
+        })
+        .then(filter);
     };
 
     /**
@@ -607,10 +602,9 @@ define('io.ox/contacts/api', [
                     }
                     // use first contact
                     return fetchCache.add(address, data);
-                } else {
-                    // no data found
-                    return fetchCache.add(address, {});
                 }
+                // no data found
+                return fetchCache.add(address, {});
             });
         });
     };

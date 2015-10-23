@@ -89,9 +89,8 @@ define('io.ox/core/sub/model', [
                 if (this.refreshState() === 'ready') {
                     api.subscriptions.refresh(this);
                     return (this._refresh = _.wait(5000));
-                }  else {
-                    return this._refresh;
                 }
+                return this._refresh;
             },
             syncer: createSyncer(api.subscriptions)
         }),

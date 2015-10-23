@@ -32,9 +32,8 @@ define('io.ox/mail/print', [
             // replace images on source level
             source = source.replace(regImageSrc, '$1' + ox.apiRoot);
             return $.trim(source.replace(/\n/g, '').replace(/<br[ ]?\/?>/g, '\n'));
-        } else {
-            return content.get(data, { autoCollapseBlockquotes: false }).content.innerHTML;
         }
+        return content.get(data, { autoCollapseBlockquotes: false }).content.innerHTML;
     }
 
     function getList(data, field) {

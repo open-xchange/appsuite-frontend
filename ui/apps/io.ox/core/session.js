@@ -183,9 +183,8 @@ define('io.ox/core/session', [
 
                             if (options.store) {
                                 return that.store().then(function () { return data; });
-                            } else {
-                                return data;
                             }
+                            return data;
                         },
                         function fail(e) {
                             if (ox.debug) console.error('Login failed!', e.error, e.error_desc || '');
@@ -257,9 +256,8 @@ define('io.ox/core/session', [
                         action: 'logout'
                     }
                 });
-            } else {
-                return $.Deferred().resolve();
             }
+            return $.Deferred().resolve();
         },
 
         setClient: function (client) {

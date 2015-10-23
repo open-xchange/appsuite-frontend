@@ -34,18 +34,16 @@ define('io.ox/tasks/print', [
     function getState(data) {
         if (data.status === 2) {
             return '<b>' + states[data.status] + '</b>, ' + gt('Progress') + ': ' + (data.percent_completed || 0) + '%';
-        } else {
-            return '<b>' + states[data.status] + '</b>';
         }
+        return '<b>' + states[data.status] + '</b>';
     }
 
     function getPriority(data) {
         if (data.priority) {
             return priorities[data.priority];
-        } else {
-            //use medium priority as default
-            return priorities[1];
         }
+        //use medium priority as default
+        return priorities[1];
     }
 
     function process(data) {

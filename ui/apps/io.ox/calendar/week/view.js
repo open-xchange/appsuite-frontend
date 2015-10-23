@@ -1436,10 +1436,9 @@ define('io.ox/calendar/week/view', [
                             // revert the appointment by returning true
                             $(this).show();
                             return true;
-                        } else {
-                            // return false so that the appointment does not revert
-                            return false;
                         }
+                        // return false so that the appointment does not revert
+                        return false;
                     },
                     start: function (e, ui) {
                         // write all appointment divs to draggable object
