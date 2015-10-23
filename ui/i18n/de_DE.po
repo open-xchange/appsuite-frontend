@@ -352,8 +352,8 @@ msgstr "%1$s bis %2$s"
 msgid "%1$s updated their profile:"
 msgstr "%1$s haben ihr Profil aktualisiert:"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:370 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:375
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:371 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:376
 msgid "%1$s, %2$s"
 msgstr "%1$s, %2$s"
 
@@ -803,7 +803,7 @@ msgstr "Neuen Teilnehmer hinzufügen"
 msgid "Add new rule"
 msgstr "Neue Regel hinzufügen"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:296 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:297 module:io.ox/mail
 msgid "Add new signature"
 msgstr "Neue Signatur hinzufügen"
 
@@ -832,15 +832,15 @@ msgstr "Andere hinzufügen"
 msgid "Add recipients ..."
 msgstr "Empfänger hinzufügen ..."
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:140 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:141 module:io.ox/mail
 msgid "Add signature"
 msgstr "Signatur hinzufügen"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:103 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:104 module:io.ox/mail
 msgid "Add signature above quoted text"
 msgstr "Signatur oberhalb des zitierten Textes einfügen"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:104 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:105 module:io.ox/mail
 msgid "Add signature below quoted text"
 msgstr "Signatur unterhalb des zitierten Textes einfügen"
 
@@ -1494,8 +1494,8 @@ msgstr "Kalender:"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1252
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:149
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:253
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:150
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:254
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:121
 #: apps/io.ox/settings/accounts/settings/pane.js:134
@@ -2025,7 +2025,7 @@ msgid "Could not load this list"
 msgstr "Liste konnte nicht geladen werden"
 
 #: apps/io.ox/mail/settings/pane.js:135 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:323
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:324
 msgid "Could not save settings"
 msgstr "Einstellungen konnten nicht gespeichert werden."
 
@@ -2264,11 +2264,11 @@ msgstr "Standard-Erinnerung"
 msgid "Default sender address"
 msgstr "Standard-Absender-Adresse"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:494 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:495 module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "Standardsignatur für neue Nachrichten"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:501 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:502 module:io.ox/mail
 msgid "Default signature for replies or forwardings"
 msgstr "Standardsignatur für Antworten und Weiterleitungen"
 
@@ -2299,8 +2299,8 @@ msgstr "Verschoben"
 #: apps/io.ox/mail/actions/delete.js:67 apps/io.ox/mail/actions/delete.js:86
 #: apps/io.ox/mail/mailfilter/settings/filter.js:323
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:374
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:375
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:376
 #: apps/io.ox/mail/toolbar.js:79 apps/io.ox/portal/main.js:691
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:119
 #: apps/io.ox/settings/accounts/settings/pane.js:111
@@ -2345,7 +2345,7 @@ msgstr "Kontakt löschen"
 msgid "Delete group"
 msgstr "Gruppe löschen"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:228 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:229 module:io.ox/mail
 msgid "Delete old signatures after import"
 msgstr "Alte Signaturen nach dem Importieren löschen"
 
@@ -2872,8 +2872,8 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1256
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:368
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:370
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:369
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:371
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:281
 #: apps/io.ox/settings/accounts/settings/pane.js:113
@@ -2962,7 +2962,7 @@ msgstr "Regel bearbeiten"
 msgid "Edit share"
 msgstr "Freigabe bearbeiten"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:140 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:141 module:io.ox/mail
 msgid "Edit signature"
 msgstr "Signatur bearbeiten"
 
@@ -4006,7 +4006,7 @@ msgstr "Bilder"
 
 #: apps/io.ox/core/folder/contextmenu.js:404 module:io.ox/core
 #: apps/io.ox/core/import/import.js:185
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:252 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:253 module:io.ox/mail
 msgid "Import"
 msgstr "Importieren"
 
@@ -4014,8 +4014,8 @@ msgstr "Importieren"
 msgid "Import from file"
 msgstr "Aus Datei importieren"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:224 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:309
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:225 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:310
 msgid "Import signatures"
 msgstr "Signaturen importieren"
 
@@ -5131,9 +5131,9 @@ msgid "No reminder"
 msgstr "Keine Erinnerung"
 
 #: apps/io.ox/mail/compose/extensions.js:350 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:346
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:348
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:405
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:347
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:349
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:406
 msgid "No signature"
 msgstr "Keine Signatur"
 
@@ -5745,7 +5745,7 @@ msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
 msgid "Please enter a valid email address or phone number"
 msgstr "Bitte geben Sie eine gültige E-Mail-Adresse oder Telefonnummer ein."
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:130 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:131 module:io.ox/mail
 msgid "Please enter a valid name"
 msgstr "Geben Sie einen gültigen Namen ein."
 
@@ -6598,7 +6598,7 @@ msgstr "Umsatz"
 #: apps/io.ox/mail/compose/extensions.js:71
 #: apps/io.ox/mail/compose/names.js:162
 #: apps/io.ox/mail/mailfilter/settings/filter.js:104
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:148
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:149
 #: apps/io.ox/oauth/settings.js:80 module:io.ox/settings
 #: apps/io.ox/tasks/edit/view-template.js:46 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:82
@@ -7098,7 +7098,7 @@ msgstr "Name der Signatur"
 
 #: apps/io.ox/mail/compose/extensions.js:349 module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js:23
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:301
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:302
 msgid "Signatures"
 msgstr "Signaturen"
 
@@ -8932,7 +8932,7 @@ msgstr ""
 "oder ein soziales Netzwerk einfügen. Bitte beachten Sie, dass jeder im "
 "Besitz dieses Links auf die Freigabe zugreifen kann."
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:226 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:227 module:io.ox/mail
 msgid ""
 "You can import existing signatures from the previous product generation."
 msgstr ""

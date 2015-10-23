@@ -347,8 +347,8 @@ msgstr "%1$s viiva %2$s"
 msgid "%1$s updated their profile:"
 msgstr "%1$s päivitti profiiliaan:"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:370 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:375
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:371 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:376
 msgid "%1$s, %2$s"
 msgstr "%1$s, %2$s"
 
@@ -796,7 +796,7 @@ msgstr "Lisää uusi osallistuja"
 msgid "Add new rule"
 msgstr "Lisää uusi sääntö"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:296 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:297 module:io.ox/mail
 msgid "Add new signature"
 msgstr "Lisää uusi allekirjoitus"
 
@@ -825,15 +825,15 @@ msgstr "Lisää ihmisiä"
 msgid "Add recipients ..."
 msgstr "Lisää vastaanottajia..."
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:140 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:141 module:io.ox/mail
 msgid "Add signature"
 msgstr "Lisää allekirjoitus"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:103 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:104 module:io.ox/mail
 msgid "Add signature above quoted text"
 msgstr "Lisää allekirjoitus ennen lainattua tekstiä"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:104 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:105 module:io.ox/mail
 msgid "Add signature below quoted text"
 msgstr "Lisää allekirjoitus lainatun tekstin jälkeen"
 
@@ -1486,8 +1486,8 @@ msgstr "Kalenteri:"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1252
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:149
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:253
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:150
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:254
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:121
 #: apps/io.ox/settings/accounts/settings/pane.js:134
@@ -2013,7 +2013,7 @@ msgid "Could not load this list"
 msgstr "Tätä listaa ei voitu ladata"
 
 #: apps/io.ox/mail/settings/pane.js:135 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:323
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:324
 msgid "Could not save settings"
 msgstr "Asetuksia ei voitu tallentaa"
 
@@ -2252,11 +2252,11 @@ msgstr "Oletusmuistutus"
 msgid "Default sender address"
 msgstr "Oletuslähettäjä"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:494 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:495 module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "Oletusallekirjoitus uusille viesteille"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:501 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:502 module:io.ox/mail
 msgid "Default signature for replies or forwardings"
 msgstr "Oletusallekirjoitukset vastauksia tai välityksiä varten."
 
@@ -2287,8 +2287,8 @@ msgstr "Lykätty"
 #: apps/io.ox/mail/actions/delete.js:67 apps/io.ox/mail/actions/delete.js:86
 #: apps/io.ox/mail/mailfilter/settings/filter.js:323
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:374
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:375
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:376
 #: apps/io.ox/mail/toolbar.js:79 apps/io.ox/portal/main.js:691
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:119
 #: apps/io.ox/settings/accounts/settings/pane.js:111
@@ -2336,7 +2336,7 @@ msgstr "Poista yhteystieto"
 msgid "Delete group"
 msgstr "Poista ryhmä"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:228 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:229 module:io.ox/mail
 msgid "Delete old signatures after import"
 msgstr "Poista vanhat allekirjoitukset tuonnin jälkeen"
 
@@ -2848,8 +2848,8 @@ msgstr "ET"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1256
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:368
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:370
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:369
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:371
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:281
 #: apps/io.ox/settings/accounts/settings/pane.js:113
@@ -2938,7 +2938,7 @@ msgstr "Muokkaa sääntöä"
 msgid "Edit share"
 msgstr "Muokkaa jakamista"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:140 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:141 module:io.ox/mail
 msgid "Edit signature"
 msgstr "Muokkaa allekirjoitusta"
 
@@ -3974,7 +3974,7 @@ msgstr "Kuvat"
 
 #: apps/io.ox/core/folder/contextmenu.js:404 module:io.ox/core
 #: apps/io.ox/core/import/import.js:185
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:252 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:253 module:io.ox/mail
 msgid "Import"
 msgstr "Tuo"
 
@@ -3982,8 +3982,8 @@ msgstr "Tuo"
 msgid "Import from file"
 msgstr "Tuo tiedostosta"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:224 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:309
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:225 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:310
 msgid "Import signatures"
 msgstr "Tuo allekirjoituksia"
 
@@ -5097,9 +5097,9 @@ msgid "No reminder"
 msgstr "Ei muistutusta"
 
 #: apps/io.ox/mail/compose/extensions.js:350 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:346
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:348
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:405
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:347
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:349
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:406
 msgid "No signature"
 msgstr "Ei allekirjoitusta"
 
@@ -5710,7 +5710,7 @@ msgstr "Ole hyvä ja syötä käypä sähköpostiosoite"
 msgid "Please enter a valid email address or phone number"
 msgstr "Ole hyvä ja syötä käypä sähköpostiosoite tai puhelinnumero"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:130 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:131 module:io.ox/mail
 msgid "Please enter a valid name"
 msgstr "Syötä käypä nimi"
 
@@ -6560,7 +6560,7 @@ msgstr "Liikevaihto"
 #: apps/io.ox/mail/compose/extensions.js:71
 #: apps/io.ox/mail/compose/names.js:162
 #: apps/io.ox/mail/mailfilter/settings/filter.js:104
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:148
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:149
 #: apps/io.ox/oauth/settings.js:80 module:io.ox/settings
 #: apps/io.ox/tasks/edit/view-template.js:46 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:82
@@ -7068,7 +7068,7 @@ msgstr "Allekirjoituksen nimi"
 
 #: apps/io.ox/mail/compose/extensions.js:349 module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js:23
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:301
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:302
 msgid "Signatures"
 msgstr "Allekirjoitukset"
 
@@ -8862,7 +8862,7 @@ msgstr ""
 "verkostoon. Huomioi, että kuka tahansa pääsee jakamaasi kohteeseen tämän "
 "linkin kautta."
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:226 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:227 module:io.ox/mail
 msgid ""
 "You can import existing signatures from the previous product generation."
 msgstr ""

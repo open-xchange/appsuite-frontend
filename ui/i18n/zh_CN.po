@@ -348,8 +348,8 @@ msgstr "%1$s - %2$s"
 msgid "%1$s updated their profile:"
 msgstr "%1$s 更改了他们的状态："
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:370 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:375
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:371 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:376
 msgid "%1$s, %2$s"
 msgstr "%1$s %2$s"
 
@@ -795,7 +795,7 @@ msgstr "添加新参与者"
 msgid "Add new rule"
 msgstr "添加新规则"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:296 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:297 module:io.ox/mail
 msgid "Add new signature"
 msgstr "添加新签名"
 
@@ -824,15 +824,15 @@ msgstr "添加人员"
 msgid "Add recipients ..."
 msgstr "添加收件人 ..."
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:140 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:141 module:io.ox/mail
 msgid "Add signature"
 msgstr "添加签名"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:103 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:104 module:io.ox/mail
 msgid "Add signature above quoted text"
 msgstr "在引用文本上方添加签名"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:104 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:105 module:io.ox/mail
 msgid "Add signature below quoted text"
 msgstr "在引用文本下方添加签名"
 
@@ -1474,8 +1474,8 @@ msgstr "日历："
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1252
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:149
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:253
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:150
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:254
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:121
 #: apps/io.ox/settings/accounts/settings/pane.js:134
@@ -1998,7 +1998,7 @@ msgid "Could not load this list"
 msgstr "不能加载此列表"
 
 #: apps/io.ox/mail/settings/pane.js:135 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:323
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:324
 msgid "Could not save settings"
 msgstr "不能保存设定"
 
@@ -2235,11 +2235,11 @@ msgstr "默认提醒"
 msgid "Default sender address"
 msgstr "默认发件人地址"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:494 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:495 module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "新信息没有默认签名"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:501 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:502 module:io.ox/mail
 msgid "Default signature for replies or forwardings"
 msgstr "回复或转发的默认签名"
 
@@ -2270,8 +2270,8 @@ msgstr "延迟"
 #: apps/io.ox/mail/actions/delete.js:67 apps/io.ox/mail/actions/delete.js:86
 #: apps/io.ox/mail/mailfilter/settings/filter.js:323
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:374
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:375
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:376
 #: apps/io.ox/mail/toolbar.js:79 apps/io.ox/portal/main.js:691
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:119
 #: apps/io.ox/settings/accounts/settings/pane.js:111
@@ -2319,7 +2319,7 @@ msgstr "删除联系人"
 msgid "Delete group"
 msgstr "删除组"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:228 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:229 module:io.ox/mail
 msgid "Delete old signatures after import"
 msgstr "在导入后删除旧的签名"
 
@@ -2828,8 +2828,8 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1256
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:368
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:370
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:369
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:371
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:281
 #: apps/io.ox/settings/accounts/settings/pane.js:113
@@ -2918,7 +2918,7 @@ msgstr "编辑规则"
 msgid "Edit share"
 msgstr "编辑分享"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:140 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:141 module:io.ox/mail
 msgid "Edit signature"
 msgstr "编辑签名"
 
@@ -3934,7 +3934,7 @@ msgstr "图像"
 
 #: apps/io.ox/core/folder/contextmenu.js:404 module:io.ox/core
 #: apps/io.ox/core/import/import.js:185
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:252 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:253 module:io.ox/mail
 msgid "Import"
 msgstr "导入"
 
@@ -3942,8 +3942,8 @@ msgstr "导入"
 msgid "Import from file"
 msgstr "从文件导入"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:224 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:309
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:225 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:310
 msgid "Import signatures"
 msgstr "导入签名"
 
@@ -5052,9 +5052,9 @@ msgid "No reminder"
 msgstr "无提醒"
 
 #: apps/io.ox/mail/compose/extensions.js:350 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:346
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:348
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:405
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:347
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:349
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:406
 msgid "No signature"
 msgstr "没有签名"
 
@@ -5659,7 +5659,7 @@ msgstr "请输入一个有效电子邮件地址"
 msgid "Please enter a valid email address or phone number"
 msgstr "请输入一个有效的电子邮件地址或电话号码"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:130 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:131 module:io.ox/mail
 msgid "Please enter a valid name"
 msgstr "请输入一个有效名称"
 
@@ -6494,7 +6494,7 @@ msgstr "销售量"
 #: apps/io.ox/mail/compose/extensions.js:71
 #: apps/io.ox/mail/compose/names.js:162
 #: apps/io.ox/mail/mailfilter/settings/filter.js:104
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:148
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:149
 #: apps/io.ox/oauth/settings.js:80 module:io.ox/settings
 #: apps/io.ox/tasks/edit/view-template.js:46 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:82
@@ -6999,7 +6999,7 @@ msgstr "签名名称"
 
 #: apps/io.ox/mail/compose/extensions.js:349 module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js:23
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:301
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:302
 msgid "Signatures"
 msgstr "签名"
 
@@ -8734,7 +8734,7 @@ msgstr ""
 "您能复制和贴上此链接在电子邮件、即时通讯器、或社交网路里。请注意每一个有此链"
 "接的人皆能访问该分享。"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:226 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:227 module:io.ox/mail
 msgid ""
 "You can import existing signatures from the previous product generation."
 msgstr "您能从前代产品导入存在的签名。"
