@@ -25,7 +25,7 @@ define('io.ox/metrics/adapters/default', [
         id = settings.get('tracking/piwik/id', 1);
 
     // piwik uses global var to allow pushing before tracker is fully loaded
-    window._paq = window._paq || [];
+    var _paq = window._paq = window._paq || [];
 
     point.extend({
         id: 'piwik',

@@ -124,8 +124,7 @@
         'no-throw-literal': 2,
         // disallow usage of expressions in statement position
         'no-unused-expressions': 2,
-        // disallow declaration of variables that are not used in the code
-        'no-unused-vars': 2,
+
         // disallow unnecessary .call() and .apply()
         'no-useless-call': 2,
         // disallow use of void operator
@@ -142,6 +141,22 @@
         'wrap-iife': [2, 'any'],
         // require or disallow Yoda conditions
         'yoda': 2,
+
+
+        // VARIABLES
+        // http://eslint.org/docs/rules/#variables
+
+        // disallow deletion of variables
+        'no-delete-var': 2,
+        // disallow use of undeclared variables unless mentioned in a 'globals'
+        'no-undef': 0, // NEEDS CODE REFACTORING (45) // 2,
+        // disallow use of undefined variable
+        'no-undefined': 0, // NEEDS CODE REFACTORING (309) // 2,
+        // disallow declaration of variables that are not used in the code
+        'no-unused-vars': 2,
+        // disallow use of variables before they are defined
+        'no-use-before-define': 0, // NEEDS CODE REFACTORING (235) // 2,
+
 
         // STYLE
         // http://eslint.org/docs/rules/#stylistic-issues
