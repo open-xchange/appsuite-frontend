@@ -586,11 +586,11 @@ define('io.ox/contacts/api', [
                 if (data.length) {
                     // favor contacts with an image
                     data.sort(function (a, b) {
-                        return !!b.image1_url ? + 1 : -1;
+                        return !!b.image1_url ? +1 : -1;
                     });
                     // favor contacts in global address book
                     data.sort(function (a, b) {
-                        return b.folder_id === '6' ? + 1 : -1;
+                        return b.folder_id === '6' ? +1 : -1;
                     });
                     // just use the first one
                     data = data[0];

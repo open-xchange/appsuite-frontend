@@ -217,7 +217,7 @@
         // require a space after return, throw, and case
         'space-return-throw-case': 2,
         // Require or disallow spaces before/after unary operators
-        'space-unary-ops': 0,
+        'space-unary-ops': 2,
         // require or disallow a space immediately following the // or /* in a comment
         'spaced-comment': 0, // Temporarily removed: See below!
         // 'spaced-comment': [2, 'always', {'exceptions': ['-', '+'], 'markers': ['=', '!', '#.']}], // space here to support gt comments

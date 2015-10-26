@@ -237,7 +237,7 @@ function (ext, Event, caps, uuids, http, stanza, tabId) {
     // Periodically poll
     actions.poll = function () {
         // no need to poll if no one is listening for events
-        if (! someoneIsListeningForRemoveEvents()) {
+        if (!someoneIsListeningForRemoveEvents()) {
             return;
         }
 

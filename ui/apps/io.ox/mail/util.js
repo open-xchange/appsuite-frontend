@@ -609,7 +609,7 @@ define('io.ox/mail/util', [
                             // remove empty alt attribute(added by tiny)
                             .replace(/ alt=""/, '');
                     });
-                    return _(signatures).indexOf(add(text, !!isHTML)) > - 1;
+                    return _(signatures).indexOf(add(text, !!isHTML)) > -1;
                 }
             };
         })(),

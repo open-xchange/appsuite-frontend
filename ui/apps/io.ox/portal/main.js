@@ -622,7 +622,7 @@ define('io.ox/portal/main', [
     app.refresh = _.throttle(function () {
         _(widgets.getEnabled()).chain().filter(function (model) {
             // don't refresh widgets with loading errors automatically so logs don't get spammed (see bug 41740)
-            return !( model.attributes.baton && model.attributes.baton.options && model.attributes.baton.options.loadingError);
+            return !(model.attributes.baton && model.attributes.baton.options && model.attributes.baton.options.loadingError);
         }).each(app.refreshWidget);
     }, 30000);
 
