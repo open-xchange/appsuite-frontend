@@ -5,9 +5,19 @@ define([
 
     describe('Text processing toolkit', function () {
         describe('htmltotext', function () {
-            it('should convert links to markdown format', function () {
-                var text = textproc.htmltotext('<a href="https://example.com/">Example link</a>');
-                expect(text).to.equal('[Example link](https://example.com/)');
+            describe('should handle links', function () {
+                it('should convert links', function () {
+                    var text = textproc.htmltotext('<a href="https://example.com/">Example link</a>');
+                    expect(text).to.equal('[Example link](https://example.com/)');
+                });
+                it('should use short format for links without "description"', function () {
+                    var text = textproc.htmltotext('<a href="https://example.com/">https://example.com/</a>');
+                    expect(text).to.equal('https://example.com/');
+                });
+                it('should use short format for mailto links', function () {
+                    var text = textproc.htmltotext('<a href="mailto:jochen@example.com">jochen@example.com</a>');
+                    expect(text).to.equal('jochen@example.com');
+                });
             });
 
             it('should convert unordered lists', function () {

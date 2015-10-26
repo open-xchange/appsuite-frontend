@@ -243,6 +243,12 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
             replacement: function (str, attrs, innerHTML) {
                 var href = attrs.match(attrRegExp('href'));
 
+                if (href && href[1].indexOf('mailto:') === 0) {
+                    return href[1].substr(7);
+                } else if (href && innerHTML === href[1]) {
+                    return innerHTML;
+                }
+
                 return '[' + (innerHTML || '') + '](' + (href && href[1] || '') + ')';
             }
         }];
