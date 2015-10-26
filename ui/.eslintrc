@@ -98,7 +98,7 @@
         // disallow unnecessary .call() and .apply()
         'no-useless-call': 2,
         // disallow use of void operator
-        'no-void': 0,
+        'no-void': 2,
         // disallow usage of configurable warning terms in comments: e.g. todo
         'no-warning-comments': [0, { 'terms': ['todo', 'fixme', 'xxx'], 'location': 'start' }],
         // disallow use of the with statement
@@ -125,9 +125,9 @@
         // enforce one true comma style
         'comma-style': [2, 'last'],
         // require or disallow padding inside computed properties
-        'computed-property-spacing': 0,
+        'computed-property-spacing': [2, 'never'],
         // enforces consistent naming when capturing the current execution context
-        'consistent-this': 0,
+        'consistent-this': 0, // NEEDS CODE REFACTORING (68) //[2, 'self'],
         // enforce newline at the end of file, with no multiple empty lines
         'eol-last': 2,
         // require function expressions to have a name
@@ -147,11 +147,11 @@
         // disallow mixed 'LF' and 'CRLF' as linebreaks
         'linebreak-style': 0,
         // specify the maximum depth callbacks can be nested
-        'max-nested-callbacks': 0,
+        'max-nested-callbacks': 0, // NEEDS CODE REFACTORING // [2, 3],
         // require a capital letter for constructors
         'new-cap': [2, {'capIsNew': false, newIsCap: false}],
         // disallow the omission of parentheses when invoking a constructor with no arguments
-        'new-parens': 0,
+        'new-parens': 2,
         // allow/disallow an empty newline after var statement
         'newline-after-var': 0,
         // disallow use of the Array constructor
