@@ -525,14 +525,14 @@ define('io.ox/core/extPatterns/links', [
         var label = baton.label || options.label,
             args = $.makeArray(arguments),
             node = baton.$el || $('<div>'),
-            ul, toggle;
+            ul;
 
         // label: Use baton or String or DOM node
         label = _.isString(label) ? $.txt(label) : label;
         // build dropdown
         this.append(
             node.addClass('dropdown').append(
-                toggle = $('<a href="#" role="button" tabindex="1">').attr({
+                $('<a href="#" role="button" tabindex="1">').attr({
                     'data-toggle': 'dropdown',
                     'aria-haspopup': true,
                     'aria-label': options.ariaLabel ? options.ariaLabel : label.textContent

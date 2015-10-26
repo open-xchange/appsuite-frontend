@@ -549,7 +549,7 @@
             id: 'role',
             draw: function (baton) {
 
-                var $el, node, dropdown,
+                var $el, dropdown,
                     role = baton.view.getRole(),
                     description = baton.view.getRoleDescription(role),
                     isFile = baton.parentModel.isFile(),
@@ -594,7 +594,7 @@
                             model.set('bits', isFile ? fileRoles[value] : roles[value].bit);
                         }
                     });
-                    node = dropdown.render().$el;
+                    dropdown.render();
                 }
 
                 this.append($el);

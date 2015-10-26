@@ -130,7 +130,7 @@ define('io.ox/search/main', [
             closable: true,
             window: win
         }),
-        sidepopup, model, run;
+        model, run;
 
     // hide/show topbar search field
     win.on('show', function () {
@@ -263,7 +263,7 @@ define('io.ox/search/main', [
         win.show(function () {
             // detail view sidepopo
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                sidepopup = new dialogs.SidePopup({ tabTrap: true })
+                new dialogs.SidePopup({ tabTrap: true })
                             .delegate(app.view.$el, '.item', openSidePopup);
             });
         });

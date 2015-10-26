@@ -46,8 +46,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
             if (!baton.model) return;
 
-            var panelBody,
-                model = baton.model,
+            var model = baton.model,
                 name = model.getDisplayName() || '-',
                 size = model.get('file_size'),
                 sizeString = (_.isNumber(size)) ? _.filesize(size) : '-',
@@ -124,7 +123,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 );
             }
 
-            panelBody = this.find('.sidebar-panel-body').empty().append(dl);
+            this.find('.sidebar-panel-body').empty().append(dl);
         }
     });
 

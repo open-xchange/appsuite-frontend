@@ -24,7 +24,7 @@ define('io.ox/xing/api', ['io.ox/core/http'], function (http) {
         likeActivity, unlikeActivity, getLikes, showActivity,
         shareActivity, deleteActivity, changeStatus, createProfile,
         initiateContactRequest, revokeContactRequest, invite,
-        shareLink, createSubscription;
+        createSubscription;
 
     /*
      * Helpers
@@ -134,10 +134,11 @@ define('io.ox/xing/api', ['io.ox/core/http'], function (http) {
         return xingPost('invite', params);
     };
 
+    // TODO: unused
     /* strictly experimental */
-    shareLink = function (params, body) {
-        return xingPost('share_link', params, body);
-    };
+    // var shareLink = function (params, body) {
+    //     return xingPost('share_link', params, body);
+    // };
 
     /*
      * Create a folder in contacts with name 'XING' and corresponding subscription

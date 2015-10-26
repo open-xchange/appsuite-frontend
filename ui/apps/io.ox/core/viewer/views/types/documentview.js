@@ -150,7 +150,6 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         onPinch: (function () {
             var startDistance,
-                moveDelta,
                 transformScale,
                 zoomFactor,
                 transformOriginX,
@@ -162,7 +161,6 @@ define('io.ox/core/viewer/views/types/documentview', [
                         startDistance = distance;
                         break;
                     case 'move':
-                        moveDelta = distance - startDistance;
                         transformScale = distance / startDistance;
                         transformOriginX = midPoint.x + this.$el.scrollLeft();
                         transformOriginY = midPoint.y + this.$el.scrollTop();

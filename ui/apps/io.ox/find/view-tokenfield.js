@@ -178,12 +178,7 @@ define('io.ox/find/view-tokenfield', [
                     };
 
                     var node = $('<div class="autocomplete-item">'),
-                        value = tokendata.model,
-                        facet = value.get('facet');
-
-                    var regular;
-
-                    regular = !facet.isType('simple') && !!facet.getName();
+                        value = tokendata.model;
 
                     draw.call(node, value);
 

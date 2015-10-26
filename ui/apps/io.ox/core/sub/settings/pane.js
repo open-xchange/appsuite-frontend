@@ -28,7 +28,7 @@ define('io.ox/core/sub/settings/pane', [
 
     var point = views.point('io.ox/core/sub/settings/list'),
         SettingView = point.createView({ className: 'sub settings' }),
-        filter, folderState, dialog;
+        filter, folderState;
 
     function openFileDetailView(popup, e, target) {
         e.preventDefault();
@@ -60,7 +60,7 @@ define('io.ox/core/sub/settings/pane', [
                 view.render().$el
             );
             // add side popup for single file publications
-            dialog = new dialogs.SidePopup().delegate(this, '.file-detail-link', openFileDetailView);
+            new dialogs.SidePopup().delegate(this, '.file-detail-link', openFileDetailView);
         }
     });
 

@@ -121,8 +121,7 @@ define('io.ox/core/folder/view', [
 
             resize: (function () {
 
-                var bar = $(),
-                    maxSidePanelWidth = 0,
+                var maxSidePanelWidth = 0,
                     minSidePanelWidth = 150,
                     base, width;
 
@@ -158,7 +157,7 @@ define('io.ox/core/folder/view', [
                 return {
                     enable: function () {
                         sidepanel.append(
-                            bar = $('<div class="resizebar">').on('mousedown.resize', mousedown)
+                            $('<div class="resizebar">').on('mousedown.resize', mousedown)
                         );
                     },
                     autoHideThreshold: options.autoHideThreshold

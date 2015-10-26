@@ -31,10 +31,10 @@ define('io.ox/calendar/list/view-grid-template', [
                 return 70;
             },
             build: function () {
-                var title, location, time, date, shown_as, conflicts, isPrivate, contentContainer;
+                var title, location, time, date, shown_as, conflicts, isPrivate;
                 this.addClass('calendar').append(
                     time = $('<div class="time">').attr('aria-hidden', true),
-                    contentContainer = $('<div class="contentContainer">').append(
+                    $('<div class="contentContainer">').append(
                         date = $('<div class="date">'),
                         isPrivate = $('<i class="fa fa-lock private-flag">').hide(),
                         title = $('<div class="title">'),

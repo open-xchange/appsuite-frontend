@@ -87,7 +87,6 @@ define('io.ox/core/tk/selection', [
             isCheckbox,
             isMultiple,
             isRange,
-            isDragged,
             getIndex,
             getNode,
             selectFirst,
@@ -120,12 +119,13 @@ define('io.ox/core/tk/selection', [
             return e && e.shiftKey && multiple;
         };
 
-        isDragged = function (e) {
-            return $(e.currentTarget).hasClass('dnd-over');
-        };
+        // TODO: unused
+        // isDragged = function (e) {
+        //     return $(e.currentTarget).hasClass('dnd-over');
+        // };
 
         hasMultiple = function () {
-            var mult = 0, id;
+            var mult = 0;
             for (id in selectedItems) {
                 mult++;
                 if (mult > 1) {

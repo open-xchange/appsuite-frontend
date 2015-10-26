@@ -95,6 +95,8 @@
         'no-throw-literal': 2,
         // disallow usage of expressions in statement position
         'no-unused-expressions': 2,
+        // disallow variables that are declared and not used anywhere
+        'no-unused-vars': 2,
         // disallow unnecessary .call() and .apply()
         'no-useless-call': 2,
         // disallow use of void operator

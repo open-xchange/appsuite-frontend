@@ -29,8 +29,9 @@ define('io.ox/core/boot/util', [], function () {
             )
         ).show();
     }
+    var feedbackNode = null;
+    // var feedbackType = null;
 
-    var feedbackType = null, feedbackNode = null;
     ox.on('language', displayFeedback);
 
     var exports = {
@@ -47,7 +48,7 @@ define('io.ox/core/boot/util', [], function () {
         },
 
         feedback: function (type, node) {
-            feedbackType = type;
+            // feedbackType = type;
             feedbackNode = node;
             displayFeedback();
         },

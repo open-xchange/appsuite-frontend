@@ -396,7 +396,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     });
                 }, require('io.ox/core/notifications').yell);
             }
-            var radioNone, radioCustom, signatureText;
+            var radioCustom, signatureText;
             try {
                 if (_.device('smartphone')) {
                     var type = settings.get('mobileSignatureType');
@@ -405,8 +405,8 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                         $('<div class="form-group">').append(
                             $('<div class="radio">').append(
                                 $('<label>').append(
-                                    radioNone = $('<input type="radio" name="mobileSignature">')
-                                    .prop('checked', type === 'none'),
+                                    $('<input type="radio" name="mobileSignature">')
+                                        .prop('checked', type === 'none'),
                                     gt('No signature')
                                 )
                                 .on('change', radioChange)
@@ -448,8 +448,6 @@ define('io.ox/mail/settings/signatures/settings/pane', [
             }
 
             function addSignatureList($node) {
-                var section;
-
                 // Register edit and delete events
                 $list = $('<ul class="list-unstyled list-group settings-list">')
                 .on('click keydown', 'a[data-action=edit]', function (e) {
@@ -514,8 +512,6 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 //draw signatures
                 fnDrawAll();
                 snippets.on('refresh.all', fnDrawAll);
-
-                section = null;
             }
         }
     });

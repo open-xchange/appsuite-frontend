@@ -496,12 +496,10 @@ define('io.ox/mail/compose/view', [
             var self = this,
                 model = this.model,
                 mail = this.model.getMailForDraft(),
-                def = new $.Deferred(),
-                old_vcard_flag;
+                def = new $.Deferred();
 
             // never append vcard when saving as draft
             // backend will append vcard for every send operation (which save as draft is)
-            old_vcard_flag = mail.vcard;
             delete mail.vcard;
 
             return attachmentEmpty.emptinessCheck(mail.files).then(function () {

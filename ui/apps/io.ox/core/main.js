@@ -287,9 +287,8 @@ define('io.ox/core/main', [
             itemsLeftWidth += this.getBoundingClientRect().width;
         });
 
-        var visibleTabs, i = 0, hidden = 0;
+        var i = 0, hidden = 0;
         for (i = items.length; i > 1; i--) {
-            visibleTabs = itemsVisible.length - hidden;
             if (itemsLeftWidth + itemsRightWidth <= viewPortWidth) {
                 break;
             } else {

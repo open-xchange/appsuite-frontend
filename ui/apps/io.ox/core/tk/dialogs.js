@@ -624,7 +624,6 @@ define('io.ox/core/tk/dialogs', [
 
         var open,
             close,
-            closeAll,
             // for example: The view within this SidePopup closes itself
             closeByEvent,
             previousProp,
@@ -745,9 +744,10 @@ define('io.ox/core/tk/dialogs', [
             }
         };
 
-        closeAll = function (e) {
-            e.data.target.find('.io-ox-sidepopup').trigger('close');
-        };
+        // TODO: unused
+        // closeAll = function (e) {
+        //     e.data.target.find('.io-ox-sidepopup').trigger('close');
+        // };
 
         popup.on('close', close);
 
