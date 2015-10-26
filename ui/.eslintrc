@@ -1,6 +1,8 @@
 {
     'rules': {
+
         // BEST PRACTICES
+        // http://eslint.org/docs/rules/#best-practices
 
         // Enforces getter/setter pairs in objects
         'accessor-pairs': 0,
@@ -95,7 +97,7 @@
         'no-throw-literal': 2,
         // disallow usage of expressions in statement position
         'no-unused-expressions': 2,
-        // disallow variables that are declared and not used anywhere
+        // disallow declaration of variables that are not used in the code
         'no-unused-vars': 2,
         // disallow unnecessary .call() and .apply()
         'no-useless-call': 2,
@@ -115,6 +117,7 @@
         'yoda': 2,
 
         // STYLE
+        // http://eslint.org/docs/rules/#stylistic-issues
 
         // enforce spacing inside array brackets
         'array-bracket-spacing': 0,
@@ -138,6 +141,8 @@
         'func-style': 0,
         // this option enforces minimum and maximum identifier lengths (variable names, property names etc.)
         'id-length': 0,
+        // require identifiers to match the provided regular expression
+        'id-match': 0,
         // this option sets a specific tab width for your code
         'indent': 0, // NEEDS CODE REFACTORING // [2, 4, {"SwitchCase": 1}],
         // specify whether double or single quotes should be used in JSX attributes
@@ -185,7 +190,7 @@
         // require or disallow padding inside curly braces
         'object-curly-spacing': 0,
         // allow just one var statement per function
-        'one-var': 0,
+        'one-var': 0, // NEEDS CODE REFACTORING (1315) //[2, 'always'],
         // require assignment operator shorthand where possible or prohibit it entirely
         'operator-assignment': 0,
         // enforce operators to be placed before or after line breaks
@@ -193,11 +198,9 @@
         // enforce padding within blocks
         'padded-blocks': 0,
         // require quotes around object literal property names
-        'quote-props': 0,
+        'quote-props': 0, // NEEDS CODE REFACTORING (478) //[2, 'consistent-as-needed'],
         // specify whether double or single quotes should be used
         'quotes': [2, 'single', 'avoid-escape'],
-        // require identifiers to match the provided regular expression
-        'id-match': 0,
         // enforce spacing before and after semicolons
         'semi-spacing': [2, {'before': false, 'after': true}],
         // require or disallow use of semicolons instead of ASI
@@ -211,7 +214,7 @@
         // require or disallow space before function opening parenthesis
         'space-before-function-paren': [2, {"anonymous": "always", "named": "never"}],
         // require or disallow spaces inside parentheses
-        'space-in-parens': 0,
+        'space-in-parens': 0, // NEEDS CODE REFACTORING (112) //[2, 'never'],
         // require spaces around operators
         'space-infix-ops': 2,
         // require a space after return, throw, and case
@@ -221,7 +224,6 @@
         // require or disallow a space immediately following the // or /* in a comment
         'spaced-comment': 0, // Temporarily removed: See below!
         // 'spaced-comment': [2, 'always', {'exceptions': ['-', '+'], 'markers': ['=', '!', '#.']}], // space here to support gt comments
-
         // require regex literals to be wrapped in parentheses
         'wrap-regex': 0
     }
