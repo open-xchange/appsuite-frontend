@@ -111,7 +111,7 @@ define('plugins/notifications/tasks/register', [
                     autoOpen: autoOpen,
                     genericDesktopNotification: {
                         title: gt('New overdue tasks'),
-                        body: gt('You\'ve got overdue tasks'),
+                        body: gt('You have overdue tasks'),
                         icon: ''
                     },
                     specificDesktopNotification: function (model) {
@@ -202,7 +202,7 @@ define('plugins/notifications/tasks/register', [
                         //#. Title for a generic desktop notification about new reminders for tasks
                         title: gt('New task reminders'),
                         //#. Content for a generic desktop notification about new reminders for tasks
-                        body: gt('You\'ve got task reminders'),
+                        body: gt('You have new task reminders'),
                         icon: ''
                     },
                     specificDesktopNotification: function (model) {
@@ -344,7 +344,7 @@ define('plugins/notifications/tasks/register', [
                         //#. Title for a generic desktop notification about new invitations to tasks
                         title: gt('New task invitations'),
                         //#. Content for a generic desktop notification about new invitations to tasks
-                        body: gt('You\'ve got task invitations'),
+                        body: gt('You have new task invitations'),
                         icon: ''
                     },
                     specificDesktopNotification: function (model) {
