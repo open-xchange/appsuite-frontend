@@ -142,8 +142,8 @@ define('io.ox/core/gettext', function () {
                 translation = get(key);
             // return original string if we don't have a translation
             if (!translation) return Number(n) !== 1 ? plural : singular;
-            // return translation with singular as fallback (some languages don't have a plural, e.g. Japanese)
-            return _.isArray(translation) ? translation[Number(po.plural(Number(n)))] : translation;
+            // return translation with singular as fallback for Grunt breakage
+            return _.isString(translation) ? translation : translation[Number(po.plural(Number(n)))];
         }
 
         return gettext;
