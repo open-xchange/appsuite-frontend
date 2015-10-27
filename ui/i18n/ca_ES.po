@@ -540,15 +540,15 @@ msgstr "Client %s per a iOS"
 msgid "%s is also available for other platforms:"
 msgstr "%s està també disponible per a altres plataformes:"
 
-#: apps/io.ox/files/share/permissions.js:525 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:565 module:io.ox/core
 msgid "(Read and write)"
 msgstr ""
 
-#: apps/io.ox/files/share/permissions.js:522 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:562 module:io.ox/core
 msgid "(Read only)"
 msgstr ""
 
-#: apps/io.ox/files/share/permissions.js:530 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:570 module:io.ox/core
 msgid "(Read, write, and delete)"
 msgstr ""
 
@@ -730,7 +730,7 @@ msgstr "Compte"
 #: apps/io.ox/core/extPatterns/links.js:430
 #: apps/io.ox/files/mobile-toolbar-actions.js:88
 #: apps/io.ox/files/mobile-toolbar-actions.js:132
-#: apps/io.ox/files/share/permissions.js:674 apps/io.ox/mail/detail/view.js:91
+#: apps/io.ox/files/share/permissions.js:714 apps/io.ox/mail/detail/view.js:91
 #: apps/io.ox/mail/detail/view.js:92
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:952
 #: module:io.ox/settings apps/io.ox/mail/mobile-toolbar-actions.js:150
@@ -906,7 +906,7 @@ msgstr "Afegeix %s"
 msgid "Add participant/resource"
 msgstr "Afegeix participant/recurs"
 
-#: apps/io.ox/files/share/permissions.js:830 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:870 module:io.ox/core
 #, fuzzy
 #| msgid "Add new rule"
 msgid "Add people"
@@ -1025,7 +1025,7 @@ msgstr "Ajusta"
 msgid "Adjust start date"
 msgstr "Ajusta la data d'inici"
 
-#: apps/io.ox/files/share/permissions.js:641 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:681 module:io.ox/core
 #, fuzzy
 #| msgid "Administrator"
 msgid "Administrative role"
@@ -1035,8 +1035,8 @@ msgstr "Administrador"
 #. object permissions - admin role
 #: apps/io.ox/core/permissions/permissions.js:51 module:io.ox/core
 #: apps/io.ox/files/share/permissions.js:51
-#: apps/io.ox/files/share/permissions.js:534
-#: apps/io.ox/files/share/permissions.js:645
+#: apps/io.ox/files/share/permissions.js:574
+#: apps/io.ox/files/share/permissions.js:685
 msgid "Administrator"
 msgstr "Administrador"
 
@@ -1191,7 +1191,7 @@ msgid "Apply rule if any condition is met."
 msgstr "Aplica la regla si es compleix alguna condició"
 
 #: apps/io.ox/core/permissions/permissions.js:435 module:io.ox/core
-#: apps/io.ox/files/share/permissions.js:876
+#: apps/io.ox/files/share/permissions.js:916
 #, fuzzy
 #| msgid "All folders"
 msgid "Apply to all subfolders"
@@ -1347,7 +1347,7 @@ msgstr "Autentificació"
 #. Role: create folder + read/write/delete all
 #: apps/io.ox/core/permissions/permissions.js:49 module:io.ox/core
 #: apps/io.ox/files/share/permissions.js:49
-#: apps/io.ox/files/share/permissions.js:530
+#: apps/io.ox/files/share/permissions.js:570
 msgid "Author"
 msgstr "Autor"
 
@@ -1606,7 +1606,7 @@ msgstr "Calendari"
 #: apps/io.ox/files/actions/share.js:55
 #: apps/io.ox/files/actions/upload-new-version.js:78
 #: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:871
-#: apps/io.ox/files/main.js:922 apps/io.ox/files/share/permissions.js:803
+#: apps/io.ox/files/main.js:922 apps/io.ox/files/share/permissions.js:843
 #: apps/io.ox/keychain/secretRecoveryDialog.js:39 module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js:45 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:273
@@ -1902,7 +1902,7 @@ msgstr "Premeu per a puja una imatge"
 #: apps/io.ox/editor/main.js:175 module:io.ox/editor
 #: apps/io.ox/files/actions/showlink.js:48 module:io.ox/files
 #: apps/io.ox/files/mediaplayer.js:302
-#: apps/io.ox/files/share/permissions.js:937
+#: apps/io.ox/files/share/permissions.js:977
 #: apps/io.ox/files/upload/view.js:133
 #: apps/io.ox/mail/accounts/settings.js:327
 #: module:io.ox/mail/accounts/settings apps/io.ox/mail/actions/source.js:26
@@ -2278,14 +2278,14 @@ msgid "Create new rule"
 msgstr "Crea una nova regla"
 
 #. folder permissions
-#: apps/io.ox/files/share/permissions.js:597 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:637 module:io.ox/core
 #, fuzzy
 #| msgid "create objects"
 msgid "Create objects"
 msgstr "crea objectes"
 
 #. folder permissions
-#: apps/io.ox/files/share/permissions.js:599 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:639 module:io.ox/core
 #, fuzzy
 #| msgid "create objects and subfolders"
 msgid "Create objects and subfolders"
@@ -2321,7 +2321,7 @@ msgstr "Moneda"
 msgid "Current Date"
 msgstr "Moneda"
 
-#: apps/io.ox/files/share/permissions.js:520 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:560 module:io.ox/core
 #, fuzzy
 #| msgid "Currency"
 msgid "Current role"
@@ -2506,7 +2506,7 @@ msgid "Delete all %1$d messages"
 msgstr "Missatges esborrats"
 
 #. object permissions - delete
-#: apps/io.ox/files/share/permissions.js:632 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:672 module:io.ox/core
 #, fuzzy
 #| msgid "delete all objects"
 msgid "Delete all objects"
@@ -2534,13 +2534,13 @@ msgid "Delete old signatures after import"
 msgstr ""
 
 #. object permissions - delete
-#: apps/io.ox/files/share/permissions.js:630 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:670 module:io.ox/core
 #, fuzzy
 #| msgid "delete only own objects"
 msgid "Delete own objects"
 msgstr "suprimeix només els objectes propis"
 
-#: apps/io.ox/files/share/permissions.js:626 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:666 module:io.ox/core
 #, fuzzy
 #| msgid "no delete permissions"
 msgid "Delete permissions"
@@ -2617,7 +2617,7 @@ msgstr "La descripció ha estat copiada"
 msgid "Description text"
 msgstr "Descripció"
 
-#: apps/io.ox/files/share/permissions.js:657 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:697 module:io.ox/core
 msgid "Detailed access rights"
 msgstr ""
 
@@ -2625,7 +2625,7 @@ msgstr ""
 #: apps/io.ox/calendar/view-detail.js:174 module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:143
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/sidebarview.js:88
-#: apps/io.ox/files/share/permissions.js:589 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:629 module:io.ox/core
 #: apps/io.ox/files/upload/main.js:289 module:io.ox/files
 msgid "Details"
 msgstr "Detalls"
@@ -3069,7 +3069,7 @@ msgstr "EB"
 #: module:io.ox/files apps/io.ox/files/actions.js:739
 #: apps/io.ox/files/main.js:164 apps/io.ox/files/main.js:170
 #: apps/io.ox/files/main.js:874 apps/io.ox/files/main.js:922
-#: apps/io.ox/files/share/permissions.js:693 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:733 module:io.ox/core
 #: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:497
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
@@ -3104,7 +3104,7 @@ msgid "Edit Tumblr feed"
 msgstr "Edita un feed de Tumblr"
 
 #. object permissions - edit/modify
-#: apps/io.ox/files/share/permissions.js:621 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:661 module:io.ox/core
 #, fuzzy
 #| msgid "edit all objects"
 msgid "Edit all objects"
@@ -3152,7 +3152,7 @@ msgid "Edit names"
 msgstr "Edita la tasca"
 
 #. object permissions - edit/modify
-#: apps/io.ox/files/share/permissions.js:619 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:659 module:io.ox/core
 #, fuzzy
 #| msgid "edit own objects"
 msgid "Edit own objects"
@@ -3334,7 +3334,7 @@ msgstr "Acaba"
 msgid "Enter Password"
 msgstr "Entrau la contrasenya"
 
-#: apps/io.ox/files/share/permissions.js:919 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:959 module:io.ox/core
 msgid "Enter a Message to inform users"
 msgstr ""
 
@@ -3801,7 +3801,7 @@ msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:242 module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:81
-#: module:io.ox/core/viewer apps/io.ox/files/share/permissions.js:593
+#: module:io.ox/core/viewer apps/io.ox/files/share/permissions.js:633
 #: module:io.ox/core apps/io.ox/files/share/toolbar.js:50 module:io.ox/files
 #: apps/io.ox/find/extensions-api.js:286 apps/io.ox/find/extensions-api.js:299
 #: apps/io.ox/find/extensions-api.js:435 apps/io.ox/mail/detail/links.js:84
@@ -4018,7 +4018,7 @@ msgstr "Gris"
 msgid "Green"
 msgstr "Verd"
 
-#: apps/io.ox/files/share/permissions.js:337 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:345 module:io.ox/core
 #: apps/io.ox/participants/model.js:45
 msgid "Group"
 msgstr "Grup"
@@ -4037,7 +4037,7 @@ msgid "Groups"
 msgstr "Grup"
 
 #: apps/io.ox/core/permissions/permissions.js:47 module:io.ox/core
-#: apps/io.ox/files/share/permissions.js:342
+#: apps/io.ox/files/share/permissions.js:350
 msgid "Guest"
 msgstr "Convidat"
 
@@ -4395,7 +4395,7 @@ msgstr "Missatgeria instantània 1"
 msgid "Instant Messenger 2"
 msgstr "Missatgeria instantània 2"
 
-#: apps/io.ox/files/share/permissions.js:333 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:341 module:io.ox/core
 #, fuzzy
 #| msgid "External participants"
 msgid "Internal user"
@@ -5535,9 +5535,9 @@ msgstr "Sense títol."
 #. Auth type. None. No authentication
 #: apps/io.ox/core/settings/pane.js:275 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:436 apps/io.ox/core/tk/flag-picker.js:141
-#: module:io.ox/mail apps/io.ox/files/share/permissions.js:606
-#: apps/io.ox/files/share/permissions.js:617
-#: apps/io.ox/files/share/permissions.js:628
+#: module:io.ox/mail apps/io.ox/files/share/permissions.js:646
+#: apps/io.ox/files/share/permissions.js:657
+#: apps/io.ox/files/share/permissions.js:668
 #: apps/io.ox/files/view-options.js:113 module:io.ox/files
 #: apps/io.ox/files/view-options.js:124
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
@@ -5970,7 +5970,7 @@ msgstr "Elimina definitivament els correus suprimits"
 msgid "Permissions"
 msgstr "Permisos"
 
-#: apps/io.ox/files/share/permissions.js:791 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:831 module:io.ox/core
 #, fuzzy
 #| msgid "Permissions"
 msgid "Permissions for \"%1$s\""
@@ -5991,7 +5991,7 @@ msgid "Personal information"
 msgstr "Informació personal"
 
 #. placeholder text in share dialog
-#: apps/io.ox/files/share/permissions.js:927 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:967 module:io.ox/core
 msgid ""
 "Personal message (optional). This message is sent to all newly invited "
 "people."
@@ -6531,8 +6531,8 @@ msgid "Public calendars"
 msgstr "Nou calendari públic"
 
 #: apps/io.ox/files/share/listview.js:243 module:io.ox/files
-#: apps/io.ox/files/share/permissions.js:119 module:io.ox/core
-#: apps/io.ox/files/share/permissions.js:346
+#: apps/io.ox/files/share/permissions.js:123 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:354
 #, fuzzy
 #| msgid "Public"
 msgid "Public link"
@@ -6624,7 +6624,7 @@ msgstr ""
 "vostra puntuació."
 
 #. object permissions - read
-#: apps/io.ox/files/share/permissions.js:610 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:650 module:io.ox/core
 #, fuzzy
 #| msgid "read all objects"
 msgid "Read all objects"
@@ -6635,13 +6635,13 @@ msgid "Read article on tumblr.com"
 msgstr "Llegiu l'article a tumblr.com"
 
 #. object permissions - read
-#: apps/io.ox/files/share/permissions.js:608 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:648 module:io.ox/core
 #, fuzzy
 #| msgid "read own objects"
 msgid "Read own objects"
 msgstr "llegeix objectes propis"
 
-#: apps/io.ox/files/share/permissions.js:604 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:644 module:io.ox/core
 #, fuzzy
 #| msgid "no read permissions"
 msgid "Read permissions"
@@ -6927,7 +6927,7 @@ msgstr "Respon al remitent"
 msgid "Request read receipt"
 msgstr "Sol·licita una confirmació de lectura"
 
-#: apps/io.ox/files/share/permissions.js:687 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:727 module:io.ox/core
 #, fuzzy
 #| msgid "Task invitations"
 msgid "Resend invitation"
@@ -7004,7 +7004,7 @@ msgstr "Revisau les vostres compres"
 
 #. Role: view folder + read/write all
 #: apps/io.ox/files/share/permissions.js:47 module:io.ox/core
-#: apps/io.ox/files/share/permissions.js:525
+#: apps/io.ox/files/share/permissions.js:565
 #, fuzzy
 #| msgid "Preview"
 msgid "Reviewer"
@@ -7014,9 +7014,9 @@ msgstr "Vista prèvia"
 msgid "Revoke"
 msgstr ""
 
-#: apps/io.ox/files/share/permissions.js:682 module:io.ox/core
-#: apps/io.ox/files/share/permissions.js:689
-#: apps/io.ox/files/share/permissions.js:695
+#: apps/io.ox/files/share/permissions.js:722 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:729
+#: apps/io.ox/files/share/permissions.js:735
 #: apps/io.ox/files/share/toolbar.js:43 module:io.ox/files
 msgid "Revoke access"
 msgstr ""
@@ -7051,7 +7051,7 @@ msgstr "Volum de vendes"
 #: apps/io.ox/core/settings/user.js:45 apps/io.ox/editor/main.js:150
 #: module:io.ox/editor apps/io.ox/editor/main.js:172
 #: apps/io.ox/files/actions/edit-description.js:35 module:io.ox/files
-#: apps/io.ox/files/filepicker.js:38 apps/io.ox/files/share/permissions.js:802
+#: apps/io.ox/files/filepicker.js:38 apps/io.ox/files/share/permissions.js:842
 #: apps/io.ox/mail/accounts/settings.js:44 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:70 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:72
@@ -7347,13 +7347,13 @@ msgid "Settings"
 msgstr "Preferències"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js:229 module:io.ox/core
-#: apps/io.ox/files/share/permissions.js:802 apps/io.ox/files/toolbar.js:79
+#: apps/io.ox/files/share/permissions.js:842 apps/io.ox/files/toolbar.js:79
 #: module:io.ox/files apps/plugins/portal/xing/actions.js:209
 #: module:plugins/portal
 msgid "Share"
 msgstr "Comparteix"
 
-#: apps/io.ox/files/share/permissions.js:790 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:830 module:io.ox/core
 #, fuzzy
 #| msgid "Searched for: %1$s"
 msgid "Share \"%1$s\""
@@ -7804,7 +7804,7 @@ msgid "Start tour"
 msgstr "Comença"
 
 #: apps/io.ox/core/permissions/permissions.js:479 module:io.ox/core
-#: apps/io.ox/files/share/permissions.js:887
+#: apps/io.ox/files/share/permissions.js:927
 #: apps/plugins/administration/groups/settings/edit.js:85
 msgid "Start typing to search for user names"
 msgstr ""
@@ -8326,7 +8326,7 @@ msgstr "L'àrea de notificació està tancada"
 msgid "The notification area is open"
 msgstr "L'àrea de notificació està oberta"
 
-#: apps/io.ox/files/share/permissions.js:295 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:303 module:io.ox/core
 #, fuzzy
 #| msgid "The notification area is open"
 msgid "The notification has been resent"
@@ -9163,7 +9163,7 @@ msgstr ""
 "prement la tecla ESC."
 
 #. object permissions - user role
-#: apps/io.ox/files/share/permissions.js:643 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:683 module:io.ox/core
 #, fuzzy
 #| msgid "Username"
 msgid "User"
@@ -9258,7 +9258,7 @@ msgid "View source"
 msgstr "Mostra'n el codi font"
 
 #. folder permissions
-#: apps/io.ox/files/share/permissions.js:595 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:635 module:io.ox/core
 #, fuzzy
 #| msgid "view the folder"
 msgid "View the folder"
@@ -9270,7 +9270,7 @@ msgstr ""
 
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permissions.js:45 module:io.ox/core
-#: apps/io.ox/files/share/permissions.js:522
+#: apps/io.ox/files/share/permissions.js:562
 #, fuzzy
 #| msgid "View"
 msgid "Viewer"
@@ -9403,7 +9403,7 @@ msgstr "Vista de setmana laboral"
 msgid "Would you like to enable desktop notifications?"
 msgstr "No hi ha notificacions"
 
-#: apps/io.ox/files/share/permissions.js:615 module:io.ox/core
+#: apps/io.ox/files/share/permissions.js:655 module:io.ox/core
 #, fuzzy
 #| msgid "no edit permissions"
 msgid "Write permissions"
