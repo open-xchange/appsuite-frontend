@@ -485,7 +485,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         },
 
         /**
-         * Returns the pageNode with the given pageNumber.
+         * Returns the pageNode for the given pageNumber.
          *
          * @param {Number} pageNumber
          *  The 1-based number of the page node to return.
@@ -553,9 +553,9 @@ define('io.ox/core/viewer/views/types/documentview', [
 
                 // draw page nodes and apply css sizes
                 _.times(pageCount, function (index) {
-                    var documentPage = $('<div class="document-page">'),
+                    var documentPage = $('<div class="document-page">').attr('data-page', index + 1),
                         pageSize = this.pdfView.getRealPageSize(index + 1, this.currentZoomFactor / 100);
-                    documentPage.attr('data-page', index + 1);
+
                     this.documentContainer.append(documentPage.attr(pageSize).css(pageSize));
                 }, this);
 
@@ -799,6 +799,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                     this.pageLoader.abortQueuedRequests();
                     this.cancelMorePagesTimer();
                     this.pageLoader.destroy();
+                    this.pageLoader = null;
                 }
                 if (this.pdfView) {
                     this.pdfView.destroy();
