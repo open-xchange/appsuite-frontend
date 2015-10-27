@@ -14,6 +14,7 @@
 define('io.ox/calendar/month/perspective', [
     'io.ox/calendar/month/view',
     'io.ox/calendar/api',
+    'io.ox/core/api/backbone',
     'io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
     'io.ox/calendar/view-detail',
@@ -22,7 +23,7 @@ define('io.ox/calendar/month/perspective', [
     'io.ox/core/folder/api',
     'settings!io.ox/calendar',
     'gettext!io.ox/calendar'
-], function (View, api, ext, dialogs, detailView, conflictView, print, folderAPI, settings, gt) {
+], function (View, api, backbone, ext, dialogs, detailView, conflictView, print, folderAPI, settings, gt) {
 
     'use strict';
 
@@ -176,8 +177,8 @@ define('io.ox/calendar/month/perspective', [
                                     tmpEnd = moment.utc(tmpEnd).local(true).valueOf();
                                 }
                                 if ((tmpStart >= start && tmpStart < end) || (tmpEnd > start && tmpEnd <= end) || (tmpStart <= start && tmpEnd >= end)) {
-                                    var m = new Backbone.Model(mod);
-                                    m.id = _.cid(mod);
+                                    // overwrites model.cid with our _.cid
+                                    var m = new backbone.Model(mod);
                                     retList.push(m);
                                 }
                             }

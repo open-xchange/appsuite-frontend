@@ -72,6 +72,9 @@ define('io.ox/calendar/model', [
                     end: this.get('full_time') ? defEnd : this.get('end_date')
                 };
 
+                // overwrites model.cid with our _.cid
+                this.cid = this.attributes.cid = _.cid(this.attributes);
+
                 // bind events
                 this.on({
                     'create:fail update:fail': function (response) {
