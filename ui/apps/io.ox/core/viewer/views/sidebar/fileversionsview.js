@@ -172,6 +172,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         className: 'viewer-fileversions',
 
         initialize: function () {
+            PanelBaseView.prototype.initialize.apply(this, arguments);
             // initially hide the panel
             this.$el.hide();
             // attach event handlers
