@@ -1810,11 +1810,6 @@
         }
       }
     },
-    "handy": {
-      "version": "0.0.13",
-      "from": "handy@>=0.0.11",
-      "resolved": "https://registry.npmjs.org/handy/-/handy-0.0.13.tgz"
-    },
     "har-validator": {
       "version": "2.0.2",
       "from": "har-validator@>=2.0.2 <2.1.0",
@@ -3320,7 +3315,14 @@
     "to": {
       "version": "0.2.9",
       "from": "to@>=0.2.9 <0.3.0",
-      "resolved": "https://registry.npmjs.org/to/-/to-0.2.9.tgz"
+      "resolved": "https://registry.npmjs.org/to/-/to-0.2.9.tgz",
+      "dependencies": {
+        "handy" : {
+          "version": "0.0.13",
+          "from": "handy@>=0.0.11",
+          "resolved": "https://registry.npmjs.org/handy/-/handy-0.0.13.tgz"
+        }
+      }
     },
     "to-double-quotes": {
       "version": "1.0.2",
