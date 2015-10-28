@@ -576,7 +576,7 @@ define('io.ox/calendar/month/perspective', [
                 });
 
             // define default sidepopup dialog
-            this.dialog = new dialogs.SidePopup({ tabTrap: true })
+            this.dialog = new dialogs.SidePopup({ tabTrap: true, preserveOnAppchange: true })
                 .on('close', function () {
                     $('.appointment', this.main).removeClass('opac current');
                 });

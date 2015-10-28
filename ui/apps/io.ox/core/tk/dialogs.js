@@ -589,6 +589,12 @@ define('io.ox/core/tk/dialogs', [
     $(document).on('click', function (e) {
 
         var popups = $('.io-ox-sidepopup'), target = $(e.target);
+        if (target.hasClass('apptitle')) {
+            popups = $('.io-ox-sidepopup:not(.preserve-on-appchange)');
+        } else {
+            popups = $('.io-ox-sidepopup:not(.preserve-on-appchange), .preserve-on-appchange:visible');
+        }
+
         if (popups.length === 0) return;
         //check if we are inside a modal dialog or pressed a button in the footer (footer buttons usually close the dialog so check with .io-ox-dialog-popup would fail)
         if (target.closest('.io-ox-dialog-popup, .io-ox-dialog-underlay, .modal-footer').length > 0) return;
@@ -602,7 +608,7 @@ define('io.ox/core/tk/dialogs', [
     });
 
     $(document).on('keydown', function (e) {
-        if (e.which === 27) $('.io-ox-sidepopup').trigger('close');
+        if (e.which === 27) $('.io-ox-sidepopup:not(.preserve-on-appchange), .preserve-on-appchange:visible').trigger('close');
     });
 
     var SidePopup = function (options) {
@@ -674,6 +680,12 @@ define('io.ox/core/tk/dialogs', [
 
         if (options.modal) {
             overlay = $('<div class="io-ox-sidepopup-overlay abs">').append(popup, arrow);
+        }
+
+        // prevent popups from closing when the app changes
+        // used in calendar week/month views see Bug 41346
+        if (options.preserveOnAppchange) {
+            popup.addClass('preserve-on-appchange');
         }
 
         // public nodes
