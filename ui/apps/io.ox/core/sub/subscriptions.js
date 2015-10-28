@@ -343,8 +343,8 @@ define('io.ox/core/sub/subscriptions', [
             var destructive = isDestructiveSubscription(baton);
             this.append(
                 $('<div>').addClass('control-group').append(
-                    $('<div>').addClass('controls').append(
-                        $('<label>').addClass('checkbox').text(gt('Add new folder for this subscription')).append(
+                    $('<div>').addClass('controls checkbox').append(
+                        $('<label>').append(
                             $('<input type="checkbox">')
                                 .prop('checked', true)
                                 .prop('disabled', destructive)
@@ -357,7 +357,8 @@ define('io.ox/core/sub/subscriptions', [
                                     if (!$(this).prop('checked')) {
                                         baton.newFolder = false;
                                     }
-                                })
+                                }),
+                            $.txt(gt('Add new folder for this subscription'))
                         )
                     )
                 )
