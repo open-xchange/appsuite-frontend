@@ -1114,7 +1114,8 @@ define('io.ox/mail/api', [
                 action: 'new'
             },
             data: form,
-            dataType: 'text'
+            dataType: 'json',
+            fixPost: true
         });
     }
 
