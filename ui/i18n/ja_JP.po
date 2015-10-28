@@ -1066,7 +1066,7 @@ msgstr "アポイント"
 #: apps/io.ox/calendar/detail/main.js:38 module:io.ox/calendar
 #: apps/io.ox/calendar/list/perspective.js:66
 #: apps/io.ox/calendar/list/perspective.js:77
-#: apps/io.ox/calendar/month/perspective.js:63
+#: apps/io.ox/calendar/month/perspective.js:64
 #: apps/io.ox/calendar/week/perspective.js:69
 msgid "Appointment Details"
 msgstr "アポイントの詳細"
@@ -1077,7 +1077,7 @@ msgstr "アポイントの詳細"
 msgid "Appointment invitations"
 msgstr "アポイントへの出席依頼"
 
-#: apps/io.ox/calendar/month/perspective.js:462 module:io.ox/calendar
+#: apps/io.ox/calendar/month/perspective.js:463 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:397
 msgid "Appointment list"
 msgstr "アポイントのリスト"
@@ -1106,9 +1106,9 @@ msgstr "承認："
 msgid "Approximate Duration for Subscriptions"
 msgstr "登録の概算時間"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:653
+#: apps/io.ox/calendar/edit/recurrence-view.js:657
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:699
+#: apps/io.ox/calendar/edit/recurrence-view.js:703
 msgid "April"
 msgstr "4 月"
 
@@ -1155,7 +1155,7 @@ msgstr "昇順"
 msgid "Assistant"
 msgstr "秘書"
 
-#: apps/io.ox/mail/compose/view.js:226 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:229 module:io.ox/mail
 msgid "Attach Vcard"
 msgstr "vCard を添付"
 
@@ -1183,9 +1183,9 @@ msgstr "添付ファイル"
 msgid "Attachments have been saved!"
 msgstr "添付ファイルを保存しました。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:657
+#: apps/io.ox/calendar/edit/recurrence-view.js:661
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:703
+#: apps/io.ox/calendar/edit/recurrence-view.js:707
 msgid "August"
 msgstr "8 月"
 
@@ -1231,8 +1231,12 @@ msgid ""
 msgstr "メールの送信時に \"収集済みアドレス\" フォルダに連絡先を自動的に収集"
 
 #: apps/io.ox/calendar/settings/pane.js:179 module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Automatically delete incoming notifications after the appointment has "
+#| "been accepted or declined"
 msgid ""
-"Automatically delete incoming notifications after the appointment has been "
+"Automatically delete the invitation email after the appointment has been "
 "accepted or declined"
 msgstr "アポイントが承諾または辞退された後受信通知を自動的に削除"
 
@@ -1356,7 +1360,7 @@ msgstr "ギフトを購入"
 msgid "Buy now!"
 msgstr "購入"
 
-#: apps/io.ox/calendar/month/perspective.js:132 module:io.ox/calendar
+#: apps/io.ox/calendar/month/perspective.js:133 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:153
 msgid ""
 "By changing the date of this appointment you are creating an appointment "
@@ -1416,7 +1420,7 @@ msgstr "予定表："
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:424
 #: apps/io.ox/calendar/edit/timezone-dialog.js:141
 #: apps/io.ox/calendar/main.js:256 apps/io.ox/calendar/main.js:322
-#: apps/io.ox/calendar/month/perspective.js:114
+#: apps/io.ox/calendar/month/perspective.js:115
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js:92
 #: apps/io.ox/calendar/week/perspective.js:119
 #: apps/io.ox/calendar/week/perspective.js:162
@@ -1455,7 +1459,7 @@ msgstr "予定表："
 #: apps/io.ox/mail/actions/reminder.js:37
 #: apps/io.ox/mail/compose/extensions.js:493
 #: apps/io.ox/mail/compose/inline-images.js:80
-#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:645
+#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:648
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1252
@@ -1810,7 +1814,7 @@ msgid "Company"
 msgstr "会社"
 
 #: apps/io.ox/mail/compose/main.js:26 module:io.ox/mail
-#: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:476
+#: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:479
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:208 apps/io.ox/mail/toolbar.js:40
 msgid "Compose"
@@ -2185,9 +2189,9 @@ msgstr "日ビュー"
 msgid "Days"
 msgstr "日"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:661
+#: apps/io.ox/calendar/edit/recurrence-view.js:665
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:707
+#: apps/io.ox/calendar/edit/recurrence-view.js:711
 msgid "December"
 msgstr "12 月"
 
@@ -2445,7 +2449,7 @@ msgstr "変更を破棄"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:643 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:646 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "メッセージを破棄"
@@ -2582,7 +2586,7 @@ msgstr "このウィジェットを削除しますか？"
 msgid "Do you really want to discard your changes?"
 msgstr "変更を破棄しますか？"
 
-#: apps/io.ox/mail/compose/view.js:640 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:643 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "メッセージを本当に破棄しますか？"
 
@@ -3372,9 +3376,9 @@ msgstr "FAX (自宅)"
 msgid "Fax (alt)"
 msgstr "FAX (予備)"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:651
+#: apps/io.ox/calendar/edit/recurrence-view.js:655
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:697
+#: apps/io.ox/calendar/edit/recurrence-view.js:701
 msgid "February"
 msgstr "2 月"
 
@@ -3834,7 +3838,8 @@ msgstr "スタック トレースを隠す"
 msgid "Hide this notification"
 msgstr "この通知を隠す。"
 
-#: apps/io.ox/mail/compose/view.js:215 module:io.ox/mail
+#. E-Mail priority
+#: apps/io.ox/mail/compose/view.js:216 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:361 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "High"
@@ -3927,7 +3932,7 @@ msgstr "警告を無視"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:191 module:io.ox/calendar
 #: apps/io.ox/calendar/edit/main.js:153 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/month/perspective.js:113
+#: apps/io.ox/calendar/month/perspective.js:114
 #: apps/io.ox/calendar/week/perspective.js:118
 #: apps/plugins/notifications/calendar/register.js:83
 #: module:plugins/notifications
@@ -4148,9 +4153,9 @@ msgstr "アイテムのリスト設定"
 msgid "Items without a file can not be downloaded."
 msgstr "ファイルがないアイテムはダウンロードできません。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:650
+#: apps/io.ox/calendar/edit/recurrence-view.js:654
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:696
+#: apps/io.ox/calendar/edit/recurrence-view.js:700
 msgid "January"
 msgstr "1 月"
 
@@ -4180,15 +4185,15 @@ msgstr "プレゼンテーションに参加"
 msgid "Join presentation"
 msgstr "プレゼンテーションに参加"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:656
+#: apps/io.ox/calendar/edit/recurrence-view.js:660
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:702
+#: apps/io.ox/calendar/edit/recurrence-view.js:706
 msgid "July"
 msgstr "7 月"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:655
+#: apps/io.ox/calendar/edit/recurrence-view.js:659
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:701
+#: apps/io.ox/calendar/edit/recurrence-view.js:705
 msgid "June"
 msgstr "6 月"
 
@@ -4391,7 +4396,8 @@ msgstr "損失"
 msgid "Loss: %1$s %"
 msgstr "損失: %1$s %"
 
-#: apps/io.ox/mail/compose/view.js:217 module:io.ox/mail
+#. E-Mail priority
+#: apps/io.ox/mail/compose/view.js:220 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:359 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "Low"
@@ -4496,8 +4502,8 @@ msgstr "メール通知"
 msgid "Mail reminder for"
 msgstr "件名"
 
-#: apps/io.ox/mail/compose/view.js:533 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:557
+#: apps/io.ox/mail/compose/view.js:536 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:560
 msgid "Mail saved as draft"
 msgstr "メールの下書きを保存しました。"
 
@@ -4566,9 +4572,9 @@ msgstr "ファイルの管理"
 msgid "Manual"
 msgstr "手動設定"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:652
+#: apps/io.ox/calendar/edit/recurrence-view.js:656
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:698
+#: apps/io.ox/calendar/edit/recurrence-view.js:702
 msgid "March"
 msgstr "3 月"
 
@@ -4643,9 +4649,9 @@ msgstr "未読にする"
 msgid "Matches"
 msgstr "次の文字列と一致"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:654
+#: apps/io.ox/calendar/edit/recurrence-view.js:658
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:700
+#: apps/io.ox/calendar/edit/recurrence-view.js:704
 msgid "May"
 msgstr "5 月"
 
@@ -5005,7 +5011,7 @@ msgid "Nickname"
 msgstr "ニックネーム"
 
 #. folder permissions - Is Admin? NO
-#: apps/io.ox/calendar/month/perspective.js:134 module:io.ox/calendar
+#: apps/io.ox/calendar/month/perspective.js:135 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:155 apps/io.ox/core/main.js:134
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js:177
 msgid "No"
@@ -5126,7 +5132,8 @@ msgstr "タイトルなし"
 msgid "None"
 msgstr "なし"
 
-#: apps/io.ox/mail/compose/view.js:216 module:io.ox/mail
+#. E-Mail priority
+#: apps/io.ox/mail/compose/view.js:218 module:io.ox/mail
 msgid "Normal"
 msgstr "標準"
 
@@ -5189,9 +5196,9 @@ msgstr "Notifier"
 msgid "Notify all participants by email."
 msgstr "メールですべての出席者に通知"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:660
+#: apps/io.ox/calendar/edit/recurrence-view.js:664
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:706
+#: apps/io.ox/calendar/edit/recurrence-view.js:710
 msgid "November"
 msgstr "11 月"
 
@@ -5225,9 +5232,9 @@ msgstr "オブジェクト権限"
 msgid "Objects"
 msgstr "オブジェクト"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:659
+#: apps/io.ox/calendar/edit/recurrence-view.js:663
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:705
+#: apps/io.ox/calendar/edit/recurrence-view.js:709
 msgid "October"
 msgstr "10 月"
 
@@ -5373,8 +5380,8 @@ msgstr "オプション 20"
 #: apps/io.ox/files/toolbar.js:299 module:io.ox/files
 #: apps/io.ox/find/extensions-facets.js:84 module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js:378 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:225 apps/io.ox/mail/compose/view.js:226
-#: apps/io.ox/mail/compose/view.js:227 apps/io.ox/mail/toolbar.js:246
+#: apps/io.ox/mail/compose/view.js:228 apps/io.ox/mail/compose/view.js:229
+#: apps/io.ox/mail/compose/view.js:230 apps/io.ox/mail/toolbar.js:246
 #: apps/io.ox/tasks/toolbar.js:143
 msgid "Options"
 msgstr "オプション"
@@ -5649,7 +5656,7 @@ msgstr ""
 "\n"
 "メールの指示に従い、ウィジットを返信してアカウント設定を終了します。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:1096
+#: apps/io.ox/calendar/edit/recurrence-view.js:1100
 #: module:io.ox/calendar/edit/main
 msgid "Please choose a sentence below."
 msgstr "次の文を選択してください。"
@@ -5983,9 +5990,10 @@ msgstr "印刷タスク"
 msgid "Printout"
 msgstr "印刷"
 
+#. E-Mail priority
 #: apps/io.ox/mail/compose/view.js:214 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:215 apps/io.ox/mail/compose/view.js:216
-#: apps/io.ox/mail/compose/view.js:217
+#: apps/io.ox/mail/compose/view.js:216 apps/io.ox/mail/compose/view.js:218
+#: apps/io.ox/mail/compose/view.js:220
 #: apps/io.ox/tasks/edit/view-template.js:367 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:789 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:104
@@ -6371,7 +6379,7 @@ msgstr "名前を変更"
 msgid "Rename folder"
 msgstr "フォルダ名を変更"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:1220
+#: apps/io.ox/calendar/edit/recurrence-view.js:1224
 #: module:io.ox/calendar/edit/main
 msgid "Repeat"
 msgstr "定期的なアポイント"
@@ -6405,7 +6413,7 @@ msgstr "すべての宛先に返信"
 msgid "Reply to sender"
 msgstr "差出人に返信"
 
-#: apps/io.ox/mail/compose/view.js:227 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:230 module:io.ox/mail
 msgid "Request read receipt"
 msgstr "開封確認メッセージを要求"
 
@@ -6551,7 +6559,7 @@ msgstr "保存"
 msgid "Save as distribution list"
 msgstr "配布リストとして保存"
 
-#: apps/io.ox/mail/compose/view.js:644 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:647 module:io.ox/mail
 msgid "Save as draft"
 msgstr "下書きを保存"
 
@@ -6760,9 +6768,9 @@ msgctxt "folder"
 msgid "Sent messages"
 msgstr "送信済みメッセージ"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:658
+#: apps/io.ox/calendar/edit/recurrence-view.js:662
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:704
+#: apps/io.ox/calendar/edit/recurrence-view.js:708
 msgid "September"
 msgstr "9 月"
 
@@ -7483,7 +7491,7 @@ msgstr "アポイントが削除されました。"
 msgid "The appointment has been updated"
 msgstr "アポイントが更新されました。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:519
+#: apps/io.ox/calendar/edit/recurrence-view.js:523
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
@@ -7494,7 +7502,7 @@ msgstr ""
 "\"interval\"><span class=\"number-control\">2</span> 日ごとに</a> 繰り返され"
 "ます。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:540
+#: apps/io.ox/calendar/edit/recurrence-view.js:544
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
@@ -7515,7 +7523,7 @@ msgstr ""
 "この定期的なアポイントは <a href=\"#\" data-attribute=\"recurrenceType\" "
 "data-widget=\"options\">毎週</a> 繰り返されます。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:666
+#: apps/io.ox/calendar/edit/recurrence-view.js:670
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
@@ -7528,7 +7536,7 @@ msgstr ""
 "attribute=\"ordinal\">第 1</a> <a href=\"#\" data-widget=\"options\" data-"
 "attribute=\"day\">水曜日</a> に繰り返されます。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:638
+#: apps/io.ox/calendar/edit/recurrence-view.js:642
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated every year on day <a href=\"#\" data-widget="
@@ -7541,7 +7549,7 @@ msgstr ""
 "attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> 日に繰"
 "り返されます。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:562
+#: apps/io.ox/calendar/edit/recurrence-view.js:566
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated on day <a href=\"#\" data-widget=\"number\" data-"
@@ -7554,7 +7562,7 @@ msgstr ""
 "\"#\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span class="
 "\"number-control\">10</span></a> 日に繰り返されます。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:591
+#: apps/io.ox/calendar/edit/recurrence-view.js:595
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated the <a href=\"#\" data-widget=\"options\" data-"
@@ -7735,7 +7743,7 @@ msgid "The sender wants to get notified when you have read this email"
 msgstr ""
 "このメールをお読みになったら差出人に連絡するよう、差出人が求めています。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:746
+#: apps/io.ox/calendar/edit/recurrence-view.js:750
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -7747,7 +7755,7 @@ msgstr ""
 "で <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">終了</a> "
 "します。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:736
+#: apps/io.ox/calendar/edit/recurrence-view.js:740
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -7758,7 +7766,7 @@ msgstr ""
 "\"datePicker\">2013 年 3 月 11 日</a> に <a href=\"#\" data-attribute="
 "\"ending\" data-widget=\"options\">終了</a> します。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:727
+#: apps/io.ox/calendar/edit/recurrence-view.js:731
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -7792,8 +7800,8 @@ msgstr "設定を有効にするには、再読み込みするかログオンし
 msgid "The start date must be before the due date."
 msgstr "開始日は終了日より前の日付でなければなりません。"
 
-#: apps/io.ox/calendar/model.js:246 module:io.ox/calendar
-#: apps/io.ox/calendar/model.js:247
+#: apps/io.ox/calendar/model.js:249 module:io.ox/calendar
+#: apps/io.ox/calendar/model.js:250
 #: apps/io.ox/mail/vacationnotice/settings/filter.js:92 module:io.ox/mail
 #: apps/io.ox/mail/vacationnotice/settings/filter.js:93
 msgid "The start date must be before the end date."
@@ -8736,7 +8744,7 @@ msgid "Yellow"
 msgstr "黄"
 
 #. folder permissions - Is Admin? YES
-#: apps/io.ox/calendar/month/perspective.js:133 module:io.ox/calendar
+#: apps/io.ox/calendar/month/perspective.js:134 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:154 apps/io.ox/core/main.js:133
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js:179
 #: apps/io.ox/files/util.js:257 module:io.ox/files
@@ -8913,6 +8921,50 @@ msgstr "強制的にサイン アウトされました。"
 msgid "You have declined the appointment"
 msgstr "アポイントを辞退しました。"
 
+#. Body text of generic desktop notification about new invitations to appointments
+#: apps/plugins/notifications/calendar/register.js:255
+#: module:plugins/notifications
+#, fuzzy
+#| msgid "You've got appointment invitations"
+msgid "You have new appointment invitations"
+msgstr "アポイントへの出席依頼があります。"
+
+#. Body text of generic desktop notification about new reminders for appointments
+#: apps/plugins/notifications/calendar/register.js:203
+#: module:plugins/notifications
+#, fuzzy
+#| msgid "You've got appointment reminders"
+msgid "You have new appointment reminders"
+msgstr "アポイントのアラームがあります。"
+
+#: apps/plugins/notifications/mail/register.js:94 module:plugins/notifications
+#, fuzzy
+#| msgid "You've got new mails"
+msgid "You have new mail"
+msgstr "新規メッセージがあります。"
+
+#: apps/io.ox/core/notifications/subview.js:156 module:io.ox/core
+#, fuzzy
+#| msgid "You've got new notifications"
+msgid "You have new notifications"
+msgstr "新規通知があります。"
+
+#. Content for a generic desktop notification about new invitations to tasks
+#: apps/plugins/notifications/tasks/register.js:347
+#: module:plugins/notifications
+#, fuzzy
+#| msgid "You've got task invitations"
+msgid "You have new task invitations"
+msgstr "仕事への出席依頼があります。"
+
+#. Content for a generic desktop notification about new reminders for tasks
+#: apps/plugins/notifications/tasks/register.js:205
+#: module:plugins/notifications
+#, fuzzy
+#| msgid "You've got task reminders"
+msgid "You have new task reminders"
+msgstr "仕事のアラームがあります。"
+
 #: apps/plugins/portal/linkedIn/register.js:288 module:plugins/portal
 msgid "You have no new messages"
 msgstr "新規メッセージはありません。"
@@ -8920,6 +8972,13 @@ msgstr "新規メッセージはありません。"
 #: apps/plugins/portal/mail/register.js:174 module:plugins/portal
 msgid "You have no unread messages"
 msgstr "未読メッセージはありません。"
+
+#: apps/plugins/notifications/tasks/register.js:114
+#: module:plugins/notifications
+#, fuzzy
+#| msgid "You've got overdue tasks"
+msgid "You have overdue tasks"
+msgstr "期限の過ぎた仕事があります。"
 
 #: apps/plugins/portal/linkedIn/register.js:172 module:plugins/portal
 #: apps/plugins/portal/twitter/register.js:235
@@ -8985,43 +9044,6 @@ msgstr ""
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "%1$d 秒後に自動的にサイン アウトされます。"
-
-#. Body text of generic desktop notification about new invitations to appointments
-#: apps/plugins/notifications/calendar/register.js:255
-#: module:plugins/notifications
-msgid "You've got appointment invitations"
-msgstr "アポイントへの出席依頼があります。"
-
-#. Body text of generic desktop notification about new reminders for appointments
-#: apps/plugins/notifications/calendar/register.js:203
-#: module:plugins/notifications
-msgid "You've got appointment reminders"
-msgstr "アポイントのアラームがあります。"
-
-#: apps/plugins/notifications/mail/register.js:94 module:plugins/notifications
-msgid "You've got new mails"
-msgstr "新規メッセージがあります。"
-
-#: apps/io.ox/core/notifications/subview.js:156 module:io.ox/core
-msgid "You've got new notifications"
-msgstr "新規通知があります。"
-
-#: apps/plugins/notifications/tasks/register.js:114
-#: module:plugins/notifications
-msgid "You've got overdue tasks"
-msgstr "期限の過ぎた仕事があります。"
-
-#. Content for a generic desktop notification about new invitations to tasks
-#: apps/plugins/notifications/tasks/register.js:347
-#: module:plugins/notifications
-msgid "You've got task invitations"
-msgstr "仕事への出席依頼があります。"
-
-#. Content for a generic desktop notification about new reminders for tasks
-#: apps/plugins/notifications/tasks/register.js:205
-#: module:plugins/notifications
-msgid "You've got task reminders"
-msgstr "仕事のアラームがあります。"
 
 #: apps/plugins/portal/xing/register.js:346 module:plugins/portal
 msgid "Your %s newsfeed"
@@ -9188,7 +9210,7 @@ msgstr "承諾済み"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:463
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:753
+#: apps/io.ox/calendar/edit/recurrence-view.js:757
 msgid "after %1$d appointment"
 msgid_plural "after %1$d appointments"
 msgstr[0] "%1$d 回のアポイント"
@@ -9236,7 +9258,8 @@ msgstr "オブジェクトを作成"
 msgid "create objects and subfolders"
 msgstr "オブジェクトとサブフォルダを作成"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:510
+#. recurring appointment: the appointment is repeated daily
+#: apps/io.ox/calendar/edit/recurrence-view.js:511
 #: module:io.ox/calendar/edit/main
 msgid "daily"
 msgstr "毎日"
@@ -9254,15 +9277,15 @@ msgstr "濃い緑"
 msgid "datepicker"
 msgstr "日付ピッカー"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:618
+#: apps/io.ox/calendar/edit/recurrence-view.js:622
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:686
+#: apps/io.ox/calendar/edit/recurrence-view.js:690
 msgid "day of the week"
 msgstr "稼働日"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:619
+#: apps/io.ox/calendar/edit/recurrence-view.js:623
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:687
+#: apps/io.ox/calendar/edit/recurrence-view.js:691
 msgid "day of the weekend"
 msgstr "週末"
 
@@ -9316,12 +9339,12 @@ msgstr "自分のオブジェクトのみを編集"
 msgid "end date "
 msgstr "終了日 "
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:723
+#: apps/io.ox/calendar/edit/recurrence-view.js:727
 #: module:io.ox/calendar/edit/main
 msgid "ends"
 msgstr "終了"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:720
+#: apps/io.ox/calendar/edit/recurrence-view.js:724
 #: module:io.ox/calendar/edit/main
 msgid "ends after a certain number of appointments"
 msgstr "特定回数のアポイントで終了"
@@ -9331,7 +9354,7 @@ msgstr "特定回数のアポイントで終了"
 msgid "ends on"
 msgstr "終了日時"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:719
+#: apps/io.ox/calendar/edit/recurrence-view.js:723
 #: module:io.ox/calendar/edit/main
 msgid "ends on a specific date"
 msgstr "特定の日に終了"
@@ -9340,8 +9363,8 @@ msgstr "特定の日に終了"
 #. This is inserted into an HTML construct.
 #: apps/io.ox/calendar/edit/recurrence-view.js:460
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:531
-#: apps/io.ox/calendar/edit/recurrence-view.js:534
+#: apps/io.ox/calendar/edit/recurrence-view.js:535
+#: apps/io.ox/calendar/edit/recurrence-view.js:538
 msgid "every %1$d day"
 msgid_plural "every %1$d days"
 msgstr[0] "%1$d 日ごとに"
@@ -9350,9 +9373,9 @@ msgstr[0] "%1$d 日ごとに"
 #. This is inserted into an HTML construct.
 #: apps/io.ox/calendar/edit/recurrence-view.js:462
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:575
-#: apps/io.ox/calendar/edit/recurrence-view.js:577
-#: apps/io.ox/calendar/edit/recurrence-view.js:632
+#: apps/io.ox/calendar/edit/recurrence-view.js:579
+#: apps/io.ox/calendar/edit/recurrence-view.js:581
+#: apps/io.ox/calendar/edit/recurrence-view.js:636
 msgid "every %1$d month"
 msgid_plural "every %1$d months"
 msgstr[0] "%1$d か月ごと"
@@ -9361,39 +9384,39 @@ msgstr[0] "%1$d か月ごと"
 #. This is inserted into an HTML construct.
 #: apps/io.ox/calendar/edit/recurrence-view.js:461
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:552
-#: apps/io.ox/calendar/edit/recurrence-view.js:555
+#: apps/io.ox/calendar/edit/recurrence-view.js:556
+#: apps/io.ox/calendar/edit/recurrence-view.js:559
 msgid "every %1$d week"
 msgid_plural "every %1$d weeks"
 msgstr[0] "%1$d 週間ごと"
 
 #. as in: The appointment is repeated every day
 #. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js:526
+#: apps/io.ox/calendar/edit/recurrence-view.js:530
 #: module:io.ox/calendar/edit/main
 msgid "every day"
 msgstr "毎日"
 
 #. as in: The appointment is repeated every month
 #. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js:571
+#: apps/io.ox/calendar/edit/recurrence-view.js:575
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:630
+#: apps/io.ox/calendar/edit/recurrence-view.js:634
 msgid "every month"
 msgstr "毎月"
 
 #. as in: The appointment is repeated every week
 #. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js:548
+#: apps/io.ox/calendar/edit/recurrence-view.js:552
 #: module:io.ox/calendar/edit/main
 msgid "every week"
 msgstr "毎週"
 
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: first week or first Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:600
+#: apps/io.ox/calendar/edit/recurrence-view.js:604
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:672
+#: apps/io.ox/calendar/edit/recurrence-view.js:676
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "first"
 msgstr "第 1"
@@ -9408,9 +9431,9 @@ msgstr "flickr.photos.search"
 
 #. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: fourth week or fourth Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:609
+#: apps/io.ox/calendar/edit/recurrence-view.js:613
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:678
+#: apps/io.ox/calendar/edit/recurrence-view.js:682
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "fourth"
 msgstr "第 4"
@@ -9470,9 +9493,9 @@ msgstr "日付指定"
 
 #. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: last week or last Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:597
+#: apps/io.ox/calendar/edit/recurrence-view.js:601
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:680
+#: apps/io.ox/calendar/edit/recurrence-view.js:684
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "last"
 msgstr "最終"
@@ -9489,14 +9512,15 @@ msgstr "薄い青"
 msgid "light green"
 msgstr "薄い緑"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:512
+#. recurring appointment: the appointment is repeated monthly
+#: apps/io.ox/calendar/edit/recurrence-view.js:515
 #: module:io.ox/calendar/edit/main
 msgid "monthly"
 msgstr "毎月"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:718
+#: apps/io.ox/calendar/edit/recurrence-view.js:722
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:732
+#: apps/io.ox/calendar/edit/recurrence-view.js:736
 msgid "never ends"
 msgstr "期限なし"
 
@@ -9599,9 +9623,9 @@ msgstr "削除"
 
 #. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: second week or second Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:603
+#: apps/io.ox/calendar/edit/recurrence-view.js:607
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:674
+#: apps/io.ox/calendar/edit/recurrence-view.js:678
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "second"
 msgstr "第 2"
@@ -9645,9 +9669,9 @@ msgstr "行の長さは数字でなければなりません"
 
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:606
+#: apps/io.ox/calendar/edit/recurrence-view.js:610
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:676
+#: apps/io.ox/calendar/edit/recurrence-view.js:680
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "third"
 msgstr "第 3"
@@ -9708,7 +9732,8 @@ msgstr "経由メール:"
 msgid "view the folder"
 msgstr "フォルダを表示"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:511
+#. recurring appointment: the appointment is repeated weekly
+#: apps/io.ox/calendar/edit/recurrence-view.js:513
 #: module:io.ox/calendar/edit/main
 msgid "weekly"
 msgstr "毎週"
@@ -9718,7 +9743,8 @@ msgstr "毎週"
 msgid "work days"
 msgstr "稼働日"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:513
+#. recurring appointment: the appointment is repeated yearly
+#: apps/io.ox/calendar/edit/recurrence-view.js:517
 #: module:io.ox/calendar/edit/main
 msgid "yearly"
 msgstr "毎年"
