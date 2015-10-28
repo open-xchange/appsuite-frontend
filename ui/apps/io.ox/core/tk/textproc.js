@@ -74,7 +74,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
             // has no children?
             if (children.length === 0) {
                 //do not trim single spaces
-                text = self.text() === ' ' ? self.text : $.trim(self.text());
+                text = self.text().match(/^[ \t]$/) ? self.text : $.trim(self.text());
                 // has no text?
                 if (text === '') {
                     // empty table cell?
