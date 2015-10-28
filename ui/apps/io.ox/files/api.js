@@ -412,22 +412,50 @@ define('io.ox/files/api', [
             };
         },
         httpGet: function (module, params) {
-            return $.when(
-                folderAPI.list(params.folder),
-                // this one might fail due to lack of permissions; error are transformed to empty array
-                http.GET({ module: module, params: _(params).omit('limit') }).then(null, $.when)
-            )
-            .then(function (folders, files) {
+            // since we don't have a unified API for files and folders
+            // we fetch folders first to see how many we get.
+            // we always have to do that even if the offset is > 0
+            // since the number might have changed.
+            // next, we can calculate the proper limit for the files request
+            return folderAPI.list(params.folder).then(function (folders) {
                 // sort by date client-side
                 if (String(params.sort) === '5') {
                     folders = _(folders).sortBy('last_modified');
                 }
                 if (params.order === 'desc') folders.reverse();
-                return [].concat(folders, files[0] || []);
+                // get remaining limit for files
+                var split = params.limit.split(/,/),
+                    start = Number(split[0]),
+                    stop = Number(split[1]),
+                    // construct new values
+                    newStart = start - folders.length,
+                    newStop = stop - folders.length,
+                    limit = newStart + ',' + newStop;
+                // folders exceed upper limit?
+                if (folders.length >= stop) return folders.slice(start, stop);
+                // fetch files
+                return http.GET({ module: module, params: _.extend({}, params, { limit: limit }) }).then(
+                    function (files) {
+                        // build virual response of folders, placeholders, and files
+                        // simple solution to get proper slice
+                        var unified = [].concat(
+                            folders,
+                            // fill up with placeholders
+                            new Array(Math.max(0, start - folders.length)),
+                            files
+                        );
+                        return unified.slice(start, stop);
+                    },
+                    function fail(e) {
+                        // this one might fail due to lack of permissions; error are transformed to empty array
+                        if (ox.debug) console.warn('files.httpGet', e.error, e);
+                        return [];
+                    }
+                );
             });
         },
-        // use client-side limit
-        useSlice: true,
+        // // use client-side limit
+        // useSlice: true,
         // set higher limit; works much faster than mail
         // we pick a number that looks ok for typical columns, so 5 * 6 * 7 = 210
         PRIMARY_PAGE_SIZE: 210,
