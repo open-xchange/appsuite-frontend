@@ -37,5 +37,8 @@
     "typeahead.js": "0.10.5",
     "underscore": "1.8.3",
     "velocity": "1.2.2"
+  },
+  "resolutions": {
+    "backbone": "fda02db428c464badb12010c990622ee91f28a48"
   }
 }
