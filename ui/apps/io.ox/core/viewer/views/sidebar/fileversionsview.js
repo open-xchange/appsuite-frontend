@@ -36,6 +36,8 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
 
             function drawAllVersions(allVersions) {
                 _.chain(allVersions)
+                // avoid unnecessary model changes / change events
+                .clone(versionSorter)
                 .sort(versionSorter)
                 .each(function (version) {
                     var entryRow = $('<tr class="version">');
@@ -58,7 +60,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             panelBody.empty();
             if (!model || !_.isArray(versions)) { return; }
 
-            table = $('<table>').addClass('versiontable table').append(
+            table = $('<table>').addClass('versiontable table').attr('data-latest-version', _.last(versions).version).append(
                         $('<caption>').addClass('sr-only').text(gt('File version table, the first row represents the current version.')),
                         $('<thead>').addClass('sr-only').append(
                             $('<tr>').append(
@@ -183,11 +185,14 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         },
 
         onOpen: function () {
-            this.$('.sidebar-panel-heading').busy();
+            var header = this.$('.sidebar-panel-heading').busy();
             // loading versions will trigger 'change:version' which in turn renders the version list
-            FilesAPI.versions.load(this.model.toJSON(), { cache: false }).fail(function (error) {
-                if (ox.debug) console.error('FilesAPI.versions.load()', 'error', error);
-            });
+            FilesAPI.versions.load(this.model.toJSON(), { cache: false })
+                .always($.proxy(header.idle, header))
+                .done($.proxy(this.renderVersionsAsNeeded, this))
+                .fail(function (error) {
+                    if (ox.debug) console.error('FilesAPI.versions.load()', 'error', error);
+                });
         },
 
         render: function () {
@@ -203,7 +208,25 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
          * Render the version list
          */
         renderVersions: function () {
+            if (!this.model) return this;
             Ext.point(POINT + '/list').invoke('draw', this.$el, Ext.Baton({ model: this.model, data: this.model.toJSON() }));
+        },
+
+        renderVersionsAsNeeded: function () {
+            // in case FilesAPI.versions.load will not indirectly triggers a 'change:version'
+            // f.e. when a new office document is created and the model
+            // is up-to-date when toggling versions pane
+            var node = this.$el.find('table.versiontable'),
+                model = this.model, versions;
+            // is empty
+            if (!node.length) return this.renderVersions();
+            // missing versions
+            versions = model.get('versions') || [];
+            if (!versions.length) return this.renderVersions();
+            // added and removed same number of versions
+            if (node.find('tr.version').length !== versions.length) return this.renderVersions();
+            // has difference in version count
+            if (node.attr('data-latest-version') !== _.last(versions).version) return this.renderVersions();
         },
 
         /**
