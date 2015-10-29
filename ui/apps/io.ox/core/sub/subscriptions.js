@@ -52,7 +52,7 @@ define('io.ox/core/sub/subscriptions', [
         render: function (app) {
             var self = this,
 
-            popup = new dialogs.ModalDialog({ async: true, help: 'ox.appsuite.user.concept.pubsub.subscribe' });
+            popup = new dialogs.ModalDialog({ async: true, help: 'ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html' });
 
             popup.getHeader().append($('<h4>').text(gt('Subscribe')));
 
