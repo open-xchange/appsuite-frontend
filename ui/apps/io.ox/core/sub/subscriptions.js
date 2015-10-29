@@ -52,14 +52,19 @@ define('io.ox/core/sub/subscriptions', [
         render: function (app) {
             var self = this,
 
-            popup = new dialogs.ModalDialog({ async: true, help: 'ox.appsuite.user.concept.pubsub.subscribe' })
-                .addPrimaryButton('subscribe', gt('Subscribe'))
-                .addButton('cancel', gt('Cancel'));
+            popup = new dialogs.ModalDialog({ async: true, help: 'ox.appsuite.user.concept.pubsub.subscribe' });
 
             popup.getHeader().append($('<h4>').text(gt('Subscribe')));
 
             api.sources.getAll().done(function (data) {
-                var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, services: data, popup: popup, newFolder: true });
+                // filter services for the current module
+                var services = [];
+                _.each(data, function (service) {
+                    if (self.model.get('entityModule') === service.module) {
+                        services.push(service);
+                    }
+                });
+                var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, services: services, popup: popup, newFolder: true });
 
                 function removeFolder(id) {
                     return folderAPI.remove(id);
@@ -124,10 +129,17 @@ define('io.ox/core/sub/subscriptions', [
                 }
 
                 popup.getBody().addClass('form-horizontal');
-                ext.point(POINT + '/dialog').invoke('draw', popup.getBody(), baton);
-                popup.show(function () {
-                    popup.getBody().find('select.service-value').focus();
-                });
+                if (services.length > 0) {
+                    ext.point(POINT + '/dialog').invoke('draw', popup.getBody(), baton);
+                    popup.addPrimaryButton('subscribe', gt('Subscribe'))
+                        .addButton('cancel', gt('Cancel'))
+                        .show(function () {
+                            popup.getBody().find('select.service-value').focus();
+                        });
+                } else {
+                    popup.getBody().append($('<p>').text(gt('No subscription services available for this module')));
+                    popup.addPrimaryButton('cancel', gt('Cancel')).show();
+                }
                 popup.on('subscribe', function () {
 
                     popup.busy();
@@ -320,9 +332,7 @@ define('io.ox/core/sub/subscriptions', [
                     }))));
 
             _.each(baton.services, function (service) {
-                if (baton.data.entityModule === service.module) {
-                    node.append($('<option>').text(service.displayName).val(service.id));
-                }
+                node.append($('<option>').text(service.displayName).val(service.id));
             });
 
             if (!baton.model.source()) {
