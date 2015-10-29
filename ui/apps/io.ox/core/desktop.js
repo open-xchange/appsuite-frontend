@@ -61,6 +61,7 @@ define('io.ox/core/desktop', [
             var self = this;
             this.options = options || {};
             this.guid = options.guid;
+            this.id = this.id || 'app-' + this.guid;
             this.getInstance = function () {
                 return self;
             };
@@ -772,10 +773,6 @@ define('io.ox/core/desktop', [
      */
     ox.ui.createApp = function (options) {
         options.guid = appGuid++;
-        // create a standard-id
-        if (!options.id) {
-            options.id = 'app-' + appGuid;
-        }
         return new ox.ui.App(options);
     };
 
