@@ -782,7 +782,7 @@ msgstr "新增行事曆"
 msgid "Add new folder"
 msgstr "新增資料夾"
 
-#: apps/io.ox/core/sub/subscriptions.js:348 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:362 module:io.ox/core/sub
 msgid "Add new folder for this subscription"
 msgstr "為此訂閱新增資料夾"
 
@@ -1118,8 +1118,8 @@ msgstr "共享日曆中的約會"
 msgid "Approved:"
 msgstr "允許於:"
 
-#: apps/io.ox/core/sub/subscriptions.js:378 module:io.ox/core/sub
-#: apps/io.ox/core/sub/subscriptions.js:381
+#: apps/io.ox/core/sub/subscriptions.js:379 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:382
 msgid "Approximate Duration for Subscriptions"
 msgstr "訂閱的預估持續時間"
 
@@ -1727,7 +1727,7 @@ msgstr "單點上傳圖像。"
 #: apps/io.ox/core/folder/tree.js:224 apps/io.ox/core/main.js:1214
 #: apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/tk/wizard.js:359
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:161
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:162
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:181
 #: apps/io.ox/core/viewer/views/toolbarview.js:187
 #: apps/io.ox/core/wizard/registry.js:60 module:io.ox/core/wizard
@@ -2379,7 +2379,7 @@ msgid "Descending"
 msgstr "降冪"
 
 #: apps/io.ox/calendar/edit/extensions.js:320 module:io.ox/calendar/edit/main
-#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:94
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:95
 #: module:io.ox/core/viewer apps/io.ox/files/actions/edit-description.js:31
 #: module:io.ox/files apps/io.ox/tasks/edit/view-template.js:113
 #: module:io.ox/tasks/edit
@@ -2406,7 +2406,7 @@ msgstr "詳細存取權"
 
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js:174 module:io.ox/calendar
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:143
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:144
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/sidebarview.js:88
 #: apps/io.ox/files/share/permissions.js:629 module:io.ox/core
 #: apps/io.ox/files/upload/main.js:289 module:io.ox/files
@@ -4838,7 +4838,7 @@ msgstr "新增"
 msgid "New Folder"
 msgstr "新資料夾"
 
-#: apps/io.ox/mail/api.js:1426 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1427 module:io.ox/mail
 msgid "New Mail"
 msgstr "新增郵件"
 
@@ -5142,7 +5142,7 @@ msgstr ""
 msgid "Note: The vCard format cannot contain distribution lists"
 msgstr "注意: vCard 格式無法幫韓通訊組清單"
 
-#: apps/io.ox/core/sub/subscriptions.js:368 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:369 module:io.ox/core/sub
 msgid ""
 "Note: This subscription will replace the calendar content with the external "
 "content. Therefore you must create a new folder for this subscription."
@@ -6551,7 +6551,7 @@ msgstr "已儲存聯絡人附件"
 msgid "Saved in:"
 msgstr "儲存於:"
 
-#: apps/io.ox/mail/api.js:1149 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1150 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "儲存郵件附件"
 
@@ -8109,9 +8109,9 @@ msgstr "切換選取盒"
 msgid "Toggle fullscreen"
 msgstr "切換全螢幕"
 
-#: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:58
+#: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:57
 #: module:io.ox/core/viewer
-#: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:59
+#: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:58
 msgid "Toggle panel"
 msgstr "切換面板"
 
@@ -8288,7 +8288,7 @@ msgstr ""
 msgid "Updater"
 msgstr "更新器"
 
-#: apps/io.ox/core/sub/subscriptions.js:380 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:381 module:io.ox/core/sub
 msgid ""
 "Updating subscribed data takes time. Importing 100 contacts for example, may "
 "take up to 5 minutes. Please have some patience."
@@ -8437,7 +8437,7 @@ msgstr "假期通知"
 msgid "Version Comment"
 msgstr "版本注釋"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:195
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:196
 #: module:io.ox/core/viewer
 msgid "Versions (%1$d)"
 msgstr "版本（%1$d）"

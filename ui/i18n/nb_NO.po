@@ -785,7 +785,7 @@ msgstr "Legg til ny kalender"
 msgid "Add new folder"
 msgstr "Legg til ny mappe"
 
-#: apps/io.ox/core/sub/subscriptions.js:348 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:362 module:io.ox/core/sub
 msgid "Add new folder for this subscription"
 msgstr "Legg til ny mappe for dette abonnementet"
 
@@ -1121,8 +1121,8 @@ msgstr "Avtaler i delte kalendere"
 msgid "Approved:"
 msgstr "Godkjent:"
 
-#: apps/io.ox/core/sub/subscriptions.js:378 module:io.ox/core/sub
-#: apps/io.ox/core/sub/subscriptions.js:381
+#: apps/io.ox/core/sub/subscriptions.js:379 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:382
 msgid "Approximate Duration for Subscriptions"
 msgstr "Omtrentlig varighet for abonnementer"
 
@@ -1738,7 +1738,7 @@ msgstr "Klikk for å laste opp bilde"
 #: apps/io.ox/core/folder/tree.js:224 apps/io.ox/core/main.js:1214
 #: apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/tk/wizard.js:359
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:161
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:162
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:181
 #: apps/io.ox/core/viewer/views/toolbarview.js:187
 #: apps/io.ox/core/wizard/registry.js:60 module:io.ox/core/wizard
@@ -2391,7 +2391,7 @@ msgid "Descending"
 msgstr "Synkende"
 
 #: apps/io.ox/calendar/edit/extensions.js:320 module:io.ox/calendar/edit/main
-#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:94
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:95
 #: module:io.ox/core/viewer apps/io.ox/files/actions/edit-description.js:31
 #: module:io.ox/files apps/io.ox/tasks/edit/view-template.js:113
 #: module:io.ox/tasks/edit
@@ -2418,7 +2418,7 @@ msgstr "Detaljerte tilgangsrettigheter"
 
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js:174 module:io.ox/calendar
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:143
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:144
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/sidebarview.js:88
 #: apps/io.ox/files/share/permissions.js:629 module:io.ox/core
 #: apps/io.ox/files/upload/main.js:289 module:io.ox/files
@@ -4875,7 +4875,7 @@ msgstr "Ny"
 msgid "New Folder"
 msgstr "Ny mappe"
 
-#: apps/io.ox/mail/api.js:1426 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1427 module:io.ox/mail
 msgid "New Mail"
 msgstr "Ny e-post"
 
@@ -5183,7 +5183,7 @@ msgstr ""
 msgid "Note: The vCard format cannot contain distribution lists"
 msgstr "Notat: vCard-formatet kan ikke inneholde distribusjonslister"
 
-#: apps/io.ox/core/sub/subscriptions.js:368 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:369 module:io.ox/core/sub
 msgid ""
 "Note: This subscription will replace the calendar content with the external "
 "content. Therefore you must create a new folder for this subscription."
@@ -6609,7 +6609,7 @@ msgstr "Lagret kontaktvedlegg"
 msgid "Saved in:"
 msgstr "Lagret i:"
 
-#: apps/io.ox/mail/api.js:1149 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1150 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Lagret e-postvedlegg"
 
@@ -8210,9 +8210,9 @@ msgstr "Veksle avkrysningsboksene"
 msgid "Toggle fullscreen"
 msgstr "Fullskjerm av/på"
 
-#: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:58
+#: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:57
 #: module:io.ox/core/viewer
-#: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:59
+#: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:58
 msgid "Toggle panel"
 msgstr "Panel av/på"
 
@@ -8390,7 +8390,7 @@ msgstr ""
 msgid "Updater"
 msgstr "Oppdateringsklient"
 
-#: apps/io.ox/core/sub/subscriptions.js:380 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:381 module:io.ox/core/sub
 msgid ""
 "Updating subscribed data takes time. Importing 100 contacts for example, may "
 "take up to 5 minutes. Please have some patience."
@@ -8546,7 +8546,7 @@ msgstr "Ferievarsel"
 msgid "Version Comment"
 msgstr "Versjonskommentar"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:195
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:196
 #: module:io.ox/core/viewer
 msgid "Versions (%1$d)"
 msgstr "Versjoner (%1$d)"
