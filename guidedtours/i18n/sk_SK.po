@@ -220,11 +220,11 @@ msgid "Further information"
 msgstr "Ďalšie informácie"
 
 #. Tour name; general introduction
-#: apps/io.ox/tours/main.js:803 module:io.ox/tours
+#: apps/io.ox/tours/main.js:806 module:io.ox/tours
 msgid "Getting started"
 msgstr "Začíname"
 
-#: apps/io.ox/tours/main.js:829 module:io.ox/tours
+#: apps/io.ox/tours/main.js:832 module:io.ox/tours
 msgid "Guided tour for this app"
 msgstr "Prehliadka tejto aplikácie"
 
@@ -667,9 +667,13 @@ msgstr ""
 "tlačidlo Štartovacia stránka alebo Obsah v hornej časti okna."
 
 #: apps/io.ox/tours/main.js:732 module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings. "
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings. "
+"the menu bar. Select Settings."
 msgstr ""
 "Nastavenia otvoríte kliknutím na ikonu menu Systém v pravej hornej časti "
 "panela menu. Vyberte Nastavenia."

@@ -218,11 +218,11 @@ msgid "Further information"
 msgstr "További információk"
 
 #. Tour name; general introduction
-#: apps/io.ox/tours/main.js:803 module:io.ox/tours
+#: apps/io.ox/tours/main.js:806 module:io.ox/tours
 msgid "Getting started"
 msgstr "Első lépések"
 
-#: apps/io.ox/tours/main.js:829 module:io.ox/tours
+#: apps/io.ox/tours/main.js:832 module:io.ox/tours
 msgid "Guided tour for this app"
 msgstr "Az alkalmazás bemutatója"
 
@@ -677,9 +677,13 @@ msgstr ""
 "részén található Kezdőlapra vagy a Tartalomjegyzékre."
 
 #: apps/io.ox/tours/main.js:732 module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings. "
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings. "
+"the menu bar. Select Settings."
 msgstr ""
 "A beállítások megnyitásához kattintson a menüsor jobb felső részében "
 "található Rendszer menü ikonra és válassza ki a Beállításokat."
