@@ -12,7 +12,7 @@
   ],
   "dependencies": {
     "Chart.js": "https://github.com/nnnick/Chart.js.git#8f025f33c08c66991a12f02f908bab156a963aef",
-    "backbone": "1.2.3",
+    "backbone": "https://github.com/jashkenas/backbone.git#fda02db428c464badb12010c990622ee91f28a48",
     "backbone-validation": "0.11.5",
     "bigscreen": "2.0.5",
     "bootstrap": "3.3.5",
