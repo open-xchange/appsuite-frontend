@@ -51,6 +51,8 @@ define('plugins/portal/quota/register', [
                 module: 'mail',
                 quota: quota.mail.countquota,
                 usage: quota.mail.countuse,
+                quotaField: 'countquota',
+                usageField: 'countuse',
                 name: 'mailcount',
                 title: gt('Mail count quota'),
                 sizeFunction: function (name) {
