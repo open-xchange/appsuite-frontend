@@ -26,7 +26,21 @@ define('io.ox/calendar/week/perspective', [
 
     'use strict';
 
-    var perspective = new ox.ui.Perspective('week');
+    var perspective = new ox.ui.Perspective('week'),
+        // ensure cid is used in model and collection as idAttribute properly
+        // hint: please note that WeekAppointment is actually not used as Model
+        //       cause we currently still have to deal with the ModelFactory
+        WeekAppointment = Backbone.Model.extend({
+            idAttribute: 'cid',
+            initialize: function () {
+                this.cid = this.attributes.cid = _.cid(this.attributes);
+                // backward compatibility
+                this.id = this.cid;
+            }
+        }),
+        WeekAppointmentCollection = Backbone.Collection.extend({
+            model: WeekAppointment
+        });
 
     _.extend(perspective, {
 
@@ -396,8 +410,7 @@ define('io.ox/calendar/week/perspective', [
                     'role': 'navigation',
                     'aria-label': gt('Appointment list')
                 });
-
-            this.collection = new Backbone.Collection([]);
+            this.collection = new WeekAppointmentCollection([]);
 
             var refresh = function () { self.refresh(true); },
                 reload = function () { self.refresh(false); };

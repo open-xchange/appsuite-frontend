@@ -14,7 +14,6 @@
 define('io.ox/calendar/month/perspective', [
     'io.ox/calendar/month/view',
     'io.ox/calendar/api',
-    'io.ox/core/api/backbone',
     'io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
     'io.ox/calendar/view-detail',
@@ -23,11 +22,23 @@ define('io.ox/calendar/month/perspective', [
     'io.ox/core/folder/api',
     'settings!io.ox/calendar',
     'gettext!io.ox/calendar'
-], function (View, api, backbone, ext, dialogs, detailView, conflictView, print, folderAPI, settings, gt) {
+], function (View, api, ext, dialogs, detailView, conflictView, print, folderAPI, settings, gt) {
 
     'use strict';
 
-    var perspective = new ox.ui.Perspective('month');
+    var perspective = new ox.ui.Perspective('month'),
+        // ensure cid is used in model and collection as idAttribute properly
+        MonthAppointment = Backbone.Model.extend({
+            idAttribute: 'cid',
+            initialize: function () {
+                this.cid = this.attributes.cid = _.cid(this.attributes);
+                // backward compatibility
+                this.id = this.cid;
+            }
+        }),
+        MonthAppointmentCollection = Backbone.Collection.extend({
+            model: MonthAppointment
+        });
 
     _.extend(perspective, {
 
@@ -177,9 +188,7 @@ define('io.ox/calendar/month/perspective', [
                                     tmpEnd = moment.utc(tmpEnd).local(true).valueOf();
                                 }
                                 if ((tmpStart >= start && tmpStart < end) || (tmpEnd > start && tmpEnd <= end) || (tmpStart <= start && tmpEnd >= end)) {
-                                    // overwrites model.cid with our _.cid
-                                    var m = new backbone.Model(mod);
-                                    retList.push(m);
+                                    retList.push(new MonthAppointment(mod));
                                 }
                             }
                         }
@@ -224,7 +233,7 @@ define('io.ox/calendar/month/perspective', [
                     monthDelimiter = curWeek.date() > endDate.date();
 
                 // add collection for week
-                self.collections[day] = new Backbone.Collection([]);
+                self.collections[day] = new MonthAppointmentCollection([]);
                 // new view
                 var view = createView({
                     collection: self.collections[day],
