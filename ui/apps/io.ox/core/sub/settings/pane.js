@@ -142,15 +142,41 @@ define('io.ox/core/sub/settings/pane', [
 
             var data = baton.model.toJSON(),
                 enabled = data.enabled,
+                dynamicAction,
                 url,
                 displayName = getDisplayName(data) || '\u00A0';
 
             this[enabled ? 'removeClass' : 'addClass']('disabled');
 
+            if (data.source && (baton.model.refreshState() === 'ready')) {
+                // this is a subscription
+                dynamicAction = $('<a>').attr({
+                    href: '#',
+                    tabindex: '1',
+                    class: 'action',
+                    'data-action': 'refresh',
+                    'aria-label': displayName + ', ' + gt('Refresh')
+                }).text(gt('Refresh'));
+                if (isDestructiveRefresh(data)) {
+                    dynamicAction.addClass('text-error');
+                }
+            } else if (data.source && (baton.model.refreshState() !== 'pending')) {
+                // this is a subscription and refresh should be disabled
+                dynamicAction = $('<span>');
+            }
+
             url = getUrl(data);
 
             this.addClass('widget-settings-view').append(
                 $('<div class="widget-controls">').append(
+                    enabled ? dynamicAction : '',
+                    data.source ? $('<a>').attr({
+                        href: '#',
+                        tabindex: '1',
+                        class: 'action',
+                        'data-action': 'toggle',
+                        'aria-label': displayName + ', ' + (enabled ? gt('Disable') : gt('Enable'))
+                    }).text(enabled ? gt('Disable') : gt('Enable')) : '',
                     $('<a class="remove">').attr({
                         href: '#',
                         tabindex: 1,
@@ -201,12 +227,39 @@ define('io.ox/core/sub/settings/pane', [
             this.listenTo(this.model, 'remove', performRemove);
         },
         events: {
+            'click [data-action="toggle"]': 'onToggle',
+            'click [data-action="refresh"]': 'onRefresh',
             'click [data-action="remove"]': 'onRemove'
         },
         render: function () {
             var baton = ext.Baton({ model: this.model, view: this });
             ext.point('io.ox/core/sub/settings/list/itemview').invoke('draw', this.$el.empty(), baton);
             return this;
+        },
+        onToggle: function (ev) {
+            var model = this.model;
+            ev.preventDefault();
+
+            model.set('enabled', !model.get('enabled'), { validate: true }).save().fail(function () {
+                model.set('enabled', !model.get('enabled'), { validate: true });
+            });
+            this.render();
+        },
+        onRefresh: function (ev) {
+            var baton = ext.Baton({ model: this.model, view: this });
+            ev.preventDefault();
+            yell({
+                type: 'info',
+                headline: gt('Subscription refresh'),
+                message: gt(
+                    'A refresh takes some time, so please be patient, while the refresh runs in the background. ' +
+                    'Only one refresh per subscription and per session is allowed.'
+                )
+            });
+            this.model.performRefresh().done(function () {
+                baton.view.render();
+            });
+            baton.view.render();
         },
         onRemove: function (e) {
             e.preventDefault();
