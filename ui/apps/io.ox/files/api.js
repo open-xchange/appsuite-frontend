@@ -454,8 +454,6 @@ define('io.ox/files/api', [
                 );
             });
         },
-        // // use client-side limit
-        // useSlice: true,
         // set higher limit; works much faster than mail
         // we pick a number that looks ok for typical columns, so 5 * 6 * 7 = 210
         PRIMARY_PAGE_SIZE: 210,
