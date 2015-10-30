@@ -105,11 +105,14 @@ define('io.ox/presenter/views/sidebarview', [
          *  The panel state.
          */
         toggleSidebar: function (state) {
+            var prevState = this.opened;
             // determine current state if undefined
             this.opened = _.isUndefined(state) ? !this.opened : Boolean(state);
             this.$el.toggleClass('opened', this.opened);
             this.renderSections();
-            this.presenterEvents.trigger('presenter:sidebar:change:state', this.opened);
+            if (prevState !== this.opened) {
+                this.presenterEvents.trigger('presenter:sidebar:change:state', this.opened);
+            }
         },
 
         /**

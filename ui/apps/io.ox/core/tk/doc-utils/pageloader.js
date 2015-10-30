@@ -316,7 +316,7 @@ define('io.ox/core/tk/doc-utils/pageloader', [
 
             if (renderType === 'pdf') {
                 // <canvas> element: render page into canvas and create text overlay
-                pdfView.renderPDFPage(jqPageNode, getElementAttributeAsInteger(jqPageNode, 'data-page', 1), pageZoom).then( function () {
+                pdfView.renderPDFPage(jqPageNode, pageNumber, pageZoom).then( function () {
                     jqPageNode.data('page-zoom', pageZoom).attr(newPageSize).css(ACTIVE_STYLE);
                 });
             }
