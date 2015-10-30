@@ -38,24 +38,35 @@ define('io.ox/tours/intro', [
             .title(gt('Launching an app'))
             .content(gt('To launch an app, click on an entry on the left side of the menu bar.'))
             .hotspot('.launcher[data-app-name="io.ox/mail"]')
+            .referTo('.launcher[data-app-name="io.ox/mail"]')
             .end()
         .step()
             .title(gt('Displaying the help or the settings'))
             .content(gt('To display the help or the settings, click the System menu icon in the menu bar.'))
-            .referTo('.launcher .fa-bars.launcher-icon')
             .hotspot('.launcher .fa-bars.launcher-icon')
+            .referTo('#topbar-settings-dropdown')
+            .waitFor('#topbar-settings-dropdown')
+            .on('wait', function () {
+                $('#topbar-settings-dropdown').css('display', 'block');
+            })
+            .on('hide', function () {
+                $('#topbar-settings-dropdown').css('display', '');
+            })
             .on('before:show', function () { notifications.hide(); })
             .end()
         .step()
             .title(gt('The New objects icon'))
             .content(gt('The New objects icon shows the number of unread E-Mails or other notifications. If clicking the icon, the info area opens.'))
             .hotspot('#io-ox-notifications-icon')
-            .on('before:show', function () { notifications.show(); })
+            .referTo('#io-ox-notifications')
+            .on('before:show', function () { notifications.show(); $('#io-ox-notifications').show(); })
             .end()
         .step()
             .title(gt('The info area'))
             .content(gt('In case of new notifications, e.g. appointment invitations, the info area is opened.'))
             .hotspot('#io-ox-notifications-icon')
+            .referTo('#io-ox-notifications')
+            .on('before:show', function () { notifications.show(); $('#io-ox-notifications').show(); })
             .end()
         .step()
             .title(gt('Creating new items'))
@@ -63,12 +74,21 @@ define('io.ox/tours/intro', [
             .navigateTo('io.ox/mail/main')
             .waitFor('.classic-toolbar .io-ox-action-link:first')
             .hotspot('.classic-toolbar .io-ox-action-link:first')
+            .referTo('.classic-toolbar .io-ox-action-link:first')
             .on('before:show', function () { notifications.hide(); })
             .end()
         .step()
             .title(gt('Opening or closing the folder tree'))
             .content(gt('To open or close the folder tree, click on View >  Folder view on the right side of the toolbar.'))
-            .spotlight('.classic-toolbar [data-dropdown="view"]')
+            .spotlight('.classic-toolbar [data-dropdown="view"] ul a[data-name="folderview"]')
+            .referTo('.classic-toolbar [data-dropdown="view"] ul')
+            .waitFor('.classic-toolbar [data-dropdown="view"] ul a[data-name="folderview"]')
+            .on('wait', function () {
+                $('.classic-toolbar [data-dropdown="view"] ul').css('display', 'block');
+            })
+            .on('hide', function () {
+                $('.classic-toolbar [data-dropdown="view"] ul').css('display', '');
+            })
             .end()
         .step()
             .title(gt('Searching for objects'))
@@ -98,8 +118,15 @@ define('io.ox/tours/intro', [
         .step()
             .title(gt('Further information'))
             .content(gt('Detailed instructions for the single apps are located in System menu > Help.'))
-            .hotspot('.launcher .fa-bars.launcher-icon')
-            .referTo('.launcher .fa-bars.launcher-icon')
+            .hotspot('#topbar-settings-dropdown .io-ox-context-help')
+            .referTo('#topbar-settings-dropdown')
+            .waitFor('#topbar-settings-dropdown')
+            .on('wait', function () {
+                $('#topbar-settings-dropdown').css('display', 'block');
+            })
+            .on('hide', function () {
+                $('#topbar-settings-dropdown').css('display', '');
+            })
             .end()
         .start();
     });
