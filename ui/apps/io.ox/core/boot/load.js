@@ -101,18 +101,24 @@ define('io.ox/core/boot/load', [
         // greedy prefetch for mail app
         // need to get this request out as soon as possible
         if (coreSettings.get('autoStart') === 'io.ox/mail/main' && capabilities.has('webmail')) {
+
             var folder = 'default0/INBOX',
                 thread = mailSettings.get(['viewOptions', folder, 'thread'], true),
+                sort = mailSettings.get(['viewOptions', folder, 'sort'], 610),
                 action = thread ? 'threadedAll' : 'all',
                 params = {
                     action: action,
                     folder: folder,
                     columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652',
-                    sort: mailSettings.get(['viewOptions', folder, 'sort'], 610),
+                    sort: sort,
                     order: mailSettings.get(['viewOptions', folder, 'order'], 'desc'),
                     timezone: 'utc',
                     limit: '0,30'
                 };
+
+            // edge case: no prefetch if sorting is 'from-to' (need to many data we don't have yet)
+            if (sort === 'from-to') return;
+
             if (thread) {
                 _.extend(params, { includeSent: true, max: 300 });
             }
