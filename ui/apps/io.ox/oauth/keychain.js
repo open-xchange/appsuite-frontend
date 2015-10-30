@@ -174,7 +174,8 @@ define.async('io.ox/oauth/keychain', [
                     filestorageAccount = filestorageApi.getAccountForOauth(account);
                     // if there is a filestorageAccount for this Oauth account, remove it too
                     if (filestorageAccount) {
-                        filestorageApi.deleteAccount(filestorageAccount);
+                        // use softDelete parameter to only cleanup caches. Backend removes the filestorage account automatically, so we don't need to send a request
+                        filestorageApi.deleteAccount(filestorageAccount, { softDelete: true });
                     }
                 }
                 delete cache[service.id].accounts[account.id];
