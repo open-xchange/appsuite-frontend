@@ -257,7 +257,7 @@ msgstr ""
 #: apps/io.ox/mail/main.js:149
 #: apps/io.ox/mail/main.js:155
 #: apps/io.ox/mail/main.js:307
-#: apps/io.ox/mail/main.js:1256
+#: apps/io.ox/mail/main.js:1253
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:369
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:371
 #: apps/io.ox/portal/settings/pane.js:280
@@ -525,7 +525,7 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
 #: apps/io.ox/mail/main.js:307
-#: apps/io.ox/mail/main.js:1252
+#: apps/io.ox/mail/main.js:1249
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:254
 #: apps/io.ox/oauth/settings.js:82
@@ -3553,31 +3553,36 @@ msgstr ""
 
 #: apps/io.ox/core/boot/i18n.js:41
 #: module:io.ox/core/boot
+msgid "Your password is expired. Please change your password to continue."
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js:42
+#: module:io.ox/core/boot
 msgid "Please update your browser."
 msgstr ""
 
 #. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
-#: apps/io.ox/core/boot/i18n.js:43
+#: apps/io.ox/core/boot/i18n.js:44
 #: module:io.ox/core/boot
 msgid "For best results, please use "
 msgstr ""
 
-#: apps/io.ox/core/boot/i18n.js:44
+#: apps/io.ox/core/boot/i18n.js:45
 #: module:io.ox/core/boot
 msgid "You have been automatically signed out"
 msgstr ""
 
-#: apps/io.ox/core/boot/i18n.js:45
+#: apps/io.ox/core/boot/i18n.js:46
 #: module:io.ox/core/boot
 msgid "Unsupported Preview - Certain functions disabled and stability not assured until general release later this year"
 msgstr ""
 
-#: apps/io.ox/core/boot/i18n.js:47
+#: apps/io.ox/core/boot/i18n.js:48
 #: module:io.ox/core/boot
 msgid "Offline mode"
 msgstr ""
 
-#: apps/io.ox/core/boot/i18n.js:48
+#: apps/io.ox/core/boot/i18n.js:49
 #: module:io.ox/core/boot
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr ""
@@ -8611,35 +8616,35 @@ msgstr ""
 msgid "Mail Details"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:721
+#: apps/io.ox/mail/main.js:718
 #: module:io.ox/mail
 msgid "No message selected"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:747
+#: apps/io.ox/mail/main.js:744
 #: module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr ""
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:753
+#: apps/io.ox/mail/main.js:750
 #: module:io.ox/mail
 msgid "Move all %1$d messages to another folder"
 msgstr ""
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:756
+#: apps/io.ox/mail/main.js:753
 #: module:io.ox/mail
 msgid "Delete all %1$d messages"
 msgstr ""
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:784
+#: apps/io.ox/mail/main.js:781
 #: module:io.ox/mail
 msgid "%1$d selected"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:1435
+#: apps/io.ox/mail/main.js:1432
 #: module:io.ox/mail
 #: apps/io.ox/settings/main.js:577
 #: module:io.ox/core
