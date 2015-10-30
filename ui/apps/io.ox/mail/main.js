@@ -651,10 +651,9 @@ define('io.ox/mail/main', [
             // wWithout the delay, the UI would try to render messages that are
             // just about to be deleted as well.
 
-            var recentDeleteEvent = false,
+            var recentDeleteEventCount = 0,
                 eventTimer,
                 messageTimer,
-                wait = 500,
                 latestMessage;
 
             function show() {
@@ -668,24 +667,22 @@ define('io.ox/mail/main', [
                 // remember latest message
                 latestMessage = cid;
                 // delay or instant?
-                if (recentDeleteEvent) {
+                if (recentDeleteEventCount) {
                     // clear view instantly
                     app.threadView.empty();
                     clearTimeout(messageTimer);
-                    messageTimer = setTimeout(show, wait);
+                    var delay = (recentDeleteEventCount - 1) * 1000;
+                    messageTimer = setTimeout(show, delay);
                 } else {
                     show();
-                    wait = 500;
                 }
             };
 
             // add delay if a mail just got deleted
             api.on('beforedelete', function () {
-                recentDeleteEvent = true;
-                // increase delay by 500ms (max is 2 seconds)
-                if (wait < 2000) wait += 500;
+                if (recentDeleteEventCount < 2) recentDeleteEventCount++;
                 clearTimeout(eventTimer);
-                eventTimer = setTimeout(function () { recentDeleteEvent = false; }, wait);
+                eventTimer = setTimeout(function () { recentDeleteEventCount = 0; }, 4000);
             });
         },
 
