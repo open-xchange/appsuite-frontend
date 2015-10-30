@@ -289,23 +289,27 @@ $(window).load(function () {
                 if (settings.get('autoStart') === 'io.ox/mail/main') {
                     var folder = 'default0/INBOX',
                         thread = mail.get(['viewOptions', folder, 'thread'], true),
+                        sort = mail.get(['viewOptions', folder, 'sort'], 610),
                         action = thread ? 'threadedAll' : 'all',
                         params = {
                             action: action,
                             folder: folder,
                             columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
-                            sort: mail.get(['viewOptions', folder, 'sort'], 610),
+                            sort: sort,
                             order: mail.get(['viewOptions', folder, 'order'], 'desc'),
                             timezone: 'utc',
                             limit: '0,30'
                         };
-                    if (thread) {
-                        _.extend(params, { includeSent: true, max: 300 });
+                    // edge case: no prefetch if sorting is 'from-to' (need to many data we don't have yet)
+                    if (sort !== 'from-to') {
+                        if (thread) {
+                            _.extend(params, { includeSent: true, max: 300 });
+                        }
+                        http.GET({ module: 'mail', params: params }).done(function (data) {
+                            // the collection loader will check ox.rampup for this data
+                            ox.rampup['mail/' + _.param(params)] = data;
+                        });
                     }
-                    http.GET({ module: 'mail', params: params }).done(function (data) {
-                        // the collection loader will check ox.rampup for this data
-                        ox.rampup['mail/' + _.param(params)] = data;
-                    });
                 }
 
                 var theme = _.url.hash('theme') || settings.get('theme') || 'default';
