@@ -232,34 +232,47 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                     }
                 }
             },
-            deleteAccount: function (options) {
-                var model;
-                if (options.attributes) {
-                    model = options;
-                    options = options.attributes;
+            deleteAccount: function (data, options) {
+                var model,
+                    options = options || {};
+
+                if (data.attributes) {
+                    model = data;
+                    data = data.attributes;
+                }
+
+                // softDelete options only cleans the caches
+                // since the backend removes filestorage accounts automatically when an Oauth account is deleted, we don't need to send a delete request
+                if (options.softDelete) {
+                    accountsCache.remove(data);
+                    idsCache = _(idsCache).without(data.qualifiedId);
+                    $(api).trigger('delete', model || data);
+
+                    return true;
                 }
 
                 return http.PUT({
                     module: 'fileaccount',
                     params: {
                         action: 'delete',
-                        id: options.id,
-                        filestorageService: options.filestorageService
+                        id: data.id,
+                        filestorageService: data.filestorageService
                     }
                 })
                 .then(
                     function success(response) {
-                        accountsCache.remove(options);
-                        idsCache = _(idsCache).without(options.qualifiedId);
-                        $(api).trigger('delete', model || options);
+                        accountsCache.remove(data);
+                        idsCache = _(idsCache).without(data.qualifiedId);
+                        $(api).trigger('delete', model || data);
 
                         return response;
                     },
                     function fail(error) {
                         // may be it was deleted already. If it's in the cache, delete it
                         // deleting an Oauth account with a matching filestorage account normally deletes the filestorageaccount too.
-                        accountsCache.remove(options);
-                        $(api).trigger('delete', model || options);
+                        accountsCache.remove(data);
+                        idsCache = _(idsCache).without(data.qualifiedId);
+                        $(api).trigger('delete', model || data);
 
                         return error;
                     }
@@ -346,10 +359,23 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
             },
             // function to check if a folder is a folder from an external Storage
             // folder.account_id must be present
-            isExternal: function (folder) {
-                var isExternal = false;
+            // if options.type is true, isExternal returns the type of folderstorage instead of a boolean
+            // options.root checks if the folder is also the root folder
+            isExternal: function (folder, options) {
+                var isExternal = false,
+                    options = options || {};
+
                 if (api.rampupDone && folder && folder.account_id) {
                     isExternal = _(idsCache).indexOf(folder.account_id) !== -1;
+                }
+                if (isExternal && (options.type || options.root)) {
+                    var model = accountsCache.findWhere({ qualifiedId: folder.account_id });
+                    if (options.root) {
+                        isExternal = folder.id === model.get('rootFolder');
+                    }
+                    if (isExternal && options.type) {
+                        isExternal = model.get('filestorageService');
+                    }
                 }
                 return isExternal;
             }

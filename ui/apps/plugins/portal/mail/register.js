@@ -281,7 +281,7 @@ define('plugins/portal/mail/register', [
                     api.off('deleted-mails', remove);
                     portalWidgets.getCollection().remove(baton.model);
                 };
-            return api.get({ folder: props.folder_id, id: props.id, view: 'text' }).then(
+            return api.get({ folder: props.folder_id, id: props.id, view: 'text', unseen: true }).then(
                 function success(data) {
                     baton.data = data;
                     // remove widget when mail is deleted

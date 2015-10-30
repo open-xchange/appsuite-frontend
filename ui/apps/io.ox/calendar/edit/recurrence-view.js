@@ -294,6 +294,9 @@ define('io.ox/calendar/edit/recurrence-view', [
                                     drawState();
                                 }
                                 return false;
+                            }).on('focusout', function (e) {
+                                // dont close the dropdown after selection
+                                e.stopPropagation();
                             })
                         ));
                     })
@@ -504,9 +507,13 @@ define('io.ox/calendar/edit/recurrence-view', [
                         tabindex: self.tabindex,
                         recurrenceType: {
                             options: {
+                                //#. recurring appointment: the appointment is repeated daily
                                 1: gt('daily'),
+                                //#. recurring appointment: the appointment is repeated weekly
                                 2: gt('weekly'),
+                                //#. recurring appointment: the appointment is repeated monthly
                                 3: gt('monthly'),
+                                //#. recurring appointment: the appointment is repeated yearly
                                 4: gt('yearly')
                             },
                             initial: 2

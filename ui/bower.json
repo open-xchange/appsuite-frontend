@@ -12,13 +12,13 @@
   ],
   "dependencies": {
     "Chart.js": "https://github.com/nnnick/Chart.js.git#8f025f33c08c66991a12f02f908bab156a963aef",
-    "backbone": "1.1.2",
+    "backbone": "https://github.com/jashkenas/backbone.git#fda02db428c464badb12010c990622ee91f28a48",
     "backbone-validation": "0.11.5",
     "bigscreen": "2.0.5",
     "bootstrap": "3.3.5",
     "bootstrap-accessibility-plugin": "https://github.com/Open-Xchange-Frontend/bootstrap-accessibility-plugin.git#90a9ca94ab7712915d0416102837f8a638fc2819",
     "bootstrap-datepicker": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#tag-1.3.1",
-    "bootstrap-tokenfield": "https://github.com/Open-Xchange-Frontend/bootstrap-tokenfield.git#6f8163b2beab36156bd37ac0954883b3f41321b3",
+    "bootstrap-tokenfield": "https://github.com/Open-Xchange-Frontend/bootstrap-tokenfield.git#0ea7b1c516592101fda27935665e9d6368a02448",
     "font-awesome": "4.4.0",
     "jquery": "2.1.4",
     "jquery-imageloader": "https://github.com/beatak/jquery-imageloader.git#3e616c19ad3bb32e4e62679a348f8b18a80790d2",
@@ -37,5 +37,8 @@
     "typeahead.js": "0.10.5",
     "underscore": "1.8.3",
     "velocity": "1.2.2"
+  },
+  "resolutions": {
+    "backbone": "fda02db428c464badb12010c990622ee91f28a48"
   }
 }

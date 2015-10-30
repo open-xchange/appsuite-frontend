@@ -188,10 +188,23 @@
             .ellipsis();
         }
 
+        .post-description {
+            color: #aaa;
+        }
+
         .display_name {
             font-weight: bold;
             .title, .first_name {
                 font-weight: normal;
+            }
+        }
+
+        .halo-link {
+            &:hover {
+                cursor:pointer;
+                &.display_name {
+                    text-decoration: underline;
+                }
             }
         }
 

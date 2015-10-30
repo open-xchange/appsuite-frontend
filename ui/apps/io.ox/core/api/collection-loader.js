@@ -51,6 +51,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                 if (last.head) last = last.head;
                 // compare
                 if (_.cid(first) !== _.cid(last)) {
+                    if (ox.debug) console.warn('paginate compare fail', _.cid(first), _.cid(last), data);
                     // check d0901724d8050552b5b82c0fdd5be1ccfef50d99 for details
                     params.thread = params.action === 'threadedAll';
                     loader.reload(params, PAGE_SIZE);

@@ -1229,7 +1229,7 @@ define('io.ox/calendar/week/view', [
             if (_.device('touch')) return;
 
             // init drag and resize widget on appointments
-            var colWidth = $('.day:first', this.$el).outerWidth(),
+            var colWidth = this.$('.day:first').outerWidth(),
                 paneOffset = this.$('.week-container').offset().left,
                 paneHeight = self.height();
 
@@ -1243,6 +1243,9 @@ define('io.ox/calendar/week/view', [
                     containment: 'parent',
                     start: function (e, ui) {
                         var d = $(this).data('ui-resizable');
+                        // get fresh dimensions as window size and/or timezone favorites might change
+                        colWidth = self.$('.day:first').outerWidth();
+                        paneOffset = self.$('.week-container').offset().left;
                         // init custom resize object
                         d.my = {};
                         // set current day

@@ -59,9 +59,10 @@ define('io.ox/core/desktop', [
 
         initialize: function (options) {
             var self = this;
-            this.guid = appGuid++;
-            this.id = this.id || 'app-' + appGuid;
             this.options = options || {};
+            this.guid = options.guid;
+            this.id = this.id || 'app-' + this.guid;
+            this.set('id', this.id);
             this.getInstance = function () {
                 return self;
             };
@@ -185,7 +186,6 @@ define('io.ox/core/desktop', [
 
         initialize: function () {
             var self = this;
-
             // call super constructor
             AbstractApp.prototype.initialize.apply(this, arguments);
 
@@ -568,6 +568,7 @@ define('io.ox/core/desktop', [
                     ox.ui.windowManager.trigger('window.quit', win);
                     win.destroy();
                 }
+
                 // remove from list
                 ox.ui.apps.remove(self);
                 // mark as not running
@@ -772,6 +773,7 @@ define('io.ox/core/desktop', [
      * Create app
      */
     ox.ui.createApp = function (options) {
+        options.guid = appGuid++;
         return new ox.ui.App(options);
     };
 

@@ -200,7 +200,7 @@ define('plugins/notifications/calendar/register', [
                         //#. Title of generic desktop notification about new reminders for appointments
                         title: gt('New appointment reminders'),
                         //#. Body text of generic desktop notification about new reminders for appointments
-                        body: gt('You\'ve got appointment reminders'),
+                        body: gt('You have new appointment reminders'),
                         icon: ''
                     },
                     specificDesktopNotification: function (model) {
@@ -252,7 +252,7 @@ define('plugins/notifications/calendar/register', [
                         //#. Title of generic desktop notification about new invitations to appointments
                         title: gt('New appointment invitation'),
                         //#. Body text of generic desktop notification about new invitations to appointments
-                        body: gt('You\'ve got appointment invitations'),
+                        body: gt('You have new appointment invitations'),
                         icon: ''
                     },
                     specificDesktopNotification: function (model) {

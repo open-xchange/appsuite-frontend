@@ -212,8 +212,11 @@ define('io.ox/mail/compose/view', [
             draw: function () {
                 this.data('view')
                     .header(gt('Priority'))
+                    //#. E-Mail priority
                     .option('priority', 0, gt('High'), gt('Priority'))
+                    //#. E-Mail priority
                     .option('priority', 3, gt('Normal'), gt('Priority'))
+                    //#. E-Mail priority
                     .option('priority', 5, gt('Low'), gt('Priority'));
             }
         },
@@ -223,7 +226,7 @@ define('io.ox/mail/compose/view', [
             draw: function () {
                 this.data('view')
                     .header(gt('Options'))
-                    .option('vcard', 1, gt('Attach Vcard'), gt('Options'))
+                    .option('vcard', 1, gt('Attach Vcard'), gt('Options'), 0)
                     .option('disp_notification_to', true, gt('Request read receipt'), gt('Options'));
             }
         }
@@ -765,6 +768,7 @@ define('io.ox/mail/compose/view', [
             options.app = this.app;
             options.view = this;
             options.model = this.model;
+            options.oxContext = { view: this };
 
             ox.manifests.loadPluginsFor('io.ox/mail/compose/editor/' + this.model.get('editorMode')).then(function (Editor) {
                 new Editor(self.editorContainer, options).done(function (editor) {

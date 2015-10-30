@@ -38,6 +38,7 @@ define('io.ox/core/boot/i18n', ['io.ox/core/boot/util', 'gettext!io.ox/core/boot
         //#. %n is the lowest version of iOS
         gt('You need to use iOS %n or higher.');
         gt('Your operating system is not supported.');
+        gt('Your password is expired. Please change your password to continue.');
         gt('Please update your browser.');
         //#. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
         gt('For best results, please use ');

@@ -74,7 +74,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
             // has no children?
             if (children.length === 0) {
                 //do not trim single spaces
-                text = self.text() === ' ' ? self.text : $.trim(self.text());
+                text = self.text().match(/^[ \t]$/) ? self.text : $.trim(self.text());
                 // has no text?
                 if (text === '') {
                     // empty table cell?
@@ -236,14 +236,20 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
         {
             patterns: 'hr',
             type: 'void',
-            replacement: '\n\n- - -\n'
+            replacement: '\n\n---\n'
         },
         {
             patterns: 'a',
             replacement: function (str, attrs, innerHTML) {
                 var href = attrs.match(attrRegExp('href'));
-                if (/^mailto:/.test(href[1])) return href[1].substr(7).length ? href[1].substr(7) : '';
-                return href ? (innerHTML ? innerHTML : href[1]) : '';
+
+                if (href && href[1].indexOf('mailto:') === 0) {
+                    return href[1].substr(7);
+                } else if (href && innerHTML === href[1]) {
+                    return innerHTML;
+                }
+
+                return '[' + (innerHTML || '') + '](' + (href && href[1] || '') + ')';
             }
         }];
 
@@ -346,15 +352,16 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
 
         function cleanUp(string) {
             return string
-                .replace(/&nbsp;/g, ' ')
-                .replace(/&gt;/g, '>')
-                .replace(/&lt;/g, '<')
                 .replace(/<!--(.*?)-->/g, '')             // Remove comments
                 .replace(/<img[^>]* data-emoji-unicode=\"([^\"]*)\"[^>]*>/gi, '$1')
                 .replace(/(<\/?\w+(\s[^<>]*)?\/?>)/g, '') // Remove all remaining tags except mail addresses
                 .replace(/^[\t\r\n]+|[\t\r\n]+$/g, '')    // Trim leading/trailing whitespace
                 .replace(/\n\s+\n/g, '\n\n')
                 .replace(/\n{3,}/g, '\n\n')              // limit consecutive linebreaks to 2
+                //replace html entities last, because things like &gt; and &lt; might get removed otherwise
+                .replace(/&nbsp;/g, ' ')
+                .replace(/&gt;/g, '>')
+                .replace(/&lt;/g, '<')
                 .replace(/&amp;/g, '&');
         }
 

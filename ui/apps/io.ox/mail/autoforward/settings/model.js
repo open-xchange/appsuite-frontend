@@ -93,7 +93,7 @@ define('io.ox/mail/autoforward/settings/model', [
     var fields = {
         headline: gt('Auto Forward'),
         forwardmail: gt('Forward all incoming emails to this address'),
-        active: gt('Enabled'),
+        active: gt('Enable'),
         keep: gt('Keep a copy of the message')
     };
 

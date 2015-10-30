@@ -153,7 +153,7 @@ define('io.ox/core/notifications/subview', [
             desktopNotificationSupport: true,
             genericDesktopNotification: {
                 title: gt('New notifications'),
-                body: gt('You\'ve got new notifications'),
+                body: gt('You have new notifications'),
                 icon: ''
             },
             specificDesktopNotification: null,
@@ -262,7 +262,7 @@ define('io.ox/core/notifications/subview', [
                         self.hiddenCollection.remove(obj);
                         //don't add twice
                         if (!self.collection.get(obj.get('id'))) {
-                            self.collection.add(obj);
+                            self.addNotifications([obj]);
                         }
                     }, time);
                 }

@@ -72,6 +72,9 @@ define('io.ox/calendar/model', [
                     end: this.get('full_time') ? defEnd : this.get('end_date')
                 };
 
+                // overwrites model.cid with our _.cid
+                this.cid = this.attributes.cid = _.cid(this.attributes);
+
                 // bind events
                 this.on({
                     'create:fail update:fail': function (response) {
@@ -193,7 +196,6 @@ define('io.ox/calendar/model', [
 
             setDefaultParticipants: function (options) {
                 var self = this;
-                if (this.get('participants').length > 0) return $.when();
                 return folderAPI.get(this.get('folder_id')).then(function (folder) {
                     if (folderAPI.is('private', folder)) {
                         if (options.create) {

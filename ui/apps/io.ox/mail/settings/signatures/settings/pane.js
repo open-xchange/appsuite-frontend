@@ -74,7 +74,8 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     },
                     class: 'io-ox-signature-edit',
                     keepalive: keepAlive,
-                    scrollpane: baton.$.contentEditable
+                    scrollpane: baton.$.contentEditable,
+                    oxContext: { signature: true }
                 }).done(function (ed) {
                     baton.editor = ed;
                     baton.editor.show();

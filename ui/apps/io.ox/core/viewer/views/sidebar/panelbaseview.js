@@ -25,12 +25,11 @@ define('io.ox/core/viewer/views/sidebar/panelbaseview', [
     var PanelBaseView = DisposableView.extend({
 
         // overwrite constructor to keep initialize intact
-        constructor: function (options) {
+        initialize: function (options) {
 
             var panelId = _.uniqueId('panel-');
 
             // we only need the DOM element at this point
-            this._ensureElement();
             this.$el.addClass('sidebar-panel');
 
             // ensure we have options
@@ -66,9 +65,6 @@ define('io.ox/core/viewer/views/sidebar/panelbaseview', [
 
                 this.$el.on('click', '.sidebar-panel-heading', this.onTogglePanel.bind(this));
             }
-
-            // call parent constructor that also calls initialize
-            DisposableView.prototype.constructor.apply(this, arguments);
         },
 
         /**

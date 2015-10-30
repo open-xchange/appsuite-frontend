@@ -90,6 +90,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         },
 
         initialize: function () {
+            PanelBaseView.prototype.initialize.apply(this, arguments);
             if (this.model && this.model.isFile()) {
                 this.setPanelHeader(gt('Description'));
                 this.togglePanel(true);

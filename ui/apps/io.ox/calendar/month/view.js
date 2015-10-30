@@ -182,9 +182,9 @@ define('io.ox/calendar/month/view', [
                     .addClass('appointment')
                     .data('app', a)
                     .attr({
-                        'data-cid': a.id,
+                        'data-cid': a.cid,
                         'data-extension-point': 'io.ox/calendar/month/view/appointment',
-                        'data-composite-id': a.id
+                        'data-composite-id': a.cid
                     });
 
             ext.point('io.ox/calendar/month/view/appointment')

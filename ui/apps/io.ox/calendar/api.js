@@ -197,6 +197,7 @@ define('io.ox/calendar/api', [
                 key = folder_id + '.' + o.id + '.' + (o.recurrence_position || 0),
                 attachmentHandlingNeeded = o.tempAttachmentIndicator;
 
+            delete o.cid;
             delete o.tempAttachmentIndicator;
 
             if (_.isEmpty(o)) {
@@ -304,6 +305,7 @@ define('io.ox/calendar/api', [
          */
         create: function (o) {
             var attachmentHandlingNeeded = o.tempAttachmentIndicator;
+            delete o.cid;
             delete o.tempAttachmentIndicator;
             return http.PUT({
                 module: 'calendar',

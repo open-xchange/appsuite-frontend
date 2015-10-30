@@ -91,7 +91,7 @@ define('plugins/notifications/mail/register', [
                 if (newItems.length > 1) {
                     desktopNotifications.show({
                         title: gt('New mails'),
-                        body: gt('You\'ve got new mails'),
+                        body: gt('You have new mail'),
                         icon: ''
                     });
                 } else {
