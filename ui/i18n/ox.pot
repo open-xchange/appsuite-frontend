@@ -302,9 +302,9 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/remove.js:33
 #: module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:293
-#: apps/io.ox/core/sub/settings/pane.js:158
+#: apps/io.ox/core/sub/settings/pane.js:184
 #: module:io.ox/core/sub
-#: apps/io.ox/core/sub/settings/pane.js:160
+#: apps/io.ox/core/sub/settings/pane.js:186
 #: apps/io.ox/core/viewer/views/toolbarview.js:279
 #: apps/io.ox/files/actions.js:765
 #: module:io.ox/files
@@ -459,17 +459,17 @@ msgstr ""
 #: apps/io.ox/calendar/edit/timezone-dialog.js:141
 #: apps/io.ox/calendar/main.js:256
 #: apps/io.ox/calendar/main.js:322
-#: apps/io.ox/calendar/month/perspective.js:115
+#: apps/io.ox/calendar/month/perspective.js:126
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js:92
-#: apps/io.ox/calendar/week/perspective.js:119
-#: apps/io.ox/calendar/week/perspective.js:162
+#: apps/io.ox/calendar/week/perspective.js:133
+#: apps/io.ox/calendar/week/perspective.js:176
 #: apps/io.ox/contacts/actions/delete.js:38
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:203
 #: apps/io.ox/contacts/edit/main.js:258
 #: apps/io.ox/contacts/main.js:412
 #: apps/io.ox/contacts/main.js:744
-#: apps/io.ox/core/desktop.js:1638
+#: apps/io.ox/core/desktop.js:1636
 #: module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:109
@@ -485,8 +485,9 @@ msgstr ""
 #: apps/io.ox/core/permissions/permissions.js:405
 #: apps/io.ox/core/print.js:113
 #: apps/io.ox/core/relogin.js:88
-#: apps/io.ox/core/sub/subscriptions.js:57
+#: apps/io.ox/core/sub/subscriptions.js:135
 #: module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:141
 #: apps/io.ox/core/tk/filestorageUtil.js:39
 #: apps/io.ox/core/tk/mobiscroll.js:27
 #: apps/io.ox/core/upsell.js:36
@@ -563,8 +564,8 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/edit/main.js:153
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/month/perspective.js:114
-#: apps/io.ox/calendar/week/perspective.js:118
+#: apps/io.ox/calendar/month/perspective.js:125
+#: apps/io.ox/calendar/week/perspective.js:132
 #: apps/plugins/notifications/calendar/register.js:83
 #: module:plugins/notifications
 msgid "Ignore conflicts"
@@ -579,7 +580,7 @@ msgstr ""
 #: apps/io.ox/calendar/actions/acceptdeny.js:224
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js:40
-#: apps/io.ox/calendar/week/perspective.js:160
+#: apps/io.ox/calendar/week/perspective.js:174
 msgid "Series"
 msgstr ""
 
@@ -589,7 +590,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/main.js:384
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:281
-#: apps/io.ox/calendar/week/perspective.js:161
+#: apps/io.ox/calendar/week/perspective.js:175
 #: apps/io.ox/mail/detail/links.js:73
 #: module:io.ox/mail
 msgid "Appointment"
@@ -643,7 +644,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/actions/edit.js:37
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:158
+#: apps/io.ox/calendar/week/perspective.js:172
 msgid "Do you want to edit the whole series or just one appointment within the series?"
 msgstr ""
 
@@ -656,15 +657,15 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/list/perspective.js:66
 #: apps/io.ox/calendar/list/perspective.js:77
-#: apps/io.ox/calendar/month/perspective.js:64
-#: apps/io.ox/calendar/week/perspective.js:69
+#: apps/io.ox/calendar/month/perspective.js:75
+#: apps/io.ox/calendar/week/perspective.js:83
 msgid "Appointment Details"
 msgstr ""
 
 #: apps/io.ox/calendar/detail/main.js:46
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:86
-#: apps/io.ox/calendar/week/perspective.js:223
+#: apps/io.ox/calendar/week/perspective.js:100
+#: apps/io.ox/calendar/week/perspective.js:237
 msgid "An error occurred. Please try again."
 msgstr ""
 
@@ -1669,16 +1670,16 @@ msgstr ""
 msgid "The start date must be before the end date."
 msgstr ""
 
-#: apps/io.ox/calendar/month/perspective.js:133
+#: apps/io.ox/calendar/month/perspective.js:144
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:153
+#: apps/io.ox/calendar/week/perspective.js:167
 msgid "By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?"
 msgstr ""
 
 #. folder permissions - Is Admin? YES
-#: apps/io.ox/calendar/month/perspective.js:134
+#: apps/io.ox/calendar/month/perspective.js:145
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:154
+#: apps/io.ox/calendar/week/perspective.js:168
 #: apps/io.ox/core/main.js:133
 #: module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js:179
@@ -1688,18 +1689,18 @@ msgid "Yes"
 msgstr ""
 
 #. folder permissions - Is Admin? NO
-#: apps/io.ox/calendar/month/perspective.js:135
+#: apps/io.ox/calendar/month/perspective.js:146
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:155
+#: apps/io.ox/calendar/week/perspective.js:169
 #: apps/io.ox/core/main.js:134
 #: module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js:177
 msgid "No"
 msgstr ""
 
-#: apps/io.ox/calendar/month/perspective.js:463
+#: apps/io.ox/calendar/month/perspective.js:472
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:397
+#: apps/io.ox/calendar/week/perspective.js:411
 msgid "Appointment list"
 msgstr ""
 
@@ -1715,7 +1716,7 @@ msgstr ""
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js:369
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:1916
+#: apps/io.ox/calendar/week/view.js:1919
 #, c-format
 msgid "%1$s (Tentative)"
 msgstr ""
@@ -2362,17 +2363,17 @@ msgstr ""
 msgid "Conflicts:"
 msgstr ""
 
-#: apps/io.ox/calendar/week/perspective.js:320
+#: apps/io.ox/calendar/week/perspective.js:334
 #: module:io.ox/calendar
 msgid "Day View"
 msgstr ""
 
-#: apps/io.ox/calendar/week/perspective.js:325
+#: apps/io.ox/calendar/week/perspective.js:339
 #: module:io.ox/calendar
 msgid "Workweek View"
 msgstr ""
 
-#: apps/io.ox/calendar/week/perspective.js:331
+#: apps/io.ox/calendar/week/perspective.js:345
 #: module:io.ox/calendar
 msgid "Week View"
 msgstr ""
@@ -3770,22 +3771,22 @@ msgid_plural "%d minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/io.ox/core/desktop.js:164
+#: apps/io.ox/core/desktop.js:166
 #: module:io.ox/core
 msgid "Failed to automatically save current stage of work. Please save your work to avoid data loss in case the browser closes unexpectedly."
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:300
+#: apps/io.ox/core/desktop.js:301
 #: module:io.ox/core
 msgid "Could not get a default folder for this application."
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:766
+#: apps/io.ox/core/desktop.js:768
 #: module:io.ox/core
 msgid "There are unsaved changes."
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1083
+#: apps/io.ox/core/desktop.js:1081
 #: module:io.ox/core
 msgid "Application Toolbar"
 msgstr ""
@@ -3793,19 +3794,19 @@ msgstr ""
 #. Title of the browser window
 #. %1$s is the name of the page, e.g. OX App Suite
 #. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1169
+#: apps/io.ox/core/desktop.js:1167
 #: module:io.ox/core
-#: apps/io.ox/core/desktop.js:1338
+#: apps/io.ox/core/desktop.js:1336
 msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1455
+#: apps/io.ox/core/desktop.js:1453
 #: module:io.ox/core
 msgid "Main window"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1519
+#: apps/io.ox/core/desktop.js:1517
 #: module:io.ox/core
 #: apps/io.ox/core/main.js:817
 #: apps/io.ox/find/extensions-facets.js:30
@@ -3820,25 +3821,25 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1557
+#: apps/io.ox/core/desktop.js:1555
 #: module:io.ox/core
-#: apps/io.ox/core/desktop.js:1558
+#: apps/io.ox/core/desktop.js:1556
 msgid "Start search"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1570
+#: apps/io.ox/core/desktop.js:1568
 #: module:io.ox/core
-#: apps/io.ox/core/desktop.js:1571
+#: apps/io.ox/core/desktop.js:1569
 msgid "Cancel search"
 msgstr ""
 
 #. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js:1591
+#: apps/io.ox/core/desktop.js:1589
 #: module:io.ox/core
 msgid "Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1714
+#: apps/io.ox/core/desktop.js:1712
 #: module:io.ox/core
 msgid "Failed to start application. Maybe you have connection problems. Please try again."
 msgstr ""
@@ -4106,7 +4107,7 @@ msgstr ""
 
 #: apps/io.ox/core/folder/api.js:906
 #: module:io.ox/core
-#: apps/io.ox/core/sub/subscriptions.js:171
+#: apps/io.ox/core/sub/subscriptions.js:183
 #: module:io.ox/core/sub
 msgid "New Folder"
 msgstr ""
@@ -4506,6 +4507,9 @@ msgstr ""
 #: apps/io.ox/core/main.js:355
 #: module:io.ox/core
 #: apps/io.ox/core/main.js:832
+#: apps/io.ox/core/sub/settings/pane.js:158
+#: module:io.ox/core/sub
+#: apps/io.ox/core/sub/settings/pane.js:159
 msgid "Refresh"
 msgstr ""
 
@@ -4644,6 +4648,9 @@ msgstr ""
 
 #: apps/io.ox/core/notifications.js:134
 #: module:io.ox/core
+#: apps/io.ox/core/sub/settings/pane.js:178
+#: module:io.ox/core/sub
+#: apps/io.ox/core/sub/settings/pane.js:179
 #: apps/io.ox/mail/mailfilter/settings/filter.js:142
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:284
@@ -4654,6 +4661,9 @@ msgstr ""
 
 #: apps/io.ox/core/notifications.js:139
 #: module:io.ox/core
+#: apps/io.ox/core/sub/settings/pane.js:178
+#: module:io.ox/core/sub
+#: apps/io.ox/core/sub/settings/pane.js:179
 #: apps/io.ox/mail/autoforward/settings/model.js:96
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:142
@@ -4903,7 +4913,7 @@ msgstr ""
 
 #: apps/io.ox/core/print.js:198
 #: module:io.ox/core
-#: apps/io.ox/core/sub/subscriptions.js:114
+#: apps/io.ox/core/sub/subscriptions.js:119
 #: module:io.ox/core/sub
 #: apps/io.ox/core/yell.js:21
 #: apps/io.ox/core/yell.js:122
@@ -5331,43 +5341,53 @@ msgstr ""
 msgid "Note: Refreshing this subscription will replace the calendar content with the external content. Changes you have made inside appsuite will be overwritten"
 msgstr ""
 
-#: apps/io.ox/core/sub/settings/pane.js:282
+#: apps/io.ox/core/sub/settings/pane.js:253
+#: module:io.ox/core/sub
+msgid "Subscription refresh"
+msgstr ""
+
+#: apps/io.ox/core/sub/settings/pane.js:254
+#: module:io.ox/core/sub
+msgid "A refresh takes some time, so please be patient, while the refresh runs in the background. Only one refresh per subscription and per session is allowed."
+msgstr ""
+
+#: apps/io.ox/core/sub/settings/pane.js:335
 #: module:io.ox/core/sub
 msgid "This folder has publications but you are not allowed to view or edit them"
 msgstr ""
 
-#: apps/io.ox/core/sub/settings/pane.js:283
+#: apps/io.ox/core/sub/settings/pane.js:336
 #: module:io.ox/core/sub
 msgid "This folder has subscriptions but you are not allowed to view or edit them"
 msgstr ""
 
-#: apps/io.ox/core/sub/settings/pane.js:289
+#: apps/io.ox/core/sub/settings/pane.js:342
 #: module:io.ox/core/sub
 msgid "This folder has no publications"
 msgstr ""
 
-#: apps/io.ox/core/sub/settings/pane.js:290
+#: apps/io.ox/core/sub/settings/pane.js:343
 #: module:io.ox/core/sub
 msgid "This folder has no subscriptions"
 msgstr ""
 
-#: apps/io.ox/core/sub/settings/pane.js:294
+#: apps/io.ox/core/sub/settings/pane.js:347
 #: module:io.ox/core/sub
 msgid "You don't have any publications yet"
 msgstr ""
 
-#: apps/io.ox/core/sub/settings/pane.js:295
+#: apps/io.ox/core/sub/settings/pane.js:348
 #: module:io.ox/core/sub
 msgid "You don't have any subscriptions yet"
 msgstr ""
 
-#: apps/io.ox/core/sub/settings/pane.js:321
+#: apps/io.ox/core/sub/settings/pane.js:374
 #: module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/register.js:41
 msgid "Publications"
 msgstr ""
 
-#: apps/io.ox/core/sub/settings/pane.js:331
+#: apps/io.ox/core/sub/settings/pane.js:384
 #: module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/register.js:36
 msgid "Subscriptions"
@@ -5378,67 +5398,72 @@ msgstr ""
 msgid "Publications and Subscriptions"
 msgstr ""
 
-#: apps/io.ox/core/sub/subscriptions.js:56
+#: apps/io.ox/core/sub/subscriptions.js:57
 #: module:io.ox/core/sub
-#: apps/io.ox/core/sub/subscriptions.js:59
+#: apps/io.ox/core/sub/subscriptions.js:134
 msgid "Subscribe"
 msgstr ""
 
-#: apps/io.ox/core/sub/subscriptions.js:70
+#: apps/io.ox/core/sub/subscriptions.js:75
 #: module:io.ox/core/sub
 msgid "Checking credentials ..."
 msgstr ""
 
-#: apps/io.ox/core/sub/subscriptions.js:79
+#: apps/io.ox/core/sub/subscriptions.js:84
 #: module:io.ox/core/sub
 msgid "Subscription successfully created."
 msgstr ""
 
-#: apps/io.ox/core/sub/subscriptions.js:86
+#: apps/io.ox/core/sub/subscriptions.js:91
 #: module:io.ox/core/sub
-#: apps/io.ox/core/sub/subscriptions.js:110
+#: apps/io.ox/core/sub/subscriptions.js:115
 msgid "Error:"
 msgstr ""
 
-#: apps/io.ox/core/sub/subscriptions.js:115
+#: apps/io.ox/core/sub/subscriptions.js:120
 #: module:io.ox/core/sub
 msgid "The subscription could not be created."
 msgstr ""
 
-#: apps/io.ox/core/sub/subscriptions.js:238
+#: apps/io.ox/core/sub/subscriptions.js:140
+#: module:io.ox/core/sub
+msgid "No subscription services available for this module"
+msgstr ""
+
+#: apps/io.ox/core/sub/subscriptions.js:250
 #: module:io.ox/core/sub
 msgid "Add new account"
 msgstr ""
 
-#: apps/io.ox/core/sub/subscriptions.js:251
+#: apps/io.ox/core/sub/subscriptions.js:263
 #: module:io.ox/core/sub
 #: apps/plugins/portal/mail/register.js:217
 #: module:plugins/portal
 msgid "Account"
 msgstr ""
 
-#: apps/io.ox/core/sub/subscriptions.js:313
+#: apps/io.ox/core/sub/subscriptions.js:325
 #: module:io.ox/core/sub
 msgid "Source"
 msgstr ""
 
-#: apps/io.ox/core/sub/subscriptions.js:362
+#: apps/io.ox/core/sub/subscriptions.js:372
 #: module:io.ox/core/sub
 msgid "Add new folder for this subscription"
 msgstr ""
 
-#: apps/io.ox/core/sub/subscriptions.js:369
+#: apps/io.ox/core/sub/subscriptions.js:379
 #: module:io.ox/core/sub
 msgid "Note: This subscription will replace the calendar content with the external content. Therefore you must create a new folder for this subscription."
 msgstr ""
 
-#: apps/io.ox/core/sub/subscriptions.js:379
+#: apps/io.ox/core/sub/subscriptions.js:389
 #: module:io.ox/core/sub
-#: apps/io.ox/core/sub/subscriptions.js:382
+#: apps/io.ox/core/sub/subscriptions.js:392
 msgid "Approximate Duration for Subscriptions"
 msgstr ""
 
-#: apps/io.ox/core/sub/subscriptions.js:381
+#: apps/io.ox/core/sub/subscriptions.js:391
 #: module:io.ox/core/sub
 msgid "Updating subscribed data takes time. Importing 100 contacts for example, may take up to 5 minutes. Please have some patience."
 msgstr ""
@@ -5909,12 +5934,12 @@ msgstr ""
 msgid "This folder is shared with others"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:62
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:64
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:65
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:67
 #: module:io.ox/core/viewer
 #: apps/io.ox/editor/main.js:385
 #: module:io.ox/editor
@@ -5924,7 +5949,7 @@ msgstr ""
 msgid "File"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:120
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:122
 #: module:io.ox/core/viewer
 #: apps/io.ox/mail/util.js:42
 #: module:io.ox/core
@@ -5933,7 +5958,7 @@ msgstr ""
 msgid "unknown"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:196
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:201
 #: module:io.ox/core/viewer
 msgid "Versions (%1$d)"
 msgstr ""
@@ -10922,14 +10947,14 @@ msgstr ""
 msgid "File quota"
 msgstr ""
 
-#: apps/plugins/portal/quota/register.js:55
+#: apps/plugins/portal/quota/register.js:57
 #: module:plugins/portal
 msgid "Mail count quota"
 msgstr ""
 
-#: apps/plugins/portal/quota/register.js:91
+#: apps/plugins/portal/quota/register.js:93
 #: module:plugins/portal
-#: apps/plugins/portal/quota/register.js:104
+#: apps/plugins/portal/quota/register.js:106
 msgid "Quota"
 msgstr ""
 

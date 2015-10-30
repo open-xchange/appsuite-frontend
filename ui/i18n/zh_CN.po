@@ -209,8 +209,8 @@ msgstr "%1$s %2$s"
 #. Title of the browser window
 #. %1$s is the name of the page, e.g. OX App Suite
 #. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1169 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1338
+#: apps/io.ox/core/desktop.js:1167 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1336
 msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
@@ -256,7 +256,7 @@ msgstr "%1$s %2$s"
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js:369 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:1916
+#: apps/io.ox/calendar/week/view.js:1919
 #, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s （暂定）"
@@ -548,6 +548,13 @@ msgstr ""
 msgid "A read receipt has been sent"
 msgstr "已发送一个送达回执"
 
+#: apps/io.ox/core/sub/settings/pane.js:254 module:io.ox/core/sub
+msgid ""
+"A refresh takes some time, so please be patient, while the refresh runs in "
+"the background. Only one refresh per subscription and per session is allowed."
+msgstr ""
+"一个刷新稍为需时，请耐心等待背景运行完成。一个会话和订阅每次只允许一个刷新。"
+
 #: apps/io.ox/tasks/actions/doneUndone.js:66 module:io.ox/tasks
 msgid "A severe error occurred!"
 msgstr "发生一个严重错误！"
@@ -604,7 +611,7 @@ msgstr "以 WebDAV 访问文件"
 msgid "Accessing global address book is not permitted"
 msgstr "不允许访问全域地址簿"
 
-#: apps/io.ox/core/sub/subscriptions.js:251 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:263 module:io.ox/core/sub
 #: apps/plugins/portal/mail/register.js:217 module:plugins/portal
 msgid "Account"
 msgstr "账户"
@@ -767,7 +774,7 @@ msgstr "附加本地文件"
 msgid "Add mail account"
 msgstr "添加邮件帐户"
 
-#: apps/io.ox/core/sub/subscriptions.js:238 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:250 module:io.ox/core/sub
 msgid "Add new account"
 msgstr "添加新户口"
 
@@ -783,7 +790,7 @@ msgstr "添加新日历"
 msgid "Add new folder"
 msgstr "添加新文件夹"
 
-#: apps/io.ox/core/sub/subscriptions.js:362 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:372 module:io.ox/core/sub
 msgid "Add new folder for this subscription"
 msgstr "为此订阅添加新文件夹"
 
@@ -1004,8 +1011,8 @@ msgid "An error occurred."
 msgstr "发生一个错误。"
 
 #: apps/io.ox/calendar/detail/main.js:46 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:86
-#: apps/io.ox/calendar/week/perspective.js:223
+#: apps/io.ox/calendar/week/perspective.js:100
+#: apps/io.ox/calendar/week/perspective.js:237
 msgid "An error occurred. Please try again."
 msgstr "发生了一个错误。请重试。"
 
@@ -1040,7 +1047,7 @@ msgstr "任何收件人"
 msgid "Append vCard"
 msgstr "追加 vcard"
 
-#: apps/io.ox/core/desktop.js:1083 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1081 module:io.ox/core
 msgid "Application Toolbar"
 msgstr "应用程序工具条"
 
@@ -1076,7 +1083,7 @@ msgstr "套用到所有子文件夹"
 #: apps/io.ox/calendar/actions/acceptdeny.js:225 module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:384
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js:281
-#: apps/io.ox/calendar/week/perspective.js:161
+#: apps/io.ox/calendar/week/perspective.js:175
 #: apps/io.ox/mail/detail/links.js:73 module:io.ox/mail
 msgid "Appointment"
 msgstr "约会"
@@ -1084,8 +1091,8 @@ msgstr "约会"
 #: apps/io.ox/calendar/detail/main.js:38 module:io.ox/calendar
 #: apps/io.ox/calendar/list/perspective.js:66
 #: apps/io.ox/calendar/list/perspective.js:77
-#: apps/io.ox/calendar/month/perspective.js:64
-#: apps/io.ox/calendar/week/perspective.js:69
+#: apps/io.ox/calendar/month/perspective.js:75
+#: apps/io.ox/calendar/week/perspective.js:83
 msgid "Appointment Details"
 msgstr "约会详情"
 
@@ -1095,8 +1102,8 @@ msgstr "约会详情"
 msgid "Appointment invitations"
 msgstr "约会邀请"
 
-#: apps/io.ox/calendar/month/perspective.js:463 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:397
+#: apps/io.ox/calendar/month/perspective.js:472 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:411
 msgid "Appointment list"
 msgstr "约会列表"
 
@@ -1119,8 +1126,8 @@ msgstr "共享日历中的约会"
 msgid "Approved:"
 msgstr "已批准："
 
-#: apps/io.ox/core/sub/subscriptions.js:379 module:io.ox/core/sub
-#: apps/io.ox/core/sub/subscriptions.js:382
+#: apps/io.ox/core/sub/subscriptions.js:389 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:392
 msgid "Approximate Duration for Subscriptions"
 msgstr "大致订阅持续时间"
 
@@ -1377,8 +1384,8 @@ msgstr "购买一份礼物"
 msgid "Buy now!"
 msgstr "现在就买！"
 
-#: apps/io.ox/calendar/month/perspective.js:133 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:153
+#: apps/io.ox/calendar/month/perspective.js:144 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:167
 msgid ""
 "By changing the date of this appointment you are creating an appointment "
 "exception to the series. Do you want to continue?"
@@ -1435,14 +1442,14 @@ msgstr "日历："
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:424
 #: apps/io.ox/calendar/edit/timezone-dialog.js:141
 #: apps/io.ox/calendar/main.js:256 apps/io.ox/calendar/main.js:322
-#: apps/io.ox/calendar/month/perspective.js:115
+#: apps/io.ox/calendar/month/perspective.js:126
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js:92
-#: apps/io.ox/calendar/week/perspective.js:119
-#: apps/io.ox/calendar/week/perspective.js:162
+#: apps/io.ox/calendar/week/perspective.js:133
+#: apps/io.ox/calendar/week/perspective.js:176
 #: apps/io.ox/contacts/actions/delete.js:38 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:203
 #: apps/io.ox/contacts/edit/main.js:258 apps/io.ox/contacts/main.js:412
-#: apps/io.ox/contacts/main.js:744 apps/io.ox/core/desktop.js:1638
+#: apps/io.ox/contacts/main.js:744 apps/io.ox/core/desktop.js:1636
 #: module:io.ox/core apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:109
 #: apps/io.ox/core/folder/actions/archive.js:44
@@ -1453,8 +1460,9 @@ msgstr "日历："
 #: apps/io.ox/core/main.js:515 apps/io.ox/core/main.js:1502
 #: apps/io.ox/core/permissions/permissions.js:372
 #: apps/io.ox/core/permissions/permissions.js:405 apps/io.ox/core/print.js:113
-#: apps/io.ox/core/relogin.js:88 apps/io.ox/core/sub/subscriptions.js:57
-#: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js:39
+#: apps/io.ox/core/relogin.js:88 apps/io.ox/core/sub/subscriptions.js:135
+#: module:io.ox/core/sub apps/io.ox/core/sub/subscriptions.js:141
+#: apps/io.ox/core/tk/filestorageUtil.js:39
 #: apps/io.ox/core/tk/mobiscroll.js:27 apps/io.ox/core/upsell.js:36
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:83
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js:367 module:io.ox/editor
@@ -1504,8 +1512,8 @@ msgstr "日历："
 msgid "Cancel"
 msgstr "取消"
 
-#: apps/io.ox/core/desktop.js:1570 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1571
+#: apps/io.ox/core/desktop.js:1568 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1569
 msgid "Cancel search"
 msgstr "取消搜寻"
 
@@ -1628,7 +1636,7 @@ msgstr "字符"
 msgid "Checkboxes"
 msgstr "选择框"
 
-#: apps/io.ox/core/sub/subscriptions.js:70 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:75 module:io.ox/core/sub
 msgid "Checking credentials ..."
 msgstr "检查证书中 ..."
 
@@ -1977,7 +1985,7 @@ msgstr "支出必须在 -%1$d 到 %1$d 之间。"
 msgid "Costs must only have two decimal places."
 msgstr "花费只能有两个小数位。"
 
-#: apps/io.ox/core/desktop.js:300 module:io.ox/core
+#: apps/io.ox/core/desktop.js:301 module:io.ox/core
 msgid "Could not get a default folder for this application."
 msgstr "不能获得此应用程序的默认文件夹。"
 
@@ -2191,7 +2199,7 @@ msgstr "出生日期"
 msgid "Day"
 msgstr "日"
 
-#: apps/io.ox/calendar/week/perspective.js:320 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:334 module:io.ox/calendar
 msgid "Day View"
 msgstr "日视图"
 
@@ -2264,8 +2272,8 @@ msgstr "延迟"
 #: apps/io.ox/contacts/toolbar.js:85
 #: apps/io.ox/core/folder/actions/remove.js:33 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:293
-#: apps/io.ox/core/sub/settings/pane.js:158 module:io.ox/core/sub
-#: apps/io.ox/core/sub/settings/pane.js:160
+#: apps/io.ox/core/sub/settings/pane.js:184 module:io.ox/core/sub
+#: apps/io.ox/core/sub/settings/pane.js:186
 #: apps/io.ox/core/viewer/views/toolbarview.js:279
 #: apps/io.ox/files/actions.js:765 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
@@ -2425,6 +2433,8 @@ msgid "Direct link: %1$s"
 msgstr "直接链接：%1$s"
 
 #: apps/io.ox/core/notifications.js:134 module:io.ox/core
+#: apps/io.ox/core/sub/settings/pane.js:178 module:io.ox/core/sub
+#: apps/io.ox/core/sub/settings/pane.js:179
 #: apps/io.ox/mail/mailfilter/settings/filter.js:142 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:284
 #: apps/io.ox/portal/settings/pane.js:301 module:io.ox/portal
@@ -2628,7 +2638,7 @@ msgid "Do you want to delete this appointment?"
 msgstr "确定要删除此约会吗？"
 
 #: apps/io.ox/calendar/actions/edit.js:37 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:158
+#: apps/io.ox/calendar/week/perspective.js:172
 msgid ""
 "Do you want to edit the whole series or just one appointment within the "
 "series?"
@@ -3021,6 +3031,8 @@ msgid "Empty name and description found."
 msgstr "找到空的名称和描述。"
 
 #: apps/io.ox/core/notifications.js:139 module:io.ox/core
+#: apps/io.ox/core/sub/settings/pane.js:178 module:io.ox/core/sub
+#: apps/io.ox/core/sub/settings/pane.js:179
 #: apps/io.ox/mail/autoforward/settings/model.js:96 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:142
 #: apps/io.ox/mail/mailfilter/settings/filter.js:284
@@ -3088,7 +3100,7 @@ msgid "Envelope - To"
 msgstr "信封 - 到"
 
 #: apps/io.ox/core/print.js:198 module:io.ox/core
-#: apps/io.ox/core/sub/subscriptions.js:114 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:119 module:io.ox/core/sub
 #: apps/io.ox/core/yell.js:21 apps/io.ox/core/yell.js:122
 msgid "Error"
 msgstr "错误"
@@ -3102,8 +3114,8 @@ msgstr "错误记录"
 msgid "Error while resolving mail addresses. Please try again."
 msgstr "于解析邮件地址时发生错误，请再试。"
 
-#: apps/io.ox/core/sub/subscriptions.js:86 module:io.ox/core/sub
-#: apps/io.ox/core/sub/subscriptions.js:110
+#: apps/io.ox/core/sub/subscriptions.js:91 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:115
 msgid "Error:"
 msgstr "错误："
 
@@ -3277,7 +3289,7 @@ msgstr "脸部"
 msgid "Failed to add. Maybe the vCard attachment is invalid."
 msgstr "添加失败，VCard 附件可能无效。"
 
-#: apps/io.ox/core/desktop.js:164 module:io.ox/core
+#: apps/io.ox/core/desktop.js:166 module:io.ox/core
 msgid ""
 "Failed to automatically save current stage of work. Please save your work to "
 "avoid data loss in case the browser closes unexpectedly."
@@ -3308,7 +3320,7 @@ msgstr "保存通讯组列表失败。"
 msgid "Failed to sign in"
 msgstr "登录失败"
 
-#: apps/io.ox/core/desktop.js:1714 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1712 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -3386,7 +3398,7 @@ msgstr "回馈"
 msgid "Feeling • Decoration"
 msgstr "感觉：装饰"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:65
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:67
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js:385 module:io.ox/editor
 #: apps/io.ox/mail/detail/links.js:75 module:io.ox/mail
 #: apps/io.ox/mail/detail/links.js:76
@@ -3421,7 +3433,7 @@ msgstr "文件名称、单击以更名"
 msgid "File quota"
 msgstr "文件限额"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:62
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:64
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
 msgstr "文件版本表格，第一行代表当前版本。"
@@ -3911,8 +3923,8 @@ msgstr "忽视警告"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:191 module:io.ox/calendar
 #: apps/io.ox/calendar/edit/main.js:153 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/month/perspective.js:114
-#: apps/io.ox/calendar/week/perspective.js:118
+#: apps/io.ox/calendar/month/perspective.js:125
+#: apps/io.ox/calendar/week/perspective.js:132
 #: apps/plugins/notifications/calendar/register.js:83
 #: module:plugins/notifications
 msgid "Ignore conflicts"
@@ -4424,7 +4436,7 @@ msgstr "邮件地址（必填）"
 msgid "Mail and Messaging"
 msgstr "邮件和即时通讯"
 
-#: apps/plugins/portal/quota/register.js:55 module:plugins/portal
+#: apps/plugins/portal/quota/register.js:57 module:plugins/portal
 msgid "Mail count quota"
 msgstr "邮件总数限额"
 
@@ -4508,7 +4520,7 @@ msgstr "每小时邮件数（%）"
 msgid "Mails per week-day (%)"
 msgstr "每工作日邮件数（%）"
 
-#: apps/io.ox/core/desktop.js:1455 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1453 module:io.ox/core
 msgid "Main window"
 msgstr "主窗口"
 
@@ -4836,7 +4848,7 @@ msgid "New"
 msgstr "新建"
 
 #: apps/io.ox/core/folder/api.js:906 module:io.ox/core
-#: apps/io.ox/core/sub/subscriptions.js:171 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:183 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "新文件夹"
 
@@ -4980,8 +4992,8 @@ msgid "Nickname"
 msgstr "别名"
 
 #. folder permissions - Is Admin? NO
-#: apps/io.ox/calendar/month/perspective.js:135 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:155 apps/io.ox/core/main.js:134
+#: apps/io.ox/calendar/month/perspective.js:146 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:169 apps/io.ox/core/main.js:134
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js:177
 msgid "No"
 msgstr "否"
@@ -5077,6 +5089,12 @@ msgstr "没有慢速请求"
 msgid "No subject"
 msgstr "无主题"
 
+#: apps/io.ox/core/sub/subscriptions.js:140 module:io.ox/core/sub
+#, fuzzy
+#| msgid "Sorry, there is no preview available for this file."
+msgid "No subscription services available for this module"
+msgstr "抱歉，此文件没有预览可用。"
+
 #: apps/plugins/portal/reddit/register.js:113 module:io.ox/portal
 #: apps/plugins/portal/reddit/register.js:142
 msgid "No title."
@@ -5144,7 +5162,7 @@ msgstr ""
 msgid "Note: The vCard format cannot contain distribution lists"
 msgstr "备注：vCard 格式不能包含通信组列表"
 
-#: apps/io.ox/core/sub/subscriptions.js:369 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:379 module:io.ox/core/sub
 msgid ""
 "Note: This subscription will replace the calendar content with the external "
 "content. Therefore you must create a new folder for this subscription."
@@ -6038,7 +6056,7 @@ msgstr "发布必须有一个地点。"
 msgid "Publication must have a target."
 msgstr "发布必须有一个目标。"
 
-#: apps/io.ox/core/sub/settings/pane.js:321 module:io.ox/core/sub
+#: apps/io.ox/core/sub/settings/pane.js:374 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/register.js:41
 msgid "Publications"
 msgstr "发布"
@@ -6063,8 +6081,8 @@ msgstr "紫色"
 msgid "Quit"
 msgstr "退出"
 
-#: apps/plugins/portal/quota/register.js:91 module:plugins/portal
-#: apps/plugins/portal/quota/register.js:104
+#: apps/plugins/portal/quota/register.js:93 module:plugins/portal
+#: apps/plugins/portal/quota/register.js:106
 msgid "Quota"
 msgstr "限额"
 
@@ -6218,6 +6236,8 @@ msgid "Reduce to widget summary"
 msgstr "减少到小部件摘要"
 
 #: apps/io.ox/core/main.js:355 module:io.ox/core apps/io.ox/core/main.js:832
+#: apps/io.ox/core/sub/settings/pane.js:158 module:io.ox/core/sub
+#: apps/io.ox/core/sub/settings/pane.js:159
 msgid "Refresh"
 msgstr "刷新"
 
@@ -6578,7 +6598,7 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "排程"
 
-#: apps/io.ox/core/desktop.js:1519 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1517 module:io.ox/core
 #: apps/io.ox/core/main.js:817 apps/io.ox/find/extensions-facets.js:30
 #: apps/io.ox/find/main.js:48 apps/io.ox/find/view-tokenfield.js:119
 #: apps/io.ox/search/autocomplete/extensions.js:52
@@ -6597,7 +6617,7 @@ msgid "Search results"
 msgstr "搜索结果"
 
 #. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js:1591 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1589 module:io.ox/core
 msgid ""
 "Search results page lists all active facets to allow them to be easly "
 "adjustable/removable. Below theses common facets additonal advanced facets "
@@ -6733,7 +6753,7 @@ msgstr "九月"
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js:224 module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js:40
-#: apps/io.ox/calendar/week/perspective.js:160
+#: apps/io.ox/calendar/week/perspective.js:174
 msgid "Series"
 msgstr "系列"
 
@@ -7101,7 +7121,7 @@ msgstr "依 .. 排序"
 msgid "Sort options"
 msgstr "排序选项"
 
-#: apps/io.ox/core/sub/subscriptions.js:313 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:325 module:io.ox/core/sub
 msgid "Source"
 msgstr "来源"
 
@@ -7168,8 +7188,8 @@ msgstr "开始演讲"
 msgid "Start remote presentation"
 msgstr "开始远端演讲"
 
-#: apps/io.ox/core/desktop.js:1557 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1558
+#: apps/io.ox/core/desktop.js:1555 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1556
 msgid "Start search"
 msgstr "开始搜索"
 
@@ -7231,8 +7251,8 @@ msgstr "主题"
 msgid "Submit comment"
 msgstr "送出回帖"
 
-#: apps/io.ox/core/sub/subscriptions.js:56 module:io.ox/core/sub
-#: apps/io.ox/core/sub/subscriptions.js:59
+#: apps/io.ox/core/sub/subscriptions.js:57 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:134
 msgid "Subscribe"
 msgstr "订阅"
 
@@ -7240,11 +7260,15 @@ msgstr "订阅"
 msgid "Subscribe IMAP folders"
 msgstr "订阅 IMAP 文件夹"
 
-#: apps/io.ox/core/sub/subscriptions.js:79 module:io.ox/core/sub
+#: apps/io.ox/core/sub/settings/pane.js:253 module:io.ox/core/sub
+msgid "Subscription refresh"
+msgstr "订阅刷新"
+
+#: apps/io.ox/core/sub/subscriptions.js:84 module:io.ox/core/sub
 msgid "Subscription successfully created."
 msgstr "成功创建订阅。"
 
-#: apps/io.ox/core/sub/settings/pane.js:331 module:io.ox/core/sub
+#: apps/io.ox/core/sub/settings/pane.js:384 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/register.js:36
 msgid "Subscriptions"
 msgstr "订阅"
@@ -7746,7 +7770,7 @@ msgstr "起始日期一定要在结束日期之前。"
 msgid "The start date must be before the end date."
 msgstr "起始日期一定要在结束日期之前。"
 
-#: apps/io.ox/core/sub/subscriptions.js:115 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:120 module:io.ox/core/sub
 msgid "The subscription could not be created."
 msgstr "不能创建此订阅。"
 
@@ -7799,7 +7823,7 @@ msgid ""
 "There are no external applications/services which can access your account."
 msgstr "没有能够访问您户口的外部应用程序/服务。"
 
-#: apps/io.ox/core/desktop.js:766 module:io.ox/core
+#: apps/io.ox/core/desktop.js:768 module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "找到未保存更改。"
 
@@ -7942,11 +7966,11 @@ msgstr "已与别人分享此文件"
 msgid "This file will be written in your default folder to allow editing"
 msgstr "此文件将会写入在您的默认文件夹以允许编辑"
 
-#: apps/io.ox/core/sub/settings/pane.js:289 module:io.ox/core/sub
+#: apps/io.ox/core/sub/settings/pane.js:342 module:io.ox/core/sub
 msgid "This folder has no publications"
 msgstr "此文件夹没有发布"
 
-#: apps/io.ox/core/sub/settings/pane.js:290 module:io.ox/core/sub
+#: apps/io.ox/core/sub/settings/pane.js:343 module:io.ox/core/sub
 msgid "This folder has no subscriptions"
 msgstr "此文件夹没有订阅"
 
@@ -7954,7 +7978,7 @@ msgstr "此文件夹没有订阅"
 msgid "This folder has publications and/or subscriptions"
 msgstr "此文件夹有发布和/或订阅"
 
-#: apps/io.ox/core/sub/settings/pane.js:282 module:io.ox/core/sub
+#: apps/io.ox/core/sub/settings/pane.js:335 module:io.ox/core/sub
 msgid ""
 "This folder has publications but you are not allowed to view or edit them"
 msgstr "此文件夹带有发布，可是您不允许检视或编辑它们"
@@ -7963,7 +7987,7 @@ msgstr "此文件夹带有发布，可是您不允许检视或编辑它们"
 msgid "This folder has subscriptions"
 msgstr "此文件夹有订阅"
 
-#: apps/io.ox/core/sub/settings/pane.js:283 module:io.ox/core/sub
+#: apps/io.ox/core/sub/settings/pane.js:336 module:io.ox/core/sub
 msgid ""
 "This folder has subscriptions but you are not allowed to view or edit them"
 msgstr "此文件夹带有订阅，可是您不允许检视或编辑它们"
@@ -8288,7 +8312,7 @@ msgstr ""
 msgid "Updater"
 msgstr "更新程序"
 
-#: apps/io.ox/core/sub/subscriptions.js:381 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:391 module:io.ox/core/sub
 msgid ""
 "Updating subscribed data takes time. Importing 100 contacts for example, may "
 "take up to 5 minutes. Please have some patience."
@@ -8435,7 +8459,7 @@ msgstr "假期通知"
 msgid "Version Comment"
 msgstr "版本注释"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:196
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:201
 #: module:io.ox/core/viewer
 msgid "Versions (%1$d)"
 msgstr "版本 (%1$d)"
@@ -8537,7 +8561,7 @@ msgstr "天气：季节"
 msgid "Week"
 msgstr "周"
 
-#: apps/io.ox/calendar/week/perspective.js:331 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:345 module:io.ox/calendar
 msgid "Week View"
 msgstr "周视图"
 
@@ -8604,7 +8628,7 @@ msgstr "全天"
 msgid "Workweek"
 msgstr "工作周"
 
-#: apps/io.ox/calendar/week/perspective.js:325 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:339 module:io.ox/calendar
 msgid "Workweek View"
 msgstr "工作周视图"
 
@@ -8657,8 +8681,8 @@ msgid "Yellow"
 msgstr "黄色"
 
 #. folder permissions - Is Admin? YES
-#: apps/io.ox/calendar/month/perspective.js:134 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:154 apps/io.ox/core/main.js:133
+#: apps/io.ox/calendar/month/perspective.js:145 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:168 apps/io.ox/core/main.js:133
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js:179
 #: apps/io.ox/files/util.js:257 module:io.ox/files
 msgid "Yes"
@@ -8774,11 +8798,11 @@ msgstr "您拒绝了此任务"
 msgid "You don't have any appointments in the near future."
 msgstr "您在稍后没有任何约会。"
 
-#: apps/io.ox/core/sub/settings/pane.js:294 module:io.ox/core/sub
+#: apps/io.ox/core/sub/settings/pane.js:347 module:io.ox/core/sub
 msgid "You don't have any publications yet"
 msgstr "您还没有任何发布"
 
-#: apps/io.ox/core/sub/settings/pane.js:295 module:io.ox/core/sub
+#: apps/io.ox/core/sub/settings/pane.js:348 module:io.ox/core/sub
 msgid "You don't have any subscriptions yet"
 msgstr "您还没有任何发布"
 
@@ -9609,7 +9633,7 @@ msgstr "今晚"
 msgid "unconfirmed"
 msgstr "未确认"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:120
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:122
 #: module:io.ox/core/viewer apps/io.ox/mail/util.js:42 module:io.ox/core
 #: apps/io.ox/mail/util.js:433 apps/io.ox/mail/util.js:447
 msgid "unknown"
@@ -9860,14 +9884,6 @@ msgstr "年"
 
 #~ msgid "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
 #~ msgstr "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
-
-#~ msgid ""
-#~ "A refresh takes some time, so please be patient, while the refresh runs "
-#~ "in the background. Only one refresh per subscription and per session is "
-#~ "allowed."
-#~ msgstr ""
-#~ "一个刷新稍为需时，请耐心等待背景运行完成。一个会话和订阅每次只允许一个刷"
-#~ "新。"
 
 #~ msgid "AD"
 #~ msgstr "AD"
@@ -12613,9 +12629,6 @@ msgstr "年"
 #~ "订阅不是由另一个 Open-Xchange 服务器(比如 OXMF)投递的项目可能需要一段时"
 #~ "间。例如，从 Xing 导入 100 个联系人大约需要 5 分钟。我们正持续改善该功能。"
 #~ "今后的版本的运行将更为高效。"
-
-#~ msgid "Subscription refresh"
-#~ msgstr "订阅刷新"
 
 #~ msgid "Such data will never be uploaded"
 #~ msgstr "该数据将永远不会被上载"
