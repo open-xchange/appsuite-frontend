@@ -32,5 +32,9 @@
     "bootstrap-tokenfield": "https://github.com/Open-Xchange-Frontend/bootstrap-tokenfield.git#0ea7b1c516592101fda27935665e9d6368a02448",
     "typeahead.js": "0.10.5",
     "marked": "~0.3.3"
+  },
+  "resolutions": {
+    "jquery": "2.1.1",
+    "bootstrap": "3.1.1"
   }
 }
