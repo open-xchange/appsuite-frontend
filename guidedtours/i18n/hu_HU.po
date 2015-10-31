@@ -54,7 +54,7 @@ msgstr "Új feladat létrehozása"
 msgid "Creating a note"
 msgstr "Jegyzet létrehozása"
 
-#: apps/io.ox/tours/intro.js:61 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:72 module:io.ox/tours
 msgid "Creating new items"
 msgstr "Új elemek létrehozása"
 
@@ -78,7 +78,7 @@ msgstr "Feladat létrehozása"
 msgid "Customizing the Portal"
 msgstr "Portál testreszabása"
 
-#: apps/io.ox/tours/intro.js:80 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:100 module:io.ox/tours
 msgid ""
 "Depending on the app, the toolbar contains various functions for creating, "
 "editing and organizing objects."
@@ -86,7 +86,7 @@ msgstr ""
 "Az alkalmazástól függően az eszköztár az objektumok létrehozásához, "
 "szerkesztéséhez és rendezéséhez kapcsolódó funkciókat tartalmaz."
 
-#: apps/io.ox/tours/intro.js:100 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:120 module:io.ox/tours
 msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
 msgstr ""
@@ -97,7 +97,7 @@ msgstr ""
 msgid "Displaying information"
 msgstr "Információ megjelenítése"
 
-#: apps/io.ox/tours/intro.js:43 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid "Displaying the help or the settings"
 msgstr "A súgó vagy a beállítások megjelenítése"
 
@@ -201,7 +201,7 @@ msgstr "Lejjebb mellékletként dokumentumokat csatolhat a találkozóhoz."
 msgid "Further functions"
 msgstr "További műveletek"
 
-#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:119 module:io.ox/tours
 msgid "Further information"
 msgstr "További információk"
 
@@ -232,7 +232,7 @@ msgstr ""
 "Ha nem akarja továbbiakban megjeleníteni a négyzetet, akkor kattintson a "
 "keresztre."
 
-#: apps/io.ox/tours/intro.js:57 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:66 module:io.ox/tours
 msgid ""
 "In case of new notifications, e.g. appointment invitations, the info area is "
 "opened."
@@ -274,7 +274,7 @@ msgstr "Navigációs sáv"
 msgid "Opening an E-Mail in a separate window"
 msgstr "Levél megnyitása külön ablakban"
 
-#: apps/io.ox/tours/intro.js:69 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:81 module:io.ox/tours
 msgid "Opening or closing the folder tree"
 msgstr "Mappastruktúra megnyitása és bezárása"
 
@@ -298,7 +298,7 @@ msgstr "E-mail társalgások olvasása"
 msgid "Reading the details"
 msgstr "Részletek olvasása"
 
-#: apps/io.ox/tours/intro.js:74 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Elemek keresése"
 
@@ -327,11 +327,11 @@ msgstr "Feladatok rendezése"
 msgid "Sorting your E-Mails"
 msgstr "Levelek rendezése"
 
-#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:114 module:io.ox/tours
 msgid "The Detail view"
 msgstr "A részletes nézet"
 
-#: apps/io.ox/tours/intro.js:95 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:115 module:io.ox/tours
 msgid ""
 "The Detail view displays an object's content. Depending on the app, further "
 "functions for organizing objects can be found in the Detail view."
@@ -377,11 +377,11 @@ msgstr ""
 "dátuma. A fájlok kiválasztásához használja a jelölőnégyzeteket. A fájlra "
 "kattintva egy felugró ablakban további részletek és funkciók jelennek meg."
 
-#: apps/io.ox/tours/intro.js:50 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:58 module:io.ox/tours
 msgid "The New objects icon"
 msgstr "Az Új elemek ikon"
 
-#: apps/io.ox/tours/intro.js:51 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:59 module:io.ox/tours
 msgid ""
 "The New objects icon shows the number of unread E-Mails or other "
 "notifications. If clicking the icon, the info area opens."
@@ -425,15 +425,15 @@ msgstr ""
 "A naptárnézetek jelenítik meg a naptárakat a megadott időintervallumban lévő "
 "találkozókkal."
 
-#: apps/io.ox/tours/intro.js:84 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:104 module:io.ox/tours
 msgid "The folder tree"
 msgstr "A mappastruktúra"
 
-#: apps/io.ox/tours/intro.js:56 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:65 module:io.ox/tours
 msgid "The info area"
 msgstr "Az információs terület"
 
-#: apps/io.ox/tours/intro.js:89 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:109 module:io.ox/tours
 msgid "The list"
 msgstr "A lista"
 
@@ -445,7 +445,7 @@ msgstr ""
 "A beállítások témák szerint vannak rendezve. Válasszon egy témát a bal "
 "oldalon pl. Alapbeállítások vagy Levél."
 
-#: apps/io.ox/tours/intro.js:79 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
 msgid "The toolbar"
 msgstr "Az eszköztár"
 
@@ -481,7 +481,7 @@ msgstr ""
 msgid "To compose a new E-Mail, click on Compose in the toolbar."
 msgstr "Új levél írásához kattintson felül az Új levél szerkesztése ikonra."
 
-#: apps/io.ox/tours/intro.js:62 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:73 module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr ""
 "Új levél írásához kattintson az eszköztárban található Új levél szerkesztése "
@@ -543,7 +543,7 @@ msgstr ""
 "Az elem újbóli megjelenítéséhez vagy további információ eléréséhez "
 "kattintson az ezen az oldalon található Testreszabásra."
 
-#: apps/io.ox/tours/intro.js:44 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:45 module:io.ox/tours
 msgid ""
 "To display the help or the settings, click the System menu icon in the menu "
 "bar."
@@ -618,7 +618,7 @@ msgstr ""
 "Az E-mail társalgások megnyitásához vagy bezárásához kattintson a fejléc "
 "szabad területére."
 
-#: apps/io.ox/tours/intro.js:70 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:82 module:io.ox/tours
 msgid ""
 "To open or close the folder tree, click on View >  Folder view on the right "
 "side of the toolbar."
@@ -667,7 +667,7 @@ msgstr ""
 "Ha további információt szeretne megtudni a feladóról vagy a többi "
 "címzettről, akkor a nevükre kattintva megnyithatja a Halo nézetet."
 
-#: apps/io.ox/tours/intro.js:75 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:95 module:io.ox/tours
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr ""
 "Az elemek kereséséhez kattintson a menüsorban található Keresés ikonra."
@@ -757,7 +757,7 @@ msgstr ""
 "eléréséhez. Amennyiben a mappa rejtett, kattintson az eszköztár jobb oldalán "
 "található Nézet > Mappanézet ikonra."
 
-#: apps/io.ox/tours/intro.js:85 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:105 module:io.ox/tours
 msgid ""
 "Use the folder tree to open the folder containing the objects that you want "
 "to view in the list."
@@ -765,7 +765,7 @@ msgstr ""
 "Használja a mappastruktúrát, ha egy olyan elemek szeretne megtekinteni a "
 "listában, amely egy mappában van."
 
-#: apps/io.ox/tours/intro.js:90 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:110 module:io.ox/tours
 msgid ""
 "Use the list to select an object, show its contents or activate functions."
 msgstr ""

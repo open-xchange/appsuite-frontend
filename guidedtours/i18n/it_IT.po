@@ -56,7 +56,7 @@ msgstr "Creare una nuova attività"
 msgid "Creating a note"
 msgstr "Creare una nota"
 
-#: apps/io.ox/tours/intro.js:61 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:72 module:io.ox/tours
 msgid "Creating new items"
 msgstr "Creare nuovi elementi"
 
@@ -80,7 +80,7 @@ msgstr "Creare l'attività"
 msgid "Customizing the Portal"
 msgstr "Personalizzare il portale"
 
-#: apps/io.ox/tours/intro.js:80 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:100 module:io.ox/tours
 msgid ""
 "Depending on the app, the toolbar contains various functions for creating, "
 "editing and organizing objects."
@@ -88,7 +88,7 @@ msgstr ""
 "In base all'applicazione, la barra degli strumenti contiene varie funzioni "
 "per creare, modificare e organizzare oggetti."
 
-#: apps/io.ox/tours/intro.js:100 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:120 module:io.ox/tours
 msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
 msgstr ""
@@ -99,7 +99,7 @@ msgstr ""
 msgid "Displaying information"
 msgstr "Visualizzare le informazioni"
 
-#: apps/io.ox/tours/intro.js:43 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid "Displaying the help or the settings"
 msgstr "Visualizzare la guida o le impostazioni"
 
@@ -206,7 +206,7 @@ msgstr ""
 msgid "Further functions"
 msgstr "Funzioni ulteriori"
 
-#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:119 module:io.ox/tours
 msgid "Further information"
 msgstr "Ulteriori informazioni"
 
@@ -236,7 +236,7 @@ msgid "If you no longer want to display a square, click the cross."
 msgstr ""
 "Se non si desidera visualizzare più un riquadro, fare clic sulla croce."
 
-#: apps/io.ox/tours/intro.js:57 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:66 module:io.ox/tours
 msgid ""
 "In case of new notifications, e.g. appointment invitations, the info area is "
 "opened."
@@ -278,7 +278,7 @@ msgstr "Barra di navigazione"
 msgid "Opening an E-Mail in a separate window"
 msgstr "Aprire un messaggio di posta in una finestra separata"
 
-#: apps/io.ox/tours/intro.js:69 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:81 module:io.ox/tours
 msgid "Opening or closing the folder tree"
 msgstr "Aprire e chiudere l'albero delle cartelle"
 
@@ -302,7 +302,7 @@ msgstr "Lettura delle conversazioni di posta"
 msgid "Reading the details"
 msgstr "Leggere i dettagli"
 
-#: apps/io.ox/tours/intro.js:74 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Cercare oggetti"
 
@@ -331,11 +331,11 @@ msgstr "Ordinare le attività"
 msgid "Sorting your E-Mails"
 msgstr "Ordinare i messaggi"
 
-#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:114 module:io.ox/tours
 msgid "The Detail view"
 msgstr "La vista dettagliata"
 
-#: apps/io.ox/tours/intro.js:95 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:115 module:io.ox/tours
 msgid ""
 "The Detail view displays an object's content. Depending on the app, further "
 "functions for organizing objects can be found in the Detail view."
@@ -383,11 +383,11 @@ msgstr ""
 "file per visualizzare ulteriori dettagli e funzioni nella finestra a "
 "comparsa."
 
-#: apps/io.ox/tours/intro.js:50 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:58 module:io.ox/tours
 msgid "The New objects icon"
 msgstr "L'icona Nuovi oggetti"
 
-#: apps/io.ox/tours/intro.js:51 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:59 module:io.ox/tours
 msgid ""
 "The New objects icon shows the number of unread E-Mails or other "
 "notifications. If clicking the icon, the info area opens."
@@ -432,15 +432,15 @@ msgstr ""
 "Le viste del calendario visualizzano un foglio del calendario con gli "
 "appuntamenti per l'intervallo di tempo selezionato."
 
-#: apps/io.ox/tours/intro.js:84 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:104 module:io.ox/tours
 msgid "The folder tree"
 msgstr "L'albero delle cartelle"
 
-#: apps/io.ox/tours/intro.js:56 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:65 module:io.ox/tours
 msgid "The info area"
 msgstr "L'area informazioni"
 
-#: apps/io.ox/tours/intro.js:89 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:109 module:io.ox/tours
 msgid "The list"
 msgstr "L'elenco"
 
@@ -452,7 +452,7 @@ msgstr ""
 "Le impostazioni sono organizzate in argomenti. Selezionare l'argomento a "
 "sinistra, ad es. Impostazioni di base o Posta elettronica."
 
-#: apps/io.ox/tours/intro.js:79 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
 msgid "The toolbar"
 msgstr "La barra degli strumenti"
 
@@ -491,7 +491,7 @@ msgstr ""
 "Per comporre una nuovo messaggio di posta, fare clic su Componi nella barra "
 "degli strumenti."
 
-#: apps/io.ox/tours/intro.js:62 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:73 module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr ""
 "Per creare un nuovo messaggio di posta, fare clic sull'icona Componi un "
@@ -553,7 +553,7 @@ msgstr ""
 "Per visualizzare nuovamente un riquadro o per mostrare ulteriori fonti di "
 "informazione, fare clic su Personalizza questa pagina."
 
-#: apps/io.ox/tours/intro.js:44 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:45 module:io.ox/tours
 msgid ""
 "To display the help or the settings, click the System menu icon in the menu "
 "bar."
@@ -628,7 +628,7 @@ msgstr ""
 "Per aprire o chiudere un messaggio in una conversazione, fare clic su "
 "un'area libera nell'intestazione."
 
-#: apps/io.ox/tours/intro.js:70 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:82 module:io.ox/tours
 msgid ""
 "To open or close the folder tree, click on View >  Folder view on the right "
 "side of the toolbar."
@@ -677,7 +677,7 @@ msgstr ""
 "Per ricevere informazioni sul mittente o sugli altri destinatari, aprire la "
 "vista Aura facendo clic su un nome."
 
-#: apps/io.ox/tours/intro.js:75 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:95 module:io.ox/tours
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr ""
 "Per cercare oggetti, fare clic sull'icona Ricerca nella barra dei menu."
@@ -766,7 +766,7 @@ msgstr ""
 "condivisi. Se l'albero delle cartelle è nascosto, fare clic su Vista > Vista "
 "delle cartelle a destra della barra della barra degli strumenti."
 
-#: apps/io.ox/tours/intro.js:85 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:105 module:io.ox/tours
 msgid ""
 "Use the folder tree to open the folder containing the objects that you want "
 "to view in the list."
@@ -774,7 +774,7 @@ msgstr ""
 "Utilizzare l'albero delle cartelle per aprire la cartella che contiene gli "
 "oggetti che si desidera visualizzare nell'elenco."
 
-#: apps/io.ox/tours/intro.js:90 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:110 module:io.ox/tours
 msgid ""
 "Use the list to select an object, show its contents or activate functions."
 msgstr ""

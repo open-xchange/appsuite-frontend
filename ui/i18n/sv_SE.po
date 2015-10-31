@@ -131,7 +131,7 @@ msgstr[1] "%1$d medlemmar"
 msgid "%1$d messages in this conversation"
 msgstr "%1$d meddelanden i den här konversationen"
 
-#: apps/io.ox/mail/main.js:747 module:io.ox/mail
+#: apps/io.ox/mail/main.js:744 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d meddelanden markerade"
 
@@ -161,7 +161,7 @@ msgstr[0] "%1$d sekund"
 msgstr[1] "%1$d sekunder"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:784 module:io.ox/mail
+#: apps/io.ox/mail/main.js:781 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "%1$d markerade"
 
@@ -1058,7 +1058,7 @@ msgstr "Lägg till vCard"
 msgid "Application Toolbar"
 msgstr "Programmets verktygsrad"
 
-#: apps/io.ox/mail/main.js:1435 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1432 module:io.ox/mail
 #: apps/io.ox/settings/main.js:577 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr "Programmet kanske inte fungerar som väntat tills problemet är löst."
@@ -1500,7 +1500,7 @@ msgstr "Kalender:"
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:648
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1252
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1249
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:254
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
@@ -2324,7 +2324,7 @@ msgid "Delete account"
 msgstr "Ta bort konto"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:756 module:io.ox/mail
+#: apps/io.ox/mail/main.js:753 module:io.ox/mail
 #, fuzzy
 #| msgctxt "folder"
 #| msgid "Deleted messages"
@@ -2861,7 +2861,7 @@ msgstr "Eb"
 #: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:497
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1256
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1253
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:369
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:371
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
@@ -3614,7 +3614,7 @@ msgid "Food"
 msgstr "Mat"
 
 #. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
-#: apps/io.ox/core/boot/i18n.js:43 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
 msgid "For best results, please use "
 msgstr "För bäst result, använd "
 
@@ -4798,7 +4798,7 @@ msgid "Move"
 msgstr "Flytta"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:753 module:io.ox/mail
+#: apps/io.ox/mail/main.js:750 module:io.ox/mail
 #, fuzzy
 #| msgid "Show all %1$d messages in inbox"
 msgid "Move all %1$d messages to another folder"
@@ -5092,7 +5092,7 @@ msgstr "Inga förlorade sökningar"
 msgid "No mails in your inbox"
 msgstr "Ingen e-post i din inkorg"
 
-#: apps/io.ox/mail/main.js:721 module:io.ox/mail
+#: apps/io.ox/mail/main.js:718 module:io.ox/mail
 msgid "No message selected"
 msgstr "Inget meddelande markerat"
 
@@ -5274,7 +5274,7 @@ msgstr "Oktober"
 msgid "Offline"
 msgstr "Nedkopplat läge"
 
-#: apps/io.ox/core/boot/i18n.js:47 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
 msgid "Offline mode"
 msgstr "Nedkopplat läge"
 
@@ -5830,7 +5830,7 @@ msgstr "Skriv in igen för att fortsätta"
 msgid "Please specify these missing variables: "
 msgstr "Definiera dessa saknade variabler: "
 
-#: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:42 module:io.ox/core/boot
 msgid "Please update your browser."
 msgstr "Uppdatera din webbläsare."
 
@@ -8411,7 +8411,7 @@ msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr ""
 "Dokument som inte har sparats kommer gå förlorade. Vill du logga ut nu?"
 
-#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:46 module:io.ox/core/boot
 msgid ""
 "Unsupported Preview - Certain functions disabled and stability not assured "
 "until general release later this year"
@@ -8979,7 +8979,7 @@ msgstr "Du har accepterat mötet"
 msgid "You have accepted this task"
 msgstr "Du har accepterat uppgiften"
 
-#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
 msgid "You have been automatically signed out"
 msgstr "Du har loggats ut automatiskt"
 
@@ -9147,7 +9147,7 @@ msgstr "Din webbläsare stöds inte."
 msgid "Your browser version is not supported!"
 msgstr "Din webbläsarversion stöds inte."
 
-#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:49 module:io.ox/core/boot
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr "Din webbläsares kakfunktioner är avaktiverade. Vänligen aktivera dem."
 
@@ -9198,6 +9198,13 @@ msgstr "Ditt operativsystem stöds inte."
 #: module:io.ox/mail/accounts/settings
 msgid "Your password"
 msgstr "Ditt lösenord"
+
+#: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
+#, fuzzy
+#| msgid ""
+#| "Your password has expired. In order to change it, please log in to %1$s."
+msgid "Your password is expired. Please change your password to continue."
+msgstr "Ditt lösenord har förfallit. För att kunna ändra det, log in på %1$s."
 
 #. %1$s are some example characters
 #: apps/plugins/portal/userSettings/register.js:71 module:io.ox/core
@@ -15520,11 +15527,6 @@ msgstr "yyyy"
 
 #~ msgid "Your data has been saved"
 #~ msgstr "Din data har sparats"
-
-#~ msgid ""
-#~ "Your password has expired. In order to change it, please log in to %1$s."
-#~ msgstr ""
-#~ "Ditt lösenord har förfallit. För att kunna ändra det, log in på %1$s."
 
 #, fuzzy
 #~ msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"

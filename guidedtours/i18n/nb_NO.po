@@ -52,7 +52,7 @@ msgstr "Opprette en ny oppgave"
 msgid "Creating a note"
 msgstr "Opprette et notat"
 
-#: apps/io.ox/tours/intro.js:61 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:72 module:io.ox/tours
 msgid "Creating new items"
 msgstr "Opprette nye elementer"
 
@@ -76,7 +76,7 @@ msgstr "Opprette oppgaven"
 msgid "Customizing the Portal"
 msgstr "Tilpasning av portalen"
 
-#: apps/io.ox/tours/intro.js:80 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:100 module:io.ox/tours
 msgid ""
 "Depending on the app, the toolbar contains various functions for creating, "
 "editing and organizing objects."
@@ -84,7 +84,7 @@ msgstr ""
 "Verktøylinjen inneholder funksjoner for å opprette, redigere og organisere "
 "elementer."
 
-#: apps/io.ox/tours/intro.js:100 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:120 module:io.ox/tours
 msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
 msgstr ""
@@ -94,7 +94,7 @@ msgstr ""
 msgid "Displaying information"
 msgstr "Vise informasjon"
 
-#: apps/io.ox/tours/intro.js:43 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid "Displaying the help or the settings"
 msgstr "Vise innstillinger eller hjelpedokumentasjon"
 
@@ -198,7 +198,7 @@ msgstr "Lenger nede kan du legge til dokumenter som vedlegg til avtalen."
 msgid "Further functions"
 msgstr "Flere funksjoner"
 
-#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:119 module:io.ox/tours
 msgid "Further information"
 msgstr "Mer informasjon"
 
@@ -219,13 +219,14 @@ msgstr "Hvordan innstillingene er organisert"
 msgid ""
 "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
 "separate window."
-msgstr "Du kan dobbeltklikke en epost i listen for å åpne den i et eget vindu. "
+msgstr ""
+"Du kan dobbeltklikke en epost i listen for å åpne den i et eget vindu. "
 
 #: apps/io.ox/tours/portal.js:46 module:io.ox/tours
 msgid "If you no longer want to display a square, click the cross."
 msgstr "Hvis du ønsker å fjerne en widget, klikk på krysset."
 
-#: apps/io.ox/tours/intro.js:57 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:66 module:io.ox/tours
 msgid ""
 "In case of new notifications, e.g. appointment invitations, the info area is "
 "opened."
@@ -266,7 +267,7 @@ msgstr "Navigeringslinje"
 msgid "Opening an E-Mail in a separate window"
 msgstr "Åpne en epost i et nytt vindu"
 
-#: apps/io.ox/tours/intro.js:69 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:81 module:io.ox/tours
 msgid "Opening or closing the folder tree"
 msgstr "Åpne eller lukke mappetreet"
 
@@ -290,7 +291,7 @@ msgstr "Lese epostsamtaler"
 msgid "Reading the details"
 msgstr "Se flere detaljer"
 
-#: apps/io.ox/tours/intro.js:74 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Søke etter elementer"
 
@@ -319,11 +320,11 @@ msgstr "Sortere oppgaver"
 msgid "Sorting your E-Mails"
 msgstr "Sortere eposter"
 
-#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:114 module:io.ox/tours
 msgid "The Detail view"
 msgstr "Detaljvisning"
 
-#: apps/io.ox/tours/intro.js:95 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:115 module:io.ox/tours
 msgid ""
 "The Detail view displays an object's content. Depending on the app, further "
 "functions for organizing objects can be found in the Detail view."
@@ -367,11 +368,11 @@ msgstr ""
 "avkrysningsboksene for å velge filer. Klikk på en fil for å vise flere "
 "detaljer og få tilgang til flere funksjoner."
 
-#: apps/io.ox/tours/intro.js:50 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:58 module:io.ox/tours
 msgid "The New objects icon"
 msgstr "Varslingsikonet"
 
-#: apps/io.ox/tours/intro.js:51 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:59 module:io.ox/tours
 msgid ""
 "The New objects icon shows the number of unread E-Mails or other "
 "notifications. If clicking the icon, the info area opens."
@@ -415,15 +416,15 @@ msgstr ""
 "Kalenderen viser deg dine planlagte avtaler og hendelser innenfor den valgte "
 "tidsrammen."
 
-#: apps/io.ox/tours/intro.js:84 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:104 module:io.ox/tours
 msgid "The folder tree"
 msgstr "Mappetreet"
 
-#: apps/io.ox/tours/intro.js:56 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:65 module:io.ox/tours
 msgid "The info area"
 msgstr "Informasjonsområdet"
 
-#: apps/io.ox/tours/intro.js:89 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:109 module:io.ox/tours
 msgid "The list"
 msgstr "Elementlisten"
 
@@ -432,10 +433,10 @@ msgid ""
 "The settings are organized in topics. Select the topic on the left side, e.g "
 "Basic settings or E-Mail."
 msgstr ""
-"Innstillingene er organisert i kategorier. Velg en kategori til venstre, "
-"f.eks. \"Grunnleggende innstillinger\" eller \"Epost\"."
+"Innstillingene er organisert i kategorier. Velg en kategori til venstre, f."
+"eks. \"Grunnleggende innstillinger\" eller \"Epost\"."
 
-#: apps/io.ox/tours/intro.js:79 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
 msgid "The toolbar"
 msgstr "Verktøylinjen"
 
@@ -456,7 +457,8 @@ msgstr "For å legge til flere detaljer, klikk \"Utvid skjema\". "
 msgid ""
 "To change the layout, drag a square's title to another position and drop it "
 "there."
-msgstr "For å endre på layouten, dra og slipp en widget til en annen posisjon. "
+msgstr ""
+"For å endre på layouten, dra og slipp en widget til en annen posisjon. "
 
 #: apps/io.ox/tours/mail.js:87 module:io.ox/tours
 msgid ""
@@ -470,7 +472,7 @@ msgstr ""
 msgid "To compose a new E-Mail, click on Compose in the toolbar."
 msgstr "For å opprette en ny epost, klikk \"Opprett\" i verktøylinjen."
 
-#: apps/io.ox/tours/intro.js:62 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:73 module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr "For å opprette en ny epost, klikk \"Opprett\" i verktøylinjen."
 
@@ -521,10 +523,10 @@ msgid ""
 "To display a square again or to display further information sources, click "
 "on Customize this page."
 msgstr ""
-"For å reaktivere en skjult widget eller for å legge til flere, klikk \""
-"Tilpass denne siden\"."
+"For å reaktivere en skjult widget eller for å legge til flere, klikk "
+"\"Tilpass denne siden\"."
 
-#: apps/io.ox/tours/intro.js:44 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:45 module:io.ox/tours
 msgid ""
 "To display the help or the settings, click the System menu icon in the menu "
 "bar."
@@ -596,7 +598,7 @@ msgstr ""
 "For å åpne eller lukke en epost i en samtale, klikk på et tomt område i "
 "overskriften. "
 
-#: apps/io.ox/tours/intro.js:70 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:82 module:io.ox/tours
 msgid ""
 "To open or close the folder tree, click on View >  Folder view on the right "
 "side of the toolbar."
@@ -643,7 +645,7 @@ msgstr ""
 "Du kan få et oversiktsbilde over nylige samhandlinger du har hatt med en "
 "avsender eller andre mottagere ved å klikke på et navn."
 
-#: apps/io.ox/tours/intro.js:75 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:95 module:io.ox/tours
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr "For å søke etter elementer, klikk søkeikonet i menylinjen. "
 
@@ -667,8 +669,8 @@ msgid ""
 "To send an E-Mail to the contact, click on an E-Mail address or on Send "
 "email in the toolbar."
 msgstr ""
-"For å sende en epost til kontakten, klikk på en epostadresse, eller på \""
-"Send epost\" i verktøylinjen. "
+"For å sende en epost til kontakten, klikk på en epostadresse, eller på "
+"\"Send epost\" i verktøylinjen. "
 
 #: apps/io.ox/tours/mail.js:75 module:io.ox/tours
 msgid "To send the E-Mail, click on Send"
@@ -727,7 +729,7 @@ msgstr ""
 "Hvis mappetreet er skjult, klikk Visning > Mappetre til høyre i "
 "verktøylinjen."
 
-#: apps/io.ox/tours/intro.js:85 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:105 module:io.ox/tours
 msgid ""
 "Use the folder tree to open the folder containing the objects that you want "
 "to view in the list."
@@ -735,7 +737,7 @@ msgstr ""
 "Bruk mappetreet for å velge mappen som inneholder elementene du ønsker å "
 "jobbe med. "
 
-#: apps/io.ox/tours/intro.js:90 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:110 module:io.ox/tours
 msgid ""
 "Use the list to select an object, show its contents or activate functions."
 msgstr ""

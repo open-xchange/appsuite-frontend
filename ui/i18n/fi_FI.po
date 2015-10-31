@@ -127,7 +127,7 @@ msgstr[1] "%1$d jäsenet"
 msgid "%1$d messages in this conversation"
 msgstr "%1$d viestiä tässä keskustelussa"
 
-#: apps/io.ox/mail/main.js:747 module:io.ox/mail
+#: apps/io.ox/mail/main.js:744 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d viestiä valittuna"
 
@@ -157,7 +157,7 @@ msgstr[0] "%1$d sekuntia"
 msgstr[1] "%1$d valittuna"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:784 module:io.ox/mail
+#: apps/io.ox/mail/main.js:781 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "%1$d valittuna"
 
@@ -1053,7 +1053,7 @@ msgstr "Lisää vCard käyntikorttini"
 msgid "Application Toolbar"
 msgstr "Sovellustyökalupalkki"
 
-#: apps/io.ox/mail/main.js:1435 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1432 module:io.ox/mail
 #: apps/io.ox/settings/main.js:577 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
@@ -1498,7 +1498,7 @@ msgstr "Kalenteri:"
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:648
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1252
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1249
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:254
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
@@ -2324,7 +2324,7 @@ msgid "Delete account"
 msgstr "Poista tili"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:756 module:io.ox/mail
+#: apps/io.ox/mail/main.js:753 module:io.ox/mail
 #, fuzzy
 #| msgctxt "folder"
 #| msgid "Deleted messages"
@@ -2862,7 +2862,7 @@ msgstr "ET"
 #: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:497
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1256
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1253
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:369
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:371
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
@@ -3614,7 +3614,7 @@ msgid "Food"
 msgstr "Ruoka"
 
 #. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
-#: apps/io.ox/core/boot/i18n.js:43 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
 msgid "For best results, please use "
 msgstr "Parhaan tuloksen saavuttamiseksi, ole hyvä ja käytä"
 
@@ -4799,7 +4799,7 @@ msgid "Move"
 msgstr "Siirrä"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:753 module:io.ox/mail
+#: apps/io.ox/mail/main.js:750 module:io.ox/mail
 #, fuzzy
 #| msgid "Show all %1$d messages in inbox"
 msgid "Move all %1$d messages to another folder"
@@ -5092,7 +5092,7 @@ msgstr "Ei kadotettuja pyyntöjä"
 msgid "No mails in your inbox"
 msgstr "Ei viestejä saapuneet laatikossasi"
 
-#: apps/io.ox/mail/main.js:721 module:io.ox/mail
+#: apps/io.ox/mail/main.js:718 module:io.ox/mail
 msgid "No message selected"
 msgstr "Ei valittuja viestejä"
 
@@ -5276,7 +5276,7 @@ msgstr "lokakuu"
 msgid "Offline"
 msgstr "Offline"
 
-#: apps/io.ox/core/boot/i18n.js:47 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
 msgid "Offline mode"
 msgstr "Offline tila"
 
@@ -5834,7 +5834,7 @@ msgstr "Uudelleenkirjaudu jatkaaksesi"
 msgid "Please specify these missing variables: "
 msgstr "Määrittele nämä puuttuvat muuttujat:"
 
-#: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:42 module:io.ox/core/boot
 msgid "Please update your browser."
 msgstr "Ole hyvä ja päivitä selaimesi."
 
@@ -8412,7 +8412,7 @@ msgstr "Lukematon: %1$d"
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "Tallentamattomat dokumentit menetetään. Haluatko kirjautua ulos?"
 
-#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:46 module:io.ox/core/boot
 msgid ""
 "Unsupported Preview - Certain functions disabled and stability not assured "
 "until general release later this year"
@@ -8974,7 +8974,7 @@ msgstr "Hyväksyit tämän tapaamisen"
 msgid "You have accepted this task"
 msgstr "Hyväksyit tämän tehtävän"
 
-#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
 msgid "You have been automatically signed out"
 msgstr "Sinut on automaattisesti uloskirjattu"
 
@@ -9142,7 +9142,7 @@ msgstr "Selaimesi ei ole tuettu!"
 msgid "Your browser version is not supported!"
 msgstr "Selainversiosi ei ole tuettu!"
 
-#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:49 module:io.ox/core/boot
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr ""
 "Selaimesi evästetoiminnallisuus on kytketty pois päältä. Ole hyvä ja kytke "
@@ -9194,6 +9194,10 @@ msgstr "Käyttöjärjestelmäsi ei ole tuettu."
 #: module:io.ox/mail/accounts/settings
 msgid "Your password"
 msgstr "Salasanasi"
+
+#: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
+msgid "Your password is expired. Please change your password to continue."
+msgstr ""
 
 #. %1$s are some example characters
 #: apps/plugins/portal/userSettings/register.js:71 module:io.ox/core

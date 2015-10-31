@@ -143,7 +143,7 @@ msgstr[2] "%1$d členov"
 msgid "%1$d messages in this conversation"
 msgstr "%1$d správ v tejto konverzácii"
 
-#: apps/io.ox/mail/main.js:747 module:io.ox/mail
+#: apps/io.ox/mail/main.js:744 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d správ vybraných"
 
@@ -175,7 +175,7 @@ msgstr[1] "%1$d sekundy"
 msgstr[2] "%1$d sekúnd"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:784 module:io.ox/mail
+#: apps/io.ox/mail/main.js:781 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "%1$d vybraných"
 
@@ -1082,7 +1082,7 @@ msgstr "Pripojiť vCard"
 msgid "Application Toolbar"
 msgstr "Panel nástrojov aplikácie"
 
-#: apps/io.ox/mail/main.js:1435 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1432 module:io.ox/mail
 #: apps/io.ox/settings/main.js:577 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
@@ -1527,7 +1527,7 @@ msgstr "Kalendár:"
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:648
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1252
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1249
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:254
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
@@ -2355,7 +2355,7 @@ msgid "Delete account"
 msgstr "Zmazať účet"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:756 module:io.ox/mail
+#: apps/io.ox/mail/main.js:753 module:io.ox/mail
 #, fuzzy
 #| msgctxt "folder"
 #| msgid "Deleted messages"
@@ -2900,7 +2900,7 @@ msgstr "EB"
 #: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:497
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1256
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1253
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:369
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:371
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
@@ -3656,7 +3656,7 @@ msgid "Food"
 msgstr "Jedlo"
 
 #. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
-#: apps/io.ox/core/boot/i18n.js:43 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
 msgid "For best results, please use "
 msgstr "Aby ste dosiahli najlepšie výsledky, použite "
 
@@ -4843,7 +4843,7 @@ msgid "Move"
 msgstr "Presunúť"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:753 module:io.ox/mail
+#: apps/io.ox/mail/main.js:750 module:io.ox/mail
 #, fuzzy
 #| msgid "Show all %1$d messages in inbox"
 msgid "Move all %1$d messages to another folder"
@@ -5137,7 +5137,7 @@ msgstr "Žiadne stratené požiadavky"
 msgid "No mails in your inbox"
 msgstr "Žiadne poštové správy v priečinku Prijaté"
 
-#: apps/io.ox/mail/main.js:721 module:io.ox/mail
+#: apps/io.ox/mail/main.js:718 module:io.ox/mail
 msgid "No message selected"
 msgstr "Nebola vybraná žiadna správa."
 
@@ -5324,7 +5324,7 @@ msgstr "október"
 msgid "Offline"
 msgstr "Režime offline"
 
-#: apps/io.ox/core/boot/i18n.js:47 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
 msgid "Offline mode"
 msgstr "Režime offline"
 
@@ -5881,7 +5881,7 @@ msgstr "Prosím, znova sa prihláste, aby ste mohli pokračovať"
 msgid "Please specify these missing variables: "
 msgstr "Prosím, uveďte tieto chýbajúce premenné: "
 
-#: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:42 module:io.ox/core/boot
 msgid "Please update your browser."
 msgstr "Prosím aktualizujte svoj prehliadač."
 
@@ -8478,7 +8478,7 @@ msgstr "Neprečítaných: %1$d"
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "Neuložené dokumenty budú stratené. Chcete sa teraz odhlásiť?"
 
-#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:46 module:io.ox/core/boot
 msgid ""
 "Unsupported Preview - Certain functions disabled and stability not assured "
 "until general release later this year"
@@ -9045,7 +9045,7 @@ msgstr "Prijali ste túto schôdzku"
 msgid "You have accepted this task"
 msgstr "Prijali ste túto úlohu"
 
-#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
 msgid "You have been automatically signed out"
 msgstr "Boli ste automaticky odhlásení"
 
@@ -9215,7 +9215,7 @@ msgstr "Váš prehliadač nie je podporovaný!"
 msgid "Your browser version is not supported!"
 msgstr "Vaša verzia prehliadača nie je podporovaná!"
 
-#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:49 module:io.ox/core/boot
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr "Funkcia cookies vášho prehliadača je vypnutá. Prosím, zapnite ju."
 
@@ -9266,6 +9266,12 @@ msgstr "Váš operačný systém nie je podporovaný."
 #: module:io.ox/mail/accounts/settings
 msgid "Your password"
 msgstr "Vaše heslo"
+
+#: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
+#, fuzzy
+#| msgid "Your session has expired. Please log in again."
+msgid "Your password is expired. Please change your password to continue."
+msgstr "Platnosť vašej relácie vypršala. Prosím, znova sa prihláste."
 
 #. %1$s are some example characters
 #: apps/plugins/portal/userSettings/register.js:71 module:io.ox/core
@@ -15650,9 +15656,6 @@ msgstr "RRRR"
 #~ msgstr ""
 #~ "Súbor „%1$s“ nie je možné nahrať, pretože prekračuje maximálnu veľkosť "
 #~ "súboru %2$s"
-
-#~ msgid "Your session has expired. Please log in again."
-#~ msgstr "Platnosť vašej relácie vypršala. Prosím, znova sa prihláste."
 
 #~ msgid "Your session has expired. You have to close this window."
 #~ msgstr "Platnosť vašej relácie vypršala. Musíte zatvoriť toto okno."

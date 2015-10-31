@@ -140,7 +140,7 @@ msgstr[2] "%1$d dalībnieki"
 msgid "%1$d messages in this conversation"
 msgstr "Šai sarunā ir %1$d ziņojumi"
 
-#: apps/io.ox/mail/main.js:747 module:io.ox/mail
+#: apps/io.ox/mail/main.js:744 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "Iezīmēti %1$d ziņojumi"
 
@@ -172,7 +172,7 @@ msgstr[1] "%1$d sekundes"
 msgstr[2] "%1$d sekundes"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:784 module:io.ox/mail
+#: apps/io.ox/mail/main.js:781 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "%1$d iezīmēti"
 
@@ -1080,7 +1080,7 @@ msgstr "Pievienot vCard"
 msgid "Application Toolbar"
 msgstr "Aplikācijas rīkjosla"
 
-#: apps/io.ox/mail/main.js:1435 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1432 module:io.ox/mail
 #: apps/io.ox/settings/main.js:577 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
@@ -1526,7 +1526,7 @@ msgstr "Kalendārs:"
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:648
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1252
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1249
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:254
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
@@ -2354,7 +2354,7 @@ msgid "Delete account"
 msgstr "Dzēst kontu"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:756 module:io.ox/mail
+#: apps/io.ox/mail/main.js:753 module:io.ox/mail
 #, fuzzy
 #| msgctxt "folder"
 #| msgid "Deleted messages"
@@ -2901,7 +2901,7 @@ msgstr "EB"
 #: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:497
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1256
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1253
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:369
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:371
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
@@ -3657,7 +3657,7 @@ msgid "Food"
 msgstr "Pārtika"
 
 #. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
-#: apps/io.ox/core/boot/i18n.js:43 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
 msgid "For best results, please use "
 msgstr "Labākajiem rezultātiem lūdzu izmantojiet "
 
@@ -4842,7 +4842,7 @@ msgid "Move"
 msgstr "Pārvietot"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:753 module:io.ox/mail
+#: apps/io.ox/mail/main.js:750 module:io.ox/mail
 #, fuzzy
 #| msgid "Show all %1$d messages in inbox"
 msgid "Move all %1$d messages to another folder"
@@ -5136,7 +5136,7 @@ msgstr "Nav zaudētu pieprasījumu"
 msgid "No mails in your inbox"
 msgstr "Jūsu pasta kastē nav vēstuļu"
 
-#: apps/io.ox/mail/main.js:721 module:io.ox/mail
+#: apps/io.ox/mail/main.js:718 module:io.ox/mail
 msgid "No message selected"
 msgstr "Neviens ziņojums nav izvēlēts"
 
@@ -5326,7 +5326,7 @@ msgstr "Oktobris"
 msgid "Offline"
 msgstr "Bezsaiste"
 
-#: apps/io.ox/core/boot/i18n.js:47 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
 msgid "Offline mode"
 msgstr "Bezsaistes režīms"
 
@@ -5882,7 +5882,7 @@ msgstr "Lai turpinātu lūdzu pieslēdzieties no jauna"
 msgid "Please specify these missing variables: "
 msgstr "Lūdzu norādiet iztrūkstošās vērtības: "
 
-#: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:42 module:io.ox/core/boot
 msgid "Please update your browser."
 msgstr "Lūdzu jauniniet savu pārlūkprogrammu."
 
@@ -8482,7 +8482,7 @@ msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr ""
 "Nesaglabātie dokumenti tiks zaudēti. Vai tiešām vēlaties tagad atslēgties?"
 
-#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:46 module:io.ox/core/boot
 msgid ""
 "Unsupported Preview - Certain functions disabled and stability not assured "
 "until general release later this year"
@@ -9052,7 +9052,7 @@ msgstr "Jūs esat apstiprinājis šo mītiņu"
 msgid "You have accepted this task"
 msgstr "Jūs esat apstiprinājis šo uzdevumu"
 
-#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
 msgid "You have been automatically signed out"
 msgstr "Jūs esat automātiski izrakstīts"
 
@@ -9221,7 +9221,7 @@ msgstr "Jūsu web pārlūkprogramma netiek atbalstīta!"
 msgid "Your browser version is not supported!"
 msgstr "Jūsu web pārlūkprogramms versija netiek atbalstīta!"
 
-#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:49 module:io.ox/core/boot
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr ""
 "Jūsu pārlūkprogrammā ir atspējota sīkfailu funkcionalitāte. Lūdzu to "
@@ -9274,6 +9274,12 @@ msgstr "Jūsu operētājsistēma netiek atbalstīta."
 #: module:io.ox/mail/accounts/settings
 msgid "Your password"
 msgstr "Jūsu parole"
+
+#: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
+#, fuzzy
+#| msgid "Your session has expired. Please log in again."
+msgid "Your password is expired. Please change your password to continue."
+msgstr "Jūsu sesijas derīgums ir beidzies. Lūdzu pieslēdzieteis no jauna."
 
 #. %1$s are some example characters
 #: apps/plugins/portal/userSettings/register.js:71 module:io.ox/core
@@ -15704,9 +15710,6 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Fails \"%1$s\" nevar tikt augšupielādēts, jo tas pārsniedz maksimālie "
 #~ "pieļaujamo %2$s izmēra limitu"
-
-#~ msgid "Your session has expired. Please log in again."
-#~ msgstr "Jūsu sesijas derīgums ir beidzies. Lūdzu pieslēdzieteis no jauna."
 
 #~ msgid "Your session has expired. You have to close this window."
 #~ msgstr "Jūsu sesijas derīgums ir beidzies. Jums ir jāaizver šis logs."

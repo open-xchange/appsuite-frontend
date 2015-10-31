@@ -129,7 +129,7 @@ msgstr[1] "%1$d miembros"
 msgid "%1$d messages in this conversation"
 msgstr "%1$d mensajes en esta conversación"
 
-#: apps/io.ox/mail/main.js:747 module:io.ox/mail
+#: apps/io.ox/mail/main.js:744 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d mensajes seleccionados"
 
@@ -159,7 +159,7 @@ msgstr[0] "%1$d segundo"
 msgstr[1] "%1$d segundos"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:784 module:io.ox/mail
+#: apps/io.ox/mail/main.js:781 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "%1$d seleccionados"
 
@@ -1060,7 +1060,7 @@ msgstr "Añadir vCard"
 msgid "Application Toolbar"
 msgstr "Barra de herramientas de la aplicación"
 
-#: apps/io.ox/mail/main.js:1435 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1432 module:io.ox/mail
 #: apps/io.ox/settings/main.js:577 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
@@ -1506,7 +1506,7 @@ msgstr "Calendario:"
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:648
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1252
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1249
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:254
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
@@ -2332,7 +2332,7 @@ msgid "Delete account"
 msgstr "Borrar cuenta"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:756 module:io.ox/mail
+#: apps/io.ox/mail/main.js:753 module:io.ox/mail
 #, fuzzy
 #| msgctxt "folder"
 #| msgid "Deleted messages"
@@ -2879,7 +2879,7 @@ msgstr "EB"
 #: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:497
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1256
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1253
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:369
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:371
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
@@ -3638,7 +3638,7 @@ msgid "Food"
 msgstr "Comida"
 
 #. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
-#: apps/io.ox/core/boot/i18n.js:43 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
 msgid "For best results, please use "
 msgstr "Para obtener mejores resultados, por favor utilice "
 
@@ -4825,7 +4825,7 @@ msgid "Move"
 msgstr "Mover"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:753 module:io.ox/mail
+#: apps/io.ox/mail/main.js:750 module:io.ox/mail
 #, fuzzy
 #| msgid "Show all %1$d messages in inbox"
 msgid "Move all %1$d messages to another folder"
@@ -5119,7 +5119,7 @@ msgstr "No hay peticiones perdidas"
 msgid "No mails in your inbox"
 msgstr "No hay correos en su bandeja de entrada"
 
-#: apps/io.ox/mail/main.js:721 module:io.ox/mail
+#: apps/io.ox/mail/main.js:718 module:io.ox/mail
 msgid "No message selected"
 msgstr "No hay mensajes seleccionados"
 
@@ -5305,7 +5305,7 @@ msgstr "octubre"
 msgid "Offline"
 msgstr "Desconectado"
 
-#: apps/io.ox/core/boot/i18n.js:47 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
 msgid "Offline mode"
 msgstr "Modo desconectado"
 
@@ -5870,7 +5870,7 @@ msgstr "Por favor, inicie de nuevo la sesión para continuar"
 msgid "Please specify these missing variables: "
 msgstr "Por favor, especifique estas variables que faltan: "
 
-#: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:42 module:io.ox/core/boot
 msgid "Please update your browser."
 msgstr "Por favor, actualice su navegador."
 
@@ -8469,7 +8469,7 @@ msgstr "No leídos: %1$d"
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "Los documentos no guardados se perderán. ¿Desea salir ahora?"
 
-#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:46 module:io.ox/core/boot
 msgid ""
 "Unsupported Preview - Certain functions disabled and stability not assured "
 "until general release later this year"
@@ -9040,7 +9040,7 @@ msgstr "Usted ha aceptado esta cita"
 msgid "You have accepted this task"
 msgstr "Usted ha aceptado esta tarea"
 
-#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
 msgid "You have been automatically signed out"
 msgstr "Ha sido desconectado automáticamente"
 
@@ -9209,7 +9209,7 @@ msgstr "Su navegador no está admitido"
 msgid "Your browser version is not supported!"
 msgstr "La versión de su navegador no está admitida"
 
-#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:49 module:io.ox/core/boot
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr ""
 "La funcionalidad de cookies de su navegador está desactivada. Por favor, "
@@ -9262,6 +9262,12 @@ msgstr "Su sistema operativo no está admitido."
 #: module:io.ox/mail/accounts/settings
 msgid "Your password"
 msgstr "Su contraseña"
+
+#: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
+#, fuzzy
+#| msgid "Your session has expired. Please log in again."
+msgid "Your password is expired. Please change your password to continue."
+msgstr "Su sesión ha expirado. Por favor, conéctese de nuevo."
 
 #. %1$s are some example characters
 #: apps/plugins/portal/userSettings/register.js:71 module:io.ox/core
@@ -18558,9 +18564,6 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "El fichero \"%1$s\" no se puede cargar porque supera el tamaño máximo de "
 #~ "fichero de %2$s"
-
-#~ msgid "Your session has expired. Please log in again."
-#~ msgstr "Su sesión ha expirado. Por favor, conéctese de nuevo."
 
 #~ msgid "Your session has expired. You have to close this window."
 #~ msgstr "Su sesión ha expirado. Tiene que cerrar esta ventana."

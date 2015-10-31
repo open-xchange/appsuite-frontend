@@ -118,7 +118,7 @@ msgstr[0] "%1$d メンバー"
 msgid "%1$d messages in this conversation"
 msgstr "このスレッドに %1$d 件のメッセージが含まれています。"
 
-#: apps/io.ox/mail/main.js:747 module:io.ox/mail
+#: apps/io.ox/mail/main.js:744 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d 件のメッセージが選択されています。"
 
@@ -146,7 +146,7 @@ msgid_plural "%1$d seconds"
 msgstr[0] "%1$d 秒"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:784 module:io.ox/mail
+#: apps/io.ox/mail/main.js:781 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "%1$d 件のメッセージが選択されています。"
 
@@ -1032,7 +1032,7 @@ msgstr "vCard を添付"
 msgid "Application Toolbar"
 msgstr "アプリケーション ツールバー"
 
-#: apps/io.ox/mail/main.js:1435 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1432 module:io.ox/mail
 #: apps/io.ox/settings/main.js:577 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
@@ -1471,7 +1471,7 @@ msgstr "予定表："
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:648
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1252
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1249
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:254
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
@@ -2297,7 +2297,7 @@ msgid "Delete account"
 msgstr "アカウントを削除"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:756 module:io.ox/mail
+#: apps/io.ox/mail/main.js:753 module:io.ox/mail
 #, fuzzy
 #| msgctxt "folder"
 #| msgid "Deleted messages"
@@ -2844,7 +2844,7 @@ msgstr "EB"
 #: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:497
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1256
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1253
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:369
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:371
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
@@ -3597,7 +3597,7 @@ msgid "Food"
 msgstr "食べ物"
 
 #. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
-#: apps/io.ox/core/boot/i18n.js:43 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
 msgid "For best results, please use "
 msgstr "最良の結果を得るには、次を使用することをお勧めします。 "
 
@@ -4786,7 +4786,7 @@ msgid "Move"
 msgstr "移動"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:753 module:io.ox/mail
+#: apps/io.ox/mail/main.js:750 module:io.ox/mail
 #, fuzzy
 #| msgid "Show all %1$d messages in inbox"
 msgid "Move all %1$d messages to another folder"
@@ -5080,7 +5080,7 @@ msgstr "失われたリクエストはありません。"
 msgid "No mails in your inbox"
 msgstr "受信トレイにメールがありません。"
 
-#: apps/io.ox/mail/main.js:721 module:io.ox/mail
+#: apps/io.ox/mail/main.js:718 module:io.ox/mail
 msgid "No message selected"
 msgstr "メッセージが選択されていません。"
 
@@ -5261,7 +5261,7 @@ msgstr "10 月"
 msgid "Offline"
 msgstr "オフライン"
 
-#: apps/io.ox/core/boot/i18n.js:47 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
 msgid "Offline mode"
 msgstr "オフライン モード"
 
@@ -5816,7 +5816,7 @@ msgstr "続行するには、再度サイン インしてください。"
 msgid "Please specify these missing variables: "
 msgstr "次の変数を指定してください: "
 
-#: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:42 module:io.ox/core/boot
 msgid "Please update your browser."
 msgstr "ご利用のブラウザを更新してください。"
 
@@ -8375,7 +8375,7 @@ msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr ""
 "保存されていないドキュメントは失われます。今すぐサイン アウトしますか？"
 
-#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:46 module:io.ox/core/boot
 msgid ""
 "Unsupported Preview - Certain functions disabled and stability not assured "
 "until general release later this year"
@@ -8937,7 +8937,7 @@ msgstr "このアポイントを承諾しました。"
 msgid "You have accepted this task"
 msgstr "この仕事を承諾しました。"
 
-#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
 msgid "You have been automatically signed out"
 msgstr "強制的にサイン アウトされました。"
 
@@ -9106,7 +9106,7 @@ msgstr "ご利用のブラウザはサポートされていません。"
 msgid "Your browser version is not supported!"
 msgstr "ご利用のブラウザのバージョンはサポートされていません。"
 
-#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:49 module:io.ox/core/boot
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr ""
 "ご利用のブラウザの Cookie 機能が無効になっています。有効にしてください。"
@@ -9157,6 +9157,12 @@ msgstr "ご利用のブラウザはサポートされていません。"
 #: module:io.ox/mail/accounts/settings
 msgid "Your password"
 msgstr "ご利用のパスワード"
+
+#: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
+#, fuzzy
+#| msgid "Your session has expired. Please log in again."
+msgid "Your password is expired. Please change your password to continue."
+msgstr "セッションが期限切れです。もう一度ログインしてください。"
 
 #. %1$s are some example characters
 #: apps/plugins/portal/userSettings/register.js:71 module:io.ox/core
@@ -16950,9 +16956,6 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "ファイル \"%1$s\" が最大ファイル サイズ %2$s を超えたため、アップロードで"
 #~ "きません。"
-
-#~ msgid "Your session has expired. Please log in again."
-#~ msgstr "セッションが期限切れです。もう一度ログインしてください。"
 
 #~ msgid "Your session has expired. You have to close this window."
 #~ msgstr "セッションが期限切れです。このウィンドウを閉じてください。"

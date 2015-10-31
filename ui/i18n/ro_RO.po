@@ -142,7 +142,7 @@ msgstr[2] "%1$d de membri"
 msgid "%1$d messages in this conversation"
 msgstr "%1$d mesaje în această conversație"
 
-#: apps/io.ox/mail/main.js:747 module:io.ox/mail
+#: apps/io.ox/mail/main.js:744 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d mesaje selectate"
 
@@ -174,7 +174,7 @@ msgstr[1] "%1$d secunde"
 msgstr[2] "%1$d de secunde"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:784 module:io.ox/mail
+#: apps/io.ox/mail/main.js:781 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "%1$d selectate"
 
@@ -1083,7 +1083,7 @@ msgstr "Adaugă un vCard"
 msgid "Application Toolbar"
 msgstr "Bară de unelte pentru aplicații"
 
-#: apps/io.ox/mail/main.js:1435 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1432 module:io.ox/mail
 #: apps/io.ox/settings/main.js:577 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
@@ -1528,7 +1528,7 @@ msgstr "Calendar:"
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:648
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1252
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1249
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:254
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
@@ -2358,7 +2358,7 @@ msgid "Delete account"
 msgstr "Șterge contul"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:756 module:io.ox/mail
+#: apps/io.ox/mail/main.js:753 module:io.ox/mail
 #, fuzzy
 #| msgctxt "folder"
 #| msgid "Deleted messages"
@@ -2904,7 +2904,7 @@ msgstr "EB"
 #: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:497
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1256
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1253
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:369
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:371
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
@@ -3660,7 +3660,7 @@ msgid "Food"
 msgstr "Mâncare"
 
 #. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
-#: apps/io.ox/core/boot/i18n.js:43 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
 msgid "For best results, please use "
 msgstr "Pentru rezultate optime, utilizați"
 
@@ -4848,7 +4848,7 @@ msgid "Move"
 msgstr "Mută"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:753 module:io.ox/mail
+#: apps/io.ox/mail/main.js:750 module:io.ox/mail
 #, fuzzy
 #| msgid "Show all %1$d messages in inbox"
 msgid "Move all %1$d messages to another folder"
@@ -5142,7 +5142,7 @@ msgstr "Nicio cerere pierdută"
 msgid "No mails in your inbox"
 msgstr "Niciun mesaj în dosarul dumneavoastră de mesaje primite"
 
-#: apps/io.ox/mail/main.js:721 module:io.ox/mail
+#: apps/io.ox/mail/main.js:718 module:io.ox/mail
 msgid "No message selected"
 msgstr "Niciun element selectat"
 
@@ -5329,7 +5329,7 @@ msgstr "Octombrie"
 msgid "Offline"
 msgstr "Offline"
 
-#: apps/io.ox/core/boot/i18n.js:47 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
 msgid "Offline mode"
 msgstr "Mod offline"
 
@@ -5887,7 +5887,7 @@ msgstr "Autentificați-vă din nou pentru a continua"
 msgid "Please specify these missing variables: "
 msgstr "Specificați următoarele variabile care lipsesc: "
 
-#: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:42 module:io.ox/core/boot
 msgid "Please update your browser."
 msgstr "Actualizați navigatorul."
 
@@ -8499,7 +8499,7 @@ msgstr "Necitite: %1$d"
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "Documentele nesalvate se vor pierde. Doriți să vă deconectați acum?"
 
-#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:46 module:io.ox/core/boot
 msgid ""
 "Unsupported Preview - Certain functions disabled and stability not assured "
 "until general release later this year"
@@ -9069,7 +9069,7 @@ msgstr "Ați acceptat această întâlnire"
 msgid "You have accepted this task"
 msgstr "Ați acceptat această sarcină"
 
-#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
 msgid "You have been automatically signed out"
 msgstr "Ați fost deconectat automat"
 
@@ -9238,7 +9238,7 @@ msgstr "Navigatorul dumneavoastră nu este suportat!"
 msgid "Your browser version is not supported!"
 msgstr "Versiunea navigatorului dumneavoastră nu este suportată!"
 
-#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:49 module:io.ox/core/boot
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr ""
 "Funcționalitatea pentru cookie-uri a navigatorului dumneavoastră este "
@@ -9291,6 +9291,12 @@ msgstr "Sistemul dumneavoastră de operare nu este suportat."
 #: module:io.ox/mail/accounts/settings
 msgid "Your password"
 msgstr "Parola dumneavoastră"
+
+#: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
+#, fuzzy
+#| msgid "Your session has expired. Please log in again."
+msgid "Your password is expired. Please change your password to continue."
+msgstr "Sesiunea dumneavoastră a expirat. Autentificați-vă din nou."
 
 #. %1$s are some example characters
 #: apps/plugins/portal/userSettings/register.js:71 module:io.ox/core
@@ -15774,9 +15780,6 @@ msgstr "aaaa"
 #~ msgstr ""
 #~ "Fișierul \"%1$s\" nu poate fi încărcat deoarece depășește dimensiunea "
 #~ "maximă pentru fișier de %2$s"
-
-#~ msgid "Your session has expired. Please log in again."
-#~ msgstr "Sesiunea dumneavoastră a expirat. Autentificați-vă din nou."
 
 #~ msgid "Your session has expired. You have to close this window."
 #~ msgstr "Sesiunea dumneavoastră a expirat. Închideți această fereastră."

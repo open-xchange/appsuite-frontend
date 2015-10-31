@@ -129,7 +129,7 @@ msgstr[1] "%1$d tag"
 msgid "%1$d messages in this conversation"
 msgstr "%1$d üzenet a beszélgetésben"
 
-#: apps/io.ox/mail/main.js:747 module:io.ox/mail
+#: apps/io.ox/mail/main.js:744 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d üzenet kijelölve"
 
@@ -159,7 +159,7 @@ msgstr[0] "%1$d másodperc"
 msgstr[1] "%1$d másodperc"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:784 module:io.ox/mail
+#: apps/io.ox/mail/main.js:781 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "%1$d kiválasztva"
 
@@ -1058,7 +1058,7 @@ msgstr "vCard hozzáadása"
 msgid "Application Toolbar"
 msgstr "Alkalmazás eszköztár"
 
-#: apps/io.ox/mail/main.js:1435 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1432 module:io.ox/mail
 #: apps/io.ox/settings/main.js:577 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
@@ -1504,7 +1504,7 @@ msgstr "Naptár:"
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:648
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1252
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1249
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:254
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
@@ -2333,7 +2333,7 @@ msgid "Delete account"
 msgstr "Fiók törlése"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:756 module:io.ox/mail
+#: apps/io.ox/mail/main.js:753 module:io.ox/mail
 #, fuzzy
 #| msgctxt "folder"
 #| msgid "Deleted messages"
@@ -2882,7 +2882,7 @@ msgstr "EB"
 #: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:497
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1256
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1253
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:369
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:371
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
@@ -3633,7 +3633,7 @@ msgid "Food"
 msgstr "Étel"
 
 #. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
-#: apps/io.ox/core/boot/i18n.js:43 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
 msgid "For best results, please use "
 msgstr "A legjobb eredmények érdekében használja a következőt:"
 
@@ -4819,7 +4819,7 @@ msgid "Move"
 msgstr "Mozgatás"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:753 module:io.ox/mail
+#: apps/io.ox/mail/main.js:750 module:io.ox/mail
 msgid "Move all %1$d messages to another folder"
 msgstr ""
 
@@ -5111,7 +5111,7 @@ msgstr "Nincs elveszett kérés"
 msgid "No mails in your inbox"
 msgstr "Nincsenek levelek Beérkezett üzenetek mappában"
 
-#: apps/io.ox/mail/main.js:721 module:io.ox/mail
+#: apps/io.ox/mail/main.js:718 module:io.ox/mail
 msgid "No message selected"
 msgstr "Nincs kiválasztott üzenet"
 
@@ -5296,7 +5296,7 @@ msgstr "Október"
 msgid "Offline"
 msgstr "Nem érhető el"
 
-#: apps/io.ox/core/boot/i18n.js:47 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
 msgid "Offline mode"
 msgstr "Kapcsolat nélküli mód"
 
@@ -5854,7 +5854,7 @@ msgstr "Jelentkezzen be újra a folytatáshoz"
 msgid "Please specify these missing variables: "
 msgstr "Adja meg ezeket a hiányzó változókat:"
 
-#: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:42 module:io.ox/core/boot
 msgid "Please update your browser."
 msgstr "Frissítse böngészőjét."
 
@@ -8434,7 +8434,7 @@ msgstr "Olvasatlan: %1$d"
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "Az el nem mentett dokumentumok elvesznek. Szeretne most kilépni?"
 
-#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:46 module:io.ox/core/boot
 msgid ""
 "Unsupported Preview - Certain functions disabled and stability not assured "
 "until general release later this year"
@@ -9000,7 +9000,7 @@ msgstr "Elfogadta ezt a találkozót"
 msgid "You have accepted this task"
 msgstr "Elfogadta ezt a feladatot"
 
-#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
 msgid "You have been automatically signed out"
 msgstr "Automatikusan ki lett jelentkeztetve"
 
@@ -9168,7 +9168,7 @@ msgstr "A böngészője nem támogatott"
 msgid "Your browser version is not supported!"
 msgstr "A böngésző verziója nem támogatott"
 
-#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
+#: apps/io.ox/core/boot/i18n.js:49 module:io.ox/core/boot
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr "A böngésző süti funkciója ki van kapcsolva. Kapcsolja azt vissza."
 
@@ -9219,6 +9219,10 @@ msgstr "Az operációs rendszere nem támogatott."
 #: module:io.ox/mail/accounts/settings
 msgid "Your password"
 msgstr "Az Ön jelszava"
+
+#: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
+msgid "Your password is expired. Please change your password to continue."
+msgstr ""
 
 #. %1$s are some example characters
 #: apps/plugins/portal/userSettings/register.js:71 module:io.ox/core
