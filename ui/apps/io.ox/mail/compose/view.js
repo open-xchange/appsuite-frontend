@@ -642,7 +642,11 @@ define('io.ox/mail/compose/view', [
             return def;
         },
 
-        send: function () {
+        send: function (options) {
+            var options = _.extend({
+                showErrors: true
+            }, options);
+
             // get mail
             var self = this,
                 mail = this.model.getMail(),
@@ -686,12 +690,14 @@ define('io.ox/mail/compose/view', [
                     if (result.error && !result.warnings) {
                         if (win) { win.idle().show(); }
                         // TODO: check if backend just says "A severe error occurred"
-                        notifications.yell(result);
+                        if (options.showErrors) notifications.yell(result);
                         return;
                     }
 
                     if (result.warnings) {
-                        notifications.yell('warning', result.warnings.error);
+                        if (options.showErrors) {
+                            notifications.yell('warning', result.warnings.error);
+                        }
                     } else {
                         // success - some want to be notified, other's not
                         if (settings.get('features/notifyOnSent', false)) {
