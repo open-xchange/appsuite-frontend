@@ -375,6 +375,7 @@ define('io.ox/mail/compose/view', [
         },
 
         fetchMail: function (obj) {
+
             // Empty compose (early exit)
             if (obj.mode === 'compose') return $.when();
 
@@ -383,7 +384,7 @@ define('io.ox/mail/compose/view', [
 
             var self = this,
                 mode = obj.mode,
-                attachmentMailInfo = obj.attachment ? obj.attachments[1].mail : undefined;
+                attachmentMailInfo = obj.attachment && obj.attachments[1] ? obj.attachments[1].mail : undefined;
 
             delete obj.mode;
 
