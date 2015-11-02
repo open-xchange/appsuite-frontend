@@ -306,7 +306,7 @@ define('io.ox/mail/write/main',
                     ed.appendContent(text);
                     ed.scrollTop('bottom');
                 } else {
-                    ed.prependContent(text);
+                    ed.insertPrevCite(text);
                     ed.scrollTop('top');
                 }
                 currentSignature = text;

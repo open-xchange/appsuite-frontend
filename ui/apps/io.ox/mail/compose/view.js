@@ -943,6 +943,8 @@ define('io.ox/mail/compose/view', [
                 ds.misc = _.isString(ds.misc) ? JSON.parse(ds.misc) : ds.misc;
                 this.setSignature(ds);
             }
+            // do not add new line if sigs are simply exchanged
+            if (prevSignature && newSignature) return;
             this.prependNewLine();
         },
 
@@ -986,12 +988,13 @@ define('io.ox/mail/compose/view', [
             if (this.signatures.length > 0) {
                 text = mailUtil.signatures.cleanAdd(signature.content, isHTML);
                 if (isHTML) text = this.getParagraph(text);
+                // signature wrapper
                 if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
                 if (signature.misc && signature.misc.insertion === 'below') {
                     this.editor.appendContent(text);
                     this.editor.scrollTop('bottom');
                 } else {
-                    this.editor.prependContent(text);
+                    this.editor.insertPrevCite(text);
                     this.editor.scrollTop('top');
                 }
             }
