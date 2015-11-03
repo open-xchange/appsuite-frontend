@@ -129,8 +129,11 @@ define('io.ox/mail/compose/view', [
         draw: function () {
             this.data('view')
                 .header(gt('Priority'))
+                //#. E-Mail priority
                 .option('priority', 0, gt('High'))
+                //#. E-Mail priority
                 .option('priority', 3, gt('Normal'))
+                //#. E-Mail priority
                 .option('priority', 5, gt('Low'));
         }
     });

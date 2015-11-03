@@ -714,8 +714,11 @@ define('io.ox/mail/write/view-main',
                 .append(
                     $('<legend>').addClass('group-label').text(gt('Priority'))
                 )
+                //#. E-Mail priority
                 .append(createRadio('priority', '1', gt('High')))
+                //#. E-Mail priority
                 .append(createRadio('priority', '3', gt('Normal'), true))
+                //#. E-Mail priority
                 .append(createRadio('priority', '5', gt('Low')))
                 .on('change', 'input', function () {
                     var radio = $(this);
