@@ -589,7 +589,7 @@ msgid "Accessing Files with WebDAV"
 msgstr "WebDAV によるファイルへのアクセス"
 
 #: apps/io.ox/core/api/folder.js:72 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:292
+#: apps/io.ox/core/folder/api.js:303
 msgid "Accessing global address book is not permitted"
 msgstr "グローバル アドレス帳へのアクセスは許可されていません。"
 
@@ -645,7 +645,7 @@ msgstr "アカウントが更新されました。"
 #: apps/io.ox/files/mobile-toolbar-actions.js:111
 #: apps/io.ox/files/mobile-toolbar-actions.js:124
 #: apps/io.ox/mail/detail/view.js:97 apps/io.ox/mail/detail/view.js:98
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:814
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:843
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/mobile-toolbar-actions.js:140
 #: apps/io.ox/mail/mobile-toolbar-actions.js:141
@@ -682,7 +682,7 @@ msgstr "添付ファイルを追加"
 msgid "Add account"
 msgstr "アカウントを追加"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:828
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:857
 #: module:io.ox/settings/settings
 msgid "Add action"
 msgstr "アクションを追加"
@@ -695,7 +695,7 @@ msgstr "添付ファイルを追加"
 msgid "Add cipher code"
 msgstr "暗号コードを追加"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:823
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:852
 #: module:io.ox/settings/settings
 msgid "Add condition"
 msgstr "条件を追加"
@@ -992,13 +992,13 @@ msgstr "アプリケーション"
 msgid "Apply role"
 msgstr "ロールを割り当てる"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:859
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:888
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:863
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:892
 msgid "Apply rule if all conditions are met"
 msgstr "すべての条件を満たす場合にルールを適用"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:859
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:888
 #: module:io.ox/settings/settings
 msgid "Apply rule if any condition is met."
 msgstr "いずれかの条件を満たす場合にルールを適用"
@@ -1240,12 +1240,19 @@ msgstr "誕生日"
 msgid "Black"
 msgstr "黒"
 
+#: apps/io.ox/mail/print.js:87 module:io.ox/mail
+#, fuzzy
+#| msgid "in copy"
+msgctxt "BCC"
+msgid "Blind copy"
+msgstr "CC"
+
 #: apps/io.ox/mail/write/view-main.js:534 module:io.ox/mail
 msgid "Blind copy (BCC) to"
 msgstr "BCC:"
 
 #: apps/io.ox/core/tk/flag-picker.js:92 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:95
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:97
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:164
 #: module:io.ox/portal
 msgid "Blue"
@@ -1732,7 +1739,7 @@ msgstr "新規メールを作成"
 msgid "Compose new mail"
 msgstr "新規メールを作成"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:813
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:842
 #: module:io.ox/settings/settings
 msgid "Conditions"
 msgstr "条件"
@@ -1800,6 +1807,11 @@ msgstr "連絡先を移動しました。"
 msgid "Contains"
 msgstr "次の文字列を含む"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:57
+#: module:io.ox/settings/settings
+msgid "Content"
+msgstr "コンテンツ"
+
 #: apps/io.ox/core/main.js:1294 module:io.ox/core
 msgid "Continue"
 msgstr "続行"
@@ -1827,7 +1839,7 @@ msgid "Copy"
 msgstr "コピー"
 
 #: apps/io.ox/mail/common-extensions.js:268 module:io.ox/mail
-#: apps/io.ox/mail/print.js:85
+#: apps/io.ox/mail/print.js:86
 msgctxt "CC"
 msgid "Copy"
 msgstr "コピー"
@@ -1884,7 +1896,7 @@ msgid "Could not save settings."
 msgstr "設定を保存できませんでした。"
 
 #: apps/io.ox/core/api/folder.js:688 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:587
+#: apps/io.ox/core/folder/api.js:598
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -1925,7 +1937,7 @@ msgstr "連絡先のデータを読み込めませんでした。"
 msgid "Couldn't load your mail filter rules."
 msgstr "メール フィルタ ルールを読み込めませんでした。"
 
-#: apps/io.ox/mail/vacationnotice/settings/register.js:72 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/register.js:74 module:io.ox/mail
 msgid "Couldn't load your vacation notice."
 msgstr "休暇通知を読み込めませんでした。"
 
@@ -2270,7 +2282,7 @@ msgstr "ウィジェットを無効化"
 #: apps/io.ox/contacts/edit/view-form.js:199
 #: apps/io.ox/core/settings/user.js:82
 #: apps/io.ox/mail/compose/extensions.js:74 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:67
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:69
 #: module:io.ox/settings/settings apps/io.ox/mail/write/inplace/inplace.js:115
 #: apps/io.ox/mail/write/view-main.js:65
 #: apps/io.ox/tasks/edit/view-template.js:85 module:io.ox/tasks/edit
@@ -2750,7 +2762,7 @@ msgstr "メール 3"
 msgid "Email address"
 msgstr "メール アドレス"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:139 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:140 module:io.ox/mail
 msgid "Email addresses"
 msgstr "メール アドレス"
 
@@ -2840,21 +2852,20 @@ msgstr "フォルダを空にしています... 数秒かかる場合があり�
 
 #: apps/io.ox/core/pubsub/settings/pane.js:237 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:238
-#: apps/io.ox/mail/mailfilter/settings/filter.js:140 module:io.ox/mail
+#: apps/io.ox/mail/autoforward/settings/model.js:94 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:140
 #: apps/io.ox/mail/mailfilter/settings/filter.js:310
 #: apps/io.ox/portal/settings/pane.js:344 module:io.ox/portal
 msgid "Enable"
 msgstr "有効"
 
-#: apps/io.ox/mail/autoforward/settings/model.js:94 module:io.ox/mail
-msgid "Enabled"
-msgstr "有効"
-
-#: apps/io.ox/mail/vacationnotice/settings/model.js:138 module:io.ox/mail
-msgid "Enabled for the following addresses"
+#: apps/io.ox/mail/vacationnotice/settings/model.js:139 module:io.ox/mail
+#, fuzzy
+#| msgid "Enabled for the following addresses"
+msgid "Enable for the following addresses"
 msgstr "次のアドレスに適用"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:141 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:142 module:io.ox/mail
 msgid "End"
 msgstr "終了"
 
@@ -3213,7 +3224,7 @@ msgstr "名"
 msgid "First name Last name"
 msgstr "名 姓"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:73
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:75
 #: module:io.ox/settings/settings
 msgid "Flag mail with"
 msgstr "次のフラグをメールに付ける"
@@ -3431,14 +3442,14 @@ msgid "Good morning, %s"
 msgstr "おはようございます、%s さん。"
 
 #: apps/io.ox/core/tk/flag-picker.js:94 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:98
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:100
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:158
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "グレー"
 
 #: apps/io.ox/core/tk/flag-picker.js:93 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:93
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:95
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:162
 #: module:io.ox/portal
 msgid "Green"
@@ -3884,7 +3895,7 @@ msgstr "ウィジェットを無効化"
 msgid "KB"
 msgstr "KB"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:66
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:68
 #: module:io.ox/settings/settings
 msgid "Keep"
 msgstr "保持"
@@ -3952,14 +3963,14 @@ msgid "Life"
 msgstr "日常"
 
 #: apps/io.ox/core/tk/flag-picker.js:99 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:94
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:96
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:163
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "薄い青"
 
 #: apps/io.ox/core/tk/flag-picker.js:96 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:92
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:94
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:161
 #: module:io.ox/portal
 msgid "Light green"
@@ -4253,7 +4264,7 @@ msgstr "未完了"
 msgid "Mark as unread"
 msgstr "未読にする"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:71
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:73
 #: module:io.ox/settings/settings
 msgid "Mark mail as"
 msgstr "次の印をメールに付ける"
@@ -4405,11 +4416,11 @@ msgstr ""
 msgid "Move"
 msgstr "移動"
 
-#: apps/io.ox/core/folder/actions/move.js:135 module:io.ox/core
+#: apps/io.ox/core/folder/actions/move.js:140 module:io.ox/core
 msgid "Move folder"
 msgstr "フォルダを移動"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:69
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:71
 #: module:io.ox/settings/settings
 msgid "Move to folder"
 msgstr "フォルダに移動"
@@ -4445,7 +4456,7 @@ msgstr "自分の仕事"
 #: apps/io.ox/contacts/distrib/create-dist-view.js:77 module:io.ox/contacts
 #: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:459
 #: apps/io.ox/core/pubsub/publications.js:231 module:io.ox/core/pubsub
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:634
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:663
 #: module:io.ox/settings/settings
 msgid "Name"
 msgstr "名前"
@@ -4473,12 +4484,12 @@ msgid "New"
 msgstr "新規"
 
 #: apps/io.ox/core/api/folder.js:551 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:639
+#: apps/io.ox/core/folder/api.js:650
 #: apps/io.ox/core/pubsub/subscriptions.js:172 module:io.ox/core/pubsub
 msgid "New Folder"
 msgstr "新規フォルダ"
 
-#: apps/io.ox/mail/api.js:1826 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1820 module:io.ox/mail
 msgid "New Mail"
 msgstr "新規メール"
 
@@ -4705,7 +4716,7 @@ msgstr "ウォール ポストは今のところありません。"
 #: apps/io.ox/core/tk/attachments.js:436 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:90 module:io.ox/mail
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:88
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:90
 #: module:io.ox/settings/settings apps/io.ox/tasks/edit/view-template.js:334
 #: module:io.ox/tasks/edit
 msgid "None"
@@ -4781,7 +4792,7 @@ msgstr "メールですべての出席者に通知"
 msgid "November"
 msgstr "11 月"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:137 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:138 module:io.ox/mail
 msgid "Number of days between vacation notices to the same sender"
 msgstr "同じ差出人への休暇通知の通知周期"
 
@@ -4980,7 +4991,7 @@ msgid "Options"
 msgstr "オプション"
 
 #: apps/io.ox/core/tk/flag-picker.js:97 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:90
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:92
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:160
 #: module:io.ox/portal
 msgid "Orange"
@@ -5167,7 +5178,7 @@ msgid "Pick a time here"
 msgstr "時間を選択してください。"
 
 #: apps/io.ox/core/tk/flag-picker.js:98 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:97
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:99
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:166
 #: module:io.ox/portal
 msgid "Pink"
@@ -5466,6 +5477,7 @@ msgstr "印刷"
 
 #: apps/io.ox/mail/compose/view.js:131 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:715
+#: apps/io.ox/mail/write/view-main.js:953
 #: apps/io.ox/tasks/edit/view-template.js:353 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:674 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:105
@@ -5563,7 +5575,7 @@ msgid "Purchase confirmation"
 msgstr "購入の確認"
 
 #: apps/io.ox/core/tk/flag-picker.js:95 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:96
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:98
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:165
 #: module:io.ox/portal
 msgid "Purple"
@@ -5663,13 +5675,13 @@ msgid "Recurring tasks need a valid start date."
 msgstr "定期的な仕事には、有効な開始日が必要です。"
 
 #: apps/io.ox/core/tk/flag-picker.js:91 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:89
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:91
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:159
 #: module:io.ox/portal
 msgid "Red"
 msgstr "赤"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:68
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:70
 #: module:io.ox/settings/settings
 msgid "Redirect to"
 msgstr "次へ転送"
@@ -5701,7 +5713,7 @@ msgstr "次の文字列と一致 (正規表現)"
 msgid "Reject changes"
 msgstr "変更を拒否"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:70
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:72
 #: module:io.ox/settings/settings
 msgid "Reject with reason"
 msgstr "次の理由で拒否"
@@ -5925,7 +5937,7 @@ msgstr "購入品を確認"
 msgid "Room number"
 msgstr "部屋番号"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:842
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:871
 #: module:io.ox/settings/settings
 msgid "Rule name"
 msgstr "ルール名"
@@ -6016,7 +6028,7 @@ msgstr "保存された連絡先の添付ファイル"
 msgid "Saved in"
 msgstr "保存先:"
 
-#: apps/io.ox/mail/api.js:1474 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1468 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "保存された添付ファイル"
 
@@ -6154,7 +6166,7 @@ msgstr "すべての出席者にメールを送信"
 msgid "Send new mail"
 msgstr "新規メールを送信"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:142 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:143 module:io.ox/mail
 msgid "Send vacation notice during this time only"
 msgstr "休暇通知をこの期間のみ送信"
 
@@ -6575,7 +6587,7 @@ msgstr "配偶者名"
 msgid "Standard folders"
 msgstr "標準フォルダ"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:140 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:141 module:io.ox/mail
 #: apps/io.ox/tasks/print.js:91 module:io.ox/tasks
 msgid "Start"
 msgstr "開始"
@@ -6637,7 +6649,7 @@ msgstr "学生"
 #: apps/io.ox/mail/compose/extensions.js:235
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:50
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/vacationnotice/settings/model.js:135
+#: apps/io.ox/mail/vacationnotice/settings/model.js:136
 #: apps/io.ox/mail/view-options.js:35 apps/io.ox/mail/write/view-main.js:891
 #: apps/io.ox/mail/write/view-main.js:946
 #: apps/io.ox/tasks/edit/view-template.js:107 module:io.ox/tasks/edit
@@ -6725,7 +6737,7 @@ msgstr "TB"
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:72
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:74
 #: module:io.ox/settings/settings
 msgid "Tag mail with"
 msgstr "次のタグをメールに付ける"
@@ -6816,7 +6828,7 @@ msgstr "仮の予定"
 msgid "Tentatively accepted"
 msgstr "仮承諾済み"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:136 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:137 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:740
 msgid "Text"
 msgstr "テキスト"
@@ -6971,7 +6983,7 @@ msgstr ""
 msgid "The changes have been rejected"
 msgstr "変更が拒否されました。"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:515
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:525
 #: module:io.ox/settings/settings
 msgid "The character \" \" is not allowed."
 msgstr "文字 \" \" は許可されていません。"
@@ -7168,8 +7180,8 @@ msgstr "開始日は終了日より前の日付でなければなりません。
 
 #: apps/io.ox/calendar/model.js:255 module:io.ox/calendar
 #: apps/io.ox/calendar/model.js:256
-#: apps/io.ox/mail/vacationnotice/settings/filter.js:98 module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/filter.js:99
+#: apps/io.ox/mail/vacationnotice/settings/filter.js:100 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/filter.js:101
 msgid "The start date must be before the end date."
 msgstr "開始日は終了日より前の日付でなければなりません。"
 
@@ -7444,7 +7456,7 @@ msgstr "サイズ制限のためそれを超えたメッセージの部分は切
 msgid "This note will not be printed"
 msgstr "このメモは印刷されません。"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:169
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:171
 #: module:io.ox/settings/settings
 msgid ""
 "This rule applies to all messages. Please add a condition to restrict this "
@@ -7510,7 +7522,7 @@ msgstr "敬称（前）"
 #: apps/io.ox/mail/compose/extensions.js:49
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:52
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:554
-#: apps/io.ox/mail/print.js:84 apps/io.ox/mail/view-options.js:32
+#: apps/io.ox/mail/print.js:85 apps/io.ox/mail/view-options.js:32
 #: apps/io.ox/mail/write/inplace/inplace.js:72
 #: apps/io.ox/mail/write/view-main.js:522
 #: apps/io.ox/mail/write/view-main.js:523
@@ -7656,7 +7668,7 @@ msgid "Unable to load mail filter rules settings."
 msgstr "メール フィルタ ルール設定を読み込めません。"
 
 #: apps/io.ox/mail/autoforward/settings/register.js:50 module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/register.js:69
+#: apps/io.ox/mail/vacationnotice/settings/register.js:71
 #: apps/io.ox/settings/util.js:61 module:io.ox/core
 msgid "Unable to load mail filter settings."
 msgstr "メール フィルタ バックエンドに接続できません。"
@@ -7867,8 +7879,8 @@ msgstr "ユーザ名"
 msgid "Username must not be empty."
 msgstr "ユーザ名は空にできません。"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:134 module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/register.js:41
+#: apps/io.ox/mail/vacationnotice/settings/model.js:135 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/register.js:42
 msgid "Vacation Notice"
 msgstr "休暇通知"
 
@@ -8076,7 +8088,7 @@ msgid "Years"
 msgstr "年"
 
 #: apps/io.ox/core/tk/flag-picker.js:100 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:91
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:93
 #: module:io.ox/settings/settings
 msgid "Yellow"
 msgstr "黄"
@@ -8186,6 +8198,12 @@ msgstr ""
 #: apps/io.ox/editor/main.js:166 module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Ctrl キー + Enter キーで、変更をすぐに保存できます。"
+
+#: apps/io.ox/core/folder/actions/move.js:63 module:io.ox/core
+#, fuzzy
+#| msgid "You cannot move items to virtual folders"
+msgid "You cannot move items to this folder"
+msgstr "仮想フォルダにアイテムを移動できません。"
 
 #: apps/io.ox/core/folder/actions/move.js:58 module:io.ox/core
 msgid "You cannot move items to virtual folders"
@@ -8901,7 +8919,7 @@ msgstr "未読にする"
 msgid "vCard"
 msgstr "vCard"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:109 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:110 module:io.ox/mail
 msgid "vacation notice"
 msgstr "休暇通知"
 
@@ -10596,9 +10614,6 @@ msgstr "yyyy"
 #~ msgid "Contact overview"
 #~ msgstr "連絡先の概要"
 
-#~ msgid "Content"
-#~ msgstr "コンテンツ"
-
 #~ msgid "Content-Type:"
 #~ msgstr "Content-Type:"
 
@@ -11309,6 +11324,9 @@ msgstr "yyyy"
 
 #~ msgid "Enable visual effects"
 #~ msgstr "視覚効果を有効化"
+
+#~ msgid "Enabled"
+#~ msgstr "有効"
 
 #~ msgid "Enabled for all mail folders"
 #~ msgstr "すべてのメール フォルダ"
