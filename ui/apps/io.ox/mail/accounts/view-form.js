@@ -558,6 +558,9 @@ define.async('io.ox/mail/accounts/view-form', [
                     // add four input fields
                     _('sent trash drafts spam archive'.split(' ')).map(function (folder) {
 
+                        // skip archive if capability is missing
+                        if (folder === 'archive' && !capabilities.has('archive_emails')) return;
+
                         // neither 0 nor undefined
                         var text = folderLabels[folder], id = model.get('id'), enabled = !!id;
                         folder = folder + '_fullname';
