@@ -747,6 +747,9 @@ define('io.ox/core/viewer/views/types/documentview', [
             }
 
             zoomLevel = Util.minMax(zoomLevel, this.getMinZoomFactor(), this.getMaxZoomFactor());
+            if (zoomLevel === this.currentZoomFactor) {
+                return;
+            }
 
             var // the vertical scroll position before zooming
                 documentTopPosition = this.$el.scrollTop(),
