@@ -318,12 +318,19 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         loadPage: function (pageNumber, priority) {
             var // the page node of the specified page
-                pageNode = this.getPageNode(pageNumber);
+                pageNode = this.getPageNode(pageNumber),
+                // the page load options
+                options = {
+                    format: 'pdf',
+                    textOverlay: true,
+                    priority: priority,
+                    pageZoom: this.currentZoomFactor / 100
+                };
 
             // do not load correctly initialized page again
             if (pageNode.children().length === 0) {
                 // format 'pdf' is rendered via the PDF.js library onto HTML5 canvas elements
-                this.pageLoader.loadPage(pageNode, pageNumber, { format: 'pdf', priority: priority, pageZoom: this.currentZoomFactor / 100 }).done(function () {
+                this.pageLoader.loadPage(pageNode, pageNumber, options).done(function () {
                     this.loadedPageNodes[pageNumber] = pageNode;
                     this.refresh(pageNumber);
 
