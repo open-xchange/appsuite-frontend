@@ -101,7 +101,7 @@ define('io.ox/contacts/view-detail', [
         id: 'inline-actions',
         draw: function (baton) {
             if (!api.looksLikeResource(baton.data)) {
-                ext.point('io.ox/contacts/detail/actions').invoke('draw', this, baton.data);
+                ext.point('io.ox/contacts/detail/actions').invoke('draw', this, baton);
             }
         }
     });
