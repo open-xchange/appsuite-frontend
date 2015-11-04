@@ -157,17 +157,14 @@ define('io.ox/calendar/edit/main', [
                                         .done(function (action) {
                                             if (action === 'cancel') {
                                                 // add temp timezone attribute again
-                                                self.model.set('endTimezone', self.model.previousAttributes().endTimezone,  { silent: true });
+                                                self.model.set('endTimezone', self.model.endTimezone,  { silent: true });
+                                                delete self.model.endTimezone;
+                                                // restore model attributes for moving
+                                                self.model.set('folder_id', self.moveAfterSave,  { silent: true });
+                                                self.model.silentMode = false;
                                                 return;
                                             }
                                             if (action === 'ignore') {
-                                                if (self.moveAfterSave) {
-                                                    // prevent some onChange event handlers that would be called on the first save
-                                                    // causes problems, like the change fulltime handler changing the endtime (see Bug 41710)
-                                                    self.model.silentMode = true;
-                                                    // save correct endTimezone (also gets lost on save)
-                                                    self.model.endTimezone = self.model.previousAttributes().endTimezone;
-                                                }
                                                 self.model.set('ignore_conflicts', true, { validate: true });
                                                 self.model.save().then(_.bind(self.onSave, self));
                                             }
@@ -344,11 +341,6 @@ define('io.ox/calendar/edit/main', [
             },
 
             onSave: function (data) {
-                this.model.silentMode = false;
-                if (this.model.endTimezone) {
-                    this.model.set('endTimezone', this.model.endTimezone);
-                    delete this.model.endTimezone;
-                }
                 if (this.moveAfterSave) {
                     var save = _.bind(this.onSave, this),
                         fail = _.bind(this.onError, this),
@@ -356,10 +348,15 @@ define('io.ox/calendar/edit/main', [
                     //update last modified parameter not to run into a conflict error
                     this.model.set('last_modified', data.last_modified, { silent: true });
                     api.move(this.model.toJSON(), this.moveAfterSave).then(function () {
-                        self.moveAfterSave = null;
+                        delete self.moveAfterSave;
                         save();
                     }, fail);
                 } else {
+                    this.model.silentMode = false;
+                    if (this.model.endTimezone) {
+                        this.model.set('endTimezone', this.model.endTimezone);
+                        delete this.model.endTimezone;
+                    }
                     this.considerSaved = true;
                     this.getWindow().idle();
                     this.quit();
