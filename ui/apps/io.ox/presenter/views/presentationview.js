@@ -852,12 +852,15 @@ define('io.ox/presenter/views/presentationview', [
                 swiperPrevButtonId = _.uniqueId('presenter-button-prev-');
 
             // configure Swiper
+            //
+            // listen to onTransitionEnd instead of onSlideChangeEnd. Swiper doesn't trigger the onSlideChangeEnd event
+            // when a resize events occurs during the processing of a swiper.slideTo() call.
             var swiperParameter = {
                 initialSlide: this.startIndex,
                 nextButton: '#' + swiperNextButtonId,
                 prevButton: '#' + swiperPrevButtonId,
-                onSlideChangeEnd: this.onSlideChangeEnd.bind(this),
-                onSlideChangeStart: this.onSlideChangeStart.bind(this)
+                onSlideChangeStart: this.onSlideChangeStart.bind(this),
+                onTransitionEnd: this.onSlideChangeEnd.bind(this)
             };
             swiperParameter = _.extend(swiperParameter, SWIPER_PARAMS_DEFAULT);
             // enable swiping on touch devices
