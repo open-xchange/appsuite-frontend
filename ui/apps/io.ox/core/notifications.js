@@ -283,6 +283,18 @@ define('io.ox/core/notifications', [
             // if it's open already we're done
             if (this.isOpen()) return;
 
+            // adjust top if there is a banner
+            if (!this.bannerHeight) {
+                var bannerHeight = $('#io-ox-banner:visible').css('height'),
+                    nodeHeight = parseInt(this.nodes.main.css('top').replace('px', ''), 10);
+
+                bannerHeight = parseInt(bannerHeight.replace('px', ''), 10);
+                this.bannerHeight = bannerHeight;
+
+                var newHeight = nodeHeight + bannerHeight;
+                this.nodes.main.css('top', newHeight + 'px');
+            }
+
             if (_.device('smartphone')) {
                 $('[data-app-name="io.ox/portal"]:visible').addClass('notifications-open');
             }
@@ -353,18 +365,6 @@ define('io.ox/core/notifications', [
             $('#io-ox-core').prepend(
                 self.nodes.main.append(this.el)
             );
-
-            //adjust top if theres a banner (cannot be done before because its not attached when the banner is drawn)
-            var bannerHeight = $('#io-ox-banner:visible').css('height'),
-                nodeHeight = parseInt(self.nodes.main.css('top').replace('px',''), 10);
-
-            if (bannerHeight) {
-
-                bannerHeight = parseInt(bannerHeight.replace('px',''), 10);
-                self.bannerHeight = bannerHeight;
-                var newHeight = nodeHeight + bannerHeight;
-                self.nodes.main.css('top', newHeight + 'px');
-            }
 
             //close if count set to 0
             badgeview.on('auto-close', function () {
