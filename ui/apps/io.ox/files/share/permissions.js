@@ -528,7 +528,7 @@
                 if (!baton.model.isPerson()) return;
                 var email = baton.model.getEmail();
                 this.find('.display_name, .image').each(function (index, node) {
-                    node.addClass('halo-link').data({ email1: email });
+                    $(node).addClass('halo-link').data({ email1: email });
                 });
             }
         },
@@ -836,11 +836,30 @@
                 permissionsView.render().$el
             );
 
-            if (objModel.isAdmin()) {
+            // to change privileges you have to a folder admin
+            var supportsChanges = objModel.isAdmin();
+
+            // whether you can invite further people is a different question:
+            // A. you have to be the admin AND (
+            //   B. you can invite guests (external contacts) OR
+            //   C. you are in a groupware context (internal users and/or groups)
+            // )
+            var supportsInvites = supportsChanges && (function () {
+                if (capabilities.has('invite_guests') && module !== 'mail') return true;
+                if (!capabilities.has('gab') || capabilities.has('alone')) return false;
+                return true;
+            }());
+
+            if (supportsChanges) {
                 // add action buttons
                 dialog
                     .addPrimaryButton('save', options.share ? gt('Share') : gt('Save'), 'save', { tabindex: 1 })
                     .addButton('cancel', gt('Cancel'), 'cancel', { tabindex: 1 });
+            } else {
+                dialog.addPrimaryButton('cancel', gt('Close'));
+            }
+
+            if (supportsInvites) {
 
                 /*
                  * extension point for autocomplete item
@@ -972,9 +991,6 @@
                 );
 
                 typeaheadView.render();
-
-            } else {
-                dialog.addPrimaryButton('cancel', gt('Close'));
             }
 
             dialog.on('save', function () {
