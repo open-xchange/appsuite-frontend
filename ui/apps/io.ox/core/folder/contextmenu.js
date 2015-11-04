@@ -15,10 +15,11 @@ define('io.ox/core/folder/contextmenu', [
     'io.ox/core/extensions',
     'io.ox/core/folder/actions/common',
     'io.ox/core/folder/api',
+    'io.ox/core/api/account',
     'io.ox/core/capabilities',
     'io.ox/core/api/filestorage',
     'gettext!io.ox/core'
-], function (ext, actions, api, capabilities, filestorage, gt) {
+], function (ext, actions, api, account, capabilities, filestorage, gt) {
 
     'use strict';
 
@@ -183,9 +184,13 @@ define('io.ox/core/folder/contextmenu', [
 
                 if (baton.module !== 'mail') return;
 
+                // is in a subfolder of archive?
+                var id = baton.data.id;
+                if (account.is('archive', id)) return;
+
                 addLink(this, {
                     action: 'archive',
-                    data: { id: baton.data.id },
+                    data: { id: id },
                     enabled: api.can('delete', baton.data),
                     handler: handler,
                     //#. Verb: (to) archive messages
