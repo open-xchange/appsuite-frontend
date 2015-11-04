@@ -634,11 +634,11 @@ msgstr "A fiók sikeresen hozzáadva"
 msgid "Account could not be added"
 msgstr "Felhasználói fiók nem adható hozzá"
 
-#: apps/io.ox/mail/accounts/view-form.js:592 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:595 module:io.ox/settings
 msgid "Account name"
 msgstr "Postafiók neve"
 
-#: apps/io.ox/mail/accounts/view-form.js:588 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:591 module:io.ox/settings
 msgid "Account settings"
 msgstr "Fiók beállításai"
 
@@ -750,8 +750,8 @@ msgid "Add condition"
 msgstr "Feltétel hozzáadása"
 
 #: apps/io.ox/contacts/actions.js:357 module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/create-dist-view.js:130
-#: apps/io.ox/contacts/distrib/create-dist-view.js:131
+#: apps/io.ox/contacts/distrib/create-dist-view.js:128
+#: apps/io.ox/contacts/distrib/create-dist-view.js:129
 msgid "Add contact"
 msgstr "Névjegy hozzáadása"
 
@@ -773,7 +773,7 @@ msgstr "Hozzáadás a Drive-ról"
 msgid "Add local file"
 msgstr "Helyi fájl hozzáadása"
 
-#: apps/io.ox/core/folder/extensions.js:224 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:230 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:266
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/folderview-extensions.js:39 module:io.ox/mail
@@ -785,13 +785,13 @@ msgid "Add new account"
 msgstr "Új fiók hozzáadása"
 
 #: apps/io.ox/core/folder/actions/add.js:57 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:591
+#: apps/io.ox/core/folder/extensions.js:597
 msgid "Add new calendar"
 msgstr "Új naptár hozzáadása"
 
 #: apps/io.ox/core/folder/actions/add.js:57 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:243
-#: apps/io.ox/core/folder/extensions.js:591 apps/io.ox/files/actions.js:689
+#: apps/io.ox/core/folder/extensions.js:597 apps/io.ox/files/actions.js:689
 #: module:io.ox/files
 msgid "Add new folder"
 msgstr "Új mappa hozzáadása"
@@ -859,11 +859,11 @@ msgid "Add timezone"
 msgstr "Időzóna hozzáadása"
 
 #: apps/io.ox/contacts/actions.js:459 module:io.ox/contacts
-#: apps/io.ox/mail/actions.js:685 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:684 module:io.ox/mail
 msgid "Add to address book"
 msgstr "Hozzáadás a címjegyzékhez"
 
-#: apps/io.ox/mail/actions.js:693 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:692 module:io.ox/mail
 msgid "Add to calendar"
 msgstr "Hozzáadás a naptárhoz"
 
@@ -875,7 +875,7 @@ msgstr "Hozzáadás a kedvencekhez"
 #: apps/io.ox/contacts/toolbar.js:125
 #: apps/io.ox/core/viewer/views/toolbarview.js:265 module:io.ox/core
 #: apps/io.ox/files/actions.js:806 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:218 apps/io.ox/mail/actions.js:674
+#: apps/io.ox/files/toolbar.js:218 apps/io.ox/mail/actions.js:673
 #: module:io.ox/mail apps/io.ox/mail/toolbar.js:179
 msgid "Add to portal"
 msgstr "Hozzáadás a portálhoz"
@@ -1154,7 +1154,7 @@ msgstr "Archívum"
 
 #. Verb: (to) archive messages
 #: apps/io.ox/core/folder/actions/archive.js:43 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:192 apps/io.ox/mail/actions.js:623
+#: apps/io.ox/core/folder/contextmenu.js:192 apps/io.ox/mail/actions.js:622
 #: module:io.ox/mail apps/io.ox/mail/mobile-toolbar-actions.js:116
 #: apps/io.ox/mail/toolbar.js:113
 msgctxt "verb"
@@ -1466,7 +1466,7 @@ msgstr "Naptár:"
 #: apps/io.ox/calendar/week/perspective.js:133
 #: apps/io.ox/calendar/week/perspective.js:176
 #: apps/io.ox/contacts/actions/delete.js:38 module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js:203
+#: apps/io.ox/contacts/distrib/main.js:201
 #: apps/io.ox/contacts/edit/main.js:258 apps/io.ox/contacts/main.js:412
 #: apps/io.ox/contacts/main.js:744 apps/io.ox/core/desktop.js:1636
 #: module:io.ox/core apps/io.ox/core/export/export.js:104
@@ -1983,8 +1983,8 @@ msgstr ""
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:90 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:117 apps/io.ox/files/actions.js:524
 #: module:io.ox/files apps/io.ox/files/actions.js:866
-#: apps/io.ox/files/toolbar.js:232 apps/io.ox/mail/actions.js:226
-#: apps/io.ox/mail/actions.js:612
+#: apps/io.ox/files/toolbar.js:232 apps/io.ox/mail/actions.js:225
+#: apps/io.ox/mail/actions.js:611
 #: apps/io.ox/mail/mobile-toolbar-actions.js:107
 #: apps/io.ox/mail/toolbar.js:143
 msgid "Copy"
@@ -2105,7 +2105,7 @@ msgid "Create contact"
 msgstr "Névjegy létrehozása"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:39 module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js:48
+#: apps/io.ox/contacts/distrib/main.js:46
 msgid "Create distribution list"
 msgstr "Disztribúciós lista létrehozása"
 
@@ -2305,7 +2305,7 @@ msgstr "Elhalasztott"
 #: apps/io.ox/files/actions.js:765 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
-#: apps/io.ox/files/toolbar.js:174 apps/io.ox/mail/actions.js:507
+#: apps/io.ox/files/toolbar.js:174 apps/io.ox/mail/actions.js:506
 #: apps/io.ox/mail/actions/delete.js:67 apps/io.ox/mail/actions/delete.js:86
 #: apps/io.ox/mail/mailfilter/settings/filter.js:323
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
@@ -2488,7 +2488,7 @@ msgstr "Eldobás"
 #. "Discard changes" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
 #: apps/io.ox/calendar/edit/main.js:423 module:io.ox/calendar/edit/main
-#: apps/io.ox/contacts/distrib/main.js:202 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/main.js:200 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:257 apps/io.ox/editor/main.js:366
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:181 module:io.ox/tasks
 msgctxt "dialog"
@@ -2528,8 +2528,8 @@ msgstr "Nevek megjelenítése"
 msgid "Distance"
 msgstr "Távolság"
 
-#: apps/io.ox/contacts/distrib/main.js:38 module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js:173
+#: apps/io.ox/contacts/distrib/main.js:36 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/main.js:171
 msgid "Distribution List"
 msgstr "Disztribúciós lista"
 
@@ -2544,8 +2544,8 @@ msgstr "Disztribúciós lista részletei"
 msgid "Distribution list"
 msgstr "Disztribúciós lista"
 
-#: apps/io.ox/contacts/distrib/main.js:77 module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js:126
+#: apps/io.ox/contacts/distrib/main.js:75 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/main.js:124
 msgid "Distribution list has been saved"
 msgstr "A disztribúciós lista mentve"
 
@@ -2636,7 +2636,7 @@ msgid "Do you really want to delete this widget?"
 msgstr "Biztos, hogy törölni szeretné ezt a widgetet?"
 
 #: apps/io.ox/calendar/edit/main.js:420 module:io.ox/calendar/edit/main
-#: apps/io.ox/contacts/distrib/main.js:199 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/main.js:197 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:254 apps/io.ox/editor/main.js:363
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:178 module:io.ox/tasks
 msgid "Do you really want to discard your changes?"
@@ -2731,7 +2731,7 @@ msgstr "Egész napos találkozóért kattintson duplán erre a sorra"
 #: apps/io.ox/files/actions.js:748 module:io.ox/files
 #: apps/io.ox/files/actions.js:756 apps/io.ox/files/actions.js:907
 #: apps/io.ox/files/toolbar.js:160 apps/io.ox/files/toolbar.js:167
-#: apps/io.ox/mail/actions.js:717 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:716 module:io.ox/mail
 #: apps/plugins/portal/updater/register.js:38 module:plugins/portal
 msgid "Download"
 msgstr "Letöltés"
@@ -2804,7 +2804,7 @@ msgstr "Ejtse ide a mellékleteket"
 msgid "Drop files here to upload"
 msgstr "A feltöltéshez húzza ide a fájlokat"
 
-#: apps/io.ox/mail/actions.js:743 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:742 module:io.ox/mail
 msgid "Drop here to import this mail"
 msgstr "Ejtse ide a levél importálásához"
 
@@ -2879,7 +2879,7 @@ msgstr "EB"
 #: apps/io.ox/files/main.js:164 apps/io.ox/files/main.js:170
 #: apps/io.ox/files/main.js:874 apps/io.ox/files/main.js:922
 #: apps/io.ox/files/share/permissions.js:733 module:io.ox/core
-#: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:497
+#: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:496
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1253
@@ -2935,7 +2935,7 @@ msgid "Edit description"
 msgstr "Leírás szerkesztése"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:44 module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js:117
+#: apps/io.ox/contacts/distrib/main.js:115
 msgid "Edit distribution list"
 msgstr "Disztribúciós lista szerkesztése"
 
@@ -3015,7 +3015,7 @@ msgstr "2. e-mail"
 msgid "Email 3"
 msgstr "3. e-mail"
 
-#: apps/io.ox/mail/accounts/view-form.js:606 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:609 module:io.ox/settings
 msgid "Email address"
 msgstr "E-mail cím"
 
@@ -3357,8 +3357,8 @@ msgstr "Az importálás meghiúsult"
 msgid "Failed to recover accounts"
 msgstr "A fiókok visszaállítása meghiúsult"
 
-#: apps/io.ox/contacts/distrib/main.js:84 module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js:132
+#: apps/io.ox/contacts/distrib/main.js:82 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/main.js:130
 msgid "Failed to save distribution list."
 msgstr "A disztribúciós lista mentése sikertelen."
 
@@ -3664,7 +3664,7 @@ msgstr "Formátum"
 msgid "Format emails as"
 msgstr "E-mailek formázásának módja"
 
-#: apps/io.ox/mail/actions.js:486 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:485 module:io.ox/mail
 #: apps/io.ox/mail/mobile-toolbar-actions.js:64 apps/io.ox/mail/toolbar.js:71
 msgid "Forward"
 msgstr "Továbbítás"
@@ -3818,15 +3818,15 @@ msgstr "Szia világ!"
 msgid "Help"
 msgstr "Súgó"
 
-#: apps/io.ox/core/folder/extensions.js:498 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:504 module:io.ox/core
 msgid "Hidden address books"
 msgstr "Rejtett címjegyzékek"
 
-#: apps/io.ox/core/folder/extensions.js:504 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:510 module:io.ox/core
 msgid "Hidden calendars"
 msgstr "Rejtett naptárak"
 
-#: apps/io.ox/core/folder/extensions.js:510 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:516 module:io.ox/core
 msgid "Hidden tasks"
 msgstr "Rejtett feladatok"
 
@@ -4158,7 +4158,7 @@ msgstr "Meghívás ide: %s"
 
 #: apps/io.ox/contacts/actions.js:409 module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:59 module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js:71 apps/io.ox/mail/actions.js:581
+#: apps/io.ox/contacts/toolbar.js:71 apps/io.ox/mail/actions.js:580
 msgid "Invite to appointment"
 msgstr "Meghívás találkozóra"
 
@@ -4513,7 +4513,7 @@ msgstr "Levélszámkvóta"
 msgid "Mail from %1$s, %2$s"
 msgstr "Levél innen: %1$s %2$s"
 
-#: apps/io.ox/mail/actions.js:226 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:225 module:io.ox/mail
 msgid "Mail has been copied"
 msgstr "A levél átmásolásra került"
 
@@ -4521,7 +4521,7 @@ msgstr "A levél átmásolásra került"
 msgid "Mail has been imported"
 msgstr "A levelek importálva"
 
-#: apps/io.ox/mail/actions.js:225 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:224 module:io.ox/mail
 msgid "Mail has been moved"
 msgstr "A levelek áthelyezésre kerültek"
 
@@ -4569,11 +4569,11 @@ msgstr "A levél nem lett importálva, csak a .eml fájlok támogatottak."
 msgid "Mailing list"
 msgstr "Levelezőlista"
 
-#: apps/io.ox/mail/actions.js:226 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:225 module:io.ox/mail
 msgid "Mails have been copied"
 msgstr "A levelek átmásolásra kerültek"
 
-#: apps/io.ox/mail/actions.js:225 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:224 module:io.ox/mail
 msgid "Mails have been moved"
 msgstr "A levelek áthelyezésre kerültek"
 
@@ -4656,7 +4656,7 @@ msgstr "Megjelölés elvégzettként"
 msgid "Mark as read"
 msgstr "Megjelölés olvasottként"
 
-#: apps/io.ox/mail/actions.js:551 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:550 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:87
 msgid "Mark as spam"
 msgstr "Megjelölés levélszemétként"
@@ -4680,14 +4680,14 @@ msgstr "Levél megjelölése"
 #. Translation should be as short a possible
 #. Instead of "Mark as read" it's just "Mark read"
 #. German, for example, should be just "Gelesen"
-#: apps/io.ox/mail/actions.js:535 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:534 module:io.ox/mail
 msgid "Mark read"
 msgstr "Megjelölés olvasottként"
 
 #. Translation should be as short a possible
 #. Instead of "Mark as unread" it's just "Mark unread"
 #. German, for example, should be just "Ungelesen"
-#: apps/io.ox/mail/actions.js:521 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:520 module:io.ox/mail
 msgid "Mark unread"
 msgstr "Megjelölés olvasottként"
 
@@ -4809,7 +4809,7 @@ msgstr "A megjelenített %1$s elemnél több is található"
 #: apps/io.ox/core/folder/contextmenu.js:320 module:io.ox/core
 #: apps/io.ox/files/actions.js:523 module:io.ox/files
 #: apps/io.ox/files/actions.js:856 apps/io.ox/files/toolbar.js:223
-#: apps/io.ox/mail/actions.js:225 apps/io.ox/mail/actions.js:602
+#: apps/io.ox/mail/actions.js:224 apps/io.ox/mail/actions.js:601
 #: apps/io.ox/mail/mobile-toolbar-actions.js:81 apps/io.ox/mail/toolbar.js:136
 #: apps/io.ox/tasks/actions.js:317 module:io.ox/tasks
 #: apps/io.ox/tasks/actions/move.js:46 apps/io.ox/tasks/actions/move.js:58
@@ -4844,11 +4844,11 @@ msgstr "Többválasztásos"
 msgid "Music"
 msgstr "Zene"
 
-#: apps/io.ox/core/folder/extensions.js:495 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:501 module:io.ox/core
 msgid "My address books"
 msgstr "Saját címjegyzékek"
 
-#: apps/io.ox/core/folder/extensions.js:501 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:507 module:io.ox/core
 msgid "My calendars"
 msgstr "Saját naptárak"
 
@@ -4858,7 +4858,7 @@ msgstr "Saját naptárak"
 msgid "My contact data"
 msgstr "A névjegyadataim"
 
-#: apps/io.ox/core/folder/extensions.js:176 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:182 module:io.ox/core
 msgid "My folders"
 msgstr "Saját mappák"
 
@@ -4870,12 +4870,12 @@ msgstr "Legutóbbi fájlok"
 msgid "My password"
 msgstr "A jelszavam"
 
-#: apps/io.ox/core/folder/extensions.js:93 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:99 module:io.ox/core
 #: apps/io.ox/files/share/view-options.js:60 module:io.ox/files
 msgid "My shares"
 msgstr "Saját megosztások"
 
-#: apps/io.ox/core/folder/extensions.js:507 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:513 module:io.ox/core
 #: apps/plugins/portal/tasks/register.js:25 module:plugins/portal
 #: apps/plugins/portal/tasks/register.js:137
 msgid "My tasks"
@@ -5187,7 +5187,7 @@ msgstr "Nincs"
 msgid "Normal"
 msgstr "Normál"
 
-#: apps/io.ox/mail/actions.js:561 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:560 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:94
 msgid "Not spam"
 msgstr "Nem levélszemét"
@@ -5331,7 +5331,7 @@ msgid "Open folder view"
 msgstr "Mappanézet megnyitása"
 
 #: apps/io.ox/core/pim/actions.js:78 module:io.ox/core
-#: apps/io.ox/mail/actions.js:709 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:708 module:io.ox/mail
 msgid "Open in browser"
 msgstr "Megnyitás böngészőben"
 
@@ -6033,7 +6033,7 @@ msgstr "Elsődleges fiók"
 #: apps/io.ox/contacts/actions.js:400 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:102 apps/io.ox/core/print.js:108
 #: module:io.ox/core apps/io.ox/core/viewer/views/toolbarview.js:221
-#: apps/io.ox/mail/actions.js:633 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:632 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:150 apps/io.ox/tasks/actions.js:335
 #: module:io.ox/tasks apps/io.ox/tasks/toolbar.js:101
 msgid "Print"
@@ -6103,11 +6103,11 @@ msgstr "Az előrehaladásnak 0 és 100 közötti érvényes számnak kell lennie
 msgid "Properties"
 msgstr "Tulajdonságok"
 
-#: apps/io.ox/core/folder/extensions.js:496 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:502 module:io.ox/core
 msgid "Public address books"
 msgstr "Nyilvános címjegyzékek"
 
-#: apps/io.ox/core/folder/extensions.js:502 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:508 module:io.ox/core
 msgid "Public calendars"
 msgstr "Nyilvános naptárak"
 
@@ -6121,7 +6121,7 @@ msgstr "Nyilvános hivatkozás"
 msgid "Public servant"
 msgstr "Közszolga"
 
-#: apps/io.ox/core/folder/extensions.js:508 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:514 module:io.ox/core
 msgid "Public tasks"
 msgstr "Nyilvános feladatok"
 
@@ -6384,7 +6384,7 @@ msgstr "Emlékeztessen újra"
 #: apps/io.ox/calendar/actions/acceptdeny.js:50 module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js:361 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/invitations/register.js:605 module:io.ox/calendar/main
-#: apps/io.ox/mail/actions.js:664 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:663 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:172
 msgid "Reminder"
 msgstr "Emlékeztető"
@@ -6455,12 +6455,12 @@ msgstr "Ismétlés"
 msgid "Repeat new password"
 msgstr "Új jelszó ismét"
 
-#: apps/io.ox/mail/actions.js:465 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:464 module:io.ox/mail
 #: apps/plugins/portal/twitter/util.js:225 module:plugins/portal
 msgid "Reply"
 msgstr "Válasz"
 
-#: apps/io.ox/mail/actions.js:475 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:474 module:io.ox/mail
 msgid "Reply All"
 msgstr "Válasz mindenkinek"
 
@@ -6622,7 +6622,7 @@ msgid "Save"
 msgstr "Mentés"
 
 #: apps/io.ox/calendar/actions.js:475 module:io.ox/calendar
-#: apps/io.ox/mail/actions.js:590 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:589 module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "Mentés disztribúciós listaként"
 
@@ -6630,7 +6630,7 @@ msgstr "Mentés disztribúciós listaként"
 msgid "Save as draft"
 msgstr "Mentés piszkozatként"
 
-#: apps/io.ox/mail/actions.js:643 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:642 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:157
 msgid "Save as file"
 msgstr "Mentés fájlként"
@@ -6642,7 +6642,7 @@ msgstr "Melléklet mentése"
 #: apps/io.ox/core/pim/actions.js:80 module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js:301
 #: apps/io.ox/core/viewer/views/toolbarview.js:328
-#: apps/io.ox/mail/actions.js:725 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:724 module:io.ox/mail
 msgid "Save to Drive"
 msgstr "Mentés a Drive-ra"
 
@@ -6719,7 +6719,7 @@ msgstr ""
 "lapokat vagy adjon hozzá újakat."
 
 #: apps/io.ox/files/view-options.js:110 module:io.ox/files
-#: apps/io.ox/mail/accounts/view-form.js:574 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:577 module:io.ox/settings
 msgid "Select"
 msgstr "Kijelölés"
 
@@ -6809,7 +6809,7 @@ msgstr "Levél küldése"
 msgid "Send mail to all participants"
 msgstr "Levél küldése minden résztvevőnek"
 
-#: apps/io.ox/mail/actions.js:572 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:571 module:io.ox/mail
 msgid "Send new mail"
 msgstr "Új levél küldése"
 
@@ -6956,19 +6956,19 @@ msgstr "Megosztott találkozók"
 msgid "Shared activity"
 msgstr "Megosztott tevékenység"
 
-#: apps/io.ox/core/folder/extensions.js:497 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:503 module:io.ox/core
 msgid "Shared address books"
 msgstr "Megosztott címjegyzékek"
 
-#: apps/io.ox/core/folder/extensions.js:677 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:683 module:io.ox/core
 msgid "Shared by other users"
 msgstr "Más felhasználó által megosztott"
 
-#: apps/io.ox/core/folder/extensions.js:503 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:509 module:io.ox/core
 msgid "Shared calendars"
 msgstr "Megosztott naptárak"
 
-#: apps/io.ox/core/folder/extensions.js:509 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:515 module:io.ox/core
 msgid "Shared tasks"
 msgstr "Megosztott feladatok"
 
@@ -7400,9 +7400,9 @@ msgstr ""
 "E-mail cím, naptár, névjegyek és feladatok, valamint nyilvános, megosztott "
 "és rendszermappák szinkronizálása Microsoft Outlook® kliensekkel."
 
-#: apps/io.ox/core/folder/extensions.js:240 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:621
-#: apps/io.ox/core/folder/extensions.js:636
+#: apps/io.ox/core/folder/extensions.js:246 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:627
+#: apps/io.ox/core/folder/extensions.js:642
 msgid "Synchronize with your tablet or smartphone"
 msgstr "Szinkronizáció a táblagéppel vagy telefonnal"
 
@@ -8099,7 +8099,7 @@ msgstr "A mappa nem tartalmaz publikációkat"
 msgid "This folder has no subscriptions"
 msgstr "A mappa nem tartalmaz feliratkozásokat"
 
-#: apps/io.ox/core/folder/extensions.js:719 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:725 module:io.ox/core
 msgid "This folder has publications and/or subscriptions"
 msgstr "A mappa tartalmaz publikációkat és/vagy feliratkozásokat"
 
@@ -8110,7 +8110,7 @@ msgstr ""
 "Ez a mappa publikációkat tartalmaz, de nem nézheti meg vagy szerkesztheti "
 "azokat"
 
-#: apps/io.ox/core/folder/extensions.js:716 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:722 module:io.ox/core
 msgid "This folder has subscriptions"
 msgstr "A mappa feliratkozásokat tartalmaz"
 
@@ -8235,7 +8235,7 @@ msgstr "Megszólítás"
 msgid "To"
 msgstr "Címzett"
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:145 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:143 module:io.ox/contacts
 msgid ""
 "To add contacts manually, just provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
@@ -8555,7 +8555,7 @@ msgstr ""
 msgid "Use separate username and password"
 msgstr "Külön felhasználónév és jelszó használata"
 
-#: apps/io.ox/mail/accounts/view-form.js:616 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:619 module:io.ox/settings
 msgid "Use unified mail for this account"
 msgstr "Egységes levelezés használata ehhez a fiókhoz"
 
@@ -8623,12 +8623,12 @@ msgstr "Videók"
 #: apps/io.ox/core/pim/actions.js:77 module:io.ox/core
 #: apps/io.ox/files/actions.js:720 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:146 apps/io.ox/files/toolbar.js:293
-#: apps/io.ox/mail/actions.js:701 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:700 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:238 apps/io.ox/tasks/toolbar.js:142
 msgid "View"
 msgstr "Nézet"
 
-#: apps/io.ox/mail/actions.js:734 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:733 module:io.ox/mail
 msgid "View attachment"
 msgstr "Melléklet megtekintése"
 
@@ -8646,7 +8646,7 @@ msgid "View participants"
 msgstr "Résztvevők megtekintése"
 
 #. source in terms of source code
-#: apps/io.ox/mail/actions.js:654 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:653 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:165
 msgid "View source"
 msgstr "Forrás megtekintése"
@@ -9106,9 +9106,9 @@ msgstr "Az Android %n vagy újabb verziója szükséges."
 msgid "You need to use iOS %n or higher."
 msgstr "Az iOS %n vagy újabb verziója szükséges."
 
-#: apps/io.ox/core/folder/extensions.js:687 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:696
-#: apps/io.ox/core/folder/extensions.js:699
+#: apps/io.ox/core/folder/extensions.js:693 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:702
+#: apps/io.ox/core/folder/extensions.js:705
 msgid "You share this folder with other users"
 msgstr "Ezt a mappát megosztja más felhasználókkal"
 
@@ -9202,7 +9202,7 @@ msgstr "Az Ön e-mail címe"
 msgid "Your messages"
 msgstr "Üzenetei"
 
-#: apps/io.ox/mail/accounts/view-form.js:599 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:602 module:io.ox/settings
 #: apps/plugins/wizards/mandatory/main.js:65 module:io.ox/wizards/firstStart
 msgid "Your name"
 msgstr "Név"
