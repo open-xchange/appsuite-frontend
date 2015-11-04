@@ -86,8 +86,8 @@ define('io.ox/backbone/mini-views/quota', [
             var label;
             this.$el.append(
                 $('<div class="quota-description">').append(
-                    $('<span class="title pull-left">').text(this.options.title),
-                    label = $('<span class="numbers">')
+                    $('<div class="title">').text(this.options.title),
+                    label = $('<div class="numbers">')
                 )
             );
 
