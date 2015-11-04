@@ -12,7 +12,6 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
-
 define.async('io.ox/core/date',
     ['io.ox/core/gettext',
      'settings!io.ox/core',
@@ -703,11 +702,13 @@ define.async('io.ox/core/date',
             return !ttinfo.isdst;
         }) || _.first(ttinfos);
 
-        var finalTTInfo = version2 && byte() === 10 ?
-                parseTZ(tzinfo.slice(pos, tzinfo.indexOf("\n", pos))) :
-                function () {
-                    return _.last(transitions).ttinfo;
-                };
+        var finalTTInfo = version2 && byte() === 10 && parseTZ(tzinfo.slice(pos, tzinfo.indexOf("\n", pos)));
+
+        if (!finalTTInfo) {
+            finalTTInfo = function () {
+                return _.last(transitions).ttinfo;
+            };
+        }
 
         var BIN_SIZE = AVG_YEAR / 2;
 
