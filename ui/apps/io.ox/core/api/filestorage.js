@@ -60,6 +60,7 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                         if (!error) {
                             // no errors everything is ready and caches are up to date.
                             api.rampupDone = true;
+                            api.rampupFailed = false;
                         } else {
                             // something went wrong, for example filestorages are not enabled on the server
                             // set rampupfailed to true to indicate that a rampup was tried before but failed for whatever reasons
