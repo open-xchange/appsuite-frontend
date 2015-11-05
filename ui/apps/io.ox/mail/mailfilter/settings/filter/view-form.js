@@ -24,7 +24,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
     'use strict';
 
     var POINT = 'io.ox/mailfilter/settings/filter/detail',
-        testCapabilities = {},
+        testCapabilities,
 
         sizeValues = {
             'over': gt('Is bigger than'),
@@ -184,7 +184,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             className: 'io-ox-mailfilter-edit',
 
             initialize: function (opt) {
-
+                testCapabilities = {};
                 _.each(opt.config.tests, function (value) {
                     testCapabilities[value.test] = value.comparison;
                 });

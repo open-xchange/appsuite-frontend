@@ -56,7 +56,7 @@ msgstr "Skapa en ny uppgift"
 msgid "Creating a note"
 msgstr "Skapa en anteckning"
 
-#: apps/io.ox/tours/intro.js:61 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:72 module:io.ox/tours
 msgid "Creating new items"
 msgstr "Skapa nya objekt"
 
@@ -80,7 +80,7 @@ msgstr "Skapa uppgift"
 msgid "Customizing the Portal"
 msgstr "Anpassa portalen"
 
-#: apps/io.ox/tours/intro.js:80 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:100 module:io.ox/tours
 msgid ""
 "Depending on the app, the toolbar contains various functions for creating, "
 "editing and organizing objects."
@@ -88,7 +88,7 @@ msgstr ""
 "Beroende på vilket program du använder kan verktygsraden innehålla olika "
 "funktioner för att skapa, redigera eller organisera objekt."
 
-#: apps/io.ox/tours/intro.js:100 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:120 module:io.ox/tours
 msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
 msgstr ""
@@ -99,7 +99,7 @@ msgstr ""
 msgid "Displaying information"
 msgstr "Visa information"
 
-#: apps/io.ox/tours/intro.js:43 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid "Displaying the help or the settings"
 msgstr "Visa hjälp eller inställningar"
 
@@ -203,7 +203,7 @@ msgstr "Längre ner kan du lägga till dokument som bilagor för mötet."
 msgid "Further functions"
 msgstr "Ytterligare funktioner"
 
-#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:119 module:io.ox/tours
 msgid "Further information"
 msgstr "Vidare information"
 
@@ -232,7 +232,7 @@ msgstr ""
 msgid "If you no longer want to display a square, click the cross."
 msgstr "Om du inte längre vill visa en ruta, klicka på krysset."
 
-#: apps/io.ox/tours/intro.js:57 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:66 module:io.ox/tours
 msgid ""
 "In case of new notifications, e.g. appointment invitations, the info area is "
 "opened."
@@ -274,7 +274,7 @@ msgstr "Navigeringsraden"
 msgid "Opening an E-Mail in a separate window"
 msgstr "Öppna e-post i ett separat fönster"
 
-#: apps/io.ox/tours/intro.js:69 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:81 module:io.ox/tours
 msgid "Opening or closing the folder tree"
 msgstr "Öppna eller stäng mappträdet"
 
@@ -298,7 +298,7 @@ msgstr "Läsa e-postkonversationer"
 msgid "Reading the details"
 msgstr "Läsa detaljerna"
 
-#: apps/io.ox/tours/intro.js:74 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Hitta objekt"
 
@@ -327,11 +327,11 @@ msgstr "Sortera uppgifter"
 msgid "Sorting your E-Mails"
 msgstr "Sortera din e-post"
 
-#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:114 module:io.ox/tours
 msgid "The Detail view"
 msgstr "Detaljvyn"
 
-#: apps/io.ox/tours/intro.js:95 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:115 module:io.ox/tours
 msgid ""
 "The Detail view displays an object's content. Depending on the app, further "
 "functions for organizing objects can be found in the Detail view."
@@ -376,11 +376,11 @@ msgstr ""
 "för att välja filer. Klicka på en fil för att se ytterligare detaljer och "
 "funktioner i popuprutan."
 
-#: apps/io.ox/tours/intro.js:50 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:58 module:io.ox/tours
 msgid "The New objects icon"
 msgstr "Nya objekt-ikonen"
 
-#: apps/io.ox/tours/intro.js:51 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:59 module:io.ox/tours
 msgid ""
 "The New objects icon shows the number of unread E-Mails or other "
 "notifications. If clicking the icon, the info area opens."
@@ -424,15 +424,15 @@ msgstr ""
 "Kalendervyerna visar ett kalenderark med mötena inom det valda "
 "tidsintervallet."
 
-#: apps/io.ox/tours/intro.js:84 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:104 module:io.ox/tours
 msgid "The folder tree"
 msgstr "Mappträdet"
 
-#: apps/io.ox/tours/intro.js:56 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:65 module:io.ox/tours
 msgid "The info area"
 msgstr "Informationsområdet"
 
-#: apps/io.ox/tours/intro.js:89 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:109 module:io.ox/tours
 msgid "The list"
 msgstr "Listan"
 
@@ -444,7 +444,7 @@ msgstr ""
 "Inställningarna är organiserade i ämnen. Välj ämne till vänster, t.ex. "
 "Grundläggande inställningar eller E-post."
 
-#: apps/io.ox/tours/intro.js:79 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
 msgid "The toolbar"
 msgstr "Verktygsraden"
 
@@ -481,7 +481,7 @@ msgstr ""
 msgid "To compose a new E-Mail, click on Compose in the toolbar."
 msgstr "För att skriva ny e-post, klicka på Skriv ny e-post i verktygsraden."
 
-#: apps/io.ox/tours/intro.js:62 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:73 module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr ""
 "För att skapa ny e-post, klicka på ikonen Skriv ny e-post i verktygsraden."
@@ -538,7 +538,7 @@ msgstr ""
 "För att visa en ruta igen, eller för att visa ytterligare "
 "informationskällor, klicka på Anpassa sidan."
 
-#: apps/io.ox/tours/intro.js:44 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:45 module:io.ox/tours
 msgid ""
 "To display the help or the settings, click the System menu icon in the menu "
 "bar."
@@ -609,7 +609,7 @@ msgstr ""
 "För att öppna eller stänga e-brev i en konversation, klicka på en ledig yta "
 "i sidhuvudet."
 
-#: apps/io.ox/tours/intro.js:70 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:82 module:io.ox/tours
 msgid ""
 "To open or close the folder tree, click on View >  Folder view on the right "
 "side of the toolbar."
@@ -657,7 +657,7 @@ msgstr ""
 "För att få information om avsändaren eller andra mottagare, öppna halovyn "
 "genom att klicka på ett namn."
 
-#: apps/io.ox/tours/intro.js:75 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:95 module:io.ox/tours
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr "För att söka efter objekt, klicka på Sök-ikonen i menyraden."
 
@@ -741,7 +741,7 @@ msgstr ""
 "Använd mappträdet för att komma åt egna, offentliga, eller delade filer. Om "
 "mappträdet är dolt, klicka på Visa > Mappvy till höger i verktygsraden."
 
-#: apps/io.ox/tours/intro.js:85 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:105 module:io.ox/tours
 msgid ""
 "Use the folder tree to open the folder containing the objects that you want "
 "to view in the list."
@@ -749,7 +749,7 @@ msgstr ""
 "Använd mappträdet för att öppna mappen som innehåller objekten du vill se i "
 "listan."
 
-#: apps/io.ox/tours/intro.js:90 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:110 module:io.ox/tours
 msgid ""
 "Use the list to select an object, show its contents or activate functions."
 msgstr ""

@@ -55,7 +55,7 @@ msgstr "Nieuwe taak aanmaken"
 msgid "Creating a note"
 msgstr "Een notitie aanmaken"
 
-#: apps/io.ox/tours/intro.js:61 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:72 module:io.ox/tours
 msgid "Creating new items"
 msgstr "Nieuwe items aanmaken"
 
@@ -79,7 +79,7 @@ msgstr "De taak aanmaken"
 msgid "Customizing the Portal"
 msgstr "Aanpassingen maken in het Portaal"
 
-#: apps/io.ox/tours/intro.js:80 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:100 module:io.ox/tours
 msgid ""
 "Depending on the app, the toolbar contains various functions for creating, "
 "editing and organizing objects."
@@ -87,7 +87,7 @@ msgstr ""
 "Afhankelijk van de app bevat de werkbalk verschillende functies voor het "
 "aanmaken, bewerken en organiseren van objecten."
 
-#: apps/io.ox/tours/intro.js:100 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:120 module:io.ox/tours
 msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
 msgstr ""
@@ -98,7 +98,7 @@ msgstr ""
 msgid "Displaying information"
 msgstr "Tonen van informatie"
 
-#: apps/io.ox/tours/intro.js:43 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid "Displaying the help or the settings"
 msgstr "Tonen van de hulp of de instellingen"
 
@@ -204,7 +204,7 @@ msgstr ""
 msgid "Further functions"
 msgstr "Andere mogelijkheden"
 
-#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:119 module:io.ox/tours
 msgid "Further information"
 msgstr "Meer informatie"
 
@@ -233,7 +233,7 @@ msgstr ""
 msgid "If you no longer want to display a square, click the cross."
 msgstr "Als u een vlak niet langer wilt tonen moet u op het kruis klikken."
 
-#: apps/io.ox/tours/intro.js:57 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:66 module:io.ox/tours
 msgid ""
 "In case of new notifications, e.g. appointment invitations, the info area is "
 "opened."
@@ -276,7 +276,7 @@ msgstr "Navigatiebalk"
 msgid "Opening an E-Mail in a separate window"
 msgstr "Een e-mailbericht openen in een apert scherm"
 
-#: apps/io.ox/tours/intro.js:69 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:81 module:io.ox/tours
 msgid "Opening or closing the folder tree"
 msgstr "Openen of sluiten van de mappenboom"
 
@@ -300,7 +300,7 @@ msgstr "E-mailconversaties lezen"
 msgid "Reading the details"
 msgstr "Details lezen"
 
-#: apps/io.ox/tours/intro.js:74 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Zoeken naar objecten"
 
@@ -329,11 +329,11 @@ msgstr "Taken sorteren"
 msgid "Sorting your E-Mails"
 msgstr "Sorteren van e-mailberichten"
 
-#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:114 module:io.ox/tours
 msgid "The Detail view"
 msgstr "Het Detailoverzicht"
 
-#: apps/io.ox/tours/intro.js:95 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:115 module:io.ox/tours
 msgid ""
 "The Detail view displays an object's content. Depending on the app, further "
 "functions for organizing objects can be found in the Detail view."
@@ -380,11 +380,11 @@ msgstr ""
 "wijziging. Gebruik de selectievakken om bestanden te selecteren. Klik op een "
 "bestand om meer details en functies te tonen in de pop-up."
 
-#: apps/io.ox/tours/intro.js:50 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:58 module:io.ox/tours
 msgid "The New objects icon"
 msgstr "Het 'Nieuwe objecten' pictogram"
 
-#: apps/io.ox/tours/intro.js:51 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:59 module:io.ox/tours
 msgid ""
 "The New objects icon shows the number of unread E-Mails or other "
 "notifications. If clicking the icon, the info area opens."
@@ -429,15 +429,15 @@ msgstr ""
 "Het agendaoverzicht toont een kalenderblad met de afspraken voor de gekozen "
 "tijdsinterval."
 
-#: apps/io.ox/tours/intro.js:84 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:104 module:io.ox/tours
 msgid "The folder tree"
 msgstr "De mappenboom"
 
-#: apps/io.ox/tours/intro.js:56 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:65 module:io.ox/tours
 msgid "The info area"
 msgstr "Het meldingengebied"
 
-#: apps/io.ox/tours/intro.js:89 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:109 module:io.ox/tours
 msgid "The list"
 msgstr "De lijst"
 
@@ -449,7 +449,7 @@ msgstr ""
 "De instellingen zijn georganiseerd in onderwerpen. Selecteer het onderwerp "
 "aan de linkerkant, bijvoorbeeld Basisinstellingen of E-mail."
 
-#: apps/io.ox/tours/intro.js:79 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
 msgid "The toolbar"
 msgstr "De werkbalk"
 
@@ -488,7 +488,7 @@ msgstr ""
 "Om een nieuw e-mailbericht te maken klikt u op Nieuw e-mailbericht opstellen "
 "in de werkbalk."
 
-#: apps/io.ox/tours/intro.js:62 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:73 module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr ""
 "Om een nieuw e-mailbericht te maken klikt u op 'Nieuw e-mailbericht "
@@ -547,7 +547,7 @@ msgstr ""
 "Om een vlak opnieuw te tonen of om meer informatiebronnen toe te voegen "
 "klikt u op Deze pagina aanpassen."
 
-#: apps/io.ox/tours/intro.js:44 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:45 module:io.ox/tours
 msgid ""
 "To display the help or the settings, click the System menu icon in the menu "
 "bar."
@@ -618,7 +618,7 @@ msgstr ""
 "Om een E-mail uit een conversatie te openen of te sluiten klikt u op het "
 "vrije gebied in de kop."
 
-#: apps/io.ox/tours/intro.js:70 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:82 module:io.ox/tours
 msgid ""
 "To open or close the folder tree, click on View >  Folder view on the right "
 "side of the toolbar."
@@ -667,7 +667,7 @@ msgstr ""
 "Om informatie te krijgen over de verzender of andere ontvangers kan u "
 "gebruik maken van het Halo-overzicht door op een naam te klikken."
 
-#: apps/io.ox/tours/intro.js:75 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:95 module:io.ox/tours
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr "Om objecten te zoeken, klikt u op het Zoeken pictogram in de menubalk."
 
@@ -753,7 +753,7 @@ msgstr ""
 "Als de mappenboom verborgen is klikt u op Overzicht > Mappenoverzicht aan de "
 "rechterkant van de werkbalk."
 
-#: apps/io.ox/tours/intro.js:85 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:105 module:io.ox/tours
 msgid ""
 "Use the folder tree to open the folder containing the objects that you want "
 "to view in the list."
@@ -761,7 +761,7 @@ msgstr ""
 "Gebruik de mappenboom om een map te openen waarin de objecten staan die u "
 "wilt zien in de lijst."
 
-#: apps/io.ox/tours/intro.js:90 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:110 module:io.ox/tours
 msgid ""
 "Use the list to select an object, show its contents or activate functions."
 msgstr ""

@@ -478,6 +478,39 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             this.setContent(content);
         };
 
+        this.setContentParts = function (data, type) {
+            var content = '';
+            // normalise
+            data = _.isString(data) ? { content: data } : data;
+            // concat content parts
+            if (data.content) content += data.content;
+            if (type === 'above' && data.cite) content += ('\n\n' + data.cite);
+            if (data.quote) content += ('\n\n' + data.quote || '');
+            if (type === 'below' && data.cite) content += ('\n\n' + data.cite);
+            this.setContent(content);
+        };
+
+        // hint: does not detects the cite block
+        this.getContentParts = function () {
+            var content = this.getContent(),
+                index = content.indexOf('<blockquote type="cite">');
+            if (index < 0) return { content: content };
+            return {
+                // content without trailing whitespace
+                content: content.substring(0, index).replace(/\s+$/g, ''),
+                quote: content.substring(index),
+                cite: undefined
+            };
+        };
+
+        this.insertPrevCite = function (str) {
+            var data = this.getContentParts();
+            str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
+            // add cite
+            data.cite = str;
+            this.setContentParts(data, 'above');
+        };
+
         this.replaceParagraph = function (str, rep) {
             var content = this.getContent(), pos, top;
             str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';

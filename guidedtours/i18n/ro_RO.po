@@ -55,7 +55,7 @@ msgstr "Crearea unei sarcini noi"
 msgid "Creating a note"
 msgstr "Crearea unei note"
 
-#: apps/io.ox/tours/intro.js:61 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:72 module:io.ox/tours
 msgid "Creating new items"
 msgstr "Crearea de elemente noi"
 
@@ -79,7 +79,7 @@ msgstr "Crearea sarcinii"
 msgid "Customizing the Portal"
 msgstr "Personalizarea portalului"
 
-#: apps/io.ox/tours/intro.js:80 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:100 module:io.ox/tours
 msgid ""
 "Depending on the app, the toolbar contains various functions for creating, "
 "editing and organizing objects."
@@ -87,7 +87,7 @@ msgstr ""
 "În funcție de aplicație, bara de unelte conține diverse funcții pentru "
 "crearea, editarea și organizarea obiectelor."
 
-#: apps/io.ox/tours/intro.js:100 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:120 module:io.ox/tours
 msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
 msgstr ""
@@ -98,7 +98,7 @@ msgstr ""
 msgid "Displaying information"
 msgstr "Afișarea de informații"
 
-#: apps/io.ox/tours/intro.js:43 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid "Displaying the help or the settings"
 msgstr "Afișarea ajutorului și setărilor"
 
@@ -203,7 +203,7 @@ msgstr "Mai jos puteți adăuga documente ca fișiere atașate întâlnirii ."
 msgid "Further functions"
 msgstr "Funcții suplimentare"
 
-#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:119 module:io.ox/tours
 msgid "Further information"
 msgstr "Informații suplimentare"
 
@@ -232,7 +232,7 @@ msgstr ""
 msgid "If you no longer want to display a square, click the cross."
 msgstr "Dacă nu mai doriți afișarea cadrului, apăsați pe cruce."
 
-#: apps/io.ox/tours/intro.js:57 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:66 module:io.ox/tours
 msgid ""
 "In case of new notifications, e.g. appointment invitations, the info area is "
 "opened."
@@ -275,7 +275,7 @@ msgstr "Bara de navigare"
 msgid "Opening an E-Mail in a separate window"
 msgstr "Deschiderea unui e-mail într-o fereastră separată"
 
-#: apps/io.ox/tours/intro.js:69 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:81 module:io.ox/tours
 msgid "Opening or closing the folder tree"
 msgstr "Deschiderea sau închiderea arborelui de dosare"
 
@@ -299,7 +299,7 @@ msgstr "Citirea conversațiilor de e-mail"
 msgid "Reading the details"
 msgstr "Citirea detaliilor"
 
-#: apps/io.ox/tours/intro.js:74 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Căutarea de obiecte"
 
@@ -328,11 +328,11 @@ msgstr "Sortarea sarcinilor"
 msgid "Sorting your E-Mails"
 msgstr "Sortarea e-mailurilor"
 
-#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:114 module:io.ox/tours
 msgid "The Detail view"
 msgstr "Vederea detaliată"
 
-#: apps/io.ox/tours/intro.js:95 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:115 module:io.ox/tours
 msgid ""
 "The Detail view displays an object's content. Depending on the app, further "
 "functions for organizing objects can be found in the Detail view."
@@ -380,11 +380,11 @@ msgstr ""
 "fișier pentru a vizualiza detaliile și funcțiile suplimentare într-o "
 "fereastră pop-up. "
 
-#: apps/io.ox/tours/intro.js:50 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:58 module:io.ox/tours
 msgid "The New objects icon"
 msgstr "Pictograma Obiecte noi"
 
-#: apps/io.ox/tours/intro.js:51 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:59 module:io.ox/tours
 msgid ""
 "The New objects icon shows the number of unread E-Mails or other "
 "notifications. If clicking the icon, the info area opens."
@@ -430,15 +430,15 @@ msgstr ""
 "Vederile calendar afișează o foaie de calendar cu întâlnirile pentru "
 "intervalul de timp selectat."
 
-#: apps/io.ox/tours/intro.js:84 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:104 module:io.ox/tours
 msgid "The folder tree"
 msgstr "Arborele de dosare"
 
-#: apps/io.ox/tours/intro.js:56 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:65 module:io.ox/tours
 msgid "The info area"
 msgstr "Zona de informații"
 
-#: apps/io.ox/tours/intro.js:89 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:109 module:io.ox/tours
 msgid "The list"
 msgstr "Lista"
 
@@ -450,7 +450,7 @@ msgstr ""
 "Setările sunt grupate pe subiecte. Selectați subiectul în partea stângă, de "
 "ex. Setări de bază sau E-mail."
 
-#: apps/io.ox/tours/intro.js:79 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
 msgid "The toolbar"
 msgstr "Bara de unelte"
 
@@ -487,7 +487,7 @@ msgstr ""
 msgid "To compose a new E-Mail, click on Compose in the toolbar."
 msgstr "Pentru a compune un e-mail nou, apăsați pe Compune în bara de unelte."
 
-#: apps/io.ox/tours/intro.js:62 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:73 module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr ""
 "Pentru a crea un e-mail nou, apăsați pe Creează e-mail nou în bara de unelte."
@@ -542,7 +542,7 @@ msgstr ""
 "Pentru a afișa un cadru din nou sau pentru a afișa surse de informații "
 "suplimentare, apăsați pe Personalizează pagina."
 
-#: apps/io.ox/tours/intro.js:44 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:45 module:io.ox/tours
 msgid ""
 "To display the help or the settings, click the System menu icon in the menu "
 "bar."
@@ -617,7 +617,7 @@ msgstr ""
 "Pentru a deschide sau a închide un e-mail dintr-o conversație, apăsați pe o "
 "zonă liberă din antet."
 
-#: apps/io.ox/tours/intro.js:70 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:82 module:io.ox/tours
 msgid ""
 "To open or close the folder tree, click on View >  Folder view on the right "
 "side of the toolbar."
@@ -666,7 +666,7 @@ msgstr ""
 "Pentru a primi informații despre expeditor sau alți destinatari, deschideți "
 "vederea haloului apăsând pe un nume."
 
-#: apps/io.ox/tours/intro.js:75 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:95 module:io.ox/tours
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr ""
 "Pentru a căuta anumite obiecte,  apăsați pe pictograma Căutare din bara de "
@@ -756,7 +756,7 @@ msgstr ""
 "partajate. Dacă arborele de dosare este ascuns, apăsați pe Vedere > Vedere "
 "dosar în partea dreaptă a barei de unelte."
 
-#: apps/io.ox/tours/intro.js:85 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:105 module:io.ox/tours
 msgid ""
 "Use the folder tree to open the folder containing the objects that you want "
 "to view in the list."
@@ -764,7 +764,7 @@ msgstr ""
 "Utilzați arborele de dosare pentru a deschide dosarul care conține obiectele "
 "pe care doriți să le vizualizați în listă."
 
-#: apps/io.ox/tours/intro.js:90 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:110 module:io.ox/tours
 msgid ""
 "Use the list to select an object, show its contents or activate functions."
 msgstr ""

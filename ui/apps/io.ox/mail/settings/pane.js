@@ -50,6 +50,11 @@ define('io.ox/mail/settings/pane', [
             { label: gt('10 minutes'), value: '10_minutes' }
         ];
 
+    // not possible to set nested defaults, so do it here
+    if (mailSettings.get('features/registerProtocolHandler') === undefined) {
+        mailSettings.set('features/registerProtocolHandler', true);
+    }
+
     var MailSettingsView = Backbone.View.extend({
         tagName: 'div',
 
@@ -190,6 +195,12 @@ define('io.ox/mail/settings/pane', [
                         $('<div class="checkbox expertmode">').append(
                             $('<label>').text(gt('Use fixed-width font for text mails')).prepend(
                                 new mini.CheckboxView({ name: 'useFixedWidthFont', model: mailSettings }).render().$el
+                            )
+                        ),
+                        // mailto handler registration
+                        $('<div class="checkbox expertmode">').append(
+                            $('<label>').text(gt('Ask for mailto link registration')).prepend(
+                                new mini.CheckboxView({ name: 'features/registerProtocolHandler', model: mailSettings }).render().$el
                             )
                         )
                     )

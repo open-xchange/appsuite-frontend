@@ -177,9 +177,9 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/archive', {
+        capabilities: 'archive_emails',
         requires: function (e) {
             if (!e.collection.has('some')) return false;
-
             return _(e.baton.array()).reduce(function (memo, obj) {
                 // already false?
                 if (memo === false) return false;
@@ -195,7 +195,6 @@ define('io.ox/mail/actions', [
         },
         action: function (baton) {
             var list = _.isArray(baton.data) ? baton.data : [ baton.data ];
-
             api.archive(list);
         }
     });

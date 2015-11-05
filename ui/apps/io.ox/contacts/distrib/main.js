@@ -28,8 +28,6 @@ define('io.ox/contacts/distrib/main', [
         var app,
             win,
             container,
-            model,
-            view,
             considerSaved = false,
             initialDistlist;
 
@@ -48,7 +46,7 @@ define('io.ox/contacts/distrib/main', [
             win.setTitle(gt('Create distribution list'));
 
             if (initdata) {
-                model = contactModel.factory.create({
+                app.model = contactModel.factory.create({
                     display_name: initdata.display_name ? initdata.display_name : '',
                     folder_id: folderId,
                     mark_as_distributionlist: true,
@@ -56,11 +54,11 @@ define('io.ox/contacts/distrib/main', [
                     last_name: ''
                 });
             } else {
-                model = contactModel.factory.create(initialDistlist);
+                app.model = contactModel.factory.create(initialDistlist);
             }
 
-            view = new ContactCreateDistView({
-                model: model,
+            app.view = new ContactCreateDistView({
+                model: app.model,
                 app: this
             });
 
@@ -68,7 +66,7 @@ define('io.ox/contacts/distrib/main', [
                 app.quit();
             }
 
-            model.on({
+            app.model.on({
                 'sync:start': function () {
                     win.busy();
                 },
@@ -87,16 +85,16 @@ define('io.ox/contacts/distrib/main', [
             });
 
             win.on('show', function () {
-                if (model.get('id')) {
+                if (app.model.get('id')) {
                     //set url parameters
-                    app.setState({ folder: model.get('folder_id'), id: model.get('id') });
+                    app.setState({ folder: app.model.get('folder_id'), id: app.model.get('id') });
                 } else {
-                    app.setState({ folder: model.get('folder_id'), id: null });
+                    app.setState({ folder: app.model.get('folder_id'), id: null });
                 }
             });
 
             // go!
-            container.append(view.render().$el);
+            container.append(app.view.render().$el);
             win.show();
         };
 
@@ -106,19 +104,19 @@ define('io.ox/contacts/distrib/main', [
             return contactModel.factory.realm('edit').retain().get(api.reduce(obj)).done(function (data) {
 
                 // actually data IS a model
-                model = data;
+                app.model = data;
 
                 // set state
-                app.setState({ folder: model.get('folder_id'), id: model.get('id') });
+                app.setState({ folder: app.model.get('folder_id'), id: app.model.get('id') });
 
-                app.setTitle(model.get('display_name'));
+                app.setTitle(app.model.get('display_name'));
 
                 // set title, init model/view
                 win.setTitle(gt('Edit distribution list'));
 
-                view = new ContactCreateDistView({ model: model, app: app });
+                app.view = new ContactCreateDistView({ model: app.model, app: app });
 
-                model.on({
+                app.model.on({
                     'sync:start': function () {
                         win.busy();
                     },
@@ -135,16 +133,16 @@ define('io.ox/contacts/distrib/main', [
                 });
 
                 win.on('show', function () {
-                    if (model.get('id')) {
+                    if (app.model.get('id')) {
                         //set url parameters
-                        app.setState({ folder: model.get('folder_id'), id: model.get('id') });
+                        app.setState({ folder: app.model.get('folder_id'), id: app.model.get('id') });
                     } else {
-                        app.setState({ folder: model.get('folder_id'), id: null });
+                        app.setState({ folder: app.model.get('folder_id'), id: null });
                     }
                 });
 
                 // go!
-                container.append(view.render().$el);
+                container.append(app.view.render().$el);
                 win.show();
             });
         };
@@ -190,8 +188,8 @@ define('io.ox/contacts/distrib/main', [
 
         app.setQuit(function () {
             var def = $.Deferred();
-            if (model.isDirty() && considerSaved === false) {
-                if (_.isEqual(initialDistlist, model.changedSinceLoading())) {
+            if (app.model.isDirty() && considerSaved === false) {
+                if (_.isEqual(initialDistlist, app.model.changedSinceLoading())) {
                     def.resolve();
                 } else {
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
@@ -204,13 +202,13 @@ define('io.ox/contacts/distrib/main', [
                             .show()
                             .done(function (action) {
                                 if (action === 'delete') {
-                                    model.factory.realm('edit').release();
+                                    app.model.factory.realm('edit').release();
                                     def.resolve();
                                 } else {
                                     // NOTE: biggeleben: maybe we need a better function here
                                     // actually I just want to reset the current model
                                     // see Bug 26184 - [L3] Contact in Distribution list will still be deleted although the removal of the contact in edit mode was cancelled
-                                    model.factory.realm('edit').destroy();
+                                    app.model.factory.realm('edit').destroy();
                                     def.reject();
                                 }
                             });
@@ -218,7 +216,7 @@ define('io.ox/contacts/distrib/main', [
                 }
 
             } else {
-                model.factory.realm('edit').release();
+                app.model.factory.realm('edit').release();
                 def.resolve();
             }
 

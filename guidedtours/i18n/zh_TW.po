@@ -51,7 +51,7 @@ msgstr "新建工作"
 msgid "Creating a note"
 msgstr "建立筆記"
 
-#: apps/io.ox/tours/intro.js:61 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:72 module:io.ox/tours
 msgid "Creating new items"
 msgstr "建立新項目"
 
@@ -75,13 +75,13 @@ msgstr "建立任務"
 msgid "Customizing the Portal"
 msgstr "自訂 Portal"
 
-#: apps/io.ox/tours/intro.js:80 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:100 module:io.ox/tours
 msgid ""
 "Depending on the app, the toolbar contains various functions for creating, "
 "editing and organizing objects."
 msgstr "視應用程式而定，工具列包含了建立、編輯、管理物件的不同功能。"
 
-#: apps/io.ox/tours/intro.js:100 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:120 module:io.ox/tours
 msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
 msgstr "可以在系統選單 > 說明中找到各程式的詳細操作說明。"
@@ -90,7 +90,7 @@ msgstr "可以在系統選單 > 說明中找到各程式的詳細操作說明。
 msgid "Displaying information"
 msgstr "顯示資訊"
 
-#: apps/io.ox/tours/intro.js:43 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid "Displaying the help or the settings"
 msgstr "顯示選項或說明"
 
@@ -188,7 +188,7 @@ msgstr "您還可以新增文件為附件至約會。"
 msgid "Further functions"
 msgstr "更多功能"
 
-#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:119 module:io.ox/tours
 msgid "Further information"
 msgstr "更多資訊"
 
@@ -215,7 +215,7 @@ msgstr "若雙擊清單中的郵件，將於不同視窗中開啟該郵件。"
 msgid "If you no longer want to display a square, click the cross."
 msgstr "若您不想要顯示方塊，點擊叉叉。"
 
-#: apps/io.ox/tours/intro.js:57 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:66 module:io.ox/tours
 msgid ""
 "In case of new notifications, e.g. appointment invitations, the info area is "
 "opened."
@@ -252,7 +252,7 @@ msgstr "導覽列"
 msgid "Opening an E-Mail in a separate window"
 msgstr "在不同視窗開啟郵件"
 
-#: apps/io.ox/tours/intro.js:69 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:81 module:io.ox/tours
 msgid "Opening or closing the folder tree"
 msgstr "開啟或關閉資料夾樹"
 
@@ -276,7 +276,7 @@ msgstr "閱讀郵件討論串"
 msgid "Reading the details"
 msgstr "閱讀詳情"
 
-#: apps/io.ox/tours/intro.js:74 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "搜尋物件"
 
@@ -305,11 +305,11 @@ msgstr "排序任務"
 msgid "Sorting your E-Mails"
 msgstr "排序您的郵件"
 
-#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:114 module:io.ox/tours
 msgid "The Detail view"
 msgstr "詳細視圖"
 
-#: apps/io.ox/tours/intro.js:95 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:115 module:io.ox/tours
 msgid ""
 "The Detail view displays an object's content. Depending on the app, further "
 "functions for organizing objects can be found in the Detail view."
@@ -352,11 +352,11 @@ msgstr ""
 "清單視圖將會顯示大小與修改日期等詳情。使用選取盒來選取檔案，點擊檔案以在彈出"
 "視窗中檢視更多資料或操作功能。"
 
-#: apps/io.ox/tours/intro.js:50 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:58 module:io.ox/tours
 msgid "The New objects icon"
 msgstr "新物件圖示"
 
-#: apps/io.ox/tours/intro.js:51 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:59 module:io.ox/tours
 msgid ""
 "The New objects icon shows the number of unread E-Mails or other "
 "notifications. If clicking the icon, the info area opens."
@@ -394,15 +394,15 @@ msgid ""
 "selected time range."
 msgstr "行事曆視圖將會顯示包含指定時間範圍中約會的行事曆。"
 
-#: apps/io.ox/tours/intro.js:84 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:104 module:io.ox/tours
 msgid "The folder tree"
 msgstr "資料夾樹"
 
-#: apps/io.ox/tours/intro.js:56 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:65 module:io.ox/tours
 msgid "The info area"
 msgstr "資訊區域"
 
-#: apps/io.ox/tours/intro.js:89 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:109 module:io.ox/tours
 msgid "The list"
 msgstr "清單"
 
@@ -412,7 +412,7 @@ msgid ""
 "Basic settings or E-Mail."
 msgstr "設定依照主題排序顯示。點擊左邊的主題，例如「基礎設定」或「電子郵件」。"
 
-#: apps/io.ox/tours/intro.js:79 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
 msgid "The toolbar"
 msgstr "工具列"
 
@@ -444,7 +444,7 @@ msgstr "要選擇不同視圖，點擊工具列列中的視圖。在版面中選
 msgid "To compose a new E-Mail, click on Compose in the toolbar."
 msgstr "要撰寫新郵件，點選工具列的撰寫。"
 
-#: apps/io.ox/tours/intro.js:62 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:73 module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr "要發新信，點擊工具列中的的寫新郵件圖示。"
 
@@ -490,7 +490,7 @@ msgid ""
 "on Customize this page."
 msgstr "要再次顯示方塊或顯示更多資訊來源，點選此頁面的自訂。"
 
-#: apps/io.ox/tours/intro.js:44 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:45 module:io.ox/tours
 msgid ""
 "To display the help or the settings, click the System menu icon in the menu "
 "bar."
@@ -553,7 +553,7 @@ msgid ""
 "header."
 msgstr "要開啟或關閉討論串中的郵件，點選檔頭旁的空白區域。"
 
-#: apps/io.ox/tours/intro.js:70 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:82 module:io.ox/tours
 msgid ""
 "To open or close the folder tree, click on View >  Folder view on the right "
 "side of the toolbar."
@@ -593,7 +593,7 @@ msgid ""
 "view by clicking on a name."
 msgstr "要取得寄件者或其他收件者的資訊，點選姓名中的 Halo View"
 
-#: apps/io.ox/tours/intro.js:75 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:95 module:io.ox/tours
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr "要搜尋物件，點選選單列中的搜尋圖示。"
 
@@ -664,13 +664,13 @@ msgstr ""
 "使用資料夾樹存取自己的、公開的或共享的檔案。若資料夾樹被隱藏了，點擊工具列右"
 "邊的檢視 > 資料夾視圖。"
 
-#: apps/io.ox/tours/intro.js:85 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:105 module:io.ox/tours
 msgid ""
 "Use the folder tree to open the folder containing the objects that you want "
 "to view in the list."
 msgstr "使用資料夾樹來開啟包含你想要在清單中檢視的物件的資料夾。"
 
-#: apps/io.ox/tours/intro.js:90 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:110 module:io.ox/tours
 msgid ""
 "Use the list to select an object, show its contents or activate functions."
 msgstr "使用清單來選擇物件，以檢視其內容或套用功能。"

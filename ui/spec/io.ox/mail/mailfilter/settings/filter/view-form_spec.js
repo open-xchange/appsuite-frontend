@@ -14,7 +14,7 @@
 define([
     'io.ox/mail/mailfilter/settings/filter',
     'waitsFor',
-    'gettext!io.ox/settings/settings'
+    'gettext!io.ox/settings'
 ], function (filters, waitsFor, gt) {
 
     'use strict';
@@ -173,7 +173,7 @@ define([
             expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Any recipient') + ')')).to.have.length(1);
             expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Subject') + ')')).to.have.length(1);
             expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Mailing list') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('To') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Envelope - To') + ')')).to.have.length(1);
             expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('CC') + ')')).to.have.length(1);
             expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Header') + ')')).to.have.length(1);
             expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Envelope') + ')')).to.have.length(1);
