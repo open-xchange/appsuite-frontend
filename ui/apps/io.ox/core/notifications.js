@@ -288,11 +288,13 @@ define('io.ox/core/notifications', [
                 var bannerHeight = $('#io-ox-banner:visible').css('height'),
                     nodeHeight = parseInt(this.nodes.main.css('top').replace('px', ''), 10);
 
-                bannerHeight = parseInt(bannerHeight.replace('px', ''), 10);
-                this.bannerHeight = bannerHeight;
+                if (bannerHeight !== undefined) {
+                    bannerHeight = parseInt(bannerHeight.replace('px', ''), 10);
+                    this.bannerHeight = bannerHeight;
 
-                var newHeight = nodeHeight + bannerHeight;
-                this.nodes.main.css('top', newHeight + 'px');
+                    var newHeight = nodeHeight + bannerHeight;
+                    this.nodes.main.css('top', newHeight + 'px');
+                }
             }
 
             if (_.device('smartphone')) {
