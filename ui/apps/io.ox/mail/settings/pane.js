@@ -201,7 +201,16 @@ define('io.ox/mail/settings/pane', [
                         $('<div class="checkbox expertmode">').append(
                             $('<label>').text(gt('Ask for mailto link registration')).prepend(
                                 new mini.CheckboxView({ name: 'features/registerProtocolHandler', model: mailSettings }).render().$el
-                            )
+                            ),
+                            // if supported add register now link
+                            navigator.registerProtocolHandler ?
+                            $('<a href="#" >').text(gt('Register now')).css('margin-left', '8px').on('click', function (e) {
+                                e.preventDefault();
+                                var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
+                                navigator.registerProtocolHandler(
+                                    'mailto', url + '#app=' + ox.registry.get('mail-compose') + ':compose&mailto=%s', ox.serverConfig.productNameMail
+                                );
+                            }) : []
                         )
                     )
                 )
