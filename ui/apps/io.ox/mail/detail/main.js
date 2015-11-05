@@ -27,7 +27,7 @@ define('io.ox/mail/detail/main',
          * Setup thread view
          */
         'thread-view': function (app) {
-            app.threadView = new threadView.Desktop();
+            app.threadView = new threadView.Desktop({ disableDrag: true });
             app.getWindow().nodes.main
                 .addClass('mail-reader')
                 .append(app.threadView.render().$el);
