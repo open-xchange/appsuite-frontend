@@ -144,9 +144,9 @@ define([
             expect(this.node.find('li [data-action="edit-vacation"]')).to.have.length(1);
             expect(this.node.find('li [data-action="toggle"]')).to.have.length(3);
             expect(this.node.find('li [data-action="delete"]')).to.have.length(3);
-            expect(this.node.find('li [data-action="toogleProcessSub"]')).to.have.length(3);
-            expect(this.node.find('li[data-id="0"] [data-action="toogleProcessSub"] i').hasClass('fa-ban')).to.be.true;
-            expect(this.node.find('li[data-id="2"] [data-action="toogleProcessSub"] i').hasClass('fa-arrow-down')).to.be.true;
+            expect(this.node.find('li [data-action="toggle-process-subsequent"]')).to.have.length(3);
+            expect(this.node.find('li[data-id="0"] [data-action="toggle-process-subsequent"] i').hasClass('fa-ban')).to.be.true;
+            expect(this.node.find('li[data-id="2"] [data-action="toggle-process-subsequent"] i').hasClass('fa-arrow-down')).to.be.true;
 
         });
 

@@ -294,7 +294,7 @@ define('io.ox/files/view-options', [
                                 )
                             ).show();
                     };
-                $(filestorageApi).on('create delete update', draw);
+                filestorageApi.on('create delete update', draw);
                 draw();
             });
         }

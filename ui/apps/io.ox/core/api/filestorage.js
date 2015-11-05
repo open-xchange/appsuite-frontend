@@ -17,7 +17,10 @@
 *  Otherwise functions like isStorageAvailable or getAccountForOauth don't work correctly. Those functions were designed without deferreds so they can be used in if statements
 */
 
-define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
+define('io.ox/core/api/filestorage', [
+    'io.ox/core/http',
+    'io.ox/core/event'
+], function (http, Events) {
 
     'use strict';
 
@@ -204,7 +207,7 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
 
                         accountsCache.add(account);
                         addToIdsCache([account]);
-                        $(api).trigger('create', accountsCache.get(account));
+                        api.trigger('create', accountsCache.get(account));
 
                         return accountsCache.get(account);
                     });
@@ -246,7 +249,7 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                 if (options.softDelete) {
                     accountsCache.remove(data);
                     idsCache = _(idsCache).without(data.qualifiedId);
-                    $(api).trigger('delete', model || data);
+                    api.trigger('delete', model || data);
 
                     return true;
                 }
@@ -263,7 +266,7 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                     function success(response) {
                         accountsCache.remove(data);
                         idsCache = _(idsCache).without(data.qualifiedId);
-                        $(api).trigger('delete', model || data);
+                        api.trigger('delete', model || data);
 
                         return response;
                     },
@@ -272,7 +275,7 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                         // deleting an Oauth account with a matching filestorage account normally deletes the filestorageaccount too.
                         accountsCache.remove(data);
                         idsCache = _(idsCache).without(data.qualifiedId);
-                        $(api).trigger('delete', model || data);
+                        api.trigger('delete', model || data);
 
                         return error;
                     }
@@ -303,7 +306,7 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                     return api.getAccount({ id: options.id, filestorageService: options.filestorageService }, false).then(function (account) {
                         accountsCache.add(account, { merge: true });
 
-                        $(api).trigger('update', accountsCache.get(account));
+                        api.trigger('update', accountsCache.get(account));
 
                         return accountsCache.get(account);
                     });
@@ -380,6 +383,9 @@ define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
                 return isExternal;
             }
         };
+
+    // add event support
+    Events.extend(api);
 
     return api;
 

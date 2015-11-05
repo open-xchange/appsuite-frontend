@@ -86,9 +86,7 @@ define('io.ox/contacts/distrib/create-dist-view', [
         render: function () {
             var self = this;
             // define collection
-            this.baton.member = new Backbone.Collection(this.baton.model.get('distribution_list'), {
-                model: pModel.Participant
-            });
+            this.baton.member = new pModel.Participants(this.baton.model.get('distribution_list'));
 
             this.listenTo(this.baton.member, 'add remove reset', function (ctx, col) {
                 var all = col.map(function (m) {

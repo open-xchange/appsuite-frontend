@@ -172,7 +172,7 @@ define('io.ox/core/api/account', [
             } else {
                 // loop of all types to also check if a subfolder is of a type
                 return _(typeHash).some(function (defaultType, defaultId) {
-                    var isSubfolder = (id).indexOf(defaultId + separator) === 0;
+                    var isSubfolder = (id).indexOf(defaultId) === 0;
                     return defaultType === type && (defaultId === id || isSubfolder);
                 });
             }

@@ -943,12 +943,15 @@ define('io.ox/mail/compose/view', [
             if (this.model.get('signatures').length > 0) {
                 text = mailUtil.signatures.cleanAdd(signature.content, isHTML);
                 if (isHTML) text = this.getParagraph(text);
+                // signature wrapper
                 if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
                 if (signature.misc && signature.misc.insertion === 'below') {
                     this.editor.appendContent(text);
                     this.editor.scrollTop('bottom');
                 } else {
-                    this.editor.prependContent(text);
+                    // backward compatibility
+                    var proc = _.bind(this.editor.insertPrevCite || this.editor.prependContent, this.editor);
+                    proc(text);
                     this.editor.scrollTop('top');
                 }
             }
