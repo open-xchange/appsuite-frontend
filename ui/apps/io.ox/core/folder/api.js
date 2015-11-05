@@ -1186,7 +1186,7 @@ define('io.ox/core/folder/api', [
     ox.on('please:refresh refresh^', refresh);
 
     // If there is a new filestorage refresh the folders
-    $(filestorageApi).on('create delete update', refresh);
+    filestorageApi.on('create delete update', refresh);
 
     //
     // Get standard mail folders
