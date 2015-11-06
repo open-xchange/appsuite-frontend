@@ -506,19 +506,21 @@ define('io.ox/core/folder/node', [
             if (o.tree.module === 'mail') {
                 type = account.getType(this.folder) || 'default';
                 this.$.icon.addClass('visible ' + type);
-            } else {
-                if (this.folder === 'virtual/myshares') {
-                    this.$.icon.addClass('visible myshares');
-                } else {
-                    var self = this;
-                    require(['io.ox/core/api/filestorage'], function (filestorageApi) {
-                        var externalRoot = filestorageApi.isExternal(self.model.attributes, { type: true, root: true });
-                        if (externalRoot) {
-                            self.$.icon.addClass('visible external-filestorage-root ' + externalRoot);
-                        }
-                    });
-                }
+                return;
             }
+
+            var iconClass = '',
+                infostoreDefaultFolder = String(api.getDefaultFolder('infostore'));
+
+            switch (this.folder) {
+                case 'virtual/myshares':
+                    iconClass = 'visible myshares';
+                    break;
+                case infostoreDefaultFolder:
+                    iconClass = 'visible myfiles';
+                    break;
+            }
+            this.$.icon.addClass(iconClass);
         },
 
         render: function () {

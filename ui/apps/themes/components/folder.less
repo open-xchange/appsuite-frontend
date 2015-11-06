@@ -182,21 +182,7 @@
             &.default { i { color: #aaa; }}
 
             &.myshares { i:before{ content: '\f0c2'; }} // fa-cloud
-
-            &.external-filestorage-root {
-                i {
-                    background-size: cover;
-                    height: 14px;
-                    width: 14px;
-                    &:before { content: ''; }
-                    vertical-align: middle;
-                }
-            };
-
-            &.dropbox { i:before { content: '\f16b'; }} // fa-dropbox
-            &.googledrive { i { background-image: url(apps/themes/default/googledrive_logo32.png); }}
-            &.boxcom { i { background-image: url(apps/themes/default/box_logo36.png); }}
-            &.onedrive { i { background-image: url(apps/themes/default/onedrive_logo32.png); }}
+            &.myfiles { i:before{ content: '\f007'; }} // fa-user
         }
 
         .folder-checkbox {
@@ -232,7 +218,7 @@
         display: block;
     }
 
-    .favorites, .unified-folders, .standard-folders, .other-folders, .myshares, .root-folders {
+    .favorites, .unified-folders, .standard-folders, .other-folders, .myshares, .root-folders, .private-drive-folders, .public-drive-folders, .filestorage-folders {
         margin-bottom: @default-padding;
         @media (max-width: 480px), (max-device-width: 480px) {
             margin-bottom: 0;
