@@ -15,7 +15,7 @@ msgstr ""
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
 #. %1$d is the zoom level
-#: apps/io.ox/presenter/views/presentationview.js:922 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:1042 module:io.ox/presenter
 msgid "%1$d %"
 msgstr "%1$d %"
 
@@ -127,7 +127,7 @@ msgstr[1] "%1$d jäsenet"
 msgid "%1$d messages in this conversation"
 msgstr "%1$d viestiä tässä keskustelussa"
 
-#: apps/io.ox/mail/main.js:744 module:io.ox/mail
+#: apps/io.ox/mail/main.js:745 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d viestiä valittuna"
 
@@ -145,7 +145,7 @@ msgstr[1] "%1$d minuuttia"
 #. text of a presentation slide caption
 #: apps/io.ox/core/viewer/views/displayerview.js:139 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:544
-#: apps/io.ox/presenter/views/presentationview.js:355 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:370 module:io.ox/presenter
 msgid "%1$d of %2$d"
 msgstr "%1$s/%2$s"
 
@@ -157,7 +157,7 @@ msgstr[0] "%1$d sekuntia"
 msgstr[1] "%1$d valittuna"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:781 module:io.ox/mail
+#: apps/io.ox/mail/main.js:782 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "%1$d valittuna"
 
@@ -898,7 +898,7 @@ msgstr "Lisää tilisi"
 msgid "Added the new participant"
 msgstr "Uusi osallistuja lisätty"
 
-#: apps/io.ox/mail/settings/pane.js:254 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:263 module:io.ox/mail
 msgid "Additional settings"
 msgstr "Lisäasetukset"
 
@@ -1000,11 +1000,11 @@ msgstr "Kaikki tapaamiset"
 msgid "All timezones"
 msgstr "Kaikki aikavyöhykkeet"
 
-#: apps/io.ox/mail/settings/pane.js:310 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:319 module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "Salli html muotoillut sähköpostit"
 
-#: apps/io.ox/mail/settings/pane.js:315 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:324 module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
 msgstr "Salli muualta linkitettyjen kuvien ennakoiva lataaminen"
 
@@ -1045,7 +1045,7 @@ msgstr "Vuosipäivä"
 msgid "Any recipient"
 msgstr "Kuka tahansa vastaanottaja"
 
-#: apps/io.ox/mail/settings/pane.js:223 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:232 module:io.ox/mail
 msgid "Append vCard"
 msgstr "Lisää vCard käyntikorttini"
 
@@ -1053,7 +1053,7 @@ msgstr "Lisää vCard käyntikorttini"
 msgid "Application Toolbar"
 msgstr "Sovellustyökalupalkki"
 
-#: apps/io.ox/mail/main.js:1432 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1433 module:io.ox/mail
 #: apps/io.ox/settings/main.js:577 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
@@ -1238,7 +1238,7 @@ msgstr "Tekijä"
 msgid "Auto Forward"
 msgstr "Automaattinen välitys"
 
-#: apps/io.ox/mail/settings/pane.js:285 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:294 module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Luonnosten automaattinen tallennus"
 
@@ -1281,7 +1281,7 @@ msgstr ""
 
 #. It's a label for an input field with a number
 #. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js:261 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
 msgstr "Tekstin automaattinen rivitys näin monen merkin jälkeen:"
 
@@ -1502,7 +1502,7 @@ msgstr "Kalenteri:"
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:649
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1249
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1250
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:254
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
@@ -1585,7 +1585,7 @@ msgstr "Matkapuhelin vaihtoehtoinen"
 msgid "Change"
 msgstr "Muuta"
 
-#: apps/io.ox/mail/settings/pane.js:355 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:364 module:io.ox/mail
 msgid "Change IMAP subscriptions"
 msgstr "Muuta IMAP-tilauksia"
 
@@ -1796,7 +1796,7 @@ msgstr "Pienennä lomake"
 msgid "Color"
 msgstr "Väri"
 
-#: apps/io.ox/mail/settings/pane.js:325 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:334 module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Värjää lainaukset"
 
@@ -1855,7 +1855,7 @@ msgstr "Yhtiö"
 #: apps/io.ox/mail/compose/main.js:26 module:io.ox/mail
 #: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:480
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
-#: apps/io.ox/mail/settings/pane.js:219 apps/io.ox/mail/toolbar.js:40
+#: apps/io.ox/mail/settings/pane.js:228 apps/io.ox/mail/toolbar.js:40
 msgid "Compose"
 msgstr "Uusi viesti"
 
@@ -2265,7 +2265,7 @@ msgstr "Oletuskalenteri"
 msgid "Default reminder"
 msgstr "Oletusmuistutus"
 
-#: apps/io.ox/mail/settings/pane.js:275 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:284 module:io.ox/mail
 msgid "Default sender address"
 msgstr "Oletuslähettäjä"
 
@@ -2328,7 +2328,7 @@ msgid "Delete account"
 msgstr "Poista tili"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:753 module:io.ox/mail
+#: apps/io.ox/mail/main.js:754 module:io.ox/mail
 #, fuzzy
 #| msgctxt "folder"
 #| msgid "Deleted messages"
@@ -2496,7 +2496,7 @@ msgctxt "dialog"
 msgid "Discard message"
 msgstr "Hylkää viesti"
 
-#: apps/io.ox/mail/settings/pane.js:306 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:315 module:io.ox/mail
 msgid "Display"
 msgstr "Viestien näyttäminen"
 
@@ -2504,7 +2504,7 @@ msgstr "Viestien näyttäminen"
 msgid "Display Name"
 msgstr "Näytä nimi"
 
-#: apps/io.ox/mail/settings/pane.js:320 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:329 module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
 msgstr "Näytä hymiöt kuvina tekstimuotoisissa posteissa"
 
@@ -2867,7 +2867,7 @@ msgstr "ET"
 #: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:496
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1253
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1254
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:369
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:371
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
@@ -3645,7 +3645,7 @@ msgstr "Unohditko salasanasi?"
 msgid "Format"
 msgstr "Muotoile"
 
-#: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:254 module:io.ox/mail
 msgid "Format emails as"
 msgstr "Sähköpostin muoto"
 
@@ -3658,7 +3658,7 @@ msgstr "Välitä"
 msgid "Forward all incoming emails to this address"
 msgstr "Välitä kaikki saapuva posti tähän osoitteeseen"
 
-#: apps/io.ox/mail/settings/pane.js:236 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
 msgid "Forward emails as"
 msgstr "Viestien välitys"
 
@@ -3673,7 +3673,7 @@ msgstr "Freelancer"
 
 #: apps/io.ox/mail/actions/reminder.js:53 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:110
-#: apps/io.ox/mail/compose/extensions.js:169 apps/io.ox/mail/main.js:621
+#: apps/io.ox/mail/compose/extensions.js:169 apps/io.ox/mail/main.js:622
 #: apps/io.ox/mail/view-options.js:32
 msgid "From"
 msgstr "Lähettäjä"
@@ -4071,7 +4071,7 @@ msgstr "Lisää"
 msgid "Insert inline image"
 msgstr "Lisää joukkoon kuva"
 
-#: apps/io.ox/mail/settings/pane.js:228 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:237 module:io.ox/mail
 msgid "Insert the original email text to a reply"
 msgstr "Lisää alkuperäisen viesti teksti vastaukseen"
 
@@ -4172,14 +4172,14 @@ msgstr "Kohteet"
 
 #. items list (e.g. mails)
 #: apps/io.ox/core/commons.js:596 module:io.ox/core
-#: apps/io.ox/files/main.js:298 module:io.ox/files apps/io.ox/mail/main.js:512
+#: apps/io.ox/files/main.js:298 module:io.ox/files apps/io.ox/mail/main.js:513
 #: module:io.ox/mail
 msgid "Item list"
 msgstr "Kohteet"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/core/tk/vgrid.js:310 module:io.ox/core
-#: apps/io.ox/files/main.js:301 module:io.ox/files apps/io.ox/mail/main.js:515
+#: apps/io.ox/files/main.js:301 module:io.ox/files apps/io.ox/mail/main.js:516
 #: module:io.ox/mail
 msgid "Item list options"
 msgstr "Kohdeluettelovaihtoehdot"
@@ -4322,15 +4322,15 @@ msgid "Learn more"
 msgstr "Lue lisää"
 
 #. label for the leave presentation button
-#: apps/io.ox/presenter/views/presentationview.js:228 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:239 module:io.ox/presenter
 msgid "Leave"
 msgstr "Lähde"
 
 #. tooltip for the leave presentation button
 #. button label for leaving the presentation
 #. button tooltip for leaving the presentation
-#: apps/io.ox/presenter/views/presentationview.js:224 module:io.ox/presenter
-#: apps/io.ox/presenter/views/presentationview.js:225
+#: apps/io.ox/presenter/views/presentationview.js:235 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:236
 #: apps/io.ox/presenter/views/toolbarview.js:144
 #: apps/io.ox/presenter/views/toolbarview.js:151
 #: apps/io.ox/presenter/views/toolbarview.js:152
@@ -4804,7 +4804,7 @@ msgid "Move"
 msgstr "Siirrä"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:750 module:io.ox/mail
+#: apps/io.ox/mail/main.js:751 module:io.ox/mail
 #, fuzzy
 #| msgid "Show all %1$d messages in inbox"
 msgid "Move all %1$d messages to another folder"
@@ -5032,8 +5032,8 @@ msgstr "Seuraava sivu"
 #. button tooltip for 'go to next presentation slide' action
 #: apps/io.ox/presenter/views/navigationview.js:49 module:io.ox/presenter
 #: apps/io.ox/presenter/views/navigationview.js:50
-#: apps/io.ox/presenter/views/presentationview.js:89
-#: apps/io.ox/presenter/views/presentationview.js:90
+#: apps/io.ox/presenter/views/presentationview.js:93
+#: apps/io.ox/presenter/views/presentationview.js:94
 msgid "Next slide"
 msgstr "Seuraava dia"
 
@@ -5097,12 +5097,12 @@ msgstr "Ei kadotettuja pyyntöjä"
 msgid "No mails in your inbox"
 msgstr "Ei viestejä saapuneet laatikossasi"
 
-#: apps/io.ox/mail/main.js:718 module:io.ox/mail
+#: apps/io.ox/mail/main.js:719 module:io.ox/mail
 msgid "No message selected"
 msgstr "Ei valittuja viestejä"
 
 #: apps/io.ox/core/notifications.js:105 module:io.ox/core
-#: apps/io.ox/core/notifications.js:380
+#: apps/io.ox/core/notifications.js:382
 msgid "No notifications"
 msgstr "Ei ilmoituksia"
 
@@ -5481,7 +5481,7 @@ msgstr "PDF-tiedostot"
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:240 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:253 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "%1$s/%2$s"
 
@@ -5902,7 +5902,7 @@ msgid "Presentation end"
 msgstr "Esitys päättyy"
 
 #. Info text that says the presentation is paused.
-#: apps/io.ox/presenter/views/presentationview.js:219 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:230 module:io.ox/presenter
 msgid "Presentation is paused."
 msgstr "Esitys on pysäytetty."
 
@@ -5996,8 +5996,8 @@ msgstr "Edellinen sivu"
 #. button tooltip for 'go to previous presentation slide' action
 #: apps/io.ox/presenter/views/navigationview.js:53 module:io.ox/presenter
 #: apps/io.ox/presenter/views/navigationview.js:54
-#: apps/io.ox/presenter/views/presentationview.js:84
-#: apps/io.ox/presenter/views/presentationview.js:85
+#: apps/io.ox/presenter/views/presentationview.js:88
+#: apps/io.ox/presenter/views/presentationview.js:89
 msgid "Previous slide"
 msgstr "Edellinen dia"
 
@@ -6327,6 +6327,10 @@ msgstr "Päivitystiheys minuutteina:"
 #: module:io.ox/settings
 msgid "Regex"
 msgstr "Säännöllinen lauseke (regex)"
+
+#: apps/io.ox/mail/settings/pane.js:207 module:io.ox/mail
+msgid "Register now"
+msgstr ""
 
 #: apps/io.ox/calendar/invitations/register.js:34 module:io.ox/calendar/main
 msgid "Reject changes"
@@ -7060,7 +7064,7 @@ msgstr "Näytä lainattu teksti"
 msgid "Show request body"
 msgstr "Näytä pyynnön runko"
 
-#: apps/io.ox/mail/settings/pane.js:330 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:339 module:io.ox/mail
 msgid "Show requests for read receipts"
 msgstr "Näytä lukukuittauspyynnöt"
 
@@ -7172,13 +7176,20 @@ msgstr "%s ei juuri nyt saada yhteyttä."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "%s:ssa ei ole tietoja sinun saatavillasi."
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:27 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:29 module:io.ox/core
 msgid "Sorry, there is no preview available for this file."
 msgstr "Tiedostoa ei voi valitettavasti esikatsella."
 
 #: apps/io.ox/core/viewer/views/types/imageview.js:64 module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Kuvaa ei voi esikatsella."
+
+#: apps/io.ox/core/viewer/views/types/documentview.js:338 module:io.ox/core
+#: apps/io.ox/presenter/views/presentationview.js:750 module:io.ox/presenter
+#, fuzzy
+#| msgid "Sorry, there is no data available for you on %s."
+msgid "Sorry, this page is not available at the moment."
+msgstr "%s:ssa ei ole tietoja sinun saatavillasi."
 
 #: apps/plugins/portal/linkedIn/register.js:181 module:plugins/portal
 msgid ""
@@ -8015,7 +8026,7 @@ msgstr "Tämä yhteystieto on yksityinen eikä sitä voida jakaa."
 msgid "This distribution list has been added to the portal"
 msgstr "Tämä jakelulista on lisätty portaaliin"
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:28 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:30 module:io.ox/core
 msgid "This document is password protected and cannot be displayed."
 msgstr "Asiakirja on suojattu salasanalla eikä sitä voida näyttää."
 
@@ -8214,7 +8225,7 @@ msgstr "Titteli"
 #: apps/io.ox/mail/common-extensions.js:324 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:33
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:58
-#: module:io.ox/settings apps/io.ox/mail/main.js:619
+#: module:io.ox/settings apps/io.ox/mail/main.js:620
 #: apps/io.ox/mail/print.js:85 apps/io.ox/mail/view-options.js:32
 msgid "To"
 msgstr "Vastaanottaja"

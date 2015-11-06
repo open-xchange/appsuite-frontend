@@ -18,7 +18,7 @@ msgstr ""
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
 #. %1$d is the zoom level
-#: apps/io.ox/presenter/views/presentationview.js:922 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:1042 module:io.ox/presenter
 msgid "%1$d %"
 msgstr "%1$d %"
 
@@ -118,7 +118,7 @@ msgstr[0] "%1$d メンバー"
 msgid "%1$d messages in this conversation"
 msgstr "このスレッドに %1$d 件のメッセージが含まれています。"
 
-#: apps/io.ox/mail/main.js:744 module:io.ox/mail
+#: apps/io.ox/mail/main.js:745 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d 件のメッセージが選択されています。"
 
@@ -135,7 +135,7 @@ msgstr[0] "%1$d 分"
 #. text of a presentation slide caption
 #: apps/io.ox/core/viewer/views/displayerview.js:139 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:544
-#: apps/io.ox/presenter/views/presentationview.js:355 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:370 module:io.ox/presenter
 msgid "%1$d of %2$d"
 msgstr "%2$d 中の %1$d"
 
@@ -146,7 +146,7 @@ msgid_plural "%1$d seconds"
 msgstr[0] "%1$d 秒"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:781 module:io.ox/mail
+#: apps/io.ox/mail/main.js:782 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "%1$d 件のメッセージが選択されています。"
 
@@ -877,7 +877,7 @@ msgstr "アカウントを追加"
 msgid "Added the new participant"
 msgstr "新規出席者が追加されました。"
 
-#: apps/io.ox/mail/settings/pane.js:254 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:263 module:io.ox/mail
 msgid "Additional settings"
 msgstr "追加設定"
 
@@ -979,11 +979,11 @@ msgstr "全てのアポイント"
 msgid "All timezones"
 msgstr "全てのタイムゾーン"
 
-#: apps/io.ox/mail/settings/pane.js:310 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:319 module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "HTML フォーマットのメールを許可"
 
-#: apps/io.ox/mail/settings/pane.js:315 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:324 module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
 msgstr "外部リンク先の画像の事前読み込みを許可"
 
@@ -1024,7 +1024,7 @@ msgstr "記念日"
 msgid "Any recipient"
 msgstr "すべての宛先"
 
-#: apps/io.ox/mail/settings/pane.js:223 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:232 module:io.ox/mail
 msgid "Append vCard"
 msgstr "vCard を添付"
 
@@ -1032,7 +1032,7 @@ msgstr "vCard を添付"
 msgid "Application Toolbar"
 msgstr "アプリケーション ツールバー"
 
-#: apps/io.ox/mail/main.js:1432 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1433 module:io.ox/mail
 #: apps/io.ox/settings/main.js:577 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
@@ -1219,7 +1219,7 @@ msgstr "作成者"
 msgid "Auto Forward"
 msgstr "自動転送"
 
-#: apps/io.ox/mail/settings/pane.js:285 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:294 module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "下書きの自動保存"
 
@@ -1256,7 +1256,7 @@ msgstr "アポイントが承諾または辞退された後受信通知を自動
 
 #. It's a label for an input field with a number
 #. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js:261 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
 msgstr "送信メールの本文を自動的に折り返す文字数:"
 
@@ -1477,7 +1477,7 @@ msgstr "予定表："
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:649
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1249
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1250
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:254
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
@@ -1559,7 +1559,7 @@ msgstr "携帯電話 (予備)"
 msgid "Change"
 msgstr "変更"
 
-#: apps/io.ox/mail/settings/pane.js:355 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:364 module:io.ox/mail
 msgid "Change IMAP subscriptions"
 msgstr "IMAP登録を変更"
 
@@ -1772,7 +1772,7 @@ msgstr "フォームを折りたたむ"
 msgid "Color"
 msgstr "色"
 
-#: apps/io.ox/mail/settings/pane.js:325 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:334 module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "カラーの引用ラインを使用"
 
@@ -1831,7 +1831,7 @@ msgstr "会社"
 #: apps/io.ox/mail/compose/main.js:26 module:io.ox/mail
 #: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:480
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
-#: apps/io.ox/mail/settings/pane.js:219 apps/io.ox/mail/toolbar.js:40
+#: apps/io.ox/mail/settings/pane.js:228 apps/io.ox/mail/toolbar.js:40
 msgid "Compose"
 msgstr "作成"
 
@@ -2240,7 +2240,7 @@ msgstr "規定の予定表"
 msgid "Default reminder"
 msgstr "既定のアラーム"
 
-#: apps/io.ox/mail/settings/pane.js:275 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:284 module:io.ox/mail
 msgid "Default sender address"
 msgstr "差出人の既定のメール アドレス"
 
@@ -2303,7 +2303,7 @@ msgid "Delete account"
 msgstr "アカウントを削除"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:753 module:io.ox/mail
+#: apps/io.ox/mail/main.js:754 module:io.ox/mail
 #, fuzzy
 #| msgctxt "folder"
 #| msgid "Deleted messages"
@@ -2471,7 +2471,7 @@ msgctxt "dialog"
 msgid "Discard message"
 msgstr "メッセージを破棄"
 
-#: apps/io.ox/mail/settings/pane.js:306 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:315 module:io.ox/mail
 msgid "Display"
 msgstr "表示"
 
@@ -2479,7 +2479,7 @@ msgstr "表示"
 msgid "Display Name"
 msgstr "表示名"
 
-#: apps/io.ox/mail/settings/pane.js:320 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:329 module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
 msgstr "メール本文に顔文字をグラフィックとして表示"
 
@@ -2851,7 +2851,7 @@ msgstr "EB"
 #: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:496
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1253
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1254
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:369
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:371
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
@@ -3630,7 +3630,7 @@ msgstr "パスワードをお忘れですか？"
 msgid "Format"
 msgstr "フォーマット"
 
-#: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:254 module:io.ox/mail
 msgid "Format emails as"
 msgstr "メールのフォーマット"
 
@@ -3643,7 +3643,7 @@ msgstr "転送"
 msgid "Forward all incoming emails to this address"
 msgstr "すべての受信メールを次のアドレスに転送"
 
-#: apps/io.ox/mail/settings/pane.js:236 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
 msgid "Forward emails as"
 msgstr "メールの転送方法:"
 
@@ -3658,7 +3658,7 @@ msgstr "フリーランサー"
 
 #: apps/io.ox/mail/actions/reminder.js:53 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:110
-#: apps/io.ox/mail/compose/extensions.js:169 apps/io.ox/mail/main.js:621
+#: apps/io.ox/mail/compose/extensions.js:169 apps/io.ox/mail/main.js:622
 #: apps/io.ox/mail/view-options.js:32
 msgid "From"
 msgstr "差出人"
@@ -4056,7 +4056,7 @@ msgstr "挿入"
 msgid "Insert inline image"
 msgstr "インライン画像を挿入"
 
-#: apps/io.ox/mail/settings/pane.js:228 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:237 module:io.ox/mail
 msgid "Insert the original email text to a reply"
 msgstr "返信に元のメールの本文を残す"
 
@@ -4157,14 +4157,14 @@ msgstr "アイテムのリスト"
 
 #. items list (e.g. mails)
 #: apps/io.ox/core/commons.js:596 module:io.ox/core
-#: apps/io.ox/files/main.js:298 module:io.ox/files apps/io.ox/mail/main.js:512
+#: apps/io.ox/files/main.js:298 module:io.ox/files apps/io.ox/mail/main.js:513
 #: module:io.ox/mail
 msgid "Item list"
 msgstr "アイテムのリスト"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/core/tk/vgrid.js:310 module:io.ox/core
-#: apps/io.ox/files/main.js:301 module:io.ox/files apps/io.ox/mail/main.js:515
+#: apps/io.ox/files/main.js:301 module:io.ox/files apps/io.ox/mail/main.js:516
 #: module:io.ox/mail
 msgid "Item list options"
 msgstr "アイテムのリスト設定"
@@ -4308,15 +4308,15 @@ msgid "Learn more"
 msgstr "詳細は、こちらをご覧ください"
 
 #. label for the leave presentation button
-#: apps/io.ox/presenter/views/presentationview.js:228 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:239 module:io.ox/presenter
 msgid "Leave"
 msgstr "退出"
 
 #. tooltip for the leave presentation button
 #. button label for leaving the presentation
 #. button tooltip for leaving the presentation
-#: apps/io.ox/presenter/views/presentationview.js:224 module:io.ox/presenter
-#: apps/io.ox/presenter/views/presentationview.js:225
+#: apps/io.ox/presenter/views/presentationview.js:235 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:236
 #: apps/io.ox/presenter/views/toolbarview.js:144
 #: apps/io.ox/presenter/views/toolbarview.js:151
 #: apps/io.ox/presenter/views/toolbarview.js:152
@@ -4793,7 +4793,7 @@ msgid "Move"
 msgstr "移動"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:750 module:io.ox/mail
+#: apps/io.ox/mail/main.js:751 module:io.ox/mail
 #, fuzzy
 #| msgid "Show all %1$d messages in inbox"
 msgid "Move all %1$d messages to another folder"
@@ -5021,8 +5021,8 @@ msgstr "次のページ"
 #. button tooltip for 'go to next presentation slide' action
 #: apps/io.ox/presenter/views/navigationview.js:49 module:io.ox/presenter
 #: apps/io.ox/presenter/views/navigationview.js:50
-#: apps/io.ox/presenter/views/presentationview.js:89
-#: apps/io.ox/presenter/views/presentationview.js:90
+#: apps/io.ox/presenter/views/presentationview.js:93
+#: apps/io.ox/presenter/views/presentationview.js:94
 msgid "Next slide"
 msgstr "次のスライド"
 
@@ -5087,12 +5087,12 @@ msgstr "失われたリクエストはありません。"
 msgid "No mails in your inbox"
 msgstr "受信トレイにメールがありません。"
 
-#: apps/io.ox/mail/main.js:718 module:io.ox/mail
+#: apps/io.ox/mail/main.js:719 module:io.ox/mail
 msgid "No message selected"
 msgstr "メッセージが選択されていません。"
 
 #: apps/io.ox/core/notifications.js:105 module:io.ox/core
-#: apps/io.ox/core/notifications.js:380
+#: apps/io.ox/core/notifications.js:382
 msgid "No notifications"
 msgstr "通知はありません。"
 
@@ -5468,7 +5468,7 @@ msgstr "PDF"
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:240 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:253 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "%2$d ページ中の %1$d ページ"
 
@@ -5886,7 +5886,7 @@ msgid "Presentation end"
 msgstr "プレゼンテーション終了"
 
 #. Info text that says the presentation is paused.
-#: apps/io.ox/presenter/views/presentationview.js:219 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:230 module:io.ox/presenter
 msgid "Presentation is paused."
 msgstr "プレゼンテーションは一時停止になっています。"
 
@@ -5980,8 +5980,8 @@ msgstr "前のページ"
 #. button tooltip for 'go to previous presentation slide' action
 #: apps/io.ox/presenter/views/navigationview.js:53 module:io.ox/presenter
 #: apps/io.ox/presenter/views/navigationview.js:54
-#: apps/io.ox/presenter/views/presentationview.js:84
-#: apps/io.ox/presenter/views/presentationview.js:85
+#: apps/io.ox/presenter/views/presentationview.js:88
+#: apps/io.ox/presenter/views/presentationview.js:89
 msgid "Previous slide"
 msgstr "前のスライド"
 
@@ -6303,6 +6303,10 @@ msgstr "更新間隔 (分)"
 #: module:io.ox/settings
 msgid "Regex"
 msgstr "次の文字列と一致 (正規表現)"
+
+#: apps/io.ox/mail/settings/pane.js:207 module:io.ox/mail
+msgid "Register now"
+msgstr ""
 
 #: apps/io.ox/calendar/invitations/register.js:34 module:io.ox/calendar/main
 msgid "Reject changes"
@@ -7031,7 +7035,7 @@ msgstr "引用文を表示"
 msgid "Show request body"
 msgstr "リクエストの本文を表示"
 
-#: apps/io.ox/mail/settings/pane.js:330 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:339 module:io.ox/mail
 msgid "Show requests for read receipts"
 msgstr "開封確認メッセージの要求を表示"
 
@@ -7144,13 +7148,20 @@ msgstr "現在 %s に接続できません。"
 msgid "Sorry, there is no data available for you on %s."
 msgstr "%s には利用できるデータがありません。"
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:27 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:29 module:io.ox/core
 msgid "Sorry, there is no preview available for this file."
 msgstr "このファイルに利用できるプレビューがありません。"
 
 #: apps/io.ox/core/viewer/views/types/imageview.js:64 module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "この画像に利用できるプレビューがありません。"
+
+#: apps/io.ox/core/viewer/views/types/documentview.js:338 module:io.ox/core
+#: apps/io.ox/presenter/views/presentationview.js:750 module:io.ox/presenter
+#, fuzzy
+#| msgid "Sorry, there is no data available for you on %s."
+msgid "Sorry, this page is not available at the moment."
+msgstr "%s には利用できるデータがありません。"
 
 #: apps/plugins/portal/linkedIn/register.js:181 module:plugins/portal
 msgid ""
@@ -7981,7 +7992,7 @@ msgstr ""
 msgid "This distribution list has been added to the portal"
 msgstr "この配布リストをポータルに追加しました。"
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:28 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:30 module:io.ox/core
 msgid "This document is password protected and cannot be displayed."
 msgstr "本ドキュメントはパスワードで保護されており、表示できません。"
 
@@ -8178,7 +8189,7 @@ msgstr "敬称（前）"
 #: apps/io.ox/mail/common-extensions.js:324 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:33
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:58
-#: module:io.ox/settings apps/io.ox/mail/main.js:619
+#: module:io.ox/settings apps/io.ox/mail/main.js:620
 #: apps/io.ox/mail/print.js:85 apps/io.ox/mail/view-options.js:32
 msgid "To"
 msgstr "宛先"

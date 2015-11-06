@@ -81,7 +81,7 @@ define('io.ox/core/sub/subscriptions', [
                             if (!self.model.id) { self.model.id = id; }
                             api.subscriptions.refresh({ id: id, folder: folder }).then(
                                 function refreshSuccess() {
-                                    notifications.yell('info', gt('Subscription successfully created.'));
+                                    notifications.yell('success', gt('Subscription successfully created.'));
                                     popup.close();
                                     return self.model;
                                 },

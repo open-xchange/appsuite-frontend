@@ -65,9 +65,25 @@ define('io.ox/core/api/filestorage', [
                 api.getAllServices();
                 api.getAllAccounts();
                 return http.resume()
-                    .done(function () {
-                        // no errors everything is ready and caches are up to date.
-                        api.rampupDone = true;
+                    .done(function (data) {
+
+                        var error = false;
+                        _(data).each(function (item) {
+                            if (item.error) {
+                                error = true;
+                            }
+                        });
+
+                        if (!error) {
+                            // no errors everything is ready and caches are up to date.
+                            api.rampupDone = true;
+                            api.rampupFailed = false;
+                        } else {
+                            // something went wrong, for example filestorages are not enabled on the server
+                            // set rampupfailed to true to indicate that a rampup was tried before but failed for whatever reasons
+                            api.rampupDone = false;
+                            api.rampupFailed = true;
+                        }
                     })
                     .fail(function (e) {
                         // something went wrong, for example filestorages are not enabled on the server
@@ -326,7 +342,7 @@ define('io.ox/core/api/filestorage', [
             // Checks if every filestorage account has a proper Oauth account, if not removes it
             // if there are multiple filestorage accounts for one Oauth account, only one is kept
             consistencyCheck: function () {
-                if (!api.rampupDone) {
+                if (!api.rampupDone || api.rampupFailed) {
                     return;
                 }
                 require(['io.ox/oauth/keychain'], function (keychain) {

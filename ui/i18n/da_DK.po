@@ -17,7 +17,7 @@ msgstr ""
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
 #. %1$d is the zoom level
-#: apps/io.ox/presenter/views/presentationview.js:922 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:1042 module:io.ox/presenter
 msgid "%1$d %"
 msgstr "%1$d %"
 
@@ -129,7 +129,7 @@ msgstr[1] "%1$d medlemmer"
 msgid "%1$d messages in this conversation"
 msgstr "%1$d beskeder i denne samtale"
 
-#: apps/io.ox/mail/main.js:744 module:io.ox/mail
+#: apps/io.ox/mail/main.js:745 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d beskeder valgt"
 
@@ -147,7 +147,7 @@ msgstr[1] "%1$d minutter"
 #. text of a presentation slide caption
 #: apps/io.ox/core/viewer/views/displayerview.js:139 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:544
-#: apps/io.ox/presenter/views/presentationview.js:355 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:370 module:io.ox/presenter
 msgid "%1$d of %2$d"
 msgstr "%1$d af %2$d"
 
@@ -159,7 +159,7 @@ msgstr[0] "%1$d sekund"
 msgstr[1] "%1$d sekunder"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:781 module:io.ox/mail
+#: apps/io.ox/mail/main.js:782 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "%1$d valgt"
 
@@ -913,7 +913,7 @@ msgstr "Tilføj din konto"
 msgid "Added the new participant"
 msgstr "Tilføjede den nye deltager"
 
-#: apps/io.ox/mail/settings/pane.js:254 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:263 module:io.ox/mail
 msgid "Additional settings"
 msgstr "Flere indstillinger"
 
@@ -1016,11 +1016,11 @@ msgstr "Alle mine aftaler"
 msgid "All timezones"
 msgstr "Alle tidszoner"
 
-#: apps/io.ox/mail/settings/pane.js:310 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:319 module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "Tillad html-formateret e-mails"
 
-#: apps/io.ox/mail/settings/pane.js:315 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:324 module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
 msgstr "Tillad forhåndsindlæsning af eksternt linkede billeder"
 
@@ -1062,7 +1062,7 @@ msgstr "Jubilæum"
 msgid "Any recipient"
 msgstr "Enhver modtager"
 
-#: apps/io.ox/mail/settings/pane.js:223 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:232 module:io.ox/mail
 msgid "Append vCard"
 msgstr "Tilføj \"vCard\"-visitkort"
 
@@ -1070,7 +1070,7 @@ msgstr "Tilføj \"vCard\"-visitkort"
 msgid "Application Toolbar"
 msgstr "Programværktøjslinjen"
 
-#: apps/io.ox/mail/main.js:1432 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1433 module:io.ox/mail
 #: apps/io.ox/settings/main.js:577 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
@@ -1255,7 +1255,7 @@ msgstr "Forfatter"
 msgid "Auto Forward"
 msgstr "Automatisk videresendelse"
 
-#: apps/io.ox/mail/settings/pane.js:285 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:294 module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Gem e-mail-kladder automatisk"
 
@@ -1296,7 +1296,7 @@ msgstr ""
 
 #. It's a label for an input field with a number
 #. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js:261 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
 msgstr "Ombryd automatisk efter tegnet:"
 
@@ -1517,7 +1517,7 @@ msgstr "Kalender:"
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:649
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1249
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1250
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:254
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
@@ -1600,7 +1600,7 @@ msgstr "Mobiltelefon (alternativ)"
 msgid "Change"
 msgstr "Ændr"
 
-#: apps/io.ox/mail/settings/pane.js:355 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:364 module:io.ox/mail
 msgid "Change IMAP subscriptions"
 msgstr "Ændr IMAP-abonnementer"
 
@@ -1810,7 +1810,7 @@ msgstr "Skjul form"
 msgid "Color"
 msgstr "Farve"
 
-#: apps/io.ox/mail/settings/pane.js:325 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:334 module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Farv citerede linjer"
 
@@ -1869,7 +1869,7 @@ msgstr "Virksomhed"
 #: apps/io.ox/mail/compose/main.js:26 module:io.ox/mail
 #: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:480
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
-#: apps/io.ox/mail/settings/pane.js:219 apps/io.ox/mail/toolbar.js:40
+#: apps/io.ox/mail/settings/pane.js:228 apps/io.ox/mail/toolbar.js:40
 msgid "Compose"
 msgstr "Skriv"
 
@@ -2278,7 +2278,7 @@ msgstr "Standardkalender"
 msgid "Default reminder"
 msgstr "Standard påmindelse"
 
-#: apps/io.ox/mail/settings/pane.js:275 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:284 module:io.ox/mail
 msgid "Default sender address"
 msgstr "Standard afsenderadresse"
 
@@ -2341,7 +2341,7 @@ msgid "Delete account"
 msgstr "Slet konto"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:753 module:io.ox/mail
+#: apps/io.ox/mail/main.js:754 module:io.ox/mail
 #, fuzzy
 #| msgctxt "folder"
 #| msgid "Deleted messages"
@@ -2509,7 +2509,7 @@ msgctxt "dialog"
 msgid "Discard message"
 msgstr "Kassér besked"
 
-#: apps/io.ox/mail/settings/pane.js:306 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:315 module:io.ox/mail
 msgid "Display"
 msgstr "Vis"
 
@@ -2517,7 +2517,7 @@ msgstr "Vis"
 msgid "Display Name"
 msgstr "Vist navn"
 
-#: apps/io.ox/mail/settings/pane.js:320 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:329 module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
 msgstr "Vis smilelys som grafik i tekst e-mails"
 
@@ -2882,7 +2882,7 @@ msgstr "EB"
 #: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:496
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1253
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1254
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:369
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:371
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
@@ -3661,7 +3661,7 @@ msgstr "Glemt adgangskode?"
 msgid "Format"
 msgstr "Format"
 
-#: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:254 module:io.ox/mail
 msgid "Format emails as"
 msgstr "Formatér e-mails som"
 
@@ -3674,7 +3674,7 @@ msgstr "Videresend"
 msgid "Forward all incoming emails to this address"
 msgstr "Videresend alle indkomne e-mails til denne adresse"
 
-#: apps/io.ox/mail/settings/pane.js:236 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
 msgid "Forward emails as"
 msgstr "Videresend e-mails som"
 
@@ -3689,7 +3689,7 @@ msgstr "Freelancer"
 
 #: apps/io.ox/mail/actions/reminder.js:53 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:110
-#: apps/io.ox/mail/compose/extensions.js:169 apps/io.ox/mail/main.js:621
+#: apps/io.ox/mail/compose/extensions.js:169 apps/io.ox/mail/main.js:622
 #: apps/io.ox/mail/view-options.js:32
 msgid "From"
 msgstr "Fra"
@@ -4087,7 +4087,7 @@ msgstr "Indsæt"
 msgid "Insert inline image"
 msgstr "Indsæt billede"
 
-#: apps/io.ox/mail/settings/pane.js:228 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:237 module:io.ox/mail
 msgid "Insert the original email text to a reply"
 msgstr "Indsæt den originale e-mails tekst i et svar"
 
@@ -4188,14 +4188,14 @@ msgstr "Elementliste"
 
 #. items list (e.g. mails)
 #: apps/io.ox/core/commons.js:596 module:io.ox/core
-#: apps/io.ox/files/main.js:298 module:io.ox/files apps/io.ox/mail/main.js:512
+#: apps/io.ox/files/main.js:298 module:io.ox/files apps/io.ox/mail/main.js:513
 #: module:io.ox/mail
 msgid "Item list"
 msgstr "Elementliste"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/core/tk/vgrid.js:310 module:io.ox/core
-#: apps/io.ox/files/main.js:301 module:io.ox/files apps/io.ox/mail/main.js:515
+#: apps/io.ox/files/main.js:301 module:io.ox/files apps/io.ox/mail/main.js:516
 #: module:io.ox/mail
 msgid "Item list options"
 msgstr "Indstillinger for elementliste"
@@ -4338,15 +4338,15 @@ msgid "Learn more"
 msgstr "Lær mere"
 
 #. label for the leave presentation button
-#: apps/io.ox/presenter/views/presentationview.js:228 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:239 module:io.ox/presenter
 msgid "Leave"
 msgstr "Forlad"
 
 #. tooltip for the leave presentation button
 #. button label for leaving the presentation
 #. button tooltip for leaving the presentation
-#: apps/io.ox/presenter/views/presentationview.js:224 module:io.ox/presenter
-#: apps/io.ox/presenter/views/presentationview.js:225
+#: apps/io.ox/presenter/views/presentationview.js:235 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:236
 #: apps/io.ox/presenter/views/toolbarview.js:144
 #: apps/io.ox/presenter/views/toolbarview.js:151
 #: apps/io.ox/presenter/views/toolbarview.js:152
@@ -4820,7 +4820,7 @@ msgid "Move"
 msgstr "Flyt"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:750 module:io.ox/mail
+#: apps/io.ox/mail/main.js:751 module:io.ox/mail
 #, fuzzy
 #| msgid "Show all %1$d messages in inbox"
 msgid "Move all %1$d messages to another folder"
@@ -5048,8 +5048,8 @@ msgstr "Næste side"
 #. button tooltip for 'go to next presentation slide' action
 #: apps/io.ox/presenter/views/navigationview.js:49 module:io.ox/presenter
 #: apps/io.ox/presenter/views/navigationview.js:50
-#: apps/io.ox/presenter/views/presentationview.js:89
-#: apps/io.ox/presenter/views/presentationview.js:90
+#: apps/io.ox/presenter/views/presentationview.js:93
+#: apps/io.ox/presenter/views/presentationview.js:94
 msgid "Next slide"
 msgstr "Næste slide"
 
@@ -5114,12 +5114,12 @@ msgstr "Ingen tabte forespørgsler"
 msgid "No mails in your inbox"
 msgstr "Ingen e-mails i din indbakke"
 
-#: apps/io.ox/mail/main.js:718 module:io.ox/mail
+#: apps/io.ox/mail/main.js:719 module:io.ox/mail
 msgid "No message selected"
 msgstr "Ingen besked valgt"
 
 #: apps/io.ox/core/notifications.js:105 module:io.ox/core
-#: apps/io.ox/core/notifications.js:380
+#: apps/io.ox/core/notifications.js:382
 msgid "No notifications"
 msgstr "Ingen påmindelser"
 
@@ -5498,7 +5498,7 @@ msgstr "PDF-filer"
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:240 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:253 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "Side %1$d af %2$d"
 
@@ -5919,7 +5919,7 @@ msgid "Presentation end"
 msgstr "Præsentation afsluttet"
 
 #. Info text that says the presentation is paused.
-#: apps/io.ox/presenter/views/presentationview.js:219 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:230 module:io.ox/presenter
 msgid "Presentation is paused."
 msgstr "Præsentation på pause."
 
@@ -6013,8 +6013,8 @@ msgstr "Forgående side"
 #. button tooltip for 'go to previous presentation slide' action
 #: apps/io.ox/presenter/views/navigationview.js:53 module:io.ox/presenter
 #: apps/io.ox/presenter/views/navigationview.js:54
-#: apps/io.ox/presenter/views/presentationview.js:84
-#: apps/io.ox/presenter/views/presentationview.js:85
+#: apps/io.ox/presenter/views/presentationview.js:88
+#: apps/io.ox/presenter/views/presentationview.js:89
 msgid "Previous slide"
 msgstr "Forrige slide"
 
@@ -6343,6 +6343,10 @@ msgstr "Opdateringsfrekvens i minutter"
 #: module:io.ox/settings
 msgid "Regex"
 msgstr "Regulært udtryk"
+
+#: apps/io.ox/mail/settings/pane.js:207 module:io.ox/mail
+msgid "Register now"
+msgstr ""
 
 #: apps/io.ox/calendar/invitations/register.js:34 module:io.ox/calendar/main
 msgid "Reject changes"
@@ -7076,7 +7080,7 @@ msgstr "Vis citeret tekst"
 msgid "Show request body"
 msgstr "Vis forespørgslens krop"
 
-#: apps/io.ox/mail/settings/pane.js:330 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:339 module:io.ox/mail
 msgid "Show requests for read receipts"
 msgstr "Vis forespørgsler for læsekvitteringer"
 
@@ -7188,13 +7192,20 @@ msgstr "Beklager.  Kunne ikke forbinde til %s lige nu."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Beklage.  Der er ingen data til dig på %s."
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:27 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:29 module:io.ox/core
 msgid "Sorry, there is no preview available for this file."
 msgstr "Beklager.  Der er ingen forhåndsvisning for denne fil."
 
 #: apps/io.ox/core/viewer/views/types/imageview.js:64 module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Beklager.  Der er ingen forhåndsvisning for dette billede."
+
+#: apps/io.ox/core/viewer/views/types/documentview.js:338 module:io.ox/core
+#: apps/io.ox/presenter/views/presentationview.js:750 module:io.ox/presenter
+#, fuzzy
+#| msgid "Sorry, there is no data available for you on %s."
+msgid "Sorry, this page is not available at the moment."
+msgstr "Beklage.  Der er ingen data til dig på %s."
 
 #: apps/plugins/portal/linkedIn/register.js:181 module:plugins/portal
 msgid ""
@@ -8029,7 +8040,7 @@ msgstr "Denne kontakt er privat og kan ikke deles"
 msgid "This distribution list has been added to the portal"
 msgstr "Denne distributionsliste er blevet tilføjet portalen"
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:28 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:30 module:io.ox/core
 msgid "This document is password protected and cannot be displayed."
 msgstr "Dette dokument er beskyttet med en adgangskode og kan ikke vises."
 
@@ -8226,7 +8237,7 @@ msgstr "Titel"
 #: apps/io.ox/mail/common-extensions.js:324 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:33
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:58
-#: module:io.ox/settings apps/io.ox/mail/main.js:619
+#: module:io.ox/settings apps/io.ox/mail/main.js:620
 #: apps/io.ox/mail/print.js:85 apps/io.ox/mail/view-options.js:32
 msgid "To"
 msgstr "Til"

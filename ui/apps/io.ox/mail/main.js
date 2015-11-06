@@ -355,8 +355,8 @@ define('io.ox/mail/main', [
          * Setup list view
          */
         'list-view': function (app) {
-            app.listView = new MailListView({ swipe: true, app: app, draggable: true, ignoreFocus: true, preserve: true, selectionOptions: { mode: 'special' } });
-            app.listView.model.set({ folder: app.folder.get() });
+            app.listView = new MailListView({ swipe: true, app: app, draggable: true, ignoreFocus: true, selectionOptions: { mode: 'special' } });
+            app.listView.model.set({ folder: app.folder.get(), preserve: false });
             app.listView.model.set('thread', true);
             // for debugging
             window.list = app.listView;
@@ -432,7 +432,8 @@ define('io.ox/mail/main', [
                     app.props.set('thread', options.threadrestore || false);
                 }
                 // now change sort columns
-                model.set('sort', value);
+                // use "preserve" mode for "sort by unseen" (only)
+                model.set({ sort: value, preserve: value === 651 });
             });
         },
 

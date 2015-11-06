@@ -17,7 +17,7 @@ msgstr ""
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
 #. %1$d is the zoom level
-#: apps/io.ox/presenter/views/presentationview.js:922 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:1042 module:io.ox/presenter
 msgid "%1$d %"
 msgstr "%1$d %"
 
@@ -141,7 +141,7 @@ msgstr[2] "%1$d участников"
 msgid "%1$d messages in this conversation"
 msgstr "сообщений в обсуждении: %1$d"
 
-#: apps/io.ox/mail/main.js:744 module:io.ox/mail
+#: apps/io.ox/mail/main.js:745 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d выбрано"
 
@@ -160,7 +160,7 @@ msgstr[2] "%1$d минут"
 #. text of a presentation slide caption
 #: apps/io.ox/core/viewer/views/displayerview.js:139 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:544
-#: apps/io.ox/presenter/views/presentationview.js:355 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:370 module:io.ox/presenter
 msgid "%1$d of %2$d"
 msgstr "%1$d из %2$d"
 
@@ -173,7 +173,7 @@ msgstr[1] "%1$d секунды"
 msgstr[2] "%1$d секунд"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:781 module:io.ox/mail
+#: apps/io.ox/mail/main.js:782 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "выбрано: %1$d"
 
@@ -924,7 +924,7 @@ msgstr "Добавить учетную запись"
 msgid "Added the new participant"
 msgstr "Участник добавлен"
 
-#: apps/io.ox/mail/settings/pane.js:254 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:263 module:io.ox/mail
 msgid "Additional settings"
 msgstr "Дополнительные параметры"
 
@@ -1026,11 +1026,11 @@ msgstr "Мои встречи"
 msgid "All timezones"
 msgstr "Все часовые пояса"
 
-#: apps/io.ox/mail/settings/pane.js:310 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:319 module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "Разрешить HTML в сообщениях"
 
-#: apps/io.ox/mail/settings/pane.js:315 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:324 module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
 msgstr "Разрешить загрузку изображений из сети"
 
@@ -1071,7 +1071,7 @@ msgstr "Годовщина"
 msgid "Any recipient"
 msgstr "Любой получатель"
 
-#: apps/io.ox/mail/settings/pane.js:223 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:232 module:io.ox/mail
 msgid "Append vCard"
 msgstr "Добавить vCard"
 
@@ -1079,7 +1079,7 @@ msgstr "Добавить vCard"
 msgid "Application Toolbar"
 msgstr "Панель приложений"
 
-#: apps/io.ox/mail/main.js:1432 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1433 module:io.ox/mail
 #: apps/io.ox/settings/main.js:577 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr "Надо исправить ошибку, иначе работа приложения может быть нарушена."
@@ -1264,7 +1264,7 @@ msgstr "Автор"
 msgid "Auto Forward"
 msgstr "Автопересылка"
 
-#: apps/io.ox/mail/settings/pane.js:285 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:294 module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Автосохранение черновиков"
 
@@ -1306,7 +1306,7 @@ msgstr ""
 
 #. It's a label for an input field with a number
 #. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js:261 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
 msgstr "Автоматически переносить текст после знака:"
 
@@ -1525,7 +1525,7 @@ msgstr "Календарь:"
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:649
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1249
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1250
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:254
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
@@ -1609,7 +1609,7 @@ msgstr "Мобильный (доп.)"
 msgid "Change"
 msgstr "Изменить"
 
-#: apps/io.ox/mail/settings/pane.js:355 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:364 module:io.ox/mail
 msgid "Change IMAP subscriptions"
 msgstr "Изменить подписки IMAP"
 
@@ -1821,7 +1821,7 @@ msgstr "Свернуть"
 msgid "Color"
 msgstr "Цвет"
 
-#: apps/io.ox/mail/settings/pane.js:325 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:334 module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Выделить цитаты"
 
@@ -1880,7 +1880,7 @@ msgstr "Компания"
 #: apps/io.ox/mail/compose/main.js:26 module:io.ox/mail
 #: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:480
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
-#: apps/io.ox/mail/settings/pane.js:219 apps/io.ox/mail/toolbar.js:40
+#: apps/io.ox/mail/settings/pane.js:228 apps/io.ox/mail/toolbar.js:40
 msgid "Compose"
 msgstr "Создать"
 
@@ -2289,7 +2289,7 @@ msgstr "Календарь по умолчанию"
 msgid "Default reminder"
 msgstr "Стандартное напоминание"
 
-#: apps/io.ox/mail/settings/pane.js:275 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:284 module:io.ox/mail
 msgid "Default sender address"
 msgstr "Адрес отправителя по умолчанию"
 
@@ -2352,7 +2352,7 @@ msgid "Delete account"
 msgstr "Удалить учетную запись"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:753 module:io.ox/mail
+#: apps/io.ox/mail/main.js:754 module:io.ox/mail
 #, fuzzy
 #| msgctxt "folder"
 #| msgid "Deleted messages"
@@ -2520,7 +2520,7 @@ msgctxt "dialog"
 msgid "Discard message"
 msgstr "Удалить сообщение"
 
-#: apps/io.ox/mail/settings/pane.js:306 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:315 module:io.ox/mail
 msgid "Display"
 msgstr "Вид"
 
@@ -2528,7 +2528,7 @@ msgstr "Вид"
 msgid "Display Name"
 msgstr "Краткое имя"
 
-#: apps/io.ox/mail/settings/pane.js:320 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:329 module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
 msgstr "Показывать значки настроения в текстовых сообщениях"
 
@@ -2897,7 +2897,7 @@ msgstr "ЭБ"
 #: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:496
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1253
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1254
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:369
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:371
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
@@ -3672,7 +3672,7 @@ msgstr "Забыли пароль?"
 msgid "Format"
 msgstr "Формат"
 
-#: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:254 module:io.ox/mail
 msgid "Format emails as"
 msgstr "Формат сообщений"
 
@@ -3685,7 +3685,7 @@ msgstr "Переслать"
 msgid "Forward all incoming emails to this address"
 msgstr "Пересылать все входящие"
 
-#: apps/io.ox/mail/settings/pane.js:236 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
 msgid "Forward emails as"
 msgstr "Переслать как"
 
@@ -3700,7 +3700,7 @@ msgstr "Фрилансер"
 
 #: apps/io.ox/mail/actions/reminder.js:53 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:110
-#: apps/io.ox/mail/compose/extensions.js:169 apps/io.ox/mail/main.js:621
+#: apps/io.ox/mail/compose/extensions.js:169 apps/io.ox/mail/main.js:622
 #: apps/io.ox/mail/view-options.js:32
 msgid "From"
 msgstr "От"
@@ -4096,7 +4096,7 @@ msgstr "Вставить"
 msgid "Insert inline image"
 msgstr "Вставить изображение"
 
-#: apps/io.ox/mail/settings/pane.js:228 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:237 module:io.ox/mail
 msgid "Insert the original email text to a reply"
 msgstr "Вставить исходное сообщение в ответ"
 
@@ -4197,14 +4197,14 @@ msgstr "Объекты"
 
 #. items list (e.g. mails)
 #: apps/io.ox/core/commons.js:596 module:io.ox/core
-#: apps/io.ox/files/main.js:298 module:io.ox/files apps/io.ox/mail/main.js:512
+#: apps/io.ox/files/main.js:298 module:io.ox/files apps/io.ox/mail/main.js:513
 #: module:io.ox/mail
 msgid "Item list"
 msgstr "Объекты"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/core/tk/vgrid.js:310 module:io.ox/core
-#: apps/io.ox/files/main.js:301 module:io.ox/files apps/io.ox/mail/main.js:515
+#: apps/io.ox/files/main.js:301 module:io.ox/files apps/io.ox/mail/main.js:516
 #: module:io.ox/mail
 msgid "Item list options"
 msgstr "Параметры списка"
@@ -4347,15 +4347,15 @@ msgid "Learn more"
 msgstr "Узнать больше"
 
 #. label for the leave presentation button
-#: apps/io.ox/presenter/views/presentationview.js:228 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:239 module:io.ox/presenter
 msgid "Leave"
 msgstr "Выйти"
 
 #. tooltip for the leave presentation button
 #. button label for leaving the presentation
 #. button tooltip for leaving the presentation
-#: apps/io.ox/presenter/views/presentationview.js:224 module:io.ox/presenter
-#: apps/io.ox/presenter/views/presentationview.js:225
+#: apps/io.ox/presenter/views/presentationview.js:235 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:236
 #: apps/io.ox/presenter/views/toolbarview.js:144
 #: apps/io.ox/presenter/views/toolbarview.js:151
 #: apps/io.ox/presenter/views/toolbarview.js:152
@@ -4829,7 +4829,7 @@ msgid "Move"
 msgstr "Переместить"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:750 module:io.ox/mail
+#: apps/io.ox/mail/main.js:751 module:io.ox/mail
 #, fuzzy
 #| msgid "Show all %1$d messages in inbox"
 msgid "Move all %1$d messages to another folder"
@@ -5057,8 +5057,8 @@ msgstr "Следующая страница"
 #. button tooltip for 'go to next presentation slide' action
 #: apps/io.ox/presenter/views/navigationview.js:49 module:io.ox/presenter
 #: apps/io.ox/presenter/views/navigationview.js:50
-#: apps/io.ox/presenter/views/presentationview.js:89
-#: apps/io.ox/presenter/views/presentationview.js:90
+#: apps/io.ox/presenter/views/presentationview.js:93
+#: apps/io.ox/presenter/views/presentationview.js:94
 msgid "Next slide"
 msgstr "Следующий слайд"
 
@@ -5123,12 +5123,12 @@ msgstr "Нет потерянных запросов"
 msgid "No mails in your inbox"
 msgstr "Нет входящих сообщений."
 
-#: apps/io.ox/mail/main.js:718 module:io.ox/mail
+#: apps/io.ox/mail/main.js:719 module:io.ox/mail
 msgid "No message selected"
 msgstr "Сообщения не выбраны."
 
 #: apps/io.ox/core/notifications.js:105 module:io.ox/core
-#: apps/io.ox/core/notifications.js:380
+#: apps/io.ox/core/notifications.js:382
 msgid "No notifications"
 msgstr "Нет уведомлений"
 
@@ -5511,7 +5511,7 @@ msgstr "PDF"
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:240 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:253 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "%1$d из %2$d"
 
@@ -5927,7 +5927,7 @@ msgid "Presentation end"
 msgstr "Презентация завершилась"
 
 #. Info text that says the presentation is paused.
-#: apps/io.ox/presenter/views/presentationview.js:219 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:230 module:io.ox/presenter
 msgid "Presentation is paused."
 msgstr "Презентация приостановлена."
 
@@ -6021,8 +6021,8 @@ msgstr "Предыдущая страница"
 #. button tooltip for 'go to previous presentation slide' action
 #: apps/io.ox/presenter/views/navigationview.js:53 module:io.ox/presenter
 #: apps/io.ox/presenter/views/navigationview.js:54
-#: apps/io.ox/presenter/views/presentationview.js:84
-#: apps/io.ox/presenter/views/presentationview.js:85
+#: apps/io.ox/presenter/views/presentationview.js:88
+#: apps/io.ox/presenter/views/presentationview.js:89
 msgid "Previous slide"
 msgstr "Предыдущий слайд"
 
@@ -6347,6 +6347,10 @@ msgstr "Частота обновления (мин.)"
 #: module:io.ox/settings
 msgid "Regex"
 msgstr "Регулярное выражение"
+
+#: apps/io.ox/mail/settings/pane.js:207 module:io.ox/mail
+msgid "Register now"
+msgstr ""
 
 #: apps/io.ox/calendar/invitations/register.js:34 module:io.ox/calendar/main
 msgid "Reject changes"
@@ -7083,7 +7087,7 @@ msgstr "Показать цитируемый текст"
 msgid "Show request body"
 msgstr "Показать тело запроса"
 
-#: apps/io.ox/mail/settings/pane.js:330 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:339 module:io.ox/mail
 msgid "Show requests for read receipts"
 msgstr "Показать запросы уведомления о прочтении"
 
@@ -7196,13 +7200,20 @@ msgstr "Не удалось подключиться к %s."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Для вас нет данных на %s."
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:27 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:29 module:io.ox/core
 msgid "Sorry, there is no preview available for this file."
 msgstr "Предварительный просмотр этого файла недоступен."
 
 #: apps/io.ox/core/viewer/views/types/imageview.js:64 module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Предварительный просмотр этого изображения недоступен."
+
+#: apps/io.ox/core/viewer/views/types/documentview.js:338 module:io.ox/core
+#: apps/io.ox/presenter/views/presentationview.js:750 module:io.ox/presenter
+#, fuzzy
+#| msgid "Sorry, there is no data available for you on %s."
+msgid "Sorry, this page is not available at the moment."
+msgstr "Для вас нет данных на %s."
 
 #: apps/plugins/portal/linkedIn/register.js:181 module:plugins/portal
 msgid ""
@@ -8029,7 +8040,7 @@ msgstr "Доступ к личному контакту не может быть
 msgid "This distribution list has been added to the portal"
 msgstr "Список рассылки добавлен в портал"
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:28 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:30 module:io.ox/core
 msgid "This document is password protected and cannot be displayed."
 msgstr "Документ защищен паролем и не может быть показан."
 
@@ -8227,7 +8238,7 @@ msgstr "Обращение"
 #: apps/io.ox/mail/common-extensions.js:324 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:33
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:58
-#: module:io.ox/settings apps/io.ox/mail/main.js:619
+#: module:io.ox/settings apps/io.ox/mail/main.js:620
 #: apps/io.ox/mail/print.js:85 apps/io.ox/mail/view-options.js:32
 msgid "To"
 msgstr "Кому"

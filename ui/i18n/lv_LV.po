@@ -16,7 +16,7 @@ msgstr ""
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
 #. %1$d is the zoom level
-#: apps/io.ox/presenter/views/presentationview.js:922 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:1042 module:io.ox/presenter
 msgid "%1$d %"
 msgstr "%1$d %"
 
@@ -140,7 +140,7 @@ msgstr[2] "%1$d dalībnieki"
 msgid "%1$d messages in this conversation"
 msgstr "Šai sarunā ir %1$d ziņojumi"
 
-#: apps/io.ox/mail/main.js:744 module:io.ox/mail
+#: apps/io.ox/mail/main.js:745 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "Iezīmēti %1$d ziņojumi"
 
@@ -159,7 +159,7 @@ msgstr[2] "%1$d minūtes"
 #. text of a presentation slide caption
 #: apps/io.ox/core/viewer/views/displayerview.js:139 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:544
-#: apps/io.ox/presenter/views/presentationview.js:355 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:370 module:io.ox/presenter
 msgid "%1$d of %2$d"
 msgstr "%1$d no %2$d"
 
@@ -172,7 +172,7 @@ msgstr[1] "%1$d sekundes"
 msgstr[2] "%1$d sekundes"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:781 module:io.ox/mail
+#: apps/io.ox/mail/main.js:782 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "%1$d iezīmēti"
 
@@ -925,7 +925,7 @@ msgstr "Pievienot savu kontu"
 msgid "Added the new participant"
 msgstr "Jauns dalībnieks ir pievienots"
 
-#: apps/io.ox/mail/settings/pane.js:254 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:263 module:io.ox/mail
 msgid "Additional settings"
 msgstr "Papildus iestatījumi"
 
@@ -1027,11 +1027,11 @@ msgstr "Visi mani mītiņi"
 msgid "All timezones"
 msgstr "Visas laika joslas"
 
-#: apps/io.ox/mail/settings/pane.js:310 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:319 module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "Atļaut HTML formatētu e-pastu"
 
-#: apps/io.ox/mail/settings/pane.js:315 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:324 module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
 msgstr "Atļaut ārēji saistīto attēlu priekš-ielādi"
 
@@ -1072,7 +1072,7 @@ msgstr "Dzimšanas diena"
 msgid "Any recipient"
 msgstr "Jebkurš saņēmējs"
 
-#: apps/io.ox/mail/settings/pane.js:223 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:232 module:io.ox/mail
 msgid "Append vCard"
 msgstr "Pievienot vCard"
 
@@ -1080,7 +1080,7 @@ msgstr "Pievienot vCard"
 msgid "Application Toolbar"
 msgstr "Aplikācijas rīkjosla"
 
-#: apps/io.ox/mail/main.js:1432 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1433 module:io.ox/mail
 #: apps/io.ox/settings/main.js:577 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
@@ -1268,7 +1268,7 @@ msgstr "Autors"
 msgid "Auto Forward"
 msgstr "Automātiski pārsūtīt"
 
-#: apps/io.ox/mail/settings/pane.js:285 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:294 module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Automātiski saglabāt e-pasta melnrakstus"
 
@@ -1311,7 +1311,7 @@ msgstr ""
 
 #. It's a label for an input field with a number
 #. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js:261 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
 msgstr "Automātiski pārkārtot tekstu jaunā rinā pēc:"
 
@@ -1532,7 +1532,7 @@ msgstr "Kalendārs:"
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:649
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1249
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1250
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:254
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
@@ -1616,7 +1616,7 @@ msgstr "Mob. telefons (alt.)"
 msgid "Change"
 msgstr "Mainīt"
 
-#: apps/io.ox/mail/settings/pane.js:355 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:364 module:io.ox/mail
 msgid "Change IMAP subscriptions"
 msgstr "Mainīt IMAP abonementus"
 
@@ -1828,7 +1828,7 @@ msgstr "Sakļaut formu"
 msgid "Color"
 msgstr "Krāsa"
 
-#: apps/io.ox/mail/settings/pane.js:325 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:334 module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Krāsaini iezīmētas rindas"
 
@@ -1887,7 +1887,7 @@ msgstr "Uzņēmums"
 #: apps/io.ox/mail/compose/main.js:26 module:io.ox/mail
 #: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:480
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
-#: apps/io.ox/mail/settings/pane.js:219 apps/io.ox/mail/toolbar.js:40
+#: apps/io.ox/mail/settings/pane.js:228 apps/io.ox/mail/toolbar.js:40
 msgid "Compose"
 msgstr "Sastādīšana"
 
@@ -2297,7 +2297,7 @@ msgstr "Noklusētais kalendārs"
 msgid "Default reminder"
 msgstr "Noklusētais atgādinājums"
 
-#: apps/io.ox/mail/settings/pane.js:275 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:284 module:io.ox/mail
 msgid "Default sender address"
 msgstr "Noklusētā nosūtītāja adrese"
 
@@ -2360,7 +2360,7 @@ msgid "Delete account"
 msgstr "Dzēst kontu"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:753 module:io.ox/mail
+#: apps/io.ox/mail/main.js:754 module:io.ox/mail
 #, fuzzy
 #| msgctxt "folder"
 #| msgid "Deleted messages"
@@ -2528,7 +2528,7 @@ msgctxt "dialog"
 msgid "Discard message"
 msgstr "Atsaukt ziņojumu"
 
-#: apps/io.ox/mail/settings/pane.js:306 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:315 module:io.ox/mail
 msgid "Display"
 msgstr "Attēlošana"
 
@@ -2536,7 +2536,7 @@ msgstr "Attēlošana"
 msgid "Display Name"
 msgstr "Uzrādes vārds"
 
-#: apps/io.ox/mail/settings/pane.js:320 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:329 module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
 msgstr "Rādīt emocijzīmes kā grafiku teksta e-pastā"
 
@@ -2908,7 +2908,7 @@ msgstr "EB"
 #: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:496
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
-#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1253
+#: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1254
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:369
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:371
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
@@ -3690,7 +3690,7 @@ msgstr "Vai aizmirsāt paroli?"
 msgid "Format"
 msgstr "Formāts"
 
-#: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:254 module:io.ox/mail
 msgid "Format emails as"
 msgstr "Formatēt e-pastu kā"
 
@@ -3703,7 +3703,7 @@ msgstr "Pārsūtīt"
 msgid "Forward all incoming emails to this address"
 msgstr "Pārsūtīt visu ienākošo e-pastu uz šo adresi"
 
-#: apps/io.ox/mail/settings/pane.js:236 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
 msgid "Forward emails as"
 msgstr "Pārsūtīt e-pastu kā"
 
@@ -3718,7 +3718,7 @@ msgstr "Pašnodarbinātais"
 
 #: apps/io.ox/mail/actions/reminder.js:53 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:110
-#: apps/io.ox/mail/compose/extensions.js:169 apps/io.ox/mail/main.js:621
+#: apps/io.ox/mail/compose/extensions.js:169 apps/io.ox/mail/main.js:622
 #: apps/io.ox/mail/view-options.js:32
 msgid "From"
 msgstr "Sūtītājs"
@@ -4116,7 +4116,7 @@ msgstr "Ievietot"
 msgid "Insert inline image"
 msgstr "Ievietot ietverto attēlu"
 
-#: apps/io.ox/mail/settings/pane.js:228 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:237 module:io.ox/mail
 msgid "Insert the original email text to a reply"
 msgstr "Ietvert oriģinālā e-pasta tekstu atildē"
 
@@ -4217,14 +4217,14 @@ msgstr "Vienību saraksts"
 
 #. items list (e.g. mails)
 #: apps/io.ox/core/commons.js:596 module:io.ox/core
-#: apps/io.ox/files/main.js:298 module:io.ox/files apps/io.ox/mail/main.js:512
+#: apps/io.ox/files/main.js:298 module:io.ox/files apps/io.ox/mail/main.js:513
 #: module:io.ox/mail
 msgid "Item list"
 msgstr "Vienību saraksts"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/core/tk/vgrid.js:310 module:io.ox/core
-#: apps/io.ox/files/main.js:301 module:io.ox/files apps/io.ox/mail/main.js:515
+#: apps/io.ox/files/main.js:301 module:io.ox/files apps/io.ox/mail/main.js:516
 #: module:io.ox/mail
 msgid "Item list options"
 msgstr "Sarakstra opcijas"
@@ -4367,15 +4367,15 @@ msgid "Learn more"
 msgstr "Uzzināt vairāk"
 
 #. label for the leave presentation button
-#: apps/io.ox/presenter/views/presentationview.js:228 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:239 module:io.ox/presenter
 msgid "Leave"
 msgstr "Atstāt"
 
 #. tooltip for the leave presentation button
 #. button label for leaving the presentation
 #. button tooltip for leaving the presentation
-#: apps/io.ox/presenter/views/presentationview.js:224 module:io.ox/presenter
-#: apps/io.ox/presenter/views/presentationview.js:225
+#: apps/io.ox/presenter/views/presentationview.js:235 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:236
 #: apps/io.ox/presenter/views/toolbarview.js:144
 #: apps/io.ox/presenter/views/toolbarview.js:151
 #: apps/io.ox/presenter/views/toolbarview.js:152
@@ -4849,7 +4849,7 @@ msgid "Move"
 msgstr "Pārvietot"
 
 #. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js:750 module:io.ox/mail
+#: apps/io.ox/mail/main.js:751 module:io.ox/mail
 #, fuzzy
 #| msgid "Show all %1$d messages in inbox"
 msgid "Move all %1$d messages to another folder"
@@ -5077,8 +5077,8 @@ msgstr "Nākošā lapa"
 #. button tooltip for 'go to next presentation slide' action
 #: apps/io.ox/presenter/views/navigationview.js:49 module:io.ox/presenter
 #: apps/io.ox/presenter/views/navigationview.js:50
-#: apps/io.ox/presenter/views/presentationview.js:89
-#: apps/io.ox/presenter/views/presentationview.js:90
+#: apps/io.ox/presenter/views/presentationview.js:93
+#: apps/io.ox/presenter/views/presentationview.js:94
 msgid "Next slide"
 msgstr "Nākošais slaids"
 
@@ -5143,12 +5143,12 @@ msgstr "Nav zaudētu pieprasījumu"
 msgid "No mails in your inbox"
 msgstr "Jūsu pasta kastē nav vēstuļu"
 
-#: apps/io.ox/mail/main.js:718 module:io.ox/mail
+#: apps/io.ox/mail/main.js:719 module:io.ox/mail
 msgid "No message selected"
 msgstr "Neviens ziņojums nav izvēlēts"
 
 #: apps/io.ox/core/notifications.js:105 module:io.ox/core
-#: apps/io.ox/core/notifications.js:380
+#: apps/io.ox/core/notifications.js:382
 msgid "No notifications"
 msgstr "Nav paziņojumu"
 
@@ -5533,7 +5533,7 @@ msgstr "PDF"
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:240 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:253 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "Lapa %1$d no %2$d"
 
@@ -5952,7 +5952,7 @@ msgid "Presentation end"
 msgstr "Prezentācija beidzas"
 
 #. Info text that says the presentation is paused.
-#: apps/io.ox/presenter/views/presentationview.js:219 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:230 module:io.ox/presenter
 msgid "Presentation is paused."
 msgstr "Prezentācija ir pārtraukta"
 
@@ -6046,8 +6046,8 @@ msgstr "Iepriekšējā lapa"
 #. button tooltip for 'go to previous presentation slide' action
 #: apps/io.ox/presenter/views/navigationview.js:53 module:io.ox/presenter
 #: apps/io.ox/presenter/views/navigationview.js:54
-#: apps/io.ox/presenter/views/presentationview.js:84
-#: apps/io.ox/presenter/views/presentationview.js:85
+#: apps/io.ox/presenter/views/presentationview.js:88
+#: apps/io.ox/presenter/views/presentationview.js:89
 msgid "Previous slide"
 msgstr "Iepriekšējā slaids"
 
@@ -6378,6 +6378,10 @@ msgstr "Jaunināšanas intervāls minūtēs"
 #: module:io.ox/settings
 msgid "Regex"
 msgstr "Regex"
+
+#: apps/io.ox/mail/settings/pane.js:207 module:io.ox/mail
+msgid "Register now"
+msgstr ""
 
 #: apps/io.ox/calendar/invitations/register.js:34 module:io.ox/calendar/main
 msgid "Reject changes"
@@ -7117,7 +7121,7 @@ msgstr "Rādīt kvotēto tekstu"
 msgid "Show request body"
 msgstr "Rādīt pieprasījuma informāciju"
 
-#: apps/io.ox/mail/settings/pane.js:330 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:339 module:io.ox/mail
 msgid "Show requests for read receipts"
 msgstr "Rādīt lasīšanas apstiprinājumu pieprasījumus"
 
@@ -7230,13 +7234,20 @@ msgstr "Atvainojiet, bet pašreiz nav iespējamas pieslēgties pie %s."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Atvainojiet, bet %s nav jums pieejamu datu."
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:27 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:29 module:io.ox/core
 msgid "Sorry, there is no preview available for this file."
 msgstr "Atvainojiet, šim failam nav apskata iespēju."
 
 #: apps/io.ox/core/viewer/views/types/imageview.js:64 module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Atvainojiet, šim attēlam nav apskata iespēju."
+
+#: apps/io.ox/core/viewer/views/types/documentview.js:338 module:io.ox/core
+#: apps/io.ox/presenter/views/presentationview.js:750 module:io.ox/presenter
+#, fuzzy
+#| msgid "Sorry, there is no data available for you on %s."
+msgid "Sorry, this page is not available at the moment."
+msgstr "Atvainojiet, bet %s nav jums pieejamu datu."
 
 #: apps/plugins/portal/linkedIn/register.js:181 module:plugins/portal
 msgid ""
@@ -8085,7 +8096,7 @@ msgstr "Šis kontakts ir privāts un nevar tikt koplietots"
 msgid "This distribution list has been added to the portal"
 msgstr "Šis izplatīšanas saraksts ir pievienots portālam"
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:28 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:30 module:io.ox/core
 msgid "This document is password protected and cannot be displayed."
 msgstr "Šis dokuments ir aizsargāts ar paroli un nevar tikt parādīts."
 
@@ -8285,7 +8296,7 @@ msgstr "Virsraksts"
 #: apps/io.ox/mail/common-extensions.js:324 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:33
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:58
-#: module:io.ox/settings apps/io.ox/mail/main.js:619
+#: module:io.ox/settings apps/io.ox/mail/main.js:620
 #: apps/io.ox/mail/print.js:85 apps/io.ox/mail/view-options.js:32
 msgid "To"
 msgstr "Saņēmējs"

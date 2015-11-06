@@ -197,7 +197,7 @@ define('io.ox/core/tk/list', [
             if (li.length === 0) return;
 
             // preserve item?
-            if (isSelected && this.options.preserve) {
+            if (isSelected && this.model.get('preserve')) {
                 // note: preserved items are no longer part of the collection, i.e.
                 // they won't respond to model changes! They are just visible until
                 // the selection is changed by the user
@@ -428,12 +428,10 @@ define('io.ox/core/tk/list', [
             // app: application
             // pagination: use pagination (default is true)
             // draggable: add drag'n'drop support
-            // preserve: don't remove selected items (e.g. for unseen messages)
             // swipe: enables swipe handling (swipe to delete etc)
             this.options = _.extend({
                 pagination: true,
                 draggable: false,
-                preserve: false,
                 selection: true,
                 scrollable: true,
                 swipe: false

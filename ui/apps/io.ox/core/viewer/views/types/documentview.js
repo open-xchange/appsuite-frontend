@@ -26,7 +26,7 @@ define('io.ox/core/viewer/views/types/documentview', [
     'use strict';
 
     var PDF_ERROR_NOTIFICATIONS = {
-        general: gt('Sorry, there is no preview available for this file.'),
+        general: gt('An error occurred converting the document so it cannot be displayed.'),
         passwordProtected: gt('This document is password protected and cannot be displayed.')
     };
 
