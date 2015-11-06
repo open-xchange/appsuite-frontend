@@ -160,7 +160,9 @@ define('io.ox/calendar/edit/main', [
                                                 self.model.set('endTimezone', self.model.endTimezone,  { silent: true });
                                                 delete self.model.endTimezone;
                                                 // restore model attributes for moving
-                                                self.model.set('folder_id', self.moveAfterSave,  { silent: true });
+                                                if (self.moveAfterSave) {
+                                                    self.model.set('folder_id', self.moveAfterSave,  { silent: true });
+                                                }
                                                 self.model.silentMode = false;
                                                 return;
                                             }
