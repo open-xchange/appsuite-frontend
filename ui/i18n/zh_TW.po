@@ -347,8 +347,8 @@ msgstr "%2$s 到 %1$s"
 msgid "%1$s updated their profile:"
 msgstr "%1$s 更新了個人資料:"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:371 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:376
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:375 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:380
 msgid "%1$s, %2$s"
 msgstr "%1$s %2$s"
 
@@ -801,7 +801,7 @@ msgstr "添加參與者"
 msgid "Add new rule"
 msgstr "新增規則"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:297 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:301 module:io.ox/mail
 msgid "Add new signature"
 msgstr "新增簽名"
 
@@ -1005,6 +1005,12 @@ msgstr "允許 HTML 格式的電子郵件"
 msgid "Allow pre-loading of externally linked images"
 msgstr "允許預載外部鏈結圖像"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js:29 module:io.ox/core
+#, fuzzy
+#| msgid "An error occurred while importing the document."
+msgid "An error occurred converting the document so it cannot be displayed."
+msgstr "匯入文件時發生錯誤。"
+
 #: apps/io.ox/portal/main.js:526 module:io.ox/portal
 msgid "An error occurred."
 msgstr "發生錯誤。"
@@ -1080,7 +1086,7 @@ msgid "Apply to all subfolders"
 msgstr "套用至所有子資料夾"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:225 module:io.ox/calendar
-#: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:381
+#: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:383
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js:281
 #: apps/io.ox/calendar/week/perspective.js:175
 #: apps/io.ox/mail/detail/links.js:73 module:io.ox/mail
@@ -1444,7 +1450,7 @@ msgstr "行事曆:"
 #: apps/io.ox/calendar/actions/delete.js:79
 #: apps/io.ox/calendar/actions/delete.js:91
 #: apps/io.ox/calendar/actions/edit.js:42 apps/io.ox/calendar/edit/main.js:155
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:421
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:423
 #: apps/io.ox/calendar/edit/timezone-dialog.js:141
 #: apps/io.ox/calendar/main.js:256 apps/io.ox/calendar/main.js:322
 #: apps/io.ox/calendar/month/perspective.js:126
@@ -1461,7 +1467,7 @@ msgstr "行事曆:"
 #: apps/io.ox/core/folder/actions/common.js:47
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
-#: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:186
+#: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:188
 #: apps/io.ox/core/main.js:515 apps/io.ox/core/main.js:1502
 #: apps/io.ox/core/permissions/permissions.js:372
 #: apps/io.ox/core/permissions/permissions.js:405 apps/io.ox/core/print.js:113
@@ -1492,7 +1498,7 @@ msgstr "行事曆:"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1250
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:254
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:258
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:121
 #: apps/io.ox/settings/accounts/settings/pane.js:134
@@ -2015,7 +2021,7 @@ msgid "Could not load this list"
 msgstr "無法載入此清單"
 
 #: apps/io.ox/mail/settings/pane.js:140 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:324
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:328
 msgid "Could not save settings"
 msgstr "無法儲存設定"
 
@@ -2073,7 +2079,7 @@ msgid "Create"
 msgstr "建立"
 
 #: apps/io.ox/calendar/edit/extensions.js:55 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:175 apps/io.ox/calendar/edit/main.js:321
+#: apps/io.ox/calendar/edit/main.js:177 apps/io.ox/calendar/edit/main.js:323
 msgid "Create appointment"
 msgstr "建立約會"
 
@@ -2172,11 +2178,11 @@ msgstr "自訂此頁面"
 msgid "Dark colors"
 msgstr "暗色"
 
-#: apps/io.ox/core/import/import.js:270 module:io.ox/core
+#: apps/io.ox/core/import/import.js:272 module:io.ox/core
 msgid "Data imported successfully"
 msgstr "成功匯入資料"
 
-#: apps/io.ox/core/import/import.js:278 module:io.ox/core
+#: apps/io.ox/core/import/import.js:280 module:io.ox/core
 msgid "Data only partially imported (%1$s of %2$s records)"
 msgstr "只匯入部分資料〈%1$s 筆記錄，共 %2$s 筆〉"
 
@@ -2252,11 +2258,11 @@ msgstr "預設提醒時間"
 msgid "Default sender address"
 msgstr "預設寄件者地址"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:495 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:499 module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "寄送新訊息時預設使用的簽章"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:502 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:506 module:io.ox/mail
 msgid "Default signature for replies or forwardings"
 msgstr "回信或轉寄郵件時預設使用的簽章"
 
@@ -2287,8 +2293,8 @@ msgstr "延遲"
 #: apps/io.ox/mail/actions/delete.js:67 apps/io.ox/mail/actions/delete.js:86
 #: apps/io.ox/mail/mailfilter/settings/filter.js:323
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:375
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:376
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:379
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:380
 #: apps/io.ox/mail/toolbar.js:79 apps/io.ox/portal/main.js:691
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:119
 #: apps/io.ox/settings/accounts/settings/pane.js:111
@@ -2336,7 +2342,7 @@ msgstr "刪除聯絡人"
 msgid "Delete group"
 msgstr "刪除組"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:229 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:233 module:io.ox/mail
 msgid "Delete old signatures after import"
 msgstr "匯出後刪除舊簽章"
 
@@ -2464,7 +2470,7 @@ msgstr "放棄"
 
 #. "Discard changes" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/calendar/edit/main.js:420 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:422 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:200 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:257 apps/io.ox/editor/main.js:366
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:181 module:io.ox/tasks
@@ -2606,7 +2612,7 @@ msgstr[1] "您確定要刪除此任務嗎？"
 msgid "Do you really want to delete this widget?"
 msgstr "確定要刪除此小工具嗎？"
 
-#: apps/io.ox/calendar/edit/main.js:417 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:419 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:197 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:254 apps/io.ox/editor/main.js:363
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:178 module:io.ox/tasks
@@ -2848,8 +2854,8 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1254
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:369
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:371
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:373
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:375
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:281
 #: apps/io.ox/settings/accounts/settings/pane.js:113
@@ -2883,7 +2889,7 @@ msgid "Edit all objects"
 msgstr "編輯所有物件"
 
 #: apps/io.ox/calendar/edit/extensions.js:55 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:175 apps/io.ox/calendar/edit/main.js:319
+#: apps/io.ox/calendar/edit/main.js:177 apps/io.ox/calendar/edit/main.js:321
 #: apps/io.ox/calendar/toolbar.js:65 module:io.ox/calendar
 msgid "Edit appointment"
 msgstr "編輯約會"
@@ -3308,7 +3314,7 @@ msgid "Failed to connect."
 msgstr "無法連線。"
 
 #. Failure message if no data (e.g. appointments) could be imported
-#: apps/io.ox/core/import/import.js:274 module:io.ox/core
+#: apps/io.ox/core/import/import.js:276 module:io.ox/core
 msgid "Failed to import any data"
 msgstr "無法匯入任何資料"
 
@@ -3936,7 +3942,11 @@ msgstr "忽略警告"
 msgid "Ignore conflicts"
 msgstr "忽略衝突"
 
-#: apps/io.ox/core/import/import.js:128 module:io.ox/core
+#: apps/io.ox/core/import/import.js:130 module:io.ox/core
+msgid "Ignore existing events"
+msgstr ""
+
+#: apps/io.ox/core/import/import.js:129 module:io.ox/core
 msgid ""
 "Ignore existing events. Helpful to import public holiday calendars, for "
 "example."
@@ -3955,17 +3965,17 @@ msgid "Images"
 msgstr "圖片"
 
 #: apps/io.ox/core/folder/contextmenu.js:409 module:io.ox/core
-#: apps/io.ox/core/import/import.js:185
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:253 module:io.ox/mail
+#: apps/io.ox/core/import/import.js:187
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:257 module:io.ox/mail
 msgid "Import"
 msgstr "匯入"
 
-#: apps/io.ox/core/import/import.js:177 module:io.ox/core
+#: apps/io.ox/core/import/import.js:179 module:io.ox/core
 msgid "Import from file"
 msgstr "從檔案匯入"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:225 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:310
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:229 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:314
 msgid "Import signatures"
 msgstr "匯入簽名"
 
@@ -4272,7 +4282,7 @@ msgstr "啟動器下拉選單，請按 Enter 以跳轉至下拉選單。"
 msgid "Layout"
 msgstr "版面"
 
-#: apps/io.ox/core/import/import.js:154 module:io.ox/core
+#: apps/io.ox/core/import/import.js:156 module:io.ox/core
 msgid "Learn more"
 msgstr "了解更多"
 
@@ -5074,9 +5084,9 @@ msgid "No reminder"
 msgstr "無提醒"
 
 #: apps/io.ox/mail/compose/extensions.js:351 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:347
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:349
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:406
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:351
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:353
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:410
 msgid "No signature"
 msgstr "無簽名"
 
@@ -5144,7 +5154,7 @@ msgstr "未開始"
 msgid "Note"
 msgstr "備註"
 
-#: apps/io.ox/core/import/import.js:145 module:io.ox/core
+#: apps/io.ox/core/import/import.js:147 module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "CSV 檔案注意事項:"
 
@@ -5756,11 +5766,11 @@ msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr "請提供舊密碼以復原帳號密碼。"
 
-#: apps/io.ox/core/import/import.js:228 module:io.ox/core
+#: apps/io.ox/core/import/import.js:230 module:io.ox/core
 msgid "Please select a file to import"
 msgstr "請選擇要匯入的檔案"
 
-#: apps/io.ox/core/import/import.js:232 module:io.ox/core
+#: apps/io.ox/core/import/import.js:234 module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "請選擇有效的 iCal 檔案匯入"
 
@@ -7035,7 +7045,7 @@ msgstr "簽名名稱"
 
 #: apps/io.ox/mail/compose/extensions.js:350 module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js:23
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:302
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:306
 msgid "Signatures"
 msgstr "簽名"
 
@@ -7103,10 +7113,6 @@ msgstr "抱歉，目前無法連線至 %s。"
 #: apps/plugins/halo/xing/register.js:264 module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "抱歉，%s 上目前沒有可提供給您的資料。"
-
-#: apps/io.ox/core/viewer/views/types/documentview.js:29 module:io.ox/core
-msgid "Sorry, there is no preview available for this file."
-msgstr "抱歉，無法預覽此檔案。"
 
 #: apps/io.ox/core/viewer/views/types/imageview.js:64 module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
@@ -7646,7 +7652,7 @@ msgstr "因為超過了檔案大小限制 %1$s，無法上傳"
 msgid "The first 90 days are free."
 msgstr "前 90 天內免費。"
 
-#: apps/io.ox/core/import/import.js:148 module:io.ox/core
+#: apps/io.ox/core/import/import.js:150 module:io.ox/core
 msgid ""
 "The first record of a valid CSV file must define proper column names. "
 "Supported separators are comma and semi-colon."
@@ -7882,12 +7888,12 @@ msgid "There was a problem with XING. The error message was: \"%s\""
 msgstr "XING 有點問題。錯誤訊息為:「%s」"
 
 #. Error message if calendar import failed
-#: apps/io.ox/core/import/import.js:208 module:io.ox/core
+#: apps/io.ox/core/import/import.js:210 module:io.ox/core
 msgid "There was no appointment data to import"
 msgstr "沒有約會資料可匯入"
 
 #. Error message if contact import failed
-#: apps/io.ox/core/import/import.js:211 module:io.ox/core
+#: apps/io.ox/core/import/import.js:213 module:io.ox/core
 msgid "There was no contact data to import"
 msgstr "沒有聯絡人資料可匯入"
 
@@ -7897,7 +7903,7 @@ msgid "There was no suitable server found for this mail/password combination"
 msgstr "此帳號密碼組合無法登入任何可用的伺服器"
 
 #. Error message if task import failed
-#: apps/io.ox/core/import/import.js:214 module:io.ox/core
+#: apps/io.ox/core/import/import.js:216 module:io.ox/core
 msgid "There was no task data to import"
 msgstr "沒有任務資料可匯入"
 
@@ -8785,7 +8791,7 @@ msgstr ""
 "您可以複製並將此連結貼到郵件、即時訊息或社交網路中，請注意任何看到此連結的人"
 "都能存取此分享內容。"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:227 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:231 module:io.ox/mail
 msgid ""
 "You can import existing signatures from the previous product generation."
 msgstr "您可以自先前版本的產品匯入現有的簽章。"
@@ -10089,9 +10095,6 @@ msgstr "年"
 
 #~ msgid "An error occurred"
 #~ msgstr "發生錯誤"
-
-#~ msgid "An error occurred while importing the document."
-#~ msgstr "匯入文件時發生錯誤。"
 
 #~ msgid "An error occurred while loading page %1$d."
 #~ msgstr "載入第 %1$d 頁時發生錯誤。"
@@ -12499,6 +12502,9 @@ msgstr "年"
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "無法上傳此檔案。"
+
+#~ msgid "Sorry, there is no preview available for this file."
+#~ msgstr "抱歉，無法預覽此檔案。"
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "排序您的郵件"

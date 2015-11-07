@@ -350,8 +350,8 @@ msgstr "%1$s to %2$s"
 msgid "%1$s updated their profile:"
 msgstr "%1$s updated their profile:"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:371 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:376
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:375 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:380
 msgid "%1$s, %2$s"
 msgstr "%1$s, %2$s"
 
@@ -808,7 +808,7 @@ msgstr "Add new participant"
 msgid "Add new rule"
 msgstr "Add new rule"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:297 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:301 module:io.ox/mail
 msgid "Add new signature"
 msgstr "Add new signature"
 
@@ -1012,6 +1012,12 @@ msgstr "Allow HTML formatted email messages"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Allow pre-loading of externally linked images"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js:29 module:io.ox/core
+#, fuzzy
+#| msgid "An error occurred while loading the document."
+msgid "An error occurred converting the document so it cannot be displayed."
+msgstr "An error occurred while loading the document."
+
 #: apps/io.ox/portal/main.js:526 module:io.ox/portal
 msgid "An error occurred."
 msgstr "An error occurred."
@@ -1087,7 +1093,7 @@ msgid "Apply to all subfolders"
 msgstr "Apply to all subfolders"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:225 module:io.ox/calendar
-#: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:381
+#: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:383
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js:281
 #: apps/io.ox/calendar/week/perspective.js:175
 #: apps/io.ox/mail/detail/links.js:73 module:io.ox/mail
@@ -1459,7 +1465,7 @@ msgstr "Calendar:"
 #: apps/io.ox/calendar/actions/delete.js:79
 #: apps/io.ox/calendar/actions/delete.js:91
 #: apps/io.ox/calendar/actions/edit.js:42 apps/io.ox/calendar/edit/main.js:155
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:421
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:423
 #: apps/io.ox/calendar/edit/timezone-dialog.js:141
 #: apps/io.ox/calendar/main.js:256 apps/io.ox/calendar/main.js:322
 #: apps/io.ox/calendar/month/perspective.js:126
@@ -1476,7 +1482,7 @@ msgstr "Calendar:"
 #: apps/io.ox/core/folder/actions/common.js:47
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
-#: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:186
+#: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:188
 #: apps/io.ox/core/main.js:515 apps/io.ox/core/main.js:1502
 #: apps/io.ox/core/permissions/permissions.js:372
 #: apps/io.ox/core/permissions/permissions.js:405 apps/io.ox/core/print.js:113
@@ -1507,7 +1513,7 @@ msgstr "Calendar:"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1250
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:254
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:258
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:121
 #: apps/io.ox/settings/accounts/settings/pane.js:134
@@ -2031,7 +2037,7 @@ msgid "Could not load this list"
 msgstr "Could not load this list"
 
 #: apps/io.ox/mail/settings/pane.js:140 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:324
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:328
 msgid "Could not save settings"
 msgstr "Could not save settings"
 
@@ -2091,7 +2097,7 @@ msgid "Create"
 msgstr "Create"
 
 #: apps/io.ox/calendar/edit/extensions.js:55 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:175 apps/io.ox/calendar/edit/main.js:321
+#: apps/io.ox/calendar/edit/main.js:177 apps/io.ox/calendar/edit/main.js:323
 msgid "Create appointment"
 msgstr "Create appointment"
 
@@ -2190,11 +2196,11 @@ msgstr "Customise this page"
 msgid "Dark colors"
 msgstr "Dark colours"
 
-#: apps/io.ox/core/import/import.js:270 module:io.ox/core
+#: apps/io.ox/core/import/import.js:272 module:io.ox/core
 msgid "Data imported successfully"
 msgstr "Data imported successfully"
 
-#: apps/io.ox/core/import/import.js:278 module:io.ox/core
+#: apps/io.ox/core/import/import.js:280 module:io.ox/core
 msgid "Data only partially imported (%1$s of %2$s records)"
 msgstr "Data only partially imported (%1$s of %2$s records)"
 
@@ -2270,11 +2276,11 @@ msgstr "Default reminder"
 msgid "Default sender address"
 msgstr "Default sender address"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:495 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:499 module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "Default signature for new messages"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:502 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:506 module:io.ox/mail
 msgid "Default signature for replies or forwardings"
 msgstr "Default signature for replies or forwards"
 
@@ -2305,8 +2311,8 @@ msgstr "Deferred"
 #: apps/io.ox/mail/actions/delete.js:67 apps/io.ox/mail/actions/delete.js:86
 #: apps/io.ox/mail/mailfilter/settings/filter.js:323
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:375
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:376
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:379
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:380
 #: apps/io.ox/mail/toolbar.js:79 apps/io.ox/portal/main.js:691
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:119
 #: apps/io.ox/settings/accounts/settings/pane.js:111
@@ -2354,7 +2360,7 @@ msgstr "Delete contact"
 msgid "Delete group"
 msgstr "Delete group"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:229 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:233 module:io.ox/mail
 msgid "Delete old signatures after import"
 msgstr "Delete old signatures after import"
 
@@ -2482,7 +2488,7 @@ msgstr "Discard"
 
 #. "Discard changes" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/calendar/edit/main.js:420 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:422 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:200 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:257 apps/io.ox/editor/main.js:366
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:181 module:io.ox/tasks
@@ -2630,7 +2636,7 @@ msgstr[1] "Do you really want to delete these tasks?"
 msgid "Do you really want to delete this widget?"
 msgstr "Do you really want to delete this widget?"
 
-#: apps/io.ox/calendar/edit/main.js:417 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:419 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:197 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:254 apps/io.ox/editor/main.js:363
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:178 module:io.ox/tasks
@@ -2880,8 +2886,8 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1254
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:369
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:371
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:373
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:375
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:281
 #: apps/io.ox/settings/accounts/settings/pane.js:113
@@ -2915,7 +2921,7 @@ msgid "Edit all objects"
 msgstr "Edit all objects"
 
 #: apps/io.ox/calendar/edit/extensions.js:55 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:175 apps/io.ox/calendar/edit/main.js:319
+#: apps/io.ox/calendar/edit/main.js:177 apps/io.ox/calendar/edit/main.js:321
 #: apps/io.ox/calendar/toolbar.js:65 module:io.ox/calendar
 msgid "Edit appointment"
 msgstr "Edit appointment"
@@ -3348,7 +3354,7 @@ msgid "Failed to connect."
 msgstr "Failed to connect."
 
 #. Failure message if no data (e.g. appointments) could be imported
-#: apps/io.ox/core/import/import.js:274 module:io.ox/core
+#: apps/io.ox/core/import/import.js:276 module:io.ox/core
 msgid "Failed to import any data"
 msgstr "Failed to import any data"
 
@@ -3988,7 +3994,11 @@ msgstr "Ignore Warnings"
 msgid "Ignore conflicts"
 msgstr "Ignore conflicts"
 
-#: apps/io.ox/core/import/import.js:128 module:io.ox/core
+#: apps/io.ox/core/import/import.js:130 module:io.ox/core
+msgid "Ignore existing events"
+msgstr ""
+
+#: apps/io.ox/core/import/import.js:129 module:io.ox/core
 msgid ""
 "Ignore existing events. Helpful to import public holiday calendars, for "
 "example."
@@ -4009,17 +4019,17 @@ msgid "Images"
 msgstr "Images"
 
 #: apps/io.ox/core/folder/contextmenu.js:409 module:io.ox/core
-#: apps/io.ox/core/import/import.js:185
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:253 module:io.ox/mail
+#: apps/io.ox/core/import/import.js:187
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:257 module:io.ox/mail
 msgid "Import"
 msgstr "Import"
 
-#: apps/io.ox/core/import/import.js:177 module:io.ox/core
+#: apps/io.ox/core/import/import.js:179 module:io.ox/core
 msgid "Import from file"
 msgstr "Import from file"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:225 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:310
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:229 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:314
 msgid "Import signatures"
 msgstr "Import signatures"
 
@@ -4331,7 +4341,7 @@ msgstr "Launcher dropdown. Press [enter] to jump to the dropdown."
 msgid "Layout"
 msgstr "Layout"
 
-#: apps/io.ox/core/import/import.js:154 module:io.ox/core
+#: apps/io.ox/core/import/import.js:156 module:io.ox/core
 msgid "Learn more"
 msgstr "Learn more"
 
@@ -5134,9 +5144,9 @@ msgid "No reminder"
 msgstr "No reminder"
 
 #: apps/io.ox/mail/compose/extensions.js:351 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:347
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:349
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:406
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:351
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:353
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:410
 msgid "No signature"
 msgstr "No signature"
 
@@ -5204,7 +5214,7 @@ msgstr "Not started"
 msgid "Note"
 msgstr "Note"
 
-#: apps/io.ox/core/import/import.js:145 module:io.ox/core
+#: apps/io.ox/core/import/import.js:147 module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "Note on CSV files:"
 
@@ -5824,11 +5834,11 @@ msgid ""
 msgstr ""
 "Please provide the old password so the account passwords can be recovered."
 
-#: apps/io.ox/core/import/import.js:228 module:io.ox/core
+#: apps/io.ox/core/import/import.js:230 module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Please select a file to import"
 
-#: apps/io.ox/core/import/import.js:232 module:io.ox/core
+#: apps/io.ox/core/import/import.js:234 module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "Please select a valid iCal file to import"
 
@@ -7121,7 +7131,7 @@ msgstr "Signature name"
 
 #: apps/io.ox/mail/compose/extensions.js:350 module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js:23
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:302
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:306
 msgid "Signatures"
 msgstr "Signatures"
 
@@ -7191,10 +7201,6 @@ msgstr "Sorry, could not connect to %s right now."
 #: apps/plugins/halo/xing/register.js:264 module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Sorry, there is no data available for you on %s."
-
-#: apps/io.ox/core/viewer/views/types/documentview.js:29 module:io.ox/core
-msgid "Sorry, there is no preview available for this file."
-msgstr "Sorry, there is no preview available for this file."
 
 #: apps/io.ox/core/viewer/views/types/imageview.js:64 module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
@@ -7751,7 +7757,7 @@ msgstr ""
 msgid "The first 90 days are free."
 msgstr "The first 90 days are free."
 
-#: apps/io.ox/core/import/import.js:148 module:io.ox/core
+#: apps/io.ox/core/import/import.js:150 module:io.ox/core
 msgid ""
 "The first record of a valid CSV file must define proper column names. "
 "Supported separators are comma and semi-colon."
@@ -8001,12 +8007,12 @@ msgid "There was a problem with XING. The error message was: \"%s\""
 msgstr "There was a problem with XING. The error message was: \"%s\""
 
 #. Error message if calendar import failed
-#: apps/io.ox/core/import/import.js:208 module:io.ox/core
+#: apps/io.ox/core/import/import.js:210 module:io.ox/core
 msgid "There was no appointment data to import"
 msgstr "There was no appointment data to import"
 
 #. Error message if contact import failed
-#: apps/io.ox/core/import/import.js:211 module:io.ox/core
+#: apps/io.ox/core/import/import.js:213 module:io.ox/core
 msgid "There was no contact data to import"
 msgstr "There was no contact data to import"
 
@@ -8016,7 +8022,7 @@ msgid "There was no suitable server found for this mail/password combination"
 msgstr "There was no suitable server found for this email/password combination"
 
 #. Error message if task import failed
-#: apps/io.ox/core/import/import.js:214 module:io.ox/core
+#: apps/io.ox/core/import/import.js:216 module:io.ox/core
 msgid "There was no task data to import"
 msgstr "There was no task data to import"
 
@@ -8930,7 +8936,7 @@ msgstr ""
 "You can copy and paste this link in an e-mail, instant messenger or social "
 "network. Please note that anyone with this link can access the share."
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:227 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:231 module:io.ox/mail
 msgid ""
 "You can import existing signatures from the previous product generation."
 msgstr ""
@@ -10003,9 +10009,6 @@ msgstr "yyyy"
 
 #~ msgid "An error occurred while loading page %1$d."
 #~ msgstr "An error occurred while loading page %1$d."
-
-#~ msgid "An error occurred while loading the document."
-#~ msgstr "An error occurred while loading the document."
 
 #, fuzzy
 #~| msgid "Apply role"
@@ -11196,6 +11199,9 @@ msgstr "yyyy"
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "This file could not be uploaded."
+
+#~ msgid "Sorry, there is no preview available for this file."
+#~ msgstr "Sorry, there is no preview available for this file."
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "Sorting your email messages"

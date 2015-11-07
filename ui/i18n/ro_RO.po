@@ -366,8 +366,8 @@ msgstr "din%1$s până în %2$s"
 msgid "%1$s updated their profile:"
 msgstr "%1$s și-a actualizat profilul:"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:371 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:376
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:375 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:380
 msgid "%1$s, %2$s"
 msgstr "%1$s, %2$s"
 
@@ -833,7 +833,7 @@ msgstr "Adaugă participant"
 msgid "Add new rule"
 msgstr "Adaugă o regulă nouă"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:297 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:301 module:io.ox/mail
 msgid "Add new signature"
 msgstr "Adaugă o semnătură nouă"
 
@@ -1038,6 +1038,12 @@ msgstr "Permite mesajele în format html"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Permite preîncărcarea imaginilor cu legături externe"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js:29 module:io.ox/core
+#, fuzzy
+#| msgid "An error occurred while importing the document."
+msgid "An error occurred converting the document so it cannot be displayed."
+msgstr "A apărut o eroare la importarea documentului."
+
 #: apps/io.ox/portal/main.js:526 module:io.ox/portal
 msgid "An error occurred."
 msgstr "A apărut o eroare."
@@ -1115,7 +1121,7 @@ msgid "Apply to all subfolders"
 msgstr "Aplică pentru toate dosarele subordonate"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:225 module:io.ox/calendar
-#: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:381
+#: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:383
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js:281
 #: apps/io.ox/calendar/week/perspective.js:175
 #: apps/io.ox/mail/detail/links.js:73 module:io.ox/mail
@@ -1488,7 +1494,7 @@ msgstr "Calendar:"
 #: apps/io.ox/calendar/actions/delete.js:79
 #: apps/io.ox/calendar/actions/delete.js:91
 #: apps/io.ox/calendar/actions/edit.js:42 apps/io.ox/calendar/edit/main.js:155
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:421
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:423
 #: apps/io.ox/calendar/edit/timezone-dialog.js:141
 #: apps/io.ox/calendar/main.js:256 apps/io.ox/calendar/main.js:322
 #: apps/io.ox/calendar/month/perspective.js:126
@@ -1505,7 +1511,7 @@ msgstr "Calendar:"
 #: apps/io.ox/core/folder/actions/common.js:47
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
-#: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:186
+#: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:188
 #: apps/io.ox/core/main.js:515 apps/io.ox/core/main.js:1502
 #: apps/io.ox/core/permissions/permissions.js:372
 #: apps/io.ox/core/permissions/permissions.js:405 apps/io.ox/core/print.js:113
@@ -1536,7 +1542,7 @@ msgstr "Calendar:"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1250
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:254
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:258
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:121
 #: apps/io.ox/settings/accounts/settings/pane.js:134
@@ -2066,7 +2072,7 @@ msgid "Could not load this list"
 msgstr "Nu s-a putut încărca lista"
 
 #: apps/io.ox/mail/settings/pane.js:140 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:324
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:328
 msgid "Could not save settings"
 msgstr "Nu s-au putut salva setările"
 
@@ -2126,7 +2132,7 @@ msgid "Create"
 msgstr "Creează"
 
 #: apps/io.ox/calendar/edit/extensions.js:55 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:175 apps/io.ox/calendar/edit/main.js:321
+#: apps/io.ox/calendar/edit/main.js:177 apps/io.ox/calendar/edit/main.js:323
 msgid "Create appointment"
 msgstr "Creează o întâlnire"
 
@@ -2225,11 +2231,11 @@ msgstr "Personalizează pagina"
 msgid "Dark colors"
 msgstr "Culori închise"
 
-#: apps/io.ox/core/import/import.js:270 module:io.ox/core
+#: apps/io.ox/core/import/import.js:272 module:io.ox/core
 msgid "Data imported successfully"
 msgstr "Datele au fost importate cu succes"
 
-#: apps/io.ox/core/import/import.js:278 module:io.ox/core
+#: apps/io.ox/core/import/import.js:280 module:io.ox/core
 msgid "Data only partially imported (%1$s of %2$s records)"
 msgstr "Datele au fost importate doar parțial (%1$s din %2$s înregistrări)"
 
@@ -2305,11 +2311,11 @@ msgstr "Memento implicit"
 msgid "Default sender address"
 msgstr "Adresa implicită a expeditorului"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:495 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:499 module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "Semnătură implicită pentru mesajele noi"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:502 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:506 module:io.ox/mail
 msgid "Default signature for replies or forwardings"
 msgstr "Semnătură implicită pentru răspunsuri sau redirecționări"
 
@@ -2340,8 +2346,8 @@ msgstr "Amânat"
 #: apps/io.ox/mail/actions/delete.js:67 apps/io.ox/mail/actions/delete.js:86
 #: apps/io.ox/mail/mailfilter/settings/filter.js:323
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:375
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:376
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:379
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:380
 #: apps/io.ox/mail/toolbar.js:79 apps/io.ox/portal/main.js:691
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:119
 #: apps/io.ox/settings/accounts/settings/pane.js:111
@@ -2389,7 +2395,7 @@ msgstr "Șterge contactul"
 msgid "Delete group"
 msgstr "Șterge grupul"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:229 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:233 module:io.ox/mail
 msgid "Delete old signatures after import"
 msgstr "Șterge semnăturile vechi după importare"
 
@@ -2518,7 +2524,7 @@ msgstr "Renunță"
 
 #. "Discard changes" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/calendar/edit/main.js:420 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:422 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:200 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:257 apps/io.ox/editor/main.js:366
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:181 module:io.ox/tasks
@@ -2665,7 +2671,7 @@ msgstr[2] "Sigur doriți să ștergeți aceste sarcini?"
 msgid "Do you really want to delete this widget?"
 msgstr "Sigur doriți să ștergeți această aplicație?"
 
-#: apps/io.ox/calendar/edit/main.js:417 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:419 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:197 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:254 apps/io.ox/editor/main.js:363
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:178 module:io.ox/tasks
@@ -2912,8 +2918,8 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1254
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:369
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:371
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:373
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:375
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:281
 #: apps/io.ox/settings/accounts/settings/pane.js:113
@@ -2947,7 +2953,7 @@ msgid "Edit all objects"
 msgstr "Editează toate obiectele"
 
 #: apps/io.ox/calendar/edit/extensions.js:55 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:175 apps/io.ox/calendar/edit/main.js:319
+#: apps/io.ox/calendar/edit/main.js:177 apps/io.ox/calendar/edit/main.js:321
 #: apps/io.ox/calendar/toolbar.js:65 module:io.ox/calendar
 msgid "Edit appointment"
 msgstr "Editează întâlnirea"
@@ -3382,7 +3388,7 @@ msgid "Failed to connect."
 msgstr "Eroare de conexiune."
 
 #. Failure message if no data (e.g. appointments) could be imported
-#: apps/io.ox/core/import/import.js:274 module:io.ox/core
+#: apps/io.ox/core/import/import.js:276 module:io.ox/core
 msgid "Failed to import any data"
 msgstr "Importarea a eșuat, nu s-a importat nimic"
 
@@ -4023,7 +4029,11 @@ msgstr "Ignoră avertismentele"
 msgid "Ignore conflicts"
 msgstr "Ignoră conflictele"
 
-#: apps/io.ox/core/import/import.js:128 module:io.ox/core
+#: apps/io.ox/core/import/import.js:130 module:io.ox/core
+msgid "Ignore existing events"
+msgstr ""
+
+#: apps/io.ox/core/import/import.js:129 module:io.ox/core
 msgid ""
 "Ignore existing events. Helpful to import public holiday calendars, for "
 "example."
@@ -4044,17 +4054,17 @@ msgid "Images"
 msgstr "Imagini"
 
 #: apps/io.ox/core/folder/contextmenu.js:409 module:io.ox/core
-#: apps/io.ox/core/import/import.js:185
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:253 module:io.ox/mail
+#: apps/io.ox/core/import/import.js:187
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:257 module:io.ox/mail
 msgid "Import"
 msgstr "Importă"
 
-#: apps/io.ox/core/import/import.js:177 module:io.ox/core
+#: apps/io.ox/core/import/import.js:179 module:io.ox/core
 msgid "Import from file"
 msgstr "Importă dintr-un fișier"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:225 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:310
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:229 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:314
 msgid "Import signatures"
 msgstr "Importă semnăturile"
 
@@ -4368,7 +4378,7 @@ msgstr ""
 msgid "Layout"
 msgstr "Aspect"
 
-#: apps/io.ox/core/import/import.js:154 module:io.ox/core
+#: apps/io.ox/core/import/import.js:156 module:io.ox/core
 msgid "Learn more"
 msgstr "Mai multe informații"
 
@@ -5172,9 +5182,9 @@ msgid "No reminder"
 msgstr "Niciun memento"
 
 #: apps/io.ox/mail/compose/extensions.js:351 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:347
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:349
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:406
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:351
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:353
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:410
 msgid "No signature"
 msgstr "Nicio semnătură"
 
@@ -5242,7 +5252,7 @@ msgstr "Nu a început"
 msgid "Note"
 msgstr "Notiță"
 
-#: apps/io.ox/core/import/import.js:145 module:io.ox/core
+#: apps/io.ox/core/import/import.js:147 module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "Notă pentru fișierele CSV:"
 
@@ -5865,11 +5875,11 @@ msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr "Introduceți parola veche pentru a putea recupera parola contului."
 
-#: apps/io.ox/core/import/import.js:228 module:io.ox/core
+#: apps/io.ox/core/import/import.js:230 module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Selectați fișierul care trebuie importat"
 
-#: apps/io.ox/core/import/import.js:232 module:io.ox/core
+#: apps/io.ox/core/import/import.js:234 module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "Selectați un fișier iCal de importat"
 
@@ -7170,7 +7180,7 @@ msgstr "Nume semnătură"
 
 #: apps/io.ox/mail/compose/extensions.js:350 module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js:23
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:302
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:306
 msgid "Signatures"
 msgstr "Semnături"
 
@@ -7240,10 +7250,6 @@ msgstr "Ne pare rău, conectarea la %s este imposibilă pentru moment."
 #: apps/plugins/halo/xing/register.js:264 module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Ne pare rău, nu sunt date disponibile pe %s."
-
-#: apps/io.ox/core/viewer/views/types/documentview.js:29 module:io.ox/core
-msgid "Sorry, there is no preview available for this file."
-msgstr "Ne pare rău, pentru acest tip de fișier nu există previzualizare."
 
 #: apps/io.ox/core/viewer/views/types/imageview.js:64 module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
@@ -7802,7 +7808,7 @@ msgstr ""
 msgid "The first 90 days are free."
 msgstr "Primele 90 de zile sunt gratuite."
 
-#: apps/io.ox/core/import/import.js:148 module:io.ox/core
+#: apps/io.ox/core/import/import.js:150 module:io.ox/core
 msgid ""
 "The first record of a valid CSV file must define proper column names. "
 "Supported separators are comma and semi-colon."
@@ -8058,12 +8064,12 @@ msgid "There was a problem with XING. The error message was: \"%s\""
 msgstr "A apărut o problemă la XING. Mesaj de eroare: \"%s\""
 
 #. Error message if calendar import failed
-#: apps/io.ox/core/import/import.js:208 module:io.ox/core
+#: apps/io.ox/core/import/import.js:210 module:io.ox/core
 msgid "There was no appointment data to import"
 msgstr "Nu s-a găsit nicio dată despre întâlniri de importat"
 
 #. Error message if contact import failed
-#: apps/io.ox/core/import/import.js:211 module:io.ox/core
+#: apps/io.ox/core/import/import.js:213 module:io.ox/core
 msgid "There was no contact data to import"
 msgstr "Nu s-a găsit nicio dată despre contacte de importat"
 
@@ -8075,7 +8081,7 @@ msgstr ""
 "parolă"
 
 #. Error message if task import failed
-#: apps/io.ox/core/import/import.js:214 module:io.ox/core
+#: apps/io.ox/core/import/import.js:216 module:io.ox/core
 msgid "There was no task data to import"
 msgstr "Nu s-a găsit nicio dată despre sarcini de importat"
 
@@ -9007,7 +9013,7 @@ msgstr ""
 "sau rețea socială. Atenție: oricine deține această legătură va putea accesa "
 "partajarea."
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:227 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:231 module:io.ox/mail
 msgid ""
 "You can import existing signatures from the previous product generation."
 msgstr "Puteți importa semnături existente din generația trecută a produsului."
@@ -10362,9 +10368,6 @@ msgstr "aaaa"
 
 #~ msgid "An error occurred"
 #~ msgstr "A apărut o eroare"
-
-#~ msgid "An error occurred while importing the document."
-#~ msgstr "A apărut o eroare la importarea documentului."
 
 #~ msgid "An error occurred while loading page %1$d."
 #~ msgstr "A apărut o eroare la încărcarea paginii %1$d."
@@ -14333,6 +14336,9 @@ msgstr "aaaa"
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Nu s-a putut încărca fișierul."
+
+#~ msgid "Sorry, there is no preview available for this file."
+#~ msgstr "Ne pare rău, pentru acest tip de fișier nu există previzualizare."
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "Sortarea e-mailurilor"

@@ -349,8 +349,8 @@ msgstr "%1$s itt: %2$s"
 msgid "%1$s updated their profile:"
 msgstr "%1$s frissítette profilját:"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:371 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:376
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:375 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:380
 msgid "%1$s, %2$s"
 msgstr "%1$s, %2$s"
 
@@ -808,7 +808,7 @@ msgstr "Új résztvevő hozzáadása"
 msgid "Add new rule"
 msgstr "Új szabály hozzáadása"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:297 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:301 module:io.ox/mail
 msgid "Add new signature"
 msgstr "Új aláírás hozzáadása"
 
@@ -1013,6 +1013,10 @@ msgstr "HTML formátumú e-mailek engedélyezése"
 msgid "Allow pre-loading of externally linked images"
 msgstr "A külső hivatkozásokon található képek előtöltésének engedélyezése"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js:29 module:io.ox/core
+msgid "An error occurred converting the document so it cannot be displayed."
+msgstr ""
+
 #: apps/io.ox/portal/main.js:526 module:io.ox/portal
 msgid "An error occurred."
 msgstr "Hiba történt."
@@ -1090,7 +1094,7 @@ msgid "Apply to all subfolders"
 msgstr "Alkalmazás az összes mappára"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:225 module:io.ox/calendar
-#: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:381
+#: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:383
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js:281
 #: apps/io.ox/calendar/week/perspective.js:175
 #: apps/io.ox/mail/detail/links.js:73 module:io.ox/mail
@@ -1462,7 +1466,7 @@ msgstr "Naptár:"
 #: apps/io.ox/calendar/actions/delete.js:79
 #: apps/io.ox/calendar/actions/delete.js:91
 #: apps/io.ox/calendar/actions/edit.js:42 apps/io.ox/calendar/edit/main.js:155
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:421
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:423
 #: apps/io.ox/calendar/edit/timezone-dialog.js:141
 #: apps/io.ox/calendar/main.js:256 apps/io.ox/calendar/main.js:322
 #: apps/io.ox/calendar/month/perspective.js:126
@@ -1479,7 +1483,7 @@ msgstr "Naptár:"
 #: apps/io.ox/core/folder/actions/common.js:47
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
-#: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:186
+#: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:188
 #: apps/io.ox/core/main.js:515 apps/io.ox/core/main.js:1502
 #: apps/io.ox/core/permissions/permissions.js:372
 #: apps/io.ox/core/permissions/permissions.js:405 apps/io.ox/core/print.js:113
@@ -1510,7 +1514,7 @@ msgstr "Naptár:"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1250
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:254
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:258
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:121
 #: apps/io.ox/settings/accounts/settings/pane.js:134
@@ -2039,7 +2043,7 @@ msgid "Could not load this list"
 msgstr "A lista nem tölthető be"
 
 #: apps/io.ox/mail/settings/pane.js:140 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:324
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:328
 msgid "Could not save settings"
 msgstr "A beállítások nem menthetők"
 
@@ -2099,7 +2103,7 @@ msgid "Create"
 msgstr "Létrehozás"
 
 #: apps/io.ox/calendar/edit/extensions.js:55 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:175 apps/io.ox/calendar/edit/main.js:321
+#: apps/io.ox/calendar/edit/main.js:177 apps/io.ox/calendar/edit/main.js:323
 msgid "Create appointment"
 msgstr "Találkozó létrehozása"
 
@@ -2198,11 +2202,11 @@ msgstr "Oldal testre szabása"
 msgid "Dark colors"
 msgstr "Sötét színek"
 
-#: apps/io.ox/core/import/import.js:270 module:io.ox/core
+#: apps/io.ox/core/import/import.js:272 module:io.ox/core
 msgid "Data imported successfully"
 msgstr "Az adatok sikeresen importálva"
 
-#: apps/io.ox/core/import/import.js:278 module:io.ox/core
+#: apps/io.ox/core/import/import.js:280 module:io.ox/core
 msgid "Data only partially imported (%1$s of %2$s records)"
 msgstr "Csak részben importált adatok (%1$s / %2$s rekord)"
 
@@ -2278,11 +2282,11 @@ msgstr "Alapértelmezett figyelmeztetés"
 msgid "Default sender address"
 msgstr "Alapértelmezett küldő e-mail címe"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:495 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:499 module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "Alapértelmezett aláírás új üzenetekhez"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:502 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:506 module:io.ox/mail
 msgid "Default signature for replies or forwardings"
 msgstr "Alapértelmezett aláírás válaszokhoz vagy továbbításokhoz"
 
@@ -2313,8 +2317,8 @@ msgstr "Elhalasztott"
 #: apps/io.ox/mail/actions/delete.js:67 apps/io.ox/mail/actions/delete.js:86
 #: apps/io.ox/mail/mailfilter/settings/filter.js:323
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:375
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:376
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:379
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:380
 #: apps/io.ox/mail/toolbar.js:79 apps/io.ox/portal/main.js:691
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:119
 #: apps/io.ox/settings/accounts/settings/pane.js:111
@@ -2362,7 +2366,7 @@ msgstr "Névjegy törlése"
 msgid "Delete group"
 msgstr "Csoport törlése"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:229 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:233 module:io.ox/mail
 msgid "Delete old signatures after import"
 msgstr "Régi aláírás törlése importálás után"
 
@@ -2491,7 +2495,7 @@ msgstr "Eldobás"
 
 #. "Discard changes" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/calendar/edit/main.js:420 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:422 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:200 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:257 apps/io.ox/editor/main.js:366
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:181 module:io.ox/tasks
@@ -2639,7 +2643,7 @@ msgstr[1] "Biztos, hogy törölni szeretné ezeket az feladatokat?"
 msgid "Do you really want to delete this widget?"
 msgstr "Biztos, hogy törölni szeretné ezt a widgetet?"
 
-#: apps/io.ox/calendar/edit/main.js:417 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:419 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:197 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:254 apps/io.ox/editor/main.js:363
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:178 module:io.ox/tasks
@@ -2888,8 +2892,8 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1254
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:369
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:371
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:373
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:375
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:281
 #: apps/io.ox/settings/accounts/settings/pane.js:113
@@ -2923,7 +2927,7 @@ msgid "Edit all objects"
 msgstr "Minden elem szerkesztése"
 
 #: apps/io.ox/calendar/edit/extensions.js:55 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:175 apps/io.ox/calendar/edit/main.js:319
+#: apps/io.ox/calendar/edit/main.js:177 apps/io.ox/calendar/edit/main.js:321
 #: apps/io.ox/calendar/toolbar.js:65 module:io.ox/calendar
 msgid "Edit appointment"
 msgstr "Találkozó szerkesztése"
@@ -3354,7 +3358,7 @@ msgid "Failed to connect."
 msgstr "A kapcsolódás meghiúsult."
 
 #. Failure message if no data (e.g. appointments) could be imported
-#: apps/io.ox/core/import/import.js:274 module:io.ox/core
+#: apps/io.ox/core/import/import.js:276 module:io.ox/core
 msgid "Failed to import any data"
 msgstr "Az importálás meghiúsult"
 
@@ -3994,7 +3998,11 @@ msgstr "Figyelmeztetések mellőzése"
 msgid "Ignore conflicts"
 msgstr "Ütközések figyelmen kívül hagyása"
 
-#: apps/io.ox/core/import/import.js:128 module:io.ox/core
+#: apps/io.ox/core/import/import.js:130 module:io.ox/core
+msgid "Ignore existing events"
+msgstr ""
+
+#: apps/io.ox/core/import/import.js:129 module:io.ox/core
 msgid ""
 "Ignore existing events. Helpful to import public holiday calendars, for "
 "example."
@@ -4015,17 +4023,17 @@ msgid "Images"
 msgstr "Képek"
 
 #: apps/io.ox/core/folder/contextmenu.js:409 module:io.ox/core
-#: apps/io.ox/core/import/import.js:185
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:253 module:io.ox/mail
+#: apps/io.ox/core/import/import.js:187
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:257 module:io.ox/mail
 msgid "Import"
 msgstr "Importálás"
 
-#: apps/io.ox/core/import/import.js:177 module:io.ox/core
+#: apps/io.ox/core/import/import.js:179 module:io.ox/core
 msgid "Import from file"
 msgstr "Importálás fájlból"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:225 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:310
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:229 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:314
 msgid "Import signatures"
 msgstr "Aláírások importálása"
 
@@ -4337,7 +4345,7 @@ msgstr "Indító legördülő. Nyomja meg az Entert a legördülőre ugráshoz."
 msgid "Layout"
 msgstr "Elrendezés"
 
-#: apps/io.ox/core/import/import.js:154 module:io.ox/core
+#: apps/io.ox/core/import/import.js:156 module:io.ox/core
 msgid "Learn more"
 msgstr "További információ"
 
@@ -5139,9 +5147,9 @@ msgid "No reminder"
 msgstr "Nincs emlékeztető"
 
 #: apps/io.ox/mail/compose/extensions.js:351 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:347
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:349
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:406
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:351
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:353
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:410
 msgid "No signature"
 msgstr "Nincs aláírás"
 
@@ -5209,7 +5217,7 @@ msgstr "Nem indult el"
 msgid "Note"
 msgstr "Megjegyzés"
 
-#: apps/io.ox/core/import/import.js:145 module:io.ox/core
+#: apps/io.ox/core/import/import.js:147 module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "Megjegyzés a CSV fájlokon:"
 
@@ -5830,11 +5838,11 @@ msgid ""
 msgstr ""
 "Adja meg a régi jelszót, hogy a fiók jelszavai visszaállíthatók legyenek."
 
-#: apps/io.ox/core/import/import.js:228 module:io.ox/core
+#: apps/io.ox/core/import/import.js:230 module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Válassza ki a fájlt az importáláshoz"
 
-#: apps/io.ox/core/import/import.js:232 module:io.ox/core
+#: apps/io.ox/core/import/import.js:234 module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "Válasszon egy érvényes iCal fájlt az importáláshoz"
 
@@ -7127,7 +7135,7 @@ msgstr "Aláírásnév"
 
 #: apps/io.ox/mail/compose/extensions.js:350 module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js:23
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:302
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:306
 msgid "Signatures"
 msgstr "Aláírások"
 
@@ -7196,10 +7204,6 @@ msgstr "Elnézést, most nem lehet kapcsolódni ehhez: %s."
 #: apps/plugins/halo/xing/register.js:264 module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Elnézést, jelenleg nincs elérhető adat ezen: %s."
-
-#: apps/io.ox/core/viewer/views/types/documentview.js:29 module:io.ox/core
-msgid "Sorry, there is no preview available for this file."
-msgstr "Sajnáljuk, de ehhez a fájltípushoz nincs előnézet."
 
 #: apps/io.ox/core/viewer/views/types/imageview.js:64 module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
@@ -7754,7 +7758,7 @@ msgstr ""
 msgid "The first 90 days are free."
 msgstr "Az első 90 nap ingyenes."
 
-#: apps/io.ox/core/import/import.js:148 module:io.ox/core
+#: apps/io.ox/core/import/import.js:150 module:io.ox/core
 msgid ""
 "The first record of a valid CSV file must define proper column names. "
 "Supported separators are comma and semi-colon."
@@ -8002,12 +8006,12 @@ msgid "There was a problem with XING. The error message was: \"%s\""
 msgstr "Probléma a XING-gel. A hibaüzenet: „%s”"
 
 #. Error message if calendar import failed
-#: apps/io.ox/core/import/import.js:208 module:io.ox/core
+#: apps/io.ox/core/import/import.js:210 module:io.ox/core
 msgid "There was no appointment data to import"
 msgstr "Nem volt importálható találkozó"
 
 #. Error message if contact import failed
-#: apps/io.ox/core/import/import.js:211 module:io.ox/core
+#: apps/io.ox/core/import/import.js:213 module:io.ox/core
 msgid "There was no contact data to import"
 msgstr "Nem volt importálható névjegyzék"
 
@@ -8017,7 +8021,7 @@ msgid "There was no suitable server found for this mail/password combination"
 msgstr "Nem található megfelelő kiszolgáló ehhez a cím/jelszó kombinációhoz"
 
 #. Error message if task import failed
-#: apps/io.ox/core/import/import.js:214 module:io.ox/core
+#: apps/io.ox/core/import/import.js:216 module:io.ox/core
 msgid "There was no task data to import"
 msgstr "Nem volt importálható feladat"
 
@@ -8938,7 +8942,7 @@ msgstr ""
 "üzenetküldőbe vagy közösségi hálózatra. Vegye figyelembe, hogy ezzel a "
 "hivatkozással bárki eléri a megosztott tartalmat."
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:227 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:231 module:io.ox/mail
 msgid ""
 "You can import existing signatures from the previous product generation."
 msgstr "A korábbi termékekből importálhat meglévő aláírásokat."
@@ -9957,6 +9961,9 @@ msgstr "yyyy"
 
 #~ msgid "Signature"
 #~ msgstr "Aláírás"
+
+#~ msgid "Sorry, there is no preview available for this file."
+#~ msgstr "Sajnáljuk, de ehhez a fájltípushoz nincs előnézet."
 
 #~ msgid ""
 #~ "This document is password protected and cannot be displayed. Please open "

@@ -367,8 +367,8 @@ msgstr "%1$s až %2$s"
 msgid "%1$s updated their profile:"
 msgstr "%1$s aktualizoval(a) svoj profil:"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:371 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:376
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:375 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:380
 msgid "%1$s, %2$s"
 msgstr "%1$s, %2$s"
 
@@ -833,7 +833,7 @@ msgstr "Pridať nového účastníka"
 msgid "Add new rule"
 msgstr "Pridať nové pravidlo"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:297 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:301 module:io.ox/mail
 msgid "Add new signature"
 msgstr "Pridať nový podpis"
 
@@ -1037,6 +1037,12 @@ msgstr "Povoliť emaily vo formáte HTML"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Povoliť automatické načítanie externých obrázkov"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js:29 module:io.ox/core
+#, fuzzy
+#| msgid "An error occurred while importing the document."
+msgid "An error occurred converting the document so it cannot be displayed."
+msgstr "Vyskytla sa k chybe pri importe dokumentu."
+
 #: apps/io.ox/portal/main.js:526 module:io.ox/portal
 msgid "An error occurred."
 msgstr "Vyskytla sa chyba."
@@ -1113,7 +1119,7 @@ msgid "Apply to all subfolders"
 msgstr "Použiť na všetky podpriečinky"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:225 module:io.ox/calendar
-#: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:381
+#: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:383
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js:281
 #: apps/io.ox/calendar/week/perspective.js:175
 #: apps/io.ox/mail/detail/links.js:73 module:io.ox/mail
@@ -1487,7 +1493,7 @@ msgstr "Kalendár:"
 #: apps/io.ox/calendar/actions/delete.js:79
 #: apps/io.ox/calendar/actions/delete.js:91
 #: apps/io.ox/calendar/actions/edit.js:42 apps/io.ox/calendar/edit/main.js:155
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:421
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:423
 #: apps/io.ox/calendar/edit/timezone-dialog.js:141
 #: apps/io.ox/calendar/main.js:256 apps/io.ox/calendar/main.js:322
 #: apps/io.ox/calendar/month/perspective.js:126
@@ -1504,7 +1510,7 @@ msgstr "Kalendár:"
 #: apps/io.ox/core/folder/actions/common.js:47
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
-#: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:186
+#: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:188
 #: apps/io.ox/core/main.js:515 apps/io.ox/core/main.js:1502
 #: apps/io.ox/core/permissions/permissions.js:372
 #: apps/io.ox/core/permissions/permissions.js:405 apps/io.ox/core/print.js:113
@@ -1535,7 +1541,7 @@ msgstr "Kalendár:"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:324
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1250
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:254
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:258
 #: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:693
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:121
 #: apps/io.ox/settings/accounts/settings/pane.js:134
@@ -2063,7 +2069,7 @@ msgid "Could not load this list"
 msgstr "Nepodarilo sa načítať tento zoznam."
 
 #: apps/io.ox/mail/settings/pane.js:140 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:324
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:328
 msgid "Could not save settings"
 msgstr "Nepodarilo sa uložiť nastavenia"
 
@@ -2123,7 +2129,7 @@ msgid "Create"
 msgstr "Vytvoriť"
 
 #: apps/io.ox/calendar/edit/extensions.js:55 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:175 apps/io.ox/calendar/edit/main.js:321
+#: apps/io.ox/calendar/edit/main.js:177 apps/io.ox/calendar/edit/main.js:323
 msgid "Create appointment"
 msgstr "Vytvoriť schôdzku"
 
@@ -2222,11 +2228,11 @@ msgstr "Prispôsobiť túto stránku"
 msgid "Dark colors"
 msgstr "Tmavé farby"
 
-#: apps/io.ox/core/import/import.js:270 module:io.ox/core
+#: apps/io.ox/core/import/import.js:272 module:io.ox/core
 msgid "Data imported successfully"
 msgstr "Údaje boli naimportované úspešne"
 
-#: apps/io.ox/core/import/import.js:278 module:io.ox/core
+#: apps/io.ox/core/import/import.js:280 module:io.ox/core
 msgid "Data only partially imported (%1$s of %2$s records)"
 msgstr "Údaje boli naimportované iba čiastočne (%1$s z %2$s záznamov)"
 
@@ -2302,11 +2308,11 @@ msgstr "Predvolený čas pripomenutia"
 msgid "Default sender address"
 msgstr "Predvolená adresa odosielateľa"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:495 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:499 module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "Predvolený podpis v nových správach"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:502 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:506 module:io.ox/mail
 msgid "Default signature for replies or forwardings"
 msgstr "Predvolený podpis v odpovediach alebo preposlaných správach"
 
@@ -2337,8 +2343,8 @@ msgstr "Odložené"
 #: apps/io.ox/mail/actions/delete.js:67 apps/io.ox/mail/actions/delete.js:86
 #: apps/io.ox/mail/mailfilter/settings/filter.js:323
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:375
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:376
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:379
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:380
 #: apps/io.ox/mail/toolbar.js:79 apps/io.ox/portal/main.js:691
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:119
 #: apps/io.ox/settings/accounts/settings/pane.js:111
@@ -2386,7 +2392,7 @@ msgstr "Zmazať kontakt"
 msgid "Delete group"
 msgstr "Zmazať skupinu"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:229 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:233 module:io.ox/mail
 msgid "Delete old signatures after import"
 msgstr "Odstrániť staré podpisy po importe"
 
@@ -2514,7 +2520,7 @@ msgstr "Zahodiť"
 
 #. "Discard changes" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/calendar/edit/main.js:420 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:422 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:200 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:257 apps/io.ox/editor/main.js:366
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:181 module:io.ox/tasks
@@ -2662,7 +2668,7 @@ msgstr[2] "Ste si istý, že chcete tieto úlohy zmazať?"
 msgid "Do you really want to delete this widget?"
 msgstr "Skutočne chcete zmazať túto miniaplikáciu?"
 
-#: apps/io.ox/calendar/edit/main.js:417 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:419 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:197 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:254 apps/io.ox/editor/main.js:363
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:178 module:io.ox/tasks
@@ -2908,8 +2914,8 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1254
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:369
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:371
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:373
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:375
 #: apps/io.ox/portal/settings/pane.js:280 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:281
 #: apps/io.ox/settings/accounts/settings/pane.js:113
@@ -2943,7 +2949,7 @@ msgid "Edit all objects"
 msgstr "Upravovať všetky objekty"
 
 #: apps/io.ox/calendar/edit/extensions.js:55 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:175 apps/io.ox/calendar/edit/main.js:319
+#: apps/io.ox/calendar/edit/main.js:177 apps/io.ox/calendar/edit/main.js:321
 #: apps/io.ox/calendar/toolbar.js:65 module:io.ox/calendar
 msgid "Edit appointment"
 msgstr "Upraviť schôdzku"
@@ -3377,7 +3383,7 @@ msgid "Failed to connect."
 msgstr "Nepodarilo sa pripojiť sa."
 
 #. Failure message if no data (e.g. appointments) could be imported
-#: apps/io.ox/core/import/import.js:274 module:io.ox/core
+#: apps/io.ox/core/import/import.js:276 module:io.ox/core
 msgid "Failed to import any data"
 msgstr "Nepodarilo sa naimportovať žiadne údaje"
 
@@ -4018,7 +4024,11 @@ msgstr "Ignorovať upozornenia"
 msgid "Ignore conflicts"
 msgstr "Ignorovať konflikty"
 
-#: apps/io.ox/core/import/import.js:128 module:io.ox/core
+#: apps/io.ox/core/import/import.js:130 module:io.ox/core
+msgid "Ignore existing events"
+msgstr ""
+
+#: apps/io.ox/core/import/import.js:129 module:io.ox/core
 msgid ""
 "Ignore existing events. Helpful to import public holiday calendars, for "
 "example."
@@ -4039,17 +4049,17 @@ msgid "Images"
 msgstr "Obrázky"
 
 #: apps/io.ox/core/folder/contextmenu.js:409 module:io.ox/core
-#: apps/io.ox/core/import/import.js:185
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:253 module:io.ox/mail
+#: apps/io.ox/core/import/import.js:187
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:257 module:io.ox/mail
 msgid "Import"
 msgstr "Importovať"
 
-#: apps/io.ox/core/import/import.js:177 module:io.ox/core
+#: apps/io.ox/core/import/import.js:179 module:io.ox/core
 msgid "Import from file"
 msgstr "Importovať zo súboru"
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:225 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:310
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:229 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:314
 msgid "Import signatures"
 msgstr "Importovať podpisy"
 
@@ -4363,7 +4373,7 @@ msgstr ""
 msgid "Layout"
 msgstr "Rozloženie"
 
-#: apps/io.ox/core/import/import.js:154 module:io.ox/core
+#: apps/io.ox/core/import/import.js:156 module:io.ox/core
 msgid "Learn more"
 msgstr "Zistite viac"
 
@@ -5167,9 +5177,9 @@ msgid "No reminder"
 msgstr "Bez pripomenutia"
 
 #: apps/io.ox/mail/compose/extensions.js:351 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:347
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:349
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:406
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:351
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:353
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:410
 msgid "No signature"
 msgstr "Bez podpisu"
 
@@ -5237,7 +5247,7 @@ msgstr "Nezačaté"
 msgid "Note"
 msgstr "Poznámka"
 
-#: apps/io.ox/core/import/import.js:145 module:io.ox/core
+#: apps/io.ox/core/import/import.js:147 module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "Poznámka o súboroch CSV:"
 
@@ -5859,11 +5869,11 @@ msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr "Prosím, zadajte vaše staré heslo, aby bolo možné obnoviť heslá k účtu."
 
-#: apps/io.ox/core/import/import.js:228 module:io.ox/core
+#: apps/io.ox/core/import/import.js:230 module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Prosím, vyberte súbor, ktorý chcete importovať"
 
-#: apps/io.ox/core/import/import.js:232 module:io.ox/core
+#: apps/io.ox/core/import/import.js:234 module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "Prosím, vyberte platný súbor iCal, ktorý chcete importovať"
 
@@ -7161,7 +7171,7 @@ msgstr "Názov podpisu"
 
 #: apps/io.ox/mail/compose/extensions.js:350 module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js:23
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:302
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:306
 msgid "Signatures"
 msgstr "Podpisy"
 
@@ -7231,10 +7241,6 @@ msgstr "Ľutujeme, ale momentálne nie je možné pripojiť sa k %s."
 #: apps/plugins/halo/xing/register.js:264 module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Ľutujeme, nie sú pre vás k dispozícii žiadne údaje o %s."
-
-#: apps/io.ox/core/viewer/views/types/documentview.js:29 module:io.ox/core
-msgid "Sorry, there is no preview available for this file."
-msgstr "Ľutujeme, nie je k dispozícii náhľad tohto súboru."
 
 #: apps/io.ox/core/viewer/views/types/imageview.js:64 module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
@@ -7790,7 +7796,7 @@ msgstr ""
 msgid "The first 90 days are free."
 msgstr "Prvých 90 dní je zadarmo."
 
-#: apps/io.ox/core/import/import.js:148 module:io.ox/core
+#: apps/io.ox/core/import/import.js:150 module:io.ox/core
 msgid ""
 "The first record of a valid CSV file must define proper column names. "
 "Supported separators are comma and semi-colon."
@@ -8044,12 +8050,12 @@ msgid "There was a problem with XING. The error message was: \"%s\""
 msgstr "Vyskytol sa problém s XING. Chybová správa bola: „%s“"
 
 #. Error message if calendar import failed
-#: apps/io.ox/core/import/import.js:208 module:io.ox/core
+#: apps/io.ox/core/import/import.js:210 module:io.ox/core
 msgid "There was no appointment data to import"
 msgstr "Nie sú žiadne údaje schôdzok na import"
 
 #. Error message if contact import failed
-#: apps/io.ox/core/import/import.js:211 module:io.ox/core
+#: apps/io.ox/core/import/import.js:213 module:io.ox/core
 msgid "There was no contact data to import"
 msgstr "Žiadne kontaktné údaje neboli k dispozícii na importovanie"
 
@@ -8059,7 +8065,7 @@ msgid "There was no suitable server found for this mail/password combination"
 msgstr "Nenašiel sa žiaden vhodný server pre túto kombináciu emailu a hesla"
 
 #. Error message if task import failed
-#: apps/io.ox/core/import/import.js:214 module:io.ox/core
+#: apps/io.ox/core/import/import.js:216 module:io.ox/core
 msgid "There was no task data to import"
 msgstr "Žiadne údaje o úlohách neboli k dispozícii na importovanie"
 
@@ -8982,7 +8988,7 @@ msgstr ""
 "sociálnej siete. Prosím, pamätajte, že prostredníctvom tohto odkazu môže "
 "pristupovať k zdieľanému obsahu ktokoľvek."
 
-#: apps/io.ox/mail/settings/signatures/settings/pane.js:227 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js:231 module:io.ox/mail
 msgid ""
 "You can import existing signatures from the previous product generation."
 msgstr ""
@@ -10323,9 +10329,6 @@ msgstr "RRRR"
 
 #~ msgid "An error occurred"
 #~ msgstr "Vyskytla sa chyba"
-
-#~ msgid "An error occurred while importing the document."
-#~ msgstr "Vyskytla sa k chybe pri importe dokumentu."
 
 #~ msgid "An error occurred while loading page %1$d."
 #~ msgstr "Vyskytla sa chyba pri načítaní stránky %1$d."
@@ -14258,6 +14261,9 @@ msgstr "RRRR"
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Tento súbor nebolo možné nahrať."
+
+#~ msgid "Sorry, there is no preview available for this file."
+#~ msgstr "Ľutujeme, nie je k dispozícii náhľad tohto súboru."
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "Zoraďovanie vašich emailov"
