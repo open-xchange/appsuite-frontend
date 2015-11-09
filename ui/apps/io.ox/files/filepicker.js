@@ -43,7 +43,10 @@ define('io.ox/files/filepicker', [
             tree: {
                 // must be noop (must return undefined!)
                 filter: $.noop
-            }
+            },
+            acceptLocalFileType: '', //e.g.  '.jpg,.png,.doc', 'audio/*', 'image/*' see@ https://developer.mozilla.org/de/docs/Web/HTML/Element/Input#attr-accept
+            cancel: $.noop,
+            initialize: $.noop
         }, options);
 
         var filesPane = $('<ul class="io-ox-fileselection list-unstyled">'),
@@ -242,6 +245,7 @@ define('io.ox/files/filepicker', [
                 if (options.uploadButton) {
                     $uploadButton = $('<input name="file" type="file" class="file-input">')
                         .attr('multiple', options.multiselect)
+                        .attr('accept', options.acceptLocalFileType)
                         .hide()
                         .on('change', { dialog: dialog, tree: tree }, fileUploadHandler);
                 }
@@ -274,6 +278,7 @@ define('io.ox/files/filepicker', [
                 }
 
                 tree.on('change', onFolderChange);
+                options.initialize(dialog);
             },
 
             alternative: function (dialog) {
@@ -281,7 +286,8 @@ define('io.ox/files/filepicker', [
                 if ($uploadButton) {
                     $uploadButton.trigger('click');
                 }
-            }
+            },
+            cancel: options.cancel
         });
 
         return def.promise();

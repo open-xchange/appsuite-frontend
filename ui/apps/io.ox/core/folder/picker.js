@@ -84,7 +84,9 @@ define('io.ox/core/folder/picker', [
             initialize: $.noop,
             close: $.noop,
             show: $.noop,
-            alternative: $.noop
+            alternative: $.noop,
+            cancel: $.noop,
+            closeReg: $.noop
         }, options);
 
         var dialog = new dialogs.ModalDialog({ async: o.async, addClass: o.addClass, width: o.width })
@@ -160,6 +162,7 @@ define('io.ox/core/folder/picker', [
             .on('alternative', function () {
                 o.alternative(dialog, tree);
             })
+            .on('cancel', o.cancel)
             .show(function () {
                 dialog.getBody().busy();
                 (id ? api.path(id) : $.Deferred().reject())
