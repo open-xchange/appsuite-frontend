@@ -40,12 +40,12 @@ define('io.ox/core/viewer/views/displayerview', [
             // timeout object for navigation items
             this.navigationTimeoutId = null;
             // array of all slide content Backbone Views
-            this.slideViews = [];
+            this.slideViews = {};
             // array of slide duplicate views
             this.slideDuplicateViews = [];
             // local array of loaded slide indices.
             this.loadedSlides = [];
-            // number of slides to be prefetched in the left/right direction of the active slide
+            // number of slides to be prefetched in the left/right direction of the active slide (minimum of 1 required)
             this.preloadOffset = 3;
             // number of slides to be kept loaded at one time in the browser.
             this.slidesToCache = 7;
@@ -90,11 +90,18 @@ define('io.ox/core/viewer/views/displayerview', [
                     simulateTouch: false,
                     noSwiping: true,
                     speed: 0,
-                    initialSlide: startIndex,
                     runCallbacksOnInit: false,
                     onSlideChangeEnd: this.onSlideChangeEnd.bind(this),
                     onSlideChangeStart: this.onSlideChangeStart.bind(this)
                 };
+
+            if (startIndex < this.preloadOffset) {
+                swiperParameter.initialSlide = startIndex;
+            } else if (this.startIndex >= this.collection.length - this.preloadOffset) {
+                swiperParameter.initialSlide = this.collection.length - this.startIndex + this.preloadOffset;
+            } else {
+                swiperParameter.initialSlide = this.preloadOffset;
+            }
 
             // enable touch and swiping for mobile devices
             if (_.device('smartphone') || _.device('tablet')) {
@@ -121,27 +128,26 @@ define('io.ox/core/viewer/views/displayerview', [
             // append carousel to view
             this.$el.append(carouselRoot, caption).attr({ tabindex: -1, role: 'main' });
             this.carouselRoot = carouselRoot;
+            this.carouselInner = carouselInner;
+            this.activeIndex = startIndex;
 
             // create slides from file collection and append them to the carousel
-            this.createSlides(carouselInner)
-            .done(function () {
+            this.createSlides(startIndex).then(function success() {
                 if (self.disposed) {
                     return;
                 }
                 // initiate swiper
                 self.swiper = new window.Swiper(self.carouselRoot[0], swiperParameter);
-                // overwrite the original removeSlide function because its buggy
-                self.swiper.removeSlide = self.removeSlide;
+                if (self.collection.length <= 1) self.swiper.lockSwipes();
                 // always load duplicate slides of the swiper plugin.
                 self.handleDuplicatesSlides();
                 // preload selected file and its neighbours initially
-                self.loadSlide(startIndex, 'both');
+                //self.loadSlide(startIndex, 'both');
                 self.blendCaption(gt('%1$d of %2$d', startIndex + 1, self.collection.length));
                 self.blendNavigation();
                 // focus first active slide initially
                 self.focusActiveSlide();
-            })
-            .fail(function () {
+            }, function fail() {
                 console.warn('DisplayerView.createSlides() - some errors occured:', arguments);
             });
 
@@ -153,84 +159,99 @@ define('io.ox/core/viewer/views/displayerview', [
          */
         handleDuplicatesSlides: function () {
             var self = this,
-                model = this.model;
-            this.$el.find('.swiper-slide-duplicate').each(function (index, element) {
-                var slideNode = $(element),
-                    slideIndex = slideNode.data('swiper-slide-index'),
-                    slideModel = self.collection.at(slideIndex);
+                first = this.$el.find('.swiper-slide-duplicate[data-index="0"]'),
+                last = this.$el.find('.swiper-slide-duplicate[data-index="' + (this.collection.length - 1) + '"]');
 
-                TypesRegistry.getModelType(slideModel)
-                    .then(function (ModelType) {
-                        if (self.disposed) {
-                            return;
-                        }
-                        var view = new ModelType({ model: slideModel, collection: self.collection, el: element, viewerEvents: self.viewerEvents });
-                        // don't load duplicate slides that call document converter
-                        if (!model.isOffice() && !model.isPDF()) {
-                            view.render().prefetch(1).show();
-                        } else {
-                            view.render();//.prefetch(1);
-                        }
-                        self.slideDuplicateViews.push(view);
-                    },
-                    function () {
-                        console.warn('Cannot require a view type for', slideModel.get('filename'));
-                    });
+            function handle(el, model) {
+                TypesRegistry.getModelType(model).then(function success(ModelTypeView) {
+                    var view = new ModelTypeView({
+                        el: el.get(0),
+                        model: model,
+                        collection: self.collection,
+                        viewerEvents: self.viewerEvents
+                    }).render();
+
+                    // only load duplicate slides which are not processed by the document converter
+                    if (!model.isOffice() && !model.isPDF()) view.prefetch(1).show();
+                }, function fail() {
+                    return gt('Cannot require a view type for %1$s', model.get('filename'));
+                });
+            }
+
+            if (first.length > 0) handle(first, this.collection.first());
+            if (last.length > 0) handle(last, this.collection.last());
+        },
+
+        /**
+         * Creates the Swiper slide elements in a range around the active slide.
+         *
+         * @param {int} index
+         *  the start index
+         *
+         * @returns {jQuery.Promise}
+         *  a Promise of a Deferred object that will be resolved with a jQuery object
+         */
+        createSlides: function (index) {
+            var self = this,
+                indices = this.getSlideLoadRange(index, this.preloadOffset, 'both');
+
+            return $.when.apply(this, _(indices).map(this.createView.bind(this))).then(function () {
+                // order slides according to index
+                self.carouselInner.append(
+                    _(arguments)
+                        .chain()
+                        .map(function (view) {
+                            return view.$el;
+                        })
+                        .sortBy(function ($el) {
+                            return parseInt($el.data('index'));
+                        })
+                        .value()
+                );
             });
         },
 
         /**
-         * Creates the Swiper slide elements.
-         * For each Viewer model in the Viewer collection the model type
-         * is required asynchronously and the slide content is created.
-         * After all slides where successfully created, they are appended
-         * to the given DOM node.
+         * Create a view with appropriate settings according to the loaded content
          *
-         * @param {jQuery} node
-         *  the jQuery element to attach the created slides to.
+         * @param {int} index
+         *  the index of the model in the collection where the view should be created for
          *
-         * @returns {jQuery.Promise}
-         *  a Promise of a Deferred object that will be resolved with an array
-         *  of jQuery slide elements; or rejected with an array of error strings,
-         *  in case of an error.
+         * @ returns {jquery.Promise}
+         *  a Promise which is resolved after the view is rendered and prefetched
          */
-        createSlides: function (node) {
-            var promises = [],
-                collection = this.collection,
+        createView: function (index) {
+            var collection = this.collection,
                 self = this,
-                resultDef;
+                model = collection.at(index);
 
-            collection.each(function (model) {
-                var def = new $.Deferred();
+            function get() {
+                if (self.slideViews[index]) return $.when(self.slideViews[index]);
 
-                TypesRegistry.getModelType(model)
-                .then(function (ModelType) {
-                    var view = new ModelType({ model: model, collection: collection, viewerEvents: self.viewerEvents });
-                    view.render();
-                    return def.resolve(view);
-                },
-                function () {
-                    return def.reject('Cannot require a view type for ', model.get('filename'));
+                return TypesRegistry.getModelType(model).then(function success(ModelTypeView) {
+                    var view = new ModelTypeView({
+                        model: model,
+                        collection: collection,
+                        viewerEvents: self.viewerEvents
+                    });
+
+                    // render view and append index
+                    self.slideViews[index] = view.render();
+                    view.$el.attr('data-index', index);
+
+                    return view;
+                }, function fail() {
+                    return gt('Cannot require a view type for %1$s', model.get('filename'));
                 });
+            }
 
-                promises.push(def);
+            return get().done(function (view) {
+                // prefetch data according to priority
+                if (!view.isPrefetched) {
+                    var priority = Math.max(1, Math.abs(self.activeIndex - index));
+                    view.prefetch(priority);
+                }
             });
-
-            resultDef = $.when.apply(null, promises);
-
-            resultDef.done(function () {
-                if (this.disposed) {
-                    return;
-                }
-                // in case of 'done' the arguments array contains the View instances
-                for (var i = 0; i < arguments.length; i++) {
-                    var view = arguments[i];
-                    this.slideViews.push(view);
-                    node.append(view.el);
-                }
-            }.bind(this));
-
-            return resultDef;
         },
 
         /**
@@ -279,59 +300,66 @@ define('io.ox/core/viewer/views/displayerview', [
                 break;
             }
 
-            return _.map(loadRange, this.normalizeSlideIndex.bind(this));
+            return _(loadRange)
+                .chain()
+                .map(this.normalizeSlideIndex.bind(this))
+                .uniq()
+                .value();
         },
 
         /**
-         * Load the given slide index and additionally number of neighboring slides in the given direction.
+         * Load the given slide in the direction of movement. It automatically unloads the first of the loaded slides and apppends a new slide (both according to the direction of movement).
          *
-         * @param {Number} slideToLoad
-         *  The index of the current active slide to be loaded.
-         *
-         * @param {String} [prefetchDirection = 'right']
-         *  Direction of the prefetch: 'left', 'right' or 'both' are supported.
-         *  Example: if slideToLoad is 7 with a preloadOffset of 3, the range to load would be for
-         *      'left': [4,5,6,7]
-         *      'right':      [7,8,9,10]
-         *      'both': [4,5,6,7,8,9,10]
+         * @param {String} [direction = 'right']
+         *  Direction of the prefetch: 'left' or 'right' are supported.
          */
-        loadSlide: function (slideToLoad, prefetchDirection) {
-
+        loadSlide: function (direction) {
             var self = this,
-                slideToLoad = slideToLoad || 0,
-                slidesCount = this.collection.length,
-                activeModel = this.collection.at(slideToLoad),
-                previousModel = this.collection.at(this.swiper.previousIndex - 1) || null,
-                loadRange = this.getSlideLoadRange(slideToLoad, this.preloadOffset, prefetchDirection);
+                insertOffset = direction === 'right' ? this.preloadOffset : - this.preloadOffset,
+                removeOffset = direction === 'right' ? - this.preloadOffset - 1 : this.preloadOffset + 1,
+                insertIndex = this.normalizeSlideIndex(this.activeIndex + insertOffset),
+                removeIndex = this.normalizeSlideIndex(this.activeIndex + removeOffset);
 
-            // prefetch data of the slides within the preload offset range
-            _.each(loadRange, function (slideIndex) {
-                var priority;
+            this.slideViews[this.activeIndex].show();
 
-                if ((slideIndex >= 0) && !self.isSlideLoaded(slideIndex)) {
-                    priority = self.getPrefetchPriority(slideIndex);
-                    self.slideViews[slideIndex].prefetch(priority);
+            // we do not have to load any slides if the slide to insert already exists
+            if (this.slideViews[insertIndex]) return $.when();
 
-                    if (self.slideViews[slideIndex].isPrefetched) {
-                        self.loadedSlides.push(slideIndex);
+            return this.createView(insertIndex).done(function (view) {
+                var swiper = self.swiper;
+                swiper.destroyLoop();
+
+                // remove old slide
+                self.slideViews[removeIndex].unload().dispose();
+                delete self.slideViews[removeIndex];
+                swiper.wrapper.find('*[data-index=' + removeIndex + ']').remove();
+
+                // add new slide at correct position
+                if (direction === 'right') {
+                    var neighbour = swiper.wrapper.find('*[data-index=' + (insertIndex - 1) + ']');
+
+                    if (neighbour.length > 0) {
+                        neighbour.after(view.$el);
+                    } else {
+                        swiper.wrapper.prepend(view.$el);
+                    }
+                } else if (direction === 'left') {
+                    var neighbour = swiper.wrapper.find('*[data-index=' + (insertIndex + 1) + ']');
+
+                    if (neighbour.length > 0) {
+                        neighbour.before(view.$el);
+                    } else {
+                        swiper.wrapper.append(view.$el);
                     }
                 }
+
+                swiper.createLoop();
+
+                // recalculate swiper index
+                swiper.activeIndex = parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index')) + 1;
+
+                swiper.update(true);
             });
-
-            // show correct real or duplicate view instance
-            var activeIndex = this.swiper.activeIndex;
-            if (!this.standalone && (activeIndex === 0) || (activeIndex === (slidesCount + 1))) {
-                var duplicateIndex = (activeIndex === 0) ? 0 : 1;
-                this.slideDuplicateViews[duplicateIndex].show();
-            } else {
-                this.slideViews[slideToLoad].show();
-            }
-
-            // remove listener from previous and attach to current model
-            if (previousModel) {
-                this.stopListening(previousModel, 'change:version', this.onModelChangeVersion);
-            }
-            this.listenTo(activeModel, 'change:version', this.onModelChangeVersion.bind(this));
         },
 
         /**
@@ -473,10 +501,7 @@ define('io.ox/core/viewer/views/displayerview', [
          *  The index of the active slide.
          */
         getActiveSlideIndex: function () {
-            if (!this.swiper) {
-                return 0;
-            }
-            return this.normalizeSlideIndex(this.swiper.activeIndex - 1);
+            return this.activeIndex;
         },
 
         /**
@@ -532,18 +557,23 @@ define('io.ox/core/viewer/views/displayerview', [
          * @param swiper
          */
         onSlideChangeEnd: function (swiper) {
-            var activeSlideIndex = this.getActiveSlideIndex(),
-                activeSlideNode = this.getActiveSlideNode(),
-                previousSlideNode = this.getPreviousSlideNode(),
-                preloadDirection = (swiper.previousIndex < swiper.activeIndex) ? 'right' : 'left';
+            var activeSlideNode = this.getActiveSlideNode(),
+                previousSlideNode = this.getPreviousSlideNode();
+
+            if (swiper) {
+                var preloadDirection = (swiper.previousIndex < swiper.activeIndex) ? 'right' : 'left';
+
+                // increment active index
+                this.activeIndex = this.normalizeSlideIndex(this.activeIndex + (preloadDirection === 'right' ? 1 : -1));
+                this.loadSlide(preloadDirection).done(this.handleDuplicatesSlides.bind(this));
+            }
 
             //#. text of a viewer slide caption
             //#. Example result: "1 of 10"
             //#. %1$d is the slide index of the current
             //#. %2$d is the total slide count
-            this.blendCaption(gt('%1$d of %2$d', activeSlideIndex + 1, this.collection.length));
+            this.blendCaption(gt('%1$d of %2$d', this.activeIndex + 1, this.collection.length));
             this.blendNavigation();
-            this.loadSlide(activeSlideIndex, preloadDirection);
             // a11y
             activeSlideNode.attr('aria-selected', 'true');
             previousSlideNode.attr('aria-selected', 'false');
@@ -551,8 +581,7 @@ define('io.ox/core/viewer/views/displayerview', [
             previousSlideNode.find('audio, video').each(function () {
                 this.pause();
             });
-            this.viewerEvents.trigger('viewer:displayeditem:change', this.collection.at(activeSlideIndex));
-            this.unloadDistantSlides(activeSlideIndex);
+            this.viewerEvents.trigger('viewer:displayeditem:change', this.collection.at(this.activeIndex));
         },
 
         /**
@@ -563,8 +592,9 @@ define('io.ox/core/viewer/views/displayerview', [
          * @param {Swiper} swiper
          *  the instance of the swiper plugin
          */
-        onSlideChangeStart: function (swiper) {
-            var previousIndex = swiper.previousIndex - 1,
+        onSlideChangeStart: function () {
+            var previousSlide = this.getPreviousSlideNode(),
+                previousIndex = parseInt(previousSlide.data('index')),
                 activeSlideView = this.slideViews[previousIndex];
             if (activeSlideView) {
                 var scrollPosition = activeSlideView.$el.scrollTop();
@@ -575,108 +605,57 @@ define('io.ox/core/viewer/views/displayerview', [
         },
 
         /**
-         * Unloads slides that are outside of a 'cached' slide range, to prevent bloating of OX Viewer
-         * DOM Elements if we encounter a folder with a lot of files.
-         *
-         * The cached slide range is a array of slide indexes built from the current active slide index
-         * plus the preload offset in both directions.
-         * Example: if active slide is 7 with a preload offset of 3, the range would be: [4,5,6,7,8,9,10]
-         *
-         * @param activeSlideIndex
-         *  Current active slide index
-         */
-        unloadDistantSlides: function (activeSlideIndex) {
-            var cacheOffset = Math.floor(this.slidesToCache / 2),
-                cachedRange = this.getSlideLoadRange(activeSlideIndex, cacheOffset, 'both'),
-                slidesToUnload;
-
-            slidesToUnload = _.difference(this.loadedSlides, cachedRange);
-            _.each(slidesToUnload, function (index) {
-                this.slideViews[index].unload();
-            }, this);
-            this.loadedSlides = _.difference(this.loadedSlides, slidesToUnload);
-        },
-
-        /**
          * File remove handler.
-         *
-         * @param {jQueryEvent} event
-         *  a jQuery Event object
          *
          * @param {Array} removedFiles
          *  an array consisting of objects representing file models.
          */
         onFileRemoved: function (removedFiles) {
-            if (!_.isArray(removedFiles) || removedFiles.length < 1) {
-                return;
-            }
-            // identify removed models
-            var removedFileCid = removedFiles[0].cid,
-                removedFileModel = this.collection.get(removedFileCid),
-                removedFileModelIndex = this.collection.indexOf(removedFileModel);
-            // remove the deleted file(s) from Viewer collection
-            this.collection.remove(removedFileModel);
-            // reset the invalidated local loaded slides array
-            this.loadedSlides = [];
-            // reset document zoom level and scroll positions
-            if (this.removeInitialZoomLevel) {
-                this.removeInitialZoomLevel(removedFileModel.get('id'));
-            }
-            if (this.removeInitialScrollPosition) {
-                this.removeInitialScrollPosition(removedFileModel.get('id'));
-            }
-            // remove corresponding view type of the file
-            this.slideViews.splice(removedFileModelIndex, 1);
-            // remove slide from the swiper plugin
-            this.swiper.removeSlide(removedFileModelIndex + 1);
-            // render the duplicate slides
-            this.handleDuplicatesSlides();
+            var self = this,
+                models = _(removedFiles).map(function (file) {
+                    var cid = file.cid,
+                        model = self.collection.get(cid),
+                        index = self.collection.indexOf(model);
+
+                    self.slideViews[index].unload().dispose();
+
+                    return model;
+                }),
+                swiper = this.swiper;
+
+            this.collection.remove(models);
+            this.slideViews = {};
+
             // close viewer we don't have any files to show
             if (this.collection.length === 0) {
                 this.viewerEvents.trigger('viewer:close');
                 return;
             }
-            // do a swiper change end manually, because the plugin is not doing it (maybe a bug)
-            this.onSlideChangeEnd(this.swiper);
-        },
 
-        /**
-         * This remove slide function overwrites the original function from the swiper plugin,
-         * because it is buggy. (v.3.0.6, slide duplicates are not restored after removing slides)
-         *
-         * @param {Number | Array } slidesIndexes
-         *  the index of the slide to be removed, as a Number or Array.
-         */
-        removeSlide: function (slidesIndexes) {
-            if (this.params.loop) {
-                this.destroyLoop();
-            }
-            var newActiveIndex = this.activeIndex,
-                indexToRemove;
-            if (typeof slidesIndexes === 'object' && slidesIndexes.length) {
-                for (var i = 0; i < slidesIndexes.length; i++) {
-                    indexToRemove = slidesIndexes[i];
-                    if (this.slides[indexToRemove]) this.slides.eq(indexToRemove).remove();
-                    if (indexToRemove < newActiveIndex) newActiveIndex--;
+            swiper.destroyLoop();
+            swiper.wrapper.empty();
+
+            // recalculate active index (can change due to overflow)
+            this.activeIndex = this.normalizeSlideIndex(this.activeIndex);
+
+            // create slides from file collection and append them to the carousel
+            this.createSlides(this.activeIndex).done(function success() {
+                swiper.createLoop();
+
+                // recalculate swiper index
+                swiper.activeIndex = parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index')) + 1;
+
+                swiper.update(true);
+
+                self.onSlideChangeEnd();
+
+                if (self.collection.length <= 1) {
+                    swiper.destroyLoop();
+                    swiper.params.loop = false;
+                    swiper.fixLoop();
+                    swiper.update(true);
                 }
-                newActiveIndex = Math.max(newActiveIndex, 0);
-            } else {
-                indexToRemove = slidesIndexes;
-                if (this.slides[indexToRemove]) this.slides.eq(indexToRemove).remove();
-                if (indexToRemove < newActiveIndex) newActiveIndex--;
-                newActiveIndex = Math.max(newActiveIndex, 0);
-            }
-            if (this.params.loop) {
-                this.createLoop();
-            }
-            if (!(this.params.observer && this.support.observer)) {
-                this.update(true);
-            }
-            var slidesCount = this.slides.not('.swiper-slide-duplicate').length;
-            if (newActiveIndex >= slidesCount) {
-                newActiveIndex = slidesCount;
-            }
-            this.slideTo(newActiveIndex, 0, true);
+            });
         },
 
         disposeView: function () {
