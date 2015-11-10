@@ -264,5 +264,12 @@ define('io.ox/core/api/user', [
         });
     };
 
+    // reload account API if current user gets changed
+    api.on('update:' + _.ecid({ folder_id: 6, id: ox.user_id }), function () {
+        require(['io.ox/core/api/account'], function (accountAPI) {
+            accountAPI.reload();
+        });
+    });
+
     return api;
 });
