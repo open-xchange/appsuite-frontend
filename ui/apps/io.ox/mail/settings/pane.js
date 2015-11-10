@@ -237,6 +237,13 @@ define('io.ox/mail/settings/pane', [
                             $('<label>').text(gt('Insert the original email text to a reply')).prepend(
                                 new mini.CheckboxView({ name: 'appendMailTextOnReply', model: mailSettings }).render().$el
                             )
+                        ),
+                        $('<div class="checkbox">').append(
+                            //#. this setting is about what happens when the user presses <enter>
+                            //#. in mail compose: either simple line breaks (<br> tags) or paragraphs (<p> tags)
+                            $('<label>').text(gt('Insert line breaks instead parapraphs when pressing <enter>')).prepend(
+                                new mini.CheckboxView({ name: 'simpleLineBreaks', model: mailSettings }).render().$el
+                            )
                         )
                     )
                 ),
