@@ -241,7 +241,7 @@ define('io.ox/mail/settings/pane', [
                         $('<div class="checkbox">').append(
                             //#. this setting is about what happens when the user presses <enter>
                             //#. in mail compose: either simple line breaks (<br> tags) or paragraphs (<p> tags)
-                            $('<label>').text(gt('Insert line breaks instead parapraphs when pressing <enter>')).prepend(
+                            $('<label>').text(gt('Insert line breaks instead paragraphs when pressing <enter>')).prepend(
                                 new mini.CheckboxView({ name: 'simpleLineBreaks', model: mailSettings }).render().$el
                             )
                         )
