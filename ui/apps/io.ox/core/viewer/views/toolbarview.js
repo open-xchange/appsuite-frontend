@@ -631,7 +631,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                     data: isDriveFile ? model.toJSON() : origData
                 }),
                 appName = model.get('source'),
-                self = this;
+                self = this,
+                funcName = toolbarPoint.has(appName) ? 'replace' : 'extend';
 
             // remove listener from previous model
             if (this.model) {
@@ -651,8 +652,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                     toolbarPoint.disable(id);
                 }
             });
-            //extend toolbar extension point with the toolbar links
-            toolbarPoint.extend(new LinksPattern.InlineLinks({
+            //extend or replace toolbar extension point with the toolbar links
+            toolbarPoint[funcName](new LinksPattern.InlineLinks({
                 id: appName,
                 dropdown: true,
                 compactDropdown: true,
