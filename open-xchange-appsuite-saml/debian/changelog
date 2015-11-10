@@ -58,6 +58,12 @@ open-xchange-appsuite-saml (7.8.0-0) stable; urgency=low
 
  -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 07 Jul 2015 11:27:29 +0200
 
+open-xchange-appsuite-saml (7.6.2-5) stable; urgency=medium
+
+  * Build for patch 2015-11-11 (2844)
+
+ -- Francisco Laguna <francisco.laguna@open-xchange.com>  Thu, 29 Oct 2015 13:57:44 +0100
+
 open-xchange-appsuite-saml (7.6.2-4) stable; urgency=medium
 
   * Build for patch  2015-10-12 (2784)
