@@ -2,13 +2,19 @@ open-xchange-appsuite-help-drive (7.6.3-1) stable; urgency=medium
 
   * First candidate for 7.6.3 release
 
- -- Marcus Klein <marcus.klein@open-xchange.com>  Mon, 26 Oct 2015 10:37:09 +0000
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Mon, 26 Oct 2015 11:37:09 +0100
 
 open-xchange-appsuite-help-drive (7.6.3-0) unstable; urgency=medium
 
   * prepare for 7.6.3 release
 
  -- Marcus Klein <marcus.klein@open-xchange.com>  Wed, 25 Mar 2015 13:07:31 +0100
+
+open-xchange-appsuite-help-drive (7.6.2-19) stable; urgency=medium
+
+  * Build for patch 2015-11-11 (2844)
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Thu, 29 Oct 2015 13:57:42 +0100
 
 open-xchange-appsuite-help-drive (7.6.2-18) stable; urgency=medium
 

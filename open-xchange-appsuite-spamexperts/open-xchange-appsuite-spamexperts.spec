@@ -86,6 +86,8 @@ if [ -x %{update} ]; then %{update}; fi
 #%{docroot}
 
 %changelog
+* Thu Oct 29 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
+Build for patch 2015-11-11 (2844)
 * Mon Oct 26 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
 First candidate for 7.6.3 release
 * Wed Sep 30 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
