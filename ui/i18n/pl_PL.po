@@ -160,8 +160,8 @@ msgstr[2] "%1$d min"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
 #. text of a presentation slide caption
-#: apps/io.ox/core/viewer/views/displayerview.js:139 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:544
+#: apps/io.ox/core/viewer/views/displayerview.js:146 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:575
 #: apps/io.ox/presenter/views/presentationview.js:370 module:io.ox/presenter
 msgid "%1$d of %2$d"
 msgstr "%1$d z %2$d"
@@ -1602,6 +1602,11 @@ msgid_plural "Cannot print these items"
 msgstr[0] "Nie można wydrukować tego elementu"
 msgstr[1] "Nie można wydrukować tych elementów"
 msgstr[2] "Nie można wydrukować tych elementów"
+
+#: apps/io.ox/core/viewer/views/displayerview.js:177 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:244
+msgid "Cannot require a view type for %1$s"
+msgstr ""
 
 #: apps/io.ox/files/guidance/statistics.js:189 module:io.ox/files
 msgid "Capacity"
@@ -5077,7 +5082,7 @@ msgid "New task reminders"
 msgstr "Nowe przypomnienia o zadaniach"
 
 #: apps/io.ox/core/tk/wizard.js:408 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:114
+#: apps/io.ox/core/viewer/views/displayerview.js:121
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
@@ -6040,7 +6045,7 @@ msgstr "Aby otworzyć, naciśnij klawisz [Enter]."
 msgid "Preview"
 msgstr "Podgląd"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:113 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:120 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53 module:io.ox/core/wizard
 msgid "Previous"
 msgstr "Poprzedni"
@@ -8636,7 +8641,7 @@ msgstr "Użyj nazwy niestandardowej"
 msgid "Use fixed-width font for text mails"
 msgstr "Używaj czcionki o stałej szerokości w wiadomościach tekstowych"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:115 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:122 module:io.ox/core
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
 msgstr ""

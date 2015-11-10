@@ -144,8 +144,8 @@ msgstr[1] "%1$d 分钟"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
 #. text of a presentation slide caption
-#: apps/io.ox/core/viewer/views/displayerview.js:139 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:544
+#: apps/io.ox/core/viewer/views/displayerview.js:146 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:575
 #: apps/io.ox/presenter/views/presentationview.js:370 module:io.ox/presenter
 msgid "%1$d of %2$d"
 msgstr "%2$s 的 %1$s"
@@ -1557,6 +1557,11 @@ msgid "Cannot print this item"
 msgid_plural "Cannot print these items"
 msgstr[0] "无法打印此项目"
 msgstr[1] "无法打印此项目"
+
+#: apps/io.ox/core/viewer/views/displayerview.js:177 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:244
+msgid "Cannot require a view type for %1$s"
+msgstr ""
 
 #: apps/io.ox/files/guidance/statistics.js:189 module:io.ox/files
 msgid "Capacity"
@@ -4978,7 +4983,7 @@ msgid "New task reminders"
 msgstr "新任务提醒"
 
 #: apps/io.ox/core/tk/wizard.js:408 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:114
+#: apps/io.ox/core/viewer/views/displayerview.js:121
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
@@ -5927,7 +5932,7 @@ msgstr "按下 [enter] 以打开"
 msgid "Preview"
 msgstr "概览"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:113 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:120 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53 module:io.ox/core/wizard
 msgid "Previous"
 msgstr "前一个"
@@ -8427,7 +8432,7 @@ msgstr "使用自定义名称"
 msgid "Use fixed-width font for text mails"
 msgstr "文本邮件使用固定宽度"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:115 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:122 module:io.ox/core
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
 msgstr "使用左/右箭头键导航和换码键离开检视器。"
