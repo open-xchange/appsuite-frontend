@@ -142,7 +142,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 // always load duplicate slides of the swiper plugin.
                 self.handleDuplicatesSlides();
                 // preload selected file and its neighbours initially
-                //self.loadSlide(startIndex, 'both');
+                self.slideViews[self.activeIndex].show();
                 self.blendCaption(gt('%1$d of %2$d', startIndex + 1, self.collection.length));
                 self.blendNavigation();
                 // focus first active slide initially
@@ -582,6 +582,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 this.pause();
             });
             this.viewerEvents.trigger('viewer:displayeditem:change', this.collection.at(this.activeIndex));
+            this.swiper.params.onlyExternal = false;
         },
 
         /**
@@ -602,6 +603,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     activeSlideView.setInitialScrollPosition(activeSlideView.model.get('id'), scrollPosition);
                 }
             }
+            this.swiper.params.onlyExternal = true;
         },
 
         /**
