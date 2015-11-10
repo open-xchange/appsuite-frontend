@@ -221,6 +221,12 @@ define('io.ox/participants/detail', [
                             var glist, memberList;
                             // resolve group members (remove internal users first)
                             memberList = _(obj.members).difference(users);
+                            // remove group members that are not part of "users" array
+                            // (some might have been removed from the appointment)
+                            // see bug 42204
+                            if (_.isArray(baton.data.users)) {
+                                memberList = _(memberList).intersection(_(baton.data.users).pluck('id'));
+                            }
                             if (memberList.length) {
                                 // new section
                                 participants.append(
