@@ -97,8 +97,8 @@ define('io.ox/core/viewer/views/displayerview', [
 
             if (startIndex < this.preloadOffset) {
                 swiperParameter.initialSlide = startIndex;
-            } else if (this.startIndex >= this.collection.length - this.preloadOffset) {
-                swiperParameter.initialSlide = this.collection.length - this.startIndex + this.preloadOffset;
+            } else if (startIndex >= this.collection.length - this.preloadOffset) {
+                swiperParameter.initialSlide = 2 * this.preloadOffset - this.collection.length + startIndex + 1;
             } else {
                 swiperParameter.initialSlide = this.preloadOffset;
             }
