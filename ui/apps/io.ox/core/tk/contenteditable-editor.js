@@ -264,9 +264,10 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
             plugins: opt.plugins,
 
-            //link plugin settings
+            // link plugin settings
             link_title: false,
             target_list: false,
+            link_assume_external_targets: true,
 
             language: lookupTinyMCELanguage(),
 
