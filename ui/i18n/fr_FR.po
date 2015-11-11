@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-10-19 19:14+0200\n"
+"PO-Revision-Date: 2015-11-11 09:45+0100\n"
 "Last-Translator: Nicolas Ternisien <nicolas@bureau-cornavin.com>\n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr_FR\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.7.7\n"
 
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
@@ -5248,7 +5248,7 @@ msgstr "Aucun"
 #. E-Mail priority
 #: apps/io.ox/mail/compose/view.js:218 module:io.ox/mail
 msgid "Normal"
-msgstr "Normal"
+msgstr "Normale"
 
 #: apps/io.ox/mail/actions.js:560 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:94
