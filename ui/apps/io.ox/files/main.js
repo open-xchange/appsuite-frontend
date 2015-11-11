@@ -957,12 +957,19 @@ define('io.ox/files/main', [
             if (_.device('smartphone')) return;
 
             api.on('beforedelete', function (ids) {
-                // change selection
-                app.listView.selection.dodge();
-                // optimization for many items
-                if (ids.length === 1) return;
-                // remove all DOM elements of current collection; keep the first item
-                app.listView.onBatchRemove(ids.slice(1));
+                var selection = app.listView.selection.get();
+                var cids = _.map(ids, _.cid);
+
+                //intersection check for Bug 41861
+                if (_.intersection(cids, selection).length) {
+
+                    // change selection
+                    app.listView.selection.dodge();
+                    // optimization for many items
+                    if (ids.length === 1) return;
+                    // remove all DOM elements of current collection; keep the first item
+                    app.listView.onBatchRemove(ids.slice(1));
+                }
             });
         },
 
