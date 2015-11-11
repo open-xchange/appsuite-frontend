@@ -68,6 +68,28 @@ define('io.ox/tasks/model', [
                         changeParticipantsUpdate = false;
                     });
                     return this._participants;
+                },
+
+                // special get function for datepicker
+                getDate: function () {
+                    var time = this.get.apply(this, arguments);
+                    // if time is undefined moment initializes with the current date, we need to prevent that
+                    // !time check would be wrong for timestamp 0 so specific check is needed
+                    if ((time !== undefined && time !== null) && this.get('full_time')) {
+                        time = moment.utc(time).local(true).valueOf();
+                    }
+                    return time;
+                },
+
+                // special set function for datepicker
+                setDate: function (attr, time) {
+                    // if time is undefined moment initializes with the current date, we need to prevent that
+                    // !time check would be wrong for timestamp 0 so specific check is needed
+                    if ((time !== undefined && time !== null) && this.get('full_time')) {
+                        time = moment(time);
+                        arguments[1] = time.utc(true).valueOf();
+                    }
+                    return this.set.apply(this, arguments);
                 }
             }
         });
