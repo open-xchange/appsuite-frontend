@@ -178,6 +178,7 @@ define('io.ox/core/folder/contextmenu', [
             return function (baton) {
 
                 if (baton.module !== 'mail') return;
+                if (!capabilities.has('archive_emails')) return;
 
                 addLink(this, {
                     action: 'archive',
