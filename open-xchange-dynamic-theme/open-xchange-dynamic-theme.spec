@@ -58,6 +58,8 @@ if [ -x %{update} ]; then %{update} --later; fi
 %config(noreplace) /opt/open-xchange/etc/settings/open-xchange-dynamic-theme.properties
 
 %changelog
+* Tue Nov 03 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
+Build for patch 2015-11-09 (2841)
 * Thu Oct 29 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
 Build for patch 2015-11-11 (2844)
 * Tue Oct 20 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
