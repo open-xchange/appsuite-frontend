@@ -214,11 +214,11 @@ msgid "Further information"
 msgstr "Lisätietoja"
 
 #. Tour name; general introduction
-#: apps/io.ox/tours/main.js:803 module:io.ox/tours
+#: apps/io.ox/tours/main.js:806 module:io.ox/tours
 msgid "Getting started"
 msgstr "Aluksi"
 
-#: apps/io.ox/tours/main.js:829 module:io.ox/tours
+#: apps/io.ox/tours/main.js:832 module:io.ox/tours
 msgid "Guided tour for this app"
 msgstr "Tämän sovelluksen ohjattu esittely"
 
@@ -662,9 +662,13 @@ msgstr ""
 "tai sisällysluettelossa."
 
 #: apps/io.ox/tours/main.js:732 module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings. "
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings. "
+"the menu bar. Select Settings."
 msgstr ""
 "Avataksesi asetukset, napsauta järjestelmävalikkon hammaspyöräkuvaketta "
 "valikkopalkin oikeassa yläreunassa. Valitse Asetukset."

@@ -44,11 +44,12 @@ define('io.ox/mail/vacationnotice/settings/filter',
 
             api.getRules('vacation').done(function (data) {
                 var defaultNotice = {
-                    days: '7',
-                    internal_id: 'vacation',
-                    subject: '',
-                    text: ''
-                },
+                        days: '7',
+                        internal_id: 'vacation',
+                        subject: '',
+                        text: '',
+                        from: multiValues.from
+                    },
                     vacationData,
                     VacationEdit,
                     vacationNotice;
@@ -57,6 +58,7 @@ define('io.ox/mail/vacationnotice/settings/filter',
                     vacationData = data[0].actioncmds[0];
                     vacationData.internal_id = vacationData.id;
                     vacationData.id = data[0].id;
+                    vacationData.from = multiValues.from;
 
                     if (_(data[0].test).size() === 2) {
                         _(data[0].test.tests).each(function (value) {

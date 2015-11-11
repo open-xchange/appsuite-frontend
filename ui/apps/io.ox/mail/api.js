@@ -1051,18 +1051,12 @@ define('io.ox/mail/api',
 
         // start update on server
         return http.wait(
-            update(list, { folder_id: targetFolderId }).then(function (response) {
-                var errorText, i = 0, $i = response.length;
+            update(list, { folder_id: targetFolderId }).then(function (data) {
                 // look if anything went wrong
-                for (; i < $i; i++) {
-                    if (response[i].error) {
-                        errorText = response[i].error.error;
-                        break;
-                    }
-                }
+                var failed = _(data.response).find(function (item) { return !!item.error; });
                 api.trigger('move', list, targetFolderId);
                 folderAPI.reload(targetFolderId, list);
-                if (errorText) return errorText;
+                if (failed) return failed.error;
             })
         );
     };

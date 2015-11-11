@@ -53,13 +53,15 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             'Cc': gt('CC'),
             'cleanHeader': gt('Header'),
             'envelope': gt('Envelope'),
-            'size': gt('Size (bytes)')
+            'size': gt('Size (bytes)'),
+            'body': gt('Content')
         },
 
         conditionsMapping = {
             'header': ['From', 'any', 'Subject', 'mailingList', 'To', 'Cc', 'cleanHeader'],
             'envelope': ['envelope'],
-            'size': ['size']
+            'size': ['size'],
+            'body': ['body']
         },
 
         actionsTranslations = {
@@ -226,6 +228,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 var baton = ext.Baton({ model: this.model, view: this });
                 ext.point(POINT + '/view').invoke('draw', this.$el.empty(), baton);
+                toggleSaveButton(this.dialog.getFooter(), this.$el);
                 return this;
 
             },
@@ -269,7 +272,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 this.model.set('test', testArray);
                 this.render();
-                toggleSaveButton(this.dialog.getFooter(), this.$el);
             },
 
             onRemoveAction: function (e) {
@@ -409,11 +411,19 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     list = link.closest('li'),
                     label =  list.find('label.sr-only'),
                     testTitle = list.find('.list-title').text(),
-                    type = list.attr('data-type'),
                     testID = list.attr('data-test-id'),
 
                     testArray =  this.model.get('test'),
-                    translatedValue = type === 'size' ? sizeValues[value] : containsValues[value];
+                    translatedValue;
+
+                switch (list.attr('data-type')) {
+                    case 'size':
+                        translatedValue = sizeValues[value];
+                        break;
+                    case 'values':
+                        translatedValue = containsValues[value];
+                        break;
+                }
 
                 label.text(testTitle + ' ' + value);
                 link.text(translatedValue);
@@ -606,6 +616,25 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                                     ),
                                     $('<div class="col-md-6">').append(
                                         elements.drawInputfieldTest(test.comparison, test.size)
+                                    )
+                                )
+                            )
+                        )
+                    );
+                } else if (test.id === 'body') {
+                    listTests.append(
+                        $('<li>').addClass('filter-settings-view row').attr({ 'data-type': 'values', 'data-test-id': num }).append(
+                            elements.drawDeleteButton('test'),
+                            $('<div>').addClass('col-md-6 singleline').append(
+                                $('<span>').addClass('list-title').text(headerTranslation[test.id])
+                            ),
+                            $('<div>').addClass('col-md-6').append(
+                                $('<div>').addClass('row').append(
+                                    $('<div>').addClass('col-md-3').append(
+                                        elements.drawOptions(test.comparison, filterValues(test.id, containsValues))
+                                    ),
+                                    $('<div class="col-md-9">').append(
+                                        elements.drawInputfieldTest(test.comparison, test.values[0])
                                     )
                                 )
                             )
@@ -822,12 +851,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 headlineTest, notification, listTests,
                 elements.drawOptionsExtern(gt('Add condition'), headerTranslation, {
                     test: 'create',
-                    toggle: 'dropup'
+                    toggle: 'dropdown'
                 }),
                 headlineActions, listActions,
                 elements.drawOptionsExtern(gt('Add action'), actionsTranslations, {
                     action: 'create',
-                    toggle: 'dropup'
+                    toggle: 'dropdown'
                 })
             );
 

@@ -950,7 +950,7 @@ define('io.ox/mail/write/view-main',
                     this.emojiToggle(),
                     // priority
                     this.priorityOverlay = $('<div class="priority-overlay">')
-                        .attr('title', 'Priority')
+                        .attr('title', gt('Priority'))
                         .append(
                             $('<i class="fa fa-exclamation">')
                         )

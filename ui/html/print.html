@@ -14,8 +14,9 @@
                     <div class="clear"></div>
                     <h1><%- element.subject %></h1>
                     <div class="to-and-cc">
-                        <label><%- i18n.to %></label> <%= element.to %>&nbsp;&nbsp;
-                        <% if (element.cc !== '') { %><label><%- i18n.copy %></label> <%= element.cc %><% } %>
+                        <% if (element.to !== '')  { %><label><%- i18n.to %></label> <%= element.to %>&nbsp;&nbsp;<% } %>
+                        <% if (element.cc !== '')  { %><label><%- i18n.copy %></label> <%= element.cc %>&nbsp;&nbsp;<% } %>
+                        <% if (element.bcc !== '') { %><label><%- i18n.blindcopy %></label> <%= element.bcc %><% } %>
                     </div>
                 </header>
                 <pre class="content"><%= element.content %></pre>
