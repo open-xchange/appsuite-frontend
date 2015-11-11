@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-11-11 09:45+0100\n"
+"PO-Revision-Date: 2015-11-11 09:59+0100\n"
 "Last-Translator: Nicolas Ternisien <nicolas@bureau-cornavin.com>\n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr_FR\n"
@@ -9494,7 +9494,7 @@ msgstr "créer des objets et des sous-dossiers"
 #: apps/io.ox/calendar/edit/recurrence-view.js:511
 #: module:io.ox/calendar/edit/main
 msgid "daily"
-msgstr "quotidien"
+msgstr "quotidienne"
 
 #: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
 msgid "dark blue"
@@ -9752,7 +9752,7 @@ msgstr "vert clair"
 #: apps/io.ox/calendar/edit/recurrence-view.js:515
 #: module:io.ox/calendar/edit/main
 msgid "monthly"
-msgstr "mensuel"
+msgstr "mensuelle"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:722
 #: module:io.ox/calendar/edit/main
@@ -9983,7 +9983,7 @@ msgstr "jours ouvrés"
 #: apps/io.ox/calendar/edit/recurrence-view.js:517
 #: module:io.ox/calendar/edit/main
 msgid "yearly"
-msgstr "annuel"
+msgstr "annuelle"
 
 #: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
 msgid "yellow"
