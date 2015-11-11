@@ -140,10 +140,9 @@ define('io.ox/core/gettext', function () {
         function npgettext(context, singular, plural, n) {
             var key = (context ? context + '\x00' : '') + singular + '\x01' + plural,
                 translation = get(key);
-            // return original string if we don't have a translation
-            if (!translation) return Number(n) !== 1 ? plural : singular;
-            // return translation with singular as fallback for Grunt breakage
-            return _.isString(translation) ? translation : translation[Number(po.plural(Number(n)))];
+            return translation ?
+                translation[Number(po.plural(Number(n)))] :
+                Number(n) !== 1 ? plural : singular;
         }
 
         return gettext;
