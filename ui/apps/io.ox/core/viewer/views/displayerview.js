@@ -58,6 +58,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.listenTo(FilesAPI, 'remove:file', this.onFileRemoved.bind(this));
             // blend in navigation by user activity
             this.$el.on('mousemove click', _.throttle(this.blendNavigation.bind(this), 500));
+            // listen to version change events
+            this.listenTo(this.collection, 'change:version', this.onModelChangeVersion.bind(this));
         },
 
         /**
