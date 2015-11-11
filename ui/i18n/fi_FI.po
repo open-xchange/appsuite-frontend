@@ -898,7 +898,7 @@ msgstr "Lisää tilisi"
 msgid "Added the new participant"
 msgstr "Uusi osallistuja lisätty"
 
-#: apps/io.ox/mail/settings/pane.js:263 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
 msgid "Additional settings"
 msgstr "Lisäasetukset"
 
@@ -1000,11 +1000,11 @@ msgstr "Kaikki tapaamiset"
 msgid "All timezones"
 msgstr "Kaikki aikavyöhykkeet"
 
-#: apps/io.ox/mail/settings/pane.js:319 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:326 module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "Salli html muotoillut sähköpostit"
 
-#: apps/io.ox/mail/settings/pane.js:324 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:331 module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
 msgstr "Salli muualta linkitettyjen kuvien ennakoiva lataaminen"
 
@@ -1242,7 +1242,7 @@ msgstr "Tekijä"
 msgid "Auto Forward"
 msgstr "Automaattinen välitys"
 
-#: apps/io.ox/mail/settings/pane.js:294 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:301 module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Luonnosten automaattinen tallennus"
 
@@ -1285,7 +1285,7 @@ msgstr ""
 
 #. It's a label for an input field with a number
 #. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:277 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
 msgstr "Tekstin automaattinen rivitys näin monen merkin jälkeen:"
 
@@ -1594,7 +1594,7 @@ msgstr "Matkapuhelin vaihtoehtoinen"
 msgid "Change"
 msgstr "Muuta"
 
-#: apps/io.ox/mail/settings/pane.js:364 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:371 module:io.ox/mail
 msgid "Change IMAP subscriptions"
 msgstr "Muuta IMAP-tilauksia"
 
@@ -1805,7 +1805,7 @@ msgstr "Pienennä lomake"
 msgid "Color"
 msgstr "Väri"
 
-#: apps/io.ox/mail/settings/pane.js:334 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:341 module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Värjää lainaukset"
 
@@ -2274,7 +2274,7 @@ msgstr "Oletuskalenteri"
 msgid "Default reminder"
 msgstr "Oletusmuistutus"
 
-#: apps/io.ox/mail/settings/pane.js:284 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:291 module:io.ox/mail
 msgid "Default sender address"
 msgstr "Oletuslähettäjä"
 
@@ -2505,7 +2505,7 @@ msgctxt "dialog"
 msgid "Discard message"
 msgstr "Hylkää viesti"
 
-#: apps/io.ox/mail/settings/pane.js:315 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:322 module:io.ox/mail
 msgid "Display"
 msgstr "Viestien näyttäminen"
 
@@ -2513,7 +2513,7 @@ msgstr "Viestien näyttäminen"
 msgid "Display Name"
 msgstr "Näytä nimi"
 
-#: apps/io.ox/mail/settings/pane.js:329 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:336 module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
 msgstr "Näytä hymiöt kuvina tekstimuotoisissa posteissa"
 
@@ -3654,7 +3654,7 @@ msgstr "Unohditko salasanasi?"
 msgid "Format"
 msgstr "Muotoile"
 
-#: apps/io.ox/mail/settings/pane.js:254 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:261 module:io.ox/mail
 msgid "Format emails as"
 msgstr "Sähköpostin muoto"
 
@@ -3667,7 +3667,7 @@ msgstr "Välitä"
 msgid "Forward all incoming emails to this address"
 msgstr "Välitä kaikki saapuva posti tähän osoitteeseen"
 
-#: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:252 module:io.ox/mail
 msgid "Forward emails as"
 msgstr "Viestien välitys"
 
@@ -3681,7 +3681,7 @@ msgid "Freelancer"
 msgstr "Freelancer"
 
 #: apps/io.ox/mail/actions/reminder.js:53 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:110
+#: apps/io.ox/mail/compose/extensions.js:111
 #: apps/io.ox/mail/compose/extensions.js:169 apps/io.ox/mail/main.js:622
 #: apps/io.ox/mail/view-options.js:32
 msgid "From"
@@ -4083,6 +4083,12 @@ msgstr "Lisää"
 #: apps/io.ox/mail/compose/inline-images.js:61 module:io.ox/mail
 msgid "Insert inline image"
 msgstr "Lisää joukkoon kuva"
+
+#. this setting is about what happens when the user presses <enter>
+#. in mail compose: either simple line breaks (<br> tags) or paragraphs (<p> tags)
+#: apps/io.ox/mail/settings/pane.js:244 module:io.ox/mail
+msgid "Insert line breaks instead paragraphs when pressing <enter>"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js:237 module:io.ox/mail
 msgid "Insert the original email text to a reply"
@@ -5038,7 +5044,7 @@ msgstr "Seuraava päivä"
 msgid "Next Week"
 msgstr "Seuraava viikko"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:684 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:685 module:io.ox/core
 msgid "Next page"
 msgstr "Seuraava sivu"
 
@@ -6002,7 +6008,7 @@ msgstr "Edellinen viikko"
 msgid "Previous month"
 msgstr "Edellinen kuukausi"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:681 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:682 module:io.ox/core
 msgid "Previous page"
 msgstr "Edellinen sivu"
 
@@ -6512,7 +6518,7 @@ msgstr "resurssiryhmä"
 msgid "Resource name"
 msgstr "Resurssin nimi"
 
-#: apps/io.ox/participants/detail.js:260 module:io.ox/core
+#: apps/io.ox/participants/detail.js:266 module:io.ox/core
 #: apps/plugins/administration/resources/register.js:23
 #: apps/plugins/administration/resources/settings/pane.js:121
 msgid "Resources"
@@ -7077,7 +7083,7 @@ msgstr "Näytä lainattu teksti"
 msgid "Show request body"
 msgstr "Näytä pyynnön runko"
 
-#: apps/io.ox/mail/settings/pane.js:339 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:346 module:io.ox/mail
 msgid "Show requests for read receipts"
 msgstr "Näytä lukukuittauspyynnöt"
 
@@ -7384,7 +7390,7 @@ msgstr "%-tilisi uudelleenvaltuutettiin onnistuneesti"
 msgid "Suffix"
 msgstr "Jälkiliite"
 
-#: apps/io.ox/participants/detail.js:280 module:io.ox/core
+#: apps/io.ox/participants/detail.js:286 module:io.ox/core
 msgid "Summary"
 msgstr "Yhteenveto"
 

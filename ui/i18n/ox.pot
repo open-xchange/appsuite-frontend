@@ -6162,12 +6162,12 @@ msgstr ""
 msgid "Viewer Toolbar"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:681
+#: apps/io.ox/core/viewer/views/toolbarview.js:682
 #: module:io.ox/core
 msgid "Previous page"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:684
+#: apps/io.ox/core/viewer/views/toolbarview.js:685
 #: module:io.ox/core
 msgid "Next page"
 msgstr ""
@@ -7906,7 +7906,7 @@ msgstr ""
 
 #: apps/io.ox/mail/actions/reminder.js:53
 #: module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:110
+#: apps/io.ox/mail/compose/extensions.js:111
 #: apps/io.ox/mail/compose/extensions.js:169
 #: apps/io.ox/mail/main.js:622
 #: apps/io.ox/mail/view-options.js:32
@@ -8812,69 +8812,76 @@ msgstr ""
 msgid "Insert the original email text to a reply"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:245
+#. this setting is about what happens when the user presses <enter>
+#. in mail compose: either simple line breaks (<br> tags) or paragraphs (<p> tags)
+#: apps/io.ox/mail/settings/pane.js:244
+#: module:io.ox/mail
+msgid "Insert line breaks instead paragraphs when pressing <enter>"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:252
 #: module:io.ox/mail
 msgid "Forward emails as"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:254
+#: apps/io.ox/mail/settings/pane.js:261
 #: module:io.ox/mail
 msgid "Format emails as"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:263
+#: apps/io.ox/mail/settings/pane.js:270
 #: module:io.ox/mail
 msgid "Additional settings"
 msgstr ""
 
 #. It's a label for an input field with a number
 #. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js:270
+#: apps/io.ox/mail/settings/pane.js:277
 #: module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:284
+#: apps/io.ox/mail/settings/pane.js:291
 #: module:io.ox/mail
 msgid "Default sender address"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:294
+#: apps/io.ox/mail/settings/pane.js:301
 #: module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:315
+#: apps/io.ox/mail/settings/pane.js:322
 #: module:io.ox/mail
 msgid "Display"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:319
+#: apps/io.ox/mail/settings/pane.js:326
 #: module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:324
+#: apps/io.ox/mail/settings/pane.js:331
 #: module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:329
+#: apps/io.ox/mail/settings/pane.js:336
 #: module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:334
+#: apps/io.ox/mail/settings/pane.js:341
 #: module:io.ox/mail
 msgid "Color quoted lines"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:339
+#: apps/io.ox/mail/settings/pane.js:346
 #: module:io.ox/mail
 msgid "Show requests for read receipts"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:364
+#: apps/io.ox/mail/settings/pane.js:371
 #: module:io.ox/mail
 msgid "Change IMAP subscriptions"
 msgstr ""
@@ -9172,14 +9179,14 @@ msgstr ""
 msgid "External participants"
 msgstr ""
 
-#: apps/io.ox/participants/detail.js:260
+#: apps/io.ox/participants/detail.js:266
 #: module:io.ox/core
 #: apps/plugins/administration/resources/register.js:23
 #: apps/plugins/administration/resources/settings/pane.js:121
 msgid "Resources"
 msgstr ""
 
-#: apps/io.ox/participants/detail.js:280
+#: apps/io.ox/participants/detail.js:286
 #: module:io.ox/core
 msgid "Summary"
 msgstr ""

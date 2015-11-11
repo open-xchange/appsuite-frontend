@@ -896,7 +896,7 @@ msgstr "添加您的帐户"
 msgid "Added the new participant"
 msgstr "添加新参与者"
 
-#: apps/io.ox/mail/settings/pane.js:263 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
 msgid "Additional settings"
 msgstr "额外设定"
 
@@ -998,11 +998,11 @@ msgstr "我所有的约会"
 msgid "All timezones"
 msgstr "所有时区"
 
-#: apps/io.ox/mail/settings/pane.js:319 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:326 module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "允许 html 格式的电子邮件"
 
-#: apps/io.ox/mail/settings/pane.js:324 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:331 module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
 msgstr "允许外部链接图像的预加载"
 
@@ -1243,7 +1243,7 @@ msgstr "作者"
 msgid "Auto Forward"
 msgstr "自动转发"
 
-#: apps/io.ox/mail/settings/pane.js:294 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:301 module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "自动保存电子邮件草稿"
 
@@ -1280,7 +1280,7 @@ msgstr "在一个约会接受或拒绝后，自动删除外来通知"
 
 #. It's a label for an input field with a number
 #. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:277 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
 msgstr "自动在字符后包裹纯文字："
 
@@ -1585,7 +1585,7 @@ msgstr "移动电话（替代）"
 msgid "Change"
 msgstr "更改"
 
-#: apps/io.ox/mail/settings/pane.js:364 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:371 module:io.ox/mail
 msgid "Change IMAP subscriptions"
 msgstr "更改 IMAP 订阅"
 
@@ -1795,7 +1795,7 @@ msgstr "折叠表格"
 msgid "Color"
 msgstr "颜色"
 
-#: apps/io.ox/mail/settings/pane.js:334 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:341 module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "颜色引用线"
 
@@ -2260,7 +2260,7 @@ msgstr "默认日历"
 msgid "Default reminder"
 msgstr "默认提醒"
 
-#: apps/io.ox/mail/settings/pane.js:284 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:291 module:io.ox/mail
 msgid "Default sender address"
 msgstr "默认发件人地址"
 
@@ -2491,7 +2491,7 @@ msgctxt "dialog"
 msgid "Discard message"
 msgstr "丢弃消息"
 
-#: apps/io.ox/mail/settings/pane.js:315 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:322 module:io.ox/mail
 msgid "Display"
 msgstr "显示"
 
@@ -2499,7 +2499,7 @@ msgstr "显示"
 msgid "Display Name"
 msgstr "显示名称"
 
-#: apps/io.ox/mail/settings/pane.js:329 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:336 module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
 msgstr "在文本电子邮件中以图形显示表情符号"
 
@@ -3625,7 +3625,7 @@ msgstr "忘记密码？"
 msgid "Format"
 msgstr "格式"
 
-#: apps/io.ox/mail/settings/pane.js:254 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:261 module:io.ox/mail
 msgid "Format emails as"
 msgstr "将电子邮件格式化为"
 
@@ -3638,7 +3638,7 @@ msgstr "转发"
 msgid "Forward all incoming emails to this address"
 msgstr "转发所有接收电子邮件到此地址"
 
-#: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:252 module:io.ox/mail
 msgid "Forward emails as"
 msgstr "电子邮件的转发方式"
 
@@ -3652,7 +3652,7 @@ msgid "Freelancer"
 msgstr "自由工作者"
 
 #: apps/io.ox/mail/actions/reminder.js:53 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:110
+#: apps/io.ox/mail/compose/extensions.js:111
 #: apps/io.ox/mail/compose/extensions.js:169 apps/io.ox/mail/main.js:622
 #: apps/io.ox/mail/view-options.js:32
 msgid "From"
@@ -4045,6 +4045,12 @@ msgstr "插入"
 #: apps/io.ox/mail/compose/inline-images.js:61 module:io.ox/mail
 msgid "Insert inline image"
 msgstr "插入直列图像"
+
+#. this setting is about what happens when the user presses <enter>
+#. in mail compose: either simple line breaks (<br> tags) or paragraphs (<p> tags)
+#: apps/io.ox/mail/settings/pane.js:244 module:io.ox/mail
+msgid "Insert line breaks instead paragraphs when pressing <enter>"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js:237 module:io.ox/mail
 msgid "Insert the original email text to a reply"
@@ -4997,7 +5003,7 @@ msgstr "下一天"
 msgid "Next Week"
 msgstr "下周"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:684 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:685 module:io.ox/core
 msgid "Next page"
 msgstr "下页"
 
@@ -5949,7 +5955,7 @@ msgstr "上周"
 msgid "Previous month"
 msgstr "上月"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:681 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:682 module:io.ox/core
 msgid "Previous page"
 msgstr "前一页"
 
@@ -6447,7 +6453,7 @@ msgstr "资源组"
 msgid "Resource name"
 msgstr "资源名称"
 
-#: apps/io.ox/participants/detail.js:260 module:io.ox/core
+#: apps/io.ox/participants/detail.js:266 module:io.ox/core
 #: apps/plugins/administration/resources/register.js:23
 #: apps/plugins/administration/resources/settings/pane.js:121
 msgid "Resources"
@@ -7009,7 +7015,7 @@ msgstr "显示引用文本"
 msgid "Show request body"
 msgstr "显示请求内文"
 
-#: apps/io.ox/mail/settings/pane.js:339 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:346 module:io.ox/mail
 msgid "Show requests for read receipts"
 msgstr "显示送达回执的请求"
 
@@ -7315,7 +7321,7 @@ msgstr "已成功重认证您的 %s 户口"
 msgid "Suffix"
 msgstr "后缀"
 
-#: apps/io.ox/participants/detail.js:280 module:io.ox/core
+#: apps/io.ox/participants/detail.js:286 module:io.ox/core
 msgid "Summary"
 msgstr "撮要"
 

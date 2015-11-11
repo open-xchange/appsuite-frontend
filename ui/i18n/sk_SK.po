@@ -927,7 +927,7 @@ msgstr "Pridať váš účet"
 msgid "Added the new participant"
 msgstr "Pridať nového účastníka"
 
-#: apps/io.ox/mail/settings/pane.js:263 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
 msgid "Additional settings"
 msgstr "Ďalšie nastavenia"
 
@@ -1029,11 +1029,11 @@ msgstr "Všetky moje schôdzky"
 msgid "All timezones"
 msgstr "Všetky časové pásma"
 
-#: apps/io.ox/mail/settings/pane.js:319 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:326 module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "Povoliť emaily vo formáte HTML"
 
-#: apps/io.ox/mail/settings/pane.js:324 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:331 module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
 msgstr "Povoliť automatické načítanie externých obrázkov"
 
@@ -1276,7 +1276,7 @@ msgstr "Autor"
 msgid "Auto Forward"
 msgstr "Automatické preposielanie"
 
-#: apps/io.ox/mail/settings/pane.js:294 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:301 module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Automaticky ukladať rozpísané správy"
 
@@ -1318,7 +1318,7 @@ msgstr ""
 
 #. It's a label for an input field with a number
 #. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:277 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
 msgstr "Automaticky zalomiť text po znaku:"
 
@@ -1629,7 +1629,7 @@ msgstr "Mobilný telefón (alt)"
 msgid "Change"
 msgstr "Zmeniť"
 
-#: apps/io.ox/mail/settings/pane.js:364 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:371 module:io.ox/mail
 msgid "Change IMAP subscriptions"
 msgstr "Zmeniť odoberanie IMAP"
 
@@ -1840,7 +1840,7 @@ msgstr "Zbaliť formulár"
 msgid "Color"
 msgstr "Farba:"
 
-#: apps/io.ox/mail/settings/pane.js:334 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:341 module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Zafarbiť citované riadky"
 
@@ -2309,7 +2309,7 @@ msgstr "Predvolený kalendár"
 msgid "Default reminder"
 msgstr "Predvolený čas pripomenutia"
 
-#: apps/io.ox/mail/settings/pane.js:284 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:291 module:io.ox/mail
 msgid "Default sender address"
 msgstr "Predvolená adresa odosielateľa"
 
@@ -2540,7 +2540,7 @@ msgctxt "dialog"
 msgid "Discard message"
 msgstr "Zahodiť správu"
 
-#: apps/io.ox/mail/settings/pane.js:315 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:322 module:io.ox/mail
 msgid "Display"
 msgstr "Zobraziť"
 
@@ -2548,7 +2548,7 @@ msgstr "Zobraziť"
 msgid "Display Name"
 msgstr "Zobrazené meno"
 
-#: apps/io.ox/mail/settings/pane.js:329 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:336 module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
 msgstr "Zobraziť emotikony ako grafiku v textových emailoch"
 
@@ -3700,7 +3700,7 @@ msgstr "Zabudli ste heslo?"
 msgid "Format"
 msgstr "Formát"
 
-#: apps/io.ox/mail/settings/pane.js:254 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:261 module:io.ox/mail
 msgid "Format emails as"
 msgstr "Formátovať email ako"
 
@@ -3713,7 +3713,7 @@ msgstr "Preposlať"
 msgid "Forward all incoming emails to this address"
 msgstr "Preposielať všetky prichádzajúce emaily na túto adresu"
 
-#: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:252 module:io.ox/mail
 msgid "Forward emails as"
 msgstr "Preposlať email ako"
 
@@ -3727,7 +3727,7 @@ msgid "Freelancer"
 msgstr "Na voľnej nohe"
 
 #: apps/io.ox/mail/actions/reminder.js:53 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:110
+#: apps/io.ox/mail/compose/extensions.js:111
 #: apps/io.ox/mail/compose/extensions.js:169 apps/io.ox/mail/main.js:622
 #: apps/io.ox/mail/view-options.js:32
 msgid "From"
@@ -4129,6 +4129,12 @@ msgstr "Vložiť"
 #: apps/io.ox/mail/compose/inline-images.js:61 module:io.ox/mail
 msgid "Insert inline image"
 msgstr "Vložiť obrázok"
+
+#. this setting is about what happens when the user presses <enter>
+#. in mail compose: either simple line breaks (<br> tags) or paragraphs (<p> tags)
+#: apps/io.ox/mail/settings/pane.js:244 module:io.ox/mail
+msgid "Insert line breaks instead paragraphs when pressing <enter>"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js:237 module:io.ox/mail
 msgid "Insert the original email text to a reply"
@@ -5086,7 +5092,7 @@ msgstr "Ďalší deň"
 msgid "Next Week"
 msgstr "Nasledujúci týždeň"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:684 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:685 module:io.ox/core
 msgid "Next page"
 msgstr "Ďalšia stránka"
 
@@ -6053,7 +6059,7 @@ msgstr "Predošlý týždeň"
 msgid "Previous month"
 msgstr "Predošlý mesiac"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:681 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:682 module:io.ox/core
 msgid "Previous page"
 msgstr "Predošlá stránka"
 
@@ -6564,7 +6570,7 @@ msgstr "Skupina zdrojov"
 msgid "Resource name"
 msgstr "Meno zdroja"
 
-#: apps/io.ox/participants/detail.js:260 module:io.ox/core
+#: apps/io.ox/participants/detail.js:266 module:io.ox/core
 #: apps/plugins/administration/resources/register.js:23
 #: apps/plugins/administration/resources/settings/pane.js:121
 msgid "Resources"
@@ -7134,7 +7140,7 @@ msgstr "Zobraziť citovaný text"
 msgid "Show request body"
 msgstr "Zobraziť telo požiadavky"
 
-#: apps/io.ox/mail/settings/pane.js:339 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:346 module:io.ox/mail
 msgid "Show requests for read receipts"
 msgstr "Zobraziť žiadosti o potvrdenie prečítania"
 
@@ -7442,7 +7448,7 @@ msgstr "Úspešne ste znova autorizovali svoj účet %s."
 msgid "Suffix"
 msgstr "Prípona"
 
-#: apps/io.ox/participants/detail.js:280 module:io.ox/core
+#: apps/io.ox/participants/detail.js:286 module:io.ox/core
 msgid "Summary"
 msgstr "Zhrnutie"
 
