@@ -53,6 +53,7 @@ define('io.ox/core/folder/picker', [
     //     done         {function}  Called on "ok" (and a folder is selected)
     //     initialize   {function}  Called to have access to dialog and tree
     //     show         {function}  Called on show
+    //     cancel       {function]  Called on "cancel"
 
     return function (options) {
 
@@ -85,8 +86,7 @@ define('io.ox/core/folder/picker', [
             close: $.noop,
             show: $.noop,
             alternative: $.noop,
-            cancel: $.noop,
-            closeReg: $.noop
+            cancel: $.noop
         }, options);
 
         var dialog = new dialogs.ModalDialog({ async: o.async, addClass: o.addClass, width: o.width })
