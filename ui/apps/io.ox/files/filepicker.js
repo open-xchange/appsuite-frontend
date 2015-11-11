@@ -132,8 +132,7 @@ define('io.ox/files/filepicker', [
                     .map(function (file) {
                         var title = (file.filename || file.title),
                             $div = $('<li class="file selectable">').attr('data-obj-id', _.cid(file)).append(
-                                $('<label class="">')
-                                    .addClass('checkbox-inline' + (!options.multiselect ? ' sr-only' : ''))
+                                $('<label class="checkbox-inline sr-only">')
                                     .attr('title', title)
                                     .append(
                                         $('<input type="checkbox" class="reflect-selection" tabindex="-1">')
