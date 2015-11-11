@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-10-28 11:41+0100\n"
+"PO-Revision-Date: 2015-11-11 09:50+0100\n"
 "Last-Translator: \n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr_CA\n"
@@ -6295,7 +6295,7 @@ msgstr "Haute"
 #: apps/io.ox/mail/compose/view.js:133 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:718
 msgid "Normal"
-msgstr "Normal"
+msgstr "Normale"
 
 #: apps/io.ox/mail/compose/view.js:134 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:719
