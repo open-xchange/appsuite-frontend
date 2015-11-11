@@ -112,7 +112,7 @@ define('io.ox/core/api/autocomplete', [
                                 case 'custom':
                                 case 'user':
                                 case 'contact':
-                                    retData = self.processContactResults(retData);
+                                    retData = self.processContactResults(retData, query);
                                     break;
                             }
                         });
@@ -131,7 +131,7 @@ define('io.ox/core/api/autocomplete', [
          * @param  {array}  data (contains results array)
          * @return { array }
          */
-        processContactResults: function (data) {
+        processContactResults: function (data, query) {
             var tmp = [], hash = {}, self = this;
 
             // improve response
@@ -158,7 +158,12 @@ define('io.ox/core/api/autocomplete', [
                             var clone = _.extend({}, obj);
                             //store target value
                             clone.field = field;
-                            tmp.push(clone);
+                            if (obj[field] === query) {
+                                tmp.unshift(clone);
+                            } else {
+                                tmp.push(clone);
+                            }
+
                         }
                     });
                 }
