@@ -403,7 +403,9 @@ define('io.ox/mail/compose/view', [
                 if (!_.isEmpty(data.from)) {
                     accountAPI.getAllSenderAddresses().then(function (a) {
                         if (_.isEmpty(a)) return;
-                        data.from = a.filter(function (from) { return from[1] === data.from[0][1]; });
+                        data.from = a.filter(function (from) {
+                            return from[1] === $.trim(data.from[0][1]).toLowerCase();
+                        });
                     });
                 }
                 if (mode === 'forward') {
