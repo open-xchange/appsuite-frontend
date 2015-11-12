@@ -79,7 +79,14 @@ define('io.ox/mail/mailfilter/settings/filter/defaults', function () {
                     'extensionskey': 'text',
                     'extensionsvalue': null,
                     'values': ['']
+                },
+                'currentdate': {
+                    'id': 'currentdate',
+                    'comparison': 'ge',
+                    'datepart': 'date',
+                    'datevalue': []
                 }
+
             },
             actions: {
                 'keep': {
