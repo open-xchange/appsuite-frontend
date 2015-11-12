@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-09-08 09:25+0100\n"
+"PO-Revision-Date: 2015-11-12 15:52+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -3289,7 +3289,7 @@ msgid ""
 msgstr ""
 "Ein öffentlicher Ordner ist für Inhalte vorgesehen, die für alle Benutzer von "
 "Interesse sind. Damit andere Benutzer die Inhalte lesen oder bearbeiten "
-"können, müssen Sie entprechende Berechtigungen an dem öffentlichen Ordner "
+"können, müssen Sie entsprechende Berechtigungen an dem öffentlichen Ordner "
 "erteilen."
 
 #. notification while archiving messages
@@ -9688,6 +9688,9 @@ msgstr "Einladen zu %s"
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
 
+msgid "Permissions"
+msgstr "Berechtigungen"
+
 #~ msgid "Only showing items related to folder \"%1$s\""
 #~ msgstr ""
 #~ "Es werden nur Objekte angezeigt, die zum Ordner \"%1$s\" in Bezug stehen."
@@ -11487,9 +11490,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Permanently remove deleted emails?"
 #~ msgstr "Gelöschte E-Mails unwiderruflich entfernen?"
-
-msgid "Permissions"
-msgstr "Berechtigungen"
 
 #~ msgid "Permissions for"
 #~ msgstr "Berechtigungen für "
