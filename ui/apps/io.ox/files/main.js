@@ -248,8 +248,10 @@ define('io.ox/files/main', [
          * Get folder-based view options
          */
         'get-view-options': function (app) {
+
             app.getViewOptions = function (folder) {
-                var options = app.settings.get(['viewOptions', folder]);
+                var options = app.settings.get(['viewOptions', folder], {});
+                if (!/^(list|icon|tile)/.test(options.layout)) options.layout = 'list';
                 return _.extend({ sort: 702, order: 'asc', layout: 'list' }, options);
             };
         },
@@ -329,7 +331,10 @@ define('io.ox/files/main', [
          */
         'myshares-listview': function (app) {
 
-            if (!capabilities.has('publication')) return;
+            // not for guests
+            if (capabilities.has('guest')) return;
+            // normal users need the following capabilites
+            if (!capabilities.has('edit_public_folders') && !capabilities.has('read_create_shared_folders')) return;
 
             // add virtual folder to folder api
             folderAPI.virtual.add('virtual/myshares', function () { return $.when([]); });

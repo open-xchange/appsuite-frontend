@@ -98,6 +98,11 @@ define('io.ox/calendar/model', [
                         }
                     },
                     'change:full_time': function (model, fulltime) {
+                        // silentMode is used when performing a folderchange in the edit dialog
+                        // this listener would change the endtime to a wrong time otherwise
+                        if (model.silentMode) {
+                            return;
+                        }
                         // handle shown as
                         if (settings.get('markFulltimeAppointmentsAsFree', false)) {
                             model.set('shown_as', fulltime ? 4 : 1, { validate: true });
@@ -188,7 +193,6 @@ define('io.ox/calendar/model', [
 
             setDefaultParticipants: function (options) {
                 var self = this;
-                if (this.get('participants').length > 0) return $.when();
                 return folderAPI.get(this.get('folder_id')).then(function (folder) {
                     if (folderAPI.is('private', folder)) {
                         if (options.create) {

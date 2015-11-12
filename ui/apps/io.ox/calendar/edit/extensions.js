@@ -72,14 +72,19 @@ define('io.ox/calendar/edit/extensions', [
                         //temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
                         baton.model.attributes.tempAttachmentIndicator = true;
                     }
-                    // cleanup temp timezone data without change events
-                    baton.model.unset('endTimezone', { silent: true });
 
                     if (oldFolder !== folder && baton.mode === 'edit') {
                         baton.model.set({ 'folder_id': oldFolder }, { silent: true });
                         //actual moving is done in the app.onSave method, because this method is also called after confirming conflicts, so we don't need duplicated code
                         baton.app.moveAfterSave = folder;
+                        // prevent some onChange event handlers that would be called on the first save
+                        // causes problems, like the change fulltime handler changing the endtime (see Bug 41710)
+                        baton.model.silentMode = true;
                     }
+                    // cleanup temp timezone data from attributes without change events but keep it in the model (previousAttributes might be cleaned in some cases so it's not safe)
+                    var timezone = baton.model.get('endTimezone');
+                    baton.model.unset('endTimezone', { silent: true });
+                    baton.model.endTimezone = timezone;
                     baton.model.save().done(save);
                 })
             );

@@ -220,8 +220,16 @@ define('io.ox/core/viewer/views/sidebarview', [
                     caption: gt('Drop new version of "%1$s" here', this.model.get('filename'))
                 });
                 // drop handler
-                this.zone.on('drop', this.onNewVersionDropped.bind(this));
-                detailPane.append(this.zone.render().$el.addClass('abs'));
+                this.zone.on({
+                    show: function () {
+                        detailPane.stop().hide();
+                    },
+                    hide: function () {
+                        detailPane.fadeIn('fast');
+                    },
+                    drop: this.onNewVersionDropped.bind(this)
+                });
+                detailPane.parent().append(this.zone.render().$el.addClass('abs'));
             }
             // options
             fileInfoOpt = {

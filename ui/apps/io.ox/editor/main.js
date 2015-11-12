@@ -50,6 +50,22 @@ define('io.ox/editor/main', [
         },
 
         onContentKeydown: function (e) {
+            // chrome has some problems with page up and down keys (https://groups.google.com/a/chromium.org/forum/#!topic/chromium-bugs/AqNbWLzzIW8 https://bugs.webkit.org/show_bug.cgi?id=64143)
+            // use a workaround to fake the page up and down behaviour
+            if (_.device('chrome') && (e.which === 33 || e.which === 34)) {
+                e.preventDefault();
+                if (e.which === 33) {
+                    // cursor to first position
+                    e.target.setSelectionRange(0,0);
+                    e.target.scrollTop = 0;
+                } else {
+                    // cursor to last position
+                    var v = e.target.value;
+                    e.target.value = '';
+                    e.target.value = v;
+                    e.target.scrollTop = e.target.scrollHeight;
+                }
+            }
             if (e.which === 13 && e.ctrlKey) {
                 e.preventDefault();
                 this.app.save();
@@ -295,6 +311,14 @@ define('io.ox/editor/main', [
             });
         };
 
+        app.setData = function (data) {
+            app.setState({ folder: data.folder_id, id: data.id });
+            var title = data.title || gt('Editor');
+            win.setTitle(title);
+            app.setTitle(title);
+            model.set(data);
+        };
+
         app.load = function (o) {
             var def = $.Deferred();
             app.cid = 'io.ox/editor:edit.' + _.cid(o);
@@ -310,15 +334,8 @@ define('io.ox/editor/main', [
                 )
                 .done(function (data, text) {
                     win.idle();
-                    app.setState({ folder: o.folder_id, id: o.id });
-                    var title = data.title;
-                    if (!title) {
-                        title = gt('Editor');
-                    }
-                    win.setTitle(title);
-                    app.setTitle(title);
-
-                    model.set(previous = $.extend(data, { content: text[0] }));
+                    _.extend(data, _(o).pick('id', 'folder_id'), { content: text[0] });
+                    app.setData(previous = data);
                     if (_.device('!smartphone')) view.focus();
                     def.resolve();
                 })
@@ -359,6 +376,23 @@ define('io.ox/editor/main', [
                 app.destroy();
             });
         });
+
+        app.failSave = function () {
+            if (!app || !app.view) return false;
+            app.view.updateModel();
+            var data = model.toJSON();
+            return {
+                description: gt('File') + (data.title ? ': ' + data.title : ''),
+                module: 'io.ox/editor',
+                point: data
+            };
+        };
+
+        app.failRestore = function (point) {
+            return win.show(function () {
+                app.setData(point);
+            });
+        };
 
         return app;
     }

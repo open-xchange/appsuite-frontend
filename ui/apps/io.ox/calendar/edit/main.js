@@ -47,7 +47,7 @@ define('io.ox/calendar/edit/main', [
                 this.model.off();
             },
 
-            // published via calllbacks objects in baton (see below)
+            // published via callbacks objects in baton (see below)
             // baton makes its journey through all extensions
             // description field (resource only) uses this function to
             // offer "Copy to description"; the click event lands here
@@ -58,7 +58,8 @@ define('io.ox/calendar/edit/main', [
                 // 'new forms.InputField({...})' stuff in template.js
                 e.preventDefault();
                 var textarea = app.view.$el.find('textarea.note');
-                textarea.val(textarea.val() + e.data.description);
+                // trigger change to update the model
+                textarea.val(textarea.val() + e.data.description).trigger('change');
                 notifications.yell('success', gt('Description has been copied'));
             },
 
@@ -156,7 +157,13 @@ define('io.ox/calendar/edit/main', [
                                         .done(function (action) {
                                             if (action === 'cancel') {
                                                 // add temp timezone attribute again
-                                                self.model.set('endTimezone', self.model.previousAttributes().endTimezone,  { silent: true });
+                                                self.model.set('endTimezone', self.model.endTimezone,  { silent: true });
+                                                delete self.model.endTimezone;
+                                                // restore model attributes for moving
+                                                if (self.moveAfterSave) {
+                                                    self.model.set('folder_id', self.moveAfterSave,  { silent: true });
+                                                }
+                                                self.model.silentMode = false;
                                                 return;
                                             }
                                             if (action === 'ignore') {
@@ -343,10 +350,15 @@ define('io.ox/calendar/edit/main', [
                     //update last modified parameter not to run into a conflict error
                     this.model.set('last_modified', data.last_modified, { silent: true });
                     api.move(this.model.toJSON(), this.moveAfterSave).then(function () {
-                        self.moveAfterSave = null;
+                        delete self.moveAfterSave;
                         save();
                     }, fail);
                 } else {
+                    this.model.silentMode = false;
+                    if (this.model.endTimezone) {
+                        this.model.set('endTimezone', this.model.endTimezone);
+                        delete this.model.endTimezone;
+                    }
                     this.considerSaved = true;
                     this.getWindow().idle();
                     this.quit();
@@ -354,6 +366,12 @@ define('io.ox/calendar/edit/main', [
             },
 
             onError: function (error) {
+                this.model.silentMode = false;
+                if (this.model.endTimezone) {
+                    this.model.set('endTimezone', this.model.endTimezone);
+                    delete this.model.endTimezone;
+                }
+                delete this.moveAfterSave;
                 this.getWindow().idle();
                 if (error) notifications.yell(error);
             },

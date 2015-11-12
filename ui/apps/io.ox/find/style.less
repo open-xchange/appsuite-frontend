@@ -27,6 +27,11 @@
     // left
     .search-box {
 
+        .tokenfield.form-control {
+            // keep height of search field placeholder
+            height: 30px;
+        }
+
         .twitter-typeahead .tt-dropdown-menu {
             // enlarge default height
             max-height: 400px;
@@ -45,6 +50,9 @@
             .token-input.tt-input {
                 // keep placeholder at same position when switching to typeahead
                 padding-left: 3px;
+                &[disabled] {
+                    background-color: #eee;
+                }
             }
         }
     }

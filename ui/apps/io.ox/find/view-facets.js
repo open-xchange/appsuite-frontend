@@ -77,9 +77,7 @@ define('io.ox/find/view-facets', [
             this.listenTo(this.app, 'find:config-updated', $.proxy(this.render, this));
         },
 
-        redraw: function (count) {
-            // just reset when no facets are active
-            if (count === 0) return this.reset();
+        redraw: function () {
             this.render();
         },
 

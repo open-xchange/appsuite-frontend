@@ -41,6 +41,11 @@ define(['io.ox/mail/detail/links'], function (links) {
             expect(html).to.equal('Hoi <a href="https://yeah.html" target="_blank">https://yeah.html</a>!');
         });
 
+        it('recognizes a simple URL (www)', function () {
+            var html = process('Hoi www.google.de!');
+            expect(html).to.equal('Hoi <a href="http://www.google.de" target="_blank">www.google.de</a>!');
+        });
+
         it('recognizes a complex URL', function () {
             var html = process('Hoi https://yeah.html/path/file#hash!');
             expect(html).to.equal('Hoi <a href="https://yeah.html/path/file#hash" target="_blank">https://yeah.html/path/file#hash</a>!');
@@ -74,6 +79,11 @@ define(['io.ox/mail/detail/links'], function (links) {
         it('recognizes multiple links', function () {
             var html = process('Hoi http://yeah.html! test http://test/foo#m=calendar&f=1&i=1337 foo "Jon doe" <icke@domain.foo> END.');
             expect(html).to.equal('Hoi <a href="http://yeah.html" target="_blank">http://yeah.html</a>! test <a role="button" href="http://test/foo#m=calendar&amp;f=1&amp;i=1337" target="_blank" class="deep-link btn btn-primary btn-xs deep-link-calendar" style="font-family: Arial; color: white; text-decoration: none;">Termin</a> foo <a href="mailto:icke@domain.foo" class="mailto-link" target="_blank">Jon doe</a> END.');
+        });
+
+        it('recognizes multiple links (not greedy)', function () {
+            var html = process('Das hier ist ohne prefix am Satzende www.google.de. Und das www.google.de mitten im Satz. und mit prefix http://www.google.de.');
+            expect(html).to.equal('Das hier ist ohne prefix am Satzende <a href="http://www.google.de" target="_blank">www.google.de</a>. Und das <a href="http://www.google.de" target="_blank">www.google.de</a> mitten im Satz. und mit prefix <a href="http://www.google.de" target="_blank">http://www.google.de</a>.');
         });
 
         it('recognizes multiple links across multiple lines', function () {

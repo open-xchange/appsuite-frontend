@@ -174,7 +174,7 @@ define('plugins/notifications/tasks/register', [
                             //update detailview
                             api.trigger('update:' + _.ecid(key[0]));
                         });
-                        baton.view.collection.remove(baton.requestedModel);
+                        baton.view.removeNotifications([baton.requestedModel]);
                     }
                 });
             });

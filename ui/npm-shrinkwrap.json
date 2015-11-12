@@ -5296,9 +5296,9 @@
       }
     },
     "open-xchange-shared-grunt-config": {
-      "version": "0.11.7",
+      "version": "0.11.9",
       "from": "open-xchange-shared-grunt-config@>=0.11.3 <0.12.0",
-      "resolved": "https://registry.npmjs.org/open-xchange-shared-grunt-config/-/open-xchange-shared-grunt-config-0.11.7.tgz",
+      "resolved": "https://registry.npmjs.org/open-xchange-shared-grunt-config/-/open-xchange-shared-grunt-config-0.11.9.tgz",
       "dependencies": {
         "async": {
           "version": "0.9.2",

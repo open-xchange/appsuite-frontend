@@ -17,13 +17,14 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/backbone/mini-views/common',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/extensions',
+    'io.ox/core/extPatterns/actions',
     'io.ox/core/tk/tokenfield',
     'io.ox/core/dropzone',
     'io.ox/core/capabilities',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'static/3rd.party/jquery-ui.min.js'
-], function (contactAPI, sender, mini, Dropdown, ext, Tokenfield, dropzone, capabilities, settings, gt) {
+], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, settings, gt) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -441,6 +442,25 @@ define('io.ox/mail/compose/extensions', [
                     zone.render().$el.addClass('abs'),
                     view.$el
                 );
+
+                view.$el.on('click', 'li.item', function (e) {
+
+                    var node = $(e.currentTarget), id, data, baton, list;
+
+                    // skip attachments without preview
+                    if (!node.attr('data-original')) return;
+
+                    id = node.attr('data-id');
+                    data = view.collection.get(id).toJSON();
+                    list = view.collection.filter(function (a) {
+                        return a.get('disp') === 'attachment';
+                    }).map(function (a) {
+                        return a.toJSON();
+                    });
+                    baton = ext.Baton({ startItem: data, data: list });
+
+                    actions.invoke('io.ox/mail/actions/view-attachment', null, baton);
+                });
 
                 // needed when adding several contacts via 'send as vcard'
                 view.updateScrollControls();

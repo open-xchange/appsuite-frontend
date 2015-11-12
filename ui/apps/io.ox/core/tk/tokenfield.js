@@ -55,7 +55,7 @@ define('io.ox/core/tk/tokenfield', [
         if (typeof tokens === 'string') {
             if (this._delimiters.length) {
                 // Split based on comma as delimiter whilst ignoring comma in quotes
-                tokens = tokens.match(/([^\"\',]*((\'[^\']*\')*||(\"[^\"]*\")*))+/gm).filter(function (e) { return e; });
+                tokens = tokens.match(/('[^']*'|"[^"]*"|[^"',]+)+/g);
             } else {
                 tokens = [tokens];
             }
@@ -87,7 +87,8 @@ define('io.ox/core/tk/tokenfield', [
                         var model = new pModel.Participant(m);
                         return {
                             value: model.getTarget({ fallback: true }),
-                            label: model.getDisplayName(),
+                            // fallback when firstname and lastname are empty strings
+                            label: model.getDisplayName().trim() || model.getEmail(),
                             model: model
                         };
                     });

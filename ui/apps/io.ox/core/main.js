@@ -1014,25 +1014,22 @@ define('io.ox/core/main', [
             }
         });
 
-        var dedicatedLogoutButton = settings.get('features/dedicatedLogoutButton', false) === true && _.device('!smartphone');
-        if (!dedicatedLogoutButton) {
-            ext.point('io.ox/core/topbar/right/dropdown').extend({
-                id: 'logout',
-                index: 1000,
-                draw: function () {
-                    this.append(
-                        $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
-                        $('<li role="presentation">').append(
-                            $('<a href="#" data-action="logout" role="menuitem" tabindex="-1">').text(gt('Sign out'))
-                        )
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            logout();
-                        })
-                    );
-                }
-            });
-        }
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'logout',
+            index: 1000,
+            draw: function () {
+                this.append(
+                    $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
+                    $('<li role="presentation">').append(
+                        $('<a href="#" data-action="logout" role="menuitem" tabindex="-1">').text(gt('Sign out'))
+                    )
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        logout();
+                    })
+                );
+            }
+        });
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'dropdown',
@@ -1373,9 +1370,13 @@ define('io.ox/core/main', [
                 manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app],
                 mailto = _.url.hash('mailto') !== undefined && (appURL === ox.registry.get('mail-compose').split('/').slice(0, -1).join('/') + ':compose');
 
-            baton.autoLaunch = (manifest && (manifest.refreshable || mailto)) ?
-                appURL.split(/,/) :
-                autoLaunchArray();
+            if (manifest && (manifest.refreshable || mailto)) {
+                baton.autoLaunch = appURL.split(/,/);
+            } else {
+                // clear typical parameter?
+                if (manifest) _.url.hash({ app: null, folder: null, id: null });
+                baton.autoLaunch = autoLaunchArray();
+            }
         }
 
         var baton = ext.Baton({ block: $.Deferred() });

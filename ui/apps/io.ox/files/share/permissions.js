@@ -93,6 +93,10 @@
                 return this.get('type') === 'user';
             },
 
+            isPerson: function () {
+                return this.isUser() || this.isGuest();
+            },
+
             isInternal: function () {
                 var type = this.get('type');
                 return type === 'user' || type === 'group';
@@ -118,6 +122,10 @@
                     case 'anonymous':
                         return gt('Public link');
                 }
+            },
+
+            getEmail: function () {
+                return contactsUtil.getMail( this.get('contact') );
             },
 
             getSortName: function () {
@@ -493,6 +501,38 @@
                 );
             }
         },
+        //
+        // User identifier (not userid)
+        //
+        {
+            index: 210,
+            id: 'userid',
+            draw: function (baton) {
+                if (!baton.model.isUser()) return;
+                var node = this.find('.description:first'),
+                    mail = baton.model.getEmail(),
+                    id = _.first(mail.split('@'));
+                if (!id) return;
+                node.append(
+                    $('<span class="post-description">').text(' (' + id + ')')
+                );
+            }
+        },
+        //
+        // Halo link
+        //
+        {
+            index: 220,
+            id: 'halo',
+            draw: function (baton) {
+                if (!baton.model.isPerson()) return;
+                var email = baton.model.getEmail();
+                this.find('.display_name, .image').each(function (index, node) {
+                    node.addClass('halo-link').data({ email1: email });
+                });
+            }
+        },
+
         //
         // Role dropdown
         //
