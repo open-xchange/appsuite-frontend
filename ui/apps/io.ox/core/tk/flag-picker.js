@@ -27,7 +27,10 @@ define('io.ox/core/tk/flag-picker',
             $ul = $('ul', $parent).first(),
             $zIndex = $parent.parents('[style*="z-index"]'),
             transformOffset = $parent.closest('[style*="translate3d"]').offset() || { top: 0, left: 0 },
-            $container = $this.closest('.scrollable'),
+            // use #io-ox-windowmanager in 7.6.3 as container. 7.6.3 only uses the smart-dropdown for mail flagpicker, 7.8.0 for sharing etc too. so don't merge back
+            // otherwise mails that are longer than the screen would cause the dropdown to be drawn off screen, mails that are shorter would draw the dropdown with unnecessary scrollbars
+            // see Bug 42141
+            $container = $('#io-ox-windowmanager'),
             margin = 7;
 
         if (!$parent.hasClass('open') || _.device('smartphone')) return;
