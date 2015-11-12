@@ -160,8 +160,8 @@ msgstr[2] "%1$d minút"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
 #. text of a presentation slide caption
-#: apps/io.ox/core/viewer/views/displayerview.js:146 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:575
+#: apps/io.ox/core/viewer/views/displayerview.js:148 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:577
 #: apps/io.ox/presenter/views/presentationview.js:370 module:io.ox/presenter
 msgid "%1$d of %2$d"
 msgstr "%1$d z %2$d"
@@ -637,7 +637,7 @@ msgctxt "help"
 msgid "Accessing Files with WebDAV"
 msgstr "Prístup k súborom prostredníctvom WebDAV"
 
-#: apps/io.ox/core/folder/api.js:489 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:500 module:io.ox/core
 msgid "Accessing global address book is not permitted"
 msgstr "Prístup ku Globálnemu adresáru nie je povolený"
 
@@ -815,7 +815,7 @@ msgid "Add new calendar"
 msgstr "Pridať nový kalendár"
 
 #: apps/io.ox/core/folder/actions/add.js:57 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:248
+#: apps/io.ox/core/folder/contextmenu.js:249
 #: apps/io.ox/core/folder/extensions.js:597 apps/io.ox/files/actions.js:689
 #: module:io.ox/files
 msgid "Add new folder"
@@ -1021,7 +1021,7 @@ msgstr "Všetky priečinky"
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr "Všetky správy staršie ako %1$d dní budú presunuté do priečinka Archív"
 
-#: apps/io.ox/core/folder/api.js:375 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:386 module:io.ox/core
 msgid "All my appointments"
 msgstr "Všetky moje schôdzky"
 
@@ -1183,7 +1183,7 @@ msgstr "Archív"
 
 #. Verb: (to) archive messages
 #: apps/io.ox/core/folder/actions/archive.js:43 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:197 apps/io.ox/mail/actions.js:622
+#: apps/io.ox/core/folder/contextmenu.js:198 apps/io.ox/mail/actions.js:622
 #: module:io.ox/mail apps/io.ox/mail/mobile-toolbar-actions.js:116
 #: apps/io.ox/mail/toolbar.js:113
 msgctxt "verb"
@@ -1510,7 +1510,7 @@ msgstr "Kalendár:"
 #: apps/io.ox/core/folder/actions/common.js:47
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
-#: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:188
+#: apps/io.ox/core/folder/picker.js:99 apps/io.ox/core/import/import.js:188
 #: apps/io.ox/core/main.js:515 apps/io.ox/core/main.js:1502
 #: apps/io.ox/core/permissions/permissions.js:372
 #: apps/io.ox/core/permissions/permissions.js:405 apps/io.ox/core/print.js:113
@@ -1602,8 +1602,8 @@ msgstr[0] "Nie je možné vytlačiť túto položku"
 msgstr[1] "Nie je možné vytlačiť tieto položky"
 msgstr[2] "Nie je možné vytlačiť tieto položky"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:177 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:244
+#: apps/io.ox/core/viewer/views/displayerview.js:179 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:246
 msgid "Cannot require a view type for %1$s"
 msgstr ""
 
@@ -2039,13 +2039,13 @@ msgstr "Kópia"
 msgid "Copy to description"
 msgstr "Skopírovať do popisu"
 
-#: apps/io.ox/tasks/model.js:113 module:io.ox/tasks
-#: apps/io.ox/tasks/model.js:122
+#: apps/io.ox/tasks/model.js:135 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:144
 msgid "Costs must be between -%1$d and %1$d."
 msgstr "Náklady musia byť medzi %1$d a %1$d."
 
-#: apps/io.ox/tasks/model.js:134 module:io.ox/tasks
-#: apps/io.ox/tasks/model.js:137
+#: apps/io.ox/tasks/model.js:156 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:159
 msgid "Costs must only have two decimal places."
 msgstr "Náklady musia mať len dve desatinné miesta."
 
@@ -2082,7 +2082,7 @@ msgstr "Nepodarilo sa uložiť nastavenia"
 msgid "Could not save settings."
 msgstr "Nepodarilo sa uložiť nastavenia."
 
-#: apps/io.ox/core/folder/api.js:842 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:853 module:io.ox/core
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -2337,7 +2337,7 @@ msgstr "Odložené"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:78 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:85
 #: apps/io.ox/core/folder/actions/remove.js:33 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:298
+#: apps/io.ox/core/folder/contextmenu.js:299
 #: apps/io.ox/core/sub/settings/pane.js:184 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:186
 #: apps/io.ox/core/viewer/views/toolbarview.js:279
@@ -2783,7 +2783,7 @@ msgstr "Stiahnite si teraz %s za %s"
 msgid "Download %s via the OX Updater"
 msgstr "Stiahnuť %s prostredníctvom OX Updater"
 
-#: apps/io.ox/core/folder/contextmenu.js:353 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:354 module:io.ox/core
 msgid "Download entire folder"
 msgstr "Stiahnuť celý priečinok"
 
@@ -3100,7 +3100,7 @@ msgid "Empty"
 msgstr "Prázdne"
 
 #: apps/io.ox/core/folder/actions/common.js:46 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:215
+#: apps/io.ox/core/folder/contextmenu.js:216
 msgid "Empty folder"
 msgstr "Prázdny priečinok"
 
@@ -3326,7 +3326,7 @@ msgid "Expires on"
 msgstr "Vyprší"
 
 #: apps/io.ox/core/export/export.js:103 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:382
+#: apps/io.ox/core/folder/contextmenu.js:383
 msgid "Export"
 msgstr "Exportovať"
 
@@ -3533,8 +3533,8 @@ msgstr "Tabuľka verzií súborov. Prvý riadok predstavuje aktuálnu verziu."
 msgid "File: %1$s"
 msgstr "Súbor: %1$s"
 
-#: apps/io.ox/files/filepicker.js:73 module:io.ox/files
-#: apps/io.ox/files/filepicker.js:120
+#: apps/io.ox/files/filepicker.js:76 module:io.ox/files
+#: apps/io.ox/files/filepicker.js:123
 msgid "Files"
 msgstr "Súbory"
 
@@ -3648,8 +3648,8 @@ msgstr "Operácie priečinka"
 #: apps/io.ox/calendar/main.js:222 apps/io.ox/calendar/main.js:229
 #: apps/io.ox/contacts/main.js:369 module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:376 apps/io.ox/core/folder/view.js:308
-#: module:io.ox/core apps/io.ox/files/filepicker.js:64 module:io.ox/files
-#: apps/io.ox/files/filepicker.js:82 apps/io.ox/files/main.js:161
+#: module:io.ox/core apps/io.ox/files/filepicker.js:67 module:io.ox/files
+#: apps/io.ox/files/filepicker.js:85 apps/io.ox/files/main.js:161
 #: apps/io.ox/files/main.js:168 apps/io.ox/mail/main.js:146 module:io.ox/mail
 #: apps/io.ox/mail/main.js:153 apps/io.ox/tasks/main.js:155 module:io.ox/tasks
 #: apps/io.ox/tasks/main.js:162
@@ -3762,7 +3762,7 @@ msgstr "Stiahnuť %s"
 msgid "Get free upgrade"
 msgstr "Získajte aktualizáciu zadarmo"
 
-#: apps/io.ox/core/folder/contextmenu.js:473 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:474 module:io.ox/core
 #: apps/io.ox/files/actions.js:706 module:io.ox/files
 #: apps/io.ox/files/actions.js:826
 msgid "Get link"
@@ -3870,7 +3870,7 @@ msgstr "Skryté kalendáre"
 msgid "Hidden tasks"
 msgstr "Skryté úlohy"
 
-#: apps/io.ox/core/folder/contextmenu.js:578 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:579 module:io.ox/core
 msgid "Hide"
 msgstr "Skryť"
 
@@ -4053,7 +4053,7 @@ msgstr "Obrázok 1"
 msgid "Images"
 msgstr "Obrázky"
 
-#: apps/io.ox/core/folder/contextmenu.js:409 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:410 module:io.ox/core
 #: apps/io.ox/core/import/import.js:187
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:257 module:io.ox/mail
 msgid "Import"
@@ -4187,7 +4187,7 @@ msgstr "Pozvánka"
 msgid "Invite owner"
 msgstr "Pozvať vlastníka"
 
-#: apps/io.ox/core/folder/contextmenu.js:462 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:463 module:io.ox/core
 #: apps/io.ox/files/actions.js:697 module:io.ox/files
 #: apps/io.ox/files/actions.js:816
 msgid "Invite people"
@@ -4858,7 +4858,7 @@ msgstr "Bolo nájdených viac ako momentálne zobrazených %1$s položiek"
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:444
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:84 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:109
-#: apps/io.ox/core/folder/contextmenu.js:325 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:326 module:io.ox/core
 #: apps/io.ox/files/actions.js:523 module:io.ox/files
 #: apps/io.ox/files/actions.js:856 apps/io.ox/files/toolbar.js:223
 #: apps/io.ox/mail/actions.js:224 apps/io.ox/mail/actions.js:601
@@ -4964,7 +4964,7 @@ msgstr "Potrebujete viac miesta?"
 msgid "New"
 msgstr "Nový"
 
-#: apps/io.ox/core/folder/api.js:906 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:917 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:183 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "Nový priečinok"
@@ -5045,7 +5045,7 @@ msgstr "Nové heslo"
 msgid "New rule"
 msgstr "Nové pravidlo"
 
-#: apps/io.ox/core/folder/contextmenu.js:498 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:499 module:io.ox/core
 msgid "New subscription"
 msgstr "Nový odber"
 
@@ -5078,7 +5078,7 @@ msgid "New task reminders"
 msgstr "Nové pripomenutia úloh"
 
 #: apps/io.ox/core/tk/wizard.js:408 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:121
+#: apps/io.ox/core/viewer/views/displayerview.js:123
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
@@ -5356,7 +5356,7 @@ msgstr "Režime offline"
 msgid "Offline mode"
 msgstr "Režime offline"
 
-#: apps/io.ox/core/folder/picker.js:64 module:io.ox/core
+#: apps/io.ox/core/folder/picker.js:65 module:io.ox/core
 #: apps/io.ox/core/relogin.js:59 apps/io.ox/core/tk/filestorageUtil.js:37
 #: apps/io.ox/core/tk/mobiscroll.js:33
 msgid "Ok"
@@ -5646,7 +5646,7 @@ msgstr "Ľudia"
 msgid "Permanently remove deleted emails"
 msgstr "Trvale odstrániť zmazané poštové správy"
 
-#: apps/io.ox/core/folder/contextmenu.js:462 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:463 module:io.ox/core
 msgid "Permissions"
 msgstr "Oprávnenia"
 
@@ -6042,7 +6042,7 @@ msgstr "Stlačením [Enter] otvoríte"
 msgid "Preview"
 msgstr "Náhľad"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:120 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:122 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53 module:io.ox/core/wizard
 msgid "Previous"
 msgstr "Predošlé"
@@ -6149,12 +6149,12 @@ msgstr "Priebeh %1$s %"
 msgid "Progress in %"
 msgstr "Priebeh v %"
 
-#: apps/io.ox/tasks/model.js:146 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:168 module:io.ox/tasks
 msgid "Progress must be a valid number between 0 and 100"
 msgstr "Priebeh musí byť platné číslo medzi 0 a 100"
 
 #: apps/io.ox/core/folder/actions/properties.js:46 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:544
+#: apps/io.ox/core/folder/contextmenu.js:545
 msgid "Properties"
 msgstr "Vlastnosti"
 
@@ -6356,11 +6356,11 @@ msgstr "Obnovenie hesiel"
 msgid "Recruiter"
 msgstr "Náborár"
 
-#: apps/io.ox/tasks/model.js:166 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:188 module:io.ox/tasks
 msgid "Recurring tasks need a valid due date."
 msgstr "Opakujúce sa úlohy potrebujú platný dátum konca."
 
-#: apps/io.ox/tasks/model.js:156 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:178 module:io.ox/tasks
 msgid "Recurring tasks need a valid start date."
 msgstr "Opakujúce sa úlohy musia mať platný dátum začiatku."
 
@@ -6494,7 +6494,7 @@ msgid "Remove member"
 msgstr "Odstrániť člena"
 
 #: apps/io.ox/core/folder/actions/rename.js:65 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:273
+#: apps/io.ox/core/folder/contextmenu.js:274
 #: apps/io.ox/core/viewer/views/toolbarview.js:199
 #: apps/io.ox/files/actions.js:836 module:io.ox/files
 #: apps/io.ox/files/actions/rename.js:68 apps/io.ox/files/actions/rename.js:73
@@ -6815,7 +6815,7 @@ msgid "Select file"
 msgstr "Vybrať súbor"
 
 #: apps/io.ox/calendar/edit/extensions.js:131 module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/picker.js:74 module:io.ox/core
+#: apps/io.ox/core/folder/picker.js:75 module:io.ox/core
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:797
 #: module:io.ox/settings
 msgid "Select folder"
@@ -7043,7 +7043,7 @@ msgstr "Zdieľané úlohy"
 msgid "Shares"
 msgstr "Zdieľané"
 
-#: apps/io.ox/core/folder/contextmenu.js:453 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:454 module:io.ox/core
 msgid "Sharing"
 msgstr "Zdieľané"
 
@@ -7051,7 +7051,7 @@ msgstr "Zdieľané"
 msgid "Shopping cart"
 msgstr "Nákupný košík"
 
-#: apps/io.ox/core/folder/contextmenu.js:578 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:579 module:io.ox/core
 msgid "Show"
 msgstr "Zobraziť"
 
@@ -7949,7 +7949,7 @@ msgstr ""
 "Nastavenie vyžaduje obnovenie stránky alebo opätovné prihlásenie, aby sa "
 "prejavilo."
 
-#: apps/io.ox/tasks/model.js:102 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:124 module:io.ox/tasks
 msgid "The start date must be before the due date."
 msgstr "Dátum začiatku musí byť pred dátumom konca."
 
@@ -7993,7 +7993,7 @@ msgstr ""
 "Neobnoviteľné položky boli úspešne vyčistené. Zmeny budete vidieť po "
 "obnovení tejto stránky."
 
-#: apps/io.ox/files/filepicker.js:197 module:io.ox/files
+#: apps/io.ox/files/filepicker.js:199 module:io.ox/files
 msgid "The uploaded file does not match the requested file type."
 msgid_plural "None of the uploaded files matches the requested file type."
 msgstr[0] "Nahraný súbor nie je požadovaného typu."
@@ -8558,7 +8558,7 @@ msgstr "Nahrať"
 msgid "Upload file"
 msgstr "Nahrať nový súbor"
 
-#: apps/io.ox/files/filepicker.js:216 module:io.ox/files
+#: apps/io.ox/files/filepicker.js:218 module:io.ox/files
 msgid "Upload local file"
 msgstr "Nahrať lokálny súbor"
 
@@ -8623,7 +8623,7 @@ msgstr "Použiť vlastné meno"
 msgid "Use fixed-width font for text mails"
 msgstr "Používať proporcionálne písmo pre text emailov"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:122 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:124 module:io.ox/core
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
 msgstr ""

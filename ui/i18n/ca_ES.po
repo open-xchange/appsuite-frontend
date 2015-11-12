@@ -158,8 +158,8 @@ msgstr[1] "%1$d minuts"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
 #. text of a presentation slide caption
-#: apps/io.ox/core/viewer/views/displayerview.js:146 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:575
+#: apps/io.ox/core/viewer/views/displayerview.js:148 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:577
 #: apps/io.ox/presenter/views/presentationview.js:370 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$s of %2$s"
@@ -671,7 +671,7 @@ msgctxt "help"
 msgid "Accessing Files with WebDAV"
 msgstr "Accés a fitxers amb WebDAV"
 
-#: apps/io.ox/core/folder/api.js:489 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:500 module:io.ox/core
 msgid "Accessing global address book is not permitted"
 msgstr "L'accés a la llibreta d'adreces global no està permès"
 
@@ -875,7 +875,7 @@ msgid "Add new calendar"
 msgstr "Afegeix al calendari"
 
 #: apps/io.ox/core/folder/actions/add.js:57 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:248
+#: apps/io.ox/core/folder/contextmenu.js:249
 #: apps/io.ox/core/folder/extensions.js:597 apps/io.ox/files/actions.js:689
 #: module:io.ox/files
 #, fuzzy
@@ -1104,7 +1104,7 @@ msgstr ""
 "Tots els missatges de més de %1$d dies d'antiguitat seran moguts a la "
 "carpeta d'arxiu"
 
-#: apps/io.ox/core/folder/api.js:375 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:386 module:io.ox/core
 #, fuzzy
 #| msgid "Appointments"
 msgid "All my appointments"
@@ -1281,7 +1281,7 @@ msgstr "Arxiu"
 
 #. Verb: (to) archive messages
 #: apps/io.ox/core/folder/actions/archive.js:43 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:197 apps/io.ox/mail/actions.js:622
+#: apps/io.ox/core/folder/contextmenu.js:198 apps/io.ox/mail/actions.js:622
 #: module:io.ox/mail apps/io.ox/mail/mobile-toolbar-actions.js:116
 #: apps/io.ox/mail/toolbar.js:113
 msgctxt "verb"
@@ -1608,7 +1608,7 @@ msgstr "Calendari"
 #: apps/io.ox/core/folder/actions/common.js:47
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
-#: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:188
+#: apps/io.ox/core/folder/picker.js:99 apps/io.ox/core/import/import.js:188
 #: apps/io.ox/core/main.js:515 apps/io.ox/core/main.js:1502
 #: apps/io.ox/core/permissions/permissions.js:372
 #: apps/io.ox/core/permissions/permissions.js:405 apps/io.ox/core/print.js:113
@@ -1705,8 +1705,8 @@ msgid_plural "Cannot print these items"
 msgstr[0] "No s'ha pogut imprimir aquest element"
 msgstr[1] "No s'han pogut imprimir aquests elements"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:177 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:244
+#: apps/io.ox/core/viewer/views/displayerview.js:179 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:246
 msgid "Cannot require a view type for %1$s"
 msgstr ""
 
@@ -2163,13 +2163,13 @@ msgstr "Copia"
 msgid "Copy to description"
 msgstr "Copia a la descripció"
 
-#: apps/io.ox/tasks/model.js:113 module:io.ox/tasks
-#: apps/io.ox/tasks/model.js:122
+#: apps/io.ox/tasks/model.js:135 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:144
 msgid "Costs must be between -%1$d and %1$d."
 msgstr "Els costs han d'estar entre -%1$d i %1$d."
 
-#: apps/io.ox/tasks/model.js:134 module:io.ox/tasks
-#: apps/io.ox/tasks/model.js:137
+#: apps/io.ox/tasks/model.js:156 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:159
 msgid "Costs must only have two decimal places."
 msgstr "Els costs han de tenir tan sols 2 decimals."
 
@@ -2207,7 +2207,7 @@ msgstr "No s'han pogut desar els ajustaments"
 msgid "Could not save settings."
 msgstr "No s'han pogut carregar les preferències"
 
-#: apps/io.ox/core/folder/api.js:842 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:853 module:io.ox/core
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -2486,7 +2486,7 @@ msgstr "Ajornada"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:78 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:85
 #: apps/io.ox/core/folder/actions/remove.js:33 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:298
+#: apps/io.ox/core/folder/contextmenu.js:299
 #: apps/io.ox/core/sub/settings/pane.js:184 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:186
 #: apps/io.ox/core/viewer/views/toolbarview.js:279
@@ -2959,7 +2959,7 @@ msgstr "Descarrega %s per %s"
 msgid "Download %s via the OX Updater"
 msgstr "Descarrega %s via OX Updater"
 
-#: apps/io.ox/core/folder/contextmenu.js:353 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:354 module:io.ox/core
 msgid "Download entire folder"
 msgstr "Descarrega la carpeta sencera"
 
@@ -3300,7 +3300,7 @@ msgid "Empty"
 msgstr "Buit"
 
 #: apps/io.ox/core/folder/actions/common.js:46 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:215
+#: apps/io.ox/core/folder/contextmenu.js:216
 msgid "Empty folder"
 msgstr "Buidar carpeta"
 
@@ -3536,7 +3536,7 @@ msgid "Expires on"
 msgstr "Venç en"
 
 #: apps/io.ox/core/export/export.js:103 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:382
+#: apps/io.ox/core/folder/contextmenu.js:383
 msgid "Export"
 msgstr "Exporta"
 
@@ -3759,8 +3759,8 @@ msgstr ""
 msgid "File: %1$s"
 msgstr "Fitxer: %1$s"
 
-#: apps/io.ox/files/filepicker.js:73 module:io.ox/files
-#: apps/io.ox/files/filepicker.js:120
+#: apps/io.ox/files/filepicker.js:76 module:io.ox/files
+#: apps/io.ox/files/filepicker.js:123
 #, fuzzy
 #| msgid "File"
 msgid "Files"
@@ -3878,8 +3878,8 @@ msgstr "Accions específiques de carpeta"
 #: apps/io.ox/calendar/main.js:222 apps/io.ox/calendar/main.js:229
 #: apps/io.ox/contacts/main.js:369 module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:376 apps/io.ox/core/folder/view.js:308
-#: module:io.ox/core apps/io.ox/files/filepicker.js:64 module:io.ox/files
-#: apps/io.ox/files/filepicker.js:82 apps/io.ox/files/main.js:161
+#: module:io.ox/core apps/io.ox/files/filepicker.js:67 module:io.ox/files
+#: apps/io.ox/files/filepicker.js:85 apps/io.ox/files/main.js:161
 #: apps/io.ox/files/main.js:168 apps/io.ox/mail/main.js:146 module:io.ox/mail
 #: apps/io.ox/mail/main.js:153 apps/io.ox/tasks/main.js:155 module:io.ox/tasks
 #: apps/io.ox/tasks/main.js:162
@@ -4001,7 +4001,7 @@ msgstr "Obtén %s"
 msgid "Get free upgrade"
 msgstr "Obtén una actualització gratuïta"
 
-#: apps/io.ox/core/folder/contextmenu.js:473 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:474 module:io.ox/core
 #: apps/io.ox/files/actions.js:706 module:io.ox/files
 #: apps/io.ox/files/actions.js:826
 #, fuzzy
@@ -4119,7 +4119,7 @@ msgstr "Carpetes ocultes"
 msgid "Hidden tasks"
 msgstr "Imprimeix les tasques"
 
-#: apps/io.ox/core/folder/contextmenu.js:578 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:579 module:io.ox/core
 msgid "Hide"
 msgstr "Amaga"
 
@@ -4319,7 +4319,7 @@ msgstr "Imatge 1"
 msgid "Images"
 msgstr "Imatge 1"
 
-#: apps/io.ox/core/folder/contextmenu.js:409 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:410 module:io.ox/core
 #: apps/io.ox/core/import/import.js:187
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:257 module:io.ox/mail
 msgid "Import"
@@ -4465,7 +4465,7 @@ msgstr "Convida"
 msgid "Invite owner"
 msgstr "Convida gent"
 
-#: apps/io.ox/core/folder/contextmenu.js:462 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:463 module:io.ox/core
 #: apps/io.ox/files/actions.js:697 module:io.ox/files
 #: apps/io.ox/files/actions.js:816
 msgid "Invite people"
@@ -5178,7 +5178,7 @@ msgstr "S'han trobat més elements que els %1$s que es mostren a continuació"
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:444
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:84 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:109
-#: apps/io.ox/core/folder/contextmenu.js:325 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:326 module:io.ox/core
 #: apps/io.ox/files/actions.js:523 module:io.ox/files
 #: apps/io.ox/files/actions.js:856 apps/io.ox/files/toolbar.js:223
 #: apps/io.ox/mail/actions.js:224 apps/io.ox/mail/actions.js:601
@@ -5292,7 +5292,7 @@ msgstr ""
 msgid "New"
 msgstr "Nou"
 
-#: apps/io.ox/core/folder/api.js:906 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:917 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:183 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "Nova carpeta"
@@ -5389,7 +5389,7 @@ msgstr "Nova contrasenya"
 msgid "New rule"
 msgstr "Nova regla"
 
-#: apps/io.ox/core/folder/contextmenu.js:498 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:499 module:io.ox/core
 msgid "New subscription"
 msgstr "Nova subscripció"
 
@@ -5430,7 +5430,7 @@ msgid "New task reminders"
 msgstr "Recordatoris de tasques"
 
 #: apps/io.ox/core/tk/wizard.js:408 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:121
+#: apps/io.ox/core/viewer/views/displayerview.js:123
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
@@ -5715,7 +5715,7 @@ msgstr "Desconnectat"
 msgid "Offline mode"
 msgstr "Mode desconnectat"
 
-#: apps/io.ox/core/folder/picker.js:64 module:io.ox/core
+#: apps/io.ox/core/folder/picker.js:65 module:io.ox/core
 #: apps/io.ox/core/relogin.js:59 apps/io.ox/core/tk/filestorageUtil.js:37
 #: apps/io.ox/core/tk/mobiscroll.js:33
 msgid "Ok"
@@ -6013,7 +6013,7 @@ msgstr "Gent"
 msgid "Permanently remove deleted emails"
 msgstr "Elimina definitivament els correus suprimits"
 
-#: apps/io.ox/core/folder/contextmenu.js:462 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:463 module:io.ox/core
 msgid "Permissions"
 msgstr "Permisos"
 
@@ -6440,7 +6440,7 @@ msgstr "Nou correu de %1$s %2$s. Premeu [intro] per a obrir-lo"
 msgid "Preview"
 msgstr "Vista prèvia"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:120 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:122 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53 module:io.ox/core/wizard
 msgid "Previous"
 msgstr "Anterior"
@@ -6557,12 +6557,12 @@ msgstr "Progrés %1$s %"
 msgid "Progress in %"
 msgstr "Progrés en %"
 
-#: apps/io.ox/tasks/model.js:146 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:168 module:io.ox/tasks
 msgid "Progress must be a valid number between 0 and 100"
 msgstr "El progrés ha de ser un nombre vàlid entre 0 i 100"
 
 #: apps/io.ox/core/folder/actions/properties.js:46 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:544
+#: apps/io.ox/core/folder/contextmenu.js:545
 msgid "Properties"
 msgstr "Propietats"
 
@@ -6783,11 +6783,11 @@ msgstr "Recupera contrasenyes"
 msgid "Recruiter"
 msgstr "Reclutador"
 
-#: apps/io.ox/tasks/model.js:166 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:188 module:io.ox/tasks
 msgid "Recurring tasks need a valid due date."
 msgstr "Les tasques periòdiques necessiten una data de finalització vàlida."
 
-#: apps/io.ox/tasks/model.js:156 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:178 module:io.ox/tasks
 msgid "Recurring tasks need a valid start date."
 msgstr "Les tasques periòdiques necessiten una data d'inici vàlida."
 
@@ -6929,7 +6929,7 @@ msgid "Remove member"
 msgstr "novembre"
 
 #: apps/io.ox/core/folder/actions/rename.js:65 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:273
+#: apps/io.ox/core/folder/contextmenu.js:274
 #: apps/io.ox/core/viewer/views/toolbarview.js:199
 #: apps/io.ox/files/actions.js:836 module:io.ox/files
 #: apps/io.ox/files/actions/rename.js:68 apps/io.ox/files/actions/rename.js:73
@@ -7264,7 +7264,7 @@ msgid "Select file"
 msgstr "Selecciona carpeta"
 
 #: apps/io.ox/calendar/edit/extensions.js:131 module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/picker.js:74 module:io.ox/core
+#: apps/io.ox/core/folder/picker.js:75 module:io.ox/core
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:797
 #: module:io.ox/settings
 msgid "Select folder"
@@ -7508,7 +7508,7 @@ msgstr "Compartit"
 msgid "Shares"
 msgstr "Comparteix"
 
-#: apps/io.ox/core/folder/contextmenu.js:453 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:454 module:io.ox/core
 #, fuzzy
 #| msgid "Share"
 msgid "Sharing"
@@ -7518,7 +7518,7 @@ msgstr "Comparteix"
 msgid "Shopping cart"
 msgstr "Cistella de la compra"
 
-#: apps/io.ox/core/folder/contextmenu.js:578 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:579 module:io.ox/core
 msgid "Show"
 msgstr "Mostra"
 
@@ -8477,7 +8477,7 @@ msgstr ""
 msgid "The setting requires a reload or relogin to take effect."
 msgstr "La configuració requereix una recàrrega o reinici per a ser efectiva."
 
-#: apps/io.ox/tasks/model.js:102 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:124 module:io.ox/tasks
 msgid "The start date must be before the due date."
 msgstr "La data d'inici ha de ser anterior a la de finalització."
 
@@ -8518,7 +8518,7 @@ msgstr ""
 "Els elements no recuperables s'han netejat satisfactòriament. Per favor, "
 "recarregau aquesta pàgina per a veure'n els canvis."
 
-#: apps/io.ox/files/filepicker.js:197 module:io.ox/files
+#: apps/io.ox/files/filepicker.js:199 module:io.ox/files
 msgid "The uploaded file does not match the requested file type."
 msgid_plural "None of the uploaded files matches the requested file type."
 msgstr[0] ""
@@ -9126,7 +9126,7 @@ msgstr "Pujant..."
 msgid "Upload file"
 msgstr "Puja un nou fitxer"
 
-#: apps/io.ox/files/filepicker.js:216 module:io.ox/files
+#: apps/io.ox/files/filepicker.js:218 module:io.ox/files
 #, fuzzy
 #| msgid "Upload file"
 msgid "Upload local file"
@@ -9201,7 +9201,7 @@ msgstr "Nom d'usuari"
 msgid "Use fixed-width font for text mails"
 msgstr "Empra fonts d'amplada fixa per a correus de text"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:122 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:124 module:io.ox/core
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
 msgstr ""

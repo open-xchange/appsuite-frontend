@@ -206,7 +206,7 @@ msgstr ""
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:84
 #: module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:109
-#: apps/io.ox/core/folder/contextmenu.js:325
+#: apps/io.ox/core/folder/contextmenu.js:326
 #: module:io.ox/core
 #: apps/io.ox/files/actions.js:523
 #: module:io.ox/files
@@ -301,7 +301,7 @@ msgstr ""
 #: apps/io.ox/contacts/toolbar.js:85
 #: apps/io.ox/core/folder/actions/remove.js:33
 #: module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:298
+#: apps/io.ox/core/folder/contextmenu.js:299
 #: apps/io.ox/core/sub/settings/pane.js:184
 #: module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:186
@@ -477,7 +477,7 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/common.js:47
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
-#: apps/io.ox/core/folder/picker.js:97
+#: apps/io.ox/core/folder/picker.js:99
 #: apps/io.ox/core/import/import.js:188
 #: apps/io.ox/core/main.js:515
 #: apps/io.ox/core/main.js:1502
@@ -756,7 +756,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js:131
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/picker.js:74
+#: apps/io.ox/core/folder/picker.js:75
 #: module:io.ox/core
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:797
 #: module:io.ox/settings
@@ -1585,9 +1585,9 @@ msgstr ""
 #: apps/io.ox/contacts/main.js:376
 #: apps/io.ox/core/folder/view.js:308
 #: module:io.ox/core
-#: apps/io.ox/files/filepicker.js:64
+#: apps/io.ox/files/filepicker.js:67
 #: module:io.ox/files
-#: apps/io.ox/files/filepicker.js:82
+#: apps/io.ox/files/filepicker.js:85
 #: apps/io.ox/files/main.js:161
 #: apps/io.ox/files/main.js:168
 #: apps/io.ox/mail/main.js:146
@@ -3884,7 +3884,7 @@ msgstr ""
 
 #: apps/io.ox/core/export/export.js:103
 #: module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:382
+#: apps/io.ox/core/folder/contextmenu.js:383
 msgid "Export"
 msgstr ""
 
@@ -3904,7 +3904,7 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/add.js:57
 #: module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:248
+#: apps/io.ox/core/folder/contextmenu.js:249
 #: apps/io.ox/core/folder/extensions.js:597
 #: apps/io.ox/files/actions.js:689
 #: module:io.ox/files
@@ -3962,7 +3962,7 @@ msgstr ""
 #. Verb: (to) archive messages
 #: apps/io.ox/core/folder/actions/archive.js:43
 #: module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:197
+#: apps/io.ox/core/folder/contextmenu.js:198
 #: apps/io.ox/mail/actions.js:622
 #: module:io.ox/mail
 #: apps/io.ox/mail/mobile-toolbar-actions.js:116
@@ -3988,7 +3988,7 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/common.js:46
 #: module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:215
+#: apps/io.ox/core/folder/contextmenu.js:216
 msgid "Empty folder"
 msgstr ""
 
@@ -4024,7 +4024,7 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/properties.js:46
 #: module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:544
+#: apps/io.ox/core/folder/contextmenu.js:545
 msgid "Properties"
 msgstr ""
 
@@ -4067,7 +4067,7 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/rename.js:65
 #: module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:273
+#: apps/io.ox/core/folder/contextmenu.js:274
 #: apps/io.ox/core/viewer/views/toolbarview.js:199
 #: apps/io.ox/files/actions.js:836
 #: module:io.ox/files
@@ -4096,22 +4096,22 @@ msgstr ""
 msgid "%1$s: %2$s"
 msgstr ""
 
-#: apps/io.ox/core/folder/api.js:375
+#: apps/io.ox/core/folder/api.js:386
 #: module:io.ox/core
 msgid "All my appointments"
 msgstr ""
 
-#: apps/io.ox/core/folder/api.js:489
+#: apps/io.ox/core/folder/api.js:500
 #: module:io.ox/core
 msgid "Accessing global address book is not permitted"
 msgstr ""
 
-#: apps/io.ox/core/folder/api.js:842
+#: apps/io.ox/core/folder/api.js:853
 #: module:io.ox/core
 msgid "Could not save settings. There have to be at least one user with administration rights."
 msgstr ""
 
-#: apps/io.ox/core/folder/api.js:906
+#: apps/io.ox/core/folder/api.js:917
 #: module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:183
 #: module:io.ox/core/sub
@@ -4133,12 +4133,12 @@ msgstr ""
 msgid "Clean up"
 msgstr ""
 
-#: apps/io.ox/core/folder/contextmenu.js:353
+#: apps/io.ox/core/folder/contextmenu.js:354
 #: module:io.ox/core
 msgid "Download entire folder"
 msgstr ""
 
-#: apps/io.ox/core/folder/contextmenu.js:409
+#: apps/io.ox/core/folder/contextmenu.js:410
 #: module:io.ox/core
 #: apps/io.ox/core/import/import.js:187
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:257
@@ -4146,17 +4146,17 @@ msgstr ""
 msgid "Import"
 msgstr ""
 
-#: apps/io.ox/core/folder/contextmenu.js:453
+#: apps/io.ox/core/folder/contextmenu.js:454
 #: module:io.ox/core
 msgid "Sharing"
 msgstr ""
 
-#: apps/io.ox/core/folder/contextmenu.js:462
+#: apps/io.ox/core/folder/contextmenu.js:463
 #: module:io.ox/core
 msgid "Permissions"
 msgstr ""
 
-#: apps/io.ox/core/folder/contextmenu.js:462
+#: apps/io.ox/core/folder/contextmenu.js:463
 #: module:io.ox/core
 #: apps/io.ox/files/actions.js:697
 #: module:io.ox/files
@@ -4164,7 +4164,7 @@ msgstr ""
 msgid "Invite people"
 msgstr ""
 
-#: apps/io.ox/core/folder/contextmenu.js:473
+#: apps/io.ox/core/folder/contextmenu.js:474
 #: module:io.ox/core
 #: apps/io.ox/files/actions.js:706
 #: module:io.ox/files
@@ -4172,17 +4172,17 @@ msgstr ""
 msgid "Get link"
 msgstr ""
 
-#: apps/io.ox/core/folder/contextmenu.js:498
+#: apps/io.ox/core/folder/contextmenu.js:499
 #: module:io.ox/core
 msgid "New subscription"
 msgstr ""
 
-#: apps/io.ox/core/folder/contextmenu.js:578
+#: apps/io.ox/core/folder/contextmenu.js:579
 #: module:io.ox/core
 msgid "Show"
 msgstr ""
 
-#: apps/io.ox/core/folder/contextmenu.js:578
+#: apps/io.ox/core/folder/contextmenu.js:579
 #: module:io.ox/core
 msgid "Hide"
 msgstr ""
@@ -4326,7 +4326,7 @@ msgstr ""
 msgid "Folder-specific actions"
 msgstr ""
 
-#: apps/io.ox/core/folder/picker.js:64
+#: apps/io.ox/core/folder/picker.js:65
 #: module:io.ox/core
 #: apps/io.ox/core/relogin.js:59
 #: apps/io.ox/core/tk/filestorageUtil.js:37
@@ -5852,7 +5852,7 @@ msgstr ""
 
 #: apps/io.ox/core/tk/wizard.js:408
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:121
+#: apps/io.ox/core/viewer/views/displayerview.js:123
 #: apps/io.ox/core/wizard/registry.js:47
 #: module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80
@@ -5885,14 +5885,14 @@ msgstr ""
 msgid "Get free upgrade"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/displayerview.js:120
+#: apps/io.ox/core/viewer/views/displayerview.js:122
 #: module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53
 #: module:io.ox/core/wizard
 msgid "Previous"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/displayerview.js:122
+#: apps/io.ox/core/viewer/views/displayerview.js:124
 #: module:io.ox/core
 msgid "Use left/right arrow keys to navigate and escape key to exit the viewer."
 msgstr ""
@@ -5902,17 +5902,17 @@ msgstr ""
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
 #. text of a presentation slide caption
-#: apps/io.ox/core/viewer/views/displayerview.js:146
+#: apps/io.ox/core/viewer/views/displayerview.js:148
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:575
+#: apps/io.ox/core/viewer/views/displayerview.js:577
 #: apps/io.ox/presenter/views/presentationview.js:370
 #: module:io.ox/presenter
 msgid "%1$d of %2$d"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/displayerview.js:177
+#: apps/io.ox/core/viewer/views/displayerview.js:179
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:244
+#: apps/io.ox/core/viewer/views/displayerview.js:246
 msgid "Cannot require a view type for %1$s"
 msgstr ""
 
@@ -6632,20 +6632,20 @@ msgstr ""
 msgid "Add files"
 msgstr ""
 
-#: apps/io.ox/files/filepicker.js:73
+#: apps/io.ox/files/filepicker.js:76
 #: module:io.ox/files
-#: apps/io.ox/files/filepicker.js:120
+#: apps/io.ox/files/filepicker.js:123
 msgid "Files"
 msgstr ""
 
-#: apps/io.ox/files/filepicker.js:197
+#: apps/io.ox/files/filepicker.js:199
 #: module:io.ox/files
 msgid "The uploaded file does not match the requested file type."
 msgid_plural "None of the uploaded files matches the requested file type."
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/io.ox/files/filepicker.js:216
+#: apps/io.ox/files/filepicker.js:218
 #: module:io.ox/files
 msgid "Upload local file"
 msgstr ""
@@ -10010,34 +10010,34 @@ msgstr ""
 msgid "Show done tasks"
 msgstr ""
 
-#: apps/io.ox/tasks/model.js:102
+#: apps/io.ox/tasks/model.js:124
 #: module:io.ox/tasks
 msgid "The start date must be before the due date."
 msgstr ""
 
-#: apps/io.ox/tasks/model.js:113
+#: apps/io.ox/tasks/model.js:135
 #: module:io.ox/tasks
-#: apps/io.ox/tasks/model.js:122
+#: apps/io.ox/tasks/model.js:144
 msgid "Costs must be between -%1$d and %1$d."
-msgstr ""
-
-#: apps/io.ox/tasks/model.js:134
-#: module:io.ox/tasks
-#: apps/io.ox/tasks/model.js:137
-msgid "Costs must only have two decimal places."
-msgstr ""
-
-#: apps/io.ox/tasks/model.js:146
-#: module:io.ox/tasks
-msgid "Progress must be a valid number between 0 and 100"
 msgstr ""
 
 #: apps/io.ox/tasks/model.js:156
 #: module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:159
+msgid "Costs must only have two decimal places."
+msgstr ""
+
+#: apps/io.ox/tasks/model.js:168
+#: module:io.ox/tasks
+msgid "Progress must be a valid number between 0 and 100"
+msgstr ""
+
+#: apps/io.ox/tasks/model.js:178
+#: module:io.ox/tasks
 msgid "Recurring tasks need a valid start date."
 msgstr ""
 
-#: apps/io.ox/tasks/model.js:166
+#: apps/io.ox/tasks/model.js:188
 #: module:io.ox/tasks
 msgid "Recurring tasks need a valid due date."
 msgstr ""

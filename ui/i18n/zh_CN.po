@@ -144,8 +144,8 @@ msgstr[1] "%1$d 分钟"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
 #. text of a presentation slide caption
-#: apps/io.ox/core/viewer/views/displayerview.js:146 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:575
+#: apps/io.ox/core/viewer/views/displayerview.js:148 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:577
 #: apps/io.ox/presenter/views/presentationview.js:370 module:io.ox/presenter
 msgid "%1$d of %2$d"
 msgstr "%2$s 的 %1$s"
@@ -607,7 +607,7 @@ msgctxt "help"
 msgid "Accessing Files with WebDAV"
 msgstr "以 WebDAV 访问文件"
 
-#: apps/io.ox/core/folder/api.js:489 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:500 module:io.ox/core
 msgid "Accessing global address book is not permitted"
 msgstr "不允许访问全域地址簿"
 
@@ -784,7 +784,7 @@ msgid "Add new calendar"
 msgstr "添加新日历"
 
 #: apps/io.ox/core/folder/actions/add.js:57 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:248
+#: apps/io.ox/core/folder/contextmenu.js:249
 #: apps/io.ox/core/folder/extensions.js:597 apps/io.ox/files/actions.js:689
 #: module:io.ox/files
 msgid "Add new folder"
@@ -990,7 +990,7 @@ msgstr "所有文件夹"
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr "所有超过 %1$d 天的消息将会移到归档文件夹"
 
-#: apps/io.ox/core/folder/api.js:375 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:386 module:io.ox/core
 msgid "All my appointments"
 msgstr "我所有的约会"
 
@@ -1151,7 +1151,7 @@ msgstr "归档"
 
 #. Verb: (to) archive messages
 #: apps/io.ox/core/folder/actions/archive.js:43 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:197 apps/io.ox/mail/actions.js:622
+#: apps/io.ox/core/folder/contextmenu.js:198 apps/io.ox/mail/actions.js:622
 #: module:io.ox/mail apps/io.ox/mail/mobile-toolbar-actions.js:116
 #: apps/io.ox/mail/toolbar.js:113
 msgctxt "verb"
@@ -1468,7 +1468,7 @@ msgstr "日历："
 #: apps/io.ox/core/folder/actions/common.js:47
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
-#: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:188
+#: apps/io.ox/core/folder/picker.js:99 apps/io.ox/core/import/import.js:188
 #: apps/io.ox/core/main.js:515 apps/io.ox/core/main.js:1502
 #: apps/io.ox/core/permissions/permissions.js:372
 #: apps/io.ox/core/permissions/permissions.js:405 apps/io.ox/core/print.js:113
@@ -1558,8 +1558,8 @@ msgid_plural "Cannot print these items"
 msgstr[0] "无法打印此项目"
 msgstr[1] "无法打印此项目"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:177 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:244
+#: apps/io.ox/core/viewer/views/displayerview.js:179 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:246
 msgid "Cannot require a view type for %1$s"
 msgstr ""
 
@@ -1992,13 +1992,13 @@ msgstr "复制"
 msgid "Copy to description"
 msgstr "复制到描述"
 
-#: apps/io.ox/tasks/model.js:113 module:io.ox/tasks
-#: apps/io.ox/tasks/model.js:122
+#: apps/io.ox/tasks/model.js:135 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:144
 msgid "Costs must be between -%1$d and %1$d."
 msgstr "支出必须在 -%1$d 到 %1$d 之间。"
 
-#: apps/io.ox/tasks/model.js:134 module:io.ox/tasks
-#: apps/io.ox/tasks/model.js:137
+#: apps/io.ox/tasks/model.js:156 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:159
 msgid "Costs must only have two decimal places."
 msgstr "花费只能有两个小数位。"
 
@@ -2035,7 +2035,7 @@ msgstr "不能保存设定"
 msgid "Could not save settings."
 msgstr "不能保存设定。"
 
-#: apps/io.ox/core/folder/api.js:842 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:853 module:io.ox/core
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -2288,7 +2288,7 @@ msgstr "延迟"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:78 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:85
 #: apps/io.ox/core/folder/actions/remove.js:33 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:298
+#: apps/io.ox/core/folder/contextmenu.js:299
 #: apps/io.ox/core/sub/settings/pane.js:184 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:186
 #: apps/io.ox/core/viewer/views/toolbarview.js:279
@@ -2726,7 +2726,7 @@ msgstr "立刻下载 %s（为  %s）"
 msgid "Download %s via the OX Updater"
 msgstr "经由 OX 更新器下载 %s"
 
-#: apps/io.ox/core/folder/contextmenu.js:353 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:354 module:io.ox/core
 msgid "Download entire folder"
 msgstr "下载完整文件夹"
 
@@ -3040,7 +3040,7 @@ msgid "Empty"
 msgstr "空置"
 
 #: apps/io.ox/core/folder/actions/common.js:46 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:215
+#: apps/io.ox/core/folder/contextmenu.js:216
 msgid "Empty folder"
 msgstr "空文件夹"
 
@@ -3262,7 +3262,7 @@ msgid "Expires on"
 msgstr "过期于"
 
 #: apps/io.ox/core/export/export.js:103 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:382
+#: apps/io.ox/core/folder/contextmenu.js:383
 msgid "Export"
 msgstr "导出"
 
@@ -3460,8 +3460,8 @@ msgstr "文件版本表格，第一行代表当前版本。"
 msgid "File: %1$s"
 msgstr "文件：%1$s"
 
-#: apps/io.ox/files/filepicker.js:73 module:io.ox/files
-#: apps/io.ox/files/filepicker.js:120
+#: apps/io.ox/files/filepicker.js:76 module:io.ox/files
+#: apps/io.ox/files/filepicker.js:123
 msgid "Files"
 msgstr "文件"
 
@@ -3575,8 +3575,8 @@ msgstr "文件夹指定动作"
 #: apps/io.ox/calendar/main.js:222 apps/io.ox/calendar/main.js:229
 #: apps/io.ox/contacts/main.js:369 module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:376 apps/io.ox/core/folder/view.js:308
-#: module:io.ox/core apps/io.ox/files/filepicker.js:64 module:io.ox/files
-#: apps/io.ox/files/filepicker.js:82 apps/io.ox/files/main.js:161
+#: module:io.ox/core apps/io.ox/files/filepicker.js:67 module:io.ox/files
+#: apps/io.ox/files/filepicker.js:85 apps/io.ox/files/main.js:161
 #: apps/io.ox/files/main.js:168 apps/io.ox/mail/main.js:146 module:io.ox/mail
 #: apps/io.ox/mail/main.js:153 apps/io.ox/tasks/main.js:155 module:io.ox/tasks
 #: apps/io.ox/tasks/main.js:162
@@ -3687,7 +3687,7 @@ msgstr "获得 %s"
 msgid "Get free upgrade"
 msgstr "获取免费更新"
 
-#: apps/io.ox/core/folder/contextmenu.js:473 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:474 module:io.ox/core
 #: apps/io.ox/files/actions.js:706 module:io.ox/files
 #: apps/io.ox/files/actions.js:826
 msgid "Get link"
@@ -3793,7 +3793,7 @@ msgstr "隐藏日历"
 msgid "Hidden tasks"
 msgstr "隐藏任务"
 
-#: apps/io.ox/core/folder/contextmenu.js:578 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:579 module:io.ox/core
 msgid "Hide"
 msgstr "隐藏"
 
@@ -3970,7 +3970,7 @@ msgstr "图像 1"
 msgid "Images"
 msgstr "图像"
 
-#: apps/io.ox/core/folder/contextmenu.js:409 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:410 module:io.ox/core
 #: apps/io.ox/core/import/import.js:187
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:257 module:io.ox/mail
 msgid "Import"
@@ -4102,7 +4102,7 @@ msgstr "邀请"
 msgid "Invite owner"
 msgstr "邀请拥有者"
 
-#: apps/io.ox/core/folder/contextmenu.js:462 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:463 module:io.ox/core
 #: apps/io.ox/files/actions.js:697 module:io.ox/files
 #: apps/io.ox/files/actions.js:816
 msgid "Invite people"
@@ -4769,7 +4769,7 @@ msgstr "找到当前显示以外的 %1$s 个项目"
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:444
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:84 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:109
-#: apps/io.ox/core/folder/contextmenu.js:325 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:326 module:io.ox/core
 #: apps/io.ox/files/actions.js:523 module:io.ox/files
 #: apps/io.ox/files/actions.js:856 apps/io.ox/files/toolbar.js:223
 #: apps/io.ox/mail/actions.js:224 apps/io.ox/mail/actions.js:601
@@ -4875,7 +4875,7 @@ msgstr "需要更多空间？"
 msgid "New"
 msgstr "新建"
 
-#: apps/io.ox/core/folder/api.js:906 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:917 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:183 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "新文件夹"
@@ -4956,7 +4956,7 @@ msgstr "新密码"
 msgid "New rule"
 msgstr "新规则"
 
-#: apps/io.ox/core/folder/contextmenu.js:498 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:499 module:io.ox/core
 msgid "New subscription"
 msgstr "新订阅"
 
@@ -4989,7 +4989,7 @@ msgid "New task reminders"
 msgstr "新任务提醒"
 
 #: apps/io.ox/core/tk/wizard.js:408 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:121
+#: apps/io.ox/core/viewer/views/displayerview.js:123
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
@@ -5259,7 +5259,7 @@ msgstr "离线"
 msgid "Offline mode"
 msgstr "脱机模式"
 
-#: apps/io.ox/core/folder/picker.js:64 module:io.ox/core
+#: apps/io.ox/core/folder/picker.js:65 module:io.ox/core
 #: apps/io.ox/core/relogin.js:59 apps/io.ox/core/tk/filestorageUtil.js:37
 #: apps/io.ox/core/tk/mobiscroll.js:33
 msgid "Ok"
@@ -5549,7 +5549,7 @@ msgstr "人文"
 msgid "Permanently remove deleted emails"
 msgstr "永久移除已删除的电子邮件"
 
-#: apps/io.ox/core/folder/contextmenu.js:462 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:463 module:io.ox/core
 msgid "Permissions"
 msgstr "权限"
 
@@ -5938,7 +5938,7 @@ msgstr "按下 [enter] 以打开"
 msgid "Preview"
 msgstr "概览"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:120 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:122 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53 module:io.ox/core/wizard
 msgid "Previous"
 msgstr "前一个"
@@ -6045,12 +6045,12 @@ msgstr "进度 %1$s %"
 msgid "Progress in %"
 msgstr "进度 %"
 
-#: apps/io.ox/tasks/model.js:146 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:168 module:io.ox/tasks
 msgid "Progress must be a valid number between 0 and 100"
 msgstr "进度必须是 0 到 100 之间的有效数值"
 
 #: apps/io.ox/core/folder/actions/properties.js:46 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:544
+#: apps/io.ox/core/folder/contextmenu.js:545
 msgid "Properties"
 msgstr "属性"
 
@@ -6239,11 +6239,11 @@ msgstr "还原密码"
 msgid "Recruiter"
 msgstr "招募者"
 
-#: apps/io.ox/tasks/model.js:166 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:188 module:io.ox/tasks
 msgid "Recurring tasks need a valid due date."
 msgstr "重复任务需要一个有效结束日期。"
 
-#: apps/io.ox/tasks/model.js:156 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:178 module:io.ox/tasks
 msgid "Recurring tasks need a valid start date."
 msgstr "重复任务需要一个有效开始日期。"
 
@@ -6377,7 +6377,7 @@ msgid "Remove member"
 msgstr "移除成员"
 
 #: apps/io.ox/core/folder/actions/rename.js:65 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:273
+#: apps/io.ox/core/folder/contextmenu.js:274
 #: apps/io.ox/core/viewer/views/toolbarview.js:199
 #: apps/io.ox/files/actions.js:836 module:io.ox/files
 #: apps/io.ox/files/actions/rename.js:68 apps/io.ox/files/actions/rename.js:73
@@ -6694,7 +6694,7 @@ msgid "Select file"
 msgstr "选择文件"
 
 #: apps/io.ox/calendar/edit/extensions.js:131 module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/picker.js:74 module:io.ox/core
+#: apps/io.ox/core/folder/picker.js:75 module:io.ox/core
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:797
 #: module:io.ox/settings
 msgid "Select folder"
@@ -6918,7 +6918,7 @@ msgstr "已共享任务"
 msgid "Shares"
 msgstr "共享"
 
-#: apps/io.ox/core/folder/contextmenu.js:453 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:454 module:io.ox/core
 msgid "Sharing"
 msgstr "分享"
 
@@ -6926,7 +6926,7 @@ msgstr "分享"
 msgid "Shopping cart"
 msgstr "购物车"
 
-#: apps/io.ox/core/folder/contextmenu.js:578 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:579 module:io.ox/core
 msgid "Show"
 msgstr "显示为"
 
@@ -7795,7 +7795,7 @@ msgstr "设置已保存，在您下一次进入应用时会生效。"
 msgid "The setting requires a reload or relogin to take effect."
 msgstr "设置要求重新读取或登陆以生效。"
 
-#: apps/io.ox/tasks/model.js:102 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:124 module:io.ox/tasks
 msgid "The start date must be before the due date."
 msgstr "起始日期一定要在结束日期之前。"
 
@@ -7834,7 +7834,7 @@ msgid ""
 "this page to see the changes."
 msgstr "已成功清空无法还原的项目，请重新刷新此页以检视改变。"
 
-#: apps/io.ox/files/filepicker.js:197 module:io.ox/files
+#: apps/io.ox/files/filepicker.js:199 module:io.ox/files
 msgid "The uploaded file does not match the requested file type."
 msgid_plural "None of the uploaded files matches the requested file type."
 msgstr[0] "上载的文件和请求的文件类别不匹配。"
@@ -8376,7 +8376,7 @@ msgstr "上载"
 msgid "Upload file"
 msgstr "上载档案"
 
-#: apps/io.ox/files/filepicker.js:216 module:io.ox/files
+#: apps/io.ox/files/filepicker.js:218 module:io.ox/files
 msgid "Upload local file"
 msgstr "上载本地文件"
 
@@ -8438,7 +8438,7 @@ msgstr "使用自定义名称"
 msgid "Use fixed-width font for text mails"
 msgstr "文本邮件使用固定宽度"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:122 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:124 module:io.ox/core
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
 msgstr "使用左/右箭头键导航和换码键离开检视器。"
