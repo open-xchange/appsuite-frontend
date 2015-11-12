@@ -88,7 +88,7 @@ define('io.ox/mail/threadview', [
         index: 200,
         draw: function (baton) {
             var keepFirstPrefix = baton.view.collection.length === 1,
-                subject = util.getSubject(baton.view.collection.at(0).toJSON(), keepFirstPrefix),
+                subject = util.getSubject(baton.view.model.toJSON(), keepFirstPrefix),
                 node = $('<div class="subject">').text(subject);
 
             this.append(node);
