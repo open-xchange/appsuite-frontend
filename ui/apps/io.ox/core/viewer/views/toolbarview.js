@@ -384,13 +384,12 @@ define('io.ox/core/viewer/views/toolbarview', [
             return currentApp !== 'io.ox/files/detail';
         },
         action: function (baton) {
-            var fileModel,
-                currentApp = ox.ui.App.getCurrentApp().getName();
+            var fileModel;
 
-            if (currentApp === 'io.ox/mail') {
-                fileModel = { file: baton.data };
-            } else {
+            if (baton.model.isFile()) {
                 fileModel = baton.model;
+            } else {
+                fileModel = { file: baton.data };
             }
 
             ox.launch('io.ox/files/detail/main', fileModel);
