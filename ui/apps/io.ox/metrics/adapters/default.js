@@ -51,7 +51,7 @@ define('io.ox/metrics/adapters/default', [
         },
         trackPage: function (baton) {
             //_paq.push(['setUserId', this.getUserHash() ]);
-            _paq.push(['trackPageView', baton.data.trackingId || baton.data.id || baton.data.name ]);
+            _paq.push(['trackPageView', baton.data.trackingId || baton.data.name || baton.data.id ]);
         },
         trackVariable: function (data) {
             // important: index range in piwiks default settings is 1 to 5

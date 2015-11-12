@@ -24,7 +24,7 @@ define('io.ox/tasks/common-extensions', [
     var extensions = {
 
         date: function (baton, options) {
-            var data = baton.data, t = data.end_date || data.start_date || data.last_modified;
+            var data = baton.data, t = data.end_time || data.start_time || data.last_modified;
             if (!_.isNumber(t)) return;
             this.append(
                 $('<time class="date">')
@@ -79,15 +79,15 @@ define('io.ox/tasks/common-extensions', [
 
                 ox.load(['io.ox/core/tk/dialogs', 'io.ox/core/notifications']).done(function (dialogs, notifications) {
 
-                    var endDate = util.computePopupTime(finderId).endDate,
+                    var endTime = util.computePopupTime(finderId).endDate,
                         modifications = {
-                            end_date: endDate,
+                            end_time: endTime,
                             id: data.id,
                             folder_id: data.folder_id || data.folder
                         };
 
                     //check if startDate is still valid with new endDate, if not, show dialog
-                    if (data.start_date && data.start_date > endDate) {
+                    if (data.start_time && data.start_time > endTime) {
 
                         var popup = new dialogs.ModalDialog()
                             .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
@@ -105,7 +105,7 @@ define('io.ox/tasks/common-extensions', [
                             if (action === 'cancel') {
                                 notifications.yell('info', gt('Canceled'));
                             } else {
-                                modifications.start_date = modifications.end_date;
+                                modifications.start_time = modifications.end_time;
                                 api.update(modifications).done(function () {
                                     notifications.yell('success', gt('Changed due date'));
                                 });

@@ -121,6 +121,12 @@ define('io.ox/core/folder/api', [
     // no deep recursion needed here, children are sufficient
     function calculateSubtotal(model) {
         return pool.getCollection(model.id).reduce(function (total, model) {
+            // use account API so it works with non standard accounts as well
+            var type = account.getType(model.get('id'));
+            // don't count trash or spam root folders
+            if (type === 'trash' || type === 'spam') {
+                return total;
+            }
             return total + (model.get('subtotal') || 0) + (model.get('unread') || 0);
         }, 0);
     }
@@ -285,15 +291,20 @@ define('io.ox/core/folder/api', [
             }
             collection[type](models);
             collection.fetched = true;
-            if (this.models[id] && this.models[id].get('module') !== 'system') {
+            // some virtual folders have type undefined. Track subtotal for them too.
+            if (this.models[id] && (this.models[id].get('module') === 'mail' || this.models[id].get('module') === undefined)) {
                 var subtotal = 0;
                 for (var i = 0; i < models.length; i++) {
-                    subtotal += (models[i].get('subtotal') || 0) + (models[i].get('unread') || 0);
-                    // add virtual parent references
-                    if (isVirtual(id)) {
-                        var newParents = models[i].get('virtual_parents');
-                        newParents.push(id);
-                        models[i].set('virtual_parents', _.uniq(newParents));
+                    // use account API so it works with non standard accounts as well
+                    var type = account.getType(models[i].get('id'));
+                    if (type !== 'trash' && type !== 'spam') {
+                        subtotal += (models[i].get('subtotal') || 0) + (models[i].get('unread') || 0);
+                        // add virtual parent references
+                        if (isVirtual(id)) {
+                            var newParents = models[i].get('virtual_parents');
+                            newParents.push(id);
+                            models[i].set('virtual_parents', _.uniq(newParents));
+                        }
                     }
                 }
                 this.models[id].set('subtotal', subtotal);
@@ -855,7 +866,8 @@ define('io.ox/core/folder/api', [
 
     function move(id, target, ignoreWarnings) {
 
-        if (id === target) return;
+        // doesn't make sense but let's silently finish
+        if (id === target) return $.when();
 
         // prepare move
         var model = pool.getModel(id),

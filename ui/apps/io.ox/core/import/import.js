@@ -118,14 +118,16 @@ define('io.ox/core/import/import', [
         index: 200,
         draw: function (baton) {
 
-            // show option only for ical imports in calendar
-            if (baton.module !== 'calendar') return;
+            // show option only for calendar and tasks
+            if (!(baton.module === 'calendar' || baton.module === 'tasks')) return;
 
             this.append(
                 $('<div class="checkbox">').append(
                     $('<label>').append(
                         $('<input type="checkbox" tabindex="1" name="ignore_uuids">'),
-                        gt('Ignore existing events. Helpful to import public holiday calendars, for example.')
+                        baton.module === 'calendar' ?
+                            gt('Ignore existing events. Helpful to import public holiday calendars, for example.') :
+                            gt('Ignore existing events')
                     )
                 )
             );

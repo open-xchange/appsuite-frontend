@@ -366,12 +366,14 @@ define('io.ox/core/api/filestorage', [
                                 }
                             }
                         });
-                        _(oauthAccounts.models).each(function (account) {
+                        // Wait until backend finds a solution for Bug 42049 and update UI accordingly
+                        // We don't want to create unnecessary accounts in the meantime
+                        /*_(oauthAccounts.models).each(function (account) {
                             // check if we have oauth accounts without fileStorage that need one
                             if (!accountsWithStorage[account.id] && api.isStorageAvailable(account.get('serviceId'))) {
                                 api.createAccountFromOauth(account.attributes);
                             }
-                        });
+                        });*/
                     } catch (e) {
                     }
                 });

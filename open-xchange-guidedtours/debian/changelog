@@ -4,6 +4,12 @@ open-xchange-guidedtours (7.8.1-0) unstable; urgency=medium
 
  -- Marcus Klein <marcus.klein@open-xchange.com>  Thu, 08 Oct 2015 17:14:59 +0200
 
+open-xchange-guidedtours (7.8.0-9) stable; urgency=medium
+
+  * Build for patch 2015-11-09 (2840)
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 06 Nov 2015 13:43:06 +0100
+
 open-xchange-guidedtours (7.8.0-8) stable; urgency=medium
 
   * Build for patch 2015-10-26 (2816)
@@ -57,6 +63,18 @@ open-xchange-guidedtours (7.8.0-0) unstable; urgency=medium
   * prepare for 7.8.0 release
 
  -- Marcus Klein <marcus.klein@open-xchange.com>  Wed, 05 Nov 2014 16:22:50 +0100
+
+open-xchange-guidedtours (7.6.2-28) stable; urgency=medium
+
+  * Build for patch 2015-11-09 (2841)
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Tue, 03 Nov 2015 15:53:52 +0100
+
+open-xchange-guidedtours (7.6.2-27) stable; urgency=medium
+
+  * Build for patch 2015-11-11 (2844)
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Thu, 29 Oct 2015 14:04:21 +0100
 
 open-xchange-guidedtours (7.6.2-26) stable; urgency=medium
 

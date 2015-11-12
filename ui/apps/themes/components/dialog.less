@@ -259,25 +259,19 @@
                     .ellipsis();
                 }
 
-                &.selected, &.selected:hover {
-
-                    background-color: @foldertree-selected-background;
-
+                &.selected {
+                    background-color: @foldertree-selected-focus-background;
                     * {
-                        color: @foldertree-selected-label-color;
+                        color: @foldertree-focused-label-color;
                     }
                 }
 
                 &:focus {
-
-                    background-color: @foldertree-selected-focus-background;
-
+                    background-color: darken(@foldertree-selected-focus-background, 5%);
                     * {
                         color: @foldertree-focused-label-color;
                     }
-
                 }
-
             }
 
             &.singleselect li.file .name {

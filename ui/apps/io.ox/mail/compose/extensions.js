@@ -88,6 +88,7 @@ define('io.ox/mail/compose/extensions', [
 
             var node = $('<div class="row sender" data-extension-id="sender">'),
                 render = function () {
+
                     function renderFrom(array) {
                         if (!array) return;
                         var name = _(array).first(), address = _(array).last();
@@ -126,7 +127,6 @@ define('io.ox/mail/compose/extensions', [
                             var from = _(baton.model.get('from')).first();
                             dropdown.$('ul').empty();
                             drawOptions();
-
                             dropdown.$('.dropdown-label').empty().append(renderFrom(from));
                             // re-focus element otherwise the bootstap a11y closes the drop-down
                             dropdown.$ul.find('[data-name="toggle-display"]').focus();

@@ -14,12 +14,13 @@
 define.async('io.ox/core/tk/contenteditable-editor', [
     'io.ox/core/emoji/util',
     'io.ox/core/capabilities',
-    'settings!io.ox/core',
     'io.ox/core/extensions',
     'io.ox/core/tk/textproc',
     'io.ox/mail/api',
+    'settings!io.ox/core',
+    'settings!io.ox/mail',
     'less!io.ox/core/tk/contenteditable-editor'
-], function (emoji, capabilities, settings, ext, textproc, mailAPI) {
+], function (emoji, capabilities, ext, textproc, mailAPI, settings, mailSettings) {
 
     'use strict';
 
@@ -254,15 +255,19 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
             entity_encoding: 'raw',
 
-            forced_root_block: 'p',
+            // simpleLineBreaks = true -> false -> enter insert <br>
+            // simpleLineBreaks = false -> 'p' -> enter inserts new paragraph
+            // this one is stored in mail settings
+            forced_root_block: mailSettings.get('simpleLineBreaks', true) ? false : 'p',
 
             browser_spellcheck: true,
 
             plugins: opt.plugins,
 
-            //link plugin settings
+            // link plugin settings
             link_title: false,
             target_list: false,
+            link_assume_external_targets: true,
 
             language: lookupTinyMCELanguage(),
 
