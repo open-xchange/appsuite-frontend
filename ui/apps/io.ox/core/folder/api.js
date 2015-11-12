@@ -866,7 +866,8 @@ define('io.ox/core/folder/api', [
 
     function move(id, target, ignoreWarnings) {
 
-        if (id === target) return;
+        // doesn't make sense but let's silently finish
+        if (id === target) return $.when();
 
         // prepare move
         var model = pool.getModel(id),
