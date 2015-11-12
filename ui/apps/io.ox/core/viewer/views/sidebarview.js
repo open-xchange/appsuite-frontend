@@ -24,11 +24,51 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/viewer/views/sidebar/uploadnewversionview',
     'io.ox/core/extensions',
     'gettext!io.ox/core/viewer',
+    'io.ox/core/extPatterns/links',
     // prefetch cause all views need the base view
     'io.ox/core/viewer/views/sidebar/panelbaseview'
-], function (DisposableView, Util, FilesAPI, Dropzone, Capabilities, ViewerSettings, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, ext, gt) {
+], function (DisposableView, Util, FilesAPI, Dropzone, Capabilities, ViewerSettings, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, ext, gt, links) {
 
     'use strict';
+
+    ext.point('io.ox/core/viewer/views/sidebarview/detail').extend({
+        id: 'file-info',
+        index: 100,
+        draw: function (baton) {
+            var fileInfoOpt = {
+                model: baton.model,
+                fixed: true,
+                closable: baton.options.closable,
+                disableFolderInfo: !!(baton.options.opt && baton.options.opt.disableFolderInfo)
+            };
+
+            this.append(new FileInfoView(fileInfoOpt).render().el);
+        }
+    });
+
+    ext.point('io.ox/core/viewer/views/sidebarview/detail').extend({
+        id: 'file-description',
+        index: 200,
+        draw: function (baton) {
+            this.append(new FileDescriptionView({ model: baton.model }).render().el);
+        }
+    });
+
+    ext.point('io.ox/core/viewer/views/sidebarview/detail').extend({
+        id: 'file-versions',
+        index: 300,
+        draw: function (baton) {
+            this.append(new FileVersionsView({ model: baton.model }).render().el);
+        }
+    });
+
+    ext.point('io.ox/core/viewer/views/sidebarview/detail').extend(new links.Link({
+        id: 'upload-new-version',
+        index: 400,
+        draw: function (baton) {
+            this.append(new UploadNewVersionView({ model: baton.model }).render().el);
+        }
+    }));
 
     /**
      * notifications lazy load
@@ -200,7 +240,7 @@ define('io.ox/core/viewer/views/sidebarview', [
          * and version history.
          */
         renderSections: function () {
-            var detailPane = this.$('.detail-pane'), fileInfoOpt;
+            var detailPane = this.$('.detail-pane');
             // remove previous sections
             detailPane.empty();
             // remove dropzone handler
@@ -232,21 +272,13 @@ define('io.ox/core/viewer/views/sidebarview', [
                 });
                 detailPane.parent().append(this.zone.render().$el.addClass('abs'));
             }
-            // options
-            fileInfoOpt = {
+            ext.point('io.ox/core/viewer/views/sidebarview/detail').invoke('draw', detailPane, ext.Baton({
+                options: this.options,
+                context: this,
+                $el: detailPane,
                 model: this.model,
-                fixed: true,
-                closable: this.options.closable,
-                disableFolderInfo: !!(this.options.opt && this.options.opt.disableFolderInfo)
-            };
-            // render sections
-            detailPane.append(
-                new FileInfoView(fileInfoOpt).render().el,
-                new FileDescriptionView({ model: this.model }).render().el,
-                new FileVersionsView({ model: this.model }).render().el,
-                new UploadNewVersionView({ model: this.model }).render().el
-            );
-            ext.point('io.ox/core/viewer/views/sidebarview/detail').invoke('draw', this);
+                data: this.model.isFile() ? this.model.toJSON() : this.model.get('origData')
+            }));
         },
 
         /**
