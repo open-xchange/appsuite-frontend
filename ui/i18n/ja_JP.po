@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-11-03 10:55+0100\n"
+"PO-Revision-Date: 2015-11-12 16:02+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -256,7 +256,7 @@ msgstr "辞退"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:1016
 #: apps/io.ox/mail/settings/signatures/register.js:181
-#: apps/io.ox/mail/settings/signatures/register.js:286
+#: apps/io.ox/mail/settings/signatures/register.js:290
 #: apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1460 apps/io.ox/mail/write/view-main.js:605
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
@@ -365,8 +365,8 @@ msgstr "このアポイントを削除しますか？"
 #: apps/io.ox/files/toolbar.js:108 apps/io.ox/mail/actions.js:86
 #: apps/io.ox/mail/actions.js:105 apps/io.ox/mail/actions.js:923
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/register.js:363
-#: apps/io.ox/mail/settings/signatures/register.js:364
+#: apps/io.ox/mail/settings/signatures/register.js:367
+#: apps/io.ox/mail/settings/signatures/register.js:368
 #: apps/io.ox/mail/toolbar.js:76 apps/io.ox/portal/main.js:623
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
@@ -467,8 +467,8 @@ msgstr "印刷"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:160
 #: apps/io.ox/mail/main.js:146 apps/io.ox/mail/main.js:152
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:1020
-#: apps/io.ox/mail/settings/signatures/register.js:357
-#: apps/io.ox/mail/settings/signatures/register.js:359
+#: apps/io.ox/mail/settings/signatures/register.js:361
+#: apps/io.ox/mail/settings/signatures/register.js:363
 #: apps/io.ox/portal/settings/pane.js:321 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:323
 #: apps/io.ox/settings/accounts/settings/pane.js:46
@@ -1629,7 +1629,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js:106 module:io.ox/calendar
 #: apps/io.ox/core/main.js:226 module:io.ox/core
-#: apps/io.ox/launchpad/main.js:32
+#: apps/io.ox/launchpad/main.js:32 apps/io.ox/search/view-template.js:37
 msgctxt "app"
 msgid "Calendar"
 msgstr "予定表"
@@ -2226,6 +2226,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/distrib/main.js:38 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:175
+#: apps/io.ox/core/api/autocomplete.js:144 module:io.ox/core
 msgid "Distribution List"
 msgstr "配布リスト"
 
@@ -3472,7 +3473,7 @@ msgstr "フォルダ全体をダウンロード"
 
 #: apps/io.ox/core/folder/contextmenu.js:313 module:io.ox/core
 #: apps/io.ox/core/import/import.js:178
-#: apps/io.ox/mail/settings/signatures/register.js:285 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:289 module:io.ox/mail
 msgid "Import"
 msgstr "インポート"
 
@@ -3759,46 +3760,46 @@ msgstr ""
 "ランチャー ドロップダウンです。Enter キーでドロップダウンに移動します。"
 
 #: apps/io.ox/core/main.js:223 module:io.ox/core
-#: apps/io.ox/launchpad/main.js:29
+#: apps/io.ox/launchpad/main.js:29 apps/io.ox/search/view-template.js:34
 msgctxt "app"
 msgid "Portal"
 msgstr "ポータル"
 
 #: apps/io.ox/core/main.js:224 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:30 apps/io.ox/mail/settings/pane.js:153
-#: module:io.ox/mail
+#: module:io.ox/mail apps/io.ox/search/view-template.js:35
 msgctxt "app"
 msgid "Mail"
 msgstr "メール"
 
 #: apps/io.ox/core/main.js:225 module:io.ox/core
-#: apps/io.ox/launchpad/main.js:31
+#: apps/io.ox/launchpad/main.js:31 apps/io.ox/search/view-template.js:36
 msgctxt "app"
 msgid "Address Book"
 msgstr "アドレス帳"
 
 #: apps/io.ox/core/main.js:227 module:io.ox/core
-#: apps/io.ox/launchpad/main.js:33
+#: apps/io.ox/launchpad/main.js:33 apps/io.ox/search/view-template.js:38
 msgctxt "app"
 msgid "Scheduling"
 msgstr "スケジューリング"
 
 #: apps/io.ox/core/main.js:228 module:io.ox/core
-#: apps/io.ox/launchpad/main.js:34 apps/io.ox/tasks/settings/pane.js:50
-#: module:io.ox/tasks
+#: apps/io.ox/launchpad/main.js:34 apps/io.ox/search/view-template.js:39
+#: apps/io.ox/tasks/settings/pane.js:50 module:io.ox/tasks
 msgctxt "app"
 msgid "Tasks"
 msgstr "仕事"
 
 #: apps/io.ox/core/main.js:229 module:io.ox/core
 #: apps/io.ox/files/settings/pane.js:52 module:io.ox/files
-#: apps/io.ox/launchpad/main.js:35
+#: apps/io.ox/launchpad/main.js:35 apps/io.ox/search/view-template.js:40
 msgctxt "app"
 msgid "Drive"
 msgstr "Drive"
 
 #: apps/io.ox/core/main.js:230 module:io.ox/core
-#: apps/io.ox/launchpad/main.js:36
+#: apps/io.ox/launchpad/main.js:36 apps/io.ox/search/view-template.js:41
 msgctxt "app"
 msgid "Conversations"
 msgstr "スレッド"
@@ -5589,11 +5590,13 @@ msgid "Failed to recover accounts"
 msgstr "アカウントの復元に失敗しました。"
 
 #: apps/io.ox/launchpad/main.js:37 module:io.ox/core
+#: apps/io.ox/search/view-template.js:42
 msgctxt "app"
 msgid "Settings"
 msgstr "設定"
 
 #: apps/io.ox/launchpad/main.js:38 module:io.ox/core
+#: apps/io.ox/search/view-template.js:43
 msgctxt "app"
 msgid "Documents"
 msgstr "ドキュメント"
@@ -6202,13 +6205,13 @@ msgid "Request read receipt"
 msgstr "開封確認メッセージを要求"
 
 #: apps/io.ox/mail/compose/view.js:154 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:413
+#: apps/io.ox/mail/settings/signatures/register.js:417
 #: apps/io.ox/mail/write/view-main.js:643
 msgid "Signatures"
 msgstr "署名"
 
 #: apps/io.ox/mail/compose/view.js:155 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:395
+#: apps/io.ox/mail/settings/signatures/register.js:399
 #: apps/io.ox/mail/write/view-main.js:991
 msgid "No signature"
 msgstr "署名なし"
@@ -6739,53 +6742,53 @@ msgstr "署名を追加"
 msgid "Edit signature"
 msgstr "署名を編集"
 
-#: apps/io.ox/mail/settings/signatures/register.js:257 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:482
+#: apps/io.ox/mail/settings/signatures/register.js:261 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:486
 msgid "Import signatures"
 msgstr "署名をインポート"
 
-#: apps/io.ox/mail/settings/signatures/register.js:259 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:263 module:io.ox/mail
 msgid ""
 "You can import existing signatures from the previous product generation."
 msgstr "前の製品世代から既存の署名をインポートできます。"
 
-#: apps/io.ox/mail/settings/signatures/register.js:261 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:265 module:io.ox/mail
 msgid "Delete old signatures after import"
 msgstr "インポート後古い署名を削除してください。"
 
 #. This signature is set as default
-#: apps/io.ox/mail/settings/signatures/register.js:347 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:355
-#: apps/io.ox/mail/settings/signatures/register.js:454
+#: apps/io.ox/mail/settings/signatures/register.js:351 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:359
+#: apps/io.ox/mail/settings/signatures/register.js:458
 msgid "(Default)"
 msgstr "(既定)"
 
 #. Action to make this signature the new default
-#: apps/io.ox/mail/settings/signatures/register.js:348 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:355
-#: apps/io.ox/mail/settings/signatures/register.js:452
+#: apps/io.ox/mail/settings/signatures/register.js:352 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:359
+#: apps/io.ox/mail/settings/signatures/register.js:456
 msgid "Set as default"
 msgstr "既定として設定"
 
 #. A11y for an action button, read the display name and the action
 #. %1$s is the displayable name of the signature
 #. %2$s is the action: one of the msgids "(Default)", "Edit", "Delete" or "Set as default"
-#: apps/io.ox/mail/settings/signatures/register.js:354 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:359
-#: apps/io.ox/mail/settings/signatures/register.js:364
+#: apps/io.ox/mail/settings/signatures/register.js:358 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:363
+#: apps/io.ox/mail/settings/signatures/register.js:368
 msgid "%1$s, %2$s"
 msgstr "%1$s、%2$s"
 
 #. Section title for the mobile signature
-#: apps/io.ox/mail/settings/signatures/register.js:386 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:390 module:io.ox/mail
 msgid "Signature"
 msgstr "署名"
 
-#: apps/io.ox/mail/settings/signatures/register.js:467 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:471 module:io.ox/mail
 msgid "Add new signature"
 msgstr "新規の署名を追加"
 
-#: apps/io.ox/mail/settings/signatures/register.js:473 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:477 module:io.ox/mail
 msgid "Unset default signature"
 msgstr "既定の署名を設定解除"
 
@@ -7274,7 +7277,7 @@ msgstr ""
 "このフォルダは仮想フォルダです。検索できません。他のフォルダを選んでくださ"
 "い。"
 
-#: apps/io.ox/search/view-template.js:186 module:io.ox/core
+#: apps/io.ox/search/view-template.js:199 module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
 msgstr ""
 "現在表示されている %1$s 個のアイテムよりも多いアイテムが見つかりました。"
