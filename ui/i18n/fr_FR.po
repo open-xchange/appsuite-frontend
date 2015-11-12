@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-11-11 09:59+0100\n"
+"PO-Revision-Date: 2015-11-12 11:32+0100\n"
 "Last-Translator: Nicolas Ternisien <nicolas@bureau-cornavin.com>\n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr_FR\n"
@@ -3460,7 +3460,7 @@ msgstr "Télécopie"
 
 #: apps/io.ox/contacts/model.js:238 module:io.ox/contacts
 msgid "Fax (Home)"
-msgstr "Fax (privé)"
+msgstr "Télécopie (privé)"
 
 #: apps/io.ox/contacts/model.js:242 module:io.ox/contacts
 msgid "Fax (alt)"
