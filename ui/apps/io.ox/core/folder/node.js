@@ -520,7 +520,7 @@ define('io.ox/core/folder/node', [
                     iconClass = 'visible myfiles';
                     break;
             }
-            if (iconClass === '' && api.is('trash', this.model.attributes)) {
+            if (iconClass === '' && api.is('trash', this.model.attributes) && this.model.get('standard_folder')) {
                 iconClass = 'visible trash';
             }
             this.$.icon.addClass(iconClass);
