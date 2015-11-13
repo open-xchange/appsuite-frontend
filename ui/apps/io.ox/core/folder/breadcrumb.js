@@ -134,7 +134,8 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
 
             var length = all.length,
                 isLast = index === length - 1,
-                isDisabled = this.disable && _(this.disable).indexOf(data.id) > -1,
+                missingPrivileges = !api.can('read', data),
+                isDisabled = missingPrivileges || (this.disable && _(this.disable).indexOf(data.id) > -1),
                 node;
 
             // add ellipsis for more than four items
