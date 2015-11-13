@@ -638,7 +638,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/add-folder', {
         requires: function (e) {
             var model = folderAPI.pool.getModel(e.baton.app.folder.get());
-            return folderAPI.can('create:folder', model.toJSON());
+            return folderAPI.can('create:folder', model.toJSON()) && !folderAPI.is('trash', model.toJSON());
         },
         action: function (baton) {
             var id = baton.app.folder.get(), model = folderAPI.pool.getModel(id);
