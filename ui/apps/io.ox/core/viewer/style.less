@@ -14,7 +14,7 @@
 @viewer-toolbar-height: 40px;
 @viewer-toolbar-filename-width: 400px;
 @viewer-toolbar-filename-width-smartphone-portrait: 130px;
-@viewer-toolbar-filename-width-smartphone-landscape: 320px;
+@viewer-toolbar-filename-width-smartphone-landscape: 220px;
 @viewer-toolbar-link-width: 48px;
 @viewer-toolbar-link-width-smartphone: 50px;
 @viewer-sidebar-width: 360px;
@@ -410,7 +410,9 @@
             &.disabled {
                 cursor: default;
             }
-            @media (orientation: portrait) and (min-width: 320px) {
+            
+            // portrait
+            @media screen and (max-aspect-ratio: 13/9) and (min-width: 320px) {
                 i {
                     margin-right: 5px;
                 }
@@ -421,7 +423,8 @@
                     width: 215px;
                 }
             }
-            @media (orientation: landscape) {
+            // landscape
+            @media screen and (min-aspect-ratio: 13/9) {
                 width: @viewer-toolbar-filename-width-smartphone-landscape;
             }
         }
