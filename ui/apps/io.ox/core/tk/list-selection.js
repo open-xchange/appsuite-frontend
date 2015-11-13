@@ -306,7 +306,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         selectAll: function (items) {
             items = _.isString(items) ? this.getItems(items) : (items || this.getItems());
             var slice = items.slice(0, items.length);
-            slice.removeClass('no-checkbox');
+            slice.removeClass('no-checkbox precursor');
+            slice.first().addClass('precursor');
             this.check(slice);
             this.focus(0, items);
             this.triggerChange(items);
