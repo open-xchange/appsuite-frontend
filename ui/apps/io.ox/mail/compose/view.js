@@ -77,6 +77,31 @@ define('io.ox/mail/compose/view', [
         draw: extensions.subject
     });
 
+    ext.point(POINT + '/recipientActionLink').extend(
+        {
+            id: 'cc',
+            index: 100,
+            draw: extensions.recipientActionLink('cc')
+        },
+        {
+            id: 'bcc',
+            index: 200,
+            draw: extensions.recipientActionLink('bcc')
+        }
+    );
+
+    ext.point(POINT + '/recipientActionLinkMobile').extend({
+        id: 'mobile',
+        index: 100,
+        draw: extensions.recipientActionLinkMobile
+    });
+
+    ext.point(POINT + '/recipientActions').extend({
+        id: 'recipientActions',
+        index: 100,
+        draw: extensions.recipientActions
+    });
+
     ext.point(POINT + '/header').extend({
         draw: function (baton) {
             ext.point(POINT + '/header/title').invoke('draw', this, baton);
@@ -116,6 +141,7 @@ define('io.ox/mail/compose/view', [
         id: 'editor',
         index: 100,
         draw: function () {
+            if (_.device('smartphone')) return;
             this.data('view')
                 .header(gt('Editor'))
                 .option('editorMode', 'text', gt('Plain Text'))
@@ -155,17 +181,20 @@ define('io.ox/mail/compose/view', [
                 .option('signature', '', gt('No signature'));
 
             ext.point(POINT + '/menuoptions').invoke('draw', optionDropdown.$el, baton);
-            ext.point(POINT + '/signatures').invoke('draw', signatureDropdown.$el, baton);
+
+            if (_.device('!smartphone')) {
+                ext.point(POINT + '/signatures').invoke('draw', signatureDropdown.$el, baton);
+                signatureDropdown.$ul.addClass('pull-right');
+
+                baton.view.signaturesLoading.done(function (sig) {
+                    if (sig.length > 0) {
+                        signatureDropdown.$ul.addClass('pull-right');
+                        optionDropdown.$el.before(signatureDropdown.render().$el.addClass('signatures text-left'));
+                    }
+                });
+            }
 
             optionDropdown.$ul.addClass('pull-right');
-            signatureDropdown.$ul.addClass('pull-right');
-
-            baton.view.signaturesLoading.done(function (sig) {
-                if (sig.length > 0) {
-                    signatureDropdown.$ul.addClass('pull-right');
-                    optionDropdown.$el.before(signatureDropdown.render().$el.addClass('signatures text-left'));
-                }
-            });
 
             this.append(
                 $('<div data-extension-id="composetoolbar-menu" class="col-xs-8 col-md-6">').append(
@@ -813,14 +842,32 @@ define('io.ox/mail/compose/view', [
 
         toggleTokenfield: function (e) {
             var isString = typeof e === 'string',
-                type = isString ? e : $(e.target).attr('data-type'),
-                button = this.$el.find('[data-type="' + type + '"]'),
+                type = isString ? e : $(e.target).attr('data-type');
+
+            if (_.device('smartphone')) {
+                if (!isString) e.preventDefault();
+                var input = this.$el.find('[data-extension-id="cc"], [data-extension-id="bcc"]');
+                if (input.hasClass('hidden')) {
+                    input.removeClass('hidden');
+                    this.$el.find('[data-action="add"] span').removeClass('fa-angle-right').addClass('fa-angle-down');
+                } else {
+                    if (_.isEmpty(this.model.attributes.cc) && _.isEmpty(this.model.attributes.bcc)) {
+                        this.model.set('cc', []);
+                        this.model.set('bcc', []);
+                        input.addClass('hidden');
+                        this.$el.find('[data-action="add"] span').removeClass('fa-angle-down').addClass('fa-angle-right');
+                    }
+                }
+                return input;
+            }
+
+            var button = this.$el.find('[data-type="' + type + '"]'),
                 input = this.$el.find('[data-extension-id="' + type + '"]');
             if (!isString) e.preventDefault();
             if (input.hasClass('hidden') || isString) {
                 input.removeClass('hidden');
                 button.addClass('active').attr('aria-checked', true);
-            } else if (this.model.get(type).length === 0) {
+            } else if (!this.model.has(type) || _.isEmpty(this.model.get(type))) {
                 //We don't want to close it automatically! Bug: 35730
                 this.model.set(type, []);
                 input.addClass('hidden');
