@@ -60,6 +60,7 @@ define('io.ox/calendar/view-grid-template', [
             },
             set: function (data, fields) {
                 var self = this,
+                    isPrivate = _.isUndefined(data.title),
                     a11yLabel = '',
                     tmpStr = '';
                 //conflicts with appointments, where you aren't a participant don't have a folder_id.
@@ -72,8 +73,8 @@ define('io.ox/calendar/view-grid-template', [
                 }
 
                 fields.title
-                    .text(a11yLabel = data.title ? gt.noI18n(data.title || '\u00A0') : gt('Private'));
-                if (data.conflict) {
+                    .text(a11yLabel = isPrivate ? gt('Private') : gt.noI18n(data.title || '\u00A0'));
+                if (data.conflict && !isPrivate) {
                     fields.title
                         .append(
                             $.txt(' ('),
