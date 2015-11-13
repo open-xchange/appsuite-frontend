@@ -483,16 +483,20 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     events: { 'change': 'onChange', 'keyup': 'onKeyup' },
                     onChange: function () {
                         if (this.name === 'size') {
-                            var sizeValue = _.isNaN(parseInt(this.$el.val(), 10)) ? '' : parseInt(this.$el.val(), 10);
-                            this.model.set(this.name, sizeValue);
-                            this.update();
+                            var isValid = /^[0-9]+$/.test(this.$el.val()) && parseInt(this.$el.val(), 10) < 2147483648 && parseInt(this.$el.val(), 10) >= 0;
+                            if (isValid) {
+                                this.model.set(this.name, parseInt(this.$el.val(), 10));
+                                this.update();
+                            }
                         }
                         if (this.name === 'values' || this.name === 'headers') this.model.set(this.name, [this.$el.val()]);
                     },
                     onKeyup: function () {
-                        var state;
+                        var state,
+                            isValid;
                         if (this.name === 'size') {
-                            state = _.isNaN(parseInt(this.$el.val(), 10)) ? 'invalid:' : 'valid:';
+                            isValid = /^[0-9]+$/.test(this.$el.val()) && parseInt(this.$el.val(), 10) < 2147483648 && parseInt(this.$el.val(), 10) >= 0;
+                            state = isValid ? 'valid:' : 'invalid:';
                         } else {
                             state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
                         }
