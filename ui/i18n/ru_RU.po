@@ -4943,7 +4943,7 @@ msgstr "Нужно больше места?"
 msgid "New"
 msgstr "Создать"
 
-#: apps/io.ox/core/folder/api.js:917 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:918 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:183 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "Создать папку"
@@ -5071,7 +5071,7 @@ msgstr "Следующий день"
 msgid "Next Week"
 msgstr "Следующая неделя"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:685 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:684 module:io.ox/core
 msgid "Next page"
 msgstr "Следующая страница"
 
@@ -6035,7 +6035,7 @@ msgstr "Предыдущая неделя"
 msgid "Previous month"
 msgstr "Предыдущий месяц"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:682 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:681 module:io.ox/core
 msgid "Previous page"
 msgstr "Предыдущая страница"
 
@@ -7591,7 +7591,7 @@ msgstr "Необходимо выбрать имя учетной записи"
 msgid "The activity has been deleted successfully"
 msgstr "События удалены"
 
-#: apps/io.ox/files/api.js:380 module:io.ox/files
+#: apps/io.ox/files/api.js:381 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "Квота достигнута."
@@ -7822,7 +7822,7 @@ msgstr "Область уведомлений открыта"
 msgid "The notification has been resent"
 msgstr "Уведомление было отправлено повторно"
 
-#: apps/io.ox/files/api.js:375 module:io.ox/files
+#: apps/io.ox/files/api.js:376 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "Предоставленное имя файла превышает допустимую длину."
@@ -8086,7 +8086,7 @@ msgstr "Для доступа к этой функции необходимо о
 msgid "This field has to be filled"
 msgstr "Заполните поле"
 
-#: apps/io.ox/files/api.js:387 module:io.ox/files
+#: apps/io.ox/files/api.js:388 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "Не удалось отправить файл."
@@ -8689,7 +8689,7 @@ msgstr "Открыть во весь экран на устройстве."
 msgid "Viewer"
 msgstr "Просмотрели"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:623 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:622 module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr "Панель просмотра"
 
@@ -9679,7 +9679,7 @@ msgstr "нет"
 #. text of a presentation slide count display
 #. Example result: "of 10"
 #. %1$d is the total slide count
-#: apps/io.ox/core/viewer/views/toolbarview.js:541 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:540 module:io.ox/core
 #: apps/io.ox/presenter/views/navigationview.js:326 module:io.ox/presenter
 msgid "of %1$d"
 msgstr "из %1$d"

@@ -4875,7 +4875,7 @@ msgstr "需要更多空间？"
 msgid "New"
 msgstr "新建"
 
-#: apps/io.ox/core/folder/api.js:917 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:918 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:183 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "新文件夹"
@@ -5003,7 +5003,7 @@ msgstr "下一天"
 msgid "Next Week"
 msgstr "下周"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:685 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:684 module:io.ox/core
 msgid "Next page"
 msgstr "下页"
 
@@ -5955,7 +5955,7 @@ msgstr "上周"
 msgid "Previous month"
 msgstr "上月"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:682 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:681 module:io.ox/core
 msgid "Previous page"
 msgstr "前一页"
 
@@ -7494,7 +7494,7 @@ msgstr "户口必须命名"
 msgid "The activity has been deleted successfully"
 msgstr "已成功删除活动"
 
-#: apps/io.ox/files/api.js:380 module:io.ox/files
+#: apps/io.ox/files/api.js:381 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "已到达允许额度。"
@@ -7717,7 +7717,7 @@ msgstr "通知区域开放"
 msgid "The notification has been resent"
 msgstr "通知已再发送"
 
-#: apps/io.ox/files/api.js:375 module:io.ox/files
+#: apps/io.ox/files/api.js:376 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "提供的文件名称超过允许长度。"
@@ -7971,7 +7971,7 @@ msgstr "此特性不可用。您必须先升级您的户口才能使用。"
 msgid "This field has to be filled"
 msgstr "此栏必填"
 
-#: apps/io.ox/files/api.js:387 module:io.ox/files
+#: apps/io.ox/files/api.js:388 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "无法上载此文件。"
@@ -8557,7 +8557,7 @@ msgstr "在您的装置上以全屏检视此演讲。"
 msgid "Viewer"
 msgstr "检视器"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:623 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:622 module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr "检视器工具条"
 
@@ -9529,7 +9529,7 @@ msgstr "无"
 #. text of a presentation slide count display
 #. Example result: "of 10"
 #. %1$d is the total slide count
-#: apps/io.ox/core/viewer/views/toolbarview.js:541 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:540 module:io.ox/core
 #: apps/io.ox/presenter/views/navigationview.js:326 module:io.ox/presenter
 msgid "of %1$d"
 msgstr "（共 %1$d 张）"

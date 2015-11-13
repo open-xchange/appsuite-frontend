@@ -4969,7 +4969,7 @@ msgstr "Necesitați mai mult spațiu?"
 msgid "New"
 msgstr "Nou"
 
-#: apps/io.ox/core/folder/api.js:917 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:918 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:183 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "Dosar nou"
@@ -5097,7 +5097,7 @@ msgstr "Ziua următoare"
 msgid "Next Week"
 msgstr "Săptămâna următoare"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:685 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:684 module:io.ox/core
 msgid "Next page"
 msgstr "Pagina următoare"
 
@@ -6065,7 +6065,7 @@ msgstr "Săptămâna trecută"
 msgid "Previous month"
 msgstr "Luna precedentă"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:682 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:681 module:io.ox/core
 msgid "Previous page"
 msgstr "Pagina precedentă"
 
@@ -7635,7 +7635,7 @@ msgstr "Contul trebuie să fie numit"
 msgid "The activity has been deleted successfully"
 msgstr "Activitatea a fost ștearsă"
 
-#: apps/io.ox/files/api.js:380 module:io.ox/files
+#: apps/io.ox/files/api.js:381 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "S-a atins limita permisă."
@@ -7876,7 +7876,7 @@ msgstr "Zona de notificare este deschisă"
 msgid "The notification has been resent"
 msgstr "Notificarea a fost retrimisă"
 
-#: apps/io.ox/files/api.js:375 module:io.ox/files
+#: apps/io.ox/files/api.js:376 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "Numele fișierului depășește lungimea permisă."
@@ -8154,7 +8154,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Acest câmp trebuie să fie completat"
 
-#: apps/io.ox/files/api.js:387 module:io.ox/files
+#: apps/io.ox/files/api.js:388 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "Nu s-a putut încărca fișierul."
@@ -8769,7 +8769,7 @@ msgstr ""
 msgid "Viewer"
 msgstr "Vizualizare"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:623 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:622 module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr "Bară de unelte vizualizare"
 
@@ -9773,7 +9773,7 @@ msgstr "nimeni"
 #. text of a presentation slide count display
 #. Example result: "of 10"
 #. %1$d is the total slide count
-#: apps/io.ox/core/viewer/views/toolbarview.js:541 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:540 module:io.ox/core
 #: apps/io.ox/presenter/views/navigationview.js:326 module:io.ox/presenter
 msgid "of %1$d"
 msgstr "din %1$d"

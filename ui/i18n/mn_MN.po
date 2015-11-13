@@ -4880,7 +4880,7 @@ msgstr ""
 msgid "New"
 msgstr ""
 
-#: apps/io.ox/core/folder/api.js:917 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:918 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:183 module:io.ox/core/sub
 msgid "New Folder"
 msgstr ""
@@ -5008,7 +5008,7 @@ msgstr ""
 msgid "Next Week"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:685 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:684 module:io.ox/core
 msgid "Next page"
 msgstr ""
 
@@ -5960,7 +5960,7 @@ msgstr ""
 msgid "Previous month"
 msgstr "сар бүр"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:682 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:681 module:io.ox/core
 #, fuzzy
 #| msgid "every week"
 msgid "Previous page"
@@ -7498,7 +7498,7 @@ msgstr ""
 msgid "The activity has been deleted successfully"
 msgstr ""
 
-#: apps/io.ox/files/api.js:380 module:io.ox/files
+#: apps/io.ox/files/api.js:381 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr ""
@@ -7696,7 +7696,7 @@ msgstr ""
 msgid "The notification has been resent"
 msgstr ""
 
-#: apps/io.ox/files/api.js:375 module:io.ox/files
+#: apps/io.ox/files/api.js:376 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr ""
@@ -7948,7 +7948,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr ""
 
-#: apps/io.ox/files/api.js:387 module:io.ox/files
+#: apps/io.ox/files/api.js:388 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr ""
@@ -8539,7 +8539,7 @@ msgstr ""
 msgid "Viewer"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:623 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:622 module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr ""
 
@@ -9512,7 +9512,7 @@ msgstr ""
 #. text of a presentation slide count display
 #. Example result: "of 10"
 #. %1$d is the total slide count
-#: apps/io.ox/core/viewer/views/toolbarview.js:541 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:540 module:io.ox/core
 #: apps/io.ox/presenter/views/navigationview.js:326 module:io.ox/presenter
 msgid "of %1$d"
 msgstr ""

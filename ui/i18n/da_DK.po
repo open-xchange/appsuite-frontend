@@ -4934,7 +4934,7 @@ msgstr "Brug for mere plads?"
 msgid "New"
 msgstr "Ny"
 
-#: apps/io.ox/core/folder/api.js:917 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:918 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:183 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "Ny mappe"
@@ -5062,7 +5062,7 @@ msgstr "Næste dag"
 msgid "Next Week"
 msgstr "Næste uge"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:685 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:684 module:io.ox/core
 msgid "Next page"
 msgstr "Næste side"
 
@@ -6027,7 +6027,7 @@ msgstr "Foregående uge"
 msgid "Previous month"
 msgstr "Forrige måned"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:682 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:681 module:io.ox/core
 msgid "Previous page"
 msgstr "Forgående side"
 
@@ -7582,7 +7582,7 @@ msgstr "Kontoen skal have navn"
 msgid "The activity has been deleted successfully"
 msgstr "Aktiviteten blev slettet"
 
-#: apps/io.ox/files/api.js:380 module:io.ox/files
+#: apps/io.ox/files/api.js:381 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "Den tilladte kvote er nået."
@@ -7817,7 +7817,7 @@ msgstr "Påmindelsesområdet er åbent"
 msgid "The notification has been resent"
 msgstr "Underretningen er blevet gensendt"
 
-#: apps/io.ox/files/api.js:375 module:io.ox/files
+#: apps/io.ox/files/api.js:376 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "Det givne filnavn overskrider den tilladte længde."
@@ -8088,7 +8088,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Dette felt skal udfyldes"
 
-#: apps/io.ox/files/api.js:387 module:io.ox/files
+#: apps/io.ox/files/api.js:388 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "Denne fil kunne ikke overføre."
@@ -8691,7 +8691,7 @@ msgstr "Se præsentationen i fuldskærmsmodus på din enhed."
 msgid "Viewer"
 msgstr "Læser"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:623 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:622 module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr "Fremviserværktøjslinje"
 
@@ -9683,7 +9683,7 @@ msgstr "ingen"
 #. text of a presentation slide count display
 #. Example result: "of 10"
 #. %1$d is the total slide count
-#: apps/io.ox/core/viewer/views/toolbarview.js:541 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:540 module:io.ox/core
 #: apps/io.ox/presenter/views/navigationview.js:326 module:io.ox/presenter
 msgid "of %1$d"
 msgstr "af %1$d"
