@@ -106,15 +106,17 @@ define('io.ox/calendar/week/perspective', [
              */
             var apiUpdate = function (obj) {
                 obj = clean(obj);
-                api.update(obj).fail(function (con) {
-                    if (con.conflicts) {
+                api.update(obj).fail(function (error) {
+                    if (error.conflicts) {
                         var dialog = new dialogs.ModalDialog({
                             top: '20%',
                             center: false,
                             container: self.main
                         });
                         dialog
-                            .append(conflictView.drawList(con.conflicts, dialog).addClass('additional-info'))
+                            .append(
+                                conflictView.drawList(error.conflicts, dialog).addClass('additional-info')
+                            )
                             .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', { tabIndex: 1 })
                             .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                             .show()
@@ -128,6 +130,8 @@ define('io.ox/calendar/week/perspective', [
                                     apiUpdate(obj);
                                 }
                             });
+                    } else {
+                        notifications.yell(error);
                     }
                 });
             };
@@ -168,7 +172,8 @@ define('io.ox/calendar/week/perspective', [
                         case 'series':
                             // get recurrence master object
                             if (obj.old_start_date || obj.old_end_date) {
-                                api.get({ id: obj.id, folder_id: obj.folder_id }).done(function (data) {
+                                // bypass cache to have a fresh last_modified timestamp (see bug 42376)
+                                api.get({ id: obj.id, folder_id: obj.folder_id }, false).done(function (data) {
                                     // calculate new dates if old dates are available
                                     data.start_date += (obj.start_date - obj.old_start_date);
                                     data.end_date += (obj.end_date - obj.old_end_date);
