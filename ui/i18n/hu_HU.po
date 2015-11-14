@@ -672,7 +672,7 @@ msgstr "Felhasználói fiókok"
 #: apps/io.ox/files/mobile-toolbar-actions.js:132
 #: apps/io.ox/files/share/permissions.js:714 apps/io.ox/mail/detail/view.js:91
 #: apps/io.ox/mail/detail/view.js:92
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:952
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:956
 #: module:io.ox/settings apps/io.ox/mail/mobile-toolbar-actions.js:150
 #: apps/io.ox/mail/mobile-toolbar-actions.js:151
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:110 module:io.ox/tasks
@@ -726,7 +726,7 @@ msgstr "Leírás hozzáadása"
 msgid "Add account"
 msgstr "Fiók hozzáadása"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:966
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:970
 #: module:io.ox/settings
 msgid "Add action"
 msgstr "Művelet hozzáadása"
@@ -744,7 +744,7 @@ msgstr "Hozzáad nyilvános mappaként"
 msgid "Add attachments"
 msgstr "Mellékletek csatolása"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:961
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:965
 #: module:io.ox/settings
 msgid "Add condition"
 msgstr "Feltétel hozzáadása"
@@ -1023,7 +1023,7 @@ msgstr "Hiba történt."
 
 #: apps/io.ox/calendar/detail/main.js:46 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:100
-#: apps/io.ox/calendar/week/perspective.js:237
+#: apps/io.ox/calendar/week/perspective.js:242
 msgid "An error occurred. Please try again."
 msgstr "Hiba történt. Próbálja újra."
 
@@ -1077,13 +1077,13 @@ msgstr "Alkalmazások"
 msgid "Apply role"
 msgstr "Szerep alkalmazása"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:997
-#: module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1001
+#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1005
 msgid "Apply rule if all conditions are met"
 msgstr "Szabály alkalmazása, ha minden feltétel teljesül"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:997
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1001
 #: module:io.ox/settings
 msgid "Apply rule if any condition is met."
 msgstr "Szabály alkalmazása, ha bármely feltétel teljesül."
@@ -1096,7 +1096,7 @@ msgstr "Alkalmazás az összes mappára"
 #: apps/io.ox/calendar/actions/acceptdeny.js:225 module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:383
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js:281
-#: apps/io.ox/calendar/week/perspective.js:175
+#: apps/io.ox/calendar/week/perspective.js:179
 #: apps/io.ox/mail/detail/links.js:73 module:io.ox/mail
 msgid "Appointment"
 msgstr "Találkozó"
@@ -1116,7 +1116,7 @@ msgid "Appointment invitations"
 msgstr "Találkozómeghívók"
 
 #: apps/io.ox/calendar/month/perspective.js:472 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:411
+#: apps/io.ox/calendar/week/perspective.js:416
 msgid "Appointment list"
 msgstr "Találkozólista"
 
@@ -1410,7 +1410,7 @@ msgid "Buy now!"
 msgstr "Vegye meg most!"
 
 #: apps/io.ox/calendar/month/perspective.js:144 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:167
+#: apps/io.ox/calendar/week/perspective.js:171
 msgid ""
 "By changing the date of this appointment you are creating an appointment "
 "exception to the series. Do you want to continue?"
@@ -1471,8 +1471,8 @@ msgstr "Naptár:"
 #: apps/io.ox/calendar/main.js:256 apps/io.ox/calendar/main.js:322
 #: apps/io.ox/calendar/month/perspective.js:126
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js:92
-#: apps/io.ox/calendar/week/perspective.js:133
-#: apps/io.ox/calendar/week/perspective.js:176
+#: apps/io.ox/calendar/week/perspective.js:135
+#: apps/io.ox/calendar/week/perspective.js:180
 #: apps/io.ox/contacts/actions/delete.js:38 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:201
 #: apps/io.ox/contacts/edit/main.js:258 apps/io.ox/contacts/main.js:412
@@ -1885,7 +1885,7 @@ msgstr "Új levél írása"
 msgid "Compose new mail"
 msgstr "Új levél szerkesztése"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:951
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:955
 #: module:io.ox/settings
 msgid "Conditions"
 msgstr "Feltételek"
@@ -1907,7 +1907,7 @@ msgstr "Ütközés történt"
 msgid "Conflicts with resources cannot be ignored"
 msgstr "Az erőforrásokkal történő ütközés nem hagyható figyelmen kívül"
 
-#: apps/io.ox/calendar/view-grid-template.js:96 module:io.ox/calendar
+#: apps/io.ox/calendar/view-grid-template.js:97 module:io.ox/calendar
 msgid "Conflicts:"
 msgstr "Ütközik:"
 
@@ -2239,7 +2239,7 @@ msgstr "Születési idő"
 msgid "Day"
 msgstr "Nap"
 
-#: apps/io.ox/calendar/week/perspective.js:334 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:339 module:io.ox/calendar
 msgid "Day View"
 msgstr "Napnézet"
 
@@ -2689,7 +2689,7 @@ msgid "Do you want to delete this appointment?"
 msgstr "Valóban törölni akarja ezt a találkozót?"
 
 #: apps/io.ox/calendar/actions/edit.js:37 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:172
+#: apps/io.ox/calendar/week/perspective.js:176
 msgid ""
 "Do you want to edit the whole series or just one appointment within the "
 "series?"
@@ -3507,7 +3507,7 @@ msgid "File: %1$s"
 msgstr "Fájl: %1$s"
 
 #: apps/io.ox/files/filepicker.js:76 module:io.ox/files
-#: apps/io.ox/files/filepicker.js:123
+#: apps/io.ox/files/filepicker.js:133
 msgid "Files"
 msgstr "Fájlok"
 
@@ -3997,7 +3997,7 @@ msgstr "Figyelmeztetések mellőzése"
 #: apps/io.ox/calendar/actions/acceptdeny.js:191 module:io.ox/calendar
 #: apps/io.ox/calendar/edit/main.js:153 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/month/perspective.js:125
-#: apps/io.ox/calendar/week/perspective.js:132
+#: apps/io.ox/calendar/week/perspective.js:134
 #: apps/plugins/notifications/calendar/register.js:83
 #: module:plugins/notifications
 msgid "Ignore conflicts"
@@ -4911,7 +4911,7 @@ msgstr "Saját feladatok"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:64
 #: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js:46
 #: module:io.ox/files apps/io.ox/files/view-options.js:44
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:513
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:517
 #: module:io.ox/settings
 msgid "Name"
 msgstr "Név"
@@ -5080,7 +5080,7 @@ msgstr "Becenév"
 
 #. folder permissions - Is Admin? NO
 #: apps/io.ox/calendar/month/perspective.js:146 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:169 apps/io.ox/core/main.js:134
+#: apps/io.ox/calendar/week/perspective.js:173 apps/io.ox/core/main.js:134
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js:177
 msgid "No"
 msgstr "Nem"
@@ -5765,7 +5765,7 @@ msgstr "Adjon meg egy keresőkifejezést"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:225 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 apps/io.ox/backbone/validation.js:78
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:590
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:594
 #: module:io.ox/settings
 msgid "Please enter a valid date"
 msgstr "Érvényes dátumot adjon meg"
@@ -6083,7 +6083,7 @@ msgstr "Prioritás"
 
 #: apps/io.ox/calendar/edit/extensions.js:471 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js:83 module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js:75
+#: apps/io.ox/calendar/view-grid-template.js:76
 #: apps/io.ox/contacts/view-detail.js:154 module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js:392 module:io.ox/tasks/edit
 msgid "Private"
@@ -6093,7 +6093,7 @@ msgstr "Személyes"
 msgid "Private address"
 msgstr "Magáncím"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1040
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1044
 #: module:io.ox/settings
 msgid "Process subsequent rules"
 msgstr "Soron következő szabályok feldolgozása"
@@ -6608,7 +6608,7 @@ msgstr "Visszavont hozzáférés."
 msgid "Room number"
 msgstr "Szobaszám"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:980
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:984
 #: module:io.ox/settings
 msgid "Rule name"
 msgstr "Szabály neve"
@@ -6784,7 +6784,7 @@ msgstr "Válasszon fájlt"
 
 #: apps/io.ox/calendar/edit/extensions.js:131 module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/picker.js:75 module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:797
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:801
 #: module:io.ox/settings
 msgid "Select folder"
 msgstr "Válasszon mappát"
@@ -6874,7 +6874,7 @@ msgstr "Szeptember"
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js:224 module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js:40
-#: apps/io.ox/calendar/week/perspective.js:174
+#: apps/io.ox/calendar/week/perspective.js:178
 msgid "Series"
 msgstr "Ismétlődések"
 
@@ -7951,7 +7951,7 @@ msgstr ""
 "A nem visszaállítható elemek sikeresen törölve lettek. Frissítse az oldalt a "
 "változások megtekintéséhez."
 
-#: apps/io.ox/files/filepicker.js:199 module:io.ox/files
+#: apps/io.ox/files/filepicker.js:213 module:io.ox/files
 msgid "The uploaded file does not match the requested file type."
 msgid_plural "None of the uploaded files matches the requested file type."
 msgstr[0] "A feltöltött fájl nem illeszkedik a kért fájltípusra."
@@ -8510,7 +8510,7 @@ msgstr "Feltöltés"
 msgid "Upload file"
 msgstr "Fájl feltöltése"
 
-#: apps/io.ox/files/filepicker.js:218 module:io.ox/files
+#: apps/io.ox/files/filepicker.js:232 module:io.ox/files
 msgid "Upload local file"
 msgstr "Helyi fájl feltöltése"
 
@@ -8738,7 +8738,7 @@ msgstr "Időjárás • Évszak"
 msgid "Week"
 msgstr "Hét"
 
-#: apps/io.ox/calendar/week/perspective.js:345 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:350 module:io.ox/calendar
 msgid "Week View"
 msgstr "Hét nézet"
 
@@ -8807,7 +8807,7 @@ msgstr "Egész nap"
 msgid "Workweek"
 msgstr "Munkahét"
 
-#: apps/io.ox/calendar/week/perspective.js:339 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:344 module:io.ox/calendar
 msgid "Workweek View"
 msgstr "Munkahét nézet"
 
@@ -8861,7 +8861,7 @@ msgstr "Sárga"
 
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js:145 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:168 apps/io.ox/core/main.js:133
+#: apps/io.ox/calendar/week/perspective.js:172 apps/io.ox/core/main.js:133
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js:179
 #: apps/io.ox/files/util.js:257 module:io.ox/files
 msgid "Yes"
@@ -9395,7 +9395,7 @@ msgstr "sötétkék"
 msgid "dark green"
 msgstr "sötétzöld"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:614
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:618
 #: module:io.ox/settings
 msgid "datepicker"
 msgstr "dátumválasztó"

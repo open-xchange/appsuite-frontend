@@ -672,7 +672,7 @@ msgstr "Accounts"
 #: apps/io.ox/files/mobile-toolbar-actions.js:132
 #: apps/io.ox/files/share/permissions.js:714 apps/io.ox/mail/detail/view.js:91
 #: apps/io.ox/mail/detail/view.js:92
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:952
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:956
 #: module:io.ox/settings apps/io.ox/mail/mobile-toolbar-actions.js:150
 #: apps/io.ox/mail/mobile-toolbar-actions.js:151
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:110 module:io.ox/tasks
@@ -726,7 +726,7 @@ msgstr "Add a description"
 msgid "Add account"
 msgstr "Add account"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:966
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:970
 #: module:io.ox/settings
 msgid "Add action"
 msgstr "Add action"
@@ -744,7 +744,7 @@ msgstr "Add as public folder"
 msgid "Add attachments"
 msgstr "Add attachments"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:961
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:965
 #: module:io.ox/settings
 msgid "Add condition"
 msgstr "Add condition"
@@ -1024,7 +1024,7 @@ msgstr "An error occurred."
 
 #: apps/io.ox/calendar/detail/main.js:46 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:100
-#: apps/io.ox/calendar/week/perspective.js:237
+#: apps/io.ox/calendar/week/perspective.js:242
 msgid "An error occurred. Please try again."
 msgstr "An error occurred. Please try again."
 
@@ -1076,13 +1076,13 @@ msgstr "Applications"
 msgid "Apply role"
 msgstr "Apply role"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:997
-#: module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1001
+#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1005
 msgid "Apply rule if all conditions are met"
 msgstr "Apply rule if all conditions are met"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:997
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1001
 #: module:io.ox/settings
 msgid "Apply rule if any condition is met."
 msgstr "Apply rule if any condition is met."
@@ -1095,7 +1095,7 @@ msgstr "Apply to all subfolders"
 #: apps/io.ox/calendar/actions/acceptdeny.js:225 module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:383
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js:281
-#: apps/io.ox/calendar/week/perspective.js:175
+#: apps/io.ox/calendar/week/perspective.js:179
 #: apps/io.ox/mail/detail/links.js:73 module:io.ox/mail
 msgid "Appointment"
 msgstr "Appointment"
@@ -1115,7 +1115,7 @@ msgid "Appointment invitations"
 msgstr "Appointment invitations"
 
 #: apps/io.ox/calendar/month/perspective.js:472 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:411
+#: apps/io.ox/calendar/week/perspective.js:416
 msgid "Appointment list"
 msgstr "Appointment list"
 
@@ -1409,7 +1409,7 @@ msgid "Buy now!"
 msgstr "Buy now!"
 
 #: apps/io.ox/calendar/month/perspective.js:144 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:167
+#: apps/io.ox/calendar/week/perspective.js:171
 msgid ""
 "By changing the date of this appointment you are creating an appointment "
 "exception to the series. Do you want to continue?"
@@ -1470,8 +1470,8 @@ msgstr "Calendar:"
 #: apps/io.ox/calendar/main.js:256 apps/io.ox/calendar/main.js:322
 #: apps/io.ox/calendar/month/perspective.js:126
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js:92
-#: apps/io.ox/calendar/week/perspective.js:133
-#: apps/io.ox/calendar/week/perspective.js:176
+#: apps/io.ox/calendar/week/perspective.js:135
+#: apps/io.ox/calendar/week/perspective.js:180
 #: apps/io.ox/contacts/actions/delete.js:38 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:201
 #: apps/io.ox/contacts/edit/main.js:258 apps/io.ox/contacts/main.js:412
@@ -1880,7 +1880,7 @@ msgstr "Compose new e-mail"
 msgid "Compose new mail"
 msgstr "Compose new email"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:951
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:955
 #: module:io.ox/settings
 msgid "Conditions"
 msgstr "Conditions"
@@ -1902,7 +1902,7 @@ msgstr "Conflicts detected"
 msgid "Conflicts with resources cannot be ignored"
 msgstr "Conflicts with resources cannot be ignored"
 
-#: apps/io.ox/calendar/view-grid-template.js:96 module:io.ox/calendar
+#: apps/io.ox/calendar/view-grid-template.js:97 module:io.ox/calendar
 msgid "Conflicts:"
 msgstr "Conflicts:"
 
@@ -2233,7 +2233,7 @@ msgstr "Date of birth"
 msgid "Day"
 msgstr "Day"
 
-#: apps/io.ox/calendar/week/perspective.js:334 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:339 module:io.ox/calendar
 msgid "Day View"
 msgstr "Day View"
 
@@ -2683,7 +2683,7 @@ msgid "Do you want to delete this appointment?"
 msgstr "Do you want to delete this appointment?"
 
 #: apps/io.ox/calendar/actions/edit.js:37 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:172
+#: apps/io.ox/calendar/week/perspective.js:176
 msgid ""
 "Do you want to edit the whole series or just one appointment within the "
 "series?"
@@ -3504,7 +3504,7 @@ msgid "File: %1$s"
 msgstr "File: %1$s"
 
 #: apps/io.ox/files/filepicker.js:76 module:io.ox/files
-#: apps/io.ox/files/filepicker.js:123
+#: apps/io.ox/files/filepicker.js:133
 msgid "Files"
 msgstr "Files"
 
@@ -3993,7 +3993,7 @@ msgstr "Ignore Warnings"
 #: apps/io.ox/calendar/actions/acceptdeny.js:191 module:io.ox/calendar
 #: apps/io.ox/calendar/edit/main.js:153 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/month/perspective.js:125
-#: apps/io.ox/calendar/week/perspective.js:132
+#: apps/io.ox/calendar/week/perspective.js:134
 #: apps/plugins/notifications/calendar/register.js:83
 #: module:plugins/notifications
 msgid "Ignore conflicts"
@@ -4909,7 +4909,7 @@ msgstr "My tasks"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:64
 #: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js:46
 #: module:io.ox/files apps/io.ox/files/view-options.js:44
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:513
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:517
 #: module:io.ox/settings
 msgid "Name"
 msgstr "Name"
@@ -5078,7 +5078,7 @@ msgstr "Nickname"
 
 #. folder permissions - Is Admin? NO
 #: apps/io.ox/calendar/month/perspective.js:146 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:169 apps/io.ox/core/main.js:134
+#: apps/io.ox/calendar/week/perspective.js:173 apps/io.ox/core/main.js:134
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js:177
 msgid "No"
 msgstr "No"
@@ -5761,7 +5761,7 @@ msgstr "Please enter a search query"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:225 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 apps/io.ox/backbone/validation.js:78
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:590
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:594
 #: module:io.ox/settings
 msgid "Please enter a valid date"
 msgstr "Please enter a valid date"
@@ -6079,7 +6079,7 @@ msgstr "Priority"
 
 #: apps/io.ox/calendar/edit/extensions.js:471 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js:83 module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js:75
+#: apps/io.ox/calendar/view-grid-template.js:76
 #: apps/io.ox/contacts/view-detail.js:154 module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js:392 module:io.ox/tasks/edit
 msgid "Private"
@@ -6089,7 +6089,7 @@ msgstr "Private"
 msgid "Private address"
 msgstr "Private address"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1040
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1044
 #: module:io.ox/settings
 msgid "Process subsequent rules"
 msgstr "Process subsequent rules"
@@ -6605,7 +6605,7 @@ msgstr "Revoked access."
 msgid "Room number"
 msgstr "Room number"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:980
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:984
 #: module:io.ox/settings
 msgid "Rule name"
 msgstr "Rule name"
@@ -6780,7 +6780,7 @@ msgstr "Select file"
 
 #: apps/io.ox/calendar/edit/extensions.js:131 module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/picker.js:75 module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:797
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:801
 #: module:io.ox/settings
 msgid "Select folder"
 msgstr "Select folder"
@@ -6870,7 +6870,7 @@ msgstr "September"
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js:224 module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js:40
-#: apps/io.ox/calendar/week/perspective.js:174
+#: apps/io.ox/calendar/week/perspective.js:178
 msgid "Series"
 msgstr "Series"
 
@@ -7952,7 +7952,7 @@ msgstr ""
 "The unrecoverable items have been cleaned up successfully. Please refresh "
 "this page to see the changes."
 
-#: apps/io.ox/files/filepicker.js:199 module:io.ox/files
+#: apps/io.ox/files/filepicker.js:213 module:io.ox/files
 msgid "The uploaded file does not match the requested file type."
 msgid_plural "None of the uploaded files matches the requested file type."
 msgstr[0] "The uploaded file does not match the requested file type."
@@ -8508,7 +8508,7 @@ msgstr "Upload"
 msgid "Upload file"
 msgstr "Upload file"
 
-#: apps/io.ox/files/filepicker.js:218 module:io.ox/files
+#: apps/io.ox/files/filepicker.js:232 module:io.ox/files
 msgid "Upload local file"
 msgstr "Upload local file"
 
@@ -8734,7 +8734,7 @@ msgstr "Weather • Season"
 msgid "Week"
 msgstr "Week"
 
-#: apps/io.ox/calendar/week/perspective.js:345 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:350 module:io.ox/calendar
 msgid "Week View"
 msgstr "Week View"
 
@@ -8803,7 +8803,7 @@ msgstr "Whole day"
 msgid "Workweek"
 msgstr "Workweek"
 
-#: apps/io.ox/calendar/week/perspective.js:339 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:344 module:io.ox/calendar
 msgid "Workweek View"
 msgstr "Workweek View"
 
@@ -8857,7 +8857,7 @@ msgstr "Yellow"
 
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js:145 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:168 apps/io.ox/core/main.js:133
+#: apps/io.ox/calendar/week/perspective.js:172 apps/io.ox/core/main.js:133
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js:179
 #: apps/io.ox/files/util.js:257 module:io.ox/files
 msgid "Yes"
@@ -9392,7 +9392,7 @@ msgstr "dark blue"
 msgid "dark green"
 msgstr "dark green"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:614
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:618
 #: module:io.ox/settings
 msgid "datepicker"
 msgstr "date picker"
