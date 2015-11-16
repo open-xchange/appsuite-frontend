@@ -14,7 +14,7 @@
 define('io.ox/core/pdf/pdfdocument', [
     'io.ox/core/pdf/pdfview',
     '3rd.party/pdfjs/pdf.combined',
-    'settings!io.ox/core/pdf'
+    'settings!io.ox/core'
 ], function (PDFView, PDFJS, Settings) {
 
     'use strict';
@@ -51,7 +51,7 @@ define('io.ox/core/pdf/pdfdocument', [
             pageSizes = [],
 
             // whether to enable range requests support
-            enableRangeRequests = Settings.get('enableRangeRequests');
+            enableRangeRequests = Settings.get('pdf/enableRangeRequests');
 
         /**
          * Range request support. If the server supports range requests the PDF will be fetched in chunks.
