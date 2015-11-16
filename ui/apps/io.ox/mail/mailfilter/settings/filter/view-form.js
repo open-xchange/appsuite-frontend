@@ -676,10 +676,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                             ),
                             $('<div>').addClass('col-md-8').append(
                                 $('<div>').addClass('row').append(
-                                    $('<div>').addClass('col-md-3').append(
+                                    $('<div>').addClass('col-md-2').append(
                                         elements.drawOptions(test.comparison, filterValues(test.id, timeValues))
                                     ),
-                                    $('<div class="col-md-9">').append(
+                                    $('<div class="col-md-10">').append(
                                         dateView.render().$el
                                     )
                                 )
