@@ -73,7 +73,8 @@ define('io.ox/core/folder/util', [
         case 'system':
             return data.type === 5;
         case 'trash':
-            return data.type === 16;
+            // some trash folders have the legacy type 7, so check standard_folder_type too
+            return data.type === 16 || data.standard_folder_type === 12;
         case 'mail':
             return data.module === 'mail';
         case 'messaging':

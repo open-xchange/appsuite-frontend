@@ -401,6 +401,8 @@ define('io.ox/mail/listview', [
                 return memo || parseInt(obj.color_label || 0, 10);
             }, 0);
             data.color_label = color;
+            // set subject to first message in thread so a Thread has a constant subject
+            data.subject = thread[thread.length - 1].subject;
             // done
             return data;
         },

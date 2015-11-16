@@ -104,6 +104,16 @@ define('io.ox/files/filepicker', [
             options.uploadButton = false;
         }
 
+        function toggleOkButton(state) {
+            $('[data-action="ok"]', filesPane.closest('.add-infostore-file')).prop('disabled', !state);
+        }
+
+        toggleOkButton(false);
+
+        this.selection.on('change', function (e, list) {
+            toggleOkButton(list.length > 0);
+        });
+
         function onFolderChange(id) {
 
             if (currentFolder === id) {
@@ -123,6 +133,10 @@ define('io.ox/files/filepicker', [
                     pages.getNavbar('fileList').setTitle(gt('Files'));
                 });
             }
+
+            // disable ok button on folder change (selection will enable it)
+            toggleOkButton(false);
+
             filesPane.empty();
             filesAPI.getAll(id, { cache: false }).done(function (files) {
                 filesPane.append(

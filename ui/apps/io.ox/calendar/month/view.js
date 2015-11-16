@@ -87,6 +87,12 @@ define('io.ox/calendar/month/view', [
         },
 
         onCreateAppointment: function (e) {
+
+            // fix for strange safari-specific bug
+            // apparently, the double click changes the selection and then Safari runs into
+            // EXC_BAD_ACCESS (SIGSEGV). See bug 42111
+            if (_.device('safari')) document.getSelection().collapse(true);
+
             this.app.folder.can('create').done(function (create) {
 
                 if (!create) return;
