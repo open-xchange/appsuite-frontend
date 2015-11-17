@@ -13,8 +13,9 @@
 
 define('io.ox/core/pdf/pdfdocument', [
     'io.ox/core/pdf/pdfview',
-    '3rd.party/pdfjs/pdf.combined'
-], function (PDFView, PDFJS) {
+    '3rd.party/pdfjs/pdf.combined',
+    'settings!io.ox/core'
+], function (PDFView, PDFJS, Settings) {
 
     'use strict';
 
@@ -47,27 +48,26 @@ define('io.ox/core/pdf/pdfdocument', [
             defaultPageSize = null,
 
             // the size of the first page is treated as default page size {[{width, height}, ...]}
-            pageSizes = [];
+            pageSizes = [],
+
+            // whether to enable range requests support
+            enableRangeRequests = Settings.get('pdf/enableRangeRequests');
 
         /**
-         * TODO (KA): check reenabling range request,
-         * but ATM, we're running into into rate limits
-         * much too often
-         *
-         * Additionally Safari has issues with cached range requests see:
-         * https://github.com/mozilla/pdf.js/issues/3260
-         *
-         * Disable range requests
+         * Range request support. If the server supports range requests the PDF will be fetched in chunks.
          */
-        PDFJS.disableRange = true;
+        PDFJS.disableRange = !enableRangeRequests;
 
         /**
-         * On Safari also disable streaming
-         * taken from pdfjs/compatibility.js
+         * Streaming of PDF file data.
          */
-        if (_.device('safari')) {
-            PDFJS.disableStream = true;
-        }
+        PDFJS.disableStream = !enableRangeRequests;
+
+        /**
+         * Pre-fetching of PDF file data. PDF.js will automatically keep fetching more data even if it isn't needed to display the current page.
+         * NOTE: It is also necessary to disable streaming, see above, in order for disabling of pre-fetching to work correctly.
+         */
+        PDFJS.disableAutoFetch = !enableRangeRequests;
 
         // set verbosity level for PDF.js to errors only
         PDFJS.verbosity = PDFJS.VERBOSITY_LEVELS.errors;
