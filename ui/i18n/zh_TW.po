@@ -665,7 +665,7 @@ msgstr "帳戶"
 #: apps/io.ox/files/mobile-toolbar-actions.js:132
 #: apps/io.ox/files/share/permissions.js:714 apps/io.ox/mail/detail/view.js:91
 #: apps/io.ox/mail/detail/view.js:92
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:956
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:961
 #: module:io.ox/settings apps/io.ox/mail/mobile-toolbar-actions.js:150
 #: apps/io.ox/mail/mobile-toolbar-actions.js:151
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:110 module:io.ox/tasks
@@ -719,7 +719,7 @@ msgstr "新增描述"
 msgid "Add account"
 msgstr "新增帳號"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:970
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:980
 #: module:io.ox/settings
 msgid "Add action"
 msgstr "新增行為"
@@ -737,7 +737,7 @@ msgstr "新增為公開資料夾"
 msgid "Add attachments"
 msgstr "新增附件"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:965
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:975
 #: module:io.ox/settings
 msgid "Add condition"
 msgstr "添加條件"
@@ -797,7 +797,7 @@ msgstr "為此訂閱新增資料夾"
 msgid "Add new participant"
 msgstr "添加參與者"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:434 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:437 module:io.ox/mail
 msgid "Add new rule"
 msgstr "新增規則"
 
@@ -1069,13 +1069,13 @@ msgstr "應用程式"
 msgid "Apply role"
 msgstr "套用腳色"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1001
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1011
 #: module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1005
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1015
 msgid "Apply rule if all conditions are met"
 msgstr "符合所有條件時套用規則"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1001
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1011
 #: module:io.ox/settings
 msgid "Apply rule if any condition is met."
 msgstr "符合任何條件時套用規則"
@@ -1495,7 +1495,7 @@ msgstr "行事曆:"
 #: apps/io.ox/mail/compose/inline-images.js:80
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:649
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
-#: apps/io.ox/mail/mailfilter/settings/filter.js:324
+#: apps/io.ox/mail/mailfilter/settings/filter.js:327
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1250
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:258
@@ -1749,7 +1749,7 @@ msgstr "單點上傳圖像。"
 
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
-#: apps/io.ox/core/folder/tree.js:224 apps/io.ox/core/main.js:1214
+#: apps/io.ox/core/folder/tree.js:227 apps/io.ox/core/main.js:1214
 #: apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/tk/wizard.js:359
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:162
@@ -1865,7 +1865,7 @@ msgstr "撰寫新郵件"
 msgid "Compose new mail"
 msgstr "撰寫新郵件"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:955
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:960
 #: module:io.ox/settings
 msgid "Conditions"
 msgstr "條件"
@@ -2296,7 +2296,7 @@ msgstr "延遲"
 #: apps/io.ox/files/actions/versions-delete.js:25
 #: apps/io.ox/files/toolbar.js:174 apps/io.ox/mail/actions.js:506
 #: apps/io.ox/mail/actions/delete.js:67 apps/io.ox/mail/actions/delete.js:86
-#: apps/io.ox/mail/mailfilter/settings/filter.js:323
+#: apps/io.ox/mail/mailfilter/settings/filter.js:326
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:379
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:380
@@ -2451,8 +2451,8 @@ msgstr "直接鏈結：%1$s"
 #: apps/io.ox/core/notifications.js:134 module:io.ox/core
 #: apps/io.ox/core/sub/settings/pane.js:178 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:179
-#: apps/io.ox/mail/mailfilter/settings/filter.js:142 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:284
+#: apps/io.ox/mail/mailfilter/settings/filter.js:145 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:287
 #: apps/io.ox/portal/settings/pane.js:301 module:io.ox/portal
 msgid "Disable"
 msgstr "禁用"
@@ -2593,7 +2593,7 @@ msgctxt "One file only"
 msgid "Do you really want to delete this file?"
 msgstr "您確定要刪除此檔案？"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:322 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:325 module:io.ox/mail
 #, fuzzy
 #| msgctxt "One file only"
 #| msgid "Do you really want to delete this file?"
@@ -2856,7 +2856,7 @@ msgstr "EB"
 #: apps/io.ox/files/main.js:874 apps/io.ox/files/main.js:922
 #: apps/io.ox/files/share/permissions.js:733 module:io.ox/core
 #: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:496
-#: apps/io.ox/mail/mailfilter/settings/filter.js:156
+#: apps/io.ox/mail/mailfilter/settings/filter.js:159
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1254
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:373
@@ -3051,8 +3051,8 @@ msgstr "找到空白的名稱與描述。"
 #: apps/io.ox/core/sub/settings/pane.js:178 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:179
 #: apps/io.ox/mail/autoforward/settings/model.js:96 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:142
-#: apps/io.ox/mail/mailfilter/settings/filter.js:284
+#: apps/io.ox/mail/mailfilter/settings/filter.js:145
+#: apps/io.ox/mail/mailfilter/settings/filter.js:287
 #: apps/io.ox/portal/settings/pane.js:306 module:io.ox/portal
 msgid "Enable"
 msgstr "啟用"
@@ -4442,7 +4442,7 @@ msgstr "郵件"
 msgid "Mail Details"
 msgstr "郵件詳細資訊"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:432 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:435 module:io.ox/mail
 msgid "Mail Filter Rules"
 msgstr "郵件篩選規則"
 
@@ -4850,7 +4850,7 @@ msgstr "我的任務"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:64
 #: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js:46
 #: module:io.ox/files apps/io.ox/files/view-options.js:44
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:517
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:522
 #: module:io.ox/settings
 msgid "Name"
 msgstr "姓名"
@@ -5675,6 +5675,13 @@ msgstr "請從下方挑選一個句子"
 msgid "Please comment your confirmation status."
 msgstr "請修改確認狀態。"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:142
+#: module:io.ox/settings
+#, fuzzy
+#| msgid "Please enter a description."
+msgid "Please define at least one action."
+msgstr "請輸入名稱。"
+
 #: apps/io.ox/backbone/validation.js:81 module:io.ox/core
 msgid "Please enter a date in the past"
 msgstr "請輸入過去的日期"
@@ -5697,7 +5704,7 @@ msgstr "請輸入搜尋字串"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:225 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 apps/io.ox/backbone/validation.js:78
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:594
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:599
 #: module:io.ox/settings
 msgid "Please enter a valid date"
 msgstr "請輸入有效日期"
@@ -6019,7 +6026,7 @@ msgstr "私人"
 msgid "Private address"
 msgstr "私人地址"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1044
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1054
 #: module:io.ox/settings
 msgid "Process subsequent rules"
 msgstr "處理後續規則"
@@ -6521,7 +6528,7 @@ msgstr "已撤銷授權。"
 msgid "Room number"
 msgstr "房間號"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:984
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:994
 #: module:io.ox/settings
 msgid "Rule name"
 msgstr "規則名稱"
@@ -6694,7 +6701,7 @@ msgstr "選擇檔案"
 
 #: apps/io.ox/calendar/edit/extensions.js:131 module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/picker.js:75 module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:801
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:806
 #: module:io.ox/settings
 msgid "Select folder"
 msgstr "選擇資料夾"
@@ -7878,7 +7885,7 @@ msgstr "這種類型的檔案無法預覽"
 msgid "There is no recent activity in your Xing network."
 msgstr "您的 Xing 網路中沒有近期活動。"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:452 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:455 module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "沒有定義規則"
 
@@ -8425,7 +8432,7 @@ msgstr ""
 "使用方向鍵變更日期。同時按下 Ctrl 以變更年度，或按下 Shift 變更月份，按下 "
 "Esc 鍵關閉日期選擇器。"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:241 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:244 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:252 module:io.ox/portal
 msgid ""
 "Use cursor keys to change the item position. Virtual cursor mode has to be "
@@ -9240,7 +9247,7 @@ msgstr "深藍色"
 msgid "dark green"
 msgstr "深紅色"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:618
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:623
 #: module:io.ox/settings
 msgid "datepicker"
 msgstr "日期選擇器"
@@ -9565,7 +9572,7 @@ msgstr "粉紅色"
 msgid "private"
 msgstr "私人"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:158 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:161 module:io.ox/mail
 msgid "process subsequent rules"
 msgstr "處理後續規則"
 
@@ -9588,7 +9595,7 @@ msgstr "讀取自己的物件"
 msgid "red"
 msgstr "紅色"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:159 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:162 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:311 module:io.ox/portal
 msgid "remove"
 msgstr "刪除"
@@ -9629,7 +9636,7 @@ msgstr "狀態"
 msgid "tentative"
 msgstr "暫定"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:393 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:396 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:213 module:io.ox/portal
 msgid "the item has been moved"
 msgstr "此項目已被移動"
