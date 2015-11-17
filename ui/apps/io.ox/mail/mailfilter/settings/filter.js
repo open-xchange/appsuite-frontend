@@ -330,11 +330,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             if (action === 'delete') {
                                 if (id !== false) {
                                     //yell on reject
+                                    self.model.collection.remove(id);
                                     settingsUtil.yellOnReject(
                                         api.deleteRule(id).done(function () {
                                             var arrayOfFilters,
                                                 data;
-                                            self.model.collection.remove(id);
                                             $node.find('.controls [data-action="add"]').focus();
 
                                             arrayOfFilters = $node.find('li[data-id]');
