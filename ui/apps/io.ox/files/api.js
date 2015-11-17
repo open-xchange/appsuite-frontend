@@ -199,7 +199,7 @@ define('io.ox/files/api', [
         types: {
             image: /^(gif|bmp|tiff|jpe?g|gmp|png)$/,
             audio: /^(aac|mp3|m4a|m4b|ogg|opus|wav)$/,
-            video: /^(avi|m4v|mp4|ogv|ogm|mov|mpeg|webm)$/,
+            video: /^(avi|m4v|mp4|ogv|ogm|mov|mpeg|webm|wmv)$/,
             vcf:   /^(vcf)$/,
             doc:   /^(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)$/,
             xls:   /^(csv|xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb|ods|ots)$/,
@@ -262,6 +262,7 @@ define('io.ox/files/api', [
         'ogv':  'video/ogg',
         'ogm':  'video/ogg',
         'webm': 'video/webm',
+        'wmv':  'video/video/x-ms-wmv',
         // CSV
         'csv':  'text/csv',
         // open office
