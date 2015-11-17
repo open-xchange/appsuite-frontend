@@ -23,16 +23,14 @@ define('io.ox/onboarding/clients/wizard', [
     Wizard.registry.add({ id: 'client-onboarding', title: gt('Client onboarding'), type: 'onboarding' }, function () {
 
         new Wizard({ model: new Backbone.Model({ platform: null, device: null, module: null }) })
-        .step({ next: false, width: 'auto' })
-            .title(gt('Select your platform'))
+        .step({ next: false, width: 'auto', minWidth: '504px' })
             .on('before:show', drawPlatforms)
             .end()
-        .step({ next: false, width: 'auto' })
+        .step({ next: false, width: 'auto', minWidth: '504px', labelBack: gt('Back to platforms') })
             .title(gt('Select your device'))
             .on('before:show', drawDevices)
             .end()
-        .step({ next: false, width: 'auto' })
-            .title(gt('What do you want to use on your device?'))
+        .step({ next: false, width: 'auto', minWidth: '504px', labelBack: gt('Back to devices') })
             .on('before:show', drawModules)
             .end()
         .step({ next: false })
@@ -50,6 +48,12 @@ define('io.ox/onboarding/clients/wizard', [
     var MODULES = ['mail', 'contacts', 'calendar', 'drive'];
 
     var meta = {
+
+        teaser: {
+            //#. %1$s is the product name, e.g. OX.
+            platform: gt('Take %1$s with you! Stay up-to-date on your favorite devices.', ox.serverConfig.productName),
+            device: gt('Which device do you want to configure?')
+        },
 
         platforms: {
             android: {
@@ -71,25 +75,46 @@ define('io.ox/onboarding/clients/wizard', [
 
         devices: {
             'android-phone': {
-                title: gt('Smartphone'), icon: 'fa-mobile', modules: MODULES
+                icon: 'fa-mobile',
+                modules: MODULES,
+                teaser: gt('What to you want to use on your smartphone?'),
+                title: gt('Smartphone')
             },
             'android-tablet': {
-                title: gt('Tablet'), icon: 'fa-mobile', modules: MODULES
+                icon: 'fa-mobile',
+                modules: MODULES,
+                teaser: gt('What do you want to use on your tablet?'),
+                title: gt('Tablet')
             },
             'iphone': {
-                title: gt('iPhone'), icon: 'fa-mobile', modules: MODULES
+                icon: 'fa-mobile',
+                modules: MODULES,
+                teaser: gt('What do you want to use on your iPhone?'),
+                title: gt('iPhone')
             },
             'ipad': {
-                title: gt('iPad'), icon: 'fa-tablet', modules: MODULES
+                icon: 'fa-tablet',
+                modules: MODULES,
+                teaser: gt('What do you want to use on your iPad?'),
+                title: gt('iPad')
             },
             'mac': {
-                title: gt('Mac'), icon: 'fa-desktop', modules: MODULES
+                icon: 'fa-desktop',
+                modules: MODULES,
+                teaser: gt('What do you want to use on your Mac?'),
+                title: gt('Mac')
             },
             'windows-phone': {
-                title: gt('Windows Phone'), icon: 'fa-mobile', modules: MODULES
+                icon: 'fa-mobile',
+                modules: MODULES,
+                teaser: gt('What do you want to use on your Windows Phone?'),
+                title: gt('Windows Phone')
             },
             'windows-pc': {
-                title: gt('Windows PC'), icon: 'fa-desktop', modules: MODULES
+                icon: 'fa-desktop',
+                modules: MODULES,
+                teaser: gt('What do you want to use on your Windows PC?'),
+                title: gt('Windows PC')
             }
         },
 
@@ -146,7 +171,11 @@ define('io.ox/onboarding/clients/wizard', [
     }
 
     function drawPlatforms() {
+        this.$('.wizard-title').css('white-space', 'pre').text(
+            meta.teaser.platform.replace(/!\s/, '!\n')
+        );
         this.$('.wizard-content').empty().append(
+            $('<p class="onboarding-teaser">').text(gt('Select the platform of your device:')),
             drawOptions('platform', getPlatforms())
             .on('click', 'a', onSelectPlatform.bind(this))
         );
@@ -174,6 +203,7 @@ define('io.ox/onboarding/clients/wizard', [
 
     function drawDevices() {
         var platform = this.getModel().get('platform');
+        this.$('.wizard-title').text(meta.teaser.device);
         this.$('.wizard-content').empty().append(
             drawOptions('device', getDevices(platform))
             .on('click', 'a', onSelectDevice.bind(this))
@@ -202,6 +232,7 @@ define('io.ox/onboarding/clients/wizard', [
 
     function drawModules() {
         var device = this.getModel().get('device');
+        this.$('.wizard-title').text(meta.devices[device].teaser);
         this.$('.wizard-content').empty().append(
             drawOptions('module', getModules(device))
             .on('click', 'a', onSelectModule.bind(this))

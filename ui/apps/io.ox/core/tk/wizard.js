@@ -328,8 +328,10 @@ define('io.ox/core/tk/wizard', [
                 this.parent.trigger('step:' + type);
             });
 
-            // custom width
-            if (this.options.width) this.$el.css('width', this.options.width);
+            // custom css
+            _(['width', 'minWidth']).each(function (type) {
+                if (this.options[type]) this.$el.css(type, this.options[type]);
+            }, this);
 
             // navbar needs an update for every change
             // only once for normal popups
