@@ -1,6 +1,6 @@
 Name:           open-xchange-appsuite-saml
 Version:        @OXVERSION@
-%define         ox_release 7
+%define         ox_release 8
 Release:        %{ox_release}
 Group:          Applications/Productivity
 Packager:       Francisco Laguna <francisco.laguna@open-xchange.com>
@@ -45,6 +45,8 @@ if [ -x %{update} ]; then %{update}; fi
 /opt/open-xchange/appsuite
 
 %changelog
+* Mon Nov 16 2015 Francisco Laguna <francisco.laguna@open-xchange.com>
+Build for patch 2015-11-13 (2879)
 * Wed Nov 11 2015 Francisco Laguna <francisco.laguna@open-xchange.com>
 Build for patch 2015-11-16 (2862)
 * Tue Nov 03 2015 Francisco Laguna <francisco.laguna@open-xchange.com>

@@ -44,6 +44,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             'regex': gt('Regex')
         },
 
+        timeValues = {
+            'ge': gt('starts on'),
+            'le': gt('ends on'),
+            'is': gt('is on')
+        },
+
         headerTranslation = {
             'From': gt('Sender/From'),
             'any': gt('Any recipient'),
@@ -54,7 +60,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             'cleanHeader': gt('Header'),
             'envelope': gt('Envelope'),
             'size': gt('Size (bytes)'),
-            'body': gt('Content')
+            'body': gt('Content'),
+            'currentdate': gt('Current Date')
         },
 
         conditionsMapping = {
@@ -179,7 +186,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         },
 
         toggleSaveButton = function (footer, pane) {
-            if (pane.find('input.warning').length === 0) {
+            if (pane.find('input.warning, select.warning').length === 0) {
                 footer.find('[data-action="save"]').prop('disabled', false);
             } else {
                 footer.find('[data-action="save"]').prop('disabled', true);
@@ -423,6 +430,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     case 'values':
                         translatedValue = containsValues[value];
                         break;
+                    case 'currentdate':
+                        translatedValue = timeValues[value];
                 }
 
                 label.text(testTitle + ' ' + value);
@@ -640,6 +649,49 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                             )
                         )
                     );
+                } else if (test.id === 'currentdate') {
+                    var TimeModel = Backbone.Model.extend({
+                        }),
+                        model = new TimeModel();
+
+                    model.on('change:datevalue', function () {
+                        test.datevalue = [model.get('datevalue')];
+                        if (model.get('datevalue') < 0 || model.get('datevalue') === null) {
+                            listTests.find('[data-test-id="' + num + '"] select').addClass('warning');
+                        } else {
+                            listTests.find('[data-test-id="' + num + '"] select').removeClass('warning');
+                        }
+                        toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
+                    });
+
+                    model.set('datevalue', test.datevalue[0]);
+
+                    var dateView = new mini.DateView({ name: 'datevalue', model: model, future: 5, past: 5 });
+
+                    listTests.append(
+                        $('<li>').addClass('filter-settings-view row').attr({ 'data-type': 'currentdate', 'data-test-id': num }).append(
+                            elements.drawDeleteButton('test'),
+                            $('<div>').addClass('col-md-4 singleline').append(
+                                $('<span>').addClass('list-title').text(headerTranslation[test.id])
+                            ),
+                            $('<div>').addClass('col-md-8').append(
+                                $('<div>').addClass('row').append(
+                                    $('<div>').addClass('col-md-2').append(
+                                        elements.drawOptions(test.comparison, filterValues(test.id, timeValues))
+                                    ),
+                                    $('<div class="col-md-10">').append(
+                                        dateView.render().$el
+                                    )
+                                )
+                            )
+                        )
+                    );
+                    listTests.find('fieldset legend').addClass('sr-only');
+                    if (test.datevalue.length === 0) {
+                        listTests.find('[data-test-id="' + num + '"] select').addClass('warning');
+                        toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
+                    }
+
                 } else if (test.id === 'header') {
                     var name;
                     if (test.headers[3]) {

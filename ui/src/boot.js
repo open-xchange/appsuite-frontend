@@ -121,7 +121,9 @@ $(window).load(function () {
             return this;
         }
     }
-
+    if (_.device('smartphone')) {
+        $('html').addClass('smartphone');
+    }
     if (_.device('iOS')) {
         $('html').addClass('ios');
     }
