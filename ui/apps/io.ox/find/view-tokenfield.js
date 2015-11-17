@@ -134,8 +134,9 @@ define('io.ox/find/view-tokenfield', [
                 reduce: function (data) {
                     var manager = model.manager,
                         list = [];
-                    // IMPORTANT: add models to collection
-                    manager.update(data);
+                    // IMPORTANT: add models to collection (but not folder!)
+                    // do not change folder facet values here (see bug 42395)
+                    manager.update(data, { keep: 'folder' } );
                     data = manager.filter(function (facet) {
                         return facet.is('tokenfield') && !facet.is('hidden');
                     });
