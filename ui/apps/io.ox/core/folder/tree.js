@@ -101,6 +101,9 @@ define('io.ox/core/folder/tree', [
         },
 
         filter: function (folder, model) {
+            // .hideTrashfolder hides the trashfolder, used when saving attachments to drive see Bug 38280
+            if (this.options.hideTrashfolder && api.is('trash', model.attributes)) { return false; }
+
             // custom filter?
             var filter = this.options.filter,
                 result = _.isFunction(filter) ? filter.apply(this, arguments) : undefined;

@@ -697,7 +697,7 @@ msgstr "Conturi"
 #: apps/io.ox/files/mobile-toolbar-actions.js:132
 #: apps/io.ox/files/share/permissions.js:714 apps/io.ox/mail/detail/view.js:91
 #: apps/io.ox/mail/detail/view.js:92
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:956
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:961
 #: module:io.ox/settings apps/io.ox/mail/mobile-toolbar-actions.js:150
 #: apps/io.ox/mail/mobile-toolbar-actions.js:151
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:110 module:io.ox/tasks
@@ -751,7 +751,7 @@ msgstr "Adaugă o descriere"
 msgid "Add account"
 msgstr "Adaugă un cont"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:970
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:980
 #: module:io.ox/settings
 msgid "Add action"
 msgstr "Adaugă o acțiune"
@@ -769,7 +769,7 @@ msgstr "Adaugă ca dosar public"
 msgid "Add attachments"
 msgstr "Adaugă fișiere atașate"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:965
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:975
 #: module:io.ox/settings
 msgid "Add condition"
 msgstr "Adaugă condiție"
@@ -829,7 +829,7 @@ msgstr "Adaugă un dosar nou pentru acest abonament"
 msgid "Add new participant"
 msgstr "Adaugă participant"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:434 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:437 module:io.ox/mail
 msgid "Add new rule"
 msgstr "Adaugă o regulă nouă"
 
@@ -1104,13 +1104,13 @@ msgstr "Aplicații"
 msgid "Apply role"
 msgstr "Aplică rolul"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1001
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1011
 #: module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1005
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1015
 msgid "Apply rule if all conditions are met"
 msgstr "Aplică regula dacă toate condițiile sunt respectate"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1001
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1011
 #: module:io.ox/settings
 msgid "Apply rule if any condition is met."
 msgstr "Aplică regula dacă oricare din condiții este respectată."
@@ -1539,7 +1539,7 @@ msgstr "Calendar:"
 #: apps/io.ox/mail/compose/inline-images.js:80
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:649
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
-#: apps/io.ox/mail/mailfilter/settings/filter.js:324
+#: apps/io.ox/mail/mailfilter/settings/filter.js:327
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1250
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:258
@@ -1798,7 +1798,7 @@ msgstr "Apăsați aici pentru a încărca imaginea"
 
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
-#: apps/io.ox/core/folder/tree.js:224 apps/io.ox/core/main.js:1214
+#: apps/io.ox/core/folder/tree.js:227 apps/io.ox/core/main.js:1214
 #: apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/tk/wizard.js:359
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:162
@@ -1914,7 +1914,7 @@ msgstr "Compune un mesaj nou"
 msgid "Compose new mail"
 msgstr "Compune un mail nou"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:955
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:960
 #: module:io.ox/settings
 msgid "Conditions"
 msgstr "Condiții"
@@ -2349,7 +2349,7 @@ msgstr "Amânat"
 #: apps/io.ox/files/actions/versions-delete.js:25
 #: apps/io.ox/files/toolbar.js:174 apps/io.ox/mail/actions.js:506
 #: apps/io.ox/mail/actions/delete.js:67 apps/io.ox/mail/actions/delete.js:86
-#: apps/io.ox/mail/mailfilter/settings/filter.js:323
+#: apps/io.ox/mail/mailfilter/settings/filter.js:326
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:379
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:380
@@ -2505,8 +2505,8 @@ msgstr "Legătură directă: %1$s"
 #: apps/io.ox/core/notifications.js:134 module:io.ox/core
 #: apps/io.ox/core/sub/settings/pane.js:178 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:179
-#: apps/io.ox/mail/mailfilter/settings/filter.js:142 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:284
+#: apps/io.ox/mail/mailfilter/settings/filter.js:145 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:287
 #: apps/io.ox/portal/settings/pane.js:301 module:io.ox/portal
 msgid "Disable"
 msgstr "Dezactivează"
@@ -2650,7 +2650,7 @@ msgctxt "One file only"
 msgid "Do you really want to delete this file?"
 msgstr "Sigur doriți să ștergeți acest fișier?"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:322 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:325 module:io.ox/mail
 #, fuzzy
 #| msgctxt "One file only"
 #| msgid "Do you really want to delete this file?"
@@ -2920,7 +2920,7 @@ msgstr "EB"
 #: apps/io.ox/files/main.js:874 apps/io.ox/files/main.js:922
 #: apps/io.ox/files/share/permissions.js:733 module:io.ox/core
 #: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:496
-#: apps/io.ox/mail/mailfilter/settings/filter.js:156
+#: apps/io.ox/mail/mailfilter/settings/filter.js:159
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1254
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:373
@@ -3117,8 +3117,8 @@ msgstr "S-au găsit un nume și o descriere vide."
 #: apps/io.ox/core/sub/settings/pane.js:178 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:179
 #: apps/io.ox/mail/autoforward/settings/model.js:96 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:142
-#: apps/io.ox/mail/mailfilter/settings/filter.js:284
+#: apps/io.ox/mail/mailfilter/settings/filter.js:145
+#: apps/io.ox/mail/mailfilter/settings/filter.js:287
 #: apps/io.ox/portal/settings/pane.js:306 module:io.ox/portal
 msgid "Enable"
 msgstr "Activează"
@@ -4538,7 +4538,7 @@ msgstr "Mail"
 msgid "Mail Details"
 msgstr "Detalii e-mail"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:432 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:435 module:io.ox/mail
 msgid "Mail Filter Rules"
 msgstr "Reguli de filtrare a mesajelor"
 
@@ -4946,7 +4946,7 @@ msgstr "Sarcinile mele"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:64
 #: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js:46
 #: module:io.ox/files apps/io.ox/files/view-options.js:44
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:517
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:522
 #: module:io.ox/settings
 msgid "Name"
 msgstr "Nume"
@@ -5781,6 +5781,13 @@ msgstr "Selectați o propoziție."
 msgid "Please comment your confirmation status."
 msgstr "Comentați starea confirmării dumneavoastră. "
 
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:142
+#: module:io.ox/settings
+#, fuzzy
+#| msgid "Please select at least one task!"
+msgid "Please define at least one action."
+msgstr "Selectați cel puțin o sarcină!"
+
 #: apps/io.ox/backbone/validation.js:81 module:io.ox/core
 msgid "Please enter a date in the past"
 msgstr "Introduceți o dată din trecut"
@@ -5803,7 +5810,7 @@ msgstr "Introduceți o interogare de căutare"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:225 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 apps/io.ox/backbone/validation.js:78
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:594
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:599
 #: module:io.ox/settings
 msgid "Please enter a valid date"
 msgstr "Introduceți o dată corectă"
@@ -6130,7 +6137,7 @@ msgstr "Personal"
 msgid "Private address"
 msgstr "Adresă personală"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1044
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1054
 #: module:io.ox/settings
 msgid "Process subsequent rules"
 msgstr "Procesează regulile ulterioare"
@@ -6648,7 +6655,7 @@ msgstr "Acces revocat."
 msgid "Room number"
 msgstr "Număr cameră"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:984
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:994
 #: module:io.ox/settings
 msgid "Rule name"
 msgstr "Nume regulă"
@@ -6825,7 +6832,7 @@ msgstr "Selectează fișierul"
 
 #: apps/io.ox/calendar/edit/extensions.js:131 module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/picker.js:75 module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:801
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:806
 #: module:io.ox/settings
 msgid "Select folder"
 msgstr "Selectează dosarul"
@@ -8054,7 +8061,7 @@ msgstr "Pentru acest tip de fișier nu există previzualizare"
 msgid "There is no recent activity in your Xing network."
 msgstr "Nicio activitate recentă în rețeaua dumneavoastră Xing."
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:452 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:455 module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "Nu a fost definită nicio regulă"
 
@@ -8628,7 +8635,7 @@ msgstr ""
 "același timp pentru a modifica anul sau tasta Shift pentru a modifica luna. "
 "Închideți selectorul de dată apăsând tasta Esc."
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:241 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:244 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:252 module:io.ox/portal
 msgid ""
 "Use cursor keys to change the item position. Virtual cursor mode has to be "
@@ -9477,7 +9484,7 @@ msgstr "albastru închis"
 msgid "dark green"
 msgstr "verde închis"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:618
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:623
 #: module:io.ox/settings
 msgid "datepicker"
 msgstr "selectare date"
@@ -9806,7 +9813,7 @@ msgstr "roz"
 msgid "private"
 msgstr "personal"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:158 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:161 module:io.ox/mail
 msgid "process subsequent rules"
 msgstr "procesează regulile ulterioare"
 
@@ -9829,7 +9836,7 @@ msgstr "citește obiectele personale"
 msgid "red"
 msgstr "roșu"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:159 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:162 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:311 module:io.ox/portal
 msgid "remove"
 msgstr "elimină"
@@ -9870,7 +9877,7 @@ msgstr "stare"
 msgid "tentative"
 msgstr "tentativă"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:393 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:396 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:213 module:io.ox/portal
 msgid "the item has been moved"
 msgstr "elementul a fost mutat"
@@ -13609,9 +13616,6 @@ msgstr "aaaa"
 
 #~ msgid "Please select at least one E-Mail address."
 #~ msgstr "Selectați cel puțin o adresă de e-mail."
-
-#~ msgid "Please select at least one task!"
-#~ msgstr "Selectați cel puțin o sarcină!"
 
 #~ msgid "Please select only one Publication"
 #~ msgstr "Selectați o singură publicație"

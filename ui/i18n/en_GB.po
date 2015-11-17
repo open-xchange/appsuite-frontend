@@ -672,7 +672,7 @@ msgstr "Accounts"
 #: apps/io.ox/files/mobile-toolbar-actions.js:132
 #: apps/io.ox/files/share/permissions.js:714 apps/io.ox/mail/detail/view.js:91
 #: apps/io.ox/mail/detail/view.js:92
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:956
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:961
 #: module:io.ox/settings apps/io.ox/mail/mobile-toolbar-actions.js:150
 #: apps/io.ox/mail/mobile-toolbar-actions.js:151
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:110 module:io.ox/tasks
@@ -726,7 +726,7 @@ msgstr "Add a description"
 msgid "Add account"
 msgstr "Add account"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:970
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:980
 #: module:io.ox/settings
 msgid "Add action"
 msgstr "Add action"
@@ -744,7 +744,7 @@ msgstr "Add as public folder"
 msgid "Add attachments"
 msgstr "Add attachments"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:965
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:975
 #: module:io.ox/settings
 msgid "Add condition"
 msgstr "Add condition"
@@ -804,7 +804,7 @@ msgstr "Add new folder for this subscription"
 msgid "Add new participant"
 msgstr "Add new participant"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:434 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:437 module:io.ox/mail
 msgid "Add new rule"
 msgstr "Add new rule"
 
@@ -1076,13 +1076,13 @@ msgstr "Applications"
 msgid "Apply role"
 msgstr "Apply role"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1001
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1011
 #: module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1005
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1015
 msgid "Apply rule if all conditions are met"
 msgstr "Apply rule if all conditions are met"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1001
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1011
 #: module:io.ox/settings
 msgid "Apply rule if any condition is met."
 msgstr "Apply rule if any condition is met."
@@ -1510,7 +1510,7 @@ msgstr "Calendar:"
 #: apps/io.ox/mail/compose/inline-images.js:80
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:649
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
-#: apps/io.ox/mail/mailfilter/settings/filter.js:324
+#: apps/io.ox/mail/mailfilter/settings/filter.js:327
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1250
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:150
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:258
@@ -1764,7 +1764,7 @@ msgstr "Click to upload image"
 
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
-#: apps/io.ox/core/folder/tree.js:224 apps/io.ox/core/main.js:1214
+#: apps/io.ox/core/folder/tree.js:227 apps/io.ox/core/main.js:1214
 #: apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/tk/wizard.js:359
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:162
@@ -1880,7 +1880,7 @@ msgstr "Compose new e-mail"
 msgid "Compose new mail"
 msgstr "Compose new email"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:955
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:960
 #: module:io.ox/settings
 msgid "Conditions"
 msgstr "Conditions"
@@ -2314,7 +2314,7 @@ msgstr "Deferred"
 #: apps/io.ox/files/actions/versions-delete.js:25
 #: apps/io.ox/files/toolbar.js:174 apps/io.ox/mail/actions.js:506
 #: apps/io.ox/mail/actions/delete.js:67 apps/io.ox/mail/actions/delete.js:86
-#: apps/io.ox/mail/mailfilter/settings/filter.js:323
+#: apps/io.ox/mail/mailfilter/settings/filter.js:326
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:379
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:380
@@ -2469,8 +2469,8 @@ msgstr "Direct link: %1$s"
 #: apps/io.ox/core/notifications.js:134 module:io.ox/core
 #: apps/io.ox/core/sub/settings/pane.js:178 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:179
-#: apps/io.ox/mail/mailfilter/settings/filter.js:142 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:284
+#: apps/io.ox/mail/mailfilter/settings/filter.js:145 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:287
 #: apps/io.ox/portal/settings/pane.js:301 module:io.ox/portal
 msgid "Disable"
 msgstr "Disable"
@@ -2617,7 +2617,7 @@ msgctxt "One file only"
 msgid "Do you really want to delete this file?"
 msgstr "Do you really want to delete this file?"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:322 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:325 module:io.ox/mail
 #, fuzzy
 #| msgctxt "One file only"
 #| msgid "Do you really want to delete this file?"
@@ -2888,7 +2888,7 @@ msgstr "EB"
 #: apps/io.ox/files/main.js:874 apps/io.ox/files/main.js:922
 #: apps/io.ox/files/share/permissions.js:733 module:io.ox/core
 #: apps/io.ox/files/toolbar.js:72 apps/io.ox/mail/actions.js:496
-#: apps/io.ox/mail/mailfilter/settings/filter.js:156
+#: apps/io.ox/mail/mailfilter/settings/filter.js:159
 #: apps/io.ox/mail/main.js:149 apps/io.ox/mail/main.js:155
 #: apps/io.ox/mail/main.js:307 apps/io.ox/mail/main.js:1254
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:373
@@ -3085,8 +3085,8 @@ msgstr "Empty name and description found."
 #: apps/io.ox/core/sub/settings/pane.js:178 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:179
 #: apps/io.ox/mail/autoforward/settings/model.js:96 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:142
-#: apps/io.ox/mail/mailfilter/settings/filter.js:284
+#: apps/io.ox/mail/mailfilter/settings/filter.js:145
+#: apps/io.ox/mail/mailfilter/settings/filter.js:287
 #: apps/io.ox/portal/settings/pane.js:306 module:io.ox/portal
 msgid "Enable"
 msgstr "Enable"
@@ -4501,7 +4501,7 @@ msgstr "Email"
 msgid "Mail Details"
 msgstr "E-mail Details"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:432 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:435 module:io.ox/mail
 msgid "Mail Filter Rules"
 msgstr "E-mail Filter Rules"
 
@@ -4909,7 +4909,7 @@ msgstr "My tasks"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:64
 #: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js:46
 #: module:io.ox/files apps/io.ox/files/view-options.js:44
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:517
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:522
 #: module:io.ox/settings
 msgid "Name"
 msgstr "Name"
@@ -5739,6 +5739,13 @@ msgstr "Please choose a sentence below."
 msgid "Please comment your confirmation status."
 msgstr "Please comment on your confirmation status."
 
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:142
+#: module:io.ox/settings
+#, fuzzy
+#| msgid "Please enter a description."
+msgid "Please define at least one action."
+msgstr "Please enter a description."
+
 #: apps/io.ox/backbone/validation.js:81 module:io.ox/core
 msgid "Please enter a date in the past"
 msgstr "Please enter a date in the past"
@@ -5761,7 +5768,7 @@ msgstr "Please enter a search query"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:225 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 apps/io.ox/backbone/validation.js:78
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:594
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:599
 #: module:io.ox/settings
 msgid "Please enter a valid date"
 msgstr "Please enter a valid date"
@@ -6089,7 +6096,7 @@ msgstr "Private"
 msgid "Private address"
 msgstr "Private address"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1044
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1054
 #: module:io.ox/settings
 msgid "Process subsequent rules"
 msgstr "Process subsequent rules"
@@ -6605,7 +6612,7 @@ msgstr "Revoked access."
 msgid "Room number"
 msgstr "Room number"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:984
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:994
 #: module:io.ox/settings
 msgid "Rule name"
 msgstr "Rule name"
@@ -6780,7 +6787,7 @@ msgstr "Select file"
 
 #: apps/io.ox/calendar/edit/extensions.js:131 module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/picker.js:75 module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:801
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:806
 #: module:io.ox/settings
 msgid "Select folder"
 msgstr "Select folder"
@@ -7997,7 +8004,7 @@ msgstr "There is no preview for this file type"
 msgid "There is no recent activity in your Xing network."
 msgstr "There is no recent activity in your XING network."
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:452 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:455 module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "There is no rule defined"
 
@@ -8555,7 +8562,7 @@ msgstr ""
 "Use cursor keys to change the date. Press [Ctrl] at the same time to change "
 "year or [Shift] to change month. Close date-picker by pressing [Esc]."
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:241 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:244 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:252 module:io.ox/portal
 msgid ""
 "Use cursor keys to change the item position. Virtual cursor mode has to be "
@@ -9392,7 +9399,7 @@ msgstr "dark blue"
 msgid "dark green"
 msgstr "dark green"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:618
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:623
 #: module:io.ox/settings
 msgid "datepicker"
 msgstr "date picker"
@@ -9717,7 +9724,7 @@ msgstr "pink"
 msgid "private"
 msgstr "private"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:158 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:161 module:io.ox/mail
 msgid "process subsequent rules"
 msgstr "process subsequent rules"
 
@@ -9740,7 +9747,7 @@ msgstr "read own objects"
 msgid "red"
 msgstr "red"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:159 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:162 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:311 module:io.ox/portal
 msgid "remove"
 msgstr "remove"
@@ -9781,7 +9788,7 @@ msgstr "status "
 msgid "tentative"
 msgstr "tentative"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:393 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:396 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:213 module:io.ox/portal
 msgid "the item has been moved"
 msgstr "the item has been moved"
