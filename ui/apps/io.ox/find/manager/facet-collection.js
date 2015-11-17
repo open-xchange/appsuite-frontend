@@ -97,11 +97,12 @@ define('io.ox/find/manager/facet-collection', [
          * - adds new
          * - removes missing
          */
-        update: function (list) {
+        update: function (list, options) {
             var self = this,
                 valid = [],
                 invalid = [],
-                hash = {};
+                hash = {},
+                opt = _.extend({ keep: [] }, options);
             list = [].concat(list);
 
             //TODO: global ids do not change
@@ -110,8 +111,11 @@ define('io.ox/find/manager/facet-collection', [
                 var id = cid(obj),
                     model = self.get(id);
                 if (model) {
-                    // merge values into existing model
-                    model.update(obj);
+                    // do not update special facets (see bug 42395)
+                    if (opt.keep.indexOf(id) < 0) {
+                        // merge values into existing model
+                        model.update(obj);
+                    }
                 } else if (!model) {
                     // use cid here to keep server side id
                     // after model is created cid is mapped to model id
