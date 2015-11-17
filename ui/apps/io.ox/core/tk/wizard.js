@@ -298,11 +298,11 @@ define('io.ox/core/tk/wizard', [
         onKeyUp: function (e) {
             switch (e.which) {
                 // check if "close" button exists
-                case 27: if (this.$('.close').length) this.trigger('close'); break;
-                // check if "back" button is enabled
-                case 37: if (!this.$('[data-action="back"]').prop('disabled')) this.trigger('back'); break;
-                // check if "next" button is enabled
-                case 39: if (!this.$('[data-action="next"]').prop('disabled')) this.trigger('next'); break;
+                case 27: if (this.$('.wizard-close').length) this.trigger('close'); break;
+                // check if "back" button is enabled and available
+                case 37: if (this.$('[data-action="back"]:enabled').length) this.trigger('back'); break;
+                // check if "next" button is enabled and available
+                case 39: if (this.$('[data-action="next"]:enabled').length) this.trigger('next'); break;
             }
         },
 
@@ -328,6 +328,9 @@ define('io.ox/core/tk/wizard', [
                 this.parent.trigger('step:' + type);
             });
 
+            // custom width
+            if (this.options.width) this.$el.css('width', this.options.width);
+
             // navbar needs an update for every change
             // only once for normal popups
             if (!_.device('smartphone')) this.once('before:show', this.renderButtons);
@@ -335,14 +338,18 @@ define('io.ox/core/tk/wizard', [
             this.render();
         },
 
+        getModel: function () {
+            return this.parent.options.model;
+        },
+
         // append to title element
-        title: append('.title'),
+        title: append('.wizard-title'),
 
         // append to content element
-        content: append('.content'),
+        content: append('.wizard-content'),
 
         // append to footer element
-        footer: append('.footer'),
+        footer: append('.wizard-footer'),
 
         // render scaffold
         render: function () {
@@ -353,15 +360,15 @@ define('io.ox/core/tk/wizard', [
                 'aria-labelledby': 'dialog-title'
             })
             .append(
-                $('<div class="header">').append(
-                    $('<button class="close pull-right" tabindex="1" data-action="close">').append(
+                $('<div class="wizard-header">').append(
+                    $('<button class="wizard-close close pull-right" tabindex="1" data-action="close">').append(
                         $('<span aria-hidden="true">&times;</span>'),
                         $('<span class="sr-only">').text(gt('Close'))
                     ),
-                    $('<h4 class="title" id="dialog-title">')
+                    $('<h4 class="wizard-title" id="dialog-title">')
                 ),
-                $('<div class="content" id="dialog-content">'),
-                $('<div class="footer">')
+                $('<div class="wizard-content" id="dialog-content">'),
+                $('<div class="wizard-footer">')
             );
             return this;
         },
@@ -371,7 +378,7 @@ define('io.ox/core/tk/wizard', [
         renderButtons: function () {
 
             var dir = this.getDirections(),
-                footer = this.$('.footer').empty();
+                footer = this.$('.wizard-footer').empty();
 
             // show "Back" button
             if (dir.back) this.addButton(footer, { action: 'back', className: 'btn-default', label: this.getLabelBack() });
@@ -422,14 +429,14 @@ define('io.ox/core/tk/wizard', [
             return {
                 back: this.options.back && this.parent.hasBack(),
                 next: this.options.next && this.parent.hasNext(),
-                done: this.isLast()
+                done: this.options.next && this.isLast()
             };
         },
 
         // define that this step is mandatory
         // removes the '.close' icon; escape key no longer works
         mandatory: function () {
-            this.$('.header .close').remove();
+            this.$('.wizard-header .wizard-close').remove();
             return this;
         },
 

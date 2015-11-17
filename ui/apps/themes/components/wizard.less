@@ -39,7 +39,7 @@
         transform: translate3d(-50%, -50%, 0);
     }
 
-    .title {
+    .wizard-title {
         font-size: 16px;
         font-weight: bold;
         padding: 24px 16px 0 16px;
@@ -47,7 +47,7 @@
         &:empty { display: none; }
     }
 
-    .close {
+    .wizard-close {
         position: relative;
         width: 40px;
         height: 48px;
@@ -61,11 +61,11 @@
         }
     }
 
-    .content {
+    .wizard-content {
         padding: 24px 16px;
     }
 
-    .footer {
+    .wizard-footer {
         padding: 0 16px 16px 16px;
         font-weight: bold;
         text-align: right;
@@ -90,64 +90,6 @@
     background-color: rgba(255, 255, 255, 0.01);
     box-shadow: 0 10px 50px 0px rgba(0, 0, 0, 0.40);
     z-index: 998;
-}
-
-.wizard-container {
-    background-color: #f5f5f5;
-    z-index: 1000;
-    overflow: hidden;
-}
-
-.wizard-navbar {
-    position: absolute;
-    width: 100%;
-    height: 48px;
-    border-bottom: 1px solid #ccc;
-    background-color: #fff;
-    text-align: center;
-    line-height: 48px;
-    display: table;
-    table-layout: fixed;
-
-    a:active, a:focus {
-        opacity: 0.50;
-        text-decoration: none;
-    }
-
-    -webkit-touch-callout: none;
-}
-
-.wizard-title, .wizard-back, .wizard-next {
-    display: table-cell;
-    width: 50%; // yep 50
-    white-space: nowrap;
-}
-
-.wizard-title {
-    font-weight: bold;
-    text-align: center;
-    .ellipsis();
-}
-
-.wizard-back {
-    text-align: left;
-    padding: 0 8px 0 16px;
-}
-
-.wizard-next {
-    text-align: right;
-    padding: 0 16px 0 8px;
-}
-
-.wizard-pages {
-    position: absolute;
-    width: 100%;
-    top: 49px;
-    bottom: 0;
-}
-
-.wizard-animation {
-    display: none;
 }
 
 .wizard-hotspot {
@@ -212,7 +154,70 @@
     100% { opacity: 0.00; transform: scale(1.0); }
 }
 
-@media all and (max-width: 480px), all and (max-device-width: 480px) {
+//
+// Smartphone support
+//
+
+.smartphone {
+
+    .wizard-container {
+        background-color: #f5f5f5;
+        z-index: 1000;
+        overflow: hidden;
+    }
+
+    .wizard-navbar {
+        position: absolute;
+        width: 100%;
+        height: 48px;
+        border-bottom: 1px solid #ccc;
+        background-color: #fff;
+        text-align: center;
+        line-height: 48px;
+        display: table;
+        table-layout: fixed;
+
+        a:active, a:focus {
+            opacity: 0.50;
+            text-decoration: none;
+        }
+
+        -webkit-touch-callout: none;
+    }
+
+    .wizard-title, .wizard-back, .wizard-next {
+        display: table-cell;
+        width: 50%; // yep 50
+        white-space: nowrap;
+    }
+
+    .wizard-title {
+        font-weight: bold;
+        text-align: center;
+        .ellipsis();
+    }
+
+    .wizard-back {
+        text-align: left;
+        padding: 0 8px 0 16px;
+    }
+
+    .wizard-next {
+        text-align: right;
+        padding: 0 16px 0 8px;
+    }
+
+    .wizard-pages {
+        position: absolute;
+        width: 100%;
+        top: 49px;
+        bottom: 0;
+    }
+
+    .wizard-animation {
+        display: none;
+    }
+
     .wizard-step {
         font-size: 16px;
         top: 0;
