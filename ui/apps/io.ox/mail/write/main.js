@@ -1451,7 +1451,7 @@ define('io.ox/mail/write/main',
 
             if (app.dirty()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog()
+                    new dialogs.ModalDialog({ width: 550 })
                         .text(gt('Do you really want to discard your message?'))
                         //#. "Discard message" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user
