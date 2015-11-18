@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-11-18 10:57+0100\n"
+"PO-Revision-Date: 2015-11-18 11:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -2843,7 +2843,7 @@ msgstr "Server-Version"
 #: apps/io.ox/core/folder/actions/properties.js:71
 #: apps/io.ox/core/folder/tree.js:227 apps/io.ox/core/main.js:1214
 #: apps/io.ox/core/permissions/permissions.js:492
-#: apps/io.ox/core/tk/wizard.js:359
+#: apps/io.ox/core/tk/wizard.js:368
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:162
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:181
 #: apps/io.ox/core/viewer/views/toolbarview.js:187
@@ -3415,6 +3415,7 @@ msgstr "Umbenennen"
 
 #: apps/io.ox/core/folder/api.js:77 module:io.ox/core
 #: apps/io.ox/mail/detail/links.js:82 module:io.ox/mail
+#: apps/io.ox/onboarding/clients/wizard.js:131 module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "Kalender"
 
@@ -4917,18 +4918,18 @@ msgctxt "tour"
 msgid "Finish"
 msgstr "Beenden"
 
-#: apps/io.ox/core/tk/wizard.js:408 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:417 module:io.ox/core
 msgid "Start tour"
 msgstr "Tour starten"
 
-#: apps/io.ox/core/tk/wizard.js:408 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:417 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:123
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
 msgstr "Weiter"
 
-#: apps/io.ox/core/tk/wizard.js:794 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:803 module:io.ox/core
 msgid "Welcome"
 msgstr "Willkommen"
 
@@ -5588,6 +5589,7 @@ msgstr "Dateien hinzufügen"
 
 #: apps/io.ox/files/filepicker.js:76 module:io.ox/files
 #: apps/io.ox/files/filepicker.js:133
+#: apps/io.ox/onboarding/clients/wizard.js:135 module:io.ox/core/onboarding
 msgid "Files"
 msgstr "Dateien"
 
@@ -7742,6 +7744,106 @@ msgstr "Angezeigter Name"
 #: apps/io.ox/oauth/settings.js:81 module:io.ox/settings
 msgid "Reauthorize"
 msgstr "Erneut autorisieren"
+
+#: apps/io.ox/onboarding/clients/wizard.js:23 module:io.ox/core/onboarding
+msgid "Client onboarding"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:29 module:io.ox/core/onboarding
+msgid "Back to platforms"
+msgstr "Zurück zu den Plattformen"
+
+#: apps/io.ox/onboarding/clients/wizard.js:30 module:io.ox/core/onboarding
+msgid "Select your device"
+msgstr "Wählen Sie Ihr Gerät"
+
+#: apps/io.ox/onboarding/clients/wizard.js:33 module:io.ox/core/onboarding
+msgid "Back to devices"
+msgstr "Zurück zu den Geräten"
+
+#. %1$s is the product name, e.g. OX.
+#: apps/io.ox/onboarding/clients/wizard.js:54 module:io.ox/core/onboarding
+#, fuzzy
+msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
+msgstr ""
+"Nehmen Sie %1$s mit. Bleiben Sie bei Ihren favorisierten Geräten auf dem "
+"neuesten Stand."
+
+#: apps/io.ox/onboarding/clients/wizard.js:55 module:io.ox/core/onboarding
+msgid "Which device do you want to configure?"
+msgstr "Welches Gerät möchten Sie konfigurieren?"
+
+#: apps/io.ox/onboarding/clients/wizard.js:80 module:io.ox/core/onboarding
+msgid "What to you want to use on your smartphone?"
+msgstr "Was möchten Sie auf Ihrem Smartphone verwenden?"
+
+#: apps/io.ox/onboarding/clients/wizard.js:81 module:io.ox/core/onboarding
+msgid "Smartphone"
+msgstr "Smartphone"
+
+#: apps/io.ox/onboarding/clients/wizard.js:86 module:io.ox/core/onboarding
+msgid "What do you want to use on your tablet?"
+msgstr "Was möchten Sie auf Ihrem Tablet verwenden?"
+
+#: apps/io.ox/onboarding/clients/wizard.js:87 module:io.ox/core/onboarding
+msgid "Tablet"
+msgstr "Tablet"
+
+#: apps/io.ox/onboarding/clients/wizard.js:92 module:io.ox/core/onboarding
+msgid "What do you want to use on your iPhone?"
+msgstr "Was möchten Sie auf Ihrem iPhone verwenden?"
+
+#: apps/io.ox/onboarding/clients/wizard.js:93 module:io.ox/core/onboarding
+msgid "iPhone"
+msgstr "iPhone"
+
+#: apps/io.ox/onboarding/clients/wizard.js:98 module:io.ox/core/onboarding
+msgid "What do you want to use on your iPad?"
+msgstr "Was möchten Sie auf Ihrem iPad verwenden?"
+
+#: apps/io.ox/onboarding/clients/wizard.js:99 module:io.ox/core/onboarding
+msgid "iPad"
+msgstr "iPad"
+
+#: apps/io.ox/onboarding/clients/wizard.js:104 module:io.ox/core/onboarding
+msgid "What do you want to use on your Mac?"
+msgstr "Was möchten Sie auf Ihrem Mac verwenden?"
+
+#: apps/io.ox/onboarding/clients/wizard.js:105 module:io.ox/core/onboarding
+msgid "Mac"
+msgstr "Mac"
+
+#: apps/io.ox/onboarding/clients/wizard.js:110 module:io.ox/core/onboarding
+#, fuzzy
+msgid "What do you want to use on your Windows Phone?"
+msgstr "Was möchten Sie auf Ihrem Windows Phone verwenden?"
+
+#: apps/io.ox/onboarding/clients/wizard.js:111 module:io.ox/core/onboarding
+#, fuzzy
+msgid "Windows Phone"
+msgstr "Windows Phone"
+
+#: apps/io.ox/onboarding/clients/wizard.js:116 module:io.ox/core/onboarding
+#, fuzzy
+msgid "What do you want to use on your Windows PC?"
+msgstr "Was möchten Sie auf Ihrem Windows PC verwenden?"
+
+#: apps/io.ox/onboarding/clients/wizard.js:117 module:io.ox/core/onboarding
+#, fuzzy
+msgid "Windows PC"
+msgstr "Windows PC"
+
+#: apps/io.ox/onboarding/clients/wizard.js:123 module:io.ox/core/onboarding
+msgid "EMail"
+msgstr "E-Mail"
+
+#: apps/io.ox/onboarding/clients/wizard.js:127 module:io.ox/core/onboarding
+msgid "Contacts"
+msgstr "Mitglieder"
+
+#: apps/io.ox/onboarding/clients/wizard.js:178 module:io.ox/core/onboarding
+msgid "Select the platform of your device:"
+msgstr "Wählen Sie die Plattform Ihres Geräts:"
 
 #: apps/io.ox/participants/add.js:56 module:io.ox/core
 #: apps/io.ox/participants/add.js:57
@@ -10468,9 +10570,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Confirmed"
 #~ msgstr "Bestätigt"
-
-#~ msgid "Contacts"
-#~ msgstr "Mitglieder"
 
 #~ msgid "Continue Presentation"
 #~ msgstr "Präsentation fortführen"
