@@ -64,7 +64,6 @@ define('io.ox/core/sub/subscriptions', [
                         services.push(service);
                     }
                 });
-                var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, services: services, popup: popup, newFolder: true });
 
                 function removeFolder(id) {
                     return folderAPI.remove(id);
@@ -129,6 +128,40 @@ define('io.ox/core/sub/subscriptions', [
                 }
 
                 popup.getBody().addClass('form-horizontal');
+
+                // filter disabled/unavailable oauth sources without existing accounts
+                services = _.filter(services, function (service) {
+                    var fdlength = (service.formDescription || []).length, enabled;
+
+                    // process when no formDescriptions
+                    if (fdlength === 0) return true;
+
+                    service.formDescription = _.filter(service.formDescription, function (fd) {
+
+                        if (fd.widget !== 'oauthAccount') return true;
+
+                        var accountType = getAccountType(fd.options.type),
+                            accounts = _.where(keychainAPI.getAll(), { serviceId: fd.options.type });
+
+                        // process when at least one account exists
+                        if (accounts.length) return true;
+
+                        enabled = keychainAPI.isEnabled(accountType);
+
+                        if (!enabled) {
+                            console.error('I do not know keys of accountType ' + accountType + '! I suppose a needed plugin was not registered in the server configuration.');
+                        }
+
+                        // remove formdescription entry when oauth service isn't available
+                        return enabled;
+                    });
+
+                    // remove service in case all formdescriptions where removed
+                    return (service.formDescription || []).length;
+                });
+
+                var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, services: services, popup: popup, newFolder: true });
+
                 if (services.length > 0) {
                     ext.point(POINT + '/dialog').invoke('draw', popup.getBody(), baton);
                     popup.addPrimaryButton('subscribe', gt('Subscribe'))
@@ -277,43 +310,6 @@ define('io.ox/core/sub/subscriptions', [
             }
         });
     }
-
-    ext.point(POINT + '/dialog').extend({
-        id: 'missing-oauth',
-        index: 1,
-        draw: function (baton) {
-            // filter disabled/unavailable oauth sources without existing accounts
-            baton.services = _.filter(baton.services, function (service) {
-                var fdlength = (service.formDescription || []).length, enabled;
-
-                // process when no formDescriptions
-                if (fdlength === 0) return true;
-
-                service.formDescription = _.filter(service.formDescription, function (fd) {
-
-                    if (fd.widget !== 'oauthAccount') return true;
-
-                    var accountType = getAccountType(fd.options.type),
-                        accounts = _.where(keychainAPI.getAll(), { serviceId: fd.options.type });
-
-                    // process when at least one account exists
-                    if (accounts.length) return true;
-
-                    enabled = keychainAPI.isEnabled(accountType);
-
-                    if (!enabled) {
-                        console.error('I do not know keys of accountType ' + accountType + '! I suppose a needed plugin was not registered in the server configuration.');
-                    }
-
-                    // remove formdescription entry when oauth service isn't available
-                    return enabled;
-                });
-
-                // remove service in case all formdescriptions where removed
-                return (service.formDescription || []).length;
-            });
-        }
-    });
 
     ext.point(POINT + '/dialog').extend({
         id: 'service',
