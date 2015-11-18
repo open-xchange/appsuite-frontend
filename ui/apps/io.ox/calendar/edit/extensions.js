@@ -624,8 +624,6 @@ define('io.ox/calendar/edit/extensions', [
                 app.view.baton.attachmentList.addFile(fileData);
             });
         }
-    }, {
-        rowClass: 'collapsed'
     });
 
     function openFreeBusyView(e) {
