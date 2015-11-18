@@ -98,7 +98,8 @@ define('io.ox/calendar/edit/extensions', [
         draw: function (baton) {
             this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >')
                 .text(gt('Discard'))
-                .on('click', function () {
+                .on('click', function (e) {
+                    e.stopPropagation();
                     baton.app.quit();
                 })
             );

@@ -71,7 +71,10 @@ define('io.ox/tasks/edit/view-template', [
                 //cancel button
                 $('<button type="button" data-action="discard" class="btn btn-default cancel task-edit-cancel">')
                     .text(gt('Discard'))
-                    .on('click', function () { app.quit(); })
+                    .on('click', function (e) {
+                        e.stopPropagation();
+                        app.quit();
+                    })
                 );
 
             app.getWindow().setHeader(row);
