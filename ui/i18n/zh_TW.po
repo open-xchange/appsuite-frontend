@@ -1313,6 +1313,18 @@ msgstr "向後"
 msgid "Back to appointment"
 msgstr "回到約會"
 
+#: apps/io.ox/onboarding/clients/wizard.js:33 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Back to sign in"
+msgid "Back to devices"
+msgstr "回到登入"
+
+#: apps/io.ox/onboarding/clients/wizard.js:29 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "your platform"
+msgid "Back to platforms"
+msgstr "您的平台"
+
 #: apps/plugins/wizards/mandatory/main.js:56 module:io.ox/wizards/firstStart
 msgid "Back to sign in"
 msgstr "回到登入"
@@ -1425,6 +1437,7 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js:77 module:io.ox/core
 #: apps/io.ox/mail/detail/links.js:82 module:io.ox/mail
+#: apps/io.ox/onboarding/clients/wizard.js:131 module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "日曆"
 
@@ -1747,11 +1760,15 @@ msgstr "點擊以再試一次。"
 msgid "Click to upload image"
 msgstr "單點上傳圖像。"
 
+#: apps/io.ox/onboarding/clients/wizard.js:23 module:io.ox/core/onboarding
+msgid "Client onboarding"
+msgstr ""
+
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
 #: apps/io.ox/core/folder/tree.js:227 apps/io.ox/core/main.js:1214
 #: apps/io.ox/core/permissions/permissions.js:492
-#: apps/io.ox/core/tk/wizard.js:359
+#: apps/io.ox/core/tk/wizard.js:368
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:162
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:181
 #: apps/io.ox/core/viewer/views/toolbarview.js:187
@@ -1920,6 +1937,10 @@ msgstr "聯絡人照片"
 #: apps/plugins/xing/main.js:108 module:plugins/portal
 msgid "Contact request sent"
 msgstr "已送出聯絡人請求"
+
+#: apps/io.ox/onboarding/clients/wizard.js:127 module:io.ox/core/onboarding
+msgid "Contacts"
+msgstr "成員"
 
 #: apps/io.ox/contacts/actions.js:129 module:io.ox/contacts
 msgid "Contacts have been copied"
@@ -2841,6 +2862,12 @@ msgstr "結束於 %s"
 msgid "EB"
 msgstr "EB"
 
+#: apps/io.ox/onboarding/clients/wizard.js:123 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "E-Mail"
+msgid "EMail"
+msgstr "電子郵件"
+
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js:405 module:io.ox/calendar
 #: apps/io.ox/calendar/main.js:225 apps/io.ox/calendar/main.js:231
@@ -3460,6 +3487,7 @@ msgstr "檔案：%1$s"
 
 #: apps/io.ox/files/filepicker.js:76 module:io.ox/files
 #: apps/io.ox/files/filepicker.js:133
+#: apps/io.ox/onboarding/clients/wizard.js:135 module:io.ox/core/onboarding
 msgid "Files"
 msgstr "檔案"
 
@@ -4427,6 +4455,12 @@ msgstr "MB"
 msgid "MM"
 msgstr "月"
 
+#: apps/io.ox/onboarding/clients/wizard.js:105 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "March"
+msgid "Mac"
+msgstr "三月"
+
 #: apps/io.ox/mail/compose/model.js:237 module:io.ox/mail
 msgid "Mail"
 msgstr "郵件"
@@ -4986,7 +5020,7 @@ msgstr "新任務提醒"
 msgid "New task reminders"
 msgstr "新任務提醒"
 
-#: apps/io.ox/core/tk/wizard.js:408 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:417 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:123
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
@@ -6706,6 +6740,16 @@ msgstr "選擇檔案"
 msgid "Select folder"
 msgstr "選擇資料夾"
 
+#: apps/io.ox/onboarding/clients/wizard.js:178 module:io.ox/core/onboarding
+msgid "Select the platform of your device:"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:30 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Selecting a view"
+msgid "Select your device"
+msgstr "選擇視圖"
+
 #: apps/io.ox/core/commons.js:130 module:io.ox/core
 msgid "Selection Details"
 msgstr "選擇範圍詳情"
@@ -7091,6 +7135,12 @@ msgstr "大小 (位元組)"
 msgid "Slow requests"
 msgstr "慢速請求"
 
+#: apps/io.ox/onboarding/clients/wizard.js:81 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Smartphone settings:"
+msgid "Smartphone"
+msgstr "智慧型手機設定:"
+
 #: apps/io.ox/portal/settings/pane.js:411 module:io.ox/portal
 msgid "Smartphone settings:"
 msgstr "智慧型手機設定:"
@@ -7234,7 +7284,7 @@ msgstr "開始遠端簡報"
 msgid "Start search"
 msgstr "開始搜尋"
 
-#: apps/io.ox/core/tk/wizard.js:408 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:417 module:io.ox/core
 msgid "Start tour"
 msgstr "開始導覽"
 
@@ -7366,10 +7416,21 @@ msgstr "TB"
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
 
+#: apps/io.ox/onboarding/clients/wizard.js:87 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Table"
+msgid "Tablet"
+msgstr "表格"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
 #: module:io.ox/settings
 msgid "Tag mail with"
 msgstr "為郵件加入標籤"
+
+#. %1$s is the product name, e.g. OX.
+#: apps/io.ox/onboarding/clients/wizard.js:54 module:io.ox/core/onboarding
+msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
+msgstr ""
 
 #: apps/io.ox/mail/detail/links.js:74 module:io.ox/mail
 #: apps/io.ox/tasks/edit/main.js:215 module:io.ox/tasks
@@ -7499,7 +7560,7 @@ msgstr "必須為帳號取名"
 msgid "The activity has been deleted successfully"
 msgstr "已成功刪除動態"
 
-#: apps/io.ox/files/api.js:381 module:io.ox/files
+#: apps/io.ox/files/api.js:382 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "已達可用的配額額度。"
@@ -7722,7 +7783,7 @@ msgstr "通知區域已開啟"
 msgid "The notification has been resent"
 msgstr "已重新送出通知"
 
-#: apps/io.ox/files/api.js:376 module:io.ox/files
+#: apps/io.ox/files/api.js:377 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "檔名超過允許的長度。"
@@ -7978,7 +8039,7 @@ msgstr "此功能無法使用。要使用的話，您必須立刻升級您的帳
 msgid "This field has to be filled"
 msgstr "必須填入此欄位"
 
-#: apps/io.ox/files/api.js:388 module:io.ox/files
+#: apps/io.ox/files/api.js:389 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "無法上傳此檔案。"
@@ -8616,7 +8677,7 @@ msgstr "周視圖"
 msgid "Weekly on %1$s"
 msgstr "每週的 %1$s"
 
-#: apps/io.ox/core/tk/wizard.js:794 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:803 module:io.ox/core
 msgid "Welcome"
 msgstr "歡迎"
 
@@ -8653,6 +8714,48 @@ msgstr "歡迎使用任務程式"
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "歡迎，請提供您關於此產品的意見回饋"
 
+#: apps/io.ox/onboarding/clients/wizard.js:104 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your configuration?"
+msgid "What do you want to use on your Mac?"
+msgstr "您是否想保存您的配置？"
+
+#: apps/io.ox/onboarding/clients/wizard.js:116 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your configuration?"
+msgid "What do you want to use on your Windows PC?"
+msgstr "您是否想保存您的配置？"
+
+#: apps/io.ox/onboarding/clients/wizard.js:110 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your configuration?"
+msgid "What do you want to use on your Windows Phone?"
+msgstr "您是否想保存您的配置？"
+
+#: apps/io.ox/onboarding/clients/wizard.js:98 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your configuration?"
+msgid "What do you want to use on your iPad?"
+msgstr "您是否想保存您的配置？"
+
+#: apps/io.ox/onboarding/clients/wizard.js:92 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your configuration?"
+msgid "What do you want to use on your iPhone?"
+msgstr "您是否想保存您的配置？"
+
+#: apps/io.ox/onboarding/clients/wizard.js:86 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your configuration?"
+msgid "What do you want to use on your tablet?"
+msgstr "您是否想保存您的配置？"
+
+#: apps/io.ox/onboarding/clients/wizard.js:80 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your configuration?"
+msgid "What to you want to use on your smartphone?"
+msgstr "您是否想保存您的配置？"
+
 #: apps/io.ox/core/settings/downloads/pane.js:59 module:io.ox/core
 #: apps/plugins/portal/updater/register.js:32 module:plugins/portal
 msgid ""
@@ -8665,9 +8768,21 @@ msgstr ""
 "的 Windows® 客戶端軟體，並且會在有新的更新時通知您。您可以在更新器中下載更"
 "新。"
 
+#: apps/io.ox/onboarding/clients/wizard.js:55 module:io.ox/core/onboarding
+msgid "Which device do you want to configure?"
+msgstr ""
+
 #: apps/io.ox/calendar/util.js:203 module:io.ox/calendar
 msgid "Whole day"
 msgstr "全天"
+
+#: apps/io.ox/onboarding/clients/wizard.js:117 module:io.ox/core/onboarding
+msgid "Windows PC"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:111 module:io.ox/core/onboarding
+msgid "Windows Phone"
+msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js:80 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:162 module:io.ox/calendar
@@ -9432,6 +9547,16 @@ msgstr "有參與者"
 #: apps/io.ox/core/import/import.js:61 module:io.ox/core
 msgid "iCal"
 msgstr "iCal"
+
+#: apps/io.ox/onboarding/clients/wizard.js:99 module:io.ox/core/onboarding
+msgid "iPad"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:93 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Phone"
+msgid "iPhone"
+msgstr "電話"
 
 #: apps/io.ox/search/view-template.js:159 module:io.ox/core
 msgid "in"
@@ -10731,9 +10856,6 @@ msgstr "年"
 #~ msgid "Contact overview"
 #~ msgstr "聯繫人概覽"
 
-#~ msgid "Contacts"
-#~ msgstr "成員"
-
 #~ msgid "Content-Type:"
 #~ msgstr "內容類型："
 
@@ -11151,9 +11273,6 @@ msgstr "年"
 #~ msgid "Do you want to keep the draft after sending this mail?"
 #~ msgstr "您想要在寄送郵件後保留草稿嗎？"
 
-#~ msgid "Do you want to save your configuration?"
-#~ msgstr "您是否想保存您的配置？"
-
 #~ msgid "Do you want to send a delivery receipt?"
 #~ msgstr "您是否想發送送達回執？"
 
@@ -11224,9 +11343,6 @@ msgstr "年"
 
 #~ msgid "Dynamic resizing..."
 #~ msgstr "動態調整大小..."
-
-#~ msgid "E-Mail"
-#~ msgstr "電子郵件"
 
 #~ msgid "E-Mail (business):"
 #~ msgstr "電子郵件（業務）"
@@ -12371,9 +12487,6 @@ msgstr "年"
 #~ msgid "Select page"
 #~ msgstr "選擇頁面"
 
-#~ msgid "Selecting a view"
-#~ msgstr "選擇視圖"
-
 #~ msgid "Sender"
 #~ msgstr "寄件者"
 
@@ -12591,9 +12704,6 @@ msgstr "年"
 
 #~ msgid "Synchronization to the server has been lost."
 #~ msgstr "已失去與伺服器的同步。"
-
-#~ msgid "Table"
-#~ msgstr "表格"
 
 #~ msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
 #~ msgstr "任務邀請。%1$s %2$s %3$s。按 Enter 以開啟。"

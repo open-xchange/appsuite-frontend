@@ -1351,6 +1351,18 @@ msgstr "Atpakaļ"
 msgid "Back to appointment"
 msgstr "Atpakaļ uz mītiņu"
 
+#: apps/io.ox/onboarding/clients/wizard.js:33 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Back to sign in"
+msgid "Back to devices"
+msgstr "Atpakaļ pie pieslēgšanās"
+
+#: apps/io.ox/onboarding/clients/wizard.js:29 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "your platform"
+msgid "Back to platforms"
+msgstr "jūsu platforma"
+
 #: apps/plugins/wizards/mandatory/main.js:56 module:io.ox/wizards/firstStart
 msgid "Back to sign in"
 msgstr "Atpakaļ pie pieslēgšanās"
@@ -1467,6 +1479,7 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js:77 module:io.ox/core
 #: apps/io.ox/mail/detail/links.js:82 module:io.ox/mail
+#: apps/io.ox/onboarding/clients/wizard.js:131 module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "Kalendārs"
 
@@ -1792,11 +1805,15 @@ msgstr "Noklikšķiniet lai mēģinātu vēlreiz."
 msgid "Click to upload image"
 msgstr "Noklikšķiniet, lai ielādētu attēlu"
 
+#: apps/io.ox/onboarding/clients/wizard.js:23 module:io.ox/core/onboarding
+msgid "Client onboarding"
+msgstr ""
+
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
 #: apps/io.ox/core/folder/tree.js:227 apps/io.ox/core/main.js:1214
 #: apps/io.ox/core/permissions/permissions.js:492
-#: apps/io.ox/core/tk/wizard.js:359
+#: apps/io.ox/core/tk/wizard.js:368
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:162
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:181
 #: apps/io.ox/core/viewer/views/toolbarview.js:187
@@ -1965,6 +1982,10 @@ msgstr "Kontaktu attēli"
 #: apps/plugins/xing/main.js:108 module:plugins/portal
 msgid "Contact request sent"
 msgstr "Kontakta pieprasījums ir nosūtīts"
+
+#: apps/io.ox/onboarding/clients/wizard.js:127 module:io.ox/core/onboarding
+msgid "Contacts"
+msgstr "Kontakti"
 
 #: apps/io.ox/contacts/actions.js:129 module:io.ox/contacts
 msgid "Contacts have been copied"
@@ -2902,6 +2923,12 @@ msgstr "Izpildāms %1$s"
 msgid "EB"
 msgstr "EB"
 
+#: apps/io.ox/onboarding/clients/wizard.js:123 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "E-Mail"
+msgid "EMail"
+msgstr "E-pasts"
+
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js:405 module:io.ox/calendar
 #: apps/io.ox/calendar/main.js:225 apps/io.ox/calendar/main.js:231
@@ -3536,6 +3563,7 @@ msgstr "Fails: %1$s"
 
 #: apps/io.ox/files/filepicker.js:76 module:io.ox/files
 #: apps/io.ox/files/filepicker.js:133
+#: apps/io.ox/onboarding/clients/wizard.js:135 module:io.ox/core/onboarding
 msgid "Files"
 msgstr "Faili"
 
@@ -4517,6 +4545,12 @@ msgstr "MB"
 msgid "MM"
 msgstr "MM"
 
+#: apps/io.ox/onboarding/clients/wizard.js:105 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "March"
+msgid "Mac"
+msgstr "Marts"
+
 #: apps/io.ox/mail/compose/model.js:237 module:io.ox/mail
 msgid "Mail"
 msgstr "Pasts"
@@ -5076,7 +5110,7 @@ msgstr "Jauna uzdevuma atgādinājums"
 msgid "New task reminders"
 msgstr "Jauno uzdevumu atgādinājumi"
 
-#: apps/io.ox/core/tk/wizard.js:408 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:417 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:123
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
@@ -6830,6 +6864,16 @@ msgstr "Izvēlēties failu"
 msgid "Select folder"
 msgstr "Izvēlēties mapi"
 
+#: apps/io.ox/onboarding/clients/wizard.js:178 module:io.ox/core/onboarding
+msgid "Select the platform of your device:"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:30 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Selecting a view"
+msgid "Select your device"
+msgstr "Skata izvēle"
+
 #: apps/io.ox/core/commons.js:130 module:io.ox/core
 msgid "Selection Details"
 msgstr "Izvēles detaļas"
@@ -7219,6 +7263,12 @@ msgstr "Izmērs (baiti)"
 msgid "Slow requests"
 msgstr "Rādīt pieprasījumus"
 
+#: apps/io.ox/onboarding/clients/wizard.js:81 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Smartphone settings:"
+msgid "Smartphone"
+msgstr "Viedtālruņa iestatījumi:"
+
 #: apps/io.ox/portal/settings/pane.js:411 module:io.ox/portal
 msgid "Smartphone settings:"
 msgstr "Viedtālruņa iestatījumi:"
@@ -7365,7 +7415,7 @@ msgstr "Sākt attālināto prezentāciju"
 msgid "Start search"
 msgstr "Sākt meklēšanu"
 
-#: apps/io.ox/core/tk/wizard.js:408 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:417 module:io.ox/core
 msgid "Start tour"
 msgstr "Uzsākt tūri"
 
@@ -7497,10 +7547,21 @@ msgstr "TB"
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
 
+#: apps/io.ox/onboarding/clients/wizard.js:87 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Table"
+msgid "Tablet"
+msgstr "Tabula"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
 #: module:io.ox/settings
 msgid "Tag mail with"
 msgstr "Marķēt pastu ar"
+
+#. %1$s is the product name, e.g. OX.
+#: apps/io.ox/onboarding/clients/wizard.js:54 module:io.ox/core/onboarding
+msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
+msgstr ""
 
 #: apps/io.ox/mail/detail/links.js:74 module:io.ox/mail
 #: apps/io.ox/tasks/edit/main.js:215 module:io.ox/tasks
@@ -7635,7 +7696,7 @@ msgstr "Kontam ir jānorāda vārds"
 msgid "The activity has been deleted successfully"
 msgstr "Darbība ir veiksmīgi izdzēsta"
 
-#: apps/io.ox/files/api.js:381 module:io.ox/files
+#: apps/io.ox/files/api.js:382 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "Sasniegta pieejamā kvota."
@@ -7876,7 +7937,7 @@ msgstr "Paziņojumu apgabals ir atvērts"
 msgid "The notification has been resent"
 msgstr "Paziņojums ir nosūtīts atkārtoti"
 
-#: apps/io.ox/files/api.js:376 module:io.ox/files
+#: apps/io.ox/files/api.js:377 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "Norādītā faila vārda garums pārsniedz pieļaujamo limitu."
@@ -8151,7 +8212,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Šis lauks ir oligāti jāaizpilda"
 
-#: apps/io.ox/files/api.js:388 module:io.ox/files
+#: apps/io.ox/files/api.js:389 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "Šo failu nevar augšupielādēt."
@@ -8807,7 +8868,7 @@ msgstr "Nedēļas skats"
 msgid "Weekly on %1$s"
 msgstr "Katru nedēļu, %1$s"
 
-#: apps/io.ox/core/tk/wizard.js:794 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:803 module:io.ox/core
 msgid "Welcome"
 msgstr "Esiet sveicināti"
 
@@ -8844,6 +8905,48 @@ msgstr "Esiet sveicināti savu uzdevumu vietnē"
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "Esiet sveicināti. Lūdzu dodiet savas atsauksmes par šo produktu"
 
+#: apps/io.ox/onboarding/clients/wizard.js:104 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your configuration?"
+msgid "What do you want to use on your Mac?"
+msgstr "Vai vēlaties saglabāt šo konfigurāciju?"
+
+#: apps/io.ox/onboarding/clients/wizard.js:116 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your configuration?"
+msgid "What do you want to use on your Windows PC?"
+msgstr "Vai vēlaties saglabāt šo konfigurāciju?"
+
+#: apps/io.ox/onboarding/clients/wizard.js:110 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your configuration?"
+msgid "What do you want to use on your Windows Phone?"
+msgstr "Vai vēlaties saglabāt šo konfigurāciju?"
+
+#: apps/io.ox/onboarding/clients/wizard.js:98 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your configuration?"
+msgid "What do you want to use on your iPad?"
+msgstr "Vai vēlaties saglabāt šo konfigurāciju?"
+
+#: apps/io.ox/onboarding/clients/wizard.js:92 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your configuration?"
+msgid "What do you want to use on your iPhone?"
+msgstr "Vai vēlaties saglabāt šo konfigurāciju?"
+
+#: apps/io.ox/onboarding/clients/wizard.js:86 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your configuration?"
+msgid "What do you want to use on your tablet?"
+msgstr "Vai vēlaties saglabāt šo konfigurāciju?"
+
+#: apps/io.ox/onboarding/clients/wizard.js:80 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your configuration?"
+msgid "What to you want to use on your smartphone?"
+msgstr "Vai vēlaties saglabāt šo konfigurāciju?"
+
 #: apps/io.ox/core/settings/downloads/pane.js:59 module:io.ox/core
 #: apps/plugins/portal/updater/register.js:32 module:plugins/portal
 msgid ""
@@ -8858,9 +8961,23 @@ msgstr ""
 "jums par pieejamajiem jauninājumiem. Jaunās versijas jūs varēsiet "
 "lejupielādēt un uzstādīt  izmantojot jauninātāju."
 
+#: apps/io.ox/onboarding/clients/wizard.js:55 module:io.ox/core/onboarding
+msgid "Which device do you want to configure?"
+msgstr ""
+
 #: apps/io.ox/calendar/util.js:203 module:io.ox/calendar
 msgid "Whole day"
 msgstr "Visa diena"
+
+#: apps/io.ox/onboarding/clients/wizard.js:117 module:io.ox/core/onboarding
+msgid "Windows PC"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:111 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Windows are shown as"
+msgid "Windows Phone"
+msgstr "Logi tiek uzrādīti kā"
 
 #: apps/io.ox/calendar/freebusy/templates.js:80 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:162 module:io.ox/calendar
@@ -9654,6 +9771,16 @@ msgstr "ir dalībnieki"
 #: apps/io.ox/core/import/import.js:61 module:io.ox/core
 msgid "iCal"
 msgstr "iCal"
+
+#: apps/io.ox/onboarding/clients/wizard.js:99 module:io.ox/core/onboarding
+msgid "iPad"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:93 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Phone"
+msgid "iPhone"
+msgstr "Telefons"
 
 #: apps/io.ox/search/view-template.js:159 module:io.ox/core
 msgid "in"
@@ -11022,9 +11149,6 @@ msgstr "yyyy"
 #~ msgid "Contact overview"
 #~ msgstr "Kontaktu pārskats"
 
-#~ msgid "Contacts"
-#~ msgstr "Kontakti"
-
 #~ msgid "Content-Type:"
 #~ msgstr "Satura tips:"
 
@@ -11456,9 +11580,6 @@ msgstr "yyyy"
 #~ msgid "Do you want to keep the draft after sending this mail?"
 #~ msgstr "Vai vēlaties saglabāt melnrakstu pēc vēstules nosūtīšanas?"
 
-#~ msgid "Do you want to save your configuration?"
-#~ msgstr "Vai vēlaties saglabāt šo konfigurāciju?"
-
 #~ msgid "Do you want to send a delivery receipt?"
 #~ msgstr "Vai vēlaties nosūtīt saņemšanas apstiprinājumu?"
 
@@ -11532,9 +11653,6 @@ msgstr "yyyy"
 
 #~ msgid "Dynamic resizing..."
 #~ msgstr "Dinamiska mērogošana..."
-
-#~ msgid "E-Mail"
-#~ msgstr "E-pasts"
 
 #~ msgid "E-Mail (business):"
 #~ msgstr "E-pasts (bizness):"
@@ -14046,9 +14164,6 @@ msgstr "yyyy"
 #~ msgid "Select the number of items to be displayed in the module panes."
 #~ msgstr "Izvēlieties vienību skaitu uzrādīšanai moduļu paneļos."
 
-#~ msgid "Selecting a view"
-#~ msgstr "Skata izvēle"
-
 #~ msgid "Send Attachment"
 #~ msgstr "Sūtīt pievienojumu"
 
@@ -14557,9 +14672,6 @@ msgstr "yyyy"
 
 #~ msgid "Tab-based panel"
 #~ msgstr "Tabulatoru panelis"
-
-#~ msgid "Table"
-#~ msgstr "Tabula"
 
 #~ msgid "Tabs example"
 #~ msgstr "Tabulatoru piemērs"
@@ -15559,9 +15671,6 @@ msgstr "yyyy"
 #~ "Lūdzu pārdomājiet kur jūs glabājiet un kam pārsūtiet jums pieejamos "
 #~ "personu datus. Lūdzu nodrošiniet atbilstošu piekļuves drošību, piemēram, "
 #~ "izmantojot pienācīgi drošas paroles."
-
-#~ msgid "Windows are shown as"
-#~ msgstr "Logi tiek uzrādīti kā"
 
 #~ msgctxt "address"
 #~ msgid "Work"

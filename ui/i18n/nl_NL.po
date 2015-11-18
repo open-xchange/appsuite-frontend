@@ -1332,6 +1332,18 @@ msgstr "Terug"
 msgid "Back to appointment"
 msgstr "Terug naar afspraak"
 
+#: apps/io.ox/onboarding/clients/wizard.js:33 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Back to sign in"
+msgid "Back to devices"
+msgstr "Terug naar aanmelden"
+
+#: apps/io.ox/onboarding/clients/wizard.js:29 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "your platform"
+msgid "Back to platforms"
+msgstr "uw platform"
+
 #: apps/plugins/wizards/mandatory/main.js:56 module:io.ox/wizards/firstStart
 msgid "Back to sign in"
 msgstr "Terug naar aanmelden"
@@ -1448,6 +1460,7 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js:77 module:io.ox/core
 #: apps/io.ox/mail/detail/links.js:82 module:io.ox/mail
+#: apps/io.ox/onboarding/clients/wizard.js:131 module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "Agenda"
 
@@ -1773,11 +1786,15 @@ msgstr "Klik om het opnieuw te proberen."
 msgid "Click to upload image"
 msgstr "Klik om de afbeelding te uploaden"
 
+#: apps/io.ox/onboarding/clients/wizard.js:23 module:io.ox/core/onboarding
+msgid "Client onboarding"
+msgstr ""
+
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
 #: apps/io.ox/core/folder/tree.js:227 apps/io.ox/core/main.js:1214
 #: apps/io.ox/core/permissions/permissions.js:492
-#: apps/io.ox/core/tk/wizard.js:359
+#: apps/io.ox/core/tk/wizard.js:368
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:162
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:181
 #: apps/io.ox/core/viewer/views/toolbarview.js:187
@@ -1948,6 +1965,10 @@ msgstr "Contactafbeeldingen"
 #: apps/plugins/xing/main.js:108 module:plugins/portal
 msgid "Contact request sent"
 msgstr "Contactverzoek verstuurd"
+
+#: apps/io.ox/onboarding/clients/wizard.js:127 module:io.ox/core/onboarding
+msgid "Contacts"
+msgstr "Contacten"
 
 #: apps/io.ox/contacts/actions.js:129 module:io.ox/contacts
 msgid "Contacts have been copied"
@@ -2891,6 +2912,12 @@ msgstr "Vervalt op %1$s"
 msgid "EB"
 msgstr "EB"
 
+#: apps/io.ox/onboarding/clients/wizard.js:123 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Mail"
+msgid "EMail"
+msgstr "E-mail"
+
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js:405 module:io.ox/calendar
 #: apps/io.ox/calendar/main.js:225 apps/io.ox/calendar/main.js:231
@@ -3528,6 +3555,7 @@ msgstr "Bestand: %1$s"
 
 #: apps/io.ox/files/filepicker.js:76 module:io.ox/files
 #: apps/io.ox/files/filepicker.js:133
+#: apps/io.ox/onboarding/clients/wizard.js:135 module:io.ox/core/onboarding
 msgid "Files"
 msgstr "Bestanden"
 
@@ -4510,6 +4538,12 @@ msgstr "MB"
 msgid "MM"
 msgstr "MM"
 
+#: apps/io.ox/onboarding/clients/wizard.js:105 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "March"
+msgid "Mac"
+msgstr "maart"
+
 #: apps/io.ox/mail/compose/model.js:237 module:io.ox/mail
 msgid "Mail"
 msgstr "E-mail"
@@ -5070,7 +5104,7 @@ msgstr "Nieuwe taakherinnering"
 msgid "New task reminders"
 msgstr "Nieuwe taakherinneringen"
 
-#: apps/io.ox/core/tk/wizard.js:408 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:417 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:123
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
@@ -6829,6 +6863,16 @@ msgstr "Selecteer bestand"
 msgid "Select folder"
 msgstr "Selecteer map"
 
+#: apps/io.ox/onboarding/clients/wizard.js:178 module:io.ox/core/onboarding
+msgid "Select the platform of your device:"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:30 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Selecting a view"
+msgid "Select your device"
+msgstr "Selecteer een weergave"
+
 #: apps/io.ox/core/commons.js:130 module:io.ox/core
 msgid "Selection Details"
 msgstr "Selectiedetails"
@@ -7214,6 +7258,12 @@ msgstr "Grootte (bytes)"
 msgid "Slow requests"
 msgstr "Langzame verzoeken"
 
+#: apps/io.ox/onboarding/clients/wizard.js:81 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Smartphone settings:"
+msgid "Smartphone"
+msgstr "Smartphone instellingen:"
+
 #: apps/io.ox/portal/settings/pane.js:411 module:io.ox/portal
 msgid "Smartphone settings:"
 msgstr "Smartphone instellingen:"
@@ -7360,7 +7410,7 @@ msgstr "Start remote presentatie"
 msgid "Start search"
 msgstr "Zoeken starten"
 
-#: apps/io.ox/core/tk/wizard.js:408 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:417 module:io.ox/core
 msgid "Start tour"
 msgstr "Start rondleiding"
 
@@ -7492,10 +7542,21 @@ msgstr "TB"
 msgid "TTY/TDD"
 msgstr "Teletype/TDD"
 
+#: apps/io.ox/onboarding/clients/wizard.js:87 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Enable"
+msgid "Tablet"
+msgstr "Inschakelen"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
 #: module:io.ox/settings
 msgid "Tag mail with"
 msgstr "Labelen met"
+
+#. %1$s is the product name, e.g. OX.
+#: apps/io.ox/onboarding/clients/wizard.js:54 module:io.ox/core/onboarding
+msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
+msgstr ""
 
 #: apps/io.ox/mail/detail/links.js:74 module:io.ox/mail
 #: apps/io.ox/tasks/edit/main.js:215 module:io.ox/tasks
@@ -7631,7 +7692,7 @@ msgstr "Het accounts moet een naam hebben"
 msgid "The activity has been deleted successfully"
 msgstr "De activiteit is succesvol verwijderd"
 
-#: apps/io.ox/files/api.js:381 module:io.ox/files
+#: apps/io.ox/files/api.js:382 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "Het toegestane quota is bereikt."
@@ -7877,7 +7938,7 @@ msgstr "Er is geen kennisgevingsgebied open"
 msgid "The notification has been resent"
 msgstr "De kennisgeving is opnieuw verzonden"
 
-#: apps/io.ox/files/api.js:376 module:io.ox/files
+#: apps/io.ox/files/api.js:377 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "De gegeven bestandsnaam is langer dan de toegestane lengte."
@@ -8152,7 +8213,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Dit veld moet gevuld zijn"
 
-#: apps/io.ox/files/api.js:388 module:io.ox/files
+#: apps/io.ox/files/api.js:389 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "Dit bestand kan niet worden geüpload."
@@ -8815,7 +8876,7 @@ msgstr "Weekoverzicht"
 msgid "Weekly on %1$s"
 msgstr "Wekelijks op %1$s"
 
-#: apps/io.ox/core/tk/wizard.js:794 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:803 module:io.ox/core
 msgid "Welcome"
 msgstr "Welkom"
 
@@ -8852,6 +8913,36 @@ msgstr "Welkom bij uw taken"
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "Welkom. Geef alstublieft feedback over dit product"
 
+#: apps/io.ox/onboarding/clients/wizard.js:104 module:io.ox/core/onboarding
+msgid "What do you want to use on your Mac?"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:116 module:io.ox/core/onboarding
+msgid "What do you want to use on your Windows PC?"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:110 module:io.ox/core/onboarding
+msgid "What do you want to use on your Windows Phone?"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:98 module:io.ox/core/onboarding
+msgid "What do you want to use on your iPad?"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:92 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you really want to discard your changes?"
+msgid "What do you want to use on your iPhone?"
+msgstr "Weet u zeker dat u deze wijziging wilt afbreken?"
+
+#: apps/io.ox/onboarding/clients/wizard.js:86 module:io.ox/core/onboarding
+msgid "What do you want to use on your tablet?"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:80 module:io.ox/core/onboarding
+msgid "What to you want to use on your smartphone?"
+msgstr ""
+
 #: apps/io.ox/core/settings/downloads/pane.js:59 module:io.ox/core
 #: apps/plugins/portal/updater/register.js:32 module:plugins/portal
 msgid ""
@@ -8865,9 +8956,21 @@ msgstr ""
 "versie van de Windows® client. De Updater informeert u over nieuwe updates. "
 "U kan deze updates downloaden vanuit de Updater."
 
+#: apps/io.ox/onboarding/clients/wizard.js:55 module:io.ox/core/onboarding
+msgid "Which device do you want to configure?"
+msgstr ""
+
 #: apps/io.ox/calendar/util.js:203 module:io.ox/calendar
 msgid "Whole day"
 msgstr "Volledige dag"
+
+#: apps/io.ox/onboarding/clients/wizard.js:117 module:io.ox/core/onboarding
+msgid "Windows PC"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:111 module:io.ox/core/onboarding
+msgid "Windows Phone"
+msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js:80 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:162 module:io.ox/calendar
@@ -9651,6 +9754,16 @@ msgstr "heeft deelnemers"
 msgid "iCal"
 msgstr "iCal"
 
+#: apps/io.ox/onboarding/clients/wizard.js:99 module:io.ox/core/onboarding
+msgid "iPad"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:93 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Phone"
+msgid "iPhone"
+msgstr "Telefoon"
+
 #: apps/io.ox/search/view-template.js:159 module:io.ox/core
 msgid "in"
 msgstr "in"
@@ -10195,9 +10308,6 @@ msgstr "yyyy"
 
 #~ msgid "Confirmed"
 #~ msgstr "Bevestigd"
-
-#~ msgid "Contacts"
-#~ msgstr "Contacten"
 
 #, fuzzy
 #~ msgid "Continue Presentation"
@@ -10914,9 +11024,6 @@ msgstr "yyyy"
 
 #~ msgid "Select none"
 #~ msgstr "Selecteer niets"
-
-#~ msgid "Selecting a view"
-#~ msgstr "Selecteer een weergave"
 
 #~ msgid "Sender"
 #~ msgstr "Verzender"

@@ -1296,6 +1296,18 @@ msgstr "戻る"
 msgid "Back to appointment"
 msgstr "アポイントに戻る"
 
+#: apps/io.ox/onboarding/clients/wizard.js:33 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Back to sign in"
+msgid "Back to devices"
+msgstr "サイン インに戻る"
+
+#: apps/io.ox/onboarding/clients/wizard.js:29 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "your platform"
+msgid "Back to platforms"
+msgstr "ご利用のプラットフォーム"
+
 #: apps/plugins/wizards/mandatory/main.js:56 module:io.ox/wizards/firstStart
 msgid "Back to sign in"
 msgstr "サイン インに戻る"
@@ -1412,6 +1424,7 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js:77 module:io.ox/core
 #: apps/io.ox/mail/detail/links.js:82 module:io.ox/mail
+#: apps/io.ox/onboarding/clients/wizard.js:131 module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "予定表"
 
@@ -1736,11 +1749,15 @@ msgstr "クリックして再試行"
 msgid "Click to upload image"
 msgstr "クリックして画像をアップロード"
 
+#: apps/io.ox/onboarding/clients/wizard.js:23 module:io.ox/core/onboarding
+msgid "Client onboarding"
+msgstr ""
+
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
 #: apps/io.ox/core/folder/tree.js:227 apps/io.ox/core/main.js:1214
 #: apps/io.ox/core/permissions/permissions.js:492
-#: apps/io.ox/core/tk/wizard.js:359
+#: apps/io.ox/core/tk/wizard.js:368
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:162
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:181
 #: apps/io.ox/core/viewer/views/toolbarview.js:187
@@ -1909,6 +1926,10 @@ msgstr "連絡先の写真"
 #: apps/plugins/xing/main.js:108 module:plugins/portal
 msgid "Contact request sent"
 msgstr "コンタクトリクエストが送信されました。"
+
+#: apps/io.ox/onboarding/clients/wizard.js:127 module:io.ox/core/onboarding
+msgid "Contacts"
+msgstr "メンバ"
 
 #: apps/io.ox/contacts/actions.js:129 module:io.ox/contacts
 msgid "Contacts have been copied"
@@ -2845,6 +2866,12 @@ msgstr "期限: %1$s"
 msgid "EB"
 msgstr "EB"
 
+#: apps/io.ox/onboarding/clients/wizard.js:123 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "E-Mail"
+msgid "EMail"
+msgstr "メール"
+
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js:405 module:io.ox/calendar
 #: apps/io.ox/calendar/main.js:225 apps/io.ox/calendar/main.js:231
@@ -3476,6 +3503,7 @@ msgstr "ファイル: %1$s"
 
 #: apps/io.ox/files/filepicker.js:76 module:io.ox/files
 #: apps/io.ox/files/filepicker.js:133
+#: apps/io.ox/onboarding/clients/wizard.js:135 module:io.ox/core/onboarding
 msgid "Files"
 msgstr "ファイル"
 
@@ -4459,6 +4487,12 @@ msgstr "MB"
 msgid "MM"
 msgstr "MM"
 
+#: apps/io.ox/onboarding/clients/wizard.js:105 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "March"
+msgid "Mac"
+msgstr "3 月"
+
 #: apps/io.ox/mail/compose/model.js:237 module:io.ox/mail
 msgid "Mail"
 msgstr "メール"
@@ -5020,7 +5054,7 @@ msgstr "新規仕事のアラーム"
 msgid "New task reminders"
 msgstr "新規仕事のアラーム"
 
-#: apps/io.ox/core/tk/wizard.js:408 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:417 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:123
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
@@ -6752,6 +6786,16 @@ msgstr "ファイルを選択"
 msgid "Select folder"
 msgstr "フォルダを選択"
 
+#: apps/io.ox/onboarding/clients/wizard.js:178 module:io.ox/core/onboarding
+msgid "Select the platform of your device:"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:30 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Selecting a view"
+msgid "Select your device"
+msgstr "ビューの選択"
+
 #: apps/io.ox/core/commons.js:130 module:io.ox/core
 msgid "Selection Details"
 msgstr "選択オプションの詳細"
@@ -7133,6 +7177,12 @@ msgstr "サイズ (バイト)"
 msgid "Slow requests"
 msgstr "リクエストを表示"
 
+#: apps/io.ox/onboarding/clients/wizard.js:81 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Smartphone settings:"
+msgid "Smartphone"
+msgstr "スマートフォン設定："
+
 #: apps/io.ox/portal/settings/pane.js:411 module:io.ox/portal
 msgid "Smartphone settings:"
 msgstr "スマートフォン設定："
@@ -7279,7 +7329,7 @@ msgstr "リモートプレゼンテーションを開始します。"
 msgid "Start search"
 msgstr "検索を開始"
 
-#: apps/io.ox/core/tk/wizard.js:408 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:417 module:io.ox/core
 msgid "Start tour"
 msgstr "ツアーを開始"
 
@@ -7411,10 +7461,21 @@ msgstr "TB"
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
 
+#: apps/io.ox/onboarding/clients/wizard.js:87 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Table"
+msgid "Tablet"
+msgstr "表"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
 #: module:io.ox/settings
 msgid "Tag mail with"
 msgstr "次のタグをメールに付ける"
+
+#. %1$s is the product name, e.g. OX.
+#: apps/io.ox/onboarding/clients/wizard.js:54 module:io.ox/core/onboarding
+msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
+msgstr ""
 
 #: apps/io.ox/mail/detail/links.js:74 module:io.ox/mail
 #: apps/io.ox/tasks/edit/main.js:215 module:io.ox/tasks
@@ -7542,7 +7603,7 @@ msgstr "アカウントの名前を指定する必要があります。"
 msgid "The activity has been deleted successfully"
 msgstr "アクティビティが正しく削除されました。"
 
-#: apps/io.ox/files/api.js:381 module:io.ox/files
+#: apps/io.ox/files/api.js:382 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "割当量を超えました。"
@@ -7780,7 +7841,7 @@ msgstr "通知エリアが開いています。"
 msgid "The notification has been resent"
 msgstr "通知がもう一度送信されます。"
 
-#: apps/io.ox/files/api.js:376 module:io.ox/files
+#: apps/io.ox/files/api.js:377 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "入力したファイル名が最大文字数を超えています。"
@@ -8047,7 +8108,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "このフィールドには、値を入力する必要があります。"
 
-#: apps/io.ox/files/api.js:388 module:io.ox/files
+#: apps/io.ox/files/api.js:389 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "このファイルをアップロードできませんでした。"
@@ -8699,7 +8760,7 @@ msgstr "週ビュー"
 msgid "Weekly on %1$s"
 msgstr "毎週 %1$s"
 
-#: apps/io.ox/core/tk/wizard.js:794 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:803 module:io.ox/core
 msgid "Welcome"
 msgstr "ようこそ"
 
@@ -8736,6 +8797,48 @@ msgstr "仕事へようこそ"
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "ようこそこの製品のフィードバックをお送りください。"
 
+#: apps/io.ox/onboarding/clients/wizard.js:104 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your layout changes?"
+msgid "What do you want to use on your Mac?"
+msgstr "レイアウトの変更を保存しますか？"
+
+#: apps/io.ox/onboarding/clients/wizard.js:116 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your layout changes?"
+msgid "What do you want to use on your Windows PC?"
+msgstr "レイアウトの変更を保存しますか？"
+
+#: apps/io.ox/onboarding/clients/wizard.js:110 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your layout changes?"
+msgid "What do you want to use on your Windows Phone?"
+msgstr "レイアウトの変更を保存しますか？"
+
+#: apps/io.ox/onboarding/clients/wizard.js:98 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your configuration?"
+msgid "What do you want to use on your iPad?"
+msgstr "構成を保存しますか？"
+
+#: apps/io.ox/onboarding/clients/wizard.js:92 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your layout changes?"
+msgid "What do you want to use on your iPhone?"
+msgstr "レイアウトの変更を保存しますか？"
+
+#: apps/io.ox/onboarding/clients/wizard.js:86 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your layout changes?"
+msgid "What do you want to use on your tablet?"
+msgstr "レイアウトの変更を保存しますか？"
+
+#: apps/io.ox/onboarding/clients/wizard.js:80 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your layout changes?"
+msgid "What to you want to use on your smartphone?"
+msgstr "レイアウトの変更を保存しますか？"
+
 #: apps/io.ox/core/settings/downloads/pane.js:59 module:io.ox/core
 #: apps/plugins/portal/updater/register.js:32 module:plugins/portal
 msgid ""
@@ -8750,9 +8853,25 @@ msgstr ""
 "と、最新のアップデートに関する通知が受信できます。これらのアップデートはアッ"
 "プデータ内からダウンロードできます。"
 
+#: apps/io.ox/onboarding/clients/wizard.js:55 module:io.ox/core/onboarding
+msgid "Which device do you want to configure?"
+msgstr ""
+
 #: apps/io.ox/calendar/util.js:203 module:io.ox/calendar
 msgid "Whole day"
 msgstr "終日"
+
+#: apps/io.ox/onboarding/clients/wizard.js:117 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Window"
+msgid "Windows PC"
+msgstr "ウィンドウ"
+
+#: apps/io.ox/onboarding/clients/wizard.js:111 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Windows are shown as"
+msgid "Windows Phone"
+msgstr "ウィンドウの表示形式"
 
 #: apps/io.ox/calendar/freebusy/templates.js:80 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:162 module:io.ox/calendar
@@ -9528,6 +9647,16 @@ msgstr "出席者あり"
 #: apps/io.ox/core/import/import.js:61 module:io.ox/core
 msgid "iCal"
 msgstr "iCal"
+
+#: apps/io.ox/onboarding/clients/wizard.js:99 module:io.ox/core/onboarding
+msgid "iPad"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:93 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Phone"
+msgid "iPhone"
+msgstr "電話"
 
 #: apps/io.ox/search/view-template.js:159 module:io.ox/core
 msgid "in"
@@ -11567,9 +11696,6 @@ msgstr "yyyy"
 #~ msgid "Contact overview"
 #~ msgstr "連絡先の概要"
 
-#~ msgid "Contacts"
-#~ msgstr "メンバ"
-
 #~ msgid "Content-Type:"
 #~ msgstr "Content-Type:"
 
@@ -12044,12 +12170,6 @@ msgstr "yyyy"
 #~ msgid "Do you want to keep the draft after sending this mail?"
 #~ msgstr "メールの送信後にこの下書きを保存しますか？"
 
-#~ msgid "Do you want to save your configuration?"
-#~ msgstr "構成を保存しますか？"
-
-#~ msgid "Do you want to save your layout changes?"
-#~ msgstr "レイアウトの変更を保存しますか？"
-
 #~ msgid "Do you want to send a delivery receipt?"
 #~ msgstr "開封通知を送信しますか？"
 
@@ -12137,9 +12257,6 @@ msgstr "yyyy"
 
 #~ msgid "Dynamic resizing..."
 #~ msgstr "ダイナミック リサイズしています..."
-
-#~ msgid "E-Mail"
-#~ msgstr "メール"
 
 #~ msgid "E-Mail (business)"
 #~ msgstr "電子メール (ビジネス)"
@@ -15096,9 +15213,6 @@ msgstr "yyyy"
 #~ msgid "Select the number of items to be displayed in the module panes."
 #~ msgstr "モジュール ペインに表示するアイテム数を選択してください。"
 
-#~ msgid "Selecting a view"
-#~ msgstr "ビューの選択"
-
 #~ msgid "Send Attachment"
 #~ msgstr "添付ファイルを送信"
 
@@ -15694,9 +15808,6 @@ msgstr "yyyy"
 
 #~ msgid "Tab-based panel"
 #~ msgstr "タブ形式パネル"
-
-#~ msgid "Table"
-#~ msgstr "表"
 
 #~ msgid "Tagging"
 #~ msgstr "タグ付け"
@@ -16794,12 +16905,6 @@ msgstr "yyyy"
 #~ "人情報の取り扱いにも細心の注意を払うようお勧めします。個人データの保管場所"
 #~ "や転送する相手についても十分に検討をし、パスワードによる確実な保護を施すな"
 #~ "ど、適切なアクセス保護を行ってください。"
-
-#~ msgid "Window"
-#~ msgstr "ウィンドウ"
-
-#~ msgid "Windows are shown as"
-#~ msgstr "ウィンドウの表示形式"
 
 #~ msgctxt "address"
 #~ msgid "Work"

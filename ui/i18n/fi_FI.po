@@ -1319,6 +1319,18 @@ msgstr "Takaisin"
 msgid "Back to appointment"
 msgstr "Takaisin tapaamiseen"
 
+#: apps/io.ox/onboarding/clients/wizard.js:33 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Back to sign in"
+msgid "Back to devices"
+msgstr "Takaisin sisäänkirjautumiseen"
+
+#: apps/io.ox/onboarding/clients/wizard.js:29 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "your platform"
+msgid "Back to platforms"
+msgstr "Alustasi"
+
 #: apps/plugins/wizards/mandatory/main.js:56 module:io.ox/wizards/firstStart
 msgid "Back to sign in"
 msgstr "Takaisin sisäänkirjautumiseen"
@@ -1435,6 +1447,7 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js:77 module:io.ox/core
 #: apps/io.ox/mail/detail/links.js:82 module:io.ox/mail
+#: apps/io.ox/onboarding/clients/wizard.js:131 module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "Kalenteri"
 
@@ -1758,11 +1771,15 @@ msgstr "Napsauta yrittääksesi uudestaan."
 msgid "Click to upload image"
 msgstr "Napsauta ladataksesi kuva"
 
+#: apps/io.ox/onboarding/clients/wizard.js:23 module:io.ox/core/onboarding
+msgid "Client onboarding"
+msgstr ""
+
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
 #: apps/io.ox/core/folder/tree.js:227 apps/io.ox/core/main.js:1214
 #: apps/io.ox/core/permissions/permissions.js:492
-#: apps/io.ox/core/tk/wizard.js:359
+#: apps/io.ox/core/tk/wizard.js:368
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:162
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:181
 #: apps/io.ox/core/viewer/views/toolbarview.js:187
@@ -1931,6 +1948,10 @@ msgstr "Yhteystiedon kuvat"
 #: apps/plugins/xing/main.js:108 module:plugins/portal
 msgid "Contact request sent"
 msgstr "Yhteystietopyyntö lähetetty"
+
+#: apps/io.ox/onboarding/clients/wizard.js:127 module:io.ox/core/onboarding
+msgid "Contacts"
+msgstr "Yhteystiedot"
 
 #: apps/io.ox/contacts/actions.js:129 module:io.ox/contacts
 msgid "Contacts have been copied"
@@ -2859,6 +2880,12 @@ msgstr "Erääntyy %1$s"
 msgid "EB"
 msgstr "ET"
 
+#: apps/io.ox/onboarding/clients/wizard.js:123 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Mail"
+msgid "EMail"
+msgstr "Sähköposti"
+
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js:405 module:io.ox/calendar
 #: apps/io.ox/calendar/main.js:225 apps/io.ox/calendar/main.js:231
@@ -3489,6 +3516,7 @@ msgstr "Tiedosto: %1$s"
 
 #: apps/io.ox/files/filepicker.js:76 module:io.ox/files
 #: apps/io.ox/files/filepicker.js:133
+#: apps/io.ox/onboarding/clients/wizard.js:135 module:io.ox/core/onboarding
 msgid "Files"
 msgstr "Tiedostot"
 
@@ -4470,6 +4498,12 @@ msgstr "MT"
 msgid "MM"
 msgstr "KK"
 
+#: apps/io.ox/onboarding/clients/wizard.js:105 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "March"
+msgid "Mac"
+msgstr "maaliskuu"
+
 #: apps/io.ox/mail/compose/model.js:237 module:io.ox/mail
 msgid "Mail"
 msgstr "Sähköposti"
@@ -5029,7 +5063,7 @@ msgstr "Uusi tehtävämuistutus."
 msgid "New task reminders"
 msgstr "Uusia tehtävämuistutuksia"
 
-#: apps/io.ox/core/tk/wizard.js:408 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:417 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:123
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
@@ -6775,6 +6809,16 @@ msgstr "Valitse tiedosto"
 msgid "Select folder"
 msgstr "Valitse kansio"
 
+#: apps/io.ox/onboarding/clients/wizard.js:178 module:io.ox/core/onboarding
+msgid "Select the platform of your device:"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:30 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Selecting a view"
+msgid "Select your device"
+msgstr "Näkymän valitseminen"
+
 #: apps/io.ox/core/commons.js:130 module:io.ox/core
 msgid "Selection Details"
 msgstr "Valinnan yksityiskohdat"
@@ -7160,6 +7204,12 @@ msgstr "Koko (tavuina)"
 msgid "Slow requests"
 msgstr "Hitaat pyynnöt"
 
+#: apps/io.ox/onboarding/clients/wizard.js:81 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Smartphone settings:"
+msgid "Smartphone"
+msgstr "Älypuhelimen asetukset:"
+
 #: apps/io.ox/portal/settings/pane.js:411 module:io.ox/portal
 msgid "Smartphone settings:"
 msgstr "Älypuhelimen asetukset:"
@@ -7305,7 +7355,7 @@ msgstr "Aloita etäesitys"
 msgid "Start search"
 msgstr "Aloita haku"
 
-#: apps/io.ox/core/tk/wizard.js:408 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:417 module:io.ox/core
 msgid "Start tour"
 msgstr "Aloita kierros"
 
@@ -7437,10 +7487,21 @@ msgstr "TT"
 msgid "TTY/TDD"
 msgstr "kaukokirjoitin/tekstipuhelin"
 
+#: apps/io.ox/onboarding/clients/wizard.js:87 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Enable"
+msgid "Tablet"
+msgstr "Kytke päälle"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
 #: module:io.ox/settings
 msgid "Tag mail with"
 msgstr "Aseta avainsana"
+
+#. %1$s is the product name, e.g. OX.
+#: apps/io.ox/onboarding/clients/wizard.js:54 module:io.ox/core/onboarding
+msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
+msgstr ""
 
 #: apps/io.ox/mail/detail/links.js:74 module:io.ox/mail
 #: apps/io.ox/tasks/edit/main.js:215 module:io.ox/tasks
@@ -7572,7 +7633,7 @@ msgstr "Tili täytyy nimetä"
 msgid "The activity has been deleted successfully"
 msgstr "Aktiviteetti on poistettu onnistuneesti"
 
-#: apps/io.ox/files/api.js:381 module:io.ox/files
+#: apps/io.ox/files/api.js:382 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "Sallittu kiintiö on täynnä."
@@ -7807,7 +7868,7 @@ msgstr "Ilmoitusalue on avoinna"
 msgid "The notification has been resent"
 msgstr "Ilmoitus on lähetetty uudelleen"
 
-#: apps/io.ox/files/api.js:376 module:io.ox/files
+#: apps/io.ox/files/api.js:377 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "Annettu tiedostonimi ylittää sallitun enimmäispituuden."
@@ -8079,7 +8140,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Tämä kenttä pitää täyttää"
 
-#: apps/io.ox/files/api.js:388 module:io.ox/files
+#: apps/io.ox/files/api.js:389 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "Tiedostoa ei voitu ladata."
@@ -8730,7 +8791,7 @@ msgstr "Viikkonäkymä"
 msgid "Weekly on %1$s"
 msgstr "Viikoittain %1$s"
 
-#: apps/io.ox/core/tk/wizard.js:794 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:803 module:io.ox/core
 msgid "Welcome"
 msgstr "Tervetuloa"
 
@@ -8767,6 +8828,36 @@ msgstr "Tervetuloa tehtäviisi"
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "Tervetuloa. Ole hyvä ja anna tuotteesta palautetta."
 
+#: apps/io.ox/onboarding/clients/wizard.js:104 module:io.ox/core/onboarding
+msgid "What do you want to use on your Mac?"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:116 module:io.ox/core/onboarding
+msgid "What do you want to use on your Windows PC?"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:110 module:io.ox/core/onboarding
+msgid "What do you want to use on your Windows Phone?"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:98 module:io.ox/core/onboarding
+msgid "What do you want to use on your iPad?"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:92 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you really want to discard your changes?"
+msgid "What do you want to use on your iPhone?"
+msgstr "Haluatko varmasti hylätä muutoksesi?"
+
+#: apps/io.ox/onboarding/clients/wizard.js:86 module:io.ox/core/onboarding
+msgid "What do you want to use on your tablet?"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:80 module:io.ox/core/onboarding
+msgid "What to you want to use on your smartphone?"
+msgstr ""
+
 #: apps/io.ox/core/settings/downloads/pane.js:59 module:io.ox/core
 #: apps/plugins/portal/updater/register.js:32 module:plugins/portal
 msgid ""
@@ -8780,9 +8871,21 @@ msgstr ""
 "asiakasohjelmasta. Päivittäjä ilmoittaa automaattisesti uusista "
 "päivityksistä. Uusimmat päivitykset voit ladata päivittäjän kautta."
 
+#: apps/io.ox/onboarding/clients/wizard.js:55 module:io.ox/core/onboarding
+msgid "Which device do you want to configure?"
+msgstr ""
+
 #: apps/io.ox/calendar/util.js:203 module:io.ox/calendar
 msgid "Whole day"
 msgstr "Koko päivän"
+
+#: apps/io.ox/onboarding/clients/wizard.js:117 module:io.ox/core/onboarding
+msgid "Windows PC"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:111 module:io.ox/core/onboarding
+msgid "Windows Phone"
+msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js:80 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:162 module:io.ox/calendar
@@ -9564,6 +9667,16 @@ msgstr "on osallitujia"
 msgid "iCal"
 msgstr "iCal"
 
+#: apps/io.ox/onboarding/clients/wizard.js:99 module:io.ox/core/onboarding
+msgid "iPad"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js:93 module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Phone"
+msgid "iPhone"
+msgstr "Puhelin"
+
 #: apps/io.ox/search/view-template.js:159 module:io.ox/core
 msgid "in"
 msgstr "mukana"
@@ -10104,9 +10217,6 @@ msgstr "vvvv"
 
 #~ msgid "Confirmed"
 #~ msgstr "Vahvistettu"
-
-#~ msgid "Contacts"
-#~ msgstr "Yhteystiedot"
 
 #, fuzzy
 #~ msgid "Continue Presentation"
@@ -10806,9 +10916,6 @@ msgstr "vvvv"
 
 #~ msgid "Select none"
 #~ msgstr "Poista valinta"
-
-#~ msgid "Selecting a view"
-#~ msgstr "Näkymän valitseminen"
 
 #~ msgid "Sender"
 #~ msgstr "Lähettäjä"
