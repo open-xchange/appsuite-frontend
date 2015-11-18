@@ -38,6 +38,9 @@ define('io.ox/backbone/mini-views/help', [], function () {
         },
 
         onClick: function (e) {
+
+            e.preventDefault();
+
             var href = this.options.href,
                 base = this.options.base;
 
@@ -48,6 +51,8 @@ define('io.ox/backbone/mini-views/help', [], function () {
                 base = href.base || base;
                 href = href.target || href;
             }
+
+            window.open(base + '/l10n/' + ox.language + '/' + href);
 
             // metrics
             require(['io.ox/metrics/main'], function (metrics) {
@@ -65,10 +70,6 @@ define('io.ox/backbone/mini-views/help', [], function () {
                     detail: href.substr(href.lastIndexOf('#') + 1)
                 });
             });
-
-            window.open(base + '/l10n/' + ox.language + '/' + href);
-
-            e.preventDefault();
         },
 
         initialize: function (options) {
@@ -89,7 +90,7 @@ define('io.ox/backbone/mini-views/help', [], function () {
                 this.options.content
             ).attr({
                 target: '_blank',
-                href: '',
+                href: '#',
                 role: 'menuitem',
                 tabindex: this.options.tabindex
             });

@@ -91,6 +91,7 @@ define('io.ox/core/folder/selection', [], function () {
 
             // trigger action event
             this.view.trigger('selection:action', items, index);
+
             // do nothing if already selected
             if (current.hasClass('selected')) return;
 

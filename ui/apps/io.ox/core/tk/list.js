@@ -76,19 +76,26 @@ define('io.ox/core/tk/list', [
             // ignore fake clicks
             if (!e.pageX) return;
             // restore focus
+            this.restoreFocus();
+        },
+
+        restoreFocus: function (greedy) {
             // try to find the correct item to focus
-            var selectedItems = this.getItems().filter('.selected');
-            if (selectedItems.length !== 0) {
-                if (selectedItems.length === 1) {
-                    // only one item, just focus that
-                    selectedItems.focus();
-                } else if (selectedItems.filter(document.activeElement).length === 1) {
-                    // the activeElement is in the list, focus it
-                    selectedItems.filter(document.activeElement).focus();
-                } else {
-                    // just use the last selected item to focus
-                    selectedItems.last().focus();
-                }
+            var items = this.getItems(),
+                selectedItems = items.filter('.selected');
+            if (selectedItems.length === 0) {
+                if (greedy) this.selection.select(0, items);
+                return;
+            }
+            if (selectedItems.length === 1) {
+                // only one item, just focus that
+                selectedItems.focus();
+            } else if (selectedItems.filter(document.activeElement).length === 1) {
+                // the activeElement is in the list, focus it
+                selectedItems.filter(document.activeElement).focus();
+            } else {
+                // just use the last selected item to focus
+                selectedItems.last().focus();
             }
         },
 

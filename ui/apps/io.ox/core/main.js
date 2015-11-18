@@ -51,6 +51,11 @@ define('io.ox/core/main', [
         };
     }
 
+    // a11y fix for role="button"
+    $(document).on('keypress', 'a[role="button"]', function (e) {
+        $(e.currentTarget).click();
+    });
+
     debug('core: Loaded');
     ox.trigger('core:load');
 
@@ -844,7 +849,7 @@ define('io.ox/core/main', [
                 this.append(
                     addLauncher('right', new HelpView({
                         iconClass: 'launcher-icon',
-                        tabindex: '-1',
+                        tabindex: '1',
                         href: getHelp
                     }).render().$el)
                 );

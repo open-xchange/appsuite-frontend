@@ -181,7 +181,7 @@ define('io.ox/mail/detail/view', [
             var $body;
             this.append(
                 $('<section class="attachments">'),
-                $body = $('<section class="body user-select-text">')
+                $body = $('<section class="body user-select-text" tabindex="-1">')
             );
             $body.on('dispose', function () {
                 var $content = $(this).find('.content');

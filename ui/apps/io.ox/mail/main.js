@@ -1321,6 +1321,25 @@ define('io.ox/mail/main', [
             };
         },
 
+        'a11y': function (app) {
+            // mail list: focus mail detail view on <enter>
+            app.listView.$el.on('keydown', '.list-item', function (e) {
+                if (e.which === 13) app.threadView.$('.list-item.expanded .body').focus();
+            });
+            // detail view: return back to list view via <escape>
+            app.threadView.$el.on('keydown', '.list-item', function (e) {
+                if (e.which === 27) app.listView.restoreFocus(true);
+            });
+            // folder tree: focus list view on <enter>
+            app.folderView.tree.$el.on('keydown', '.folder', function (e) {
+                if (e.which === 13) app.listView.restoreFocus(true);
+            });
+            // mail list: focus folder on <escape>
+            app.listView.$el.on('keydown', '.list-item', function (e) {
+                if (e.which === 27) { app.folderView.tree.$('.folder.selected').focus(); return false; }
+            });
+        },
+
         'metrics': function (app) {
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
