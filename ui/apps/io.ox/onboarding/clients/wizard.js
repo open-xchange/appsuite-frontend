@@ -174,7 +174,7 @@ define('io.ox/onboarding/clients/wizard', [
         this.$('.wizard-title').css('white-space', 'pre').text(
             meta.teaser.platform.replace(/!\s/, '!\n')
         );
-        this.$('.wizard-content').empty().append(
+        this.$('.wizard-content').addClass('onboarding-platform').empty().append(
             $('<p class="onboarding-teaser">').text(gt('Select the platform of your device:')),
             drawOptions('platform', getPlatforms())
             .on('click', 'a', onSelectPlatform.bind(this))
