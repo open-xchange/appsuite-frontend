@@ -935,7 +935,8 @@ define('io.ox/mail/compose/view', [
             if (_.isString(model)) id = model;
 
             var newSignature = _.where(this.signatures, { id: String(id) })[0],
-                prevSignature = _.where(this.signatures, { id: _.isObject(model) ? model.previous('signature') : '' })[0];
+                prevSignature = _.where(this.signatures, { id: _.isObject(model) ? model.previous('signature') : '' })[0],
+                hasContent = !!this.editor.getContent().length;
 
             if (prevSignature) {
                 this.removeSignature(prevSignature);
@@ -947,6 +948,8 @@ define('io.ox/mail/compose/view', [
             }
             // do not add new line if sigs are simply exchanged
             if (prevSignature && newSignature) return;
+            // otherwise a line would be added above user entered content
+            if (hasContent) return;
             this.prependNewLine();
         },
 
