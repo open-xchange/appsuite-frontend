@@ -1323,20 +1323,22 @@ define('io.ox/mail/main', [
 
         'a11y': function (app) {
             // mail list: focus mail detail view on <enter>
+            // mail list: focus folder on <escape>
             app.listView.$el.on('keydown', '.list-item', function (e) {
                 if (e.which === 13) app.threadView.$('.list-item.expanded .body').focus();
+                if (e.which === 27) { app.folderView.tree.$('.folder.selected').focus(); return false; }
             });
             // detail view: return back to list view via <escape>
             app.threadView.$el.on('keydown', '.list-item', function (e) {
                 if (e.which === 27) app.listView.restoreFocus(true);
             });
             // folder tree: focus list view on <enter>
+            // folder tree: focus top-bar on <escape>
             app.folderView.tree.$el.on('keydown', '.folder', function (e) {
+                // check if it's really the folder - not the contextmenu toggle
+                if (!$(e.target).hasClass('folder')) return;
                 if (e.which === 13) app.listView.restoreFocus(true);
-            });
-            // mail list: focus folder on <escape>
-            app.listView.$el.on('keydown', '.list-item', function (e) {
-                if (e.which === 27) { app.folderView.tree.$('.folder.selected').focus(); return false; }
+                if (e.which === 27) $('#io-ox-topbar .active-app > a').focus();
             });
         },
 

@@ -51,9 +51,16 @@ define('io.ox/core/main', [
         };
     }
 
-    // a11y fix for role="button"
-    $(document).on('keypress', 'a[role="button"]', function (e) {
+    // a11y: fix for role="button"
+    $(document).on('keydown', 'a[role="button"]', function (e) {
+        if (e.which !== 32) return;
+        e.preventDefault();
         $(e.currentTarget).click();
+    });
+
+    // a11y: focus folder tree from top-bar on <enter>
+    $(document).on('keydown', '#io-ox-topbar .active-app a', function (e) {
+        if (e.which === 13) $('.folder-tree:visible .folder.selected').focus();
     });
 
     debug('core: Loaded');

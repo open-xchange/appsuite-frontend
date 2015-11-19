@@ -122,18 +122,20 @@ define('io.ox/mail/view-options', [
 
     function toggleFolderView(e) {
         e.preventDefault();
-        e.data.app.folderView.forceOpen = e.data.state;
-        e.data.app.props.set('folderview', e.data.state);
+        var state = !!e.data.state;
+        e.data.app.folderView.forceOpen = state;
+        e.data.app.props.set('folderview', state);
+        // keep focus
+        var selector = '[data-action="' + (state ? 'close' : 'open') + '-folder-view"]';
+        e.data.app.getWindow().nodes.outer.find(selector).focus();
     }
 
     function onFolderViewOpen(app) {
-        app.getWindow().nodes.main.find('.list-view-control')
-            .removeClass('toolbar-bottom-visible');
+        app.getWindow().nodes.main.find('.list-view-control').removeClass('toolbar-bottom-visible');
     }
 
     function onFolderViewClose(app) {
-        app.getWindow().nodes.main.find('.list-view-control')
-            .addClass('toolbar-bottom-visible');
+        app.getWindow().nodes.main.find('.list-view-control').addClass('toolbar-bottom-visible');
     }
 
     ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
@@ -142,7 +144,7 @@ define('io.ox/mail/view-options', [
         draw: function (baton) {
 
             this.append(
-                $('<a href="#" class="toolbar-item" tabindex="1">')
+                $('<a href="#" class="toolbar-item" tabindex="1" data-action="open-folder-view">')
                 .attr('title', gt('Open folder view'))
                 .append($('<i class="fa fa-angle-double-right">'))
                 .on('click', { app: baton.app, state: true }, toggleFolderView)
@@ -153,7 +155,7 @@ define('io.ox/mail/view-options', [
             side.addClass('bottom-toolbar');
             side.append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" class="toolbar-item" role="button" tabindex="1">')
+                    $('<a href="#" class="toolbar-item" role="button" tabindex="1" data-action="close-folder-view">')
                     .append(
                         $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
                         $('<span class="sr-only">').text(gt('Close folder view'))
