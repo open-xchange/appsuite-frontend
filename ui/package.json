@@ -18,10 +18,10 @@
     "grunt-contrib-copy": "^0.8.0",
     "grunt-newer": "^1.1.0",
     "grunt-jsonlint": "^1.0.1",
-    "grunt-require-gettext": "^0.6.0",
+    "grunt-require-gettext": "^0.7.0",
     "grunt-contrib-jshint": "^0.11.0",
     "grunt-jscs": "^2.1.0",
-    "open-xchange-shared-grunt-config": "^0.12.2",
+    "open-xchange-shared-grunt-config": "^0.12.3",
     "underscore": "^1.8.0",
     "grunt-bump": "^0.3.0"
   },
