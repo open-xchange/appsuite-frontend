@@ -17,8 +17,9 @@ define('io.ox/mail/compose/actions/send', [
     'settings!io.ox/mail',
     'io.ox/core/notifications',
     'gettext!io.ox/mail',
-    'io.ox/mail/actions/attachmentEmpty'
-], function (ext, mailAPI, settings, notifications, gt, attachmentEmpty) {
+    'io.ox/mail/actions/attachmentEmpty',
+    'io.ox/mail/actions/attachmentQuota'
+], function (ext, mailAPI, settings, notifications, gt, attachmentEmpty, attachmentQuota) {
 
     'use strict';
 
@@ -99,6 +100,13 @@ define('io.ox/mail/compose/actions/send', [
                 return attachmentEmpty.emptinessCheck(baton.mail.files).then(_.identity, function () {
                     baton.stopPropagation();
                 });
+            }
+        },
+        {
+            id: 'check:attachment-publishmailattachments',
+            index: 550,
+            perform: function (baton) {
+                return attachmentQuota.publishMailAttachmentsNotification(baton.mail.files);
             }
         },
         {

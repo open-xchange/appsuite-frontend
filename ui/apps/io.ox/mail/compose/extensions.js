@@ -21,10 +21,11 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/core/tk/tokenfield',
     'io.ox/core/dropzone',
     'io.ox/core/capabilities',
+    'io.ox/mail/actions/attachmentQuota',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'static/3rd.party/jquery-ui.min.js'
-], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, settings, gt) {
+], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, settings, gt) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -479,11 +480,21 @@ define('io.ox/mail/compose/extensions', [
         attachment: (function () {
 
             function addLocalFile(model, e) {
-                model.attachFiles(
-                    _(e.target.files).map(function (file) {
-                        return _.extend(file, { group: 'localFile' });
+                var attachmentCollection = model.get('attachments'),
+                    accumulatedSize = attachmentCollection.filter(function (m) {
+                        var size = m.get('size');
+                        return typeof(size) !== 'undefined';
                     })
-                );
+                    .map(function (m) { return m.get('size'); })
+                    .reduce(function (m, n) { return m + n; }, 0);
+
+                if (attachmentQuota.checkQuota(e.target.files, accumulatedSize)) {
+                    model.attachFiles(
+                        _(e.target.files).map(function (file) {
+                            return _.extend(file, { group: 'localFile' });
+                        })
+                    );
+                }
             }
 
             function openFilePicker(model) {

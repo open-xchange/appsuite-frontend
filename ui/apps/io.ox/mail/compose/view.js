@@ -25,10 +25,11 @@ define('io.ox/mail/compose/view', [
     'io.ox/core/api/account',
     'gettext!io.ox/mail',
     'io.ox/mail/actions/attachmentEmpty',
+    'io.ox/mail/actions/attachmentQuota',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send'
-], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty) {
+], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota) {
 
     'use strict';
 
@@ -510,7 +511,11 @@ define('io.ox/mail/compose/view', [
                     })).then(def.resolve, def.reject);
                 });
                 return def;
-            }).then(function () {
+            })
+            .then(function () {
+                return attachmentQuota.publishMailAttachmentsNotification(mail.files);
+            })
+            .then(function () {
                 return mailAPI.send(mail, mail.files);
             }).then(function (result) {
                 var opt = self.parseMsgref(result.data);
@@ -698,26 +703,6 @@ define('io.ox/mail/compose/view', [
                     return p.perform.apply(undefined, [baton]);
                 });
             }, $.when());
-        },
-
-        attachmentsExceedQuota: function (mail) {
-
-            var allAttachmentsSizes = [].concat(mail.files).concat(mail.attachments)
-                    .map(function (m) {
-                        return m.size || 0;
-                    }),
-                quota = coreSettings.get('properties/attachmentQuota', 0),
-                accumulatedSize = allAttachmentsSizes
-                    .reduce(function (acc, size) {
-                        return acc + size;
-                    }, 0),
-                singleFileExceedsQuota = allAttachmentsSizes
-                    .reduce(function (acc, size) {
-                        var quotaPerFile = coreSettings.get('properties/attachmentQuotaPerFile', 0);
-                        return acc || (quotaPerFile > 0 && size > quotaPerFile);
-                    }, false);
-
-            return singleFileExceedsQuota || (quota > 0 && accumulatedSize > quota);
         },
 
         toggleTokenfield: function (e) {

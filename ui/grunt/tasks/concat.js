@@ -190,6 +190,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/page-controller.js',
                             'apps/io.ox/mail/actions.js',
                             'apps/io.ox/mail/actions/attachmentEmpty.js',
+                            'apps/io.ox/mail/actions/attachmentQuota.js',
                             'apps/io.ox/mail/toolbar.js',
                             'apps/io.ox/mail/import.js',
                             'apps/io.ox/mail/folderview-extensions.js',
