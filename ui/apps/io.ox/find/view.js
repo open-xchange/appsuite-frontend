@@ -25,6 +25,7 @@ define('io.ox/find/view', [
         events: {
             'focusin': 'show',
             'focusout': 'smartCancel',
+            'keydown .token-input': 'keyDown',
             // subview buttons
             'click .action-cancel': 'cancel'
         },
@@ -164,7 +165,7 @@ define('io.ox/find/view', [
             this.reset();
             this.hide();
             // move to next visible tabindexed node
-            this.setFocus('move');
+            this.setFocus(this.shifttab ? 'prev' : 'next');
             // move focus
             this.trigger('cancel');
         },
@@ -189,6 +190,11 @@ define('io.ox/find/view', [
             }, 150);
         },
 
+        // set flag: shift + tab pressed for focusout handler
+        keyDown: function (e) {
+            this.shifttab = e.shiftKey && e.which === 9;
+        },
+
         _onResize: function (delta) {
             var box = this.$el,
                 facets = this.ui.facets.$el.find('ul'),
@@ -208,14 +214,15 @@ define('io.ox/find/view', [
 
         setFocus: function (target) {
             // focus search field
-            if (target !== 'move') return this.ui.searchbox.setFocus();
+            if (target !== 'next' && target !== 'prev') return this.ui.searchbox.setFocus();
 
-            // focus next element in tabindex order
+            // focus next/prev element in tabindex order
             var tabVisible = '[tabindex][tabindex!="-1"]:visible',
                 $list = $(tabVisible),
                 last = this.$el.closest('.io-ox-find').find(tabVisible).last(),
                 index = $list.index(last),
-                next = $list.get(index + 1) || $list.get(index - 1) || $();
+                incr = target === 'next' ? 1 : -1,
+                next =  $list.get(index + incr) || $list.get(index - incr) || $();
             _.defer(function () {
                 next.focus();
             });
