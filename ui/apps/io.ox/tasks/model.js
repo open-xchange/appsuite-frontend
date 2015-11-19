@@ -190,6 +190,15 @@ define('io.ox/tasks/model', [
         }
     });
 
+    ext.point('io.ox/tasks/model/validation').extend({
+        id: 'upload-quota',
+        validate: function (attributes) {
+            if (attributes.quotaExceeded) {
+                this.add('quota_exceeded', gt('Files can not be uploaded, because quota exceeded.'));
+            }
+        }
+    });
+
     return {
         defaults: defaults,
         factory: factory,

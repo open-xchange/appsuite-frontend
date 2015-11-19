@@ -106,6 +106,21 @@ define('io.ox/core/tk/attachments', [
                 }
             },
 
+            checkQuota: function () {
+                var properties = settings.get('properties'),
+                    size = this.attachmentsToAdd.reduce(function (acc, attachment) {
+                    return acc + (attachment.file_size || 0);
+                }, 0);
+                if (size > properties.attachmentMaxUploadSize) {
+                    this.model.set('quotaExceeded', {
+                        actualSize: size,
+                        attachmentMaxUploadSize: properties.attachmentMaxUploadSize
+                    });
+                } else {
+                    this.model.unset('quotaExceeded');
+                }
+            },
+
             updateState: function () {
                 var self = this;
                 this.allAttachments = _(this.attachmentsOnServer.concat(this.attachmentsToAdd)).reject(function (attachment) {
@@ -113,6 +128,7 @@ define('io.ox/core/tk/attachments', [
                         return toDelete.id === attachment.id;
                     });
                 });
+                this.checkQuota();
                 this.attachmentsChanged();
             },
 

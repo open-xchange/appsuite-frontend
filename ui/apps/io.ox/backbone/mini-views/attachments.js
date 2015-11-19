@@ -16,8 +16,9 @@ define('io.ox/backbone/mini-views/attachments', [
     'io.ox/core/api/attachment',
     'io.ox/core/tk/attachments',
     'io.ox/core/strings',
-    'gettext!io.ox/core'
-], function (AbstractView, api, attachments, strings, gt) {
+    'gettext!io.ox/core',
+    'settings!io.ox/core'
+], function (AbstractView, api, attachments, strings, gt, settings) {
 
     'use strict';
 
@@ -96,6 +97,21 @@ define('io.ox/backbone/mini-views/attachments', [
             );
         },
 
+        checkQuota: function () {
+            var properties = settings.get('properties'),
+                size = this.attachmentsToAdd.reduce(function (acc, attachment) {
+                return acc + (attachment.file_size || 0);
+            }, 0);
+            if (size > properties.attachmentMaxUploadSize) {
+                this.model.set('quotaExceeded', {
+                    actualSize: size,
+                    attachmentMaxUploadSize: properties.attachmentMaxUploadSize
+                });
+            } else {
+                this.model.unset('quotaExceeded');
+            }
+        },
+
         loadAttachments: function () {
             var self = this;
             if (this.model.id) {
@@ -114,6 +130,7 @@ define('io.ox/backbone/mini-views/attachments', [
                     return toDelete.id === attachment.id;
                 });
             });
+            this.checkQuota();
             this.attachmentsChanged();
         },
 

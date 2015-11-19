@@ -14,11 +14,12 @@
 define('io.ox/contacts/model', [
     'io.ox/backbone/modelFactory',
     'io.ox/backbone/validation',
+    'io.ox/core/extensions',
     'io.ox/contacts/api',
     'io.ox/core/capabilities',
     'io.ox/settings/util',
     'gettext!io.ox/contacts'
-], function (ModelFactory, Validators, api, capabilities, settingsUtil, gt) {
+], function (ModelFactory, Validators, ext, api, capabilities, settingsUtil, gt) {
 
     'use strict';
 
@@ -178,6 +179,15 @@ define('io.ox/contacts/model', [
             addressBusiness: { format: 'string' },
             addressOther: { format: 'string' },
             private_flag: { format: 'boolean' }
+        });
+
+        ext.point(ref + '/validation').extend({
+            id: 'upload_quota',
+            validate: function (attributes) {
+                if (attributes.quotaExceeded) {
+                    this.add('attachments_list', gt('Files can not be uploaded, because quota exceeded.'));
+                }
+            }
         });
 
         return factory;

@@ -252,6 +252,15 @@ define('io.ox/calendar/model', [
         }
     });
 
+    ext.point('io.ox/calendar/model/validation').extend({
+        id: 'upload-quota',
+        validate: function (attributes) {
+            if (attributes.quotaExceeded) {
+                this.add('quota_exceeded', gt('Files can not be uploaded, because quota exceeded.'));
+            }
+        }
+    });
+
     Validators.validationFor('io.ox/calendar/model', {
         title: { format: 'string', mandatory: true },
         start_date: { format: 'date', mandatory: true },
