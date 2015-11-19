@@ -544,7 +544,7 @@ msgstr ""
 "asettaa heille vastaavat oikeudet julkiseen kansioon."
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:608 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:614 module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr "Ilmoitus viestin lukemisesta lähetetty"
 
@@ -560,11 +560,11 @@ msgstr ""
 msgid "A severe error occurred!"
 msgstr "Tapahtui vakava virhe!"
 
-#: apps/io.ox/core/main.js:977 module:io.ox/core
+#: apps/io.ox/core/main.js:982 module:io.ox/core
 msgid "About"
 msgstr "Tietoja"
 
-#: apps/io.ox/calendar/edit/extensions.js:390 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:391 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Absent"
 msgstr "Muualla"
@@ -612,7 +612,7 @@ msgstr "Tiedostoihin pääsy WebDAV kautta"
 msgid "Accessing global address book is not permitted"
 msgstr "Pääsy yhteiseen osoitekirjaan evätty"
 
-#: apps/io.ox/core/sub/subscriptions.js:263 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:296 module:io.ox/core/sub
 #: apps/plugins/portal/mail/register.js:217 module:plugins/portal
 msgid "Account"
 msgstr "Tili"
@@ -675,13 +675,13 @@ msgstr "Tilit"
 msgid "Actions"
 msgstr "Toimenpiteet"
 
-#: apps/io.ox/tasks/edit/view-template.js:606 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:609 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:98 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:123
 msgid "Actual costs"
 msgstr "Todelliset kustannukset"
 
-#: apps/io.ox/tasks/edit/view-template.js:578 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:581 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:96 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:121
 msgid "Actual duration in minutes"
@@ -776,7 +776,7 @@ msgstr "Lisää paikallinen tiedosto"
 msgid "Add mail account"
 msgstr "Lisää postitili"
 
-#: apps/io.ox/core/sub/subscriptions.js:250 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:283 module:io.ox/core/sub
 msgid "Add new account"
 msgstr "Lisää uusi tili"
 
@@ -792,7 +792,7 @@ msgstr "Lisää uusi kalenteri"
 msgid "Add new folder"
 msgstr "Lisää uusi kansio"
 
-#: apps/io.ox/core/sub/subscriptions.js:372 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:368 module:io.ox/core/sub
 msgid "Add new folder for this subscription"
 msgstr "Lisää uusi kansio tähän tilaukseen"
 
@@ -907,7 +907,7 @@ msgstr "Lisäasetukset"
 msgid "Address Book"
 msgstr "Osoitekirja"
 
-#: apps/io.ox/core/main.js:238 module:io.ox/core
+#: apps/io.ox/core/main.js:243 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:31 apps/io.ox/search/view-template.js:35
 msgctxt "app"
 msgid "Address Book"
@@ -968,8 +968,8 @@ msgstr "Kaikki kansiot"
 msgid "All attachments"
 msgstr "Kaikki liitteet"
 
-#: apps/io.ox/calendar/edit/extensions.js:285 module:io.ox/calendar/edit/main
-#: apps/io.ox/tasks/edit/view-template.js:212 module:io.ox/tasks/edit
+#: apps/io.ox/calendar/edit/extensions.js:286 module:io.ox/calendar/edit/main
+#: apps/io.ox/tasks/edit/view-template.js:215 module:io.ox/tasks/edit
 msgid "All day"
 msgstr "Koko päivän"
 
@@ -1057,13 +1057,13 @@ msgstr "Lisää vCard käyntikorttini"
 msgid "Application Toolbar"
 msgstr "Sovellustyökalupalkki"
 
-#: apps/io.ox/mail/main.js:1433 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1452 module:io.ox/mail
 #: apps/io.ox/settings/main.js:577 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Sovellus ei välttämättä toimi odotetusti ennnen tämän ongelman korjaamista."
 
-#: apps/io.ox/core/main.js:221 module:io.ox/core
+#: apps/io.ox/core/main.js:226 module:io.ox/core
 msgid "Applications"
 msgstr "Sovellukset"
 
@@ -1133,8 +1133,8 @@ msgstr "Tapaamiset jaetuissa kalentereissa"
 msgid "Approved:"
 msgstr "Hyväksytty:"
 
-#: apps/io.ox/core/sub/subscriptions.js:389 module:io.ox/core/sub
-#: apps/io.ox/core/sub/subscriptions.js:392
+#: apps/io.ox/core/sub/subscriptions.js:385 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:388
 msgid "Approximate Duration for Subscriptions"
 msgstr "Tilausten arvioitu kesto"
 
@@ -1205,12 +1205,12 @@ msgid_plural "Attachments have been saved"
 msgstr[0] "Liite tallennettu"
 msgstr[1] "Liitteet tallennettu"
 
-#: apps/io.ox/calendar/edit/extensions.js:546 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:547 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:381 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:130 module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js:514 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:533
-#: apps/io.ox/tasks/edit/view-template.js:446 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:449 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js:92 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:231
 msgid "Attachments"
@@ -1250,7 +1250,7 @@ msgstr "Luonnosten automaattinen tallennus"
 msgid "Automatic opening of notification area"
 msgstr "Ilmoitusalueen automaattinen avaus"
 
-#: apps/io.ox/core/main.js:512 module:io.ox/core
+#: apps/io.ox/core/main.js:517 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:326
 msgid "Automatic sign out"
 msgstr "Automaattinen uloskirjautuminen"
@@ -1348,7 +1348,7 @@ msgstr ""
 "Ennen kuin voit jatkaa tuotteen käyttöä, sinun tulee antaa joitakin "
 "perustietoja. Se vie alle minuutin."
 
-#: apps/io.ox/tasks/edit/view-template.js:661 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:664 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:100 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:125
 msgid "Billing information"
@@ -1364,7 +1364,7 @@ msgstr "Syntymäpäivät"
 msgid "Black"
 msgstr "Musta"
 
-#: apps/io.ox/mail/common-extensions.js:346 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:352 module:io.ox/mail
 msgid "Blind copy"
 msgstr "Piilotettu kopio"
 
@@ -1452,7 +1452,7 @@ msgid "Calendar"
 msgstr "Kalenteri"
 
 #: apps/io.ox/calendar/settings/pane.js:77 module:io.ox/calendar
-#: apps/io.ox/core/main.js:239 module:io.ox/core
+#: apps/io.ox/core/main.js:244 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:32 apps/io.ox/search/view-template.js:36
 msgctxt "app"
 msgid "Calendar"
@@ -1462,7 +1462,7 @@ msgstr "Kalenteri"
 msgid "Calendar view"
 msgstr "Kalenterinäkymä"
 
-#: apps/io.ox/calendar/edit/extensions.js:153 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:154 module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "Kalenteri:"
 
@@ -1491,11 +1491,11 @@ msgstr "Kalenteri:"
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
 #: apps/io.ox/core/folder/picker.js:99 apps/io.ox/core/import/import.js:188
-#: apps/io.ox/core/main.js:515 apps/io.ox/core/main.js:1502
+#: apps/io.ox/core/main.js:520 apps/io.ox/core/main.js:1507
 #: apps/io.ox/core/permissions/permissions.js:372
 #: apps/io.ox/core/permissions/permissions.js:405 apps/io.ox/core/print.js:113
-#: apps/io.ox/core/relogin.js:88 apps/io.ox/core/sub/subscriptions.js:135
-#: module:io.ox/core/sub apps/io.ox/core/sub/subscriptions.js:141
+#: apps/io.ox/core/relogin.js:88 apps/io.ox/core/sub/subscriptions.js:168
+#: module:io.ox/core/sub apps/io.ox/core/sub/subscriptions.js:174
 #: apps/io.ox/core/tk/filestorageUtil.js:39
 #: apps/io.ox/core/tk/mobiscroll.js:27 apps/io.ox/core/upsell.js:36
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:83
@@ -1623,7 +1623,7 @@ msgstr "Muuta vahvistustilanne"
 msgid "Change due date"
 msgstr "Vaihda valmistumispäivämäärää"
 
-#: apps/io.ox/core/main.js:930 module:io.ox/core
+#: apps/io.ox/core/main.js:935 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:115
 #: apps/plugins/portal/userSettings/register.js:67
 msgid "Change password"
@@ -1675,7 +1675,7 @@ msgstr "Hahmot"
 msgid "Checkboxes"
 msgstr "Valintaruutuja"
 
-#: apps/io.ox/core/sub/subscriptions.js:75 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:74 module:io.ox/core/sub
 msgid "Checking credentials ..."
 msgstr "Tarkistetaan valtuuksia ..."
 
@@ -1777,7 +1777,7 @@ msgstr ""
 
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
-#: apps/io.ox/core/folder/tree.js:227 apps/io.ox/core/main.js:1214
+#: apps/io.ox/core/folder/tree.js:227 apps/io.ox/core/main.js:1219
 #: apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/tk/wizard.js:368
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:162
@@ -1809,13 +1809,13 @@ msgstr "Sulje kansionäkymä"
 msgid "Close this reminder"
 msgstr "Sulje tämä muistutus"
 
-#: apps/io.ox/calendar/edit/extensions.js:345 module:io.ox/calendar/edit/main
-#: apps/io.ox/tasks/edit/view-template.js:124 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view-template.js:147
+#: apps/io.ox/calendar/edit/extensions.js:346 module:io.ox/calendar/edit/main
+#: apps/io.ox/tasks/edit/view-template.js:127 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:150
 msgid "Collapse form"
 msgstr "Pienennä lomake"
 
-#: apps/io.ox/calendar/edit/extensions.js:438 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:439 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/view-options.js:36 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:170 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:172
@@ -1868,7 +1868,7 @@ msgstr "Yleiset emoji-merkit"
 msgid "Compact"
 msgstr "Tiivis"
 
-#: apps/io.ox/tasks/edit/view-template.js:675 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:678 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:101 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:126
 msgid "Companies"
@@ -1971,7 +1971,7 @@ msgstr "Sisältää merkkejä"
 msgid "Content"
 msgstr "Sisältö"
 
-#: apps/io.ox/core/main.js:1503 module:io.ox/core
+#: apps/io.ox/core/main.js:1508 module:io.ox/core
 msgid "Continue"
 msgstr "Jatka"
 
@@ -1990,7 +1990,7 @@ msgstr "Jatka esitystä"
 msgid "Conversations"
 msgstr "Keskustelut"
 
-#: apps/io.ox/core/main.js:243 module:io.ox/core
+#: apps/io.ox/core/main.js:248 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:36 apps/io.ox/search/view-template.js:40
 msgctxt "app"
 msgid "Conversations"
@@ -2015,7 +2015,7 @@ msgstr ""
 msgid "Copy"
 msgstr "Kopioi"
 
-#: apps/io.ox/mail/common-extensions.js:335 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:341 module:io.ox/mail
 #: apps/io.ox/mail/print.js:86
 msgctxt "CC"
 msgid "Copy"
@@ -2113,7 +2113,7 @@ msgstr "Maa"
 #: apps/io.ox/calendar/edit/extensions.js:66 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:36 module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js:41 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view-template.js:85
+#: apps/io.ox/tasks/edit/view-template.js:88
 #: apps/plugins/administration/groups/settings/edit.js:130 module:io.ox/core
 #: apps/plugins/administration/resources/settings/edit.js:89
 msgid "Create"
@@ -2173,7 +2173,7 @@ msgstr "Luo muistutus"
 
 #: apps/io.ox/tasks/edit/main.js:150 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:42 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view-template.js:84 apps/io.ox/tasks/edit/view.js:153
+#: apps/io.ox/tasks/edit/view-template.js:87 apps/io.ox/tasks/edit/view.js:153
 msgid "Create task"
 msgstr "Luo tehtävä"
 
@@ -2186,7 +2186,7 @@ msgctxt "help"
 msgid "Creating Files"
 msgstr "Tiedostojen luominen"
 
-#: apps/io.ox/tasks/edit/view-template.js:625 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:628 module:io.ox/tasks/edit
 msgid "Currency"
 msgstr "Valuutta"
 
@@ -2199,7 +2199,7 @@ msgstr "Päivämäärä nyt"
 msgid "Current role"
 msgstr "Nykyinen rooli"
 
-#: apps/io.ox/core/main.js:372 module:io.ox/core
+#: apps/io.ox/core/main.js:377 module:io.ox/core
 msgid "Currently refreshing"
 msgstr "Virkistetään"
 
@@ -2307,7 +2307,7 @@ msgstr "Oletusallekirjoitus uusille viesteille"
 msgid "Default signature for replies or forwardings"
 msgstr "Oletusallekirjoitukset vastauksia tai välityksiä varten."
 
-#: apps/io.ox/tasks/edit/view-template.js:282 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:285 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:31 module:io.ox/tasks
 #: apps/io.ox/tasks/util.js:221
 msgid "Deferred"
@@ -2439,10 +2439,10 @@ msgstr "Osasto"
 msgid "Descending"
 msgstr "Laskeva"
 
-#: apps/io.ox/calendar/edit/extensions.js:323 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:324 module:io.ox/calendar/edit/main
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:95
 #: module:io.ox/core/viewer apps/io.ox/files/actions/edit-description.js:31
-#: module:io.ox/files apps/io.ox/tasks/edit/view-template.js:113
+#: module:io.ox/files apps/io.ox/tasks/edit/view-template.js:116
 #: module:io.ox/tasks/edit
 #: apps/plugins/administration/resources/settings/edit.js:50 module:io.ox/core
 #: apps/plugins/portal/flickr/register.js:229 module:plugins/portal
@@ -2546,7 +2546,7 @@ msgstr "Näytä nimi"
 msgid "Display of names"
 msgstr "Nimien esitysmuoto"
 
-#: apps/io.ox/tasks/edit/view-template.js:647 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:650 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:99 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:124
 msgid "Distance"
@@ -2727,7 +2727,7 @@ msgstr "Asiakirjat"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js:206 module:io.ox/core
 #: apps/io.ox/files/actions/share.js:54 module:io.ox/files
-#: apps/io.ox/tasks/edit/view-template.js:280 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:283 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:31 module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js:70 module:io.ox/mail
 #: apps/io.ox/tasks/util.js:213
@@ -2796,7 +2796,7 @@ msgstr "Luonnokset"
 msgid "Drag to reorder widget"
 msgstr "Siirrä uudelleenjärjestelläksesi widgetit"
 
-#: apps/io.ox/core/main.js:242 module:io.ox/core
+#: apps/io.ox/core/main.js:247 module:io.ox/core
 #: apps/io.ox/files/settings/pane.js:56 module:io.ox/files
 #: apps/io.ox/launchpad/main.js:35 apps/io.ox/search/view-template.js:39
 msgctxt "app"
@@ -2824,9 +2824,9 @@ msgstr "Pudota tiedostot tähän ladataksesi ne"
 msgid "Drop here to import this mail"
 msgstr "Tiputa tähän tuodaksesi tämä viesti"
 
-#: apps/io.ox/calendar/edit/extensions.js:620 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:621 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/edit/view-form.js:390 module:io.ox/contacts
-#: apps/io.ox/tasks/edit/view-template.js:684 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:687 module:io.ox/tasks/edit
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr "Tiputa tähän ladataksesi <b class=\"dndignore\">uusi liite</b>"
 
@@ -2864,7 +2864,7 @@ msgstr "Valmis"
 msgid "Due %1$s"
 msgstr "%1$s mennessä"
 
-#: apps/io.ox/tasks/edit/view-template.js:188 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:191 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:787 module:io.ox/tasks
 msgid "Due date"
 msgstr "Valmistumispäivämäärä"
@@ -3000,7 +3000,7 @@ msgstr "Muokkaa allekirjoitusta"
 
 #: apps/io.ox/tasks/edit/main.js:27 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:47 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view-template.js:81 apps/io.ox/tasks/edit/view.js:153
+#: apps/io.ox/tasks/edit/view-template.js:84 apps/io.ox/tasks/edit/view.js:153
 #: apps/io.ox/tasks/toolbar.js:53 module:io.ox/mail
 msgid "Edit task"
 msgstr "Muokkaa tehtävää"
@@ -3135,7 +3135,7 @@ msgstr "Työajan loppu"
 msgid "End presentation"
 msgstr "Lopeta esitys"
 
-#: apps/io.ox/calendar/edit/extensions.js:246 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:247 module:io.ox/calendar/edit/main
 msgid "Ends on"
 msgstr "Päättyy"
 
@@ -3163,7 +3163,7 @@ msgid "Envelope - To"
 msgstr "Kirjekuori - Vastaanottaja"
 
 #: apps/io.ox/core/print.js:198 module:io.ox/core
-#: apps/io.ox/core/sub/subscriptions.js:119 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:118 module:io.ox/core/sub
 #: apps/io.ox/core/yell.js:21 apps/io.ox/core/yell.js:122
 msgid "Error"
 msgstr "Virhe"
@@ -3177,8 +3177,8 @@ msgstr "Virhelogi"
 msgid "Error while resolving mail addresses. Please try again."
 msgstr "Osoitteiden selvittämisessä tapahtui virhe. Yritä uudestaan."
 
-#: apps/io.ox/core/sub/subscriptions.js:91 module:io.ox/core/sub
-#: apps/io.ox/core/sub/subscriptions.js:115
+#: apps/io.ox/core/sub/subscriptions.js:90 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:114
 msgid "Error:"
 msgstr "Virhe:"
 
@@ -3186,13 +3186,13 @@ msgstr "Virhe:"
 msgid "Errors"
 msgstr "Virheet"
 
-#: apps/io.ox/tasks/edit/view-template.js:592 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:595 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:97 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:122
 msgid "Estimated costs"
 msgstr "Arvioidut kustannukset"
 
-#: apps/io.ox/tasks/edit/view-template.js:564 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:567 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:95 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:120
 msgid "Estimated duration in minutes"
@@ -3286,10 +3286,10 @@ msgstr "Tarkat päivämäärät"
 msgid "Executive"
 msgstr "Johtaja"
 
-#: apps/io.ox/calendar/edit/extensions.js:336 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/extensions.js:342
-#: apps/io.ox/tasks/edit/view-template.js:127 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view-template.js:147
+#: apps/io.ox/calendar/edit/extensions.js:337 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:343
+#: apps/io.ox/tasks/edit/view-template.js:130 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:150
 msgid "Expand form"
 msgstr "Laajenna lomake"
 
@@ -3332,7 +3332,7 @@ msgstr "Ulkoinen yhteystieto"
 msgid "External guests"
 msgstr "Ulkoiset vieraat"
 
-#: apps/io.ox/mail/common-extensions.js:555 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:561 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "Viestissä olevia kuvia ei näytetä yksityisyytesi suojaamiseksi."
@@ -3538,7 +3538,7 @@ msgstr "Suodata"
 msgid "Filter Rules"
 msgstr "Suodatinsäännöt"
 
-#: apps/io.ox/calendar/edit/extensions.js:664 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:663 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:51 module:io.ox/calendar
 msgid "Find a free time"
@@ -3613,7 +3613,7 @@ msgid "Folder view"
 msgstr "Kansionäkymä"
 
 #. %1$s is the filename
-#: apps/io.ox/core/main.js:1739 module:io.ox/core
+#: apps/io.ox/core/main.js:1744 module:io.ox/core
 msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
@@ -3699,7 +3699,7 @@ msgstr "Välitä kaikki saapuva posti tähän osoitteeseen"
 msgid "Forward emails as"
 msgstr "Viestien välitys"
 
-#: apps/io.ox/calendar/edit/extensions.js:391 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:392 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Free"
 msgstr "Vapaa"
@@ -3835,7 +3835,7 @@ msgid "Hello World"
 msgstr "Hello World"
 
 #: apps/io.ox/calendar/freebusy/templates.js:104
-#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:953
+#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:958
 #: module:io.ox/core apps/io.ox/help/center.js:103 module:io.ox/help
 msgid "Help"
 msgstr "Ohje"
@@ -3889,8 +3889,8 @@ msgstr "Paina piilottaaksesi kaikki tehtäväkutsut."
 msgid "Hide all task reminders."
 msgstr "Paina piilottaaksesi kaikki tehtävämuistutukset."
 
-#: apps/io.ox/tasks/edit/view-template.js:539 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view-template.js:549
+#: apps/io.ox/tasks/edit/view-template.js:542 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:552
 msgid "Hide details"
 msgstr "Piilota yksityiskohdat"
 
@@ -3912,7 +3912,7 @@ msgstr "Napsauta sulkeaksesi ilmoituksen"
 
 #. E-Mail priority
 #: apps/io.ox/mail/compose/view.js:216 module:io.ox/mail
-#: apps/io.ox/tasks/edit/view-template.js:361 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:364 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "High"
 msgstr "Korkea"
@@ -4054,7 +4054,7 @@ msgstr "Tuo allekirjoituksia"
 msgid "In %1$d days"
 msgstr "%1$d päivän kuluttua"
 
-#: apps/io.ox/tasks/edit/view-template.js:279 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:282 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:31 module:io.ox/tasks
 #: apps/io.ox/tasks/util.js:209
 msgid "In progress"
@@ -4354,7 +4354,7 @@ msgstr "Viime vuonna"
 msgid "Later"
 msgstr "Myöhemmin "
 
-#: apps/io.ox/core/main.js:228 module:io.ox/core
+#: apps/io.ox/core/main.js:233 module:io.ox/core
 msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
 msgstr "Käynnistyspudotusvalikko Paina [enter] päästäksesi pudotusvalikkoon"
 
@@ -4456,7 +4456,7 @@ msgstr "Lista"
 msgid "Listview"
 msgstr "Listanäkymä"
 
-#: apps/io.ox/calendar/edit/extensions.js:198 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:199 module:io.ox/calendar/edit/main
 msgid "Location"
 msgstr "Sijainti"
 
@@ -4479,7 +4479,7 @@ msgstr "Kadotetut: %1$s %"
 
 #. E-Mail priority
 #: apps/io.ox/mail/compose/view.js:220 module:io.ox/mail
-#: apps/io.ox/tasks/edit/view-template.js:359 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:362 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "Low"
 msgstr "Matala"
@@ -4508,7 +4508,7 @@ msgstr "maaliskuu"
 msgid "Mail"
 msgstr "Sähköposti"
 
-#: apps/io.ox/core/main.js:237 module:io.ox/core
+#: apps/io.ox/core/main.js:242 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:30 apps/io.ox/mail/settings/pane.js:156
 #: module:io.ox/mail apps/io.ox/search/view-template.js:34
 msgctxt "app"
@@ -4740,7 +4740,7 @@ msgstr "Vastaa merkkejä"
 msgid "May"
 msgstr "toukokuu"
 
-#: apps/io.ox/tasks/edit/view-template.js:360 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:363 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "Medium"
 msgstr "Media"
@@ -4892,7 +4892,7 @@ msgstr "Osoitekirjani"
 msgid "My calendars"
 msgstr "Kalenterini"
 
-#: apps/io.ox/core/main.js:908 module:io.ox/core
+#: apps/io.ox/core/main.js:913 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:87
 #: apps/plugins/portal/userSettings/register.js:217
 msgid "My contact data"
@@ -4951,7 +4951,7 @@ msgid "New"
 msgstr "Uusi"
 
 #: apps/io.ox/core/folder/api.js:918 module:io.ox/core
-#: apps/io.ox/core/sub/subscriptions.js:183 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:216 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "Uusi kansio"
 
@@ -5096,7 +5096,7 @@ msgstr "Kutsumanimi"
 
 #. folder permissions - Is Admin? NO
 #: apps/io.ox/calendar/month/perspective.js:146 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:173 apps/io.ox/core/main.js:134
+#: apps/io.ox/calendar/week/perspective.js:173 apps/io.ox/core/main.js:139
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js:177
 msgid "No"
 msgstr "Ei"
@@ -5193,7 +5193,7 @@ msgstr "Ei hitaita pyyntöjä"
 msgid "No subject"
 msgstr "Ei aihetta"
 
-#: apps/io.ox/core/sub/subscriptions.js:140 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:173 module:io.ox/core/sub
 #, fuzzy
 #| msgid "Sorry, there is no preview available for this file."
 msgid "No subscription services available for this module"
@@ -5217,7 +5217,7 @@ msgstr "Ei otsikkoa."
 #: apps/io.ox/files/view-options.js:124
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:98
-#: apps/io.ox/tasks/edit/view-template.js:358 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:361 module:io.ox/tasks/edit
 msgid "None"
 msgstr "Ei tunnistetta"
 
@@ -5231,7 +5231,7 @@ msgstr "Tavallinen"
 msgid "Not spam"
 msgstr "Ei roskapostia"
 
-#: apps/io.ox/tasks/edit/view-template.js:278 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:281 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:31 module:io.ox/tasks
 #: apps/io.ox/tasks/util.js:205
 msgid "Not started"
@@ -5268,7 +5268,7 @@ msgstr ""
 msgid "Note: The vCard format cannot contain distribution lists"
 msgstr "Huom: vCard-muoto ei voi sisältää jakelulistoja"
 
-#: apps/io.ox/core/sub/subscriptions.js:379 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:375 module:io.ox/core/sub
 msgid ""
 "Note: This subscription will replace the calendar content with the external "
 "content. Therefore you must create a new folder for this subscription."
@@ -5284,7 +5284,7 @@ msgstr "Ilmoitukset"
 msgid "Notifier"
 msgstr "Ilmoitin"
 
-#: apps/io.ox/calendar/edit/extensions.js:527 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:528 module:io.ox/calendar/edit/main
 msgid "Notify all participants by email."
 msgstr "Ilmoita osallistujille sähköpostitse."
 
@@ -5330,7 +5330,7 @@ msgstr "Esineet"
 msgid "October"
 msgstr "lokakuu"
 
-#: apps/io.ox/core/main.js:200 module:io.ox/core
+#: apps/io.ox/core/main.js:205 module:io.ox/core
 msgid "Offline"
 msgstr "Offline"
 
@@ -5835,7 +5835,7 @@ msgstr "Syötä oikea salasana"
 msgid "Please enter the following data: %1$s"
 msgstr "Ole hyvä ja syötä seuraavat tiedot: %1$s"
 
-#: apps/io.ox/tasks/edit/view-template.js:338 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:341 module:io.ox/tasks/edit
 msgid "Please enter value between 0 and 100."
 msgstr "Syötä arvo väliltä 0 ja 100"
 
@@ -5890,7 +5890,7 @@ msgstr ""
 "Ole hyvä ja valitse mitä seuraavista tiedoista voidaan käyttää %s-tilisi "
 "luomiseen:"
 
-#: apps/io.ox/core/main.js:1204 module:io.ox/core
+#: apps/io.ox/core/main.js:1209 module:io.ox/core
 #: apps/io.ox/core/relogin.js:80
 msgid "Please sign in again to continue"
 msgstr "Uudelleenkirjaudu jatkaaksesi"
@@ -5919,7 +5919,7 @@ msgstr "Avaa erillisessä ikkunassa"
 msgid "Portal"
 msgstr "Portaali"
 
-#: apps/io.ox/core/main.js:236 module:io.ox/core
+#: apps/io.ox/core/main.js:241 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:29 apps/io.ox/search/view-template.js:33
 msgctxt "app"
 msgid "Portal"
@@ -6096,17 +6096,17 @@ msgstr "Tuloste"
 #: apps/io.ox/mail/compose/view.js:214 module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js:216 apps/io.ox/mail/compose/view.js:218
 #: apps/io.ox/mail/compose/view.js:220
-#: apps/io.ox/tasks/edit/view-template.js:367 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:370 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:789 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:104
 msgid "Priority"
 msgstr "Prioriteetti"
 
-#: apps/io.ox/calendar/edit/extensions.js:471 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:472 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js:83 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:76
 #: apps/io.ox/contacts/view-detail.js:154 module:io.ox/contacts
-#: apps/io.ox/tasks/edit/view-template.js:392 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:395 module:io.ox/tasks/edit
 msgid "Private"
 msgstr "Yksityinen"
 
@@ -6135,7 +6135,7 @@ msgstr "Edistys"
 msgid "Progress %1$s %"
 msgstr "Valmiina %1$s %"
 
-#: apps/io.ox/tasks/edit/view-template.js:319 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:322 module:io.ox/tasks/edit
 msgid "Progress in %"
 msgstr "Edistyminen %"
 
@@ -6369,7 +6369,7 @@ msgstr "Uudelleenohjaa kohteeseen"
 msgid "Reduce to widget summary"
 msgstr "Pienennä widget-yhteenvedoksi."
 
-#: apps/io.ox/core/main.js:355 module:io.ox/core apps/io.ox/core/main.js:832
+#: apps/io.ox/core/main.js:360 module:io.ox/core apps/io.ox/core/main.js:837
 #: apps/io.ox/core/sub/settings/pane.js:158 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:159
 msgid "Refresh"
@@ -6417,7 +6417,7 @@ msgstr "Aikaa jäljellä %1$s"
 
 #: apps/io.ox/mail/actions/reminder.js:40 module:io.ox/mail
 #: apps/io.ox/mail/actions/reminder.js:57
-#: apps/io.ox/tasks/edit/view-template.js:234 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:237 module:io.ox/tasks/edit
 msgid "Remind me"
 msgstr "Muistuta minua"
 
@@ -6431,14 +6431,14 @@ msgid "Remind me again "
 msgstr "Muistuta minua uudestaan "
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:50 module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js:364 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:365 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/invitations/register.js:605 module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js:663 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:172
 msgid "Reminder"
 msgstr "Muistutus"
 
-#: apps/io.ox/tasks/edit/view-template.js:262 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:265 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:103 module:io.ox/tasks
 msgid "Reminder date"
 msgstr "Muistutuspäivämäärä"
@@ -6537,7 +6537,7 @@ msgstr "Pyydä lukukuittaus"
 msgid "Resend invitation"
 msgstr "Lähetä kutsu uudelleen"
 
-#: apps/io.ox/calendar/edit/extensions.js:388 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:389 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Reserved"
 msgstr "Varattu"
@@ -6565,7 +6565,7 @@ msgstr "Resurssin nimi"
 msgid "Resources"
 msgstr "Resurssit"
 
-#: apps/io.ox/core/main.js:1495 module:io.ox/core
+#: apps/io.ox/core/main.js:1500 module:io.ox/core
 msgid "Restore applications"
 msgstr "Keskeneräisiä toimintoja"
 
@@ -6660,7 +6660,7 @@ msgstr "Liikevaihto"
 #: apps/io.ox/mail/settings/signatures/settings/pane.js:149
 #: apps/io.ox/oauth/settings.js:80 module:io.ox/settings
 #: apps/io.ox/tasks/edit/view-template.js:46 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view-template.js:82
+#: apps/io.ox/tasks/edit/view-template.js:85
 #: apps/plugins/administration/groups/settings/edit.js:130
 #: apps/plugins/administration/resources/settings/edit.js:89
 #: apps/plugins/portal/flickr/register.js:236 module:plugins/portal
@@ -6730,14 +6730,14 @@ msgstr[1] "Tallenna liite"
 msgid "Scheduling"
 msgstr "Suunnittelu"
 
-#: apps/io.ox/core/main.js:240 module:io.ox/core
+#: apps/io.ox/core/main.js:245 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:33 apps/io.ox/search/view-template.js:37
 msgctxt "app"
 msgid "Scheduling"
 msgstr "Suunnittelu"
 
 #: apps/io.ox/core/desktop.js:1517 module:io.ox/core
-#: apps/io.ox/core/main.js:817 apps/io.ox/find/extensions-facets.js:30
+#: apps/io.ox/core/main.js:822 apps/io.ox/find/extensions-facets.js:30
 #: apps/io.ox/find/main.js:48 apps/io.ox/find/view-tokenfield.js:119
 #: apps/io.ox/search/autocomplete/extensions.js:52
 #: apps/io.ox/search/main.js:198 module:io.ox/search
@@ -6802,7 +6802,7 @@ msgstr "Valitse suosimasi aikavyöhyke"
 msgid "Select file"
 msgstr "Valitse tiedosto"
 
-#: apps/io.ox/calendar/edit/extensions.js:131 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:132 module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/picker.js:75 module:io.ox/core
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:806
 #: module:io.ox/settings
@@ -6828,7 +6828,7 @@ msgid "Send"
 msgstr "Lähetä"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:638 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:644 module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Lähetä ilmoitus viestin lukemisesta"
 
@@ -6923,7 +6923,7 @@ msgid "Server type"
 msgstr "Palvelimen tyyppi"
 
 #: apps/io.ox/backbone/basicModel.js:145 module:io.ox/core
-#: apps/io.ox/core/main.js:207
+#: apps/io.ox/core/main.js:212
 msgid "Server unreachable"
 msgstr "Palvelin ei saatavilla"
 
@@ -6937,7 +6937,7 @@ msgstr "Palvelimen versio"
 msgid "Set color"
 msgstr "Aseta väri"
 
-#: apps/io.ox/core/main.js:887 module:io.ox/core apps/io.ox/core/main.js:1016
+#: apps/io.ox/core/main.js:892 module:io.ox/core apps/io.ox/core/main.js:1021
 #: apps/io.ox/settings/main.js:129 apps/io.ox/settings/main.js:497
 msgid "Settings"
 msgstr "Asetukset"
@@ -7078,8 +7078,8 @@ msgstr "Näytä tapaamiset joista kieltäydytty"
 msgid "Show desktop notifications"
 msgstr "Näytä työpöytäilmoitukset"
 
-#: apps/io.ox/tasks/edit/view-template.js:541 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view-template.js:549
+#: apps/io.ox/tasks/edit/view-template.js:544 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:552
 msgid "Show details"
 msgstr "Näytä yksityiskohdat"
 
@@ -7100,7 +7100,7 @@ msgstr "Näytä piilotetut tiedostot ja kansiot"
 msgid "Show icons"
 msgstr "Näytä kuvakkeet"
 
-#: apps/io.ox/mail/common-extensions.js:554 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:560 module:io.ox/mail
 msgid "Show images"
 msgstr "Näytä kuvat"
 
@@ -7151,7 +7151,7 @@ msgstr "Näytä tehtävän yksityiskohdat"
 msgid "Show tiles"
 msgstr "Näytä sovellusikkunat"
 
-#: apps/io.ox/calendar/edit/extensions.js:397 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:398 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:222 module:io.ox/calendar
 msgid "Shown as"
 msgstr "Näytetään tilassa"
@@ -7161,12 +7161,12 @@ msgstr "Näytetään tilassa"
 msgid "Sign in"
 msgstr "Kirjaudu"
 
-#: apps/io.ox/core/main.js:996 module:io.ox/core apps/io.ox/core/main.js:1034
-#: apps/io.ox/core/main.js:1036 apps/io.ox/core/main.js:1184
+#: apps/io.ox/core/main.js:1001 module:io.ox/core apps/io.ox/core/main.js:1039
+#: apps/io.ox/core/main.js:1041 apps/io.ox/core/main.js:1189
 msgid "Sign out"
 msgstr "Kirjaudu ulos"
 
-#: apps/io.ox/core/main.js:516 module:io.ox/core
+#: apps/io.ox/core/main.js:521 module:io.ox/core
 msgid "Sign out now"
 msgstr "Kirjaudu heti ulos"
 
@@ -7185,7 +7185,7 @@ msgstr "Allekirjoitukset"
 msgid "Signed in as %1$s"
 msgstr "Kirjautuneena käyttäjänä %1$s"
 
-#: apps/io.ox/core/main.js:1177 module:io.ox/core
+#: apps/io.ox/core/main.js:1182 module:io.ox/core
 msgid "Signed in as:"
 msgstr "Kirjautuneena käyttäjänä"
 
@@ -7283,7 +7283,7 @@ msgstr "Lajittele"
 msgid "Sort options"
 msgstr "Lajitteluvaihtoehdot"
 
-#: apps/io.ox/core/sub/subscriptions.js:325 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:321 module:io.ox/core/sub
 msgid "Source"
 msgstr "Lähde"
 
@@ -7319,7 +7319,7 @@ msgstr "Vakioaikavyöhyke"
 msgid "Start"
 msgstr "Aloitus"
 
-#: apps/io.ox/tasks/edit/view-template.js:164 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:167 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js:119 module:io.ox/tasks
 msgid "Start date"
 msgstr "Aloituspäivämäärä"
@@ -7365,7 +7365,7 @@ msgstr "Aloita kierros"
 msgid "Start typing to search for user names"
 msgstr "Aloita kirjoittaminen hakeaksesi käyttäjänimiä"
 
-#: apps/io.ox/calendar/edit/extensions.js:224 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:225 module:io.ox/calendar/edit/main
 msgid "Starts on"
 msgstr "Alkaa"
 
@@ -7379,7 +7379,7 @@ msgid "Statistics"
 msgstr "Tilastot"
 
 #: apps/io.ox/calendar/toolbar.js:71 module:io.ox/calendar
-#: apps/io.ox/tasks/edit/view-template.js:288 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:291 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:786 module:io.ox/tasks
 msgid "Status"
 msgstr "Tila"
@@ -7397,14 +7397,14 @@ msgstr "Katu"
 msgid "Student"
 msgstr "Opiskelija"
 
-#: apps/io.ox/calendar/edit/extensions.js:179 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:180 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions/reminder.js:47 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:310
 #: apps/io.ox/mail/compose/extensions.js:314
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:56
 #: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js:173
 #: apps/io.ox/mail/view-options.js:35
-#: apps/io.ox/tasks/edit/view-template.js:99 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:102 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:788 module:io.ox/tasks
 msgid "Subject"
 msgstr "Aihe"
@@ -7414,7 +7414,7 @@ msgid "Submit comment"
 msgstr "Lähetä kommentti"
 
 #: apps/io.ox/core/sub/subscriptions.js:57 module:io.ox/core/sub
-#: apps/io.ox/core/sub/subscriptions.js:134
+#: apps/io.ox/core/sub/subscriptions.js:167
 msgid "Subscribe"
 msgstr "Tilaa"
 
@@ -7426,7 +7426,7 @@ msgstr "Tilaa IMAP kansioita"
 msgid "Subscription refresh"
 msgstr "Tilauksen päivitys"
 
-#: apps/io.ox/core/sub/subscriptions.js:84 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:83 module:io.ox/core/sub
 msgid "Subscription successfully created."
 msgstr "Tilaus luotu onnistuneesti."
 
@@ -7555,7 +7555,7 @@ msgstr "Tehtävää muutettu aiemmin. Ole hyvä ja päivitä."
 msgid "Tasks"
 msgstr "Tehtävät"
 
-#: apps/io.ox/core/main.js:241 module:io.ox/core
+#: apps/io.ox/core/main.js:246 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:34 apps/io.ox/search/view-template.js:38
 #: apps/io.ox/tasks/settings/pane.js:50 module:io.ox/tasks
 msgctxt "app"
@@ -7586,7 +7586,7 @@ msgstr "Radiopuhelin"
 msgid "Telex"
 msgstr "Teleksi"
 
-#: apps/io.ox/calendar/edit/extensions.js:389 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:390 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Temporary"
 msgstr "Tilapäinen"
@@ -7828,7 +7828,7 @@ msgstr "Tämä kansio on siivottu."
 msgid "The folder has been emptied"
 msgstr "Kansio on tyhjennetty."
 
-#: apps/io.ox/core/main.js:1497 module:io.ox/core
+#: apps/io.ox/core/main.js:1502 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -7893,7 +7893,7 @@ msgstr ""
 msgid "The selected timezone is already a favorite."
 msgstr "Valittu aikavyöhyke on jo suosikki."
 
-#: apps/io.ox/mail/common-extensions.js:641 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:647 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
 "Lähettäjä haluaisi saada vahvistuksen, kun olet lukenut tämän sähköpostin"
@@ -7966,7 +7966,7 @@ msgstr "Alkupäivämäärän tulee olla ennen valmistumispäivämäärää."
 msgid "The start date must be before the end date."
 msgstr "Alkupäivämäärän tulee olla ennen loppupäivämäärää."
 
-#: apps/io.ox/core/sub/subscriptions.js:120 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:119 module:io.ox/core/sub
 msgid "The subscription could not be created."
 msgstr "Tilausta ei voitu luoda"
 
@@ -7978,7 +7978,7 @@ msgstr[1] "Tehtäviä ei voitu poistaa."
 
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
-#: apps/io.ox/calendar/edit/extensions.js:270 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/extensions.js:271 module:io.ox/calendar/edit/main
 msgid ""
 "The timezone of this appointment (%1$s) differs from your default timezone "
 "(%2$s)."
@@ -8245,11 +8245,11 @@ msgstr "Tässä viestissä ei ole sisältöä"
 msgid "This message has been truncated due to size limitations."
 msgstr "Tätä viestiä on lyhennetty kokorajoitusten vuoksi."
 
-#: apps/io.ox/mail/common-extensions.js:504 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:510 module:io.ox/mail
 msgid "This message is read, press this button to mark it as unread."
 msgstr "Tämä sähköposti on luettu, paina merkitäksesi se lukemattomaksi."
 
-#: apps/io.ox/mail/common-extensions.js:503 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:509 module:io.ox/mail
 msgid "This message is unread, press this button to mark it as read."
 msgstr "Tätä sähköpostia ei ole luettu, paina merkitäksesi se luetuksi."
 
@@ -8305,7 +8305,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Titteli"
 
-#: apps/io.ox/mail/common-extensions.js:324 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:330 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:33
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:58
 #: module:io.ox/settings apps/io.ox/mail/main.js:620
@@ -8418,8 +8418,8 @@ msgstr "Twitter"
 msgid "Twitter reported the following errors:"
 msgstr "Twitter raportoi seuraavat virheet:"
 
-#: apps/io.ox/calendar/edit/extensions.js:468 module:io.ox/calendar/edit/main
-#: apps/io.ox/tasks/edit/view-template.js:389 module:io.ox/tasks/edit
+#: apps/io.ox/calendar/edit/extensions.js:469 module:io.ox/calendar/edit/main
+#: apps/io.ox/tasks/edit/view-template.js:392 module:io.ox/tasks/edit
 #: apps/plugins/portal/flickr/register.js:223 module:plugins/portal
 msgid "Type"
 msgstr "Tyyppi"
@@ -8508,7 +8508,7 @@ msgstr "Lukematon"
 msgid "Unread: %1$d"
 msgstr "Lukematon: %1$d"
 
-#: apps/io.ox/core/main.js:132 module:io.ox/core
+#: apps/io.ox/core/main.js:137 module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "Tallentamattomat dokumentit menetetään. Haluatko kirjautua ulos?"
 
@@ -8526,7 +8526,7 @@ msgstr ""
 msgid "Updater"
 msgstr "Päivittäjä"
 
-#: apps/io.ox/core/sub/subscriptions.js:391 module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:387 module:io.ox/core/sub
 msgid ""
 "Updating subscribed data takes time. Importing 100 contacts for example, may "
 "take up to 5 minutes. Please have some patience."
@@ -8745,7 +8745,7 @@ msgstr "Katselija"
 msgid "Viewer Toolbar"
 msgstr "Esikatselun työkalurivi"
 
-#: apps/io.ox/tasks/edit/view-template.js:281 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:284 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:31 module:io.ox/tasks
 #: apps/io.ox/tasks/util.js:217
 msgid "Waiting"
@@ -8755,7 +8755,7 @@ msgstr "Odottaa"
 msgid "Warning"
 msgstr "Varoitus"
 
-#: apps/io.ox/mail/common-extensions.js:581 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:587 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Varoitus: Tämä viesti voi olla urkinta- tai huijausposti"
 
@@ -8946,7 +8946,7 @@ msgstr "Keltainen"
 
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js:145 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:172 apps/io.ox/core/main.js:133
+#: apps/io.ox/calendar/week/perspective.js:172 apps/io.ox/core/main.js:138
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js:179
 #: apps/io.ox/files/util.js:257 module:io.ox/files
 msgid "Yes"
@@ -9244,7 +9244,7 @@ msgstr ""
 "Palaudut automaattisesti tapaamisdialogiin. Valittu alku- ja päättymisaika "
 "sekä osallistujalista otetaan käyttöön."
 
-#: apps/io.ox/core/main.js:493 module:io.ox/core
+#: apps/io.ox/core/main.js:498 module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "Automaattinen uloskirjautuminen %1$d sekunnin kuluttua"
@@ -9254,7 +9254,7 @@ msgstr[1] "Automaattinen uloskirjautuminen %1$d sekunnin kuluttua"
 msgid "Your %s newsfeed"
 msgstr "%s uutissyötteesi"
 
-#: apps/io.ox/core/main.js:1062 module:io.ox/core
+#: apps/io.ox/core/main.js:1067 module:io.ox/core
 msgid "Your Applications"
 msgstr "Sinun sovelluksesi"
 
@@ -9360,7 +9360,7 @@ msgstr "Valitsemasi kuva ylittää suurimman sallitun tiedostokoon %1$s."
 msgid "Your selected picture will be displayed after saving"
 msgstr "Valitsemasi kuva tulee näkyviin tallentamisen jälkeen"
 
-#: apps/io.ox/core/main.js:1203 module:io.ox/core
+#: apps/io.ox/core/main.js:1208 module:io.ox/core
 #: apps/io.ox/core/relogin.js:30
 msgid "Your session is expired"
 msgstr "Istuntosi on vanhentunut"
@@ -9431,7 +9431,7 @@ msgid "and"
 msgstr "ja"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:361 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:367 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "ja %1$d muuta"
 
@@ -9452,7 +9452,7 @@ msgid "close"
 msgstr "sulje"
 
 #. %1$s is app title/name
-#: apps/io.ox/core/main.js:632 module:io.ox/core
+#: apps/io.ox/core/main.js:637 module:io.ox/core
 msgid "close for %1$s"
 msgstr "sulje %1$s"
 
