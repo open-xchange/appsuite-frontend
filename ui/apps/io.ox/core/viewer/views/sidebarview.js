@@ -206,6 +206,7 @@ define('io.ox/core/viewer/views/sidebarview', [
             // remove dropzone handler
             if (this.zone) {
                 this.zone.off();
+                this.zone.remove();
                 this.zone = null;
             }
             // render sections only if side bar is open
