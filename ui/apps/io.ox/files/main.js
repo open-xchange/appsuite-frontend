@@ -488,7 +488,7 @@ define('io.ox/files/main', [
 
             if (_.device('touch')) return;
 
-            app.listView.on('selection:change', function () {
+            function updateSidebar() {
 
                 // do nothing if closed
                 if (!sidebarView.open) return;
@@ -515,6 +515,12 @@ define('io.ox/files/main', [
                     sidebarView.renderSections();
                     sidebarView.$('img').trigger('appear.lazyload');
                     sidebarView.$('.sidebar-panel-thumbnail').attr('aria-label', gt('thumbnail'));
+                }
+            }
+            app.listView.on('selection:change', updateSidebar);
+            api.pool.get('detail').on('expired_models', function (ids) {
+                if (_(ids).indexOf(sidebarView.model.cid) !== -1) {
+                    updateSidebar();
                 }
             });
         },
