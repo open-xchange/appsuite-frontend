@@ -69,8 +69,20 @@ define('io.ox/core/pdf/pdfdocument', [
          */
         PDFJS.disableAutoFetch = !enableRangeRequests;
 
-        // set verbosity level for PDF.js to errors only
+        /**
+         * set verbosity level for PDF.js to errors only
+         */
         PDFJS.verbosity = PDFJS.VERBOSITY_LEVELS.errors;
+
+        /**
+         * Open external links in a new window
+         */
+        PDFJS.openExternalLinksInNewWindow = true;
+
+        /**
+         * Path for image resources, mainly for annotation icons. Include trailing slash.
+         */
+        PDFJS.imageResourcesPath = ox.base + '/apps/3rd.party/pdfjs/web/images/';
 
         // ---------------------------------------------------------------------
 

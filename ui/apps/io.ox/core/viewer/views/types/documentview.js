@@ -18,10 +18,11 @@ define('io.ox/core/viewer/views/types/documentview', [
     'io.ox/core/pdf/pdfview',
     'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/tk/doc-utils/pageloader',
+    'io.ox/core/pdf/pdfviewerlinkservice',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core',
     'less!io.ox/core/pdf/pdfstyle'
-], function (ActionsPattern, BaseView, ThumbnailView, PDFDocument, PDFView, DocConverterUtils, PageLoader, Util, gt) {
+], function (ActionsPattern, BaseView, ThumbnailView, PDFDocument, PDFView, DocConverterUtils, PageLoader, PDFViewerLinkService, Util, gt) {
 
     'use strict';
 
@@ -81,6 +82,9 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.listenTo(this.viewerEvents, 'viewer:document:scrolltopage', this.onScrollToPage);
             this.listenTo(this.viewerEvents, 'viewer:document:next', this.onNextPage);
             this.listenTo(this.viewerEvents, 'viewer:document:previous', this.onPreviousPage);
+            this.listenTo(this.viewerEvents, 'viewer:document:first', this.onFirstPage);
+            this.listenTo(this.viewerEvents, 'viewer:document:last', this.onLastPage);
+            this.listenTo(this.viewerEvents, 'viewer:document:print', this.onPrint);
             // create a debounced version of zoom function
             this.setZoomLevelDebounced = _.debounce(this.setZoomLevel.bind(this), 1000);
             // create a debounced version of refresh function
@@ -220,6 +224,34 @@ define('io.ox/core/viewer/views/types/documentview', [
         },
 
         /**
+         * First page handler:
+         * - scrolls to the first page
+         */
+        onFirstPage: function () {
+            this.onScrollToPage(1);
+        },
+
+        /**
+         * Last page handler:
+         * - scrolls to the last page
+         */
+        onLastPage: function () {
+            if (this.numberOfPages > 0) {
+                this.onScrollToPage(this.numberOfPages);
+            }
+        },
+
+        /**
+         * Print handler:
+         * - opens the document in a new browser tab
+         */
+        onPrint: function () {
+            // can't use print action because it needs the ToolbarVIew as context to function
+            var documentUrl = DocConverterUtils.getEncodedConverterUrl(this.model);
+            window.open(documentUrl, '_blank');
+        },
+
+        /**
          * Viewer before close handler:
          * - saves the scroll position of the document.
          */
@@ -322,7 +354,6 @@ define('io.ox/core/viewer/views/types/documentview', [
                 // the page load options
                 options = {
                     format: 'pdf',
-                    textOverlay: true,
                     priority: priority,
                     pageZoom: this.currentZoomFactor / 100
                 };
@@ -546,13 +577,22 @@ define('io.ox/core/viewer/views/types/documentview', [
                     return;
                 }
 
-                var // the stored scroll position
-                    lastScrollPosition = this.getInitialScrollPosition(this.model.get('id')) || 0;
+                // the stored scroll position
+                var lastScrollPosition = this.getInitialScrollPosition(this.model.get('id')) || 0;
+                // the PDF link service. connects the Viewer with named actions and annotation links of the PDF
+                var pdfLinkService = new  PDFViewerLinkService({
+                    pdfDocument: this.pdfDocument.getPDFJSDocument(),
+                    eventHub: this.viewerEvents
+                });
 
                 // store number of pages
                 this.numberOfPages = pageCount;
                 // create the PDF view after successful loading
-                this.pdfView = new PDFView(this.pdfDocument, { textOverlay: true });
+                this.pdfView = new PDFView(this.pdfDocument, {
+                    textOverlay: true,
+                    annotationsOverlay: true,
+                    linkService: pdfLinkService
+                });
                 // the PDF page rendering queue
                 this.pageLoader = new PageLoader(this.pdfDocument, this.pdfView);
                 // set zoom factor to stored value or default zoom
