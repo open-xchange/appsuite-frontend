@@ -733,6 +733,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         if (this.name === 'flags') {
                             var value = (/customflag_/g.test(this.id)) ? ['$' + this.$el.val().toString()] : [this.$el.val()];
                             this.model.set(this.name, value);
+                        } else if (this.name === 'to') {
+                            this.model.set(this.name, this.$el.val().trim());
                         } else {
                             this.model.set(this.name, this.$el.val());
                         }
