@@ -1367,6 +1367,8 @@ define('io.ox/mail/api',
             deferred = handleSendTheGoodOldWay(data, form);
         }
 
+        var DELAY = api.SEND_REFRESH_DELAY;
+
         return deferred
             .done(function () {
                 api.trigger('send', { data: data, files: files, form: form });
@@ -1376,7 +1378,7 @@ define('io.ox/mail/api',
                 // wait a moment, then update mail index
                 setTimeout(function () {
                     api.trigger('refresh.all');
-                }, 3000);
+                }, DELAY);
                 // IE9
                 if (_.isObject(text))
                     return text;
@@ -1396,18 +1398,18 @@ define('io.ox/mail/api',
                         folder = base.without(id).join(api.separator);
                     $.when(accountAPI.getUnifiedMailboxName())
                     .done(function (isUnified) {
-                        if (isUnified !== null) {
-                            folderAPI.refresh();
-                        } else {
-                            folderAPI.reload(folder);
-                        }
-                        api.trigger('refresh.list');
+                        // wait a moment, then update folders as well
+                        setTimeout(function () {
+                            if (isUnified !== null) folderAPI.refresh(); else folderAPI.reload(folder);
+                        }, DELAY);
                     });
                 }
-
                 return result;
             });
     };
+
+    // delay to refresh mail list and folders after sending a message
+    api.SEND_REFRESH_DELAY = 5000;
 
     function handleSendXHR2(data, files) {
 
