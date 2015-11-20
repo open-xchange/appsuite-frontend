@@ -397,7 +397,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         };
 
         //special handling for alternative mode, send HTML to backend and it will create text/plain part of the mail automagically
-        this.content_type = opt.model.get('preferredEditorMode') === 'alternative' ? 'ALTERNATIVE' : 'text/html';
+        this.content_type = opt.model && opt.model.get('preferredEditorMode') === 'alternative' ? 'ALTERNATIVE' : 'text/html';
 
         // publish internal 'done'
         this.done = function (fn) {
