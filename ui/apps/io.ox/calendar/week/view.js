@@ -867,7 +867,8 @@ define('io.ox/calendar/week/view', [
                         return self.renderTimeLabel(tz).addClass('secondary-timezone');
                     })
                 );
-                self.adjustCellHeight();
+
+                self.adjustCellHeight(true);
 
                 if (list.length > 0) {
                     self.weekCon.css('margin-left', ((list.length + 1) * 80) + 'px');
@@ -915,7 +916,8 @@ define('io.ox/calendar/week/view', [
          * adjust cell height to fit into scrollpane
          * @return { View } thie view
          */
-        adjustCellHeight: function () {
+        adjustCellHeight: function (redraw) {
+
             var cells = Math.min(Math.max(4, (this.workEnd - this.workStart + 1)), 18);
             this.paneHeight = this.pane.height() || this.paneHeight;
             this.cellHeight = Math.floor(
@@ -927,6 +929,8 @@ define('io.ox/calendar/week/view', [
             if (this.cellHeight !== this.minCellHeight) {
                 $('.timeslot', this.pane).height(this.cellHeight - 1);
                 $('.time', this.pane).height((this.cellHeight * this.fragmentation) - 1);
+                // if the cell height changes we also need to redraw all appointments
+                if (redraw) this.renderAppointments();
             }
             return this;
         },
@@ -1027,6 +1031,7 @@ define('io.ox/calendar/week/view', [
          * clear all appointments from current week and render all appointments form collection
          */
         renderAppointments: function () {
+
             this.showDeclined = settings.get('showDeclinedAppointments', false);
 
             var self = this,
