@@ -283,12 +283,15 @@ define('io.ox/find/main', [
                 var isDrive = app.getModuleParam() === 'files';
                 if (!isDrive) return app.set('storages', []);
                 require(['io.ox/core/api/filestorage'], function (filesstorageAPI) {
-                    app.set('storages', filesstorageAPI.getAccountsCache());
-                    // currenty implementation: filestorages do not change during runtime
-                    app.get('storages').on({
-                        'change': $.noop,
-                        'add': $.noop,
-                        'remove': $.noop
+                    // ensure rampup was executed
+                    filesstorageAPI.rampup().then(function () {
+                        app.set('storages', filesstorageAPI.getAccountsCache());
+                        // currenty implementation: filestorages do not change during runtime
+                        app.get('storages').on({
+                            'change': $.noop,
+                            'add': $.noop,
+                            'remove': $.noop
+                        });
                     });
                 });
             }
