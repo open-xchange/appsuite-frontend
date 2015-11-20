@@ -1130,6 +1130,8 @@ define('io.ox/mail/api', [
 
         deferred = handleSendXHR2(data, files, deferred);
 
+        var DELAY = api.SEND_REFRESH_DELAY;
+
         return deferred
             .done(function () {
                 contactsAPI.trigger('maybyNewContact');
@@ -1146,7 +1148,7 @@ define('io.ox/mail/api', [
                     resetFolderByType('sent');
                     resetFolderByType('drafts');
                     api.trigger('refresh.all');
-                }, 3000);
+                }, DELAY);
                 // IE9
                 if (_.isObject(text)) return text;
                 // process HTML-ish non-JSONP response
@@ -1164,18 +1166,18 @@ define('io.ox/mail/api', [
                         folder = base.without(id).join(api.separator);
                     $.when(accountAPI.getUnifiedMailboxName())
                     .done(function (isUnified) {
-                        if (isUnified !== null) {
-                            folderAPI.refresh();
-                        } else {
-                            folderAPI.reload(folder);
-                        }
-                        api.trigger('refresh.list');
+                        // wait a moment, then update folders as well
+                        setTimeout(function () {
+                            if (isUnified !== null) folderAPI.refresh(); else folderAPI.reload(folder);
+                        }, DELAY);
                     });
                 }
-
                 return result;
             });
     };
+
+    // delay to refresh mail list and folders after sending a message
+    api.SEND_REFRESH_DELAY = 5000;
 
     function handleSendXHR2(data, files) {
 
