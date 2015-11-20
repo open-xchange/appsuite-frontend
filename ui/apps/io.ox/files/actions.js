@@ -523,17 +523,25 @@ define('io.ox/files/actions', [
     moveAndCopy('move', gt('Move'), { single: gt('File has been moved'), multiple: gt('Files have been moved') });
     moveAndCopy('copy', gt('Copy'), { single: gt('File has been copied'), multiple: gt('Files have been copied') });
 
+    function isShareable(e) {
+        var id;
+        // not possible for multi-selection
+        if (e.collection.has('multiple')) return false;
+        if (e.collection.has('one')) {
+            // use selected file or folders
+            id = e.collection.has('folders') ? e.baton.data.id : e.baton.data.folder_id;
+        } else if (e.baton.app) {
+            // use current folder
+            id = e.baton.app.folder.get();
+        }
+        return id ? folderAPI.pool.getModel(id).isShareable() : false;
+    }
+
     // folder based actions
     new Action('io.ox/files/actions/invite', {
         capabilities: 'invite_guests',
         requires: function (e) {
-            var id;
-            if (e.baton.app) {
-                id = e.baton.app.folder.get();
-            } else if (e.collection.has('one')) {
-                id = e.baton.data.folder_id;
-            }
-            return id ? folderAPI.pool.getModel(id).isShareable() : false;
+            return isShareable(e);
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
@@ -554,13 +562,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/getalink', {
         capabilities: 'share_links',
         requires: function (e) {
-            var id;
-            if (e.baton.app) {
-                id = e.baton.app.folder.get();
-            } else if (e.collection.has('one')) {
-                id = e.baton.data.folder_id;
-            }
-            return id ? folderAPI.pool.getModel(id).isShareable() : false;
+            return isShareable(e);
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
