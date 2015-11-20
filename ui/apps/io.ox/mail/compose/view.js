@@ -446,24 +446,9 @@ define('io.ox/mail/compose/view', [
         saveDraft: function () {
             // get mail
             var self = this,
-                mail = this.model.getMail(),
+                mail = this.model.getMailForDraft(),
                 def = new $.Deferred(),
                 old_vcard_flag;
-
-            if (mail.msgref && mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
-                delete mail.msgref;
-            }
-
-            if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
-                mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                this.model.set('sendtype', mail.sendtype, { silent: true });
-            }
-
-            if (_(mail.flags).isUndefined()) {
-                mail.flags = mailAPI.FLAGS.DRAFT;
-            } else if ((mail.data.flags & 4) === 0) {
-                mail.flags += mailAPI.FLAGS.DRAFT;
-            }
 
             // never append vcard when saving as draft
             // backend will append vcard for every send operation (which save as draft is)
@@ -499,23 +484,9 @@ define('io.ox/mail/compose/view', [
 
         autoSaveDraft: function () {
 
-            var mail = this.model.getMail(),
-                def = new $.Deferred(),
+            var def = new $.Deferred(),
+                mail = this.model.getMailForAutosave(),
                 self = this;
-
-            if (mail.msgref && mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
-                delete mail.msgref;
-            }
-            if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
-                mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                this.model.set('sendtype', mail.sendtype, { silent: true });
-            }
-
-            if (_(mail.flags).isUndefined()) {
-                mail.flags = mailAPI.FLAGS.DRAFT;
-            } else if ((mail.data.flags & 4) === 0) {
-                mail.flags += mailAPI.FLAGS.DRAFT;
-            }
 
             mailAPI.autosave(mail).always(function (result) {
                 if (result.error) {
@@ -525,6 +496,8 @@ define('io.ox/mail/compose/view', [
                     if (mail.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
                         self.model.set('msgref', result, { silent: true });
                     }
+                    var saved = self.model.get('infostore_ids_saved');
+                    self.model.set('infostore_ids_saved', [].concat(saved, mail.infostore_ids || []));
                     notifications.yell('success', gt('Mail saved as draft'));
                     def.resolve(result);
                 }
