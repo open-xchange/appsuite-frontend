@@ -685,9 +685,10 @@ define('io.ox/files/api', [
     //
     folderAPI.on({
         'before:clear': function (id) {
+            var isTrash = String(settings.get('folder/trash')) === id;
             // clear target folder
             _(pool.getByFolder(id)).each(function (collection) {
-                var files = collection.filter(function (model) { return model.isFile(); });
+                var files = collection.filter(function (model) { return isTrash || model.isFile(); });
                 collection.remove(files);
             });
         },
