@@ -1,3 +1,9 @@
+open-xchange-guidedtours (7.6.3-2) stable; urgency=medium
+
+  * Second release candidate for 7.6.3
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Mon, 23 Nov 2015 08:55:06 +0000
+
 open-xchange-guidedtours (7.6.3-1) stable; urgency=medium
 
   * First candidate for 7.6.3 release
