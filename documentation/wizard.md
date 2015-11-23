@@ -4,10 +4,3 @@ description: Build a simple welcome wizard that tries to complete the users info
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Writing_a_wizard
 ---
 
-
-
-
-
-
-
-test
