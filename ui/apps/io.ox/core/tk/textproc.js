@@ -194,7 +194,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
             'iframe, object, applet, input, textarea, button, select, ' +
             'canvas, script, noscript, audio, video, img'
             )
-            .filter(':not(img.emoji,img[src*="' + ox.abs + ox.root + '/api/file"])').remove();
+            .filter(':not(img.emoji,img[src*="' + ox.abs + ox.root + '/api/file"],img[data-pending="true"])').remove();
         // beautify SUP tags
         node.find('sup').css('lineHeight', '0');
         // unwrap
