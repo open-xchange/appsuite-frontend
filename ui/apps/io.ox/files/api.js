@@ -500,7 +500,7 @@ define('io.ox/files/api', [
             var model = pool.get('detail').get(_.cid(file));
             // look for an attribute that is not part of the "all" request
             // to determine if we can use a cached model
-            if (model && !model.get('expired') && model.has('description')) return $.when(model.toJSON());
+            if (model && model.has('description')) return $.when(model.toJSON());
         }
 
         var params =  {

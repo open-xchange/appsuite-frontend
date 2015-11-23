@@ -74,12 +74,7 @@ define('io.ox/core/viewer/main', [], function () {
                 require(['io.ox/files/api'], function (api) {
                     api.getAll(data.folder).then(function success(files) {
                         data.selection = data.files[0];
-                        function getter(item) {
-                            return this.get(_.cid(item));
-                        }
-                        // the viewer has listeners that work directly on the model
-                        // so we need to get the pool models instead of creating own models
-                        fileList = _(files).map(getter, api.pool.get('detail'));
+                        fileList = files;
                     }).always(cont);
                 });
             } else {

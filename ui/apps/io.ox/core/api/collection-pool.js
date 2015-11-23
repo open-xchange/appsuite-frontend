@@ -55,7 +55,7 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
         // Garbage Collection
         // ------------------
         // concept:
-        // - on first refresh, all collections are marked as expired
+        // - on first refreah, all collections are marked as expired
         // - collections that are still used in UI will be updated and therefore "expired" will be set to false
         // - models that are in active collections are collected
         // - all remaining models will be removed
@@ -87,7 +87,7 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             return !models[model.cid];
         });
 
-        // remove expired models from detail collection
+        // remove expired modesl from detail collection
         this.get('detail').remove(expired, { silent: true });
 
         // clean up
@@ -194,28 +194,10 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
 
         add: function (cid, data) {
             if (arguments.length === 1) { data = cid; cid = 'detail'; }
-            var collection = this.get(cid), valid, expired = [];
+            var collection = this.get(cid);
             data =  _([].concat(data)).map(this.map, collection);
 
-            // find models that are expired (changed in another browser or by a shared user etc)
-            if (cid === 'detail') {
-                _(data).each(function (item) {
-                    valid = !collection.get(_.cid(item))  || (collection.get(_.cid(item)) && collection.get(_.cid(item)).get('last_modified') >= item.last_modified);
-                    if (!valid) {
-                        item.expired = true;
-                        expired.push(_.cid(item));
-                    } else {
-                        item.expired = false;
-                    }
-                });
-            }
             collection.add(data, { merge: true, parse: true });
-
-            if (expired.length > 0) {
-                // trigger event for the expired models, so views can update
-                collection.trigger('expired_models', expired);
-            }
-
             return collection;
         },
 
