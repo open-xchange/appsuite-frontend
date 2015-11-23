@@ -36,7 +36,10 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
     function propagateChange(module, model) {
         if (skip) return;
         _(collections[module]).each(function (entry) {
-            var target = entry.collection.get(model.cid), data;
+            var cid = !!model.changed.cid ? model.previous('cid') : model.cid,
+                target = entry.collection.get(cid),
+                data;
+
             if (target) {
                 skip = true;
                 data = model.toJSON();
