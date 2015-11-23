@@ -859,7 +859,7 @@
             //   C. you are in a groupware context (internal users and/or groups)
             // )
             var supportsInvites = supportsChanges && (function () {
-                if (capabilities.has('invite_guests') && module !== 'mail') return true;
+                if (capabilities.has('invite_guests') && objModel.get('module') !== 'mail') return true;
                 if (!capabilities.has('gab') || capabilities.has('alone')) return false;
                 return true;
             }());

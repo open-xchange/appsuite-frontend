@@ -141,9 +141,13 @@ define('io.ox/core/gettext', function () {
         function npgettext(context, singular, plural, n) {
             var key = (context ? context + '\x00' : '') + singular + '\x01' + plural,
                 translation = get(key);
+
+            /*eslint-disable no-nested-ternary */
             return translation ?
                 translation[Number(po.plural(Number(n)))] :
                 Number(n) !== 1 ? plural : singular;
+            /*eslint-enable no-nested-ternary */
+
         }
 
         return gettext;

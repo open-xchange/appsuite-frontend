@@ -248,9 +248,9 @@ define('io.ox/core/api/filestorage', [
                 //no config found
                 return $.Deferred().reject();
             },
-            deleteAccount: function (data, options) {
+            deleteAccount: function (data, o) {
                 var model,
-                    options = options || {};
+                    options = o || {};
 
                 if (data.attributes) {
                     model = data;
@@ -379,9 +379,9 @@ define('io.ox/core/api/filestorage', [
             // folder.account_id must be present
             // if options.type is true, isExternal returns the type of folderstorage instead of a boolean
             // options.root checks if the folder is also the root folder
-            isExternal: function (folder, options) {
+            isExternal: function (folder, o) {
                 var isExternal = false,
-                    options = options || {};
+                    options = o || {};
 
                 if (api.rampupDone && folder && folder.account_id) {
                     isExternal = _(idsCache).indexOf(folder.account_id) !== -1;

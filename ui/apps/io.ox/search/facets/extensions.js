@@ -133,7 +133,7 @@ define('io.ox/search/facets/extensions', [
                 current = value.custom,
                 action,
                 option,
-                link,// action,
+                link, // action,
                 menu = $('<ul class="dropdown dropdown-menu facet-dropdown">')
                     .attr({
                         'data-facet': 'folder',

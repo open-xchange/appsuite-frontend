@@ -632,7 +632,7 @@ define('io.ox/core/tk/dialogs', [
 
             overlay,
 
-            pane = $('<div class="io-ox-sidepopup-pane f6-target default-content-padding abs" tabindex="1">').scrollable(),
+            sidepopuppane = $('<div class="io-ox-sidepopup-pane f6-target default-content-padding abs" tabindex="1">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
                     $('<a href="#" class="close" data-action="close" role="button" tabindex="1">').append(
@@ -640,7 +640,7 @@ define('io.ox/core/tk/dialogs', [
                     )
                 ),
 
-            popup = $('<div class="io-ox-sidepopup abs">').attr('role', 'complementary').append(closer, pane),
+            popup = $('<div class="io-ox-sidepopup abs">').attr('role', 'complementary').append(closer, sidepopuppane),
 
             arrow = options.arrow === false ? $() :
                 $('<div class="io-ox-sidepopup-arrow">').append(
@@ -671,7 +671,9 @@ define('io.ox/core/tk/dialogs', [
                         items.eq(index).focus();
                     }
                 }
-            };
+            },
+
+            pane = sidepopuppane.scrollable();
 
         // add event hub
         Events.extend(this);

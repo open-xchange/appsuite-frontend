@@ -20,8 +20,8 @@ define('io.ox/core/notifications/badgeview', [
 
     var BadgeModel = Backbone.Model.extend({
         defaults: {
-            count: 0,//overall count, should be used as read only, add notificationViews to update
-            registeredViews: {}//stores the notificationViews that should be included in the calculation of the count
+            count: 0, //overall count, should be used as read only, add notificationViews to update
+            registeredViews: {} //stores the notificationViews that should be included in the calculation of the count
         }
     });
 

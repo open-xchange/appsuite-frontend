@@ -522,6 +522,7 @@ define('io.ox/core/folder/node', [
                 case infostoreDefaultFolder:
                     iconClass = 'visible myfiles';
                     break;
+                // no default
             }
             if (iconClass === '' && api.is('trash', this.model.attributes) && this.model.get('standard_folder')) {
                 iconClass = 'visible trash';

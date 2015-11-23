@@ -296,8 +296,8 @@ define('io.ox/core/folder/api', [
                 var subtotal = 0;
                 for (var i = 0; i < models.length; i++) {
                     // use account API so it works with non standard accounts as well
-                    var type = account.getType(models[i].get('id'));
-                    if (type !== 'trash' && type !== 'spam') {
+                    var ctype = account.getType(models[i].get('id'));
+                    if (ctype !== 'trash' && ctype !== 'spam') {
                         subtotal += (models[i].get('subtotal') || 0) + (models[i].get('unread') || 0);
                         // add virtual parent references
                         if (isVirtual(id)) {

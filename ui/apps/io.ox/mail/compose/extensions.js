@@ -481,7 +481,7 @@ define('io.ox/mail/compose/extensions', [
                 var attachmentCollection = model.get('attachments'),
                     accumulatedSize = attachmentCollection.filter(function (m) {
                         var size = m.get('size');
-                        return typeof(size) !== 'undefined';
+                        return typeof size !== 'undefined';
                     })
                     .map(function (m) { return m.get('size'); })
                     .reduce(function (m, n) { return m + n; }, 0);

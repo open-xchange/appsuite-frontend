@@ -46,7 +46,7 @@ define('io.ox/core/tk/doc-utils/pageloader', [
      * @returns {Number}
      *  The attribute value parsed as integer, or the default value.
      */
-    function getElementAttributeAsInteger (node, name, def) {
+    function getElementAttributeAsInteger(node, name, def) {
         var attr = $(node).attr(name);
         return _.isString(attr) ? parseInt(attr, 10) : def;
     }

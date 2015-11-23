@@ -83,7 +83,7 @@ define('io.ox/mail/compose/inline-images', [
     return {
         api: api,
         show: function () {
-            var noBusy = (_.browser.IE && _.browser.IE < 10),//IE9 upload fails if window becomes busy
+            var noBusy = (_.browser.IE && _.browser.IE < 10), // IE9 upload fails if window becomes busy
                 dialog = new dialogs.ModalDialog({ async: true, noBusy: noBusy }),
                 baton =  new ext.Baton({ $: {} }),
                 def = $.Deferred(),

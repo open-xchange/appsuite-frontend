@@ -26,16 +26,12 @@ define('io.ox/mail/actions/attachmentQuota', [
             properties = coreSettings.get('properties'),
             total = accumulatedSize || 0,
             maxFileSize,
-            quota,
-            usage,
             autoPublish = require('io.ox/core/capabilities').has('publish_mail_attachments'),
             result = {};
 
         if (!list.length) return;
 
         maxFileSize = autoPublish ? -1 : properties.attachmentQuotaPerFile;
-        quota = autoPublish ? -1 : properties.attachmentQuota;
-        usage = 0;
 
         _.find(list, function (item) {
             var fileTitle = item.filename || item.name || item.subject,

@@ -532,7 +532,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 params: {},
                 data: {},
                 dataType: 'json',
-                appendColumns: type === 'GET' || type === 'UPLOAD',
+                appendColumns: !(type === 'GET' || type === 'UPLOAD'), // GET and UPLOAD don't need columns
                 columnModule: options.module || '',
                 appendSession: true,
                 processData: true,

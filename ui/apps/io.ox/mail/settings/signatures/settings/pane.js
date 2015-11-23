@@ -160,8 +160,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 if (baton.$.name.val() !== signature.displayname) update.displayname = baton.$.name.val();
 
                 // remove trailing whitespace when copy/paste signatures out of html pages
-                if (update && update.content)
-                    update.content = update.content.replace(/(<br>)\s+(\S)/g, '$1$2');
+                if (update && update.content) update.content = update.content.replace(/(<br>)\s+(\S)/g, '$1$2');
 
                 popup.busy();
 

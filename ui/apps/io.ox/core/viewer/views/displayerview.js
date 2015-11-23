@@ -206,7 +206,7 @@ define('io.ox/core/viewer/views/displayerview', [
                             return view.$el;
                         })
                         .sortBy(function ($el) {
-                            return parseInt($el.data('index'));
+                            return parseInt($el.data('index'), 10);
                         })
                         .value()
                 );
@@ -321,8 +321,8 @@ define('io.ox/core/viewer/views/displayerview', [
          */
         loadSlide: function (direction) {
             var self = this,
-                insertOffset = direction === 'right' ? this.preloadOffset : - this.preloadOffset,
-                removeOffset = direction === 'right' ? - this.preloadOffset - 1 : this.preloadOffset + 1,
+                insertOffset = direction === 'right' ? this.preloadOffset : -this.preloadOffset,
+                removeOffset = direction === 'right' ? -this.preloadOffset - 1 : this.preloadOffset + 1,
                 insertIndex = this.normalizeSlideIndex(this.activeIndex + insertOffset),
                 removeIndex = this.normalizeSlideIndex(this.activeIndex + removeOffset);
 
@@ -583,7 +583,7 @@ define('io.ox/core/viewer/views/displayerview', [
          */
         onSlideChangeStart: function () {
             var previousSlide = this.getPreviousSlideNode(),
-                previousIndex = parseInt(previousSlide.data('index')),
+                previousIndex = parseInt(previousSlide.data('index'), 10),
                 activeSlideView = this.slideViews[previousIndex];
             if (activeSlideView) {
                 var scrollPosition = activeSlideView.$el.scrollTop();
@@ -633,7 +633,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 swiper.createLoop();
 
                 // recalculate swiper index
-                swiper.activeIndex = parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index')) + 1;
+                swiper.activeIndex = parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index'), 10) + 1;
 
                 swiper.update(true);
 
