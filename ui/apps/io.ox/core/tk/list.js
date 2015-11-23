@@ -428,6 +428,14 @@ define('io.ox/core/tk/list', [
             this.trigger('change', model);
         },
 
+        onChangeCID: function (model) {
+            var oldModel = model.clone();
+
+            oldModel.set(model.previousAttributes());
+
+            this.$el.find('li[data-cid="' + $.escape(this.getCompositeKey(oldModel)) + '"]').attr('data-cid', this.getCompositeKey(model));
+        },
+
         initialize: function (options) {
 
             // options
@@ -553,6 +561,7 @@ define('io.ox/core/tk/list', [
                 // backbone
                 'add': this.onAdd,
                 'change': this.onChange,
+                'change:cid': this.onChangeCID,
                 'remove': this.onRemove,
                 'reset': this.onReset,
                 'sort': this.onSort,

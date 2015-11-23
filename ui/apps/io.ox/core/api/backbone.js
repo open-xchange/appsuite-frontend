@@ -20,6 +20,10 @@ define('io.ox/core/api/backbone', [], function () {
         idAttribute: 'cid',
         initialize: function () {
             this.cid = this.attributes.cid = _.cid(this.attributes);
+            this.on('change:id', this.updateCID.bind(this));
+        },
+        updateCID: function () {
+            this.set('cid', this.cid = _.cid(this.attributes));
         },
         toString: function () {
             // just helps debugging
