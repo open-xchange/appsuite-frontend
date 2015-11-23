@@ -105,6 +105,7 @@ define('io.ox/core/folder/node', [
         onRemove: function (model) {
             var children = this.$.subfolders.children();
             children.filter('[data-id="' + $.escape(model.id) + '"]').remove();
+            if (children.length === 0) this.model.set('subfolders', false);
             this.renderEmpty();
         },
 
