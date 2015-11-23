@@ -993,7 +993,13 @@ define('io.ox/files/api', [
                 folder_id: options.folder_id || options.folder,
                 version_comment: options.version_comment || ''
             })
-            .then(function () {
+            .then(function (data) {
+                if (options.id !== data.data) {
+                    var model = api.pool.get('detail').get(_.cid(options));
+                    model.set('id', data.data);
+                    return api.propagate('add:version', model.toJSON());
+                }
+
                 return api.propagate('add:version', options);
             });
         },
