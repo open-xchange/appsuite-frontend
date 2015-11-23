@@ -33,7 +33,7 @@
     "requirejs": "2.1.20",
     "swiper": "3.0.6",
     "textarea-helper": "https://github.com/Codecademy/textarea-helper.git#0.3.1",
-    "tinymce-dist": "4.2.6",
+    "tinymce-dist": "4.3.0",
     "typeahead.js": "0.10.5",
     "underscore": "1.8.3",
     "velocity": "1.2.2"
