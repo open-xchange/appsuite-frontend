@@ -16,7 +16,7 @@
 module.exports = function (grunt) {
 
     // displays the execution time of grunt tasks
-    if (grunt.option('benchmark')) require('time-grunt')(grunt);
+    if (grunt.option('benchmark') || grunt.config('local.benchmark')) require('time-grunt')(grunt);
 
     grunt.registerTask('bootjs', ['newer:assemble:ox', 'newer:concat:bootjs']);
 
