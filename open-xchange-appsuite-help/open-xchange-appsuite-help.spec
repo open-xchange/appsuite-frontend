@@ -226,6 +226,10 @@ done
 %changelog
 * Mon Nov 23 2015 Marcus Klein <marcus.klein@open-xchange.com>
 Second release candidate for 7.6.3
+* Tue Nov 17 2015 Marcus Klein <marcus.klein@open-xchange.com>
+Build for patch 2015-11-23 (2882)
+* Mon Nov 16 2015 Marcus Klein <marcus.klein@open-xchange.com>
+Build for patch 2015-11-13 (2879)
 * Wed Nov 11 2015 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2015-11-16 (2862)
 * Tue Nov 03 2015 Marcus Klein <marcus.klein@open-xchange.com>

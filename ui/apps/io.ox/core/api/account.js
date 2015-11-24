@@ -687,9 +687,16 @@ define('io.ox/core/api/account',
      * @fires  api#refresh.all
      * @return {promise}
      */
-    api.refresh = function () {
+
+    api.reload = function () {
         api.cache = {};
-        api.trigger('refresh.all');
+        return api.all();
+    };
+
+    api.refresh = function () {
+        return this.reload().done(function () {
+            api.trigger('refresh.all');
+        });
     };
 
     ox.on('refresh^', function () {

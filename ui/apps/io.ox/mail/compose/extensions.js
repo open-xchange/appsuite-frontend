@@ -48,7 +48,8 @@ define('io.ox/mail/compose/extensions', [
     var tokenfieldTranslations = {
         to: gt('To'),
         cc: gt('CC'),
-        bcc: gt('BCC')
+        bcc: gt('BCC'),
+        reply_to: /*#. Must not exceed 8 characters. e.g. German would be: "Antworten an", needs to be abbreviated like "Antw. an" as space is very limited */ gt.pgettext('compose', 'Reply to')
     };
 
     var extensions = {
@@ -69,9 +70,9 @@ define('io.ox/mail/compose/extensions', [
         buttons: function (baton) {
             this.append(
                 $('<div class="col-xs-12 col-sm-6 text-right">').append(
-                    $('<button type="button" class="btn btn-default" data-action="discard">')
-                        .on('click', function () { baton.view.app.quit(); })
-                        .text(gt('Discard')),
+                        $('<button type="button" class="btn btn-primary" data-action="send">')
+                            .on('click', function () { baton.view.send(); })
+                            .text(gt('Send')),
                     $('<button type="button" class="btn btn-default" data-action="save">')
                         .on('click', function () {
                             if (baton.view.isSaving === true) return false;
@@ -83,9 +84,9 @@ define('io.ox/mail/compose/extensions', [
                             });
                         })
                         .text(gt('Save')),
-                    $('<button type="button" class="btn btn-primary" data-action="send">')
-                        .on('click', function () { baton.view.send(); })
-                        .text(gt('Send'))
+                    $('<button type="button" class="btn btn-default" data-action="discard">')
+                        .on('click', function () { baton.view.app.quit(); })
+                        .text(gt('Discard'))
                 )
             );
         },
@@ -132,6 +133,34 @@ define('io.ox/mail/compose/extensions', [
             this.append(node);
         },
 
+        recipientActionLink: function (type) {
+            return function () {
+                var node = $('<a href="#" tabindex="1" data-action="add" role="checkbox" aria-checked="false">');
+                if (type === 'cc') {
+                    node.attr({ 'data-type': 'cc', 'aria-label': gt('Show carbon copy input field') }).text(gt('CC'));
+                } else {
+                    node.attr({ 'data-type': 'bcc', 'aria-label': gt('Show blind carbon copy input field') }).text(gt('BCC'));
+                }
+                this.append(node);
+            };
+        },
+
+        recipientActionLinkMobile: function () {
+            var node = $('<a href="#" tabindex="1" data-action="add" role="checkbox" aria-checked="false">').append($('<span class="fa fa-angle-right">'));
+            this.append(node);
+        },
+
+        recipientActions: function () {
+            var node = $('<div class="recipient-actions">');
+            if (_.device('!smartphone')) {
+                ext.point(POINT + '/recipientActionLink').invoke('draw', node);
+            } else {
+                ext.point(POINT + '/recipientActionLinkMobile').invoke('draw', node);
+            }
+
+            this.append(node);
+        },
+
         tokenfield: function (label) {
 
             var attr = String(label).toLowerCase();
@@ -144,7 +173,7 @@ define('io.ox/mail/compose/extensions', [
                     tokenfieldView = new Tokenfield({
                         id: guid,
                         className: attr,
-                        placeholder: tokenfieldTranslations[attr],
+                        placeholder: false,
                         apiOptions: {
                             contacts: true,
                             distributionlists: true,
@@ -158,36 +187,18 @@ define('io.ox/mail/compose/extensions', [
                         }
                     });
 
+                var node = $('<div class="col-xs-11">').append(
+                    tokenfieldView.$el
+                );
+                if (attr === 'to') {
+                    ext.point(POINT + '/recipientActions').invoke('draw', node);
+                }
+
                 this.append(
-                    $('<div data-extension-id="' + attr + '">')
-                        .addClass(cls)
+                    $('<div data-extension-id="' + attr + '">').addClass(cls)
                         .append(
-                            $('<label class="maillabel hidden-xs col-sm-1">').text(tokenfieldTranslations[attr]).attr({
-                                'for': guid
-                            }),
-                            $('<div class="col-xs-12 col-sm-11">').append(
-                                tokenfieldView.$el,
-                                attr === 'to' ? $('<div class="recipient-actions">').append(
-                                    $('<a>').attr({
-                                        href: '#',
-                                        tabindex: 1,
-                                        'data-action': 'add',
-                                        'data-type': 'cc',
-                                        role: 'checkbox',
-                                        'aria-checked': false,
-                                        'aria-label': gt('Show carbon copy input field')
-                                    }).text(gt('CC')),
-                                    $('<a>').attr({
-                                        href: '#',
-                                        tabindex: 1,
-                                        'data-action': 'add',
-                                        'data-type': 'bcc',
-                                        role: 'checkbox',
-                                        'aria-checked': false,
-                                        'aria-label': gt('Show blind carbon copy input field')
-                                    }).text(gt('BCC'))
-                                ) : $()
-                            )
+                            $('<label class="maillabel col-xs-1">').text(tokenfieldTranslations[attr]).attr({ 'for': guid }),
+                            node
                         )
                     );
 
@@ -239,6 +250,7 @@ define('io.ox/mail/compose/extensions', [
         },
 
         signature: function (baton) {
+            if (_.device('smartphone')) return;
             var self = this;
             baton.view.signaturesLoading = $.Deferred();
             require(['io.ox/core/api/snippets'], function (snippetAPI) {

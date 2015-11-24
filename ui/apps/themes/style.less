@@ -4561,3 +4561,8 @@ wbr:after {
 .fix-spin .fa-spin {
     filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'saturate\' values=\'1\'/></filter></svg>#grayscale");
 }
+
+/* Override Edge's Clear input behaviour */
+::-ms-clear {
+    display: none;
+}

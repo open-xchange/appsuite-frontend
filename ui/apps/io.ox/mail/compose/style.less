@@ -302,6 +302,165 @@
         width: 1000px;
     }
 }
+.smartphone {
+    .io-ox-mail-compose {
+        padding-top: 8px;
 
+        padding: 0;
+        margin:0;
 
+        textarea {
+            padding:8px 16px;
+            border:0;
+            &:focus {
+                outline: none;
+            }
+        }
+
+        & > .mail-compose-fields > .row {
+            font-size:16px;
+            label {
+                font-size: 16px;
+                font-weight: 400;
+                color: #aaa;
+            }
+            margin:0;
+
+            &.sender { display: none; }
+
+            &[data-extension-id=to],&[data-extension-id=cc],&[data-extension-id=bcc] {
+                padding-top: 2px;
+                padding-bottom: 2px;
+                .col-xs-11 {
+                    width: 90%;
+                    margin-right: -5px;
+                }
+            }
+            &[data-extension-id=subject] {
+                .col-xs-12 { padding-left: 7px; }
+            }
+            &[data-extension-id=composetoolbar] {
+                padding-top:8px;
+                padding-bottom:4px;
+            }
+
+            .maillabel {
+                &.col-xs-1 {
+                    width: 10%;
+                }
+            }
+
+            &.subject {
+                padding-bottom: 6px;
+                padding-top:3px;
+                input { padding-left: 8px; font-size: 16px; font-weight:300; }
+            }
+
+            &:not(.attachments) {
+                border-bottom: 1px solid #ccc;
+            }
+            .token-input, &.subject input {
+                &::-webkit-input-placeholder {
+                    color: #aaa;
+                    font-weight: normal;
+                }
+                &:-moz-placeholder {
+                    color: #aaa;
+                    font-weight: normal;
+                }
+                &::-moz-placeholder {
+                    color: #aaa;
+                    font-weight: normal;
+                }
+                &:-ms-input-placeholder {
+                    color: #aaa;
+                    font-weight: normal;
+                }
+            }
+
+            .twitter-typeahead {
+                // This should be removed when autocomplete is rendered inplace
+                display:block !important;
+            }
+
+            .form-control {
+                padding-top: 7px;
+                border: none;
+                //border-bottom: 1px solid #aaa;
+                border-radius: 0;
+                box-shadow: none;
+                &.focus, &:focus {
+                    //border-color: #66afe9;
+                }
+            }
+        }
+
+        .tokenfield.form-control.to { padding-right: 20px; }
+
+        .recipient-actions a { outline: 0; }
+
+        textarea.editable, .mce-content-body.editable {
+            border-top:0;
+            padding: 8px 16px;
+            margin-top: 0;
+        }
+        .mail-attachment-list {
+            margin-left: -15px;
+            margin-right: -15px;
+            padding: 8px 15px 9px;
+            border-bottom: 1px solid #ccc;
+            &.open { border-bottom: 1px solid #ccc; }
+            &.empty { border-bottom: 0; }
+        }
+        .hidden-file-picker {
+            font-size: 15px;
+            line-height: initial;
+            color: @link-color;
+            padding: 0;
+            padding-top: 1px;
+            &:focus, &:hover {
+                color: @link-color;
+                background-color: transparent;
+            }
+        }
+        textarea.editable, .mce-content-body.editable {
+            border: none;
+            outline: none;
+            &.mce-edit-focus {
+                &:focus {
+                    box-shadow: none;
+                }
+            }
+        }
+    }
+}
+
+.smartphone .window-container.header-top {
+    .window-header {
+        position: fixed;
+        left: 0;
+        right: 0;
+        z-index: 666;
+        bottom: 0;
+        width: 100%;
+        height: 40px;
+        background-color: #ddd;
+        padding: 0;
+        border-top: 1px solid #3c73aa;
+    }
+    .window-body {
+        top:0;
+    }
+}
+.smartphone .window-container.header-top .window-header button.btn {
+    border: 0;
+    border-radius: 0;
+    margin: 0;
+    height: 40px;
+    width: 50%;
+}
+
+.smartphone .io-ox-mail-compose-window.header-top .window-header .btn[data-action=save], .smartphone .editable-toolbar {
+    display: none !important;
+}
 
