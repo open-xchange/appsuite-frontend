@@ -35,6 +35,12 @@ __Placholders__
 | core/toolbar/[action]         | clicks on settings, my contact data, help, getting started, fullscreen, about, sign out ... |
 | settings/folder/select/[type] | Click on a specific folder/part in the setting                                              |
 
+## Data
+
+| EventId                               | Trigger                |
+|---------------------------------------|------------------------|
+| data/drive/account/[action]/[filestorage_type] | create, update, delete filestorage authentication |
+
 ## Help
 
 | EventId                               | Trigger                |
@@ -115,9 +121,10 @@ A event triggers when an app started. The measure time is between the click on t
 
 | EventId                            | Trigger                                                                                          |
 |------------------------------------|--------------------------------------------------------------------------------------------------|
-| drive/folder/select/[type]         | Clicks on a folder in drive folder tree (folder-type: standard_folder_type + '.' + folder_type)  |
+| drive/folder/select/[types]        | Clicks on a folder in drive folder tree<br> (folder-type: standard_folder_type + '/' + folder_type + '/' + filestorage + '/' + filestorage_id)  |
 | drive/folder/context-menu/[action] | Clicks within the context menu, which pops up, when you click on a folder name and its menu icon |
-| drive/toolbar/[action]             | Clicks on tasks toolbar action                                                                   |                                                                
+| drive/toolbar/[action]             | Clicks on tasks toolbar action |
+| drive/folder/account/add/[id]      | Clicks on 'Add account' buttons |                                                                
 
 ## Text App (aka Text Portal)
 
@@ -139,6 +146,6 @@ A event triggers when an app started. The measure time is between the click on t
 
 | EventId                      | Trigger                           |
 |------------------------------|-----------------------------------|
-| text-editor/toolbar/[action] | Clicks on Text Editor toolbar nyi |
+| text-editor/toolbar/[action] | Clicks on Text Editor toolbar |
 
 

@@ -81,4 +81,27 @@ define('io.ox/metrics/extensions', [
         }
     });
 
+    point.extend({
+        id: 'filestorages',
+        register: function () {
+            var metrics = this;
+            // filestorage api C(R)UD
+            require(['io.ox/core/api/filestorage'], function (filestorageApi) {
+                var map = {
+                        'create': 'created',
+                        'delete': 'deleted',
+                        'update': 'updated'
+                    };
+                filestorageApi.on('create delete update', function (e, model) {
+                    metrics.trackEvent({
+                        app: 'data',
+                        target: 'drive/account/' + map[e.type],
+                        type: 'click',
+                        action: model.get('filestorageService')
+                    });
+                });
+            });
+        }
+    });
+
 });

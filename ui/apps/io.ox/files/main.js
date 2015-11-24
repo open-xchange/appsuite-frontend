@@ -1054,12 +1054,18 @@ define('io.ox/files/main', [
                 app.on('folder:change folder-virtual:change', function (folder, data) {
                     // http://oxpedia.org/wiki/index.php?title=HTTP_API#DefaultTypes
                     // hint: custom ids for virtual folder 'vi'
+                    var list = [data.standard_folder_type, data.type];
+                    // add filestorage data
+                    if (data.account_id) {
+                        // simplify: 'dropbox://164' -> ['dropbox', '164']
+                        list = list.concat(data.account_id.split('://'));
+                    }
                     metrics.trackEvent({
                         app: 'drive',
                         target: 'folder',
                         type: 'click',
                         action: 'select',
-                        detail:  data.standard_folder_type + '.' + data.type
+                        detail: list.join('/')
                     });
                 });
                 // selection in listview

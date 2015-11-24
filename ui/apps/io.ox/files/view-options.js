@@ -256,6 +256,7 @@ define('io.ox/files/view-options', [
                             container.hide();
                             return;
                         }
+
                         function buildbutton(text, customclass, service) {
                             var node = $('<a href="#" class="toolbar-item" role="button">').addClass(customclass)
                                 .append(
@@ -273,6 +274,8 @@ define('io.ox/files/view-options', [
                                     e.preventDefault();
                                     var win = window.open(ox.base + '/busy.html', '_blank', 'height=600, width=800, resizable=yes, scrollbars=yes');
                                     service.createInteractively(win);
+                                }).attr({
+                                    'data-service': service.id
                                 });
                             }
                             return node;
@@ -296,6 +299,27 @@ define('io.ox/files/view-options', [
                     };
                 filestorageApi.on('create delete update', draw);
                 draw();
+            });
+        }
+    });
+
+    ext.point('io.ox/files/list-view/toolbar/bottom').extend({
+        id: 'add-accounts-metrics',
+        index: 150,
+        draw: function (baton) {
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+                var nodes = baton.app.getWindow().nodes,
+                    sidepanel = nodes.sidepanel;
+                // sidepanel actions
+                sidepanel.delegate('.over-bottom .toolbar-item', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'drive',
+                        target: 'folder/account/add',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-service') || 'unknown'
+                    });
+                });
             });
         }
     });
