@@ -79,7 +79,7 @@ itself.
 Every time a module/app is used for the first time for each visit the
 corresponding event will be triggered.
 
-You can interpret page titles as '\[appname\] was started \[x\] times'.
+You can interpret page titles as _\[appname\] was started \[x\] times_.
 Please be aware that after a full refresh of the browser tab used by OX
 Appsuite the app usage is tracked again.
 
@@ -93,7 +93,7 @@ element.
 This part contains all main information about the whole event data
 condensed in a single string.
 
-```
+```javascript
 // example: 'mail/toolbar/delete'
 \[appname\]/\[location in the ui\]/\[action\]
 ```
@@ -106,13 +106,13 @@ occurred'. Please be aware that the category is based on the technical
 app that might differ from the abstract application that is communicted
 by the user interface.
 
-__example: 'io.ox/mail'__
+_example: 'io.ox/mail'_
 
 ### Event name
 
 The event id.
 
-__example: 'delete'__
+_example: 'delete'_
 
 ### Event value
 
