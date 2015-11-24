@@ -535,7 +535,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     }
 
                 } else {
-                    actionArray[actionID][type] = type === 'to' || 'text' ? value : [value];
+                    actionArray[actionID][type] = type === 'to' || 'text' ? value.trim() : [value];
                 }
 
                 this.model.set('actioncmds', actionArray);
