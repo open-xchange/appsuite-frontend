@@ -934,6 +934,9 @@
                                 // so we skip any manual edits
                                 if (module === 'mail') return;
 
+                                // skip manual edit if invite_guests isn't set
+                                if (!capabilities.has('invite_guests')) return;
+
                                 // enter or blur?
                                 if (e.type === 'keydown' && e.which !== 13) return;
 
