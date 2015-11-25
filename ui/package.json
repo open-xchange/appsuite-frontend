@@ -46,7 +46,6 @@
     "karma-sinon": "^1.0.3",
     "karma-spec-reporter": "0.0.19",
     "mocha": "^2.1.0",
-    "q": "~1.2.0",
     "sinon": "^1.13.0",
     "time-grunt": "^1.0.0"
   },
