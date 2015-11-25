@@ -24,8 +24,11 @@ module.exports = function (grunt) {
 
     //Override the default tasks
 
+    //default implementation uses newer, we don't want that, because it has some problems and copy is fast anyway
+    grunt.registerTask('copy_build', grunt.util.runPrefixedSubtasksFor('copy', 'build'));
+
     // steps to build the ui (ready for development)
-    grunt.registerTask('build', ['lint', 'copy_build', 'compile_po', 'copy_build_base', 'concat', 'newer:less']);
+    grunt.registerTask('build', ['lint', 'copy_build', 'compile_po', 'concat', 'newer:less']);
     // create a package ready version of the ui (aka what jenkins does)
     grunt.registerTask('dist', ['clean', 'checkDependencies:build', 'bower', 'build', 'uglify', 'copy_dist', 'create_i18n_properties']);
 

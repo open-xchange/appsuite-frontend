@@ -35,7 +35,7 @@ module.exports = function (grunt) {
 
     grunt.config.merge({
         'copy': {
-            base: {
+            build_base: {
                 options: {
                     process: function (content, srcpath) {
                         if (/.html$/.test(srcpath)) {
@@ -64,7 +64,7 @@ module.exports = function (grunt) {
                     }
                 ]
             },
-            ox: {
+            build_ox: {
                 options: {
                     process: function (content) {
                         return grunt.template.process(content, { data: process_options });
@@ -100,8 +100,6 @@ module.exports = function (grunt) {
             }
         }
     });
-
-    grunt.registerTask('copy_build_base', ['newer:copy:base', 'newer:copy:ox']);
 
     grunt.loadNpmTasks('grunt-contrib-copy');
 };
