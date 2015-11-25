@@ -37,7 +37,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             if (this.model) {
                 var nextValue = value;
                 if (toggle) {
-                    if (toggleValue = undefined) {
+                    if (toggleValue === undefined) {
                         // boolean toggle
                         nextValue = !this.model.get(name);
                     } else {
