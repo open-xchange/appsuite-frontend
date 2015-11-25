@@ -15,12 +15,64 @@
 
 module.exports = function (grunt) {
 
+    var momentLanguages = [];
+    grunt.file.expand({ cwd: 'bower_components/moment/locale/' }, '*.js').forEach(function (file) {
+        momentLanguages.push(file.split('.').shift());
+    });
+
+    var version = String(grunt.config('pkg.version') + '.' + grunt.template.date(new Date(), 'yyyymmdd.HHMMss'));
+
+    var process_options = {
+        version: version,
+        revision: String(grunt.config('pkg.version').slice(grunt.config('pkg.version').indexOf('-') + 1)),
+        enable_debug: String(grunt.config('local.debug')),
+        base: 'v=' + version,
+        cap: String(grunt.config('local.cap') || ''),
+        momentLanguages:  '[\'' + momentLanguages.join('\',\'') + '\']'
+    };
+
+    grunt.config.set('oxbase', process_options.base);
+
     grunt.config.merge({
-        copy: {
+        'copy': {
+            base: {
+                options: {
+                    process: function (content) {
+                        return grunt.template.process(content, { data: process_options });
+                    }
+                },
+                files: [
+                    {
+                        src: 'html/index.html',
+                        dest: 'build/ui'
+                    },
+                    {
+                        src: 'html/index.html',
+                        dest: 'build/core'
+                    },
+                    {
+                        src: 'html/index.html',
+                        dest: 'build/signin'
+                    }
+                ]
+            },
+            ox: {
+                options: {
+                    process: function (content) {
+                        return grunt.template.process(content, { data: process_options });
+                    }
+                },
+                files: [
+                    {
+                        src: 'src/ox.ejs',
+                        dest: 'build/ox.js'
+                    }
+                ]
+            },
             build_static: {
                 files: [
                     {
-                        src: ['.*', '*', '!*.hbs', '!{core_*,index,signin}.html'],
+                        src: ['.*', '*', '!*.{ejs,hbs}', '!{core_*,index,signin}.html'],
                         expand: true,
                         cwd: 'html/',
                         dest: 'build/'
@@ -40,6 +92,8 @@ module.exports = function (grunt) {
             }
         }
     });
+
+    grunt.registerTask('copy_build_base', ['newer:copy:base', 'newer:copy:ox']);
 
     grunt.loadNpmTasks('grunt-contrib-copy');
 };

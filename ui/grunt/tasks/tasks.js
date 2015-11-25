@@ -18,14 +18,14 @@ module.exports = function (grunt) {
     // displays the execution time of grunt tasks
     if (grunt.option('benchmark') || grunt.config('local.benchmark')) require('time-grunt')(grunt);
 
-    grunt.registerTask('bootjs', ['newer:assemble:ox', 'newer:concat:bootjs']);
+    grunt.registerTask('bootjs', ['newer:copy:ox', 'newer:concat:bootjs']);
 
     grunt.registerTask('lint:specs', ['newer:jshint:specs', 'newer:jscs:specs', 'newer:jsonlint:specs']);
 
     //Override the default tasks
 
     // steps to build the ui (ready for development)
-    grunt.registerTask('build', ['lint', 'copy_build', 'compile_po', 'assemble_build', 'concat', 'newer:less']);
+    grunt.registerTask('build', ['lint', 'copy_build', 'compile_po', 'copy_build_base', 'concat', 'newer:less']);
     // create a package ready version of the ui (aka what jenkins does)
     grunt.registerTask('dist', ['clean', 'checkDependencies:build', 'bower', 'build', 'uglify', 'copy_dist', 'create_i18n_properties']);
 

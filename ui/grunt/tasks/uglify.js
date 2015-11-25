@@ -20,8 +20,8 @@ module.exports = function (grunt) {
             bootjs: {
                 options: {
                     sourceMap: 'build/maps/boot.js.map',
-                    sourceMapRoot: '/appsuite/<%= assemble.options.base %>',
-                    sourceMappingURL: '/appsuite/<%= assemble.options.base %>/maps/boot.js.map',
+                    sourceMapRoot: '/appsuite/<%= oxbase %>',
+                    sourceMappingURL: '/appsuite/<%= oxbase %>/maps/boot.js.map',
                     sourceMapPrefix: 1
                 },
                 files: {

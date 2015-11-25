@@ -9,17 +9,17 @@ if (oldRoot !== root) {//only change if it's different, otherwise we get infinit
 window.ox = _.extend({
     abs: location.protocol + '//' + location.host,
     apiRoot: root + '/api',
-    base: '{{ base }}',
-    cap: '{{ cap }}',
+    base: '<%= base %>',
+    cap: '<%= cap %>',
     context_id: 0,
-    debug: {{ enable_debug }},
+    debug: <%= enable_debug %>,
     language: 'en_US',
-    momentLanguages: {{{ momentLanguages }}},
+    momentLanguages: <%= momentLanguages %>,
     loginLocation: 'ui',
     logoutLocation: 'ui',
     online: navigator.onLine !== undefined ? navigator.onLine : true,
     relogin: function () {},
-    revision: '{{ revision }}',
+    revision: '<%= revision %>',
     rampup: {},
     root: root,
     secretCookie: false, // auto-login
@@ -32,6 +32,6 @@ window.ox = _.extend({
     ui: { session: {} },
     user: '',
     user_id: 0,
-    version: '{{ version }}',
+    version: '<%= version %>',
     windowState: 'foreground'
 }, window.ox);
