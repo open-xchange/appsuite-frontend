@@ -43,7 +43,6 @@ module.exports = function (grunt) {
                                 .replace(/<!--[\s\S]*?-->/g, '') // remove html comments
                                 .replace(/\/\*([\s\S]*?)\*\//g, '') // remove js comments
                                 .replace(/\s{2,}/g, '') // remove spacing
-                                .replace(/\'/g, '"') // replace single quotes
                                 .replace(/\n/g, '') + '\n'; // strip nl
                         }
                         return grunt.template.process(content, { data: process_options });
