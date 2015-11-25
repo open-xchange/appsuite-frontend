@@ -618,6 +618,17 @@ define('io.ox/core/viewer/views/toolbarview', [
                 console.error('Core.Viewer.ToolbarView.render(): no file to render');
                 return this;
             }
+
+            this.renderQueued(model);
+
+            return this;
+        },
+
+        /**
+         * Render the DisplayerView in a queued version, because some extensionpoints are rendered asynchronous.
+         * And calling toolbar.empty() before the toolbarpoint has not finished rendering may result in a race condition.
+         */
+        renderQueued: _.queued(function (model) {
             // draw toolbar
             var origData = model.get('origData'),
                 toolbar = this.$el.attr({ role: 'menu', 'aria-label': gt('Viewer Toolbar') }),
@@ -668,10 +679,9 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
             }));
 
-            toolbarPoint.invoke('draw', toolbar, baton);
-
-            return this;
-        },
+            var ret = toolbarPoint.invoke('draw', toolbar, baton);
+            return $.when.apply(this, ret.value());
+        }),
 
         /**
          * Renders the document page navigation controls.
