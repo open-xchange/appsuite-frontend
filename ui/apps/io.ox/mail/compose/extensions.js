@@ -55,25 +55,23 @@ define('io.ox/mail/compose/extensions', [
         buttons: {
             discard: function (baton) {
                 this.append(
-                    $('<button type="button" class="btn btn-default" data-action="discard">')
+                    $('<button type="button" class="btn btn-default" data-action="discard" tabindex="1">')
                         .on('click', function () { baton.view.app.quit(); })
                         .text(gt('Discard')));
             },
             save: function (baton) {
-                this.append($('<button type="button" class="btn btn-default" data-action="save">')
+                this.append($('<button type="button" class="btn btn-default" data-action="save" tabindex="1">')
                     .on('click', function () {
                         if (baton.view.isSaving === true) return false;
                         baton.view.isSaving = true;
-                        baton.view.saveDraft().done(function () {
-                            baton.view.isSaving = false;
-                        }).fail(function () {
+                        baton.view.saveDraft().always(function () {
                             baton.view.isSaving = false;
                         });
                     })
                     .text(gt('Save')));
             },
             send: function (baton) {
-                this.append($('<button type="button" class="btn btn-primary" data-action="send">')
+                this.append($('<button type="button" class="btn btn-primary" data-action="send" tabindex="1">')
                     .on('click', function () { baton.view.send(); })
                     .text(gt('Send')));
             }

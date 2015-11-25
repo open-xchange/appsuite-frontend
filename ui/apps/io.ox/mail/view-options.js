@@ -88,6 +88,8 @@ define('io.ox/mail/view-options', [
             e.preventDefault();
             var i = $(this).find('i'), selection = e.data.baton.app.listView.selection;
             if (i.hasClass('fa-check-square-o')) selection.selectNone(); else selection.selectAll();
+            // get the focus back
+            $(this).focus();
         }
     }
 
