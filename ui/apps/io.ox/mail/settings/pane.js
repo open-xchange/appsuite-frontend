@@ -119,11 +119,6 @@ define('io.ox/mail/settings/pane', [
 
             this.append(mailViewSettings.render(baton).$el);
 
-            if (Modernizr.touch) {
-                // see Bug 24802 - iPad: Cannot write email
-                this.find('input[name="messageFormat"]:first').closest('.control-group').hide().prev().hide();
-            }
-
             if (!capabilities.has('emoji')) {
                 // see Bug 25537 - Emotes not working as advertised
                 this.find('[name="displayEmoticons"]').parent().parent().hide();
@@ -255,7 +250,7 @@ define('io.ox/mail/settings/pane', [
                 ),
 
                 (function () {
-                    if (_.device('smartphone || tablet')) return $();
+                    if (_.device('smartphone')) return $();
                     return $('<fieldset>').append(
                         $('<legend>').addClass('sectiontitle').append(
                             $('<h2>').text(gt('Format emails as'))
