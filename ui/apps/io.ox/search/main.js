@@ -53,8 +53,10 @@ define('io.ox/search/main', [
                 'io.ox/office/text': 'io.ox/files',
                 'io.ox/office/portal': 'io.ox/files',
                 'io.ox/office/spreadsheet': 'io.ox/files',
+                'io.ox/office/presentation': 'io.ox/files',
                 'io.ox/office/portal/text': 'io.ox/files',
                 'io.ox/office/portal/spreadsheet': 'io.ox/files',
+                'io.ox/office/portal/presentation': 'io.ox/files',
                 'io.ox/portal': data.defaultApp,
                 'io.ox/search': data.defaultApp,
                 'io.ox/settings': data.defaultApp
