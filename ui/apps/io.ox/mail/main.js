@@ -865,7 +865,7 @@ define('io.ox/mail/main', [
                     app.showMultiple(list);
                     break;
                 }
-            }, 100);
+            }, 1);
 
             app.listView.on({
                 'selection:empty': function () {
