@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-11-26 16:21+0100\n"
+"PO-Revision-Date: 2015-11-26 16:33+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -2948,6 +2948,7 @@ msgstr "Ihr Betriebssystem wird nicht unterstützt."
 #: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
 msgid "Your password is expired. Please change your password to continue."
 msgstr ""
+"Ihr Passwort ist abgelaufen. Zum Fortfahren ändern Sie bitte Ihr Passwort."
 
 #: apps/io.ox/core/boot/i18n.js:42 module:io.ox/core/boot
 msgid "Please update your browser."
@@ -3374,7 +3375,7 @@ msgstr "Ordnertyp"
 #. number of items in a folder
 #: apps/io.ox/core/folder/actions/properties.js:56 module:io.ox/core
 msgid "Number of messages"
-msgstr ""
+msgstr "Anzahl der Nachrichten"
 
 #. number of items in a folder
 #: apps/io.ox/core/folder/actions/properties.js:56 module:io.ox/core
@@ -4558,7 +4559,7 @@ msgstr "Das Abonnement konnte nicht erstellt werden."
 
 #: apps/io.ox/core/sub/subscriptions.js:173 module:io.ox/core/sub
 msgid "No subscription services available for this module"
-msgstr ""
+msgstr "Für dieses Modul stehen keine Abonnement-Dienste zur Verfügung"
 
 #: apps/io.ox/core/sub/subscriptions.js:283 module:io.ox/core/sub
 msgid "Add new account"
@@ -6601,7 +6602,7 @@ msgstr "Der Termin wurde Ihrem Kalender hinzugefügt"
 
 #: apps/io.ox/mail/actions/invite.js:98 module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
-msgstr ""
+msgstr "Fehler beim Auflösen der E-Mail-Adressen. Bitte versuchen Sie es erneut."
 
 #: apps/io.ox/mail/actions/reminder.js:36 module:io.ox/mail
 msgid "Create reminder"
@@ -6787,7 +6788,7 @@ msgstr "BCC"
 #: apps/io.ox/mail/compose/extensions.js:36 module:io.ox/mail
 msgctxt "compose"
 msgid "Reply to"
-msgstr ""
+msgstr "Antwort an"
 
 #: apps/io.ox/mail/compose/extensions.js:50 module:io.ox/mail
 msgid "Compose new mail"
@@ -7317,7 +7318,7 @@ msgstr "Entwurf bearbeiten"
 #: apps/io.ox/mail/print.js:87 module:io.ox/mail
 msgctxt "BCC"
 msgid "Blind copy"
-msgstr ""
+msgstr "Blindkopie"
 
 #: apps/io.ox/mail/settings/model.js:26 module:io.ox/mail
 #: apps/io.ox/mail/settings/model.js:27
