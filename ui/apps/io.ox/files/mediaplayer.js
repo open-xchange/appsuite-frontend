@@ -10,6 +10,9 @@
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
+
+/* global MediaElementPlayer: true */
+
 /*
     NOTE:
 

@@ -149,7 +149,7 @@
         // disallow deletion of variables
         'no-delete-var': 2,
         // disallow use of undeclared variables unless mentioned in a 'globals'
-        'no-undef': 0, // NEEDS CODE REFACTORING (45) // 2,
+        'no-undef': 2,
         // disallow use of undefined variable
         'no-undefined': 0, // NEEDS CODE REFACTORING (309) // 2,
         // disallow declaration of variables that are not used in the code

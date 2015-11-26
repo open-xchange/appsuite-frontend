@@ -94,6 +94,9 @@ define('io.ox/core/tk/selection', [
             selectLast,
             selectNext,
             // marker mode
+            mark,
+            fastMark,
+            clearMarks,
             isMarker = $.noop,
             // trick for smooth updates
             lastIndex = -1,
@@ -125,14 +128,7 @@ define('io.ox/core/tk/selection', [
         // };
 
         hasMultiple = function () {
-            var mult = 0;
-            for (id in selectedItems) {
-                mult++;
-                if (mult > 1) {
-                    return true;
-                }
-            }
-            return false;
+            return _.isArray(selectedItems) && selectedItems.length > 1;
         };
 
         changed = function () {
@@ -561,7 +557,7 @@ define('io.ox/core/tk/selection', [
             if (typeof obj === 'object') {
                 return (obj.folder_id !== undefined) ? _.cid(obj) : obj.id;
             }
-            return  obj;
+            return obj;
         };
 
         this.setSerializer = function (fn) {

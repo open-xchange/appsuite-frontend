@@ -11,6 +11,8 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
+/* global assert: true */
+
 define('io.ox/core/gettext', function () {
 
     'use strict';

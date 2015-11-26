@@ -435,7 +435,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             var conditionList = $('<ol class="widget-list list-unstyled tests">'),
                 actionList = $('<ol class="widget-list list-unstyled actions">'),
                 appliedConditions = baton.model.get('test'),
-
+                inputId,
                 drawDeleteButton = function (type) {
                     return $('<a href="#" class="remove" tabindex="1" data-action="remove-' + type + '">').append($('<i class="fa fa-trash-o">'));
                 };
@@ -443,8 +443,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             appliedConditions = appliedConditions.tests ? appliedConditions.tests : [appliedConditions];
 
             _(appliedConditions).each(function (condition, num) {
-                var inputId,
-                    ConditionModel = Backbone.Model.extend({
+                var ConditionModel = Backbone.Model.extend({
                         validate: function (attrs) {
                             if (_.has(attrs, 'size')) {
                                 if (_.isNaN(attrs.size) || attrs.size === '') {

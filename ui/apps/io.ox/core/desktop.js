@@ -12,6 +12,8 @@
  *
  */
 
+/* global assert: true */
+
 define('io.ox/core/desktop', [
     'io.ox/core/event',
     'io.ox/core/extensions',
