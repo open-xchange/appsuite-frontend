@@ -40,7 +40,6 @@ define('io.ox/mail/detail/view', [
         id: 'subject',
         index: INDEX += 100,
         draw: function (baton) {
-
             var subject = util.getSubject(baton.data),
                 node = $('<h1 class="subject">').text(subject);
 
@@ -272,7 +271,7 @@ define('io.ox/mail/detail/view', [
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
                 node = this.$el.find('section.body').empty();
-            ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);
+            _.delay(ext.point('io.ox/mail/detail/body').invoke, 20, 'draw', node, baton);
             // global event for tracking purposes
             ox.trigger('mail:detail:body:render', this);
         },
