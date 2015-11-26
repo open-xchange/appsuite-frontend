@@ -1,7 +1,7 @@
 Name:           open-xchange-appsuite-saml
 Version:        @OXVERSION@
 %define         ox_release 12
-Release:        %{ox_release}
+Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Francisco Laguna <francisco.laguna@open-xchange.com>
 License:        CC-BY-NC-SA-3.0
