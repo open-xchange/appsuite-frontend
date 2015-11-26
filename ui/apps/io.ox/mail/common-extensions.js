@@ -28,8 +28,9 @@ define('io.ox/mail/common-extensions', [
     'io.ox/core/tk/flag-picker',
     'io.ox/core/capabilities',
     'settings!io.ox/mail',
+    'io.ox/core/attachments/view',
     'gettext!io.ox/mail'
-], function (ext, links, actions, emoji, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, gt) {
+], function (ext, links, actions, emoji, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, attachment, gt) {
 
     'use strict';
 
@@ -440,61 +441,55 @@ define('io.ox/mail/common-extensions', [
             return function (baton) {
                 if (baton.attachments.length === 0) return $.when();
 
-                var $el = this,
-                    def = $.Deferred();
+                var $el = this;
 
-                require(['io.ox/core/attachments/view'], function (attachment) {
+                _.once(function () {
+                    CustomAttachmentView = attachment.View.extend({
+                        renderContent: renderContent
+                    });
+                })();
 
-                    _.once(function () {
-                        CustomAttachmentView = attachment.View.extend({
-                            renderContent: renderContent
-                        });
-                    })();
-
-                    var list = baton.attachments.map(function (m) {
-                            m.group = 'mail';
-                            return m;
-                        }),
-                        collection = new attachment.Collection(list),
-                        view = new attachment.List({
-                            AttachmentView: CustomAttachmentView,
-                            collection: collection,
-                            el: $el,
-                            mode: settings.get('attachments/layout/detail/' + _.display(), 'list')
-                        });
-
-                    $el.append(view.render().$el);
-
-                    view.renderInlineLinks = function () {
-                        var models = this.getValidModels(), $links = this.$header.find('.links').empty();
-                        if (models.length >= 1) drawInlineLinks($links, _(models).invoke('toJSON'));
-                    };
-
-                    view.listenTo(view.collection, 'add remove reset', view.renderInlineLinks);
-                    view.renderInlineLinks();
-
-                    view.$el.on('click', 'li.item', function (e) {
-
-                        var node = $(e.currentTarget), id, data, baton;
-
-                        // skip attachments without preview
-                        if (!node.attr('data-original')) return;
-
-                        id = node.attr('data-id');
-                        data = collection.get(id).toJSON();
-                        baton = ext.Baton({ startItem: data, data: list });
-
-                        actions.invoke('io.ox/mail/actions/view-attachment', null, baton);
+                var list = baton.attachments.map(function (m) {
+                        m.group = 'mail';
+                        return m;
+                    }),
+                    collection = new attachment.Collection(list),
+                    view = new attachment.List({
+                        AttachmentView: CustomAttachmentView,
+                        collection: collection,
+                        el: $el,
+                        mode: settings.get('attachments/layout/detail/' + _.display(), 'list')
                     });
 
-                    view.on('change:layout', function (mode) {
-                        settings.set('attachments/layout/detail/' + _.display(), mode).save();
-                    });
+                $el.append(view.render().$el);
 
-                    def.resolve(view);
-                }, def.reject);
+                view.renderInlineLinks = function () {
+                    var models = this.getValidModels(), $links = this.$header.find('.links').empty();
+                    if (models.length >= 1) drawInlineLinks($links, _(models).invoke('toJSON'));
+                };
 
-                return def;
+                view.listenTo(view.collection, 'add remove reset', view.renderInlineLinks);
+                view.renderInlineLinks();
+
+                view.$el.on('click', 'li.item', function (e) {
+
+                    var node = $(e.currentTarget), id, data, baton;
+
+                    // skip attachments without preview
+                    if (!node.attr('data-original')) return;
+
+                    id = node.attr('data-id');
+                    data = collection.get(id).toJSON();
+                    baton = ext.Baton({ startItem: data, data: list });
+
+                    actions.invoke('io.ox/mail/actions/view-attachment', null, baton);
+                });
+
+                view.on('change:layout', function (mode) {
+                    settings.set('attachments/layout/detail/' + _.display(), mode).save();
+                });
+
+                return view;
             };
         }()),
 
