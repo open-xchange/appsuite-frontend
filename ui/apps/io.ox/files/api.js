@@ -449,6 +449,11 @@ define('io.ox/files/api', [
                         return unified.slice(start, stop);
                     },
                     function fail(e) {
+                        if (e.code === 'IFO-0400' && e.error_params.length === 0) {
+                            // IFO-0400 is missing the folder in the error params -> adding this manually
+                            e.error_params.push(params.folder);
+                        }
+                        api.trigger('error error:' +  e.code, e );
                         // this one might fail due to lack of permissions; error are transformed to empty array
                         if (ox.debug) console.warn('files.httpGet', e.error, e);
                         return [];
@@ -519,6 +524,9 @@ define('io.ox/files/api', [
         .then(function (data) {
             pool.add('detail', data);
             return data;
+        }, function (error) {
+            api.trigger('error error:' +  error.code, error );
+            return error;
         });
     };
 
@@ -541,6 +549,9 @@ define('io.ox/files/api', [
         .then(function (data) {
             pool.add('detail', data);
             return data;
+        }, function (error) {
+            api.trigger('error error:' +  error.code, error );
+            return error;
         });
     };
 

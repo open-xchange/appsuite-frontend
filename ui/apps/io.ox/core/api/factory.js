@@ -165,6 +165,9 @@ define('io.ox/core/api/factory', [
                         } else {
                             return data;
                         }
+                    }, function (error) {
+                        api.trigger('error error:' +  error.code, error );
+                        return error;
                     })
                     .then(function (data) {
                         return (o.pipe.all || _.identity)(data, opt);
@@ -284,6 +287,9 @@ define('io.ox/core/api/factory', [
                     })
                     .then(function (data) {
                         return (o.pipe.get || _.identity)(data, opt);
+                    }, function (error) {
+                        api.trigger('error error:' +  error.code, error );
+                        return error;
                     })
                     .then(function (data) {
                         // use cache?

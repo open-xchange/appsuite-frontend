@@ -820,6 +820,46 @@ define('io.ox/files/main', [
         },
 
         /*
+         * change to default folder on no permission or folder not found errors
+         */
+        'no-permission': function (app) {
+            // use debounce, so errors from folder and app api are only handled once.
+            var handleError = _.debounce(function (error) {
+                // work with (error) and (event, error) arguments
+                if (error && !error.error) {
+                    if (arguments[1] && arguments[1].error) {
+                        error = arguments[1];
+                    } else {
+                        return;
+                    }
+                }
+                // only change if folder is currently displayed
+                if (error.error_params[0] && String(app.folder.get()) !== String(error.error_params[0])) {
+                    return;
+                }
+                require(['io.ox/core/yell'], function (yell) {
+                    yell(error);
+                    // try to load the default folder
+                    // guests do not have a default folder, so the first visible one is chosen
+                    app.folder.setDefault();
+                });
+            }, 300);
+
+            folderAPI.on('error:FLD-0008 error:FLD-0003', handleError);
+            api.on('error:FLD-0008', handleError);
+            api.on('error:IFO-0400', function (error) {
+                // check if folder is currently displayed
+                if (String(app.folder.get()) !== String(error.error_params[0])) {
+                    return;
+                }
+                // see if we can still access the folder, although we are not allowed to view the contents
+                // this is important because otherwise we would not be able to change permissions (because the view jumps to the default folder all the time)
+                // if the useer is nto allowed to view this folder, the folderapi will trigger error:FLD-0003
+                folderAPI.get(app.folder.get(), { cache: false });
+            });
+        },
+
+        /*
          * Delete file
          * leave detailview if file is deleted
 
