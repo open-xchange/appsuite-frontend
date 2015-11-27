@@ -143,7 +143,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             //#. File and folder details
             this.setPanelHeader(gt('Details'));
             // attach event handlers
-            this.listenTo(this.model, 'change:filename change:file_size change:last_modified change:folder_id', this.render);
+            this.listenTo(this.model, 'change:cid change:filename change:file_size change:last_modified change:folder_id', this.render);
             this.on('dispose', this.disposeView.bind(this));
         },
 

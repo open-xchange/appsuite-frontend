@@ -685,9 +685,10 @@ define('io.ox/files/api', [
     //
     folderAPI.on({
         'before:clear': function (id) {
+            var isTrash = String(settings.get('folder/trash')) === id;
             // clear target folder
             _(pool.getByFolder(id)).each(function (collection) {
-                var files = collection.filter(function (model) { return model.isFile(); });
+                var files = collection.filter(function (model) { return isTrash || model.isFile(); });
                 collection.remove(files);
             });
         },
@@ -881,10 +882,15 @@ define('io.ox/files/api', [
                 action: 'update',
                 id: file.id,
                 timestamp: _.then(),
-                ignoreWarnings: options.ignoreWarnings
+                ignoreWarnings: options.ignoreWarnings,
+                extendedResponse: true
             },
             data: data,
             appendColumns: false
+        })
+        .then(function (response) {
+            // if id changes after update (e.g. rename files of some storage systems) update model id
+            if (_.isObject(response) && model.get('id') !== response.id) model.set('id', response.id);
         })
         .always(_.lfo(process, prev, model))
         .done(function () {
@@ -987,7 +993,13 @@ define('io.ox/files/api', [
                 folder_id: options.folder_id || options.folder,
                 version_comment: options.version_comment || ''
             })
-            .then(function () {
+            .then(function (data) {
+                if (options.id !== data.data) {
+                    var model = api.pool.get('detail').get(_.cid(options));
+                    model.set('id', data.data);
+                    return api.propagate('add:version', model.toJSON());
+                }
+
                 return api.propagate('add:version', options);
             });
         },

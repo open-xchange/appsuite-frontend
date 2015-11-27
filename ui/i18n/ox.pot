@@ -3924,7 +3924,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr ""
@@ -6401,7 +6401,7 @@ msgstr ""
 
 #: apps/io.ox/files/filepicker.js
 #: module:io.ox/files
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "Files"
 msgstr ""
@@ -8891,120 +8891,135 @@ msgstr ""
 msgid "Reauthorize"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js
-#: module:io.ox/core/onboarding
-msgid "Client onboarding"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/wizard.js
-#: module:io.ox/core/onboarding
-msgid "Back to platforms"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/wizard.js
-#: module:io.ox/core/onboarding
-msgid "Select your device"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/wizard.js
-#: module:io.ox/core/onboarding
-msgid "Back to devices"
-msgstr ""
-
 #. %1$s is the product name, e.g. OX.
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "Which device do you want to configure?"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
+#: module:io.ox/core/onboarding
+msgid "Which app do you want to use on your device?"
+msgstr ""
+
+#: apps/io.ox/onboarding/api.js
+#: module:io.ox/core/onboarding
+msgid "What service do you want to use?"
+msgstr ""
+
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "What to you want to use on your smartphone?"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "Smartphone"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "What do you want to use on your tablet?"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "Tablet"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "What do you want to use on your iPhone?"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "iPhone"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "What do you want to use on your iPad?"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "iPad"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "What do you want to use on your Mac?"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "Mac"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "What do you want to use on your Windows Phone?"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "Windows Phone"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "What do you want to use on your Windows PC?"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "Windows PC"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "EMail"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/api.js
 #: module:io.ox/core/onboarding
 msgid "Contacts"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/clients/view.js
 #: module:io.ox/core/onboarding
 msgid "Select the platform of your device:"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/view.js
+#: module:io.ox/core/onboarding
+msgid "Client onboarding"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/view.js
+#: module:io.ox/core/onboarding
+msgid "Back to platforms"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/view.js
+#: module:io.ox/core/onboarding
+msgid "Select your device"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/view.js
+#: module:io.ox/core/onboarding
+msgid "Back to devices"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/view.js
+#: module:io.ox/core/onboarding
+msgid "Back to modules"
 msgstr ""
 
 #: apps/io.ox/participants/add.js

@@ -36,7 +36,10 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
     function propagateChange(module, model) {
         if (skip) return;
         _(collections[module]).each(function (entry) {
-            var target = entry.collection.get(model.cid), data;
+            var cid = !!model.changed.cid ? model.previous('cid') : model.cid,
+                target = entry.collection.get(cid),
+                data;
+
             if (target) {
                 skip = true;
                 data = model.toJSON();
@@ -194,7 +197,7 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             var collection = this.get(cid), valid, expired = [];
             data =  _([].concat(data)).map(this.map, collection);
 
-            // find models that are expired (changed in another browser or by a shared user etc)
+            // find modules that are expired (changed in another browser or by a shared user etc)
             if (cid === 'detail') {
                 _(data).each(function (item) {
                     valid = !collection.get(_.cid(item))  || (collection.get(_.cid(item)) && collection.get(_.cid(item)).get('last_modified') >= item.last_modified);
@@ -206,6 +209,7 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
                     }
                 });
             }
+
             collection.add(data, { merge: true, parse: true });
 
             if (expired.length > 0) {

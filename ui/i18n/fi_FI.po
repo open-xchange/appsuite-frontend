@@ -1261,13 +1261,19 @@ msgstr "Takaisin"
 msgid "Back to appointment"
 msgstr "Takaisin tapaamiseen"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Back to sign in"
 msgid "Back to devices"
 msgstr "Takaisin sisäänkirjautumiseen"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Back to sign in"
+msgid "Back to modules"
+msgstr "Takaisin sisäänkirjautumiseen"
+
+#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "your platform"
 msgid "Back to platforms"
@@ -1386,7 +1392,7 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "Kalenteri"
 
@@ -1677,7 +1683,7 @@ msgstr "Napsauta yrittääksesi uudestaan."
 msgid "Click to upload image"
 msgstr "Napsauta ladataksesi kuva"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
 msgid "Client onboarding"
 msgstr ""
 
@@ -1846,7 +1852,7 @@ msgstr "Yhteystiedon kuvat"
 msgid "Contact request sent"
 msgstr "Yhteystietopyyntö lähetetty"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Contacts"
 msgstr "Yhteystiedot"
 
@@ -2733,7 +2739,7 @@ msgstr "Erääntyy %1$s"
 msgid "EB"
 msgstr "ET"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Mail"
 msgid "EMail"
@@ -3331,7 +3337,7 @@ msgid "File: %1$s"
 msgstr "Tiedosto: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Files"
 msgstr "Tiedostot"
 
@@ -4281,7 +4287,7 @@ msgstr "MT"
 msgid "MM"
 msgstr "KK"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "March"
 msgid "Mac"
@@ -6500,11 +6506,11 @@ msgstr "Valitse tiedosto"
 msgid "Select folder"
 msgstr "Valitse kansio"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
 msgid "Select the platform of your device:"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Selecting a view"
 msgid "Select your device"
@@ -6880,7 +6886,7 @@ msgstr "Koko (tavuina)"
 msgid "Slow requests"
 msgstr "Hitaat pyynnöt"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Smartphone settings:"
 msgid "Smartphone"
@@ -7153,7 +7159,7 @@ msgstr "TT"
 msgid "TTY/TDD"
 msgstr "kaukokirjoitin/tekstipuhelin"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Enable"
 msgid "Tablet"
@@ -7165,7 +7171,7 @@ msgid "Tag mail with"
 msgstr "Aseta avainsana"
 
 #. %1$s is the product name, e.g. OX.
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
 msgstr ""
 
@@ -8443,33 +8449,39 @@ msgstr "Tervetuloa tehtäviisi"
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "Tervetuloa. Ole hyvä ja anna tuotteesta palautetta."
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "What do you want to use on your Mac?"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "What do you want to use on your Windows PC?"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "What do you want to use on your Windows Phone?"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "What do you want to use on your iPad?"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you really want to discard your changes?"
 msgid "What do you want to use on your iPhone?"
 msgstr "Haluatko varmasti hylätä muutoksesi?"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "What do you want to use on your tablet?"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you really want to discard your changes?"
+msgid "What service do you want to use?"
+msgstr "Haluatko varmasti hylätä muutoksesi?"
+
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "What to you want to use on your smartphone?"
 msgstr ""
 
@@ -8486,7 +8498,13 @@ msgstr ""
 "asiakasohjelmasta. Päivittäjä ilmoittaa automaattisesti uusista "
 "päivityksistä. Uusimmat päivitykset voit ladata päivittäjän kautta."
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you really want to discard your changes?"
+msgid "Which app do you want to use on your device?"
+msgstr "Haluatko varmasti hylätä muutoksesi?"
+
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Which device do you want to configure?"
 msgstr ""
 
@@ -8494,11 +8512,11 @@ msgstr ""
 msgid "Whole day"
 msgstr "Koko päivän"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Windows PC"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Windows Phone"
 msgstr ""
 
@@ -9222,11 +9240,11 @@ msgstr "on osallitujia"
 msgid "iCal"
 msgstr "iCal"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "iPad"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Phone"
 msgid "iPhone"

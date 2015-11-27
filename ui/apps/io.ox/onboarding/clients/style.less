@@ -30,16 +30,28 @@
 
         margin: 0 16px 0 0;
         display: inline-block;
+        // tmp
+        max-width: 146px;
 
         a {
             color: @black;
             border: 1px solid rgba(0, 0, 0, 0.10);
             display: inline-block;
             outline: 0;
+            &.disabled {
+                //background-color: red;
+                color: #ccc;
+                pointer-events: none;
+                cursor: default;
+            }
         }
 
         a:hover {
             border-color: rgba(0, 0, 0, 0.50);
+            &.disabled {
+                border-color: rgba(0, 0, 0, 0.10);
+                text-decoration: none;
+            }
         }
 
         a:active, a:focus {
@@ -58,6 +70,15 @@
             text-align: center;
             line-height: 40px;
             margin-bottom: 8px;
+        }
+
+        .description {
+            text-align: center;
+            line-height: 40px;
+            margin-bottom: 8px;
+            font-style: italic;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 

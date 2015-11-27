@@ -1,26 +1,247 @@
 <!DOCTYPE html>
 <html>
-<head>
-{{> core_head }}
-<script>
-  // signin page
-  window.ox = { signin: true };
-  // fix broken URL
-  var path = location.pathname;
-  if (/^\/\//.test(path)) {
-    location.href = location.href.replace(path, path.substr(1));
-  }
-</script>
-</head>
-<body class="unselectable">
-{{> core_body }}
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="google" value="notranslate">
+        <meta name="theme-color" content="#3c73aa">
+        <!-- windows 8 icon to place homescreen tile -->
+        <meta id="win8Icon" name="msapplication-TileImage" content="">
+        <meta id="win8TileColor" name="msapplication-TileColor" content="#3c739b">
+        <!-- Never change status-bar-style! There is an iOS bug that freezes home screen apps once this changes. -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-title" content="">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link id="favicon" rel="shortcut icon" href="<%= base %>/apps/themes/default/favicon.ico" type="image/x-icon">
+        <!-- iOS home screen icons -->
+        <link id="icon57" rel="apple-touch-icon" href="">
+        <link id="icon72" rel="apple-touch-icon" sizes="72x72" href="">
+        <link id="icon76" rel="apple-touch-icon" sizes="76x76" href="">
+        <link id="icon114" rel="apple-touch-icon" sizes="114x114" href="">
+        <link id="icon120" rel="apple-touch-icon" sizes="120x120" href="">
+        <link id="icon144" rel="apple-touch-icon" sizes="144x144" href="">
+        <link id="icon152" rel="apple-touch-icon" sizes="152x152" href="">
+        <!-- iPhone 3.5" SPLASHSCREEN -->
+        <link id="splash460" href="" media="(device-width: 320px)" rel="apple-touch-startup-image">
+        <!-- iPhone 3.5" (Retina) SPLASHSCREEN -->
+        <link id="splash920" href="" media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+        <!-- iPhone 4" (Retina) SPLASHSCREEN -->
+        <link id="splash1096" href="" media="(device-aspect-ratio: 40/71)" rel="apple-touch-startup-image">
+        <link rel="stylesheet" href="<%= base %>/apps/themes/login/login.css">
+        <style type="text/css">
+            html, body { background-color: #fff; margin: 0; padding: 0; border: 0; }
+            body { overflow: hidden; }
 
-<noscript>
-<p class="noscript">This app uses JavaScript. Your browser either doesn't support JavaScript or you have it turned off. To use this app please use a JavaScript enabled browser.</p>
-<!-- see bug #27608 and #26722 -->
-</noscript>
+            .throbber {
+                position: absolute;
+                top: 50%;
+                width: 100%;
+                text-align: center;
+                margin: -10px 0 -21px 0;
+            }
 
-<script src="{{ base }}/precore.js" defer="defer"></script>
+            .throbber > div {
+                width: 14px;
+                height: 14px;
+                background-color: #ccc;
+                border-radius: 100%;
+                display: inline-block;
+                -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+                animation: bouncedelay 1.4s infinite ease-in-out;
+                /* Prevent first frame from flickering when animation starts */
+                -webkit-animation-fill-mode: both;
+                animation-fill-mode: both;
+            }
 
-</body>
+            .throbber .bounce1 {
+                -webkit-animation-delay: -0.32s;
+                animation-delay: -0.32s;
+            }
+
+            .throbber .bounce2 {
+                -webkit-animation-delay: -0.16s;
+                animation-delay: -0.16s;
+            }
+
+            @-webkit-keyframes bouncedelay {
+              0%, 80%, 100% { -webkit-transform: scale(0.0) }
+              40% { -webkit-transform: scale(1.0) }
+            }
+
+            @keyframes bouncedelay {
+              0%, 80%, 100% {
+                transform: scale(0.0);
+                -webkit-transform: scale(0.0);
+              } 40% {
+                transform: scale(1.0);
+                -webkit-transform: scale(1.0);
+              }
+            }
+        </style>
+        <meta id="bootstrap">
+        <meta id="theme">
+        <meta id="css">
+        <meta id="custom">
+        <meta id="code">
+        <script>
+          /* signin page */
+          window.ox = { signin: true };
+          /* fix broken URL */
+          var path = location.pathname;
+          if (/^\/\//.test(path)) {
+            location.href = location.href.replace(path, path.substr(1));
+          }
+        </script>
+    </head>
+    <body class="unselectable">
+        <!-- Visual overlays -->
+        <div id="background-loader" class="busy">
+            <div class="throbber">
+              <div class="bounce1"></div>
+              <div class="bounce2"></div>
+              <div class="bounce3"></div>
+            </div>
+        </div>
+        <!-- Core Panel -->
+        <div id="io-ox-core" class="abs unselectable" style="display: none">
+            <!-- banner -->
+            <div id="io-ox-banner">
+                <span class="banner-logo" style="display: none"></span>
+                <span class="banner-title"></span>
+                <span class="banner-content"></span>
+            </div>
+            <!-- top bar -->
+            <div id="io-ox-topbar" role="navigation" class="f6-target">
+                <ul class="launchers list-unstyled"></ul>
+                <div class="launcher-dropdown dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1"><i class="fa fa-bars" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu"></ul>
+                </div>
+            </div>
+            <!-- screens -->
+            <div id="io-ox-screens" class="abs">
+                <!-- window manager -->
+                <div id="io-ox-windowmanager" class="abs" style="display: none">
+                    <div id="io-ox-windowmanager-pane" class="atb"></div>
+                </div>
+                <!-- empty desktop -->
+                <div id="io-ox-desktop" class="abs"></div>
+            </div>
+        </div>
+        <!-- Login screen -->
+        <div id="io-ox-login-screen" class="unselectable" style="display: block">
+            <!-- Background decoration -->
+            <div id="io-ox-login-background" class="wallpaper"></div>
+            <div id="io-ox-login-blocker" style="display: none"></div>
+            <div id="io-ox-login-container-scrollpane">
+                <div id="io-ox-login-container" class="container">
+                    <div id="io-ox-login-header">
+                        <h1>
+                            <span id='io-ox-login-header-prefix'></span>
+                            <span id='io-ox-login-header-label'>...</span>
+                        </h1>
+                    </div>
+                    <div id="io-ox-login-form-container">
+                        <!-- login dialog; must be hard-coded this way, otherwise browsers won't inject credentials -->
+                        <form action="/appsuite/api/redirect" method="post" id="io-ox-login-form" target="store-credentials" novalidate>
+                            <input type="hidden" name="location" value=""><!-- used by redirect servlet -->
+                            <div class="row help">
+                                <div class="col-xs-12">
+                                    <p id="io-ox-login-help" class="help-block"></p>
+                                </div>
+                            </div>
+                            <div class="row username">
+                                <div class="form-group col-xs-12">
+                                    <label for="io-ox-login-username" class="sr-only" data-i18n="User name">User name</label>
+                                    <input type="email" id="io-ox-login-username" name="username" class="form-control" maxlength="1000" autocorrect="off" autocapitalize="off" spellcheck="false" aria-required="true" placeholder="User name" data-i18n="User name" data-i18n-attr="placeholder">
+                                </div>
+                            </div>
+                            <div class="row password">
+                                <div class="form-group col-xs-12">
+                                    <label for="io-ox-login-password" class="sr-only" data-i18n="Password">Password</label>
+                                    <input type="password" id="io-ox-login-password" name="password" class="form-control" maxlength="100" autocorrect="off" autocapitalize="off" aria-required="true" placeholder="Password" data-i18n="Password" data-i18n-attr="placeholder">
+                                </div>
+                            </div>
+                            <div class="row password-retype">
+                                <div class="form-group col-xs-12">
+                                    <label for="io-ox-retype-password" class="sr-only" data-i18n="Confirm new password">Confirm new password</label>
+                                    <input type="password" id="io-ox-retype-password" name="password2" class="form-control" maxlength="100" autocorrect="off" autocapitalize="off" aria-required="true" placeholder="Confirm new password" data-i18n="Confirm new password" data-i18n-attr="placeholder">
+                                </div>
+                            </div>
+                            <!-- Feedback area -->
+                            <div class="row feedback">
+                                <div class="col-xs-12" id="io-ox-login-feedback"></div>
+                            </div>
+                            <div class="row options">
+                                <div class="col-sm-6 col-xs-12 checkbox" id="io-ox-login-store">
+                                    <label for="io-ox-login-store-box" aria-label="Stay signed in" data-i18n="Stay signed in" data-i18n-attr="label,aria-label">
+                                        <input type="checkbox" id="io-ox-login-store-box" checked="checked" name="store" value="1">
+                                        Stay signed in
+                                    </label>
+                                </div>
+                                <div class="col-sm-6 col-xs-12 radio text-right" id="io-ox-forgot-password">
+                                    <a href="#" target="_blank" data-i18n="Forgot your password?">Forgot your password?</a>
+                                </div>
+                            </div>
+                            <div class="row buttons">
+                                <div class="form-group col-sm-6 col-xs-12">
+                                    <input type="submit" name="signin"
+                                        id="io-ox-login-button" class="btn btn-primary form-control"
+                                        value="Sign in" data-i18n="Sign in" data-i18n-attr="value,aria-label"/>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- forget password dialog (sharing) -->
+                        <form action="/appsuite/api/share/reset/password" method="get" id="io-ox-password-forget-form" style="display:none;" novalidate>
+                            <div class="row help">
+                                <div class="col-xs-12">
+                                    <p class="help-block"></p>
+                                </div>
+                            </div>
+                            <div class="row email">
+                                <div class="form-group col-xs-12">
+                                    <label for="io-ox-login-restoremail" class="sr-only" data-i18n="Email">Email</label>
+                                    <input type="email" id="io-ox-login-restoremail" name="restoremail" class="form-control" maxlength="1000" autocorrect="off" autocapitalize="off" spellcheck="false" aria-required="true" placeholder="Email" data-i18n="Email address" data-i18n-attr="placeholder">
+                                </div>
+                            </div>
+                            <div class="row button">
+                                <div class="form-group col-sm-6 col-xs-12">
+                                    <input type="submit" name="resetpassword"
+                                        id="resetpassword-button" class="btn btn-primary form-control"
+                                        value="Reset my password" data-i18n="Next" data-i18n-attr="value,aria-label">
+                                </div>
+                                <div class="col-sm-6 col-xs-12 text-right" id="io-ox-backtosignin">
+                                    <a href="#" target="_blank" data-i18n="Back to sign in">Back to sign in</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <footer id="io-ox-login-footer">
+                    <span id="io-ox-languages"></span>
+                    <span id="io-ox-copyright"></span>
+                </footer>
+            </div>
+        </div>
+        <!-- offline notifier -->
+        <div id="io-ox-offline" style="bottom: -41px; display: none;"></div>
+        <!-- screenreader notifier -->
+        <div id="io-ox-alert-screenreader" role="alert" aria-live="polite" class="sr-only">
+            <span id="sr-alert-text"></span>
+        </div>
+        <div id="tmp" style="display: none;">
+            <iframe src="javascript:false" name="store-credentials"></iframe>
+        </div>
+        <!-- blur effect overlay for browsers without cssfilter support -->
+        <svg style="height:0;"><filter id="overlay-effect"><feGaussianBlur stdDeviation="2"/></filter></svg>
+        <script src="<%= base %>/boot.js"></script>
+        <noscript>
+            <p class="noscript">This app uses JavaScript. Your browser either doesn't support JavaScript or you have it turned off. To use this app please use a JavaScript enabled browser.</p>
+        <!-- see bug #27608 and #26722 -->
+        </noscript>
+
+        <script src="<%= base %>/precore.js" defer="defer"></script>
+    </body>
 </html>

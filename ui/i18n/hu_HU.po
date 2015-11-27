@@ -1267,13 +1267,19 @@ msgstr "Vissza"
 msgid "Back to appointment"
 msgstr "Vissza a találkozóhoz"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Back to sign in"
 msgid "Back to devices"
 msgstr "Vissza a bejelentkezéshez"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Back to sign in"
+msgid "Back to modules"
+msgstr "Vissza a bejelentkezéshez"
+
+#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "your platform"
 msgid "Back to platforms"
@@ -1392,7 +1398,7 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "Naptár"
 
@@ -1686,7 +1692,7 @@ msgstr "Kattintson az újrapróbálkozáshoz."
 msgid "Click to upload image"
 msgstr "Kattintson a képfeltöltéshez"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
 msgid "Client onboarding"
 msgstr ""
 
@@ -1855,7 +1861,7 @@ msgstr "Névjegy képei"
 msgid "Contact request sent"
 msgstr "Kapcsolatkérés elküldve"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Contact"
 msgid "Contacts"
@@ -2755,7 +2761,7 @@ msgstr "Határidő: %1$s"
 msgid "EB"
 msgstr "EB"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Mail"
 msgid "EMail"
@@ -3352,7 +3358,7 @@ msgid "File: %1$s"
 msgstr "Fájl: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Files"
 msgstr "Fájlok"
 
@@ -4303,7 +4309,7 @@ msgstr "MB"
 msgid "MM"
 msgstr "MM"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "March"
 msgid "Mac"
@@ -6520,11 +6526,11 @@ msgstr "Válasszon fájlt"
 msgid "Select folder"
 msgstr "Válasszon mappát"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
 msgid "Select the platform of your device:"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Select folder"
 msgid "Select your device"
@@ -6900,7 +6906,7 @@ msgstr "Méret (bájt)"
 msgid "Slow requests"
 msgstr "Lassú kérések"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Smartphone settings:"
 msgid "Smartphone"
@@ -7173,7 +7179,7 @@ msgstr "TB"
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Enable"
 msgid "Tablet"
@@ -7185,7 +7191,7 @@ msgid "Tag mail with"
 msgstr "Levél címkézése:"
 
 #. %1$s is the product name, e.g. OX.
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
 msgstr ""
 
@@ -8467,33 +8473,39 @@ msgstr "Üdvözöljük a feladatai között"
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "Üdvözöljük, kérjük adjon visszajelzést a termékkel kapcsolatban."
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "What do you want to use on your Mac?"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "What do you want to use on your Windows PC?"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "What do you want to use on your Windows Phone?"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "What do you want to use on your iPad?"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you really want to discard your changes?"
 msgid "What do you want to use on your iPhone?"
 msgstr "Eldobja ezeket a módosításokat?"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "What do you want to use on your tablet?"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you really want to discard your changes?"
+msgid "What service do you want to use?"
+msgstr "Eldobja ezeket a módosításokat?"
+
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "What to you want to use on your smartphone?"
 msgstr ""
 
@@ -8510,7 +8522,13 @@ msgstr ""
 "legfrissebb változatát. A frissítések ezután az Updater programból "
 "telepíthetők."
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you really want to discard your changes?"
+msgid "Which app do you want to use on your device?"
+msgstr "Eldobja ezeket a módosításokat?"
+
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Which device do you want to configure?"
 msgstr ""
 
@@ -8518,11 +8536,11 @@ msgstr ""
 msgid "Whole day"
 msgstr "Egész nap"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Windows PC"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Windows Phone"
 msgstr ""
 
@@ -9245,11 +9263,11 @@ msgstr "vannak résztvevői"
 msgid "iCal"
 msgstr "iCal"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "iPad"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Phone"
 msgid "iPhone"

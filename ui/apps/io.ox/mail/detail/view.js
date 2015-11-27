@@ -40,7 +40,6 @@ define('io.ox/mail/detail/view', [
         id: 'subject',
         index: INDEX += 100,
         draw: function (baton) {
-
             var subject = util.getSubject(baton.data),
                 node = $('<h1 class="subject">').text(subject);
 
@@ -260,19 +259,25 @@ define('io.ox/mail/detail/view', [
         },
 
         onChangeAttachments: function () {
+            if (this.model.changed.attachments && _.isEqual(this.model.previous('attachments'), this.model.get('attachments'))) return;
+
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
                 node = this.$el.find('section.attachments').empty();
             ext.point('io.ox/mail/detail/attachments').invoke('draw', node, baton);
             // global event for tracking purposes
             ox.trigger('mail:detail:attachments:render', this);
+
+            if (this.model.previous('attachments') &&
+                this.model.get('attachments') &&
+                this.model.previous('attachments')[0].content !== this.model.get('attachments')[0].content) this.onChangeContent();
         },
 
         onChangeContent: function () {
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
                 node = this.$el.find('section.body').empty();
-            ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);
+            _.delay(ext.point('io.ox/mail/detail/body').invoke, 20, 'draw', node, baton);
             // global event for tracking purposes
             ox.trigger('mail:detail:body:render', this);
         },
@@ -389,7 +394,7 @@ define('io.ox/mail/detail/view', [
             this.model = pool.getDetailModel(options.data);
             this.loaded = options.loaded || false;
             this.listenTo(this.model, 'change:flags', this.onChangeFlags);
-            this.listenTo(this.model, 'change:attachments', this.onChangeContent);
+            this.listenTo(this.model, 'change:attachments', this.onChangeAttachments);
             this.listenTo(this.model, 'change:to change:cc change:bcc', this.onChangeRecipients);
 
             this.on({

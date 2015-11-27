@@ -655,7 +655,7 @@ define('io.ox/core/folder/extensions', [
         }
 
         function openSubSettings(e) {
-            var options = { id: 'io.ox/core/sub', folder: e.data.folder.id, data: e.data.folder };
+            var options = { id: 'io.ox/core/sub', data: e.data.folder };
             ox.launch('io.ox/settings/main', options).done(function () {
                 this.setSettingsPane(options);
             });

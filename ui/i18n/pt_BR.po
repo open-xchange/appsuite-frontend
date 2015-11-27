@@ -1269,13 +1269,19 @@ msgstr "Voltar"
 msgid "Back to appointment"
 msgstr "Voltar ao compromisso"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Back to sign in"
 msgid "Back to devices"
 msgstr "Voltar a identificação"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Back to sign in"
+msgid "Back to modules"
+msgstr "Voltar a identificação"
+
+#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "your platform"
 msgid "Back to platforms"
@@ -1394,7 +1400,7 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "Calendário"
 
@@ -1686,7 +1692,7 @@ msgstr "Clique para tentar novamente."
 msgid "Click to upload image"
 msgstr "Clique para enviar imagem"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
 msgid "Client onboarding"
 msgstr ""
 
@@ -1855,7 +1861,7 @@ msgstr "Fotos do contato"
 msgid "Contact request sent"
 msgstr "Requisição de contato enviado"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Contacts"
 msgstr "Contatos"
 
@@ -2748,7 +2754,7 @@ msgstr "Vencimento em %1$s"
 msgid "EB"
 msgstr "EB"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "E-Mail"
 msgid "EMail"
@@ -3351,7 +3357,7 @@ msgid "File: %1$s"
 msgstr "Arquivo: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Files"
 msgstr "Arquivos"
 
@@ -4303,7 +4309,7 @@ msgstr "MB"
 msgid "MM"
 msgstr "MM"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "March"
 msgid "Mac"
@@ -6528,11 +6534,11 @@ msgstr "Selecionar arquivo"
 msgid "Select folder"
 msgstr "Selecionar pasta"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
 msgid "Select the platform of your device:"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Selecting a view"
 msgid "Select your device"
@@ -6908,7 +6914,7 @@ msgstr "Tamanho (bytes)"
 msgid "Slow requests"
 msgstr "Requisições lentas"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Smartphone settings:"
 msgid "Smartphone"
@@ -7182,7 +7188,7 @@ msgstr "TB"
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Enable"
 msgid "Tablet"
@@ -7194,7 +7200,7 @@ msgid "Tag mail with"
 msgstr "Marcar e-mail com"
 
 #. %1$s is the product name, e.g. OX.
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
 msgstr ""
 
@@ -8494,43 +8500,49 @@ msgstr "Bem-vindo às suas tarefas"
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "Bem-vindo. Forneça seu comentário sobre este produto"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you want to save your configuration?"
 msgid "What do you want to use on your Mac?"
 msgstr "Deseja salvar sua configuração?"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you want to save your configuration?"
 msgid "What do you want to use on your Windows PC?"
 msgstr "Deseja salvar sua configuração?"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you want to save your configuration?"
 msgid "What do you want to use on your Windows Phone?"
 msgstr "Deseja salvar sua configuração?"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you want to save your configuration?"
 msgid "What do you want to use on your iPad?"
 msgstr "Deseja salvar sua configuração?"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you want to save your configuration?"
 msgid "What do you want to use on your iPhone?"
 msgstr "Deseja salvar sua configuração?"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you want to save your configuration?"
 msgid "What do you want to use on your tablet?"
 msgstr "Deseja salvar sua configuração?"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your configuration?"
+msgid "What service do you want to use?"
+msgstr "Deseja salvar sua configuração?"
+
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you want to save your configuration?"
 msgid "What to you want to use on your smartphone?"
@@ -8549,7 +8561,13 @@ msgstr ""
 "doSoftware cliente do Windows®. O Updater informa automaticamente sobre "
 "novasatualizações. Você pode baixar as atualizações a partir do Updater."
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your configuration?"
+msgid "Which app do you want to use on your device?"
+msgstr "Deseja salvar sua configuração?"
+
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Which device do you want to configure?"
 msgstr ""
 
@@ -8557,11 +8575,11 @@ msgstr ""
 msgid "Whole day"
 msgstr "Dia inteiro"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Windows PC"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Windows are shown as"
 msgid "Windows Phone"
@@ -9298,11 +9316,11 @@ msgstr "tem participantes"
 msgid "iCal"
 msgstr "iCal"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "iPad"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Phone"
 msgid "iPhone"
