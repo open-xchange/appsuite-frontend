@@ -259,6 +259,8 @@ define('io.ox/mail/detail/view', [
         },
 
         onChangeAttachments: function () {
+            if (this.model.changed.attachments && _.isEqual(this.model.previous('attachments'), this.model.get('attachments'))) return;
+
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
                 node = this.$el.find('section.attachments').empty();
