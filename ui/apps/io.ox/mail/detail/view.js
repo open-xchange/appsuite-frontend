@@ -259,8 +259,6 @@ define('io.ox/mail/detail/view', [
         },
 
         onChangeAttachments: function () {
-            if (this.model.changed.attachments && _.isEqual(this.model.previous('attachments'), this.model.get('attachments'))) return;
-
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
                 node = this.$el.find('section.attachments').empty();
@@ -390,8 +388,7 @@ define('io.ox/mail/detail/view', [
             this.model = pool.getDetailModel(options.data);
             this.loaded = options.loaded || false;
             this.listenTo(this.model, 'change:flags', this.onChangeFlags);
-            this.listenTo(this.model, 'change:attachments', this.onChangeAttachments);
-            this.listenTo(this.model, 'change:content', this.onChangeContent);
+            this.listenTo(this.model, 'change:attachments', this.onChangeContent);
             this.listenTo(this.model, 'change:to change:cc change:bcc', this.onChangeRecipients);
 
             this.on({
