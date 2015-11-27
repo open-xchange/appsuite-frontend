@@ -268,6 +268,10 @@ define('io.ox/mail/detail/view', [
             ext.point('io.ox/mail/detail/attachments').invoke('draw', node, baton);
             // global event for tracking purposes
             ox.trigger('mail:detail:attachments:render', this);
+
+            if (this.model.previous('attachments') &&
+                this.model.get('attachments') &&
+                this.model.previous('attachments')[0].content !== this.model.get('attachments')[0].content) this.onChangeContent();
         },
 
         onChangeContent: function () {
@@ -391,7 +395,7 @@ define('io.ox/mail/detail/view', [
             this.model = pool.getDetailModel(options.data);
             this.loaded = options.loaded || false;
             this.listenTo(this.model, 'change:flags', this.onChangeFlags);
-            this.listenTo(this.model, 'change:attachments', this.onChangeContent);
+            this.listenTo(this.model, 'change:attachments', this.onChangeAttachments);
             this.listenTo(this.model, 'change:to change:cc change:bcc', this.onChangeRecipients);
 
             this.on({
