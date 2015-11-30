@@ -83,6 +83,30 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
         });
 
         ext.point(ref + '/edit/view').extend({
+            index: 275,
+            id: ref + '/edit/view/sender',
+            draw: function (baton) {
+                this.append(
+                    $('<fieldset>').append(
+                        $('<legend>').addClass('sectiontitle').append(
+                            $('<h2>').text(model.fields.headlineSender)
+                        ),
+                        $('<div class="row form-group">').append(
+                            $('<label for="from" class="control-label sr-only">').text(model.fields.headlineSender),
+                            $('<div class="controls col-sm-6">').append(
+                                new mini.SelectView({
+                                    id: 'from',
+                                    list: multiValues.from,
+                                    model: baton.model
+                                }).render().$el
+                            )
+                        )
+                    )
+                );
+            }
+        });
+
+        ext.point(ref + '/edit/view').extend({
             index: 300,
             id: ref + '/edit/view/addresses',
             draw: function (baton) {

@@ -26,13 +26,14 @@ define('io.ox/mail/vacationnotice/settings/model', [
                 days: attributes.days,
                 id: attributes.internal_id,
                 subject: attributes.subject,
-                text: attributes.text,
-                from: attributes.from
+                text: attributes.text
             },
 
             preparedData = {
                 'actioncmds': [newAttributes]
             };
+
+        if (attributes.from) newAttributes.from = attributes.from;
 
         if (attributes.id !== undefined) {
             preparedData.id = attributes.id;
@@ -174,6 +175,7 @@ define('io.ox/mail/vacationnotice/settings/model', [
         text: gt('Text'),
         days: gt('Number of days between vacation notices to the same sender'),
         headlineAdresses: gt('Enable for the following addresses'),
+        headlineSender: gt('Default sender for vacation notice'),
         addresses: gt('Email addresses'),
         dateFrom: gt('Start'),
         dateUntil: gt('End'),
