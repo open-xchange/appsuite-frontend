@@ -2188,6 +2188,12 @@ msgstr "Default reminder"
 msgid "Default sender address"
 msgstr "Default sender address"
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Couldn't load your vacation notice."
+msgid "Default sender for vacation notice"
+msgstr "Couldn't load your vacation notice."
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "Default signature for new messages"

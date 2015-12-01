@@ -2220,6 +2220,12 @@ msgstr "Predvolený čas pripomenutia"
 msgid "Default sender address"
 msgstr "Predvolená adresa odosielateľa"
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Couldn't load your vacation notice."
+msgid "Default sender for vacation notice"
+msgstr "Nepodarilo sa načítať vaše oznámenie o dovolenke."
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "Predvolený podpis v nových správach"

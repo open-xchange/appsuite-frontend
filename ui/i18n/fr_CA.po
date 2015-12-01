@@ -2203,6 +2203,12 @@ msgstr "Rappel par défaut"
 msgid "Default sender address"
 msgstr "Adresse d'expéditeur par défaut"
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Couldn't load your vacation notice."
+msgid "Default sender for vacation notice"
+msgstr "Impossible de charger votre message d'absence."
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "Signature par défaut pour les nouveaux messages"

@@ -2185,6 +2185,12 @@ msgstr "Oletusmuistutus"
 msgid "Default sender address"
 msgstr "Oletuslähettäjä"
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Couldn't load your vacation notice."
+msgid "Default sender for vacation notice"
+msgstr "Lomailmoitustasi ei voitu ladata."
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "Oletusallekirjoitus uusille viesteille"

@@ -8821,6 +8821,11 @@ msgstr ""
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js
 #: module:io.ox/mail
+msgid "Default sender for vacation notice"
+msgstr ""
+
+#: apps/io.ox/mail/vacationnotice/settings/model.js
+#: module:io.ox/mail
 msgid "Email addresses"
 msgstr ""
 

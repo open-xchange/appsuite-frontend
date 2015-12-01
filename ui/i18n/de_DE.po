@@ -2191,6 +2191,12 @@ msgstr "Standard-Erinnerung"
 msgid "Default sender address"
 msgstr "Standard-Absender-Adresse"
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Couldn't load your vacation notice."
+msgid "Default sender for vacation notice"
+msgstr "Ihre Abwesenheitsnotiz konnte nicht geladen werden."
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "Standardsignatur für neue Nachrichten"

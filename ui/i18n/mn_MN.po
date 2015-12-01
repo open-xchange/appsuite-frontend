@@ -2169,6 +2169,10 @@ msgstr ""
 msgid "Default sender address"
 msgstr ""
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+msgid "Default sender for vacation notice"
+msgstr ""
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr ""

@@ -2171,6 +2171,12 @@ msgstr "默认提醒"
 msgid "Default sender address"
 msgstr "默认发件人地址"
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Couldn't load your vacation notice."
+msgid "Default sender for vacation notice"
+msgstr "不能加载您的假期通知。"
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "新信息没有默认签名"

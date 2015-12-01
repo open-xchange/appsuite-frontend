@@ -2365,6 +2365,12 @@ msgstr "Recordatori predeterminat"
 msgid "Default sender address"
 msgstr "Adreça de remitent predeterminada"
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Couldn't load your vacation notice."
+msgid "Default sender for vacation notice"
+msgstr "No s'ha pogut carregar el vostre avís d'absència."
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 #, fuzzy
 #| msgid "You have no new messages"

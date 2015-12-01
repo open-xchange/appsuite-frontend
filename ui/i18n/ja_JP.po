@@ -2162,6 +2162,12 @@ msgstr "既定のアラーム"
 msgid "Default sender address"
 msgstr "差出人の既定のメール アドレス"
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Couldn't load your vacation notice."
+msgid "Default sender for vacation notice"
+msgstr "休暇通知を読み込めませんでした。"
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "新規メッセージ用の既定署名"

@@ -2216,6 +2216,12 @@ msgstr "Výchozí upomínka"
 msgid "Default sender address"
 msgstr "Výchozí adresa odesílatele"
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Couldn't load your vacation notice."
+msgid "Default sender for vacation notice"
+msgstr "Nepodařilo se načíst vaše oznámení o nepřítomnosti."
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "Výchozí podpisy pro nové zprávy"

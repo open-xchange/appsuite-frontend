@@ -2199,6 +2199,12 @@ msgstr "Recordatorio predeterminado"
 msgid "Default sender address"
 msgstr "Dirección de remite predeterminada"
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Couldn't load your vacation notice."
+msgid "Default sender for vacation notice"
+msgstr "No se pudo cargar su aviso de ausencia."
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "Firma predeterminada para mensajes nuevos"
