@@ -66,6 +66,8 @@
 
 @presenter-overlay-bgcolor: rgba(0, 0, 0, 0.8);
 
+@presenter-slide-preview-image-max-width: 600px;
+
 .flex-center() {
     display: -ms-flexbox;
     display: -webkit-flex;
@@ -440,6 +442,7 @@
 
         &.presenting {
             width: 35%;
+            max-width: @presenter-slide-preview-image-max-width;
             .flex-center();
             border:0;
             background-color: @presenter-sidebar-presenting-bgcolor;

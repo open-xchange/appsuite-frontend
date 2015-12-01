@@ -316,7 +316,7 @@ define('io.ox/files/actions', [
                 return false;
             }
             var model = e.baton.models[0];
-            return (model.isPresentation() && model.isFile());
+            return ((model.isPresentation() || model.isPDF()) && model.isFile());
         },
         action: function (baton) {
             var fileModel = baton.models[0];

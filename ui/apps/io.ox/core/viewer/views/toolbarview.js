@@ -400,7 +400,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         capabilities: 'presenter document_preview',
         requires: function (e) {
             var model = e.baton.model;
-            return (model.isPresentation() && model.isFile());
+            return ((model.isPresentation() || model.isPDF()) && model.isFile());
         },
         action: function (baton) {
             var fileModel = baton.model;
