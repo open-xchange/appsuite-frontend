@@ -325,11 +325,17 @@ define('io.ox/core/tk/autocomplete',
             },
 
             fnSelectItem = function (e) {
+                if (e.type === 'mousedown') {
+                    disableBlurHandler = true;
+                    return;
+                }
+
                 e.data = $(this).data();
                 if (o.mode === 'participant')
                     select(e.data.index);
                 o.click.call(self.get(0), e);
                 close();
+                disableBlurHandler = false;
             },
 
             fnIgnore = function () {
