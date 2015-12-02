@@ -198,7 +198,17 @@ define('io.ox/mail/detail/view', [
     ext.point('io.ox/mail/detail/attachments').extend({
         id: 'attachment-list',
         index: 100,
-        draw: extensions.attachmentList
+        draw: function (baton) {
+            if (baton.attachments.length === 0) return;
+            // reuse existing view, to not duplicate event listeners
+            if (baton.view.attachmentView) {
+                baton.view.attachmentView.$header.empty();
+                this.append(baton.view.attachmentView.render());
+                baton.view.attachmentView.renderInlineLinks();
+            } else {
+                baton.view.attachmentView = extensions.attachmentList.call(this, baton);
+            }
+        }
     });
 
     ext.point('io.ox/mail/detail/body').extend({
@@ -263,7 +273,7 @@ define('io.ox/mail/detail/view', [
             if (this.model.changed.attachments && _.isEqual(this.model.previous('attachments'), this.model.get('attachments'))) return;
 
             var data = this.model.toJSON(),
-                baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
+                baton = ext.Baton({ view: this, data: data, attachments: util.getAttachments(data) }),
                 node = this.$el.find('section.attachments').empty();
             ext.point('io.ox/mail/detail/attachments').invoke('draw', node, baton);
             // global event for tracking purposes
