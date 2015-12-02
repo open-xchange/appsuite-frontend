@@ -43,6 +43,13 @@ define('io.ox/mail/actions/attachmentQuota', [
 
             if (fileSize) {
                 total += fileSize;
+
+                if (quota > 0 && total > quota) {
+                    result.error = gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(quota));
+                    result.reason = 'filesize';
+                    return true;
+                }
+
                 if (maxFileSize > 0 && fileSize > maxFileSize) {
                     result.error = gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxFileSize));
                     result.reason = 'filesize';

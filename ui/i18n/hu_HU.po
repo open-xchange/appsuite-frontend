@@ -2196,6 +2196,12 @@ msgstr "Alapértelmezett figyelmeztetés"
 msgid "Default sender address"
 msgstr "Alapértelmezett küldő e-mail címe"
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Couldn't load your vacation notice."
+msgid "Default sender for vacation notice"
+msgstr "A szabadságértesítő nem tölthető be."
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "Alapértelmezett aláírás új üzenetekhez"

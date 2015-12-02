@@ -514,6 +514,9 @@ define('io.ox/core/folder/api', [
         })
         .then(function (data) {
             return renameDefaultCalendarFolders(data);
+        }, function (error) {
+            api.trigger('error error:' +  error.code, error );
+            return error;
         })
         .then(function (data) {
             // update/add model
@@ -601,7 +604,10 @@ define('io.ox/core/folder/api', [
             },
             appendColumns: true
         })
-        .then(renameDefaultCalendarFolders)
+        .then(renameDefaultCalendarFolders, function (error) {
+            api.trigger('error error:' +  error.code, error );
+            return error;
+        })
         .then(function (array) {
             array = processListResponse(id, array);
             pool.addCollection(collectionId, array);
@@ -1235,9 +1241,9 @@ define('io.ox/core/folder/api', [
 
     function getExistingFolder(type) {
         var defaultId = util.getDefaultFolder(type);
-        if (defaultId) return defaultId;
-        if (type === 'mail') return 'default0' + mailSettings.get('defaultseparator') + 'INBOX';
-        if (type === 'infostore') return 10;
+        if (defaultId) return $.Deferred().resolve(defaultId);
+        if (type === 'mail') return $.Deferred().resolve('default0' + mailSettings.get('defaultseparator') + 'INBOX');
+        if (type === 'infostore') return $.Deferred().resolve(10);
         return flat({ module: type }).then(function (data) {
             for (var section in data) {
                 if (section === 'hidden') continue;

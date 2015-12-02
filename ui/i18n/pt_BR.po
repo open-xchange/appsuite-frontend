@@ -2194,6 +2194,12 @@ msgstr "Lembrete padrão"
 msgid "Default sender address"
 msgstr "Endereço do remetente padrão"
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Couldn't load your vacation notice."
+msgid "Default sender for vacation notice"
+msgstr "Não foi possível carregar seu aviso de férias."
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "Assinatura padrão para novas mensagens"

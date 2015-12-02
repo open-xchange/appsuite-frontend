@@ -195,105 +195,79 @@ define('io.ox/presenter/views/mainview', [
 
             var self = this,
                 rtModel = this.app.rtModel,
-                userId = this.app.rtConnection.getRTUuid();
-
-            // TODO: check if we need to handle TAB traversal ourselves.
-            // manual TAB traversal handler. 'Traps' TAB traversal inside the viewer root component.
-            function tabHandler(event) {
-                var tabableActions = this.$el.find('[tabindex]:not([tabindex^="-"]):visible'),
-                    tabableActionsCount = tabableActions.length;
-                // quit immediately if no tabable actions are found
-                if (tabableActionsCount === 0) { return; }
-                var focusedElementIndex = tabableActions.index(document.activeElement),
-                    traversalStep = event.shiftKey ? -1 : 1,
-                    nextElementIndex = focusedElementIndex + traversalStep;
-                // prevent default TAB traversal
-                event.preventDefault();
-                // traverse to prev/next action
-                if (nextElementIndex >= tabableActionsCount) {
-                    nextElementIndex = 0;
-                }
-                // focus next action candidate
-                tabableActions.eq(nextElementIndex).focus();
-            }
+                rtConnection = this.app.rtConnection,
+                userId = rtConnection.getRTUuid();
 
             function togglePause() {
-                var app = self.app,
-                    userId = app.rtConnection.getRTUuid();
-                if (app.rtModel.canPause(userId)) {
-                    app.rtConnection.pausePresentation();
-                    app.mainView.toggleFullscreen(false);
-                } else if (app.rtModel.canContinue(userId)) {
-                    app.rtConnection.continuePresentation();
+                if (rtModel.canPause(userId)) {
+                    rtConnection.pausePresentation();
+                    self.toggleFullscreen(false);
+                } else if (rtModel.canContinue(userId)) {
+                    rtConnection.continuePresentation();
                 }
             }
 
-            console.info('event type: ', event.type, 'keyCode: ', event.keyCode, 'charCode: ', event.charCode);
+            function endOrLeavePresentation () {
+                if (rtModel.isPresenter(userId)) {
+                    rtConnection.endPresentation();
+                } else if (rtModel.canLeave(userId)) {
+                    rtConnection.leavePresentation();
+                }
+            }
+
+            function startOrJoinPresentation () {
+                if (rtModel.canStart(userId)) {
+                    var slideId = self.getActiveSlideIndex();
+                    rtConnection.startPresentation({ activeSlide: slideId });
+                } else if (rtModel.canJoin(userId)) {
+                    self.joinPresentation();
+                }
+            }
 
             switch (event.which || event.keyCode) {
-                case 9: // TAB key
-                    // TODO: check if we need to handle TAB traversal ourselves.
-                    if (false /*activate for manual tab traversal*/) {
-                        tabHandler(event);
-                    }
-                    break;
+
                 case 37: // left arrow : show previous slide
-                    this.presentationView.showPreviousSlide();
-                    break;
-                case 39: // right arrow : show next slide
-                    this.presentationView.showNextSlide();
-                    break;
                 case 38: // up arrow : show previous slide
-                    this.presentationView.showPreviousSlide();
-                    break;
-                case 40: // down arrow : show next slide
-                    this.presentationView.showNextSlide();
-                    break;
                 case 33: // page up : show previous slide
-                    this.presentationView.showPreviousSlide();
+                    this.showPreviousSlide();
                     break;
+
+                case 39: // right arrow : show next slide
+                case 40: // down arrow : show next slide
                 case 34: // page down : show next slide
-                    this.presentationView.showNextSlide();
+                    this.showNextSlide();
                     break;
-                case 8: // ctrl + backspace : ends or leaves the presentation. backspace: show previous slide
+
+                case 8: // ctrl + backspace : ends or leaves the presentation. backspace : show previous slide
                     if (event.ctrlKey) {
-                        if (rtModel.canLeave(userId)) {
-                            this.app.rtConnection.leavePresentation();
-                        }
-                        if (rtModel.isPresenter(userId)) {
-                            this.app.rtConnection.endPresentation();
-                        }
+                        endOrLeavePresentation();
                     } else {
                         event.preventDefault();
-                        this.presentationView.showPreviousSlide();
+                        this.showPreviousSlide();
                     }
                     break;
+
                 case 13: // ctrl + enter :  starts or joins a presentation.
                     if (event.ctrlKey) {
-                        if (rtModel.canStart(userId)) {
-                            var slideId = this.app.mainView.getActiveSlideIndex();
-                            this.app.rtConnection.startPresentation({ activeSlide: slideId });
-                        }
-                        if (rtModel.canJoin(userId)) {
-                            this.joinPresentation();
-                        }
+                        startOrJoinPresentation();
                     } else { // enter: show next slide
-                        this.presentationView.showNextSlide();
+                        this.showNextSlide();
                     }
                     break;
+
                 case 36: // home : show first slide
-                    this.presentationView.showSlide(0);
+                    this.showFirstSlide();
                     break;
+
                 case 35: // end : show last slide
-                    var slideCount = this.getSlideCount();
-                    this.presentationView.showSlide(slideCount - 1);
+                    this.showLastSlide();
                     break;
+
                 case 190: // period : pause / continue presentation
-                    togglePause();
-                    break;
                 case 188: // comma : pause / continue presentation
                     togglePause();
                     break;
+
                 case 70: // ctrl + shift + f : go into fullscreen for presenters
                     if (event.ctrlKey && event.shiftKey && rtModel.isPresenter(userId)) {
                         this.toggleFullscreen();
@@ -591,6 +565,27 @@ define('io.ox/presenter/views/mainview', [
          */
         showPreviousSlide: function () {
             this.presentationView.showPreviousSlide();
+            this.presentationView.focusActiveSlide();
+        },
+
+        /**
+         * Show the first slide, but only if the user is presenter or has not joined the presentation.
+         */
+        showFirstSlide: function () {
+            this.showSlide(0);
+            this.presentationView.focusActiveSlide();
+        },
+
+        /**
+         * Show the last slide, but only if the user is presenter or has not joined the presentation.
+         */
+        showLastSlide: function () {
+            var slideCount = this.getSlideCount();
+
+            if (slideCount > 0) {
+                this.showSlide(slideCount - 1);
+            }
+
             this.presentationView.focusActiveSlide();
         },
 

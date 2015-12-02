@@ -61,6 +61,9 @@ define('io.ox/calendar/api', [
                 })
                 .done(function (data) {
                     api.caches.get[key] = data;
+                }).fail(function (error) {
+                    api.trigger('error error:' +  error.code, error );
+                    return error;
                 });
             } else {
                 return $.Deferred().resolve(api.caches.get[key]);
@@ -101,6 +104,9 @@ define('io.ox/calendar/api', [
                 })
                 .done(function (data) {
                     api.caches.all[key] = JSON.stringify(data);
+                }).fail(function (error) {
+                    api.trigger('error error:' +  error.code, error );
+                    return error;
                 });
             } else {
                 return $.Deferred().resolve(JSON.parse(api.caches.all[key]));

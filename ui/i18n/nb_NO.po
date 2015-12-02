@@ -2182,6 +2182,12 @@ msgstr "Standard påminnelse"
 msgid "Default sender address"
 msgstr "Standard avsenderadresse"
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Couldn't load your vacation notice."
+msgid "Default sender for vacation notice"
+msgstr "Kunne ikke laste inn ditt ferievarsel."
+
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "Standardsignatur for nye meldinger"

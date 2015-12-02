@@ -1589,6 +1589,10 @@ define('io.ox/mail/api', [
                 };
             }
         },
+        fail: function (error) {
+            api.trigger('error error:' +  error.code, error );
+            return error;
+        },
 
         PRIMARY_PAGE_SIZE: settings.get('listview/primaryPageSize', 50),
         SECONDARY_PAGE_SIZE: settings.get('listview/secondaryPageSize', 200)

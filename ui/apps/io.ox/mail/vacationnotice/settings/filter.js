@@ -17,8 +17,9 @@ define('io.ox/mail/vacationnotice/settings/filter', [
     'io.ox/mail/vacationnotice/settings/model',
     'io.ox/mail/vacationnotice/settings/view-form',
     'io.ox/core/tk/dialogs',
+    'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (ext, api, mailfilterModel, ViewForm, dialogs, gt) {
+], function (ext, api, mailfilterModel, ViewForm, dialogs, settings, gt) {
 
     'use strict';
 
@@ -39,18 +40,26 @@ define('io.ox/mail/vacationnotice/settings/filter', [
                         days: '7',
                         internal_id: 'vacation',
                         subject: '',
-                        text: '',
-                        from: multiValues.from
+                        text: ''
                     },
                     vacationData,
                     VacationEdit,
-                    vacationNotice;
+                    vacationNotice,
+                    setSender = settings.get('features/setFromInVacationNotice', false);
+
+                if (setSender) {
+                    defaultNotice.from = _.first(multiValues.from).value;
+                } else {
+                    ext.point('io.ox/core/vacationnotice/edit/view').disable('io.ox/core/vacationnotice/edit/view/sender');
+                }
 
                 if (data[0] && data[0].actioncmds[0]) {
                     vacationData = data[0].actioncmds[0];
                     vacationData.internal_id = vacationData.id;
                     vacationData.id = data[0].id;
-                    vacationData.from = multiValues.from;
+
+                    if (setSender && !vacationData.from) vacationData.from = _.first(multiValues.from).value;
+                    if (!setSender && vacationData.from) delete vacationData.from;
 
                     if (_(data[0].test).size() === 2) {
                         _(data[0].test.tests).each(function (value) {

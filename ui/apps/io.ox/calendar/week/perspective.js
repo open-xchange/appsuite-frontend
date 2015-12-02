@@ -240,13 +240,7 @@ define('io.ox/calendar/week/perspective', [
                 self.view.reset(obj.start, list);
             }).fail(function (error) {
                 // no permission to read appointments in this folder
-                if (error && error.code === 'APP-0013') {
-                    notifications.yell(error);
-                    // try to load the default folder, guests do not have a default folder
-                    if (folderAPI.getDefaultFolder('calendar')) {
-                        self.app.folder.set(folderAPI.getDefaultFolder('calendar'));
-                    }
-                } else {
+                if (error && error.code !== 'APP-0013') {
                     notifications.yell('error', gt('An error occurred. Please try again.'));
                 }
             });

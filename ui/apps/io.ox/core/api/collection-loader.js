@@ -93,6 +93,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                 .fail(function (e) {
                     self.done();
                     cb_fail(e);
+                    self.fail(e);
                 });
         }
 
@@ -240,6 +241,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
         done: function () {
             this.loading = false;
+        },
+        fail: function (/* error */) {
         }
     });
 
