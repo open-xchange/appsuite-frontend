@@ -210,7 +210,15 @@ define('io.ox/core/pdf/pdfdocument', [
                 loadDef.resolve({ cause: 'importError' });
             }
         }, function () {
-            $.get(pdfConverterURL).always(function (data) {
+            // In case of an error, extend the given URL with the
+            // enctest=pdf flag, so that we get a correct error code
+            // even in case of PDF source files, which are not treated
+            // by the documentconverter otherwise;
+            // The documentconverter will perform an encryption test on
+            // a given PDF file and set the password error response accordingly
+            var encTestPDFConverterURL = pdfConverterURL + '&enctest=pdf';
+
+            $.get(encTestPDFConverterURL).always(function (data) {
                 loadDef.resolve(
                   (_.isObject(data) && _.isString(data.responseText)) ?
                       $.parseJSON(data.responseText) :
