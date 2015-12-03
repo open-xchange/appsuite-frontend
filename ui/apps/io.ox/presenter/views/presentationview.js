@@ -729,7 +729,6 @@ define('io.ox/presenter/views/presentationview', [
                 // the page load options
                 options = {
                     format: 'pdf',
-                    textOverlay: false,
                     priority: priority,
                     pageZoom: this.currentZoomFactor / 100
                 };
@@ -870,7 +869,7 @@ define('io.ox/presenter/views/presentationview', [
 
             this.numberOfSlides = pageCount;
             // create the PDF view after successful loading;
-            this.pdfView = new PDFView(this.pdfDocument, { textOverlay: true });
+            this.pdfView = new PDFView(this.pdfDocument, { textOverlay: false });
             // the PDF page rendering queue
             this.pageLoader = new PageLoader(this.pdfDocument, this.pdfView);
             // set scale/zoom according to device's viewport

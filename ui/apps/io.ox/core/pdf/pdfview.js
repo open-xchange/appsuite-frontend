@@ -13,8 +13,9 @@
 
 define('io.ox/core/pdf/pdfview', [
     'io.ox/core/pdf/pdftextlayerbuilder',
+    'io.ox/core/pdf/pdfannotationslayerbuilder',
     'less!io.ox/core/pdf/pdfstyle'
-], function (PDFTextLayerBuilder) {
+], function (PDFTextLayerBuilder, PDFAnnotationsLayerBuilder) {
 
     'use strict';
 
@@ -414,25 +415,34 @@ define('io.ox/core/pdf/pdfview', [
          * @param {jquery.Node} parentNode
          *  The parent node to be rendered within.
          *
-         * @param {Number} pageNumber
+         * @param {Object} options
+         *  Additional rendering options, defaulted by the global options.
          *
-         * @param {Number} pageZoom
+         *  @param {Number} [pageNumber]
+         *      The 1-based page number.
          *
-         * @returns {jquery Promise}
-         *  The promise of the rendering function, that is resolved, when rendering is finshed.
+         *  @param {Number} [pageZoom]
+         *      The page zoom level.
+         *
+         *  @param {Boolean} [textOverlay]
+         *      If true overlay divs over the PDF text are created
+         *      to provide text-selection functionality for the PDF.
+         *
+         * @returns {Object}
+         *  The page size object the page was rendered with.
          */
         this.createPDFPageNode = function (parentNode, options) {
-            var // the jquery parent node
-                jqParentNode = $(parentNode),
-                options = options || {},
-                pageSize = options.pageSize;
+            var opt = _.extend({}, globalOptions, options);
+            var pageSize = opt.pageSize;
+            var pageNumer = opt.pageNumer;
+            var pageZoom = opt.pageZoom;
 
             if (!(_.isObject(pageSize) && _.isNumber(pageSize.width) && _.isNumber(pageSize.height))) {
-                pageSize = _.isNumber(options.pageNumer) ? pdfDocument.getOriginalPageSize(options.pageNumer) : pdfDocument.getDefaultPageSize();
+                pageSize = _.isNumber(pageNumer) ? pdfDocument.getOriginalPageSize(pageNumer) : pdfDocument.getDefaultPageSize();
             }
 
-            if (_.isNumber(options.pageZoom)) {
-                pageSize = PDFView.getNormalizedSize({ width: pageSize.width * options.pageZoom, height: pageSize.height * options.pageZoom });
+            if (_.isNumber(pageZoom)) {
+                pageSize = PDFView.getNormalizedSize({ width: pageSize.width * pageZoom, height: pageSize.height * pageZoom });
             }
 
             // set retrieved PDF page size as page node data and append correctly initialized canvas to given page node
@@ -443,12 +453,12 @@ define('io.ox/core/pdf/pdfview', [
 
                 pageNode.append(canvasWrapper.append($('<canvas ' + extentAttr + '>')));
 
-                if (options.textOverlay) {
+                if (opt.textOverlay) {
                     var textWrapper = $('<div class="text-wrapper user-select-text" ' + extentAttr + '>');
                     pageNode.append(textWrapper);
                 }
 
-                jqParentNode.append(pageNode);
+                $(parentNode).append(pageNode);
             }
 
             return pageSize;
@@ -585,6 +595,7 @@ define('io.ox/core/pdf/pdfview', [
                                 canvasNode = canvasWrapperNode.children('canvas'),
                                 textWrapperNode = pageNode.children('.text-wrapper'),
                                 pdfTextBuilder = null,
+                                pdfAnnotationsBuilder = null,
                                 getScale = function (orgSize) {
                                     if (orgSize * DEVICE_OUTPUTSCALING > MAXIMUM_SIDE_SIZE) {
                                         return MAXIMUM_SIDE_SIZE / (orgSize * DEVICE_OUTPUTSCALING);
@@ -613,6 +624,16 @@ define('io.ox/core/pdf/pdfview', [
                                     viewport: viewport,
                                     pageIndex: pageNumber
                                 });
+                            }
+
+                            if (globalOptions.annotationsOverlay) {
+                                pdfAnnotationsBuilder = new PDFAnnotationsLayerBuilder({
+                                    pageDiv: pageNode[0],
+                                    pdfPage: pdfjsPage,
+                                    linkService: globalOptions.linkService
+                                });
+
+                                pdfAnnotationsBuilder.setupAnnotations(viewport);
                             }
 
                             var canvasCtx = canvasNode[0].getContext('2d');
