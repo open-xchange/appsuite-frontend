@@ -7,3 +7,4 @@ ui/node_modules
 *.kate-swp
 ui/lib/bootstrap/node_modules
 npm-debug.log
+nbproject
