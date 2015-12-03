@@ -271,6 +271,10 @@ define('io.ox/mail/actions', [
                 if (!account.isPrimary(obj.folder_id)) return false;
                 // is spam folder?
                 if (account.is('spam', obj.folder_id)) return false;
+                // is sent folder?
+                if (account.is('sent', obj.folder_id)) return false;
+                // is drafts folder?
+                if (account.is('drafts', obj.folder_id)) return false;
                 // is marked as spam already?
                 if (util.isSpam(obj)) return false;
                 // else

@@ -195,6 +195,8 @@ define('io.ox/mail/mobile-toolbar-actions', [
         // extract single object if length === 1
         list = list.length === 1 ? list[0] : list;
 
+        // don't set an empty baton
+        if (selection.length === 0 && list.length === 0) return;
         // draw toolbar
         var baton = ext.Baton({ data: list, isThread: isThread, selection: selection, app: this });
 

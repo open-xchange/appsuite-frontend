@@ -121,7 +121,8 @@ define('io.ox/tasks/model', [
         validate: function (attributes) {
             //start_time = end_time is valid
             if (attributes.start_time && attributes.end_time && attributes.end_time < attributes.start_time) {
-                this.add('end_time', gt('The start date must be before the due date.'));
+                this.add('start_time', gt('The start date must be before the due date.'));
+                this.add('end_time', gt('The due date must not be before the start date.'));
             }
         }
     });

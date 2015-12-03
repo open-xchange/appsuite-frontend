@@ -7,4 +7,4 @@ RewriteEngine On
 
 # Check if requested file is available as custom file, otherwise fall back to default
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^.*?(favicon|win|icon|splashscreen_|fallback-picture-[^.])(\d*.)(png|jpg|ico)$ icons/default/$1$2$3 [L]
+RewriteRule ^.*?(favicon|win|icon|splashscreen_|fallback-image-[^.])(\d*.)(png|jpg|ico)$ icons/default/$1$2$3 [L]
