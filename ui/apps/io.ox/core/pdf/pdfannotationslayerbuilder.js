@@ -145,6 +145,23 @@ define('io.ox/core/pdf/pdfannotationslayerbuilder', [
                             }
 
                             self.div.appendChild(element);
+
+                            // left align text annotations that are positioned on the right side of the page
+                            if (data.annotationType === 2) {
+                                var $element = $(element);
+                                var pageWidth = $(self.pageDiv).width();
+                                var elementWidth = $element.width();
+                                var elementPosition = $element.position();
+                                var textWidth = $element.find('.annotTextContent').outerWidth();
+
+                                if ((textWidth > 0) && (elementPosition.left > (pageWidth / 2))) {
+                                    var textWrapper = $element.find('.annotTextContentWrapper');
+                                    textWrapper.css({
+                                        left: Math.floor(rect[2] - rect[0] - textWidth - elementWidth - 5),
+                                        maxWidth: textWidth
+                                    });
+                                }
+                            }
                         }
                     }
                 });
