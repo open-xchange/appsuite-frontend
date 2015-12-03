@@ -1215,9 +1215,6 @@ msgid ""
 msgstr "Lagre alle adresser du sender epost til i \"Innsamlede adresser\""
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#| msgid ""
-#| "Automatically delete incoming notifications after the appointment has "
-#| "been accepted or declined"
 msgid ""
 "Automatically delete the invitation email after the appointment has been "
 "accepted or declined"
@@ -1311,7 +1308,6 @@ msgid "Blind copy"
 msgstr "Blindkopi"
 
 #: apps/io.ox/mail/print.js module:io.ox/mail
-#| msgid "Blind copy"
 msgctxt "BCC"
 msgid "Blind copy"
 msgstr "Blindkopi"
@@ -2497,8 +2493,6 @@ msgid "Do you really want to delete this file?"
 msgstr "Ønsker du å slette denne filen?"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#| msgid "Do you really want to delete this file?"
-#| msgid_plural "Do you really want to delete these files?"
 msgid "Do you really want to delete this filter rule?"
 msgstr "Er du sikker på at du vil slette denne filterregelen?"
 
@@ -2940,7 +2934,6 @@ msgid "Enable"
 msgstr "Aktiver"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
-#| msgid "Enabled for the following addresses"
 msgid "Enable for the following addresses"
 msgstr "Aktiver for følgende adresser"
 
@@ -4944,7 +4937,6 @@ msgid "No subject"
 msgstr "Ikke noe emne"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-#| msgid "Sorry, there is no preview available for this file."
 msgid "No subscription services available for this module"
 msgstr "Ingen abonnementtjenester er tilgjengelig for denne modulen"
 
@@ -5672,8 +5664,6 @@ msgid "Postcode"
 msgstr "Postnummer"
 
 #: apps/io.ox/files/toolbar.js module:io.ox/files
-#| msgctxt "presenter"
-#| msgid "Present"
 msgid "Present"
 msgstr "Presentèr"
 
@@ -6917,7 +6907,6 @@ msgstr "Beklager, ingen forhåndsvisning er tilgjengelig for dette bildet."
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 #: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
-#| msgid "Sorry, there is no data available for you on %s."
 msgid "Sorry, this page is not available at the moment."
 msgstr "Beklager, denne siden er ikke tilgjengelig for øyeblikket."
 
@@ -7299,8 +7288,8 @@ msgid ""
 "attribute=\"interval\">every <span class=\"number-control\">2</span> days</"
 "a>."
 msgstr ""
-"Avtalen gjentas <a href=\"#\" data-widget=\"number\" data-attribute=\""
-"interval\">hver <span class=\"number-control\">2.</span> dag</a>."
+"Avtalen gjentas <a href=\"#\" data-widget=\"number\" data-attribute="
+"\"interval\">hver <span class=\"number-control\">2.</span> dag</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid ""
@@ -7308,9 +7297,9 @@ msgid ""
 "attribute=\"interval\">every <span class=\"number-control\">2</span> weeks</"
 "a> on <a href=\"#\"  data-widget=\"days\" data-attribute=\"days\">monday</a>."
 msgstr ""
-"Avtalen gjentas <a href=\"#\" data-widget=\"number\" data-attribute=\""
-"interval\">hver <span class=\"number-control\">2.</span> uke</a> på <a href="
-"\"#\" data-widget=\"days\" data-attribute=\"days\">mandag</a>."
+"Avtalen gjentas <a href=\"#\" data-widget=\"number\" data-attribute="
+"\"interval\">hver <span class=\"number-control\">2.</span> uke</a> på <a "
+"href=\"#\" data-widget=\"days\" data-attribute=\"days\">mandag</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid ""
@@ -7327,10 +7316,10 @@ msgid ""
 "attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget=\"options\" "
 "data-attribute=\"month\">October</a>."
 msgstr ""
-"Avtalen gjentas hver <a href=\"#\" data-widget=\"options\" data-attribute=\""
-"ordinal\">første</a> <a href=\"#\" data-widget=\"options\" data-attribute=\""
-"day\">onsdag</a> i <a href=\"#\" data-widget=\"options\" data-attribute=\""
-"month\">oktober</a>."
+"Avtalen gjentas hver <a href=\"#\" data-widget=\"options\" data-attribute="
+"\"ordinal\">første</a> <a href=\"#\" data-widget=\"options\" data-attribute="
+"\"day\">onsdag</a> i <a href=\"#\" data-widget=\"options\" data-attribute="
+"\"month\">oktober</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid ""
@@ -7350,10 +7339,10 @@ msgid ""
 "href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every <span "
 "class=\"number-control\">2</span> months</a>."
 msgstr ""
-"Avtalen gjentas på den <a href=\"#\" data-widget=\"number\" data-attribute=\""
-"dayInMonth\"><span class=\"number-control\">10.</span></a> dagen <a href=\"#"
-"\" data-widget=\"number\" data-attribute=\"interval\">hver <span class"
-"=\"number-control\">2.</span> måned</a>."
+"Avtalen gjentas på den <a href=\"#\" data-widget=\"number\" data-attribute="
+"\"dayInMonth\"><span class=\"number-control\">10.</span></a> dagen <a href="
+"\"#\" data-widget=\"number\" data-attribute=\"interval\">hver <span class="
+"\"number-control\">2.</span> måned</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid ""
@@ -7363,10 +7352,10 @@ msgid ""
 "attribute=\"interval\">every <span class=\"number-control\">2</span> months</"
 "a>."
 msgstr ""
-"Avtalen gjentas den <a href=\"#\" data-widget=\"options\" data-attribute=\""
-"ordinal\">andre</a> <a href=\"#\" data-widget=\"options\" data-attribute=\""
-"day\">onsdag</a>en <a href=\"#\" data-widget=\"number\" data-attribute=\""
-"interval\">i hver <span class=\"number-control\">2</span>. måned</a>."
+"Avtalen gjentas den <a href=\"#\" data-widget=\"options\" data-attribute="
+"\"ordinal\">andre</a> <a href=\"#\" data-widget=\"options\" data-attribute="
+"\"day\">onsdag</a>en <a href=\"#\" data-widget=\"number\" data-attribute="
+"\"interval\">i hver <span class=\"number-control\">2</span>. måned</a>."
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
@@ -7552,9 +7541,9 @@ msgid ""
 "\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget="
 "\"datePicker\">11/03/2013</a>."
 msgstr ""
-"Serien <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\""
-">slutter</a> den <a href=\"#\" data-attribute=\"until\" data-widget=\""
-"datePicker\">03.11.2013</a>."
+"Serien <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+"\">slutter</a> den <a href=\"#\" data-attribute=\"until\" data-widget="
+"\"datePicker\">03.11.2013</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid ""
@@ -8740,36 +8729,30 @@ msgstr "Du har avslått avtalen"
 #. Body text of generic desktop notification about new invitations to appointments
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
-#| msgid "You've got appointment invitations"
 msgid "You have new appointment invitations"
 msgstr "Du har nye avtaleinvitasjoner."
 
 #. Body text of generic desktop notification about new reminders for appointments
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
-#| msgid "You've got appointment reminders"
 msgid "You have new appointment reminders"
 msgstr "Du har nye avtalepåminnelser"
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
-#| msgid "You've got new mails"
 msgid "You have new mail"
 msgstr "Du har ny epost"
 
 #: apps/io.ox/core/notifications/subview.js module:io.ox/core
-#| msgid "You've got new notifications"
 msgid "You have new notifications"
 msgstr "Du har nye varsler"
 
 #. Content for a generic desktop notification about new invitations to tasks
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-#| msgid "You've got task invitations"
 msgid "You have new task invitations"
 msgstr "Du har nye oppgaveinvitasjoner"
 
 #. Content for a generic desktop notification about new reminders for tasks
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-#| msgid "You've got task reminders"
 msgid "You have new task reminders"
 msgstr "Du har nye oppgavepåminnelser"
 
@@ -8782,7 +8765,6 @@ msgid "You have no unread messages"
 msgstr "Du har ingen uleste meldinger"
 
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-#| msgid "You've got overdue tasks"
 msgid "You have overdue tasks"
 msgstr "Du har forfalte oppgaver"
 
