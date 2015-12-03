@@ -131,7 +131,8 @@ define('io.ox/core/tk/tokenfield', [
             this.$el.tokenfield({
                 createTokensOnBlur: true,
                 minLength: o.minLength,
-                typeahead: self.typeaheadOptions
+                typeahead: self.typeaheadOptions,
+                html: this.options.html || false
             }).on({
                 'tokenfield:createtoken': function (e) {
                     var inputData = self.getInput().data(), model;
