@@ -205,7 +205,9 @@ define('io.ox/backbone/mini-views/datepicker', [
             timestamp = moment.tz(timestamp, this.model.get(this.options.timezoneAttribute));
             if (!this.mobileMode) {
                 this.nodes.timeField.val(timestamp.format('LT'));
-                if (this.nodes.dayField.datepicker) {
+                // check if datepicker plugin is not loaded and initialized
+                // if not initialized, the update call would create a new datepicker, using the standard values. So the clear button might be missing etc.
+                if (this.nodes.dayField.datepicker && this.nodes.dayField.data('datepicker')) {
                     this.nodes.dayField.datepicker('update', this.getDateStr(timestamp));
                 } else {
                     this.nodes.dayField.val(this.getDateStr(timestamp));
