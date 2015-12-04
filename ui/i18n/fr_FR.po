@@ -7503,6 +7503,12 @@ msgstr ""
 "La date d'échéance ne peut pas précéder la date de début. Ajuster la date de "
 "début ?"
 
+#: apps/io.ox/tasks/model.js module:io.ox/tasks
+#, fuzzy
+#| msgid "The start date must be before the due date."
+msgid "The due date must not be before the start date."
+msgstr "La date de début doit précéder la date d'échéance."
+
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Le courriel a été envoyé"

@@ -7379,6 +7379,12 @@ msgstr "Kommentaren er slettet"
 msgid "The due date cannot be before start date. Adjust start date?"
 msgstr "Forfallsdatoen kan ikke være før startdato. Justere startdato?"
 
+#: apps/io.ox/tasks/model.js module:io.ox/tasks
+#, fuzzy
+#| msgid "The start date must be before the due date."
+msgid "The due date must not be before the start date."
+msgstr "Startdatoen må være før forfallsdato."
+
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The email has been sent"
 msgstr "E-posten er sendt"

@@ -7486,6 +7486,12 @@ msgid "The due date cannot be before start date. Adjust start date?"
 msgstr ""
 "Izpildes datums nevar būt pirms sākuma datuma. Vai koriģēt sākuma datumu?"
 
+#: apps/io.ox/tasks/model.js module:io.ox/tasks
+#, fuzzy
+#| msgid "The start date must be before the due date."
+msgid "The due date must not be before the start date."
+msgstr "Sākuma datumam ir jābūt pirms izpides datuma."
+
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Vēstule ir nosūtīta"

@@ -9849,6 +9849,11 @@ msgstr ""
 
 #: apps/io.ox/tasks/model.js
 #: module:io.ox/tasks
+msgid "The due date must not be before the start date."
+msgstr ""
+
+#: apps/io.ox/tasks/model.js
+#: module:io.ox/tasks
 msgid "Costs must be between -%1$d and %1$d."
 msgstr ""
 

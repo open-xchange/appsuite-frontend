@@ -7347,6 +7347,12 @@ msgstr "已成功刪除留言"
 msgid "The due date cannot be before start date. Adjust start date?"
 msgstr "到期日無法在起始日之前，調整起始日？"
 
+#: apps/io.ox/tasks/model.js module:io.ox/tasks
+#, fuzzy
+#| msgid "The start date must be before the due date."
+msgid "The due date must not be before the start date."
+msgstr "起始日期必須在到期日前。"
+
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The email has been sent"
 msgstr "已寄出郵件"

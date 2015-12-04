@@ -7435,6 +7435,12 @@ msgstr ""
 "Das Fälligkeitsdatum darf nicht vor dem Startdatum liegen. Wollen Sie das "
 "Startdatum anpassen?"
 
+#: apps/io.ox/tasks/model.js module:io.ox/tasks
+#, fuzzy
+#| msgid "The start date must be before the due date."
+msgid "The due date must not be before the start date."
+msgstr "Das Startdatum muss vor dem Enddatum liegen."
+
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Die E-Mail wurde gesendet"

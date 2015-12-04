@@ -7424,6 +7424,12 @@ msgstr ""
 "Valmistumispäivämäärä ei voi olla ennen aloituspäivämäärää. Säädä "
 "aloituspäivämäärää?"
 
+#: apps/io.ox/tasks/model.js module:io.ox/tasks
+#, fuzzy
+#| msgid "The start date must be before the due date."
+msgid "The due date must not be before the start date."
+msgstr "Alkupäivämäärän tulee olla ennen valmistumispäivämäärää."
+
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Sähköposti lähetetty"

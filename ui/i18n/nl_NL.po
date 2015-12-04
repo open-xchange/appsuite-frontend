@@ -7487,6 +7487,12 @@ msgstr "Het commentaar is succesvol verwijderd"
 msgid "The due date cannot be before start date. Adjust start date?"
 msgstr "De vervaldatum kan niet voor de startdatum zijn. Startdatum aanpassen?"
 
+#: apps/io.ox/tasks/model.js module:io.ox/tasks
+#, fuzzy
+#| msgid "The start date must be before the due date."
+msgid "The due date must not be before the start date."
+msgstr "De startdatum moet voor de einddatum liggen."
+
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Het e-mailbericht is verzonden"

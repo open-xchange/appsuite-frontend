@@ -7494,6 +7494,12 @@ msgstr ""
 "Data scadentă nu poate fi înaintea datei de început. Doriți să modificați "
 "data de început?"
 
+#: apps/io.ox/tasks/model.js module:io.ox/tasks
+#, fuzzy
+#| msgid "The start date must be before the due date."
+msgid "The due date must not be before the start date."
+msgstr "Data de început trebuie să fie înaintea datei de scadență."
+
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The email has been sent"
 msgstr "E-mailul a fost trimis"
