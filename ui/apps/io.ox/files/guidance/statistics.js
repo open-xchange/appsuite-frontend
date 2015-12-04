@@ -82,6 +82,7 @@ define('io.ox/files/guidance/statistics', [
             'potx': 'Presentations',
             'potm': 'Presentations',
             'ppt':  'Presentations',
+            'pot':  'Presentations',
             'pps':  'Presentations',
 
             //Pdf

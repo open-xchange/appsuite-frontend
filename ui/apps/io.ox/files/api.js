@@ -302,6 +302,7 @@ define('io.ox/files/api', [
         'xlb':  'application/vnd.ms-excel',
         'xlt':  'application/vnd.ms-excel',
         'ppt':  'application/vnd.ms-powerpoint',
+        'pot':  'application/vnd.ms-powerpoint',
         'pps':  'application/vnd.ms-powerpoint'
     };
 

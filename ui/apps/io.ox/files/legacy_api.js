@@ -193,6 +193,7 @@ define('io.ox/files/legacy_api', [
         'xlb': 'application/vnd.ms-excel',
         'xlt': 'application/vnd.ms-excel',
         'ppt': 'application/vnd.ms-powerpoint',
+        'pot': 'application/vnd.ms-powerpoint',
         'pps': 'application/vnd.ms-powerpoint'
     };
 
