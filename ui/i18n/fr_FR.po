@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-11-12 11:32+0100\n"
+"PO-Revision-Date: 2015-12-04 09:37+0100\n"
 "Last-Translator: Nicolas Ternisien <nicolas@bureau-cornavin.com>\n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr_FR\n"
@@ -5477,7 +5477,7 @@ msgstr "Téléphone"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Phone & fax numbers"
-msgstr "Nos de téléphone et de télécopie"
+msgstr "Numéros de téléphone et de télécopie"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Phone (assistant)"
