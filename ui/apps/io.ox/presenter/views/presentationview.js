@@ -658,7 +658,7 @@ define('io.ox/presenter/views/presentationview', [
         },
 
         /**
-         * Returns the pageNode for the given pageNumber.
+         * Returns the page node for the given page number.
          *
          * @param {Number} pageNumber
          *  The 1-based number of the page node to return.
@@ -669,6 +669,16 @@ define('io.ox/presenter/views/presentationview', [
         getPageNode: function (pageNumber) {
             return ((pageNumber > 0) && this.documentContainer) ?
                 this.documentContainer.children().eq(pageNumber - 1).find('.document-page') : $();
+        },
+
+        /**
+         * Returns the active page node.
+         *
+         * @returns {jquery.Node} pageNode
+         *  The active jQuery page node.
+         */
+        getActivePageNode: function () {
+            return this.getPageNode(this.getActiveSlideIndex() + 1);
         },
 
         /**
@@ -743,6 +753,7 @@ define('io.ox/presenter/views/presentationview', [
                 this.pageLoader.loadPage(pageNode, pageNumber, options).done(function () {
                     this.loadedPageNodes[pageNumber] = pageNode;
                     this.refresh(pageNumber);
+                    this.presenterEvents.trigger('presenter:page:loaded', pageNumber);
 
                 }.bind(this)).fail(function () {
                     pageNode.append(
@@ -960,7 +971,7 @@ define('io.ox/presenter/views/presentationview', [
          * @returns {Number} zoom factor
          */
         getFitScreenZoomFactor: function () {
-            var offset = 80,
+            var offset = 40,
                 slideHeight = this.$el.height(),
                 slideWidth = this.$el.width(),
                 originalPageSize = this.pdfDocument.getOriginalPageSize(),
