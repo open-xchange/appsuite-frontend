@@ -286,10 +286,13 @@ define('io.ox/mail/detail/view', [
         onChangeContent: function () {
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
-                node = this.$el.find('section.body').empty();
-            _.delay(ext.point('io.ox/mail/detail/body').invoke, 20, 'draw', node, baton);
-            // global event for tracking purposes
-            ox.trigger('mail:detail:body:render', this);
+                node = this.$el.find('section.body').empty(),
+                view = this;
+            _.delay(function () {
+                ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);
+                // global event for tracking purposes
+                ox.trigger('mail:detail:body:render', view);
+            }, 20);
         },
 
         onChangeRecipients: _.debounce(function () {
