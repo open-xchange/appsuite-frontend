@@ -225,6 +225,21 @@ define('io.ox/core/tk/tokenfield', [
                     if (_.isFunction(o.cbshow)) o.cbshow();
                 },
                 'typeahead:selected typeahead:autocompleted': function (e, item) {
+                    if (item.model.get('distribution_list')) {
+                        item.model.get('distribution_list').map(function (m) {
+                            var p = new pModel.Participant({
+                                type: 5,
+                                display_name: m.display_name,
+                                email1: m.mail
+                            });
+                            p.set('token', {
+                                label: m.display_name,
+                                value: m.mail
+                            }, { silent: true });
+                            self.collection.addUniquely(makeUnique(p));
+                            self.resort.call(self);
+                        });
+                    }
                     o.click.call(this, e, item.data);
                     self.input.trigger('select', item.data);
                 },
