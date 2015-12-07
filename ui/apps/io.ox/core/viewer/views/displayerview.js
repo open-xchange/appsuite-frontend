@@ -325,7 +325,15 @@ define('io.ox/core/viewer/views/displayerview', [
             this.slideViews[this.activeIndex].show();
 
             // we do not have to load any slides if the slide to insert already exists
-            if (this.slideViews[insertIndex]) return $.when();
+            if (this.slideViews[insertIndex]) {
+                var swiper = self.swiper;
+
+                // recalculate swiper index
+                swiper.activeIndex = parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index')) + 1;
+                swiper.update(true);
+
+                return $.when();
+            }
 
             return this.createView(insertIndex).done(function (view) {
                 var swiper = self.swiper;
@@ -359,7 +367,6 @@ define('io.ox/core/viewer/views/displayerview', [
 
                 // recalculate swiper index
                 swiper.activeIndex = parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index')) + 1;
-
                 swiper.update(true);
             });
         },
