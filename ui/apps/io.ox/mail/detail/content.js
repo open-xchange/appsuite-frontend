@@ -337,6 +337,17 @@ define('io.ox/mail/detail/content', [
         }
     });
 
+    ext.point('io.ox/mail/detail/content').extend({
+        id: 'check-simple',
+        index: 1000,
+        process: function () {
+            var container = $(this);
+            // if a mail contains a table, we assume that it is a mail with a lot of markup
+            // and styles and things like max-width: 100% will destroy the layout
+            if (container.find('table').length === 0) container.addClass('simple-mail');
+        }
+    });
+
     function getText(node) {
         // get text content for current node if it's a text node
         var value = (node.nodeType === 3 && String(node.nodeValue).trim()) || '',

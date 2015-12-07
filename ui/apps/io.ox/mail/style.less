@@ -237,7 +237,7 @@
     &.expanded {
         section.attachments, section.notifications { display: block; }
         // for proper overflow behavior */
-        section.body { display: table; }
+        section.body { display: block; }
         section.attachments:empty { display: none; }
     }
 
@@ -1279,6 +1279,13 @@ textarea.inplace-editor {
             font-family: monospace;
             -webkit-font-feature-settings: normal;
             font-feature-settings: normal;
+        }
+
+        &.simple-mail {
+            img {
+                max-width: 100%;
+                height: auto!important;
+            }
         }
 
         @base: 14px;
