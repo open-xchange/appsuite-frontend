@@ -45,6 +45,7 @@ define('io.ox/core/folder/picker', [
     //     settings     {object}    app-specific settings
     //     title        {string}    dialog title / can also be DOM element(s)
     //     width        {number}    dialog width in px
+    //     open         [array]     Folders to be open by default; array of IDs
     //
     //   Callbacks:
     //     always       {function}  Called on "ok" / no matter if a folder is selected
@@ -71,6 +72,7 @@ define('io.ox/core/folder/picker', [
             persistent: false,
             hideTrashfolder: false,
             root: '1',
+            open: [],
             selection: true,
             title: gt('Select folder'),
             width: 500,
@@ -120,7 +122,7 @@ define('io.ox/core/folder/picker', [
             indent: o.indent,
             module: o.module,
             abs: o.abs,
-            open: ['1'].concat(open),
+            open: ['1'].concat(o.open, open),
             root: o.root,
             customize: o.customize,
             disable: o.disable,

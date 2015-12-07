@@ -110,6 +110,7 @@ define('io.ox/core/folder/actions/move', [
                 module: options.module,
                 persistent: 'folderpopup',
                 root: options.root,
+                open: options.open,
                 settings: settings,
                 title: options.title,
 
