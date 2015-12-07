@@ -21,6 +21,10 @@ define('io.ox/presenter/views/sidebar/slidepeekview', [
 
         className: 'presenter-sidebar-section',
 
+        events: {
+            'click .slidepeek': 'onSlidePeekClicked'
+        },
+
         initialize: function (options) {
             _.extend(this, options);
 
@@ -117,11 +121,22 @@ define('io.ox/presenter/views/sidebar/slidepeekview', [
             var pageSize = this.app.mainView.presentationView.pdfDocument.getOriginalPageSize();
             var zoom = this.app.mainView.presentationView.currentZoomFactor * 0.01;
             var factor = zoom * 0.5;
+            var maxWidth = slidePeek.parent().width();
+            var width;
+            var height;
 
             if (pageSize && pageSize.width > 0 && pageSize.height > 0) {
+                width = pageSize.width * factor;
+                height = pageSize.height * factor;
+
+                if (width > maxWidth) {
+                    width = maxWidth;
+                    height = maxWidth * pageSize.height / pageSize.width;
+                }
+
                 slidePeek.css({
-                    width: pageSize.width * factor,
-                    height: pageSize.height * factor
+                    width: width,
+                    height: height
                 });
             }
         },
@@ -152,6 +167,14 @@ define('io.ox/presenter/views/sidebar/slidepeekview', [
             }
 
             this.updateSlidePeekSize();
+        },
+
+        /**
+         * Handles clicks on the slide peek.
+         */
+        onSlidePeekClicked: function (event) {
+            event.preventDefault();
+            this.app.mainView.showNextSlide();
         },
 
         disposeView: function () {
