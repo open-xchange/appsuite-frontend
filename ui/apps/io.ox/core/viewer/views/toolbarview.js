@@ -681,7 +681,7 @@ define('io.ox/core/viewer/views/toolbarview', [
 
             var ret = toolbarPoint.invoke('draw', toolbar, baton);
             return $.when.apply(this, ret.value());
-        }),
+        }, 1),
 
         /**
          * Renders the document page navigation controls.
