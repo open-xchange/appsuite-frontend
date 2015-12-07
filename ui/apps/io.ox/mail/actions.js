@@ -179,7 +179,7 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/archive', {
         capabilities: 'archive_emails',
         requires: function (e) {
-            if (!e.collection.has('some')) return false;
+            if (!e.collection.has('some', 'delete')) return false;
             return _(e.baton.array()).reduce(function (memo, obj) {
                 // already false?
                 if (memo === false) return false;
@@ -206,7 +206,7 @@ define('io.ox/mail/actions', [
     function generate(type, label, success) {
 
         new Action('io.ox/mail/actions/' + type, {
-            requires: 'toplevel some',
+            requires: 'toplevel some' + (type === 'move' ? ' delete' : ''),
             multiple: function (list, baton) {
                 require(['io.ox/mail/actions/copyMove'], function (action) {
                     action.multiple({
@@ -227,7 +227,7 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/mark-unread', {
         requires: function (e) {
             // must be top-level
-            if (!e.collection.has('toplevel')) return;
+            if (!e.collection.has('toplevel', 'write')) return;
             // partiallySeen? has at least one email that's seen?
             return _(e.baton.array()).reduce(function (memo, obj) {
                 return memo || !util.isUnseen(obj);
@@ -243,7 +243,7 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/mark-read', {
         requires: function (e) {
             // must be top-level
-            if (!e.collection.has('toplevel')) return;
+            if (!e.collection.has('toplevel', 'write')) return;
             // partiallyUnseen? has at least one email that's seen?
             return _(e.baton.array()).reduce(function (memo, obj) {
                 return memo || util.isUnseen(obj);
@@ -262,7 +262,7 @@ define('io.ox/mail/actions', [
         capabilities: 'spam',
         requires: function (e) {
             // must be top-level
-            if (!e.collection.has('toplevel', 'some')) return false;
+            if (!e.collection.has('toplevel', 'some', 'delete')) return false;
             // is spam?
             return _(e.baton.array()).reduce(function (memo, obj) {
                 // already false?
