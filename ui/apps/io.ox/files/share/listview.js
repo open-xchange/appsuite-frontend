@@ -93,7 +93,7 @@ define('io.ox/files/share/listview', [
             switch (this.model.get('sort')) {
                 case 'date':
                     this.collection.comparator = function (shareA) {
-                        return desc ? shareA.get('last_modified') : -shareA.get('last_modified');
+                        return desc ? -shareA.get('last_modified') : shareA.get('last_modified');
                     };
                     break;
                 case 'name':
