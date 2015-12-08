@@ -42,7 +42,7 @@ define.async('plugins/wizards/mandatory/main', [
                     def.reject();
                 } else {
                     user.save();
-                    tzModel.save();
+                    settings.save();
                     def.resolve();
                 }
             });
