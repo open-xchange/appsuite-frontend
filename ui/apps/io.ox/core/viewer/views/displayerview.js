@@ -250,7 +250,10 @@ define('io.ox/core/viewer/views/displayerview', [
             return get().done(function (view) {
                 // prefetch data according to priority
                 if (!view.isPrefetched) {
-                    var priority = Math.max(1, Math.abs(self.activeIndex - index));
+                    var size = self.collection.length,
+                        diff = Math.abs(self.activeIndex - index),
+                        priority = Math.max(1, diff < size / 2 ? diff : size - diff);
+
                     view.prefetch(priority);
                 }
             });
@@ -380,34 +383,6 @@ define('io.ox/core/viewer/views/displayerview', [
          */
         isSlideLoaded: function (slideIndex) {
             return _.contains(this.loadedSlides, slideIndex);
-        },
-
-        /**
-         * Returns the priority with which the given slide should be prefetched.
-         * Starting with priority 1 as the highest priority, the following priories depend on the preload offset.
-         * Note: the preload offset determins the number of slides that are prefetched in the left/right direction of the active slide.
-         *
-         * Example: [4,5,6,7,8,9,10], if the active slide is 7  with a preloadOffset of 3, the priorities would be
-         *  1 for slide 6,7,8
-         *  2 for 5,9
-         *  3 for 4,10
-         *  4 for all other slides
-         */
-        getPrefetchPriority: function (slideId) {
-            var activeSlideId = this.getActiveSlideIndex();
-
-            if (activeSlideId === slideId) {
-                return 1;
-            }
-
-            // start with direct neighbours if the active slide, the look for neighbours of the neighbours and s.o.
-            for (var prio = 1; prio <= this.preloadOffset; prio++) {
-                if (((this.normalizeSlideIndex(activeSlideId - prio) === slideId) || (this.normalizeSlideIndex(activeSlideId + prio) === slideId))) {
-                    return prio;
-                }
-            }
-
-            return (this.preloadOffset + 1);
         },
 
         /**
