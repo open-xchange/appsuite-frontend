@@ -23,9 +23,11 @@ define('plugins/portal/quota/register', [
     'use strict';
 
     var loadTile = function () {
-        return api.get();
-    },
-    availableQuota = function (quota) {
+        api.requestFileQuotaUpdates();
+        return api.load();
+    };
+
+    var availableQuota = function (quota) {
 
         var fields = [];
 
@@ -65,9 +67,9 @@ define('plugins/portal/quota/register', [
             //must check against undefined otherwise 0 values would lead to not displaying the quota. See Bug 25110
             return (q.quota !== undefined && q.usage !== undefined);
         });
-    },
+    };
 
-    drawTile = function (quota) {
+    var drawTile = function (quota) {
         this.append(
             $('<ul class="content no-pointer list-unstyled">').append(
                 _(availableQuota(quota)).map(function (q) {
@@ -79,13 +81,13 @@ define('plugins/portal/quota/register', [
                 })
             )
         );
-    },
+    };
 
-    load = function () {
+    var load = function () {
         return $.Deferred().resolve();
-    },
+    };
 
-    draw = function () {
+    var draw = function () {
         return $.Deferred().resolve();
     };
 
