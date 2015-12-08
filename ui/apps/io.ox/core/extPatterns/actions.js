@@ -15,8 +15,9 @@
 define('io.ox/core/extPatterns/actions', [
     'io.ox/core/extensions',
     'io.ox/core/upsell',
-    'io.ox/core/collection'
-], function (ext, upsell, Collection) {
+    'io.ox/core/collection',
+    'io.ox/core/capabilities'
+], function (ext, upsell, Collection, capabilities) {
 
     'use strict';
 
@@ -68,18 +69,20 @@ define('io.ox/core/extPatterns/actions', [
         baton.tracker = [].concat(baton.data);
 
         var point = ext.point(ref),
-            capabilities = _(point.pluck('capabilities')).filter(function (cap) {return !_(cap).isEmpty(); }),
+            // get all sets of capabilities including empty sets
+            sets = point.pluck('capabilities'),
             ignoreEmptyTracker = baton.tracker.length === 0,
             list = point.list(), i = 0, $i = list.length, extension, tmp;
 
         // check capabilities upfront; if no action can be applied due to missing
         // capabilities, we try to offer upsell
-        if (capabilities.length && !upsell.any(capabilities)) {
-            if (upsell.enabled(capabilities)) {
+        // if an action has an empty set we must not run into upsell (see bug 39009)
+        if (sets.length && !upsell.any(sets)) {
+            if (upsell.enabled(sets)) {
                 upsell.trigger({
                     type: 'inline-action',
                     id: ref,
-                    missing: upsell.missing(capabilities)
+                    missing: upsell.missing(sets)
                 });
             }
             return;
@@ -92,6 +95,8 @@ define('io.ox/core/extPatterns/actions', [
             if (extension.id === 'default' && baton.isDefaultPrevented()) continue;
             // check for disabled extensions
             if (baton.isDisabled(point.id, extension.id)) continue;
+            // has all capabilities?
+            if (extension.capabilities && !capabilities.has(extension.capabilities)) continue;
             // empty tracker?
             if (!ignoreEmptyTracker && baton.tracker.length === 0) break;
             // apply filter
