@@ -258,7 +258,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             // simpleLineBreaks = true -> false -> enter insert <br>
             // simpleLineBreaks = false -> 'p' -> enter inserts new paragraph
             // this one is stored in mail settings
-            forced_root_block: mailSettings.get('simpleLineBreaks', true) ? false : 'p',
+            forced_root_block: mailSettings.get('simpleLineBreaks', true) ? /* false */ 'p' : 'p',
 
             browser_spellcheck: true,
 
