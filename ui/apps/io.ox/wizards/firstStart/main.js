@@ -43,9 +43,11 @@ define('io.ox/wizards/firstStart/main', [
                     settings.set('wizards/firstStart/finished', true).save();
                     topbar.show();
                     ox.busy();
+                    def.resolve();
                 })
                 .fail(function () {
                     require('io.ox/core/main').logout();
+                    def.reject();
                 });
 
             return def;
