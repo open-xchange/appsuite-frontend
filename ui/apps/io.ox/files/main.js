@@ -1140,6 +1140,31 @@ define('io.ox/files/main', [
                     }
                 });
             });
+        },
+
+        'select-file': function (app) {
+
+            app.selectFile = function (obj) {
+
+                function isCurrentFolder() {
+                    return app.listView.collection.cid.indexOf('folder=' + obj.folder_id) > -1;
+                }
+
+                function select() {
+                    if (!isCurrentFolder()) return;
+                    app.listView.off('collection:load', select);
+                    app.listView.selection.set([obj], true);
+                }
+
+                obj = _.isString(obj) ? _.cid(obj) : obj;
+
+                if (isCurrentFolder()) {
+                    select();
+                } else {
+                    app.listView.on('collection:load', select);
+                    app.folder.set(obj.folder_id);
+                }
+            };
         }
     });
 

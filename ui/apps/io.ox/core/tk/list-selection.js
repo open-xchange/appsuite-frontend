@@ -125,7 +125,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             if (node.hasClass('selected')) this.uncheck(node); else this.check(node);
         },
 
-        set: function (list) {
+        set: function (list, focus) {
 
             if (!_.isArray(list)) return;
 
@@ -148,7 +148,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             });
 
             if (lastIndex > -1) {
-                items.eq(lastIndex).attr('tabindex', '1');
+                var node = items.eq(lastIndex).attr('tabindex', '1');
+                if (focus) node.focus();
             }
         },
 
