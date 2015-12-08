@@ -689,6 +689,10 @@ define('io.ox/calendar/util', [
                 })
                 // add mail to user objects
                 .then(function (users) {
+                    // add user type 1 to all internal users
+                    _.each(users, function (obj) {
+                        _.extend(obj, { type: 1 });
+                    });
                     // search for external users in contacts
                     var defs = _(IDs.ext).map(function (ext) {
                         return contactAPI.search(ext.mail);
