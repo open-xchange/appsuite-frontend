@@ -39,9 +39,8 @@ define('io.ox/presenter/views/thumbnailview', [
             this.listenTo(this.presenterEvents, 'presenter:presentation:pause', this.onToggleVisibility);
             this.listenTo(this.presenterEvents, 'presenter:presentation:continue', this.onToggleVisibility);
             this.listenTo(this.presenterEvents, 'presenter:participants:change', this.onToggleVisibility);
-
-            this.listenTo(this.presenterEvents, 'presenter:fullscreen:enter', this.onEnterFullScreen);
-            this.listenTo(this.presenterEvents, 'presenter:fullscreen:exit', this.onExitFullScreen);
+            this.listenTo(this.presenterEvents, 'presenter:fullscreen:enter', this.onToggleVisibility);
+            this.listenTo(this.presenterEvents, 'presenter:fullscreen:exit', this.onToggleVisibility);
 
             // dispose view on global dispose
             this.on('dispose', this.disposeView.bind(this));
@@ -56,6 +55,7 @@ define('io.ox/presenter/views/thumbnailview', [
         render: function () {
             var self = this;
             this.$el.addClass('io-ox-busy');
+
             function beginConvertSuccess(convertData) {
                 self.convertData = convertData;
                 _.times(convertData.pageCount, function (pageNumber) {
@@ -95,6 +95,7 @@ define('io.ox/presenter/views/thumbnailview', [
                 thumbnail = $('<div class="presenter-thumbnail">'),
                 thumbnailImage = this.createDocumentThumbnailImage('thumbnail-image'),
                 thumbnailPageNumber = $('<div class="page-number">').text(pageNumber + 1);
+
             thumbnail.append(thumbnailImage).addClass('io-ox-busy');
             this.thumbnailImages.push(thumbnailImage);
             thumbnailWrapper.append(thumbnail, thumbnailPageNumber);
@@ -197,13 +198,14 @@ define('io.ox/presenter/views/thumbnailview', [
         },
 
         /**
-         * Handles updates to the real-time message data and set the visibility of this view accordingly.
+         * Handles updates to the real-time message data and sets the visibility of this view accordingly.
          */
         onToggleVisibility: function () {
             var rtModel = this.app.rtModel,
-                userId = this.app.rtConnection.getRTUuid();
+                userId = this.app.rtConnection.getRTUuid(),
+                fullscreen = this.app.mainView.fullscreen;
 
-            this.toggleVisibility(rtModel.canShowThumbnails(userId));
+            this.toggleVisibility(!fullscreen && rtModel.canShowThumbnails(userId));
         },
 
         /**
@@ -222,25 +224,6 @@ define('io.ox/presenter/views/thumbnailview', [
             if (_.device('!iOS && !Android')) {
                 this.presenterEvents.trigger('presenter:resize');
             }
-        },
-
-        /**
-         * Enter fullscreen handler.
-         * - hides this thumbnail view
-         */
-        onEnterFullScreen: function () {
-            this.toggleVisibility(false);
-        },
-
-        /**
-         * Exit fullscreen handler.
-         * - shows this thumbnail view
-         */
-        onExitFullScreen: function () {
-            var rtModel = this.app.rtModel,
-                userId = this.app.rtConnection.getRTUuid();
-
-            this.toggleVisibility(rtModel.canShowThumbnails(userId));
         },
 
         /**

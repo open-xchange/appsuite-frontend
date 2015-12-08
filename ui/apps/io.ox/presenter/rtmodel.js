@@ -113,6 +113,19 @@ define('io.ox/presenter/rtmodel', [
         },
 
         /**
+         * Returns true if the passed user id belongs to the presenter and the presentation is running.
+         *
+         * @param {String} userId
+         *  The user id to check.
+         *
+         * @returns {Boolean}
+         *  Whether the user is currently presenting.
+         */
+        isPresenting: function (userId) {
+            return (!this.isPaused() && this.isPresenter(userId));
+        },
+
+        /**
          * Returns true if the provided user can start the presentation.
          * Which means the presentation must not be running and the user must not be joined.
          *
