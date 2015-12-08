@@ -633,7 +633,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
                 swiper.update(true);
 
-                self.onSlideChangeEnd();
+                self.onSlideChangeEnd(swiper);
 
                 if (self.collection.length <= 1) {
                     swiper.destroyLoop();
