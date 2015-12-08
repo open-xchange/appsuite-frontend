@@ -40,12 +40,26 @@ define('io.ox/files/share/model', [
             };
         },
 
-        initialize: function (option) {
-            this.set('files', option.files);
-            this.set('type', option.type);
-            if (option.type === this.TYPES.INVITE) {
-                this.set('edit', true);
-            }
+        initialize: function (attributes) {
+            this.set('edit', attributes.type === this.TYPES.INVITE);
+            this.setOriginal();
+        },
+
+        setOriginal: function (data) {
+            this.originalAttributes = data || _.clone(this.attributes);
+        },
+
+        getChanges: function () {
+            var original = this.originalAttributes, changes = {};
+            _(this.attributes).each(function (val, id) {
+                if (!_.isEqual(val, original[id])) changes[id] = val;
+            });
+            // limit to relevant attributes
+            return _(changes).pick('expiry_date', 'password', 'temporary', 'secured');
+        },
+
+        hasChanges: function () {
+            return !_.isEmpty(this.getChanges());
         },
 
         getExpiryDate: function () {
@@ -194,11 +208,17 @@ define('io.ox/files/share/model', [
                             data.id = _.uniqueId();
                         }
                         self.set(_.extend(data, { lastModified: timestamp }));
+                        self.setOriginal();
                         return data.url;
                     }).fail(yell);
-                case 'create':
                 case 'update':
-                    return api.updateLink(model.toJSON(), model.get('lastModified'))
+                case 'create':
+                    var changes = self.getChanges(),
+                        data = model.toJSON();
+                    // remove password from data unless it has changed
+                    if (!('password' in changes)) delete data.password;
+                    // update only if there are relevant changes
+                    return (_.isEmpty(changes) ? $.when() : api.updateLink(data, model.get('lastModified')))
                         .done(this.send.bind(this))
                         .fail(yell);
                 case 'delete':
