@@ -571,12 +571,11 @@ define('io.ox/calendar/api', [
 
             var now = _.now(),
                 start = moment(now).subtract(2, 'hours').valueOf(),
-                end = moment(now).add(5, 'years').valueOf();
+                end = moment(now).add(1, 'years').valueOf();
 
             return this.getUpdates({
                 folder: 'all',
                 start: start,
-                // 5 years like OX6
                 end: end,
                 timestamp: 0,
                 recurrence_master: true

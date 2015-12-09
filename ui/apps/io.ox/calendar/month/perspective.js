@@ -367,8 +367,10 @@ define('io.ox/calendar/month/perspective', [
                 }
             }
 
-            var firstDay = $('#' + target.year() + '-' + target.month(), self.pane),
-                nextFirstDay = $('#' + target.year() + '-' + (target.month() + 1), self.pane),
+            // we cannot use target.month() + 1 or we might get month 13 in 2015 instead of month 1 in 2016
+            var nextMonth = moment(target).add(1, 'month'),
+                firstDay = $('#' + target.year() + '-' + target.month(), self.pane),
+                nextFirstDay = $('#' + nextMonth.year() + '-' + (nextMonth.month()), self.pane),
                 scrollToDate = function () {
                     // scroll to position
                     if (firstDay.length === 0) return;
