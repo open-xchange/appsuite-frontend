@@ -615,7 +615,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 // disable slide swiping per default on documents
                 this.$el.addClass('swiper-no-swiping');
                 // register scroll handler
-                this.$el.on('scroll', _.debounce(this.onScrollHandler.bind(this), 500));
+                this.$el.on('scroll', _.debounce(this.onScrollHandler.bind(this), 50));
                 // set scroll position
                 this.$el.scrollTop(lastScrollPosition);
                 // update stored index of the dominant page
