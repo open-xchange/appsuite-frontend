@@ -198,28 +198,28 @@ define('io.ox/tasks/util', [
                 //no state for task over time, so manual check is needed
                 if (!options.noOverdue && this.isOverdue(task)) {
                     task.status = gt('Overdue');
-                    task.badge = 'badge badge-important';
+                    task.badge = 'badge badge-overdue';
                 } else if (task.status) {
                     switch (task.status) {
                         case 1:
                             task.status = gt('Not started');
-                            task.badge = 'badge';
+                            task.badge = 'badge badge-notstarted';
                             break;
                         case 2:
                             task.status = gt('In progress');
-                            task.badge = 'badge';
+                            task.badge = 'badge badge-inprogress';
                             break;
                         case 3:
                             task.status = gt('Done');
-                            task.badge = 'badge badge-success';
+                            task.badge = 'badge badge-done';
                             break;
                         case 4:
                             task.status = gt('Waiting');
-                            task.badge = 'badge';
+                            task.badge = 'badge badge-waiting';
                             break;
                         case 5:
                             task.status = gt('Deferred');
-                            task.badge = 'badge';
+                            task.badge = 'badge badge-deferred';
                             break;
                     }
                 } else {
