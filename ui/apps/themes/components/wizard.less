@@ -11,6 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+.wizard-container {
+    display: flex;
+}
+
 .wizard-step {
 
     font-size: 14px;
@@ -26,17 +30,13 @@
     .box-shadow(0 10px 50px 0px rgba(0, 0, 0, 0.5));
 
     &.center {
-        left: 50%;
-        transform: translate(-50%, 0);
+        position: static;
+        margin: 0 auto;
     }
 
     &.middle {
-        top: 50%;
-        transform: translate(0, -50%);
-    }
-
-    &.center.middle {
-        transform: translate(-50%, -50%);
+        position: static;
+        align-self: center;
     }
 
     .wizard-title {
@@ -164,6 +164,7 @@
         background-color: #f5f5f5;
         z-index: 1000;
         overflow: hidden;
+        display: block;
     }
 
     .wizard-navbar {

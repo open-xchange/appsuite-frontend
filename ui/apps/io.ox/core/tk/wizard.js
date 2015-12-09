@@ -32,18 +32,21 @@ define('io.ox/core/tk/wizard', [
 
     var backdrop = $('<div class="wizard-backdrop abs">');
 
-    // special node for fullscreen wizards on smartphone
-    var container = $(
-        '<div class="wizard-container abs">' +
-        '  <div class="wizard-navbar">' +
-        '    <div class="wizard-back"></div>' +
-        '    <div class="wizard-title"></div>' +
-        '    <div class="wizard-next"></div>' +
-        '  </div>' +
-        '  <div class="wizard-pages"></div>' +
-        '  <div class="wizard-animation"></div>' +
-        '</div>'
-    );
+    var container = _.device('smartphone') ?
+        // special node for fullscreen wizards on smartphone
+        $(
+            '<div class="wizard-container abs">' +
+            '  <div class="wizard-navbar">' +
+            '    <div class="wizard-back"></div>' +
+            '    <div class="wizard-title"></div>' +
+            '    <div class="wizard-next"></div>' +
+            '  </div>' +
+            '  <div class="wizard-pages"></div>' +
+            '  <div class="wizard-animation"></div>' +
+            '</div>'
+        ) :
+        // simple container on desktop for flex layout
+        $('<div class="wizard-container abs">');
 
     function getBounds(elem) {
         var o = elem.offset();
@@ -118,6 +121,7 @@ define('io.ox/core/tk/wizard', [
             $('.wizard-step:visible').focus();
         });
 
+        this.container = container.clone();
         if (_.device('smartphone')) initalizeSmartphoneSupport.call(this);
     }
 
@@ -184,7 +188,7 @@ define('io.ox/core/tk/wizard', [
             _(this.steps).each(function (step) {
                 step.dispose();
             });
-            if (_.device('smartphone')) this.container.remove().empty();
+            this.container.remove().empty();
             // unregister / clean up
             $(document).off('click.wizard');
             this.steps = [];
@@ -209,6 +213,7 @@ define('io.ox/core/tk/wizard', [
             } else {
                 this.withCurrentStep(function (step) {
                     this.trigger('before:start');
+                    this.container.appendTo('body');
                     step.show();
                     this.trigger('start');
                 });
@@ -511,7 +516,7 @@ define('io.ox/core/tk/wizard', [
             function cont() {
 
                 // make invisible and add to DOM to allow proper alignment
-                this.$el.addClass('invisible').appendTo('body');
+                this.$el.addClass('invisible').appendTo(this.parent.container);
 
                 // counter-event to "wait"
                 this.trigger('ready');
@@ -799,7 +804,6 @@ define('io.ox/core/tk/wizard', [
 
     function initalizeSmartphoneSupport() {
 
-        this.container = container.clone();
         this.container.find('.wizard-title').text(this.options.title || gt('Welcome'));
 
         this.container.on('tap', '[data-action]', { parent: this }, function (e) {
