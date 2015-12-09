@@ -3925,12 +3925,6 @@ msgstr "Lisää"
 msgid "Insert inline image"
 msgstr "Lisää joukkoon kuva"
 
-#. this setting is about what happens when the user presses <enter>
-#. in mail compose: either simple line breaks (<br> tags) or paragraphs (<p> tags)
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Insert line breaks instead paragraphs when pressing <enter>"
-msgstr ""
-
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Insert the original email text to a reply"
 msgstr "Lisää alkuperäisen viesti teksti vastaukseen"

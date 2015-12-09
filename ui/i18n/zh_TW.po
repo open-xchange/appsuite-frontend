@@ -3886,12 +3886,6 @@ msgstr "插入"
 msgid "Insert inline image"
 msgstr "插入行內圖片"
 
-#. this setting is about what happens when the user presses <enter>
-#. in mail compose: either simple line breaks (<br> tags) or paragraphs (<p> tags)
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Insert line breaks instead paragraphs when pressing <enter>"
-msgstr ""
-
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Insert the original email text to a reply"
 msgstr "於回覆中插入原始電子郵件文字"
