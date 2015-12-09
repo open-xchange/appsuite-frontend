@@ -493,6 +493,7 @@ define('io.ox/mail/compose/view', [
             win.busy();
             // get mail
             var self = this,
+                model = this.model,
                 mail = this.model.getMailForDraft(),
                 def = new $.Deferred(),
                 old_vcard_flag;
@@ -507,7 +508,7 @@ define('io.ox/mail/compose/view', [
                 ext.point('io.ox/mail/compose/actions/send').get('wait-for-pending-images', function (p) {
                     p.perform(new ext.Baton({
                         mail: mail,
-                        model: self.model
+                        model: model
                     })).then(def.resolve, def.reject);
                 });
                 return def;
@@ -532,13 +533,13 @@ define('io.ox/mail/compose/view', [
                 }
             }).then(function (result, data) {
                 // Replace inline images in contenteditable with links from draft response
-                if (self.model.get('editorMode') === 'html') {
+                if (model.get('editorMode') === 'html') {
                     $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
                         $('img:not(.emoji):eq(' + index + ')', self.editorContainer.find('.editable')).attr('src', $(el).attr('src'));
                     });
                 }
-                self.model.set('msgref', result.data, { silent: true });
-                self.model.dirty(false);
+                model.set('msgref', result.data, { silent: true });
+                model.dirty(false);
                 notifications.yell('success', gt('Mail saved as draft'));
                 return result;
             }).always(function () {
@@ -550,6 +551,7 @@ define('io.ox/mail/compose/view', [
 
             var def = new $.Deferred(),
                 self = this,
+                model = this.model,
                 mail = this.model.getMailForAutosave();
 
             mailAPI.autosave(mail).always(function (result) {
@@ -558,11 +560,11 @@ define('io.ox/mail/compose/view', [
                     def.reject(result);
                 } else {
                     if (mail.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
-                        self.model.set('msgref', result, { silent: true });
+                        model.set('msgref', result, { silent: true });
                     }
 
-                    var saved = self.model.get('infostore_ids_saved');
-                    self.model.set('infostore_ids_saved', [].concat(saved, mail.infostore_ids || []));
+                    var saved = model.get('infostore_ids_saved');
+                    model.set('infostore_ids_saved', [].concat(saved, mail.infostore_ids || []));
                     notifications.yell('success', gt('Mail saved as draft'));
                     def.resolve(result);
                 }
