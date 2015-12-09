@@ -45,7 +45,14 @@ define('io.ox/mail/vacationnotice/settings/filter', [
                     vacationData,
                     VacationEdit,
                     vacationNotice,
-                    setSender = settings.get('features/setFromInVacationNotice', false);
+                    setSender = settings.get('features/setFromInVacationNotice', false),
+                    mapSenders = function (senderArray) {
+                        var senderObj = {};
+                        _.each(senderArray, function (sender) {
+                            senderObj[sender.value] = sender.value;
+                        });
+                        return senderObj;
+                    };
 
                 if (setSender) {
                     defaultNotice.from = _.first(multiValues.from).value;
@@ -58,7 +65,8 @@ define('io.ox/mail/vacationnotice/settings/filter', [
                     vacationData.internal_id = vacationData.id;
                     vacationData.id = data[0].id;
 
-                    if (setSender && !vacationData.from) vacationData.from = _.first(multiValues.from).value;
+                    if (setSender && !_.has(mapSenders(multiValues.from), vacationData.from)) vacationData.from = _.first(multiValues.from).value;
+
                     if (!setSender && vacationData.from) delete vacationData.from;
 
                     if (_(data[0].test).size() === 2) {

@@ -63,7 +63,7 @@ define('io.ox/mail/vacationnotice/settings/register', [
                         });
                         return list;
                     }
-                    var userFullName = contactsUtil.getMailFullName(user),
+                    var userFullName = '"' + contactsUtil.getMailFullName(user) + '"',
                         aliases = _.object(user.aliases, user.aliases),
                         multiValues = {
                         aliases: aliases,
