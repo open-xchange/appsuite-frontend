@@ -550,7 +550,6 @@ define('io.ox/mail/compose/view', [
         autoSaveDraft: function () {
 
             var def = new $.Deferred(),
-                self = this,
                 model = this.model,
                 mail = this.model.getMailForAutosave();
 
