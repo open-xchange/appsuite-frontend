@@ -571,7 +571,7 @@ define('io.ox/calendar/api', [
 
             var now = _.now(),
                 start = moment(now).subtract(2, 'hours').valueOf(),
-                end = moment(now).add(1, 'years').valueOf();
+                end = moment(now).add(2, 'years').valueOf();
 
             return this.getUpdates({
                 folder: 'all',
