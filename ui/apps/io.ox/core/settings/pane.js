@@ -389,7 +389,19 @@ define('io.ox/core/settings/pane', [
                         $('<div>').addClass('checkbox').append(
                             $('<label class="control-label">').text(gt('Show desktop notifications')).prepend(
                                 new miniViews.CheckboxView({ name: 'showDesktopNotifications', model: this.baton.model }).render().$el
-                            )
+                            ),
+                            // add ask now link (by design browsers only allow asking if there was no decision yet)
+                                                                                                               //#. Opens popup to decide if desktop notifications should be shown
+                            desktopNotifications.getPermissionStatus() === 'default' ? $('<a href="#" >').text(gt('Manage permission now')).css('margin-left', '8px').on('click', function (e) {
+                                e.preventDefault();
+                                desktopNotifications.requestPermission(function (result) {
+                                    if (result === 'granted') {
+                                        settings.set('showDesktopNotifications', true).save();
+                                    } else if (result === 'denied') {
+                                        settings.set('showDesktopNotifications', false).save();
+                                    }
+                                });
+                            }) : []
                         )
                     )
                 );

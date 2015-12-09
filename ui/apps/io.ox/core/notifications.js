@@ -130,13 +130,13 @@ define('io.ox/core/notifications', [
                     laterButton = $('<button class="later-button btn btn-warning">').text(gt('Later')).on('click', function (e) {
                         e.stopPropagation();
                         cleanup();
-                    }),
-                    disableButton = $('<button class="disable-button btn btn-danger">').text(gt('Disable')).on('click', function (e) {
+                    }),                                                                      //#. declines the use of desktop notifications
+                    disableButton = $('<button class="disable-button btn btn-danger">').text(gt('Never')).on('click', function (e) {
                         settings.set('showDesktopNotifications', false).save();
                         e.stopPropagation();
                         cleanup();
-                    }),
-                    enableButton = $('<button class="enable-button btn btn-success">').text(gt('Enable')).on('click', function (e) {
+                    }),                                                                     //#. Opens popup to decide if desktop notifications should be shown
+                    enableButton = $('<button class="enable-button btn btn-success">').text(gt('Decide now')).on('click', function (e) {
                         e.stopPropagation();
                         desktopNotifications.requestPermission(function (result) {
                             if (result === 'granted') {
