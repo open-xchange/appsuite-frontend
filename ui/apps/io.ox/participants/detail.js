@@ -86,7 +86,7 @@ define('io.ox/participants/detail', [
             );
         }
 
-        node.data(_.extend(obj, { display_name: display_name, email1: mail_lc }));
+        node.data(_.extend(obj, { display_name: display_name, email1: obj.email1 || mail_lc }));
 
         return node;
     }
