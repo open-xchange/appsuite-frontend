@@ -625,19 +625,19 @@ define('io.ox/core/tk/list', [
             this.collection = loader.getDefaultCollection();
             this.loader = loader;
 
-            this.load = function () {
+            this.load = function (options) {
                 // load data
                 this.empty();
-                loader.load(this.model.toJSON());
+                loader.load(_.extend(this.model.toJSON(), options));
                 this.setCollection(loader.collection);
             };
 
-            this.paginate = function () {
-                loader.paginate(this.model.toJSON());
+            this.paginate = function (options) {
+                loader.paginate(_.extend(this.model.toJSON(), options));
             };
 
-            this.reload = function () {
-                loader.reload(this.model.toJSON());
+            this.reload = function (options) {
+                loader.reload(_.extend(this.model.toJSON(), options));
             };
         },
 

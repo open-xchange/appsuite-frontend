@@ -794,7 +794,7 @@ define('io.ox/files/main', [
         'refresh': function (app) {
             ox.on('refresh^', function () {
                 _.defer(function () {
-                    app.listView.reload();
+                    app.listView.reload({ pregenerate_previews: false });
                 });
             });
         },

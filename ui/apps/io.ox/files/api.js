@@ -410,7 +410,8 @@ define('io.ox/files/api', [
                 sort: params.sort || '702',
                 order: params.order || 'asc',
                 // tell server to prefetch thumbnails (see bug 39897)
-                pregenerate_previews: true,
+                // default is true; can be set to false
+                pregenerate_previews: params.pregenerate_previews !== false,
                 timezone: 'utc'
             };
         },
