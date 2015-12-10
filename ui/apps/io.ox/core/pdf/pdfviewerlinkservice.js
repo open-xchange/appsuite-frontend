@@ -134,7 +134,7 @@ define('io.ox/core/pdf/pdfviewerlinkservice', [
             getDestinationHash: function PDFViewerLinkService_getDestinationHash(dest) {
 
                 if (typeof dest === 'string') {
-                    return this.getAnchorUrl('#' + escape(dest));
+                    return this.getAnchorUrl('#' + encodeURIComponent(dest));
                 }
                 if (dest instanceof Array) {
                     var destRef = dest[0]; // see navigateTo method for dest format
@@ -244,9 +244,9 @@ define('io.ox/core/pdf/pdfviewerlinkservice', [
 
                 } else { // named destination
                     if (this.pdfHistory) {
-                        this.pdfHistory.updateNextHashParam(unescape(hash));
+                        this.pdfHistory.updateNextHashParam(decodeURIComponent(hash));
                     }
-                    this.navigateTo(unescape(hash));
+                    this.navigateTo(decodeURIComponent(hash));
                 }
             },
 
