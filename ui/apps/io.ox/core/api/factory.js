@@ -163,6 +163,7 @@ define('io.ox/core/api/factory', [
                             )
                             .then(function () { return data; });
                         }
+                        return data;
                     }, function (error) {
                         api.trigger('error error:' +  error.code, error );
                         return error;
