@@ -250,12 +250,26 @@ define('io.ox/core/viewer/views/displayerview', [
             return get().done(function (view) {
                 // prefetch data according to priority
                 if (!view.isPrefetched) {
-                    var size = self.collection.length,
-                        diff = Math.abs(self.activeIndex - index),
-                        priority = Math.max(1, diff < size / 2 ? diff : size - diff);
-
-                    view.prefetch(priority);
+                    view.prefetch(self.getPrefetchPriority(index));
                 }
+            });
+        },
+
+        getPrefetchPriority: function (index) {
+            var size = this.collection.length,
+                diff = Math.abs(this.activeIndex - index);
+
+            return Math.max(1, diff < size / 2 ? diff : size - diff);
+        },
+
+        updatePriorities: function () {
+            var self = this;
+
+            _(this.slideViews).each(function (view, key) {
+                if (view.isPrefetched) return;
+
+                var index = parseInt(key);
+                view.prefetch(self.getPrefetchPriority(index));
             });
         },
 
@@ -336,6 +350,8 @@ define('io.ox/core/viewer/views/displayerview', [
                 swiper.activeIndex = parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index'), 10) + 1;
                 swiper.update(true);
 
+                this.updatePriorities();
+
                 return $.when();
             }
 
@@ -373,6 +389,8 @@ define('io.ox/core/viewer/views/displayerview', [
                 // recalculate swiper index
                 swiper.activeIndex = parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index'), 10) + 1;
                 swiper.update(true);
+
+                self.updatePriorities();
             });
         },
 
