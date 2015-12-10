@@ -345,7 +345,6 @@ define('io.ox/files/main', [
                 'virtual': function (id) {
                     if (id !== 'virtual/myshares') return;
 
-                    app.trigger('folder-virtual:change', id, { type: 'myshares', standard_folder_type: 'virtual' });
                     app.folder.unset();
 
                     if (app.mysharesListViewControl) {

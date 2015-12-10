@@ -327,6 +327,10 @@ define('io.ox/core/folder/view', [
                 ignoreChangeEvent = false;
             });
 
+            tree.on('virtual', function (id) {
+                app.trigger('folder-virtual:change', id);
+            });
+
             app.on('folder:change', function (id) {
                 if (ignoreChangeEvent) return;
                 tree.selection.set(id);
