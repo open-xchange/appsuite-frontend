@@ -16,7 +16,15 @@ module.exports = function (grunt) {
 
     grunt.config.merge({
         eslint: {
-            target: ['apps/io.ox/**/*.js']
+            all: {
+                files: [{
+                    expand: true,
+                    src: [
+                        'apps/io.ox/**/*.js'
+                    ],
+                    filter: 'isFile'
+                }]
+            }
         }
     });
 
