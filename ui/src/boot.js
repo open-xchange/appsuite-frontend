@@ -89,10 +89,9 @@ $(window).load(function () {
                 var def = $.Deferred().done(success).fail(fail || fallback);
                 require(deps, def.resolve, def.reject);
                 return def.promise();
-            } else {
-                // bypass
-                return require.apply(this, arguments);
             }
+            // bypass
+            return require.apply(this, arguments);
         };
 
         _.extend(window.require, require);

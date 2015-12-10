@@ -65,13 +65,12 @@ define('plugins/metrics/demo/register', [
                 this.step('Select first message', function (done) {
                     if (window.list.collection.length === 0) {
                         return console.error('No message to reply to');
-                    } else {
-                        window.list.selection.select(0);
-                        this.waitFor(function () {
-                            return !$('.io-ox-action-link[data-ref="io.ox/mail/actions/reply"]').hasClass('disabled');
-                        })
-                        .done(done);
                     }
+                    window.list.selection.select(0);
+                    this.waitFor(function () {
+                        return !$('.io-ox-action-link[data-ref="io.ox/mail/actions/reply"]').hasClass('disabled');
+                    })
+                    .done(done);
                 });
 
                 this.step('Click on reply', function () {

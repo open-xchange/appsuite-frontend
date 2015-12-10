@@ -249,20 +249,19 @@ define('plugins/portal/linkedIn/register', [
                     return (baton.data = data.values);
                 });
 
-            } else {
-
-                return http.GET({
-                    module: 'integrations/linkedin/portal',
-                    params: { action: 'updates' }
-                })
-                .then(function (activities) {
-                    if (activities && activities.values && activities.values !== 0) {
-                        baton.data = activities.values;
-                    } else {
-                        baton.data = activities;
-                    }
-                });
             }
+
+            return http.GET({
+                module: 'integrations/linkedin/portal',
+                params: { action: 'updates' }
+            })
+            .then(function (activities) {
+                if (activities && activities.values && activities.values !== 0) {
+                    baton.data = activities.values;
+                } else {
+                    baton.data = activities;
+                }
+            });
         },
 
         preview: function (baton) {

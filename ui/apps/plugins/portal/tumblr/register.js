@@ -54,9 +54,8 @@ define('plugins/portal/tumblr/register', [
                 return baton.feed.load().done(function (data) {
                     baton.data = data.response;
                 });
-            } else {
-                return $.when();
             }
+            return $.when();
         },
 
         summary: function () {
@@ -126,80 +125,77 @@ define('plugins/portal/tumblr/register', [
 
             function drawPost(post) {
                 var sizes, url = '', width = 0,
-                    node = $('<div class="post">').attr('data-post-type', post.type);
-
-                var postTitle = function () {
-                    var title = $('<h2>').text(_.noI18n(post.title));
-                    if (post.url || post.post_url) {
-                        return $('<a>', { href: post.url || post.post_url, target: '_blank' }).append(title);
-                    } else {
+                    node = $('<div class="post">').attr('data-post-type', post.type),
+                    postTitle = function () {
+                        var title = $('<h2>').text(_.noI18n(post.title));
+                        if (post.url || post.post_url) {
+                            return $('<a>', { href: post.url || post.post_url, target: '_blank' }).append(title);
+                        }
                         return title;
-                    }
-                },
+                    },
 
-                postDate = function () {
-                    return $('<span class="post-date">').text(' ' + moment.unix(post.timestamp).format('lll'));
-                },
-                postTags = function () {
-                    var tags = [],
-                        tagBaseUri = '//' + post.blog_name + '.tumblr.com/tagged/';
-                    if (post.tags && post.tags.length > 0) {
-                        _(post.tags).each(function (tag) {
-                            tags.push($('<a>', { href: tagBaseUri + tag, target: '_blank' })
-                                .addClass('tag').text(tag).prepend($('<i class="fa fa-tag">')));
-                        });
-                    }
-                    return tags;
-                },
-                postPhotos = function () {
-                    var img;
-                    if (_.isArray(post.photos) && post.photos.length && (sizes = post.photos[0].alt_sizes)) {
-                        _(sizes).each(function (photo) {
-                            if (width === 0 || (photo.width > 500 && photo.width < 1200)) {
-                                url = photo.url;
-                                width = photo.width;
+                    postDate = function () {
+                        return $('<span class="post-date">').text(' ' + moment.unix(post.timestamp).format('lll'));
+                    },
+                    postTags = function () {
+                        var tags = [],
+                            tagBaseUri = '//' + post.blog_name + '.tumblr.com/tagged/';
+                        if (post.tags && post.tags.length > 0) {
+                            _(post.tags).each(function (tag) {
+                                tags.push($('<a>', { href: tagBaseUri + tag, target: '_blank' })
+                                    .addClass('tag').text(tag).prepend($('<i class="fa fa-tag">')));
+                            });
+                        }
+                        return tags;
+                    },
+                    postPhotos = function () {
+                        var img;
+                        if (_.isArray(post.photos) && post.photos.length && (sizes = post.photos[0].alt_sizes)) {
+                            _(sizes).each(function (photo) {
+                                if (width === 0 || (photo.width > 500 && photo.width < 1200)) {
+                                    url = photo.url;
+                                    width = photo.width;
+                                }
+                            });
+                            url = url.replace(/https?:\/\//, '//');
+                            img = $('<img>').attr({ 'src': url }).css({
+                                'width': '100%',
+                                'max-width': width,
+                                'margin-bottom': '13px'
+                            });
+                            if (post.post_url || post.link_url) {
+                                return $('<a>', { href: post.post_url || post.link_url, target: '_blank' }).append(img);
                             }
-                        });
-                        url = url.replace(/https?:\/\//, '//');
-                        img = $('<img>').attr({ 'src': url }).css({
-                            'width': '100%',
-                            'max-width': width,
-                            'margin-bottom': '13px'
-                        });
-                        if (post.post_url || post.link_url) {
-                            return $('<a>', { href: post.post_url || post.link_url, target: '_blank' }).append(img);
-                        } else {
                             return img;
                         }
-                    }
-                },
-                postBody = function () {
-                    var strippedHtml = post.body
-                        .replace(/<(?!img\s*\/?)[^>]+>/g, '\n')
-                        .replace(/<img.+?src=[\'"]([^\'"]+)[\'"].*?>/i, '<img src="$1">');
-                    if (post.type === 'chat') {
-                        strippedHtml = strippedHtml.replace(/\n/g, '<br />');
-                    }
-                    return $('<div class="post-body">').html(strippedHtml);
-                },
-                postQuote = function () {
-                    return $('<blockquote>').append(_.escape($.trim(post.text)))
-                        .append($('<em>').text(_.escape($.trim(post.source))));
-                },
-                postLink = function () {
-                    return $('<a>', { href: post.post_url, target: '_blank', title: gt('Read article on tumblr.com') }).append($('<i class="icon-tumblr-sign">'));
-                },
-                postExternalLink = function () {
-                    return $('<a>', { href: post.url, target: '_blank', title: gt('Open external link') }).append($('<i class="fa fa-external-link-square">'));
-                },
-                postNav = function () {
-                    var nav = $('<div class="post-bar">');
-                    if (post.tags) nav.append(postTags());
-                    if (post.timestamp) nav.append(postDate());
-                    if (post.url) nav.append(postExternalLink());
-                    if (post.post_url) nav.append(postLink());
-                    return nav;
-                };
+                    },
+                    postBody = function () {
+                        var strippedHtml = post.body
+                            .replace(/<(?!img\s*\/?)[^>]+>/g, '\n')
+                            .replace(/<img.+?src=[\'"]([^\'"]+)[\'"].*?>/i, '<img src="$1">');
+                        if (post.type === 'chat') {
+                            strippedHtml = strippedHtml.replace(/\n/g, '<br />');
+                        }
+                        return $('<div class="post-body">').html(strippedHtml);
+                    },
+                    postQuote = function () {
+                        return $('<blockquote>').append(_.escape($.trim(post.text)))
+                            .append($('<em>').text(_.escape($.trim(post.source))));
+                    },
+                    postLink = function () {
+                        return $('<a>', { href: post.post_url, target: '_blank', title: gt('Read article on tumblr.com') }).append($('<i class="icon-tumblr-sign">'));
+                    },
+                    postExternalLink = function () {
+                        return $('<a>', { href: post.url, target: '_blank', title: gt('Open external link') }).append($('<i class="fa fa-external-link-square">'));
+                    },
+                    postNav = function () {
+                        var nav = $('<div class="post-bar">');
+                        if (post.tags) nav.append(postTags());
+                        if (post.timestamp) nav.append(postDate());
+                        if (post.url) nav.append(postExternalLink());
+                        if (post.post_url) nav.append(postLink());
+                        return nav;
+                    };
 
                 if (post.type === 'photo') {
                     node.append(postPhotos());

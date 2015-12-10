@@ -78,9 +78,8 @@ define('plugins/portal/rss/register', [
                             function () {
                                 if (data.urls.length > 1) {
                                     return $('<span class="gray">').text(_.noI18n(entry.feedTitle + ' '));
-                                } else {
-                                    return '';
                                 }
+                                return '';
                             },
                             $('<span class="bold">').text(_.noI18n(entry.subject)), $.txt('')
                         )

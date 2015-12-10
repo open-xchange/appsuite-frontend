@@ -69,15 +69,15 @@ define('plugins/notifications/mail/register', [
     // removes mails of a whole folder from notificationview
     function removeFolder(folder) {
         var mails = _.compact(_(ids.models).map(function (item) {
-                if (item.attributes.folder_id === folder) {
-                    return item.attributes.id;
-                }
-            }));
+            if (item.attributes.folder_id === folder) {
+                return item.attributes.id;
+            }
+        }));
         if (mails.length > 0) {
             ids.remove(mails);
         }
     }
-    function checkNew (items) {
+    function checkNew(items) {
         var newIds = _(items).map(function (item) {
                 return item.folder_id + '.'  + item.id;
             }),

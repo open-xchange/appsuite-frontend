@@ -20,13 +20,11 @@ define('plugins/mobile/addToHomescreen/register', [
         isIDevice = _.device('iOS'),
         isIPad = false,
         isRetina = false,
-        isSafari,
         isStandalone,
         OSVersion = 6,
         startX = 0,
         startY = 0,
         balloon,
-        overrideChecks,
 
         positionInterval,
         closeTimeout,
@@ -82,7 +80,6 @@ define('plugins/mobile/addToHomescreen/register', [
         }
         isIPad = _.device('ios && medium');
         isRetina = _.device('retina');
-        isSafari = _.device('safari');
         OSVersion = _.browser.ios;
         isStandalone = nav.standalone || false;
         // test for cookie presence
@@ -144,7 +141,7 @@ define('plugins/mobile/addToHomescreen/register', [
         id: 'show',
         draw: function () {
             var duration,
-            iPadXShift = 208;
+                iPadXShift = 208;
 
             // Set the initial position
             if (isIPad) {
@@ -160,18 +157,18 @@ define('plugins/mobile/addToHomescreen/register', [
 
                 switch (options.animationIn) {
 
-                case 'drop':
-                    duration = '0.6s';
-                    balloon.style.webkitTransform = 'translate3d(0,' + -(window.scrollY + options.bottomOffset + balloon.offsetHeight) + 'px,0)';
-                    break;
-                case 'bubble':
-                    duration = '0.6s';
-                    balloon.style.opacity = '0';
-                    balloon.style.webkitTransform = 'translate3d(0,' + (startY + 50) + 'px,0)';
-                    break;
-                default:
-                    duration = '1s';
-                    balloon.style.opacity = '0';
+                    case 'drop':
+                        duration = '0.6s';
+                        balloon.style.webkitTransform = 'translate3d(0,' + -(window.scrollY + options.bottomOffset + balloon.offsetHeight) + 'px,0)';
+                        break;
+                    case 'bubble':
+                        duration = '0.6s';
+                        balloon.style.opacity = '0';
+                        balloon.style.webkitTransform = 'translate3d(0,' + (startY + 50) + 'px,0)';
+                        break;
+                    default:
+                        duration = '1s';
+                        balloon.style.opacity = '0';
                 }
             } else {
                 startY = window.innerHeight + window.scrollY;
@@ -187,21 +184,22 @@ define('plugins/mobile/addToHomescreen/register', [
                 }
 
                 switch (options.animationIn) {
-                case 'drop':
-                    duration = '1s';
-                    balloon.style.webkitTransform = 'translate3d(0,' + -(startY + options.bottomOffset) + 'px,0)';
-                    break;
-                case 'bubble':
-                    duration = '0.6s';
-                    balloon.style.webkitTransform = 'translate3d(0,' + (balloon.offsetHeight + options.bottomOffset + 50) + 'px,0)';
-                    break;
-                default:
-                    duration = '1s';
-                    balloon.style.opacity = '0';
+                    case 'drop':
+                        duration = '1s';
+                        balloon.style.webkitTransform = 'translate3d(0,' + -(startY + options.bottomOffset) + 'px,0)';
+                        break;
+                    case 'bubble':
+                        duration = '0.6s';
+                        balloon.style.webkitTransform = 'translate3d(0,' + (balloon.offsetHeight + options.bottomOffset + 50) + 'px,0)';
+                        break;
+                    default:
+                        duration = '1s';
+                        balloon.style.opacity = '0';
                 }
             }
 
             // repaint trick
+            /*eslint no-unused-vars: 0*/
             var unused = balloon.offsetHeight;
             unused = null;
             balloon.style.webkitTransitionDuration = duration;
@@ -213,10 +211,9 @@ define('plugins/mobile/addToHomescreen/register', [
         }
     });
 
-    function manualShow(override) {
+    function manualShow() {
         if (!isIDevice || balloon) return;
 
-        overrideChecks = override;
         loaded();
     }
 
@@ -248,29 +245,29 @@ define('plugins/mobile/addToHomescreen/register', [
         balloon.style.webkitTransitionProperty = '-webkit-transform,opacity';
 
         switch (options.animationOut) {
-        case 'drop':
-            if (isIPad) {
-                duration = '0.4s';
-                opacity = '0';
-                posY += 50;
-            } else {
-                duration = '0.6s';
-                posY += balloon.offsetHeight + options.bottomOffset + 50;
-            }
-            break;
-        case 'bubble':
-            if (isIPad) {
+            case 'drop':
+                if (isIPad) {
+                    duration = '0.4s';
+                    opacity = '0';
+                    posY += 50;
+                } else {
+                    duration = '0.6s';
+                    posY += balloon.offsetHeight + options.bottomOffset + 50;
+                }
+                break;
+            case 'bubble':
+                if (isIPad) {
+                    duration = '0.8s';
+                    posY -= balloon.offsetHeight + options.bottomOffset + 50;
+                } else {
+                    duration = '0.4s';
+                    opacity = '0';
+                    posY -= 50;
+                }
+                break;
+            default:
                 duration = '0.8s';
-                posY -= balloon.offsetHeight + options.bottomOffset + 50;
-            } else {
-                duration = '0.4s';
                 opacity = '0';
-                posY -= 50;
-            }
-            break;
-        default:
-            duration = '0.8s';
-            opacity = '0';
         }
 
         balloon.addEventListener('webkitTransitionEnd', transitionEnd, false);

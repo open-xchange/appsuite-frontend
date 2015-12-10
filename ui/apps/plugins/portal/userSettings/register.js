@@ -53,14 +53,14 @@ define('plugins/portal/userSettings/register', [
                 pwRegex = settings.get('password/regexp', '[^a-z0-9]'),
                 regexText = settings.get('password/special', '$, _, %'),
                 pwStrengths = [
-                    { label: gt('Password strength: Too short'), color: 'bar-weak', barLength: '20%' },//red
-                    { label: gt('Password strength: Wrong length'), color: 'bar-weak', barLength: '20%' },//red
-                    { label: gt('Password strength: Very weak'), color: 'bar-weak', barLength: '20%' },//red
-                    { label: gt('Password strength: Weak'), color: 'bar-weak', barLength: '40%' },//red
-                    { label: gt('Password strength: Good'), color: 'bar-good', barLength: '60%' },//orange
-                    { label: gt('Password strength: Strong'), color: 'bar-strong', barLength: '80%' },//green
-                    { label: gt('Password strength: Very strong'), color: 'bar-strong', barLength: '100%' },//green
-                    { label: gt('Password strength: Legendary!'), color: 'bar-legendary', barLength: '100%' }//golden
+                    { label: gt('Password strength: Too short'), color: 'bar-weak', barLength: '20%' }, //red
+                    { label: gt('Password strength: Wrong length'), color: 'bar-weak', barLength: '20%' }, //red
+                    { label: gt('Password strength: Very weak'), color: 'bar-weak', barLength: '20%' }, //red
+                    { label: gt('Password strength: Weak'), color: 'bar-weak', barLength: '40%' }, //red
+                    { label: gt('Password strength: Good'), color: 'bar-good', barLength: '60%' }, //orange
+                    { label: gt('Password strength: Strong'), color: 'bar-strong', barLength: '80%' }, //green
+                    { label: gt('Password strength: Very strong'), color: 'bar-strong', barLength: '100%' }, //green
+                    { label: gt('Password strength: Legendary!'), color: 'bar-legendary', barLength: '100%' } //golden
                 ];
 
             new dialogs.ModalDialog({ async: true, width: 500 })
@@ -178,14 +178,13 @@ define('plugins/portal/userSettings/register', [
                     oldScore = 0;
                     // to short with no maxlength
                     return pwStrengths[0];
-                } else {
-                    if (oldScore !== 1) {
-                        notifications.yell('screenreader', pwStrengths[1].label);
-                    }
-                    oldScore = 1;
-                    // to short or to long
-                    return pwStrengths[1];
                 }
+                if (oldScore !== 1) {
+                    notifications.yell('screenreader', pwStrengths[1].label);
+                }
+                oldScore = 1;
+                // to short or to long
+                return pwStrengths[1];
             }
 
             //tests the password and draws the bar

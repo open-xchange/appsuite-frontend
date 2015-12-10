@@ -73,7 +73,7 @@ define('plugins/upsell/simple-wizard/register', [
         // see upsell:simple-wizard:init
         getURL: function (options, url) {
 
-            var url, hash = that.getVariables(options);
+            var hash = that.getVariables(options);
 
             url = String(url || that.settings.url).replace(/\$(\w+)/g, function (all, key) {
                 key = String(key).toLowerCase();

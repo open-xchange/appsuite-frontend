@@ -154,11 +154,10 @@ define('plugins/portal/mail/register', [
 
             if (props.id) {
                 return getMails('default' + props.id + '/INBOX');
-            } else {
-                return accountAPI.getUnifiedMailboxName().then(function (mb) {
-                    return getMails(mb ? mb + '/INBOX' : api.getDefaultFolder());
-                });
             }
+            return accountAPI.getUnifiedMailboxName().then(function (mb) {
+                return getMails(mb ? mb + '/INBOX' : api.getDefaultFolder());
+            });
         },
 
         summary: function (baton) {

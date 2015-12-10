@@ -84,7 +84,7 @@ define('plugins/xing/main', [
                 arr = _.compact([contact.email1, contact.email2, contact.email3]),
                 def = $.Deferred();
 
-            if (! hasXingAccount()) {
+            if (!hasXingAccount()) {
                 def.resolve(false);
                 return def;
             }

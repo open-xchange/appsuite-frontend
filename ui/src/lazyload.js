@@ -31,7 +31,8 @@
     $.fn.lazyloadScrollpane = function (options) {
 
         // don't add twice
-        if (this.prop('lazyload')) return this; else this.prop('lazyload', true);
+        if (this.prop('lazyload')) return this;
+        this.prop('lazyload', true);
 
         var scrollpane = this;
         options = _.extend({ effect: 'show' }, options);
@@ -60,22 +61,22 @@
         // respond to resize event; some elements might become visible
         $(window).on('resize.lazyload', _.debounce(update, 100));
 
-        this.on('appear.lazyload', '.lazyload', function (e) {
-                // response to appear event
-                onAppear.call(this, options);
-            })
-            .on({
-                // response to add.lazyload event
-                'add.lazyload': _.debounce(update, 10),
-                // update on scroll stop
-                'scroll.lazyload': _.debounce(update, 300),
-                // clean up on dispose
-                'dispose': function () {
-                    $(window).off('resize.lazyload');
-                    $(this).off('add.lazyload scroll.lazyload appear.lazyload');
-                    scrollpane = options = null;
-                }
-            });
+        this.on('appear.lazyload', '.lazyload', function () {
+            // response to appear event
+            onAppear.call(this, options);
+        })
+        .on({
+            // response to add.lazyload event
+            'add.lazyload': _.debounce(update, 10),
+            // update on scroll stop
+            'scroll.lazyload': _.debounce(update, 300),
+            // clean up on dispose
+            'dispose': function () {
+                $(window).off('resize.lazyload');
+                $(this).off('add.lazyload scroll.lazyload appear.lazyload');
+                scrollpane = options = null;
+            }
+        });
 
         return this;
     };

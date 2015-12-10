@@ -239,9 +239,8 @@ define('plugins/portal/twitter/register', [
             });
         } else if (errorCode === 88 || errorCode === 130) {
             return $('<a class="solution">').text(gt('Click to retry later.')).on('click', function () { keychain.submodules.twitter.trigger('update'); });
-        } else {
-            return $('<a class="solution">').text(gt('Click to retry')).on('click', function () { keychain.submodules.twitter.trigger('update'); });
         }
+        return $('<a class="solution">').text(gt('Click to retry')).on('click', function () { keychain.submodules.twitter.trigger('update'); });
     };
 
     var refreshWidget = function () {
@@ -301,8 +300,7 @@ define('plugins/portal/twitter/register', [
 
         load: function (baton) {
 
-            if (!keychain.hasStandardAccount('twitter'))
-                return $.Deferred().reject({ code: 'OAUTH-0006' });
+            if (!keychain.hasStandardAccount('twitter')) return $.Deferred().reject({ code: 'OAUTH-0006' });
 
             return loadFromTwitter({ count: loadEntriesPerPage, include_entities: true }).done(function (data) {
                 baton.data = data;

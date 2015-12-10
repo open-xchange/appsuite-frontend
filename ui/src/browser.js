@@ -12,6 +12,8 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
+ /* global DocumentTouch */
+
 (function () {
 
     var us = {},
@@ -31,8 +33,7 @@
         standalone,
         uiwebview,
         chromeIOS,
-        browserLC = {},
-        slice = Array.prototype.slice;
+        browserLC = {};
 
     // supported browsers
     us.browserSupport = {
@@ -50,15 +51,6 @@
         return true;
     }
 
-    function extend() {
-        var source = slice.call(arguments, 1);
-        for (var i = 0; i < source.length; i++) {
-            for (var prop in source) {
-                obj[prop] = source[prop];
-            }
-        }
-        return obj;
-    }
     /*
      * matchMedia() polyfill - test whether a CSS media type or media query applies
      * primary author: Scott Jehl
@@ -96,7 +88,7 @@
                     }
                     docElem.insertBefore(fakeBody, docElem.firstChild);
                     docElem.insertBefore(styleBlock, docElem.firstChild);
-                    cache[q] = ((window.getComputedStyle ? window.getComputedStyle(testDiv,null) : testDiv.currentStyle).position == 'absolute');
+                    cache[q] = ((window.getComputedStyle ? window.getComputedStyle(testDiv, null) : testDiv.currentStyle).position === 'absolute');
                     docElem.removeChild(fakeBody);
                     docElem.removeChild(styleBlock);
                 }
@@ -137,6 +129,7 @@
                 webkit = false;
             }
 
+            /*eslint no-nested-ternary: 0*/
             // add namespaces, just sugar
             us.browser = {
                 /** is IE? */
@@ -208,7 +201,7 @@
             // Only major versions will be kept
             // '7.2.3' will be 7.2
             // '6.0.1' will be 6
-            if (typeof(value) === 'string') {
+            if (typeof value === 'string') {
                 value = value === '' ? true : parseFloat(value, 10);
                 us.browser[key] = value;
             }
@@ -224,7 +217,7 @@
         if (us.browser.chrome && us.browser.windows8 && Modernizr.touch) {
             // overwrite Modernizr's touch property and remove html class
             Modernizr.touch = false;
-            document.getElementsByTagName('html')[0].className = document.getElementsByTagName('html')[0].className.replace(/\btouch\b/,'');
+            document.getElementsByTagName('html')[0].className = document.getElementsByTagName('html')[0].className.replace(/\btouch\b/, '');
         }
     }
 
@@ -331,6 +324,7 @@
                 console.debug(condition);
             }
             try {
+                /*eslint no-new-func: 0*/
                 return new Function('return !!(' + condition + ')')();
             } catch (e) {
                 console.error('_.device()', condition, e);

@@ -169,12 +169,11 @@ define('plugins/portal/xing/actions', [
                     $('<i class="fa fa-thumbs-down">'),
                     $.txt(gt('Un-like'))
                 ).on('click', handler);
-            } else {
-                return $('<div class="xing possible-action like">').append(
-                    $('<i class="fa fa-thumbs-up">'),
-                    $.txt(gt('Like'))
-                ).on('click', handler);
             }
+            return $('<div class="xing possible-action like">').append(
+                $('<i class="fa fa-thumbs-up">'),
+                $.txt(gt('Like'))
+            ).on('click', handler);
         }
     });
 

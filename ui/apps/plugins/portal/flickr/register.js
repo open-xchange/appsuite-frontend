@@ -67,10 +67,9 @@ define('plugins/portal/flickr/register', [
                 return baton.feed.load().done(function (data) {
                     baton.data = data;
                 });
-            } else {
-                baton.data = [];
-                return $.when();
             }
+            baton.data = [];
+            return $.when();
         },
 
         preview: function (baton) {

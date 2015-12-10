@@ -21,19 +21,15 @@ define('plugins/portal/reddit/register', [
     var MediaPlayer = function () {}, settings = {};
 
     var drawPlugin = function (index) {
-        if (!index) {
-            index = 100;
-        }
+        if (!index) index = 100;
 
-        var mp = new MediaPlayer();
-        var apiUrl = {
+        var mp = new MediaPlayer(),
+            apiUrl = {
                 'new': 'http://www.reddit.com/r/##subreddit##/new.json?sort=new',
                 'hot': 'http://www.reddit.com/r/##subreddit##/.json?sort='
-            };
-
-        var lastShowedPreview = false;
-
-        var subreddits = settings.get('subreddits');
+            },
+            lastShowedPreview = false,
+            subreddits = settings.get('subreddits');
 
         _.each(subreddits, function (v) {
             if (apiUrl[v.mode]) {

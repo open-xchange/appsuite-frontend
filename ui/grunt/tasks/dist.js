@@ -19,7 +19,8 @@ module.exports = function (grunt) {
         //filter all languages that should not be packaged
         //those will have something like ""X-Package: no\n"" in their header
         var content = grunt.file.read(file),
-        included = !/^\s*"X-Package: (?:off|no|false|0)(?:\\n)?"\s*$/im.test(content);
+            included = !/^\s*"X-Package: (?:off|no|false|0)(?:\\n)?"\s*$/im.test(content);
+
         if (!included) {
             grunt.verbose.writeln('Filtered file: ', file);
         }

@@ -37,7 +37,7 @@ define('plugins/portal/xing/register', [
 
     'use strict';
 
-    var addXingAccount,
+    var // addXingAccount,
         createXingAccount,
         makeNewsfeed,
         statusUpdateForm,
@@ -67,12 +67,12 @@ define('plugins/portal/xing/register', [
         new dialogs.ModalDialog()
 
             .build(function () {
-                var menu, availableLangs;
+                var availableLangs;
 
                 availableLangs = 'de en es fr it nl pl pt ru tr zh'.split(' ');
 
                 this.append(
-                    menu = $('<div class="io-ox-xing submitted-data">').append(
+                    $('<div class="io-ox-xing submitted-data">').append(
                         $('<p>').text(
                             gt('Please select which of the following data we may use to create your %s account:', XING_NAME)
                         ),
@@ -137,17 +137,17 @@ define('plugins/portal/xing/register', [
 
     };
 
-    addXingAccount = function (event) {
-        var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600'),
-            baton = event.data.baton;
-        return keychain.createInteractively('xing', win).done(function () {
-            var model = baton.model;
-            $(model.node).find('.setup-questions').remove();
-            //hack to provoke loadAndPreview()
-            model.changed.props = baton.model.drawn = true;
-            ox.trigger('refresh^');
-        });
-    };
+    // addXingAccount = function (event) {
+    //     var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600'),
+    //         baton = event.data.baton;
+    //     return keychain.createInteractively('xing', win).done(function () {
+    //         var model = baton.model;
+    //         $(model.node).find('.setup-questions').remove();
+    //         //hack to provoke loadAndPreview()
+    //         model.changed.props = baton.model.drawn = true;
+    //         ox.trigger('refresh^');
+    //     });
+    // };
 
     statusUpdateForm = function () {
         var form = $('<div>').addClass('xing comment').append(

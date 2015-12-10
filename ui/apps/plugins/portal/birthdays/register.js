@@ -170,6 +170,7 @@ define('plugins/portal/birthdays/register', [
                             nextBirthday.add(1, 'year');
                             delta = nextBirthday.diff(moment(), 'day');
                         }
+                        /*eslint no-nested-ternary: 0*/
                         delta = delta === 0 ? gt('Today') : delta === 1 ? gt('Tomorrow') : delta === -1 ? gt('Yesterday') : gt('In %1$d days', Math.ceil(delta));
 
                         $list.append(

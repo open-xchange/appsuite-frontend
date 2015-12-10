@@ -60,9 +60,8 @@ module.exports = function (grunt) {
                 // just extract plugins we need
                 if (subPath.indexOf('plugins' + path.sep) > -1 && !isUsed(plugins, subPath)) return null;
                 return subPath + path.sep + path.basename(filepath);
-            } else {
-                return null;
             }
+            return null;
         };
 
     grunt.config.merge({

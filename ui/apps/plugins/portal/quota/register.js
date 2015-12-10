@@ -74,10 +74,9 @@ define('plugins/portal/quota/register', [
             $('<ul class="content no-pointer list-unstyled">').append(
                 _(availableQuota(quota)).map(function (q) {
                     return new QuotaView(_.extend({
-                            tagName: 'li',
-                            className: 'paragraph'
-                        }, q)
-                    ).render().$el;
+                        tagName: 'li',
+                        className: 'paragraph'
+                    }, q)).render().$el;
                 })
             )
         );

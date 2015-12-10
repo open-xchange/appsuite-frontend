@@ -50,12 +50,10 @@ define('plugins/portal/twitter/network', ['io.ox/oauth/proxy'], function (proxy)
 
                 if (!jsonResponse.error) {
                     return jsonResponse;
-                } else {
-                    return {};
                 }
-            } else {
                 return {};
             }
+            return {};
         });
     };
 

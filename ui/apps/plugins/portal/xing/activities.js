@@ -173,7 +173,7 @@ define('plugins/portal/xing/activities', [
     ext.point('io.ox/portal/widget/xing/activityhandler').extend({
         id: 'singleCompanyProfileUpdate',
         accepts: function (activity) {
-            return (activity.verb === 'share' || activity.verb === 'post')&&
+            return (activity.verb === 'share' || activity.verb === 'post') &&
                 activity.objects.length === 1 &&
                 activity.objects[0].type === 'company_profile_update';
         },
