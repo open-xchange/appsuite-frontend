@@ -227,7 +227,7 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/mark-unread', {
         requires: function (e) {
             // must be top-level
-            if (!e.collection.has('toplevel', 'write')) return;
+            if (!e.collection.has('toplevel', 'modify')) return;
             // partiallySeen? has at least one email that's seen?
             return _(e.baton.array()).reduce(function (memo, obj) {
                 return memo || !util.isUnseen(obj);
@@ -243,7 +243,7 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/mark-read', {
         requires: function (e) {
             // must be top-level
-            if (!e.collection.has('toplevel', 'write')) return;
+            if (!e.collection.has('toplevel', 'modify')) return;
             // partiallyUnseen? has at least one email that's seen?
             return _(e.baton.array()).reduce(function (memo, obj) {
                 return memo || util.isUnseen(obj);
