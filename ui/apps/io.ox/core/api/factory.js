@@ -237,26 +237,26 @@ define('io.ox/core/api/factory', [
                 // empty?
                 if (ids.length === 0) {
                     return $.Deferred().resolve([]).done(o.done.list || $.noop);
-                // see Bug 32300 - Single contact does not get updated after external change
-                // } else if (ids.length === 1) {
+                    // see Bug 32300 - Single contact does not get updated after external change
+                    // } else if (ids.length === 1) {
 
-                //     // if just one item, we use get request
-                //     if (typeof ids[0] === 'number') {
-                //         ids = [{ id: ids[0]}];
-                //     }
+                    //     // if just one item, we use get request
+                    //     if (typeof ids[0] === 'number') {
+                    //         ids = [{ id: ids[0]}];
+                    //     }
 
-                //     var getOptions = http.simplify(ids)[0];
+                    //     var getOptions = http.simplify(ids)[0];
 
-                //     //look if special handling is needed
-                //     if (_.isFunction(o.simplify)) {
-                //         getOptions = o.simplify({ original: ids[0], simplified: getOptions });
-                //     }
+                    //     //look if special handling is needed
+                    //     if (_.isFunction(o.simplify)) {
+                    //         getOptions = o.simplify({ original: ids[0], simplified: getOptions });
+                    //     }
 
-                //     // go!
-                //     return this.get(getOptions, useCache)
-                //         .then(function (data) { return [data]; })
-                //         .then(o.pipe.listPost)
-                //         .done(o.done.list || $.noop);
+                    //     // go!
+                    //     return this.get(getOptions, useCache)
+                    //         .then(function (data) { return [data]; })
+                    //         .then(o.pipe.listPost)
+                    //         .done(o.done.list || $.noop);
                 }
                 // cache miss?
                 return (useCache ? caches.list.get(ids, getter) : getter())

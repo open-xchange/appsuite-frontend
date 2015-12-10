@@ -333,7 +333,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 var swiper = self.swiper;
 
                 // recalculate swiper index
-                swiper.activeIndex = parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index')) + 1;
+                swiper.activeIndex = parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index'), 10) + 1;
                 swiper.update(true);
 
                 return $.when();

@@ -63,15 +63,8 @@ define('io.ox/backbone/mini-views/quota', [
                     quota: o.quota,
                     usage: o.usage
                 });
-            } else {
-                return quotaAPI.load().then(function (result) {
-                    return {
-                        quota: result[module][quotaField],
-                        usage: result[module][usageField]
-                    };
-                });
             }
-            return quotaAPI.get().then(function (result) {
+            return quotaAPI.load().then(function (result) {
                 return {
                     quota: result[module][quotaField],
                     usage: result[module][usageField]

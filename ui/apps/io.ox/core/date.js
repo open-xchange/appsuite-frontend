@@ -566,7 +566,7 @@ define.async('io.ox/core/date', [
             var t = m[i + 5] ? time(i + 5) : 72e5;
             if (m[i])     return julian(m[i], t);
             if (m[i + 1]) return gregorian(m[i + 1], t);
-                          return monthly(m[i + 2], m[i + 3], m[i + 4], t);
+            return monthly(m[i + 2], m[i + 3], m[i + 4], t);
         }
         if (m) {
             var std = {

@@ -125,7 +125,6 @@ define('io.ox/contacts/widgets/exif', function () {
                 vals[n] = file.getByteAt(offset + n);
             }
             return vals;
-            break;
         case 2:
             // ascii, 8-bit byte
             offset = numValues > 4 ? valueOffset : (entryOffset + 8);
@@ -141,7 +140,6 @@ define('io.ox/contacts/widgets/exif', function () {
                 vals[n] = file.getShortAt(offset + 2 * n, bigEnd);
             }
             return vals;
-            break;
         case 4:
             // long, 32 bit int
             if (numValues === 1) {
@@ -152,7 +150,6 @@ define('io.ox/contacts/widgets/exif', function () {
                 vals[n] = file.getLongAt(valueOffset + 4 * n, bigEnd);
             }
             return vals;
-            break;
         case 5: // rational = two long values, first is numerator, second is denominator
             if (numValues === 1) {
                 return file.getLongAt(valueOffset, bigEnd) / file.getLongAt(valueOffset + 4, bigEnd);
@@ -162,7 +159,6 @@ define('io.ox/contacts/widgets/exif', function () {
                 aVals[n] = file.getLongAt(valueOffset + 8 * n, bigEnd) / file.getLongAt(valueOffset + 4 + 8 * n, bigEnd);
             }
             return aVals;
-            break;
         case 9:
             // slong, 32 bit signed int
             if (numValues === 1) {
@@ -173,7 +169,6 @@ define('io.ox/contacts/widgets/exif', function () {
                 vals[n] = file.getSLongAt(valueOffset + 4 * n, bigEnd);
             }
             return vals;
-            break;
         case 10:
             // signed rational, two slongs, first is numerator, second is denominator
             if (numValues === 1) {

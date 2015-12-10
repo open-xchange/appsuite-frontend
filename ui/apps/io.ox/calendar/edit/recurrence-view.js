@@ -910,7 +910,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                         }
                         break;
 
-                        // no default
+                    // no default
                     }
 
                     this.nodes.endsChoice.children().detach();
@@ -1089,7 +1089,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                 case '3':
                     this.endsChoice = this.ends.after;
                     break;
-                    // no default
+                // no default
                 }
                 this.updateModel();
             },

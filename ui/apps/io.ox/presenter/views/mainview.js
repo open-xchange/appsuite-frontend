@@ -207,7 +207,7 @@ define('io.ox/presenter/views/mainview', [
                 }
             }
 
-            function endOrLeavePresentation () {
+            function endOrLeavePresentation() {
                 if (rtModel.isPresenter(userId)) {
                     rtConnection.endPresentation();
                 } else if (rtModel.canLeave(userId)) {
@@ -215,7 +215,7 @@ define('io.ox/presenter/views/mainview', [
                 }
             }
 
-            function startOrJoinPresentation () {
+            function startOrJoinPresentation() {
                 if (rtModel.canStart(userId)) {
                     var slideId = self.getActiveSlideIndex();
                     rtConnection.startPresentation({ activeSlide: slideId });

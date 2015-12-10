@@ -223,7 +223,6 @@ define('io.ox/participants/model', [
                         return contactAPI.get(this.pick('id', 'folder_id')).then(update);
                     }
                     return contactAPI.getByEmailaddress(this.getEmail()).then(partialUpdate);
-                    break;
                 case this.TYPE_DISTLIST:
                     if (this.get('display_name') && 'distribution_list' in this.attributes) break;
                     return contactAPI.get(this.pick('id', 'folder_id')).then(update);
