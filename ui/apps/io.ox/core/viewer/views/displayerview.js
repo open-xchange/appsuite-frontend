@@ -268,7 +268,7 @@ define('io.ox/core/viewer/views/displayerview', [
             _(this.slideViews).each(function (view, key) {
                 if (view.isPrefetched) return;
 
-                var index = parseInt(key);
+                var index = parseInt(key, 10);
                 view.prefetch(self.getPrefetchPriority(index));
             });
         },
