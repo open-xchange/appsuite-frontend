@@ -267,14 +267,17 @@ define('io.ox/mail/api', [
         return get.call(api, obj, options && options.cache).done(function (data) {
             // delete potential 'cid' attribute (see bug 40136); otherwise the mail gets lost
             delete data.cid;
-            // either update or add model
-            if (model) {
-                // if we already have a model we promote changes for threads
-                model.set(data);
-                propagate(model);
-            } else {
-                // add new model
-                pool.add('detail', data);
+            //don't save raw data in our models. We only want preformated content there
+            if (!obj.view || (obj.view && obj.view !== 'raw')) {
+                // either update or add model
+                if (model) {
+                    // if we already have a model we promote changes for threads
+                    model.set(data);
+                    propagate(model);
+                } else {
+                    // add new model
+                    pool.add('detail', data);
+                }
             }
         });
     };
