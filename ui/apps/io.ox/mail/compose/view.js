@@ -326,7 +326,7 @@ define('io.ox/mail/compose/view', [
                 };
                 // remove 'mailto:'' prefix and split at '?''
                 var tmp = mailto.replace(/^mailto:/, '').split(/\?/, 2);
-                var to = unescape(tmp[0]);
+                var to = decodeURIComponent(tmp[0]);
                 params = _.deserialize(tmp[1]);
                 // see Bug 31345 - [L3] Case sensitivity issue with Richmail while rendering Mailto: link parameters
                 for (var key in params) params[key.toLowerCase()] = params[key];
