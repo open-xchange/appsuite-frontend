@@ -4493,27 +4493,16 @@ msgstr ""
 msgid "Later"
 msgstr ""
 
+#. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js
 #: module:io.ox/core
-#: apps/io.ox/core/sub/settings/pane.js
-#: module:io.ox/core/sub
-#: apps/io.ox/mail/mailfilter/settings/filter.js
-#: module:io.ox/mail
-#: apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal
-msgid "Disable"
+msgid "Never"
 msgstr ""
 
+#. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/notifications.js
 #: module:io.ox/core
-#: apps/io.ox/core/sub/settings/pane.js
-#: module:io.ox/core/sub
-#: apps/io.ox/mail/autoforward/settings/model.js
-#: module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js
-#: apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal
-msgid "Enable"
+msgid "Decide now"
 msgstr ""
 
 #: apps/io.ox/core/notifications.js
@@ -5058,6 +5047,12 @@ msgstr ""
 msgid "Show desktop notifications"
 msgstr ""
 
+#. Opens popup to decide if desktop notifications should be shown
+#: apps/io.ox/core/settings/pane.js
+#: module:io.ox/core
+msgid "Manage permission now"
+msgstr ""
+
 #: apps/io.ox/core/settings/user.js
 #: module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -5153,6 +5148,25 @@ msgstr ""
 #: apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub
 msgid "Note: Refreshing this subscription will replace the calendar content with the external content. Changes you have made inside appsuite will be overwritten"
+msgstr ""
+
+#: apps/io.ox/core/sub/settings/pane.js
+#: module:io.ox/core/sub
+#: apps/io.ox/mail/mailfilter/settings/filter.js
+#: module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
+msgid "Disable"
+msgstr ""
+
+#: apps/io.ox/core/sub/settings/pane.js
+#: module:io.ox/core/sub
+#: apps/io.ox/mail/autoforward/settings/model.js
+#: module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
+msgid "Enable"
 msgstr ""
 
 #: apps/io.ox/core/sub/settings/pane.js

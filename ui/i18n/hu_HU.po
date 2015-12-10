@@ -2162,6 +2162,11 @@ msgstr "Nap"
 msgid "December"
 msgstr "December"
 
+#. Opens popup to decide if desktop notifications should be shown
+#: apps/io.ox/core/notifications.js module:io.ox/core
+msgid "Decide now"
+msgstr ""
+
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Decline"
@@ -2377,7 +2382,6 @@ msgstr "Közvetlen hivatkozás"
 msgid "Direct link: %1$s"
 msgstr "Közvetlen hivatkozás: %1$s"
 
-#: apps/io.ox/core/notifications.js module:io.ox/core
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -2963,7 +2967,6 @@ msgstr "Mappa ürítése"
 msgid "Empty name and description found."
 msgstr "A név és a leírás üres."
 
-#: apps/io.ox/core/notifications.js module:io.ox/core
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js
@@ -4448,6 +4451,13 @@ msgstr "Alkalmazások kezelése"
 msgid "Manage favorites"
 msgstr "Kedvencek kezelése"
 
+#. Opens popup to decide if desktop notifications should be shown
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "no edit permissions"
+msgid "Manage permission now"
+msgstr "nincs szerkesztési jogosultság"
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Manage signatures"
 msgstr "Aláírások kezelése"
@@ -4731,6 +4741,11 @@ msgstr "Természet"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Need more space?"
 msgstr "Több helyre van szüksége?"
+
+#. declines the use of desktop notifications
+#: apps/io.ox/core/notifications.js module:io.ox/core
+msgid "Never"
+msgstr ""
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail

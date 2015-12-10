@@ -2169,6 +2169,11 @@ msgstr "Jours"
 msgid "December"
 msgstr "Décembre"
 
+#. Opens popup to decide if desktop notifications should be shown
+#: apps/io.ox/core/notifications.js module:io.ox/core
+msgid "Decide now"
+msgstr ""
+
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Decline"
@@ -2385,7 +2390,6 @@ msgstr "Lien direct"
 msgid "Direct link: %1$s"
 msgstr "Lien direct : %1$s"
 
-#: apps/io.ox/core/notifications.js module:io.ox/core
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -2978,7 +2982,6 @@ msgstr "Vider le dossier"
 msgid "Empty name and description found."
 msgstr "Un nom et une description vides ont été trouvés."
 
-#: apps/io.ox/core/notifications.js module:io.ox/core
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js
@@ -4481,6 +4484,13 @@ msgstr "Gérer les applications"
 msgid "Manage favorites"
 msgstr "Gérer les favoris"
 
+#. Opens popup to decide if desktop notifications should be shown
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "no edit permissions"
+msgid "Manage permission now"
+msgstr "pas de droits de modification"
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Manage signatures"
 msgstr "Gérer les signatures"
@@ -4767,6 +4777,11 @@ msgstr "Nature"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Need more space?"
 msgstr "Besoin de davantage d'espace ?"
+
+#. declines the use of desktop notifications
+#: apps/io.ox/core/notifications.js module:io.ox/core
+msgid "Never"
+msgstr "Jamais"
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -10876,9 +10891,6 @@ msgstr "aaaa"
 
 #~ msgid "Network Problems"
 #~ msgstr "Problèmes réseau"
-
-#~ msgid "Never"
-#~ msgstr "Jamais"
 
 #~ msgid "New Mail from %1$s %2$s. Press [enter] to open"
 #~ msgstr "Nouveau courriel de %1$s %2$s. Appuyez sur [Entr] pour l'ouvrir"

@@ -2112,6 +2112,11 @@ msgstr ""
 msgid "December"
 msgstr ""
 
+#. Opens popup to decide if desktop notifications should be shown
+#: apps/io.ox/core/notifications.js module:io.ox/core
+msgid "Decide now"
+msgstr ""
+
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Decline"
@@ -2321,7 +2326,6 @@ msgstr ""
 msgid "Direct link: %1$s"
 msgstr ""
 
-#: apps/io.ox/core/notifications.js module:io.ox/core
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -2885,7 +2889,6 @@ msgstr ""
 msgid "Empty name and description found."
 msgstr ""
 
-#: apps/io.ox/core/notifications.js module:io.ox/core
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js
@@ -4325,6 +4328,11 @@ msgstr ""
 msgid "Manage favorites"
 msgstr ""
 
+#. Opens popup to decide if desktop notifications should be shown
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Manage permission now"
+msgstr ""
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Manage signatures"
 msgstr ""
@@ -4607,6 +4615,11 @@ msgstr ""
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Need more space?"
+msgstr ""
+
+#. declines the use of desktop notifications
+#: apps/io.ox/core/notifications.js module:io.ox/core
+msgid "Never"
 msgstr ""
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
