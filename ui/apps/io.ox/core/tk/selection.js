@@ -231,45 +231,45 @@ define('io.ox/core/tk/selection', [
 
             // process event
             switch (e.which) {
-            case 38:
-                e.preventDefault();
-                if ($(e.target).hasClass('folder-options-badge dropdown-opened')) return;
-                // cursor up
-                if (e.metaKey || e.ctrlKey) {
-                    selectFirst(e);
-                } else {
-                    selectPrevious(e);
-                }
-                break;
-            case 32:
-                // last is the current selected/focussed
-                if (options.markable) {
+                case 38:
                     e.preventDefault();
-                    toggle(last);
-                }
-                break;
-            case 40:
-                e.preventDefault();
-                if ($(e.target).hasClass('folder-options-badge dropdown-opened')) return;
-                // cursor down
-                if (e.metaKey || e.crtlKey) {
-                    selectLast(e);
-                } else {
-                    selectNext(e);
-                }
-                break;
-            case 9:
-                if (options.markable) {
-                    clearMarks();
-                }
-                break;
-            // [Del], [Backspace] or [fn+Backspace] (MacOS) > delete item
-            case 8:
-            case 46:
-                e.preventDefault();
-                self.trigger('selection:delete', self.get());
-                break;
-            // no default
+                    if ($(e.target).hasClass('folder-options-badge dropdown-opened')) return;
+                    // cursor up
+                    if (e.metaKey || e.ctrlKey) {
+                        selectFirst(e);
+                    } else {
+                        selectPrevious(e);
+                    }
+                    break;
+                case 32:
+                    // last is the current selected/focussed
+                    if (options.markable) {
+                        e.preventDefault();
+                        toggle(last);
+                    }
+                    break;
+                case 40:
+                    e.preventDefault();
+                    if ($(e.target).hasClass('folder-options-badge dropdown-opened')) return;
+                    // cursor down
+                    if (e.metaKey || e.crtlKey) {
+                        selectLast(e);
+                    } else {
+                        selectNext(e);
+                    }
+                    break;
+                case 9:
+                    if (options.markable) {
+                        clearMarks();
+                    }
+                    break;
+                // [Del], [Backspace] or [fn+Backspace] (MacOS) > delete item
+                case 8:
+                case 46:
+                    e.preventDefault();
+                    self.trigger('selection:delete', self.get());
+                    break;
+                // no default
             }
         };
 

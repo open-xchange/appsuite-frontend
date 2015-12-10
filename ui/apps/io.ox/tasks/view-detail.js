@@ -256,10 +256,10 @@ define('io.ox/tasks/view-detail', [
 
     var buildDropdown = function (container, label, data) {
         var bla = new links.Dropdown({
-                label: label,
-                classes: 'attachment-item',
-                ref: 'io.ox/core/tk/attachment/links'
-            }).draw.call(container, data);
+            label: label,
+            classes: 'attachment-item',
+            ref: 'io.ox/core/tk/attachment/links'
+        }).draw.call(container, data);
 
         //no inline style for mobile
         if (_.device('smartphone')) {

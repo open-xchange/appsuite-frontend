@@ -118,9 +118,9 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
 
             // open dropdown for
             var baton = ext.Baton({
-                    data: this.getFile(),
-                    $: new Dialogs.ModalDialog()
-                });
+                data: this.getFile(),
+                $: new Dialogs.ModalDialog()
+            });
             // draw modal body
             ext.point(POINT + '/dialog').invoke('draw', this, baton);
 
@@ -132,10 +132,10 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
 
         upload: function (comment) {
             var data = {
-                    file: this.getFile(),
-                    id: this.model.get('id'),
-                    folder: this.model.get('folder_id')
-                };
+                file: this.getFile(),
+                id: this.model.get('id'),
+                folder: this.model.get('folder_id')
+            };
 
             if (COMMENTS) data.version_comment = comment || '';
 

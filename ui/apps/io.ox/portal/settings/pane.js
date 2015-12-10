@@ -213,24 +213,24 @@ define('io.ox/portal/settings/pane', [
         }
 
         switch (e.which) {
-        case 38:
-            if (index > 0) {
-                // up
-                e.preventDefault();
-                current.insertBefore(current.prevAll('.draggable:first'));
-                cont();
-            }
-            break;
-        case 40:
-            if (index < items.length) {
-                // down
-                e.preventDefault();
-                current.insertAfter(current.nextAll('.draggable:first'));
-                cont();
-            }
-            break;
-        default:
-            break;
+            case 38:
+                if (index > 0) {
+                    // up
+                    e.preventDefault();
+                    current.insertBefore(current.prevAll('.draggable:first'));
+                    cont();
+                }
+                break;
+            case 40:
+                if (index < items.length) {
+                    // down
+                    e.preventDefault();
+                    current.insertAfter(current.nextAll('.draggable:first'));
+                    cont();
+                }
+                break;
+            default:
+                break;
         }
 
     }

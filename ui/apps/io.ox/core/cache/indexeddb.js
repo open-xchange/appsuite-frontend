@@ -285,10 +285,10 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     function ITER(request) {
 
         var callbacks = {
-            step: [],
-            end: [],
-            fail: []
-        }, failed = false, ended = false;
+                step: [],
+                end: [],
+                fail: []
+            }, failed = false, ended = false;
 
         request.onerror = function (event) {
             if (!failed && !ended) {

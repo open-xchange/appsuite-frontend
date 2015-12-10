@@ -448,16 +448,16 @@ define('io.ox/settings/main', [
 
             var node = app.getWindow().nodes.outer;
             metrics.watch({
-                    node: node,
-                    selector: '.io-ox-accounts-settings [data-actionname="mailaccount"]',
-                    type: 'click'
+                node: node,
+                selector: '.io-ox-accounts-settings [data-actionname="mailaccount"]',
+                type: 'click'
 
-                }, {
-                    app: 'mail',
-                    target: 'settings/account',
-                    type: 'click',
-                    action: 'add'
-                });
+            }, {
+                app: 'mail',
+                target: 'settings/account',
+                type: 'click',
+                action: 'add'
+            });
         });
 
         ext.point('io.ox/settings/pane').extend({

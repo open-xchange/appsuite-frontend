@@ -633,7 +633,7 @@ define('io.ox/mail/util', [
             return function (data) {
                 data = data || {};
                 var i, $i, obj, dat, attachments = [],
-                mail = { id: data.id, folder_id: data.folder_id };
+                    mail = { id: data.id, folder_id: data.folder_id };
 
                 // get nested messages
                 for (i = 0, $i = (data.nested_msgs || []).length; i < $i; i++) {

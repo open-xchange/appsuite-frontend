@@ -104,20 +104,20 @@ define('io.ox/find/date/patterns', [
     var getFormat = (function () {
         var regexEndian = /(\d{1,4})([\/\.\-])(\d{1,2})[\/\.\-](\d{1,4})/,
             replaceEndian = function (matchedPart, first, separator, second, third) {
-            var hasYearSuffix = first.length < third.length,
-                parts = hasYearSuffix ? [undefined, undefined, 'YYYY'] : ['YYYY', undefined, undefined];
-            // special case: MM/DD/YYYY
-            if (separator === '/' && hasYearSuffix) {
-                parts[0] = first.replace(/./g, 'M');
-                parts[1] = second.replace(/./g, 'D');
-            }
-            // month: always in the middle
-            parts[1] = parts[1] || second.replace(/./g, 'M');
-            // day: fill up last undefined part
-            parts[0] = parts[0] || first.replace(/./g, 'D');
-            parts[2] = parts[2] || third.replace(/./g, 'D');
-            return parts.join(separator);
-        };
+                var hasYearSuffix = first.length < third.length,
+                    parts = hasYearSuffix ? [undefined, undefined, 'YYYY'] : ['YYYY', undefined, undefined];
+                // special case: MM/DD/YYYY
+                if (separator === '/' && hasYearSuffix) {
+                    parts[0] = first.replace(/./g, 'M');
+                    parts[1] = second.replace(/./g, 'D');
+                }
+                // month: always in the middle
+                parts[1] = parts[1] || second.replace(/./g, 'M');
+                // day: fill up last undefined part
+                parts[0] = parts[0] || first.replace(/./g, 'D');
+                parts[2] = parts[2] || third.replace(/./g, 'D');
+                return parts.join(separator);
+            };
         return function (value) {
             return value.replace(regexEndian, replaceEndian);
         };

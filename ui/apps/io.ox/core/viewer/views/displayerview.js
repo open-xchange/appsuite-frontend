@@ -289,21 +289,21 @@ define('io.ox/core/viewer/views/displayerview', [
             }
 
             switch (prefetchDirection) {
-            case 'left':
-                loadRange = getLeftRange();
-                break;
+                case 'left':
+                    loadRange = getLeftRange();
+                    break;
 
-            case 'right':
-                loadRange = getRigthRange();
-                break;
+                case 'right':
+                    loadRange = getRigthRange();
+                    break;
 
-            case 'both':
-                loadRange = _.union(getLeftRange(), getRigthRange());
-                break;
+                case 'both':
+                    loadRange = _.union(getLeftRange(), getRigthRange());
+                    break;
 
-            default:
-                loadRange = [slideIndex];
-                break;
+                default:
+                    loadRange = [slideIndex];
+                    break;
             }
 
             return _(loadRange)

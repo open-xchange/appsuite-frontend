@@ -60,8 +60,8 @@ define('io.ox/calendar/actions/acceptdeny', [
                 }
 
                 return new dialogs.ModalDialog({
-                        help: 'ox.appsuite.user.sect.calendar.manage.changestatus.html#ox.appsuite.user.concept.calendar.changestatus'
-                    })
+                    help: 'ox.appsuite.user.sect.calendar.manage.changestatus.html#ox.appsuite.user.concept.calendar.changestatus'
+                })
                     .build(function () {
                         if (!series && o.recurrence_position) {
                             data = api.removeRecurrenceInformation(data);
@@ -129,17 +129,17 @@ define('io.ox/calendar/actions/acceptdeny', [
                             }
 
                             switch (action) {
-                            case 'accepted':
-                                apiData.data.confirmation = 1;
-                                break;
-                            case 'declined':
-                                apiData.data.confirmation = 2;
-                                break;
-                            case 'tentative':
-                                apiData.data.confirmation = 3;
-                                break;
-                            default:
-                                return;
+                                case 'accepted':
+                                    apiData.data.confirmation = 1;
+                                    break;
+                                case 'declined':
+                                    apiData.data.confirmation = 2;
+                                    break;
+                                case 'tentative':
+                                    apiData.data.confirmation = 3;
+                                    break;
+                                default:
+                                    return;
                             }
 
                             // set (default) reminder?

@@ -21,32 +21,32 @@ define('io.ox/core/tk/nodetouch', [
      */
     function registerTouchHandlers(nodes, _options) {
 
-        var defaults = {
+        var defaults =
+            {
+                // determines the distance that decides between tap and swipe event
+                threshold: 3,
 
-            // determines the distance that decides between tap and swipe event
-            threshold: 3,
+                // determines the maximum finger down time in milliseconds to detect a tap event
+                tapTime: 250,
 
-            // determines the maximum finger down time in milliseconds to detect a tap event
-            tapTime: 250,
+                // determines the maximum time in milliseconds between taps to detect a multi tap
+                tapInterval: 300,
 
-            // determines the maximum time in milliseconds between taps to detect a multi tap
-            tapInterval: 300,
+                // determines the maximum number of taps that are recognized
+                maxTapCount: 2,
 
-            // determines the maximum number of taps that are recognized
-            maxTapCount: 2,
+                // determines the horizontal distance a swipe is detected
+                horSwipeThreshold: 100,
 
-            // determines the horizontal distance a swipe is detected
-            horSwipeThreshold: 100,
+                // determines if horStripe in between events are generated ('move' phase) or if only the 'end' phase is fired
+                horSwipeStrict: true,
 
-            // determines if horStripe in between events are generated ('move' phase) or if only the 'end' phase is fired
-            horSwipeStrict: true,
+                // ...
+                horSwipePreventDefault: true
+            },
+            options = $.extend({}, defaults, _options),
 
-            // ...
-            horSwipePreventDefault: true
-        },
-        options = $.extend({}, defaults, _options),
-
-        selector = _options && _options.selector;
+            selector = _options && _options.selector;
 
         options.taps = 0;
 

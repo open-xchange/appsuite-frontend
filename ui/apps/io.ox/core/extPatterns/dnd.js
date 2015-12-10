@@ -109,16 +109,16 @@ define('io.ox/core/extPatterns/dnd', [
 
         onDrag: function (e) {
             switch (e.type) {
-            case 'dragenter':
-                this.show();
-                break;
-            case 'drop':
-                e.preventDefault();
+                case 'dragenter':
+                    this.show();
+                    break;
+                case 'drop':
+                    e.preventDefault();
                 /* falls through */
-            case 'dragleave':
-                this.hide();
-                break;
-            // no default
+                case 'dragleave':
+                    this.hide();
+                    break;
+                // no default
             }
         },
 

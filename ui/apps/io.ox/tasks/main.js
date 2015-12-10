@@ -245,7 +245,9 @@ define('io.ox/tasks/main', [
 
         'vgrid': function (app) {
 
-            var grid = app.grid;
+            var grid = app.grid,
+                allRequest,
+                listRequest;
 
             app.left.append(app.gridContainer);
 
@@ -263,12 +265,13 @@ define('io.ox/tasks/main', [
                 });
             }
             //custom requests
-            var allRequest = function () {
+            allRequest = function () {
                 var datacopy,
                     done = grid.prop('done'),
                     sort = grid.prop('sort'),
                     order = grid.prop('order'),
                     column;
+
                 if (sort !== 'urgency') {
                     column = sort;
                 } else {
@@ -288,7 +291,8 @@ define('io.ox/tasks/main', [
                     }
                     return datacopy;
                 });
-            },
+            };
+
             listRequest = function (ids) {
                 return api.getList(ids).pipe(function (list) {
                     //use compact to eliminate unfound tasks to prevent errors(maybe deleted elsewhere)
@@ -814,13 +818,13 @@ define('io.ox/tasks/main', [
         index: 1000000000000,
         draw: function () {
             var dropdown = new Dropdown({
-                    model: app.grid.props,
-                    tagName: 'div',
-                    caret: false,
-                    label: function () {
-                        return [$('<i class="fa fa-arrow-down">'), $('<i class="fa fa-arrow-up">')];
-                    }
-                })
+                model: app.grid.props,
+                tagName: 'div',
+                caret: false,
+                label: function () {
+                    return [$('<i class="fa fa-arrow-down">'), $('<i class="fa fa-arrow-up">')];
+                }
+            })
                 .header(gt('Sort options'))
                 .option('sort', 'urgency', gt('Urgency'))
                 .option('sort', '300', gt('Status'))

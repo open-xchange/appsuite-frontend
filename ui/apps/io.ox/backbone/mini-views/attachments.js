@@ -100,8 +100,8 @@ define('io.ox/backbone/mini-views/attachments', [
         checkQuota: function () {
             var properties = settings.get('properties'),
                 size = this.attachmentsToAdd.reduce(function (acc, attachment) {
-                return acc + (attachment.file_size || 0);
-            }, 0);
+                    return acc + (attachment.file_size || 0);
+                }, 0);
             if (size > properties.attachmentMaxUploadSize) {
                 this.model.set('quotaExceeded', {
                     actualSize: size,

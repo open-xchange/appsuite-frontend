@@ -67,8 +67,8 @@ define('io.ox/files/actions/share', [
         });
 
         dialog.on('share', function () {
-                view.share().then(this.close, this.idle);
-            })
+            view.share().then(this.close, this.idle);
+        })
             .on('cancel', function () {
                 view.cancel();
                 this.close();

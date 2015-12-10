@@ -33,7 +33,7 @@ define('io.ox/core/tk/flag-picker', [
                 $zIndex = $parent.parents('[style*="z-index"]'),
                 transformOffset = $parent.closest('[style*="translate3d"]').offset() || { top: 0, left: 0 },
                 margin = 8,
-            $scrollContainer = $parent.closest('.ios .io-ox-sidepopup-pane, .ios .io-ox-dialog-popup');
+                $scrollContainer = $parent.closest('.ios .io-ox-sidepopup-pane, .ios .io-ox-dialog-popup');
 
             $scrollContainer.css('-webkit-overflow-scrolling', 'auto');
 

@@ -103,7 +103,7 @@ define('io.ox/tasks/view-grid-template', [
 
             // use template
             var tmpl = new VGrid.Template(),
-            $div = $('<div>');
+                $div = $('<div>');
 
             // add template
             tmpl.add(gridTemplate.main);

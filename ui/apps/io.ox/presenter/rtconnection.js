@@ -340,15 +340,13 @@ define('io.ox/presenter/rtconnection', [
                 _.find(payloads, function (payload) {
                     if (_.isObject(payload) && _.isObject(payload.data) && _.isString(payload.element)) {
                         switch (payload.element) {
-                        case 'error':
-                            hasError = true;
-                            data = { error: payload.data };
-                            break;
-                        default:
-                            if (!data) {
-                                data = payload.data;
-                            }
-                            break;
+                            case 'error':
+                                hasError = true;
+                                data = { error: payload.data };
+                                break;
+                            default:
+                                if (!data) data = payload.data;
+                                break;
                         }
                     }
                     return hasError;

@@ -197,11 +197,11 @@ define('io.ox/find/view-tokenfield', [
                 click: function (e, data) {
                     // apply selected filter
                     var baton = ext.Baton.ensure({
-                            // for in8
-                            deferred: $.Deferred().resolve(data.model),
-                            model: model//,
-                            //view: view
-                        });
+                        // for in8
+                        deferred: $.Deferred().resolve(data.model),
+                        model: model//,
+                        //view: view
+                    });
                     // data.model.activate()
                     ext.point(POINT + '/handler/click').invoke('flow', this, baton);
                 }
@@ -271,7 +271,7 @@ define('io.ox/find/view-tokenfield', [
                 'tokenfield:createdtoken',
                 'tokenfield:removetoken',
                 'tokenfield:removedtoken'
-                ].join(' '), _.bind(this.retrigger, this));
+            ].join(' '), _.bind(this.retrigger, this));
             // listen for tokenfield:events
             this.on({
                 // stop creation when cancel button is clicked while dropdown is open

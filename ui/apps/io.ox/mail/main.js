@@ -239,16 +239,16 @@ define('io.ox/mail/main', [
             if (_.device('smartphone')) return;
 
             var quota = new QuotaView({
-                    title: gt('Mail quota'),
-                    renderUnlimited: false,
-                    upsell: {
-                        title: gt('Need more space?'),
-                        requires: 'active_sync || caldav || carddav',
-                        id: 'mail-folderview-quota',
-                        icon: ''
-                    },
-                    upsellLimit: 5 * 1024 * 1024 // default upsell limit of 5 mb
-                });
+                title: gt('Mail quota'),
+                renderUnlimited: false,
+                upsell: {
+                    title: gt('Need more space?'),
+                    requires: 'active_sync || caldav || carddav',
+                    id: 'mail-folderview-quota',
+                    icon: ''
+                },
+                upsellLimit: 5 * 1024 * 1024 // default upsell limit of 5 mb
+            });
             // add some listeners
             folderAPI.on('cleared-trash', function () {
                 quota.getQuota(true);
@@ -851,20 +851,20 @@ define('io.ox/mail/main', [
                 }
 
                 switch (type) {
-                case 'empty':
-                    resetRight('selection-empty');
-                    app.showEmpty();
-                    break;
-                case 'one':
-                case 'action':
-                    resetRight('selection-one');
-                    app.showMail(list[0]);
-                    break;
-                case 'multiple':
-                    resetRight('selection-multiple');
-                    app.showMultiple(list);
-                    break;
-                // no default
+                    case 'empty':
+                        resetRight('selection-empty');
+                        app.showEmpty();
+                        break;
+                    case 'one':
+                    case 'action':
+                        resetRight('selection-one');
+                        app.showMail(list[0]);
+                        break;
+                    case 'multiple':
+                        resetRight('selection-multiple');
+                        app.showMultiple(list);
+                        break;
+                    // no default
                 }
             }, 1);
 

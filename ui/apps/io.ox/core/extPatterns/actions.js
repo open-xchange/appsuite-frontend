@@ -132,8 +132,8 @@ define('io.ox/core/extPatterns/actions', [
     var processActions = function (ref, collection, baton) {
         // allow extensions to cancel actions
         var stopped = false, stopPropagation = function () {
-            stopped = true;
-        };
+                stopped = true;
+            };
 
         // combine actions
         var defs = ext.point(ref).map(function (action) {

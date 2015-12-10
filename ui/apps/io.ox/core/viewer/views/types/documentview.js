@@ -731,8 +731,8 @@ define('io.ox/core/viewer/views/types/documentview', [
                     switch (action) {
                         case 'increase':
                             nextZoomFactor = _.find(this.ZOOM_FACTORS, function (factor) {
-                                    return factor > currentZoomFactor;
-                                }) || this.getMaxZoomFactor();
+                                return factor > currentZoomFactor;
+                            }) || this.getMaxZoomFactor();
                             this.resetFitZoom();
                             break;
                         case 'decrease':

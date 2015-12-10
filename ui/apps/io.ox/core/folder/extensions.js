@@ -272,12 +272,12 @@ define('io.ox/core/folder/extensions', [
 
         rootFolders: function (tree) {
             var options = {
-                    folder: tree.root,
-                    headless: true,
-                    open: true,
-                    tree: tree,
-                    parent: tree
-                };
+                folder: tree.root,
+                headless: true,
+                open: true,
+                tree: tree,
+                parent: tree
+            };
 
             if (tree.options.hideTrashfolder) {
                 options.filter = function (id, model) {

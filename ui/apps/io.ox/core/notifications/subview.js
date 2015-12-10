@@ -161,8 +161,8 @@ define('io.ox/core/notifications/subview', [
         };
     }
     var SubviewModel = Backbone.Model.extend({
-            defaults: defaults()
-        });
+        defaults: defaults()
+    });
 
     var Subview = Backbone.View.extend({
         tagName: 'div',

@@ -76,7 +76,7 @@ define('io.ox/mail/compose/view', [
     );
 
     ext.point(POINT + '/fields').extend(
-    {
+        {
             id: 'header',
             index: INDEX += 100,
             draw: extensions.header
@@ -410,63 +410,64 @@ define('io.ox/mail/compose/view', [
             return mailAPI[mode](obj, this.messageFormat)
                 .then(accountAPI.getValidAddress)
                 .then(function (data) {
-                if (mode !== 'edit') {
-                    data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
-                } else {
-                    data.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                }
-                data.mode = mode;
-                var attachments = _.clone(data.attachments);
-                // to keep the previews working we copy data from the original mail
-                if (mode === 'forward' || mode === 'edit' ) {
-                    attachments.map(function (file) {
-                        return _.extend(file, { group: 'mail', mail: attachmentMailInfo });
-                    });
-                }
+                    if (mode !== 'edit') {
+                        data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
+                    } else {
+                        data.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                    }
+                    data.mode = mode;
 
-                delete data.attachments;
-
-                if (mode === 'forward') {
-                    // move nested messages into attachment array
-                    _(data.nested_msgs).each(function (obj) {
-                        attachments.push({
-                            id: obj.id,
-                            filename: obj.subject,
-                            content_type: 'message/rfc822',
-                            msgref: obj.msgref
-                        });
-                    });
-                    delete data.nested_msgs;
-                }
-                self.model.set(data);
-
-                var attachmentCollection = self.model.get('attachments');
-                attachmentCollection.reset(attachments);
-                var content = attachmentCollection.at(0).get('content'),
-                    content_type = attachmentCollection.at(0).get('content_type');
-
-                // Force text edit mode when alternative editorMode and text/plain mail
-                if (mode === 'edit' && self.model.get('editorMode') === 'alternative' && content_type === 'text/plain') {
-                    self.model.set('editorMode', 'text', { silent: true });
-                }
-
-                if (content_type === 'text/plain' && self.model.get('editorMode') === 'html') {
-                    var hasBlockquotes = content.match(/(&gt; )+/g);
-                    if (hasBlockquotes) {
-                        $.each(hasBlockquotes.sort().reverse()[0].match(/&gt; /g), function () {
-                            content = self.markupQuotes(content);
+                    var attachments = _.clone(data.attachments);
+                    // to keep the previews working we copy data from the original mail
+                    if (mode === 'forward' || mode === 'edit' ) {
+                        attachments.map(function (file) {
+                            return _.extend(file, { group: 'mail', mail: attachmentMailInfo });
                         });
                     }
-                    attachmentCollection.at(0).set('content_type', 'text/html');
-                }
-                if (content_type === 'text/plain' && self.model.get('editorMode') === 'text' && mode === 'edit') {
-                    content = textproc.htmltotext(content);
-                }
-                attachmentCollection.at(0).set('content', content);
-                self.model.unset('attachments');
-                self.model.set('attachments', attachmentCollection);
-                obj = data = attachmentCollection = null;
-            });
+
+                    delete data.attachments;
+
+                    if (mode === 'forward') {
+                        // move nested messages into attachment array
+                        _(data.nested_msgs).each(function (obj) {
+                            attachments.push({
+                                id: obj.id,
+                                filename: obj.subject,
+                                content_type: 'message/rfc822',
+                                msgref: obj.msgref
+                            });
+                        });
+                        delete data.nested_msgs;
+                    }
+                    self.model.set(data);
+
+                    var attachmentCollection = self.model.get('attachments');
+                    attachmentCollection.reset(attachments);
+                    var content = attachmentCollection.at(0).get('content'),
+                        content_type = attachmentCollection.at(0).get('content_type');
+
+                    // Force text edit mode when alternative editorMode and text/plain mail
+                    if (mode === 'edit' && self.model.get('editorMode') === 'alternative' && content_type === 'text/plain') {
+                        self.model.set('editorMode', 'text', { silent: true });
+                    }
+
+                    if (content_type === 'text/plain' && self.model.get('editorMode') === 'html') {
+                        var hasBlockquotes = content.match(/(&gt; )+/g);
+                        if (hasBlockquotes) {
+                            $.each(hasBlockquotes.sort().reverse()[0].match(/&gt; /g), function () {
+                                content = self.markupQuotes(content);
+                            });
+                        }
+                        attachmentCollection.at(0).set('content_type', 'text/html');
+                    }
+                    if (content_type === 'text/plain' && self.model.get('editorMode') === 'text' && mode === 'edit') {
+                        content = textproc.htmltotext(content);
+                    }
+                    attachmentCollection.at(0).set('content', content);
+                    self.model.unset('attachments');
+                    self.model.set('attachments', attachmentCollection);
+                    obj = data = attachmentCollection = null;
+                });
         },
 
         setSubject: function (e) {

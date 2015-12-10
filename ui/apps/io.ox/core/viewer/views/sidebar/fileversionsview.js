@@ -130,7 +130,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         index: 30,
         draw: function (baton) {
             var isToday = moment().isSame(moment(baton.data.last_modified), 'day'),
-            dateString = (baton.data.last_modified) ? moment(baton.data.last_modified).format(isToday ? 'LT' : 'l LT') : '-';
+                dateString = (baton.data.last_modified) ? moment(baton.data.last_modified).format(isToday ? 'LT' : 'l LT') : '-';
 
             this.find('td:last').append($('<div class="last_modified">').text(gt.noI18n(dateString)));
         }

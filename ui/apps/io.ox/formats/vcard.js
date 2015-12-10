@@ -81,13 +81,13 @@ define('io.ox/formats/vcard', function () {
         //typeless vs. typed: 'key:value' vs. 'key;type:value'
         //value vs. valuelist: 'key:value' vs. 'key:value;value;value'
         var regexps = {
-            valid: /^(tel|email|version|n|adr|fn|title|org|role|url|bday|category|role|note)[\:\;](.+)$/i,
-            next: /^(end)[\:](VCARD)$/i,
-            photo: /^(photo)[\:\;](.+)$/i
-        }, n,
-        contacts = [],
-        imagecontainer = '',
-        lines = vcard.split(/\r?\n/);
+                valid: /^(tel|email|version|n|adr|fn|title|org|role|url|bday|category|role|note)[\:\;](.+)$/i,
+                next: /^(end)[\:](VCARD)$/i,
+                photo: /^(photo)[\:\;](.+)$/i
+            }, n,
+            contacts = [],
+            imagecontainer = '',
+            lines = vcard.split(/\r?\n/);
 
         for (n in lines) {
             var line = lines[n],

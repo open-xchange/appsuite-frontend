@@ -33,11 +33,11 @@ define('io.ox/participants/add', [
         index: 100,
         draw: function (participant) {
             var pview = new pViews.ParticipantEntryView({
-                    model: participant,
-                    closeButton: false,
-                    halo: false,
-                    field: true
-                });
+                model: participant,
+                closeButton: false,
+                halo: false,
+                field: true
+            });
             this.append(pview.render().$el);
         }
     });

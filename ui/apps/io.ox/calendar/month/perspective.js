@@ -570,20 +570,20 @@ define('io.ox/calendar/month/perspective', [
             this.main
                 .on('keydown', function (e) {
                     switch (e.which) {
-                    case 37:
-                        // left
-                        self.gotoMonth('prev');
-                        break;
-                    case 39:
-                        // right
-                        self.gotoMonth('next');
-                        break;
-                    case 13:
-                        // enter
-                        $(e.target).click();
-                        break;
-                    default:
-                        break;
+                        case 37:
+                            // left
+                            self.gotoMonth('prev');
+                            break;
+                        case 39:
+                            // right
+                            self.gotoMonth('next');
+                            break;
+                        case 13:
+                            // enter
+                            $(e.target).click();
+                            break;
+                        default:
+                            break;
                     }
                 });
 

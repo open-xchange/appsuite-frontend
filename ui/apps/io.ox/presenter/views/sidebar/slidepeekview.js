@@ -81,18 +81,18 @@ define('io.ox/presenter/views/sidebar/slidepeekview', [
             var peekPageNumber = this.activeSlideIndex + 2;
             // build thumbnail request param
             var params = {
-                    action: 'convertdocument',
-                    convert_action: 'getpage',
-                    target_format: 'png',
-                    target_width: 600,
-                    target_zoom: 1,
-                    page_number: peekPageNumber,
-                    job_id: convertData.jobID,
-                    id: encodeURIComponent(this.model.get('id')),
-                    folder_id: this.model.get('folder_id'),
-                    filename: encodeURIComponent(this.model.get('filename')),
-                    version: this.model.get('version')
-                };
+                action: 'convertdocument',
+                convert_action: 'getpage',
+                target_format: 'png',
+                target_width: 600,
+                target_zoom: 1,
+                page_number: peekPageNumber,
+                job_id: convertData.jobID,
+                id: encodeURIComponent(this.model.get('id')),
+                folder_id: this.model.get('folder_id'),
+                filename: encodeURIComponent(this.model.get('filename')),
+                version: this.model.get('version')
+            };
 
             if (peekPageNumber > convertData.pageCount) {
                 //#. info text on the next slide preview, which means the presenting user reached the last slide.

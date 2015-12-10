@@ -91,61 +91,62 @@ define('io.ox/contacts/api', [
                     opt = opt || {};
                     query = query + '*';
                     var data = {
-                        orSearch: true,
-                        admin: settings.get('showAdmin', false),
-                        emailAutoComplete: !!opt.emailAutoComplete
-                    },
-                    defaultBehaviour = true,
-                    queryField = {
-                        names: {
-                            display_name: query,
-                            first_name: query,
-                            last_name: query,
-                            email1: query,
-                            email2: query,
-                            email3: query
+                            orSearch: true,
+                            admin: settings.get('showAdmin', false),
+                            emailAutoComplete: !!opt.emailAutoComplete
                         },
-                        addresses: {
-                            street_home: query,
-                            postal_code_home: query,
-                            city_home: query,
-                            state_home: query,
-                            country_home: query,
-                            street_business: query,
-                            postal_code_business: query,
-                            city_business: query,
-                            state_business: query,
-                            country_business: query,
-                            street_other: query,
-                            postal_code_other: query,
-                            city_other: query,
-                            state_other: query,
-                            country_other: query
-                        },
-                        phones: {
-                            telephone_business1: query,
-                            telephone_business2: query,
-                            telephone_home1: query,
-                            telephone_home2: query,
-                            telephone_other: query,
-                            fax_business: query,
-                            telephone_callback: query,
-                            telephone_car: query,
-                            telephone_company: query,
-                            fax_home: query,
-                            cellular_telephone1: query,
-                            cellular_telephone2: query,
-                            fax_other: query,
-                            telephone_isdn: query,
-                            telephone_pager: query,
-                            telephone_primary: query,
-                            telephone_radio: query,
-                            telephone_telex: query,
-                            telephone_ttytdd: query,
-                            telephone_ip: query,
-                            telephone_assistant: query
-                        }
-                    };
+                        defaultBehaviour = true,
+                        queryField = {
+                            names: {
+                                display_name: query,
+                                first_name: query,
+                                last_name: query,
+                                email1: query,
+                                email2: query,
+                                email3: query
+                            },
+                            addresses: {
+                                street_home: query,
+                                postal_code_home: query,
+                                city_home: query,
+                                state_home: query,
+                                country_home: query,
+                                street_business: query,
+                                postal_code_business: query,
+                                city_business: query,
+                                state_business: query,
+                                country_business: query,
+                                street_other: query,
+                                postal_code_other: query,
+                                city_other: query,
+                                state_other: query,
+                                country_other: query
+                            },
+                            phones: {
+                                telephone_business1: query,
+                                telephone_business2: query,
+                                telephone_home1: query,
+                                telephone_home2: query,
+                                telephone_other: query,
+                                fax_business: query,
+                                telephone_callback: query,
+                                telephone_car: query,
+                                telephone_company: query,
+                                fax_home: query,
+                                cellular_telephone1: query,
+                                cellular_telephone2: query,
+                                fax_other: query,
+                                telephone_isdn: query,
+                                telephone_pager: query,
+                                telephone_primary: query,
+                                telephone_radio: query,
+                                telephone_telex: query,
+                                telephone_ttytdd: query,
+                                telephone_ip: query,
+                                telephone_assistant: query
+                            }
+                        };
+
                     _(opt).each(function (value, key) {
                         if (_(queryField).chain().keys().contains(key).value() && value === 'on') {
                             data = _(data).extend(queryField[key]);

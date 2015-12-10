@@ -755,8 +755,8 @@ define('io.ox/core/desktop', [
 
         // find all applications with unsaved changes
         var dirtyApps = ox.ui.apps.filter(function (app) {
-                return _.isFunction(app.hasUnsavedChanges) && app.hasUnsavedChanges();
-            });
+            return _.isFunction(app.hasUnsavedChanges) && app.hasUnsavedChanges();
+        });
 
         // browser will show a confirmation dialog, if onbeforeunload returns a string
         var unsavedChanges = dirtyApps.length > 0;

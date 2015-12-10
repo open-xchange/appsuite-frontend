@@ -104,8 +104,8 @@ define('io.ox/core/api/filestorage', [
                     return $.Deferred().resolve(servicesCache);
                 }
                 var params = {
-                        action: 'all'
-                    };
+                    action: 'all'
+                };
                 if (filestorageService) {
                     params.filestorageService = filestorageService;
                 }

@@ -64,103 +64,103 @@ define('io.ox/core/api/apps', [
     });
 
     var bless = function (obj, id) {
-        obj = _.clone(obj || {});
-        obj.id = id;
-        obj.icon = ox.base + (obj.icon && (obj.icon.charAt(0) === '/') ? obj.path.replace(/(.+)\/(.+)$/, '/apps/$1') + obj.icon : '/apps/io.ox/core/images/' + (obj.icon || 'default.png'));
-        obj.description = obj.description || 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat...';
-        obj.visible = obj.visible !== false;
-        return obj;
-    },
+            obj = _.clone(obj || {});
+            obj.id = id;
+            obj.icon = ox.base + (obj.icon && (obj.icon.charAt(0) === '/') ? obj.path.replace(/(.+)\/(.+)$/, '/apps/$1') + obj.icon : '/apps/io.ox/core/images/' + (obj.icon || 'default.png'));
+            obj.description = obj.description || 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat...';
+            obj.visible = obj.visible !== false;
+            return obj;
+        },
 
-    /**
-     * get number of apps per category/special category
-     * @return { array} object for each category
-     */
-    getCategories = function () {
-        // loop over apps to figure out numbers per category
-        var counts = {};
-        _(appData.apps).each(function (app) {
-            var id = app.category || '---';
-            counts[id] = (counts[id] || 0) + (app.visible !== false ? 1 : 0);
-        });
-        return [
-            {
-                // special 'Installed' category
-                id: 'installed',
-                title: 'Installed',
-                count: appData.installed.length,
-                group: 'Your Apps'
-            }, {
-                // special 'Favorites' category
-                id: 'favorites',
-                title: 'Favorites',
-                count: appData.favorites.length,
-                group: 'Your Apps'
-            },
-            {
-                // special 'Upgrades' category
-                id: 'upgrades',
-                title: 'Upgrades',
-                count: 1,
-                group: 'Your Apps'
-            }
-        ].concat(
-            // loop over categories and add count per category
-            _(appData.categories).map(function (id) {
-                return {
-                    id: id.toLowerCase(),
-                    title: id,
-                    count: counts[id],
-                    group: 'Categories'
-                };
-            })
-        ).concat(
-            // Add extension point categories
-            ext.point('io.ox/core/apps/category').map(function (ext) {
-                if (ext.category) {
-                    return ext.metadata('category');
+        /**
+         * get number of apps per category/special category
+         * @return { array} object for each category
+         */
+        getCategories = function () {
+            // loop over apps to figure out numbers per category
+            var counts = {};
+            _(appData.apps).each(function (app) {
+                var id = app.category || '---';
+                counts[id] = (counts[id] || 0) + (app.visible !== false ? 1 : 0);
+            });
+            return [
+                {
+                    // special 'Installed' category
+                    id: 'installed',
+                    title: 'Installed',
+                    count: appData.installed.length,
+                    group: 'Your Apps'
+                }, {
+                    // special 'Favorites' category
+                    id: 'favorites',
+                    title: 'Favorites',
+                    count: appData.favorites.length,
+                    group: 'Your Apps'
+                },
+                {
+                    // special 'Upgrades' category
+                    id: 'upgrades',
+                    title: 'Upgrades',
+                    count: 1,
+                    group: 'Your Apps'
                 }
-                return ext;
-            }).value()
-        );
-    },
-
-    /**
-     * get by category ('productivity', 'basic', 'dev')
-     * @param  {string} category
-     * @return { array} object for each category
-     */
-    getByCategory = function (id) {
-        return _(appData.apps)
-            .chain()
-            .map(function (obj, id) {
-                return bless(obj, id);
-            })
-            .filter(function (obj) {
-                return obj.visible && obj.category.toLowerCase() === id;
-            })
-            .value();
-    },
-
-    getSpecial = function (prop, apps) {
-        return (apps || appData[prop])
-            .map(function (id) {
-                return bless(appData.apps[id], id);
-            })
-            .filter(function (data) {
-                // ignore apps that don't have a title
-                return !!data.title;
-            })
-            .concat(
+            ].concat(
+                // loop over categories and add count per category
+                _(appData.categories).map(function (id) {
+                    return {
+                        id: id.toLowerCase(),
+                        title: id,
+                        count: counts[id],
+                        group: 'Categories'
+                    };
+                })
+            ).concat(
                 // Add extension point categories
-                ext.point('io.ox/core/apps/' + prop).map(function (ext) {
-                    if (ext.app) {
-                        return ext.metadata('app');
+                ext.point('io.ox/core/apps/category').map(function (ext) {
+                    if (ext.category) {
+                        return ext.metadata('category');
                     }
                     return ext;
                 }).value()
             );
-    };
+        },
+
+        /**
+         * get by category ('productivity', 'basic', 'dev')
+         * @param  {string} category
+         * @return { array} object for each category
+         */
+        getByCategory = function (id) {
+            return _(appData.apps)
+                .chain()
+                .map(function (obj, id) {
+                    return bless(obj, id);
+                })
+                .filter(function (obj) {
+                    return obj.visible && obj.category.toLowerCase() === id;
+                })
+                .value();
+        },
+
+        getSpecial = function (prop, apps) {
+            return (apps || appData[prop])
+                .map(function (id) {
+                    return bless(appData.apps[id], id);
+                })
+                .filter(function (data) {
+                    // ignore apps that don't have a title
+                    return !!data.title;
+                })
+                .concat(
+                    // Add extension point categories
+                    ext.point('io.ox/core/apps/' + prop).map(function (ext) {
+                        if (ext.app) {
+                            return ext.metadata('app');
+                        }
+                        return ext;
+                    }).value()
+                );
+        };
 
     var cachedInstalled = null;
 

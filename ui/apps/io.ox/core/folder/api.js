@@ -768,13 +768,13 @@ define('io.ox/core/folder/api', [
             // loop over results to get proper objects and sort out hidden folders
             _(data).each(function (section, id) {
                 var array = _(section).filter(function (folder) {
-                        // store section / easier than type=1,2,3
-                        if (hash[folder.id]) { hidden.push(folder); return false; }
-                        // sharing?
-                        if (util.is('shared-by-me', folder)) sharing.push(folder);
-                        // otherwise
-                        return true;
-                    });
+                    // store section / easier than type=1,2,3
+                    if (hash[folder.id]) { hidden.push(folder); return false; }
+                    // sharing?
+                    if (util.is('shared-by-me', folder)) sharing.push(folder);
+                    // otherwise
+                    return true;
+                });
                 // inject 'All my appointments' for calender/private
                 if (module === 'calendar' && id === 'private') injectVirtualCalendarFolder(array);
                 // process response and add to pool

@@ -150,25 +150,25 @@ define('io.ox/calendar/invitations/register', [
 
             if (status > 0) {
                 switch (status) {
-                case 1:
-                    message = this.type !== 'task' ?
+                    case 1:
+                        message = this.type !== 'task' ?
                         gt('You have accepted this appointment') :
                         gt('You have accepted this task');
-                    className = 'accepted';
-                    break;
-                case 2:
-                    message = this.type !== 'task' ?
+                        className = 'accepted';
+                        break;
+                    case 2:
+                        message = this.type !== 'task' ?
                         gt('You declined this appointment') :
                         gt('You declined this task');
-                    className = 'declined';
-                    break;
-                case 3:
-                    message = this.type !== 'task' ?
+                        className = 'declined';
+                        break;
+                    case 3:
+                        message = this.type !== 'task' ?
                         gt('You tentatively accepted this invitation') :
                         gt('You tentatively accepted this task');
-                    className = 'tentative';
-                    break;
-                // no default
+                        className = 'tentative';
+                        break;
+                    // no default
                 }
                 return $('<div class="confirmation-status">').addClass(className).text(message);
             }

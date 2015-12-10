@@ -179,45 +179,45 @@ define('io.ox/core/tk/dialogs', [
                 var items, focus, index;
 
                 switch (e.which || e.keyCode) {
-                case 27:
-                    // ESC
-                    if (!isBusy && self.getBody().find('.open > .dropdown-menu').length === 0) {
-                        // prevent other elements to trigger close
-                        e.stopPropagation();
-                        if (o.easyOut) invoke('cancel');
-                    }
-                    break;
-                case 13:
-                    // Enter
-                    if (!isBusy && $(e.target).is('input:text, input:password')) {
-                        if (!o.enter) return false;
-                        if (_.isFunction(o.enter)) return o.enter.call(self);
-                        invoke(o.enter);
-                        return false;
-                    }
-                    break;
-                case 9:
-                    // tab
-                    if (o.tabTrap) {
-                        // get items first
-                        items = $(this).find('[tabindex][tabindex!="-1"][disabled!="disabled"]:visible');
-                        if (items.length) {
-                            e.preventDefault();
-                            focus = $(document.activeElement);
-                            index = (items.index(focus) >= 0) ? items.index(focus) : 0;
-                            index += (e.shiftKey) ? -1 : 1;
-
-                            if (index >= items.length) {
-                                index = 0;
-                            } else if (index < 0) {
-                                index = items.length - 1;
-                            }
-                            items.eq(index).focus();
+                    case 27:
+                        // ESC
+                        if (!isBusy && self.getBody().find('.open > .dropdown-menu').length === 0) {
+                            // prevent other elements to trigger close
+                            e.stopPropagation();
+                            if (o.easyOut) invoke('cancel');
                         }
-                    }
-                    break;
-                default:
-                    break;
+                        break;
+                    case 13:
+                        // Enter
+                        if (!isBusy && $(e.target).is('input:text, input:password')) {
+                            if (!o.enter) return false;
+                            if (_.isFunction(o.enter)) return o.enter.call(self);
+                            invoke(o.enter);
+                            return false;
+                        }
+                        break;
+                    case 9:
+                        // tab
+                        if (o.tabTrap) {
+                            // get items first
+                            items = $(this).find('[tabindex][tabindex!="-1"][disabled!="disabled"]:visible');
+                            if (items.length) {
+                                e.preventDefault();
+                                focus = $(document.activeElement);
+                                index = (items.index(focus) >= 0) ? items.index(focus) : 0;
+                                index += (e.shiftKey) ? -1 : 1;
+
+                                if (index >= items.length) {
+                                    index = 0;
+                                } else if (index < 0) {
+                                    index = items.length - 1;
+                                }
+                                items.eq(index).focus();
+                            }
+                        }
+                        break;
+                    default:
+                        break;
                 }
             };
         // pass options to ext point

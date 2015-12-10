@@ -118,13 +118,13 @@ define('io.ox/core/api/attachment', [
         createOldWay: function (options, form) {
 
             var json = {
-                module: options.module,
-                attached: options.id,
-                folder: options.folder || options.folder_id
-            },
-            uploadCounter = 0,
-            self = this,
-            deferred = $.Deferred();
+                    module: options.module,
+                    attached: options.id,
+                    folder: options.folder || options.folder_id
+                },
+                uploadCounter = 0,
+                self = this,
+                deferred = $.Deferred();
 
             $(':input.add-attachment', form).each(function (index, field) {
                 var jqField = $(field);
@@ -183,13 +183,13 @@ define('io.ox/core/api/attachment', [
                     source: 'task'
                 });
             switch (mode) {
-            case 'view':
-            case 'open':
-                return url + '&delivery=view';
-            case 'download':
-                return url + '&delivery=download';
-            default:
-                return url;
+                case 'view':
+                case 'open':
+                    return url + '&delivery=view';
+                case 'download':
+                    return url + '&delivery=download';
+                default:
+                    return url;
             }
         },
 

@@ -133,10 +133,10 @@ define('io.ox/core/tk/tokenfield', [
                 index: 100,
                 draw: function (data) {
                     var pview = new pViews.ParticipantEntryView({
-                            model: data.model,
-                            closeButton: false,
-                            halo: false
-                        });
+                        model: data.model,
+                        closeButton: false,
+                        halo: false
+                    });
                     this.append(pview.render().$el);
                 }
             });

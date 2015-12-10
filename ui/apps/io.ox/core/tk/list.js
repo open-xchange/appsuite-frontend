@@ -21,19 +21,19 @@ define('io.ox/core/tk/list', [
     'use strict';
 
     var keyEvents = {
-        13: 'enter',
-        27: 'escape',
-        32: 'space',
-        37: 'cursor:left',
-        38: 'cursor:up',
-        39: 'cursor:right',
-        40: 'cursor:down'
-    },
+            13: 'enter',
+            27: 'escape',
+            32: 'space',
+            37: 'cursor:left',
+            38: 'cursor:up',
+            39: 'cursor:right',
+            40: 'cursor:down'
+        },
     // PULL TO REFRESH constants
-    PTR_START =           5,    // Threshold when pull-to-refresh starts
-    PTR_TRIGGER =       150,    // threshold when refresh is done
-    PTR_MAX_PULLDOWM =  300,    // max distance where the PTR node can be dragged to
-    PTR_ROTATE_ANGLE =  360;    // total rotation angle of the spinner while pulled down
+        PTR_START =           5,    // Threshold when pull-to-refresh starts
+        PTR_TRIGGER =       150,    // threshold when refresh is done
+        PTR_MAX_PULLDOWM =  300,    // max distance where the PTR node can be dragged to
+        PTR_ROTATE_ANGLE =  360;    // total rotation angle of the spinner while pulled down
 
     // helper
     function NOOP() { return $.when(); }
@@ -251,9 +251,9 @@ define('io.ox/core/tk/list', [
 
             // get affected DOM nodes and remove them
             items.filter(function () {
-                    var cid = $(this).attr('data-cid');
-                    return !!hash[cid];
-                })
+                var cid = $(this).attr('data-cid');
+                return !!hash[cid];
+            })
                 .remove();
 
             if (!selected) return;

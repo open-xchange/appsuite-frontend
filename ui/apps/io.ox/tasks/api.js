@@ -180,21 +180,21 @@ define('io.ox/tasks/api', [
                     var tmp = {};
                     tmp.type = participant.type;
                     switch (participant.type) {
-                    case 1://internal user
-                        tmp.type = participant.type;
-                        tmp.mail = participant.email1;
-                        tmp.display_name = participant.display_name;
-                        tmp.id = participant.id;
-                        break;
-                    case 5://external user
-                        tmp.type = participant.type;
-                        tmp.mail = participant.mail;
-                        tmp.display_name = participant.display_name;
-                        tmp.id = 0;
-                        break;
-                    default://all the rest
-                        tmp = participant;
-                        break;
+                        case 1://internal user
+                            tmp.type = participant.type;
+                            tmp.mail = participant.email1;
+                            tmp.display_name = participant.display_name;
+                            tmp.id = participant.id;
+                            break;
+                        case 5://external user
+                            tmp.type = participant.type;
+                            tmp.mail = participant.mail;
+                            tmp.display_name = participant.display_name;
+                            tmp.id = 0;
+                            break;
+                        default://all the rest
+                            tmp = participant;
+                            break;
                     }
                     list.push(tmp);
                 });

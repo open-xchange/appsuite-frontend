@@ -317,9 +317,9 @@ define('io.ox/mail/accounts/settings', [
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 var failDialogbox = new dialogs.ModalDialog({
-                        width: 400,
-                        async: true
-                    });
+                    width: 400,
+                    async: true
+                });
                 failDialogbox.header()
                 .append(
                     alertPlaceholder

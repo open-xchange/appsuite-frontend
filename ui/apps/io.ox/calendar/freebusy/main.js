@@ -73,25 +73,25 @@ define('io.ox/calendar/freebusy/main', [
 
                 freebusy.promise.done(function (action, data) {
                     switch (action) {
-                    case 'quit':
-                        quit();
-                        break;
-                    case 'update':
-                        options.model.set({
-                            start_date: data.start_date,
-                            participants: data.participants
-                        }, { validate: true });
-                        // set end_date in a seperate call to avoid the appointment model applyAutoLengthMagic (Bug 27259)
-                        options.model.set({
-                            end_date: data.end_date
-                        }, { validate: true });
-                        /* falls through */
-                    case 'cancel':
-                        options.app.getWindow().show();
-                        if (options.callback) options.callback();
-                        quit();
-                        break;
-                    // no default
+                        case 'quit':
+                            quit();
+                            break;
+                        case 'update':
+                            options.model.set({
+                                start_date: data.start_date,
+                                participants: data.participants
+                            }, { validate: true });
+                            // set end_date in a seperate call to avoid the appointment model applyAutoLengthMagic (Bug 27259)
+                            options.model.set({
+                                end_date: data.end_date
+                            }, { validate: true });
+                            /* falls through */
+                        case 'cancel':
+                            options.app.getWindow().show();
+                            if (options.callback) options.callback();
+                            quit();
+                            break;
+                        // no default
                     }
                 });
             });

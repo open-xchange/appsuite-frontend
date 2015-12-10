@@ -117,9 +117,9 @@ define('io.ox/find/apiproxy', [
                 // suggestions
                 search: function (query) {
                     var standard = {
-                            params: { module: app.getModuleParam() },
-                            data: { prefix: query }
-                        };
+                        params: { module: app.getModuleParam() },
+                        data: { prefix: query }
+                    };
 
                     function updateModel(data) {
                         model.set({

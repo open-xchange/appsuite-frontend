@@ -388,10 +388,10 @@ define('io.ox/mail/compose/extensions', [
 
             require(['io.ox/core/attachments/view'], function (Attachments) {
                 var view = new Attachments.List({
-                        collection: baton.model.get('attachments'),
-                        editable: true,
-                        mode: settings.get('attachments/layout/compose/' + _.display(), 'preview')
-                    });
+                    collection: baton.model.get('attachments'),
+                    editable: true,
+                    mode: settings.get('attachments/layout/compose/' + _.display(), 'preview')
+                });
 
                 // dropzone
                 var zone = new dropzone.Inplace({

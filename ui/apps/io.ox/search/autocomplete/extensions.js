@@ -127,15 +127,15 @@ define('io.ox/search/autocomplete/extensions', [
                 click: function (e, data) {
                     // apply selected filter
                     var baton = ext.Baton.ensure({
-                            deferred: $.Deferred().resolve(),
-                            view: view,
-                            model: model,
-                            token: {
-                                label: data.label,
-                                value: data.value,
-                                model: data.model
-                            }
-                        });
+                        deferred: $.Deferred().resolve(),
+                        view: view,
+                        model: model,
+                        token: {
+                            label: data.label,
+                            value: data.value,
+                            model: data.model
+                        }
+                    });
 
                     ext.point(POINT + '/handler/click').invoke('flow', this, baton);
                 }

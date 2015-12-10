@@ -22,41 +22,41 @@ define('io.ox/files/upload/main', [
     'use strict';
 
     var limits = [
-            {
-                limit: 1000,
-                message: function (t) {
-                    //#. estimated upload duration
-                    return gt.format(gt.ngettext('%1$d second', '%1$d seconds', t), t);
-                }
-            },
-            {
-                limit: 60,
-                message: function (t) {
-                    //#. estimated upload duration
-                    return gt.format(gt.ngettext('%1$d minute', '%1$d minutes', t), t);
-                }
-            },
-            {
-                limit: 60,
-                message: function (t) {
-                    //#. estimated upload duration
-                    return gt.format(gt.ngettext('%1$d hour', '%1$d hours', t), t);
-                }
-            },
-            {
-                limit: 24,
-                message: function (t) {
-                    //#. estimated upload duration
-                    return gt.format(gt.ngettext('%1$d day', '%1$d days', t), t);
-                }
-            },
-            {
-                limit: 7,
-                message: function (t) {
-                    //#. estimated upload duration
-                    return gt.format(gt.ngettext('%1$d week', '%1$d weeks', t), t);
-                }
+        {
+            limit: 1000,
+            message: function (t) {
+                //#. estimated upload duration
+                return gt.format(gt.ngettext('%1$d second', '%1$d seconds', t), t);
             }
+        },
+        {
+            limit: 60,
+            message: function (t) {
+                //#. estimated upload duration
+                return gt.format(gt.ngettext('%1$d minute', '%1$d minutes', t), t);
+            }
+        },
+        {
+            limit: 60,
+            message: function (t) {
+                //#. estimated upload duration
+                return gt.format(gt.ngettext('%1$d hour', '%1$d hours', t), t);
+            }
+        },
+        {
+            limit: 24,
+            message: function (t) {
+                //#. estimated upload duration
+                return gt.format(gt.ngettext('%1$d day', '%1$d days', t), t);
+            }
+        },
+        {
+            limit: 7,
+            message: function (t) {
+                //#. estimated upload duration
+                return gt.format(gt.ngettext('%1$d week', '%1$d weeks', t), t);
+            }
+        }
         ],
         UploadFile = Backbone.Model.extend({
             defaults: {
@@ -73,13 +73,13 @@ define('io.ox/files/upload/main', [
 
     function FileUpload() {
         var totalProgress = 0,
-        totalSize = 0, //accumulated size of all files
-        currentSize = 0, //number of bytes, which are currently uploaded
-        startTime, // time stamp, when the first file started uploading
-        uploadCollection = new UploadCollection(),
-        $el, bottomToolbar, mainView, win, //some dom nodes needed for the view
-        self = this,
-        api = filesAPI;
+            totalSize = 0, //accumulated size of all files
+            currentSize = 0, //number of bytes, which are currently uploaded
+            startTime, // time stamp, when the first file started uploading
+            uploadCollection = new UploadCollection(),
+            $el, bottomToolbar, mainView, win, //some dom nodes needed for the view
+            self = this,
+            api = filesAPI;
 
         this.update = upload.createQueue({
             start: function () {

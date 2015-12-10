@@ -66,10 +66,10 @@ define('io.ox/mail/vacationnotice/settings/register', [
                     var userFullName = '"' + contactsUtil.getMailFullName(user) + '"',
                         aliases = _.object(user.aliases, user.aliases),
                         multiValues = {
-                        aliases: aliases,
-                        days: createDaysObject(1, 31),
-                        from: assembleFrom(aliases)
-                    };
+                            aliases: aliases,
+                            days: createDaysObject(1, 31),
+                            from: assembleFrom(aliases)
+                        };
                     filters.editVacationtNotice($container, multiValues, user.email1).done(function (filter) {
                         filterModel = filter;
                         touchAttributes(filterModel);

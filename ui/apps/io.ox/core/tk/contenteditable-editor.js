@@ -167,8 +167,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
     function lookupTinyMCELanguage() {
         var lookup_lang = ox.language,
-        tinymce_langpacks = ['ar', 'ar_SA', 'az', 'be', 'bg_BG', 'bn_BD', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'de_AT', 'dv', 'el', 'en_CA', 'en_GB', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr_FR', 'gd', 'gl', 'he_IL', 'hr', 'hu_HU', 'hy', 'id', 'is_IS', 'it', 'ja', 'ka_GE', 'kk', 'km_KH', 'ko_KR', 'lb', 'lt', 'lv', 'ml', 'ml_IN', 'mn_MN', 'nb_NO', 'nl', 'pl', 'pt_BR', 'pt_PT', 'ro', 'ru', 'si_LK', 'sk', 'sl_SI', 'sr', 'sv_SE', 'ta', 'ta_IN', 'tg', 'th_TH', 'tr_TR', 'tt', 'ug', 'uk', 'uk_UA', 'vi', 'vi_VN', 'zh_CN', 'zh_TW'],
-        tinymce_lang = _.indexOf(tinymce_langpacks, lookup_lang, true);
+            tinymce_langpacks = ['ar', 'ar_SA', 'az', 'be', 'bg_BG', 'bn_BD', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'de_AT', 'dv', 'el', 'en_CA', 'en_GB', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr_FR', 'gd', 'gl', 'he_IL', 'hr', 'hu_HU', 'hy', 'id', 'is_IS', 'it', 'ja', 'ka_GE', 'kk', 'km_KH', 'ko_KR', 'lb', 'lt', 'lv', 'ml', 'ml_IN', 'mn_MN', 'nb_NO', 'nl', 'pl', 'pt_BR', 'pt_PT', 'ro', 'ru', 'si_LK', 'sk', 'sl_SI', 'sr', 'sv_SE', 'ta', 'ta_IN', 'tg', 'th_TH', 'tr_TR', 'tt', 'ug', 'uk', 'uk_UA', 'vi', 'vi_VN', 'zh_CN', 'zh_TW'],
+            tinymce_lang = _.indexOf(tinymce_langpacks, lookup_lang, true);
 
         // See bug 38381
         if (lookup_lang === 'fr_CA') return 'fr_FR';
@@ -310,96 +310,92 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         }
 
         var resizeEditor = _.debounce(function () {
-            if (el === null) return;
+                if (el === null) return;
 
-            var composeFieldsHeight = el.parent().find('.mail-compose-fields').height();
+                var composeFieldsHeight = el.parent().find('.mail-compose-fields').height();
 
-            if (_.device('smartphone') && $('.io-ox-mobile-mail-compose-window').length > 0) {
-                var containerHeight = el.parent().parent().height();
-                editor.css('min-height', containerHeight - composeFieldsHeight - 32);
+                if (_.device('smartphone') && $('.io-ox-mobile-mail-compose-window').length > 0) {
+                    var containerHeight = el.parent().parent().height();
+                    editor.css('min-height', containerHeight - composeFieldsHeight - 32);
+                    return;
+                } else if (_.device('smartphone')) {
+                    composeFieldsHeight = el.parent().find('.mail-compose-fields').height();
+                    var topBarHeight = $('#io-ox-topbar').height(),
+                        windowHeaderHeight = el.parents().find('.window-header').height(),
+                        editorPadding = 30;
+                    editor.css('min-height', window.innerHeight - (composeFieldsHeight + topBarHeight + windowHeaderHeight + editorPadding));
+                    return;
+                }
+
+                var h = $(window).height(),
+                    top = editor.offset().top;
+
+                editor.css('min-height', h - top - 40 + 'px');
+                if (opt.css) editor.css(opt.css);
+
+                var th = $(fixed_toolbar + ' > div').height(),
+                    w = $(fixed_toolbar).next().outerWidth();
+
+                if (th) $(fixed_toolbar).css('height', th + 1);
+                if (w) $(fixed_toolbar).css('width', w);
                 return;
-            } else if (_.device('smartphone')) {
-                composeFieldsHeight = el.parent().find('.mail-compose-fields').height();
-                var topBarHeight = $('#io-ox-topbar').height(),
-                    windowHeaderHeight = el.parents().find('.window-header').height(),
-                    editorPadding = 30;
-                editor.css('min-height', window.innerHeight - (composeFieldsHeight + topBarHeight + windowHeaderHeight + editorPadding));
-                return;
-            }
+            }, 30),
 
-            var h = $(window).height(),
-                top = editor.offset().top;
-
-            editor.css('min-height', h - top - 40 + 'px');
-            if (opt.css) editor.css(opt.css);
-
-            var th = $(fixed_toolbar + ' > div').height(),
-                w = $(fixed_toolbar).next().outerWidth();
-            if (th) {
-                $(fixed_toolbar).css('height', th + 1);
-            }
-            if (w) {
-                $(fixed_toolbar).css('width', w);
-            }
-            return;
-
-        }, 30),
-
-        set = function (str) {
-            var text = emoji.processEmoji(str, function (text, lib) {
-                if (!lib.loaded) return;
+            set = function (str) {
+                var text = emoji.processEmoji(str, function (text, lib) {
+                    if (!lib.loaded) return;
+                    ed.setContent(text);
+                });
                 ed.setContent(text);
-            });
-            ed.setContent(text);
 
-            // Remove all position: absolute and white-space: nowrap inline styles
-            // This is a fix for the infamous EUROPCAR mail bugs
-            // Don't change this if you don't know what you are doing
-            if (/position:(\s+)?absolute/i.test(str)) {
-                $(ed.getBody()).find('[style*=absolute]').css('position', 'static');
-            }
-            if (/white-space:(\s+)?nowrap/i.test(str)) {
-                $(ed.getBody()).find('[style*=nowrap]').css('white-space', 'normal');
-            }
+                // Remove all position: absolute and white-space: nowrap inline styles
+                // This is a fix for the infamous EUROPCAR mail bugs
+                // Don't change this if you don't know what you are doing
+                if (/position:(\s+)?absolute/i.test(str)) {
+                    $(ed.getBody()).find('[style*=absolute]').css('position', 'static');
+                }
+                if (/white-space:(\s+)?nowrap/i.test(str)) {
+                    $(ed.getBody()).find('[style*=nowrap]').css('white-space', 'normal');
+                }
 
-        },
+            },
 
-        clear = function () {
-            set('');
-        },
+            clear = function () {
+                set('');
+            },
 
-        ln2br = function (str) {
-            return String(str || '').replace(/\r/g, '')
-                // '\n' is for IE
-                .replace(new RegExp('\\n', 'g'), '<br>');
-        },
+            ln2br = function (str) {
+                return String(str || '').replace(/\r/g, '')
+                    // '\n' is for IE
+                    .replace(new RegExp('\\n', 'g'), '<br>');
+            },
 
-        // get editor content
-        // trim white-space and clean up pseudo XHTML
-        // remove empty paragraphs at the end
-        get = function () {
-            // remove tinyMCE resizeHandles
-            $(ed.getBody()).find('.mce-resizehandle').remove();
+            // get editor content
+            // trim white-space and clean up pseudo XHTML
+            // remove empty paragraphs at the end
+            get = function () {
+                // remove tinyMCE resizeHandles
+                $(ed.getBody()).find('.mce-resizehandle').remove();
 
-            // get raw content
-            var content = ed.getContent({ format: 'raw' });
-            // convert emojies
-            content = emoji.imageTagsToUnified(content);
-            // clean up
-            content = content
-                // remove custom attributes (incl. bogus attribute)
-                .replace(/\sdata-[^=]+="[^"]*"/g, '')
-                .replace(/<(\w+)[ ]?\/>/g, '<$1>')
-                .replace(/(<p>(<br>)?<\/p>)+$/, '');
+                // get raw content
+                var content = ed.getContent({ format: 'raw' });
+                // convert emojies
+                content = emoji.imageTagsToUnified(content);
+                // clean up
+                content = content
+                    // remove custom attributes (incl. bogus attribute)
+                    .replace(/\sdata-[^=]+="[^"]*"/g, '')
+                    .replace(/<(\w+)[ ]?\/>/g, '<$1>')
+                    .replace(/(<p>(<br>)?<\/p>)+$/, '');
 
-            // remove trailing white-space, line-breaks, and empty paragraphs
-            content = content.replace(
-                /(\s|&nbsp;|\0x20|<br\/?>|<p( class="io-ox-signature")>(&nbsp;|\s|<br\/?>)*<\/p>)*$/g, ''
-            );
+                // remove trailing white-space, line-breaks, and empty paragraphs
+                content = content.replace(
+                    /(\s|&nbsp;|\0x20|<br\/?>|<p( class="io-ox-signature")>(&nbsp;|\s|<br\/?>)*<\/p>)*$/g, ''
+                );
 
-            // remove trailing white-space
-            return trimEnd(content);
-        };
+                // remove trailing white-space
+                return trimEnd(content);
+            };
 
         //special handling for alternative mode, send HTML to backend and it will create text/plain part of the mail automagically
         this.content_type = opt.model && opt.model.get('preferredEditorMode') === 'alternative' ? 'ALTERNATIVE' : 'text/html';

@@ -24,21 +24,23 @@ define('io.ox/mail/actions/ical', [
         var attachment = _.isArray(baton.data) ? _.first(baton.data) : baton.data;
 
         require(['io.ox/core/api/conversion']).done(function (conversionAPI) {
-            conversionAPI.convert({
-                identifier: 'com.openexchange.mail.ical',
-                args: [
-                    { 'com.openexchange.mail.conversion.fullname': attachment.parent.folder_id },
-                    { 'com.openexchange.mail.conversion.mailid': attachment.parent.id },
-                    { 'com.openexchange.mail.conversion.sequenceid': attachment.id }
-                ]
-            },
-            {
-                identifier: 'com.openexchange.ical',
-                args: [
-                    { 'com.openexchange.groupware.calendar.folder': coreConfig.get('folder/calendar') },
-                    { 'com.openexchange.groupware.task.folder': coreConfig.get('folder/tasks') }
-                ]
-            })
+            conversionAPI.convert(
+                {
+                    identifier: 'com.openexchange.mail.ical',
+                    args: [
+                        { 'com.openexchange.mail.conversion.fullname': attachment.parent.folder_id },
+                        { 'com.openexchange.mail.conversion.mailid': attachment.parent.id },
+                        { 'com.openexchange.mail.conversion.sequenceid': attachment.id }
+                    ]
+                },
+                {
+                    identifier: 'com.openexchange.ical',
+                    args: [
+                        { 'com.openexchange.groupware.calendar.folder': coreConfig.get('folder/calendar') },
+                        { 'com.openexchange.groupware.task.folder': coreConfig.get('folder/tasks') }
+                    ]
+                }
+            )
             .done(function () {
                 notifications.yell('success', gt('The appointment has been added to your calendar'));
             })

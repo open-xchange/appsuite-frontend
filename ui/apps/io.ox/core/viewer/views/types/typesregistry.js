@@ -11,7 +11,7 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/types/typesregistry', [
-'io.ox/core/capabilities'
+    'io.ox/core/capabilities'
 ], function (Capabilities) {
 
     'use strict';

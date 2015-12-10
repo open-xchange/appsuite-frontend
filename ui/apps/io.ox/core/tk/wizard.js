@@ -743,20 +743,20 @@ define('io.ox/core/tk/wizard', [
 
             // find the best position according to the passed options
             switch ((options && options.position) || 'right') {
-            case 'right':
-                if (!(alignRight() || alignBottom() || alignLeft() || alignTop())) alignCenter();
-                break;
-            case 'left':
-                if (!(alignLeft() || alignBottom() || alignRight() || alignTop())) alignCenter();
-                break;
-            case 'bottom':
-                if (!(alignBottom() || alignTop() || alignRight() || alignLeft())) alignCenter();
-                break;
-            case 'top':
-                if (!(alignTop() || alignBottom() || alignRight() || alignLeft())) alignCenter();
-                break;
-            default:
-                alignCenter();
+                case 'right':
+                    if (!(alignRight() || alignBottom() || alignLeft() || alignTop())) alignCenter();
+                    break;
+                case 'left':
+                    if (!(alignLeft() || alignBottom() || alignRight() || alignTop())) alignCenter();
+                    break;
+                case 'bottom':
+                    if (!(alignBottom() || alignTop() || alignRight() || alignLeft())) alignCenter();
+                    break;
+                case 'top':
+                    if (!(alignTop() || alignBottom() || alignRight() || alignLeft())) alignCenter();
+                    break;
+                default:
+                    alignCenter();
             }
 
             this.trigger('align');

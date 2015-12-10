@@ -130,38 +130,38 @@ define('io.ox/participants/views', [
             }
 
             switch (this.model.get('type')) {
-            case 1:
-            case 5:
-                // set organizer
-                if (this.isOrganizer()) {
-                    extra = gt('Organizer');
-                    // don't remove organizer
-                    if (!this.isRemovable()) this.$el.removeClass('removable');
-                }
-
-                if (mail && this.options.halo) {
-                    this.nodes.$mail
-                        .attr({ href: '#', tabindex: '1' })
-                        .data({ email1: mail })
-                        .addClass('halo-link');
-                }
-                break;
-            case 3:
-                if (this.options.halo) {
-                    var data = this.model.toJSON();
-                    data.callbacks = {};
-                    if (this.options.baton && this.options.baton.callbacks) {
-                        data.callbacks = this.options.baton.callbacks;
+                case 1:
+                case 5:
+                    // set organizer
+                    if (this.isOrganizer()) {
+                        extra = gt('Organizer');
+                        // don't remove organizer
+                        if (!this.isRemovable()) this.$el.removeClass('removable');
                     }
-                    var link = $('<a>')
-                        .attr({ href: '#', tabindex: '1' })
-                        .data(data)
-                        .addClass('halo-resource-link');
-                    this.nodes.$extra.replaceWith(link);
-                    this.nodes.$extra = link;
-                }
-                break;
-            // no default
+
+                    if (mail && this.options.halo) {
+                        this.nodes.$mail
+                            .attr({ href: '#', tabindex: '1' })
+                            .data({ email1: mail })
+                            .addClass('halo-link');
+                    }
+                    break;
+                case 3:
+                    if (this.options.halo) {
+                        var data = this.model.toJSON();
+                        data.callbacks = {};
+                        if (this.options.baton && this.options.baton.callbacks) {
+                            data.callbacks = this.options.baton.callbacks;
+                        }
+                        var link = $('<a>')
+                            .attr({ href: '#', tabindex: '1' })
+                            .data(data)
+                            .addClass('halo-resource-link');
+                        this.nodes.$extra.replaceWith(link);
+                        this.nodes.$extra = link;
+                    }
+                    break;
+                // no default
             }
 
             this.setRows(mail, extra);

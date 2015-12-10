@@ -12,7 +12,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
- define('io.ox/files/share/permissions', [
+define('io.ox/files/share/permissions', [
     'io.ox/core/extensions',
     'io.ox/backbone/disposable',
     'io.ox/core/yell',

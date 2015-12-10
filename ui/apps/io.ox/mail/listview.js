@@ -350,9 +350,9 @@ define('io.ox/mail/listview', [
 
             // generate updated data object (similar to server response structure)
             var obj = _.extend(model.toJSON(), threadlist[0], {
-                    thread: threadlist,
-                    threadSize: threadlist.length
-                });
+                thread: threadlist,
+                threadSize: threadlist.length
+            });
 
             // do the thread hokey-pokey-dance
             api.processThreadMessage(obj);

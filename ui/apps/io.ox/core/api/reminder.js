@@ -163,9 +163,9 @@ define('io.ox/core/api/reminder', [
             }
 
             var obj = {
-                    id: reminder.target_id,
-                    folder_id: reminder.folder
-                };
+                id: reminder.target_id,
+                folder_id: reminder.folder
+            };
             if (reminder.module === 4) {
                 //task
                 return taskAPI.get(obj);

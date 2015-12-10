@@ -101,60 +101,60 @@ define('io.ox/contacts/widgets/canvasresize', ['io.ox/contacts/widgets/exif'], f
              */
             transformCoordinate: function (canvas, width, height, orientation) {
                 switch (orientation) {
-                case 5:
-                case 6:
-                case 7:
-                case 8:
-                    canvas.width = height;
-                    canvas.height = width;
-                    break;
-                default:
-                    canvas.width = width;
-                    canvas.height = height;
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                        canvas.width = height;
+                        canvas.height = width;
+                        break;
+                    default:
+                        canvas.width = width;
+                        canvas.height = height;
                 }
                 var ctx = canvas.getContext('2d');
                 switch (orientation) {
-                case 1:
-                    // nothing
-                    break;
-                case 2:
-                    // horizontal flip
-                    ctx.translate(width, 0);
-                    ctx.scale(-1, 1);
-                    break;
-                case 3:
-                    // 180 rotate left
-                    ctx.translate(width, height);
-                    ctx.rotate(Math.PI);
-                    break;
-                case 4:
-                    // vertical flip
-                    ctx.translate(0, height);
-                    ctx.scale(1, -1);
-                    break;
-                case 5:
-                    // vertical flip + 90 rotate right
-                    ctx.rotate(0.5 * Math.PI);
-                    ctx.scale(1, -1);
-                    break;
-                case 6:
-                    // 90 rotate right
-                    ctx.rotate(0.5 * Math.PI);
-                    ctx.translate(0, -height);
-                    break;
-                case 7:
-                    // horizontal flip + 90 rotate right
-                    ctx.rotate(0.5 * Math.PI);
-                    ctx.translate(width, -height);
-                    ctx.scale(-1, 1);
-                    break;
-                case 8:
-                    // 90 rotate left
-                    ctx.rotate(-0.5 * Math.PI);
-                    ctx.translate(-width, 0);
-                    break;
-                default:
-                    break;
+                    case 1:
+                        // nothing
+                        break;
+                    case 2:
+                        // horizontal flip
+                        ctx.translate(width, 0);
+                        ctx.scale(-1, 1);
+                        break;
+                    case 3:
+                        // 180 rotate left
+                        ctx.translate(width, height);
+                        ctx.rotate(Math.PI);
+                        break;
+                    case 4:
+                        // vertical flip
+                        ctx.translate(0, height);
+                        ctx.scale(1, -1);
+                        break;
+                    case 5:
+                        // vertical flip + 90 rotate right
+                        ctx.rotate(0.5 * Math.PI);
+                        ctx.scale(1, -1);
+                        break;
+                    case 6:
+                        // 90 rotate right
+                        ctx.rotate(0.5 * Math.PI);
+                        ctx.translate(0, -height);
+                        break;
+                    case 7:
+                        // horizontal flip + 90 rotate right
+                        ctx.rotate(0.5 * Math.PI);
+                        ctx.translate(width, -height);
+                        ctx.scale(-1, 1);
+                        break;
+                    case 8:
+                        // 90 rotate left
+                        ctx.rotate(-0.5 * Math.PI);
+                        ctx.translate(-width, 0);
+                        break;
+                    default:
+                        break;
                 }
             },
             /**

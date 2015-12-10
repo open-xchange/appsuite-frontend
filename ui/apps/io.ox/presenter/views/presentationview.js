@@ -87,8 +87,7 @@ define('io.ox/presenter/views/presentationview', [
             //#. button tooltip for 'go to previous presentation slide' action
             title: gt('Previous slide'),
             'aria-label': gt('Previous slide')
-        } :
-        {
+        } : {
             //#. button tooltip for 'go to next presentation slide' action
             title: gt('Next slide'),
             'aria-label': gt('Next slide')

@@ -247,9 +247,9 @@ define('io.ox/core/import/import', [
 
                         // get failed records
                         var failed = _.filter(data, function (item) {
-                            return item && item.error;
-                        }),
-                        custom;
+                                return item && item.error;
+                            }),
+                            custom;
 
                         // cache
                         try {

@@ -106,11 +106,11 @@ define('io.ox/core/folder/selection', [], function () {
             if (!$(e.target).hasClass('selectable')) return;
             // cursor up/down
             switch (e.which) {
-            case 38:
-            case 40:
-                this.onCursorUpDown(e);
-                break;
-            // no default
+                case 38:
+                case 40:
+                    this.onCursorUpDown(e);
+                    break;
+                // no default
             }
         },
 

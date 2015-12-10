@@ -797,13 +797,13 @@ define('io.ox/mail/api', [
         try {
             return http.wait(
                 http.PUT({
-                module: 'mail',
-                params: {
-                    action: 'autosave'
-                },
-                data: obj,
-                appendColumns: false
-            })
+                    module: 'mail',
+                    params: {
+                        action: 'autosave'
+                    },
+                    data: obj,
+                    appendColumns: false
+                })
             .then(function (result) {
 
                 // reset draft folder
@@ -1213,13 +1213,13 @@ define('io.ox/mail/api', [
                 attachment: data.id
             });
         switch (mode) {
-        case 'view':
-        case 'open':
-            return url + '&delivery=view';
-        case 'download':
-            return url + '&delivery=download';
-        default:
-            return url;
+            case 'view':
+            case 'open':
+                return url + '&delivery=view';
+            case 'download':
+                return url + '&delivery=download';
+            default:
+                return url;
         }
     };
 

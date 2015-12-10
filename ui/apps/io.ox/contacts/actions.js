@@ -177,14 +177,14 @@ define('io.ox/contacts/actions', [
             }
             var list = [].concat(contact);
             return api.getList(list, true, {
-                        check: function (obj) {
-                            return obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3;
-                        }
-                    }).then(function (list) {
-                        return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
-                            return memo + (obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
-                        }, 0).value() > 0;
-                    });
+                check: function (obj) {
+                    return obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3;
+                }
+            }).then(function (list) {
+                return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
+                    return memo + (obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
+                }, 0).value() > 0;
+            });
         },
         multiple: function (list) {
             require(['io.ox/contacts/actions/invite'], function (action) {

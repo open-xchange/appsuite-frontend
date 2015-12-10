@@ -11,7 +11,7 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
- define('io.ox/files/share/view-options', [
+define('io.ox/files/share/view-options', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views/dropdown',
     'gettext!io.ox/files',

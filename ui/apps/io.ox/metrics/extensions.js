@@ -88,10 +88,10 @@ define('io.ox/metrics/extensions', [
             // filestorage api C(R)UD
             require(['io.ox/core/api/filestorage'], function (filestorageApi) {
                 var map = {
-                        'create': 'created',
-                        'delete': 'deleted',
-                        'update': 'updated'
-                    };
+                    'create': 'created',
+                    'delete': 'deleted',
+                    'update': 'updated'
+                };
                 filestorageApi.on('create delete update', function (e, model) {
                     metrics.trackEvent({
                         app: 'data',

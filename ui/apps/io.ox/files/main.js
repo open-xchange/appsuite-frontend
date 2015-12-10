@@ -392,12 +392,12 @@ define('io.ox/files/main', [
 
                         app.updateMyshareToolbar = _.debounce(function (list) {
                             var baton = ext.Baton({
-                                $el: toolbar.$list,
-                                data: app.mysharesListView.collection.get(list),
-                                collection: app.mysharesListView.collection,
-                                model: app.mysharesListView.collection.get(app.mysharesListView.collection.get(list))
-                            }),
-                            ret = ext.point('io.ox/files/share/classic-toolbar')
+                                    $el: toolbar.$list,
+                                    data: app.mysharesListView.collection.get(list),
+                                    collection: app.mysharesListView.collection,
+                                    model: app.mysharesListView.collection.get(app.mysharesListView.collection.get(list))
+                                }),
+                                ret = ext.point('io.ox/files/share/classic-toolbar')
                                 .invoke('draw', toolbar.$list.empty(), baton);
 
                             $.when.apply($, ret.value()).then(function () {

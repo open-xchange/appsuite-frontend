@@ -69,9 +69,9 @@ define('io.ox/find/extensions-api', [
             if (_.device('smartphone')) return;
 
             var whitelist = {
-                    style: ['simple'],
-                    id: ['contacts', 'contact', 'participant', 'task_participants', 'date.custom']
-                };
+                style: ['simple'],
+                id: ['contacts', 'contact', 'participant', 'task_participants', 'date.custom']
+            };
 
             // flag  facet
             _.each(baton.data, function (facet) {

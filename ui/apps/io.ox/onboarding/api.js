@@ -392,7 +392,7 @@ define('io.ox/onboarding/api', [
                     'icon': null,
                     'type': 'display'
                 },
-               {
+                {
                     'id': 'android.tablet/email/imap/display',
                     'enabled': true,
                     'title': null,

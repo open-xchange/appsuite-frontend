@@ -58,8 +58,8 @@ define('io.ox/tasks/actions/delete', [
                                         'The tasks could not be deleted.',
                                         numberOfTasks
                                     ), function () {
-                                        popup.trigger('deleteTask', data);
-                                    })).find('h4').remove();
+                                    popup.trigger('deleteTask', data);
+                                })).find('h4').remove();
                             }
                         });
                 });

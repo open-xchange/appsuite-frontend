@@ -56,9 +56,9 @@ define('io.ox/mail/vacationnotice/settings/model', [
         }
 
         var testForTimeframe = {
-                'id': 'allof',
-                'tests': []
-            };
+            'id': 'allof',
+            'tests': []
+        };
 
         if (attributes.dateFrom) {
             testForTimeframe.tests.push(

@@ -16,12 +16,12 @@ define('io.ox/files/settings/defaults', function () {
     'use strict';
 
     var settingsDefaults = {
-            view: 'fluid:icon',
-            videoEnabled: true,
-            audioEnabled: true,
-            rootFolderId: 9,
-            showHidden: false
-        };
+        view: 'fluid:icon',
+        videoEnabled: true,
+        audioEnabled: true,
+        rootFolderId: 9,
+        showHidden: false
+    };
 
     return settingsDefaults;
 });

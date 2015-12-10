@@ -489,9 +489,9 @@ define('io.ox/search/model', [
                     pooldisabled: {},
                     start: 0
                 },
-                {
-                    silent: true
-                });
+                    {
+                        silent: true
+                    });
                 if (!opt.silent) this.trigger('reset');
             }
         }

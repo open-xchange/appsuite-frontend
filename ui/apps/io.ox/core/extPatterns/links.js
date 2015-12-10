@@ -171,11 +171,11 @@ define('io.ox/core/extPatterns/links', [
                 this.append(
                     $('<li>').attr({ role: 'presentation' }).append(
                         link = $('<a>').attr({
-                                    'data-action': extension.ref,
-                                    role: 'menuitem',
-                                    href: '#',
-                                    tabindex: 1
-                                }).text(extension.label)
+                            'data-action': extension.ref,
+                            role: 'menuitem',
+                            href: '#',
+                            tabindex: 1
+                        }).text(extension.label)
                                 .on('click', { baton: baton, extension: extension }, actionClick)
                     )
                 );

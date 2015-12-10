@@ -27,208 +27,208 @@ define('io.ox/core/sub/subscriptions', [
 
     var POINT = 'io.ox/core/sub/subscribe',
 
-    // needs id and module (e.g. contacts)
-    buildSubscribeDialog = function (options) {
-        options = options || {};
-        var model = new sub.Subscription({
+        // needs id and module (e.g. contacts)
+        buildSubscribeDialog = function (options) {
+            options = options || {};
+            var model = new sub.Subscription({
                 folder: options.folder,
                 entity: { folder: options.folder },
                 entityModule: options.module
             });
 
-        new SubscriptionView({ model: model }).render(options.app);
-    },
+            new SubscriptionView({ model: model }).render(options.app);
+        },
 
-    isDestructiveSubscription = function (baton) {
-        return baton.data.entityModule === 'calendar';
-    },
+        isDestructiveSubscription = function (baton) {
+            return baton.data.entityModule === 'calendar';
+        },
 
-    getAccountType = function (type) {
-        return type.substring(type.lastIndexOf('.') + 1);
-    },
+        getAccountType = function (type) {
+            return type.substring(type.lastIndexOf('.') + 1);
+        },
 
-    SubscriptionView = Backbone.View.extend({
-        tagName: 'div',
-        render: function (app) {
-            var self = this,
+        SubscriptionView = Backbone.View.extend({
+            tagName: 'div',
+            render: function (app) {
+                var self = this,
 
-            popup = new dialogs.ModalDialog({ async: true, help: 'ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html' });
+                    popup = new dialogs.ModalDialog({ async: true, help: 'ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html' });
 
-            popup.getHeader().append($('<h4>').text(gt('Subscribe')));
+                popup.getHeader().append($('<h4>').text(gt('Subscribe')));
 
-            api.sources.getAll().done(function (data) {
-                // filter services for the current module
-                var services = [];
-                _.each(data, function (service) {
-                    if (self.model.get('entityModule') === service.module) {
-                        services.push(service);
+                api.sources.getAll().done(function (data) {
+                    // filter services for the current module
+                    var services = [];
+                    _.each(data, function (service) {
+                        if (self.model.get('entityModule') === service.module) {
+                            services.push(service);
+                        }
+                    });
+
+                    function removeFolder(id) {
+                        return folderAPI.remove(id);
                     }
-                });
 
-                function removeFolder(id) {
-                    return folderAPI.remove(id);
-                }
+                    function saveModel(newFolder) {
 
-                function saveModel(newFolder) {
+                        notifications.yell('busy', gt('Checking credentials ...'));
+                        var folder = self.model.attributes.folder;
 
-                    notifications.yell('busy', gt('Checking credentials ...'));
-                    var folder = self.model.attributes.folder;
-
-                    self.model.save().then(
-                        function saveSuccess(id) {
-                            //set id, if none is present (new model)
-                            if (!self.model.id) { self.model.id = id; }
-                            api.subscriptions.refresh({ id: id, folder: folder }).then(
-                                function refreshSuccess() {
-                                    notifications.yell('success', gt('Subscription successfully created.'));
-                                    popup.close();
-                                    return self.model;
-                                },
-                                function refreshFail(error) {
-                                    popup.idle();
-                                    popup.getBody().find('.control-group:not(:first)').addClass('error');
-                                    showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error_html || error.error));
-                                    api.subscriptions.destroy(id);
-                                    self.model = self.model.clone();
-                                    if (newFolder) {
-                                        removeFolder(folder);
+                        self.model.save().then(
+                            function saveSuccess(id) {
+                                //set id, if none is present (new model)
+                                if (!self.model.id) { self.model.id = id; }
+                                api.subscriptions.refresh({ id: id, folder: folder }).then(
+                                    function refreshSuccess() {
+                                        notifications.yell('success', gt('Subscription successfully created.'));
+                                        popup.close();
+                                        return self.model;
+                                    },
+                                    function refreshFail(error) {
+                                        popup.idle();
+                                        popup.getBody().find('.control-group:not(:first)').addClass('error');
+                                        showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error_html || error.error));
+                                        api.subscriptions.destroy(id);
+                                        self.model = self.model.clone();
+                                        if (newFolder) {
+                                            removeFolder(folder);
+                                        }
+                                    }
+                                )
+                                .then(function (model) {
+                                    return model.fetch();
+                                })
+                                .then(function (model) {
+                                    var subscriptions = sub.subscriptions();
+                                    //update the model-(collection)
+                                    subscriptions.add(model, { merge: true });
+                                })
+                                .done(function () {
+                                    app.folder.set(folder);
+                                });
+                            },
+                            function saveFail(error) {
+                                popup.idle();
+                                if (!self.model.valid) {
+                                    if (!error.model) {
+                                        showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error));
+                                    } else {
+                                        notifications.yell({
+                                            type: 'error',
+                                            headline: gt('Error'),
+                                            message: gt('The subscription could not be created.')
+                                        });
                                     }
                                 }
-                            )
-                            .then(function (model) {
-                                return model.fetch();
-                            })
-                            .then(function (model) {
-                                var subscriptions = sub.subscriptions();
-                                //update the model-(collection)
-                                subscriptions.add(model, { merge: true });
-                            })
-                            .done(function () {
-                                app.folder.set(folder);
-                            });
-                        },
-                        function saveFail(error) {
-                            popup.idle();
-                            if (!self.model.valid) {
-                                if (!error.model) {
-                                    showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error));
-                                } else {
-                                    notifications.yell({
-                                        type: 'error',
-                                        headline: gt('Error'),
-                                        message: gt('The subscription could not be created.')
-                                    });
+                                if (newFolder) {
+                                    removeFolder(folder);
                                 }
                             }
-                            if (newFolder) {
-                                removeFolder(folder);
+                        );
+                    }
+
+                    popup.getBody().addClass('form-horizontal');
+
+                    // filter disabled/unavailable oauth sources without existing accounts
+                    services = _.filter(services, function (service) {
+                        var fdlength = (service.formDescription || []).length, enabled;
+
+                        // process when no formDescriptions
+                        if (fdlength === 0) return true;
+
+                        service.formDescription = _.filter(service.formDescription, function (fd) {
+
+                            if (fd.widget !== 'oauthAccount') return true;
+
+                            var accountType = getAccountType(fd.options.type),
+                                accounts = _.where(keychainAPI.getAll(), { serviceId: fd.options.type });
+
+                            // process when at least one account exists
+                            if (accounts.length) return true;
+
+                            enabled = keychainAPI.isEnabled(accountType);
+
+                            if (!enabled) {
+                                console.error('I do not know keys of accountType ' + accountType + '! I suppose a needed plugin was not registered in the server configuration.');
                             }
-                        }
-                    );
-                }
 
-                popup.getBody().addClass('form-horizontal');
-
-                // filter disabled/unavailable oauth sources without existing accounts
-                services = _.filter(services, function (service) {
-                    var fdlength = (service.formDescription || []).length, enabled;
-
-                    // process when no formDescriptions
-                    if (fdlength === 0) return true;
-
-                    service.formDescription = _.filter(service.formDescription, function (fd) {
-
-                        if (fd.widget !== 'oauthAccount') return true;
-
-                        var accountType = getAccountType(fd.options.type),
-                            accounts = _.where(keychainAPI.getAll(), { serviceId: fd.options.type });
-
-                        // process when at least one account exists
-                        if (accounts.length) return true;
-
-                        enabled = keychainAPI.isEnabled(accountType);
-
-                        if (!enabled) {
-                            console.error('I do not know keys of accountType ' + accountType + '! I suppose a needed plugin was not registered in the server configuration.');
-                        }
-
-                        // remove formdescription entry when oauth service isn't available
-                        return enabled;
-                    });
-
-                    // remove service in case all formdescriptions where removed
-                    return (service.formDescription || []).length;
-                });
-
-                var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, services: services, popup: popup, newFolder: true });
-
-                if (services.length > 0) {
-                    ext.point(POINT + '/dialog').invoke('draw', popup.getBody(), baton);
-                    popup.addPrimaryButton('subscribe', gt('Subscribe'))
-                        .addButton('cancel', gt('Cancel'))
-                        .show(function () {
-                            popup.getBody().find('select.service-value').focus();
+                            // remove formdescription entry when oauth service isn't available
+                            return enabled;
                         });
-                } else {
-                    popup.getBody().append($('<p>').text(gt('No subscription services available for this module')));
-                    popup.addPrimaryButton('cancel', gt('Cancel')).show();
-                }
-                popup.on('subscribe', function () {
 
-                    popup.busy();
-                    var module = self.model.get('entityModule'),
-                        invalid, folder;
-
-                    _.each(popup.getBody().find('.userform input'), function (input) {
-                        if (!$(input).val()) {
-                            $(input).closest('.control-group').addClass('has-error');
-                            popup.idle();
-                            invalid = true;
-                        } else {
-                            $(input).closest('.control-group').removeClass('has-error');
-                        }
+                        // remove service in case all formdescriptions where removed
+                        return (service.formDescription || []).length;
                     });
 
-                    if (invalid) return;
+                    var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, services: services, popup: popup, newFolder: true });
 
-                    // needs to create an account first
-                    var createAccount = popup.getBody().find('.btn-new-account');
-                    if (createAccount.length) {
-                        createAccount
-                            .parent().addClass('has-error')
-                            .end().on('click', function () {
-                                $(this).parent().removeClass('has-error');
+                    if (services.length > 0) {
+                        ext.point(POINT + '/dialog').invoke('draw', popup.getBody(), baton);
+                        popup.addPrimaryButton('subscribe', gt('Subscribe'))
+                            .addButton('cancel', gt('Cancel'))
+                            .show(function () {
+                                popup.getBody().find('select.service-value').focus();
                             });
-                        popup.idle();
-                        return;
-                    }
-
-                    // add new folders under module's default folder!
-                    folder = require('settings!io.ox/core').get('folder/' + module);
-
-                    //...but drive uses current selected folder instead
-                    if (module === 'infostore') folder = app.folder.get() || folder;
-
-                    if (baton.newFolder) {
-                        var service = findId(baton.services, baton.model.get('source'));
-
-                        folderAPI.create(folder, {
-                            title: service.displayName || gt('New Folder')
-                        })
-                        .done(function (folder) {
-                            self.model.attributes.folder = self.model.attributes.entity.folder = folder.id;
-                            saveModel(true);
-                        });
                     } else {
-                        self.model.attributes.folder = folder;
-                        saveModel();
+                        popup.getBody().append($('<p>').text(gt('No subscription services available for this module')));
+                        popup.addPrimaryButton('cancel', gt('Cancel')).show();
                     }
+                    popup.on('subscribe', function () {
 
+                        popup.busy();
+                        var module = self.model.get('entityModule'),
+                            invalid, folder;
+
+                        _.each(popup.getBody().find('.userform input'), function (input) {
+                            if (!$(input).val()) {
+                                $(input).closest('.control-group').addClass('has-error');
+                                popup.idle();
+                                invalid = true;
+                            } else {
+                                $(input).closest('.control-group').removeClass('has-error');
+                            }
+                        });
+
+                        if (invalid) return;
+
+                        // needs to create an account first
+                        var createAccount = popup.getBody().find('.btn-new-account');
+                        if (createAccount.length) {
+                            createAccount
+                                .parent().addClass('has-error')
+                                .end().on('click', function () {
+                                    $(this).parent().removeClass('has-error');
+                                });
+                            popup.idle();
+                            return;
+                        }
+
+                        // add new folders under module's default folder!
+                        folder = require('settings!io.ox/core').get('folder/' + module);
+
+                        //...but drive uses current selected folder instead
+                        if (module === 'infostore') folder = app.folder.get() || folder;
+
+                        if (baton.newFolder) {
+                            var service = findId(baton.services, baton.model.get('source'));
+
+                            folderAPI.create(folder, {
+                                title: service.displayName || gt('New Folder')
+                            })
+                            .done(function (folder) {
+                                self.model.attributes.folder = self.model.attributes.entity.folder = folder.id;
+                                saveModel(true);
+                            });
+                        } else {
+                            self.model.attributes.folder = folder;
+                            saveModel();
+                        }
+
+                    });
                 });
-            });
 
-        }
-    });
+            }
+        });
 
     function showErrorInline(node, label, msg) {
         node.find('div.alert').remove();
@@ -386,9 +386,9 @@ define('io.ox/core/sub/subscriptions', [
                         $('<div>').addClass('privacy-text').text(
                             gt('Updating subscribed data takes time. Importing 100 contacts for example, may take up to 5 minutes. Please have some patience.')));
             var link = $('<div>').addClass('control-group').append($('<a href="#">').addClass('controls').text(gt('Approximate Duration for Subscriptions')).on('click', function (e) {
-                    e.preventDefault();
-                    link.replaceWith(fullNode);
-                }));
+                e.preventDefault();
+                link.replaceWith(fullNode);
+            }));
             this.append(link);
         }
     });

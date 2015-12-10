@@ -183,24 +183,24 @@ define('io.ox/calendar/week/perspective', [
                     .show()
                     .done(function (action) {
                         switch (action) {
-                        case 'series':
-                            // get recurrence master object
-                            if (obj.old_start_date || obj.old_end_date) {
-                                // bypass cache to have a fresh last_modified timestamp (see bug 42376)
-                                api.get({ id: obj.id, folder_id: obj.folder_id }, false).done(function (data) {
-                                    // calculate new dates if old dates are available
-                                    data.start_date += (obj.start_date - obj.old_start_date);
-                                    data.end_date += (obj.end_date - obj.old_end_date);
-                                    apiUpdate(data);
-                                });
-                            }
-                            break;
-                        case 'appointment':
-                            apiUpdate(api.removeRecurrenceInformation(obj));
-                            break;
-                        default:
-                            self.refresh();
-                            return;
+                            case 'series':
+                                // get recurrence master object
+                                if (obj.old_start_date || obj.old_end_date) {
+                                    // bypass cache to have a fresh last_modified timestamp (see bug 42376)
+                                    api.get({ id: obj.id, folder_id: obj.folder_id }, false).done(function (data) {
+                                        // calculate new dates if old dates are available
+                                        data.start_date += (obj.start_date - obj.old_start_date);
+                                        data.end_date += (obj.end_date - obj.old_end_date);
+                                        apiUpdate(data);
+                                    });
+                                }
+                                break;
+                            case 'appointment':
+                                apiUpdate(api.removeRecurrenceInformation(obj));
+                                break;
+                            default:
+                                self.refresh();
+                                return;
                         }
                     });
             } else {
@@ -337,22 +337,22 @@ define('io.ox/calendar/week/perspective', [
                     appExtPoint: 'io.ox/calendar/week/view/appointment'
                 });
                 switch (this.view.mode) {
-                case 'day':
-                    this.main.attr({
-                        'aria-label': gt('Day View')
-                    });
-                    break;
-                case 'workweek':
-                    this.main.attr({
-                        'aria-label': gt('Workweek View')
-                    });
-                    break;
-                default:
-                case 'week':
-                    this.main.attr({
-                        'aria-label': gt('Week View')
-                    });
-                    break;
+                    case 'day':
+                        this.main.attr({
+                            'aria-label': gt('Day View')
+                        });
+                        break;
+                    case 'workweek':
+                        this.main.attr({
+                            'aria-label': gt('Workweek View')
+                        });
+                        break;
+                    default:
+                    case 'week':
+                        this.main.attr({
+                            'aria-label': gt('Week View')
+                        });
+                        break;
                 }
 
                 // bind listener for view events

@@ -526,16 +526,16 @@ define('io.ox/core/tk/vgrid', [
         cloneRow = (function () {
 
             var createCheckbox = function () {
-                    var fields = {};
-                    this.prepend(
+                var fields = {};
+                this.prepend(
                         fields.div = $('<div class="vgrid-cell-checkbox">').append(
                             fields.label = $('<label>').append(
                                 fields.input = $('<input type="checkbox" class="reflect-selection" aria-hidden="true">').attr('tabindex', -1)
                             )
                         )
                     );
-                    return { checkbox: fields };
-                };
+                return { checkbox: fields };
+            };
 
             return function (template) {
                 // get clone

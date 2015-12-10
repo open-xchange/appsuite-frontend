@@ -221,14 +221,15 @@ define('io.ox/core/commons', [
          * Wire grid & window
          */
         wireGridAndWindow: function (grid, win) {
-            var top = 0, on = function () {
-                grid.keyboard(true);
-                if (grid.selection.get().length) {
-                    // only retrigger if selection is not empty; hash gets broken if caches are empty
-                    // TODO: figure out why this was important
-                    grid.selection.retriggerUnlessEmpty();
-                }
-            };
+            var top = 0,
+                on = function () {
+                    grid.keyboard(true);
+                    if (grid.selection.get().length) {
+                        // only retrigger if selection is not empty; hash gets broken if caches are empty
+                        // TODO: figure out why this was important
+                        grid.selection.retriggerUnlessEmpty();
+                    }
+                };
 
             grid.setApp(win.app);
             // show

@@ -38,10 +38,10 @@ define('io.ox/core/tk/reminder-util', [
             var toggle, menu,
                 // super special function to have overflow scroll and dropdowns as popups see Bug 40962 and https://github.com/twbs/bootstrap/issues/7160
                 dropDownFixPosition = function (button, dropdown) {
-                var dropDownTop = button.offset().top + button.outerHeight();
-                dropdown.css('top', dropDownTop + 'px');
-                dropdown.css('left', button.offset().left + 'px');
-            };
+                    var dropDownTop = button.offset().top + button.outerHeight();
+                    dropdown.css('top', dropDownTop + 'px');
+                    dropdown.css('left', button.offset().left + 'px');
+                };
 
             node.append(
                 $('<div>').addClass('dropdown').css({ 'float': 'left' }).append(

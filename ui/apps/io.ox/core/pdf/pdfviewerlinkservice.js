@@ -256,40 +256,36 @@ define('io.ox/core/pdf/pdfviewerlinkservice', [
             executeNamedAction: function PDFViewerLinkService_executeNamedAction(action) {
                 // See PDF reference, table 8.45 - Named action
                 switch (action) {
-                case 'GoBack':
-                    if (this.pdfHistory) {
-                        this.pdfHistory.back();
-                    }
-                    break;
+                    case 'GoBack':
+                        if (this.pdfHistory) this.pdfHistory.back();
+                        break;
 
-                case 'GoForward':
-                    if (this.pdfHistory) {
-                        this.pdfHistory.forward();
-                    }
-                    break;
+                    case 'GoForward':
+                        if (this.pdfHistory) this.pdfHistory.forward();
+                        break;
 
-                case 'NextPage':
-                    this.eventHub.trigger('viewer:document:next');
-                    break;
+                    case 'NextPage':
+                        this.eventHub.trigger('viewer:document:next');
+                        break;
 
-                case 'PrevPage':
-                    this.eventHub.trigger('viewer:document:previous');
-                    break;
+                    case 'PrevPage':
+                        this.eventHub.trigger('viewer:document:previous');
+                        break;
 
-                case 'LastPage':
-                    this.eventHub.trigger('viewer:document:last');
-                    break;
+                    case 'LastPage':
+                        this.eventHub.trigger('viewer:document:last');
+                        break;
 
-                case 'FirstPage':
-                    this.eventHub.trigger('viewer:document:first');
-                    break;
+                    case 'FirstPage':
+                        this.eventHub.trigger('viewer:document:first');
+                        break;
 
-                case 'Print':
-                    this.eventHub.trigger('viewer:document:print');
-                    break;
+                    case 'Print':
+                        this.eventHub.trigger('viewer:document:print');
+                        break;
 
-                default:
-                    break; // No action according to spec
+                    default:
+                        break; // No action according to spec
                 }
             },
 

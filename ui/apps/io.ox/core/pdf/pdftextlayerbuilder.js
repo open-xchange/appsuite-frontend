@@ -253,9 +253,9 @@ define('io.ox/core/pdf/pdftextlayerbuilder', [
 
                 var event = document.createEvent('CustomEvent');
                 event.initCustomEvent('textlayerrendered', true, true,
-                        {
-                            pageNumber: this.pageNumber
-                        });
+                    {
+                        pageNumber: this.pageNumber
+                    });
                 this.textLayerDiv.dispatchEvent(event);
             },
 

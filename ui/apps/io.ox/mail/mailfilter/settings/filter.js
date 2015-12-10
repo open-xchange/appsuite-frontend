@@ -188,8 +188,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
         editMailfilter: function ($node, baton) {
 
             var createExtpointForSelectedFilter = function (node, args, config) {
-                    ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args, config);
-                };
+                ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args, config);
+            };
 
             return $.when(api.getRules(), api.getConfig()).then(function (data, config) {
                 data = data[0];
@@ -200,8 +200,10 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     return model.get('position');
                 };
 
-                var FilterSettingsView = DisposableView.extend({
+                var FilterSettingsView,
+                    MailfilterEdit;
 
+                FilterSettingsView = DisposableView.extend({
                     tagName: 'li',
 
                     className: 'widget-settings-view',
@@ -408,21 +410,17 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         }
 
                         switch (e.which) {
-                        case 38:
-                            if (index > 0) {
-                                keyHandle('up');
-                            }
-                            break;
-                        case 40:
-                            if (index < items.length) {
-                                keyHandle('down');
-                            }
-                            break;
-                        default:
-                            break;
+                            case 38:
+                                if (index > 0) keyHandle('up');
+                                break;
+                            case 40:
+                                if (index < items.length) keyHandle('down');
+                                break;
+                            default:
+                                break;
                         }
                     }
-                }),
+                });
 
                 MailfilterEdit = Backbone.View.extend({
 
@@ -489,9 +487,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             stop: function (e, ui) {
                                 ui.item.attr('aria-grabbed', 'false');
                                 var arrayOfFilters = $node.find('li[data-id]'),
-                                data = _.map(arrayOfFilters, function (single) {
-                                    return parseInt($(single).attr('data-id'), 10);
-                                });
+                                    data = _.map(arrayOfFilters, function (single) {
+                                        return parseInt($(single).attr('data-id'), 10);
+                                    });
 
                                 //yell on reject
                                 settingsUtil.yellOnReject(
@@ -502,9 +500,10 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         });
                     }
 
-                }),
+                });
 
-                mailFilter = new MailfilterEdit();
+                var mailFilter = new MailfilterEdit();
+
                 $node.append(mailFilter.render().$el);
                 return collection;
             });

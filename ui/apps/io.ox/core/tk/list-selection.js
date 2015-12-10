@@ -437,43 +437,43 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
             switch (e.which) {
 
-            // [enter] > action
-            case 13:
-                this.triggerAction(e);
-                break;
+                // [enter] > action
+                case 13:
+                    this.triggerAction(e);
+                    break;
 
-            // [Ctrl|Cmd + A] > select all
-            case 65:
-            case 97:
-                if (e.ctrlKey || e.metaKey) {
+                // [Ctrl|Cmd + A] > select all
+                case 65:
+                case 97:
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                        this.selectAll();
+                    } else {
+                        this.view.trigger('selection:archive', this.get());
+                    }
+                    break;
+
+                // [Del], [Backspace] or [fn+Backspace] (MacOS) > delete item
+                case 8:
+                case 46:
                     e.preventDefault();
-                    this.selectAll();
-                } else {
-                    this.view.trigger('selection:archive', this.get());
-                }
-                break;
+                    this.view.trigger('selection:delete', this.get());
+                    break;
 
-            // [Del], [Backspace] or [fn+Backspace] (MacOS) > delete item
-            case 8:
-            case 46:
-                e.preventDefault();
-                this.view.trigger('selection:delete', this.get());
-                break;
+                // cursor left/right up/down
+                case 37:
+                case 38:
+                case 39:
+                case 40:
+                    this.onCursor(e);
+                    break;
 
-            // cursor left/right up/down
-            case 37:
-            case 38:
-            case 39:
-            case 40:
-                this.onCursor(e);
-                break;
-
-            // page up/down
-            case 33:
-            case 34:
-                this.onPageUpDown(e);
-                break;
-            // no default
+                // page up/down
+                case 33:
+                case 34:
+                    this.onPageUpDown(e);
+                    break;
+                // no default
             }
         },
 
@@ -756,7 +756,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                                 duration: MOVE_UP_TIME,
                                 complete: function () {
                                     var node = $(self).closest(SELECTABLE),
-                                    cid = node.attr('data-cid');
+                                        cid = node.attr('data-cid');
                                     // bind reset event
                                     theView.on('remove-mobile', resetStyle, cellsBelow);
                                     theView.trigger('selection:delete', [cid]);
@@ -768,7 +768,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                             });
                         } else {
                             var node = $(self).closest(SELECTABLE),
-                            cid = node.attr('data-cid');
+                                cid = node.attr('data-cid');
                             // bind reset event
                             theView.on('remove-mobile', resetStyle, cellsBelow);
                             theView.trigger('selection:delete', [cid]);

@@ -112,74 +112,74 @@ define('io.ox/contacts/widgets/exif', function () {
             n;
 
         switch (type) {
-        case 1:
-            // byte, 8-bit unsigned int
-        case 7:
-            // undefined, 8-bit byte, value depending on field
-            if (numValues === 1) {
-                return file.getByteAt(entryOffset + 8, bigEnd);
-            }
-            offset = numValues > 4 ? valueOffset : (entryOffset + 8);
-            vals = [];
-            for (n = 0; n < numValues; n++) {
-                vals[n] = file.getByteAt(offset + n);
-            }
-            return vals;
-        case 2:
-            // ascii, 8-bit byte
-            offset = numValues > 4 ? valueOffset : (entryOffset + 8);
-            return file.getStringAt(offset, numValues - 1);
-        case 3:
-            // short, 16 bit int
-            if (numValues === 1) {
-                return file.getShortAt(entryOffset + 8, bigEnd);
-            }
-            offset = numValues > 2 ? valueOffset : (entryOffset + 8);
-            vals = [];
-            for (n = 0; n < numValues; n++) {
-                vals[n] = file.getShortAt(offset + 2 * n, bigEnd);
-            }
-            return vals;
-        case 4:
-            // long, 32 bit int
-            if (numValues === 1) {
-                return file.getLongAt(entryOffset + 8, bigEnd);
-            }
-            vals = [];
-            for (n = 0; n < numValues; n++) {
-                vals[n] = file.getLongAt(valueOffset + 4 * n, bigEnd);
-            }
-            return vals;
-        case 5: // rational = two long values, first is numerator, second is denominator
-            if (numValues === 1) {
-                return file.getLongAt(valueOffset, bigEnd) / file.getLongAt(valueOffset + 4, bigEnd);
-            }
-            var aVals = [];
-            for (n = 0; n < numValues; n++) {
-                aVals[n] = file.getLongAt(valueOffset + 8 * n, bigEnd) / file.getLongAt(valueOffset + 4 + 8 * n, bigEnd);
-            }
-            return aVals;
-        case 9:
-            // slong, 32 bit signed int
-            if (numValues === 1) {
-                return file.getSLongAt(entryOffset + 8, bigEnd);
-            }
-            vals = [];
-            for (n = 0; n < numValues; n++) {
-                vals[n] = file.getSLongAt(valueOffset + 4 * n, bigEnd);
-            }
-            return vals;
-        case 10:
-            // signed rational, two slongs, first is numerator, second is denominator
-            if (numValues === 1) {
-                return file.getSLongAt(valueOffset, bigEnd) / file.getSLongAt(valueOffset + 4, bigEnd);
-            }
-            vals = [];
-            for (n = 0; n < numValues; n++) {
-                vals[n] = file.getSLongAt(valueOffset + 8 * n, bigEnd) / file.getSLongAt(valueOffset + 4 + 8 * n, bigEnd);
-            }
-            return vals;
-        // no default
+            case 1:
+                // byte, 8-bit unsigned int
+            case 7:
+                // undefined, 8-bit byte, value depending on field
+                if (numValues === 1) {
+                    return file.getByteAt(entryOffset + 8, bigEnd);
+                }
+                offset = numValues > 4 ? valueOffset : (entryOffset + 8);
+                vals = [];
+                for (n = 0; n < numValues; n++) {
+                    vals[n] = file.getByteAt(offset + n);
+                }
+                return vals;
+            case 2:
+                // ascii, 8-bit byte
+                offset = numValues > 4 ? valueOffset : (entryOffset + 8);
+                return file.getStringAt(offset, numValues - 1);
+            case 3:
+                // short, 16 bit int
+                if (numValues === 1) {
+                    return file.getShortAt(entryOffset + 8, bigEnd);
+                }
+                offset = numValues > 2 ? valueOffset : (entryOffset + 8);
+                vals = [];
+                for (n = 0; n < numValues; n++) {
+                    vals[n] = file.getShortAt(offset + 2 * n, bigEnd);
+                }
+                return vals;
+            case 4:
+                // long, 32 bit int
+                if (numValues === 1) {
+                    return file.getLongAt(entryOffset + 8, bigEnd);
+                }
+                vals = [];
+                for (n = 0; n < numValues; n++) {
+                    vals[n] = file.getLongAt(valueOffset + 4 * n, bigEnd);
+                }
+                return vals;
+            case 5: // rational = two long values, first is numerator, second is denominator
+                if (numValues === 1) {
+                    return file.getLongAt(valueOffset, bigEnd) / file.getLongAt(valueOffset + 4, bigEnd);
+                }
+                var aVals = [];
+                for (n = 0; n < numValues; n++) {
+                    aVals[n] = file.getLongAt(valueOffset + 8 * n, bigEnd) / file.getLongAt(valueOffset + 4 + 8 * n, bigEnd);
+                }
+                return aVals;
+            case 9:
+                // slong, 32 bit signed int
+                if (numValues === 1) {
+                    return file.getSLongAt(entryOffset + 8, bigEnd);
+                }
+                vals = [];
+                for (n = 0; n < numValues; n++) {
+                    vals[n] = file.getSLongAt(valueOffset + 4 * n, bigEnd);
+                }
+                return vals;
+            case 10:
+                // signed rational, two slongs, first is numerator, second is denominator
+                if (numValues === 1) {
+                    return file.getSLongAt(valueOffset, bigEnd) / file.getSLongAt(valueOffset + 4, bigEnd);
+                }
+                vals = [];
+                for (n = 0; n < numValues; n++) {
+                    vals[n] = file.getSLongAt(valueOffset + 8 * n, bigEnd) / file.getSLongAt(valueOffset + 4 + 8 * n, bigEnd);
+                }
+                return vals;
+            // no default
         }
     }
 

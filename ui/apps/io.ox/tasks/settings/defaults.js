@@ -16,11 +16,11 @@ define('io.ox/tasks/settings/defaults', function () {
     'use strict';
 
     var settingsDefaults = {
-            interval: 30,
-            notifyNewModifiedDeleted: true,
-            notifyAcceptedDeclinedAsCreator: false,
-            notifyAcceptedDeclinedAsParticipant: false
-        };
+        interval: 30,
+        notifyNewModifiedDeleted: true,
+        notifyAcceptedDeclinedAsCreator: false,
+        notifyAcceptedDeclinedAsParticipant: false
+    };
 
     return settingsDefaults;
 });

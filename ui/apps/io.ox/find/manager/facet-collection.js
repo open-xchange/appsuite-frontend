@@ -59,8 +59,8 @@ define('io.ox/find/manager/facet-collection', [
             var self = this;
             // trigger event: 'active:[current number of active]'
             this.on('change:list-of-actives', _.debounce(function () {
-                    self.trigger('active', this.getActive().length);
-                }, 10)
+                self.trigger('active', this.getActive().length);
+            }, 10)
             );
             // custom value models
             this.facetmodels = {};

@@ -113,11 +113,11 @@ define('io.ox/core/pdf/pdfannotationslayerbuilder', [
                             var rect = data.rect;
                             var view = pdfPage.view;
                             rect = PDFJS.Util.normalizeRect([
-                                                             rect[0],
-                                                             view[3] - rect[1] + view[1],
-                                                             rect[2],
-                                                             view[3] - rect[3] + view[1]
-                                                             ]);
+                                rect[0],
+                                view[3] - rect[1] + view[1],
+                                rect[2],
+                                view[3] - rect[3] + view[1]
+                            ]);
                             element.style.left = rect[0] + 'px';
                             element.style.top = rect[1] + 'px';
                             element.style.position = 'absolute';

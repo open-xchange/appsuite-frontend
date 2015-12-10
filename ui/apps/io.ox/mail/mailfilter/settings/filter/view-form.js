@@ -478,30 +478,30 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 });
 
                 var Input = mini.InputView.extend({
-                    events: { 'change': 'onChange', 'keyup': 'onKeyup' },
-                    onChange: function () {
-                        if (this.name === 'size') {
-                            var isValid = /^[0-9]+$/.test(this.$el.val()) && parseInt(this.$el.val(), 10) < 2147483648 && parseInt(this.$el.val(), 10) >= 0;
-                            if (isValid) {
-                                this.model.set(this.name, parseInt(this.$el.val(), 10));
-                                this.update();
+                        events: { 'change': 'onChange', 'keyup': 'onKeyup' },
+                        onChange: function () {
+                            if (this.name === 'size') {
+                                var isValid = /^[0-9]+$/.test(this.$el.val()) && parseInt(this.$el.val(), 10) < 2147483648 && parseInt(this.$el.val(), 10) >= 0;
+                                if (isValid) {
+                                    this.model.set(this.name, parseInt(this.$el.val(), 10));
+                                    this.update();
+                                }
                             }
+                            if (this.name === 'values' || this.name === 'headers') this.model.set(this.name, [this.$el.val()]);
+                        },
+                        onKeyup: function () {
+                            var state,
+                                isValid;
+                            if (this.name === 'size') {
+                                isValid = /^[0-9]+$/.test(this.$el.val()) && parseInt(this.$el.val(), 10) < 2147483648 && parseInt(this.$el.val(), 10) >= 0;
+                                state = isValid ? 'valid:' : 'invalid:';
+                            } else {
+                                state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
+                            }
+                            this.model.trigger(state + this.name);
+                            toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
                         }
-                        if (this.name === 'values' || this.name === 'headers') this.model.set(this.name, [this.$el.val()]);
-                    },
-                    onKeyup: function () {
-                        var state,
-                            isValid;
-                        if (this.name === 'size') {
-                            isValid = /^[0-9]+$/.test(this.$el.val()) && parseInt(this.$el.val(), 10) < 2147483648 && parseInt(this.$el.val(), 10) >= 0;
-                            state = isValid ? 'valid:' : 'invalid:';
-                        } else {
-                            state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
-                        }
-                        this.model.trigger(state + this.name);
-                        toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
-                    }
-                }), secondInputId;
+                    }), secondInputId;
 
                 function drawCondition(o) {
                     if (o.secondInputId) {
@@ -719,42 +719,42 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 });
 
                 var Input = mini.InputView.extend({
-                    events: { 'change': 'onChange', 'keyup': 'onKeyup' },
-                    onChange: function () {
-                        if (this.name === 'flags') {
-                            var value = (/customflag_/g.test(this.id)) ? ['$' + this.$el.val().toString()] : [this.$el.val()];
-                            this.model.set(this.name, value);
-                        } else if (this.name === 'to') {
-                            this.model.set(this.name, this.$el.val().trim());
-                        } else {
-                            this.model.set(this.name, this.$el.val());
+                        events: { 'change': 'onChange', 'keyup': 'onKeyup' },
+                        onChange: function () {
+                            if (this.name === 'flags') {
+                                var value = (/customflag_/g.test(this.id)) ? ['$' + this.$el.val().toString()] : [this.$el.val()];
+                                this.model.set(this.name, value);
+                            } else if (this.name === 'to') {
+                                this.model.set(this.name, this.$el.val().trim());
+                            } else {
+                                this.model.set(this.name, this.$el.val());
+                            }
+                        },
+                        update: function () {
+                            if (/customflag_/g.test(this.id)) {
+                                this.$el.val(this.model.get('flags')[0].replace(/^\$+/, ''));
+                            } else if (/move_/g.test(this.id)) {
+                                this.$el.val(prepareFolderForDisplay(this.model.get('into')));
+                            } else {
+                                this.$el.val($.trim(this.model.get(this.name)));
+                            }
+                        },
+                        onKeyup: function () {
+                            var state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
+                            this.model.trigger(state +  this.name);
+                            toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
                         }
-                    },
-                    update: function () {
-                        if (/customflag_/g.test(this.id)) {
-                            this.$el.val(this.model.get('flags')[0].replace(/^\$+/, ''));
-                        } else if (/move_/g.test(this.id)) {
-                            this.$el.val(prepareFolderForDisplay(this.model.get('into')));
-                        } else {
-                            this.$el.val($.trim(this.model.get(this.name)));
-                        }
-                    },
-                    onKeyup: function () {
-                        var state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
-                        this.model.trigger(state +  this.name);
-                        toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
-                    }
-                }),
+                    }),
                     Dropdown = mini.DropdownLinkView.extend({
-                    onClick: function (e) {
-                        e.preventDefault();
-                        if (/markas_/g.test(this.id)) {
-                            this.model.set(this.name, [$(e.target).attr('data-value')]);
-                        } else {
-                            this.model.set(this.name, $(e.target).attr('data-value'));
+                        onClick: function (e) {
+                            e.preventDefault();
+                            if (/markas_/g.test(this.id)) {
+                                this.model.set(this.name, [$(e.target).attr('data-value')]);
+                            } else {
+                                this.model.set(this.name, $(e.target).attr('data-value'));
+                            }
                         }
-                    }
-                });
+                    });
 
                 function drawColorDropdown(activeColor, colors, colorflags) {
 
@@ -1016,42 +1016,38 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
         id: 'stopaction',
         draw: function (baton) {
             var checkStopAction = function (e) {
-                currentState = $(e.currentTarget).find('[type="checkbox"]').prop('checked');
-                var arrayOfActions = baton.model.get('actioncmds');
+                    currentState = $(e.currentTarget).find('[type="checkbox"]').prop('checked');
+                    var arrayOfActions = baton.model.get('actioncmds');
 
-                function getCurrentPosition(array) {
-                    var currentPosition;
-                    _.each(array, function (single, id) {
-                        if (single.id === 'stop') {
-                            currentPosition = id;
-                        }
-                    });
+                    function getCurrentPosition(array) {
+                        var currentPosition;
+                        _.each(array, function (single, id) {
+                            if (single.id === 'stop') {
+                                currentPosition = id;
+                            }
+                        });
 
-                    return currentPosition;
-                }
+                        return currentPosition;
+                    }
 
-                if (currentState === true) {
-                    arrayOfActions.splice(getCurrentPosition(arrayOfActions), 1);
+                    if (currentState === true) {
+                        arrayOfActions.splice(getCurrentPosition(arrayOfActions), 1);
+                    } else {
+                        arrayOfActions.push({ id: 'stop' });
+                    }
+                    baton.model.set('actioncmds', arrayOfActions);
+                },
 
-                } else {
-                    arrayOfActions.push({ id: 'stop' });
-                }
-
-                baton.model.set('actioncmds', arrayOfActions);
-
-            },
-
-            drawcheckbox = function (value) {
-                return $('<div>').addClass('control-group mailfilter checkbox').append(
-                    $('<div>').addClass('controls'),
-                    $('<label>').text(gt('Process subsequent rules')).prepend(
-                        $('<input type="checkbox" tabindex="1">').attr({ 'data-action': 'check-for-stop', 'checked': value })
-                    )
-                );
-            },
-
-            target = baton.view.dialog.getFooter(),
-            arrayOfActions = baton.model.get('actioncmds');
+                drawcheckbox = function (value) {
+                    return $('<div>').addClass('control-group mailfilter checkbox').append(
+                        $('<div>').addClass('controls'),
+                        $('<label>').text(gt('Process subsequent rules')).prepend(
+                            $('<input type="checkbox" tabindex="1">').attr({ 'data-action': 'check-for-stop', 'checked': value })
+                        )
+                    );
+                },
+                target = baton.view.dialog.getFooter(),
+                arrayOfActions = baton.model.get('actioncmds');
 
             function checkForStopAction(array) {
                 var stopAction;

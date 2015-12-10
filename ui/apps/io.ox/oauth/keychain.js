@@ -297,59 +297,59 @@ define.async('io.ox/oauth/keychain', [
     }
 
     getAll().done(function (services, accounts) {
-            // build and register extensions
-            _(services[0]).each(function (service) {
+        // build and register extensions
+        _(services[0]).each(function (service) {
 
-                var keychainAPI = new OAuthKeychainAPI(service);
+            var keychainAPI = new OAuthKeychainAPI(service);
 
-                // add initialized listener before extending (that triggers the initialized event)
-                keychainAPI.one('initialized', function () {
-                    // trigger refresh if we have accounts or the settings account list might miss Oauth accounts due to race conditions
-                    if (_(cache[service.id].accounts).size() > 0) {
-                        keychainAPI.trigger('refresh.all');
-                    }
-                });
+            // add initialized listener before extending (that triggers the initialized event)
+            keychainAPI.one('initialized', function () {
+                // trigger refresh if we have accounts or the settings account list might miss Oauth accounts due to race conditions
+                if (_(cache[service.id].accounts).size() > 0) {
+                    keychainAPI.trigger('refresh.all');
+                }
+            });
 
-                point.extend(keychainAPI);
-                keychainAPI.on('create', function () {
-                    // Some standard event handlers
-                    require(['plugins/halo/api'], function (haloAPI) {
-                        haloAPI.halo.refreshServices();
-                    });
-                });
-
-                keychainAPI.on('delete', function () {
-                    // Some standard event handlers
-                    require(['plugins/halo/api'], function (haloAPI) {
-                        haloAPI.halo.refreshServices();
-                    });
+            point.extend(keychainAPI);
+            keychainAPI.on('create', function () {
+                // Some standard event handlers
+                require(['plugins/halo/api'], function (haloAPI) {
+                    haloAPI.halo.refreshServices();
                 });
             });
 
-            // rampup filestorageApi. Success or failure is unimportant here. Resolve loading in any case
-            filestorageApi.rampup().then(function () {
-                // perform consistency check for filestorage accounts (there might be cases were they are out of sync)
-                // we delay it so it doesn't prolong appsuite startup
-                _.delay(filestorageApi.consistencyCheck, 5000);
-            }).always( function () {
-                // Resolve loading
-                moduleDeferred.resolve({
-                    message: 'Done with oauth keychain',
-                    services: services,
-                    accounts: accounts,
-                    serviceIDs: _(services[0]).map(function (service) {return simplifyId(service.id); })
+            keychainAPI.on('delete', function () {
+                // Some standard event handlers
+                require(['plugins/halo/api'], function (haloAPI) {
+                    haloAPI.halo.refreshServices();
                 });
-            });
-        })
-        .fail(function () {
-
-            console.error('Could not initialize OAuth keyring!');
-            // rampup filestorageApi. Success or failure is unimportant here. Resolve loading in any case
-            filestorageApi.rampup().always(function () {
-                // Resolve on fail
-                moduleDeferred.resolve({ message: 'Init failed', services: [], accounts: [], serviceIDs: [] });
             });
         });
+
+        // rampup filestorageApi. Success or failure is unimportant here. Resolve loading in any case
+        filestorageApi.rampup().then(function () {
+            // perform consistency check for filestorage accounts (there might be cases were they are out of sync)
+            // we delay it so it doesn't prolong appsuite startup
+            _.delay(filestorageApi.consistencyCheck, 5000);
+        }).always( function () {
+            // Resolve loading
+            moduleDeferred.resolve({
+                message: 'Done with oauth keychain',
+                services: services,
+                accounts: accounts,
+                serviceIDs: _(services[0]).map(function (service) {return simplifyId(service.id); })
+            });
+        });
+    })
+    .fail(function () {
+
+        console.error('Could not initialize OAuth keyring!');
+        // rampup filestorageApi. Success or failure is unimportant here. Resolve loading in any case
+        filestorageApi.rampup().always(function () {
+            // Resolve on fail
+            moduleDeferred.resolve({ message: 'Init failed', services: [], accounts: [], serviceIDs: [] });
+        });
+    });
 
     return moduleDeferred;
 });

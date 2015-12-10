@@ -192,19 +192,19 @@ define('io.ox/core/notifications', [
                                 }
                                 node.addClass('io-ox-notifications-sidepopup first');
                                 var cont = function (data) {
-                                        //work with real model view or just draw method with baton
-                                        if (renderer.View) {
-                                            var view = new renderer.View({ data: data });
-                                            popup.idle().append(view.render().expand().$el.addClass('no-padding'));
-                                        } else {
-                                            popup.idle().append(renderer.draw({ data: data }).addClass('no-padding'));
-                                        }
+                                    //work with real model view or just draw method with baton
+                                    if (renderer.View) {
+                                        var view = new renderer.View({ data: data });
+                                        popup.idle().append(view.render().expand().$el.addClass('no-padding'));
+                                    } else {
+                                        popup.idle().append(renderer.draw({ data: data }).addClass('no-padding'));
+                                    }
 
-                                        if (_.device('smartphone')) {
-                                            self.nodes.main.removeClass('active');
-                                        }
-                                        return data;
-                                    };
+                                    if (_.device('smartphone')) {
+                                        self.nodes.main.removeClass('active');
+                                    }
+                                    return data;
+                                };
                                 //check if data is deferred
                                 if (data.then) {
                                     // fetch proper item now
