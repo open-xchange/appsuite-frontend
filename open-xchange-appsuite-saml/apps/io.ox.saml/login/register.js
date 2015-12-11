@@ -11,7 +11,15 @@ define.async('io.ox.saml/login/register', ['io.ox/core/extensions', 'io.ox.saml/
             }
         });
         if (ox.serverConfig.samlLoginErrorPage === true) {
-            ox.trigger('server:down');
+            $('body').addClass('down');
+            $('#io-ox-login-container').empty().append(
+                $('<div class="alert alert-info">').append(
+                    $('<div><b>Connection error</b></div> The service is not available right now. <a href="#">Retry</a>')
+                )
+                .on('click', function (e) { e.preventDefault(); location.reload(); })
+            );
+            $('#background-loader').fadeOut(250);
+            console.warn('Server is down.');
         }
         return def.reject(); // actually doesn't really do anything yet
     } else {
