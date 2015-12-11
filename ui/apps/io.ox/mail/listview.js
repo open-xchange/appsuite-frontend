@@ -234,7 +234,7 @@ define('io.ox/mail/listview', [
         {
             id: 'date/size',
             index: 100,
-            draw: extensions.dataOrSize
+            draw: extensions.dateOrSize
         },
         {
             id: 'from',
