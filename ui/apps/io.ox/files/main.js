@@ -1146,7 +1146,7 @@ define('io.ox/files/main', [
             app.selectFile = function (obj) {
 
                 function isCurrentFolder() {
-                    return app.listView.collection.cid.indexOf('folder=' + obj.folder_id) > -1;
+                    return app.listView.collection.cid && app.listView.collection.cid.indexOf('folder=' + obj.folder_id) > -1;
                 }
 
                 function select() {
