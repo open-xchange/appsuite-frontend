@@ -392,7 +392,7 @@ define('io.ox/presenter/views/presentationview', [
             var rtModel = this.app.rtModel,
                 userId = this.app.rtConnection.getRTUuid();
 
-            if (rtModel.isJoined(userId)) {
+            if (rtModel.isJoined(userId) && !rtModel.isPresenter(userId)) {
                 this.internalShowSlide(index);
             }
         },
@@ -509,7 +509,7 @@ define('io.ox/presenter/views/presentationview', [
          */
         internalShowSlide: function (index) {
             if (this.swiper && _.isNumber(index)) {
-                this.swiper.slideTo(index);
+                this.swiper.slideTo(index, 0);
             }
         },
 
@@ -545,7 +545,7 @@ define('io.ox/presenter/views/presentationview', [
             }
 
             if (this.swiper && (!rtModel.isJoined(userId) || rtModel.isPresenter(userId))) {
-                this.swiper.slideNext();
+                this.swiper.slideNext(true, 0);
             }
         },
 
@@ -565,7 +565,7 @@ define('io.ox/presenter/views/presentationview', [
             }
 
             if (this.swiper && (!rtModel.isJoined(userId) || rtModel.isPresenter(userId))) {
-                this.swiper.slidePrev();
+                this.swiper.slidePrev(true, 0);
             }
         },
 
