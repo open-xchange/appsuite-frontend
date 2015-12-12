@@ -71,7 +71,6 @@ msgstr[1] "%1$d dagen"
 #. %1$d is the number of days
 #. %2$s is the text for the remainder of the last day
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgid "%1$d day, %2$s"
 msgid_plural "%1$d days, %2$s"
 msgstr[0] "%1$d dag, %2$s"
@@ -81,7 +80,6 @@ msgstr[1] "%1$d dagen, %2$s"
 #. %1$d is the number of days
 #. %2$s is the text for the remainder of the last day
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgctxt "in"
 msgid "%1$d day, %2$s"
 msgid_plural "%1$d days, %2$s"
@@ -104,7 +102,6 @@ msgstr[1] "%1$d uren"
 #. %1$d is the number of hours
 #. %2$s is the text for the remainder of the last hour
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgid "%1$d hour and %2$s"
 msgid_plural "%1$d hours and %2$s"
 msgstr[0] "%1$d uur en %2$s"
@@ -114,7 +111,6 @@ msgstr[1] "%1$d uur en %2$s"
 #. %1$d is the number of hours
 #. %2$s is the text for the remainder of the last hour
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgctxt "in"
 msgid "%1$d hour and %2$s"
 msgid_plural "%1$d hours and %2$s"
@@ -224,7 +220,6 @@ msgstr "%1$s %2$s"
 #. %5$s Appointment Organizer
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
-#, c-format
 msgid "%1$s %2$s %3$s %4$s %5$s."
 msgstr "%1$s %2$s %3$s %4$s %5$s."
 
@@ -233,7 +228,6 @@ msgstr "%1$s %2$s %3$s %4$s %5$s."
 #. %3$s Appointment time
 #. %4$s Appointment location
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#, c-format
 msgid "%1$s %2$s %3$s %4$s."
 msgstr "%1$s %2$s %3$s %4$s."
 
@@ -242,14 +236,12 @@ msgstr "%1$s %2$s %3$s %4$s."
 #. %3$s task status
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-#, c-format
 msgid "%1$s %2$s %3$s."
 msgstr "%1$s %2$s %3$s."
 
 #. %1$s task title
 #. %2$s task end date
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-#, c-format
 msgid "%1$s %2$s."
 msgstr "%1$s %2$s."
 
@@ -259,7 +251,6 @@ msgstr "%1$s %2$s."
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js
-#, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Voorlopig)"
 
@@ -318,7 +309,6 @@ msgstr[1] "%1$d items geselecteerd"
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
-#, c-format
 msgid "%1$s of %2$s"
 msgstr "%1$s van %2$s"
 
@@ -339,7 +329,6 @@ msgstr "%1$ heeft een link aanbevolen:"
 #. %1$s is the start date
 #. %2$s is the end date
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, c-format
 msgid "%1$s to %2$s"
 msgstr "%1$s tot %2$s"
 
@@ -376,7 +365,6 @@ msgstr "%3$s %2$s, %1$s"
 #. %d is the number of days
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/core/date.js
 #: module:io.ox/core
-#, c-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d dag"
@@ -385,7 +373,6 @@ msgstr[1] "%d dagen"
 #. Reminder (objective case): in X days
 #. %d is the number of days
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgctxt "in"
 msgid "%d day"
 msgid_plural "%d days"
@@ -396,7 +383,6 @@ msgstr[1] "%d dagen"
 #. General duration (nominative case): X hours
 #. %d is the number of hours
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d uur"
@@ -406,7 +392,6 @@ msgstr[1] "%d uren"
 #. Reminder (objective case): in X hours
 #. %d is the number of hours
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgctxt "in"
 msgid "%d hour"
 msgid_plural "%d hours"
@@ -417,7 +402,6 @@ msgstr[1] "%d uren"
 #. %d is the number of minutes
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d minuut"
@@ -426,7 +410,6 @@ msgstr[1] "%d minuten"
 #. Reminder (objective case): in X minutes
 #. %d is the number of minutes
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgctxt "in"
 msgid "%d minute"
 msgid_plural "%d minutes"
@@ -436,7 +419,6 @@ msgstr[1] "%d minuten"
 #. General duration (nominative case): X weeks
 #. %d is the number of weeks
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] "%d week"
@@ -445,7 +427,6 @@ msgstr[1] "%d weken"
 #. Reminder (objective case): in X weeks
 #. %d is the number of weeks
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgctxt "in"
 msgid "%d week"
 msgid_plural "%d weeks"
@@ -2762,7 +2743,6 @@ msgstr "Vervaldatum"
 
 #. %1$s due date of a task
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
-#, c-format
 msgid "Due %1$s"
 msgstr "Vervalt %1$s"
 
@@ -4380,7 +4360,6 @@ msgstr "Quotum aantal e-mails"
 #. %1$s mail sender
 #. %2$s mail subject
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
-#, c-format
 msgid "Mail from %1$s, %2$s"
 msgstr "E-mailbericht van %1$s, %2$s"
 
@@ -4610,7 +4589,6 @@ msgstr "Minimaliseren"
 
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
-#, c-format
 msgid "Minimum password length is %1$d."
 msgstr "Minimale wachtwoord lengte is %1$d."
 
@@ -5003,7 +4981,6 @@ msgstr "Geen langzame verzoeken"
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail apps/io.ox/mail/util.js
 #: module:io.ox/core apps/plugins/notifications/mail/register.js
 #: module:plugins/notifications
-#, c-format
 msgid "No subject"
 msgstr "Geen onderwerp"
 
@@ -5374,7 +5351,6 @@ msgstr "Wachtwoord"
 #. %1$s is the minimum password length
 #. %2$s is the maximum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
-#, c-format
 msgid "Password length must be between %1$d and %2$d characters."
 msgstr "De wachtwoordlengte moet tussen %1$d en %2$d tekens zijn."
 
@@ -5640,7 +5616,6 @@ msgstr "Voer alstublieft het correcte wachtwoord in"
 
 #. %1$s the missing request parameter
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#, c-format
 msgid "Please enter the following data: %1$s"
 msgstr "Voer alstublieft de volgende gegevens in: %1$s"
 
@@ -5929,7 +5904,6 @@ msgstr "Voortgang"
 #. %1$s how much of a task is completed in percent, values from 0-100
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 #: apps/io.ox/tasks/view-grid-template.js
-#, c-format
 msgid "Progress %1$s %"
 msgstr "Voortgang %1$s %"
 
@@ -6022,7 +5996,6 @@ msgstr ""
 #. %1$d is current raiting
 #. %2$d is the maximum rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-#, c-format
 msgid ""
 "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
 "arrowkeys to adjust your rating."
@@ -6232,7 +6205,6 @@ msgstr "Herinneringsdatum"
 
 #. %1$s reminder date of a task
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
-#, c-format
 msgid "Reminder date %1$s"
 msgstr "Herinneringsdatum %1$s"
 
@@ -7604,7 +7576,6 @@ msgstr "De volgende producten worden nu geactiveerd:"
 #. message text of an alert box if joining a presentation fails
 #. %1$d is the name of the user who started the presentation
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
-#, c-format
 msgid ""
 "The limit of participants has been reached. Please contact the presenter "
 "%1$s."
@@ -8826,7 +8797,6 @@ msgstr "U heeft geen taken die binnenkort af moeten zijn of die te laat zijn."
 
 #. %1$d number of notifications
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-#, c-format
 msgid "You have %1$d notification."
 msgid_plural "You have %1$d notifications."
 msgstr[0] "U heeft %1$d kennisgeving."
@@ -9067,7 +9037,6 @@ msgstr ""
 
 #. %1$s are some example characters
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
-#, c-format
 msgid ""
 "Your password is more secure if it also contains capital letters, numbers, "
 "and special characters like %1$s"

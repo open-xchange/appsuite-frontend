@@ -69,7 +69,6 @@ msgstr[1] "%1$d 天"
 #. %1$d is the number of days
 #. %2$s is the text for the remainder of the last day
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgid "%1$d day, %2$s"
 msgid_plural "%1$d days, %2$s"
 msgstr[0] "%1$d 天、%2$s"
@@ -79,7 +78,6 @@ msgstr[1] "%1$d 天、%2$s"
 #. %1$d is the number of days
 #. %2$s is the text for the remainder of the last day
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgctxt "in"
 msgid "%1$d day, %2$s"
 msgid_plural "%1$d days, %2$s"
@@ -101,7 +99,6 @@ msgstr[1] "%1$d 小時"
 #. %1$d is the number of hours
 #. %2$s is the text for the remainder of the last hour
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgid "%1$d hour and %2$s"
 msgid_plural "%1$d hours and %2$s"
 msgstr[0] "%1$d 小時和 %2$s"
@@ -111,7 +108,6 @@ msgstr[1] "%1$d 小時和 %2$s"
 #. %1$d is the number of hours
 #. %2$s is the text for the remainder of the last hour
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgctxt "in"
 msgid "%1$d hour and %2$s"
 msgid_plural "%1$d hours and %2$s"
@@ -219,7 +215,6 @@ msgstr "%1$s %2$s"
 #. %5$s Appointment Organizer
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
-#, c-format
 msgid "%1$s %2$s %3$s %4$s %5$s."
 msgstr "%1$s %2$s %3$s %4$s %5$s。"
 
@@ -228,7 +223,6 @@ msgstr "%1$s %2$s %3$s %4$s %5$s。"
 #. %3$s Appointment time
 #. %4$s Appointment location
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#, c-format
 msgid "%1$s %2$s %3$s %4$s."
 msgstr "%1$s %2$s %3$s %4$s。"
 
@@ -237,14 +231,12 @@ msgstr "%1$s %2$s %3$s %4$s。"
 #. %3$s task status
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-#, c-format
 msgid "%1$s %2$s %3$s."
 msgstr "%1$s %2$s %3$s。"
 
 #. %1$s task title
 #. %2$s task end date
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-#, c-format
 msgid "%1$s %2$s."
 msgstr "%1$s %2$s。"
 
@@ -252,7 +244,6 @@ msgstr "%1$s %2$s。"
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js
-#, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (暫定)"
 
@@ -311,7 +302,6 @@ msgstr[1] "已選擇 %1$s 個項目"
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
-#, c-format
 msgid "%1$s of %2$s"
 msgstr "%2$s 的 %1$s"
 
@@ -332,7 +322,6 @@ msgstr "%1$s 推薦此連結:"
 #. %1$s is the start date
 #. %2$s is the end date
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, c-format
 msgid "%1$s to %2$s"
 msgstr "%2$s 到 %1$s"
 
@@ -369,7 +358,6 @@ msgstr "%3$s %2$s、%1$s"
 #. %d is the number of days
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/core/date.js
 #: module:io.ox/core
-#, c-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d 天"
@@ -378,7 +366,6 @@ msgstr[1] "%d 天"
 #. Reminder (objective case): in X days
 #. %d is the number of days
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgctxt "in"
 msgid "%d day"
 msgid_plural "%d days"
@@ -388,7 +375,6 @@ msgstr[1] "%d 天"
 #. General duration (nominative case): X hours
 #. %d is the number of hours
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d 小時"
@@ -397,7 +383,6 @@ msgstr[1] "%d 小時"
 #. Reminder (objective case): in X hours
 #. %d is the number of hours
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgctxt "in"
 msgid "%d hour"
 msgid_plural "%d hours"
@@ -408,7 +393,6 @@ msgstr[1] "%d 小時"
 #. %d is the number of minutes
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d 分鐘"
@@ -417,7 +401,6 @@ msgstr[1] "%d 分鐘"
 #. Reminder (objective case): in X minutes
 #. %d is the number of minutes
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgctxt "in"
 msgid "%d minute"
 msgid_plural "%d minutes"
@@ -427,7 +410,6 @@ msgstr[1] "%d 分鐘"
 #. General duration (nominative case): X weeks
 #. %d is the number of weeks
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] "%d 周"
@@ -436,7 +418,6 @@ msgstr[1] "%d 周"
 #. Reminder (objective case): in X weeks
 #. %d is the number of weeks
 #: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgctxt "in"
 msgid "%d week"
 msgid_plural "%d weeks"
@@ -2712,7 +2693,6 @@ msgstr "到期日"
 
 #. %1$s due date of a task
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
-#, c-format
 msgid "Due %1$s"
 msgstr "%1$s 到期"
 
@@ -4295,7 +4275,6 @@ msgstr "郵件數量額度"
 #. %1$s mail sender
 #. %2$s mail subject
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
-#, c-format
 msgid "Mail from %1$s, %2$s"
 msgstr "來自 %1$s 的郵件: %2$s"
 
@@ -4524,7 +4503,6 @@ msgstr "最小化"
 
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
-#, c-format
 msgid "Minimum password length is %1$d."
 msgstr "最小密碼長度為 %1$d。"
 
@@ -4915,7 +4893,6 @@ msgstr "無慢速請求"
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail apps/io.ox/mail/util.js
 #: module:io.ox/core apps/plugins/notifications/mail/register.js
 #: module:plugins/notifications
-#, c-format
 msgid "No subject"
 msgstr "無主題"
 
@@ -5279,7 +5256,6 @@ msgstr "密碼"
 #. %1$s is the minimum password length
 #. %2$s is the maximum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
-#, c-format
 msgid "Password length must be between %1$d and %2$d characters."
 msgstr "密碼長度必須在 %1$d 到 %2$d 字元之間。"
 
@@ -5538,7 +5514,6 @@ msgstr "請輸入正確密碼"
 
 #. %1$s the missing request parameter
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#, c-format
 msgid "Please enter the following data: %1$s"
 msgstr "請輸入下列資料: %1$s"
 
@@ -5820,7 +5795,6 @@ msgstr "進度"
 #. %1$s how much of a task is completed in percent, values from 0-100
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 #: apps/io.ox/tasks/view-grid-template.js
-#, c-format
 msgid "Progress %1$s %"
 msgstr "進度 %1$s %"
 
@@ -5911,7 +5885,6 @@ msgstr "已確認 %1$d / %2$d 評分。請使用左右鍵調整您的評分。"
 #. %1$d is current raiting
 #. %2$d is the maximum rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-#, c-format
 msgid ""
 "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
 "arrowkeys to adjust your rating."
@@ -6107,7 +6080,6 @@ msgstr "提醒日期"
 
 #. %1$s reminder date of a task
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
-#, c-format
 msgid "Reminder date %1$s"
 msgstr "提醒日期 %1$s"
 
@@ -7447,7 +7419,6 @@ msgstr "下列產品將會被啟用:"
 #. message text of an alert box if joining a presentation fails
 #. %1$d is the name of the user who started the presentation
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
-#, c-format
 msgid ""
 "The limit of participants has been reached. Please contact the presenter "
 "%1$s."
@@ -8621,7 +8592,6 @@ msgstr "您沒有快要到期或已過期的任務。"
 
 #. %1$d number of notifications
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-#, c-format
 msgid "You have %1$d notification."
 msgid_plural "You have %1$d notifications."
 msgstr[0] "您有 %1$d 個通知。"
@@ -8860,7 +8830,6 @@ msgstr ""
 
 #. %1$s are some example characters
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
-#, c-format
 msgid ""
 "Your password is more secure if it also contains capital letters, numbers, "
 "and special characters like %1$s"
