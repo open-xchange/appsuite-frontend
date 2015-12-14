@@ -43,7 +43,7 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         get: function (attribute) {
-            return this.view.$el.find('.selectable.selected').attr(attribute || 'data-id');
+            return this.view.$el.find('.selectable.selected').attr(attribute || 'data-id');
         },
 
         set: function (id) {

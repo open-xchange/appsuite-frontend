@@ -997,15 +997,12 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         }
 
         function wait(def) {
-            if (def) {
-                wait.pending++;
-                return def.always(function () {
-                    wait.pending--;
-                    if (wait.pending === 0) release();
-                });
-            } else {
-                return wait.pending === 0 ? ready : block.promise();
-            }
+            if (!def) return wait.pending === 0 ? ready : block.promise();
+            wait.pending++;
+            return def.always(function () {
+                wait.pending--;
+                if (wait.pending === 0) release();
+            });
         }
 
         wait.pending = 0;

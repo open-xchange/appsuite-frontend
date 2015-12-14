@@ -94,7 +94,7 @@ define('io.ox/core/tk/wizard', [
 
     function Wizard(options) {
 
-        this.options = options || {};
+        this.options = options || {};
         this.currentStep = 0;
         this.steps = [];
         this.closed = false;

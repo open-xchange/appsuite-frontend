@@ -38,7 +38,7 @@ define('io.ox/search/facets/extensions', [
                     api.get(target)
                         .always(function (data) {
                             //use id as fallback label
-                            var label = (data || {}).title || target;
+                            var label = (data || {}).title || target;
                             baton.model.update(facet.id, id, { custom: target, name: label });
                         });
                 },
@@ -101,7 +101,7 @@ define('io.ox/search/facets/extensions', [
 
                     var link = $(e.target).closest('a'),
                         list = link.closest('ul'),
-                        option = link.attr('data-action') || link.attr('data-custom') ||  link.attr('data-option'),
+                        option = link.attr('data-action') || link.attr('data-custom') || link.attr('data-option'),
                         facet = list.attr('data-facet'),
                         value = list.attr('data-value');
 

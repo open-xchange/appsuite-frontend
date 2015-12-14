@@ -194,7 +194,7 @@ define('io.ox/core/folder/node', [
         // utility functions
         hasSubFolders: function () {
             var isFlat = /^virtual\/flat/.test(this.folder);
-            return this.options.subfolders && (isFlat || this.model.get('subfolders') === true);
+            return this.options.subfolders && (isFlat || this.model.get('subfolders') === true);
         },
 
         // respond to new sub-folders

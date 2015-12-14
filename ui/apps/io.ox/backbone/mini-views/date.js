@@ -148,7 +148,7 @@ define('io.ox/backbone/mini-views/date', [
 
         setup: function (options) {
             this.name = options.name;
-            this.future = options.future || 0; // use positive integers to allow years in the future
+            this.future = options.future || 0; // use positive integers to allow years in the future
             this.past = options.past || 150; // use positive integers to allow years in the past
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },

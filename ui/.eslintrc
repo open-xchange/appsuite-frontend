@@ -12,13 +12,13 @@
         // phantomjs global variables.
         'phantomjs': true,
         // jquery global variables.
-        'jquery': true
+        'jquery': true,
+        // defines require() and define() as global variables as per the amd spec.
+        'amd': true
     },
 
     'globals': {
         _: true,
-        define: true,
-        require: true,
         requirejs: true,
         Backbone: true,
         ox: true,
@@ -141,6 +141,8 @@
         'wrap-iife': [2, 'any'],
         // require or disallow Yoda conditions
         'yoda': 2,
+        // Invalid or irregular whitespace
+        no-irregular-whitespace: 2,
 
 
         // VARIABLES

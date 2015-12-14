@@ -222,7 +222,7 @@ define('io.ox/settings/accounts/settings/pane', [
 
                         // Enhance Add... options
 
-                        function add(e) {
+                        function add(e) {
                             e.preventDefault();
                             var submodule = e.data.submodule;
                             // looks like oauth?

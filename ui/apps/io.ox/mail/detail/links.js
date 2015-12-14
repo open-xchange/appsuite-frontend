@@ -222,7 +222,7 @@ define('io.ox/mail/detail/links', [
         },
 
         'mail-address-complex': {
-            test: function (node) {
+            test: function (node) {
                 // quick check
                 if (node.nodeValue.indexOf('@') === -1) return false;
                 // precise check
@@ -232,7 +232,7 @@ define('io.ox/mail/detail/links', [
         },
 
         'mail-address': {
-            test: function (node) {
+            test: function (node) {
                 // quick check
                 if (node.nodeValue.indexOf('@') === -1) return false;
                 // precise check

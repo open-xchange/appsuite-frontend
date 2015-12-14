@@ -535,7 +535,7 @@ define('io.ox/calendar/main', [
 
         'inplace-find': function (app) {
 
-            if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (_.device('smartphone') || !capabilities.has('search')) return;
 
             app.searchable();
 
@@ -548,8 +548,8 @@ define('io.ox/calendar/main', [
                     // hide sort options
                     app.grid.getToolbar().find('.grid-options:first').hide();
                     // switch to supported perspective
-                    lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
-                    if (lastPerspective !== SEARCH_PERSPECTIVE) {
+                    lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
+                    if (lastPerspective !== SEARCH_PERSPECTIVE) {
                         // fluent option: do not write to user settings
                         app.props.set('layout', SEARCH_PERSPECTIVE, { fluent: true });
                         // cancel search when user changes view

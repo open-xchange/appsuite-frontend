@@ -78,7 +78,7 @@ define('io.ox/core/sub/settings/pane', [
 
         breadcrumb = new BreadcrumbView({
             folder: folder,
-            exclude: ['9'],
+            exclude: ['9'],
             notail: true,
             isLast: true
         });

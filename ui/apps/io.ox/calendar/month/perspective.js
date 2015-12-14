@@ -160,7 +160,7 @@ define('io.ox/calendar/month/perspective', [
         updateWeeks: function (opt, useCache) {
             // fetch appointments
             var self = this,
-                weeks = opt.weeks || this.updateLoad,
+                weeks = opt.weeks || this.updateLoad,
                 apiData = {
                     start: opt.start,
                     end: moment(opt.start).add(weeks, 'weeks').valueOf()

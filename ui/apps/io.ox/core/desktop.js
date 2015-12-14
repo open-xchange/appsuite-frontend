@@ -230,7 +230,7 @@ define('io.ox/core/desktop', [
                             if (!appchange) {
                                 // update window title & toolbar?
                                 if (win) {
-                                    win.setTitle(_.noI18n(data.title || ''));
+                                    win.setTitle(_.noI18n(data.title || ''));
                                     win.updateToolbar();
                                 }
                                 // update grid?

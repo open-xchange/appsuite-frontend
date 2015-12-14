@@ -310,7 +310,7 @@ define('io.ox/mail/detail/content', [
         process: function () {
             each(this, 'a', function (node) {
                 var link = $(node),
-                    href = link.attr('href') || '',
+                    href = link.attr('href') || '',
                     data, text;
                 // deep links?
                 if (links.isInternalDeepLink(href)) {

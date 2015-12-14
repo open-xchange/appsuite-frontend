@@ -73,7 +73,7 @@ $(window).load(function () {
     // teach require.js to use deferred objects
     //
 
-    (function (require) {
+    (function (require) {
 
         function fallback(error) {
             console.error('require: Error in ' + error.requireModules, error.stack);

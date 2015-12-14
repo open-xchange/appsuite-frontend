@@ -52,7 +52,7 @@ define('io.ox/search/util', [
                     'data-original-title': title
                 })
                 .tooltip()
-                .on('click', function () {
+                .on('click', function () {
                     if (node.tooltip) {
                         node.tooltip('hide');
                     }

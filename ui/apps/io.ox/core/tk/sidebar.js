@@ -37,7 +37,7 @@ define('io.ox/core/tk/sidebar', [], function () {
             options = _.extend({ side: 'right', visible: true }, options);
 
             // ensure DOM element
-            options.sidebar = options.sidebar || $('<div>');
+            options.sidebar = options.sidebar || $('<div>');
 
             // ensure proper css classes
             options.sidebar.addClass('abs generic-sidebar scrollpane border-' + (options.side === 'left' ? 'right' : 'left'));

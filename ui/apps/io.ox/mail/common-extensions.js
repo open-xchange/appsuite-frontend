@@ -127,7 +127,7 @@ define('io.ox/mail/common-extensions', [
                 field = single && account.is('sent|drafts', data.folder_id) ? 'to' : 'from',
                 // get folder data to check capabilities:
                 // if bit 4096 is set, the server sort by local part not display name
-                capabilities = folderAPI.pool.getModel(data.folder_id).get('capabilities') || 0,
+                capabilities = folderAPI.pool.getModel(data.folder_id).get('capabilities') || 0,
                 useDisplayName = baton.options.sort !== 'from-to' || !(capabilities & 4096);
 
             this.append(
@@ -407,7 +407,7 @@ define('io.ox/mail/common-extensions', [
 
                     // support for fixed position
                     // TODO: introduce as general solution
-                    node.on('show.bs.dropdown', function (e) {
+                    node.on('show.bs.dropdown', function (e) {
                         var link = $(e.relatedTarget),
                             offset = link.offset(),
                             // need to use siblings() instead of next() due to funky backdrop injection on mobile devices (see bug 35863)
@@ -427,7 +427,7 @@ define('io.ox/mail/common-extensions', [
                         $('body').append(overlay);
                     });
 
-                    node.on('hide.bs.dropdown', function (e) {
+                    node.on('hide.bs.dropdown', function (e) {
                         var link = $(e.relatedTarget), overlay = link.data('overlay');
                         link.parent().append(overlay.children());
                         overlay.remove();

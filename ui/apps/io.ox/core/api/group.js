@@ -119,7 +119,7 @@ define('io.ox/core/api/group', [
     api.create = function (data) {
         return http.PUT({
             module: 'group',
-            params: { action: 'new' },
+            params: { action: 'new' },
             data: data,
             appendColumns: false
         })
@@ -138,7 +138,7 @@ define('io.ox/core/api/group', [
     api.update = function (data) {
         return http.PUT({
             module: 'group',
-            params: { action: 'update', id: data.id, timestamp: _.then() },
+            params: { action: 'update', id: data.id, timestamp: _.then() },
             data: _(data).pick('name', 'display_name', 'members'),
             appendColumns: false
         })
@@ -157,7 +157,7 @@ define('io.ox/core/api/group', [
         api.trigger('before:remove', id);
         return http.PUT({
             module: 'group',
-            params: { action: 'delete', timestamp: _.then() },
+            params: { action: 'delete', timestamp: _.then() },
             data: { id: id },
             appendColumns: false
         })

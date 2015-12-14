@@ -45,7 +45,7 @@ define('io.ox/core/folder/favorites', [
         api.virtual.add(id, function () {
             return api.multiple(settings.get('favorites/' + module, []), { errors: true }).then(function (response) {
                 // remove non-existent entries
-                var list = _(response).filter(function (item) {
+                var list = _(response).filter(function (item) {
                     // FLD-0008 -> not found
                     // FLD-0003 -> permission denied
                     if (item.error && (item.code === 'FLD-0008' || item.code === 'FLD-0003')) {

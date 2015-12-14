@@ -184,7 +184,7 @@ define('io.ox/files/share/listview', [
                 var model = baton.model,
                     breadcrumb = new BreadcrumbView({
                         folder: model.getFolderID(),
-                        exclude: ['9'],
+                        exclude: ['9'],
                         notail: true,
                         isLast: true
                     });

@@ -46,7 +46,7 @@ define('io.ox/files/share/model', [
         },
 
         setOriginal: function (data) {
-            this.originalAttributes = data || _.clone(this.attributes);
+            this.originalAttributes = data || _.clone(this.attributes);
         },
 
         getChanges: function () {

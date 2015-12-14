@@ -113,7 +113,7 @@ module.exports = function (grunt) {
                                 '    config.user().then(def.resolve, def.reject);\n' +
                                 '}\n' +
                                 'def.then(function () {\n',
-                    footer: '});\n});\n' //closing the precore definition and the resolve callback for def variable
+                    footer: '});\n});\n' // closing the precore definition and the resolve callback for def variable
                 },
                 files: [
                     {

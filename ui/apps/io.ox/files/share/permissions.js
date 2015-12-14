@@ -118,7 +118,7 @@ define('io.ox/files/share/permissions', [
                         return this.get('display_name');
                     case 'guest':
                         var data = this.get('contact');
-                        return data[data.field] || data.email1;
+                        return data[data.field] || data.email1;
                     case 'anonymous':
                         return gt('Public link');
                     // no default
@@ -139,7 +139,7 @@ define('io.ox/files/share/permissions', [
                         return this.get('display_name');
                     case 'guest':
                         data = this.get('contact');
-                        return data[data.field] || data.email1;
+                        return data[data.field] || data.email1;
                     case 'anonymous':
                         return '';
                     // no default
@@ -353,7 +353,7 @@ define('io.ox/files/share/permissions', [
                         break;
                     case 'guest':
                         this.user = this.model.get('contact');
-                        this.display_name = this.user[this.user.field] || this.user.email1;
+                        this.display_name = this.user[this.user.field] || this.user.email1;
                         this.description = gt('Guest');
                         break;
                     case 'anonymous':

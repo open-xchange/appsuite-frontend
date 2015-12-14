@@ -77,7 +77,7 @@ define('io.ox/find/extensions-api', [
             _.each(baton.data, function (facet) {
                 var style = _.contains(whitelist.style, facet.style),
                     id = _.contains(whitelist.id, facet.id),
-                    advanced = !(style || id);
+                    advanced = !(style || id);
 
                 // flag when not in whitelist
                 if (advanced) {

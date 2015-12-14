@@ -168,7 +168,7 @@ define('io.ox/find/view-tokenfield', [
                         var individual = ext.point(POINT + '/item/' + facetId);
 
                         // use special draw handler
-                        if (individual.list().length) {
+                        if (individual.list().length) {
                             // special
                             individual.invoke('draw', this, baton);
                         } else {
@@ -366,7 +366,7 @@ define('io.ox/find/view-tokenfield', [
             this.ui.container
                 .find('input.tt-input')
                 .attr({
-                    placeholder: this.isEmpty() ? this.ui.view.options.placeholder || '' : ''
+                    placeholder: this.isEmpty() ? this.ui.view.options.placeholder || '' : ''
                 });
         }
 

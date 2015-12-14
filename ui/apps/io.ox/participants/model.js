@@ -269,11 +269,11 @@ define('io.ox/participants/model', [
                     // resolve distribution lists
                     var add;
                     if (participant instanceof self.model) {
-                        if (participant.get('mark_as_distributionlist')) {
+                        if (participant.get('mark_as_distributionlist')) {
                             add = participant.get('distribution_list');
                         }
                     } else {
-                        if (participant.mark_as_distributionlist) {
+                        if (participant.mark_as_distributionlist) {
                             add = participant.distribution_list;
                         }
                     }

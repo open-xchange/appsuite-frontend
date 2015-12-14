@@ -618,7 +618,7 @@ define('io.ox/tasks/main', [
 
         'inplace-find': function (app) {
 
-            if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (_.device('smartphone') || !capabilities.has('search')) return;
             var find = app.searchable().get('find');
 
             find.on({

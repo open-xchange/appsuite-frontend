@@ -153,7 +153,7 @@ define('io.ox/find/view-facets', [
                         api.get(target)
                             .always(function (data) {
                                 //use id as fallback label
-                                var label = (data || {}).title || target;
+                                var label = (data || {}).title || target;
                                 manager.activate(facet.id, 'custom', {
                                     value: target,
                                     id: target,

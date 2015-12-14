@@ -401,7 +401,7 @@ define('io.ox/settings/main', [
             // try to get a translated title
             var title = declaration['title_' + ox.language] || /*#, dynamic*/gt(declaration.title) || '';
 
-            ext.point('io.ox/settings/pane/' + (declaration.group || 'tools')).extend(_.extend({
+            ext.point('io.ox/settings/pane/' + (declaration.group || 'tools')).extend(_.extend({
                 id: id,
                 ref: 'io.ox/configjump/' + id,
                 loadSettingPane: false

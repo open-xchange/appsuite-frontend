@@ -20,7 +20,7 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
         // open files app
         require(['io.ox/core/folder/api'], function (api) {
             api.get(id).then(
-                function () {
+                function () {
                     ox.launch(app, { folder: id }).done(function () {
                         // set proper folder
                         if (this.folder.get() !== id) this.folder.set(id);
@@ -159,7 +159,7 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
         // go!
         ox.registry.call('mail-compose', 'compose', {
             to: [[name, address]],
-            subject: params.subject || '',
+            subject: params.subject || '',
             attachments: params.body ? [{ content: params.body || '' }] : undefined
         });
     });

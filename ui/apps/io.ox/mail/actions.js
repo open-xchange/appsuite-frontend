@@ -149,7 +149,7 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/source', {
         requires: function (e) {
             // must be at least one message and top-level
-            if (!e.collection.has('some') || !e.collection.has('toplevel')) return;
+            if (!e.collection.has('some') || !e.collection.has('toplevel')) return;
             // multiple selection
             if (e.baton.selection && e.baton.selection.length > 1) return;
             // multiple and not a thread?

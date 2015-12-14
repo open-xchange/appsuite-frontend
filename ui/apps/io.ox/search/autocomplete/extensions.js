@@ -78,7 +78,7 @@ define('io.ox/search/autocomplete/extensions', [
                     var individual = ext.point(POINT + '/item/' + baton.data.facet);
 
                     // use special draw handler
-                    if (individual.list().length) {
+                    if (individual.list().length) {
                         // special
                         individual.invoke('draw', node, baton);
                     } else {

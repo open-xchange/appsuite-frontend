@@ -839,7 +839,7 @@ define('io.ox/contacts/main', [
 
         'inplace-find': function (app) {
 
-            if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (_.device('smartphone') || !capabilities.has('search')) return;
 
             app.searchable();
         },

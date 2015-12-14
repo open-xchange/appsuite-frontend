@@ -215,7 +215,7 @@ define('io.ox/core/tk/list-dnd', [
             clearTimeout(toggleTimer);
             // abort unless it was a real drag move
             if (!dragged) return;
-            var target = $(this).attr('data-model') || $(this).attr('data-id') || $(this).attr('data-cid') || $(this).attr('data-obj-id'),
+            var target = $(this).attr('data-model') || $(this).attr('data-id') || $(this).attr('data-cid') || $(this).attr('data-obj-id'),
                 baton = new ext.Baton({ data: data, dragType: options.dragType, dropzone: this, target: target });
             $(this).trigger('selection:drop', [baton]);
         }

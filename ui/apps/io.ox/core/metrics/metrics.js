@@ -65,7 +65,7 @@ define('io.ox/core/metrics/metrics', ['io.ox/files/api', 'io.ox/core/http'], fun
                             return api.get(api.reduce(match));
                         }
                         // create new file
-                        return create(folder, filename).then(function (id) {
+                        return create(folder, filename).then(function (id) {
                             return api.get({ folder_id: folder, id: id });
                         });
                     });

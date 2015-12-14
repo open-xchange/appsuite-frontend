@@ -81,7 +81,7 @@ define('io.ox/search/model', [
         // ignore folder facet with 'custom' (it's equivalent to an unset filter)
         var relevant = _.filter(list, function (value) {
             var facet = pool[value.facet];
-            if (value.facet === 'folder' && (facet.values.custom.custom === 'custom' || !facet.values.custom.custom)) {
+            if (value.facet === 'folder' && (facet.values.custom.custom === 'custom' || !facet.values.custom.custom)) {
                 return false;
             }
             return true;
@@ -246,7 +246,7 @@ define('io.ox/search/model', [
                             facet: facet,
                             value: value,
                             // a) simple or default without options, b) exclusive, c) default with options
-                            option: data.style === 'simple' || itemvalue.filter || !itemvalue.options ? '' : option || itemvalue.options[0].id
+                            option: data.style === 'simple' || itemvalue.filter || !itemvalue.options ? '' : option || itemvalue.options[0].id
                         };
 
                         (itemvalue || data)._compact = compact;
@@ -369,7 +369,7 @@ define('io.ox/search/model', [
                         simple = _.copy(value, true);
                     }
 
-                    if (value && (value.id !== 'custom' || (value.custom && value.custom !== 'custom'))) {
+                    if (value && (value.id !== 'custom' || (value.custom && value.custom !== 'custom'))) {
                         active.push({
                             //remove temporary suffix
                             facet: facet.id.split('.')[0],

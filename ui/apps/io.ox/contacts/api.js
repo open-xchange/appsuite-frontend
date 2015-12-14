@@ -1052,7 +1052,7 @@ define('io.ox/contacts/api', [
                 return _(data).map(function (item) {
                     // prepare simple array for fast lookups
                     item.fulltext = _(fields).map(function (id) {
-                        return String(item[id] || '').toLowerCase();
+                        return String(item[id] || '').toLowerCase();
                     });
                     // avoid useless lookups by removing empty strings
                     item.fulltext = _(item.fulltext).compact();
