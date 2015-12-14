@@ -103,7 +103,7 @@ define('io.ox/search/autocomplete/extensions', [
                             return ['contacts', 'contact', 'participant', 'task_participants'].indexOf(this.id) > -1;
                         };
 
-                        _.each(facet.values || [ facet ], function (data) {
+                        _.each(facet.values || [facet], function (data) {
                             var value = $.extend({}, data, { facet: facet.id }),
                                 valueModel = new ValueModel({
                                     facet: facet,

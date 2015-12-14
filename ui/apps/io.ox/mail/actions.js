@@ -194,7 +194,7 @@ define('io.ox/mail/actions', [
             }, true);
         },
         action: function (baton) {
-            var list = _.isArray(baton.data) ? baton.data : [ baton.data ];
+            var list = _.isArray(baton.data) ? baton.data : [baton.data];
             api.archive(list);
         }
     });

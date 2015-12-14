@@ -353,7 +353,7 @@ define('io.ox/files/share/api', [
          */
         remove: function (shares) {
             if (_.isString(shares)) {
-                shares = [ shares ];
+                shares = [shares];
             }
             return http.PUT({
                 module: 'share/management',

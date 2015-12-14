@@ -284,7 +284,7 @@ define('io.ox/mail/common-extensions', [
                 var view = new BreadcrumbView({
                         folder: baton.data.original_folder_id,
                         app: baton.app,
-                        exclude: [ 'default0' ]
+                        exclude: ['default0']
                     }), renderPathOrig;
                 // not need for this here
                 view.computeWidth = $.noop;

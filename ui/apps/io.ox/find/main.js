@@ -151,7 +151,7 @@ define('io.ox/find/main', [
                 // search: list request
                 // forward ids (no explicit all/list request in find/search api)
                 grid.setListRequest('search', function (ids) {
-                    var args = [ ids ];
+                    var args = [ids];
                     return $.Deferred().resolveWith(app, args);
                 });
 

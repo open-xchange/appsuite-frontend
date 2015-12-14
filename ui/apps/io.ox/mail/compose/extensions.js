@@ -159,7 +159,7 @@ define('io.ox/mail/compose/extensions', [
                                 if (from[1] !== id) return;
                                 from[0] = data.overwrite ? data.name : data.defaultName;
                             });
-                            baton.model.set('from', [ from ]);
+                            baton.model.set('from', [from]);
                         }
 
                         drawOptions();

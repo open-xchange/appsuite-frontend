@@ -41,7 +41,7 @@ define('io.ox/find/extensions-api', [
                 facet = $.extend(facet, {
                     id: facet.id + '.custom',
                     style: 'custom',
-                    values: [ value ]
+                    values: [value]
                 });
                 // adjust value
                 delete value.filter;
@@ -294,7 +294,7 @@ define('io.ox/find/extensions-api', [
                         item: {
                             name: gt('Folder')
                         },
-                        options: [ allfolders = {
+                        options: [allfolders = {
                             account: undefined,
                             value: null,
                             id: 'disabled',

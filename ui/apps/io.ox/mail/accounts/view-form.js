@@ -107,7 +107,7 @@ define.async('io.ox/mail/accounts/view-form', [
                 //if the server has no pop3 support and this account is a new one, remove the pop3 option from the selection box
                 //we leave it in with existing accounts to display them correctly even if they have pop3 protocol (we deny protocol changing when editing accounts anyway)
                 if (!capabilities.has('pop3') && !this.model.get('id')) {
-                    optionsServerType = [ { label: gt.noI18n('IMAP'), value: 'imap' } ];
+                    optionsServerType = [{ label: gt.noI18n('IMAP'), value: 'imap' }];
                 }
 
                 //check if login and mailaddress are synced

@@ -57,7 +57,7 @@ define('io.ox/find/date/facet-model', [
         update: function (data) {
             this.prepare(data);
             if (data.values.length) this.show(); else this.hide();
-            return this._base('update', [ data ]);
+            return this._base('update', [data]);
         }
 
     });

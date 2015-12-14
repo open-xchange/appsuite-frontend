@@ -189,19 +189,19 @@ define('io.ox/find/date/patterns', [
             start: moment(),
             end: moment()
         });
-        add([ gt('Last day'), gt('Yesterday') ], 0, {
+        add([gt('Last day'), gt('Yesterday')], 0, {
             start: moment().subtract(1, 'day'),
             end: moment().subtract(1, 'day')
         });
-        add([ gt('Last week'), gt('Previous week') ], 0, {
+        add([gt('Last week'), gt('Previous week')], 0, {
             start: moment().subtract(7, 'day').startOf('week'),
             end: moment().subtract(7, 'day').endOf('week')
         });
-        add([ gt('Last month'), gt('Previous month') ], 1, {
+        add([gt('Last month'), gt('Previous month')], 1, {
             start: moment().subtract(1, 'month').startOf('month'),
             end: moment().subtract(1, 'month').endOf('month')
         });
-        add([ gt('Last year'), gt('Previous year') ], 2, {
+        add([gt('Last year'), gt('Previous year')], 2, {
             start: moment().subtract(1, 'year').startOf('year'),
             end: moment().subtract(1, 'year').endOf('year')
         });

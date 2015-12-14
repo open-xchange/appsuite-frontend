@@ -69,7 +69,7 @@ define('io.ox/files/util', [
 
             //real reject/resolve -> pseudo resolve/reject
             chain.always(function () {
-                return response.resolveWith(undefined, [ chain.state() === 'resolved' ]);
+                return response.resolveWith(undefined, [chain.state() === 'resolved']);
             });
 
             return response.promise();

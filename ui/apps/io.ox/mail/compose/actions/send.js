@@ -211,7 +211,7 @@ define('io.ox/mail/compose/actions/send', [
                 if (isReply || isForward) {
                     //single vs. multiple
                     if (baton.mail.msgref) {
-                        msgrefs = [ baton.mail.msgref ];
+                        msgrefs = [baton.mail.msgref];
                     } else {
                         msgrefs = _.chain(baton.mail.attachments)
                             .filter(function (attachment) {

@@ -1607,7 +1607,7 @@ define('io.ox/mail/api', [
         var current = api.threads.get(_.cid(obj)) || {};
         if (current && current.length > 1) return current;
         // no thread references at all
-        return [ obj ];
+        return [obj];
     }
 
     api.processThreadMessage = function (obj) {

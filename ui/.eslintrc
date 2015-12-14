@@ -166,7 +166,7 @@
         // http://eslint.org/docs/rules/#stylistic-issues
 
         // enforce spacing inside array brackets
-        'array-bracket-spacing': 0,
+        'array-bracket-spacing': [2, "never"],
         // enforce one true brace style
         'brace-style': [2, '1tbs', {'allowSingleLine': true }],
         // require camel case names

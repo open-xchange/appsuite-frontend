@@ -45,7 +45,7 @@ define('io.ox/metrics/adapters/console', [
                 baton = baton || {};
                 var id = baton.id || type,
                     data = baton.data,
-                    entry =  [id, JSON.stringify(data) ];
+                    entry =  [id, JSON.stringify(data)];
                 // add to store
                 store.hash[type] = store.hash[type] || [];
                 store.hash[type].push(entry);

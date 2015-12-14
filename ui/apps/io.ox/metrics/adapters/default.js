@@ -32,7 +32,7 @@ define('io.ox/metrics/adapters/default', [
         setup: function () {
             _paq.push(['setTrackerUrl', url + 'piwik.php']);
             _paq.push(['setSiteId', ox.debug ? 2 : id]);
-            _paq.push(['setUserId', this.getUserHash() ]);
+            _paq.push(['setUserId', this.getUserHash()]);
             //_paq.push(['trackPageView']);
             _paq.push(['enableLinkTracking']);
             // lazy
@@ -47,11 +47,11 @@ define('io.ox/metrics/adapters/default', [
         trackEvent: function (baton) {
             var data = baton.data;
             // category, action, name, value
-            _paq.push(['trackEvent', data.app, baton.id || data.target, data.action, data.detail || data.value ]);
+            _paq.push(['trackEvent', data.app, baton.id || data.target, data.action, data.detail || data.value]);
         },
         trackPage: function (baton) {
             //_paq.push(['setUserId', this.getUserHash() ]);
-            _paq.push(['trackPageView', baton.data.trackingId || baton.data.name || baton.data.id ]);
+            _paq.push(['trackPageView', baton.data.trackingId || baton.data.name || baton.data.id]);
         },
         trackVariable: function (data) {
             // important: index range in piwiks default settings is 1 to 5
@@ -62,7 +62,7 @@ define('io.ox/metrics/adapters/default', [
             }
             // http://developer.piwik.org/guides/tracking-javascript-guide#custom-variables
             data.value = _.isString(data.value) ? data.value : JSON.stringify(data.value);
-            _paq.push(['setCustomVariable', data.index, data.id, data.value, data.scope || 'visit' ]);
+            _paq.push(['setCustomVariable', data.index, data.id, data.value, data.scope || 'visit']);
         }
     });
 
