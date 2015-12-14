@@ -214,7 +214,7 @@
         // disallow comments inline after code
         'no-inline-comments': 0,
         // disallow if as the only statement in an else block
-        'no-lonely-if': 0,
+        'no-lonely-if': 2,
         // disallow mixed spaces and tabs for indentation
         'no-mixed-spaces-and-tabs': 2,
         // disallow multiple empty lines

@@ -42,13 +42,11 @@ define('io.ox/mail/detail/content', [
                     text = text.replace(/<br>$/, '') + '<blockquote type="cite"><p>' + tmp + '</p></blockquote>' + line;
                     quoting = false;
                 }
+            } else if (quoting) {
+                tmp.push(line.replace(regQuoted, ''));
             } else {
-                if (quoting) {
-                    tmp.push(line.replace(regQuoted, ''));
-                } else {
-                    quoting = true;
-                    tmp = [line.replace(regQuoted, '')];
-                }
+                quoting = true;
+                tmp = [line.replace(regQuoted, '')];
             }
         }
         return text.replace(/<br>$/, '');

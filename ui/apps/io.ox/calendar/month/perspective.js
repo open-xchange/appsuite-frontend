@@ -379,18 +379,16 @@ define('io.ox/calendar/month/perspective', [
 
             if (firstDay.length > 0 && nextFirstDay.length > 0) {
                 scrollToDate();
+            } else if (target.valueOf() < self.current.valueOf()) {
+                this.drawWeeks({ up: true }).done(function () {
+                    firstDay = $('#' + target.year() + '-' + target.month(), self.pane);
+                    scrollToDate();
+                });
             } else {
-                if (target.valueOf() < self.current.valueOf()) {
-                    this.drawWeeks({ up: true }).done(function () {
-                        firstDay = $('#' + target.year() + '-' + target.month(), self.pane);
-                        scrollToDate();
-                    });
-                } else {
-                    this.drawWeeks().done(function () {
-                        firstDay = $('#' + target.year() + '-' + target.month(), self.pane);
-                        scrollToDate();
-                    });
-                }
+                this.drawWeeks().done(function () {
+                    firstDay = $('#' + target.year() + '-' + target.month(), self.pane);
+                    scrollToDate();
+                });
             }
         },
 

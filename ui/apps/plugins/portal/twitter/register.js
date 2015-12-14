@@ -149,12 +149,10 @@ define('plugins/portal/twitter/register', [
                         if (!jsonResponse.errors) {
                             $tweets.prepend(util.renderTweet(jsonResponse));
                             tweetCache.add(jsonResponse.id_str, jsonResponse);
+                        } else if (_.isArray(jsonResponse.errors)) {
+                            notifications.yell('error', jsonResponse.errors[0].message);
                         } else {
-                            if (_.isArray(jsonResponse.errors)) {
-                                notifications.yell('error', jsonResponse.errors[0].message);
-                            } else {
-                                notifications.yell('error', jsonResponse.errors);
-                            }
+                            notifications.yell('error', jsonResponse.errors);
                         }
 
                         options.textArea.attr({ rows: '1', placeholder: 'Compose new tweet...' })

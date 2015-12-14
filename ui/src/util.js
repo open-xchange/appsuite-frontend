@@ -747,8 +747,8 @@
                     if (o[r] !== undefined && o[r] !== null) {
                         // if we have a recurrence position we need a folder
                         tmp = encode(f || 0) + '.' + tmp + '.' + encode(o[r]);
-                    } else {
-                        if (f !== undefined) { tmp = encode(f) + '.' + tmp; }
+                    } else if (f !== undefined) {
+                        tmp = encode(f) + '.' + tmp;
                     }
                     return tmp;
                 }

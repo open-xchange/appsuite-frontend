@@ -136,11 +136,9 @@ define('io.ox/core/relogin', [
                     this.find('input').focus();
                 });
 
-        } else {
+        } else if (request && deferred) {
             // enqueue last request
-            if (request && deferred) {
-                queue.push({ request: request, deferred: deferred });
-            }
+            queue.push({ request: request, deferred: deferred });
         }
     }
 

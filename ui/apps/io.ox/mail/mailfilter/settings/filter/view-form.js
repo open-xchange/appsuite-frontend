@@ -240,15 +240,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                 if (checkForMultipleTests(this.el).length > 2) {
                     testArray.tests.splice(testID, 1);
+                } else if (testArray.tests) {
+                    testArray.tests.splice(testID, 1);
+                    testArray = testArray.tests[0];
                 } else {
-
-                    if (testArray.tests) {
-                        testArray.tests.splice(testID, 1);
-                        testArray = testArray.tests[0];
-                    } else {
-                        testArray = { id: 'true' };
-                    }
-
+                    testArray = { id: 'true' };
                 }
 
                 this.model.set('test', testArray);

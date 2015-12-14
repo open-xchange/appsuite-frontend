@@ -194,12 +194,10 @@ define('io.ox/search/util', [
                         } else {
                             cont('selected', data);
                         }
+                    } else if (isVirtual) {
+                        cont('invalid', data);
                     } else {
-                        if (isVirtual) {
-                            cont('invalid', data);
-                        } else {
-                            cont('selected', data);
-                        }
+                        cont('selected', data);
                     }
                 });
 

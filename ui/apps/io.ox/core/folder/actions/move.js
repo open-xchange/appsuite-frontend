@@ -79,15 +79,13 @@ define('io.ox/core/folder/actions/move', [
                         // custom callback?
                         if (options.successCallback) {
                             options.successCallback(response);
-                        } else {
+                        } else if (_.isObject(response) && response.error) {
                             // fail?
-                            if (_.isObject(response) && response.error) {
-                                notifications.yell(response);
-                            } else {
-                                if (type === 'copy') success();
-                                api.reload(target, options.list);
-                                if (type === 'move' && options.vgrid) options.vgrid.idle();
-                            }
+                            notifications.yell(response);
+                        } else {
+                            if (type === 'copy') success();
+                            api.reload(target, options.list);
+                            if (type === 'move' && options.vgrid) options.vgrid.idle();
                         }
                     },
                     notifications.yell

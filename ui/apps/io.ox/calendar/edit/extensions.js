@@ -588,22 +588,20 @@ define('io.ox/calendar/edit/extensions', [
                         //in file picker dialog - other browsers still seem to work)
                         $input[0].value = '';
                         $input.trigger('reset.fileupload');
-                    } else {
+                    } else if ($input.val()) {
                         //IE
-                        if ($input.val()) {
-                            var fileData = {
-                                name: $input.val().match(/[^\/\\]+$/),
-                                size: 0,
-                                hiddenField: $input
-                            };
-                            baton.attachmentList.addFile(fileData);
-                            //hide input field with file
-                            $input.addClass('add-attachment').hide();
-                            //create new input field
-                            $input = $('<input>', { type: 'file', name: 'file' })
-                                    .on('change', changeHandler)
-                                    .appendTo($input.parent());
-                        }
+                        var fileData = {
+                            name: $input.val().match(/[^\/\\]+$/),
+                            size: 0,
+                            hiddenField: $input
+                        };
+                        baton.attachmentList.addFile(fileData);
+                        //hide input field with file
+                        $input.addClass('add-attachment').hide();
+                        //create new input field
+                        $input = $('<input>', { type: 'file', name: 'file' })
+                                .on('change', changeHandler)
+                                .appendTo($input.parent());
                     }
                 };
             $input.on('change', changeHandler);

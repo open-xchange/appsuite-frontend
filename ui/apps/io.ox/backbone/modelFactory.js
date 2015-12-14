@@ -80,10 +80,8 @@ define('io.ox/backbone/modelFactory', [
 
                                         if (o[key] === undefined) {
                                             different = true;
-                                        } else {
-                                            if (val2 !== o[key][key2]) {
-                                                different = true;
-                                            }
+                                        } else if (val2 !== o[key][key2]) {
+                                            different = true;
                                         }
                                     });
 

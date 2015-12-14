@@ -168,16 +168,14 @@ define('io.ox/core/tk/selection', [
             if (!touchstart) {
                 // event
                 changed();
-            } else {
+            } else if (isCheckbox(e) || mobileSelectMode) {
                 // check if select mode
                 // check if checkbox tap
                 // else call apply again without touchstart
-                if (isCheckbox(e) || mobileSelectMode) {
-                    e.preventDefault();
-                    selectOnly();
-                } else {
-                    apply(id, e);
-                }
+                e.preventDefault();
+                selectOnly();
+            } else {
+                apply(id, e);
             }
         };
 
@@ -997,12 +995,10 @@ define('io.ox/core/tk/selection', [
                 var tmp = this.get();
                 this.clear();
                 this.set(tmp);
+            } else if (mobileSelectMode) {
+                selectOnly();
             } else {
-                if (mobileSelectMode) {
-                    selectOnly();
-                } else {
-                    changed();
-                }
+                changed();
             }
         };
 

@@ -114,16 +114,12 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             // we store this once (per folder)
             this.ownWidth = ownWidth;
 
-            if (ownWidth > maxWidth) {
-                if (this.ellipsisCount === 4) {
-                    this.ellipsisCount = 2;
-                    this.render();
-                }
-            } else {
-                if (this.ellipsisCount === 2) {
-                    this.ellipsisCount = 4;
-                    this.render();
-                }
+            if (ownWidth > maxWidth && this.ellipsisCount === 4) {
+                this.ellipsisCount = 2;
+                this.render();
+            } else if (this.ellipsisCount === 2) {
+                this.ellipsisCount = 4;
+                this.render();
             }
 
             this.$el.css('max-width', maxWidth);

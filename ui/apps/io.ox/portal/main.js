@@ -384,12 +384,10 @@ define('io.ox/portal/main', [
 
         if (model.get('enabled') === false) {
             node.hide();
-        } else {
-            if (!widgets.visible(model.get('type'))) {
-                // hide due to missing capabilites
-                node.hide();
-                return;
-            }
+        } else if (!widgets.visible(model.get('type'))) {
+            // hide due to missing capabilites
+            node.hide();
+            return;
         }
         if (add) {
             var lastProtected = appBaton.$.widgets.find('li.protected').last();

@@ -100,12 +100,10 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
                             self.text(text.replace(/^"/, '\u201C').replace(/"$/, '\u201D'));
                         }
                     }
-                } else {
+                } else if (tagName === 'DIV' && !self.attr('class') && !self.attr('style') && unwrapDiv) {
                     // extraneous DIV?
-                    if (tagName === 'DIV' && !self.attr('class') && !self.attr('style') && unwrapDiv) {
-                        children.eq(0).unwrap();
-                        return false;
-                    }
+                    children.eq(0).unwrap();
+                    return false;
                 }
                 return memo;
             }

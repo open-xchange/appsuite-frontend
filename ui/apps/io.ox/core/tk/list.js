@@ -370,14 +370,12 @@ define('io.ox/core/tk/list', [
                 // reset
                 this.selection.isScrolling = false;
 
-            } else {
-                if (this.isPulling) {
-                    // threshold was not reached, just remove the ptr indicator
-                    this.removePullToRefreshIndicator(true);
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.selection.isScrolling = true;
-                }
+            } else if (this.isPulling) {
+                // threshold was not reached, just remove the ptr indicator
+                this.removePullToRefreshIndicator(true);
+                e.preventDefault();
+                e.stopPropagation();
+                this.selection.isScrolling = true;
             }
             // reset everything
             this.pullToRefreshStartY = null;

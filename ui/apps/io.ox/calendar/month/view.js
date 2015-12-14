@@ -235,11 +235,9 @@ define('io.ox/calendar/month/view', [
                     if (tempDate === undefined) {
                         // first run, draw
                         this.renderAppointmentIndicator(cell);
-                    } else {
-                        if (!startMoment.isSame(tempDate, 'day')) {
-                            // one mark per day is enough
-                            this.renderAppointmentIndicator(cell);
-                        }
+                    } else if (!startMoment.isSame(tempDate, 'day')) {
+                        // one mark per day is enough
+                        this.renderAppointmentIndicator(cell);
                     }
                     // remember for next run
                     tempDate = startMoment.clone();

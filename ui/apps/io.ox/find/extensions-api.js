@@ -262,16 +262,12 @@ define('io.ox/find/extensions-api', [
                     isVirtual = module === 'mail' ? !folderAPI.can('read', preselect.data) : isVirtualFolder(preselect.data);
 
                     // conditions mapping
-                    if (!isMandatory) {
-                        if (isDefault || isVirtual) {
-                            // convenience function respectively fallback when virtual all not exists
-                            preselect = all || standard;
-                        }
-                    } else {
-                        if (isVirtual) {
-                            // fallback when folder is mandatory
-                            preselect = standard;
-                        }
+                    if (!isMandatory && (isDefault || isVirtual)) {
+                        // convenience function respectively fallback when virtual all not exists
+                        preselect = all || standard;
+                    } else if (isVirtual) {
+                        // fallback when folder is mandatory
+                        preselect = standard;
                     }
 
                     // flag as preselected

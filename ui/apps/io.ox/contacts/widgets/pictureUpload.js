@@ -143,13 +143,11 @@ define('io.ox/contacts/widgets/pictureUpload', [
                 if (imageUrl) {
                     imageUrl = imageUrl.replace(/^\/ajax/, ox.apiRoot);
                     hasImage = true;
-                } else {
+                } else if (this.model.get('image1') && this.model.get('image1_content_type')) {
                     // temporary support for data-url images
-                    if (this.model.get('image1') && this.model.get('image1_content_type')) {
-                        dataUrl = 'data:' + this.model.get('image1_content_type') + ';base64,' + this.model.get('image1');
-                        this.model.set('image1_url', dataUrl, { silent: true, validate: true });
-                        hasImage = true;
-                    }
+                    dataUrl = 'data:' + this.model.get('image1_content_type') + ';base64,' + this.model.get('image1');
+                    this.model.set('image1_url', dataUrl, { silent: true, validate: true });
+                    hasImage = true;
                 }
 
                 this.$el.append(

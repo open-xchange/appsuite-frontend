@@ -72,10 +72,8 @@ define('io.ox/core/tk/upload', [
                     // IE has no pointer-events: none
                     if (!_.browser.IE) {
                         $actionNode.removeClass('io-ox-dropzone-hover');
-                    } else {
-                        if (!$(e.target).hasClass('dropzone') && !$(e.target).hasClass('dndignore')) {
-                            $actionNode.removeClass('io-ox-dropzone-hover');
-                        }
+                    } else if (!$(e.target).hasClass('dropzone') && !$(e.target).hasClass('dndignore')) {
+                        $actionNode.removeClass('io-ox-dropzone-hover');
                     }
                 },
                 drop: function (e) {

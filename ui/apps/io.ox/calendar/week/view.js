@@ -1489,15 +1489,13 @@ define('io.ox/calendar/week/view', [
                         // abort moving
                         if (day < 0 || day >= self.columns) {
                             left = ui.position.left = d.my.lastLeft;
-                        } else {
+                        } else if (d.my.mode < 4) {
                             // hide apppintment parts outside of the pane
-                            if (d.my.mode < 4) {
-                                d.my.all.show();
-                                if (d.my.firstPos + move < 0) {
-                                    d.my.all.slice(0, Math.abs(d.my.firstPos + move)).hide();
-                                } else if (d.my.lastPos + move >= self.columns) {
-                                    d.my.all.slice((d.my.lastPos + move - self.columns + 1) * -1).hide();
-                                }
+                            d.my.all.show();
+                            if (d.my.firstPos + move < 0) {
+                                d.my.all.slice(0, Math.abs(d.my.firstPos + move)).hide();
+                            } else if (d.my.lastPos + move >= self.columns) {
+                                d.my.all.slice((d.my.lastPos + move - self.columns + 1) * -1).hide();
                             }
                         }
 

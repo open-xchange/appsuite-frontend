@@ -272,19 +272,17 @@ define('io.ox/backbone/mini-views/attachments', [
                         //in file picker dialog - other browsers still seem to work)
                         $input[0].value = '';
                         $input.trigger('reset.fileupload');
-                    } else {
-                        if ($input.val()) {
-                            var fileData = {
-                                name: $input.val().match(/[^\/\\]+$/),
-                                size: 0,
-                                hiddenField: $input
-                            };
-                            list.addFile(fileData);
-                            $input.addClass('add-attachment').hide();
-                            $input.parent().append(
-                                $input = $('<input type="file">')
-                            );
-                        }
+                    } else if ($input.val()) {
+                        var fileData = {
+                            name: $input.val().match(/[^\/\\]+$/),
+                            size: 0,
+                            hiddenField: $input
+                        };
+                        list.addFile(fileData);
+                        $input.addClass('add-attachment').hide();
+                        $input.parent().append(
+                            $input = $('<input type="file">')
+                        );
                     }
                 })
                 .on('focus', function () {

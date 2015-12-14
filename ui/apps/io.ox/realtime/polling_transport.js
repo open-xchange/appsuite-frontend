@@ -458,10 +458,8 @@ function (ext, Event, caps, uuids, http, stanza, tabId) {
                     }
                     resetSequence(0);
                 }
-            } else {
-                if (api.debug) {
-                    console.log('Already received ' + stanza.seq + '. Waiting for ' + (serverSequenceThreshhold + 1));
-                }
+            } else if (api.debug) {
+                console.log('Already received ' + stanza.seq + '. Waiting for ' + (serverSequenceThreshhold + 1));
             }
         }
     }

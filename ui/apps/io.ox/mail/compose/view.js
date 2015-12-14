@@ -359,13 +359,11 @@ define('io.ox/mail/compose/view', [
                         text = text.replace(/<br>$/, '') + '<blockquote type="cite"><p>' + tmp + '</p></blockquote>' + line;
                         quoting = false;
                     }
+                } else if (quoting) {
+                    tmp.push(line.replace(regQuoted, ''));
                 } else {
-                    if (quoting) {
-                        tmp.push(line.replace(regQuoted, ''));
-                    } else {
-                        quoting = true;
-                        tmp = [line.replace(regQuoted, '')];
-                    }
+                    quoting = true;
+                    tmp = [line.replace(regQuoted, '')];
                 }
             }
             text = text.replace(/<br>$/, '');
@@ -718,13 +716,11 @@ define('io.ox/mail/compose/view', [
                 if (input.hasClass('hidden')) {
                     input.removeClass('hidden');
                     this.$el.find('[data-action="add"] span').removeClass('fa-angle-right').addClass('fa-angle-down');
-                } else {
-                    if (_.isEmpty(this.model.attributes.cc) && _.isEmpty(this.model.attributes.bcc)) {
-                        this.model.set('cc', []);
-                        this.model.set('bcc', []);
-                        input.addClass('hidden');
-                        this.$el.find('[data-action="add"] span').removeClass('fa-angle-down').addClass('fa-angle-right');
-                    }
+                } else if (_.isEmpty(this.model.attributes.cc) && _.isEmpty(this.model.attributes.bcc)) {
+                    this.model.set('cc', []);
+                    this.model.set('bcc', []);
+                    input.addClass('hidden');
+                    this.$el.find('[data-action="add"] span').removeClass('fa-angle-down').addClass('fa-angle-right');
                 }
                 return input;
             }
@@ -911,10 +907,8 @@ define('io.ox/mail/compose/view', [
                     // remove entire block unless it seems edited
                     if (unchanged) node.remove(); else node.removeClass('io-ox-signature');
                 });
-            } else {
-                if (currentSignature) {
-                    this.editor.replaceParagraph(currentSignature, '');
-                }
+            } else if (currentSignature) {
+                this.editor.replaceParagraph(currentSignature, '');
             }
         },
 

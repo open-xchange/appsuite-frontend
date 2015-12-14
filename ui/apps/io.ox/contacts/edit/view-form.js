@@ -588,13 +588,11 @@ define('io.ox/contacts/edit/view-form', [
                     // hide block if block contains no paragraph with content
                     if (block.children('div.has-content, div.always').length === 0) {
                         block.addClass('hidden');
+                    } else if (this.find('fieldset.block').length % 2) {
+                        block.addClass('odd');
                     } else {
-                        if (this.find('fieldset.block').length % 2) {
-                            block.addClass('odd');
-                        } else {
-                            block.addClass('even');
-                            this.append($('<div class="clearfix">'));
-                        }
+                        block.addClass('even');
+                        this.append($('<div class="clearfix">'));
                     }
                 }
             });

@@ -872,20 +872,18 @@ define('io.ox/mail/api', [
             if (data.attachments && data.attachments.length) {
                 if (data.attachments[0].content === '') {
                     // nothing to do - nothing to break
+                } else if (data.attachments[0].content_type === 'text/html') {
+                    // content-type specific
+                    // robust approach for large mails
+                    tmp = document.createElement('DIV');
+                    tmp.innerHTML = data.attachments[0].content;
+                    _(tmp.getElementsByTagName('BLOCKQUOTE')).each(function (node) {
+                        node.removeAttribute('style');
+                    });
+                    text = tmp.innerHTML;
+                    tmp = null;
                 } else {
-                    //content-type specific
-                    if (data.attachments[0].content_type === 'text/html') {
-                        // robust approach for large mails
-                        tmp = document.createElement('DIV');
-                        tmp.innerHTML = data.attachments[0].content;
-                        _(tmp.getElementsByTagName('BLOCKQUOTE')).each(function (node) {
-                            node.removeAttribute('style');
-                        });
-                        text = tmp.innerHTML;
-                        tmp = null;
-                    } else {
-                        text = $.trim(data.attachments[0].content);
-                    }
+                    text = $.trim(data.attachments[0].content);
                 }
             } else {
                 data.attachments = data.attachments || [{}];

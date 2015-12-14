@@ -92,12 +92,10 @@ define('plugins/portal/twitter/util', [
                         .attr({ 'aria-pressed': 'false' })
                         .text(gt('Favorite'));
                 }
+            } else if (_.isArray(jsonResponse.errors)) {
+                notifications.yell('error', jsonResponse.errors[0].message);
             } else {
-                if (_.isArray(jsonResponse.errors)) {
-                    notifications.yell('error', jsonResponse.errors[0].message);
-                } else {
-                    notifications.yell('error', jsonResponse.errors);
-                }
+                notifications.yell('error', jsonResponse.errors);
             }
         },
         function fail() {
@@ -133,12 +131,10 @@ define('plugins/portal/twitter/util', [
                                 .attr({ 'aria-pressed': 'true' })
                                 .text(gt('Retweeted'));
                             tweet.retweeted = true;
+                        } else if (_.isArray(jsonResponse.errors)) {
+                            notifications.yell('error', jsonResponse.errors[0].message);
                         } else {
-                            if (_.isArray(jsonResponse.errors)) {
-                                notifications.yell('error', jsonResponse.errors[0].message);
-                            } else {
-                                notifications.yell('error', jsonResponse.errors);
-                            }
+                            notifications.yell('error', jsonResponse.errors);
                         }
                     },
                     function fail() {
@@ -245,12 +241,10 @@ define('plugins/portal/twitter/util', [
                                 .removeClass('retweeted')
                                 .attr({ 'aria-pressed': 'false' })
                                 .text(gt('Retweet'));
+                        } else if (_.isArray(jsonResponse.errors)) {
+                            notifications.yell('error', jsonResponse.errors[0].message);
                         } else {
-                            if (_.isArray(jsonResponse.errors)) {
-                                notifications.yell('error', jsonResponse.errors[0].message);
-                            } else {
-                                notifications.yell('error', jsonResponse.errors);
-                            }
+                            notifications.yell('error', jsonResponse.errors);
                         }
                     }, function fail() {
                         notifications.yell('error', gt('An internal error occurred'));
@@ -324,24 +318,22 @@ define('plugins/portal/twitter/util', [
                 )
                 .removeClass('btn-primary btn-danger following')
                 .attr({ 'aria-pressed': 'false' });
+        } else if (hover) {
+            //display unfollow
+            btn.empty().text(
+                    //#. twitter: Stop following this person
+                    gt('Unfollow')
+                )
+                .removeClass('btn-primary').addClass('btn-danger following')
+                .attr({ 'aria-pressed': 'true' });
         } else {
-            if (hover) {
-                //display unfollow
-                btn.empty().text(
-                        //#. twitter: Stop following this person
-                        gt('Unfollow')
-                    )
-                    .removeClass('btn-primary').addClass('btn-danger following')
-                    .attr({ 'aria-pressed': 'true' });
-            } else {
-                //display following
-                btn.empty().text(
-                        //#. twitter: already following this person
-                        gt('Following')
-                    )
-                    .removeClass('btn-danger').addClass('btn-primary following')
-                    .attr({ 'aria-pressed': 'true' });
-            }
+            //display following
+            btn.empty().text(
+                    //#. twitter: already following this person
+                    gt('Following')
+                )
+                .removeClass('btn-danger').addClass('btn-primary following')
+                .attr({ 'aria-pressed': 'true' });
         }
     };
 
@@ -375,12 +367,10 @@ define('plugins/portal/twitter/util', [
                     tweet.user.following = !btn.hasClass('following');
 
                     updateFollowButtons(tweet.user.id_str, tweet.user.following);
+                } else if (_.isArray(jsonResponse.errors)) {
+                    notifications.yell('error', jsonResponse.errors[0].message);
                 } else {
-                    if (_.isArray(jsonResponse.errors)) {
-                        notifications.yell('error', jsonResponse.errors[0].message);
-                    } else {
-                        notifications.yell('error', jsonResponse.errors);
-                    }
+                    notifications.yell('error', jsonResponse.errors);
                 }
             },
             function fail() {
@@ -420,12 +410,10 @@ define('plugins/portal/twitter/util', [
                         if (!jsonResponse.errors) {
                             $myTweet.remove();
                             tweetCache.remove(tweet.id_str);
+                        } else if (_.isArray(jsonResponse.errors)) {
+                            notifications.yell('error', jsonResponse.errors[0].message);
                         } else {
-                            if (_.isArray(jsonResponse.errors)) {
-                                notifications.yell('error', jsonResponse.errors[0].message);
-                            } else {
-                                notifications.yell('error', jsonResponse.errors);
-                            }
+                            notifications.yell('error', jsonResponse.errors);
                         }
                     },
                     function fail() {
@@ -502,24 +490,19 @@ define('plugins/portal/twitter/util', [
         applyOptions();
 
         function applyOptions() {
-            if (options !== undefined) {
-                if (options.isOpen) {
-                    if (options.open !== undefined) {
-                        options.open({
-                            replyBoxContainer: replyBoxContainer,
-                            textArea: textArea,
-                            buttonContainer: buttonContainer
-                        });
-                    }
-                } else {
-                    if (options.close !== undefined) {
-                        options.close({
-                            replyBoxContainer: replyBoxContainer,
-                            textArea: textArea,
-                            buttonContainer: buttonContainer
-                        });
-                    }
-                }
+            if (options === undefined) return;
+            if (options.isOpen && options.open !== undefined) {
+                options.open({
+                    replyBoxContainer: replyBoxContainer,
+                    textArea: textArea,
+                    buttonContainer: buttonContainer
+                });
+            } else if (options.close !== undefined) {
+                options.close({
+                    replyBoxContainer: replyBoxContainer,
+                    textArea: textArea,
+                    buttonContainer: buttonContainer
+                });
             }
         }
 

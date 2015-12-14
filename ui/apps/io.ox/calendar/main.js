@@ -788,9 +788,9 @@ define('io.ox/calendar/main', [
 
                     if (_.device('smartphone') && _.indexOf(['week:workweek', 'week:week', 'calendar'], lastPerspective) >= 0) {
                         lastPerspective = 'week:day';
-                    } else {
+                    } else if (lastPerspective === 'calendar') {
                         // corrupt data fix
-                        if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
+                        lastPerspective = 'week:workweek';
                     }
                     ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true });
                     app.props.set('layout', lastPerspective);

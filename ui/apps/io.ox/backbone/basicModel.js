@@ -97,20 +97,18 @@ define('io.ox/backbone/basicModel', [
                 self.trigger('invalid', errors, self);
                 self.errors = errors;
                 self._valid = false;
-            } else {
-                if (!self._valid) {
-                    _(self.attributeValidity).each(function (wasValid, attribute) {
-                        if (!wasValid) {
-                            self.trigger('valid:' + attribute, self);
-                        }
-                    });
+            } else if (!self._valid) {
+                _(self.attributeValidity).each(function (wasValid, attribute) {
+                    if (!wasValid) {
+                        self.trigger('valid:' + attribute, self);
+                    }
+                });
 
-                    _(attributes).chain().keys().each(function (key) {
-                        self.attributeValidity[key] = true;
-                    });
-                    self._valid = true;
-                    this.trigger('valid');
-                }
+                _(attributes).chain().keys().each(function (key) {
+                    self.attributeValidity[key] = true;
+                });
+                self._valid = true;
+                this.trigger('valid');
             }
         },
         parse: function () {

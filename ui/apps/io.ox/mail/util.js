@@ -142,14 +142,12 @@ define('io.ox/mail/util', [
                     target = that.cleanupPhone(match[3]);
                 }
                 name = util.unescapeDisplayName(match[1]);
-            } else {
+            } else if (that.getChannel(recipient) === 'email') {
                 // case 2: assume plain email address / telephone number
-                if (that.getChannel(recipient) === 'email') {
-                    target = recipient.replace(rMailCleanup, '').toLowerCase();
-                    name = target.split(/@/)[0];
-                } else {
-                    name = target = that.cleanupPhone(recipient);
-                }
+                target = recipient.replace(rMailCleanup, '').toLowerCase();
+                name = target.split(/@/)[0];
+            } else {
+                name = target = that.cleanupPhone(recipient);
             }
             return [name, target];
         },

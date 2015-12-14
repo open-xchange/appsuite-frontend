@@ -449,17 +449,15 @@ define('io.ox/presenter/rtconnection', [
                 } else if (payloads.length > 0) {
                     handleJoinResponse(def, response);
                     joining = false;
-                } else {
+                } else if (_.isFunction(retryHandler)) {
                     // We encountered an illegal state for our join request.
-                    if (_.isFunction(retryHandler)) {
-                        // try to re-join if handler is available
-                        handleRejoin(def, response, retryHandler);
-                    } else {
-                        // without retry handler just process the original
-                        // response
-                        handleJoinResponse(def, response);
-                        joining = false;
-                    }
+                    // try to re-join if handler is available
+                    handleRejoin(def, response, retryHandler);
+                } else {
+                    // without retry handler just process the original
+                    // response
+                    handleJoinResponse(def, response);
+                    joining = false;
                 }
             }, function (response) {
                 handleRejectedJoinRequest(def, response, retryHandler);

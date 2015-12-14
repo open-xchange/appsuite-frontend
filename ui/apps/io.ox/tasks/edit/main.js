@@ -193,16 +193,14 @@ define('io.ox/tasks/edit/main', [
                             }
                         });
                 });
+            } else if (app.edit) {
+                clean();
+                //old model no longer needed
+                model.factory.realm('edit').release();
+                def.resolve();
             } else {
-                if (app.edit) {
-                    clean();
-                    //old model no longer needed
-                    model.factory.realm('edit').release();
-                    def.resolve();
-                } else {
-                    clean();
-                    def.resolve();
-                }
+                clean();
+                def.resolve();
             }
 
             return def;
