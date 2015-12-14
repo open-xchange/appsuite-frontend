@@ -222,7 +222,7 @@ define('plugins/notifications/calendar/register', [
 
             //react to changes in settings
             settings.on('change:autoOpenNotification', function (e, value) {
-                subview.model.set('autoOpen', value );
+                subview.model.set('autoOpen', value);
             });
 
             reminderAPI.getReminders();
@@ -274,7 +274,7 @@ define('plugins/notifications/calendar/register', [
 
             //react to changes in settings
             settings.on('change:autoOpenNotification', function (e, value) {
-                subview.model.set('autoOpen', value );
+                subview.model.set('autoOpen', value);
             });
 
             calAPI.getInvites();

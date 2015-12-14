@@ -62,7 +62,7 @@ define('io.ox/tasks/view-grid-template', [
                     fields.title.addClass('not-fulltime');
                 }
                 fields.end_time.text(_.noI18n(data.end_time));
-                fields.end_timeMessage.text( !task.end_time ? '' : util.getSmartEnddate(task));
+                fields.end_timeMessage.text(!task.end_time ? '' : util.getSmartEnddate(task));
                 //important. with addClass old classes aren't removed correctly
                 fields.status.attr('class', 'status ' + data.badge)
                     .text(data.status || _.noI18n('\u00A0'));

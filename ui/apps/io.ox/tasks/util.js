@@ -55,7 +55,7 @@ define('io.ox/tasks/util', [
                         if (value === 't') {
                             //tomorow
                             alarmDate.add(1, 'day');
-                        } else if ( value === 'ww') {
+                        } else if (value === 'ww') {
                             // next week
                             alarmDate.add(1, 'week');
                         } else if (value.indexOf('w') === 0) {
@@ -164,7 +164,7 @@ define('io.ox/tasks/util', [
             },
 
             isOverdue: function (task) {
-                return ( task.end_time !== undefined && task.end_time !== null && task.end_time < _.now() && task.status !== 3 );
+                return (task.end_time !== undefined && task.end_time !== null && task.end_time < _.now() && task.status !== 3);
             },
 
             getSmartEnddate: function (data) {

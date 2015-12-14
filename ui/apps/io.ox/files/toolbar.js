@@ -105,7 +105,7 @@ define('io.ox/files/toolbar', [
                     // set proper tooltip
                     var folders = 0,
                         files = 0;
-                    _(_.isArray(baton.data) ? baton.data : [baton.data]).each( function (item) {
+                    _(_.isArray(baton.data) ? baton.data : [baton.data]).each(function (item) {
                         if (item.folder_id === 'folder') {
                             folders++;
                         } else {

@@ -30,10 +30,10 @@ define('io.ox/core/tk/tokenfield', [
 
     $.fn.tokenfield.Constructor.prototype.getTokensList = function (delimiter, beautify, active) {
         delimiter = delimiter || this._firstDelimiter;
-        beautify = ( typeof beautify !== 'undefined' && beautify !== null ) ? beautify : this.options.beautify;
+        beautify = (typeof beautify !== 'undefined' && beautify !== null) ? beautify : this.options.beautify;
 
-        var separator = delimiter + ( beautify && delimiter !== ' ' ? ' ' : '');
-        return $.map( this.getTokens(active), function (token) {
+        var separator = delimiter + (beautify && delimiter !== ' ' ? ' ' : '');
+        return $.map(this.getTokens(active), function (token) {
             if (token.model) {
                 var displayname = token.model.getDisplayName(),
                     email = token.model.getEmail ? token.model.getEmail() : undefined;
@@ -192,7 +192,7 @@ define('io.ox/core/tk/tokenfield', [
                     if (self.autoselect[query]) {
                         // trigger enter key press event
                         self.input.trigger(
-                            $.Event( 'keydown', { keyCode: 13, which: 13 } )
+                            $.Event('keydown', { keyCode: 13, which: 13 })
                         );
                         // remove from hash
                         delete self.autoselect[query];

@@ -71,7 +71,7 @@ define('io.ox/files/share/wizard', [
                 if (_.device('ios')) return;
                 node.focus();
             });
-            if (link === '' ) {
+            if (link === '') {
                 baton.model.fetch();
             }
         }

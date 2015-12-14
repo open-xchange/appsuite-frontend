@@ -73,7 +73,7 @@ define('io.ox/core/viewer/backbone', [
          *  The file descriptor of the currently selected file.
          */
         setStartIndex: function (startFile) {
-            if (!startFile || !startFile.id ) { return; }
+            if (!startFile || !startFile.id) { return; }
             var startModel = this.findWhere({ id: startFile.id }),
                 startModelIndex = this.indexOf(startModel);
             this.startIndex = startModelIndex < 0 ? 0 : startModelIndex;

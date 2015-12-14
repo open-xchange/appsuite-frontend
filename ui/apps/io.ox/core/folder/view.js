@@ -275,7 +275,7 @@ define('io.ox/core/folder/view', [
                             section = api.getSection(_(path).where({ 'id': id })[0].type);
 
                         if (section && _(['mail', 'contacts', 'calendar', 'tasks', 'infostore']).contains(tree.module) && tree.flat && tree.context === 'app') {
-                            ids.push('virtual/flat/' + tree.module + '/' + section );
+                            ids.push('virtual/flat/' + tree.module + '/' + section);
                         }
                         tree.open = _(tree.open.concat(ids)).uniq();
                     })

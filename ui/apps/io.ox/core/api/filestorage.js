@@ -157,7 +157,7 @@ define('io.ox/core/api/filestorage', [
                         id: id
                     }
                 })
-                .then( function (service) {
+                .then(function (service) {
                     return new Backbone.Model(service);
                 });
             },
@@ -175,7 +175,7 @@ define('io.ox/core/api/filestorage', [
                         action: 'all'
                     }
                 })
-                .then( function (accounts) {
+                .then(function (accounts) {
                     accountsCache.reset(accounts);
                     addToIdsCache(accounts);
                     return accountsCache;
@@ -203,7 +203,7 @@ define('io.ox/core/api/filestorage', [
                         filestorageService: options.filestorageService
                     }
                 })
-                .then( function (account) {
+                .then(function (account) {
                     return new Backbone.Model(account);
                 });
             },
@@ -217,7 +217,7 @@ define('io.ox/core/api/filestorage', [
                     },
                     data: options
                 })
-                .then( function (accountId) {
+                .then(function (accountId) {
                     return api.getAccount({ id: accountId, filestorageService: options.filestorageService }).then(function (account) {
 
                         accountsCache.add(account);
@@ -347,7 +347,7 @@ define('io.ox/core/api/filestorage', [
                     try {
                         var accountsWithStorage = {},
                             oauthAccounts = new Backbone.Collection(keychain.accounts[0]);
-                        _(accountsCache.models).each( function (account) {
+                        _(accountsCache.models).each(function (account) {
                             // let's use a hardcoded list here to not accidentally delete filestorages we are not interested in
                             if (account.get('filestorageService') === 'googledrive' || account.get('filestorageService') === 'dropbox' ||
                                 account.get('filestorageService') === 'onedrive' || account.get('filestorageService') === 'boxcom') {

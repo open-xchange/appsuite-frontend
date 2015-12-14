@@ -175,14 +175,14 @@ define('io.ox/contacts/mobile-toolbar-actions', [
             //single select
             app.grid.selection.on('select pagechange:detailView', function () {
                 //don't override secondary toolbar
-                if (app.props.get('checkboxes') === true ) return;
+                if (app.props.get('checkboxes') === true) return;
 
                 var data = app.grid.selection.get();
                 app.updateToolbar(data[0]);
             });
 
             function updateSecondaryToolbar(list) {
-                if (app.props.get('checkboxes') !== true ) return;
+                if (app.props.get('checkboxes') !== true) return;
                 if (list.length === 0) {
                     // reset to remove old baton
                     app.pages.getSecondaryToolbar('listView')

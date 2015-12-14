@@ -513,7 +513,7 @@ define('io.ox/calendar/main', [
                 }
                 // see if we can still access the folder, although we are not allowed to view the contents
                 // this is important because otherwise we would not be able to change permissions (because the view jumps to the default folder all the time)
-                folderAPI.get(app.folder.get(), { cache: false }).fail( function (error) {
+                folderAPI.get(app.folder.get(), { cache: false }).fail(function (error) {
                     if (error.code === 'FLD-0003') {
                         handleError(error);
                     }

@@ -461,7 +461,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                 this.trigger('valid:headers');
                             }
 
-                            if (_.has(attrs, 'values') ) {
+                            if (_.has(attrs, 'values')) {
                                 if ($.trim(attrs.values[0]) === '') {
                                     this.trigger('invalid:values');
                                     return 'error';
@@ -611,7 +611,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                             new mini.DropdownLinkView({ name: 'comparison', model: cmodel, values: filterValues('currentdate', timeValues) }).render().$el
                                         ),
                                         $('<div class="col-sm-8">').append(
-                                            new ModifiedDatePicker({ model: cmodel, display: 'DATE', attribute: 'datevalue', label: gt('datepicker' ) }).render().$el
+                                            new ModifiedDatePicker({ model: cmodel, display: 'DATE', attribute: 'datevalue', label: gt('datepicker') }).render().$el
                                         )
                                     )
                                 ),

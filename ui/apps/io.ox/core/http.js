@@ -488,7 +488,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         // flatten this array
         var tmp = [], column = '';
         for (column in ids) {
-            if ( idMappingExcludes.indexOf(column) === -1 ) {
+            if (idMappingExcludes.indexOf(column) === -1) {
                 tmp.push(column);
             }
         }

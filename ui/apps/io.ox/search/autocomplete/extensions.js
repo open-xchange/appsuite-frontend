@@ -93,7 +93,7 @@ define('io.ox/search/autocomplete/extensions', [
                     var ValueModel = Backbone.Model.extend({
                         getDisplayName: function () {
                             var value = this.get('value');
-                            return (value.item && value.item.name ? value.item.name : value.name || '\u00A0' );
+                            return (value.item && value.item.name ? value.item.name : value.name || '\u00A0');
                         }
                     });
 

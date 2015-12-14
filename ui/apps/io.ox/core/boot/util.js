@@ -97,7 +97,7 @@ define('io.ox/core/boot/util', [], function () {
                             $('<a target="_blank" role="button" class="btn btn-primary btn">')
                                 .text(self.gt('Change password'))
                                 // error_params[0] should contain a url to password change manager or sth.
-                                .attr( 'href', error.error_params[0] )];
+                                .attr('href', error.error_params[0])];
                 });
             } else {
                 this.feedback('error', $.txt(_.formatError(error, '%1$s (%2$s)')));

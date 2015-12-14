@@ -480,7 +480,7 @@ define('io.ox/mail/main', [
                 if (app.props.get('find-result')) return;
                 var folder = app.folder.get(), data = app.props.toJSON();
                 app.settings
-                    .set(['viewOptions', folder], _.extend({ sort: data.sort, order: data.order, thread: data.thread }, options.viewOptions || {} ))
+                    .set(['viewOptions', folder], _.extend({ sort: data.sort, order: data.order, thread: data.thread }, options.viewOptions || {}))
                     .set('layout', data.layout)
                     .set('showContactPictures', data.contactPictures)
                     .set('showExactDates', data.exactDates);
@@ -876,7 +876,7 @@ define('io.ox/mail/main', [
                 'selection:one': function (list) {
                     app.right.find('.multi-selection-message div').attr('id', null);
                     var type = 'one';
-                    if ( app.listView.selection.getBehavior() === 'alternative' ) {
+                    if (app.listView.selection.getBehavior() === 'alternative') {
                         type = 'multiple';
                     }
                     react(type, list);
@@ -1224,7 +1224,7 @@ define('io.ox/mail/main', [
          */
         'change:checkboxes': function (app) {
             if (_.device('smartphone')) return;
-            if ( app.listView.selection.getBehavior() === 'alternative' ) {
+            if (app.listView.selection.getBehavior() === 'alternative') {
                 app.listView.toggleCheckboxes(true);
             } else {
                 app.props.on('change:checkboxes', function (model, value) {
@@ -1378,7 +1378,7 @@ define('io.ox/mail/main', [
                 }
                 // see if we can still access the folder, although we are not allowed to view the contents
                 // this is important because otherwise we would not be able to change permissions (because the view jumps to the default folder all the time)
-                folderAPI.get(app.folder.get(), { cache: false }).fail( function (error) {
+                folderAPI.get(app.folder.get(), { cache: false }).fail(function (error) {
                     if (error.code === 'FLD-0003') {
                         handleError(error);
                     }

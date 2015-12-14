@@ -156,7 +156,7 @@ define('io.ox/core/viewer/views/mainview', [
                         isDropdownMenuItem = escTarget.parents('.dropdown-menu').length > 0,
                         isDropdownToggler = escTarget.attr('data-toggle') === 'dropdown';
                     // close the viewer only if user is not on a dropdown menu, or a dropdown menu item
-                    if ( !isDropdownMenuItem && !isDropdownToggler ) {
+                    if (!isDropdownMenuItem && !isDropdownToggler) {
                         this.closeViewer();
                     }
                     break;

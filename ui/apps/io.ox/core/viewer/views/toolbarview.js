@@ -465,7 +465,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         action: function (baton) {
             var viewedAttachment = baton.data;
             MailAPI.get({ id: viewedAttachment.mail.id, folder_id: viewedAttachment.mail.folder_id }).done(function (mail) {
-                ox.registry.call('mail-compose', 'replyall', mail ).then(function (MailApp) {
+                ox.registry.call('mail-compose', 'replyall', mail).then(function (MailApp) {
                     // look for currently viewed attachment in the list of attachments of the source email
                     var attachmentToSend = _.find(mail.attachments, function (attachment) {
                         return attachment.id === viewedAttachment.id;
@@ -727,7 +727,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     $(this).val(oldValue);
                     return;
                 }
-                if (newValue <= 0 ) {
+                if (newValue <= 0) {
                     $(this).val(1);
                     newValue = 1;
                 }

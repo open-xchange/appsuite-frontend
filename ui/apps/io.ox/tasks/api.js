@@ -348,13 +348,13 @@ define('io.ox/tasks/api', [
 
         // recurrence attribute key present but undefined means it must be removed so set to null
         // this is different from calendar implementation, where recurrence attributes that are not in the request are set to null automatically by the backend
-        if ( _(task).has('days') && task.days === undefined) {
+        if (_(task).has('days') && task.days === undefined) {
             task.days = null;
         }
-        if ( _(task).has('day_in_month ') && task.day_in_month  === undefined) {
+        if (_(task).has('day_in_month ') && task.day_in_month  === undefined) {
             task.day_in_month = null;
         }
-        if ( _(task).has('month') && task.month === undefined) {
+        if (_(task).has('month') && task.month === undefined) {
             task.month = null;
         }
 

@@ -126,7 +126,7 @@ define('io.ox/files/share/permissions', [
             },
 
             getEmail: function () {
-                return contactsUtil.getMail( this.get('contact') );
+                return contactsUtil.getMail(this.get('contact'));
             },
 
             getSortName: function () {

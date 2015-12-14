@@ -75,7 +75,7 @@ define('io.ox/presenter/rtmodel', [
 
             result.participants = _.filter(data.activeUsers, function (user) {
                 return ((user.joined && (user.active || (!user.active && user.durationOfInactivity < 30))) || (user.userId === data.presenterId));
-            }, this );
+            }, this);
 
             return result;
         },

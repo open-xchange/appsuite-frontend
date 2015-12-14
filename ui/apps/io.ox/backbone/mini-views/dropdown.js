@@ -118,7 +118,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 )
             );
             // in firefox draggable=false is not enough to prevent dragging...
-            if ( _.device('firefox') ) {
+            if (_.device('firefox')) {
                 link.attr('ondragstart', 'return false;');
             }
             return this;
@@ -130,10 +130,10 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 .text(text);
             if (callback) link.on('click', callback);
             // in firefox draggable=false is not enough to prevent dragging...
-            if ( _.device('firefox') ) {
+            if (_.device('firefox')) {
                 link.attr('ondragstart', 'return false;');
             }
-            return this.append( link );
+            return this.append(link);
         },
 
         header: function (text) {
@@ -178,7 +178,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             // use smart drop-down? (fixed positioning)
             if (this.options.smart) toggle.addClass('smart-dropdown');
             // in firefox draggable=false is not enough to prevent dragging...
-            if ( _.device('firefox') ) {
+            if (_.device('firefox')) {
                 toggle.attr('ondragstart', 'return false;');
             }
             toggle.dropdown();

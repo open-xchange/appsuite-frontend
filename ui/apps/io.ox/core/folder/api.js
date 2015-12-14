@@ -515,7 +515,7 @@ define('io.ox/core/folder/api', [
         .then(function (data) {
             return renameDefaultCalendarFolders(data);
         }, function (error) {
-            api.trigger('error error:' +  error.code, error );
+            api.trigger('error error:' +  error.code, error);
             return error;
         })
         .then(function (data) {
@@ -605,7 +605,7 @@ define('io.ox/core/folder/api', [
             appendColumns: true
         })
         .then(renameDefaultCalendarFolders, function (error) {
-            api.trigger('error error:' +  error.code, error );
+            api.trigger('error error:' +  error.code, error);
             return error;
         })
         .then(function (array) {
@@ -844,7 +844,7 @@ define('io.ox/core/folder/api', [
                     if ('title' in changes) api.trigger('rename', id, model.toJSON());
                 }
                 // fetch subfolders of parent folder to ensure proper order after rename/move
-                if (id !== newId || changes.title || changes.folder_id ) {
+                if (id !== newId || changes.title || changes.folder_id) {
                     return list(model.get('folder_id'), { cache: false })
                             .then(function () {
                                 pool.getCollection(model.get('folder_id')).sort();

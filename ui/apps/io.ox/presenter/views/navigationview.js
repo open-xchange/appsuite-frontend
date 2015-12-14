@@ -150,7 +150,7 @@ define('io.ox/presenter/views/navigationview', [
             //if (_.device('smartphone')) return;
 
             function quoteId(id) {
-                return id.replace( /(:|@|\/|\.|\[|\]|,)/g, '\\$1' );
+                return id.replace(/(:|@|\/|\.|\[|\]|,)/g, '\\$1');
             }
 
             var dropdown,
@@ -302,7 +302,7 @@ define('io.ox/presenter/views/navigationview', [
                     $(this).val(slideNumber);
                     return;
 
-                } else if (newValue <= 0 ) {
+                } else if (newValue <= 0) {
                     $(this).val(1);
                     newValue = 1;
 

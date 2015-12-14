@@ -48,10 +48,10 @@ define('io.ox/core/notifications', [
             $(document.body).on('click', function (e) {
                 // don't check if notification area is closed
                 if (self.getStatus() !== 'closed') {
-                    var isInside = $( e.target )
+                    var isInside = $(e.target)
                         .closest('#io-ox-notifications, #io-ox-notifications-sidepopup, #io-ox-notifications-icon, .io-ox-dialog-underlay, .io-ox-dialog-popup, .modal-footer, .custom-dropdown').length > 0;
 
-                    if (!isInside ) {
+                    if (!isInside) {
                         self.hide({ refocus: document.body === document.activeElement });
                     }
                 }
@@ -161,7 +161,7 @@ define('io.ox/core/notifications', [
                         disableButton.remove();
                         self.hideNotificationInfo = true;
                     },
-                    containerNode = $('<div class="desktop-notification-info clearfix">').append( textNode, enableButton, disableButton, laterButton );
+                    containerNode = $('<div class="desktop-notification-info clearfix">').append(textNode, enableButton, disableButton, laterButton);
 
                 if (self.hideNotificationInfo) {
                     cleanup();

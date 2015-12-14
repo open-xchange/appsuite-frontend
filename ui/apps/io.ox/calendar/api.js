@@ -62,7 +62,7 @@ define('io.ox/calendar/api', [
                 .done(function (data) {
                     api.caches.get[key] = data;
                 }).fail(function (error) {
-                    api.trigger('error error:' +  error.code, error );
+                    api.trigger('error error:' +  error.code, error);
                     return error;
                 });
             }
@@ -104,7 +104,7 @@ define('io.ox/calendar/api', [
                 .done(function (data) {
                     api.caches.all[key] = JSON.stringify(data);
                 }).fail(function (error) {
-                    api.trigger('error error:' +  error.code, error );
+                    api.trigger('error error:' +  error.code, error);
                     return error;
                 });
             }
@@ -240,7 +240,7 @@ define('io.ox/calendar/api', [
                 // if master, delete all appointments from cache
                 if (o.recurrence_type > 0 && !o.recurrence_position) {
                     var deleteKey = folder_id + '.' + o.id;
-                    for ( var i in api.caches.get ) {
+                    for (var i in api.caches.get) {
                         if (i.indexOf(deleteKey) === 0) delete api.caches.get[i];
                     }
                 }
@@ -281,7 +281,7 @@ define('io.ox/calendar/api', [
                 // if master, delete all appointments from cache
                 if (o.recurrence_type > 0 && !o.recurrence_position) {
                     var deleteKey = folder_id + '.' + o.id;
-                    for ( var i in api.caches.get ) {
+                    for (var i in api.caches.get) {
                         if (i.indexOf(deleteKey) === 0) delete api.caches.get[i];
                     }
                 }

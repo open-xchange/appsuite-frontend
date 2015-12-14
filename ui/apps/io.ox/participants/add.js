@@ -86,7 +86,7 @@ define('io.ox/participants/add', [
                         display_name: util.parseRecipient(val)[0],
                         email1: util.parseRecipient(val)[1],
                         field: 'email1', type: 5
-                    }, val );
+                    }, val);
                 }
             }
         },

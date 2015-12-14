@@ -526,7 +526,7 @@ define('plugins/portal/twitter/util', [
         function updateTextLength() {
             var linkRegexp = /\b(https?:\/\/|www.)\S+\.\S+\b/gi,
                 //calculate the length of links (twitter makes every link 22 chars long)
-                linkLength = (textArea.val().match(linkRegexp) || [] ).length * 22,
+                linkLength = (textArea.val().match(linkRegexp) || []).length * 22,
                 //cut out links
                 nonLinkLength = textArea.val().replace(linkRegexp, '').length;
 

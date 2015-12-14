@@ -46,10 +46,10 @@ define('io.ox/core/desktopNotifications', [
 
         notification = new Notification(title, message);
         //assign events
-        if ( onclose ) { notification.onclose = onclose; }
-        if ( onshow ) { notification.onshow = onshow; }
-        if ( onclick ) { notification.onclick = onclick; }
-        if ( onerror ) { notification.onerror = onerror; }
+        if (onclose) { notification.onclose = onclose; }
+        if (onshow) { notification.onshow = onshow; }
+        if (onclick) { notification.onclick = onclick; }
+        if (onerror) { notification.onerror = onerror; }
 
         if (duration) {
             //firefox closes notifications automatically after 4s so there is no need to do this manually then

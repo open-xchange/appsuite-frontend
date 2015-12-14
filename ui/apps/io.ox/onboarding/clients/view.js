@@ -29,7 +29,7 @@ define('io.ox/onboarding/clients/view', [
                 return $('<li>').append(
                     $('<a href="#" tabindex="1">')
                         .attr('data-' + type, model.get('id'))
-                        .addClass(model.get('enabled') ? '' : 'disabled' )
+                        .addClass(model.get('enabled') ? '' : 'disabled')
                         .append(
                             $('<i class="icon fa">').addClass(model.get('icon') || 'fa-circle'),
                             $('<div class="title">').text(model.get('title') || '\xa0')

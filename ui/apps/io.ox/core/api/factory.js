@@ -165,7 +165,7 @@ define('io.ox/core/api/factory', [
                         }
                         return data;
                     }, function (error) {
-                        api.trigger('error error:' +  error.code, error );
+                        api.trigger('error error:' +  error.code, error);
                         return error;
                     })
                     .then(function (data) {
@@ -286,7 +286,7 @@ define('io.ox/core/api/factory', [
                     .then(function (data) {
                         return (o.pipe.get || _.identity)(data, opt);
                     }, function (error) {
-                        api.trigger('error error:' +  error.code, error );
+                        api.trigger('error error:' +  error.code, error);
                         return error;
                     })
                     .then(function (data) {

@@ -324,7 +324,7 @@ define('io.ox/mail/actions', [
         multiple: function (attachmentList, baton) {
             ox.load(['io.ox/mail/actions/viewer']).done(function (action) {
                 var options = { files: attachmentList };
-                if ( baton.startItem ) {
+                if (baton.startItem) {
                     options.selection = baton.startItem;
                 }
                 action(options);

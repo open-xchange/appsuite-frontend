@@ -406,7 +406,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.resetCheckmark(items);
             this.pick(index, items, e);
             //alternative selection mode needs this, has no effect in default mode
-            if ( this.isMultiple(e) || this.isRange(e)) {
+            if (this.isMultiple(e) || this.isRange(e)) {
                 this.triggerChange(items);
             } else {
                 this.selectEvents(items);

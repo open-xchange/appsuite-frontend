@@ -419,7 +419,7 @@ define('io.ox/mail/compose/view', [
 
                     var attachments = _.clone(data.attachments);
                     // to keep the previews working we copy data from the original mail
-                    if (mode === 'forward' || mode === 'edit' ) {
+                    if (mode === 'forward' || mode === 'edit') {
                         attachments.map(function (file) {
                             return _.extend(file, { group: 'mail', mail: attachmentMailInfo });
                         });

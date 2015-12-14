@@ -341,7 +341,7 @@ define('io.ox/calendar/week/view', [
                     this.cleanUpLasso();
                     $('.week-container .day>.appointment.modify', this.$el)
                     .draggable({ 'revert': true })
-                    .trigger( 'mouseup' );
+                    .trigger('mouseup');
                     break;
                 case 37:
                     // left

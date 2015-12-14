@@ -142,7 +142,7 @@ define('io.ox/core/tk/doc-utils/pageloader', [
             queue[priority].push(pageData);
             map[pageNumber] = pageData;
 
-            return pageData.def.promise().always( function () {
+            return pageData.def.promise().always(function () {
                 busyNode.remove();
             });
         }
@@ -316,7 +316,7 @@ define('io.ox/core/tk/doc-utils/pageloader', [
 
             if (renderType === 'pdf') {
                 // <canvas> element: render page into canvas and create text overlay
-                pdfView.renderPDFPage(jqPageNode, pageNumber, pageZoom).then( function () {
+                pdfView.renderPDFPage(jqPageNode, pageNumber, pageZoom).then(function () {
                     jqPageNode.data('page-zoom', pageZoom).attr(newPageSize).css(ACTIVE_STYLE);
                 });
             }

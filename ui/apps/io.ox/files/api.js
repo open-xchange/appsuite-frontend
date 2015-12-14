@@ -42,7 +42,7 @@ define('io.ox/files/api', [
          * Constructor, to initialize the model with mail and PIM attachments,
          * besides Drive model attributes.
          */
-        constructor: function ( attributes, options ) {
+        constructor: function (attributes, options) {
             attributes = attributes || {};
             var normalizedAttrs;
             // check if model is initialized with mail, pim or drive model attributes
@@ -82,7 +82,7 @@ define('io.ox/files/api', [
                 normalizedAttrs.source = 'drive';
             }
             // call parent constructor
-            backbone.Model.call( this, normalizedAttrs, options );
+            backbone.Model.call(this, normalizedAttrs, options);
 
             this.listenTo(this, 'change:filename', function (m, newName) {
                 //maybe update versions if filename is changed
@@ -455,7 +455,7 @@ define('io.ox/files/api', [
                             // IFO-0400 is missing the folder in the error params -> adding this manually
                             e.error_params.push(params.folder);
                         }
-                        api.trigger('error error:' +  e.code, e );
+                        api.trigger('error error:' +  e.code, e);
                         // this one might fail due to lack of permissions; error are transformed to empty array
                         if (ox.debug) console.warn('files.httpGet', e.error, e);
                         return [];
@@ -526,7 +526,7 @@ define('io.ox/files/api', [
             pool.add('detail', data);
             return data;
         }, function (error) {
-            api.trigger('error error:' +  error.code, error );
+            api.trigger('error error:' +  error.code, error);
             return error;
         });
     };
@@ -551,7 +551,7 @@ define('io.ox/files/api', [
             pool.add('detail', data);
             return data;
         }, function (error) {
-            api.trigger('error error:' +  error.code, error );
+            api.trigger('error error:' +  error.code, error);
             return error;
         });
     };

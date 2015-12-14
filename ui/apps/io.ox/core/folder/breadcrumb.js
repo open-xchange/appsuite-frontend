@@ -100,7 +100,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             );
         },
 
-        computeWidth: _.throttle( function () {
+        computeWidth: _.throttle(function () {
 
             if (this.disposed || !this.$el.is(':visible')) return;
 

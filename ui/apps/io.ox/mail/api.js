@@ -1590,7 +1590,7 @@ define('io.ox/mail/api', [
             };
         },
         fail: function (error) {
-            api.trigger('error error:' +  error.code, error );
+            api.trigger('error error:' +  error.code, error);
             return error;
         },
 

@@ -47,7 +47,7 @@ define('io.ox/core/notifications/subview', [
                 //reminders need both to work correctly (reminderObject and task/appointment)
 
                 //make sure we have a model
-                if ( !model ) {
+                if (!model) {
                     model = requestedModel;
                 } else if (!model.get) {
                     model = new Backbone.Model(model);
@@ -98,7 +98,7 @@ define('io.ox/core/notifications/subview', [
                     for (i = 0; i < max && items[i]; i++) {
                         //mail needs unseen attribute, shouldn't bother other apis
                         //extend with empty object to not overwrite the model
-                        defs.push(api.get(_.extend({}, items[i].attributes, { unseen: true })).then(_.partial( drawItem, _, items[i])));
+                        defs.push(api.get(_.extend({}, items[i].attributes, { unseen: true })).then(_.partial(drawItem, _, items[i])));
                     }
                     $.when.apply($, defs).then(function () {
                         itemNode.idle();
@@ -360,7 +360,7 @@ define('io.ox/core/notifications/subview', [
                 items = [].concat(items);
             }
             //stop here if nothing changes, to prevent event triggering and redrawing
-            if (items.length === 0 ||  (items.length === 1 && items[0].id && !this.collection.get(items[0]))) {
+            if (items.length === 0 || (items.length === 1 && items[0].id && !this.collection.get(items[0]))) {
                 return;
             }
             this.collection.remove(items, { silent: silent });
@@ -380,7 +380,7 @@ define('io.ox/core/notifications/subview', [
         onClick: function (e) {
             if ((!(this.model.get('detailview'))) ||
                 ((e.type !== 'click') && (e.which !== 13)) ||
-                $(e.target).filter('.dropdown, select, a, button, .btn').length > 0 ) {
+                $(e.target).filter('.dropdown, select, a, button, .btn').length > 0) {
                 return;
             }
             var cid = String($(e.currentTarget).data('cid')),

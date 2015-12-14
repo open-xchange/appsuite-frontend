@@ -291,11 +291,11 @@ define('io.ox/mail/common-extensions', [
                 // show only folder paths tail
                 renderPathOrig = view.renderPath;
                 view.renderPath = function (path) {
-                    return renderPathOrig.call(this, [].concat(_.last(path)) );
+                    return renderPathOrig.call(this, [].concat(_.last(path)));
                 };
 
                 // append to dom
-                node.append( view.render().$el );
+                node.append(view.render().$el);
             });
         },
 

@@ -326,7 +326,7 @@ define('io.ox/find/main', [
         app.toggle = function (folderid) {
             var notWhitelisted = !FOLDERWHITELIST[folderid];
             // is folder unsupported?
-            app.trigger( folderAPI.isVirtual(folderid) && notWhitelisted ? 'view:disable' : 'view:enable');
+            app.trigger(folderAPI.isVirtual(folderid) && notWhitelisted ? 'view:disable' : 'view:enable');
         };
 
         // parent app id

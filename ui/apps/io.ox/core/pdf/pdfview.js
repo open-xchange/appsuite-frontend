@@ -286,7 +286,7 @@ define('io.ox/core/pdf/pdfview', [
                             }
                         });
 
-                        $.when.apply($, renderDefs).always( function () {
+                        $.when.apply($, renderDefs).always(function () {
                             // notify possible <code>renderCallbacks.endRendering</code> callback function
                             if (_.isObject(renderCallbacks) && _.isFunction(renderCallbacks.endRendering)) {
                                 renderCallbacks.endRendering(pagesToRender);
@@ -577,7 +577,7 @@ define('io.ox/core/pdf/pdfview', [
             }
 
             // reset isInRendering flag after rendering is done or in failure case
-            def.always( function () {
+            def.always(function () {
                 if (pageData[pagePos]) {
                     pageData[pagePos].isInRendering = null;
                 }
@@ -589,7 +589,7 @@ define('io.ox/core/pdf/pdfview', [
 
                 var renderDef = $.Deferred();
                 renderDef.done(function () {
-                    pdfDocument.getPDFJSPage(pageNumber).then( function (pdfjsPage) {
+                    pdfDocument.getPDFJSPage(pageNumber).then(function (pdfjsPage) {
                         if (pageNode.children().length) {
                             var viewport = getPageViewport(pdfjsPage, pageZoom),
                                 pageSize = PDFView.getNormalizedSize({ width: viewport.width, height: viewport.height }),
@@ -646,9 +646,9 @@ define('io.ox/core/pdf/pdfview', [
                             return pdfjsPage.render({
                                 canvasContext: canvasCtx,
                                 viewport: viewport
-                            }).then( function () {
+                            }).then(function () {
                                 if (pdfTextBuilder) {
-                                    return pdfjsPage.getTextContent().then( function (pdfTextContent) {
+                                    return pdfjsPage.getTextContent().then(function (pdfTextContent) {
                                         pdfTextBuilder.setTextContent(pdfTextContent);
                                         pdfTextBuilder.render();
                                         prepareTextLayerForTextSelection(textWrapperNode);

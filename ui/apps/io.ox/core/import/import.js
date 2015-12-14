@@ -208,10 +208,10 @@ define('io.ox/core/import/import', [
                                 .value(),
                                 defaultMessage = //#. Error message if calendar import failed
                                                  gt('There was no appointment data to import');
-                            if ( module === 'contacts' ) {
+                            if (module === 'contacts') {
                                 defaultMessage = //#. Error message if contact import failed
                                                  gt('There was no contact data to import');
-                            } else if ( module === 'tasks' ) {
+                            } else if (module === 'tasks') {
                                 defaultMessage = //#. Error message if task import failed
                                     gt('There was no task data to import');
                             }

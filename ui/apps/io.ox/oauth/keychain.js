@@ -331,7 +331,7 @@ define.async('io.ox/oauth/keychain', [
             // perform consistency check for filestorage accounts (there might be cases were they are out of sync)
             // we delay it so it doesn't prolong appsuite startup
             _.delay(filestorageApi.consistencyCheck, 5000);
-        }).always( function () {
+        }).always(function () {
             // Resolve loading
             moduleDeferred.resolve({
                 message: 'Done with oauth keychain',

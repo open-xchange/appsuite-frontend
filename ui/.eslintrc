@@ -143,6 +143,8 @@
         'yoda': 2,
         // Invalid or irregular whitespace
         no-irregular-whitespace: 2,
+        // Disallow Dangling Commas
+        comma-dangle: [2, 'never'],
 
 
         // VARIABLES
@@ -258,7 +260,7 @@
         // require or disallow space before function opening parenthesis
         'space-before-function-paren': [2, {'anonymous': 'always', 'named': 'never'}],
         // require or disallow spaces inside parentheses
-        'space-in-parens': 0, // NEEDS CODE REFACTORING (112) //[2, 'never'],
+        'space-in-parens': [2, 'never'],
         // require spaces around operators
         'space-infix-ops': 2,
         // require a space after return, throw, and case

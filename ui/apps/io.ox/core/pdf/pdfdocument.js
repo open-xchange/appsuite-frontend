@@ -90,7 +90,7 @@ define('io.ox/core/pdf/pdfdocument', [
             var def = $.Deferred();
 
             if (_.isNumber(pageNumber) && (pageNumber > 0) && (pageNumber <= pageCount)) {
-                self.getPDFJSPage(pageNumber).then( function (pdfjsPage) {
+                self.getPDFJSPage(pageNumber).then(function (pdfjsPage) {
                     var viewport = pdfjsPage.getViewport(PDFView.getAdjustedZoom(1.0));
                     return def.resolve(PDFView.getNormalizedSize({ width: viewport.width, height: viewport.height }));
                 });
@@ -201,7 +201,7 @@ define('io.ox/core/pdf/pdfdocument', [
         // ---------------------------------------------------------------------
 
         // convert document to PDF
-        PDFJS.getDocument(pdfConverterURL).promise.then( function (document) {
+        PDFJS.getDocument(pdfConverterURL).promise.then(function (document) {
             var error = true;
 
             if (document) {
@@ -211,7 +211,7 @@ define('io.ox/core/pdf/pdfdocument', [
                 if (pageCount > 0) {
                     error = false;
 
-                    initializePageSize(1).then( function (pageSize) {
+                    initializePageSize(1).then(function (pageSize) {
                         pageSizes[0] = defaultPageSize = pageSize;
                         return loadDef.resolve(pageCount);
                     });

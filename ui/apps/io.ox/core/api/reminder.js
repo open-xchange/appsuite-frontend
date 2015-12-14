@@ -38,7 +38,7 @@ define('io.ox/core/api/reminder', [
             _(reminders).each(function (reminder) {
                 keys.push(reminder.id);
             });
-            reminderStorage = _.object( keys, reminders );
+            reminderStorage = _.object(keys, reminders);
         },
         // function to check which reminders should be displayed and keeps the timer for the next reminder up to date
         checkReminders = function () {
@@ -217,7 +217,7 @@ define('io.ox/core/api/reminder', [
     function find(item, type, remove) {
         var found = false;
         _(reminderStorage).each(function (reminder, key) {
-            if ( reminder.module === type && reminder.target_id === item.id ) {
+            if (reminder.module === type && reminder.target_id === item.id) {
                 if (remove) {
                     delete reminderStorage[key];
                 }
