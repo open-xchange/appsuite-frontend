@@ -103,7 +103,7 @@ define('plugins/portal/flickr/register', [
                     });
                     // use size
                     this.addClass('photo-stream').append(
-                        $('<div class="content pointer" tabindex="1" role="button" aria-label="' +  gt('Press [enter] to jump to the flicker stream.') + '">')
+                        $('<div class="content pointer" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to the flicker stream.') + '">')
                         .css('backgroundImage', 'url(' + url + ')')
                         .addClass('decoration')
                     );

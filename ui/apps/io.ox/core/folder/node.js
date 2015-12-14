@@ -33,11 +33,11 @@ define('io.ox/core/folder/node', [
         indentation: _.device('smartphone') ? 15 : 30,
 
         events: {
-            'click .folder-options':  'onOptions',
-            'click .folder-arrow':    'onArrowClick',
-            'dblclick .folder-label': 'onToggle',
-            'mousedown .folder-arrow':'onArrowMousedown',
-            'keydown':                'onKeydown'
+            'click .folder-options':   'onOptions',
+            'click .folder-arrow':     'onArrowClick',
+            'dblclick .folder-label':  'onToggle',
+            'mousedown .folder-arrow': 'onArrowMousedown',
+            'keydown':                 'onKeydown'
         },
 
         list: function () {
@@ -367,7 +367,7 @@ define('io.ox/core/folder/node', [
                 .append(
                     // folder
                     this.$.selectable = $('<div class="folder-node" role="presentation">')
-                    .css('padding-left', (o.level * this.indentation) +  offset)
+                    .css('padding-left', (o.level * this.indentation) + offset)
                     .append(
                         this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw"></i></div>') : [],
                         this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw"></i></div>'),

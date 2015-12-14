@@ -230,7 +230,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         });
     }
 
-    that =  {
+    that = {
         id: 'indexeddb',
         index: 100,
         getInstance: function (id) {

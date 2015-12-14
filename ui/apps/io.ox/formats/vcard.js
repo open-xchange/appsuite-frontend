@@ -152,9 +152,9 @@ define('io.ox/formats/vcard', function () {
         }
 
         //org, title, role
-        output += contact.org ?  '<div class="org">' + contact.org.typeless + '</div>' : '';
-        output += contact.title ?  '<div class="title">' + contact.title.typeless + '</div>' : '';
-        output += contact.role ?  '<div class="role">' + contact.role.typeless + '</div>' : '';
+        output += contact.org ? '<div class="org">' + contact.org.typeless + '</div>' : '';
+        output += contact.title ? '<div class="title">' + contact.title.typeless + '</div>' : '';
+        output += contact.role ? '<div class="role">' + contact.role.typeless + '</div>' : '';
 
         //url (multitype)
         for (type in contact.url) {
@@ -200,13 +200,13 @@ define('io.ox/formats/vcard', function () {
             for (i in ordered) {
                 key = ordered[i];
                 value = contact.adr[type][key];
-                output += value ?  '<div class="' + key + '">' + value + '</div>' : '';
+                output += value ? '<div class="' + key + '">' + value + '</div>' : '';
             }
             output += '</div>';
         }
 
         //birthday
-        output += contact.bday ?  '<div class="bday">' + contact.bday.typeless + '</div>' : '';
+        output += contact.bday ? '<div class="bday">' + contact.bday.typeless + '</div>' : '';
 
         output += '</div><br>';
         return output.replace(/\\n/g, '<br/>');

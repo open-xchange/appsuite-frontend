@@ -115,14 +115,16 @@ define('io.ox/calendar/week/view', [
             this.delegateEvents(events);
 
             // initialize main objects
-            this.pane           = $('<div>').addClass('scrollpane f6-target').attr({ tabindex: 1 });
-            this.fulltimePane   = $('<div>').addClass('fulltime');
-            this.fulltimeCon    = $('<div>').addClass('fulltime-container');
-            this.fulltimeNote   = $('<div>').addClass('note');
-            this.timeline       = $('<div>').addClass('timeline');
-            this.dayLabel       = $('<div>').addClass('footer');
-            this.kwInfo         = _.device('smartphone') ? $('<div>').addClass('info') : $('<a href="#" tabindex="1">').addClass('info').on('click', $.preventDefault);
-            this.weekCon        = $('<div>').addClass('week-container');
+            _.extend(this, {
+                pane:         $('<div>').addClass('scrollpane f6-target').attr({ tabindex: 1 }),
+                fulltimePane: $('<div>').addClass('fulltime'),
+                fulltimeCon:  $('<div>').addClass('fulltime-container'),
+                fulltimeNote: $('<div>').addClass('note'),
+                timeline:     $('<div>').addClass('timeline'),
+                dayLabel:     $('<div>').addClass('footer'),
+                kwInfo:       _.device('smartphone') ? $('<div>').addClass('info') : $('<a href="#" tabindex="1">').addClass('info').on('click', $.preventDefault),
+                weekCon:      $('<div>').addClass('week-container')
+            });
 
             this.kwInfo.attr({
                 'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.')
@@ -1595,7 +1597,7 @@ define('io.ox/calendar/week/view', [
                             // disable widget
                             $(this).draggable('disable');
 
-                            if (app.start_date !==  app.old_start_date) {
+                            if (app.start_date !== app.old_start_date) {
                                 self.onUpdateAppointment(app);
                             } else {
                                 self.renderAppointments();
@@ -1894,7 +1896,7 @@ define('io.ox/calendar/week/view', [
                 self.addClass(util.getAppointmentColorClass(f, a.attributes));
 
                 if (util.canAppointmentChangeColor(f, a.attributes)) {
-                    self.attr('data-folder',  f.id);
+                    self.attr('data-folder', f.id);
                 }
             }
 

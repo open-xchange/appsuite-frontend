@@ -157,11 +157,11 @@ define('io.ox/calendar/edit/main', [
                                         .done(function (action) {
                                             if (action === 'cancel') {
                                                 // add temp timezone attribute again
-                                                self.model.set('endTimezone', self.model.endTimezone,  { silent: true });
+                                                self.model.set('endTimezone', self.model.endTimezone, { silent: true });
                                                 delete self.model.endTimezone;
                                                 // restore model attributes for moving
                                                 if (self.moveAfterSave) {
-                                                    self.model.set('folder_id', self.moveAfterSave,  { silent: true });
+                                                    self.model.set('folder_id', self.moveAfterSave, { silent: true });
                                                 }
                                                 self.model.silentMode = false;
                                                 return;
@@ -420,7 +420,7 @@ define('io.ox/calendar/edit/main', [
                         //#. "Discard changes" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user
                         .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', { 'tabIndex': '1' })
-                        .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
+                        .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {

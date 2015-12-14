@@ -62,7 +62,7 @@ define('plugins/portal/oxdriveclients/register', [
         if (platform.match(/android|ios|mac os/)) {
             if (platform === 'mac os') platform = 'mac_os';
             var $img = $('<div class="oxdrive-shop-image ' + platform + '">')
-                .css('background-image', 'url(' + imagePath + lang + '_'  + platform + '.png)');
+                .css('background-image', 'url(' + imagePath + lang + '_' + platform + '.png)');
 
             return $('<a class="shoplink">').attr({
                 href: url,

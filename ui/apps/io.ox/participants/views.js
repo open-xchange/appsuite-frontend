@@ -120,7 +120,7 @@ define('io.ox/participants/views', [
             return folderAPI.pool.getModel(appointment.folder_id).is('public');
         },
 
-        setTypeStyle: function  () {
+        setTypeStyle: function () {
 
             var mail = this.model.getTarget(),
                 extra = null;

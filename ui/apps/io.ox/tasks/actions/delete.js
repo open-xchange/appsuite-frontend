@@ -33,7 +33,7 @@ define('io.ox/tasks/actions/delete', [
                                           'Do you really want to delete these tasks?', numberOfTasks)));
             // go
             popup.show();
-            popup.on('deleteTask', function  () {
+            popup.on('deleteTask', function () {
                 require(['io.ox/tasks/api'], function (api) {
                     api.remove(data)
                         .done(function () {

@@ -88,7 +88,7 @@
         // disallow creation of functions within loops
         'no-loop-func': 2,
         // disallow use of multiple spaces
-        'no-multi-spaces': 0,
+        'no-multi-spaces': [2, { exceptions: { "VariableDeclarator": true } }],
         // disallow use of multiline strings
         'no-multi-str': 2,
         // disallow reassignments of native objects
@@ -194,7 +194,7 @@
         // specify whether double or single quotes should be used in JSX attributes
         'jsx-quotes': 2,
         // enforces spacing between keys and values in object literal properties
-        'key-spacing': 0,
+        key-spacing: [2, {"beforeColon": false, "afterColon": true, "mode": "minimum"}],
         // enforces empty lines around comments
         'lines-around-comment': 0,
         // disallow mixed 'LF' and 'CRLF' as linebreaks

@@ -40,7 +40,7 @@ define('io.ox/core/print', [
             try {
                 var selector = options.selector || 'script',
                     template = $(document.body).find('[type="text/template"]').filter(selector).html(),
-                    title = (options.title  || '').trim();
+                    title = (options.title || '').trim();
 
                 $(document.body).html(_.template(template)(it));
                 //hint: in case title contains a '.' chrome will cut off at this char when suggesting a filename

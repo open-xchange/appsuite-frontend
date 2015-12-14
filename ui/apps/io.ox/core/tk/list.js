@@ -338,7 +338,7 @@ define('io.ox/core/tk/list', [
                     top = -70 + ((70 / PTR_TRIGGER) * distance);
 
                 this.pullToRefreshIndicator
-                    .css('-webkit-transform', 'translate3d(0,' + top +  'px,0)');
+                    .css('-webkit-transform', 'translate3d(0,' + top + 'px,0)');
 
                 $('#ptr-spinner').css('-webkit-transform', 'rotateZ(' + rotationAngle + 'deg)');
 

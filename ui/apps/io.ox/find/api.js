@@ -97,7 +97,7 @@ define('io.ox/find/api', [
 
     // get default options
     function getDefault(key) {
-        var  obj = _.copy(api.options.requests[key], true);
+        var obj = _.copy(api.options.requests[key], true);
         // filter admin contacts
         _.extend(obj.data.options, { admin: settings.get('showAdmin', false) });
         return obj;

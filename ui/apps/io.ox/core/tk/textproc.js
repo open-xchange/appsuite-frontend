@@ -341,7 +341,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
             }
 
             function replaceBlockquotes(html) {
-                return html.replace(/<blockquote\b[^>]*>([\s\S]*?)<\/blockquote>/gi, function (string,  inner) {
+                return html.replace(/<blockquote\b[^>]*>([\s\S]*?)<\/blockquote>/gi, function (string, inner) {
                     inner = inner.replace(/^\s+|\s+$/g, '');
                     inner = cleanUp(inner);
                     inner = inner

@@ -1168,7 +1168,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                         if (!_.isUndefined(sentence.days) && !(sentence.days & previousAttributes.dayBits)) {
                             return false;
                         }
-                        if (!_.isUndefined(sentence.day) &&  (sentence.day !== previousAttributes.dayBits)) {
+                        if (!_.isUndefined(sentence.day) && (sentence.day !== previousAttributes.dayBits)) {
                             return false;
                         }
                         if (!_.isUndefined(sentence.dayInMonth) && (sentence.dayInMonth !== previousAttributes.dayInMonth)) {
@@ -1177,7 +1177,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                         if (!_.isUndefined(sentence.month) && (sentence.month !== previousAttributes.month)) {
                             return false;
                         }
-                        if (!_.isUndefined(sentence.ordinal) &&  (sentence.ordinal !== previousAttributes.ordinal)) {
+                        if (!_.isUndefined(sentence.ordinal) && (sentence.ordinal !== previousAttributes.ordinal)) {
                             return false;
                         }
                         return true;

@@ -62,7 +62,7 @@ define('io.ox/core/tk/attachmentsUtil', [
             } else if (file instanceof $ && file[0].tagName === 'INPUT') {
                 //file input: old mode for IE9 (local)
                 data = {
-                    type:  file.val().split('.').length > 1  ? file.val().split('.').pop() : '',
+                    type:  file.val().split('.').length > 1 ? file.val().split('.').pop() : '',
                     module: 'mail',
                     group: 'input'
                 };
@@ -219,7 +219,7 @@ define('io.ox/core/tk/attachmentsUtil', [
                             $('<div class="row-1">').text(_.noI18n(_.ellipsis(name, { max: opt.labelmax, charpos: 'middle' }))),
                             $('<div class="row-2">').append(
                                 info,
-                                opt.showpreview  ? createPreview(obj.file, opt.rightside) : $(),
+                                opt.showpreview ? createPreview(obj.file, opt.rightside) : $(),
                                 $.txt('\u00A0')
                             ),
                              // remove
@@ -258,7 +258,7 @@ define('io.ox/core/tk/attachmentsUtil', [
             e.preventDefault();
 
             var file = target.data('file'),
-                data = self.get(file),  preview, reader;
+                data = self.get(file), preview, reader;
 
             //close if editor is selected (causes overlapping, bug 27875)
             if (target.data('rightside')) {

@@ -306,11 +306,11 @@ define('io.ox/mail/compose/view', [
             // register for 'dispose' event (using inline function to make this testable via spyOn)
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
 
-            this.listenTo(this.model, 'keyup:subject change:subject',   this.setTitle);
-            this.listenTo(this.model, 'change:editorMode',              this.toggleEditorMode);
-            this.listenTo(this.model, 'change:defaultSignatureId',      this.setSelectedSignature);
-            this.listenTo(this.model, 'change:signatures',              this.updateSelectedSignature);
-            this.listenTo(this.model, 'needsync',                       this.syncMail);
+            this.listenTo(this.model, 'keyup:subject change:subject', this.setTitle);
+            this.listenTo(this.model, 'change:editorMode', this.toggleEditorMode);
+            this.listenTo(this.model, 'change:defaultSignatureId', this.setSelectedSignature);
+            this.listenTo(this.model, 'change:signatures', this.updateSelectedSignature);
+            this.listenTo(this.model, 'needsync', this.syncMail);
 
             var mailto, params;
             // triggered by mailto?
@@ -331,9 +331,9 @@ define('io.ox/mail/compose/view', [
                 // see Bug 31345 - [L3] Case sensitivity issue with Richmail while rendering Mailto: link parameters
                 for (var key in params) params[key.toLowerCase()] = params[key];
                 // save data
-                if (to) {           this.model.set('to',  parseRecipients(to),          { silent: true }); }
-                if (params.cc) {    this.model.set('cc',  parseRecipients(params.cc),   { silent: true }); }
-                if (params.bcc) {   this.model.set('bcc', parseRecipients(params.bcc),  { silent: true }); }
+                if (to) { this.model.set('to', parseRecipients(to), { silent: true }); }
+                if (params.cc) { this.model.set('cc', parseRecipients(params.cc), { silent: true }); }
+                if (params.bcc) { this.model.set('bcc', parseRecipients(params.bcc), { silent: true }); }
 
                 this.setSubject(params.subject || '');
                 this.model.setContent(params.body || '');

@@ -384,8 +384,8 @@ define('io.ox/mail/actions', [
         requires: function (e) {
             var context = _.isArray(e.context) ? _.first(e.context) : e.context,
                 hasRightSuffix = context.filename && !!context.filename.match(/\.ics$/i),
-                isCalendarType = context.content_type  && !!context.content_type.match(/^text\/calendar/i),
-                isAppType = context.content_type  && !!context.content_type.match(/^application\/ics/i);
+                isCalendarType = context.content_type && !!context.content_type.match(/^text\/calendar/i),
+                isAppType = context.content_type && !!context.content_type.match(/^application\/ics/i);
             return hasRightSuffix || isCalendarType || isAppType;
         },
         action: function (baton) {

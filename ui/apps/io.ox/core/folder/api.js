@@ -515,7 +515,7 @@ define('io.ox/core/folder/api', [
         .then(function (data) {
             return renameDefaultCalendarFolders(data);
         }, function (error) {
-            api.trigger('error error:' +  error.code, error);
+            api.trigger('error error:' + error.code, error);
             return error;
         })
         .then(function (data) {
@@ -605,7 +605,7 @@ define('io.ox/core/folder/api', [
             appendColumns: true
         })
         .then(renameDefaultCalendarFolders, function (error) {
-            api.trigger('error error:' +  error.code, error);
+            api.trigger('error error:' + error.code, error);
             return error;
         })
         .then(function (array) {

@@ -63,7 +63,7 @@ define('io.ox/tasks/actions', [
             if (!(e.collection.has('some') && e.collection.has('modify'))) {
                 return false;
             }
-            return (e.baton.data.length  !== undefined || e.baton.data.status !== 3);
+            return (e.baton.data.length !== undefined || e.baton.data.status !== 3);
         },
         action: function (baton) {
             ox.load(['io.ox/tasks/actions/doneUndone']).done(function (action) {
@@ -77,7 +77,7 @@ define('io.ox/tasks/actions', [
             if (!(e.collection.has('some') && e.collection.has('modify'))) {
                 return false;
             }
-            return (e.baton.data.length  !== undefined || e.baton.data.status === 3);
+            return (e.baton.data.length !== undefined || e.baton.data.status === 3);
         },
         action: function (baton) {
             ox.load(['io.ox/tasks/actions/doneUndone']).done(function (action) {

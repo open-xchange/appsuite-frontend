@@ -737,7 +737,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         },
                         onKeyup: function () {
                             var state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
-                            this.model.trigger(state +  this.name);
+                            this.model.trigger(state + this.name);
                             toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
                         }
                     }),
@@ -818,7 +818,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             drawDeleteButton('action')
                         );
                     } else if (/discard_/g.test(inputId) || /keep_/g.test(inputId)) {
-                        return $('<li>').addClass('filter-settings-view ' +  o.addClass + ' row').attr('data-action-id', num).append(
+                        return $('<li>').addClass('filter-settings-view ' + o.addClass + ' row').attr('data-action-id', num).append(
                             $('<div>').addClass('col-sm-4 singleline').append(
                                 $('<span>').addClass('list-title').text(o.title)
                             ),

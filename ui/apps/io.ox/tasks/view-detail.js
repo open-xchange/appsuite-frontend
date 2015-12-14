@@ -203,7 +203,7 @@ define('io.ox/tasks/view-detail', [
             }
             this.append(
                 // status
-                $('<div>').text(task.status).addClass('state ' +  task.badge)
+                $('<div>').text(task.status).addClass('state ' + task.badge)
             );
         }
     });

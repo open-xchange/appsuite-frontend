@@ -1154,10 +1154,10 @@ define('io.ox/core/tk/selection', [
                 $(document).on('mousemove.dnd', move)
                     .one('mousemove.dnd', firstMove)
                     .on('mouseover.dnd', '.folder-tree', scroll.over)
-                    .on('mouseout.dnd',  '.folder-tree', scroll.out)
+                    .on('mouseout.dnd', '.folder-tree', scroll.out)
                     .on('mousemove.dnd', '.folder-tree', scroll.move)
                     .on('mouseover.dnd', '.selectable', over)
-                    .on('mouseout.dnd',  '.selectable', out);
+                    .on('mouseout.dnd', '.selectable', out);
             }
 
             function remove() {

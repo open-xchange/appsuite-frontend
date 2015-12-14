@@ -183,7 +183,7 @@ define('io.ox/settings/accounts/settings/pane', [
         index: 300,
         id: 'accountssettings',
         draw: function (data) {
-            var  that = this;
+            var that = this;
 
             function redraw() {
 

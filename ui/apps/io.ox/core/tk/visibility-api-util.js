@@ -52,7 +52,7 @@ define('io.ox/core/tk/visibility-api-util', [
         $(document).on(tempVisibilityChangeEvent, function handleVisibilityChange() {
             var oldState = api.isHidden;
             api.isHidden = !!document[api.hiddenAttribute];
-            $(api).trigger('visibility-changed', { currentHiddenState:api.isHidden, oldState: oldState });
+            $(api).trigger('visibility-changed', { currentHiddenState: api.isHidden, oldState: oldState });
         });
     }
 

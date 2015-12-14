@@ -564,7 +564,7 @@ define('io.ox/core/tk/dialogs', [
             return this;
         };
 
-        this.setUnderlayStyle =  function (css) {
+        this.setUnderlayStyle = function (css) {
             nodes.underlay.css(css || {});
             return this;
         };

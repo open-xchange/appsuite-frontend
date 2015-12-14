@@ -355,7 +355,7 @@ define('io.ox/core/pdf/pdfview', [
         this.setRenderCallbacks = function (callbacks) {
             this.clearRenderCallbacks();
 
-            if (_.isObject(callbacks) && _.isFunction(callbacks.getVisiblePageNumbers) &&  _.isFunction(callbacks.getPageNode)) {
+            if (_.isObject(callbacks) && _.isFunction(callbacks.getVisiblePageNumbers) && _.isFunction(callbacks.getPageNode)) {
                 renderCallbacks = callbacks;
                 intervalId = window.setInterval(intervalHandler, 100);
             }

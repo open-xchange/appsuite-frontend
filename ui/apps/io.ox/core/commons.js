@@ -740,7 +740,7 @@ define('io.ox/core/commons', [
         if (_.isArray(data)) {
             // multiple items - just listen to generic events.
             // otherweise "select all" of some thousands items freezes browser
-            folderAPI.on('update',  redraw);
+            folderAPI.on('update', redraw);
             // ignore move case for multiple
             api.on('delete update', redraw);
         } else {

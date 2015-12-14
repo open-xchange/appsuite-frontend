@@ -62,7 +62,7 @@ define('io.ox/calendar/api', [
                 .done(function (data) {
                     api.caches.get[key] = data;
                 }).fail(function (error) {
-                    api.trigger('error error:' +  error.code, error);
+                    api.trigger('error error:' + error.code, error);
                     return error;
                 });
             }
@@ -104,7 +104,7 @@ define('io.ox/calendar/api', [
                 .done(function (data) {
                     api.caches.all[key] = JSON.stringify(data);
                 }).fail(function (error) {
-                    api.trigger('error error:' +  error.code, error);
+                    api.trigger('error error:' + error.code, error);
                     return error;
                 });
             }

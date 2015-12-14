@@ -50,11 +50,11 @@ define.async('io.ox/mail/accounts/view-form', [
 
         optionsAuthType = [
             //#. Auth type. Short for "Use same credentials as incoming mail server"
-            { value: 'mail',    label: gt('As incoming mail server') },
+            { value: 'mail', label: gt('As incoming mail server') },
             //#. Auth type. Use separate username and password
-            { value: 'custom',  label: gt('Use separate username and password') },
+            { value: 'custom', label: gt('Use separate username and password') },
             //#. Auth type. None. No authentication
-            { value: 'none',    label: gt('None') }
+            { value: 'none', label: gt('None') }
         ],
 
         // already for 7.8.0

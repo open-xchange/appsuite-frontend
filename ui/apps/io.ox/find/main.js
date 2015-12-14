@@ -97,14 +97,14 @@ define('io.ox/find/main', [
             /**
              * Mode: inplace
              */
-            'window-inplace': function  (app) {
+            'window-inplace': function (app) {
                 if (!app.get('inplace')) return;
 
                 // use 'parent' window
                 app.set('window', app.get('parent').getWindow());
             },
 
-            'state': function  (app) {
+            'state': function (app) {
                 if (!app.get('inplace')) return;
 
                 var parent = app.get('parent');
@@ -288,7 +288,7 @@ define('io.ox/find/main', [
             /**
              * Mode: standalone
              */
-            'window-standalone': function  (app) {
+            'window-standalone': function (app) {
                 if (app.get('inplace')) return;
 
                 var win;

@@ -309,7 +309,7 @@ define('plugins/portal/twitter/register', [
 
         preview: function (baton) {
             if (!baton.data) { return; }
-            var content = $('<ul class="content pointer list-unstyled" tabindex="1" role="button" aria-label="' +  gt('Press [enter] to jump to the twitter feed.') + '">');
+            var content = $('<ul class="content pointer list-unstyled" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to the twitter feed.') + '">');
             baton.contentNode = content;
             drawPreview(baton);
             this.append(content);

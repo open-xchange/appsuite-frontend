@@ -301,9 +301,9 @@ define('io.ox/core/settings', [
                     var list = _.isArray(this) ? this : [this];
                     _.each(list, function (current) {
                         if (current.state) {
-                            console.warn('SAVEANDYELL: ' +  current.state());
+                            console.warn('SAVEANDYELL: ' + current.state());
                         } else if (def.state) {
-                            console.warn('SAVEANDYELL: ' +  def.state());
+                            console.warn('SAVEANDYELL: ' + def.state());
                         }
                     });
                 });

@@ -171,7 +171,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                     draw: function (baton) {
                         var checkboxView = new mini.CheckboxView({ name: 'activateTimeFrame', model: baton.model });
 
-                        baton.model.off('change:' + checkboxView.name, null,  ext.point(ref + '/edit/view'));
+                        baton.model.off('change:' + checkboxView.name, null, ext.point(ref + '/edit/view'));
                         baton.model.on('change:' + checkboxView.name, function (model, checked) {
                             $('.dateFrom').find('.form-control').attr('disabled', !checked);
                             $('.dateUntil').find('.form-control').attr('disabled', !checked);

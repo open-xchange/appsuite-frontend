@@ -130,13 +130,13 @@ define('io.ox/core/api/attachment', [
                 var jqField = $(field);
                 if (jqField.attr('type') === 'file') {
                     jqField.attr('name', 'file_' + uploadCounter);
-                    $(form).append($('<input>',  { 'type': 'hidden', 'name': 'json_' + uploadCounter, 'value': JSON.stringify(json) }));
+                    $(form).append($('<input>', { 'type': 'hidden', 'name': 'json_' + uploadCounter, 'value': JSON.stringify(json) }));
                     uploadCounter++;
                 }
             });
 
             var tmpName = 'iframe_' + _.now(),
-                frame = $('<iframe>',  { 'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1 });
+                frame = $('<iframe>', { 'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1 });
 
             $('#tmp').append(frame);
             window.callback_attach = function (response) {

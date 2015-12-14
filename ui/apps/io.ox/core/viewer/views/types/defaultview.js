@@ -10,7 +10,7 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
-define('io.ox/core/viewer/views/types/defaultview',  [
+define('io.ox/core/viewer/views/types/defaultview', [
     'io.ox/core/viewer/views/types/baseview',
     'gettext!io.ox/core'
 ], function (BaseView, gt) {

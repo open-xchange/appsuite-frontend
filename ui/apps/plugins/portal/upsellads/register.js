@@ -92,7 +92,7 @@ define('plugins/portal/upsellads/register', [
 
         /* if user clicked "next", reset timer to zero; if here because of interval: no problem either. */
         clearInterval(adInterval[ad]);
-        adInterval[ad] = setInterval(function () { return nextAd(content, ad, slides); },  intervalDuration);
+        adInterval[ad] = setInterval(function () { return nextAd(content, ad, slides); }, intervalDuration);
 
     };
 
@@ -130,7 +130,7 @@ define('plugins/portal/upsellads/register', [
                 });
             });
             addContent(slides[startPos], content);
-            adInterval[ad] = setInterval(function () { return nextAd(content, ad, slides); },  intervalDuration);
+            adInterval[ad] = setInterval(function () { return nextAd(content, ad, slides); }, intervalDuration);
         }
     });
 });

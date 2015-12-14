@@ -17,7 +17,7 @@ define('io.ox/mail/print', [
     'io.ox/mail/util',
     'io.ox/mail/detail/content',
     'gettext!io.ox/mail'
-], function (print, api, util, content,  gt) {
+], function (print, api, util, content, gt) {
 
     'use strict';
 

@@ -138,7 +138,7 @@ define('io.ox/files/upload/main', [
 
                     if (model) {
                         var loaded = model.get('loaded');
-                        model.set({ progress: sub,  loaded: e.loaded });
+                        model.set({ progress: sub, loaded: e.loaded });
 
                         currentSize += e.loaded - loaded;
                     }

@@ -510,7 +510,7 @@ define('io.ox/core/viewer/views/toolbarview', [
          * - renders the page navigation in the toolbar.
          */
         onDocumentLoaded: function () {
-            if (this.standalone &&  !_.device('smartphone')) {
+            if (this.standalone && !_.device('smartphone')) {
                 this.renderPageNavigation();
             }
         },

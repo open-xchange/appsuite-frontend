@@ -161,7 +161,7 @@ define('io.ox/find/date/patterns', [
         function addMonth(year, name, index) {
             // skip if future month
             if (year === currentYear && index > currentMonth) return;
-            var basestring = (index + 1)  + ' ' + year;
+            var basestring = (index + 1) + ' ' + year;
             add(name + ' ' + year, -(year + index * 0.01), {
                 start: moment(basestring, 'M YYYY').startOf('month'),
                 end: moment(basestring, 'M YYYY').endOf('month')

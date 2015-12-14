@@ -186,7 +186,7 @@ define('plugins/portal/twitter/util', [
             $('<div class="text">').append(
                 $('<strong class="io-ox-twitter-name">').append($('<a>', { href: profileLink, target: '_blank' }).text(tweet.user.name)),
                 '<br />',
-                $('<a>',  { 'class': 'name', href: profileLink, target: '_blank' }).text('@' + tweet.user.screen_name),
+                $('<a>', { 'class': 'name', href: profileLink, target: '_blank' }).text('@' + tweet.user.screen_name),
                 '<br />',
                 parseTweet(tweet.text, tweet.entities)
             )

@@ -826,7 +826,7 @@ define('io.ox/core/main', [
                             require(['io.ox/search/main'], function (searchapp) {
                                 searchapp.run({ reset: true });
                             });
-                        },  gt('Search'))
+                        }, gt('Search'))
                         .attr('id', 'io-ox-search-topbar-icon')
                     );
                 }
@@ -1043,7 +1043,7 @@ define('io.ox/core/main', [
                 draw: function () {
                     var logoutButton = addLauncher('right', $('<i class="fa fa-power-off launcher-icon">').attr('aria-hidden', 'true'), function () {
                         logout();
-                    },  gt('Sign out'));
+                    }, gt('Sign out'));
                     logoutButton.find('a').tooltip({
                         title: gt('Sign out'),
                         placement: function (tip, el) {

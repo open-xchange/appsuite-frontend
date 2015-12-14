@@ -190,7 +190,7 @@ define('io.ox/search/model', [
                 app = this.get('app');
                 // ensure options
                 if (!options.mapping) {
-                    ext.point('io.ox/search/main').invoke('config',  $(), options);
+                    ext.point('io.ox/search/main').invoke('config', $(), options);
                 }
                 // return module param for api calls
                 return (options.mapping[app] || options.mapping[app + '/edit'] || app);
@@ -320,7 +320,7 @@ define('io.ox/search/model', [
                     for (var i = list.length - 1; i >= 0; i--) {
                         var item = list[i];
                         if (item.facet === facet && item.value === value) {
-                            _.extend(item, facetdata.style === 'exclusive' ?  { value: data.option } : {}, data);
+                            _.extend(item, facetdata.style === 'exclusive' ? { value: data.option } : {}, data);
                         }
                     }
                 }

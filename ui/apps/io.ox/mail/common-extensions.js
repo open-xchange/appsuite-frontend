@@ -39,7 +39,7 @@ define('io.ox/mail/common-extensions', [
         a11yLabel: function (baton) {
             var data = baton.data,
                 size = api.threads.size(data),
-                threadSize = size <= 1 ? '' :  ', ' + gt.format('Thread contains %1$d messages', gt.noI18n(size)),
+                threadSize = size <= 1 ? '' : ', ' + gt.format('Thread contains %1$d messages', gt.noI18n(size)),
                 fromlist = data.from || [['', '']],
                 subject = $.trim(data.subject),
                 unread = util.isUnseen(data) ? gt('Unread') + ', ' : '',

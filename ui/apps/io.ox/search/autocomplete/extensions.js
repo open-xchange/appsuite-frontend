@@ -281,7 +281,7 @@ define('io.ox/search/autocomplete/extensions', [
         },
 
         a11y: function () {
-            var text = this.find('.name').text() + ' ' +  this.find('.detail').text();
+            var text = this.find('.name').text() + ' ' + this.find('.detail').text();
             this.attr({
                 'aria-label': text,
                 'tabIndex': 1

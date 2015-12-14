@@ -116,7 +116,7 @@ define('plugins/portal/reddit/register', [
                 lastShowedPreview = entry.name;
 
                 if (thumbUrl !== '') {
-                    var $img = $('<img/>',  { 'data-original': thumbUrl });
+                    var $img = $('<img/>', { 'data-original': thumbUrl });
                     return $img;
                 }
 
@@ -149,7 +149,7 @@ define('plugins/portal/reddit/register', [
                 } else if (imageUrl) {
                     willDisableBusyIndicator = true;
 
-                    $img = $('<img/>',  { 'src': imageUrl }).css({ display: 'none' })
+                    $img = $('<img/>', { 'src': imageUrl }).css({ display: 'none' })
                         .load(function () {
                             if ($busyIndicator) {
                                 $busyIndicator.detach();

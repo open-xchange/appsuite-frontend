@@ -578,7 +578,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 // the stored scroll position
                 var lastScrollPosition = this.getInitialScrollPosition(this.model.get('id')) || 0;
                 // the PDF link service. connects the Viewer with named actions and annotation links of the PDF
-                var pdfLinkService = new  PDFViewerLinkService({
+                var pdfLinkService = new PDFViewerLinkService({
                     pdfDocument: this.pdfDocument.getPDFJSDocument(),
                     eventHub: this.viewerEvents
                 });

@@ -229,7 +229,7 @@ define('io.ox/files/util', [
             serverFilename = String(serverFilename || '');
             formFilename = String(formFilename || '');
             var def = $.Deferred(),
-                extServer = serverFilename.indexOf('.') >= 0 ? _.last(serverFilename.split('.')) :  '',
+                extServer = serverFilename.indexOf('.') >= 0 ? _.last(serverFilename.split('.')) : '',
                 extForm = _.last(formFilename.split('.')),
                 $hint = $('<div class="muted inset">').append(
                             $('<small style="padding-top: 8px">').text(
@@ -251,8 +251,8 @@ define('io.ox/files/util', [
                 new dialogs.ModalDialog(opt)
                             .header($('<h4>').text(gt('Confirmation')))
                             .append(message, $hint)
-                            .addPrimaryButton('rename', gt('Yes'), 'rename',  { 'tabIndex': '1' })
-                            .addButton('change', gt('Adjust'), 'change',  { 'tabIndex': '1' })
+                            .addPrimaryButton('rename', gt('Yes'), 'rename', { 'tabIndex': '1' })
+                            .addButton('change', gt('Adjust'), 'change', { 'tabIndex': '1' })
                             .show()
                             .done(function (action) {
                                 if (action === 'rename') {

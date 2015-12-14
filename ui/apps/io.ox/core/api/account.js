@@ -40,7 +40,7 @@ define('io.ox/core/api/account', [
                     // folder isn't available in config
                     if (!folder) {
                         // educated guess
-                        folder = settings.get('folder/inbox') + separator +  (account[id] || title);
+                        folder = settings.get('folder/inbox') + separator + (account[id] || title);
                     }
                     account[field] = folder;
                 } else if (!account[field]) {

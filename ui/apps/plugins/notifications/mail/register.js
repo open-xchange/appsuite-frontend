@@ -79,10 +79,10 @@ define('plugins/notifications/mail/register', [
     }
     function checkNew(items) {
         var newIds = _(items).map(function (item) {
-                return item.folder_id + '.'  + item.id;
+                return item.folder_id + '.' + item.id;
             }),
             oldIds = _(ids.models).map(function (model) {
-                return model.get('folder_id') + '.'  + model.get('id');
+                return model.get('folder_id') + '.' + model.get('id');
             }),
             newItems = _.difference(newIds, oldIds);
         if (newItems.length) {

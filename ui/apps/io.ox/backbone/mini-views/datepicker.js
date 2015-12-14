@@ -89,7 +89,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                         var timezoneAbbreviation = gt.noI18n(moment.tz(self.model.get(self.options.timezoneAttribute)).zoneAbbr());
 
                         if (!self.options.timezoneButton && !self.mobileMode) {
-                            timezoneContainer = self.nodes.timezoneField  = $('<div class="timezone input-group-addon">').text(timezoneAbbreviation);
+                            timezoneContainer = self.nodes.timezoneField = $('<div class="timezone input-group-addon">').text(timezoneAbbreviation);
                         } else {
                             timezoneContainer = self.nodes.timezoneField = $('<a class="timezone input-group-addon btn" data-toggle="popover" tabindex="1">').text(timezoneAbbreviation);
                             if (self.model.has('start_date') && self.model.has('end_date')) {
@@ -247,7 +247,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                 formatStr = 'l';
 
             // empty?
-            if (dateStr === '')  return null;
+            if (dateStr === '') return null;
 
             // change format string for datetime if timefield is present
             if (!this.isFullTime()) {

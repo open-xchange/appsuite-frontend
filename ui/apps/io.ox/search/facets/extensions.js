@@ -183,7 +183,7 @@ define('io.ox/search/facets/extensions', [
 
                             // reduce list for non primary accounts
                             if (key !== '0') {
-                                account.list  = account.list.slice(0, 2);
+                                account.list = account.list.slice(0, 2);
                             }
 
                             // sort by type

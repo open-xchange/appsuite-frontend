@@ -342,7 +342,7 @@ define('io.ox/core/tk/tokenfield', [
             this.register();
 
             // save original typeahead input
-            this.input =  $(this.$el).data('bs.tokenfield').$input;
+            this.input = $(this.$el).data('bs.tokenfield').$input;
             // call typehead render
             Typeahead.prototype.render.call({
                 $el: this.input,

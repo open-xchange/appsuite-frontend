@@ -74,10 +74,10 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     .on('touchstart', SELECTABLE, this, this.onTouchStart)
                     .on('touchmove', SELECTABLE, this, this.onTouchMove)
                     .on('touchend', SELECTABLE, this, this.onTouchEnd)
-                    .on('tap', SWIPEDELETE,  $.proxy(function (e) {
+                    .on('tap', SWIPEDELETE, $.proxy(function (e) {
                         this.onSwipeDelete(e);
                     }, this))
-                    .on('tap', SWIPEMORE,  $.proxy(function (e) {
+                    .on('tap', SWIPEMORE, $.proxy(function (e) {
                         this.onSwipeMore(e);
                     }, this));
             } else if (isTouch) {
@@ -385,7 +385,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             var cursorUpDown = e.which === 38 || e.which === 40,
                 cursorBack = e.which === 37 || e.which === 38,
                 step = grid && cursorUpDown ? width : 1;
-            index +=  cursorBack ? -step : +step;
+            index += cursorBack ? -step : +step;
 
             // move to very last element on cursor down?
             if (step > 1 && e.which === 40 && index >= items.length && column >= (items.length % width)) index = items.length - 1;
@@ -874,7 +874,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     events = 'selection:change selection:action';
 
                 // to keep correct select all checkbox state
-                if (items  && items.length > 0 && items.length === list.length) {
+                if (items && items.length > 0 && items.length === list.length) {
                     events += ' selection:all';
                 } else {
                     events += ' selection:subset';

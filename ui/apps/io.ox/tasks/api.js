@@ -351,7 +351,7 @@ define('io.ox/tasks/api', [
         if (_(task).has('days') && task.days === undefined) {
             task.days = null;
         }
-        if (_(task).has('day_in_month ') && task.day_in_month  === undefined) {
+        if (_(task).has('day_in_month ') && task.day_in_month === undefined) {
             task.day_in_month = null;
         }
         if (_(task).has('month') && task.month === undefined) {
@@ -520,7 +520,7 @@ define('io.ox/tasks/api', [
      * @param  {object} options (properties: data, folder_id, id)
      * @return { promise }
      */
-    api.confirm =  function (options) {
+    api.confirm = function (options) {
         //options.id is the id of the task not userId
         var key = (options.folder_id || options.folder) + '.' + options.id;
         return http.PUT({

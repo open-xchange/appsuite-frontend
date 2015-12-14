@@ -67,7 +67,7 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
         id: 'primary',
         draw: function (baton) {
             var self = this;
-            baton.$.addPrimaryButton('upload', gt('Upload'), 'upload',  { 'tabIndex': '1' })
+            baton.$.addPrimaryButton('upload', gt('Upload'), 'upload', { 'tabIndex': '1' })
                 .on('upload', function () {
                     var comment = baton.$.getContentNode().find('textarea.comment').val() || '';
                     // upload file
@@ -80,7 +80,7 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
         index: 400,
         id: 'cancel',
         draw: function (baton) {
-            baton.$.addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' });
+            baton.$.addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' });
         }
     });
 

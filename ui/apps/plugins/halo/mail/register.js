@@ -27,7 +27,7 @@ define('plugins/halo/mail/register', [
             return type === 'com.openexchange.halo.mail';
         },
 
-        draw: function  (baton) {
+        draw: function (baton) {
 
             if (baton.data.length === 0) return $.when();
 

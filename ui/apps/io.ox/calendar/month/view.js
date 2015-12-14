@@ -346,7 +346,7 @@ define('io.ox/calendar/month/view', [
             function addColorClasses(f) {
                 self.addClass(util.getAppointmentColorClass(f, a.attributes));
                 if (util.canAppointmentChangeColor(f, a.attributes)) {
-                    self.attr('data-folder',  f.id);
+                    self.attr('data-folder', f.id);
                 }
             }
 

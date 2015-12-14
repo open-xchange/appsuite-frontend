@@ -231,7 +231,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         }
 
                         function getEditableState() {
-                            return (checkForUnknown() === 'unknown' || _.contains(['autoforward', 'spam', 'vacation'], flag))  ? 'fixed' : 'editable';
+                            return (checkForUnknown() === 'unknown' || _.contains(['autoforward', 'spam', 'vacation'], flag)) ? 'fixed' : 'editable';
                         }
 
                         var title = self.model.get('rulename'),
@@ -325,8 +325,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                         new dialogs.ModalDialog()
                         .text(gt('Do you really want to delete this filter rule?'))
-                        .addPrimaryButton('delete', gt('Delete'), 'delete',  { 'tabIndex': '1' })
-                        .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
+                        .addPrimaryButton('delete', gt('Delete'), 'delete', { 'tabIndex': '1' })
+                        .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {

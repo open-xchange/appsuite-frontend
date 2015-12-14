@@ -918,13 +918,13 @@ define('io.ox/mail/main', [
                     savedHeight = app.settings.get('listview/height/' + _.display());
 
                 function applyWidth(x) {
-                    var width = x === undefined ? '' :  x + 'px';
+                    var width = x === undefined ? '' : x + 'px';
                     app.right.css('left', width);
                     app.left.css('width', width);
                 }
 
                 function applyHeight(x) {
-                    var height = x === undefined ? '' :  x + 'px';
+                    var height = x === undefined ? '' : x + 'px';
                     app.right.css('top', height);
                     app.left.css('height', height);
                 }

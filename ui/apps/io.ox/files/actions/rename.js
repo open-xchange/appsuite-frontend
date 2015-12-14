@@ -70,8 +70,8 @@ define('io.ox/files/actions/rename', [
             .append(
                 $('<input type="text" name="name" class="form-control" tabindex="1">')
             )
-            .addPrimaryButton('rename', gt('Rename'), 'rename',  { 'tabIndex': '1' })
-            .addButton('cancel', gt('Cancel'),  'cancel',  { 'tabIndex': '1' })
+            .addPrimaryButton('rename', gt('Rename'), 'rename', { 'tabIndex': '1' })
+            .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
             .on('rename', function () {
                 var node = this.getContentNode(),
                     name = node.find('input[name="name"]').val();

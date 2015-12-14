@@ -839,7 +839,7 @@ define('io.ox/mail/api', [
         view = view === 'text/html' ? 'html' : view;
 
         if (view === 'html' && obj.content_type === 'text/plain' && !isDraft) view = 'text';
-        if (view === 'text' && obj.content_type === 'text/plain' && isDraft)  view = 'raw';
+        if (view === 'text' && obj.content_type === 'text/plain' && isDraft) view = 'raw';
 
         // attach original message on touch devices?
         var attachOriginalMessage = view === 'text' && Modernizr.touch && settings.get('attachOriginalMessage', false) === true,
@@ -1588,7 +1588,7 @@ define('io.ox/mail/api', [
             };
         },
         fail: function (error) {
-            api.trigger('error error:' +  error.code, error);
+            api.trigger('error error:' + error.code, error);
             return error;
         },
 

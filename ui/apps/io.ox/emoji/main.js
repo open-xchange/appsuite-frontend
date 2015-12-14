@@ -361,7 +361,7 @@ define('io.ox/emoji/main', [
 
         converterFor: function (options, format) {
             var self = this;
-            format =  format || 'html';
+            format = format || 'html';
 
             options = _.extend({
                 from: 'unified',

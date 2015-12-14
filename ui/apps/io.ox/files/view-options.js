@@ -42,7 +42,7 @@ define('io.ox/files/view-options', [
         draw: function () {
             this.data('view')
                 .option('sort', 702, gt('Name'))
-                .option('sort',   5, gt('Date'))
+                .option('sort', 5, gt('Date'))
                 .option('sort', 704, gt('Size'));
         }
     });

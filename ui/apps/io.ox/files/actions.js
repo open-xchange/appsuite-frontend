@@ -752,7 +752,7 @@ define('io.ox/files/actions', [
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id:'download-folder',
+        id: 'download-folder',
         prio: 'hi',
         mobile: 'lo',
         label: gt('Download'),

@@ -39,9 +39,9 @@ define('io.ox/settings/util', [
                     var list = _.isArray(this) ? this : [this];
                     _.each(list, function (current) {
                         if (current.state) {
-                            console.warn('NOTIFIY: ' +  current.state());
+                            console.warn('NOTIFIY: ' + current.state());
                         } else if (def.state) {
-                            console.warn('NOTIFIY: ' +  def.state());
+                            console.warn('NOTIFIY: ' + def.state());
                         }
                     });
                 });
@@ -56,7 +56,7 @@ define('io.ox/settings/util', [
                         error: 'unknown',
                         error_params: []
                     }, e || {});
-                    if (obj.code  === 'MAIL_FILTER-0015') {
+                    if (obj.code === 'MAIL_FILTER-0015') {
                         //show custom error message
                         obj.message = gt('Unable to load mail filter settings.');
                     } else if (obj.error) {

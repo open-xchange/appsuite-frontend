@@ -134,7 +134,7 @@ define('io.ox/files/detail/main', [
             if (obj.folder && obj.id) {
                 if (obj.attachment) {
                     // is mail attachment
-                    require(['io.ox/mail/api', 'io.ox/mail/util'],  function (mailAPI, mailUtil) {
+                    require(['io.ox/mail/api', 'io.ox/mail/util'], function (mailAPI, mailUtil) {
                         mailAPI.get({ folder: obj.folder, id: obj.id }).then(function success(mail) {
                             var attachments = mailUtil.getAttachments(mail),
                                 attachment = _.find(attachments, function (attachment) {

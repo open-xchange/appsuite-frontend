@@ -596,7 +596,7 @@ define('io.ox/mail/util', [
                         // consider changes applied by appsuite
                         var clean = add(signature.content, !!isHTML);
                         // consider changes applied by tiny
-                        if (clean === '')  return '<br>';
+                        if (clean === '') return '<br>';
 
                         return clean
                             // set breaks
@@ -660,7 +660,7 @@ define('io.ox/mail/util', [
 
                 //fix referenced mail
                 if (data.parent && mail && mail.folder_id === undefined) {
-                    mail.id =  data.parent.id;
+                    mail.id = data.parent.id;
                     mail.folder_id = data.parent.folder_id;
                 }
 

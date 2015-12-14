@@ -9,7 +9,7 @@
  *
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
-define('io.ox/core/viewer/views/types/videoview',  [
+define('io.ox/core/viewer/views/types/videoview', [
     'io.ox/core/viewer/views/types/baseview',
     'gettext!io.ox/core'
 ], function (BaseView, gt) {

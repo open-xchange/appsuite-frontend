@@ -595,7 +595,7 @@
             //fix invalid length
             if (!opt.length || opt.length * 2 > space) {
                 //save space for ellipse char
-                opt.length = (space % 2 === 0 ? space  / 2 : (opt.max / 2) - 1) || 1;
+                opt.length = (space % 2 === 0 ? space / 2 : (opt.max / 2) - 1) || 1;
             }
             return str.substr(0, opt.length).trim() + opt.char + str.substr(str.length - opt.length).trim();
         },
@@ -813,8 +813,7 @@
         return (html || '').replace(/&(?:(\w+)|#x([0-9A-Fa-f]+)|#(\d+));/g,
                             function (original, entity, hex, dec) {
                                 return entity ? _.unescapeHTML.entities[entity] || original :
-                                       hex    ? String.fromCharCode(parseInt(hex, 16)) :
-                                                String.fromCharCode(parseInt(dec, 10));
+                                       hex ? String.fromCharCode(parseInt(hex, 16)) : String.fromCharCode(parseInt(dec, 10));
                             });
     };
 

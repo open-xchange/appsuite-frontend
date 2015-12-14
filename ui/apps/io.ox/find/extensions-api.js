@@ -126,7 +126,7 @@ define('io.ox/find/extensions-api', [
                                     return folder.account_id === data.get('qualifiedId');
                                 });
                                 // get account name for current selected account and adjust name of 'all folders' option
-                                allfolders.item.name = allfolders.item.name +  ' (' + data.get('displayName') + ')';
+                                allfolders.item.name = allfolders.item.name + ' (' + data.get('displayName') + ')';
                             }
                             def.resolve(accounts, folders);
                         });

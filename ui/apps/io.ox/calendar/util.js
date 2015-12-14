@@ -192,7 +192,7 @@ define('io.ox/calendar/util', [
 
         getFullTimeInterval: function (data, smart) {
             var length = this.getDurationInDays(data);
-            return length <= 1  && smart ? gt('Whole day') : gt.format(
+            return length <= 1 && smart ? gt('Whole day') : gt.format(
                 //#. General duration (nominative case): X days
                 //#. %d is the number of days
                 //#, c-format
@@ -252,7 +252,7 @@ define('io.ox/calendar/util', [
                         options[item.value] = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), gt.noI18n(i));
                         break;
                     case 'days':
-                        i  = Math.floor(item.value / 60 / 24);
+                        i = Math.floor(item.value / 60 / 24);
                         options[item.value] = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), gt.noI18n(i));
                         break;
                     case 'weeks':

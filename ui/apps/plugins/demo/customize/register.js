@@ -212,11 +212,11 @@ define('plugins/demo/customize/register', [
     model.on('change:headerText', function (model, value) {
         // very simple markdown-ish support
         value = _.escape(value)
-            .replace(/\*\*([^*]+)\*\*/g,        '<b>$1</b>')
-            .replace(/\*([^*]+)\*/g,            '<i>$1</i>')
-            .replace(/\|\|\|([^\|]+)\|\|\|/g,   '<span style="color: rgba(0, 0, 0, 0.5);">$1</span>')
-            .replace(/\|\|([^\|]+)\|\|/g,       '<span style="color: rgba(255, 255, 255, 0.5);">$1</span>')
-            .replace(/\|([^\|]+)\|/g,           '<span style="opacity: 0.5;">$1</span>');
+            .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
+            .replace(/\*([^*]+)\*/g, '<i>$1</i>')
+            .replace(/\|\|\|([^\|]+)\|\|\|/g, '<span style="color: rgba(0, 0, 0, 0.5);">$1</span>')
+            .replace(/\|\|([^\|]+)\|\|/g, '<span style="color: rgba(255, 255, 255, 0.5);">$1</span>')
+            .replace(/\|([^\|]+)\|/g, '<span style="opacity: 0.5;">$1</span>');
         $('#io-ox-banner .banner-title').html(value);
         // empty > logo left?
         // $('#customize-text .logo').toggleClass('left', value === '');

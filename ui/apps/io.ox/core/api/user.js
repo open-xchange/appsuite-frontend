@@ -95,7 +95,7 @@ define('io.ox/core/api/user', [
      * @fires  api#refresh.list
      * @return { deferred} done returns object with timestamp, data
      */
-    api.update =  function (o) {
+    api.update = function (o) {
         if (_.isEmpty(o.data)) return $.when();
 
         return require(['io.ox/contacts/api']).then(function (contactsApi) {

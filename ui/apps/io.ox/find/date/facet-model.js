@@ -48,8 +48,8 @@ define('io.ox/find/date/facet-model', [
                 target.value = item.label;
                 target.id = item.id;
                 target.match = item;
-                target.item.name =  item.label || target.item.name;
-                target.item.detail =  item.detail || target.item.detail;
+                target.item.name = item.label || target.item.name;
+                target.item.detail = item.detail || target.item.detail;
                 data.values.push(target);
             });
         },

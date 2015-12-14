@@ -197,8 +197,8 @@ define('io.ox/contacts/distrib/main', [
                             .text(gt('Do you really want to discard your changes?'))
                             //#. "Discard changes" appears in combination with "Cancel" (this action)
                             //#. Translation should be distinguishable for the user
-                            .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete',  { 'tabIndex': '1' })
-                            .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
+                            .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', { 'tabIndex': '1' })
+                            .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
                             .show()
                             .done(function (action) {
                                 if (action === 'delete') {

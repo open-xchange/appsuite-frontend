@@ -554,7 +554,7 @@ define('io.ox/core/folder/extensions', [
                         privateFolders.toggle(true);
                     });
 
-                    publicFolders = new TreeNodeView(_.extend({}, defaults, { folder: folder + '/public',  model_id: model_id + '/public',  title: getTitle(module, 'public') }));
+                    publicFolders = new TreeNodeView(_.extend({}, defaults, { folder: folder + '/public', model_id: model_id + '/public', title: getTitle(module, 'public') }));
 
                     placeholder.replaceWith(
                         // private folders
@@ -564,13 +564,13 @@ define('io.ox/core/folder/extensions', [
                         // public folders
                         publicFolders.render().$el.addClass('section'),
                         // shared with me
-                        new TreeNodeView(_.extend({}, defaults, { folder: folder + '/shared',  model_id: model_id + '/shared',  title: getTitle(module, 'shared') }))
+                        new TreeNodeView(_.extend({}, defaults, { folder: folder + '/shared', model_id: model_id + '/shared', title: getTitle(module, 'shared') }))
                         .render().$el.addClass('section'),
                         // // shared by me
                         // new TreeNodeView(_.extend({}, defaults, { folder: folder + '/sharing', model_id: model_id + '/sharing', title: gt('Shared by me') }))
                         // .render().$el.addClass('section'),
                         // hidden folders
-                        new TreeNodeView(_.extend({}, defaults, { folder: folder + '/hidden',  model_id: model_id + '/hidden',  title: getTitle(module, 'hidden') }))
+                        new TreeNodeView(_.extend({}, defaults, { folder: folder + '/hidden', model_id: model_id + '/hidden', title: getTitle(module, 'hidden') }))
                         .render().$el.addClass('section')
                     );
                 });

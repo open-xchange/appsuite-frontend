@@ -38,7 +38,7 @@ define('io.ox/tasks/edit/view', [
                 if (value) {
                     if (!(model.get('start_time')) && model.get('start_time') !== 0) {
                         if (model.get('end_time') !== undefined && model.get('end_time') !== null) {
-                            model.set('start_time',  moment(model.get('end_time')).subtract(1, 'day').valueOf(), { validate: true });
+                            model.set('start_time', moment(model.get('end_time')).subtract(1, 'day').valueOf(), { validate: true });
                         } else {
                             model.set('start_time', _.now(), { validate: true });
                         }
