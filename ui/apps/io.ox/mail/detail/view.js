@@ -140,6 +140,14 @@ define('io.ox/mail/detail/view', [
     ext.point('io.ox/mail/detail/header').extend({
         id: 'recipients',
         index: INDEX_header += 100,
+        draw: function (baton) {
+            ext.point('io.ox/mail/detail/header/recipients').invoke('draw', this, baton);
+        }
+    });
+
+    ext.point('io.ox/mail/detail/header/recipients').extend({
+        id: 'default',
+        index: 100,
         draw: extensions.recipients
     });
 
@@ -309,7 +317,7 @@ define('io.ox/mail/detail/view', [
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, model: this.model, view: this }),
                 node = this.$('.recipients').empty();
-            extensions.recipients.call(node, baton);
+            ext.point('io.ox/mail/detail/header/recipients').invoke('draw', node, baton);
         }, 10),
 
         onToggle: function (e) {
