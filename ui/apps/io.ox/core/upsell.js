@@ -177,6 +177,7 @@ define('io.ox/core/upsell', [
             settings.set('features/upsell/portal-widget', { imageURL: 'http://lorempixel.com/400/300/' });
             settings.set('features/upsell/folderview/mail/i18n/en_US', { title: 'Custom english title for synchronizing mails.' });
             settings.set('features/upsell/topbar-dropdown', { color: '#f00' });
+            settings.set('features/upsell/mail-folderview-quota', { upsellLimit: 10 * 1024 * 1024 });
             console.debug('Disabled inline actions regarding calendar, tasks, and files; enabled upsell instead');
             if (!debugCustomWizard) {
                 that.useDefaults();
