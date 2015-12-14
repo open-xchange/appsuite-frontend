@@ -26,7 +26,12 @@ define('plugins/halo/contacts/register', ['io.ox/core/extensions'], function (ex
 
             var self = this, def = $.Deferred();
 
-            require(['io.ox/contacts/view-detail', 'less!io.ox/contacts/style'], function (view) {
+            require(['io.ox/contacts/view-detail', 'io.ox/contacts/util', 'less!io.ox/contacts/style'], function (view, util) {
+                var contact = baton.data[0];
+
+                // if no display name can be computed, use the name of the mail
+                if (util.getDisplayName(contact) === '') contact.display_name = baton.contact.name;
+
                 self.append(view.draw(baton.data[0]));
                 def.resolve();
             });
