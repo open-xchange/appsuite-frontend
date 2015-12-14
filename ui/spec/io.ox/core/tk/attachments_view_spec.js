@@ -259,7 +259,7 @@ define([
         });
     });
 
-    describe('Attachment View:', function () {
+    describe.skip('Attachment View:', function () {
         var FakeModel = Backbone.Model.extend({
             needsUpload: sinon.stub().returns(false),
             getShortTitle: sinon.stub().returns('TestTitle'),

@@ -15,7 +15,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
 
     describe('Mail Compose', function () {
 
-        describe('main app', function () {
+        describe.skip('main app', function () {
             var app, pictureHalo, snippetsGetAll;
             beforeEach(function () {
                 return require(['io.ox/core/api/snippets', 'io.ox/contacts/api', 'settings!io.ox/mail'], function (snippetAPI, contactsAPI, settings) {

@@ -57,7 +57,7 @@ define([
             return app.quit();
         });
 
-        describe('reply to a message', function () {
+        describe.skip('reply to a message', function () {
             beforeEach(function () {
                 this.server.respondWith('PUT', /api\/mail\?action=reply/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
@@ -140,7 +140,7 @@ define([
                 });
             });
         });
-        describe('reply to all participants of a message', function () {
+        describe.skip('reply to all participants of a message', function () {
             beforeEach(function () {
                 this.server.respondWith('PUT', /api\/mail\?action=reply/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({

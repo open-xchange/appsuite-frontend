@@ -16,7 +16,7 @@ define([
     'io.ox/core/notifications'
 ], function (waitsFor, notifications) {
 
-    describe('The Notification area should', function () {
+    describe.skip('The Notification area should', function () {
         it('draw topbaricon and badge', function () {
             var launcher = $('#io-ox-notifications-icon');
             expect(launcher.length).to.equal(1);

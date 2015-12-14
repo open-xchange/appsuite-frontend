@@ -28,7 +28,7 @@ define(['io.ox/mail/compose/main', 'settings!io.ox/mail'], function (compose, se
             }
             return app.quit();
         });
-        describe('forward a message', function () {
+        describe.skip('forward a message', function () {
             beforeEach(function () {
                 this.server.respondWith('PUT', /api\/mail\?action=forward/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({

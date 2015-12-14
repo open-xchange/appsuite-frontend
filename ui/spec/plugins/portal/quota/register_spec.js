@@ -56,12 +56,12 @@ define([
                 expect(this.node.find('li.paragraph')).to.have.length(3);
                 expect(this.node.find('.progress')).to.have.length(3);
             });
-            it('show correct values', function () {
+            it.skip('show correct values', function () {
                 expect(this.node.find('.quota-memory-mail').text()).to.equal('100%');
                 expect(this.node.find('.quota-memory-file').text()).to.equal('91 MB von 100 MB');
                 expect(this.node.find('.quota-mailcount').text()).to.equal('5 von 50');
             });
-            it('show correct bar colors and lengths', function () {
+            it.skip('show correct bar colors and lengths', function () {
                 expect(this.node.find('.plugins-portal-quota-memory-filebar').children().first().hasClass('bar-danger')).to.be.true;
                 expect(this.node.find('.plugins-portal-quota-memory-filebar').children().first().css('width')).to.equal('91%');
                 expect(this.node.find('.plugins-portal-quota-memory-mailbar').children().first().hasClass('bar-danger')).to.be.true;
@@ -84,7 +84,7 @@ define([
                     done();
                 });
             });
-            it('show correct unlimited values', function () {
+            it.skip('show correct unlimited values', function () {
                 expect(this.node.find('li.paragraph')).to.have.length(3);
                 expect(this.node.find('.progress')).to.have.length(0);
 
@@ -108,7 +108,7 @@ define([
                     done();
                 });
             });
-            it('react to missing infostore capability', function () {
+            it.skip('react to missing infostore capability', function () {
                 expect(this.node.find('li.paragraph')).to.have.length(2);
                 expect(this.node.find('.progress')).to.have.length(0);
             });

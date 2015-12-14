@@ -53,7 +53,7 @@ define(['io.ox/mail/compose/model',
 
             });
 
-            describe('different content types', function () {
+            describe.skip('different content types', function () {
                 it('switching text -> html', function () {
                     var model = new MailModel({
                         editorMode: 'text'

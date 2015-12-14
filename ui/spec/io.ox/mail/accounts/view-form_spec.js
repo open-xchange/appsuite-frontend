@@ -17,7 +17,7 @@ define([
 ], function (ext, gt, fixtureUser) {
     'use strict';
 
-    describe('mailaccountsettings', function () {
+    describe.skip('mailaccountsettings', function () {
         var $popup,
             $node = $('<div>');
 

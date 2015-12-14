@@ -45,7 +45,7 @@ define([
                 expect(this.node.children()).to.have.length(1);
                 expect(this.node.children().first().is('ul')).to.be.true;
             });
-            it('draw all Tasks', function () {
+            it.skip('draw all Tasks', function () {
                 expect(this.node.find('li.item')).to.have.length(2);
                 expect($(this.node.find('.bold')[0]).text()).to.equal('Pommes kaufen');
                 expect($(this.node.find('.bold')[1]).text()).to.equal('Nase putzen');

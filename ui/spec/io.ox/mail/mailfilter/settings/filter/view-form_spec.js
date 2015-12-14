@@ -194,7 +194,7 @@ define([
         });
 
         // conditions
-        it('should draw the "Sender/From" condition', function (done) {
+        it.skip('should draw the "Sender/From" condition', function (done) {
             $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Sender/From') + ')').click();
 
             expect($popup.find('.alert.alert-info'), 'remove alert info element if a condition is displayed').to.have.length(0);

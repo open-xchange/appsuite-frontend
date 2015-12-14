@@ -34,7 +34,7 @@ define([
             return app.quit();
         });
         describe('signatures', function () {
-            describe('in HTML mode', function () {
+            describe.skip('in HTML mode', function () {
                 beforeEach(function () {
                     this.server.respondWith('GET', /api\/snippet\?action=all/, function (xhr) {
                         xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(signatures.current));

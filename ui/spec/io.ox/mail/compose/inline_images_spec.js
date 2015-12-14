@@ -33,7 +33,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
             pictureHalo.restore();
             return app.quit();
         });
-        describe('inline images', function () {
+        describe.skip('inline images', function () {
             beforeEach(function () {
                 this.server.respondWith('POST', /api\/mail\?action=new/, function (xhr) {
                     xhr.respond(200, 'content-type:text/javascript;', JSON.stringify({

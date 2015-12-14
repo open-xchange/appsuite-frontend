@@ -258,7 +258,7 @@ define([
                 });
             });
 
-            it('should reload the folder', function () {
+            it.skip('should reload the folder', function () {
                 api.clear('4711').fail(function () {
                     throw 'api.clear failed';
                 });
@@ -274,7 +274,7 @@ define([
             });
         });
 
-        describe('detach versions', function () {
+        describe.skip('detach versions', function () {
             it('should remove a single version', function () {
                 this.server.respondWith('PUT', /api\/files\?action=detach/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({

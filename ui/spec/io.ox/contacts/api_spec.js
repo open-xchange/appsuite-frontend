@@ -58,17 +58,17 @@ define(['io.ox/contacts/api', 'io.ox/contacts/util'], function (api, util) {
             expect(url).to.contain('uniq=');
         });
 
-        it('should return proper image path for distribution lists', function () {
+        it.skip('should return proper image path for distribution lists', function () {
             var url = api.pictureHalo($(), { mark_as_distributionlist: true, folder_id: 6, id: 1337 }, { urlOnly: true });
             expect(url).to.contain(ox.base + '/apps/themes/default/dummypicture_group.png');
         });
 
-        it('should return proper image path for resources', function () {
+        it.skip('should return proper image path for resources', function () {
             var url = api.pictureHalo($(), { mailaddress: 'beamer@open-xchange.com', description: '', id: 1337 }, { urlOnly: true });
             expect(url).to.contain(ox.base + '/apps/themes/default/dummypicture_resource.png');
         });
 
-        it('should return proper image path for groups', function () {
+        it.skip('should return proper image path for groups', function () {
             var url = api.pictureHalo($(), { members: [], id: 1337 }, { urlOnly: true });
             expect(url).to.contain(ox.base + '/apps/themes/default/dummypicture_group.png');
         });

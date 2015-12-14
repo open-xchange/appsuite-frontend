@@ -42,7 +42,7 @@ define([
                 beforeEach(function () {
                     capabilities.enable('infostore');
                 });
-                it('and ox.drive is enabled "Files" button should be shown', function () {
+                it.skip('and ox.drive is enabled "Files" button should be shown', function () {
                     var node = attachments.fileUploadWidget({ drive: true });
                     expect(node.find('[data-action="addinternal"]')).to.have.length(1);
                 });

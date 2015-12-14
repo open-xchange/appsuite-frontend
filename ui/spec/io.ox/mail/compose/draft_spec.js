@@ -14,7 +14,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
     'use strict';
 
     describe('Mail Compose', function () {
-        describe('draft mails', function () {
+        describe.skip('draft mails', function () {
 
             var app, clock, pictureHalo, snippetsGetAll;
             beforeEach(function () {

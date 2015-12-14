@@ -179,7 +179,7 @@ define(['shared/examples/for/api',
                 });
             });
         });
-        describe('getting Task Notifications', function () {
+        describe.skip('getting Task Notifications', function () {
             beforeEach(function () {
                 this.server.respondWith('GET', /api\/tasks\?action=all/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data": []}');

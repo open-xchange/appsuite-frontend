@@ -16,7 +16,7 @@ define([
     'waitsFor'
 ], function (register, ext, waitsFor) {
 
-    describe('html signatures', function () {
+    describe.skip('html signatures', function () {
         var node,
             baton;
 

@@ -385,7 +385,7 @@ define([
                         });
                     });
 
-                    it('should trigger "warn:hidden" event during update', function (done) {
+                    it.skip('should trigger "warn:hidden" event during update', function (done) {
 
                         this.server.respondWith('PUT', /api\/folders\?action=update/, function (xhr) {
                             var idPos = xhr.url.indexOf('&id='),

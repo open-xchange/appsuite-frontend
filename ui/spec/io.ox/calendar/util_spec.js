@@ -288,7 +288,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
             });
         });
 
-        describe('can resolve group ids to user arrays', function () {
+        describe.skip('can resolve group ids to user arrays', function () {
             var userList = {
                 'timestamp': 1385422043857,
                 'data': [
