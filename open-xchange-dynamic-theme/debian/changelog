@@ -1,3 +1,9 @@
+open-xchange-dynamic-theme (7.6.2-34) stable; urgency=medium
+
+  * Build for patch 2015-12-21 (2952)
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Mon, 14 Dec 2015 10:35:07 +0000
+
 open-xchange-dynamic-theme (7.6.2-33) stable; urgency=medium
 
   * Build for patch 2015-12-07 (2916)
