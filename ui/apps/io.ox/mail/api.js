@@ -366,41 +366,73 @@ define('io.ox/mail/api', [
      * @param  {object} options [see api factory]
      * @return { deferred} resolves as array
      */
-    api.remove = function (ids, all) {
-        try {
+    api.remove = (function () {
+
+        var pending = false, queue = [], wait = $.Deferred();
+
+        var dequeue = _.debounce(function () {
+            if (queue.length) {
+                remove(queue).always(wait.resolve);
+                queue = [];
+                wait = $.Deferred();
+            } else {
+                pending = false;
+            }
+        }, 5000);
+
+        function enqueue(ids) {
+            queue = queue.concat(ids);
+            return wait.promise();
+        }
+
+        function remove(ids) {
+            pending = true;
             return http.wait(
-                http.PUT({
-                    module: 'mail',
-                    params: { action: 'delete', timestamp: _.then() },
-                    data: http.simplify(ids),
-                    appendColumns: false
-                })
-                .done(function () {
-                    // reset trash folder
-                    var trashId = accountAPI.getFoldersByType('trash');
-                    pool.resetFolder(trashId);
-                    // update unread counter and folder item counter
-                    folderAPI.reload(ids, trashId);
-                    // trigger delete to update notification area
-                    api.trigger('delete');
-                    api.trigger('deleted-mails', ids);
-                    // if this is a trash folder trigger special event (quota updates)
-                    // checking the first id is enough, all id's must be from the same folder anyway when using our UI
-                    if (accountAPI.is('trash', ids[0].folder_id)) {
-                        api.trigger('deleted-mails-from-trash');
-                    }
-                })
-                .fail(function () {
-                    // something went wrong; let's kind of rollback
-                    api.trigger('refresh.all');
+                // wait a short moment, so that the UI reacts first, i.e. triggers
+                // the next message; apparently a "delete" blocks that otherwise
+                _.wait(500).then(function () {
+                    return http.PUT({
+                        module: 'mail',
+                        params: { action: 'delete', timestamp: _.then() },
+                        data: http.simplify(ids),
+                        appendColumns: false
+                    })
+                    .done(function () {
+                        // reset trash folder
+                        var trashId = accountAPI.getFoldersByType('trash');
+                        pool.resetFolder(trashId);
+                        // update unread counter and folder item counter
+                        folderAPI.reload(ids, trashId);
+                        // trigger delete to update notification area
+                        api.trigger('delete');
+                        api.trigger('deleted-mails', ids);
+                        // if this is a trash folder trigger special event (quota updates)
+                        // checking the first id is enough, all id's must be from the same folder anyway when using our UI
+                        if (accountAPI.is('trash', ids[0].folder_id)) {
+                            api.trigger('deleted-mails-from-trash');
+                        }
+                    })
+                    .fail(function () {
+                        // something went wrong; let's kind of rollback
+                        api.trigger('refresh.all');
+                    })
+                    .always(dequeue);
                 })
             );
-        } finally {
-            // try/finally is used to set up http.wait() first
-            // otherwise we run into race-conditions (see bug 37707)
-            prepareRemove(ids, all);
         }
-    };
+
+        return function (ids, all) {
+            try {
+                // avoid parallel delete requests
+                return pending ? enqueue(ids) : remove(ids);
+            } finally {
+                // try/finally is used to set up http.wait() first
+                // otherwise we run into race-conditions (see bug 37707)
+                prepareRemove(ids, all);
+            }
+        };
+
+    }());
 
     /**
      * archives a list of files

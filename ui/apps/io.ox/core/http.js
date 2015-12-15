@@ -1233,6 +1233,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             this.trigger('paused');
         },
 
+        isPaused: function () {
+            return paused;
+        },
+
         /**
          * Resume HTTP API. Send all queued requests as one multiple
          */
