@@ -103,7 +103,7 @@ define('io.ox/calendar/actions', [
                     m.getApp().launch().done(function () {
                         this.create(coreSettings.get('folder/contacts'), { distribution_list: distlist });
                         // trigger an empty remove just to get rid of unnecessary values in contacts
-                        if (!_.isEmpty(distlist)) this.view.baton.member.trigger('remove', {}, this.view.baton.member);
+                        // if (!_.isEmpty(distlist)) this.view.baton.member.trigger('remove', {}, this.view.baton.member);
                     });
                 });
             });
