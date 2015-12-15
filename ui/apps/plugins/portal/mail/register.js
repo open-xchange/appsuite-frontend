@@ -136,9 +136,32 @@ define('plugins/portal/mail/register', [
         return def;
     };
 
+    function getFolderName(baton) {
+        var props = baton.model.get('props', {});
+
+        if (props.id) {
+            return $.when('default' + props.id + '/INBOX');
+        }
+        return accountAPI.getUnifiedMailboxName().then(function (mb) {
+            return mb ? mb + '/INBOX' : api.getDefaultFolder();
+        });
+    }
+
     ext.point('io.ox/portal/widget/mail').extend({
 
         title: gt('Inbox'),
+
+        initialize: function (baton) {
+            return $.when(getFolderName(baton)).done(function (folderName) {
+                api.on('update', function (event, list, target) {
+                    if (target === folderName) {
+                        require(['io.ox/portal/main'], function (portal) {
+                            portal.getApp().refreshWidget(baton.model, 0);
+                        });
+                    }
+                });
+            });
+        },
 
         load: function (baton) {
 
@@ -147,18 +170,12 @@ define('plugins/portal/mail/register', [
                     params = loader.getQueryParams({ folder: folderName });
 
                 baton.collection = loader.getCollection(params);
-                if (baton.collection.length === 0) return loadCollection(folderName);
+                if (baton.collection.length === 0 || baton.collection.expired) return loadCollection(folderName);
             }
 
-            var props = baton.model.get('props', {});
-
-            if (props.id) {
-                return getMails('default' + props.id + '/INBOX');
-            } else {
-                return accountAPI.getUnifiedMailboxName().then(function (mb) {
-                    return getMails(mb ? mb + '/INBOX' : api.getDefaultFolder());
-                });
-            }
+            return $.when(getFolderName(baton)).then(function (folderName) {
+                return getMails(folderName);
+            });
         },
 
         summary: function (baton) {
