@@ -206,30 +206,33 @@ define('io.ox/presenter/views/mainview', [
          *  @param {String} presenter.presenterName
          *   the display name of the former presenter
          */
-        onPresentationEnd: function (/*formerPresenter*/) {
+        onPresentationEnd: function (formerPresenter) {
             var rtModel = this.app.rtModel;
-            //var localModel = this.app.localModel;
+            var localModel = this.app.localModel;
             var userId = this.app.rtConnection.getRTUuid();
 
-            var formerRemoteParticipants = rtModel.previous('participants');
-            var formerRemotePresenter = rtModel.previous('presenterId');
-
-            // handle end of a remote presentation
-            if (!rtModel.hasPresenter() && !_.isEmpty(formerRemotePresenter)) {
-
-                var wasParticipant = _.some(formerRemoteParticipants, function (user) {
+            function wasParticipant (userId) {
+                return !rtModel.wasPresenter(userId) && _.some(rtModel.previous('participants'), function (user) {
                     return (userId === user.userId);
                 }, this);
+            }
 
-                if (wasParticipant && userId !== formerRemotePresenter) {
-                    // show presentation end notification to all participants that joined the remote presentation.
+            // handle end of a remote / local presentation
+            if (rtModel.wasPresenter(formerPresenter.presenterId)) {
+
+                // show presentation end notification to all participants that joined the remote presentation.
+                if (wasParticipant(userId)) {
                     this.notifyPresentationEnd();
-                    // leave full screen mode for all participants.
-                    this.toggleFullscreen(false);
                 }
+
+                // leave full screen mode
+                this.toggleFullscreen(false);
 
                 // remove presenter id from session store
                 SessionRestore.state('presenter~' + this.model.get('id'), null);
+
+            } else if (localModel.wasPresenter(formerPresenter.presenterId)) {
+                this.toggleFullscreen(false);
             }
         },
 

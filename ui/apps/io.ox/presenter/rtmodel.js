@@ -111,6 +111,22 @@ define('io.ox/presenter/rtmodel', [
         },
 
         /**
+         * Returns true if the passed user id belongs to the former presenter.
+         * Which means the given user started and ended the presentation again. And the presentation has not yet been started.
+         * - Intended to be called after a Backbone model change event (otherwise the result may not be valid).
+         *
+         * @param {String} userId
+         *  The user id to check.
+         *
+         * @returns {Boolean}
+         *  Whether the user was the presenter.
+         */
+        wasPresenter: function (userId) {
+            var formerPresenter = this.previous('presenterId');
+            return (!this.hasPresenter() && !_.isEmpty(formerPresenter) && userId === formerPresenter);
+        },
+
+        /**
          * Returns true if the passed user id belongs to the presenter and the presentation is running.
          *
          * @param {String} userId
