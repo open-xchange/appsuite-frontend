@@ -129,7 +129,7 @@ define('io.ox/files/detail/main', [
             }
 
             // deep-link
-            obj = app.getState();
+            obj = _.clone(app.getState());
 
             if (obj.folder && obj.id) {
                 if (obj.attachment) {
