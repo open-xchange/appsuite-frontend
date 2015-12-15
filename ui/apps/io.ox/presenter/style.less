@@ -333,6 +333,26 @@
                 color: #ccc;
                 border-color: #777;
             }
+            .pause-continue {
+                width: 110px;
+                height: 120px;
+                line-height: 120px;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+                text-align: center;
+                font-size: 6em;
+                color: rgba(195, 195, 195, 0.6);
+            }
+            &.remote-presenation .pause-continue {
+                display: none;
+            }
+            &.local-presenation .pause-infobox {
+                display: none;
+            }
         }
 
         &.thumbnails-opened {

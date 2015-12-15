@@ -46,17 +46,22 @@ define('io.ox/presenter/actions', [
         requires: function (e) {
             if (!e.baton.context) { return false; }
 
-            var rtModel = e.baton.context.app.rtModel,
-                userId = e.baton.context.app.rtConnection.getRTUuid();
+            var rtModel = e.baton.context.app.rtModel;
+            var localModel = e.baton.context.app.localModel;
+            var userId = e.baton.context.app.rtConnection.getRTUuid();
 
-            return (_.device('!iOS') && !rtModel.isPresenter(userId) && !rtModel.isJoined(userId));
+            //return (_.device('!iOS') && !rtModel.isPresenter(userId) && !rtModel.isJoined(userId));
+            return (localModel.canStart(userId) && !rtModel.isPresenter(userId) && !rtModel.isJoined(userId));
         },
         action: function (baton) {
-            var app = baton.context.app,
-                slideId = app.mainView.getActiveSlideIndex();
+            var app = baton.context.app;
+            var localModel = app.localModel;
+            var userId = app.rtConnection.getRTUuid();
+            var slideId = app.mainView.getActiveSlideIndex();
 
             console.info('start local action:', baton, 'slide', slideId);
-            app.mainView.toggleFullscreen(true);
+            //app.mainView.toggleFullscreen(true);
+            localModel.startPresentation(userId);
         }
     });
 
@@ -66,14 +71,15 @@ define('io.ox/presenter/actions', [
         requires: function (e) {
             if (!e.baton.context) { return false; }
 
-            var rtModel = e.baton.context.app.rtModel,
-                userId = e.baton.context.app.rtConnection.getRTUuid();
+            var rtModel = e.baton.context.app.rtModel;
+            var localModel = e.baton.context.app.localModel;
+            var userId = e.baton.context.app.rtConnection.getRTUuid();
 
-            return (rtModel.canStart(userId));
+            return (!localModel.isPresenter(userId) && rtModel.canStart(userId));
         },
         action: function (baton) {
-            var app = baton.context.app,
-                slideId = app.mainView.getActiveSlideIndex();
+            var app = baton.context.app;
+            var slideId = app.mainView.getActiveSlideIndex();
 
             console.info('start remote action:', baton, 'slide', slideId);
             app.rtConnection.startPresentation({ activeSlide: slideId });
@@ -84,14 +90,26 @@ define('io.ox/presenter/actions', [
         requires: function (e) {
             if (!e.baton.context) { return false; }
 
-            var rtModel = e.baton.context.app.rtModel,
-                userId = e.baton.context.app.rtConnection.getRTUuid();
+            var rtModel = e.baton.context.app.rtModel;
+            var localModel = e.baton.context.app.localModel;
+            var userId = e.baton.context.app.rtConnection.getRTUuid();
 
-            return (rtModel.isPresenter(userId));
+            return (localModel.isPresenter(userId) || rtModel.isPresenter(userId));
         },
         action: function (baton) {
-            console.info('end action:', baton);
-            baton.context.app.rtConnection.endPresentation();
+            var app = baton.context.app;
+            var rtModel = app.rtModel;
+            var localModel = app.localModel;
+            var userId = app.rtConnection.getRTUuid();
+
+            if (localModel.isPresenter(userId)) {
+                console.info('end local action:', baton);
+                localModel.endPresentation(userId);
+
+            } else if (rtModel.isPresenter(userId)) {
+                console.info('end remote action:', baton);
+                app.rtConnection.endPresentation();
+            }
         }
     });
 
@@ -99,16 +117,28 @@ define('io.ox/presenter/actions', [
         requires: function (e) {
             if (!e.baton.context) { return false; }
 
-            var rtModel = e.baton.context.app.rtModel,
-                userId = e.baton.context.app.rtConnection.getRTUuid();
+            var rtModel = e.baton.context.app.rtModel;
+            var localModel = e.baton.context.app.localModel;
+            var userId = e.baton.context.app.rtConnection.getRTUuid();
 
-            return (rtModel.canPause(userId));
+            return (localModel.canPause(userId) || rtModel.canPause(userId));
         },
         action: function (baton) {
-            console.info('pause action:', baton);
             var app = baton.context.app;
-            app.rtConnection.pausePresentation();
-            app.mainView.toggleFullscreen(false);
+            var rtModel = app.rtModel;
+            var localModel = app.localModel;
+            var userId = app.rtConnection.getRTUuid();
+
+            if (localModel.canPause(userId)) {
+                console.info('pause local action:', baton);
+                localModel.pausePresentation(userId);
+
+            } else if (rtModel.canPause(userId)) {
+                console.info('pause remote action:', baton);
+                app.rtConnection.pausePresentation();
+                app.mainView.toggleFullscreen(false);
+            }
+
         }
     });
 
@@ -116,14 +146,26 @@ define('io.ox/presenter/actions', [
         requires: function (e) {
             if (!e.baton.context) { return false; }
 
-            var rtModel = e.baton.context.app.rtModel,
-                userId = e.baton.context.app.rtConnection.getRTUuid();
+            var rtModel = e.baton.context.app.rtModel;
+            var localModel = e.baton.context.app.localModel;
+            var userId = e.baton.context.app.rtConnection.getRTUuid();
 
-            return (rtModel.canContinue(userId));
+            return (localModel.canContinue(userId) || rtModel.canContinue(userId));
         },
         action: function (baton) {
-            console.info('continue action:', baton);
-            baton.context.app.rtConnection.continuePresentation();
+            var app = baton.context.app;
+            var rtModel = app.rtModel;
+            var localModel = app.localModel;
+            var userId = app.rtConnection.getRTUuid();
+
+            if (localModel.canContinue(userId)) {
+                console.info('continue local action:', baton);
+                localModel.continuePresentation(userId);
+
+            } else if (rtModel.canContinue(userId)) {
+                console.info('continue remote action:', baton);
+                baton.context.app.rtConnection.continuePresentation();
+            }
         }
     });
 
@@ -131,10 +173,11 @@ define('io.ox/presenter/actions', [
         requires: function (e) {
             if (!e.baton.context) { return false; }
 
-            var rtModel = e.baton.context.app.rtModel,
-                userId = e.baton.context.app.rtConnection.getRTUuid();
+            var rtModel = e.baton.context.app.rtModel;
+            var localModel = e.baton.context.app.localModel;
+            var userId = e.baton.context.app.rtConnection.getRTUuid();
 
-            return (rtModel.canJoin(userId));
+            return (!localModel.isPresenter(userId) && rtModel.canJoin(userId));
         },
         action: function (baton) {
             console.info('join action:', baton);
@@ -163,10 +206,11 @@ define('io.ox/presenter/actions', [
             // iOS doesn't support full-screen
             if (!e.baton.context || _.device('iOS')) { return false; }
 
-            var rtModel = e.baton.context.app.rtModel,
-                userId = e.baton.context.app.rtConnection.getRTUuid();
+            var rtModel = e.baton.context.app.rtModel;
+            var localModel = e.baton.context.app.localModel;
+            var userId = e.baton.context.app.rtConnection.getRTUuid();
 
-            return (rtModel.isPresenter(userId) || rtModel.isJoined(userId));
+            return (localModel.isPresenter(userId) || rtModel.isPresenter(userId) || rtModel.isJoined(userId));
         },
         action: function (baton) {
             console.info('fullscreen action:', baton);
@@ -178,10 +222,11 @@ define('io.ox/presenter/actions', [
         requires: function (e) {
             if (!e.baton.context) { return false; }
 
-            var rtModel = e.baton.context.app.rtModel,
-                userId = e.baton.context.app.rtConnection.getRTUuid();
+            var rtModel = e.baton.context.app.rtModel;
+            var localModel = e.baton.context.app.localModel;
+            var userId = e.baton.context.app.rtConnection.getRTUuid();
 
-            return !rtModel.isPresenter(userId) || rtModel.isPaused();
+            return (!localModel.isPresenter(userId) && (!rtModel.isPresenter(userId) || rtModel.isPaused()));
         },
         action: function (baton) {
             console.info('togglesidebar action', baton);

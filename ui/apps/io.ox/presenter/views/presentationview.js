@@ -169,6 +169,9 @@ define('io.ox/presenter/views/presentationview', [
             this.listenTo(this.presenterEvents, 'presenter:presentation:continue', this.onPresentationContinue);
             // register thumbnail view slide select handler
             this.listenTo(this.presenterEvents, 'presenter:showslide', this.showSlide);
+            // register presentation start/end handler
+            this.listenTo(this.presenterEvents, 'presenter:presentation:start', this.onPresentationStartEnd);
+            this.listenTo(this.presenterEvents, 'presenter:presentation:end', this.onPresentationStartEnd);
         },
 
         /**
@@ -222,30 +225,48 @@ define('io.ox/presenter/views/presentationview', [
          * Creates the presentation pause overlay.
          */
         renderPauseOverlay: function () {
-            var overlay = $('<div class="pause-overlay">'),
-                infoBox = $('<div class="pause-infobox">'),
-                pauseNotification = $('<span class="pause-message">').text(
+            var overlay = $('<div class="pause-overlay">');
+
+            var infoBox = $('<div class="pause-infobox">');
+            var pauseNotification = $('<span class="pause-message">')
+                .text(
                     //#. Info text that says the presentation is paused.
                     gt('Presentation is paused.')
-                ),
-                leaveButton = $('<button class="btn btn-default pause-leave" role="button" type="button" tabindex="1">')
-                    .attr({
-                        //#. tooltip for the leave presentation button
-                        'title': gt('Leave presentation'),
-                        'aria-label': gt('Leave presentation')
-                    })
-                    //#. label for the leave presentation button
-                    .text(gt('Leave'));
+                );
+            var leaveButton = $('<button class="btn btn-default pause-leave" role="button" type="button" tabindex="1">')
+                .attr({
+                    //#. tooltip for the leave presentation button
+                    'title': gt('Leave presentation'),
+                    'aria-label': gt('Leave presentation')
+                })
+                //#. label for the leave presentation button
+                .text(gt('Leave'));
 
+            var pauseButton = $('<a href="#" class="pause-continue" tabindex="1" role="button"><i class="fa fa-pause" aria-hidden="true"></i></a>')
+                .attr({
+                    //#. tooltip for the continue presentation button
+                    'title': gt('Continue presentation'),
+                    'aria-label': gt('Continue presentation')
+                });
+
+            // leave the paused remote presentation
             function onPauseLeave() {
                 this.togglePauseOverlay();
                 this.app.rtConnection.leavePresentation();
                 this.app.mainView.toggleFullscreen(false);
             }
+            // continue the paused local presentation
+            function onPauseContinue() {
+                var localModel = this.app.localModel;
+                var userId = this.rtConnection.getRTUuid();
+                localModel.continuePresentation(userId);
+                this.togglePauseOverlay();
+            }
 
             leaveButton.on('click', onPauseLeave.bind(this));
             infoBox.append(pauseNotification, leaveButton);
-            overlay.append(infoBox);
+            pauseButton.on('click', onPauseContinue.bind(this));
+            overlay.append(pauseButton, infoBox);
             this.$el.append(overlay);
         },
 
@@ -383,6 +404,14 @@ define('io.ox/presenter/views/presentationview', [
         },
 
         /**
+         * Handles presentation start and end.
+         */
+        onPresentationStartEnd: function () {
+            this.updateNavigationArrows();
+            this.updateSwiperParams();
+        },
+
+        /**
          * Handles remote slide changes invoked by the real-time framework.
          *
          * @param {Number} index
@@ -414,11 +443,18 @@ define('io.ox/presenter/views/presentationview', [
          * Handles presentation pause invoked by the real-time framework.
          */
         onPresentationPause: function () {
+            var rtModel = this.app.rtModel;
+            var localModel = this.app.localModel;
+            var userId = this.app.rtConnection.getRTUuid();
+
             console.info('Presenter - presentation - pause');
             this.updateNavigationArrows();
             this.updateSwiperParams();
             this.togglePauseOverlay();
-            this.hideNavigation(0);
+
+            if (localModel.canContinue(userId) || rtModel.canContinue(userId)) {
+                this.hideNavigation(0);
+            }
         },
 
         /**
@@ -435,14 +471,16 @@ define('io.ox/presenter/views/presentationview', [
          * Toggles the visibility of the pause overlay for presentation participants.
          */
         togglePauseOverlay: function () {
-            var userId = this.app.rtConnection.getRTUuid(),
-                rtModel = this.app.rtModel;
+            var rtModel = this.app.rtModel;
+            var localModel = this.app.localModel;
+            var userId = this.app.rtConnection.getRTUuid();
 
-            // presenter never gets the pause overlay
-            if (rtModel.isPresenter(userId)) { return; }
-            // to see the pause overlay the participant needs to be joined and the presentation needs to be paused
-            if (rtModel.isJoined(userId) && rtModel.isPaused()) {
-                this.$('.pause-overlay').show();
+            // to see the pause overlay the presentation needs to be paused and the user needs to be
+            // the presenter of a local presentation or joined in a remote presentation.
+            if (localModel.canShowPauseOverlay(userId)) {
+                this.$('.pause-overlay').addClass('local-presenation').removeClass('remote-presenation').show();
+            } else if (rtModel.canShowPauseOverlay(userId)) {
+                this.$('.pause-overlay').addClass('remote-presenation').removeClass('local-presenation').show();
             } else {
                 this.$('.pause-overlay').hide();
             }
@@ -577,11 +615,12 @@ define('io.ox/presenter/views/presentationview', [
          *  - the current user is the presenter and the presentation is paused
          */
         updateNavigationArrows: function () {
-            var rtModel = this.app.rtModel,
-                userId = this.app.rtConnection.getRTUuid(),
-                navigationArrows = this.$el.find('.swiper-button-control');
+            var rtModel = this.app.rtModel;
+            var localModel = this.app.localModel;
+            var userId = this.app.rtConnection.getRTUuid();
+            var navigationArrows = this.$el.find('.swiper-button-control');
 
-            if (!rtModel.isJoined(userId) || (rtModel.isPresenter(userId) && rtModel.isPaused())) {
+            if (!localModel.isPresenter(userId) && (!rtModel.isJoined(userId) || (rtModel.isPresenter(userId) && rtModel.isPaused()))) {
                 navigationArrows.show();
             } else {
                 navigationArrows.hide();
@@ -596,9 +635,11 @@ define('io.ox/presenter/views/presentationview', [
          *  - the current user is the presenter
          */
         updateSwiperParams: function () {
-            var rtModel = this.app.rtModel,
-                userId = this.app.rtConnection.getRTUuid(),
-                enable = !rtModel.isJoined(userId) || rtModel.isPresenter(userId);
+            var rtModel = this.app.rtModel;
+            //var localModel = this.app.localModel;
+            var userId = this.app.rtConnection.getRTUuid();
+            //var enable = !rtModel.isJoined(userId) || rtModel.isPresenter(userId) || localModel.isPresenter(userId);
+            var enable = !rtModel.isJoined(userId) || rtModel.isPresenter(userId);
 
             if (!this.swiper) { return; }
 
@@ -638,10 +679,11 @@ define('io.ox/presenter/views/presentationview', [
          * but only if the current user is the presenter and the presentation is no paused.
          */
         showNavigation: function () {
-            var userId = this.app.rtConnection.getRTUuid(),
-                rtModel = this.app.rtModel;
+            var userId = this.app.rtConnection.getRTUuid();
+            var localModel = this.app.localModel;
+            var rtModel = this.app.rtModel;
 
-            if (rtModel.isPresenter(userId) && !rtModel.isPaused()) {
+            if (localModel.isPresenting(userId) || rtModel.isPresenting(userId)) {
                 this.navigationView.$el.show();
             }
         },

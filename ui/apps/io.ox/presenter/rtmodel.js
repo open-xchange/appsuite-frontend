@@ -81,8 +81,6 @@ define('io.ox/presenter/rtmodel', [
         },
 
         initialize: function () {
-            //console.info('Presenter - RTModel.initialize()');
-
             this.on('change', function (model) {
                 console.log('Presenter - RTModel - change', model);
             });
@@ -172,9 +170,6 @@ define('io.ox/presenter/rtmodel', [
         /**
          * Returns the real-time user object for the provided user id.
          *
-         * activeUsers participants
-         * An array of objects representing a
-         *
          * @param {String} userId
          *  The user id to look for.
          */
@@ -229,6 +224,17 @@ define('io.ox/presenter/rtmodel', [
          */
         canShowThumbnails: function (userId) {
             return (!this.isJoined(userId) || (this.isPresenter(userId) && this.isPaused()));
+        },
+
+        /**
+         * Returns true if the pause overlay can be displayed for the provided user.
+         * Which means the user must be joined and the presentation must be paused.
+         *
+         * @param {String} userId
+         *  The user id to check.
+         */
+        canShowPauseOverlay: function (userId) {
+            return (this.isPaused() && !this.isPresenter(userId) && this.isJoined(userId));
         }
 
     });
