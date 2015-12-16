@@ -79,6 +79,9 @@ define('io.ox/presenter/views/mainview', [
             // listen to RTModel updates
             //this.listenTo(this.app.rtModel, 'change:presenterId change:activeSlide change:paused change:participants', this.onRTModelUpdate);
             this.listenTo(this.app.rtModel, 'change', this.onRTModelUpdate);
+
+            // listen to local model updates
+            this.listenTo(this.app.localModel, 'change', this.onLocalModelUpdate);
         },
 
         /**
@@ -111,8 +114,6 @@ define('io.ox/presenter/views/mainview', [
          *  The real-time model instance.
          */
         onRTModelUpdate: function (rtModel) {
-            console.info('Presenter - MainView - onRTUpdatertData - RTModel - change', rtModel);
-
             var currentPresenterId,
                 previousPresenterId,
                 localSlideId = this.getActiveSlideIndex(),
@@ -142,7 +143,36 @@ define('io.ox/presenter/views/mainview', [
                 this.presenterEvents.trigger(eventType);
             }
 
-            //always focus in navigation for keyboard stuff
+            // always focus in navigation for keyboard stuff
+            this.presentationView.focusActiveSlide();
+        },
+
+        /**
+         * Handles local model data changes.
+         *
+         * @param {LocalModel} localModel
+         *  The local model instance.
+         */
+        onLocalModelUpdate: function (localModel) {
+            if (localModel.hasChanged('presenterId')) {
+                // compare current with previous presenter id
+                var currentPresenterId = localModel.get('presenterId');
+                var previousPresenterId = localModel.previous('presenterId');
+
+                if (!_.isEmpty(currentPresenterId) && _.isEmpty(previousPresenterId)) {
+                    this.presenterEvents.trigger('presenter:presentation:start', { presenterId: currentPresenterId, presenterName: localModel.get('presenterName') });
+
+                } else if (_.isEmpty(currentPresenterId) && !_.isEmpty(previousPresenterId)) {
+                    this.presenterEvents.trigger('presenter:presentation:end', { presenterId: previousPresenterId, presenterName: localModel.previous('presenterName') });
+                }
+            }
+            if (localModel.hasChanged('paused')) {
+                // compare current with previous presentation pause state
+                var eventType = (localModel.get('paused') && !localModel.previous('paused')) ? 'presenter:presentation:pause' : 'presenter:presentation:continue';
+                this.presenterEvents.trigger(eventType);
+            }
+
+            // always focus in navigation for keyboard stuff
             this.presentationView.focusActiveSlide();
         },
 
@@ -150,16 +180,19 @@ define('io.ox/presenter/views/mainview', [
          * Handles remote presentation start invoked by the real-time framework.
          */
         onPresentationStart: function () {
-            var rtModel = this.app.rtModel,
-                userId = this.app.rtConnection.getRTUuid();
+            var rtModel = this.app.rtModel;
+            var localModel = this.app.localModel;
+            var userId = this.app.rtConnection.getRTUuid();
 
             if (rtModel.isPresenter(userId)) {
                 // store presenter state and slide id to restore presentation on browser reload
                 SessionRestore.state('presenter~' + this.model.get('id'), { isPresenter: true, slideId: this.getActiveSlideIndex() });
             }
 
-            // show presentation start notification to all participants.
-            this.notifyPresentationStart();
+            if (!localModel.isPresenter(userId)) {
+                // show presentation start notification to all participants in case of a remote presentation.
+                this.notifyPresentationStart();
+            }
         },
 
         /**
@@ -174,17 +207,33 @@ define('io.ox/presenter/views/mainview', [
          *   the display name of the former presenter
          */
         onPresentationEnd: function (formerPresenter) {
-            var rtModel = this.app.rtModel,
-                userId = this.app.rtConnection.getRTUuid();
+            var rtModel = this.app.rtModel;
+            var localModel = this.app.localModel;
+            var userId = this.app.rtConnection.getRTUuid();
 
-            // leave full screen mode for all participants.
-            if (!rtModel.hasPresenter() && (userId !== formerPresenter.presenterId)) {
+            function wasParticipant (userId) {
+                return !rtModel.wasPresenter(userId) && _.some(rtModel.previous('participants'), function (user) {
+                    return (userId === user.userId);
+                }, this);
+            }
+
+            // handle end of a remote / local presentation
+            if (rtModel.wasPresenter(formerPresenter.presenterId)) {
+
+                // show presentation end notification to all participants that joined the remote presentation.
+                if (wasParticipant(userId)) {
+                    this.notifyPresentationEnd();
+                }
+
+                // leave full screen mode
+                this.toggleFullscreen(false);
+
+                // remove presenter id from session store
+                SessionRestore.state('presenter~' + this.model.get('id'), null);
+
+            } else if (localModel.wasPresenter(formerPresenter.presenterId)) {
                 this.toggleFullscreen(false);
             }
-            // remove presenter id from session store
-            SessionRestore.state('presenter~' + this.model.get('id'), null);
-            // show presentation end notification to all participants.
-            this.notifyPresentationEnd();
         },
 
         /**
@@ -193,23 +242,30 @@ define('io.ox/presenter/views/mainview', [
         onKeydown: function (event) {
             event.stopPropagation();
 
-            var self = this,
-                rtModel = this.app.rtModel,
-                rtConnection = this.app.rtConnection,
-                userId = rtConnection.getRTUuid();
+            var self = this;
+            var rtModel = this.app.rtModel;
+            var localModel = this.app.localModel;
+            var rtConnection = this.app.rtConnection;
+            var userId = rtConnection.getRTUuid();
 
             function togglePause() {
                 if (rtModel.canPause(userId)) {
                     rtConnection.pausePresentation();
                     self.toggleFullscreen(false);
+                } else if (localModel.canPause(userId)) {
+                    localModel.pausePresentation(userId);
                 } else if (rtModel.canContinue(userId)) {
                     rtConnection.continuePresentation();
+                } else if (localModel.canContinue(userId)) {
+                    localModel.continuePresentation(userId);
                 }
             }
 
             function endOrLeavePresentation() {
                 if (rtModel.isPresenter(userId)) {
                     rtConnection.endPresentation();
+                } else if (localModel.isPresenter(userId)) {
+                    localModel.endPresentation(userId);
                 } else if (rtModel.canLeave(userId)) {
                     rtConnection.leavePresentation();
                 }

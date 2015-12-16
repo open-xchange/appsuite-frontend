@@ -202,11 +202,12 @@ define('io.ox/presenter/views/thumbnailview', [
          * Handles updates to the real-time message data and sets the visibility of this view accordingly.
          */
         onToggleVisibility: function () {
-            var rtModel = this.app.rtModel,
-                userId = this.app.rtConnection.getRTUuid(),
-                fullscreen = this.app.mainView.fullscreen;
+            var rtModel = this.app.rtModel;
+            var localModel = this.app.localModel;
+            var userId = this.app.rtConnection.getRTUuid();
+            var fullscreen = this.app.mainView.fullscreen;
 
-            this.toggleVisibility(!fullscreen && rtModel.canShowThumbnails(userId));
+            this.toggleVisibility(!fullscreen && rtModel.canShowThumbnails(userId) && !localModel.isPresenter(userId));
         },
 
         /**

@@ -17,10 +17,11 @@ define('io.ox/presenter/main', [
     'io.ox/core/page-controller',
     'io.ox/presenter/rtconnection',
     'io.ox/presenter/rtmodel',
+    'io.ox/presenter/localmodel',
     'io.ox/presenter/views/mainview',
     'io.ox/core/tk/sessionrestore',
     'less!io.ox/presenter/style'
-], function (FilesAPI, PageController, RTConnection, RTModel, MainView, SessionRestore) {
+], function (FilesAPI, PageController, RTConnection, RTModel, LocalModel, MainView, SessionRestore) {
 
     'use strict';
 
@@ -75,6 +76,9 @@ define('io.ox/presenter/main', [
                         //console.info('Presenter - rtUpdateHandler()', data);
                         app.rtModel.set(app.rtModel.parse(data));
                     }
+
+                    // init local model
+                    app.localModel = new LocalModel();
 
                     // init RT connection
                     app.rtModel = new RTModel();

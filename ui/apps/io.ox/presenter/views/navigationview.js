@@ -58,60 +58,61 @@ define('io.ox/presenter/views/navigationview', [
     }
 
     // define extension points for this NavigationView
-    var navigationPoint = Ext.point(NAVIGATION_ID),
-        // navigation link meta object used to generate extension points later
-        navigationLinksMeta = {
-            'pause': {
-                prio: 'hi',
-                mobile: 'lo',
-                //#. button label for pausing the presentation
-                label: gt('Pause presentation'),
-                ref: PRESENTER_ACTION_ID + '/pause',
-                customize: function () {
-                    this.addClass('presenter-toolbar-pause')
-                        .attr({
-                            tabindex: '1',
-                            //#. button tooltip for pausing the presentation
-                            title: gt('Pause presentation'),
-                            'aria-label': gt('Pause presentation')
-                        });
-                }
-            },
-            'continue': {
-                prio: 'hi',
-                mobile: 'lo',
-                //#. button label for continuing the presentation
-                label: gt('Continue presentation'),
-                ref: PRESENTER_ACTION_ID + '/continue',
-                customize: function () {
-                    this.addClass('presenter-toolbar-continue')
-                        .attr({
-                            tabindex: '1',
-                            //#. button tooltip for continuing the presentation
-                            title: gt('Continue presentation'),
-                            'aria-label': gt('Continue presentation')
-                        });
-                }
-            },
-            'fullscreen': {
-                prio: 'hi',
-                mobile: 'lo',
-                icon: 'fa fa-arrows-alt',
-                //#. button label for toggling fullscreen mode
-                label: gt('Toggle fullscreen'),
-                ref: PRESENTER_ACTION_ID + '/fullscreen',
+    var navigationPoint = Ext.point(NAVIGATION_ID);
 
-                customize: function () {
-                    this.addClass('presenter-toolbar-fullscreen').attr({
+    // navigation link meta object used to generate extension points later
+    var navigationLinksMeta = {
+        'pause': {
+            prio: 'hi',
+            mobile: 'lo',
+            //#. button label for pausing the presentation
+            label: gt('Pause presentation'),
+            ref: PRESENTER_ACTION_ID + '/pause',
+            customize: function () {
+                this.addClass('presenter-toolbar-pause')
+                    .attr({
                         tabindex: '1',
-                        //#. button label for toggling fullscreen mode
-                        title: gt('Toggle fullscreen'),
-                        'aria-label': gt('Toggle fullscreen')
+                        //#. button tooltip for pausing the presentation
+                        title: gt('Pause presentation'),
+                        'aria-label': gt('Pause presentation')
                     });
-                }
             }
+        },
+        'continue': {
+            prio: 'hi',
+            mobile: 'lo',
+            //#. button label for continuing the presentation
+            label: gt('Continue presentation'),
+            ref: PRESENTER_ACTION_ID + '/continue',
+            customize: function () {
+                this.addClass('presenter-toolbar-continue')
+                    .attr({
+                        tabindex: '1',
+                        //#. button tooltip for continuing the presentation
+                        title: gt('Continue presentation'),
+                        'aria-label': gt('Continue presentation')
+                    });
+            }
+        },
+        'fullscreen': {
+            prio: 'hi',
+            mobile: 'lo',
+            icon: 'fa fa-arrows-alt',
+            //#. button label for toggling fullscreen mode
+            label: gt('Toggle fullscreen'),
+            ref: PRESENTER_ACTION_ID + '/fullscreen',
 
-        };
+            customize: function () {
+                this.addClass('presenter-toolbar-fullscreen').attr({
+                    tabindex: '1',
+                    //#. button label for toggling fullscreen mode
+                    title: gt('Toggle fullscreen'),
+                    'aria-label': gt('Toggle fullscreen')
+                });
+            }
+        }
+
+    };
 
     // iterate link meta and create link extensions
     var linkIndex = 0;
@@ -149,21 +150,26 @@ define('io.ox/presenter/views/navigationview', [
             if (!baton.context) { return; }
             //if (_.device('smartphone')) return;
 
+            var rtModel = baton.context.app.rtModel;
+            var localModel = baton.context.app.localModel;
+            var userId = baton.context.app.rtConnection.getRTUuid();
+
+            // no participants list for local presenter
+            if (localModel.isPresenter(userId)) { return; }
+
             function quoteId(id) {
                 return id.replace(/(:|@|\/|\.|\[|\]|,)/g, '\\$1');
             }
 
-            var dropdown,
-                participantsJoined = false,
-                rtModel = baton.context.app.rtModel,
-                presenterId = rtModel.get('presenterId') || 'none',
-                presenterName = rtModel.get('presenterName') ||
+            var participantsJoined = false;
+            var participants = rtModel.get('participants');
+            var presenterId = rtModel.get('presenterId') || 'none';
+            var presenterName = rtModel.get('presenterName') ||
                     //#. text of an user list that shows the names of presenting user and participants.
                     //#. the text to display as presenter name if no user is presenting yet.
-                    gt('none'),
-                participants = rtModel.get('participants');
+                    gt('none');
 
-            dropdown = new Dropdown({
+            var dropdown = new Dropdown({
                 model: baton.context.app.rtModel,
                 //#. text of an user list that shows the names of presenting user and participants.
                 //#. the dropdown button label for the participants dropdown.
@@ -242,20 +248,21 @@ define('io.ox/presenter/views/navigationview', [
         render: function () {
             // draw navigation
             //#. aria label for the presenter navigation bar, for screen reader only.
-            var navigation = this.$el.attr({ role: 'menu', 'aria-label': gt('Presenter navigation bar') }),
-                userId = this.app.rtConnection.getRTUuid(),
-                rtModel = this.app.rtModel,
-                baton = Ext.Baton({
-                    context: this,
-                    $el: navigation,
-                    model: this.model,
-                    models: [this.model],
-                    data: this.model.toJSON()
-                });
+            var navigation = this.$el.attr({ role: 'menu', 'aria-label': gt('Presenter navigation bar') });
+            var rtModel = this.app.rtModel;
+            var localModel = this.app.localModel;
+            var userId = this.app.rtConnection.getRTUuid();
+            var baton = Ext.Baton({
+                context: this,
+                $el: navigation,
+                model: this.model,
+                models: [this.model],
+                data: this.model.toJSON()
+            });
             // render navigation links
             navigation.empty();
             // the navigation panel is displayed for the presenter only and if the presentation is not paused.
-            if (rtModel.isPresenter(userId) && !rtModel.isPaused()) {
+            if (localModel.isPresenting(userId) || rtModel.isPresenting(userId)) {
                 navigationPoint.invoke('draw', navigation, baton);
             }
             return this;
