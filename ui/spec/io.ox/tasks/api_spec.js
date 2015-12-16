@@ -179,30 +179,39 @@ define(['shared/examples/for/api',
                 });
             });
         });
-        describe.skip('getting Task Notifications', function () {
+        describe('getting Task Notifications', function () {
             beforeEach(function () {
                 this.server.respondWith('GET', /api\/tasks\?action=all/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data": []}');
                 });
             });
             it('should trigger new-tasks event', function () {
-                var spy = sinon.spy();
+                var spy = sinon.spy(),
+                    stub = sinon.stub(api, 'getDefaultFolder');
+
+                stub.returns('1337');
                 api.on('new-tasks', spy);
                 var result = api.getTasks();
                 this.server.respond();
                 return result.done(function () {
                     api.off('new-tasks', spy);
                     expect(spy.called, '"new-tasks" event triggered').to.be.true;
+                    stub.restore();
                 });
             });
             it('should trigger set:tasks:to-be-confirmed event', function () {
-                var spy = sinon.spy();
+                var spy = sinon.spy(),
+                    stub = sinon.stub(api, 'getDefaultFolder');
+
+                stub.returns('1337');
+                api.on('new-tasks', spy);
                 api.on('set:tasks:to-be-confirmed', spy);
                 var result = api.getTasks();
                 this.server.respond();
                 return result.done(function () {
                     api.off('set:tasks:to-be-confirmed', spy);
                     expect(spy.called, '"set:tasks:to-be-confirmed').to.be.true;
+                    stub.restore();
                 });
             });
         });

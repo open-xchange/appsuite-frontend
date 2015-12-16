@@ -59,11 +59,6 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/moment'
                 var result = util.interpretTask(options.testData);
                 expect(result.title).to.equal('\u2014');
             });
-
-            it.skip('should add badges if detail parameter is set', function () {
-                var result = util.interpretTask(options.testData, { detail: true });
-                expect(result.badge).to.equal('badge');
-            });
         });
 
         describe('buildOptionArray', function () {
