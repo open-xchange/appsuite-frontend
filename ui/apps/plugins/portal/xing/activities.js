@@ -116,7 +116,10 @@ define('plugins/portal/xing/activities', [
             var statusActivity = activity.objects[0];
 
             return $('<div class="xing activityObj">').append(
-                $('<div class="actionDesc">').text(gt('%1$s changed their status:', makeName(statusActivity.creator))),
+                //#. We do not know the gender of the user and therefore, it is impossible to write e.g. '%1$s changed her status'.
+                //#. But you could use '%1$s changes his/her status' depending on the language.
+                //#. %1$s the name of the user which changed his/her status
+                $('<div class="actionDesc">').text(gt('%1$s changed the status:', makeName(statusActivity.creator))),
                 $('<div class="actionContent">').text(shorter(statusActivity.content, options))
             );
         }
@@ -181,7 +184,10 @@ define('plugins/portal/xing/activities', [
             var profileUpdate = activity.objects[0];
 
             return $('<div class="xing activityObj">').append(
-                $('<div class="actionDesc">').text(gt('%1$s updated their profile:', profileUpdate.description)),
+                //#. We do not know the gender of the user and therefore, it is impossible to write e.g. '%1$s changed her profile:'.
+                //#. But you could use '%1$s changes his/her profile:' depending on the language.
+                //#. %1$s the name of the user which changed his/her profile
+                $('<div class="actionDesc">').text(gt('%1$s updated the profile:', profileUpdate.description)),
                 $('<div class="actionContent">').text(shorter(profileUpdate.name, options))
             );
         }

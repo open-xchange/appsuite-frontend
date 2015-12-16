@@ -97,7 +97,7 @@ define('io.ox/search/view-template', [
                 opt = baton.model.getOptions(),
                 items = [],
                 titles = {},
-                apps = settings.get('search/modules', []),
+                apps = settings.get('search/modules') || [],
                 elem;
 
             // apply mapping (infostore-files-drive chameleon)
