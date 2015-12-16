@@ -268,13 +268,30 @@ define('io.ox/contacts/util', [
             });
             return field;
         },
+
         //used to change birthdays without year(we save them as year 1) from gregorian to julian calendar (year 1 is julian, current calendar is gregorian)
         gregorianToJulian: function (timestamp) {
             return moment.utc(timestamp - calculateDayDifference(timestamp)).valueOf();
         },
+
         //used to change birthdays without year(we save them as year 1) from julian to gregorian calendar (year 1 is julian, current calendar is gregorian)
         julianToGregorian: function (timestamp) {
             return moment.utc(timestamp + calculateDayDifference(timestamp)).valueOf();
+        },
+
+        // little helper to get birthdays
+        // @birthday is either a timestamp or a momentjs instance
+        getBirthday: function (birthday) {
+            // ensure instance of moment
+            birthday = moment(birthday).utc(true);
+            // Year 0 is special for birthdays without year (backend changes this to 1, however ...)
+            // therefore, return full date if year is not 1
+            if (birthday.year() !== 1) return birthday.format('l');
+            // get localized format without the year otherwise
+            // i.e. remove dashes and slashes but keep dots
+            return birthday.format(
+                moment.localeData().longDateFormat('l').replace(/[\/\-]*Y+[\/\-]*/, '')
+            );
         }
     };
 

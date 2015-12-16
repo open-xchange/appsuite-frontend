@@ -106,11 +106,8 @@ define('plugins/portal/birthdays/register', [
                     } else if (birthday.diff(today, 'day') === -1) {
                         //yesterday
                         birthdayText = gt('Yesterday');
-                    } else if (birthday.year() === 1) {
-                        //Year 0 is special for birthdays without year (backend changes this to 1...)
-                        birthdayText = birthday.format(moment.localeData().longDateFormat('l').replace(/Y/g, ''));
                     } else {
-                        birthdayText = birthday.format('l');
+                        birthdayText = util.getBirthday(birthday);
                     }
 
                     if (!isDuplicate(name, birthday, hash)) {

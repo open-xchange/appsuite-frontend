@@ -460,13 +460,7 @@ define('io.ox/contacts/view-detail', [
                         simple(data, 'nickname'),
                         row('birthday', function () {
                             if (baton.data.birthday) {
-                                //use utc time. birthdays must not be converted
-                                var birthday = moment.utc(baton.data.birthday);
-                                if (birthday.year() === 1) {
-                                    //Year 0 is special for birthdays without year (backend changes this to 1...)
-                                    return birthday.format(moment.localeData().longDateFormat('l').replace(/Y/g, ''));
-                                }
-                                return birthday.format('l');
+                                return util.getBirthday(baton.data.birthday);
                             }
                         }),
                         row('url', function () {
