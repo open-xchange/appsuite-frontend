@@ -140,7 +140,13 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                 return ox.ui.App.reuse('io.ox/mail:replyall.' + _.cid(data));
             }
             if (type === 'forward' && unblocked(mailAPI.SENDTYPE.FORWARD)) {
-                return ox.ui.App.reuse('io.ox/mail:forward.' + _.cid(data));
+                var cid;
+                if (_.isArray(data)) {
+                    cid = _(data).map(function (o) {return _.cid(o); }).join();
+                } else {
+                    cid = _.cid(data);
+                }
+                return ox.ui.App.reuse('io.ox/mail:forward.' + cid);
             }
             if (type === 'edit' && unblocked(mailAPI.SENDTYPE.DRAFT)) {
                 return ox.ui.App.reuse('io.ox/mail:edit.' + _.cid(data));
