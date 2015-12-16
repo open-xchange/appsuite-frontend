@@ -44,7 +44,7 @@ define('io.ox/core/desktop', [
 
     function supportsFind(name) {
         // enabled apps
-        var list = coreConfig.get('search/modules', []);
+        var list = coreConfig.get('search/modules') || [];
 
         name = name.replace(/^io\.ox\//, '')
             .replace(/files/, 'drive'); // drive alias
