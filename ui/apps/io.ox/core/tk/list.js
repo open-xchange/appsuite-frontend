@@ -155,7 +155,7 @@ define('io.ox/core/tk/list', [
         empty: function () {
             this.idle();
             this.toggleComplete(false);
-            this.$el.empty();
+            this.getItems().remove();
             if (this.selection) this.selection.reset();
             this.$el.scrollTop(0);
         },
