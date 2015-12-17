@@ -8,81 +8,267 @@
  *
  * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
- * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-.onboarding-teaser {
-    margin: 0 0 16px 0;
-}
+.wizard-step {
 
-.onboarding-platform {
-    margin-bottom: 40px;
-}
+    .teaser {
+        margin: 0 0 16px 0;
+    }
 
-.onboarding-options {
+    .onboarding-platform {
+        margin-bottom: 40px;
+    }
 
-    list-style-type: none;
-    white-space: nowrap;
-    padding: 0;
-    margin: 0;
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
 
-    li {
-
-        margin: 0 16px 0 0;
-        display: inline-block;
-        // tmp
-        max-width: 146px;
-
-        a {
-            color: @black;
-            border: 1px solid rgba(0, 0, 0, 0.10);
-            display: inline-block;
-            outline: 0;
-            &.disabled {
-                //background-color: red;
-                color: #ccc;
-                pointer-events: none;
-                cursor: default;
-            }
-        }
-
-        a:hover {
-            border-color: rgba(0, 0, 0, 0.50);
-            &.disabled {
-                border-color: rgba(0, 0, 0, 0.10);
-                text-decoration: none;
-            }
-        }
-
-        a:active, a:focus {
-            color: @selected-color;
-            background-color: @selected-background;
-        }
-
-        .icon {
-            width: 64px;
-            font-size: 64px;
-            margin: 24px 40px 0 40px;
-            text-align: center;
-        }
-
-        .title {
-            text-align: center;
-            line-height: 40px;
-            margin-bottom: 8px;
-        }
-
-        .description {
-            text-align: center;
-            line-height: 40px;
-            margin-bottom: 8px;
-            font-style: italic;
-            overflow: hidden;
-            text-overflow: ellipsis;
+    .descriptions {
+        min-height: 60px;
+        height: 80px;
+        li {
+            width: 100%;
+            padding: 16px 16px 16px 0;
+            line-height: 20px;
         }
     }
 
-    li:last-child {
-        margin-right: 0;
+    .wizard-footer:empty {
+        display: block;
+        padding-bottom: 6px;
+    };
+
+    .options {
+
+            white-space: nowrap;
+            //display: table-row;
+
+            li {
+
+                margin: 0 16px 0 0;
+                display: inline-block;
+                // tmp
+                max-width: 146px;
+
+                a {
+                    color: @black;
+                    max-width: 144px;
+                    border: 1px solid rgba(0, 0, 0, 0.10);
+                    display: inline-block;
+                    outline: 0;
+
+                    &.disabled {
+                        //background-color: red;
+                        color: #ccc;
+                        pointer-events: none;
+                        cursor: default;
+                    }
+
+                }
+
+                &.selected, &.selected:focus {
+                    a {
+                        background-color: white;
+                        color: black;
+                        border: 1px rgb(60, 115, 170) solid;
+                    }
+                }
+
+                a:hover {
+                    border-color: rgba(0, 0, 0, 0.50);
+                    text-decoration: none;
+                    &.disabled {
+                        border-color: rgba(0, 0, 0, 0.10);
+                    }
+                }
+
+                a:selected, a:focus {
+                    color: @selected-color;
+                    background-color: @selected-background;
+                }
+
+                .icon {
+                    width: 64px;
+                    font-size: 64px;
+                    margin: 24px 40px 0 40px;
+                    text-align: center;
+                }
+
+                .title {
+                    text-align: center;
+                    line-height: 40px;
+                    margin-bottom: 8px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    padding: 0 8px;
+                }
+
+                .description {
+                    text-align: center;
+                    line-height: 40px;
+                    margin-bottom: 8px;
+                    font-style: italic;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+
+            li:last-child {
+                margin-right: 0;
+            }
+
+
+        &.selection {
+            list-style-type: none;
+            li {
+                max-width: none;
+                clear: both;
+                line-height: 14px;
+
+                a {
+                    float: left;
+                    .icon {
+                        margin: 0;
+                    }
+                    .title {
+
+                    }
+                }
+
+                .description {
+                    padding-left: 16px;
+                    float: left;
+                }
+            }
+        }
     }
+
+    .actions {
+        .action {
+
+            .content {
+                padding: 16px 0;
+                display: none;
+                .row {
+                    padding-bottom: 5px;
+                }
+            }
+
+            .title, .description, .field, .btn {
+                margin-bottom: 5px;
+            }
+
+            .btn {
+                margin-top: 5px;
+            }
+
+            .control-label {
+                text-align: right;
+                margin-top: 4px;
+                margin-bottom: 4px;
+                padding: 0 0 0 15px;
+            }
+
+            .fa {
+                padding-right: 8px;
+            }
+
+            .fa-chevron-right {
+                display: inline-block;
+            }
+
+            .fa-chevron-down {
+                display: none;
+            }
+
+
+            &.expanded {
+
+                .content {
+                    display: block;
+                }
+
+                .fa-chevron-right {
+                    display: none;
+                }
+
+                .fa-chevron-down {
+                    display: inline-block;
+                }
+            }
+
+
+        }
+    }
+
+    .sectiontitle {
+        font-weight: 700;
+        display: block;
+        width: 100%;
+        font-size: 14px;
+        height: 32px;
+        color: #333;
+        margin: 0;
+        margin-bottom: 8px;
+
+        cursor: pointer;
+
+        h2 {
+            font-weight: 700;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .fa {
+            font-size: 12px;
+        }
+    }
+
+    // https://turnkey-shop.com/animate-box-shadow-with-silky-smooth-performance
+    .box {
+      position: relative;
+      display: inline-block;
+      // width: 100px;
+      // height: 100px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+      transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    // .box:after {
+    //   content: "";
+    //   border-radius: 5px;
+    //   position: absolute;
+    //   top: 0;
+    //   left: 0;
+    //   width: 100%;
+    //   height: 100%;
+    //   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    //   opacity: 0;
+    //   -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    //   transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)
+    // }
+
+    // .box:hover {
+    //   -webkit-transform: scale(1.05, 1.05);
+    //   transform: scale(1.05, 1.05)
+    // }
+
+    .box:hover {
+        z-index:1000;
+        box-shadow:rgba(0, 0, 0, 0.3) 0 8px 8px 0;
+        -webkit-box-shadow:rgba(0, 0, 0, 0.3) 0 8px 8px 0;
+        -moz-box-shadow:rgba(0, 0, 0, 0.3) 0 8px px 0;
+    }
+
+    // .box:hover:after{
+    //     opacity: 1
+    // }
+
 }
