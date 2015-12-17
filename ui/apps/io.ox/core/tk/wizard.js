@@ -150,10 +150,26 @@ define('io.ox/core/tk/wizard', [
             this.trigger('change:step');
         },
 
+        get: function (num) {
+            return this.steps[num];
+        },
+
+        skippable: function (index) {
+            var step = this.get(index);
+            return (step && step.skippable && step.skippable());
+        },
+
         shift: function (num) {
             this.withCurrentStep(function (step) {
                 step.hide();
             });
+            // skip next/previus step?
+            var targetIndex = this.currentStep + num;
+            if (this.skippable(targetIndex)) {
+                num = num < 0 ? num - 1 : num + 1;
+                this.trigger('step:skip', targetIndex);
+                return this.shift(num);
+            }
             this.setCurrentStep(this.currentStep + num);
             this.withCurrentStep(function (step) {
                 step.show();
@@ -326,12 +342,15 @@ define('io.ox/core/tk/wizard', [
                 enableBack: true,
                 labelBack: gt('Back'),
                 //#. finish the tour
-                labelDone: gt.pgettext('tour', 'Finish')
+                labelDone: gt.pgettext('tour', 'Finish'),
+                // attribues
+                attributes: {}
+
             }, options);
 
             // forward events
             this.on('all', function (type) {
-                this.parent.trigger('step:' + type);
+                this.parent.trigger('step:' + type, this.parent.currentStep);
             });
 
             // custom css
@@ -342,6 +361,9 @@ define('io.ox/core/tk/wizard', [
             // navbar needs an update for every change
             // only once for normal popups
             if (!_.device('smartphone')) this.once('before:show', this.renderButtons);
+
+            // custom attributes
+            this.$el.attr(this.options.attributes);
 
             this.render();
         },
@@ -358,6 +380,11 @@ define('io.ox/core/tk/wizard', [
 
         // append to footer element
         footer: append('.wizard-footer'),
+
+        setSkippable: function (callback) {
+            if (callback) this.skippable = callback;
+            return this;
+        },
 
         // render scaffold
         render: function () {
