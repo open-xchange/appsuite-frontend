@@ -258,8 +258,13 @@ msgstr "%1$s (Provvisorio)"
 msgid "%1$s at %2$s"
 msgstr "%1$s presso %2$s"
 
+#. We do not know the gender of the user and therefore, it is impossible to write e.g. '%1$s changed her status'.
+#. But you could use '%1$s changes his/her status' depending on the language.
+#. %1$s the name of the user which changed his/her status
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
-msgid "%1$s changed their status:"
+#, fuzzy
+#| msgid "%1$s changed their status:"
+msgid "%1$s changed the status:"
 msgstr "%1$s hanno cambiato il loro stato:"
 
 #. %1$s progress of currently uploaded files in percent
@@ -329,6 +334,15 @@ msgstr "%1$s consiglia questo collegamento:"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "%1$s to %2$s"
 msgstr "dal %1$s al %2$s"
+
+#. We do not know the gender of the user and therefore, it is impossible to write e.g. '%1$s changed her profile:'.
+#. But you could use '%1$s changes his/her profile:' depending on the language.
+#. %1$s the name of the user which changed his/her profile
+#: apps/plugins/portal/xing/activities.js module:plugins/portal
+#, fuzzy
+#| msgid "%1$s updated their profile:"
+msgid "%1$s updated the profile:"
+msgstr "%1$s hanno cambiato il loro profilo:"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
 msgid "%1$s updated their profile:"
@@ -1875,7 +1889,9 @@ msgstr "Continua"
 
 #. button label for continuing the presentation
 #. button tooltip for continuing the presentation
+#. tooltip for the continue presentation button
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Continue presentation"
 msgstr "Continua la presentazione"
