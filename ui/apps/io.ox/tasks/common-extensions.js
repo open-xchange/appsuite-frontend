@@ -33,14 +33,6 @@ define('io.ox/tasks/common-extensions', [
             );
         },
 
-        smartdate: function (baton) {
-            extensions.date.call(this, baton, { fulldate: false, smart: true });
-        },
-
-        fulldate: function (baton) {
-            extensions.date.call(this, baton, { fulldate: true, smart: false });
-        },
-
         compactdate: function (baton) {
             extensions.date.call(this, baton, { fulldate: false, smart: false });
         },
@@ -49,14 +41,6 @@ define('io.ox/tasks/common-extensions', [
             this.append(
                 $('<div class="title">').append(
                     baton.data.title
-                )
-            );
-        },
-
-        status: function (baton) {
-            this.append(
-                $('<div class="status">').append(
-                    baton.data.status
                 )
             );
         },
