@@ -1252,6 +1252,7 @@ msgid "Back to appointment"
 msgstr "回到约会"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "Back to sign in"
 msgid "Back to devices"
@@ -1264,6 +1265,7 @@ msgid "Back to modules"
 msgstr "返回登录"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "your platform"
 msgid "Back to platforms"
@@ -1378,7 +1380,7 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "日历"
 
@@ -1388,6 +1390,10 @@ msgstr "日历"
 msgctxt "app"
 msgid "Calendar"
 msgstr "日历"
+
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
+msgid "Calendar (Manually)"
+msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
@@ -1669,6 +1675,7 @@ msgid "Click to upload image"
 msgstr "点击上载图像"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 msgid "Client onboarding"
 msgstr ""
 
@@ -1836,10 +1843,6 @@ msgstr "联系人图像"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Contact request sent"
 msgstr "已发送联系人请求"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "Contacts"
-msgstr "成员"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been copied"
@@ -2598,7 +2601,8 @@ msgstr "在此行里双击以查看全天约会"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/plugins/portal/updater/register.js
+#: module:io.ox/mail apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
 #: module:plugins/portal
 msgid "Download"
 msgstr "下载"
@@ -2728,12 +2732,6 @@ msgstr "结束于 %1$s"
 msgid "EB"
 msgstr "EB"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "E-Mail"
-msgid "EMail"
-msgstr "电子邮件"
-
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
@@ -2847,6 +2845,7 @@ msgid "Editor"
 msgstr "编辑器"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Email"
 msgstr "电子邮件"
 
@@ -3315,7 +3314,6 @@ msgid "File: %1$s"
 msgstr "文件：%1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Files"
 msgstr "文件"
 
@@ -3744,6 +3742,26 @@ msgstr "小时"
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "How does this work?"
 msgstr "这如何运作？"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "IMAP login"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Import"
+msgid "IMAP port"
+msgstr "导入"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "IMAP secure"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Incoming server"
+msgid "IMAP server"
+msgstr "外来服务器"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
@@ -4245,13 +4263,8 @@ msgstr "MB"
 msgid "MM"
 msgstr "月"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "March"
-msgid "Mac"
-msgstr "三月"
-
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Mail"
 msgstr "邮件"
 
@@ -4261,6 +4274,10 @@ msgstr "邮件"
 msgctxt "app"
 msgid "Mail"
 msgstr "邮件"
+
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
+msgid "Mail (Manually)"
+msgstr ""
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Mail Details"
@@ -4404,6 +4421,7 @@ msgid "Managing Files"
 msgstr "管理文件"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Manual"
 msgstr "手动"
 
@@ -5578,6 +5596,12 @@ msgstr "请选择一个有效 iCal 文件作汇入"
 msgid "Please select a valid image File to insert"
 msgstr "请选择一个有效图像文件作插入"
 
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Please select a file to insert"
+msgid "Please select the platform of your device."
+msgstr "请选择一个插入的文件"
+
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Please select which of the following data we may use to create your %s "
@@ -6280,6 +6304,30 @@ msgstr "规则名称"
 msgid "Running applications"
 msgstr "运行中应用"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "RSS"
+msgid "SMS"
+msgstr "RSS"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMTP login"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Server port"
+msgid "SMTP port"
+msgstr "服务器端口"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMTP secure"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMTP server"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "销售量"
@@ -6455,6 +6503,7 @@ msgid "Selection Details"
 msgstr "选择详情"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Send"
 msgstr "发送"
 
@@ -6495,6 +6544,14 @@ msgstr "发送邮件"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "发送邮件到所有参与者"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Send me the profile data by SMS."
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Send me the profile data by mail."
+msgstr ""
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
@@ -6569,6 +6626,10 @@ msgstr "设置"
 msgctxt "app"
 msgid "Settings"
 msgstr "设定"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Setup your profile manually."
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
@@ -6805,6 +6866,10 @@ msgstr "登入为 %1$s"
 msgid "Signed in as:"
 msgstr "登录为："
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Simply download the profile to your device."
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
 #: module:io.ox/files apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -6819,12 +6884,6 @@ msgstr "体积（字节）"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
 msgstr "慢速请求"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Smartphone settings:"
-msgid "Smartphone"
-msgstr "智能手机配置："
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Smartphone settings:"
@@ -7092,19 +7151,12 @@ msgstr "TB"
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Table"
-msgid "Tablet"
-msgstr "表格"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Tag mail with"
 msgstr "标签邮件为"
 
-#. %1$s is the product name, e.g. OX.
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
 msgstr ""
 
@@ -8340,52 +8392,10 @@ msgstr "欢迎到您的任务"
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "欢迎。请提供您有关此产品的回馈"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What do you want to use on your Mac?"
-msgstr "您是否想保存您的配置？"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What do you want to use on your Windows PC?"
-msgstr "您是否想保存您的配置？"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What do you want to use on your Windows Phone?"
-msgstr "您是否想保存您的配置？"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What do you want to use on your iPad?"
-msgstr "您是否想保存您的配置？"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What do you want to use on your iPhone?"
-msgstr "您是否想保存您的配置？"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What do you want to use on your tablet?"
-msgstr "您是否想保存您的配置？"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you want to save your configuration?"
 msgid "What service do you want to use?"
-msgstr "您是否想保存您的配置？"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What to you want to use on your smartphone?"
 msgstr "您是否想保存您的配置？"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -8399,27 +8409,13 @@ msgstr ""
 "在执行已下载的文件时，将会启动安装向导。请按照指示后安装更新器和最新版本的 "
 "Windows® 客户端软件。更新器会自动通知新的更新，您可以从更新器里下载更新。"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "Which app do you want to use on your device?"
-msgstr "您是否想保存您的配置？"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Which device do you want to configure?"
 msgstr ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Whole day"
 msgstr "全天"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "Windows PC"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "Windows Phone"
-msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -9119,19 +9115,15 @@ msgstr "有附件"
 msgid "has participants"
 msgstr "有参与者"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Last name"
+msgid "hostname"
+msgstr "姓氏"
+
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "iCal"
 msgstr "iCal"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "iPad"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Phone"
-msgid "iPhone"
-msgstr "电话"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "in"
@@ -9188,6 +9180,12 @@ msgstr "浅蓝色"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "light green"
 msgstr "浅绿色"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Relogin"
+msgid "login"
+msgstr "重新登录"
 
 #. recurring appointment: the appointment is repeated monthly
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -10418,6 +10416,9 @@ msgstr "年"
 #~ msgid "Contact overview"
 #~ msgstr "联系人概览"
 
+#~ msgid "Contacts"
+#~ msgstr "成员"
+
 #~ msgid "Content-Type:"
 #~ msgstr "内容类型："
 
@@ -10924,6 +10925,11 @@ msgstr "年"
 
 #~ msgid "EEEE, %s"
 #~ msgstr "EEEE、%s"
+
+#, fuzzy
+#~| msgid "E-Mail"
+#~ msgid "EMail"
+#~ msgstr "电子邮件"
 
 #~ msgid "EUR"
 #~ msgstr "EUR"
@@ -11701,6 +11707,11 @@ msgstr "年"
 #~ msgid "Logout now"
 #~ msgstr "现在注销"
 
+#, fuzzy
+#~| msgid "March"
+#~ msgid "Mac"
+#~ msgstr "三月"
+
 #~ msgid "Mail Thread Details"
 #~ msgstr "邮件帖子详情"
 
@@ -11952,9 +11963,6 @@ msgstr "年"
 #~ msgid "Please enter an feed-url."
 #~ msgstr "请输入一个 feed-url。"
 
-#~ msgid "Please select a file to insert"
-#~ msgstr "请选择一个插入的文件"
-
 #~ msgid "Polish"
 #~ msgstr "波兰文"
 
@@ -12030,9 +12038,6 @@ msgstr "年"
 #~ msgid "Quick Search"
 #~ msgstr "快速搜索"
 
-#~ msgid "RSS"
-#~ msgstr "RSS"
-
 #~ msgid "Read Only Mode"
 #~ msgstr "唯读模式"
 
@@ -12044,9 +12049,6 @@ msgstr "年"
 
 #~ msgid "Recurring tasks need a valid end date."
 #~ msgstr "重复任务需要一个有效结束日期。"
-
-#~ msgid "Relogin"
-#~ msgstr "重新登录"
 
 #~ msgid "Remove"
 #~ msgstr "移除"
@@ -12261,6 +12263,11 @@ msgstr "年"
 #~ msgid "Slideshow"
 #~ msgstr "幻灯片"
 
+#, fuzzy
+#~| msgid "Smartphone settings:"
+#~ msgid "Smartphone"
+#~ msgstr "智能手机配置："
+
 #~ msgid ""
 #~ "Social accounts are only used to download contact and/or calendar data"
 #~ msgstr "社交户口只会用作下载联系人和/或日历数据"
@@ -12353,6 +12360,11 @@ msgstr "年"
 
 #~ msgid "Synchronization to the server has been lost."
 #~ msgstr "丢失到服务器的同步。"
+
+#, fuzzy
+#~| msgid "Table"
+#~ msgid "Tablet"
+#~ msgstr "表格"
 
 #~ msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
 #~ msgstr "任务邀请。%1$s %2$s %3$s。请按 [enter] 打开"
@@ -12858,6 +12870,41 @@ msgstr "年"
 #~ msgid "Weekend Day"
 #~ msgstr "周末"
 
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What do you want to use on your Mac?"
+#~ msgstr "您是否想保存您的配置？"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What do you want to use on your Windows PC?"
+#~ msgstr "您是否想保存您的配置？"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What do you want to use on your Windows Phone?"
+#~ msgstr "您是否想保存您的配置？"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What do you want to use on your iPad?"
+#~ msgstr "您是否想保存您的配置？"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What do you want to use on your iPhone?"
+#~ msgstr "您是否想保存您的配置？"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What do you want to use on your tablet?"
+#~ msgstr "您是否想保存您的配置？"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What to you want to use on your smartphone?"
+#~ msgstr "您是否想保存您的配置？"
+
 #~ msgid ""
 #~ "When using this feature, you as the current owner of the data are "
 #~ "responsible for being careful with privacy rules and for complying with "
@@ -12878,6 +12925,11 @@ msgstr "年"
 #~ "据经济价值、不可未经某人同意发布或转发该人个人数据。法律义务外，我们鼓励您"
 #~ "在处理个人数据时极端用心。请小心考虑您的存储位置和转发个人数据的目标人。请"
 #~ "保持适当访问保护，例如：正确的密码保护。"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "Which app do you want to use on your device?"
+#~ msgstr "您是否想保存您的配置？"
 
 #~ msgctxt "address"
 #~ msgid "Work"
@@ -12994,6 +13046,11 @@ msgstr "年"
 
 #~ msgid "http://"
 #~ msgstr "http://"
+
+#, fuzzy
+#~| msgid "Phone"
+#~ msgid "iPhone"
+#~ msgstr "电话"
 
 #~ msgid "in blind copy"
 #~ msgstr "无名副本"

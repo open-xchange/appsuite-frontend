@@ -1257,6 +1257,7 @@ msgid "Back to appointment"
 msgstr "Takaisin tapaamiseen"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "Back to sign in"
 msgid "Back to devices"
@@ -1269,6 +1270,7 @@ msgid "Back to modules"
 msgstr "Takaisin sisäänkirjautumiseen"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "your platform"
 msgid "Back to platforms"
@@ -1387,7 +1389,7 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "Kalenteri"
 
@@ -1397,6 +1399,10 @@ msgstr "Kalenteri"
 msgctxt "app"
 msgid "Calendar"
 msgstr "Kalenteri"
+
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
+msgid "Calendar (Manually)"
+msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
@@ -1679,6 +1685,7 @@ msgid "Click to upload image"
 msgstr "Napsauta ladataksesi kuva"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 msgid "Client onboarding"
 msgstr ""
 
@@ -1846,10 +1853,6 @@ msgstr "Yhteystiedon kuvat"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Contact request sent"
 msgstr "Yhteystietopyyntö lähetetty"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "Contacts"
-msgstr "Yhteystiedot"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been copied"
@@ -2615,7 +2618,8 @@ msgstr "Tuplaklikkaa tätä riviä valitaksesi koko päivän tapaaminen"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/plugins/portal/updater/register.js
+#: module:io.ox/mail apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
 #: module:plugins/portal
 msgid "Download"
 msgstr "Lataa"
@@ -2745,12 +2749,6 @@ msgstr "Erääntyy %1$s"
 msgid "EB"
 msgstr "ET"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Mail"
-msgid "EMail"
-msgstr "Sähköposti"
-
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
@@ -2864,6 +2862,7 @@ msgid "Editor"
 msgstr "Editori"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Email"
 msgstr "Sähköposti"
 
@@ -3342,7 +3341,6 @@ msgid "File: %1$s"
 msgstr "Tiedosto: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Files"
 msgstr "Tiedostot"
 
@@ -3775,6 +3773,26 @@ msgstr "Tuntia"
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "How does this work?"
 msgstr "Kuinka tämä toimii?"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "IMAP login"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Import"
+msgid "IMAP port"
+msgstr "Tuo"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "IMAP secure"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Incoming server"
+msgid "IMAP server"
+msgstr "Saapuvan postin palvelin"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
@@ -4286,13 +4304,8 @@ msgstr "MT"
 msgid "MM"
 msgstr "KK"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "March"
-msgid "Mac"
-msgstr "maaliskuu"
-
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Mail"
 msgstr "Sähköposti"
 
@@ -4302,6 +4315,10 @@ msgstr "Sähköposti"
 msgctxt "app"
 msgid "Mail"
 msgstr "Sähköposti"
+
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
+msgid "Mail (Manually)"
+msgstr ""
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Mail Details"
@@ -4445,6 +4462,7 @@ msgid "Managing Files"
 msgstr "Tiedostojen hallinnointi"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Manual"
 msgstr "Manuaalinen"
 
@@ -5630,6 +5648,12 @@ msgstr "Valitse tuotava iCal-tiedosto"
 msgid "Please select a valid image File to insert"
 msgstr "Valitse lisättäväksi käypä kuvatiedosto"
 
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Please select a file to insert"
+msgid "Please select the platform of your device."
+msgstr "Valitse lisättävä tiedosto"
+
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Please select which of the following data we may use to create your %s "
@@ -6346,6 +6370,28 @@ msgstr "Säännön nimi"
 msgid "Running applications"
 msgstr "Käynnissä olevat sovellukset"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMS"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMTP login"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Server port"
+msgid "SMTP port"
+msgstr "Palvelimen portti"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMTP secure"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMTP server"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "Liikevaihto"
@@ -6524,6 +6570,7 @@ msgid "Selection Details"
 msgstr "Valinnan yksityiskohdat"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Send"
 msgstr "Lähetä"
 
@@ -6564,6 +6611,14 @@ msgstr "Lähetä viesti"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "Lähetä postia kaikille osallistujille"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Send me the profile data by SMS."
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Send me the profile data by mail."
+msgstr ""
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
@@ -6638,6 +6693,10 @@ msgstr "Asetukset"
 msgctxt "app"
 msgid "Settings"
 msgstr "Asetukset"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Setup your profile manually."
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
@@ -6874,6 +6933,10 @@ msgstr "Kirjautuneena käyttäjänä %1$s"
 msgid "Signed in as:"
 msgstr "Kirjautuneena käyttäjänä"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Simply download the profile to your device."
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
 #: module:io.ox/files apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -6888,12 +6951,6 @@ msgstr "Koko (tavuina)"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
 msgstr "Hitaat pyynnöt"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Smartphone settings:"
-msgid "Smartphone"
-msgstr "Älypuhelimen asetukset:"
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Smartphone settings:"
@@ -7162,19 +7219,12 @@ msgstr "TT"
 msgid "TTY/TDD"
 msgstr "kaukokirjoitin/tekstipuhelin"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Enable"
-msgid "Tablet"
-msgstr "Kytke päälle"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Tag mail with"
 msgstr "Aseta avainsana"
 
-#. %1$s is the product name, e.g. OX.
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
 msgstr ""
 
@@ -8457,41 +8507,11 @@ msgstr "Tervetuloa tehtäviisi"
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "Tervetuloa. Ole hyvä ja anna tuotteesta palautetta."
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "What do you want to use on your Mac?"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "What do you want to use on your Windows PC?"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "What do you want to use on your Windows Phone?"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "What do you want to use on your iPad?"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you really want to discard your changes?"
-msgid "What do you want to use on your iPhone?"
-msgstr "Haluatko varmasti hylätä muutoksesi?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "What do you want to use on your tablet?"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you really want to discard your changes?"
 msgid "What service do you want to use?"
 msgstr "Haluatko varmasti hylätä muutoksesi?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "What to you want to use on your smartphone?"
-msgstr ""
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/updater/register.js module:plugins/portal
@@ -8506,27 +8526,13 @@ msgstr ""
 "asiakasohjelmasta. Päivittäjä ilmoittaa automaattisesti uusista "
 "päivityksistä. Uusimmat päivitykset voit ladata päivittäjän kautta."
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you really want to discard your changes?"
-msgid "Which app do you want to use on your device?"
-msgstr "Haluatko varmasti hylätä muutoksesi?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Which device do you want to configure?"
 msgstr ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Whole day"
 msgstr "Koko päivän"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "Windows PC"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "Windows Phone"
-msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -9242,19 +9248,15 @@ msgstr "on liitteitä"
 msgid "has participants"
 msgstr "on osallitujia"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Last name"
+msgid "hostname"
+msgstr "Sukunimi"
+
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "iCal"
 msgstr "iCal"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "iPad"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Phone"
-msgid "iPhone"
-msgstr "Puhelin"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "in"
@@ -9311,6 +9313,10 @@ msgstr "Vaaleansininen"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "light green"
 msgstr "Vaaleanvihreä"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "login"
+msgstr ""
 
 #. recurring appointment: the appointment is repeated monthly
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -9782,6 +9788,9 @@ msgstr "vvvv"
 #~ msgid "Confirmed"
 #~ msgstr "Vahvistettu"
 
+#~ msgid "Contacts"
+#~ msgstr "Yhteystiedot"
+
 #, fuzzy
 #~ msgid "Continue Presentation"
 #~ msgstr "Tehtäväkutsut"
@@ -9907,6 +9916,11 @@ msgstr "vvvv"
 #~ msgctxt "help"
 #~ msgid "E-Mail Settings"
 #~ msgstr "Sähköpostiasetukset"
+
+#, fuzzy
+#~| msgid "Mail"
+#~ msgid "EMail"
+#~ msgstr "Sähköposti"
 
 #~ msgid ""
 #~ "Edit a setting on the right side. In most of the cases, the changes are "
@@ -10213,6 +10227,11 @@ msgstr "vvvv"
 #~ msgid "Line wrap when sending text mails after "
 #~ msgstr "Rivitä tekstimuotoiset postit "
 
+#, fuzzy
+#~| msgid "March"
+#~ msgid "Mac"
+#~ msgstr "maaliskuu"
+
 #~ msgid "Mail Thread Details"
 #~ msgstr "Keskustelun yksityiskohdat"
 
@@ -10368,9 +10387,6 @@ msgstr "vvvv"
 
 #~ msgid "Please enter a valid date."
 #~ msgstr "Ole hyvä ja syötä käypä päivämäärä."
-
-#~ msgid "Please select a file to insert"
-#~ msgstr "Valitse lisättävä tiedosto"
 
 #~ msgid "Portal Widgets"
 #~ msgstr "Portaalin widgetit"
@@ -10557,6 +10573,11 @@ msgstr "vvvv"
 #~ msgid "Slideshow"
 #~ msgstr "Diaesitys"
 
+#, fuzzy
+#~| msgid "Smartphone settings:"
+#~ msgid "Smartphone"
+#~ msgstr "Älypuhelimen asetukset:"
+
 #~ msgid ""
 #~ "Social accounts are only used to download contact and/or calendar data"
 #~ msgstr ""
@@ -10599,6 +10620,11 @@ msgstr "vvvv"
 
 #~ msgid "Sunday"
 #~ msgstr "sunnuntai"
+
+#, fuzzy
+#~| msgid "Enable"
+#~ msgid "Tablet"
+#~ msgstr "Kytke päälle"
 
 #~ msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
 #~ msgstr "Tehtäväkutsu %1$s %2$s %3$s Paina [enter] avataksesi"
@@ -11102,6 +11128,11 @@ msgstr "vvvv"
 #~ msgid "Wednesday"
 #~ msgstr "keskiviikko"
 
+#, fuzzy
+#~| msgid "Do you really want to discard your changes?"
+#~ msgid "What do you want to use on your iPhone?"
+#~ msgstr "Haluatko varmasti hylätä muutoksesi?"
+
 #~ msgid ""
 #~ "When using this feature, you as the current owner of the data are "
 #~ "responsible for being careful with privacy rules and for complying with "
@@ -11128,6 +11159,11 @@ msgstr "vvvv"
 #~ "käsitellessäsi. Harkitse tarkoin missä säilytät ja kenelle toimitat "
 #~ "henkilökohtaisia tietoja. Varmista sopiva pääsynhallinta esimerkiksi "
 #~ "kunnollisella salasanasuojauksella."
+
+#, fuzzy
+#~| msgid "Do you really want to discard your changes?"
+#~ msgid "Which app do you want to use on your device?"
+#~ msgstr "Haluatko varmasti hylätä muutoksesi?"
 
 #~ msgid ""
 #~ "You can drag and drop files from your computer here to add as attachment."
@@ -11187,6 +11223,11 @@ msgstr "vvvv"
 
 #~ msgid "files"
 #~ msgstr "tiedostot"
+
+#, fuzzy
+#~| msgid "Phone"
+#~ msgid "iPhone"
+#~ msgstr "Puhelin"
 
 #~ msgid "in blind copy"
 #~ msgstr "piilokopioituna"

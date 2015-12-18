@@ -1250,6 +1250,7 @@ msgid "Back to appointment"
 msgstr "Tilbake til avtalen"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "Back to sign in"
 msgid "Back to devices"
@@ -1262,6 +1263,7 @@ msgid "Back to modules"
 msgstr "Tilbake til innlogging"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "your platform"
 msgid "Back to platforms"
@@ -1378,7 +1380,7 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "Kalender"
 
@@ -1388,6 +1390,10 @@ msgstr "Kalender"
 msgctxt "app"
 msgid "Calendar"
 msgstr "Kalender"
+
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
+msgid "Calendar (Manually)"
+msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
@@ -1671,6 +1677,7 @@ msgid "Click to upload image"
 msgstr "Klikk for å laste opp bilde"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 msgid "Client onboarding"
 msgstr ""
 
@@ -1838,10 +1845,6 @@ msgstr "Kontaktbilder"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Contact request sent"
 msgstr "Kontaktforespørsel sendt"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "Contacts"
-msgstr "Kontakter"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been copied"
@@ -2600,7 +2603,8 @@ msgstr "Dobbeltklikk på denne raden for heldagsavtale"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/plugins/portal/updater/register.js
+#: module:io.ox/mail apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
 #: module:plugins/portal
 msgid "Download"
 msgstr "Last ned"
@@ -2732,12 +2736,6 @@ msgstr "Forfaller den %1$s"
 msgid "EB"
 msgstr "EB"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Mail"
-msgid "EMail"
-msgstr "E-post"
-
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
@@ -2851,6 +2849,7 @@ msgid "Editor"
 msgstr "Redigeringprogram"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Email"
 msgstr "E-post"
 
@@ -3326,7 +3325,6 @@ msgid "File: %1$s"
 msgstr "Fil: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Files"
 msgstr "Filer"
 
@@ -3759,6 +3757,26 @@ msgstr "Timer"
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "How does this work?"
 msgstr "Hvordan fungerer dette?"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "IMAP login"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Import"
+msgid "IMAP port"
+msgstr "Importer"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "IMAP secure"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Incoming server"
+msgid "IMAP server"
+msgstr "Innkommende server"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
@@ -4271,13 +4289,8 @@ msgstr "MB"
 msgid "MM"
 msgstr "MM"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "March"
-msgid "Mac"
-msgstr "mars"
-
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Mail"
 msgstr "E-post"
 
@@ -4287,6 +4300,10 @@ msgstr "E-post"
 msgctxt "app"
 msgid "Mail"
 msgstr "E-post"
+
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
+msgid "Mail (Manually)"
+msgstr ""
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Mail Details"
@@ -4430,6 +4447,7 @@ msgid "Managing Files"
 msgstr "Behandle filer"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Manual"
 msgstr "Manuelt"
 
@@ -5609,6 +5627,10 @@ msgstr "Vennligst velg en gyldig iCal-fil som skal importeres"
 msgid "Please select a valid image File to insert"
 msgstr "Vennligst velg en gyldig bildefil som skal settes inn"
 
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+msgid "Please select the platform of your device."
+msgstr ""
+
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Please select which of the following data we may use to create your %s "
@@ -6318,6 +6340,28 @@ msgstr "Regelnavn"
 msgid "Running applications"
 msgstr "Kjørende programmer"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMS"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMTP login"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Server port"
+msgid "SMTP port"
+msgstr "Serverport"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMTP secure"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMTP server"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "Salgsvolum"
@@ -6496,6 +6540,7 @@ msgid "Selection Details"
 msgstr "Utvalgsdetaljer"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Send"
 msgstr "Send"
 
@@ -6536,6 +6581,14 @@ msgstr "Send e-post"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "Send epost til alle deltakere"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Send me the profile data by SMS."
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Send me the profile data by mail."
+msgstr ""
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
@@ -6610,6 +6663,10 @@ msgstr "Innstillinger"
 msgctxt "app"
 msgid "Settings"
 msgstr "Innstillinger"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Setup your profile manually."
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
@@ -6836,6 +6893,10 @@ msgstr "Innlogget som %1$s"
 msgid "Signed in as:"
 msgstr "Innlogget som: "
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Simply download the profile to your device."
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
 #: module:io.ox/files apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -6850,12 +6911,6 @@ msgstr "Størrelse (byte)"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
 msgstr "Trege forespørsler"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Smartphone settings:"
-msgid "Smartphone"
-msgstr "Innstillinger for smarttelefon:"
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Smartphone settings:"
@@ -7123,19 +7178,12 @@ msgstr "TB"
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Enable"
-msgid "Tablet"
-msgstr "Aktiver"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Tag mail with"
 msgstr "Tag e-post med"
 
-#. %1$s is the product name, e.g. OX.
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
 msgstr ""
 
@@ -8427,41 +8475,11 @@ msgstr "Velkommen til dine oppgaver"
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "Velkommen. Vennligst gi din tilbakemelding om dette produktet"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "What do you want to use on your Mac?"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "What do you want to use on your Windows PC?"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "What do you want to use on your Windows Phone?"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "What do you want to use on your iPad?"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you really want to discard your changes?"
-msgid "What do you want to use on your iPhone?"
-msgstr "Ønsker du virkelig å forkaste endringene?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "What do you want to use on your tablet?"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you really want to discard your changes?"
 msgid "What service do you want to use?"
 msgstr "Ønsker du virkelig å forkaste endringene?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "What to you want to use on your smartphone?"
-msgstr ""
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/updater/register.js module:plugins/portal
@@ -8480,27 +8498,13 @@ msgstr ""
 "Når du kjører den nedlastede filen, vil en installasjonsveiviser bli kjørt. "
 "Følg instruksjonene og installer oppdateringsprogrammet. "
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you really want to discard your changes?"
-msgid "Which app do you want to use on your device?"
-msgstr "Ønsker du virkelig å forkaste endringene?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Which device do you want to configure?"
 msgstr ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Whole day"
 msgstr "Hele dagen"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "Windows PC"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "Windows Phone"
-msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -9204,19 +9208,15 @@ msgstr "har vedlegg"
 msgid "has participants"
 msgstr "har deltakere"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Last name"
+msgid "hostname"
+msgstr "Etternavn"
+
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "iCal"
 msgstr "iCal"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "iPad"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Phone"
-msgid "iPhone"
-msgstr "Telefon"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "in"
@@ -9273,6 +9273,10 @@ msgstr "lyseblå"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "light green"
 msgstr "lysegrønt"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "login"
+msgstr ""
 
 #. recurring appointment: the appointment is repeated monthly
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -9585,6 +9589,9 @@ msgstr "yyyy"
 #~ msgid "Compact view"
 #~ msgstr "Kompaktvisning"
 
+#~ msgid "Contacts"
+#~ msgstr "Kontakter"
+
 #, fuzzy
 #~| msgid "Task invitations"
 #~ msgid "Continue Presentation"
@@ -9600,6 +9607,11 @@ msgstr "yyyy"
 #~| msgid "Details"
 #~ msgid "Detail"
 #~ msgstr "Detaljer"
+
+#, fuzzy
+#~| msgid "Mail"
+#~ msgid "EMail"
+#~ msgstr "E-post"
 
 #~ msgid "Email notification for Accept/Declined"
 #~ msgstr "E-postvarsling for godkjente / avviste"
@@ -9690,6 +9702,11 @@ msgstr "yyyy"
 
 #~ msgid "Liked a link: %s"
 #~ msgstr "Likte en link: %s"
+
+#, fuzzy
+#~| msgid "March"
+#~ msgid "Mac"
+#~ msgstr "mars"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "E-post og sosiale kontoer"
@@ -9815,6 +9832,11 @@ msgstr "yyyy"
 #~ msgid "Slideshow"
 #~ msgstr "Lysbildefremvisning"
 
+#, fuzzy
+#~| msgid "Smartphone settings:"
+#~ msgid "Smartphone"
+#~ msgstr "Innstillinger for smarttelefon:"
+
 #~ msgid ""
 #~ "Social accounts are only used to download contact and/or calendar data"
 #~ msgstr ""
@@ -9851,6 +9873,11 @@ msgstr "yyyy"
 
 #~ msgid "Sunday"
 #~ msgstr "Søndag"
+
+#, fuzzy
+#~| msgid "Enable"
+#~ msgid "Tablet"
+#~ msgstr "Aktiver"
 
 #~ msgid "The character \" \" is not allowed."
 #~ msgstr "Tegnet \" \" er ikke tillatt."
@@ -9930,6 +9957,16 @@ msgstr "yyyy"
 #~ msgid "Wednesday"
 #~ msgstr "Onsdag"
 
+#, fuzzy
+#~| msgid "Do you really want to discard your changes?"
+#~ msgid "What do you want to use on your iPhone?"
+#~ msgstr "Ønsker du virkelig å forkaste endringene?"
+
+#, fuzzy
+#~| msgid "Do you really want to discard your changes?"
+#~ msgid "Which app do you want to use on your device?"
+#~ msgstr "Ønsker du virkelig å forkaste endringene?"
+
 #~ msgid ""
 #~ "You can drag and drop files from your computer to upload either a new "
 #~ "file or another version of a file."
@@ -9951,6 +9988,11 @@ msgstr "yyyy"
 
 #~ msgid "files"
 #~ msgstr "filer"
+
+#, fuzzy
+#~| msgid "Phone"
+#~ msgid "iPhone"
+#~ msgstr "Telefon"
 
 #~ msgid "next Friday"
 #~ msgstr "neste fredag"

@@ -1291,6 +1291,7 @@ msgid "Back to appointment"
 msgstr "Înapoi la întâlnire"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "Back to sign in"
 msgid "Back to devices"
@@ -1303,6 +1304,7 @@ msgid "Back to modules"
 msgstr "Înapoi la autentificare"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "your platform"
 msgid "Back to platforms"
@@ -1421,7 +1423,7 @@ msgstr "URL CalDAV"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "Calendar"
 
@@ -1431,6 +1433,10 @@ msgstr "Calendar"
 msgctxt "app"
 msgid "Calendar"
 msgstr "Calendar"
+
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
+msgid "Calendar (Manually)"
+msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
@@ -1717,6 +1723,7 @@ msgid "Click to upload image"
 msgstr "Apăsați aici pentru a încărca imaginea"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 msgid "Client onboarding"
 msgstr ""
 
@@ -1884,10 +1891,6 @@ msgstr "Imagini contact"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Contact request sent"
 msgstr "Cerere de contact trimisă"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "Contacts"
-msgstr "Contacte"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been copied"
@@ -2657,7 +2660,8 @@ msgstr "Dublu clic în această linie pentru o întâlnire pentru întreaga zi"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/plugins/portal/updater/register.js
+#: module:io.ox/mail apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
 #: module:plugins/portal
 msgid "Download"
 msgstr "Descarcă"
@@ -2791,12 +2795,6 @@ msgstr "Scadent pe %1$s"
 msgid "EB"
 msgstr "EB"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "E-Mail"
-msgid "EMail"
-msgstr "E-mail"
-
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
@@ -2910,6 +2908,7 @@ msgid "Editor"
 msgstr "Editor"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Email"
 msgstr "E-mail"
 
@@ -3392,7 +3391,6 @@ msgid "File: %1$s"
 msgstr "Fișier: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Files"
 msgstr "Fișiere"
 
@@ -3826,6 +3824,26 @@ msgstr "Ore"
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "How does this work?"
 msgstr "Cum funcționează?"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "IMAP login"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Import"
+msgid "IMAP port"
+msgstr "Importă"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "IMAP secure"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "IMAP Mail Server"
+msgid "IMAP server"
+msgstr "Server de mail IMAP"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
@@ -4339,13 +4357,8 @@ msgstr "MB"
 msgid "MM"
 msgstr "LL"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "March"
-msgid "Mac"
-msgstr "Martie"
-
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Mail"
 msgstr "Mail"
 
@@ -4355,6 +4368,10 @@ msgstr "Mail"
 msgctxt "app"
 msgid "Mail"
 msgstr "Mail"
+
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
+msgid "Mail (Manually)"
+msgstr ""
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Mail Details"
@@ -4498,6 +4515,7 @@ msgid "Managing Files"
 msgstr "Gestionarea fișierelor"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Manual"
 msgstr "Manual"
 
@@ -5687,6 +5705,12 @@ msgstr "Selectați un fișier iCal de importat"
 msgid "Please select a valid image File to insert"
 msgstr "Selectați un fișier imagine corect de inserat"
 
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Please select at least one E-Mail address."
+msgid "Please select the platform of your device."
+msgstr "Selectați cel puțin o adresă de e-mail."
+
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Please select which of the following data we may use to create your %s "
@@ -6406,6 +6430,30 @@ msgstr "Nume regulă"
 msgid "Running applications"
 msgstr "Aplicații în execuție"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "RSS"
+msgid "SMS"
+msgstr "RSS"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMTP login"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Server port"
+msgid "SMTP port"
+msgstr "Port server"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMTP secure"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMTP server"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "Volumul vânzărilor"
@@ -6586,6 +6634,7 @@ msgid "Selection Details"
 msgstr "Detalii selecție"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Send"
 msgstr "Trimite"
 
@@ -6626,6 +6675,14 @@ msgstr "Trimite mail"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "Trimite mailul tuturor participanților"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Send me the profile data by SMS."
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Send me the profile data by mail."
+msgstr ""
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
@@ -6700,6 +6757,10 @@ msgstr "Setări "
 msgctxt "app"
 msgid "Settings"
 msgstr "Setări"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Setup your profile manually."
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
@@ -6940,6 +7001,10 @@ msgstr "Conectat ca %1$s"
 msgid "Signed in as:"
 msgstr "Conectat ca:"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Simply download the profile to your device."
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
 #: module:io.ox/files apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -6954,12 +7019,6 @@ msgstr "Dimensiune (bytes)"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
 msgstr "Cereri lente"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Smartphone settings:"
-msgid "Smartphone"
-msgstr "Setări smartphone"
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Smartphone settings:"
@@ -7230,19 +7289,12 @@ msgstr "TB"
 msgid "TTY/TDD"
 msgstr "Telefon TTY/TDD"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Table"
-msgid "Tablet"
-msgstr "Tabel"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Tag mail with"
 msgstr "Marcați e-mailul cu"
 
-#. %1$s is the product name, e.g. OX.
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
 msgstr ""
 
@@ -8553,52 +8605,10 @@ msgstr "Bine ați venit la sarcinile dumneavoastră"
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "Bine ați venit. Vă rugăm să ne furnizați feedback despre acest produs"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What do you want to use on your Mac?"
-msgstr "Doriți să salvați configurația?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What do you want to use on your Windows PC?"
-msgstr "Doriți să salvați configurația?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What do you want to use on your Windows Phone?"
-msgstr "Doriți să salvați configurația?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What do you want to use on your iPad?"
-msgstr "Doriți să salvați configurația?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What do you want to use on your iPhone?"
-msgstr "Doriți să salvați configurația?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What do you want to use on your tablet?"
-msgstr "Doriți să salvați configurația?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you want to save your configuration?"
 msgid "What service do you want to use?"
-msgstr "Doriți să salvați configurația?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What to you want to use on your smartphone?"
 msgstr "Doriți să salvați configurația?"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -8615,29 +8625,13 @@ msgstr ""
 "actualizare vă va informa automat cu privire la noile actualizări. Puteți "
 "descărca actualizările prin aplicația de actualizare."
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "Which app do you want to use on your device?"
-msgstr "Doriți să salvați configurația?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Which device do you want to configure?"
 msgstr ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Whole day"
 msgstr "Toată ziua"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "Windows PC"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Windows are shown as"
-msgid "Windows Phone"
-msgstr "Ferestrele sunt afișate ca"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -9365,19 +9359,15 @@ msgstr "conține fișiere atașate"
 msgid "has participants"
 msgstr "are participanți"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Last name"
+msgid "hostname"
+msgstr "Nume"
+
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "iCal"
 msgstr "iCal"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "iPad"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Phone"
-msgid "iPhone"
-msgstr "Telefon"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "in"
@@ -9435,6 +9425,12 @@ msgstr "albastru deschis"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "light green"
 msgstr "verde deschis"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Relogin"
+msgid "login"
+msgstr "Reautentificare"
 
 #. recurring appointment: the appointment is repeated monthly
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -10747,6 +10743,9 @@ msgstr "aaaa"
 #~ msgid "Contact overview"
 #~ msgstr "Prezentare generală a contactului"
 
+#~ msgid "Contacts"
+#~ msgstr "Contacte"
+
 #~ msgid "Content-Type:"
 #~ msgstr "Content-Type:"
 
@@ -11282,6 +11281,11 @@ msgstr "aaaa"
 
 #~ msgid "EEEE, %s"
 #~ msgstr "EEEE, %s"
+
+#, fuzzy
+#~| msgid "E-Mail"
+#~ msgid "EMail"
+#~ msgstr "E-mail"
 
 #~ msgid "EUR"
 #~ msgstr "EUR"
@@ -12033,9 +12037,6 @@ msgstr "aaaa"
 #~ msgid "IM (private):"
 #~ msgstr "IM (personal):"
 
-#~ msgid "IMAP Mail Server"
-#~ msgstr "Server de mail IMAP"
-
 #~ msgid "IMAP folder subscription"
 #~ msgstr "Abonare dosar IMAP"
 
@@ -12500,6 +12501,11 @@ msgstr "aaaa"
 
 #~ msgid "MM/dd/yyyy"
 #~ msgstr "LL/zz/aaaa"
+
+#, fuzzy
+#~| msgid "March"
+#~ msgid "Mac"
+#~ msgstr "Martie"
 
 #~ msgid "Macao"
 #~ msgstr "Macao"
@@ -13284,9 +13290,6 @@ msgstr "aaaa"
 #~ msgid "Please select a file to insert"
 #~ msgstr "Selectați fișierul de inserat"
 
-#~ msgid "Please select at least one E-Mail address."
-#~ msgstr "Selectați cel puțin o adresă de e-mail."
-
 #~ msgid "Please select only one Publication"
 #~ msgstr "Selectați o singură publicație"
 
@@ -13443,9 +13446,6 @@ msgstr "aaaa"
 #~ msgid "RMB"
 #~ msgstr "RMB"
 
-#~ msgid "RSS"
-#~ msgstr "RSS"
-
 #~ msgid "RUB"
 #~ msgstr "RUB"
 
@@ -13509,9 +13509,6 @@ msgstr "aaaa"
 
 #~ msgid "Reload current view every:"
 #~ msgstr "Reîncarcă vederea curentă la fiecare:"
-
-#~ msgid "Relogin"
-#~ msgstr "Reautentificare"
 
 #~ msgid "Reminder:"
 #~ msgstr "Memento:"
@@ -13981,6 +13978,11 @@ msgstr "aaaa"
 #~ msgid "Slovenia"
 #~ msgstr "Slovenia"
 
+#, fuzzy
+#~| msgid "Smartphone settings:"
+#~ msgid "Smartphone"
+#~ msgstr "Setări smartphone"
+
 #~ msgid "Social"
 #~ msgstr "Social"
 
@@ -14284,6 +14286,11 @@ msgstr "aaaa"
 
 #~ msgid "Tab-based panel"
 #~ msgstr "Panou cu file"
+
+#, fuzzy
+#~| msgid "Table"
+#~ msgid "Tablet"
+#~ msgstr "Tabel"
 
 #~ msgid "Taiwan"
 #~ msgstr "Taiwan"
@@ -15250,6 +15257,41 @@ msgstr "aaaa"
 #~ msgid "Western Sahara"
 #~ msgstr "Sahara Occidentală"
 
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What do you want to use on your Mac?"
+#~ msgstr "Doriți să salvați configurația?"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What do you want to use on your Windows PC?"
+#~ msgstr "Doriți să salvați configurația?"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What do you want to use on your Windows Phone?"
+#~ msgstr "Doriți să salvați configurația?"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What do you want to use on your iPad?"
+#~ msgstr "Doriți să salvați configurația?"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What do you want to use on your iPhone?"
+#~ msgstr "Doriți să salvați configurația?"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What do you want to use on your tablet?"
+#~ msgstr "Doriți să salvați configurația?"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What to you want to use on your smartphone?"
+#~ msgstr "Doriți să salvați configurația?"
+
 #~ msgid "When \"Reply all\":"
 #~ msgstr "Când se \"Răspunde tuturor\":"
 
@@ -15290,6 +15332,16 @@ msgstr "aaaa"
 #~ "considerare locul în care depozitați și persoanele cărora le transmiteți "
 #~ "date cu caracter personal. Asigurați un acces protejat adaptat, de "
 #~ "exemplu printr-o parolă adaptată.  "
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "Which app do you want to use on your device?"
+#~ msgstr "Doriți să salvați configurația?"
+
+#, fuzzy
+#~| msgid "Windows are shown as"
+#~ msgid "Windows Phone"
+#~ msgstr "Ferestrele sunt afișate ca"
 
 #~ msgctxt "address"
 #~ msgid "Work"
@@ -15646,6 +15698,11 @@ msgstr "aaaa"
 
 #~ msgid "iCalendar"
 #~ msgstr "iCalendar"
+
+#, fuzzy
+#~| msgid "Phone"
+#~ msgid "iPhone"
+#~ msgstr "Telefon"
 
 #~ msgid "in blind copy"
 #~ msgstr "în copie invizibilă "

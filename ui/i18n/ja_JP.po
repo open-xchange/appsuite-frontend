@@ -1234,6 +1234,7 @@ msgid "Back to appointment"
 msgstr "アポイントに戻る"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "Back to sign in"
 msgid "Back to devices"
@@ -1246,6 +1247,7 @@ msgid "Back to modules"
 msgstr "サイン インに戻る"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "your platform"
 msgid "Back to platforms"
@@ -1364,7 +1366,7 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "予定表"
 
@@ -1374,6 +1376,12 @@ msgstr "予定表"
 msgctxt "app"
 msgid "Calendar"
 msgstr "予定表"
+
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Calendar day view"
+msgid "Calendar (Manually)"
+msgstr "予定表の日ビュー"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
@@ -1657,6 +1665,7 @@ msgid "Click to upload image"
 msgstr "クリックして画像をアップロード"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 msgid "Client onboarding"
 msgstr ""
 
@@ -1824,10 +1833,6 @@ msgstr "連絡先の写真"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Contact request sent"
 msgstr "コンタクトリクエストが送信されました。"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "Contacts"
-msgstr "メンバ"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been copied"
@@ -2592,7 +2597,8 @@ msgstr "終日のアポイントを作成するには、この行をダブル �
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/plugins/portal/updater/register.js
+#: module:io.ox/mail apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
 #: module:plugins/portal
 msgid "Download"
 msgstr "ダウンロード"
@@ -2731,12 +2737,6 @@ msgstr "期限: %1$s"
 msgid "EB"
 msgstr "EB"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "E-Mail"
-msgid "EMail"
-msgstr "メール"
-
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
@@ -2850,6 +2850,7 @@ msgid "Editor"
 msgstr "エディタ"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Email"
 msgstr "メール"
 
@@ -3329,7 +3330,6 @@ msgid "File: %1$s"
 msgstr "ファイル: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Files"
 msgstr "ファイル"
 
@@ -3762,6 +3762,26 @@ msgstr "時間"
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "How does this work?"
 msgstr "アポイントの作成方法について"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "IMAP login"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Import"
+msgid "IMAP port"
+msgstr "インポート"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "IMAP secure"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "IMAP Mail Server"
+msgid "IMAP server"
+msgstr "IMAP メール サーバ"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
@@ -4275,13 +4295,8 @@ msgstr "MB"
 msgid "MM"
 msgstr "MM"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "March"
-msgid "Mac"
-msgstr "3 月"
-
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Mail"
 msgstr "メール"
 
@@ -4291,6 +4306,10 @@ msgstr "メール"
 msgctxt "app"
 msgid "Mail"
 msgstr "メール"
+
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
+msgid "Mail (Manually)"
+msgstr ""
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Mail Details"
@@ -4435,6 +4454,7 @@ msgid "Managing Files"
 msgstr "ファイルの管理"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Manual"
 msgstr "手動設定"
 
@@ -5617,6 +5637,12 @@ msgstr "インポートする有効な iCal ファイルを選択してくださ
 msgid "Please select a valid image File to insert"
 msgstr "挿入する画像ファイルを選択してください。"
 
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Please select at least one E-Mail address."
+msgid "Please select the platform of your device."
+msgstr "少なくとも一つ以上のメール アドレスを選択してください。"
+
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Please select which of the following data we may use to create your %s "
@@ -6323,6 +6349,30 @@ msgstr "ルール名"
 msgid "Running applications"
 msgstr "実行中のアプリケーション"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "RSS"
+msgid "SMS"
+msgstr "RSS"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMTP login"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Server port"
+msgid "SMTP port"
+msgstr "サーバ ポート"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMTP secure"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMTP server"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "売上規模"
@@ -6500,6 +6550,7 @@ msgid "Selection Details"
 msgstr "選択オプションの詳細"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Send"
 msgstr "送信"
 
@@ -6540,6 +6591,14 @@ msgstr "メールを送信"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "すべての出席者にメールを送信"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Send me the profile data by SMS."
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Send me the profile data by mail."
+msgstr ""
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
@@ -6614,6 +6673,10 @@ msgstr "設定"
 msgctxt "app"
 msgid "Settings"
 msgstr "設定"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Setup your profile manually."
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
@@ -6846,6 +6909,10 @@ msgstr "サイン イン ユーザ: %1$s"
 msgid "Signed in as:"
 msgstr "サイン イン ユーザ:"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Simply download the profile to your device."
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
 #: module:io.ox/files apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -6860,12 +6927,6 @@ msgstr "サイズ (バイト)"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
 msgstr "リクエストを表示"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Smartphone settings:"
-msgid "Smartphone"
-msgstr "スマートフォン設定："
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Smartphone settings:"
@@ -7135,19 +7196,12 @@ msgstr "TB"
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Table"
-msgid "Tablet"
-msgstr "表"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Tag mail with"
 msgstr "次のタグをメールに付ける"
 
-#. %1$s is the product name, e.g. OX.
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
 msgstr ""
 
@@ -8425,52 +8479,10 @@ msgstr "仕事へようこそ"
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "ようこそこの製品のフィードバックをお送りください。"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your layout changes?"
-msgid "What do you want to use on your Mac?"
-msgstr "レイアウトの変更を保存しますか？"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your layout changes?"
-msgid "What do you want to use on your Windows PC?"
-msgstr "レイアウトの変更を保存しますか？"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your layout changes?"
-msgid "What do you want to use on your Windows Phone?"
-msgstr "レイアウトの変更を保存しますか？"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What do you want to use on your iPad?"
-msgstr "構成を保存しますか？"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your layout changes?"
-msgid "What do you want to use on your iPhone?"
-msgstr "レイアウトの変更を保存しますか？"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your layout changes?"
-msgid "What do you want to use on your tablet?"
-msgstr "レイアウトの変更を保存しますか？"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you want to save your layout changes?"
 msgid "What service do you want to use?"
-msgstr "レイアウトの変更を保存しますか？"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your layout changes?"
-msgid "What to you want to use on your smartphone?"
 msgstr "レイアウトの変更を保存しますか？"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -8487,31 +8499,13 @@ msgstr ""
 "と、最新のアップデートに関する通知が受信できます。これらのアップデートはアッ"
 "プデータ内からダウンロードできます。"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your layout changes?"
-msgid "Which app do you want to use on your device?"
-msgstr "レイアウトの変更を保存しますか？"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Which device do you want to configure?"
 msgstr ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Whole day"
 msgstr "終日"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Window"
-msgid "Windows PC"
-msgstr "ウィンドウ"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Windows are shown as"
-msgid "Windows Phone"
-msgstr "ウィンドウの表示形式"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -9222,19 +9216,15 @@ msgstr "添付ファイルあります"
 msgid "has participants"
 msgstr "出席者あり"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Last name"
+msgid "hostname"
+msgstr "姓"
+
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "iCal"
 msgstr "iCal"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "iPad"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Phone"
-msgid "iPhone"
-msgstr "電話"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "in"
@@ -9290,6 +9280,12 @@ msgstr "薄い青"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "light green"
 msgstr "薄い緑"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Relogin"
+msgid "login"
+msgstr "再ログイン"
 
 #. recurring appointment: the appointment is repeated monthly
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -10972,9 +10968,6 @@ msgstr "yyyy"
 #~ msgid "Calendar custom view"
 #~ msgstr "予定表のカスタム ビュー"
 
-#~ msgid "Calendar day view"
-#~ msgstr "予定表の日ビュー"
-
 #~ msgid "Calendar month view"
 #~ msgstr "予定表月ビュー"
 
@@ -11258,6 +11251,9 @@ msgstr "yyyy"
 
 #~ msgid "Contact overview"
 #~ msgstr "連絡先の概要"
+
+#~ msgid "Contacts"
+#~ msgstr "メンバ"
 
 #~ msgid "Content-Type:"
 #~ msgstr "Content-Type:"
@@ -11851,6 +11847,11 @@ msgstr "yyyy"
 
 #~ msgid "EEEE, %s"
 #~ msgstr "EEEE, %s"
+
+#, fuzzy
+#~| msgid "E-Mail"
+#~ msgid "EMail"
+#~ msgstr "メール"
 
 #~ msgid "EUR"
 #~ msgstr "EUR"
@@ -12747,9 +12748,6 @@ msgstr "yyyy"
 #~ msgid "IM (private):"
 #~ msgstr "メッセンジャー (プライベート):"
 
-#~ msgid "IMAP Mail Server"
-#~ msgstr "IMAP メール サーバ"
-
 #~ msgid "IMAP folder subscription"
 #~ msgstr "IMAP フォルダの登録"
 
@@ -13268,6 +13266,11 @@ msgstr "yyyy"
 
 #~ msgid "MM/dd/yyyy"
 #~ msgstr "MM/dd/yyyy"
+
+#, fuzzy
+#~| msgid "March"
+#~ msgid "Mac"
+#~ msgstr "3 月"
 
 #~ msgid "Macao"
 #~ msgstr "マカオ"
@@ -14207,9 +14210,6 @@ msgstr "yyyy"
 #~ msgid "Please select a file to insert"
 #~ msgstr "挿入するファイルを選択してください。"
 
-#~ msgid "Please select at least one E-Mail address."
-#~ msgstr "少なくとも一つ以上のメール アドレスを選択してください。"
-
 #~ msgid "Please select only one Publication"
 #~ msgstr "公開を一つだけ選択してください。"
 
@@ -14423,9 +14423,6 @@ msgstr "yyyy"
 #~ msgid "RMB"
 #~ msgstr "RMB"
 
-#~ msgid "RSS"
-#~ msgstr "RSS"
-
 #~ msgid "RUB"
 #~ msgstr "RUB"
 
@@ -14491,9 +14488,6 @@ msgstr "yyyy"
 
 #~ msgid "Reload current view every:"
 #~ msgstr "現在のビューの再読み込み間隔:"
-
-#~ msgid "Relogin"
-#~ msgstr "再ログイン"
 
 #~ msgid "Remember me"
 #~ msgstr "アラームを通知"
@@ -15019,6 +15013,11 @@ msgstr "yyyy"
 #~ msgid "Slovenia"
 #~ msgstr "スロヴェニア"
 
+#, fuzzy
+#~| msgid "Smartphone settings:"
+#~ msgid "Smartphone"
+#~ msgstr "スマートフォン設定："
+
 #~ msgid "Social"
 #~ msgstr "ソーシャル"
 
@@ -15360,6 +15359,11 @@ msgstr "yyyy"
 
 #~ msgid "Tab-based panel"
 #~ msgstr "タブ形式パネル"
+
+#, fuzzy
+#~| msgid "Table"
+#~ msgid "Tablet"
+#~ msgstr "表"
 
 #~ msgid "Tagging"
 #~ msgstr "タグ付け"
@@ -16423,6 +16427,41 @@ msgstr "yyyy"
 #~ msgid "Western Sahara"
 #~ msgstr "西サハラ"
 
+#, fuzzy
+#~| msgid "Do you want to save your layout changes?"
+#~ msgid "What do you want to use on your Mac?"
+#~ msgstr "レイアウトの変更を保存しますか？"
+
+#, fuzzy
+#~| msgid "Do you want to save your layout changes?"
+#~ msgid "What do you want to use on your Windows PC?"
+#~ msgstr "レイアウトの変更を保存しますか？"
+
+#, fuzzy
+#~| msgid "Do you want to save your layout changes?"
+#~ msgid "What do you want to use on your Windows Phone?"
+#~ msgstr "レイアウトの変更を保存しますか？"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What do you want to use on your iPad?"
+#~ msgstr "構成を保存しますか？"
+
+#, fuzzy
+#~| msgid "Do you want to save your layout changes?"
+#~ msgid "What do you want to use on your iPhone?"
+#~ msgstr "レイアウトの変更を保存しますか？"
+
+#, fuzzy
+#~| msgid "Do you want to save your layout changes?"
+#~ msgid "What do you want to use on your tablet?"
+#~ msgstr "レイアウトの変更を保存しますか？"
+
+#, fuzzy
+#~| msgid "Do you want to save your layout changes?"
+#~ msgid "What to you want to use on your smartphone?"
+#~ msgstr "レイアウトの変更を保存しますか？"
+
 #~ msgid "When \"Reply all\":"
 #~ msgstr "\"全員に返信\" の場合:"
 
@@ -16457,6 +16496,21 @@ msgstr "yyyy"
 #~ "人情報の取り扱いにも細心の注意を払うようお勧めします。個人データの保管場所"
 #~ "や転送する相手についても十分に検討をし、パスワードによる確実な保護を施すな"
 #~ "ど、適切なアクセス保護を行ってください。"
+
+#, fuzzy
+#~| msgid "Do you want to save your layout changes?"
+#~ msgid "Which app do you want to use on your device?"
+#~ msgstr "レイアウトの変更を保存しますか？"
+
+#, fuzzy
+#~| msgid "Window"
+#~ msgid "Windows PC"
+#~ msgstr "ウィンドウ"
+
+#, fuzzy
+#~| msgid "Windows are shown as"
+#~ msgid "Windows Phone"
+#~ msgstr "ウィンドウの表示形式"
 
 #~ msgctxt "address"
 #~ msgid "Work"
@@ -16828,6 +16882,11 @@ msgstr "yyyy"
 
 #~ msgid "iCalendar"
 #~ msgstr "iCalendar"
+
+#, fuzzy
+#~| msgid "Phone"
+#~ msgid "iPhone"
+#~ msgstr "電話"
 
 #~ msgid "in blind copy"
 #~ msgstr "BCC"

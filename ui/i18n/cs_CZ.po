@@ -1288,6 +1288,7 @@ msgid "Back to appointment"
 msgstr "Zpět na schůzku"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "Back to sign in"
 msgid "Back to devices"
@@ -1300,6 +1301,7 @@ msgid "Back to modules"
 msgstr "Zpět na přihlášení"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "your platform"
 msgid "Back to platforms"
@@ -1416,7 +1418,7 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "Kalendář"
 
@@ -1426,6 +1428,10 @@ msgstr "Kalendář"
 msgctxt "app"
 msgid "Calendar"
 msgstr "Kalendář"
+
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
+msgid "Calendar (Manually)"
+msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
@@ -1711,6 +1717,7 @@ msgid "Click to upload image"
 msgstr "Kliknutím nahrajete obrázek"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 msgid "Client onboarding"
 msgstr ""
 
@@ -1878,10 +1885,6 @@ msgstr "Obrázky kontaktů"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Contact request sent"
 msgstr "Odeslán požadavek na kontakt"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "Contacts"
-msgstr "Kontakty"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been copied"
@@ -2646,7 +2649,8 @@ msgstr "Dvojitým kliknutím na tento řádek zvolíte celodenní schůzku"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/plugins/portal/updater/register.js
+#: module:io.ox/mail apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
 #: module:plugins/portal
 msgid "Download"
 msgstr "Stáhnout"
@@ -2776,12 +2780,6 @@ msgstr "Dokončit do %1$s"
 msgid "EB"
 msgstr "EB"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "E-Mail"
-msgid "EMail"
-msgstr "E-mail"
-
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
@@ -2895,6 +2893,7 @@ msgid "Editor"
 msgstr "Upravit"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Email"
 msgstr "E-mail"
 
@@ -3371,7 +3370,6 @@ msgid "File: %1$s"
 msgstr "Soubor: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
 msgid "Files"
 msgstr "Soubory"
 
@@ -3804,6 +3802,30 @@ msgstr "Hodiny"
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "How does this work?"
 msgstr "Jak to funguje?"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "SMTP login"
+msgid "IMAP login"
+msgstr "SMTP přihlašovací jméno"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "SMTP port"
+msgid "IMAP port"
+msgstr "SMTP port"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "SMTP server"
+msgid "IMAP secure"
+msgstr "SMTP server"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "SMTP server"
+msgid "IMAP server"
+msgstr "SMTP server"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
@@ -4315,13 +4337,8 @@ msgstr "MB"
 msgid "MM"
 msgstr "MM"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "March"
-msgid "Mac"
-msgstr "Březen"
-
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Mail"
 msgstr "Pošta"
 
@@ -4331,6 +4348,10 @@ msgstr "Pošta"
 msgctxt "app"
 msgid "Mail"
 msgstr "Pošta"
+
+#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
+msgid "Mail (Manually)"
+msgstr ""
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Mail Details"
@@ -4474,6 +4495,7 @@ msgid "Managing Files"
 msgstr "Správa souborů"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Manual"
 msgstr "Příručka"
 
@@ -5663,6 +5685,12 @@ msgstr "Vyberte, prosím, platný soubor iCal k importu"
 msgid "Please select a valid image File to insert"
 msgstr "Vyberte, prosím, platný soubor s obrázkem k vložení"
 
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Please select at least one E-Mail address."
+msgid "Please select the platform of your device."
+msgstr "Vyberte, prosím, alespoň jednu e-mailovou adresu."
+
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Please select which of the following data we may use to create your %s "
@@ -6377,6 +6405,30 @@ msgstr "Název pravidla"
 msgid "Running applications"
 msgstr "Spuštěné aplikace"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "RSS"
+msgid "SMS"
+msgstr "RSS"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMTP login"
+msgstr "SMTP přihlašovací jméno"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMTP port"
+msgstr "SMTP port"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "SMTP server"
+msgid "SMTP secure"
+msgstr "SMTP server"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "SMTP server"
+msgstr "SMTP server"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "Objem prodeje"
@@ -6556,6 +6608,7 @@ msgid "Selection Details"
 msgstr "Podrobnosti o výběru"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Send"
 msgstr "Poslat"
 
@@ -6596,6 +6649,14 @@ msgstr "Poslat zprávu"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "Poslat zprávu všem účastníkům"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Send me the profile data by SMS."
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Send me the profile data by mail."
+msgstr ""
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
@@ -6670,6 +6731,10 @@ msgstr "Nastavení"
 msgctxt "app"
 msgid "Settings"
 msgstr "Nastavení"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Setup your profile manually."
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
@@ -6910,6 +6975,10 @@ msgstr "Přihlášený(á) jako %1$s"
 msgid "Signed in as:"
 msgstr "Přihlášený(á) jako:"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Simply download the profile to your device."
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
 #: module:io.ox/files apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -6924,12 +6993,6 @@ msgstr "Velikost (bajty)"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
 msgstr "Pomalé požadavky"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Smartphone settings:"
-msgid "Smartphone"
-msgstr "Nastavení chytrého telefonu:"
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Smartphone settings:"
@@ -7199,19 +7262,12 @@ msgstr "TB"
 msgid "TTY/TDD"
 msgstr "Telefon pro neslyšící (TTY/TDD)"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Table"
-msgid "Tablet"
-msgstr "Tabulka"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Tag mail with"
 msgstr "Dát zprávě příznak"
 
-#. %1$s is the product name, e.g. OX.
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
 msgstr ""
 
@@ -8506,52 +8562,10 @@ msgstr "Vítejte u svých úkolů"
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "Vítejte. Poskytněte, prosím, zpětnou vazbu o tomto produktu"
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What do you want to use on your Mac?"
-msgstr "Přejete si uložit nastavení?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What do you want to use on your Windows PC?"
-msgstr "Přejete si uložit nastavení?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What do you want to use on your Windows Phone?"
-msgstr "Přejete si uložit nastavení?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What do you want to use on your iPad?"
-msgstr "Přejete si uložit nastavení?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What do you want to use on your iPhone?"
-msgstr "Přejete si uložit nastavení?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What do you want to use on your tablet?"
-msgstr "Přejete si uložit nastavení?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you want to save your configuration?"
 msgid "What service do you want to use?"
-msgstr "Přejete si uložit nastavení?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "What to you want to use on your smartphone?"
 msgstr "Přejete si uložit nastavení?"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -8568,29 +8582,13 @@ msgstr ""
 "upozorní na případné aktualizace. Aktualizace lze stáhnout z prostředí "
 "aktualizačního nástroje."
 
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Do you want to save your configuration?"
-msgid "Which app do you want to use on your device?"
-msgstr "Přejete si uložit nastavení?"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Which device do you want to configure?"
 msgstr ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Whole day"
 msgstr "Celý den"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "Windows PC"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Windows are shown as"
-msgid "Windows Phone"
-msgstr "Okna jsou zobrazena jako"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -9311,19 +9309,15 @@ msgstr "má přílohy"
 msgid "has participants"
 msgstr "má účastníky"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Last name"
+msgid "hostname"
+msgstr "Příjmení"
+
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "iCal"
 msgstr "iCal"
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-msgid "iPad"
-msgstr ""
-
-#: apps/io.ox/onboarding/api.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Phone"
-msgid "iPhone"
-msgstr "Telefon"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "in"
@@ -9381,6 +9375,12 @@ msgstr "světle modrá"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "light green"
 msgstr "světle zelená"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Relogin"
+msgid "login"
+msgstr "Znovu přihlásit"
 
 #. recurring appointment: the appointment is repeated monthly
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -12270,6 +12270,9 @@ msgstr "rrrr"
 #~ msgid "Contact overview"
 #~ msgstr "Přehled kontaktu"
 
+#~ msgid "Contacts"
+#~ msgstr "Kontakty"
+
 #~ msgid "Content-Type:"
 #~ msgstr "Druh obsahu:"
 
@@ -12827,6 +12830,11 @@ msgstr "rrrr"
 
 #~ msgid "EEEE, %s"
 #~ msgstr "EEEE, %s"
+
+#, fuzzy
+#~| msgid "E-Mail"
+#~ msgid "EMail"
+#~ msgstr "E-mail"
 
 #~ msgid "EUR"
 #~ msgstr "EUR"
@@ -14302,6 +14310,11 @@ msgstr "rrrr"
 #~ msgid "MM/dd/yyyy"
 #~ msgstr "dd/MM/yyyy"
 
+#, fuzzy
+#~| msgid "March"
+#~ msgid "Mac"
+#~ msgstr "Březen"
+
 #~ msgid "Macao"
 #~ msgstr "Macau"
 
@@ -15346,9 +15359,6 @@ msgstr "rrrr"
 #~ msgid "Please select a file to insert"
 #~ msgstr "Vyberte, prosím, soubor k vložení"
 
-#~ msgid "Please select at least one E-Mail address."
-#~ msgstr "Vyberte, prosím, alespoň jednu e-mailovou adresu."
-
 #~ msgid "Please select only one Publication"
 #~ msgstr "Vyberte, prosím, jen jednu publikaci"
 
@@ -15541,9 +15551,6 @@ msgstr "rrrr"
 #~ msgid "RMB"
 #~ msgstr "RMB"
 
-#~ msgid "RSS"
-#~ msgstr "RSS"
-
 #~ msgid "RUB"
 #~ msgstr "RUB"
 
@@ -15610,9 +15617,6 @@ msgstr "rrrr"
 
 #~ msgid "Reload current view every:"
 #~ msgstr "Obnovit stávající pohled každých:"
-
-#~ msgid "Relogin"
-#~ msgstr "Znovu přihlásit"
 
 #~ msgid "Reminder:"
 #~ msgstr "Upomínka:"
@@ -15731,17 +15735,8 @@ msgstr "rrrr"
 #~ msgid "SEK"
 #~ msgstr "SEK"
 
-#~ msgid "SMTP login"
-#~ msgstr "SMTP přihlašovací jméno"
-
-#~ msgid "SMTP port"
-#~ msgstr "SMTP port"
-
 #~ msgid "SMTP protocol"
 #~ msgstr "SMTP protokol"
-
-#~ msgid "SMTP server"
-#~ msgstr "SMTP server"
 
 #~ msgid "Saint Barthélemy"
 #~ msgstr "Saint Barthélemy"
@@ -16161,6 +16156,11 @@ msgstr "rrrr"
 #~ msgid "Slovenia"
 #~ msgstr "Slovinsko"
 
+#, fuzzy
+#~| msgid "Smartphone settings:"
+#~ msgid "Smartphone"
+#~ msgstr "Nastavení chytrého telefonu:"
+
 #~ msgid "Social"
 #~ msgstr "Sociální"
 
@@ -16472,6 +16472,11 @@ msgstr "rrrr"
 
 #~ msgid "Tab-based panel"
 #~ msgstr "Panel s kartami"
+
+#, fuzzy
+#~| msgid "Table"
+#~ msgid "Tablet"
+#~ msgstr "Tabulka"
 
 #~ msgid "Tabs example"
 #~ msgstr "Příklad karet"
@@ -17930,6 +17935,41 @@ msgstr "rrrr"
 #~ msgid "Western Sahara"
 #~ msgstr "Západní Sahara"
 
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What do you want to use on your Mac?"
+#~ msgstr "Přejete si uložit nastavení?"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What do you want to use on your Windows PC?"
+#~ msgstr "Přejete si uložit nastavení?"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What do you want to use on your Windows Phone?"
+#~ msgstr "Přejete si uložit nastavení?"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What do you want to use on your iPad?"
+#~ msgstr "Přejete si uložit nastavení?"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What do you want to use on your iPhone?"
+#~ msgstr "Přejete si uložit nastavení?"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What do you want to use on your tablet?"
+#~ msgstr "Přejete si uložit nastavení?"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "What to you want to use on your smartphone?"
+#~ msgstr "Přejete si uložit nastavení?"
+
 #~ msgid "When \"Reply all\":"
 #~ msgstr "Při „Odpovědět všem“:"
 
@@ -17970,6 +18010,16 @@ msgstr "rrrr"
 
 #~ msgid "Where:"
 #~ msgstr "Kde:"
+
+#, fuzzy
+#~| msgid "Do you want to save your configuration?"
+#~ msgid "Which app do you want to use on your device?"
+#~ msgstr "Přejete si uložit nastavení?"
+
+#, fuzzy
+#~| msgid "Windows are shown as"
+#~ msgid "Windows Phone"
+#~ msgstr "Okna jsou zobrazena jako"
 
 #~ msgctxt "address"
 #~ msgid "Work"
@@ -18557,6 +18607,11 @@ msgstr "rrrr"
 
 #~ msgid "iCalendar"
 #~ msgstr "iCalendar"
+
+#, fuzzy
+#~| msgid "Phone"
+#~ msgid "iPhone"
+#~ msgstr "Telefon"
 
 #~ msgid "in blind copy"
 #~ msgstr "ve slepé kopii"
