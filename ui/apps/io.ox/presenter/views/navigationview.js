@@ -317,6 +317,9 @@ define('io.ox/presenter/views/navigationview', [
 
                 self.app.mainView.showSlide(newValue - 1);
             }
+            function onClick() {
+                $(this).select();
+            }
 
             // set slide number in the slide input control
             slideInput.val(slideNumber);
@@ -336,7 +339,7 @@ define('io.ox/presenter/views/navigationview', [
                 next.addClass('disabled').attr('aria-disabled', true);
             }
 
-            slideInput.on('keydown', onInputKeydown).on('change', onInputChange);
+            slideInput.on('keydown', onInputKeydown).on('change', onInputChange).on('click', onClick);
             prev.on('click', onPrevSlide);
             next.on('click', onNextSlide);
 

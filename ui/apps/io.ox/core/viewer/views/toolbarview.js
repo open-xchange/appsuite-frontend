@@ -747,7 +747,11 @@ define('io.ox/core/viewer/views/toolbarview', [
                     self.viewerEvents.trigger('viewer:document:scrolltopage', newValue);
                 }
             }
-            pageInput.on('keydown', onInputKeydown).on('change', onInputChange);
+            function onClick() {
+                $(this).select();
+            }
+
+            pageInput.on('keydown', onInputKeydown).on('change', onInputChange).on('click', onClick);
             prev.on('click', onPrevPage);
             next.on('click', onNextPage);
             group.append(prev, next, pageInputWrapper, totalPage)
