@@ -433,12 +433,15 @@
          */
         queued: function (fn, timeout) {
 
-            var hash = {};
+            var hash = {}, guid = 0;
 
             return function () {
 
+                // add guid
+                fn.queue_guid = fn.queue_guid || guid++;
+
                 var def = $.Deferred(),
-                    queue = hash[fn] || (hash[fn] = [$.when()]),
+                    queue = hash[fn.queue_guid] || (hash[fn.queue_guid] = [$.when()]),
                     last = _(queue).last(),
                     self = this,
                     args = $.makeArray(arguments);

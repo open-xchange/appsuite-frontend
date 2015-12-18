@@ -155,26 +155,33 @@ define('io.ox/tasks/toolbar', [
         id: 'toolbar',
         index: 10000,
         setup: function (app) {
-            var toolbar = new Toolbar({ title: app.getTitle(), tabindex: 1 }),
-                cont = function (list) {
-                    // extract single object if length === 1
-                    list = list.length === 1 ? list[0] : list;
-                    var baton = ext.Baton({ $el: toolbar.$list, data: list, app: this }),
-                        ret = ext.point('io.ox/tasks/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
-                    return $.when.apply($, ret.value()).then(function () {
-                        toolbar.initButtons();
-                    });
-                };
+
+            var toolbarView = new Toolbar({ title: app.getTitle(), tabindex: 1 });
+
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-                toolbar.render().$el
+                toolbarView.render().$el
             );
-            app.updateToolbar = _.queued(function (list) {
-                if (!list) return $.when();
+
+            function updateCallback($toolbar) {
+                toolbarView.replaceToolbar($toolbar).initButtons();
+            }
+
+            function render(list) {
+                // extract single object if length === 1
+                list = list.length === 1 ? list[0] : list;
+                // disable visible buttons
+                toolbarView.disableButtons();
                 // draw toolbar
-                if (list.length <= 100) {
-                    return api.getList(list).done(cont.bind(this));
-                }
-                return cont.call(this, list);
+                var $toolbar = toolbarView.createToolbar(),
+                    baton = ext.Baton({ $el: $toolbar, data: list, app: app }),
+                    ret = ext.point('io.ox/tasks/classic-toolbar').invoke('draw', $toolbar, baton);
+                $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
+            }
+
+            app.updateToolbar = _.debounce(function (list) {
+                if (!list) return;
+                var callback = _.lfo(render);
+                if (list.length <= 100) api.getList(list).done(callback); else callback.call(this, list);
             }, 10);
         }
     });

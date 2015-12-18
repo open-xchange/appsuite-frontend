@@ -20,35 +20,45 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
         className: 'classic-toolbar-container',
 
         events: {
-            'mousedown ul.classic-toolbar>li>a': 'onMousedown',
-            'keydown ul.classic-toolbar>li>a': 'onKeydown'
+            'mousedown ul.classic-toolbar > li > a': 'onMousedown',
+            'keydown ul.classic-toolbar > li > a': 'onKeydown'
         },
 
         initialize: function (opt) {
-            var defaults = {
-                tabindex: 0
-            };
-            this.options = _.extend(defaults, opt);
+            this.options = _.extend({ tabindex: 0 }, opt);
+            this.$list = this.createToolbar();
+        },
+
+        createToolbar: function () {
+            return $('<ul class="classic-toolbar" role="toolbar">').attr({ 'aria-label': gt('Actions') });
         },
 
         render: function () {
             this.$el.attr({
                 role: 'navigation',
                 'aria-label': gt('Inline menu %1$s', this.options.title || '')
-            }).append(
-                this.$list = $('<ul>').attr({
-                    role: 'toolbar',
-                    'aria-label': gt('Actions')
-                }).addClass('classic-toolbar')
-            );
+            })
+            .append(this.$list);
+            return this;
+        },
+
+        getButtons: function () {
+            return this.$el.find('ul.classic-toolbar > li > a');
+        },
+
+        disableButtons: function () {
+            // remove all event handlers
+            this.getButtons().off();
+            return this;
+        },
+
+        replaceToolbar: function (toolbar) {
+            this.$el.find('ul.classic-toolbar').replaceWith(toolbar);
             return this;
         },
 
         initButtons: function () {
-            this.$links = this.$el.find('ul.classic-toolbar>li>a').attr({
-                role: 'button',
-                tabindex: -1
-            });
+            this.$links = this.getButtons().attr({ role: 'button', tabindex: -1 });
             // set focus to first element
             this.$links.first().attr({
                 tabindex: this.options.tabindex

@@ -180,31 +180,33 @@ define('io.ox/contacts/toolbar', [
         id: 'toolbar',
         index: 10000,
         setup: function (app) {
-            var toolbar = new Toolbar({ title: app.getTitle(), tabindex: 1 });
+
+            var toolbarView = new Toolbar({ title: app.getTitle(), tabindex: 1 });
+
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-               toolbar.render().$el
+               toolbarView.render().$el
             );
 
-            function finalize(node) {
-                toolbar.$list.empty().append(node.contents());
-                toolbar.initButtons();
+            function updateCallback($toolbar) {
+                toolbarView.replaceToolbar($toolbar).initButtons();
             }
 
-            function render(app, node, callback, data) {
+            function render(data) {
                 // extract single object if length === 1
                 data = data.length === 1 ? data[0] : data;
+                // disable visible buttons
+                toolbarView.disableButtons();
                 // draw toolbar
-                var baton = ext.Baton({ $el: node, data: data, app: app }),
-                    ret = ext.point('io.ox/contacts/classic-toolbar').invoke('draw', node, baton);
-                $.when.apply($, ret.value()).done(callback);
+                var $toolbar = toolbarView.createToolbar(),
+                    baton = ext.Baton({ $el: $toolbar, data: data, app: app }),
+                    ret = ext.point('io.ox/contacts/classic-toolbar').invoke('draw', $toolbar, baton);
+                $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
             }
 
             app.updateToolbar = _.debounce(function (list) {
                 if (!list) return;
-                // toolbar.$list.empty();
-                var node = $('<div>');
-                var callback = _.lfo(render, this, node, _.lfo(finalize, node));
-                api.getList(list).done(callback);
+                var callback = _.lfo(render);
+                if (list.length <= 100) api.getList(list).done(callback); else callback.call(this, list);
             }, 10);
         }
     });

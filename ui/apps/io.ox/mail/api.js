@@ -393,7 +393,7 @@ define('io.ox/mail/api', [
                 _.wait(500).then(function () {
                     return http.PUT({
                         module: 'mail',
-                        params: { action: 'delete', timestamp: _.then() },
+                        params: { action: 'delete', withFolders: true, timestamp: _.then() },
                         data: http.simplify(ids),
                         appendColumns: false
                     })
