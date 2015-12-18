@@ -80,7 +80,8 @@ define('io.ox/core/extPatterns/links', [
                         'data-animation': 'false',
                         'data-container': 'body',
                         // tooltip removes title attribute
-                        'aria-label': !self.label ? self.title || null : null
+                        // therefore we always add arial-label to maintain screen reader support
+                        'aria-label': self.title || self.label || null
                     })
                     .tooltip({ trigger: 'hover' })
                     .on('dispose', function () {
