@@ -42,7 +42,7 @@ define('io.ox/presenter/views/toolbarview', [
                 //#. button label for the 'start presentation' dropdown
                 label: gt('Start presentation'),
                 //#. button tooltip for 'start presentation' dropdown
-                title: gt('Start presentation'),
+                title: gt('Start the presentation'),
                 drawDisabled: true,
                 ref: TOOLBAR_ID + '/dropdown/start-presentation',
                 customize: function (baton) {
@@ -74,14 +74,13 @@ define('io.ox/presenter/views/toolbarview', [
                 mobile: 'hi',
                 //#. button label for ending the presentation
                 label: gt('End presentation'),
+                //#. button tooltip for ending the presentation
+                title: gt('End the presentation'),
                 ref: PRESENTER_ACTION_ID + '/end',
                 customize: function () {
-                    this.addClass('presenter-toolbar-end')
-                        .attr({
-                            tabindex: '1',
-                            //#. button tooltip for ending the presentation
-                            'aria-label': gt('End presentation')
-                        });
+                    this.addClass('presenter-toolbar-end').attr({
+                        'aria-label': gt('End presentation')
+                    });
                     this.parent().addClass('pull-left');
                 }
             },
@@ -90,15 +89,13 @@ define('io.ox/presenter/views/toolbarview', [
                 mobile: 'hi',
                 //#. button label for pausing the presentation
                 label: gt('Pause presentation'),
+                //#. button tooltip for pausing the presentation
+                title: gt('Pause the presentation'),
                 ref: PRESENTER_ACTION_ID + '/pause',
                 customize: function () {
-                    this.addClass('presenter-toolbar-pause')
-                        .attr({
-                            tabindex: '1',
-                            //#. button tooltip for pausing the presentation
-                            title: gt('Pause presentation'),
-                            'aria-label': gt('Pause presentation')
-                        });
+                    this.addClass('presenter-toolbar-pause').attr({
+                        'aria-label': gt('Pause presentation')
+                    });
                     this.parent().addClass('pull-left');
                 }
             },
@@ -107,15 +104,13 @@ define('io.ox/presenter/views/toolbarview', [
                 mobile: 'hi',
                 //#. button label for continuing the presentation
                 label: gt('Continue presentation'),
+                //#. button tooltip for continuing the presentation
+                title: gt('Continue the presentation'),
                 ref: PRESENTER_ACTION_ID + '/continue',
                 customize: function () {
-                    this.addClass('presenter-toolbar-continue')
-                        .attr({
-                            tabindex: '1',
-                            //#. button tooltip for continuing the presentation
-                            title: gt('Continue presentation'),
-                            'aria-label': gt('Continue presentation')
-                        });
+                    this.addClass('presenter-toolbar-continue').attr({
+                        'aria-label': gt('Continue presentation')
+                    });
                     this.parent().addClass('pull-left');
                 }
             },
@@ -125,15 +120,13 @@ define('io.ox/presenter/views/toolbarview', [
                 mobile: 'hi',
                 //#. button label for joining the presentation
                 label: gt('Join presentation'),
+                //#. button tooltip for joining the presentation
+                title: gt('Join the presentation'),
                 ref: PRESENTER_ACTION_ID + '/join',
                 customize: function () {
-                    this.addClass('presenter-toolbar-join')
-                        .attr({
-                            tabindex: '1',
-                            //#. button tooltip for joining the presentation
-                            title: gt('Join presentation'),
-                            'aria-label': gt('Join presentation')
-                        });
+                    this.addClass('presenter-toolbar-join').attr({
+                        'aria-label': gt('Join presentation')
+                    });
                     this.parent().addClass('pull-left');
                 }
             },
@@ -142,15 +135,13 @@ define('io.ox/presenter/views/toolbarview', [
                 mobile: 'hi',
                 //#. button label for leaving the presentation
                 label: gt('Leave presentation'),
+                //#. button tooltip for leaving the presentation
+                title: gt('Leave the presentation'),
                 ref: PRESENTER_ACTION_ID + '/leave',
                 customize: function () {
-                    this.addClass('presenter-toolbar-leave')
-                        .attr({
-                            tabindex: '1',
-                            //#. button tooltip for leaving the presentation
-                            title: gt('Leave presentation'),
-                            'aria-label': gt('Leave presentation')
-                        });
+                    this.addClass('presenter-toolbar-leave').attr({
+                        'aria-label': gt('Leave presentation')
+                    });
                     this.parent().addClass('pull-left');
                 }
             },
@@ -162,11 +153,10 @@ define('io.ox/presenter/views/toolbarview', [
                 ref: PRESENTER_ACTION_ID + '/zoomout',
                 //#. button label for zooming out the presentation
                 label: gt('Zoom out'),
+                //#. button tooltip for zooming out the presentation
+                title: gt('Zoom out'),
                 customize: function () {
                     this.addClass('presenter-toolbar-zoomout').attr({
-                        tabindex: '1',
-                        //#. button tooltip for zooming out the presentation
-                        title: gt('Zoom out'),
                         'aria-label': gt('Zoom out')
                     });
                 }
@@ -177,12 +167,11 @@ define('io.ox/presenter/views/toolbarview', [
                 icon: 'fa fa-search-plus',
                 //#. button label for zooming in the presentation
                 label: gt('Zoom in'),
+                //#. button tooltip for zooming in the presentation
+                title: gt('Zoom in'),
                 ref: PRESENTER_ACTION_ID + '/zoomin',
                 customize: function () {
                     this.addClass('presenter-toolbar-zoomin').attr({
-                        tabindex: '1',
-                        //#. button tooltip for zooming in the presentation
-                        title: gt('Zoom in'),
                         'aria-label': gt('Zoom in')
                     });
                 }
@@ -193,13 +182,11 @@ define('io.ox/presenter/views/toolbarview', [
                 icon: 'fa fa-arrows-alt',
                 //#. button label for toggling fullscreen mode
                 label: gt('Toggle fullscreen'),
+                //#. button tooltip for toggling fullscreen mode
+                title: gt('Toggle fullscreen'),
                 ref: PRESENTER_ACTION_ID + '/fullscreen',
-
                 customize: function () {
                     this.addClass('presenter-toolbar-fullscreen').attr({
-                        tabindex: '1',
-                        //#. button tooltip for toggling fullscreen mode
-                        title: gt('Toggle fullscreen'),
                         'aria-label': gt('Toggle fullscreen')
                     });
                 }
@@ -210,15 +197,13 @@ define('io.ox/presenter/views/toolbarview', [
                 icon: 'fa fa-users',
                 //#. button label for toggling participants view
                 label: gt('View participants'),
+                //#. button tooltip for toggling participants view
+                title: gt('View participants'),
                 ref: PRESENTER_ACTION_ID + '/togglesidebar',
                 customize: function () {
-                    this.addClass('presenter-toolbar-togglesidebar')
-                        .attr({
-                            tabindex: '1',
-                            //#. button tooltip for toggling participants view
-                            title: gt('View participants'),
-                            'aria-label': gt('View participants')
-                        });
+                    this.addClass('presenter-toolbar-togglesidebar').attr({
+                        'aria-label': gt('View participants')
+                    });
                 }
             }
         };

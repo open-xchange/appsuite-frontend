@@ -44,15 +44,16 @@ define('io.ox/presenter/views/navigationview', [
         var button = $('<a href="#" class="presenter-navigation-slide-button" tabindex="1" role="menuitem" aria-disabled="false">'),
             icon = $('<i class="fa" aria-hidden="true">');
 
-        button.attr((type === 'next') ? {
-            //#. button tooltip for 'go to next presentation slide' action
-            title: gt('Next slide'),
-            'aria-label': gt('Next slide')
-        } : {
-            //#. button tooltip for 'go to previous presentation slide' action
-            title: gt('Previous slide'),
-            'aria-label': gt('Previous slide')
+        button.attr({ 'aria-label': (type === 'next') ? gt('Next slide') : gt('Previous slide') });
+        button.tooltip({
+            placement: 'top',
+            title: (type === 'next') ?
+                //#. button tooltip for 'go to next presentation slide' action
+                gt('Next slide') :
+                //#. button tooltip for 'go to previous presentation slide' action
+                gt('Previous slide')
         });
+
         icon.addClass((type === 'next') ? 'fa-arrow-down' : 'fa-arrow-up');
         return button.append(icon);
     }
@@ -67,15 +68,12 @@ define('io.ox/presenter/views/navigationview', [
             mobile: 'lo',
             //#. button label for pausing the presentation
             label: gt('Pause presentation'),
+            //#. button tooltip for pausing the presentation
+            title: gt('Pause the presentation'),
             ref: PRESENTER_ACTION_ID + '/pause',
             customize: function () {
-                this.addClass('presenter-toolbar-pause')
-                    .attr({
-                        tabindex: '1',
-                        //#. button tooltip for pausing the presentation
-                        title: gt('Pause presentation'),
-                        'aria-label': gt('Pause presentation')
-                    });
+                this.attr({ 'aria-label': gt('Pause presentation') });
+                this.data('bs.tooltip').options.placement = 'top';
             }
         },
         'continue': {
@@ -83,15 +81,12 @@ define('io.ox/presenter/views/navigationview', [
             mobile: 'lo',
             //#. button label for continuing the presentation
             label: gt('Continue presentation'),
+            //#. button tooltip for continuing the presentation
+            title: gt('Continue the presentation'),
             ref: PRESENTER_ACTION_ID + '/continue',
             customize: function () {
-                this.addClass('presenter-toolbar-continue')
-                    .attr({
-                        tabindex: '1',
-                        //#. button tooltip for continuing the presentation
-                        title: gt('Continue presentation'),
-                        'aria-label': gt('Continue presentation')
-                    });
+                this.attr({ 'aria-label': gt('Continue presentation') });
+                this.data('bs.tooltip').options.placement = 'top';
             }
         },
         'fullscreen': {
@@ -100,18 +95,14 @@ define('io.ox/presenter/views/navigationview', [
             icon: 'fa fa-arrows-alt',
             //#. button label for toggling fullscreen mode
             label: gt('Toggle fullscreen'),
+            //#. button label for toggling fullscreen mode
+            title: gt('Toggle fullscreen'),
             ref: PRESENTER_ACTION_ID + '/fullscreen',
-
             customize: function () {
-                this.addClass('presenter-toolbar-fullscreen').attr({
-                    tabindex: '1',
-                    //#. button label for toggling fullscreen mode
-                    title: gt('Toggle fullscreen'),
-                    'aria-label': gt('Toggle fullscreen')
-                });
+                this.attr({ 'aria-label': gt('Toggle fullscreen') });
+                this.data('bs.tooltip').options.placement = 'top';
             }
         }
-
     };
 
     // iterate link meta and create link extensions
@@ -185,6 +176,12 @@ define('io.ox/presenter/views/navigationview', [
                 //#. text of an user list that shows the names of presenting user and participants.
                 //#. the participants section label.
                 .header(gt('Participants'));
+
+            dropdown.$el.tooltip({
+                //#. the dropdown button tooltip for the participants dropdown.
+                title: gt('View participants'),
+                placement: 'top'
+            });
 
             _.each(participants, function (user) {
                 if (!rtModel.isPresenter(user.userId)) {
@@ -327,6 +324,7 @@ define('io.ox/presenter/views/navigationview', [
             if (safariFullscreen) {
                 slideInput.attr({ readonly: true, disabled: true, 'aria-readonly': true });
             }
+
             //#. text of a presentation slide count display
             //#. Example result: "of 10"
             //#. %1$d is the total slide count
@@ -341,6 +339,12 @@ define('io.ox/presenter/views/navigationview', [
             slideInput.on('keydown', onInputKeydown).on('change', onInputChange);
             prev.on('click', onPrevSlide);
             next.on('click', onNextSlide);
+
+            slideInputWrapper.tooltip({
+                //#. button tooltip for 'jump to presentation slide' action
+                title: gt('Jump to slide'),
+                placement: 'top'
+            });
 
             group.append(prev, next, slideInputWrapper, slideCountDisplay);
             this.$el.prepend(group);
