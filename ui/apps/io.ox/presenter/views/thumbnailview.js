@@ -49,7 +49,7 @@ define('io.ox/presenter/views/thumbnailview', [
             // thumbnail size defaults
             this.thumbnailPaneHeight = 140;
             this.thumbnailWidthLandscape = 100;
-            this.thumbnailWidthPortrait = 75;
+            this.thumbnailWidthPortrait = 70;
         },
 
         render: function () {
