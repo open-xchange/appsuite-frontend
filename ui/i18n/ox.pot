@@ -123,13 +123,6 @@ msgstr ""
 msgid "All timezones"
 msgstr ""
 
-#. %1$s inline menu title for better accessibility
-#: apps/io.ox/backbone/mini-views/toolbar.js
-#: module:io.ox/core
-#: apps/io.ox/core/extPatterns/links.js
-msgid "Inline menu %1$s"
-msgstr ""
-
 #: apps/io.ox/backbone/mini-views/toolbar.js
 #: module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
@@ -146,6 +139,13 @@ msgstr ""
 #: apps/io.ox/tasks/mobile-toolbar-actions.js
 #: module:io.ox/tasks
 msgid "Actions"
+msgstr ""
+
+#. %1$s inline menu title for better accessibility
+#: apps/io.ox/backbone/mini-views/toolbar.js
+#: module:io.ox/core
+#: apps/io.ox/core/extPatterns/links.js
+msgid "Inline menu %1$s"
 msgstr ""
 
 #: apps/io.ox/backbone/validation.js
@@ -9311,21 +9311,33 @@ msgid "Previous slide"
 msgstr ""
 
 #. button label for pausing the presentation
-#. button tooltip for pausing the presentation
 #: apps/io.ox/presenter/views/navigationview.js
 #: module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Pause presentation"
 msgstr ""
 
+#. button tooltip for pausing the presentation
+#: apps/io.ox/presenter/views/navigationview.js
+#: module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
+msgid "Pause the presentation"
+msgstr ""
+
 #. button label for continuing the presentation
-#. button tooltip for continuing the presentation
 #. tooltip for the continue presentation button
 #: apps/io.ox/presenter/views/navigationview.js
 #: module:io.ox/presenter
 #: apps/io.ox/presenter/views/presentationview.js
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Continue presentation"
+msgstr ""
+
+#. button tooltip for continuing the presentation
+#: apps/io.ox/presenter/views/navigationview.js
+#: module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
+msgid "Continue the presentation"
 msgstr ""
 
 #. button label for toggling fullscreen mode
@@ -9353,10 +9365,25 @@ msgstr ""
 msgid "Presenter"
 msgstr ""
 
+#. the dropdown button tooltip for the participants dropdown.
+#. button label for toggling participants view
+#. button tooltip for toggling participants view
+#: apps/io.ox/presenter/views/navigationview.js
+#: module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
+msgid "View participants"
+msgstr ""
+
 #. aria label for the presenter navigation bar, for screen reader only.
 #: apps/io.ox/presenter/views/navigationview.js
 #: module:io.ox/presenter
 msgid "Presenter navigation bar"
+msgstr ""
+
+#. button tooltip for 'jump to presentation slide' action
+#: apps/io.ox/presenter/views/navigationview.js
+#: module:io.ox/presenter
+msgid "Jump to slide"
 msgstr ""
 
 #. Info text that says the presentation is paused.
@@ -9367,7 +9394,6 @@ msgstr ""
 
 #. tooltip for the leave presentation button
 #. button label for leaving the presentation
-#. button tooltip for leaving the presentation
 #: apps/io.ox/presenter/views/presentationview.js
 #: module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js
@@ -9401,31 +9427,45 @@ msgid "End of Slides"
 msgstr ""
 
 #. button label for the 'start presentation' dropdown
-#. button tooltip for 'start presentation' dropdown
 #: apps/io.ox/presenter/views/toolbarview.js
 #: module:io.ox/presenter
 msgid "Start presentation"
 msgstr ""
 
+#. button tooltip for 'start presentation' dropdown
+#: apps/io.ox/presenter/views/toolbarview.js
+#: module:io.ox/presenter
+msgid "Start the presentation"
+msgstr ""
+
 #. button label for ending the presentation
-#. button tooltip for ending the presentation
 #: apps/io.ox/presenter/views/toolbarview.js
 #: module:io.ox/presenter
 msgid "End presentation"
 msgstr ""
 
+#. button tooltip for ending the presentation
+#: apps/io.ox/presenter/views/toolbarview.js
+#: module:io.ox/presenter
+msgid "End the presentation"
+msgstr ""
+
 #. button label for joining the presentation
-#. button tooltip for joining the presentation
 #: apps/io.ox/presenter/views/toolbarview.js
 #: module:io.ox/presenter
 msgid "Join presentation"
 msgstr ""
 
-#. button label for toggling participants view
-#. button tooltip for toggling participants view
+#. button tooltip for joining the presentation
 #: apps/io.ox/presenter/views/toolbarview.js
 #: module:io.ox/presenter
-msgid "View participants"
+msgid "Join the presentation"
+msgstr ""
+
+#. button tooltip for leaving the presentation
+#: apps/io.ox/presenter/views/toolbarview.js
+#: module:io.ox/presenter
+msgid "Leave the presentation"
 msgstr ""
 
 #. aria label for the toolbar, for screen reader only.

@@ -1859,13 +1859,20 @@ msgid "Continue"
 msgstr ""
 
 #. button label for continuing the presentation
-#. button tooltip for continuing the presentation
 #. tooltip for the continue presentation button
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
 #: apps/io.ox/presenter/views/presentationview.js
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Continue presentation"
 msgstr ""
+
+#. button tooltip for continuing the presentation
+#: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
+#, fuzzy
+#| msgid "Please enter a valid date"
+msgid "Continue the presentation"
+msgstr "Огноог зөв оруулна уу"
 
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Conversations"
@@ -2953,11 +2960,17 @@ msgid "End of working time"
 msgstr ""
 
 #. button label for ending the presentation
-#. button tooltip for ending the presentation
 #: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 #, fuzzy
 #| msgid "Please enter a valid date"
 msgid "End presentation"
+msgstr "Огноог зөв оруулна уу"
+
+#. button tooltip for ending the presentation
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Please enter a valid date"
+msgid "End the presentation"
 msgstr "Огноог зөв оруулна уу"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -4025,14 +4038,25 @@ msgid "Join Presentation"
 msgstr ""
 
 #. button label for joining the presentation
-#. button tooltip for joining the presentation
 #: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 msgid "Join presentation"
 msgstr ""
 
+#. button tooltip for joining the presentation
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Please enter a valid date"
+msgid "Join the presentation"
+msgstr "Огноог зөв оруулна уу"
+
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "July"
 msgstr "7 сар"
+
+#. button tooltip for 'jump to presentation slide' action
+#: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
+msgid "Jump to slide"
+msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "June"
@@ -4134,11 +4158,17 @@ msgstr ""
 
 #. tooltip for the leave presentation button
 #. button label for leaving the presentation
-#. button tooltip for leaving the presentation
 #: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Leave presentation"
 msgstr ""
+
+#. button tooltip for leaving the presentation
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Please enter a valid date"
+msgid "Leave the presentation"
+msgstr "Огноог зөв оруулна уу"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -5320,11 +5350,18 @@ msgid "Password strength: Wrong length"
 msgstr ""
 
 #. button label for pausing the presentation
-#. button tooltip for pausing the presentation
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Pause presentation"
 msgstr ""
+
+#. button tooltip for pausing the presentation
+#: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
+#, fuzzy
+#| msgid "Please enter a valid date"
+msgid "Pause the presentation"
+msgstr "Огноог зөв оруулна уу"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -6993,7 +7030,6 @@ msgid "Start of working time"
 msgstr ""
 
 #. button label for the 'start presentation' dropdown
-#. button tooltip for 'start presentation' dropdown
 #: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 msgid "Start presentation"
 msgstr ""
@@ -7008,6 +7044,13 @@ msgstr "Огноог зөв оруулна уу"
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Start search"
 msgstr ""
+
+#. button tooltip for 'start presentation' dropdown
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Please enter a valid date"
+msgid "Start the presentation"
+msgstr "Огноог зөв оруулна уу"
 
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 #, fuzzy
@@ -8236,9 +8279,11 @@ msgstr ""
 msgid "View details"
 msgstr ""
 
+#. the dropdown button tooltip for the participants dropdown.
 #. button label for toggling participants view
 #. button tooltip for toggling participants view
-#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
 #, fuzzy
 #| msgid "Participants"
 msgid "View participants"

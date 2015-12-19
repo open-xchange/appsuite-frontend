@@ -1869,12 +1869,19 @@ msgid "Continue"
 msgstr "Fortsett"
 
 #. button label for continuing the presentation
-#. button tooltip for continuing the presentation
 #. tooltip for the continue presentation button
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
 #: apps/io.ox/presenter/views/presentationview.js
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Continue presentation"
+msgstr "Fortsett presentasjon"
+
+#. button tooltip for continuing the presentation
+#: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
+#, fuzzy
+#| msgid "Continue presentation"
+msgid "Continue the presentation"
 msgstr "Fortsett presentasjon"
 
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -2955,9 +2962,15 @@ msgid "End of working time"
 msgstr "Arbeidsdagen slutter"
 
 #. button label for ending the presentation
-#. button tooltip for ending the presentation
 #: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 msgid "End presentation"
+msgstr "Avslutt presentasjon"
+
+#. button tooltip for ending the presentation
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "End presentation"
+msgid "End the presentation"
 msgstr "Avslutt presentasjon"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -4063,14 +4076,27 @@ msgid "Join Presentation"
 msgstr "Delta i presentasjonen"
 
 #. button label for joining the presentation
-#. button tooltip for joining the presentation
 #: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 msgid "Join presentation"
+msgstr "Delta i presentasjonen"
+
+#. button tooltip for joining the presentation
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Join presentation"
+msgid "Join the presentation"
 msgstr "Delta i presentasjonen"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "July"
 msgstr "juli"
+
+#. button tooltip for 'jump to presentation slide' action
+#: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Next slide"
+msgid "Jump to slide"
+msgstr "Neste lysbilde"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "June"
@@ -4172,10 +4198,16 @@ msgstr "Forlat"
 
 #. tooltip for the leave presentation button
 #. button label for leaving the presentation
-#. button tooltip for leaving the presentation
 #: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Leave presentation"
+msgstr "Forlat presentasjonen"
+
+#. button tooltip for leaving the presentation
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Leave presentation"
+msgid "Leave the presentation"
 msgstr "Forlat presentasjonen"
 
 #. Emoji category
@@ -5360,10 +5392,17 @@ msgid "Password strength: Wrong length"
 msgstr "Passordstyrke: Feil lengde"
 
 #. button label for pausing the presentation
-#. button tooltip for pausing the presentation
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Pause presentation"
+msgstr "Pause presentasjon"
+
+#. button tooltip for pausing the presentation
+#: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
+#, fuzzy
+#| msgid "Pause presentation"
+msgid "Pause the presentation"
 msgstr "Pause presentasjon"
 
 #. Emoji category
@@ -7039,7 +7078,6 @@ msgid "Start of working time"
 msgstr "Arbeidsdagen starter"
 
 #. button label for the 'start presentation' dropdown
-#. button tooltip for 'start presentation' dropdown
 #: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 msgid "Start presentation"
 msgstr "Start presentasjon"
@@ -7052,6 +7090,13 @@ msgstr "Start fjernpresentasjon"
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Start search"
 msgstr "Start søk"
+
+#. button tooltip for 'start presentation' dropdown
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Start presentation"
+msgid "Start the presentation"
+msgstr "Start presentasjon"
 
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 msgid "Start tour"
@@ -8364,9 +8409,11 @@ msgstr "Vis vedlegg"
 msgid "View details"
 msgstr "Vis detaljer"
 
+#. the dropdown button tooltip for the participants dropdown.
 #. button label for toggling participants view
 #. button tooltip for toggling participants view
-#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
 msgid "View participants"
 msgstr "Vis deltakere"
 

@@ -1912,12 +1912,19 @@ msgid "Continue"
 msgstr "Pokračovať"
 
 #. button label for continuing the presentation
-#. button tooltip for continuing the presentation
 #. tooltip for the continue presentation button
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
 #: apps/io.ox/presenter/views/presentationview.js
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Continue presentation"
+msgstr "Pokračovať v prezentácii"
+
+#. button tooltip for continuing the presentation
+#: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
+#, fuzzy
+#| msgid "Continue presentation"
+msgid "Continue the presentation"
 msgstr "Pokračovať v prezentácii"
 
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -3012,9 +3019,15 @@ msgid "End of working time"
 msgstr "Koniec pracovnej doby"
 
 #. button label for ending the presentation
-#. button tooltip for ending the presentation
 #: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 msgid "End presentation"
+msgstr "Koniec prezentácie"
+
+#. button tooltip for ending the presentation
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "End presentation"
+msgid "End the presentation"
 msgstr "Koniec prezentácie"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -4124,14 +4137,27 @@ msgid "Join Presentation"
 msgstr "Pripojiť sa k prezentácii"
 
 #. button label for joining the presentation
-#. button tooltip for joining the presentation
 #: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 msgid "Join presentation"
+msgstr "Pripojiť sa k prezentácii"
+
+#. button tooltip for joining the presentation
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Join presentation"
+msgid "Join the presentation"
 msgstr "Pripojiť sa k prezentácii"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "July"
 msgstr "júl"
+
+#. button tooltip for 'jump to presentation slide' action
+#: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Next slide"
+msgid "Jump to slide"
+msgstr "Ďalšia snímka"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "June"
@@ -4235,10 +4261,16 @@ msgstr "Opustiť"
 
 #. tooltip for the leave presentation button
 #. button label for leaving the presentation
-#. button tooltip for leaving the presentation
 #: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Leave presentation"
+msgstr "Opustiť prezentáciu"
+
+#. button tooltip for leaving the presentation
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Leave presentation"
+msgid "Leave the presentation"
 msgstr "Opustiť prezentáciu"
 
 #. Emoji category
@@ -5435,10 +5467,17 @@ msgid "Password strength: Wrong length"
 msgstr "Sila hesla: nesprávna dĺžka"
 
 #. button label for pausing the presentation
-#. button tooltip for pausing the presentation
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Pause presentation"
+msgstr "Pozastaviť prezentáciu"
+
+#. button tooltip for pausing the presentation
+#: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
+#, fuzzy
+#| msgid "Pause presentation"
+msgid "Pause the presentation"
 msgstr "Pozastaviť prezentáciu"
 
 #. Emoji category
@@ -7141,7 +7180,6 @@ msgid "Start of working time"
 msgstr "Začiatok pracovného času"
 
 #. button label for the 'start presentation' dropdown
-#. button tooltip for 'start presentation' dropdown
 #: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 msgid "Start presentation"
 msgstr "Spustiť prezentáciu"
@@ -7154,6 +7192,13 @@ msgstr "Spustiť vzdialenú prezentáciu"
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Start search"
 msgstr "Spustiť vyhľadávanie"
+
+#. button tooltip for 'start presentation' dropdown
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Start presentation"
+msgid "Start the presentation"
+msgstr "Spustiť prezentáciu"
 
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 msgid "Start tour"
@@ -8471,9 +8516,11 @@ msgstr "Zobraziť prílohu"
 msgid "View details"
 msgstr "Zobraziť podrobnosti"
 
+#. the dropdown button tooltip for the participants dropdown.
 #. button label for toggling participants view
 #. button tooltip for toggling participants view
-#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
 msgid "View participants"
 msgstr "Zobraziť účastníkov"
 

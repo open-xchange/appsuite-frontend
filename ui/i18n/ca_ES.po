@@ -2041,7 +2041,6 @@ msgid "Continue"
 msgstr "Continua"
 
 #. button label for continuing the presentation
-#. button tooltip for continuing the presentation
 #. tooltip for the continue presentation button
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
 #: apps/io.ox/presenter/views/presentationview.js
@@ -2049,6 +2048,14 @@ msgstr "Continua"
 #, fuzzy
 #| msgid "Task invitations"
 msgid "Continue presentation"
+msgstr "Convits a tasques"
+
+#. button tooltip for continuing the presentation
+#: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
+#, fuzzy
+#| msgid "Task invitations"
+msgid "Continue the presentation"
 msgstr "Convits a tasques"
 
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -3219,11 +3226,17 @@ msgid "End of working time"
 msgstr "Final de la jornada laboral"
 
 #. button label for ending the presentation
-#. button tooltip for ending the presentation
 #: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 #, fuzzy
 #| msgid "Task invitations"
 msgid "End presentation"
+msgstr "Convits a tasques"
+
+#. button tooltip for ending the presentation
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Task invitations"
+msgid "End the presentation"
 msgstr "Convits a tasques"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -4416,16 +4429,29 @@ msgid "Join Presentation"
 msgstr "Convits a tasques"
 
 #. button label for joining the presentation
-#. button tooltip for joining the presentation
 #: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 #, fuzzy
 #| msgid "Task invitations"
 msgid "Join presentation"
 msgstr "Convits a tasques"
 
+#. button tooltip for joining the presentation
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Task invitations"
+msgid "Join the presentation"
+msgstr "Convits a tasques"
+
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "July"
 msgstr "juliol"
+
+#. button tooltip for 'jump to presentation slide' action
+#: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Next Week"
+msgid "Jump to slide"
+msgstr "La setmana que ve"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "June"
@@ -4544,12 +4570,18 @@ msgstr ""
 
 #. tooltip for the leave presentation button
 #. button label for leaving the presentation
-#. button tooltip for leaving the presentation
 #: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js
 #, fuzzy
 #| msgid "Task invitations"
 msgid "Leave presentation"
+msgstr "Convits a tasques"
+
+#. button tooltip for leaving the presentation
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Task invitations"
+msgid "Leave the presentation"
 msgstr "Convits a tasques"
 
 #. Emoji category
@@ -5803,12 +5835,19 @@ msgid "Password strength: Wrong length"
 msgstr "Fortalesa de la contrasenya: longitud incorrecta"
 
 #. button label for pausing the presentation
-#. button tooltip for pausing the presentation
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js
 #, fuzzy
 #| msgid "Task invitations"
 msgid "Pause presentation"
+msgstr "Convits a tasques"
+
+#. button tooltip for pausing the presentation
+#: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
+#, fuzzy
+#| msgid "Task invitations"
+msgid "Pause the presentation"
 msgstr "Convits a tasques"
 
 #. Emoji category
@@ -7633,7 +7672,6 @@ msgid "Start of working time"
 msgstr "Inici de la jornada laboral"
 
 #. button label for the 'start presentation' dropdown
-#. button tooltip for 'start presentation' dropdown
 #: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 #, fuzzy
 #| msgid "Task invitations"
@@ -7650,6 +7688,13 @@ msgstr "Convits a tasques"
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Start search"
 msgstr "Comença la recerca"
+
+#. button tooltip for 'start presentation' dropdown
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Task invitations"
+msgid "Start the presentation"
+msgstr "Convits a tasques"
 
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 #, fuzzy
@@ -9055,9 +9100,11 @@ msgstr "Desa l'adjunt"
 msgid "View details"
 msgstr "Amaga els detalls"
 
+#. the dropdown button tooltip for the participants dropdown.
 #. button label for toggling participants view
 #. button tooltip for toggling participants view
-#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
 #, fuzzy
 #| msgid "Participants"
 msgid "View participants"
