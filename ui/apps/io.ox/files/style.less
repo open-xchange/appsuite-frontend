@@ -647,3 +647,37 @@ ul.breadcrumb li.prefix {
 .filestorage-conflict-warning {
     padding-top: 8px;
 }
+
+// add storage account dialog
+.select-storage-account-dialog {
+    .modal-body {
+        .add-acc-label {
+            color: #555;
+            margin: 0;
+        }
+
+        .storage-account-item {
+
+            display: block;
+            float: left;
+            margin: 0 4px 10px 0;
+            background-size: cover;
+            width: 32px;
+            height: 32px;
+            padding: 0;
+
+            &.logo-google {
+                background-image: url(apps/themes/default/googledrive_logo64.png);
+            }
+            &.logo-boxcom {
+                background-image: url(apps/themes/default/box_logo64.png);
+            }
+            &.logo-onedrive {
+                background-image: url(apps/themes/default/onedrive_logo64.png);
+            }
+            &.logo-dropbox {
+                background-image: url(apps/themes/default/dropbox_logo64.png);
+            }
+        }
+    }
+}

@@ -41,7 +41,8 @@ define('io.ox/files/main', [
     'io.ox/files/share/toolbar',
     'io.ox/files/upload/dropzone',
     'io.ox/core/folder/breadcrumb',
-    'gettext!io.ox/core/viewer'
+    'gettext!io.ox/core/viewer',
+    'io.ox/files/folderview-extensions'
 ], function (commons, gt, settings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview) {
 
     'use strict';
@@ -1047,6 +1048,16 @@ define('io.ox/files/main', [
                     toolbar = nodes.body.find('.classic-toolbar-container'),
                     control = nodes.body.find('.list-view-control > .generic-toolbar'),
                     sidepanel = nodes.sidepanel;
+                metrics.watch({
+                    node: sidepanel,
+                    selector: '[data-action="add-storage-account"]',
+                    type: 'click'
+                }, {
+                    app: 'drive',
+                    target: 'folder/account',
+                    type: 'click',
+                    action: 'add'
+                });
                 // toolbar actions
                 toolbar.delegate('.io-ox-action-link:not(.dropdown-toggle)', 'mousedown', function (e) {
                     metrics.trackEvent({
