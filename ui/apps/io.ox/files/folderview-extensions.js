@@ -132,6 +132,7 @@ define('io.ox/files/folderview-extensions', [
                                 .on('click', function (e) {
                                     e.preventDefault();
 
+                                    $(this).tooltip('hide');
                                     baton.dialog.close();
 
                                     var win = window.open(ox.base + '/busy.html', '_blank', 'height=600, width=800, resizable=yes, scrollbars=yes');
