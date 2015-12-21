@@ -390,19 +390,18 @@ define('io.ox/mail/api', [
             return http.wait(
                 // wait a short moment, so that the UI reacts first, i.e. triggers
                 // the next message; apparently a "delete" blocks that otherwise
-                _.wait(500).then(function () {
+                _.wait(100).then(function () {
                     return http.PUT({
                         module: 'mail',
                         params: { action: 'delete', withFolders: true, timestamp: _.then() },
                         data: http.simplify(ids),
                         appendColumns: false
                     })
-                    .done(function () {
-                        // reset trash folder
-                        var trashId = accountAPI.getFoldersByType('trash');
-                        pool.resetFolder(trashId);
-                        // update unread counter and folder item counter
-                        folderAPI.reload(ids, trashId);
+                    .done(function (data) {
+                        // update affected folders
+                        _(data.folders).each(function (item) {
+                            folderAPI.pool.getModel(item.folder_id).set(_(item).pick('total', 'unread'));
+                        });
                         // trigger delete to update notification area
                         api.trigger('delete');
                         api.trigger('deleted-mails', ids);
