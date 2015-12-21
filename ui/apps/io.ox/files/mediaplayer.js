@@ -70,7 +70,7 @@ define('io.ox/files/mediaplayer', [
                 this.win = this.app.getWindow();
             } else {
                 //get active window by hand
-                this.win = { nodes: { outer: $('.window-container:visible').first() }};
+                this.win = { nodes: { outer: $('.window-container:visible').first() } };
             }
             this.lastActiveElement = $(document.activeElement);
 

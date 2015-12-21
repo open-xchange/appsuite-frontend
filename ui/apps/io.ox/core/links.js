@@ -39,7 +39,7 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
         var data = $(this).data(),
             // special handling for text and spreadsheet
             options = /^io.ox\/office\//.test(data.app) ?
-                { action: 'load', file: { folder_id: data.folder, id: data.id }} :
+                { action: 'load', file: { folder_id: data.folder, id: data.id } } :
                 _(data).pick('folder', 'folder_id', 'id');
 
         ox.launch(data.app + '/main', options).done(function () {

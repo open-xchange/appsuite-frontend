@@ -150,7 +150,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
         .on('save', function () {
             if (baton.$.name.val() !== '') {
-                var update = signature.id ? {} : { type: 'signature', module: 'io.ox/mail', displayname: '', content: '', misc: { insertion: 'below', 'content-type': 'text/html' }},
+                var update = signature.id ? {} : { type: 'signature', module: 'io.ox/mail', displayname: '', content: '', misc: { insertion: 'below', 'content-type': 'text/html' } },
                     editorContent = baton.editor.getContent();
 
                 update.id = signature.id;

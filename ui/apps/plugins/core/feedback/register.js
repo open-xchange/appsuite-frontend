@@ -40,23 +40,23 @@ define('plugins/core/feedback/register', [
                     if (e.which === 37) {
                         activestars = node.find('.active-star').length;
                         if (activestars - 1 >= 0) {
-                            updateStars({ data: { starnumber: activestars - 1 }});
+                            updateStars({ data: { starnumber: activestars - 1 } });
                         }
                         node.attr('aria-label', gt('Rating %1$d of %2$d. Press Enter to confirm or use the left and right arrowkeys to adjust your rating.', activestars - 1, number));
                     } else if (e.which === 39) {
                         //right arrow
                         activestars = node.find('.active-star').length;
                         if (activestars + 1 <= number) {
-                            updateStars({ data: { starnumber: activestars + 1 }});
+                            updateStars({ data: { starnumber: activestars + 1 } });
                         }
                         node.attr('aria-label', gt('Rating %1$d of %2$d. Press Enter to confirm or use the left and right arrowkeys to adjust your rating.', activestars + 1, number));
                     } else if (e.which === 13) {
                         //enter
-                        updateStars({ type: 'click', data: { starnumber: node.find('.active-star').length }});
+                        updateStars({ type: 'click', data: { starnumber: node.find('.active-star').length } });
                         node.attr('aria-label', gt('Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust your rating.', value, number));
                     } else if (e.which === 9) {
                         //tab
-                        updateStars({ type: 'mouseleave', data: { starnumber: value }});
+                        updateStars({ type: 'mouseleave', data: { starnumber: value } });
                         node.attr('aria-label', gt('Rating %1$d of %2$d. Press Enter to confirm or use the left and right arrowkeys to adjust your rating.', value, number));
                     }
                 }),
@@ -89,7 +89,7 @@ define('plugins/core/feedback/register', [
               .on((hover === false ? 'click' : 'click mouseenter mouseleave'), { starnumber: i + 1 }, updateStars));
         }
         //trigger initial update
-        updateStars({ data: { starnumber: value }});
+        updateStars({ data: { starnumber: value } });
 
         node.append(stars);
 

@@ -62,38 +62,48 @@ define('io.ox/mail/accounts/model', [
                 },
                 msg: gt('This field has to be filled')
             },
-            mail_port: [{
-                required: function () {
-                    return !this.isHidden();
+            mail_port: [
+                {
+                    required: function () {
+                        return !this.isHidden();
+                    },
+                    msg: gt('This field has to be filled')
                 },
-                msg: gt('This field has to be filled')
-            }, { fn: function (val) {
-                var temp = validation.formats.number(val);
-                if (temp === true) {
-                    // strangely if the validation returns true here, it is marked as invalid...
-                    return false;
+                {
+                    fn: function (val) {
+                        var temp = validation.formats.number(val);
+                        if (temp === true) {
+                            // strangely if the validation returns true here, it is marked as invalid...
+                            return false;
+                        }
+                        return temp;
+                    }
                 }
-                return temp;
-            }}],
+            ],
             transport_server: {
                 required: function () {
                     return !this.isHidden();
                 },
                 msg: gt('This field has to be filled')
             },
-            transport_port: [{
-                required: function () {
-                    return !this.isHidden();
+            transport_port: [
+                {
+                    required: function () {
+                        return !this.isHidden();
+                    },
+                    msg: gt('This field has to be filled')
                 },
-                msg: gt('This field has to be filled')
-            }, { fn: function (val) {
-                var temp = validation.formats.number(val);
-                if (temp === true) {
-                    // strangely if the validation returns true here, it is marked as invalid...
-                    return false;
+                {
+                    fn: function (val) {
+                        var temp = validation.formats.number(val);
+                        if (temp === true) {
+                            // strangely if the validation returns true here, it is marked as invalid...
+                            return false;
+                        }
+                        return temp;
+                    }
                 }
-                return temp;
-            }}]
+            ]
         },
 
         isHidden: function () {
@@ -114,9 +124,7 @@ define('io.ox/mail/accounts/model', [
 
             var regEmail = /\@/.test(newMailaddress);
 
-            if (!regEmail) {
-                return gt('This is not a valid email address');
-            }
+            if (!regEmail) return gt('This is not a valid email address');
         },
 
         initialize: function () {

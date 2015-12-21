@@ -287,7 +287,7 @@ define.async('io.ox/oauth/keychain', [
                 cache = {};
 
                 _(services[0]).each(function (service) {
-                    cache[service.id] = $.extend({ accounts: {}}, service);
+                    cache[service.id] = $.extend({ accounts: {} }, service);
                 });
 
                 _(accounts[0]).each(function (account) {
