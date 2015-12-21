@@ -366,7 +366,7 @@ define('io.ox/mail/api', [
      * @param  {object} options [see api factory]
      * @return { deferred} resolves as array
      */
-    api.remove = (function () {
+    api.remove = (function () {
 
         var pending = false, queue = [], wait = $.Deferred();
 

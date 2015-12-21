@@ -39,7 +39,7 @@ define('io.ox/files/folderview-extensions', [
         }
     };
 
-    function getAvailableServices () {
+    function getAvailableServices() {
         return require(['io.ox/keychain/api']).then(function (keychainApi) {
             return _(keychainApi.submodules).filter(function (submodule) {
                 if (!services[submodule.id]) return false;

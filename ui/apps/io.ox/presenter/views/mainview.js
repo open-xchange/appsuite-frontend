@@ -211,7 +211,7 @@ define('io.ox/presenter/views/mainview', [
             var localModel = this.app.localModel;
             var userId = this.app.rtConnection.getRTUuid();
 
-            function wasParticipant (userId) {
+            function wasParticipant(userId) {
                 return !rtModel.wasPresenter(userId) && _.some(rtModel.previous('participants'), function (user) {
                     return (userId === user.userId);
                 }, this);

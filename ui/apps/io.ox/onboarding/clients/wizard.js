@@ -37,7 +37,7 @@ define('io.ox/onboarding/clients/wizard', [
                                 .append(
                                     $('<a href="#" tabindex="1" class="box">')
                                     // apply disabled style?
-                                    .addClass(obj.enabled ? '' : 'disabled' )
+                                    .addClass(obj.enabled ? '' : 'disabled')
                                     .append(
                                         $('<i class="icon fa">').addClass(obj.icon || 'fa-circle'),
                                         $('<div class="title">').text(obj.title || obj.name || obj.id || '\xa0')
@@ -183,7 +183,7 @@ define('io.ox/onboarding/clients/wizard', [
                 // step:before:show, step:ready, step:show, step:next, step:before:hide, step:hide, change:step,
                 //'all': this._inspect,
                 'step:back': _.bind(this._reset, this),
-                'step:before:show':_.bind(this._onStepBeforeShow, this)
+                'step:before:show': _.bind(this._onStepBeforeShow, this)
             });
 
             this.wizard.on('selected', function (data) {
