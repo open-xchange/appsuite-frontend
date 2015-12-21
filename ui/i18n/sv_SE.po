@@ -670,19 +670,19 @@ msgstr "Faktisk tidsåtgång i minuter"
 msgid "Add"
 msgstr "Lägg till"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
 msgid "Add Box account"
 msgstr "Lägg till Box-konto"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
 msgid "Add Dropbox account"
 msgstr "Lägg till Dropbox-konto"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
 msgid "Add Google Drive account"
 msgstr "Lägg till Google Drive-konto"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
 msgid "Add OneDrive account"
 msgstr "Lägg till OneDrive-konto"
 
@@ -691,7 +691,7 @@ msgstr "Lägg till OneDrive-konto"
 msgid "Add a description"
 msgstr "Lägg till beskrivning"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
 msgid "Add account"
@@ -813,6 +813,12 @@ msgstr "Lägg till signatur ovanför citerad text"
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add signature below quoted text"
 msgstr "Lägg till signatur nedanför citerad text"
+
+#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
+#, fuzzy
+#| msgid "Add your account"
+msgid "Add storage account"
+msgstr "Lägg till ditt konto"
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Add subject"
@@ -1442,7 +1448,8 @@ msgstr "Kalender:"
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
-#: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
+#: apps/io.ox/files/actions/versions-delete.js
+#: apps/io.ox/files/folderview-extensions.js apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings

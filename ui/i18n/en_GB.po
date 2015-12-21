@@ -669,19 +669,19 @@ msgstr "Actual duration in minutes"
 msgid "Add"
 msgstr "Add"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
 msgid "Add Box account"
 msgstr "Add Box account"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
 msgid "Add Dropbox account"
 msgstr "Add Dropbox account"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
 msgid "Add Google Drive account"
 msgstr "Add Google Drive account"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
 msgid "Add OneDrive account"
 msgstr "Add OneDrive account"
 
@@ -690,7 +690,7 @@ msgstr "Add OneDrive account"
 msgid "Add a description"
 msgstr "Add a description"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
 msgid "Add account"
@@ -812,6 +812,12 @@ msgstr "Add signature above quoted text"
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add signature below quoted text"
 msgstr "Add signature below quoted text"
+
+#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
+#, fuzzy
+#| msgid "Add your account"
+msgid "Add storage account"
+msgstr "Add your account"
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Add subject"
@@ -1443,7 +1449,8 @@ msgstr "Calendar:"
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
-#: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
+#: apps/io.ox/files/actions/versions-delete.js
+#: apps/io.ox/files/folderview-extensions.js apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings

@@ -662,19 +662,19 @@ msgstr "實際持續分鐘數"
 msgid "Add"
 msgstr "新增"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
 msgid "Add Box account"
 msgstr "新增 Box 帳號"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
 msgid "Add Dropbox account"
 msgstr "新增 Dropbox 帳號"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
 msgid "Add Google Drive account"
 msgstr "新增 Google Drive 帳號"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
 msgid "Add OneDrive account"
 msgstr "新增 OneDrive 帳號"
 
@@ -683,7 +683,7 @@ msgstr "新增 OneDrive 帳號"
 msgid "Add a description"
 msgstr "新增描述"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
 msgid "Add account"
@@ -805,6 +805,12 @@ msgstr "新增簽名檔於引用內容上方"
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add signature below quoted text"
 msgstr "新增簽名檔於引用內容下方"
+
+#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
+#, fuzzy
+#| msgid "Add your account"
+msgid "Add storage account"
+msgstr "新增您的帳號"
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Add subject"
@@ -1428,7 +1434,8 @@ msgstr "行事曆:"
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
-#: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
+#: apps/io.ox/files/actions/versions-delete.js
+#: apps/io.ox/files/folderview-extensions.js apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings

@@ -449,6 +449,7 @@ msgstr ""
 #: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js
+#: apps/io.ox/files/folderview-extensions.js
 #: apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js
@@ -6416,6 +6417,38 @@ msgstr[1] ""
 msgid "Upload local file"
 msgstr ""
 
+#: apps/io.ox/files/folderview-extensions.js
+#: module:io.ox/files
+msgid "Add Google Drive account"
+msgstr ""
+
+#: apps/io.ox/files/folderview-extensions.js
+#: module:io.ox/files
+msgid "Add Dropbox account"
+msgstr ""
+
+#: apps/io.ox/files/folderview-extensions.js
+#: module:io.ox/files
+msgid "Add Box account"
+msgstr ""
+
+#: apps/io.ox/files/folderview-extensions.js
+#: module:io.ox/files
+msgid "Add OneDrive account"
+msgstr ""
+
+#: apps/io.ox/files/folderview-extensions.js
+#: module:io.ox/files
+msgid "Add storage account"
+msgstr ""
+
+#: apps/io.ox/files/folderview-extensions.js
+#: module:io.ox/files
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "Add account"
+msgstr ""
+
 #: apps/io.ox/files/guidance/main.js
 #: module:io.ox/files
 msgctxt "help"
@@ -7057,33 +7090,6 @@ msgstr ""
 #: apps/io.ox/files/view-options.js
 #: module:io.ox/files
 msgid "Search results"
-msgstr ""
-
-#: apps/io.ox/files/view-options.js
-#: module:io.ox/files
-msgid "Add Google Drive account"
-msgstr ""
-
-#: apps/io.ox/files/view-options.js
-#: module:io.ox/files
-msgid "Add Dropbox account"
-msgstr ""
-
-#: apps/io.ox/files/view-options.js
-#: module:io.ox/files
-msgid "Add OneDrive account"
-msgstr ""
-
-#: apps/io.ox/files/view-options.js
-#: module:io.ox/files
-msgid "Add Box account"
-msgstr ""
-
-#: apps/io.ox/files/view-options.js
-#: module:io.ox/files
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts
-msgid "Add account"
 msgstr ""
 
 #: apps/io.ox/find/date/patterns.js
