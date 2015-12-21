@@ -43,12 +43,9 @@ define('io.ox/files/share/api', [
             // Check if ACLs enabled and only do that for mail component,
             // every other component will have ACL capabilities (stored in DB)
             if (this.get('module') === 'mail' && !(this.get('capabilities') & 1)) return false;
-            // we use supported capabilities here. note: if a folder has no capabilities the supported capabilities is not present (instead of an empty array).
-            // this can be seen with folders from external filestorages
-            if (this.get('module') === 'infostore') {
-                return _(this.get('supported_capabilities')).indexOf('permissions') > -1 && folderAPI.Bitmask(this.get('own_rights')).get('admin') >= 1;
-            }
-            // otherwise check folder bits
+            // for infostore/drive we need to check 'supported_capabilities' first
+            if (this.get('module') === 'infostore' && _(this.get('supported_capabilities')).indexOf('permissions') === -1) return false;
+            // finally: check folder bits
             return folderAPI.Bitmask(this.get('own_rights')).get('admin') >= 1;
         },
 
@@ -252,7 +249,7 @@ define('io.ox/files/share/api', [
                     tree: 0,
                     all: 0,
                     altNames: true,
-                    columns: '1,2,5,300,301,302,305,3060'
+                    columns: '1,2,5,300,301,302,305,317,3060'
                 }
             });
         },
