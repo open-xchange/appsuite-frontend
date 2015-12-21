@@ -14,13 +14,14 @@ define('io.ox/backbone/settings', ['io.ox/backbone/basicModel'], function (Basic
 
     'use strict';
 
+    if (ox.debug) console.warn('io.ox/backbone/settings is deprecated with 7.8.1.');
+
     var cache = {};
 
     return {
         get: function (ref, options) {
-            if (cache[ref]) {
-                return cache[ref];
-            }
+
+            if (cache[ref]) return cache[ref];
 
             var settings = require('settings!' + ref);
 
@@ -39,17 +40,16 @@ define('io.ox/backbone/settings', ['io.ox/backbone/basicModel'], function (Basic
                         // Don't do anything
                     },
                     read: function () {
-                        var def = $.Deferred();
-                        settings.load({ noCache: true })
-                            .done(function () {
-                                return def.resolve(settings.all());
-                            });
-                        return def;
+                        return settings.load({ noCache: true }).then(function () {
+                            return settings.all();
+                        });
                     }
                 }
             }, options));
 
-            return (cache[ref] = settings.createModel(ModelClass));
+            cache[ref] = settings.createModel(ModelClass);
+
+            return cache[ref];
         }
     };
 });
