@@ -156,7 +156,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             if (!_.isEmpty(baton.data.version_comment)) {
                 this.find('td:last').append(
                     $('<div class="comment">').append(
-                        ($node = $('<span class="version-comment">'))
+                        $node = $('<span class="version-comment">')
                     )
                 );
 

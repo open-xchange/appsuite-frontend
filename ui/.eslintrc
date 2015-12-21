@@ -104,7 +104,7 @@
         'no-sparse-arrays': 2,
 
         // Avoid code that looks like two expressions but is actually one
-        // 'no-unexpected-multiline': 2,
+        'no-unexpected-multiline': 2,
 
         // disallow unreachable statements after a return, throw, continue, or break statement
         'no-unreachable': 2,
