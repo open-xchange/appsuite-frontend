@@ -312,7 +312,6 @@ function (ext, Event, caps, uuids, http, stanza, tabId) {
         delete resendBuffer[sequenceNumber];
         if (resendDeferreds[sequenceNumber]) {
             resendDeferreds[sequenceNumber].resolve();
-        } else {
         }
         if (api.debug) {
             console.log('Received receipt for ' + sequenceNumber);

@@ -35,7 +35,7 @@
         // http://eslint.org/docs/rules/index.html#possible-errors
 
         // disallow assignment in conditional expressions
-        //'no-cond-assign': 2,
+        // 'no-cond-assign': 2,
 
         // disallow dangling Commas
         'comma-dangle': [2, 'never'],
@@ -65,7 +65,7 @@
         'no-empty-character-class': 2,
 
         // disallow empty statements
-        //'no-empty': 2,
+        'no-empty': 2,
 
         // disallow assigning to the exception in a catch block
         'no-ex-assign': 2,

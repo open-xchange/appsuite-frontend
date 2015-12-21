@@ -881,7 +881,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             if (r.o.type === 'GET' || r.o.type === 'PUT') {
 
                 // get hash value - we just use stringify here (xhr contains payload for unique PUT requests)
-                try { hash = JSON.stringify(r.xhr); } catch (e) {}
+                try { hash = JSON.stringify(r.xhr); } catch (e) { if (ox.debug) console.error(e); }
 
                 if (r.o.consolidate !== false && hash && _.isArray(requests[hash])) {
                     // enqueue callbacks

@@ -206,6 +206,7 @@ define('io.ox/files/share/permissions', [
                         }
                     }
                 } catch (e) {
+                    if (ox.debug) console.error(e);
                 }
 
                 return isGuest;

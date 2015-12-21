@@ -372,6 +372,7 @@ define('io.ox/core/api/filestorage', [
                             }
                         });*/
                     } catch (e) {
+                        if (ox.debug) console.error(e);
                     }
                 });
             },

@@ -11,6 +11,8 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
+/*eslint-disable */
+
 define('l10n/ja_JP/io.ox/register', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',

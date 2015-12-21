@@ -152,7 +152,9 @@ define('io.ox/calendar/edit/recurrence-view', [
                     }
                     try {
                         $content.remove();
-                    } catch (e) {}
+                    } catch (e) {
+                        if (ox.debug) console.error(e);
+                    }
                     $anchor.show();
                     self[attribute] = value;
                     self.trigger('change', self);
@@ -175,7 +177,9 @@ define('io.ox/calendar/edit/recurrence-view', [
                     keys.destroy();
                     try {
                         $content.remove();
-                    } catch (e) {}
+                    } catch (e) {
+                        if (ox.debug) console.error(e);
+                    }
                     $anchor.show();
                 });
             });
@@ -401,7 +405,9 @@ define('io.ox/calendar/edit/recurrence-view', [
                             $dateInput.datepicker('remove');
                         }
                         $dateInput.remove();
-                    } catch (e) {}
+                    } catch (e) {
+                        if (ox.debug) console.error(e);
+                    }
                     $anchor.show().focus();
                 }
             });

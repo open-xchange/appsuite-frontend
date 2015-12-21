@@ -119,7 +119,9 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                     start = prev.children('li').length + 1;
                     ol.attr('start', start);
                 }
-            } catch (e) {}
+            } catch (e) {
+                if (ox.debug) console.error(e);
+            }
             // climb up
             container = p;
         }
@@ -128,6 +130,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             try {
                 lastBR.parentNode.removeChild(lastBR);
             } catch (e) {
+                if (ox.debug) console.error(e);
             }
         }
         // create new elements

@@ -148,7 +148,9 @@ define('io.ox/core/tk/upload', [
                         effectAllowed;
                     try {
                         effectAllowed = origEvt.dataTransfer.effectAllowed;
-                    } catch (err) {}
+                    } catch (e) {
+                        if (ox.debug) console.error(e);
+                    }
                     origEvt.dataTransfer.dropEffect = effectAllowed === 'move' || effectAllowed === 'linkMove' ? 'move' : 'copy';
 
                     clearTimeout(dragLeaveTimer);
