@@ -335,7 +335,7 @@ define('io.ox/portal/main', [
     collection.wasElementDeleted = function (model) {
         var needle = model.cid,
             haystack = this.models;
-        return !_(haystack).some(function (suspiciousHay) {return suspiciousHay.cid === needle; });
+        return !_(haystack).some(function (suspiciousHay) { return suspiciousHay.cid === needle; });
     };
 
     app.getTour = function () {

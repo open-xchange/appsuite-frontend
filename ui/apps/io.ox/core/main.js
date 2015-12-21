@@ -1101,7 +1101,7 @@ define('io.ox/core/main', [
                 if (topbar) {
                     // get hash of exisiting favorites
                     _(favorites).each(function (obj) { hash[obj.id] = obj; });
-                    _(topbarApps).each(function (obj) {hash[obj.id] = obj; });
+                    _(topbarApps).each(function (obj) { hash[obj.id] = obj; });
                     // get proper order
                     favorites = _(topbar.split(','))
                         .chain()

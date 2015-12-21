@@ -138,7 +138,7 @@ define('io.ox/core/extPatterns/links', [
         if (!process) return;
 
         // add least one desription exists so inject dividers
-        if (!extension.description) { return injectDescriptionDividers(this);}
+        if (!extension.description) return injectDescriptionDividers(this);
 
         // add help description
         var id = extension.ref.replace(/\//g, '-') + '-descr';

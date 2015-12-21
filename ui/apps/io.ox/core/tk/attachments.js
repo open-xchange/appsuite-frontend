@@ -91,7 +91,7 @@ define('io.ox/core/tk/attachments', [
 
                 removeFile.on('click', function () { self.deleteAttachment(attachment); });
 
-                if (size.text() === '0 B') {size.text(' '); }
+                if (size.text() === '0 B') size.text(' ');
 
                 return $el;
             },

@@ -142,7 +142,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
             if (type === 'forward' && unblocked(mailAPI.SENDTYPE.FORWARD)) {
                 var cid;
                 if (_.isArray(data)) {
-                    cid = _(data).map(function (o) {return _.cid(o); }).join();
+                    cid = _(data).map(function (o) { return _.cid(o); }).join();
                 } else {
                     cid = _.cid(data);
                 }

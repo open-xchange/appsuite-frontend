@@ -50,7 +50,7 @@ define('plugins/portal/twitter/util', [
             }
         });
 
-        var keySet = _(offsets).keys().sort(function (a, b) {return a - b; });
+        var keySet = _(offsets).keys().sort(function (a, b) { return a - b; });
         var bob = $('<span>');
         var cursor = 0;
         _(keySet).each(function (key) {

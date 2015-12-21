@@ -74,7 +74,7 @@ define.async('io.ox/oauth/keychain', [
         }
 
         this.getAll = function () {
-            return _(cache[service.id].accounts).chain().map(function (account) { return account; }).sortBy(function (account) {return account.id; }).map(outgoing).value();
+            return _(cache[service.id].accounts).chain().map(function (account) { return account; }).sortBy(function (account) { return account.id; }).map(outgoing).value();
         };
 
         this.get = function (id) {
@@ -337,7 +337,7 @@ define.async('io.ox/oauth/keychain', [
                 message: 'Done with oauth keychain',
                 services: services,
                 accounts: accounts,
-                serviceIDs: _(services[0]).map(function (service) {return simplifyId(service.id); })
+                serviceIDs: _(services[0]).map(function (service) { return simplifyId(service.id); })
             });
         });
     })

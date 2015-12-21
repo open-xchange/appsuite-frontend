@@ -44,12 +44,14 @@ define('io.ox/tasks/actions/delete', [
                             if (result.code === 'TSK-0019') { // task was already deleted somewhere else. everythings fine, just show info
                                 notifications.yell('info', gt('Task was already deleted!'));
                                 popup.close();
-                            } else if (result.error) {// there is an error message from the backend
+                            } else if (result.error) {
+                                // there is an error message from the backend
                                 popup.idle();
                                 popup.getBody().empty().append($.fail(result.error, function () {
                                     popup.trigger('deleteTask', data);
                                 })).find('h4').remove();
-                            } else {// show generic error message
+                            } else {
+                                // show generic error message
                                 // show retrymessage and enable buttons again
                                 popup.idle();
                                 popup.getBody().empty().append($.fail(

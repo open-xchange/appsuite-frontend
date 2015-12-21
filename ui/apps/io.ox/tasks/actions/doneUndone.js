@@ -64,7 +64,8 @@ define('io.ox/tasks/actions/doneUndone', [
                     })
                     .fail(function (result) {
                         var errorMsg = gt('A severe error occurred!');
-                        if (result.code === 'TSK-0007') {//task was modified before
+                        if (result.code === 'TSK-0007') {
+                            //task was modified before
                             errorMsg = gt('Task was modified before, please reload');
                         }
                         notifications.yell('error', errorMsg);

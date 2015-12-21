@@ -116,7 +116,7 @@ define('io.ox/tasks/edit/main', [
             win.nodes.main.addClass('scrollable');
 
             win.on('show', function () {
-                if (app.dropZone) {app.dropZone.include(); }
+                if (app.dropZone) app.dropZone.include();
                 // no autofocus on smartphone and for iOS in special (see bug #36921)
                 if (taskView && _.device('!smartphone && !iOS')) {
                     taskView.$el.find('.title-field').focus();
@@ -168,7 +168,7 @@ define('io.ox/tasks/edit/main', [
                 taskView.trigger('dispose');
                 //important so no events are executed on non existing models
                 taskModel.off();
-                if (app.dropZone) {app.dropZone.remove(); }
+                if (app.dropZone) app.dropZone.remove();
                 app = win = taskModel = taskView = null;
             };
 
