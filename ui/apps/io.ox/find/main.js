@@ -372,7 +372,6 @@ define('io.ox/find/main', [
             // TODO: move to ext point (>= 7.8.1)
             app.listenTo(manager, {
                 'change:list-of-actives': _.debounce(function (state, value, model) {
-                    if (app.model.manager.isFolderOnly());
                     require(['io.ox/metrics/main'], function (metrics) {
                         var name = app.get('parent').get('name') || 'unknown',
                             apptitle = _.last(name.split('/')),
