@@ -31,16 +31,7 @@ module.exports = function (grunt) {
         }
     });
 
-    try {
-        require('grunt-curl/tasks/curl');
-    } catch (e) {
-        grunt.verbose.warn('Skipping tinymce optional tasks');
-        return;
-    }
-
-    var languages = ['ar', 'ar_SA', 'az', 'be', 'bg_BG', 'bn_BD', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'de_AT', 'dv', 'el', 'en_CA', 'en_GB', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr_FR', 'gd', 'gl', 'he_IL', 'hr', 'hu_HU', 'hy', 'id', 'is_IS', 'it', 'ja', 'ka_GE', 'kk', 'km_KH', 'ko_KR', 'lb', 'lt', 'lv', 'ml', 'ml_IN', 'mn_MN', 'nb_NO', 'nl', 'pl', 'pt_BR', 'pt_PT', 'ro', 'ru', 'si_LK', 'sk', 'sl_SI', 'sr', 'sv_SE', 'ta', 'ta_IN', 'tg', 'th_TH', 'tr_TR', 'tt', 'ug', 'uk', 'uk_UA', 'vi', 'vi_VN', 'zh_CN', 'zh_TW'],
-        plugins = ['autolink', 'oximage', 'link', 'paste', 'textcolor', 'emoji'],
-
+    var plugins = ['autolink', 'oximage', 'link', 'paste', 'textcolor', 'emoji'],
         path = require('path'),
 
         isUsed = function (list, subPath) {
@@ -64,19 +55,36 @@ module.exports = function (grunt) {
             return null;
         };
 
-    grunt.config.merge({
-        curl: {
-            tinymceLanguagePack: {
-                src: {
-                    url: 'http://www.tinymce.com/i18n/download.php',
+    grunt.registerTask('tinymceLanguagePack', 'Fetches TinyMCE language files', function () {
+        var fs = require('fs'),
+            request = require('request'),
+            done = this.async();
+
+        request('http://archive.tinymce.com/i18n/index.php', function (error, response, body) {
+            if (error) grunt.fail.warn(error);
+
+            if (!error && response.statusCode == 200) {
+                var re = /download\[\]" value="(.*)"/g,
+                    languages = body.match(re).map(function (str) {
+                        str = str.replace(re, '$1');
+                        // remove corrupt languages
+                        if (/zh_CN\.GB2312|ru@petr1708/.test(str)) return;
+                        return str;
+                    }),
+                    writeStream = fs.createWriteStream('tmp/tinymce_language_pack.zip');
+                request({
+                    url: 'http://archive.tinymce.com/i18n/download.php',
                     method: 'POST',
                     form: {
                         'download': languages
                     }
-                },
-                dest: 'tmp/tinymce_language_pack.zip'
+                }, function cb(error) {
+                    if (error) grunt.fail.warn(error);
+                }).pipe(writeStream);
+                writeStream.on('close', done);
+                writeStream.on('error', done);
             }
-        }
+        });
     });
 
     grunt.config.merge({
@@ -91,8 +99,7 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('tinymce_update', ['curl:tinymceLanguagePack', 'unzip:tinymceLanguagePack', 'copy:build_tinymce']);
+    grunt.registerTask('tinymce_update', ['tinymceLanguagePack', 'unzip:tinymceLanguagePack', 'copy:build_tinymce']);
 
-    grunt.loadNpmTasks('grunt-curl');
     grunt.loadNpmTasks('grunt-zip');
 };
