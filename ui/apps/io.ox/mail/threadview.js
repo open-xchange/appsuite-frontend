@@ -354,11 +354,12 @@ define('io.ox/mail/threadview',
             items.eq(index).get(0).scrollIntoView(true);
         },
 
-        initialize: function () {
+        initialize: function (options) {
 
             this.model = null;
             this.threaded = true;
             this.collection = new backbone.Collection();
+            options = options || {};
 
             this.listenTo(this.collection, {
                 add: this.onAdd,
@@ -374,13 +375,16 @@ define('io.ox/mail/threadview',
 
             this.$el.on('toggle', '.list-item', this.onToggle.bind(this));
 
-            // enable drag & drop support
-            dnd.enable({
-                container: this.$el,
-                draggable: true,
-                selectable: '.detail-view-header',
-                simple: true
-            });
+            // we don't need drag support when it's open in a separate detailview (there is no foldertree to drag to)
+            if (!options.disableDrag) {
+                // enable drag & drop support
+                dnd.enable({
+                    container: this.$el,
+                    draggable: true,
+                    selectable: '.detail-view-header .contact-picture',
+                    simple: true
+                });
+            }
         },
 
         // return alls items of this list

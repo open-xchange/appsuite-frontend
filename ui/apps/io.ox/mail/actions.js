@@ -242,7 +242,7 @@ define('io.ox/mail/actions',
 
         new Action('io.ox/mail/actions/' + type, {
             id: type,
-            requires: 'toplevel some',
+            requires: 'toplevel some' + (type === 'move' ? ' delete' : ''),
             multiple: function (list, baton) {
 
                 require(['io.ox/core/folder/actions/move'], function (move) {
@@ -271,7 +271,7 @@ define('io.ox/mail/actions',
         id: 'markunread',
         requires: function (e) {
             // must be top-level
-            if (!e.collection.has('toplevel')) return;
+            if (!e.collection.has('toplevel', 'modify')) return;
             // partiallySeen? has at least one email that's seen?
             return _(e.baton.array()).reduce(function (memo, obj) {
                 return memo || !util.isUnseen(obj);
@@ -288,7 +288,7 @@ define('io.ox/mail/actions',
         id: 'markread',
         requires: function (e) {
             // must be top-level
-            if (!e.collection.has('toplevel')) return;
+            if (!e.collection.has('toplevel', 'modify')) return;
             // partiallyUnseen? has at least one email that's seen?
             return _(e.baton.array()).reduce(function (memo, obj) {
                 return memo || util.isUnseen(obj);
@@ -307,7 +307,7 @@ define('io.ox/mail/actions',
         capabilities: 'spam',
         requires: function (e) {
             // must be top-level
-            if (!e.collection.has('toplevel', 'some')) return false;
+            if (!e.collection.has('toplevel', 'some', 'delete')) return false;
             // is spam?
             return _(e.baton.array()).reduce(function (memo, obj) {
                 // already false?
