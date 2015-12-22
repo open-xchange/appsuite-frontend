@@ -63,7 +63,7 @@ module.exports = function (grunt) {
         request('http://archive.tinymce.com/i18n/index.php', function (error, response, body) {
             if (error) grunt.fail.warn(error);
 
-            if (!error && response.statusCode == 200) {
+            if (!error && response.statusCode === 200) {
                 var re = /download\[\]" value="(.*)"/g,
                     languages = body.match(re).map(function (str) {
                         str = str.replace(re, '$1');

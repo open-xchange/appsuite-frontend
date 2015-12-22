@@ -47,7 +47,7 @@
         // no-constant-condition: 2,
 
         // disallow control characters in regular expressions
-        // 'no-control-regex': 2,
+        'no-control-regex': 2,
 
         // disallow use of debugger
         'no-debugger': 1,
@@ -381,7 +381,7 @@
         'jsx-quotes': 2,
 
         // enforces spacing between keys and values in object literal properties
-        key-spacing: [2, {"beforeColon": false, "afterColon": true, "mode": "minimum"}],
+        'key-spacing': [2, {"beforeColon": false, "afterColon": true, "mode": "minimum"}],
 
         // disallow mixed 'LF' and 'CRLF' as linebreaks
         'linebreak-style': [2, "unix"],
@@ -393,7 +393,7 @@
         //'max-depth': 0,
 
         // specify the maximum length of a line in your program
-        // 'max-len': 0,
+        //'max-len': [2, 180, 4],
 
         // specify the maximum depth callbacks can be nested
         'max-nested-callbacks': [2, 7],
