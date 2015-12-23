@@ -1070,6 +1070,22 @@ define('io.ox/mail/main', [
             app.listView.on('first-reset', app.prefetch);
         },
 
+        'prefetch-message': function (app) {
+
+            if (_.device('smartphone')) return;
+            if (!settings.get('prefetch/next', true)) return;
+
+            app.listView.on('selection:one', function () {
+                var items = this.selection.getItems(),
+                    pos = this.selection.getPosition(items),
+                    dir = this.selection.getDirection(),
+                    last = items.length - 1, next;
+                if (dir === 'down' && pos < last) next = items.eq(pos + 1);
+                else if (dir === 'up' && pos > 0) next = items.eq(pos - 1);
+                if (next) api.get(_.cid(next.attr('data-cid')));
+            });
+        },
+
         /*
          * Prefetch mail-compose code
          */

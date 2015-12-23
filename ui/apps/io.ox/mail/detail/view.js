@@ -193,13 +193,13 @@ define('io.ox/mail/detail/view', [
                 $body = $('<section class="body user-select-text" tabindex="-1">')
             );
             // rendering mails in chrome is slow if we do not use a shadow dom
-            if ($body.get(0).createShadowRoot && _.device('chrome') && !_.device('smartphone')) {
-                shadow = $body.get(0).createShadowRoot();
+            if ($body[0].createShadowRoot && _.device('chrome') && !_.device('smartphone')) {
+                shadow = $body[0].createShadowRoot();
                 shadow.innerHTML = '<style>' + shadowStyle + '</style>';
+                $body.data('shadow', shadow);
             }
-            $body.data('content', shadow || $body.get(0));
             $body.on('dispose', function () {
-                var $content = $('.content', $(this).data('content'));
+                var $content = $(this.shadowRoot || this);
                 if ($content[0] && $content[0].children.length > 0) {
                     //cleanup content manually, since this subtree might get very large
                     //content only contains the mail and should not have any handlers assigned
@@ -230,8 +230,10 @@ define('io.ox/mail/detail/view', [
         id: 'content',
         index: 1000,
         draw: function (baton) {
+
             var data = content.get(baton.data),
                 node = data.content;
+
             if (!data.isLarge && !data.processedEmoji && data.type === 'text/html') {
                 emoji.processEmoji(node.innerHTML, function (html, lib) {
                     baton.processedEmoji = !lib.loaded;
@@ -239,7 +241,13 @@ define('io.ox/mail/detail/view', [
                     node.innerHTML = html;
                 });
             }
+
+            // restore height or set minimum height of 100px
+            $(node).css('min-height', baton.model.get('visualHeight') || 100);
+            // add to DOM
             this.idle().append(node);
+            // now remember height
+            baton.model.set('visualHeight', $(node).height(), { silent: true });
         }
     });
 
@@ -312,12 +320,20 @@ define('io.ox/mail/detail/view', [
                     data: data,
                     attachments: util.getAttachments(data)
                 }),
-                node = $(this.$el.find('section.body').data('content')).empty(),
+                body = this.$el.find('section.body'),
+                // get shadow DOM or body node
+                shadowRoot = body.prop('shadowRoot'),
+                node = $(shadowRoot || body),
                 view = this;
+            // set outer height & clear content
+            body.css('min-height', this.model.get('visualHeight') || null);
+            if (shadowRoot) shadowRoot.innerHTML = ''; else body.empty();
+            // draw
             _.delay(function () {
                 ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);
                 // global event for tracking purposes
                 ox.trigger('mail:detail:body:render', view);
+                body = shadowRoot = node = view = null;
             }, 20);
         },
 

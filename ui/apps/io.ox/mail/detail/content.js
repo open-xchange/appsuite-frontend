@@ -11,6 +11,8 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+/*jshint scripturl:true*/
+
 define('io.ox/mail/detail/content', [
     'io.ox/mail/api',
     'io.ox/core/util',

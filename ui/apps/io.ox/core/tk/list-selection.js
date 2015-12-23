@@ -37,6 +37,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         this.view = view;
         this.behavior = behavior;
+        this._direction = 'down';
+        this._lastPosition = -1;
         this.view.$el
             .on('mousedown', $.proxy(this.onMousedown, this))
             .on('mouseup', $.proxy(this.onMouseup, this))
@@ -110,7 +112,14 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         getPosition: function (items) {
             items = items || this.getItems();
-            return items.index(items.filter('.precursor'));
+            var pos = items.index(items.filter('.precursor'));
+            if (pos !== this._lastPosition) this._direction = pos < this._lastPosition ? 'up' : 'down';
+            this._lastPosition = pos;
+            return pos;
+        },
+
+        getDirection: function () {
+            return this._direction;
         },
 
         check: function (nodes) {
@@ -347,15 +356,21 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 selected = items.filter('.selected'),
                 length = selected.length,
                 first = items.index(selected.first()),
-                apply = this.select.bind(this);
+                last = items.index(selected.last()),
+                tail = items.length - 1,
+                apply = this.select.bind(this),
+                direction = this.getDirection();
 
             // All: if all items are selected we dodge by clearing the entire selection
             if (items.length === length) return this.clear();
 
-            // Tail: if there's no room inbetween or after the selection we move up
-            if ((first + length) === items.length) return apply(first - 1, items);
+            // up and enough room
+            if (direction === 'up' && first > 0) return apply(first - 1, items);
 
-            // iterate over list
+            // down and enough room
+            if (direction === 'down' && last < tail) return apply(last + 1, items);
+
+            // otherwise: iterate over list to find a free spot
             items.slice(first).each(function (index) {
                 if (!$(this).hasClass('selected')) {
                     apply(first + index, items);
@@ -405,7 +420,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.resetTabIndex(items, items.eq(index));
             this.resetCheckmark(items);
             this.pick(index, items, e);
-            //alternative selection mode needs this, has no effect in default mode
+            // just call get position to update "direction"
+            this.getPosition();
+            // alternative selection mode needs this, has no effect in default mode
             if (this.isMultiple(e) || this.isRange(e)) {
                 this.triggerChange(items);
             } else {
