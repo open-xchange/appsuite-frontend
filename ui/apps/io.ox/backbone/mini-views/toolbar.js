@@ -48,7 +48,7 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
 
         disableButtons: function () {
             // remove all event handlers
-            this.getButtons().off();
+            this.getButtons().off().tooltip('hide').tooltip('disable');
             return this;
         },
 
