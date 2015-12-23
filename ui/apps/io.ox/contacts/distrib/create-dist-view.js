@@ -115,6 +115,9 @@ define('io.ox/contacts/distrib/create-dist-view', [
                 collection: this.baton.member,
                 baton: this.baton
             }).render().$el);
+
+            // trigger an empty remove just to get rid of unnecessary values in contacts
+            if (!_.isEmpty(this.baton.model.get('distribution_list'))) this.baton.member.trigger('remove', {}, this.baton.member);
         }
     });
 
