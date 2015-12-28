@@ -393,14 +393,14 @@ define('io.ox/mail/api', [
                 _.wait(100).then(function () {
                     return http.PUT({
                         module: 'mail',
-                        params: { action: 'delete', withFolders: true, timestamp: _.then() },
+                        params: { action: 'delete', returnAffectedFolders: true, timestamp: _.then() },
                         data: http.simplify(ids),
                         appendColumns: false
                     })
                     .done(function (data) {
                         // update affected folders
-                        _(data.folders).each(function (item) {
-                            folderAPI.pool.getModel(item.folder_id).set(_(item).pick('total', 'unread'));
+                        _(data.folders).each(function (changes, id) {
+                            folderAPI.pool.getModel(id).set(changes);
                         });
                         // trigger delete to update notification area
                         api.trigger('delete');
