@@ -1082,7 +1082,11 @@ define('io.ox/mail/main', [
                     last = items.length - 1, next;
                 if (dir === 'down' && pos < last) next = items.eq(pos + 1);
                 else if (dir === 'up' && pos > 0) next = items.eq(pos - 1);
-                if (next) api.get(_.cid(next.attr('data-cid')));
+                if (next) {
+                    next = _.cid(next.attr('data-cid'));
+                    next.unseen = true;
+                    api.get(next);
+                }
             });
         },
 
