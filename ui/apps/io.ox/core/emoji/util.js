@@ -59,7 +59,7 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (setting
                 return str;
             }
 
-            if (tooLarge || !hasEmoji) {
+            if (tooLarge || !hasEmoji || _.device('emoji')) {
                 return cont(str);
             } else if (emoji) {
                 return cont(convert(str));
