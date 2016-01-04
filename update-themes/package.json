@@ -1,6 +1,6 @@
 {
   "name": "update-themes",
-  "version": "7.8.0-13",
+  "version": "7.8.0-14",
   "description": "A tool to manually update a set of themes for Open-Xchange Appsuite",
   "main": "index.js",
   "scripts": {
