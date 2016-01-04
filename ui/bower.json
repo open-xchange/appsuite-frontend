@@ -15,7 +15,7 @@
     "backbone": "https://github.com/jashkenas/backbone.git#fda02db428c464badb12010c990622ee91f28a48",
     "backbone-validation": "0.11.5",
     "bigscreen": "2.0.5",
-    "bootstrap": "3.3.5",
+    "bootstrap": "3.3.6",
     "bootstrap-accessibility-plugin": "https://github.com/Open-Xchange-Frontend/bootstrap-accessibility-plugin.git#90a9ca94ab7712915d0416102837f8a638fc2819",
     "bootstrap-datepicker": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#tag-1.3.1",
     "bootstrap-tokenfield": "https://github.com/Open-Xchange-Frontend/bootstrap-tokenfield.git#a7f25abb631d5ad05ba24ad1c4ef42e60c51f13a",
