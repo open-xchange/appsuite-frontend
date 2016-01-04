@@ -22,9 +22,11 @@ define('io.ox/mail/detail/view', [
     'io.ox/core/extPatterns/links',
     'io.ox/core/emoji/util',
     'gettext!io.ox/mail',
+    'less!io.ox/mail/detail/shadow',
+    'less!io.ox/mail/detail/style',
     'less!io.ox/mail/style',
     'io.ox/mail/actions'
-], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, gt) {
+], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, gt, shadowStyle) {
 
     'use strict';
 
@@ -185,13 +187,19 @@ define('io.ox/mail/detail/view', [
         id: 'body',
         index: INDEX += 100,
         draw: function () {
-            var $body;
+            var $body, shadow;
             this.append(
                 $('<section class="attachments">'),
                 $body = $('<section class="body user-select-text" tabindex="-1">')
             );
+            // rendering mails in chrome is slow if we do not use a shadow dom
+            if ($body.get(0).createShadowRoot && _.device('chrome') && !_.device('smartphone')) {
+                shadow = $body.get(0).createShadowRoot();
+                shadow.innerHTML = '<style>' + shadowStyle + '</style>';
+            }
+            $body.data('content', shadow || $body.get(0));
             $body.on('dispose', function () {
-                var $content = $(this).find('.content');
+                var $content = $('.content', $(this).data('content'));
                 if ($content[0] && $content[0].children.length > 0) {
                     //cleanup content manually, since this subtree might get very large
                     //content only contains the mail and should not have any handlers assigned
@@ -304,7 +312,7 @@ define('io.ox/mail/detail/view', [
                     data: data,
                     attachments: util.getAttachments(data)
                 }),
-                node = this.$el.find('section.body').empty(),
+                node = $(this.$el.find('section.body').data('content')).empty(),
                 view = this;
             _.delay(function () {
                 ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);

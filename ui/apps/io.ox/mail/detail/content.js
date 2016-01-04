@@ -232,7 +232,7 @@ define('io.ox/mail/detail/content', [
     function hasParent(elem, selector) {
         while (elem) {
             elem = elem.parentNode;
-            if (elem && elem.matchtes && elem.matches(selector)) return true;
+            if (elem && elem.matches && elem.matches(selector)) return true;
         }
         return false;
     }
@@ -485,27 +485,16 @@ define('io.ox/mail/detail/content', [
                 if (baton.isHTML) {
                     // robust constructor for large HTML -- no jQuery here to avoid its caches
                     content = document.createElement('DIV');
-                    content.className = 'content noI18n';
-
-                    // rendering mails in chrome is slow if we do not use a shadow dom
-                    if (content.createShadowRoot && _.device('chrome')) {
-                        shadow = content.createShadowRoot();
-                        shadow.innerHTML = baton.source;
-                        // last line of defense
-                        each(shadow, 'script, base, meta', function (node) {
-                            node.parentNode.removeChild(node);
-                        });
-                    } else {
-                        content.innerHTML = baton.source;
-                        // last line of defense
-                        each(content, 'script, base, meta', function (node) {
-                            node.parentNode.removeChild(node);
-                        });
-                    }
+                    content.className = 'mail-detail-content noI18n';
+                    content.innerHTML = baton.source;
+                    // last line of defense
+                    each(content, 'script, base, meta', function (node) {
+                        node.parentNode.removeChild(node);
+                    });
                 } else {
                     // plain TEXT
                     content = document.createElement('DIV');
-                    content.className = 'content plain-text noI18n';
+                    content.className = 'mail-detail-content plain-text noI18n';
                     content.innerHTML = beautifyText(baton.source);
                     if (!baton.processedEmoji) {
                         emoji.processEmoji(baton.source, function (text, lib) {

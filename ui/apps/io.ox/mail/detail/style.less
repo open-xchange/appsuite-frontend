@@ -1,0 +1,89 @@
+.mail-detail-content {
+
+    cursor: auto;
+    // for large images (see bug #22756 and #25033)
+    display: block;
+    // helper for absolutely positioned elements
+    overflow: hidden;
+
+    * {
+        // see Bug 25737 - [L3] HTML mail with pasted text from MS Word not displayed correctly (cut off at upper edge)
+        line-height: normal;
+        box-sizing: content-box;
+    }
+
+    // TODO: remove / temp. fix for bootstrap
+    [class*="span"] {
+        float: none;
+        margin-left: 0;
+    }
+
+    // reset bootstrap stuff
+
+    small {
+        color: inherit;
+        font-size: initial;
+    }
+
+    code {
+        font-family: inherit;
+    }
+
+    table {
+        border: 0 none; line-height: normal; border-collapse: initial;
+    }
+
+    ul, ol {
+        padding: 0;
+        margin: 1em 0 1em 24px;
+    }
+
+    ul { list-style-type: disc; }
+    ul ul { list-style-type: circle; }
+    ul ul ul { list-style-type: square; }
+
+    li {
+        line-height: normal;
+        margin-bottom: 0.5em;
+    }
+
+    pre {
+        // for firefox
+        word-break: keep-all;
+        word-break: initial;
+        white-space: pre-wrap;
+        background-color: transparent;
+        border: 0 none;
+        .border-radius(0);
+    }
+
+    th {
+        padding: @table-cell-padding;
+        text-align: center;
+    }
+
+    th[align="left"] {
+        // special case, see bug 37082
+        text-align: left;
+    }
+
+    ul, ol { padding-left: 16px; }
+}
+
+.touch .mail-detail .mail-detail-content.plain-text {
+    font-size: @font-size-touch;
+}
+
+.smartphone {
+    .mail-detail-content {
+        padding: 0;
+        font-size: 16px;
+        * {
+            line-height: 1.42857142em; // ~20px at 14px
+        }
+        ul, ol {
+            padding-left: 10px;
+            margin-left: 8px;
+        }
+    }
+}
