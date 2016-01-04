@@ -30,7 +30,6 @@
     "chai": "^2.1.1",
     "grunt-contrib-connect": "^0.9.0",
     "grunt-contrib-watch": "^0.6.1",
-    "grunt-curl": "~2.1.0",
     "grunt-devtools": "~0.2.0",
     "grunt-karma": "^0.10.1",
     "grunt-modernizr": "~0.6.0",
@@ -46,6 +45,7 @@
     "karma-sinon": "^1.0.3",
     "karma-spec-reporter": "0.0.19",
     "mocha": "^2.1.0",
+    "request": "^2.67.0",
     "sinon": "^1.13.0",
     "time-grunt": "^1.0.0"
   },
