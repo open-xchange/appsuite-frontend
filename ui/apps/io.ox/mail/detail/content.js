@@ -232,7 +232,7 @@ define('io.ox/mail/detail/content', [
     function hasParent(elem, selector) {
         while (elem) {
             elem = elem.parentNode;
-            if (elem && elem.matches(selector)) return true;
+            if (elem && elem.matchtes && elem.matches(selector)) return true;
         }
         return false;
     }
@@ -450,7 +450,7 @@ define('io.ox/mail/detail/content', [
                 return { content: $(), isLarge: false, type: 'text/plain' };
             }
 
-            var baton = new ext.Baton({ data: data, options: options || {}, source: '', type: 'text/plain' }), content;
+            var baton = new ext.Baton({ data: data, options: options || {}, source: '', type: 'text/plain' }), content, shadow;
 
             try {
 
@@ -486,11 +486,22 @@ define('io.ox/mail/detail/content', [
                     // robust constructor for large HTML -- no jQuery here to avoid its caches
                     content = document.createElement('DIV');
                     content.className = 'content noI18n';
-                    content.innerHTML = baton.source;
-                    // last line of defense
-                    each(content, 'script, base, meta', function (node) {
-                        node.parentNode.remove(node);
-                    });
+
+                    // rendering mails in chrome is slow if we do not use a shadow dom
+                    if (content.createShadowRoot && _.device('chrome')) {
+                        shadow = content.createShadowRoot();
+                        shadow.innerHTML = baton.source;
+                        // last line of defense
+                        each(shadow, 'script, base, meta', function (node) {
+                            node.parentNode.removeChild(node);
+                        });
+                    } else {
+                        content.innerHTML = baton.source;
+                        // last line of defense
+                        each(content, 'script, base, meta', function (node) {
+                            node.parentNode.removeChild(node);
+                        });
+                    }
                 } else {
                     // plain TEXT
                     content = document.createElement('DIV');
@@ -505,12 +516,12 @@ define('io.ox/mail/detail/content', [
                 }
 
                 // process content unless too large
-                if (!baton.isLarge) ext.point('io.ox/mail/detail/content').invoke('process', content, baton);
+                if (!baton.isLarge) ext.point('io.ox/mail/detail/content').invoke('process', shadow || content, baton);
 
                 // fix absolute positions
                 // heuristic: the source must at least contain the word "absolute" somewhere
                 if ((/absolute/i).test(baton.source)) {
-                    setTimeout(fixAbsolutePositions, 10, content, baton.isLarge);
+                    setTimeout(fixAbsolutePositions, 10, shadow || content, baton.isLarge);
                 }
 
             } catch (e) {
