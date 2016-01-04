@@ -521,7 +521,11 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     this.removeAttr('style');
                     // reset velocitie's transfrom cache manually
                     _(this).each(function (listItem) {
-                        $(listItem).data('velocity').transformCache = {};
+                        // assigning the value directly leads to a typeerror on ios
+                        // like $(listItem).data('velocity').transformCache = {}
+                        var c = $(listItem).data('velocity');
+                        c.transformCache = {};
+                        $(listItem).data('velocity', c);
                     });
                     self.view.off('remove-mobile', resetStyle);
                 };
