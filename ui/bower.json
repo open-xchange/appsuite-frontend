@@ -23,7 +23,7 @@
     "jquery": "2.1.4",
     "jquery-imageloader": "https://github.com/beatak/jquery-imageloader.git#3e616c19ad3bb32e4e62679a348f8b18a80790d2",
     "marked": "0.3.5",
-    "mediaelement": "2.18.2",
+    "mediaelement": "2.19.0",
     "mobiscroll": "2.16.1",
     "moment": "2.10.6",
     "moment-interval": "https://github.com/Open-Xchange-Frontend/moment-interval.git",
