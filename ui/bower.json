@@ -30,7 +30,7 @@
     "moment-timezone": "0.4.1",
     "open-sans-fontface": "1.2.1",
     "pdfjs-dist": "1.1.366",
-    "requirejs": "2.1.20",
+    "requirejs": "2.1.22",
     "swiper": "3.0.6",
     "textarea-helper": "https://github.com/Codecademy/textarea-helper.git#0.3.1",
     "tinymce-dist": "4.3.2",
