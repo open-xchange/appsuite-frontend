@@ -225,7 +225,7 @@
 
         // make this public so that it can be patched by UI plugins
         hasNativeEmoji: function () {
-            var support = us.browser.ios > 5 || us.browser.Android > 4.1 || (us.browser.MacOS && us.browser.Safari);
+            var support = us.browser.ios > 5 || us.browser.Android > 4.1 || us.browser.Safari || window.cordova !== undefined;
             return support;
         },
 
