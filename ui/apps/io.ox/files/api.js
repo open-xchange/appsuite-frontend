@@ -902,7 +902,7 @@ define('io.ox/files/api', [
         })
         .then(function (response) {
             // if id changes after update (e.g. rename files of some storage systems) update model id
-            if (_.isObject(response) && model.get('id') !== response.id) model.set('id', response.id);
+            if (_.isObject(response) && model && model.get('id') !== response.id) model.set('id', response.id);
         })
         .always(_.lfo(process, prev, model))
         .done(function () {
