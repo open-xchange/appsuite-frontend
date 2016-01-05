@@ -497,7 +497,7 @@ define('plugins/portal/twitter/util', [
                     textArea: textArea,
                     buttonContainer: buttonContainer
                 });
-            } else if (options.close !== undefined) {
+            } else if (!options.isOpen && options.close !== undefined) {
                 options.close({
                     replyBoxContainer: replyBoxContainer,
                     textArea: textArea,

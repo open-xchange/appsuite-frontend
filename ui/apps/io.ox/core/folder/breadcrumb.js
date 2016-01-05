@@ -117,7 +117,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             if (ownWidth > maxWidth && this.ellipsisCount === 4) {
                 this.ellipsisCount = 2;
                 this.render();
-            } else if (this.ellipsisCount === 2) {
+            } else if (ownWidth <= maxWidth && this.ellipsisCount === 2) {
                 this.ellipsisCount = 4;
                 this.render();
             }

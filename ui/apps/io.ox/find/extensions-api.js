@@ -265,7 +265,7 @@ define('io.ox/find/extensions-api', [
                     if (!isMandatory && (isDefault || isVirtual)) {
                         // convenience function respectively fallback when virtual all not exists
                         preselect = all || standard;
-                    } else if (isVirtual) {
+                    } else if (isMandatory && isVirtual) {
                         // fallback when folder is mandatory
                         preselect = standard;
                     }
