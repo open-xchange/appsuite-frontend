@@ -106,7 +106,7 @@ define('io.ox/participants/model', [
                         'contact_id': this.get('id'),
                         'id': this.get('internal_userid')
                     });
-                } else if (this.get('type') === this.TYPE_USER && this.get('contact_id')) {
+                } else if (this.get('field') !== 'email1' && this.get('type') === this.TYPE_USER && this.get('contact_id')) {
                     this.set({
                         'type': this.TYPE_EXTERNAL_USER,
                         'internal_userid': this.get('id'),
