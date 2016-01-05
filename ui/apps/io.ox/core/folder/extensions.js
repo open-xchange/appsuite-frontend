@@ -221,6 +221,41 @@ define('io.ox/core/folder/extensions', [
             );
         },
 
+        addStorageAccount: (function () {
+            if (_.device('smartphone')) return $.noop;
+
+            var links = $('<div class="links">');
+
+            function draw() {
+                if (capabilities.has('boxcom || google || msliveconnect || dropbox')) {
+                    links.empty().show().append(
+                        $('<a href="#" data-action="add-storage-account" tabindex="1" role="button">')
+                        .text(gt('Add storage account'))
+                        .on('click', function (e) {
+                            e.preventDefault();
+                            require(['io.ox/files/actions/add-storage-account'], function (addStorageAccount) {
+                                addStorageAccount();
+                            });
+                        })
+                    );
+                } else {
+                    links.hide();
+                }
+            }
+
+            return function () {
+                this.append(links);
+
+                require(['io.ox/core/api/filestorage'], function (filestorageApi) {
+                    // remove old listeners
+                    filestorageApi.off('create delete update', draw);
+                    // append new listeners and draw immediatly
+                    filestorageApi.on('create delete update', draw);
+                    draw();
+                });
+            };
+        })(),
+
         addRemoteAccount: function () {
             if (!capabilities.has('multiple_mail_accounts')) return;
 
@@ -460,6 +495,10 @@ define('io.ox/core/folder/extensions', [
             id: 'remote-accounts',
             index: 300,
             draw: extensions.fileStorageAccounts
+        }, {
+            id: 'add-external-account',
+            index: 400,
+            draw: extensions.addStorageAccount
         }
     );
 

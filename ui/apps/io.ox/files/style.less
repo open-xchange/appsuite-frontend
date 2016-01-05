@@ -651,6 +651,9 @@ ul.breadcrumb li.prefix {
 // add storage account dialog
 .select-storage-account-dialog {
     .modal-body {
+
+        text-align: center;
+
         .add-acc-label {
             color: #555;
             margin: 0;
@@ -658,25 +661,30 @@ ul.breadcrumb li.prefix {
 
         .storage-account-item {
 
-            display: block;
-            float: left;
-            margin: 0 4px 10px 0;
-            background-size: cover;
-            width: 32px;
-            height: 32px;
+            display: inline-block;
             padding: 0;
+            line-height: 28px;
+            margin: 5px;
 
-            &.logo-google {
-                background-image: url(apps/themes/default/googledrive_logo64.png);
+            .icon {
+                margin: 15px 20px 0;
+                text-align: center;
+                width: 64px;
+                height: 64px;
+                background-size: cover;
             }
-            &.logo-boxcom {
-                background-image: url(apps/themes/default/box_logo64.png);
+
+            &.logo-google .icon{
+                background-image: url(apps/themes/default/googledrive_logo128.png);
             }
-            &.logo-onedrive {
-                background-image: url(apps/themes/default/onedrive_logo64.png);
+            &.logo-boxcom .icon{
+                background-image: url(apps/themes/default/box_logo128.png);
             }
-            &.logo-dropbox {
-                background-image: url(apps/themes/default/dropbox_logo64.png);
+            &.logo-onedrive .icon{
+                background-image: url(apps/themes/default/onedrive_logo128.png);
+            }
+            &.logo-dropbox .icon{
+                background-image: url(apps/themes/default/dropbox_logo128.png);
             }
         }
     }
