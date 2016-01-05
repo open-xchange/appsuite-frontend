@@ -130,7 +130,7 @@ define('io.ox/mail/threadview', [
             this.model = null;
         },
 
-        updateHeader: _.debounce(function () {
+        updateHeader: function () {
 
             var baton = new ext.Baton({ view: this }),
                 node = this.$el.find('.thread-view-list > h1').empty();
@@ -141,7 +141,7 @@ define('io.ox/mail/threadview', [
 
             this.$el.find('.thread-view').toggleClass('multiple-messages', this.collection.length > 1);
 
-        }, 10),
+        },
 
         updatePosition: function (position) {
             this.$el.find('.position').text(position);
