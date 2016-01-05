@@ -187,16 +187,14 @@ define('io.ox/mail/detail/view', [
         id: 'body',
         index: INDEX += 100,
         draw: function () {
-            var $body, shadow;
+            var $body;
             this.append(
                 $('<section class="attachments">'),
                 $body = $('<section class="body user-select-text" tabindex="-1">')
             );
             // rendering mails in chrome is slow if we do not use a shadow dom
             if ($body[0].createShadowRoot && _.device('chrome') && !_.device('smartphone')) {
-                shadow = $body[0].createShadowRoot();
-                shadow.innerHTML = '<style>' + shadowStyle + '</style>';
-                $body.data('shadow', shadow);
+                $body[0].createShadowRoot();
             }
             $body.on('dispose', function () {
                 var $content = $(this.shadowRoot || this);
@@ -327,7 +325,7 @@ define('io.ox/mail/detail/view', [
                 view = this;
             // set outer height & clear content
             body.css('min-height', this.model.get('visualHeight') || null);
-            if (shadowRoot) shadowRoot.innerHTML = ''; else body.empty();
+            if (shadowRoot) shadowRoot.innerHTML = '<style>' + shadowStyle + '</style>'; else body.empty();
             // draw
             _.delay(function () {
                 ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);
