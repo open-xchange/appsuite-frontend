@@ -82,8 +82,8 @@ define('io.ox/mail/api', [
                 extendColumns: 'io.ox/mail/api/list'
             },
             get: {
-                action: 'get'
-                //embedded: 'true'
+                action: 'get',
+                embedded: 'true'
             },
             getUnmodified: {
                 action: 'get',
