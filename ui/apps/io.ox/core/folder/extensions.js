@@ -226,21 +226,35 @@ define('io.ox/core/folder/extensions', [
 
             var links = $('<div class="links">');
 
+            function getAvailableServices() {
+                var services = ['google', 'dropbox', 'boxcom', 'msliveconnect'];
+
+                return require(['io.ox/keychain/api']).then(function (keychainApi) {
+                    return _(keychainApi.submodules).filter(function (submodule) {
+                        if (services.indexOf(submodule.id) < 0) return false;
+
+                        return !submodule.canAdd || submodule.canAdd.apply(this);
+                    });
+                });
+            }
+
             function draw() {
-                if (capabilities.has('boxcom || google || msliveconnect || dropbox')) {
-                    links.empty().show().append(
-                        $('<a href="#" data-action="add-storage-account" tabindex="1" role="button">')
-                        .text(gt('Add storage account'))
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            require(['io.ox/files/actions/add-storage-account'], function (addStorageAccount) {
-                                addStorageAccount();
-                            });
-                        })
-                    );
-                } else {
-                    links.hide();
-                }
+                getAvailableServices().done(function (services) {
+                    if (services.length > 0) {
+                        links.empty().show().append(
+                            $('<a href="#" data-action="add-storage-account" tabindex="1" role="button">')
+                            .text(gt('Add storage account'))
+                            .on('click', function (e) {
+                                e.preventDefault();
+                                require(['io.ox/files/actions/add-storage-account'], function (addStorageAccount) {
+                                    addStorageAccount();
+                                });
+                            })
+                        );
+                    } else {
+                        links.hide();
+                    }
+                });
             }
 
             return function () {
