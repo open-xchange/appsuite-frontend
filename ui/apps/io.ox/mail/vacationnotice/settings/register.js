@@ -59,11 +59,12 @@ define('io.ox/mail/vacationnotice/settings/register', [
                     function assembleFrom(obj) {
                         var list = [];
                         _.each(obj, function (key, value) {
-                            list.push({ 'value': userFullName + ' <' + value + '>', 'label': userFullName + ' <' + value + '>' });
+                            var assembledValue = userFullName.trim() === '' ? value : '"' + userFullName + '"' + ' <' + value + '>';
+                            list.push({ 'value': assembledValue, 'label': assembledValue });
                         });
                         return list;
                     }
-                    var userFullName = '"' + contactsUtil.getMailFullName(user) + '"',
+                    var userFullName = contactsUtil.getMailFullName(user),
                         aliases = _.object(user.aliases, user.aliases),
                         multiValues = {
                             aliases: aliases,
