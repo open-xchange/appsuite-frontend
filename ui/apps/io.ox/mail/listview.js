@@ -185,7 +185,7 @@ define('io.ox/mail/listview', [
     ext.point('io.ox/mail/listview/item/small/col6').extend({
         id: 'date/size',
         index: 100,
-        draw: extensions.dataOrSize
+        draw: extensions.dateOrSize
     });
 
     /* default */
