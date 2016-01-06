@@ -59,7 +59,7 @@ define('io.ox/files/actions/add-storage-account', [
 
         var data = services[service.id];
 
-        return $('<button class="btn btn-default storage-account-item" role="button" tabindex="1">')
+        return $('<button class="btn btn-default storage-account-item" tabindex="1">')
             .addClass(data.className)
             .append(
                 $('<div class="icon">'),
@@ -67,7 +67,8 @@ define('io.ox/files/actions/add-storage-account', [
             )
             .attr({
                 'data-service': service.id,
-                'title': data.title
+                //#. %$1s is the account name like Dropbox, Google Drive, or OneDrive
+                'aria-label': gt('Add %1$s account', data.title)
             })
             .on('click', { dialog: this, service: service }, onClick);
     }
@@ -79,7 +80,6 @@ define('io.ox/files/actions/add-storage-account', [
         getAvailableServices().done(function (availableServices) {
             node.append(_(availableServices).map(draw)).show();
             $(window).trigger('resize');
-            node.find('.storage-account-item:first').focus();
         });
 
         // consider metrics
