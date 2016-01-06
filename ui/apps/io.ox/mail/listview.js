@@ -306,6 +306,10 @@ define('io.ox/mail/listview', [
             ListView.prototype.initialize.call(this, options);
             this.$el.addClass('mail-item');
             this.on('collection:load', this.lookForUnseenMessage);
+            this.delegateEvents({
+                'click .selectable .fa-envelope': 'markRead',
+                'mousedown .selectable .fa-envelope': 'markRead'
+            });
 
             // track some states
             if (options && options.app) {
@@ -331,6 +335,19 @@ define('io.ox/mail/listview', [
 
             // use this number only to set the minimum (there might be more due to pagination)
             folderAPI.setUnseenMinimum(folder_id, unseen);
+        },
+
+        markRead: function (e) {
+            var cid = $(e.currentTarget).closest('.selectable').data('cid'),
+                thread = api.threads.get(cid),
+                isUnseen = _(thread).reduce(function (memo, item) {
+                    return memo || util.isUnseen(item);
+                }, false);
+
+            if (isUnseen) api.markRead(thread);
+
+            e.preventDefault();
+            e.stopPropagation();
         },
 
         reprocessThread: function (model) {
