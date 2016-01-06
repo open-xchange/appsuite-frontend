@@ -118,6 +118,8 @@ define('io.ox/find/view', [
         show: function () {
             if (this.isActive()) return;
             this.calculateDimensions();
+            // apply margin to next
+            this.$el.next().css('margin-top', this.css.body.open);
             // apply dynamic styles
             this.ui.body.css('top', this.css.body.open);
             this.$el.css('top', this.css.el.open);
@@ -133,6 +135,8 @@ define('io.ox/find/view', [
         // collapse (keep focus)
         hide: function () {
             if (!this.isActive() || !this.isEmpty()) return;
+            // remove margin-top from next
+            this.$el.next().css('margin-top', '');
             // reset dynamic styles
             this.ui.body.css('top', this.css.body.closed);
             this.$el.css('top', this.css.el.closed);
