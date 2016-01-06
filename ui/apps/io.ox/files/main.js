@@ -1188,6 +1188,9 @@ define('io.ox/files/main', [
                     if (!isCurrentFolder()) return;
                     app.listView.off('collection:load', select);
                     app.listView.selection.set([obj], true);
+
+                    // must trigger for a updated toolbar
+                    app.listView.trigger('selection:change');
                 }
 
                 obj = _.isString(obj) ? _.cid(obj) : obj;
