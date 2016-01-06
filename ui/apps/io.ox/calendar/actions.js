@@ -437,7 +437,7 @@ define('io.ox/calendar/actions', [
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 300,
         prio: 'hi',
-        mobile: 'hi',
+        mobile: 'lo',
         id: 'follow-up',
         //#. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
         label: gt('Follow-up'),
