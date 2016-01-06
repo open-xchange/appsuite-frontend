@@ -762,6 +762,20 @@ define('io.ox/contacts/main', [
             });
         },
 
+        'premium-area': function (app) {
+            if (_.device('smartphone')) return;
+            if (!settings.get('features/clientOnboarding', true)) return;
+
+            var sidepanel = app.getWindow().nodes.sidepanel,
+                container = $('<div class="premium-toolbar generic-toolbar bottom visual-focus">').append(
+                    $('<div class="header">').text(gt('Premium features'))
+                );
+
+            ext.point('io.ox/contacts/folderview/premium-area').invoke('draw', container, {});
+            if (container.find('li').length === 0) return;
+            sidepanel.append(container);
+        },
+
         /*
          * Folerview toolbar
          */

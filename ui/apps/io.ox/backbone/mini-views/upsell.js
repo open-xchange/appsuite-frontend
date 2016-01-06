@@ -57,6 +57,8 @@ define('io.ox/backbone/mini-views/upsell', [
                     $('<a href="#">').css('color', this.opt.color).append(
                         this.opt.title,
                         _(this.icon.split(/ /)).map(function (icon, index) {
+                            if (icon === '') return;
+
                             return $('<i class="fa">')
                                 .addClass(icon)
                                 .css({

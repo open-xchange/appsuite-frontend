@@ -457,6 +457,13 @@ define('io.ox/mail/actions', [
         }
     });
 
+    new Action('io.ox/mail/premium/actions/synchronize', {
+        capabilities: 'active_sync',
+        action: function () {
+            require(['io.ox/onboarding/clients/wizard']);
+        }
+    });
+
     // inline links
     var INDEX = 0;
 
@@ -748,4 +755,19 @@ define('io.ox/mail/actions', [
             app.queues.importEML.offer(file, { folder: app.folder.get() });
         }
     });
+
+    ext.point('io.ox/mail/folderview/premium-area').extend(new links.InlineLinks({
+        index: 100,
+        id: 'inline-premium-links',
+        ref: 'io.ox/mail/links/premium-links',
+        classes: 'list-unstyled'
+    }));
+
+    ext.point('io.ox/mail/links/premium-links').extend(new links.Link({
+        index: 100,
+        prio: 'hi',
+        id: 'synchronize',
+        label: gt('Synchronize with Outlook'),
+        ref: 'io.ox/mail/premium/actions/synchronize'
+    }));
 });

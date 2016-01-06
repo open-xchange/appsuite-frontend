@@ -667,6 +667,13 @@ define('io.ox/files/actions', [
         }
     });
 
+    new Action('io.ox/files/premium/actions/synchronize', {
+        capabilities: 'boxcom || google || msliveconnect',
+        action: function () {
+            require(['io.ox/onboarding/clients/wizard']);
+        }
+    });
+
     // 'new' dropdown
     new links.ActionLink('io.ox/files/links/toolbar/default', {
         index: 100,
@@ -964,4 +971,19 @@ define('io.ox/files/actions', [
             });
         }
     });
+
+    ext.point('io.ox/files/folderview/premium-area').extend(new links.InlineLinks({
+        index: 100,
+        id: 'inline-premium-links',
+        ref: 'io.ox/files/links/premium-links',
+        classes: 'list-unstyled'
+    }));
+
+    ext.point('io.ox/files/links/premium-links').extend(new links.Link({
+        index: 100,
+        prio: 'hi',
+        id: 'share-files',
+        label: gt('Add external folder storage'),
+        ref: 'io.ox/files/premium/actions/synchronize'
+    }));
 });

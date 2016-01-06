@@ -243,6 +243,13 @@ define('io.ox/contacts/actions', [
         }
     });
 
+    new Action('io.ox/contacts/premium/actions/synchronize', {
+        capabilities: 'carddav',
+        action: function () {
+            require(['io.ox/onboarding/clients/wizard']);
+        }
+    });
+
     /*
     new Action('io.ox/contacts/actions/viewer', {
         id: 'viewer',
@@ -463,4 +470,18 @@ define('io.ox/contacts/actions', [
      ref: 'io.ox/contacts/actions/viewer'
      }));
     */
+    ext.point('io.ox/contacts/folderview/premium-area').extend(new links.InlineLinks({
+        index: 100,
+        id: 'inline-premium-links',
+        ref: 'io.ox/contacts/links/premium-links',
+        classes: 'list-unstyled'
+    }));
+
+    ext.point('io.ox/contacts/links/premium-links').extend(new links.Link({
+        index: 100,
+        prio: 'hi',
+        id: 'synchronize-contacts',
+        label: gt('Share your contacts'),
+        ref: 'io.ox/contacts/premium/actions/synchronize'
+    }));
 });

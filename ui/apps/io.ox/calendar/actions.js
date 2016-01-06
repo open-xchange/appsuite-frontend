@@ -344,6 +344,13 @@ define('io.ox/calendar/actions', [
         }
     });
 
+    new Action('io.ox/calendar/premium/actions/share', {
+        capabilities: 'caldav',
+        action: function () {
+            require(['io.ox/onboarding/clients/wizard']);
+        }
+    });
+
     // Mobile multi select extension points
     // delete appointment(s)
     ext.point('io.ox/calendar/mobileMultiSelect/toolbar').extend({
@@ -474,5 +481,20 @@ define('io.ox/calendar/actions', [
         id: 'save as distlist',
         label: gt('Save as distribution list'),
         ref: 'io.ox/calendar/detail/actions/save-as-distlist'
+    }));
+
+    ext.point('io.ox/calendar/folderview/premium-area').extend(new links.InlineLinks({
+        index: 100,
+        id: 'inline-premium-links',
+        ref: 'io.ox/calendar/links/premium-links',
+        classes: 'list-unstyled'
+    }));
+
+    ext.point('io.ox/calendar/links/premium-links').extend(new links.Link({
+        index: 100,
+        prio: 'hi',
+        id: 'share-calendar',
+        label: gt('Synchronize calendar'),
+        ref: 'io.ox/calendar/premium/actions/share'
     }));
 });

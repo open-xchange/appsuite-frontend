@@ -298,28 +298,61 @@
     background-color: #f5f5f5;
 
     &.visible {
-        display:block;
+        .flex-display(flex);
+        .flex-direction(column);
         overflow: visible;
         width: 250px;
         + .window-body { left: 250px; }
+    }
+
+    .folder-tree {
+        position: static;
+        flex: 1;
     }
 
     .resizebar {
         background: transparent;
         width: 5px;
         height: 100%;
-        position: relative;
+        position: absolute;
         z-index: 1;
         float: right;
         cursor: e-resize;
         cursor: ew-resize;
         cursor: col-resize;
+        top: 0;
         right: -3px;
+        bottom: 0;
     }
 
-    .generic-toolbar.bottom {
-        border-color: rgba(0, 0, 0, 0.10);
-        background-color: rgba(0, 0, 0, 0.015);
+    .generic-toolbar {
+        .flex(0 0 auto);
+        position: static;
+
+        &.bottom {
+            border-color: rgba(0, 0, 0, 0.10);
+            background-color: @foldertree-sidepanel-background;
+        }
+
+        &.premium-toolbar {
+            height: auto;
+            padding: 16px;
+
+            ul {
+                line-height: 23px;
+                margin: 0;
+            }
+
+            .header {
+                margin-left: -16px;
+                margin-right: -16px;
+                margin-top: -16px;
+                margin-bottom: 11px;
+                padding: 5px 16px 0 16px;
+                background-color: #3C73AA;
+                color: #fff;
+            }
+        }
     }
 }
 

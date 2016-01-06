@@ -311,6 +311,20 @@ define('io.ox/calendar/main', [
             app.folderView.resize.enable();
         },
 
+        'premium-area': function (app) {
+            if (_.device('smartphone')) return;
+            if (!settings.get('features/clientOnboarding', true)) return;
+
+            var sidepanel = app.getWindow().nodes.sidepanel,
+                container = $('<div class="premium-toolbar generic-toolbar bottom visual-focus">').append(
+                    $('<div class="header">').text(gt('Premium features'))
+                );
+
+            ext.point('io.ox/calendar/folderview/premium-area').invoke('draw', container, {});
+            if (container.find('li').length === 0) return;
+            sidepanel.append(container);
+        },
+
         'toggle-folder-editmode': function (app) {
 
             if (_.device('!smartphone')) return;
