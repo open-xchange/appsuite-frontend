@@ -983,7 +983,7 @@ define('io.ox/files/actions', [
         index: 100,
         prio: 'hi',
         id: 'share-files',
-        label: gt('Add external folder storage'),
+        label: gt('Share your folders'),
         ref: 'io.ox/files/premium/actions/synchronize'
     }));
 });
