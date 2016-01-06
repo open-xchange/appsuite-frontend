@@ -18,15 +18,24 @@ define('io.ox/calendar/actions/follow-up', function () {
     return function (data) {
 
         // reduce data
-        data = _(data).pick(
+        var copy = _(data).pick(
             'alarm color_label folder_id full_time location note participants private_flag shown_as title'.split(' ')
         );
+
+        // copy date/time
+        ['start_date', 'end_date'].forEach(function (field) {
+            var ref = moment(data[field]),
+                // set date to today, keep time, then use same weekday
+                d = moment({ hour: ref.hour(), minute: ref.minute() }).weekday(ref.weekday());
+            // add 1 week if date is in the past
+            if (d.isBefore(moment())) d.add(1, 'w');
+            copy[field] = d.valueOf();
+        });
 
         // use ox.launch to have an indicator for slow connections
         ox.load(['io.ox/calendar/edit/main']).done(function (edit) {
             edit.getApp().launch().done(function () {
-                this.create(data);
-                this.model.toSync = data;
+                this.create(copy);
             });
         });
     };
