@@ -182,8 +182,20 @@ define('io.ox/calendar/actions', [
         },
         action: function (baton) {
             // load & call
-            ox.load(['io.ox/calendar/actions/acceptdeny']).done(function (acceptdeny) {
-                acceptdeny(baton.data);
+            ox.load(['io.ox/calendar/actions/acceptdeny']).done(function (action) {
+                action(baton.data);
+            });
+        }
+    });
+
+    new Action('io.ox/calendar/detail/actions/follow-up', {
+        requires: function (e) {
+            return e.collection.has('create', 'read');
+        },
+        action: function (baton) {
+            // load & call
+            ox.load(['io.ox/calendar/actions/follow-up']).done(function (action) {
+                action(baton.data);
             });
         }
     });
@@ -425,6 +437,16 @@ define('io.ox/calendar/actions', [
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 300,
         prio: 'hi',
+        mobile: 'hi',
+        id: 'follow-up',
+        //#. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
+        label: gt('Follow-up'),
+        ref: 'io.ox/calendar/detail/actions/follow-up'
+    }));
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 400,
+        prio: 'hi',
         mobile: 'lo',
         id: 'delete',
         label: gt('Delete'),
@@ -432,7 +454,7 @@ define('io.ox/calendar/actions', [
     }));
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
-        index: 400,
+        index: 500,
         prio: 'lo',
         mobile: 'lo',
         id: 'move',
@@ -442,7 +464,7 @@ define('io.ox/calendar/actions', [
     }));
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
-        index: 500,
+        index: 600,
         prio: 'lo',
         id: 'print',
         label: gt('Print'),
