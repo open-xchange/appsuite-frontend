@@ -337,17 +337,6 @@ define('io.ox/mail/detail/content', [
         }
     });
 
-    ext.point('io.ox/mail/detail/content').extend({
-        id: 'check-simple',
-        index: 1000,
-        process: function () {
-            var container = $(this);
-            // if a mail contains a table, we assume that it is a mail with a lot of markup
-            // and styles and things like max-width: 100% will destroy the layout
-            if (container.find('table').length === 0) container.addClass('simple-mail');
-        }
-    });
-
     function getText(node) {
         // get text content for current node if it's a text node
         var value = (node.nodeType === 3 && String(node.nodeValue).trim()) || '',
@@ -398,6 +387,31 @@ define('io.ox/mail/detail/content', [
             });
             // delegate
             $(this).on('click', '.blockquote-toggle', explandBlockquote);
+        }
+    });
+
+    ext.point('io.ox/mail/detail/content').extend({
+        id: 'check-simple',
+        index: 1100,
+        process: function () {
+            var container = $(this);
+            // if a mail contains a table, we assume that it is a mail with a lot of markup
+            // and styles and things like max-width: 100% will destroy the layout
+            if (container.find('table').length === 0) container.addClass('simple-mail');
+        }
+    });
+
+    ext.point('io.ox/mail/detail/content').extend({
+        id: 'lazyload-images',
+        index: 1200,
+        process: function () {
+            $(this).find('img[src!=""]').each(function () {
+                var img = $(this);
+                img.attr({
+                    'data-original': img.attr('src'),
+                    'src': ''
+                }).addClass('lazyload');
+            });
         }
     });
 
@@ -452,7 +466,7 @@ define('io.ox/mail/detail/content', [
                 return { content: $(), isLarge: false, type: 'text/plain' };
             }
 
-            var baton = new ext.Baton({ data: data, options: options || {}, source: '', type: 'text/plain' }), content, shadow;
+            var baton = new ext.Baton({ data: data, options: options || {}, source: '', type: 'text/plain' }), content;
 
             try {
 
@@ -507,12 +521,12 @@ define('io.ox/mail/detail/content', [
                 }
 
                 // process content unless too large
-                if (!baton.isLarge) ext.point('io.ox/mail/detail/content').invoke('process', shadow || content, baton);
+                if (!baton.isLarge) ext.point('io.ox/mail/detail/content').invoke('process', content, baton);
 
                 // fix absolute positions
                 // heuristic: the source must at least contain the word "absolute" somewhere
                 if ((/absolute/i).test(baton.source)) {
-                    setTimeout(fixAbsolutePositions, 10, shadow || content, baton.isLarge);
+                    setTimeout(fixAbsolutePositions, 10, content, baton.isLarge);
                 }
 
             } catch (e) {

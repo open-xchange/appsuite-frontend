@@ -195,6 +195,7 @@ define('io.ox/mail/detail/view', [
             // rendering mails in chrome is slow if we do not use a shadow dom
             if ($body[0].createShadowRoot && _.device('chrome') && !_.device('smartphone')) {
                 $body[0].createShadowRoot();
+                $body.addClass('shadow-root-container');
             }
             $body.on('dispose', function () {
                 var $content = $(this.shadowRoot || this);
@@ -244,6 +245,13 @@ define('io.ox/mail/detail/view', [
             $(node).css('min-height', baton.model.get('visualHeight') || 100);
             // add to DOM
             this.idle().append(node);
+            // ensure, that the scrollable is a lazyload scrollpane
+            if (this[0].host) {
+                // if it is a shadow dom, we must trigger add.lazyload to ensure, that lazyloading is updated at least once
+                $(this[0].host).closest('.scrollable').lazyloadScrollpane().trigger('add.lazyload');
+            } else {
+                this.closest('.scrollable').lazyloadScrollpane();
+            }
             // now remember height
             baton.model.set('visualHeight', $(node).height(), { silent: true });
         }
