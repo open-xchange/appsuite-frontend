@@ -336,21 +336,26 @@
 
         &.premium-toolbar {
             height: auto;
-            padding: 16px;
+            line-height: 16px;
+            background-color: @premium-toolbar-background;
 
             ul {
-                line-height: 23px;
-                margin: 0;
+                margin: 6px 16px;
+
+                li {
+
+                    padding: 5px 0;
+
+                    a {
+                        color: @premium-toolbar-link-color;
+                    }
+                }
             }
 
             .header {
-                margin-left: -16px;
-                margin-right: -16px;
-                margin-top: -16px;
-                margin-bottom: 11px;
-                padding: 5px 16px 0 16px;
-                background-color: #3C73AA;
-                color: #fff;
+                padding: 6px 16px 6px 16px;
+                background-color: @premium-toolbar-header-background;
+                color: @premium-toolbar-header-color;
             }
         }
     }
