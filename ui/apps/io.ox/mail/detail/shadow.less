@@ -85,8 +85,6 @@
         text-align: left;
     }
 
-    ul, ol { padding-left: 16px; }
-
     // see Bug 24995 - Strange boxes shown for invitation mails
     .calendar-detail .label {
         display: block;
@@ -102,6 +100,25 @@
     // div {
     //     word-break: break-word;
     // }
+
+    table {
+        border: 0 none; line-height: normal; border-collapse: initial;
+    }
+
+    ul, ol {
+        padding: 0;
+        padding-left: 16px;
+        margin: 1em 0 1em 24px;
+    }
+
+    ul { list-style-type: disc; }
+    ul ul { list-style-type: circle; }
+    ul ul ul { list-style-type: square; }
+
+    li {
+        line-height: normal;
+        margin-bottom: 0.5em;
+    }
 
     blockquote {
         color: #555;
