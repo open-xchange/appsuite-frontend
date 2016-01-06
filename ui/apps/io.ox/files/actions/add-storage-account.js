@@ -67,7 +67,7 @@ define('io.ox/files/actions/add-storage-account', [
             )
             .attr({
                 'data-service': service.id,
-                //#. %$1s is the account name like Dropbox, Google Drive, or OneDrive
+                //#. %1$s is the account name like Dropbox, Google Drive, or OneDrive
                 'aria-label': gt('Add %1$s account', data.title)
             })
             .on('click', { dialog: this, service: service }, onClick);
@@ -75,35 +75,40 @@ define('io.ox/files/actions/add-storage-account', [
 
     function drawContent(node) {
 
+        // consider metrics
+        if (metrics.isEnabled()) {
+            this.delegate('.toolbar-item', 'mousedown', function (e) {
+                metrics.trackEvent({
+                    app: 'drive',
+                    target: 'folder/account/add',
+                    type: 'click',
+                    action: $(e.currentTarget).attr('data-service') || 'unknown'
+                });
+            });
+        }
+
         var draw = drawLink.bind(this);
 
-        getAvailableServices().done(function (availableServices) {
+        return getAvailableServices().done(function (availableServices) {
             node.append(_(availableServices).map(draw)).show();
-            $(window).trigger('resize');
-        });
-
-        // consider metrics
-        if (!metrics.isEnabled()) return;
-
-        this.delegate('.toolbar-item', 'mousedown', function (e) {
-            metrics.trackEvent({
-                app: 'drive',
-                target: 'folder/account/add',
-                type: 'click',
-                action: $(e.currentTarget).attr('data-service') || 'unknown'
-            });
         });
     }
 
     return function () {
 
-        new dialogs.ModalDialog({ width: 506 })
+        var def, dialog;
+
+        dialog = new dialogs.ModalDialog({ width: 506 })
             .header($('<h4>').text(gt('Add storage account')))
             .addPrimaryButton('close', gt('Close'), 'close', { tabIndex: 1 })
             .build(function () {
                 this.getPopup().addClass('select-storage-account-dialog');
-                drawContent.call(this, this.getContentNode());
-            })
-            .show();
+                def = drawContent.call(this, this.getContentNode());
+            });
+
+        def.done(function () {
+            dialog.show();
+            dialog = def = null;
+        });
     };
 });
