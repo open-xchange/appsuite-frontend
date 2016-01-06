@@ -644,28 +644,11 @@ msgstr "実際の時間 (分)"
 msgid "Add"
 msgstr "追加"
 
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
-msgid "Add Box account"
-msgstr "Box.com アカウントを追加"
-
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
-msgid "Add Dropbox account"
-msgstr "Dropbox アカウントを追加"
-
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
-msgid "Add Google Drive account"
-msgstr "Google Drive アカウントを追加"
-
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
-msgid "Add OneDrive account"
-msgstr "OndDrive アカウントを追加"
-
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
 msgstr "説明を追加"
 
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
 msgid "Add account"
@@ -788,7 +771,8 @@ msgstr "署名を引用文の上に追加"
 msgid "Add signature below quoted text"
 msgstr "署名を引用文の下に追加"
 
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #, fuzzy
 #| msgid "Add your account"
 msgid "Add storage account"
@@ -1308,6 +1292,12 @@ msgstr "ブラインドコピー"
 msgid "Blue"
 msgstr "青"
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "InfoBox"
+msgid "Box"
+msgstr "インフォボックス"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Branches"
 msgstr "支店"
@@ -1423,8 +1413,7 @@ msgstr "予定表："
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
-#: apps/io.ox/files/actions/versions-delete.js
-#: apps/io.ox/files/folderview-extensions.js apps/io.ox/files/main.js
+#: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
@@ -1684,12 +1673,12 @@ msgstr ""
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/showlink.js module:io.ox/files
-#: apps/io.ox/files/mediaplayer.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/upload/view.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings apps/io.ox/mail/actions/source.js
-#: module:io.ox/mail apps/io.ox/mail/statistics.js
-#: apps/plugins/upsell/simple-wizard/register.js
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/files/actions/showlink.js apps/io.ox/files/mediaplayer.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/view.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/actions/source.js module:io.ox/mail
+#: apps/io.ox/mail/statistics.js apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
 msgstr "閉じる"
@@ -2725,6 +2714,12 @@ msgstr "新規バージョン\"%1$s\"をここにドロップ"
 msgid "Drop only a single file as new version."
 msgstr "単一ファイルのみを新規バージョンとしてドロップ"
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Dropdown"
+msgid "Dropbox"
+msgstr "ドロップダウン"
+
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 #: module:io.ox/mail
@@ -3604,6 +3599,12 @@ msgstr "こんばんは、%s さん。"
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Good morning, %s"
 msgstr "おはようございます、%s さん。"
+
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Drive"
+msgstr "Google Drive アカウントを追加"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -5160,6 +5161,13 @@ msgid ""
 msgstr ""
 "1 つ以上の添付ファイルがメールのサイズ制限を越えているため、添付ファイルとし"
 "て送信されませんでした。ファイルはサーバに保存されました。"
+
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgctxt "app"
+#| msgid "Drive"
+msgid "OneDrive"
+msgstr "ドライブ"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
@@ -9863,14 +9871,23 @@ msgstr "yyyy"
 #~ msgid "Add Bcc ->"
 #~ msgstr "Bccに追加 ->"
 
+#~ msgid "Add Box account"
+#~ msgstr "Box.com アカウントを追加"
+
 #~ msgid "Add Cc ->"
 #~ msgstr "Ccに追加 ->"
+
+#~ msgid "Add Dropbox account"
+#~ msgstr "Dropbox アカウントを追加"
 
 #~ msgid "Add E-Mail account ..."
 #~ msgstr "メール アカウントを追加..."
 
 #~ msgid "Add Facebook/Twitter ..."
 #~ msgstr "Facebook/Twitter を追加..."
+
+#~ msgid "Add OneDrive account"
+#~ msgstr "OndDrive アカウントを追加"
 
 #~ msgid "Add a Subreddit"
 #~ msgstr "サブレディットを追加"
@@ -11851,9 +11868,6 @@ msgstr "yyyy"
 #~ msgid "Drop the file anywhere to add attachment"
 #~ msgstr "ファイルを任意の場所にドロップすると、添付ファイルを追加できます。"
 
-#~ msgid "Dropdown"
-#~ msgstr "ドロップダウン"
-
 #~ msgid "Due date:"
 #~ msgstr "締切日:"
 
@@ -12960,9 +12974,6 @@ msgstr "yyyy"
 
 #~ msgid "Info area"
 #~ msgstr "情報エリア"
-
-#~ msgid "InfoBox"
-#~ msgstr "インフォボックス"
 
 #~ msgid "InfoStore"
 #~ msgstr "インフォストア"

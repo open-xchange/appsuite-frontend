@@ -662,28 +662,11 @@ msgstr "實際持續分鐘數"
 msgid "Add"
 msgstr "新增"
 
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
-msgid "Add Box account"
-msgstr "新增 Box 帳號"
-
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
-msgid "Add Dropbox account"
-msgstr "新增 Dropbox 帳號"
-
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
-msgid "Add Google Drive account"
-msgstr "新增 Google Drive 帳號"
-
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
-msgid "Add OneDrive account"
-msgstr "新增 OneDrive 帳號"
-
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
 msgstr "新增描述"
 
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
 msgid "Add account"
@@ -806,7 +789,8 @@ msgstr "新增簽名檔於引用內容上方"
 msgid "Add signature below quoted text"
 msgstr "新增簽名檔於引用內容下方"
 
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #, fuzzy
 #| msgid "Add your account"
 msgid "Add storage account"
@@ -1323,6 +1307,10 @@ msgstr "密件副本"
 msgid "Blue"
 msgstr "藍色"
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+msgid "Box"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Branches"
 msgstr "分支"
@@ -1434,8 +1422,7 @@ msgstr "行事曆:"
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
-#: apps/io.ox/files/actions/versions-delete.js
-#: apps/io.ox/files/folderview-extensions.js apps/io.ox/files/main.js
+#: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
@@ -1693,12 +1680,12 @@ msgstr ""
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/showlink.js module:io.ox/files
-#: apps/io.ox/files/mediaplayer.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/upload/view.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings apps/io.ox/mail/actions/source.js
-#: module:io.ox/mail apps/io.ox/mail/statistics.js
-#: apps/plugins/upsell/simple-wizard/register.js
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/files/actions/showlink.js apps/io.ox/files/mediaplayer.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/view.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/actions/source.js module:io.ox/mail
+#: apps/io.ox/mail/statistics.js apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
 msgstr "關閉"
@@ -2719,6 +2706,12 @@ msgstr "在此放下新版本的「%1$s」"
 msgid "Drop only a single file as new version."
 msgstr "放下新黨闇作為新版本。"
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Dropdown"
+msgid "Dropbox"
+msgstr "下拉清單"
+
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 #: module:io.ox/mail
@@ -3583,6 +3576,12 @@ msgstr "%s 晚安"
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Good morning, %s"
 msgstr "%s 早安"
+
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Drive"
+msgstr "新增 Google Drive 帳號"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -5123,6 +5122,13 @@ msgid ""
 msgstr ""
 "一個或多個附加的檔案超過電子郵件的可附加大小，因此，這些檔案並未作為附件送出"
 "而是存放在伺服器中。您寄出的郵件當中包含可下載這些檔案的連結。"
+
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgctxt "app"
+#| msgid "Drive"
+msgid "OneDrive"
+msgstr "Drive"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
@@ -9729,11 +9735,20 @@ msgstr "年"
 #~ msgid "Add Bcc →"
 #~ msgstr "添加密件副本收件人→"
 
+#~ msgid "Add Box account"
+#~ msgstr "新增 Box 帳號"
+
 #~ msgid "Add Cc →"
 #~ msgstr "添加副本收件人→"
 
+#~ msgid "Add Dropbox account"
+#~ msgstr "新增 Dropbox 帳號"
+
 #~ msgid "Add E-Mail account ..."
 #~ msgstr "新增電子郵件帳戶..."
+
+#~ msgid "Add OneDrive account"
+#~ msgstr "新增 OneDrive 帳號"
 
 #~ msgid "Add To →"
 #~ msgstr "添加收件人 →"
@@ -10941,9 +10956,6 @@ msgstr "年"
 
 #~ msgid "Drop the file anywhere to add attachment"
 #~ msgstr "只要把檔案隨便丟到一個地方即可新增附件"
-
-#~ msgid "Dropdown"
-#~ msgstr "下拉清單"
 
 #~ msgid "Due date:"
 #~ msgstr "截止日："

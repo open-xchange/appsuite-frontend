@@ -672,28 +672,11 @@ msgstr "Durata attuale in minuti"
 msgid "Add"
 msgstr "Aggiungi"
 
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
-msgid "Add Box account"
-msgstr "Aggiungi account Box"
-
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
-msgid "Add Dropbox account"
-msgstr "Aggiungi account Dropbox"
-
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
-msgid "Add Google Drive account"
-msgstr "Aggiungi account Google Drive"
-
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
-msgid "Add OneDrive account"
-msgstr "Aggiungi account OneDrive"
-
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
 msgstr "Aggiungi una descrizione"
 
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
 msgid "Add account"
@@ -816,7 +799,8 @@ msgstr "Aggiungi la firma sopra il testo citato"
 msgid "Add signature below quoted text"
 msgstr "Aggiungi la firma sotto il testo citato"
 
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #, fuzzy
 #| msgid "Add your account"
 msgid "Add storage account"
@@ -1345,6 +1329,10 @@ msgstr "Copia nascosta"
 msgid "Blue"
 msgstr "Blu"
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+msgid "Box"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Branches"
 msgstr "Divisioni"
@@ -1458,8 +1446,7 @@ msgstr "Calendario:"
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
-#: apps/io.ox/files/actions/versions-delete.js
-#: apps/io.ox/files/folderview-extensions.js apps/io.ox/files/main.js
+#: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
@@ -1718,12 +1705,12 @@ msgstr ""
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/showlink.js module:io.ox/files
-#: apps/io.ox/files/mediaplayer.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/upload/view.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings apps/io.ox/mail/actions/source.js
-#: module:io.ox/mail apps/io.ox/mail/statistics.js
-#: apps/plugins/upsell/simple-wizard/register.js
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/files/actions/showlink.js apps/io.ox/files/mediaplayer.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/view.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/actions/source.js module:io.ox/mail
+#: apps/io.ox/mail/statistics.js apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
 msgstr "Chiudi"
@@ -2756,6 +2743,12 @@ msgstr "Rilascia qui la nuova versione di \"%1$s\""
 msgid "Drop only a single file as new version."
 msgstr "Rilascia solo un singolo file come nuova versione."
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Dropdown"
+msgid "Dropbox"
+msgstr "Elenco a discesa"
+
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 #: module:io.ox/mail
@@ -3645,6 +3638,12 @@ msgstr "Buona sera, %s"
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Good morning, %s"
 msgstr "Buongiorno, %s"
+
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Drive"
+msgstr "Aggiungi account Google Drive"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -5203,6 +5202,13 @@ msgstr ""
 "Uno o più file allegati superano il limite di dimensione per messaggio. I "
 "file non sono perciò inviati come allegati, ma tenuti sul server. Il "
 "messaggio che hai inviato contiene i collegamenti per scaricare questi file."
+
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgctxt "app"
+#| msgid "Drive"
+msgid "OneDrive"
+msgstr "Drive"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
@@ -9941,14 +9947,23 @@ msgstr "aaaa"
 #~ msgid "Add Bcc →"
 #~ msgstr "Aggiungi Ccn →"
 
+#~ msgid "Add Box account"
+#~ msgstr "Aggiungi account Box"
+
 #~ msgid "Add Box.com account"
 #~ msgstr "Aggiungi account Box.com"
 
 #~ msgid "Add Cc →"
 #~ msgstr "Aggiungi Cc →"
 
+#~ msgid "Add Dropbox account"
+#~ msgstr "Aggiungi account Dropbox"
+
 #~ msgid "Add E-Mail account ..."
 #~ msgstr "Aggiungi un account di posta elettronica..."
+
+#~ msgid "Add OneDrive account"
+#~ msgstr "Aggiungi account OneDrive"
 
 #~ msgid "Add To →"
 #~ msgstr "Aggiungi A →"
@@ -11266,9 +11281,6 @@ msgstr "aaaa"
 
 #~ msgid "Drop the file anywhere to add attachment"
 #~ msgstr "Rilascia il file in un punto qualsiasi per aggiungere l'allegato"
-
-#~ msgid "Dropdown"
-#~ msgstr "Elenco a discesa"
 
 #~ msgid "Due date:"
 #~ msgstr "Data scadenza:"

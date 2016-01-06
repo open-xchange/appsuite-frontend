@@ -449,7 +449,6 @@ msgstr ""
 #: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js
-#: apps/io.ox/files/folderview-extensions.js
 #: apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js
@@ -3271,8 +3270,9 @@ msgstr ""
 #: module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js
 #: module:io.ox/editor
-#: apps/io.ox/files/actions/showlink.js
+#: apps/io.ox/files/actions/add-storage-account.js
 #: module:io.ox/files
+#: apps/io.ox/files/actions/showlink.js
 #: apps/io.ox/files/mediaplayer.js
 #: apps/io.ox/files/share/permissions.js
 #: apps/io.ox/files/upload/view.js
@@ -4028,6 +4028,13 @@ msgstr ""
 #: apps/io.ox/core/folder/extensions.js
 #: module:io.ox/core
 msgid "My folders"
+msgstr ""
+
+#: apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core
+#: apps/io.ox/files/actions/add-storage-account.js
+#: module:io.ox/files
+msgid "Add storage account"
 msgstr ""
 
 #: apps/io.ox/core/folder/extensions.js
@@ -6295,6 +6302,26 @@ msgstr ""
 msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
 msgstr ""
 
+#: apps/io.ox/files/actions/add-storage-account.js
+#: module:io.ox/files
+msgid "Google Drive"
+msgstr ""
+
+#: apps/io.ox/files/actions/add-storage-account.js
+#: module:io.ox/files
+msgid "Dropbox"
+msgstr ""
+
+#: apps/io.ox/files/actions/add-storage-account.js
+#: module:io.ox/files
+msgid "Box"
+msgstr ""
+
+#: apps/io.ox/files/actions/add-storage-account.js
+#: module:io.ox/files
+msgid "OneDrive"
+msgstr ""
+
 #: apps/io.ox/files/actions/add-to-portal.js
 #: module:io.ox/files
 msgid "This file has been added to the portal"
@@ -6415,38 +6442,6 @@ msgstr[1] ""
 #: apps/io.ox/files/filepicker.js
 #: module:io.ox/files
 msgid "Upload local file"
-msgstr ""
-
-#: apps/io.ox/files/folderview-extensions.js
-#: module:io.ox/files
-msgid "Add Google Drive account"
-msgstr ""
-
-#: apps/io.ox/files/folderview-extensions.js
-#: module:io.ox/files
-msgid "Add Dropbox account"
-msgstr ""
-
-#: apps/io.ox/files/folderview-extensions.js
-#: module:io.ox/files
-msgid "Add Box account"
-msgstr ""
-
-#: apps/io.ox/files/folderview-extensions.js
-#: module:io.ox/files
-msgid "Add OneDrive account"
-msgstr ""
-
-#: apps/io.ox/files/folderview-extensions.js
-#: module:io.ox/files
-msgid "Add storage account"
-msgstr ""
-
-#: apps/io.ox/files/folderview-extensions.js
-#: module:io.ox/files
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts
-msgid "Add account"
 msgstr ""
 
 #: apps/io.ox/files/guidance/main.js
@@ -9518,6 +9513,11 @@ msgstr ""
 #: apps/io.ox/search/view-template.js
 #: module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
+msgstr ""
+
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "Add account"
 msgstr ""
 
 #: apps/io.ox/settings/accounts/settings/pane.js

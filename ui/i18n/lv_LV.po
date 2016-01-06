@@ -692,28 +692,11 @@ msgstr "Faktiskais ilgums minūtēs"
 msgid "Add"
 msgstr "Pievienot"
 
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
-msgid "Add Box account"
-msgstr "Pievienot Box kontu"
-
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
-msgid "Add Dropbox account"
-msgstr "Pievienot Dropbox kontu"
-
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
-msgid "Add Google Drive account"
-msgstr "Pievienot Google Drive kontu"
-
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
-msgid "Add OneDrive account"
-msgstr "Pievienot OneDrive kontu"
-
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
 msgstr "Pievienot aprakstu"
 
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
 msgid "Add account"
@@ -836,7 +819,8 @@ msgstr "Pievienot parakstu virs kvotētā teksta"
 msgid "Add signature below quoted text"
 msgstr "Pievienot parakstu zem kvotētā teksta"
 
-#: apps/io.ox/files/folderview-extensions.js module:io.ox/files
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #, fuzzy
 #| msgid "Add your account"
 msgid "Add storage account"
@@ -1363,6 +1347,10 @@ msgstr "BC kopija"
 msgid "Blue"
 msgstr "Zils"
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+msgid "Box"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Branches"
 msgstr "Zari"
@@ -1476,8 +1464,7 @@ msgstr "Kalendārs:"
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
-#: apps/io.ox/files/actions/versions-delete.js
-#: apps/io.ox/files/folderview-extensions.js apps/io.ox/files/main.js
+#: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
@@ -1738,12 +1725,12 @@ msgstr ""
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/showlink.js module:io.ox/files
-#: apps/io.ox/files/mediaplayer.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/upload/view.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings apps/io.ox/mail/actions/source.js
-#: module:io.ox/mail apps/io.ox/mail/statistics.js
-#: apps/plugins/upsell/simple-wizard/register.js
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/files/actions/showlink.js apps/io.ox/files/mediaplayer.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/view.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/actions/source.js module:io.ox/mail
+#: apps/io.ox/mail/statistics.js apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
 msgstr "Aizvērt"
@@ -2780,6 +2767,12 @@ msgstr "Ielādēt jaunu \"%1$s\" versiju šeit"
 msgid "Drop only a single file as new version."
 msgstr "Pievienot tikai atsevišķu failu kā jaunu versiju."
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Dropdown"
+msgid "Dropbox"
+msgstr "Lejatvere"
+
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 #: module:io.ox/mail
@@ -3662,6 +3655,12 @@ msgstr "Labvakar, %s"
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Good morning, %s"
 msgstr "Labrīt, %s"
+
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Drive"
+msgstr "Pievienot Google Drive kontu"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -5224,6 +5223,13 @@ msgstr ""
 "Viens vai vairāki pievienotie faili pārsniedz izmēra ierobežojumu. Tāpēc "
 "faili nav nosūtīti kā pievienojumi, bet ir saglabāti serverī. Jūsu nosūtītā "
 "vēstule vienkārši satur saites šo failu lejupielādēšanai."
+
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgctxt "app"
+#| msgid "Drive"
+msgid "OneDrive"
+msgstr "Drive"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
@@ -9968,11 +9974,20 @@ msgstr "yyyy"
 #~ msgid "Add Bcc →"
 #~ msgstr "BCC →"
 
+#~ msgid "Add Box account"
+#~ msgstr "Pievienot Box kontu"
+
 #~ msgid "Add Cc →"
 #~ msgstr "CC →"
 
+#~ msgid "Add Dropbox account"
+#~ msgstr "Pievienot Dropbox kontu"
+
 #~ msgid "Add E-Mail account ..."
 #~ msgstr "Pievienot e-pasta kontu..."
+
+#~ msgid "Add OneDrive account"
+#~ msgstr "Pievienot OneDrive kontu"
 
 #~ msgid "Add To →"
 #~ msgstr "Saņēmējs →"
@@ -11249,9 +11264,6 @@ msgstr "yyyy"
 
 #~ msgid "Drop the file anywhere to add attachment"
 #~ msgstr "Lai izveidotu pievienojumu vienkārši nomtiet failu vinalga kur"
-
-#~ msgid "Dropdown"
-#~ msgstr "Lejatvere"
 
 #~ msgid "Due date:"
 #~ msgstr "Izpildes datums:"
