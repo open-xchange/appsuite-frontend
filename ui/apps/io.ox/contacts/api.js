@@ -1012,7 +1012,7 @@ define('io.ox/contacts/api', [
         // should be >= 1!
         var minLength = Math.max(1, settings.get('search/minimumQueryLength', 3)),
             // use these fields for local lookups
-            fields = 'display_name email1 email2 email3 first_name last_name'.split(' ');
+            fields = settings.get('search/fields', 'display_name email1 email2 email3 first_name last_name'.split(' '));
 
         // check for minimum length
         function hasMinLength(str) {
@@ -1067,7 +1067,7 @@ define('io.ox/contacts/api', [
             query = $.trim(query).toLowerCase();
 
             // default: standard columns plus cell phone for MSISDN support
-            var columns = '1,2,5,20,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,551,552';
+            var columns = '1,2,5,20,101,500,501,502,505,519,520,524,555,556,557,569,592,602,606,607,551,552';
             options = _.extend({ admin: false, email: true, sort: '609', columns: columns, cache: true, limit: 0 }, options);
 
             // try local cache
