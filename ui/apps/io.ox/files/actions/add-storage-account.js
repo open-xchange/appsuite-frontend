@@ -42,15 +42,22 @@ define('io.ox/files/actions/add-storage-account', [
         return require(['io.ox/keychain/api']).then(function (keychainApi) {
             return _(keychainApi.submodules).filter(function (submodule) {
                 if (!services[submodule.id]) return false;
-
                 return !submodule.canAdd || submodule.canAdd.apply(this);
             });
         });
     }
 
+    function onClick(e) {
+        e.preventDefault();
+        $(this).tooltip('hide');
+        e.data.dialog.close();
+        var win = window.open(ox.base + '/busy.html', '_blank', 'height=600, width=800, resizable=yes, scrollbars=yes');
+        e.data.service.createInteractively(win);
+    }
+
     function drawLink(service) {
-        var self = this,
-            data = services[service.id];
+
+        var data = services[service.id];
 
         return $('<button class="btn btn-default storage-account-item" role="button" tabindex="1">')
             .addClass(data.className)
@@ -62,29 +69,23 @@ define('io.ox/files/actions/add-storage-account', [
                 'data-service': service.id,
                 'title': data.title
             })
-            .on('click', function (e) {
-                e.preventDefault();
-
-                $(this).tooltip('hide');
-                self.close();
-
-                var win = window.open(ox.base + '/busy.html', '_blank', 'height=600, width=800, resizable=yes, scrollbars=yes');
-                service.createInteractively(win);
-            });
+            .on('click', { dialog: this, service: service }, onClick);
     }
 
     function drawContent(node) {
-        var self = this;
+
+        var draw = drawLink.bind(this);
 
         getAvailableServices().done(function (availableServices) {
-            node.append(
-                _(availableServices).map(drawLink.bind(self))
-            ).show();
+            node.append(_(availableServices).map(draw)).show();
+            $(window).trigger('resize');
+            node.find('.storage-account-item:first').focus();
         });
 
         // consider metrics
         if (!metrics.isEnabled()) return;
-        self.delegate('.toolbar-item', 'mousedown', function (e) {
+
+        this.delegate('.toolbar-item', 'mousedown', function (e) {
             metrics.trackEvent({
                 app: 'drive',
                 target: 'folder/account/add',
@@ -95,7 +96,8 @@ define('io.ox/files/actions/add-storage-account', [
     }
 
     return function () {
-        new dialogs.ModalDialog()
+
+        new dialogs.ModalDialog({ width: 506 })
             .header($('<h4>').text(gt('Add storage account')))
             .addPrimaryButton('close', gt('Close'), 'close', { tabIndex: 1 })
             .build(function () {
