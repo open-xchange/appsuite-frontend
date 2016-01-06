@@ -1012,7 +1012,7 @@ define('io.ox/contacts/api', [
         // should be >= 1!
         var minLength = Math.max(1, settings.get('search/minimumQueryLength', 3)),
             // use these fields for local lookups
-            fields = settings.get('search/fields', 'display_name email1 email2 email3 first_name last_name'.split(' '));
+            fields = settings.get('search/autocompleteFields', 'display_name,email1,email2,email3,first_name,last_name').split(',');
 
         // check for minimum length
         function hasMinLength(str) {
