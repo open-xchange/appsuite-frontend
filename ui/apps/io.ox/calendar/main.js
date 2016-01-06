@@ -25,13 +25,14 @@ define('io.ox/calendar/main', [
     'io.ox/core/toolbars-mobile',
     'io.ox/core/page-controller',
     'io.ox/calendar/api',
+    'io.ox/backbone/mini-views/upsell',
     'io.ox/calendar/mobile-navbar-extensions',
     'io.ox/calendar/mobile-toolbar-actions',
     'io.ox/calendar/toolbar',
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style',
     'io.ox/calendar/week/view'
-], function (coreConfig, commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, VGrid, Bars, PageController, api) {
+], function (coreConfig, commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, VGrid, Bars, PageController, api, UpsellView) {
 
     'use strict';
 
@@ -322,6 +323,15 @@ define('io.ox/calendar/main', [
 
             ext.point('io.ox/calendar/folderview/premium-area').invoke('draw', container, {});
             if (container.find('li').length === 0) return;
+            container.append(new UpsellView({
+                id: 'folderview/calendar/bottom',
+                requires: 'caldav',
+                icon: '',
+                title: gt('Try now!'),
+                customize: function () {
+                    this.$('a').addClass('btn btn-primary');
+                }
+            }).render().$el);
             sidepanel.append(container);
         },
 

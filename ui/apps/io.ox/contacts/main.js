@@ -32,10 +32,11 @@ define('io.ox/contacts/main', [
     'io.ox/core/page-controller',
     'io.ox/core/folder/tree',
     'io.ox/core/folder/view',
+    'io.ox/backbone/mini-views/upsell',
     'io.ox/contacts/mobile-navbar-extensions',
     'io.ox/contacts/mobile-toolbar-actions',
     'less!io.ox/contacts/style'
-], function (util, coreUtil, api, VGrid, hints, viewDetail, ext, actions, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView) {
+], function (util, coreUtil, api, VGrid, hints, viewDetail, ext, actions, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView, UpsellView) {
 
     'use strict';
 
@@ -773,6 +774,15 @@ define('io.ox/contacts/main', [
 
             ext.point('io.ox/contacts/folderview/premium-area').invoke('draw', container, {});
             if (container.find('li').length === 0) return;
+            container.append(new UpsellView({
+                id: 'folderview/contacts/bottom',
+                requires: 'carddav',
+                icon: '',
+                title: gt('Try now!'),
+                customize: function () {
+                    this.$('a').addClass('btn btn-primary');
+                }
+            }).render().$el);
             sidepanel.append(container);
         },
 
