@@ -10,10 +10,8 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-define('io.ox/mail/settings/model', [
-    'settings!io.ox/mail',
-    'gettext!io.ox/mail'
-], function (settings, gt) {
+
+define('io.ox/mail/settings/model', ['settings!io.ox/mail'], function (settings) {
 
     'use strict';
 
@@ -21,12 +19,7 @@ define('io.ox/mail/settings/model', [
 
         initialize: $.noop,
 
-        validate: function (attrs) {
-            if (!/^[0-9]*$/.test(attrs.lineWrapAfter)) {
-                this.trigger('invalid:lineWrapAfter', gt('the line length must be a number'));
-                return gt('the line length must be a number');
-            }
-            this.trigger('valid:lineWrapAfter');
+        validate: function () {
         },
 
         save: function () {

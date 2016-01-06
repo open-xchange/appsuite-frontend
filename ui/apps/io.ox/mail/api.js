@@ -833,20 +833,21 @@ define('io.ox/mail/api', [
                 http.PUT({
                     module: 'mail',
                     params: {
-                        action: 'autosave'
+                        action: 'autosave',
+                        lineWrapAfter: 0
                     },
                     data: obj,
                     appendColumns: false
                 })
-            .then(function (result) {
-
-                // reset draft folder
-                var draftsFolder = accountAPI.getFoldersByType('drafts');
-                pool.resetFolder(draftsFolder);
-                folderAPI.reload(draftsFolder);
-                api.trigger('refresh.all');
-                return result;
-            }));
+                .then(function (result) {
+                    // reset draft folder
+                    var draftsFolder = accountAPI.getFoldersByType('drafts');
+                    pool.resetFolder(draftsFolder);
+                    folderAPI.reload(draftsFolder);
+                    api.trigger('refresh.all');
+                    return result;
+                })
+            );
         } finally {
             // try/finally is used to set up http.wait() first
             if (obj.msgref) prepareRemove(parseMsgref(obj.msgref));
@@ -1147,7 +1148,8 @@ define('io.ox/mail/api', [
         return http.UPLOAD({
             module: 'mail',
             params: {
-                action: 'new'
+                action: 'new',
+                lineWrapAfter: 0
             },
             data: form,
             dataType: 'json',

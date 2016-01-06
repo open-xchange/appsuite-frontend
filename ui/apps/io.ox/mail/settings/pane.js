@@ -264,24 +264,6 @@ define('io.ox/mail/settings/pane', [
                     $('<legend>').addClass('sectiontitle sr-only').append(
                         $('<h2>').text(gt('Additional settings'))
                     ),
-                    $('<div>').addClass('form-group expertmode').append(
-
-                        $('<label for="lineWrapAfter">').addClass('control-label').text(
-                            //#. It's a label for an input field with a number
-                            //#. This only applies for plain text messages, so please keep this information in translations
-                            gt('Automatically wrap plain text after character:')
-                        ),
-                        $('<div>').addClass('controls').append(
-                            $('<div>').addClass('row').append(
-                                $('<div>').addClass('col-md-2').append(
-                                    new mini.InputView({ name: 'lineWrapAfter', model: mailSettings, className: 'form-control', id: 'lineWrapAfter' }).render().$el
-                                ),
-                                $('<div>').addClass('col-md-10').append(
-                                    new mini.ErrorView({ selector: '.form-group.expertmode' }).render().$el
-                                )
-                            )
-                        )
-                    ),
                     $('<div>').addClass('form-group').append(
                         $('<label>').attr({ 'for': 'defaultSendAddress' }).text(gt('Default sender address')),
                         $('<div>').addClass('controls').append(
