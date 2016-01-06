@@ -306,10 +306,7 @@ define('io.ox/mail/listview', [
             ListView.prototype.initialize.call(this, options);
             this.$el.addClass('mail-item');
             this.on('collection:load', this.lookForUnseenMessage);
-            this.delegateEvents({
-                'click .selectable .fa-envelope': 'markRead',
-                'mousedown .selectable .fa-envelope': 'markRead'
-            });
+            this.delegate('click mousedown', '.selectable .fa-envelope', this.markRead.bind(this));
 
             // track some states
             if (options && options.app) {
