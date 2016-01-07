@@ -31,7 +31,6 @@ define('io.ox/files/main', [
     'io.ox/files/api',
     'io.ox/core/tk/sidebar',
     'io.ox/core/viewer/views/sidebarview',
-    'io.ox/backbone/mini-views/upsell',
     // prefetch
     'io.ox/files/mobile-navbar-extensions',
     'io.ox/files/mobile-toolbar-actions',
@@ -43,7 +42,7 @@ define('io.ox/files/main', [
     'io.ox/files/upload/dropzone',
     'io.ox/core/folder/breadcrumb',
     'gettext!io.ox/core/viewer'
-], function (commons, gt, settings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, UpsellView) {
+], function (commons, gt, settings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview) {
 
     'use strict';
 
@@ -956,26 +955,10 @@ define('io.ox/files/main', [
         },
 
         'premium-area': function (app) {
-            if (_.device('smartphone')) return;
-            if (!settings.get('features/clientOnboarding', true)) return;
-
-            var sidepanel = app.getWindow().nodes.sidepanel,
-                container = $('<div class="premium-toolbar generic-toolbar bottom visual-focus">').append(
-                    $('<div class="header">').text(gt('Premium features'))
-                );
-
-            ext.point('io.ox/files/folderview/premium-area').invoke('draw', container, {});
-            if (container.find('li').length === 0) return;
-            container.append(new UpsellView({
-                id: 'folderview/infostore/bottom',
-                requires: 'boxcom || google || msliveconnect',
-                icon: '',
-                title: gt('Try now!'),
-                customize: function () {
-                    this.$('a').addClass('btn btn-default');
-                }
-            }).render().$el);
-            sidepanel.append(container);
+            commons.addPremiumFeatures(app, {
+                upsellId: 'folderview/infostore/bottom',
+                upsellRequires: 'boxcom || google || msliveconnect'
+            });
         },
 
         /*

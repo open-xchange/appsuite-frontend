@@ -16,8 +16,10 @@ define('io.ox/core/commons', [
     'io.ox/core/extPatterns/links',
     'gettext!io.ox/core',
     'io.ox/core/folder/api',
-    'io.ox/core/api/account'
-], function (ext, links, gt, /*FolderView,*/ folderAPI, accountAPI) {
+    'io.ox/core/api/account',
+    'settings!io.ox/core',
+    'io.ox/backbone/mini-views/upsell'
+], function (ext, links, gt, /*FolderView,*/ folderAPI, accountAPI, coreSettings, UpsellView) {
 
     'use strict';
 
@@ -663,6 +665,40 @@ define('io.ox/core/commons', [
             onFolderViewClose(app);
 
             if (app.folderViewIsVisible()) _.defer(onFolderViewOpen, app);
+        },
+
+        addPremiumFeatures: function (app, opt) {
+            if (_.device('smartphone')) return;
+            if (!coreSettings.get('features/clientOnboarding', true)) return;
+            if (coreSettings.get('features/hiddenPremiumFeatures')) return;
+
+            var sidepanel = app.getWindow().nodes.sidepanel,
+                container = $('<div class="premium-toolbar generic-toolbar bottom visual-focus in">').append(
+                    $('<div class="header">').append(
+                        gt('Premium features'),
+                        $('<a href="#" class="pull-right">').append(
+                            $('<i class="fa fa-times" aria-hidden="true">'),
+                            $('<span class="sr-only">').text(gt('Close premium features'))
+                        ).on('click', function (e) {
+                            e.preventDefault();
+                            $(this).closest('.premium-toolbar').collapse('hide');
+                            coreSettings.set('features/hiddenPremiumFeatures', true).save();
+                        })
+                    )
+                );
+
+            ext.point(app.get('name') + '/folderview/premium-area').invoke('draw', container, {});
+            if (container.find('li').length === 0) return;
+            container.append(new UpsellView({
+                id: opt.upsellId || 'folderview/' + app.get('name') + '/bottom',
+                requires: opt.upsellRequires,
+                icon: '',
+                title: gt('Try now!'),
+                customize: function () {
+                    this.$('a').addClass('btn btn-default');
+                }
+            }).render().$el);
+            sidepanel.append(container);
         }
     };
 
