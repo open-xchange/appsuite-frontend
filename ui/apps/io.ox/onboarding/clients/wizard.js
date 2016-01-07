@@ -24,7 +24,8 @@ define('io.ox/onboarding/clients/wizard', [
     'use strict';
 
     var POINT = 'io.ox/onboarding/clients/views',
-        titleLabel = gt('Take %1$s with you! Stay up-to-date on your favorite devices.', ox.serverConfig.productName);
+        titleLabel = gt('Take %1$s with you! Stay up-to-date on your favorite devices.', ox.serverConfig.productName),
+        initiate, wizard;
 
     function drawOptions(type, list) {
         return $('<ul class="options" role="navigation">')
@@ -158,6 +159,7 @@ define('io.ox/onboarding/clients/wizard', [
         run: function () {
             // wrapper for wizard registry
             Wizard.registry.run(this.opt.id);
+            return this;
         },
 
         _onStepBeforeShow: function () {
@@ -277,7 +279,21 @@ define('io.ox/onboarding/clients/wizard', [
 
     });
 
-    config.load().then(function () {
-        new OnboardingView(config).run();
-    });
+    wizard = {
+
+        load: function () {
+            if (!initiate) initiate = config.load().promise();
+            return initiate;
+        },
+
+        render: function () {
+            return new OnboardingView(config).run();
+        },
+
+        run: function () {
+            return wizard.load().then(wizard.render);
+        }
+    };
+
+    return wizard;
 });

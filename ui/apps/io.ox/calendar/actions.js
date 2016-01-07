@@ -359,7 +359,9 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/premium/actions/share', {
         capabilities: 'caldav',
         action: function () {
-            require(['io.ox/onboarding/clients/wizard']);
+            require(['io.ox/onboarding/clients/wizard'], function (wizard) {
+                wizard.run();
+            });
         }
     });
 

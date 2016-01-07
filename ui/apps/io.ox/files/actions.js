@@ -670,7 +670,9 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/premium/actions/synchronize', {
         capabilities: 'boxcom || google || msliveconnect',
         action: function () {
-            require(['io.ox/onboarding/clients/wizard']);
+            require(['io.ox/onboarding/clients/wizard'], function (wizard) {
+                wizard.run();
+            });
         }
     });
 

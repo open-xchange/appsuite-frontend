@@ -246,7 +246,9 @@ define('io.ox/contacts/actions', [
     new Action('io.ox/contacts/premium/actions/synchronize', {
         capabilities: 'carddav',
         action: function () {
-            require(['io.ox/onboarding/clients/wizard']);
+            require(['io.ox/onboarding/clients/wizard'], function (wizard) {
+                wizard.run();
+            });
         }
     });
 
