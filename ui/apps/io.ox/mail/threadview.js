@@ -98,15 +98,56 @@ define('io.ox/mail/threadview', [
         }
     });
 
+    function onQuickReply(e) {
+        e.preventDefault();
+        openInplaceReply.call(this, e.data.cid);
+    }
+
+    function openInplaceReply(cid) {
+        var section = $(this).closest('h1');
+        section.find('.open-inplace-reply').hide();
+        require(['io.ox/mail/inplace-reply'], function (InplaceReplyView) {
+            section.find('.caption').after(
+                new InplaceReplyView({ cid: cid })
+                .on('dispose', function () {
+                    section.find('.open-inplace-reply').show().focus();
+                    section = null;
+                })
+                .render()
+                .$el
+            );
+        });
+    }
+
     ext.point('io.ox/mail/thread-view/header').extend({
         id: 'summary',
         index: 300,
         draw: function (baton) {
+
             var length = baton.view.collection.length;
             if (length <= 1) return;
+
+            var cid = baton.view.collection.at(0).cid;
+
             this.append(
-                $('<div class="summary">').text(gt('%1$d messages in this conversation', length))
+                $('<div class="caption">').append(
+                    $('<span class="summary">').text(gt('%1$d messages in this conversation', length)),
+                    // quick reply
+                    $('<a href="#" role="button" tabindex="1" class="open-inplace-reply">').append(
+                        $('<i class="fa fa-reply-all">'),
+                        $.txt(' '),
+                        $.txt(gt('Quick reply'))
+                    )
+                    .on('click', { cid: cid }, onQuickReply)
+                )
             );
+
+            // quick reply support (desktop only)
+            if (!_.device('desktop')) return;
+
+            require(['io.ox/mail/inplace-reply'], function (InplaceReplyView) {
+                if (InplaceReplyView.hasDraft(cid)) openInplaceReply.call(this, cid);
+            }.bind(this));
         }
     });
 

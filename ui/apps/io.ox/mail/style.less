@@ -655,21 +655,23 @@
             &:focus { color: @link-color; }
         }
 
-        .summary {
-
-            color: #777;
+        .caption {
             font-size: 13px;
             line-height: 20px;
             margin-top: 4px;
+            font-weight: normal;
+        }
 
+        .summary {
+            color: #777;
+            font-weight: 300;
+            display: inline-block;
+            margin-right: 16px;
             html.high-contrast & {
                 color: @hc-gray;
             }
-
         }
-
     }
-
 }
 
 @media(max-width: 700px) {
@@ -681,24 +683,33 @@
 .thread-view.list-view .list-item { cursor: default; }
 .thread-view.list-view.multiple-messages .list-item { cursor: pointer; }
 
+//
+// Inplace/quick reply
+//
+
 .inplace-reply {
-    margin: 20px 20px 0 20px;
+
+    margin: 0 -16px 0px -16px;
+    padding: 0 16px;
+    border-bottom: 8px solid #eee;
+
+    .form-group {
+        margin-bottom: 19px;
+    }
 }
 
 textarea.inplace-editor {
+    color: #333;
+    font-size: 13px;
+    font-weight: 500; // for better readability
+    line-height: 16px;
     width: 100%;
-    height: 100px;
-    padding: 19px;
-    margin: 0;
-    resize: vertical;
-    border-radius: 0;
-    border: 1px solid white;
-    .box-shadow(none);
-    &:focus {
-        border-color: #66AFE9;
-        outline: 0;
-        .box-shadow(~"inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6)");
-    }
+    height: 121px;
+    min-height: 121px;
+    max-height: 401px;
+    padding: 11px 11px 8px 11px;
+    margin: 18px 0 15px 0;
+    resize: none;
 }
 
 .thread-view-control {
