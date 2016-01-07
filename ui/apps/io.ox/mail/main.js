@@ -33,7 +33,6 @@ define('io.ox/mail/main', [
     'io.ox/backbone/mini-views/quota',
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
-    'io.ox/backbone/mini-views/upsell',
     'io.ox/mail/actions',
     'io.ox/mail/mobile-navbar-extensions',
     'io.ox/mail/mobile-toolbar-actions',
@@ -41,7 +40,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, gt, settings, UpsellView) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, gt, settings) {
 
     'use strict';
 
@@ -233,29 +232,6 @@ define('io.ox/mail/main', [
             // initialize folder view
             FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
-        },
-
-        'premium-area': function (app) {
-            if (_.device('smartphone')) return;
-            if (!settings.get('features/clientOnboarding', true)) return;
-
-            var sidepanel = app.getWindow().nodes.sidepanel,
-                container = $('<div class="premium-toolbar generic-toolbar bottom visual-focus">').append(
-                    $('<div class="header">').text(gt('Premium features'))
-                );
-
-            ext.point('io.ox/mail/folderview/premium-area').invoke('draw', container, {});
-            if (container.find('li').length === 0) return;
-            container.append(new UpsellView({
-                id: 'folderview/mail/bottom',
-                requires: 'active_sync',
-                icon: '',
-                title: gt('Try now!'),
-                customize: function () {
-                    this.$('a').addClass('btn btn-primary');
-                }
-            }).render().$el);
-            sidepanel.append(container);
         },
 
         'mail-quota': function (app) {

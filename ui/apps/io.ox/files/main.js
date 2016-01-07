@@ -207,29 +207,6 @@ define('io.ox/files/main', [
             app.folderView.resize.enable();
         },
 
-        'premium-area': function (app) {
-            if (_.device('smartphone')) return;
-            if (!settings.get('features/clientOnboarding', true)) return;
-
-            var sidepanel = app.getWindow().nodes.sidepanel,
-                container = $('<div class="premium-toolbar generic-toolbar bottom visual-focus">').append(
-                    $('<div class="header">').text(gt('Premium features'))
-                );
-
-            ext.point('io.ox/files/folderview/premium-area').invoke('draw', container, {});
-            if (container.find('li').length === 0) return;
-            container.append(new UpsellView({
-                id: 'folderview/infostore/bottom',
-                requires: 'boxcom || google || msliveconnect',
-                icon: '',
-                title: gt('Try now!'),
-                customize: function () {
-                    this.$('a').addClass('btn btn-primary');
-                }
-            }).render().$el);
-            sidepanel.append(container);
-        },
-
         /*
          * Folder view mobile support
          */
@@ -976,6 +953,29 @@ define('io.ox/files/main', [
                     .on('click', { app: app, state: false }, toggleFolderView)
                 )
             );
+        },
+
+        'premium-area': function (app) {
+            if (_.device('smartphone')) return;
+            if (!settings.get('features/clientOnboarding', true)) return;
+
+            var sidepanel = app.getWindow().nodes.sidepanel,
+                container = $('<div class="premium-toolbar generic-toolbar bottom visual-focus">').append(
+                    $('<div class="header">').text(gt('Premium features'))
+                );
+
+            ext.point('io.ox/files/folderview/premium-area').invoke('draw', container, {});
+            if (container.find('li').length === 0) return;
+            container.append(new UpsellView({
+                id: 'folderview/infostore/bottom',
+                requires: 'boxcom || google || msliveconnect',
+                icon: '',
+                title: gt('Try now!'),
+                customize: function () {
+                    this.$('a').addClass('btn btn-default');
+                }
+            }).render().$el);
+            sidepanel.append(container);
         },
 
         /*

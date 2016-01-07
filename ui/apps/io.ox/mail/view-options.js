@@ -15,8 +15,10 @@ define('io.ox/mail/view-options', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/api/account',
-    'gettext!io.ox/mail'
-], function (ext, Dropdown, account, gt) {
+    'gettext!io.ox/mail',
+    'io.ox/backbone/mini-views/upsell',
+    'settings!io.ox/mail'
+], function (ext, Dropdown, account, gt, UpsellView, settings) {
 
     'use strict';
 
@@ -172,6 +174,33 @@ define('io.ox/mail/view-options', [
             });
 
             if (baton.app.folderViewIsVisible()) _.defer(onFolderViewOpen, baton.app);
+        }
+    });
+
+    ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
+        id: 'premium-area',
+        index: 200,
+        draw: function (baton) {
+            if (_.device('smartphone')) return;
+            if (!settings.get('features/clientOnboarding', true)) return;
+
+            var sidepanel = baton.app.getWindow().nodes.sidepanel,
+                container = $('<div class="premium-toolbar generic-toolbar bottom visual-focus">').append(
+                    $('<div class="header">').text(gt('Premium features'))
+                );
+
+            ext.point('io.ox/mail/folderview/premium-area').invoke('draw', container, {});
+            if (container.find('li').length === 0) return;
+            container.append(new UpsellView({
+                id: 'folderview/mail/bottom',
+                requires: 'active_sync',
+                icon: '',
+                title: gt('Try now!'),
+                customize: function () {
+                    this.$('a').addClass('btn btn-default');
+                }
+            }).render().$el);
+            sidepanel.append(container);
         }
     });
 });

@@ -329,7 +329,7 @@ define('io.ox/calendar/main', [
                 icon: '',
                 title: gt('Try now!'),
                 customize: function () {
-                    this.$('a').addClass('btn btn-primary');
+                    this.$('a').addClass('btn btn-default');
                 }
             }).render().$el);
             sidepanel.append(container);

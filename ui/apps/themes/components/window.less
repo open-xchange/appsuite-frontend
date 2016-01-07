@@ -338,13 +338,18 @@
             height: auto;
             line-height: 16px;
             background-color: @premium-toolbar-background;
+            padding: 8px 16px;
 
             ul {
-                margin: 6px 16px;
+
+                margin: 0;
+                padding-top: 3px;
+                margin-bottom: 5px;
 
                 li {
 
-                    padding: 5px 0;
+                    padding-top: 5px;
+                    margin-bottom: 3px;
 
                     a {
                         color: @premium-toolbar-link-color;
@@ -353,9 +358,14 @@
             }
 
             .header {
-                padding: 6px 16px 6px 16px;
+                margin: -8px -16px 6px -16px;
+                padding: 10px 16px;
                 background-color: @premium-toolbar-header-background;
                 color: @premium-toolbar-header-color;
+            }
+
+            .io-ox-upsell-link {
+                padding-top: 5px;
             }
         }
     }

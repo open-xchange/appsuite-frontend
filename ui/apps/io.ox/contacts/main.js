@@ -763,6 +763,14 @@ define('io.ox/contacts/main', [
             });
         },
 
+        /*
+         * Folerview toolbar
+         */
+        'folderview-toolbar': function (app) {
+            if (_.device('smartphone')) return;
+            commons.mediateFolderView(app);
+        },
+
         'premium-area': function (app) {
             if (_.device('smartphone')) return;
             if (!settings.get('features/clientOnboarding', true)) return;
@@ -780,18 +788,10 @@ define('io.ox/contacts/main', [
                 icon: '',
                 title: gt('Try now!'),
                 customize: function () {
-                    this.$('a').addClass('btn btn-primary');
+                    this.$('a').addClass('btn btn-default');
                 }
             }).render().$el);
             sidepanel.append(container);
-        },
-
-        /*
-         * Folerview toolbar
-         */
-        'folderview-toolbar': function (app) {
-            if (_.device('smartphone')) return;
-            commons.mediateFolderView(app);
         },
 
         /*
