@@ -37,7 +37,7 @@
         var scrollpane = this, viewport;
         options = _.extend({ effect: 'show' }, options);
 
-        function lazyload(parent) {
+        function lazyload() {
             // skip if already loaded
             if (this.loaded) return;
             // get offset for each element
@@ -61,7 +61,6 @@
             scrollpane.find('.lazyload').each(lazyload);
             //find .lazyload elements also in shadow dom
             scrollpane.find('.shadow-root-container').each(function () {
-                var parent = this;
                 $(this.shadowRoot).find('.lazyload').each(lazyload);
             });
         }
