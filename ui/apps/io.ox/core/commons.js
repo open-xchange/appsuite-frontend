@@ -689,7 +689,7 @@ define('io.ox/core/commons', [
 
             ext.point(app.get('name') + '/folderview/premium-area').invoke('draw', container, {});
             if (container.find('li').length === 0) return;
-            container.append(new UpsellView({
+            var upsellView = new UpsellView({
                 id: opt.upsellId || 'folderview/' + app.get('name') + '/bottom',
                 requires: opt.upsellRequires,
                 icon: '',
@@ -697,7 +697,11 @@ define('io.ox/core/commons', [
                 customize: function () {
                     this.$('a').addClass('btn btn-default');
                 }
-            }).render().$el);
+            });
+            if (upsellView.visible) {
+                container.append(upsellView.render().$el);
+                $('.header a', container).remove();
+            }
             sidepanel.append(container);
         }
     };
