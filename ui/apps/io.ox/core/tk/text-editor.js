@@ -164,6 +164,8 @@ define('io.ox/core/tk/text-editor', [], function () {
         this.getContentParts = function () {
             var content = this.getContent(),
                 index = content.indexOf('\n> ');
+            // special case: initial reply/forward
+            if (content.substring(0, 2) === '> ') index = 0;
             if (index < 0) return { content: content };
             return {
                 // content without trailing whitespace
