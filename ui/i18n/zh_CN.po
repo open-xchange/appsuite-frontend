@@ -663,6 +663,13 @@ msgstr "按分钟设置间隔"
 msgid "Add"
 msgstr "添加"
 
+#. %1$s is the account name like Dropbox, Google Drive, or OneDrive
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Add your %1$s account"
+msgid "Add %1$s account"
+msgstr "添加您的 %1$s 户口"
+
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
@@ -1208,12 +1215,6 @@ msgid ""
 "Automatically delete the invitation email after the appointment has been "
 "accepted or declined"
 msgstr "在一个约会接受或拒绝后，自动删除外来通知"
-
-#. It's a label for an input field with a number
-#. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Automatically wrap plain text after character:"
-msgstr "自动在字符后包裹纯文字："
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Average time: %1$s ms"
@@ -3452,6 +3453,13 @@ msgstr "文件夹"
 #. twitter: Follow this person
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Follow"
+msgstr "跟随"
+
+#. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Follow"
+msgid "Follow-up"
 msgstr "跟随"
 
 #. twitter: already following this person
@@ -5710,6 +5718,12 @@ msgstr "发送一个状态更新"
 msgid "Postcode"
 msgstr "邮寄编号"
 
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Premium features"
+msgstr ""
+
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 #, fuzzy
 #| msgctxt "presenter"
@@ -6741,6 +6755,18 @@ msgstr[1] "分享 %1$d 个文件夹"
 msgid "Share this file"
 msgstr "另存为文件"
 
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Your shared contacts:"
+msgid "Share your contacts"
+msgstr "您的已分享联系人："
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#, fuzzy
+#| msgid "Sent folder"
+msgid "Share your folders"
+msgstr "发送文件夹"
+
 #: apps/plugins/halo/appointments/register.js module:plugins/halo
 msgid "Shared Appointments"
 msgstr "已分享约会"
@@ -7191,6 +7217,18 @@ msgid ""
 msgstr ""
 "从电子邮件、日历、联系人、任务、公共文件夹、共享文件夹、系统文件夹，到 "
 "Microsoft Outlook® 客户端的同步。"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Shared calendars"
+msgid "Synchronize calendar"
+msgstr "已共享日历"
+
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Synchronize with your tablet or smartphone"
+msgid "Synchronize with Outlook"
+msgstr "和您的平板或智能手机同步"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Synchronize with your tablet or smartphone"
@@ -8043,6 +8081,14 @@ msgstr "合共：%1$s 个请求"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Town"
 msgstr "城镇"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Buy now!"
+msgid "Try now!"
+msgstr "现在就买！"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
@@ -9390,10 +9436,6 @@ msgstr "暂定"
 msgid "the item has been moved"
 msgstr "项目已被移动"
 
-#: apps/io.ox/mail/settings/model.js module:io.ox/mail
-msgid "the line length must be a number"
-msgstr "线长必须为一数字"
-
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -10088,6 +10130,9 @@ msgstr "年"
 
 #~ msgid "Automatically select first E-Mail"
 #~ msgstr "自动选择第一封电子邮件"
+
+#~ msgid "Automatically wrap plain text after character:"
+#~ msgstr "自动在字符后包裹纯文字："
 
 #~ msgid "Availability"
 #~ msgstr "可用性"
@@ -13204,6 +13249,9 @@ msgstr "年"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "%s 的子文件夹"
+
+#~ msgid "the line length must be a number"
+#~ msgstr "线长必须为一数字"
 
 #~ msgid "total"
 #~ msgstr "合共"

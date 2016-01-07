@@ -670,6 +670,13 @@ msgstr "Duración real en minutos"
 msgid "Add"
 msgstr "Añadir"
 
+#. %1$s is the account name like Dropbox, Google Drive, or OneDrive
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Add your %1$s account"
+msgid "Add %1$s account"
+msgstr "Añadir su cuenta de %1$s"
+
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
@@ -1225,12 +1232,6 @@ msgid ""
 msgstr ""
 "Borrar automáticamente las notificaciones entrantes después de que la cita "
 "haya sido aceptada o rechazada"
-
-#. It's a label for an input field with a number
-#. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Automatically wrap plain text after character:"
-msgstr "Dividir el texto plano automáticamente tras el carácter:"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Average time: %1$s ms"
@@ -3508,6 +3509,13 @@ msgstr "Carpetas"
 #. twitter: Follow this person
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Follow"
+msgstr "Seguir"
+
+#. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Follow"
+msgid "Follow-up"
 msgstr "Seguir"
 
 #. twitter: already following this person
@@ -5809,6 +5817,12 @@ msgstr "Publicar una actualización de estado"
 msgid "Postcode"
 msgstr "Código postal"
 
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Premium features"
+msgstr "Características premium"
+
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 #, fuzzy
 #| msgctxt "presenter"
@@ -6859,6 +6873,16 @@ msgstr[1] "Compartir %1$d elementos"
 msgid "Share this file"
 msgstr "Guardar como fichero"
 
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+msgid "Share your contacts"
+msgstr "Comparta sus contactos"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#, fuzzy
+#| msgid "Sent folder"
+msgid "Share your folders"
+msgstr "Carpeta Enviados"
+
 #: apps/plugins/halo/appointments/register.js module:plugins/halo
 msgid "Shared Appointments"
 msgstr "Citas compartidas"
@@ -7311,6 +7335,18 @@ msgid ""
 msgstr ""
 "Sincronización de Correo, Calendario, Contactos y Tareas, además de las "
 "carpetas públicas, compartidas y de sistema con clientes Microsoft Outlook®."
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Shared calendars"
+msgid "Synchronize calendar"
+msgstr "Calendarios compartidos"
+
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Synchronize with your tablet or smartphone"
+msgid "Synchronize with Outlook"
+msgstr "Sincronizar con su tablet o smartphone"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Synchronize with your tablet or smartphone"
@@ -8217,6 +8253,14 @@ msgstr "Total: %1$s peticiones"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Town"
 msgstr "Ciudad"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Buy now!"
+msgid "Try now!"
+msgstr "¡Comprar ahora!"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
@@ -9602,10 +9646,6 @@ msgstr "provisional"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "the item has been moved"
 msgstr "el elemento se ha movido"
-
-#: apps/io.ox/mail/settings/model.js module:io.ox/mail
-msgid "the line length must be a number"
-msgstr "la longitud de la línea debe ser un número"
 
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
@@ -11845,6 +11885,9 @@ msgstr "yyyy"
 
 #~ msgid "Automatically select first E-Mail"
 #~ msgstr "Seleccionar automáticamente el primer correo electrónico"
+
+#~ msgid "Automatically wrap plain text after character:"
+#~ msgstr "Dividir el texto plano automáticamente tras el carácter:"
 
 #~ msgid "Autorefresh:"
 #~ msgstr "Autorefresco:"
@@ -15516,9 +15559,6 @@ msgstr "yyyy"
 #~ msgid "Preferences"
 #~ msgstr "Preferencias"
 
-#~ msgid "Premium features"
-#~ msgstr "Características premium"
-
 #, fuzzy
 #~ msgid "Presenter Navigation"
 #~ msgstr "Destino"
@@ -16101,9 +16141,6 @@ msgstr "yyyy"
 
 #~ msgid "Share link by email"
 #~ msgstr "Compartir enlace por correo"
-
-#~ msgid "Share your contacts"
-#~ msgstr "Comparta sus contactos"
 
 #~ msgid "Shared"
 #~ msgstr "Compartida"
@@ -18917,6 +18954,9 @@ msgstr "yyyy"
 
 #~ msgid "th"
 #~ msgstr "º"
+
+#~ msgid "the line length must be a number"
+#~ msgstr "la longitud de la línea debe ser un número"
 
 #~ msgid "to"
 #~ msgstr "a"

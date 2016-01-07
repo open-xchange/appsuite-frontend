@@ -672,6 +672,13 @@ msgstr "Durata attuale in minuti"
 msgid "Add"
 msgstr "Aggiungi"
 
+#. %1$s is the account name like Dropbox, Google Drive, or OneDrive
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Add your %1$s account"
+msgid "Add %1$s account"
+msgstr "Aggiungi il tuo account %1$s"
+
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
@@ -1227,12 +1234,6 @@ msgid ""
 msgstr ""
 "Elimina automaticamente le notifiche in ingresso quando l'appuntamento è "
 "stato accettato o rifiutato"
-
-#. It's a label for an input field with a number
-#. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Automatically wrap plain text after character:"
-msgstr "Interruzione automatica del testo semplice dopo n caratteri:"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Average time: %1$s ms"
@@ -3509,6 +3510,13 @@ msgstr "Cartelle"
 #. twitter: Follow this person
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Follow"
+msgstr "Segui"
+
+#. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Follow"
+msgid "Follow-up"
 msgstr "Segui"
 
 #. twitter: already following this person
@@ -5799,6 +5807,12 @@ msgstr "Pubblica un aggiornamento dello stato"
 msgid "Postcode"
 msgstr "CAP"
 
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Premium features"
+msgstr ""
+
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 #, fuzzy
 #| msgctxt "presenter"
@@ -6848,6 +6862,18 @@ msgstr[1] "Condividi %1$d elementi"
 msgid "Share this file"
 msgstr "Salva come file"
 
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Your shared contacts:"
+msgid "Share your contacts"
+msgstr "I tuoi contatti condivisi:"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#, fuzzy
+#| msgid "Sent folder"
+msgid "Share your folders"
+msgstr "Cartella Posta inviata"
+
 #: apps/plugins/halo/appointments/register.js module:plugins/halo
 msgid "Shared Appointments"
 msgstr "Appuntamenti condivisi"
@@ -7303,6 +7329,18 @@ msgstr ""
 "Sincronizzazione di messaggi di posta, calendario, contatti e attività, "
 "insieme alle cartelle pubbliche, condivise e di sistema con i client "
 "Microsoft Outlook®."
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Shared calendars"
+msgid "Synchronize calendar"
+msgstr "Calendari condivisi"
+
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Synchronize with your tablet or smartphone"
+msgid "Synchronize with Outlook"
+msgstr "Sincronizza con il tuo tablet o smartphone"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Synchronize with your tablet or smartphone"
@@ -8221,6 +8259,14 @@ msgstr "Totale: %1$s richieste"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Town"
 msgstr "Città"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Buy now!"
+msgid "Try now!"
+msgstr "Compra subito!"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
@@ -9605,10 +9651,6 @@ msgstr "provvisorio"
 msgid "the item has been moved"
 msgstr "l'elemento è stato spostato"
 
-#: apps/io.ox/mail/settings/model.js module:io.ox/mail
-msgid "the line length must be a number"
-msgstr "la lunghezza della riga deve essere un numero"
-
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -10353,6 +10395,9 @@ msgstr "aaaa"
 
 #~ msgid "Automatically select first E-Mail"
 #~ msgstr "Seleziona automaticamente il primo messaggio"
+
+#~ msgid "Automatically wrap plain text after character:"
+#~ msgstr "Interruzione automatica del testo semplice dopo n caratteri:"
 
 #~ msgid "Autorefresh:"
 #~ msgstr "Aggiornamento automatico:"
@@ -13607,6 +13652,9 @@ msgstr "aaaa"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "sottocartelle di %s"
+
+#~ msgid "the line length must be a number"
+#~ msgstr "la lunghezza della riga deve essere un numero"
 
 #~ msgid "total"
 #~ msgstr "totale"

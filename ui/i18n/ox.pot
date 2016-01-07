@@ -249,6 +249,12 @@ msgstr ""
 msgid "Change status"
 msgstr ""
 
+#. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
+#: apps/io.ox/calendar/actions.js
+#: module:io.ox/calendar
+msgid "Follow-up"
+msgstr ""
+
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/calendar/actions.js
 #: module:io.ox/calendar
@@ -332,6 +338,11 @@ msgstr ""
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
 msgid "Save as distribution list"
+msgstr ""
+
+#: apps/io.ox/calendar/actions.js
+#: module:io.ox/calendar
+msgid "Synchronize calendar"
 msgstr ""
 
 #: apps/io.ox/calendar/actions/acceptdeny.js
@@ -1504,6 +1515,28 @@ msgstr ""
 msgid "Expand timeframe by one month"
 msgstr ""
 
+#: apps/io.ox/calendar/main.js
+#: module:io.ox/calendar
+#: apps/io.ox/contacts/main.js
+#: module:io.ox/contacts
+#: apps/io.ox/files/main.js
+#: module:io.ox/files
+#: apps/io.ox/mail/main.js
+#: module:io.ox/mail
+msgid "Premium features"
+msgstr ""
+
+#: apps/io.ox/calendar/main.js
+#: module:io.ox/calendar
+#: apps/io.ox/contacts/main.js
+#: module:io.ox/contacts
+#: apps/io.ox/files/main.js
+#: module:io.ox/files
+#: apps/io.ox/mail/main.js
+#: module:io.ox/mail
+msgid "Try now!"
+msgstr ""
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
 #: module:io.ox/calendar
 msgid "Listview"
@@ -2373,6 +2406,11 @@ msgstr ""
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
 msgid "Add to address book"
+msgstr ""
+
+#: apps/io.ox/contacts/actions.js
+#: module:io.ox/contacts
+msgid "Share your contacts"
 msgstr ""
 
 #: apps/io.ox/contacts/actions/addToPortal.js
@@ -6302,6 +6340,11 @@ msgstr ""
 msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
 msgstr ""
 
+#: apps/io.ox/files/actions.js
+#: module:io.ox/files
+msgid "Share your folders"
+msgstr ""
+
 #: apps/io.ox/files/actions/add-storage-account.js
 #: module:io.ox/files
 msgid "Google Drive"
@@ -6320,6 +6363,12 @@ msgstr ""
 #: apps/io.ox/files/actions/add-storage-account.js
 #: module:io.ox/files
 msgid "OneDrive"
+msgstr ""
+
+#. %1$s is the account name like Dropbox, Google Drive, or OneDrive
+#: apps/io.ox/files/actions/add-storage-account.js
+#: module:io.ox/files
+msgid "Add %1$s account"
 msgstr ""
 
 #: apps/io.ox/files/actions/add-to-portal.js
@@ -7565,6 +7614,11 @@ msgstr ""
 msgid "Drop here to import this mail"
 msgstr ""
 
+#: apps/io.ox/mail/actions.js
+#: module:io.ox/mail
+msgid "Synchronize with Outlook"
+msgstr ""
+
 #: apps/io.ox/mail/actions/addToPortal.js
 #: module:io.ox/mail
 msgid "This mail has been added to the portal"
@@ -8466,11 +8520,6 @@ msgctxt "BCC"
 msgid "Blind copy"
 msgstr ""
 
-#: apps/io.ox/mail/settings/model.js
-#: module:io.ox/mail
-msgid "the line length must be a number"
-msgstr ""
-
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
 msgid "Inline"
@@ -8570,13 +8619,6 @@ msgstr ""
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
 msgid "Additional settings"
-msgstr ""
-
-#. It's a label for an input field with a number
-#. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-msgid "Automatically wrap plain text after character:"
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js

@@ -680,6 +680,13 @@ msgstr "Faktisk varighed i minutter"
 msgid "Add"
 msgstr "Tilføj"
 
+#. %1$s is the account name like Dropbox, Google Drive, or OneDrive
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Add your %1$s account"
+msgid "Add %1$s account"
+msgstr "Tilføj din %1$s-konto"
+
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
@@ -1230,12 +1237,6 @@ msgid ""
 msgstr ""
 "Slet automatisk indkomne e-mail-underretninger efter at aftalen er blevet "
 "accepteret eller afslået"
-
-#. It's a label for an input field with a number
-#. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Automatically wrap plain text after character:"
-msgstr "Ombryd automatisk efter tegnet:"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Average time: %1$s ms"
@@ -3495,6 +3496,13 @@ msgstr "Mapper"
 #. twitter: Follow this person
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Follow"
+msgstr "Følg"
+
+#. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Follow"
+msgid "Follow-up"
 msgstr "Følg"
 
 #. twitter: already following this person
@@ -5782,6 +5790,12 @@ msgstr "Slå en statusopdatering op"
 msgid "Postcode"
 msgstr "Postnummer"
 
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Premium features"
+msgstr ""
+
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 #, fuzzy
 #| msgctxt "presenter"
@@ -6825,6 +6839,18 @@ msgstr[1] "Del %1$d elementer"
 msgid "Share this file"
 msgstr "Gem som fil"
 
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Your shared contacts:"
+msgid "Share your contacts"
+msgstr "Dine delte kontakter:"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#, fuzzy
+#| msgid "Select folder"
+msgid "Share your folders"
+msgstr "Vælg mappe"
+
 #: apps/plugins/halo/appointments/register.js module:plugins/halo
 msgid "Shared Appointments"
 msgstr "Delte aftaler"
@@ -7276,6 +7302,18 @@ msgid ""
 msgstr ""
 "Synkronisering af e-mails, kalender, kontakter og opgaver, samt offentlige, "
 "delte og systemmapper med Microsoft Outlook®-klienter."
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Shared calendars"
+msgid "Synchronize calendar"
+msgstr "Delte kalendre"
+
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Synchronize with your tablet or smartphone"
+msgid "Synchronize with Outlook"
+msgstr "Synkronisér med din tablet eller smartphone"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Synchronize with your tablet or smartphone"
@@ -8165,6 +8203,14 @@ msgstr "Total: %1$s forespørgsler"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Town"
 msgstr "By"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Buy now!"
+msgid "Try now!"
+msgstr "Køb nu!"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
@@ -9542,10 +9588,6 @@ msgstr "foreløbigt"
 msgid "the item has been moved"
 msgstr "elementet er blevet flyttet"
 
-#: apps/io.ox/mail/settings/model.js module:io.ox/mail
-msgid "the line length must be a number"
-msgstr "linjelængden skal være et tal"
-
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -9849,6 +9891,9 @@ msgstr "åååå"
 #~ msgstr ""
 #~ "Saml automatisk kontakter i mappen \"Indsamlede adresser\" imens der "
 #~ "sendes?"
+
+#~ msgid "Automatically wrap plain text after character:"
+#~ msgstr "Ombryd automatisk efter tegnet:"
 
 #~ msgid "Bcc"
 #~ msgstr "Blind kopi til (Bcc)"
@@ -11632,6 +11677,9 @@ msgstr "åååå"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "undermapper til %s"
+
+#~ msgid "the line length must be a number"
+#~ msgstr "linjelængden skal være et tal"
 
 #~ msgid "total"
 #~ msgstr "total"

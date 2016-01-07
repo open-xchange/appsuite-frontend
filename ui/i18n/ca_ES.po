@@ -743,6 +743,13 @@ msgstr "Durada real en minuts"
 msgid "Add"
 msgstr "Afegeix"
 
+#. %1$s is the account name like Dropbox, Google Drive, or OneDrive
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Add account"
+msgid "Add %1$s account"
+msgstr "Afegeix compte"
+
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 #, fuzzy
@@ -1341,12 +1348,6 @@ msgid ""
 msgstr ""
 "Esborrar automàticament un correu de notificació després d'haver estat "
 "acceptat o rebutjat?"
-
-#. It's a label for an input field with a number
-#. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Automatically wrap plain text after character:"
-msgstr "Divideix el text pla automàticament darrere el caràcter:"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Average time: %1$s ms"
@@ -3751,6 +3752,13 @@ msgstr "Carpetes"
 #. twitter: Follow this person
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Follow"
+msgstr "Segueix-lo"
+
+#. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Follow"
+msgid "Follow-up"
 msgstr "Segueix-lo"
 
 #. twitter: already following this person
@@ -6188,6 +6196,12 @@ msgstr "Publica una actualització d'estat"
 msgid "Postcode"
 msgstr "Codi postal"
 
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Premium features"
+msgstr ""
+
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 #, fuzzy
 #| msgid "Task invitations"
@@ -7312,6 +7326,18 @@ msgstr[1] "Comparteix %1$d ítems"
 msgid "Share this file"
 msgstr "Desa com a fitxer"
 
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Your shared contacts:"
+msgid "Share your contacts"
+msgstr "Els vostres contactes compartits:"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#, fuzzy
+#| msgid "Select folder"
+msgid "Share your folders"
+msgstr "Selecciona carpeta"
+
 #: apps/plugins/halo/appointments/register.js module:plugins/halo
 msgid "Shared Appointments"
 msgstr "Cites compartides"
@@ -7815,6 +7841,16 @@ msgstr ""
 "Sincronització de Correu electrònic, Calendari, Contactes i Tasques, a més "
 "de les carpetes públiques, compartides i de sistema, per a clients Microsoft "
 "Outlook®."
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "New calendar"
+msgid "Synchronize calendar"
+msgstr "Nou calendari"
+
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+msgid "Synchronize with Outlook"
+msgstr ""
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Synchronize with your tablet or smartphone"
@@ -8769,6 +8805,14 @@ msgstr "Total: %1$s peticions"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Town"
 msgstr "Localitat"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Buy now!"
+msgid "Try now!"
+msgstr "Compra-ho ara!"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
@@ -10268,10 +10312,6 @@ msgstr "provisional"
 msgid "the item has been moved"
 msgstr "El fitxer ha estat mogut"
 
-#: apps/io.ox/mail/settings/model.js module:io.ox/mail
-msgid "the line length must be a number"
-msgstr ""
-
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -10507,6 +10547,9 @@ msgstr ""
 #~ msgid "Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open"
 #~ msgstr ""
 #~ "Recordatori de cita. %1$s %2$s %3$s %4$s. Premeu [Intro] per a obrir-lo"
+
+#~ msgid "Automatically wrap plain text after character:"
+#~ msgstr "Divideix el text pla automàticament darrere el caràcter:"
 
 #~ msgid "Bcc"
 #~ msgstr "Cco"

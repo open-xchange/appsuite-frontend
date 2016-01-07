@@ -665,6 +665,13 @@ msgstr "Todellinen kesto minuuteissa"
 msgid "Add"
 msgstr "Lisää"
 
+#. %1$s is the account name like Dropbox, Google Drive, or OneDrive
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Add your %1$s account"
+msgid "Add %1$s account"
+msgstr "Lisää  %1$s -tilisi"
+
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
@@ -1213,12 +1220,6 @@ msgid ""
 msgstr ""
 "Automaattisesti poista saapuvat ilmoitukset, kun se on hyväksytty tai "
 "hylätty?"
-
-#. It's a label for an input field with a number
-#. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Automatically wrap plain text after character:"
-msgstr "Tekstin automaattinen rivitys näin monen merkin jälkeen:"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Average time: %1$s ms"
@@ -3477,6 +3478,13 @@ msgstr "Kansiot"
 #. twitter: Follow this person
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Follow"
+msgstr "Seuraa"
+
+#. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Follow"
+msgid "Follow-up"
 msgstr "Seuraa"
 
 #. twitter: already following this person
@@ -5762,6 +5770,12 @@ msgstr "Postaa tilapäivitys"
 msgid "Postcode"
 msgstr "Postinumero"
 
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Premium features"
+msgstr ""
+
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 #, fuzzy
 #| msgctxt "presenter"
@@ -6806,6 +6820,18 @@ msgstr[1] "Jaa  %1$d kohdetta"
 msgid "Share this file"
 msgstr "Tallenna tiedostoksi"
 
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Your shared contacts:"
+msgid "Share your contacts"
+msgstr "Jaetut yhteystietosi:"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#, fuzzy
+#| msgid "Select folder"
+msgid "Share your folders"
+msgstr "Valitse kansio"
+
 #: apps/plugins/halo/appointments/register.js module:plugins/halo
 msgid "Shared Appointments"
 msgstr "Jaetut tapaamiset"
@@ -7257,6 +7283,18 @@ msgid ""
 msgstr ""
 "Viestien, kalenterin, yhteystietojen ja tehtävien sekä julkisten, jaettujen "
 "ja järjestelmäkansioiden synkronointi Microsoft Outlook® asiakasohjelmille."
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Shared calendars"
+msgid "Synchronize calendar"
+msgstr "Jaetut kalenterit"
+
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Synchronize with your tablet or smartphone"
+msgid "Synchronize with Outlook"
+msgstr "Synkronoi tablettisi tai älypuhelimesi kanssa"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Synchronize with your tablet or smartphone"
@@ -8149,6 +8187,14 @@ msgstr "Yhteensä %1$s pyyntöä"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Town"
 msgstr "Kaupunki"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Buy now!"
+msgid "Try now!"
+msgstr "Osta heti!"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
@@ -9519,10 +9565,6 @@ msgstr "alustava"
 msgid "the item has been moved"
 msgstr "Kohde  on siirretty"
 
-#: apps/io.ox/mail/settings/model.js module:io.ox/mail
-msgid "the line length must be a number"
-msgstr "rivin pituuden pitää olla numero"
-
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -9786,6 +9828,9 @@ msgstr "vvvv"
 
 #~ msgid "Attention"
 #~ msgstr "Huomio"
+
+#~ msgid "Automatically wrap plain text after character:"
+#~ msgstr "Tekstin automaattinen rivitys näin monen merkin jälkeen:"
 
 #~ msgid "Bcc"
 #~ msgstr "Piilokopio"
@@ -11352,6 +11397,9 @@ msgstr "vvvv"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "%s alikansioita"
+
+#~ msgid "the line length must be a number"
+#~ msgstr "rivin pituuden pitää olla numero"
 
 #~ msgid "total"
 #~ msgstr "yhteensä"

@@ -666,6 +666,13 @@ msgstr "Faktisk varighet i minutter"
 msgid "Add"
 msgstr "Legg til"
 
+#. %1$s is the account name like Dropbox, Google Drive, or OneDrive
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Add your %1$s account"
+msgid "Add %1$s account"
+msgstr "Legg til din %1$s konto"
+
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
@@ -1206,12 +1213,6 @@ msgid ""
 msgstr ""
 "Slett innkommende invitasjonsepost automatisk når avtalen har blitt "
 "akseptert eller avvist"
-
-#. It's a label for an input field with a number
-#. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Automatically wrap plain text after character:"
-msgstr "Sett inn linjeskift i ren tekst etter tegn nr.:"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Average time: %1$s ms"
@@ -3461,6 +3462,13 @@ msgstr "Mapper"
 #. twitter: Follow this person
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Follow"
+msgstr "Følg"
+
+#. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Follow"
+msgid "Follow-up"
 msgstr "Følg"
 
 #. twitter: already following this person
@@ -5737,6 +5745,12 @@ msgstr "Publiser en statusoppdatering"
 msgid "Postcode"
 msgstr "Postnummer"
 
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Premium features"
+msgstr ""
+
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Present"
 msgstr "Presentèr"
@@ -6766,6 +6780,18 @@ msgstr[1] "Del %1$d elementer"
 msgid "Share this file"
 msgstr "Del denne filen"
 
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Your shared contacts:"
+msgid "Share your contacts"
+msgstr "Dine delte kontakter"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#, fuzzy
+#| msgid "Share current folder"
+msgid "Share your folders"
+msgstr "Del gjeldende mappe"
+
 #: apps/plugins/halo/appointments/register.js module:plugins/halo
 msgid "Shared Appointments"
 msgstr "Delte avtaler"
@@ -7216,6 +7242,18 @@ msgid ""
 msgstr ""
 "Synkronisering av epost, kalender, kontakter og oppgaver, samt offentlige-, "
 "delte- og systemmapper til Microsoft Outlook®-klienter."
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Shared calendars"
+msgid "Synchronize calendar"
+msgstr "Delte kalendere"
+
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Synchronize with your tablet or smartphone"
+msgid "Synchronize with Outlook"
+msgstr "Synkroniser med nettbrett eller smarttelefon"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Synchronize with your tablet or smartphone"
@@ -8114,6 +8152,14 @@ msgstr "Total: %1$s forespørsler"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Town"
 msgstr "By"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Buy now!"
+msgid "Try now!"
+msgstr "Kjøp nå!"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
@@ -9479,10 +9525,6 @@ msgstr "foreløpig"
 msgid "the item has been moved"
 msgstr "elementet har blitt flyttet"
 
-#: apps/io.ox/mail/settings/model.js module:io.ox/mail
-msgid "the line length must be a number"
-msgstr "linjelengden må være et tall"
-
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -9640,6 +9682,9 @@ msgstr "yyyy"
 
 #~ msgid "Archive"
 #~ msgstr "Arkiv"
+
+#~ msgid "Automatically wrap plain text after character:"
+#~ msgstr "Sett inn linjeskift i ren tekst etter tegn nr.:"
 
 #~ msgid "Bcc"
 #~ msgstr "BCC"
@@ -10102,3 +10147,6 @@ msgstr "yyyy"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "undermapper av %s"
+
+#~ msgid "the line length must be a number"
+#~ msgstr "linjelengden må være et tall"

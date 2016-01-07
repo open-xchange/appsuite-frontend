@@ -691,6 +691,13 @@ msgstr "Действительная продолжительность (мин.
 msgid "Add"
 msgstr "Добавить"
 
+#. %1$s is the account name like Dropbox, Google Drive, or OneDrive
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Add your %1$s account"
+msgid "Add %1$s account"
+msgstr "Добавить %1$s"
+
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
@@ -1240,12 +1247,6 @@ msgid ""
 msgstr ""
 "Автоматически удалять уведомление после принятия или отказа приглашения на "
 "встречу"
-
-#. It's a label for an input field with a number
-#. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Automatically wrap plain text after character:"
-msgstr "Автоматически переносить текст после знака:"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Average time: %1$s ms"
@@ -3507,6 +3508,13 @@ msgstr "Папки"
 #. twitter: Follow this person
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Follow"
+msgstr "Подписаться"
+
+#. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Follow"
+msgid "Follow-up"
 msgstr "Подписаться"
 
 #. twitter: already following this person
@@ -5788,6 +5796,12 @@ msgstr "Опубликовать обновление статуса"
 msgid "Postcode"
 msgstr "Индекс"
 
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Premium features"
+msgstr ""
+
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 #, fuzzy
 #| msgctxt "presenter"
@@ -6830,6 +6844,18 @@ msgstr[2] "Совместный доступ к %1$d папкам"
 msgid "Share this file"
 msgstr "Сохранить как файл"
 
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Your shared contacts:"
+msgid "Share your contacts"
+msgstr "Общие контакты:"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#, fuzzy
+#| msgid "Select folder"
+msgid "Share your folders"
+msgstr "Выбор папки"
+
 #: apps/plugins/halo/appointments/register.js module:plugins/halo
 msgid "Shared Appointments"
 msgstr "Общие встречи"
@@ -7280,6 +7306,18 @@ msgid ""
 msgstr ""
 "Синхронизация почты, календаря, контактов, задач, а также общедоступных, "
 "совместных и системных папок с клиентами Microsoft Outlook®."
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Shared calendars"
+msgid "Synchronize calendar"
+msgstr "Совместные календари"
+
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Synchronize with your tablet or smartphone"
+msgid "Synchronize with Outlook"
+msgstr "Синхронизация с планшетом и смартфоном"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Synchronize with your tablet or smartphone"
@@ -8163,6 +8201,14 @@ msgstr "Всего запросов: %1$s"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Town"
 msgstr "Город"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Buy now!"
+msgid "Try now!"
+msgstr "Купить"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
@@ -9536,10 +9582,6 @@ msgstr "возможно"
 msgid "the item has been moved"
 msgstr "объект перенесен"
 
-#: apps/io.ox/mail/settings/model.js module:io.ox/mail
-msgid "the line length must be a number"
-msgstr "длина строки должна иметь числовое значение"
-
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -9887,6 +9929,9 @@ msgstr "гггг"
 
 #~ msgid "Automatically select first E-Mail"
 #~ msgstr "Автоматически выбирать первое сообщение"
+
+#~ msgid "Automatically wrap plain text after character:"
+#~ msgstr "Автоматически переносить текст после знака:"
 
 #~ msgid "Bcc"
 #~ msgstr "Скрытая копия"
@@ -11807,6 +11852,9 @@ msgstr "гггг"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "вложенные папки %s"
+
+#~ msgid "the line length must be a number"
+#~ msgstr "длина строки должна иметь числовое значение"
 
 #~ msgid "total"
 #~ msgstr "всего"

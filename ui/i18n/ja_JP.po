@@ -644,6 +644,13 @@ msgstr "実際の時間 (分)"
 msgid "Add"
 msgstr "追加"
 
+#. %1$s is the account name like Dropbox, Google Drive, or OneDrive
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Add your %1$s account"
+msgid "Add %1$s account"
+msgstr "アカウント %1$s を追加"
+
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
@@ -1190,12 +1197,6 @@ msgid ""
 "Automatically delete the invitation email after the appointment has been "
 "accepted or declined"
 msgstr "アポイントが承諾または辞退された後受信通知を自動的に削除"
-
-#. It's a label for an input field with a number
-#. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Automatically wrap plain text after character:"
-msgstr "送信メールの本文を自動的に折り返す文字数:"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Average time: %1$s ms"
@@ -3470,6 +3471,13 @@ msgstr "フォルダ"
 #. twitter: Follow this person
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Follow"
+msgstr "フォロー"
+
+#. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Follow"
+msgid "Follow-up"
 msgstr "フォロー"
 
 #. twitter: already following this person
@@ -5753,6 +5761,12 @@ msgstr "ステータスのアップデートを投稿"
 msgid "Postcode"
 msgstr "郵便番号"
 
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Premium features"
+msgstr "プレミアム機能"
+
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 #, fuzzy
 #| msgctxt "presenter"
@@ -6786,6 +6800,16 @@ msgstr[0] "フォルダ\"%1$d\"を共有"
 msgid "Share this file"
 msgstr "ファイルとして保存"
 
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+msgid "Share your contacts"
+msgstr "連絡先を共有"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#, fuzzy
+#| msgid "Sent folder"
+msgid "Share your folders"
+msgstr "送信済みフォルダ"
+
 #: apps/plugins/halo/appointments/register.js module:plugins/halo
 msgid "Shared Appointments"
 msgstr "共有アポイント"
@@ -7238,6 +7262,18 @@ msgid ""
 msgstr ""
 "メール、予定表、連絡先、仕事に加え、パブリック フォルダ、共有フォルダ、システ"
 "ム フォルダを Microsoft Outlook® クライアントに同期します。"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Shared calendars"
+msgid "Synchronize calendar"
+msgstr "共有予定表"
+
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Synchronize with your tablet or smartphone"
+msgid "Synchronize with Outlook"
+msgstr "タブレットまたはスマートフォンに同期"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Synchronize with your tablet or smartphone"
@@ -8122,6 +8158,14 @@ msgstr "総数: %1$s 件のリクエスト"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Town"
 msgstr "市区町村"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Buy now!"
+msgid "Try now!"
+msgstr "購入"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
@@ -9491,10 +9535,6 @@ msgstr "仮承諾"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "the item has been moved"
 msgstr "アイテムを移動しました。"
-
-#: apps/io.ox/mail/settings/model.js module:io.ox/mail
-msgid "the line length must be a number"
-msgstr "行の長さは数字でなければなりません"
 
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
@@ -10866,6 +10906,9 @@ msgstr "yyyy"
 
 #~ msgid "Automatically select first E-Mail"
 #~ msgstr "最新のメールを自動的に選択"
+
+#~ msgid "Automatically wrap plain text after character:"
+#~ msgstr "送信メールの本文を自動的に折り返す文字数:"
 
 #~ msgid "Autorefresh:"
 #~ msgstr "自動更新:"
@@ -14328,9 +14371,6 @@ msgstr "yyyy"
 #~ msgid "Preferences"
 #~ msgstr "環境設定"
 
-#~ msgid "Premium features"
-#~ msgstr "プレミアム機能"
-
 #~ msgid "Presenter Navigation"
 #~ msgstr "送付先"
 
@@ -14891,9 +14931,6 @@ msgstr "yyyy"
 
 #~ msgid "Share link by email"
 #~ msgstr "メールでリンクを共有"
-
-#~ msgid "Share your contacts"
-#~ msgstr "連絡先を共有"
 
 #~ msgid "Shared"
 #~ msgstr "共有"
@@ -17100,6 +17137,9 @@ msgstr "yyyy"
 
 #~ msgid "temporary"
 #~ msgstr "仮の予定"
+
+#~ msgid "the line length must be a number"
+#~ msgstr "行の長さは数字でなければなりません"
 
 #~ msgid "to"
 #~ msgstr "宛先"

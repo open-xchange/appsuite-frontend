@@ -650,6 +650,11 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
+#. %1$s is the account name like Dropbox, Google Drive, or OneDrive
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+msgid "Add %1$s account"
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
@@ -1184,12 +1189,6 @@ msgstr ""
 msgid ""
 "Automatically delete the invitation email after the appointment has been "
 "accepted or declined"
-msgstr ""
-
-#. It's a label for an input field with a number
-#. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Automatically wrap plain text after character:"
 msgstr ""
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
@@ -3392,6 +3391,11 @@ msgstr ""
 #. twitter: Follow this person
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Follow"
+msgstr ""
+
+#. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Follow-up"
 msgstr ""
 
 #. twitter: already following this person
@@ -5603,6 +5607,12 @@ msgstr ""
 msgid "Postcode"
 msgstr ""
 
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Premium features"
+msgstr ""
+
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Present"
 msgstr ""
@@ -6610,6 +6620,14 @@ msgstr[1] ""
 msgid "Share this file"
 msgstr ""
 
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+msgid "Share your contacts"
+msgstr ""
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+msgid "Share your folders"
+msgstr ""
+
 #: apps/plugins/halo/appointments/register.js module:plugins/halo
 msgid "Shared Appointments"
 msgstr ""
@@ -7051,6 +7069,14 @@ msgstr ""
 msgid ""
 "Synchronization of Emails, Calendar, Contacts and Tasks, along with Public, "
 "Shared and System Folders to Microsoft Outlook® clients."
+msgstr ""
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Synchronize calendar"
+msgstr ""
+
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+msgid "Synchronize with Outlook"
 msgstr ""
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -7864,6 +7890,12 @@ msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Town"
+msgstr ""
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Try now!"
 msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
@@ -9176,10 +9208,6 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "the item has been moved"
-msgstr ""
-
-#: apps/io.ox/mail/settings/model.js module:io.ox/mail
-msgid "the line length must be a number"
 msgstr ""
 
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend

@@ -675,6 +675,13 @@ msgstr "Werkelijke duur in minuten"
 msgid "Add"
 msgstr "Toevoegen"
 
+#. %1$s is the account name like Dropbox, Google Drive, or OneDrive
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Add your %1$s account"
+msgid "Add %1$s account"
+msgstr "Uw %1$s account toevoegen"
+
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
@@ -1226,12 +1233,6 @@ msgid ""
 msgstr ""
 "Automatisch binnengekomen kennisgevingsberichten verwijderen als de afspraak "
 "is geaccepteerd of afgewezen?"
-
-#. It's a label for an input field with a number
-#. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Automatically wrap plain text after character:"
-msgstr "Automatische terugloop in platte tekst na teken:"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Average time: %1$s ms"
@@ -3518,6 +3519,13 @@ msgstr "Map"
 #. twitter: Follow this person
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Follow"
+msgstr "Volgen"
+
+#. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Follow"
+msgid "Follow-up"
 msgstr "Volgen"
 
 #. twitter: already following this person
@@ -5815,6 +5823,12 @@ msgstr "Post een status"
 msgid "Postcode"
 msgstr "Postcode"
 
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Premium features"
+msgstr ""
+
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 #, fuzzy
 #| msgctxt "presenter"
@@ -6863,6 +6877,18 @@ msgstr[1] "Deel %1$d items"
 msgid "Share this file"
 msgstr "Opslaan als bestand"
 
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Your shared contacts:"
+msgid "Share your contacts"
+msgstr "Uw gedeelde contact:"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#, fuzzy
+#| msgid "Select folder"
+msgid "Share your folders"
+msgstr "Selecteer map"
+
 #: apps/plugins/halo/appointments/register.js module:plugins/halo
 msgid "Shared Appointments"
 msgstr "Gedeelde Afspraken"
@@ -7315,6 +7341,18 @@ msgid ""
 msgstr ""
 "Synchronisatie van E-mailberichten, Agenda, Contacten en Taken, samen met "
 "Publieke, Gedeelde en Systeem mappen naar Microsoft Outlook® clients."
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Shared calendars"
+msgid "Synchronize calendar"
+msgstr "Gedeelde agenda's"
+
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Synchronize with your tablet or smartphone"
+msgid "Synchronize with Outlook"
+msgstr "Synchroniseer met uw tablet of smartphone"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Synchronize with your tablet or smartphone"
@@ -8233,6 +8271,14 @@ msgstr "Totaal: %1$s aanvragen"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Town"
 msgstr "Stad"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Buy now!"
+msgid "Try now!"
+msgstr "Koop nu!"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
@@ -9609,10 +9655,6 @@ msgstr "voorlopig"
 msgid "the item has been moved"
 msgstr "het item is verplaatst"
 
-#: apps/io.ox/mail/settings/model.js module:io.ox/mail
-msgid "the line length must be a number"
-msgstr "te regellengte moet een getal zijn"
-
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -9876,6 +9918,9 @@ msgstr "yyyy"
 
 #~ msgid "Attention"
 #~ msgstr "Let op"
+
+#~ msgid "Automatically wrap plain text after character:"
+#~ msgstr "Automatische terugloop in platte tekst na teken:"
 
 #~ msgid "Bcc"
 #~ msgstr "Bcc"
@@ -11450,6 +11495,9 @@ msgstr "yyyy"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "submappen van %s"
+
+#~ msgid "the line length must be a number"
+#~ msgstr "te regellengte moet een getal zijn"
 
 #~ msgid "total"
 #~ msgstr "totaal"

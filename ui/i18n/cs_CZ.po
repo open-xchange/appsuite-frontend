@@ -694,6 +694,13 @@ msgstr "Skutečná doba trvání v minutách"
 msgid "Add"
 msgstr "Přidat"
 
+#. %1$s is the account name like Dropbox, Google Drive, or OneDrive
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgid "Add your %1$s account"
+msgid "Add %1$s account"
+msgstr "Přidat váš účet %1$s"
+
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
@@ -1244,12 +1251,6 @@ msgid ""
 msgstr ""
 "Automaticky vymazat příchozí oznámení, po té co byla schůzka přijata nebo "
 "odmítnuta"
-
-#. It's a label for an input field with a number
-#. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Automatically wrap plain text after character:"
-msgstr "Automaticky zalamovat prostý text na znaku: "
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Average time: %1$s ms"
@@ -3508,6 +3509,13 @@ msgstr "Složky"
 #. twitter: Follow this person
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Follow"
+msgstr "Sledovat"
+
+#. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Follow"
+msgid "Follow-up"
 msgstr "Sledovat"
 
 #. twitter: already following this person
@@ -5801,6 +5809,12 @@ msgstr "Sdílet aktuální stav"
 msgid "Postcode"
 msgstr "PSČ"
 
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Premium features"
+msgstr "Prémiové funkce"
+
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 #, fuzzy
 #| msgctxt "presenter"
@@ -6850,6 +6864,16 @@ msgstr[2] "Sdílet %1$d položek"
 msgid "Share this file"
 msgstr "Uložit jako soubor"
 
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+msgid "Share your contacts"
+msgstr "Sdílet vaše kontakty"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#, fuzzy
+#| msgid "Sent folder"
+msgid "Share your folders"
+msgstr "Odeslané zprávy"
+
 #: apps/plugins/halo/appointments/register.js module:plugins/halo
 msgid "Shared Appointments"
 msgstr "Sdílené schůzky"
@@ -7302,6 +7326,18 @@ msgid ""
 msgstr ""
 "Synchronizace e-mailových zpráv, kalendáře, kontaktů a úkolů, spolu s "
 "veřejnými, sdílenými a systémovými složkami s klienty Microsoft Outlook®."
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Shared calendars"
+msgid "Synchronize calendar"
+msgstr "Sdílené kalendáře"
+
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Synchronize with your tablet or smartphone"
+msgid "Synchronize with Outlook"
+msgstr "Synchronizovat s tabletem nebo chytrým telefonem"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Synchronize with your tablet or smartphone"
@@ -8204,6 +8240,14 @@ msgstr "Celkem: %1$s požadavků"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Town"
 msgstr "Město"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Buy now!"
+msgid "Try now!"
+msgstr "Koupit!"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
@@ -9584,10 +9628,6 @@ msgstr "předběžně"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "the item has been moved"
 msgstr "položka byla přesunuta"
-
-#: apps/io.ox/mail/settings/model.js module:io.ox/mail
-msgid "the line length must be a number"
-msgstr "délka řádku musí být číslo"
 
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
@@ -11834,6 +11874,9 @@ msgstr "rrrr"
 
 #~ msgid "Automatically select first E-Mail"
 #~ msgstr "Automaticky zobrazit první e-mail"
+
+#~ msgid "Automatically wrap plain text after character:"
+#~ msgstr "Automaticky zalamovat prostý text na znaku: "
 
 #~ msgid "Autorefresh:"
 #~ msgstr "Automatické obnovení:"
@@ -15475,9 +15518,6 @@ msgstr "rrrr"
 #~ msgid "Preferences"
 #~ msgstr "Vlastnosti"
 
-#~ msgid "Premium features"
-#~ msgstr "Prémiové funkce"
-
 #, fuzzy
 #~ msgid "Presenter Navigation"
 #~ msgstr "Cíl"
@@ -16048,9 +16088,6 @@ msgstr "rrrr"
 
 #~ msgid "Share link by email"
 #~ msgstr "Sdílet odkaz e-mailem"
-
-#~ msgid "Share your contacts"
-#~ msgstr "Sdílet vaše kontakty"
 
 #~ msgid "Shared"
 #~ msgstr "Sdílené"
@@ -18832,6 +18869,9 @@ msgstr "rrrr"
 
 #~ msgid "th"
 #~ msgstr "."
+
+#~ msgid "the line length must be a number"
+#~ msgstr "délka řádku musí být číslo"
 
 #~ msgid "to"
 #~ msgstr "komu"
