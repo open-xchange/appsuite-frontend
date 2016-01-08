@@ -11,12 +11,32 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/inplace-reply', ['io.ox/backbone/disposable', 'gettext!io.ox/mail'], function (DisposableView, gt) {
+define('io.ox/mail/inplace-reply', [
+    'io.ox/backbone/disposable',
+    'io.ox/mail/api',
+    'io.ox/core/yell',
+    'gettext!io.ox/mail',
+    'settings!io.ox/mail'
+], function (DisposableView, api, yell, gt, settings) {
 
     'use strict';
 
     // store messages during session. avoid data loss. no dialogs required.
-    var replyCache = {};
+    var drafts = {};
+
+    // helper
+
+    function getFormat() {
+        return settings.get('messageFormat', 'html');
+    }
+
+    function getContentType() {
+        switch (getFormat()) {
+            case 'alternative': return 'alternative';
+            case 'html': return 'text/html';
+            default: return 'text/plain';
+        }
+    }
 
     var InplaceReplyView = DisposableView.extend({
 
@@ -29,19 +49,57 @@ define('io.ox/mail/inplace-reply', ['io.ox/backbone/disposable', 'gettext!io.ox/
         },
 
         onSend: function () {
-            /*eslint-disable no-alert*/
-            alert('Please insert another coin ...');
-            /*eslint-enable no-alert*/
+            // get reply
+            this.busy(true);
+            // alternativ also asks for HTML
+            var view = getFormat() === 'text' ? 'text' : 'html';
+            api.replyall(_.cid(this.cid), view)
+                .done(this.onReplyReady.bind(this, $.trim(this.getContent())))
+                .fail(this.onSendFail.bind(this));
+        },
+
+        onReplyReady: function (content, data) {
+            // add content
+            content = _.escape(content).replace(/\n/g, '<br>');
+            // append quoted message
+            content += '<br>' + data.attachments[0].content;
+            // pick other stuff we need
+            data = _(data).pick('from', 'to', 'cc', 'bcc', 'headers', 'priority', 'vcard', 'subject', 'sendtype', 'csid', 'msgref');
+            // add content
+            data.attachments = [{ id: 1, content_type: getContentType(), content: content }];
+            // send
+            api.send(data)
+                .done(this.onSendComplete.bind(this))
+                .fail(this.onSendFail.bind(this));
+        },
+
+        onSendComplete: function () {
+            delete drafts[this.cid];
+            this.$el.empty().append(
+                $('<div class="alert alert-success" role="alert">').text(gt('Your reply has been sent'))
+            );
+            setTimeout(function ($el) {
+                $el.fadeOut();
+            }, 5000, this.$el);
+        },
+
+        onSendFail: function (e) {
+            yell(e);
+            this.busy(false);
+        },
+
+        busy: function (state) {
+            this.$('.btn, textarea').prop('disabled', state).toggleClass('disabled', state);
         },
 
         onCancel: function () {
-            delete replyCache[this.cid];
+            delete drafts[this.cid];
             this.$el.remove();
         },
 
         onChange: function () {
             var content = $.trim(this.getContent());
-            replyCache[this.cid] = content;
+            drafts[this.cid] = content;
             this.updateSendButton(content);
         },
 
@@ -65,11 +123,10 @@ define('io.ox/mail/inplace-reply', ['io.ox/backbone/disposable', 'gettext!io.ox/
             this.cid = options.cid;
 
             this.$send = $();
-            this.$textarea = $('<textarea class="inplace-editor form-control" tabindex="1">')
-                .attr('placeholder', 'Just a prototype; does not yet send the message!');
+            this.$textarea = $('<textarea class="inplace-editor form-control" tabindex="1">');
 
             // prefill?
-            var content = replyCache[this.cid] || '';
+            var content = drafts[this.cid] || '';
             if (content !== '') this.setContent(content);
         },
 
@@ -80,11 +137,11 @@ define('io.ox/mail/inplace-reply', ['io.ox/backbone/disposable', 'gettext!io.ox/
                     // keep keyboard stuff local to avoid side-effects
                     .on('keydown keyup', function (e) { e.stopPropagation(); }),
                 $('<div class="form-group">').append(
-                    this.$send = $('<button class="btn btn-primary disabled" data-action="send" tabindex="1">')
+                    this.$send = $('<button class="btn btn-primary btn-sm disabled" data-action="send" tabindex="1">')
                         .prop('disabled', true)
                         .text(gt('Reply to all')),
                     $.txt(' '),
-                    $('<button class="btn btn-default" data-action="cancel" tabindex="1">')
+                    $('<button class="btn btn-default btn-sm" data-action="cancel" tabindex="1">')
                         .text(gt('Cancel'))
                 )
             );
@@ -95,7 +152,7 @@ define('io.ox/mail/inplace-reply', ['io.ox/backbone/disposable', 'gettext!io.ox/
             this.$textarea.on('input', function () {
                 this.style.height = 'auto';
                 var scrh = this.scrollHeight, h = 0;
-                if (scrh <= 119) h = 119; else if (scrh >= 399) h = 399; else h = scrh + 6;
+                if (scrh <= 101) h = 101; else if (scrh >= 399) h = 399; else h = scrh + 6;
                 this.style.height = h + 'px';
             });
 
@@ -107,8 +164,11 @@ define('io.ox/mail/inplace-reply', ['io.ox/backbone/disposable', 'gettext!io.ox/
     });
 
     InplaceReplyView.hasDraft = function (cid) {
-        return !!replyCache[cid];
+        return !!drafts[cid];
     };
+
+    // accessible for debugging
+    InplaceReplyView.drafts = drafts;
 
     return InplaceReplyView;
 });

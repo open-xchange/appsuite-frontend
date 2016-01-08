@@ -125,17 +125,17 @@ define('io.ox/mail/threadview', [
         draw: function (baton) {
 
             var length = baton.view.collection.length;
-            if (length <= 1) return;
+            if (!length) return;
 
             var cid = baton.view.collection.at(0).cid;
 
             this.append(
                 $('<div class="caption">').append(
-                    $('<span class="summary">').text(gt('%1$d messages in this conversation', length)),
+                    $('<span class="summary">')
+                        .text(gt('%1$d messages in this conversation', length))
+                        .toggle(length > 1),
                     // quick reply
                     $('<a href="#" role="button" tabindex="1" class="open-inplace-reply">').append(
-                        $('<i class="fa fa-reply-all">'),
-                        $.txt(' '),
                         $.txt(gt('Quick reply'))
                     )
                     .on('click', { cid: cid }, onQuickReply)
