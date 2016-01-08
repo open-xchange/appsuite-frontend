@@ -1,9 +1,3 @@
-open-xchange-guidedtours (7.6.2-35) stable; urgency=medium
-
-  * Build for patch 2016-01-13 (2980)
-
- -- Marcus Klein <marcus.klein@open-xchange.com>  Mon, 04 Jan 2016 14:02:38 +0000
-
 open-xchange-guidedtours (7.6.2-34) stable; urgency=medium
 
   * Build for patch 2015-12-21 (2952)
