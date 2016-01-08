@@ -77,7 +77,8 @@ define('io.ox/calendar/api', [
                 order: 'asc'
             }, o || {});
             useCache = useCache === undefined ? true : !!useCache;
-            var key = (o.folder || o.folder_id) + '.' + o.start + '.' + o.end + '.' + o.order,
+            var folderId = o.folder !== undefined ? o.folder : o.folder_id,
+                key = folderId + '.' + o.start + '.' + o.end + '.' + o.order,
                 params = {
                     action: 'all',
                     // id, folder_id, last_modified, private_flag, color_label, recurrence_id, recurrence_position, start_date,
@@ -798,6 +799,19 @@ define('io.ox/calendar/api', [
                     contactsApi.trigger('maybyNewContact');
                 });
             }
+        }
+    });
+
+    folderAPI.on({
+        'before:remove before:move': function (data) {
+            if (data.module === 'calendar') {
+                //remove cache for "All my appointments"
+                var cleanedAllCache = _.omit(api.caches.all, function (value, key) {
+                    return key.split('.')[0] === '0';
+                });
+                api.caches.all = cleanedAllCache;
+            }
+
         }
     });
 
