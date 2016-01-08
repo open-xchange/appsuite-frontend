@@ -1446,7 +1446,7 @@ msgstr "Kalender:"
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
-#: apps/io.ox/mail/compose/view.js
+#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/oauth/settings.js apps/io.ox/portal/main.js module:io.ox/portal
@@ -1713,6 +1713,10 @@ msgstr "Stäng"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Stäng mappvy"
+
+#: apps/io.ox/core/commons.js module:io.ox/core
+msgid "Close premium features"
+msgstr ""
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close this reminder"
@@ -5185,6 +5189,10 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid "Only showing items related to folder \"%1$s\""
+msgstr "Visar bara objekt som är relevanta för mappen \"%1$s\""
+
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
 msgstr "Öppna"
@@ -5770,9 +5778,7 @@ msgstr "Lägg upp en statusuppdatering"
 msgid "Postcode"
 msgstr "Postnummer"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Premium features"
 msgstr ""
 
@@ -6019,6 +6025,10 @@ msgstr "Bekräfta köp"
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "Lila"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+msgid "Quick reply"
+msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "Quit"
@@ -6320,6 +6330,12 @@ msgstr "Svara alla"
 msgctxt "compose"
 msgid "Reply to"
 msgstr "Svara till"
+
+#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
+#, fuzzy
+#| msgid "Reply all"
+msgid "Reply to all"
+msgstr "Svara alla"
 
 #: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
@@ -6878,6 +6894,10 @@ msgstr "Visa"
 #: apps/io.ox/core/settings/user.js
 msgid "Show all fields"
 msgstr "Visa alla fält"
+
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid "Show all items"
+msgstr "Visa alla objekt"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Show appointment details"
@@ -8190,9 +8210,7 @@ msgstr "Totalt: %1$s sökningar"
 msgid "Town"
 msgstr "Ort"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 #, fuzzy
 #| msgid "Buy now!"
 msgid "Try now!"
@@ -12737,9 +12755,6 @@ msgstr "yyyy"
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "Visa bara sammanfattning om komponenter på mobila enheter"
 
-#~ msgid "Only showing items related to folder \"%1$s\""
-#~ msgstr "Visar bara objekt som är relevanta för mappen \"%1$s\""
-
 #~ msgid "Only the task creator is allowed to set private flag."
 #~ msgstr "Endast skaparen av uppgiften är tillåten att använda privat flagga."
 
@@ -13006,9 +13021,6 @@ msgstr "yyyy"
 #~ msgid "Remove on cache failed"
 #~ msgstr "Borttagandet på cacheminnet misslyckades."
 
-#~ msgid "Reply all"
-#~ msgstr "Svara alla"
-
 #~ msgid "Reply to"
 #~ msgstr "Svar till"
 
@@ -13198,9 +13210,6 @@ msgstr "yyyy"
 
 #~ msgid "Show advanced filters"
 #~ msgstr "Visa avancerade filter"
-
-#~ msgid "Show all items"
-#~ msgstr "Visa alla objekt"
 
 #~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
 #~ msgstr "Visa all e-post. OBS: E-post grupperas inte i konversationer."

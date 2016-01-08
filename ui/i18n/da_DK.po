@@ -1459,7 +1459,7 @@ msgstr "Kalender:"
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
-#: apps/io.ox/mail/compose/view.js
+#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/oauth/settings.js apps/io.ox/portal/main.js module:io.ox/portal
@@ -1723,6 +1723,10 @@ msgstr "Luk"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Luk mappevisning"
+
+#: apps/io.ox/core/commons.js module:io.ox/core
+msgid "Close premium features"
+msgstr ""
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close this reminder"
@@ -5203,6 +5207,10 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid "Only showing items related to folder \"%1$s\""
+msgstr "Viser kun elementer relaterede til mappen »%1$s«"
+
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
 msgstr "Åbn"
@@ -5790,9 +5798,7 @@ msgstr "Slå en statusopdatering op"
 msgid "Postcode"
 msgstr "Postnummer"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Premium features"
 msgstr ""
 
@@ -6038,6 +6044,10 @@ msgstr "Købsbekræftelse"
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "Lilla"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+msgid "Quick reply"
+msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "Quit"
@@ -6339,6 +6349,12 @@ msgstr "Svar alle"
 msgctxt "compose"
 msgid "Reply to"
 msgstr "Svar til"
+
+#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
+#, fuzzy
+#| msgid "Reply all"
+msgid "Reply to all"
+msgstr "Svar alle"
 
 #: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
@@ -6897,6 +6913,10 @@ msgstr "Vis"
 #: apps/io.ox/core/settings/user.js
 msgid "Show all fields"
 msgstr "Vis alle felter"
+
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid "Show all items"
+msgstr "Vis alle elementer"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Show appointment details"
@@ -8204,9 +8224,7 @@ msgstr "Total: %1$s forespørgsler"
 msgid "Town"
 msgstr "By"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 #, fuzzy
 #| msgid "Buy now!"
 msgid "Try now!"
@@ -10646,9 +10664,6 @@ msgstr "åååå"
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "Vi kun widget-opsummering på mobile enheder"
 
-#~ msgid "Only showing items related to folder \"%1$s\""
-#~ msgstr "Viser kun elementer relaterede til mappen »%1$s«"
-
 #~ msgid "Open in new tab"
 #~ msgstr "Åbn i ny fane"
 
@@ -10766,9 +10781,6 @@ msgstr "åååå"
 #~ msgid "Remove from recipient list"
 #~ msgstr "Fjern fra modtagerliste"
 
-#~ msgid "Reply all"
-#~ msgstr "Svar alle"
-
 #~ msgid "Reply to"
 #~ msgstr "Svar til"
 
@@ -10846,9 +10858,6 @@ msgstr "åååå"
 
 #~ msgid "Show advanced filters"
 #~ msgstr "Vis avanceret filtre"
-
-#~ msgid "Show all items"
-#~ msgstr "Vis alle elementer"
 
 #~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""

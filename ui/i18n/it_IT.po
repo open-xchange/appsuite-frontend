@@ -1456,7 +1456,7 @@ msgstr "Calendario:"
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
-#: apps/io.ox/mail/compose/view.js
+#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/oauth/settings.js apps/io.ox/portal/main.js module:io.ox/portal
@@ -1721,6 +1721,10 @@ msgstr "Chiudi"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Chiudi la vista della cartella"
+
+#: apps/io.ox/core/commons.js module:io.ox/core
+msgid "Close premium features"
+msgstr ""
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close this reminder"
@@ -5218,6 +5222,10 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid "Only showing items related to folder \"%1$s\""
+msgstr "Mostra solo gli elementi relativi alla cartella \"%1$s\""
+
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
 msgstr "Apri"
@@ -5807,9 +5815,7 @@ msgstr "Pubblica un aggiornamento dello stato"
 msgid "Postcode"
 msgstr "CAP"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Premium features"
 msgstr ""
 
@@ -6055,6 +6061,12 @@ msgstr "Conferma dell'acquisto"
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "Viola"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Quick Search"
+msgid "Quick reply"
+msgstr "Ricerca rapida"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "Quit"
@@ -6358,6 +6370,12 @@ msgstr "Rispondi a tutti"
 msgctxt "compose"
 msgid "Reply to"
 msgstr "Rispondi a"
+
+#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
+#, fuzzy
+#| msgid "Reply all"
+msgid "Reply to all"
+msgstr "Rispondi a tutti"
 
 #: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
@@ -6920,6 +6938,10 @@ msgstr "Mostra"
 #: apps/io.ox/core/settings/user.js
 msgid "Show all fields"
 msgstr "Mostra tutti i campi"
+
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid "Show all items"
+msgstr "Mostra tutti gli elementi"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Show appointment details"
@@ -8260,9 +8282,7 @@ msgstr "Totale: %1$s richieste"
 msgid "Town"
 msgstr "Città"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 #, fuzzy
 #| msgid "Buy now!"
 msgid "Try now!"
@@ -12273,9 +12293,6 @@ msgstr "aaaa"
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "Mostra solo il sommario dei widget sui dispositivi mobili"
 
-#~ msgid "Only showing items related to folder \"%1$s\""
-#~ msgstr "Mostra solo gli elementi relativi alla cartella \"%1$s\""
-
 #~ msgid "Open in new tab"
 #~ msgstr "Apri in una nuova scheda"
 
@@ -12422,9 +12439,6 @@ msgstr "aaaa"
 #~ msgid "Pull To Refresh"
 #~ msgstr "Estendi per aggiornare"
 
-#~ msgid "Quick Search"
-#~ msgstr "Ricerca rapida"
-
 #~ msgid "Read Only Mode"
 #~ msgstr "Modalità di sola lettura"
 
@@ -12448,9 +12462,6 @@ msgstr "aaaa"
 
 #~ msgid "Rename Document"
 #~ msgstr "Rinomina documento"
-
-#~ msgid "Reply all"
-#~ msgstr "Rispondi a tutti"
 
 #~ msgid "Reply to"
 #~ msgstr "Rispondi a"
@@ -12556,9 +12567,6 @@ msgstr "aaaa"
 
 #~ msgid "Show advanced filters"
 #~ msgstr "Mostra i filtri avanzati"
-
-#~ msgid "Show all items"
-#~ msgstr "Mostra tutti gli elementi"
 
 #~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""

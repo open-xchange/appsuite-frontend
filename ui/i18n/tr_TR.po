@@ -1392,7 +1392,7 @@ msgstr ""
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
-#: apps/io.ox/mail/compose/view.js
+#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/oauth/settings.js apps/io.ox/portal/main.js module:io.ox/portal
@@ -1655,6 +1655,10 @@ msgstr ""
 #: module:io.ox/files apps/io.ox/files/view-options.js
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
+msgstr ""
+
+#: apps/io.ox/core/commons.js module:io.ox/core
+msgid "Close premium features"
 msgstr ""
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
@@ -5030,6 +5034,10 @@ msgstr ""
 msgid "OneDrive"
 msgstr ""
 
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid "Only showing items related to folder \"%1$s\""
+msgstr ""
+
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
 msgstr ""
@@ -5598,9 +5606,7 @@ msgstr ""
 msgid "Postcode"
 msgstr ""
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Premium features"
 msgstr ""
 
@@ -5842,6 +5848,10 @@ msgstr ""
 #: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Purple"
+msgstr ""
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+msgid "Quick reply"
 msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
@@ -6131,6 +6141,10 @@ msgstr ""
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgctxt "compose"
 msgid "Reply to"
+msgstr ""
+
+#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
+msgid "Reply to all"
 msgstr ""
 
 #: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
@@ -6660,6 +6674,10 @@ msgstr ""
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 #: apps/io.ox/core/settings/user.js
 msgid "Show all fields"
+msgstr ""
+
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid "Show all items"
 msgstr ""
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
@@ -7874,9 +7892,7 @@ msgstr ""
 msgid "Town"
 msgstr ""
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Try now!"
 msgstr ""
 

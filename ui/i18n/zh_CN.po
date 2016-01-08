@@ -1433,7 +1433,7 @@ msgstr "日历："
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
-#: apps/io.ox/mail/compose/view.js
+#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/oauth/settings.js apps/io.ox/portal/main.js module:io.ox/portal
@@ -1697,6 +1697,10 @@ msgstr "关闭"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "关闭文件夹视图"
+
+#: apps/io.ox/core/commons.js module:io.ox/core
+msgid "Close premium features"
+msgstr ""
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close this reminder"
@@ -5139,6 +5143,10 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid "Only showing items related to folder \"%1$s\""
+msgstr "只显示和 \"%1$s\" 文件夹有关的项目"
+
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
 msgstr "打开"
@@ -5718,9 +5726,7 @@ msgstr "发送一个状态更新"
 msgid "Postcode"
 msgstr "邮寄编号"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Premium features"
 msgstr ""
 
@@ -5966,6 +5972,12 @@ msgstr "购买配置"
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "紫色"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Quick Search"
+msgid "Quick reply"
+msgstr "快速搜索"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "Quit"
@@ -6256,6 +6268,12 @@ msgstr "全部回复"
 msgctxt "compose"
 msgid "Reply to"
 msgstr "回复给"
+
+#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
+#, fuzzy
+#| msgid "Reply all"
+msgid "Reply to all"
+msgstr "全部回复"
 
 #: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
@@ -6813,6 +6831,10 @@ msgstr "显示为"
 #: apps/io.ox/core/settings/user.js
 msgid "Show all fields"
 msgstr "显示所有字段"
+
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid "Show all items"
+msgstr "显示所有项目"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Show appointment details"
@@ -8082,9 +8104,7 @@ msgstr "合共：%1$s 个请求"
 msgid "Town"
 msgstr "城镇"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 #, fuzzy
 #| msgid "Buy now!"
 msgid "Try now!"
@@ -11997,9 +12017,6 @@ msgstr "年"
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "只显示移动装置上的小部件摘要"
 
-#~ msgid "Only showing items related to folder \"%1$s\""
-#~ msgstr "只显示和 \"%1$s\" 文件夹有关的项目"
-
 #~ msgid "Open in new tab"
 #~ msgstr "在新选项卡打开"
 
@@ -12146,9 +12163,6 @@ msgstr "年"
 #~ msgid "Pull To Refresh"
 #~ msgstr "下拉刷新"
 
-#~ msgid "Quick Search"
-#~ msgstr "快速搜索"
-
 #~ msgid "Read Only Mode"
 #~ msgstr "唯读模式"
 
@@ -12172,9 +12186,6 @@ msgstr "年"
 
 #~ msgid "Rename Document"
 #~ msgstr "文档更名"
-
-#~ msgid "Reply all"
-#~ msgstr "全部回复"
 
 #~ msgid "Reply to"
 #~ msgstr "回复"
@@ -12277,9 +12288,6 @@ msgstr "年"
 
 #~ msgid "Show advanced filters"
 #~ msgstr "显示进阶过滤器"
-
-#~ msgid "Show all items"
-#~ msgstr "显示所有项目"
 
 #~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
 #~ msgstr "显示所有邮件。备注：邮件不再以谈话分组。"

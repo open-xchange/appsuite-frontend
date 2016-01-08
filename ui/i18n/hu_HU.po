@@ -1448,7 +1448,7 @@ msgstr "Naptár:"
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
-#: apps/io.ox/mail/compose/view.js
+#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/oauth/settings.js apps/io.ox/portal/main.js module:io.ox/portal
@@ -1716,6 +1716,10 @@ msgstr "Bezárás"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Mappanézet bezárása"
+
+#: apps/io.ox/core/commons.js module:io.ox/core
+msgid "Close premium features"
+msgstr ""
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close this reminder"
@@ -5200,6 +5204,10 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid "Only showing items related to folder \"%1$s\""
+msgstr "Csak a(z) „%1$s” mappával kapcsolatos elemek megjelenítése"
+
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
 msgstr "Megnyitás"
@@ -5785,9 +5793,7 @@ msgstr "Állapotfrissítés küldése"
 msgid "Postcode"
 msgstr "Irányítószám"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Premium features"
 msgstr ""
 
@@ -6033,6 +6039,10 @@ msgstr "Vásárlás jóváhagyása"
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "Bíbor"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+msgid "Quick reply"
+msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "Quit"
@@ -6334,6 +6344,13 @@ msgstr "Válasz mindenkinek"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgctxt "compose"
 msgid "Reply to"
+msgstr "Válaszcím"
+
+#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "compose"
+#| msgid "Reply to"
+msgid "Reply to all"
 msgstr "Válaszcím"
 
 #: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
@@ -6894,6 +6911,10 @@ msgstr "Megjelenítés"
 #: apps/io.ox/core/settings/user.js
 msgid "Show all fields"
 msgstr "Összes mező megjelenítése"
+
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid "Show all items"
+msgstr "Az összes elem megjelenítése"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Show appointment details"
@@ -8205,9 +8226,7 @@ msgstr "Összesen: %1$s kérés"
 msgid "Town"
 msgstr "Város"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 #, fuzzy
 #| msgid "Buy now!"
 msgid "Try now!"
@@ -9767,14 +9786,8 @@ msgstr "yyyy"
 #~ msgid "Off"
 #~ msgstr "Ki"
 
-#~ msgid "Only showing items related to folder \"%1$s\""
-#~ msgstr "Csak a(z) „%1$s” mappával kapcsolatos elemek megjelenítése"
-
 #~ msgid "Press [enter] to jump to the facebook stream."
 #~ msgstr "Nyomja meg az [enter]-t a Facebook folyamra ugráshoz."
-
-#~ msgid "Show all items"
-#~ msgstr "Az összes elem megjelenítése"
 
 #~ msgid "Show comments"
 #~ msgstr "Megjegyzések megjelenítése"

@@ -1474,7 +1474,7 @@ msgstr "Kalendārs:"
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
-#: apps/io.ox/mail/compose/view.js
+#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/oauth/settings.js apps/io.ox/portal/main.js module:io.ox/portal
@@ -1741,6 +1741,12 @@ msgstr "Aizvērt"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Aizvērt mapes skatu"
+
+#: apps/io.ox/core/commons.js module:io.ox/core
+#, fuzzy
+#| msgid "Premium features"
+msgid "Close premium features"
+msgstr "Papildus funkcijas"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close this reminder"
@@ -5239,6 +5245,10 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid "Only showing items related to folder \"%1$s\""
+msgstr "Uzrāda tikai ar mapi \"%1$s\" saistītās vienības"
+
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
 msgstr "Atvērt"
@@ -5824,9 +5834,7 @@ msgstr "Reģistrēt statusa jauniunājumu"
 msgid "Postcode"
 msgstr "Pasta kods"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Premium features"
 msgstr "Papildus funkcijas"
 
@@ -6072,6 +6080,12 @@ msgstr "Pirkuma apstiprinājums"
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "Purpura"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Quick Search"
+msgid "Quick reply"
+msgstr "Ātrā meklēšana"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "Quit"
@@ -6375,6 +6389,12 @@ msgstr "Atbildēt visiem"
 msgctxt "compose"
 msgid "Reply to"
 msgstr "Atbildēt"
+
+#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
+#, fuzzy
+#| msgid "Reply all"
+msgid "Reply to all"
+msgstr "Atbildēt visiem"
 
 #: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
@@ -6939,6 +6959,10 @@ msgstr "Rādīt"
 #: apps/io.ox/core/settings/user.js
 msgid "Show all fields"
 msgstr "Rādīt visus laukus"
+
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid "Show all items"
+msgstr "Rādīt visu"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Show appointment details"
@@ -8263,9 +8287,7 @@ msgstr "Kopā: %1$s pieprasījumi"
 msgid "Town"
 msgstr "Pilsēta"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 #, fuzzy
 #| msgid "Buy now!"
 msgid "Try now!"
@@ -13082,9 +13104,6 @@ msgstr "yyyy"
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "Mobilajās iericēs rādīt tikai logrīka kopsavilkumu"
 
-#~ msgid "Only showing items related to folder \"%1$s\""
-#~ msgstr "Uzrāda tikai ar mapi \"%1$s\" saistītās vienības"
-
 #~ msgid ""
 #~ "Only use this option if this computer is used solely by you. Your "
 #~ "credentials are locally saved for the current working day. You can use "
@@ -13488,9 +13507,6 @@ msgstr "yyyy"
 #~ msgid "Pull To Refresh"
 #~ msgstr "Pavelciet lai jauninātu"
 
-#~ msgid "Quick Search"
-#~ msgstr "Ātrā meklēšana"
-
 #~ msgid "Quick config"
 #~ msgstr "Ātrā konfigurācija"
 
@@ -13586,9 +13602,6 @@ msgstr "yyyy"
 
 #~ msgid "Renminbi"
 #~ msgstr "Renminbi"
-
-#~ msgid "Reply all"
-#~ msgstr "Atbildēt visiem"
 
 #~ msgid "Reply to"
 #~ msgstr "Atbildēt"
@@ -13901,9 +13914,6 @@ msgstr "yyyy"
 
 #~ msgid "Show advanced filters"
 #~ msgstr "Rādīt paplašinātu filtru"
-
-#~ msgid "Show all items"
-#~ msgstr "Rādīt visu"
 
 #~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""

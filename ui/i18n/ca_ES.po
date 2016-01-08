@@ -1570,7 +1570,7 @@ msgstr "Calendari"
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
-#: apps/io.ox/mail/compose/view.js
+#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/oauth/settings.js apps/io.ox/portal/main.js module:io.ox/portal
@@ -1859,6 +1859,10 @@ msgstr "Tanca"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Tanca la vista de carpeta"
+
+#: apps/io.ox/core/commons.js module:io.ox/core
+msgid "Close premium features"
+msgstr ""
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close this reminder"
@@ -5590,6 +5594,10 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid "Only showing items related to folder \"%1$s\""
+msgstr "Es mostren només els elements relacionats amb la carpeta \"%1$s\""
+
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
 msgstr "Obre"
@@ -6196,9 +6204,7 @@ msgstr "Publica una actualització d'estat"
 msgid "Postcode"
 msgstr "Codi postal"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Premium features"
 msgstr ""
 
@@ -6483,6 +6489,10 @@ msgstr "Confirma la compra"
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "Morat"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+msgid "Quick reply"
+msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "Quit"
@@ -6802,6 +6812,12 @@ msgstr "Respon a tothom"
 #| msgid "Reply"
 msgctxt "compose"
 msgid "Reply to"
+msgstr "Respon"
+
+#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
+#, fuzzy
+#| msgid "Reply"
+msgid "Reply to all"
 msgstr "Respon"
 
 #: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
@@ -7397,6 +7413,10 @@ msgstr "Mostra"
 #, fuzzy
 #| msgid "Show all items"
 msgid "Show all fields"
+msgstr "Mostra tots els elements"
+
+#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+msgid "Show all items"
 msgstr "Mostra tots els elements"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
@@ -8806,9 +8826,7 @@ msgstr "Total: %1$s peticions"
 msgid "Town"
 msgstr "Localitat"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 #, fuzzy
 #| msgid "Buy now!"
 msgid "Try now!"
@@ -10760,9 +10778,6 @@ msgstr ""
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "Mostra el menú de widgets només en dispositius mòbils"
 
-#~ msgid "Only showing items related to folder \"%1$s\""
-#~ msgstr "Es mostren només els elements relacionats amb la carpeta \"%1$s\""
-
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "Tasca endarrerida. %1$s %2$s. Premeu [Intro] per a obrir-la"
 
@@ -10828,9 +10843,6 @@ msgstr ""
 
 #~ msgid "Show advanced filters"
 #~ msgstr "Mostra els filtres avançats"
-
-#~ msgid "Show all items"
-#~ msgstr "Mostra tots els elements"
 
 #~ msgid "Show all my appointments from all calendars"
 #~ msgstr "Mostra totes les meves cites de tots els calendaris"

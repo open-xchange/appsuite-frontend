@@ -476,6 +476,7 @@ msgstr ""
 #: apps/io.ox/mail/compose/inline-images.js
 #: apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js
+#: apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/main.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
@@ -1513,28 +1514,6 @@ msgstr ""
 #: apps/io.ox/calendar/main.js
 #: module:io.ox/calendar
 msgid "Expand timeframe by one month"
-msgstr ""
-
-#: apps/io.ox/calendar/main.js
-#: module:io.ox/calendar
-#: apps/io.ox/contacts/main.js
-#: module:io.ox/contacts
-#: apps/io.ox/files/main.js
-#: module:io.ox/files
-#: apps/io.ox/mail/main.js
-#: module:io.ox/mail
-msgid "Premium features"
-msgstr ""
-
-#: apps/io.ox/calendar/main.js
-#: module:io.ox/calendar
-#: apps/io.ox/contacts/main.js
-#: module:io.ox/contacts
-#: apps/io.ox/files/main.js
-#: module:io.ox/files
-#: apps/io.ox/mail/main.js
-#: module:io.ox/mail
-msgid "Try now!"
 msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
@@ -3532,6 +3511,21 @@ msgstr ""
 
 #: apps/io.ox/core/commons.js
 #: module:io.ox/core
+msgid "Premium features"
+msgstr ""
+
+#: apps/io.ox/core/commons.js
+#: module:io.ox/core
+msgid "Close premium features"
+msgstr ""
+
+#: apps/io.ox/core/commons.js
+#: module:io.ox/core
+msgid "Try now!"
+msgstr ""
+
+#: apps/io.ox/core/commons.js
+#: module:io.ox/core
 msgid "Retry"
 msgstr ""
 
@@ -5172,6 +5166,16 @@ msgstr ""
 #: apps/io.ox/core/sub/model.js
 #: module:io.ox/core/sub
 msgid "You have to enter a username and password to subscribe."
+msgstr ""
+
+#: apps/io.ox/core/sub/settings/pane.js
+#: module:io.ox/core/sub
+msgid "Only showing items related to folder \"%1$s\""
+msgstr ""
+
+#: apps/io.ox/core/sub/settings/pane.js
+#: module:io.ox/core/sub
+msgid "Show all items"
 msgstr ""
 
 #: apps/io.ox/core/sub/settings/pane.js
@@ -8166,6 +8170,11 @@ msgstr ""
 msgid "Drop EML file here for import"
 msgstr ""
 
+#: apps/io.ox/mail/inplace-reply.js
+#: module:io.ox/mail
+msgid "Reply to all"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: module:io.ox/mail
 msgid "Create new rule"
@@ -8759,6 +8768,11 @@ msgstr ""
 #: apps/io.ox/mail/threadview.js
 #: module:io.ox/mail
 msgid "%1$d messages in this conversation"
+msgstr ""
+
+#: apps/io.ox/mail/threadview.js
+#: module:io.ox/mail
+msgid "Quick reply"
 msgstr ""
 
 #: apps/io.ox/mail/toolbar.js
