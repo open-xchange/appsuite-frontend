@@ -306,7 +306,7 @@ define('io.ox/mail/listview', [
             ListView.prototype.initialize.call(this, options);
             this.$el.addClass('mail-item');
             this.on('collection:load', this.lookForUnseenMessage);
-            this.$el.on('click mousedown .selectable .icon-unread', this.markRead.bind(this));
+            this.$el.on('click mousedown',  '.selectable .icon-unread', this.markRead.bind(this));
 
             // track some states
             if (options && options.app) {
