@@ -107,7 +107,7 @@ define('io.ox/onboarding/clients/extensions', [
                         .append(
                             $('<i class="fa fa-fw fa-chevron-right">'),
                             $('<i class="fa fa-fw fa-chevron-down">'),
-                            $.txt(gt('Manual'))
+                            $.txt(gt('Settings for advanced users'))
                         ),
                     // content
                     $('<span class="content">').append(
@@ -243,7 +243,7 @@ define('io.ox/onboarding/clients/extensions', [
                     $('<span class="content">').append(
                         // description
                         $('<div class="description">')
-                            .text(gt('Send me the profile data by mail.')),
+                            .text(gt('Get your device configured by email.')),
                         // form
                         form = $('<div class="data">'),
                         // action
@@ -313,16 +313,16 @@ define('io.ox/onboarding/clients/extensions', [
                         .append(
                             $('<i class="fa fa-fw fa-chevron-right">'),
                             $('<i class="fa fa-fw fa-chevron-down">'),
-                            $.txt(gt('Download'))
+                            $.txt(gt('Automatic Configuration'))
                         ),
                     $('<span class="content">').append(
                         // description
                         $('<div class="description">')
-                            .text(gt('Simply download the profile to your device.')),
+                            .text(gt('Automatically configure your device by clicking the button below.')),
                         // action
                         $('<button>')
                             .addClass('btn btn-sm btn-primary')
-                            .text(gt('Download'))
+                            .text(gt('Configure now'))
                     )
                 );
             return this;

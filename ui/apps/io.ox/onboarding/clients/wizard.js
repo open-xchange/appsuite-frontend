@@ -79,11 +79,11 @@ define('io.ox/onboarding/clients/wizard', [
         var config = this.parent.config,
             list = config.getDevices();
         // title
-        this.$('.wizard-title').text(titleLabel);
+        this.$('.wizard-title').text(gt('Which device do you want to configure?'));
         // content
         this.$('.wizard-content').empty()
             .append(
-                $('<p class="teaser">').text(gt('Which device do you want to configure?')),
+                //$('<p class="teaser">').text),
                 drawOptions('device', list)
                 .on('click', 'a', onSelect.bind(this))
             );
@@ -108,9 +108,9 @@ define('io.ox/onboarding/clients/wizard', [
             wizard = this.parent,
             container = this.$('.wizard-content').empty();
         // title and teaser
-        this.$('.wizard-title').text(titleLabel);
+        this.$('.wizard-title').text(gt('What do you want to use?'));
         container.append(
-            $('<p class="teaser">').text(gt('What service do you want to use?'))
+            //$('<p class="teaser">').text()
         );
         // content
         container.append(
