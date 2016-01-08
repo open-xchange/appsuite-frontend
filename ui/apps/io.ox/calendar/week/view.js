@@ -20,7 +20,7 @@ define('io.ox/calendar/week/view', [
     'settings!io.ox/core',
     'io.ox/backbone/mini-views/dropdown',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, appointmentFactory, util, folderAPI, gt, settings, coreSettings, Dropdown) {
+], function (ext, AppointmentModel, util, folderAPI, gt, settings, coreSettings, Dropdown) {
 
     'use strict';
 
@@ -192,7 +192,7 @@ define('io.ox/calendar/week/view', [
                         return (os >= ws && os < we) || (oe > ws && oe < we) || (os <= ws && oe >= we);
                     })
                     .map(function (obj) {
-                        var model = new appointmentFactory.model(obj);
+                        var model = new AppointmentModel(obj);
                         model.id = _.cid(obj);
                         return model;
                     });

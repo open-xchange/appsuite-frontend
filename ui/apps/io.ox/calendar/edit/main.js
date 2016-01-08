@@ -21,7 +21,7 @@ define('io.ox/calendar/edit/main', [
     'gettext!io.ox/calendar/edit/main',
     'settings!io.ox/calendar',
     'less!io.ox/calendar/edit/style'
-], function (appointmentFactory, api, dnd, EditView, notifications, folderAPI, gt, settings) {
+], function (AppointmentModel, api, dnd, EditView, notifications, folderAPI, gt, settings) {
 
     'use strict';
 
@@ -163,7 +163,6 @@ define('io.ox/calendar/edit/main', [
                                                 if (self.moveAfterSave) {
                                                     self.model.set('folder_id', self.moveAfterSave, { silent: true });
                                                 }
-                                                self.model.silentMode = false;
                                                 return;
                                             }
                                             if (action === 'ignore') {
@@ -198,32 +197,12 @@ define('io.ox/calendar/edit/main', [
                         if (opt.mode === 'edit') {
 
                             if (opt.action === 'appointment') {
-                                // ensure to create a change exception
-                                self.model.touch('recurrence_position');
                                 self.model.set('recurrence_type', 0, { validate: true });
+                                self.model.mode = 'appointment';
                             }
 
                             if (opt.action === 'series') {
-
-                                // fields for recurrences
-                                var x = 0,
-                                    fields = [
-                                        'recurrence_date_position',
-                                        'change_exceptions',
-                                        'delete_exceptions',
-                                        'recurrence_type',
-                                        'days',
-                                        'day_in_month',
-                                        'month',
-                                        'interval',
-                                        'until',
-                                        'occurrences'
-                                    ];
-
-                                // ensure theses fields will be send to backend to edit the whole series
-                                for (; x < fields.length; x++) {
-                                    self.model.touch(fields[x]);
-                                }
+                                self.model.mode = 'series';
                             }
 
                             // init alarm
@@ -249,7 +228,7 @@ define('io.ox/calendar/edit/main', [
                 if (opt.mode === 'edit' && data.id) {
                     // hash support
                     self.setState({ folder: data.folder_id, id: data.id });
-                    self.model = appointmentFactory.create(data);
+                    self.model = new AppointmentModel(data);
                     loadFolder();
                 } else {
 
@@ -258,8 +237,7 @@ define('io.ox/calendar/edit/main', [
                     if (data.full_time) {
                         data.shown_as = settings.get('markFulltimeAppointmentsAsFree', false) ? 4 : 1;
                     }
-
-                    self.model = appointmentFactory.realm('default').create(data);
+                    self.model = new AppointmentModel(data);
                     if (!data.folder_id || /^virtual/.test(data.folder_id)) {
                         self.model.set('folder_id', data.folder_id = folderAPI.getDefaultFolder('calendar'));
                         loadFolder();
@@ -354,7 +332,6 @@ define('io.ox/calendar/edit/main', [
                         save();
                     }, fail);
                 } else {
-                    this.model.silentMode = false;
                     if (this.model.endTimezone) {
                         this.model.set('endTimezone', this.model.endTimezone);
                         delete this.model.endTimezone;
@@ -366,7 +343,7 @@ define('io.ox/calendar/edit/main', [
             },
 
             onError: function (error) {
-                this.model.silentMode = false;
+                this.model.set('ignore_conflicts', false, { validate: true });
                 if (this.model.endTimezone) {
                     this.model.set('endTimezone', this.model.endTimezone);
                     delete this.model.endTimezone;
