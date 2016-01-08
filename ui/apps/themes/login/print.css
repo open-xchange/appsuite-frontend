@@ -51,6 +51,14 @@ h1 {
     clear: both;
 }
 
+h2 {
+    font-size: 18px;
+    line-height: 20px;
+    font-weight: 200;
+    margin: 0;
+    clear: both;
+}
+
 a, a:visited { color: #08c; }
 
 p {
@@ -62,8 +70,27 @@ p {
     margin: 0 0 2cm 0;
 }
 
+.item-compact {
+    margin: 0 0 0.25cm 0;
+    
+}
+
+.compact-subject {
+    font-weight: bold;
+}
+
+.item-compact:not(:first-of-type) {
+    border-top: 1px solid #CCC;
+    padding-top: 0.25cm;
+}
+
 label {
     color: #888;
+}
+
+/* on paper this looks fine #888 looks like black */
+.label-compact {
+    color: #CCC;
 }
 
 .content, .top-border {
