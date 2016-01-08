@@ -20,6 +20,14 @@ define('io.ox/find/view', [
 
     'use strict';
 
+    /**
+     * view
+     *     view-searchbox
+     *         view-tokenfield
+     *             view-token
+     *     view-facets
+     */
+
     var FindView = Backbone.View.extend({
 
         events: {
@@ -116,6 +124,7 @@ define('io.ox/find/view', [
         },
 
         show: function () {
+            this.trigger('focusin');
             if (this.isActive()) return;
             this.calculateDimensions();
             // apply margin to next
@@ -186,6 +195,7 @@ define('io.ox/find/view', [
         // on focusout
         smartCancel: function () {
             var self = this;
+            this.app.trigger('focusout');
             // ensures click event in toolbar resolves before cancel is executed
             _.delay(function () {
                 if (!self.hasFocus() && self.isEmpty() && !self.hasChanged()) {

@@ -249,6 +249,14 @@ define('io.ox/find/view-tokenfield', [
             this.trigger(e.type, e);
         },
 
+        reopenDropdown: function () {
+            var api = this.hiddenapi;
+            if (api.dropdown.isOpen) return;
+            if (!this.getQuery()) return;
+            // skip internal check if query has changed an fire manually
+            api.input.trigger('queryChanged', api.input.query);
+        },
+
         disable: function () {
             this.api('disable');
         },
@@ -285,8 +293,11 @@ define('io.ox/find/view-tokenfield', [
             this.ui.view.on({
                 'typeahead-custom:dropdown-rendered': _.bind(this.restoreSelection, this)
             });
-
-            //
+            // main view events
+            this.app.view.on({
+                'focusin': _.bind(self.reopenDropdown, self)
+            });
+            // app events
             this.app.on({
                 'view:disable': _.bind(self.disable, self),
                 'view:enable': _.bind(self.enable, self)
@@ -321,13 +332,17 @@ define('io.ox/find/view-tokenfield', [
             return this.ui.field;
         },
 
+        getQuery: function () {
+            return this.ui.tokeninput.val().trim();
+        },
+
         isEmpty: function () {
             // get active facets and filter the mandatory
             var active = this.model.manager.getActive(),
                 nonmandatory = _.filter(active, function (facet) { return !facet.is('mandatory'); });
 
             // TODO: empty check also for not yet tokenized input (data loss?!)
-            return !nonmandatory.length && this.api('getTokens').length === 0 && this.ui.tokeninput.val().trim() === '';
+            return !nonmandatory.length && this.api('getTokens').length === 0 && this.getQuery() === '';
         },
 
         empty: function () {
