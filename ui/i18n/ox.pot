@@ -11,11 +11,13 @@ msgstr ""
 
 #: apps/io.ox/backbone/basicModel.js
 #: module:io.ox/core
+#: apps/io.ox/backbone/extendedModel.js
 msgid "Invalid data"
 msgstr ""
 
 #: apps/io.ox/backbone/basicModel.js
 #: module:io.ox/core
+#: apps/io.ox/backbone/extendedModel.js
 #: apps/io.ox/core/main.js
 msgid "Server unreachable"
 msgstr ""
@@ -181,6 +183,123 @@ msgstr ""
 #: apps/io.ox/backbone/validation.js
 #: module:io.ox/core
 msgid "Please enter a value"
+msgstr ""
+
+#: apps/io.ox/calendar/actions.js
+#: module:io.ox/calendar
+msgid "Do you want the appointments printed in detail or as a compact list?"
+msgstr ""
+
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js
+#: module:io.ox/calendar
+msgid "Detailed"
+msgstr ""
+
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js
+#: module:io.ox/calendar
+#: apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
+msgid "Compact"
+msgstr ""
+
+#: apps/io.ox/calendar/actions.js
+#: module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
+#: apps/io.ox/calendar/actions/create.js
+#: apps/io.ox/calendar/actions/delete.js
+#: apps/io.ox/calendar/actions/edit.js
+#: apps/io.ox/calendar/edit/main.js
+#: module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/timezone-dialog.js
+#: apps/io.ox/calendar/main.js
+#: apps/io.ox/calendar/month/perspective.js
+#: apps/io.ox/calendar/settings/timezones/favorite-view.js
+#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/contacts/actions/delete.js
+#: module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/main.js
+#: apps/io.ox/contacts/edit/main.js
+#: apps/io.ox/contacts/main.js
+#: apps/io.ox/core/desktop.js
+#: module:io.ox/core
+#: apps/io.ox/core/export/export.js
+#: apps/io.ox/core/folder/actions/add.js
+#: apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/core/folder/actions/common.js
+#: apps/io.ox/core/folder/actions/remove.js
+#: apps/io.ox/core/folder/actions/rename.js
+#: apps/io.ox/core/folder/picker.js
+#: apps/io.ox/core/import/import.js
+#: apps/io.ox/core/main.js
+#: apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/print.js
+#: apps/io.ox/core/relogin.js
+#: apps/io.ox/core/sub/subscriptions.js
+#: module:io.ox/core/sub
+#: apps/io.ox/core/tk/filestorageUtil.js
+#: apps/io.ox/core/tk/mobiscroll.js
+#: apps/io.ox/core/upsell.js
+#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
+#: module:io.ox/core/viewer
+#: apps/io.ox/editor/main.js
+#: module:io.ox/editor
+#: apps/io.ox/files/actions/delete.js
+#: module:io.ox/files
+#: apps/io.ox/files/actions/edit-description.js
+#: apps/io.ox/files/actions/rename.js
+#: apps/io.ox/files/actions/share.js
+#: apps/io.ox/files/actions/upload-new-version.js
+#: apps/io.ox/files/actions/versions-delete.js
+#: apps/io.ox/files/main.js
+#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/keychain/secretRecoveryDialog.js
+#: module:io.ox/keychain
+#: apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/accounts/view-form.js
+#: module:io.ox/settings
+#: apps/io.ox/mail/actions/attachmentEmpty.js
+#: module:io.ox/mail
+#: apps/io.ox/mail/actions/delete.js
+#: apps/io.ox/mail/actions/reminder.js
+#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/compose/inline-images.js
+#: apps/io.ox/mail/compose/names.js
+#: apps/io.ox/mail/compose/view.js
+#: apps/io.ox/mail/inplace-reply.js
+#: apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/main.js
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+#: apps/io.ox/oauth/settings.js
+#: apps/io.ox/portal/main.js
+#: module:io.ox/portal
+#: apps/io.ox/portal/settings/widgetview.js
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+#: apps/io.ox/settings/apps/settings/pane.js
+#: apps/io.ox/tasks/actions/delete.js
+#: module:io.ox/tasks
+#: apps/io.ox/tasks/common-extensions.js
+#: apps/io.ox/tasks/edit/main.js
+#: apps/io.ox/tasks/main.js
+#: apps/plugins/administration/groups/settings/edit.js
+#: apps/plugins/administration/groups/settings/toolbar.js
+#: apps/plugins/administration/resources/settings/edit.js
+#: apps/plugins/administration/resources/settings/toolbar.js
+#: apps/plugins/core/feedback/register.js
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+#: apps/plugins/portal/flickr/register.js
+#: module:plugins/portal
+#: apps/plugins/portal/mail/register.js
+#: apps/plugins/portal/rss/register.js
+#: apps/plugins/portal/tumblr/register.js
+#: apps/plugins/portal/twitter/util.js
+#: apps/plugins/portal/userSettings/register.js
+#: apps/plugins/portal/xing/register.js
+msgid "Cancel"
 msgstr ""
 
 #: apps/io.ox/calendar/actions.js
@@ -415,103 +534,6 @@ msgstr ""
 
 #: apps/io.ox/calendar/actions/acceptdeny.js
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/actions/create.js
-#: apps/io.ox/calendar/actions/delete.js
-#: apps/io.ox/calendar/actions/edit.js
-#: apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/timezone-dialog.js
-#: apps/io.ox/calendar/main.js
-#: apps/io.ox/calendar/month/perspective.js
-#: apps/io.ox/calendar/settings/timezones/favorite-view.js
-#: apps/io.ox/calendar/week/perspective.js
-#: apps/io.ox/contacts/actions/delete.js
-#: module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js
-#: apps/io.ox/contacts/edit/main.js
-#: apps/io.ox/contacts/main.js
-#: apps/io.ox/core/desktop.js
-#: module:io.ox/core
-#: apps/io.ox/core/export/export.js
-#: apps/io.ox/core/folder/actions/add.js
-#: apps/io.ox/core/folder/actions/archive.js
-#: apps/io.ox/core/folder/actions/common.js
-#: apps/io.ox/core/folder/actions/remove.js
-#: apps/io.ox/core/folder/actions/rename.js
-#: apps/io.ox/core/folder/picker.js
-#: apps/io.ox/core/import/import.js
-#: apps/io.ox/core/main.js
-#: apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/core/print.js
-#: apps/io.ox/core/relogin.js
-#: apps/io.ox/core/sub/subscriptions.js
-#: module:io.ox/core/sub
-#: apps/io.ox/core/tk/filestorageUtil.js
-#: apps/io.ox/core/tk/mobiscroll.js
-#: apps/io.ox/core/upsell.js
-#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
-#: module:io.ox/core/viewer
-#: apps/io.ox/editor/main.js
-#: module:io.ox/editor
-#: apps/io.ox/files/actions/delete.js
-#: module:io.ox/files
-#: apps/io.ox/files/actions/edit-description.js
-#: apps/io.ox/files/actions/rename.js
-#: apps/io.ox/files/actions/share.js
-#: apps/io.ox/files/actions/upload-new-version.js
-#: apps/io.ox/files/actions/versions-delete.js
-#: apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js
-#: apps/io.ox/keychain/secretRecoveryDialog.js
-#: module:io.ox/keychain
-#: apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/accounts/view-form.js
-#: module:io.ox/settings
-#: apps/io.ox/mail/actions/attachmentEmpty.js
-#: module:io.ox/mail
-#: apps/io.ox/mail/actions/delete.js
-#: apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/compose/inline-images.js
-#: apps/io.ox/mail/compose/names.js
-#: apps/io.ox/mail/compose/view.js
-#: apps/io.ox/mail/inplace-reply.js
-#: apps/io.ox/mail/mailfilter/settings/filter.js
-#: apps/io.ox/mail/main.js
-#: apps/io.ox/mail/settings/signatures/settings/pane.js
-#: apps/io.ox/oauth/settings.js
-#: apps/io.ox/portal/main.js
-#: module:io.ox/portal
-#: apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts
-#: apps/io.ox/settings/apps/settings/pane.js
-#: apps/io.ox/tasks/actions/delete.js
-#: module:io.ox/tasks
-#: apps/io.ox/tasks/common-extensions.js
-#: apps/io.ox/tasks/edit/main.js
-#: apps/io.ox/tasks/main.js
-#: apps/plugins/administration/groups/settings/edit.js
-#: apps/plugins/administration/groups/settings/toolbar.js
-#: apps/plugins/administration/resources/settings/edit.js
-#: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/core/feedback/register.js
-#: apps/plugins/notifications/calendar/register.js
-#: module:plugins/notifications
-#: apps/plugins/portal/flickr/register.js
-#: module:plugins/portal
-#: apps/plugins/portal/mail/register.js
-#: apps/plugins/portal/rss/register.js
-#: apps/plugins/portal/tumblr/register.js
-#: apps/plugins/portal/twitter/util.js
-#: apps/plugins/portal/userSettings/register.js
-#: apps/plugins/portal/xing/register.js
-msgid "Cancel"
-msgstr ""
-
-#: apps/io.ox/calendar/actions/acceptdeny.js
-#: module:io.ox/calendar
 #: apps/io.ox/calendar/edit/main.js
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/month/perspective.js
@@ -728,6 +750,8 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/print-compact.js
+#: module:io.ox/calendar
 msgid "Location"
 msgstr ""
 
@@ -1613,6 +1637,37 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js
 msgid "%1$s (Tentative)"
+msgstr ""
+
+#. used as a label for the start time of an appointment, try to keep short because it's used in a compact printing view
+#: apps/io.ox/calendar/print-compact.js
+#: module:io.ox/calendar
+#: apps/io.ox/mail/vacationnotice/settings/model.js
+#: module:io.ox/mail
+#: apps/io.ox/tasks/print.js
+#: module:io.ox/tasks
+msgid "Start"
+msgstr ""
+
+#. used as a label for the end time of an appointment, try to keep short because it's used in a compact printing view
+#: apps/io.ox/calendar/print-compact.js
+#: module:io.ox/calendar
+#: apps/io.ox/mail/vacationnotice/settings/model.js
+#: module:io.ox/mail
+msgid "End"
+msgstr ""
+
+#. text of an user list that shows the names of presenting user and participants.
+#. the dropdown button label for the participants dropdown.
+#. the participants section label.
+#: apps/io.ox/calendar/print-compact.js
+#: module:io.ox/calendar
+#: apps/io.ox/participants/detail.js
+#: module:io.ox/core
+#: apps/io.ox/participants/views.js
+#: apps/io.ox/presenter/views/navigationview.js
+#: module:io.ox/presenter
+msgid "Participants"
 msgstr ""
 
 #: apps/io.ox/calendar/print.js
@@ -8172,6 +8227,11 @@ msgstr ""
 
 #: apps/io.ox/mail/inplace-reply.js
 #: module:io.ox/mail
+msgid "Your reply has been sent"
+msgstr ""
+
+#: apps/io.ox/mail/inplace-reply.js
+#: module:io.ox/mail
 msgid "Reply to all"
 msgstr ""
 
@@ -8787,11 +8847,6 @@ msgstr ""
 
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
-msgid "Compact"
-msgstr ""
-
-#: apps/io.ox/mail/toolbar.js
-#: module:io.ox/mail
 msgid "Horizontal"
 msgstr ""
 
@@ -8879,18 +8934,6 @@ msgstr ""
 #: apps/io.ox/mail/vacationnotice/settings/model.js
 #: module:io.ox/mail
 msgid "Email addresses"
-msgstr ""
-
-#: apps/io.ox/mail/vacationnotice/settings/model.js
-#: module:io.ox/mail
-#: apps/io.ox/tasks/print.js
-#: module:io.ox/tasks
-msgid "Start"
-msgstr ""
-
-#: apps/io.ox/mail/vacationnotice/settings/model.js
-#: module:io.ox/mail
-msgid "End"
 msgstr ""
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js
@@ -9094,17 +9137,6 @@ msgstr ""
 #: apps/io.ox/participants/add.js
 #: module:io.ox/core
 msgid "This email address cannot be used"
-msgstr ""
-
-#. text of an user list that shows the names of presenting user and participants.
-#. the dropdown button label for the participants dropdown.
-#. the participants section label.
-#: apps/io.ox/participants/detail.js
-#: module:io.ox/core
-#: apps/io.ox/participants/views.js
-#: apps/io.ox/presenter/views/navigationview.js
-#: module:io.ox/presenter
-msgid "Participants"
 msgstr ""
 
 #: apps/io.ox/participants/detail.js

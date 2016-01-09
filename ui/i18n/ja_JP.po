@@ -1388,7 +1388,8 @@ msgstr "予定表ビュー"
 msgid "Calendar:"
 msgstr "予定表："
 
-#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/timezone-dialog.js
@@ -1753,6 +1754,8 @@ msgstr "共通項目"
 msgid "Common Emoji"
 msgstr "他社共通絵文字"
 
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Compact"
 msgstr "コンパクト"
@@ -2337,6 +2340,13 @@ msgstr "説明がコピーされました。"
 msgid "Description text"
 msgstr "説明"
 
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Detail"
+msgid "Detailed"
+msgstr "詳細"
+
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Detailed access rights"
 msgstr "詳細アクセス権限"
@@ -2537,6 +2547,10 @@ msgstr "フォルダ \"%s\" の中身を削除しますか？"
 msgid ""
 "Do you really want to remove the extension \".%1$s\" from your filename?"
 msgstr "ファイル名から拡張子 \".%1$s\" を削除しますか？"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Do you want the appointments printed in detail or as a compact list?"
+msgstr ""
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid ""
@@ -2955,6 +2969,8 @@ msgstr "有効"
 msgid "Enable for the following addresses"
 msgstr "次のアドレスに適用"
 
+#. used as a label for the end time of an appointment, try to keep short because it's used in a compact printing view
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "End"
 msgstr "終了"
@@ -4001,6 +4017,7 @@ msgid "Internal users"
 msgstr "内部ユーザ"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
+#: apps/io.ox/backbone/extendedModel.js
 msgid "Invalid data"
 msgstr "日付が無効です。"
 
@@ -4308,6 +4325,7 @@ msgid "Listview"
 msgstr "リスト ビュー"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 msgid "Location"
 msgstr "場所"
 
@@ -5376,6 +5394,7 @@ msgstr "ポケットベル"
 #. text of an user list that shows the names of presenting user and participants.
 #. the dropdown button label for the participants dropdown.
 #. the participants section label.
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
 #: apps/io.ox/participants/views.js
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -6738,7 +6757,8 @@ msgstr "サーバ ポート"
 msgid "Server type"
 msgstr "サーバ タイプ"
 
-#: apps/io.ox/backbone/basicModel.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/backbone/basicModel.js module:io.ox/core
+#: apps/io.ox/backbone/extendedModel.js apps/io.ox/core/main.js
 msgid "Server unreachable"
 msgstr "サーバに到達できません。"
 
@@ -7135,6 +7155,8 @@ msgstr "標準フォルダ"
 msgid "Standard timezone"
 msgstr "標準タイムゾーン"
 
+#. used as a label for the start time of an appointment, try to keep short because it's used in a compact printing view
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
@@ -9074,6 +9096,12 @@ msgid ""
 "and special characters like %1$s"
 msgstr ""
 "パスワードに大文字、数字、%1$s などの特殊文字を含めるとより安全になります。"
+
+#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
+#, fuzzy
+#| msgid "A read receipt has been sent"
+msgid "Your reply has been sent"
+msgstr "開封通知が送信されました。"
 
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
@@ -11733,9 +11761,6 @@ msgstr "yyyy"
 
 #~ msgid "Detach file"
 #~ msgstr "ファイルを接続解除"
-
-#~ msgid "Detail"
-#~ msgstr "詳細"
 
 #~ msgid "Detail Information for Publication"
 #~ msgstr "公開するための詳細情報"

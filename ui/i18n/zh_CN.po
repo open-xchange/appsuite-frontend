@@ -1398,7 +1398,8 @@ msgstr "日历视图"
 msgid "Calendar:"
 msgstr "日历："
 
-#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/timezone-dialog.js
@@ -1759,6 +1760,8 @@ msgstr "共同设置"
 msgid "Common Emoji"
 msgstr "一般表情符号"
 
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Compact"
 msgstr "精简"
@@ -2340,6 +2343,13 @@ msgstr "描述已复制"
 msgid "Description text"
 msgstr "描述文本"
 
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Detail"
+msgid "Detailed"
+msgstr "详细信息"
+
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Detailed access rights"
 msgstr "详细访问权"
@@ -2542,6 +2552,10 @@ msgstr "确定要清空文件夹 \"%s\" 吗？"
 msgid ""
 "Do you really want to remove the extension \".%1$s\" from your filename?"
 msgstr "确定从您的文件名称移除  \".%1$s\" 延伸吗？"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Do you want the appointments printed in detail or as a compact list?"
+msgstr ""
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid ""
@@ -2946,6 +2960,8 @@ msgstr "启用"
 msgid "Enable for the following addresses"
 msgstr "为以下地址启用"
 
+#. used as a label for the end time of an appointment, try to keep short because it's used in a compact printing view
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "End"
 msgstr "结束"
@@ -3969,6 +3985,7 @@ msgid "Internal users"
 msgstr "内部用户"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
+#: apps/io.ox/backbone/extendedModel.js
 msgid "Invalid data"
 msgstr "无效数据"
 
@@ -4273,6 +4290,7 @@ msgid "Listview"
 msgstr "列表视图"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 msgid "Location"
 msgstr "地点"
 
@@ -5336,6 +5354,7 @@ msgstr "寻呼机"
 #. text of an user list that shows the names of presenting user and participants.
 #. the dropdown button label for the participants dropdown.
 #. the participants section label.
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
 #: apps/io.ox/participants/views.js
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -6687,7 +6706,8 @@ msgstr "服务器端口"
 msgid "Server type"
 msgstr "服务器类型"
 
-#: apps/io.ox/backbone/basicModel.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/backbone/basicModel.js module:io.ox/core
+#: apps/io.ox/backbone/extendedModel.js apps/io.ox/core/main.js
 msgid "Server unreachable"
 msgstr "服务器无法访问"
 
@@ -7088,6 +7108,8 @@ msgstr "常规文件夹"
 msgid "Standard timezone"
 msgstr "标准时区"
 
+#. used as a label for the start time of an appointment, try to keep short because it's used in a compact printing view
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
@@ -8969,6 +8991,12 @@ msgid ""
 "Your password is more secure if it also contains capital letters, numbers, "
 "and special characters like %1$s"
 msgstr "您的密码会在它包含大写、数字、和如 %1$s 特殊字符时更为安全。"
+
+#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
+#, fuzzy
+#| msgid "A read receipt has been sent"
+msgid "Your reply has been sent"
+msgstr "已发送一个送达回执"
 
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
@@ -10852,9 +10880,6 @@ msgstr "年"
 
 #~ msgid "Detach file"
 #~ msgstr "分离文件"
-
-#~ msgid "Detail"
-#~ msgstr "详细信息"
 
 #~ msgid "Detail Information for Publication"
 #~ msgstr "发布的详细信息"

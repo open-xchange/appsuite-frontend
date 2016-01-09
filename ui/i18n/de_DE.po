@@ -1408,7 +1408,8 @@ msgstr "Kalenderansicht"
 msgid "Calendar:"
 msgstr "Kalender:"
 
-#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/timezone-dialog.js
@@ -1775,6 +1776,8 @@ msgstr "Allgemein"
 msgid "Common Emoji"
 msgstr "Allgemeine Emoji-Symbole"
 
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Compact"
 msgstr "Kompakt"
@@ -2359,6 +2362,13 @@ msgstr "Die Beschreibung wurde kopiert"
 msgid "Description text"
 msgstr "Beschreibungstext"
 
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Detail"
+msgid "Detailed"
+msgstr "Detail"
+
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Detailed access rights"
 msgstr "Detaillierte Zugriffsrechte"
@@ -2566,6 +2576,10 @@ msgid ""
 msgstr ""
 "Wollen Sie die Namenserweiterung \".%1$s\" wirklich aus dem Dateinamen "
 "entfernen?"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Do you want the appointments printed in detail or as a compact list?"
+msgstr ""
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid ""
@@ -2979,6 +2993,8 @@ msgstr "Aktivieren"
 msgid "Enable for the following addresses"
 msgstr "Für folgende Adressen aktivieren"
 
+#. used as a label for the end time of an appointment, try to keep short because it's used in a compact printing view
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "End"
 msgstr "Ende"
@@ -4026,6 +4042,7 @@ msgid "Internal users"
 msgstr "Interne Benutzer"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
+#: apps/io.ox/backbone/extendedModel.js
 msgid "Invalid data"
 msgstr "Ungültige Daten"
 
@@ -4334,6 +4351,7 @@ msgid "Listview"
 msgstr "Listenansicht"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 msgid "Location"
 msgstr "Ort"
 
@@ -5403,6 +5421,7 @@ msgstr "Pager"
 #. text of an user list that shows the names of presenting user and participants.
 #. the dropdown button label for the participants dropdown.
 #. the participants section label.
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
 #: apps/io.ox/participants/views.js
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -6778,7 +6797,8 @@ msgstr "Server-Port"
 msgid "Server type"
 msgstr "Server-Typ"
 
-#: apps/io.ox/backbone/basicModel.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/backbone/basicModel.js module:io.ox/core
+#: apps/io.ox/backbone/extendedModel.js apps/io.ox/core/main.js
 msgid "Server unreachable"
 msgstr "Der Server ist nicht erreichbar"
 
@@ -7169,6 +7189,8 @@ msgstr "Standardordner"
 msgid "Standard timezone"
 msgstr "Standard-Zeitzone"
 
+#. used as a label for the start time of an appointment, try to keep short because it's used in a compact printing view
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
@@ -9143,6 +9165,12 @@ msgstr ""
 "Ihr Passwort ist sicherer, wenn es auch Großbuchstaben, Zahlen und "
 "Sonderzeichen wie %1$s enthält."
 
+#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
+#, fuzzy
+#| msgid "A read receipt has been sent"
+msgid "Your reply has been sent"
+msgstr "Lesebestätigung wurde gesendet"
+
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
@@ -10510,9 +10538,6 @@ msgstr "JJJJ"
 
 #~ msgid "Demote one level"
 #~ msgstr "Eine Ebene nach unten verschieben"
-
-#~ msgid "Detail"
-#~ msgstr "Detail"
 
 #~ msgid ""
 #~ "Detailed guides for all modules are located in the help section of the "

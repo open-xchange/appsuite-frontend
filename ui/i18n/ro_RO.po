@@ -1441,7 +1441,8 @@ msgstr "Vedere calendar"
 msgid "Calendar:"
 msgstr "Calendar:"
 
-#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/timezone-dialog.js
@@ -1809,6 +1810,8 @@ msgstr "Comun"
 msgid "Common Emoji"
 msgstr "Emoji obișnuit"
 
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Compact"
 msgstr "Compact"
@@ -2395,6 +2398,13 @@ msgstr "Descrierea a fost copiată"
 msgid "Description text"
 msgstr "Text descriere"
 
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Detail"
+msgid "Detailed"
+msgstr "Detalii"
+
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Detailed access rights"
 msgstr "Drepturi de acces în detaliu"
@@ -2602,6 +2612,10 @@ msgstr "Sigur doriți să goliți dosarul \"%s\"?"
 msgid ""
 "Do you really want to remove the extension \".%1$s\" from your filename?"
 msgstr "Sigur doriți să eliminați extensia \".%1$s\" din numele fișierului?"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Do you want the appointments printed in detail or as a compact list?"
+msgstr ""
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid ""
@@ -3013,6 +3027,8 @@ msgstr "Activează"
 msgid "Enable for the following addresses"
 msgstr "Activat pentru următoarele adrese"
 
+#. used as a label for the end time of an appointment, try to keep short because it's used in a compact printing view
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "End"
 msgstr "Sfârșit"
@@ -4061,6 +4077,7 @@ msgid "Internal users"
 msgstr "Utilizatori interni"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
+#: apps/io.ox/backbone/extendedModel.js
 msgid "Invalid data"
 msgstr "Date incorecte"
 
@@ -4369,6 +4386,7 @@ msgid "Listview"
 msgstr "Vedere pe liste"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 msgid "Location"
 msgstr "Loc"
 
@@ -5441,6 +5459,7 @@ msgstr "Pager"
 #. text of an user list that shows the names of presenting user and participants.
 #. the dropdown button label for the participants dropdown.
 #. the participants section label.
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
 #: apps/io.ox/participants/views.js
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -6820,7 +6839,8 @@ msgstr "Port server"
 msgid "Server type"
 msgstr "Tip server"
 
-#: apps/io.ox/backbone/basicModel.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/backbone/basicModel.js module:io.ox/core
+#: apps/io.ox/backbone/extendedModel.js apps/io.ox/core/main.js
 msgid "Server unreachable"
 msgstr "Server inaccesibil"
 
@@ -7225,6 +7245,8 @@ msgstr "Dosare standard"
 msgid "Standard timezone"
 msgstr "Fus orar standard"
 
+#. used as a label for the start time of an appointment, try to keep short because it's used in a compact printing view
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
@@ -9206,6 +9228,12 @@ msgid ""
 msgstr ""
 "Parola dumneavoastră este mai sigură dacă include și majuscule, cifre și "
 "caractere speciale precum %1$s"
+
+#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
+#, fuzzy
+#| msgid "A read receipt has been sent"
+msgid "Your reply has been sent"
+msgstr "A fost trimisă o confirmare de citire"
 
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
@@ -11194,9 +11222,6 @@ msgstr "aaaa"
 
 #~ msgid "Detach file"
 #~ msgstr "Detașează fișierul"
-
-#~ msgid "Detail"
-#~ msgstr "Detalii"
 
 #~ msgid "Detail Information for Publication"
 #~ msgstr "Informații detaliate pentru publicație"

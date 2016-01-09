@@ -1535,7 +1535,8 @@ msgstr "Vista de calendari"
 msgid "Calendar:"
 msgstr "Calendari"
 
-#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/timezone-dialog.js
@@ -1921,6 +1922,8 @@ msgstr "Comú"
 msgid "Common Emoji"
 msgstr "Emojis comuns"
 
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Compact"
 msgstr "Compacta"
@@ -2551,6 +2554,13 @@ msgstr "La descripció ha estat copiada"
 msgid "Description text"
 msgstr "Descripció"
 
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Details"
+msgid "Detailed"
+msgstr "Detalls"
+
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Detailed access rights"
 msgstr ""
@@ -2762,6 +2772,10 @@ msgstr "Realment voleu buidar la carpeta \"%s\"?"
 msgid ""
 "Do you really want to remove the extension \".%1$s\" from your filename?"
 msgstr "Realment voleu eliminar l'extensió \".%1$s\" del nom del fitxer?"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Do you want the appointments printed in detail or as a compact list?"
+msgstr ""
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid ""
@@ -3201,6 +3215,8 @@ msgstr "Activa"
 msgid "Enable for the following addresses"
 msgstr "Activat per a les següents adreces"
 
+#. used as a label for the end time of an appointment, try to keep short because it's used in a compact printing view
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "End"
 msgstr "Fi"
@@ -4326,6 +4342,7 @@ msgid "Internal users"
 msgstr "Participants externs"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
+#: apps/io.ox/backbone/extendedModel.js
 msgid "Invalid data"
 msgstr "Dades no vàlides"
 
@@ -4665,6 +4682,7 @@ msgid "Listview"
 msgstr "Vista de llista"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 msgid "Location"
 msgstr "Ubicació"
 
@@ -5791,6 +5809,7 @@ msgstr "Cercapersones"
 #. text of an user list that shows the names of presenting user and participants.
 #. the dropdown button label for the participants dropdown.
 #. the participants section label.
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
 #: apps/io.ox/participants/views.js
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -7248,7 +7267,8 @@ msgstr "Port del servidor"
 msgid "Server type"
 msgstr "Tipus de servidor"
 
-#: apps/io.ox/backbone/basicModel.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/backbone/basicModel.js module:io.ox/core
+#: apps/io.ox/backbone/extendedModel.js apps/io.ox/core/main.js
 msgid "Server unreachable"
 msgstr "Servidor no disponible"
 
@@ -7693,6 +7713,8 @@ msgstr "Carpetes estàndard"
 msgid "Standard timezone"
 msgstr "Carpetes estàndard"
 
+#. used as a label for the start time of an appointment, try to keep short because it's used in a compact printing view
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
@@ -9792,6 +9814,12 @@ msgstr ""
 "La vostra contrasenya és més segura si contén majúscules, xifres i caràcters "
 "especials com %1$s"
 
+#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
+#, fuzzy
+#| msgid "A read receipt has been sent"
+msgid "Your reply has been sent"
+msgstr "N'heu enviat una confirmació de lectura"
+
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 #, fuzzy
@@ -10613,11 +10641,6 @@ msgstr ""
 
 #~ msgid "Create new task"
 #~ msgstr "Crea una nova tasca"
-
-#, fuzzy
-#~| msgid "Details"
-#~ msgid "Detail"
-#~ msgstr "Detalls"
 
 #, fuzzy
 #~| msgid "Mail"

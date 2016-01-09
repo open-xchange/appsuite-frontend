@@ -1436,7 +1436,8 @@ msgstr "Kalendář"
 msgid "Calendar:"
 msgstr "Kalendář:"
 
-#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/timezone-dialog.js
@@ -1803,6 +1804,8 @@ msgstr "Obecné"
 msgid "Common Emoji"
 msgstr "Běžné Emoji"
 
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Compact"
 msgstr "Kompaktní"
@@ -2387,6 +2390,13 @@ msgstr "Popis byl zkopírován"
 msgid "Description text"
 msgstr "Popis"
 
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Detail"
+msgid "Detailed"
+msgstr "Detail"
+
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Detailed access rights"
 msgstr "Podrobná přístupová práva"
@@ -2591,6 +2601,10 @@ msgstr "Opravdu chcete vyprázdnit složku „%s“?"
 msgid ""
 "Do you really want to remove the extension \".%1$s\" from your filename?"
 msgstr "Opravdu chcete z názvu souboru odstranit příponu „.%1$s“?"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Do you want the appointments printed in detail or as a compact list?"
+msgstr ""
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid ""
@@ -2997,6 +3011,8 @@ msgstr "Povolit"
 msgid "Enable for the following addresses"
 msgstr "Povoleno pro následující adresy"
 
+#. used as a label for the end time of an appointment, try to keep short because it's used in a compact printing view
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "End"
 msgstr "Konec"
@@ -4043,6 +4059,7 @@ msgid "Internal users"
 msgstr "Interní uživatelé"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
+#: apps/io.ox/backbone/extendedModel.js
 msgid "Invalid data"
 msgstr "Neplatná data"
 
@@ -4349,6 +4366,7 @@ msgid "Listview"
 msgstr "Seznam"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 msgid "Location"
 msgstr "Místo"
 
@@ -5422,6 +5440,7 @@ msgstr "Pager"
 #. text of an user list that shows the names of presenting user and participants.
 #. the dropdown button label for the participants dropdown.
 #. the participants section label.
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
 #: apps/io.ox/participants/views.js
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -6794,7 +6813,8 @@ msgstr "Port serveru"
 msgid "Server type"
 msgstr "Druh serveru"
 
-#: apps/io.ox/backbone/basicModel.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/backbone/basicModel.js module:io.ox/core
+#: apps/io.ox/backbone/extendedModel.js apps/io.ox/core/main.js
 msgid "Server unreachable"
 msgstr "Server je nedostupný"
 
@@ -7199,6 +7219,8 @@ msgstr "Standardní složky"
 msgid "Standard timezone"
 msgstr "Standardní časová pásma"
 
+#. used as a label for the start time of an appointment, try to keep short because it's used in a compact printing view
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
@@ -9159,6 +9181,12 @@ msgid ""
 msgstr ""
 "Vaše heslo bude bezpečnější, když bude obsahovat také velká písmena, čísla a "
 "speciální znaky jako %1$s"
+
+#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
+#, fuzzy
+#| msgid "A read receipt has been sent"
+msgid "Your reply has been sent"
+msgstr "Bylo odesláno potvrzení o doručení"
 
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
@@ -12739,9 +12767,6 @@ msgstr "rrrr"
 
 #~ msgid "Detach file"
 #~ msgstr "Odebrat soubor"
-
-#~ msgid "Detail"
-#~ msgstr "Detail"
 
 #~ msgid "Detail Information for Publication"
 #~ msgstr "Podrobné informace o publikaci"

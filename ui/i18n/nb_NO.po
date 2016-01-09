@@ -1398,7 +1398,8 @@ msgstr "Kalendervisning"
 msgid "Calendar:"
 msgstr "Kalender:"
 
-#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/timezone-dialog.js
@@ -1761,6 +1762,8 @@ msgstr "Felles"
 msgid "Common Emoji"
 msgstr "Felles Emoji"
 
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Compact"
 msgstr "Kompakt"
@@ -2345,6 +2348,13 @@ msgstr "Beskrivelse har blitt kopiert"
 msgid "Description text"
 msgstr "Beskrivelsestekst"
 
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Details"
+msgid "Detailed"
+msgstr "Detaljer"
+
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Detailed access rights"
 msgstr "Detaljerte tilgangsrettigheter"
@@ -2544,6 +2554,10 @@ msgstr "Ønsker du virkelig å tømme mappen \"%s\"?"
 msgid ""
 "Do you really want to remove the extension \".%1$s\" from your filename?"
 msgstr "Ønsker du virkelig å fjerne utvidelsen \".%1$s\" fra filnavnet?"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Do you want the appointments printed in detail or as a compact list?"
+msgstr ""
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid ""
@@ -2947,6 +2961,8 @@ msgstr "Aktiver"
 msgid "Enable for the following addresses"
 msgstr "Aktiver for følgende adresser"
 
+#. used as a label for the end time of an appointment, try to keep short because it's used in a compact printing view
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "End"
 msgstr "Slutt"
@@ -3991,6 +4007,7 @@ msgid "Internal users"
 msgstr "Interne brukere"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
+#: apps/io.ox/backbone/extendedModel.js
 msgid "Invalid data"
 msgstr "Ugyldig data"
 
@@ -4297,6 +4314,7 @@ msgid "Listview"
 msgstr "Listevisning"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 msgid "Location"
 msgstr "Beliggenhet"
 
@@ -5358,6 +5376,7 @@ msgstr "Personsøker"
 #. text of an user list that shows the names of presenting user and participants.
 #. the dropdown button label for the participants dropdown.
 #. the participants section label.
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
 #: apps/io.ox/participants/views.js
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -6721,7 +6740,8 @@ msgstr "Serverport"
 msgid "Server type"
 msgstr "Servertype"
 
-#: apps/io.ox/backbone/basicModel.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/backbone/basicModel.js module:io.ox/core
+#: apps/io.ox/backbone/extendedModel.js apps/io.ox/core/main.js
 msgid "Server unreachable"
 msgstr "Systemet er utilgjengelig"
 
@@ -7112,6 +7132,8 @@ msgstr "Standardmapper"
 msgid "Standard timezone"
 msgstr "Standard tidssone"
 
+#. used as a label for the start time of an appointment, try to keep short because it's used in a compact printing view
+#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
@@ -9058,6 +9080,12 @@ msgstr ""
 "Passordet ditt er sikrere hvis det også inneholder store bokstaver, tall og "
 "spesialtegn som %1$s"
 
+#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
+#, fuzzy
+#| msgid "A read receipt has been sent"
+msgid "Your reply has been sent"
+msgstr "En lesebekreftelse har blitt sendt"
+
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
@@ -9733,11 +9761,6 @@ msgstr "yyyy"
 #~ "shared folder"
 #~ msgstr ""
 #~ "Lagde privat mappe '%1$s' i %2$s og opprettet abonnement på delt mappe"
-
-#, fuzzy
-#~| msgid "Details"
-#~ msgid "Detail"
-#~ msgstr "Detaljer"
 
 #, fuzzy
 #~| msgid "Mail"
