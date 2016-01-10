@@ -38,6 +38,18 @@ define('io.ox/mail/inplace-reply', [
         }
     }
 
+    function getProperDisplayName(from) {
+        var name = from[0], address = from[1];
+        if (!settings.get('sendDisplayName', true)) {
+            // no display name at all
+            name = null;
+        } else if (settings.get(['customDisplayNames', address, 'overwrite'])) {
+            // custom display name
+            name = settings.get(['customDisplayNames', address, 'name'], '');
+        }
+        return [name, address];
+    }
+
     var InplaceReplyView = DisposableView.extend({
 
         className: 'inplace-reply',
@@ -50,7 +62,7 @@ define('io.ox/mail/inplace-reply', [
 
         onSend: function () {
             // get reply
-            this.busy(true);
+            this.busy(true).setProgress(30);
             // alternativ also asks for HTML
             var view = getFormat() === 'text' ? 'text' : 'html';
             api.replyall(_.cid(this.cid), view)
@@ -59,37 +71,39 @@ define('io.ox/mail/inplace-reply', [
         },
 
         onReplyReady: function (content, data) {
-            // add content
+            // progress
+            this.setProgress(70);
+            // escape plain text content since we always send HTML
             content = _.escape(content).replace(/\n/g, '<br>');
-            // append quoted message
+            // append quoted content of original message
             content += '<br>' + data.attachments[0].content;
             // pick other stuff we need
             data = _(data).pick('from', 'to', 'cc', 'bcc', 'headers', 'priority', 'vcard', 'subject', 'sendtype', 'csid', 'msgref');
-            // add content
+            data.from[0] = getProperDisplayName(data.from[0]);
             data.attachments = [{ id: 1, content_type: getContentType(), content: content }];
-            // send
+            // go!
             api.send(data)
                 .done(this.onSendComplete.bind(this))
                 .fail(this.onSendFail.bind(this));
         },
 
         onSendComplete: function () {
+            this.setProgress(100);
             delete drafts[this.cid];
-            this.$el.empty().append(
-                $('<div class="alert alert-success" role="alert">').text(gt('Your reply has been sent'))
-            );
             setTimeout(function ($el) {
-                $el.fadeOut();
-            }, 5000, this.$el);
+                $el.empty().append(
+                    $('<div class="alert alert-success" role="alert">').text(gt('Your reply has been sent'))
+                );
+                setTimeout(function () {
+                    $el.fadeOut();
+                    $el = null;
+                }, 5000);
+            }, 1000, this.$el);
         },
 
         onSendFail: function (e) {
             yell(e);
             this.busy(false);
-        },
-
-        busy: function (state) {
-            this.$('.btn, textarea').prop('disabled', state).toggleClass('disabled', state);
         },
 
         onCancel: function () {
@@ -101,6 +115,18 @@ define('io.ox/mail/inplace-reply', [
             var content = $.trim(this.getContent());
             drafts[this.cid] = content;
             this.updateSendButton(content);
+        },
+
+        busy: function (state) {
+            this.$textarea.prop('disabled', state).toggleClass('disabled', state);
+            this.$('.form-group').toggle(!state);
+            return this;
+        },
+
+        setProgress: function (pct) {
+            this.$('.progress').toggle(pct > 0);
+            this.$('.progress-bar').width(pct + '%').attr('aria-valuenow', pct);
+            return this;
         },
 
         updateSendButton: function (content) {
@@ -133,9 +159,15 @@ define('io.ox/mail/inplace-reply', [
         render: function () {
 
             this.$el.append(
+                // editor
                 this.$textarea
                     // keep keyboard stuff local to avoid side-effects
                     .on('keydown keyup', function (e) { e.stopPropagation(); }),
+                // progress bar (while sending)
+                $('<div class="progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">')
+                    .append($('<div class="progress-bar progress-bar-striped active" style="width: 0%">'))
+                    .hide(),
+                // buttons
                 $('<div class="form-group">').append(
                     this.$send = $('<button class="btn btn-primary btn-sm disabled" data-action="send" tabindex="1">')
                         .prop('disabled', true)
@@ -152,7 +184,7 @@ define('io.ox/mail/inplace-reply', [
             this.$textarea.on('input', function () {
                 this.style.height = 'auto';
                 var scrh = this.scrollHeight, h = 0;
-                if (scrh <= 101) h = 101; else if (scrh >= 399) h = 399; else h = scrh + 6;
+                if (scrh <= 105) h = 105; else if (scrh >= 399) h = 399; else h = scrh + 6;
                 this.style.height = h + 'px';
             });
 
