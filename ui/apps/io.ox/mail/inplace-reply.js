@@ -90,15 +90,14 @@ define('io.ox/mail/inplace-reply', [
         onSendComplete: function () {
             this.setProgress(100);
             delete drafts[this.cid];
-            setTimeout(function ($el) {
-                $el.empty().append(
-                    $('<div class="alert alert-success" role="alert">').text(gt('Your reply has been sent'))
-                );
+            var view = this, $el = this.$el;
+            setTimeout(function () {
+                view.renderSuccess();
                 setTimeout(function () {
                     $el.fadeOut();
-                    $el = null;
+                    $el = view = null;
                 }, 5000);
-            }, 1000, this.$el);
+            }, 1000);
         },
 
         onSendFail: function (e) {
@@ -118,12 +117,14 @@ define('io.ox/mail/inplace-reply', [
         },
 
         busy: function (state) {
+            if (this.disposed) return this;
             this.$textarea.prop('disabled', state).toggleClass('disabled', state);
             this.$('.form-group').toggle(!state);
             return this;
         },
 
         setProgress: function (pct) {
+            if (this.disposed) return this;
             this.$('.progress').toggle(pct > 0);
             this.$('.progress-bar').width(pct + '%').attr('aria-valuenow', pct);
             return this;
@@ -192,6 +193,16 @@ define('io.ox/mail/inplace-reply', [
             setTimeout(function (node) { node.focus(); }, 0, this.$textarea);
 
             return this;
+        },
+
+        renderSuccess: function () {
+            this.$el.empty().append(
+                $('<div class="alert alert-success" role="alert">').append(
+                    $('<i class="fa fa-check" aria-hidden="true">'),
+                    $.txt(' '),
+                    $.txt(gt('Your reply has been sent'))
+                )
+            );
         }
     });
 
