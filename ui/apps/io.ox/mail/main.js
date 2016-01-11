@@ -375,6 +375,15 @@ define('io.ox/mail/main', [
             app.listView.toggleCheckboxes(false);
         },
 
+        'list-view-message-empty': function (app) {
+            // enable 'empty' message
+            app.listView.messageEmpty
+                //.removeClass('hidden')
+                .find('.message-empty')
+                // customize message
+                .text(gt('Empty'));
+        },
+
         /*
          * Scroll-o-mat
          * Scroll to top if new unseen messages arrive
