@@ -52,6 +52,9 @@ define('io.ox/core/tk/list', [
 
         busyIndicator: $('<li class="busy-indicator"><i class="fa fa-chevron-down"/></li>'),
 
+        // disabled by default via 'hidden class'
+        messageEmpty: $('<li class="message-empty-container hidden"><div class="message-empty"></div></li>'),
+
         pullToRefreshIndicator: $(
             '<div class="pull-to-refresh" style="transform: translate3d(0, -70px,0)">' +
             '<div class="spinner slight-drop-shadow" style="opacity: 1">' +
@@ -656,6 +659,7 @@ define('io.ox/core/tk/list', [
                 });
             }
             this.$el.attr('data-ref', this.ref);
+            this.addMessageEmpty();
             // fix evil CSS transition issue with phantomJS
             if (_.device('phantomjs')) this.$el.addClass('no-transition');
             return this;
@@ -699,6 +703,10 @@ define('io.ox/core/tk/list', [
 
         getBusyIndicator: function () {
             return this.$el.find('.busy-indicator');
+        },
+
+        addMessageEmpty: function () {
+            this.messageEmpty.clone().appendTo(this.$el);
         },
 
         addBusyIndicator: function () {

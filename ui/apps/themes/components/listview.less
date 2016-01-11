@@ -93,7 +93,9 @@
 
     &:not(.upside-down) {
         &.toolbar-top-visible .list-view { top: @height-default; }
+        &.toolbar-top-visible .list-view>.message-empty-container  { padding-bottom: @height-default; }
         &.toolbar-bottom-visible .list-view { bottom: @height-small; }
+        &.toolbar-bottom-visible .list-view>.message-empty-container { padding-top: @height-small; }
     }
 
     &.upside-down {
@@ -178,6 +180,23 @@
             top: 12px;
             font-size: 18px;
             &:before { content: "\f096"; } // fa-square-o
+        }
+    }
+
+    .message-empty-container {
+        display: none;
+        &:only-child {
+            display: table;
+            height: 100%;
+            width: 100%;
+            .message-empty {
+                color: #777;
+                font-weight: 300;
+                font-size: 16px;
+                display: table-cell;
+                text-align: center;
+                vertical-align: middle;
+            }
         }
     }
 
