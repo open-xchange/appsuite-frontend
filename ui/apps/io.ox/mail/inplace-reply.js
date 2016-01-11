@@ -14,10 +14,11 @@
 define('io.ox/mail/inplace-reply', [
     'io.ox/backbone/disposable',
     'io.ox/mail/api',
+    'io.ox/core/api/account',
     'io.ox/core/yell',
     'gettext!io.ox/mail',
     'settings!io.ox/mail'
-], function (DisposableView, api, yell, gt, settings) {
+], function (DisposableView, api, accountAPI, yell, gt, settings) {
 
     'use strict';
 
@@ -39,15 +40,26 @@ define('io.ox/mail/inplace-reply', [
     }
 
     function getProperDisplayName(from) {
-        var name = from[0], address = from[1];
-        if (!settings.get('sendDisplayName', true)) {
-            // no display name at all
-            name = null;
-        } else if (settings.get(['customDisplayNames', address, 'overwrite'])) {
-            // custom display name
-            name = settings.get(['customDisplayNames', address, 'name'], '');
-        }
-        return [name, address];
+        return accountAPI.getSenderAddresses().then(function (addresses) {
+            var name, address = from[1];
+            // drop display name?
+            if (!settings.get('sendDisplayName', true)) {
+                // no display name at all
+                name = null;
+            } else if (settings.get(['customDisplayNames', address, 'overwrite'])) {
+                // custom display name
+                name = settings.get(['customDisplayNames', address, 'name'], '');
+            } else {
+                // look for matching sender address
+                name = (_(addresses).find(function (item) { return item[1] === address; }) || from)[0];
+            }
+            return [name, address];
+        });
+    }
+
+    function transformID(sent) {
+        var matches = /^(.+)\D(\d+)$/.exec(sent);
+        return _.cid({ folder_id: matches[1], id: matches[2] });
     }
 
     var InplaceReplyView = DisposableView.extend({
@@ -57,7 +69,9 @@ define('io.ox/mail/inplace-reply', [
         events: {
             'input .inplace-editor': 'onChange',
             'click [data-action="send"]': 'onSend',
-            'click [data-action="cancel"]': 'onCancel'
+            'click [data-action="cancel"]': 'onCancel',
+            'keydown': 'onKeyUpDown',
+            'keyup': 'onKeyUpDown'
         },
 
         onSend: function () {
@@ -79,16 +93,19 @@ define('io.ox/mail/inplace-reply', [
             content += '<br>' + data.attachments[0].content;
             // pick other stuff we need
             data = _(data).pick('from', 'to', 'cc', 'bcc', 'headers', 'priority', 'vcard', 'subject', 'sendtype', 'csid', 'msgref');
-            data.from[0] = getProperDisplayName(data.from[0]);
             data.attachments = [{ id: 1, content_type: getContentType(), content: content }];
-            // go!
-            api.send(data)
-                .done(this.onSendComplete.bind(this))
-                .fail(this.onSendFail.bind(this));
+            getProperDisplayName(data.from[0]).done(function (from) {
+                data.from[0] = from;
+                // go!
+                api.send(data)
+                    .done(this.onSendComplete.bind(this))
+                    .fail(this.onSendFail.bind(this));
+            }.bind(this));
         },
 
-        onSendComplete: function () {
+        onSendComplete: function (response) {
             this.setProgress(100);
+            this.trigger('send', transformID(response.data));
             delete drafts[this.cid];
             var view = this, $el = this.$el;
             setTimeout(function () {
@@ -96,7 +113,7 @@ define('io.ox/mail/inplace-reply', [
                 setTimeout(function () {
                     $el.fadeOut();
                     $el = view = null;
-                }, 5000);
+                }, 4000);
             }, 1000);
         },
 
@@ -116,10 +133,16 @@ define('io.ox/mail/inplace-reply', [
             this.updateSendButton(content);
         },
 
+        onKeyUpDown: function (e) {
+            // keep keyboard stuff local to avoid side-effects
+            e.stopPropagation();
+            // respond to <esc> if empty
+            if (e.which === 27 && $.trim(this.getContent()) === '') this.onCancel();
+        },
+
         busy: function (state) {
             if (this.disposed) return this;
-            this.$textarea.prop('disabled', state).toggleClass('disabled', state);
-            this.$('.form-group').toggle(!state);
+            this.$('textarea, .form-group').toggle(!state);
             return this;
         },
 
@@ -161,9 +184,7 @@ define('io.ox/mail/inplace-reply', [
 
             this.$el.append(
                 // editor
-                this.$textarea
-                    // keep keyboard stuff local to avoid side-effects
-                    .on('keydown keyup', function (e) { e.stopPropagation(); }),
+                this.$textarea,
                 // progress bar (while sending)
                 $('<div class="progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">')
                     .append($('<div class="progress-bar progress-bar-striped active" style="width: 0%">'))

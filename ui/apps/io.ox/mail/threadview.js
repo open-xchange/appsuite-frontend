@@ -98,27 +98,6 @@ define('io.ox/mail/threadview', [
         }
     });
 
-    function onQuickReply(e) {
-        e.preventDefault();
-        openInplaceReply.call(this, e.data.cid);
-    }
-
-    function openInplaceReply(cid) {
-        var section = $(this).closest('h1');
-        section.find('.open-inplace-reply').hide();
-        require(['io.ox/mail/inplace-reply'], function (InplaceReplyView) {
-            section.find('.caption').after(
-                new InplaceReplyView({ cid: cid })
-                .on('dispose', function () {
-                    section.find('.open-inplace-reply').show().focus();
-                    section = null;
-                })
-                .render()
-                .$el
-            );
-        });
-    }
-
     ext.point('io.ox/mail/thread-view/header').extend({
         id: 'summary',
         index: 300,
@@ -127,23 +106,61 @@ define('io.ox/mail/threadview', [
             var length = baton.view.collection.length;
             if (!length) return;
 
-            var cid = baton.view.collection.at(0).cid;
-
             this.append(
                 $('<div class="caption">').append(
                     $('<span class="summary">')
                         .text(gt('%1$d messages in this conversation', length))
-                        .toggle(length > 1),
-                    // quick reply
-                    $('<a href="#" role="button" tabindex="1" class="open-inplace-reply">').append(
-                        $.txt(gt('Quick reply'))
-                    )
-                    .on('click', { cid: cid }, onQuickReply)
+                        .toggle(length > 1)
                 )
             );
+        }
+    });
+
+    // Inplace/quick reply
+
+    function onQuickReply(e) {
+        e.preventDefault();
+        openInplaceReply.call(this, e.data.cid);
+    }
+
+    function openInplaceReply(cid) {
+        var view = $(this).closest('.thread-view-control');
+        view.find('.open-inplace-reply').hide();
+        require(['io.ox/mail/inplace-reply'], function (InplaceReplyView) {
+            view.find('article[data-cid="' + cid + '"] section.body').before(
+                new InplaceReplyView({ tagName: 'section', cid: cid })
+                .on('send', function (cid) {
+                    view.data('open', cid);
+                })
+                .on('dispose', function () {
+                    view.find('.open-inplace-reply').show().focus();
+                    view = null;
+                })
+                .render()
+                .$el
+            );
+        });
+    }
+
+    ext.point('io.ox/mail/thread-view/header').extend({
+        id: 'inplace-reply',
+        index: 400,
+        draw: function (baton) {
 
             // quick reply support (desktop only)
             if (!_.device('desktop')) return;
+
+            var length = baton.view.collection.length;
+            if (!length) return;
+            var cid = baton.view.collection.at(0).cid;
+
+            this.find('.caption').append(
+                // quick reply
+                $('<a href="#" role="button" tabindex="1" class="open-inplace-reply">').append(
+                    $.txt(gt('Quick reply'))
+                )
+                .on('click', { cid: cid }, onQuickReply)
+            );
 
             require(['io.ox/mail/inplace-reply'], function (InplaceReplyView) {
                 if (InplaceReplyView.hasDraft(cid)) openInplaceReply.call(this, cid);
@@ -307,7 +324,8 @@ define('io.ox/mail/threadview', [
 
             var index = model.get('index'),
                 children = this.getItems(),
-                li = this.renderListItem(model);
+                li = this.renderListItem(model),
+                open = this.$el.data('open');
 
             // insert or append
             if (index < children.length) children.eq(index).before(li); else this.$messages.append(li);
@@ -318,6 +336,11 @@ define('io.ox/mail/threadview', [
 
             this.zIndex();
             this.updateHeader();
+
+            if (open) {
+                this.toggleMail(open);
+                this.$el.data('open', null);
+            }
         },
 
         onRemove: function (model) {
