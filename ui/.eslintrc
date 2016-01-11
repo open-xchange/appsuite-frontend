@@ -19,6 +19,7 @@
 
     'globals': {
         _: true,
+        _paq: true,
         requirejs: true,
         Backbone: true,
         ox: true,
