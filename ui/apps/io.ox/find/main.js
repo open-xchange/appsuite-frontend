@@ -30,6 +30,23 @@ define('io.ox/find/main', [
             ];
             //toString
             return _.compact(parts).join(':');
+        },
+        // helper object to manage listviews 'empty' message
+        messageEmpty = {
+            original: $(),
+            set: function (parent) {
+                var original = parent.listView.$el.find('.message-empty-container');
+                messageEmpty.original = original.clone();
+                // ensure that node is visible
+                original.removeClass('hidden')
+                    // custom message
+                    .find('.message-empty')
+                    .text(gt('No matching items found.'));
+            },
+            restore: function (parent) {
+                // force to use default 'empty' message again (listView.messageEmpty)
+                parent.listView.$el.find('.message-empty-container').replaceWith(messageEmpty.original);
+            }
         };
 
     // multi instance pattern
@@ -174,7 +191,7 @@ define('io.ox/find/main', [
                     if (state !== 'launched') return;
                     // check for listview
                     var parent = app.get('parent');
-                    if (!app.get('parent').listView) return;
+                    if (!parent.listView) return;
 
                     require(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
                         var manager = app.view.model.manager,
@@ -246,6 +263,8 @@ define('io.ox/find/main', [
                             parent.listControl.$el.find('.grid-options:first').hide();
                             parent.listView.connect(collectionLoader);
                             mode = 'search';
+                            // activate/adjust 'empty' message
+                            messageEmpty.set(parent);
                             // wrap setCollection
                             parent.listView.setCollection = function (collection) {
                                 view.stopListening();
@@ -260,6 +279,8 @@ define('io.ox/find/main', [
                                 if (mode === 'search') {
                                     // show sort options
                                     parent.listControl.$el.find('.grid-options:first').show();
+                                    // restore old 'empty' message
+                                    messageEmpty.restore(parent);
                                     // reset collection loader
                                     parent.listView.connect(defaultLoader);
                                     parent.listView.load();
