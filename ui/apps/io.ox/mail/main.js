@@ -1377,6 +1377,21 @@ define('io.ox/mail/main', [
             });
         },
 
+        'auto-expunge': function (app) {
+
+            if (!settings.get('features/autoExpunge', false)) return;
+
+            function isDeleted(model) {
+                return (model.get('flags') & 2) === 2;
+            }
+
+            app.listView.on('collection:load collection:paginate collection:reload', function () {
+                // any deleted message?
+                var any = this.collection.any(isDeleted);
+                if (any) api.expunge(app.folder.get());
+            });
+        },
+
         /*
          * change to default folder on no permission or folder not found errors
          */
