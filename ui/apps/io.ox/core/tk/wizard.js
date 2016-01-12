@@ -297,6 +297,7 @@ define('io.ox/core/tk/wizard', [
         onAction: function (e) {
             e.preventDefault();
             var action = $(e.currentTarget).attr('data-action');
+            e.stopImmediatePropagation();
             this.trigger(action);
         },
 
