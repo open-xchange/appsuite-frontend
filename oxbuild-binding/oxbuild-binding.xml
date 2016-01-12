@@ -25,11 +25,29 @@
     
     <property name    ="env.WORKSPACE_HOME" location="${workspace-root}/.." />
     <basename property="env.WORKSPACE"      file    ="${workspace-root}"    />
-   
-    <echo message="### DBG : WORKSPACE_HOME : ${env.WORKSPACE_HOME}" level="debug" />
-    <echo message="### DBG : WORKSPACE      : ${env.WORKSPACE}"      level="debug" />
 
-    <property name="oxbuild-binding.path.user-env"       value="${user.home}/.builddev"                              />
+    <condition property="env.OXBUILD_USERHOME" value="${user.home}/.oxbuild">
+        <and>
+            <not>
+                <isset property="env.OXBUILD_USERHOME" />
+            </not>
+            <available file="${user.home}/.oxbuild" type="dir"/>
+        </and>
+    </condition>
+
+    <condition property="env.OXBUILD_USERHOME" value="${user.home}/.builddev">
+        <and>
+            <not>
+                <isset property="env.OXBUILD_USERHOME" />
+            </not>
+            <available file="${user.home}/.builddev" type="dir"/>
+        </and>
+    </condition>
+
+    <fail unless ="env.OXBUILD_USERHOME"
+          message="Miss OXBUILD_USERHOME or need $HOME/.oxbuild or $HOME/.builddev or ..." />
+   
+    <property name="oxbuild-binding.path.user-env"       value="${env.OXBUILD_USERHOME}"                             />
     <property name="oxbuild-binding.file.config.oxbuild" value="${oxbuild-binding.path.user-env}/oxbuild.properties" />
     <property name="oxbuild-binding.cfg-prefix"          value="oxbuild-binding.config.var"                          />
     
@@ -42,6 +60,12 @@
     
     <property name="oxbuild-binding.file.oxclipse-xml" value="${oxbuild-binding.config.var.oxbuild.home}/bin/oxclipse.xml" />
     <property name="env.OXBUILD_HOME" value="${oxbuild-binding.config.var.oxbuild.home}" />
+    
+    <echo message="### DBG : WORKSPACE_HOME   : ${env.WORKSPACE_HOME}"   level="info" />
+    <echo message="### DBG : WORKSPACE        : ${env.WORKSPACE}"        level="info" />
+    <echo message="### DBG : OXBUILD_HOME     : ${env.OXBUILD_HOME}"     level="info" />
+    <echo message="### DBG : OXBUILD_USERHOME : ${env.OXBUILD_USERHOME}" level="info" />
+
     <import file="${oxbuild-binding.file.oxclipse-xml}" />
 
     <!-- =================================================================================
