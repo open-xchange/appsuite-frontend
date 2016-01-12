@@ -178,6 +178,8 @@ define('io.ox/calendar/freebusy/controller', [
                                         if (part && part.type === 3) {
                                             obj.title = getResourceTitleByIndex(index);
                                         }
+                                        // do not show private flag icon
+                                        obj.private_flag = false;
                                         return obj;
                                     })
                                     .value();
