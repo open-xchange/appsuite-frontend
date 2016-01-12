@@ -134,7 +134,10 @@
     .appointment {
         opacity: @opacity;
         cursor: pointer;
-        &.hover {
+        &.disabled {
+            cursor: default;
+        }
+        &.hover:not(.disabled) {
             opacity: 1;
         }
     }
