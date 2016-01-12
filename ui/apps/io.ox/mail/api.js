@@ -810,6 +810,27 @@ define('io.ox/mail/api', [
         }
     };
 
+    api.moveAll = function (source, target) {
+
+        // clear affected collections
+        _(pool.getByFolder(source)).each(function (collection) {
+            collection.reset([]);
+            collection.complete = true;
+        });
+
+        return http.wait(
+            http.PUT({
+                module: 'mail',
+                appendColumns: false,
+                params: { action: 'move_all' },
+                data: { source: source, target: target }
+            })
+        )
+        .done(function () {
+            folderAPI.reload([source, target]);
+        });
+    };
+
     /**
      * copies a number of mails to another folder
      * @param  {array} list

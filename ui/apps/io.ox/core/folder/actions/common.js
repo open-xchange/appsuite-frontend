@@ -29,9 +29,13 @@ define('io.ox/core/folder/actions/common', [
             mailAPI.allSeen(e.data.folder);
         },
 
-        expungeFolder: function (e) {
-            // get current folder id
-            var folder = e.data.folder;
+        moveAll: function (source) {
+            ox.load(['io.ox/core/folder/actions/move']).done(function (move) {
+                move.all({ button: gt('Move all'), source: source });
+            });
+        },
+
+        expunge: function (folder) {
             notifications.yell('busy', gt('Cleaning up ...'));
             mailAPI.expunge(folder).done(function () {
                 notifications.yell('success', gt('The folder has been cleaned up.'));
