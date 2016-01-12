@@ -219,6 +219,8 @@ define('io.ox/mail/compose/model', [
             mail.attachments = mail.attachments.filter(function (attachment) {
                 return attachment.get('group') !== 'localFile';
             });
+            // Get flat attachments
+            mail.attachments = this.attributes.attachments.toJSON();
             return {
                 description: gt('Mail') + ': ' + (mail.subject || gt('No subject')),
                 point: mail
