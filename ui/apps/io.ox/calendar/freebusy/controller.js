@@ -302,7 +302,9 @@ define('io.ox/calendar/freebusy/controller', [
                         // whole-day / all-day / full-time
                         .addClass(model.get('full_time') ? 'fulltime' : '')
                         // temporary
-                        .addClass(model.get('shown_as') === 2 ? 'striped' : '');
+                        .addClass(model.get('shown_as') === 2 ? 'striped' : '')
+                        // no read access: disable (no click handler, default pointer, no hover)
+                        .addClass(!model.get('folder_id') ? 'disabled' : '');
                     return $el;
                 };
 
