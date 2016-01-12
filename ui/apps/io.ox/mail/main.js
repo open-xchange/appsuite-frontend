@@ -743,7 +743,10 @@ define('io.ox/mail/main', [
                 list = api.resolve(list, app.props.get('thread'));
 
                 // check if a folder is selected
-                var id = app.folder.get(), model = folderAPI.pool.getModel(id), total = model.get('total');
+                var id = app.folder.get(),
+                    model = folderAPI.pool.getModel(id),
+                    total = model.get('total'),
+                    search = app.get('find') && app.get('find').isActive();
 
                 app.right.find('.multi-selection-message .message')
                     .empty()
@@ -754,7 +757,7 @@ define('io.ox/mail/main', [
                             gt('%1$d messages selected', $('<span class="number">').text(list.length).prop('outerHTML'))
                         ),
                         // inline actions
-                        id && total ?
+                        id && total && !search ?
                             $('<div class="inline-actions">').append(
                                 $('<span>').text(gt('The following actions apply to all messages (%1$d) in this folder:', total)),
                                 $('<br>'),
