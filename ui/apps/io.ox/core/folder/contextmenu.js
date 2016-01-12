@@ -204,9 +204,9 @@ define('io.ox/core/folder/contextmenu', [
 
             addLink(this, {
                 action: 'clearfolder',
-                data: { id: baton.data.id, module: baton.module },
+                data: { id: baton.data.id },
                 enabled: api.can('delete', baton.data),
-                handler: actions.clearFolder,
+                handler: actions.clearFolder.bind(actions, baton.data.id),
                 text: gt('Empty folder')
             });
         },
