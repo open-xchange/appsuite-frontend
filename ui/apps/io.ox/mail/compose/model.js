@@ -119,7 +119,7 @@ define.async('io.ox/mail/compose/model', [
         },
 
         getCopy: function () {
-            var ret = _.clone(this.attributes);
+            var ret = _.clone(this.toJSON());
             ret.attachments = _.clone(this.attributes.attachments.toJSON());
             return ret;
         },

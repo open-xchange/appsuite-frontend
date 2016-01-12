@@ -562,6 +562,7 @@ define('io.ox/mail/compose/view', [
 
                     var saved = model.get('infostore_ids_saved');
                     model.set('infostore_ids_saved', [].concat(saved, mail.infostore_ids || []));
+                    model.updateShadow();
                     notifications.yell('success', gt('Mail saved as draft'));
                     def.resolve(result);
                 }
