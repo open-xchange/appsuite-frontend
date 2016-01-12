@@ -32,6 +32,12 @@ define('io.ox/calendar/freebusy/controller', [
 
     'use strict';
 
+    // ensure cid is used in model and collection as idAttribute properly
+    // to ensure appointments of series are handled correctly (same id)
+    var FreebusyCollection = Backbone.Collection.extend({
+        model: Backbone.Model.extend({ idAttribute: 'cid' })
+    });
+
     var that = {
 
         FreeBusy: function (options) {
@@ -42,7 +48,7 @@ define('io.ox/calendar/freebusy/controller', [
                 // short-term fluent appointment cache
                 cache = {},
                 // dummy collection
-                emptyCollection = new Backbone.Collection([]),
+                emptyCollection = new FreebusyCollection([]),
                 // calendar views (day, workweek, week)
                 currentMode = '',
                 calendarViews = {},
@@ -236,7 +242,7 @@ define('io.ox/calendar/freebusy/controller', [
             };
 
             // all appointments are stored in this collection
-            this.appointments = new Backbone.Collection([]);
+            this.appointments = new FreebusyCollection([]);
 
             this.getCalendarView = function () {
                 return calendarViews ? calendarViews[currentMode] : null;
