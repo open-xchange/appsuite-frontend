@@ -1221,6 +1221,12 @@ msgstr "Redirecționare automată"
 msgid "Auto-save email drafts"
 msgstr "Salvare automată a schițelor de mesaje"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "My Social Configuration"
+msgid "Automatic Configuration"
+msgstr "Configurație socială personală"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "Deschidere automată a zonei de notificare"
@@ -1242,6 +1248,10 @@ msgid ""
 "sending"
 msgstr ""
 "Colectează automat contactele în dosarul  \"Adrese colectate\" la trimitere"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Automatically configure your device by clicking the button below."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
@@ -1844,6 +1854,12 @@ msgstr "Compune un mail nou"
 #: module:io.ox/settings
 msgid "Conditions"
 msgstr "Condiții"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Confirmed"
+msgid "Configure now"
+msgstr "Confirmat"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Confirmation"
@@ -2682,8 +2698,7 @@ msgstr "Dublu clic în această linie pentru o întâlnire pentru întreaga zi"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
+#: module:io.ox/mail apps/plugins/portal/updater/register.js
 #: module:plugins/portal
 msgid "Download"
 msgstr "Descarcă"
@@ -2998,6 +3013,13 @@ msgstr "Tip de angajat"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Employment"
 msgstr "Loc de muncă"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "vgrid"
+#| msgid "Empty"
+msgid "Empty"
+msgstr "Gol"
 
 #. list is empty / no items
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
@@ -3677,6 +3699,10 @@ msgstr ""
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Get started here"
 msgstr "Introducere"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Get your device configured by email."
+msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Give feedback"
@@ -4585,7 +4611,6 @@ msgid "Managing Files"
 msgstr "Gestionarea fișierelor"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Manual"
 msgstr "Manual"
 
@@ -5059,6 +5084,12 @@ msgstr "Nicio cerere pierdută"
 #: apps/plugins/portal/mail/register.js module:plugins/portal
 msgid "No mails in your inbox"
 msgstr "Niciun mesaj în dosarul dumneavoastră de mesaje primite"
+
+#: apps/io.ox/find/main.js module:io.ox/core
+#, fuzzy
+#| msgid "No items found"
+msgid "No matching items found."
+msgstr "Nu s-au găsit elemente"
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "No message selected"
@@ -6785,10 +6816,6 @@ msgstr "Trimite mailul tuturor participanților"
 msgid "Send me the profile data by SMS."
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Send me the profile data by mail."
-msgstr ""
-
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
 msgstr "Trimite mail"
@@ -6863,6 +6890,12 @@ msgstr "Setări "
 msgctxt "app"
 msgid "Settings"
 msgstr "Setări"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced filters"
+msgid "Settings for advanced users"
+msgstr "Afișează filtrele avansate"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Setup your profile manually."
@@ -7120,10 +7153,6 @@ msgstr "Conectat ca %1$s"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr "Conectat ca:"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Simply download the profile to your device."
-msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -8756,7 +8785,7 @@ msgstr "Bine ați venit. Vă rugăm să ne furnizați feedback despre acest prod
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you want to save your configuration?"
-msgid "What service do you want to use?"
+msgid "What do you want to use?"
 msgstr "Doriți să salvați configurația?"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -10890,9 +10919,6 @@ msgstr "aaaa"
 #~ msgid "Confirmation status"
 #~ msgstr "Starea confirmării"
 
-#~ msgid "Confirmed"
-#~ msgstr "Confirmat"
-
 #~ msgid "Congo"
 #~ msgstr "Congo"
 
@@ -12854,9 +12880,6 @@ msgstr "aaaa"
 #~ msgid "My OX Social"
 #~ msgstr "OX Social personal"
 
-#~ msgid "My Social Configuration"
-#~ msgstr "Configurație socială personală"
-
 #~ msgid "Myanmar"
 #~ msgstr "Myanmar"
 
@@ -13980,9 +14003,6 @@ msgstr "aaaa"
 
 #~ msgid "Show QR code"
 #~ msgstr "Afișează codul QR"
-
-#~ msgid "Show advanced filters"
-#~ msgstr "Afișează filtrele avansate"
 
 #~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""

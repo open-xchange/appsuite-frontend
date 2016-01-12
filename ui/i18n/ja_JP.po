@@ -1168,6 +1168,12 @@ msgstr "自動転送"
 msgid "Auto-save email drafts"
 msgstr "下書きの自動保存"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "My Social Configuration"
+msgid "Automatic Configuration"
+msgstr "マイ ソーシャルの構成"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "通知エリアを自動的に表示"
@@ -1187,6 +1193,10 @@ msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "sending"
 msgstr "メールの送信時に \"収集済みアドレス\" フォルダに連絡先を自動的に収集"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Automatically configure your device by clicking the button below."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
@@ -1788,6 +1798,12 @@ msgstr "新規メールを作成"
 #: module:io.ox/settings
 msgid "Conditions"
 msgstr "条件"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Confirmed"
+msgid "Configure now"
+msgstr "確認"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Confirmation"
@@ -2621,8 +2637,7 @@ msgstr "終日のアポイントを作成するには、この行をダブル �
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
+#: module:io.ox/mail apps/plugins/portal/updater/register.js
 #: module:plugins/portal
 msgid "Download"
 msgstr "ダウンロード"
@@ -2940,6 +2955,13 @@ msgstr "従業員タイプ"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Employment"
 msgstr "職業"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "vgrid"
+#| msgid "Empty"
+msgid "Empty"
+msgstr "何もありません。"
 
 #. list is empty / no items
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
@@ -3617,6 +3639,10 @@ msgstr ""
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Get started here"
 msgstr "はじめにここからはじめます。"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Get your device configured by email."
+msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Give feedback"
@@ -4526,7 +4552,6 @@ msgid "Managing Files"
 msgstr "ファイルの管理"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Manual"
 msgstr "手動設定"
 
@@ -5001,6 +5026,12 @@ msgstr "失われたリクエストはありません。"
 #: apps/plugins/portal/mail/register.js module:plugins/portal
 msgid "No mails in your inbox"
 msgstr "受信トレイにメールがありません。"
+
+#: apps/io.ox/find/main.js module:io.ox/core
+#, fuzzy
+#| msgid "No items found"
+msgid "No matching items found."
+msgstr "アイテムが見つかりません。"
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "No message selected"
@@ -6703,10 +6734,6 @@ msgstr "すべての出席者にメールを送信"
 msgid "Send me the profile data by SMS."
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Send me the profile data by mail."
-msgstr ""
-
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
 msgstr "新規メールを送信"
@@ -6781,6 +6808,12 @@ msgstr "設定"
 msgctxt "app"
 msgid "Settings"
 msgstr "設定"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced filters"
+msgid "Settings for advanced users"
+msgstr "詳細フィルタを表示"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Setup your profile manually."
@@ -7030,10 +7063,6 @@ msgstr "サイン イン ユーザ: %1$s"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr "サイン イン ユーザ:"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Simply download the profile to your device."
-msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -8632,7 +8661,7 @@ msgstr "ようこそこの製品のフィードバックをお送りください
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you want to save your layout changes?"
-msgid "What service do you want to use?"
+msgid "What do you want to use?"
 msgstr "レイアウトの変更を保存しますか？"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -11401,9 +11430,6 @@ msgstr "yyyy"
 #~ msgid "Confirmation status for new appointments in a personal folder"
 #~ msgstr "個人用フォルダにある新規アポイントの確認ステータス"
 
-#~ msgid "Confirmed"
-#~ msgstr "確認"
-
 #~ msgid "Congo"
 #~ msgstr "コンゴ"
 
@@ -13628,9 +13654,6 @@ msgstr "yyyy"
 #~ msgid "My OX Social"
 #~ msgstr "マイ OX ソーシャル"
 
-#~ msgid "My Social Configuration"
-#~ msgstr "マイ ソーシャルの構成"
-
 #~ msgid "Myanmar"
 #~ msgstr "ミャンマー"
 
@@ -15024,9 +15047,6 @@ msgstr "yyyy"
 
 #~ msgid "Show QuickInfo after Login"
 #~ msgstr "ログイン後にクイックインフォを表示"
-
-#~ msgid "Show advanced filters"
-#~ msgstr "詳細フィルタを表示"
 
 #~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""

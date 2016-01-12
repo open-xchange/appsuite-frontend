@@ -1185,6 +1185,12 @@ msgstr "自動轉寄"
 msgid "Auto-save email drafts"
 msgstr "自動保存電子郵件草稿"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic sign out"
+msgid "Automatic Configuration"
+msgstr "自動登出"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "自動開啟通知區域"
@@ -1204,6 +1210,10 @@ msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "sending"
 msgstr "寄件時自動將收集到的聯絡人加入到「收集到的地址」資料夾？"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Automatically configure your device by clicking the button below."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
@@ -1793,6 +1803,12 @@ msgstr "撰寫新郵件"
 #: module:io.ox/settings
 msgid "Conditions"
 msgstr "條件"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Confirmed"
+msgid "Configure now"
+msgstr "確認"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Confirmation"
@@ -2620,8 +2636,7 @@ msgstr "雙擊此欄位以新增全天約會"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
+#: module:io.ox/mail apps/plugins/portal/updater/register.js
 #: module:plugins/portal
 msgid "Download"
 msgstr "下載"
@@ -2930,6 +2945,13 @@ msgstr "員工類型"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Employment"
 msgstr "工作"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "vgrid"
+#| msgid "Empty"
+msgid "Empty"
+msgstr "空"
 
 #. list is empty / no items
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
@@ -3592,6 +3614,10 @@ msgstr "訂閱來自您的 XING 網路的新消息。保持連線，尋找新的
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Get started here"
 msgstr "開始入門"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Get your device configured by email."
+msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Give feedback"
@@ -4487,7 +4513,6 @@ msgid "Managing Files"
 msgstr "管理檔案"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Manual"
 msgstr "手動"
 
@@ -4959,6 +4984,12 @@ msgstr "無損失請求"
 #: apps/plugins/portal/mail/register.js module:plugins/portal
 msgid "No mails in your inbox"
 msgstr "您的收件匣中沒有郵件"
+
+#: apps/io.ox/find/main.js module:io.ox/core
+#, fuzzy
+#| msgid "No items found"
+msgid "No matching items found."
+msgstr "找不到項目"
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "No message selected"
@@ -6651,10 +6682,6 @@ msgstr "傳送郵件給所有參與者"
 msgid "Send me the profile data by SMS."
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Send me the profile data by mail."
-msgstr ""
-
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
 msgstr "寄送新郵件"
@@ -6729,6 +6756,12 @@ msgstr "選項"
 msgctxt "app"
 msgid "Settings"
 msgstr "選項"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced filters"
+msgid "Settings for advanced users"
+msgstr "顯示進階過濾器"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Setup your profile manually."
@@ -6984,10 +7017,6 @@ msgstr "已登入為 %1$s"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr "已登入為:"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Simply download the profile to your device."
-msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -8545,7 +8574,7 @@ msgstr "歡迎，請提供您關於此產品的意見回饋"
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you want to save your configuration?"
-msgid "What service do you want to use?"
+msgid "What do you want to use?"
 msgstr "您是否想保存您的配置？"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -10564,9 +10593,6 @@ msgstr "年"
 #~ msgid "Confirmation status"
 #~ msgstr "確認狀態"
 
-#~ msgid "Confirmed"
-#~ msgstr "確認"
-
 #~ msgid "Congo"
 #~ msgstr "剛果"
 
@@ -12213,9 +12239,6 @@ msgstr "年"
 
 #~ msgid "Show QR code"
 #~ msgstr "顯示 QR code"
-
-#~ msgid "Show advanced filters"
-#~ msgstr "顯示進階過濾器"
 
 #~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
 #~ msgstr "顯示所有郵件。請注意：郵件將不再依對話內容分組。"

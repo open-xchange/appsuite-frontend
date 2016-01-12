@@ -1220,6 +1220,12 @@ msgstr "Automatyczne przesyłanie dalej"
 msgid "Auto-save email drafts"
 msgstr "Automatycznie zapisuj wersje robocze wiadomości"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic sign out"
+msgid "Automatic Configuration"
+msgstr "Automatyczne wylogowanie"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "Automatyczne otwieranie obszaru powiadomień"
@@ -1243,6 +1249,10 @@ msgid ""
 msgstr ""
 "Automatycznie gromadź kontakty w folderze \"Zgromadzone adresy\" podczas "
 "wysyłania wiadomości"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Automatically configure your device by clicking the button below."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
@@ -1841,6 +1851,12 @@ msgstr "Nowa wiadomość e-mail"
 #: module:io.ox/settings
 msgid "Conditions"
 msgstr "Warunki"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Confirmed"
+msgid "Configure now"
+msgstr "Potwierdzono"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Confirmation"
@@ -2684,8 +2700,7 @@ msgstr "Kliknij dwukrotnie w tym wierszu, aby zaplanować spotkanie całodniowe"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
+#: module:io.ox/mail apps/plugins/portal/updater/register.js
 #: module:plugins/portal
 msgid "Download"
 msgstr "Pobierz"
@@ -2996,6 +3011,13 @@ msgstr "Rodzaj zatrudnienia"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Employment"
 msgstr "Zatrudnienie"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "vgrid"
+#| msgid "Empty"
+msgid "Empty"
+msgstr "Puste"
 
 #. list is empty / no items
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
@@ -3678,6 +3700,10 @@ msgstr ""
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Get started here"
 msgstr "Zacznij tutaj"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Get your device configured by email."
+msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Give feedback"
@@ -4588,7 +4614,6 @@ msgid "Managing Files"
 msgstr "Zarządzanie plikami"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Manual"
 msgstr "Ręcznie"
 
@@ -5062,6 +5087,12 @@ msgstr "Bez zgubionych żądań"
 #: apps/plugins/portal/mail/register.js module:plugins/portal
 msgid "No mails in your inbox"
 msgstr "Brak wiadomości w skrzynce odbiorczej"
+
+#: apps/io.ox/find/main.js module:io.ox/core
+#, fuzzy
+#| msgid "No items found"
+msgid "No matching items found."
+msgstr "Nie znaleziono żadnych elementów"
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "No message selected"
@@ -6781,10 +6812,6 @@ msgstr "Wyślij wiadomość e-mail do wszystkich uczestników"
 msgid "Send me the profile data by SMS."
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Send me the profile data by mail."
-msgstr ""
-
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
 msgstr "Wyślij nową wiadomość"
@@ -6859,6 +6886,12 @@ msgstr "Ustawienia"
 msgctxt "app"
 msgid "Settings"
 msgstr "Ustawienia"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced filters"
+msgid "Settings for advanced users"
+msgstr "Pokaż filtry zaawansowane"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Setup your profile manually."
@@ -7118,10 +7151,6 @@ msgstr "Zalogowano jako %1$s"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr "Zalogowano jako:"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Simply download the profile to your device."
-msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -8754,7 +8783,7 @@ msgstr "Witamy! Prosimy o opinię o tym produkcie."
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you really want to discard your changes?"
-msgid "What service do you want to use?"
+msgid "What do you want to use?"
 msgstr "Czy na pewno chcesz odrzucić zmiany?"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -10122,9 +10151,6 @@ msgstr "rrrr"
 #~ msgid "Confirmation status"
 #~ msgstr "Status potwierdzenia"
 
-#~ msgid "Confirmed"
-#~ msgstr "Potwierdzono"
-
 #~ msgid "Contacts"
 #~ msgstr "Kontakty"
 
@@ -11022,9 +11048,6 @@ msgstr "rrrr"
 
 #~ msgid "Show QR code"
 #~ msgstr "Pokaż kod QR"
-
-#~ msgid "Show advanced filters"
-#~ msgstr "Pokaż filtry zaawansowane"
 
 #~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""

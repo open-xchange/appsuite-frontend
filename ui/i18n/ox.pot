@@ -4790,8 +4790,6 @@ msgstr ""
 #: apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
-#: apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
 #: apps/plugins/portal/updater/register.js
 #: module:plugins/portal
 msgid "Download"
@@ -7268,6 +7266,11 @@ msgstr ""
 msgid "Accounts"
 msgstr ""
 
+#: apps/io.ox/find/main.js
+#: module:io.ox/core
+msgid "No matching items found."
+msgstr ""
+
 #: apps/io.ox/find/view-facets.js
 #: module:io.ox/core
 msgid "Search facets"
@@ -7396,8 +7399,6 @@ msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
-#: apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
 msgid "Manual"
 msgstr ""
 
@@ -8227,12 +8228,12 @@ msgstr ""
 
 #: apps/io.ox/mail/inplace-reply.js
 #: module:io.ox/mail
-msgid "Your reply has been sent"
+msgid "Reply to all"
 msgstr ""
 
 #: apps/io.ox/mail/inplace-reply.js
 #: module:io.ox/mail
-msgid "Reply to all"
+msgid "Your reply has been sent"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js
@@ -8511,6 +8512,11 @@ msgstr ""
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
 msgid "Mail Details"
+msgstr ""
+
+#: apps/io.ox/mail/main.js
+#: module:io.ox/mail
+msgid "Empty"
 msgstr ""
 
 #: apps/io.ox/mail/main.js
@@ -9053,6 +9059,11 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
+msgid "Settings for advanced users"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
 msgid "Setup your profile manually."
 msgstr ""
 
@@ -9068,12 +9079,22 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "Send me the profile data by mail."
+msgid "Get your device configured by email."
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "Simply download the profile to your device."
+msgid "Automatic Configuration"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
+msgid "Automatically configure your device by clicking the button below."
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
+msgid "Configure now"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/view.js
@@ -9126,7 +9147,7 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/wizard.js
 #: module:io.ox/core/onboarding
-msgid "What service do you want to use?"
+msgid "What do you want to use?"
 msgstr ""
 
 #: apps/io.ox/participants/add.js

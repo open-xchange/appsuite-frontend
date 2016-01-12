@@ -1185,6 +1185,12 @@ msgstr "Automaattinen välitys"
 msgid "Auto-save email drafts"
 msgstr "Luonnosten automaattinen tallennus"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic sign out"
+msgid "Automatic Configuration"
+msgstr "Automaattinen uloskirjautuminen"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "Ilmoitusalueen automaattinen avaus"
@@ -1208,6 +1214,10 @@ msgid ""
 msgstr ""
 "Lähetettäessä automaattisesti kerää yhteystietoja kansioon \"Collected "
 "addresses\""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Automatically configure your device by clicking the button below."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
@@ -1804,6 +1814,12 @@ msgstr "Uusi viesti"
 #: module:io.ox/settings
 msgid "Conditions"
 msgstr "Ehdot"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Confirmed"
+msgid "Configure now"
+msgstr "Vahvistettu"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Confirmation"
@@ -2638,8 +2654,7 @@ msgstr "Tuplaklikkaa tätä riviä valitaksesi koko päivän tapaaminen"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
+#: module:io.ox/mail apps/plugins/portal/updater/register.js
 #: module:plugins/portal
 msgid "Download"
 msgstr "Lataa"
@@ -2947,6 +2962,13 @@ msgstr "Työntekijän tyyppi"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Employment"
 msgstr "Työ"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "vgrid"
+#| msgid "Empty"
+msgid "Empty"
+msgstr "Tyhjä"
 
 #. list is empty / no items
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
@@ -3622,6 +3644,10 @@ msgstr ""
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Get started here"
 msgstr "Aloita tästä"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Get your device configured by email."
+msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Give feedback"
@@ -4528,7 +4554,6 @@ msgid "Managing Files"
 msgstr "Tiedostojen hallinnointi"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Manual"
 msgstr "Manuaalinen"
 
@@ -5001,6 +5026,12 @@ msgstr "Ei kadotettuja pyyntöjä"
 #: apps/plugins/portal/mail/register.js module:plugins/portal
 msgid "No mails in your inbox"
 msgstr "Ei viestejä saapuneet laatikossasi"
+
+#: apps/io.ox/find/main.js module:io.ox/core
+#, fuzzy
+#| msgid "No items found"
+msgid "No matching items found."
+msgstr "Kohteita ei löytynyt"
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "No message selected"
@@ -6715,10 +6746,6 @@ msgstr "Lähetä postia kaikille osallistujille"
 msgid "Send me the profile data by SMS."
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Send me the profile data by mail."
-msgstr ""
-
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
 msgstr "Lähetä uusi viesti"
@@ -6793,6 +6820,12 @@ msgstr "Asetukset"
 msgctxt "app"
 msgid "Settings"
 msgstr "Asetukset"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced filters"
+msgid "Settings for advanced users"
+msgstr "Näytä laajat suodattimet"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Setup your profile manually."
@@ -7048,10 +7081,6 @@ msgstr "Kirjautuneena käyttäjänä %1$s"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr "Kirjautuneena käyttäjänä"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Simply download the profile to your device."
-msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -8654,7 +8683,7 @@ msgstr "Tervetuloa. Ole hyvä ja anna tuotteesta palautetta."
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you really want to discard your changes?"
-msgid "What service do you want to use?"
+msgid "What do you want to use?"
 msgstr "Haluatko varmasti hylätä muutoksesi?"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -9943,9 +9972,6 @@ msgstr "vvvv"
 #~ msgid "Confirmation status"
 #~ msgstr "Vahvistustilanne"
 
-#~ msgid "Confirmed"
-#~ msgstr "Vahvistettu"
-
 #~ msgid "Contacts"
 #~ msgstr "Yhteystiedot"
 
@@ -10654,9 +10680,6 @@ msgstr "vvvv"
 
 #~ msgid "Show QR code"
 #~ msgstr "Näytä QR koodi"
-
-#~ msgid "Show advanced filters"
-#~ msgstr "Näytä laajat suodattimet"
 
 #~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""
