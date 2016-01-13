@@ -958,6 +958,12 @@ msgstr "Alle filer er blevet slettet"
 msgid "All folders"
 msgstr "Alle mapper"
 
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All messages have been deleted"
+msgstr "Alle filer er blevet slettet"
+
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr ""
@@ -2289,10 +2295,9 @@ msgstr "Slet konto"
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #, fuzzy
-#| msgctxt "folder"
-#| msgid "Deleted messages"
-msgid "Delete all %1$d messages"
-msgstr "Slettet beskeder"
+#| msgid "Show all %1$d messages in inbox"
+msgid "Delete all messages in this folder"
+msgstr "Vis alle %1$d beskeder i indbakke"
 
 #. object permissions - delete
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -4760,16 +4765,22 @@ msgstr "Der blev fundet flere elementer end de %1$s viste"
 msgid "Move"
 msgstr "Flyt"
 
-#. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 #, fuzzy
-#| msgid "Show all %1$d messages in inbox"
-msgid "Move all %1$d messages to another folder"
-msgstr "Vis alle %1$d beskeder i indbakke"
+#| msgid "Close all"
+msgid "Move all"
+msgstr "Luk alle"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Move all messages"
 msgstr "Flyt alle beskeder"
+
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show all %1$d messages in inbox"
+msgid "Move all messages to another folder"
+msgstr "Vis alle %1$d beskeder i indbakke"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
@@ -7734,6 +7745,10 @@ msgstr "Denne mappe er blevet ryddet op."
 msgid "The folder has been emptied"
 msgstr "Mappen er blevet tømt"
 
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "The following actions apply to all messages (%1$d) in this folder:"
+msgstr ""
+
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
@@ -10017,9 +10032,6 @@ msgstr "åååå"
 #~ "Tryk på et bogstav i venstre side af navigationslinjen, for at vise de "
 #~ "tilhørende kontakter fra den valgte adressebog."
 
-#~ msgid "Close all"
-#~ msgstr "Luk alle"
-
 #~ msgid "Close document"
 #~ msgstr "Luk dokument"
 
@@ -10130,6 +10142,12 @@ msgstr "åååå"
 
 #~ msgid "Default view"
 #~ msgstr "Standard visning"
+
+#, fuzzy
+#~| msgctxt "folder"
+#~| msgid "Deleted messages"
+#~ msgid "Delete all %1$d messages"
+#~ msgstr "Slettet beskeder"
 
 #~ msgid "Delete all accounts"
 #~ msgstr "Slet alle konti"

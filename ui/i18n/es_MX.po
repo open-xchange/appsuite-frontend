@@ -948,6 +948,12 @@ msgstr "Se han borrado todos los archivos"
 msgid "All folders"
 msgstr "Todas las carpetas"
 
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All messages have been deleted"
+msgstr "Se han borrado todos los archivos"
+
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr ""
@@ -2290,10 +2296,9 @@ msgstr "Borrar cuenta"
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #, fuzzy
-#| msgctxt "folder"
-#| msgid "Deleted messages"
-msgid "Delete all %1$d messages"
-msgstr "Mensajes borrados"
+#| msgid "Show all %1$d messages in inbox"
+msgid "Delete all messages in this folder"
+msgstr "Mostrar todos los mensajes %1$d en la bandeja de entrada"
 
 #. object permissions - delete
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -4782,16 +4787,22 @@ msgstr "Se encontraron más elementos que los %1$s que se muestran actualmente"
 msgid "Move"
 msgstr "Mover"
 
-#. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 #, fuzzy
-#| msgid "Show all %1$d messages in inbox"
-msgid "Move all %1$d messages to another folder"
-msgstr "Mostrar todos los mensajes %1$d en la bandeja de entrada"
+#| msgid "Close all"
+msgid "Move all"
+msgstr "Cerrar todo"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Move all messages"
 msgstr "Mover todos los mensajes"
+
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show all %1$d messages in inbox"
+msgid "Move all messages to another folder"
+msgstr "Mostrar todos los mensajes %1$d en la bandeja de entrada"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
@@ -7782,6 +7793,10 @@ msgstr "La carpeta se ha limpiado."
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "The folder has been emptied"
 msgstr "La carpeta se ha vaciado"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "The following actions apply to all messages (%1$d) in this folder:"
+msgstr ""
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
@@ -12373,9 +12388,6 @@ msgstr "yyyy"
 #~ msgid "Close Window"
 #~ msgstr "Cerrar ventana"
 
-#~ msgid "Close all"
-#~ msgstr "Cerrar todo"
-
 #~ msgid "Close configuration"
 #~ msgstr "Cerrar configuración"
 
@@ -12764,6 +12776,12 @@ msgstr "yyyy"
 
 #~ msgid "Delete a stream"
 #~ msgstr "Borrar un flujo"
+
+#, fuzzy
+#~| msgctxt "folder"
+#~| msgid "Deleted messages"
+#~ msgid "Delete all %1$d messages"
+#~ msgstr "Mensajes borrados"
 
 #~ msgid "Delete all accounts"
 #~ msgstr "Borrar todas las cuentas"

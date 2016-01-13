@@ -929,6 +929,12 @@ msgstr ""
 msgid "All folders"
 msgstr ""
 
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "Changes have been saved"
+msgid "All messages have been deleted"
+msgstr "Промените са запазени"
+
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr ""
@@ -2223,7 +2229,7 @@ msgstr ""
 
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "Delete all %1$d messages"
+msgid "Delete all messages in this folder"
 msgstr ""
 
 #. object permissions - delete
@@ -4615,13 +4621,19 @@ msgstr ""
 msgid "Move"
 msgstr "Премести"
 
-#. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "Move all %1$d messages to another folder"
-msgstr ""
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "Move"
+msgid "Move all"
+msgstr "Премести"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Move all messages"
+msgstr ""
+
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Move all messages to another folder"
 msgstr ""
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
@@ -7455,6 +7467,10 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "The folder has been emptied"
+msgstr ""
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "The following actions apply to all messages (%1$d) in this folder:"
 msgstr ""
 
 #: apps/io.ox/core/main.js module:io.ox/core

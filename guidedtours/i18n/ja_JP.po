@@ -15,6 +15,12 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Generator: Poedit 1.7.7\n"
 
+#: apps/io.ox/tours/files.js:215 module:io.ox/tours
+#, fuzzy
+#| msgid "Add new account"
+msgid "Add another account"
+msgstr "新規アカウントを追加"
+
 #: apps/io.ox/tours/calendar.js:72 module:io.ox/tours
 msgid "Adding attachments"
 msgstr "添付ファイルの追加"
@@ -22,6 +28,20 @@ msgstr "添付ファイルの追加"
 #: apps/io.ox/tours/tasks.js:54 module:io.ox/tours
 msgid "Adding further details"
 msgstr "詳細情報の追加"
+
+#: apps/io.ox/tours/files.js:101 module:io.ox/tours
+msgid ""
+"At the top you can find the toolbar with many functions and additional "
+"options. You can easily create new folders, new files and much more."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:163 module:io.ox/tours
+msgid ""
+"Choose from two alternatives to share your files and folders. Use Invite "
+"people if you want to manage access rights and allow recipients to create "
+"and edit files. Or just get a link to let others view and download your "
+"files. You can use an expiration date and password protection if you like."
+msgstr ""
 
 #: apps/io.ox/tours/contacts.js:36 module:io.ox/tours
 msgid ""
@@ -31,9 +51,23 @@ msgstr ""
 "選択したアドレス帳にある連絡先を表示するには、ナビゲーション バーの左側にある"
 "該当する文字をクリックします。"
 
+#: apps/io.ox/tours/files.js:78 module:io.ox/tours
+msgid ""
+"Clicking on a folder displays all the subfolders, documents, media and other "
+"files that it contains."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:129 module:io.ox/tours
+msgid "Clicking on the view icon leads you to a preview of the selected file."
+msgstr ""
+
 #: apps/io.ox/tours/portal.js:45 module:io.ox/tours
 msgid "Closing a square"
 msgstr "タイルを閉じる"
+
+#: apps/io.ox/tours/files.js:176 module:io.ox/tours
+msgid "Collaborating"
+msgstr ""
 
 #: apps/io.ox/tours/mail.js:33 module:io.ox/tours
 msgid "Composing a new E-Mail"
@@ -50,10 +84,6 @@ msgstr "新規連絡先の作成"
 #: apps/io.ox/tours/tasks.js:32 module:io.ox/tours
 msgid "Creating a new task"
 msgstr "新規の仕事の作成"
-
-#: apps/io.ox/tours/files.js:60 module:io.ox/tours
-msgid "Creating a note"
-msgstr "メモの作成"
 
 #: apps/io.ox/tours/intro.js:72 module:io.ox/tours
 msgid "Creating new items"
@@ -94,9 +124,16 @@ msgstr ""
 "各アプリケーションの詳細な使用方法を表示するには、[システム　メニュー] → [ヘ"
 "ルプ] の順に選択します。"
 
-#: apps/io.ox/tours/files.js:67 module:io.ox/tours
-msgid "Displaying information"
-msgstr "情報の表示"
+#: apps/io.ox/tours/files.js:192 module:io.ox/tours
+msgid ""
+"Did you know that you can edit text documents and spreadsheets online? Drive "
+"will automatically update your edited file, but thanks to versioning the "
+"original file stays available."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:86 module:io.ox/tours
+msgid "Different views are available. Just select the one you like best."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -106,11 +143,24 @@ msgstr "ヘルプや設定の表示"
 msgid "Drag and drop"
 msgstr "ドラッグ アンド ドロップ"
 
+#: apps/io.ox/tours/files.js:216 module:io.ox/tours
+msgid ""
+"Drive allows you to connect to other storage solutions if you already have a "
+"cloud storage account you use to save and sync your files. Simply click on "
+"the appropriate logo to access your existing data."
+msgstr ""
+
 #: apps/io.ox/tours/settings.js:44 module:io.ox/tours
 msgid ""
 "Edit a setting on the right side. In most of the cases, the changes are "
 "activated immediately."
 msgstr "右ペインで設定を編集します。通常変更はすぐに有効になります。"
+
+#: apps/io.ox/tours/files.js:191 module:io.ox/tours
+#, fuzzy
+#| msgid "Edit document"
+msgid "Edit documents"
+msgstr "ドキュメントを編集"
 
 #: apps/io.ox/tours/mail.js:106 module:io.ox/tours
 msgid "Editing multiple E-Mails"
@@ -188,9 +238,27 @@ msgstr "件名の入力"
 msgid "Entering the task's data"
 msgstr "仕事のデータの入力"
 
-#: apps/io.ox/tours/files.js:30 module:io.ox/tours
+#: apps/io.ox/tours/files.js:199 module:io.ox/tours
+#, fuzzy
+#| msgid "File Details"
+msgid "File details"
+msgstr "ファイルの詳細"
+
+#: apps/io.ox/tours/files.js:77 module:io.ox/tours
+#, fuzzy
+#| msgid "Folder tree"
+msgid "Folder content"
+msgstr "フォルダ ツリー"
+
+#: apps/io.ox/tours/files.js:63 module:io.ox/tours
 msgid "Folder tree"
 msgstr "フォルダ ツリー"
+
+#: apps/io.ox/tours/files.js:140 module:io.ox/tours
+msgid ""
+"From preview you can also select other options to help you manage and work "
+"on your files."
+msgstr ""
 
 #: apps/io.ox/tours/calendar.js:73 module:io.ox/tours
 msgid "Further down you can add documents as attachments to the appointment."
@@ -212,6 +280,18 @@ msgstr "はじめに"
 #: apps/io.ox/tours/mail.js:101 module:io.ox/tours
 msgid "Halo view"
 msgstr "ハロー ビュー"
+
+#: apps/io.ox/tours/files.js:151 module:io.ox/tours
+msgid ""
+"Here you can share files with your colleagues and external contacts. You can "
+"also collaborate on a document and set different access rights."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:226 module:io.ox/tours
+msgid ""
+"Hint: you can always restart guided tours, any time you need them, from the "
+"system menu."
+msgstr ""
 
 #: apps/io.ox/tours/settings.js:36 module:io.ox/tours
 msgid "How the settings are organized"
@@ -258,9 +338,29 @@ msgstr "アポイントへの出席依頼"
 msgid "Launching an app"
 msgstr "アプリケーションの起動"
 
+#: apps/io.ox/tours/files.js:37 module:io.ox/tours
+msgid ""
+"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy "
+"eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam "
+"voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet "
+"clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit "
+"amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam "
+"nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed "
+"diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet "
+"clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+msgstr ""
+
 #: apps/io.ox/tours/contacts.js:35 module:io.ox/tours
 msgid "Navigation bar"
 msgstr "ナビゲーション バー"
+
+#: apps/io.ox/tours/files.js:64 module:io.ox/tours
+msgid ""
+"On the left you can see the folder tree. It displays your folder structure "
+"and allows you to navigate to specific folders and subfolders. To make your "
+"life easier, we have already included folders for your Documents, Music, "
+"Pictures and Videos."
+msgstr ""
 
 #: apps/io.ox/tours/mail.js:91 module:io.ox/tours
 msgid "Opening an E-Mail in a separate window"
@@ -282,6 +382,18 @@ msgstr "ヘルプを開く"
 msgid "Opening the settings"
 msgstr "設定を開く"
 
+#: apps/io.ox/tours/files.js:128 module:io.ox/tours
+#, fuzzy
+#| msgid "Preview pane"
+msgid "Preview files"
+msgstr "プレビュー"
+
+#: apps/io.ox/tours/files.js:139 module:io.ox/tours
+#, fuzzy
+#| msgid "Preview pane"
+msgid "Preview mode"
+msgstr "プレビュー"
+
 #: apps/io.ox/tours/mail.js:96 module:io.ox/tours
 msgid "Reading E-Mail conversations"
 msgstr "メールスレッドの表示"
@@ -290,12 +402,22 @@ msgstr "メールスレッドの表示"
 msgid "Reading the details"
 msgstr "詳細情報の閲覧"
 
+#: apps/io.ox/tours/files.js:225 module:io.ox/tours
+msgid "Restart Guided Tour"
+msgstr ""
+
 #: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "オブジェクトの検索"
 
+#: apps/io.ox/tours/files.js:85 module:io.ox/tours
+#, fuzzy
+#| msgid "Selecting a view"
+msgid "Select a view"
+msgstr "ビューの選択"
+
 #: apps/io.ox/tours/calendar.js:83 module:io.ox/tours
-#: apps/io.ox/tours/files.js:35 apps/io.ox/tours/mail.js:86
+#: apps/io.ox/tours/mail.js:86
 msgid "Selecting a view"
 msgstr "ビューの選択"
 
@@ -306,6 +428,26 @@ msgstr "連絡先へのメールの送信"
 #: apps/io.ox/tours/mail.js:74 module:io.ox/tours
 msgid "Sending the E-Mail"
 msgstr "メールの送信"
+
+#: apps/io.ox/tours/files.js:150 module:io.ox/tours
+#, fuzzy
+#| msgid "Share this file"
+msgid "Share files"
+msgstr "このファイルを共有"
+
+#: apps/io.ox/tours/files.js:177 module:io.ox/tours
+msgid ""
+"Sharing files by inviting people does not only offer your recipients the "
+"option to create and edit files. Internal and external participants are also "
+"able to collaborate with you on text documents and spreadsheets at the same "
+"time."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:162 module:io.ox/tours
+#, fuzzy
+#| msgid "Sort options"
+msgid "Sharing options"
+msgstr "ソート オプション"
 
 #: apps/io.ox/tours/settings.js:54 module:io.ox/tours
 msgid "Signing out"
@@ -331,20 +473,21 @@ msgstr ""
 "詳細ビューには、オブジェクトの内容が表示されます。オブジェクトを整理するため"
 "の機能が詳細ビューに表示されます。"
 
-#: apps/io.ox/tours/files.js:45 module:io.ox/tours
-msgid "The Icons view"
-msgstr "アイコン ビュー"
+#: apps/io.ox/tours/files.js:56 module:io.ox/tours
+#, fuzzy
+#| msgctxt "help"
+#| msgid "The Drive App"
+msgid "The Drive app"
+msgstr "Drive アプリケーション"
 
-#: apps/io.ox/tours/files.js:46 module:io.ox/tours
-msgid ""
-"The Icons view displays an icon and the file name for each file. Click on an "
-"icon to view further details and functions in the pop-up."
-msgstr ""
-"アイコン ビューには、各ファイルのアイコンとファイル名が表示されます。アイコン"
-"をクリックすると、詳細と機能がポップアップに表示されます。"
+#: apps/io.ox/tours/files.js:50 module:io.ox/tours
+#, fuzzy
+#| msgctxt "help"
+#| msgid "The Drive App"
+msgid "The Drive app tour.txt"
+msgstr "Drive アプリケーション"
 
 #: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
-#: apps/io.ox/tours/files.js:40
 msgid "The List view"
 msgstr "リスト ビュー"
 
@@ -357,16 +500,6 @@ msgstr ""
 "リスト ビューには、現在のフォルダにあるアポイントの一覧が表示されます。アポイ"
 "ントをクリックすると、そのアポイントのデータと機能が詳細ビューに表示されま"
 "す。"
-
-#: apps/io.ox/tours/files.js:41 module:io.ox/tours
-msgid ""
-"The List view shows details like the size and date of change. Use the "
-"checkboxes to select files. Click on a file to view further details and "
-"functions in the pop-up."
-msgstr ""
-"リスト ビューには、サイズや変更日などの詳細が表示されます。ファイルを選択する"
-"には、チェックボックスを使用します。ファイルをクリックすると、その詳細と機能"
-"がポップアップに表示されます。"
 
 #: apps/io.ox/tours/intro.js:58 module:io.ox/tours
 msgid "The New objects icon"
@@ -392,18 +525,6 @@ msgstr ""
 "ポータルでは、最新のメール、アポイント、ソーシャル ネットワーク ニュースが表"
 "示されます。"
 
-#: apps/io.ox/tours/files.js:50 module:io.ox/tours
-msgid "The Tiles view"
-msgstr "タイル ビュー"
-
-#: apps/io.ox/tours/files.js:51 module:io.ox/tours
-msgid ""
-"The Tiles view shows a big icon for each file. Click on an icon to view "
-"further details and functions in the pop-up."
-msgstr ""
-"タイル ビューには、各ファイルの大型のアイコンが表示されます。アイコンをクリッ"
-"クすると、詳細と機能がポップアップに表示されます。"
-
 #: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
 msgid "The calendar views"
 msgstr "予定表ビュー"
@@ -415,6 +536,13 @@ msgid ""
 msgstr ""
 "予定表ビューでは、選択された時間軸で、予定表シートにアポイントが表示されま"
 "す。"
+
+#: apps/io.ox/tours/files.js:200 module:io.ox/tours
+msgid ""
+"The file details side bar offers additional information about your files. "
+"Just enable the File details option from the View drop down menu and select "
+"a file to see the details."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js:104 module:io.ox/tours
 msgid "The folder tree"
@@ -490,11 +618,6 @@ msgstr ""
 #: apps/io.ox/tours/tasks.js:33 module:io.ox/tours
 msgid "To create a new task, click on New in the toolbar."
 msgstr "新規の仕事を作成するには、ツールバーで、[新規] をクリックします。"
-
-#: apps/io.ox/tours/files.js:61 module:io.ox/tours
-msgid "To create a note, click on New > Add note in the toolbar."
-msgstr ""
-"メモを作成するには、ツールバーで、[新規] → [メモを追加] をクリックします。"
 
 #: apps/io.ox/tours/calendar.js:58 module:io.ox/tours
 msgid ""
@@ -656,14 +779,6 @@ msgid "To search for objects, click the Search icon in the menu bar."
 msgstr ""
 "オブジェクトを検索するには、メニュー バーで、検索アイコンをクリックします。"
 
-#: apps/io.ox/tours/files.js:36 module:io.ox/tours
-msgid ""
-"To select one of the views List, Icons or Squares, click on View on the "
-"right side of the toolbar."
-msgstr ""
-"リスト ビュー、アイコン ビュー、またはタイル ビューのいずれかを選択するには、"
-"ツールバー右側にある [ビュー] をクリックします。"
-
 #: apps/io.ox/tours/calendar.js:84 module:io.ox/tours
 msgid ""
 "To select one of the views like Day, Month or List, click on View in the "
@@ -706,36 +821,29 @@ msgstr ""
 msgid "To track the editing status, enter the current progress."
 msgstr "進捗状況を記録するには、現在の達成率を入力します。"
 
-#: apps/io.ox/tours/files.js:56 module:io.ox/tours
-msgid "To upload a file, click on New > Upload new file in the toolbar."
-msgstr ""
-"ファイルをアップロードするには、ツールバーで、[新規] → [新規ファイルをアップ"
-"ロード] の順にクリックします。"
-
-#: apps/io.ox/tours/files.js:68 module:io.ox/tours
+#: apps/io.ox/tours/files.js:114 module:io.ox/tours
 msgid ""
-"To view further information, click on a file. A pop-up window displays "
-"further details and functions."
+"To upload a new file from your local device, simply click on Add local file "
+"and select the file you would like to upload. It is even easier if you just "
+"drag and drop files from your local device into Drive. The uploaded file is "
+"now available in Drive on all your devices."
 msgstr ""
-"詳細を閲覧するには、目的のファイルをクリックします。詳細と機能がポップアップ "
-"ウィンドウに表示されます。"
+
+#: apps/io.ox/tours/files.js:100 module:io.ox/tours
+#, fuzzy
+#| msgid "The toolbar"
+msgid "Toolbar"
+msgstr "ツールバー"
 
 #: apps/io.ox/tours/tasks.js:72 module:io.ox/tours
 msgid "Tracking the editing status"
 msgstr "進捗状況の記録"
 
-#: apps/io.ox/tours/files.js:55 module:io.ox/tours
-msgid "Uploading a file"
-msgstr "ファイルのアップロード"
-
-#: apps/io.ox/tours/files.js:31 module:io.ox/tours
-msgid ""
-"Use the folder tree to access own, public or shared files. If the folder "
-"tree is hidden, click on View > Folder view on the right side of the toolbar."
-msgstr ""
-"自身のファイル、パブリック ファイル、共有ファイルにアクセスするには、フォル"
-"ダ ツリーを使用します。フォルダ ツリーが隠れている場合は、ツールバーの右側に"
-"ある [ビュー] → [フォルダ ビュー] の順にクリックします。"
+#: apps/io.ox/tours/files.js:113 module:io.ox/tours
+#, fuzzy
+#| msgid "Upload new file"
+msgid "Upload a new file"
+msgstr "新規ファイルをアップロード"
 
 #: apps/io.ox/tours/intro.js:105 module:io.ox/tours
 msgid ""
@@ -760,6 +868,14 @@ msgstr "アラーム機能の使用"
 #: apps/io.ox/tours/intro.js:34 module:io.ox/tours
 msgid "Welcome to %s"
 msgstr "%s へようこそ"
+
+#: apps/io.ox/tours/files.js:57 module:io.ox/tours
+msgid ""
+"Welcome to your cloud storage app. This Guided Tour will introduce you to "
+"your new online storage solution - your one point to access online stored "
+"files from all your accounts. This is where you can upload and save your "
+"files, share them and synchronize them with different devices.  "
+msgstr ""
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -1357,9 +1473,6 @@ msgstr "%s へようこそ"
 
 #~ msgid "Add mail account"
 #~ msgstr "メール アカウントを追加"
-
-#~ msgid "Add new account"
-#~ msgstr "新規アカウントを追加"
 
 #~ msgid "Add new contact"
 #~ msgstr "新規連絡先を追加"
@@ -3492,6 +3605,9 @@ msgstr "%s へようこそ"
 #~ msgid "Creating Files"
 #~ msgstr "ファイルの作成"
 
+#~ msgid "Creating a note"
+#~ msgstr "メモの作成"
+
 #~ msgid "Creating date:"
 #~ msgstr "作成日:"
 
@@ -3917,6 +4033,9 @@ msgstr "%s へようこそ"
 #~ msgid "Displayed name"
 #~ msgstr "表示名"
 
+#~ msgid "Displaying information"
+#~ msgstr "情報の表示"
+
 #~ msgid "Distance"
 #~ msgstr "距離"
 
@@ -4323,9 +4442,6 @@ msgstr "%s へようこそ"
 
 #~ msgid "Edit description"
 #~ msgstr "説明を編集"
-
-#~ msgid "Edit document"
-#~ msgstr "ドキュメントを編集"
 
 #~ msgid "Edit draft"
 #~ msgstr "下書きを編集"
@@ -4960,9 +5076,6 @@ msgstr "%s へようこそ"
 
 #~ msgid "File"
 #~ msgstr "ファイル"
-
-#~ msgid "File Details"
-#~ msgstr "ファイルの詳細"
 
 #~ msgid "File name"
 #~ msgstr "ファイル名"
@@ -8030,9 +8143,6 @@ msgstr "%s へようこそ"
 #~ msgid "Preview could not be loaded"
 #~ msgstr "プレビューを読み込めませんでした。"
 
-#~ msgid "Preview pane"
-#~ msgstr "プレビュー"
-
 #~ msgid "Previous"
 #~ msgstr "前"
 
@@ -8964,9 +9074,6 @@ msgstr "%s へようこそ"
 #~ msgid "Share tasks"
 #~ msgstr "仕事を共有"
 
-#~ msgid "Share this file"
-#~ msgstr "このファイルを共有"
-
 #~ msgid "Share this folder"
 #~ msgstr "このフォルダを共有"
 
@@ -9287,9 +9394,6 @@ msgstr "%s へようこそ"
 #~ msgstr ""
 #~ "メッセージを表示するためのキーをご利用のプロバイダが LinkedIn から入手する"
 #~ "必要があります。"
-
-#~ msgid "Sort options"
-#~ msgstr "ソート オプション"
 
 #~ msgid "Source"
 #~ msgstr "ソース"
@@ -9823,10 +9927,6 @@ msgstr "%s へようこそ"
 #~ msgstr "フィード用に新規グループを追加"
 
 #~ msgctxt "help"
-#~ msgid "The Drive App"
-#~ msgstr "Drive アプリケーション"
-
-#~ msgctxt "help"
 #~ msgid "The E-Mail Components"
 #~ msgstr "メールの構成要素"
 
@@ -9843,6 +9943,16 @@ msgstr "%s へようこそ"
 #~ msgctxt "help"
 #~ msgid "The Files Components"
 #~ msgstr "ファイルの構成要素"
+
+#~ msgid "The Icons view"
+#~ msgstr "アイコン ビュー"
+
+#~ msgid ""
+#~ "The Icons view displays an icon and the file name for each file. Click on "
+#~ "an icon to view further details and functions in the pop-up."
+#~ msgstr ""
+#~ "アイコン ビューには、各ファイルのアイコンとファイル名が表示されます。アイ"
+#~ "コンをクリックすると、詳細と機能がポップアップに表示されます。"
 
 #~ msgid "The Icons view displays an icon for each file."
 #~ msgstr "アイコン ビューでは、各ファイルのアイコンが表示されます。"
@@ -9866,11 +9976,30 @@ msgstr "%s へようこそ"
 #~ "のになります。"
 
 #~ msgid ""
+#~ "The List view shows details like the size and date of change. Use the "
+#~ "checkboxes to select files. Click on a file to view further details and "
+#~ "functions in the pop-up."
+#~ msgstr ""
+#~ "リスト ビューには、サイズや変更日などの詳細が表示されます。ファイルを選択"
+#~ "するには、チェックボックスを使用します。ファイルをクリックすると、その詳細"
+#~ "と機能がポップアップに表示されます。"
+
+#~ msgid ""
 #~ "The My InfoStore folder is a copy of the personal UserStore folder at the "
 #~ "InfoStore section."
 #~ msgstr ""
 #~ "マイ インフォストア フォルダは、インフォストア セクションの個人用の "
 #~ "UserStore フォルダのコピーです。"
+
+#~ msgid "The Tiles view"
+#~ msgstr "タイル ビュー"
+
+#~ msgid ""
+#~ "The Tiles view shows a big icon for each file. Click on an icon to view "
+#~ "further details and functions in the pop-up."
+#~ msgstr ""
+#~ "タイル ビューには、各ファイルの大型のアイコンが表示されます。アイコンをク"
+#~ "リックすると、詳細と機能がポップアップに表示されます。"
 
 #~ msgid ""
 #~ "The UserStore includes all shared personal InfoStore folders from other "
@@ -10540,6 +10669,10 @@ msgstr "%s へようこそ"
 #~ "出席者を手動で追加するには、有効なメール アドレスを入力してください (例:"
 #~ "john.doe@example.com または \"John Doe\" <jd@example.com>)。"
 
+#~ msgid "To create a note, click on New > Add note in the toolbar."
+#~ msgstr ""
+#~ "メモを作成するには、ツールバーで、[新規] → [メモを追加] をクリックします。"
+
 #~ msgid "To create a note, click the icon at the top. Select Add note."
 #~ msgstr ""
 #~ "メモを作成するには、最上部のアイコンをクリックし、[メモを追加] を選択しま"
@@ -10569,13 +10702,32 @@ msgstr "%s へようこそ"
 #~ "ヘルプを開くには、メニュー バーの右上にある歯車のアイコンをクリックし、[ヘ"
 #~ "ルプ] を選択します。"
 
+#~ msgid ""
+#~ "To select one of the views List, Icons or Squares, click on View on the "
+#~ "right side of the toolbar."
+#~ msgstr ""
+#~ "リスト ビュー、アイコン ビュー、またはタイル ビューのいずれかを選択するに"
+#~ "は、ツールバー右側にある [ビュー] をクリックします。"
+
 #~ msgid "To send the E-Mail, click on Send on the upper right side."
 #~ msgstr "メールを送信するには、画面右上にある [送信] をクリックします。"
+
+#~ msgid "To upload a file, click on New > Upload new file in the toolbar."
+#~ msgstr ""
+#~ "ファイルをアップロードするには、ツールバーで、[新規] → [新規ファイルをアッ"
+#~ "プロード] の順にクリックします。"
 
 #~ msgid "To view attachment you must first save your e-mail as a draft."
 #~ msgstr ""
 #~ "添付ファイルを表示するには、まずメールを下書きとして保存する必要がありま"
 #~ "す。"
+
+#~ msgid ""
+#~ "To view further information, click on a file. A pop-up window displays "
+#~ "further details and functions."
+#~ msgstr ""
+#~ "詳細を閲覧するには、目的のファイルをクリックします。詳細と機能がポップアッ"
+#~ "プ ウィンドウに表示されます。"
 
 #~ msgid "To..."
 #~ msgstr "宛先..."
@@ -10875,14 +11027,14 @@ msgstr "%s へようこそ"
 #~ msgid "Upload file"
 #~ msgstr "ファイルをアップロード"
 
-#~ msgid "Upload new file"
-#~ msgstr "新規ファイルをアップロード"
-
 #~ msgid "Upload new files"
 #~ msgstr "新規ファイルをアップロード"
 
 #~ msgid "Upload new version"
 #~ msgstr "新規バージョンをアップロード"
+
+#~ msgid "Uploading a file"
+#~ msgstr "ファイルのアップロード"
 
 #~ msgid "Uploading folders is not supported."
 #~ msgstr "フォルダのアップロードはサポートされていません。"
@@ -10922,6 +11074,15 @@ msgstr "%s へようこそ"
 
 #~ msgid "Use the expert mode?"
 #~ msgstr "エキスパート モードを使用する"
+
+#~ msgid ""
+#~ "Use the folder tree to access own, public or shared files. If the folder "
+#~ "tree is hidden, click on View > Folder view on the right side of the "
+#~ "toolbar."
+#~ msgstr ""
+#~ "自身のファイル、パブリック ファイル、共有ファイルにアクセスするには、フォ"
+#~ "ルダ ツリーを使用します。フォルダ ツリーが隠れている場合は、ツールバーの右"
+#~ "側にある [ビュー] → [フォルダ ビュー] の順にクリックします。"
 
 #~ msgid ""
 #~ "Use this option when logging in to the server from a public or shared "

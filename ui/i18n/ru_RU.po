@@ -969,6 +969,12 @@ msgstr "Все файлы были удалены"
 msgid "All folders"
 msgstr "Все папки"
 
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All messages have been deleted"
+msgstr "Все файлы были удалены"
+
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr "Сообщения старше %1$d дня(ей) будут перенесены в архив"
@@ -2300,10 +2306,9 @@ msgstr "Удалить учетную запись"
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #, fuzzy
-#| msgctxt "folder"
-#| msgid "Deleted messages"
-msgid "Delete all %1$d messages"
-msgstr "Удаленные"
+#| msgid "Show all %1$d messages in inbox"
+msgid "Delete all messages in this folder"
+msgstr "Показать все сообщения (%1$d) во входящих"
 
 #. object permissions - delete
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -4769,16 +4774,22 @@ msgstr "Показаны не все обнаруженные объекты: %1
 msgid "Move"
 msgstr "Переместить"
 
-#. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 #, fuzzy
-#| msgid "Show all %1$d messages in inbox"
-msgid "Move all %1$d messages to another folder"
-msgstr "Показать все сообщения (%1$d) во входящих"
+#| msgid "Close all"
+msgid "Move all"
+msgstr "Закрыть все"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Move all messages"
 msgstr "Переместить все сообщения"
+
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show all %1$d messages in inbox"
+msgid "Move all messages to another folder"
+msgstr "Показать все сообщения (%1$d) во входящих"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
@@ -7738,6 +7749,10 @@ msgstr "Папка освобождена."
 msgid "The folder has been emptied"
 msgstr "Папка освобождена"
 
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "The following actions apply to all messages (%1$d) in this folder:"
+msgstr ""
+
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
@@ -10058,9 +10073,6 @@ msgstr "гггг"
 #~ "Выберите букву в панели навигации для просмотра имен контактов, "
 #~ "начинающихся с этой буквы."
 
-#~ msgid "Close all"
-#~ msgstr "Закрыть все"
-
 #~ msgid "Close document"
 #~ msgstr "Закрыть документ"
 
@@ -10181,6 +10193,12 @@ msgstr "гггг"
 
 #~ msgid "Default view"
 #~ msgstr "Вид по умолчанию"
+
+#, fuzzy
+#~| msgctxt "folder"
+#~| msgid "Deleted messages"
+#~ msgid "Delete all %1$d messages"
+#~ msgstr "Удаленные"
 
 #~ msgid "Delete all accounts"
 #~ msgstr "Удалить все учетные записи"

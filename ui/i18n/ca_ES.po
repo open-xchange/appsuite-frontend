@@ -1050,6 +1050,13 @@ msgstr "S'ha suprimit aquest fitxer"
 msgid "All folders"
 msgstr "Totes les carpetes"
 
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "This file has been deleted"
+#| msgid_plural "These files have been deleted"
+msgid "All messages have been deleted"
+msgstr "S'ha suprimit aquest fitxer"
+
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr ""
@@ -2453,10 +2460,9 @@ msgstr "Suprimeix el compte"
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #, fuzzy
-#| msgctxt "folder"
-#| msgid "Deleted messages"
-msgid "Delete all %1$d messages"
-msgstr "Missatges esborrats"
+#| msgid "Show all %1$d messages in inbox"
+msgid "Delete all messages in this folder"
+msgstr "Mostra tots els missatges de %1$d a la safata d'entrada"
 
 #. object permissions - delete
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -5107,18 +5113,24 @@ msgstr "S'han trobat més elements que els %1$s que es mostren a continuació"
 msgid "Move"
 msgstr "Mou"
 
-#. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 #, fuzzy
-#| msgid "Show all %1$d messages in inbox"
-msgid "Move all %1$d messages to another folder"
-msgstr "Mostra tots els missatges de %1$d a la safata d'entrada"
+#| msgid "Close all"
+msgid "Move all"
+msgstr "Tanca-ho tot"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #, fuzzy
 #| msgid "Open/close all messages"
 msgid "Move all messages"
 msgstr "Obre/tanca tots els missatges"
+
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show all %1$d messages in inbox"
+msgid "Move all messages to another folder"
+msgstr "Mostra tots els missatges de %1$d a la safata d'entrada"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
@@ -8297,6 +8309,10 @@ msgstr "La carpeta s'ha netejat."
 msgid "The folder has been emptied"
 msgstr "La carpeta s'ha buidat."
 
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "The following actions apply to all messages (%1$d) in this folder:"
+msgstr ""
+
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
@@ -10641,9 +10657,6 @@ msgstr ""
 #~ msgid "Click here for free trial."
 #~ msgstr "Premeu aquí per a una prova gratuïta."
 
-#~ msgid "Close all"
-#~ msgstr "Tanca-ho tot"
-
 #, fuzzy
 #~| msgid "Comments"
 #~ msgid "Common Facets"
@@ -10668,6 +10681,12 @@ msgstr ""
 
 #~ msgid "Create new task"
 #~ msgstr "Crea una nova tasca"
+
+#, fuzzy
+#~| msgctxt "folder"
+#~| msgid "Deleted messages"
+#~ msgid "Delete all %1$d messages"
+#~ msgstr "Missatges esborrats"
 
 #, fuzzy
 #~| msgid "Mail"

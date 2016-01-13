@@ -972,6 +972,12 @@ msgstr "Všetky súbory boli zmazané"
 msgid "All folders"
 msgstr "Všetky priečinky"
 
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All messages have been deleted"
+msgstr "Všetky súbory boli zmazané"
+
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr "Všetky správy staršie ako %1$d dní budú presunuté do priečinka Archív"
@@ -2311,10 +2317,9 @@ msgstr "Zmazať účet"
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #, fuzzy
-#| msgctxt "folder"
-#| msgid "Deleted messages"
-msgid "Delete all %1$d messages"
-msgstr "Zmazané správy"
+#| msgid "Show all %1$d messages in inbox"
+msgid "Delete all messages in this folder"
+msgstr "Zobraziť všetkých %1$d správ v priečinku Doručená pošta"
 
 #. object permissions - delete
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -4794,16 +4799,22 @@ msgstr "Bolo nájdených viac ako momentálne zobrazených %1$s položiek"
 msgid "Move"
 msgstr "Presunúť"
 
-#. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 #, fuzzy
-#| msgid "Show all %1$d messages in inbox"
-msgid "Move all %1$d messages to another folder"
-msgstr "Zobraziť všetkých %1$d správ v priečinku Doručená pošta"
+#| msgid "Close all"
+msgid "Move all"
+msgstr "Zatvoriť všetko"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Move all messages"
 msgstr "Presunúť všetky správy"
+
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show all %1$d messages in inbox"
+msgid "Move all messages to another folder"
+msgstr "Zobraziť všetkých %1$d správ v priečinku Doručená pošta"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
@@ -7785,6 +7796,10 @@ msgstr "Priečinok bol vyčistený."
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "The folder has been emptied"
 msgstr "Priečinok bol vyprázdnený"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "The following actions apply to all messages (%1$d) in this folder:"
+msgstr ""
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
@@ -10802,9 +10817,6 @@ msgstr "RRRR"
 #~ msgid "Close Window"
 #~ msgstr "Zatvoriť okno"
 
-#~ msgid "Close all"
-#~ msgstr "Zatvoriť všetko"
-
 #~ msgid "Close configuration"
 #~ msgstr "Zatvoriť konfiguráciu"
 
@@ -11161,6 +11173,12 @@ msgstr "RRRR"
 
 #~ msgid "Delete a stream"
 #~ msgstr "Zmazať stream"
+
+#, fuzzy
+#~| msgctxt "folder"
+#~| msgid "Deleted messages"
+#~ msgid "Delete all %1$d messages"
+#~ msgstr "Zmazané správy"
 
 #~ msgid "Delete all accounts"
 #~ msgstr "Zmazať všetky účty"

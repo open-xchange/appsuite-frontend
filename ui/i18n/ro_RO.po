@@ -972,6 +972,12 @@ msgstr "Toate fișierele au fost șterse"
 msgid "All folders"
 msgstr "Toate dosarele"
 
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All messages have been deleted"
+msgstr "Toate fișierele au fost șterse"
+
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr ""
@@ -2314,10 +2320,9 @@ msgstr "Șterge contul"
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #, fuzzy
-#| msgctxt "folder"
-#| msgid "Deleted messages"
-msgid "Delete all %1$d messages"
-msgstr "Coș de gunoi"
+#| msgid "Show all %1$d messages in inbox"
+msgid "Delete all messages in this folder"
+msgstr "Afișează toate cele %1$d mesaje primite"
 
 #. object permissions - delete
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -4799,16 +4804,22 @@ msgstr "S-au găsit mai multe elemente decât cele %1$s afișate momentan."
 msgid "Move"
 msgstr "Mută"
 
-#. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 #, fuzzy
-#| msgid "Show all %1$d messages in inbox"
-msgid "Move all %1$d messages to another folder"
-msgstr "Afișează toate cele %1$d mesaje primite"
+#| msgid "Close all"
+msgid "Move all"
+msgstr "Închide tot"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Move all messages"
 msgstr "Mută toate mesajele"
+
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show all %1$d messages in inbox"
+msgid "Move all messages to another folder"
+msgstr "Afișează toate cele %1$d mesaje primite"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
@@ -7796,6 +7807,10 @@ msgstr "Dosarul a fost curățat."
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "The folder has been emptied"
 msgstr "Dosarul a fost golit"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "The following actions apply to all messages (%1$d) in this folder:"
+msgstr ""
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
@@ -10850,9 +10865,6 @@ msgstr "aaaa"
 #~ msgid "Close Window"
 #~ msgstr "Închide fereastra"
 
-#~ msgid "Close all"
-#~ msgstr "Închide tot"
-
 #~ msgid "Close configuration"
 #~ msgstr "Închide configurația"
 
@@ -11210,6 +11222,12 @@ msgstr "aaaa"
 
 #~ msgid "Delete a stream"
 #~ msgstr "Șterge un flux"
+
+#, fuzzy
+#~| msgctxt "folder"
+#~| msgid "Deleted messages"
+#~ msgid "Delete all %1$d messages"
+#~ msgstr "Coș de gunoi"
 
 #~ msgid "Delete all accounts"
 #~ msgstr "Șterge toate conturile"

@@ -944,6 +944,12 @@ msgstr "Alle filer har blitt slettet"
 msgid "All folders"
 msgstr "Alle mapper"
 
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All messages have been deleted"
+msgstr "Alle filer har blitt slettet"
+
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr "Alle meldinger som er eldre enn %1$d dager vil bli flyttet til arkiv"
@@ -2265,8 +2271,10 @@ msgstr "Slett konto"
 
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "Delete all %1$d messages"
-msgstr "Slett alle %1$d meldinger"
+#, fuzzy
+#| msgid "Move all %1$d messages to another folder"
+msgid "Delete all messages in this folder"
+msgstr "Flytt alle %1$d meldingene til en annen mappe"
 
 #. object permissions - delete
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -4725,14 +4733,22 @@ msgstr "Mer enn de %1$s elementer som ble funnet"
 msgid "Move"
 msgstr "Flytt"
 
-#. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "Move all %1$d messages to another folder"
-msgstr "Flytt alle %1$d meldingene til en annen mappe"
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "Move"
+msgid "Move all"
+msgstr "Flytt"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Move all messages"
 msgstr "Flytt alle meldinger"
+
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Move all %1$d messages to another folder"
+msgid "Move all messages to another folder"
+msgstr "Flytt alle %1$d meldingene til en annen mappe"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
@@ -7674,6 +7690,10 @@ msgstr "Mappen har blitt ryddet opp."
 msgid "The folder has been emptied"
 msgstr "Mappen har blitt tømt."
 
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "The following actions apply to all messages (%1$d) in this folder:"
+msgstr ""
+
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
@@ -9788,6 +9808,9 @@ msgstr "yyyy"
 #~ "shared folder"
 #~ msgstr ""
 #~ "Lagde privat mappe '%1$s' i %2$s og opprettet abonnement på delt mappe"
+
+#~ msgid "Delete all %1$d messages"
+#~ msgstr "Slett alle %1$d meldinger"
 
 #, fuzzy
 #~| msgid "Mail"

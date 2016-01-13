@@ -13,6 +13,12 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
 "X-Generator: Poedit 1.8.4\n"
 
+#: apps/io.ox/tours/files.js:215 module:io.ox/tours
+#, fuzzy
+#| msgid "Add new account"
+msgid "Add another account"
+msgstr "Pievienot jaunu kontu"
+
 #: apps/io.ox/tours/calendar.js:72 module:io.ox/tours
 msgid "Adding attachments"
 msgstr "Pielikumu pievienošana"
@@ -20,6 +26,20 @@ msgstr "Pielikumu pievienošana"
 #: apps/io.ox/tours/tasks.js:54 module:io.ox/tours
 msgid "Adding further details"
 msgstr "Pārejo detaļu pievienošana"
+
+#: apps/io.ox/tours/files.js:101 module:io.ox/tours
+msgid ""
+"At the top you can find the toolbar with many functions and additional "
+"options. You can easily create new folders, new files and much more."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:163 module:io.ox/tours
+msgid ""
+"Choose from two alternatives to share your files and folders. Use Invite "
+"people if you want to manage access rights and allow recipients to create "
+"and edit files. Or just get a link to let others view and download your "
+"files. You can use an expiration date and password protection if you like."
+msgstr ""
 
 #: apps/io.ox/tours/contacts.js:36 module:io.ox/tours
 msgid ""
@@ -29,9 +49,23 @@ msgstr ""
 "Noklikšķiniet uz burta kreisajā malā novietotajā navigācijas joslā lai "
 "uzrādītu atbilstošās kontaktpersonas no izvēlētās adrešu grāmatas."
 
+#: apps/io.ox/tours/files.js:78 module:io.ox/tours
+msgid ""
+"Clicking on a folder displays all the subfolders, documents, media and other "
+"files that it contains."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:129 module:io.ox/tours
+msgid "Clicking on the view icon leads you to a preview of the selected file."
+msgstr ""
+
 #: apps/io.ox/tours/portal.js:45 module:io.ox/tours
 msgid "Closing a square"
 msgstr "Apskatlogu aizvēršana"
+
+#: apps/io.ox/tours/files.js:176 module:io.ox/tours
+msgid "Collaborating"
+msgstr ""
 
 #: apps/io.ox/tours/mail.js:33 module:io.ox/tours
 msgid "Composing a new E-Mail"
@@ -48,10 +82,6 @@ msgstr "Jaunas kontaktpersonas izveide"
 #: apps/io.ox/tours/tasks.js:32 module:io.ox/tours
 msgid "Creating a new task"
 msgstr "Jauna uzdevuma izveide"
-
-#: apps/io.ox/tours/files.js:60 module:io.ox/tours
-msgid "Creating a note"
-msgstr "Piezīmes izveidošana"
 
 #: apps/io.ox/tours/intro.js:72 module:io.ox/tours
 msgid "Creating new items"
@@ -92,9 +122,16 @@ msgstr ""
 "Atsevišķo aplikāciju detalizētas instrukcijas ir atrodamas sistēmas izvēlnē "
 "> Palīgs."
 
-#: apps/io.ox/tours/files.js:67 module:io.ox/tours
-msgid "Displaying information"
-msgstr "Informācijas parādīšana"
+#: apps/io.ox/tours/files.js:192 module:io.ox/tours
+msgid ""
+"Did you know that you can edit text documents and spreadsheets online? Drive "
+"will automatically update your edited file, but thanks to versioning the "
+"original file stays available."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:86 module:io.ox/tours
+msgid "Different views are available. Just select the one you like best."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -104,6 +141,13 @@ msgstr "Palīga vai iestatījumu parādīšana"
 msgid "Drag and drop"
 msgstr "Pārvikšana"
 
+#: apps/io.ox/tours/files.js:216 module:io.ox/tours
+msgid ""
+"Drive allows you to connect to other storage solutions if you already have a "
+"cloud storage account you use to save and sync your files. Simply click on "
+"the appropriate logo to access your existing data."
+msgstr ""
+
 #: apps/io.ox/tours/settings.js:44 module:io.ox/tours
 msgid ""
 "Edit a setting on the right side. In most of the cases, the changes are "
@@ -111,6 +155,12 @@ msgid ""
 msgstr ""
 "Veiciet atbilstošo iestatījumu rediģēšanu labās puses panelī. Vairumā "
 "gadījumu izmaiņas tiek tūlītēji aktivizētas."
+
+#: apps/io.ox/tours/files.js:191 module:io.ox/tours
+#, fuzzy
+#| msgid "Edit document"
+msgid "Edit documents"
+msgstr "Rediģēt dokumentu"
 
 #: apps/io.ox/tours/mail.js:106 module:io.ox/tours
 msgid "Editing multiple E-Mails"
@@ -189,9 +239,27 @@ msgstr "Tēmas ievadīšana"
 msgid "Entering the task's data"
 msgstr "Uzdevuma datu ievadīšana"
 
-#: apps/io.ox/tours/files.js:30 module:io.ox/tours
+#: apps/io.ox/tours/files.js:199 module:io.ox/tours
+#, fuzzy
+#| msgid "File Details"
+msgid "File details"
+msgstr "Faila detaļas"
+
+#: apps/io.ox/tours/files.js:77 module:io.ox/tours
+#, fuzzy
+#| msgid "Folder tree"
+msgid "Folder content"
+msgstr "Mapju koks"
+
+#: apps/io.ox/tours/files.js:63 module:io.ox/tours
 msgid "Folder tree"
 msgstr "Mapju koks"
+
+#: apps/io.ox/tours/files.js:140 module:io.ox/tours
+msgid ""
+"From preview you can also select other options to help you manage and work "
+"on your files."
+msgstr ""
 
 #: apps/io.ox/tours/calendar.js:73 module:io.ox/tours
 msgid "Further down you can add documents as attachments to the appointment."
@@ -214,6 +282,18 @@ msgstr "Iepazīstināšana"
 #: apps/io.ox/tours/mail.js:101 module:io.ox/tours
 msgid "Halo view"
 msgstr "Halo skats"
+
+#: apps/io.ox/tours/files.js:151 module:io.ox/tours
+msgid ""
+"Here you can share files with your colleagues and external contacts. You can "
+"also collaborate on a document and set different access rights."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:226 module:io.ox/tours
+msgid ""
+"Hint: you can always restart guided tours, any time you need them, from the "
+"system menu."
+msgstr ""
 
 #: apps/io.ox/tours/settings.js:36 module:io.ox/tours
 msgid "How the settings are organized"
@@ -266,9 +346,29 @@ msgstr "Citu dalībnieku uzaicināšana"
 msgid "Launching an app"
 msgstr "Aplikācijas startēšana"
 
+#: apps/io.ox/tours/files.js:37 module:io.ox/tours
+msgid ""
+"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy "
+"eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam "
+"voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet "
+"clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit "
+"amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam "
+"nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed "
+"diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet "
+"clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+msgstr ""
+
 #: apps/io.ox/tours/contacts.js:35 module:io.ox/tours
 msgid "Navigation bar"
 msgstr "Navigācijas josla"
+
+#: apps/io.ox/tours/files.js:64 module:io.ox/tours
+msgid ""
+"On the left you can see the folder tree. It displays your folder structure "
+"and allows you to navigate to specific folders and subfolders. To make your "
+"life easier, we have already included folders for your Documents, Music, "
+"Pictures and Videos."
+msgstr ""
 
 #: apps/io.ox/tours/mail.js:91 module:io.ox/tours
 msgid "Opening an E-Mail in a separate window"
@@ -290,6 +390,16 @@ msgstr "Palīga atvēršana"
 msgid "Opening the settings"
 msgstr "Iestatījumu atvēršana"
 
+#: apps/io.ox/tours/files.js:128 module:io.ox/tours
+#, fuzzy
+msgid "Preview files"
+msgstr "Apskats"
+
+#: apps/io.ox/tours/files.js:139 module:io.ox/tours
+#, fuzzy
+msgid "Preview mode"
+msgstr "Apskats"
+
 #: apps/io.ox/tours/mail.js:96 module:io.ox/tours
 msgid "Reading E-Mail conversations"
 msgstr "E-pasta sarunu lasīšana"
@@ -298,12 +408,22 @@ msgstr "E-pasta sarunu lasīšana"
 msgid "Reading the details"
 msgstr "Detaļu apskats"
 
+#: apps/io.ox/tours/files.js:225 module:io.ox/tours
+msgid "Restart Guided Tour"
+msgstr ""
+
 #: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Objektu meklēšana"
 
+#: apps/io.ox/tours/files.js:85 module:io.ox/tours
+#, fuzzy
+#| msgid "Selecting a view"
+msgid "Select a view"
+msgstr "Skata izvēle"
+
 #: apps/io.ox/tours/calendar.js:83 module:io.ox/tours
-#: apps/io.ox/tours/files.js:35 apps/io.ox/tours/mail.js:86
+#: apps/io.ox/tours/mail.js:86
 msgid "Selecting a view"
 msgstr "Skata izvēle"
 
@@ -314,6 +434,26 @@ msgstr "E-pasta nosūtīšana kontaktpersonai"
 #: apps/io.ox/tours/mail.js:74 module:io.ox/tours
 msgid "Sending the E-Mail"
 msgstr "E-pasta nosūtīšana"
+
+#: apps/io.ox/tours/files.js:150 module:io.ox/tours
+#, fuzzy
+#| msgid "Share this file"
+msgid "Share files"
+msgstr "Koplietot šo failu"
+
+#: apps/io.ox/tours/files.js:177 module:io.ox/tours
+msgid ""
+"Sharing files by inviting people does not only offer your recipients the "
+"option to create and edit files. Internal and external participants are also "
+"able to collaborate with you on text documents and spreadsheets at the same "
+"time."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:162 module:io.ox/tours
+#, fuzzy
+#| msgid "Sort options"
+msgid "Sharing options"
+msgstr "Kārtošanas opcijas"
 
 #: apps/io.ox/tours/settings.js:54 module:io.ox/tours
 msgid "Signing out"
@@ -339,21 +479,21 @@ msgstr ""
 "Detaļu skatā tiek uzrādīts objekta saturs. Atkarībā no aplikācijas, detaļu "
 "skatā var būt pieejamas arī papildus funkcijas objektu organizēšanai."
 
-#: apps/io.ox/tours/files.js:45 module:io.ox/tours
-msgid "The Icons view"
-msgstr "Ikonu skats"
+#: apps/io.ox/tours/files.js:56 module:io.ox/tours
+#, fuzzy
+#| msgctxt "help"
+#| msgid "The Drive App"
+msgid "The Drive app"
+msgstr "Drive aplikācija"
 
-#: apps/io.ox/tours/files.js:46 module:io.ox/tours
-msgid ""
-"The Icons view displays an icon and the file name for each file. Click on an "
-"icon to view further details and functions in the pop-up."
-msgstr ""
-"Ikonu skatā katrs fails tiek uzrādīts kā ikona ar atbilstošu vārdu. "
-"Noklikšķinot uz ikonas tiek parādīts uznirstošais logs ar faila detaļām un "
-"funkcijām."
+#: apps/io.ox/tours/files.js:50 module:io.ox/tours
+#, fuzzy
+#| msgctxt "help"
+#| msgid "The Drive App"
+msgid "The Drive app tour.txt"
+msgstr "Drive aplikācija"
 
 #: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
-#: apps/io.ox/tours/files.js:40
 msgid "The List view"
 msgstr "Saraksta skats"
 
@@ -366,16 +506,6 @@ msgstr ""
 "Saraksta skatā tiek parādītas visas pašreizējā mapē esošās tikšanās. "
 "Noklikšķinot uz tikšanās ieraksta, detaļu skatā tiek parādīta tikšanās "
 "informācija un būtiskākās pārvaldības funkcijas."
-
-#: apps/io.ox/tours/files.js:41 module:io.ox/tours
-msgid ""
-"The List view shows details like the size and date of change. Use the "
-"checkboxes to select files. Click on a file to view further details and "
-"functions in the pop-up."
-msgstr ""
-"Saraksta skatā tie uzrādītas tādas detaļas kā izmērs un izmaiņu saglabāšanas "
-"datums. Lai izvēlētos failus, aktivizējiet izvēles rūtiņas. Noklikšķinot uz "
-"faila tiek parādīts uznirstošais logs ar papildus detaļām un funkcijām."
 
 #: apps/io.ox/tours/intro.js:58 module:io.ox/tours
 msgid "The New objects icon"
@@ -401,18 +531,6 @@ msgstr ""
 "Portāls informē jūs par pašreizējām e-pasta vēstulēm, uzdevumiem, tikšanās "
 "reizēm un sociālo tīklu jaunumiem."
 
-#: apps/io.ox/tours/files.js:50 module:io.ox/tours
-msgid "The Tiles view"
-msgstr "Flīžu skats"
-
-#: apps/io.ox/tours/files.js:51 module:io.ox/tours
-msgid ""
-"The Tiles view shows a big icon for each file. Click on an icon to view "
-"further details and functions in the pop-up."
-msgstr ""
-"Flīžu skatā faili tiek uzrādīti kā lielas ikonas. Noklikšķinot uz ikonas "
-"tiek parādīts uznirstošais logs ar faila detaļām un funkcijām."
-
 #: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
 msgid "The calendar views"
 msgstr "Kalendāra skati"
@@ -424,6 +542,13 @@ msgid ""
 msgstr ""
 "Kalendāra skati parāda kalendāra lapu izvēlētajam laika apgabalam ar tajā "
 "atzīmētām tikšanās reizēm."
+
+#: apps/io.ox/tours/files.js:200 module:io.ox/tours
+msgid ""
+"The file details side bar offers additional information about your files. "
+"Just enable the File details option from the View drop down menu and select "
+"a file to see the details."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js:104 module:io.ox/tours
 msgid "The folder tree"
@@ -503,12 +628,6 @@ msgstr ""
 #: apps/io.ox/tours/tasks.js:33 module:io.ox/tours
 msgid "To create a new task, click on New in the toolbar."
 msgstr "Lai izveidotu jaunu uzdevumu, rīkjoslā noklikšķinet uz Jauns."
-
-#: apps/io.ox/tours/files.js:61 module:io.ox/tours
-msgid "To create a note, click on New > Add note in the toolbar."
-msgstr ""
-"Jaunas piezīmes izveidošanai rīkjoslā noklikšķiniet uz Jauns > Pievienot "
-"piezīmi"
 
 #: apps/io.ox/tours/calendar.js:58 module:io.ox/tours
 msgid ""
@@ -669,14 +788,6 @@ msgstr ""
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr "Obejktu meklēšanai noklikšķiniet uz meklēšanas ikonas rīkjoslā."
 
-#: apps/io.ox/tours/files.js:36 module:io.ox/tours
-msgid ""
-"To select one of the views List, Icons or Squares, click on View on the "
-"right side of the toolbar."
-msgstr ""
-"Lai izvēlētos ikonu, saraksta vai apskatlapu skatu, rīkjoslā noklikšķiniet "
-"uz skata izvēles ikonas."
-
 #: apps/io.ox/tours/calendar.js:84 module:io.ox/tours
 msgid ""
 "To select one of the views like Day, Month or List, click on View in the "
@@ -722,36 +833,29 @@ msgstr ""
 msgid "To track the editing status, enter the current progress."
 msgstr "Lai sekotu izpildes statusam ievadiet pašreizējo progresu."
 
-#: apps/io.ox/tours/files.js:56 module:io.ox/tours
-msgid "To upload a file, click on New > Upload new file in the toolbar."
-msgstr ""
-"Jauna faila augšupielādēšanai rīkjoslā noklikšķiniet uz Jauns > Ielādēt "
-"jaunu failu."
-
-#: apps/io.ox/tours/files.js:68 module:io.ox/tours
+#: apps/io.ox/tours/files.js:114 module:io.ox/tours
 msgid ""
-"To view further information, click on a file. A pop-up window displays "
-"further details and functions."
+"To upload a new file from your local device, simply click on Add local file "
+"and select the file you would like to upload. It is even easier if you just "
+"drag and drop files from your local device into Drive. The uploaded file is "
+"now available in Drive on all your devices."
 msgstr ""
-"Lai skatītu tālāku informāciju noklikšķiniet iz atbilstošā faila. "
-"Informācija un funkcijas tiek parādītas uznirstošajā logā."
+
+#: apps/io.ox/tours/files.js:100 module:io.ox/tours
+#, fuzzy
+#| msgid "The toolbar"
+msgid "Toolbar"
+msgstr "Rīkjosla"
 
 #: apps/io.ox/tours/tasks.js:72 module:io.ox/tours
 msgid "Tracking the editing status"
 msgstr "Izpildes statusa sekošana"
 
-#: apps/io.ox/tours/files.js:55 module:io.ox/tours
-msgid "Uploading a file"
-msgstr "Failu augšupielāde"
-
-#: apps/io.ox/tours/files.js:31 module:io.ox/tours
-msgid ""
-"Use the folder tree to access own, public or shared files. If the folder "
-"tree is hidden, click on View > Folder view on the right side of the toolbar."
-msgstr ""
-"Izmantojiet mapju koku, lai piekļūtu personīgajiem, publiskajiem un "
-"koplietojuma failiem. Ja mapju koks ir paslēpts, rīkjoslas labajā pusē "
-"piespiediet Skats > Mapes skats."
+#: apps/io.ox/tours/files.js:113 module:io.ox/tours
+#, fuzzy
+#| msgid "Upload new file"
+msgid "Upload a new file"
+msgstr "Ielādēt jaunu failu"
 
 #: apps/io.ox/tours/intro.js:105 module:io.ox/tours
 msgid ""
@@ -776,6 +880,14 @@ msgstr "Atgādinājuma funkciju lietošana"
 #: apps/io.ox/tours/intro.js:34 module:io.ox/tours
 msgid "Welcome to %s"
 msgstr "Esiet sveicināti %s"
+
+#: apps/io.ox/tours/files.js:57 module:io.ox/tours
+msgid ""
+"Welcome to your cloud storage app. This Guided Tour will introduce you to "
+"your new online storage solution - your one point to access online stored "
+"files from all your accounts. This is where you can upload and save your "
+"files, share them and synchronize them with different devices.  "
+msgstr ""
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -1388,9 +1500,6 @@ msgstr "Esiet sveicināti %s"
 
 #~ msgid "Add member"
 #~ msgstr "Pievienot locekli"
-
-#~ msgid "Add new account"
-#~ msgstr "Pievienot jaunu kontu"
 
 #~ msgid "Add new contact"
 #~ msgstr "Pievienot jaunu kontaktu"
@@ -2865,6 +2974,9 @@ msgstr "Esiet sveicināti %s"
 #~ msgid "Creating Files"
 #~ msgstr "Failu izveide"
 
+#~ msgid "Creating a note"
+#~ msgstr "Piezīmes izveidošana"
+
 #~ msgid "Creation date:"
 #~ msgstr "Izveides datums:"
 
@@ -3254,6 +3366,9 @@ msgstr "Esiet sveicināti %s"
 
 #~ msgid "Displayed name"
 #~ msgstr "Uzrādītais vārds"
+
+#~ msgid "Displaying information"
+#~ msgstr "Informācijas parādīšana"
 
 #~ msgid "Distance"
 #~ msgstr "Attālums"
@@ -3648,9 +3763,6 @@ msgstr "Esiet sveicināti %s"
 
 #~ msgid "Edit description"
 #~ msgstr "Rediģēt apsrakstu"
-
-#~ msgid "Edit document"
-#~ msgstr "Rediģēt dokumentu"
 
 #~ msgid "Edit draft"
 #~ msgstr "Rediģēt melnrakstu"
@@ -4151,9 +4263,6 @@ msgstr "Esiet sveicināti %s"
 
 #~ msgid "File"
 #~ msgstr "Fails"
-
-#~ msgid "File Details"
-#~ msgstr "Faila detaļas"
 
 #~ msgid "File name"
 #~ msgstr "Faila vārds"
@@ -7002,10 +7111,6 @@ msgstr "Esiet sveicināti %s"
 #~ msgid "Preview could not be loaded"
 #~ msgstr "Nevar ielādēt apskatu."
 
-#, fuzzy
-#~ msgid "Preview pane"
-#~ msgstr "Apskats"
-
 #~ msgid "Previous"
 #~ msgstr "Iepriekšējais"
 
@@ -7854,9 +7959,6 @@ msgstr "Esiet sveicināti %s"
 #~ msgid "Share tasks"
 #~ msgstr "Koplietot uzdevumus"
 
-#~ msgid "Share this file"
-#~ msgstr "Koplietot šo failu"
-
 #~ msgid "Share this folder"
 #~ msgstr "Koplietot šo mapi"
 
@@ -8156,9 +8258,6 @@ msgstr "Esiet sveicināti %s"
 #~ msgstr ""
 #~ "Diemžēl, mēs šeit nevaram palīdzēt. Jūsu pakalpojuma nodrošinātājam ir "
 #~ "jāiegūst LinkeIn atslēga ar tiesībām lasīt ziņojumus."
-
-#~ msgid "Sort options"
-#~ msgstr "Kārtošanas opcijas"
 
 #~ msgid "Source"
 #~ msgstr "Avots"
@@ -8615,10 +8714,6 @@ msgstr "Esiet sveicināti %s"
 #~ msgstr "Pievienot jaunu ziņapmainās grupu"
 
 #~ msgctxt "help"
-#~ msgid "The Drive App"
-#~ msgstr "Drive aplikācija"
-
-#~ msgctxt "help"
 #~ msgid "The E-Mail Components"
 #~ msgstr "E-pasta komponentes"
 
@@ -8635,6 +8730,17 @@ msgstr "Esiet sveicināti %s"
 #~ msgctxt "help"
 #~ msgid "The Files Components"
 #~ msgstr "Failu komponentes"
+
+#~ msgid "The Icons view"
+#~ msgstr "Ikonu skats"
+
+#~ msgid ""
+#~ "The Icons view displays an icon and the file name for each file. Click on "
+#~ "an icon to view further details and functions in the pop-up."
+#~ msgstr ""
+#~ "Ikonu skatā katrs fails tiek uzrādīts kā ikona ar atbilstošu vārdu. "
+#~ "Noklikšķinot uz ikonas tiek parādīts uznirstošais logs ar faila detaļām "
+#~ "un funkcijām."
 
 #~ msgid "The Icons view displays an icon for each file."
 #~ msgstr "Ikonu skats uzrāda failus kā tiem atbilstošās ikonas."
@@ -8656,6 +8762,26 @@ msgstr "Esiet sveicināti %s"
 #~ "Saraksta skatā tiek uzrādīta sānu josla ar failiem un apskata apgabals ar "
 #~ "datiem par izvēlēto failu. Šis skats atbilst skatam e-pasta un kontaktu "
 #~ "aplikācijās."
+
+#~ msgid ""
+#~ "The List view shows details like the size and date of change. Use the "
+#~ "checkboxes to select files. Click on a file to view further details and "
+#~ "functions in the pop-up."
+#~ msgstr ""
+#~ "Saraksta skatā tie uzrādītas tādas detaļas kā izmērs un izmaiņu "
+#~ "saglabāšanas datums. Lai izvēlētos failus, aktivizējiet izvēles rūtiņas. "
+#~ "Noklikšķinot uz faila tiek parādīts uznirstošais logs ar papildus detaļām "
+#~ "un funkcijām."
+
+#~ msgid "The Tiles view"
+#~ msgstr "Flīžu skats"
+
+#~ msgid ""
+#~ "The Tiles view shows a big icon for each file. Click on an icon to view "
+#~ "further details and functions in the pop-up."
+#~ msgstr ""
+#~ "Flīžu skatā faili tiek uzrādīti kā lielas ikonas. Noklikšķinot uz ikonas "
+#~ "tiek parādīts uznirstošais logs ar faila detaļām un funkcijām."
 
 #~ msgid "The account must be named"
 #~ msgstr "Kontam ir jānorāda vārds"
@@ -9328,6 +9454,11 @@ msgstr "Esiet sveicināti %s"
 #~ "Lai manuāli pievienotu kontaktus vienkārši norādiet derīgu e-pasta adresi "
 #~ "(piem., john.doe@example.com or \"John Doe\" <jd@example.com>)"
 
+#~ msgid "To create a note, click on New > Add note in the toolbar."
+#~ msgstr ""
+#~ "Jaunas piezīmes izveidošanai rīkjoslā noklikšķiniet uz Jauns > Pievienot "
+#~ "piezīmi"
+
 #~ msgid "To create a note, click the icon at the top. Select Add note."
 #~ msgstr ""
 #~ "Piezīmes pievienošanai noklikšķiniet uz rīkjoslas augšējās ikonas un "
@@ -9359,13 +9490,32 @@ msgstr "Esiet sveicināti %s"
 #~ "Lai atvērtu Palīgu noklikšķiniet uzsistēmas izvēlņu ikonas izvēlņu joslas "
 #~ "augšējā labajā malā un izvēlieties palīga izvēlni."
 
+#~ msgid ""
+#~ "To select one of the views List, Icons or Squares, click on View on the "
+#~ "right side of the toolbar."
+#~ msgstr ""
+#~ "Lai izvēlētos ikonu, saraksta vai apskatlapu skatu, rīkjoslā "
+#~ "noklikšķiniet uz skata izvēles ikonas."
+
 #~ msgid "To send the E-Mail, click on Send on the upper right side."
 #~ msgstr "Lai nosūtītu vēstuli noklikšķiniet uz 'Sūtīt' augšējā labajā malā."
+
+#~ msgid "To upload a file, click on New > Upload new file in the toolbar."
+#~ msgstr ""
+#~ "Jauna faila augšupielādēšanai rīkjoslā noklikšķiniet uz Jauns > Ielādēt "
+#~ "jaunu failu."
 
 #~ msgid "To view attachment you must first save your e-mail as a draft."
 #~ msgstr ""
 #~ "Lai skatītu pievienojumu jums vispirms ir jāsaglabā savs e-pasts kā "
 #~ "melnraksts."
+
+#~ msgid ""
+#~ "To view further information, click on a file. A pop-up window displays "
+#~ "further details and functions."
+#~ msgstr ""
+#~ "Lai skatītu tālāku informāciju noklikšķiniet iz atbilstošā faila. "
+#~ "Informācija un funkcijas tiek parādītas uznirstošajā logā."
 
 #~ msgid "To..."
 #~ msgstr "Kam..."
@@ -9651,14 +9801,14 @@ msgstr "Esiet sveicināti %s"
 #~ msgid "Upload file"
 #~ msgstr "Ielādēt failu"
 
-#~ msgid "Upload new file"
-#~ msgstr "Ielādēt jaunu failu"
-
 #~ msgid "Upload new files"
 #~ msgstr "Ielādēt jaunus failus"
 
 #~ msgid "Upload new version"
 #~ msgstr "Ielādēt jaunu versiju"
+
+#~ msgid "Uploading a file"
+#~ msgstr "Failu augšupielāde"
 
 #~ msgid "Uploading folders is not supported."
 #~ msgstr "Mapju augšupielāde netiek atbalstīta."
@@ -9699,6 +9849,15 @@ msgstr "Esiet sveicināti %s"
 
 #~ msgid "Use the expert mode?"
 #~ msgstr "Lietot eksperta režīmu?"
+
+#~ msgid ""
+#~ "Use the folder tree to access own, public or shared files. If the folder "
+#~ "tree is hidden, click on View > Folder view on the right side of the "
+#~ "toolbar."
+#~ msgstr ""
+#~ "Izmantojiet mapju koku, lai piekļūtu personīgajiem, publiskajiem un "
+#~ "koplietojuma failiem. Ja mapju koks ir paslēpts, rīkjoslas labajā pusē "
+#~ "piespiediet Skats > Mapes skats."
 
 #~ msgid ""
 #~ "Use this option when logging in to the server from a public or shared "

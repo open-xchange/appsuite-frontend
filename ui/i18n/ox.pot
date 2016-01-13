@@ -3892,12 +3892,32 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/common.js
 #: module:io.ox/core
+msgid "Move all"
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/common.js
+#: module:io.ox/core
 msgid "Cleaning up ..."
 msgstr ""
 
 #: apps/io.ox/core/folder/actions/common.js
 #: module:io.ox/core
 msgid "The folder has been cleaned up."
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/common.js
+#: module:io.ox/core
+msgid "All messages have been deleted"
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/common.js
+#: module:io.ox/core
+msgid "All files have been deleted"
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/common.js
+#: module:io.ox/core
+msgid "The folder has been emptied"
 msgstr ""
 
 #: apps/io.ox/core/folder/actions/common.js
@@ -3909,16 +3929,6 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
 msgid "Empty folder"
-msgstr ""
-
-#: apps/io.ox/core/folder/actions/common.js
-#: module:io.ox/core
-msgid "All files have been deleted"
-msgstr ""
-
-#: apps/io.ox/core/folder/actions/common.js
-#: module:io.ox/core
-msgid "The folder has been emptied"
 msgstr ""
 
 #: apps/io.ox/core/folder/actions/imap-subscription.js
@@ -8529,16 +8539,21 @@ msgstr ""
 msgid "%1$d messages selected"
 msgstr ""
 
-#. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
-msgid "Move all %1$d messages to another folder"
+msgid "The following actions apply to all messages (%1$d) in this folder:"
 msgstr ""
 
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
-msgid "Delete all %1$d messages"
+msgid "Move all messages to another folder"
+msgstr ""
+
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js
+#: module:io.ox/mail
+msgid "Delete all messages in this folder"
 msgstr ""
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view

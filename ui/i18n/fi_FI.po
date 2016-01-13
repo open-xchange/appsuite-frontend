@@ -943,6 +943,12 @@ msgstr "Kaikki tiedostot on poistettu"
 msgid "All folders"
 msgstr "Kaikki kansiot"
 
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All messages have been deleted"
+msgstr "Kaikki tiedostot on poistettu"
+
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr "Kaikki  %1$d päivää vanhemmat viestit siirretään arkistokansioon"
@@ -2274,10 +2280,9 @@ msgstr "Poista tili"
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #, fuzzy
-#| msgctxt "folder"
-#| msgid "Deleted messages"
-msgid "Delete all %1$d messages"
-msgstr "Hylätyt viestit"
+#| msgid "Show all %1$d messages in inbox"
+msgid "Delete all messages in this folder"
+msgstr "Näytä kaikki saapuneet laatikon %1$d viestiä"
 
 #. object permissions - delete
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -4742,16 +4747,22 @@ msgstr "Löytyi enemmän kuin nyt näytettävät %1$s kohdetta"
 msgid "Move"
 msgstr "Siirrä"
 
-#. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 #, fuzzy
-#| msgid "Show all %1$d messages in inbox"
-msgid "Move all %1$d messages to another folder"
-msgstr "Näytä kaikki saapuneet laatikon %1$d viestiä"
+#| msgid "Close all"
+msgid "Move all"
+msgstr "Sulje kaikki"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Move all messages"
 msgstr "Siirrä kaikki viestit"
+
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show all %1$d messages in inbox"
+msgid "Move all messages to another folder"
+msgstr "Näytä kaikki saapuneet laatikon %1$d viestiä"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
@@ -7716,6 +7727,10 @@ msgstr "Tämä kansio on siivottu."
 msgid "The folder has been emptied"
 msgstr "Kansio on tyhjennetty."
 
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "The following actions apply to all messages (%1$d) in this folder:"
+msgstr ""
+
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
@@ -9948,9 +9963,6 @@ msgstr "vvvv"
 #~ "Napsauta kirjainta vasemmasta reunasta näyttääksesi vastaavat "
 #~ "yhteystiedot valitusta osoitekirjasta."
 
-#~ msgid "Close all"
-#~ msgstr "Sulje kaikki"
-
 #~ msgid "Closing a tile"
 #~ msgstr "Sovellusikkunan sulkeminen"
 
@@ -10046,6 +10058,12 @@ msgstr "vvvv"
 
 #~ msgid "Default view"
 #~ msgstr "Oletusnäkymä"
+
+#, fuzzy
+#~| msgctxt "folder"
+#~| msgid "Deleted messages"
+#~ msgid "Delete all %1$d messages"
+#~ msgstr "Hylätyt viestit"
 
 #, fuzzy
 #~| msgid "Return Receipt"

@@ -922,6 +922,12 @@ msgstr "すべてのファイルを削除しました。"
 msgid "All folders"
 msgstr "すべてのフォルダ"
 
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All messages have been deleted"
+msgstr "すべてのファイルを削除しました。"
+
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr "%1$d 日以上経過したメッセージは、アーカイブ フォルダに移動されます。"
@@ -2257,10 +2263,9 @@ msgstr "アカウントを削除"
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #, fuzzy
-#| msgctxt "folder"
-#| msgid "Deleted messages"
-msgid "Delete all %1$d messages"
-msgstr "削除済みメッセージ"
+#| msgid "Show all %1$d messages in inbox"
+msgid "Delete all messages in this folder"
+msgstr "受信トレイにある %1$d 件のメッセージをすべて表示"
 
 #. object permissions - delete
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -4741,16 +4746,22 @@ msgstr ""
 msgid "Move"
 msgstr "移動"
 
-#. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 #, fuzzy
-#| msgid "Show all %1$d messages in inbox"
-msgid "Move all %1$d messages to another folder"
-msgstr "受信トレイにある %1$d 件のメッセージをすべて表示"
+#| msgid "Close all"
+msgid "Move all"
+msgstr "すべて閉じる"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Move all messages"
 msgstr "全てのメッセージを移動する"
+
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show all %1$d messages in inbox"
+msgid "Move all messages to another folder"
+msgstr "受信トレイにある %1$d 件のメッセージをすべて表示"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
@@ -7698,6 +7709,10 @@ msgstr "フォルダのクリーン アップが完了しました。"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "The folder has been emptied"
 msgstr "フォルダを空にしました。"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "The following actions apply to all messages (%1$d) in this folder:"
+msgstr ""
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
@@ -11352,9 +11367,6 @@ msgstr "yyyy"
 #~ msgid "Close Window"
 #~ msgstr "ウィンドウを閉じる"
 
-#~ msgid "Close all"
-#~ msgstr "すべて閉じる"
-
 #~ msgid "Close configuration"
 #~ msgstr "構成を閉じる"
 
@@ -11747,6 +11759,12 @@ msgstr "yyyy"
 
 #~ msgid "Delete a stream"
 #~ msgstr "ストリームを削除"
+
+#, fuzzy
+#~| msgctxt "folder"
+#~| msgid "Deleted messages"
+#~ msgid "Delete all %1$d messages"
+#~ msgstr "削除済みメッセージ"
 
 #~ msgid "Delete all accounts"
 #~ msgstr "すべてのアカウントを削除"

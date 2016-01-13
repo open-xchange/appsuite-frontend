@@ -16,6 +16,12 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2;\n"
 "X-Generator: Lokalize 1.5\n"
 
+#: apps/io.ox/tours/files.js:215 module:io.ox/tours
+#, fuzzy
+#| msgid "Add new account"
+msgid "Add another account"
+msgstr "Dodaj nowe konto"
+
 #: apps/io.ox/tours/calendar.js:72 module:io.ox/tours
 msgid "Adding attachments"
 msgstr "Dodawanie załączników"
@@ -23,6 +29,20 @@ msgstr "Dodawanie załączników"
 #: apps/io.ox/tours/tasks.js:54 module:io.ox/tours
 msgid "Adding further details"
 msgstr "Dodawanie dalszych informacji"
+
+#: apps/io.ox/tours/files.js:101 module:io.ox/tours
+msgid ""
+"At the top you can find the toolbar with many functions and additional "
+"options. You can easily create new folders, new files and much more."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:163 module:io.ox/tours
+msgid ""
+"Choose from two alternatives to share your files and folders. Use Invite "
+"people if you want to manage access rights and allow recipients to create "
+"and edit files. Or just get a link to let others view and download your "
+"files. You can use an expiration date and password protection if you like."
+msgstr ""
 
 #: apps/io.ox/tours/contacts.js:36 module:io.ox/tours
 msgid ""
@@ -32,9 +52,23 @@ msgstr ""
 "Aby wyświetlić odpowiednie kontakty z książki adresowej, po lewej stronie "
 "paska nawigacyjnego kliknij wybraną literę."
 
+#: apps/io.ox/tours/files.js:78 module:io.ox/tours
+msgid ""
+"Clicking on a folder displays all the subfolders, documents, media and other "
+"files that it contains."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:129 module:io.ox/tours
+msgid "Clicking on the view icon leads you to a preview of the selected file."
+msgstr ""
+
 #: apps/io.ox/tours/portal.js:45 module:io.ox/tours
 msgid "Closing a square"
 msgstr "Zamykanie pola"
+
+#: apps/io.ox/tours/files.js:176 module:io.ox/tours
+msgid "Collaborating"
+msgstr ""
 
 #: apps/io.ox/tours/mail.js:33 module:io.ox/tours
 msgid "Composing a new E-Mail"
@@ -51,10 +85,6 @@ msgstr "Tworzenie nowego kontaktu"
 #: apps/io.ox/tours/tasks.js:32 module:io.ox/tours
 msgid "Creating a new task"
 msgstr "Tworzenie nowego zadania"
-
-#: apps/io.ox/tours/files.js:60 module:io.ox/tours
-msgid "Creating a note"
-msgstr "Tworzenie notatki"
 
 #: apps/io.ox/tours/intro.js:72 module:io.ox/tours
 msgid "Creating new items"
@@ -95,9 +125,16 @@ msgstr ""
 "Szczegółowe instrukcje dotyczące poszczególnych aplikacji można znaleźć w "
 "sekcji Menu systemowe > Pomoc."
 
-#: apps/io.ox/tours/files.js:67 module:io.ox/tours
-msgid "Displaying information"
-msgstr "Wyświetlanie informacji"
+#: apps/io.ox/tours/files.js:192 module:io.ox/tours
+msgid ""
+"Did you know that you can edit text documents and spreadsheets online? Drive "
+"will automatically update your edited file, but thanks to versioning the "
+"original file stays available."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:86 module:io.ox/tours
+msgid "Different views are available. Just select the one you like best."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -107,6 +144,13 @@ msgstr "Wyświetlanie pomocy lub ustawień"
 msgid "Drag and drop"
 msgstr "Przeciąganie i upuszczanie"
 
+#: apps/io.ox/tours/files.js:216 module:io.ox/tours
+msgid ""
+"Drive allows you to connect to other storage solutions if you already have a "
+"cloud storage account you use to save and sync your files. Simply click on "
+"the appropriate logo to access your existing data."
+msgstr ""
+
 #: apps/io.ox/tours/settings.js:44 module:io.ox/tours
 msgid ""
 "Edit a setting on the right side. In most of the cases, the changes are "
@@ -114,6 +158,12 @@ msgid ""
 msgstr ""
 "Zmień ustawienia po prawej stronie. W większości przypadków zmiany będą "
 "uaktywniane od razu."
+
+#: apps/io.ox/tours/files.js:191 module:io.ox/tours
+#, fuzzy
+#| msgid "Edit document"
+msgid "Edit documents"
+msgstr "Edytuj dokument "
 
 #: apps/io.ox/tours/mail.js:106 module:io.ox/tours
 msgid "Editing multiple E-Mails"
@@ -191,9 +241,27 @@ msgstr "Wpisywanie tematu"
 msgid "Entering the task's data"
 msgstr "Wprowadzanie danych zadania"
 
-#: apps/io.ox/tours/files.js:30 module:io.ox/tours
+#: apps/io.ox/tours/files.js:199 module:io.ox/tours
+#, fuzzy
+#| msgid "File Details"
+msgid "File details"
+msgstr "Szczegóły pliku"
+
+#: apps/io.ox/tours/files.js:77 module:io.ox/tours
+#, fuzzy
+#| msgid "Folder tree"
+msgid "Folder content"
+msgstr "Drzewo folderów"
+
+#: apps/io.ox/tours/files.js:63 module:io.ox/tours
 msgid "Folder tree"
 msgstr "Drzewo folderów"
+
+#: apps/io.ox/tours/files.js:140 module:io.ox/tours
+msgid ""
+"From preview you can also select other options to help you manage and work "
+"on your files."
+msgstr ""
 
 #: apps/io.ox/tours/calendar.js:73 module:io.ox/tours
 msgid "Further down you can add documents as attachments to the appointment."
@@ -215,6 +283,18 @@ msgstr "Wprowadzenie"
 #: apps/io.ox/tours/mail.js:101 module:io.ox/tours
 msgid "Halo view"
 msgstr "Widok halo"
+
+#: apps/io.ox/tours/files.js:151 module:io.ox/tours
+msgid ""
+"Here you can share files with your colleagues and external contacts. You can "
+"also collaborate on a document and set different access rights."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:226 module:io.ox/tours
+msgid ""
+"Hint: you can always restart guided tours, any time you need them, from the "
+"system menu."
+msgstr ""
 
 #: apps/io.ox/tours/settings.js:36 module:io.ox/tours
 msgid "How the settings are organized"
@@ -267,9 +347,29 @@ msgstr "Zapraszanie innych uczestników"
 msgid "Launching an app"
 msgstr "Uruchamianie aplikacji"
 
+#: apps/io.ox/tours/files.js:37 module:io.ox/tours
+msgid ""
+"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy "
+"eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam "
+"voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet "
+"clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit "
+"amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam "
+"nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed "
+"diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet "
+"clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+msgstr ""
+
 #: apps/io.ox/tours/contacts.js:35 module:io.ox/tours
 msgid "Navigation bar"
 msgstr "Pasek nawigacyjny"
+
+#: apps/io.ox/tours/files.js:64 module:io.ox/tours
+msgid ""
+"On the left you can see the folder tree. It displays your folder structure "
+"and allows you to navigate to specific folders and subfolders. To make your "
+"life easier, we have already included folders for your Documents, Music, "
+"Pictures and Videos."
+msgstr ""
 
 #: apps/io.ox/tours/mail.js:91 module:io.ox/tours
 msgid "Opening an E-Mail in a separate window"
@@ -291,6 +391,16 @@ msgstr "Otwieranie pomocy"
 msgid "Opening the settings"
 msgstr "Otwieranie ustawień"
 
+#: apps/io.ox/tours/files.js:128 module:io.ox/tours
+#, fuzzy
+msgid "Preview files"
+msgstr "Podgląd"
+
+#: apps/io.ox/tours/files.js:139 module:io.ox/tours
+#, fuzzy
+msgid "Preview mode"
+msgstr "Podgląd"
+
 #: apps/io.ox/tours/mail.js:96 module:io.ox/tours
 msgid "Reading E-Mail conversations"
 msgstr "Czytanie konwersacji e-mail"
@@ -299,12 +409,22 @@ msgstr "Czytanie konwersacji e-mail"
 msgid "Reading the details"
 msgstr "Zapoznawanie się ze szczegółami"
 
+#: apps/io.ox/tours/files.js:225 module:io.ox/tours
+msgid "Restart Guided Tour"
+msgstr ""
+
 #: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Wyszukiwanie obiektów"
 
+#: apps/io.ox/tours/files.js:85 module:io.ox/tours
+#, fuzzy
+#| msgid "Selecting a view"
+msgid "Select a view"
+msgstr "Wybieranie widoku"
+
 #: apps/io.ox/tours/calendar.js:83 module:io.ox/tours
-#: apps/io.ox/tours/files.js:35 apps/io.ox/tours/mail.js:86
+#: apps/io.ox/tours/mail.js:86
 msgid "Selecting a view"
 msgstr "Wybieranie widoku"
 
@@ -315,6 +435,26 @@ msgstr "Wysyłanie wiadomości e-mail do kontaktu"
 #: apps/io.ox/tours/mail.js:74 module:io.ox/tours
 msgid "Sending the E-Mail"
 msgstr "Wysyłanie wiadomości e-mail"
+
+#: apps/io.ox/tours/files.js:150 module:io.ox/tours
+#, fuzzy
+#| msgid "Share this file"
+msgid "Share files"
+msgstr "Udostępnij ten plik"
+
+#: apps/io.ox/tours/files.js:177 module:io.ox/tours
+msgid ""
+"Sharing files by inviting people does not only offer your recipients the "
+"option to create and edit files. Internal and external participants are also "
+"able to collaborate with you on text documents and spreadsheets at the same "
+"time."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:162 module:io.ox/tours
+#, fuzzy
+#| msgid "Sort options"
+msgid "Sharing options"
+msgstr "Opcje sortowania"
 
 #: apps/io.ox/tours/settings.js:54 module:io.ox/tours
 msgid "Signing out"
@@ -341,21 +481,21 @@ msgstr ""
 "aplikacji są w nim dostępne dodatkowe funkcje umożliwiające porządkowanie "
 "obiektów."
 
-#: apps/io.ox/tours/files.js:45 module:io.ox/tours
-msgid "The Icons view"
-msgstr "Widok Ikony"
+#: apps/io.ox/tours/files.js:56 module:io.ox/tours
+#, fuzzy
+#| msgctxt "help"
+#| msgid "The Drive App"
+msgid "The Drive app"
+msgstr "Aplikacja Drive"
 
-#: apps/io.ox/tours/files.js:46 module:io.ox/tours
-msgid ""
-"The Icons view displays an icon and the file name for each file. Click on an "
-"icon to view further details and functions in the pop-up."
-msgstr ""
-"W widoku ikon wyświetlane są ikony oraz nazwy poszczególnych plików. Jeśli "
-"klikniesz ikonę, pojawi się wyskakujące okienko z dodatkowymi informacjami "
-"oraz funkcjami."
+#: apps/io.ox/tours/files.js:50 module:io.ox/tours
+#, fuzzy
+#| msgctxt "help"
+#| msgid "The Drive App"
+msgid "The Drive app tour.txt"
+msgstr "Aplikacja Drive"
 
 #: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
-#: apps/io.ox/tours/files.js:40
 msgid "The List view"
 msgstr "Widok Lista"
 
@@ -368,16 +508,6 @@ msgstr ""
 "W widoku listy wyświetlane są spotkania z bieżącego folderu. Kliknięcie "
 "spotkania powoduje wyświetlenie widoku szczegółów z danymi spotkania oraz "
 "dostępnymi funkcjami."
-
-#: apps/io.ox/tours/files.js:41 module:io.ox/tours
-msgid ""
-"The List view shows details like the size and date of change. Use the "
-"checkboxes to select files. Click on a file to view further details and "
-"functions in the pop-up."
-msgstr ""
-"W widoku listy wyświetlane są takie szczegóły jak rozmiar i data zmiany. Aby "
-"wybrać pliki, skorzystaj z pól wyboru. Jeśli klikniesz plik, pojawi się "
-"wyskakujące okienko z dodatkowymi informacjami oraz funkcjami."
 
 #: apps/io.ox/tours/intro.js:58 module:io.ox/tours
 msgid "The New objects icon"
@@ -404,19 +534,6 @@ msgstr ""
 "W portalu znajdują się informacje o aktualnych wiadomościach e-mail, "
 "spotkaniach i informacjach z sieci społecznościowej."
 
-#: apps/io.ox/tours/files.js:50 module:io.ox/tours
-msgid "The Tiles view"
-msgstr "Widok Kafelki"
-
-#: apps/io.ox/tours/files.js:51 module:io.ox/tours
-msgid ""
-"The Tiles view shows a big icon for each file. Click on an icon to view "
-"further details and functions in the pop-up."
-msgstr ""
-"W widoku kafelków wyświetlane są duże ikony poszczególnych plików. Jeśli "
-"klikniesz ikonę, pojawi się wyskakujące okienko z dodatkowymi informacjami "
-"oraz funkcjami."
-
 #: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
 msgid "The calendar views"
 msgstr "Widoki kalendarza"
@@ -428,6 +545,13 @@ msgid ""
 msgstr ""
 "W widokach kalendarza wyświetlany jest arkusz kalendarza ze spotkaniami w "
 "wybranym zakresie czasu."
+
+#: apps/io.ox/tours/files.js:200 module:io.ox/tours
+msgid ""
+"The file details side bar offers additional information about your files. "
+"Just enable the File details option from the View drop down menu and select "
+"a file to see the details."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js:104 module:io.ox/tours
 msgid "The folder tree"
@@ -505,11 +629,6 @@ msgstr ""
 #: apps/io.ox/tours/tasks.js:33 module:io.ox/tours
 msgid "To create a new task, click on New in the toolbar."
 msgstr "Aby utworzyć nowe zadanie, kliknij pozycję Nowe na pasku narzędzi."
-
-#: apps/io.ox/tours/files.js:61 module:io.ox/tours
-msgid "To create a note, click on New > Add note in the toolbar."
-msgstr ""
-"Aby utworzyć notatkę, kliknij pozycje Nowe > Dodaj notatkę na pasku narzędzi."
 
 #: apps/io.ox/tours/calendar.js:58 module:io.ox/tours
 msgid ""
@@ -670,14 +789,6 @@ msgstr ""
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr "Aby wyszukać obiekty, kliknij ikonę Szukaj na pasku menu."
 
-#: apps/io.ox/tours/files.js:36 module:io.ox/tours
-msgid ""
-"To select one of the views List, Icons or Squares, click on View on the "
-"right side of the toolbar."
-msgstr ""
-"Aby wybrać jeden z widoków, np. Lista, Ikony lub Pola, kliknij przycisk "
-"Widok z prawej strony paska narzędzi."
-
 #: apps/io.ox/tours/calendar.js:84 module:io.ox/tours
 msgid ""
 "To select one of the views like Day, Month or List, click on View in the "
@@ -723,36 +834,29 @@ msgid "To track the editing status, enter the current progress."
 msgstr ""
 "Aby śledzić status edycji, wpisz aktualny postęp w realizacji danego zadania."
 
-#: apps/io.ox/tours/files.js:56 module:io.ox/tours
-msgid "To upload a file, click on New > Upload new file in the toolbar."
-msgstr ""
-"Aby przesłać plik, kliknij pozycje Nowe > Prześlij nowy plik na pasku "
-"narzędzi."
-
-#: apps/io.ox/tours/files.js:68 module:io.ox/tours
+#: apps/io.ox/tours/files.js:114 module:io.ox/tours
 msgid ""
-"To view further information, click on a file. A pop-up window displays "
-"further details and functions."
+"To upload a new file from your local device, simply click on Add local file "
+"and select the file you would like to upload. It is even easier if you just "
+"drag and drop files from your local device into Drive. The uploaded file is "
+"now available in Drive on all your devices."
 msgstr ""
-"Aby wyświetlić więcej informacji, kliknij plik. Pojawi się wyskakujące "
-"okienko z dodatkowymi informacjami i funkcjami."
+
+#: apps/io.ox/tours/files.js:100 module:io.ox/tours
+#, fuzzy
+#| msgid "The toolbar"
+msgid "Toolbar"
+msgstr "Pasek narzędzi"
 
 #: apps/io.ox/tours/tasks.js:72 module:io.ox/tours
 msgid "Tracking the editing status"
 msgstr "Śledzenie statusu edycji"
 
-#: apps/io.ox/tours/files.js:55 module:io.ox/tours
-msgid "Uploading a file"
-msgstr "Przesyłanie pliku"
-
-#: apps/io.ox/tours/files.js:31 module:io.ox/tours
-msgid ""
-"Use the folder tree to access own, public or shared files. If the folder "
-"tree is hidden, click on View > Folder view on the right side of the toolbar."
-msgstr ""
-"Drzewo folderów umożliwia uzyskiwanie dostępu do własnych, publicznych lub "
-"udostępnionych plików. Jeśli drzewo folderów jest ukryte, kliknij pozycje "
-"Widok > Widok folderu z prawej strony paska narzędzi."
+#: apps/io.ox/tours/files.js:113 module:io.ox/tours
+#, fuzzy
+#| msgid "Upload new file"
+msgid "Upload a new file"
+msgstr "Prześlij nowy plik"
 
 #: apps/io.ox/tours/intro.js:105 module:io.ox/tours
 msgid ""
@@ -777,6 +881,14 @@ msgstr "Używanie funkcji przypomnień"
 #: apps/io.ox/tours/intro.js:34 module:io.ox/tours
 msgid "Welcome to %s"
 msgstr "%s — zapraszamy!"
+
+#: apps/io.ox/tours/files.js:57 module:io.ox/tours
+msgid ""
+"Welcome to your cloud storage app. This Guided Tour will introduce you to "
+"your new online storage solution - your one point to access online stored "
+"files from all your accounts. This is where you can upload and save your "
+"files, share them and synchronize them with different devices.  "
+msgstr ""
 
 #~ msgid "%1$d %2$s"
 #~ msgstr "%1$d %2$s"
@@ -1169,9 +1281,6 @@ msgstr "%s — zapraszamy!"
 
 #~ msgid "Add member"
 #~ msgstr "Dodaj członka"
-
-#~ msgid "Add new account"
-#~ msgstr "Dodaj nowe konto"
 
 #~ msgid "Add new folder"
 #~ msgstr "Dodaj nowy folder"
@@ -2006,6 +2115,9 @@ msgstr "%s — zapraszamy!"
 #~ msgid "Creating Files"
 #~ msgstr "Tworzenie plików"
 
+#~ msgid "Creating a note"
+#~ msgstr "Tworzenie notatki"
+
 #~ msgid "Currency"
 #~ msgstr "Waluta"
 
@@ -2162,6 +2274,9 @@ msgstr "%s — zapraszamy!"
 
 #~ msgid "Display of names"
 #~ msgstr "Wyświetlanie nazw"
+
+#~ msgid "Displaying information"
+#~ msgstr "Wyświetlanie informacji"
 
 #~ msgid "Distance"
 #~ msgstr "Odległość"
@@ -2368,9 +2483,6 @@ msgstr "%s — zapraszamy!"
 
 #~ msgid "Edit description"
 #~ msgstr "Edytuj opis"
-
-#~ msgid "Edit document"
-#~ msgstr "Edytuj dokument "
 
 #, fuzzy
 #~ msgid "Edit draft"
@@ -2690,9 +2802,6 @@ msgstr "%s — zapraszamy!"
 
 #~ msgid "File"
 #~ msgstr "Plik"
-
-#~ msgid "File Details"
-#~ msgstr "Szczegóły pliku"
 
 #~ msgid "File name"
 #~ msgstr "Nazwa pliku"
@@ -4218,10 +4327,6 @@ msgstr "%s — zapraszamy!"
 #~ msgid "Preview"
 #~ msgstr "Podgląd"
 
-#, fuzzy
-#~ msgid "Preview pane"
-#~ msgstr "Podgląd"
-
 #~ msgid "Previous"
 #~ msgstr "Poprzedni"
 
@@ -4691,9 +4796,6 @@ msgstr "%s — zapraszamy!"
 #~ msgid "Share link by email"
 #~ msgstr "Udostępnij łącze przez e-mail"
 
-#~ msgid "Share this file"
-#~ msgstr "Udostępnij ten plik"
-
 #~ msgid "Share this folder"
 #~ msgstr "Udostępnij ten folder"
 
@@ -4915,9 +5017,6 @@ msgstr "%s — zapraszamy!"
 #~ "powinien uzyskać od serwisu LinkedIn klucz z uprawnieniem do odczytu "
 #~ "wiadomości."
 
-#~ msgid "Sort options"
-#~ msgstr "Opcje sortowania"
-
 #~ msgid "Source"
 #~ msgstr "Źródło"
 
@@ -5088,16 +5187,23 @@ msgstr "%s — zapraszamy!"
 #~ msgstr "Format tekstowy"
 
 #~ msgctxt "help"
-#~ msgid "The Drive App"
-#~ msgstr "Aplikacja Drive"
-
-#~ msgctxt "help"
 #~ msgid "The E-Mail Components"
 #~ msgstr "Składniki aplikacji E-mail"
 
 #~ msgctxt "help"
 #~ msgid "The Files Components"
 #~ msgstr "Składniki aplikacji Pliki"
+
+#~ msgid "The Icons view"
+#~ msgstr "Widok Ikony"
+
+#~ msgid ""
+#~ "The Icons view displays an icon and the file name for each file. Click on "
+#~ "an icon to view further details and functions in the pop-up."
+#~ msgstr ""
+#~ "W widoku ikon wyświetlane są ikony oraz nazwy poszczególnych plików. "
+#~ "Jeśli klikniesz ikonę, pojawi się wyskakujące okienko z dodatkowymi "
+#~ "informacjami oraz funkcjami."
 
 #~ msgid "The Icons view displays an icon for each file."
 #~ msgstr "W widoku Ikony widoczna jest ikona każdego pliku."
@@ -5119,6 +5225,26 @@ msgstr "%s — zapraszamy!"
 #~ "W widoku Lista widoczny jest pasek boczny z plikami oraz obszar "
 #~ "wyświetlania ze szczegółami wybranego pliku. Odpowiada to widokowi w "
 #~ "polach E-mail lub Kontakty."
+
+#~ msgid ""
+#~ "The List view shows details like the size and date of change. Use the "
+#~ "checkboxes to select files. Click on a file to view further details and "
+#~ "functions in the pop-up."
+#~ msgstr ""
+#~ "W widoku listy wyświetlane są takie szczegóły jak rozmiar i data zmiany. "
+#~ "Aby wybrać pliki, skorzystaj z pól wyboru. Jeśli klikniesz plik, pojawi "
+#~ "się wyskakujące okienko z dodatkowymi informacjami oraz funkcjami."
+
+#~ msgid "The Tiles view"
+#~ msgstr "Widok Kafelki"
+
+#~ msgid ""
+#~ "The Tiles view shows a big icon for each file. Click on an icon to view "
+#~ "further details and functions in the pop-up."
+#~ msgstr ""
+#~ "W widoku kafelków wyświetlane są duże ikony poszczególnych plików. Jeśli "
+#~ "klikniesz ikonę, pojawi się wyskakujące okienko z dodatkowymi "
+#~ "informacjami oraz funkcjami."
 
 #~ msgid "The account must be named"
 #~ msgstr "Konto musi mieć nazwę"
@@ -5672,6 +5798,11 @@ msgstr "%s — zapraszamy!"
 #~ "Aby dodać kontakty ręcznie, podaj prawidłowy adres e-mail (np. jan."
 #~ "kowalski@example.com lub \"Jan Kowalski\" <jk@example.com>)"
 
+#~ msgid "To create a note, click on New > Add note in the toolbar."
+#~ msgstr ""
+#~ "Aby utworzyć notatkę, kliknij pozycje Nowe > Dodaj notatkę na pasku "
+#~ "narzędzi."
+
 #~ msgid "To create a note, click the icon at the top. Select Add note."
 #~ msgstr ""
 #~ "Aby utworzyć notatkę, kliknij ikonę na górze ekranu i wybierz polecenie "
@@ -5705,10 +5836,29 @@ msgstr "%s — zapraszamy!"
 #~ "Aby otworzyć pomoc, kliknij ikonę menu systemowego widoczną w prawym "
 #~ "górnym rogu paska menu. Wybierz polecenie Pomoc. "
 
+#~ msgid ""
+#~ "To select one of the views List, Icons or Squares, click on View on the "
+#~ "right side of the toolbar."
+#~ msgstr ""
+#~ "Aby wybrać jeden z widoków, np. Lista, Ikony lub Pola, kliknij przycisk "
+#~ "Widok z prawej strony paska narzędzi."
+
 #~ msgid "To send the E-Mail, click on Send on the upper right side."
 #~ msgstr ""
 #~ "Aby wysłać wiadomość e-mail, kliknij dostępny w prawym górnym rogu okna "
 #~ "przycisk Wyślij."
+
+#~ msgid "To upload a file, click on New > Upload new file in the toolbar."
+#~ msgstr ""
+#~ "Aby przesłać plik, kliknij pozycje Nowe > Prześlij nowy plik na pasku "
+#~ "narzędzi."
+
+#~ msgid ""
+#~ "To view further information, click on a file. A pop-up window displays "
+#~ "further details and functions."
+#~ msgstr ""
+#~ "Aby wyświetlić więcej informacji, kliknij plik. Pojawi się wyskakujące "
+#~ "okienko z dodatkowymi informacjami i funkcjami."
 
 #~ msgid "Today"
 #~ msgstr "Dzisiaj"
@@ -5862,14 +6012,14 @@ msgstr "%s — zapraszamy!"
 #~ msgid "Upload file"
 #~ msgstr "Prześlij plik"
 
-#~ msgid "Upload new file"
-#~ msgstr "Prześlij nowy plik"
-
 #~ msgid "Upload new files"
 #~ msgstr "Prześlij nowe pliki"
 
 #~ msgid "Upload new version"
 #~ msgstr "Prześlij nową wersję"
+
+#~ msgid "Uploading a file"
+#~ msgstr "Przesyłanie pliku"
 
 #~ msgid "Uploading folders is not supported."
 #~ msgstr "Przesyłanie folderów nie jest obsługiwane."
@@ -5897,6 +6047,15 @@ msgstr "%s — zapraszamy!"
 
 #~ msgid "Use fixed-width font for text mails"
 #~ msgstr "Używaj czcionki o stałej szerokości w wiadomościach tekstowych"
+
+#~ msgid ""
+#~ "Use the folder tree to access own, public or shared files. If the folder "
+#~ "tree is hidden, click on View > Folder view on the right side of the "
+#~ "toolbar."
+#~ msgstr ""
+#~ "Drzewo folderów umożliwia uzyskiwanie dostępu do własnych, publicznych "
+#~ "lub udostępnionych plików. Jeśli drzewo folderów jest ukryte, kliknij "
+#~ "pozycje Widok > Widok folderu z prawej strony paska narzędzi."
 
 #~ msgid "Use unified mail for this account"
 #~ msgstr "Użyj ujednoliconej poczty dla tego konta"

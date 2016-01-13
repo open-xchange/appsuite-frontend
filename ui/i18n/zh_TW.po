@@ -940,6 +940,12 @@ msgstr "已刪除所有檔案"
 msgid "All folders"
 msgstr "所有資料夾"
 
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All messages have been deleted"
+msgstr "已刪除所有檔案"
+
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr "超過 %1$d 天的訊息將被移動至封存信件匣"
@@ -2259,10 +2265,9 @@ msgstr "刪除帳號"
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #, fuzzy
-#| msgctxt "folder"
-#| msgid "Deleted messages"
-msgid "Delete all %1$d messages"
-msgstr "已刪除訊息"
+#| msgid "Show all %1$d messages in inbox"
+msgid "Delete all messages in this folder"
+msgstr "顯示收件匣中全部 %1$d 封訊息"
 
 #. object permissions - delete
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -4701,16 +4706,22 @@ msgstr "找到超過目前顯示的 %1$s 個項目"
 msgid "Move"
 msgstr "移動"
 
-#. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 #, fuzzy
-#| msgid "Show all %1$d messages in inbox"
-msgid "Move all %1$d messages to another folder"
-msgstr "顯示收件匣中全部 %1$d 封訊息"
+#| msgid "Close all"
+msgid "Move all"
+msgstr "全部關閉"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Move all messages"
 msgstr "移動所有訊息"
+
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show all %1$d messages in inbox"
+msgid "Move all messages to another folder"
+msgstr "顯示收件匣中全部 %1$d 封訊息"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
@@ -7639,6 +7650,10 @@ msgstr "已清理此資料夾。"
 msgid "The folder has been emptied"
 msgstr "已清空資料夾"
 
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "The following actions apply to all messages (%1$d) in this folder:"
+msgstr ""
+
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
@@ -10530,9 +10545,6 @@ msgstr "年"
 #~ msgid "Close Window"
 #~ msgstr "關閉窗口"
 
-#~ msgid "Close all"
-#~ msgstr "全部關閉"
-
 #~ msgid "Close document"
 #~ msgstr "關閉文件"
 
@@ -10873,6 +10885,12 @@ msgstr "年"
 
 #~ msgid "Delete a stream"
 #~ msgstr "刪除串流"
+
+#, fuzzy
+#~| msgctxt "folder"
+#~| msgid "Deleted messages"
+#~ msgid "Delete all %1$d messages"
+#~ msgstr "已刪除訊息"
 
 #~ msgid "Delete all accounts"
 #~ msgstr "刪除所有帳號"

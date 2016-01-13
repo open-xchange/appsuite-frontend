@@ -14,6 +14,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.7.7\n"
 
+#: apps/io.ox/tours/files.js:215 module:io.ox/tours
+msgid "Add another account"
+msgstr ""
+
 #: apps/io.ox/tours/calendar.js:72 module:io.ox/tours
 msgid "Adding attachments"
 msgstr "Mellékletek csatolása"
@@ -21,6 +25,20 @@ msgstr "Mellékletek csatolása"
 #: apps/io.ox/tours/tasks.js:54 module:io.ox/tours
 msgid "Adding further details"
 msgstr "További részletek hozzáadása"
+
+#: apps/io.ox/tours/files.js:101 module:io.ox/tours
+msgid ""
+"At the top you can find the toolbar with many functions and additional "
+"options. You can easily create new folders, new files and much more."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:163 module:io.ox/tours
+msgid ""
+"Choose from two alternatives to share your files and folders. Use Invite "
+"people if you want to manage access rights and allow recipients to create "
+"and edit files. Or just get a link to let others view and download your "
+"files. You can use an expiration date and password protection if you like."
+msgstr ""
 
 #: apps/io.ox/tours/contacts.js:36 module:io.ox/tours
 msgid ""
@@ -30,9 +48,23 @@ msgstr ""
 "Kattintson  a bal oldalon található egyik betűre, hogy az ehhez tartozó "
 "megfelelő névjegyek megjelenjenek a kiválasztott címjegyzékből."
 
+#: apps/io.ox/tours/files.js:78 module:io.ox/tours
+msgid ""
+"Clicking on a folder displays all the subfolders, documents, media and other "
+"files that it contains."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:129 module:io.ox/tours
+msgid "Clicking on the view icon leads you to a preview of the selected file."
+msgstr ""
+
 #: apps/io.ox/tours/portal.js:45 module:io.ox/tours
 msgid "Closing a square"
 msgstr "Elem bezárása"
+
+#: apps/io.ox/tours/files.js:176 module:io.ox/tours
+msgid "Collaborating"
+msgstr ""
 
 #: apps/io.ox/tours/mail.js:33 module:io.ox/tours
 msgid "Composing a new E-Mail"
@@ -49,10 +81,6 @@ msgstr "Új névjegy létrehozása"
 #: apps/io.ox/tours/tasks.js:32 module:io.ox/tours
 msgid "Creating a new task"
 msgstr "Új feladat létrehozása"
-
-#: apps/io.ox/tours/files.js:60 module:io.ox/tours
-msgid "Creating a note"
-msgstr "Jegyzet létrehozása"
 
 #: apps/io.ox/tours/intro.js:72 module:io.ox/tours
 msgid "Creating new items"
@@ -93,9 +121,16 @@ msgstr ""
 "Az egyes alkalmazások részletes leírása a Rendszer menü Súgó menüpontjában "
 "található."
 
-#: apps/io.ox/tours/files.js:67 module:io.ox/tours
-msgid "Displaying information"
-msgstr "Információ megjelenítése"
+#: apps/io.ox/tours/files.js:192 module:io.ox/tours
+msgid ""
+"Did you know that you can edit text documents and spreadsheets online? Drive "
+"will automatically update your edited file, but thanks to versioning the "
+"original file stays available."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:86 module:io.ox/tours
+msgid "Different views are available. Just select the one you like best."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -105,6 +140,13 @@ msgstr "A súgó vagy a beállítások megjelenítése"
 msgid "Drag and drop"
 msgstr "Fogd és vidd"
 
+#: apps/io.ox/tours/files.js:216 module:io.ox/tours
+msgid ""
+"Drive allows you to connect to other storage solutions if you already have a "
+"cloud storage account you use to save and sync your files. Simply click on "
+"the appropriate logo to access your existing data."
+msgstr ""
+
 #: apps/io.ox/tours/settings.js:44 module:io.ox/tours
 msgid ""
 "Edit a setting on the right side. In most of the cases, the changes are "
@@ -112,6 +154,10 @@ msgid ""
 msgstr ""
 "A beállítások a jobb oldalon szerkeszthetők. A legtöbb esetben a módosítások "
 "azonnal érvényre jutnak."
+
+#: apps/io.ox/tours/files.js:191 module:io.ox/tours
+msgid "Edit documents"
+msgstr ""
 
 #: apps/io.ox/tours/mail.js:106 module:io.ox/tours
 msgid "Editing multiple E-Mails"
@@ -189,9 +235,27 @@ msgstr "Tárgy megadása"
 msgid "Entering the task's data"
 msgstr "Feladatok adatainak megadása"
 
-#: apps/io.ox/tours/files.js:30 module:io.ox/tours
+#: apps/io.ox/tours/files.js:199 module:io.ox/tours
+#, fuzzy
+#| msgid "Reading the details"
+msgid "File details"
+msgstr "Részletek olvasása"
+
+#: apps/io.ox/tours/files.js:77 module:io.ox/tours
+#, fuzzy
+#| msgid "Folder tree"
+msgid "Folder content"
+msgstr "Mappastruktúra"
+
+#: apps/io.ox/tours/files.js:63 module:io.ox/tours
 msgid "Folder tree"
 msgstr "Mappastruktúra"
+
+#: apps/io.ox/tours/files.js:140 module:io.ox/tours
+msgid ""
+"From preview you can also select other options to help you manage and work "
+"on your files."
+msgstr ""
 
 #: apps/io.ox/tours/calendar.js:73 module:io.ox/tours
 msgid "Further down you can add documents as attachments to the appointment."
@@ -213,6 +277,18 @@ msgstr "Első lépések"
 #: apps/io.ox/tours/mail.js:101 module:io.ox/tours
 msgid "Halo view"
 msgstr "Áttekintő nézet"
+
+#: apps/io.ox/tours/files.js:151 module:io.ox/tours
+msgid ""
+"Here you can share files with your colleagues and external contacts. You can "
+"also collaborate on a document and set different access rights."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:226 module:io.ox/tours
+msgid ""
+"Hint: you can always restart guided tours, any time you need them, from the "
+"system menu."
+msgstr ""
 
 #: apps/io.ox/tours/settings.js:36 module:io.ox/tours
 msgid "How the settings are organized"
@@ -266,9 +342,29 @@ msgstr "További résztvevők meghívása"
 msgid "Launching an app"
 msgstr "Alkalmazás indítása"
 
+#: apps/io.ox/tours/files.js:37 module:io.ox/tours
+msgid ""
+"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy "
+"eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam "
+"voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet "
+"clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit "
+"amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam "
+"nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed "
+"diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet "
+"clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+msgstr ""
+
 #: apps/io.ox/tours/contacts.js:35 module:io.ox/tours
 msgid "Navigation bar"
 msgstr "Navigációs sáv"
+
+#: apps/io.ox/tours/files.js:64 module:io.ox/tours
+msgid ""
+"On the left you can see the folder tree. It displays your folder structure "
+"and allows you to navigate to specific folders and subfolders. To make your "
+"life easier, we have already included folders for your Documents, Music, "
+"Pictures and Videos."
+msgstr ""
 
 #: apps/io.ox/tours/mail.js:91 module:io.ox/tours
 msgid "Opening an E-Mail in a separate window"
@@ -290,6 +386,14 @@ msgstr "Súgó megnyitása"
 msgid "Opening the settings"
 msgstr "Beállítások megnyitása"
 
+#: apps/io.ox/tours/files.js:128 module:io.ox/tours
+msgid "Preview files"
+msgstr ""
+
+#: apps/io.ox/tours/files.js:139 module:io.ox/tours
+msgid "Preview mode"
+msgstr ""
+
 #: apps/io.ox/tours/mail.js:96 module:io.ox/tours
 msgid "Reading E-Mail conversations"
 msgstr "E-mail társalgások olvasása"
@@ -298,12 +402,22 @@ msgstr "E-mail társalgások olvasása"
 msgid "Reading the details"
 msgstr "Részletek olvasása"
 
+#: apps/io.ox/tours/files.js:225 module:io.ox/tours
+msgid "Restart Guided Tour"
+msgstr ""
+
 #: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Elemek keresése"
 
+#: apps/io.ox/tours/files.js:85 module:io.ox/tours
+#, fuzzy
+#| msgid "Selecting a view"
+msgid "Select a view"
+msgstr "Nézet kiválasztása"
+
 #: apps/io.ox/tours/calendar.js:83 module:io.ox/tours
-#: apps/io.ox/tours/files.js:35 apps/io.ox/tours/mail.js:86
+#: apps/io.ox/tours/mail.js:86
 msgid "Selecting a view"
 msgstr "Nézet kiválasztása"
 
@@ -314,6 +428,22 @@ msgstr "Levél küldése a címjegyzékben található kapcsolatnak"
 #: apps/io.ox/tours/mail.js:74 module:io.ox/tours
 msgid "Sending the E-Mail"
 msgstr "Levél küldése"
+
+#: apps/io.ox/tours/files.js:150 module:io.ox/tours
+msgid "Share files"
+msgstr ""
+
+#: apps/io.ox/tours/files.js:177 module:io.ox/tours
+msgid ""
+"Sharing files by inviting people does not only offer your recipients the "
+"option to create and edit files. Internal and external participants are also "
+"able to collaborate with you on text documents and spreadsheets at the same "
+"time."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:162 module:io.ox/tours
+msgid "Sharing options"
+msgstr ""
 
 #: apps/io.ox/tours/settings.js:54 module:io.ox/tours
 msgid "Signing out"
@@ -340,20 +470,15 @@ msgstr ""
 "az objektumok rendezéséhez kapcsolódó további funkciók a részletes nézetben "
 "találhatók."
 
-#: apps/io.ox/tours/files.js:45 module:io.ox/tours
-msgid "The Icons view"
-msgstr "Ikonnézet"
-
-#: apps/io.ox/tours/files.js:46 module:io.ox/tours
-msgid ""
-"The Icons view displays an icon and the file name for each file. Click on an "
-"icon to view further details and functions in the pop-up."
+#: apps/io.ox/tours/files.js:56 module:io.ox/tours
+msgid "The Drive app"
 msgstr ""
-"A Ikonnézet minden fájlhoz egy ikont és a fájlnevet jelenít meg. Az ikonra "
-"kattintva egy felugró ablakban további részletek és funkciók jelennek meg."
+
+#: apps/io.ox/tours/files.js:50 module:io.ox/tours
+msgid "The Drive app tour.txt"
+msgstr ""
 
 #: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
-#: apps/io.ox/tours/files.js:40
 msgid "The List view"
 msgstr "Listanézet"
 
@@ -366,16 +491,6 @@ msgstr ""
 "A Listanézet az aktuális mappában lévő találkozók listáját mutatja. A "
 "találkozókra kattintva a Részletes nézetben a találkozó adatai és az ahhoz "
 "kapcsolódó funkciók jelennek meg."
-
-#: apps/io.ox/tours/files.js:41 module:io.ox/tours
-msgid ""
-"The List view shows details like the size and date of change. Use the "
-"checkboxes to select files. Click on a file to view further details and "
-"functions in the pop-up."
-msgstr ""
-"A Listanézet olyan részleteket mutat meg, mint a méret vagy a módosítás "
-"dátuma. A fájlok kiválasztásához használja a jelölőnégyzeteket. A fájlra "
-"kattintva egy felugró ablakban további részletek és funkciók jelennek meg."
 
 #: apps/io.ox/tours/intro.js:58 module:io.ox/tours
 msgid "The New objects icon"
@@ -401,18 +516,6 @@ msgstr ""
 "A Portál értesít a legújabb levelekről, találkozókról vagy a közösségi "
 "hálózatról érkező hírekről."
 
-#: apps/io.ox/tours/files.js:50 module:io.ox/tours
-msgid "The Tiles view"
-msgstr "A Mozaik nézet"
-
-#: apps/io.ox/tours/files.js:51 module:io.ox/tours
-msgid ""
-"The Tiles view shows a big icon for each file. Click on an icon to view "
-"further details and functions in the pop-up."
-msgstr ""
-"A Mozaik nézet minden fájlról egy nagy ikont jelenít meg. Az ikonra "
-"kattintva egy felugró ablakban további részletek és funkciók jelennek meg."
-
 #: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
 msgid "The calendar views"
 msgstr "Naptárnézetek"
@@ -424,6 +527,13 @@ msgid ""
 msgstr ""
 "A naptárnézetek jelenítik meg a naptárakat a megadott időintervallumban lévő "
 "találkozókkal."
+
+#: apps/io.ox/tours/files.js:200 module:io.ox/tours
+msgid ""
+"The file details side bar offers additional information about your files. "
+"Just enable the File details option from the View drop down menu and select "
+"a file to see the details."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js:104 module:io.ox/tours
 msgid "The folder tree"
@@ -502,12 +612,6 @@ msgstr ""
 msgid "To create a new task, click on New in the toolbar."
 msgstr ""
 "Új feladat létrehozásához kattintson az eszköztárban található Új ikonra."
-
-#: apps/io.ox/tours/files.js:61 module:io.ox/tours
-msgid "To create a note, click on New > Add note in the toolbar."
-msgstr ""
-"Új megjegyzés létrehozásához kattintson az eszköztárban található Új > "
-"Megjegyzés hozzáadása ikonra."
 
 #: apps/io.ox/tours/calendar.js:58 module:io.ox/tours
 msgid ""
@@ -672,14 +776,6 @@ msgid "To search for objects, click the Search icon in the menu bar."
 msgstr ""
 "Az elemek kereséséhez kattintson a menüsorban található Keresés ikonra."
 
-#: apps/io.ox/tours/files.js:36 module:io.ox/tours
-msgid ""
-"To select one of the views List, Icons or Squares, click on View on the "
-"right side of the toolbar."
-msgstr ""
-"Az egyik Ikon- vagy Listanézet kiválasztásához, kattintson az eszköztár "
-"alján található ikonra."
-
 #: apps/io.ox/tours/calendar.js:84 module:io.ox/tours
 msgid ""
 "To select one of the views like Day, Month or List, click on View in the "
@@ -726,36 +822,29 @@ msgid "To track the editing status, enter the current progress."
 msgstr ""
 "A szerkesztési állapot megtekintéséhez lépjen be a jelenlegi folyamatba."
 
-#: apps/io.ox/tours/files.js:56 module:io.ox/tours
-msgid "To upload a file, click on New > Upload new file in the toolbar."
-msgstr ""
-"Fájl feltöltéséhez kattintson az eszköztárban található Új > Új fájl "
-"feltöltése ikonra."
-
-#: apps/io.ox/tours/files.js:68 module:io.ox/tours
+#: apps/io.ox/tours/files.js:114 module:io.ox/tours
 msgid ""
-"To view further information, click on a file. A pop-up window displays "
-"further details and functions."
+"To upload a new file from your local device, simply click on Add local file "
+"and select the file you would like to upload. It is even easier if you just "
+"drag and drop files from your local device into Drive. The uploaded file is "
+"now available in Drive on all your devices."
 msgstr ""
-"További információ megjelenítéséhez kattintson a fájlra. A további "
-"információ egy felugró ablakban fog megjelenni."
+
+#: apps/io.ox/tours/files.js:100 module:io.ox/tours
+#, fuzzy
+#| msgid "The toolbar"
+msgid "Toolbar"
+msgstr "Az eszköztár"
 
 #: apps/io.ox/tours/tasks.js:72 module:io.ox/tours
 msgid "Tracking the editing status"
 msgstr "Szerkesztési állapot nyomon követése"
 
-#: apps/io.ox/tours/files.js:55 module:io.ox/tours
-msgid "Uploading a file"
+#: apps/io.ox/tours/files.js:113 module:io.ox/tours
+#, fuzzy
+#| msgid "Uploading a file"
+msgid "Upload a new file"
 msgstr "Fájl feltöltése"
-
-#: apps/io.ox/tours/files.js:31 module:io.ox/tours
-msgid ""
-"Use the folder tree to access own, public or shared files. If the folder "
-"tree is hidden, click on View > Folder view on the right side of the toolbar."
-msgstr ""
-"Használja a mappastruktúrát a saját, publikus vagy megosztott fájlok "
-"eléréséhez. Amennyiben a mappa rejtett, kattintson az eszköztár jobb oldalán "
-"található Nézet > Mappanézet ikonra."
 
 #: apps/io.ox/tours/intro.js:105 module:io.ox/tours
 msgid ""
@@ -781,5 +870,82 @@ msgstr "Emlékeztető funkció használata"
 msgid "Welcome to %s"
 msgstr "Üdvözli a(z) %s"
 
+#: apps/io.ox/tours/files.js:57 module:io.ox/tours
+msgid ""
+"Welcome to your cloud storage app. This Guided Tour will introduce you to "
+"your new online storage solution - your one point to access online stored "
+"files from all your accounts. This is where you can upload and save your "
+"files, share them and synchronize them with different devices.  "
+msgstr ""
+
+#~ msgid "Creating a note"
+#~ msgstr "Jegyzet létrehozása"
+
+#~ msgid "Displaying information"
+#~ msgstr "Információ megjelenítése"
+
 #~ msgid "Guided tour for this app"
 #~ msgstr "Az alkalmazás bemutatója"
+
+#~ msgid "The Icons view"
+#~ msgstr "Ikonnézet"
+
+#~ msgid ""
+#~ "The Icons view displays an icon and the file name for each file. Click on "
+#~ "an icon to view further details and functions in the pop-up."
+#~ msgstr ""
+#~ "A Ikonnézet minden fájlhoz egy ikont és a fájlnevet jelenít meg. Az "
+#~ "ikonra kattintva egy felugró ablakban további részletek és funkciók "
+#~ "jelennek meg."
+
+#~ msgid ""
+#~ "The List view shows details like the size and date of change. Use the "
+#~ "checkboxes to select files. Click on a file to view further details and "
+#~ "functions in the pop-up."
+#~ msgstr ""
+#~ "A Listanézet olyan részleteket mutat meg, mint a méret vagy a módosítás "
+#~ "dátuma. A fájlok kiválasztásához használja a jelölőnégyzeteket. A fájlra "
+#~ "kattintva egy felugró ablakban további részletek és funkciók jelennek meg."
+
+#~ msgid "The Tiles view"
+#~ msgstr "A Mozaik nézet"
+
+#~ msgid ""
+#~ "The Tiles view shows a big icon for each file. Click on an icon to view "
+#~ "further details and functions in the pop-up."
+#~ msgstr ""
+#~ "A Mozaik nézet minden fájlról egy nagy ikont jelenít meg. Az ikonra "
+#~ "kattintva egy felugró ablakban további részletek és funkciók jelennek meg."
+
+#~ msgid "To create a note, click on New > Add note in the toolbar."
+#~ msgstr ""
+#~ "Új megjegyzés létrehozásához kattintson az eszköztárban található Új > "
+#~ "Megjegyzés hozzáadása ikonra."
+
+#~ msgid ""
+#~ "To select one of the views List, Icons or Squares, click on View on the "
+#~ "right side of the toolbar."
+#~ msgstr ""
+#~ "Az egyik Ikon- vagy Listanézet kiválasztásához, kattintson az eszköztár "
+#~ "alján található ikonra."
+
+#~ msgid "To upload a file, click on New > Upload new file in the toolbar."
+#~ msgstr ""
+#~ "Fájl feltöltéséhez kattintson az eszköztárban található Új > Új fájl "
+#~ "feltöltése ikonra."
+
+#~ msgid ""
+#~ "To view further information, click on a file. A pop-up window displays "
+#~ "further details and functions."
+#~ msgstr ""
+#~ "További információ megjelenítéséhez kattintson a fájlra. A további "
+#~ "információ egy felugró ablakban fog megjelenni."
+
+#~ msgid ""
+#~ "Use the folder tree to access own, public or shared files. If the folder "
+#~ "tree is hidden, click on View > Folder view on the right side of the "
+#~ "toolbar."
+#~ msgstr ""
+#~ "Használja a mappastruktúrát a saját, publikus vagy megosztott fájlok "
+#~ "eléréséhez. Amennyiben a mappa rejtett, kattintson az eszköztár jobb "
+#~ "oldalán található Nézet > Mappanézet ikonra."

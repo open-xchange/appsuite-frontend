@@ -15,6 +15,12 @@ msgstr ""
 "20)) ? 1 : 2;\n"
 "X-Generator: Poedit 1.6.9\n"
 
+#: apps/io.ox/tours/files.js:215 module:io.ox/tours
+#, fuzzy
+#| msgid "Add new account"
+msgid "Add another account"
+msgstr "Adaugă un cont nou"
+
 #: apps/io.ox/tours/calendar.js:72 module:io.ox/tours
 msgid "Adding attachments"
 msgstr "Adăugarea fișierelor atașate"
@@ -22,6 +28,20 @@ msgstr "Adăugarea fișierelor atașate"
 #: apps/io.ox/tours/tasks.js:54 module:io.ox/tours
 msgid "Adding further details"
 msgstr "Adăugarea detaliilor suplimentare"
+
+#: apps/io.ox/tours/files.js:101 module:io.ox/tours
+msgid ""
+"At the top you can find the toolbar with many functions and additional "
+"options. You can easily create new folders, new files and much more."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:163 module:io.ox/tours
+msgid ""
+"Choose from two alternatives to share your files and folders. Use Invite "
+"people if you want to manage access rights and allow recipients to create "
+"and edit files. Or just get a link to let others view and download your "
+"files. You can use an expiration date and password protection if you like."
+msgstr ""
 
 #: apps/io.ox/tours/contacts.js:36 module:io.ox/tours
 msgid ""
@@ -31,9 +51,23 @@ msgstr ""
 "Apăsați pe o literă din partea stângă a barei de navigare pentru a afișa "
 "contactele corespunzătoare din agenda de contacte selectată."
 
+#: apps/io.ox/tours/files.js:78 module:io.ox/tours
+msgid ""
+"Clicking on a folder displays all the subfolders, documents, media and other "
+"files that it contains."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:129 module:io.ox/tours
+msgid "Clicking on the view icon leads you to a preview of the selected file."
+msgstr ""
+
 #: apps/io.ox/tours/portal.js:45 module:io.ox/tours
 msgid "Closing a square"
 msgstr "Închiderea unui cadru"
+
+#: apps/io.ox/tours/files.js:176 module:io.ox/tours
+msgid "Collaborating"
+msgstr ""
 
 #: apps/io.ox/tours/mail.js:33 module:io.ox/tours
 msgid "Composing a new E-Mail"
@@ -50,10 +84,6 @@ msgstr "Crearea unui contact nou"
 #: apps/io.ox/tours/tasks.js:32 module:io.ox/tours
 msgid "Creating a new task"
 msgstr "Crearea unei sarcini noi"
-
-#: apps/io.ox/tours/files.js:60 module:io.ox/tours
-msgid "Creating a note"
-msgstr "Crearea unei note"
 
 #: apps/io.ox/tours/intro.js:72 module:io.ox/tours
 msgid "Creating new items"
@@ -94,9 +124,16 @@ msgstr ""
 "Instrucțiunile detaliate pentru aplicațiile individuale se găsesc în Meniul "
 "sistem > Ajutor."
 
-#: apps/io.ox/tours/files.js:67 module:io.ox/tours
-msgid "Displaying information"
-msgstr "Afișarea de informații"
+#: apps/io.ox/tours/files.js:192 module:io.ox/tours
+msgid ""
+"Did you know that you can edit text documents and spreadsheets online? Drive "
+"will automatically update your edited file, but thanks to versioning the "
+"original file stays available."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:86 module:io.ox/tours
+msgid "Different views are available. Just select the one you like best."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -106,6 +143,13 @@ msgstr "Afișarea ajutorului și setărilor"
 msgid "Drag and drop"
 msgstr "Glisarea și fixarea"
 
+#: apps/io.ox/tours/files.js:216 module:io.ox/tours
+msgid ""
+"Drive allows you to connect to other storage solutions if you already have a "
+"cloud storage account you use to save and sync your files. Simply click on "
+"the appropriate logo to access your existing data."
+msgstr ""
+
 #: apps/io.ox/tours/settings.js:44 module:io.ox/tours
 msgid ""
 "Edit a setting on the right side. In most of the cases, the changes are "
@@ -113,6 +157,12 @@ msgid ""
 msgstr ""
 "Editați o setare în partea dreaptă. În cele mai multe cazuri, modificările "
 "sunt activate imediat."
+
+#: apps/io.ox/tours/files.js:191 module:io.ox/tours
+#, fuzzy
+#| msgid "Edit document"
+msgid "Edit documents"
+msgstr "Editează documentul"
 
 #: apps/io.ox/tours/mail.js:106 module:io.ox/tours
 msgid "Editing multiple E-Mails"
@@ -191,9 +241,27 @@ msgstr "Introducerea subiectului"
 msgid "Entering the task's data"
 msgstr "Introducerea datelor sarcinii"
 
-#: apps/io.ox/tours/files.js:30 module:io.ox/tours
+#: apps/io.ox/tours/files.js:199 module:io.ox/tours
+#, fuzzy
+#| msgid "File Details"
+msgid "File details"
+msgstr "Detalii fișier"
+
+#: apps/io.ox/tours/files.js:77 module:io.ox/tours
+#, fuzzy
+#| msgid "Folder tree"
+msgid "Folder content"
+msgstr "Arborele de dosare"
+
+#: apps/io.ox/tours/files.js:63 module:io.ox/tours
 msgid "Folder tree"
 msgstr "Arborele de dosare"
+
+#: apps/io.ox/tours/files.js:140 module:io.ox/tours
+msgid ""
+"From preview you can also select other options to help you manage and work "
+"on your files."
+msgstr ""
 
 #: apps/io.ox/tours/calendar.js:73 module:io.ox/tours
 msgid "Further down you can add documents as attachments to the appointment."
@@ -215,6 +283,18 @@ msgstr "Introducere"
 #: apps/io.ox/tours/mail.js:101 module:io.ox/tours
 msgid "Halo view"
 msgstr "Vedere halou"
+
+#: apps/io.ox/tours/files.js:151 module:io.ox/tours
+msgid ""
+"Here you can share files with your colleagues and external contacts. You can "
+"also collaborate on a document and set different access rights."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:226 module:io.ox/tours
+msgid ""
+"Hint: you can always restart guided tours, any time you need them, from the "
+"system menu."
+msgstr ""
 
 #: apps/io.ox/tours/settings.js:36 module:io.ox/tours
 msgid "How the settings are organized"
@@ -267,9 +347,29 @@ msgstr "Invitarea altor participanți "
 msgid "Launching an app"
 msgstr "Lansarea unei aplicații"
 
+#: apps/io.ox/tours/files.js:37 module:io.ox/tours
+msgid ""
+"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy "
+"eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam "
+"voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet "
+"clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit "
+"amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam "
+"nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed "
+"diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet "
+"clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+msgstr ""
+
 #: apps/io.ox/tours/contacts.js:35 module:io.ox/tours
 msgid "Navigation bar"
 msgstr "Bara de navigare"
+
+#: apps/io.ox/tours/files.js:64 module:io.ox/tours
+msgid ""
+"On the left you can see the folder tree. It displays your folder structure "
+"and allows you to navigate to specific folders and subfolders. To make your "
+"life easier, we have already included folders for your Documents, Music, "
+"Pictures and Videos."
+msgstr ""
 
 #: apps/io.ox/tours/mail.js:91 module:io.ox/tours
 msgid "Opening an E-Mail in a separate window"
@@ -291,6 +391,16 @@ msgstr "Deschiderea ajutorului"
 msgid "Opening the settings"
 msgstr "Deschiderea setărilor"
 
+#: apps/io.ox/tours/files.js:128 module:io.ox/tours
+#, fuzzy
+msgid "Preview files"
+msgstr "Previzualizare"
+
+#: apps/io.ox/tours/files.js:139 module:io.ox/tours
+#, fuzzy
+msgid "Preview mode"
+msgstr "Previzualizare"
+
 #: apps/io.ox/tours/mail.js:96 module:io.ox/tours
 msgid "Reading E-Mail conversations"
 msgstr "Citirea conversațiilor de e-mail"
@@ -299,12 +409,22 @@ msgstr "Citirea conversațiilor de e-mail"
 msgid "Reading the details"
 msgstr "Citirea detaliilor"
 
+#: apps/io.ox/tours/files.js:225 module:io.ox/tours
+msgid "Restart Guided Tour"
+msgstr ""
+
 #: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Căutarea de obiecte"
 
+#: apps/io.ox/tours/files.js:85 module:io.ox/tours
+#, fuzzy
+#| msgid "Selecting a view"
+msgid "Select a view"
+msgstr "Selectare unei vederi"
+
 #: apps/io.ox/tours/calendar.js:83 module:io.ox/tours
-#: apps/io.ox/tours/files.js:35 apps/io.ox/tours/mail.js:86
+#: apps/io.ox/tours/mail.js:86
 msgid "Selecting a view"
 msgstr "Selectare unei vederi"
 
@@ -315,6 +435,26 @@ msgstr "Trimiterea unui e-mail către un contact"
 #: apps/io.ox/tours/mail.js:74 module:io.ox/tours
 msgid "Sending the E-Mail"
 msgstr "Trimiterea e-mailului"
+
+#: apps/io.ox/tours/files.js:150 module:io.ox/tours
+#, fuzzy
+#| msgid "Share this file"
+msgid "Share files"
+msgstr "Partajează fișierul curent"
+
+#: apps/io.ox/tours/files.js:177 module:io.ox/tours
+msgid ""
+"Sharing files by inviting people does not only offer your recipients the "
+"option to create and edit files. Internal and external participants are also "
+"able to collaborate with you on text documents and spreadsheets at the same "
+"time."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:162 module:io.ox/tours
+#, fuzzy
+#| msgid "Sort options"
+msgid "Sharing options"
+msgstr "Opțiuni de sortare"
 
 #: apps/io.ox/tours/settings.js:54 module:io.ox/tours
 msgid "Signing out"
@@ -341,21 +481,21 @@ msgstr ""
 "în vederea detaliată se pot găsi funcții suplimentare pentru organizarea "
 "obiectelor."
 
-#: apps/io.ox/tours/files.js:45 module:io.ox/tours
-msgid "The Icons view"
-msgstr "Vederea pe pictograme"
+#: apps/io.ox/tours/files.js:56 module:io.ox/tours
+#, fuzzy
+#| msgctxt "help"
+#| msgid "The Drive App"
+msgid "The Drive app"
+msgstr "Aplicația Drive"
 
-#: apps/io.ox/tours/files.js:46 module:io.ox/tours
-msgid ""
-"The Icons view displays an icon and the file name for each file. Click on an "
-"icon to view further details and functions in the pop-up."
-msgstr ""
-"Vederea pe pictograme afișează o pictogramă și numele fișierului pentru "
-"fiecare fișier. Apăsați pe o pictogramă pentru a vizualiza detaliile și "
-"funcțiile suplimentare într-o fereastră pop-up. "
+#: apps/io.ox/tours/files.js:50 module:io.ox/tours
+#, fuzzy
+#| msgctxt "help"
+#| msgid "The Drive App"
+msgid "The Drive app tour.txt"
+msgstr "Aplicația Drive"
 
 #: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
-#: apps/io.ox/tours/files.js:40
 msgid "The List view"
 msgstr "Vederea pe liste"
 
@@ -368,17 +508,6 @@ msgstr ""
 "Vederea pe liste afișează o listă cu întâlnirile din dosarul curent. Printr-"
 "un clic pe o întâlnire, datele referitoare la întâlnire și anumite funcții "
 "se afișează în vederea detaliată."
-
-#: apps/io.ox/tours/files.js:41 module:io.ox/tours
-msgid ""
-"The List view shows details like the size and date of change. Use the "
-"checkboxes to select files. Click on a file to view further details and "
-"functions in the pop-up."
-msgstr ""
-"Vederea pe liste afișează detalii precum dimensiunea și data modificării. "
-"Utilizați casetele de selectare pentru a selecta fișierele. Apăsați pe un "
-"fișier pentru a vizualiza detaliile și funcțiile suplimentare într-o "
-"fereastră pop-up. "
 
 #: apps/io.ox/tours/intro.js:58 module:io.ox/tours
 msgid "The New objects icon"
@@ -405,19 +534,6 @@ msgstr ""
 "Portalul vă informează despre e-mailurile, întâlnirile sau știrile din "
 "rețelele sociale curente."
 
-#: apps/io.ox/tours/files.js:50 module:io.ox/tours
-msgid "The Tiles view"
-msgstr "Vederea pe cadre"
-
-#: apps/io.ox/tours/files.js:51 module:io.ox/tours
-msgid ""
-"The Tiles view shows a big icon for each file. Click on an icon to view "
-"further details and functions in the pop-up."
-msgstr ""
-"Vederea pe cadre afișează o pictogramă mare pentru fiecare fișier. Apăsați "
-"pe o pictogramă pentru a vizualiza detaliile și funcțiile suplimentare într-"
-"o fereastră pop-up. "
-
 #: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
 msgid "The calendar views"
 msgstr "Vederile calendarului"
@@ -429,6 +545,13 @@ msgid ""
 msgstr ""
 "Vederile calendar afișează o foaie de calendar cu întâlnirile pentru "
 "intervalul de timp selectat."
+
+#: apps/io.ox/tours/files.js:200 module:io.ox/tours
+msgid ""
+"The file details side bar offers additional information about your files. "
+"Just enable the File details option from the View drop down menu and select "
+"a file to see the details."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js:104 module:io.ox/tours
 msgid "The folder tree"
@@ -505,10 +628,6 @@ msgstr ""
 #: apps/io.ox/tours/tasks.js:33 module:io.ox/tours
 msgid "To create a new task, click on New in the toolbar."
 msgstr "Pentru a crea o sarcină nouă, apăsați pe Nou în bara de unelte."
-
-#: apps/io.ox/tours/files.js:61 module:io.ox/tours
-msgid "To create a note, click on New > Add note in the toolbar."
-msgstr "Pentru a crea o notă, apăsați pe Nou >Adaugă notă în bara de unelte."
 
 #: apps/io.ox/tours/calendar.js:58 module:io.ox/tours
 msgid ""
@@ -672,14 +791,6 @@ msgstr ""
 "Pentru a căuta anumite obiecte,  apăsați pe pictograma Căutare din bara de "
 "meniu."
 
-#: apps/io.ox/tours/files.js:36 module:io.ox/tours
-msgid ""
-"To select one of the views List, Icons or Squares, click on View on the "
-"right side of the toolbar."
-msgstr ""
-"Pentru a selecta una dintre vederile Listă, Pictograme sau Cadre, apăsați pe "
-"Vedere în partea dreaptă a barei de unelte."
-
 #: apps/io.ox/tours/calendar.js:84 module:io.ox/tours
 msgid ""
 "To select one of the views like Day, Month or List, click on View in the "
@@ -725,36 +836,29 @@ msgstr ""
 msgid "To track the editing status, enter the current progress."
 msgstr "Pentru a urmări starea de editare, introduceți progresul curent."
 
-#: apps/io.ox/tours/files.js:56 module:io.ox/tours
-msgid "To upload a file, click on New > Upload new file in the toolbar."
-msgstr ""
-"Pentru a încărca un fișier, apăsați pe Nou > Încarcă fișier nou în bara de "
-"unelte."
-
-#: apps/io.ox/tours/files.js:68 module:io.ox/tours
+#: apps/io.ox/tours/files.js:114 module:io.ox/tours
 msgid ""
-"To view further information, click on a file. A pop-up window displays "
-"further details and functions."
+"To upload a new file from your local device, simply click on Add local file "
+"and select the file you would like to upload. It is even easier if you just "
+"drag and drop files from your local device into Drive. The uploaded file is "
+"now available in Drive on all your devices."
 msgstr ""
-"Pentru a vizualiza informații suplimentare, apăsați pe un fișier. Detaliile "
-"și funcțiile suplimentare se afișează într-o fereastră pop-up."
+
+#: apps/io.ox/tours/files.js:100 module:io.ox/tours
+#, fuzzy
+#| msgid "The toolbar"
+msgid "Toolbar"
+msgstr "Bara de unelte"
 
 #: apps/io.ox/tours/tasks.js:72 module:io.ox/tours
 msgid "Tracking the editing status"
 msgstr "Urmărirea stării de editare"
 
-#: apps/io.ox/tours/files.js:55 module:io.ox/tours
-msgid "Uploading a file"
-msgstr "Încărcarea unui fișier"
-
-#: apps/io.ox/tours/files.js:31 module:io.ox/tours
-msgid ""
-"Use the folder tree to access own, public or shared files. If the folder "
-"tree is hidden, click on View > Folder view on the right side of the toolbar."
-msgstr ""
-"Utilizați arborele de dosare pentru a accesa fișierele proprii, publice sau "
-"partajate. Dacă arborele de dosare este ascuns, apăsați pe Vedere > Vedere "
-"dosar în partea dreaptă a barei de unelte."
+#: apps/io.ox/tours/files.js:113 module:io.ox/tours
+#, fuzzy
+#| msgid "Upload new file"
+msgid "Upload a new file"
+msgstr "Încarcă fișier nou"
 
 #: apps/io.ox/tours/intro.js:105 module:io.ox/tours
 msgid ""
@@ -779,6 +883,14 @@ msgstr "Utilizarea funcției de memento"
 #: apps/io.ox/tours/intro.js:34 module:io.ox/tours
 msgid "Welcome to %s"
 msgstr "Bine ați venit la %s"
+
+#: apps/io.ox/tours/files.js:57 module:io.ox/tours
+msgid ""
+"Welcome to your cloud storage app. This Guided Tour will introduce you to "
+"your new online storage solution - your one point to access online stored "
+"files from all your accounts. This is where you can upload and save your "
+"files, share them and synchronize them with different devices.  "
+msgstr ""
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -1403,9 +1515,6 @@ msgstr "Bine ați venit la %s"
 
 #~ msgid "Add member"
 #~ msgstr "Adaugă un membru"
-
-#~ msgid "Add new account"
-#~ msgstr "Adaugă un cont nou"
 
 #~ msgid "Add new contact"
 #~ msgstr "Adaugă contact nou"
@@ -2889,6 +2998,9 @@ msgstr "Bine ați venit la %s"
 #~ msgid "Creating Files"
 #~ msgstr "Crearea de fișiere"
 
+#~ msgid "Creating a note"
+#~ msgstr "Crearea unei note"
+
 #~ msgid "Creation date:"
 #~ msgstr "Data creării:"
 
@@ -3279,6 +3391,9 @@ msgstr "Bine ați venit la %s"
 
 #~ msgid "Displayed name"
 #~ msgstr "Nume afișat"
+
+#~ msgid "Displaying information"
+#~ msgstr "Afișarea de informații"
 
 #~ msgid "Distance"
 #~ msgstr "Distanță"
@@ -3671,9 +3786,6 @@ msgstr "Bine ați venit la %s"
 
 #~ msgid "Edit description"
 #~ msgstr "Editează descrierea"
-
-#~ msgid "Edit document"
-#~ msgstr "Editează documentul"
 
 #~ msgid "Edit draft"
 #~ msgstr "Editează ciorna"
@@ -4180,9 +4292,6 @@ msgstr "Bine ați venit la %s"
 
 #~ msgid "File"
 #~ msgstr "Fișier"
-
-#~ msgid "File Details"
-#~ msgstr "Detalii fișier"
 
 #~ msgid "File name"
 #~ msgstr "Nume fișier"
@@ -7050,10 +7159,6 @@ msgstr "Bine ați venit la %s"
 #~ msgid "Preview could not be loaded"
 #~ msgstr "Nu s-a putut încărca previzualizarea"
 
-#, fuzzy
-#~ msgid "Preview pane"
-#~ msgstr "Previzualizare"
-
 #~ msgid "Previous"
 #~ msgstr "Precedent"
 
@@ -7898,9 +8003,6 @@ msgstr "Bine ați venit la %s"
 #~ msgid "Share tasks"
 #~ msgstr "Partajează sarcinile"
 
-#~ msgid "Share this file"
-#~ msgstr "Partajează fișierul curent"
-
 #~ msgid "Share this folder"
 #~ msgstr "Partajează dosarul curent"
 
@@ -8206,9 +8308,6 @@ msgstr "Bine ați venit la %s"
 #~ msgstr ""
 #~ "Ne pare rău, dar nu vă putem ajuta. Furnizorul dumneavoastră trebuie să "
 #~ "obțină de la LinkedIn o cheie cu permisiuni pentru a citi mesajele. "
-
-#~ msgid "Sort options"
-#~ msgstr "Opțiuni de sortare"
 
 #~ msgid "Source"
 #~ msgstr "Sursă"
@@ -8671,10 +8770,6 @@ msgstr "Bine ați venit la %s"
 #~ msgstr "Adăugați un grup nou pentru fluxuri"
 
 #~ msgctxt "help"
-#~ msgid "The Drive App"
-#~ msgstr "Aplicația Drive"
-
-#~ msgctxt "help"
 #~ msgid "The E-Mail Components"
 #~ msgstr "Componentele e-mailului"
 
@@ -8690,6 +8785,17 @@ msgstr "Bine ați venit la %s"
 #~ msgctxt "help"
 #~ msgid "The Files Components"
 #~ msgstr "Componentele fișier"
+
+#~ msgid "The Icons view"
+#~ msgstr "Vederea pe pictograme"
+
+#~ msgid ""
+#~ "The Icons view displays an icon and the file name for each file. Click on "
+#~ "an icon to view further details and functions in the pop-up."
+#~ msgstr ""
+#~ "Vederea pe pictograme afișează o pictogramă și numele fișierului pentru "
+#~ "fiecare fișier. Apăsați pe o pictogramă pentru a vizualiza detaliile și "
+#~ "funcțiile suplimentare într-o fereastră pop-up. "
 
 #~ msgid "The Icons view displays an icon for each file."
 #~ msgstr "Vederea pe pictograme afișează o pictogramă pentru fiecare fișier."
@@ -8711,6 +8817,27 @@ msgstr "Bine ați venit la %s"
 #~ "Vederea pe liste afișează o bară laterală cu fișiere și o zonă de afișare "
 #~ "cu informațiile despre fișierul selectat. Această vedere corespunde "
 #~ "vederii din E-mail și Contacte."
+
+#~ msgid ""
+#~ "The List view shows details like the size and date of change. Use the "
+#~ "checkboxes to select files. Click on a file to view further details and "
+#~ "functions in the pop-up."
+#~ msgstr ""
+#~ "Vederea pe liste afișează detalii precum dimensiunea și data modificării. "
+#~ "Utilizați casetele de selectare pentru a selecta fișierele. Apăsați pe un "
+#~ "fișier pentru a vizualiza detaliile și funcțiile suplimentare într-o "
+#~ "fereastră pop-up. "
+
+#~ msgid "The Tiles view"
+#~ msgstr "Vederea pe cadre"
+
+#~ msgid ""
+#~ "The Tiles view shows a big icon for each file. Click on an icon to view "
+#~ "further details and functions in the pop-up."
+#~ msgstr ""
+#~ "Vederea pe cadre afișează o pictogramă mare pentru fiecare fișier. "
+#~ "Apăsați pe o pictogramă pentru a vizualiza detaliile și funcțiile "
+#~ "suplimentare într-o fereastră pop-up. "
 
 #~ msgid "The account must be named"
 #~ msgstr "Contul trebuie să fie numit"
@@ -9392,6 +9519,10 @@ msgstr "Bine ați venit la %s"
 #~ "Pentru a adăuga contacte manual, introduceți o adresă de mail validă (de "
 #~ "exemplu john.doe@example.com sau \"John Doe\" <jd@example.com>) "
 
+#~ msgid "To create a note, click on New > Add note in the toolbar."
+#~ msgstr ""
+#~ "Pentru a crea o notă, apăsați pe Nou >Adaugă notă în bara de unelte."
+
 #~ msgid "To create a note, click the icon at the top. Select Add note."
 #~ msgstr ""
 #~ "Pentru a crea o notă, apăsați pe pictograma din partea de sus. Selectați "
@@ -9422,14 +9553,33 @@ msgstr "Bine ați venit la %s"
 #~ "Pentru a deschide ajutorul, apăsați pe pictograma Meniu sistem din partea "
 #~ "dreapă sus a barei de meniu. Selectați Ajutor."
 
+#~ msgid ""
+#~ "To select one of the views List, Icons or Squares, click on View on the "
+#~ "right side of the toolbar."
+#~ msgstr ""
+#~ "Pentru a selecta una dintre vederile Listă, Pictograme sau Cadre, apăsați "
+#~ "pe Vedere în partea dreaptă a barei de unelte."
+
 #~ msgid "To send the E-Mail, click on Send on the upper right side."
 #~ msgstr ""
 #~ "Pentru a trimite e-mailul, apăsație pe Trimite în partea dreaptă sus."
+
+#~ msgid "To upload a file, click on New > Upload new file in the toolbar."
+#~ msgstr ""
+#~ "Pentru a încărca un fișier, apăsați pe Nou > Încarcă fișier nou în bara "
+#~ "de unelte."
 
 #~ msgid "To view attachment you must first save your e-mail as a draft."
 #~ msgstr ""
 #~ "Pentru a vizualiza fișierele atașate terbuie să salvați înainte mesajul "
 #~ "dumneavoastră ca schiță."
+
+#~ msgid ""
+#~ "To view further information, click on a file. A pop-up window displays "
+#~ "further details and functions."
+#~ msgstr ""
+#~ "Pentru a vizualiza informații suplimentare, apăsați pe un fișier. "
+#~ "Detaliile și funcțiile suplimentare se afișează într-o fereastră pop-up."
 
 #~ msgid "To..."
 #~ msgstr "Către..."
@@ -9718,14 +9868,14 @@ msgstr "Bine ați venit la %s"
 #~ msgid "Upload file"
 #~ msgstr "Încarcă un fișier"
 
-#~ msgid "Upload new file"
-#~ msgstr "Încarcă fișier nou"
-
 #~ msgid "Upload new files"
 #~ msgstr "Încarcă fișiere noi"
 
 #~ msgid "Upload new version"
 #~ msgstr "Încarcă versiune nouă"
+
+#~ msgid "Uploading a file"
+#~ msgstr "Încărcarea unui fișier"
 
 #~ msgid "Uploading folders is not supported."
 #~ msgstr "Încărcarea dosarelor nu este suportată."
@@ -9765,6 +9915,15 @@ msgstr "Bine ați venit la %s"
 
 #~ msgid "Use the expert mode?"
 #~ msgstr "Folosește modul expert?"
+
+#~ msgid ""
+#~ "Use the folder tree to access own, public or shared files. If the folder "
+#~ "tree is hidden, click on View > Folder view on the right side of the "
+#~ "toolbar."
+#~ msgstr ""
+#~ "Utilizați arborele de dosare pentru a accesa fișierele proprii, publice "
+#~ "sau partajate. Dacă arborele de dosare este ascuns, apăsați pe Vedere > "
+#~ "Vedere dosar în partea dreaptă a barei de unelte."
 
 #~ msgid ""
 #~ "Use this option when logging in to the server from a public or shared "

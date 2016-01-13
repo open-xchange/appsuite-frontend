@@ -953,6 +953,12 @@ msgstr "Alle bestanden zijn verwijderd"
 msgid "All folders"
 msgstr "Alle mappen"
 
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All messages have been deleted"
+msgstr "Alle bestanden zijn verwijderd"
+
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr ""
@@ -2290,10 +2296,9 @@ msgstr "Account verwijderen"
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #, fuzzy
-#| msgctxt "folder"
-#| msgid "Deleted messages"
-msgid "Delete all %1$d messages"
-msgstr "Verwijderde berichten"
+#| msgid "Show all %1$d messages in inbox"
+msgid "Delete all messages in this folder"
+msgstr "Toon alle %1$d berichten in Postvak IN"
 
 #. object permissions - delete
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -4785,16 +4790,22 @@ msgstr "Er zijn meer dan de momenteel getoonde %1$s elementen gevonden"
 msgid "Move"
 msgstr "Verplaatsen"
 
-#. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 #, fuzzy
-#| msgid "Show all %1$d messages in inbox"
-msgid "Move all %1$d messages to another folder"
-msgstr "Toon alle %1$d berichten in Postvak IN"
+#| msgid "Close all"
+msgid "Move all"
+msgstr "Alles sluiten"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Move all messages"
 msgstr "Alle berichten verplaatsen"
+
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show all %1$d messages in inbox"
+msgid "Move all messages to another folder"
+msgstr "Toon alle %1$d berichten in Postvak IN"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
@@ -7788,6 +7799,10 @@ msgstr "De map is opgeschoond."
 msgid "The folder has been emptied"
 msgstr "De map is leeg gemaakt"
 
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "The following actions apply to all messages (%1$d) in this folder:"
+msgstr ""
+
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
@@ -10039,9 +10054,6 @@ msgstr "yyyy"
 #~ "Klik op een letter aan de linkerkant van de navigatiebalk om de contacten "
 #~ "te tonen met de overeenkomstige beginletters in het gekozen adresboek."
 
-#~ msgid "Close all"
-#~ msgstr "Alles sluiten"
-
 #~ msgid "Closing a tile"
 #~ msgstr "Een vlak sluiten"
 
@@ -10138,6 +10150,12 @@ msgstr "yyyy"
 
 #~ msgid "Default view"
 #~ msgstr "Standaardoverzicht"
+
+#, fuzzy
+#~| msgctxt "folder"
+#~| msgid "Deleted messages"
+#~ msgid "Delete all %1$d messages"
+#~ msgstr "Verwijderde berichten"
 
 #, fuzzy
 #~| msgid "Return Receipt"

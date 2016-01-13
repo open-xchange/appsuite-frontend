@@ -948,6 +948,12 @@ msgstr "Alla filer har tagits bort"
 msgid "All folders"
 msgstr "Alla mappar"
 
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All messages have been deleted"
+msgstr "Alla filer har tagits bort"
+
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr "Alla meddelanden äldre än %1$d dagar kommer flyttas till arkivmappen"
@@ -2278,10 +2284,9 @@ msgstr "Ta bort konto"
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #, fuzzy
-#| msgctxt "folder"
-#| msgid "Deleted messages"
-msgid "Delete all %1$d messages"
-msgstr "Raderade meddelanden"
+#| msgid "Show all %1$d messages in inbox"
+msgid "Delete all messages in this folder"
+msgstr "Visa alla %1$d meddelanden i inkorgen"
 
 #. object permissions - delete
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -4745,16 +4750,22 @@ msgstr "Fler än de nu visade %1$s objekten hittades"
 msgid "Move"
 msgstr "Flytta"
 
-#. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 #, fuzzy
-#| msgid "Show all %1$d messages in inbox"
-msgid "Move all %1$d messages to another folder"
-msgstr "Visa alla %1$d meddelanden i inkorgen"
+#| msgid "Close all"
+msgid "Move all"
+msgstr "Stäng alla"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Move all messages"
 msgstr "Flytta alla meddelanden"
+
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show all %1$d messages in inbox"
+msgid "Move all messages to another folder"
+msgstr "Visa alla %1$d meddelanden i inkorgen"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
@@ -7717,6 +7728,10 @@ msgstr "Mappen har städats."
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "The folder has been emptied"
 msgstr "Mappen har tömts"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "The following actions apply to all messages (%1$d) in this folder:"
+msgstr ""
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
@@ -10819,9 +10834,6 @@ msgstr "yyyy"
 #~ "Klicka på en bokstav till vänster om navigationsraden för att visa "
 #~ "motsvarande kontakter från den valda adressboken."
 
-#~ msgid "Close all"
-#~ msgstr "Stäng alla"
-
 #~ msgid "Close document"
 #~ msgstr "Stäng dokument"
 
@@ -11133,6 +11145,12 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Definierade rättigheter till mapp %1$s i kontext %2$s är inte passande "
 #~ "för användare %3$s på grund av användarkonfigurationen"
+
+#, fuzzy
+#~| msgctxt "folder"
+#~| msgid "Deleted messages"
+#~ msgid "Delete all %1$d messages"
+#~ msgstr "Raderade meddelanden"
 
 #~ msgid "Delete all accounts"
 #~ msgstr "Ta bort alla konton"
