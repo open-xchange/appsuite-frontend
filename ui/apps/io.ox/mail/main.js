@@ -460,7 +460,7 @@ define('io.ox/mail/main', [
          */
         'change:thread': function (app) {
             app.props.on('change:thread', function (model, value, opt) {
-                if (app.listView.collection) {
+                if (!app.changingFolders && app.listView.collection) {
                     app.listView.collection.expired = true;
                 }
                 if (value === true) {
@@ -619,17 +619,12 @@ define('io.ox/mail/main', [
 
                 var options = app.getViewOptions(id),
                     fromTo = $(app.left[0]).find('.dropdown.grid-options .dropdown-menu [data-value="from-to"] span'),
-                    showFrom = account.is('sent|drafts', id);
+                    showTo = account.is('sent|drafts', id);
 
                 app.props.set(_.pick(options, 'sort', 'order', 'thread'));
                 app.listView.model.set('folder', id);
                 app.folder.getData();
-
-                if (showFrom) {
-                    fromTo.text(gt('To'));
-                } else {
-                    fromTo.text(gt('From'));
-                }
+                fromTo.text(showTo ? gt('To') : gt('From'));
                 app.changingFolders = false;
             });
         },
