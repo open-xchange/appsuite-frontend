@@ -25,22 +25,73 @@ define('io.ox/presenter/util', [
      */
     Util.getVisibleNodes = function (nodes) {
         var visibleNodes = [];
-        // Whether the page element is visible in the viewport, wholly or partially.
-        function isNodeVisible(node) {
-            var nodeBoundingRect = node.getBoundingClientRect();
-            function isInWindow(verticalPosition) {
-                return verticalPosition >= 0 && verticalPosition <= window.innerHeight;
-            }
-            return isInWindow(nodeBoundingRect.top) ||
-                isInWindow(nodeBoundingRect.bottom) ||
-                (nodeBoundingRect.top < 0 && nodeBoundingRect.bottom > window.innerHeight);
-        }
+
         // return the visible pages
         _.each(nodes, function (element, index) {
-            if (!isNodeVisible(element)) { return; }
+            if (!Util.isVisibleNode(element)) { return; }
             visibleNodes.push(index + 1);
         });
         return visibleNodes;
+    };
+
+    /**
+     * Detect visible thumbnail image nodes
+     * that have not yet been loaded from given nodes array.
+     *
+     * @param {Array} nodes
+     *  an array of image nodes.
+     *
+     * @returns {Array}
+     *  an array of indices of visible image nodes.
+     */
+    Util.getThumbnailsToLoad = function (nodes) {
+        var visibleNodes = [];
+
+        // return the visible pages
+        _.each(nodes, function (image, index) {
+            if (image.src) {
+                return;
+            }
+            if (!Util.isVisibleNode(image)) {
+                return;
+            }
+            visibleNodes.push(index + 1);
+        });
+
+        return visibleNodes;
+    };
+
+    /**
+     * Returns whether the node is visible in the viewport, wholly or partially.
+     *
+     * @param {DOM} node
+     *  The DOM node to check.
+     *
+     * @returns {Boolean}
+     *  Whether the node the is visible.
+     */
+    Util.isVisibleNode = function (node) {
+
+        function isVerticalInWindow(verticalPosition) {
+            return verticalPosition >= 0 && verticalPosition <= window.innerHeight;
+        }
+
+        function overlapsVertical(nodeBoundingRect) {
+            return nodeBoundingRect.top < 0 && nodeBoundingRect.bottom > window.innerHeight;
+        }
+
+        function isHorizontalInWindow(horizontalPosition) {
+            return horizontalPosition >= 0 && horizontalPosition <= window.innerWidth;
+        }
+
+        function overlapsHorizontal(nodeBoundingRect) {
+            return nodeBoundingRect.left < 0 && nodeBoundingRect.right > window.innerWidth;
+        }
+
+        var nodeBoundingRect = node.getBoundingClientRect();
+
+        return (isHorizontalInWindow(nodeBoundingRect.left) || isHorizontalInWindow(nodeBoundingRect.right) || overlapsHorizontal(nodeBoundingRect)) &&
+                (isVerticalInWindow(nodeBoundingRect.top) || isVerticalInWindow(nodeBoundingRect.bottom) || overlapsVertical(nodeBoundingRect));
     };
 
     Util.createAbortableDeferred = function (abortFunction) {
