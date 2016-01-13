@@ -53,7 +53,9 @@ define('io.ox/core/moment', [
     if (langISO !== defaultLang) {
         // load the file that contains the define, then load the define itself
         // we need do it this way to avoid the use of anonymous defines
-        require(['static/3rd.party/moment/locale/' + langISO + '.js', 'moment/locale/' + langISO]);
+        require(['static/3rd.party/moment/locale/' + langISO + '.js'], function () {
+            require(['moment/locale/' + langISO]);
+        });
     }
 
     // set timezone
