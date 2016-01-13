@@ -105,7 +105,7 @@ define('io.ox/tasks/view-detail', [
                 data = util.checkMailLinks(note);
             note = data.note;
 
-            if (note !== '') {
+            if (note !== '' || data.link) {
                 this.append(
                     $('<div class="note">').html(
                         note
@@ -121,6 +121,11 @@ define('io.ox/tasks/view-detail', [
                                 // see if mail is still there. Also loads the mail into the pool. Needed for the app to work
                                 api.get(_.extend({}, { unseen: true }, _.cid(data.link))).done(function () {
                                     ox.launch('io.ox/mail/detail/main', { cid: data.link });
+                                }).fail(function (error) {
+                                    //if the mail was moved or the mail was deleted the cid cannot be found, show error
+                                    require(['io.ox/core/yell'], function (yell) {
+                                        yell(error);
+                                    });
                                 }).always(function () {
                                     self.idle().css({ width: 'auto', height: 'auto' }).text(gt('show mail'));
                                 });
