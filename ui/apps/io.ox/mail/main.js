@@ -378,7 +378,7 @@ define('io.ox/mail/main', [
         'list-view-message-empty': function (app) {
             // enable 'empty' message
             app.listView.messageEmpty
-                .removeClass('hidden')
+                //.removeClass('hidden')
                 .find('.message-empty')
                 // customize message
                 .text(gt('Empty'));
