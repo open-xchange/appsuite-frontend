@@ -74,7 +74,7 @@ define('io.ox/core/folder/contextmenu', [
         select: function (e) {
             var meta = _.extend({},
                 this.model.get('meta'),
-                { color_label: $(e.target).data('index') }
+                { color_label: $(e.currentTarget).data('index') }
             );
 
             api.update(this.model.get('id'), { meta: meta }).fail(function (error) {
