@@ -936,23 +936,21 @@ define('io.ox/presenter/views/presentationview', [
             }
 
             // draw page nodes and apply css sizes
+            var docContainerHeight = this.documentContainer.height();
+            var pdfPageZoom = this.currentZoomFactor / 100;
+
             _.times(pageCount, function (index) {
-                var swiperSlide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
-                    documentPage = $('<div class="document-page">').attr('data-page', index + 1),
-                    pageSize = this.pdfView.getRealPageSize(index + 1, this.currentZoomFactor / 100);
+                // to prevent mobile Safari crashing due to rendering overload default the slide 'visibility' to 'hidden'
+                // and set only the rendered slides to 'visible'.
+                var pageNumber = index + 1;
+                var pageSize = this.pdfView.getRealPageSize(pageNumber, pdfPageZoom);
+                var pageWidth = pageSize.width;
+                var pageHeight = pageSize.height;
+                // create DOM from strings to optimize performance for presentations with lots of slides
+                var swiperSlide = '<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false" style="visibility: hidden; line-height: ' + docContainerHeight + 'px;">';
+                var documentPage = '<div class="document-page" data-page="' + pageNumber + '" width="' + pageWidth + '" height="' + pageHeight + '" style="width: ' + pageWidth + 'px; height: ' + pageHeight + 'px;"></div>';
 
-                this.documentContainer.append(
-                   swiperSlide.append(
-                       documentPage.attr(pageSize).css(pageSize)
-                   )
-                );
-
-                swiperSlide.css('line-height', swiperSlide.height() + 'px');
-
-                // to prevent mobile Safari crashing due to rendering overload
-                // set the visibility of the slides to hidden and set only
-                // the rendered slides to visible.
-                swiperSlide.css({ visibility: 'hidden' });
+                this.documentContainer.append(swiperSlide + documentPage + '</div>');
 
             }, this);
 
