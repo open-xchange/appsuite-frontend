@@ -76,4 +76,19 @@ define('io.ox/onboarding/clients/views', [
         }
     });
 
+    ext.point(POINT + '/link/mailappinstall').extend({
+        index: 100,
+        draw: function (action, baton) {
+            var view = new extensions.AppActionView(action, { baton: baton });
+            this.append(view.render().$el);
+        }
+    });
+
+    ext.point(POINT + '/link/driveappinstall').extend({
+        index: 100,
+        draw: function (action, baton) {
+            var view = new extensions.AppActionView(action, { baton: baton });
+            this.append(view.render().$el);
+        }
+    });
 });

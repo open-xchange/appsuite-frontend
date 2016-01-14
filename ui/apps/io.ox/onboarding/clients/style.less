@@ -13,262 +13,226 @@
 
 .wizard-step {
 
-    .teaser {
-        margin: 0 0 16px 0;
-    }
-
-    .onboarding-platform {
-        margin-bottom: 40px;
-    }
-
-    ul {
+    /**
+     * :MIXINS
+     */
+    .mixin-unstyled-list {
         list-style-type: none;
         padding: 0;
         margin: 0;
     }
 
-    .descriptions {
-        min-height: 60px;
-        height: 80px;
-        li {
-            width: 100%;
-            padding: 16px 16px 16px 0;
-            line-height: 20px;
+    .mixin-expanded {
+        .content { display: block; }
+        .fa-chevron-right { display: none; }
+        .fa-chevron-down { display: inline-block; }
+    }
+
+    .box-shadow (@string) {
+        -webkit-box-shadow: @string;
+        -moz-box-shadow:    @string;
+        box-shadow:         @string;
+    }
+
+    .transition(@duration:0.2s, @ease:ease-out) {
+        -webkit-transition: all @duration @ease;
+        -moz-transition: all @duration @ease;
+        -o-transition: all @duration @ease;
+        transition: all @duration @ease;
+    }
+
+
+    /**
+     * SIMPLE MODE
+     */
+
+    &[data-mode="simple"] {
+        fieldset.action {
+            display: none;
+        }
+        fieldset.action:nth-child(1) {
+            display: block;
         }
     }
 
-    .wizard-footer:empty {
-        display: block;
-        padding-bottom: 6px;
-    };
+    /**
+     * ADVANCED MODE
+     */
 
-    .options {
+    .wizard-content {
+
+        .teaser {
+            margin: 0 0 16px 0;
+        }
+
+        .options {
+            .mixin-unstyled-list;
 
             white-space: nowrap;
-            //display: table-row;
 
-            li {
-
+            .option {
                 margin: 0 16px 0 0;
                 display: inline-block;
-                // tmp
                 max-width: 146px;
 
-                a {
-                    color: @black;
+                .link {
                     max-width: 144px;
                     border: 1px solid rgba(0, 0, 0, 0.10);
                     display: inline-block;
                     outline: 0;
+                    text-decoration: none;
+                    color: black;
 
                     &.disabled {
-                        //background-color: red;
                         color: #ccc;
                         pointer-events: none;
                         cursor: default;
                     }
 
-                }
-
-                &.selected, &.selected:focus {
-                    a {
-                        background-color: white;
-                        color: black;
-                        border: 1px rgb(60, 115, 170) solid;
+                    &:hover {
+                        border-color: rgba(0, 0, 0, 0.50);
+                        &.disabled {
+                            border-color: rgba(0, 0, 0, 0.10);
+                        }
                     }
-                }
 
-                a:hover {
-                    border-color: rgba(0, 0, 0, 0.50);
-                    text-decoration: none;
-                    &.disabled {
-                        border-color: rgba(0, 0, 0, 0.10);
+                    // https://turnkey-shop.com/animate-box-shadow-with-silky-smooth-performance
+                    &.box {
+                        position: relative;
+                        display: inline-block;
+                        background-color: #fff;
+                        border-radius: 5px;
+                        .box-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+                        .transition(0.6s cubic-bezier(0.165, 0.84, 0.44, 1));
+                        &:hover {
+                            z-index:1000;
+                            .box-shadow(rgba(0, 0, 0, 0.3) 0 8px 8px 0)
+                        }
                     }
-                }
 
-                a:selected, a:focus {
-                    color: @selected-color;
-                    background-color: @selected-background;
-                }
-
-                .icon {
-                    width: 64px;
-                    font-size: 64px;
-                    margin: 24px 40px 0 40px;
-                    text-align: center;
-                }
-
-                .title {
-                    text-align: center;
-                    line-height: 40px;
-                    margin-bottom: 8px;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    padding: 0 8px;
-                }
-
-                .description {
-                    text-align: center;
-                    line-height: 40px;
-                    margin-bottom: 8px;
-                    font-style: italic;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-            }
-
-            li:last-child {
-                margin-right: 0;
-            }
-
-
-        &.selection {
-            list-style-type: none;
-            li {
-                max-width: none;
-                clear: both;
-                line-height: 14px;
-
-                a {
-                    float: left;
-                    .icon {
-                        margin: 0;
+                    .icon-list {
+                        margin: 12px 24px 0 24px;
+                        display: flex;
+                        justify-content: space-around;
+                        align-items: center;
+                        .icon {
+                            width: 48px;
+                            font-size: 48px;
+                            text-align: center;
+                            margin: 8px;
+                            text-decoration: none;
+                        }
                     }
+
                     .title {
-
+                        text-align: center;
+                        line-height: 24px;
+                        margin-bottom: 8px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        padding: 0 8px;
+                        text-decoration: none;
                     }
                 }
 
-                .description {
-                    padding-left: 16px;
-                    float: left;
+                // back buttona
+                &.centered {
+                    //.icon-list { margin: 18px 24px 18px 24px; }
+                    .title { line-height: 0; }
+                    .icon-list { margin: 18px 0}
                 }
+
+                // selection
+                &.selected>.link { border: 1px rgb(60, 115, 170) solid; }
             }
         }
-    }
 
-    .actions {
-        .action {
+        .descriptions {
+            .mixin-unstyled-list;
 
-            .content {
-                padding: 16px 0;
-                display: none;
-                .row {
-                    padding-bottom: 5px;
-                }
+            min-height: 20px;
+
+            .description {
+                width: 100%;
+                padding: 8px 0;
+                //line-height: 20px;
             }
+        }
 
-            .title, .description, .field, .btn {
-                margin-bottom: 5px;
-            }
+        .actions {
 
-            .btn {
-                margin-top: 5px;
-            }
-
-            .control-label {
-                text-align: right;
-                margin-top: 4px;
-                margin-bottom: 4px;
-                padding: 0 0 0 15px;
-            }
-
-            .fa {
-                padding-right: 8px;
-            }
-
-            .fa-chevron-right {
+            .toggle-link {
+                margin-top: 12px;
                 display: inline-block;
             }
 
-            .fa-chevron-down {
-                display: none;
-            }
+            .action {
+                // accordeon: less space when collapsed
+                margin-bottom: 0;
 
-
-            &.expanded {
+                .section-title {
+                    font-size: 14px;
+                    height: 32px;
+                    color: #333;
+                    cursor: pointer;
+                    margin-bottom: 5px;
+                    .fa {
+                        font-size: 12px;
+                        padding-right: 8px;
+                    }
+                    // collapsed
+                    .fa-chevron-right { display: inline-block; }
+                    .fa-chevron-down { display: none; }
+                }
 
                 .content {
-                    display: block;
-                }
-
-                .fa-chevron-right {
+                    padding: 2px 0;
                     display: none;
+
+                    .description {
+                        margin-bottom: 5px;
+                    }
+
+                    .btn {
+                        float: right;
+                    }
+
+                    .interaction {
+                        label, input { margin-right: 8px; }
+                        input { width: 60%; }
+                        button { float: right; }
+                        .row { margin-right: -10px; }
+                        .form-inline>* { padding-right: 8px; }
+                    }
+
+                    .data .row { padding-bottom: 5px; }
+
+                    .control-label {
+                        margin-top: 4px;
+                        margin-bottom: 4px;
+                        padding: 0 0 0 15px;
+                        .display-label { text-align: right; }
+                    }
+
                 }
 
-                .fa-chevron-down {
-                    display: inline-block;
+                &.expanded {
+                    .mixin-expanded;
                 }
             }
 
+            // when only one action is visible
+            .single-action .action {
+                .mixin-expanded;
+                .section-title {
+                    cursor: default;
+                    .fa-chevron-right, .fa-chevron-down {
+                        display: none;
+                    }
+                }
+            }
 
         }
     }
-
-    .sectiontitle {
-        font-weight: 700;
-        display: block;
-        width: 100%;
-        font-size: 14px;
-        height: 32px;
-        color: #333;
-        margin: 0;
-        margin-bottom: 8px;
-
-        cursor: pointer;
-
-        h2 {
-            font-weight: 700;
-            font-size: 14px;
-            margin: 0;
-        }
-
-        .fa {
-            font-size: 12px;
-        }
-    }
-
-    // https://turnkey-shop.com/animate-box-shadow-with-silky-smooth-performance
-    .box {
-      position: relative;
-      display: inline-block;
-      // width: 100px;
-      // height: 100px;
-      background-color: #fff;
-      border-radius: 5px;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-      -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-      transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-    }
-
-    // .box:after {
-    //   content: "";
-    //   border-radius: 5px;
-    //   position: absolute;
-    //   top: 0;
-    //   left: 0;
-    //   width: 100%;
-    //   height: 100%;
-    //   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    //   opacity: 0;
-    //   -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-    //   transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)
-    // }
-
-    // .box:hover {
-    //   -webkit-transform: scale(1.05, 1.05);
-    //   transform: scale(1.05, 1.05)
-    // }
-
-    .box:hover {
-        z-index:1000;
-        box-shadow:rgba(0, 0, 0, 0.3) 0 8px 8px 0;
-        -webkit-box-shadow:rgba(0, 0, 0, 0.3) 0 8px 8px 0;
-        -moz-box-shadow:rgba(0, 0, 0, 0.3) 0 8px px 0;
-    }
-
-    // .box:hover:after{
-    //     opacity: 1
-    // }
 
 }

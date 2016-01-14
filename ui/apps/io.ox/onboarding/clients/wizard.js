@@ -28,24 +28,54 @@ define('io.ox/onboarding/clients/wizard', [
         initiate, wizard;
 
     function drawOptions(type, list) {
+
+        function addIcons(icon) {
+            var list = [].concat(icon);
+            return _.map(list, function (name) {
+                return $('<i class="icon fa">').addClass(name);
+            });
+        }
+
+        var backlabels = {
+            'device': true,
+            'scenario': true
+        };
+
         return $('<ul class="options" role="navigation">')
                 .append(function () {
                     return _.map(list, function (obj) {
-                        return $('<li>')
+                        return $('<li class="option">')
                                 .attr({
                                     'data-value': obj.id
                                 })
                                 .append(
-                                    $('<a href="#" tabindex="1" class="box">')
+                                    $('<a href="#" tabindex="1" class="link box">')
                                     // apply disabled style?
                                     .addClass(obj.enabled ? '' : 'disabled')
                                     .append(
-                                        $('<i class="icon fa">').addClass(obj.icon || 'fa-circle'),
+                                        $('<div class="icon-list">').append(addIcons(obj.icon)),
                                         $('<div class="title">').text(obj.title || obj.name || obj.id || '\xa0')
                                     )
                         );
                     });
-                });
+                })
+                // back button
+                .prepend(
+                    backlabels[type] ?
+                    $('<li class="option centered">')
+                        .attr({
+                            'data-value': 'back'
+                        })
+                        .append(
+                            $('<a href="#" tabindex="1" class="link box">')
+                            // apply disabled style?
+                            .append(
+                                $('<div class="icon-list">').append(addIcons('fa-angle-left')),
+                                $('<div class="title">').text('\u00A0')
+                            )
+                        )
+                    : ''
+                );
     }
 
     //
@@ -56,6 +86,10 @@ define('io.ox/onboarding/clients/wizard', [
         e.preventDefault();
         var value = $(e.currentTarget).closest('li').attr('data-value'),
             type = this.$el.attr('data-type');
+
+        // back button
+        if (value === 'back') return this.parent.back();
+
         // update model
         this.parent.model.set(type, value);
         this.trigger('next');
@@ -64,12 +98,12 @@ define('io.ox/onboarding/clients/wizard', [
     function drawPlatforms() {
         var config = this.parent.config;
         // title
-        this.$('.wizard-title').text(titleLabel);
+        this.$('.wizard-title').text(gt('Please select the platform of your device.'));
         // content
         this.$('.wizard-content').empty()
             .addClass('onboarding-platform')
             .append(
-                $('<p class="teaser">').text(gt('Please select the platform of your device.')),
+                $('<p class="teaser">').text(titleLabel),
                 drawOptions('platform', config.getPlatforms())
                 .on('click', 'a', onSelect.bind(this))
             );
@@ -99,6 +133,8 @@ define('io.ox/onboarding/clients/wizard', [
             container = node.closest('[data-type]'),
             type = container.attr('data-type'),
             value = node.closest('[data-value]').attr('data-value');
+        // back
+        if (value === 'back') return data.wizard.back();
         data.wizard.trigger('selected', { type: type, value: value });
     }
 
@@ -121,7 +157,7 @@ define('io.ox/onboarding/clients/wizard', [
         container.append(
             $('<ul class="descriptions">').append(function () {
                 return _.map(list, function (obj) {
-                    return $('<li class="hidden">').attr('data-parent', obj.id).append(
+                    return $('<li class="description hidden">').attr('data-parent', obj.id).append(
                         $('<div class="description">').text(obj.description || obj.id || '\xa0')
                     );
                 });
@@ -130,7 +166,7 @@ define('io.ox/onboarding/clients/wizard', [
         // actions
         ext.point(POINT).invoke('draw', container, { scenarios: list, config: config });
         // max width: supress resizing in case description is quite long
-        var space = (list.length * 160) + 32;
+        var space = ((list.length + 1) * 160) + 32;
         this.$('.wizard-content').css('max-width', space > 560 ? space : 560);
 
         // preselect
@@ -234,6 +270,7 @@ define('io.ox/onboarding/clients/wizard', [
                 // platform
                 .step({
                     attributes: { 'data-type': 'platform' },
+                    back: false,
                     next: false,
                     width: 'auto',
                     minWidth: '504px'
@@ -243,7 +280,7 @@ define('io.ox/onboarding/clients/wizard', [
                 // device
                 .step({
                     attributes: { 'data-type': 'device' },
-                    labelBack: gt('Back to platforms'),
+                    back: false,
                     next: false,
                     width: 'auto',
                     minWidth: '504px'
@@ -253,11 +290,11 @@ define('io.ox/onboarding/clients/wizard', [
                 .end()
                 // scenarios
                 .step({
-                    attributes: { 'data-type': 'scenario' },
+                    attributes: { 'data-type': 'scenario', 'data-mode': 'simple' },
+                    back: false,
                     next: false,
                     width: 'auto',
-                    minWidth: '504px',
-                    labelBack: gt('Back to devices')
+                    minWidth: '504px'
                 })
                 .on('before:show', drawScenarios)
                 .end();
