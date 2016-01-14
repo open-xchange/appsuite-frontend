@@ -368,11 +368,11 @@ define('io.ox/mail/api', [
      */
     api.remove = (function () {
 
-        var pending = false, queue = [], wait = $.Deferred();
+        var pending = false, queue = [], wait = $.Deferred(), recentlyDeleted = {};
 
         var dequeue = _.debounce(function () {
             if (queue.length) {
-                remove(queue).always(wait.resolve);
+                removeOnServer(queue).always(wait.resolve);
                 queue = [];
                 wait = $.Deferred();
             } else {
@@ -385,7 +385,21 @@ define('io.ox/mail/api', [
             return wait.promise();
         }
 
-        function remove(ids) {
+        // remember deleted messages for 15 seconds
+        function remember(ids) {
+            var list = [].concat(ids);
+            list.forEach(function (item) {
+                recentlyDeleted[_.cid(item)] = true;
+            });
+            setTimeout(function () {
+                list.forEach(function (item) {
+                    delete recentlyDeleted[_.cid(item)];
+                });
+                list = null;
+            }, 15000);
+        }
+
+        function removeOnServer(ids) {
             pending = true;
             return http.wait(
                 // wait a short moment, so that the UI reacts first, i.e. triggers
@@ -420,16 +434,28 @@ define('io.ox/mail/api', [
             );
         }
 
-        return function (ids, all) {
+        function remove(ids, all) {
             try {
+                // add to recently deleted hash
+                remember(ids);
                 // avoid parallel delete requests
-                return pending ? enqueue(ids) : remove(ids);
+                return pending ? enqueue(ids) : removeOnServer(ids);
             } finally {
                 // try/finally is used to set up http.wait() first
                 // otherwise we run into race-conditions (see bug 37707)
                 prepareRemove(ids, all);
             }
+        }
+
+        remove.getRecentlyDeleted = function () {
+            return recentlyDeleted;
         };
+
+        remove.isRecentlyDeleted = function (id) {
+            return !!recentlyDeleted[id];
+        };
+
+        return remove;
 
     }());
 
@@ -1641,11 +1667,13 @@ define('io.ox/mail/api', [
                 timezone: 'utc'
             };
         },
+        filter: function (item) {
+            return !api.remove.isRecentlyDeleted(_.cid(item));
+        },
         fail: function (error) {
             api.trigger('error error:' + error.code, error);
             return error;
         },
-
         PRIMARY_PAGE_SIZE: settings.get('listview/primaryPageSize', 50),
         SECONDARY_PAGE_SIZE: settings.get('listview/secondaryPageSize', 200)
     });

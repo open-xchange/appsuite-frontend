@@ -224,6 +224,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
             return http.wait().then(function () {
                 return self.httpGet(module, params).then(function (data) {
+                    // apply filter
+                    if (self.filter) data = _(data).filter(self.filter);
                     // useSlice helps if server request doesn't support "limit"
                     return self.useSlice ? Array.prototype.slice.apply(data, params.limit.split(',')) : data;
                 });
