@@ -87,6 +87,11 @@ msgstr ""
 msgid "Please enter a valid date"
 msgstr ""
 
+#: apps/io.ox/backbone/mini-views/help.js
+#: module:io.ox/core
+msgid "Online help"
+msgstr ""
+
 #: apps/io.ox/backbone/mini-views/quota.js
 #: module:io.ox/core
 msgid "unlimited"
@@ -10176,6 +10181,11 @@ msgstr ""
 #: apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
 msgid "Medium priority"
+msgstr ""
+
+#: apps/io.ox/tasks/view-detail.js
+#: module:io.ox/tasks
+msgid "show mail"
 msgstr ""
 
 #. %1$s due date of a task

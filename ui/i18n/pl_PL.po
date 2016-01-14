@@ -5311,6 +5311,12 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/backbone/mini-views/help.js module:io.ox/core
+#, fuzzy
+#| msgid "Opening the help"
+msgid "Online help"
+msgstr "Otwieranie pomocy"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "Pokaż tylko elementy związane z folderem %1$s"
@@ -9745,6 +9751,12 @@ msgstr "widoczność"
 msgid "select format"
 msgstr "Wybierz format"
 
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, fuzzy
+#| msgid "show image"
+msgid "show mail"
+msgstr "pokaż obraz"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
 msgstr "sześć miesięcy"
@@ -10881,9 +10893,6 @@ msgstr "rrrr"
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "Otwieranie ustawień poczty e-mail"
 
-#~ msgid "Opening the help"
-#~ msgstr "Otwieranie pomocy"
-
 #~ msgid "Opening the settings"
 #~ msgstr "Otwieranie ustawień"
 
@@ -11991,9 +12000,6 @@ msgstr "rrrr"
 
 #~ msgid "september"
 #~ msgstr "wrzesień"
-
-#~ msgid "show image"
-#~ msgstr "pokaż obraz"
 
 #, fuzzy
 #~| msgid "show all"

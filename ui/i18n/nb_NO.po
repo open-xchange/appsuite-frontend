@@ -5228,6 +5228,12 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/backbone/mini-views/help.js module:io.ox/core
+#, fuzzy
+#| msgid "Offline mode"
+msgid "Online help"
+msgstr "Frakoblet modus"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "Bare vis elementer knyttet til mappe \"%1$s\""
@@ -9597,6 +9603,12 @@ msgstr "sett"
 msgid "select format"
 msgstr "velg format"
 
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, fuzzy
+#| msgid "show image"
+msgid "show mail"
+msgstr "vis bilde"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
 msgstr "seks måneder"
@@ -10219,9 +10231,6 @@ msgstr "yyyy"
 #~| msgid "remove"
 #~ msgid "remove share"
 #~ msgstr "fjern"
-
-#~ msgid "show image"
-#~ msgstr "vis bilde"
 
 #, fuzzy
 #~| msgid "Show list"

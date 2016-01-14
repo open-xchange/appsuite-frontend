@@ -5308,6 +5308,12 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/backbone/mini-views/help.js module:io.ox/core
+#, fuzzy
+#| msgid "Opening the help"
+msgid "Online help"
+msgstr "Deschiderea ajutorului"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "Se afișează doar elementele legate de dosarul \"%1$s\""
@@ -9751,6 +9757,12 @@ msgstr "vizualizat"
 msgid "select format"
 msgstr "selectează formatul"
 
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, fuzzy
+#| msgid "show image"
+msgid "show mail"
+msgstr "afișează imaginea"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
 msgstr "șase luni"
@@ -13251,9 +13263,6 @@ msgstr "aaaa"
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "Deschiderea setărilor de e-mail"
 
-#~ msgid "Opening the help"
-#~ msgstr "Deschiderea ajutorului"
-
 #~ msgid "Opening the settings"
 #~ msgstr "Deschiderea setărilor"
 
@@ -15986,9 +15995,6 @@ msgstr "aaaa"
 
 #~ msgid "set the last used time range of the new view"
 #~ msgstr "setează ultimul interval de timp utilizat în vederea nouă"
-
-#~ msgid "show image"
-#~ msgstr "afișează imaginea"
 
 #, fuzzy
 #~| msgid "show all"

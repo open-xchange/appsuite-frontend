@@ -5265,6 +5265,12 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/backbone/mini-views/help.js module:io.ox/core
+#, fuzzy
+#| msgid "Offline mode"
+msgid "Online help"
+msgstr "Kapcsolat nélküli mód"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "Csak a(z) „%1$s” mappával kapcsolatos elemek megjelenítése"
@@ -9651,6 +9657,12 @@ msgstr "olvasott"
 #: apps/io.ox/core/import/import.js
 msgid "select format"
 msgstr "formátum kiválasztása"
+
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, fuzzy
+#| msgid "New mail"
+msgid "show mail"
+msgstr "Új levél"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"

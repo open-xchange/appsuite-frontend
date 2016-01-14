@@ -5243,6 +5243,12 @@ msgstr ""
 msgid "OneDrive"
 msgstr "ドライブ"
 
+#: apps/io.ox/backbone/mini-views/help.js module:io.ox/core
+#, fuzzy
+#| msgid "Opening the help"
+msgid "Online help"
+msgstr "ヘルプを開く"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "フォルダ \"%1$s\" に関連するアイテムのみを表示しています。"
@@ -9607,6 +9613,12 @@ msgstr "既読"
 #: apps/io.ox/core/import/import.js
 msgid "select format"
 msgstr "フォーマットを選択"
+
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, fuzzy
+#| msgid "show all"
+msgid "show mail"
+msgstr "すべてを表示"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
@@ -14049,9 +14061,6 @@ msgstr "yyyy"
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "メール設定を開く"
 
-#~ msgid "Opening the help"
-#~ msgstr "ヘルプを開く"
-
 #~ msgid "Opening the settings"
 #~ msgstr "設定を開く"
 
@@ -17170,9 +17179,6 @@ msgstr "yyyy"
 
 #~ msgid "set the last used time range of the new view"
 #~ msgstr "前回使用された時間軸を新しいビューに設定する"
-
-#~ msgid "show all"
-#~ msgstr "すべてを表示"
 
 #~ msgid "show all my appointments from all calendars"
 #~ msgstr "予定表全体から自分のアポイントをすべて表示"

@@ -5247,6 +5247,12 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/backbone/mini-views/help.js module:io.ox/core
+#, fuzzy
+#| msgid "Opening the help"
+msgid "Online help"
+msgstr "Ohjeen avaaminen"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "Näytetään vain kansioon %1$s liittyvät kohdat"
@@ -9633,6 +9639,12 @@ msgstr "nähty"
 msgid "select format"
 msgstr "valitse muotoilu"
 
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, fuzzy
+#| msgid "show image"
+msgid "show mail"
+msgstr "näytä kuva"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
 msgstr "puolen vuoden"
@@ -10547,9 +10559,6 @@ msgstr "vvvv"
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "Sähköpostiasetusten avaaminen"
 
-#~ msgid "Opening the help"
-#~ msgstr "Ohjeen avaaminen"
-
 #~ msgid "Opening the settings"
 #~ msgstr "Asetusten avaaminen"
 
@@ -11459,9 +11468,6 @@ msgstr "vvvv"
 #~| msgid "remove"
 #~ msgid "remove share"
 #~ msgstr "poista"
-
-#~ msgid "show image"
-#~ msgstr "näytä kuva"
 
 #, fuzzy
 #~| msgid "Show list"

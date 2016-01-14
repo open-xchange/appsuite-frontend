@@ -5249,6 +5249,12 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/backbone/mini-views/help.js module:io.ox/core
+#, fuzzy
+#| msgid "Opening the help"
+msgid "Online help"
+msgstr "Öppna hjälpen"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "Visar bara objekt som är relevanta för mappen \"%1$s\""
@@ -9646,6 +9652,12 @@ msgstr "läst"
 msgid "select format"
 msgstr "välj format"
 
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, fuzzy
+#| msgid "show image"
+msgid "show mail"
+msgstr "visa bild"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
 msgstr "sex månader"
@@ -12837,9 +12849,6 @@ msgstr "yyyy"
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "Öppna e-postinställningarna"
 
-#~ msgid "Opening the help"
-#~ msgstr "Öppna hjälpen"
-
 #~ msgid "Opening the settings"
 #~ msgstr "Öppna inställningarna"
 
@@ -15648,9 +15657,6 @@ msgstr "yyyy"
 #~| msgid "remove"
 #~ msgid "remove share"
 #~ msgstr "ta bort"
-
-#~ msgid "show image"
-#~ msgstr "visa bild"
 
 #, fuzzy
 #~| msgid "show all"
