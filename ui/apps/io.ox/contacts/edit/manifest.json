@@ -1,5 +1,9 @@
 {
-    "namespace": "io.ox/dev/testing/main",
+    "title": "Edit Contact",
+    "company": "Open-Xchange",
+    "icon": "addressbook.png",
+    "category": "Basic",
+    "settings": false,
     "requires": "contacts",
-    "path": "io.ox/contacts/edit/test"
+    "visible": false
 }
