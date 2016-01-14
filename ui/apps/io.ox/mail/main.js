@@ -661,6 +661,10 @@ define('io.ox/mail/main', [
                 messageTimer,
                 latestMessage;
 
+            app.recentDelete = function () {
+                return recentDeleteEventCount > 0;
+            };
+
             function show() {
                 // check if message is still within the current collection
                 if (!app.listView.collection.get(latestMessage)) return;
@@ -1061,10 +1065,15 @@ define('io.ox/mail/main', [
             if (!settings.get('prefetch/next', true)) return;
 
             app.listView.on('selection:one', function () {
+
+                // do not prefetch if a message has just been deleted
+                if (app.recentDelete()) return;
+
                 var items = this.selection.getItems(),
                     pos = this.selection.getPosition(items),
                     dir = this.selection.getDirection(),
                     last = items.length - 1, next;
+
                 if (dir === 'down' && pos < last) next = items.eq(pos + 1);
                 else if (dir === 'up' && pos > 0) next = items.eq(pos - 1);
                 if (next) {
