@@ -141,12 +141,34 @@ legend {
 
 .badge {
 
+    &.badge-deferred {
+        background-color: @badge-deferred-bg;
+        color: @badge-deferred-color;
+    }
+
+    &.badge-inprogress {
+        background-color: @badge-inprogress-bg;
+        color: @badge-inprogress-color;
+    }
+
+    &.badge-notstarted {
+        background-color: @badge-notstarted-bg;
+        color: @badge-notstarted-color;
+    }
+
     &.badge-done {
-        background-color: @green;
+        background-color: @badge-done-bg;
+        color: @badge-done-color;
+    }
+
+    &.badge-waiting {
+        background-color: @badge-waiting-bg;
+        color: @badge-waiting-color;
     }
 
     &.badge-overdue {
-        background-color: @blue;
+        background-color: @badge-overdue-bg;
+        color: @badge-overdue-color;
     }
 }
 
