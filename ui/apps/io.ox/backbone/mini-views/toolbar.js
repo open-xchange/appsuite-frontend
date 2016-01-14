@@ -30,7 +30,20 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
         },
 
         createToolbar: function () {
-            return $('<ul class="classic-toolbar" role="toolbar">').attr({ 'aria-label': gt('Actions') });
+            return $('<ul class="classic-toolbar" role="toolbar">')
+                //#. screenreader label for main toolbar
+                .attr({ 'aria-label': gt('Actions. Use cursor keys to navigate.') })
+                .tooltip({
+                    animation: false,
+                    container: 'body',
+                    delay: 2000,
+                    placement: 'left',
+                    //#. Tooltip for main toolbar
+                    title: gt('Use cursor keys to navigate'),
+                    trigger: 'focus'
+                })
+                // always avoid clearing the URL hash
+                .on('click', 'a', $.preventDefault);
         },
 
         render: function () {
@@ -53,7 +66,7 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
         },
 
         replaceToolbar: function (toolbar) {
-            this.$el.find('ul.classic-toolbar').replaceWith(toolbar);
+            this.$el.find('ul.classic-toolbar').tooltip('hide').replaceWith(toolbar);
             return this;
         },
 
