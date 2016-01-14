@@ -118,7 +118,7 @@ define('io.ox/mail/detail/links', [
 
             var data = parseDeepLink(node.nodeValue),
                 text = ('id' in data ? items[data.app] : folders[data.app]) || gt('Link'),
-                link = $('<a role="button" href="#" target="_blank" class="deep-link btn btn-primary btn-xs" style="font-family: Arial; color: white; text-decoration: none;">')
+                link = $('<a href="#" target="_blank" class="deep-link" role="button">')
                     .attr('href', data.link)
                     .text(text);
 

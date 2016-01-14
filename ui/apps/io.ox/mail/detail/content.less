@@ -217,4 +217,17 @@
         padding: 16px 16px 0 16px;
         border-top: 1px solid #ddd;
     }
+
+    a.deep-link {
+        color: white;
+        background-color: @btn-primary-bg;
+        text-decoration: none;
+        font-family: @normal-font-family !important;
+        padding: 1px 8px;
+        .border-radius(2px);
+        &:hover, &:focus, &:active {
+            color: white;
+            background-color: darken(@btn-primary-bg, 10%);
+        }
+    }
 }
