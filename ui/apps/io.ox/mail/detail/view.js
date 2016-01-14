@@ -22,7 +22,7 @@ define('io.ox/mail/detail/view', [
     'io.ox/core/extPatterns/links',
     'io.ox/core/emoji/util',
     'gettext!io.ox/mail',
-    'less!io.ox/mail/detail/shadow',
+    'less!io.ox/mail/detail/content',
     'less!io.ox/mail/detail/style',
     'less!io.ox/mail/style',
     'io.ox/mail/actions'
