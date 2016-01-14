@@ -119,6 +119,12 @@ define('io.ox/onboarding/clients/config', [
         getActions: function (scenario) {
             var cid = _cid(this.model.get('device'), scenario || this.model.get('scenario')),
                 matching = this.hash.matching[cid];
+
+            // TODO: remove after backend added check
+            if (!matching) {
+                if (ox.debug) console.error('undefined onboarding scenario: ' + cid);
+                return;
+            }
             return _.filter(this.actions, function (obj) {
                 return matching.actions.indexOf(obj.id) >= 0;
             });
