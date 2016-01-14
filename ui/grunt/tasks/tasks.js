@@ -20,6 +20,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('bootjs', ['newer:copy:ox', 'newer:concat:bootjs']);
 
+    grunt.registerTask('lint', ['newer:eslint:all', 'newer:jsonlint:all']);
     grunt.registerTask('lint:specs', ['newer:jshint:specs', 'newer:jscs:specs', 'newer:jsonlint:specs']);
 
     //Override the default tasks
@@ -28,7 +29,7 @@ module.exports = function (grunt) {
     grunt.registerTask('copy_build', grunt.util.runPrefixedSubtasksFor('copy', 'build'));
 
     // steps to build the ui (ready for development)
-    grunt.registerTask('build', ['newer:eslint:all', 'copy_build', 'compile_po', 'concat', 'newer:less']);
+    grunt.registerTask('build', ['lint', 'copy_build', 'compile_po', 'concat', 'newer:less']);
     // create a package ready version of the ui (aka what jenkins does)
     grunt.registerTask('dist', ['clean', 'checkDependencies:build', 'bower', 'build', 'uglify', 'copy_dist', 'create_i18n_properties']);
 

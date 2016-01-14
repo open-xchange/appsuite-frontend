@@ -5653,6 +5653,12 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/backbone/mini-views/help.js module:io.ox/core
+#, fuzzy
+#| msgid "Offline mode"
+msgid "Online help"
+msgstr "Mode desconnectat"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "Es mostren només els elements relacionats amb la carpeta \"%1$s\""
@@ -10373,6 +10379,12 @@ msgstr "vist"
 msgid "select format"
 msgstr "selecciona format"
 
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, fuzzy
+#| msgid "show image"
+msgid "show mail"
+msgstr "mostra imatge"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
 msgstr "sis mesos"
@@ -11163,9 +11175,6 @@ msgstr ""
 #~| msgid "remove"
 #~ msgid "remove share"
 #~ msgstr "suprimeix"
-
-#~ msgid "show image"
-#~ msgstr "mostra imatge"
 
 #, fuzzy
 #~| msgid "Show list"

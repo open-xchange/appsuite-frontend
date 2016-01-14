@@ -391,6 +391,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
     var that = {};
 
     var isLoss = function (status) {
+        // 400 is Bad Request which usually is a missing parameter
+        if (status === 400) return false;
         return (/^(0|4\d\d|5\d\d)$/).test(status);
     };
 
@@ -558,8 +560,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         }
         // remove white space from columns (otherwise evil to debug)
         if (o.params.columns) {
-            o.params.columns.replace(/\s/g, '');
+            o.params.columns = o.params.columns.replace(/\s/g, '');
         }
+        // publish request before a potential use of JSON.stringify that omits undefined values
+        ox.trigger('http:before:send', o);
         // data & body
         if (type === 'GET' || type === 'POST') {
             // GET & POST
@@ -744,7 +748,6 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             }
 
             var t0, ajax;
-
             t0 = _.now();
             ajax = $.ajax(ajaxOptions);
 
@@ -916,6 +919,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         }
 
         return function (o, type) {
+
             // process options
             o = processOptions(o, type);
 

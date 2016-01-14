@@ -5295,6 +5295,12 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/backbone/mini-views/help.js module:io.ox/core
+#, fuzzy
+#| msgid "Opening the help"
+msgid "Online help"
+msgstr "De hulp oproepen"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "Alleen items gerelateerd aan map \"%1$s\" worden getoond"
@@ -9721,6 +9727,12 @@ msgstr "gezien"
 msgid "select format"
 msgstr "Selecteer formaat"
 
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, fuzzy
+#| msgid "show image"
+msgid "show mail"
+msgstr "toon afbeelding"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
 msgstr "zes maanden"
@@ -10636,9 +10648,6 @@ msgstr "yyyy"
 
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "De e-mailinstellingen openen"
-
-#~ msgid "Opening the help"
-#~ msgstr "De hulp oproepen"
 
 #~ msgid "Opening the settings"
 #~ msgstr "De instellingen openen"
@@ -11557,9 +11566,6 @@ msgstr "yyyy"
 #~| msgid "remove"
 #~ msgid "remove share"
 #~ msgstr "verwijderen"
-
-#~ msgid "show image"
-#~ msgstr "toon afbeelding"
 
 #, fuzzy
 #~| msgid "Show list"

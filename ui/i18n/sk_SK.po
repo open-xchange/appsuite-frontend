@@ -5304,6 +5304,12 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/backbone/mini-views/help.js module:io.ox/core
+#, fuzzy
+#| msgid "Opening the help"
+msgid "Online help"
+msgstr "Otvorenie Pomocníka"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "Zobrazujú sa len položky súvisiace s priečinkom „%1$s“"
@@ -9727,6 +9733,12 @@ msgstr "videné"
 msgid "select format"
 msgstr "vyberte formát"
 
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, fuzzy
+#| msgid "show image"
+msgid "show mail"
+msgstr "zobraziť obrázok"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
 msgstr "šesť mesiacov"
@@ -13181,9 +13193,6 @@ msgstr "RRRR"
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "Otvorenie nastavenia emailov"
 
-#~ msgid "Opening the help"
-#~ msgstr "Otvorenie Pomocníka"
-
 #~ msgid "Opening the settings"
 #~ msgstr "Otvorenie nastavení"
 
@@ -15853,9 +15862,6 @@ msgstr "RRRR"
 
 #~ msgid "set the last used time range of the new view"
 #~ msgstr "nastaviť posledný použitý časový rozsah nového zobrazenia"
-
-#~ msgid "show image"
-#~ msgstr "zobraziť obrázok"
 
 #, fuzzy
 #~| msgid "show all"

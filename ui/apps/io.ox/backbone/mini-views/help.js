@@ -11,7 +11,7 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-define('io.ox/backbone/mini-views/help', [], function () {
+define('io.ox/backbone/mini-views/help', ['gettext!io.ox/core'], function (gt) {
 
     'use strict';
 
@@ -76,7 +76,7 @@ define('io.ox/backbone/mini-views/help', [], function () {
             this.options = _.extend({
                 href: 'index.html',
                 tabindex: '1',
-                content: $('<i class="fa fa-question-circle">'),
+                content: $('<i class="fa fa-question-circle" aria-hidden="true">'),
                 base: 'help'
             }, options);
 
@@ -86,14 +86,15 @@ define('io.ox/backbone/mini-views/help', [], function () {
         },
 
         render: function () {
-            this.$el.append(
-                this.options.content
-            ).attr({
-                target: '_blank',
-                href: '#',
-                role: 'menuitem',
-                tabindex: this.options.tabindex
-            });
+            this.$el
+                .append(this.options.content)
+                .attr({
+                    href: '#',
+                    role: 'button',
+                    tabindex: this.options.tabindex,
+                    target: '_blank',
+                    'aria-label': gt('Online help')
+                });
             return this;
         }
     });

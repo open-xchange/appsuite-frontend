@@ -5291,6 +5291,12 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/backbone/mini-views/help.js module:io.ox/core
+#, fuzzy
+#| msgid "Opening the help"
+msgid "Online help"
+msgstr "Abrir la ayuda"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "Sólo se muestran elementos relacionados con la carpeta \"%1$s\""
@@ -9722,6 +9728,12 @@ msgstr "visto"
 #: apps/io.ox/core/import/import.js
 msgid "select format"
 msgstr "seleccionar formato"
+
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, fuzzy
+#| msgid "show image"
+msgid "show mail"
+msgstr "mostrar imagen"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
@@ -15200,9 +15212,6 @@ msgstr "yyyy"
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "Apertura de los ajustes de correo electrónico"
 
-#~ msgid "Opening the help"
-#~ msgstr "Abrir la ayuda"
-
 #~ msgid "Opening the settings"
 #~ msgstr "Abrir los ajustes"
 
@@ -18987,9 +18996,6 @@ msgstr "yyyy"
 #~ msgid "set the last used time range of the new view"
 #~ msgstr ""
 #~ "establecer el intervalo de tiempo empleado la última vez de la vista nueva"
-
-#~ msgid "show image"
-#~ msgstr "mostrar imagen"
 
 #, fuzzy
 #~| msgid "show all"

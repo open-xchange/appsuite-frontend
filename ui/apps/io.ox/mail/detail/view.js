@@ -22,7 +22,7 @@ define('io.ox/mail/detail/view', [
     'io.ox/core/extPatterns/links',
     'io.ox/core/emoji/util',
     'gettext!io.ox/mail',
-    'less!io.ox/mail/detail/shadow',
+    'less!io.ox/mail/detail/content',
     'less!io.ox/mail/detail/style',
     'less!io.ox/mail/style',
     'io.ox/mail/actions'
@@ -249,6 +249,10 @@ define('io.ox/mail/detail/view', [
             if (this[0].host) {
                 // if it is a shadow dom, we must trigger add.lazyload to ensure, that lazyloading is updated at least once
                 $(this[0].host).closest('.scrollable').lazyloadScrollpane().trigger('add.lazyload');
+                // copy events
+                _($._data(document).events.click).each(function (e) {
+                    if (!e.namespace && e.selector) $(node).on('click', e.selector, e.handler);
+                });
             } else {
                 this.closest('.scrollable').lazyloadScrollpane();
             }

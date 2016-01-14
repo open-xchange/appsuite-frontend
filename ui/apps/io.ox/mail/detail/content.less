@@ -1,3 +1,16 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2016 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
 .mail-detail-content {
 
     font: normal e('13px/normal') @normal-font-family;
@@ -15,9 +28,7 @@
         font-family: @normal-font-family;
         white-space: pre-wrap;
 
-        blockquote {
-            white-space:normal;
-        }
+        blockquote { white-space:normal; }
     }
 
     &.fixed-width-font, &.fixed-width-font.plain-text,
@@ -101,7 +112,7 @@
     //     word-break: break-word;
     // }
 
-        pre {
+    pre {
         // for firefox
         word-break: keep-all;
         word-break: initial;
@@ -121,8 +132,8 @@
         margin: 1em 0 1em 24px;
     }
 
-    ul { list-style-type: disc; }
-    ul ul { list-style-type: circle; }
+    ul       { list-style-type: disc;   }
+    ul ul    { list-style-type: circle; }
     ul ul ul { list-style-type: square; }
 
     li {
@@ -137,11 +148,12 @@
         padding: 0 0 0 16px;
         margin: 16px 0 16px 0;
 
-    }
+        p { font-size: 13px; }
 
-    blockquote blockquote {
-        border-color: #3C73AA;
-        margin: 8px 0;
+        blockquote {
+            border-color: #3C73AA;
+            margin: 8px 0;
+        }
     }
 
     .blockquote(@color) {
@@ -151,24 +163,19 @@
         a[href]:hover { color: darken(@color, 10%); }
     }
 
-    &.colorQuoted blockquote blockquote {
-        .blockquote(#3C73AA);
-    }
-
-    &.colorQuoted blockquote blockquote blockquote {
-        .blockquote(#DD0880);
-    }
-
-    &.colorQuoted blockquote blockquote blockquote blockquote {
-        .blockquote(#8F09C7);
-    }
-
-    &.colorQuoted blockquote blockquote blockquote blockquote blockquote {
-        .blockquote(#777);
-    }
-
-    blockquote p {
-        font-size: 13px;
+    &.colorQuoted {
+        blockquote blockquote {
+            .blockquote(#3C73AA);
+        }
+        blockquote blockquote blockquote {
+            .blockquote(#DD0880);
+        }
+        blockquote blockquote blockquote blockquote {
+            .blockquote(#8F09C7);
+        }
+        blockquote blockquote blockquote blockquote blockquote {
+            .blockquote(#777);
+        }
     }
 
     .collapsed-blockquote {
@@ -181,6 +188,7 @@
         padding-left: 56px;
         margin: 16px 0;
         min-height: 16px;
+
         i {
             color: #888;
             background-color: #eee;
@@ -192,15 +200,14 @@
             outline: none;
             position: absolute;
             left: 0;
+
             &:hover, &:focus {
                 color: #fff;
                 background-color: @link-color;
                 text-decoration: none;
             }
-        }
 
-        i:before {
-            content: '...';
+            &:before { content: '...'; }
         }
     }
 
@@ -209,5 +216,18 @@
         margin: 10px -16px 0 -16px;
         padding: 16px 16px 0 16px;
         border-top: 1px solid #ddd;
+    }
+
+    a.deep-link {
+        color: white;
+        background-color: @btn-primary-bg;
+        text-decoration: none;
+        font-family: @normal-font-family !important;
+        padding: 1px 8px;
+        .border-radius(2px);
+        &:hover, &:focus, &:active {
+            color: white;
+            background-color: darken(@btn-primary-bg, 10%);
+        }
     }
 }

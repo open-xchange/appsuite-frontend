@@ -5202,6 +5202,12 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/backbone/mini-views/help.js module:io.ox/core
+#, fuzzy
+#| msgid "Opening the help"
+msgid "Online help"
+msgstr "開啟說明"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "只顯示與「%1$s」資料夾相關的項目"
@@ -9509,6 +9515,12 @@ msgstr "已閱讀"
 msgid "select format"
 msgstr "選擇格式"
 
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, fuzzy
+#| msgid "show image"
+msgid "show mail"
+msgstr "顯示圖片"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
 msgstr "六個月"
@@ -12001,9 +12013,6 @@ msgstr "年"
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "開啟郵件選項"
 
-#~ msgid "Opening the help"
-#~ msgstr "開啟說明"
-
 #~ msgid "Opening the settings"
 #~ msgstr "開啟選項"
 
@@ -13205,9 +13214,6 @@ msgstr "年"
 
 #~ msgid "september"
 #~ msgstr "九月"
-
-#~ msgid "show image"
-#~ msgstr "顯示圖片"
 
 #, fuzzy
 #~| msgid "show all"

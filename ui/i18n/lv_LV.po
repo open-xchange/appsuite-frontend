@@ -5305,6 +5305,12 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/backbone/mini-views/help.js module:io.ox/core
+#, fuzzy
+#| msgid "Opening the help"
+msgid "Online help"
+msgstr "Palīga atvēršana"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "Uzrāda tikai ar mapi \"%1$s\" saistītās vienības"
@@ -9733,6 +9739,12 @@ msgstr "redzēts"
 msgid "select format"
 msgstr "izvēlēties formātu"
 
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, fuzzy
+#| msgid "show image"
+msgid "show mail"
+msgstr "Rādīt attēlu"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
 msgstr "seši mēneši"
@@ -13200,9 +13212,6 @@ msgstr "yyyy"
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "E-pasta iestatījumu atvēršana"
 
-#~ msgid "Opening the help"
-#~ msgstr "Palīga atvēršana"
-
 #~ msgid "Opening the settings"
 #~ msgstr "Iestatījumu atvēršana"
 
@@ -15913,9 +15922,6 @@ msgstr "yyyy"
 
 #~ msgid "set the last used time range of the new view"
 #~ msgstr "iestatīt jaunā skata pēdējā lietojuma laika apgabalu"
-
-#~ msgid "show image"
-#~ msgstr "Rādīt attēlu"
 
 #, fuzzy
 #~| msgid "show all"

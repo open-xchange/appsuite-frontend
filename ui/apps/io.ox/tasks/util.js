@@ -186,6 +186,18 @@ define('io.ox/tasks/util', [
                 return m.format('ddd, ' + m.format(data.full_time ? 'l' : 'l, LT'));
             },
 
+            // looks in the task note for 'linkedMailCid:' + _.cid(maildata), removes that from the note and returns the mail link as a button
+            // only one link allowed that has to be at the beginning, only used for mail reminders, automatically generated there
+            checkMailLinks: function (note) {
+                var link;
+                link = note.match(/^linkedMailCid:\S+\.\S+/);
+                if (link) {
+                    link = link[0].replace(/linkedMailCid:/, '');
+                    note = note.replace(/^linkedMailCid:\S+\.\S+/, '');
+                }
+                return { note: note, link: link };
+            },
+
             //change status number to status text. format enddate to presentable string
             //if detail is set, alarm and startdate get converted too and status text is set for more states than overdue and success
             interpretTask: function (task, options) {
