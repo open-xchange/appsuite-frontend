@@ -271,3 +271,42 @@
 
 
 .export-dialog .modal-body label.checkbox { padding-left: 20px; }
+
+//
+// Backbone-based Modal Dialog
+//
+.modal.flex {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    .modal-dialog {
+        margin: 16px 0;
+    }
+
+    .modal-content {
+        width: 500px;
+    }
+
+    .modal-title {
+        font-size: 18px;
+        line-height: 24px;
+        margin: -2px 0 2px 0;
+    }
+
+    .modal-body {
+        min-height: 60px;
+        overflow-y: auto;
+    }
+
+    .modal-header, .modal-body, .modal-footer {
+        padding: 16px;
+    }
+
+    .modal-footer {
+        .btn.pull-left { margin-right: 8px; }
+        .btn.pull-right { margin-left: 8px; }
+    }
+}
