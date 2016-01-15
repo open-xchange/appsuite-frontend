@@ -322,6 +322,14 @@ define('io.ox/mail/detail/view', [
                 this.model.previous('attachments')[0].content !== this.model.get('attachments')[0].content) this.onChangeContent();
         },
 
+        getEmptyBodyNode: function () {
+            // get shadow DOM or body node
+            var body = this.$el.find('section.body'),
+                shadowRoot = body.prop('shadowRoot');
+            if (shadowRoot) shadowRoot.innerHTML = '<style>' + shadowStyle + '</style>'; else body.empty();
+            return $(shadowRoot || body);
+        },
+
         onChangeContent: function () {
             var data = this.model.toJSON(),
                 baton = ext.Baton({
@@ -331,19 +339,16 @@ define('io.ox/mail/detail/view', [
                     attachments: util.getAttachments(data)
                 }),
                 body = this.$el.find('section.body'),
-                // get shadow DOM or body node
-                shadowRoot = body.prop('shadowRoot'),
-                node = $(shadowRoot || body),
+                node = this.getEmptyBodyNode(),
                 view = this;
             // set outer height & clear content
             body.css('min-height', this.model.get('visualHeight') || null);
-            if (shadowRoot) shadowRoot.innerHTML = '<style>' + shadowStyle + '</style>'; else body.empty();
             // draw
             _.delay(function () {
                 ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);
                 // global event for tracking purposes
                 ox.trigger('mail:detail:body:render', view);
-                body = shadowRoot = node = view = null;
+                body = node = view = null;
             }, 20);
         },
 
@@ -411,9 +416,19 @@ define('io.ox/mail/detail/view', [
             }
         },
 
-        onLoadFail: function () {
+        onLoadFail: function (e) {
+            this.trigger('load:fail');
             this.trigger('load:done');
-            if (this.$el) this.$el.attr('data-loaded', false).removeClass('expanded');
+            if (!this.$el) return;
+            this.$el.attr('data-loaded', false);
+            this.getEmptyBodyNode().empty().append(
+                $('<div class="mail-detail-content">').append(
+                    $('<div class="loading-error">').append(
+                        $('<h4>').text(gt('Error while loading message content')),
+                        $('<div>').text(e.error)
+                    )
+                )
+            );
         },
 
         toggle: function (state) {
