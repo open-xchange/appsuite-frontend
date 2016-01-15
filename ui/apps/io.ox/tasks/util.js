@@ -186,14 +186,41 @@ define('io.ox/tasks/util', [
                 return m.format('ddd, ' + m.format(data.full_time ? 'l' : 'l, LT'));
             },
 
-            // looks in the task note for 'linkedMailCid:' + _.cid(maildata), removes that from the note and returns the mail link as a button
-            // only one link allowed that has to be at the beginning, only used for mail reminders, automatically generated there
+            // looks in the task note for 'mail:' + _.cid(maildata), removes that from the note and returns the mail link as a button that opens the mailapp
+            // currently only looks for one link at the end of the note. Used by mail reminders.
             checkMailLinks: function (note) {
-                var link;
-                link = note.match(/^linkedMailCid:\S+\.\S+/);
-                if (link) {
-                    link = link[0].replace(/linkedMailCid:/, '');
-                    note = note.replace(/^linkedMailCid:\S+\.\S+/, '');
+                // find the link (note using .+ and not \S+ as folders might contain spaces)
+                var cid = note.match(/mail:.+?\.\S+?\s*$/),
+                    link;
+
+                if (cid && cid[0]) {
+                    // remove link and signature style divider "--"
+                    note = note.replace(cid[0], '').replace(/\s*?-+\s*?$/, '');
+                    // remove leading "mail:" and space at the end from the link
+                    cid = cid[0].replace(/^mail:/, '').replace(/\s*$/, '');
+
+                    // build the button
+                    link = $('<button class="mail-link btn btn-primary">').text(gt('show mail')).on('click', function () {
+                        var self = $(this),
+                        // save height and width so it doesn't change when the busy animation is drawn
+                            width = self.outerWidth() + 'px',
+                            height = self.outerHeight() + 'px';
+
+                        self.css({ width: width, height: height }).busy(true);
+                        require(['io.ox/mail/api'], function (api) {
+                            // see if mail is still there. Also loads the mail into the pool. Needed for the app to work
+                            api.get(_.extend({}, { unseen: true }, _.cid(cid))).done(function () {
+                                ox.launch('io.ox/mail/detail/main', { cid: cid });
+                            }).fail(function (error) {
+                                //if the mail was moved or the mail was deleted the cid cannot be found, show error
+                                require(['io.ox/core/yell'], function (yell) {
+                                    yell(error);
+                                });
+                            }).always(function () {
+                                self.idle().css({ width: 'auto', height: 'auto' }).text(gt('show mail'));
+                            });
+                        });
+                    });
                 }
                 return { note: note, link: link };
             },

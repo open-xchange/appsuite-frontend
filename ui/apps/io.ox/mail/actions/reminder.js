@@ -70,7 +70,7 @@ define('io.ox/mail/actions/reminder', [
                         note;
 
                     //add mail cid so the task can offer a link
-                    note = 'linkedMailCid:' + _.cid(data) + ' ' + noteInput.val();
+                    note = noteInput.val() + '\n--\nmail:' + _.cid(data);
                     taskAPI.create({
                         title: titleInput.val(),
                         folder_id: coreConfig.get('folder/tasks'),

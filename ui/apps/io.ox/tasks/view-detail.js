@@ -101,36 +101,15 @@ define('io.ox/tasks/view-detail', [
         index: 300,
         id: 'note',
         draw: function (baton) {
-            var note = calendarUtil.getNote(baton.interpretedData),
-                data = util.checkMailLinks(note);
-            note = data.note;
+            var data = util.checkMailLinks(baton.interpretedData.note),
+                note = calendarUtil.getNote(data);
 
             if (note !== '' || data.link) {
                 this.append(
                     $('<div class="note">').html(
                         note
-                    ).prepend(
-                        data.link && capabilities.has('webmail') ? $('<button class="btn btn-primary">').text(gt('show mail')).on('click', function () {
-                            var self = $(this),
-                            // save height and width so it doesn't change when the busy animation is drawn
-                                width = self.outerWidth() + 'px',
-                                height = self.outerHeight() + 'px';
-
-                            self.css({ width: width, height: height }).busy(true);
-                            require(['io.ox/mail/api'], function (api) {
-                                // see if mail is still there. Also loads the mail into the pool. Needed for the app to work
-                                api.get(_.extend({}, { unseen: true }, _.cid(data.link))).done(function () {
-                                    ox.launch('io.ox/mail/detail/main', { cid: data.link });
-                                }).fail(function (error) {
-                                    //if the mail was moved or the mail was deleted the cid cannot be found, show error
-                                    require(['io.ox/core/yell'], function (yell) {
-                                        yell(error);
-                                    });
-                                }).always(function () {
-                                    self.idle().css({ width: 'auto', height: 'auto' }).text(gt('show mail'));
-                                });
-                            });
-                        }) : ''
+                    ).append(
+                        data.link && capabilities.has('webmail') ? data.link : ''
                     )
                 );
             }
