@@ -27,9 +27,11 @@ define('io.ox/onboarding/clients/api', [
                 // TODO: remove when backend is ready
                 // fix wrong identifiers
                 _.each(data.matching, function (match) {
-                    if (match.id.indexOf('mailappinstall') > -1) match.actions = ['link/mailappinstall'];
-                    if (match.id.indexOf('driveappinstall') > -1) match.actions = ['link/driveappinstall'];
-                    if (match.id.indexOf('mailmanual') > -1) match.actions = ['display/mailmanual'];
+                    match.actions = _.map(match.actions, function (action) {
+                        if (action.indexOf('email') > -1) return 'email';
+                        if (action.indexOf('download') > -1) return 'download';
+                        return action;
+                    });
                 });
                 _.each(_.where(data.devices, { id: 'apple.mac' }), function (device) {
                     device.scenarios = _.without(device.scenarios, 'apple.mac/mailappinstall', 'apple.mac/driveappinstall');
