@@ -161,9 +161,8 @@
         <script type="text/template" class="appointment-compact">
         <% _.each(data, function(element) { %>
             <section class="item-compact">
-                <span class="start-date"><label class="label-compact"><%- i18n.start %>:</label class="label-compact"> <%- element.start %></span>
-                <span class="end-date"><label class="label-compact"><%- i18n.end %>:</label> <%- element.end %></span>
                 <span class="compact-subject"><%- element.subject %></span>
+                <span class="date"><%- element.date %></span>
                 <% if (element.location) { %>
                     <span class="location"><label class="label-compact"><%- i18n.location %>:</label> <%- element.location %></span>
                 <% }%>
