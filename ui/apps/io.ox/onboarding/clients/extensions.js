@@ -63,10 +63,13 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         update: function () {
-            var list = this.$el.find('.actions-scenario');
+            var list = this.$el.find('.actions-scenario'),
+                mode = this.$step.attr('data-mode');
             _.each(list, function (container) {
                 container = $(container);
-                var actions = container.find('.action:visible');
+                // advanced: cover (hidden) actions of not selected
+                // selections to be ready when users switches scenarios
+                var actions = container.find(mode === 'advanced' ? '.action' : '.action:visible');
                 if (actions.length <= 1) {
                     return container.addClass('single-action');
                 }
@@ -83,12 +86,9 @@ define('io.ox/onboarding/clients/extensions', [
                     node = $('<div class="actions-scenario">').attr('data-parent', scenario.id),
                     baton = ext.Baton({ data: list, config: config, model: config.model });
                 // draw actions
-                _.each(baton.data, function (action, index) {
+                _.each(baton.data, function (action) {
                     node.attr('data-value', action.id);
                     ext.point(POINT + '/' + action.id).invoke('draw', node, action, baton);
-                    if (index === 0) {
-                        //node.append(self.$toggleMode.clone());
-                    }
                 });
                 // add toggle link
                 if (baton.data.length > 1) node.append(self.$toggleMode.clone());

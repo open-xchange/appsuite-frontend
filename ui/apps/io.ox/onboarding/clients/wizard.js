@@ -164,7 +164,7 @@ define('io.ox/onboarding/clients/wizard', [
             })
         );
         // actions
-        ext.point(POINT).invoke('draw', container, { scenarios: list, config: config });
+        ext.point(POINT).invoke('draw', container, { $step: this.$el, scenarios: list, config: config });
         // max width: supress resizing in case description is quite long
         var space = ((list.length + 1) * 160) + 32;
         this.$('.wizard-content').css('max-width', space > 560 ? space : 560);
