@@ -1426,8 +1426,8 @@ define('io.ox/mail/api', [
      * @return { deferred} returns array with objects (id, folder_id)
      */
     api.importEML = function (options) {
-        options.folder = options.folder || api.getDefaultFolder();
 
+        var folder = options.folder || api.getDefaultFolder();
         var form = new FormData();
         form.append('file', options.file);
 
@@ -1435,7 +1435,7 @@ define('io.ox/mail/api', [
             module: 'mail',
             params: {
                 action: 'import',
-                folder: options.folder,
+                folder: folder,
                 // don't check from address!
                 force: true
             },
@@ -1443,8 +1443,8 @@ define('io.ox/mail/api', [
             fixPost: true
         })
         .done(function () {
-            pool.resetFolder(options.folder);
-            folderAPI.reload(options.folder);
+            pool.resetFolder(folder);
+            folderAPI.reload(folder);
             api.trigger('refresh.all');
         });
     };
