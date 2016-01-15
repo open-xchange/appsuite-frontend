@@ -37,14 +37,18 @@ define('io.ox/mail/import', [
                         win.busy();
                     },
                     progress: function (item) {
-                        return api.importEML({ file: item.file, folder: item.options.folder }).done(function (data) {
-                            var first = _(data.data || []).first() || {};
-                            if ('Error' in first) {
-                                notifications.yell('error', first.Error);
-                            } else {
-                                notifications.yell('success', gt('Mail has been imported'));
-                            }
-                        });
+                        return api.importEML({ file: item.file, folder: item.options.folder })
+                            .done(function (data) {
+                                var first = _(data.data || []).first() || {};
+                                // no clue if upper-case is correct here and if errors wind up here
+                                if ('Error' in first) {
+                                    notifications.yell('error', first.Error);
+                                } else {
+                                    notifications.yell('success', gt('Mail has been imported'));
+                                }
+                            })
+                            // we need a fail handler für server-side errors (as well)
+                            .fail(notifications.yell);
                     },
                     stop: function () {
                         win.idle();
