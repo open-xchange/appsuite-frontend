@@ -637,10 +637,9 @@ msgstr "Fiók frissítve"
 msgid "Accounts"
 msgstr "Felhasználói fiókok"
 
-#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/core/extPatterns/links.js
+#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -648,6 +647,11 @@ msgstr "Felhasználói fiókok"
 #: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "Actions"
 msgstr "Műveletek"
+
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+msgid "Actions. Use cursor keys to navigate."
+msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -908,6 +912,10 @@ msgstr "Adminisztrátori szerep"
 msgid "Administrator"
 msgstr "Adminisztrátor"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Advanced user?"
+msgstr ""
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
@@ -1013,6 +1021,10 @@ msgstr "Bármely címzett"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Append vCard"
 msgstr "vCard hozzáadása"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Apple App Store"
+msgstr ""
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
@@ -1270,7 +1282,6 @@ msgid "Back to appointment"
 msgstr "Vissza a találkozóhoz"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "Back to sign in"
 msgid "Back to devices"
@@ -1283,7 +1294,6 @@ msgid "Back to modules"
 msgstr "Vissza a bejelentkezéshez"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "your platform"
 msgid "Back to platforms"
@@ -1406,7 +1416,6 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "Naptár"
 
@@ -1416,10 +1425,6 @@ msgstr "Naptár"
 msgctxt "app"
 msgid "Calendar"
 msgstr "Naptár"
-
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Calendar (Manually)"
-msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
@@ -3691,6 +3696,12 @@ msgstr "Jó reggelt, %s"
 msgid "Google Drive"
 msgstr "Google Drive falhasználói fiók hozzáadása"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Playstore"
+msgstr "Google Drive falhasználói fiók hozzáadása"
+
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/portal/settings/pane.js
@@ -3809,6 +3820,12 @@ msgstr "Részletek elrejtése"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Hide names"
 msgstr "Nevek elrejtése"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Hide all notifications for overdue tasks."
+msgid "Hide options for advanced user."
+msgstr "Összes lejárt feladatról szóló értesítés elrejtése."
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
@@ -4206,6 +4223,12 @@ msgstr "Június"
 msgid "Just disable widget"
 msgstr "Widget letiltása"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Just open the %1$s"
+msgstr "Határidő: %1$s"
+
 #. Kilobytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "KB"
@@ -4421,7 +4444,6 @@ msgid "MM"
 msgstr "MM"
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Mail"
 msgstr "Levelek"
 
@@ -4431,10 +4453,6 @@ msgstr "Levelek"
 msgctxt "app"
 msgid "Mail"
 msgstr "Levelek"
-
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Mail (Manually)"
-msgstr ""
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Mail Details"
@@ -5277,6 +5295,12 @@ msgstr "Csak a(z) „%1$s” mappával kapcsolatos elemek megjelenítése"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
+msgstr "Megnyitás"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Open"
+msgid "Open "
 msgstr "Megnyitás"
 
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
@@ -8509,6 +8533,13 @@ msgid ""
 msgstr ""
 "A kurzorbillentyűkkel módosíthatja az elem pozícióját. A virtuális "
 "kurzormódnak letiltottnak kell lennie."
+
+#. Tooltip for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#, fuzzy
+#| msgid "Use custom name"
+msgid "Use cursor keys to navigate"
+msgstr "Egyéni név használata"
 
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"

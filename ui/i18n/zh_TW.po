@@ -630,10 +630,9 @@ msgstr "已更新帳戶"
 msgid "Accounts"
 msgstr "帳戶"
 
-#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/core/extPatterns/links.js
+#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -641,6 +640,11 @@ msgstr "帳戶"
 #: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "Actions"
 msgstr "行為"
+
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+msgid "Actions. Use cursor keys to navigate."
+msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -901,6 +905,12 @@ msgstr "管理角色"
 msgid "Administrator"
 msgstr "管理員"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Advanced Facets"
+msgid "Advanced user?"
+msgstr "進階 Facet"
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
@@ -1007,6 +1017,10 @@ msgstr "任何收件人"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Append vCard"
 msgstr "附加 vCard"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Apple App Store"
+msgstr ""
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
@@ -1258,7 +1272,6 @@ msgid "Back to appointment"
 msgstr "回到約會"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "Back to sign in"
 msgid "Back to devices"
@@ -1271,7 +1284,6 @@ msgid "Back to modules"
 msgstr "回到登入"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "your platform"
 msgid "Back to platforms"
@@ -1390,7 +1402,6 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "日曆"
 
@@ -1400,10 +1411,6 @@ msgstr "日曆"
 msgctxt "app"
 msgid "Calendar"
 msgstr "日曆"
-
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Calendar (Manually)"
-msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
@@ -3642,6 +3649,12 @@ msgstr "%s 早安"
 msgid "Google Drive"
 msgstr "新增 Google Drive 帳號"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Playstore"
+msgstr "新增 Google Drive 帳號"
+
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/portal/settings/pane.js
@@ -3760,6 +3773,12 @@ msgstr "隱藏詳情"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Hide names"
 msgstr "隱藏名稱"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced filters"
+msgid "Hide options for advanced user."
+msgstr "顯示進階過濾器"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
@@ -4146,6 +4165,12 @@ msgstr "六月"
 msgid "Just disable widget"
 msgstr "僅停用小工具"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Just open the %1$s"
+msgstr "結束於 %s"
+
 #. Kilobytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "KB"
@@ -4361,7 +4386,6 @@ msgid "MM"
 msgstr "月"
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Mail"
 msgstr "郵件"
 
@@ -4371,10 +4395,6 @@ msgstr "郵件"
 msgctxt "app"
 msgid "Mail"
 msgstr "郵件"
-
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Mail (Manually)"
-msgstr ""
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Mail Details"
@@ -5214,6 +5234,12 @@ msgstr "只顯示與「%1$s」資料夾相關的項目"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
+msgstr "打開"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Open"
+msgid "Open "
 msgstr "打開"
 
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
@@ -8385,6 +8411,13 @@ msgid ""
 "disabled."
 msgstr "使用方向鍵修改項目位置。必須停用虛擬游標模式。"
 
+#. Tooltip for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#, fuzzy
+#| msgid "Use custom name"
+msgid "Use cursor keys to navigate"
+msgstr "使用自訂名稱"
+
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
 msgstr "使用自訂名稱"
@@ -9966,9 +9999,6 @@ msgstr "年"
 
 #~ msgid "Administration"
 #~ msgstr "管理"
-
-#~ msgid "Advanced Facets"
-#~ msgstr "進階 Facet"
 
 #~ msgid "Advanced facets block was closed."
 #~ msgstr "進階 facet 區塊已被關閉。"

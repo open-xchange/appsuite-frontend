@@ -612,10 +612,9 @@ msgstr "アカウントが更新されました。"
 msgid "Accounts"
 msgstr "アカウント"
 
-#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/core/extPatterns/links.js
+#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -623,6 +622,11 @@ msgstr "アカウント"
 #: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "Actions"
 msgstr "アクション"
+
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+msgid "Actions. Use cursor keys to navigate."
+msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -883,6 +887,12 @@ msgstr "管理ロール"
 msgid "Administrator"
 msgstr "管理者"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Advanced Facets"
+msgid "Advanced user?"
+msgstr "詳細ファセット"
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
@@ -989,6 +999,10 @@ msgstr "すべての宛先"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Append vCard"
 msgstr "vCard を添付"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Apple App Store"
+msgstr ""
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
@@ -1241,7 +1255,6 @@ msgid "Back to appointment"
 msgstr "アポイントに戻る"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "Back to sign in"
 msgid "Back to devices"
@@ -1254,7 +1267,6 @@ msgid "Back to modules"
 msgstr "サイン インに戻る"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "your platform"
 msgid "Back to platforms"
@@ -1379,7 +1391,6 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "予定表"
 
@@ -1389,12 +1400,6 @@ msgstr "予定表"
 msgctxt "app"
 msgid "Calendar"
 msgstr "予定表"
-
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Calendar day view"
-msgid "Calendar (Manually)"
-msgstr "予定表の日ビュー"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
@@ -3667,6 +3672,12 @@ msgstr "おはようございます、%s さん。"
 msgid "Google Drive"
 msgstr "Google Drive アカウントを追加"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Playstore"
+msgstr "Google Drive アカウントを追加"
+
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/portal/settings/pane.js
@@ -3785,6 +3796,12 @@ msgstr "詳細を隠す"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Hide names"
 msgstr "名前を隠す"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced filters"
+msgid "Hide options for advanced user."
+msgstr "詳細フィルタを表示"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
@@ -4182,6 +4199,12 @@ msgstr "6 月"
 msgid "Just disable widget"
 msgstr "ウィジェットを無効化"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Just open the %1$s"
+msgstr "期限: %1$s"
+
 #. Kilobytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "KB"
@@ -4399,7 +4422,6 @@ msgid "MM"
 msgstr "MM"
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Mail"
 msgstr "メール"
 
@@ -4409,10 +4431,6 @@ msgstr "メール"
 msgctxt "app"
 msgid "Mail"
 msgstr "メール"
-
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Mail (Manually)"
-msgstr ""
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Mail Details"
@@ -5255,6 +5273,12 @@ msgstr "フォルダ \"%1$s\" に関連するアイテムのみを表示して�
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
+msgstr "開く"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Open"
+msgid "Open "
 msgstr "開く"
 
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
@@ -8470,6 +8494,13 @@ msgstr ""
 "カーソルキーを使用して、アイテムの位置を変更できます。仮想カーソルモードは無"
 "効にしてください。"
 
+#. Tooltip for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#, fuzzy
+#| msgid "Use custom name"
+msgid "Use cursor keys to navigate"
+msgstr "カスタム名を使用"
+
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
 msgstr "カスタム名を使用"
@@ -10111,9 +10142,6 @@ msgstr "yyyy"
 #~ msgid "Administration"
 #~ msgstr "管理"
 
-#~ msgid "Advanced Facets"
-#~ msgstr "詳細ファセット"
-
 #~ msgid "Advanced facets block was closed."
 #~ msgstr "詳細ファセットブロックが閉じられました。"
 
@@ -11184,6 +11212,11 @@ msgstr "yyyy"
 
 #~ msgid "CW"
 #~ msgstr "CW"
+
+#, fuzzy
+#~| msgid "Calendar day view"
+#~ msgid "Calendar (Manually)"
+#~ msgstr "予定表の日ビュー"
 
 #~ msgid "Calendar custom view"
 #~ msgstr "予定表のカスタム ビュー"

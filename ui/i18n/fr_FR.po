@@ -642,10 +642,9 @@ msgstr "Compte mis à jour"
 msgid "Accounts"
 msgstr "Comptes"
 
-#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/core/extPatterns/links.js
+#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -653,6 +652,11 @@ msgstr "Comptes"
 #: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "Actions"
 msgstr "Actions"
+
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+msgid "Actions. Use cursor keys to navigate."
+msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -913,6 +917,12 @@ msgstr "Rôle administratif"
 msgid "Administrator"
 msgstr "Administrateur"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Advanced Facets"
+msgid "Advanced user?"
+msgstr "Facettes avancées"
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
@@ -1021,6 +1031,10 @@ msgstr "N'importe quel destinataire"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Append vCard"
 msgstr "Ajouter une carte de visite au format vCard"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Apple App Store"
+msgstr ""
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
@@ -1278,7 +1292,6 @@ msgid "Back to appointment"
 msgstr "Revenir au rendez-vous"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "Back to sign in"
 msgid "Back to devices"
@@ -1291,7 +1304,6 @@ msgid "Back to modules"
 msgstr "Retourner à la connexion"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "your platform"
 msgid "Back to platforms"
@@ -1414,7 +1426,6 @@ msgstr "URL CalDAV"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "Agenda"
 
@@ -1424,10 +1435,6 @@ msgstr "Agenda"
 msgctxt "app"
 msgid "Calendar"
 msgstr "Agenda"
-
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Calendar (Manually)"
-msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
@@ -3721,6 +3728,12 @@ msgstr "Bonjour, %s"
 msgid "Google Drive"
 msgstr "Ajouter un compte Google Drive"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Playstore"
+msgstr "Ajouter un compte Google Drive"
+
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/portal/settings/pane.js
@@ -3841,6 +3854,12 @@ msgstr "Masquer les détails"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Hide names"
 msgstr "Masquer les noms"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced filters"
+msgid "Hide options for advanced user."
+msgstr "Afficher les filtres avancés"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
@@ -4239,6 +4258,12 @@ msgstr "Juin"
 msgid "Just disable widget"
 msgstr "Uniquement le désactiver"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Just open the %1$s"
+msgstr "Arrive à échéance le %1$s"
+
 #. Kilobytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "KB"
@@ -4456,7 +4481,6 @@ msgid "MM"
 msgstr "MM"
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Mail"
 msgstr "Courrier"
 
@@ -4466,10 +4490,6 @@ msgstr "Courrier"
 msgctxt "app"
 msgid "Mail"
 msgstr "Courrier"
-
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Mail (Manually)"
-msgstr ""
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Mail Details"
@@ -5321,6 +5341,12 @@ msgstr "Seuls les éléments relatifs au dossier « %1$s » sont affichés"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
+msgstr "Ouvrir"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Open"
+msgid "Open "
 msgstr "Ouvrir"
 
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
@@ -8605,6 +8631,13 @@ msgstr ""
 "Utilisez les touches fléchées pour changer la position de l'élément. Le mode "
 "de curseur virtuel doit être désactivé."
 
+#. Tooltip for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#, fuzzy
+#| msgid "Use custom name"
+msgid "Use cursor keys to navigate"
+msgstr "Utiliser le nom personnalisé"
+
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
 msgstr "Utiliser le nom personnalisé"
@@ -10092,9 +10125,6 @@ msgstr "aaaa"
 
 #~ msgid "Addresses"
 #~ msgstr "Adresses"
-
-#~ msgid "Advanced Facets"
-#~ msgstr "Facettes avancées"
 
 #~ msgid "Advanced facets block was closed."
 #~ msgstr "Le bloc des facettes avancées a été fermé."

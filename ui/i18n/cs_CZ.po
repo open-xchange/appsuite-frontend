@@ -662,10 +662,9 @@ msgstr "Účet aktualizován"
 msgid "Accounts"
 msgstr "Účty"
 
-#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/core/extPatterns/links.js
+#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -673,6 +672,11 @@ msgstr "Účty"
 #: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "Actions"
 msgstr "Činnosti"
+
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+msgid "Actions. Use cursor keys to navigate."
+msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -933,6 +937,12 @@ msgstr "Role administrátora"
 msgid "Administrator"
 msgstr "Administrátor"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Advanced Facets"
+msgid "Advanced user?"
+msgstr "Pokročilá kritéria"
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
@@ -1040,6 +1050,10 @@ msgstr "Kterýkoliv adresát"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Append vCard"
 msgstr "Připojit vCard"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Apple App Store"
+msgstr ""
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
@@ -1295,7 +1309,6 @@ msgid "Back to appointment"
 msgstr "Zpět na schůzku"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "Back to sign in"
 msgid "Back to devices"
@@ -1308,7 +1321,6 @@ msgid "Back to modules"
 msgstr "Zpět na přihlášení"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "your platform"
 msgid "Back to platforms"
@@ -1429,7 +1441,6 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "Kalendář"
 
@@ -1439,10 +1450,6 @@ msgstr "Kalendář"
 msgctxt "app"
 msgid "Calendar"
 msgstr "Kalendář"
-
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Calendar (Manually)"
-msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
@@ -3705,6 +3712,12 @@ msgstr "Dobré ráno, %s"
 msgid "Google Drive"
 msgstr "Přidat účet Google Disk"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Playstore"
+msgstr "Přidat účet Google Disk"
+
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/portal/settings/pane.js
@@ -3823,6 +3836,12 @@ msgstr "Skrýt detaily"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Hide names"
 msgstr "Skrýt jména"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced filters"
+msgid "Hide options for advanced user."
+msgstr "Zobrazit pokročilé filtry"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
@@ -4224,6 +4243,12 @@ msgstr "Červen"
 msgid "Just disable widget"
 msgstr "Pouze vypnout widget"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Just open the %1$s"
+msgstr "Dokončit do %1$s"
+
 #. Kilobytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "KB"
@@ -4439,7 +4464,6 @@ msgid "MM"
 msgstr "MM"
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Mail"
 msgstr "Pošta"
 
@@ -4449,10 +4473,6 @@ msgstr "Pošta"
 msgctxt "app"
 msgid "Mail"
 msgstr "Pošta"
-
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Mail (Manually)"
-msgstr ""
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Mail Details"
@@ -5301,6 +5321,12 @@ msgstr "Zobrazují se pouze položky související se složkou „%1$s“"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
+msgstr "Otevřít"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Open"
+msgid "Open "
 msgstr "Otevřít"
 
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
@@ -8550,6 +8576,13 @@ msgstr ""
 "Pozici položky změňte pomocí kurzorových kláves. Je nutné vypnout režim "
 "virtuálního kurzoru."
 
+#. Tooltip for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#, fuzzy
+#| msgid "Use custom name"
+msgid "Use cursor keys to navigate"
+msgstr "Použít vlastní jméno"
+
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
 msgstr "Použít vlastní jméno"
@@ -10596,9 +10629,6 @@ msgstr "rrrr"
 
 #~ msgid "Administration"
 #~ msgstr "Administrace"
-
-#~ msgid "Advanced Facets"
-#~ msgstr "Pokročilá kritéria"
 
 #~ msgid "Advanced facets block was closed."
 #~ msgstr "Blok pokročilých kritérií byl zavřen."

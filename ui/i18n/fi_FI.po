@@ -633,10 +633,9 @@ msgstr "Tili päivitetty"
 msgid "Accounts"
 msgstr "Tilit"
 
-#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/core/extPatterns/links.js
+#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -644,6 +643,11 @@ msgstr "Tilit"
 #: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "Actions"
 msgstr "Toimenpiteet"
+
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+msgid "Actions. Use cursor keys to navigate."
+msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -904,6 +908,12 @@ msgstr "Hallinnointirooli"
 msgid "Administrator"
 msgstr "Ylläpitäjä"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Advanced Facets"
+msgid "Advanced user?"
+msgstr "Tarkemmat hakuasetukset"
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
@@ -1008,6 +1018,10 @@ msgstr "Kuka tahansa vastaanottaja"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Append vCard"
 msgstr "Lisää vCard käyntikorttini"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Apple App Store"
+msgstr ""
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
@@ -1264,7 +1278,6 @@ msgid "Back to appointment"
 msgstr "Takaisin tapaamiseen"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "Back to sign in"
 msgid "Back to devices"
@@ -1277,7 +1290,6 @@ msgid "Back to modules"
 msgstr "Takaisin sisäänkirjautumiseen"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "your platform"
 msgid "Back to platforms"
@@ -1400,7 +1412,6 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "Kalenteri"
 
@@ -1410,10 +1421,6 @@ msgstr "Kalenteri"
 msgctxt "app"
 msgid "Calendar"
 msgstr "Kalenteri"
-
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Calendar (Manually)"
-msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
@@ -3672,6 +3679,12 @@ msgstr "Hyvää huomenta, %s"
 msgid "Google Drive"
 msgstr "Lisää Google Drive-tili"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Playstore"
+msgstr "Lisää Google Drive-tili"
+
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/portal/settings/pane.js
@@ -3790,6 +3803,12 @@ msgstr "Piilota yksityiskohdat"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Hide names"
 msgstr "Piilota nimet"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced filters"
+msgid "Hide options for advanced user."
+msgstr "Näytä laajat suodattimet"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
@@ -4187,6 +4206,12 @@ msgstr "kesäkuu"
 msgid "Just disable widget"
 msgstr "Poista widget käytöstä"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Just open the %1$s"
+msgstr "Erääntyy %1$s"
+
 #. Kilobytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "KB"
@@ -4402,7 +4427,6 @@ msgid "MM"
 msgstr "KK"
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Mail"
 msgstr "Sähköposti"
 
@@ -4412,10 +4436,6 @@ msgstr "Sähköposti"
 msgctxt "app"
 msgid "Mail"
 msgstr "Sähköposti"
-
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Mail (Manually)"
-msgstr ""
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Mail Details"
@@ -5259,6 +5279,12 @@ msgstr "Näytetään vain kansioon %1$s liittyvät kohdat"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
+msgstr "Avaa"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Open"
+msgid "Open "
 msgstr "Avaa"
 
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
@@ -8492,6 +8518,13 @@ msgstr ""
 "Käytä nuolinäppäimiä muuttaaksesi kohteen sijaintia. Virtuaalikursori täytyy "
 "kytkeä pois päältä."
 
+#. Tooltip for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#, fuzzy
+#| msgid "Use custom name"
+msgid "Use cursor keys to navigate"
+msgstr "Käytä mukautettua nimiä"
+
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
 msgstr "Käytä mukautettua nimiä"
@@ -9863,9 +9896,6 @@ msgstr "vvvv"
 
 #~ msgid "Addresses"
 #~ msgstr "Osoitteet"
-
-#~ msgid "Advanced Facets"
-#~ msgstr "Tarkemmat hakuasetukset"
 
 #~ msgid "Advanced facets block was closed."
 #~ msgstr "Tarkempien asetusten blokkaus on suljettu."

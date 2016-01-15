@@ -711,10 +711,9 @@ msgstr "Compte actualitzat"
 msgid "Accounts"
 msgstr "Compte"
 
-#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/core/extPatterns/links.js
+#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -722,6 +721,11 @@ msgstr "Compte"
 #: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "Actions"
 msgstr "Accions"
+
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+msgid "Actions. Use cursor keys to navigate."
+msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -1004,6 +1008,12 @@ msgstr "Administrador"
 msgid "Administrator"
 msgstr "Administrador"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Advanced Settings"
+msgid "Advanced user?"
+msgstr "Preferències avançades"
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
@@ -1126,6 +1136,10 @@ msgstr "Qualsevol destinatari"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Append vCard"
 msgstr "Afegeix vCard"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Apple App Store"
+msgstr ""
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
@@ -1393,7 +1407,6 @@ msgid "Back to appointment"
 msgstr "Torna a la cita"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "Failed to sign in"
 msgid "Back to devices"
@@ -1406,7 +1419,6 @@ msgid "Back to modules"
 msgstr "Ha fallat l'inici de sessió"
 
 #: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
 #, fuzzy
 #| msgid "your platform"
 msgid "Back to platforms"
@@ -1527,7 +1539,6 @@ msgstr "URL de CalDAV"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "Calendari"
 
@@ -1537,10 +1548,6 @@ msgstr "Calendari"
 msgctxt "app"
 msgid "Calendar"
 msgstr "Calendari"
-
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Calendar (Manually)"
-msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
@@ -3954,6 +3961,12 @@ msgstr "Bon dia, %s"
 msgid "Google Drive"
 msgstr "Afegeix el meu compte"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Add your account"
+msgid "Google Playstore"
+msgstr "Afegeix el meu compte"
+
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/portal/settings/pane.js
@@ -4096,6 +4109,12 @@ msgstr "Amaga els detalls"
 #| msgid "Middle name"
 msgid "Hide names"
 msgstr "Segon nom"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced filters"
+msgid "Hide options for advanced user."
+msgstr "Mostra els filtres avançats"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
@@ -4518,6 +4537,12 @@ msgstr "juny"
 msgid "Just disable widget"
 msgstr "Just desactiva el widget"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Just open the %1$s"
+msgstr "Venç el %1$s"
+
 #. Kilobytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "KB"
@@ -4756,7 +4781,6 @@ msgid "MM"
 msgstr ""
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Mail"
 msgstr "Correu"
 
@@ -4766,10 +4790,6 @@ msgstr "Correu"
 msgctxt "app"
 msgid "Mail"
 msgstr "Correu"
-
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Mail (Manually)"
-msgstr ""
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Mail Details"
@@ -5665,6 +5685,12 @@ msgstr "Es mostren només els elements relacionats amb la carpeta \"%1$s\""
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
+msgstr "Obre"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Open"
+msgid "Open "
 msgstr "Obre"
 
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
@@ -9130,6 +9156,13 @@ msgid ""
 "disabled."
 msgstr "Emprau les tecles del cursor per a canviar la posició de l'element"
 
+#. Tooltip for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#, fuzzy
+#| msgid "User name"
+msgid "Use cursor keys to navigate"
+msgstr "Nom d'usuari"
+
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 #, fuzzy
 #| msgid "User name"
@@ -10628,11 +10661,6 @@ msgstr ""
 #~| msgid "This may take some seconds"
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Això es pot torbar uns segons"
-
-#, fuzzy
-#~| msgid "Advanced Settings"
-#~ msgid "Advanced Facets"
-#~ msgstr "Preferències avançades"
 
 #~ msgid "Advanced Settings"
 #~ msgstr "Preferències avançades"
