@@ -15,7 +15,6 @@
 @participantsWidth: 340px;
 
 .free-busy-controls {
-
     top: auto;
     background-color: whiteSmoke;
     border-top: 1px solid #ddd;
@@ -33,13 +32,12 @@
         left: 13px !important;
         max-width: 380px;
 
-        .arrow {
-            left: 45px;
-        }
+        .arrow { left: 45px; }
     }
 }
 
 .window-content .free-busy-view {
+    @opacity: 0.70;
 
     .user-select(none);
 
@@ -61,10 +59,7 @@
         left: 13px;
         line-height: 30px;
 
-        .tt-suggestion {
-            padding: 3px 10px;
-
-        }
+        .tt-suggestion { padding: 3px 10px; }
     }
 
     .participants-view-scrollpane {
@@ -92,30 +87,23 @@
 
     .view-dropdown {
         padding-top: 5px;
+
         .dropdown-menu {
             top: auto;
             bottom: 110%;
         }
     }
 
-    .participants-view:after {
-        content: '\00a0';
-    }
+    .participants-view:after { content: '\00a0'; }
 
-    .participant-wrapper .remove {
-        right: 11px;
-    }
+    .participant-wrapper .remove { right: 11px; }
 
     .with-participant-color {
         padding-right: 20px;
         margin-bottom: 1px;
     }
 
-    .with-participant-color.removable {
-        padding-right: 50px;
-    }
-
-    @opacity: 0.70;
+    .with-participant-color.removable { padding-right: 50px; }
 
     .participant-color {
         position: absolute;
@@ -127,9 +115,7 @@
         opacity: @opacity;
     }
 
-    .modal-footer .btn.add-button {
-        min-width: 3em;
-    }
+    .modal-footer .btn.add-button { min-width: 3em; }
 
     .appointment {
         opacity: @opacity;

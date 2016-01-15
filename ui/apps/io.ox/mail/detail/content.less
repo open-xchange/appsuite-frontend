@@ -123,7 +123,9 @@
     }
 
     table {
-        border: 0 none; line-height: normal; border-collapse: initial;
+        border: 0 none;
+        line-height: normal;
+        border-collapse: initial;
     }
 
     ul, ol {
@@ -164,18 +166,10 @@
     }
 
     &.colorQuoted {
-        blockquote blockquote {
-            .blockquote(#3C73AA);
-        }
-        blockquote blockquote blockquote {
-            .blockquote(#DD0880);
-        }
-        blockquote blockquote blockquote blockquote {
-            .blockquote(#8F09C7);
-        }
-        blockquote blockquote blockquote blockquote blockquote {
-            .blockquote(#777);
-        }
+        blockquote blockquote                                   { .blockquote(#3C73AA); }
+        blockquote blockquote blockquote                        { .blockquote(#DD0880); }
+        blockquote blockquote blockquote blockquote             { .blockquote(#8F09C7); }
+        blockquote blockquote blockquote blockquote blockquote  { .blockquote(#777);    }
     }
 
     .collapsed-blockquote {

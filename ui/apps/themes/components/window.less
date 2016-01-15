@@ -25,9 +25,7 @@
     z-index: 10;
 }
 
-#io-ox-windowmanager {
-    overflow: hidden;
-}
+#io-ox-windowmanager { overflow: hidden; }
 
 #io-ox-windowmanager-pane {
     left: 0;
@@ -35,17 +33,12 @@
 }
 
 .touch {
-    #io-ox-screens {
-        top: 40px;
-    }
+    #io-ox-screens { top: 40px; }
 
-    #io-ox-windowmanager .window-container-center {
-        width: 100% !important;
-    }
+    #io-ox-windowmanager .window-container-center { width: 100% !important; }
 }
 
 .window-title {
-
     padding: 0 13px 0 13px;
     color: @window-title-color;
     font-family: @light-font-family;
@@ -67,60 +60,53 @@
     }
 }
 
-.smartphone {
-    .window-container {
-        &.header-top {
-            .window-body{
-                top: 0;
-                margin-bottom: 40px;
-            }
+.smartphone .window-container.header-top {
+    .window-body{
+        top: 0;
+        margin-bottom: 40px;
+    }
 
-            .window-header {
-                position: fixed;
-                left: 0;
-                right: 0;
-                z-index: 666;
-                bottom: 0;
-                width: 100%;
-                height: 40px;
-                background-color: #ddd;
-                padding: 0;
-                border-top: 1px solid @link-color;
+    .window-header {
+        position: fixed;
+        left: 0;
+        right: 0;
+        z-index: 666;
+        bottom: 0;
+        width: 100%;
+        height: 40px;
+        background-color: #ddd;
+        padding: 0;
+        border-top: 1px solid @link-color;
 
-                .container {
-                    padding-left:0;
-                    padding-right:0;
-                }
+        .container {
+            padding-left:0;
+            padding-right:0;
+        }
 
-                h1.title {
-                    display: none;
-                }
+        h1.title { display: none; }
 
-                a.btn {
-                    padding: 0;
-                    line-height: 40px;
-                    border: 0;
-                    border-radius: 0;
-                    margin: 0;
-                    height: 40px;
-                    width: 50%;
+        a.btn {
+            padding: 0;
+            line-height: 40px;
+            border: 0;
+            border-radius: 0;
+            margin: 0;
+            height: 40px;
+            width: 50%;
 
-                }
+        }
 
-                button.btn {
-                    border: 0;
-                    border-radius: 0;
-                    margin: 0;
-                    height: 40px;
-                    width: 50%;
-                }
-            }
+        button.btn {
+            border: 0;
+            border-radius: 0;
+            margin: 0;
+            height: 40px;
+            width: 50%;
         }
     }
 }
 
 .window-container {
-
     position: absolute;
     top: 0;
     width: 100%;
@@ -159,33 +145,26 @@
             }
         }
 
-        .window-content {
-            // always reserve space for scroll bar
-            overflow-y: scroll !important;
-        }
+        // always reserve space for scroll bar
+        .window-content { overflow-y: scroll !important; }
     }
 
     &.classic {
-
         color: white;
 
         .window-head {
-
             width: auto; right: 0; height: 30px; color: white;
             border-top: 1px solid #000;
             padding: 7px 0 11px 0;
             text-align: center;
 
-            .toolbar-button {
-                display: none;
-            }
-
+            .toolbar-button { display: none; }
         }
 
         .window-body {
-            top: 50px; left: 0;
+            top: 50px;
+            left: 0;
         }
-
     }
 
     &.simple-window {
@@ -207,15 +186,12 @@
 }
 
 .window-blocker {
-
     background-color: #fff;
     background-color: rgba(255, 255, 255, 0.8);
     opacity: 0.8;
     z-index: 30;
 
-    .rgba & {
-        opacity: 1;
-    }
+    .rgba & { opacity: 1; }
 
     .progress {
         position: absolute;
@@ -247,22 +223,17 @@
         text-align: center;
     }
 
-    .first {
-        margin-top: -20px;
-    }
+    .first { margin-top: -20px; }
 
     .second {
         margin-top: 5px;
         height: 10px;
     }
 
-    .progress .progress-bar {
-        .border-radius(4px);
-    }
+    .progress .progress-bar { .border-radius(4px); }
 }
 
 .window-head {
-
     font-size: @window-head-font-size;
     background-color: @window-head-color;
     position: absolute;
@@ -274,9 +245,7 @@
     .user-select(none);
     filter: none;
 
-    html.high-contrast & {
-        border-right: 1px solid @hc-border-color;
-    }
+    html.high-contrast & { border-right: 1px solid @hc-border-color; }
 
     &.css-table {
         table-layout: fixed;
@@ -285,7 +254,6 @@
 }
 
 .window-sidepanel {
-
     position: absolute;
     top: 0;
     bottom: 0;
@@ -294,7 +262,6 @@
     z-index: 2;
     overflow: hidden;
     display: none;
-
     background-color: #f5f5f5;
 
     &.visible {
@@ -341,23 +308,18 @@
             padding: 8px 16px;
 
             ul {
-
                 margin: 0;
                 padding-top: 3px;
                 margin-bottom: 5px;
 
                 li {
-
                     padding-top: 5px;
                     margin-bottom: 3px;
                 }
             }
 
-            ul, .header {
-                a {
-                    color: @premium-toolbar-link-color;
-                }
-            }
+            ul a,
+            .header a { color: @premium-toolbar-link-color; }
 
             .header {
                 margin: -8px -16px 6px -16px;
@@ -366,9 +328,7 @@
                 color: @premium-toolbar-header-color;
             }
 
-            .io-ox-upsell-link {
-                padding-top: 5px;
-            }
+            .io-ox-upsell-link { padding-top: 5px; }
         }
     }
 }
@@ -428,9 +388,7 @@
     overflow: auto;
 }
 
-.rightside-navbar {
-    display: none;
-}
+.rightside-navbar { display: none; }
 
 @media (max-width: 900px) {
     .leftside { width: 250px; }
@@ -454,7 +412,6 @@
 
 // TINY SCREENS
 @media (max-width: 540px) {
-
     .window-head {
         top: auto;
         right: 0;
@@ -481,9 +438,7 @@
         left: 0;
     }
 
-    .chromeless-window .window-body {
-        bottom: 0;
-    }
+    .chromeless-window .window-body { bottom: 0; }
 
     .vsplit {
         left: 0; width: 200%; right: auto;
@@ -507,9 +462,7 @@
         animation-name: slideleft;
     }
 
-    .touch .vsplit {
-        -webkit-backface-visibility: hidden;
-    }
+    .touch .vsplit { -webkit-backface-visibility: hidden; }
 
     .vsplit .leftside {
         width: 50%;
@@ -540,10 +493,8 @@
     }
 
     .vsplit-reverse {
-
-        .rightside-navbar, .rightside {
-            display:none;
-        }
+        .rightside-navbar,
+        .rightside { display:none; }
     }
 }
 
@@ -551,9 +502,7 @@
 // iOS will go fullscreen and show an overaly with own buttons
 // we need to position our buttons around them
 @media (height: 320px) and (orientation:landscape) {
-    .window-head {
-        padding-right: 40px;
-    }
+    .window-head { padding-right: 40px; }
 }
 
 // small screens (mobile)
@@ -561,7 +510,6 @@
 // to target all devices which don't support the max-device-width
 // property
 @media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
-
     .window-sidepanel {
         display: block;
         -webkit-backface-visibility: hidden;

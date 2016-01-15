@@ -29,6 +29,7 @@
 
     .io-ox-dropzone-action {
         display: table-row;
+
         div {
             display: table-cell;
             vertical-align: middle;
@@ -36,21 +37,15 @@
             border: 1px dashed #aaa;
             background: #fff;
         }
-        &.io-ox-dropzone-hover {
-            div {
-                border-color: darken(@hoverColor, 30%);
-                background-color: @hoverColor;
-            }
+        &.io-ox-dropzone-hover div {
+            border-color: darken(@hoverColor, 30%);
+            background-color: @hoverColor;
         }
     }
 }
 
 // this is for all browsers without CSS filter support
-.io-ox-dropzone-active {
-    .io-ox-dropzone-multiple-overlay {
-        background-color: rgba(255, 255, 255, 0.60);
-    }
-}
+.io-ox-dropzone-active .io-ox-dropzone-multiple-overlay { background-color: rgba(255, 255, 255, 0.60); }
 
 // css animation is not possible due to
 // https://code.google.com/p/chromium/issues/detail?id=265429
@@ -63,12 +58,10 @@
 
 // for those with CSS filter support
 .cssfilters .io-ox-dropzone-active {
-    #io-ox-core {
-        -webkit-filter: blur(20px);
-    }
-    .io-ox-dropzone-multiple-overlay {
-        background-color: rgba(255, 255, 255, 0.20);
-    }
+
+    #io-ox-core { -webkit-filter: blur(20px); }
+
+    .io-ox-dropzone-multiple-overlay { background-color: rgba(255, 255, 255, 0.20); }
 }
 
 .no-cssfilters .io-ox-dropzone-active #io-ox-core {

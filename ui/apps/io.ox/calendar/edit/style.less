@@ -12,26 +12,19 @@
  */
 
 .io-ox-calendar-edit {
-
     // baseline adjustment
-    padding-top: 16px;
+    padding-top: @default-padding;
 
-    .btn.btn-link {
-        padding-left: 0;
-    }
+    .btn.btn-link { padding-left: 0; }
 
     .actionToggle {
         display: none;
         margin: 10px 0;
     }
 
-    .recurrenceview div.checkbox {
-        margin-top: 0;
-    }
+    .recurrenceview div.checkbox { margin-top: 0; }
 
-    input[name="title"] {
-        font-weight: bold;
-    }
+    input[name="title"] { font-weight: bold; }
 
     textarea.note {
         resize: vertical;
@@ -39,9 +32,7 @@
         min-height: 120px;
     }
 
-    .find-free-time {
-        margin-top: 12px;
-    }
+    .find-free-time { margin-top: 12px; }
 
     .custom-color {
         .generate-color-label(@counter) when (@counter > 0) {
@@ -75,69 +66,38 @@
                 color: @black;
             }
 
-            .fa {
-                display: none;
-            }
+            .fa { display: none; }
 
-            &.active {
-                .fa {
-                    display: inline-block;
-                }
-            }
+            &.active .fa { display: inline-block; }
         }
     }
 
-    .hard-conflict {
-        margin: 1em 0 0 0;
-    }
+    .hard-conflict { margin: 1em 0 0 0; }
 
     /* Mobile */
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
+        .actionToggle { display: block; }
 
-        .actionToggle {
-            display: block;
-        }
+        .collapsed { display: none; }
 
-        .collapsed {
-            display: none;
-        }
+        textarea.note { min-height: 50px; }
 
-        textarea.note {
-            min-height: 50px;
-        }
+        .custom-color .color-label {
+            width: 40px;
+            height: 40px;
+            margin: 4px;
+            font-size: 30px;
 
-        .custom-color {
-            .color-label {
-                width: 40px;
-                height: 40px;
-                margin: 4px;
-                font-size: 30px;
+            &.no-color { margin-right: 52px; }
 
-                &.no-color {
-                    margin-right: 52px;
-                }
-
-                &.active {
-                    .fa {
-                        line-height: 40px;
-                    }
-                }
-            }
+            &.active .fa { line-height: 40px; }
         }
     }
 }
 
-.io-ox-calendar-edit-window {
-    &.header-top {
-        .window-header {
-            .header-right {
-                float: right;
-                line-height: 32px;
+.io-ox-calendar-edit-window.header-top .window-header .header-right {
+    float: right;
+    line-height: 32px;
 
-                a {
-                    margin-left: 0.2em;
-                }
-            }
-        }
-    }
+    a { margin-left: 0.2em; }
 }

@@ -13,21 +13,15 @@
 
 .vgrid-cell.tasks {
 
-    .vgrid-cell-checkbox {
-        padding-top: 10px;
-    }
+    .vgrid-cell-checkbox { padding-top: 10px; }
 
     .end_date {
-
         color: #777;
         margin-left: 0.5em;
         font-weight: 300;
         float: right;
 
-        html.high-contrast & {
-            color: @black;
-        }
-
+        html.high-contrast & { color: @black; }
     }
 
     .status {
@@ -37,7 +31,6 @@
     }
 
     .priority {
-
         font-size: 16;
         font-weight: bold;
         padding: 0 0.5em 0 0.5em;
@@ -46,10 +39,7 @@
         position: relative;
         overflow:visible;
 
-        i.fa-star {
-            display: inline-block;
-        }
-
+        i.fa-star { display: inline-block; }
     }
 
     .title {
@@ -58,9 +48,7 @@
         white-space: nowrap;
         width: 115px;
 
-        &.not-fulltime {
-            width: 75px;
-        }
+        &.not-fulltime { width: 75px; }
     }
 
     .private-flag {
@@ -91,30 +79,28 @@
 @media (max-width: 700px) {
     .vgrid-cell.tasks .title {
         width: 325px;
-        &.not-fulltime {
-            width: 285px;
-        }
+
+        &.not-fulltime { width: 285px; }
     }
+
     .vgrid.editable .vgrid-cell.tasks .title {
         width: 275px;
-        &.not-fulltime {
-            width: 235px;
-        }
+
+        &.not-fulltime { width: 235px; }
     }
 }
 
 @media (max-width: 500px) {
     .vgrid-cell.tasks .title {
         width: 225px;
-        &.not-fulltime {
-            width: 185px;
-        }
+
+        &.not-fulltime { width: 185px; }
     }
+
     .vgrid.editable .vgrid-cell.tasks .title {
         width: 175px;
-        &.not-fulltime {
-            width: 135px;
-        }
+
+        &.not-fulltime { width: 135px; }
     }
 }
 
@@ -125,6 +111,7 @@
             width: 140px;
         }
     }
+
     .vgrid.editable .vgrid-cell.tasks .title {
         width: 140px;
         &.not-fulltime {
@@ -136,47 +123,35 @@
 @media (min-width: 1300px) {
     .vgrid-cell.tasks .title {
         width: 195px;
-        &.not-fulltime {
-            width: 155px;
-        }
+
+        &.not-fulltime { width: 155px; }
     }
-    .tasks-detailview {
-        .dl-horizontal dt {
-            width: 250px;
-        }
-    }
+
+    .tasks-detailview .dl-horizontal dt { width: 250px; }
 }
 
 @media (min-width: 1500px) {
     .vgrid-cell.tasks .title {
         width: 245px;
-        &.not-fulltime {
-            width: 195px;
-        }
+
+        &.not-fulltime { width: 195px; }
     }
 }
 
 @media (min-width: 1700px) {
     .vgrid-cell.tasks .title {
         width: 295px;
-        &.not-fulltime {
-            width: 245px;
-        }
+
+        &.not-fulltime { width: 245px; }
     }
 }
 
-.task-detail-container {
-    padding: 16px 32px;
-}
-    
+.task-detail-container { padding: 16px 32px; }
+
 .tasks-detailview {
-
-    .io-ox-inline-links:first-child {
-        margin: 0 0 26px 0;
-    }
+    .io-ox-inline-links:first-child { margin: 0 0 26px 0; }
 
     header {
-
        margin-bottom: 15px;
        padding-top: 1px;
 
@@ -233,7 +208,6 @@
     }
 
     .attachments-container {
-
         border-top: 1px solid #ddd;
         padding-top: 15px;
         margin-bottom: 7px;
@@ -246,7 +220,6 @@
             padding-bottom: 2px;
             line-height: 22px;
         }
-
     }
 
     .attachment-item {
@@ -284,7 +257,6 @@
     }
 
     .priority {
-
         font-weight: bold;
         vertical-align: top;
         white-space: nowrap;
@@ -294,25 +266,21 @@
             font-size: 16px;
             color: @task-priority;
         }
-
     }
-
 }
 
 @media (max-width: 480px), (max-device-width: 480px) {
     .vgrid-cell.tasks {
+        z-index: 2;
         width: 100%;
         font-size: 14px;
         border-top: 1px solid #ddd;
-        &:first-child {
-            border-top-width: 0;
-        }
         left: 0;
         .transition(e('left 0.40s cubic-bezier(0.1, 0.7, 0.1, 1), padding 0.40s cubic-bezier(0.1, 0.7, 0.1, 1)'));
-        &.swipe-left {
-            left: -80px;
-        }
-        z-index: 2;
+
+        &:first-child { border-top-width: 0; }
+
+        &.swipe-left { left: -80px; }
     }
 
     .tasks-detailview {
@@ -322,41 +290,27 @@
             padding-bottom: 1px;
         }
 
-        .detail-label, .detail-value, .participants-table-confirmmessage {
-            display: block;
-        }
+        .detail-label, .detail-value,
+        .participants-table-confirmmessage { display: block; }
 
-        .detail-label {
-            margin-bottom: 0;
-        }
-        .detail-value {
-            padding-top: 0;
-        }
+        .detail-label { margin-bottom: 0; }
+
+        .detail-value { padding-top: 0; }
 
         .io-ox-inline-links:first-child {
             margin: 0;
             padding: 15px 0;
         }
 
-        .participants-table-confirmmessage {
-            padding-left: 0;
-        }
+        .participants-table-confirmmessage { padding-left: 0; }
 
-        .info-panel {
-            //to push the title under the info panel, prevents long titles to be ripped apart
-            width: 100%;
-        }
-
+        // to push the title under the info panel, prevents long titles to be ripped apart
+        .info-panel { width: 100%; }
     }
 
-    div.io-ox-tasks-edit.task-edit-wrapper.container.default-content-padding {
-        padding-bottom: 40px;
-    }
+    div.io-ox-tasks-edit.task-edit-wrapper.container.default-content-padding { padding-bottom: 40px; }
 
-    .task-detail-container {
-        padding: 16px 16px 0 16px;
-    }
-
+    .task-detail-container { padding: 16px 16px 0 16px; }
 }
 
 //io.ox/tasks/listview, io.ox/tasks/common-extensions
@@ -378,7 +332,5 @@
         }
     }
 
-    .prog{
-        color: rgb(119, 119, 119);
-    }
+    .prog { color: rgb(119, 119, 119); }
 }

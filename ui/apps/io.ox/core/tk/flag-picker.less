@@ -1,0 +1,104 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2016 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+// flag colors
+.flag_1     { color: @red;                    }
+.flag_2     { color: @blue;                   }
+.flag_3     { color: @green;                  }
+.flag_4     { color: @gray-light;             }
+.flag_5     { color: @purple;                 } /* (former brown) */
+.flag_6     { color: @green-light;            }
+.flag_7     { color: @orange;                 }
+.flag_8     { color: @pink;                   }
+.flag_9     { color: @blue-light;             }
+.flag_10    { color: @yellow;                 }
+
+.flag_bg_1  { background-color: @red;         }
+.flag_bg_2  { background-color: @blue;        }
+.flag_bg_3  { background-color: @green;       }
+.flag_bg_4  { background-color: @gray-light;  }
+.flag_bg_5  { background-color: @purple;      } /* (former brown) */
+.flag_bg_6  { background-color: @green-light; }
+.flag_bg_7  { background-color: @orange;      }
+.flag_bg_8  { background-color: @pink;        }
+.flag_bg_9  { background-color: @blue-light;  }
+.flag_bg_10 { background-color: @yellow;      }
+
+.flag-picker {
+
+    .dropdown-toggle {
+        font-size: 14px;
+
+        &:hover { text-decoration: none; }
+        &:focus i {
+            outline: thin dotted;
+            outline: 5px auto -webkit-focus-ring-color;
+            outline-offset: -2px;
+        }
+    }
+
+}
+
+.flag-picker {
+    float: right;
+    display: inline-block;
+    margin-left: 16px;
+    position: relative;
+
+    .flag-example {
+        display: inline-block;
+        float: right;
+        width: 28px;
+        height: 22px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        .border-radius(@border-radius-base);
+    }
+
+    .flag-dropdown {
+
+        font-size: 22px;
+        margin: 7px 0 0 14px;
+        cursor: pointer;
+        float: right;
+
+        ul {
+            font: 14px/20 @normal-font-family;
+            right: -20px;
+            left: auto;
+            top: 120%;
+            width: 200px;
+        }
+
+        a {
+            line-height: 24px;
+            text-decoration: none;
+        }
+
+        .flag-dropdown-icon.flag_0 {
+            color: #ddd;
+
+            &:hover { color: #aaa; }
+        }
+        .flag-dropdown-icon.flag_0 { color: #767676; }
+    }
+
+    .dropdown-menu {
+        right: 0;
+        left: auto;
+        width: 200px;
+        a {
+            line-height: 24px;
+            .ellipsis();
+        }
+    }
+}

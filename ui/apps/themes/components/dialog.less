@@ -29,18 +29,13 @@
     z-index: 65000;
     .transition(opacity 0.15s linear);
 
-    &.in {
-        opacity: 0.30;
-    }
+    &.in { opacity: 0.30; }
 
-    &.topmost {
-        z-index: 65002;
-    }
+    &.topmost { z-index: 65002; }
 
 }
 
 .io-ox-dialog-popup {
-
     position: relative;
     max-width: 500px;
     margin: 0 auto 0 auto;
@@ -52,6 +47,7 @@
     .border-radius(@border-radius-base);
 
     .modal-header {
+        position: relative;
 
         h2, h3, h4 {
             font-size: 18px;
@@ -60,12 +56,8 @@
             .ellipsis();
         }
 
-        position: relative;
-
         &.help {
-            h2, h3, h4 {
-                margin-right: 35px;
-            }
+            h2, h3, h4 { margin-right: 35px; }
         }
 
         .io-ox-context-help {
@@ -90,19 +82,17 @@
     &.zero-padding {
         .modal-body {
             padding: 0;
+
             iframe {
                 display: block;
                 .border-radius(5px 5px 0 0);
             }
         }
-        .modal-footer {
-            margin-top: 0;
-        }
+
+        .modal-footer { margin-top: 0; }
     }
 
-    &.relogin {
-        z-index: 65301;
-    }
+    &.relogin { z-index: 65301; }
 
     .content {
         overflow: auto;
@@ -113,19 +103,13 @@
             color: @text-color;
             padding: 10px;
         }
-
     }
 
-    .modal-footer > .btn {
-        min-width: 5em;
-    }
+    .modal-footer > .btn { min-width: 5em; }
 
-    .io-ox-sidepopup.right {
-        .border-radius(0 5px 5px 0);
-    }
-
-    .io-ox-sidepopup.left {
-        .border-radius(5px 0 0 5px);
+    .io-ox-sidepopup {
+        &.right { .border-radius(0 5px 5px 0); }
+        &.left  { .border-radius(5px 0 0 5px); }
     }
 
     &:focus {
@@ -133,45 +117,28 @@
         .box-shadow(0 5px 25px -5px darken(@link-color, 20%));
     }
 
-    &.topmost {
-        z-index: 65003;
-    }
+    &.topmost { z-index: 65003; }
 
-    .modal-header, .modal-footer {
-        padding: 12px 16px;
-    }
+    .modal-header, .modal-footer { padding: 12px 16px; }
 
 }
 
-.subscribe-imap-folder .modal-body {
-    padding: 0;
-}
+.subscribe-imap-folder .modal-body { padding: 0; }
 
-// filepicker shoudl always be 100% in width, also in landscape mode
-.ios.smartphone, .android.smartphone {
-    .picker-pc-container {
-        .modal-body {
-            &>div, &>ul {
-                width: 100%;
-            }
-        }
-    }
+// filepicker should always be 100% in width, also in landscape mode
+.ios.smartphone, .android.smartphone .picker-pc-container .modal-body {
+    & > div,
+    & > ul { width: 100%; }
 }
 // filepicker mobile
-.picker-pc-container {
-    .io-ox-pagecontroller.page {
-        padding-top: 40px;
-    }
-}
+.picker-pc-container .io-ox-pagecontroller.page { padding-top: 40px; }
 
 .add-infostore-file {
     .picker-pc-container {
         position: relative;
         height: 350px;
         @media all and (max-width: 480px), all and (max-device-width: 480px) {
-            .folder-tree .folder-node .folder-arrow {
-                position: static
-            }
+            .folder-tree .folder-node .folder-arrow { position: static; }
         }
 
         .io-ox-fileselection {
@@ -180,50 +147,41 @@
                 outline: none;
                 line-height: 40px;
                 padding: 2px 7px;
-
                 .user-select(none);
 
                 label {
-                    margin-top:     10px;
-                    margin-left:    2px;
-                    margin-right:   5px;
+                    margin-top:   10px;
+                    margin-left:  2px;
+                    margin-right: 5px;
                     float: left;
                 }
 
-                .checkbox-inline {
-                    font-size: 16px;
-                }
+                .checkbox-inline { font-size: 16px; }
 
-                .name {
-                    .ellipsis();
-                }
+                .name { .ellipsis(); }
 
                 &.selected, &.selected:hover {
                     background-color: @foldertree-selected-background;
-                    * {
-                        color: @foldertree-selected-label-color;
-                    }
+
+                    * { color: @foldertree-selected-label-color; }
                 }
 
                 &:focus {
                     background-color: @foldertree-selected-focus-background;
-                    * {
-                        color: @foldertree-focused-label-color;
-                    }
+
+                    * { color: @foldertree-focused-label-color; }
                 }
             }
 
-            &.singleselect li.file .name {
-                padding-left: 0.5em;
-            }
+            &.singleselect li.file .name { padding-left: 0.5em; }
         }
     }
 
     .modal-body {
-
         padding: 0;
         overflow: hidden;
-        &>div, &>ul {
+
+        & > div, & > ul {
             display: inline-block;
             width: 50%;
             height: 100%;
@@ -231,19 +189,17 @@
             overflow: auto;
             margin: 0;
         }
+
         @media all and (max-width: 480px), all and (max-device-width: 480px) {
-            &>div, &>ul {
-                width: 100%;
-            }
+            & > div,
+            & > ul { width: 100%; }
         }
-        .folder-tree {
-            border-right: 1px solid #ddd;
-        }
+
+        .folder-tree { border-right: 1px solid #ddd; }
 
         .io-ox-fileselection {
 
             li.file {
-
                 outline: none;
                 line-height: 30px;
                 padding: 2px 7px;
@@ -256,43 +212,30 @@
                     float: left;
                 }
 
-                .name {
-                    .ellipsis();
-                }
+                .name { .ellipsis(); }
 
                 &.selected {
                     background-color: @foldertree-selected-focus-background;
-                    * {
-                        color: @foldertree-focused-label-color;
-                    }
+
+                    * { color: @foldertree-focused-label-color; }
                 }
 
                 &:focus {
                     background-color: darken(@foldertree-selected-focus-background, 5%);
-                    * {
-                        color: @foldertree-focused-label-color;
-                    }
+
+                    * { color: @foldertree-focused-label-color; }
                 }
             }
 
-            &.singleselect li.file .name {
-                padding-left: 0.5em;
-            }
-
+            &.singleselect li.file .name { padding-left: 0.5em; }
         }
-
     }
 
-    .modal-footer {
-        margin-top: 0;
-    }
-
+    .modal-footer { margin-top: 0; }
 }
 
 /* ios momentum scrolling, breakes mobile chrome if applied to all devices */
-.ios {
-    .io-ox-dialog-popup { -webkit-overflow-scrolling: touch; }
-}
+.ios .io-ox-dialog-popup { -webkit-overflow-scrolling: touch; }
 
 .mobile-dialog.io-ox-dialog-popup {
 
@@ -304,48 +247,27 @@
     .border-radius(0);
 
     .modal-footer {
-
         margin-top: 0;
 
         .row {
-
-            [class*="col-"] {
-                margin-left: 0;
-            }
+            [class*="col-"] { margin-left: 0; }
 
             .btn {
                 width: 100%;
                 margin: 2px 0;
             }
-
         }
-
     }
 
-    h3 {
-        font-size: 20px;
-    }
+    h3 { font-size: 20px; }
 }
 
 /***************** Android stock browser tweaks **************/
-.legacy-chrome {
-    .io-ox-dialog-popup {
-        .modal-footer {
-            .row {
-                margin: 0;
+.legacy-chrome .io-ox-dialog-popup .modal-footer .row {
+    margin: 0;
 
-                .col-md-3 {
-                    padding: 0;
-                }
-            }
-        }
-    }
+    .col-md-3 { padding: 0; }
 }
 
-.export-dialog {
-    .modal-body {
-        label.checkbox {
-            padding-left: 20px;
-        }
-    }
-}
+
+.export-dialog .modal-body label.checkbox { padding-left: 20px; }

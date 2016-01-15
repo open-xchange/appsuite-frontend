@@ -19,14 +19,10 @@
     min-width: 300px;
     max-height: 600px;
 
-    .scrollable-pane {
-        padding: 5px 0;
-    }
+    .scrollable-pane { padding: 5px 0; }
 
-    .scrollable-pane:after {
-        // make sure margins/paddings are applied properly
-        content: '';
-    }
+    // make sure margins/paddings are applied properly
+    .scrollable-pane:after { content: ''; }
 
     .autocomplete-item {
 
@@ -38,9 +34,8 @@
             font-style: normal;
             color: rgba(0, 0, 0, 0.5);
         }
-        &.indent {
-            padding-left: 24px;
-        }
+        &.indent { padding-left: 24px; }
+
         &.dropdown-header {
             padding-top: 9px;
             margin-top: 9px;
@@ -59,9 +54,8 @@
 
         .name {
             word-break: break-all;
-            i {
-                word-break: break-word;
-            }
+
+            i { word-break: break-word; }
         }
 
         &.contacts, &.contact, &.participant, &.task_participants {
@@ -71,9 +65,7 @@
                 float: left;
                 .picture(42px, 42px);
             }
-            .name {
-                .ellipsis();
-            }
+            .name { .ellipsis(); }
             .detail {
                 color: rgba(0, 0, 0, 0.5);
                 .ellipsis();
@@ -84,10 +76,8 @@
 
 // io.ox/core/tk/autocomplete: dropdown drawn inline on mobile
 .autocomplete-search.mobile-dropdown {
-
     width: auto;
     max-width: 500px;
-
     margin-left: 0;
     margin-bottom: 4px;
 
@@ -142,12 +132,9 @@
 }
 
 @media all and (max-width: 768px), all and (max-device-width: 768px) {
-    #io-ox-search-topbar.launcher {
-        display: none;
-    }
-    #io-ox-search-topbar-icon.launcher {
-        display: inline-block;
-    }
+    #io-ox-search-topbar.launcher      { display: none;         }
+    #io-ox-search-topbar-icon.launcher { display: inline-block; }
+
     // block buttons on mobile
     .io-ox-search.window-content  {
         padding-top: 8px;
@@ -168,17 +155,17 @@
     }
 
 
-    // kepp button on top while searchfield grows
+    // keep button on top while searchfield grows
     .row.query {
-          border-bottom: 1px solid #ccc;
-          padding-bottom: 5px;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 5px;
+        margin-bottom: 7px;
 
         .recipient-actions {
-
             position: relative;
             top: 0;
             right: 0;
-            margin-top: 3   px;
+            margin-top: 3px;
 
             a {
                 margin-right: 3px;
@@ -192,20 +179,14 @@
             }
         }
 
-        margin-bottom: 7px;
-
-
-        &[data-extension-id=to],&[data-extension-id=cc],&[data-extension-id=bcc] {
-            .col-xs-11 {
-                width: 90%;
-                margin-right: -5px;
-            }
+        &[data-extension-id=to],&[data-extension-id=cc],&[data-extension-id=bcc] .col-xs-11 {
+            width: 90%;
+            margin-right: -5px;
         }
         .maillabel {
             padding-top: 3px;
-            &.col-xs-1 {
-                width: 10%;
-            }
+
+            &.col-xs-1 { width: 10%; }
         }
 
         .token-input {
@@ -229,23 +210,17 @@
 
         .tokenfield.search-field.form-control {
             border: none;
-            //border-bottom: 1px solid #aaa;
             border-radius: 0;
             box-shadow: none;
-            &.focus, &:focus {
-                //border-color: #66afe9;
-            }
+
             .token {
                 // fill search field completely
                 width: 100%;
                 text-align: center;
-                // hide close 'x'
-                .token-label {
-                    padding-right: 4px;
-                }
-                a {
-                    display: none;
-                }
+
+                .token-label { padding-right: 4px; }
+
+                a { display: none; }
             }
         }
 
@@ -253,18 +228,10 @@
 
         .recipient-actions a { outline: 0; }
 
-
-
-        .input-group-btn {
-              vertical-align: top;
-        }
+        .input-group-btn { vertical-align: top; }
     }
 
-    .row.result {
-        .calendar-item .location {
-          float: none;
-        }
-    }
+    .row.result .calendar-item .location { float: none; }
 }
 
 // hide/adjust default window parts
@@ -273,66 +240,45 @@
     -webkit-overflow-scrolling: touch;
 
     // hide head
-    .window-head {
-        display: none;
-    }
-    .window-body {
-        left: 0;
-    }
+    .window-head { display: none; }
+
+    .window-body { left: 0; }
+
     // scrollable
-    .window-content {
-        overflow: auto;
-    }
+    .window-content { overflow: auto; }
 }
 
 // SEARCH APP STYLES
 .io-ox-search {
 
     &.empty {
-        .btn-search {
-            display: block;
-        }
-        .btn-clear {
-            display: none;
-        }
+        .btn-search { display: block; }
+        .btn-clear  { display: none;  }
     }
     &:not(.empty) {
-        .btn-search {
-            display: none;
-        }
-        .btn-clear {
-            display: block;
-        }
+        .btn-search { display: none; }
+        .btn-clear  { display: block; }
     }
 
     &.window-content {
 
-        .row {
-            //margin-bottom: 14px;
-            max-width: 500px;
+        .row { max-width: 500px; }
 
-        }
-
-        ul, ol {
-            margin-bottom: 0;
-        }
+        ul, ol { margin-bottom: 0; }
 
         // section: applications
         .applications {
             border-bottom: 1px solid #ccc;
             padding-bottom: 5px;
             margin-bottom: 6px;
-            .caret {
-                margin-left: 6px;
-            }
+
+            .caret { margin-left: 6px; }
+
             .application {
                 display: inline-block;
                 margin-bottom: 8px;
-                .btn-group {
-                    button {
-                        border-radius: 0;
-                    }
-                }
+
+                .btn-group button { border-radius: 0; }
             }
         }
 
@@ -352,7 +298,6 @@
             padding: 6px 10px;
             border-left: 3px solid #428bca;
         }
-
     }
 }
 
@@ -361,12 +306,13 @@
 // applies for desktop and mobile
 .search-facets {
     // 6px + 8px facet (used when facets are stacked)
-
     margin-bottom: 6px;
+
     li.facet {
         margin-right: 8px;
         margin-bottom: 8px;
         max-width: 470px;
+
         .facet-container {
             background-color: #E6E6E6;
             border: transparent;

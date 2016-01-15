@@ -12,19 +12,16 @@
  */
 
 .star-wrapper {
-
     margin-top: 3px;
-	//don't make the stars too small since those are buttons as well
-	font-size: 18px;
+    //don't make the stars too small since those are buttons as well
+    font-size: 18px;
 
     .rating-star {
         cursor: pointer;
         color: #ccc;
     }
 
-    .active-star {
-	color: #fd0;
-    }
+    .active-star { color: #fd0; }
 
 }
 
@@ -35,11 +32,11 @@
 }
 
 .feedback-button {
-	padding-top: 2px;
-	text-align: center;
-	background-color: #aaa;
-	border: 1px solid #aaa;
-	border-bottom-color: transparent;
+    padding-top: 2px;
+    text-align: center;
+    background-color: #aaa;
+    border: 1px solid #aaa;
+    border-bottom-color: transparent;
     height: 26px;
     width: 90px;
     z-index: 50;
@@ -48,16 +45,12 @@
     top: 80%;
     position: absolute;
     cursor: pointer;
-	border-radius: @border-radius-base @border-radius-base 0 0;
+    border-radius: @border-radius-base @border-radius-base 0 0;
 
-    html.high-contrast & {
-        background-color: @hc-gray;
-    }
+    html.high-contrast & { background-color: @hc-gray; }
 }
 
-.feedback-label {
-	color: #888;
-}
+.feedback-label { color: #888; }
 
 .feedback-userdata-notice {
     margin-top: 6px;

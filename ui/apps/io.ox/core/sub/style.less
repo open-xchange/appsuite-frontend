@@ -25,9 +25,11 @@
                 word-wrap: break-word;
                 max-width: 100%;
             }
+
             .content {
                 line-height: @lineHeight;
                 text-align: left;
+
                 .url {
                     a { word-break: break-all; }
                     a, i { color: #888; }
@@ -35,30 +37,30 @@
                     clear: both;
                     padding-top: 6px;
                 }
+
                 .breadcrumb-view {
                     padding-top: 4px;
                     white-space: pre-wrap;
                 }
+
                 .breadcrumb {
                     background-color: transparent;
                     li { line-height: @lineHeight; }
                 }
+
                 .fa-spin { margin-left: 0.5em; }
             }
-            .widget-controls .remove {
-                height: 45px;
-            }
+
+            .widget-controls .remove { height: 45px; }
 
             &.disabled {
                 .list-title {
                     color: #aaa;
                     font-weight: normal;
                 }
-                .url {
-                    i {
-                        color: #ccc;
-                        font-style: italic;
-                    }
+                .url i {
+                    color: #ccc;
+                    font-style: italic;
                 }
             }
         }

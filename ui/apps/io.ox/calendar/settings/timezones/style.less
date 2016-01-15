@@ -1,30 +1,36 @@
-.io-ox-calendar-settings {
-    .favorite-view {
-        .timezone-abbr {
-            display: inline-block;
-            width: 5em;
-            text-align: left;
-        }
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
 
-        .offset {
-            color: #777;
-            display: inline-block;
-            width: 6em;
-            text-align: left;
-        }
+.io-ox-calendar-settings .favorite-view {
+    .timezone-abbr {
+        display: inline-block;
+        width: 5em;
+        text-align: left;
+    }
 
-        @media all and (max-width: 480px), all and (max-device-width: 480px) {
-            .timezone-abbr {
-                width: 3.5em;
-            }
+    .offset {
+        color: #777;
+        display: inline-block;
+        width: 6em;
+        text-align: left;
+    }
 
-            .offset {
-                width: 5em;
-            }
+    @media all and (max-width: 480px), all and (max-device-width: 480px) {
 
-            button {
-                margin-top: 7px;
-            }
-        }
+        .timezone-abbr { width: 3.5em; }
+
+        .offset { width: 5em; }
+
+        button { margin-top: 7px; }
     }
 }

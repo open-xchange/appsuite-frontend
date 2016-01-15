@@ -78,23 +78,27 @@
 
     html.high-contrast &.io-ox-alert-error {
         background-color: @red;
+
         .icon, .close, .message, a { color: @white; opacity: 1; }
     }
     html.high-contrast &.io-ox-alert-warning {
         background-color: @yellow;
+
         .icon, .close, .message, a { color: @black; opacity: 1; }
     }
     html.high-contrast &.io-ox-alert-success {
         background-color: @green;
+
         .icon, .close, .message, a { color: @black; opacity: 1; }
     }
 
-    &.io-ox-alert-info .icon { color: #08c; }
-    &.io-ox-alert-error .icon { color: #a00; }
+    &.io-ox-alert-info .icon    { color: #08c; }
+    &.io-ox-alert-error .icon   { color: #a00; }
     &.io-ox-alert-warning .icon { color: #fc0; }
     &.io-ox-alert-success .icon { color: @green-light; }
-    &.io-ox-alert-busy .icon { color: #555; }
-    &.io-ox-alert-success { cursor: pointer; }
+    &.io-ox-alert-busy .icon    { color: #555; }
+
+    &.io-ox-alert-success   { cursor: pointer; }
 }
 
 @media (max-width: 480px), (max-device-width: 480px) {

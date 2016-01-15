@@ -14,12 +14,7 @@
  */
 
 /* High contrast */
-html.high-contrast {
-
-    a:not(.btn) {
-        color: @hc-link-color;
-    }
-}
+html.high-contrast a:not(.btn) { color: @hc-link-color; }
 
 body {
     // add a bit of perfection
@@ -39,12 +34,10 @@ body {
     font-style: normal;
 }
 
-textarea, .user-select-text {
-    .user-select(text);
-}
+textarea,
+.user-select-text { .user-select(text); }
 
 textarea { resize: none; }
-
 
 span.hint {
     font-size: 8pt;
@@ -87,9 +80,7 @@ legend, label {
     }
 }
 
-.radio-inline, .checkbox-inline, .checkbox label, .radio label {
-    font-size: @font-size-base;
-}
+.radio-inline, .checkbox-inline, .checkbox label, .radio label { font-size: @font-size-base; }
 
 legend {
     padding-top: 8px;
@@ -126,9 +117,7 @@ legend {
         outline: none;
     }
 
-    i.fa-paperclip:after {
-        content: '\00a0';
-    }
+    i.fa-paperclip:after { content: '\00a0'; }
 }
 
 /* medium large button, used on mobile since the bootstrap large button is to large */
@@ -180,9 +169,8 @@ wbr:after { content: "\00200B" }
     margin-bottom: 20px;
 }
 
-.row {
-    label { padding-top: 8px; }
-}
+.row label { padding-top: 8px; }
+
 /* Bootstrap overrides END */
 
 .clear-title {
@@ -194,17 +182,13 @@ wbr:after { content: "\00200B" }
 
 /* Hopscotch overrides BEGIN */
 div.hopscotch-bubble {
-    * {
-        box-sizing: content-box;
-    }
-    div.hopscotch-bubble-content {
-        margin: 0;
-    }
+    * { box-sizing: content-box; }
+
+    div.hopscotch-bubble-content { margin: 0; }
 }
 /* Hopscotch overrides END */
 
 #background-loader.secure {
-
     background-color: rgba(255, 255, 255, 0);
     /* bug 27760 */
     /* .transition(background-color 0.5 linear); */
@@ -217,9 +201,7 @@ div.hopscotch-bubble {
             position: relative;
             top: 52%;
         }
-
     }
-
 }
 
 .io-ox-busy {
@@ -289,9 +271,7 @@ div.hopscotch-bubble {
     -webkit-tap-highlight-color: transparent;
 }
 
-.blockscroll {
-    overflow: hidden !important;
-}
+.blockscroll { overflow: hidden !important; }
 
 .scrollable-pane {
     position: relative;
@@ -347,67 +327,37 @@ div.hopscotch-bubble {
 .delimiter {
     color: #ccc;
 
-    html.high-contrast & {
-        color: @black;
-    }
+    html.high-contrast & { color: @black; }
 }
 
 .default-content-padding { padding: 20px 30px; }
 
-a.n-more {
-    white-space: nowrap;
-    display: inline-block;
-    margin-right: 1em;
-}
-
-a.nolink {
-    color: @text-color;
-    text-decoration: none;
-}
-
 .border-top {
     border-top: 1px solid @defaultBorderColor;
 
-    html.high-contrast & {
-        border-top: 1px solid @hc-border-color;
-    }
+    html.high-contrast & { border-top: 1px solid @hc-border-color; }
 }
 
 .border-right {
     border-right: 1px solid @defaultBorderColor;
 
-    html.high-contrast & {
-        border-right: 1px solid @hc-border-color;
-    }
+    html.high-contrast & { border-right: 1px solid @hc-border-color; }
 }
 
 .border-bottom {
     border-bottom: 1px solid @defaultBorderColor;
 
-    html.high-contrast & {
-        border-bottom: 1px solid @hc-border-color;
-    }
+    html.high-contrast & { border-bottom: 1px solid @hc-border-color; }
 
 }
 
 .border-left {
     border-left: 1px solid @defaultBorderColor;
 
-    html.high-contrast & {
-        border-left: 1px solid @hc-border-color;
-    }
+    html.high-contrast & { border-left: 1px solid @hc-border-color; }
 }
 
-.touch {
-
-    body {
-        font-size: @font-size-touch;
-    }
-
-    .scrollable .scrollable-pane {
-        /*-webkit-transform: translate3d(0, 0, 0);*/
-    }
-}
+.touch body { font-size: @font-size-touch; }
 
 @media (max-width: 767px) {
     body {
@@ -417,9 +367,7 @@ a.nolink {
 }
 
 @media (max-width: 900px) {
-    .default-content-padding {
-        padding: 26px 13px 26px 13px;
-    }
+    .default-content-padding { padding: 26px 13px 26px 13px; }
 }
 
 .form-spacer { margin-top: 32px; }
@@ -430,12 +378,9 @@ a.nolink {
 // property
 @media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
 
-    .default-content-padding {
-        padding: 5px 10px 5px 10px;
-    }
-    .form-control {
-        padding: 4px;
-    }
+    .default-content-padding { padding: 5px 10px 5px 10px; }
+
+    .form-control {padding: 4px; }
 
     // flat input fields
     textarea.flat, input.flat {
@@ -453,9 +398,7 @@ a.nolink {
 
     }
 
-    .clear-title {
-        font-size: 15pt;
-    }
+    .clear-title { font-size: 15pt; }
 
     #background-loader.secure.block {
         background-color: rgba(0,0,0,.6);
@@ -465,6 +408,4 @@ a.nolink {
 }
 
 /* Override Edge's Clear input behaviour */
-::-ms-clear {
-    display: none;
-}
+::-ms-clear { display: none; }
