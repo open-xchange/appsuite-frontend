@@ -24,7 +24,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
         className: 'modal flex',
 
         events: {
-            'click [data-action]': 'onAction'
+            'click [data-action]': 'onAction',
+            'keydown input:text, input:password': 'onKeypress'
         },
 
         // we use the constructor here not to collide with initialize()
@@ -43,6 +44,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
                     )
                 )
             );
+            // shortcut
+            this.$body = this.$('.modal-body');
             // apply custom width
             if (options.width) this.$('.modal-dialog').width(options.width);
             // respond to window resize
@@ -57,13 +60,19 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
 
         render: function () {
             this.on('resize', this.setMaxHeight.bind(this));
-            return this.invoke('draw', this.$('.modal-body'));
+            return this.invoke('draw', this.$body);
+        },
+
+        setMaxHeight: function () {
+            this.$body.css('max-height', $(window).height() - 160);
         },
 
         open: function () {
             this.render().$el.appendTo('body');
             this.setMaxHeight();
             this.$el.modal('show');
+            // set initial focus
+            this.$(this.options.focus).focus();
             return this;
         },
 
@@ -73,13 +82,18 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             return this;
         },
 
+        build: function (fn) {
+            fn.call(this);
+            return this;
+        },
+
         addButton: function (options) {
             options = _.extend({ placement: 'right', className: 'btn-primary', label: gt('Close'), action: 'cancel' }, options);
-            var fn = options.placement === 'left' ? 'prepend' : 'append';
+            var left = options.placement === 'left', fn = left ? 'prepend' : 'append';
+            if (left) options.className += ' pull-left';
             this.$('.modal-footer')[fn](
                 $('<button class="btn" tabindex="1">')
                     .addClass(options.className)
-                    .addClass('pull-' + options.placement)
                     .attr('data-action', options.action)
                     .text(options.label)
             );
@@ -101,14 +115,40 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
 
         onAction: function (e) {
             var action = $(e.currentTarget).attr('data-action');
-            this.trigger(action);
-            if (action === 'cancel') this.close();
+            this.invokeAction(action);
         },
 
-        setMaxHeight: function () {
-            this.$('.modal-body').css('max-height', $(window).height() - 160);
+        invokeAction: function (action) {
+            this.trigger(action);
+            this.close();
+        },
+
+        onKeypress: function (e) {
+            if (e.which !== 13) return;
+            if (!this.options.enter) return;
+            if (!$(e.target).is('input:text, input:password')) return;
+            this.invokeAction(this.options.enter);
         }
     });
+
+    ModalDialogView.foo = function () {
+        require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+            new ModalDialog({ focus: '.foo', enter: 'woohoo' })
+            .build(function () {
+                this.$body.append(
+                    $('<div class="form-group">').append(
+                        $('<input type="text" class="form-control foo" tabindex="1">')
+                    ),
+                    $('<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>')
+                );
+            })
+            .addCancelButton()
+            .addCloseButton()
+            .addAlternativeButton()
+            .on('all', _.inspect)
+            .open();
+        });
+    };
 
     return ModalDialogView;
 });
