@@ -1420,6 +1420,7 @@ msgstr "日曆視圖"
 msgid "Calendar:"
 msgstr "行事曆:"
 
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
@@ -1430,7 +1431,7 @@ msgstr "行事曆:"
 #: apps/io.ox/calendar/week/perspective.js
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js apps/io.ox/contacts/edit/main.js
-#: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js module:io.ox/core
+#: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js
 #: apps/io.ox/core/export/export.js apps/io.ox/core/folder/actions/add.js
 #: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
@@ -1697,10 +1698,10 @@ msgstr "單點上傳圖像。"
 msgid "Client onboarding"
 msgstr ""
 
-#: apps/io.ox/core/about/about.js module:io.ox/core
-#: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
+#: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/wizard.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -2993,8 +2994,6 @@ msgstr "啟用"
 msgid "Enable for the following addresses"
 msgstr "對下列地址啟用"
 
-#. used as a label for the end time of an appointment, try to keep short because it's used in a compact printing view
-#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "End"
 msgstr "結束"
@@ -3059,6 +3058,12 @@ msgstr "錯誤"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Error log"
 msgstr "錯誤記錄"
+
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "An error occurred while loading the document."
+msgid "Error while loading message content"
+msgstr "載入文件時發生錯誤。"
 
 #: apps/io.ox/mail/actions/invite.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -7178,8 +7183,6 @@ msgstr "標準資料夾"
 msgid "Standard timezone"
 msgstr "標準時區"
 
-#. used as a label for the start time of an appointment, try to keep short because it's used in a compact printing view
-#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
@@ -9548,7 +9551,7 @@ msgstr "已閱讀"
 msgid "select format"
 msgstr "選擇格式"
 
-#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
 #, fuzzy
 #| msgid "show image"
 msgid "show mail"
@@ -10047,9 +10050,6 @@ msgstr "年"
 
 #~ msgid "An error occurred while loading page %1$d."
 #~ msgstr "載入第 %1$d 頁時發生錯誤。"
-
-#~ msgid "An error occurred while loading the document."
-#~ msgstr "載入文件時發生錯誤。"
 
 #~ msgid "An error occurred. (%1$s, %3$s)"
 #~ msgstr "發生錯誤。(%1$s，%3$s)"

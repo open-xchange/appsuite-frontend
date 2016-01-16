@@ -1462,6 +1462,7 @@ msgstr "Kalendāra skats"
 msgid "Calendar:"
 msgstr "Kalendārs:"
 
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
@@ -1472,7 +1473,7 @@ msgstr "Kalendārs:"
 #: apps/io.ox/calendar/week/perspective.js
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js apps/io.ox/contacts/edit/main.js
-#: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js module:io.ox/core
+#: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js
 #: apps/io.ox/core/export/export.js apps/io.ox/core/folder/actions/add.js
 #: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
@@ -1742,10 +1743,10 @@ msgstr "Noklikšķiniet, lai ielādētu attēlu"
 msgid "Client onboarding"
 msgstr ""
 
-#: apps/io.ox/core/about/about.js module:io.ox/core
-#: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
+#: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/wizard.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -3058,8 +3059,6 @@ msgstr "Iespējot"
 msgid "Enable for the following addresses"
 msgstr "Iespējots sekojošām adresēm"
 
-#. used as a label for the end time of an appointment, try to keep short because it's used in a compact printing view
-#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "End"
 msgstr "Beigas"
@@ -3124,6 +3123,12 @@ msgstr "Kļūda"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Error log"
 msgstr "Kļūdu saraksts"
+
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "An error occurred while loading the document."
+msgid "Error while loading message content"
+msgstr "Kļūda pie dokumenta ielādēšanas."
 
 #: apps/io.ox/mail/actions/invite.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -7310,8 +7315,6 @@ msgstr "Standarta mapes"
 msgid "Standard timezone"
 msgstr "Standarta laika josla"
 
-#. used as a label for the start time of an appointment, try to keep short because it's used in a compact printing view
-#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
@@ -9772,7 +9775,7 @@ msgstr "redzēts"
 msgid "select format"
 msgstr "izvēlēties formātu"
 
-#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
 #, fuzzy
 #| msgid "show image"
 msgid "show mail"
@@ -10291,9 +10294,6 @@ msgstr "yyyy"
 
 #~ msgid "An error occurred while loading page %1$d."
 #~ msgstr "Kļūda pie lapas %1$d ielādes."
-
-#~ msgid "An error occurred while loading the document."
-#~ msgstr "Kļūda pie dokumenta ielādēšanas."
 
 #~ msgid "An error occurred. (%1$s, %3$s)"
 #~ msgstr "Reģistrēta kļūda. (%1$s, %3$s)"

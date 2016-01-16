@@ -1442,6 +1442,7 @@ msgstr "Vista de calendario"
 msgid "Calendar:"
 msgstr "Calendario:"
 
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
@@ -1452,7 +1453,7 @@ msgstr "Calendario:"
 #: apps/io.ox/calendar/week/perspective.js
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js apps/io.ox/contacts/edit/main.js
-#: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js module:io.ox/core
+#: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js
 #: apps/io.ox/core/export/export.js apps/io.ox/core/folder/actions/add.js
 #: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
@@ -1722,10 +1723,10 @@ msgstr "Presione para subir una imagen"
 msgid "Client onboarding"
 msgstr ""
 
-#: apps/io.ox/core/about/about.js module:io.ox/core
-#: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
+#: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/wizard.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -3038,8 +3039,6 @@ msgstr "Activar"
 msgid "Enable for the following addresses"
 msgstr "Activado para las siguientes direcciones"
 
-#. used as a label for the end time of an appointment, try to keep short because it's used in a compact printing view
-#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "End"
 msgstr "Fin"
@@ -3104,6 +3103,12 @@ msgstr "Error"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Error log"
 msgstr "Registro de errores"
+
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "An error occurred while loading the document."
+msgid "Error while loading message content"
+msgstr "Se produjo un error durante la carga del documento."
 
 #: apps/io.ox/mail/actions/invite.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -7302,8 +7307,6 @@ msgstr "Carpetas estándar"
 msgid "Standard timezone"
 msgstr "Zona horaria estándar"
 
-#. used as a label for the start time of an appointment, try to keep short because it's used in a compact printing view
-#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
@@ -9762,7 +9765,7 @@ msgstr "visto"
 msgid "select format"
 msgstr "seleccionar formato"
 
-#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
 #, fuzzy
 #| msgid "show image"
 msgid "show mail"
@@ -11360,9 +11363,6 @@ msgstr "yyyy"
 
 #~ msgid "An error occurred while loading page %1$d."
 #~ msgstr "Se produjo un error al cargar la página %1$d."
-
-#~ msgid "An error occurred while loading the document."
-#~ msgstr "Se produjo un error durante la carga del documento."
 
 #~ msgid "An error occurred. (%1$s, %3$s)"
 #~ msgstr "Ha ocurrido un error. (%1$s, %3$s)"

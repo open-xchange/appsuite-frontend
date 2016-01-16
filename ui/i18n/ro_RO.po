@@ -1464,6 +1464,7 @@ msgstr "Vedere calendar"
 msgid "Calendar:"
 msgstr "Calendar:"
 
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
@@ -1474,7 +1475,7 @@ msgstr "Calendar:"
 #: apps/io.ox/calendar/week/perspective.js
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js apps/io.ox/contacts/edit/main.js
-#: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js module:io.ox/core
+#: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js
 #: apps/io.ox/core/export/export.js apps/io.ox/core/folder/actions/add.js
 #: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
@@ -1746,10 +1747,10 @@ msgstr "Apăsați aici pentru a încărca imaginea"
 msgid "Client onboarding"
 msgstr ""
 
-#: apps/io.ox/core/about/about.js module:io.ox/core
-#: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
+#: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/wizard.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -3061,8 +3062,6 @@ msgstr "Activează"
 msgid "Enable for the following addresses"
 msgstr "Activat pentru următoarele adrese"
 
-#. used as a label for the end time of an appointment, try to keep short because it's used in a compact printing view
-#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "End"
 msgstr "Sfârșit"
@@ -3127,6 +3126,12 @@ msgstr "Eroare"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Error log"
 msgstr "Jurnal erori"
+
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "An error occurred while loading the document."
+msgid "Error while loading message content"
+msgstr "A apărut o eroare la încărcarea documentului."
 
 #: apps/io.ox/mail/actions/invite.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -7317,8 +7322,6 @@ msgstr "Dosare standard"
 msgid "Standard timezone"
 msgstr "Fus orar standard"
 
-#. used as a label for the start time of an appointment, try to keep short because it's used in a compact printing view
-#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
@@ -9790,7 +9793,7 @@ msgstr "vizualizat"
 msgid "select format"
 msgstr "selectează formatul"
 
-#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
 #, fuzzy
 #| msgid "show image"
 msgid "show mail"
@@ -10321,9 +10324,6 @@ msgstr "aaaa"
 
 #~ msgid "An error occurred while loading page %1$d."
 #~ msgstr "A apărut o eroare la încărcarea paginii %1$d."
-
-#~ msgid "An error occurred while loading the document."
-#~ msgstr "A apărut o eroare la încărcarea documentului."
 
 #~ msgid "An error occurred. (%1$s, %3$s)"
 #~ msgstr "A apărut o eroare. (%1$s, %3$s)"

@@ -184,25 +184,39 @@ msgstr ""
 msgid "Please enter a value"
 msgstr ""
 
-#: apps/io.ox/calendar/actions.js
-#: module:io.ox/calendar
-msgid "Do you want the appointments printed in detail or as a compact list?"
-msgstr ""
-
-#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
-#: apps/io.ox/calendar/actions.js
-#: module:io.ox/calendar
-msgid "Detailed"
-msgstr ""
-
-#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
-#: apps/io.ox/calendar/actions.js
-#: module:io.ox/calendar
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/backbone/views/modal.js
+#: module:io.ox/core
+#: apps/io.ox/core/about/about.js
+#: apps/io.ox/core/folder/actions/properties.js
+#: apps/io.ox/core/folder/tree.js
+#: apps/io.ox/core/main.js
+#: apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/wizard/registry.js
+#: module:io.ox/core/wizard
+#: apps/io.ox/editor/main.js
+#: module:io.ox/editor
+#: apps/io.ox/files/actions/add-storage-account.js
+#: module:io.ox/files
+#: apps/io.ox/files/actions/showlink.js
+#: apps/io.ox/files/mediaplayer.js
+#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/upload/view.js
+#: apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/actions/source.js
 #: module:io.ox/mail
-msgid "Compact"
+#: apps/io.ox/mail/statistics.js
+#: apps/plugins/upsell/simple-wizard/register.js
+#: module:plugins/upsell/simple-wizard
+msgid "Close"
 msgstr ""
 
+#: apps/io.ox/backbone/views/modal.js
+#: module:io.ox/core
 #: apps/io.ox/calendar/actions.js
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
@@ -222,7 +236,6 @@ msgstr ""
 #: apps/io.ox/contacts/edit/main.js
 #: apps/io.ox/contacts/main.js
 #: apps/io.ox/core/desktop.js
-#: module:io.ox/core
 #: apps/io.ox/core/export/export.js
 #: apps/io.ox/core/folder/actions/add.js
 #: apps/io.ox/core/folder/actions/archive.js
@@ -299,6 +312,25 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js
 #: apps/plugins/portal/xing/register.js
 msgid "Cancel"
+msgstr ""
+
+#: apps/io.ox/calendar/actions.js
+#: module:io.ox/calendar
+msgid "Do you want the appointments printed in detail or as a compact list?"
+msgstr ""
+
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js
+#: module:io.ox/calendar
+msgid "Detailed"
+msgstr ""
+
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js
+#: module:io.ox/calendar
+#: apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
+msgid "Compact"
 msgstr ""
 
 #: apps/io.ox/calendar/actions.js
@@ -1653,24 +1685,6 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js
 msgid "%1$s (Tentative)"
-msgstr ""
-
-#. used as a label for the start time of an appointment, try to keep short because it's used in a compact printing view
-#: apps/io.ox/calendar/print-compact.js
-#: module:io.ox/calendar
-#: apps/io.ox/mail/vacationnotice/settings/model.js
-#: module:io.ox/mail
-#: apps/io.ox/tasks/print.js
-#: module:io.ox/tasks
-msgid "Start"
-msgstr ""
-
-#. used as a label for the end time of an appointment, try to keep short because it's used in a compact printing view
-#: apps/io.ox/calendar/print-compact.js
-#: module:io.ox/calendar
-#: apps/io.ox/mail/vacationnotice/settings/model.js
-#: module:io.ox/mail
-msgid "End"
 msgstr ""
 
 #. text of an user list that shows the names of presenting user and participants.
@@ -3342,36 +3356,6 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 msgid "Server version"
-msgstr ""
-
-#: apps/io.ox/core/about/about.js
-#: module:io.ox/core
-#: apps/io.ox/core/folder/actions/properties.js
-#: apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js
-#: apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/core/tk/wizard.js
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer
-#: apps/io.ox/core/viewer/views/toolbarview.js
-#: apps/io.ox/core/wizard/registry.js
-#: module:io.ox/core/wizard
-#: apps/io.ox/editor/main.js
-#: module:io.ox/editor
-#: apps/io.ox/files/actions/add-storage-account.js
-#: module:io.ox/files
-#: apps/io.ox/files/actions/showlink.js
-#: apps/io.ox/files/mediaplayer.js
-#: apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/upload/view.js
-#: apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/actions/source.js
-#: module:io.ox/mail
-#: apps/io.ox/mail/statistics.js
-#: apps/plugins/upsell/simple-wizard/register.js
-#: module:plugins/upsell/simple-wizard
-msgid "Close"
 msgstr ""
 
 #: apps/io.ox/core/api/attachment.js
@@ -8238,6 +8222,11 @@ msgstr ""
 msgid "Email from %1$s: %2$s"
 msgstr ""
 
+#: apps/io.ox/mail/detail/view.js
+#: module:io.ox/mail
+msgid "Error while loading message content"
+msgstr ""
+
 #: apps/io.ox/mail/import.js
 #: module:io.ox/mail
 msgid "Mail has been imported"
@@ -8967,6 +8956,18 @@ msgstr ""
 #: apps/io.ox/mail/vacationnotice/settings/model.js
 #: module:io.ox/mail
 msgid "Email addresses"
+msgstr ""
+
+#: apps/io.ox/mail/vacationnotice/settings/model.js
+#: module:io.ox/mail
+#: apps/io.ox/tasks/print.js
+#: module:io.ox/tasks
+msgid "Start"
+msgstr ""
+
+#: apps/io.ox/mail/vacationnotice/settings/model.js
+#: module:io.ox/mail
+msgid "End"
 msgstr ""
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js
@@ -10195,6 +10196,11 @@ msgstr ""
 
 #: apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
+msgid "show mail"
+msgstr ""
+
+#: apps/io.ox/tasks/util.js
+#: module:io.ox/tasks
 msgid "Overdue"
 msgstr ""
 
@@ -10206,11 +10212,6 @@ msgstr ""
 #: apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
 msgid "Medium priority"
-msgstr ""
-
-#: apps/io.ox/tasks/view-detail.js
-#: module:io.ox/tasks
-msgid "show mail"
 msgstr ""
 
 #. %1$s due date of a task
