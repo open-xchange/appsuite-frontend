@@ -16,8 +16,19 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
     'use strict';
 
     //
-    // Extensible view.
+    // Model Dialog View.
     //
+    // options:
+    // - async: call busy() instead of close() when invoking an action (except "cancel")
+    // - container: parent DOM element of the dialog
+    // - enter: this action is triggered on <enter>
+    // - focus: set initial focus on this element
+    // - help: TBD
+    // - keyboard: close popup on <escape>
+    // - maximize: popup uses full height
+    // - point: extension point id to render content
+    // - title: dialog title
+    // - width: dialog width
 
     var ModalDialogView = ExtensibleView.extend({
 
@@ -31,54 +42,74 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
         // we use the constructor here not to collide with initialize()
         constructor: function (options) {
             // ensure options
-            options = options || {};
+            options = _.extend({ container: 'body', keyboard: true }, options);
             // the original constructor will call initialize()
             ExtensibleView.prototype.constructor.apply(this, arguments);
             // add structure now
-            this.$el.attr({ tabindex: -1, role: 'dialog' }).append(
+            var title_id = _.uniqueId('title');
+            this.$el.attr({ tabindex: -1, role: 'dialog', 'aria-labelledby': title_id }).append(
                 $('<div class="modal-dialog">').append(
                     $('<div class="modal-content">').append(
-                        $('<div class="modal-header"><h4 class="modal-title">Horst</h4></div>'),
-                        $('<div class="modal-body">'),
+                        $('<div class="modal-header"><h4 class="modal-title"></h4></div>'),
+                        this.$body = $('<div class="modal-body">'),
                         $('<div class="modal-footer">')
                     )
                 )
             );
-            // shortcut
-            this.$body = this.$('.modal-body');
+            // set title via options
+            this.$('.modal-title').attr('id', title_id);
+            this.setTitle(options.title);
             // apply custom width
-            if (options.width) this.$('.modal-dialog').width(options.width);
-            // respond to window resize
-            function onResize() {
-                this.trigger('resize');
-            }
-            $(window).on('resize orientationchange', $.proxy(onResize, this));
-            this.on('dispose', function () {
-                $(window).off('resize orientationchange', onResize);
-            });
+            this.$('.modal-dialog').width(options.width);
+            // maximize?
+            this.$el.toggleClass('maximize', options.maximize);
         },
 
         render: function () {
-            this.on('resize', this.setMaxHeight.bind(this));
             return this.invoke('draw', this.$body);
         },
 
-        setMaxHeight: function () {
-            this.$body.css('max-height', $(window).height() - 160);
+        setTitle: function (title) {
+            this.$('.modal-title').text(title || '\u00A0');
         },
 
         open: function () {
-            this.render().$el.appendTo('body');
-            this.setMaxHeight();
-            this.$el.modal('show');
+            var o = this.options;
+            this.render().$el.appendTo(o.container);
+            this.$el.modal({ keyboard: o.keyboard }).modal('show');
+            this.trigger('open');
             // set initial focus
-            this.$(this.options.focus).focus();
+            this.previousFocus = $(document.activeElement);
+            this.$(o.focus).focus();
             return this;
         },
 
         close: function () {
+            this.trigger('close');
             this.$el.modal('hide');
+            if (this.previousFocus) this.previousFocus.focus();
             this.$el.remove();
+            return this;
+        },
+
+        busy: function () {
+            // disable all form elements; mark already disabled elements via CSS class
+            this.$(':input').each(function () {
+                $(this).toggleClass('disabled', $(this).prop('disabled')).prop('disabled', true);
+            });
+            this.activeElement = $(document.activeElement);
+            this.$body.css('opacity', 0.50);
+            this.$el.focus();
+            return this;
+        },
+
+        idle: function () {
+            // enable all form elements
+            this.$(':input').each(function () {
+                $(this).prop('disabled', $(this).hasClass('disabled')).removeClass('disabled');
+            });
+            this.$body.css('opacity', '');
+            if (this.activeElement) this.activeElement.focus();
             return this;
         },
 
@@ -88,14 +119,14 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
         },
 
         addButton: function (options) {
-            options = _.extend({ placement: 'right', className: 'btn-primary', label: gt('Close'), action: 'cancel' }, options);
-            var left = options.placement === 'left', fn = left ? 'prepend' : 'append';
-            if (left) options.className += ' pull-left';
+            var o = _.extend({ placement: 'right', className: 'btn-primary', label: gt('Close'), action: 'cancel' }, options),
+                left = o.placement === 'left', fn = left ? 'prepend' : 'append';
+            if (left) o.className += ' pull-left';
             this.$('.modal-footer')[fn](
                 $('<button class="btn" tabindex="1">')
-                    .addClass(options.className)
-                    .attr('data-action', options.action)
-                    .text(options.label)
+                    .addClass(o.className)
+                    .attr('data-action', o.action)
+                    .text(o.label)
             );
             return this;
         },
@@ -109,18 +140,18 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
         },
 
         addAlternativeButton: function (options) {
-            options = _.extend({ placement: 'left', className: 'btn-default', label: 'Alt', action: 'alt' }, options);
-            return this.addButton(options);
+            return this.addButton(
+                _.extend({ placement: 'left', className: 'btn-default', label: 'Alt', action: 'alt' }, options)
+            );
         },
 
         onAction: function (e) {
-            var action = $(e.currentTarget).attr('data-action');
-            this.invokeAction(action);
+            this.invokeAction($(e.currentTarget).attr('data-action'));
         },
 
         invokeAction: function (action) {
             this.trigger(action);
-            this.close();
+            if (this.options.async && action !== 'cancel') this.busy(); else this.close();
         },
 
         onKeypress: function (e) {
@@ -133,13 +164,14 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
 
     ModalDialogView.foo = function () {
         require(['io.ox/backbone/views/modal'], function (ModalDialog) {
-            new ModalDialog({ focus: '.foo', enter: 'woohoo' })
+            new ModalDialog({ enter: 'woohoo', focus: '.foo', maximize: true, title: 'Example' })
             .build(function () {
                 this.$body.append(
                     $('<div class="form-group">').append(
+                        $('<label>').text('Label'),
                         $('<input type="text" class="form-control foo" tabindex="1">')
                     ),
-                    $('<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>')
+                    $('<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>')
                 );
             })
             .addCancelButton()

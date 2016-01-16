@@ -283,10 +283,8 @@
     overflow: hidden;
 
     .modal-dialog {
-        margin: 16px 0;
-    }
-
-    .modal-content {
+        margin: 0;
+        padding: 16px 0;
         width: 500px;
     }
 
@@ -303,10 +301,26 @@
 
     .modal-header, .modal-body, .modal-footer {
         padding: 16px;
+        flex-grow: 0;
     }
 
     .modal-footer {
         .btn.pull-left { margin-right: 8px; }
         .btn.pull-right { margin-left: 8px; }
+    }
+
+    &.maximize {
+        .modal-dialog {
+            height: 100%;
+        }
+        .modal-content {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            height: 100%;
+        }
+        .modal-body {
+            flex-grow: 1;
+        }
     }
 }
