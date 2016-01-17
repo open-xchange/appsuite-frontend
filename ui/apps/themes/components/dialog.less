@@ -288,10 +288,14 @@
         width: 500px;
     }
 
+    .modal-content {
+        border: 0;
+    }
+
     .modal-title {
         font-size: 18px;
         line-height: 24px;
-        margin: -2px 0 2px 0;
+        margin: -3px 0 2px 0;
     }
 
     .modal-body {
@@ -321,6 +325,20 @@
         }
         .modal-body {
             flex-grow: 1;
+        }
+    }
+
+    .modal-header.help {
+        .modal-title {
+            margin-right: 40px;
+        }
+        .io-ox-context-help {
+            padding: 16px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-size: 18px;
+            line-height: 24px;
         }
     }
 }

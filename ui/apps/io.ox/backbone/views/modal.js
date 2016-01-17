@@ -23,7 +23,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
     // - container: parent DOM element of the dialog
     // - enter: this action is triggered on <enter>
     // - focus: set initial focus on this element
-    // - help: TBD
+    // - help: link to online help article
     // - keyboard: close popup on <escape>
     // - maximize: popup uses full height
     // - point: extension point id to render content
@@ -47,30 +47,32 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             ExtensibleView.prototype.constructor.apply(this, arguments);
             // add structure now
             var title_id = _.uniqueId('title');
-            this.$el.attr({ tabindex: -1, role: 'dialog', 'aria-labelledby': title_id }).append(
-                $('<div class="modal-dialog">').append(
-                    $('<div class="modal-content">').append(
-                        $('<div class="modal-header"><h4 class="modal-title"></h4></div>'),
-                        this.$body = $('<div class="modal-body">'),
-                        $('<div class="modal-footer">')
+            this.$el
+                .toggleClass('maximize', options.maximize)
+                .attr({ tabindex: -1, role: 'dialog', 'aria-labelledby': title_id })
+                .append(
+                    $('<div class="modal-dialog">').width(options.width).append(
+                        $('<div class="modal-content">').append(
+                            $('<div class="modal-header">').append(
+                                $('<h4 class="modal-title">').attr('id', title_id).text(options.title || '\u00A0')
+                            ),
+                            this.$body = $('<div class="modal-body">'),
+                            $('<div class="modal-footer">')
+                        )
                     )
-                )
-            );
-            // set title via options
-            this.$('.modal-title').attr('id', title_id);
-            this.setTitle(options.title);
-            // apply custom width
-            this.$('.modal-dialog').width(options.width);
-            // maximize?
-            this.$el.toggleClass('maximize', options.maximize);
+                );
+            // add help icon?
+            if (options.help) {
+                require(['io.ox/backbone/mini-views/help'], function (HelpView) {
+                    this.$('.modal-header').addClass('help').append(
+                        new HelpView({ href: options.help }).render().$el
+                    );
+                }.bind(this));
+            }
         },
 
         render: function () {
             return this.invoke('draw', this.$body);
-        },
-
-        setTitle: function (title) {
-            this.$('.modal-title').text(title || '\u00A0');
         },
 
         open: function () {
@@ -118,6 +120,14 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             return this;
         },
 
+        // Add a button
+        //
+        // options:
+        // - placement: 'left' or 'right' (default)
+        // - className: 'btn-primary' (default) or 'btn-default'
+        // - label: Button label
+        // - action: Button action
+        //
         addButton: function (options) {
             var o = _.extend({ placement: 'right', className: 'btn-primary', label: gt('Close'), action: 'cancel' }, options),
                 left = o.placement === 'left', fn = left ? 'prepend' : 'append';
@@ -164,7 +174,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
 
     ModalDialogView.foo = function () {
         require(['io.ox/backbone/views/modal'], function (ModalDialog) {
-            new ModalDialog({ enter: 'woohoo', focus: '.foo', maximize: true, title: 'Example' })
+            new ModalDialog({ enter: 'woohoo', focus: '.foo', help: 'hurz', maximize: true, title: 'Example' })
             .build(function () {
                 this.$body.append(
                     $('<div class="form-group">').append(
