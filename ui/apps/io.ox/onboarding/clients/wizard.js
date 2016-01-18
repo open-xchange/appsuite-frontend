@@ -52,6 +52,7 @@ define('io.ox/onboarding/clients/wizard', [
                                     $('<a href="#" tabindex="1" class="link box">')
                                     // apply disabled style?
                                     .addClass(obj.enabled ? '' : 'disabled')
+                                    .append(obj.enabled ? '' : $('<div class="premium">').text(gt('Premium')))
                                     .append(
                                         $('<div class="icon-list">').append(addIcons(obj.icon)),
                                         $('<div class="title">').text(obj.title || obj.name || obj.id || '\xa0')
