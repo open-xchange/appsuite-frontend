@@ -68,14 +68,16 @@
         .options {
             .mixin-unstyled-list;
             display: flex;
-            align-items: flex-end;
-
             white-space: nowrap;
+            // auto expand to full height
+            display: flex;
+            align-items: stretch;
 
             .option {
                 margin: 0 16px 0 0;
-                display: inline-block;
+                display: inline-flex;
                 max-width: 146px;
+                white-space: normal;
 
                 .premium {
                     position: absolute;
@@ -92,6 +94,7 @@
 
                 .link {
                     max-width: 144px;
+                    max-height: 200px;
                     border: 1px solid rgba(0, 0, 0, 0.10);
                     display: inline-block;
                     outline: 0;
@@ -143,8 +146,8 @@
                         text-align: center;
                         line-height: 24px;
                         margin-bottom: 8px;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
+                        // overflow: hidden;
+                        // text-overflow: ellipsis;
                         padding: 0 8px;
                         text-decoration: none;
                     }
@@ -152,8 +155,9 @@
 
                 // back buttona
                 &.centered {
+                    .link.box { display: flex; }
                     //.icon-list { margin: 18px 24px 18px 24px; }
-                    .title { line-height: 0; }
+                    .title { display: none; }
                     .icon-list { margin: 18px 0}
                 }
 
