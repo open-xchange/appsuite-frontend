@@ -14,8 +14,9 @@
 define('io.ox/onboarding/clients/config', [
     'io.ox/onboarding/clients/api',
     'io.ox/core/api/user',
-    'io.ox/onboarding/clients/defaults'
-], function (api, userAPI, defaults) {
+    'io.ox/onboarding/clients/defaults',
+    'io.ox/onboarding/clients/codes'
+], function (api, userAPI, defaults, codes) {
 
     'use strict';
 
@@ -142,7 +143,9 @@ define('io.ox/onboarding/clients/config', [
             var user = this.user;
             if (!user) return;
             return user.cellular_telephone1 || user.cellular_telephone2;
-        }
+        },
+
+        getCodes: codes.get
     };
 
     return config;

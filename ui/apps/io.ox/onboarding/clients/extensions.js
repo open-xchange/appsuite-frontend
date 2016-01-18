@@ -106,13 +106,14 @@ define('io.ox/onboarding/clients/extensions', [
             var target = $(e.target),
                 action = target.closest('.action'),
                 container = action.closest('.actions');
-            // does not collapse when only action visible
             if (container.find('.action:visible').length <= 1) {
+                // does not collapse when only action visible
                 action.addClass('expanded');
             } else {
                 action.toggleClass('expanded');
             }
-            action.closest('.scenario-action').find('.action').not(action).removeClass('expanded');
+            // there can only be one
+            action.closest('.actions-scenario').find('.action').not(action).removeClass('expanded');
         }
 
     });
@@ -186,23 +187,47 @@ define('io.ox/onboarding/clients/extensions', [
 
     var NumberActionView = Backbone.View.extend({
 
-        events: {
-            'click .btn': '_onClick'
-        },
+        tagName: 'fieldset',
+        className: 'action form-group',
+        events: { 'click .btn': '_onClick' },
 
         initialize: function (action, options) {
             _.extend(this, action);
             this.model = options.baton.model;
             this.config = options.baton.config;
-            // root
-            this.setElement(
-                $('<fieldset class="action form-group">')
-                .attr('data-action', action.id)
-            );
+            this.$el.attr('data-action', action.id);
+        },
+
+        _input: function () {
+            var value = this.model.get('sms') || this.config.getUserMobile();
+            return new mini.InputView({ name: 'sms', type: 'tel', model: this.model }).render()
+                    .$el
+                    .removeClass('form-control')
+                    .addClass('field form-control')
+                    .attr('title', this.name)
+                    .attr('list', 'addresses')
+                    .attr('placeholder', gt('Cell phone'))
+                    .val(value).trigger('change');
+        },
+
+        _select: function () {
+            var select = new mini.SelectView({
+                    name: 'code',
+                    model: this.model,
+                    list: this.config.getCodes()
+                }),
+                standard = 'DE';
+            // adjust node
+            select.render().$el
+                .removeClass('form-control')
+                .addClass('select form-control')
+                .attr('title', this.name)
+                .attr('list', 'addresses')
+                .val(this.model.get('code') || this.config.getCodes(standard).value).trigger('change');
+            return select;
         },
 
         render: function () {
-            var form;
             this.$el.empty()
                 .append(
                     // title
@@ -210,41 +235,26 @@ define('io.ox/onboarding/clients/extensions', [
                         .append(
                             $('<i class="fa fa-fw fa-chevron-right">'),
                             $('<i class="fa fa-fw fa-chevron-down">'),
-                            $.txt(gt('SMS'))
+                            $.txt(gt('Short Message (SMS)'))
                         ),
                     $('<span class="content">').append(
                         // description
                         $('<div class="description">')
                             .text(gt('Send me the profile data by SMS.')),
                         // form
-                        form = $('<div class="data">'),
-                        // action
-                        $('<button>')
-                            .addClass('btn btn-primary')
-                            .text(gt('Send'))
+                        $('<div class="interaction">').append(
+                            $('<form class="form-inline">').append(
+                                $('<div class="row">').append(
+                                    //$('<label class="control-label">').text(gt('Phone Number')),
+                                    this._select().$el,
+                                    this._input(),
+                                    $('<button class="btn btn-primary">').text(gt('Send'))
+                                )
+                            )
+                        )
                     )
                 );
-            var value = this.model.get('number'),
-                node = new mini.InputView({ name: 'number', model: this.model }).render()
-                        .$el
-                        .removeClass('form-control')
-                        .addClass('field form-control')
-                        .attr('title', this.name)
-                        .attr('list', 'addresses')
-                        .val(value || '');
 
-            var group = $('<div class="row">');
-            group.append(
-                $('<label class="control-label col-sm-4">').text(gt('SMS')),
-                $('<div class="col-sm-7">').append(
-                    node,
-                    $('<datalist id="addresses">').append(
-                        $('<option>').attr('value', this.config.getUserMobile())
-                    )
-                )
-            );
-            if (value) node.val(value);
-            form.append(group);
             return this;
         },
 
@@ -253,7 +263,8 @@ define('io.ox/onboarding/clients/extensions', [
             var scenario = this.config.getScenarioCID(),
                 action = this.id,
                 data = {
-                    number: this.model.get('number')
+                    sms: this.model.get('sms'),
+                    code: this.model.get('code')
                 };
             // call
             api.execute(scenario, action, data).always(notify);
@@ -277,8 +288,18 @@ define('io.ox/onboarding/clients/extensions', [
             );
         },
 
+        _input: function () {
+            var value = this.model.get('email') || this.config.getUserMail();
+            return new mini.InputView({ name: 'email', model: this.model }).render()
+                .$el
+                .removeClass('form-control')
+                .addClass('field form-control')
+                .attr('title', this.name)
+                .attr('list', 'addresses')
+                .val(value || '').trigger('change');
+        },
+
         render: function () {
-            var group;
             this.$el.empty()
                 .append(
                     // title
@@ -295,30 +316,18 @@ define('io.ox/onboarding/clients/extensions', [
                         // form
                         $('<div class="interaction">').append(
                             $('<form class="form-inline">').append(
-                                group = $('<div class="row">')
+                                $('<div class="row">').append(
+                                    //$('<label class="control-label">').text(gt('Email')),
+                                    this._input(),
+                                    // action
+                                    $('<button>')
+                                        .addClass('btn btn-primary')
+                                        .text(gt('Send'))
+                                )
                             )
                         )
                     )
                 );
-            var value = this.model.get('email') || this.config.getUserMail(),
-                input = new mini.InputView({ name: 'email', model: this.model }).render()
-                        .$el
-                        .removeClass('form-control')
-                        .addClass('field form-control')
-                        .attr('title', this.name)
-                        .attr('list', 'addresses')
-                        .val(value || '');
-
-            group.append(
-                $('<label class="control-label">').text(gt('Email')),
-                input,
-                // action
-                $('<button>')
-                    .addClass('btn btn-primary')
-                    .text(gt('Send'))
-            );
-            if (value) input.val(value);
-
             return this;
         },
 
@@ -382,6 +391,7 @@ define('io.ox/onboarding/clients/extensions', [
             });
         }
     });
+
     var AppActionView = Backbone.View.extend({
 
         events: {

@@ -171,6 +171,7 @@
             .action {
                 // accordeon: less space when collapsed
                 margin-bottom: 0;
+                margin-top: 4px;
 
                 .section-title {
                     font-size: 14px;
@@ -187,6 +188,10 @@
                     .fa-chevron-down { display: none; }
                 }
 
+                &[data-action="sms"] {
+                    .content .interaction .field { width: 30%; }
+                }
+
                 .content {
                     padding: 2px 0;
                     display: none;
@@ -195,15 +200,18 @@
                         margin-bottom: 5px;
                     }
 
-                    .btn {
-                        float: right;
-                    }
+                    // .btn {
+                    //     float: right;
+                    // }
 
                     .interaction {
-                        label, input { margin-right: 8px; }
-                        input { width: 60%; }
-                        button { float: right; }
-                        .row { margin-right: -10px; }
+                        label, input, select { margin-right: 8px; }
+                        .field { width: 50%; }
+                        .select { width: 20%; }
+                        .row {
+                            margin-right: -10px;
+                            padding: 0 0 0 15px;
+                        }
                         .form-inline>* { padding-right: 8px; }
                     }
 
@@ -212,7 +220,6 @@
                     .control-label {
                         margin-top: 4px;
                         margin-bottom: 4px;
-                        padding: 0 0 0 15px;
                         .display-label { text-align: right; }
                     }
 
