@@ -30,6 +30,14 @@ define('io.ox/onboarding/clients/extensions', [
         return yell('info', resp);
     }
 
+    var util = {
+        clickCommon: function (e) {
+            var target = $(e.target);
+            target.addClass('disabled');//.hide();
+            target.after($('<i class="fa fa-check button-clicked"></i>'));
+        }
+    };
+
     var ActionsView = Backbone.View.extend({
 
         events: {
@@ -267,6 +275,7 @@ define('io.ox/onboarding/clients/extensions', [
                     code: this.model.get('code')
                 };
             // call
+            util.clickCommon(e);
             api.execute(scenario, action, data).always(notify);
         }
     });
@@ -339,6 +348,7 @@ define('io.ox/onboarding/clients/extensions', [
                     email: this.model.get('email')
                 };
             // call
+            util.clickCommon(e);
             api.execute(scenario, action, data).always(notify);
         }
     });
@@ -386,6 +396,7 @@ define('io.ox/onboarding/clients/extensions', [
         _onClick: function (e) {
             e.preventDefault();
             var url = api.getUrl(this.config.getScenarioCID(), this.id);
+            util.clickCommon(e);
             require(['io.ox/core/download'], function (download) {
                 download.url(url);
             });
@@ -446,6 +457,7 @@ define('io.ox/onboarding/clients/extensions', [
 
         _onClick: function (e) {
             e.preventDefault();
+            util.clickCommon(e);
             window.open(this.link);
         }
     });
