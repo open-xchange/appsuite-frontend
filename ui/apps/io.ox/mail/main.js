@@ -936,7 +936,9 @@ define('io.ox/mail/main',
                 // resolve thread
                 baton.data = api.resolve(baton.data, app.props.get('thread'));
                 // call action
-                actions.invoke('io.ox/mail/actions/move', null, baton);
+                actions.check('io.ox/mail/actions/move', baton.data).done(function () {
+                    actions.invoke('io.ox/mail/actions/move', null, baton);
+                });
             });
         },
 
@@ -951,7 +953,10 @@ define('io.ox/mail/main',
                 // resolve thread
                 baton.data = api.resolve(baton.data, app.props.get('thread'));
                 // call action
-                actions.invoke('io.ox/mail/actions/delete', null, baton);
+                // check if action can be called
+                actions.check('io.ox/mail/actions/delete', baton.data).done(function () {
+                    actions.invoke('io.ox/mail/actions/delete', null, baton);
+                });
             });
         },
 
