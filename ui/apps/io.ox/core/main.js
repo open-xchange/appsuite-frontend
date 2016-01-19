@@ -907,6 +907,26 @@ define('io.ox/core/main', [
         });
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'onboarding',
+            index: 120,
+            draw: function () {
+
+                this.append(
+                    $('<li role="presentation">').append(
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="onboarding" role="menuitem" tabindex="-1">')
+                        .text(gt('Connect your Device'))
+                    )
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        require(['io.ox/onboarding/clients/wizard'], function (wizard) {
+                            wizard.run();
+                        });
+                    })
+                );
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'change-user-data',
             index: 150,
             draw: function () {
@@ -945,26 +965,6 @@ define('io.ox/core/main', [
                         e.preventDefault();
                         require(['plugins/portal/userSettings/register'], function (userSettings) {
                             userSettings.changePassword();
-                        });
-                    })
-                );
-            }
-        });
-
-        ext.point('io.ox/core/topbar/right/dropdown').extend({
-            id: 'onboarding',
-            index: 190,
-            draw: function () {
-
-                this.append(
-                    $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" data-action="onboarding" role="menuitem" tabindex="-1">')
-                        .text(gt('Connect your Device'))
-                    )
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        require(['io.ox/onboarding/clients/wizard'], function (wizard) {
-                            wizard.run();
                         });
                     })
                 );
