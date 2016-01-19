@@ -64,6 +64,11 @@ define('io.ox/presenter/main', [
                         if (lastState && lastState.isPresenter) {
                             app.rtConnection.startPresentation({ activeSlide: lastState.slideId || 0 });
                         }
+                        // join a runnig presentation if Presenter was started from a deep link
+                        if (app.deepLink && app.rtModel.canJoin()) {
+                            app.mainView.notifyPresentationJoin();
+                            app.mainView.joinPresentation();
+                        }
                     }
 
                     // RT connect error handler
@@ -167,6 +172,7 @@ define('io.ox/presenter/main', [
             if (cid !== undefined) {
                 // called from files app
                 obj = _.cid(cid);
+                app.deepLink = false;
                 app.setState({ folder: obj.folder_id, id: obj.id });
                 app.startPresentation(obj);
                 return;
@@ -176,6 +182,7 @@ define('io.ox/presenter/main', [
             obj = app.getState();
 
             if (obj.folder && obj.id) {
+                app.deepLink = true;
                 app.startPresentation(obj);
             }
         });
