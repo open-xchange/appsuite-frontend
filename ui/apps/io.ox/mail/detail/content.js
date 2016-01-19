@@ -401,19 +401,19 @@ define('io.ox/mail/detail/content', [
         }
     });
 
-    // ext.point('io.ox/mail/detail/content').extend({
-    //     id: 'lazyload-images',
-    //     index: 1200,
-    //     process: function () {
-    //         $(this).find('img[src!=""]').each(function () {
-    //             var img = $(this);
-    //             img.attr({
-    //                 'data-original': img.attr('src'),
-    //                 'src': ''
-    //             }).addClass('lazyload');
-    //         });
-    //     }
-    // });
+    ext.point('io.ox/mail/detail/content').extend({
+        id: 'lazyload-images',
+        index: 1200,
+        process: function () {
+            $(this).find('img[src!=""]').each(function () {
+                var img = $(this);
+                img.attr({
+                    'data-original': img.attr('src'),
+                    'src': '//:0'
+                }).addClass('lazyload');
+            });
+        }
+    });
 
     function isBlockquoteToggle(elem) {
         return $(elem).parent().hasClass('blockquote-toggle');

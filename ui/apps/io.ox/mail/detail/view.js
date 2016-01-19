@@ -254,7 +254,7 @@ define('io.ox/mail/detail/view', [
                     if (!e.namespace && e.selector) $(node).on('click', e.selector, e.handler);
                 });
             } else {
-                this.closest('.scrollable').lazyloadScrollpane();
+                this.closest('.scrollable').lazyloadScrollpane().trigger('add.lazyload');
             }
             // now remember height
             baton.model.set('visualHeight', $(node).height(), { silent: true });
