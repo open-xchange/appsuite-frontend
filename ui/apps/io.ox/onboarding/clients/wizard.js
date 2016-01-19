@@ -36,11 +36,6 @@ define('io.ox/onboarding/clients/wizard', [
             });
         }
 
-        var backlabels = {
-            'device': true,
-            'scenario': true
-        };
-
         return $('<ul class="options" role="navigation">')
                 .append(function () {
                     return _.map(list, function (obj) {
@@ -62,7 +57,7 @@ define('io.ox/onboarding/clients/wizard', [
                 })
                 // back button
                 .prepend(
-                    backlabels[type] ?
+                    _.contains(['device', 'scenario'], type) ?
                     $('<li class="option centered">')
                         .attr({
                             'data-value': 'back'
@@ -86,10 +81,15 @@ define('io.ox/onboarding/clients/wizard', [
     function onSelect(e) {
         e.preventDefault();
         var value = $(e.currentTarget).closest('li').attr('data-value'),
+            wizard = this.parent,
             type = this.$el.attr('data-type');
 
         // back button
-        if (value === 'back') return this.parent.back();
+        if (value === 'back') {
+            // remove value set within previous step
+            wizard.model.unset('platform');
+            return wizard.back();
+        }
 
         // update model
         this.parent.model.set(type, value);
@@ -131,11 +131,17 @@ define('io.ox/onboarding/clients/wizard', [
     function select(e) {
         var node = $(e.target),
             data = e.data,
+            wizard = data.wizard,
             container = node.closest('[data-type]'),
             type = container.attr('data-type'),
             value = node.closest('[data-value]').attr('data-value');
         // back
-        if (value === 'back') return data.wizard.back();
+        if (value === 'back') {
+            // remove value set within previous step
+            wizard.model.unset('device');
+            wizard.model.unset('scenario');
+            return wizard.back();
+        }
         data.wizard.trigger('selected', { type: type, value: value });
     }
 
@@ -169,11 +175,10 @@ define('io.ox/onboarding/clients/wizard', [
         // max width: supress resizing in case description is quite long
         var space = ((list.length + 1) * 160) + 32;
         this.$('.wizard-content').css('max-width', space > 560 ? space : 560);
-
-        // preselect
-        var preselected = _.first(list);
-        config.model.set('scenario', preselected.id);
-        wizard.trigger('selected', { type: 'scenario', value: preselected.id });
+        // autoselect first
+        var id = config.model.get('scenario');
+        if (!id) { config.model.set('scenario', id = _.first(list).id); }
+        wizard.trigger('selected', { type: 'scenario', value: id });
     }
 
     var OnboardingView = Backbone.View.extend({
@@ -206,9 +211,24 @@ define('io.ox/onboarding/clients/wizard', [
             this.setElement(node.$el);
         },
 
-        // _inspect: function (eventname) {
-        //     if (ox.debug) console.log('%c' + eventname, 'color: white; background-color: blue');
-        // },
+        _onChange: function (type, model, value) {
+            // autoselect when only one option available
+            if (!value) return;
+            var data = {};
+            switch (type) {
+                case 'platform':
+                    data.target = 'device';
+                    data.list = this.config.getDevices();
+                    break;
+                case 'device':
+                    data.target = 'scenario';
+                    data.list = this.config.getScenarios();
+                    break;
+                default:
+            }
+            if (data.list.length > 1) return;
+            this.model.set(data.target, _.first(data.list).id);
+        },
 
         _reset: function (index) {
             var step = this.wizard.get(index),
@@ -217,6 +237,9 @@ define('io.ox/onboarding/clients/wizard', [
         },
 
         register: function () {
+            this.model.on('change:platform', this._onChange.bind(this, 'platform'));
+            this.model.on('change:device', this._onChange.bind(this, 'device'));
+
             // set max width of description block
             this.wizard.on({
                 // step:before:show, step:ready, step:show, step:next, step:before:hide, step:hide, change:step,
@@ -250,18 +273,8 @@ define('io.ox/onboarding/clients/wizard', [
             }.bind(this));
         },
 
-        skip: function (step) {
-            var type = step.$el.attr('data-type'),
-                devices = this.config.getDevices(),
-                doSkip = devices.length === 1;
-            if (doSkip) {
-                this.config.model.set(type, devices[0].id);
-            }
-            return doSkip;
-        },
-
         render: function () {
-            var wizard = this.wizard = new Wizard(),
+            var wizard = this.wizard = new Wizard({ model: this.model }),
                 self = this;
             // add references
             wizard.config = this.config;
@@ -271,6 +284,7 @@ define('io.ox/onboarding/clients/wizard', [
                 // platform
                 .step({
                     attributes: { 'data-type': 'platform' },
+                    id: 'platform',
                     back: false,
                     next: false,
                     width: 'auto',
@@ -281,17 +295,18 @@ define('io.ox/onboarding/clients/wizard', [
                 // device
                 .step({
                     attributes: { 'data-type': 'device' },
+                    id: 'device',
                     back: false,
                     next: false,
                     width: 'auto',
                     minWidth: '504px'
                 })
-                .setSkippable(function () { return self.skip(this); })
                 .on('before:show', drawDevices)
                 .end()
                 // scenarios
                 .step({
                     attributes: { 'data-type': 'scenario', 'data-mode': 'simple' },
+                    id: 'scenario',
                     back: false,
                     next: false,
                     width: 'auto',
