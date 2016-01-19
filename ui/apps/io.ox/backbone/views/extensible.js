@@ -11,9 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/backbone/views/extensible', ['io.ox/backbone/disposable', 'io.ox/core/extensions'], function (DisposableView, ext) {
+define('io.ox/backbone/views/extensible', ['io.ox/backbone/views/disposable', 'io.ox/core/extensions'], function (DisposableView, ext) {
 
     'use strict';
+
+    // hash to "close" a view
+    var closed = {};
 
     //
     // Extensible view.
@@ -33,10 +36,13 @@ define('io.ox/backbone/views/extensible', ['io.ox/backbone/disposable', 'io.ox/c
         },
 
         // convenience function to add multiple extensions
+        // needs some logic to avoid redefinitions
         extend: function (extensions) {
+            // check if the point has been closed
+            if (closed[this.point.id]) return this;
             var index = 100;
             _(extensions).each(function (fn, id) {
-                this.point.extend({ id: id, index: index, draw: fn });
+                this.point.extend({ id: id, index: index, render: fn });
                 index += 100;
             }, this);
             return this;
@@ -44,12 +50,14 @@ define('io.ox/backbone/views/extensible', ['io.ox/backbone/disposable', 'io.ox/c
 
         invoke: function (type, $el) {
             var baton = new ext.Baton({ view: this, model: this.model });
-            this.point.invoke(type || 'draw', $el || this.$el, baton);
+            this.point.invoke(type || 'render', $el || this.$el, baton);
+            // close for further calls of extend
+            closed[this.point.id] = true;
             return this;
         },
 
         render: function () {
-            return this.invoke('draw');
+            return this.invoke('render');
         }
     });
 

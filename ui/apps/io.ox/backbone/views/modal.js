@@ -72,7 +72,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
         },
 
         render: function () {
-            return this.invoke('draw', this.$body);
+            return this.invoke('render', this.$body);
         },
 
         open: function () {
@@ -174,15 +174,21 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
 
     ModalDialogView.foo = function () {
         require(['io.ox/backbone/views/modal'], function (ModalDialog) {
-            new ModalDialog({ enter: 'woohoo', focus: '.foo', help: 'hurz', maximize: true, title: 'Example' })
-            .build(function () {
-                this.$body.append(
-                    $('<div class="form-group">').append(
-                        $('<label>').text('Label'),
-                        $('<input type="text" class="form-control foo" tabindex="1">')
-                    ),
-                    $('<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>')
-                );
+            new ModalDialog({ enter: 'woohoo', focus: '.foo', help: 'xmpl', point: 'modal/xmpl', maximize: true, title: 'Example' })
+            .extend({
+                default: function () {
+                    this.append(
+                        $('<div class="form-group">').append(
+                            $('<label>').text('Label'),
+                            $('<input type="text" class="form-control foo" tabindex="1">')
+                        )
+                    );
+                },
+                text: function () {
+                    this.append(
+                        $('<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>')
+                    );
+                }
             })
             .addCancelButton()
             .addCloseButton()
