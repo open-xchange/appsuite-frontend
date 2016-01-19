@@ -238,16 +238,24 @@ define('io.ox/mail/detail/mobileView', [
                 baton = ext.Baton({ view: this, data: data, attachments: util.getAttachments(data) }),
                 node = this.$el.find('section.attachments').empty();
             ext.point('io.ox/mail/mobile/detail/attachments').invoke('draw', node, baton);
+
+            if (this.model.previous('attachments') &&
+                this.model.get('attachments') &&
+                this.model.previous('attachments')[0].content !== this.model.get('attachments')[0].content) this.onChangeContent();
         },
 
         onChangeContent: function () {
             var data = this.model.toJSON(),
-                baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
-                node = this.$el.find('section.body').empty();
+                baton = ext.Baton({
+                    view: this,
+                    model: this.model,
+                    data: data,
+                    attachments: util.getAttachments(data)
+                }),
+                node = this.getEmptyBodyNode();
             ext.point('io.ox/mail/mobile/detail/body').invoke('draw', node, baton);
         },
         render: function () {
-
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, model: this.model, view: this }),
                 subject = util.getSubject(data),
@@ -272,7 +280,6 @@ define('io.ox/mail/detail/mobileView', [
                 'data-cid': this.cid,
                 'data-loaded': 'false'
             });
-
             this.$el.data({ view: this, model: this.model });
             this.baton = baton;
             ext.point('io.ox/mail/mobile/detail').invoke('draw', this.$el, baton);
