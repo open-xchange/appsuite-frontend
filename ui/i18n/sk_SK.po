@@ -943,6 +943,24 @@ msgstr "Správca"
 msgid "Advanced user?"
 msgstr "Pokročilé filtre"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Afghanistan"
+msgstr "Afganistan"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Cayman Islands"
+msgid "Aland Islands"
+msgstr "Kajmanie ostrovy"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Albania"
+msgstr "Albánsko"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Algeria"
+msgstr "Alžírsko"
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
@@ -1008,6 +1026,10 @@ msgstr "Povoliť emaily vo formáte HTML"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Povoliť automatické načítanie externých obrázkov"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "American Samoa"
+msgstr "Americká Samoa"
+
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 #, fuzzy
 #| msgid "An error occurred while importing the document."
@@ -1037,9 +1059,25 @@ msgstr "Vyskytla sa vnútorná chyba"
 msgid "An unknown error occurred"
 msgstr "Vyskytla sa neznáma chyba"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Andorra"
+msgstr "Andorra"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Angola"
+msgstr "Angola"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Anguilla"
+msgstr "Anguilla"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Anniversary"
 msgstr "Výročie"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Antigua and Barbuda"
+msgstr "Antigua a Barbuda"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -1167,6 +1205,18 @@ msgstr "Archivujú sa správy..."
 msgid "Are you sure you want to delete this Tweet?"
 msgstr "Ste si istý, že chcete zmazať tento tweet?"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Argentina"
+msgstr "Argentína"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Armenia"
+msgstr "Arménsko"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Aruba"
+msgstr "Aruba"
+
 #. Auth type. Short for "Use same credentials as incoming mail server"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "As incoming mail server"
@@ -1219,6 +1269,14 @@ msgstr "Prílohy boli boli uložené!"
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "August"
 msgstr "august"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Australia"
+msgstr "Austrália"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Austria"
+msgstr "Rakúsko"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Authentication"
@@ -1288,6 +1346,10 @@ msgstr ""
 msgid "Average time: %1$s ms"
 msgstr "Priemerný čas: %1$s ms"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Azerbaijan"
+msgstr "Azerbajdžan"
+
 #. Bytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "B"
@@ -1310,27 +1372,25 @@ msgstr "Späť"
 msgid "Back to appointment"
 msgstr "Späť na schôdzku"
 
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Back to sign in"
-msgid "Back to devices"
-msgstr "Späť na prihlásenie"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Back to sign in"
-msgid "Back to modules"
-msgstr "Späť na prihlásenie"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "your platform"
-msgid "Back to platforms"
-msgstr "vaša platforma"
-
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid "Back to sign in"
 msgstr "Späť na prihlásenie"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bahamas"
+msgstr "Bahamy"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bahrain"
+msgstr "Bahrajn"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bangladesh"
+msgstr "Bangladéš"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Barbados"
+msgstr "Barbados"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/main.js
@@ -1344,6 +1404,30 @@ msgid ""
 msgstr ""
 "Predtým, než budete môcť pokračovať v používaní produktu, budete musieť "
 "zadať niektoré základné informácie. Bude to trvať menej ako minútu."
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Belarus"
+msgstr "Bielorusko"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Belgium"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Belize"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Benin"
+msgstr "Benin"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bermuda"
+msgstr "Bermudy"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bhutan"
+msgstr "Bhután"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -1377,6 +1461,22 @@ msgstr "Skrytá kópia"
 msgid "Blue"
 msgstr "Modrá"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bolivia"
+msgstr "Bolívia"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bonaire, Saint Eustatius and Saba "
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bosnia and Herzegovina"
+msgstr "Bosna a Hercegovina"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Botswana"
+msgstr "Botswana"
+
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "Box"
 msgstr ""
@@ -1385,6 +1485,20 @@ msgstr ""
 msgid "Branches"
 msgstr "Vetvy"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Brazil"
+msgstr "Brazília"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "British Indian Ocean Territory"
+msgstr "Britské indickooceánske územie"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Virgin Islands, U.S."
+msgid "British Virgin Islands"
+msgstr "Panenské ostrovy Spojených štátov"
+
 #: apps/io.ox/presenter/actions.js module:io.ox/presenter
 msgid "Broadcast your presentation over the Web."
 msgstr "Vysielať vašu prezentáciu prostredníctvom webu."
@@ -1392,6 +1506,22 @@ msgstr "Vysielať vašu prezentáciu prostredníctvom webu."
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Browser"
 msgstr "Prehliadač"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Brunei"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bulgaria"
+msgstr "Bulharsko"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Burkina Faso"
+msgstr "Burkina Faso"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Burundi"
+msgstr "Burundi"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Business Address"
@@ -1462,6 +1592,18 @@ msgstr "Zobrazenie kalendára"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "Kalendár:"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cambodia"
+msgstr "Kambodža"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cameroon"
+msgstr "Kamerun"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Canada"
+msgstr "Kanada"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -1567,18 +1709,35 @@ msgstr ""
 msgid "Capacity"
 msgstr "Kapacita"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cape Verde"
+msgstr "Kapverdy"
+
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "Košík je prázdny."
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cayman Islands"
+msgstr "Kajmanie ostrovy"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "Mobil"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Cell phone (alt)"
 msgstr "Mobilný telefón (alt)"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Central African Republic"
+msgstr "Stredoafrická republika"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Chad"
+msgstr "Čad"
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid "Change"
@@ -1655,6 +1814,18 @@ msgstr "Kontrolujú sa prihlasovacie údaje..."
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Children"
 msgstr "Deti"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Chile"
+msgstr "Čile"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "China"
+msgstr "Čína"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Christmas Island"
+msgstr "Vianočný ostrov"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "City"
@@ -1739,8 +1910,7 @@ msgstr "Kliknutím to skúsite znova neskôr."
 msgid "Click to upload image"
 msgstr "Kliknite nahráte obrázok"
 
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
 msgstr ""
 
@@ -1778,10 +1948,20 @@ msgstr "Prémiové funkcie"
 msgid "Close this reminder"
 msgstr "Zatvoriť túto pripomienku"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Cook Islands"
+msgid "Cocos Islands"
+msgstr "Cookove ostrovy"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Collapse form"
 msgstr "Zbaliť formulár"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Colombia"
+msgstr "Kolumbia"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -1830,6 +2010,12 @@ msgstr "Bežné"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Common Emoji"
 msgstr "Bežné Emoji"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Tomorrow"
+msgid "Comoros"
+msgstr "Zajtra"
 
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -1892,6 +2078,12 @@ msgstr "Konflikty zdrojov nie je možné ignorovať"
 #: apps/io.ox/calendar/view-grid-template.js module:io.ox/calendar
 msgid "Conflicts:"
 msgstr "Konflikty:"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Selecting a view"
+msgid "Connect your Device"
+msgstr "Výber zobrazenia"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Connector for Microsoft Outlook®"
@@ -1977,6 +2169,10 @@ msgstr ""
 "Konvertovať zadaný dátum začiatku a konca tak, aby zodpovedali zmeneným "
 "časovým pásmam"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cook Islands"
+msgstr "Cookove ostrovy"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/files/actions.js
@@ -1994,6 +2190,10 @@ msgstr "Kópia"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Copy to description"
 msgstr "Skopírovať do popisu"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Costa Rica"
+msgstr "Kostarika"
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "Costs must be between -%1$d and %1$d."
@@ -2150,6 +2350,20 @@ msgctxt "help"
 msgid "Creating Files"
 msgstr "Vytváranie súborov"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Croatia"
+msgstr "Chorvátsko"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cuba"
+msgstr "Kuba"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Macao"
+msgid "Curacao"
+msgstr "Macao"
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Currency"
 msgstr "Mena"
@@ -2178,6 +2392,14 @@ msgstr "Vlastné meno"
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Customize this page"
 msgstr "Prispôsobiť túto stránku"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cyprus"
+msgstr "Cyprus"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Czech Republic"
+msgstr "Česká republika"
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Dark colors"
@@ -2391,6 +2613,16 @@ msgstr "Zmazané správy"
 msgid "Deleting messages on local storage also deletes them on server"
 msgstr "Zmazanie správ v lokálnom úložisku ich zmaže aj na serveri"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Korea, Democratic People's Republic of"
+msgid "Democratic Republic of the Congo"
+msgstr "Kórejská ľudovodemokratická republika"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Denmark"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
 msgid "Department"
@@ -2533,6 +2765,10 @@ msgstr "Poštová konferencia"
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "Tento distribučný zoznam bol uložený"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Djibouti"
+msgstr "Džibutsko"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
@@ -2692,6 +2928,14 @@ msgctxt "app"
 msgid "Documents"
 msgstr "Dokumenty"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Dominica"
+msgstr "Dominika"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Dominican Republic"
+msgstr "Dominikánska republika"
+
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js module:io.ox/core apps/io.ox/files/actions/share.js
@@ -2847,6 +3091,16 @@ msgstr "Termín %1$s"
 msgid "EB"
 msgstr "EB"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Last month"
+msgid "East Timor"
+msgstr "Minulý mesiac"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Ecuador"
+msgstr "Ekvádor"
+
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
@@ -2958,6 +3212,14 @@ msgstr "Upravením nastavíte meno."
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Editor"
 msgstr "Editor"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Egypt"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "El Salvador"
+msgstr "Salvádor"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
@@ -3112,6 +3374,14 @@ msgstr "Podnikateľ"
 msgid "Envelope - To"
 msgstr "Obálka - Komu"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Equatorial Guinea"
+msgstr "Rovníková Guinea"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Eritrea"
+msgstr ""
+
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/core/yell.js
@@ -3152,6 +3422,14 @@ msgstr "Odhadované náklady"
 #: apps/io.ox/tasks/view-detail.js
 msgid "Estimated duration in minutes"
 msgstr "Odhadované trvanie v minútach"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Estonia"
+msgstr "Estónsko"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Ethiopia"
+msgstr "Etiópia"
 
 #. recurrence string
 #. %1$d: numeric
@@ -3362,6 +3640,16 @@ msgstr ""
 "Nepodarilo sa aktualizovať stav potvrdenia; s najväčšou pravdepodobnosťou "
 "bola úloha zmazaná."
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Falkland Islands (Malvinas)"
+msgid "Falkland Islands"
+msgstr "Falklandy (Malvíny)"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Faroe Islands"
+msgstr "Faerské ostrovy"
+
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Favorite"
 msgstr "Oblúbené"
@@ -3417,6 +3705,10 @@ msgstr "Spätná väzba"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Feeling • Decoration"
 msgstr "Pocit • Dekorácia"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Fiji"
+msgstr "Fidži"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
@@ -3505,6 +3797,10 @@ msgstr "Nájsť voľný čas"
 msgctxt "tour"
 msgid "Finish"
 msgstr "Dokončiť"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Finland"
+msgstr "Fínsko"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -3652,6 +3948,12 @@ msgstr "Preposielať všetky prichádzajúce emaily na túto adresu"
 msgid "Forward emails as"
 msgstr "Preposlať email ako"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Freelancer"
+msgid "France"
+msgstr "Na voľnej nohe"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Free"
@@ -3660,6 +3962,14 @@ msgstr "Zadarmo"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Freelancer"
 msgstr "Na voľnej nohe"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "French Guiana"
+msgstr "Francúzska Guyana"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "French Polynesia"
+msgstr "Francúzska Polynézia"
 
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/main.js
@@ -3686,6 +3996,24 @@ msgstr "Furigana pre priezvisko"
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "GB"
 msgstr "GB"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Gabon"
+msgstr "Gabon"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Gambia"
+msgstr "Gambia"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Georgia"
+msgstr "Gruzínsko"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "German"
+msgid "Germany"
+msgstr "nemčina"
 
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Get %s"
@@ -3715,6 +4043,14 @@ msgstr "Začnite tu"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Get your device configured by email."
 msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Ghana"
+msgstr "Ghana"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Gibraltar"
+msgstr "Gibraltár"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Give feedback"
@@ -3747,12 +4083,26 @@ msgstr "Pridať účet Google Drive"
 msgid "Gray"
 msgstr "Šedá"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Green"
+msgid "Greece"
+msgstr "Zelená"
+
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Green"
 msgstr "Zelená"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Greenland"
+msgstr "Grónsko"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Grenada"
+msgstr "Grenada"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/participants/model.js
@@ -3768,6 +4118,22 @@ msgstr "Názov skupiny"
 msgid "Groups"
 msgstr "Skupiny"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guadeloupe"
+msgstr "Guadeloupe"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guam"
+msgstr "Guam"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guatemala"
+msgstr "Guatemala"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guernsey"
+msgstr ""
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
 msgid "Guest"
@@ -3776,6 +4142,18 @@ msgstr "Hosť"
 #: apps/io.ox/tours/get-started.js module:io.ox/core
 msgid "Guided tour for this app"
 msgstr "Prehliadka tejto aplikácie"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guinea"
+msgstr "Guinea"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guinea-Bissau"
+msgstr "Guinea-Bissau"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guyana"
+msgstr "Guyana"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 #: apps/io.ox/mail/settings/pane.js
@@ -3786,10 +4164,18 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML a čistý text"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Haiti"
+msgstr "Haiti"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Header"
 msgstr "Hlavička"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Heard Island and McDonald Islands"
+msgstr "Heardov ostrov"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Hello %s"
@@ -3908,6 +4294,14 @@ msgstr "Adresa domov"
 msgid "Home address"
 msgstr "Adresa domov"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Honduras"
+msgstr "Honduras"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Hong Kong"
+msgstr "Hongkong"
+
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Horizontal"
 msgstr "Vodorovné"
@@ -3923,6 +4317,12 @@ msgstr "Hodiny"
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "How does this work?"
 msgstr "Ako to funguje?"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Hungarian"
+msgid "Hungary"
+msgstr "maďarčina"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP login"
@@ -3947,6 +4347,10 @@ msgstr "Poštový server IMAP"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
 msgstr "IP telefón"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Iceland"
+msgstr "Island"
 
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Icons"
@@ -4061,6 +4465,16 @@ msgstr "Server prichádzajúcej pošty"
 msgid "Inconsistent dates"
 msgstr "Nekonzistentné dátumy"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "India"
+msgstr "India"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Undone"
+msgid "Indonesia"
+msgstr "Vrátené späť"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts apps/io.ox/core/yell.js
 #: module:io.ox/core
 msgid "Info"
@@ -4171,6 +4585,18 @@ msgstr "Pozvať na schôdzku"
 msgid "Invite to new appointment"
 msgstr "Pozvať na novú schôdzku"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Iran"
+msgstr "Irán"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Iraq"
+msgstr "Irak"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Ireland"
+msgstr "Írsko"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Is bigger than"
@@ -4185,6 +4611,20 @@ msgstr "Je presne"
 #: module:io.ox/settings
 msgid "Is smaller than"
 msgstr "Je menší ako"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Isle of Man"
+msgstr "Man"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Israel"
+msgstr "Izrael"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Italic"
+msgid "Italy"
+msgstr "Kurzíva"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Item List"
@@ -4206,14 +4646,30 @@ msgstr "Možnosti zoznamu položiek"
 msgid "Items without a file can not be downloaded."
 msgstr "Položky bez súboru nie je možné stiahnuť."
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Ivory Coast"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Jamaica"
+msgstr "Jamajka"
+
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "January"
 msgstr "január"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Japan"
+msgstr "Japonsko"
 
 #. Emoji collection. Emoji icons that work across Japanese (telecom) carriers.
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Japanese Carrier"
 msgstr "Japonský operátor"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Jersey"
+msgstr "Jersey"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Job"
@@ -4239,6 +4695,10 @@ msgstr "Pripojiť sa k prezentácii"
 #| msgid "Join presentation"
 msgid "Join the presentation"
 msgstr "Pripojiť sa k prezentácii"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Jordan"
+msgstr "Jordánsko"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "July"
@@ -4272,6 +4732,10 @@ msgstr "Termín %1$s"
 msgid "KB"
 msgstr "KB"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Kazakhstan"
+msgstr "Kazachstan"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Keep"
@@ -4280,6 +4744,22 @@ msgstr "Ponechať"
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 msgid "Keep a copy of the message"
 msgstr "Ponechať kópiu správy"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Kenya"
+msgstr "Keňa"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Kiribati"
+msgstr "Kiribati"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Kuwait"
+msgstr "Kuvajt"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Kyrgyzstan"
+msgstr "Kirgizsko"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -4293,6 +4773,10 @@ msgstr "Predvoľby špecifické pre jazyk"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
 msgstr "Jazyky"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Laos"
+msgstr ""
 
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Last 30 days"
@@ -4336,6 +4820,10 @@ msgstr "Minulý rok"
 msgid "Later"
 msgstr "Neskôr"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Latvia"
+msgstr ""
+
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
 msgstr ""
@@ -4371,6 +4859,14 @@ msgstr "Opustiť prezentáciu"
 msgid "Leave the presentation"
 msgstr "Opustiť prezentáciu"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Lebanon"
+msgstr "Libanon"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Lesotho"
+msgstr "Lesotho"
+
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 文字・記号
@@ -4379,6 +4875,18 @@ msgstr "Opustiť prezentáciu"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Letters • Symbols"
 msgstr "Písmená • Symboly"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Liberia"
+msgstr "Libéria"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Libya"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Liechtenstein"
+msgstr "Lichtenštajnsko"
 
 #. Emoji category
 #. Japanese: 日常
@@ -4441,6 +4949,10 @@ msgstr "Zoznam"
 msgid "Listview"
 msgstr "Zobrazenie zoznamu"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Lithuania"
+msgstr "Litva"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 msgid "Location"
@@ -4474,6 +4986,10 @@ msgstr "Nízka"
 msgid "Low priority"
 msgstr "Nízka priorita"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Luxembourg"
+msgstr "Luxembursko"
+
 #. Megabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "MB"
@@ -4482,6 +4998,18 @@ msgstr "MB"
 #: apps/io.ox/core/date.js module:io.ox/core
 msgid "MM"
 msgstr "MM"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Macao"
+msgstr "Macao"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Macedonia"
+msgstr "Macedónska republika"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Madagascar"
+msgstr "Madagaskar"
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Mail"
@@ -4607,6 +5135,26 @@ msgstr "Hlavné okno"
 msgid "Make this the current version"
 msgstr "Označiť túto verziu ako aktuálnu"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Malawi"
+msgstr "Malawi"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Malaysia"
+msgstr "Malajzia"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Maldives"
+msgstr "Maldivy"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mali"
+msgstr "Mali"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Malta"
+msgstr "Malta"
+
 #: apps/io.ox/launchpad/main.js module:io.ox/core
 msgid "Manage applications"
 msgstr "Spravovanie aplikácií"
@@ -4708,14 +5256,34 @@ msgstr "Označiť ako prečítané"
 msgid "Mark unread"
 msgstr "Označiť ako neprečítané"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Marshall Islands"
+msgstr "Marshallove ostrovy"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Martinique"
+msgstr "Martinik"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Matches"
 msgstr "Zodpovedá"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mauritania"
+msgstr "Mauritánia"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mauritius"
+msgstr "Maurícius"
+
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "May"
 msgstr "máj"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mayotte"
+msgstr "Mayotte"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -4742,6 +5310,14 @@ msgstr "Posielanie správ"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Messenger"
 msgstr "Posielanie správ"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mexico"
+msgstr "Mexiko"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Micronesia"
+msgstr "Mikronézia"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Middle name"
@@ -4779,6 +5355,22 @@ msgstr "Model je neúplný."
 msgid "Modified"
 msgstr "Zmenené"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Moldova"
+msgstr "Moldavsko"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Monaco"
+msgstr "Monako"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mongolia"
+msgstr "Mongolsko"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Montenegro"
+msgstr "Čierna Hora"
+
 #: apps/io.ox/backbone/mini-views/date.js module:io.ox/core
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Month"
@@ -4801,6 +5393,12 @@ msgstr "%1$s %2$s každého mesiaca"
 msgid "Months"
 msgstr "Mesiace"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Months"
+msgid "Montserrat"
+msgstr "Mesiace"
+
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/find/extensions-api.js apps/io.ox/search/facets/extensions.js
 msgid "More"
@@ -4809,6 +5407,10 @@ msgstr "Ďalšie"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
 msgstr "Bolo nájdených viac ako momentálne zobrazených %1$s položiek"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Morocco"
+msgstr "Maroko"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
@@ -4849,6 +5451,10 @@ msgstr "Presunúť priečinok"
 #: module:io.ox/settings
 msgid "Move to folder"
 msgstr "Presunúť do priečinka"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mozambique"
+msgstr "Mozambik"
 
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Multiselect"
@@ -4893,6 +5499,10 @@ msgstr "Moje zdieľania"
 msgid "My tasks"
 msgstr "Moje úlohy"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Myanmar"
+msgstr "Mjanmarsko"
+
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
@@ -4904,14 +5514,32 @@ msgstr "Moje úlohy"
 msgid "Name"
 msgstr "Meno"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Namibia"
+msgstr "Namíbia"
+
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Nature"
 msgstr "Príroda"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Nauru"
+msgstr "Nauru"
+
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Need more space?"
 msgstr "Potrebujete viac miesta?"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Nepal"
+msgstr "Nepál"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Dutch (Netherlands)"
+msgid "Netherlands"
+msgstr "holandčina (Holandsko)"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -4927,6 +5555,10 @@ msgstr "Nikdy"
 msgid "New"
 msgstr "Nový"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "New Caledonia"
+msgstr "Nová Kaledónia"
+
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "New Folder"
@@ -4935,6 +5567,10 @@ msgstr "Nový priečinok"
 #: apps/io.ox/mail/api.js module:io.ox/mail
 msgid "New Mail"
 msgstr "Nová pošta"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "New Zealand"
+msgstr "Nový Zéland"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -5057,9 +5693,25 @@ msgstr "Ďalšia stránka"
 msgid "Next slide"
 msgstr "Ďalšia snímka"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Nicaragua"
+msgstr "Nikaragua"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Nickname"
 msgstr "Prezývka"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Niger"
+msgstr "Niger"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Nigeria"
+msgstr "Nigéria"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Niue"
+msgstr "Niue"
 
 #. folder permissions - Is Admin? NO
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
@@ -5184,10 +5836,26 @@ msgstr "Bez názvu."
 msgid "None"
 msgstr "Žiadne"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Norfolk Island"
+msgstr "Norfolk"
+
 #. E-Mail priority
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Normal"
 msgstr "Normálna"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "North Korea"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Northern Mariana Islands"
+msgstr "Severné Mariány"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Norway"
+msgstr "Nórsko"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgid "Not spam"
@@ -5301,6 +5969,10 @@ msgstr "Režime offline"
 #: apps/io.ox/core/tk/mobiscroll.js
 msgid "Ok"
 msgstr "OK"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Oman"
+msgstr "Omán"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "On behalf of the owner"
@@ -5531,6 +6203,34 @@ msgstr "Strana %1$d z %2$d"
 msgid "Pager"
 msgstr "Pager"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Pakistan"
+msgstr "Pakistan"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Palau"
+msgstr "Palau"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Palestinian Territory, Occupied"
+msgid "Palestinian Territory"
+msgstr "palestínske územie, Okupované"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Panama"
+msgstr "Panama"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Papua New Guinea"
+msgstr "Papua - Nová Guinea"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Nicaragua"
+msgid "Paraguay"
+msgstr "Nikaragua"
+
 #. text of an user list that shows the names of presenting user and participants.
 #. the dropdown button label for the participants dropdown.
 #. the participants section label.
@@ -5646,6 +6346,14 @@ msgid ""
 msgstr ""
 "Osobná správa (nepovinné). Táto správa sa zašle všetkým novo pozvaným ľuďom."
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Peru"
+msgstr "Peru"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Philippines"
+msgstr "Filipíny"
+
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Phone"
 msgstr "Telefón"
@@ -5704,6 +6412,10 @@ msgstr "Tu vyberte čas"
 #: module:io.ox/portal
 msgid "Pink"
 msgstr "Ružová"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Pitcairn"
+msgstr "Pitcairnove ostrovy"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -5898,6 +6610,10 @@ msgstr "Prosím aktualizujte svoj prehliadač."
 msgid "Plus"
 msgstr "Plus"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Poland"
+msgstr "Poľsko"
+
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Pop out"
 msgstr "Oddeliť"
@@ -5920,6 +6636,10 @@ msgstr "Portál"
 msgid "Portal settings"
 msgstr "Nastavenia portálu"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Portugal"
+msgstr "Portugalsko"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Position"
 msgstr "Pozícia"
@@ -5931,6 +6651,12 @@ msgstr "Poslať aktualizáciu stavu"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Postcode"
 msgstr "PSČ"
+
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Premium features"
+msgid "Premium"
+msgstr "Prémiové funkcie"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Premium features"
@@ -6168,6 +6894,10 @@ msgstr "Publikácie"
 msgid "Publications and Subscriptions"
 msgstr "Publikácie a odbery"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Puerto Rico"
+msgstr "Portoriko"
+
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Purchase confirmation"
 msgstr "Potvrdenie objednávky"
@@ -6178,6 +6908,10 @@ msgstr "Potvrdenie objednávky"
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "Fialová"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Qatar"
+msgstr ""
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 #, fuzzy
@@ -6504,6 +7238,10 @@ msgstr "Odpovedať všetkým príjemcom"
 msgid "Reply to sender"
 msgstr "Odpovedať odosielateľovi"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Republic of the Congo"
+msgstr ""
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
 msgstr "Vyžiadať potvrdenie prečítania"
@@ -6572,6 +7310,10 @@ msgstr "Retweetované"
 msgid "Retweeted by %s"
 msgstr "Retweetoval %s"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Reunion"
+msgstr "Réunion"
+
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Review your purchases"
 msgstr "Skontrolovať vaše nákupy"
@@ -6594,6 +7336,12 @@ msgstr "Odvolať prístup"
 msgid "Revoked access."
 msgstr "Zrušený prístup."
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Romanian"
+msgid "Romania"
+msgstr "rumunčina"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Room number"
 msgstr "Číslo izby"
@@ -6607,11 +7355,15 @@ msgstr "Názov pravidla"
 msgid "Running applications"
 msgstr "Bežiace aplikácie"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
 #, fuzzy
-#| msgid "RSS"
-msgid "SMS"
-msgstr "RSS"
+#| msgid "Russian"
+msgid "Russia"
+msgstr "ruština"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Rwanda"
+msgstr "Rwanda"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP login"
@@ -6631,9 +7383,57 @@ msgstr ""
 msgid "SMTP server"
 msgstr ""
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Saint Barthélemy"
+msgid "Saint Barthelemy"
+msgstr "Svätý Bartolomej"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saint Helena"
+msgstr "Svätá Helena"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saint Kitts and Nevis"
+msgstr "Svätý Krištof a Nevis"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saint Lucia"
+msgstr "Svätá Lucia"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "San Marino"
+msgid "Saint Martin"
+msgstr "San Maríno"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saint Pierre and Miquelon"
+msgstr "Saint Pierre a Miquelon"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saint Vincent and the Grenadines"
+msgstr "Svätý Vincent a Grenadíny"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "Objem predaja"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Samoa"
+msgstr "Samoa"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "San Marino"
+msgstr "San Maríno"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Sao Tome and Principe"
+msgstr "Svätý Tomáš a Princov ostrov"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saudi Arabia"
+msgstr "Saudská Arábia"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
@@ -6795,16 +7595,6 @@ msgstr "Vybrať súbor"
 msgid "Select folder"
 msgstr "Vybrať priečinok"
 
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-msgid "Select the platform of your device:"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Selecting a view"
-msgid "Select your device"
-msgstr "Výber zobrazenia"
-
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "Podrobnosti výberu"
@@ -6869,6 +7659,10 @@ msgstr "Posielať oznámenie o dovolenke len v tomto čase"
 msgid "Sender/From"
 msgstr "Odosielateľ/Od"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Senegal"
+msgstr "Senegal"
+
 #. %s is the product name
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Sent from %s via mobile"
@@ -6887,6 +7681,10 @@ msgstr "Odoslané správy"
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "September"
 msgstr "september"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Serbia"
+msgstr "Srbsko"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
@@ -6940,6 +7738,10 @@ msgstr "Zobraziť rozšírené filtre"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Setup your profile manually."
 msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Seychelles"
+msgstr "Seychely"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
@@ -7050,6 +7852,10 @@ msgstr "Zdieľané"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Shopping cart"
 msgstr "Nákupný košík"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Short Message (SMS)"
+msgstr ""
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
@@ -7162,6 +7968,10 @@ msgstr "Zobraziť dlaždice"
 msgid "Shown as"
 msgstr "Zobraziť ako"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Sierra Leone"
+msgstr "Sierra Leone"
+
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
@@ -7194,6 +8004,18 @@ msgstr "Prihlásený ako %1$s"
 msgid "Signed in as:"
 msgstr "Prihlásený ako:"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Single"
+msgid "Singapore"
+msgstr "Jednoduché"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Saint Barthélemy"
+msgid "Sint Maarten"
+msgstr "Svätý Bartolomej"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
 #: module:io.ox/files apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -7204,6 +8026,14 @@ msgstr "Veľkosť"
 #: module:io.ox/settings
 msgid "Size (bytes)"
 msgstr "Veľkosť (bajtov)"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Slovakia"
+msgstr "Slovensko"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Slovenia"
+msgstr "Slovinsko"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
@@ -7217,6 +8047,14 @@ msgstr "Nastavenie smartfónu:"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "SoftBank"
 msgstr "SoftBank"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Solomon Islands"
+msgstr "Šalamúnove ostrovy"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Somalia"
+msgstr "Somálsko"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "Some fields contain invalid data"
@@ -7287,6 +8125,26 @@ msgstr "Možnosti zoradenia"
 msgid "Source"
 msgstr "Zdroj"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "South Africa"
+msgstr "Južná Afrika"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "South Africa"
+msgid "South Korea"
+msgstr "Južná Afrika"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Sudan"
+msgid "South Sudan"
+msgstr "Sudán"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Spain"
+msgstr ""
+
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -7304,6 +8162,10 @@ msgstr "Zošit"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Spreadsheets"
 msgstr "Zošity"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Sri Lanka"
+msgstr "Srí Lanka"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Standard folders"
@@ -7441,6 +8303,10 @@ msgstr "Úspešné"
 msgid "Successfully reauthorized your %s account"
 msgstr "Úspešne ste znova autorizovali svoj účet %s."
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Sudan"
+msgstr "Sudán"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Suffix"
 msgstr "Prípona"
@@ -7449,9 +8315,29 @@ msgstr "Prípona"
 msgid "Summary"
 msgstr "Zhrnutie"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Suriname"
+msgstr "Surinam"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Svalbard and Jan Mayen"
+msgstr "Svalbard a Jan Mayen"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Swaziland"
+msgstr "Svazijsko"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Sweden"
+msgstr "Švédsko"
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Switch to parent folder"
 msgstr "Prepnúť na nadradený priečinok"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Switzerland"
+msgstr "Švajčiarsko"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -7482,6 +8368,10 @@ msgstr "Synchronizácia s vaším tabletom alebo smartfónom"
 msgid "Synchronize with your tablet or smartphone"
 msgstr "Synchronizácia s vaším tabletom alebo smartfónom"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Syria"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "TAX ID"
 msgstr "Daňový ID"
@@ -7500,9 +8390,21 @@ msgstr "TTY/TDD"
 msgid "Tag mail with"
 msgstr "Označovať poštu ako"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Taiwan"
+msgstr "Taiwan"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Tajikistan"
+msgstr "Tadžikistan"
+
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
 msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Tanzania"
+msgstr "Tanzánijská zjednotená republika"
 
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
@@ -7605,6 +8507,10 @@ msgstr "Nezáväzne prijaté"
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Text"
 msgstr "Text"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Thailand"
+msgstr "Thajsko"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"
@@ -8341,11 +9247,23 @@ msgstr "Prepnúť celoobrazovkový režim"
 msgid "Toggle panel"
 msgstr "Prepnúť panel"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Togo"
+msgstr "Togo"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Tokelau"
+msgstr "Tokelau"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "Zajtra"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Tonga"
+msgstr "Tonga"
 
 #. Emoji category
 #. Japanese: ツール
@@ -8386,6 +9304,10 @@ msgstr "Celkom: %1$s žiadostí"
 msgid "Town"
 msgstr "Mesto"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Trinidad and Tobago"
+msgstr "Trinidad a Tobago"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 #, fuzzy
 #| msgid "Buy now!"
@@ -8399,6 +9321,26 @@ msgstr "Prebieha pokus o auto-nastavenie poštového účtu"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Tumblr"
 msgstr "Tumblr"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Tunisia"
+msgstr "Tunisko"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Turkey"
+msgstr "Turecko"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Turkmenistan"
+msgstr "Turkménsko"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Turks and Caicos Islands"
+msgstr "Ostrovy Turks a Caicos"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Tuvalu"
+msgstr "Tuvalu"
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Twitter"
@@ -8414,6 +9356,12 @@ msgstr "Twitter ohlásil nasledovné chyby:"
 msgid "Type"
 msgstr "Typ"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Virgin Islands, U.S."
+msgid "U.S. Virgin Islands"
+msgstr "Panenské ostrovy Spojených štátov"
+
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 msgid "UI version"
@@ -8423,6 +9371,14 @@ msgstr "Verzia používateľského rozhrania"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "URL"
 msgstr "URL"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Uganda"
+msgstr "Uganda"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Ukraine"
+msgstr "Ukrajina"
 
 #: apps/plugins/portal/xing/actions.js module:plugins/portal
 msgid "Un-like"
@@ -8466,6 +9422,22 @@ msgstr "Prestať sledovať"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Unified"
 msgstr "Zjednotená"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "United Arab Emirates"
+msgstr "Spojené arabské emiráty"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "United Kingdom"
+msgstr "Spojené kráľovstvo"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "United States"
+msgstr "Spojené štáty"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "United States Minor Outlying Islands"
+msgstr "Menšie odľahlé ostrovy Spojených štátov"
 
 #: apps/io.ox/participants/model.js module:io.ox/core
 msgid "Unknown"
@@ -8575,6 +9547,10 @@ msgstr "Čas behu: %1$s minút"
 msgid "Urgency"
 msgstr "Naliehavosť"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Uruguay"
+msgstr "Uruguaj"
+
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Use SSL connection"
 msgstr "Použiť pripojenie SSL"
@@ -8662,10 +9638,28 @@ msgstr "Meno používateľa"
 msgid "Username must not be empty."
 msgstr "Meno používateľa nesmie byť prázdne."
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Uzbekistan"
+msgstr "Uzbekistan"
+
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/vacationnotice/settings/register.js
 msgid "Vacation Notice"
 msgstr "Oznámenie o dovolenke"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Vanuatu"
+msgstr "Vanuatu"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Vertical"
+msgid "Vatican"
+msgstr "Zvislé"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Venezuela"
+msgstr "Venezuela"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer
@@ -8684,6 +9678,12 @@ msgstr "Zvislé"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Videos"
 msgstr "Videá"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Viet Nam"
+msgid "Vietnam"
+msgstr "Vietnam"
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -8738,6 +9738,10 @@ msgstr "Panel nástrojov prehliadača"
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
 msgid "Waiting"
 msgstr "Čaká sa"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Wallis and Futuna"
+msgstr "Wallis a Futuna"
 
 #: apps/io.ox/core/yell.js module:io.ox/core
 msgid "Warning"
@@ -8815,6 +9819,10 @@ msgstr "Vitajte vo vašich úlohách"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "Vitajte. Prosím, uveďte vašu spätnú väzbu ohľadne tohto produktu"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Western Sahara"
+msgstr "Západná Sahara"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 #, fuzzy
@@ -8899,6 +9907,10 @@ msgstr "Roky"
 #: module:io.ox/settings
 msgid "Yellow"
 msgstr "Žltá"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Yemen"
+msgstr "Jemen"
 
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
@@ -9334,6 +10346,14 @@ msgstr "Vaše časové pásmo"
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "ZB"
 msgstr "ZB"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Zambia"
+msgstr "Zambia"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Zimbabwe"
+msgstr "Zimbabwe"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Zoom"
@@ -10247,21 +11267,12 @@ msgstr "RRRR"
 #~ msgid "Advanced options"
 #~ msgstr "Pokročilé nastavenie"
 
-#~ msgid "Afghanistan"
-#~ msgstr "Afganistan"
-
 #~ msgid ""
 #~ "After pressing OK, a new window will open where you can authorize %s to "
 #~ "access your account data."
 #~ msgstr ""
 #~ "Po stlačení OK sa otvorí nové okno, kde môžete oprávniť %s na prístup k "
 #~ "údajom vášho účtu."
-
-#~ msgid "Albania"
-#~ msgstr "Albánsko"
-
-#~ msgid "Algeria"
-#~ msgstr "Alžírsko"
 
 #~ msgid "All Categories..."
 #~ msgstr "Všetky kategórie..."
@@ -10278,9 +11289,6 @@ msgstr "RRRR"
 #~ msgid "Alternative Email"
 #~ msgstr "Alternatívny email"
 
-#~ msgid "American Samoa"
-#~ msgstr "Americká Samoa"
-
 #~ msgid "An error occurred"
 #~ msgstr "Vyskytla sa chyba"
 
@@ -10296,15 +11304,6 @@ msgstr "RRRR"
 #~ msgid "An error occurred. The message was:"
 #~ msgstr "Vyskytla sa chyba. Správa bola:"
 
-#~ msgid "Andorra"
-#~ msgstr "Andorra"
-
-#~ msgid "Angola"
-#~ msgstr "Angola"
-
-#~ msgid "Anguilla"
-#~ msgstr "Anguilla"
-
 #~ msgid "Anniversary:"
 #~ msgstr "Výročie:"
 
@@ -10316,9 +11315,6 @@ msgstr "RRRR"
 
 #~ msgid "Antarctica"
 #~ msgstr "Antarktída"
-
-#~ msgid "Antigua and Barbuda"
-#~ msgstr "Antigua a Barbuda"
 
 #~| msgid "Apply role"
 #~ msgid "Apply"
@@ -10429,15 +11425,6 @@ msgstr "RRRR"
 #~ msgid "Are you sure?"
 #~ msgstr "Ste si istý?"
 
-#~ msgid "Argentina"
-#~ msgstr "Argentína"
-
-#~ msgid "Armenia"
-#~ msgstr "Arménsko"
-
-#~ msgid "Aruba"
-#~ msgstr "Aruba"
-
 #~ msgid "Ask for return receipt"
 #~ msgstr "Požiadať o potvrdenie o doručení"
 
@@ -10486,12 +11473,6 @@ msgstr "RRRR"
 #~ msgid "Aug"
 #~ msgstr "Aug"
 
-#~ msgid "Australia"
-#~ msgstr "Austrália"
-
-#~ msgid "Austria"
-#~ msgstr "Rakúsko"
-
 #~ msgid "Auto"
 #~ msgstr "Auto"
 
@@ -10539,26 +11520,26 @@ msgstr "RRRR"
 #~ msgid "Available UWA modules:"
 #~ msgstr "Dostupné moduly UWA:"
 
-#~ msgid "Azerbaijan"
-#~ msgstr "Azerbajdžan"
+#, fuzzy
+#~| msgid "Back to sign in"
+#~ msgid "Back to devices"
+#~ msgstr "Späť na prihlásenie"
+
+#, fuzzy
+#~| msgid "Back to sign in"
+#~ msgid "Back to modules"
+#~ msgstr "Späť na prihlásenie"
+
+#, fuzzy
+#~| msgid "your platform"
+#~ msgid "Back to platforms"
+#~ msgstr "vaša platforma"
 
 #~ msgid "Background 1"
 #~ msgstr "Pozadie 1"
 
 #~ msgid "Background 2"
 #~ msgstr "Pozadie 2"
-
-#~ msgid "Bahamas"
-#~ msgstr "Bahamy"
-
-#~ msgid "Bahrain"
-#~ msgstr "Bahrajn"
-
-#~ msgid "Bangladesh"
-#~ msgstr "Bangladéš"
-
-#~ msgid "Barbados"
-#~ msgstr "Barbados"
 
 #~ msgid "Bars"
 #~ msgstr "Panely"
@@ -10584,24 +11565,12 @@ msgstr "RRRR"
 #~ msgid "Begins at"
 #~ msgstr "Začína o"
 
-#~ msgid "Belarus"
-#~ msgstr "Bielorusko"
-
 #~ msgid ""
 #~ "Below the recipient you will find further functions, e.g. for sending "
 #~ "copies to other recipients or for adding attachments."
 #~ msgstr ""
 #~ "Pod príjemcom nájdete ďalšie funkcie, napr. na zaslanie kópie ďalším "
 #~ "príjemcom alebo na pridanie príloh."
-
-#~ msgid "Benin"
-#~ msgstr "Benin"
-
-#~ msgid "Bermuda"
-#~ msgstr "Bermudy"
-
-#~ msgid "Bhutan"
-#~ msgstr "Bhután"
 
 #~ msgid "Birthday Appointment"
 #~ msgstr "Narodeninová schôdzka"
@@ -10617,9 +11586,6 @@ msgstr "RRRR"
 
 #~ msgid "Bold"
 #~ msgstr "Hrubé"
-
-#~ msgid "Bolivia"
-#~ msgstr "Bolívia"
 
 #~ msgid "Border inside"
 #~ msgstr "Okaj vnútri"
@@ -10645,12 +11611,6 @@ msgstr "RRRR"
 #~ msgid "Border top and bottom"
 #~ msgstr "Okaj hore a dolu"
 
-#~ msgid "Bosnia and Herzegovina"
-#~ msgstr "Bosna a Hercegovina"
-
-#~ msgid "Botswana"
-#~ msgstr "Botswana"
-
 #, fuzzy
 #~ msgid "Bottom"
 #~ msgstr "Okaj dolu"
@@ -10661,26 +11621,11 @@ msgstr "RRRR"
 #~ msgid "Branches:"
 #~ msgstr "Vetvy:"
 
-#~ msgid "Brazil"
-#~ msgstr "Brazília"
-
-#~ msgid "British Indian Ocean Territory"
-#~ msgstr "Britské indickooceánske územie"
-
 #~ msgid "Brunei Darussalam"
 #~ msgstr "Brunejsko-darussalamský štát"
 
-#~ msgid "Bulgaria"
-#~ msgstr "Bulharsko"
-
 #~ msgid "Bullets On/Off"
 #~ msgstr "Odrážky zap./vyp."
-
-#~ msgid "Burkina Faso"
-#~ msgstr "Burkina Faso"
-
-#~ msgid "Burundi"
-#~ msgstr "Burundi"
 
 #~ msgid "CAD"
 #~ msgstr "CAD"
@@ -10700,18 +11645,9 @@ msgstr "RRRR"
 #~ msgid "Calendar workweek view"
 #~ msgstr "Zobrazenie kalendára - pracovný týždeň"
 
-#~ msgid "Cambodia"
-#~ msgstr "Kambodža"
-
-#~ msgid "Cameroon"
-#~ msgstr "Kamerun"
-
 #~ msgid "Can not create appointment in a folder other than appointment folder"
 #~ msgstr ""
 #~ "Nie je možné vytvoriť schôdzku v inom priečinku ako v priečinku schôdzok"
-
-#~ msgid "Canada"
-#~ msgstr "Kanada"
 
 #~ msgid "Canadian dollar"
 #~ msgstr "Kanadský dolár"
@@ -10721,9 +11657,6 @@ msgstr "RRRR"
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "Nie je možné presunúť systémový priečinok."
-
-#~ msgid "Cape Verde"
-#~ msgstr "Kapverdy"
 
 #~ msgid "Cards"
 #~ msgstr "Vizitky"
@@ -10743,9 +11676,6 @@ msgstr "RRRR"
 #~ msgid "Category names must be unique"
 #~ msgstr "Názvy kategórií musia byť jedinečné"
 
-#~ msgid "Cayman Islands"
-#~ msgstr "Kajmanie ostrovy"
-
 #~ msgid "Cc"
 #~ msgstr "Kópia"
 
@@ -10763,12 +11693,6 @@ msgstr "RRRR"
 
 #~ msgid "Centered, no text wrapping"
 #~ msgstr "V strede, bez obtekania textu"
-
-#~ msgid "Central African Republic"
-#~ msgstr "Stredoafrická republika"
-
-#~ msgid "Chad"
-#~ msgstr "Čad"
 
 #~ msgid "Change View"
 #~ msgstr "Zmeniť zobrazenie"
@@ -10797,20 +11721,11 @@ msgstr "RRRR"
 #~ msgid "Children:"
 #~ msgstr "Deti:"
 
-#~ msgid "Chile"
-#~ msgstr "Čile"
-
-#~ msgid "China"
-#~ msgstr "Čína"
-
 #~ msgid "Choose Team"
 #~ msgstr "Vyberte tím"
 
 #~ msgid "Choose a new password for your account."
 #~ msgstr "Vyberte si nové heslo k vášmu účtu."
-
-#~ msgid "Christmas Island"
-#~ msgstr "Vianočný ostrov"
 
 #~ msgid "City (business)"
 #~ msgstr "Mesto (obchodné)"
@@ -10883,9 +11798,6 @@ msgstr "RRRR"
 #~ msgid "Collect while sending E-Mails?"
 #~ msgstr "Zbierať počas posielania emailov?"
 
-#~ msgid "Colombia"
-#~ msgstr "Kolumbia"
-
 #~ msgid "Comma Separated"
 #~ msgstr "Oddelené čiarkami"
 
@@ -10947,17 +11859,11 @@ msgstr "RRRR"
 #~ msgid "Continue Presentation"
 #~ msgstr "Cieľ"
 
-#~ msgid "Cook Islands"
-#~ msgstr "Cookove ostrovy"
-
 #~ msgid "Copy (CC) to"
 #~ msgstr "Kópia (CC)"
 
 #~ msgid "Copy to"
 #~ msgstr "Kópia"
-
-#~ msgid "Costa Rica"
-#~ msgstr "Kostarika"
 
 #~ msgid "Cote d'Ivoire"
 #~ msgstr "Pobrežie Slonoviny"
@@ -11065,12 +11971,6 @@ msgstr "RRRR"
 #~ msgid "Creation date:"
 #~ msgstr "Dátum vytvorenia:"
 
-#~ msgid "Croatia"
-#~ msgstr "Chorvátsko"
-
-#~ msgid "Cuba"
-#~ msgstr "Kuba"
-
 #~ msgid "Current Costs:"
 #~ msgstr "Aktuálne náklady:"
 
@@ -11110,14 +12010,8 @@ msgstr "RRRR"
 #~ msgid "Cut"
 #~ msgstr "Vystrihnúť"
 
-#~ msgid "Cyprus"
-#~ msgstr "Cyprus"
-
 #~ msgid "Czech"
 #~ msgstr "čeština"
-
-#~ msgid "Czech Republic"
-#~ msgstr "Česká republika"
 
 #~ msgid "DKK"
 #~ msgstr "DKK"
@@ -11306,9 +12200,6 @@ msgstr "RRRR"
 #~ msgid "Displaying the help or the settings"
 #~ msgstr "Zobrazenie Pomocníka alebo nastavenia"
 
-#~ msgid "Djibouti"
-#~ msgstr "Džibutsko"
-
 #~ msgid "Do the following:"
 #~ msgstr "Vykonať nasledovné:"
 
@@ -11389,12 +12280,6 @@ msgstr "RRRR"
 #~ msgid "Does not match regex"
 #~ msgstr "Nezodpovedá regulárnemu výrazu"
 
-#~ msgid "Dominica"
-#~ msgstr "Dominika"
-
-#~ msgid "Dominican Republic"
-#~ msgstr "Dominikánska republika"
-
 #~ msgid "Don't show again"
 #~ msgstr "Už nezobrazovať"
 
@@ -11437,9 +12322,6 @@ msgstr "RRRR"
 
 #~ msgid "Due today!"
 #~ msgstr "Termín dnes!"
-
-#~ msgid "Dutch (Netherlands)"
-#~ msgstr "holandčina (Holandsko)"
 
 #~ msgid "Dynamic resizing..."
 #~ msgstr "Dynamická zmena veľkosti..."
@@ -11492,9 +12374,6 @@ msgstr "RRRR"
 #~ msgid "Each %s. %s"
 #~ msgstr "Každý %s. %s"
 
-#~ msgid "Ecuador"
-#~ msgstr "Ekvádor"
-
 #~ msgid "Edit Appointment"
 #~ msgstr "Upraviť schôdzku"
 
@@ -11543,9 +12422,6 @@ msgstr "RRRR"
 
 #~ msgid "Editor feature set:"
 #~ msgstr "Sada možností editora:"
-
-#~ msgid "El Salvador"
-#~ msgstr "Salvádor"
 
 #~ msgid "Email Address:"
 #~ msgstr "Emailová adresa:"
@@ -11737,9 +12613,6 @@ msgstr "RRRR"
 #~ msgid "Envelope"
 #~ msgstr "Obálka"
 
-#~ msgid "Equatorial Guinea"
-#~ msgstr "Rovníková Guinea"
-
 #~ msgid "Error-ID: %1$s"
 #~ msgstr "ID chyby: %1$s"
 
@@ -11757,12 +12630,6 @@ msgstr "RRRR"
 
 #~ msgid "Estimated Duration:"
 #~ msgstr "Odhadované trvanie:"
-
-#~ msgid "Estonia"
-#~ msgstr "Estónsko"
-
-#~ msgid "Ethiopia"
-#~ msgstr "Etiópia"
 
 #~ msgid "Euro"
 #~ msgstr "Euro"
@@ -11805,12 +12672,6 @@ msgstr "RRRR"
 #~ msgid "Failure! Please refresh."
 #~ msgstr "Zlyhanie! Prosím, obnovte stránku."
 
-#~ msgid "Falkland Islands (Malvinas)"
-#~ msgstr "Falklandy (Malvíny)"
-
-#~ msgid "Faroe Islands"
-#~ msgstr "Faerské ostrovy"
-
 #~ msgctxt "app"
 #~ msgid "Favorite timezone"
 #~ msgstr "Obľúbené časové pásmo"
@@ -11838,9 +12699,6 @@ msgstr "RRRR"
 
 #~ msgid "Feb"
 #~ msgstr "Feb"
-
-#~ msgid "Fiji"
-#~ msgstr "Fidži"
 
 #~ msgid "File name:"
 #~ msgstr "Názov súboru:"
@@ -11878,9 +12736,6 @@ msgstr "RRRR"
 
 #~ msgid "Finish tour"
 #~ msgstr "Dokončiť prehliadku"
-
-#~ msgid "Finland"
-#~ msgstr "Fínsko"
 
 #~ msgid "First Tab"
 #~ msgstr "Prvá karta"
@@ -11973,12 +12828,6 @@ msgstr "RRRR"
 #~ msgid "French"
 #~ msgstr "francúzština"
 
-#~ msgid "French Guiana"
-#~ msgstr "Francúzska Guyana"
-
-#~ msgid "French Polynesia"
-#~ msgstr "Francúzska Polynézia"
-
 #~ msgid "French Southern Territories"
 #~ msgstr "Francúzske južné a antarktické územia"
 
@@ -12017,33 +12866,15 @@ msgstr "RRRR"
 #~ msgid "GBP"
 #~ msgstr "GBP"
 
-#~ msgid "Gabon"
-#~ msgstr "Gabon"
-
-#~ msgid "Gambia"
-#~ msgstr "Gambia"
-
 #, fuzzy
 #~ msgid "General info"
 #~ msgstr "Všeobecné"
-
-#~ msgid "Georgia"
-#~ msgstr "Gruzínsko"
-
-#~ msgid "German"
-#~ msgstr "nemčina"
 
 #~ msgid "Get directions"
 #~ msgstr "Získať inštrukcie"
 
 #~ msgid "Get started here!"
 #~ msgstr "Začnite tu!"
-
-#~ msgid "Ghana"
-#~ msgstr "Ghana"
-
-#~ msgid "Gibraltar"
-#~ msgstr "Gibraltár"
 
 #~ msgid "Go"
 #~ msgstr "Vykonať"
@@ -12062,12 +12893,6 @@ msgstr "RRRR"
 
 #~ msgid "Greek"
 #~ msgstr "gréčtina"
-
-#~ msgid "Greenland"
-#~ msgstr "Grónsko"
-
-#~ msgid "Grenada"
-#~ msgstr "Grenada"
 
 #~ msgid "Grey"
 #~ msgstr "Šedá"
@@ -12090,26 +12915,8 @@ msgstr "RRRR"
 #~ msgid "Group task"
 #~ msgstr "Skupinová úloha"
 
-#~ msgid "Guadeloupe"
-#~ msgstr "Guadeloupe"
-
-#~ msgid "Guam"
-#~ msgstr "Guam"
-
-#~ msgid "Guatemala"
-#~ msgstr "Guatemala"
-
 #~ msgid "Guidance"
 #~ msgstr "Pokyny"
-
-#~ msgid "Guinea"
-#~ msgstr "Guinea"
-
-#~ msgid "Guinea-Bissau"
-#~ msgstr "Guinea-Bissau"
-
-#~ msgid "Guyana"
-#~ msgstr "Guyana"
 
 #~ msgctxt "teamview"
 #~ msgid "H"
@@ -12135,17 +12942,11 @@ msgstr "RRRR"
 #~ msgid "HTML-only mail"
 #~ msgstr "Iba pošta v HTML"
 
-#~ msgid "Haiti"
-#~ msgstr "Haiti"
-
 #~ msgid "Halo view"
 #~ msgstr "Zobrazenie Prstenca"
 
 #~ msgid "Heading"
 #~ msgstr "Nadpis"
-
-#~ msgid "Heard Island and McDonald Islands"
-#~ msgstr "Heardov ostrov"
 
 #~ msgid "Hello"
 #~ msgstr "Ahoj"
@@ -12200,17 +13001,8 @@ msgstr "RRRR"
 #~ msgid "Home"
 #~ msgstr "Domov"
 
-#~ msgid "Honduras"
-#~ msgstr "Honduras"
-
-#~ msgid "Hong Kong"
-#~ msgstr "Hongkong"
-
 #~ msgid "How the settings are organized"
 #~ msgstr "Ako sú organizované nastavenia"
-
-#~ msgid "Hungarian"
-#~ msgstr "maďarčina"
 
 #~ msgid "IM"
 #~ msgstr "IM"
@@ -12229,9 +13021,6 @@ msgstr "RRRR"
 
 #~ msgid "IP phone (private):"
 #~ msgstr "IP telefón (súkromný):"
-
-#~ msgid "Iceland"
-#~ msgstr "Island"
 
 #~ msgid "Icon view"
 #~ msgstr "Zobrazenie ikon"
@@ -12342,9 +13131,6 @@ msgstr "RRRR"
 
 #~ msgid "Incorrect input."
 #~ msgstr "Neplatný vstup."
-
-#~ msgid "India"
-#~ msgstr "India"
 
 #~ msgid "Info area"
 #~ msgstr "Oblasť informácií"
@@ -12459,15 +13245,6 @@ msgstr "RRRR"
 #~ msgid "Inviting other participants"
 #~ msgstr "Pozývanie ďalších účastníkov"
 
-#~ msgid "Iran"
-#~ msgstr "Irán"
-
-#~ msgid "Iraq"
-#~ msgstr "Irak"
-
-#~ msgid "Ireland"
-#~ msgstr "Írsko"
-
 #~ msgid "Is at least"
 #~ msgstr "Je aspoň"
 
@@ -12477,17 +13254,8 @@ msgstr "RRRR"
 #~ msgid "Is not exactly"
 #~ msgstr "Je približne"
 
-#~ msgid "Isle of Man"
-#~ msgstr "Man"
-
-#~ msgid "Israel"
-#~ msgstr "Izrael"
-
 #~ msgid "Italian (Italy)"
 #~ msgstr "taliančina (Taliansko)"
-
-#~ msgid "Italic"
-#~ msgstr "Kurzíva"
 
 #~ msgid "Items without a file can not be opened."
 #~ msgstr "Položky bez súboru nie je možné otvoriť."
@@ -12495,20 +13263,8 @@ msgstr "RRRR"
 #~ msgid "JPY"
 #~ msgstr "JPY"
 
-#~ msgid "Jamaica"
-#~ msgstr "Jamajka"
-
 #~ msgid "Jan"
 #~ msgstr "Jan"
-
-#~ msgid "Japan"
-#~ msgstr "Japonsko"
-
-#~ msgid "Jersey"
-#~ msgstr "Jersey"
-
-#~ msgid "Jordan"
-#~ msgstr "Jordánsko"
 
 #~ msgid "Jul"
 #~ msgstr "Júl"
@@ -12519,29 +13275,11 @@ msgstr "RRRR"
 #~ msgid "Justify"
 #~ msgstr "Na stred"
 
-#~ msgid "Kazakhstan"
-#~ msgstr "Kazachstan"
-
 #~ msgid "Keep the draft."
 #~ msgstr "Zachovať v Rozpísaných."
 
-#~ msgid "Kenya"
-#~ msgstr "Keňa"
-
-#~ msgid "Kiribati"
-#~ msgstr "Kiribati"
-
-#~ msgid "Korea, Democratic People's Republic of"
-#~ msgstr "Kórejská ľudovodemokratická republika"
-
 #~ msgid "Korea, Republic of"
 #~ msgstr "Kórejská republika"
-
-#~ msgid "Kuwait"
-#~ msgstr "Kuvajt"
-
-#~ msgid "Kyrgyzstan"
-#~ msgstr "Kirgizsko"
 
 #~ msgid "Label"
 #~ msgstr "Označenie"
@@ -12574,26 +13312,14 @@ msgstr "RRRR"
 #~ msgid "Leave messages on server"
 #~ msgstr "Ponechať správy na serveri"
 
-#~ msgid "Lebanon"
-#~ msgstr "Libanon"
-
 #~ msgid "Left"
 #~ msgstr "Vľavo"
 
 #~ msgid "Left aligned, text wraps at right side"
 #~ msgstr "Zarovnané vľavo, text obteká na pravej strane"
 
-#~ msgid "Lesotho"
-#~ msgstr "Lesotho"
-
-#~ msgid "Liberia"
-#~ msgstr "Libéria"
-
 #~ msgid "Libyan Arab Jamahiriya"
 #~ msgstr "Líbya"
-
-#~ msgid "Liechtenstein"
-#~ msgstr "Lichtenštajnsko"
 
 #~ msgid "Lighter"
 #~ msgstr "Svetlejšia"
@@ -12620,9 +13346,6 @@ msgstr "RRRR"
 
 #~ msgid "Link/Url"
 #~ msgstr "Odkaz/URL"
-
-#~ msgid "Lithuania"
-#~ msgstr "Litva"
 
 #~ msgid "Load Contents..."
 #~ msgstr "Načítať obsah..."
@@ -12666,9 +13389,6 @@ msgstr "RRRR"
 #~ msgid "Long"
 #~ msgstr "Dlhé"
 
-#~ msgid "Luxembourg"
-#~ msgstr "Luxembursko"
-
 #~ msgid "M/d/yy"
 #~ msgstr "M/d/yy"
 
@@ -12685,15 +13405,6 @@ msgstr "RRRR"
 #~| msgid "March"
 #~ msgid "Mac"
 #~ msgstr "marec"
-
-#~ msgid "Macao"
-#~ msgstr "Macao"
-
-#~ msgid "Macedonia"
-#~ msgstr "Macedónska republika"
-
-#~ msgid "Madagascar"
-#~ msgstr "Madagaskar"
 
 #~ msgid "Mail Thread Details"
 #~ msgstr "Podrobnosti poštového vlákna"
@@ -12716,21 +13427,6 @@ msgstr "RRRR"
 #~ msgid "Mailing list %s"
 #~ msgstr "Poštová konferencia %s"
 
-#~ msgid "Malawi"
-#~ msgstr "Malawi"
-
-#~ msgid "Malaysia"
-#~ msgstr "Malajzia"
-
-#~ msgid "Maldives"
-#~ msgstr "Maldivy"
-
-#~ msgid "Mali"
-#~ msgstr "Mali"
-
-#~ msgid "Malta"
-#~ msgstr "Malta"
-
 #~ msgid "Manager:"
 #~ msgstr "Nadriadený:"
 
@@ -12750,26 +13446,11 @@ msgstr "RRRR"
 #~ msgid "Mark folder read"
 #~ msgstr "Označiť priečinok ako prečítaný"
 
-#~ msgid "Marshall Islands"
-#~ msgstr "Marshallove ostrovy"
-
-#~ msgid "Martinique"
-#~ msgstr "Martinik"
-
 #~ msgid "Matches (wildcards allowed)"
 #~ msgstr "Zodpovedá (možno použiť zástupné znaky)"
 
-#~ msgid "Mauritania"
-#~ msgstr "Mauritánia"
-
-#~ msgid "Mauritius"
-#~ msgstr "Maurícius"
-
 #~ msgid "Maximum"
 #~ msgstr "Maximálne"
-
-#~ msgid "Mayotte"
-#~ msgstr "Mayotte"
 
 #~ msgid "Mediaplayer"
 #~ msgstr "Prehrávať multimédií"
@@ -12780,12 +13461,6 @@ msgstr "RRRR"
 #~| msgid "Mark as read"
 #~ msgid "Message is read"
 #~ msgstr "Správa je prečítaná"
-
-#~ msgid "Mexico"
-#~ msgstr "Mexiko"
-
-#~ msgid "Micronesia"
-#~ msgstr "Mikronézia"
 
 #~ msgid "Microsoft Outlook"
 #~ msgstr "Microsoft Outlook"
@@ -12835,23 +13510,11 @@ msgstr "RRRR"
 #~ msgid "Module"
 #~ msgstr "Modul"
 
-#~ msgid "Moldova"
-#~ msgstr "Moldavsko"
-
 #~ msgid "Mon"
 #~ msgstr "Pon"
 
-#~ msgid "Monaco"
-#~ msgstr "Monako"
-
 #~ msgid "Monday"
 #~ msgstr "Pondelok"
-
-#~ msgid "Mongolia"
-#~ msgstr "Mongolsko"
-
-#~ msgid "Montenegro"
-#~ msgstr "Čierna Hora"
 
 #~ msgid "Month View"
 #~ msgstr "Zobrazenie mesiaca"
@@ -12859,23 +13522,14 @@ msgstr "RRRR"
 #~ msgid "More zoom settings"
 #~ msgstr "Ďalšie nastavenia priblíženia"
 
-#~ msgid "Morocco"
-#~ msgstr "Maroko"
-
 #~ msgid "Moving mails ... This may take a few seconds."
 #~ msgstr "Presúvajú sa emaily... To môže niekoľko sekúnd trvať."
-
-#~ msgid "Mozambique"
-#~ msgstr "Mozambik"
 
 #~ msgid "My Infostore"
 #~ msgstr "Moje InfoÚložisko"
 
 #~ msgid "My OX Social"
 #~ msgstr "Môj Sociálny OX"
-
-#~ msgid "Myanmar"
-#~ msgstr "Mjanmarsko"
 
 #~ msgid "N/A"
 #~ msgstr "N/A"
@@ -12898,17 +13552,8 @@ msgstr "RRRR"
 #~ msgid "Names and email addresses"
 #~ msgstr "Mená a emailové adresy"
 
-#~ msgid "Namibia"
-#~ msgstr "Namíbia"
-
-#~ msgid "Nauru"
-#~ msgstr "Nauru"
-
 #~ msgid "Navigation bar"
 #~ msgstr "Navigačný panel"
-
-#~ msgid "Nepal"
-#~ msgstr "Nepál"
 
 #~ msgid "Netherlands Antilles"
 #~ msgstr "Holandské Antily"
@@ -12918,9 +13563,6 @@ msgstr "RRRR"
 
 #~ msgid "New Appointment"
 #~ msgstr "Nová schôdzka"
-
-#~ msgid "New Caledonia"
-#~ msgstr "Nová Kaledónia"
 
 #~ msgid "New Distribution List"
 #~ msgstr "Nová poštová konferencia"
@@ -12939,9 +13581,6 @@ msgstr "RRRR"
 
 #~ msgid "New Team"
 #~ msgstr "Nový tím"
-
-#~ msgid "New Zealand"
-#~ msgstr "Nový Zéland"
 
 #~ msgid "New messaging service"
 #~ msgstr "Nová služba posielania správ"
@@ -12973,20 +13612,8 @@ msgstr "RRRR"
 #~ msgid "Next birthdays"
 #~ msgstr "Najbližšie narodeniny"
 
-#~ msgid "Nicaragua"
-#~ msgstr "Nikaragua"
-
 #~ msgid "Nickname:"
 #~ msgstr "Prezývka:"
-
-#~ msgid "Niger"
-#~ msgstr "Niger"
-
-#~ msgid "Nigeria"
-#~ msgstr "Nigéria"
-
-#~ msgid "Niue"
-#~ msgstr "Niue"
 
 #~ msgid "No Appointment selected."
 #~ msgstr "Žiadna schôdzka nie je vybraná."
@@ -13088,15 +13715,6 @@ msgstr "RRRR"
 #~ msgid "No, not now"
 #~ msgstr "Nie, teraz nie"
 
-#~ msgid "Norfolk Island"
-#~ msgstr "Norfolk"
-
-#~ msgid "Northern Mariana Islands"
-#~ msgstr "Severné Mariány"
-
-#~ msgid "Norway"
-#~ msgstr "Nórsko"
-
 #~ msgid "Not Spam"
 #~ msgstr "Nie je Spam"
 
@@ -13159,9 +13777,6 @@ msgstr "RRRR"
 
 #~ msgid "Old Password is wrong."
 #~ msgstr "Staré heslo je nesprávne."
-
-#~ msgid "Oman"
-#~ msgstr "Omán"
 
 #~ msgid "On %s %s each %s. months"
 #~ msgstr "V %s %s každých %s mesiacov"
@@ -13277,23 +13892,8 @@ msgstr "RRRR"
 #~ msgid "Pager:"
 #~ msgstr "Pager:"
 
-#~ msgid "Pakistan"
-#~ msgstr "Pakistan"
-
-#~ msgid "Palau"
-#~ msgstr "Palau"
-
-#~ msgid "Palestinian Territory, Occupied"
-#~ msgstr "palestínske územie, Okupované"
-
-#~ msgid "Panama"
-#~ msgstr "Panama"
-
 #~ msgid "Panel is shown as"
 #~ msgstr "Panel je zobrazený ako"
-
-#~ msgid "Papua New Guinea"
-#~ msgstr "Papua - Nová Guinea"
 
 #~ msgid "Paragraph Alignment"
 #~ msgstr "Zarovnanie odstavca"
@@ -13348,12 +13948,6 @@ msgstr "RRRR"
 #~ msgid "Permissions: %1$s"
 #~ msgstr "Oprávnenia"
 
-#~ msgid "Peru"
-#~ msgstr "Peru"
-
-#~ msgid "Philippines"
-#~ msgstr "Filipíny"
-
 #~ msgid "Phone (business):"
 #~ msgstr "Telefón (obchodný):"
 
@@ -13389,9 +13983,6 @@ msgstr "RRRR"
 
 #~ msgid "Phone:"
 #~ msgstr "Telefón:"
-
-#~ msgid "Pitcairn"
-#~ msgstr "Pitcairnove ostrovy"
 
 #~ msgid "Place of Signature:"
 #~ msgstr "Miesto podpisu:"
@@ -13472,9 +14063,6 @@ msgstr "RRRR"
 #~ msgid "Please wait while you are being redirected to the start page ..."
 #~ msgstr "Prosím, čakajte, kým vás presmerujeme na domovskú stránku ..."
 
-#~ msgid "Poland"
-#~ msgstr "Poľsko"
-
 #~ msgid "Polish"
 #~ msgstr "poľština"
 
@@ -13486,9 +14074,6 @@ msgstr "RRRR"
 
 #~ msgid "Portal Widgets"
 #~ msgstr "Widgety portálu"
-
-#~ msgid "Portugal"
-#~ msgstr "Portugalsko"
 
 #~ msgid "Portuguese (Portugal)"
 #~ msgstr "portugalčina (Portugalsko)"
@@ -13585,9 +14170,6 @@ msgstr "RRRR"
 
 #~ msgid "Publish item"
 #~ msgstr "Publikovať položku"
-
-#~ msgid "Puerto Rico"
-#~ msgstr "Portoriko"
 
 #~ msgid "Pull To Refresh"
 #~ msgstr "Obnoviť potiahnutím"
@@ -13709,9 +14291,6 @@ msgstr "RRRR"
 #~ msgid "Retweet new"
 #~ msgstr "Retweetovať teraz"
 
-#~ msgid "Reunion"
-#~ msgstr "Réunion"
-
 #~ msgid "Revert Last Operation"
 #~ msgstr "Vrátiť späť poslednú operáciu"
 
@@ -13725,9 +14304,6 @@ msgstr "RRRR"
 #~ msgid "Right aligned, text wraps at left side"
 #~ msgstr "Zarovnané vpravo, text obteká na ľavej strane"
 
-#~ msgid "Romanian"
-#~ msgstr "rumunčina"
-
 #~ msgid "Room number:"
 #~ msgstr "Číslo izby:"
 
@@ -13737,14 +14313,8 @@ msgstr "RRRR"
 #~ msgid "Rules"
 #~ msgstr "Pravidlá"
 
-#~ msgid "Russian"
-#~ msgstr "ruština"
-
 #~ msgid "Russian Federation"
 #~ msgstr "Ruská federácia"
-
-#~ msgid "Rwanda"
-#~ msgstr "Rwanda"
 
 #~ msgctxt "saturday"
 #~ msgid "S"
@@ -13757,50 +14327,25 @@ msgstr "RRRR"
 #~ msgid "SEK"
 #~ msgstr "SEK"
 
-#~ msgid "Saint Barthélemy"
-#~ msgstr "Svätý Bartolomej"
-
-#~ msgid "Saint Helena"
-#~ msgstr "Svätá Helena"
-
-#~ msgid "Saint Kitts and Nevis"
-#~ msgstr "Svätý Krištof a Nevis"
-
-#~ msgid "Saint Lucia"
-#~ msgstr "Svätá Lucia"
+#, fuzzy
+#~| msgid "RSS"
+#~ msgid "SMS"
+#~ msgstr "RSS"
 
 #~ msgid "Saint Martin (French part)"
 #~ msgstr "Saint Martin"
 
-#~ msgid "Saint Pierre and Miquelon"
-#~ msgstr "Saint Pierre a Miquelon"
-
-#~ msgid "Saint Vincent and the Grenadines"
-#~ msgstr "Svätý Vincent a Grenadíny"
-
 #~ msgid "Sales Volume:"
 #~ msgstr "Objem predaja:"
 
-#~ msgid "Samoa"
-#~ msgstr "Samoa"
-
 #~ msgid "Sample:"
 #~ msgstr "Vzorka:"
-
-#~ msgid "San Marino"
-#~ msgstr "San Maríno"
-
-#~ msgid "Sao Tome and Principe"
-#~ msgstr "Svätý Tomáš a Princov ostrov"
 
 #~ msgid "Sat"
 #~ msgstr "Sob"
 
 #~ msgid "Saturday"
 #~ msgstr "Sobota"
-
-#~ msgid "Saudi Arabia"
-#~ msgstr "Saudská Arábia"
 
 #~ msgid "Save configuration before every logout?"
 #~ msgstr "Uložiť konfiguráciu pred každým odhlásením?"
@@ -13937,9 +14482,6 @@ msgstr "RRRR"
 #~ msgid "Sending the E-Mail"
 #~ msgstr "Odoslanie emailu"
 
-#~ msgid "Senegal"
-#~ msgstr "Senegal"
-
 #~ msgid "Sent"
 #~ msgstr "Odoslané"
 
@@ -13949,9 +14491,6 @@ msgstr "RRRR"
 #~ msgid "Separator"
 #~ msgstr "Oddeľovač"
 
-#~ msgid "Serbia"
-#~ msgstr "Srbsko"
-
 #~ msgid "Server Error"
 #~ msgstr "Chyba servera"
 
@@ -13960,9 +14499,6 @@ msgstr "RRRR"
 
 #~ msgid "Set as default"
 #~ msgstr "Nastaviť ako predvolené"
-
-#~ msgid "Seychelles"
-#~ msgstr "Seychely"
 
 #~ msgid "Share link by email"
 #~ msgstr "Zdieľať odkaz emailom"
@@ -14076,9 +14612,6 @@ msgstr "RRRR"
 #~ msgid "Sidebar"
 #~ msgstr "Bočný panel"
 
-#~ msgid "Sierra Leone"
-#~ msgstr "Sierra Leone"
-
 #~ msgid "Signature"
 #~ msgstr "Podpis"
 
@@ -14101,9 +14634,6 @@ msgstr "RRRR"
 #~ msgstr ""
 #~ "Keďže sa schôdzka vyskytuje opakovane, môže spôsobiť ďalšie konflikty."
 
-#~ msgid "Single"
-#~ msgstr "Jednoduché"
-
 #~ msgid "Size:"
 #~ msgstr "Veľkosť:"
 
@@ -14112,12 +14642,6 @@ msgstr "RRRR"
 
 #~ msgid "Slideshow"
 #~ msgstr "Prezetácia"
-
-#~ msgid "Slovakia"
-#~ msgstr "Slovensko"
-
-#~ msgid "Slovenia"
-#~ msgstr "Slovinsko"
 
 #, fuzzy
 #~| msgid "Smartphone settings:"
@@ -14135,12 +14659,6 @@ msgstr "RRRR"
 #~ msgstr ""
 #~ "Účty sociálnych sietí sa používajú len na stiahnutie kontaktov alebo "
 #~ "údajov kalendára"
-
-#~ msgid "Solomon Islands"
-#~ msgstr "Šalamúnove ostrovy"
-
-#~ msgid "Somalia"
-#~ msgstr "Somálsko"
 
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Niekto s vami zazdieľal súbor"
@@ -14170,9 +14688,6 @@ msgstr "RRRR"
 #~ msgid "Sorting your tasks"
 #~ msgstr "Zoraďovanie vašich úloh"
 
-#~ msgid "South Africa"
-#~ msgstr "Južná Afrika"
-
 #~ msgid "South Georgia and the South Sandwich Islands"
 #~ msgstr "Južná Georgia a Južné Sandwichove ostrovy"
 
@@ -14184,9 +14699,6 @@ msgstr "RRRR"
 
 #~ msgid "Spouse's name:"
 #~ msgstr "Názov partnera:"
-
-#~ msgid "Sri Lanka"
-#~ msgstr "Srí Lanka"
 
 #~ msgid "Start Page"
 #~ msgstr "Domovská stránka"
@@ -14314,9 +14826,6 @@ msgstr "RRRR"
 #~ msgid "Such data will never be uploaded"
 #~ msgstr "Takéto údaje sa nikdy nebudú nahrávať"
 
-#~ msgid "Sudan"
-#~ msgstr "Sudán"
-
 #~ msgid "Suffix:"
 #~ msgstr "Prípona:"
 
@@ -14340,26 +14849,11 @@ msgstr "RRRR"
 #~ "2010 (bez podpory „Office 2010 Klikni a spusti“, „Office Home and "
 #~ "Business 2010 Testversion“)"
 
-#~ msgid "Suriname"
-#~ msgstr "Surinam"
-
-#~ msgid "Svalbard and Jan Mayen"
-#~ msgstr "Svalbard a Jan Mayen"
-
-#~ msgid "Swaziland"
-#~ msgstr "Svazijsko"
-
-#~ msgid "Sweden"
-#~ msgstr "Švédsko"
-
 #~ msgid "Swedish (Sweden)"
 #~ msgstr "švédština (Švédsko)"
 
 #~ msgid "Swiss franc"
 #~ msgstr "Švajčiarsky frank"
-
-#~ msgid "Switzerland"
-#~ msgstr "Švajčiarsko"
 
 #~ msgid "Sync with mobile phone"
 #~ msgstr "Synchronizovať s mobilným telefónom"
@@ -14425,15 +14919,6 @@ msgstr "RRRR"
 #~ msgid "Tabs example"
 #~ msgstr "Príklad kariet"
 
-#~ msgid "Taiwan"
-#~ msgstr "Taiwan"
-
-#~ msgid "Tajikistan"
-#~ msgstr "Tadžikistan"
-
-#~ msgid "Tanzania"
-#~ msgstr "Tanzánijská zjednotená republika"
-
 #~ msgid "Target"
 #~ msgstr "Cieľ"
 
@@ -14484,9 +14969,6 @@ msgstr "RRRR"
 
 #~ msgid "Text:"
 #~ msgstr "Text:"
-
-#~ msgid "Thailand"
-#~ msgstr "Thajsko"
 
 #~ msgctxt "help"
 #~ msgid "The E-Mail Components"
@@ -15062,15 +15544,6 @@ msgstr "RRRR"
 #~ msgid "Toggle search"
 #~ msgstr "Prepnúť vyhľadávanie"
 
-#~ msgid "Togo"
-#~ msgstr "Togo"
-
-#~ msgid "Tokelau"
-#~ msgstr "Tokelau"
-
-#~ msgid "Tonga"
-#~ msgstr "Tonga"
-
 #~ msgid "Too short"
 #~ msgstr "Príliš krátke"
 
@@ -15086,29 +15559,11 @@ msgstr "RRRR"
 #~ msgid "Trash folder"
 #~ msgstr "Priečinok Kôš"
 
-#~ msgid "Trinidad and Tobago"
-#~ msgstr "Trinidad a Tobago"
-
 #~ msgid "Tue"
 #~ msgstr "Uto"
 
 #~ msgid "Tuesday"
 #~ msgstr "Utorok"
-
-#~ msgid "Tunisia"
-#~ msgstr "Tunisko"
-
-#~ msgid "Turkey"
-#~ msgstr "Turecko"
-
-#~ msgid "Turkmenistan"
-#~ msgstr "Turkménsko"
-
-#~ msgid "Turks and Caicos Islands"
-#~ msgstr "Ostrovy Turks a Caicos"
-
-#~ msgid "Tuvalu"
-#~ msgstr "Tuvalu"
 
 #~ msgid "Tweet"
 #~ msgstr "Tweet"
@@ -15136,12 +15591,6 @@ msgstr "RRRR"
 
 #~ msgid "UWA Widgets..."
 #~ msgstr "Widgety UWA..."
-
-#~ msgid "Uganda"
-#~ msgstr "Uganda"
-
-#~ msgid "Ukraine"
-#~ msgstr "Ukrajina"
 
 #~ msgid "Unable to create a new subscription folder."
 #~ msgstr "Nebolo možné vytvoriť nový priečinok odberov."
@@ -15175,18 +15624,6 @@ msgstr "RRRR"
 #~ msgstr ""
 #~ "Neočakávaná chyba: Nebolo možné načítať dáta, pretože odpoveď zo servera "
 #~ "bola prázdna! Prosím, skúste to znova alebo  kontaktujte správcu systému."
-
-#~ msgid "United Arab Emirates"
-#~ msgstr "Spojené arabské emiráty"
-
-#~ msgid "United Kingdom"
-#~ msgstr "Spojené kráľovstvo"
-
-#~ msgid "United States"
-#~ msgstr "Spojené štáty"
-
-#~ msgid "United States Minor Outlying Islands"
-#~ msgstr "Menšie odľahlé ostrovy Spojených štátov"
 
 #~ msgid "Unknown error while checking subreddit."
 #~ msgstr "Neznáma chyba počas kontrolovania subreddit."
@@ -15223,9 +15660,6 @@ msgstr "RRRR"
 
 #~ msgid "Upload new files"
 #~ msgstr "Nahrať nové súbory"
-
-#~ msgid "Uruguay"
-#~ msgstr "Uruguaj"
 
 #~ msgid "Use \"Standalone\" Mode:"
 #~ msgstr "Použiť „samostatný“ režim:"
@@ -15274,20 +15708,11 @@ msgstr "RRRR"
 #~ msgid "Using the reminder functions"
 #~ msgstr "Používanie funkcií pripomenutia"
 
-#~ msgid "Uzbekistan"
-#~ msgstr "Uzbekistan"
-
 #~ msgid "V-Split"
 #~ msgstr "Zvis. rozdelenie"
 
 #~ msgid "V-split view"
 #~ msgstr "Zvislé rozdelenie"
-
-#~ msgid "Vanuatu"
-#~ msgstr "Vanuatu"
-
-#~ msgid "Venezuela"
-#~ msgstr "Venezuela"
 
 #~ msgid "Version comment"
 #~ msgstr "Komentár k verzii"
@@ -15307,9 +15732,6 @@ msgstr "RRRR"
 #~ msgid "Video enabled"
 #~ msgstr "Video zapnuté"
 
-#~ msgid "Viet Nam"
-#~ msgstr "Vietnam"
-
 #~ msgid "View Slideshow"
 #~ msgstr "Zobraziť prezentáciu"
 
@@ -15318,9 +15740,6 @@ msgstr "RRRR"
 
 #~ msgid "Virgin Islands, British"
 #~ msgstr "Panenské ostrovy, Britské"
-
-#~ msgid "Virgin Islands, U.S."
-#~ msgstr "Panenské ostrovy Spojených štátov"
 
 #~ msgid "Visibility"
 #~ msgstr "Viditeľnosť"
@@ -15334,9 +15753,6 @@ msgstr "RRRR"
 #~ msgctxt "wednesday"
 #~ msgid "W"
 #~ msgstr "S"
-
-#~ msgid "Wallis and Futuna"
-#~ msgstr "Wallis a Futuna"
 
 #~ msgid "Warning: %2$s"
 #~ msgstr "Upozornenie: %2$s"
@@ -15355,9 +15771,6 @@ msgstr "RRRR"
 
 #~ msgid "Weekend Day"
 #~ msgstr "Deň víkendu"
-
-#~ msgid "Western Sahara"
-#~ msgstr "Západná Sahara"
 
 #, fuzzy
 #~| msgid "Do you want to save your configuration?"
@@ -15449,9 +15862,6 @@ msgstr "RRRR"
 
 #~ msgid "Would you like to create the following birthday series appointment?"
 #~ msgstr "Chcete vytvoriť nasledovnú schôdzku série narodenín?"
-
-#~ msgid "Yemen"
-#~ msgstr "Jemen"
 
 #~ msgid "Yes, upgrade my account"
 #~ msgstr "Áno, aktualizovať môj účet"
@@ -15645,12 +16055,6 @@ msgstr "RRRR"
 
 #~ msgid "ZIP:"
 #~ msgstr "PSČ:"
-
-#~ msgid "Zambia"
-#~ msgstr "Zambia"
-
-#~ msgid "Zimbabwe"
-#~ msgstr "Zimbabwe"
 
 #~ msgid "Zloty"
 #~ msgstr "Poľský zlotý"

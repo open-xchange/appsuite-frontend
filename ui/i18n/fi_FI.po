@@ -914,6 +914,24 @@ msgstr "Ylläpitäjä"
 msgid "Advanced user?"
 msgstr "Tarkemmat hakuasetukset"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Assistant"
+msgid "Afghanistan"
+msgstr "Assistentti"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Aland Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Albania"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Algeria"
+msgstr ""
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
@@ -979,6 +997,10 @@ msgstr "Salli html muotoillut sähköpostit"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Salli muualta linkitettyjen kuvien ennakoiva lataaminen"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "American Samoa"
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 msgid "An error occurred converting the document so it cannot be displayed."
 msgstr ""
@@ -1006,9 +1028,25 @@ msgstr "Tapahtui virhe"
 msgid "An unknown error occurred"
 msgstr "Tapahtui tuntematon virhe"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Andorra"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Angola"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Anguilla"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Anniversary"
 msgstr "Vuosipäivä"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Antigua and Barbuda"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -1136,6 +1174,20 @@ msgstr "Viestejä arkistoidaan..."
 msgid "Are you sure you want to delete this Tweet?"
 msgstr "Oletko varma että haluat poistaa tämän tweetin?"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Attention"
+msgid "Argentina"
+msgstr "Huomio"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Armenia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Aruba"
+msgstr ""
+
 #. Auth type. Short for "Use same credentials as incoming mail server"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "As incoming mail server"
@@ -1185,6 +1237,14 @@ msgstr "Liitteet tallennettu!"
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "August"
 msgstr "elokuu"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Australia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Austria"
+msgstr ""
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Authentication"
@@ -1255,6 +1315,10 @@ msgstr ""
 msgid "Average time: %1$s ms"
 msgstr "Keskimääräinen aika: %1$s ms"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Azerbaijan"
+msgstr ""
+
 #. Bytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "B"
@@ -1277,27 +1341,25 @@ msgstr "Takaisin"
 msgid "Back to appointment"
 msgstr "Takaisin tapaamiseen"
 
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Back to sign in"
-msgid "Back to devices"
-msgstr "Takaisin sisäänkirjautumiseen"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Back to sign in"
-msgid "Back to modules"
-msgstr "Takaisin sisäänkirjautumiseen"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "your platform"
-msgid "Back to platforms"
-msgstr "Alustasi"
-
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid "Back to sign in"
 msgstr "Takaisin sisäänkirjautumiseen"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bahamas"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bahrain"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bangladesh"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Barbados"
+msgstr ""
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/main.js
@@ -1311,6 +1373,30 @@ msgid ""
 msgstr ""
 "Ennen kuin voit jatkaa tuotteen käyttöä, sinun tulee antaa joitakin "
 "perustietoja. Se vie alle minuutin."
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Belarus"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Belgium"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Belize"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Benin"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bermuda"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bhutan"
+msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -1344,6 +1430,22 @@ msgstr "Piilotettu kopio"
 msgid "Blue"
 msgstr "Sininen"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bolivia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bonaire, Saint Eustatius and Saba "
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bosnia and Herzegovina"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Botswana"
+msgstr ""
+
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "Box"
 msgstr ""
@@ -1352,6 +1454,18 @@ msgstr ""
 msgid "Branches"
 msgstr "Sivutoimipisteet"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Brazil"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "British Indian Ocean Territory"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "British Virgin Islands"
+msgstr ""
+
 #: apps/io.ox/presenter/actions.js module:io.ox/presenter
 msgid "Broadcast your presentation over the Web."
 msgstr "Lähetä esityksesi internetin välityksellä."
@@ -1359,6 +1473,22 @@ msgstr "Lähetä esityksesi internetin välityksellä."
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Browser"
 msgstr "Selain"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Brunei"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bulgaria"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Burkina Faso"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Burundi"
+msgstr ""
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Business Address"
@@ -1429,6 +1559,18 @@ msgstr "Kalenterinäkymä"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "Kalenteri:"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cambodia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cameroon"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Canada"
+msgstr ""
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -1532,18 +1674,35 @@ msgstr ""
 msgid "Capacity"
 msgstr "Tila"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cape Verde"
+msgstr ""
+
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "Kori on tyhjä."
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cayman Islands"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "Matkapuhelin"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Cell phone (alt)"
 msgstr "Matkapuhelin vaihtoehtoinen"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Central African Republic"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Chad"
+msgstr ""
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid "Change"
@@ -1620,6 +1779,20 @@ msgstr "Tarkistetaan valtuuksia ..."
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Children"
 msgstr "Lapsia"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Children"
+msgid "Chile"
+msgstr "Lapsia"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "China"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Christmas Island"
+msgstr ""
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "City"
@@ -1704,8 +1877,7 @@ msgstr "Napsauta yrittääksesi uudestaan."
 msgid "Click to upload image"
 msgstr "Napsauta ladataksesi kuva"
 
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
 msgstr ""
 
@@ -1741,10 +1913,20 @@ msgstr ""
 msgid "Close this reminder"
 msgstr "Sulje tämä muistutus"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cocos Islands"
+msgstr ""
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Collapse form"
 msgstr "Pienennä lomake"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Color"
+msgid "Colombia"
+msgstr "Väri"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -1793,6 +1975,12 @@ msgstr "Yleiset"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Common Emoji"
 msgstr "Yleiset emoji-merkit"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Tomorrow"
+msgid "Comoros"
+msgstr "Huomenna"
 
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -1855,6 +2043,12 @@ msgstr "Ristiriitoja resursseissa ei voida jättää huomiotta"
 #: apps/io.ox/calendar/view-grid-template.js module:io.ox/calendar
 msgid "Conflicts:"
 msgstr "Ristiriitoja:"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Selecting a view"
+msgid "Connect your Device"
+msgstr "Näkymän valitseminen"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Connector for Microsoft Outlook®"
@@ -1940,6 +2134,10 @@ msgstr ""
 "Muunna antamasi aloitus- ja lopetuspäivämäärät vastaamaan muokattuja "
 "aikavyöhykkeitä"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cook Islands"
+msgstr ""
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/files/actions.js
@@ -1957,6 +2155,10 @@ msgstr "Kopioi"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Copy to description"
 msgstr "Kopioi kuvaukseen"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Costa Rica"
+msgstr ""
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "Costs must be between -%1$d and %1$d."
@@ -2113,6 +2315,18 @@ msgctxt "help"
 msgid "Creating Files"
 msgstr "Tiedostojen luominen"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Croatia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cuba"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Curacao"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Currency"
 msgstr "Valuutta"
@@ -2141,6 +2355,14 @@ msgstr "Mukautettu nimi"
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Customize this page"
 msgstr "Mukauta tätä sivua"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cyprus"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Czech Republic"
+msgstr ""
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Dark colors"
@@ -2354,6 +2576,14 @@ msgstr "Hylätyt viestit"
 msgid "Deleting messages on local storage also deletes them on server"
 msgstr "Paikallisten viestien poistaminen poistaa ne myös palvelimelta"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Democratic Republic of the Congo"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Denmark"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
 msgid "Department"
@@ -2496,6 +2726,12 @@ msgstr "Jakelulista"
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "Jakelulista on tallennettu"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "About"
+msgid "Djibouti"
+msgstr "Tietoja"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
@@ -2650,6 +2886,14 @@ msgctxt "app"
 msgid "Documents"
 msgstr "Asiakirjat"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Dominica"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Dominican Republic"
+msgstr ""
+
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js module:io.ox/core apps/io.ox/files/actions/share.js
@@ -2801,6 +3045,16 @@ msgstr "Erääntyy %1$s"
 msgid "EB"
 msgstr "ET"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Last month"
+msgid "East Timor"
+msgstr "Viime kuussa"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Ecuador"
+msgstr ""
+
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
@@ -2912,6 +3166,14 @@ msgstr "Muokkaa asettaaksesi nimi."
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Editor"
 msgstr "Editori"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Egypt"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "El Salvador"
+msgstr ""
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
@@ -3066,6 +3328,14 @@ msgstr "Yrittäjä"
 msgid "Envelope - To"
 msgstr "Kirjekuori - Vastaanottaja"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Equatorial Guinea"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Eritrea"
+msgstr ""
+
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/core/yell.js
@@ -3103,6 +3373,14 @@ msgstr "Arvioidut kustannukset"
 #: apps/io.ox/tasks/view-detail.js
 msgid "Estimated duration in minutes"
 msgstr "Arvioitu kesto minuuteissa"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Estonia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Ethiopia"
+msgstr ""
 
 #. recurrence string
 #. %1$d: numeric
@@ -3310,6 +3588,14 @@ msgid ""
 msgstr ""
 "Vahvistustilannetta ei voitu päivittää. Tehtävä on luultavasti poistettu."
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Falkland Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Faroe Islands"
+msgstr ""
+
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Favorite"
 msgstr "Suosikki"
@@ -3365,6 +3651,10 @@ msgstr "Palaute"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Feeling • Decoration"
 msgstr "Tunne • Koriste"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Fiji"
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
@@ -3453,6 +3743,10 @@ msgstr "Löydä vapaa aika"
 msgctxt "tour"
 msgid "Finish"
 msgstr "Lopeta"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Finland"
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -3600,6 +3894,12 @@ msgstr "Välitä kaikki saapuva posti tähän osoitteeseen"
 msgid "Forward emails as"
 msgstr "Viestien välitys"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Freelancer"
+msgid "France"
+msgstr "Freelancer"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Free"
@@ -3608,6 +3908,14 @@ msgstr "Vapaa"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Freelancer"
 msgstr "Freelancer"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "French Guiana"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "French Polynesia"
+msgstr ""
 
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/main.js
@@ -3634,6 +3942,22 @@ msgstr "Sukunimi"
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "GB"
 msgstr "GT"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Gabon"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Gambia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Georgia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Germany"
+msgstr ""
 
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Get %s"
@@ -3662,6 +3986,14 @@ msgstr "Aloita tästä"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Get your device configured by email."
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Ghana"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Gibraltar"
 msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
@@ -3695,12 +4027,28 @@ msgstr "Lisää Google Drive-tili"
 msgid "Gray"
 msgstr "Harmaa"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Green"
+msgid "Greece"
+msgstr "Vihreä"
+
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Green"
 msgstr "Vihreä"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Green"
+msgid "Greenland"
+msgstr "Vihreä"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Grenada"
+msgstr ""
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/participants/model.js
@@ -3716,6 +4064,22 @@ msgstr "Ryhmän nimi"
 msgid "Groups"
 msgstr "Ryhmät"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guadeloupe"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guam"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guatemala"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guernsey"
+msgstr ""
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
 msgid "Guest"
@@ -3724,6 +4088,18 @@ msgstr "Vieras"
 #: apps/io.ox/tours/get-started.js module:io.ox/core
 msgid "Guided tour for this app"
 msgstr "Tämän sovelluksen ohjattu esittely"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guinea"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guinea-Bissau"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guyana"
+msgstr ""
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 #: apps/io.ox/mail/settings/pane.js
@@ -3734,10 +4110,20 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML ja teksti"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Waiting"
+msgid "Haiti"
+msgstr "Odottaa"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Header"
 msgstr "Otsake"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Heard Island and McDonald Islands"
+msgstr ""
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Hello %s"
@@ -3856,6 +4242,14 @@ msgstr "Kotiosoite"
 msgid "Home address"
 msgstr "Kotiosoite"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Honduras"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Hong Kong"
+msgstr ""
+
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Horizontal"
 msgstr "Vaakasuora"
@@ -3871,6 +4265,10 @@ msgstr "Tuntia"
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "How does this work?"
 msgstr "Kuinka tämä toimii?"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Hungary"
+msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP login"
@@ -3895,6 +4293,10 @@ msgstr "Saapuvan postin palvelin"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
 msgstr "IP puhelin"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Iceland"
+msgstr ""
 
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Icons"
@@ -4009,6 +4411,16 @@ msgstr "Saapuvan postin palvelin"
 msgid "Inconsistent dates"
 msgstr "Ristiriitaiset päivämäärät"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "India"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Undone"
+msgid "Indonesia"
+msgstr "Tekemätön"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts apps/io.ox/core/yell.js
 #: module:io.ox/core
 msgid "Info"
@@ -4119,6 +4531,18 @@ msgstr "Kutsu tapaamiseen"
 msgid "Invite to new appointment"
 msgstr "Kutsu uuteen tapaamiseen"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Iran"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Iraq"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Ireland"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Is bigger than"
@@ -4133,6 +4557,18 @@ msgstr "On täsmälleen"
 #: module:io.ox/settings
 msgid "Is smaller than"
 msgstr "Pienempi kuin"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Isle of Man"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Israel"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Italy"
+msgstr ""
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Item List"
@@ -4154,14 +4590,30 @@ msgstr "Kohdeluettelovaihtoehdot"
 msgid "Items without a file can not be downloaded."
 msgstr "Kohdetta ilman tiedostoa ei voi ladata."
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Ivory Coast"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Jamaica"
+msgstr ""
+
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "January"
 msgstr "tammikuu"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Japan"
+msgstr ""
 
 #. Emoji collection. Emoji icons that work across Japanese (telecom) carriers.
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Japanese Carrier"
 msgstr "Japanese Carrier"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Jersey"
+msgstr ""
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Job"
@@ -4187,6 +4639,10 @@ msgstr "Liity esitykseen"
 #| msgid "Join presentation"
 msgid "Join the presentation"
 msgstr "Liity esitykseen"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Jordan"
+msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "July"
@@ -4220,6 +4676,10 @@ msgstr "Erääntyy %1$s"
 msgid "KB"
 msgstr "KT"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Kazakhstan"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Keep"
@@ -4228,6 +4688,22 @@ msgstr "Säilytä"
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 msgid "Keep a copy of the message"
 msgstr "Säilytä kopio viestistä"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Kenya"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Kiribati"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Kuwait"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Kyrgyzstan"
+msgstr ""
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -4241,6 +4717,10 @@ msgstr "Kielikohtainen oletusarvo"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
 msgstr "Kielet"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Laos"
+msgstr ""
 
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Last 30 days"
@@ -4284,6 +4764,10 @@ msgstr "Viime vuonna"
 msgid "Later"
 msgstr "Myöhemmin "
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Latvia"
+msgstr ""
+
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
 msgstr "Käynnistyspudotusvalikko Paina [enter] päästäksesi pudotusvalikkoon"
@@ -4317,6 +4801,14 @@ msgstr "Jätä esitys"
 msgid "Leave the presentation"
 msgstr "Jätä esitys"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Lebanon"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Lesotho"
+msgstr ""
+
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 文字・記号
@@ -4325,6 +4817,18 @@ msgstr "Jätä esitys"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Letters • Symbols"
 msgstr "Kirjaimet • Symbolit"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Liberia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Libya"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Liechtenstein"
+msgstr ""
 
 #. Emoji category
 #. Japanese: 日常
@@ -4387,6 +4891,10 @@ msgstr "Lista"
 msgid "Listview"
 msgstr "Listanäkymä"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Lithuania"
+msgstr ""
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 msgid "Location"
@@ -4420,6 +4928,10 @@ msgstr "Matala"
 msgid "Low priority"
 msgstr "Vähemmän tärkeä"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Luxembourg"
+msgstr ""
+
 #. Megabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "MB"
@@ -4428,6 +4940,18 @@ msgstr "MT"
 #: apps/io.ox/core/date.js module:io.ox/core
 msgid "MM"
 msgstr "KK"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Macao"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Macedonia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Madagascar"
+msgstr ""
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Mail"
@@ -4553,6 +5077,26 @@ msgstr "Pääikkuna"
 msgid "Make this the current version"
 msgstr "Tee tästä vallitseva versio"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Malawi"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Malaysia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Maldives"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mali"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Malta"
+msgstr ""
+
 #: apps/io.ox/launchpad/main.js module:io.ox/core
 msgid "Manage applications"
 msgstr "Hallinnoi sovelluksia"
@@ -4654,14 +5198,34 @@ msgstr "Merkitse luetuksi"
 msgid "Mark unread"
 msgstr "Merkitse lukemattomaksi"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Marshall Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Martinique"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Matches"
 msgstr "Vastaa merkkejä"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mauritania"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mauritius"
+msgstr ""
+
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "May"
 msgstr "toukokuu"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mayotte"
+msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -4688,6 +5252,14 @@ msgstr "Viestimet"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Messenger"
 msgstr "Viestin"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mexico"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Micronesia"
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Middle name"
@@ -4725,6 +5297,22 @@ msgstr "Malli on keskeneräinen."
 msgid "Modified"
 msgstr "Muutettu"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Moldova"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Monaco"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mongolia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Montenegro"
+msgstr ""
+
 #: apps/io.ox/backbone/mini-views/date.js module:io.ox/core
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Month"
@@ -4747,6 +5335,12 @@ msgstr "Joka kuukauden %1$s %2$s"
 msgid "Months"
 msgstr "Kuukautta"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Months"
+msgid "Montserrat"
+msgstr "Kuukautta"
+
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/find/extensions-api.js apps/io.ox/search/facets/extensions.js
 msgid "More"
@@ -4755,6 +5349,10 @@ msgstr "Lisää"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
 msgstr "Löytyi enemmän kuin nyt näytettävät %1$s kohdetta"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Morocco"
+msgstr ""
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
@@ -4795,6 +5393,10 @@ msgstr "Siirrä kansio"
 #: module:io.ox/settings
 msgid "Move to folder"
 msgstr "Siirrä kansioon"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mozambique"
+msgstr ""
 
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Multiselect"
@@ -4839,6 +5441,10 @@ msgstr "Jakamani kohteet"
 msgid "My tasks"
 msgstr "Minun tehtäväni"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Myanmar"
+msgstr ""
+
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
@@ -4850,14 +5456,30 @@ msgstr "Minun tehtäväni"
 msgid "Name"
 msgstr "Nimi"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Namibia"
+msgstr ""
+
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Nature"
 msgstr "Luonto"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Nauru"
+msgstr ""
+
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Need more space?"
 msgstr "Tarvitsetko lisää tilaa?"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Nepal"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Netherlands"
+msgstr ""
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -4873,6 +5495,12 @@ msgstr "Ei koskaan"
 msgid "New"
 msgstr "Uusi"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "New calendar"
+msgid "New Caledonia"
+msgstr "Uusi kalenteri"
+
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "New Folder"
@@ -4881,6 +5509,12 @@ msgstr "Uusi kansio"
 #: apps/io.ox/mail/api.js module:io.ox/mail
 msgid "New Mail"
 msgstr "Uusi viesti"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "New calendar"
+msgid "New Zealand"
+msgstr "Uusi kalenteri"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -5003,9 +5637,25 @@ msgstr "Seuraava sivu"
 msgid "Next slide"
 msgstr "Seuraava dia"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Nicaragua"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Nickname"
 msgstr "Kutsumanimi"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Niger"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Nigeria"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Niue"
+msgstr ""
 
 #. folder permissions - Is Admin? NO
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
@@ -5129,10 +5779,28 @@ msgstr "Ei otsikkoa."
 msgid "None"
 msgstr "Ei tunnistetta"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Norfolk Island"
+msgstr ""
+
 #. E-Mail priority
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Normal"
 msgstr "Tavallinen"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "North Korea"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Northern Mariana Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Forward"
+msgid "Norway"
+msgstr "Välitä"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgid "Not spam"
@@ -5243,6 +5911,10 @@ msgstr "Offline tila"
 #: apps/io.ox/core/tk/mobiscroll.js
 msgid "Ok"
 msgstr "Ok"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Oman"
+msgstr ""
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "On behalf of the owner"
@@ -5472,6 +6144,32 @@ msgstr "%1$s/%2$s"
 msgid "Pager"
 msgstr "Hakulaite"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Distance"
+msgid "Pakistan"
+msgstr "Etäisyys"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Palau"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Palestinian Territory"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Panama"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Papua New Guinea"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Paraguay"
+msgstr ""
+
 #. text of an user list that shows the names of presenting user and participants.
 #. the dropdown button label for the participants dropdown.
 #. the participants section label.
@@ -5588,6 +6286,14 @@ msgstr ""
 "Henkilökohtainen viesti (valinnainen). Viesti lähetetään kaikille uusille "
 "kutsutuille."
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Peru"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Philippines"
+msgstr ""
+
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Phone"
 msgstr "Puhelin"
@@ -5646,6 +6352,10 @@ msgstr "Valitse aika tästä"
 #: module:io.ox/portal
 msgid "Pink"
 msgstr "Vaaleanpunainen"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Pitcairn"
+msgstr ""
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -5840,6 +6550,10 @@ msgstr "Ole hyvä ja päivitä selaimesi."
 msgid "Plus"
 msgstr "Plus"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Poland"
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Pop out"
 msgstr "Uusi ikkuna"
@@ -5862,6 +6576,12 @@ msgstr "Portaali"
 msgid "Portal settings"
 msgstr "Portaalin asetukset"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Portal"
+msgid "Portugal"
+msgstr "Portaali"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Position"
 msgstr "Asema"
@@ -5873,6 +6593,10 @@ msgstr "Postaa tilapäivitys"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Postcode"
 msgstr "Postinumero"
+
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+msgid "Premium"
+msgstr ""
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Premium features"
@@ -6110,6 +6834,10 @@ msgstr "Julkaisut"
 msgid "Publications and Subscriptions"
 msgstr "Julkaisut ja tilaukset"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Puerto Rico"
+msgstr ""
+
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Purchase confirmation"
 msgstr "Ostosten vahvistus"
@@ -6120,6 +6848,10 @@ msgstr "Ostosten vahvistus"
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "Purppura"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Qatar"
+msgstr ""
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Quick reply"
@@ -6443,6 +7175,10 @@ msgstr "Vastaa kaikille"
 msgid "Reply to sender"
 msgstr "Vastaa lähettäjälle"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Republic of the Congo"
+msgstr ""
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
 msgstr "Pyydä lukukuittaus"
@@ -6511,6 +7247,10 @@ msgstr "Retweetattu"
 msgid "Retweeted by %s"
 msgstr "%s retweettaama"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Reunion"
+msgstr ""
+
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Review your purchases"
 msgstr "Tarkastele ostoksiasi"
@@ -6533,6 +7273,10 @@ msgstr "Peruuta käyttöoikeus"
 msgid "Revoked access."
 msgstr "Pääsy peruutettu."
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Romania"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Room number"
 msgstr "Huonenumero"
@@ -6546,8 +7290,12 @@ msgstr "Säännön nimi"
 msgid "Running applications"
 msgstr "Käynnissä olevat sovellukset"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "SMS"
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Russia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Rwanda"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
@@ -6568,9 +7316,53 @@ msgstr ""
 msgid "SMTP server"
 msgstr ""
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saint Barthelemy"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saint Helena"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saint Kitts and Nevis"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saint Lucia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saint Martin"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saint Pierre and Miquelon"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saint Vincent and the Grenadines"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "Liikevaihto"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Samoa"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "San Marino"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Sao Tome and Principe"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saudi Arabia"
+msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
@@ -6731,16 +7523,6 @@ msgstr "Valitse tiedosto"
 msgid "Select folder"
 msgstr "Valitse kansio"
 
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-msgid "Select the platform of your device:"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Selecting a view"
-msgid "Select your device"
-msgstr "Näkymän valitseminen"
-
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "Valinnan yksityiskohdat"
@@ -6805,6 +7587,10 @@ msgstr "Lähetä lomailmoitus vain tänä aikana"
 msgid "Sender/From"
 msgstr "Lähettäjä"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Senegal"
+msgstr ""
+
 #. %s is the product name
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Sent from %s via mobile"
@@ -6823,6 +7609,10 @@ msgstr "Lähetetyt viestit"
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "September"
 msgstr "syyskuu"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Serbia"
+msgstr ""
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
@@ -6875,6 +7665,10 @@ msgstr "Näytä laajat suodattimet"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Setup your profile manually."
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Seychelles"
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
@@ -6984,6 +7778,10 @@ msgstr "Jaetaan"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Shopping cart"
 msgstr "Ostoskori"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Short Message (SMS)"
+msgstr ""
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
@@ -7096,6 +7894,10 @@ msgstr "Näytä sovellusikkunat"
 msgid "Shown as"
 msgstr "Näytetään tilassa"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Sierra Leone"
+msgstr ""
+
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
@@ -7128,6 +7930,14 @@ msgstr "Kirjautuneena käyttäjänä %1$s"
 msgid "Signed in as:"
 msgstr "Kirjautuneena käyttäjänä"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Singapore"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Sint Maarten"
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
 #: module:io.ox/files apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -7138,6 +7948,14 @@ msgstr "Koko"
 #: module:io.ox/settings
 msgid "Size (bytes)"
 msgstr "Koko (tavuina)"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Slovakia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Slovenia"
+msgstr ""
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
@@ -7151,6 +7969,14 @@ msgstr "Älypuhelimen asetukset:"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "SoftBank"
 msgstr "SoftBank"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Solomon Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Somalia"
+msgstr ""
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "Some fields contain invalid data"
@@ -7220,6 +8046,22 @@ msgstr "Lajitteluvaihtoehdot"
 msgid "Source"
 msgstr "Lähde"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "South Africa"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "South Korea"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "South Sudan"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Spain"
+msgstr ""
+
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -7237,6 +8079,10 @@ msgstr "Laskentataulukko"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Spreadsheets"
 msgstr "Laskentataulukot"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Sri Lanka"
+msgstr ""
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Standard folders"
@@ -7374,6 +8220,10 @@ msgstr "Onnistuminen"
 msgid "Successfully reauthorized your %s account"
 msgstr "%-tilisi uudelleenvaltuutettiin onnistuneesti"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Sudan"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Suffix"
 msgstr "Jälkiliite"
@@ -7382,9 +8232,31 @@ msgstr "Jälkiliite"
 msgid "Summary"
 msgstr "Yhteenveto"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Your name"
+msgid "Suriname"
+msgstr "Nimesi"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Svalbard and Jan Mayen"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Swaziland"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Sweden"
+msgstr ""
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Switch to parent folder"
 msgstr "Vaihda emokansioon"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Switzerland"
+msgstr ""
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -7415,6 +8287,10 @@ msgstr "Synkronoi tablettisi tai älypuhelimesi kanssa"
 msgid "Synchronize with your tablet or smartphone"
 msgstr "Synkronoi tablettisi tai älypuhelimesi kanssa"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Syria"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "TAX ID"
 msgstr "Verotunnus"
@@ -7433,8 +8309,20 @@ msgstr "kaukokirjoitin/tekstipuhelin"
 msgid "Tag mail with"
 msgstr "Aseta avainsana"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Taiwan"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Tajikistan"
+msgstr ""
+
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Tanzania"
 msgstr ""
 
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
@@ -7535,6 +8423,10 @@ msgstr "Alustavasti hyväksytty"
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Text"
 msgstr "Teksti"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Thailand"
+msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"
@@ -8262,11 +9154,23 @@ msgstr "Vaihda koko näytölle"
 msgid "Toggle panel"
 msgstr "Vaihteluvaihtoehdot"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Togo"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Tokelau"
+msgstr ""
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "Huomenna"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Tonga"
+msgstr ""
 
 #. Emoji category
 #. Japanese: ツール
@@ -8307,6 +9211,10 @@ msgstr "Yhteensä %1$s pyyntöä"
 msgid "Town"
 msgstr "Kaupunki"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Trinidad and Tobago"
+msgstr ""
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 #, fuzzy
 #| msgid "Buy now!"
@@ -8320,6 +9228,26 @@ msgstr "Yritetään auto-konfiguroida postitilisi"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Tumblr"
 msgstr "Tumblr"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Tunisia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Turkey"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Turkmenistan"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Turks and Caicos Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Tuvalu"
+msgstr ""
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Twitter"
@@ -8335,6 +9263,10 @@ msgstr "Twitter raportoi seuraavat virheet:"
 msgid "Type"
 msgstr "Tyyppi"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "U.S. Virgin Islands"
+msgstr ""
+
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 msgid "UI version"
@@ -8344,6 +9276,14 @@ msgstr "KL versio"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "URL"
 msgstr "URL"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Uganda"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Ukraine"
+msgstr ""
 
 #: apps/plugins/portal/xing/actions.js module:plugins/portal
 msgid "Un-like"
@@ -8387,6 +9327,22 @@ msgstr "Lakkaa seuraamasta"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Unified"
 msgstr "Perus"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "United Arab Emirates"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "United Kingdom"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "United States"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "United States Minor Outlying Islands"
+msgstr ""
 
 #: apps/io.ox/participants/model.js module:io.ox/core
 msgid "Unknown"
@@ -8496,6 +9452,10 @@ msgstr "Käynnissä: %1$s minuuttia"
 msgid "Urgency"
 msgstr "Kiireellisyys"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Uruguay"
+msgstr ""
+
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Use SSL connection"
 msgstr "Käytä SSL yhteyttä"
@@ -8581,10 +9541,30 @@ msgstr "Käyttäjätunnus"
 msgid "Username must not be empty."
 msgstr "Käyttäjätunnus ei voi olla tyhjä."
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Uzbekistan"
+msgstr ""
+
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/vacationnotice/settings/register.js
 msgid "Vacation Notice"
 msgstr "Lomailmoitus"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Manual"
+msgid "Vanuatu"
+msgstr "Manuaalinen"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Vertical"
+msgid "Vatican"
+msgstr "Pystysuora"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Venezuela"
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer
@@ -8603,6 +9583,10 @@ msgstr "Pystysuora"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Videos"
 msgstr "Videot"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Vietnam"
+msgstr ""
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -8657,6 +9641,10 @@ msgstr "Esikatselun työkalurivi"
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
 msgid "Waiting"
 msgstr "Odottaa"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Wallis and Futuna"
+msgstr ""
 
 #: apps/io.ox/core/yell.js module:io.ox/core
 msgid "Warning"
@@ -8734,6 +9722,10 @@ msgstr "Tervetuloa tehtäviisi"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "Tervetuloa. Ole hyvä ja anna tuotteesta palautetta."
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Western Sahara"
+msgstr ""
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 #, fuzzy
@@ -8817,6 +9809,10 @@ msgstr "Vuotta"
 #: module:io.ox/settings
 msgid "Yellow"
 msgstr "Keltainen"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Yemen"
+msgstr ""
 
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
@@ -9245,6 +10241,14 @@ msgstr "Aikavyöhykkeesi"
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "ZB"
 msgstr "ZT"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Zambia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Zimbabwe"
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Zoom"
@@ -9959,11 +10963,23 @@ msgstr "vvvv"
 #~ msgid "Attachments (%1$s)"
 #~ msgstr "Liitteet (%1$s)"
 
-#~ msgid "Attention"
-#~ msgstr "Huomio"
-
 #~ msgid "Automatically wrap plain text after character:"
 #~ msgstr "Tekstin automaattinen rivitys näin monen merkin jälkeen:"
+
+#, fuzzy
+#~| msgid "Back to sign in"
+#~ msgid "Back to devices"
+#~ msgstr "Takaisin sisäänkirjautumiseen"
+
+#, fuzzy
+#~| msgid "Back to sign in"
+#~ msgid "Back to modules"
+#~ msgstr "Takaisin sisäänkirjautumiseen"
+
+#, fuzzy
+#~| msgid "your platform"
+#~ msgid "Back to platforms"
+#~ msgstr "Alustasi"
 
 #~ msgid "Bcc"
 #~ msgstr "Piilokopio"

@@ -941,6 +941,24 @@ msgstr "Administrators"
 msgid "Advanced user?"
 msgstr "Papildu vienumu iestatījumi"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Afghanistan"
+msgstr "Afganistāna"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Cayman Islands"
+msgid "Aland Islands"
+msgstr "Kaimanu salas"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Albania"
+msgstr "Albānija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Algeria"
+msgstr "Alžīrija"
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
@@ -1006,6 +1024,10 @@ msgstr "Atļaut HTML formatētu e-pastu"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Atļaut ārēji saistīto attēlu priekš-ielādi"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "American Samoa"
+msgstr "Amerikas Samoa"
+
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 #, fuzzy
 #| msgid "An error occurred while importing the document."
@@ -1035,9 +1057,25 @@ msgstr "Reģistrēta iekšēja kļūda"
 msgid "An unknown error occurred"
 msgstr "Reģistrēta neatpazīta kļūda"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Andorra"
+msgstr "Andora"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Angola"
+msgstr "Angola"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Anguilla"
+msgstr "Angilja"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Anniversary"
 msgstr "Dzimšanas diena"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Antigua and Barbuda"
+msgstr "Antigva un Barbuda"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -1165,6 +1203,18 @@ msgstr "Ziņojumu arhivēšana ..."
 msgid "Are you sure you want to delete this Tweet?"
 msgstr "Vai tiešam vēlaties dzēst šo ziņu?"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Argentina"
+msgstr "Argentīna"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Armenia"
+msgstr "Armēnija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Aruba"
+msgstr "Aruba"
+
 #. Auth type. Short for "Use same credentials as incoming mail server"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "As incoming mail server"
@@ -1217,6 +1267,14 @@ msgstr "Pievienojumi ir saglabāti!"
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "August"
 msgstr "Augusts"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Australia"
+msgstr "Austrālija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Austria"
+msgstr "Austija"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Authentication"
@@ -1287,6 +1345,10 @@ msgstr ""
 msgid "Average time: %1$s ms"
 msgstr "Vidējais laiks: %1$s ms"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Azerbaijan"
+msgstr "Azerbaidžāna"
+
 #. Bytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "B"
@@ -1309,27 +1371,25 @@ msgstr "Atpakaļ"
 msgid "Back to appointment"
 msgstr "Atpakaļ uz mītiņu"
 
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Back to sign in"
-msgid "Back to devices"
-msgstr "Atpakaļ pie pieslēgšanās"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Back to sign in"
-msgid "Back to modules"
-msgstr "Atpakaļ pie pieslēgšanās"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "your platform"
-msgid "Back to platforms"
-msgstr "jūsu platforma"
-
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid "Back to sign in"
 msgstr "Atpakaļ pie pieslēgšanās"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bahamas"
+msgstr "Bahamas"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bahrain"
+msgstr "Bahreina"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bangladesh"
+msgstr "Bangladeša"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Barbados"
+msgstr "Barbadosa"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/main.js
@@ -1343,6 +1403,30 @@ msgid ""
 msgstr ""
 "Lai turpinātu lietot šo produktu, jums ir jāievada atbilstoša pamata "
 "informācija. Šis process neaizņems vairāk par minūti."
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Belarus"
+msgstr "Baltkrievija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Belgium"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Belize"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Benin"
+msgstr "Benina"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bermuda"
+msgstr "Bermudas"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bhutan"
+msgstr "Butāna"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -1376,6 +1460,22 @@ msgstr "BC kopija"
 msgid "Blue"
 msgstr "Zils"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bolivia"
+msgstr "Bolīvija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bonaire, Saint Eustatius and Saba "
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bosnia and Herzegovina"
+msgstr "Bosnija un Hercogvina"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Botswana"
+msgstr "Botsvāna"
+
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "Box"
 msgstr ""
@@ -1384,6 +1484,20 @@ msgstr ""
 msgid "Branches"
 msgstr "Zari"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Brazil"
+msgstr "Brazīlija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "British Indian Ocean Territory"
+msgstr "Britu Indijas okeāna teritorija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Virgin Islands, U.S."
+msgid "British Virgin Islands"
+msgstr "ASV Virdžīnu salas"
+
 #: apps/io.ox/presenter/actions.js module:io.ox/presenter
 msgid "Broadcast your presentation over the Web."
 msgstr "Raidīt jūsu prezentāciju tīmeklī."
@@ -1391,6 +1505,22 @@ msgstr "Raidīt jūsu prezentāciju tīmeklī."
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Browser"
 msgstr "Pārlūks"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Brunei"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Bulgaria"
+msgstr "Bulgārija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Burkina Faso"
+msgstr "Burkinafaso"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Burundi"
+msgstr "Burundija"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Business Address"
@@ -1461,6 +1591,18 @@ msgstr "Kalendāra skats"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "Kalendārs:"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cambodia"
+msgstr "Kambodža"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cameroon"
+msgstr "Kamerūna"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Canada"
+msgstr "Kanāda"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -1565,18 +1707,35 @@ msgstr ""
 msgid "Capacity"
 msgstr "Kapacitāte"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cape Verde"
+msgstr "Kaboverde"
+
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "Grozs ir tukšs"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cayman Islands"
+msgstr "Kaimanu salas"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "Mob. telefons"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Cell phone (alt)"
 msgstr "Mob. telefons (alt.)"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Central African Republic"
+msgstr "Centrālāfrikas Republika"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Chad"
+msgstr "Čada"
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid "Change"
@@ -1653,6 +1812,18 @@ msgstr "Informācijas pārbaude ..."
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Children"
 msgstr "Bērni"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Chile"
+msgstr "Čīle"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "China"
+msgstr "Ķīna"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Christmas Island"
+msgstr "Ziemassvētku sala"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "City"
@@ -1738,8 +1909,7 @@ msgstr "Noklikšķiniet lai mēģinātu vēlreiz."
 msgid "Click to upload image"
 msgstr "Noklikšķiniet, lai ielādētu attēlu"
 
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
 msgstr ""
 
@@ -1777,10 +1947,20 @@ msgstr "Papildus funkcijas"
 msgid "Close this reminder"
 msgstr "Aizvērt šo atgādinājumu"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Cook Islands"
+msgid "Cocos Islands"
+msgstr "Kuka salas"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Collapse form"
 msgstr "Sakļaut formu"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Colombia"
+msgstr "Kolumbija"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -1829,6 +2009,12 @@ msgstr "Vispārēji"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Common Emoji"
 msgstr "Parastās emocijzīmes"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Tomorrow"
+msgid "Comoros"
+msgstr "Rītdien"
 
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -1891,6 +2077,12 @@ msgstr "Resursu konfliktus nevar ignorēt"
 #: apps/io.ox/calendar/view-grid-template.js module:io.ox/calendar
 msgid "Conflicts:"
 msgstr "Konflikti:"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Selecting a view"
+msgid "Connect your Device"
+msgstr "Skata izvēle"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Connector for Microsoft Outlook®"
@@ -1976,6 +2168,10 @@ msgstr ""
 "Konvertēt ievadītos sākuma un beigu datumus atbilstoši izmainītajām laika "
 "zonām"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cook Islands"
+msgstr "Kuka salas"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/files/actions.js
@@ -1993,6 +2189,10 @@ msgstr "Kopija"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Copy to description"
 msgstr "Kopēt uz apsrakstu"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Costa Rica"
+msgstr "Kostarika"
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "Costs must be between -%1$d and %1$d."
@@ -2149,6 +2349,20 @@ msgctxt "help"
 msgid "Creating Files"
 msgstr "Failu izveide"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Croatia"
+msgstr "Horvātija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cuba"
+msgstr "Kuba"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Macao"
+msgid "Curacao"
+msgstr "Makao"
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Currency"
 msgstr "Valūta"
@@ -2177,6 +2391,14 @@ msgstr "Pielāgots vārds"
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Customize this page"
 msgstr "Pielāgot šo lapu"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Cyprus"
+msgstr "Kipra"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Czech Republic"
+msgstr "Čehijas Republika"
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Dark colors"
@@ -2390,6 +2612,16 @@ msgstr "Izdzēstie ziņojumi"
 msgid "Deleting messages on local storage also deletes them on server"
 msgstr "Ziņojumu dzēšana lokālajā glabātuvē izraisīs to dzēšanu arī uz servera"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Korea, Democratic People's Republic of"
+msgid "Democratic Republic of the Congo"
+msgstr "Korejas Tautas Demokrātiskā Republika"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Denmark"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
 msgid "Department"
@@ -2532,6 +2764,10 @@ msgstr "Izplatīšanas saraksts"
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "Izplatīšanas saraksts ir saglabāts"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Djibouti"
+msgstr "Džibutija"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
@@ -2688,6 +2924,14 @@ msgstr "Dokumenti"
 msgctxt "app"
 msgid "Documents"
 msgstr "Dokumenti"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Dominica"
+msgstr "Dominika"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Dominican Republic"
+msgstr "Dominikānas Republika"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -2848,6 +3092,16 @@ msgstr "Izpildāms %1$s"
 msgid "EB"
 msgstr "EB"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Last month"
+msgid "East Timor"
+msgstr "Pēdējais mēnesis"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Ecuador"
+msgstr "Ekvadora"
+
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
@@ -2959,6 +3213,14 @@ msgstr "Ievadiet nosaukumu."
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Editor"
 msgstr "Redaktors"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Egypt"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "El Salvador"
+msgstr "Salvadora"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
@@ -3114,6 +3376,14 @@ msgstr "Uzņēmējs"
 msgid "Envelope - To"
 msgstr "Aploksne-Kam"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Equatorial Guinea"
+msgstr "Ekvatoriālā Gvineja"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Eritrea"
+msgstr ""
+
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/core/yell.js
@@ -3153,6 +3423,14 @@ msgstr "Plānotās izmaksas"
 #: apps/io.ox/tasks/view-detail.js
 msgid "Estimated duration in minutes"
 msgstr "Plānotais ilgums minūtēs"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Estonia"
+msgstr "Igaunija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Ethiopia"
+msgstr "Etiopija"
 
 #. recurrence string
 #. %1$d: numeric
@@ -3363,6 +3641,16 @@ msgstr ""
 "Kļūda pie apstiprinājuma statusa jaunināšanas; iespējams, ka uzdevuma "
 "ieraksts ir izdzēsts."
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Falkland Islands (Malvinas)"
+msgid "Falkland Islands"
+msgstr "Folklenda salas"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Faroe Islands"
+msgstr "Faroa salas"
+
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Favorite"
 msgstr "Izlase"
@@ -3418,6 +3706,10 @@ msgstr "Atsauksmes"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Feeling • Decoration"
 msgstr "Sajūtas • Dekorācija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Fiji"
+msgstr "Fidži"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
@@ -3506,6 +3798,10 @@ msgstr "Atrast brīvu laiku"
 msgctxt "tour"
 msgid "Finish"
 msgstr "Pabeigt"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Finland"
+msgstr "Somija"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -3653,6 +3949,12 @@ msgstr "Pārsūtīt visu ienākošo e-pastu uz šo adresi"
 msgid "Forward emails as"
 msgstr "Pārsūtīt e-pastu kā"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Freelancer"
+msgid "France"
+msgstr "Pašnodarbinātais"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Free"
@@ -3661,6 +3963,14 @@ msgstr "Brīvs"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Freelancer"
 msgstr "Pašnodarbinātais"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "French Guiana"
+msgstr "Franču Gviāna"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "French Polynesia"
+msgstr "Franču Polinēzija"
 
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/main.js
@@ -3687,6 +3997,24 @@ msgstr "Uzvārda furigana"
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "GB"
 msgstr "GB"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Gabon"
+msgstr "Gabona"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Gambia"
+msgstr "Gambija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Georgia"
+msgstr "Gruzija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "German"
+msgid "Germany"
+msgstr "Vāciju"
 
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Get %s"
@@ -3716,6 +4044,14 @@ msgstr "Sāciet šeit"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Get your device configured by email."
 msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Ghana"
+msgstr "Gana"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Gibraltar"
+msgstr "Gibraltārs"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Give feedback"
@@ -3748,12 +4084,26 @@ msgstr "Pievienot Google Drive kontu"
 msgid "Gray"
 msgstr "Pelēks"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Green"
+msgid "Greece"
+msgstr "Zaļš"
+
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Green"
 msgstr "Zaļš"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Greenland"
+msgstr "Grenlande"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Grenada"
+msgstr "Granāda"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/participants/model.js
@@ -3769,6 +4119,22 @@ msgstr "Grupas vārds"
 msgid "Groups"
 msgstr "Grupas"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guadeloupe"
+msgstr "Gvadelupa"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guam"
+msgstr "Guama"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guatemala"
+msgstr "Gvatemala"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guernsey"
+msgstr ""
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
 msgid "Guest"
@@ -3777,6 +4143,18 @@ msgstr "Viesis"
 #: apps/io.ox/tours/get-started.js module:io.ox/core
 msgid "Guided tour for this app"
 msgstr "Iepazīstināšana ar šo aplikāciju"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guinea"
+msgstr "Gvineja"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guinea-Bissau"
+msgstr "Gvineja-Bisava"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Guyana"
+msgstr "Gajāna"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 #: apps/io.ox/mail/settings/pane.js
@@ -3787,10 +4165,18 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML un vienkāršs teksts"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Haiti"
+msgstr "Haitī"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Header"
 msgstr "Hederis"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Heard Island and McDonald Islands"
+msgstr "Hērda sala un Makdonalda salas"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Hello %s"
@@ -3909,6 +4295,14 @@ msgstr "Mājas adrese"
 msgid "Home address"
 msgstr "Mājas adreses"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Honduras"
+msgstr "Hondurasa"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Hong Kong"
+msgstr "Honkonga"
+
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Horizontal"
 msgstr "Horizontāli"
@@ -3924,6 +4318,12 @@ msgstr "Stundas"
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "How does this work?"
 msgstr "Kā tas strādā?"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Hungarian"
+msgid "Hungary"
+msgstr "Ungāru"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP login"
@@ -3948,6 +4348,10 @@ msgstr "IMAP pasta serveris"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
 msgstr "IP telefons"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Iceland"
+msgstr "Islande"
 
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Icons"
@@ -4062,6 +4466,16 @@ msgstr "Ienākošā pasta serveris"
 msgid "Inconsistent dates"
 msgstr "Datumi nav saskanīgi."
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "India"
+msgstr "Indija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Undone"
+msgid "Indonesia"
+msgstr "Atsaukts"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts apps/io.ox/core/yell.js
 #: module:io.ox/core
 msgid "Info"
@@ -4172,6 +4586,18 @@ msgstr "Uzaicināt uz mītiņu"
 msgid "Invite to new appointment"
 msgstr "Uzaicināt uz jaunu mītiņu"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Iran"
+msgstr "Irāna"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Iraq"
+msgstr "Irāka"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Ireland"
+msgstr "Īrija"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Is bigger than"
@@ -4186,6 +4612,20 @@ msgstr "Ir tieši"
 #: module:io.ox/settings
 msgid "Is smaller than"
 msgstr "Ir mazāks par"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Isle of Man"
+msgstr "Menas sala"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Israel"
+msgstr "Izraēla"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Italic"
+msgid "Italy"
+msgstr "Slīpraksts"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Item List"
@@ -4207,14 +4647,30 @@ msgstr "Sarakstra opcijas"
 msgid "Items without a file can not be downloaded."
 msgstr "Vienības bez failiem nevar tikt lejupielādētas."
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Ivory Coast"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Jamaica"
+msgstr "Jamaika"
+
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "January"
 msgstr "Janvāris"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Japan"
+msgstr "Japāna"
 
 #. Emoji collection. Emoji icons that work across Japanese (telecom) carriers.
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Japanese Carrier"
 msgstr "Japāņu nesējs"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Jersey"
+msgstr "Džersija"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Job"
@@ -4240,6 +4696,10 @@ msgstr "Pievienoties prezentācijai"
 #| msgid "Join presentation"
 msgid "Join the presentation"
 msgstr "Pievienoties prezentācijai"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Jordan"
+msgstr "Jordāna"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "July"
@@ -4273,6 +4733,10 @@ msgstr "Izpildāms %1$s"
 msgid "KB"
 msgstr "KB"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Kazakhstan"
+msgstr "Kazahstāna"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Keep"
@@ -4281,6 +4745,22 @@ msgstr "Paturēt"
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 msgid "Keep a copy of the message"
 msgstr "Saglabāt ziņas kopiju"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Kenya"
+msgstr "Kenija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Kiribati"
+msgstr "Kiribati"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Kuwait"
+msgstr "Kuveita"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Kyrgyzstan"
+msgstr "Kirgizstāna"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -4294,6 +4774,10 @@ msgstr "Specifiskie valodas noklusējumi"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
 msgstr "Valodas"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Laos"
+msgstr ""
 
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Last 30 days"
@@ -4337,6 +4821,10 @@ msgstr "Pēdējais gads"
 msgid "Later"
 msgstr "Vēlāk"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Latvia"
+msgstr ""
+
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
 msgstr "Palaidēja nolaid-izvēlne. Lai atvērtu piespiediet [enter]."
@@ -4370,6 +4858,14 @@ msgstr "Aiziet no prezentācijas"
 msgid "Leave the presentation"
 msgstr "Aiziet no prezentācijas"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Lebanon"
+msgstr "Libāna"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Lesotho"
+msgstr "Lesoto"
+
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 文字・記号
@@ -4378,6 +4874,18 @@ msgstr "Aiziet no prezentācijas"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Letters • Symbols"
 msgstr "Burti • Simboli"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Liberia"
+msgstr "Libērija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Libya"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Liechtenstein"
+msgstr "Lihtenšteina"
 
 #. Emoji category
 #. Japanese: 日常
@@ -4440,6 +4948,10 @@ msgstr "Saraksts"
 msgid "Listview"
 msgstr "Saraksta skats"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Lithuania"
+msgstr "Lietuva"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 msgid "Location"
@@ -4473,6 +4985,10 @@ msgstr "Zema"
 msgid "Low priority"
 msgstr "Zema prioritāte"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Luxembourg"
+msgstr "Luksemburga"
+
 #. Megabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "MB"
@@ -4481,6 +4997,18 @@ msgstr "MB"
 #: apps/io.ox/core/date.js module:io.ox/core
 msgid "MM"
 msgstr "MM"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Macao"
+msgstr "Makao"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Macedonia"
+msgstr "Maķedonija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Madagascar"
+msgstr "Madagaskara"
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Mail"
@@ -4606,6 +5134,26 @@ msgstr "Pasta logs"
 msgid "Make this the current version"
 msgstr "Iestatīt šo kā pašreizējo versiju"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Malawi"
+msgstr "Malāvija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Malaysia"
+msgstr "Malaizija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Maldives"
+msgstr "Maldīvija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mali"
+msgstr "Mali"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Malta"
+msgstr "Malta"
+
 #: apps/io.ox/launchpad/main.js module:io.ox/core
 msgid "Manage applications"
 msgstr "Aplikāciju pārvaldība"
@@ -4707,14 +5255,34 @@ msgstr "Iestatīt kā izlasītu"
 msgid "Mark unread"
 msgstr "Iestatīt kā nelasītu"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Marshall Islands"
+msgstr "Maršala salas"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Martinique"
+msgstr "Martinika"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Matches"
 msgstr "Atbilst"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mauritania"
+msgstr "Mauritānija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mauritius"
+msgstr "Maurīcija"
+
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "May"
 msgstr "Maijs"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mayotte"
+msgstr "Majota"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -4741,6 +5309,14 @@ msgstr "Ziņapmaiņa"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Messenger"
 msgstr "Ziņotājs"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mexico"
+msgstr "Meksika"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Micronesia"
+msgstr "Mikronēzija"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Middle name"
@@ -4778,6 +5354,22 @@ msgstr "Modelis nav pabeigts."
 msgid "Modified"
 msgstr "Izmainīts"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Moldova"
+msgstr "Moldāvija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Monaco"
+msgstr "Monako"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mongolia"
+msgstr "Mongolija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Montenegro"
+msgstr "Melnkalne"
+
 #: apps/io.ox/backbone/mini-views/date.js module:io.ox/core
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Month"
@@ -4800,6 +5392,12 @@ msgstr "Katra mēneša %1$s %2$s"
 msgid "Months"
 msgstr "Mēneši"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Months"
+msgid "Montserrat"
+msgstr "Mēneši"
+
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/find/extensions-api.js apps/io.ox/search/facets/extensions.js
 msgid "More"
@@ -4808,6 +5406,10 @@ msgstr "Vairāk"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
 msgstr "Atrastas vairāk par pašreiz uzrādītajām %1$s vienībām"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Morocco"
+msgstr "Maroka"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
@@ -4848,6 +5450,10 @@ msgstr "Pārvietot mapi"
 #: module:io.ox/settings
 msgid "Move to folder"
 msgstr "Pārvietot uz mapi"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Mozambique"
+msgstr "Mozambika"
 
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Multiselect"
@@ -4892,6 +5498,10 @@ msgstr "Mani koplietojumi"
 msgid "My tasks"
 msgstr "Mani uzdevumi"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Myanmar"
+msgstr "Mjanma"
+
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
@@ -4903,14 +5513,32 @@ msgstr "Mani uzdevumi"
 msgid "Name"
 msgstr "Vārds"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Namibia"
+msgstr "Namībija"
+
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Nature"
 msgstr "Daba"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Nauru"
+msgstr "Nauru"
+
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Need more space?"
 msgstr "Vai ir nepieciešama papildus vieta?"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Nepal"
+msgstr "Nepāla"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Dutch (Netherlands)"
+msgid "Netherlands"
+msgstr "Holandiešu"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -4926,6 +5554,10 @@ msgstr "Nekad"
 msgid "New"
 msgstr "Jauns"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "New Caledonia"
+msgstr "Jaunkaledonija"
+
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "New Folder"
@@ -4934,6 +5566,10 @@ msgstr "Jauna mape"
 #: apps/io.ox/mail/api.js module:io.ox/mail
 msgid "New Mail"
 msgstr "Jaunais pasts"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "New Zealand"
+msgstr "Jaunzēlande"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -5056,9 +5692,25 @@ msgstr "Nākošā lapa"
 msgid "Next slide"
 msgstr "Nākošais slaids"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Nicaragua"
+msgstr "Nikaragva"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Nickname"
 msgstr "Iesauka"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Niger"
+msgstr "Nigēra"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Nigeria"
+msgstr "Nigērija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Niue"
+msgstr "Niue"
 
 #. folder permissions - Is Admin? NO
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
@@ -5183,10 +5835,26 @@ msgstr "Nav virsraksta."
 msgid "None"
 msgstr "Nekas"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Norfolk Island"
+msgstr "Norfolkas sala"
+
 #. E-Mail priority
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Normal"
 msgstr "Parasta"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "North Korea"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Northern Mariana Islands"
+msgstr "Ziemeļmarianas salas"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Norway"
+msgstr "Norvēģija"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgid "Not spam"
@@ -5303,6 +5971,10 @@ msgstr "Bezsaistes režīms"
 #: apps/io.ox/core/tk/mobiscroll.js
 msgid "Ok"
 msgstr "Labi"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Oman"
+msgstr "Omāna"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "On behalf of the owner"
@@ -5532,6 +6204,34 @@ msgstr "Lapa %1$d no %2$d"
 msgid "Pager"
 msgstr "Peidžeris"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Pakistan"
+msgstr "Pakistāna"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Palau"
+msgstr "Palau"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Palestinian Territory, Occupied"
+msgid "Palestinian Territory"
+msgstr "Palestīniešu okupētā teritorija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Panama"
+msgstr "Panama"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Papua New Guinea"
+msgstr "Papua Jaungvineja"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Nicaragua"
+msgid "Paraguay"
+msgstr "Nikaragva"
+
 #. text of an user list that shows the names of presenting user and participants.
 #. the dropdown button label for the participants dropdown.
 #. the participants section label.
@@ -5648,6 +6348,14 @@ msgstr ""
 "Personīgais paziņojums (neobligāts). Šis paziņojums tiek nosūtīts visiem "
 "jauni uzaicinātajiem cilvēkiem."
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Peru"
+msgstr "Peru"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Philippines"
+msgstr "Filipīnas"
+
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Phone"
 msgstr "Telefons"
@@ -5706,6 +6414,10 @@ msgstr "Izvēlieties laiku šeit"
 #: module:io.ox/portal
 msgid "Pink"
 msgstr "Rozā"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Pitcairn"
+msgstr "Pitkērna"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -5898,6 +6610,10 @@ msgstr "Lūdzu jauniniet savu pārlūkprogrammu."
 msgid "Plus"
 msgstr "Plus"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Poland"
+msgstr "Polija"
+
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Pop out"
 msgstr "Izlekt"
@@ -5920,6 +6636,10 @@ msgstr "Portāls"
 msgid "Portal settings"
 msgstr "Portāla iestatījumi"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Portugal"
+msgstr "Portugāle"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Position"
 msgstr "Pozīcija"
@@ -5931,6 +6651,12 @@ msgstr "Reģistrēt statusa jauniunājumu"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Postcode"
 msgstr "Pasta kods"
+
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Premium features"
+msgid "Premium"
+msgstr "Papildus funkcijas"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Premium features"
@@ -6168,6 +6894,10 @@ msgstr "Publikācijas"
 msgid "Publications and Subscriptions"
 msgstr "Publikācijas un abonementi"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Puerto Rico"
+msgstr "Puertoriko"
+
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Purchase confirmation"
 msgstr "Pirkuma apstiprinājums"
@@ -6178,6 +6908,10 @@ msgstr "Pirkuma apstiprinājums"
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "Purpura"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Qatar"
+msgstr ""
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 #, fuzzy
@@ -6504,6 +7238,10 @@ msgstr "Atbildēt visiem saņēmējiem"
 msgid "Reply to sender"
 msgstr "Atbildēt sūtītājam"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Republic of the Congo"
+msgstr ""
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
 msgstr "Prasīt piegādes apstiprinājumu"
@@ -6572,6 +7310,10 @@ msgstr "Atbildēts"
 msgid "Retweeted by %s"
 msgstr "Atbildēja %s"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Reunion"
+msgstr "Apvienošana"
+
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Review your purchases"
 msgstr "Skatīs savus pirkumus"
@@ -6594,6 +7336,12 @@ msgstr "Atsaukt piekļuvi"
 msgid "Revoked access."
 msgstr "Atsaukt piekļuvi"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Romanian"
+msgid "Romania"
+msgstr "Rumāņu"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Room number"
 msgstr "Istabas numurs"
@@ -6607,11 +7355,15 @@ msgstr "Noteikuma vārds"
 msgid "Running applications"
 msgstr "Darbojošās aplikācijas"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
 #, fuzzy
-#| msgid "RSS"
-msgid "SMS"
-msgstr "RSS"
+#| msgid "Russian"
+msgid "Russia"
+msgstr "Krievu"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Rwanda"
+msgstr "Ruanda"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP login"
@@ -6631,9 +7383,57 @@ msgstr ""
 msgid "SMTP server"
 msgstr ""
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Saint Barthélemy"
+msgid "Saint Barthelemy"
+msgstr "Santbarelemija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saint Helena"
+msgstr "Sv. Helēnas sala"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saint Kitts and Nevis"
+msgstr "Sentkitsa un Nevisa"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saint Lucia"
+msgstr "Sentlusija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "San Marino"
+msgid "Saint Martin"
+msgstr "Sanmarīno"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saint Pierre and Miquelon"
+msgstr "Senpjēra un Mikelona"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saint Vincent and the Grenadines"
+msgstr "Sentvinsenta un Grenadīnas"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "Pārdošanas apjoms"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Samoa"
+msgstr "Samoa"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "San Marino"
+msgstr "Sanmarīno"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Sao Tome and Principe"
+msgstr "Santomē un Prinsipi"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Saudi Arabia"
+msgstr "Saūda Arābija"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
@@ -6796,16 +7596,6 @@ msgstr "Izvēlēties failu"
 msgid "Select folder"
 msgstr "Izvēlēties mapi"
 
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-msgid "Select the platform of your device:"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Selecting a view"
-msgid "Select your device"
-msgstr "Skata izvēle"
-
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "Izvēles detaļas"
@@ -6870,6 +7660,10 @@ msgstr "Sūtīt prombūtnes paziņojumus tikai šajā laikā"
 msgid "Sender/From"
 msgstr "Sūtītājs/No"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Senegal"
+msgstr "Senegāla"
+
 #. %s is the product name
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Sent from %s via mobile"
@@ -6888,6 +7682,10 @@ msgstr "Nosūtītie ziņojumi"
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "September"
 msgstr "Septembris"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Serbia"
+msgstr "Serbija"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
@@ -6941,6 +7739,10 @@ msgstr "Rādīt paplašinātu filtru"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Setup your profile manually."
 msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Seychelles"
+msgstr "Seišeļu salas"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
@@ -7051,6 +7853,10 @@ msgstr "Koplietošana"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Shopping cart"
 msgstr "Iepirkumu grozs"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Short Message (SMS)"
+msgstr ""
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
@@ -7163,6 +7969,10 @@ msgstr "Rādīt flīzes"
 msgid "Shown as"
 msgstr "Rādīts kā"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Sierra Leone"
+msgstr "Sjerraleone"
+
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
@@ -7195,6 +8005,18 @@ msgstr "Pieslēdzies kā lietotājs %1$s"
 msgid "Signed in as:"
 msgstr "Pieslēgums kā:"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Single"
+msgid "Singapore"
+msgstr "Viena"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Saint Barthélemy"
+msgid "Sint Maarten"
+msgstr "Santbarelemija"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
 #: module:io.ox/files apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -7205,6 +8027,14 @@ msgstr "Izmērs"
 #: module:io.ox/settings
 msgid "Size (bytes)"
 msgstr "Izmērs (baiti)"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Slovakia"
+msgstr "Slovākija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Slovenia"
+msgstr "Slovēnija"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
@@ -7218,6 +8048,14 @@ msgstr "Viedtālruņa iestatījumi:"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "SoftBank"
 msgstr "SoftBank"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Solomon Islands"
+msgstr "Zālamana salas"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Somalia"
+msgstr "Somālija"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "Some fields contain invalid data"
@@ -7288,6 +8126,26 @@ msgstr "Kārtošanas opcijas"
 msgid "Source"
 msgstr "Avots"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "South Africa"
+msgstr "Dienvidāfrika"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "South Africa"
+msgid "South Korea"
+msgstr "Dienvidāfrika"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Sudan"
+msgid "South Sudan"
+msgstr "Sudāna"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Spain"
+msgstr ""
+
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -7305,6 +8163,10 @@ msgstr "Izklājlapa"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Spreadsheets"
 msgstr "Izklājlapas"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Sri Lanka"
+msgstr "Šrilanka"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Standard folders"
@@ -7442,6 +8304,10 @@ msgstr "Veiksmīgi"
 msgid "Successfully reauthorized your %s account"
 msgstr "Veiksmīgi veikta atkārtota jūsu %s konta autorizēšana"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Sudan"
+msgstr "Sudāna"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Suffix"
 msgstr "Sufikss"
@@ -7450,9 +8316,29 @@ msgstr "Sufikss"
 msgid "Summary"
 msgstr "Kopsavilkums"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Suriname"
+msgstr "Surinama"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Svalbard and Jan Mayen"
+msgstr "Svalbāra un Jana Majena sala"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Swaziland"
+msgstr "Svazilenda"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Sweden"
+msgstr "Zviedrija"
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Switch to parent folder"
 msgstr "Pāriet uz virsmapi"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Switzerland"
+msgstr "Šveice"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -7483,6 +8369,10 @@ msgstr "Sinhronizēt ar planšetdatoru vai telefonu"
 msgid "Synchronize with your tablet or smartphone"
 msgstr "Sinhronizēt ar planšetdatoru vai telefonu"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Syria"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "TAX ID"
 msgstr "NOD. ID"
@@ -7501,9 +8391,21 @@ msgstr "TTY/TDD"
 msgid "Tag mail with"
 msgstr "Marķēt pastu ar"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Taiwan"
+msgstr "Taivāna"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Tajikistan"
+msgstr "Tadžikistāna"
+
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
 msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Tanzania"
+msgstr "Tanzānija"
 
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
@@ -7606,6 +8508,10 @@ msgstr "Pagaidu apstiprināts"
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Text"
 msgstr "Teksts"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Thailand"
+msgstr "Taizeme"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"
@@ -8343,11 +9249,23 @@ msgstr "Pārslēgt pilnekrānā"
 msgid "Toggle panel"
 msgstr "Pārslēgt paneli"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Togo"
+msgstr "Togo"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Tokelau"
+msgstr "Tokelau"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "Rītdien"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Tonga"
+msgstr "Tonga"
 
 #. Emoji category
 #. Japanese: ツール
@@ -8388,6 +9306,10 @@ msgstr "Kopā: %1$s pieprasījumi"
 msgid "Town"
 msgstr "Pilsēta"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Trinidad and Tobago"
+msgstr "Trinidada un Tobago"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 #, fuzzy
 #| msgid "Buy now!"
@@ -8401,6 +9323,26 @@ msgstr "Mēģinājums automātiski konfigurēt jūsu pasta kontu"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Tumblr"
 msgstr "Tumblr"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Tunisia"
+msgstr "Tnisija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Turkey"
+msgstr "Turcija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Turkmenistan"
+msgstr "Turkmenistāna"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Turks and Caicos Islands"
+msgstr "Tērksas un Kaikosas salas"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Tuvalu"
+msgstr "Tuvalu"
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Twitter"
@@ -8416,6 +9358,12 @@ msgstr "Reģistrētas sekojošas Twitter kļūdas:"
 msgid "Type"
 msgstr "Tips"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Virgin Islands, U.S."
+msgid "U.S. Virgin Islands"
+msgstr "ASV Virdžīnu salas"
+
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 msgid "UI version"
@@ -8425,6 +9373,14 @@ msgstr "Interfeisa versija"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "URL"
 msgstr "URL"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Uganda"
+msgstr "Uganda"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Ukraine"
+msgstr "Ukraina"
 
 #: apps/plugins/portal/xing/actions.js module:plugins/portal
 msgid "Un-like"
@@ -8468,6 +9424,22 @@ msgstr "Nesekot"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Unified"
 msgstr "Vienots"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "United Arab Emirates"
+msgstr "Apvienotie Arābu Emirāti"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "United Kingdom"
+msgstr "Apvienotā Karaliste"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "United States"
+msgstr "Amerikas Savienotās Valstis"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "United States Minor Outlying Islands"
+msgstr "ASV aizjūras mazās teritorijas"
 
 #: apps/io.ox/participants/model.js module:io.ox/core
 msgid "Unknown"
@@ -8578,6 +9550,10 @@ msgstr "Darbības laiks: %1$s minūtes"
 msgid "Urgency"
 msgstr "Svarīgums"
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Uruguay"
+msgstr "Urugvaja"
+
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Use SSL connection"
 msgstr "Lietot SSL pieslēgumu"
@@ -8666,10 +9642,28 @@ msgstr "Lietotāja vārds"
 msgid "Username must not be empty."
 msgstr "Lietotāja vārds nevar būt tukšs."
 
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Uzbekistan"
+msgstr "Uzbekistāna"
+
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/vacationnotice/settings/register.js
 msgid "Vacation Notice"
 msgstr "Prombūtnes paziņojums"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Vanuatu"
+msgstr "Vanuatu"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Vertical"
+msgid "Vatican"
+msgstr "Vertikāli"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Venezuela"
+msgstr "Venecuēla"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer
@@ -8688,6 +9682,12 @@ msgstr "Vertikāli"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Videos"
 msgstr "Video"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Viet Nam"
+msgid "Vietnam"
+msgstr "Vjetnama"
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -8742,6 +9742,10 @@ msgstr "Skatītāja rīkjosla"
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
 msgid "Waiting"
 msgstr "Gaidīšana"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Wallis and Futuna"
+msgstr "Volisa un Futuna"
 
 #: apps/io.ox/core/yell.js module:io.ox/core
 msgid "Warning"
@@ -8819,6 +9823,10 @@ msgstr "Esiet sveicināti savu uzdevumu vietnē"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "Esiet sveicināti. Lūdzu dodiet savas atsauksmes par šo produktu"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Western Sahara"
+msgstr "Rietumsahāra"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 #, fuzzy
@@ -8903,6 +9911,10 @@ msgstr "Gadi"
 #: module:io.ox/settings
 msgid "Yellow"
 msgstr "Dzeltens"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Yemen"
+msgstr "Jemena"
 
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
@@ -9340,6 +10352,14 @@ msgstr "Jūsu laika zona"
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "ZB"
 msgstr "ZB"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Zambia"
+msgstr "Zambija"
+
+#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
+msgid "Zimbabwe"
+msgstr "Zimbabve"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Zoom"
@@ -10255,21 +11275,12 @@ msgstr "yyyy"
 #~ msgid "Advanced options"
 #~ msgstr "Papildu iestatījumi"
 
-#~ msgid "Afghanistan"
-#~ msgstr "Afganistāna"
-
 #~ msgid ""
 #~ "After pressing OK, a new window will open where you can authorize %s to "
 #~ "access your account data."
 #~ msgstr ""
 #~ "Pēc apstiprinājuma tiks atvērts jauns logs, kurā jūs varēsit autorizēt %s "
 #~ "piekļuvi sava konta datiem."
-
-#~ msgid "Albania"
-#~ msgstr "Albānija"
-
-#~ msgid "Algeria"
-#~ msgstr "Alžīrija"
 
 #~ msgid "All Categories..."
 #~ msgstr "Visas kategorijas..."
@@ -10286,9 +11297,6 @@ msgstr "yyyy"
 #~ msgid "Alternative Email"
 #~ msgstr "Alternatīvais e-pasts"
 
-#~ msgid "American Samoa"
-#~ msgstr "Amerikas Samoa"
-
 #~ msgid "An error occurred"
 #~ msgstr "Reģistrēta kļūda"
 
@@ -10304,15 +11312,6 @@ msgstr "yyyy"
 #~ msgid "An error occurred. The message was:"
 #~ msgstr "Reģistrēta kļūda. Paziņojums:"
 
-#~ msgid "Andorra"
-#~ msgstr "Andora"
-
-#~ msgid "Angola"
-#~ msgstr "Angola"
-
-#~ msgid "Anguilla"
-#~ msgstr "Angilja"
-
 #~ msgid "Anniversary:"
 #~ msgstr "Dzimšanas diena:"
 
@@ -10324,9 +11323,6 @@ msgstr "yyyy"
 
 #~ msgid "Antarctica"
 #~ msgstr "Antarktika"
-
-#~ msgid "Antigua and Barbuda"
-#~ msgstr "Antigva un Barbuda"
 
 #, fuzzy
 #~| msgid "Apply role"
@@ -10440,15 +11436,6 @@ msgstr "yyyy"
 #~ msgid "Are you sure?"
 #~ msgstr "Vai esat pārliecināti?"
 
-#~ msgid "Argentina"
-#~ msgstr "Argentīna"
-
-#~ msgid "Armenia"
-#~ msgstr "Armēnija"
-
-#~ msgid "Aruba"
-#~ msgstr "Aruba"
-
 #~ msgid "Ask for return receipt"
 #~ msgstr "Prasīt piegādes apstiprinājumu"
 
@@ -10500,12 +11487,6 @@ msgstr "yyyy"
 #~ msgid "Aug"
 #~ msgstr "Aug."
 
-#~ msgid "Australia"
-#~ msgstr "Austrālija"
-
-#~ msgid "Austria"
-#~ msgstr "Austija"
-
 #~ msgid "Auto"
 #~ msgstr "Auto"
 
@@ -10553,26 +11534,26 @@ msgstr "yyyy"
 #~ msgid "Available UWA modules:"
 #~ msgstr "Pieejamie UWA moduļi:"
 
-#~ msgid "Azerbaijan"
-#~ msgstr "Azerbaidžāna"
+#, fuzzy
+#~| msgid "Back to sign in"
+#~ msgid "Back to devices"
+#~ msgstr "Atpakaļ pie pieslēgšanās"
+
+#, fuzzy
+#~| msgid "Back to sign in"
+#~ msgid "Back to modules"
+#~ msgstr "Atpakaļ pie pieslēgšanās"
+
+#, fuzzy
+#~| msgid "your platform"
+#~ msgid "Back to platforms"
+#~ msgstr "jūsu platforma"
 
 #~ msgid "Background 1"
 #~ msgstr "Fons 1"
 
 #~ msgid "Background 2"
 #~ msgstr "Fons 2"
-
-#~ msgid "Bahamas"
-#~ msgstr "Bahamas"
-
-#~ msgid "Bahrain"
-#~ msgstr "Bahreina"
-
-#~ msgid "Bangladesh"
-#~ msgstr "Bangladeša"
-
-#~ msgid "Barbados"
-#~ msgstr "Barbadosa"
 
 #~ msgid "Bars"
 #~ msgstr "Stabiņi"
@@ -10598,9 +11579,6 @@ msgstr "yyyy"
 #~ msgid "Begins at"
 #~ msgstr "Sākas"
 
-#~ msgid "Belarus"
-#~ msgstr "Baltkrievija"
-
 #~ msgid ""
 #~ "Below the recipient you will find further functions, e.g. for sending "
 #~ "copies to other recipients or for adding attachments."
@@ -10608,15 +11586,6 @@ msgstr "yyyy"
 #~ "Zem saņēmēja lauka atrodas papildus funkcijas kopiju un oto kopiju "
 #~ "sūtīšanai citiem saņēmējiem, failu pievienošanai, kā arī citu iestatījumu "
 #~ "veikšanai."
-
-#~ msgid "Benin"
-#~ msgstr "Benina"
-
-#~ msgid "Bermuda"
-#~ msgstr "Bermudas"
-
-#~ msgid "Bhutan"
-#~ msgstr "Butāna"
 
 #~ msgid "Birthday Appointment"
 #~ msgstr "Dzimšanas dienas atzīmēšana"
@@ -10632,9 +11601,6 @@ msgstr "yyyy"
 
 #~ msgid "Bold"
 #~ msgstr "Treknraksts"
-
-#~ msgid "Bolivia"
-#~ msgstr "Bolīvija"
 
 #~ msgid "Border inside"
 #~ msgstr "Iekšmala"
@@ -10660,12 +11626,6 @@ msgstr "yyyy"
 #~ msgid "Border top and bottom"
 #~ msgstr "Augšmala un apakšmala"
 
-#~ msgid "Bosnia and Herzegovina"
-#~ msgstr "Bosnija un Hercogvina"
-
-#~ msgid "Botswana"
-#~ msgstr "Botsvāna"
-
 #, fuzzy
 #~ msgid "Bottom"
 #~ msgstr "Apakšmala"
@@ -10676,26 +11636,11 @@ msgstr "yyyy"
 #~ msgid "Branches:"
 #~ msgstr "Zari:"
 
-#~ msgid "Brazil"
-#~ msgstr "Brazīlija"
-
-#~ msgid "British Indian Ocean Territory"
-#~ msgstr "Britu Indijas okeāna teritorija"
-
 #~ msgid "Brunei Darussalam"
 #~ msgstr "Bruneja (Darussalam)"
 
-#~ msgid "Bulgaria"
-#~ msgstr "Bulgārija"
-
 #~ msgid "Bullets On/Off"
 #~ msgstr "Ieslēgt/izslēgt aizzīmes"
-
-#~ msgid "Burkina Faso"
-#~ msgstr "Burkinafaso"
-
-#~ msgid "Burundi"
-#~ msgstr "Burundija"
 
 #~ msgid "CAD"
 #~ msgstr "CAD"
@@ -10715,17 +11660,8 @@ msgstr "yyyy"
 #~ msgid "Calendar workweek view"
 #~ msgstr "Kalendāra nedēļas skats"
 
-#~ msgid "Cambodia"
-#~ msgstr "Kambodža"
-
-#~ msgid "Cameroon"
-#~ msgstr "Kamerūna"
-
 #~ msgid "Can not create appointment in a folder other than appointment folder"
 #~ msgstr "Tikšanās var tikt izveidotas tikai tām atbilstošās tikšanās mapēs."
-
-#~ msgid "Canada"
-#~ msgstr "Kanāda"
 
 #~ msgid "Canadian dollar"
 #~ msgstr "Kanādas dolāri"
@@ -10735,9 +11671,6 @@ msgstr "yyyy"
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "Sistēmas mapi nevar pārvietot."
-
-#~ msgid "Cape Verde"
-#~ msgstr "Kaboverde"
 
 #~ msgid "Cards"
 #~ msgstr "Kartiņas"
@@ -10757,9 +11690,6 @@ msgstr "yyyy"
 #~ msgid "Category names must be unique"
 #~ msgstr "Kategoriju vārdiem ir jābūt unikāliem"
 
-#~ msgid "Cayman Islands"
-#~ msgstr "Kaimanu salas"
-
 #~ msgid "Cc"
 #~ msgstr "Cc"
 
@@ -10777,12 +11707,6 @@ msgstr "yyyy"
 
 #~ msgid "Centered, no text wrapping"
 #~ msgstr "Centrēts, nav teksta sadalīšanās"
-
-#~ msgid "Central African Republic"
-#~ msgstr "Centrālāfrikas Republika"
-
-#~ msgid "Chad"
-#~ msgstr "Čada"
 
 #~ msgid "Change View"
 #~ msgstr "Mainīt skatu"
@@ -10811,20 +11735,11 @@ msgstr "yyyy"
 #~ msgid "Children:"
 #~ msgstr "Bērni:"
 
-#~ msgid "Chile"
-#~ msgstr "Čīle"
-
-#~ msgid "China"
-#~ msgstr "Ķīna"
-
 #~ msgid "Choose Team"
 #~ msgstr "Grupas izvēle"
 
 #~ msgid "Choose a new password for your account."
 #~ msgstr "Izvēlieties jaunu paroli savam kontam."
-
-#~ msgid "Christmas Island"
-#~ msgstr "Ziemassvētku sala"
 
 #~ msgid "City (business)"
 #~ msgstr "Pilsēta (bizness)"
@@ -10897,9 +11812,6 @@ msgstr "yyyy"
 #~ msgid "Collect while sending E-Mails?"
 #~ msgstr "Uzkrāt pie e-pasta sūtīšanas?"
 
-#~ msgid "Colombia"
-#~ msgstr "Kolumbija"
-
 #~ msgid "Comma Separated"
 #~ msgstr "Atdalīts ar komatu"
 
@@ -10961,17 +11873,11 @@ msgstr "yyyy"
 #~ msgid "Continue Presentation"
 #~ msgstr "Saņēmējs"
 
-#~ msgid "Cook Islands"
-#~ msgstr "Kuka salas"
-
 #~ msgid "Copy (CC) to"
 #~ msgstr "Kopija (CC)"
 
 #~ msgid "Copy to"
 #~ msgstr "Kopēt uz"
-
-#~ msgid "Costa Rica"
-#~ msgstr "Kostarika"
 
 #~ msgid "Cote d'Ivoire"
 #~ msgstr "Ziloņkaula krasts"
@@ -11078,12 +11984,6 @@ msgstr "yyyy"
 #~ msgid "Creation date:"
 #~ msgstr "Izveides datums:"
 
-#~ msgid "Croatia"
-#~ msgstr "Horvātija"
-
-#~ msgid "Cuba"
-#~ msgstr "Kuba"
-
 #~ msgid "Current Costs:"
 #~ msgstr "Pašreiz. izmaksas:"
 
@@ -11123,14 +12023,8 @@ msgstr "yyyy"
 #~ msgid "Cut"
 #~ msgstr "izgriezt"
 
-#~ msgid "Cyprus"
-#~ msgstr "Kipra"
-
 #~ msgid "Czech"
 #~ msgstr "Čehu"
-
-#~ msgid "Czech Republic"
-#~ msgstr "Čehijas Republika"
 
 #~ msgid "DKK"
 #~ msgstr "DKK"
@@ -11320,9 +12214,6 @@ msgstr "yyyy"
 #~ msgid "Displaying the help or the settings"
 #~ msgstr "Palīga vai iestatījumu parādīšana"
 
-#~ msgid "Djibouti"
-#~ msgstr "Džibutija"
-
 #~ msgid "Do the following:"
 #~ msgstr "Darbības:"
 
@@ -11403,12 +12294,6 @@ msgstr "yyyy"
 #~ msgid "Does not match regex"
 #~ msgstr "Neatbilst 'regex'"
 
-#~ msgid "Dominica"
-#~ msgstr "Dominika"
-
-#~ msgid "Dominican Republic"
-#~ msgstr "Dominikānas Republika"
-
 #~ msgid "Don't show again"
 #~ msgstr "Nerādīt vēlreiz"
 
@@ -11452,9 +12337,6 @@ msgstr "yyyy"
 
 #~ msgid "Due today!"
 #~ msgstr "Izpilde šodien!"
-
-#~ msgid "Dutch (Netherlands)"
-#~ msgstr "Holandiešu"
 
 #~ msgid "Dynamic resizing..."
 #~ msgstr "Dinamiska mērogošana..."
@@ -11507,9 +12389,6 @@ msgstr "yyyy"
 #~ msgid "Each %s. %s"
 #~ msgstr "Katra %s. %s"
 
-#~ msgid "Ecuador"
-#~ msgstr "Ekvadora"
-
 #~ msgid "Edit Appointment"
 #~ msgstr "Rediģēt tikšanos"
 
@@ -11558,9 +12437,6 @@ msgstr "yyyy"
 
 #~ msgid "Editor feature set:"
 #~ msgstr "E-pasta redaktors:"
-
-#~ msgid "El Salvador"
-#~ msgstr "Salvadora"
 
 #~ msgid "Email Address:"
 #~ msgstr "E-pasta adrese:"
@@ -11753,9 +12629,6 @@ msgstr "yyyy"
 #~ msgid "Envelope"
 #~ msgstr "Aploksne"
 
-#~ msgid "Equatorial Guinea"
-#~ msgstr "Ekvatoriālā Gvineja"
-
 #~ msgid "Error-ID: %1$s"
 #~ msgstr "Kļūda-ID: %1$s"
 
@@ -11773,12 +12646,6 @@ msgstr "yyyy"
 
 #~ msgid "Estimated Duration:"
 #~ msgstr "Ilguma prognoze:"
-
-#~ msgid "Estonia"
-#~ msgstr "Igaunija"
-
-#~ msgid "Ethiopia"
-#~ msgstr "Etiopija"
 
 #~ msgid "Euro"
 #~ msgstr "Eiro"
@@ -11821,12 +12688,6 @@ msgstr "yyyy"
 #~ msgid "Failure! Please refresh."
 #~ msgstr "Kļūda! Lūdzu atjauniniet."
 
-#~ msgid "Falkland Islands (Malvinas)"
-#~ msgstr "Folklenda salas"
-
-#~ msgid "Faroe Islands"
-#~ msgstr "Faroa salas"
-
 #~ msgctxt "app"
 #~ msgid "Favorite timezone"
 #~ msgstr "Izlases laika josla"
@@ -11854,9 +12715,6 @@ msgstr "yyyy"
 
 #~ msgid "Feb"
 #~ msgstr "Feb."
-
-#~ msgid "Fiji"
-#~ msgstr "Fidži"
 
 #~ msgid "File name:"
 #~ msgstr "Faila vārds:"
@@ -11894,9 +12752,6 @@ msgstr "yyyy"
 
 #~ msgid "Finish tour"
 #~ msgstr "Pabeigt tūri"
-
-#~ msgid "Finland"
-#~ msgstr "Somija"
 
 #~ msgid "First Tab"
 #~ msgstr "Pirmais tabulators"
@@ -11991,12 +12846,6 @@ msgstr "yyyy"
 #~ msgid "French"
 #~ msgstr "Franču"
 
-#~ msgid "French Guiana"
-#~ msgstr "Franču Gviāna"
-
-#~ msgid "French Polynesia"
-#~ msgstr "Franču Polinēzija"
-
 #~ msgid "French Southern Territories"
 #~ msgstr "Franču dienvidu teritorijas"
 
@@ -12036,33 +12885,15 @@ msgstr "yyyy"
 #~ msgid "GBP"
 #~ msgstr "GBP"
 
-#~ msgid "Gabon"
-#~ msgstr "Gabona"
-
-#~ msgid "Gambia"
-#~ msgstr "Gambija"
-
 #, fuzzy
 #~ msgid "General info"
 #~ msgstr "Vispārēji"
-
-#~ msgid "Georgia"
-#~ msgstr "Gruzija"
-
-#~ msgid "German"
-#~ msgstr "Vāciju"
 
 #~ msgid "Get directions"
 #~ msgstr "Iegūt norādes"
 
 #~ msgid "Get started here!"
 #~ msgstr "Sāciet šeit!"
-
-#~ msgid "Ghana"
-#~ msgstr "Gana"
-
-#~ msgid "Gibraltar"
-#~ msgstr "Gibraltārs"
 
 #~ msgid "Go"
 #~ msgstr "Izpildīt"
@@ -12081,12 +12912,6 @@ msgstr "yyyy"
 
 #~ msgid "Greek"
 #~ msgstr "Grieķu"
-
-#~ msgid "Greenland"
-#~ msgstr "Grenlande"
-
-#~ msgid "Grenada"
-#~ msgstr "Granāda"
 
 #~ msgid "Grey"
 #~ msgstr "Pelēks"
@@ -12109,26 +12934,8 @@ msgstr "yyyy"
 #~ msgid "Group task"
 #~ msgstr "Grupas uzdevums"
 
-#~ msgid "Guadeloupe"
-#~ msgstr "Gvadelupa"
-
-#~ msgid "Guam"
-#~ msgstr "Guama"
-
-#~ msgid "Guatemala"
-#~ msgstr "Gvatemala"
-
 #~ msgid "Guidance"
 #~ msgstr "Ieteikumi"
-
-#~ msgid "Guinea"
-#~ msgstr "Gvineja"
-
-#~ msgid "Guinea-Bissau"
-#~ msgstr "Gvineja-Bisava"
-
-#~ msgid "Guyana"
-#~ msgstr "Gajāna"
 
 #~ msgctxt "teamview"
 #~ msgid "H"
@@ -12154,17 +12961,11 @@ msgstr "yyyy"
 #~ msgid "HTML-only mail"
 #~ msgstr "Tikai HTML pasts"
 
-#~ msgid "Haiti"
-#~ msgstr "Haitī"
-
 #~ msgid "Halo view"
 #~ msgstr "Halo skats"
 
 #~ msgid "Heading"
 #~ msgstr "Galvene"
-
-#~ msgid "Heard Island and McDonald Islands"
-#~ msgstr "Hērda sala un Makdonalda salas"
 
 #~ msgid "Hello"
 #~ msgstr "Esiet sveicināti"
@@ -12219,17 +13020,8 @@ msgstr "yyyy"
 #~ msgid "Home"
 #~ msgstr "Mājas"
 
-#~ msgid "Honduras"
-#~ msgstr "Hondurasa"
-
-#~ msgid "Hong Kong"
-#~ msgstr "Honkonga"
-
 #~ msgid "How the settings are organized"
 #~ msgstr "Iestatījumu organizācija"
-
-#~ msgid "Hungarian"
-#~ msgstr "Ungāru"
 
 #~ msgid "IM"
 #~ msgstr "IM"
@@ -12248,9 +13040,6 @@ msgstr "yyyy"
 
 #~ msgid "IP phone (private):"
 #~ msgstr "IP telefons (privāts):"
-
-#~ msgid "Iceland"
-#~ msgstr "Islande"
 
 #~ msgid "Icon view"
 #~ msgstr "Ikonu skats"
@@ -12359,9 +13148,6 @@ msgstr "yyyy"
 
 #~ msgid "Incorrect input."
 #~ msgstr "Nepareizs ievads."
-
-#~ msgid "India"
-#~ msgstr "Indija"
 
 #~ msgid "Info area"
 #~ msgstr "Informatīvais apgabals"
@@ -12476,15 +13262,6 @@ msgstr "yyyy"
 #~ msgid "Inviting other participants"
 #~ msgstr "Citu dalībnieku uzaicināšana"
 
-#~ msgid "Iran"
-#~ msgstr "Irāna"
-
-#~ msgid "Iraq"
-#~ msgstr "Irāka"
-
-#~ msgid "Ireland"
-#~ msgstr "Īrija"
-
 #~ msgid "Is at least"
 #~ msgstr "Ir vismaz"
 
@@ -12494,17 +13271,8 @@ msgstr "yyyy"
 #~ msgid "Is not exactly"
 #~ msgstr "Nav tieši"
 
-#~ msgid "Isle of Man"
-#~ msgstr "Menas sala"
-
-#~ msgid "Israel"
-#~ msgstr "Izraēla"
-
 #~ msgid "Italian (Italy)"
 #~ msgstr "Itāļu (Itālija)"
-
-#~ msgid "Italic"
-#~ msgstr "Slīpraksts"
 
 #~ msgid "Items without a file can not be opened."
 #~ msgstr "Vienības bez failiem nevar tikt atvērtas."
@@ -12512,20 +13280,8 @@ msgstr "yyyy"
 #~ msgid "JPY"
 #~ msgstr "JPY"
 
-#~ msgid "Jamaica"
-#~ msgstr "Jamaika"
-
 #~ msgid "Jan"
 #~ msgstr "Jan."
-
-#~ msgid "Japan"
-#~ msgstr "Japāna"
-
-#~ msgid "Jersey"
-#~ msgstr "Džersija"
-
-#~ msgid "Jordan"
-#~ msgstr "Jordāna"
 
 #~ msgid "Jul"
 #~ msgstr "Jūl."
@@ -12536,29 +13292,11 @@ msgstr "yyyy"
 #~ msgid "Justify"
 #~ msgstr "Izlīdzināts"
 
-#~ msgid "Kazakhstan"
-#~ msgstr "Kazahstāna"
-
 #~ msgid "Keep the draft."
 #~ msgstr "Saglabāt melnrakstu."
 
-#~ msgid "Kenya"
-#~ msgstr "Kenija"
-
-#~ msgid "Kiribati"
-#~ msgstr "Kiribati"
-
-#~ msgid "Korea, Democratic People's Republic of"
-#~ msgstr "Korejas Tautas Demokrātiskā Republika"
-
 #~ msgid "Korea, Republic of"
 #~ msgstr "Korejas Republika"
-
-#~ msgid "Kuwait"
-#~ msgstr "Kuveita"
-
-#~ msgid "Kyrgyzstan"
-#~ msgstr "Kirgizstāna"
 
 #~ msgid "Label"
 #~ msgstr "Etiķete"
@@ -12591,26 +13329,14 @@ msgstr "yyyy"
 #~ msgid "Leave messages on server"
 #~ msgstr "Atstāt ziņojumus uz servera"
 
-#~ msgid "Lebanon"
-#~ msgstr "Libāna"
-
 #~ msgid "Left"
 #~ msgstr "Kreisais"
 
 #~ msgid "Left aligned, text wraps at right side"
 #~ msgstr "Kreisi novietots, teksts sadalās labajā pusē"
 
-#~ msgid "Lesotho"
-#~ msgstr "Lesoto"
-
-#~ msgid "Liberia"
-#~ msgstr "Libērija"
-
 #~ msgid "Libyan Arab Jamahiriya"
 #~ msgstr "Lībija"
-
-#~ msgid "Liechtenstein"
-#~ msgstr "Lihtenšteina"
 
 #~ msgid "Lighter"
 #~ msgstr "Gaišāks"
@@ -12637,9 +13363,6 @@ msgstr "yyyy"
 
 #~ msgid "Link/Url"
 #~ msgstr "Saite/URL"
-
-#~ msgid "Lithuania"
-#~ msgstr "Lietuva"
 
 #~ msgid "Load Contents..."
 #~ msgstr "Satura ielāde..."
@@ -12682,9 +13405,6 @@ msgstr "yyyy"
 #~ msgid "Long"
 #~ msgstr "Gara"
 
-#~ msgid "Luxembourg"
-#~ msgstr "Luksemburga"
-
 #~ msgid "M/d/yy"
 #~ msgstr "M/d/yy"
 
@@ -12701,15 +13421,6 @@ msgstr "yyyy"
 #~| msgid "March"
 #~ msgid "Mac"
 #~ msgstr "Marts"
-
-#~ msgid "Macao"
-#~ msgstr "Makao"
-
-#~ msgid "Macedonia"
-#~ msgstr "Maķedonija"
-
-#~ msgid "Madagascar"
-#~ msgstr "Madagaskara"
 
 #~ msgid "Mail Thread Details"
 #~ msgstr "Pasta sarakstes detaļas"
@@ -12732,21 +13443,6 @@ msgstr "yyyy"
 #~ msgid "Mailing list %s"
 #~ msgstr "Adresātu saraksts %s"
 
-#~ msgid "Malawi"
-#~ msgstr "Malāvija"
-
-#~ msgid "Malaysia"
-#~ msgstr "Malaizija"
-
-#~ msgid "Maldives"
-#~ msgstr "Maldīvija"
-
-#~ msgid "Mali"
-#~ msgstr "Mali"
-
-#~ msgid "Malta"
-#~ msgstr "Malta"
-
 #~ msgid "Manager:"
 #~ msgstr "Menedžeris:"
 
@@ -12766,26 +13462,11 @@ msgstr "yyyy"
 #~ msgid "Mark folder read"
 #~ msgstr "Iestatīt mapi kā izlasītu"
 
-#~ msgid "Marshall Islands"
-#~ msgstr "Maršala salas"
-
-#~ msgid "Martinique"
-#~ msgstr "Martinika"
-
 #~ msgid "Matches (wildcards allowed)"
 #~ msgstr "Sakritības (aizstājējzīmes atļautas)"
 
-#~ msgid "Mauritania"
-#~ msgstr "Mauritānija"
-
-#~ msgid "Mauritius"
-#~ msgstr "Maurīcija"
-
 #~ msgid "Maximum"
 #~ msgstr "Maksimums"
-
-#~ msgid "Mayotte"
-#~ msgstr "Majota"
 
 #~ msgid "Mediaplayer"
 #~ msgstr "Mediju atskaņotājs"
@@ -12798,12 +13479,6 @@ msgstr "yyyy"
 
 #~ msgid "Message is read"
 #~ msgstr "Ziņojums ir izlasīts"
-
-#~ msgid "Mexico"
-#~ msgstr "Meksika"
-
-#~ msgid "Micronesia"
-#~ msgstr "Mikronēzija"
 
 #~ msgid "Microsoft Outlook"
 #~ msgstr "Microsoft Outlook"
@@ -12853,23 +13528,11 @@ msgstr "yyyy"
 #~ msgid "Module"
 #~ msgstr "Modulis"
 
-#~ msgid "Moldova"
-#~ msgstr "Moldāvija"
-
 #~ msgid "Mon"
 #~ msgstr "Pir."
 
-#~ msgid "Monaco"
-#~ msgstr "Monako"
-
 #~ msgid "Monday"
 #~ msgstr "Pirmdiena"
-
-#~ msgid "Mongolia"
-#~ msgstr "Mongolija"
-
-#~ msgid "Montenegro"
-#~ msgstr "Melnkalne"
 
 #~ msgid "Month View"
 #~ msgstr "Mēneša skats"
@@ -12877,23 +13540,14 @@ msgstr "yyyy"
 #~ msgid "More zoom settings"
 #~ msgstr "Vairāk skata iestatījumu"
 
-#~ msgid "Morocco"
-#~ msgstr "Maroka"
-
 #~ msgid "Moving mails ... This may take a few seconds."
 #~ msgstr "Pasta pārvietošana... Tas var aizņemt vairākas sekundes."
-
-#~ msgid "Mozambique"
-#~ msgstr "Mozambika"
 
 #~ msgid "My Infostore"
 #~ msgstr "Mana infoglabātuve"
 
 #~ msgid "My OX Social"
 #~ msgstr "Mans OX Sociālais"
-
-#~ msgid "Myanmar"
-#~ msgstr "Mjanma"
 
 #~ msgid "N/A"
 #~ msgstr "N/A"
@@ -12916,17 +13570,8 @@ msgstr "yyyy"
 #~ msgid "Names and email addresses"
 #~ msgstr "Vārdi un e-pasta adreses"
 
-#~ msgid "Namibia"
-#~ msgstr "Namībija"
-
-#~ msgid "Nauru"
-#~ msgstr "Nauru"
-
 #~ msgid "Navigation bar"
 #~ msgstr "Navigācijas josla"
-
-#~ msgid "Nepal"
-#~ msgstr "Nepāla"
 
 #~ msgid "Netherlands Antilles"
 #~ msgstr "Nīderlandes Antiļas"
@@ -12936,9 +13581,6 @@ msgstr "yyyy"
 
 #~ msgid "New Appointment"
 #~ msgstr "Jauna tikšanās"
-
-#~ msgid "New Caledonia"
-#~ msgstr "Jaunkaledonija"
 
 #~ msgid "New Distribution List"
 #~ msgstr "Jauns izplatīšanas saraksts"
@@ -12957,9 +13599,6 @@ msgstr "yyyy"
 
 #~ msgid "New Team"
 #~ msgstr "Jauna grupa"
-
-#~ msgid "New Zealand"
-#~ msgstr "Jaunzēlande"
 
 #~ msgid "New messaging service"
 #~ msgstr "Jauns ziņapmaiņas serviss"
@@ -12991,20 +13630,8 @@ msgstr "yyyy"
 #~ msgid "Next birthdays"
 #~ msgstr "Nākošās dzimšanas dienas"
 
-#~ msgid "Nicaragua"
-#~ msgstr "Nikaragva"
-
 #~ msgid "Nickname:"
 #~ msgstr "Iesauka:"
-
-#~ msgid "Niger"
-#~ msgstr "Nigēra"
-
-#~ msgid "Nigeria"
-#~ msgstr "Nigērija"
-
-#~ msgid "Niue"
-#~ msgstr "Niue"
 
 #~ msgid "No Appointment selected."
 #~ msgstr "Neviena tikšanās nav izvēlēta."
@@ -13106,15 +13733,6 @@ msgstr "yyyy"
 #~ msgid "No, not now"
 #~ msgstr "Nē, ne tagad"
 
-#~ msgid "Norfolk Island"
-#~ msgstr "Norfolkas sala"
-
-#~ msgid "Northern Mariana Islands"
-#~ msgstr "Ziemeļmarianas salas"
-
-#~ msgid "Norway"
-#~ msgstr "Norvēģija"
-
 #~ msgid "Not Spam"
 #~ msgstr "Nav mēstule"
 
@@ -13178,9 +13796,6 @@ msgstr "yyyy"
 
 #~ msgid "Old Password is wrong."
 #~ msgstr "Nepareiza vecā parole."
-
-#~ msgid "Oman"
-#~ msgstr "Omāna"
 
 #~ msgid "On %s %s each %s. months"
 #~ msgstr "Katra %s %s katrus %s. mēnešus"
@@ -13296,23 +13911,8 @@ msgstr "yyyy"
 #~ msgid "Pager:"
 #~ msgstr "Peidžeris:"
 
-#~ msgid "Pakistan"
-#~ msgstr "Pakistāna"
-
-#~ msgid "Palau"
-#~ msgstr "Palau"
-
-#~ msgid "Palestinian Territory, Occupied"
-#~ msgstr "Palestīniešu okupētā teritorija"
-
-#~ msgid "Panama"
-#~ msgstr "Panama"
-
 #~ msgid "Panel is shown as"
 #~ msgstr "Panelis tiek uzrādīts kā"
-
-#~ msgid "Papua New Guinea"
-#~ msgstr "Papua Jaungvineja"
 
 #~ msgid "Paragraph Alignment"
 #~ msgstr "Paragrāfa novietojums"
@@ -13367,12 +13967,6 @@ msgstr "yyyy"
 #~ msgid "Permissions: %1$s"
 #~ msgstr "Tiesības"
 
-#~ msgid "Peru"
-#~ msgstr "Peru"
-
-#~ msgid "Philippines"
-#~ msgstr "Filipīnas"
-
 #~ msgid "Phone (business):"
 #~ msgstr "Telefons (bizness):"
 
@@ -13408,9 +14002,6 @@ msgstr "yyyy"
 
 #~ msgid "Phone:"
 #~ msgstr "Telefons:"
-
-#~ msgid "Pitcairn"
-#~ msgstr "Pitkērna"
 
 #~ msgid "Place of Signature:"
 #~ msgstr "Paraksta vieta:"
@@ -13492,9 +14083,6 @@ msgstr "yyyy"
 #~ msgid "Please wait while you are being redirected to the start page ..."
 #~ msgstr "Lūdzu uzgaidiet kamēr notiek pāradresācija uz sākuma lapu..."
 
-#~ msgid "Poland"
-#~ msgstr "Polija"
-
 #~ msgid "Polish"
 #~ msgstr "Poļu"
 
@@ -13506,9 +14094,6 @@ msgstr "yyyy"
 
 #~ msgid "Portal Widgets"
 #~ msgstr "Portāla logrīki"
-
-#~ msgid "Portugal"
-#~ msgstr "Portugāle"
 
 #~ msgid "Portuguese (Portugal)"
 #~ msgstr "Portugāļu (Portugāle)"
@@ -13605,9 +14190,6 @@ msgstr "yyyy"
 
 #~ msgid "Publish item"
 #~ msgstr "Publicēt vienību"
-
-#~ msgid "Puerto Rico"
-#~ msgstr "Puertoriko"
 
 #~ msgid "Pull To Refresh"
 #~ msgstr "Pavelciet lai jauninātu"
@@ -13729,9 +14311,6 @@ msgstr "yyyy"
 #~ msgid "Retweet new"
 #~ msgstr "'Retweet'-tot jauns"
 
-#~ msgid "Reunion"
-#~ msgstr "Apvienošana"
-
 #~ msgid "Revert Last Operation"
 #~ msgstr "Atsaukt pēdējo darbību"
 
@@ -13746,9 +14325,6 @@ msgstr "yyyy"
 #~ msgid "Right aligned, text wraps at left side"
 #~ msgstr "Labēji novietots, teksts sadalās kreisajā pusē"
 
-#~ msgid "Romanian"
-#~ msgstr "Rumāņu"
-
 #~ msgid "Room number:"
 #~ msgstr "Istabas numurs:"
 
@@ -13758,14 +14334,8 @@ msgstr "yyyy"
 #~ msgid "Rules"
 #~ msgstr "Noteikumi"
 
-#~ msgid "Russian"
-#~ msgstr "Krievu"
-
 #~ msgid "Russian Federation"
 #~ msgstr "Krievijas Federācija"
-
-#~ msgid "Rwanda"
-#~ msgstr "Ruanda"
 
 #~ msgctxt "saturday"
 #~ msgid "S"
@@ -13778,50 +14348,25 @@ msgstr "yyyy"
 #~ msgid "SEK"
 #~ msgstr "SEK"
 
-#~ msgid "Saint Barthélemy"
-#~ msgstr "Santbarelemija"
-
-#~ msgid "Saint Helena"
-#~ msgstr "Sv. Helēnas sala"
-
-#~ msgid "Saint Kitts and Nevis"
-#~ msgstr "Sentkitsa un Nevisa"
-
-#~ msgid "Saint Lucia"
-#~ msgstr "Sentlusija"
+#, fuzzy
+#~| msgid "RSS"
+#~ msgid "SMS"
+#~ msgstr "RSS"
 
 #~ msgid "Saint Martin (French part)"
 #~ msgstr "Senmartēna (Franču daļa)"
 
-#~ msgid "Saint Pierre and Miquelon"
-#~ msgstr "Senpjēra un Mikelona"
-
-#~ msgid "Saint Vincent and the Grenadines"
-#~ msgstr "Sentvinsenta un Grenadīnas"
-
 #~ msgid "Sales Volume:"
 #~ msgstr "Pārdošanas apjoms:"
 
-#~ msgid "Samoa"
-#~ msgstr "Samoa"
-
 #~ msgid "Sample:"
 #~ msgstr "Paraugs:"
-
-#~ msgid "San Marino"
-#~ msgstr "Sanmarīno"
-
-#~ msgid "Sao Tome and Principe"
-#~ msgstr "Santomē un Prinsipi"
 
 #~ msgid "Sat"
 #~ msgstr "Ses."
 
 #~ msgid "Saturday"
 #~ msgstr "Sestdiena"
-
-#~ msgid "Saudi Arabia"
-#~ msgstr "Saūda Arābija"
 
 #~ msgid "Save configuration before every logout?"
 #~ msgstr "Saglabāt konfigurāciju pirms katras atslēgšanās?"
@@ -13961,9 +14506,6 @@ msgstr "yyyy"
 #~ msgid "Sending the E-Mail"
 #~ msgstr "E-pasta nosūtīšana"
 
-#~ msgid "Senegal"
-#~ msgstr "Senegāla"
-
 #~ msgid "Sent"
 #~ msgstr "Nosūtīts"
 
@@ -13973,9 +14515,6 @@ msgstr "yyyy"
 #~ msgid "Separator"
 #~ msgstr "Atdalītājs"
 
-#~ msgid "Serbia"
-#~ msgstr "Serbija"
-
 #~ msgid "Server Error"
 #~ msgstr "Servera kļūda"
 
@@ -13984,9 +14523,6 @@ msgstr "yyyy"
 
 #~ msgid "Set as default"
 #~ msgstr "Uzstādīt kā noklusēto"
-
-#~ msgid "Seychelles"
-#~ msgstr "Seišeļu salas"
 
 #~ msgid "Share link by email"
 #~ msgstr "Kopīgot saiti ar e-pastu"
@@ -14103,9 +14639,6 @@ msgstr "yyyy"
 #~ msgid "Sidebar"
 #~ msgstr "Sānu josla"
 
-#~ msgid "Sierra Leone"
-#~ msgstr "Sjerraleone"
-
 #~ msgid "Signature"
 #~ msgstr "Paraksts"
 
@@ -14127,9 +14660,6 @@ msgstr "yyyy"
 #~ msgid "Since the appointment is recurring, it may cause further conflicts."
 #~ msgstr "Tā kā tikšanās ir regulāra tā var izraisīt turpmākus konfliktus."
 
-#~ msgid "Single"
-#~ msgstr "Viena"
-
 #~ msgid "Size:"
 #~ msgstr "Izmērs:"
 
@@ -14138,12 +14668,6 @@ msgstr "yyyy"
 
 #~ msgid "Slideshow"
 #~ msgstr "Slaidrāde"
-
-#~ msgid "Slovakia"
-#~ msgstr "Slovākija"
-
-#~ msgid "Slovenia"
-#~ msgstr "Slovēnija"
 
 #, fuzzy
 #~| msgid "Smartphone settings:"
@@ -14161,12 +14685,6 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Sociālie konti tiek izmantoti tikai lai lejuplādētu kontaktu un/vai "
 #~ "kalendāru datus"
-
-#~ msgid "Solomon Islands"
-#~ msgstr "Zālamana salas"
-
-#~ msgid "Somalia"
-#~ msgstr "Somālija"
 
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Kāds ir ar jums koplietojis failu"
@@ -14195,9 +14713,6 @@ msgstr "yyyy"
 #~ msgid "Sorting your tasks"
 #~ msgstr "Uzdevumu šķirošana"
 
-#~ msgid "South Africa"
-#~ msgstr "Dienvidāfrika"
-
 #~ msgid "South Georgia and the South Sandwich Islands"
 #~ msgstr "Dienviddžordžija un Dienvidsendviču salas"
 
@@ -14209,9 +14724,6 @@ msgstr "yyyy"
 
 #~ msgid "Spouse's name:"
 #~ msgstr "Dzīvesbiedra vārds:"
-
-#~ msgid "Sri Lanka"
-#~ msgstr "Šrilanka"
 
 #~ msgid "Start Page"
 #~ msgstr "Sākuma lapa"
@@ -14339,9 +14851,6 @@ msgstr "yyyy"
 #~ msgid "Such data will never be uploaded"
 #~ msgstr "Šādi dati nekad netiks augšupielādēti"
 
-#~ msgid "Sudan"
-#~ msgstr "Sudāna"
-
 #~ msgid "Suffix:"
 #~ msgstr "Sufikss:"
 
@@ -14365,26 +14874,11 @@ msgstr "yyyy"
 #~ "(\"Office 2010 Click-to-Run\", \"Office Home and Business 2010 Testversion"
 #~ "\" netiek atbalstītas)"
 
-#~ msgid "Suriname"
-#~ msgstr "Surinama"
-
-#~ msgid "Svalbard and Jan Mayen"
-#~ msgstr "Svalbāra un Jana Majena sala"
-
-#~ msgid "Swaziland"
-#~ msgstr "Svazilenda"
-
-#~ msgid "Sweden"
-#~ msgstr "Zviedrija"
-
 #~ msgid "Swedish (Sweden)"
 #~ msgstr "Zviedru"
 
 #~ msgid "Swiss franc"
 #~ msgstr "Šveices franki"
-
-#~ msgid "Switzerland"
-#~ msgstr "Šveice"
 
 #~ msgid "Sync with mobile phone"
 #~ msgstr "Sinhronizēt ar mobilo tālruni"
@@ -14450,15 +14944,6 @@ msgstr "yyyy"
 #~ msgid "Tabs example"
 #~ msgstr "Tabulatoru piemērs"
 
-#~ msgid "Taiwan"
-#~ msgstr "Taivāna"
-
-#~ msgid "Tajikistan"
-#~ msgstr "Tadžikistāna"
-
-#~ msgid "Tanzania"
-#~ msgstr "Tanzānija"
-
 #~ msgid "Target"
 #~ msgstr "Mērķis"
 
@@ -14511,9 +14996,6 @@ msgstr "yyyy"
 
 #~ msgid "Text:"
 #~ msgstr "Teksts:"
-
-#~ msgid "Thailand"
-#~ msgstr "Taizeme"
 
 #~ msgctxt "help"
 #~ msgid "The E-Mail Components"
@@ -15112,15 +15594,6 @@ msgstr "yyyy"
 #~ msgid "Toggle search"
 #~ msgstr "Pārslēgt meklēšanu"
 
-#~ msgid "Togo"
-#~ msgstr "Togo"
-
-#~ msgid "Tokelau"
-#~ msgstr "Tokelau"
-
-#~ msgid "Tonga"
-#~ msgstr "Tonga"
-
 #~ msgid "Too short"
 #~ msgstr "Pārāk īss"
 
@@ -15136,29 +15609,11 @@ msgstr "yyyy"
 #~ msgid "Trash folder"
 #~ msgstr "Atkritumu mape"
 
-#~ msgid "Trinidad and Tobago"
-#~ msgstr "Trinidada un Tobago"
-
 #~ msgid "Tue"
 #~ msgstr "Otr."
 
 #~ msgid "Tuesday"
 #~ msgstr "Otrdiena"
-
-#~ msgid "Tunisia"
-#~ msgstr "Tnisija"
-
-#~ msgid "Turkey"
-#~ msgstr "Turcija"
-
-#~ msgid "Turkmenistan"
-#~ msgstr "Turkmenistāna"
-
-#~ msgid "Turks and Caicos Islands"
-#~ msgstr "Tērksas un Kaikosas salas"
-
-#~ msgid "Tuvalu"
-#~ msgstr "Tuvalu"
 
 #~ msgid "Tweet"
 #~ msgstr "Ziņa"
@@ -15186,12 +15641,6 @@ msgstr "yyyy"
 
 #~ msgid "UWA Widgets..."
 #~ msgstr "UWA logrīki..."
-
-#~ msgid "Uganda"
-#~ msgstr "Uganda"
-
-#~ msgid "Ukraine"
-#~ msgstr "Ukraina"
 
 #~ msgid "Unable to create a new subscription folder."
 #~ msgstr "Nevar izveidot jaunu abonēšanas mapi."
@@ -15225,18 +15674,6 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Neparedzēti: Nevar ielādēt datus jo servera atbilde ir tukša! Lūdzu "
 #~ "mēģiniet vēlreiz vēlāk vai arī sazinieties ar administratoru!"
-
-#~ msgid "United Arab Emirates"
-#~ msgstr "Apvienotie Arābu Emirāti"
-
-#~ msgid "United Kingdom"
-#~ msgstr "Apvienotā Karaliste"
-
-#~ msgid "United States"
-#~ msgstr "Amerikas Savienotās Valstis"
-
-#~ msgid "United States Minor Outlying Islands"
-#~ msgstr "ASV aizjūras mazās teritorijas"
 
 #~ msgid "Unknown error while checking subreddit."
 #~ msgstr "Neatpazīta kļūda pie 'Subreddit' pārbaudes."
@@ -15273,9 +15710,6 @@ msgstr "yyyy"
 
 #~ msgid "Upload new files"
 #~ msgstr "Ielādēt jaunus failus"
-
-#~ msgid "Uruguay"
-#~ msgstr "Urugvaja"
 
 #~ msgid "Use \"Standalone\" Mode:"
 #~ msgstr "Lietot \"Savrupo\" režīmu:"
@@ -15324,20 +15758,11 @@ msgstr "yyyy"
 #~ msgid "Using the reminder functions"
 #~ msgstr "Atgādinājuma funkciju lietošana"
 
-#~ msgid "Uzbekistan"
-#~ msgstr "Uzbekistāna"
-
 #~ msgid "V-Split"
 #~ msgstr "V-sadalīts"
 
 #~ msgid "V-split view"
 #~ msgstr "V-sadalīts skats"
-
-#~ msgid "Vanuatu"
-#~ msgstr "Vanuatu"
-
-#~ msgid "Venezuela"
-#~ msgstr "Venecuēla"
 
 #~ msgid "Version comment"
 #~ msgstr "Versijas komentārs"
@@ -15357,9 +15782,6 @@ msgstr "yyyy"
 #~ msgid "Video enabled"
 #~ msgstr "Video iespējots"
 
-#~ msgid "Viet Nam"
-#~ msgstr "Vjetnama"
-
 #~ msgid "View Slideshow"
 #~ msgstr "Skatīt slaidrādi"
 
@@ -15368,9 +15790,6 @@ msgstr "yyyy"
 
 #~ msgid "Virgin Islands, British"
 #~ msgstr "Britu Virdžīnu salas"
-
-#~ msgid "Virgin Islands, U.S."
-#~ msgstr "ASV Virdžīnu salas"
 
 #~ msgid "Visibility"
 #~ msgstr "Redzamība"
@@ -15384,9 +15803,6 @@ msgstr "yyyy"
 #~ msgctxt "wednesday"
 #~ msgid "W"
 #~ msgstr "W"
-
-#~ msgid "Wallis and Futuna"
-#~ msgstr "Volisa un Futuna"
 
 #~ msgid "Warning: %2$s"
 #~ msgstr "Brīdinājums: %2$s"
@@ -15405,9 +15821,6 @@ msgstr "yyyy"
 
 #~ msgid "Weekend Day"
 #~ msgstr "Izejamā diena"
-
-#~ msgid "Western Sahara"
-#~ msgstr "Rietumsahāra"
 
 #, fuzzy
 #~| msgid "Do you want to save your configuration?"
@@ -15500,9 +15913,6 @@ msgstr "yyyy"
 
 #~ msgid "Would you like to create the following birthday series appointment?"
 #~ msgstr "Vai vēlaties izveidot sekojošu dzimšanas dienu tikšanos sēriju?"
-
-#~ msgid "Yemen"
-#~ msgstr "Jemena"
 
 #~ msgid "Yes, upgrade my account"
 #~ msgstr "Jā, jaunināt manu kontu"
@@ -15699,12 +16109,6 @@ msgstr "yyyy"
 
 #~ msgid "ZIP:"
 #~ msgstr "PK:"
-
-#~ msgid "Zambia"
-#~ msgstr "Zambija"
-
-#~ msgid "Zimbabwe"
-#~ msgstr "Zimbabve"
 
 #~ msgid "Zloty"
 #~ msgstr "Zloti"

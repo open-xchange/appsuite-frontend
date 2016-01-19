@@ -2907,6 +2907,8 @@ msgstr ""
 #: apps/io.ox/contacts/model.js
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
+#: apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr ""
 
@@ -4503,6 +4505,11 @@ msgstr ""
 #: apps/io.ox/core/settings/pane.js
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change password"
+msgstr ""
+
+#: apps/io.ox/core/main.js
+#: module:io.ox/core
+msgid "Connect your Device"
 msgstr ""
 
 #: apps/io.ox/core/main.js
@@ -9025,6 +9032,1231 @@ msgstr ""
 msgid "Reauthorize"
 msgstr ""
 
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Bangladesh"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Belgium"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Burkina Faso"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Bulgaria"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Bosnia and Herzegovina"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Barbados"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Wallis and Futuna"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Saint Barthelemy"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Bermuda"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Brunei"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Bolivia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Bahrain"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Burundi"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Benin"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Bhutan"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Jamaica"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Botswana"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Samoa"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Bonaire, Saint Eustatius and Saba "
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Brazil"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Bahamas"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Jersey"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Belarus"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Belize"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Russia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Rwanda"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Serbia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "East Timor"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Reunion"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Turkmenistan"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Tajikistan"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Romania"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Tokelau"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Guinea-Bissau"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Guam"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Guatemala"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Greece"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Equatorial Guinea"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Guadeloupe"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Japan"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Guyana"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Guernsey"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "French Guiana"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Georgia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Grenada"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "United Kingdom"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Gabon"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "El Salvador"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Guinea"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Gambia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Greenland"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Gibraltar"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Ghana"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Oman"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Tunisia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Jordan"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Croatia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Haiti"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Hungary"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Hong Kong"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Honduras"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Heard Island and McDonald Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Venezuela"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Puerto Rico"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Palestinian Territory"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Palau"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Portugal"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Svalbard and Jan Mayen"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Paraguay"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Iraq"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Panama"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "French Polynesia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Papua New Guinea"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Peru"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Pakistan"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Philippines"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Pitcairn"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Poland"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Saint Pierre and Miquelon"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Zambia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Western Sahara"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Estonia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Egypt"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "South Africa"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Ecuador"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Italy"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Vietnam"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Solomon Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Ethiopia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Somalia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Zimbabwe"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Saudi Arabia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Spain"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Eritrea"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Montenegro"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Moldova"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Madagascar"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Saint Martin"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Morocco"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Monaco"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Uzbekistan"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Myanmar"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Mali"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Macao"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Mongolia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Marshall Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Macedonia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Mauritius"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Malta"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Malawi"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Maldives"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Martinique"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Northern Mariana Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Montserrat"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Mauritania"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Isle of Man"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Uganda"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Tanzania"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Malaysia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Mexico"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Israel"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "France"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "British Indian Ocean Territory"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Saint Helena"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Finland"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Fiji"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Falkland Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Micronesia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Faroe Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Nicaragua"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Netherlands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Norway"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Namibia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Vanuatu"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "New Caledonia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Niger"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Norfolk Island"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Nigeria"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "New Zealand"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Nepal"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Nauru"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Niue"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Cook Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Ivory Coast"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Switzerland"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Colombia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "China"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Cameroon"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Chile"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Cocos Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Canada"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Republic of the Congo"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Central African Republic"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Democratic Republic of the Congo"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Czech Republic"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Cyprus"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Christmas Island"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Costa Rica"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Curacao"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Cape Verde"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Cuba"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Swaziland"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Syria"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Sint Maarten"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Kyrgyzstan"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Kenya"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "South Sudan"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Suriname"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Kiribati"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Cambodia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Saint Kitts and Nevis"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Comoros"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Sao Tome and Principe"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Slovakia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "South Korea"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Slovenia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "North Korea"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Kuwait"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Senegal"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "San Marino"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Sierra Leone"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Seychelles"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Kazakhstan"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Cayman Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Singapore"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Sweden"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Sudan"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Dominican Republic"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Dominica"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Djibouti"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Denmark"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "British Virgin Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Germany"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Yemen"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Algeria"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "United States"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Uruguay"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Mayotte"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "United States Minor Outlying Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Lebanon"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Saint Lucia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Laos"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Tuvalu"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Taiwan"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Trinidad and Tobago"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Turkey"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Sri Lanka"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Liechtenstein"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Latvia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Tonga"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Lithuania"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Luxembourg"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Liberia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Lesotho"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Thailand"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Togo"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Chad"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Turks and Caicos Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Libya"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Vatican"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Saint Vincent and the Grenadines"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "United Arab Emirates"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Andorra"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Antigua and Barbuda"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Afghanistan"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Anguilla"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "U.S. Virgin Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Iceland"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Iran"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Armenia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Albania"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Angola"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "American Samoa"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Argentina"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Australia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Austria"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Aruba"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "India"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Aland Islands"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Azerbaijan"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Ireland"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Indonesia"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Ukraine"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Qatar"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/codes.js
+#: module:io.ox/core/onboarding
+msgid "Mozambique"
+msgstr ""
+
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
 msgid "Advanced user?"
@@ -9097,7 +10329,7 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "SMS"
+msgid "Short Message (SMS)"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
@@ -9145,40 +10377,14 @@ msgstr ""
 msgid "Open "
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/view.js
-#: module:io.ox/core/onboarding
-msgid "Select the platform of your device:"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/view.js
-#: module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
-msgid "Client onboarding"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/view.js
-#: module:io.ox/core/onboarding
-msgid "Back to platforms"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/view.js
-#: module:io.ox/core/onboarding
-msgid "Select your device"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/view.js
-#: module:io.ox/core/onboarding
-msgid "Back to devices"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/view.js
-#: module:io.ox/core/onboarding
-msgid "Back to modules"
-msgstr ""
-
 #: apps/io.ox/onboarding/clients/wizard.js
 #: module:io.ox/core/onboarding
 msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js
+#: module:io.ox/core/onboarding
+msgid "Premium"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/wizard.js
@@ -9194,6 +10400,11 @@ msgstr ""
 #: apps/io.ox/onboarding/clients/wizard.js
 #: module:io.ox/core/onboarding
 msgid "What do you want to use?"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js
+#: module:io.ox/core/onboarding
+msgid "Client onboarding"
 msgstr ""
 
 #: apps/io.ox/participants/add.js
