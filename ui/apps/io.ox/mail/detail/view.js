@@ -83,9 +83,9 @@ define('io.ox/mail/detail/view', [
     });
 
     /* move the actions menu to the top in sidepanel on smartphones */
-    var extPoint = _.device('smartphone') ? 'io.ox/mail/detail' : 'io.ox/mail/detail/header';
+    var extPoint = _.device('smartphone') ? 'io.ox/mail/detail' : 'io.ox/mail/detail/header/row3';
 
-    ext.point(extPoint).extend(new links.Dropdown({
+    ext.point(extPoint).extend(new links.InlineLinks({
         id: 'actions',
         index: _.device('smartphone') ? 50 : INDEX_header += 100,
         classes: _.device('smartphone') ? '' : 'actions pull-right',
@@ -97,60 +97,105 @@ define('io.ox/mail/detail/view', [
         smart: true
     }));
 
-    ext.point('io.ox/mail/detail/header').extend({
-        id: 'unread-toggle',
-        index: INDEX_header += 100,
-        draw: extensions.unreadToggle
-    });
-
-    ext.point('io.ox/mail/detail/header').extend({
-        id: 'date',
-        index: INDEX_header += 100,
-        draw: extensions.fulldate
-    });
-
-    ext.point('io.ox/mail/detail/header').extend({
-        id: 'from',
-        index: INDEX_header += 100,
-        draw: function (baton) {
-            this.append(
-                $('<div class="from">').append(
-                    util.serializeList(baton.data, 'from')
-                )
-            );
+    //
+    // Header
+    //
+    ext.point('io.ox/mail/detail/header').extend(
+        {
+            id: 'unread-toggle',
+            index: INDEX_header += 100,
+            draw: extensions.unreadToggle
+        },
+        {
+            id: 'paper-clip',
+            index: INDEX_header += 100,
+            draw: extensions.paperClip
+        },
+        {
+            id: 'rows',
+            index: INDEX_header += 100,
+            draw: function (baton) {
+                for (var i = 1, node; i <= 3; i++) {
+                    node = $('<div class="detail-view-row row-' + i + ' clearfix">');
+                    ext.point('io.ox/mail/detail/header/row' + i).invoke('draw', node, baton);
+                    this.append(node);
+                }
+            }
         }
-    });
+    );
 
-    ext.point('io.ox/mail/detail/header').extend({
-        id: 'flag-picker',
-        index: INDEX_header += 100,
-        draw: extensions.flagPicker
-    });
-
-    ext.point('io.ox/mail/detail/header').extend({
-        id: 'priority',
-        index: INDEX_header += 100,
-        draw: extensions.priority
-    });
-
-    ext.point('io.ox/mail/detail/header').extend({
-        id: 'paper-clip',
-        index: INDEX_header += 100,
-        draw: extensions.paperClip
-    });
-
-    ext.point('io.ox/mail/detail/header').extend({
-        id: 'recipients',
-        index: INDEX_header += 100,
-        draw: function (baton) {
-            ext.point('io.ox/mail/detail/header/recipients').invoke('draw', this, baton);
+    //
+    // Row 1
+    //
+    ext.point('io.ox/mail/detail/header/row1').extend(
+        {
+            id: 'from',
+            index: INDEX_header += 100,
+            draw: function (baton) {
+                this.append(
+                    $('<div class="from">').append(
+                        util.serializeList(baton.data, 'from')
+                    )
+                );
+            }
+        },
+        {
+            id: 'flag-picker',
+            index: INDEX_header += 100,
+            draw: extensions.flagPicker
+        },
+        {
+            id: 'date',
+            index: INDEX_header += 100,
+            draw: extensions.fulldate
+        },
+        {
+            id: 'priority',
+            index: INDEX_header += 100,
+            draw: extensions.priority
         }
-    });
+    );
 
+    //
+    // Row 2
+    //
+    ext.point('io.ox/mail/detail/header/row2').extend(
+        {
+            id: 'recipients',
+            index: INDEX_header += 100,
+            draw: function (baton) {
+                ext.point('io.ox/mail/detail/header/recipients').invoke('draw', this, baton);
+            }
+        }
+    );
+
+    //
+    // Row 3
+    //
     ext.point('io.ox/mail/detail/header/recipients').extend({
         id: 'default',
         index: 100,
         draw: extensions.recipients
+    });
+
+    // Inplace/quick reply
+
+    ext.point('io.ox/mail/detail').extend({
+        id: 'inplace-reply',
+        index: INDEX += 100,
+        draw: function (baton) {
+
+            var model = baton.model;
+
+            require(['io.ox/mail/inplace-reply', 'io.ox/core/extPatterns/actions'], function (InplaceReplyView, actions) {
+                if (!InplaceReplyView.hasDraft(model.cid)) return;
+                baton = new ext.Baton({ data: model.toJSON(), view: baton.view });
+                // trigger click to open
+                baton.view.$('.detail-view-header').click();
+                actions.invoke('io.ox/mail/actions/inplace-reply', null, baton);
+                model = null;
+            });
+        }
     });
 
     ext.point('io.ox/mail/detail').extend({

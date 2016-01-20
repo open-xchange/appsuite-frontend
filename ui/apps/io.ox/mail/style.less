@@ -366,9 +366,9 @@
     &.no-padding .contact-picture { left: 0; }
 
     .io-ox-label {
-        color: #767676;
+        font-size: 12px;
+        font-weight: bold;
         white-space: nowrap;
-
         html.high-contrast & { color: @hc-gray; }
     }
 
@@ -377,20 +377,61 @@
         @media(max-width: 900px) { white-space: normal; }
     }
 
-    &:not(.expanded) .recipients {
-        height: 20px;
-        opacity: 0.3;
-        .ellipsis();
+    .detail-view-header {
 
-        html.high-contrast & { opacity: 1; }
+        position: relative;
+        line-height: 16px;
+        padding: (@default-padding + 3) @default-padding (@default-padding - 5) (@picture-padding + @default-padding + 24px);
+        min-height: 64px;
+
+        .fa-paperclip.has-attachments {
+            display: none;
+            position: absolute;
+            top: 8px;
+            right: 0px;
+            font-size: 24px;
+            width: 12px;
+            overflow: hidden;
+            color: #888;
+        }
     }
 
-    .detail-view-header {
-        position: relative;
-        .fontWeight(300);
-        line-height: 16px;
-        padding: (@default-padding + 3) @default-padding @default-padding (@picture-padding + @default-padding);
-        min-height: 71px;
+    .detail-view-row {
+        .from { float: left; }
+        .date { float: right; margin-left: 16px; }
+        .recipients { float: left; }
+        .priority { font-size: 14px; }
+        .flag-picker {
+            margin-left: 16px;
+            width: 12px; // to match fa-bars
+            text-align: right;
+            a { color: #333; }
+        }
+        .actions {
+            font-size: 13px;
+            margin: 8px 0 0 0;
+            & > li {
+                display: inline-block;
+            }
+            .fa-bars {
+                font-size: 14px;
+            }
+        }
+    }
+
+    &:not(.expanded) {
+
+        .fa-paperclip.has-attachments { display: inline-block; }
+
+        .detail-view-row.row-3, .inplace-reply { display: none; }
+
+        .unread-toggle, .flag-picker, .recipients { opacity: 0.3; }
+
+        .recipients {
+            height: 20px;
+            .ellipsis();
+            html.high-contrast & { opacity: 1; }
+        }
     }
 
     &.expanded .detail-view-header { border-bottom: 1px solid #eee; }
@@ -467,7 +508,7 @@
     .date, .size {
         .fontWeight(300);
         display: inline-block;
-        margin-left: @default-padding;
+        margin-left: @default-padding / 2;
         float: right;
     }
 
@@ -560,7 +601,7 @@
 
     .priority {
         float: right;
-
+        i.fa { margin: 0 0 0 8px; }
         .high { color: @mail-priority; }
         .low { color: @mail-priority-low; }
     }
@@ -652,10 +693,12 @@
     }
 
     .unread-toggle {
+
+        position: absolute;
+        top: 19px;
+        left: 72px;
         outline: none;
-        float: right;
         font-size: 14px;
-        padding-left: @default-padding;
         color: #767676;
 
         &:focus i {
@@ -689,11 +732,14 @@
     &.scrollable { overflow: auto; }
 
     & > h1 {
+
         .subject-base();
+        padding-bottom: 8px;
         background-color: white;
 
         .subject {
             word-break: break-word;
+            margin-bottom: 4px;
         }
 
         .toggle-all {
@@ -704,21 +750,13 @@
             &:focus { color: @link-color; }
         }
 
-        .caption {
-            font-size: 13px;
-            line-height: 20px;
-            margin-top: 4px;
-            font-weight: normal;
-        }
-
         .summary {
             color: #777;
+            font-size: 13px;
+            line-height: 16px;
             font-weight: 300;
-            display: inline-block;
-            margin-right: @default-padding;
-            html.high-contrast & {
-                color: @hc-gray;
-            }
+            margin: -5px @default-padding -11px 0;
+            html.high-contrast & { color: @hc-gray; }
         }
     }
 }
@@ -911,11 +949,12 @@ textarea.inplace-editor {
 .smartphone { // was @media (max-width: 480px), (max-device-width: 480px)
 
     .thread-view-list {
+
         padding: 0;
 
         & > h1 {
             font-size: @phone-font-size + 2;
-
+            padding-bottom: 24px;
             .summary { font-size: @phone-font-size - 2; }
         }
 
@@ -932,11 +971,15 @@ textarea.inplace-editor {
     }
 
     .mail-item  {
+
         .subject { margin-right: 32px; }
 
         .unread-toggle {
             display: inline-block;
             position: relative;
+            top: 0;
+            left: auto;
+            float: right;
             right: @default-padding;
             bottom: auto;
             margin-top: @default-padding;

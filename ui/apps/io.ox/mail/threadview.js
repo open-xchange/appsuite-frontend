@@ -104,69 +104,15 @@ define('io.ox/mail/threadview', [
         draw: function (baton) {
 
             var length = baton.view.collection.length;
-            if (!length) return;
+            if (length <= 1) return;
 
             this.append(
-                $('<div class="caption">').append(
-                    $('<span class="summary">')
-                        .text(gt('%1$d messages in this conversation', length))
-                        .toggle(length > 1)
-                )
+                $('<div class="summary">').text(gt('%1$d messages in this conversation', length))
             );
         }
     });
 
-    // Inplace/quick reply
-
-    function onQuickReply(e) {
-        e.preventDefault();
-        openInplaceReply.call(this, e.data.cid);
-    }
-
-    function openInplaceReply(cid) {
-        var view = $(this).closest('.thread-view-control');
-        view.find('.open-inplace-reply').hide();
-        require(['io.ox/mail/inplace-reply'], function (InplaceReplyView) {
-            view.find('article[data-cid="' + cid + '"] section.body').before(
-                new InplaceReplyView({ tagName: 'section', cid: cid })
-                .on('send', function (cid) {
-                    view.data('open', cid);
-                })
-                .on('dispose', function () {
-                    view.find('.open-inplace-reply').show().focus();
-                    view = null;
-                })
-                .render()
-                .$el
-            );
-        });
-    }
-
-    ext.point('io.ox/mail/thread-view/header').extend({
-        id: 'inplace-reply',
-        index: 400,
-        draw: function (baton) {
-
-            // quick reply support (desktop only)
-            if (!_.device('desktop')) return;
-
-            var length = baton.view.collection.length;
-            if (!length) return;
-            var cid = baton.view.collection.at(0).cid;
-
-            this.find('.caption').append(
-                // quick reply
-                $('<a href="#" role="button" tabindex="1" class="open-inplace-reply">').append(
-                    $.txt(gt('Quick reply'))
-                )
-                .on('click', { cid: cid }, onQuickReply)
-            );
-
-            require(['io.ox/mail/inplace-reply'], function (InplaceReplyView) {
-                if (InplaceReplyView.hasDraft(cid)) openInplaceReply.call(this, cid);
-            }.bind(this));
-        }
-    });
+    // Thread view
 
     var ThreadView = Backbone.View.extend({
 
@@ -542,7 +488,8 @@ define('io.ox/mail/threadview', [
                 data: model.toJSON(),
                 disable: {
                     'io.ox/mail/detail': ['subject', 'actions'],
-                    'io.ox/mail/detail/header': ['flag-picker', 'unread-toggle']
+                    'io.ox/mail/detail/header': ['unread-toggle'],
+                    'io.ox/mail/detail/header/row1': ['flag-picker']
                 }
             });
 
