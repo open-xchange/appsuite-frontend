@@ -336,6 +336,33 @@ define('io.ox/mail/main', [
         },
 
         /*
+         * Add support for virtual folder "Unread"
+         */
+        'all-unseen': function (app) {
+
+            var loader = api.collectionLoader,
+                params = loader.getQueryParams({ folder: 'virtual/all-unseen' }),
+                collection = loader.getCollection(params);
+
+            // register load listener which triggers complete
+            collection.on('load', function () {
+                this.complete = true;
+                this.preserve = true;
+                this.CUSTOM_PAGE_SIZE = 250;
+                this.trigger('complete');
+            });
+
+            // use mail API's "all-unseen" event to update counter (that is also used in top-bar)
+            var virtualAllSeen = folderAPI.pool.getModel('virtual/all-unseen');
+            api.on('all-unseen', function (e, count) {
+                virtualAllSeen.set('unread', count);
+            });
+
+            // make virtual folder clickable
+            app.folderView.tree.selection.addSelectableVirtualFolder('virtual/all-unseen');
+        },
+
+        /*
          * Split into left and right pane
          */
         'vsplit': function (app) {
@@ -356,7 +383,7 @@ define('io.ox/mail/main', [
          */
         'list-view': function (app) {
             app.listView = new MailListView({ swipe: true, app: app, draggable: true, ignoreFocus: true, selectionOptions: { mode: 'special' } });
-            app.listView.model.set({ folder: app.folder.get(), preserve: false });
+            app.listView.model.set({ folder: app.folder.get() });
             app.listView.model.set('thread', true);
             // for debugging
             window.list = app.listView;
@@ -441,8 +468,7 @@ define('io.ox/mail/main', [
                     app.props.set('thread', options.threadrestore || false);
                 }
                 // now change sort columns
-                // use "preserve" mode for "sort by unseen" (only)
-                model.set({ sort: value, preserve: value === 651 });
+                model.set({ sort: value });
             });
         },
 

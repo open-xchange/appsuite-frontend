@@ -50,8 +50,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '615': 'msgref',
                 '651': 'flag_seen',
                 '652': 'account_name',
-                '654': 'original_folder_id',
-                '655': 'original_id',
+                '654': 'original_id',
+                '655': 'original_folder_id',
                 '656': 'content_type'
             },
             'contacts': {

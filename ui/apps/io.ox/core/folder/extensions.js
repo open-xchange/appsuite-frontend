@@ -24,8 +24,9 @@ define('io.ox/core/folder/extensions', [
     'io.ox/core/folder/folder-color',
     'io.ox/backbone/mini-views/upsell',
     'settings!io.ox/core',
+    'settings!io.ox/mail',
     'io.ox/core/folder/favorites'
-], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color, UpsellView, settings) {
+], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color, UpsellView, settings, mailSettings) {
 
     'use strict';
 
@@ -34,13 +35,17 @@ define('io.ox/core/folder/extensions', [
     if (capabilities.has('webmail')) {
         // define virtual/standard
         api.virtual.add('virtual/standard', function () {
-            return this.concat(
+            var list = [
                 // inbox
                 api.get(INBOX),
                 // sent, drafts, spam, trash, archive
                 // default0 is alternative for IMAP server that list standard folders below INBOX
-                api.list('default0'), api.list(INBOX)
-            );
+                api.list('default0')
+            ];
+            // append all-unssen below INBOX
+            if (mailSettings.get('features/features/unseenFolder', false)) list.push(api.get('virtual/all-unseen'));
+            list.push(api.list(INBOX));
+            return this.concat.apply(this, list);
         });
 
         // myfolders
@@ -153,7 +158,7 @@ define('io.ox/core/folder/extensions', [
                 // standard folders
                 new TreeNodeView({
                     filter: function (id, model) {
-                        return account.isStandardFolder(model.id);
+                        return account.isStandardFolder(model.id) || model.id === 'virtual/all-unseen';
                     },
                     folder: 'virtual/standard',
                     headless: true,

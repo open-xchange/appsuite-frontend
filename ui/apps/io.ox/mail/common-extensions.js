@@ -299,6 +299,12 @@ define('io.ox/mail/common-extensions', [
             });
         },
 
+        folderName: function (baton) {
+            if (!baton.app || !baton.app.folder || baton.app.folder.get() !== 'virtual/all-unseen') return;
+
+            this.append($('<span class="original-folder">').append(folderAPI.getTextNode(baton.data.original_folder_id)));
+        },
+
         recipients: (function () {
 
             // var drawAllDropDown = function (node, label, data) {

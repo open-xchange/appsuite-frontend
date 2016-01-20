@@ -1643,10 +1643,32 @@ define('io.ox/mail/api', [
         return api.threads.getModels(cid);
     };
 
+    function filterAllSeen(data) {
+        // rewrite folder_id and id
+        data.id = data.original_id;
+        data.folder_id = data.original_folder_id;
+        // drop seen messages (faster check first)
+        if ((data.flags & 32) === 32) return false;
+        // drop messages from spam and trash
+        return !accountAPI.is('spam|trash', data.folder_id);
+    }
+
     // collection loader
     api.collectionLoader = new CollectionLoader({
         module: 'mail',
         getQueryParams: function (params) {
+            // is all unseen?
+            if (params.folder === 'virtual/all-unseen') {
+                return {
+                    action: 'all',
+                    folder: 'default0/virtual/all',
+                    // need original_id and original_folder_id
+                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,654,655,656',
+                    sort: '651',
+                    order: 'asc',
+                    timezone: 'utc'
+                };
+            }
             // use threads?
             if (params.thread === true) {
                 return {
@@ -1675,6 +1697,15 @@ define('io.ox/mail/api', [
         fail: function (error) {
             api.trigger('error error:' + error.code, error);
             return error;
+        },
+        httpGet: function (module, params) {
+            // apply static limit for all-unseen
+            var isAllUnseen = params.folder === 'default0/virtual/all' && params.sort === '651';
+            if (isAllUnseen) params.limit = '0,250';
+            return http.GET({ module: module, params: params }).then(function (data) {
+                // drop all seen messages for all-unseen
+                return isAllUnseen ? _(data).filter(filterAllSeen) : data;
+            });
         },
         PRIMARY_PAGE_SIZE: settings.get('listview/primaryPageSize', 50),
         SECONDARY_PAGE_SIZE: settings.get('listview/secondaryPageSize', 200)

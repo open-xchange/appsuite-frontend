@@ -151,6 +151,11 @@ define('io.ox/mail/listview', [
             draw: extensions.folder
         },
         {
+            id: 'unseen-foldername',
+            index: 175,
+            draw: extensions.folderName
+        },
+        {
             id: 'flag',
             index: 200,
             draw: extensions.flag
@@ -253,6 +258,11 @@ define('io.ox/mail/listview', [
             id: 'original-folder',
             index: 150,
             draw: extensions.folder
+        },
+        {
+            id: 'unseen-foldername',
+            index: 175,
+            draw: extensions.folderName
         },
         {
             id: 'flag',

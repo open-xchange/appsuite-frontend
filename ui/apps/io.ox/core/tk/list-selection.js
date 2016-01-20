@@ -234,10 +234,6 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         resetCheckmark: function (items) {
             items.filter('.selected').removeClass('selected no-checkbox');
-            // collect garbage: remove preserved items when selection changes
-            _.defer(function () {
-                items.filter('.preserved').not('.selected').fadeOut('fast', function () { $(this).remove(); });
-            });
         },
 
         // resets all (usually one) items with swipe-left class

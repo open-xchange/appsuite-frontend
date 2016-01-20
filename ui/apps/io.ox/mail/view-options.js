@@ -66,17 +66,28 @@ define('io.ox/mail/view-options', [
         index: 1000,
         draw: function (baton) {
 
+            var app = baton.app, model = app.props;
+
             var dropdown = new Dropdown({
                 caret: true,
                 //#. Sort options drop-down
                 label: gt.pgettext('dropdown', 'Sort by'),
-                model: baton.app.props
+                model: model
             });
+
+            function toggle() {
+                var folder = app.folder.get();
+                dropdown.$el.toggle(folder !== 'virtual/all-unseen');
+            }
+
+            app.on('folder:change', toggle);
 
             ext.point('io.ox/mail/view-options').invoke('draw', dropdown.$el, baton);
             this.append(dropdown.render().$el.addClass('grid-options toolbar-item pull-right').on('dblclick', function (e) {
                 e.stopPropagation();
             }));
+
+            toggle();
         }
     });
 
