@@ -254,21 +254,10 @@ define('io.ox/mail/detail/links', [
         'long-character-sequences': {
             test: function (node) {
                 var text = node.nodeValue;
-                return text.length >= 30 && /\S{30}/.test(text) && $(node).closest('a').length === 0;
+                return text.length >= 30 && /[\S\u00A0\x20]/.test(text) && $(node).closest('a').length === 0;
             },
             process: function (node) {
                 return { node: node, replacement: $.parseHTML(util.breakableHTML(node.nodeValue)) };
-            }
-        },
-
-        'long-non-breaking-space-sequence': {
-            test: function (node) {
-                var text = node.nodeValue;
-                return text.length >= 30 && /(\S|\u00a0){40}/.test(text) && $(node).closest('a').length === 0;
-            },
-            process: function (node) {
-                var replacement = node.nodeValue.replace(/\u00a0/g, ' ');
-                return { node: node, replacement: $.parseHTML(replacement) };
             }
         }
     };

@@ -134,7 +134,7 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
                     .join('');
             });
             // split at \u200B, escape HTML and inject <wbr> tag
-            return _(substrings.split('\u200B')).map(_.escape).join('<wbr>');
+            return _(substrings.split('\u200B')).map(_.escape).join('<wbr>').replace(/\u00a0/g, '\u00a0<wbr>');
         },
 
         breakableText: function (text) {
