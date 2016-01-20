@@ -406,7 +406,8 @@ define('io.ox/onboarding/clients/extensions', [
     var AppActionView = Backbone.View.extend({
 
         events: {
-            'click .btn': '_onClick'
+            'click .btn': '_onClick',
+            'click .store': '_onClick'
         },
 
         initialize: function (action, options) {
@@ -431,6 +432,13 @@ define('io.ox/onboarding/clients/extensions', [
             }[this.type];
         },
 
+        getBadgeUrl: function () {
+            return {
+                'appstore': 'apps/themes/icons/default/appstore/Download_on_the_Mac_App_Store_Badge_US-UK_165x40.svg',
+                'playstore': 'apps/themes/icons/default/googleplay/en_generic_rgb_wo_60.png'
+            }[this.type];
+        },
+
         render: function () {
             this.$el.empty()
                 .append(
@@ -447,9 +455,7 @@ define('io.ox/onboarding/clients/extensions', [
                         $('<div class="description">')
                             .text(gt('Just open %1$s', this.getLabel())),
                         // action
-                        $('<button>')
-                            .addClass('btn btn-primary')
-                            .text(gt('Open ', this.getLabel()))
+                        $('<a class="store">').append($('<img>').attr('src', this.getBadgeUrl()))
                     )
                 );
             return this;
@@ -457,7 +463,6 @@ define('io.ox/onboarding/clients/extensions', [
 
         _onClick: function (e) {
             e.preventDefault();
-            util.clickCommon(e);
             window.open(this.link);
         }
     });

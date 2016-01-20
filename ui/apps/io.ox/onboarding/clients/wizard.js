@@ -211,6 +211,8 @@ define('io.ox/onboarding/clients/wizard', [
             var id = this.wizard.currentStep,
                 node = (this.wizard.steps[id]);
             this.setElement(node.$el);
+            // TODO: doesn't work as expected
+            this.$el.find('.wizard-close').attr('tabindex', '2');
         },
 
         _onChange: function (type, model, value) {
