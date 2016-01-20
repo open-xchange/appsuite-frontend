@@ -19,10 +19,9 @@ define('io.ox/tasks/view-detail', [
     'io.ox/core/extPatterns/links',
     'io.ox/tasks/api',
     'io.ox/participants/detail',
-    'io.ox/core/capabilities',
     'io.ox/tasks/actions',
     'less!io.ox/tasks/style'
-], function (util, calendarUtil, gt, ext, links, api, ParticipantsView, capabilities) {
+], function (util, calendarUtil, gt, ext, links, api, ParticipantsView) {
 
     'use strict';
 
@@ -101,15 +100,13 @@ define('io.ox/tasks/view-detail', [
         index: 300,
         id: 'note',
         draw: function (baton) {
-            var data = util.checkMailLinks(baton.interpretedData.note),
-                note = calendarUtil.getNote(data);
+            var note = calendarUtil.getNote(baton.interpretedData);
+            note = util.checkMailLinks(note);
 
-            if (note !== '' || data.link) {
+            if (note) {
                 this.append(
                     $('<div class="note">').html(
                         note
-                    ).append(
-                        data.link && capabilities.has('webmail') ? data.link : ''
                     )
                 );
             }

@@ -12,8 +12,9 @@
  */
 define('io.ox/tasks/util', [
     'gettext!io.ox/tasks',
-    'settings!io.ox/core'
-], function (gt, coreSettings) {
+    'settings!io.ox/core',
+    'io.ox/core/capabilities'
+], function (gt, coreSettings, capabilities) {
 
     'use strict';
 
@@ -189,40 +190,48 @@ define('io.ox/tasks/util', [
             // looks in the task note for 'mail:' + _.cid(maildata), removes that from the note and returns the mail link as a button that opens the mailapp
             // currently only looks for one link at the end of the note. Used by mail reminders.
             checkMailLinks: function (note) {
-                // find the link (note using .+ and not \S+ as folders might contain spaces)
-                var cid = note.match(/mail:.+?\.\S+?\s*$/),
+
+                // find the link (note using .+ and not \w+ as folders might contain spaces)
+                var links = note.match(/mail:\/\/.+?\.\w+/g),
                     link;
 
-                if (cid && cid[0]) {
-                    // remove link and signature style divider "--"
-                    note = note.replace(cid[0], '').replace(/\s*?-+\s*?$/, '');
-                    // remove leading "mail:" and space at the end from the link
-                    cid = cid[0].replace(/^mail:/, '').replace(/\s*$/, '');
+                if (links && links[0] && capabilities.has('webmail')) {
 
-                    // build the button
-                    link = $('<button class="mail-link btn btn-primary">').text(gt('show mail')).on('click', function () {
+                    for (var i = 0; i < links.length; i++) {
+                        link = '<span role="button" cid="' + links[i].replace(/^mail:\/\//, '') + '" class="ox-internal-mail-link label label-primary">' + gt('Original mail') + '</span>';
+                        // replace links
+                        note = note.replace(links[i], link);
+                    }
+
+                    // add function but make sure they are added only once
+                    // code can be moved once we introduce general links for apps
+                    $('.task-detail-container').undelegate('.ox-internal-mail-link', 'click').delegate('.ox-internal-mail-link', 'click', function () {
                         var self = $(this),
-                        // save height and width so it doesn't change when the busy animation is drawn
+                            cid = self.attr('cid'),
+                            // save height and width so it doesn't change when the busy animation is drawn
                             width = self.outerWidth() + 'px',
                             height = self.outerHeight() + 'px';
-
-                        self.css({ width: width, height: height }).busy(true);
-                        require(['io.ox/mail/api'], function (api) {
-                            // see if mail is still there. Also loads the mail into the pool. Needed for the app to work
-                            api.get(_.extend({}, { unseen: true }, _.cid(cid))).done(function () {
-                                ox.launch('io.ox/mail/detail/main', { cid: cid });
-                            }).fail(function (error) {
-                                //if the mail was moved or the mail was deleted the cid cannot be found, show error
-                                require(['io.ox/core/yell'], function (yell) {
-                                    yell(error);
+                        if (cid) {
+                            self.css({ width: width, height: height }).busy(true);
+                            require(['io.ox/mail/api'], function (api) {
+                                // see if mail is still there. Also loads the mail into the pool. Needed for the app to work
+                                api.get(_.extend({}, { unseen: true }, _.cid(cid))).done(function () {
+                                    ox.launch('io.ox/mail/detail/main', { cid: cid });
+                                }).fail(function (error) {
+                                    //if the mail was moved or the mail was deleted the cid cannot be found, show error
+                                    require(['io.ox/core/yell'], function (yell) {
+                                        yell(error);
+                                    });
+                                }).always(function () {
+                                    self.idle().css({ width: 'auto', height: 'auto' }).text(gt('Original mail'));
                                 });
-                            }).always(function () {
-                                self.idle().css({ width: 'auto', height: 'auto' }).text(gt('show mail'));
                             });
-                        });
+                        }
                     });
+                    //remove signature style divider "--" used by tasks created by mail reminder function (if it's at the start remove it entirely)
+                    note = note.replace(/(<br>)+-+(<br>)*/, '<br>').replace(/^-+(<br>)*/, '');
                 }
-                return { note: note, link: link };
+                return note;
             },
 
             //change status number to status text. format enddate to presentable string
