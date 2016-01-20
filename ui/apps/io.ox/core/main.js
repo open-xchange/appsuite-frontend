@@ -910,6 +910,7 @@ define('io.ox/core/main', [
             id: 'onboarding',
             index: 120,
             draw: function () {
+                if (capabilities.has('!client-onboarding')) return;
 
                 this.append(
                     $('<li role="presentation">').append(

@@ -16,10 +16,11 @@ define('io.ox/onboarding/clients/wizard', [
     'io.ox/onboarding/clients/config',
     'io.ox/onboarding/clients/api',
     'io.ox/core/extensions',
+    'io.ox/core/capabilities',
     'gettext!io.ox/core/onboarding',
     'io.ox/onboarding/clients/views',
     'less!io.ox/onboarding/clients/style'
-], function (Wizard, config, api, ext, gt) {
+], function (Wizard, config, api, ext, capabilities, gt) {
 
     'use strict';
 
@@ -199,6 +200,7 @@ define('io.ox/onboarding/clients/wizard', [
         },
 
         run: function () {
+            if (capabilities.has('!client-onboarding')) return;
             // wrapper for wizard registry
             Wizard.registry.run(this.opt.id);
             return this;

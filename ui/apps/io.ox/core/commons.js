@@ -18,8 +18,9 @@ define('io.ox/core/commons', [
     'io.ox/core/folder/api',
     'io.ox/core/api/account',
     'settings!io.ox/core',
-    'io.ox/backbone/mini-views/upsell'
-], function (ext, links, gt, /*FolderView,*/ folderAPI, accountAPI, coreSettings, UpsellView) {
+    'io.ox/backbone/mini-views/upsell',
+    'io.ox/core/capabilities'
+], function (ext, links, gt, /*FolderView,*/ folderAPI, accountAPI, coreSettings, UpsellView, capabilities) {
 
     'use strict';
 
@@ -669,7 +670,7 @@ define('io.ox/core/commons', [
 
         addPremiumFeatures: function (app, opt) {
             if (_.device('smartphone')) return;
-            if (!coreSettings.get('features/clientOnboarding', true)) return;
+            if (capabilities.has('!client-onboarding')) return;
             if (coreSettings.get('features/hiddenPremiumFeatures')) return;
 
             var sidepanel = app.getWindow().nodes.sidepanel,

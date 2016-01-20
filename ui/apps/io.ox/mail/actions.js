@@ -497,7 +497,7 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/premium/actions/synchronize', {
-        capabilities: 'active_sync',
+        capabilities: 'active_sync client-onboarding',
         action: function () {
             require(['io.ox/onboarding/clients/wizard'], function (wizard) {
                 wizard.run();
