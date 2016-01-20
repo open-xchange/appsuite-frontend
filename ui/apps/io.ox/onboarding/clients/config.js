@@ -145,6 +145,14 @@ define('io.ox/onboarding/clients/config', [
             return user.cellular_telephone1 || user.cellular_telephone2;
         },
 
+        isIncomplete: function () {
+            var complete = true;
+            _.each(this.hash, function (data) {
+                complete = complete && !_.isEmpty(data);
+            });
+            return !complete;
+        },
+
         getCodes: codes.get
     };
 

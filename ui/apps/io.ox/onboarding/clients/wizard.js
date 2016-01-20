@@ -342,6 +342,14 @@ define('io.ox/onboarding/clients/wizard', [
         },
 
         render: function () {
+            if (config.isIncomplete()) {
+                require(['io.ox/core/yell'], function (yell) {
+                    //#. error message when server returns incomplete
+                    //#. configuration for client onboarding
+                    yell('error', gt('Incomplete configuration.'));
+                });
+                return;
+            }
             return new OnboardingView(config).run();
         },
 
