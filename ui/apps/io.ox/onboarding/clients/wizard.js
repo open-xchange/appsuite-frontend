@@ -232,10 +232,11 @@ define('io.ox/onboarding/clients/wizard', [
             this.model.set(data.target, _.first(data.list).id);
         },
 
-        _reset: function (index) {
-            var step = this.wizard.get(index),
-                type = step.$el.attr('data-type');
-            this.model.set(type, undefined);
+        _reset: function () {
+            var model = this.model;
+            _.each(['platform', 'device', 'scenario'], function (key) {
+                model.unset(key);
+            });
         },
 
         register: function () {
@@ -246,7 +247,7 @@ define('io.ox/onboarding/clients/wizard', [
             this.wizard.on({
                 // step:before:show, step:ready, step:show, step:next, step:before:hide, step:hide, change:step,
                 //'all': this._inspect,
-                'step:back': _.bind(this._reset, this),
+                'before:stop': _.bind(this._reset, this),
                 'step:before:show': _.bind(this._onStepBeforeShow, this)
             });
 
