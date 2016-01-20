@@ -13,8 +13,30 @@
  *
  */
 define('io.ox/ads/register', [
-], function () {
+    'io.ox/core/extensions',
+    'io.ox/core/capabilities'
+], function (ext, capabilities) {
     'use strict';
+
+    var config = [];
+
+    ext.point('io.ox/ads').extend({
+        id: 'default',
+        inject: function (baton) {
+            this.append(
+                baton.data.inject
+            );
+        },
+        changeModule: function (module, baton) {
+            var activeAds = baton.data.config.filter(function moduleFilter(conf) {
+                return _.isEmpty(conf.showadinmodules) || _.contains(conf.showadinmodules, module);
+            }).filter(function capabilityFilter(conf) {
+                return _.isEmpty(conf.capabilities) || capabilities.has(conf.capabilities);
+            });
+
+            //TODO: rerender all the ads, only show active ones?
+        }
+    });
 
     /**
      * Load Ad configuration from config load
@@ -22,22 +44,29 @@ define('io.ox/ads/register', [
      * @params ad - { inject: function, config: array }
      */
     function loadAdConfig(ad) {
-        //inject some code (TODO: may be, rename this API?)
-        console.log(ad.inject);
+        var baton = ext.Baton.ensure(ad);
+        ext.point('io.ox/ads').invoke('inject', $('head'), baton);
 
         //handle configuration
-        console.log(ad.config);
+        ext.point('io.ox/ads').invoke('config', undefined, baton);
+        config.push.apply(config, _.compact([].concat(baton.data.config)));
     }
 
     ox.manifests.loadPluginsFor('io.ox/ads/config').then(function () {
-        new Array(arguments).forEach(loadAdConfig);
+        for (var i = 0; i < arguments.length; i++) {
+            loadAdConfig(arguments[i]);
+        }
     });
 
-    ox.on('app:start', function (app) {
-        console.log('start', app.get('name'));
-    });
+    function changeModule(app) {
+        var baton = ext.Baton.ensure({
+            app: app,
+            config: config
+        });
+        ext.point('io.ox/ads').invoke('changeModule', undefined, app.get('id'), baton);
+    }
 
-    ox.on('app:resume', function (app) {
-        console.log('resume', app.get('name'));
-    });
+    ox.on('app:start', changeModule);
+
+    ox.on('app:resume', changeModule);
 });
