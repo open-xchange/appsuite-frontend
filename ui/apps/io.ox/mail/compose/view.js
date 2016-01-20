@@ -344,36 +344,6 @@ define('io.ox/mail/compose/view', [
             ext.point(POINT + '/mailto').invoke('setup');
         },
 
-        markupQuotes: function (text) {
-            var lines = String(text || '').split(/<br\s?\/?>/i),
-                quoting = false,
-                regQuoted = /^&gt;( |$)/i,
-                i = 0, $i = lines.length, tmp = [], line;
-            for (text = ''; i < $i; i++) {
-                line = lines[i];
-                if (!regQuoted.test(line)) {
-                    if (!quoting) {
-                        text += line + '<br>';
-                    } else {
-                        tmp = $.trim(tmp.join('\n')).replace(/\n/g, '<br>');
-                        text = text.replace(/<br>$/, '') + '<blockquote type="cite"><p>' + tmp + '</p></blockquote>' + line;
-                        quoting = false;
-                    }
-                } else if (quoting) {
-                    tmp.push(line.replace(regQuoted, ''));
-                } else {
-                    quoting = true;
-                    tmp = [line.replace(regQuoted, '')];
-                }
-            }
-            text = text.replace(/<br>$/, '');
-            if (text === '' && tmp.length) {
-                tmp = $.trim(tmp.join('\n')).replace(/\n/g, '<br>');
-                text = text.replace(/<br>$/, '') + '<blockquote type="cite"><p>' + tmp + '</p></blockquote>' + line;
-            }
-            return text;
-        },
-
         fetchMail: function (obj) {
 
             // Empty compose (early exit)
@@ -448,23 +418,25 @@ define('io.ox/mail/compose/view', [
                     if (mode === 'edit' && self.model.get('editorMode') === 'alternative' && content_type === 'text/plain') {
                         self.model.set('editorMode', 'text', { silent: true });
                     }
+                    // We get partial html from the middleware even when we request plain/text
+                    if (content_type === 'text/plain') content = textproc.htmltotext(content);
 
+                    var def = $.Deferred();
                     if (content_type === 'text/plain' && self.model.get('editorMode') === 'html') {
-                        var hasBlockquotes = content.match(/(&gt; )+/g);
-                        if (hasBlockquotes) {
-                            $.each(hasBlockquotes.sort().reverse()[0].match(/&gt; /g), function () {
-                                content = self.markupQuotes(content);
-                            });
-                        }
-                        attachmentCollection.at(0).set('content_type', 'text/html');
+                        textproc.texttohtml(content).then(function (processed) {
+                            attachmentCollection.at(0).set('content_type', 'text/html');
+                            content = processed;
+                            def.resolve();
+                        });
+                    } else {
+                        def.resolve();
                     }
-                    if (content_type === 'text/plain' && self.model.get('editorMode') === 'text' && mode === 'edit') {
-                        content = textproc.htmltotext(content);
-                    }
-                    attachmentCollection.at(0).set('content', content);
-                    self.model.unset('attachments');
-                    self.model.set('attachments', attachmentCollection);
-                    obj = data = attachmentCollection = null;
+                    return $.when(def).then(function () {
+                        attachmentCollection.at(0).set('content', content);
+                        self.model.unset('attachments');
+                        self.model.set('attachments', attachmentCollection);
+                        obj = data = attachmentCollection = null;
+                    });
                 }).fail(function () {
                     // Mark model as clean to prevent save/discard dialog when server side error occurs
                     self.clean();
