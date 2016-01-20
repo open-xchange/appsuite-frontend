@@ -259,6 +259,17 @@ define('io.ox/mail/detail/links', [
             process: function (node) {
                 return { node: node, replacement: $.parseHTML(util.breakableHTML(node.nodeValue)) };
             }
+        },
+
+        'long-non-breaking-space-sequence': {
+            test: function (node) {
+                var text = node.nodeValue;
+                return text.length >= 30 && /(\S|\u00a0){40}/.test(text) && $(node).closest('a').length === 0;
+            },
+            process: function (node) {
+                var replacement = node.nodeValue.replace(/\u00a0/g, ' ');
+                return { node: node, replacement: $.parseHTML(replacement) };
+            }
         }
     };
 

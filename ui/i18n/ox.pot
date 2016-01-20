@@ -4495,6 +4495,11 @@ msgstr ""
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
+msgid "Connect your Device"
+msgstr ""
+
+#: apps/io.ox/core/main.js
+#: module:io.ox/core
 #: apps/io.ox/core/settings/pane.js
 #: apps/plugins/portal/userSettings/register.js
 msgid "My contact data"
@@ -4505,11 +4510,6 @@ msgstr ""
 #: apps/io.ox/core/settings/pane.js
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change password"
-msgstr ""
-
-#: apps/io.ox/core/main.js
-#: module:io.ox/core
-msgid "Connect your Device"
 msgstr ""
 
 #: apps/io.ox/core/main.js
