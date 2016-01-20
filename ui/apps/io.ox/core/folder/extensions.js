@@ -43,7 +43,7 @@ define('io.ox/core/folder/extensions', [
                 api.list('default0')
             ];
             // append all-unssen below INBOX
-            if (mailSettings.get('features/features/unseenFolder', false)) list.push(api.get('virtual/all-unseen'));
+            if (mailSettings.get('features/unseenFolder', false)) list.push(api.get('virtual/all-unseen'));
             list.push(api.list(INBOX));
             return this.concat.apply(this, list);
         });
