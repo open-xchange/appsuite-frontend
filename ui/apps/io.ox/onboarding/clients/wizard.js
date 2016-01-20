@@ -89,7 +89,7 @@ define('io.ox/onboarding/clients/wizard', [
         if (value === 'back') {
             // remove value set within previous step
             wizard.model.unset('platform');
-            return wizard.back();
+            return wizard.trigger('step:back');
         }
 
         // update model
@@ -141,7 +141,7 @@ define('io.ox/onboarding/clients/wizard', [
             // remove value set within previous step
             wizard.model.unset('device');
             wizard.model.unset('scenario');
-            return wizard.back();
+            return wizard.trigger('step:back');
         }
         data.wizard.trigger('selected', { type: type, value: value });
     }

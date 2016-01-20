@@ -427,7 +427,7 @@ define('io.ox/onboarding/clients/extensions', [
         getLabel: function () {
             return {
                 'appstore': gt('Apple App Store'),
-                'playstore': gt('Google Playstore')
+                'playstore': gt('Google Play')
             }[this.type];
         },
 
@@ -445,7 +445,7 @@ define('io.ox/onboarding/clients/extensions', [
                     $('<span class="content">').append(
                         // description
                         $('<div class="description">')
-                            .text(gt('Just open the %1$s', this.getLabel())),
+                            .text(gt('Just open %1$s', this.getLabel())),
                         // action
                         $('<button>')
                             .addClass('btn btn-primary')
