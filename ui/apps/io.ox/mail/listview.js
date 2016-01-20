@@ -78,7 +78,7 @@ define('io.ox/mail/listview', [
             index: 100,
             draw: function (baton) {
                 var column = $('<div class="list-item-column column-1">');
-                extensions.unread.call(column, baton);
+                extensions.envelope.call(column, baton);
                 this.append(column);
             }
         },
@@ -351,7 +351,11 @@ define('io.ox/mail/listview', [
                     return memo || util.isUnseen(item);
                 }, false);
 
-            if (isUnseen) api.markRead(thread);
+            if (isUnseen) {
+                api.markRead(thread);
+            } else {
+                api.markUnread(thread);
+            }
 
             e.preventDefault();
             e.stopPropagation();

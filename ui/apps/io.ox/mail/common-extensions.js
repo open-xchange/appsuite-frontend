@@ -216,6 +216,11 @@ define('io.ox/mail/common-extensions', [
             );
         },
 
+        envelope: function (baton) {
+            var isUnseen = util.isUnseen(baton.data);
+            this.append($('<i class="icon-unread fa" aria-hidden="true">').addClass(isUnseen ? 'fa-envelope' : 'fa-envelope-o'));
+        },
+
         unread: function (baton) {
             var isUnseen = util.isUnseen(baton.data);
             if (isUnseen) this.append('<i class="icon-unread fa fa-envelope" aria-hidden="true">');
