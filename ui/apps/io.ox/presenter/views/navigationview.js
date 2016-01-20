@@ -54,7 +54,7 @@ define('io.ox/presenter/views/navigationview', [
                 gt('Previous slide')
         });
 
-        icon.addClass((type === 'next') ? 'fa-arrow-down' : 'fa-arrow-up');
+        icon.addClass((type === 'next') ? 'fa-chevron-right' : 'fa-chevron-left');
         return button.append(icon);
     }
 
