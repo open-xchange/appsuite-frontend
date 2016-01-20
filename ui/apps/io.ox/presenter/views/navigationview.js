@@ -180,7 +180,7 @@ define('io.ox/presenter/views/navigationview', [
             dropdown.$el.tooltip({
                 //#. the dropdown button tooltip for the participants dropdown.
                 title: gt('View participants'),
-                placement: 'top'
+                placement: 'left'
             });
 
             _.each(participants, function (user) {
