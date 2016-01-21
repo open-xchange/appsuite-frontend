@@ -545,7 +545,7 @@
             line-height: 20px;
             margin-right: (@default-padding / 2);
 
-            &.icon-unread    { color: @link-color; }
+            &.seen-unseen-indicator:before { content: "\f003"; color: #777; } // fa-envelope-o
             &.icon-answered  { color: #aaa; }
             &.icon-forwarded { color: #888; }
         }
@@ -575,6 +575,8 @@
             }
         }
     }
+
+    .unread .list-item-content i.seen-unseen-indicator:before { content: "\f0e0"; color: @link-color; } // fa-envelope
 
     .fa-paperclip.has-attachments, i.fa.signed, i.fa.encrypted {
         font-size: @icon-size;

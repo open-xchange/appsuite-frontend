@@ -216,14 +216,13 @@ define('io.ox/mail/common-extensions', [
             );
         },
 
-        envelope: function (baton) {
-            var isUnseen = util.isUnseen(baton.data);
-            this.append($('<i class="icon-unread fa" aria-hidden="true">').addClass(isUnseen ? 'fa-envelope' : 'fa-envelope-o'));
+        envelope: function () {
+            this.append($('<i class="fa seen-unseen-indicator" aria-hidden="true">'));
         },
 
         unread: function (baton) {
             var isUnseen = util.isUnseen(baton.data);
-            if (isUnseen) this.append('<i class="icon-unread fa fa-envelope" aria-hidden="true">');
+            if (isUnseen) extensions.envelope();
         },
 
         answered: function (baton) {
