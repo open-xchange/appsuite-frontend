@@ -332,8 +332,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
                         } catch (e) {
                             error(e);
                         }
-                    })
-                    .compact();
+                    });
             }
             try {
                 return o.invoke.apply(o, args);
