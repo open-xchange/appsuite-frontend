@@ -218,24 +218,24 @@ define('io.ox/onboarding/clients/wizard', [
             this.$el.find('.wizard-close').attr('tabindex', '2');
         },
 
-        _onChange: function (type, model, value) {
-            // autoselect when only one option available
-            if (!value) return;
-            var data = {};
-            switch (type) {
-                case 'platform':
-                    data.target = 'device';
-                    data.list = this.config.getDevices();
-                    break;
-                case 'device':
-                    data.target = 'scenario';
-                    data.list = this.config.getScenarios();
-                    break;
-                default:
-            }
-            if (data.list.length > 1) return;
-            this.model.set(data.target, _.first(data.list).id);
-        },
+        // TODO: gets to complicated/fragile
+        // _onChange: function (type, model, value) {
+        //     var data = {};
+        //     // autoselect when only one option available
+        //     if (!value) return;
+        //     switch (type) {
+        //         case 'platform':
+        //             data.target = 'device';
+        //             data.list = this.config.getDevices();
+        //             break;
+        //         case 'device':
+        //             data.target = 'scenario';
+        //             data.list = this.config.getScenarios();
+        //             break;
+        //     }
+        //     if (data.list.length > 1) return;
+        //     this.model.set(data.target, _.first(data.list).id);
+        // },
 
         _reset: function () {
             var model = this.model;
@@ -245,8 +245,8 @@ define('io.ox/onboarding/clients/wizard', [
         },
 
         register: function () {
-            this.model.on('change:platform', this._onChange.bind(this, 'platform'));
-            this.model.on('change:device', this._onChange.bind(this, 'device'));
+            // this.model.on('change:platform', this._onChange.bind(this, 'platform'));
+            // this.model.on('change:device', this._onChange.bind(this, 'device'));
 
             // set max width of description block
             this.wizard.on({
