@@ -44,6 +44,7 @@ define('io.ox/core/relogin', [
     function relogin(request, deferred, error) {
 
         if (!ox.online) return;
+        if (!settings.get('features/reloginPopup', true)) return;
 
         // don't ask anonymous users
         if (ox.user === 'anonymous') {
