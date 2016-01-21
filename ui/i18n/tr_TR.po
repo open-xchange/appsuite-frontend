@@ -3885,7 +3885,7 @@ msgid "Google Drive"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Google Playstore"
+msgid "Google Play"
 msgstr ""
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -4253,6 +4253,12 @@ msgstr ""
 msgid "Incoming server"
 msgstr ""
 
+#. error message when server returns incomplete
+#. configuration for client onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+msgid "Incomplete configuration."
+msgstr ""
+
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr ""
@@ -4476,6 +4482,12 @@ msgstr ""
 msgid "Join the presentation"
 msgstr ""
 
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+msgid "Joining the presentation of %1$s."
+msgstr ""
+
 #: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
 msgid "Jordan"
 msgstr ""
@@ -4500,7 +4512,7 @@ msgid "Just disable widget"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Just open the %1$s"
+msgid "Just open %1$s"
 msgstr ""
 
 #. Kilobytes
@@ -5751,10 +5763,6 @@ msgstr ""
 msgid "Open"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Open "
-msgstr ""
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr ""
@@ -5888,6 +5896,10 @@ msgstr ""
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Organizer"
+msgstr ""
+
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+msgid "Original mail"
 msgstr ""
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -6392,6 +6404,11 @@ msgstr ""
 msgid "Presentation is paused."
 msgstr ""
 
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+msgid "Presentation join"
+msgstr ""
+
 #. headline of a presentation start alert
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
 msgid "Presentation start"
@@ -6620,7 +6637,8 @@ msgstr ""
 msgid "Qatar"
 msgstr ""
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Quick reply"
 msgstr ""
 
@@ -8991,6 +9009,10 @@ msgstr ""
 msgid "Unread"
 msgstr ""
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+msgid "Unread messages"
+msgstr ""
+
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr ""
@@ -10231,10 +10253,6 @@ msgstr ""
 #: apps/io.ox/core/export/export.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "select format"
-msgstr ""
-
-#: apps/io.ox/tasks/util.js module:io.ox/tasks
-msgid "show mail"
 msgstr ""
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files

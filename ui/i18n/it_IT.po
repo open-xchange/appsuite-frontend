@@ -4053,7 +4053,7 @@ msgstr "Aggiungi account Google Drive"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
-msgid "Google Playstore"
+msgid "Google Play"
 msgstr "Aggiungi account Google Drive"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -4447,6 +4447,14 @@ msgstr "Includi le liste di distribuzione"
 msgid "Incoming server"
 msgstr "Server della posta in entrata"
 
+#. error message when server returns incomplete
+#. configuration for client onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Close configuration"
+msgid "Incomplete configuration."
+msgstr "Chiudi configurazione"
+
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr "Date incoerenti"
@@ -4682,6 +4690,14 @@ msgstr "Unisciti alla presentazione"
 msgid "Join the presentation"
 msgstr "Unisciti alla presentazione"
 
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Join presentation"
+msgid "Joining the presentation of %1$s."
+msgstr "Unisciti alla presentazione"
+
 #: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
 msgid "Jordan"
 msgstr ""
@@ -4710,7 +4726,7 @@ msgstr "Disabilita il widget"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Due on %1$s"
-msgid "Just open the %1$s"
+msgid "Just open %1$s"
 msgstr "Scade il %1$s"
 
 #. Kilobytes
@@ -6011,12 +6027,6 @@ msgstr "Mostra solo gli elementi relativi alla cartella \"%1$s\""
 msgid "Open"
 msgstr "Apri"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Open"
-msgid "Open "
-msgstr "Apri"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Apri collegamento esterno"
@@ -6151,6 +6161,12 @@ msgstr "Ordina"
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Organizer"
 msgstr "Organizzatore"
+
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+#, fuzzy
+#| msgid "Primary Email"
+msgid "Original mail"
+msgstr "Indirizzo di posta principale"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
@@ -6686,6 +6702,13 @@ msgstr "Fine della presentazione"
 msgid "Presentation is paused."
 msgstr "La presentazione è sospesa."
 
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Presentation end"
+msgid "Presentation join"
+msgstr "Fine della presentazione"
+
 #. headline of a presentation start alert
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
 msgid "Presentation start"
@@ -6914,7 +6937,8 @@ msgstr "Viola"
 msgid "Qatar"
 msgstr ""
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 #, fuzzy
 #| msgid "Quick Search"
 msgid "Quick reply"
@@ -9476,6 +9500,12 @@ msgstr "Sottoscrizione senza nome"
 msgid "Unread"
 msgstr "Non letto"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+#, fuzzy
+#| msgid "Your messages"
+msgid "Unread messages"
+msgstr "I tuoi messaggi"
+
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Non letto: %1$d"
@@ -10797,12 +10827,6 @@ msgstr "visto"
 msgid "select format"
 msgstr "seleziona formato"
 
-#: apps/io.ox/tasks/util.js module:io.ox/tasks
-#, fuzzy
-#| msgid "show image"
-msgid "show mail"
-msgstr "mostra immagine"
-
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
 msgstr "sei mesi"
@@ -11807,9 +11831,6 @@ msgstr "aaaa"
 
 #~ msgid "Close Window"
 #~ msgstr "Chiudi finestra"
-
-#~ msgid "Close configuration"
-#~ msgstr "Chiudi configurazione"
 
 #~ msgid "Close document"
 #~ msgstr "Chiudi il documento"
@@ -13270,6 +13291,11 @@ msgstr "aaaa"
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "Mostra solo il sommario dei widget sui dispositivi mobili"
 
+#, fuzzy
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "Apri"
+
 #~ msgid "Open in new tab"
 #~ msgstr "Apri in una nuova scheda"
 
@@ -13373,9 +13399,6 @@ msgstr "aaaa"
 #, fuzzy
 #~ msgid "Preview pane"
 #~ msgstr "Anteprima"
-
-#~ msgid "Primary Email"
-#~ msgstr "Indirizzo di posta principale"
 
 #~ msgid "Privacy Notice"
 #~ msgstr "Avviso di riservatezza"
@@ -14618,6 +14641,11 @@ msgstr "aaaa"
 #~| msgid "show all"
 #~ msgid "show link"
 #~ msgstr "mostra tutto"
+
+#, fuzzy
+#~| msgid "show image"
+#~ msgid "show mail"
+#~ msgstr "mostra immagine"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "sottocartelle di %s"

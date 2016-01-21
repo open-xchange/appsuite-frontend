@@ -4074,7 +4074,7 @@ msgstr "Pievienot Google Drive kontu"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
-msgid "Google Playstore"
+msgid "Google Play"
 msgstr "Pievienot Google Drive kontu"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -4462,6 +4462,14 @@ msgstr "Ietvert izplatīšanas sarakstus"
 msgid "Incoming server"
 msgstr "Ienākošā pasta serveris"
 
+#. error message when server returns incomplete
+#. configuration for client onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Close configuration"
+msgid "Incomplete configuration."
+msgstr "Aizvērt konfigurāciju"
+
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr "Datumi nav saskanīgi."
@@ -4697,6 +4705,14 @@ msgstr "Pievienoties prezentācijai"
 msgid "Join the presentation"
 msgstr "Pievienoties prezentācijai"
 
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Join presentation"
+msgid "Joining the presentation of %1$s."
+msgstr "Pievienoties prezentācijai"
+
 #: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
 msgid "Jordan"
 msgstr "Jordāna"
@@ -4725,7 +4741,7 @@ msgstr "Tikai atspējot vidžetu"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Due on %1$s"
-msgid "Just open the %1$s"
+msgid "Just open %1$s"
 msgstr "Izpildāms %1$s"
 
 #. Kilobytes
@@ -6016,12 +6032,6 @@ msgstr "Uzrāda tikai ar mapi \"%1$s\" saistītās vienības"
 msgid "Open"
 msgstr "Atvērt"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Open"
-msgid "Open "
-msgstr "Atvērt"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Atvērt ārējo saiti"
@@ -6156,6 +6166,12 @@ msgstr "Secība"
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Organizer"
 msgstr "Organizators"
+
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+#, fuzzy
+#| msgid "Primary Email"
+msgid "Original mail"
+msgstr "Galvenais e-pasts"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
@@ -6685,6 +6701,13 @@ msgstr "Prezentācija beidzas"
 msgid "Presentation is paused."
 msgstr "Prezentācija ir pārtraukta"
 
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Presentation end"
+msgid "Presentation join"
+msgstr "Prezentācija beidzas"
+
 #. headline of a presentation start alert
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
 msgid "Presentation start"
@@ -6913,7 +6936,8 @@ msgstr "Purpura"
 msgid "Qatar"
 msgstr ""
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 #, fuzzy
 #| msgid "Quick Search"
 msgid "Quick reply"
@@ -9466,6 +9490,12 @@ msgstr "Nenosaukts abonements"
 msgid "Unread"
 msgstr "Nelasīts"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+#, fuzzy
+#| msgid "Your messages"
+msgid "Unread messages"
+msgstr "Jūsu ziņojumi"
+
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Nelasīts: %1$d"
@@ -10795,12 +10825,6 @@ msgstr "redzēts"
 msgid "select format"
 msgstr "izvēlēties formātu"
 
-#: apps/io.ox/tasks/util.js module:io.ox/tasks
-#, fuzzy
-#| msgid "show image"
-msgid "show mail"
-msgstr "Rādīt attēlu"
-
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
 msgstr "seši mēneši"
@@ -11787,9 +11811,6 @@ msgstr "yyyy"
 
 #~ msgid "Close Window"
 #~ msgstr "Aizvērt logu"
-
-#~ msgid "Close configuration"
-#~ msgstr "Aizvērt konfigurāciju"
 
 #~ msgid "Close document"
 #~ msgstr "Aizvērt dokumentu"
@@ -13839,6 +13860,11 @@ msgstr "yyyy"
 #~ "logus darbam ar sistēmu. Neizmantojiet šo opciju ja pieslēdzaties no "
 #~ "sveša vai publiska datora."
 
+#, fuzzy
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "Atvērt"
+
 #~ msgid "Open attachment"
 #~ msgstr "Atvērt pievienojumu"
 
@@ -14130,9 +14156,6 @@ msgstr "yyyy"
 #, fuzzy
 #~ msgid "Preview pane"
 #~ msgstr "Apskats"
-
-#~ msgid "Primary Email"
-#~ msgstr "Galvenais e-pasts"
 
 #~ msgid "Principal:"
 #~ msgstr "Galvenais:"
@@ -16361,6 +16384,11 @@ msgstr "yyyy"
 #~| msgid "show all"
 #~ msgid "show link"
 #~ msgstr "rādīt visu"
+
+#, fuzzy
+#~| msgid "show image"
+#~ msgid "show mail"
+#~ msgstr "Rādīt attēlu"
 
 #~ msgid ""
 #~ "street\n"

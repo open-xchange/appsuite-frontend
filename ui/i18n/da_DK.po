@@ -4035,7 +4035,7 @@ msgstr "Tilføj »Google Drive«-konto"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
-msgid "Google Playstore"
+msgid "Google Play"
 msgstr "Tilføj »Google Drive«-konto"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -4425,6 +4425,14 @@ msgstr "Inkludér distributionslister"
 msgid "Incoming server"
 msgstr "Indkomne server"
 
+#. error message when server returns incomplete
+#. configuration for client onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic sign out"
+msgid "Incomplete configuration."
+msgstr "Automatisk log ud"
+
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr "Inkonsistente datoer"
@@ -4658,6 +4666,14 @@ msgstr "Deltag i præsentation"
 msgid "Join the presentation"
 msgstr "Deltag i præsentation"
 
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Join presentation"
+msgid "Joining the presentation of %1$s."
+msgstr "Deltag i præsentation"
+
 #: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
 msgid "Jordan"
 msgstr ""
@@ -4686,7 +4702,7 @@ msgstr "Deaktivér kun widget"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Due on %1$s"
-msgid "Just open the %1$s"
+msgid "Just open %1$s"
 msgstr "Forfalder d. %1$s"
 
 #. Kilobytes
@@ -5976,12 +5992,6 @@ msgstr "Viser kun elementer relaterede til mappen »%1$s«"
 msgid "Open"
 msgstr "Åbn"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Open"
-msgid "Open "
-msgstr "Åbn"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Åbn eksternt link"
@@ -6116,6 +6126,10 @@ msgstr "Rækkefølge"
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Organizer"
 msgstr "Organisér"
+
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+msgid "Original mail"
+msgstr ""
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
@@ -6645,6 +6659,13 @@ msgstr "Præsentation afsluttet"
 msgid "Presentation is paused."
 msgstr "Præsentation på pause."
 
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Presentation end"
+msgid "Presentation join"
+msgstr "Præsentation afsluttet"
+
 #. headline of a presentation start alert
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
 msgid "Presentation start"
@@ -6873,7 +6894,8 @@ msgstr "Lilla"
 msgid "Qatar"
 msgstr ""
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Quick reply"
 msgstr ""
 
@@ -9385,6 +9407,12 @@ msgstr "Unavngivet abonnement"
 msgid "Unread"
 msgstr "Ulæst"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+#, fuzzy
+#| msgid "Your messages"
+msgid "Unread messages"
+msgstr "Dine beskeder"
+
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Ulæst: %1$d"
@@ -10700,12 +10728,6 @@ msgstr "set"
 msgid "select format"
 msgstr "vælg format"
 
-#: apps/io.ox/tasks/util.js module:io.ox/tasks
-#, fuzzy
-#| msgid "show image"
-msgid "show mail"
-msgstr "vis billede"
-
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
 msgstr "seks måneder"
@@ -11790,6 +11812,11 @@ msgstr "åååå"
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "Vi kun widget-opsummering på mobile enheder"
 
+#, fuzzy
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "Åbn"
+
 #~ msgid "Open in new tab"
 #~ msgstr "Åbn i ny fane"
 
@@ -12800,6 +12827,11 @@ msgstr "åååå"
 #~| msgid "show all"
 #~ msgid "show link"
 #~ msgstr "Vis alle"
+
+#, fuzzy
+#~| msgid "show image"
+#~ msgid "show mail"
+#~ msgstr "vis billede"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "undermapper til %s"

@@ -4060,7 +4060,7 @@ msgstr "Přidat účet Google Disk"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
-msgid "Google Playstore"
+msgid "Google Play"
 msgstr "Přidat účet Google Disk"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -4454,6 +4454,14 @@ msgstr "Zahrnout distribuční seznamy"
 msgid "Incoming server"
 msgstr "Příchozí server"
 
+#. error message when server returns incomplete
+#. configuration for client onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Close configuration"
+msgid "Incomplete configuration."
+msgstr "Zavřít nastavení"
+
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr "Data nesouhlasí"
@@ -4687,6 +4695,14 @@ msgstr "Sledovat prezentaci"
 msgid "Join the presentation"
 msgstr "Sledovat prezentaci"
 
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Join presentation"
+msgid "Joining the presentation of %1$s."
+msgstr "Sledovat prezentaci"
+
 #: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
 msgid "Jordan"
 msgstr "Jordánsko"
@@ -4715,7 +4731,7 @@ msgstr "Pouze vypnout widget"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Due on %1$s"
-msgid "Just open the %1$s"
+msgid "Just open %1$s"
 msgstr "Dokončit do %1$s"
 
 #. Kilobytes
@@ -6004,12 +6020,6 @@ msgstr "Zobrazují se pouze položky související se složkou „%1$s“"
 msgid "Open"
 msgstr "Otevřít"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Open"
-msgid "Open "
-msgstr "Otevřít"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Otevřít externí odkaz"
@@ -6144,6 +6154,12 @@ msgstr "Pořadí"
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Organizer"
 msgstr "Organizátor"
+
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+#, fuzzy
+#| msgid "Primary Email"
+msgid "Original mail"
+msgstr "Primární e-mail"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
@@ -6674,6 +6690,13 @@ msgstr "Konec prezentace"
 msgid "Presentation is paused."
 msgstr "Prezentace je pozastavena."
 
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Presentation end"
+msgid "Presentation join"
+msgstr "Konec prezentace"
+
 #. headline of a presentation start alert
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
 msgid "Presentation start"
@@ -6904,7 +6927,8 @@ msgstr "Purpurová"
 msgid "Qatar"
 msgstr "Asie/Katar"
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 #, fuzzy
 #| msgid "Quick Search"
 msgid "Quick reply"
@@ -9450,6 +9474,12 @@ msgstr "Přihlášení k odběru, bez názvu"
 msgid "Unread"
 msgstr "Nepřečtené"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+#, fuzzy
+#| msgid "Your messages"
+msgid "Unread messages"
+msgstr "Vaše zprávy"
+
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Nepřečtených: %1$d"
@@ -10768,12 +10798,6 @@ msgstr "prohlédnuto"
 #: apps/io.ox/core/import/import.js
 msgid "select format"
 msgstr "vybrat formát"
-
-#: apps/io.ox/tasks/util.js module:io.ox/tasks
-#, fuzzy
-#| msgid "show image"
-msgid "show mail"
-msgstr "zobrazit obrázek"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
@@ -13318,9 +13342,6 @@ msgstr "rrrr"
 #~ msgid "Close Window"
 #~ msgstr "Zavřít okno"
 
-#~ msgid "Close configuration"
-#~ msgstr "Zavřít nastavení"
-
 #~ msgid "Close document"
 #~ msgstr "Zavřít dokument"
 
@@ -15773,6 +15794,11 @@ msgstr "rrrr"
 #~ "aplikací můžete pracovat ve více oknech prohlížeče. Nepoužívejte tuto "
 #~ "volbu, pokud pracujete na cizím počítači (např. v internetové kavárně)."
 
+#, fuzzy
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "Otevřít"
+
 #~ msgid "Open attachment"
 #~ msgstr "Otevřít přílohu"
 
@@ -16232,9 +16258,6 @@ msgstr "rrrr"
 #, fuzzy
 #~ msgid "Preview pane"
 #~ msgstr "Náhled"
-
-#~ msgid "Primary Email"
-#~ msgstr "Primární e-mail"
 
 #~ msgid "Principal:"
 #~ msgstr "Hlavní:"
@@ -19331,6 +19354,11 @@ msgstr "rrrr"
 #~| msgid "show all"
 #~ msgid "show link"
 #~ msgstr "zobrazit vše"
+
+#, fuzzy
+#~| msgid "show image"
+#~ msgid "show mail"
+#~ msgstr "zobrazit obrázek"
 
 #~ msgid "st"
 #~ msgstr "."

@@ -4078,7 +4078,7 @@ msgstr "Adaugă cont Google Drive"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
-msgid "Google Playstore"
+msgid "Google Play"
 msgstr "Adaugă cont Google Drive"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -4466,6 +4466,14 @@ msgstr "Include listele de distribuție"
 msgid "Incoming server"
 msgstr "Server de primire de e-mail"
 
+#. error message when server returns incomplete
+#. configuration for client onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Close configuration"
+msgid "Incomplete configuration."
+msgstr "Închide configurația"
+
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr "Date incorecte"
@@ -4701,6 +4709,14 @@ msgstr "Participă la prezentare"
 msgid "Join the presentation"
 msgstr "Participă la prezentare"
 
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Join presentation"
+msgid "Joining the presentation of %1$s."
+msgstr "Participă la prezentare"
+
 #: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
 msgid "Jordan"
 msgstr "Iordania"
@@ -4729,7 +4745,7 @@ msgstr "Doar dezactiveză aplicația"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Due on %1$s"
-msgid "Just open the %1$s"
+msgid "Just open %1$s"
 msgstr "Scadent pe %1$s"
 
 #. Kilobytes
@@ -6019,12 +6035,6 @@ msgstr "Se afișează doar elementele legate de dosarul \"%1$s\""
 msgid "Open"
 msgstr "Deschide"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Open"
-msgid "Open "
-msgstr "Deschide"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Deschide legătura externă"
@@ -6159,6 +6169,12 @@ msgstr "Ordine"
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Organizer"
 msgstr "Organizator"
+
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+#, fuzzy
+#| msgid "Primary Email"
+msgid "Original mail"
+msgstr "E-mail principal"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
@@ -6690,6 +6706,13 @@ msgstr "Final de prezentare"
 msgid "Presentation is paused."
 msgstr "Prezentarea este oprită."
 
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Presentation end"
+msgid "Presentation join"
+msgstr "Final de prezentare"
+
 #. headline of a presentation start alert
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
 msgid "Presentation start"
@@ -6918,7 +6941,8 @@ msgstr "Violet"
 msgid "Qatar"
 msgstr ""
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 #, fuzzy
 #| msgid "Quick Search"
 msgid "Quick reply"
@@ -9484,6 +9508,12 @@ msgstr "Abonament fără nume"
 msgid "Unread"
 msgstr "Necitite"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+#, fuzzy
+#| msgid "Your messages"
+msgid "Unread messages"
+msgstr "Mesajele dumneavoastră"
+
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Necitite: %1$d"
@@ -10813,12 +10843,6 @@ msgstr "vizualizat"
 msgid "select format"
 msgstr "selectează formatul"
 
-#: apps/io.ox/tasks/util.js module:io.ox/tasks
-#, fuzzy
-#| msgid "show image"
-msgid "show mail"
-msgstr "afișează imaginea"
-
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
 msgstr "șase luni"
@@ -11821,9 +11845,6 @@ msgstr "aaaa"
 
 #~ msgid "Close Window"
 #~ msgstr "Închide fereastra"
-
-#~ msgid "Close configuration"
-#~ msgstr "Închide configurația"
 
 #~ msgid "Close document"
 #~ msgstr "închide documentul"
@@ -13893,6 +13914,11 @@ msgstr "aaaa"
 #~ "această opțiune când lucrați pe calculatorul unei alte persoane (de "
 #~ "exemplu într-un internet café)"
 
+#, fuzzy
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "Deschide"
+
 #~ msgid "Open attachment"
 #~ msgstr "Deschide fișierul atașat"
 
@@ -14185,9 +14211,6 @@ msgstr "aaaa"
 #, fuzzy
 #~ msgid "Preview pane"
 #~ msgstr "Previzualizare"
-
-#~ msgid "Primary Email"
-#~ msgstr "E-mail principal"
 
 #~ msgid "Principal:"
 #~ msgstr "Principal:"
@@ -16437,6 +16460,11 @@ msgstr "aaaa"
 #~| msgid "show all"
 #~ msgid "show link"
 #~ msgstr "afișează tot"
+
+#, fuzzy
+#~| msgid "show image"
+#~ msgid "show mail"
+#~ msgstr "afișează imaginea"
 
 #~ msgid ""
 #~ "street\n"

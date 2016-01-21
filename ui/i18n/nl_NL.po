@@ -4059,7 +4059,7 @@ msgstr "Google Drive account toevoegen"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
-msgid "Google Playstore"
+msgid "Google Play"
 msgstr "Google Drive account toevoegen"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -4449,6 +4449,14 @@ msgstr "Distributielijst insluiten"
 msgid "Incoming server"
 msgstr "Ontvangende server"
 
+#. error message when server returns incomplete
+#. configuration for client onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic sign out"
+msgid "Incomplete configuration."
+msgstr "Automatisch afmelden"
+
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr "Inconsistente data"
@@ -4682,6 +4690,14 @@ msgstr "Deelnemen aan de presentatie"
 msgid "Join the presentation"
 msgstr "Deelnemen aan de presentatie"
 
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Join presentation"
+msgid "Joining the presentation of %1$s."
+msgstr "Deelnemen aan de presentatie"
+
 #: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
 msgid "Jordan"
 msgstr ""
@@ -4710,7 +4726,7 @@ msgstr "De widget alleen uitschakelen"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Due on %1$s"
-msgid "Just open the %1$s"
+msgid "Just open %1$s"
 msgstr "Vervalt op %1$s"
 
 #. Kilobytes
@@ -6004,12 +6020,6 @@ msgstr "Alleen items gerelateerd aan map \"%1$s\" worden getoond"
 msgid "Open"
 msgstr "Openen"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Open"
-msgid "Open "
-msgstr "Openen"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Open een externe link"
@@ -6144,6 +6154,10 @@ msgstr "Volgorde"
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Organizer"
 msgstr "Organisator"
+
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+msgid "Original mail"
+msgstr ""
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
@@ -6678,6 +6692,13 @@ msgstr "Einde presentatie"
 msgid "Presentation is paused."
 msgstr "Presentatie is gepauzeerd."
 
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Presentation end"
+msgid "Presentation join"
+msgstr "Einde presentatie"
+
 #. headline of a presentation start alert
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
 msgid "Presentation start"
@@ -6907,7 +6928,8 @@ msgstr "Paars"
 msgid "Qatar"
 msgstr ""
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Quick reply"
 msgstr ""
 
@@ -9453,6 +9475,12 @@ msgstr "Naamloos abonnement"
 msgid "Unread"
 msgstr "Ongelezen"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+#, fuzzy
+#| msgid "Your messages"
+msgid "Unread messages"
+msgstr "Uw berichten"
+
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Ongelezen: %1$d"
@@ -10765,12 +10793,6 @@ msgstr "gezien"
 msgid "select format"
 msgstr "Selecteer formaat"
 
-#: apps/io.ox/tasks/util.js module:io.ox/tasks
-#, fuzzy
-#| msgid "show image"
-msgid "show mail"
-msgstr "toon afbeelding"
-
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
 msgstr "zes maanden"
@@ -11686,6 +11708,11 @@ msgstr "yyyy"
 
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "Widget samenvatting alleen tonen op mobiele apparaten"
+
+#, fuzzy
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "Openen"
 
 #~ msgid "Opening E-Mail threads"
 #~ msgstr "Openen van e-mailconversaties"
@@ -12618,6 +12645,11 @@ msgstr "yyyy"
 #~| msgid "Show list"
 #~ msgid "show link"
 #~ msgstr "Toon lijst"
+
+#, fuzzy
+#~| msgid "show image"
+#~ msgid "show mail"
+#~ msgstr "toon afbeelding"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "submappen van %s"

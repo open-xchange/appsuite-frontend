@@ -4033,7 +4033,7 @@ msgstr "Add Google Drive account"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
-msgid "Google Playstore"
+msgid "Google Play"
 msgstr "Add Google Drive account"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -4423,6 +4423,14 @@ msgstr "Include distribution lists"
 msgid "Incoming server"
 msgstr "Incoming server"
 
+#. error message when server returns incomplete
+#. configuration for client onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic sign out"
+msgid "Incomplete configuration."
+msgstr "Automatic sign out"
+
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr "Inconsistent dates"
@@ -4656,6 +4664,14 @@ msgstr "Join presentation"
 msgid "Join the presentation"
 msgstr "Join presentation"
 
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Join presentation"
+msgid "Joining the presentation of %1$s."
+msgstr "Join presentation"
+
 #: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
 msgid "Jordan"
 msgstr ""
@@ -4684,7 +4700,7 @@ msgstr "Disable widget"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Due on %1$s"
-msgid "Just open the %1$s"
+msgid "Just open %1$s"
 msgstr "Due on %1$s"
 
 #. Kilobytes
@@ -5971,12 +5987,6 @@ msgstr "Only showing items related to folder \"%1$s\""
 msgid "Open"
 msgstr "Open"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Open"
-msgid "Open "
-msgstr "Open"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Open external link"
@@ -6111,6 +6121,12 @@ msgstr "Order"
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Organizer"
 msgstr "Organiser"
+
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+#, fuzzy
+#| msgid "Primary Email"
+msgid "Original mail"
+msgstr "Primary Email"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
@@ -6641,6 +6657,13 @@ msgstr "Presentation end"
 msgid "Presentation is paused."
 msgstr "Presentation is paused."
 
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Presentation end"
+msgid "Presentation join"
+msgstr "Presentation end"
+
 #. headline of a presentation start alert
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
 msgid "Presentation start"
@@ -6869,7 +6892,8 @@ msgstr "Purple"
 msgid "Qatar"
 msgstr ""
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Quick reply"
 msgstr ""
 
@@ -9389,6 +9413,12 @@ msgstr "Unnamed subscription"
 msgid "Unread"
 msgstr "Unread"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+#, fuzzy
+#| msgid "Your messages"
+msgid "Unread messages"
+msgstr "Your messages"
+
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Unread: %1$d"
@@ -10700,12 +10730,6 @@ msgstr "seen"
 msgid "select format"
 msgstr "select format"
 
-#: apps/io.ox/tasks/util.js module:io.ox/tasks
-#, fuzzy
-#| msgid "show image"
-msgid "show mail"
-msgstr "show image"
-
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
 msgstr "six months"
@@ -11827,6 +11851,11 @@ msgstr "yyyy"
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "Only show widget summary on mobile devices"
 
+#, fuzzy
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "Open"
+
 #~ msgid "Open in new tab"
 #~ msgstr "Open in new tab"
 
@@ -11904,9 +11933,6 @@ msgstr "yyyy"
 #, fuzzy
 #~ msgid "Preview pane"
 #~ msgstr "Preview"
-
-#~ msgid "Primary Email"
-#~ msgstr "Primary Email"
 
 #~ msgid "Privacy Notice"
 #~ msgstr "Privacy Notice"
@@ -12909,6 +12935,11 @@ msgstr "yyyy"
 #~| msgid "show all"
 #~ msgid "show link"
 #~ msgstr "show all"
+
+#, fuzzy
+#~| msgid "show image"
+#~ msgid "show mail"
+#~ msgstr "show image"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "subfolders of %s"

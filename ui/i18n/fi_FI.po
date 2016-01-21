@@ -4017,7 +4017,7 @@ msgstr "Lisää Google Drive-tili"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
-msgid "Google Playstore"
+msgid "Google Play"
 msgstr "Lisää Google Drive-tili"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -4407,6 +4407,14 @@ msgstr "Sisällytä jakelulistat"
 msgid "Incoming server"
 msgstr "Saapuvan postin palvelin"
 
+#. error message when server returns incomplete
+#. configuration for client onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic sign out"
+msgid "Incomplete configuration."
+msgstr "Automaattinen uloskirjautuminen"
+
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr "Ristiriitaiset päivämäärät"
@@ -4640,6 +4648,14 @@ msgstr "Liity esitykseen"
 msgid "Join the presentation"
 msgstr "Liity esitykseen"
 
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Join presentation"
+msgid "Joining the presentation of %1$s."
+msgstr "Liity esitykseen"
+
 #: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
 msgid "Jordan"
 msgstr ""
@@ -4668,7 +4684,7 @@ msgstr "Poista widget käytöstä"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Due on %1$s"
-msgid "Just open the %1$s"
+msgid "Just open %1$s"
 msgstr "Erääntyy %1$s"
 
 #. Kilobytes
@@ -5956,12 +5972,6 @@ msgstr "Näytetään vain kansioon %1$s liittyvät kohdat"
 msgid "Open"
 msgstr "Avaa"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Open"
-msgid "Open "
-msgstr "Avaa"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Avaa ulkoinen linkki"
@@ -6096,6 +6106,10 @@ msgstr "Järjestys"
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Organizer"
 msgstr "Järjestelijä"
+
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+msgid "Original mail"
+msgstr ""
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
@@ -6625,6 +6639,13 @@ msgstr "Esitys päättyy"
 msgid "Presentation is paused."
 msgstr "Esitys on pysäytetty."
 
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Presentation end"
+msgid "Presentation join"
+msgstr "Esitys päättyy"
+
 #. headline of a presentation start alert
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
 msgid "Presentation start"
@@ -6853,7 +6874,8 @@ msgstr "Purppura"
 msgid "Qatar"
 msgstr ""
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Quick reply"
 msgstr ""
 
@@ -9369,6 +9391,12 @@ msgstr "Nimeämätön tilaus"
 msgid "Unread"
 msgstr "Lukematon"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+#, fuzzy
+#| msgid "Your messages"
+msgid "Unread messages"
+msgstr "Viestisi"
+
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Lukematon: %1$d"
@@ -10677,12 +10705,6 @@ msgstr "nähty"
 msgid "select format"
 msgstr "valitse muotoilu"
 
-#: apps/io.ox/tasks/util.js module:io.ox/tasks
-#, fuzzy
-#| msgid "show image"
-msgid "show mail"
-msgstr "näytä kuva"
-
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
 msgstr "puolen vuoden"
@@ -11596,6 +11618,11 @@ msgstr "vvvv"
 
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "Näytä mobiililaitteilla widget-yhteenveto"
+
+#, fuzzy
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "Avaa"
 
 #~ msgid "Opening E-Mail threads"
 #~ msgstr "Sähköpostikeskustelun avaaminen"
@@ -12520,6 +12547,11 @@ msgstr "vvvv"
 #~| msgid "Show list"
 #~ msgid "show link"
 #~ msgstr "Näytä luettelo"
+
+#, fuzzy
+#~| msgid "show image"
+#~ msgid "show mail"
+#~ msgstr "näytä kuva"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "%s alikansioita"

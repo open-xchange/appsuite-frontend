@@ -4033,6 +4033,11 @@ msgstr ""
 
 #: apps/io.ox/core/folder/api.js
 #: module:io.ox/core
+msgid "Unread messages"
+msgstr ""
+
+#: apps/io.ox/core/folder/api.js
+#: module:io.ox/core
 msgid "Accessing global address book is not permitted"
 msgstr ""
 
@@ -7609,6 +7614,12 @@ msgstr ""
 msgid "Mail has been copied"
 msgstr ""
 
+#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+#: apps/io.ox/mail/actions.js
+#: module:io.ox/mail
+msgid "Quick reply"
+msgstr ""
+
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
 #: apps/plugins/portal/twitter/util.js
@@ -8857,11 +8868,6 @@ msgstr ""
 #: apps/io.ox/mail/threadview.js
 #: module:io.ox/mail
 msgid "%1$d messages in this conversation"
-msgstr ""
-
-#: apps/io.ox/mail/threadview.js
-#: module:io.ox/mail
-msgid "Quick reply"
 msgstr ""
 
 #: apps/io.ox/mail/toolbar.js
@@ -10364,17 +10370,12 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "Google Playstore"
+msgid "Google Play"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "Just open the %1$s"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
-msgid "Open "
+msgid "Just open %1$s"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/wizard.js
@@ -10405,6 +10406,13 @@ msgstr ""
 #: apps/io.ox/onboarding/clients/wizard.js
 #: module:io.ox/core/onboarding
 msgid "Client onboarding"
+msgstr ""
+
+#. error message when server returns incomplete
+#. configuration for client onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
+#: module:io.ox/core/onboarding
+msgid "Incomplete configuration."
 msgstr ""
 
 #: apps/io.ox/participants/add.js
@@ -10654,6 +10662,19 @@ msgstr ""
 #: apps/io.ox/presenter/views/mainview.js
 #: module:io.ox/presenter
 msgid "%1$s has ended the presentation."
+msgstr ""
+
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js
+#: module:io.ox/presenter
+msgid "Presentation join"
+msgstr ""
+
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js
+#: module:io.ox/presenter
+msgid "Joining the presentation of %1$s."
 msgstr ""
 
 #. message text of an alert box if joining a presentation fails
@@ -11407,7 +11428,7 @@ msgstr ""
 
 #: apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
-msgid "show mail"
+msgid "Original mail"
 msgstr ""
 
 #: apps/io.ox/tasks/util.js

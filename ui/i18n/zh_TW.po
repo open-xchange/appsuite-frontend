@@ -3991,7 +3991,7 @@ msgstr "新增 Google Drive 帳號"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
-msgid "Google Playstore"
+msgid "Google Play"
 msgstr "新增 Google Drive 帳號"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -4379,6 +4379,14 @@ msgstr "包含通訊組列表"
 msgid "Incoming server"
 msgstr "收件伺服器"
 
+#. error message when server returns incomplete
+#. configuration for client onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic sign out"
+msgid "Incomplete configuration."
+msgstr "自動登出"
+
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr "不連貫的日期"
@@ -4609,6 +4617,14 @@ msgstr "加入簡報"
 msgid "Join the presentation"
 msgstr "加入簡報"
 
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Join presentation"
+msgid "Joining the presentation of %1$s."
+msgstr "加入簡報"
+
 #: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
 msgid "Jordan"
 msgstr ""
@@ -4637,7 +4653,7 @@ msgstr "僅停用小工具"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Due on %1$s"
-msgid "Just open the %1$s"
+msgid "Just open %1$s"
 msgstr "結束於 %s"
 
 #. Kilobytes
@@ -5931,12 +5947,6 @@ msgstr "只顯示與「%1$s」資料夾相關的項目"
 msgid "Open"
 msgstr "打開"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Open"
-msgid "Open "
-msgstr "打開"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "開啟外部連結"
@@ -6071,6 +6081,12 @@ msgstr "訂購"
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Organizer"
 msgstr "組織"
+
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+#, fuzzy
+#| msgid "Primary Email"
+msgid "Original mail"
+msgstr "主要電子郵件"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
@@ -6596,6 +6612,13 @@ msgstr "簡報結束"
 msgid "Presentation is paused."
 msgstr "簡報已暫停。"
 
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Presentation end"
+msgid "Presentation join"
+msgstr "簡報結束"
+
 #. headline of a presentation start alert
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
 msgid "Presentation start"
@@ -6824,7 +6847,8 @@ msgstr "紫色"
 msgid "Qatar"
 msgstr ""
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 #, fuzzy
 #| msgid "Quick Search"
 msgid "Quick reply"
@@ -9297,6 +9321,12 @@ msgstr "未命名的訂閱"
 msgid "Unread"
 msgstr "未讀"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+#, fuzzy
+#| msgid "Your messages"
+msgid "Unread messages"
+msgstr "您的訊息"
+
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "未讀: %1$d"
@@ -10584,12 +10614,6 @@ msgstr "已閱讀"
 #: apps/io.ox/core/import/import.js
 msgid "select format"
 msgstr "選擇格式"
-
-#: apps/io.ox/tasks/util.js module:io.ox/tasks
-#, fuzzy
-#| msgid "show image"
-msgid "show mail"
-msgstr "顯示圖片"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
@@ -12900,6 +12924,11 @@ msgstr "年"
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "只在行動裝置中顯示小工具摘要"
 
+#, fuzzy
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "打開"
+
 #~ msgid "Open in new tab"
 #~ msgstr "在新分頁開啟"
 
@@ -13003,9 +13032,6 @@ msgstr "年"
 #, fuzzy
 #~ msgid "Preview pane"
 #~ msgstr "預覽"
-
-#~ msgid "Primary Email"
-#~ msgstr "主要電子郵件"
 
 #~ msgid "Privacy Notice"
 #~ msgstr "隱私權公告"
@@ -14111,6 +14137,11 @@ msgstr "年"
 #~| msgid "show all"
 #~ msgid "show link"
 #~ msgstr "顯示全部"
+
+#, fuzzy
+#~| msgid "show image"
+#~ msgid "show mail"
+#~ msgstr "顯示圖片"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "%s 的子資料夾"

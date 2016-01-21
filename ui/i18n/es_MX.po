@@ -4061,7 +4061,7 @@ msgstr "Añadir cuenta de Google Drive"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
-msgid "Google Playstore"
+msgid "Google Play"
 msgstr "Añadir cuenta de Google Drive"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -4456,6 +4456,14 @@ msgstr "Incluye listas de distribución"
 msgid "Incoming server"
 msgstr "Servidor entrante"
 
+#. error message when server returns incomplete
+#. configuration for client onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Close configuration"
+msgid "Incomplete configuration."
+msgstr "Cerrar configuración"
+
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr "Fechas inconsistentes"
@@ -4689,6 +4697,14 @@ msgstr "Unirse a la presentación"
 msgid "Join the presentation"
 msgstr "Unirse a la presentación"
 
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Join presentation"
+msgid "Joining the presentation of %1$s."
+msgstr "Unirse a la presentación"
+
 #: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
 msgid "Jordan"
 msgstr "Jordania"
@@ -4717,7 +4733,7 @@ msgstr "Sólo desactivar widget"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Due on %1$s"
-msgid "Just open the %1$s"
+msgid "Just open %1$s"
 msgstr "Vence el %1$s"
 
 #. Kilobytes
@@ -6006,12 +6022,6 @@ msgstr "Sólo se muestran elementos relacionados con la carpeta \"%1$s\""
 msgid "Open"
 msgstr "Abrir"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Open"
-msgid "Open "
-msgstr "Abrir"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Abrir enlace externo"
@@ -6146,6 +6156,12 @@ msgstr "Pedir"
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Organizer"
 msgstr "Organizador"
+
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+#, fuzzy
+#| msgid "Primary Email"
+msgid "Original mail"
+msgstr "Correo principal"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
@@ -6684,6 +6700,13 @@ msgstr "Fin de la presentación"
 msgid "Presentation is paused."
 msgstr "La presentación está detenida."
 
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Presentation end"
+msgid "Presentation join"
+msgstr "Fin de la presentación"
+
 #. headline of a presentation start alert
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
 msgid "Presentation start"
@@ -6914,7 +6937,8 @@ msgstr "Morado"
 msgid "Qatar"
 msgstr "Asia/Qatar"
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 #, fuzzy
 #| msgid "Quick Search"
 msgid "Quick reply"
@@ -9467,6 +9491,12 @@ msgstr "Suscripción sin nombre"
 msgid "Unread"
 msgstr "No leido"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+#, fuzzy
+#| msgid "Your messages"
+msgid "Unread messages"
+msgstr "Sus mensajes"
+
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "No leídos: %1$d"
@@ -10790,12 +10820,6 @@ msgstr "visto"
 #: apps/io.ox/core/import/import.js
 msgid "select format"
 msgstr "seleccionar formato"
-
-#: apps/io.ox/tasks/util.js module:io.ox/tasks
-#, fuzzy
-#| msgid "show image"
-msgid "show mail"
-msgstr "mostrar imagen"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
@@ -13336,9 +13360,6 @@ msgstr "yyyy"
 #~ msgid "Close Window"
 #~ msgstr "Cerrar ventana"
 
-#~ msgid "Close configuration"
-#~ msgstr "Cerrar configuración"
-
 #~ msgid "Close document"
 #~ msgstr "Cerrar documento"
 
@@ -15818,6 +15839,11 @@ msgstr "yyyy"
 #~ "con el software colaborativo. No emplee esta opción si trabaja desde un "
 #~ "ordenador de terceros (por ejemplo, desde un cibercafé)"
 
+#, fuzzy
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "Abrir"
+
 #~ msgid "Open attachment"
 #~ msgstr "Abrir adjunto"
 
@@ -16276,9 +16302,6 @@ msgstr "yyyy"
 #, fuzzy
 #~ msgid "Preview pane"
 #~ msgstr "Vista previa"
-
-#~ msgid "Primary Email"
-#~ msgstr "Correo principal"
 
 #~ msgid "Principal:"
 #~ msgstr "Principal:"
@@ -19417,6 +19440,11 @@ msgstr "yyyy"
 #~| msgid "show all"
 #~ msgid "show link"
 #~ msgstr "mostrar todo"
+
+#, fuzzy
+#~| msgid "show image"
+#~ msgid "show mail"
+#~ msgstr "mostrar imagen"
 
 #~ msgid "st"
 #~ msgstr "º"

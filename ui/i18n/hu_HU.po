@@ -4032,7 +4032,7 @@ msgstr "Google Drive falhasználói fiók hozzáadása"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
-msgid "Google Playstore"
+msgid "Google Play"
 msgstr "Google Drive falhasználói fiók hozzáadása"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -4422,6 +4422,14 @@ msgstr "Disztribúciós lista hozzáadása"
 msgid "Incoming server"
 msgstr "Beérkező levelek kiszolgálója"
 
+#. error message when server returns incomplete
+#. configuration for client onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic sign out"
+msgid "Incomplete configuration."
+msgstr "Automatikus kijelentkezés"
+
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr "Inkonzisztens dátumok"
@@ -4655,6 +4663,14 @@ msgstr "Csatlakozás a bemutatóhoz"
 msgid "Join the presentation"
 msgstr "Csatlakozás a bemutatóhoz"
 
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Join presentation"
+msgid "Joining the presentation of %1$s."
+msgstr "Csatlakozás a bemutatóhoz"
+
 #: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
 msgid "Jordan"
 msgstr ""
@@ -4683,7 +4699,7 @@ msgstr "Widget letiltása"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Due on %1$s"
-msgid "Just open the %1$s"
+msgid "Just open %1$s"
 msgstr "Határidő: %1$s"
 
 #. Kilobytes
@@ -5970,12 +5986,6 @@ msgstr "Csak a(z) „%1$s” mappával kapcsolatos elemek megjelenítése"
 msgid "Open"
 msgstr "Megnyitás"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Open"
-msgid "Open "
-msgstr "Megnyitás"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Külső hivatkozás megnyitása"
@@ -6110,6 +6120,10 @@ msgstr "Sorrend"
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Organizer"
 msgstr "Szervező"
+
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+msgid "Original mail"
+msgstr ""
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
@@ -6637,6 +6651,13 @@ msgstr "Bemutató befejezése"
 msgid "Presentation is paused."
 msgstr "A bemutató szünetel."
 
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Presentation end"
+msgid "Presentation join"
+msgstr "Bemutató befejezése"
+
 #. headline of a presentation start alert
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
 msgid "Presentation start"
@@ -6865,7 +6886,8 @@ msgstr "Bíbor"
 msgid "Qatar"
 msgstr ""
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Quick reply"
 msgstr ""
 
@@ -9382,6 +9404,12 @@ msgstr "Névtelen feliratkozások"
 msgid "Unread"
 msgstr "Olvasatlan"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+#, fuzzy
+#| msgid "Your messages"
+msgid "Unread messages"
+msgstr "Üzenetei"
+
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Olvasatlan: %1$d"
@@ -10692,12 +10720,6 @@ msgstr "olvasott"
 msgid "select format"
 msgstr "formátum kiválasztása"
 
-#: apps/io.ox/tasks/util.js module:io.ox/tasks
-#, fuzzy
-#| msgid "New mail"
-msgid "show mail"
-msgstr "Új levél"
-
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
 msgstr "hat hónap"
@@ -10918,6 +10940,11 @@ msgstr "yyyy"
 #~ msgid "Off"
 #~ msgstr "Ki"
 
+#, fuzzy
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "Megnyitás"
+
 #~ msgid "Press [enter] to jump to the facebook stream."
 #~ msgstr "Nyomja meg az [enter]-t a Facebook folyamra ugráshoz."
 
@@ -10976,6 +11003,11 @@ msgstr "yyyy"
 #~| msgid "Phone"
 #~ msgid "iPhone"
 #~ msgstr "Telefon"
+
+#, fuzzy
+#~| msgid "New mail"
+#~ msgid "show mail"
+#~ msgstr "Új levél"
 
 #~ msgid "the line length must be a number"
 #~ msgstr "a sorhossz egy szám kell hogy legyen"

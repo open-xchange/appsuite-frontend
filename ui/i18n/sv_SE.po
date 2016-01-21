@@ -4020,7 +4020,7 @@ msgstr "Lägg till Google Drive-konto"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
-msgid "Google Playstore"
+msgid "Google Play"
 msgstr "Lägg till Google Drive-konto"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -4410,6 +4410,14 @@ msgstr "Inkludera distributionslistor"
 msgid "Incoming server"
 msgstr "Inkommande server"
 
+#. error message when server returns incomplete
+#. configuration for client onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic sign out"
+msgid "Incomplete configuration."
+msgstr "Automatisk utloggning"
+
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr "Inkonsekventa datum"
@@ -4643,6 +4651,14 @@ msgstr "Delta i presentation"
 msgid "Join the presentation"
 msgstr "Delta i presentation"
 
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Join presentation"
+msgid "Joining the presentation of %1$s."
+msgstr "Delta i presentation"
+
 #: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
 msgid "Jordan"
 msgstr ""
@@ -4671,7 +4687,7 @@ msgstr "Bara avaktivera komponenten"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Due on %1$s"
-msgid "Just open the %1$s"
+msgid "Just open %1$s"
 msgstr "Deadline är %1$s"
 
 #. Kilobytes
@@ -5960,12 +5976,6 @@ msgstr "Visar bara objekt som är relevanta för mappen \"%1$s\""
 msgid "Open"
 msgstr "Öppna"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Open"
-msgid "Open "
-msgstr "Öppna"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Öppna extern länk"
@@ -6100,6 +6110,10 @@ msgstr "Sortera"
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Organizer"
 msgstr "Organisatör"
+
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+msgid "Original mail"
+msgstr ""
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
@@ -6627,6 +6641,13 @@ msgstr "Presentationen slut"
 msgid "Presentation is paused."
 msgstr "Presentationen är pausad."
 
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Presentation end"
+msgid "Presentation join"
+msgstr "Presentationen slut"
+
 #. headline of a presentation start alert
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
 msgid "Presentation start"
@@ -6856,7 +6877,8 @@ msgstr "Lila"
 msgid "Qatar"
 msgstr ""
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Quick reply"
 msgstr ""
 
@@ -9373,6 +9395,12 @@ msgstr "Namnlös prenumeration"
 msgid "Unread"
 msgstr "Oläst"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+#, fuzzy
+#| msgid "Your messages"
+msgid "Unread messages"
+msgstr "Dina meddelanden"
+
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Oläst: %1$d"
@@ -10691,12 +10719,6 @@ msgstr "läst"
 #: apps/io.ox/core/import/import.js
 msgid "select format"
 msgstr "välj format"
-
-#: apps/io.ox/tasks/util.js module:io.ox/tasks
-#, fuzzy
-#| msgid "show image"
-msgid "show mail"
-msgstr "visa bild"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
@@ -13886,6 +13908,11 @@ msgstr "yyyy"
 #~ msgid "Only the task creator is allowed to set private flag."
 #~ msgstr "Endast skaparen av uppgiften är tillåten att använda privat flagga."
 
+#, fuzzy
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "Öppna"
+
 #~ msgid "Open in new tab"
 #~ msgstr "Öppna i ny flik"
 
@@ -16711,6 +16738,11 @@ msgstr "yyyy"
 #~| msgid "show all"
 #~ msgid "show link"
 #~ msgstr "visa alla"
+
+#, fuzzy
+#~| msgid "show image"
+#~ msgid "show mail"
+#~ msgstr "visa bild"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "delmappar för %s"

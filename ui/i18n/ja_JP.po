@@ -4018,7 +4018,7 @@ msgstr "Google Drive アカウントを追加"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
-msgid "Google Playstore"
+msgid "Google Play"
 msgstr "Google Drive アカウントを追加"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -4406,6 +4406,14 @@ msgstr "配布リストを追加"
 msgid "Incoming server"
 msgstr "受信サーバ"
 
+#. error message when server returns incomplete
+#. configuration for client onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Close configuration"
+msgid "Incomplete configuration."
+msgstr "構成を閉じる"
+
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr "日付が矛盾しています。"
@@ -4639,6 +4647,14 @@ msgstr "プレゼンテーションに参加"
 msgid "Join the presentation"
 msgstr "プレゼンテーションに参加"
 
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Join presentation"
+msgid "Joining the presentation of %1$s."
+msgstr "プレゼンテーションに参加"
+
 #: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
 msgid "Jordan"
 msgstr "ヨルダン"
@@ -4667,7 +4683,7 @@ msgstr "ウィジェットを無効化"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Due on %1$s"
-msgid "Just open the %1$s"
+msgid "Just open %1$s"
 msgstr "期限: %1$s"
 
 #. Kilobytes
@@ -5952,12 +5968,6 @@ msgstr "フォルダ \"%1$s\" に関連するアイテムのみを表示して�
 msgid "Open"
 msgstr "開く"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Open"
-msgid "Open "
-msgstr "開く"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "外部リンクを開く"
@@ -6092,6 +6102,12 @@ msgstr "順序"
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Organizer"
 msgstr "開催者"
+
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+#, fuzzy
+#| msgid "Primary Email"
+msgid "Original mail"
+msgstr "既定のメール"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
@@ -6620,6 +6636,13 @@ msgstr "プレゼンテーション終了"
 msgid "Presentation is paused."
 msgstr "プレゼンテーションは一時停止になっています。"
 
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Presentation end"
+msgid "Presentation join"
+msgstr "プレゼンテーション終了"
+
 #. headline of a presentation start alert
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
 msgid "Presentation start"
@@ -6850,7 +6873,8 @@ msgstr "紫"
 msgid "Qatar"
 msgstr "アジア/カタール"
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 #, fuzzy
 #| msgid "Quick Search"
 msgid "Quick reply"
@@ -9360,6 +9384,12 @@ msgstr "新規の登録"
 msgid "Unread"
 msgstr "未読にする"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+#, fuzzy
+#| msgid "Your messages"
+msgid "Unread messages"
+msgstr "メッセージ"
+
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "未読: %1$d"
@@ -10667,12 +10697,6 @@ msgstr "既読"
 #: apps/io.ox/core/import/import.js
 msgid "select format"
 msgstr "フォーマットを選択"
-
-#: apps/io.ox/tasks/util.js module:io.ox/tasks
-#, fuzzy
-#| msgid "show all"
-msgid "show mail"
-msgstr "すべてを表示"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "six months"
@@ -12308,9 +12332,6 @@ msgstr "yyyy"
 
 #~ msgid "Close Window"
 #~ msgstr "ウィンドウを閉じる"
-
-#~ msgid "Close configuration"
-#~ msgstr "構成を閉じる"
 
 #~ msgid "Close document"
 #~ msgstr "ドキュメントを閉じる"
@@ -14664,6 +14685,11 @@ msgstr "yyyy"
 #~ "部のコンピュータ (例えば、インターネットカフェ内) を使用している場合には、"
 #~ "このオプションを使用しないでください。"
 
+#, fuzzy
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "開く"
+
 #~ msgid "Open attachment"
 #~ msgstr "添付ファイルを開く"
 
@@ -15082,9 +15108,6 @@ msgstr "yyyy"
 
 #~ msgid "Preview pane"
 #~ msgstr "プレビュー"
-
-#~ msgid "Primary Email"
-#~ msgstr "既定のメール"
 
 #~ msgid "Principal:"
 #~ msgstr "主催者:"
@@ -17608,6 +17631,11 @@ msgstr "yyyy"
 #~| msgid "As link"
 #~ msgid "show link"
 #~ msgstr "リンクとして"
+
+#, fuzzy
+#~| msgid "show all"
+#~ msgid "show mail"
+#~ msgstr "すべてを表示"
 
 #~ msgid ""
 #~ "street\n"
