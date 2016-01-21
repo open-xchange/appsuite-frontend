@@ -315,6 +315,11 @@ define('io.ox/files/main', [
          * Respond to folder change
          */
         'folder:change': function (app) {
+            if (_.device('safari')) {
+                app.folderView.tree.selection.view.on('scrollIntoView', function () {
+                    app.getWindow().nodes.sidepanel.hide().show(0);
+                });
+            }
 
             app.on('folder:change', function (id) {
                 // we clear the list now to avoid flickering due to subsequent layout changes
