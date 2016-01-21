@@ -57,6 +57,8 @@ define('io.ox/onboarding/clients/config', [
                 userAPI.getCurrentUser().then(function (data) {
                     config.user = data.attributes;
                 });
+                // return config
+                return this;
             }.bind(this));
         },
 

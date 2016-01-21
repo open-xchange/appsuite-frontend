@@ -390,8 +390,6 @@ define('io.ox/core/tk/wizard', [
             return this.parent.options.model;
         },
 
-        isSkippable: $.noop,
-
         getId: function () {
             return this.options.id;
         },

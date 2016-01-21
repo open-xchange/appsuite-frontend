@@ -189,12 +189,15 @@ define('io.ox/onboarding/clients/wizard', [
             var opt = _.extend({
                 id:  'client-onboarding',
                 title: gt('Client onboarding'),
-                type: 'onboarding'
+                type: 'onboarding',
+                data: {}
             }, options);
             // store model and options
             this.config = config;
             this.model = config.model;
             this.opt = opt;
+            // apply predefined data
+            this.model.set(opt.data);
             // register render
             Wizard.registry.add(opt, this.render.bind(this));
         },
@@ -344,7 +347,7 @@ define('io.ox/onboarding/clients/wizard', [
             return initiate;
         },
 
-        render: function () {
+        render: function (config, options) {
             if (config.isIncomplete()) {
                 require(['io.ox/core/yell'], function (yell) {
                     //#. error message when server returns incomplete
@@ -353,11 +356,13 @@ define('io.ox/onboarding/clients/wizard', [
                 });
                 return;
             }
-            return new OnboardingView(config).run();
+            return new OnboardingView(config, options).run();
         },
 
-        run: function () {
-            return wizard.load().then(wizard.render);
+        run: function (options) {
+            // add 'options' to 'resolve' result
+            var render = _.partial(wizard.render, _, options);
+            return wizard.load().then(render);
         }
     };
 
