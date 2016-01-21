@@ -130,6 +130,7 @@ define('io.ox/onboarding/clients/wizard', [
     //
 
     function select(e) {
+        e.preventDefault();
         var node = $(e.target),
             data = e.data,
             wizard = data.wizard,

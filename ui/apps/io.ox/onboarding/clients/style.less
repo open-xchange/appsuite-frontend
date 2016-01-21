@@ -220,7 +220,7 @@
                 }
 
                 &[data-action="sms"] {
-                    .content .interaction .field { width: 30%; }
+                    .content .interaction .field { width: 30%; min-width: 120px; }
                 }
 
                 .content {
@@ -237,8 +237,11 @@
 
                     .interaction {
                         label, input, select { margin-right: 8px; }
-                        .field { width: 50%; }
-                        .select { width: 20%; }
+                        .field {
+                            min-width: 350px;
+                            width: 50%;
+                        }
+                        .select { width: 30%; }
                         .row {
                             margin-right: -10px;
                             padding: 0 0 0 15px;
