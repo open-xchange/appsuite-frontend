@@ -100,12 +100,12 @@ define('io.ox/onboarding/clients/wizard', [
     function drawPlatforms() {
         var config = this.parent.config;
         // title
-        this.$('.wizard-title').text(gt('Please select the platform of your device.'));
+        this.$('.wizard-title').text(titleLabel);
         // content
         this.$('.wizard-content').empty()
             .addClass('onboarding-platform')
             .append(
-                $('<p class="teaser">').text(titleLabel),
+                $('<p class="teaser">').text(gt('Please select the platform of your device.')),
                 drawOptions('platform', config.getPlatforms())
                 .on('click', 'a', onSelect.bind(this))
             );
