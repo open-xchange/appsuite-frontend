@@ -1164,11 +1164,25 @@ define('io.ox/mail/api', [
                     var base = _(result.data.toString().split(api.separator)),
                         id = base.last(),
                         folder = base.without(id).join(api.separator);
-                    $.when(accountAPI.getUnifiedMailboxName())
-                    .done(function (isUnified) {
+                    $.when(accountAPI.getUnifiedMailboxName(), accountAPI.getPrimaryAddress())
+                    .done(function (isUnified, senderAddress) {
+                        // check if mail was sent to self to update inbox counters correctly
+                        var sendToSelf = false;
+                        _.chain(_.union(data.to, data.cc, data.bcc)).each(function (item) {
+                            if (item[1] === senderAddress[1]) {
+                                sendToSelf = true;
+                                return;
+                            }
+                        });
                         // wait a moment, then update folders as well
                         setTimeout(function () {
-                            if (isUnified !== null) folderAPI.refresh(); else folderAPI.reload(folder);
+                            if (isUnified !== null) {
+                                folderAPI.refresh();
+                            } else if (sendToSelf) {
+                                folderAPI.reload(folder, accountAPI.getInbox());
+                            } else {
+                                folderAPI.reload(folder);
+                            }
                         }, DELAY);
                     });
                 }
