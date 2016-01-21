@@ -222,7 +222,7 @@ define('io.ox/mail/common-extensions', [
 
         unread: function (baton) {
             var isUnseen = util.isUnseen(baton.data);
-            if (isUnseen) extensions.envelope();
+            if (isUnseen) extensions.envelope.call(this);
         },
 
         answered: function (baton) {
