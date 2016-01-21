@@ -1,0 +1,75 @@
+.io-ox-ad {
+    z-index: 1000;
+    text-align: center;
+    padding-top: 20px;
+    background-color: #ccc;
+
+    .io-ox-ad-close .close {
+        padding: 0 16px;
+    }
+}
+
+#io-ox-ad-banner {
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: none;
+    text-align: center;
+    color: #000;
+    line-height: 32px;
+    padding: 16px;
+    overflow: hidden;
+    height: 82px;
+}
+
+#io-ox-ad-skyscraper {
+    width: 160px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: none;
+    text-align: center;
+    padding-top: 30px;
+}
+
+#io-ox-ad-portal {
+    height: 120px;
+    padding-top: 30px;
+    text-align: center;
+}
+
+#io-ox-ad-mail-detail {
+    height: 90px;
+    padding-top: 30px;
+    text-align: center;
+}
+
+#io-ox-ad-drive-folder {
+    height: 90px;
+    padding-top: 30px;
+    text-align: center;
+}
+
+.thread-view-control.show-ad .thread-view-list {
+    top: 90px;
+}
+
+#io-ox-core.show-banner.show-ad {
+    @height: 64px;
+    #io-ox-banner { height: @height; padding: @default-padding; }
+    #io-ox-topbar { top: @height + @height; }
+    #io-ox-screens { top: @height + @height + 40; }
+    #io-ox-ad-banner { top: @height; }
+}
+
+#io-ox-core.show-ad {
+    @height: 82px;
+    #io-ox-banner { height: @height; padding: @default-padding; }
+    #io-ox-topbar { top: @height; }
+    #io-ox-screens { top: @height + 40; }
+}
+
+#io-ox-windowmanager.show-ad {
+    right: 160px;
+}

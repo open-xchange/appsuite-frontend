@@ -1472,6 +1472,15 @@ define('io.ox/mail/main', [
             });
         },
 
+        'motor': function (app) {
+            ox.on('mail:send:start', function () {
+                require(['io.ox/ads/mailoverlay'], function (overlay) {
+                    var target = app.pages.getAll().detailView.$el.closest('.window-body');
+                    new overlay({ target: target }).show();
+                });
+            });
+        },
+
         'metrics': function (app) {
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;

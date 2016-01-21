@@ -817,7 +817,7 @@ define('io.ox/core/desktop', [
                     $('#io-ox-screens').children().each(function () {
                         var attr = $(this).attr('id'),
                             screenId = String(attr || '').substr(6);
-                        if (screenId !== id) {
+                        if (screenId !== id && screenId !== 'ad-skyscraper') {
                             that.hide(screenId);
                         }
                     });

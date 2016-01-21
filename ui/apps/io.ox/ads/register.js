@@ -14,11 +14,16 @@
  */
 define('io.ox/ads/register', [
     'io.ox/core/extensions',
-    'io.ox/core/capabilities'
+    'io.ox/core/capabilities',
+    'less!io.ox/ads/style'
 ], function (ext, capabilities) {
     'use strict';
 
-    var config = [];
+    var config = [],
+        points = {
+            'landscape': 'io.ox/core/banner',
+            'skyscraper': 'io.ox/core/skyscraper'
+        };
 
     ext.point('io.ox/ads').extend({
         id: 'default',
@@ -28,13 +33,32 @@ define('io.ox/ads/register', [
             );
         },
         changeModule: function (module, baton) {
-            var activeAds = baton.data.config.filter(function moduleFilter(conf) {
-                return _.isEmpty(conf.showadinmodules) || _.contains(conf.showadinmodules, module);
-            }).filter(function capabilityFilter(conf) {
-                return _.isEmpty(conf.capabilities) || capabilities.has(conf.capabilities);
+            var allAds = _.keys(points),
+                activeAds = baton.data.config.filter(function moduleFilter(conf) {
+                    return _.isEmpty(conf.showadinmodules) || _.contains(conf.showadinmodules, module);
+                }).filter(function capabilityFilter(conf) {
+                    return _.isEmpty(conf.capabilities) || capabilities.has(conf.capabilities);
+                });
+
+            _.each(points, function (value, key) {
+
+                _.each(activeAds, function (obj) {
+                    var baton = ext.Baton.ensure(obj);
+                    if (obj.ad === key) {
+                        allAds.splice(_.indexOf(allAds, key));
+                        ext.point(points[key]).get('motor', function (extension) {
+                            extension.invoke('draw', undefined, baton);
+                        });
+                    }
+                });
+
             });
 
-            //TODO: rerender all the ads, only show active ones?
+            _.each(allAds, function (value) {
+                ext.point(points[value]).get('motor', function (extension) {
+                    extension.invoke('cleanup');
+                });
+            });
         }
     });
 
@@ -69,4 +93,90 @@ define('io.ox/ads/register', [
     ox.on('app:start', changeModule);
 
     ox.on('app:resume', changeModule);
+
+    ext.point('io.ox/portal/sections').extend({
+        id: 'motor',
+        before: 'widgets',
+        draw: function (baton) {
+            this.append(
+                $('<div id="io-ox-ad-portal">').append(
+                    baton.data.adtaghtml
+                )
+            );
+        },
+        cleanup: function () {
+            this.find('#io-ox-ad-portal').detach();
+        }
+    });
+
+    ext.point('io.ox/mail/thread-view').extend({
+        id: 'motor',
+        index: 50,
+        draw: function (baton) {
+            if (baton && baton.data) {
+                this.$el.closest('.thread-view-control').addClass('show-ad');
+                this.$el.append(
+                    $('<div id="io-ox-ad-mail-detail">').append(
+                        baton.data.adtaghtml
+                    )
+                );
+            }
+        },
+        cleanup: function () {
+            this.$el.closest('.thread-view-control').removeClass('show-ad');
+            this.find('#io-ox-ad-mail-detail').detach();
+
+        }
+    });
+
+    ext.point('io.ox/core/foldertree/infostore/app').extend({
+        id: 'motor',
+        index: 150,
+        draw: function (baton) {
+            this.find('#io-ox-ad-drive-folder').detach();
+            this.append(
+                $('<div id="io-ox-ad-drive-folder">').append(
+                    baton.data.adtaghtml
+                )
+            );
+        },
+        cleanup: function () {
+            this.find('#io-ox-ad-drive-folder').detach();
+        }
+    });
+
+    ext.point('io.ox/core/skyscraper').extend({
+        id: 'motor',
+        draw: function (baton) {
+            $('#io-ox-windowmanager').addClass('show-ad');
+            var skyscraper = $('#io-ox-ad-skyscraper').show();
+            skyscraper.empty();
+            skyscraper.append(
+                baton.data.adtaghtml
+            );
+
+        },
+        cleanup: function () {
+            $('#io-ox-windowmanager').removeClass('show-ad');
+            $('#io-ox-ad-skyscraper').empty();
+        }
+    });
+
+    ext.point('io.ox/core/banner').extend({
+        id: 'motor',
+        draw: function (baton) {
+            $('#io-ox-core').addClass('show-ad');
+            var banner = $('#io-ox-ad-banner').show();
+            banner.empty();
+            banner.append(
+                baton ? baton.data.adtaghtml : []
+            );
+
+        },
+        cleanup: function () {
+            $('#io-ox-core').removeClass('show-ad');
+            $('#io-ox-ad-banner').empty();
+        }
+    });
+
 });
