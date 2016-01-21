@@ -146,9 +146,9 @@
                 .ellipsis();
             }
 
-            &.unread .from span.person,
-            .subject,
-            .date { .fontWeight(bold); }
+            &.unread {
+                .from span.person, .subject, .date { .fontWeight(bold); }
+            }
         }
 
         &.unread {
@@ -497,6 +497,7 @@
 
     .from {
         .ellipsis();
+        max-height: 20px;
         span.person {
             color: inherit;
             .fontWeight(500);
@@ -545,7 +546,7 @@
             line-height: 20px;
             margin-right: (@default-padding / 2);
 
-            &.seen-unseen-indicator:before { content: "\f003"; color: #777; } // fa-envelope-o
+            &.seen-unseen-indicator:before { content: "\f003"; color: #ccc; } // fa-envelope-o
             &.icon-answered  { color: #aaa; }
             &.icon-forwarded { color: #888; }
         }
