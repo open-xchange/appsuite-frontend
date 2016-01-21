@@ -79,7 +79,7 @@ define('io.ox/mail/actions', [
                 view.$('section.body').before(
                     new InplaceReplyView({ tagName: 'section', cid: cid })
                     .on('send', function (cid) {
-                        view.data('open', cid);
+                        view.$el.data('open', cid);
                     })
                     .on('dispose', function () {
                         link.show().focus();
