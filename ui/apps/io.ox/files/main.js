@@ -315,7 +315,9 @@ define('io.ox/files/main', [
          * Respond to folder change
          */
         'folder:change': function (app) {
+            // see Bug 43512 - Opening a Drive direct link in Safari removes the edit bar
             if (_.device('safari')) {
+                // hide and show sidepanel for correct layout. Somehow, scroll into view and flexbox-layout have errors in safari
                 app.folderView.tree.selection.view.on('scrollIntoView', function () {
                     app.getWindow().nodes.sidepanel.hide().show(0);
                 });
