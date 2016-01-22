@@ -26,6 +26,7 @@ define('io.ox/onboarding/clients/wizard', [
 
     var POINT = 'io.ox/onboarding/clients/views',
         titleLabel = gt('Take %1$s with you! Stay up-to-date on your favorite devices.', ox.serverConfig.productName),
+        //titleLabel = gt('Take %1$s with you!', ox.serverConfig.productName),
         initiate, wizard;
 
 
@@ -132,9 +133,9 @@ define('io.ox/onboarding/clients/wizard', [
         this.$('.wizard-content').empty()
             .addClass('onboarding-platform')
             .append(
-                $('<p class="teaser">').text(gt('Please select the platform of your device.')),
                 options.getNode('platform', config.getPlatforms())
-                .on('click', 'a', onSelect.bind(this))
+                    .on('click', 'a', onSelect.bind(this)),
+                $('<p class="teaser">').text(gt('Please select the platform of your device.'))
             );
     }
 
@@ -143,11 +144,13 @@ define('io.ox/onboarding/clients/wizard', [
             list = config.getDevices();
         // title
         this.$('.wizard-title').text(gt('Which device do you want to configure?'));
+        this.$('.wizard-title').text(titleLabel);
         // content
         this.$('.wizard-content').empty()
             .append(
                 options.getNode('device', list)
-                .on('click', 'a', onSelect.bind(this))
+                    .on('click', 'a', onSelect.bind(this)),
+                $('<p class="teaser">').text(gt('What type of device do you want to configure?'))
             );
     }
 
@@ -180,9 +183,6 @@ define('io.ox/onboarding/clients/wizard', [
             container = this.$('.wizard-content').empty();
         // title and teaser
         this.$('.wizard-title').text(gt('What do you want to use?'));
-        container.append(
-            //$('<p class="teaser">').text()
-        );
         // content
         container.append(
             options.getNode('scenario', list)
@@ -193,7 +193,7 @@ define('io.ox/onboarding/clients/wizard', [
             $('<ul class="descriptions">').append(function () {
                 return _.map(list, function (obj) {
                     return $('<li class="description hidden">').attr('data-parent', obj.id).append(
-                        $('<div class="description">').text(obj.description || obj.id || '\xa0')
+                        $('<div class="">').text(obj.description || obj.id || '\xa0')
                     );
                 });
             })
@@ -303,7 +303,7 @@ define('io.ox/onboarding/clients/wizard', [
                     back: false,
                     next: false,
                     width: 'auto',
-                    minWidth: '504px'
+                    minWidth: '540px'
                 })
                 .on('before:show', drawPlatforms)
                 .end()
@@ -314,7 +314,7 @@ define('io.ox/onboarding/clients/wizard', [
                     back: false,
                     next: false,
                     width: 'auto',
-                    minWidth: '504px'
+                    minWidth: '540px'
                 })
                 .on('before:show', drawDevices)
                 .end()
@@ -325,7 +325,7 @@ define('io.ox/onboarding/clients/wizard', [
                     back: false,
                     next: false,
                     width: 'auto',
-                    minWidth: '504px'
+                    minWidth: '540px'
                 })
                 .on('before:show', drawScenarios)
                 .end();
