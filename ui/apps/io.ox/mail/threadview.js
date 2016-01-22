@@ -451,19 +451,12 @@ define('io.ox/mail/threadview', [
         }
     });
 
-    // Mobile
+    // Mobile, remove halo links in thread-overview
     ext.point('io.ox/mail/mobile').extend({
         id: 'remove-halo-link',
-        index: 100,
+        index: 'last',
         customize: function () {
-            var elem = this.$el.find('.person-link');
-            _(elem).each(function (el) {
-                var span = $('<span>').text($(el).text());
-                span.addClass(elem.attr('class'));
-                span.addClass('sp').removeClass('halo-link');
-                $(el).after(span);
-            });
-            elem.remove();
+            this.$el.find('.halo-link').removeClass('halo-link');
         }
     });
 
