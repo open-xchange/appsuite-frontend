@@ -1122,9 +1122,10 @@ define('io.ox/files/main', [
                 });
                 // check for clicks in folder trew
                 app.on('folder:change folder-virtual:change', function (folder, data) {
+                    var list = [];
                     // http://oxpedia.org/wiki/index.php?title=HTTP_API#DefaultTypes
-                    // hint: custom ids for virtual folder 'vi'
-                    var list = [data.standard_folder_type, data.type];
+                    if (data) { list.push(data.standard_folder_type, data.type); }
+                    if (folderAPI.isVirtual(folder)) { list.push('virtual'); }
                     // add filestorage data
                     if (data.account_id) {
                         // simplify: 'dropbox://164' -> ['dropbox', '164']
