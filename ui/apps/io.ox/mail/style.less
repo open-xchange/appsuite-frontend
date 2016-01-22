@@ -548,7 +548,7 @@
             line-height: 20px;
             margin-right: (@default-padding / 2);
 
-            &.seen-unseen-indicator:before { content: "\f003"; color: #ccc; } // fa-envelope-o
+            &.seen-unseen-indicator:before { content: "\f003"; color: rgba(0, 0, 0, 0.50); } // fa-envelope-o
             &.icon-answered  { color: #aaa; }
             &.icon-forwarded { color: #888; }
         }
@@ -579,7 +579,16 @@
         }
     }
 
-    .unread .list-item-content i.seen-unseen-indicator:before { content: "\f0e0"; color: @link-color; } // fa-envelope
+    .unread {
+        i.seen-unseen-indicator:before {
+            content: "\f0e0"; // fa-envelope
+            color: @link-color;
+        }
+    }
+
+    &.visible-selection.has-focus .list-item.selected i.seen-unseen-indicator:before {
+        color: rgba(255, 255, 255, 0.50);
+    }
 
     .fa-paperclip.has-attachments, i.fa.signed, i.fa.encrypted {
         font-size: @icon-size;
@@ -596,11 +605,9 @@
     &.visible-selection.has-focus .list-item.selected {
         i {
             opacity: 0.9;
-
             &:not(.flag):not(.has-attachments) { color: rgba(255, 255, 255, 0.50); }
         }
         .fa-paperclip.has-attachments { opacity: 1; }
-
         &.deleted { color: rgba(255, 255, 255, 0.50); }
     }
 
@@ -772,19 +779,24 @@
 
 .inplace-reply {
 
-    margin: 15px 0 0 0;
+    margin: 16px 0 0 0;
     padding: 0 @default-padding;
 
     .form-group { margin-bottom: 0; }
 
     .progress {
-        height: 8px;
-        margin-bottom: @default-padding;
+        height: 4px;
+        margin-bottom: 20px;
+        position: relative;
+        top: 8px;
     }
 
-    .alert {
+    .success {
         font-size: 14px;
         font-weight: 500;
+        text-align: right;
+        color: #358000; // green
+        padding: 2px 0;
     }
 }
 

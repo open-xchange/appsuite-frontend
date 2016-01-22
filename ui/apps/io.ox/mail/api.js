@@ -1649,6 +1649,13 @@ define('io.ox/mail/api', [
             var top = this.reverse[cid];
             if (!top) return 1;
             return (this.hash[top] || [cid]).length;
+        },
+
+        append: function (existingCID, newCID) {
+            var root = this.reverse[existingCID];
+            if (!root) return;
+            (this.hash[root] = (this.hash[root] || [])).unshift(newCID);
+            this.touch(root);
         }
     };
 

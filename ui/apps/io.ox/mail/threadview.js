@@ -390,6 +390,9 @@ define('io.ox/mail/threadview', [
 
             this.$messages = $();
 
+            // make view accessible via DOM
+            this.$el.data('view', this);
+
             this.$el.on('toggle', '.list-item', this.onToggle.bind(this));
 
             // we don't need drag support when it's open in a separate detailview (there is no foldertree to drag to)

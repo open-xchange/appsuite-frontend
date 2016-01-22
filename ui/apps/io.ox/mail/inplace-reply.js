@@ -218,7 +218,7 @@ define('io.ox/mail/inplace-reply', [
 
         renderSuccess: function () {
             this.$el.empty().append(
-                $('<div class="alert alert-success" role="alert">').append(
+                $('<div class="success" role="alert">').append(
                     $('<i class="fa fa-check" aria-hidden="true">'),
                     $.txt(' '),
                     $.txt(gt('Your reply has been sent'))
