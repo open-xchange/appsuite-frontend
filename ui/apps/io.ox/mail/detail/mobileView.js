@@ -206,8 +206,9 @@ define('io.ox/mail/detail/mobileView', [
         events: {
             'click .detail-view-header': 'onClick'
         },
-        onClick: function () {
+        onClick: function (e) {
             // trigger bubbling event
+            if ($(e.target).hasClass('show-all-recipients')) return;
             this.$el.trigger('showmail');
         },
         toggle: function () {
