@@ -284,7 +284,7 @@ define('io.ox/mail/threadview', [
             this.updateHeader();
 
             if (open) {
-                this.toggleMail(open);
+                this.showMail(open);
                 this.$el.data('open', null);
             }
         },
