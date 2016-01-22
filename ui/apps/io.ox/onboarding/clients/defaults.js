@@ -25,9 +25,9 @@ define('io.ox/onboarding/clients/defaults', [
             'android.tablet':   { icon: 'fa-tablet' },
             'apple.iphone':     { icon: 'fa-mobile' },
             'apple.ipad':       { icon: 'fa-tablet' },
-            'apple.mac':        { icon: 'fa-desktop' },
+            'apple.mac':        { icon: 'fa-laptop' },
             'windows.phone':    { icon: 'fa-mobile' },
-            'windows.desktop':  { icon: 'fa-desktop' }
+            'windows.desktop':  { icon: 'fa-laptop' }
         },
         scenarios: {
             'davsync':          { icon: ['fa-calendar', 'fa-users'] },
