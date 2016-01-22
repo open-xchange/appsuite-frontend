@@ -1006,6 +1006,10 @@ textarea.inplace-editor {
             font-size: @phone-font-size;
             margin-left: 0;
         }
+
+        .from {
+            max-height: none;
+        }
     }
 
     .thread-view.list-view {
@@ -1042,7 +1046,7 @@ textarea.inplace-editor {
             .from, .recipients, .subject { padding: @default-padding; }
 
             .from {
-                padding-bottom: 0;
+                padding-bottom: 5px;
 
                 .person-link.person-from { font-weight: 500; }
             }
