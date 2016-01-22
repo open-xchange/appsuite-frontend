@@ -441,10 +441,14 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         getBadgeUrl: function () {
-            return {
-                'appstore': 'apps/themes/icons/default/appstore/Download_on_the_Mac_App_Store_Badge_US-UK_165x40.svg',
-                'playstore': 'apps/themes/icons/default/googleplay/en_generic_rgb_wo_60.png'
-            }[this.type];
+            var available = ['EN', 'DE', 'ES', 'FR'],
+                prefix = ox.language.slice(0, 2).toUpperCase(),
+                country = _.contains(available, prefix) ? prefix : 'EN',
+                stores = {
+                    'appstore': 'apps/themes/icons/default/appstore/App_Store_Badge_' + country + '_135x40.svg',
+                    'playstore': 'apps/themes/icons/default/googleplay/google-play-badge_' + country + '.svg'
+                };
+            return stores[this.type];
         },
 
         render: function () {
@@ -463,7 +467,9 @@ define('io.ox/onboarding/clients/extensions', [
                         $('<div class="description">')
                             .text(gt('Just open %1$s', this.getLabel())),
                         // action
-                        $('<a class="store">').append($('<img>').attr('src', this.getBadgeUrl()))
+                        $('<a class="store">').append(
+                            $('<img class="store-icon">').attr('src', this.getBadgeUrl())
+                        )
                     )
                 );
             return this;
