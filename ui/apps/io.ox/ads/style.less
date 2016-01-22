@@ -7,6 +7,10 @@
     .io-ox-ad-close .close {
         padding: 0 16px;
     }
+
+    &:empty {
+        display: none;
+    }
 }
 
 #io-ox-ad-banner {
@@ -33,7 +37,7 @@
     padding-top: 30px;
 }
 
-#io-ox-ad-portal {
+#io-ox-ad-portal:not(:empty) {
     height: 120px;
     padding-top: 30px;
     text-align: center;

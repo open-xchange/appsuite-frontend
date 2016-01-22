@@ -19,11 +19,7 @@ define('io.ox/ads/register', [
 ], function (ext, capabilities) {
     'use strict';
 
-    var config = [],
-        points = {
-            'landscape': 'io.ox/core/banner',
-            'skyscraper': 'io.ox/core/skyscraper'
-        };
+    var config = {};
 
     ext.point('io.ox/ads').extend({
         id: 'default',
@@ -33,31 +29,22 @@ define('io.ox/ads/register', [
             );
         },
         changeModule: function (module, baton) {
-            var allAds = _.keys(points),
-                activeAds = baton.data.config.filter(function moduleFilter(conf) {
-                    return _.isEmpty(conf.showadinmodules) || _.contains(conf.showadinmodules, module);
+            var allAds = baton.data.config,
+                activeAds = _(baton.data.config).chain().pairs()
+                .filter(function moduleFilter(conf) {
+                    return _.isEmpty(conf[1].showadinmodules) || _.contains(conf[1].showadinmodules, module);
                 }).filter(function capabilityFilter(conf) {
-                    return _.isEmpty(conf.capabilities) || capabilities.has(conf.capabilities);
-                });
+                    return _.isEmpty(conf[1].capabilities) || capabilities.has(conf[1].capabilities);
+                })
+                .object().value();
 
-            _.each(points, function (value, key) {
-
-                _.each(activeAds, function (obj) {
-                    var baton = ext.Baton.ensure(obj);
-                    if (obj.ad === key) {
-                        allAds.splice(_.indexOf(allAds, key));
-                        ext.point(points[key]).get('motor', function (extension) {
-                            extension.invoke('draw', undefined, baton);
-                        });
-                    }
-                });
-
+            _.each(allAds, function (obj, point) {
+                var baton = ext.Baton.ensure(obj);
+                ext.point(point).invoke('cleanup', undefined, baton);
             });
-
-            _.each(allAds, function (value) {
-                ext.point(points[value]).get('motor', function (extension) {
-                    extension.invoke('cleanup');
-                });
+            _.each(activeAds, function (obj, point) {
+                var baton = ext.Baton.ensure(obj);
+                ext.point(point).invoke('draw', undefined, baton);
             });
         }
     });
@@ -73,7 +60,7 @@ define('io.ox/ads/register', [
 
         //handle configuration
         ext.point('io.ox/ads').invoke('config', undefined, baton);
-        config.push.apply(config, _.compact([].concat(baton.data.config)));
+        _.extend(config, baton.data.config, {});
     }
 
     ox.manifests.loadPluginsFor('io.ox/ads/config').then(function () {
@@ -87,7 +74,7 @@ define('io.ox/ads/register', [
             app: app,
             config: config
         });
-        ext.point('io.ox/ads').invoke('changeModule', undefined, app.get('id'), baton);
+        ext.point('io.ox/ads').invoke('changeModule', undefined, app.get('name'), baton);
     }
 
     ox.on('app:start', changeModule);
@@ -98,7 +85,7 @@ define('io.ox/ads/register', [
         require(['io.ox/ads/mailoverlay'], function (Overlay) {
             var app = ox.ui.apps.get('io.ox/mail'),
                 target = app.pages.getAll().detailView.$el.closest('.window-body'),
-                baton = ext.Baton.ensure(config.mailoverlay || { adtaghtml: '' });
+                baton = ext.Baton.ensure(config.mailoverlay || { html: '' });
 
             new Overlay({ target: target, baton: baton }).show();
         });
@@ -107,62 +94,71 @@ define('io.ox/ads/register', [
     ext.point('io.ox/portal/sections').extend({
         id: 'motor',
         before: 'widgets',
-        draw: function (baton) {
+        draw: function () {
             this.append(
-                $('<div id="io-ox-ad-portal">').append(
-                    baton.data.adtaghtml
-                )
+                $('<div id="io-ox-ad-portal" class="io-ox-ad">')
             );
-        },
-        cleanup: function () {
-            this.find('#io-ox-ad-portal').detach();
         }
     });
 
     ext.point('io.ox/mail/thread-view').extend({
         id: 'motor',
         index: 50,
-        draw: function (baton) {
-            if (baton && baton.data) {
-                this.$el.closest('.thread-view-control').addClass('show-ad');
-                this.$el.append(
-                    $('<div id="io-ox-ad-mail-detail">').append(
-                        baton.data.adtaghtml
-                    )
-                );
-            }
-        },
-        cleanup: function () {
-            this.$el.closest('.thread-view-control').removeClass('show-ad');
-            this.find('#io-ox-ad-mail-detail').detach();
-
+        draw: function () {
+            this.$el.append(
+                $('<div id="io-ox-ad-mail-detail">')
+            );
         }
     });
 
     ext.point('io.ox/core/foldertree/infostore/app').extend({
         id: 'motor',
         index: 150,
-        draw: function (baton) {
-            this.find('#io-ox-ad-drive-folder').detach();
+        draw: function () {
             this.append(
-                $('<div id="io-ox-ad-drive-folder">').append(
-                    baton.data.adtaghtml
-                )
+                $('<div id="io-ox-ad-drive-folder">')
             );
-        },
-        cleanup: function () {
-            this.find('#io-ox-ad-drive-folder').detach();
         }
     });
 
-    ext.point('io.ox/core/skyscraper').extend({
-        id: 'motor',
+    ext.point('io.ox/ads/driveFolder').extend({
+        id: 'default',
+        draw: function (baton) {
+            $('#io-ox-ad-drive-folder').append(
+                baton.data.html
+            );
+        },
+        cleanup: function () {
+            $('#io-ox-ad-drive-folder').empty();
+        }
+    });
+
+    ext.point('io.ox/ads/portalBillboard').extend({
+        id: 'default',
+        draw: function (baton) {
+            $('#io-ox-ad-portal').append(
+                baton.data.html
+            );
+        },
+        cleanup: function () {
+            $('#io-ox-ad-portal').empty();
+        }
+    });
+
+    ext.point('io.ox/ads/mailDetail').extend({
+        id: 'default',
+        draw: function () {},
+        cleanup: function () {}
+    });
+
+    ext.point('io.ox/ads/skyscraper').extend({
+        id: 'default',
         draw: function (baton) {
             $('#io-ox-windowmanager').addClass('show-ad');
             var skyscraper = $('#io-ox-ad-skyscraper').show();
             skyscraper.empty();
             skyscraper.append(
-                baton.data.adtaghtml
+                baton.data.html
             );
 
         },
@@ -172,14 +168,14 @@ define('io.ox/ads/register', [
         }
     });
 
-    ext.point('io.ox/core/banner').extend({
-        id: 'motor',
+    ext.point('io.ox/ads/leaderboard').extend({
+        id: 'default',
         draw: function (baton) {
             $('#io-ox-core').addClass('show-ad');
             var banner = $('#io-ox-ad-banner').show();
             banner.empty();
             banner.append(
-                baton ? baton.data.adtaghtml : []
+                baton ? baton.data.html : []
             );
 
         },
@@ -189,12 +185,12 @@ define('io.ox/ads/register', [
         }
     });
 
-    ext.point('io.ox/ads/mailoverlay').extend({
-        id: 'motor',
+    ext.point('io.ox/ads/mailSentOverlay').extend({
+        id: 'default',
         index: 100,
         draw: function (baton) {
             this.append(
-                baton.data.adtaghtml
+                baton.data.html
             );
         }
     });

@@ -29,7 +29,7 @@ define('io.ox/ads/mailoverlay', [
             overlay = $('<div class="io-ox-ad abs">'),
             pane = overlay.append(closer);
 
-        ext.point('io.ox/ads/mailoverlay').invoke('draw', overlay, options.baton);
+        ext.point('io.ox/ads/mailSentOverlay').invoke('draw', overlay, options.baton);
 
         closer.find('.close')
             .on('click', function (e) {
