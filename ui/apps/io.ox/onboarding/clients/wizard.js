@@ -28,52 +28,79 @@ define('io.ox/onboarding/clients/wizard', [
         titleLabel = gt('Take %1$s with you! Stay up-to-date on your favorite devices.', ox.serverConfig.productName),
         initiate, wizard;
 
-    function drawOptions(type, list) {
 
-        function addIcons(icon) {
-            var list = [].concat(icon);
-            return _.map(list, function (name) {
-                return $('<i class="icon fa">').addClass(name);
-            });
-        }
+    var options = {
 
-        return $('<ul class="options" role="navigation">')
-                .append(function () {
-                    return _.map(list, function (obj) {
-                        return $('<li class="option">')
-                                .attr({
-                                    'data-value': obj.id
-                                })
-                                .append(
-                                    $('<a href="#" tabindex="1" class="link box">')
-                                    // apply disabled style?
-                                    .addClass(obj.enabled ? '' : 'disabled')
-                                    .append(obj.enabled ? '' : $('<div class="premium">').text(gt('Premium')))
-                                    .append(
-                                        $('<div class="icon-list">').append(addIcons(obj.icon)),
-                                        $('<div class="title">').text(obj.title || obj.name || obj.id || '\xa0')
-                                    )
-                        );
-                    });
-                })
-                // back button
-                .prepend(
-                    _.contains(['device', 'scenario'], type) ?
-                    $('<li class="option centered">')
-                        .attr({
-                            'data-value': 'back'
-                        })
+        _getListItems: function (type, list) {
+            return _.chain(list)
+                    .filter(_.partial(options._getValid, _, type))
+                    .map(options._getListItem)
+                    .value();
+        },
+
+        _getListItem: function (obj) {
+            return $('<li class="option">').attr({ 'data-value': obj.id })
+                .append(options._getLink(obj));
+        },
+
+        // back button
+        _getListItemBack: function (type) {
+            if (!_.contains(['device', 'scenario'], type)) return;
+
+            return $('<li class="option centered">')
+                    .attr({ 'data-value': 'back' })
+                    .append(
+                        $('<a href="#" tabindex="1" class="link box">')
+                        // apply disabled style?
                         .append(
-                            $('<a href="#" tabindex="1" class="link box">')
-                            // apply disabled style?
-                            .append(
-                                $('<div class="icon-list">').append(addIcons('fa-angle-left')),
-                                $('<div class="title">').text('\u00A0')
-                            )
+                            $('<div class="icon-list">').append(options._getIcons('fa-angle-left')),
+                            options._getTitle({ title: '\u00A0' })
                         )
-                    : ''
+                    );
+        },
+
+        _getLink: function (obj) {
+            return $('<a href="#" tabindex="1" class="link box">')
+                .addClass(obj.enabled ? '' : 'disabled')
+                .append(
+                    options._getPremium(obj),
+                    options._getIcons(obj.icon),
+                    options._getTitle(obj)
                 );
-    }
+        },
+
+        _getPremium: function (obj) {
+            return obj.enabled ? '' : $('<div class="premium">').text(gt('Premium'));
+        },
+
+        _getTitle: function (obj) {
+            obj = obj || {};
+            return $('<div class="title">').text(obj.title || obj.name || obj.id || '\xa0');
+        },
+
+        _getIcons: function (icon) {
+            var list = [].concat(icon);
+            return $('<div class="icon-list">')
+                .append(
+                    _.map(list, function (name) {
+                        return $('<i class="icon fa">').addClass(name);
+                    })
+                );
+        },
+
+        _getValid: function (obj, type) {
+            if (type !== 'device') return true;
+            return obj.scenarios.length > 0;
+        },
+
+        getNode: function (type, list) {
+            return $('<ul class="options" role="navigation">')
+                .append(
+                    options._getListItemBack(type),
+                    options._getListItems(type, list)
+                );
+        }
+    };
 
     //
     // Platform & device
@@ -106,7 +133,7 @@ define('io.ox/onboarding/clients/wizard', [
             .addClass('onboarding-platform')
             .append(
                 $('<p class="teaser">').text(gt('Please select the platform of your device.')),
-                drawOptions('platform', config.getPlatforms())
+                options.getNode('platform', config.getPlatforms())
                 .on('click', 'a', onSelect.bind(this))
             );
     }
@@ -119,8 +146,7 @@ define('io.ox/onboarding/clients/wizard', [
         // content
         this.$('.wizard-content').empty()
             .append(
-                //$('<p class="teaser">').text),
-                drawOptions('device', list)
+                options.getNode('device', list)
                 .on('click', 'a', onSelect.bind(this))
             );
     }
@@ -159,7 +185,7 @@ define('io.ox/onboarding/clients/wizard', [
         );
         // content
         container.append(
-            drawOptions('scenario', list)
+            options.getNode('scenario', list)
             .on('click', 'a', { wizard: this.parent }, select)
         );
         // description
@@ -220,24 +246,6 @@ define('io.ox/onboarding/clients/wizard', [
             this.$el.find('.wizard-close').attr('tabindex', '2');
         },
 
-        // TODO: gets to complicated/fragile
-        // _onChange: function (type, model, value) {
-        //     var data = {};
-        //     // autoselect when only one option available
-        //     if (!value) return;
-        //     switch (type) {
-        //         case 'platform':
-        //             data.target = 'device';
-        //             data.list = this.config.getDevices();
-        //             break;
-        //         case 'device':
-        //             data.target = 'scenario';
-        //             data.list = this.config.getScenarios();
-        //             break;
-        //     }
-        //     if (data.list.length > 1) return;
-        //     this.model.set(data.target, _.first(data.list).id);
-        // },
 
         _reset: function () {
             var model = this.model;
@@ -246,41 +254,38 @@ define('io.ox/onboarding/clients/wizard', [
             });
         },
 
-        register: function () {
-            // this.model.on('change:platform', this._onChange.bind(this, 'platform'));
-            // this.model.on('change:device', this._onChange.bind(this, 'device'));
+        _onSelect: function (data) {
+            var node = this.wizard.getCurrentStep().$el,
+                options = node.find('.options');
+            // update model
+            this.model.set(data.type, data.value);
+            // mark option
+            options.find('li')
+                    .removeClass('selected')
+                    .filter('[data-value="' + data.value + '"]')
+                    .addClass('selected');
+            // show childs
+            node.find('[data-parent]')
+                .addClass('hidden')
+                .filter('[data-parent="' + data.value + '"]')
+                .removeClass('hidden');
+            // show first action
+            var expanded = node.find('.actions > [data-parent="' + data.value + '"] > .action').hasClass('expanded');
+            if (!expanded) {
+                node.find('.actions > [data-parent="' + data.value + '"] > .action')
+                .first().addClass('expanded');
+            }
+        },
 
+        register: function () {
             // set max width of description block
             this.wizard.on({
                 // step:before:show, step:ready, step:show, step:next, step:before:hide, step:hide, change:step,
                 //'all': this._inspect,
-                'before:stop': _.bind(this._reset, this),
-                'step:before:show': _.bind(this._onStepBeforeShow, this)
+                'step:before:show': _.bind(this._onStepBeforeShow, this),
+                'selected': _.bind(this._onSelect, this),
+                'before:stop': _.bind(this._reset, this)
             });
-
-            this.wizard.on('selected', function (data) {
-                var node = this.wizard.getCurrentStep().$el,
-                    options = node.find('.options');
-                // update model
-                this.model.set(data.type, data.value);
-                // mark option
-                options.find('li')
-                        .removeClass('selected')
-                        .filter('[data-value="' + data.value + '"]')
-                        .addClass('selected');
-                // show childs
-                node.find('[data-parent]')
-                    .addClass('hidden')
-                    .filter('[data-parent="' + data.value + '"]')
-                    .removeClass('hidden');
-                // show first action
-                var expanded = node.find('.actions > [data-parent="' + data.value + '"] > .action').hasClass('expanded');
-                if (!expanded) {
-                    node.find('.actions > [data-parent="' + data.value + '"] > .action')
-                        .first().addClass('expanded');
-                }
-
-            }.bind(this));
         },
 
         render: function () {
@@ -334,10 +339,6 @@ define('io.ox/onboarding/clients/wizard', [
             this.register();
             // render
             wizard.start();
-        },
-
-        getCurrent: function () {
-            return this.wizard.getCurrentStep();
         }
 
     });
