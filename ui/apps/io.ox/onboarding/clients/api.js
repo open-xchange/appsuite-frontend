@@ -17,12 +17,25 @@ define('io.ox/onboarding/clients/api', [
 
     'use strict';
 
+    var order = {
+        'apple.iphone': 101,
+        'apple.ipad': 102,
+        'apple.mac': 103,
+        'android.phone': 201,
+        'android.tablet': 202,
+        'windows.desktop': 301
+    };
+
     return {
 
         config: function () {
             return http.GET({
                 module: 'onboarding',
                 params: { action: 'config' }
+            }).then(function (data) {
+                // apply preferred order of devices
+                data.devices = _.sortBy(data.devices, function (obj) { return order[obj.id] || 1000; });
+                return data;
             }).then(function (data) {
                 // TODO: remove when backend is ready
                 // fix wrong identifiers
