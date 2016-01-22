@@ -401,6 +401,10 @@ define('io.ox/mail/threadview', [
                     selectable: '.detail-view-header .contact-picture',
                     simple: true
                 });
+                // fix lost focus when just cliking .contact-picture
+                this.$el.on('mouseup', '.detail-view-header .contact-picture', function (e) {
+                    $(e.target).closest('article').focus();
+                });
             }
         },
 
