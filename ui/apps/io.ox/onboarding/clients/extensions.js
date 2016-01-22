@@ -55,7 +55,7 @@ define('io.ox/onboarding/clients/extensions', [
             this.setElement($('<div class="actions">'));
         },
 
-        $toggleMode: $('<a href="#" class="toggle-link">').text('Advanced user?'),
+        $toggleMode: $('<a href="#" class="toggle-link">').text(gt('Expert user?')),
 
         toggleMode: function (e) {
             e.preventDefault();
@@ -65,12 +65,12 @@ define('io.ox/onboarding/clients/extensions', [
             // simple
             if (value === 'advanced') {
                 step.attr('data-mode', 'simple');
-                link.text(gt('Advanced user?'));
+                link.text(gt('Expert user?'));
                 return this.update();
             }
             // advanced
             step.attr('data-mode', 'advanced');
-            link.text(gt('Hide options for advanced user.'));
+            link.text(gt('Hide options for expert users.'));
             // update
             this.update();
         },
@@ -177,7 +177,7 @@ define('io.ox/onboarding/clients/extensions', [
                     // content
                     $('<span class="content">').append(
                         $('<div class="description">')
-                            .text(gt('Setup your profile manually.')),
+                            .text(gt('If you know what you are doing...just setup your account manually!')),
                         form = $('<div class="data">')
                     )
                 );
@@ -201,7 +201,7 @@ define('io.ox/onboarding/clients/extensions', [
         }
     });
 
-    var NumberActionView = Backbone.View.extend({
+    var ShortMessageActionView = Backbone.View.extend({
 
         tagName: 'fieldset',
         className: 'action form-group',
@@ -251,12 +251,12 @@ define('io.ox/onboarding/clients/extensions', [
                         .append(
                             $('<i class="fa fa-fw fa-chevron-right">'),
                             $('<i class="fa fa-fw fa-chevron-down">'),
-                            $.txt(gt('Short Message (SMS)'))
+                            $.txt(gt('Automatic Configuration (via SMS)'))
                         ),
                     $('<span class="content">').append(
                         // description
                         $('<div class="description">')
-                            .text(gt('Send me the profile data by SMS.')),
+                            .text(gt('Please enter your mobile phone number, and we´ll send you a link to automatically configure your iOS device! It´s that simple!')),
                         // form
                         $('<div class="interaction">').append(
                             $('<form class="form-inline">').append(
@@ -326,7 +326,7 @@ define('io.ox/onboarding/clients/extensions', [
                         .append(
                             $('<i class="fa fa-fw fa-chevron-right">'),
                             $('<i class="fa fa-fw fa-chevron-down">'),
-                            $.txt(gt('Email'))
+                            $.txt(gt('Configuration Email'))
                         ),
                     $('<span class="content">').append(
                         // description
@@ -395,7 +395,7 @@ define('io.ox/onboarding/clients/extensions', [
                     $('<span class="content">').append(
                         // description
                         $('<div class="description">')
-                            .text(gt('Automatically configure your device by clicking the button below.')),
+                            .text(gt('Let´s automatically configure your device, by clicking the button below. It´s that simple!')),
                         // action
                         $('<button>')
                             .addClass('btn btn-primary')
@@ -438,7 +438,7 @@ define('io.ox/onboarding/clients/extensions', [
 
         getLabel: function () {
             return {
-                'appstore': gt('Apple App Store'),
+                'appstore': gt('App Store'),
                 'playstore': gt('Google Play')
             }[this.type];
         },
@@ -462,13 +462,12 @@ define('io.ox/onboarding/clients/extensions', [
                         .append(
                             $('<i class="fa fa-fw fa-chevron-right">'),
                             $('<i class="fa fa-fw fa-chevron-down">'),
-                           // $.txt(gt('App for your %1$s', this.device.name))
-                            $.txt(this.getLabel())
+                            $.txt(gt('Installation'))
                         ),
                     $('<span class="content">').append(
                         // description
                         $('<div class="description">')
-                            .text(gt('Just open %1$s', this.getLabel())),
+                            .text(gt('Get the App from %1$s', this.getLabel())),
                         // action
                         $('<a class="store">').append(
                             $('<img class="store-icon">').attr('src', this.getBadgeUrl())
@@ -487,7 +486,7 @@ define('io.ox/onboarding/clients/extensions', [
     return {
         ActionsView: ActionsView,
         DisplayActionView: DisplayActionView,
-        NumberActionView: NumberActionView,
+        ShortMessageActionView: ShortMessageActionView,
         EmailActionView: EmailActionView,
         DownloadActionView: DownloadActionView,
         AppActionView: AppActionView

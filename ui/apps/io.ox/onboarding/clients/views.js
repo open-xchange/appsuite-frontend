@@ -55,7 +55,7 @@ define('io.ox/onboarding/clients/views', [
     ext.point(POINT + '/sms').extend({
         index: 100,
         draw: function (action, baton) {
-            var view = new extensions.NumberActionView(action, { baton: baton });
+            var view = new extensions.ShortMessageActionView(action, { baton: baton });
             this.append(view.render().$el);
         }
     });
