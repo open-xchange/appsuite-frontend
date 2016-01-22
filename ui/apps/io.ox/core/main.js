@@ -107,9 +107,7 @@ define('io.ox/core/main', [
                             fallback = ox.serverConfig.logoutLocation || ox.logoutLocation,
                             logoutLocation = location || (fallback + (opt.autologout ? '#autologout=true' : ''));
                         // Substitute some variables
-                        // [hostname], [login]
-                        logoutLocation = logoutLocation.replace('[hostname]', window.location.hostname);
-                        _.url.redirect(logoutLocation);
+                        _.url.redirect(_.url.vars(logoutLocation));
                     });
                 },
                 function cancel() {
@@ -1789,7 +1787,7 @@ define('io.ox/core/main', [
                 break;
             case 'LGI-0016':
                 // redirect based on error message; who had the brilliant idea to name the message of the error object 'error'?
-                location.href = error.error;
+                location.href = _.url.vars(error.error);
                 break;
             // no default
         }
