@@ -189,6 +189,16 @@
             border-bottom: 0;
         }
     }
+
+    .thread-view {
+        .from {
+            .ellipsis();
+        }
+
+        .list-view .list-item:hover {
+            background-color: #fff;
+        }
+    }
 }
 
 .swipe-option-cell {
@@ -963,7 +973,7 @@ textarea.inplace-editor {
 }
 
 // smartphone
-.smartphone { // was @media (max-width: 480px), (max-device-width: 480px)
+.smartphone {
 
     .thread-view-list {
 
@@ -975,7 +985,7 @@ textarea.inplace-editor {
             .summary { font-size: @phone-font-size - 2; }
         }
 
-        .thread-view header { border-bottom: 1px solid #ccc; }
+        .thread-view header { border-bottom: 1px solid #eee; }
 
         .from, .recipients, .date {
             font-size: @phone-font-size;
@@ -1015,7 +1025,6 @@ textarea.inplace-editor {
     .thread-view.list-view {
         &.multiple-messages .mail-detail .detail-view-header {
             padding: 0;
-            border:  0;
             min-height: auto;
 
             .from { padding: (@default-padding / 2) 0 0 @default-padding; }
@@ -1026,6 +1035,7 @@ textarea.inplace-editor {
                 padding-top: 0;
                 padding-bottom: 10px;
                 margin-bottom: -1px;
+                border-bottom: 0;
             }
         }
 
@@ -1054,7 +1064,7 @@ textarea.inplace-editor {
             .recipients {
                 line-height: 23px;
                 padding-top:  (@default-padding / 2);
-                border-bottom: 1px solid #ddd;
+                border-bottom: 1px solid #eee; // shows up in detail view
             }
 
             .subject {
@@ -1070,7 +1080,7 @@ textarea.inplace-editor {
         }
 
         section {
-            .attachments, .body { border-top: 1px solid #ddd; }
+            .attachments, .body { border-top: 1px solid #eee; }
             .attachments { margin-bottom: 0; }
             .body { padding: 8px @default-padding; }
         }
