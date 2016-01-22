@@ -25,16 +25,21 @@ define('io.ox/onboarding/clients/extensions', [
 
     var POINT = 'io.ox/onboarding/clients/views';
 
-    function notify(resp) {
+    function yellError(resp) {
         if (_.isObject(resp) && 'error' in resp) return yell(resp);
-        return yell('info', resp);
     }
 
     var util = {
-        clickCommon: function (e) {
+        removeIcons: function (e) {
             var target = $(e.target);
-            target.addClass('disabled');//.hide();
-            target.after($('<i class="fa fa-check button-clicked"></i>'));
+            target.parent().find('button-clicked').remove();
+        },
+        addIcon: function (e) {
+            var target = $(e.target);
+            target.after($('<i class="fa fa-check .button-clicked"></i>'));
+        },
+        disable: function (e) {
+            $(e.target).addClass('disabled');
         }
     };
 
@@ -275,8 +280,11 @@ define('io.ox/onboarding/clients/extensions', [
                     code: this.model.get('code')
                 };
             // call
-            util.clickCommon(e);
-            api.execute(scenario, action, data).always(notify);
+            util.disable(e);
+            util.removeIcons(e);
+            api.execute(scenario, action, data)
+                .always(yellError)
+                .always(_.partial(util.addIcon, e));
         }
     });
 
@@ -301,7 +309,6 @@ define('io.ox/onboarding/clients/extensions', [
             var value = this.model.get('email') || this.config.getUserMail();
             return new mini.InputView({ name: 'email', model: this.model }).render()
                 .$el
-                .removeClass('form-control')
                 .addClass('field form-control')
                 .attr('title', this.name)
                 .attr('list', 'addresses')
@@ -348,8 +355,10 @@ define('io.ox/onboarding/clients/extensions', [
                     email: this.model.get('email')
                 };
             // call
-            util.clickCommon(e);
-            api.execute(scenario, action, data).always(notify);
+            util.removeIcons(e);
+            api.execute(scenario, action, data)
+                .always(yellError)
+                .always(_.partial(util.addIcon, e));
         }
     });
 
@@ -396,7 +405,6 @@ define('io.ox/onboarding/clients/extensions', [
         _onClick: function (e) {
             e.preventDefault();
             var url = api.getUrl(this.config.getScenarioCID(), this.id);
-            util.clickCommon(e);
             require(['io.ox/core/download'], function (download) {
                 download.url(url);
             });
