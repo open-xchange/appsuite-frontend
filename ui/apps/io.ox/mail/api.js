@@ -269,6 +269,11 @@ define('io.ox/mail/api', [
             delete data.cid;
             //don't save raw data in our models. We only want preformated content there
             if (!obj.view || (obj.view && obj.view !== 'raw')) {
+                // sanitize content Types
+                _(data.attachments).map(function (attachment) {
+                    attachment.content_type = attachment.content_type.replace(/^text\/plain.*/, 'text/plain').replace(/^text\/html.*/, 'text/html');
+                    return attachment;
+                });
                 // either update or add model
                 if (model) {
                     // if we already have a model we promote changes for threads
