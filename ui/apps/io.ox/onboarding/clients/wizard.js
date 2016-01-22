@@ -179,6 +179,7 @@ define('io.ox/onboarding/clients/wizard', [
         this.$('.wizard-content').css('max-width', space > 560 ? space : 560);
         // autoselect first
         var id = config.model.get('scenario');
+        if (list.length === 0) return;
         if (!id) { config.model.set('scenario', id = _.first(list).id); }
         wizard.trigger('selected', { type: 'scenario', value: id });
     }
