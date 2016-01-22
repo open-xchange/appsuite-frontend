@@ -12,7 +12,8 @@
  *
  */
 define('io.ox/ads/mailoverlay', [
-], function () {
+    'io.ox/core/extensions'
+], function (ext) {
     'use strict';
 
     return function (options) {
@@ -27,6 +28,8 @@ define('io.ox/ads/mailoverlay', [
                 ),
             overlay = $('<div class="io-ox-ad abs">'),
             pane = overlay.append(closer);
+
+        ext.point('io.ox/ads/mailoverlay').invoke('draw', overlay, options.baton);
 
         closer.find('.close')
             .on('click', function (e) {

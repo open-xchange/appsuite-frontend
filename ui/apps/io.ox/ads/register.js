@@ -94,6 +94,16 @@ define('io.ox/ads/register', [
 
     ox.on('app:resume', changeModule);
 
+    ox.on('mail:send:start', function () {
+        require(['io.ox/ads/mailoverlay'], function (Overlay) {
+            var app = ox.ui.apps.get('io.ox/mail'),
+                target = app.pages.getAll().detailView.$el.closest('.window-body'),
+                baton = ext.Baton.ensure(config.mailoverlay || { adtaghtml: '' });
+
+            new Overlay({ target: target, baton: baton }).show();
+        });
+    });
+
     ext.point('io.ox/portal/sections').extend({
         id: 'motor',
         before: 'widgets',
@@ -176,6 +186,16 @@ define('io.ox/ads/register', [
         cleanup: function () {
             $('#io-ox-core').removeClass('show-ad');
             $('#io-ox-ad-banner').empty();
+        }
+    });
+
+    ext.point('io.ox/ads/mailoverlay').extend({
+        id: 'motor',
+        index: 100,
+        draw: function (baton) {
+            this.append(
+                baton.data.adtaghtml
+            );
         }
     });
 
