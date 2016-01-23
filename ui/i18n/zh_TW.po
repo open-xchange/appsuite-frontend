@@ -905,30 +905,6 @@ msgstr "管理角色"
 msgid "Administrator"
 msgstr "管理員"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Advanced Facets"
-msgid "Advanced user?"
-msgstr "進階 Facet"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Afghanistan"
-msgstr "阿富汗"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Cayman Islands"
-msgid "Aland Islands"
-msgstr "開曼群島"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Albania"
-msgstr "阿爾巴尼亞"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Algeria"
-msgstr "阿爾及利亞"
-
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
@@ -994,14 +970,17 @@ msgstr "允許 HTML 格式的電子郵件"
 msgid "Allow pre-loading of externally linked images"
 msgstr "允許預載外部鏈結圖像"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "American Samoa"
-msgstr "美屬薩摩亞"
-
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 #, fuzzy
 #| msgid "An error occurred while importing the document."
 msgid "An error occurred converting the document so it cannot be displayed."
+msgstr "匯入文件時發生錯誤。"
+
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "An error occurred while importing the document."
+msgid "An error occurred loading the document so it cannot be displayed."
 msgstr "匯入文件時發生錯誤。"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -1027,38 +1006,22 @@ msgstr "發生內部錯誤"
 msgid "An unknown error occurred"
 msgstr "發生未知錯誤"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Andorra"
-msgstr "安道爾"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Angola"
-msgstr "安哥拉"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Anguilla"
-msgstr "安圭拉"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Anniversary"
 msgstr "周年紀念日"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Antigua and Barbuda"
-msgstr "安地卡及巴布達"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Any recipient"
 msgstr "任何收件人"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "App Store"
+msgstr ""
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Append vCard"
 msgstr "附加 vCard"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Apple App Store"
-msgstr ""
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
@@ -1172,18 +1135,6 @@ msgstr "正在封存訊息…"
 msgid "Are you sure you want to delete this Tweet?"
 msgstr "確定要刪除此 Tweet 嗎？"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Argentina"
-msgstr "阿根廷"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Armenia"
-msgstr "亞美尼亞"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Aruba"
-msgstr "阿魯巴"
-
 #. Auth type. Short for "Use same credentials as incoming mail server"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "As incoming mail server"
@@ -1236,14 +1187,6 @@ msgstr "已儲存附件！"
 msgid "August"
 msgstr "八月"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Australia"
-msgstr "澳大利亞"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Austria"
-msgstr "奧地利"
-
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Authentication"
 msgstr "驗證"
@@ -1269,6 +1212,12 @@ msgstr "自動保存電子郵件草稿"
 msgid "Automatic Configuration"
 msgstr "自動登出"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic sign out"
+msgid "Automatic Configuration (via SMS)"
+msgstr "自動登出"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "自動開啟通知區域"
@@ -1289,10 +1238,6 @@ msgid ""
 "sending"
 msgstr "寄件時自動將收集到的聯絡人加入到「收集到的地址」資料夾？"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Automatically configure your device by clicking the button below."
-msgstr ""
-
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
 #| msgid ""
@@ -1306,10 +1251,6 @@ msgstr "在接受或拒絕邀請後自動刪除收到的通知？"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Average time: %1$s ms"
 msgstr "平均時間: %1$s ms"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Azerbaijan"
-msgstr "亞塞拜然"
 
 #. Bytes
 #: apps/io.ox/core/strings.js module:io.ox/core
@@ -1337,22 +1278,6 @@ msgstr "回到約會"
 msgid "Back to sign in"
 msgstr "回到登入"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bahamas"
-msgstr "巴哈馬"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bahrain"
-msgstr "巴林"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bangladesh"
-msgstr "孟加拉"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Barbados"
-msgstr "巴貝多"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/main.js
 msgid "Basic settings"
@@ -1363,30 +1288,6 @@ msgid ""
 "Before you can continue using the product, you have to enter some basic "
 "information. It will take less than a minute."
 msgstr "在您繼續使用本產品前，請輸入一些基礎資訊，這不會花您超過一分鐘。"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Belarus"
-msgstr "白俄羅斯"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Belgium"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Belize"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Benin"
-msgstr "貝寧"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bermuda"
-msgstr "百慕達"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bhutan"
-msgstr "不丹"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -1420,22 +1321,6 @@ msgstr "密件副本"
 msgid "Blue"
 msgstr "藍色"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bolivia"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bonaire, Saint Eustatius and Saba "
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bosnia and Herzegovina"
-msgstr "波士尼亞和黑塞哥維那"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Botswana"
-msgstr "波茲瓦那"
-
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "Box"
 msgstr ""
@@ -1444,18 +1329,6 @@ msgstr ""
 msgid "Branches"
 msgstr "分支"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Brazil"
-msgstr "巴西"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "British Indian Ocean Territory"
-msgstr "英屬印度洋領地"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "British Virgin Islands"
-msgstr ""
-
 #: apps/io.ox/presenter/actions.js module:io.ox/presenter
 msgid "Broadcast your presentation over the Web."
 msgstr "透過網路廣播您的簡報"
@@ -1463,22 +1336,6 @@ msgstr "透過網路廣播您的簡報"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Browser"
 msgstr "瀏覽器"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Brunei"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bulgaria"
-msgstr "保加利亞"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Burkina Faso"
-msgstr "布吉納法索"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Burundi"
-msgstr "蒲隆地"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Business Address"
@@ -1547,18 +1404,6 @@ msgstr "日曆視圖"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "行事曆:"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cambodia"
-msgstr "柬埔寨"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cameroon"
-msgstr "喀麥隆"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Canada"
-msgstr "加拿大"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -1662,17 +1507,9 @@ msgstr ""
 msgid "Capacity"
 msgstr "容量"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cape Verde"
-msgstr "維德角"
-
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "購物車是空的。"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cayman Islands"
-msgstr "開曼群島"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
@@ -1683,14 +1520,6 @@ msgstr "行動電話"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Cell phone (alt)"
 msgstr "替代行動電話"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Central African Republic"
-msgstr "中非共和國"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Chad"
-msgstr "查德"
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid "Change"
@@ -1767,18 +1596,6 @@ msgstr "正在檢查帳號密碼..."
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Children"
 msgstr "子女"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Chile"
-msgstr "智利"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "China"
-msgstr "中國"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Christmas Island"
-msgstr "聖誕島"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "City"
@@ -1898,20 +1715,10 @@ msgstr ""
 msgid "Close this reminder"
 msgstr "關閉此提醒"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Cook Islands"
-msgid "Cocos Islands"
-msgstr "庫克群島"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Collapse form"
 msgstr "摺疊表單"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Colombia"
-msgstr "哥倫比亞"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -1961,12 +1768,6 @@ msgstr "共同設置"
 msgid "Common Emoji"
 msgstr "共通表情符號"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Tomorrow"
-msgid "Comoros"
-msgstr "明天"
-
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
@@ -2001,6 +1802,12 @@ msgstr "撰寫新郵件"
 #: module:io.ox/settings
 msgid "Conditions"
 msgstr "條件"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Confirmation message"
+msgid "Configuration Email"
+msgstr "確認訊息"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
@@ -2117,10 +1924,6 @@ msgstr "談話"
 msgid "Convert the entered start and end dates to match the modified timezones"
 msgstr "轉換輸入的開始與結束日期，以符合修改的時區"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cook Islands"
-msgstr "庫克群島"
-
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/files/actions.js
@@ -2138,10 +1941,6 @@ msgstr "副本"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Copy to description"
 msgstr "複製至描述"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Costa Rica"
-msgstr "哥斯大黎加"
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "Costs must be between -%1$d and %1$d."
@@ -2296,18 +2095,6 @@ msgctxt "help"
 msgid "Creating Files"
 msgstr "建立檔案"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Croatia"
-msgstr "克羅埃西亞"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cuba"
-msgstr "古巴"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Curacao"
-msgstr ""
-
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Currency"
 msgstr "幣值"
@@ -2336,14 +2123,6 @@ msgstr "自訂名稱"
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Customize this page"
 msgstr "自訂此頁面"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cyprus"
-msgstr "賽普勒斯"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Czech Republic"
-msgstr "捷克共和國"
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Dark colors"
@@ -2557,14 +2336,6 @@ msgstr "已刪除訊息"
 msgid "Deleting messages on local storage also deletes them on server"
 msgstr "郵件從本地存儲刪除時也將從伺服器上刪除"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Democratic Republic of the Congo"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Denmark"
-msgstr ""
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
 msgid "Department"
@@ -2707,10 +2478,6 @@ msgstr "通訊組列表"
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "此通訊組清單已儲存"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Djibouti"
-msgstr "吉布地"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
@@ -2861,14 +2628,6 @@ msgstr "文件"
 msgctxt "app"
 msgid "Documents"
 msgstr "文件"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Dominica"
-msgstr "多米尼克"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Dominican Republic"
-msgstr "多明尼加共和國"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -3023,16 +2782,6 @@ msgstr "結束於 %s"
 msgid "EB"
 msgstr "EB"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Last month"
-msgid "East Timor"
-msgstr "上個月"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Ecuador"
-msgstr "厄瓜多"
-
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
@@ -3145,16 +2894,7 @@ msgstr "編輯以設定名稱。"
 msgid "Editor"
 msgstr "編輯器"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Egypt"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "El Salvador"
-msgstr "薩爾瓦多"
-
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Email"
 msgstr "電子郵件"
 
@@ -3305,14 +3045,6 @@ msgstr "創業者"
 msgid "Envelope - To"
 msgstr "信封 - 給"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Equatorial Guinea"
-msgstr "赤道幾內亞"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Eritrea"
-msgstr "厄立垂亞"
-
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/core/yell.js
@@ -3352,14 +3084,6 @@ msgstr "預估成本"
 #: apps/io.ox/tasks/view-detail.js
 msgid "Estimated duration in minutes"
 msgstr "預估持續分鐘數"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Estonia"
-msgstr "愛沙尼亞"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Ethiopia"
-msgstr "衣索比亞"
 
 #. recurrence string
 #. %1$d: numeric
@@ -3455,6 +3179,12 @@ msgstr "展開表單"
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Expand timeframe by one month"
 msgstr "展開時間範圍一個月"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Expert mode"
+msgid "Expert user?"
+msgstr "專家模式"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 #, fuzzy
@@ -3557,18 +3287,6 @@ msgid ""
 "deleted."
 msgstr "無法更新確認狀態；最可能的情況是該任務可能已被刪除。"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Cayman Islands"
-msgid "Falkland Islands"
-msgstr "開曼群島"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Cook Islands"
-msgid "Faroe Islands"
-msgstr "庫克群島"
-
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Favorite"
 msgstr "最愛"
@@ -3624,10 +3342,6 @@ msgstr "回饋"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Feeling • Decoration"
 msgstr "感覺‧裝飾"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Fiji"
-msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
@@ -3716,10 +3430,6 @@ msgstr "尋找空閒時間"
 msgctxt "tour"
 msgid "Finish"
 msgstr "完成"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Finland"
-msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -3866,12 +3576,6 @@ msgstr "轉寄所有郵件至此地址"
 msgid "Forward emails as"
 msgstr "轉發電子郵件為"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Freelancer"
-msgid "France"
-msgstr "自由工作者"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Free"
@@ -3880,16 +3584,6 @@ msgstr "空閒的"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Freelancer"
 msgstr "自由工作者"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "French"
-msgid "French Guiana"
-msgstr "法文"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "French Polynesia"
-msgstr ""
 
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/main.js
@@ -3917,24 +3611,6 @@ msgstr "姓氏注音"
 msgid "GB"
 msgstr "GB"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Gabon"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Gambia"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Georgia"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "German"
-msgid "Germany"
-msgstr "德文"
-
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Get %s"
 msgstr "下載 %s"
@@ -3959,15 +3635,11 @@ msgid "Get started here"
 msgstr "開始入門"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Get the App from %1$s"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Get your device configured by email."
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Ghana"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Gibraltar"
 msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
@@ -4001,30 +3673,12 @@ msgstr "新增 Google Drive 帳號"
 msgid "Gray"
 msgstr "灰色"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Green"
-msgid "Greece"
-msgstr "綠色"
-
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Green"
 msgstr "綠色"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Green"
-msgid "Greenland"
-msgstr "綠色"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Canada"
-msgid "Grenada"
-msgstr "加拿大"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/participants/model.js
@@ -4040,22 +3694,6 @@ msgstr "群組名稱"
 msgid "Groups"
 msgstr "群組"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guadeloupe"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guam"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guatemala"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guernsey"
-msgstr ""
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
 msgid "Guest"
@@ -4064,18 +3702,6 @@ msgstr "Guest"
 #: apps/io.ox/tours/get-started.js module:io.ox/core
 msgid "Guided tour for this app"
 msgstr "此應用程式的導覽"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guinea"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guinea-Bissau"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guyana"
-msgstr ""
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 #: apps/io.ox/mail/settings/pane.js
@@ -4086,20 +3712,10 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML 和純文本"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Waiting"
-msgid "Haiti"
-msgstr "等待中"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Header"
 msgstr "標題"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Heard Island and McDonald Islands"
-msgstr ""
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Hello %s"
@@ -4172,7 +3788,7 @@ msgstr "隱藏名稱"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Show advanced filters"
-msgid "Hide options for advanced user."
+msgid "Hide options for expert users."
 msgstr "顯示進階過濾器"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
@@ -4218,14 +3834,6 @@ msgstr "住家位址"
 msgid "Home address"
 msgstr "住家位址"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Honduras"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Hong Kong"
-msgstr ""
-
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Horizontal"
 msgstr "水平"
@@ -4241,12 +3849,6 @@ msgstr "時"
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "How does this work?"
 msgstr "這個功能如何使用？"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Hungarian"
-msgid "Hungary"
-msgstr "匈牙利文"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP login"
@@ -4272,10 +3874,6 @@ msgstr "收件伺服器"
 msgid "IP phone"
 msgstr "IP 電話"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Iceland"
-msgstr ""
-
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Icons"
 msgstr "圖示"
@@ -4285,6 +3883,10 @@ msgid ""
 "If you change the password, you will be signed out. Please ensure that "
 "everything is closed and saved."
 msgstr "若您變更密碼將會被登出，請確保所有東西已關閉並儲存。"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "If you know what you are doing...just setup your account manually!"
+msgstr ""
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid ""
@@ -4391,16 +3993,6 @@ msgstr "自動登出"
 msgid "Inconsistent dates"
 msgstr "不連貫的日期"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "India"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Undone"
-msgid "Indonesia"
-msgstr "已還原"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts apps/io.ox/core/yell.js
 #: module:io.ox/core
 msgid "Info"
@@ -4446,6 +4038,12 @@ msgid ""
 "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home "
 "Screen'%4$s"
 msgstr "在您的 %1$s 安裝此網頁應用程式: 點選 %2$s -> %3$s「新增至主畫面」%4$s"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Administration"
+msgid "Installation"
+msgstr "管理"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Instant Messenger 1"
@@ -4506,18 +4104,6 @@ msgstr "約會邀請"
 msgid "Invite to new appointment"
 msgstr "邀請至新約會"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Iran"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Iraq"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Ireland"
-msgstr ""
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Is bigger than"
@@ -4532,20 +4118,6 @@ msgstr "等於"
 #: module:io.ox/settings
 msgid "Is smaller than"
 msgstr "小於"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Isle of Man"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Israel"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Italic"
-msgid "Italy"
-msgstr "斜體"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Item List"
@@ -4567,30 +4139,14 @@ msgstr "項目清單選項"
 msgid "Items without a file can not be downloaded."
 msgstr "無法下載沒有檔案的項目。"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Ivory Coast"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Jamaica"
-msgstr ""
-
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "January"
 msgstr "一月"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Japan"
-msgstr ""
 
 #. Emoji collection. Emoji icons that work across Japanese (telecom) carriers.
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Japanese Carrier"
 msgstr "日本業者"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Jersey"
-msgstr ""
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Job"
@@ -4625,10 +4181,6 @@ msgstr "加入簡報"
 msgid "Joining the presentation of %1$s."
 msgstr "加入簡報"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Jordan"
-msgstr ""
-
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "July"
 msgstr "七月"
@@ -4650,20 +4202,10 @@ msgstr "六月"
 msgid "Just disable widget"
 msgstr "僅停用小工具"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Due on %1$s"
-msgid "Just open %1$s"
-msgstr "結束於 %s"
-
 #. Kilobytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "KB"
 msgstr "KB"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Kazakhstan"
-msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -4673,22 +4215,6 @@ msgstr "保留"
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 msgid "Keep a copy of the message"
 msgstr "保留訊息副本"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Kenya"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Kiribati"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Kuwait"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Kyrgyzstan"
-msgstr ""
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -4702,10 +4228,6 @@ msgstr "不同語言的細部設定"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
 msgstr "語言"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Laos"
-msgstr ""
 
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Last 30 days"
@@ -4749,10 +4271,6 @@ msgstr "去年"
 msgid "Later"
 msgstr "稍後"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Latvia"
-msgstr ""
-
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
 msgstr "啟動器下拉選單，請按 Enter 以跳轉至下拉選單。"
@@ -4786,14 +4304,6 @@ msgstr "離開簡報"
 msgid "Leave the presentation"
 msgstr "離開簡報"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Lebanon"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Lesotho"
-msgstr ""
-
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 文字・記号
@@ -4803,16 +4313,10 @@ msgstr ""
 msgid "Letters • Symbols"
 msgstr "書信‧符號"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Liberia"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Libya"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Liechtenstein"
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid ""
+"Let´s automatically configure your device, by clicking the button below. It"
+"´s that simple!"
 msgstr ""
 
 #. Emoji category
@@ -4876,10 +4380,6 @@ msgstr "列表"
 msgid "Listview"
 msgstr "清單視圖"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Lithuania"
-msgstr ""
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 msgid "Location"
@@ -4913,10 +4413,6 @@ msgstr "低"
 msgid "Low priority"
 msgstr "低優先順序"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Luxembourg"
-msgstr ""
-
 #. Megabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "MB"
@@ -4925,18 +4421,6 @@ msgstr "MB"
 #: apps/io.ox/core/date.js module:io.ox/core
 msgid "MM"
 msgstr "月"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Macao"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Macedonia"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Madagascar"
-msgstr ""
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Mail"
@@ -5062,26 +4546,6 @@ msgstr "主視窗"
 msgid "Make this the current version"
 msgstr "將此版本作為目前版本"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Malawi"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Malaysia"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Maldives"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mali"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Malta"
-msgstr ""
-
 #: apps/io.ox/launchpad/main.js module:io.ox/core
 msgid "Manage applications"
 msgstr "管理應用程式"
@@ -5183,36 +4647,14 @@ msgstr "標記為已讀"
 msgid "Mark unread"
 msgstr "標記為未讀"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Cayman Islands"
-msgid "Marshall Islands"
-msgstr "開曼群島"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Martinique"
-msgstr ""
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Matches"
 msgstr "符合"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mauritania"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mauritius"
-msgstr ""
-
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "May"
 msgstr "五月"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mayotte"
-msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -5239,14 +4681,6 @@ msgstr "消息"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Messenger"
 msgstr "Messenger"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mexico"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Micronesia"
-msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Middle name"
@@ -5284,24 +4718,6 @@ msgstr "模型不完整。"
 msgid "Modified"
 msgstr "已修改"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Moldova"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Monaco"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Angola"
-msgid "Mongolia"
-msgstr "安哥拉"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Montenegro"
-msgstr ""
-
 #: apps/io.ox/backbone/mini-views/date.js module:io.ox/core
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Month"
@@ -5324,12 +4740,6 @@ msgstr "每月的  %1$s %2$s"
 msgid "Months"
 msgstr "月"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Months"
-msgid "Montserrat"
-msgstr "月"
-
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/find/extensions-api.js apps/io.ox/search/facets/extensions.js
 msgid "More"
@@ -5338,10 +4748,6 @@ msgstr "更多"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
 msgstr "找到超過目前顯示的 %1$s 個項目"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Morocco"
-msgstr ""
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
@@ -5382,10 +4788,6 @@ msgstr "移動文件夾"
 #: module:io.ox/settings
 msgid "Move to folder"
 msgstr "移至文件夾"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mozambique"
-msgstr ""
 
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Multiselect"
@@ -5430,10 +4832,6 @@ msgstr "我的分享項目"
 msgid "My tasks"
 msgstr "我的任務"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Myanmar"
-msgstr ""
-
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
@@ -5445,32 +4843,14 @@ msgstr ""
 msgid "Name"
 msgstr "姓名"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Namibia"
-msgstr ""
-
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Nature"
 msgstr "大自然"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Nauru"
-msgstr ""
-
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Need more space?"
 msgstr "需要更多空間嗎？"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Nepal"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Dutch (Netherlands)"
-msgid "Netherlands"
-msgstr "荷蘭文"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -5486,12 +4866,6 @@ msgstr "永不"
 msgid "New"
 msgstr "新增"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "New calendar"
-msgid "New Caledonia"
-msgstr "新增行事曆"
-
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "New Folder"
@@ -5500,12 +4874,6 @@ msgstr "新資料夾"
 #: apps/io.ox/mail/api.js module:io.ox/mail
 msgid "New Mail"
 msgstr "新增郵件"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "New calendar"
-msgid "New Zealand"
-msgstr "新增行事曆"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -5628,27 +4996,9 @@ msgstr "下一頁"
 msgid "Next slide"
 msgstr "下一張"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Nicaragua"
-msgstr ""
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Nickname"
 msgstr "別名"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Niger"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Algeria"
-msgid "Nigeria"
-msgstr "阿爾及利亞"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Niue"
-msgstr ""
 
 #. folder permissions - Is Admin? NO
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
@@ -5771,30 +5121,10 @@ msgstr "無標題。"
 msgid "None"
 msgstr "無"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Cook Islands"
-msgid "Norfolk Island"
-msgstr "庫克群島"
-
 #. E-Mail priority
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Normal"
 msgstr "常規"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "North Korea"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Northern Mariana Islands"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Forward"
-msgid "Norway"
-msgstr "轉發"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgid "Not spam"
@@ -5903,10 +5233,6 @@ msgstr "離線模式"
 #: apps/io.ox/core/tk/mobiscroll.js
 msgid "Ok"
 msgstr "確定"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Oman"
-msgstr ""
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "On behalf of the owner"
@@ -6135,36 +5461,6 @@ msgstr "第 %1$d 頁，共 %2$d 頁"
 msgid "Pager"
 msgstr "尋呼機"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Afghanistan"
-msgid "Pakistan"
-msgstr "阿富汗"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Palau"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "British Indian Ocean Territory"
-msgid "Palestinian Territory"
-msgstr "英屬印度洋領地"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Panama"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Papua New Guinea"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Paragraph style"
-msgid "Paraguay"
-msgstr "段落樣式"
-
 #. text of an user list that shows the names of presenting user and participants.
 #. the dropdown button label for the participants dropdown.
 #. the participants section label.
@@ -6279,14 +5575,6 @@ msgid ""
 "people."
 msgstr "個人訊息（非必填），此訊息將傳送給所有新邀請的人員。"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Peru"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Philippines"
-msgstr ""
-
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Phone"
 msgstr "電話"
@@ -6345,10 +5633,6 @@ msgstr "請在此選擇一個時間"
 #: module:io.ox/portal
 msgid "Pink"
 msgstr "粉紅色"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Pitcairn"
-msgstr ""
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -6473,6 +5757,12 @@ msgstr "請輸入從 0 到 100 間的值。"
 msgid "Please enter your credentials."
 msgstr "請輸入您的帳號密碼。"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid ""
+"Please enter your mobile phone number, and we´ll send you a link to "
+"automatically configure your iOS device! It´s that simple!"
+msgstr ""
+
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please enter your password."
 msgstr "請輸入您的密碼。"
@@ -6537,10 +5827,6 @@ msgstr "請更新您的瀏覽器。"
 msgid "Plus"
 msgstr "Plus"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Poland"
-msgstr ""
-
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Pop out"
 msgstr "彈出"
@@ -6562,12 +5848,6 @@ msgstr "入口"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Portal settings"
 msgstr "入口設定"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Portal"
-msgid "Portugal"
-msgstr "入口"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Position"
@@ -6828,10 +6108,6 @@ msgstr "發佈"
 msgid "Publications and Subscriptions"
 msgstr "發佈與訂閱"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Puerto Rico"
-msgstr ""
-
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Purchase confirmation"
 msgstr "確認購買"
@@ -6842,10 +6118,6 @@ msgstr "確認購買"
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "紫色"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Qatar"
-msgstr ""
 
 #. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
 #: apps/io.ox/mail/actions.js module:io.ox/mail
@@ -7159,10 +6431,6 @@ msgstr "回覆給所有收件人"
 msgid "Reply to sender"
 msgstr "回復給寄件者"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Republic of the Congo"
-msgstr ""
-
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
 msgstr "要求送達回執"
@@ -7231,10 +6499,6 @@ msgstr "轉推"
 msgid "Retweeted by %s"
 msgstr "由 %s 轉推"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Reunion"
-msgstr ""
-
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Review your purchases"
 msgstr "確認您的購買"
@@ -7257,12 +6521,6 @@ msgstr "撤回存取權"
 msgid "Revoked access."
 msgstr "已撤銷授權。"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Romanian"
-msgid "Romania"
-msgstr "羅馬尼亞文"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Room number"
 msgstr "房間號"
@@ -7275,16 +6533,6 @@ msgstr "規則名稱"
 #: apps/io.ox/launchpad/main.js module:io.ox/core
 msgid "Running applications"
 msgstr "執行中的應用程式"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Russian"
-msgid "Russia"
-msgstr "俄文"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Rwanda"
-msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP login"
@@ -7304,53 +6552,9 @@ msgstr ""
 msgid "SMTP server"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Saint Barthelemy"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Saint Helena"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Saint Kitts and Nevis"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Saint Lucia"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Saint Martin"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Saint Pierre and Miquelon"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Saint Vincent and the Grenadines"
-msgstr ""
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "銷售量"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Samoa"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "San Marino"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Sao Tome and Principe"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Saudi Arabia"
-msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
@@ -7556,10 +6760,6 @@ msgstr "寄送郵件"
 msgid "Send mail to all participants"
 msgstr "傳送郵件給所有參與者"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Send me the profile data by SMS."
-msgstr ""
-
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
 msgstr "寄送新郵件"
@@ -7572,10 +6772,6 @@ msgstr "只在此時間傳送假期通知"
 #: module:io.ox/settings
 msgid "Sender/From"
 msgstr "寄件者/自"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Senegal"
-msgstr ""
 
 #. %s is the product name
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
@@ -7595,10 +6791,6 @@ msgstr "寄件備份"
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "September"
 msgstr "九月"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Serbia"
-msgstr ""
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
@@ -7648,14 +6840,6 @@ msgstr "選項"
 #| msgid "Show advanced filters"
 msgid "Settings for advanced users"
 msgstr "顯示進階過濾器"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Setup your profile manually."
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Seychelles"
-msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
@@ -7764,10 +6948,6 @@ msgstr "共享"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Shopping cart"
 msgstr "購物車"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Short Message (SMS)"
-msgstr ""
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
@@ -7880,10 +7060,6 @@ msgstr "顯示磚塊"
 msgid "Shown as"
 msgstr "顯示為"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Sierra Leone"
-msgstr ""
-
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
@@ -7916,16 +7092,6 @@ msgstr "已登入為 %1$s"
 msgid "Signed in as:"
 msgstr "已登入為:"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Single"
-msgid "Singapore"
-msgstr "單行"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Sint Maarten"
-msgstr ""
-
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
 #: module:io.ox/files apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -7936,14 +7102,6 @@ msgstr "大小"
 #: module:io.ox/settings
 msgid "Size (bytes)"
 msgstr "大小 (位元組)"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Slovakia"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Slovenia"
-msgstr ""
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
@@ -7957,16 +7115,6 @@ msgstr "智慧型手機設定:"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "SoftBank"
 msgstr "SoftBank"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Cook Islands"
-msgid "Solomon Islands"
-msgstr "庫克群島"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Somalia"
-msgstr ""
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "Some fields contain invalid data"
@@ -8034,22 +7182,6 @@ msgstr "排序選項"
 msgid "Source"
 msgstr "來源"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "South Africa"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "South Korea"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "South Sudan"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Spain"
-msgstr ""
-
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -8067,10 +7199,6 @@ msgstr "試算表"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Spreadsheets"
 msgstr "試算表"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Sri Lanka"
-msgstr ""
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Standard folders"
@@ -8208,10 +7336,6 @@ msgstr "成功"
 msgid "Successfully reauthorized your %s account"
 msgstr "已成功重新授權您的 %s 帳號"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Sudan"
-msgstr ""
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Suffix"
 msgstr "尾碼"
@@ -8220,31 +7344,9 @@ msgstr "尾碼"
 msgid "Summary"
 msgstr "摘要"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Your name"
-msgid "Suriname"
-msgstr "您的姓名"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Svalbard and Jan Mayen"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Swaziland"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Sweden"
-msgstr ""
-
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Switch to parent folder"
 msgstr "已切換至父資料夾"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Switzerland"
-msgstr ""
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -8275,10 +7377,6 @@ msgstr "與您的平板電腦或智慧型手機同步"
 msgid "Synchronize with your tablet or smartphone"
 msgstr "與您的平板電腦或智慧型手機同步"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Syria"
-msgstr ""
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "TAX ID"
 msgstr "TAX ID"
@@ -8297,20 +7395,8 @@ msgstr "TTY/TDD"
 msgid "Tag mail with"
 msgstr "為郵件加入標籤"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Taiwan"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Tajikistan"
-msgstr ""
-
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Tanzania"
 msgstr ""
 
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
@@ -8411,10 +7497,6 @@ msgstr "暫時接受"
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Text"
 msgstr "文本"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Thailand"
-msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"
@@ -8883,6 +7965,7 @@ msgid "This distribution list has been added to the portal"
 msgstr "此通訊組清單已被加入到入口畫面"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 msgid "This document is password protected and cannot be displayed."
 msgstr "此文件已受密碼保護，無法顯示。"
 
@@ -9104,23 +8187,11 @@ msgstr "切換全螢幕"
 msgid "Toggle panel"
 msgstr "切換面板"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Togo"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Tokelau"
-msgstr ""
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "明天"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Tonga"
-msgstr ""
 
 #. Emoji category
 #. Japanese: ツール
@@ -9161,10 +8232,6 @@ msgstr "總計: %1$s 請求"
 msgid "Town"
 msgstr "城市"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Trinidad and Tobago"
-msgstr ""
-
 #: apps/io.ox/core/commons.js module:io.ox/core
 #, fuzzy
 #| msgid "Buy now!"
@@ -9178,28 +8245,6 @@ msgstr "正在嘗試自動設定您的郵件帳號"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Tumblr"
 msgstr "Tumblr"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Tunisia"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Turkey"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Armenia"
-msgid "Turkmenistan"
-msgstr "亞美尼亞"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Turks and Caicos Islands"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Tuvalu"
-msgstr ""
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Twitter"
@@ -9215,10 +8260,6 @@ msgstr "Twitter 回報下列問題:"
 msgid "Type"
 msgstr "類型"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "U.S. Virgin Islands"
-msgstr ""
-
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 msgid "UI version"
@@ -9228,14 +8269,6 @@ msgstr "UI 版本"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "URL"
 msgstr "URL"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Uganda"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Ukraine"
-msgstr ""
 
 #: apps/plugins/portal/xing/actions.js module:plugins/portal
 msgid "Un-like"
@@ -9279,22 +8312,6 @@ msgstr "取消關注"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Unified"
 msgstr "統一"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "United Arab Emirates"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "United Kingdom"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "United States"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "United States Minor Outlying Islands"
-msgstr ""
 
 #: apps/io.ox/participants/model.js module:io.ox/core
 msgid "Unknown"
@@ -9409,10 +8426,6 @@ msgstr "上線時間: %1$s 分鐘"
 msgid "Urgency"
 msgstr "緊急程度"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Uruguay"
-msgstr ""
-
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Use SSL connection"
 msgstr "使用 SSL 連接"
@@ -9494,30 +8507,10 @@ msgstr "用戶名"
 msgid "Username must not be empty."
 msgstr "使用者名稱不能為空。"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Uzbekistan"
-msgstr ""
-
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/vacationnotice/settings/register.js
 msgid "Vacation Notice"
 msgstr "假期通知"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Manual"
-msgid "Vanuatu"
-msgstr "手動"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Vertical"
-msgid "Vatican"
-msgstr "垂直"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Venezuela"
-msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer
@@ -9536,10 +8529,6 @@ msgstr "垂直"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Videos"
 msgstr "影片"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Vietnam"
-msgstr ""
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -9594,10 +8583,6 @@ msgstr "檢視器工具列"
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
 msgid "Waiting"
 msgstr "等待中"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Wallis and Futuna"
-msgstr ""
 
 #: apps/io.ox/core/yell.js module:io.ox/core
 msgid "Warning"
@@ -9676,14 +8661,16 @@ msgstr "歡迎使用任務程式"
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "歡迎，請提供您關於此產品的意見回饋"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Western Sahara"
-msgstr ""
-
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you want to save your configuration?"
 msgid "What do you want to use?"
+msgstr "您是否想保存您的配置？"
+
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your configuration?"
+msgid "What type of device do you want to configure?"
 msgstr "您是否想保存您的配置？"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -9761,10 +8748,6 @@ msgstr "年"
 #: module:io.ox/settings
 msgid "Yellow"
 msgstr "黃色"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Yemen"
-msgstr ""
 
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
@@ -10177,14 +9160,6 @@ msgstr "您的時區"
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "ZB"
 msgstr "ZB"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Zambia"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Zimbabwe"
-msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Zoom"
@@ -11058,9 +10033,6 @@ msgstr "年"
 #~ msgid "Admin"
 #~ msgstr "管理"
 
-#~ msgid "Administration"
-#~ msgstr "管理"
-
 #~ msgid "Advanced facets block was closed."
 #~ msgstr "進階 facet 區塊已被關閉。"
 
@@ -11071,10 +10043,29 @@ msgstr "年"
 #~ msgid "Advanced options"
 #~ msgstr "進階設定"
 
+#, fuzzy
+#~| msgid "Advanced Facets"
+#~ msgid "Advanced user?"
+#~ msgstr "進階 Facet"
+
+#~ msgid "Afghanistan"
+#~ msgstr "阿富汗"
+
 #~ msgid ""
 #~ "After pressing OK, a new window will open where you can authorize %s to "
 #~ "access your account data."
 #~ msgstr "按確定後，將打開一個新窗口讓您可以授權%s訪問您的帳戶資料。"
+
+#, fuzzy
+#~| msgid "Cayman Islands"
+#~ msgid "Aland Islands"
+#~ msgstr "開曼群島"
+
+#~ msgid "Albania"
+#~ msgstr "阿爾巴尼亞"
+
+#~ msgid "Algeria"
+#~ msgstr "阿爾及利亞"
 
 #~ msgid "All Categories..."
 #~ msgstr "所有類別..."
@@ -11091,6 +10082,9 @@ msgstr "年"
 #~ msgid "Alternative Email"
 #~ msgstr "替代電子郵件"
 
+#~ msgid "American Samoa"
+#~ msgstr "美屬薩摩亞"
+
 #~ msgid "An error occurred"
 #~ msgstr "發生錯誤"
 
@@ -11106,6 +10100,15 @@ msgstr "年"
 #~ msgid "An error occurred. The message was:"
 #~ msgstr "發生錯誤。訊息是:"
 
+#~ msgid "Andorra"
+#~ msgstr "安道爾"
+
+#~ msgid "Angola"
+#~ msgstr "安哥拉"
+
+#~ msgid "Anguilla"
+#~ msgstr "安圭拉"
+
 #~ msgid "Anniversary:"
 #~ msgstr "周年紀念日："
 
@@ -11117,6 +10120,9 @@ msgstr "年"
 
 #~ msgid "Antarctica"
 #~ msgstr "南極洲"
+
+#~ msgid "Antigua and Barbuda"
+#~ msgstr "安地卡及巴布達"
 
 #, fuzzy
 #~| msgid "Apply role"
@@ -11218,6 +10224,15 @@ msgstr "年"
 #~ msgid "Are you sure?"
 #~ msgstr "您確定嗎？"
 
+#~ msgid "Argentina"
+#~ msgstr "阿根廷"
+
+#~ msgid "Armenia"
+#~ msgstr "亞美尼亞"
+
+#~ msgid "Aruba"
+#~ msgstr "阿魯巴"
+
 #~ msgid "Ask for return receipt"
 #~ msgstr "請求送達回執"
 
@@ -11263,6 +10278,12 @@ msgstr "年"
 #~ msgid "Aug"
 #~ msgstr "八月"
 
+#~ msgid "Australia"
+#~ msgstr "澳大利亞"
+
+#~ msgid "Austria"
+#~ msgstr "奧地利"
+
 #~ msgid "Auto"
 #~ msgstr "自動"
 
@@ -11303,6 +10324,9 @@ msgstr "年"
 #~ msgid "Available UWA modules:"
 #~ msgstr "可用的 UWA 模組："
 
+#~ msgid "Azerbaijan"
+#~ msgstr "亞塞拜然"
+
 #, fuzzy
 #~| msgid "Back to sign in"
 #~ msgid "Back to devices"
@@ -11323,6 +10347,18 @@ msgstr "年"
 
 #~ msgid "Background 2"
 #~ msgstr "背景 2"
+
+#~ msgid "Bahamas"
+#~ msgstr "巴哈馬"
+
+#~ msgid "Bahrain"
+#~ msgstr "巴林"
+
+#~ msgid "Bangladesh"
+#~ msgstr "孟加拉"
+
+#~ msgid "Barbados"
+#~ msgstr "巴貝多"
 
 #~ msgid "Bars"
 #~ msgstr "指示條"
@@ -11345,11 +10381,23 @@ msgstr "年"
 #~ msgid "Begins at"
 #~ msgstr "開始時間："
 
+#~ msgid "Belarus"
+#~ msgstr "白俄羅斯"
+
 #~ msgid ""
 #~ "Below the recipient you will find further functions, e.g. for sending "
 #~ "copies to other recipients or for adding attachments."
 #~ msgstr ""
 #~ "您可以在收件者下方找到更多功能，例如傳送副本給其他收件者或新增附件。"
+
+#~ msgid "Benin"
+#~ msgstr "貝寧"
+
+#~ msgid "Bermuda"
+#~ msgstr "百慕達"
+
+#~ msgid "Bhutan"
+#~ msgstr "不丹"
 
 #~ msgid "Birthday Appointment"
 #~ msgstr "生日約會"
@@ -11390,6 +10438,12 @@ msgstr "年"
 #~ msgid "Border top and bottom"
 #~ msgstr "上下邊框"
 
+#~ msgid "Bosnia and Herzegovina"
+#~ msgstr "波士尼亞和黑塞哥維那"
+
+#~ msgid "Botswana"
+#~ msgstr "波茲瓦那"
+
 #, fuzzy
 #~ msgid "Bottom"
 #~ msgstr "下邊框"
@@ -11400,11 +10454,26 @@ msgstr "年"
 #~ msgid "Branches:"
 #~ msgstr "分支："
 
+#~ msgid "Brazil"
+#~ msgstr "巴西"
+
+#~ msgid "British Indian Ocean Territory"
+#~ msgstr "英屬印度洋領地"
+
 #~ msgid "Brunei Darussalam"
 #~ msgstr "汶萊"
 
+#~ msgid "Bulgaria"
+#~ msgstr "保加利亞"
+
 #~ msgid "Bullets On/Off"
 #~ msgstr "項目符號開關"
+
+#~ msgid "Burkina Faso"
+#~ msgstr "布吉納法索"
+
+#~ msgid "Burundi"
+#~ msgstr "蒲隆地"
 
 #~ msgid "CAD"
 #~ msgstr "CAD"
@@ -11424,8 +10493,17 @@ msgstr "年"
 #~ msgid "Calendar workweek view"
 #~ msgstr "日曆工作周視圖"
 
+#~ msgid "Cambodia"
+#~ msgstr "柬埔寨"
+
+#~ msgid "Cameroon"
+#~ msgstr "喀麥隆"
+
 #~ msgid "Can not create appointment in a folder other than appointment folder"
 #~ msgstr "無法在約定文件夾以外的文件夾中建立約會"
+
+#~ msgid "Canada"
+#~ msgstr "加拿大"
 
 #~ msgid "Canadian dollar"
 #~ msgstr "加拿大元"
@@ -11435,6 +10513,9 @@ msgstr "年"
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "無法移動系統資料夾。"
+
+#~ msgid "Cape Verde"
+#~ msgstr "維德角"
 
 #~ msgid "Categories"
 #~ msgstr "類別"
@@ -11450,6 +10531,9 @@ msgstr "年"
 
 #~ msgid "Category names must be unique"
 #~ msgstr "類別名必須是唯一的"
+
+#~ msgid "Cayman Islands"
+#~ msgstr "開曼群島"
 
 #~ msgid "Cc"
 #~ msgstr "抄送"
@@ -11468,6 +10552,12 @@ msgstr "年"
 
 #~ msgid "Centered, no text wrapping"
 #~ msgstr "置中，不換行"
+
+#~ msgid "Central African Republic"
+#~ msgstr "中非共和國"
+
+#~ msgid "Chad"
+#~ msgstr "查德"
 
 #~ msgid "Change View"
 #~ msgstr "更改視圖"
@@ -11496,11 +10586,20 @@ msgstr "年"
 #~ msgid "Children:"
 #~ msgstr "子女："
 
+#~ msgid "Chile"
+#~ msgstr "智利"
+
+#~ msgid "China"
+#~ msgstr "中國"
+
 #~ msgid "Choose Team"
 #~ msgstr "選擇團隊"
 
 #~ msgid "Choose a new password for your account."
 #~ msgstr "選擇新的帳戶密碼。"
+
+#~ msgid "Christmas Island"
+#~ msgstr "聖誕島"
 
 #~ msgid "City (private)"
 #~ msgstr "城市（私人）"
@@ -11558,11 +10657,19 @@ msgstr "年"
 #~ msgid "Cocos (Keeling) Islands"
 #~ msgstr "科克斯（基靈）群島"
 
+#, fuzzy
+#~| msgid "Cook Islands"
+#~ msgid "Cocos Islands"
+#~ msgstr "庫克群島"
+
 #~ msgid "Collect while reading E-Mails?"
 #~ msgstr "閱讀電子郵件時收集聯繫人？"
 
 #~ msgid "Collect while sending E-Mails?"
 #~ msgstr "發送電子郵件時收集聯繫人？"
+
+#~ msgid "Colombia"
+#~ msgstr "哥倫比亞"
 
 #~ msgid "Comma Separated"
 #~ msgstr "逗號分隔"
@@ -11579,6 +10686,11 @@ msgstr "年"
 #~ msgid "Common Facets"
 #~ msgstr "常見 Facet"
 
+#, fuzzy
+#~| msgid "Tomorrow"
+#~ msgid "Comoros"
+#~ msgstr "明天"
+
 #~ msgid "Compact view"
 #~ msgstr "精簡型面板"
 
@@ -11593,9 +10705,6 @@ msgstr "年"
 
 #~ msgid "Confirm"
 #~ msgstr "確認"
-
-#~ msgid "Confirmation message"
-#~ msgstr "確認訊息"
 
 #~ msgid "Confirmation status"
 #~ msgstr "確認狀態"
@@ -11622,11 +10731,17 @@ msgstr "年"
 #~ msgid "Continue Presentation"
 #~ msgstr "目的地"
 
+#~ msgid "Cook Islands"
+#~ msgstr "庫克群島"
+
 #~ msgid "Copy (CC) to"
 #~ msgstr "副本 (CC) 致"
 
 #~ msgid "Copy to"
 #~ msgstr "複製到"
+
+#~ msgid "Costa Rica"
+#~ msgstr "哥斯大黎加"
 
 #~ msgid "Cote d'Ivoire"
 #~ msgstr "象牙海岸"
@@ -11732,6 +10847,12 @@ msgstr "年"
 #~ msgid "Creation date:"
 #~ msgstr "建立日期："
 
+#~ msgid "Croatia"
+#~ msgstr "克羅埃西亞"
+
+#~ msgid "Cuba"
+#~ msgstr "古巴"
+
 #~ msgid "Current Costs:"
 #~ msgstr "當前費用："
 
@@ -11771,8 +10892,14 @@ msgstr "年"
 #~ msgid "Cut"
 #~ msgstr "剪切"
 
+#~ msgid "Cyprus"
+#~ msgstr "賽普勒斯"
+
 #~ msgid "Czech"
 #~ msgstr "捷克文"
+
+#~ msgid "Czech Republic"
+#~ msgstr "捷克共和國"
 
 #~ msgid "DKK"
 #~ msgstr "DKK"
@@ -11950,6 +11077,9 @@ msgstr "年"
 #~ msgid "Displaying the help or the settings"
 #~ msgstr "顯示選項或說明"
 
+#~ msgid "Djibouti"
+#~ msgstr "吉布地"
+
 #~ msgid "Do the following:"
 #~ msgstr "進行以下操作："
 
@@ -12028,6 +11158,12 @@ msgstr "年"
 
 #~ msgid "Does not match regex"
 #~ msgstr "未正則匹配"
+
+#~ msgid "Dominica"
+#~ msgstr "多米尼克"
+
+#~ msgid "Dominican Republic"
+#~ msgstr "多明尼加共和國"
 
 #~ msgid "Don't show again"
 #~ msgstr "不再顯示"
@@ -12115,6 +11251,14 @@ msgstr "年"
 #~ msgid "Each %s. %s"
 #~ msgstr "每 %s %s"
 
+#, fuzzy
+#~| msgid "Last month"
+#~ msgid "East Timor"
+#~ msgstr "上個月"
+
+#~ msgid "Ecuador"
+#~ msgstr "厄瓜多"
+
 #~ msgid "Edit Appointment"
 #~ msgstr "編輯約會"
 
@@ -12161,6 +11305,9 @@ msgstr "年"
 
 #~ msgid "Editor feature set:"
 #~ msgstr "編輯器功能集："
+
+#~ msgid "El Salvador"
+#~ msgstr "薩爾瓦多"
 
 #~ msgid "Email Address:"
 #~ msgstr "電子郵件位址:"
@@ -12347,6 +11494,12 @@ msgstr "年"
 #~ msgid "Envelope"
 #~ msgstr "信封"
 
+#~ msgid "Equatorial Guinea"
+#~ msgstr "赤道幾內亞"
+
+#~ msgid "Eritrea"
+#~ msgstr "厄立垂亞"
+
 #~ msgid "Error-ID: %1$s"
 #~ msgstr "錯誤-ID: %1$s"
 
@@ -12365,6 +11518,12 @@ msgstr "年"
 #~ msgid "Estimated Duration:"
 #~ msgstr "預估持續時間："
 
+#~ msgid "Estonia"
+#~ msgstr "愛沙尼亞"
+
+#~ msgid "Ethiopia"
+#~ msgstr "衣索比亞"
+
 #~ msgid "Euro"
 #~ msgstr "歐元"
 
@@ -12379,9 +11538,6 @@ msgstr "年"
 
 #~ msgid "Exit Fullscreen"
 #~ msgstr "離開全螢幕"
-
-#~ msgid "Expert mode"
-#~ msgstr "專家模式"
 
 #~ msgid "Extended view"
 #~ msgstr "擴展面板"
@@ -12398,6 +11554,16 @@ msgstr "年"
 
 #~ msgid "Failure! Please refresh."
 #~ msgstr "失敗！請重新整理。"
+
+#, fuzzy
+#~| msgid "Cayman Islands"
+#~ msgid "Falkland Islands"
+#~ msgstr "開曼群島"
+
+#, fuzzy
+#~| msgid "Cook Islands"
+#~ msgid "Faroe Islands"
+#~ msgstr "庫克群島"
 
 #~ msgctxt "app"
 #~ msgid "Favorite timezone"
@@ -12479,6 +11645,16 @@ msgstr "年"
 #~ msgid "Forward emails as:"
 #~ msgstr "轉發電子郵件為："
 
+#, fuzzy
+#~| msgid "Freelancer"
+#~ msgid "France"
+#~ msgstr "自由工作者"
+
+#, fuzzy
+#~| msgid "French"
+#~ msgid "French Guiana"
+#~ msgstr "法文"
+
 #~ msgid "Friday"
 #~ msgstr "星期五"
 
@@ -12494,6 +11670,11 @@ msgstr "年"
 #~ msgid "Further information"
 #~ msgstr "更多資訊"
 
+#, fuzzy
+#~| msgid "German"
+#~ msgid "Germany"
+#~ msgstr "德文"
+
 #~ msgid "Get started here!"
 #~ msgstr "開始入門！"
 
@@ -12506,8 +11687,23 @@ msgstr "年"
 #~ msgid "Good morning"
 #~ msgstr "早上好"
 
+#, fuzzy
+#~| msgid "Green"
+#~ msgid "Greece"
+#~ msgstr "綠色"
+
 #~ msgid "Greek"
 #~ msgstr "希臘文"
+
+#, fuzzy
+#~| msgid "Green"
+#~ msgid "Greenland"
+#~ msgstr "綠色"
+
+#, fuzzy
+#~| msgid "Canada"
+#~ msgid "Grenada"
+#~ msgstr "加拿大"
 
 #~ msgid "Grey"
 #~ msgstr "灰色"
@@ -12517,6 +11713,11 @@ msgstr "年"
 
 #~ msgid "H-split view"
 #~ msgstr "水準拆分視圖"
+
+#, fuzzy
+#~| msgid "Waiting"
+#~ msgid "Haiti"
+#~ msgstr "等待中"
 
 #~ msgid "Halo view"
 #~ msgstr "Halo View"
@@ -12557,6 +11758,11 @@ msgstr "年"
 
 #~ msgid "How the settings are organized"
 #~ msgstr "設定如何整理"
+
+#, fuzzy
+#~| msgid "Hungarian"
+#~ msgid "Hungary"
+#~ msgstr "匈牙利文"
 
 #~ msgid "IMAP folder subscription"
 #~ msgstr "IMAP 資料夾訂閱"
@@ -12619,6 +11825,11 @@ msgstr "年"
 #~ msgid "Incoming Notification Mails"
 #~ msgstr "接收通知郵件"
 
+#, fuzzy
+#~| msgid "Undone"
+#~ msgid "Indonesia"
+#~ msgstr "已還原"
+
 #~ msgid "Info area"
 #~ msgstr "資訊區域"
 
@@ -12679,8 +11890,18 @@ msgstr "年"
 #~ msgid "Italian (Italy)"
 #~ msgstr "義大利文 (義大利)"
 
+#, fuzzy
+#~| msgid "Italic"
+#~ msgid "Italy"
+#~ msgstr "斜體"
+
 #~ msgid "Items without a file can not be opened."
 #~ msgstr "無法開啟沒有檔案的項目。"
+
+#, fuzzy
+#~| msgid "Due on %1$s"
+#~ msgid "Just open %1$s"
+#~ msgstr "結束於 %s"
 
 #~ msgid "Justify"
 #~ msgstr "左右對齊"
@@ -12772,6 +11993,11 @@ msgstr "年"
 #~ msgid "Managing E-Mail messages"
 #~ msgstr "管理 E-Mail"
 
+#, fuzzy
+#~| msgid "Cayman Islands"
+#~ msgid "Marshall Islands"
+#~ msgstr "開曼群島"
+
 #~ msgid "Mediaplayer"
 #~ msgstr "Mediaplayer"
 
@@ -12790,8 +12016,18 @@ msgstr "年"
 #~ msgid "Monday"
 #~ msgstr "星期一"
 
+#, fuzzy
+#~| msgid "Angola"
+#~ msgid "Mongolia"
+#~ msgstr "安哥拉"
+
 #~ msgid "Month View"
 #~ msgstr "月視圖"
+
+#, fuzzy
+#~| msgid "Months"
+#~ msgid "Montserrat"
+#~ msgstr "月"
 
 #~ msgid "More zoom settings"
 #~ msgstr "更多縮放設定"
@@ -12817,11 +12053,26 @@ msgstr "年"
 #~ msgid "Navigation bar"
 #~ msgstr "導覽列"
 
+#, fuzzy
+#~| msgid "Dutch (Netherlands)"
+#~ msgid "Netherlands"
+#~ msgstr "荷蘭文"
+
 #~ msgid "Network Problems"
 #~ msgstr "網路錯誤"
 
+#, fuzzy
+#~| msgid "New calendar"
+#~ msgid "New Caledonia"
+#~ msgstr "新增行事曆"
+
 #~ msgid "New Mail from %1$s %2$s. Press [enter] to open"
 #~ msgstr "來自 %1$s %2$s 的新郵件。按 Enter 以開啟。"
+
+#, fuzzy
+#~| msgid "New calendar"
+#~ msgid "New Zealand"
+#~ msgstr "新增行事曆"
 
 #~ msgid "New objects icon"
 #~ msgstr "新物件圖示"
@@ -12846,6 +12097,11 @@ msgstr "年"
 
 #~ msgid "Next birthdays"
 #~ msgstr "下個生日"
+
+#, fuzzy
+#~| msgid "Algeria"
+#~ msgid "Nigeria"
+#~ msgstr "阿爾及利亞"
 
 #~ msgid "No appointments found for \"%s\""
 #~ msgstr "找不到「%s」的約會"
@@ -12882,6 +12138,16 @@ msgstr "年"
 
 #~ msgid "No wall posts yet."
 #~ msgstr "尚無塗鴉牆貼文。"
+
+#, fuzzy
+#~| msgid "Cook Islands"
+#~ msgid "Norfolk Island"
+#~ msgstr "庫克群島"
+
+#, fuzzy
+#~| msgid "Forward"
+#~ msgid "Norway"
+#~ msgstr "轉發"
 
 #~ msgid "Not yet confirmed"
 #~ msgstr "未確認"
@@ -12953,6 +12219,16 @@ msgstr "年"
 #~ msgid "Page number"
 #~ msgstr "頁數"
 
+#, fuzzy
+#~| msgid "Afghanistan"
+#~ msgid "Pakistan"
+#~ msgstr "阿富汗"
+
+#, fuzzy
+#~| msgid "British Indian Ocean Territory"
+#~ msgid "Palestinian Territory"
+#~ msgstr "英屬印度洋領地"
+
 #~ msgid "Paragraph Alignment"
 #~ msgstr "段落對齊"
 
@@ -12961,6 +12237,11 @@ msgstr "年"
 
 #~ msgid "Paragraph borders"
 #~ msgstr "段落邊框"
+
+#, fuzzy
+#~| msgid "Paragraph style"
+#~ msgid "Paraguay"
+#~ msgstr "段落樣式"
 
 #, fuzzy
 #~ msgid "Pause Presentation"
@@ -13005,6 +12286,11 @@ msgstr "年"
 
 #~ msgid "Portal Widgets"
 #~ msgstr "入口小工具"
+
+#, fuzzy
+#~| msgid "Portal"
+#~ msgid "Portugal"
+#~ msgstr "入口"
 
 #~ msgid "Portuguese (Portugal)"
 #~ msgstr "葡萄牙文 (葡萄牙)"
@@ -13112,6 +12398,16 @@ msgstr "年"
 
 #~ msgid "Right aligned, text wraps at left side"
 #~ msgstr "靠右，文字於左邊換行"
+
+#, fuzzy
+#~| msgid "Romanian"
+#~ msgid "Romania"
+#~ msgstr "羅馬尼亞文"
+
+#, fuzzy
+#~| msgid "Russian"
+#~ msgid "Russia"
+#~ msgstr "俄文"
 
 #, fuzzy
 #~| msgid "RSS"
@@ -13272,6 +12568,11 @@ msgstr "年"
 #~ msgid "Simple Pad"
 #~ msgstr "Simple Pad"
 
+#, fuzzy
+#~| msgid "Single"
+#~ msgid "Singapore"
+#~ msgstr "單行"
+
 #~ msgid "Skip this step"
 #~ msgstr "略過此步驟"
 
@@ -13286,6 +12587,11 @@ msgstr "年"
 #~ msgid ""
 #~ "Social accounts are only used to download contact and/or calendar data"
 #~ msgstr "社交帳戶將只會用來下載聯絡人與/或行事曆資料"
+
+#, fuzzy
+#~| msgid "Cook Islands"
+#~ msgid "Solomon Islands"
+#~ msgstr "庫克群島"
 
 #~ msgid "Someone shared a file with you"
 #~ msgstr "某人與您分享了檔案"
@@ -13369,6 +12675,11 @@ msgstr "年"
 
 #~ msgid "Superscript"
 #~ msgstr "上標"
+
+#, fuzzy
+#~| msgid "Your name"
+#~ msgid "Suriname"
+#~ msgstr "您的姓名"
 
 #~ msgid "Swedish (Sweden)"
 #~ msgstr "瑞典文"
@@ -13810,6 +13121,11 @@ msgstr "年"
 #~ msgid "Tuesday"
 #~ msgstr "星期二"
 
+#, fuzzy
+#~| msgid "Armenia"
+#~ msgid "Turkmenistan"
+#~ msgstr "亞美尼亞"
+
 #~ msgid "Tweet"
 #~ msgstr "推"
 
@@ -13861,6 +13177,16 @@ msgstr "年"
 
 #~ msgid "Using the reminder functions"
 #~ msgstr "使用提醒功能"
+
+#, fuzzy
+#~| msgid "Manual"
+#~ msgid "Vanuatu"
+#~ msgstr "手動"
+
+#, fuzzy
+#~| msgid "Vertical"
+#~ msgid "Vatican"
+#~ msgstr "垂直"
 
 #~ msgid "Version history"
 #~ msgstr "版本記錄"

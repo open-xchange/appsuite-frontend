@@ -912,27 +912,6 @@ msgstr "Adminrolle"
 msgid "Administrator"
 msgstr "Administrator"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Advanced user?"
-msgstr "Fortgeschrittener Benutzer?"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Afghanistan"
-msgstr "Afghanistan"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Aland Islands"
-msgstr "Ålandinseln"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Albania"
-msgstr "Albanien"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Algeria"
-msgstr "Algerien"
-
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
@@ -998,12 +977,17 @@ msgstr "HTML-formatierte Nachrichten zulassen"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Laden extern verlinkter Bilder erlauben"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "American Samoa"
-msgstr ""
-
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 msgid "An error occurred converting the document so it cannot be displayed."
+msgstr ""
+"Beim Konvertieren des Dokuments ist ein Fehler aufgetreten. Es kann nicht "
+"angezeigt werden."
+
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "An error occurred converting the document so it cannot be displayed."
+msgid "An error occurred loading the document so it cannot be displayed."
 msgstr ""
 "Beim Konvertieren des Dokuments ist ein Fehler aufgetreten. Es kann nicht "
 "angezeigt werden."
@@ -1031,38 +1015,24 @@ msgstr "Es trat ein interner Fehler auf."
 msgid "An unknown error occurred"
 msgstr "Es trat ein unbekannter Fehler auf."
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Andorra"
-msgstr "Andorra"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Angola"
-msgstr "Angola"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Anguilla"
-msgstr "Anguilla"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Anniversary"
 msgstr "Jahrestag"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Antigua and Barbuda"
-msgstr "Antigua und Barbuda"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Any recipient"
 msgstr "Irgendein Empfänger"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Apple App Store"
+msgid "App Store"
+msgstr "Apple App Store"
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Append vCard"
 msgstr "Visitenkarte anhängen"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Apple App Store"
-msgstr "Apple App Store"
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
@@ -1178,18 +1148,6 @@ msgstr "Nachrichten werden archiviert ..."
 msgid "Are you sure you want to delete this Tweet?"
 msgstr "Wollen Sie diesen Tweet wirklich löschen?"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Argentina"
-msgstr "Argentinien"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Armenia"
-msgstr "Armenien"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Aruba"
-msgstr "Aruba"
-
 #. Auth type. Short for "Use same credentials as incoming mail server"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "As incoming mail server"
@@ -1240,14 +1198,6 @@ msgstr "Anlagen wurden gespeichert"
 msgid "August"
 msgstr "August"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Australia"
-msgstr "Australien"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Austria"
-msgstr "Österreich"
-
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Authentication"
 msgstr "Authentifizierung"
@@ -1269,6 +1219,12 @@ msgstr "E-Mail-Entwürfe automatisch speichern"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Automatic Configuration"
+msgstr "Automatische Konfiguration"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic Configuration"
+msgid "Automatic Configuration (via SMS)"
 msgstr "Automatische Konfiguration"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
@@ -1294,10 +1250,6 @@ msgstr ""
 "Beim Versenden Kontakte automatisch im Ordner \"Gesammelte Adressen\" "
 "speichern"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Automatically configure your device by clicking the button below."
-msgstr ""
-
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid ""
 "Automatically delete the invitation email after the appointment has been "
@@ -1309,10 +1261,6 @@ msgstr ""
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Average time: %1$s ms"
 msgstr "Durchschnittliche Zeit: %1$s ms"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Azerbaijan"
-msgstr "Aserbaidschan"
 
 #. Bytes
 #: apps/io.ox/core/strings.js module:io.ox/core
@@ -1340,23 +1288,6 @@ msgstr "Zurück zum Termin"
 msgid "Back to sign in"
 msgstr "Zurück zum Anmelden"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bahamas"
-msgstr "Bahamas"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Bahrain"
-msgstr "Bahrain"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bangladesh"
-msgstr "Bangladesch"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Barbados"
-msgstr "Barbados"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/main.js
 msgid "Basic settings"
@@ -1370,31 +1301,6 @@ msgstr ""
 "Bevor Sie mit der Verwendung des Produkts fortfahren, müssen Sie einige "
 "grundlegende Informationen eingeben. Dies wird weniger als eine Minute in "
 "Anspruch nehmen."
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Belarus"
-msgstr "Weißrussland"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Belgium"
-msgstr "Belgien"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Belize"
-msgstr "Belize"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Benin"
-msgstr "Benin"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bermuda"
-msgstr "Bermuda"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bhutan"
-msgstr "Bhutan"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -1426,22 +1332,6 @@ msgstr "Blindkopie"
 msgid "Blue"
 msgstr "Blau"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bolivia"
-msgstr "Bolivien"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bonaire, Saint Eustatius and Saba "
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bosnia and Herzegovina"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Botswana"
-msgstr "Botswana"
-
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "Box"
 msgstr ""
@@ -1450,20 +1340,6 @@ msgstr ""
 msgid "Branches"
 msgstr "Branchen"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Brazil"
-msgstr "Brasilien"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "British Indian Ocean Territory"
-msgstr "Britisches Territorium im Indischen Ozean"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "British Virgin Islands"
-msgstr "Britische Jungferninseln"
-
 #: apps/io.ox/presenter/actions.js module:io.ox/presenter
 msgid "Broadcast your presentation over the Web."
 msgstr "Ihre Präsentation über das Web übertragen."
@@ -1471,24 +1347,6 @@ msgstr "Ihre Präsentation über das Web übertragen."
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Browser"
 msgstr "Browser"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Brunei"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Hungarian"
-msgid "Bulgaria"
-msgstr "Ungarisch"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Burkina Faso"
-msgstr "Burkina Faso"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Burundi"
-msgstr "Burundi"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Business Address"
@@ -1559,18 +1417,6 @@ msgstr "Kalenderansicht"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "Kalender:"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cambodia"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cameroon"
-msgstr "Kamerun"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Canada"
-msgstr "Kanada"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -1674,17 +1520,9 @@ msgstr "Ein Ansichtstyp für %1$s kann nicht angefordert werden"
 msgid "Capacity"
 msgstr "Kapazität"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cape Verde"
-msgstr ""
-
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "Einkaufswagen ist leer."
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cayman Islands"
-msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
@@ -1695,14 +1533,6 @@ msgstr "Mobiltelefon"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Cell phone (alt)"
 msgstr "Mobiltelefon (2)"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Central African Republic"
-msgstr "Zentralafrikanische Republik"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Chad"
-msgstr "Tschad"
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid "Change"
@@ -1779,20 +1609,6 @@ msgstr "Zugangsdaten werden überprüft ..."
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Children"
 msgstr "Kinder"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Children"
-msgid "Chile"
-msgstr "Kinder"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "China"
-msgstr "China"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Christmas Island"
-msgstr ""
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "City"
@@ -1918,18 +1734,10 @@ msgstr ""
 msgid "Close this reminder"
 msgstr "Erinnerung schließen"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cocos Islands"
-msgstr ""
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Collapse form"
 msgstr "Formular ausblenden"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Colombia"
-msgstr "Kolumbien"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -1979,11 +1787,6 @@ msgstr "Allgemein"
 msgid "Common Emoji"
 msgstr "Allgemeine Emoji-Symbole"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Comoros"
-msgstr "Komoren"
-
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
@@ -2018,6 +1821,12 @@ msgstr "Neue E-Mail verfassen"
 #: module:io.ox/settings
 msgid "Conditions"
 msgstr "Bedingungen"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Confirmation message"
+msgid "Configuration Email"
+msgstr "Bestätigungsnachricht"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
@@ -2132,10 +1941,6 @@ msgstr ""
 "Eingegebenes Start- und Enddatum so konvertieren, dass Sie den geänderten "
 "Zeitzonen entsprechen"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cook Islands"
-msgstr ""
-
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/files/actions.js
@@ -2153,10 +1958,6 @@ msgstr "Kopie"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Copy to description"
 msgstr "In Beschreibung kopieren"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Costa Rica"
-msgstr "Costa Rica"
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "Costs must be between -%1$d and %1$d."
@@ -2313,18 +2114,6 @@ msgctxt "help"
 msgid "Creating Files"
 msgstr "Dateien anlegen"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Croatia"
-msgstr "Kroatien"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cuba"
-msgstr "Kuba"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Curacao"
-msgstr "Curacao"
-
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Currency"
 msgstr "Währung"
@@ -2353,15 +2142,6 @@ msgstr "Benutzerdefinierter Name"
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Customize this page"
 msgstr "Diese Seite personalisieren"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cyprus"
-msgstr "Zypern"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Czech Republic"
-msgstr "Tschechische Republik"
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Dark colors"
@@ -2573,14 +2353,6 @@ msgstr ""
 "Beim Löschen von Nachrichten aus dem lokalen Speicher werden diese auch auf "
 "dem Server gelöscht"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Democratic Republic of the Congo"
-msgstr "Demokratische Republik Kongo"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Denmark"
-msgstr "Dänemark"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
 msgid "Department"
@@ -2723,12 +2495,6 @@ msgstr "Verteilerliste"
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "Die Verteilerliste wurde gespeichert."
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "About"
-msgid "Djibouti"
-msgstr "Über"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
@@ -2891,14 +2657,6 @@ msgctxt "app"
 msgid "Documents"
 msgstr "Dokumente"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Dominica"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Dominican Republic"
-msgstr "Dominikanische Republik"
-
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js module:io.ox/core apps/io.ox/files/actions/share.js
@@ -3055,14 +2813,6 @@ msgstr "Fällig am %1$s"
 msgid "EB"
 msgstr "EB"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "East Timor"
-msgstr "Osttimor"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Ecuador"
-msgstr "Ecuador"
-
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
@@ -3175,16 +2925,7 @@ msgstr "Bearbeiten, um einen Namen hinzuzufügen"
 msgid "Editor"
 msgstr "Editor"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Egypt"
-msgstr "Ägypten"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "El Salvador"
-msgstr "El Salvador"
-
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Email"
 msgstr "E-Mail"
 
@@ -3330,14 +3071,6 @@ msgstr "Unternehmer"
 msgid "Envelope - To"
 msgstr "Envelope - An"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Equatorial Guinea"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Eritrea"
-msgstr "Eritrea"
-
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/core/yell.js
@@ -3378,14 +3111,6 @@ msgstr "Geschätzte Kosten"
 #: apps/io.ox/tasks/view-detail.js
 msgid "Estimated duration in minutes"
 msgstr "Geschätzte Dauer in Minuten"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Estonia"
-msgstr "Estland"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Ethiopia"
-msgstr "Äthopien"
 
 #. recurrence string
 #. %1$d: numeric
@@ -3485,6 +3210,12 @@ msgstr "Formular erweitern"
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Expand timeframe by one month"
 msgstr "Zeitrahmen um einen Monat erweitern"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Expert mode"
+msgid "Expert user?"
+msgstr "Expertenmodus"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Expires in"
@@ -3596,14 +3327,6 @@ msgstr ""
 "Der Bestätigungsstatus konnte nicht aktualisiert werden. Die Aufgabe wurde "
 "wahrscheinlich gelöscht."
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Falkland Islands"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Faroe Islands"
-msgstr "Faröer Inseln"
-
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Favorite"
 msgstr "Favoriten"
@@ -3659,10 +3382,6 @@ msgstr "Feedback"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Feeling • Decoration"
 msgstr "Gefühle • Gesten"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Fiji"
-msgstr "Fidschi"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
@@ -3747,10 +3466,6 @@ msgstr "Verfügbaren Zeitraum finden"
 msgctxt "tour"
 msgid "Finish"
 msgstr "Beenden"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Finland"
-msgstr "Finnland"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -3898,10 +3613,6 @@ msgstr "Alle eingehenden E-Mails an diese Adresse weiterleiten"
 msgid "Forward emails as"
 msgstr "E-Mails weiterleiten als"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "France"
-msgstr "Frankreich"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Free"
@@ -3910,15 +3621,6 @@ msgstr "Frei"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Freelancer"
 msgstr "Freiberufler"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "French Guiana"
-msgstr "Französisch-Guayana"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "French Polynesia"
-msgstr "Französisch-Polynesien"
 
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/main.js
@@ -3946,22 +3648,6 @@ msgstr "Furigana für Nachnamen"
 msgid "GB"
 msgstr "GB"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Gabon"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Gambia"
-msgstr "Gambia"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Georgia"
-msgstr "Georgien"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Germany"
-msgstr "Deutschland"
-
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Get %s"
 msgstr "%s abrufen"
@@ -3988,16 +3674,12 @@ msgid "Get started here"
 msgstr "Einstieg"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Get your device configured by email."
+msgid "Get the App from %1$s"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Ghana"
-msgstr "Ghana"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Gibraltar"
-msgstr "Gibraltar"
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Get your device configured by email."
+msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Give feedback"
@@ -4027,24 +3709,12 @@ msgstr "Google Play Store"
 msgid "Gray"
 msgstr "Grau"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Greece"
-msgstr "Griechenland"
-
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Green"
 msgstr "Grün"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Greenland"
-msgstr "Grönland"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Grenada"
-msgstr "Grenada"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/participants/model.js
@@ -4060,22 +3730,6 @@ msgstr "Gruppenname"
 msgid "Groups"
 msgstr "Gruppen"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guadeloupe"
-msgstr "Guadeloupe"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guam"
-msgstr "Guam"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guatemala"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guernsey"
-msgstr "Guernsey"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
 msgid "Guest"
@@ -4084,18 +3738,6 @@ msgstr "Gast"
 #: apps/io.ox/tours/get-started.js module:io.ox/core
 msgid "Guided tour for this app"
 msgstr "Guided Tour für diese App"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guinea"
-msgstr "Guinea"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guinea-Bissau"
-msgstr "Guinea-Bissau"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guyana"
-msgstr "Guyana"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 #: apps/io.ox/mail/settings/pane.js
@@ -4106,19 +3748,10 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML und Text"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Haiti"
-msgstr "Haiti"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Header"
 msgstr "Header"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Heard Island and McDonald Islands"
-msgstr "Heard und McDonaldinseln"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Hello %s"
@@ -4191,7 +3824,7 @@ msgstr "Namen ausblenden"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Show advanced filters"
-msgid "Hide options for advanced user."
+msgid "Hide options for expert users."
 msgstr "Erweiterte Filter anzeigen"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
@@ -4237,14 +3870,6 @@ msgstr "Privatanschrift"
 msgid "Home address"
 msgstr "Privatanschrift"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Honduras"
-msgstr "Honduras"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Hong Kong"
-msgstr ""
-
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Horizontal"
 msgstr "Horizontal"
@@ -4260,10 +3885,6 @@ msgstr "Stunden"
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "How does this work?"
 msgstr "Wie funktioniert das?"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Hungary"
-msgstr "Ungarn"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP login"
@@ -4286,10 +3907,6 @@ msgstr "IMAP-Server"
 msgid "IP phone"
 msgstr "IP-Telefon"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Iceland"
-msgstr "Island"
-
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Icons"
 msgstr "Symbole"
@@ -4301,6 +3918,10 @@ msgid ""
 msgstr ""
 "Wenn Sie das Passwort ändern, werden Sie abgemeldet. Bitte stellen Sie "
 "sicher, dass alles geschlossen und gesichert ist. "
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "If you know what you are doing...just setup your account manually!"
+msgstr ""
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid ""
@@ -4412,14 +4033,6 @@ msgstr "Automatische Konfiguration"
 msgid "Inconsistent dates"
 msgstr "Inkonsistente Datumsangaben"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "India"
-msgstr "Indien"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Indonesia"
-msgstr "Indonesien"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts apps/io.ox/core/yell.js
 #: module:io.ox/core
 msgid "Info"
@@ -4468,6 +4081,12 @@ msgid ""
 msgstr ""
 "Installieren Sie diese Web-Applikation auf Ihrem %1$s:  Tippen Sie auf %2$s, "
 "gefolgt von %3$s'Zum Home-Bildschirm hinzufügen'%4$s"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "vacation"
+msgid "Installation"
+msgstr "Abwesenheit"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Instant Messenger 1"
@@ -4530,18 +4149,6 @@ msgstr "Zu Termin einladen"
 msgid "Invite to new appointment"
 msgstr "Zu neuem Termin einladen"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Iran"
-msgstr "Iran"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Iraq"
-msgstr "Irak"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Ireland"
-msgstr "Irland"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Is bigger than"
@@ -4556,18 +4163,6 @@ msgstr "stimmt exakt überein mit"
 #: module:io.ox/settings
 msgid "Is smaller than"
 msgstr "ist kleiner als"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Isle of Man"
-msgstr "Isle of Man"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Israel"
-msgstr "Israel"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Italy"
-msgstr "Italien"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Item List"
@@ -4589,30 +4184,14 @@ msgstr "Optionen für Objektliste"
 msgid "Items without a file can not be downloaded."
 msgstr "Objekte ohne Datei können nicht heruntergeladen werden."
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Ivory Coast"
-msgstr "Elfenbeinküste"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Jamaica"
-msgstr "Jamaika"
-
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "January"
 msgstr "Januar"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Japan"
-msgstr "Japan"
 
 #. Emoji collection. Emoji icons that work across Japanese (telecom) carriers.
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Japanese Carrier"
 msgstr "Japanischer Hoster"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Jersey"
-msgstr "Jersey"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Job"
@@ -4645,11 +4224,6 @@ msgstr "Präsentation beitreten"
 msgid "Joining the presentation of %1$s."
 msgstr "Präsentation beitreten"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Jordan"
-msgstr "Jordanien"
-
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "July"
 msgstr "Juli"
@@ -4671,19 +4245,10 @@ msgstr "Juni"
 msgid "Just disable widget"
 msgstr "Widget nur deaktivieren"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Just open %1$s"
-msgstr "Öffnen Sie einfach %1$s"
-
 #. Kilobytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "KB"
 msgstr "KB"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Kazakhstan"
-msgstr "Kasachstan"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -4693,23 +4258,6 @@ msgstr "Behalten"
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 msgid "Keep a copy of the message"
 msgstr "Kopie der Nachricht behalten"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Kenya"
-msgstr "Kenja"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Kiribati"
-msgstr "Kiribati"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Kuwait"
-msgstr "Kuwait"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Kyrgyzstan"
-msgstr "Kirgisistan"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -4723,10 +4271,6 @@ msgstr "Sprachenabhängiger Standard"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
 msgstr "Sprachen"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Laos"
-msgstr "Laos"
 
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Last 30 days"
@@ -4770,10 +4314,6 @@ msgstr "Letztes Jahr"
 msgid "Later"
 msgstr "Später"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Latvia"
-msgstr "Lettland"
-
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
 msgstr ""
@@ -4807,14 +4347,6 @@ msgstr "Präsentation verlassen"
 msgid "Leave the presentation"
 msgstr "Präsentation verlassen"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Lebanon"
-msgstr "Libanon"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Lesotho"
-msgstr "Lesotho"
-
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 文字・記号
@@ -4824,17 +4356,11 @@ msgstr "Lesotho"
 msgid "Letters • Symbols"
 msgstr "Buchstaben • Symbole"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Liberia"
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid ""
+"Let´s automatically configure your device, by clicking the button below. It"
+"´s that simple!"
 msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Libya"
-msgstr "Lybien"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Liechtenstein"
-msgstr "Liechtenstein"
 
 #. Emoji category
 #. Japanese: 日常
@@ -4897,10 +4423,6 @@ msgstr "Liste"
 msgid "Listview"
 msgstr "Listenansicht"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Lithuania"
-msgstr "Litauen"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 msgid "Location"
@@ -4934,10 +4456,6 @@ msgstr "Niedrig"
 msgid "Low priority"
 msgstr "Niedrige Priorität"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Luxembourg"
-msgstr "Luxemburg"
-
 #. Megabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "MB"
@@ -4946,18 +4464,6 @@ msgstr "MB"
 #: apps/io.ox/core/date.js module:io.ox/core
 msgid "MM"
 msgstr "MM"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Macao"
-msgstr "Macao"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Macedonia"
-msgstr "Mazedonien"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Madagascar"
-msgstr "Madagascar"
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Mail"
@@ -5084,26 +4590,6 @@ msgstr "Hauptfenster"
 msgid "Make this the current version"
 msgstr "Diese als aktuelle Version markieren"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Malawi"
-msgstr "Malawi"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Malaysia"
-msgstr "Malaysien"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Maldives"
-msgstr "Malediven"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mali"
-msgstr "Mali"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Malta"
-msgstr "Malta"
-
 #: apps/io.ox/launchpad/main.js module:io.ox/core
 msgid "Manage applications"
 msgstr "Applikationen verwalten"
@@ -5203,34 +4689,14 @@ msgstr "Als gelesen markieren"
 msgid "Mark unread"
 msgstr "Als ungelesen markieren"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Marshall Islands"
-msgstr "Marshallinseln"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Martinique"
-msgstr "Martinique"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Matches"
 msgstr "stimmt überein mit"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mauritania"
-msgstr "Mauretanien"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mauritius"
-msgstr "Mauritius"
-
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "May"
 msgstr "Mai"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mayotte"
-msgstr "Mayotte"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -5257,14 +4723,6 @@ msgstr "Messaging"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Messenger"
 msgstr "Messenger"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mexico"
-msgstr "Mexiko"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Micronesia"
-msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Middle name"
@@ -5302,22 +4760,6 @@ msgstr "Unvollständige Angaben"
 msgid "Modified"
 msgstr "Geändert"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Moldova"
-msgstr "Moldawien"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Monaco"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mongolia"
-msgstr "Mongolei"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Montenegro"
-msgstr "Montenegro"
-
 #: apps/io.ox/backbone/mini-views/date.js module:io.ox/core
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Month"
@@ -5340,10 +4782,6 @@ msgstr "Am %1$s %2$s jeden Monats"
 msgid "Months"
 msgstr "Monate"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Montserrat"
-msgstr "Montserrat"
-
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/find/extensions-api.js apps/io.ox/search/facets/extensions.js
 msgid "More"
@@ -5352,11 +4790,6 @@ msgstr "Weitere"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
 msgstr "Es wurden mehr als die derzeit angezeigten %1$s Elemente gefunden."
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Morocco"
-msgstr "Marocco"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
@@ -5393,10 +4826,6 @@ msgstr "Ordner verschieben"
 #: module:io.ox/settings
 msgid "Move to folder"
 msgstr "In Ordner verschieben"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mozambique"
-msgstr "Mosambik"
 
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Multiselect"
@@ -5441,10 +4870,6 @@ msgstr "Meine Freigaben"
 msgid "My tasks"
 msgstr "Meine Aufgaben"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Myanmar"
-msgstr "Myanmar"
-
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
@@ -5456,30 +4881,14 @@ msgstr "Myanmar"
 msgid "Name"
 msgstr "Name"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Namibia"
-msgstr "Namibia"
-
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Nature"
 msgstr "Natur"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Nauru"
-msgstr "Nauru"
-
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Need more space?"
 msgstr "Sie brauchen mehr Speicher?"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Nepal"
-msgstr "Nepal"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Netherlands"
-msgstr "Niederlande"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -5495,10 +4904,6 @@ msgstr "Nie"
 msgid "New"
 msgstr "Neu"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "New Caledonia"
-msgstr "Neukaledonien"
-
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "New Folder"
@@ -5507,10 +4912,6 @@ msgstr "Neuer Ordner"
 #: apps/io.ox/mail/api.js module:io.ox/mail
 msgid "New Mail"
 msgstr "Neue E-Mails"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "New Zealand"
-msgstr "Neuseeland"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -5633,25 +5034,9 @@ msgstr "Nächste Seite"
 msgid "Next slide"
 msgstr "Nächste Folie"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Nicaragua"
-msgstr "Nicaragua"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Nickname"
 msgstr "Spitzname"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Niger"
-msgstr "Niger"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Nigeria"
-msgstr "Nigeria"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Niue"
-msgstr "Niue"
 
 #. folder permissions - Is Admin? NO
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
@@ -5772,26 +5157,10 @@ msgstr "Kein Titel"
 msgid "None"
 msgstr "Keine"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Norfolk Island"
-msgstr "Norfolkinsel"
-
 #. E-Mail priority
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Normal"
 msgstr "Normal"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "North Korea"
-msgstr "Nordkorea"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Northern Mariana Islands"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Norway"
-msgstr "Norwegen"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgid "Not spam"
@@ -5903,10 +5272,6 @@ msgstr "Offline-Modus"
 #: apps/io.ox/core/tk/mobiscroll.js
 msgid "Ok"
 msgstr "OK"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Oman"
-msgstr "Oman"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "On behalf of the owner"
@@ -6133,32 +5498,6 @@ msgstr "Seite %1$d von %2$d"
 msgid "Pager"
 msgstr "Pager"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Pakistan"
-msgstr "Pakistan"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Palau"
-msgstr "Palau"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Palestinian Territory"
-msgstr "Palästinensische Autonomiegebiete"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Panama"
-msgstr "Panama"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Papua New Guinea"
-msgstr "Papua Neu Guinea"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Paraguay"
-msgstr "Paraguay"
-
 #. text of an user list that shows the names of presenting user and participants.
 #. the dropdown button label for the participants dropdown.
 #. the participants section label.
@@ -6273,14 +5612,6 @@ msgstr ""
 "Persönliche Nachricht (optional). Diese Nachricht wird an alle neu "
 "eingeladenen Personen gesendet."
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Peru"
-msgstr "Peru"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Philippines"
-msgstr "Philippinen"
-
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Phone"
 msgstr "Telefon"
@@ -6339,10 +5670,6 @@ msgstr "Wählen Sie eine Zeit"
 #: module:io.ox/portal
 msgid "Pink"
 msgstr "Pink"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Pitcairn"
-msgstr ""
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -6468,6 +5795,12 @@ msgstr "Geben Sie einen Wert zwischen 0 und 100 ein."
 msgid "Please enter your credentials."
 msgstr "Geben Sie bitte Ihre Zugangsdaten ein."
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid ""
+"Please enter your mobile phone number, and we´ll send you a link to "
+"automatically configure your iOS device! It´s that simple!"
+msgstr ""
+
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please enter your password."
 msgstr "Geben Sie bitte Ihr Passwort ein."
@@ -6536,10 +5869,6 @@ msgstr "Bitte aktualisieren Sie Ihren Browser."
 msgid "Plus"
 msgstr "Plus"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Poland"
-msgstr "Polen"
-
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Pop out"
 msgstr "Neues Fenster"
@@ -6561,10 +5890,6 @@ msgstr "Portal"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Portal settings"
 msgstr "Portal-Einstellungen"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Portugal"
-msgstr "Portugal"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Position"
@@ -6826,10 +6151,6 @@ msgstr "Veröffentlichungen"
 msgid "Publications and Subscriptions"
 msgstr "Veröffentlichungen und Abonnements"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Puerto Rico"
-msgstr "Puerto Rico"
-
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Purchase confirmation"
 msgstr "Bestellbestätigung"
@@ -6840,10 +6161,6 @@ msgstr "Bestellbestätigung"
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "Lila"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Qatar"
-msgstr "Katar"
 
 #. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
 #: apps/io.ox/mail/actions.js module:io.ox/mail
@@ -7165,10 +6482,6 @@ msgstr "Antwort an alle Empfänger"
 msgid "Reply to sender"
 msgstr "Antwort an Absender"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Republic of the Congo"
-msgstr "Republik Kongo"
-
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
 msgstr "Lesebestätigung anfordern"
@@ -7237,11 +6550,6 @@ msgstr "Weitergeleitet (Retweet)"
 msgid "Retweeted by %s"
 msgstr "Weitergeleitet (Retweet) von %s"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Reunion"
-msgstr "Réunion"
-
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Review your purchases"
 msgstr "Prüfen Sie Ihre Bestellung"
@@ -7264,10 +6572,6 @@ msgstr "Zugriff widerrufen"
 msgid "Revoked access."
 msgstr "Zugriff widerrufen."
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Romania"
-msgstr "Rumänien"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Room number"
 msgstr "Raumnummer"
@@ -7280,14 +6584,6 @@ msgstr "Regel-Name"
 #: apps/io.ox/launchpad/main.js module:io.ox/core
 msgid "Running applications"
 msgstr "Laufende Applikationen"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Russia"
-msgstr "Russland"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Rwanda"
-msgstr "Ruanda"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP login"
@@ -7306,58 +6602,9 @@ msgstr "SMTP sicher"
 msgid "SMTP server"
 msgstr "SMTP-Server"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Saint Barthelemy"
-msgstr "Saint-Barthélemy"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Saint Helena"
-msgstr "St. Helena"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Saint Kitts and Nevis"
-msgstr "Saint Kitts und Nevis"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Saint Lucia"
-msgstr "St. Lucia"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Saint Martin"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Saint Pierre and Miquelon"
-msgstr "Saint-Pierre und Miquelon"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Saint Vincent and the Grenadines"
-msgstr ""
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "Umsatz"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Samoa"
-msgstr "Samoa"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "San Marino"
-msgstr "San Marino"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Sao Tome and Principe"
-msgstr "São Tomé und Príncipe"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Saudi Arabia"
-msgstr "Saudi-Arabien"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
@@ -7567,10 +6814,6 @@ msgstr "E-Mail versenden"
 msgid "Send mail to all participants"
 msgstr "E-Mail an alle Teilnehmer senden"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Send me the profile data by SMS."
-msgstr "Schicken Sie mir die Profildaten per SMS."
-
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
 msgstr "Neue E-Mail versenden"
@@ -7583,10 +6826,6 @@ msgstr "Abwesenheitsbenachrichtigung nur für diese Dauer versenden"
 #: module:io.ox/settings
 msgid "Sender/From"
 msgstr "Absender / Von"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Senegal"
-msgstr "Senegal"
 
 #. %s is the product name
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
@@ -7606,10 +6845,6 @@ msgstr "Gesendete Nachrichten"
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "September"
 msgstr "September"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Serbia"
-msgstr "Serbien"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
@@ -7657,15 +6892,6 @@ msgstr "Einstellungen"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Settings for advanced users"
 msgstr "Einstellungen für fortgeschrittene Benutzer"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Setup your profile manually."
-msgstr "Richten Sie Ihr Profil manuell ein."
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Seychelles"
-msgstr "Seychellen"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
@@ -7760,10 +6986,6 @@ msgstr "Freigaben"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Shopping cart"
 msgstr "Einkaufswagen"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Short Message (SMS)"
-msgstr ""
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
@@ -7876,10 +7098,6 @@ msgstr "Kacheln anzeigen"
 msgid "Shown as"
 msgstr "Anzeigen als"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Sierra Leone"
-msgstr "Sierra Leone"
-
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
@@ -7912,15 +7130,6 @@ msgstr "Angemeldet als %1$s"
 msgid "Signed in as:"
 msgstr "Angemeldet als:"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Singapore"
-msgstr "Singapur"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Sint Maarten"
-msgstr "Sint Maarten"
-
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
 #: module:io.ox/files apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -7931,14 +7140,6 @@ msgstr "Größe"
 #: module:io.ox/settings
 msgid "Size (bytes)"
 msgstr "Größe (Bytes)"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Slovakia"
-msgstr "Slowakei"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Slovenia"
-msgstr "Slowenien"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
@@ -7952,14 +7153,6 @@ msgstr "Smartphone-Einstellungen:"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "SoftBank"
 msgstr "SoftBank"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Solomon Islands"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Somalia"
-msgstr "Somalia"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "Some fields contain invalid data"
@@ -8028,22 +7221,6 @@ msgstr "Sortier-Optionen"
 msgid "Source"
 msgstr "Quelle"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "South Africa"
-msgstr "Südafrika"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "South Korea"
-msgstr "Südkorea"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "South Sudan"
-msgstr "Südsudan"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Spain"
-msgstr "Spanien"
-
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -8061,10 +7238,6 @@ msgstr "Tabellendokument"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Spreadsheets"
 msgstr "Tabellendokumente"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Sri Lanka"
-msgstr "Sri Lanka"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Standard folders"
@@ -8200,10 +7373,6 @@ msgstr "Erfolg"
 msgid "Successfully reauthorized your %s account"
 msgstr "Ihr %s-Account wurde erfolgreich neu autorisiert."
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Sudan"
-msgstr "Sudan"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Suffix"
 msgstr "Namenszusatz"
@@ -8212,29 +7381,9 @@ msgstr "Namenszusatz"
 msgid "Summary"
 msgstr "Übersicht"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Suriname"
-msgstr "Suriname"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Svalbard and Jan Mayen"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Swaziland"
-msgstr "Swasiland"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Sweden"
-msgstr "Schweden"
-
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Switch to parent folder"
 msgstr "In den übergeordneten Ordner wechseln"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Switzerland"
-msgstr "Schweiz"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -8262,10 +7411,6 @@ msgstr "Mit Outlook synchronisieren"
 msgid "Synchronize with your tablet or smartphone"
 msgstr "Mit Ihrem Tablet oder Smartphone synchronisieren"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Syria"
-msgstr "Syrien"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "TAX ID"
 msgstr "Steuernummer"
@@ -8284,24 +7429,12 @@ msgstr "Texttelefon"
 msgid "Tag mail with"
 msgstr "E-Mail-Tag"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Taiwan"
-msgstr "Taiwan"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Tajikistan"
-msgstr "Tadschikistan"
-
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 #, fuzzy
 msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
 msgstr ""
 "Nehmen Sie %1$s mit. Bleiben Sie bei Ihren favorisierten Geräten auf dem "
 "neuesten Stand."
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Tanzania"
-msgstr "Tansania"
 
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
@@ -8402,10 +7535,6 @@ msgstr "Vorläufig bestätigt"
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Text"
 msgstr "Text"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Thailand"
-msgstr "Thailand"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"
@@ -8921,6 +8050,7 @@ msgid "This distribution list has been added to the portal"
 msgstr "Diese Verteilerliste wurde dem Portal hinzugefügt"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 msgid "This document is password protected and cannot be displayed."
 msgstr "Dieses Dokument ist passwortgeschützt und kann nicht angezeigt werden."
 
@@ -9162,23 +8292,11 @@ msgstr "Vollbild an/aus"
 msgid "Toggle panel"
 msgstr "Panel an/aus"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Togo"
-msgstr "Togo"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Tokelau"
-msgstr "Tokelau"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "Morgen"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Tonga"
-msgstr "Tonga"
 
 #. Emoji category
 #. Japanese: ツール
@@ -9219,11 +8337,6 @@ msgstr "Gesamt: %1$s Anfragen"
 msgid "Town"
 msgstr "Stadt"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Trinidad and Tobago"
-msgstr "Trinidad und Tobago"
-
 #: apps/io.ox/core/commons.js module:io.ox/core
 #, fuzzy
 msgid "Try now!"
@@ -9236,26 +8349,6 @@ msgstr "Es wird versucht, Ihren E-Mail-Account automatisch zu konfigurieren"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Tumblr"
 msgstr "Tumblr"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Tunisia"
-msgstr "Tunesien"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Turkey"
-msgstr "Türkei"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Turkmenistan"
-msgstr "Turkmenistan"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Turks and Caicos Islands"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Tuvalu"
-msgstr "Tuvalu"
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Twitter"
@@ -9271,10 +8364,6 @@ msgstr "Twitter meldete folgende Fehler:"
 msgid "Type"
 msgstr "Typ"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "U.S. Virgin Islands"
-msgstr ""
-
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 msgid "UI version"
@@ -9284,14 +8373,6 @@ msgstr "Version der Benutzeroberfläche"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "URL"
 msgstr "URL"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Uganda"
-msgstr "Uganda"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Ukraine"
-msgstr "Ukraine"
 
 #: apps/plugins/portal/xing/actions.js module:plugins/portal
 msgid "Un-like"
@@ -9335,24 +8416,6 @@ msgstr "Entfolgen"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Unified"
 msgstr "Standard"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "United Arab Emirates"
-msgstr "Vereinigte Arabische Emirate"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "United Kingdom"
-msgstr "Vereinigtes Königreich"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "United States"
-msgstr "Vereinigte Staaten von Amerika"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "United States Minor Outlying Islands"
-msgstr ""
 
 #: apps/io.ox/participants/model.js module:io.ox/core
 msgid "Unknown"
@@ -9470,10 +8533,6 @@ msgstr "Laufzeit: %1$s Minuten"
 msgid "Urgency"
 msgstr "Dringlichkeit"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Uruguay"
-msgstr "Uruguay"
-
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Use SSL connection"
 msgstr "SSL-Verbindung verwenden"
@@ -9563,30 +8622,10 @@ msgstr "Benutzername"
 msgid "Username must not be empty."
 msgstr "Benutzernamen dürfen nicht leer sein."
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Uzbekistan"
-msgstr "Usbekistan"
-
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/vacationnotice/settings/register.js
 msgid "Vacation Notice"
 msgstr "Abwesenheitsnotiz"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Manual"
-msgid "Vanuatu"
-msgstr "Manuell"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Vertical"
-msgid "Vatican"
-msgstr "Vertikal"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Venezuela"
-msgstr "Venezuela"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer
@@ -9605,10 +8644,6 @@ msgstr "Vertikal"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Videos"
 msgstr "Videos"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Vietnam"
-msgstr "Vietnam"
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -9663,10 +8698,6 @@ msgstr "Viewer-Werkzeugleiste"
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
 msgid "Waiting"
 msgstr "Wartestatus"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Wallis and Futuna"
-msgstr ""
 
 #: apps/io.ox/core/yell.js module:io.ox/core
 msgid "Warning"
@@ -9747,14 +8778,15 @@ msgstr "Willkommen bei Ihren Aufgaben"
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "Willkommen. Bitte geben Sie Feedback zu diesem Produkt."
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "Western Sahara"
-msgstr "Westsahara"
-
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "What do you want to use?"
 msgstr "Was möchten Sie verwenden?"
+
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Which device do you want to configure?"
+msgid "What type of device do you want to configure?"
+msgstr "Welches Gerät möchten Sie konfigurieren?"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/updater/register.js module:plugins/portal
@@ -9832,10 +8864,6 @@ msgstr "Jahre"
 #: module:io.ox/settings
 msgid "Yellow"
 msgstr "Gelb"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Yemen"
-msgstr ""
 
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
@@ -10254,14 +9282,6 @@ msgstr "Ihre Zeitzone"
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "ZB"
 msgstr "ZB"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Zambia"
-msgstr "Sambia"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Zimbabwe"
-msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Zoom"
@@ -11133,6 +10153,22 @@ msgstr "JJJJ"
 #~ msgid "Advanced options"
 #~ msgstr "Erweiterte Optionen"
 
+#, fuzzy
+#~ msgid "Advanced user?"
+#~ msgstr "Fortgeschrittener Benutzer?"
+
+#~ msgid "Afghanistan"
+#~ msgstr "Afghanistan"
+
+#~ msgid "Aland Islands"
+#~ msgstr "Ålandinseln"
+
+#~ msgid "Albania"
+#~ msgstr "Albanien"
+
+#~ msgid "Algeria"
+#~ msgstr "Algerien"
+
 #~ msgid "All changes saved"
 #~ msgstr "Alle Änderungen gespeichert"
 
@@ -11161,8 +10197,20 @@ msgstr "JJJJ"
 #~ msgid "An error occurred. The message was:"
 #~ msgstr "Es trat ein Fehler auf. Fehlermeldung:"
 
+#~ msgid "Andorra"
+#~ msgstr "Andorra"
+
+#~ msgid "Angola"
+#~ msgstr "Angola"
+
+#~ msgid "Anguilla"
+#~ msgstr "Anguilla"
+
 #~ msgid "Another user"
 #~ msgstr "Ein anderer Benutzer"
+
+#~ msgid "Antigua and Barbuda"
+#~ msgstr "Antigua und Barbuda"
 
 #~ msgid "Apply"
 #~ msgstr "Anwenden"
@@ -11205,6 +10253,15 @@ msgstr "JJJJ"
 #~ msgid "Are you sure?"
 #~ msgstr "Sind Sie sich sicher?"
 
+#~ msgid "Argentina"
+#~ msgstr "Argentinien"
+
+#~ msgid "Armenia"
+#~ msgstr "Armenien"
+
+#~ msgid "Aruba"
+#~ msgstr "Aruba"
+
 #~ msgid "Ask for return receipt"
 #~ msgstr "Lesebestätigung anfordern"
 
@@ -11240,6 +10297,12 @@ msgstr "JJJJ"
 #~ msgid "Audio enabled"
 #~ msgstr "Audio aktiviert"
 
+#~ msgid "Australia"
+#~ msgstr "Australien"
+
+#~ msgid "Austria"
+#~ msgstr "Österreich"
+
 #~ msgid "Auto Logout"
 #~ msgstr "Automatisch abmelden"
 
@@ -11273,6 +10336,9 @@ msgstr "JJJJ"
 #~ msgid "Automatically wrap plain text after character:"
 #~ msgstr "Automatischer Zeilenumbruch in Klartextnachrichten nach Zeichen:"
 
+#~ msgid "Azerbaijan"
+#~ msgstr "Aserbaidschan"
+
 #~ msgid "Back to devices"
 #~ msgstr "Zurück zu den Geräten"
 
@@ -11289,8 +10355,31 @@ msgstr "JJJJ"
 #~ msgid "Background 2"
 #~ msgstr "Hintergrund 2"
 
+#~ msgid "Bahamas"
+#~ msgstr "Bahamas"
+
+#, fuzzy
+#~ msgid "Bahrain"
+#~ msgstr "Bahrain"
+
+#~ msgid "Bangladesh"
+#~ msgstr "Bangladesch"
+
+#~ msgid "Barbados"
+#~ msgstr "Barbados"
+
 #~ msgid "Bcc"
 #~ msgstr "BCC"
+
+#, fuzzy
+#~ msgid "Belarus"
+#~ msgstr "Weißrussland"
+
+#~ msgid "Belgium"
+#~ msgstr "Belgien"
+
+#~ msgid "Belize"
+#~ msgstr "Belize"
 
 #~ msgid ""
 #~ "Below the recipient you will find further functions, e.g. for sending "
@@ -11298,6 +10387,15 @@ msgstr "JJJJ"
 #~ msgstr ""
 #~ "Unterhalb des Empfängers finden Sie weitere Funktionen, zum Beispiel zum "
 #~ "Senden von Kopien an andere Empfänger oder zum Hinzufügen von Anlagen."
+
+#~ msgid "Benin"
+#~ msgstr "Benin"
+
+#~ msgid "Bermuda"
+#~ msgstr "Bermuda"
+
+#~ msgid "Bhutan"
+#~ msgstr "Bhutan"
 
 #, fuzzy
 #~| msgid "Birthday"
@@ -11312,6 +10410,9 @@ msgstr "JJJJ"
 
 #~ msgid "Bold"
 #~ msgstr "Fett"
+
+#~ msgid "Bolivia"
+#~ msgstr "Bolivien"
 
 #~ msgid "Border bottom"
 #~ msgstr "Unterer Rand"
@@ -11334,9 +10435,34 @@ msgstr "JJJJ"
 #~ msgid "Border top"
 #~ msgstr "Oberer Rand"
 
+#~ msgid "Botswana"
+#~ msgstr "Botswana"
+
 #, fuzzy
 #~ msgid "Bottom"
 #~ msgstr "Rahmenlinie unten"
+
+#~ msgid "Brazil"
+#~ msgstr "Brasilien"
+
+#, fuzzy
+#~ msgid "British Indian Ocean Territory"
+#~ msgstr "Britisches Territorium im Indischen Ozean"
+
+#, fuzzy
+#~ msgid "British Virgin Islands"
+#~ msgstr "Britische Jungferninseln"
+
+#, fuzzy
+#~| msgid "Hungarian"
+#~ msgid "Bulgaria"
+#~ msgstr "Ungarisch"
+
+#~ msgid "Burkina Faso"
+#~ msgstr "Burkina Faso"
+
+#~ msgid "Burundi"
+#~ msgstr "Burundi"
 
 #~ msgid "CW"
 #~ msgstr "KW"
@@ -11347,6 +10473,12 @@ msgstr "JJJJ"
 #~ msgid "Calendar settings chapter"
 #~ msgstr "Kapitel 'Kalender-Einstellungen'"
 
+#~ msgid "Cameroon"
+#~ msgstr "Kamerun"
+
+#~ msgid "Canada"
+#~ msgstr "Kanada"
+
 #~ msgid "Cannot move folder into itself."
 #~ msgstr "Ein Ordner kann nicht in sich selbst verschoben werden."
 
@@ -11355,6 +10487,12 @@ msgstr "JJJJ"
 
 #~ msgid "Centered, no text wrapping"
 #~ msgstr "Zentriert, kein Textumlauf"
+
+#~ msgid "Central African Republic"
+#~ msgstr "Zentralafrikanische Republik"
+
+#~ msgid "Chad"
+#~ msgstr "Tschad"
 
 #~ msgid "Change View"
 #~ msgstr "Ansicht ändern"
@@ -11370,6 +10508,14 @@ msgstr "JJJJ"
 
 #~ msgid "Change subscription"
 #~ msgstr "Abonnement ändern"
+
+#, fuzzy
+#~| msgid "Children"
+#~ msgid "Chile"
+#~ msgstr "Kinder"
+
+#~ msgid "China"
+#~ msgstr "China"
 
 #~ msgid "Choose file"
 #~ msgstr "Datei wählen"
@@ -11402,20 +10548,24 @@ msgstr "JJJJ"
 #~ msgid "Closing a tile"
 #~ msgstr "Eine Kachel schließen"
 
+#~ msgid "Colombia"
+#~ msgstr "Kolumbien"
+
 #~ msgid "Comment:"
 #~ msgstr "Anmerkung:"
 
 #~ msgid "Common Facets"
 #~ msgstr "Allgemeine Suchfilter"
 
+#, fuzzy
+#~ msgid "Comoros"
+#~ msgstr "Komoren"
+
 #~ msgid "Compact view"
 #~ msgstr "Kompakte Ansicht"
 
 #~ msgid "Confirm"
 #~ msgstr "Bestätigen"
-
-#~ msgid "Confirmation message"
-#~ msgstr "Bestätigungsnachricht"
 
 #~ msgid "Confirmation status"
 #~ msgstr "Bestätigungsstatus"
@@ -11431,6 +10581,9 @@ msgstr "JJJJ"
 
 #~ msgid "Copy to"
 #~ msgstr "Kopie an"
+
+#~ msgid "Costa Rica"
+#~ msgstr "Costa Rica"
 
 #, fuzzy
 #~ msgid "Could not delete this task."
@@ -11509,14 +10662,30 @@ msgstr "JJJJ"
 #~ msgid "Creating the task"
 #~ msgstr "Die Aufgabe anlegen"
 
+#~ msgid "Croatia"
+#~ msgstr "Kroatien"
+
+#~ msgid "Cuba"
+#~ msgstr "Kuba"
+
+#~ msgid "Curacao"
+#~ msgstr "Curacao"
+
 #~ msgid "Current page and total page count"
 #~ msgstr "Aktuelle Seite und Anzahl aller Seiten"
 
 #~ msgid "Customizing"
 #~ msgstr "Das Portal anpassen"
 
+#~ msgid "Cyprus"
+#~ msgstr "Zypern"
+
 #~ msgid "Czech"
 #~ msgstr "Tschechisch"
+
+#, fuzzy
+#~ msgid "Czech Republic"
+#~ msgstr "Tschechische Republik"
 
 #~ msgid "Danish"
 #~ msgstr "Dänisch"
@@ -11583,8 +10752,14 @@ msgstr "JJJJ"
 #~ msgid "Delivery Receipt"
 #~ msgstr "Empfangsbestätigung"
 
+#~ msgid "Democratic Republic of the Congo"
+#~ msgstr "Demokratische Republik Kongo"
+
 #~ msgid "Demote one level"
 #~ msgstr "Eine Ebene nach unten verschieben"
+
+#~ msgid "Denmark"
+#~ msgstr "Dänemark"
 
 #~ msgid ""
 #~ "Detailed guides for all modules are located in the help section of the "
@@ -11607,6 +10782,11 @@ msgstr "JJJJ"
 
 #~ msgid "Displaying the help or the settings"
 #~ msgstr "Hilfe anzeigen oder Einstellungen aufrufen"
+
+#, fuzzy
+#~| msgid "About"
+#~ msgid "Djibouti"
+#~ msgstr "Über"
 
 #~ msgid "Do you already have a %s account?"
 #~ msgstr "Haben Sie bereits einen %s-Account?"
@@ -11656,6 +10836,9 @@ msgstr "JJJJ"
 
 #~ msgid "Document saved in folder \"%1$s\"."
 #~ msgstr "Dokument gespeichert in Ordner \"%1$s\""
+
+#~ msgid "Dominican Republic"
+#~ msgstr "Dominikanische Republik"
 
 #~ msgid "Done!"
 #~ msgstr "Erledigt"
@@ -11715,6 +10898,12 @@ msgstr "JJJJ"
 #~ msgid "Each %s. %s"
 #~ msgstr "Jeden %s. %s"
 
+#~ msgid "East Timor"
+#~ msgstr "Osttimor"
+
+#~ msgid "Ecuador"
+#~ msgstr "Ecuador"
+
 #~ msgid "Edit Appointment"
 #~ msgstr "Termin bearbeiten"
 
@@ -11751,6 +10940,12 @@ msgstr "JJJJ"
 
 #~ msgid "Editing multiple tasks"
 #~ msgstr "Mehrere Aufgaben bearbeiten"
+
+#~ msgid "Egypt"
+#~ msgstr "Ägypten"
+
+#~ msgid "El Salvador"
+#~ msgstr "El Salvador"
 
 #~ msgid "Email Address:"
 #~ msgstr "E-Mail-Adresse:"
@@ -11872,9 +11067,18 @@ msgstr "JJJJ"
 #~ msgid "Envelope"
 #~ msgstr "Envelope"
 
+#~ msgid "Eritrea"
+#~ msgstr "Eritrea"
+
 #, fuzzy
 #~ msgid "Estimated costs in minutes"
 #~ msgstr "Geschätzte Kosten"
+
+#~ msgid "Estonia"
+#~ msgstr "Estland"
+
+#~ msgid "Ethiopia"
+#~ msgstr "Äthopien"
 
 #~ msgid "Exception caught: "
 #~ msgstr "Ausnahmefehler:"
@@ -11884,9 +11088,6 @@ msgstr "JJJJ"
 
 #~ msgid "Exit Fullscreen"
 #~ msgstr "Vollbildmodus verlassen"
-
-#~ msgid "Expert mode"
-#~ msgstr "Expertenmodus"
 
 #~ msgid "Extended view"
 #~ msgstr "Erweiterte Ansicht"
@@ -11904,6 +11105,9 @@ msgstr "JJJJ"
 #~ msgid "Failure! Please refresh."
 #~ msgstr "Fehlgeschlagen. Bitte aktualisieren Sie."
 
+#~ msgid "Faroe Islands"
+#~ msgstr "Faröer Inseln"
+
 #~ msgctxt "app"
 #~ msgid "Favorite timezone"
 #~ msgstr "Zeitzonen-Favorit"
@@ -11916,6 +11120,9 @@ msgstr "JJJJ"
 
 #~ msgid "Fax (private)"
 #~ msgstr "Fax (privat)"
+
+#~ msgid "Fiji"
+#~ msgstr "Fidschi"
 
 #~ msgid "File as"
 #~ msgstr "Speichern unter"
@@ -11947,6 +11154,9 @@ msgstr "JJJJ"
 
 #~ msgid "Finish tour"
 #~ msgstr "Tour beenden"
+
+#~ msgid "Finland"
+#~ msgstr "Finnland"
 
 #~ msgid "Fit to screen height"
 #~ msgstr "An Bildschirmhöhe anpassen"
@@ -12002,6 +11212,16 @@ msgstr "JJJJ"
 #~ msgid "Found %1$s items in %2$s seconds"
 #~ msgstr "%1$s Objekte in %2$s Sekunden gefunden"
 
+#~ msgid "France"
+#~ msgstr "Frankreich"
+
+#, fuzzy
+#~ msgid "French Guiana"
+#~ msgstr "Französisch-Guayana"
+
+#~ msgid "French Polynesia"
+#~ msgstr "Französisch-Polynesien"
+
 #~ msgid "Friday"
 #~ msgstr "Freitag"
 
@@ -12018,14 +11238,29 @@ msgstr "JJJJ"
 #~ msgid "Further information"
 #~ msgstr "Weitere Informationen"
 
+#~ msgid "Gambia"
+#~ msgstr "Gambia"
+
 #~ msgid "General info"
 #~ msgstr "Allgemeine Infos"
+
+#~ msgid "Georgia"
+#~ msgstr "Georgien"
+
+#~ msgid "Germany"
+#~ msgstr "Deutschland"
 
 #~ msgid "Get a link"
 #~ msgstr "Einen Link abrufen"
 
 #~ msgid "Get started here!"
 #~ msgstr "Einstieg"
+
+#~ msgid "Ghana"
+#~ msgstr "Ghana"
+
+#~ msgid "Gibraltar"
+#~ msgstr "Gibraltar"
 
 #~ msgid "Go to page"
 #~ msgstr "Wechseln zu Seite"
@@ -12036,20 +11271,54 @@ msgstr "JJJJ"
 #~ msgid "Good morning"
 #~ msgstr "Guten Morgen"
 
+#~ msgid "Greece"
+#~ msgstr "Griechenland"
+
 #~ msgid "Greek"
 #~ msgstr "Griechisch"
+
+#~ msgid "Greenland"
+#~ msgstr "Grönland"
+
+#~ msgid "Grenada"
+#~ msgstr "Grenada"
 
 #~ msgid "Grey"
 #~ msgstr "Grau"
 
+#~ msgid "Guadeloupe"
+#~ msgstr "Guadeloupe"
+
+#~ msgid "Guam"
+#~ msgstr "Guam"
+
+#~ msgid "Guernsey"
+#~ msgstr "Guernsey"
+
 #~ msgid "Guidance"
 #~ msgstr "Kontext-Hilfe"
+
+#~ msgid "Guinea"
+#~ msgstr "Guinea"
+
+#~ msgid "Guinea-Bissau"
+#~ msgstr "Guinea-Bissau"
+
+#~ msgid "Guyana"
+#~ msgstr "Guyana"
 
 #~ msgid "H-split view"
 #~ msgstr "H-Split-Ansicht"
 
+#~ msgid "Haiti"
+#~ msgstr "Haiti"
+
 #~ msgid "Halo view"
 #~ msgstr "Die Halo View"
+
+#, fuzzy
+#~ msgid "Heard Island and McDonald Islands"
+#~ msgstr "Heard und McDonaldinseln"
 
 #~ msgid "Hello"
 #~ msgstr "Hallo"
@@ -12082,11 +11351,20 @@ msgstr "JJJJ"
 #~ msgid "Home"
 #~ msgstr "Privatadresse"
 
+#~ msgid "Honduras"
+#~ msgstr "Honduras"
+
 #~ msgid "How the settings are organized"
 #~ msgstr "Organisation der Einstellungen"
 
+#~ msgid "Hungary"
+#~ msgstr "Ungarn"
+
 #~ msgid "IMAP folder subscription"
 #~ msgstr "Abonnement von IMAP-Ordnern"
+
+#~ msgid "Iceland"
+#~ msgstr "Island"
 
 #~ msgid "Icon view"
 #~ msgstr "Symbolansicht"
@@ -12164,6 +11442,12 @@ msgstr "JJJJ"
 #~ msgid "Incoming Notification Mails"
 #~ msgstr "Eingehende E-Mail-Benachrichtigungen"
 
+#~ msgid "India"
+#~ msgstr "Indien"
+
+#~ msgid "Indonesia"
+#~ msgstr "Indonesien"
+
 #~ msgid "Info area"
 #~ msgstr "Der Infobereich"
 
@@ -12232,14 +11516,55 @@ msgstr "JJJJ"
 #~ msgid "Inviting other participants"
 #~ msgstr "Andere Teilnehmer einladen"
 
+#~ msgid "Iran"
+#~ msgstr "Iran"
+
+#~ msgid "Iraq"
+#~ msgstr "Irak"
+
+#~ msgid "Ireland"
+#~ msgstr "Irland"
+
+#~ msgid "Isle of Man"
+#~ msgstr "Isle of Man"
+
+#~ msgid "Israel"
+#~ msgstr "Israel"
+
 #~ msgid "Italian (Italy)"
 #~ msgstr "Italienisch (Italien)"
+
+#~ msgid "Italy"
+#~ msgstr "Italien"
 
 #~ msgid "Items without a file can not be opened."
 #~ msgstr "Objekte ohne Datei können nicht geöffnet werden."
 
+#~ msgid "Ivory Coast"
+#~ msgstr "Elfenbeinküste"
+
+#~ msgid "Jamaica"
+#~ msgstr "Jamaika"
+
+#~ msgid "Japan"
+#~ msgstr "Japan"
+
+#~ msgid "Jersey"
+#~ msgstr "Jersey"
+
+#, fuzzy
+#~ msgid "Jordan"
+#~ msgstr "Jordanien"
+
+#, fuzzy
+#~ msgid "Just open %1$s"
+#~ msgstr "Öffnen Sie einfach %1$s"
+
 #~ msgid "Justify"
 #~ msgstr "Blocksatz"
+
+#~ msgid "Kazakhstan"
+#~ msgstr "Kasachstan"
 
 #~ msgid "Keep start and end time"
 #~ msgstr "Start- und Endzeit beibehalten"
@@ -12247,14 +11572,33 @@ msgstr "JJJJ"
 #~ msgid "Keep the draft."
 #~ msgstr "Entwurf behalten."
 
+#~ msgid "Kenya"
+#~ msgstr "Kenja"
+
+#~ msgid "Kiribati"
+#~ msgstr "Kiribati"
+
 #~ msgid "Knowledgebase"
 #~ msgstr "Wissensdatenbank"
+
+#~ msgid "Kuwait"
+#~ msgstr "Kuwait"
+
+#, fuzzy
+#~ msgid "Kyrgyzstan"
+#~ msgstr "Kirgisistan"
 
 #~ msgid "Label"
 #~ msgstr "Label"
 
+#~ msgid "Laos"
+#~ msgstr "Laos"
+
 #~ msgid "Last modified"
 #~ msgstr "Letzte Änderung"
+
+#~ msgid "Latvia"
+#~ msgstr "Lettland"
 
 #~ msgid "Launching an app"
 #~ msgstr "Eine App starten"
@@ -12264,6 +11608,9 @@ msgstr "JJJJ"
 
 #~ msgid "Leave messages on server"
 #~ msgstr "Nachrichten auf Server behalten"
+
+#~ msgid "Lebanon"
+#~ msgstr "Libanon"
 
 #~ msgid "Left"
 #~ msgstr "Linksbündig"
@@ -12276,6 +11623,15 @@ msgstr "JJJJ"
 
 #~ msgid "Left border"
 #~ msgstr "Rahmenlinie links"
+
+#~ msgid "Lesotho"
+#~ msgstr "Lesotho"
+
+#~ msgid "Libya"
+#~ msgstr "Lybien"
+
+#~ msgid "Liechtenstein"
+#~ msgstr "Liechtenstein"
 
 #~ msgid "Light Blue"
 #~ msgstr "Hellblau"
@@ -12306,6 +11662,9 @@ msgstr "JJJJ"
 #~ msgid "Link / URL"
 #~ msgstr "Link/URL"
 
+#~ msgid "Lithuania"
+#~ msgstr "Litauen"
+
 #~ msgid "Load Error"
 #~ msgstr "Ladefehler"
 
@@ -12321,8 +11680,20 @@ msgstr "JJJJ"
 #~ msgid "Logout now"
 #~ msgstr "Jetzt abmelden"
 
+#~ msgid "Luxembourg"
+#~ msgstr "Luxemburg"
+
 #~ msgid "Mac"
 #~ msgstr "Mac"
+
+#~ msgid "Macao"
+#~ msgstr "Macao"
+
+#~ msgid "Macedonia"
+#~ msgstr "Mazedonien"
+
+#~ msgid "Madagascar"
+#~ msgstr "Madagascar"
 
 #~ msgid "Mail Thread Details"
 #~ msgstr "E-Mail-Thread-Details"
@@ -12346,9 +11717,39 @@ msgstr "JJJJ"
 #~ msgid "Mailfilter updated"
 #~ msgstr "Mailfilter aktualisiert"
 
+#~ msgid "Malawi"
+#~ msgstr "Malawi"
+
+#~ msgid "Malaysia"
+#~ msgstr "Malaysien"
+
+#~ msgid "Maldives"
+#~ msgstr "Malediven"
+
+#~ msgid "Mali"
+#~ msgstr "Mali"
+
+#~ msgid "Malta"
+#~ msgstr "Malta"
+
 #~ msgctxt "help"
 #~ msgid "Managing E-Mail messages"
 #~ msgstr "E-Mail-Nachrichten verwalten"
+
+#~ msgid "Marshall Islands"
+#~ msgstr "Marshallinseln"
+
+#~ msgid "Martinique"
+#~ msgstr "Martinique"
+
+#~ msgid "Mauritania"
+#~ msgstr "Mauretanien"
+
+#~ msgid "Mauritius"
+#~ msgstr "Mauritius"
+
+#~ msgid "Mayotte"
+#~ msgstr "Mayotte"
 
 #~ msgid "Mediaplayer"
 #~ msgstr "Mediaplayer"
@@ -12359,6 +11760,9 @@ msgstr "JJJJ"
 #~ msgid "Message is unread"
 #~ msgstr "Nachricht wurde nicht gelesen"
 
+#~ msgid "Mexico"
+#~ msgstr "Mexiko"
+
 #~ msgid "Mobile"
 #~ msgstr "Mobiltelefon"
 
@@ -12368,11 +11772,23 @@ msgstr "JJJJ"
 #~ msgid "Modified by"
 #~ msgstr "Geändert durch"
 
+#~ msgid "Moldova"
+#~ msgstr "Moldawien"
+
 #~ msgid "Monday"
 #~ msgstr "Montag"
 
+#~ msgid "Mongolia"
+#~ msgstr "Mongolei"
+
+#~ msgid "Montenegro"
+#~ msgstr "Montenegro"
+
 #~ msgid "Month View"
 #~ msgstr "Monatsansicht"
+
+#~ msgid "Montserrat"
+#~ msgstr "Montserrat"
 
 #~ msgid "More ..."
 #~ msgstr "Weitere ..."
@@ -12380,8 +11796,18 @@ msgstr "JJJJ"
 #~ msgid "More zoom settings"
 #~ msgstr "Weitere Zoom-Einstellungen"
 
+#, fuzzy
+#~ msgid "Morocco"
+#~ msgstr "Marocco"
+
 #~ msgid "Moving mails ... This may take a few seconds."
 #~ msgstr "E-Mails werden verschoben... Dies kann eine Weile dauern."
+
+#~ msgid "Mozambique"
+#~ msgstr "Mosambik"
+
+#~ msgid "Myanmar"
+#~ msgstr "Myanmar"
 
 #~ msgid "Name already taken"
 #~ msgstr "Der Name ist bereits vergeben"
@@ -12395,17 +11821,35 @@ msgstr "JJJJ"
 #~ msgid "Names and email addresses"
 #~ msgstr "Namen und E-Mail-Adressen"
 
+#~ msgid "Namibia"
+#~ msgstr "Namibia"
+
+#~ msgid "Nauru"
+#~ msgstr "Nauru"
+
 #~ msgid "Navigation bar"
 #~ msgstr "Navigationsleiste"
 
+#~ msgid "Nepal"
+#~ msgstr "Nepal"
+
+#~ msgid "Netherlands"
+#~ msgstr "Niederlande"
+
 #~ msgid "Network Problems"
 #~ msgstr "Netzwerkprobleme"
+
+#~ msgid "New Caledonia"
+#~ msgstr "Neukaledonien"
 
 #~ msgid "New Mail from %1$s %2$s. Press [enter] to open"
 #~ msgstr "Neue E-Mail von %1$s %2$s. Drücken Sie die Eingabetaste zum Öffnen."
 
 #~ msgid "New Mails"
 #~ msgstr "Neue E-Mails"
+
+#~ msgid "New Zealand"
+#~ msgstr "Neuseeland"
 
 #~ msgid "New objects icon"
 #~ msgstr "Das Symbol Neue Objekte"
@@ -12430,6 +11874,18 @@ msgstr "JJJJ"
 
 #~ msgid "Next birthdays"
 #~ msgstr "Nächste Geburtstage"
+
+#~ msgid "Nicaragua"
+#~ msgstr "Nicaragua"
+
+#~ msgid "Niger"
+#~ msgstr "Niger"
+
+#~ msgid "Nigeria"
+#~ msgstr "Nigeria"
+
+#~ msgid "Niue"
+#~ msgstr "Niue"
 
 #~ msgid "No appointments found for \"%s\""
 #~ msgstr "Keine Termine gefunden für \"%s\""
@@ -12472,6 +11928,15 @@ msgstr "JJJJ"
 #~ msgid "No, rather not"
 #~ msgstr "Nein, lieber nicht"
 
+#~ msgid "Norfolk Island"
+#~ msgstr "Norfolkinsel"
+
+#~ msgid "North Korea"
+#~ msgstr "Nordkorea"
+
+#~ msgid "Norway"
+#~ msgstr "Norwegen"
+
 #~ msgid "Not yet confirmed"
 #~ msgstr "Noch nicht bestätigt"
 
@@ -12486,6 +11951,9 @@ msgstr "JJJJ"
 
 #~ msgid "Off"
 #~ msgstr "Aus"
+
+#~ msgid "Oman"
+#~ msgstr "Oman"
 
 #~ msgid "On %s %s each %s. months"
 #~ msgstr "Am %s %s jeden %s. Monat"
@@ -12561,6 +12029,23 @@ msgstr "JJJJ"
 #~ msgid "Page number"
 #~ msgstr "Seitenzahl"
 
+#~ msgid "Pakistan"
+#~ msgstr "Pakistan"
+
+#~ msgid "Palau"
+#~ msgstr "Palau"
+
+#, fuzzy
+#~ msgid "Palestinian Territory"
+#~ msgstr "Palästinensische Autonomiegebiete"
+
+#~ msgid "Panama"
+#~ msgstr "Panama"
+
+#, fuzzy
+#~ msgid "Papua New Guinea"
+#~ msgstr "Papua Neu Guinea"
+
 #~ msgid "Paragraph Fill Color"
 #~ msgstr "Absatz-Hintergrundfarbe"
 
@@ -12569,6 +12054,9 @@ msgstr "JJJJ"
 
 #~ msgid "Paragraph borders"
 #~ msgstr "Absatzumrandung"
+
+#~ msgid "Paraguay"
+#~ msgstr "Paraguay"
 
 #~ msgid "Pause Presentation"
 #~ msgstr "Präsentation anhalten"
@@ -12589,6 +12077,12 @@ msgstr "JJJJ"
 
 #~ msgid "Personal message (optional)"
 #~ msgstr "Persönliche Nachricht (optional)"
+
+#~ msgid "Peru"
+#~ msgstr "Peru"
+
+#~ msgid "Philippines"
+#~ msgstr "Philippinen"
 
 #~ msgid "Phone (private)"
 #~ msgstr "Telefon (privat)"
@@ -12614,6 +12108,9 @@ msgstr "JJJJ"
 #~ msgid "Please select a file to insert"
 #~ msgstr "Wählen Sie eine einzufügende Datei"
 
+#~ msgid "Poland"
+#~ msgstr "Polen"
+
 #~ msgid "Polish"
 #~ msgstr "Polnisch"
 
@@ -12625,6 +12122,9 @@ msgstr "JJJJ"
 
 #~ msgid "Portal settings chapter"
 #~ msgstr "Kapitel 'Portal-Einstellungen'"
+
+#~ msgid "Portugal"
+#~ msgstr "Portugal"
 
 #~ msgid "Portuguese (Portugal)"
 #~ msgstr "Portugiesisch (Portugal)"
@@ -12686,8 +12186,14 @@ msgstr "JJJJ"
 #~ msgid "Publish item"
 #~ msgstr "Objekt veröffentlichen"
 
+#~ msgid "Puerto Rico"
+#~ msgstr "Puerto Rico"
+
 #~ msgid "Pull To Refresh"
 #~ msgstr "Zum Aktualisieren 'Pull' ausführen"
+
+#~ msgid "Qatar"
+#~ msgstr "Katar"
 
 #~ msgid "RSS group"
 #~ msgstr "RSS-Gruppe"
@@ -12726,11 +12232,18 @@ msgstr "JJJJ"
 #~ msgid "Rename document"
 #~ msgstr "Dokument umbenennen"
 
+#~ msgid "Republic of the Congo"
+#~ msgstr "Republik Kongo"
+
 #~ msgid "Reset"
 #~ msgstr "Zurücksetzen"
 
 #~ msgid "Restore Last Operation"
 #~ msgstr "Letzte Aktion wiederherstellen"
+
+#, fuzzy
+#~ msgid "Reunion"
+#~ msgstr "Réunion"
 
 #~ msgid "Revert Last Operation"
 #~ msgstr "Letzte Aktion rückgängig machen"
@@ -12749,13 +12262,54 @@ msgstr "JJJJ"
 #~ msgid "Right border"
 #~ msgstr "Rahmenlinie rechts"
 
+#~ msgid "Romania"
+#~ msgstr "Rumänien"
+
+#~ msgid "Russia"
+#~ msgstr "Russland"
+
+#~ msgid "Rwanda"
+#~ msgstr "Ruanda"
+
 #, fuzzy
 #~| msgid "RSS"
 #~ msgid "SMS"
 #~ msgstr "RSS"
 
+#, fuzzy
+#~ msgid "Saint Barthelemy"
+#~ msgstr "Saint-Barthélemy"
+
+#~ msgid "Saint Helena"
+#~ msgstr "St. Helena"
+
+#, fuzzy
+#~ msgid "Saint Kitts and Nevis"
+#~ msgstr "Saint Kitts und Nevis"
+
+#, fuzzy
+#~ msgid "Saint Lucia"
+#~ msgstr "St. Lucia"
+
+#, fuzzy
+#~ msgid "Saint Pierre and Miquelon"
+#~ msgstr "Saint-Pierre und Miquelon"
+
+#~ msgid "Samoa"
+#~ msgstr "Samoa"
+
+#~ msgid "San Marino"
+#~ msgstr "San Marino"
+
+#~ msgid "Sao Tome and Principe"
+#~ msgstr "São Tomé und Príncipe"
+
 #~ msgid "Saturday"
 #~ msgstr "Samstag"
+
+#, fuzzy
+#~ msgid "Saudi Arabia"
+#~ msgstr "Saudi-Arabien"
 
 #~ msgid "Save as EML"
 #~ msgstr "Als EML speichern"
@@ -12807,6 +12361,9 @@ msgstr "JJJJ"
 #~ msgid "Selecting a view"
 #~ msgstr "Eine Ansicht wählen"
 
+#~ msgid "Send me the profile data by SMS."
+#~ msgstr "Schicken Sie mir die Profildaten per SMS."
+
 #~ msgid "Sender"
 #~ msgstr "Absender"
 
@@ -12816,14 +12373,27 @@ msgstr "JJJJ"
 #~ msgid "Sending the E-Mail"
 #~ msgstr "Die E-Mail senden"
 
+#~ msgid "Senegal"
+#~ msgstr "Senegal"
+
 #~ msgid "Sent folder"
 #~ msgstr "Ordner 'Gesendet'"
+
+#~ msgid "Serbia"
+#~ msgstr "Serbien"
 
 #~ msgid "Server Error"
 #~ msgstr "Server-Fehler"
 
 #~ msgid "Set as default"
 #~ msgstr "Als Standard festlegen"
+
+#, fuzzy
+#~ msgid "Setup your profile manually."
+#~ msgstr "Richten Sie Ihr Profil manuell ein."
+
+#~ msgid "Seychelles"
+#~ msgstr "Seychellen"
 
 #~ msgid "Share link by email"
 #~ msgstr "Link per E-Mail freigeben"
@@ -12906,6 +12476,9 @@ msgstr "JJJJ"
 #~ msgid "Sidebar"
 #~ msgstr "Die Seitenleiste"
 
+#~ msgid "Sierra Leone"
+#~ msgstr "Sierra Leone"
+
 #~ msgid "Signature"
 #~ msgstr "Signatur"
 
@@ -12921,11 +12494,24 @@ msgstr "JJJJ"
 #~ msgid "Simple Pad"
 #~ msgstr "Einfacher Texteditor"
 
+#~ msgid "Singapore"
+#~ msgstr "Singapur"
+
+#, fuzzy
+#~ msgid "Sint Maarten"
+#~ msgstr "Sint Maarten"
+
 #~ msgid "Skip this step"
 #~ msgstr "Diesen Schritt überspringen"
 
 #~ msgid "Slideshow"
 #~ msgstr "Diashow"
+
+#~ msgid "Slovakia"
+#~ msgstr "Slowakei"
+
+#~ msgid "Slovenia"
+#~ msgstr "Slowenien"
 
 #~ msgid "Smartphone"
 #~ msgstr "Smartphone"
@@ -12935,6 +12521,9 @@ msgstr "JJJJ"
 #~ msgstr ""
 #~ "Social Accounts werden nur zum Herunterladen von Kontakt- und/oder "
 #~ "Kalenderdaten verwendet"
+
+#~ msgid "Somalia"
+#~ msgstr "Somalia"
 
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Jemand hat eine Datei für Sie freigegeben"
@@ -12962,11 +12551,26 @@ msgstr "JJJJ"
 #~ msgid "Sorting your tasks"
 #~ msgstr "Aufgaben sortieren"
 
+#~ msgid "South Africa"
+#~ msgstr "Südafrika"
+
+#~ msgid "South Korea"
+#~ msgstr "Südkorea"
+
+#~ msgid "South Sudan"
+#~ msgstr "Südsudan"
+
+#~ msgid "Spain"
+#~ msgstr "Spanien"
+
 #~ msgid "Spam folder"
 #~ msgstr "Ordner 'Spam'"
 
 #~ msgid "Spanish"
 #~ msgstr "Spanisch"
+
+#~ msgid "Sri Lanka"
+#~ msgstr "Sri Lanka"
 
 #~ msgid "Start Presentation"
 #~ msgstr "Präsentation starten"
@@ -13016,23 +12620,50 @@ msgstr "JJJJ"
 #~ msgid "Such data will never be uploaded"
 #~ msgstr "Solche Daten werden niemals hochgeladen"
 
+#~ msgid "Sudan"
+#~ msgstr "Sudan"
+
 #~ msgid "Sunday"
 #~ msgstr "Sonntag"
 
 #~ msgid "Superscript"
 #~ msgstr "Hochstellung"
 
+#~ msgid "Suriname"
+#~ msgstr "Suriname"
+
+#~ msgid "Swaziland"
+#~ msgstr "Swasiland"
+
+#~ msgid "Sweden"
+#~ msgstr "Schweden"
+
 #~ msgid "Swedish (Sweden)"
 #~ msgstr "Schwedisch (Schweden)"
 
+#~ msgid "Switzerland"
+#~ msgstr "Schweiz"
+
 #~ msgid "Synchronization to the server has been lost."
 #~ msgstr "Die Server-Synchronisation ist abgebrochen "
+
+#~ msgid "Syria"
+#~ msgstr "Syrien"
 
 #~ msgid "Table"
 #~ msgstr "Tabelle"
 
 #~ msgid "Tablet"
 #~ msgstr "Tablet"
+
+#~ msgid "Taiwan"
+#~ msgstr "Taiwan"
+
+#~ msgid "Tajikistan"
+#~ msgstr "Tadschikistan"
+
+#~ msgid "Tanzania"
+#~ msgstr "Tansania"
 
 #~ msgid "Task chapter"
 #~ msgstr "Kapitel 'Aufgaben'"
@@ -13078,6 +12709,9 @@ msgstr "JJJJ"
 
 #~ msgid "Text:"
 #~ msgstr "Text:"
+
+#~ msgid "Thailand"
+#~ msgstr "Thailand"
 
 #~ msgctxt "help"
 #~ msgid "The E-Mail Components"
@@ -13582,6 +13216,15 @@ msgstr "JJJJ"
 #~ msgid "Toggle search"
 #~ msgstr "Suche an/aus"
 
+#~ msgid "Togo"
+#~ msgstr "Togo"
+
+#~ msgid "Tokelau"
+#~ msgstr "Tokelau"
+
+#~ msgid "Tonga"
+#~ msgstr "Tonga"
+
 #~ msgid "Top and bottom borders"
 #~ msgstr "Oberer und unterer Rand"
 
@@ -13601,11 +13244,27 @@ msgstr "JJJJ"
 #~ msgid "Trash folder"
 #~ msgstr "Ordner 'Papierkorb'"
 
+#, fuzzy
+#~ msgid "Trinidad and Tobago"
+#~ msgstr "Trinidad und Tobago"
+
 #~ msgid "Tuesday"
 #~ msgstr "Dienstag"
 
 #~ msgid "Tumblr Blogs"
 #~ msgstr "Tumblr-Blogs"
+
+#~ msgid "Tunisia"
+#~ msgstr "Tunesien"
+
+#~ msgid "Turkey"
+#~ msgstr "Türkei"
+
+#~ msgid "Turkmenistan"
+#~ msgstr "Turkmenistan"
+
+#~ msgid "Tuvalu"
+#~ msgstr "Tuvalu"
 
 #~ msgid "Tweet"
 #~ msgstr "Tweet"
@@ -13613,11 +13272,28 @@ msgstr "JJJJ"
 #~ msgid "URL:"
 #~ msgstr "URL:"
 
+#~ msgid "Uganda"
+#~ msgstr "Uganda"
+
+#~ msgid "Ukraine"
+#~ msgstr "Ukraine"
+
 #~ msgid "Under construction"
 #~ msgstr "Unter Bearbeitung"
 
 #~ msgid "Underline"
 #~ msgstr "Unterstrichen"
+
+#~ msgid "United Arab Emirates"
+#~ msgstr "Vereinigte Arabische Emirate"
+
+#, fuzzy
+#~ msgid "United Kingdom"
+#~ msgstr "Vereinigtes Königreich"
+
+#, fuzzy
+#~ msgid "United States"
+#~ msgstr "Vereinigte Staaten von Amerika"
 
 #~ msgid "Unknown error while checking subreddit."
 #~ msgstr "Unbekannter Fehler beim Prüfen des Subreddit"
@@ -13645,6 +13321,9 @@ msgstr "JJJJ"
 
 #~ msgid "Uploading..."
 #~ msgstr "Hochladen..."
+
+#~ msgid "Uruguay"
+#~ msgstr "Uruguay"
 
 #~ msgid "Use left/right arrow keys to navigate and escape key to exit view."
 #~ msgstr ""
@@ -13674,6 +13353,22 @@ msgstr "JJJJ"
 #~ msgid "Using the reminder functions"
 #~ msgstr "Die Erinnerungsfunktion verwenden"
 
+#~ msgid "Uzbekistan"
+#~ msgstr "Usbekistan"
+
+#, fuzzy
+#~| msgid "Manual"
+#~ msgid "Vanuatu"
+#~ msgstr "Manuell"
+
+#, fuzzy
+#~| msgid "Vertical"
+#~ msgid "Vatican"
+#~ msgstr "Vertikal"
+
+#~ msgid "Venezuela"
+#~ msgstr "Venezuela"
+
 #~ msgid "Version history"
 #~ msgstr "Versionshistorie"
 
@@ -13682,6 +13377,9 @@ msgstr "JJJJ"
 
 #~ msgid "Video enabled"
 #~ msgstr "Video aktiviert"
+
+#~ msgid "Vietnam"
+#~ msgstr "Vietnam"
 
 #~ msgid "View (New)"
 #~ msgstr "Ansicht (neu)"
@@ -13694,6 +13392,10 @@ msgstr "JJJJ"
 
 #~ msgid "Weekend Day"
 #~ msgstr "Wochenendtag"
+
+#, fuzzy
+#~ msgid "Western Sahara"
+#~ msgstr "Westsahara"
 
 #~ msgid "What do you want to use on your Mac?"
 #~ msgstr "Was möchten Sie auf Ihrem Mac verwenden?"
@@ -13874,6 +13576,9 @@ msgstr "JJJJ"
 
 #~ msgid "Your vacation notice has been saved"
 #~ msgstr "Ihre Abwesenheitsbenachrichtigung wurde gespeichert"
+
+#~ msgid "Zambia"
+#~ msgstr "Sambia"
 
 #~ msgid "Zoom: %1$d%"
 #~ msgstr "Zoom: %1$d%"
@@ -14082,9 +13787,6 @@ msgstr "JJJJ"
 
 #~ msgid "use Count"
 #~ msgstr "Count verwenden"
-
-#~ msgid "vacation"
-#~ msgstr "Abwesenheit"
 
 #~ msgid "wednesday"
 #~ msgstr "Mittwoch"

@@ -887,28 +887,6 @@ msgstr "管理ロール"
 msgid "Administrator"
 msgstr "管理者"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Advanced Facets"
-msgid "Advanced user?"
-msgstr "詳細ファセット"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Afghanistan"
-msgstr "アフガニスタン"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Aland Islands"
-msgstr "オーランド諸島"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Albania"
-msgstr "アルバニア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Algeria"
-msgstr "アルジェリア"
-
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
@@ -974,14 +952,17 @@ msgstr "HTML フォーマットのメールを許可"
 msgid "Allow pre-loading of externally linked images"
 msgstr "外部リンク先の画像の事前読み込みを許可"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "American Samoa"
-msgstr "米領サモア"
-
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 #, fuzzy
 #| msgid "An error occurred while importing the document."
 msgid "An error occurred converting the document so it cannot be displayed."
+msgstr "ドキュメントのインポート中にエラーが発生しました。"
+
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "An error occurred while importing the document."
+msgid "An error occurred loading the document so it cannot be displayed."
 msgstr "ドキュメントのインポート中にエラーが発生しました。"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -1007,38 +988,22 @@ msgstr "内部エラーが発生しました。"
 msgid "An unknown error occurred"
 msgstr "不明なエラーが発生しました。"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Andorra"
-msgstr "アンドラ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Angola"
-msgstr "アンゴラ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Anguilla"
-msgstr "アングイラ"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Anniversary"
 msgstr "記念日"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Antigua and Barbuda"
-msgstr "アンティグア‐バルブダ"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Any recipient"
 msgstr "すべての宛先"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "App Store"
+msgstr ""
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Append vCard"
 msgstr "vCard を添付"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Apple App Store"
-msgstr ""
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
@@ -1154,18 +1119,6 @@ msgstr "メッセージのアーカイブしています..."
 msgid "Are you sure you want to delete this Tweet?"
 msgstr "このツイートを削除しますか？"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Argentina"
-msgstr "アルゼンチン"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Armenia"
-msgstr "アルメニア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Aruba"
-msgstr "アルーバ"
-
 #. Auth type. Short for "Use same credentials as incoming mail server"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "As incoming mail server"
@@ -1217,14 +1170,6 @@ msgstr "添付ファイルを保存しました。"
 msgid "August"
 msgstr "8 月"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Australia"
-msgstr "オーストラリア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Austria"
-msgstr "オーストリア"
-
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Authentication"
 msgstr "認証"
@@ -1250,6 +1195,12 @@ msgstr "下書きの自動保存"
 msgid "Automatic Configuration"
 msgstr "マイ ソーシャルの構成"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "My Social Configuration"
+msgid "Automatic Configuration (via SMS)"
+msgstr "マイ ソーシャルの構成"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "通知エリアを自動的に表示"
@@ -1270,10 +1221,6 @@ msgid ""
 "sending"
 msgstr "メールの送信時に \"収集済みアドレス\" フォルダに連絡先を自動的に収集"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Automatically configure your device by clicking the button below."
-msgstr ""
-
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
 #| msgid ""
@@ -1287,10 +1234,6 @@ msgstr "アポイントが承諾または辞退された後受信通知を自動
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Average time: %1$s ms"
 msgstr "平均時間: %1$s ms"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Azerbaijan"
-msgstr "アゼルバイジャン"
 
 #. Bytes
 #: apps/io.ox/core/strings.js module:io.ox/core
@@ -1318,22 +1261,6 @@ msgstr "アポイントに戻る"
 msgid "Back to sign in"
 msgstr "サイン インに戻る"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bahamas"
-msgstr "バハマ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bahrain"
-msgstr "バーレーン"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bangladesh"
-msgstr "バングラデシュ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Barbados"
-msgstr "バルバドス"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/main.js
 msgid "Basic settings"
@@ -1346,32 +1273,6 @@ msgid ""
 msgstr ""
 "製品を引き続きご利用いただく前に、基本的情報をいくつか入力する必要がありま"
 "す。入力には１分もかかりません。"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Belarus"
-msgstr "ベラルーシ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Belgium"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "America/Belize"
-msgid "Belize"
-msgstr "アメリカ/ベリーズ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Benin"
-msgstr "ベナン"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bermuda"
-msgstr "バミューダ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bhutan"
-msgstr "ブータン"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -1405,22 +1306,6 @@ msgstr "ブラインドコピー"
 msgid "Blue"
 msgstr "青"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bolivia"
-msgstr "ボリビア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bonaire, Saint Eustatius and Saba "
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bosnia and Herzegovina"
-msgstr "ボスニアヘルツェゴビナ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Botswana"
-msgstr "ボツワナ"
-
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #, fuzzy
 #| msgid "InfoBox"
@@ -1431,20 +1316,6 @@ msgstr "インフォボックス"
 msgid "Branches"
 msgstr "支店"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Brazil"
-msgstr "ブラジル"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "British Indian Ocean Territory"
-msgstr "英領インド洋植民地"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Virgin Islands, U.S."
-msgid "British Virgin Islands"
-msgstr "ヴァージン諸島 (米国)"
-
 #: apps/io.ox/presenter/actions.js module:io.ox/presenter
 msgid "Broadcast your presentation over the Web."
 msgstr "プレゼンテーションをウェブ上で放送します。"
@@ -1452,24 +1323,6 @@ msgstr "プレゼンテーションをウェブ上で放送します。"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Browser"
 msgstr "ブラウザ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Asia/Brunei"
-msgid "Brunei"
-msgstr "アジア/ブルネイ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Bulgaria"
-msgstr "ブルガリア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Burkina Faso"
-msgstr "ブルキナファソ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Burundi"
-msgstr "ブルンジ"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Business Address"
@@ -1540,18 +1393,6 @@ msgstr "予定表ビュー"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "予定表："
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cambodia"
-msgstr "カンボジア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cameroon"
-msgstr "カメルーン"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Canada"
-msgstr "カナダ"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -1654,17 +1495,9 @@ msgstr ""
 msgid "Capacity"
 msgstr "容量"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cape Verde"
-msgstr "カボヴェルデ"
-
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "カートには何も入っていません。"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cayman Islands"
-msgstr "ケイマン諸島"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
@@ -1675,14 +1508,6 @@ msgstr "携帯電話"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Cell phone (alt)"
 msgstr "携帯電話 (予備)"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Central African Republic"
-msgstr "中央アフリカ共和国"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Chad"
-msgstr "チャド"
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid "Change"
@@ -1759,18 +1584,6 @@ msgstr "認証情報をチェックしています..."
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Children"
 msgstr "子供"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Chile"
-msgstr "チリ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "China"
-msgstr "中国"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Christmas Island"
-msgstr "クリスマス島"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "City"
@@ -1895,20 +1708,10 @@ msgstr "プレミアム機能"
 msgid "Close this reminder"
 msgstr "このアラームを閉じる"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Cook Islands"
-msgid "Cocos Islands"
-msgstr "クック諸島"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Collapse form"
 msgstr "フォームを折りたたむ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Colombia"
-msgstr "コロンビア"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -1958,12 +1761,6 @@ msgstr "共通項目"
 msgid "Common Emoji"
 msgstr "他社共通絵文字"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Tomorrow"
-msgid "Comoros"
-msgstr "明日"
-
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
@@ -1998,6 +1795,12 @@ msgstr "新規メールを作成"
 #: module:io.ox/settings
 msgid "Conditions"
 msgstr "条件"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Configuration changed"
+msgid "Configuration Email"
+msgstr "構成が変更されました。"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
@@ -2115,10 +1918,6 @@ msgid "Convert the entered start and end dates to match the modified timezones"
 msgstr ""
 "入力した開始日および終了日を変換して、変更したタイムゾーンに一致させます。"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cook Islands"
-msgstr "クック諸島"
-
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/files/actions.js
@@ -2136,10 +1935,6 @@ msgstr "コピー"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Copy to description"
 msgstr "説明にコピー"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Costa Rica"
-msgstr "コスタリカ"
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "Costs must be between -%1$d and %1$d."
@@ -2295,20 +2090,6 @@ msgctxt "help"
 msgid "Creating Files"
 msgstr "ファイルの作成"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Croatia"
-msgstr "クロアチア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cuba"
-msgstr "キューバ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Macao"
-msgid "Curacao"
-msgstr "マカオ"
-
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Currency"
 msgstr "通貨"
@@ -2337,14 +2118,6 @@ msgstr "カスタム名"
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Customize this page"
 msgstr "このページをカスタマイズ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Cyprus"
-msgstr "キプロス"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Czech Republic"
-msgstr "チェコ共和国"
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Dark colors"
@@ -2559,16 +2332,6 @@ msgstr "削除済みメッセージ"
 msgid "Deleting messages on local storage also deletes them on server"
 msgstr "ローカル ストレージとサーバ上のメッセージを削除"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Korea, Democratic People's Republic of"
-msgid "Democratic Republic of the Congo"
-msgstr "北朝鮮"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Denmark"
-msgstr ""
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
 msgid "Department"
@@ -2711,10 +2474,6 @@ msgstr "配布リスト"
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "配布リストが保存されました。"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Djibouti"
-msgstr "ジブチ"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
@@ -2868,14 +2627,6 @@ msgstr "Documents"
 msgctxt "app"
 msgid "Documents"
 msgstr "Documents"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Dominica"
-msgstr "ドミニカ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Dominican Republic"
-msgstr "ドミニカ共和国"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -3039,16 +2790,6 @@ msgstr "期限: %1$s"
 msgid "EB"
 msgstr "EB"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Last month"
-msgid "East Timor"
-msgstr "先月"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Ecuador"
-msgstr "エクアドル"
-
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
@@ -3161,16 +2902,7 @@ msgstr "編集して名前を設定"
 msgid "Editor"
 msgstr "エディタ"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Egypt"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "El Salvador"
-msgstr "エルサルバドル"
-
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Email"
 msgstr "メール"
 
@@ -3321,14 +3053,6 @@ msgstr "起業家"
 msgid "Envelope - To"
 msgstr "エンベロープ - 宛先"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Equatorial Guinea"
-msgstr "赤道ギニア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Eritrea"
-msgstr "エリトレア"
-
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/core/yell.js
@@ -3369,14 +3093,6 @@ msgstr "見積もりコスト"
 #: apps/io.ox/tasks/view-detail.js
 msgid "Estimated duration in minutes"
 msgstr "見積もり時間 (分)"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Estonia"
-msgstr "エストニア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Ethiopia"
-msgstr "エチオピア"
 
 #. recurrence string
 #. %1$d: numeric
@@ -3476,6 +3192,12 @@ msgstr "フォームを展開"
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Expand timeframe by one month"
 msgstr "1 か月期間を拡大する"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Expert mode"
+msgid "Expert user?"
+msgstr "エキスパート モード"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 #, fuzzy
@@ -3585,16 +3307,6 @@ msgid ""
 msgstr ""
 "確認ステータスの更新に失敗しました。仕事が削除されている可能性があります。"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Aland Islands"
-msgid "Falkland Islands"
-msgstr "オーランド諸島"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Faroe Islands"
-msgstr "フェロー諸島"
-
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Favorite"
 msgstr "お気に入りに登録"
@@ -3650,10 +3362,6 @@ msgstr "フィードバック"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Feeling • Decoration"
 msgstr "気持ち・装飾"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Fiji"
-msgstr "フィジー"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
@@ -3742,10 +3450,6 @@ msgstr "空き時間を検索"
 msgctxt "tour"
 msgid "Finish"
 msgstr "完了"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Finland"
-msgstr "フィンランド"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -3893,12 +3597,6 @@ msgstr "すべての受信メールを次のアドレスに転送"
 msgid "Forward emails as"
 msgstr "メールの転送方法:"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Freelancer"
-msgid "France"
-msgstr "フリーランサー"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Free"
@@ -3907,14 +3605,6 @@ msgstr "空き時間"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Freelancer"
 msgstr "フリーランサー"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "French Guiana"
-msgstr "仏領ギアナ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "French Polynesia"
-msgstr "仏領ポリネシア"
 
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/main.js
@@ -3942,24 +3632,6 @@ msgstr "ふりがな (姓)"
 msgid "GB"
 msgstr "GB"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Gabon"
-msgstr "ガボン"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Gambia"
-msgstr "ガンビア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Georgia"
-msgstr "ジョージア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "German"
-msgid "Germany"
-msgstr "ドイツ語"
-
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Get %s"
 msgstr "%s を入手"
@@ -3986,16 +3658,12 @@ msgid "Get started here"
 msgstr "はじめにここからはじめます。"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Get your device configured by email."
+msgid "Get the App from %1$s"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Ghana"
-msgstr "ガーナ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Gibraltar"
-msgstr "ジブラルタル"
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Get your device configured by email."
+msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Give feedback"
@@ -4028,26 +3696,12 @@ msgstr "Google Drive アカウントを追加"
 msgid "Gray"
 msgstr "グレー"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Green"
-msgid "Greece"
-msgstr "緑"
-
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Green"
 msgstr "緑"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Greenland"
-msgstr "グリーンランド"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Grenada"
-msgstr "グレナダ"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/participants/model.js
@@ -4063,22 +3717,6 @@ msgstr "グループ名"
 msgid "Groups"
 msgstr "グループ"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guadeloupe"
-msgstr "グアドループ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guam"
-msgstr "グアム"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guatemala"
-msgstr "グアテマラ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guernsey"
-msgstr ""
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
 msgid "Guest"
@@ -4087,18 +3725,6 @@ msgstr "ゲスト"
 #: apps/io.ox/tours/get-started.js module:io.ox/core
 msgid "Guided tour for this app"
 msgstr "このアプリケーションのガイドツアー"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guinea"
-msgstr "ギニア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guinea-Bissau"
-msgstr "ギニア－ビサウ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Guyana"
-msgstr "ガイアナ"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 #: apps/io.ox/mail/settings/pane.js
@@ -4109,18 +3735,10 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML とテキスト"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Haiti"
-msgstr "ハイチ"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Header"
 msgstr "ヘッダ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Heard Island and McDonald Islands"
-msgstr "ハード島およびマクドナルド諸島"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Hello %s"
@@ -4193,7 +3811,7 @@ msgstr "名前を隠す"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Show advanced filters"
-msgid "Hide options for advanced user."
+msgid "Hide options for expert users."
 msgstr "詳細フィルタを表示"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
@@ -4239,14 +3857,6 @@ msgstr "自宅住所"
 msgid "Home address"
 msgstr "自宅住所"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Honduras"
-msgstr "ホンジュラス"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Hong Kong"
-msgstr "香港"
-
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Horizontal"
 msgstr "水平分割"
@@ -4262,12 +3872,6 @@ msgstr "時間"
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "How does this work?"
 msgstr "アポイントの作成方法について"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Hungarian"
-msgid "Hungary"
-msgstr "ハンガリー語"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP login"
@@ -4293,10 +3897,6 @@ msgstr "IMAP メール サーバ"
 msgid "IP phone"
 msgstr "IP 電話"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Iceland"
-msgstr "アイスランド"
-
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Icons"
 msgstr "アイコン"
@@ -4308,6 +3908,10 @@ msgid ""
 msgstr ""
 "パスワードを変更すると、サインアウトされます。作業中のすべてのファイルを保存"
 "し、閉じてください。"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "If you know what you are doing...just setup your account manually!"
+msgstr ""
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid ""
@@ -4418,14 +4022,6 @@ msgstr "構成を閉じる"
 msgid "Inconsistent dates"
 msgstr "日付が矛盾しています。"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "India"
-msgstr "インド"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Indonesia"
-msgstr "インドネシア"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts apps/io.ox/core/yell.js
 #: module:io.ox/core
 msgid "Info"
@@ -4474,6 +4070,12 @@ msgid ""
 msgstr ""
 "ご利用の %1$s にこの Web アプリケーションをインストールします。%2$s をタップ"
 "し、%3$s'ホーム スクリーンに追加'%4$s をタップします。"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Initialization ..."
+msgid "Installation"
+msgstr "初期化しています..."
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Instant Messenger 1"
@@ -4536,18 +4138,6 @@ msgstr "アポイントへの出席を依頼"
 msgid "Invite to new appointment"
 msgstr "新規アポイントへの出席を依頼"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Iran"
-msgstr "イラン"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Iraq"
-msgstr "イラク"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Ireland"
-msgstr "アイルランド"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Is bigger than"
@@ -4562,20 +4152,6 @@ msgstr "次の文字列と完全に一致"
 #: module:io.ox/settings
 msgid "Is smaller than"
 msgstr "次の数より小さい"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Isle of Man"
-msgstr "マン島"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Israel"
-msgstr "イスラエル"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Italic"
-msgid "Italy"
-msgstr "斜体"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Item List"
@@ -4597,30 +4173,14 @@ msgstr "アイテムのリスト設定"
 msgid "Items without a file can not be downloaded."
 msgstr "ファイルがないアイテムはダウンロードできません。"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Ivory Coast"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Jamaica"
-msgstr "ジャマイカ"
-
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "January"
 msgstr "1 月"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Japan"
-msgstr "日本"
 
 #. Emoji collection. Emoji icons that work across Japanese (telecom) carriers.
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Japanese Carrier"
 msgstr "日本の通信事業者"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Jersey"
-msgstr "ジャージー"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Job"
@@ -4655,10 +4215,6 @@ msgstr "プレゼンテーションに参加"
 msgid "Joining the presentation of %1$s."
 msgstr "プレゼンテーションに参加"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Jordan"
-msgstr "ヨルダン"
-
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "July"
 msgstr "7 月"
@@ -4680,20 +4236,10 @@ msgstr "6 月"
 msgid "Just disable widget"
 msgstr "ウィジェットを無効化"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Due on %1$s"
-msgid "Just open %1$s"
-msgstr "期限: %1$s"
-
 #. Kilobytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "KB"
 msgstr "KB"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Kazakhstan"
-msgstr "カザフスタン"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -4703,22 +4249,6 @@ msgstr "保持"
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 msgid "Keep a copy of the message"
 msgstr "メッセージのコピーを保存"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Kenya"
-msgstr "ケニヤ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Kiribati"
-msgstr "キリバス"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Kuwait"
-msgstr "クウェート"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Kyrgyzstan"
-msgstr "キルギスタン"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -4732,10 +4262,6 @@ msgstr "言語に固有の既定値"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
 msgstr "言語"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Laos"
-msgstr ""
 
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Last 30 days"
@@ -4779,10 +4305,6 @@ msgstr "昨年"
 msgid "Later"
 msgstr "後で"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Latvia"
-msgstr ""
-
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
 msgstr ""
@@ -4817,14 +4339,6 @@ msgstr "プレゼンテーションを退出します。"
 msgid "Leave the presentation"
 msgstr "プレゼンテーションを退出します。"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Lebanon"
-msgstr "レバノン"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Lesotho"
-msgstr "レソト"
-
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 文字・記号
@@ -4834,17 +4348,11 @@ msgstr "レソト"
 msgid "Letters • Symbols"
 msgstr "文字・記号"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Liberia"
-msgstr "リベリア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Libya"
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid ""
+"Let´s automatically configure your device, by clicking the button below. It"
+"´s that simple!"
 msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Liechtenstein"
-msgstr "リヒテンシュタイン"
 
 #. Emoji category
 #. Japanese: 日常
@@ -4907,10 +4415,6 @@ msgstr "リスト"
 msgid "Listview"
 msgstr "リスト ビュー"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Lithuania"
-msgstr "リトアニア"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 msgid "Location"
@@ -4944,10 +4448,6 @@ msgstr "低"
 msgid "Low priority"
 msgstr "優先度 (低)"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Luxembourg"
-msgstr "ルクセンブルク"
-
 #. Megabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "MB"
@@ -4957,18 +4457,6 @@ msgstr "MB"
 #: apps/io.ox/core/date.js module:io.ox/core
 msgid "MM"
 msgstr "MM"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Macao"
-msgstr "マカオ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Macedonia"
-msgstr "マケドニア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Madagascar"
-msgstr "マダガスカル"
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Mail"
@@ -5095,26 +4583,6 @@ msgstr "メイン ウィンドウ"
 msgid "Make this the current version"
 msgstr "これを最新のバージョンにする"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Malawi"
-msgstr "マラウイ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Malaysia"
-msgstr "マレーシア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Maldives"
-msgstr "モルディヴ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mali"
-msgstr "マリ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Malta"
-msgstr "マルタ"
-
 #: apps/io.ox/launchpad/main.js module:io.ox/core
 msgid "Manage applications"
 msgstr "アプリケーションを管理"
@@ -5216,34 +4684,14 @@ msgstr "既読にする"
 msgid "Mark unread"
 msgstr "未読にする"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Marshall Islands"
-msgstr "マーシャル諸島"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Martinique"
-msgstr "マルティニク"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Matches"
 msgstr "次の文字列と一致"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mauritania"
-msgstr "モーリタニア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mauritius"
-msgstr "モーリシャス"
-
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "May"
 msgstr "5 月"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mayotte"
-msgstr "メイヨット"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -5270,14 +4718,6 @@ msgstr "メッセージング"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Messenger"
 msgstr "Messenger"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mexico"
-msgstr "メキシコ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Micronesia"
-msgstr "ミクロネシア"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Middle name"
@@ -5315,22 +4755,6 @@ msgstr "モデルが不完全です。"
 msgid "Modified"
 msgstr "更新日"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Moldova"
-msgstr "モルドヴァ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Monaco"
-msgstr "モナコ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mongolia"
-msgstr "モンゴル"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Montenegro"
-msgstr "モンテネグロ"
-
 #: apps/io.ox/backbone/mini-views/date.js module:io.ox/core
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Month"
@@ -5353,12 +4777,6 @@ msgstr "毎月 %1$s %2$s"
 msgid "Months"
 msgstr "月"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "America/Montserrat"
-msgid "Montserrat"
-msgstr "アメリカ/モントセラト島"
-
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/find/extensions-api.js apps/io.ox/search/facets/extensions.js
 msgid "More"
@@ -5368,10 +4786,6 @@ msgstr "さらに表示"
 msgid "More than the currently displayed %1$s items were found"
 msgstr ""
 "現在表示されている %1$s 個のアイテムよりも多いアイテムが見つかりました。"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Morocco"
-msgstr "モロッコ"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
@@ -5412,10 +4826,6 @@ msgstr "フォルダを移動"
 #: module:io.ox/settings
 msgid "Move to folder"
 msgstr "フォルダに移動"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Mozambique"
-msgstr "モザンビーク"
 
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Multiselect"
@@ -5460,10 +4870,6 @@ msgstr "自分の共有ファイル"
 msgid "My tasks"
 msgstr "自分の仕事"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Myanmar"
-msgstr "ミャンマー"
-
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
@@ -5475,32 +4881,14 @@ msgstr "ミャンマー"
 msgid "Name"
 msgstr "名前"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Namibia"
-msgstr "ナミビア"
-
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Nature"
 msgstr "自然"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Nauru"
-msgstr "ナウル"
-
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Need more space?"
 msgstr "容量が必要ですか？"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Nepal"
-msgstr "ネパール"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Dutch (Netherlands)"
-msgid "Netherlands"
-msgstr "オランダ語 (オランダ)"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -5516,10 +4904,6 @@ msgstr "期限なし"
 msgid "New"
 msgstr "新規"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "New Caledonia"
-msgstr "ニューカレドニア"
-
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "New Folder"
@@ -5528,10 +4912,6 @@ msgstr "新規フォルダ"
 #: apps/io.ox/mail/api.js module:io.ox/mail
 msgid "New Mail"
 msgstr "新規メール"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "New Zealand"
-msgstr "ニュージーランド"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -5654,25 +5034,9 @@ msgstr "次のページ"
 msgid "Next slide"
 msgstr "次のスライド"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Nicaragua"
-msgstr "ニカラグア"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Nickname"
 msgstr "ニックネーム"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Niger"
-msgstr "ニジェール"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Nigeria"
-msgstr "ナイジェリア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Niue"
-msgstr "ニウエ"
 
 #. folder permissions - Is Admin? NO
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
@@ -5797,26 +5161,10 @@ msgstr "タイトルなし"
 msgid "None"
 msgstr "なし"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Norfolk Island"
-msgstr "ノーフォーク島"
-
 #. E-Mail priority
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Normal"
 msgstr "標準"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "North Korea"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Northern Mariana Islands"
-msgstr "北マリアナ諸島"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Norway"
-msgstr "ノルウェー"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgid "Not spam"
@@ -5924,10 +5272,6 @@ msgstr "オフライン モード"
 #: apps/io.ox/core/tk/mobiscroll.js
 msgid "Ok"
 msgstr "OK"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Oman"
-msgstr "オマーン"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "On behalf of the owner"
@@ -6156,34 +5500,6 @@ msgstr "%2$d ページ中の %1$d ページ"
 msgid "Pager"
 msgstr "ポケットベル"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Pakistan"
-msgstr "パキスタン"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Palau"
-msgstr "パラウ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Palestinian Territory, Occupied"
-msgid "Palestinian Territory"
-msgstr "パレスチナ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Panama"
-msgstr "パナマ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Papua New Guinea"
-msgstr "パプアニューギニア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Nicaragua"
-msgid "Paraguay"
-msgstr "ニカラグア"
-
 #. text of an user list that shows the names of presenting user and participants.
 #. the dropdown button label for the participants dropdown.
 #. the participants section label.
@@ -6300,14 +5616,6 @@ msgstr ""
 "個人メッセージ（オプション）このメッセージは、新規に招待された人全てに送信さ"
 "れます。"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Peru"
-msgstr "ペルー"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Philippines"
-msgstr "フィリピン"
-
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Phone"
 msgstr "電話"
@@ -6366,10 +5674,6 @@ msgstr "時間を選択してください。"
 #: module:io.ox/portal
 msgid "Pink"
 msgstr "ピンク"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Pitcairn"
-msgstr "ピトケアン"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -6494,6 +5798,12 @@ msgstr "0 から 100 までの値を入力してください。"
 msgid "Please enter your credentials."
 msgstr "認証情報を入力してください。"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid ""
+"Please enter your mobile phone number, and we´ll send you a link to "
+"automatically configure your iOS device! It´s that simple!"
+msgstr ""
+
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please enter your password."
 msgstr "パスワードを入力してください。"
@@ -6561,10 +5871,6 @@ msgstr "ご利用のブラウザを更新してください。"
 msgid "Plus"
 msgstr "追加"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Poland"
-msgstr "ポーランド"
-
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Pop out"
 msgstr "ポップアウト"
@@ -6586,10 +5892,6 @@ msgstr "ポータル"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Portal settings"
 msgstr "ポータルの設定"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Portugal"
-msgstr "ポルトガル"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Position"
@@ -6852,10 +6154,6 @@ msgstr "公開"
 msgid "Publications and Subscriptions"
 msgstr "公開と登録"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Puerto Rico"
-msgstr "プエルトリコ"
-
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Purchase confirmation"
 msgstr "購入の確認"
@@ -6866,12 +6164,6 @@ msgstr "購入の確認"
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "紫"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Asia/Qatar"
-msgid "Qatar"
-msgstr "アジア/カタール"
 
 #. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
 #: apps/io.ox/mail/actions.js module:io.ox/mail
@@ -7190,10 +6482,6 @@ msgstr "すべての宛先に返信"
 msgid "Reply to sender"
 msgstr "差出人に返信"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Republic of the Congo"
-msgstr ""
-
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
 msgstr "開封確認メッセージを要求"
@@ -7262,10 +6550,6 @@ msgstr "リツイートの取り消し"
 msgid "Retweeted by %s"
 msgstr "%s さんがリツイート"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Reunion"
-msgstr "レユニオン島"
-
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Review your purchases"
 msgstr "購入品を確認"
@@ -7288,12 +6572,6 @@ msgstr "アクセスを無効にする"
 msgid "Revoked access."
 msgstr "アクセスを無効にする"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Romanian"
-msgid "Romania"
-msgstr "ルーマニア語"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Room number"
 msgstr "部屋番号"
@@ -7306,16 +6584,6 @@ msgstr "ルール名"
 #: apps/io.ox/launchpad/main.js module:io.ox/core
 msgid "Running applications"
 msgstr "実行中のアプリケーション"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Russian"
-msgid "Russia"
-msgstr "ロシア語"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Rwanda"
-msgstr "ルワンダ"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP login"
@@ -7335,55 +6603,9 @@ msgstr ""
 msgid "SMTP server"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Saint Barthelemy"
-msgstr "サン・バルテルミー島"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Saint Helena"
-msgstr "セントヘレナ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Saint Kitts and Nevis"
-msgstr "セントキッツ‐ネヴィス"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Saint Lucia"
-msgstr "セントルシア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "San Marino"
-msgid "Saint Martin"
-msgstr "サンマリノ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Saint Pierre and Miquelon"
-msgstr "サンピエールエミクロン"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Saint Vincent and the Grenadines"
-msgstr "セントビンセントおよびグレナディーン"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "売上規模"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Samoa"
-msgstr "サモア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "San Marino"
-msgstr "サンマリノ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Sao Tome and Principe"
-msgstr "サントーメ‐プリンシペ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Saudi Arabia"
-msgstr "サウジアラビア"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
@@ -7590,10 +6812,6 @@ msgstr "メールを送信"
 msgid "Send mail to all participants"
 msgstr "すべての出席者にメールを送信"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Send me the profile data by SMS."
-msgstr ""
-
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
 msgstr "新規メールを送信"
@@ -7606,10 +6824,6 @@ msgstr "休暇通知をこの期間のみ送信"
 #: module:io.ox/settings
 msgid "Sender/From"
 msgstr "差出人"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Senegal"
-msgstr "セネガル"
 
 #. %s is the product name
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
@@ -7629,10 +6843,6 @@ msgstr "送信済みメッセージ"
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "September"
 msgstr "9 月"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Serbia"
-msgstr "セルビア"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
@@ -7682,14 +6892,6 @@ msgstr "設定"
 #| msgid "Show advanced filters"
 msgid "Settings for advanced users"
 msgstr "詳細フィルタを表示"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Setup your profile manually."
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Seychelles"
-msgstr "セイシェル"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
@@ -7792,10 +6994,6 @@ msgstr "共有"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Shopping cart"
 msgstr "ショッピング カート"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Short Message (SMS)"
-msgstr ""
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
@@ -7908,10 +7106,6 @@ msgstr "タイルを表示"
 msgid "Shown as"
 msgstr "公開方法"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Sierra Leone"
-msgstr "シエラレオネ"
-
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
@@ -7944,18 +7138,6 @@ msgstr "サイン イン ユーザ: %1$s"
 msgid "Signed in as:"
 msgstr "サイン イン ユーザ:"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Asia/Singapore"
-msgid "Singapore"
-msgstr "アジア/シンガポール"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Saint Barthelemy"
-msgid "Sint Maarten"
-msgstr "サン・バルテルミー島"
-
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
 #: module:io.ox/files apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -7966,14 +7148,6 @@ msgstr "サイズ"
 #: module:io.ox/settings
 msgid "Size (bytes)"
 msgstr "サイズ (バイト)"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Slovakia"
-msgstr "スロヴァキア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Slovenia"
-msgstr "スロヴェニア"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
@@ -7987,14 +7161,6 @@ msgstr "スマートフォン設定："
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "SoftBank"
 msgstr "SoftBank"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Solomon Islands"
-msgstr "ソロモン諸島"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Somalia"
-msgstr "ソマリア"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "Some fields contain invalid data"
@@ -8065,26 +7231,6 @@ msgstr "ソート オプション"
 msgid "Source"
 msgstr "ソース"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "South Africa"
-msgstr "南アフリカ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "South Africa"
-msgid "South Korea"
-msgstr "南アフリカ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Sudan"
-msgid "South Sudan"
-msgstr "スーダン"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Spain"
-msgstr ""
-
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -8102,10 +7248,6 @@ msgstr "スプレッドシート"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Spreadsheets"
 msgstr "スプレッドシート"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Sri Lanka"
-msgstr "スリランカ"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Standard folders"
@@ -8243,10 +7385,6 @@ msgstr "成功"
 msgid "Successfully reauthorized your %s account"
 msgstr "%s アカウントが正しく再認証されました。"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Sudan"
-msgstr "スーダン"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Suffix"
 msgstr "敬称（後）"
@@ -8255,29 +7393,9 @@ msgstr "敬称（後）"
 msgid "Summary"
 msgstr "概要"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Suriname"
-msgstr "スリナム"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Svalbard and Jan Mayen"
-msgstr "スヴァールバルおよびヤンマイエン"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Swaziland"
-msgstr "スワジランド"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Sweden"
-msgstr "スウェーデン"
-
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Switch to parent folder"
 msgstr "親フォルダに切り替えました。"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Switzerland"
-msgstr "スイス"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -8308,10 +7426,6 @@ msgstr "タブレットまたはスマートフォンに同期"
 msgid "Synchronize with your tablet or smartphone"
 msgstr "タブレットまたはスマートフォンに同期"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Syria"
-msgstr ""
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "TAX ID"
 msgstr "税金 ID"
@@ -8330,21 +7444,9 @@ msgstr "TTY/TDD"
 msgid "Tag mail with"
 msgstr "次のタグをメールに付ける"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Taiwan"
-msgstr "台湾"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Tajikistan"
-msgstr "タジキスタン"
-
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
 msgstr ""
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Tanzania"
-msgstr "タンザニア"
 
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
@@ -8441,10 +7543,6 @@ msgstr "仮承諾済み"
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Text"
 msgstr "テキスト"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Thailand"
-msgstr "タイ"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"
@@ -8938,6 +8036,7 @@ msgid "This distribution list has been added to the portal"
 msgstr "この配布リストをポータルに追加しました。"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 msgid "This document is password protected and cannot be displayed."
 msgstr "本ドキュメントはパスワードで保護されており、表示できません。"
 
@@ -9167,23 +8266,11 @@ msgstr "全画面表示"
 msgid "Toggle panel"
 msgstr "オプションパネル"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Togo"
-msgstr "トーゴ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Tokelau"
-msgstr "トケラウ"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "明日"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Tonga"
-msgstr "トンガ"
 
 #. Emoji category
 #. Japanese: ツール
@@ -9224,10 +8311,6 @@ msgstr "総数: %1$s 件のリクエスト"
 msgid "Town"
 msgstr "市区町村"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Trinidad and Tobago"
-msgstr "トリニダードトバゴ"
-
 #: apps/io.ox/core/commons.js module:io.ox/core
 #, fuzzy
 #| msgid "Buy now!"
@@ -9241,26 +8324,6 @@ msgstr "メール アカウントを自動構成しています。"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Tumblr"
 msgstr "Tumblr"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Tunisia"
-msgstr "チュニジア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Turkey"
-msgstr "トルコ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Turkmenistan"
-msgstr "トルクメニスタン"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Turks and Caicos Islands"
-msgstr "タークスアンドケーコス諸島"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Tuvalu"
-msgstr "トゥヴァル"
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Twitter"
@@ -9276,12 +8339,6 @@ msgstr "Twitter が次のエラーを報告しました:"
 msgid "Type"
 msgstr "タイプ"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Virgin Islands, U.S."
-msgid "U.S. Virgin Islands"
-msgstr "ヴァージン諸島 (米国)"
-
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 msgid "UI version"
@@ -9291,14 +8348,6 @@ msgstr "UI バージョン"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "URL"
 msgstr "URL"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Uganda"
-msgstr "ウガンダ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Ukraine"
-msgstr "ウクライナ"
 
 #: apps/plugins/portal/xing/actions.js module:plugins/portal
 msgid "Un-like"
@@ -9342,22 +8391,6 @@ msgstr "アンフォロー"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Unified"
 msgstr "統合"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "United Arab Emirates"
-msgstr "アラブ首長国連邦"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "United Kingdom"
-msgstr "イギリス"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "United States"
-msgstr "アメリカ合衆国"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "United States Minor Outlying Islands"
-msgstr "合衆国領有小離島"
 
 #: apps/io.ox/participants/model.js module:io.ox/core
 msgid "Unknown"
@@ -9475,10 +8508,6 @@ msgstr "動作時間: %1$s 分"
 msgid "Urgency"
 msgstr "緊急度"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Uruguay"
-msgstr "ウルグアイ"
-
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Use SSL connection"
 msgstr "SSL 接続を使用"
@@ -9565,28 +8594,10 @@ msgstr "ユーザ名"
 msgid "Username must not be empty."
 msgstr "ユーザ名は空にできません。"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Uzbekistan"
-msgstr "ウズベキスタン"
-
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/vacationnotice/settings/register.js
 msgid "Vacation Notice"
 msgstr "休暇通知"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Vanuatu"
-msgstr "ヴァヌアトゥ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Vertical"
-msgid "Vatican"
-msgstr "垂直分割"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Venezuela"
-msgstr "ベネズエラ"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer
@@ -9605,12 +8616,6 @@ msgstr "垂直分割"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Videos"
 msgstr "ビデオ"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Viet Nam"
-msgid "Vietnam"
-msgstr "ベトナム"
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -9665,10 +8670,6 @@ msgstr "ビューアツールバー"
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
 msgid "Waiting"
 msgstr "待機中"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Wallis and Futuna"
-msgstr "ワリーエフトゥーナ"
 
 #: apps/io.ox/core/yell.js module:io.ox/core
 msgid "Warning"
@@ -9747,14 +8748,16 @@ msgstr "仕事へようこそ"
 msgid "Welcome. Please provide your feedback about this product"
 msgstr "ようこそこの製品のフィードバックをお送りください。"
 
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Western Sahara"
-msgstr "西サハラ"
-
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Do you want to save your layout changes?"
 msgid "What do you want to use?"
+msgstr "レイアウトの変更を保存しますか？"
+
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your layout changes?"
+msgid "What type of device do you want to configure?"
 msgstr "レイアウトの変更を保存しますか？"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -9834,10 +8837,6 @@ msgstr "年"
 #: module:io.ox/settings
 msgid "Yellow"
 msgstr "黄"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Yemen"
-msgstr "イエメン"
 
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
@@ -10265,14 +9264,6 @@ msgstr "タイムゾーン"
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "ZB"
 msgstr "ZB"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Zambia"
-msgstr "ザンビア"
-
-#: apps/io.ox/onboarding/clients/codes.js module:io.ox/core/onboarding
-msgid "Zimbabwe"
-msgstr "ジンバブエ"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Zoom"
@@ -11198,6 +10189,14 @@ msgstr "yyyy"
 #~ msgid "Advanced options"
 #~ msgstr "詳細設定"
 
+#, fuzzy
+#~| msgid "Advanced Facets"
+#~ msgid "Advanced user?"
+#~ msgstr "詳細ファセット"
+
+#~ msgid "Afghanistan"
+#~ msgstr "アフガニスタン"
+
 #~ msgid "Africa/Abidjan"
 #~ msgstr "アフリカ/アビジャン"
 
@@ -11348,6 +10347,15 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "OK を押した後、新しいウィンドウが開きます。そこで、%s をご利用のアカウン"
 #~ "ト データにアクセスできるよう許可することができます。"
+
+#~ msgid "Aland Islands"
+#~ msgstr "オーランド諸島"
+
+#~ msgid "Albania"
+#~ msgstr "アルバニア"
+
+#~ msgid "Algeria"
+#~ msgstr "アルジェリア"
 
 #~ msgid "All Categories..."
 #~ msgstr "すべてのカテゴリ..."
@@ -11577,6 +10585,9 @@ msgstr "yyyy"
 #~ msgid "America/Winnipeg"
 #~ msgstr "アメリカ/ウィニペグ"
 
+#~ msgid "American Samoa"
+#~ msgstr "米領サモア"
+
 #~ msgid "An error occurred"
 #~ msgstr "エラーが発生しました。"
 
@@ -11591,6 +10602,15 @@ msgstr "yyyy"
 
 #~ msgid "An error occurred. The message was:"
 #~ msgstr "エラーが発生しました。メッセージを次に示します:"
+
+#~ msgid "Andorra"
+#~ msgstr "アンドラ"
+
+#~ msgid "Angola"
+#~ msgstr "アンゴラ"
+
+#~ msgid "Anguilla"
+#~ msgstr "アングイラ"
 
 #~ msgid "Anniversary:"
 #~ msgstr "記念日:"
@@ -11618,6 +10638,9 @@ msgstr "yyyy"
 
 #~ msgid "Antarctica/Palmer"
 #~ msgstr "南極/パーマー"
+
+#~ msgid "Antigua and Barbuda"
+#~ msgstr "アンティグア‐バルブダ"
 
 #~| msgid "Apply role"
 #~ msgid "Apply"
@@ -11723,6 +10746,15 @@ msgstr "yyyy"
 
 #~ msgid "Are you sure?"
 #~ msgstr "続行しますか？"
+
+#~ msgid "Argentina"
+#~ msgstr "アルゼンチン"
+
+#~ msgid "Armenia"
+#~ msgstr "アルメニア"
+
+#~ msgid "Aruba"
+#~ msgstr "アルーバ"
 
 #~ msgid "As vCard"
 #~ msgstr "vCard として"
@@ -11977,6 +11009,9 @@ msgstr "yyyy"
 #~ msgid "Aug"
 #~ msgstr "8 月"
 
+#~ msgid "Australia"
+#~ msgstr "オーストラリア"
+
 #~ msgid "Australia/Adelaide"
 #~ msgstr "オーストラリア/アデレード"
 
@@ -12000,6 +11035,9 @@ msgstr "yyyy"
 
 #~ msgid "Australia/Sydney"
 #~ msgstr "オーストラリア/シドニー"
+
+#~ msgid "Austria"
+#~ msgstr "オーストリア"
 
 #~ msgid "Auto"
 #~ msgstr "自動"
@@ -12046,6 +11084,9 @@ msgstr "yyyy"
 #~ msgid "Available UWA modules:"
 #~ msgstr "利用可能な UWA モジュール:"
 
+#~ msgid "Azerbaijan"
+#~ msgstr "アゼルバイジャン"
+
 #, fuzzy
 #~| msgid "Back to sign in"
 #~ msgid "Back to devices"
@@ -12066,6 +11107,18 @@ msgstr "yyyy"
 
 #~ msgid "Background 2"
 #~ msgstr "背景色 2"
+
+#~ msgid "Bahamas"
+#~ msgstr "バハマ"
+
+#~ msgid "Bahrain"
+#~ msgstr "バーレーン"
+
+#~ msgid "Bangladesh"
+#~ msgstr "バングラデシュ"
+
+#~ msgid "Barbados"
+#~ msgstr "バルバドス"
 
 #~ msgid "Bars"
 #~ msgstr "バー"
@@ -12091,12 +11144,29 @@ msgstr "yyyy"
 #~ msgid "Begins at"
 #~ msgstr "開始時刻"
 
+#~ msgid "Belarus"
+#~ msgstr "ベラルーシ"
+
+#, fuzzy
+#~| msgid "America/Belize"
+#~ msgid "Belize"
+#~ msgstr "アメリカ/ベリーズ"
+
 #~ msgid ""
 #~ "Below the recipient you will find further functions, e.g. for sending "
 #~ "copies to other recipients or for adding attachments."
 #~ msgstr ""
 #~ "他の人に CC を送信したり、添付ファイルを追加するなどの詳細機能は宛先の下に"
 #~ "表示されます。"
+
+#~ msgid "Benin"
+#~ msgstr "ベナン"
+
+#~ msgid "Bermuda"
+#~ msgstr "バミューダ"
+
+#~ msgid "Bhutan"
+#~ msgstr "ブータン"
 
 #~ msgid "Birthday Appointment"
 #~ msgstr "誕生日のアポイント"
@@ -12112,6 +11182,9 @@ msgstr "yyyy"
 
 #~ msgid "Bold"
 #~ msgstr "太字"
+
+#~ msgid "Bolivia"
+#~ msgstr "ボリビア"
 
 #~ msgid "Border inside"
 #~ msgstr "内側"
@@ -12137,6 +11210,12 @@ msgstr "yyyy"
 #~ msgid "Border top and bottom"
 #~ msgstr "上罫線＋下罫線"
 
+#~ msgid "Bosnia and Herzegovina"
+#~ msgstr "ボスニアヘルツェゴビナ"
+
+#~ msgid "Botswana"
+#~ msgstr "ボツワナ"
+
 #~ msgid "Bottom"
 #~ msgstr "下罫線"
 
@@ -12146,11 +11225,36 @@ msgstr "yyyy"
 #~ msgid "Branches:"
 #~ msgstr "支店:"
 
+#~ msgid "Brazil"
+#~ msgstr "ブラジル"
+
+#~ msgid "British Indian Ocean Territory"
+#~ msgstr "英領インド洋植民地"
+
+#, fuzzy
+#~| msgid "Virgin Islands, U.S."
+#~ msgid "British Virgin Islands"
+#~ msgstr "ヴァージン諸島 (米国)"
+
+#, fuzzy
+#~| msgid "Asia/Brunei"
+#~ msgid "Brunei"
+#~ msgstr "アジア/ブルネイ"
+
 #~ msgid "Brunei Darussalam"
 #~ msgstr "ブルネイダルサラーム国"
 
+#~ msgid "Bulgaria"
+#~ msgstr "ブルガリア"
+
 #~ msgid "Bullets On/Off"
 #~ msgstr "箇条書きのオン/オフ"
+
+#~ msgid "Burkina Faso"
+#~ msgstr "ブルキナファソ"
+
+#~ msgid "Burundi"
+#~ msgstr "ブルンジ"
 
 #~ msgid "CAD"
 #~ msgstr "CAD"
@@ -12181,8 +11285,17 @@ msgstr "yyyy"
 #~ msgid "Calendar workweek view"
 #~ msgstr "予定表の稼働日ビュー"
 
+#~ msgid "Cambodia"
+#~ msgstr "カンボジア"
+
+#~ msgid "Cameroon"
+#~ msgstr "カメルーン"
+
 #~ msgid "Can not create appointment in a folder other than appointment folder"
 #~ msgstr "アポイント フォルダ以外のフォルダには、アポイントを作成できません。"
+
+#~ msgid "Canada"
+#~ msgstr "カナダ"
 
 #~ msgid "Canadian dollar"
 #~ msgstr "カナダドル"
@@ -12192,6 +11305,9 @@ msgstr "yyyy"
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "システム フォルダを移動できません。"
+
+#~ msgid "Cape Verde"
+#~ msgstr "カボヴェルデ"
 
 #~ msgid "Cards"
 #~ msgstr "カード"
@@ -12210,6 +11326,9 @@ msgstr "yyyy"
 
 #~ msgid "Category names must be unique"
 #~ msgstr "カテゴリには、固有の名前を指定する必要があります。"
+
+#~ msgid "Cayman Islands"
+#~ msgstr "ケイマン諸島"
 
 #~ msgid "Cc"
 #~ msgstr "Cc"
@@ -12231,6 +11350,12 @@ msgstr "yyyy"
 
 #~ msgid "Centered, no text wrapping"
 #~ msgstr "中央揃え＋テキストの折り返しなし"
+
+#~ msgid "Central African Republic"
+#~ msgstr "中央アフリカ共和国"
+
+#~ msgid "Chad"
+#~ msgstr "チャド"
 
 #~ msgid "Change Name"
 #~ msgstr "名前を変更"
@@ -12268,11 +11393,20 @@ msgstr "yyyy"
 #~ msgid "Children:"
 #~ msgstr "子供:"
 
+#~ msgid "Chile"
+#~ msgstr "チリ"
+
+#~ msgid "China"
+#~ msgstr "中国"
+
 #~ msgid "Choose Team"
 #~ msgstr "チームを選択"
 
 #~ msgid "Choose a new password for your account."
 #~ msgstr "アカウント用の新しいパスワードを選択してください。"
+
+#~ msgid "Christmas Island"
+#~ msgstr "クリスマス島"
 
 #~ msgid "City (Business)"
 #~ msgstr "市区町村 (ビジネス)"
@@ -12348,11 +11482,19 @@ msgstr "yyyy"
 #~ msgid "Cocos (Keeling) Islands"
 #~ msgstr "ココス諸島"
 
+#, fuzzy
+#~| msgid "Cook Islands"
+#~ msgid "Cocos Islands"
+#~ msgstr "クック諸島"
+
 #~ msgid "Collect while reading E-Mails?"
 #~ msgstr "メールの表示時に収集"
 
 #~ msgid "Collect while sending E-Mails?"
 #~ msgstr "メールの送信時に収集"
+
+#~ msgid "Colombia"
+#~ msgstr "コロンビア"
 
 #~ msgid "Comma Separated"
 #~ msgstr "CSV ファイル"
@@ -12369,6 +11511,11 @@ msgstr "yyyy"
 #~ msgid "Common Facets"
 #~ msgstr "一般的なファセット"
 
+#, fuzzy
+#~| msgid "Tomorrow"
+#~ msgid "Comoros"
+#~ msgstr "明日"
+
 #~ msgid "Compact view"
 #~ msgstr "コンパクト ビュー"
 
@@ -12380,9 +11527,6 @@ msgstr "yyyy"
 
 #~ msgid "Composing a new E-Mail"
 #~ msgstr "新規メールの作成"
-
-#~ msgid "Configuration changed"
-#~ msgstr "構成が変更されました。"
 
 #~ msgid "Configuration damaged, please inform the administrator."
 #~ msgstr "構成が破損しています。管理者に連絡してください。"
@@ -12423,11 +11567,17 @@ msgstr "yyyy"
 #~ msgid "Continue Presentation"
 #~ msgstr "送付先"
 
+#~ msgid "Cook Islands"
+#~ msgstr "クック諸島"
+
 #~ msgid "Copy (CC) to"
 #~ msgstr "CC:"
 
 #~ msgid "Copy to"
 #~ msgstr "CC:"
+
+#~ msgid "Costa Rica"
+#~ msgstr "コスタリカ"
 
 #~ msgid "Cote d'Ivoire"
 #~ msgstr "コートジボアール"
@@ -12556,6 +11706,17 @@ msgstr "yyyy"
 #~ msgid "Creation date:"
 #~ msgstr "作成日:"
 
+#~ msgid "Croatia"
+#~ msgstr "クロアチア"
+
+#~ msgid "Cuba"
+#~ msgstr "キューバ"
+
+#, fuzzy
+#~| msgid "Macao"
+#~ msgid "Curacao"
+#~ msgstr "マカオ"
+
 #~ msgid "Current Costs:"
 #~ msgstr "現在のコスト:"
 
@@ -12595,8 +11756,14 @@ msgstr "yyyy"
 #~ msgid "Cut"
 #~ msgstr "切り取り"
 
+#~ msgid "Cyprus"
+#~ msgstr "キプロス"
+
 #~ msgid "Czech"
 #~ msgstr "チェコ語"
+
+#~ msgid "Czech Republic"
+#~ msgstr "チェコ共和国"
 
 #~ msgid "DKK"
 #~ msgstr "DKK"
@@ -12730,6 +11897,11 @@ msgstr "yyyy"
 #~ msgid "Delivery Receipt"
 #~ msgstr "開封通知を送信"
 
+#, fuzzy
+#~| msgid "Korea, Democratic People's Republic of"
+#~ msgid "Democratic Republic of the Congo"
+#~ msgstr "北朝鮮"
+
 #~ msgid "Demote One Level"
 #~ msgstr "1 レベル下げる"
 
@@ -12816,6 +11988,9 @@ msgstr "yyyy"
 #~ msgid "Distributionlist"
 #~ msgstr "配布リスト"
 
+#~ msgid "Djibouti"
+#~ msgstr "ジブチ"
+
 #~ msgid "Do the following:"
 #~ msgstr "次を実行:"
 
@@ -12896,6 +12071,12 @@ msgstr "yyyy"
 
 #~ msgid "Does not match regex"
 #~ msgstr "次の文字列と一致しない (正規表現)"
+
+#~ msgid "Dominica"
+#~ msgstr "ドミニカ"
+
+#~ msgid "Dominican Republic"
+#~ msgstr "ドミニカ共和国"
 
 #~ msgid "Don't show again"
 #~ msgstr "次回は表示しない"
@@ -13000,6 +12181,14 @@ msgstr "yyyy"
 #~ msgid "Each %s. %s"
 #~ msgstr "指定日: %s 日 指定月: %s"
 
+#, fuzzy
+#~| msgid "Last month"
+#~ msgid "East Timor"
+#~ msgstr "先月"
+
+#~ msgid "Ecuador"
+#~ msgstr "エクアドル"
+
 #~ msgid "Edit Appointment"
 #~ msgstr "アポイントを編集"
 
@@ -13049,6 +12238,9 @@ msgstr "yyyy"
 
 #~ msgid "Editor feature set:"
 #~ msgstr "編集機能セット:"
+
+#~ msgid "El Salvador"
+#~ msgstr "エルサルバドル"
 
 #~ msgid "Elements of this week only"
 #~ msgstr "今週の用件のみ"
@@ -13246,6 +12438,12 @@ msgstr "yyyy"
 #~ msgid "Envelope"
 #~ msgstr "エンベロープ"
 
+#~ msgid "Equatorial Guinea"
+#~ msgstr "赤道ギニア"
+
+#~ msgid "Eritrea"
+#~ msgstr "エリトレア"
+
 #~ msgid "Error-ID: %1$s"
 #~ msgstr "エラー ID: %1$s"
 
@@ -13263,6 +12461,12 @@ msgstr "yyyy"
 
 #~ msgid "Estimated Duration:"
 #~ msgstr "予測される期間:"
+
+#~ msgid "Estonia"
+#~ msgstr "エストニア"
+
+#~ msgid "Ethiopia"
+#~ msgstr "エチオピア"
 
 #~ msgid "Euro"
 #~ msgstr "ユーロ"
@@ -13402,9 +12606,6 @@ msgstr "yyyy"
 #~ msgid "Expand the panel"
 #~ msgstr "パネルを拡張"
 
-#~ msgid "Expert mode"
-#~ msgstr "エキスパート モード"
-
 #~ msgid "Extended view"
 #~ msgstr "拡張ビュー"
 
@@ -13429,8 +12630,16 @@ msgstr "yyyy"
 #~ msgid "Failure! Please refresh."
 #~ msgstr "エラーが発生しました。最新の状態に更新してください。"
 
+#, fuzzy
+#~| msgid "Aland Islands"
+#~ msgid "Falkland Islands"
+#~ msgstr "オーランド諸島"
+
 #~ msgid "Falkland Islands (Malvinas)"
 #~ msgstr "フォークランド諸島"
+
+#~ msgid "Faroe Islands"
+#~ msgstr "フェロー諸島"
 
 #~ msgctxt "app"
 #~ msgid "Favorite timezone"
@@ -13462,6 +12671,9 @@ msgstr "yyyy"
 
 #~ msgid "Feb"
 #~ msgstr "2 月"
+
+#~ msgid "Fiji"
+#~ msgstr "フィジー"
 
 #~ msgid "File name:"
 #~ msgstr "ファイル名:"
@@ -13499,6 +12711,9 @@ msgstr "yyyy"
 
 #~ msgid "Finish tour"
 #~ msgstr "ツアーを終了"
+
+#~ msgid "Finland"
+#~ msgstr "フィンランド"
 
 #~ msgid "First name:"
 #~ msgstr "名:"
@@ -13578,11 +12793,22 @@ msgstr "yyyy"
 #~ msgid "Forward emails as:"
 #~ msgstr "メールの転送方法:"
 
+#, fuzzy
+#~| msgid "Freelancer"
+#~ msgid "France"
+#~ msgstr "フリーランサー"
+
 #~ msgid "Free trial..."
 #~ msgstr "無償評価版..."
 
 #~ msgid "French"
 #~ msgstr "フランス語"
+
+#~ msgid "French Guiana"
+#~ msgstr "仏領ギアナ"
+
+#~ msgid "French Polynesia"
+#~ msgstr "仏領ポリネシア"
 
 #~ msgid "French Southern Territories"
 #~ msgstr "フランス南部領土"
@@ -13625,14 +12851,34 @@ msgstr "yyyy"
 #~ msgid "GMT"
 #~ msgstr "グリニッジ標準時 "
 
+#~ msgid "Gabon"
+#~ msgstr "ガボン"
+
+#~ msgid "Gambia"
+#~ msgstr "ガンビア"
+
 #~ msgid "General info"
 #~ msgstr "全般について"
+
+#~ msgid "Georgia"
+#~ msgstr "ジョージア"
+
+#, fuzzy
+#~| msgid "German"
+#~ msgid "Germany"
+#~ msgstr "ドイツ語"
 
 #~ msgid "Get directions"
 #~ msgstr "案内を表示"
 
 #~ msgid "Get started here!"
 #~ msgstr "ここからはじめます。"
+
+#~ msgid "Ghana"
+#~ msgstr "ガーナ"
+
+#~ msgid "Gibraltar"
+#~ msgstr "ジブラルタル"
 
 #~ msgid "Go"
 #~ msgstr "Go"
@@ -13649,8 +12895,19 @@ msgstr "yyyy"
 #~ msgid "Good morning"
 #~ msgstr "おはようございます"
 
+#, fuzzy
+#~| msgid "Green"
+#~ msgid "Greece"
+#~ msgstr "緑"
+
 #~ msgid "Greek"
 #~ msgstr "ギリシア語"
+
+#~ msgid "Greenland"
+#~ msgstr "グリーンランド"
+
+#~ msgid "Grenada"
+#~ msgstr "グレナダ"
 
 #~ msgid "Grey"
 #~ msgstr "グレー"
@@ -13673,8 +12930,26 @@ msgstr "yyyy"
 #~ msgid "Group task"
 #~ msgstr "グループの仕事"
 
+#~ msgid "Guadeloupe"
+#~ msgstr "グアドループ"
+
+#~ msgid "Guam"
+#~ msgstr "グアム"
+
+#~ msgid "Guatemala"
+#~ msgstr "グアテマラ"
+
 #~ msgid "Guidance"
 #~ msgstr "統計データ"
+
+#~ msgid "Guinea"
+#~ msgstr "ギニア"
+
+#~ msgid "Guinea-Bissau"
+#~ msgstr "ギニア－ビサウ"
+
+#~ msgid "Guyana"
+#~ msgstr "ガイアナ"
 
 #~ msgctxt "teamview"
 #~ msgid "H"
@@ -13703,11 +12978,17 @@ msgstr "yyyy"
 #~ msgid "HTML-only mail"
 #~ msgstr "HTML メール"
 
+#~ msgid "Haiti"
+#~ msgstr "ハイチ"
+
 #~ msgid "Halo view"
 #~ msgstr "ハロー ビュー"
 
 #~ msgid "Heading"
 #~ msgstr "表題"
+
+#~ msgid "Heard Island and McDonald Islands"
+#~ msgstr "ハード島およびマクドナルド諸島"
 
 #~ msgid "Hello"
 #~ msgstr "こんにちは"
@@ -13771,8 +13052,19 @@ msgstr "yyyy"
 #~ msgid "Home"
 #~ msgstr "自宅"
 
+#~ msgid "Honduras"
+#~ msgstr "ホンジュラス"
+
+#~ msgid "Hong Kong"
+#~ msgstr "香港"
+
 #~ msgid "How the settings are organized"
 #~ msgstr "設定の項目について"
+
+#, fuzzy
+#~| msgid "Hungarian"
+#~ msgid "Hungary"
+#~ msgstr "ハンガリー語"
 
 #
 #~ msgid "IM"
@@ -13798,6 +13090,9 @@ msgstr "yyyy"
 
 #~ msgid "IP phone (private):"
 #~ msgstr "IP 電話 (プライベート):"
+
+#~ msgid "Iceland"
+#~ msgstr "アイスランド"
 
 #~ msgid "Icon view"
 #~ msgstr "アイコン ビュー"
@@ -13904,6 +13199,9 @@ msgstr "yyyy"
 #~ msgid "Incorrect input."
 #~ msgstr "入力が正しくありません。"
 
+#~ msgid "India"
+#~ msgstr "インド"
+
 #~ msgid "Indian/Antananarivo"
 #~ msgstr "インディアン/アンタナナリボ"
 
@@ -13937,6 +13235,9 @@ msgstr "yyyy"
 #~ msgid "Indian/Reunion"
 #~ msgstr "インド洋/レユニオン島"
 
+#~ msgid "Indonesia"
+#~ msgstr "インドネシア"
+
 #~ msgid "Info area"
 #~ msgstr "情報エリア"
 
@@ -13957,9 +13258,6 @@ msgstr "yyyy"
 
 #~ msgid "Infostore"
 #~ msgstr "インフォストア"
-
-#~ msgid "Initialization ..."
-#~ msgstr "初期化しています..."
 
 #~ msgid "Inline With Text"
 #~ msgstr "インラインにテキストを表示"
@@ -14053,6 +13351,15 @@ msgstr "yyyy"
 #~ msgid "Inviting other participants"
 #~ msgstr "アポイントへの出席依頼"
 
+#~ msgid "Iran"
+#~ msgstr "イラン"
+
+#~ msgid "Iraq"
+#~ msgstr "イラク"
+
+#~ msgid "Ireland"
+#~ msgstr "アイルランド"
+
 #~ msgid "Is at least"
 #~ msgstr "最小"
 
@@ -14062,8 +13369,19 @@ msgstr "yyyy"
 #~ msgid "Is not exactly"
 #~ msgstr "次の数値以外"
 
+#~ msgid "Isle of Man"
+#~ msgstr "マン島"
+
+#~ msgid "Israel"
+#~ msgstr "イスラエル"
+
 #~ msgid "Italian (Italy)"
 #~ msgstr "イタリア語 (イタリア)"
+
+#, fuzzy
+#~| msgid "Italic"
+#~ msgid "Italy"
+#~ msgstr "斜体"
 
 #~ msgid "Items without a file can not be opened."
 #~ msgstr "ファイルがないアイテムは開くことができません。"
@@ -14071,8 +13389,20 @@ msgstr "yyyy"
 #~ msgid "JPY"
 #~ msgstr "JPY"
 
+#~ msgid "Jamaica"
+#~ msgstr "ジャマイカ"
+
 #~ msgid "Jan"
 #~ msgstr "1 月"
+
+#~ msgid "Japan"
+#~ msgstr "日本"
+
+#~ msgid "Jersey"
+#~ msgstr "ジャージー"
+
+#~ msgid "Jordan"
+#~ msgstr "ヨルダン"
 
 #~ msgid "Jul"
 #~ msgstr "7 月"
@@ -14080,14 +13410,34 @@ msgstr "yyyy"
 #~ msgid "Jun"
 #~ msgstr "6 月"
 
+#, fuzzy
+#~| msgid "Due on %1$s"
+#~ msgid "Just open %1$s"
+#~ msgstr "期限: %1$s"
+
 #~ msgid "Justify"
 #~ msgstr "両端揃え"
+
+#~ msgid "Kazakhstan"
+#~ msgstr "カザフスタン"
 
 #~ msgid "Keep the draft."
 #~ msgstr "下書きを保存"
 
+#~ msgid "Kenya"
+#~ msgstr "ケニヤ"
+
+#~ msgid "Kiribati"
+#~ msgstr "キリバス"
+
 #~ msgid "Korea, Republic of"
 #~ msgstr "韓国"
+
+#~ msgid "Kuwait"
+#~ msgstr "クウェート"
+
+#~ msgid "Kyrgyzstan"
+#~ msgstr "キルギスタン"
 
 #~ msgid "Label"
 #~ msgstr "ラベル"
@@ -14125,14 +13475,26 @@ msgstr "yyyy"
 #~ msgid "Leave messages on server"
 #~ msgstr "サーバにメッセージを残す"
 
+#~ msgid "Lebanon"
+#~ msgstr "レバノン"
+
 #~ msgid "Left"
 #~ msgstr "左揃え"
 
 #~ msgid "Left aligned, text wraps at right side"
 #~ msgstr "左揃え＋テキストを右側で折り返し"
 
+#~ msgid "Lesotho"
+#~ msgstr "レソト"
+
+#~ msgid "Liberia"
+#~ msgstr "リベリア"
+
 #~ msgid "Libyan Arab Jamahiriya"
 #~ msgstr "リビア アラブ ジャマヒリヤ"
+
+#~ msgid "Liechtenstein"
+#~ msgstr "リヒテンシュタイン"
 
 #~ msgid "Lighter"
 #~ msgstr "薄くする"
@@ -14169,6 +13531,9 @@ msgstr "yyyy"
 
 #~ msgid "List workweek view"
 #~ msgstr "リスト稼働日ビュー"
+
+#~ msgid "Lithuania"
+#~ msgstr "リトアニア"
 
 #~ msgid "Load Contents..."
 #~ msgstr "コンテンツを読み込む..."
@@ -14219,6 +13584,9 @@ msgstr "yyyy"
 #~ msgid "Long"
 #~ msgstr "長い"
 
+#~ msgid "Luxembourg"
+#~ msgstr "ルクセンブルク"
+
 #~ msgid "M/d/yy"
 #~ msgstr "M/d/yy"
 
@@ -14235,6 +13603,15 @@ msgstr "yyyy"
 #~| msgid "March"
 #~ msgid "Mac"
 #~ msgstr "3 月"
+
+#~ msgid "Macao"
+#~ msgstr "マカオ"
+
+#~ msgid "Macedonia"
+#~ msgstr "マケドニア"
+
+#~ msgid "Madagascar"
+#~ msgstr "マダガスカル"
 
 #~ msgid "Mail Thread Details"
 #~ msgstr "メール スレッドの詳細"
@@ -14258,6 +13635,21 @@ msgstr "yyyy"
 #~ msgid "Mailing list %s"
 #~ msgstr "メーリング リスト %s"
 
+#~ msgid "Malawi"
+#~ msgstr "マラウイ"
+
+#~ msgid "Malaysia"
+#~ msgstr "マレーシア"
+
+#~ msgid "Maldives"
+#~ msgstr "モルディヴ"
+
+#~ msgid "Mali"
+#~ msgstr "マリ"
+
+#~ msgid "Malta"
+#~ msgstr "マルタ"
+
 #~ msgid "Manager:"
 #~ msgstr "上司:"
 
@@ -14277,14 +13669,29 @@ msgstr "yyyy"
 #~ msgid "Mark folder read"
 #~ msgstr "フォルダに既読の印を付ける"
 
+#~ msgid "Marshall Islands"
+#~ msgstr "マーシャル諸島"
+
+#~ msgid "Martinique"
+#~ msgstr "マルティニク"
+
 #~ msgid "Matches (wildcards allowed)"
 #~ msgstr "次の文字列と一致 (ワイルドカード)"
 
 #~ msgid "Matches regex"
 #~ msgstr "次の文字列と一致 (正規表現)"
 
+#~ msgid "Mauritania"
+#~ msgstr "モーリタニア"
+
+#~ msgid "Mauritius"
+#~ msgstr "モーリシャス"
+
 #~ msgid "Maximum"
 #~ msgstr "最大"
+
+#~ msgid "Mayotte"
+#~ msgstr "メイヨット"
 
 #~ msgid "Mediaplayer"
 #~ msgstr "メディア プレーヤー"
@@ -14298,6 +13705,12 @@ msgstr "yyyy"
 #~| msgid "Mark as read"
 #~ msgid "Message is read"
 #~ msgstr "メッセージは既読になっています。"
+
+#~ msgid "Mexico"
+#~ msgstr "メキシコ"
+
+#~ msgid "Micronesia"
+#~ msgstr "ミクロネシア"
 
 #~ msgid "Microsoft Outlook"
 #~ msgstr "Microsoft Outlook"
@@ -14353,26 +13766,52 @@ msgstr "yyyy"
 #~ msgid "Module"
 #~ msgstr "モジュール"
 
+#~ msgid "Moldova"
+#~ msgstr "モルドヴァ"
+
 #~ msgid "Mon"
 #~ msgstr "月"
+
+#~ msgid "Monaco"
+#~ msgstr "モナコ"
 
 #~ msgid "Monday"
 #~ msgstr "月曜日"
 
+#~ msgid "Mongolia"
+#~ msgstr "モンゴル"
+
+#~ msgid "Montenegro"
+#~ msgstr "モンテネグロ"
+
 #~ msgid "Month View"
 #~ msgstr "月ビュー"
+
+#, fuzzy
+#~| msgid "America/Montserrat"
+#~ msgid "Montserrat"
+#~ msgstr "アメリカ/モントセラト島"
 
 #~ msgid "More zoom settings"
 #~ msgstr "ズーム設定の詳細"
 
+#~ msgid "Morocco"
+#~ msgstr "モロッコ"
+
 #~ msgid "Moving mails ... This may take a few seconds."
 #~ msgstr "メールを移動しています... 数秒かかる場合があります。"
+
+#~ msgid "Mozambique"
+#~ msgstr "モザンビーク"
 
 #~ msgid "My Infostore"
 #~ msgstr "マイ インフォストア"
 
 #~ msgid "My OX Social"
 #~ msgstr "マイ OX ソーシャル"
+
+#~ msgid "Myanmar"
+#~ msgstr "ミャンマー"
 
 #~ msgid "N/A"
 #~ msgstr "利用不可"
@@ -14395,8 +13834,22 @@ msgstr "yyyy"
 #~ msgid "Names and email addresses"
 #~ msgstr "名前とメールアドレス"
 
+#~ msgid "Namibia"
+#~ msgstr "ナミビア"
+
+#~ msgid "Nauru"
+#~ msgstr "ナウル"
+
 #~ msgid "Navigation bar"
 #~ msgstr "ナビゲーション バー"
+
+#~ msgid "Nepal"
+#~ msgstr "ネパール"
+
+#, fuzzy
+#~| msgid "Dutch (Netherlands)"
+#~ msgid "Netherlands"
+#~ msgstr "オランダ語 (オランダ)"
 
 #~ msgid "Netherlands Antilles"
 #~ msgstr "オランダ領アンティル"
@@ -14406,6 +13859,9 @@ msgstr "yyyy"
 
 #~ msgid "New Appointment"
 #~ msgstr "新規アポイント"
+
+#~ msgid "New Caledonia"
+#~ msgstr "ニューカレドニア"
 
 #~ msgid "New Distribution List"
 #~ msgstr "新しい配布リスト"
@@ -14427,6 +13883,9 @@ msgstr "yyyy"
 
 #~ msgid "New Team"
 #~ msgstr "新規チーム"
+
+#~ msgid "New Zealand"
+#~ msgstr "ニュージーランド"
 
 #~ msgid "New account..."
 #~ msgstr "新しいアカウント..."
@@ -14461,8 +13920,20 @@ msgstr "yyyy"
 #~ msgid "Next birthdays"
 #~ msgstr "次の誕生日"
 
+#~ msgid "Nicaragua"
+#~ msgstr "ニカラグア"
+
 #~ msgid "Nickname:"
 #~ msgstr "ニックネーム:"
+
+#~ msgid "Niger"
+#~ msgstr "ニジェール"
+
+#~ msgid "Nigeria"
+#~ msgstr "ナイジェリア"
+
+#~ msgid "Niue"
+#~ msgstr "ニウエ"
 
 #~ msgid "No Appointment selected."
 #~ msgstr "アポイントが選択されていません。"
@@ -14576,6 +14047,15 @@ msgstr "yyyy"
 #~ msgid "No, not now"
 #~ msgstr "いいえ、今は結構です。"
 
+#~ msgid "Norfolk Island"
+#~ msgstr "ノーフォーク島"
+
+#~ msgid "Northern Mariana Islands"
+#~ msgstr "北マリアナ諸島"
+
+#~ msgid "Norway"
+#~ msgstr "ノルウェー"
+
 #~ msgid "Not Spam"
 #~ msgstr "スパムではありません。"
 
@@ -14641,6 +14121,9 @@ msgstr "yyyy"
 
 #~ msgid "Old Password is wrong."
 #~ msgstr "古いパスワードが間違っています。"
+
+#~ msgid "Oman"
+#~ msgstr "オマーン"
 
 #~ msgid "On %s %s each %s. months"
 #~ msgstr "指定曜日: %s %s 間隔: %s か月ごと"
@@ -14885,8 +14368,25 @@ msgstr "yyyy"
 #~ msgid "Pager:"
 #~ msgstr "ポケベル:"
 
+#~ msgid "Pakistan"
+#~ msgstr "パキスタン"
+
+#~ msgid "Palau"
+#~ msgstr "パラウ"
+
+#, fuzzy
+#~| msgid "Palestinian Territory, Occupied"
+#~ msgid "Palestinian Territory"
+#~ msgstr "パレスチナ"
+
+#~ msgid "Panama"
+#~ msgstr "パナマ"
+
 #~ msgid "Panel is shown as"
 #~ msgstr "パネルの表示形式"
+
+#~ msgid "Papua New Guinea"
+#~ msgstr "パプアニューギニア"
 
 #~ msgid "Paragraph Alignment"
 #~ msgstr "段落の配置"
@@ -14899,6 +14399,11 @@ msgstr "yyyy"
 
 #~ msgid "Paragraph style"
 #~ msgstr "段落スタイル"
+
+#, fuzzy
+#~| msgid "Nicaragua"
+#~ msgid "Paraguay"
+#~ msgstr "ニカラグア"
 
 #~ msgid "Parameter:"
 #~ msgstr "パラメータ:"
@@ -14941,6 +14446,12 @@ msgstr "yyyy"
 #~ msgid "Personal Data"
 #~ msgstr "個人データ"
 
+#~ msgid "Peru"
+#~ msgstr "ペルー"
+
+#~ msgid "Philippines"
+#~ msgstr "フィリピン"
+
 #~ msgid "Phone (business 2):"
 #~ msgstr "電話 (ビジネス 2):"
 
@@ -14979,6 +14490,9 @@ msgstr "yyyy"
 
 #~ msgid "Phone:"
 #~ msgstr "電話:"
+
+#~ msgid "Pitcairn"
+#~ msgstr "ピトケアン"
 
 #~ msgid "Place of Signature:"
 #~ msgstr "署名の場所:"
@@ -15061,6 +14575,9 @@ msgstr "yyyy"
 #~ msgid "Please wait while you are being redirected to the start page ..."
 #~ msgstr "スタート ページにリダイレクトされるまでお待ちください..."
 
+#~ msgid "Poland"
+#~ msgstr "ポーランド"
+
 #~ msgid "Polish"
 #~ msgstr "ポーランド語"
 
@@ -15072,6 +14589,9 @@ msgstr "yyyy"
 
 #~ msgid "Portal Widgets"
 #~ msgstr "ポータル ウィジェット"
+
+#~ msgid "Portugal"
+#~ msgstr "ポルトガル"
 
 #~ msgid "Portuguese (Portugal)"
 #~ msgstr "ポルトガル語 (ポルトガル)"
@@ -15224,8 +14744,16 @@ msgstr "yyyy"
 #~ msgid "Publish item"
 #~ msgstr "アイテムを公開"
 
+#~ msgid "Puerto Rico"
+#~ msgstr "プエルトリコ"
+
 #~ msgid "Pull To Refresh"
 #~ msgstr "プルして最新の状態に更新"
+
+#, fuzzy
+#~| msgid "Asia/Qatar"
+#~ msgid "Qatar"
+#~ msgstr "アジア/カタール"
 
 #~ msgid "Quick config"
 #~ msgstr "クイック構成"
@@ -15353,6 +14881,9 @@ msgstr "yyyy"
 #~ msgid "Retweet sent successfully"
 #~ msgstr "リツイートが正しく送信されました。"
 
+#~ msgid "Reunion"
+#~ msgstr "レユニオン島"
+
 #~ msgid "Revert Last Operation"
 #~ msgstr "前の操作に戻る"
 
@@ -15366,6 +14897,11 @@ msgstr "yyyy"
 #~ msgid "Right aligned, text wraps at left side"
 #~ msgstr "右揃え＋テキストを左側で折り返し"
 
+#, fuzzy
+#~| msgid "Romanian"
+#~ msgid "Romania"
+#~ msgstr "ルーマニア語"
+
 #~ msgid "Room number:"
 #~ msgstr "部屋番号:"
 
@@ -15375,8 +14911,16 @@ msgstr "yyyy"
 #~ msgid "Rules"
 #~ msgstr "ルール"
 
+#, fuzzy
+#~| msgid "Russian"
+#~ msgid "Russia"
+#~ msgstr "ロシア語"
+
 #~ msgid "Russian Federation"
 #~ msgstr "ロシア連邦"
+
+#~ msgid "Rwanda"
+#~ msgstr "ルワンダ"
 
 #
 #~ msgctxt "saturday"
@@ -15396,20 +14940,55 @@ msgstr "yyyy"
 #~ msgid "SMS"
 #~ msgstr "RSS"
 
+#~ msgid "Saint Barthelemy"
+#~ msgstr "サン・バルテルミー島"
+
+#~ msgid "Saint Helena"
+#~ msgstr "セントヘレナ"
+
+#~ msgid "Saint Kitts and Nevis"
+#~ msgstr "セントキッツ‐ネヴィス"
+
+#~ msgid "Saint Lucia"
+#~ msgstr "セントルシア"
+
+#, fuzzy
+#~| msgid "San Marino"
+#~ msgid "Saint Martin"
+#~ msgstr "サンマリノ"
+
 #~ msgid "Saint Martin (French part)"
 #~ msgstr "セイントマーティン(フランス)"
+
+#~ msgid "Saint Pierre and Miquelon"
+#~ msgstr "サンピエールエミクロン"
+
+#~ msgid "Saint Vincent and the Grenadines"
+#~ msgstr "セントビンセントおよびグレナディーン"
 
 #~ msgid "Sales Volume:"
 #~ msgstr "売上規模:"
 
+#~ msgid "Samoa"
+#~ msgstr "サモア"
+
 #~ msgid "Sample:"
 #~ msgstr "サンプル:"
+
+#~ msgid "San Marino"
+#~ msgstr "サンマリノ"
+
+#~ msgid "Sao Tome and Principe"
+#~ msgstr "サントーメ‐プリンシペ"
 
 #~ msgid "Sat"
 #~ msgstr "土曜日"
 
 #~ msgid "Saturday"
 #~ msgstr "土曜日"
+
+#~ msgid "Saudi Arabia"
+#~ msgstr "サウジアラビア"
 
 #~ msgid "Save Draft"
 #~ msgstr "下書きを保存"
@@ -15553,6 +15132,9 @@ msgstr "yyyy"
 #~ msgid "Sending the E-Mail"
 #~ msgstr "メールの送信"
 
+#~ msgid "Senegal"
+#~ msgstr "セネガル"
+
 #~ msgid "Sent"
 #~ msgstr "送信日時"
 
@@ -15561,6 +15143,9 @@ msgstr "yyyy"
 
 #~ msgid "Separator"
 #~ msgstr "表示方法"
+
+#~ msgid "Serbia"
+#~ msgstr "セルビア"
 
 #~ msgid "Series Duration"
 #~ msgstr "定期的なアポイントの期間"
@@ -15587,6 +15172,9 @@ msgstr "yyyy"
 
 #~ msgid "Set as default"
 #~ msgstr "既定として設定"
+
+#~ msgid "Seychelles"
+#~ msgstr "セイシェル"
 
 #~ msgid "Share link by email"
 #~ msgstr "メールでリンクを共有"
@@ -15726,6 +15314,9 @@ msgstr "yyyy"
 #~ msgid "Sidebar"
 #~ msgstr "サイド バー"
 
+#~ msgid "Sierra Leone"
+#~ msgstr "シエラレオネ"
+
 #~ msgid "Signature"
 #~ msgstr "署名"
 
@@ -15747,8 +15338,18 @@ msgstr "yyyy"
 #~ msgid "Since the appointment is recurring, it may cause further conflicts."
 #~ msgstr "定期的なアポイントのため、今後競合が発生する可能性があります。"
 
+#, fuzzy
+#~| msgid "Asia/Singapore"
+#~ msgid "Singapore"
+#~ msgstr "アジア/シンガポール"
+
 #~ msgid "Single"
 #~ msgstr "1 行"
+
+#, fuzzy
+#~| msgid "Saint Barthelemy"
+#~ msgid "Sint Maarten"
+#~ msgstr "サン・バルテルミー島"
 
 #~ msgid "Size:"
 #~ msgstr "サイズ:"
@@ -15758,6 +15359,12 @@ msgstr "yyyy"
 
 #~ msgid "Slideshow"
 #~ msgstr "スライドショー"
+
+#~ msgid "Slovakia"
+#~ msgstr "スロヴァキア"
+
+#~ msgid "Slovenia"
+#~ msgstr "スロヴェニア"
 
 #, fuzzy
 #~| msgid "Smartphone settings:"
@@ -15775,6 +15382,12 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "ソーシャル アカウントは、連絡先データや予定表データのダウンロードのみに使"
 #~ "用されます。"
+
+#~ msgid "Solomon Islands"
+#~ msgstr "ソロモン諸島"
+
+#~ msgid "Somalia"
+#~ msgstr "ソマリア"
 
 #~ msgid "Someone shared a file with you"
 #~ msgstr "他のユーザとファイルを共有しています。"
@@ -15801,8 +15414,21 @@ msgstr "yyyy"
 #~ msgid "Sorting your tasks"
 #~ msgstr "仕事のソート"
 
+#~ msgid "South Africa"
+#~ msgstr "南アフリカ"
+
 #~ msgid "South Georgia and the South Sandwich Islands"
 #~ msgstr "サウスジョージアとサウスサンドイッチ諸島"
+
+#, fuzzy
+#~| msgid "South Africa"
+#~ msgid "South Korea"
+#~ msgstr "南アフリカ"
+
+#, fuzzy
+#~| msgid "Sudan"
+#~ msgid "South Sudan"
+#~ msgstr "スーダン"
 
 #~ msgid "Spam folder"
 #~ msgstr "スパム フォルダ"
@@ -15821,6 +15447,9 @@ msgstr "yyyy"
 
 #~ msgid "Spouse's name:"
 #~ msgstr "配偶者名:"
+
+#~ msgid "Sri Lanka"
+#~ msgstr "スリランカ"
 
 #~ msgid "Start Page"
 #~ msgstr "スタート ページ"
@@ -15969,6 +15598,9 @@ msgstr "yyyy"
 #~ msgid "Such data will never be uploaded"
 #~ msgstr "この種類のデータは、アップロードされません。"
 
+#~ msgid "Sudan"
+#~ msgstr "スーダン"
+
 #~ msgid "Suffix:"
 #~ msgstr "敬称（後）:"
 
@@ -15999,14 +15631,29 @@ msgstr "yyyy"
 #~ "サポートされた Outlook バージョン (Connector for Microsoft Outlook):"
 #~ "Microsoft Outlook 2003、Microsoft Outlook 2007"
 
+#~ msgid "Suriname"
+#~ msgstr "スリナム"
+
 #~ msgid "Surname"
 #~ msgstr "姓"
+
+#~ msgid "Svalbard and Jan Mayen"
+#~ msgstr "スヴァールバルおよびヤンマイエン"
+
+#~ msgid "Swaziland"
+#~ msgstr "スワジランド"
+
+#~ msgid "Sweden"
+#~ msgstr "スウェーデン"
 
 #~ msgid "Swedish (Sweden)"
 #~ msgstr "スウェーデン語 (スウェーデン)"
 
 #~ msgid "Swiss franc"
 #~ msgstr "スイスフラン"
+
+#~ msgid "Switzerland"
+#~ msgstr "スイス"
 
 #~ msgid "Sync with mobile phone"
 #~ msgstr "携帯電話と同期"
@@ -16100,6 +15747,15 @@ msgstr "yyyy"
 #~ msgid "Tags:"
 #~ msgstr "タグ:"
 
+#~ msgid "Taiwan"
+#~ msgstr "台湾"
+
+#~ msgid "Tajikistan"
+#~ msgstr "タジキスタン"
+
+#~ msgid "Tanzania"
+#~ msgstr "タンザニア"
+
 #~ msgid "Target"
 #~ msgstr "対象"
 
@@ -16160,6 +15816,9 @@ msgstr "yyyy"
 
 #~ msgid "Text:"
 #~ msgstr "テキスト:"
+
+#~ msgid "Thailand"
+#~ msgstr "タイ"
 
 #~ msgctxt "help"
 #~ msgid "The E-Mail Components"
@@ -16772,6 +16431,15 @@ msgstr "yyyy"
 #~ msgid "Toggle search"
 #~ msgstr "検索フィールドを表示"
 
+#~ msgid "Togo"
+#~ msgstr "トーゴ"
+
+#~ msgid "Tokelau"
+#~ msgstr "トケラウ"
+
+#~ msgid "Tonga"
+#~ msgstr "トンガ"
+
 #~ msgid "Too short"
 #~ msgstr "短過ぎます"
 
@@ -16787,17 +16455,40 @@ msgstr "yyyy"
 #~ msgid "Trash folder"
 #~ msgstr "ごみ箱フォルダ"
 
+#~ msgid "Trinidad and Tobago"
+#~ msgstr "トリニダードトバゴ"
+
 #~ msgid "Tue"
 #~ msgstr "火"
 
 #~ msgid "Tuesday"
 #~ msgstr "火曜日"
 
+#~ msgid "Tunisia"
+#~ msgstr "チュニジア"
+
+#~ msgid "Turkey"
+#~ msgstr "トルコ"
+
+#~ msgid "Turkmenistan"
+#~ msgstr "トルクメニスタン"
+
+#~ msgid "Turks and Caicos Islands"
+#~ msgstr "タークスアンドケーコス諸島"
+
+#~ msgid "Tuvalu"
+#~ msgstr "トゥヴァル"
+
 #~ msgid "Tweet"
 #~ msgstr "ツイート"
 
 #~ msgid "Type:"
 #~ msgstr "タイプ:"
+
+#, fuzzy
+#~| msgid "Virgin Islands, U.S."
+#~ msgid "U.S. Virgin Islands"
+#~ msgstr "ヴァージン諸島 (米国)"
 
 #~ msgid "URI"
 #~ msgstr "URI"
@@ -16822,6 +16513,12 @@ msgstr "yyyy"
 
 #~ msgid "UWA Widgets..."
 #~ msgstr "UWA ウィジット..."
+
+#~ msgid "Uganda"
+#~ msgstr "ウガンダ"
+
+#~ msgid "Ukraine"
+#~ msgstr "ウクライナ"
 
 #~ msgid "Unable to create a new subscription folder."
 #~ msgstr "新しい登録フォルダを作成できません。"
@@ -16855,6 +16552,18 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "次の予期しないエラーが発生しました: サーバの応答がないため、データを読み込"
 #~ "めません。後でもう一度試すか、システム管理者に連絡してください。"
+
+#~ msgid "United Arab Emirates"
+#~ msgstr "アラブ首長国連邦"
+
+#~ msgid "United Kingdom"
+#~ msgstr "イギリス"
+
+#~ msgid "United States"
+#~ msgstr "アメリカ合衆国"
+
+#~ msgid "United States Minor Outlying Islands"
+#~ msgstr "合衆国領有小離島"
 
 #~ msgid "Unknown error while checking subreddit."
 #~ msgstr "サブレディットのチェック中に不明なエラーが発生しました。"
@@ -16904,6 +16613,9 @@ msgstr "yyyy"
 #~ msgid "Upload new files"
 #~ msgstr "新規ファイルをアップロード"
 
+#~ msgid "Uruguay"
+#~ msgstr "ウルグアイ"
+
 #~ msgid "Use \"Standalone\" Mode:"
 #~ msgstr "\"Standalone\" モードを使用してください:"
 
@@ -16952,6 +16664,9 @@ msgstr "yyyy"
 #~ msgid "Using the reminder functions"
 #~ msgstr "アラーム機能の使用"
 
+#~ msgid "Uzbekistan"
+#~ msgstr "ウズベキスタン"
+
 #~ msgid "V Split"
 #~ msgstr "垂直分割"
 
@@ -16960,6 +16675,17 @@ msgstr "yyyy"
 
 #~ msgid "V-split view"
 #~ msgstr "垂直分割ビュー"
+
+#~ msgid "Vanuatu"
+#~ msgstr "ヴァヌアトゥ"
+
+#, fuzzy
+#~| msgid "Vertical"
+#~ msgid "Vatican"
+#~ msgstr "垂直分割"
+
+#~ msgid "Venezuela"
+#~ msgstr "ベネズエラ"
 
 #~ msgid "Version"
 #~ msgstr "バージョン"
@@ -16981,6 +16707,11 @@ msgstr "yyyy"
 
 #~ msgid "Video enabled"
 #~ msgstr "ビデオを有効化"
+
+#, fuzzy
+#~| msgid "Viet Nam"
+#~ msgid "Vietnam"
+#~ msgstr "ベトナム"
 
 #~ msgid "View Slideshow"
 #~ msgstr "スライドショーを表示"
@@ -17044,6 +16775,9 @@ msgstr "yyyy"
 #~ msgid "WET"
 #~ msgstr "西ヨーロッパ時間"
 
+#~ msgid "Wallis and Futuna"
+#~ msgstr "ワリーエフトゥーナ"
+
 #~ msgid "Warning: %2$s"
 #~ msgstr "警告: %2$s"
 
@@ -17061,6 +16795,9 @@ msgstr "yyyy"
 
 #~ msgid "Weekend Day"
 #~ msgstr "週末"
+
+#~ msgid "Western Sahara"
+#~ msgstr "西サハラ"
 
 #, fuzzy
 #~| msgid "Do you want to save your layout changes?"
@@ -17156,6 +16893,9 @@ msgstr "yyyy"
 
 #~ msgid "Would you like to create the following birthday series appointment?"
 #~ msgstr "次の誕生日を定期的なアポイントとして作成しますか？"
+
+#~ msgid "Yemen"
+#~ msgstr "イエメン"
 
 #~ msgid "Yes, upgrade my account"
 #~ msgstr "はい、アカウントをアップグレードします。"
@@ -17360,6 +17100,12 @@ msgstr "yyyy"
 
 #~ msgid "ZIP:"
 #~ msgstr "郵便番号:"
+
+#~ msgid "Zambia"
+#~ msgstr "ザンビア"
+
+#~ msgid "Zimbabwe"
+#~ msgstr "ジンバブエ"
 
 #~ msgid "Zloty"
 #~ msgstr "Zloty"
