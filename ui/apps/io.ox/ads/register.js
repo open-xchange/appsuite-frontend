@@ -175,7 +175,7 @@ define('io.ox/ads/register', [
             var banner = $('#io-ox-ad-banner').show();
             banner.empty();
             banner.append(
-                baton ? baton.data.html : []
+                baton.data.html
             );
 
         },
