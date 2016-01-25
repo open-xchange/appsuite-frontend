@@ -51,6 +51,12 @@ define('io.ox/onboarding/clients/config', [
 
         types: ['platforms', 'devices', 'scenarios', 'actions', 'matching'],
 
+        props: {
+            platform: 'platforms',
+            device: 'devices',
+            scenario: 'scenarios'
+        },
+
         load: function () {
             return api.config().then(function (data) {
                 // reoder devices
@@ -83,6 +89,22 @@ define('io.ox/onboarding/clients/config', [
 
         getScenarioCID: function () {
             return _cid(this.model.get('device'), this.model.get('scenario'));
+        },
+
+        // remove invalid values
+
+        filterInvalid: function (data) {
+            var obj = {};
+            // device, scenario, action
+            _.each(data, function (value, key) {
+                var prop = config.props[key];
+                // invalid key
+                if (!prop) return;
+                // invalid value
+                if (!config.hash[prop][value]) return;
+                obj[key] = value;
+            });
+            return obj;
         },
 
         // user states

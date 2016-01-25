@@ -225,9 +225,13 @@ define('io.ox/onboarding/clients/wizard', [
             this.model = config.model;
             this.opt = opt;
             // apply predefined data
-            this.model.set(opt.data);
+            this.set(opt.data);
             // register render
             Wizard.registry.add(opt, this.render.bind(this));
+        },
+
+        set: function (data) {
+            this.model.set(this.config.filterInvalid(data));
         },
 
         run: function () {
@@ -245,7 +249,6 @@ define('io.ox/onboarding/clients/wizard', [
             // TODO: doesn't work as expected
             this.$el.find('.wizard-close').attr('tabindex', '2');
         },
-
 
         _reset: function () {
             var model = this.model;
