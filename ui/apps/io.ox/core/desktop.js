@@ -105,7 +105,7 @@ define('io.ox/core/desktop',
     });
 
     var apputil = {
-        LIMIT: 60000,
+        LIMIT: 265000,
         length: function (obj) {
             return JSON.stringify(obj).length;
         },
@@ -607,9 +607,24 @@ define('io.ox/core/desktop',
             });
         },
 
+        storeSavePoints: function (list) {
+
+            if (_.device('smartphone') || !coreConfig.get('features/storeSavePoints', true)) return;
+
+            function omitMetaData(l) {
+                return JSON.stringify(_.mapObject(l, function (o) { return _.omit(o, ['timestamp', 'version']); }));
+            }
+
+            var previous = omitMetaData(coreConfig.get('savepoints')),
+                current  = omitMetaData(list);
+
+            // Only save via jslob if savepoint has really changed
+            if (current !== previous) coreConfig.set('savepoints', list).save();
+        },
+
         setSavePoints: function (list) {
             list = list || [];
-            coreConfig.set('savepoints', list).save();
+            this.storeSavePoints(list);
             return appCache.add('savepoints', list);
         },
 

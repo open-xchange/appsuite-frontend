@@ -47,6 +47,18 @@ define('io.ox/core/extPatterns/actions',
         });
     };
 
+    // check if an action can be called based on a given list of items
+    var check = function (ref, array) {
+        var collection = new Collection(array);
+        return collection.getProperties().then(function () {
+            return processActions(ref, collection, ext.Baton.ensure(array)).then(function () {
+                return _(arguments).any(function (bool) { return bool === true; }) ?
+                    $.Deferred().resolve() :
+                    $.Deferred().reject();
+            });
+        });
+    };
+
     var invoke = function (ref, context, baton) {
 
         // make sure we have a baton
@@ -249,6 +261,7 @@ define('io.ox/core/extPatterns/actions',
 
     return {
         Action: Action,
+        check: check,
         invoke: invoke,
         applyCollection: applyCollection,
         updateCustomControls: updateCustomControls
