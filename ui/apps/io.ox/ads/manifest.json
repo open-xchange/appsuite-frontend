@@ -1,4 +1,5 @@
 {
-    "namespace": "core"
+    "namespace": "core",
+    "requires": "ads"
 }
 
