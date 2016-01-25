@@ -1687,6 +1687,22 @@ define('io.ox/core/main', [
                                 }
                             });
                         }
+                        // non-app deeplinks
+                        var id = _.url.hash('reg');
+                        if (id && ox.registry.get(id)) {
+                            // normalise args
+                            var list = (_.url.hash('regopt') || '').split(','),
+                                data = {}, parts;
+                            // key:value, key:value... -> object
+                            _.each(list, function (str) {
+                                parts = str.split(':');
+                                data[parts[0]] = parts[1];
+                            });
+                            // call after app is ready
+                            launch.done(function () {
+                                ox.registry.call(id, 'client-onboarding', { data: data });
+                            });
+                        }
                     });
                     // restore apps
                     ox.ui.App.restore();
@@ -1750,6 +1766,10 @@ define('io.ox/core/main', [
                 var dep = this.get(id),
                     args = _(arguments).toArray().slice(2);
                 return ox.load([dep]).then(function (m) {
+                    // non-apps
+                    if (m.run && _.isFunction(m.run)) return m.run.apply(m, args);
+                    if (!m.reuse || !m.getApp) return;
+                    // app
                     if (m.reuse(name, args[0])) return;
                     return m.getApp().launch().then(function () {
                         return this[name].apply(this, args);
