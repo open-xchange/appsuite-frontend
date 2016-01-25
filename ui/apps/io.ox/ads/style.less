@@ -20,10 +20,8 @@
     display: none;
     text-align: center;
     color: #000;
-    line-height: 32px;
-    padding: 16px;
+    padding: 0;
     overflow: hidden;
-    height: 82px;
 }
 
 #io-ox-ad-skyscraper {
@@ -62,8 +60,8 @@
 #io-ox-core.show-banner.show-ad {
     @height: 64px;
     #io-ox-banner { height: @height; padding: @default-padding; }
-    #io-ox-topbar { top: @height + @height; }
-    #io-ox-screens { top: @height + @height + 40; }
+    #io-ox-topbar { top: 82px + @height; }
+    #io-ox-screens { top: 82px + @height + 40; }
     #io-ox-ad-banner { top: @height; }
 }
 
@@ -72,6 +70,7 @@
     #io-ox-banner { height: @height; padding: @default-padding; }
     #io-ox-topbar { top: @height; }
     #io-ox-screens { top: @height + 40; }
+    #io-ox-notifications { top: @height + 40; }
 }
 
 #io-ox-windowmanager.show-ad {
