@@ -1750,7 +1750,8 @@ define('io.ox/core/main', [
     (function () {
 
         var hash = {
-            'mail-compose': 'io.ox/mail/compose/main'
+            'mail-compose': 'io.ox/mail/compose/main',
+            'client-onboarding': 'io.ox/onboarding/clients/wizard'
         };
 
         var custom = {};
