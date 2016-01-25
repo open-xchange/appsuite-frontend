@@ -95,7 +95,7 @@ define('io.ox/onboarding/clients/extensions', [
                 config = this.config,
                 self = this;
             _.each(scenarios, function (scenario) {
-                var list = config.getActions(scenario.id),
+                var list = config.getActions(scenario.id) || [],
                     node = $('<div class="actions-scenario">').attr('data-parent', scenario.id),
                     baton = ext.Baton({ data: list, config: config, model: config.model });
                 // draw actions

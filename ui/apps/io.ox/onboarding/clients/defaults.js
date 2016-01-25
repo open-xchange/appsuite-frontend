@@ -34,6 +34,7 @@ define('io.ox/onboarding/clients/defaults', [
             'davmanual':        { icon: 'fa-wrench' },
             'mailsync':         { icon: 'fa-envelope-o' },
             'mailmanual':       { icon: 'fa-envelope-o' },
+            'emclientinstall':  { icon: 'fa-envelope-o' },
             'mailappinstall':   { icon: 'fa-envelope-o' },
             'driveappinstall':  { icon: 'fa-cloud' }
         }
