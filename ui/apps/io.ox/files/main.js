@@ -1123,9 +1123,13 @@ define('io.ox/files/main', [
                 // check for clicks in folder trew
                 app.on('folder:change folder-virtual:change', function (folder, data) {
                     var list = [];
-                    // http://oxpedia.org/wiki/index.php?title=HTTP_API#DefaultTypes
-                    if (data) { list.push(data.standard_folder_type, data.type); }
+                    data = data || {};
                     if (folderAPI.isVirtual(folder)) { list.push('virtual'); }
+                    // add folder types
+                    if (data.standard_folder_type && data.type) {
+                        // http://oxpedia.org/wiki/index.php?title=HTTP_API#DefaultTypes
+                        list.push(data.standard_folder_type, data.type);
+                    }
                     // add filestorage data
                     if (data.account_id) {
                         // simplify: 'dropbox://164' -> ['dropbox', '164']
