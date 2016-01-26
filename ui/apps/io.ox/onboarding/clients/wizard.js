@@ -29,6 +29,12 @@ define('io.ox/onboarding/clients/wizard', [
         //titleLabel = gt('Take %1$s with you!', ox.serverConfig.productName),
         initiate, wizard;
 
+    function yell() {
+        var args = arguments;
+        require(['io.ox/core/yell'], function (yell) {
+            yell.apply(undefined, args);
+        });
+    }
 
     var options = {
 
@@ -350,6 +356,8 @@ define('io.ox/onboarding/clients/wizard', [
 
         load: function () {
             if (!initiate) initiate = config.load().promise();
+            // generic error message
+            initiate.fail(yell);
             return initiate;
         },
 
