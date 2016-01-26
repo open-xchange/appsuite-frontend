@@ -38,12 +38,42 @@ define('io.ox/core/sub/settings/pane', [
         if (ox.debug) console.error('No clue how to get here.', cid, obj);
     }
 
+    function drawFilterInfo(folder, view) {
+
+        if (!folder) return $();
+
+        var node = $('<div class="alert alert-info sub settings">');
+
+        function removeFilter(e) {
+            e.preventDefault();
+            $(this).closest('.alert').remove();
+            filter = {};
+            view.$el.empty();
+            view.render();
+        }
+
+        folderAPI.path(folder).done(function (folder) {
+
+            var folderPath = _(folder).pluck('title').join('/');
+
+            node.append(
+                $('<div class="folder">').text(
+                    gt('Only showing items related to folder "%1$s"', folderPath)
+                ),
+                $('<a href="#" class="remove-filter" data-action="remove-filter">').text(gt('Show all items'))
+                .on('click', removeFilter)
+            );
+        });
+
+        return node;
+    }
+
     ext.point('io.ox/core/sub/settings/detail').extend({
         index: 100,
         id: 'extensions',
         draw: function (baton) {
-
-            filter = {};
+            var folder = baton.options.data ? baton.options.data.id : undefined;
+            filter = { folder: folder };
 
             folderState = {
                 isPublished: folderAPI.is('published', baton.options.data || {}),
@@ -57,6 +87,7 @@ define('io.ox/core/sub/settings/pane', [
 
             this.append(
                 $('<h1 class="pane-headline">').text(baton.data.title),
+                drawFilterInfo(folder, view),
                 view.render().$el
             );
             // add side popup for single file publications

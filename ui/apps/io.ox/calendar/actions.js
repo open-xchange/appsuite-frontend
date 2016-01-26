@@ -195,6 +195,33 @@ define('io.ox/calendar/actions', [
             return e.collection.has('some', 'read') && _.device('!smartphone');
         },
         multiple: function (list) {
+            if (list.length > 1) {
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    var dialog = new dialogs.ModalDialog()
+                        .append($('<h4>').text(gt('Do you want the appointments printed in detail or as a compact list?')));
+
+                    //#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+                    dialog.addPrimaryButton('detailed', gt('Detailed'), 'detailed', { tabIndex: '1' });
+                    //#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+                    dialog.addButton('compact', gt('Compact'), 'compact', { tabIndex: '1' });
+
+                    dialog.addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: '1' })
+                        .show()
+                        .done(function (action) {
+                            if (action === 'detailed') {
+                                ox.load(['io.ox/core/print']).done(function (print) {
+                                    print.request('io.ox/calendar/print', list);
+                                });
+                            }
+                            if (action === 'compact') {
+                                ox.load(['io.ox/core/print']).done(function (print) {
+                                    print.request('io.ox/calendar/print-compact', list);
+                                });
+                            }
+                        });
+                });
+                return;
+            }
             ox.load(['io.ox/core/print']).done(function (print) {
                 print.request('io.ox/calendar/print', list);
             });

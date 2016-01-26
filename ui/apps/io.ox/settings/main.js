@@ -256,7 +256,8 @@ define('io.ox/settings/main', [
         tree.preselect(_.url.hash('folder'));
 
         tree.on('virtual', function (id, item, baton) {
-            var focus = true;
+            var focus = true,
+                refresh = (baton && baton.options) ? baton.options.refresh : false;
 
             tree.selection.resetSelected(tree.selection.getItems());
             tree.selection.preselect(id);
@@ -280,7 +281,7 @@ define('io.ox/settings/main', [
                 focus = false;
             }
 
-            if (previousSelection === null || previousSelection.id !== currentSelection.id) {
+            if (previousSelection === null || previousSelection.id !== currentSelection.id || refresh) {
                 showSettings(baton, focus);
             }
 

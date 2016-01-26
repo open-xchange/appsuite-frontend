@@ -273,7 +273,12 @@ define('io.ox/mail/detail/view', [
             if (this.model.changed.attachments && _.isEqual(this.model.previous('attachments'), this.model.get('attachments'))) return;
 
             var data = this.model.toJSON(),
-                baton = ext.Baton({ view: this, data: data, attachments: util.getAttachments(data) }),
+                baton = ext.Baton({
+                    view: this,
+                    model: this.model,
+                    data: data,
+                    attachments: util.getAttachments(data)
+                }),
                 node = this.$el.find('section.attachments').empty();
             ext.point('io.ox/mail/detail/attachments').invoke('draw', node, baton);
             // global event for tracking purposes
@@ -286,8 +291,13 @@ define('io.ox/mail/detail/view', [
 
         onChangeContent: function () {
             var data = this.model.toJSON(),
-                baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
-                node = this.$el.find('section.body').empty();
+                baton = ext.Baton({
+                    view: this,
+                    model: this.model,
+                    data: data,
+                    attachments: util.getAttachments(data)
+                }),
+            node = this.$el.find('section.body').empty();
             ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);
             // global event for tracking purposes
             ox.trigger('mail:detail:body:render', this);
