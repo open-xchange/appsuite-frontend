@@ -60,6 +60,15 @@ define('io.ox/onboarding/clients/views', [
         }
     });
 
+    ext.point(POINT + '/display/easmanual').extend({
+        index: 100,
+        draw: function (action, baton) {
+            debugger;
+            var view = new extensions.DisplayActionView(action, { baton: baton });
+            this.append(view.render().$el);
+        }
+    });
+
     ext.point(POINT + '/display/davmanual').extend({
         index: 100,
         draw: function (action, baton) {
@@ -84,7 +93,31 @@ define('io.ox/onboarding/clients/views', [
         }
     });
 
+    ext.point(POINT + '/link/emclientinstall').extend({
+        index: 100,
+        draw: function (action, baton) {
+            var view = new extensions.AppActionView(action, { baton: baton });
+            this.append(view.render().$el);
+        }
+    });
+
     ext.point(POINT + '/link/driveappinstall').extend({
+        index: 100,
+        draw: function (action, baton) {
+            var view = new extensions.AppActionView(action, { baton: baton });
+            this.append(view.render().$el);
+        }
+    });
+
+    ext.point(POINT + '/link/syncappinstall').extend({
+        index: 100,
+        draw: function (action, baton) {
+            var view = new extensions.AppActionView(action, { baton: baton });
+            this.append(view.render().$el);
+        }
+    });
+
+    ext.point(POINT + '/link/drivemacinstall').extend({
         index: 100,
         draw: function (action, baton) {
             var view = new extensions.AppActionView(action, { baton: baton });

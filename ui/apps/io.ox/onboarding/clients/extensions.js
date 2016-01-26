@@ -36,7 +36,7 @@ define('io.ox/onboarding/clients/extensions', [
         },
         addIcon: function (e) {
             var target = $(e.target);
-            target.after($('<i class="fa fa-check .button-clicked"></i>'));
+            target.after($('<i class="fa fa-check button-clicked"></i>'));
         },
         disable: function (e) {
             $(e.target).addClass('disabled');
@@ -149,7 +149,10 @@ define('io.ox/onboarding/clients/extensions', [
             'imapLogin': gt('IMAP login'),
             'imapServer': gt('IMAP server'),
             'imapPort': gt('IMAP port'),
-            'imapSecure': gt('IMAP secure')
+            'imapSecure': gt('IMAP secure'),
+            // eas
+            'eas_hostName': gt('EAS hostname'),
+            'eas_login': gt('EAS login')
         },
 
         initialize: function (action, options) {
@@ -336,7 +339,6 @@ define('io.ox/onboarding/clients/extensions', [
                         $('<div class="interaction">').append(
                             $('<form class="form-inline">').append(
                                 $('<div class="row">').append(
-                                    //$('<label class="control-label">').text(gt('Email')),
                                     this._input(),
                                     // action
                                     $('<button>')
@@ -417,7 +419,6 @@ define('io.ox/onboarding/clients/extensions', [
     var AppActionView = Backbone.View.extend({
 
         events: {
-            'click .btn': '_onClick',
             'click .store': '_onClick'
         },
 
@@ -436,11 +437,35 @@ define('io.ox/onboarding/clients/extensions', [
             this.type = action[this.device.id].type;
         },
 
+        hash: {
+            'macappstore': gt('Mac App Store'),
+            'appstore': gt('App Store'),
+            'playstore': gt('Google Play')
+        },
+
         getLabel: function () {
-            return {
-                'appstore': gt('App Store'),
-                'playstore': gt('Google Play')
-            }[this.type];
+            var storename = this.hash[this.type];
+            //#. %1$s: app store name
+            return storename ? gt('Get the App from %1$s', storename) : gt('Download the application.');
+        },
+
+
+        getButton: function () {
+            var badgeurl = this.getBadgeUrl();
+            // badge
+            if (badgeurl) {
+                return $('<a href="#" class="store" tabindex="1">').append(
+                    $('<img class="store-icon">')
+                    .attr({
+                        'role': 'button',
+                        'src': this.getBadgeUrl()
+                    })
+                );
+            }
+            // simple button
+            return $('<button class="btn btn-primary store" tabindex="1">')
+                .attr('role', 'button')
+                .text(gt('Download'));
         },
 
         getBadgeUrl: function () {
@@ -448,6 +473,7 @@ define('io.ox/onboarding/clients/extensions', [
                 prefix = ox.language.slice(0, 2).toUpperCase(),
                 country = _.contains(available, prefix) ? prefix : 'EN',
                 stores = {
+                    'macappstore': 'apps/themes/icons/default/appstore/Mac_App_Store_Badge_' + country + '_165x40.svg',
                     'appstore': 'apps/themes/icons/default/appstore/App_Store_Badge_' + country + '_135x40.svg',
                     'playstore': 'apps/themes/icons/default/googleplay/google-play-badge_' + country + '.svg'
                 };
@@ -466,12 +492,9 @@ define('io.ox/onboarding/clients/extensions', [
                         ),
                     $('<span class="content">').append(
                         // description
-                        $('<div class="description">')
-                            .text(gt('Get the App from %1$s', this.getLabel())),
-                        // action
-                        $('<a class="store">').append(
-                            $('<img class="store-icon">').attr('src', this.getBadgeUrl())
-                        )
+                        $('<div class="description">').text(this.getLabel()),
+                        this.getButton()
+
                     )
                 );
             return this;
