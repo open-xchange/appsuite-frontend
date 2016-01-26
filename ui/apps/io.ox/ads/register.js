@@ -19,7 +19,8 @@ define('io.ox/ads/register', [
 ], function (ext, capabilities) {
     'use strict';
 
-    var config = {};
+    var config = {},
+        reloadTimers = [];
 
     ext.point('io.ox/ads').extend({
         id: 'default',
@@ -42,9 +43,19 @@ define('io.ox/ads/register', [
                 var baton = ext.Baton.ensure(obj);
                 ext.point(point).invoke('cleanup', undefined, baton);
             });
+
+            reloadTimers.forEach(clearInterval);
+            reloadTimers = [];
+
             _.each(activeAds, function (obj, point) {
                 var baton = ext.Baton.ensure(obj);
                 ext.point(point).invoke('draw', undefined, baton);
+
+                if (obj.reloadAfter) {
+                    reloadTimers.push(setInterval(function () {
+                        ext.point(point).invoke('reload', undefined, baton);
+                    }, obj.reloadAfter));
+                }
             });
         }
     });
