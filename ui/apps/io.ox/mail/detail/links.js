@@ -254,13 +254,163 @@ define('io.ox/mail/detail/links', [
         'long-character-sequences': {
             test: function (node) {
                 var text = node.nodeValue;
-                return text.length >= 30 && /[\S\u00A0\x20]/.test(text) && $(node).closest('a').length === 0;
+                return text.length >= 30 && /[\S\u00A0]{30}/.test(text) && $(node).closest('a').length === 0;
             },
             process: function (node) {
                 return { node: node, replacement: $.parseHTML(util.breakableHTML(node.nodeValue)) };
             }
         }
     };
+
+    if (settings.get('features/recognizeDates', false)) {
+
+        (function () {
+
+            var regTest = {}, regReplace = {}, patterns;
+
+            var weekdays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
+                weekdaysI18n = ['sonntag', 'montag', 'dienstag', 'mittwoch', 'donnerstag', 'freitag', 'samstag'],
+                year = moment().year();
+
+            patterns = {
+                names: '(((this|next|last|diesen|nächsten|letzten)\\s)?(' + weekdays.join('|') + '|' + weekdaysI18n.join('|') + '))',
+                relative: '(yesterday|today|tomorrow|day\\safter\\stomorrow|gestern|heute|morgen|übermorgen)',
+                date: '(\\d{1,2}\\.\\d{1,2}\\.\\d{2,4}|\\d{1,2}\\.\\d{1,2}\\.|(cw|kw|week)\\s?\\d{1,2})',
+                time: '(\\d{1,2}\\:\\d\\d)(\\s?(h|a|am|p|pm))?',
+                range: '((from|von)\s)?(\\d{1,2}\\:\\d\\d)\s?(-|to|bis)\s?(\\d{1,2}\\:\\d\\d)'
+            };
+
+            patterns.day = '(' + patterns.names + '|' + patterns.relative + '|' + patterns.date + ')';
+
+            ['day', 'name', 'date', 'time'].forEach(function (id) {
+                regTest[id] = new RegExp(patterns[id], 'i');
+                regReplace[id] = new RegExp(patterns[id], 'ig');
+            });
+
+            var today = moment().hour(12).minute(0), noon = ' 12:00', dot = 'DD.MM.YYYY HH:mm', slash = 'MM/DD/YYYY HH:mm';
+
+            var parsers = [
+                [/\d{1,2}\.\d{1,2}\.\d{2,4}/, function (s) { return moment(s + noon, dot); }],
+                [/\d{1,2}\.\d{1,2}\./, function (s) { return moment(s + year + noon, dot); }],
+                [/\d{1,2}\/\d{1,2}\/\d{2,4}/, function (s) { return moment(s + noon, slash); }],
+                [/\d{1,2}\/\d{1,2}/, function (s) { return moment(s + year + noon, slash); }],
+                [/(cw|kw|week)\s?(\d{1,2})/i, function (s, match) { return m().week(match[2]); }]
+            ];
+
+            var timeParsers = [
+                [/(\d{1,2}):(\d\d)h?/, function (s, match) { return moment(0).hour(match[1]).minute(match[2]); }],
+                [/(\d{1,2}):(\d\d)\s?(am|pm|a|p)/, function (s, match) { return moment(0).hour(match[1]).minute(match[2]).add(m[3][0] === 'p' ? 12 : 0, 'h'); }]
+            ];
+
+            var replacements = {
+                'yesterday': function () { return m().subtract(1, 'd'); },
+                'today': function () { return m(); },
+                'tomorrow': function () { return m().add(1, 'd'); },
+                'day after tomorrow': function () { return m().add(2, 'd'); }
+            };
+
+            var i18n = {
+                'gestern': 'yesterday',
+                'heute': 'today',
+                'morgen': 'tomorrow',
+                'übermorgen': 'day after tomorrow'
+            };
+
+            _.range(0, 7).forEach(function (i) {
+                var day = weekdays[i], dayI18n = weekdaysI18n[i];
+                replacements['this ' + day] = function () { return m().day(i); };
+                replacements['last ' + day] = function () { return m().day(i - 7); };
+                replacements['next ' + day] = replacements[day] = function () { return m().day(i + 7); };
+                i18n['diesen ' + dayI18n] = 'this ' + day;
+                i18n['letzten ' + dayI18n] = 'last ' + day;
+                i18n['nächsten ' + dayI18n] = i18n[dayI18n] = 'next ' + day;
+            });
+
+            function m() {
+                return moment(today);
+            }
+
+            function replace(base, part) {
+                var date = base === null ? part : base,
+                    timestamp = getDateTimestamp(date), time;
+                // ignore invalid dates
+                if (!timestamp.isValid()) return part;
+                // consider part as time?
+                if (base !== null) {
+                    time = getTime(part);
+                    if (time && time.isValid()) timestamp.hour(time.hour()).minute(time.minute());
+                }
+                // return link
+                return '<a href="#" class="calendar-link" data-start-time="' + timestamp + '" role="button" tabindex="1">' + part + '</a>';
+            }
+
+            function getRecentDate(str) {
+                var date = str.match(regTest.day);
+                return date ? date[0] : null;
+            }
+
+            function getSentences(str) {
+                // escape text to be reinserted as HTML
+                return _.escape(str).replace(/(\w\w[.?!]\s|$)/g, '$1\x1D').replace(/\x1D$/, '').split(/\x1D/);
+            }
+
+            function getTime(str) {
+                for (var i in timeParsers) {
+                    var match = timeParsers[i][0].exec(str);
+                    if (match) return timeParsers[i][1](str, match);
+                }
+                return 0;
+            }
+
+            function getDateTimestamp(str) {
+                // formatted?
+                for (var i in parsers) {
+                    var match = parsers[i][0].exec(str);
+                    if (match) return parsers[i][1](str, match);
+                }
+                // check names
+                str = str.toLowerCase();
+                if (i18n[str]) str = i18n[str];
+                if (replacements[str]) return replacements[str]();
+                console.error('Unsupported date "' + str + '"');
+                return moment();
+            }
+
+            // debug
+            $(document).on('click', '.calendar-link', function (e) {
+                e.preventDefault();
+                var start_date = $(this).data('startTime'),
+                    end_date = $(this).data('endTime') || (start_date + 3600000);
+                // console.log('AHA!', moment(start_date).format('DD. MMMM YYYY HH:mm'));
+                ox.load(['io.ox/calendar/edit/main']).done(function (edit) {
+                    edit.getApp().launch().done(function () {
+                        this.create({ start_date: start_date, end_date: end_date });
+                    });
+                });
+            });
+
+            handlers.dates = {
+                test: function (node) {
+                    var text = node.nodeValue;
+                    return (regTest.day.test(text) || regTest.time.test(text)) && (!node.parentNode || node.parentNode.tagName !== 'A');
+                },
+                process: function (node) {
+                    // break into sentences first
+                    var sentences = getSentences(node.nodeValue),
+                        recentDate,
+                        html = _(sentences).reduce(function (html, sentence) {
+                            recentDate = getRecentDate(sentence) || recentDate || 'today';
+                            return html + sentence
+                                .replace(regReplace.day, replace.bind(null, null))
+                                .replace(regReplace.range, replace.bind(null, recentDate))
+                                .replace(regReplace.time, replace.bind(null, recentDate));
+                        }, '');
+                    return { node: node, replacement: $.parseHTML(html) };
+                }
+            };
+
+        }());
+    }
 
     //
     // Text nodes
