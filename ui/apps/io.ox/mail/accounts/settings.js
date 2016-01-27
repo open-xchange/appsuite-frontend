@@ -150,7 +150,9 @@ define('io.ox/mail/accounts/settings', [
             alertPlaceholder.find('.alert').remove();
             alertPlaceholder.find('.busynotice').remove();
             alertPlaceholder.append(
-                $.alert({ message: message, dismissable: true })
+                $.alert({ message: message, dismissable: true }).one('click', '.close', function () {
+                    alertPlaceholder.empty();
+                })
             );
         },
 
