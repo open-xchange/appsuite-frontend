@@ -421,9 +421,9 @@ define('io.ox/mail/detail/content',
 
             try {
 
-                // find first text/html attachment to determine content type
+                // find first text/html attachment that is not displaytype attachment or none to determine content type
                 _(data.attachments).find(function (obj) {
-                    if ((/^text\/(plain|html)$/i).test(obj.content_type)) {
+                    if ((obj.disp !== 'attachment' && obj.disp !== 'none') && (/^text\/(plain|html)$/i).test(obj.content_type)) {
                         baton.type = obj.content_type;
                         return true;
                     } else {
