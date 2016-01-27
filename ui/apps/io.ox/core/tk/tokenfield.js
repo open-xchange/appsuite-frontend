@@ -54,8 +54,8 @@ define('io.ox/core/tk/tokenfield', [
 
         if (typeof tokens === 'string') {
             if (this._delimiters.length) {
-                // Split based on comma as delimiter whilst ignoring comma in quotes
-                tokens = tokens.match(/('[^']*'|"[^"]*"|[^"',]+)+/g);
+                // Split based on comma or semi-colon as delimiter whilst ignoring comma in quotes
+                tokens = tokens.match(/('[^']*'|"[^"]*"|[^"',;]+)+/g);
             } else {
                 tokens = [tokens];
             }
