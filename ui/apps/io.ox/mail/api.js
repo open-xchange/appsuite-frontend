@@ -495,22 +495,19 @@ define('io.ox/mail/api',
         obj.max_size = settings.get('maxSize/view', 1024 * 100);
 
         return get.call(api, obj, options && options.cache).done(function (data) {
-            //don't save raw data in our models. We only want preformated content there
-            if (!obj.view || (obj.view && obj.view !== 'raw')) {
-                // sanitize content Types (we want lowercase 'text/plain' or 'text/html')
-                // split by ; because this field might contain further unwanted data
-                _(data.attachments).each(function (attachment) {
-                    attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
-                });
-                // either update or add model
-                if (model) {
-                    // if we already have a model we promote changes for threads
-                    model.set(data);
-                    propagate(model);
-                } else {
-                    // add new model
-                    pool.add('detail', data);
-                }
+            // sanitize content Types (we want lowercase 'text/plain' or 'text/html')
+            // split by ; because this field might contain further unwanted data
+            _(data.attachments).each(function (attachment) {
+                attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
+            });
+            // either update or add model
+            if (model) {
+                // if we already have a model we promote changes for threads
+                model.set(data);
+                propagate(model);
+            } else {
+                // add new model
+                pool.add('detail', data);
             }
         });
     };
