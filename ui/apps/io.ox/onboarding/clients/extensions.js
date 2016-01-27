@@ -249,7 +249,7 @@ define('io.ox/onboarding/clients/extensions', [
                     model: this.model,
                     list: this.config.getCodes()
                 }),
-                standard = 'DE';
+                standard = this['default'];
             // adjust node
             select.render().$el
                 .removeClass('form-control')
@@ -296,8 +296,8 @@ define('io.ox/onboarding/clients/extensions', [
             var scenario = this.config.getScenarioCID(),
                 action = this.id,
                 data = {
-                    sms: this.model.get('sms'),
-                    code: this.model.get('code')
+                    sms: this.model.get('code') + this.model.get('sms'),
+                    code: this.config.getUserCountryCode()
                 };
             // call
             util.disable(e);

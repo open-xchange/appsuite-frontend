@@ -184,6 +184,13 @@ define('io.ox/onboarding/clients/config', [
             return user.cellular_telephone1 || user.cellular_telephone2;
         },
 
+        getUserCountryCode: function () {
+            var user = this.user;
+            if (!user) return;
+            // iso country code
+            return user.locale.slice(3, 5).toUpperCase();
+        },
+
         isIncomplete: function () {
             var complete = true;
             _.each(this.hash, function (data) {
