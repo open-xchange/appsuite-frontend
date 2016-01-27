@@ -67,6 +67,12 @@ define('io.ox/core/viewer/main', [], function () {
                     }
                     // create main view and append main view to core
                     self.mainView = new MainView({ collection: self.fileCollection, el: el, app: data.app, standalone: data.standalone, opt: data.opt || {} });
+
+                    self.mainView.on('dispose', function () {
+                        // remove id form URL hash (see bug 43410)
+                        // use-case: viewer was opened via deep-link; a page-reload might surprise the user
+                        _.url.hash('id', null);
+                    });
                 });
             }
 
