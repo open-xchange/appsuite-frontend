@@ -497,10 +497,10 @@ define('io.ox/mail/api',
         return get.call(api, obj, options && options.cache).done(function (data) {
             //don't save raw data in our models. We only want preformated content there
             if (!obj.view || (obj.view && obj.view !== 'raw')) {
-                // sanitize content Types
-                _(data.attachments).map(function (attachment) {
-                    attachment.content_type = attachment.content_type.replace(/^text\/plain.*/, 'text/plain').replace(/^text\/html.*/, 'text/html');
-                    return attachment;
+                // sanitize content Types (we want lowercase 'text/plain' or 'text/html')
+                // split by ; because this field might contain further unwanted data
+                _(data.attachments).each(function (attachment) {
+                    attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
                 });
                 // either update or add model
                 if (model) {
