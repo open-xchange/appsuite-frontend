@@ -162,15 +162,14 @@ define('io.ox/mail/actions', [
             return data && isDraftMail(data);
         },
         action: function (baton) {
+
             var data = baton.first(),
-                check = false;
-            _.each(ox.ui.apps.models, function (app) {
-                if (app.refId === data.id) {
-                    check = true;
-                    app.launch();
-                }
-            });
-            if (check === true) return;
+                app = _(ox.ui.apps.models).find(function (model) {
+                    return model.refId === data.id;
+                });
+
+            // reuse open editor
+            if (app) return app.launch();
 
             require(['settings!io.ox/mail'], function (settings) {
 

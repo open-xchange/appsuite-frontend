@@ -939,7 +939,8 @@ define('io.ox/mail/compose/view', [
 
             return this.toggleEditorMode().then(function () {
                 return self.signaturesLoading;
-            }).done(function () {
+            })
+            .done(function () {
                 var mode = self.model.get('mode');
                 // set focus in compose and forward mode to recipient tokenfield
                 if (/(compose|forward)/.test(mode)) {
@@ -947,8 +948,9 @@ define('io.ox/mail/compose/view', [
                 } else {
                     self.editor.focus();
                 }
-                if (mode === 'replyall' && !_.isEmpty(self.model.get('cc'))) {
-                    self.toggleTokenfield('cc');
+                if (mode === 'replyall' || mode === 'edit') {
+                    if (!_.isEmpty(self.model.get('cc'))) self.toggleTokenfield('cc');
+                    if (!_.isEmpty(self.model.get('bcc'))) self.toggleTokenfield('bcc');
                 }
                 self.setBody(self.model.getContent());
                 self.model.dirty(false);
