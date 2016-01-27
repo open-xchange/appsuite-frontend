@@ -53,6 +53,18 @@ define('io.ox/onboarding/clients/extensions', [
         initialize: function (options) {
             _.extend(this, options);
             this.setElement($('<div class="actions">'));
+            this.register();
+        },
+
+        register: function () {
+            // metrics
+            var wizard = this.wizard;
+            this.$el.on('click', '.action', function (e) {
+                var id = $(this).attr('data-action'),
+                    target = $(e.target),
+                    eventname = target.hasClass('action-call') ? 'action:execute' : 'action:select';
+                wizard.trigger(eventname, id);
+            });
         },
 
         $toggleMode: $('<a href="#" class="toggle-link">').text(gt('Expert user?')),
@@ -66,10 +78,12 @@ define('io.ox/onboarding/clients/extensions', [
             if (value === 'advanced') {
                 step.attr('data-mode', 'simple');
                 link.text(gt('Expert user?'));
+                this.wizard.trigger('mode:toggle', 'simple');
                 return this.update();
             }
             // advanced
             step.attr('data-mode', 'advanced');
+            this.wizard.trigger('mode:toggle', 'advanced');
             link.text(gt('Hide options for expert users.'));
             // update
             this.update();
@@ -342,7 +356,7 @@ define('io.ox/onboarding/clients/extensions', [
                                     this._input(),
                                     // action
                                     $('<button>')
-                                        .addClass('btn btn-primary')
+                                        .addClass('btn btn-primary action-call')
                                         .text(gt('Send'))
                                 )
                             )
@@ -400,7 +414,7 @@ define('io.ox/onboarding/clients/extensions', [
                             .text(gt('Let´s automatically configure your device, by clicking the button below. It´s that simple!')),
                         // action
                         $('<button>')
-                            .addClass('btn btn-primary')
+                            .addClass('btn btn-primary action-call')
                             .text(gt('Configure now'))
                     )
                 );
@@ -419,7 +433,7 @@ define('io.ox/onboarding/clients/extensions', [
     var AppActionView = Backbone.View.extend({
 
         events: {
-            'click .store': '_onClick'
+            'click .action-call': '_onClick'
         },
 
         initialize: function (action, options) {
@@ -455,7 +469,7 @@ define('io.ox/onboarding/clients/extensions', [
             // badge
             if (badgeurl) {
                 return $('<a href="#" class="store" tabindex="1">').append(
-                    $('<img class="store-icon">')
+                    $('<img class="store-icon action-call">')
                     .attr({
                         'role': 'button',
                         'src': this.getBadgeUrl()
@@ -463,7 +477,7 @@ define('io.ox/onboarding/clients/extensions', [
                 );
             }
             // simple button
-            return $('<button class="btn btn-primary store" tabindex="1">')
+            return $('<button class="btn btn-primary action-call" tabindex="1">')
                 .attr('role', 'button')
                 .text(gt('Download'));
         },

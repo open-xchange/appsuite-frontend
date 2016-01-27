@@ -912,7 +912,7 @@ define('io.ox/core/main', [
 
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" data-action="onboarding" role="menuitem" tabindex="-1">')
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem" tabindex="-1">')
                         .text(gt('Connect your Device'))
                     )
                     .on('click', function (e) {

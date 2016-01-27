@@ -128,6 +128,7 @@ define('io.ox/onboarding/clients/wizard', [
 
         // update model
         this.parent.model.set(type, value);
+        wizard.trigger(type + ':select', value);
         this.trigger('next');
     }
 
@@ -179,7 +180,8 @@ define('io.ox/onboarding/clients/wizard', [
             wizard.model.unset('scenario');
             return wizard.trigger('step:back');
         }
-        data.wizard.trigger('selected', { type: type, value: value });
+        wizard.trigger('platform:select', value);
+        wizard.trigger('selected', { type: type, value: value });
     }
 
     function drawScenarios() {
@@ -205,7 +207,7 @@ define('io.ox/onboarding/clients/wizard', [
             })
         );
         // actions
-        ext.point(POINT).invoke('draw', container, { $step: this.$el, scenarios: list, config: config });
+        ext.point(POINT).invoke('draw', container, { $step: this.$el, scenarios: list, config: config, wizard: wizard });
         // max width: supress resizing in case description is quite long
         var space = ((list.length + 1) * 160) + 32;
         this.$('.wizard-content').css('max-width', space > 560 ? space : 560);
@@ -245,6 +247,19 @@ define('io.ox/onboarding/clients/wizard', [
             // wrapper for wizard registry
             Wizard.registry.run(this.opt.id);
             return this;
+        },
+
+        track: function (type, value) {
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+                if (!value) return;
+                metrics.trackEvent({
+                    app: 'core',
+                    target: 'client-onboarding',
+                    type: 'click',
+                    action: type + '/' + value
+                });
+            });
         },
 
         _onStepBeforeShow: function () {
@@ -293,7 +308,14 @@ define('io.ox/onboarding/clients/wizard', [
                 //'all': this._inspect,
                 'step:before:show': _.bind(this._onStepBeforeShow, this),
                 'selected': _.bind(this._onSelect, this),
-                'before:stop': _.bind(this._reset, this)
+                'before:stop': _.bind(this._reset, this),
+                // metrics
+                'platform:select': _.bind(this.track, this, 'platform/select'),
+                'device:select': _.bind(this.track, this, 'device/select'),
+                'scenario:select': _.bind(this.track, this, 'scenario/select'),
+                'action:select': _.bind(this.track, this, 'action/select'),
+                'action:execute': _.bind(this.track, this, 'action/execute'),
+                'mode:toggle': _.bind(this.track, this, 'mode/toggle')
             });
         },
 

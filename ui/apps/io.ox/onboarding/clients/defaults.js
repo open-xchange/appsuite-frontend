@@ -38,6 +38,7 @@ define('io.ox/onboarding/clients/defaults', [
             'mailsync':         { icon: 'fa-envelope-o' },
             'mailmanual':       { icon: 'fa-envelope-o' },
             'mailappinstall':   { icon: 'fa-envelope-o' },
+            'drivewindowsclientinstall':  { icon: 'fa-cloud' },
             'driveappinstall':  { icon: 'fa-cloud' },
             'drivemacinstall':  { icon: 'fa-cloud' }
         }

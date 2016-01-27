@@ -63,7 +63,6 @@ define('io.ox/onboarding/clients/views', [
     ext.point(POINT + '/display/easmanual').extend({
         index: 100,
         draw: function (action, baton) {
-            debugger;
             var view = new extensions.DisplayActionView(action, { baton: baton });
             this.append(view.render().$el);
         }
@@ -94,6 +93,14 @@ define('io.ox/onboarding/clients/views', [
     });
 
     ext.point(POINT + '/link/emclientinstall').extend({
+        index: 100,
+        draw: function (action, baton) {
+            var view = new extensions.AppActionView(action, { baton: baton });
+            this.append(view.render().$el);
+        }
+    });
+
+    ext.point(POINT + '/link/drivewindowsclientinstall').extend({
         index: 100,
         draw: function (action, baton) {
             var view = new extensions.AppActionView(action, { baton: baton });
