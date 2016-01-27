@@ -173,10 +173,17 @@
             var $parent = getParent($(this))
             var relatedTarget = { relatedTarget: this }
             if (!$parent.hasClass('open')) return
+            var originalEventType = e ? e.type : null;
             $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget))
             if (e.isDefaultPrevented()) return
+            // if the user clicked on a focusable inputfield we focus that instead of the dropdown root element
+            var focusableElement = $(document.activeElement).filter('.editable, input[type="text"], input[type="textarea"], input[type="email"]');
             if (activeElement) {
-                activeElement.focus();
+                if (!phone && originalEventType === 'click'  && focusableElement.length) {
+                    focusableElement.focus();
+                } else {
+                    activeElement.focus();
+                }
             }
             $parent.removeClass('open').trigger('hidden.bs.dropdown', relatedTarget)
         });
