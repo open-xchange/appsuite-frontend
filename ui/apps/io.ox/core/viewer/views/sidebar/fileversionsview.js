@@ -165,6 +165,10 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         }
     });
 
+    // since a file change redraws the entire view
+    // we need to track the open/close state manually
+    var open = {};
+
     /**
      * The FileVersionsView is intended as a sub view of the SidebarView and
      * is responsible for displaying the history of file versions.
@@ -179,13 +183,18 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             this.$el.hide();
             // attach event handlers
             this.on('dispose', this.disposeView.bind(this));
-            this.$el.on('open', this.onOpen.bind(this));
+            this.$el.on({
+                open: this.onOpen.bind(this),
+                close: this.onClose.bind(this)
+            });
             this.listenTo(this.model, 'change:number_of_versions', this.render);
             this.listenTo(this.model, 'change:versions change:current_version change:number_of_versions change:version change:filename', this.renderVersions);
         },
 
         onOpen: function () {
             var header = this.$('.sidebar-panel-heading').busy();
+            // remember
+            open[this.model.cid] = true;
             // loading versions will trigger 'change:version' which in turn renders the version list
             FilesAPI.versions.load(this.model.toJSON(), { cache: false })
                 .always($.proxy(header.idle, header))
@@ -195,12 +204,17 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 });
         },
 
+        onClose: function () {
+            delete open[this.model.cid];
+        },
+
         render: function () {
             if (!this.model) return this;
             var count = this.model.get('number_of_versions') || 0;
             this.setPanelHeader(gt('Versions (%1$d)', _.noI18n(count)));
             // show the versions panel only if we have at least 2 versions
             this.$el.toggle(count > 1);
+            this.togglePanel(count > 1 && !!open[this.model.cid]);
             return this;
         },
 
@@ -213,10 +227,12 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         },
 
         renderVersionsAsNeeded: function () {
+            // might be disposed meanwhile
+            if (!this.$el) return;
             // in case FilesAPI.versions.load will not indirectly triggers a 'change:version'
             // f.e. when a new office document is created and the model
             // is up-to-date when toggling versions pane
-            var node = this.$el.find('table.versiontable'),
+            var node = this.$('table.versiontable'),
                 model = this.model, versions;
             // is empty
             if (!node.length) return this.renderVersions();
