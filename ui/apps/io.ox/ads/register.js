@@ -107,7 +107,7 @@ define('io.ox/ads/register', [
         before: 'widgets',
         draw: function () {
             this.append(
-                $('<div id="io-ox-ad-portal" class="io-ox-ad">')
+                $('<div id="io-ox-ad-portal" class="io-ox-ad">').hide()
             );
         }
     });
@@ -117,7 +117,7 @@ define('io.ox/ads/register', [
         index: 50,
         draw: function () {
             this.$el.append(
-                $('<div id="io-ox-ad-mail-detail">')
+                $('<div id="io-ox-ad-mail-detail">').hide()
             );
         }
     });
@@ -127,7 +127,7 @@ define('io.ox/ads/register', [
         index: 150,
         draw: function () {
             this.append(
-                $('<div id="io-ox-ad-drive-folder">')
+                $('<div id="io-ox-ad-drive-folder">').hide()
             );
         }
     });
@@ -137,10 +137,10 @@ define('io.ox/ads/register', [
         draw: function (baton) {
             $('#io-ox-ad-drive-folder').append(
                 baton.data.html
-            );
+            ).show();
         },
         cleanup: function () {
-            $('#io-ox-ad-drive-folder').empty();
+            $('#io-ox-ad-drive-folder').empty().hide();
         }
     });
 
@@ -149,26 +149,36 @@ define('io.ox/ads/register', [
         draw: function (baton) {
             $('#io-ox-ad-portal').append(
                 baton.data.html
-            );
+            ).show();
         },
         cleanup: function () {
-            $('#io-ox-ad-portal').empty();
+            $('#io-ox-ad-portal').empty().hide();
         }
     });
 
     ext.point('io.ox/ads/mailDetail').extend({
         id: 'default',
-        draw: function () {},
-        cleanup: function () {}
+        draw: function (baton) {
+            var detail = $('#io-ox-ad-mail-detail');
+
+            detail.closest('.thread-view-control').addClass('show-ad');
+            detail.append(
+                baton.data.html
+            ).show();
+        },
+        cleanup: function () {
+            var detail = $('#io-ox-ad-mail-detail');
+
+            detail.closest('.thread-view-control').removeClass('show-ad');
+            detail.empty().hide();
+        }
     });
 
     ext.point('io.ox/ads/skyscraper').extend({
         id: 'default',
         draw: function (baton) {
             $('#io-ox-windowmanager').addClass('show-ad');
-            var skyscraper = $('#io-ox-ad-skyscraper').show();
-            skyscraper.empty();
-            skyscraper.append(
+            $('#io-ox-ad-skyscraper').append(
                 baton.data.html
             );
 
@@ -183,9 +193,7 @@ define('io.ox/ads/register', [
         id: 'default',
         draw: function (baton) {
             $('#io-ox-core').addClass('show-ad');
-            var banner = $('#io-ox-ad-banner').show();
-            banner.empty();
-            banner.append(
+            $('#io-ox-ad-banner').append(
                 baton.data.html
             );
 
