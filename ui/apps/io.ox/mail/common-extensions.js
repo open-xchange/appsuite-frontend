@@ -34,6 +34,11 @@ define('io.ox/mail/common-extensions', [
 
     'use strict';
 
+    // little helper
+    function isSearchActive(baton) {
+        return !!baton.app && !!baton.app.get('find') && baton.app.get('find').isActive();
+    }
+
     var extensions = {
 
         a11yLabel: function (baton) {
@@ -60,16 +65,14 @@ define('io.ox/mail/common-extensions', [
         },
 
         picture: function (baton) {
-
             // show picture of sender or first recipient
             // special cases:
             // - show picture of first recipient in "Sent items" and "Drafts"
             // - exception: always show sender in threaded messages
-
             var data = baton.data,
                 size = api.threads.size(data),
                 single = size <= 1,
-                addresses = single && account.is('sent|drafts', data.folder_id) ? data.to : data.from;
+                addresses = single && !isSearchActive(baton) && account.is('sent|drafts', data.folder_id) ? data.to : data.from;
             this.append(
                 contactsAPI.pictureHalo(
                     $('<div class="contact-picture" aria-hidden="true">'),
@@ -80,9 +83,7 @@ define('io.ox/mail/common-extensions', [
         },
 
         senderPicture: function (baton) {
-
             // shows picture of sender see Bug 41023
-
             var addresses = baton.data.from;
             this.append(
                 contactsAPI.pictureHalo(
@@ -124,7 +125,7 @@ define('io.ox/mail/common-extensions', [
 
             var data = baton.data,
                 single = !data.threadSize || data.threadSize === 1,
-                field = single && account.is('sent|drafts', data.folder_id) ? 'to' : 'from',
+                field = single && !isSearchActive(baton) && account.is('sent|drafts', data.folder_id) ? 'to' : 'from',
                 // get folder data to check capabilities:
                 // if bit 4096 is set, the server sort by local part not display name
                 capabilities = folderAPI.pool.getModel(data.folder_id).get('capabilities') || 0,
@@ -277,12 +278,9 @@ define('io.ox/mail/common-extensions', [
         // add orignal folder as label to search result items
         folder: function (baton) {
             // missing data or find currently inactive
-            if (!baton.data.original_folder_id || !(baton.app && baton.app.get('find') && baton.app.get('find').isActive())) return;
+            if (!baton.data.original_folder_id || !isSearchActive(baton)) return;
             // add container
-            var node;
-            this.append(
-                node = $('<span class="original-folder">')
-            );
+            var node = $('<span class="original-folder">').appendTo(this);
             // add breadcrumb
             require(['io.ox/core/folder/breadcrumb'], function (BreadcrumbView) {
                 var view = new BreadcrumbView({
@@ -297,7 +295,6 @@ define('io.ox/mail/common-extensions', [
                 view.renderPath = function (path) {
                     return renderPathOrig.call(this, [].concat(_.last(path)));
                 };
-
                 // append to dom
                 node.append(view.render().$el);
             });
