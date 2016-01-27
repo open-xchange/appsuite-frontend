@@ -92,6 +92,9 @@ define('io.ox/ads/register', [
 
     ox.on('app:resume', changeModule);
 
+    /**
+     ** Add extensions for core UI points, can be used to hook up ad extension points
+     **/
     ox.on('mail:send:start', function () {
         require(['io.ox/ads/mailoverlay'], function (Overlay) {
             var app = ox.ui.apps.get('io.ox/mail'),
@@ -131,6 +134,10 @@ define('io.ox/ads/register', [
             );
         }
     });
+
+    /**
+     ** extension points for ad areas
+     **/
 
     ext.point('io.ox/ads/driveFolder').extend({
         id: 'default',
