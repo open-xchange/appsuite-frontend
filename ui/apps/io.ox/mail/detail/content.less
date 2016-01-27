@@ -20,6 +20,9 @@
 
     position: relative;
 
+    // use display: table to cover padding/margin/float issues at the bottom
+    display: table;
+
     // TODO: remove / temp. fix for sanitized HTML
     padding: 0;
     & > div > [class$="-content"] { padding: 0; }
