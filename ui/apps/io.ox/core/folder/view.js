@@ -39,6 +39,15 @@ define('io.ox/core/folder/view', [
             forceOpen = false,
             DEFAULT_WIDTH = 250;
 
+        // smart defaults for flat folders
+        if (!open) {
+            open = {};
+            // open private and public by default
+            if (/^(contacts|calendar|tasks)$/.test(module)) {
+                open[_.display()] = ['virtual/flat/' + module + '/private', 'virtual/flat/' + module + '/public'];
+            }
+        }
+
         //
         // Utility functions
         //
