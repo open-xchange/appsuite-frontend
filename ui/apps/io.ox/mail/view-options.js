@@ -158,7 +158,7 @@ define('io.ox/mail/view-options', [
         draw: function (baton) {
 
             this.append(
-                $('<a href="#" class="toolbar-item" tabindex="1" data-action="open-folder-view">')
+                $('<a href="#" role="button" class="toolbar-item" tabindex="1" data-action="open-folder-view">')
                 .attr('title', gt('Open folder view'))
                 .append($('<i class="fa fa-angle-double-right">'))
                 .on('click', { app: baton.app, state: true }, toggleFolderView)
@@ -169,7 +169,7 @@ define('io.ox/mail/view-options', [
             side.addClass('bottom-toolbar');
             side.append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" class="toolbar-item" role="button" tabindex="1" data-action="close-folder-view">')
+                    $('<a href="#" role="button" class="toolbar-item" tabindex="1" data-action="close-folder-view">')
                     .append(
                         $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
                         $('<span class="sr-only">').text(gt('Close folder view'))
