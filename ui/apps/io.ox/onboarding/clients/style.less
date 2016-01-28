@@ -161,7 +161,6 @@
                 &.centered {
                     .link.box { display: flex; }
                     //.icon-list { margin: 18px 24px 18px 24px; }
-                    .title { display: none; }
                     .icon-list { margin: 0}
                 }
 
@@ -221,6 +220,17 @@
                     // collapsed
                     .fa-chevron-right { display: inline-block; }
                     .fa-chevron-down { display: none; }
+                }
+                // style: button to legend
+                // keyboard navigation on legend node (tabindex, role button) don't work
+                button.section-title {
+                    padding-left: 0;
+                    border: none;
+                    background: none;
+                    border-bottom: 1px #ddd solid;
+                    width: 100%;
+                    text-align: left;
+                    font-weight: 700;
                 }
 
                 &[data-action="sms"] {

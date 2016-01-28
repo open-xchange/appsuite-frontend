@@ -46,7 +46,7 @@ define('io.ox/onboarding/clients/extensions', [
     var ActionsView = Backbone.View.extend({
 
         events: {
-            'click .action>legend': 'accordion',
+            'click .section-title': 'accordion',
             'click .toggle-link': 'toggleMode'
         },
 
@@ -67,7 +67,13 @@ define('io.ox/onboarding/clients/extensions', [
             });
         },
 
-        $toggleMode: $('<a href="#" class="toggle-link">').text(gt('Expert user?')),
+        getToggleNode: function () {
+            var id = _.uniqueId('description');
+            return [
+                $('<div class="sr-only">').attr('id', id).text(gt('Click to show or hide actions for advanced users.')),
+                $('<a href="#" class="toggle-link" tabindex="1">').attr('aria-describedby', id).text(gt('Expert user?'))
+            ];
+        },
 
         toggleMode: function (e) {
             e.preventDefault();
@@ -110,7 +116,7 @@ define('io.ox/onboarding/clients/extensions', [
                 self = this;
             _.each(scenarios, function (scenario) {
                 var list = config.getActions(scenario.id) || [],
-                    node = $('<div class="actions-scenario">').attr('data-parent', scenario.id),
+                    node = $('<div class="actions-scenario" role="tablist">').attr('data-parent', scenario.id),
                     baton = ext.Baton({ data: list, config: config, model: config.model });
                 // draw actions
                 _.each(baton.data, function (action) {
@@ -121,7 +127,9 @@ define('io.ox/onboarding/clients/extensions', [
                     actionpoint.invoke('draw', node, action, baton);
                 });
                 // add toggle link
-                if (baton.data.length > 1) node.append(self.$toggleMode.clone());
+                if (baton.data.length > 1) {
+                    node.append(self.getToggleNode());
+                }
                 this.$el.append(node);
                 // expand first action
                 this.$el.find('.action:first').addClass('expanded');
@@ -138,12 +146,12 @@ define('io.ox/onboarding/clients/extensions', [
                 container = action.closest('.actions');
             if (container.find('.action:visible').length <= 1) {
                 // does not collapse when only action visible
-                action.addClass('expanded');
+                action.addClass('expanded').find('.section-title').attr('aria-pressed', true);
             } else {
-                action.toggleClass('expanded');
+                action.toggleClass('expanded').find('.section-title').attr('aria-pressed', action.hasClass('expanded'));
             }
             // there can only be one
-            action.closest('.actions-scenario').find('.action').not(action).removeClass('expanded');
+            action.closest('.actions-scenario').find('.action').not(action).removeClass('expanded').find('.section-title').attr('aria-pressed', false);
         }
 
     });
@@ -181,32 +189,41 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         render: function () {
-            var self = this, form;
+            var self = this, form,
+                id = _.uniqueId('controls');
             this.$el.empty()
                 .append(
                     // title
-                    $('<legend class="title section-title">')
+                    $('<button class="title section-title" tabindex="1" role="tab">')
+                        .attr('aria-controls', id)
                         .append(
-                            $('<i class="fa fa-fw fa-chevron-right">'),
-                            $('<i class="fa fa-fw fa-chevron-down">'),
+                            $('<i class="fa fa-fw fa-chevron-right" aria-hidden="true"> '),
+                            $('<i class="fa fa-fw fa-chevron-down" aria-hidden="true">'),
                             $.txt(gt('Settings for advanced users'))
                         ),
                     // content
-                    $('<span class="content">').append(
-                        $('<div class="description">')
-                            .text(gt('If you know what you are doing...just setup your account manually!')),
-                        form = $('<div class="data">')
-                    )
+                    $('<span class="content">')
+                        .attr('id', id)
+                        .append(
+                            $('<div class="description">')
+                                .text(gt('If you know what you are doing...just setup your account manually!')),
+                            form = $('<div class="data">')
+                        )
                 );
             // add rows
             var list = Object.keys(this.data).sort();
             _.each(list, function (key) {
                 var value = self.data[key],
-                    group = $('<div class="row">');
+                    group = $('<div class="row">'),
+                    id = _.uniqueId('label');
                 group.append(
-                    $('<label class="control-label display-label col-sm-3">').text(self.labels[key] || key),
+                    $('<label class="control-label display-label col-sm-3">')
+                        .attr('id', id)
+                        .text(self.labels[key] || key),
                     $('<div class="col-sm-9">').append(
-                        $('<input class="form-control" readonly>').val(value)
+                        $('<input class="form-control" readonly tabindex="1">')
+                            .attr('aria-labelledby', id)
+                            .val(value)
                             .on('click', function () {
                                 $(this).select();
                             })
@@ -261,18 +278,21 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         render: function () {
+            var id = _.uniqueId('description');
             this.$el.empty()
                 .append(
                     // title
-                    $('<legend class="title section-title">')
+                    $('<button class="title section-title" tabindex="1" role="tab">')
+                        .attr('aria-describedby', id)
                         .append(
-                            $('<i class="fa fa-fw fa-chevron-right">'),
-                            $('<i class="fa fa-fw fa-chevron-down">'),
+                            $('<i class="fa fa-fw fa-chevron-right" aria-hidden="true"> '),
+                            $('<i class="fa fa-fw fa-chevron-down" aria-hidden="true">'),
                             $.txt(gt('Automatic Configuration (via SMS)'))
                         ),
                     $('<span class="content">').append(
                         // description
                         $('<div class="description">')
+                            .attr('id', id)
                             .text(gt('Please enter your mobile phone number, and we´ll send you a link to automatically configure your iOS device! It´s that simple!')),
                         // form
                         $('<div class="interaction">').append(
@@ -281,7 +301,7 @@ define('io.ox/onboarding/clients/extensions', [
                                     //$('<label class="control-label">').text(gt('Phone Number')),
                                     this._select().$el,
                                     this._input(),
-                                    $('<button class="btn btn-primary">').text(gt('Send'))
+                                    $('<button class="btn btn-primary" tabindex="1">').attr('role', 'button').text(gt('Send'))
                                 )
                             )
                         )
@@ -336,18 +356,21 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         render: function () {
+            var id = _.uniqueId('description');
             this.$el.empty()
                 .append(
                     // title
-                    $('<legend class="title section-title">')
+                    $('<button class="title section-title" tabindex="1" role="tab">')
+                        .attr('aria-describedby', id)
                         .append(
-                            $('<i class="fa fa-fw fa-chevron-right">'),
-                            $('<i class="fa fa-fw fa-chevron-down">'),
+                            $('<i class="fa fa-fw fa-chevron-right" aria-hidden="true"> '),
+                            $('<i class="fa fa-fw fa-chevron-down" aria-hidden="true">'),
                             $.txt(gt('Configuration Email'))
                         ),
                     $('<span class="content">').append(
                         // description
                         $('<div class="description">')
+                            .attr('id', id)
                             .text(gt('Get your device configured by email.')),
                         // form
                         $('<div class="interaction">').append(
@@ -355,8 +378,8 @@ define('io.ox/onboarding/clients/extensions', [
                                 $('<div class="row">').append(
                                     this._input(),
                                     // action
-                                    $('<button>')
-                                        .addClass('btn btn-primary action-call')
+                                    $('<button class="btn btn-primary action-call" tabindex="1">')
+                                        .attr('role', 'button')
                                         .text(gt('Send'))
                                 )
                             )
@@ -399,22 +422,25 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         render: function () {
+            var ref = _.uniqueId('description-');
             this.$el.empty()
                 .append(
                     // title
-                    $('<legend class="title section-title">')
+                    $('<button class="title section-title" tabindex="1" role="tab">')
                         .append(
-                            $('<i class="fa fa-fw fa-chevron-right">'),
-                            $('<i class="fa fa-fw fa-chevron-down">'),
+                            $('<i class="fa fa-fw fa-chevron-right" aria-hidden="true"> '),
+                            $('<i class="fa fa-fw fa-chevron-down" aria-hidden="true">'),
                             $.txt(gt('Automatic Configuration'))
                         ),
                     $('<span class="content">').append(
                         // description
                         $('<div class="description">')
+                            .attr('id', ref)
                             .text(gt('Let´s automatically configure your device, by clicking the button below. It´s that simple!')),
                         // action
-                        $('<button>')
-                            .addClass('btn btn-primary action-call')
+                        $('<button class="btn btn-primary action-call" tabindex="1">')
+                            .attr('role', 'button')
+                            .attr('aria-describedby', ref)
                             .text(gt('Configure now'))
                     )
                 );
@@ -468,10 +494,11 @@ define('io.ox/onboarding/clients/extensions', [
             var badgeurl = this.getBadgeUrl();
             // badge
             if (badgeurl) {
-                return $('<a href="#" class="store" tabindex="1">').append(
+                return $('<a href="#" class="store">').append(
                     $('<img class="store-icon action-call">')
                     .attr({
                         'role': 'button',
+                        'tabindex': 1,
                         'src': this.getBadgeUrl()
                     })
                 );
@@ -495,18 +522,20 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         render: function () {
+            var id = _.uniqueId('description');
             this.$el.empty()
                 .append(
                     // title
-                    $('<legend class="title section-title">')
+                    $('<button class="title section-title" tabindex="1" role="tab">')
+                        .attr('aria-describedby', id)
                         .append(
-                            $('<i class="fa fa-fw fa-chevron-right">'),
-                            $('<i class="fa fa-fw fa-chevron-down">'),
+                            $('<i class="fa fa-fw fa-chevron-right" aria-hidden="true"> '),
+                            $('<i class="fa fa-fw fa-chevron-down" aria-hidden="true">'),
                             $.txt(gt('Installation'))
                         ),
                     $('<span class="content">').append(
                         // description
-                        $('<div class="description">').text(this.getLabel()),
+                        $('<div class="description">').attr(id, id).text(this.getLabel()),
                         this.getButton()
 
                     )

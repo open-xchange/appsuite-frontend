@@ -46,28 +46,29 @@ define('io.ox/onboarding/clients/wizard', [
         },
 
         _getListItem: function (obj) {
-            return $('<li class="option">').attr({ 'data-value': obj.id })
+            return $('<li class="option">')
+                .attr('data-value', obj.id)
                 .append(options._getLink(obj));
         },
 
         // back button
         _getListItemBack: function (type) {
             if (!_.contains(['device', 'scenario'], type)) return;
-
-            return $('<li class="option centered">')
-                    .attr({ 'data-value': 'back' })
+            // tabindex needed (wizard tabtrap)
+            return $('<li class="option centered" data-value="back">')
                     .append(
-                        $('<a href="#" tabindex="1" class="link box">')
-                        // apply disabled style?
+                        $('<button tabindex="1" class="link box" role="menuitem">')
                         .append(
                             $('<div class="icon-list">').append(options._getIcons('fa-angle-left')),
-                            options._getTitle({ title: '\u00A0' })
+                            // a11y
+                            options._getTitle({ title: gt('back') }).addClass('sr-only')
                         )
                     );
         },
 
         _getLink: function (obj) {
-            return $('<a href="#" tabindex="1" class="link box">')
+            // tabindex needed (wizard tabtrap)
+            return $('<button tabindex="1" class="link box" role="menuitem">')
                 .addClass(obj.enabled ? '' : 'disabled')
                 .append(
                     options._getPremium(obj),
@@ -90,7 +91,9 @@ define('io.ox/onboarding/clients/wizard', [
             return $('<div class="icon-list">')
                 .append(
                     _.map(list, function (name) {
-                        return $('<i class="icon fa">').addClass(name);
+                        return $('<i class="icon fa">')
+                            .attr('aria-hidden', true)
+                            .addClass(name);
                     })
                 );
         },
@@ -101,7 +104,7 @@ define('io.ox/onboarding/clients/wizard', [
         },
 
         getNode: function (type, list) {
-            return $('<ul class="options" role="navigation">')
+            return $('<ul class="options" role="menu">')
                 .append(
                     options._getListItemBack(type),
                     options._getListItems(type, list)
@@ -118,14 +121,12 @@ define('io.ox/onboarding/clients/wizard', [
         var value = $(e.currentTarget).closest('li').attr('data-value'),
             wizard = this.parent,
             type = this.$el.attr('data-type');
-
         // back button
         if (value === 'back') {
             // remove value set within previous step
             wizard.model.unset('platform');
             return wizard.trigger('step:back');
         }
-
         // update model
         this.parent.model.set(type, value);
         wizard.trigger(type + ':select', value);
@@ -133,7 +134,8 @@ define('io.ox/onboarding/clients/wizard', [
     }
 
     function drawPlatforms() {
-        var config = this.parent.config;
+        var config = this.parent.config,
+            descriptionId = _.uniqueId('description');
         // title
         this.$('.wizard-title').text(titleLabel);
         // content
@@ -141,14 +143,19 @@ define('io.ox/onboarding/clients/wizard', [
             .addClass('onboarding-platform')
             .append(
                 options.getNode('platform', config.getPlatforms())
-                    .on('click', 'a', onSelect.bind(this)),
-                $('<p class="teaser">').text(gt('Please select the platform of your device.'))
+                    .on('click', 'button', onSelect.bind(this)),
+                $('<p class="teaser">').attr('id', descriptionId).text(gt('Please select the platform of your device.'))
             );
+        // a11y
+        this.$el.attr('aria-labelledby', descriptionId + '  dialog-title');
+        this.$('.link').attr('aria-describedby', descriptionId);
+        this.$('.options').attr('aria-label', gt('list of available platforms'));
     }
 
     function drawDevices() {
         var config = this.parent.config,
-            list = config.getDevices();
+            list = config.getDevices(),
+            descriptionId = _.uniqueId('description');
         // title
         this.$('.wizard-title').text(gt('Which device do you want to configure?'));
         this.$('.wizard-title').text(titleLabel);
@@ -156,9 +163,14 @@ define('io.ox/onboarding/clients/wizard', [
         this.$('.wizard-content').empty()
             .append(
                 options.getNode('device', list)
-                    .on('click', 'a', onSelect.bind(this)),
-                $('<p class="teaser">').text(gt('What type of device do you want to configure?'))
+                    .on('click', 'button', onSelect.bind(this)),
+                $('<p class="teaser">').attr('id', descriptionId).text(gt('What type of device do you want to configure?'))
             );
+        // a11y
+        this.$el.attr('aria-labelledby', descriptionId + '  dialog-title');
+        this.$('.link').attr('aria-describedby', descriptionId);
+        this.$('.options').attr('aria-label', gt('list of available devices'));
+        this.$('.title.sr-only').text(gt('choose a different platform'));
     }
 
     //
@@ -188,21 +200,34 @@ define('io.ox/onboarding/clients/wizard', [
         var config = this.parent.config,
             list = config.getScenarios(),
             wizard = this.parent,
-            container = this.$('.wizard-content').empty();
+            descriptionId = _.uniqueId('description'),
+            container = this.$('.wizard-content').empty(),
+            self = this;
         // title and teaser
-        this.$('.wizard-title').text(gt('What do you want to use?'));
+
+        this.$('.wizard-title').attr('id', descriptionId).text(gt('What do you want to use?'));
         // content
         container.append(
-            options.getNode('scenario', list)
-            .on('click', 'a', { wizard: this.parent }, select)
+            options.
+            getNode('scenario', list)
+                .on('click', 'button', { wizard: this.parent }, select)
         );
         // description
         container.append(
             $('<ul class="descriptions">').append(function () {
                 return _.map(list, function (obj) {
-                    return $('<li class="description hidden">').attr('data-parent', obj.id).append(
-                        $('<div class="">').text(obj.description || obj.id || '\xa0')
-                    );
+                    var descriptionId = _.uniqueId('description');
+                    self.$('.option[data-value="' + obj.id + '"]>.link').attr('aria-labelledby', descriptionId);
+                    return $('<li class="description hidden">')
+                        .attr({
+                            'data-parent': obj.id
+                        })
+                        .append(
+                            $('<div class="">').text(obj.description || obj.id || '\xa0')
+                            .attr({
+                                'id': descriptionId
+                            })
+                        );
                 });
             })
         );
@@ -211,6 +236,11 @@ define('io.ox/onboarding/clients/wizard', [
         // max width: supress resizing in case description is quite long
         var space = ((list.length + 1) * 160) + 32;
         this.$('.wizard-content').css('max-width', space > 560 ? space : 560);
+        // a11y
+        this.$el.attr('aria-labelledby', descriptionId + '  dialog-title');
+        this.$('.options').attr('aria-label', gt('list of available devices'));
+        this.$('.actions-scenario').attr('aria-label', gt('list of available actions'));
+        this.$('.title.sr-only').text(gt('choose a different scenario'));
         // autoselect first
         var id = config.model.get('scenario');
         if (list.length === 0) return;
@@ -267,8 +297,6 @@ define('io.ox/onboarding/clients/wizard', [
             var id = this.wizard.currentStep,
                 node = (this.wizard.steps[id]);
             this.setElement(node.$el);
-            // TODO: doesn't work as expected
-            this.$el.find('.wizard-close').attr('tabindex', '2');
         },
 
         _reset: function () {
