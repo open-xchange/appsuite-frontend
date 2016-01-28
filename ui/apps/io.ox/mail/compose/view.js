@@ -398,7 +398,7 @@ define('io.ox/mail/compose/view', [
 
                     delete data.attachments;
 
-                    if (mode === 'forward') {
+                    if (mode === 'forward' || mode === 'edit') {
                         // move nested messages into attachment array
                         _(data.nested_msgs).each(function (obj) {
                             attachments.push({
