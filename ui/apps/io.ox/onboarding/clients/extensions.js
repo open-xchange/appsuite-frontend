@@ -311,13 +311,22 @@ define('io.ox/onboarding/clients/extensions', [
             return this;
         },
 
+        getNumber: function () {
+            var local = this.model.get('sms'),
+                prefix = this.model.get('code');
+            // remove non digits
+            local = local.replace(/[\D]+/g, '');
+            // remove leading zero
+            local = local.replace(/^[^\d]*0+/, '');
+            return prefix + local;
+        },
+
         _onClick: function (e) {
             e.preventDefault();
             var scenario = this.config.getScenarioCID(),
                 action = this.id,
                 data = {
-                    sms: this.model.get('code') + this.model.get('sms'),
-                    code: this.config.getUserCountryCode()
+                    sms: this.getNumber()
                 };
             // call
             util.disable(e);
