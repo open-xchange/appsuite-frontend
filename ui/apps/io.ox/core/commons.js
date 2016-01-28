@@ -677,7 +677,7 @@ define('io.ox/core/commons', [
                 container = $('<div class="premium-toolbar generic-toolbar bottom visual-focus in">').append(
                     $('<div class="header">').append(
                         gt('Premium features'),
-                        $('<a href="#" class="pull-right">').append(
+                        $('<a href="#" role="button" class="pull-right">').append(
                             $('<i class="fa fa-times" aria-hidden="true">'),
                             $('<span class="sr-only">').text(gt('Close premium features'))
                         ).on('click', function (e) {

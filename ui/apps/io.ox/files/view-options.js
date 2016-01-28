@@ -229,7 +229,7 @@ define('io.ox/files/view-options', [
         index: 200,
         draw: function (baton) {
             this.append(
-                $('<a href="#" class="toolbar-item" tabindex="1">')
+                $('<a href="#" role="button" class="toolbar-item" tabindex="1">')
                 .attr('title', gt('Open folder view'))
                 .append($('<i class="fa fa-angle-double-right">'))
                 .on('click', { app: baton.app, state: true }, toggleFolderView)
@@ -240,7 +240,7 @@ define('io.ox/files/view-options', [
             side.addClass('bottom-toolbar');
             side.append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" class="toolbar-item" role="button" tabindex="1">')
+                    $('<a href="#" role="button" class="toolbar-item" tabindex="1">')
                     .append(
                         $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
                         $('<span class="sr-only">').text(gt('Close folder view'))
