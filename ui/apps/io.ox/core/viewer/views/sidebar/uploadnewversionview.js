@@ -164,6 +164,7 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
 
                 // add file upload widget
                 var $el = this.$el;
+                var that = this;
                 require(['io.ox/core/tk/attachments'], function (Attachments) {
                     $el.append(
                         Attachments.fileUploadWidget({
@@ -171,6 +172,7 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
                             buttontext: gt('Upload new version')
                         })
                     );
+                    ext.point('io.ox/core/viewer/views/sidebarview/uploadnewversion').invoke('draw', that);
                 });
             }.bind(this));
             return this;
