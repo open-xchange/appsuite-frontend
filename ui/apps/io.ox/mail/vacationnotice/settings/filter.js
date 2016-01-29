@@ -45,17 +45,10 @@ define('io.ox/mail/vacationnotice/settings/filter', [
                     vacationData,
                     VacationEdit,
                     vacationNotice,
-                    setSender = settings.get('features/setFromInVacationNotice', false),
-                    mapSenders = function (senderArray) {
-                        var senderObj = {};
-                        _.each(senderArray, function (sender) {
-                            senderObj[sender.value] = sender.value;
-                        });
-                        return senderObj;
-                    };
+                    setSender = settings.get('features/setFromInVacationNotice', false);
 
                 if (setSender) {
-                    defaultNotice.from = _.first(multiValues.from).value;
+                    defaultNotice.from = _.first(multiValues.fromArrays);
                 } else {
                     ext.point('io.ox/core/vacationnotice/edit/view').disable('io.ox/core/vacationnotice/edit/view/sender');
                 }
@@ -64,9 +57,10 @@ define('io.ox/mail/vacationnotice/settings/filter', [
                     vacationData = data[0].actioncmds[0];
                     vacationData.internal_id = vacationData.id;
                     vacationData.id = data[0].id;
-
-                    if (setSender && !_.has(mapSenders(multiValues.from), vacationData.from)) vacationData.from = _.first(multiValues.from).value;
-
+                    // reset the from value if the submitted value is unknown
+                    if (setSender && _.findIndex(multiValues.from, { label: vacationData.from }) === -1 && _.findIndex(multiValues.from, { value: vacationData.from }) === -1) {
+                        vacationData.from = _.first(multiValues.fromArrays);
+                    }
                     if (!setSender && vacationData.from) delete vacationData.from;
 
                     if (_(data[0].test).size() === 2) {

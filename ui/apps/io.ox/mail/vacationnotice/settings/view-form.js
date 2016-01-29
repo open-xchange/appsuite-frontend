@@ -86,6 +86,23 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
             index: 275,
             id: ref + '/edit/view/sender',
             draw: function (baton) {
+                var SelectView = mini.SelectView.extend({
+                    onChange: function () {
+                        var valuePosition = _.findIndex(multiValues.from, { value: this.$el.val() });
+                        this.model.set(this.name, multiValues.fromArrays[valuePosition]);
+                    },
+                    update: function () {
+                        var valuePosition,
+                            modelValue = this.model.get(this.name);
+                        if (_.isArray(modelValue)) {
+                            this.$el.val(multiValues.from[_.findIndex(multiValues.fromArrays, modelValue)].value);
+                        } else {
+                            valuePosition = _.findIndex(multiValues.from, { value: modelValue });
+                            if (valuePosition === -1) valuePosition = _.findIndex(multiValues.from, { label: modelValue });
+                            this.$el.val(multiValues.from[valuePosition].value);
+                        }
+                    }
+                });
                 this.append(
                     $('<fieldset>').append(
                         $('<legend>').addClass('sectiontitle').append(
@@ -94,7 +111,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                         $('<div class="row form-group">').append(
                             $('<label for="from" class="control-label sr-only">').text(model.fields.headlineSender),
                             $('<div class="controls col-sm-6">').append(
-                                new mini.SelectView({
+                                new SelectView({
                                     id: 'from',
                                     list: multiValues.from,
                                     model: baton.model
