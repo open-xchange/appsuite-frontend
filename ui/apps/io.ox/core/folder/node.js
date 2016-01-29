@@ -505,7 +505,7 @@ define('io.ox/core/folder/node', [
 
         renderIcon: function () {
             var o = this.options, type;
-            if (!o.icons || (o.tree.module !== 'mail' && o.tree.module !== 'infostore')) return;
+            if ((o.tree.module !== 'infostore' && !o.icons) || (o.tree.module !== 'mail' && o.tree.module !== 'infostore')) return;
             if (o.tree.module === 'mail') {
                 type = account.getType(this.folder) || 'default';
                 this.$.icon.addClass('visible ' + type);
