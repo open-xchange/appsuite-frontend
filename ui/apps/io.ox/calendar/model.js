@@ -65,29 +65,33 @@ define('io.ox/calendar/model', [
 
             // bind events
             this.on({
+
                 'create:fail update:fail': function (response) {
                     if (response.conflicts) {
                         this.trigger('conflicts', response.conflicts);
                     }
                 },
+
                 'change:start_date': function (model, startDate) {
-                    if (length < 0) {
-                        return;
-                    }
+                    if (length < 0) return;
                     if (startDate && _.isNumber(length)) {
                         model.set('end_date', startDate + length, { validate: true });
                     }
                 },
-                'change:end_date': function (model, endDate) {
-                    var tmpLength = endDate - model.get('start_date');
-                    if (tmpLength < 0) {
-                        if (endDate && _.isNumber(length)) {
-                            model.set('start_date', endDate - length, { validate: true });
-                        }
-                    } else {
-                        length = tmpLength;
-                    }
-                },
+
+                // 'change:end_date': function (model, endDate) { },
+                //
+                // We DO NOT anything else if the length gets negative
+                //
+                // Actually you have three major optons
+                // 1. shift the start_date to keep the current length
+                // 2. shift the start_date for example 1 hour before the new end date (OX6)
+                // 3. do nothing so that the user recognizes that the start date has also changed
+                //
+                // We could show a hint right away but this is here is still rocket science
+                // and triggering a simple validation seems impossible.
+                // Therefore TODO: completely rewrite this whole model-validaten-magic!
+
                 'change:full_time': function (model, fulltime) {
                     // handle shown as
                     if (settings.get('markFulltimeAppointmentsAsFree', false)) {
@@ -256,8 +260,7 @@ define('io.ox/calendar/model', [
         id: 'start-date-before-end-date',
         validate: function (attributes) {
             if (attributes.start_date && attributes.end_date && attributes.end_date < attributes.start_date) {
-                this.add('start_date', gt('The start date must be before the end date.'));
-                this.add('end_date', gt('The start date must be before the end date.'));
+                this.add('end_date', gt('The end date must be after the start date.'));
             }
         }
     });
