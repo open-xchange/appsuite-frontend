@@ -302,8 +302,6 @@ define('io.ox/core/viewer/views/displayerview', [
             var self = this,
                 slideToLoad = slideToLoad || 0,
                 slidesCount = this.collection.length,
-                activeModel = this.collection.at(slideToLoad),
-                previousModel = this.collection.at(this.swiper.previousIndex - 1) || null,
                 loadRange = this.getSlideLoadRange(slideToLoad, this.preloadOffset, prefetchDirection);
 
             // prefetch data of the slides within the preload offset range
@@ -328,12 +326,6 @@ define('io.ox/core/viewer/views/displayerview', [
             } else {
                 this.slideViews[slideToLoad].show();
             }
-
-            // remove listener from previous and attach to current model
-            if (previousModel) {
-                this.stopListening(previousModel, 'change:version', this.onModelChangeVersion);
-            }
-            this.listenTo(activeModel, 'change:version', this.onModelChangeVersion.bind(this));
         },
 
         /**
