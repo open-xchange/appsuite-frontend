@@ -415,7 +415,8 @@ define('io.ox/core/extPatterns/links', [
                             'data-toggle': 'dropdown',
                             'data-action': 'more',
                             'aria-haspopup': true,
-                            'aria-label': isSmartphone ? gt('Actions') : gt('More')
+                            'aria-label': isSmartphone ? gt('Actions') : gt('More actions'),
+                            'title': isSmartphone ? gt('Actions') : gt('More actions')
                         })
                         .append(
                             isSmartphone && !extension.compactDropdown ?
@@ -433,10 +434,24 @@ define('io.ox/core/extPatterns/links', [
                     )
                 );
 
+                if (!isSmartphone) {
+                    dd.attr({
+                        'data-placement': 'bottom',
+                        'data-animation': 'false',
+                        'data-container': 'body'
+                    })
+                    .tooltip({ trigger: 'hover' })
+                    .parent()
+                    .on('shown.bs.dropdown dispose', function () {
+                        $(this).children('a').tooltip('hide');
+                    });
+                }
+
                 //in firefox draggable=false is not enough to prevent dragging...
                 if (_.device('firefox')) {
                     dd.attr('ondragstart', 'return false;');
                 }
+
                 dd.dropdown();
                 injectDividers(nav.find('ul'));
             }
