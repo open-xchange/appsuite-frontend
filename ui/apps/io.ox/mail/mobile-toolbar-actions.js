@@ -156,12 +156,13 @@ define('io.ox/mail/mobile-toolbar-actions', [
     // add submenu as text link to toolbar in multiselect
     pointListViewMultiSelect.extend(new links.Dropdown({
         index: 50,
-        label: $('<span>').text(
-            //.# Will be used as menu heading in mail module which then shows the sub-actions "mark as read" and "mark as unread"
-            gt('Mark as')
-        ),
+        icon: 'fa fa-bars',
+        prio: 'hi',
+        mobile: 'hi',
+        label: gt('Actions'),
         // don't draw the caret icon beside menu link
         noCaret: true,
+        classes: 'io-ox-action-link mobile-toolbar-action',
         ref: 'io.ox/mail/mobile/toolbar/submenuActions'
     }));
 
