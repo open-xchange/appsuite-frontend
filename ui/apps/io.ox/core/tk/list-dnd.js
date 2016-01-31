@@ -133,7 +133,7 @@ define('io.ox/core/tk/list-dnd', [
                         px = Math.min(y, height - y);
                         // smaller area that triggers auto-scroll;
                         // to avoid unwanted scrolling
-                        if (px > 32) return;
+                        if (px > 24) return;
                         // and another even smaller area that causes faster scrolling
                         speed = px < 8 ? 3 : 1;
                         this.scrollTop += direction * speed;
