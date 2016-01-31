@@ -110,7 +110,7 @@ define('io.ox/core/tk/list-dnd', [
         }
 
         //
-        // Auto-Scroll
+        // Auto-scroll
         //
 
         var scroll = (function () {
@@ -127,12 +127,16 @@ define('io.ox/core/tk/list-dnd', [
                 },
                 over: function () {
                     if (timer) return;
-                    var height = this.clientHeight;
+                    var height = this.clientHeight, direction, px, speed;
                     timer = setInterval(function () {
-                        var threshold = Math.round(y / height * 10) - 5,
-                            sign = threshold < 0 ? -1 : +1,
-                            abs = Math.abs(threshold);
-                        if (abs > 2) this.scrollTop += sign * (abs - 2) * 2;
+                        direction = y < (height / 2) ? -1 : +1;
+                        px = Math.min(y, height - y);
+                        // smaller area that triggers auto-scroll;
+                        // to avoid unwanted scrolling
+                        if (px > 32) return;
+                        // and another even smaller area that causes faster scrolling
+                        speed = px < 8 ? 3 : 1;
+                        this.scrollTop += direction * speed;
                     }.bind(this), 5);
                 }
             };
