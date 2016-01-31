@@ -1060,7 +1060,7 @@ define('io.ox/core/main', [
                 id: 'logout-button',
                 index: 2000,
                 draw: function () {
-                    var logoutButton = addLauncher('right', $('<i class="fa fa-power-off launcher-icon">').attr('aria-hidden', 'true'), function () {
+                    var logoutButton = addLauncher('right', $('<i class="fa fa-sign-out launcher-icon">').attr('aria-hidden', 'true'), function () {
                         logout();
                     }, gt('Sign out'));
                     logoutButton.find('a').tooltip({
@@ -1213,7 +1213,7 @@ define('io.ox/core/main', [
                 content.append(
                     $('<a href="#" class="banner-action" data-action="logout" role="button" tabindex="1">')
                     .attr('title', gt('Sign out'))
-                    .append('<i class="fa fa-power-off">')
+                    .append('<i class="fa fa-sign-out">')
                     .on('click', function (e) {
                         e.preventDefault();
                         logout();
