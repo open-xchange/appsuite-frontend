@@ -43,11 +43,13 @@ define('io.ox/core/emoji/view', [
         },
 
         // when user clicks on emoji. inserts emoji into editor
-        onInsertEmoji: function () {
+        onInsertEmoji: function (e) {
             if (!_.isFunction(this.onInsertEmojiCustom)) {
                 console.warn('Implementation missing: onInsertEmoji!');
                 return;
             }
+            var icon = $(e.target).data('icon');
+            this.emoji.recent(icon.unicode);
             this.onInsertEmojiCustom.apply(this, arguments);
         },
 
