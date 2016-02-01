@@ -1472,6 +1472,13 @@ define('io.ox/mail/main', [
             });
         },
 
+        'save-draft': function (app) {
+            api.on('autosave send', function () {
+                var folder = app.folder.get();
+                if (folderAPI.is('drafts', folder)) app.listView.reload();
+            });
+        },
+
         'metrics': function (app) {
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
