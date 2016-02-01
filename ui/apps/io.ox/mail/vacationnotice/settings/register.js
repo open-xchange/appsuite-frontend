@@ -56,11 +56,34 @@ define('io.ox/mail/vacationnotice/settings/register', [
             require(['io.ox/mail/vacationnotice/settings/filter'], function (filters) {
                 userAPI.get().done(function (user) {
 
-                    var multiValues = {
-                        aliases: _.object(user.aliases, user.aliases),
-                        days: createDaysObject(1, 31),
-                        from: contactsUtil.getMailFullName(user) + ' <' + _.first(user.aliases) + '>'
-                    };
+                    function assembleFrom(aliases) {
+                        var list = [];
+                        _.each(aliases, function (key, value) {
+                            var assembledValue = userFullName.trim() === '' ? value : userFullName + ' <' + value + '>',
+                                assembledValueEscaped = userFullName.trim() === '' ? value : '"' + userFullName + '" <' + value + '>';
+                            list.push({ 'value': assembledValueEscaped, 'label': assembledValue });
+                        });
+                        return list;
+                    }
+
+                    function assembleArrays(aliases) {
+                        var arrays = [];
+                        _.each(aliases, function (value, key) {
+                            arrays[key] = [];
+                            if (userFullName.trim() !== '') arrays[key].push(userFullName);
+                            arrays[key].push(value);
+                        });
+                        return arrays;
+                    }
+
+                    var userFullName = contactsUtil.getMailFullName(user),
+                        aliases = _.object(user.aliases, user.aliases),
+                        multiValues = {
+                            aliases: user.aliases,
+                            days: createDaysObject(1, 31),
+                            from: assembleFrom(aliases),
+                            fromArrays: assembleArrays(user.aliases)
+                        };
 
                     filters.editVacationtNotice($container, multiValues, user.email1).done(function (filter) {
                         filterModel = filter;
