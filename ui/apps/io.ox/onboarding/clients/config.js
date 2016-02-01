@@ -14,9 +14,8 @@
 define('io.ox/onboarding/clients/config', [
     'io.ox/onboarding/clients/api',
     'io.ox/core/api/user',
-    'io.ox/onboarding/clients/defaults',
     'io.ox/onboarding/clients/codes'
-], function (api, userAPI, defaults, codes) {
+], function (api, userAPI, codes) {
 
     'use strict';
 
@@ -34,15 +33,7 @@ define('io.ox/onboarding/clients/config', [
     }
 
     function getIndexFor(obj) {
-        var order = {
-            'apple.iphone': 101,
-            'apple.ipad': 102,
-            'apple.mac': 103,
-            'android.phone': 201,
-            'android.tablet': 202,
-            'windows.desktop': 301
-        };
-        return order[obj.id] || 1000;
+        return this.order[obj.id] || 1000;
     }
 
     var config = {
@@ -57,10 +48,67 @@ define('io.ox/onboarding/clients/config', [
             scenario: 'scenarios'
         },
 
+        order: {
+            // devices
+            'apple.iphone': 101,
+            'apple.ipad': 102,
+            'apple.mac': 103,
+            'android.phone': 201,
+            'android.tablet': 202,
+            // scenarios
+            'eassync': 101,
+            'emclientinstall': 102,
+            'mailappinstall': 201,
+            'mailsync': 202,
+            'mailmanual': 203,
+            'syncappinstall': 301,
+            'davsync': 302,
+            'davmanual': 303,
+            'drivewindowsclientinstall': 401,
+            'driveappinstall': 402,
+            'drivemacinstall': 403
+        },
+
+        defaults: {
+            platforms: {
+                'android':  { icon: 'fa-android' },
+                'apple':    { icon: 'fa-apple' },
+                'windows':  { icon: 'fa-windows' }
+            },
+            devices: {
+                'android.phone':    { icon: 'fa-mobile' },
+                'android.tablet':   { icon: 'fa-tablet' },
+                'apple.iphone':     { icon: 'fa-mobile' },
+                'apple.ipad':       { icon: 'fa-tablet' },
+                'apple.mac':        { icon: 'fa-laptop' },
+                'windows.phone':    { icon: 'fa-mobile' },
+                'windows.desktop':  { icon: 'fa-laptop' }
+            },
+            scenarios: {
+                // combinations
+                'eassync':          { icon: ['fa-envelope-o', 'fa-calendar', 'fa-users'] },
+                'emclientinstall':  { icon: ['fa-envelope-o', 'fa-calendar', 'fa-users'] },
+                // mail
+                'mailappinstall':   { icon: 'fa-envelope-o' },
+                'mailsync':         { icon: 'fa-envelope-o' },
+                'mailmanual':       { icon: 'fa-envelope-o' },
+                // davs
+                'davsync':          { icon: ['fa-calendar', 'fa-users'] },
+                'syncappinstall':   { icon: ['fa-calendar', 'fa-users'] },
+                'davmanual':        { icon: 'fa-wrench' },
+                // drive
+                'drivewindowsclientinstall':  { icon: 'fa-cloud' },
+                'driveappinstall':  { icon: 'fa-cloud' },
+                'drivemacinstall':  { icon: 'fa-cloud' }
+
+            }
+        },
+
         load: function () {
             return api.config().then(function (data) {
-                // reoder devices
-                data.devices = _.sortBy(data.devices, getIndexFor);
+                // reoder devices and scenarios
+                data.devices = _.sortBy(data.devices, getIndexFor, this);
+                data.scenarios = _.sortBy(data.scenarios, getIndexFor, this);
                 // extend
                 _.extend(this, data);
                 // user inputs and step progress
@@ -70,7 +118,7 @@ define('io.ox/onboarding/clients/config', [
                     // create hash maps
                     var hash = this.hash[type] = _.toHash(data[type]);
                     // apply defaults (keepa hash and list up-to-date)
-                    _.each(defaults[type], function (value, key) {
+                    _.each(this.defaults[type], function (value, key) {
                         _.extend(hash[key], value, compactObject(hash[key]));
                     });
                 }, this);
