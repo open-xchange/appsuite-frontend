@@ -62,8 +62,9 @@ define('io.ox/onboarding/clients/extensions', [
             this.$el.on('click', '.action', function (e) {
                 var id = $(this).attr('data-action'),
                     target = $(e.target),
-                    eventname = target.hasClass('action-call') ? 'action:execute' : 'action:select';
-                wizard.trigger(eventname, id);
+                    eventname = target.hasClass('action-call') ? 'action:execute' : 'action:select',
+                    detail = target.attr('data-detail');
+                wizard.trigger(eventname, id, detail);
             });
         },
 
@@ -82,7 +83,7 @@ define('io.ox/onboarding/clients/extensions', [
                 toSimple = step.attr('data-mode') === 'advanced';
             // update model and trigger event
             step.attr('data-mode', toSimple ? 'simple' : 'advanced');
-            this.wizard.trigger(toSimple ? 'simple' : 'advanced');
+            this.wizard.trigger('mode:toggle', toSimple ? 'simple' : 'advanced');
             return this.update();
         },
 
@@ -151,8 +152,8 @@ define('io.ox/onboarding/clients/extensions', [
 
         labels: {
             // card
-            'carddav_hostName': gt('hostname'),
-            'carddav_login': gt('login'),
+            'carddav_hostName': gt('Hostname'),
+            'carddav_login': gt('Login'),
             // smtp
             'smtpLogin': gt('SMTP login'),
             'smtpServer': gt('SMTP server'),
@@ -499,6 +500,7 @@ define('io.ox/onboarding/clients/extensions', [
                     .attr({
                         'role': 'button',
                         'tabindex': 1,
+                        'data-detail': this.hash[this.type],
                         'src': this.getBadgeUrl()
                     })
                 );

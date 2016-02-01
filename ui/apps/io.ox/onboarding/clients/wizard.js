@@ -80,7 +80,7 @@ define('io.ox/onboarding/clients/wizard', [
 
         _getPremium: function (obj) {
             if (obj.enabled) return;
-            if (!settings.get('features/upsell/client.onboarding/enabled')) return;
+            if (!settings.get('features/upsell/client.onboarding/enabled', true)) return;
             var container = $('<div class="premium">'), textnode, iconnode,
                 color = settings.get('features/upsell/client.onboarding/color'),
                 icon = settings.get('features/upsell/client.onboarding/icon') || settings.get('upsell/defaultIcon');
@@ -293,7 +293,7 @@ define('io.ox/onboarding/clients/wizard', [
             return this;
         },
 
-        track: function (type, value) {
+        track: function (type, value, detail) {
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
                 if (!value) return;
@@ -301,7 +301,8 @@ define('io.ox/onboarding/clients/wizard', [
                     app: 'core',
                     target: 'client-onboarding',
                     type: 'click',
-                    action: type + '/' + value
+                    action: type + '/' + value,
+                    detail: detail
                 });
             });
         },
