@@ -53,6 +53,10 @@
         fieldset.action:nth-child(1) {
             display: block;
         }
+        .wizard-content .actions .toggle-link {
+            &[data-value="to-advanced"] { display: block; }
+            &[data-value="to-simple"] { display: none; }
+        }
     }
 
     &[data-type="scenario"] {
@@ -183,6 +187,8 @@
             .toggle-link {
                 margin-top: 12px;
                 display: inline-block;
+                &[data-value="to-advanced"] { display: none; }
+                &[data-value="to-simple"] { display: block; }
             }
 
             .action {

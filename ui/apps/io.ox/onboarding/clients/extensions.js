@@ -71,28 +71,19 @@ define('io.ox/onboarding/clients/extensions', [
             var id = _.uniqueId('description');
             return [
                 $('<div class="sr-only">').attr('id', id).text(gt('Click to show or hide actions for advanced users.')),
-                $('<a href="#" class="toggle-link" tabindex="1">').attr('aria-describedby', id).text(gt('Expert user?'))
+                $('<a href="#" class="toggle-link" data-value="to-advanced" tabindex="1">').attr('aria-describedby', id).text(gt('Expert user?')),
+                $('<a href="#" class="toggle-link" data-value="to-simple" tabindex="1">').attr('aria-describedby', id).text(gt('Hide options for expert users.'))
             ];
         },
 
         toggleMode: function (e) {
             e.preventDefault();
             var step = this.$el.closest('.wizard-step'),
-                value = step.attr('data-mode'),
-                link = this.$el.find('.toggle-link');
-            // simple
-            if (value === 'advanced') {
-                step.attr('data-mode', 'simple');
-                link.text(gt('Expert user?'));
-                this.wizard.trigger('mode:toggle', 'simple');
-                return this.update();
-            }
-            // advanced
-            step.attr('data-mode', 'advanced');
-            this.wizard.trigger('mode:toggle', 'advanced');
-            link.text(gt('Hide options for expert users.'));
-            // update
-            this.update();
+                toSimple = step.attr('data-mode') === 'advanced';
+            // update model and trigger event
+            step.attr('data-mode', toSimple ? 'simple' : 'advanced');
+            this.wizard.trigger(toSimple ? 'simple' : 'advanced');
+            return this.update();
         },
 
         update: function () {
