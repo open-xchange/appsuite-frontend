@@ -103,13 +103,13 @@ define('io.ox/core/emoji/view', [
             // add tab-control?
             if (this.showTabs) {
                 node.addClass('emoji-use-tabs').append(
-                    $('<div class="emoji-tabs abs">').append(
+                    $('<div class="emoji-tabs">').append(
                         // we directly use the Japanese terms; no translation
-                        $('<a href="#" class="emoji-tab left abs" tabindex="5">')
+                        $('<a href="#" class="emoji-tab left" tabindex="5">')
                             .attr('data-collection', 'japan_carrier')
                             // 他社共通絵文字
                             .text(this.emoji.getTitle('commonEmoji')),
-                        $('<a href="#" class="emoji-tab right abs" tabindex="5">')
+                        $('<a href="#" class="emoji-tab right" tabindex="5">')
                             .attr('data-collection', 'softbank')
                             // 全絵文字
                             .text(this.emoji.getTitle('allEmoji'))
@@ -118,7 +118,7 @@ define('io.ox/core/emoji/view', [
             }
 
             node.append(
-                $('<div class="emoji-header abs">').append(
+                $('<div class="emoji-header">').append(
                     // Options drop down
                     this.showDropdown ?
                         $('<div class="emoji-options dropdown pull-right">').append(
@@ -135,8 +135,8 @@ define('io.ox/core/emoji/view', [
                     // category name
                     $('<span class="emoji-category">')
                 ),
-                $('<div class="emoji-icons abs">'),
-                $('<div class="emoji-footer abs">')
+                $('<div class="emoji-icons">'),
+                $('<div class="emoji-footer">')
             );
 
             this.$el.append(node);
@@ -283,6 +283,7 @@ define('io.ox/core/emoji/view', [
                 this.$el.toggle();
                 this.isOpen = !this.isOpen;
             }
+            this.trigger('toggle', this.isOpen);
         }
     });
 
