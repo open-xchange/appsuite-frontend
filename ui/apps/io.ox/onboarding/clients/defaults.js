@@ -30,17 +30,23 @@ define('io.ox/onboarding/clients/defaults', [
             'windows.desktop':  { icon: 'fa-laptop' }
         },
         scenarios: {
-            'davsync':          { icon: ['fa-calendar', 'fa-users'] },
+            // combinations
             'eassync':          { icon: ['fa-envelope-o', 'fa-calendar', 'fa-users'] },
             'emclientinstall':  { icon: ['fa-envelope-o', 'fa-calendar', 'fa-users'] },
+            // mail
+            'mailsync':         { icon: 'fa-envelope-o' },
+            'mailappinstall':   { icon: 'fa-envelope-o' },
+            'mailmanual':       { icon: 'fa-envelope-o' },
+            // davs
+            'davsync':          { icon: ['fa-calendar', 'fa-users'] },
             'syncappinstall':   { icon: ['fa-calendar', 'fa-users'] },
             'davmanual':        { icon: 'fa-wrench' },
-            'mailsync':         { icon: 'fa-envelope-o' },
-            'mailmanual':       { icon: 'fa-envelope-o' },
-            'mailappinstall':   { icon: 'fa-envelope-o' },
+            // drive
             'drivewindowsclientinstall':  { icon: 'fa-cloud' },
             'driveappinstall':  { icon: 'fa-cloud' },
-            'drivemacinstall':  { icon: 'fa-cloud' }
+            'drivemacinstall':  { icon: 'fa-cloud' },
+            'oxupdaterinstall':  { icon: 'fa-cloud' }
+
         }
     };
 });

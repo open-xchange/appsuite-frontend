@@ -43,7 +43,7 @@ define('io.ox/onboarding/clients/extensions', [
         }
     };
 
-    var ActionsView = Backbone.View.extend({
+    var ActionsListView = Backbone.View.extend({
 
         events: {
             'click .section-title': 'accordion',
@@ -465,7 +465,7 @@ define('io.ox/onboarding/clients/extensions', [
         }
     });
 
-    var AppActionView = Backbone.View.extend({
+    var ClientActionView = Backbone.View.extend({
 
         events: {
             'click .action-call': '_onClick'
@@ -559,11 +559,11 @@ define('io.ox/onboarding/clients/extensions', [
     });
 
     return {
-        ActionsView: ActionsView,
+        ActionsListView: ActionsListView,
         DisplayActionView: DisplayActionView,
         ShortMessageActionView: ShortMessageActionView,
         EmailActionView: EmailActionView,
         DownloadActionView: DownloadActionView,
-        AppActionView: AppActionView
+        ClientActionView: ClientActionView
     };
 });
