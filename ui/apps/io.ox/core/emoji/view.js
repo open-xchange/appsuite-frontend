@@ -44,7 +44,11 @@ define('io.ox/core/emoji/view', [
 
         // when user clicks on emoji. inserts emoji into editor
         onInsertEmoji: function () {
-            console.warn('Overwrite onInsertEmoji!');
+            if (!_.isFunction(this.onInsertEmojiCustom)) {
+                console.warn('Implementation missing: onInsertEmoji!');
+                return;
+            }
+            this.onInsertEmojiCustom.apply(this, arguments);
         },
 
         // when user clicks on emoji category
@@ -78,7 +82,7 @@ define('io.ox/core/emoji/view', [
             this.currentCategory = '';
             this.currentCollection = '';
 
-            if (options.onInsertEmoji) this.onInsertEmoji = options.onInsertEmoji;
+            if (options.onInsertEmoji) this.onInsertEmojiCustom = options.onInsertEmoji;
 
             // for optional run-time access
             this.$el.data('view', this);
