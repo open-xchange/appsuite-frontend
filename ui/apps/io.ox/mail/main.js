@@ -29,6 +29,7 @@ define('io.ox/mail/main', [
     'io.ox/core/capabilities',
     'io.ox/core/folder/tree',
     'io.ox/core/folder/view',
+    'io.ox/core/folder/api',
     'io.ox/backbone/mini-views/quota',
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
@@ -39,7 +40,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, QuotaView, gt, settings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, gt, settings) {
 
     'use strict';
 
@@ -1281,6 +1282,13 @@ define('io.ox/mail/main', [
             app.getContextualHelp = function () {
                 return 'ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.sect.email.gui';
             };
+        },
+
+        'save-draft': function (app) {
+            api.on('autosave send', function () {
+                var folder = app.folder.get();
+                if (folderAPI.is('drafts', folder)) app.listView.reload();
+            });
         },
 
         'metrics': function (app) {
