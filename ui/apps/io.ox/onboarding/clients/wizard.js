@@ -17,10 +17,11 @@ define('io.ox/onboarding/clients/wizard', [
     'io.ox/onboarding/clients/api',
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
+    'settings!io.ox/core',
     'gettext!io.ox/core/onboarding',
     'io.ox/onboarding/clients/views',
     'less!io.ox/onboarding/clients/style'
-], function (Wizard, config, api, ext, capabilities, gt) {
+], function (Wizard, config, api, ext, capabilities, settings, gt) {
 
     'use strict';
 
@@ -78,7 +79,20 @@ define('io.ox/onboarding/clients/wizard', [
         },
 
         _getPremium: function (obj) {
-            return obj.enabled ? '' : $('<div class="premium">').text(gt('Premium'));
+            if (obj.enabled) return;
+            if (!settings.get('features/upsell/client.onboarding/enabled')) return;
+            var container = $('<div class="premium">'), textnode, iconnode,
+                color = settings.get('features/upsell/client.onboarding/color'),
+                icon = settings.get('features/upsell/client.onboarding/icon') || settings.get('upsell/defaultIcon');
+            // hierarchy
+            container.append(
+                textnode = $('<span>').text(gt('Premium')),
+                iconnode = $('<i class="fa">')
+            );
+            // custom icon/color
+            if (color) textnode.css('color', color);
+            if (icon) iconnode.addClass(icon);
+            return container;
         },
 
         _getTitle: function (obj) {
