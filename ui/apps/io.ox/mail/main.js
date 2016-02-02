@@ -409,6 +409,7 @@ define('io.ox/mail/main', [
                 //.removeClass('hidden')
                 .find('.message-empty')
                 // customize message
+                //#. when items list is empty (e.g. search result)
                 .text(gt('Empty'));
         },
 
