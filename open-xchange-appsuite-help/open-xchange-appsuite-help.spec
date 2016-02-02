@@ -8,7 +8,7 @@ BuildRequires:  ant-nodeps
 BuildRequires:  java-devel >= 1.6.0
 BuildRequires:  nodejs >= 0.10.0
 Version:        @OXVERSION@
-%define         ox_release 1
+%define         ox_release 2
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -227,6 +227,8 @@ done
 %{docroot}/appsuite/help/l10n/zh_TW
 
 %changelog
+* Tue Feb 02 2016 Marcus Klein <marcus.klein@open-xchange.com>
+Second candidate for 7.8.1 release
 * Tue Jan 26 2016 Marcus Klein <marcus.klein@open-xchange.com>
 First candidate for 7.8.1 release
 * Wed Nov 11 2015 Marcus Klein <marcus.klein@open-xchange.com>

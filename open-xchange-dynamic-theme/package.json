@@ -1,6 +1,6 @@
 {
   "name": "open-xchange-dynamic-theme",
-  "version": "7.8.1-1",
+  "version": "7.8.1-2",
   "scripts": {
     "test": "cp -r build ../ui/; cd ../ui/build; node ../../open-xchange-dynamic-theme/lib/update-dynamic-theme.js"
   },
