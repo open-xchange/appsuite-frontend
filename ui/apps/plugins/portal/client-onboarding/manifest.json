@@ -1,0 +1,4 @@
+{
+    "namespace": "portal",
+    "requires": "client-onboarding"
+}
