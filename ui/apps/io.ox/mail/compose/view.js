@@ -766,23 +766,26 @@ define('io.ox/mail/compose/view', [
         },
 
         toggleEditorMode: function () {
-            var self = this, content;
-            this.editorContainer.busy();
+
+            var content;
 
             if (this.editor) {
                 this.removeSignature();
-
                 content = this.editor.getPlainText();
-
                 this.editor.hide();
             }
 
+            this.editorContainer.busy();
+
             return this.loadEditor(content).then(function () {
-                self.editorContainer.idle();
-                //update the content type of the mail
-                //FIXME: may be, do this somewhere else? in the model?
-                self.model.setMailContentType(self.editor.content_type);
-            });
+                this.editorContainer.idle();
+                // update the content type of the mail
+                // FIXME: may be, do this somewhere else? in the model?
+                this.model.setMailContentType(this.editor.content_type);
+                // reset tinyMCE's undo stack
+                if (!_.isFunction(this.editor.tinymce)) return;
+                this.editor.tinymce().undoManager.clear();
+            }.bind(this));
         },
 
         syncMail: function () {
