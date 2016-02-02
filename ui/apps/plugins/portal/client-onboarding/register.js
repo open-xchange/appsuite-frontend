@@ -57,7 +57,7 @@ define('plugins/portal/client-onboarding/register', [
                     //         $('<i class="fa fa-fw fa-android">')
                     //     ),
                     $('<div class="paragraph">').append(
-                        $('<a>', { href: '#', tabindex: '1', 'role': 'button' })
+                        $('<a>', { tabindex: '1', 'role': 'button' })
                             .addClass('action')
                             .text(gt('Connect'))
                     )

@@ -87,6 +87,16 @@
                 //max-width: 146px;
                 white-space: normal;
 
+                .premium-container {
+                    pointer-events: auto;
+                    height: 100%;
+                    width: 100%;
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+                }
+
                 .premium {
                     position: absolute;
                     font-weight: 700;
@@ -137,6 +147,10 @@
                         &:hover, &:focus {
                             z-index:1000;
                             .box-shadow(rgba(0, 0, 0, 0.3) 0 8px 8px 0)
+
+                            &.disabled {
+                               .box-shadow(none);
+                            }
                         }
                     }
 
@@ -173,7 +187,7 @@
                 }
 
                 // selection
-                &.selected>.link { border: 1px rgb(60, 115, 170) solid; }
+                &.selected>.link:not(.disabled) { border: 1px rgb(60, 115, 170) solid; }
             }
         }
 

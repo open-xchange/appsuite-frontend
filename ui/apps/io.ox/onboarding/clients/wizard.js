@@ -49,6 +49,7 @@ define('io.ox/onboarding/clients/wizard', [
         _getListItem: function (obj) {
             return $('<li class="option">')
                 .attr('data-value', obj.id)
+                .attr('data-missing-capabilities', obj.missing_capabilities)
                 .append(options._getLink(obj));
         },
 
@@ -81,13 +82,15 @@ define('io.ox/onboarding/clients/wizard', [
         _getPremium: function (obj) {
             if (obj.enabled) return;
             if (!settings.get('features/upsell/client.onboarding/enabled', true)) return;
-            var container = $('<div class="premium">'), textnode, iconnode,
+            var container = $('<div class="premium-container">'), textnode, iconnode,
                 color = settings.get('features/upsell/client.onboarding/color'),
                 icon = settings.get('features/upsell/client.onboarding/icon') || settings.get('upsell/defaultIcon');
             // hierarchy
             container.append(
-                textnode = $('<span>').text(gt('Premium')),
-                iconnode = $('<i class="fa">')
+                $('<div class="premium">').append(
+                    textnode = $('<span>').text(gt('Premium')),
+                    iconnode = $('<i class="fa">')
+                )
             );
             // custom icon/color
             if (color) textnode.css('color', color);
@@ -199,6 +202,8 @@ define('io.ox/onboarding/clients/wizard', [
             container = node.closest('[data-type]'),
             type = container.attr('data-type'),
             value = node.closest('[data-value]').attr('data-value');
+        // disabled
+        if (node.closest('.link').hasClass('disabled')) return;
         // back
         if (value === 'back') {
             // remove value set within previous step
@@ -302,7 +307,7 @@ define('io.ox/onboarding/clients/wizard', [
                     target: 'client-onboarding',
                     type: 'click',
                     action: type + '/' + value,
-                    detail: detail
+                    detail: (detail || '').toLowerCase().replace(/\s/g, '-')
                 });
             });
         },
@@ -312,6 +317,7 @@ define('io.ox/onboarding/clients/wizard', [
             var id = this.wizard.currentStep,
                 node = (this.wizard.steps[id]);
             this.setElement(node.$el);
+            this.$el.addClass('selectable-text');
         },
 
         _reset: function () {
@@ -344,7 +350,27 @@ define('io.ox/onboarding/clients/wizard', [
             }
         },
 
+        upsell: function (e) {
+            var item = $(e.target.closest('li')),
+                missing = item.attr('data-missing-capabilities');
+            if (!missing) return;
+            require(['io.ox/core/upsell'], function (upsell) {
+                if (!upsell.enabled(missing)) return;
+                // TODO: without this workaround wizard step would overlay upsell dialog
+                this.wizard.trigger('step:close');
+                upsell.trigger({
+                    type: 'custom',
+                    id: item.attr('data-value'),
+                    missing: missing
+                });
+            });
+        },
+
         register: function () {
+            this.wizard.getContainer().on(
+                'click', '.premium-container', _.bind(this.upsell, this)
+            );
+
             // set max width of description block
             this.wizard.on({
                 // step:before:show, step:ready, step:show, step:next, step:before:hide, step:hide, change:step,
