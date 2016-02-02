@@ -346,6 +346,7 @@ define('io.ox/mail/main', [
 
             // register load listener which triggers complete
             collection.on('load', function () {
+                this.gc = false;
                 this.complete = true;
                 this.preserve = true;
                 this.CUSTOM_PAGE_SIZE = 250;
