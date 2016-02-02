@@ -214,9 +214,10 @@ define('io.ox/onboarding/clients/config', [
                 if (ox.debug) console.error('undefined onboarding scenario: ' + cid);
                 return;
             }
-            return _.filter(this.actions, function (obj) {
-                return matching.actions.indexOf(obj.id) >= 0;
-            });
+            return _.chain(this.actions)
+                    .filter(function (obj) { return matching.actions.indexOf(obj.id) >= 0; })
+                    .sortBy(function (obj) { return matching.actions.indexOf(obj.id); })
+                    .value();
         },
 
         // user data helpers
