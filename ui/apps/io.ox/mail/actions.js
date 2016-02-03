@@ -783,7 +783,7 @@ define('io.ox/mail/actions', [
         id: 'save',
         index: 500,
         mobile: 'high',
-        //#. %1$s is usually "Drive" (product name; might be a customized)
+        //#. %1$s is usually "Drive" (product name; might be customized)
         label: gt('Save to %1$s', gt.pgettext('app', 'Drive')),
         ref: 'io.ox/mail/actions/save-attachment'
     }));
