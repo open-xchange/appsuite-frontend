@@ -423,7 +423,7 @@ define('io.ox/core/extPatterns/links', [
                                 $().add($.txt(gt('Actions'))).add($('<i aria-hidden="true" class="fa fa-caret-down">')) :
                                 $('<span class="sr-only">').text(gt('Actions')).add($('<i aria-hidden="true" class="fa fa-bars">'))
                         )
-                        .on(Modernizr.touch ? 'touchstart' : 'click', function () {
+                        .on(_.device('touch') ? 'touchstart' : 'click', function () {
                             // fix dropdown position on-the-fly
                             var left = $(this).parent().position().left;
                             $(this).next().attr('class', 'dropdown-menu' + (left < 200 ? '' : ' pull-right'));
