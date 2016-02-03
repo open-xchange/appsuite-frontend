@@ -15,8 +15,9 @@ define('io.ox/mail/mobile-toolbar-actions', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/mail/api',
+    'io.ox/core/capabilities',
     'gettext!io.ox/mail'
-], function (ext, links, api, gt) {
+], function (ext, links, api, cap, gt) {
 
     'use strict';
 
@@ -114,7 +115,6 @@ define('io.ox/mail/mobile-toolbar-actions', [
             icon: 'fa fa-archive',
             //#. Verb: (to) archive messages
             label: gt.pgettext('verb', 'Archive'),
-            section: 'file-op',
             ref: 'io.ox/mail/actions/archive',
             cssClasses: 'io-ox-action-link mobile-toolbar-action'
         }
@@ -140,7 +140,12 @@ define('io.ox/mail/mobile-toolbar-actions', [
     addAction(pointDetailView, ['reply', 'reply-all', 'delete', 'forward']);
 
     //multiselect in listview
-    addAction(pointListViewMultiSelect, ['delete', 'forward', 'move', 'archive']);
+
+    var actionList = ['delete', 'forward', 'move'];
+
+    if (cap.has('archive_emails')) actionList.push('archive');
+
+    addAction(pointListViewMultiSelect, actionList);
 
     pointDetailView.extend(new links.Dropdown({
         id: 'test',
