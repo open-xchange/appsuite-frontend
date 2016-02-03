@@ -113,7 +113,8 @@ define('io.ox/onboarding/clients/extensions', [
                 // draw actions
                 _.each(baton.data, function (action) {
                     node.attr('data-value', action.id);
-                    var actionpoint = ext.point(POINT + '/' + action.id);
+                    var actiontype = action.id.split('/')[0],
+                        actionpoint = ext.point(POINT + '/' + actiontype);
                     // TODO: remove when middleware is ready
                     if (actionpoint.list().length === 0 && ox.debug) console.error('missing view for client-onboarding action: ' + action.id);
                     actionpoint.invoke('draw', node, action, baton);

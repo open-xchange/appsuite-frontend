@@ -53,20 +53,10 @@ define('io.ox/onboarding/clients/views', [
     ext.point(POINT + '/download').extend({ draw: views.download });
     ext.point(POINT + '/email').extend({ draw: views.email });
     ext.point(POINT + '/sms').extend({ draw: views.shortmessage });
-
-    // display
-    ext.point(POINT + '/display/easmanual').extend({ draw: views.display });
-    ext.point(POINT + '/display/davmanual').extend({ draw: views.display });
-    ext.point(POINT + '/display/mailmanual').extend({ draw: views.display });
-
-    // client download
-    ext.point(POINT + '/link/mailappinstall').extend({ draw: views.client });
-    ext.point(POINT + '/link/emclientinstall').extend({ draw: views.client });
-    ext.point(POINT + '/link/oxupdaterinstall').extend({ draw: views.client });
-    ext.point(POINT + '/link/drivewindowsclientinstall').extend({ draw: views.client });
-    ext.point(POINT + '/link/driveappinstall').extend({ draw: views.client });
-    ext.point(POINT + '/link/syncappinstall').extend({ draw: views.client });
-    ext.point(POINT + '/link/drivemacinstall').extend({ draw: views.client });
+    // display: generic
+    ext.point(POINT + '/display').extend({ draw: views.display });
+    // client download: generic
+    ext.point(POINT + '/link').extend({ draw: views.client });
 
     return views;
 
