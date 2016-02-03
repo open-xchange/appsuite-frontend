@@ -30,46 +30,51 @@ define('plugins/portal/client-onboarding/register', [
 
         type: type,
 
-        preview: function () {
-            var style = {
-                'display': 'flex',
-                'justify-content': 'space-around',
-                'font-size': '4em',
-                'max-width': '360px',
-                'margin': '24px auto'
+        load: function (baton) {
+            // define inline styles within baton
+            // to allow simple customization
+            baton.style = {
+                content: {
+                    'cursor': 'pointer'
+                },
+                devices: {
+                    'display': 'flex',
+                    'justify-content': 'space-around',
+                    'font-size': '4em',
+                    'max-width': '360px',
+                    'margin': '24px auto'
+                }
             };
+        },
 
+        preview: function (baton) {
+            var style = $.extend(true, { content: {}, devices: {} }, baton.style);
             this.append(
-                $('<div class="content">').append(
-                    $('<div class="paragraph text-justify">').text(
-                         gt('Take %1$s with you! Stay up-to-date on your favorite devices.', ox.serverConfig.productName)
-                    ),
-                    $('<div class="paragraph text-justify">').css(style)
-                        .append(
-                            $('<i class="fa fa-fw fa-mobile">'),
-                            $('<i class="fa fa-fw fa-tablet">'),
-                            $('<i class="fa fa-fw fa-laptop">')
+                $('<div class="content">')
+                    .css(style.content)
+                    .append(
+                        $('<div class="paragraph text-justify">').text(
+                             gt('Take %1$s with you! Stay up-to-date on your favorite devices.', ox.serverConfig.productName)
                         ),
-                    // $('<div class="paragraph text-justify">').css(style)
-                    //     .append(
-                    //         $('<i class="fa fa-fw fa-windows">'),
-                    //         $('<i class="fa fa-fw fa-apple">'),
-                    //         $('<i class="fa fa-fw fa-android">')
-                    //     ),
-                    $('<div class="paragraph">').append(
-                        $('<a>', { tabindex: '1', 'role': 'button' })
-                            .addClass('action')
-                            .text(gt('Connect'))
+                        $('<div class="paragraph text-justify devices">').css(style.devices)
+                            .append(
+                                $('<i class="fa fa-fw fa-mobile">'),
+                                $('<i class="fa fa-fw fa-tablet">'),
+                                $('<i class="fa fa-fw fa-laptop">')
+                            ),
+                        $('<div class="paragraph">').append(
+                            $('<a>', { tabindex: '1', 'role': 'button' })
+                                .addClass('action')
+                                .text(gt('Connect'))
+                        )
                     )
-                )
+                    // listener
+                    .on('click', function () {
+                        require(['io.ox/onboarding/clients/wizard'], function (wizard) {
+                            wizard.run();
+                        });
+                    })
             );
-
-            // listener
-            this.on('click', function () {
-                require(['io.ox/onboarding/clients/wizard'], function (wizard) {
-                    wizard.run();
-                });
-            });
         }
     });
 
