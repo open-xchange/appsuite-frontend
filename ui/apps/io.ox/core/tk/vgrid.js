@@ -255,12 +255,15 @@ define('io.ox/core/tk/vgrid', [
             container = $('<div class="vgrid-scrollpane-container f6-target" role="listbox">').attr(ariaAttributesContainer()).css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
             // mobile select mode
             mobileSelectMode = false,
-            // bottom toolbar
-            ignoreCheckbox = false,
 
-            fnToggleCheckbox = function (e) {
-                if (ignoreCheckbox) return;
-                var grid = e.data.grid, checked = $(this).prop('checked');
+            fnToggleCheckbox = function (icon, state) {
+                icon.attr('class', state ? 'fa fa-check-square-o' : 'fa fa-square-o').parent().attr('aria-checked', state);
+            },
+
+            fnClickCheckbox = function (e) {
+                if (!(e.type === 'click' || e.keyCode === 32)) return;
+                e.preventDefault();
+                var grid = e.data.grid, checked = $(this).find('i').hasClass('fa-square-o');
                 if (checked) {
                     grid.selection.selectAll();
                     // Bugfix 38498
@@ -275,28 +278,9 @@ define('io.ox/core/tk/vgrid', [
             },
 
             updateSelectAll = function (list) {
-                //list can be larger if threads are expanded in the grid
+                // list can be larger if threads are expanded in the grid
                 var check = (list.length >= 1) && (list.length >= all.length);
-
-                ignoreCheckbox = true;
-                node.find('.select-all input').prop('checked', check);
-                ignoreCheckbox = false;
-            },
-
-            fnToggleEditable = function (e) {
-                e.preventDefault();
-                var grid = e.data.grid;
-                grid.setEditable(!grid.getEditable());
-
-                if (_.device('smartphone')) {
-                    // set selectmode On/Off
-                    mobileSelectMode = !mobileSelectMode;
-                    self.selection.setMobileSelectMode(mobileSelectMode);
-                    // clear selection and trigger mobile change on selection
-                    // to remove changed toolbar
-                    grid.selection.clear();
-                    self.selection.trigger('_m_change', []);
-                }
+                fnToggleCheckbox(node.find('.select-all i.fa'), check);
             },
 
             topbar = $('<div>').addClass('vgrid-toolbar generic-toolbar ' + (options.toolbarPlacement === 'top' ? 'bottom border-top' : 'top border-bottom'))
@@ -311,18 +295,11 @@ define('io.ox/core/tk/vgrid', [
                     // show checkbox
                     options.showCheckbox === false ?
                         [] :
-                        $('<label class="select-all">')
-                            .append(
-                                $('<input type="checkbox" value="true" tabindex="1">').attr('title', gt('Select all'))
-                            )
-                            .on('change', 'input', { grid: this }, fnToggleCheckbox),
-                    // show toggle
-                    options.showToggle === false ?
-                        [] :
-                        $('<a>', { href: '#', tabindex: 1, role: 'button', 'aria-label': gt('Toggle checkboxes') })
-                            .addClass('select-all-toggle')
-                            .append($('<i class="fa fa-th-list">'))
-                            .on('click', { grid: this }, fnToggleEditable)
+                        $('<a href="#" class="select-all" role ="checkbox" aria-checked="false" tabindex="1">').append(
+                            $('<i class="fa fa-square-o" aria-hidden="true">')
+                        )
+                        .attr('title', gt('Select all'))
+                        .on('click keydown', { grid: this }, fnClickCheckbox)
                 )
                 .prependTo(node),
             // item template
@@ -528,12 +505,10 @@ define('io.ox/core/tk/vgrid', [
             var createCheckbox = function () {
                 var fields = {};
                 this.prepend(
-                        fields.div = $('<div class="vgrid-cell-checkbox">').append(
-                            fields.label = $('<label>').append(
-                                fields.input = $('<input type="checkbox" class="reflect-selection" aria-hidden="true">').attr('tabindex', -1)
-                            )
-                        )
-                    );
+                    fields.div = $('<div class="vgrid-cell-checkbox">').append(
+                        fields.icon = $('<i class="fa fa-check" aria-hidden="true">')
+                    )
+                );
                 return { checkbox: fields };
             };
 
