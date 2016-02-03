@@ -298,7 +298,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'savemailattachmenttodrive': {
                     prio: 'lo',
                     mobile: 'lo',
-                    label: gt('Save to Drive'),
+                    //#. %1$s is usually "Drive" (product name; might be a customized)
+                    label: gt('Save to %1$s', gt.pgettext('app', 'Drive')),
                     ref: 'io.ox/mail/actions/save-attachment'
                 },
                 'sendmailattachmentasmail': {
@@ -325,7 +326,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'savemailattachmenttodrive': {
                     prio: 'lo',
                     mobile: 'lo',
-                    label: gt('Save to Drive'),
+                    //#. %1$s is usually "Drive" (product name; might be a customized)
+                    label: gt('Save to %1$s', gt.pgettext('app', 'Drive')),
                     ref: 'io.ox/core/tk/actions/save-attachment'
                 }
             },
