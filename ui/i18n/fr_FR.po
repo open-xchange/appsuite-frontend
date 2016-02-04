@@ -8412,10 +8412,6 @@ msgstr ""
 msgid "Today"
 msgstr "Aujourd'hui"
 
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-msgid "Toggle checkboxes"
-msgstr "Inverser les cases à cocher"
-
 #. button label for toggling fullscreen mode
 #. button tooltip for toggling fullscreen mode
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -12324,6 +12320,9 @@ msgstr "aaaa"
 #~ msgstr ""
 #~ "Pour afficher plus d'informations, cliquez sur un fichier. Les "
 #~ "informations le concernant s'affichent dans une nouvelle fenêtre."
+
+#~ msgid "Toggle checkboxes"
+#~ msgstr "Inverser les cases à cocher"
 
 #~ msgid "Toggle folder"
 #~ msgstr "Dossier oui/non"

@@ -8279,10 +8279,6 @@ msgstr ""
 msgid "Today"
 msgstr "今日"
 
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-msgid "Toggle checkboxes"
-msgstr "チェックボックスを表示"
-
 #. button label for toggling fullscreen mode
 #. button tooltip for toggling fullscreen mode
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -16452,6 +16448,9 @@ msgstr "yyyy"
 
 #~ msgid "To:"
 #~ msgstr "宛先:"
+
+#~ msgid "Toggle checkboxes"
+#~ msgstr "チェックボックスを表示"
 
 #~ msgid "Toggle folder"
 #~ msgstr "フォルダを表示"

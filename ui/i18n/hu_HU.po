@@ -8313,10 +8313,6 @@ msgstr ""
 msgid "Today"
 msgstr "Ma"
 
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-msgid "Toggle checkboxes"
-msgstr "Kijelölések átváltása"
-
 #. button label for toggling fullscreen mode
 #. button tooltip for toggling fullscreen mode
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -10110,6 +10106,9 @@ msgstr "yyyy"
 
 #~ msgid "Timezone"
 #~ msgstr "Időzóna"
+
+#~ msgid "Toggle checkboxes"
+#~ msgstr "Kijelölések átváltása"
 
 #, fuzzy
 #~| msgid "Manual"

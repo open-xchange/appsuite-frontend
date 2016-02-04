@@ -8385,10 +8385,6 @@ msgstr ""
 msgid "Today"
 msgstr "Šodien"
 
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-msgid "Toggle checkboxes"
-msgstr "Pārslēgt iezīmes"
-
 #. button label for toggling fullscreen mode
 #. button tooltip for toggling fullscreen mode
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -15285,6 +15281,9 @@ msgstr "yyyy"
 
 #~ msgid "To:"
 #~ msgstr "Saņēmējs:"
+
+#~ msgid "Toggle checkboxes"
+#~ msgstr "Pārslēgt iezīmes"
 
 #~ msgid "Toggle folder"
 #~ msgstr "Pārslēgt mapi"

@@ -5752,11 +5752,6 @@ msgstr ""
 msgid "Select all"
 msgstr ""
 
-#: apps/io.ox/core/tk/vgrid.js
-#: module:io.ox/core
-msgid "Toggle checkboxes"
-msgstr ""
-
 #. list is empty / no items
 #: apps/io.ox/core/tk/vgrid.js
 #: module:io.ox/core

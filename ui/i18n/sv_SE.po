@@ -8302,10 +8302,6 @@ msgstr ""
 msgid "Today"
 msgstr "Idag"
 
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-msgid "Toggle checkboxes"
-msgstr "Växla kryssrutor"
-
 #. button label for toggling fullscreen mode
 #. button tooltip for toggling fullscreen mode
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -14803,6 +14799,9 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "För att visa ytterligare information, klicka på en fil. Informationen "
 #~ "visas i ett popup-fönster."
+
+#~ msgid "Toggle checkboxes"
+#~ msgstr "Växla kryssrutor"
 
 #~ msgid "Toggle folder"
 #~ msgstr "Växla mapp"

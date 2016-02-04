@@ -8298,10 +8298,6 @@ msgstr ""
 msgid "Today"
 msgstr "Tänään"
 
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-msgid "Toggle checkboxes"
-msgstr "Vaihtele valintaruutua"
-
 #. button label for toggling fullscreen mode
 #. button tooltip for toggling fullscreen mode
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -11461,6 +11457,9 @@ msgstr "vvvv"
 #~ msgstr ""
 #~ "Nähdäksesi lisätietoja, napsauta tiedostoa. Tiedot näytetään "
 #~ "ponnahdusikkunassa."
+
+#~ msgid "Toggle checkboxes"
+#~ msgstr "Vaihtele valintaruutua"
 
 #~ msgid "Toggle folder"
 #~ msgstr "Vaihda kansiota"

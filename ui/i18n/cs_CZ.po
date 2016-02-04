@@ -8363,10 +8363,6 @@ msgstr ""
 msgid "Today"
 msgstr "Dnes"
 
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-msgid "Toggle checkboxes"
-msgstr "Přepnout zaškrtávací políčka"
-
 #. button label for toggling fullscreen mode
 #. button tooltip for toggling fullscreen mode
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -17965,6 +17961,9 @@ msgstr "rrrr"
 
 #~ msgid "To:"
 #~ msgstr "Komu:"
+
+#~ msgid "Toggle checkboxes"
+#~ msgstr "Přepnout zaškrtávací políčka"
 
 #~ msgid "Toggle folder"
 #~ msgstr "Přepnout složku"

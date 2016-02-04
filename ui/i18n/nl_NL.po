@@ -8382,10 +8382,6 @@ msgstr ""
 msgid "Today"
 msgstr "Vandaag"
 
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-msgid "Toggle checkboxes"
-msgstr "Selectievakken omschakelen"
-
 #. button label for toggling fullscreen mode
 #. button tooltip for toggling fullscreen mode
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -11562,6 +11558,9 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Om meer informatie te zien klikt u op een bestand. De informatie wordt in "
 #~ "een pop-up scherm getoond."
+
+#~ msgid "Toggle checkboxes"
+#~ msgstr "Selectievakken omschakelen"
 
 #~ msgid "Toggle folder"
 #~ msgstr "Mappenboom"

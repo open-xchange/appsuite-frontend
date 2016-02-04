@@ -8376,10 +8376,6 @@ msgstr ""
 msgid "Today"
 msgstr "Hoy"
 
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-msgid "Toggle checkboxes"
-msgstr "Cambiar casillas de verificación"
-
 #. button label for toggling fullscreen mode
 #. button tooltip for toggling fullscreen mode
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -18035,6 +18031,9 @@ msgstr "yyyy"
 
 #~ msgid "To:"
 #~ msgstr "Para:"
+
+#~ msgid "Toggle checkboxes"
+#~ msgstr "Cambiar casillas de verificación"
 
 #~ msgid "Toggle folder"
 #~ msgstr "Cambiar carpeta"

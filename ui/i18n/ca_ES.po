@@ -8903,10 +8903,6 @@ msgstr ""
 msgid "Today"
 msgstr "Avui"
 
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-msgid "Toggle checkboxes"
-msgstr "Canvia les caselles de verificació"
-
 #. button label for toggling fullscreen mode
 #. button tooltip for toggling fullscreen mode
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -11269,6 +11265,9 @@ msgstr ""
 
 #~ msgid "Timezone"
 #~ msgstr "Zona horària"
+
+#~ msgid "Toggle checkboxes"
+#~ msgstr "Canvia les caselles de verificació"
 
 #, fuzzy
 #~| msgid "Sort options"

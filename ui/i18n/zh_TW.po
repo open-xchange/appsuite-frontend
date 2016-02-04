@@ -8200,10 +8200,6 @@ msgstr ""
 msgid "Today"
 msgstr "今天"
 
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-msgid "Toggle checkboxes"
-msgstr "切換選取盒"
-
 #. button label for toggling fullscreen mode
 #. button tooltip for toggling fullscreen mode
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -13127,6 +13123,9 @@ msgstr "年"
 #~ "To view further information, click on a file. The information are "
 #~ "displayed in a pop-up window."
 #~ msgstr "要檢視更多資訊，點選檔案。資訊將會顯示於彈出的視窗中。"
+
+#~ msgid "Toggle checkboxes"
+#~ msgstr "切換選取盒"
 
 #~ msgid "Toggle folder"
 #~ msgstr "切換文件夾"
