@@ -1,5 +1,5 @@
 ---
-title: Appserver (7.6)
+title: (7.6) Appserver 
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Appserver
 description: The appserver tool is used to develop and test the OX App Suite UI andits plugins with a remote backend
 
