@@ -109,10 +109,10 @@ Their functionality is now covered by the client onboarding wizard.
 
 ### settings
 
-Remove the settings pane by disabling the follwing extension:
+Edit the property file and change the value to ``true``:
 
 ```
-ext.point('io.ox/settings/pane/tools').disable('io.ox/core/downloads');
+io.ox/core//settings/downloadsDisabled
 ```
 
 ### widgets
