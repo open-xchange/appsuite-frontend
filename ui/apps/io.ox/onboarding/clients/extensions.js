@@ -153,8 +153,10 @@ define('io.ox/onboarding/clients/extensions', [
 
         labels: {
             // card
-            'carddav_hostName': gt('Hostname'),
-            'carddav_login': gt('Login'),
+            'caldav_url': gt('CalDAV URL'),
+            'caldav_login': gt('CalDAV Login'),
+            'carddav_url': gt('CardDAV URL'),
+            'carddav_login': gt('CardDAV Login'),
             // smtp
             'smtpLogin': gt('SMTP login'),
             'smtpServer': gt('SMTP server'),
@@ -166,7 +168,7 @@ define('io.ox/onboarding/clients/extensions', [
             'imapPort': gt('IMAP port'),
             'imapSecure': gt('IMAP secure'),
             // eas
-            'eas_hostName': gt('EAS hostname'),
+            'eas_url': gt('EAS URL'),
             'eas_login': gt('EAS login')
         },
 
