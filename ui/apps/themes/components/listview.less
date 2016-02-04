@@ -237,7 +237,7 @@
     &.visible-selection.has-focus .list-item.selected {
         color: white;
         background-color: @selected-background;
-
+        i { color: rgba(255, 255, 255, 0.50); }
         html.high-contrast & {
             background-color: @hc-link-color;
         }
@@ -326,7 +326,7 @@
 
     .list-item {
         .bold { font-weight: bold; }
-        .gray { opacity: 0.50; } // 0.50 has enough color contrast
+        .gray { opacity: 0.60; } // 0.50 has enough color contrast
     }
     .pull-to-refresh {
         position: absolute;

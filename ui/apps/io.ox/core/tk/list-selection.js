@@ -250,7 +250,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             // workaround for chrome's CSS bug:
             // styles of "selected" class are not applied if focus triggers scrolling.
             // idea taken from http://forrst.com/posts/jQuery_redraw-BGv
-            if (_.device('chrome')) node.hide(0, function () { $(this).show(); });
+            if (_.device('chrome < 48')) node.hide(0, function () { $(this).show(); });
             return node;
         },
 

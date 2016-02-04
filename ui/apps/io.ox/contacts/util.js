@@ -134,9 +134,9 @@ define('io.ox/contacts/util', [
             if (htmlOutput === true) {
                 copy = {};
                 _(['title', 'first_name', 'last_name', 'display_name']).each(function (id) {
-                    if ($.trim(obj[id])) {
-                        copy[id] = '<span class="' + id + '">' + _.escape(obj[id]) + '</span>';
-                    }
+                    if (!$.trim(obj[id])) return;
+                    var tagName = id === 'last_name' ? 'b' : 'span';
+                    copy[id] = '<' + tagName + ' class="' + id + '">' + _.escape(obj[id]) + '</' + tagName + '>';
                 });
             }
             fmt = this.getFullNameFormat(copy);

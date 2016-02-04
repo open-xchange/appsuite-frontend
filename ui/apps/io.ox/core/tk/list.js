@@ -528,8 +528,10 @@ define('io.ox/core/tk/list', [
                 });
             }
 
-            // respond to window resize (see bug 37728)
-            $(window).on('resize.list-view', this.onScroll.bind(this));
+            if (this.options.pagination) {
+                // respond to window resize (see bug 37728)
+                $(window).on('resize.list-view', this.onScroll.bind(this));
+            }
 
             this.on('dispose', function () {
                 $(window).off('resize.list-view');

@@ -78,6 +78,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
         open: function () {
             var o = this.options;
             this.render().$el.appendTo(o.container);
+            this.trigger('before:open');
             this.$el.modal({ keyboard: o.keyboard }).modal('show');
             this.trigger('open');
             // set initial focus
@@ -87,30 +88,46 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
         },
 
         close: function () {
-            this.trigger('close');
+            this.trigger('before:close');
             this.$el.modal('hide');
+            this.trigger('close');
             if (this.previousFocus) this.previousFocus.focus();
             this.$el.remove();
             return this;
         },
 
-        busy: function () {
+        disableFormElements: function () {
             // disable all form elements; mark already disabled elements via CSS class
             this.$(':input').each(function () {
+                if ($(this).attr('data-action') === 'cancel') return;
                 $(this).toggleClass('disabled', $(this).prop('disabled')).prop('disabled', true);
             });
+        },
+
+        enableFormElements: function () {
+            // enable all form elements
+            this.$(':input').each(function () {
+                $(this).prop('disabled', $(this).hasClass('disabled')).removeClass('disabled');
+            });
+        },
+
+        busy: function (withAnimation) {
+            this.disableFormElements();
             this.activeElement = $(document.activeElement);
-            this.$body.css('opacity', 0.50);
+            if (withAnimation) {
+                this.$body.addClass('invisible');
+                this.$('.modal-content').busy();
+            } else {
+                this.$body.css('opacity', 0.50);
+            }
             this.$el.focus();
             return this;
         },
 
         idle: function () {
-            // enable all form elements
-            this.$(':input').each(function () {
-                $(this).prop('disabled', $(this).hasClass('disabled')).removeClass('disabled');
-            });
-            this.$body.css('opacity', '');
+            this.enableFormElements();
+            this.$('.modal-content').idle();
+            this.$body.removeClass('invisible').css('opacity', '');
             if (this.activeElement) this.activeElement.focus();
             return this;
         },
@@ -172,31 +189,35 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
         }
     });
 
-    ModalDialogView.foo = function () {
-        require(['io.ox/backbone/views/modal'], function (ModalDialog) {
-            new ModalDialog({ enter: 'woohoo', focus: '.foo', help: 'xmpl', point: 'modal/xmpl', maximize: true, title: 'Example' })
-            .extend({
-                default: function () {
-                    this.append(
-                        $('<div class="form-group">').append(
-                            $('<label>').text('Label'),
-                            $('<input type="text" class="form-control foo" tabindex="1">')
-                        )
-                    );
-                },
-                text: function () {
-                    this.append(
-                        $('<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>')
-                    );
-                }
-            })
-            .addCancelButton()
-            .addCloseButton()
-            .addAlternativeButton()
-            .on('all', _.inspect)
-            .open();
-        });
-    };
+    /*
+
+    Just for debugging:
+
+    require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+        new ModalDialog({ enter: 'woohoo', focus: '.foo', help: 'xmpl', point: 'modal/xmpl', maximize: true, title: 'Example' })
+        .extend({
+            default: function () {
+                this.append(
+                    $('<div class="form-group">').append(
+                        $('<label>').text('Label'),
+                        $('<input type="text" class="form-control foo" tabindex="1">')
+                    )
+                );
+            },
+            text: function () {
+                this.append(
+                    $('<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>')
+                );
+            }
+        })
+        .addCancelButton()
+        .addCloseButton()
+        .addAlternativeButton()
+        .on('all', _.inspect)
+        .open();
+    });
+
+    */
 
     return ModalDialogView;
 });

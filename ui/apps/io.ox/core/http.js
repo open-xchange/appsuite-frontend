@@ -158,6 +158,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '605': 'default_address',
                 '606': 'image1_url',
                 '607': 'sort_name',
+                '608': 'useCount',
                 '610': 'yomiFirstName',
                 '611': 'yomiLastName',
                 '612': 'yomiCompany'
