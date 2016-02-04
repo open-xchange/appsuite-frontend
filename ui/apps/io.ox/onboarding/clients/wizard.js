@@ -211,7 +211,7 @@ define('io.ox/onboarding/clients/wizard', [
             wizard.model.unset('scenario');
             return wizard.trigger('step:back');
         }
-        wizard.trigger('platform:select', value);
+        wizard.trigger('scenario:select', value);
         wizard.trigger('selected', { type: type, value: value });
     }
 
