@@ -49,6 +49,10 @@ define('io.ox/onboarding/clients/config', [
         },
 
         order: {
+            // os
+            'windows': 101,
+            'android': 102,
+            'apple': 103,
             // devices
             'apple.iphone': 101,
             'apple.ipad': 102,
@@ -108,6 +112,7 @@ define('io.ox/onboarding/clients/config', [
         load: function () {
             return api.config().then(function (data) {
                 // reoder devices and scenarios
+                data.platforms = _.sortBy(data.platforms, getIndexFor, this);
                 data.devices = _.sortBy(data.devices, getIndexFor, this);
                 data.scenarios = _.sortBy(data.scenarios, getIndexFor, this);
                 // extend
