@@ -33,7 +33,7 @@ define('io.ox/ads/register', [
             var allAds = baton.data.config,
                 activeAds = _(baton.data.config).chain().pairs()
                 .filter(function moduleFilter(conf) {
-                    return _.isEmpty(conf[1].showadinmodules) || _.contains(conf[1].showadinmodules, module);
+                    return _.isEmpty(conf[1].showInModules) || _.contains(conf[1].showInModules, module);
                 }).filter(function capabilityFilter(conf) {
                     return _.isEmpty(conf[1].capabilities) || capabilities.has(conf[1].capabilities);
                 })
