@@ -123,8 +123,9 @@ define('io.ox/contacts/addressbook/popup', [
         return function (options) {
 
             options = _.extend({
-                columns: '1,20,500,501,502,505,555,556,557,608',
-                limit: 1000
+                // keep this list really small for good performance!
+                columns: '1,20,500,501,502,505,555,556,557,606,608',
+                limit: 10000
             }, options);
 
             return getCollectedAddressesId().then(function (id) {
@@ -169,9 +170,6 @@ define('io.ox/contacts/addressbook/popup', [
             // fail when exceeding the limit
             if (list.length > options.limit) return $.Deferred().reject('too-many');
 
-            // apply limit
-            list = list.slice(0, options.limit);
-
             list.forEach(function (item) {
                 // skip collected addresses
                 if (String(item.folder_id) === collected_id) return;
@@ -191,12 +189,18 @@ define('io.ox/contacts/addressbook/popup', [
                     if (dupl[address]) return;
                     dupl[address] = true;
                     // add to results
+                    // do all calculations now; during rendering is more expensive
+                    var initials = util.getInitials(item);
                     var obj = {
                         cid: item.folder_id + '.' + item.id + '.' + i,
                         display_name: item.display_name,
                         email: address,
                         first_name: item.first_name,
                         full_name: util.getFullName(item).toLowerCase(),
+                        full_name_html: util.getFullName(item, true),
+                        image: util.getImage(item),
+                        initials: initials,
+                        initial_color: util.getInitialsColor(initials),
                         last_name: item.last_name,
                         sort_name: sort_name.concat(address).join('_'),
                         title: item.title,
@@ -239,7 +243,7 @@ define('io.ox/contacts/addressbook/popup', [
     // Open dialog
     //
 
-    var tooMany = false;
+    var tooMany = false, cachedResponse = null;
 
     function open(callback) {
 
@@ -282,25 +286,29 @@ define('io.ox/contacts/addressbook/popup', [
                 // hide body initially / add busy animation
                 view.busy(true);
 
+                function success(response) {
+                    if (view.disposed) return;
+                    cachedResponse = response;
+                    view.items = response.items;
+                    view.hash = response.hash;
+                    view.index = response.index;
+                    view.renderItems(view.items);
+                    view.idle();
+                    view.$('.search-field').focus();
+                }
+
+                function fail(e) {
+                    // remove animation but block form
+                    if (view.disposed) return;
+                    view.idle().disableFormElements();
+                    if (e === 'too-many') view.trigger('too-many'); else view.trigger('error', e);
+                }
+
                 view.on('open', function () {
-                    getAllMailAddresses().then(
-                        function success(response) {
-                            if (view.disposed) return;
-                            window.response = response;
-                            view.items = response.items;
-                            view.hash = response.hash;
-                            view.index = response.index;
-                            view.renderItems(view.items);
-                            view.idle();
-                            view.$('.search-field').focus();
-                            view = null;
-                        },
-                        function fail(e) {
-                            // remove animation but block form
-                            view.idle().disableFormElements();
-                            if (e === 'too-many') view.trigger('too-many'); else view.trigger('error', e);
-                        }
-                    );
+                    _.defer(function () {
+                        if (cachedResponse) return success(cachedResponse);
+                        getAllMailAddresses().then(success, fail);
+                    });
                 });
             },
             onInput: function (baton) {
@@ -326,9 +334,31 @@ define('io.ox/contacts/addressbook/popup', [
                         view.renderItems(view.items);
                         lastJSON = null;
                     }
-                }, 200);
+                }, 100);
 
                 view.$('.search-field').on('input', onInput);
+            },
+            onCursorDown: function (baton) {
+                var view = baton.view;
+                view.$('.search-field').on('keydown', function (e) {
+                    if (!(e.which === 40 || e.which === 13)) return;
+                    view.listView.selection.select(0);
+                });
+            },
+            onEnter: function (baton) {
+                var view = baton.view;
+                view.listView.$el.on('keydown', function (e) {
+                    if (e.which !== 13) return;
+                    view.trigger('select');
+                    view.close();
+                });
+            },
+            onDoubleClick: function (baton) {
+                var view = baton.view;
+                view.$('.list-view').on('dblclick', function () {
+                    view.trigger('select');
+                    view.close();
+                });
             }
         })
         .build(function () {
@@ -340,15 +370,30 @@ define('io.ox/contacts/addressbook/popup', [
                 '<li class="list-item selectable" aria-selected="false" role="option" tabindex="-1" data-cid="<%- item.cid %>">' +
                 '  <div class="list-item-checkmark"><i class="fa fa-checkmark" aria-hidden="true"></i></div>' +
                 '  <div class="list-item-content">' +
-                '    <div class="name"><%= util.getFullName(item, true) || "\u00A0" %></div>' +
-                '    <div class="email gray"><%- item.email %></div>' +
+                '    <% if (item.image) { %>' +
+                '      <div class="contact-picture" data-original="<%= item.image %>" aria-label="hidden"></div>' +
+                '    <% } else { %>' +
+                '      <div class="contact-picture initials <%= item.initial_color %>" aria-label="hidden"><%- item.initials %></div>' +
+                '    <% } %>' +
+                '    <div class="name"><%= item.full_name_html || "\u00A0" %></div>' +
+                '    <div class="email gray"><%- item.email || "\u00A0" %></div>' +
                 '  </div>' +
                 '</li>' +
                 '<% }); %>'
             );
 
+            var LIMIT = 100;
+
             this.renderItems = function (list) {
-                this.$('.list-view')[0].innerHTML = template({ list: list, util: util });
+                // get subset; we never draw more than 100 items
+                var subset = list.slice(0, LIMIT),
+                    html = template({ list: subset, util: util });
+                if (list.length > LIMIT) {
+                    //#. %1$d and %2$d are both numbers; usually > 100; never singular
+                    html += '<li class="limit">' + gt('%1$d contacts found. This list is limited to %2$d items.', list.length, LIMIT) + '</li>';
+                }
+                this.$('.list-view')[0].innerHTML = html;
+                this.$('.contact-picture[data-original]').lazyload();
             };
 
             this.resolveItems = function (ids) {
@@ -368,7 +413,7 @@ define('io.ox/contacts/addressbook/popup', [
                 this.$body.empty().addClass('error').text(e.error || e);
             },
             'select': function () {
-                if (callback) callback(this.resolveItems(this.listView.selection.get()));
+                if (_.isFunction(callback)) callback(this.resolveItems(this.listView.selection.get()));
             }
         })
         .addCancelButton()
@@ -378,8 +423,11 @@ define('io.ox/contacts/addressbook/popup', [
     }
 
     /* Debug lines
+
     require(['io.ox/contacts/addressbook/popup'], function (popup) { popup.getAllMailAddresses().always(_.inspect); });
     require('io.ox/contacts/addressbook/popup').searchIndex(window.index, 'b');
+
+    void require(['io.ox/contacts/addressbook/popup'], function (popup) { popup.open(_.inspect); });
     */
 
     return {
