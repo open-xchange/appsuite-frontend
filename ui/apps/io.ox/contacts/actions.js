@@ -245,6 +245,9 @@ define('io.ox/contacts/actions', [
 
     new Action('io.ox/contacts/premium/actions/synchronize', {
         capabilities: 'carddav client-onboarding',
+        requires: function () {
+            return _.device('!smartphone');
+        },
         action: function () {
             require(['io.ox/onboarding/clients/wizard'], function (wizard) {
                 wizard.run();

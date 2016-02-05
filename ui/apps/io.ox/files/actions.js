@@ -669,6 +669,9 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/premium/actions/synchronize', {
         capabilities: 'client-onboarding (boxcom || google || msliveconnect)',
+        requires: function () {
+            return _.device('!smartphone');
+        },
         action: function () {
             require(['io.ox/onboarding/clients/wizard'], function (wizard) {
                 wizard.run();

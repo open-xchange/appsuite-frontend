@@ -292,6 +292,7 @@ define('io.ox/onboarding/clients/wizard', [
         },
 
         run: function () {
+            if (_.device('smartphone')) return;
             if (capabilities.has('!client-onboarding')) return;
             // wrapper for wizard registry
             Wizard.registry.run(this.opt.id);
