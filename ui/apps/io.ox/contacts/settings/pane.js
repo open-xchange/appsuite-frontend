@@ -17,8 +17,9 @@ define('io.ox/contacts/settings/pane', [
     'io.ox/core/extensions',
     'gettext!io.ox/contacts',
     'io.ox/backbone/mini-views',
-    'io.ox/core/notifications'
-], function (settings, contactsSettingsModel, ext, gt, mini, notifications) {
+    'io.ox/core/notifications',
+    'io.ox/core/capabilities'
+], function (settings, contactsSettingsModel, ext, gt, mini, notifications, capabilities) {
 
     'use strict';
 
@@ -65,6 +66,26 @@ define('io.ox/contacts/settings/pane', [
             );
         }
     });
+
+    if (capabilities.has('gab !alone')) {
+        ext.point(POINT + '/pane').extend({
+            index: 150,
+            id: 'startfolder',
+            draw: function () {
+                this.append(
+                    $('<fieldset>').append(
+                        $('<div>').addClass('form-group').append(
+                            $('<div>').addClass('checkbox').append(
+                                $('<label>').text(gt('Start in global address book')).prepend(
+                                    new mini.CheckboxView({ name: 'startInGlobalAddressbook', model: contactsModel }).render().$el
+                                )
+                            )
+                        )
+                    )
+                );
+            }
+        });
+    }
 
     ext.point(POINT + '/pane').extend({
         index: 200,

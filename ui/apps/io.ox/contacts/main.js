@@ -967,6 +967,8 @@ define('io.ox/contacts/main', [
             return app.grid;
         };
 
+        if (capabilities.has('gab !alone') && !options.folder && app.settings.get('startInGlobalAddressbook', true)) options.folder = '6';
+
         // go!
         commons.addFolderSupport(app, app.grid, 'contacts', options.folder)
             .always(function () {
