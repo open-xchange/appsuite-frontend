@@ -80,4 +80,4 @@ ext.point('io.ox/ads').extend({
 ```
 
 As a reference implementation and a starting point, [this](https://github.com/Open-Xchange-Frontend/adexample) project can be used.
-The implementation is used to demonstrate the integration of a few [areas](#Areas] using a little more than just a minimal configuration.
+The implementation is used to demonstrate the integration of a few [areas](#Areas) using a little more than just a minimal configuration.
