@@ -13,8 +13,8 @@
 
 .addressbook-popup {
 
-    .modal-header .form-group {
-        margin: 8px 0 0 0;
+    .modal-header .row {
+        margin-top: 8px;
     }
 
     .modal-body.error {
@@ -39,6 +39,8 @@
         padding-top: 11px;
         padding-bottom: 11px;
 
+        &:last-child { border: 0; }
+
         .fa.fa-checkmark { top: 18px; }
     }
 
@@ -62,6 +64,7 @@
     .list-item.selected .contact-picture {
         opacity: 0.25;
         -webkit-filter: saturate(0);
+        background-color: #eee;
     }
 
     .initials {

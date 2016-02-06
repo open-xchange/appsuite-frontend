@@ -25,7 +25,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
     // - focus: set initial focus on this element
     // - help: link to online help article
     // - keyboard: close popup on <escape>
-    // - maximize: popup uses full height
+    // - maximize: popup uses full height; if given as number maximize but use that limit (useful on large screens)
     // - point: extension point id to render content
     // - title: dialog title
     // - width: dialog width
@@ -61,6 +61,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
                         )
                     )
                 );
+            // apply max height if maximize is given as number
+            if (_.isNumber(options.maximize)) this.$('.modal-dialog').css('max-height', options.maximize);
             // add help icon?
             if (options.help) {
                 require(['io.ox/backbone/mini-views/help'], function (HelpView) {

@@ -128,22 +128,24 @@ define('io.ox/contacts/addressbook/popup', [
                 limit: 10000
             }, options);
 
-            return getCollectedAddressesId().then(function (id) {
-                collected_id = id;
+            return getFolders().then(function () {
+                if (options.folder === 'all') delete options.folder;
                 return fetchAddresses(options).then(function (list) {
                     return processAddresses(list, options);
                 });
             });
         };
 
-        function getCollectedAddressesId() {
-            // get contacts folders first (just to exclude "collected addresses" later on)
-            return folderAPI.flat({ module: 'contacts' }).then(function (folders) {
-                var collected = _(folders['private']).find(function (folder) {
-                    return folder.standard_folder && folder.standard_folder_type === 0;
+        function getFolders() {
+            // get contacts folders
+            return folderAPI.flat({ module: 'contacts' }).done(function (folders) {
+                // exclude "collected addresses"
+                _(folders['private']).find(function (folder) {
+                    if (folder.standard_folder && folder.standard_folder_type === 0) {
+                        collected_id = String(folder.id);
+                        return true;
+                    }
                 });
-                var collected_id = collected ? String(collected.id) : 0;
-                return collected_id;
             });
         }
 
@@ -165,14 +167,14 @@ define('io.ox/contacts/addressbook/popup', [
 
         function processAddresses(list, options) {
 
-            var result = [], dupl = {}, hash = {};
+            var result = [], hash = {};
 
             // fail when exceeding the limit
             if (list.length > options.limit) return $.Deferred().reject('too-many');
 
             list.forEach(function (item) {
-                // skip collected addresses
-                if (String(item.folder_id) === collected_id) return;
+                // skip collected addresses (unless it's the selected folder)
+                if (String(item.folder_id) === collected_id && options.folder !== collected_id) return;
                 // get sort name
                 var sort_name = [];
                 names.forEach(function (name) {
@@ -180,14 +182,13 @@ define('io.ox/contacts/addressbook/popup', [
                 });
                 // get a match for each address
                 addresses.forEach(function (address, i) {
-                    // skip if not string
-                    address = item[address];
-                    if (typeof address !== 'string') return;
+                    // skip if empty
+                    address = $.trim(item[address]);
+                    if (!address) return;
                     // all lower-case
                     address = address.toLowerCase();
-                    // avoid duplicates
-                    if (dupl[address]) return;
-                    dupl[address] = true;
+                    // remove quotes from display name (common in collected addresses)
+                    item.display_name = (item.display_name || '').replace(/^["']+|["']+$/g, '');
                     // add to results
                     // do all calculations now; during rendering is more expensive
                     var initials = util.getInitials(item);
@@ -210,7 +211,6 @@ define('io.ox/contacts/addressbook/popup', [
                     hash[obj.cid] = obj;
                 });
             });
-            dupl = null;
             return { items: _(result).sortBy('sort_name'), hash: hash, index: buildIndex(result) };
         }
 
@@ -243,13 +243,20 @@ define('io.ox/contacts/addressbook/popup', [
     // Open dialog
     //
 
-    var tooMany = false, cachedResponse = null;
+    var tooMany = false, cachedResponse = null, folder = 'all', appeared = {};
+
+    var sections = {
+        'private': gt('My address books'),
+        'public':  gt('Public address books'),
+        'shared':  gt('Shared address books')
+    };
 
     function open(callback) {
 
         return new ModalDialog({
             enter: false,
-            maximize: true,
+            focus: '.search-field',
+            maximize: 600,
             point: 'io.ox/contacts/addressbook-popup',
             title: gt('Select contacts')
         })
@@ -257,13 +264,43 @@ define('io.ox/contacts/addressbook/popup', [
             addClass: function (baton) {
                 baton.view.$el.addClass('addressbook-popup');
             },
-            search: function (baton) {
-                baton.view.$('.modal-header').append(
-                    $('<div class="form-group">').append(
-                        $('<input type="text" class="form-control search-field" tabindex="1">')
-                        .attr('placeholder', gt('Search'))
+            header: function (baton) {
+                var view = baton.view;
+                view.$('.modal-header').append(
+                    $('<div class="row">').append(
+                        $('<div class="col-xs-6">').append(
+                            $('<input type="text" class="form-control search-field" tabindex="1">')
+                            .attr('placeholder', gt('Search'))
+                        ),
+                        $('<div class="col-xs-6">').append(
+                            $('<select class="form-control folder-dropdown" tabindex="1">').append(
+                                $('<option value="all">').text('All contacts')
+                            )
+                        )
                     )
                 );
+
+                // fill folder drop-down
+                var $dropdown = view.$('.folder-dropdown');
+                folderAPI.flat({ module: 'contacts' }).done(function (folders) {
+                    $dropdown.append(
+                        _(folders).map(function (section, id) {
+                            if (!sections[id]) return $();
+                            return $('<optgroup>').attr('label', sections[id]).append(
+                                _(section).map(function (folder) {
+                                    return $('<option>').val(folder.id).text(folder.title);
+                                })
+                            );
+                        })
+                    );
+                });
+
+                view.folder = folder;
+
+                view.$('.folder-dropdown').val(folder).on('change', function () {
+                    view.folder = folder = $(this).val() || 'all';
+                    view.$('.search-field').val('').trigger('input');
+                });
             },
             list: function (baton) {
                 var view = baton.view;
@@ -294,7 +331,6 @@ define('io.ox/contacts/addressbook/popup', [
                     view.index = response.index;
                     view.renderItems(view.items);
                     view.idle();
-                    view.$('.search-field').focus();
                 }
 
                 function fail(e) {
@@ -311,29 +347,44 @@ define('io.ox/contacts/addressbook/popup', [
                     });
                 });
             },
-            onInput: function (baton) {
+            search: function (baton) {
 
-                var view = baton.view, lastJSON = null;
-
-                var onInput = _.debounce(function () {
-                    var query = $(this).val(), result;
-                    if (query.length) {
-                        // split query into single words
-                        var words = query.split(regSplitWords), firstWord = words[0];
+                baton.view.search = function (query) {
+                    var result;
+                    if (query.length && query !== '@') {
+                        // split query into single words (without leading @; covers edge-case)
+                        var words = query.replace(/^@/, '').split(regSplitWords), firstWord = words[0];
                         // use first word for the index-based lookup
-                        result = searchIndex(view.index, firstWord);
-                        result = view.resolveItems(result).sort(sorter);
+                        console.log('search', firstWord, query);
+                        result = searchIndex(this.index, firstWord);
+                        result = this.resolveItems(result).sort(sorter);
                         // final filter to match all words
                         result = matchAllWords(result, words.slice(1));
                         // render
                         var json = JSON.stringify(result);
-                        if (json === lastJSON) return;
-                        view.renderItems(result);
-                        lastJSON = json;
+                        if (json === this.lastJSON) return;
+                        this.lastJSON = json;
                     } else {
-                        view.renderItems(view.items);
-                        lastJSON = null;
+                        result = this.items;
+                        this.lastJSON = null;
                     }
+                    // apply folder-based filter
+                    var folder = this.folder;
+                    if (folder !== 'all') {
+                        result = _(result).filter(function (item) {
+                            return item.cid.indexOf(folder + '.') === 0;
+                        });
+                    }
+                    // render
+                    this.renderItems(result);
+                };
+            },
+            onInput: function (baton) {
+
+                var view = baton.view;
+
+                var onInput = _.debounce(function () {
+                    view.search($(this).val());
                 }, 100);
 
                 view.$('.search-field').on('input', onInput);
@@ -384,7 +435,16 @@ define('io.ox/contacts/addressbook/popup', [
 
             var LIMIT = 100;
 
+            this.$el.on('appear', function (e) {
+                // track contact pictures that appear; we assume they get cached
+                appeared[$(e.target).attr('data-original')] = true;
+            });
+
             this.renderItems = function (list) {
+                // avoid duplicates
+                list = _(list).filter(function (item) {
+                    if (this[item.email]) return false; return (this[item.email] = true);
+                }, {});
                 // get subset; we never draw more than 100 items
                 var subset = list.slice(0, LIMIT),
                     html = template({ list: subset, util: util });
@@ -393,7 +453,12 @@ define('io.ox/contacts/addressbook/popup', [
                     html += '<li class="limit">' + gt('%1$d contacts found. This list is limited to %2$d items.', list.length, LIMIT) + '</li>';
                 }
                 this.$('.list-view')[0].innerHTML = html;
-                this.$('.contact-picture[data-original]').lazyload();
+                this.$('.list-view').scrollTop(0);
+                this.$('.contact-picture[data-original]').each(function () {
+                    // appeared before? show now; no lazyload; better experience
+                    var node = $(this), url = node.attr('data-original');
+                    if (appeared[url]) node.css('background-image', 'url(' + url + ')'); else node.lazyload();
+                });
             };
 
             this.resolveItems = function (ids) {

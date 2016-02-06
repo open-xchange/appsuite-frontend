@@ -326,7 +326,7 @@ define('io.ox/contacts/util', [
                 return ((match && match[1]) || '');
             }
 
-            return function (obj) {
+            function get(obj) {
 
                 var first_name = $.trim(obj.first_name),
                     last_name = $.trim(obj.last_name),
@@ -340,6 +340,10 @@ define('io.ox/contacts/util', [
                 if (first_name) return first(first_name);
 
                 return '';
+            }
+
+            return function (obj) {
+                return get(obj).toUpperCase();
             };
         }()),
 
