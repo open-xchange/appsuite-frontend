@@ -56,6 +56,11 @@ msgid_plural "%1$d attachments"
 msgstr[0] "%1$d хавсралт%1$d хавсралтууд"
 msgstr[1] ""
 
+#. %1$d and %2$d are both numbers; usually > 100; never singular
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d contacts found. This list is limited to %2$d items."
+msgstr ""
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d day"
@@ -6619,6 +6624,7 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr ""
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/desktop.js module:io.ox/core apps/io.ox/core/main.js
 #: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
 #: apps/io.ox/find/view-tokenfield.js
@@ -6658,6 +6664,12 @@ msgctxt "dropdown"
 msgid "Select"
 msgstr ""
 
+#. Context: Add selected contacts; German "Auswählen", for example
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgctxt "select-contacts"
+msgid "Select"
+msgstr ""
+
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid ""
 "Select a checkbox to define a custom name for that address; otherwise the "
@@ -6669,6 +6681,12 @@ msgstr ""
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Select all"
 msgstr ""
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Delete contact"
+msgid "Select contacts"
+msgstr "Контактыг устгах"
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -7177,6 +7195,10 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid "Start date timezone"
+msgstr ""
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Start in global address book"
 msgstr ""
 
 #. 'start presentation' dropdown menu entry to start a local only presentation where no remote participants would be able to join.
@@ -8109,6 +8131,10 @@ msgstr ""
 #: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
 #: module:plugins/portal
 msgid "Tomorrow"
+msgstr ""
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Too many contacts in your address book."
 msgstr ""
 
 #. Emoji category

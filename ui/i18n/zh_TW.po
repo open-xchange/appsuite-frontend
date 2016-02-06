@@ -58,6 +58,11 @@ msgid_plural "%1$d attachments"
 msgstr[0] "%1$d 個附件"
 msgstr[1] "(%1$s) 附件"
 
+#. %1$d and %2$d are both numbers; usually > 100; never singular
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d contacts found. This list is limited to %2$d items."
+msgstr ""
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d day"
@@ -6671,6 +6676,7 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "行程"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/desktop.js module:io.ox/core apps/io.ox/core/main.js
 #: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
 #: apps/io.ox/find/view-tokenfield.js
@@ -6711,6 +6717,14 @@ msgctxt "dropdown"
 msgid "Select"
 msgstr "選擇"
 
+#. Context: Add selected contacts; German "Auswählen", for example
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Select"
+msgctxt "select-contacts"
+msgid "Select"
+msgstr "選擇"
+
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid ""
 "Select a checkbox to define a custom name for that address; otherwise the "
@@ -6724,6 +6738,12 @@ msgstr ""
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Select all"
 msgstr "選擇全部"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Delete contact"
+msgid "Select contacts"
+msgstr "刪除聯絡人"
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -7250,6 +7270,12 @@ msgstr "起始日期"
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid "Start date timezone"
 msgstr "起始日期時區"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Shared address books"
+msgid "Start in global address book"
+msgstr "共享的通訊錄"
 
 #. 'start presentation' dropdown menu entry to start a local only presentation where no remote participants would be able to join.
 #: apps/io.ox/presenter/actions.js module:io.ox/presenter
@@ -8217,6 +8243,10 @@ msgstr "切換面板"
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "明天"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Too many contacts in your address book."
+msgstr ""
 
 #. Emoji category
 #. Japanese: ツール

@@ -65,6 +65,11 @@ msgstr[0] "%1$d załącznik"
 msgstr[1] "%1$d załączniki"
 msgstr[2] "%1$d załączników"
 
+#. %1$d and %2$d are both numbers; usually > 100; never singular
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d contacts found. This list is limited to %2$d items."
+msgstr ""
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d day"
@@ -6796,6 +6801,7 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Planowanie"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/desktop.js module:io.ox/core apps/io.ox/core/main.js
 #: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
 #: apps/io.ox/find/view-tokenfield.js
@@ -6837,6 +6843,14 @@ msgctxt "dropdown"
 msgid "Select"
 msgstr "Wybierz"
 
+#. Context: Add selected contacts; German "Auswählen", for example
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Select"
+msgctxt "select-contacts"
+msgid "Select"
+msgstr "Wybierz"
+
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid ""
 "Select a checkbox to define a custom name for that address; otherwise the "
@@ -6852,6 +6866,12 @@ msgstr ""
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Select all"
 msgstr "Wybierz wszystko"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Delete contact"
+msgid "Select contacts"
+msgstr "Usuń kontakt"
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -7386,6 +7406,12 @@ msgstr "Data rozpoczęcia"
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid "Start date timezone"
 msgstr "Strefa czasowa godziny rozpoczęcia"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Shared address books"
+msgid "Start in global address book"
+msgstr "Udostępnione książki adresowe"
 
 #. 'start presentation' dropdown menu entry to start a local only presentation where no remote participants would be able to join.
 #: apps/io.ox/presenter/actions.js module:io.ox/presenter
@@ -8415,6 +8441,10 @@ msgstr "Przełącz panel"
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "Jutro"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Too many contacts in your address book."
+msgstr ""
 
 #. Emoji category
 #. Japanese: ツール

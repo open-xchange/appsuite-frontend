@@ -2502,6 +2502,45 @@ msgstr ""
 msgid "Do you really want to delete this contact?"
 msgstr ""
 
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+msgid "Select contacts"
+msgstr ""
+
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+#: apps/io.ox/core/desktop.js
+#: module:io.ox/core
+#: apps/io.ox/core/main.js
+#: apps/io.ox/find/extensions-facets.js
+#: apps/io.ox/find/main.js
+#: apps/io.ox/find/view-tokenfield.js
+#: apps/io.ox/search/autocomplete/extensions.js
+#: apps/io.ox/search/main.js
+#: module:io.ox/search
+#: apps/plugins/portal/flickr/register.js
+#: module:plugins/portal
+msgid "Search"
+msgstr ""
+
+#. %1$d and %2$d are both numbers; usually > 100; never singular
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+msgid "%1$d contacts found. This list is limited to %2$d items."
+msgstr ""
+
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+msgid "Too many contacts in your address book."
+msgstr ""
+
+#. Context: Add selected contacts; German "Auswählen", for example
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+msgctxt "select-contacts"
+msgid "Select"
+msgstr ""
+
 #: apps/io.ox/contacts/common-extensions.js
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/main.js
@@ -3195,6 +3234,11 @@ msgstr ""
 
 #: apps/io.ox/contacts/settings/pane.js
 #: module:io.ox/contacts
+msgid "Start in global address book"
+msgstr ""
+
+#: apps/io.ox/contacts/settings/pane.js
+#: module:io.ox/contacts
 msgid "Language-specific default"
 msgstr ""
 
@@ -3749,20 +3793,6 @@ msgstr ""
 #: apps/io.ox/core/desktop.js
 #: module:io.ox/core
 msgid "Main window"
-msgstr ""
-
-#: apps/io.ox/core/desktop.js
-#: module:io.ox/core
-#: apps/io.ox/core/main.js
-#: apps/io.ox/find/extensions-facets.js
-#: apps/io.ox/find/main.js
-#: apps/io.ox/find/view-tokenfield.js
-#: apps/io.ox/search/autocomplete/extensions.js
-#: apps/io.ox/search/main.js
-#: module:io.ox/search
-#: apps/plugins/portal/flickr/register.js
-#: module:plugins/portal
-msgid "Search"
 msgstr ""
 
 #: apps/io.ox/core/desktop.js
