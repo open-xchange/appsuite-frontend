@@ -61,13 +61,17 @@
         .picture(40px, 40px);
     }
 
+    .name, .email {
+        .ellipsis();
+    }
+
     .list-item.selected .contact-picture {
         opacity: 0.25;
         -webkit-filter: saturate(0);
         background-color: #eee;
     }
 
-    .initials {
+    .initials, .distribution-list {
         color: rgba(0, 0, 0, 0.60);
         font-weight: bold;
         display: flex;
@@ -76,13 +80,19 @@
     }
 
     .initials {
-        &.red { background-color: #F9888F; }
-        &.orange { background-color: #FFBE84; }
+        &.red { background-color: #FFA0A5; }
+        &.orange { background-color: #FFA77B; }
         &.yellow { background-color: #FFD23A; }
-        &.green { background-color: #AFD619; }
+        &.green { background-color: #BFDE45; }
         &.cyan { background-color: #99E4FB; }
-        &.blue { background-color: #74BAF5; }
-        &.purple { background-color: #FF98FB; }
-        &.pink { background-color: #FFB4D7; }
+        &.blue { background-color: #95CEFF; }
+        &.purple { background-color: #E5B0FF; }
+        &.pink { background-color: #FFC2DE; }
+    }
+
+    .distribution-list {
+        font-size: 14px;
+        color: #fff;
+        background-color: #555;
     }
 }
