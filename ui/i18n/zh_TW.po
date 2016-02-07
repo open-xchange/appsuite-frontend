@@ -4824,6 +4824,7 @@ msgstr "多重選擇"
 msgid "Music"
 msgstr "音樂"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My address books"
 msgstr "我的通訊錄"
@@ -6101,6 +6102,7 @@ msgstr "進度必須是從 0 到 100 內的數字"
 msgid "Properties"
 msgstr "屬性"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public address books"
 msgstr "公開通訊錄"
@@ -6967,6 +6969,7 @@ msgstr "共享約會"
 msgid "Shared activity"
 msgstr "分享的動態"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
 msgstr "共享的通訊錄"

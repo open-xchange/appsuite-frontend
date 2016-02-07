@@ -4826,6 +4826,7 @@ msgstr "多重选择"
 msgid "Music"
 msgstr "音乐"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My address books"
 msgstr "我的地址簿"
@@ -6102,6 +6103,7 @@ msgstr "进度必须是 0 到 100 之间的有效数值"
 msgid "Properties"
 msgstr "属性"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public address books"
 msgstr "公共地址簿"
@@ -6968,6 +6970,7 @@ msgstr "已分享约会"
 msgid "Shared activity"
 msgstr "已分享活动"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
 msgstr "已共享地址簿"

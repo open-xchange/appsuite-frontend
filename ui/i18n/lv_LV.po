@@ -4916,6 +4916,7 @@ msgstr "Vairāku izvēle"
 msgid "Music"
 msgstr "Mūzika"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My address books"
 msgstr "Manas adrešu grāmatas"
@@ -6212,6 +6213,7 @@ msgstr "Progresam ir jābūt skaitlim robežās no 0 līdz 100"
 msgid "Properties"
 msgstr "Īpašibas"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public address books"
 msgstr "Publiskās adrešu grāmatas"
@@ -7098,6 +7100,7 @@ msgstr "Kopīgotie mītiņi"
 msgid "Shared activity"
 msgstr "Koplietojuma darbība"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
 msgstr "Koplietojuma adrešu grāmatas"

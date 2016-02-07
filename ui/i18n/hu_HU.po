@@ -4876,6 +4876,7 @@ msgstr "Többválasztásos"
 msgid "Music"
 msgstr "Zene"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My address books"
 msgstr "Saját címjegyzékek"
@@ -6160,6 +6161,7 @@ msgstr "Az előrehaladásnak 0 és 100 közötti érvényes számnak kell lennie
 msgid "Properties"
 msgstr "Tulajdonságok"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public address books"
 msgstr "Nyilvános címjegyzékek"
@@ -7039,6 +7041,7 @@ msgstr "Megosztott találkozók"
 msgid "Shared activity"
 msgstr "Megosztott tevékenység"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
 msgstr "Megosztott címjegyzékek"

@@ -4888,6 +4888,7 @@ msgstr "Выбрать несколько"
 msgid "Music"
 msgstr "Музыка"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My address books"
 msgstr "Мои адресные книги"
@@ -6176,6 +6177,7 @@ msgstr "Процент выполнения может принимать зна
 msgid "Properties"
 msgstr "Свойства"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public address books"
 msgstr "Общедоступные адресные книги"
@@ -7053,6 +7055,7 @@ msgstr "Общие встречи"
 msgid "Shared activity"
 msgstr "Общие действия"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
 msgstr "Совместные адресные книги"

@@ -4859,6 +4859,7 @@ msgstr "Monivalinta"
 msgid "Music"
 msgstr "Musiikki"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My address books"
 msgstr "Osoitekirjani"
@@ -6146,6 +6147,7 @@ msgstr "Edistymisen täytyy olla numero väliltä 0 ja 100"
 msgid "Properties"
 msgstr "Ominaisuudet"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public address books"
 msgstr "Julkiset osoitekirjat"
@@ -7025,6 +7027,7 @@ msgstr "Jaetut tapaamiset"
 msgid "Shared activity"
 msgstr "Jaettu aktiviteetti"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
 msgstr "Jaetut osoitekirjat"

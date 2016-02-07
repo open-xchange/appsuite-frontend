@@ -4864,6 +4864,7 @@ msgstr "Flerval"
 msgid "Music"
 msgstr "Musik"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My address books"
 msgstr "Mina adressböcker"
@@ -6149,6 +6150,7 @@ msgstr "Förloppet måste vara ett giltig nummer mellan 0 och 100"
 msgid "Properties"
 msgstr "Egenskaper"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public address books"
 msgstr "Offentliga adressböcker"
@@ -7027,6 +7029,7 @@ msgstr "Delade möten"
 msgid "Shared activity"
 msgstr "Delad aktivitet"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
 msgstr "Delade adressböcker"

@@ -5219,6 +5219,7 @@ msgstr ""
 msgid "Music"
 msgstr ""
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #, fuzzy
 #| msgid "Add to address book"
@@ -6590,6 +6591,7 @@ msgstr "El progrés ha de ser un nombre vàlid entre 0 i 100"
 msgid "Properties"
 msgstr "Propietats"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #, fuzzy
 #| msgid "Add to address book"
@@ -7522,6 +7524,7 @@ msgstr "Cites compartides"
 msgid "Shared activity"
 msgstr "Activitat compartida"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #, fuzzy
 #| msgid "Add to address book"

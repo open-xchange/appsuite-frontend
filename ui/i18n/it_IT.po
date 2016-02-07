@@ -4897,6 +4897,7 @@ msgstr "Selezione multipla"
 msgid "Music"
 msgstr "Musica"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My address books"
 msgstr "Le mie rubriche"
@@ -6191,6 +6192,7 @@ msgstr "L'avanzamento deve essere un numero valido compreso tra 0 e 100"
 msgid "Properties"
 msgstr "Proprietà"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public address books"
 msgstr "Rubriche pubbliche"
@@ -7075,6 +7077,7 @@ msgstr "Appuntamenti condivisi"
 msgid "Shared activity"
 msgstr "Attività condivisa"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
 msgstr "Rubriche condivise"

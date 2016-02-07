@@ -4902,6 +4902,7 @@ msgstr "Multiselect"
 msgid "Music"
 msgstr "Muziek"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My address books"
 msgstr "Mijn adresboeken"
@@ -6200,6 +6201,7 @@ msgstr "Voortgang moet een getal tussen 0 en 100 zijn"
 msgid "Properties"
 msgstr "Eigenschappen"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public address books"
 msgstr "Publieke adresboeken"
@@ -7082,6 +7084,7 @@ msgstr "Gedeelde Afspraken"
 msgid "Shared activity"
 msgstr "Gedeelde activiteit"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
 msgstr "Gedeelde adresboeken"

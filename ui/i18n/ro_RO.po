@@ -4922,6 +4922,7 @@ msgstr "Selectare multiplă"
 msgid "Music"
 msgstr "Muzică"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My address books"
 msgstr "Agendele mele de contacte"
@@ -6217,6 +6218,7 @@ msgstr "Progresul trebuie să fie un număr corect cuprins între 0 și 100"
 msgid "Properties"
 msgstr "Proprietăți"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public address books"
 msgstr "Agende de contacte publice"
@@ -7105,6 +7107,7 @@ msgstr "Întâlniri partajate"
 msgid "Shared activity"
 msgstr "Activitate partajată"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
 msgstr "Agende de contacte partajate"

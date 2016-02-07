@@ -2504,6 +2504,27 @@ msgstr ""
 
 #: apps/io.ox/contacts/addressbook/popup.js
 #: module:io.ox/contacts
+#: apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core
+msgid "My address books"
+msgstr ""
+
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+#: apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core
+msgid "Public address books"
+msgstr ""
+
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+#: apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core
+msgid "Shared address books"
+msgstr ""
+
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
 msgid "Select contacts"
 msgstr ""
 
@@ -4194,21 +4215,6 @@ msgstr ""
 #: apps/io.ox/core/folder/extensions.js
 #: module:io.ox/core
 msgid "Synchronize with your tablet or smartphone"
-msgstr ""
-
-#: apps/io.ox/core/folder/extensions.js
-#: module:io.ox/core
-msgid "My address books"
-msgstr ""
-
-#: apps/io.ox/core/folder/extensions.js
-#: module:io.ox/core
-msgid "Public address books"
-msgstr ""
-
-#: apps/io.ox/core/folder/extensions.js
-#: module:io.ox/core
-msgid "Shared address books"
 msgstr ""
 
 #: apps/io.ox/core/folder/extensions.js

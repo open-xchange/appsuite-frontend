@@ -4917,6 +4917,7 @@ msgstr "Viacnásobný výber"
 msgid "Music"
 msgstr "Hudba"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My address books"
 msgstr "Moje adresáre kontaktov"
@@ -6212,6 +6213,7 @@ msgstr "Priebeh musí byť platné číslo medzi 0 a 100"
 msgid "Properties"
 msgstr "Vlastnosti"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public address books"
 msgstr "Verejné adresáre kontaktov"
@@ -7097,6 +7099,7 @@ msgstr "Zdieľané schôdzky"
 msgid "Shared activity"
 msgstr "Spoločné aktivity"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
 msgstr "Zdieľané adresáre kontaktov"

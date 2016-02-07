@@ -4923,6 +4923,7 @@ msgstr "Wielokrotny wybór"
 msgid "Music"
 msgstr "Muzyka"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My address books"
 msgstr "Moje książki adresowe"
@@ -6213,6 +6214,7 @@ msgstr "Wartość postępu musi być liczbą z zakresu od 0 do 100."
 msgid "Properties"
 msgstr "Właściwości"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public address books"
 msgstr "Publiczne książki adresowe"
@@ -7099,6 +7101,7 @@ msgstr "Wspólne spotkania"
 msgid "Shared activity"
 msgstr "Udostępniona aktywność"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
 msgstr "Udostępnione książki adresowe"

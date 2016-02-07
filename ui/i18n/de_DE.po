@@ -4862,6 +4862,7 @@ msgstr "Mehrfachauswahl"
 msgid "Music"
 msgstr "Musik"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My address books"
 msgstr "Meine Adressbücher"
@@ -6144,6 +6145,7 @@ msgstr ""
 msgid "Properties"
 msgstr "Eigenschaften"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public address books"
 msgstr "Öffentliche Adressbücher"
@@ -7005,6 +7007,7 @@ msgstr "Gemeinsame Termine"
 msgid "Shared activity"
 msgstr "Gemeinsamkeiten"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
 msgstr "Geteilte Adressbücher"

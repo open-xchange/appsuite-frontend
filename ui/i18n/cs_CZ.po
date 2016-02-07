@@ -4902,6 +4902,7 @@ msgstr "Výběr více položek"
 msgid "Music"
 msgstr "Hudba"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My address books"
 msgstr "Mé adresáře"
@@ -6197,6 +6198,7 @@ msgstr "Postup musí být číslo od 0 do 100"
 msgid "Properties"
 msgstr "Vlastnosti"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public address books"
 msgstr "Veřejné adresáře"
@@ -7079,6 +7081,7 @@ msgstr "Sdílené schůzky"
 msgid "Shared activity"
 msgstr "Sdílená aktivita"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
 msgstr "Sdílené adresáře"

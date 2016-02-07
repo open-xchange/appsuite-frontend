@@ -4879,6 +4879,7 @@ msgstr "Vælg flere"
 msgid "Music"
 msgstr "Musik"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My address books"
 msgstr "Mine adressebøger"
@@ -6168,6 +6169,7 @@ msgstr "Fremgang skal være et gyldigt nummer imellem 0 og 100"
 msgid "Properties"
 msgstr "Egenskaber"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public address books"
 msgstr "Offentlige adressebøger"
@@ -7046,6 +7048,7 @@ msgstr "Delte aftaler"
 msgid "Shared activity"
 msgstr "Delt aktivitet"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
 msgstr "Delte adressebøger"

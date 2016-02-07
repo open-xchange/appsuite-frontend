@@ -4862,6 +4862,7 @@ msgstr "複数選択"
 msgid "Music"
 msgstr "音楽"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My address books"
 msgstr "アドレス帳"
@@ -6147,6 +6148,7 @@ msgstr "達成率は 0 から 100 までの数字でなければなりません�
 msgid "Properties"
 msgstr "プロパティ"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public address books"
 msgstr "パブリックアドレス帳"
@@ -7013,6 +7015,7 @@ msgstr "共有アポイント"
 msgid "Shared activity"
 msgstr "共有アクティビティ"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
 msgstr "共有アドレス帳"
