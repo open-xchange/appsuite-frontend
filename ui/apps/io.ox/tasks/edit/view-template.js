@@ -322,21 +322,20 @@ define('io.ox/tasks/edit/view-template', [
                      $('<label>').text(gt('Progress in %')).attr('for', 'task-edit-progress-field'), $(progressField.wrapper)
                     .val(baton.model.get('percent_completed'))
                     .on('change', function () {
-                        var value = parseInt(progressField.progress.val(), 10);
-                        if (value !== 'NaN' && value >= 0 && value <= 100) {
-                            if (progressField.progress.val() === '') {
-                                progressField.progress.val(0);
+                        var value = progressField.progress.val(),
+                            valid = /^\d+$/.test(value),
+                            number = parseInt(value, 10);
+                        if (valid && number >= 0 && number <= 100) {
+                            if (number === 0 && baton.model.get('status') === 2) {
                                 baton.model.set('status', 1, { validate: true });
-                            } else if (progressField.progress.val() === '0' && baton.model.get('status') === 2) {
-                                baton.model.set('status', 1, { validate: true });
-                            } else if (progressField.progress.val() === '100' && baton.model.get('status') !== 3) {
+                            } else if (number === 100 && baton.model.get('status') !== 3) {
                                 baton.model.set('status', 3, { validate: true });
                             } else if (baton.model.get('status') === 3) {
                                 baton.model.set('status', 2, { validate: true });
                             } else if (baton.model.get('status') === 1) {
                                 baton.model.set('status', 2, { validate: true });
                             }
-                            baton.model.set('percent_completed', value, { validate: true });
+                            baton.model.set('percent_completed', number, { validate: true });
                         } else {
                             notifications.yell('error', gt('Please enter value between 0 and 100.'));
                             baton.model.trigger('change:percent_completed');
