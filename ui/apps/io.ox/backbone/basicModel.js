@@ -125,7 +125,7 @@ define('io.ox/backbone/basicModel', [
             if ((action === 'update' || action === 'create')) {
                 //isValid actually calls the validate function, no need to do this manually
                 if (!this.isValid({ isSave: true })) {
-                    return $.Deferred().reject({ error: gt('Invalid data'), model: this });
+                    return $.Deferred().reject({ error: gt('The dialog contains invalid data'), model: this });
                 }
             }
             if (this.syncer) {

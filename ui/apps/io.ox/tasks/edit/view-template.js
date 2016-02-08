@@ -562,7 +562,8 @@ define('io.ox/tasks/edit/view-template', [
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<label class="control-label">').text(gt('Estimated duration in minutes')).attr({ for: guid }),
-                new mini.InputView({ name: 'target_duration', model: this.model }).render().$el.attr({ id: guid })
+                new mini.InputView({ name: 'target_duration', model: this.model }).render().$el.attr({ id: guid }),
+                new mini.ErrorView({ name: 'target_duration', model: this.model }).render().$el
             );
         }
     }, { row: '16' });
@@ -576,7 +577,8 @@ define('io.ox/tasks/edit/view-template', [
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<label class="control-label">').text(gt('Actual duration in minutes')).attr({ for: guid }),
-                new mini.InputView({ name: 'actual_duration', model: this.model }).render().$el.attr({ id: guid })
+                new mini.InputView({ name: 'actual_duration', model: this.model }).render().$el.attr({ id: guid }),
+                new mini.ErrorView({ name: 'actual_duration', model: this.model }).render().$el
             );
         }
     }, { row: '16' });
@@ -590,7 +592,8 @@ define('io.ox/tasks/edit/view-template', [
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<label class="control-label">').text(gt('Estimated costs')).attr({ for: guid }),
-                new mini.InputView({ name: 'target_costs', model: this.model }).render().$el.attr({ id: guid })
+                new mini.InputView({ name: 'target_costs', model: this.model }).render().$el.attr({ id: guid }),
+                new mini.ErrorView({ name: 'target_costs', model: this.model }).render().$el
             );
         }
     }, { row: '17' });
@@ -604,7 +607,8 @@ define('io.ox/tasks/edit/view-template', [
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<label class="control-label">').text(gt('Actual costs')).attr({ for: guid }),
-                new mini.InputView({ name: 'actual_costs', model: this.model }).render().$el.attr({ id: guid })
+                new mini.InputView({ name: 'actual_costs', model: this.model }).render().$el.attr({ id: guid }),
+                new mini.ErrorView({ name: 'actual_costs', model: this.model }).render().$el
             );
         }
     }, { row: '17' });
