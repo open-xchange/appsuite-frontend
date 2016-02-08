@@ -48,7 +48,7 @@ define('io.ox/core/capabilities', function () {
                 /*eslint no-new-func: 0*/
                 return new Function('return !!(' + condition + ')')();
             } catch (e) {
-                console.error('capabilities.has()', str, e);
+                if (_.device('!karma')) console.error('capabilities.has()', str, e);
                 return false;
             }
         },

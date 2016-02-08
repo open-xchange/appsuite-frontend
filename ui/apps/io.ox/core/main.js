@@ -1819,7 +1819,7 @@ define('io.ox/core/main', [
         return value === undefined ? 'undefined' : value;
     }
 
-    if (ox.debug) {
+    if (ox.debug && _.device('!karma')) {
         ox.on('http:before:send', function (options) {
             var json = _(['params', 'data']).reduce(function (str, id) {
                 return str + (_.isString(options[id]) ? options[id] : JSON.stringify(options[id], replacer));
