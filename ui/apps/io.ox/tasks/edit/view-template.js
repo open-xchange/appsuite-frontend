@@ -322,7 +322,7 @@ define('io.ox/tasks/edit/view-template', [
                      $('<label>').text(gt('Progress in %')).attr('for', 'task-edit-progress-field'), $(progressField.wrapper)
                     .val(baton.model.get('percent_completed'))
                     .on('change', function () {
-                        var value = progressField.progress.val(),
+                        var value = $.trim(progressField.progress.val()).replace(/\s*%$/, ''),
                             valid = /^\d+$/.test(value),
                             number = parseInt(value, 10);
                         if (valid && number >= 0 && number <= 100) {
