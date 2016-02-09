@@ -15,7 +15,8 @@
     .twitter-typeahead {
         // ensure it does not overlapp collapsed search field when collapsed
         width: 100%;
-        .token-input.tt-hint, & > .token-input.tt-input,{
+
+        .token-input.tt-hint, & > .token-input.tt-input {
             // restore min-width overwritten in tokenfield.less for mail
             min-width: 60px !important;
         }
@@ -27,18 +28,13 @@
     // left
     .search-box {
 
-        .twitter-typeahead  {
-            // keep height of search field placeholder
-            height: 24px;
-        }
+        // keep height of search field placeholder
+        .twitter-typeahead { height: 24px; }
 
-        .twitter-typeahead .tt-dropdown-menu {
-            // enlarge default height
-            max-height: 400px;
-        }
+        // enlarge default height
+        .twitter-typeahead .tt-dropdown-menu { max-height: 400px; }
 
         .search-field {
-
             &.form-control:focus {
                 // reduce size of box-shadow from 8px to 4px
                 // fixes display issue in Chrome (hidden top-bar; cause by fixed position)
@@ -50,15 +46,12 @@
             .token-input.tt-input {
                 // keep placeholder at same position when switching to typeahead
                 padding-left: 3px;
-                &[disabled] {
-                    background-color: #eee;
-                }
+                &[disabled] { background-color: #eee; }
             }
         }
     }
 
     .autocomplete-item {
-
         color: #333;
         padding: 2px 10px;
 
@@ -68,9 +61,7 @@
             color: rgba(0, 0, 0, 0.5);
         }
 
-        &.indent {
-            padding-left: 24px;
-        }
+        &.indent { padding-left: 24px; }
 
         &.dropdown-header {
             padding-top: 9px;
@@ -99,14 +90,10 @@
                 .picture(42px, 42px);
             }
 
-            .name {
-                .ellipsis();
-            }
+            .name,
+            .detail { .ellipsis(); }
 
-            .detail {
-                color: rgba(0, 0, 0, 0.5);
-                .ellipsis();
-            }
+            .detail { color: rgba(0, 0, 0, 0.5); }
         }
     }
 }

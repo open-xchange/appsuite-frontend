@@ -243,49 +243,49 @@ ul.dropdown-menu li a.disabled {
                 line-height: inherit;
                 width: 30px;
             }
+
             &:not(.has-dropdown-description), & + .dropdown-description {
                 border-bottom: 1px solid #ddd;
             }
+
+            &:first-child {
+                border-top-left-radius: @border-radius;
+                border-top-right-radius: @border-radius;
+            }
+
+            &:nth-last-child(2) {
+                border-bottom-left-radius: @border-radius;
+                border-bottom-right-radius: @border-radius;
+            }
+
+            &:last-child {
+                margin-top: @marginLarge;
+                border-radius: @border-radius;
+            }
+
+            // no clue why but there are empty <li> in system drop-down, for example
+            &:empty { padding: 0; }
+
+            & > a, & > span {
+                .ellipsis();
+                -webkit-tap-highlight-color: transparent;
+                -webkit-touch-callout: none;
+                user-select: none;
+                line-height: 30px;
+                font-size: 18px;
+                font-weight: 300;
+                max-width: none !important;
+            }
         }
 
-        li:first-child {
-            border-top-left-radius: @border-radius;
-            border-top-right-radius: @border-radius;
-        }
+        .io-ox-action-link:last-child { margin: 0; };
 
-        li:nth-last-child(2) {
-            border-bottom-left-radius: @border-radius;
-            border-bottom-right-radius: @border-radius;
-        }
-        // close
-        li:last-child {
-            margin-top: @marginLarge;
-            border-radius: @border-radius;
-        }
-
-        // no clue why but there are empty <li> in system drop-down, for example
-        li:empty { padding: 0; }
-
-        li > a, li > span {
-            .ellipsis();
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-            user-select: none;
-            line-height: 30px;
-            font-size: 18px;
-            font-weight: 300;
-            max-width: none !important;
-        }
-
-        .io-ox-action-link:last-child {
-            margin: 0;
-        };
-
-        .dropdown-menu li>a:focus:not(.disabled) {
+        .dropdown-menu li > a:focus:not(.disabled) {
             background-color: initial;
             background-image: none;
             color: initial;
         }
+
          /* fixes for mail flags */
         .flag-example, .color-example {
             display: inline-block;
@@ -301,16 +301,16 @@ ul.dropdown-menu li a.disabled {
             padding: 3px 20px;
         }
 
-        .color-black { background-color: #333; }
-        .color-red { background-color: @red; }
-        .color-orange { background-color: @orange; }
+        .color-black      { background-color: #333; }
+        .color-red        { background-color: @red; }
+        .color-orange     { background-color: @orange; }
         .color-lightgreen { background-color: darken(@green-light, 10%); }
-        .color-green { background-color: @green; }
-        .color-lightblue { background-color: darken(@blue-light, 20%); }
-        .color-blue { background-color: @blue; }
-        .color-purple { background-color: @purple; }
-        .color-pink { background-color: darken(@pink, 10%); }
-        .color-gray { background-color: darken(@gray-light, 20%); }
+        .color-green      { background-color: @green; }
+        .color-lightblue  { background-color: darken(@blue-light, 20%); }
+        .color-blue       { background-color: @blue; }
+        .color-purple     { background-color: @purple; }
+        .color-pink       { background-color: darken(@pink, 10%); }
+        .color-gray       { background-color: darken(@gray-light, 20%); }
 
         // Disable hover state on mobile devices for custom dropdowns
         // -----------
@@ -330,26 +330,21 @@ ul.dropdown-menu li a.disabled {
             .vertical-gradient(@dropdown-link-active-bg, darken(@dropdown-link-active-bg, 5%));
         }
     }
-    .android {
-         .custom-dropdown.dropdown-menu {
-            /* active state must be disabled due to messed up active classes on android */
-            &.dropdown-menu li > a:active {
-                color: inherit;
-                text-decoration: none;
-                outline: 0;
-                background: none;
+    .android .custom-dropdown.dropdown-menu {
+        /* active state must be disabled due to messed up active classes on android */
+        &.dropdown-menu li > a:active {
+            color: inherit;
+            text-decoration: none;
+            outline: 0;
+            background: none;
 
-            }
         }
     }
     //** blur style for body when mobile custom menus are shown **/
-    .ios {
-        #io-ox-core {
-             transition: -webkit-filter 100ms ease-in;
-             -webkit-filter: blur(0);
-            &.menu-blur {
-                -webkit-filter: blur(5px);
-            }
-        }
+    .ios #io-ox-core {
+         transition: -webkit-filter 100ms ease-in;
+         -webkit-filter: blur(0);
+
+        &.menu-blur { -webkit-filter: blur(5px); }
     }
 }

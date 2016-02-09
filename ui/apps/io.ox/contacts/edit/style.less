@@ -12,9 +12,8 @@
  */
 
 .edit-contact {
-
     // baseline adjustment
-    padding: 16px 0 0 0;
+    padding: @default-padding 0 0 0;
 
     h1.name {
         font-weight: 300;
@@ -34,14 +33,10 @@
     }
 
     & div.field.rare:not(.has-content),
-    &.compact div.field {
-        display: none;
-    }
+    &.compact div.field { display: none; }
 
     & div.field.always,
-    &.compact div.field.has-content {
-        display: block;
-    }
+    &.compact div.field.has-content { display: block; }
 
     .block {
         margin-bottom:28px;
@@ -49,9 +44,7 @@
         legend.group { color: @brand-primary }
     }
 
-    textarea {
-        height: 221px;
-    }
+    textarea { height: 221px; }
 
     .native-date-picker div {
         &:first-child { padding-right: 0; }
@@ -61,15 +54,14 @@
     .inline-error { display: none; }
 
     .field.error {
-        label, input, .inline-error {
-            color: #B94A48;
-        }
+
+        label, input, .inline-error { color: #B94A48; }
+
         input {
             border-color: #B94A48;
+            &:focus { .box-shadow(0 0 6px #D59392); }
         }
-        input:focus {
-            .box-shadow(0 0 6px #D59392);
-        }
+
         .inline-error {
             margin-bottom: 14px;
             display: block;
@@ -89,9 +81,7 @@
             float: left;
             margin-right: 0;
 
-            &:nth-child(odd) {
-                margin-right: 60px;
-            }
+            &:nth-child(odd) { margin-right: 60px; }
 
             i.fa-paperclip {
                 position: absolute;
@@ -134,9 +124,7 @@
                 }
             }
 
-            .row-1, .row-2 {
-                .ellipsis();
-            }
+            .row-1, .row-2 { .ellipsis(); }
         }
     }
 }

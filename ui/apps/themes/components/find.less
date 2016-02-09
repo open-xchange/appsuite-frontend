@@ -52,9 +52,8 @@
             .action.io-ox-busy {
                 position: absolute;
                 line-height: 22px;
-                &:before {
-                    font-size: 16px;
-                }
+
+                &:before { font-size: 16px; }
             }
 
             .tokenfield-placeholder {
@@ -70,9 +69,9 @@
 
                 .token {
 
-                    .token-type, .token-detail, .fa-caret-down {
-                        color: rgba(0, 0, 0, 0.7);
-                    }
+                    .token-type,
+                    .token-detail,
+                    .fa-caret-down { color: rgba(0, 0, 0, 0.7); }
 
                     .close {
                         opacity: 0.5;
@@ -87,9 +86,7 @@
                     }
 
                     .dropdown {
-                        [data-toggle="dropdown"] {
-                            outline: none;
-                        }
+                        [data-toggle="dropdown"] { outline: none; }
 
                         .fa-caret-down {
                             margin-left: 4px;
@@ -110,9 +107,7 @@
                 // overwrite fa line-height
                 line-height: 30px;
 
-                &:hover {
-                    color: @action-hover-color;
-                }
+                &:hover { color: @action-hover-color; }
             }
         }
 
@@ -121,13 +116,10 @@
             padding-left: 8px;
 
             & > .classic-toolbar {
-
                 // disable
-                .dropdown .conflicting, .dropdown.conflicting {
-                    a {
-                        color: #a4a4a4;
-                        pointer-events: none;
-                    }
+                .dropdown .conflicting, .dropdown.conflicting a {
+                    color: #a4a4a4;
+                    pointer-events: none;
                 }
             }
         }
@@ -138,19 +130,11 @@
      */
     .io-ox-find {
 
-        .search-box {
-            .action {
-                &.action-find {
-                    display: inline-block;
-                }
-                &.action-cancel {
-                    display: none;
-                }
-            }
+        .search-box .action {
+            &.action-find   { display: inline-block; }
+            &.action-cancel { display: none; }
         }
-        .search-box-filter {
-            display: none;
-        }
+        .search-box-filter { display: none; }
     }
 
     /**
@@ -158,10 +142,8 @@
      */
     &.io-ox-find-active {
 
-        .window-body {
-            //top: managed by backbone view
-            transition: top .2s;
-        }
+        //top: managed by backbone view
+        .window-body { transition: top .2s; }
 
         .io-ox-find {
             //top: managed by backbone view
@@ -176,19 +158,12 @@
 
                 // switch visibility
                 .action {
-                    &.action-show {
-                        display: none;
-                    }
-                    &.action-cancel {
-                        display: inline-block;
-                    }
+                    &.action-show   { display: none; }
+                    &.action-cancel { display: inline-block; }
                 }
             }
 
-            .search-box-filter {
-                display: block;
-            }
-
+            .search-box-filter { display: block; }
         }
     }
 }

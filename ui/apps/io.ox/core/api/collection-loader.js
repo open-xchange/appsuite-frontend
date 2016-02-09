@@ -61,7 +61,14 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
             Pool.preserve(function () {
                 var method = methods[type];
-                collection[method](data, { parse: true });
+                if (collection.preserve && type === 'reload') {
+                    // avoid "remove" and "sort" events
+                    // used by all-unseen, for example
+                    collection[method](data, { parse: true, add: true, remove: false, sort: false });
+                } else {
+                    // normal case
+                    collection[method](data, { parse: true });
+                }
             });
 
             // track completeness
@@ -106,9 +113,9 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             collection = this.collection = this.getCollection(params);
             this.loading = false;
 
-            if (collection.length > 0 && !collection.expired && collection.sorted) {
+            if (collection.length > 0 && !collection.expired && collection.sorted && !collection.preserve) {
                 // reduce too large collections
-                collection.reset(collection.first(this.PRIMARY_PAGE_SIZE), { silent: true });
+                collection.reset(collection.first(collection.CUSTOM_PAGE_SIZE || this.PRIMARY_PAGE_SIZE), { silent: true });
                 _.defer(function () {
                     collection.trigger(collection.complete ? 'reset load cache complete' : 'reset load cache');
                 });
@@ -224,6 +231,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
             return http.wait().then(function () {
                 return self.httpGet(module, params).then(function (data) {
+                    // apply filter
+                    if (self.filter) data = _(data).filter(self.filter);
                     // useSlice helps if server request doesn't support "limit"
                     return self.useSlice ? Array.prototype.slice.apply(data, params.limit.split(',')) : data;
                 });

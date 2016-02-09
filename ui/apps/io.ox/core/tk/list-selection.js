@@ -234,10 +234,6 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         resetCheckmark: function (items) {
             items.filter('.selected').removeClass('selected no-checkbox');
-            // collect garbage: remove preserved items when selection changes
-            _.defer(function () {
-                items.filter('.preserved').not('.selected').fadeOut('fast', function () { $(this).remove(); });
-            });
         },
 
         // resets all (usually one) items with swipe-left class
@@ -254,7 +250,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             // workaround for chrome's CSS bug:
             // styles of "selected" class are not applied if focus triggers scrolling.
             // idea taken from http://forrst.com/posts/jQuery_redraw-BGv
-            if (_.device('chrome')) node.hide(0, function () { $(this).show(); });
+            if (_.device('chrome < 48')) node.hide(0, function () { $(this).show(); });
             return node;
         },
 

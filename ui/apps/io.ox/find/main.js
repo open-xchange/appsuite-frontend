@@ -144,7 +144,7 @@ define('io.ox/find/main', [
             'enable-disable-toggle': function (app) {
                 if (!app.get('inplace')) return;
                 // disable search field for unsupported folders
-                app.listenTo(app.get('parent'), 'folder:change folder-virtual:change', app.toggle);
+                app.listenTo(app.get('parent'), 'folder:change folder-virtual:change', app.updateState);
             },
 
             'vgrid': function (app) {
@@ -344,7 +344,7 @@ define('io.ox/find/main', [
             if (this.view) this.view.cancel();
         };
 
-        app.toggle = function (folderid) {
+        app.updateState = function (folderid) {
             var notWhitelisted = !FOLDERWHITELIST[folderid];
             // is folder unsupported?
             app.trigger(folderAPI.isVirtual(folderid) && notWhitelisted ? 'view:disable' : 'view:enable');
@@ -449,6 +449,9 @@ define('io.ox/find/main', [
             // setup
             app.mediate();
             app.placeholder = new PlaceholderView({ app: app });
+            // disable when virtual folder selected
+            var folder = app.get('parent').folder.get();
+            app.updateState(folder);
             // delay launch app (on focus)
             app.listenToOnce(app.placeholder, 'launch', app.launch);
             app.set('state', 'prepared');

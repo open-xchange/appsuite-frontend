@@ -388,6 +388,13 @@ define('io.ox/core/folder/api', [
         type: 1
     });
 
+    pool.addModel({
+        folder_id: 'default0',
+        id: 'virtual/all-unseen',
+        module: 'mail',
+        title: gt('Unread messages')
+    });
+
     //
     // Propagate
     // central hub to coordinate events and caches

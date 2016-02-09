@@ -1,3 +1,16 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2016 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
 .mail-detail-content {
 
     cursor: auto;
@@ -25,39 +38,32 @@
         font-size: initial;
     }
 
-    code {
-        font-family: inherit;
-    }
+    code { font-family: inherit; }
 
     th {
         padding: @table-cell-padding;
         text-align: center;
     }
 
-    th[align="left"] {
-        // special case, see bug 37082
-        text-align: left;
-    }
+    // special case, see bug 37082
+    th[align="left"] { text-align: left; }
 }
 
-.touch .mail-detail .mail-detail-content.plain-text {
-    font-size: @font-size-touch;
-}
+.touch .mail-detail .mail-detail-content.plain-text { font-size: @font-size-touch; }
 
 .smartphone {
     .mail-detail-content {
         padding: 0;
         font-size: 16px;
-        * {
-            line-height: 1.42857142em; // ~20px at 14px
-        }
+        overflow: auto;
+
+        * { line-height: 1.42857142em; } // ~20px at 14px
+
         ul, ol {
             padding-left: 10px;
             margin-left: 16px;
         }
     }
 
-    .io-ox-pagecontroller.page .mail-detail .mail-detail-content {
-        margin: 0;
-    }
+    .io-ox-pagecontroller.page .mail-detail .mail-detail-content { margin: 0; }
 }

@@ -16,6 +16,12 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Virtaal 0.7.1\n"
 
+#: apps/io.ox/tours/files.js:215 module:io.ox/tours
+#, fuzzy
+#| msgid "Add new account"
+msgid "Add another account"
+msgstr "Pridať nový účet"
+
 #: apps/io.ox/tours/calendar.js:72 module:io.ox/tours
 msgid "Adding attachments"
 msgstr "Pridávanie príloh"
@@ -23,6 +29,20 @@ msgstr "Pridávanie príloh"
 #: apps/io.ox/tours/tasks.js:54 module:io.ox/tours
 msgid "Adding further details"
 msgstr "Pridanie ďalších podrobností"
+
+#: apps/io.ox/tours/files.js:101 module:io.ox/tours
+msgid ""
+"At the top you can find the toolbar with many functions and additional "
+"options. You can easily create new folders, new files and much more."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:163 module:io.ox/tours
+msgid ""
+"Choose from two alternatives to share your files and folders. Use Invite "
+"people if you want to manage access rights and allow recipients to create "
+"and edit files. Or just get a link to let others view and download your "
+"files. You can use an expiration date and password protection if you like."
+msgstr ""
 
 #: apps/io.ox/tours/contacts.js:36 module:io.ox/tours
 msgid ""
@@ -32,9 +52,23 @@ msgstr ""
 "Kliknutím na písmeno na ľavej strane navigačného panela zobrazíte "
 "zodpovedajúce kontakty z vybraného adresára kontaktov."
 
+#: apps/io.ox/tours/files.js:78 module:io.ox/tours
+msgid ""
+"Clicking on a folder displays all the subfolders, documents, media and other "
+"files that it contains."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:129 module:io.ox/tours
+msgid "Clicking on the view icon leads you to a preview of the selected file."
+msgstr ""
+
 #: apps/io.ox/tours/portal.js:45 module:io.ox/tours
 msgid "Closing a square"
 msgstr "Zatvorenie štvorca"
+
+#: apps/io.ox/tours/files.js:176 module:io.ox/tours
+msgid "Collaborating"
+msgstr ""
 
 #: apps/io.ox/tours/mail.js:33 module:io.ox/tours
 msgid "Composing a new E-Mail"
@@ -51,10 +85,6 @@ msgstr "Vytvorenie nového kontaktu"
 #: apps/io.ox/tours/tasks.js:32 module:io.ox/tours
 msgid "Creating a new task"
 msgstr "Vytvorenie novej úlohy"
-
-#: apps/io.ox/tours/files.js:60 module:io.ox/tours
-msgid "Creating a note"
-msgstr "Vytvorenie poznámky"
 
 #: apps/io.ox/tours/intro.js:72 module:io.ox/tours
 msgid "Creating new items"
@@ -95,9 +125,16 @@ msgstr ""
 "Podrobné pokyny pre jednotlivé aplikácie sa nachádzajú v menu Systém > "
 "Pomocník."
 
-#: apps/io.ox/tours/files.js:67 module:io.ox/tours
-msgid "Displaying information"
-msgstr "Zobrazenie informácií"
+#: apps/io.ox/tours/files.js:192 module:io.ox/tours
+msgid ""
+"Did you know that you can edit text documents and spreadsheets online? Drive "
+"will automatically update your edited file, but thanks to versioning the "
+"original file stays available."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:86 module:io.ox/tours
+msgid "Different views are available. Just select the one you like best."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -107,6 +144,13 @@ msgstr "Zobrazenie Pomocníka alebo nastavenia"
 msgid "Drag and drop"
 msgstr "Ťahaj a pusť"
 
+#: apps/io.ox/tours/files.js:216 module:io.ox/tours
+msgid ""
+"Drive allows you to connect to other storage solutions if you already have a "
+"cloud storage account you use to save and sync your files. Simply click on "
+"the appropriate logo to access your existing data."
+msgstr ""
+
 #: apps/io.ox/tours/settings.js:44 module:io.ox/tours
 msgid ""
 "Edit a setting on the right side. In most of the cases, the changes are "
@@ -114,6 +158,12 @@ msgid ""
 msgstr ""
 "Upravte nastavenia na pravej strane. Vo väčšine prípadov, sa zmeny aktivujú "
 "okamžite."
+
+#: apps/io.ox/tours/files.js:191 module:io.ox/tours
+#, fuzzy
+#| msgid "Edit document"
+msgid "Edit documents"
+msgstr "Upraviť dokument"
 
 #: apps/io.ox/tours/mail.js:106 module:io.ox/tours
 msgid "Editing multiple E-Mails"
@@ -191,9 +241,27 @@ msgstr "Zadanie predmetu"
 msgid "Entering the task's data"
 msgstr "Zadávanie údajov úlohy"
 
-#: apps/io.ox/tours/files.js:30 module:io.ox/tours
+#: apps/io.ox/tours/files.js:199 module:io.ox/tours
+#, fuzzy
+#| msgid "File Details"
+msgid "File details"
+msgstr "Podrobnosti súboru"
+
+#: apps/io.ox/tours/files.js:77 module:io.ox/tours
+#, fuzzy
+#| msgid "Folder tree"
+msgid "Folder content"
+msgstr "Strom priečinkov"
+
+#: apps/io.ox/tours/files.js:63 module:io.ox/tours
 msgid "Folder tree"
 msgstr "Strom priečinkov"
+
+#: apps/io.ox/tours/files.js:140 module:io.ox/tours
+msgid ""
+"From preview you can also select other options to help you manage and work "
+"on your files."
+msgstr ""
 
 #: apps/io.ox/tours/calendar.js:73 module:io.ox/tours
 msgid "Further down you can add documents as attachments to the appointment."
@@ -215,6 +283,18 @@ msgstr "Začíname"
 #: apps/io.ox/tours/mail.js:101 module:io.ox/tours
 msgid "Halo view"
 msgstr "Zobrazenie Prstenca"
+
+#: apps/io.ox/tours/files.js:151 module:io.ox/tours
+msgid ""
+"Here you can share files with your colleagues and external contacts. You can "
+"also collaborate on a document and set different access rights."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:226 module:io.ox/tours
+msgid ""
+"Hint: you can always restart guided tours, any time you need them, from the "
+"system menu."
+msgstr ""
 
 #: apps/io.ox/tours/settings.js:36 module:io.ox/tours
 msgid "How the settings are organized"
@@ -262,9 +342,29 @@ msgstr "Pozývanie ďalších účastníkov"
 msgid "Launching an app"
 msgstr "Spustenie aplikácie"
 
+#: apps/io.ox/tours/files.js:37 module:io.ox/tours
+msgid ""
+"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy "
+"eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam "
+"voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet "
+"clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit "
+"amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam "
+"nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed "
+"diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet "
+"clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+msgstr ""
+
 #: apps/io.ox/tours/contacts.js:35 module:io.ox/tours
 msgid "Navigation bar"
 msgstr "Navigačný panel"
+
+#: apps/io.ox/tours/files.js:64 module:io.ox/tours
+msgid ""
+"On the left you can see the folder tree. It displays your folder structure "
+"and allows you to navigate to specific folders and subfolders. To make your "
+"life easier, we have already included folders for your Documents, Music, "
+"Pictures and Videos."
+msgstr ""
 
 #: apps/io.ox/tours/mail.js:91 module:io.ox/tours
 msgid "Opening an E-Mail in a separate window"
@@ -286,6 +386,16 @@ msgstr "Otvorenie Pomocníka"
 msgid "Opening the settings"
 msgstr "Otvorenie nastavení"
 
+#: apps/io.ox/tours/files.js:128 module:io.ox/tours
+#, fuzzy
+msgid "Preview files"
+msgstr "Náhľad"
+
+#: apps/io.ox/tours/files.js:139 module:io.ox/tours
+#, fuzzy
+msgid "Preview mode"
+msgstr "Náhľad"
+
 #: apps/io.ox/tours/mail.js:96 module:io.ox/tours
 msgid "Reading E-Mail conversations"
 msgstr "Čítanie emailových konverzácií"
@@ -294,12 +404,22 @@ msgstr "Čítanie emailových konverzácií"
 msgid "Reading the details"
 msgstr "Čítanie podrobností"
 
+#: apps/io.ox/tours/files.js:225 module:io.ox/tours
+msgid "Restart Guided Tour"
+msgstr ""
+
 #: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Hľadanie objektov"
 
+#: apps/io.ox/tours/files.js:85 module:io.ox/tours
+#, fuzzy
+#| msgid "Selecting a view"
+msgid "Select a view"
+msgstr "Výber zobrazenia"
+
 #: apps/io.ox/tours/calendar.js:83 module:io.ox/tours
-#: apps/io.ox/tours/files.js:35 apps/io.ox/tours/mail.js:86
+#: apps/io.ox/tours/mail.js:86
 msgid "Selecting a view"
 msgstr "Výber zobrazenia"
 
@@ -310,6 +430,26 @@ msgstr "Poslanie emailu kontaktu"
 #: apps/io.ox/tours/mail.js:74 module:io.ox/tours
 msgid "Sending the E-Mail"
 msgstr "Odoslanie emailu"
+
+#: apps/io.ox/tours/files.js:150 module:io.ox/tours
+#, fuzzy
+#| msgid "Share this file"
+msgid "Share files"
+msgstr "Zdieľať tento súbor"
+
+#: apps/io.ox/tours/files.js:177 module:io.ox/tours
+msgid ""
+"Sharing files by inviting people does not only offer your recipients the "
+"option to create and edit files. Internal and external participants are also "
+"able to collaborate with you on text documents and spreadsheets at the same "
+"time."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:162 module:io.ox/tours
+#, fuzzy
+#| msgid "Sort options"
+msgid "Sharing options"
+msgstr "Možnosti zoradenia"
 
 #: apps/io.ox/tours/settings.js:54 module:io.ox/tours
 msgid "Signing out"
@@ -335,20 +475,21 @@ msgstr ""
 "Zobrazenie podrobností zobrazuje obsah objektu. V Zobrazení podrobností "
 "nájdete ďalšie funkcie na organizovanie objektov v závislosti od aplikácie."
 
-#: apps/io.ox/tours/files.js:45 module:io.ox/tours
-msgid "The Icons view"
-msgstr "Zobrazenie ikon"
+#: apps/io.ox/tours/files.js:56 module:io.ox/tours
+#, fuzzy
+#| msgctxt "help"
+#| msgid "The Drive App"
+msgid "The Drive app"
+msgstr "Aplikácia Drive"
 
-#: apps/io.ox/tours/files.js:46 module:io.ox/tours
-msgid ""
-"The Icons view displays an icon and the file name for each file. Click on an "
-"icon to view further details and functions in the pop-up."
-msgstr ""
-"Zobrazenie ikon zobrazí pre každý súbor ikonu a názov súboru. Kliknutím na "
-"ikonu zobrazíte ďalšie podrobnosti a funkcie v kontextovom menu."
+#: apps/io.ox/tours/files.js:50 module:io.ox/tours
+#, fuzzy
+#| msgctxt "help"
+#| msgid "The Drive App"
+msgid "The Drive app tour.txt"
+msgstr "Aplikácia Drive"
 
 #: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
-#: apps/io.ox/tours/files.js:40
 msgid "The List view"
 msgstr "Zobrazenie zoznamu"
 
@@ -361,16 +502,6 @@ msgstr ""
 "Zobrazenie zoznamu zobrazuje zoznam schôdzok v aktuálnom priečinku. Ak "
 "kliknete na schôdzku, údaje schôdzky a niektoré funkcie sa zobrazia v "
 "Zobrazení podrobností."
-
-#: apps/io.ox/tours/files.js:41 module:io.ox/tours
-msgid ""
-"The List view shows details like the size and date of change. Use the "
-"checkboxes to select files. Click on a file to view further details and "
-"functions in the pop-up."
-msgstr ""
-"Zobrazenie zoznamu zobrazuje podrobnosti ako veľkosť a dátum zmeny. Pomocou "
-"zaškrtávacích políčok vyberte súbory. Kliknutím na súbor zobrazíte ďalšie "
-"podrobnosti a funkcie v kontextovom menu."
 
 #: apps/io.ox/tours/intro.js:58 module:io.ox/tours
 msgid "The New objects icon"
@@ -396,18 +527,6 @@ msgstr ""
 "Portál vás informuje o aktuálnych emailoch, schôdzkach alebo novinkách v "
 "sociálnych sieťach."
 
-#: apps/io.ox/tours/files.js:50 module:io.ox/tours
-msgid "The Tiles view"
-msgstr "Zobrazenie Dlaždíc"
-
-#: apps/io.ox/tours/files.js:51 module:io.ox/tours
-msgid ""
-"The Tiles view shows a big icon for each file. Click on an icon to view "
-"further details and functions in the pop-up."
-msgstr ""
-"Zobrazenie Dlaždíc zobrazí pre každý súbor veľkú ikonu. Kliknutím na ikonu "
-"zobrazíte ďalšie podrobnosti a funkcie v kontextovom menu."
-
 #: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
 msgid "The calendar views"
 msgstr "Zobrazenia kalendára"
@@ -419,6 +538,13 @@ msgid ""
 msgstr ""
 "Zobrazenia kalendára zobrazujú hárok kalendára so schôdzkami vo vybranom "
 "časovom intervale."
+
+#: apps/io.ox/tours/files.js:200 module:io.ox/tours
+msgid ""
+"The file details side bar offers additional information about your files. "
+"Just enable the File details option from the View drop down menu and select "
+"a file to see the details."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js:104 module:io.ox/tours
 msgid "The folder tree"
@@ -497,11 +623,6 @@ msgstr ""
 #: apps/io.ox/tours/tasks.js:33 module:io.ox/tours
 msgid "To create a new task, click on New in the toolbar."
 msgstr "Novú úlohu vytvoríte kliknutím na ikonu Nový v paneli nástrojov."
-
-#: apps/io.ox/tours/files.js:61 module:io.ox/tours
-msgid "To create a note, click on New > Add note in the toolbar."
-msgstr ""
-"Ak chcete vytvoriť novú poznámku, Nový > Pridať poznámku v paneli nástrojov."
 
 #: apps/io.ox/tours/calendar.js:58 module:io.ox/tours
 msgid ""
@@ -660,14 +781,6 @@ msgid "To search for objects, click the Search icon in the menu bar."
 msgstr ""
 "Vyhľadávanie objektov otvoríte kliknutím na ikonu Hľadať v paneli menu."
 
-#: apps/io.ox/tours/files.js:36 module:io.ox/tours
-msgid ""
-"To select one of the views List, Icons or Squares, click on View on the "
-"right side of the toolbar."
-msgstr ""
-"Jedno zo zobrazení Zoznam, Ikony alebo štvorčeky vyberiete kliknutím na "
-"ikonu Zobrazenie na pravej strane panela nástrojov."
-
 #: apps/io.ox/tours/calendar.js:84 module:io.ox/tours
 msgid ""
 "To select one of the views like Day, Month or List, click on View in the "
@@ -712,35 +825,29 @@ msgstr ""
 msgid "To track the editing status, enter the current progress."
 msgstr "Ak chcete sledovať stav úprav, zadajte súčasný stav úprav."
 
-#: apps/io.ox/tours/files.js:56 module:io.ox/tours
-msgid "To upload a file, click on New > Upload new file in the toolbar."
-msgstr ""
-"Súbor nahráte kliknutím na Nový > Nahrať nový súbor v paneli nástrojov."
-
-#: apps/io.ox/tours/files.js:68 module:io.ox/tours
+#: apps/io.ox/tours/files.js:114 module:io.ox/tours
 msgid ""
-"To view further information, click on a file. A pop-up window displays "
-"further details and functions."
+"To upload a new file from your local device, simply click on Add local file "
+"and select the file you would like to upload. It is even easier if you just "
+"drag and drop files from your local device into Drive. The uploaded file is "
+"now available in Drive on all your devices."
 msgstr ""
-"Ďalšie informácie zobrazíte kliknutím na súbor. V kontextovom menu sa "
-"zobrazia ďalšie podrobnosti a funkcie."
+
+#: apps/io.ox/tours/files.js:100 module:io.ox/tours
+#, fuzzy
+#| msgid "The toolbar"
+msgid "Toolbar"
+msgstr "Panel nástrojov"
 
 #: apps/io.ox/tours/tasks.js:72 module:io.ox/tours
 msgid "Tracking the editing status"
 msgstr "Sledovanie stavu úprav"
 
-#: apps/io.ox/tours/files.js:55 module:io.ox/tours
-msgid "Uploading a file"
-msgstr "Nahranie súboru"
-
-#: apps/io.ox/tours/files.js:31 module:io.ox/tours
-msgid ""
-"Use the folder tree to access own, public or shared files. If the folder "
-"tree is hidden, click on View > Folder view on the right side of the toolbar."
-msgstr ""
-"Použite strom priečinkov na prístup k vlastným, verejným alebo zdieľaným "
-"súborom. Ak je strom  priečinkov skrytý, kliknite na Zobraziť > Zobrazenie "
-"priečinkov na pravej strane panela nástrojov."
+#: apps/io.ox/tours/files.js:113 module:io.ox/tours
+#, fuzzy
+#| msgid "Upload new file"
+msgid "Upload a new file"
+msgstr "Nahrať nový súbor"
 
 #: apps/io.ox/tours/intro.js:105 module:io.ox/tours
 msgid ""
@@ -765,6 +872,14 @@ msgstr "Používanie funkcie pripomenutia"
 #: apps/io.ox/tours/intro.js:34 module:io.ox/tours
 msgid "Welcome to %s"
 msgstr "Víta vás %s"
+
+#: apps/io.ox/tours/files.js:57 module:io.ox/tours
+msgid ""
+"Welcome to your cloud storage app. This Guided Tour will introduce you to "
+"your new online storage solution - your one point to access online stored "
+"files from all your accounts. This is where you can upload and save your "
+"files, share them and synchronize them with different devices.  "
+msgstr ""
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -1374,9 +1489,6 @@ msgstr "Víta vás %s"
 
 #~ msgid "Add mail account"
 #~ msgstr "Pridať poštový účet"
-
-#~ msgid "Add new account"
-#~ msgstr "Pridať nový účet"
 
 #~ msgid "Add new contact"
 #~ msgstr "Pridať nový kontakt"
@@ -2844,6 +2956,9 @@ msgstr "Víta vás %s"
 #~ msgid "Creating Files"
 #~ msgstr "Vytváranie súborov"
 
+#~ msgid "Creating a note"
+#~ msgstr "Vytvorenie poznámky"
+
 #~ msgid "Creation date:"
 #~ msgstr "Dátum vytvorenia:"
 
@@ -3232,6 +3347,9 @@ msgstr "Víta vás %s"
 
 #~ msgid "Displayed name"
 #~ msgstr "Zobrazené meno"
+
+#~ msgid "Displaying information"
+#~ msgstr "Zobrazenie informácií"
 
 #~ msgid "Distance"
 #~ msgstr "Vzdialenosť"
@@ -3622,9 +3740,6 @@ msgstr "Víta vás %s"
 
 #~ msgid "Edit description"
 #~ msgstr "Upraviť popis"
-
-#~ msgid "Edit document"
-#~ msgstr "Upraviť dokument"
 
 #~ msgid "Edit draft"
 #~ msgstr "Upraviť rozpísané"
@@ -4124,9 +4239,6 @@ msgstr "Víta vás %s"
 
 #~ msgid "File"
 #~ msgstr "Súbor"
-
-#~ msgid "File Details"
-#~ msgstr "Podrobnosti súboru"
 
 #~ msgid "File name"
 #~ msgstr "Názov súboru"
@@ -6975,10 +7087,6 @@ msgstr "Víta vás %s"
 #~ msgid "Preview could not be loaded"
 #~ msgstr "Náhľad nebolo možné načítať"
 
-#, fuzzy
-#~ msgid "Preview pane"
-#~ msgstr "Náhľad"
-
 #~ msgid "Previous"
 #~ msgstr "Predošlé"
 
@@ -7826,9 +7934,6 @@ msgstr "Víta vás %s"
 #~ msgid "Share tasks"
 #~ msgstr "Zdieľať úlohy"
 
-#~ msgid "Share this file"
-#~ msgstr "Zdieľať tento súbor"
-
 #~ msgid "Share this folder"
 #~ msgstr "Zdieľať tento priečinok"
 
@@ -8128,9 +8233,6 @@ msgstr "Víta vás %s"
 #~ msgstr ""
 #~ "Ľutujeme, ale nemôžeme vám tu pomôcť. Poskytovateľ potrebuje získať kľúč "
 #~ "od LinkedIn s povolením na čítanie správ."
-
-#~ msgid "Sort options"
-#~ msgstr "Možnosti zoradenia"
 
 #~ msgid "Source"
 #~ msgstr "Zdroj"
@@ -8585,10 +8687,6 @@ msgstr "Víta vás %s"
 #~ msgstr "Nová skupina vašich kanálov"
 
 #~ msgctxt "help"
-#~ msgid "The Drive App"
-#~ msgstr "Aplikácia Drive"
-
-#~ msgctxt "help"
 #~ msgid "The E-Mail Components"
 #~ msgstr "Zložky emailu"
 
@@ -8605,6 +8703,16 @@ msgstr "Víta vás %s"
 #~ msgctxt "help"
 #~ msgid "The Files Components"
 #~ msgstr "Zložky súborov"
+
+#~ msgid "The Icons view"
+#~ msgstr "Zobrazenie ikon"
+
+#~ msgid ""
+#~ "The Icons view displays an icon and the file name for each file. Click on "
+#~ "an icon to view further details and functions in the pop-up."
+#~ msgstr ""
+#~ "Zobrazenie ikon zobrazí pre každý súbor ikonu a názov súboru. Kliknutím "
+#~ "na ikonu zobrazíte ďalšie podrobnosti a funkcie v kontextovom menu."
 
 #~ msgid "The Icons view displays an icon for each file."
 #~ msgstr "Zobrazenie ikon zobrazí ikonu pre každý súbor."
@@ -8626,6 +8734,25 @@ msgstr "Víta vás %s"
 #~ "Zobrazenie zoznamu zobrazuje bočný panel so súbormi a zobrazovaciu oblasť "
 #~ "s údajmi vybraného súboru. Toto zobrazenie zodpovedá zobrazeniu v "
 #~ "emailoch a kontaktoch."
+
+#~ msgid ""
+#~ "The List view shows details like the size and date of change. Use the "
+#~ "checkboxes to select files. Click on a file to view further details and "
+#~ "functions in the pop-up."
+#~ msgstr ""
+#~ "Zobrazenie zoznamu zobrazuje podrobnosti ako veľkosť a dátum zmeny. "
+#~ "Pomocou zaškrtávacích políčok vyberte súbory. Kliknutím na súbor "
+#~ "zobrazíte ďalšie podrobnosti a funkcie v kontextovom menu."
+
+#~ msgid "The Tiles view"
+#~ msgstr "Zobrazenie Dlaždíc"
+
+#~ msgid ""
+#~ "The Tiles view shows a big icon for each file. Click on an icon to view "
+#~ "further details and functions in the pop-up."
+#~ msgstr ""
+#~ "Zobrazenie Dlaždíc zobrazí pre každý súbor veľkú ikonu. Kliknutím na "
+#~ "ikonu zobrazíte ďalšie podrobnosti a funkcie v kontextovom menu."
 
 #~ msgid "The account must be named"
 #~ msgstr "Účet musí byť pomenovaný"
@@ -9286,6 +9413,11 @@ msgstr "Víta vás %s"
 #~ "Ak chcete účastníkov pridať ručne, jednoducho zadajte platnú emailovú "
 #~ "adresu (napr. jan.kovac@example.com alebo \"Ján Kováč\" <jk@example.com>)"
 
+#~ msgid "To create a note, click on New > Add note in the toolbar."
+#~ msgstr ""
+#~ "Ak chcete vytvoriť novú poznámku, Nový > Pridať poznámku v paneli "
+#~ "nástrojov."
+
 #~ msgid "To create a note, click the icon at the top. Select Add note."
 #~ msgstr ""
 #~ "Poznámku vytvoríte kliknutím na ikonu hore. Vyberte Pridať poznámku."
@@ -9315,12 +9447,30 @@ msgstr "Víta vás %s"
 #~ "Pomocníka otvoríte kliknutím na ikonu systémového menu v pravej hornej "
 #~ "časti panela menu. Vyberte Pomocník."
 
+#~ msgid ""
+#~ "To select one of the views List, Icons or Squares, click on View on the "
+#~ "right side of the toolbar."
+#~ msgstr ""
+#~ "Jedno zo zobrazení Zoznam, Ikony alebo štvorčeky vyberiete kliknutím na "
+#~ "ikonu Zobrazenie na pravej strane panela nástrojov."
+
 #~ msgid "To send the E-Mail, click on Send on the upper right side."
 #~ msgstr "Email odošlete kliknutím na Odoslať na pravej hornej strane."
+
+#~ msgid "To upload a file, click on New > Upload new file in the toolbar."
+#~ msgstr ""
+#~ "Súbor nahráte kliknutím na Nový > Nahrať nový súbor v paneli nástrojov."
 
 #~ msgid "To view attachment you must first save your e-mail as a draft."
 #~ msgstr ""
 #~ "Ak chcete zobraziť prílohu, musíte najskôr uložiť váš email ako rozpísaný."
+
+#~ msgid ""
+#~ "To view further information, click on a file. A pop-up window displays "
+#~ "further details and functions."
+#~ msgstr ""
+#~ "Ďalšie informácie zobrazíte kliknutím na súbor. V kontextovom menu sa "
+#~ "zobrazia ďalšie podrobnosti a funkcie."
 
 #~ msgid "To..."
 #~ msgstr "Komu..."
@@ -9605,14 +9755,14 @@ msgstr "Víta vás %s"
 #~ msgid "Upload file"
 #~ msgstr "Nahrať nový súbor"
 
-#~ msgid "Upload new file"
-#~ msgstr "Nahrať nový súbor"
-
 #~ msgid "Upload new files"
 #~ msgstr "Nahrať nové súbory"
 
 #~ msgid "Upload new version"
 #~ msgstr "Nahrať novú verziu"
+
+#~ msgid "Uploading a file"
+#~ msgstr "Nahranie súboru"
 
 #~ msgid "Uploading folders is not supported."
 #~ msgstr "Nahrávanie priečinkov nie je podporované."
@@ -9652,6 +9802,15 @@ msgstr "Víta vás %s"
 
 #~ msgid "Use the expert mode?"
 #~ msgstr "Použiť expertný režim?"
+
+#~ msgid ""
+#~ "Use the folder tree to access own, public or shared files. If the folder "
+#~ "tree is hidden, click on View > Folder view on the right side of the "
+#~ "toolbar."
+#~ msgstr ""
+#~ "Použite strom priečinkov na prístup k vlastným, verejným alebo zdieľaným "
+#~ "súborom. Ak je strom  priečinkov skrytý, kliknite na Zobraziť > "
+#~ "Zobrazenie priečinkov na pravej strane panela nástrojov."
 
 #~ msgid ""
 #~ "Use this option when logging in to the server from a public or shared "

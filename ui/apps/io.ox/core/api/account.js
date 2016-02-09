@@ -218,6 +218,7 @@ define('io.ox/core/api/account', [
     };
 
     api.getType = function (id) {
+        if (id === 'virtual/all-unseen') return 'unseen';
         return typeHash[id];
     };
 

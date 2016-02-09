@@ -15,12 +15,10 @@
 
 /* vGrid */
 .vgrid {
-
-    .user-select(none);
     outline: none;
+    .user-select(none);
 
     .vgrid-scrollpane {
-
         overflow-x: hidden;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
@@ -28,44 +26,31 @@
         z-index: 1;
 
         &.has-focus > div {
-
             outline: none;
 
-            & .vgrid-cell{
-                outline: none;
-            }
+            & .vgrid-cell { outline: none; }
 
             & .vgrid-cell.selected {
 
                 background-color: @selected-background;
 
-                * {
-                    color: #fff !important;
-                }
-
+                * { color: #fff !important; }
             }
-
         }
 
         > div:focus {
 
             & .vgrid-cell.selected {
-
                 background-color: @selected-background;
 
-                * {
-                    color: #fff !important;
-                }
-
+                * { color: #fff !important; }
             }
-
         }
     }
 
     @toolbar-height: 45px;
 
     .vgrid-toolbar {
-
         position: absolute;
         display: none;
         right: 0;
@@ -76,12 +61,12 @@
         z-index: 2;
 
         a {
-            i { color: black; display: inline-block; }
             text-decoration: none;
+
+            i { color: black; display: inline-block; }
         }
 
         &.top {
-
             top: 0;
 
             & .dropdown-menu {
@@ -90,11 +75,9 @@
                 right: 0;
                 left: auto;
             }
-
         }
 
         &.bottom {
-
             bottom: 0;
 
             & .dropdown-menu {
@@ -103,11 +86,9 @@
                 right: 0;
                 left: auto;
             }
-
         }
 
         .grid-info {
-
             text-align: center;
             margin: 0 30px;
             .ellipsis();
@@ -116,11 +97,8 @@
                 font-size: 13px;
                 color: #888;
 
-                html.high-contrast & {
-                    color: @hc-gray;
-                }
+                html.high-contrast & { color: @hc-gray; }
             }
-
         }
 
         .grid-options.dropdown {
@@ -134,12 +112,15 @@
             width: 40px;
             height: 44px;
             line-height: 40px;
-            padding-left: 18px;
+            padding-left: 16px;
             display: none;
-            input {
-                // proper alignment for IE (see bug 35940)
-                margin: 0;
-                vertical-align: middle;
+            i {
+                color: #ccc;
+                margin-right: 8px;
+                width: 16px;
+                font-size: 18px;
+                position: relative;
+                top: 4px;
             }
         }
 
@@ -147,41 +128,26 @@
             float: left;
             padding: 0 8px;
         }
-
     }
 
-    &.editable .select-all {
-        display: inline-block;
-    }
+    &.editable .select-all { display: inline-block; }
 
-    &.top-toolbar .vgrid-toolbar.top, &.bottom-toolbar .vgrid-toolbar.bottom {
-        display: block;
-    }
+    &.top-toolbar .vgrid-toolbar.top,
+    &.bottom-toolbar .vgrid-toolbar.bottom { display: block; }
 
-    &.top-toolbar .vgrid-scrollpane {
-        top: @toolbar-height;
-    }
+    &.top-toolbar .vgrid-scrollpane { top: @toolbar-height; }
 
-    &.bottom-toolbar .vgrid-scrollpane {
-        bottom: @toolbar-height;
-    }
+    &.bottom-toolbar .vgrid-scrollpane { bottom: @toolbar-height; }
 
     &.editable {
-
-        .vgrid-cell-checkbox {
-            display: block;
-        }
-
+        .vgrid-cell-checkbox { display: block; }
         .vgrid-cell {
             padding-left: 48px; /* width + padding of .vgrid-cell-checkbox */
         }
-
     }
-
 }
 
 .vgrid-cell {
-
     overflow: hidden;
     position: absolute;
     right: 0;
@@ -191,16 +157,13 @@
     color: @text-color;
     background-color: @background; /* resolves hw accel anti-aliasing */
 
-    * {
-        .ellipsis();
-    }
+    * { .ellipsis(); }
 
-    &.selectable, &.hover {
+    &.selectable,
+    &.hover {
         cursor: pointer;
-    }
 
-    &.hover:hover {
-        background-color: mix(@text-color, @background, 1000%/255);
+        &:hover { background-color: mix(@text-color, @background, 1000%/255); }
     }
 
     &.vgrid-label {
@@ -213,32 +176,21 @@
         cursor: pointer;
         .vertical-gradient(@background, mix(@text-color, @background, 1500%/255));
 
-        &.left {
-            text-align: left;
-        }
+        &.left { text-align: left; }
 
     }
 
     &.selected {
-
         background-color: #ddd;
 
-        * {
-            -webkit-font-smoothing: antialiased;
-        }
-
+        * { -webkit-font-smoothing: antialiased; }
     }
 
-    &.relative {
-        position: relative;
-    }
+    &.relative { position: relative; }
 
-    &.no-border {
-        border-bottom: 0 none;
-    }
+    &.no-border { border-bottom: 0 none; }
 
     &.tail {
-
         border-bottom: 0 none;
         padding-top: 1em;
         padding-bottom: 1em;
@@ -247,33 +199,35 @@
             white-space: normal;
             line-height: 1.1em;
         }
-
     }
 
-    .title {
-        //show whitespace to visually match backend sort order
-        white-space: pre;
-    }
+    //show whitespace to visually match backend sort order
+    .title { white-space: pre; }
 
     .vgrid-cell-checkbox {
-
         position: absolute;
-        top: 3px;
+        top: 0;
         bottom: 0;
         left: 0;
         width: 48px;
         display: none;
         cursor: pointer;
-        padding: 7px 0 0 18px;
+        padding: 12px 0 0 16px;
 
-        label {
-            display: inline;
+        i.fa:before {
+            color: #ccc;
+            font-size: 18px;
+            content: "\f096"; // fa-check-square-o
         }
+    }
 
-        input {
-            border: 0 none;
-        }
+    &.selected .vgrid-cell-checkbox i.fa:before {
+        color: #aaa;
+        content: "\f14a"; // fa-check-square-o
+    }
 
+    .has-focus &.selected .vgrid-cell-checkbox i.fa:before {
+        color: rgba(255, 255, 255, 0.5);
     }
 
     .swipeDelete {
@@ -288,9 +242,8 @@
         font-size: 22px;
         width: 80px;
         text-align: center;
-        &:active {
-            background-color: darken(#DA4F49, 10%);
-        };
+
+        &:active { background-color: darken(#DA4F49, 10%); };
     }
 
 }

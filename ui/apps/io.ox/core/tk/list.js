@@ -206,15 +206,6 @@ define('io.ox/core/tk/list', [
 
             if (li.length === 0) return;
 
-            // preserve item?
-            if (isSelected && this.model.get('preserve')) {
-                // note: preserved items are no longer part of the collection, i.e.
-                // they won't respond to model changes! They are just visible until
-                // the selection is changed by the user
-                li.addClass('preserved');
-                return;
-            }
-
             // keep scroll position if element is above viewport
             if (li[0].offsetTop < this.el.scrollTop) {
                 this.el.scrollTop -= li.outerHeight(true);
@@ -537,8 +528,10 @@ define('io.ox/core/tk/list', [
                 });
             }
 
-            // respond to window resize (see bug 37728)
-            $(window).on('resize.list-view', this.onScroll.bind(this));
+            if (this.options.pagination) {
+                // respond to window resize (see bug 37728)
+                $(window).on('resize.list-view', this.onScroll.bind(this));
+            }
 
             this.on('dispose', function () {
                 $(window).off('resize.list-view');

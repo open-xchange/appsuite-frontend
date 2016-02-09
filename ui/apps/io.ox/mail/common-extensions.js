@@ -216,9 +216,13 @@ define('io.ox/mail/common-extensions', [
             );
         },
 
+        envelope: function () {
+            this.append($('<i class="fa seen-unseen-indicator" aria-hidden="true">'));
+        },
+
         unread: function (baton) {
             var isUnseen = util.isUnseen(baton.data);
-            if (isUnseen) this.append('<i class="icon-unread fa fa-envelope" aria-hidden="true">');
+            if (isUnseen) extensions.envelope.call(this);
         },
 
         answered: function (baton) {
@@ -297,6 +301,12 @@ define('io.ox/mail/common-extensions', [
                 // append to dom
                 node.append(view.render().$el);
             });
+        },
+
+        folderName: function (baton) {
+            if (!baton.app || !baton.app.folder || baton.app.folder.get() !== 'virtual/all-unseen') return;
+
+            this.append($('<span class="original-folder">').append(folderAPI.getTextNode(baton.data.original_folder_id)));
         },
 
         recipients: (function () {
@@ -448,7 +458,12 @@ define('io.ox/mail/common-extensions', [
                 };
 
             return function (baton) {
+
                 if (baton.attachments.length === 0) return $.when();
+
+                var headers = baton.model.get('headers') || {};
+                // hide attachments for our own share invitations
+                if (headers['X-Open-Xchange-Share-Type']) this.hide();
 
                 var $el = this;
 

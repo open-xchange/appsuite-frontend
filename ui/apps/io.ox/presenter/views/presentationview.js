@@ -65,6 +65,12 @@ define('io.ox/presenter/views/presentationview', [
     // defines how many pages are loaded before and after the visible pages
     var NON_VISIBLE_PAGES_TO_LOAD_BESIDE = 1;
 
+    var PDF_ERROR_NOTIFICATIONS = {
+        importError: { msg: gt('An error occurred loading the document so it cannot be displayed.'), icon: 'fa fa-exclamation-triangle' },
+        filterError: { msg: gt('An error occurred converting the document so it cannot be displayed.'), icon: 'fa fa-exclamation-triangle' },
+        passwordProtected: { msg: gt('This document is password protected and cannot be displayed.'), icon: 'fa fa-lock' }
+    };
+
     /**
      * Creates the HTML mark-up for a slide navigation button.
      *
@@ -936,23 +942,21 @@ define('io.ox/presenter/views/presentationview', [
             }
 
             // draw page nodes and apply css sizes
+            var docContainerHeight = this.documentContainer.height();
+            var pdfPageZoom = this.currentZoomFactor / 100;
+
             _.times(pageCount, function (index) {
-                var swiperSlide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
-                    documentPage = $('<div class="document-page">').attr('data-page', index + 1),
-                    pageSize = this.pdfView.getRealPageSize(index + 1, this.currentZoomFactor / 100);
+                // to prevent mobile Safari crashing due to rendering overload default the slide 'visibility' to 'hidden'
+                // and set only the rendered slides to 'visible'.
+                var pageNumber = index + 1;
+                var pageSize = this.pdfView.getRealPageSize(pageNumber, pdfPageZoom);
+                var pageWidth = pageSize.width;
+                var pageHeight = pageSize.height;
+                // create DOM from strings to optimize performance for presentations with lots of slides
+                var swiperSlide = '<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false" style="visibility: hidden; line-height: ' + docContainerHeight + 'px;">';
+                var documentPage = '<div class="document-page" data-page="' + pageNumber + '" width="' + pageWidth + '" height="' + pageHeight + '" style="width: ' + pageWidth + 'px; height: ' + pageHeight + 'px;"></div>';
 
-                this.documentContainer.append(
-                   swiperSlide.append(
-                       documentPage.attr(pageSize).css(pageSize)
-                   )
-                );
-
-                swiperSlide.css('line-height', swiperSlide.height() + 'px');
-
-                // to prevent mobile Safari crashing due to rendering overload
-                // set the visibility of the slides to hidden and set only
-                // the rendered slides to visible.
-                swiperSlide.css({ visibility: 'hidden' });
+                this.documentContainer.append(swiperSlide + documentPage + '</div>');
 
             }, this);
 
@@ -984,8 +988,28 @@ define('io.ox/presenter/views/presentationview', [
          */
         pdfDocumentLoadError: function (error) {
             console.warn('Presenter - failed loading PDF document. Cause: ', error.cause);
+            this.showErrorNotification(error);
             // reject the document load Deferred.
             this.documentLoad.reject();
+        },
+
+        /**
+         * Displays an error notification for the given PDF load error.
+         *
+         * @param {Object} error
+         *  the PDF load error data.
+         */
+        showErrorNotification: function (error) {
+            var errorData = PDF_ERROR_NOTIFICATIONS[error && error.cause];
+            var iconClass = errorData && errorData.icon || PDF_ERROR_NOTIFICATIONS.importError.icon;
+            var msg = errorData && errorData.msg || PDF_ERROR_NOTIFICATIONS.importError.msg;
+
+            var notificationNode = $('<div class="presenter-error-notification">').append(
+                                        $('<i>').addClass(iconClass),
+                                        $('<p class="apology">').text(msg)
+                                   );
+
+            this.$el.append(notificationNode);
         },
 
         /**

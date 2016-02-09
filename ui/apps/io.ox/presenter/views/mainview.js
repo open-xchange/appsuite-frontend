@@ -520,6 +520,27 @@ define('io.ox/presenter/views/mainview', [
         },
 
         /**
+         * Shows a notification to the participant who joined the presentation.
+         */
+        notifyPresentationJoin: function () {
+            var rtModel = this.app.rtModel,
+                userId = this.app.rtConnection.getRTUuid(),
+                presenterName = rtModel.get('presenterName');
+
+            if (rtModel.isPresenter(userId) || rtModel.isJoined(userId)) { return; }
+
+            this.showNotification({
+                //#. headline of a presentation end alert
+                headline: gt('Presentation join'),
+                //#. message text of a presentation end alert
+                //#. %1$d is the presenter name
+                //message: gt('%1$s has ended the presentation.', presenterName),
+                message: gt('Joining the presentation of %1$s.', presenterName),
+                duration: 6000
+            });
+        },
+
+        /**
          * Toggles full screen mode of the main view depending on the given state.
          *  A state of 'true' starts full screen mode, 'false' exits the full screen mode and
          *  'undefined' toggles the full screen state.
@@ -554,7 +575,6 @@ define('io.ox/presenter/views/mainview', [
          * Handle main view entering full screen mode
          */
         onEnterFullscreen: function () {
-            //console.info('Presenter - mainview - onEnterFullscreen()');
             this.fullscreen = true;
             this.sidebarBeforeFullscreen = this.sidebarView.opened;
             this.sidebarView.toggleSidebar(false);
@@ -565,10 +585,8 @@ define('io.ox/presenter/views/mainview', [
          * Handle main view leaving full screen mode
          */
         onExitFullscreen: function () {
-            //console.info('Presenter - mainview - onExitFullscreen()');
             this.fullscreen = false;
             this.sidebarView.toggleSidebar(this.sidebarBeforeFullscreen);
-
             this.presenterEvents.trigger('presenter:fullscreen:exit');
         },
 
@@ -576,7 +594,7 @@ define('io.ox/presenter/views/mainview', [
          * Handle main view full screen toggle errors
          */
         onErrorFullscreen: function (foo) {
-            console.info('Presenter - mainview - onErrorFullscreen()', foo);
+            console.info('Presenter - error toggle fullscreen, reason:', foo);
         },
 
         /**

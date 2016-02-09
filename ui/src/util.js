@@ -300,7 +300,29 @@
         get: function (path) {
             var l = location;
             return l.protocol + '//' + l.host + l.pathname.replace(/\/[^\/]*$/, '/' + path);
-        }
+        },
+
+        // replace [variables] in a string; usually an URL. Values get escaped.
+        vars: (function () {
+
+            function getVariables(customVariables) {
+                return _.extend(
+                    _(location).pick('hash', 'host', 'hostname', 'pathname', 'port', 'protocol', 'search'),
+                    _(_.url.hash()).pick('app', 'folder', 'id'),
+                    _(ox).pick('context_id', 'language', 'session', 'user', 'user_id'),
+                    customVariables
+                );
+            }
+
+            return function parse(url, customVariables) {
+                var hash = getVariables(customVariables);
+                // replace pattern "$word"
+                return String(url).replace(/\[(\w+)\]/g, function (all, key) {
+                    key = String(key).toLowerCase();
+                    return key in hash ? encodeURIComponent(hash[key]) : all;
+                });
+            };
+        }())
     };
 
     // extend underscore utilities

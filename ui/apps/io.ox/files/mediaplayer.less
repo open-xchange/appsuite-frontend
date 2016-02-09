@@ -45,11 +45,8 @@
 
             button {
                 margin-left: @playerMargin;
-                &.minimizemediaplayer {
-                    &:hover {
-                        color:#fff
-                    }
-                }
+
+                &.minimizemediaplayer:hover {color:#fff }
             }
         }
 
@@ -63,9 +60,8 @@
                 text-align: center;
                 font-size: 75px;
                 color: #333;
-                i {
-                    margin-left: 12px;
-                }
+
+                i { margin-left: 12px; }
             }
 
             .track {
@@ -82,12 +78,12 @@
         }
 
         .mediaplayer_player {
-
             width: 100%;
             margin-bottom: @playerMargin;
 
             .mejs-video {
                 margin-top: 43px;
+
                 video {
                     width: 100%;
                     max-height: 270px;
@@ -97,9 +93,8 @@
             .mejs-container {
                 max-height: 270px;
 
-                .mejs-mediaelement {
-                    text-align: center;
-                }
+                .mejs-mediaelement { text-align: center; }
+
                 // Controls Background
                 .mejs-controls {
 
@@ -109,18 +104,12 @@
 
                     .mejs-time-rail {
                         .mejs-time-total {
-                                background: @mediaplayerSliderBackground;
-                            .mejs-time-loaded {
-
-                                background: lighten(@link-color, 10%);
-                            }
-                        }
-                    }
-                    .mejs-horizontal-volume-slider {
-                        .mejs-horizontal-volume-total {
                             background: @mediaplayerSliderBackground;
+
+                            .mejs-time-loaded { background: lighten(@link-color, 10%); }
                         }
                     }
+                    .mejs-horizontal-volume-slider .mejs-horizontal-volume-total { background: @mediaplayerSliderBackground; }
                 }
             }
         }
@@ -142,9 +131,9 @@
                 padding: @playerMargin;
                 cursor: pointer;
                 .ellipsis();
-                &:hover {
-                    background-color: @playerHighlightColor;
-                }
+
+                &:hover { background-color: @playerHighlightColor; }
+
                 &.active {
                     color: @playerSelectionTextColor;
                     background-color: @playerSelectionColor;
@@ -197,23 +186,18 @@
             height: 84px;
 
             .album { font-size: 50px; }
-            .track { font-size: 14px; margin-top: -8px; }
+            .track {
+                font-size: 14px;
+                margin-top: -8px;
+            }
         }
 
         .mediaplayer_playlist {
             top: 128px;
             width: 294px;
 
-            li {
-                &:hover {
-                    background-color: @playerSecondaryColor;
-                }
-            }
+            li:hover { background-color: @playerSecondaryColor; }
         }
     }
 }
-.mejs-fullscreen .mediaplayer_container .mediaplayer_inner .mediaplayer_player {
-     .mejs-video video, .mejs-container {
-        max-height: 100% !important;
-    }
-}
+.mejs-fullscreen .mediaplayer_container .mediaplayer_inner .mediaplayer_player .mejs-video video, .mejs-container { max-height: 100% !important; }

@@ -32,6 +32,12 @@ define('io.ox/calendar/freebusy/controller', [
 
     'use strict';
 
+    // ensure cid is used in model and collection as idAttribute properly
+    // to ensure appointments of series are handled correctly (same id)
+    var FreebusyCollection = Backbone.Collection.extend({
+        model: Backbone.Model.extend({ idAttribute: 'cid' })
+    });
+
     var that = {
 
         FreeBusy: function (options) {
@@ -42,7 +48,7 @@ define('io.ox/calendar/freebusy/controller', [
                 // short-term fluent appointment cache
                 cache = {},
                 // dummy collection
-                emptyCollection = new Backbone.Collection([]),
+                emptyCollection = new FreebusyCollection([]),
                 // calendar views (day, workweek, week)
                 currentMode = '',
                 calendarViews = {},
@@ -141,11 +147,6 @@ define('io.ox/calendar/freebusy/controller', [
                 return model ? model.index : 0;
             }
 
-            function getResourceTitleByIndex(index) {
-                var model = self.participants.at(index);
-                return model ? model.get('display_name') : '';
-            }
-
             this.loadAppointments = function (useCache) {
                 var list = self.getParticipants(),
                     options = self.getCalendarView().getRequestParam();
@@ -167,11 +168,8 @@ define('io.ox/calendar/freebusy/controller', [
                                         obj.index = getColorByIndex(index);
                                         // add appointments without access to cache
                                         cache[_.cid(obj)] = obj;
-                                        // check participnat type
-                                        var part = list[index];
-                                        if (part && part.type === 3) {
-                                            obj.title = getResourceTitleByIndex(index);
-                                        }
+                                        // do not show private flag icon
+                                        obj.private_flag = false;
                                         return obj;
                                     })
                                     .value();
@@ -236,7 +234,7 @@ define('io.ox/calendar/freebusy/controller', [
             };
 
             // all appointments are stored in this collection
-            this.appointments = new Backbone.Collection([]);
+            this.appointments = new FreebusyCollection([]);
 
             this.getCalendarView = function () {
                 return calendarViews ? calendarViews[currentMode] : null;
@@ -304,7 +302,9 @@ define('io.ox/calendar/freebusy/controller', [
                         // whole-day / all-day / full-time
                         .addClass(model.get('full_time') ? 'fulltime' : '')
                         // temporary
-                        .addClass(model.get('shown_as') === 2 ? 'striped' : '');
+                        .addClass(model.get('shown_as') === 2 ? 'striped' : '')
+                        // no read access: disable (no click handler, default pointer, no hover)
+                        .addClass(!model.get('folder_id') ? 'disabled' : '');
                     return $el;
                 };
 

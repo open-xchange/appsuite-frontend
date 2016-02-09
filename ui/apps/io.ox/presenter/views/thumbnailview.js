@@ -28,12 +28,11 @@ define('io.ox/presenter/views/thumbnailview', [
 
         initialize: function (options) {
             _.extend(this, options);
+            // listen to slide change
             this.listenTo(this.presenterEvents, 'presenter:local:slide:change', this.selectThumbnail);
-            // listen to sidebar scroll
-            this.listenTo(this.presenterEvents, 'presenter:thumbnail:scroll', this.refreshThumbnails);
             // listen to window resize
             this.listenTo(this.presenterEvents, 'presenter:resize', this.refreshThumbnails);
-
+            // listen to presenter events that affect the visibility of this view
             this.listenTo(this.presenterEvents, 'presenter:presentation:start', this.onToggleVisibility);
             this.listenTo(this.presenterEvents, 'presenter:presentation:end', this.onToggleVisibility);
             this.listenTo(this.presenterEvents, 'presenter:presentation:pause', this.onToggleVisibility);
@@ -42,8 +41,11 @@ define('io.ox/presenter/views/thumbnailview', [
             this.listenTo(this.presenterEvents, 'presenter:fullscreen:enter', this.onToggleVisibility);
             this.listenTo(this.presenterEvents, 'presenter:fullscreen:exit', this.onToggleVisibility);
 
+            // bind scroll handler
+            this.$el.on('scroll', _.throttle(this.onThumbnailScroll.bind(this), 500));
             // dispose view on global dispose
             this.on('dispose', this.disposeView.bind(this));
+
             this.thumbnailLoadDef = Util.createAbortableDeferred($.noop);
             this.thumbnailImages = [];
             // thumbnail size defaults
@@ -54,14 +56,15 @@ define('io.ox/presenter/views/thumbnailview', [
 
         render: function () {
             var self = this;
-            this.$el.addClass('io-ox-busy');
+            this.$el.busy();
 
             function beginConvertSuccess(convertData) {
-                self.convertData = convertData;
-                _.times(convertData.pageCount, function (pageNumber) {
-                    var thumbnailNode = self.createThumbnailNode(pageNumber);
+                // create thumbnail nodes
+                _.times(convertData.pageCount, function (pageIndex) {
+                    var thumbnailNode = self.createThumbnailNode(pageIndex + 1);
                     self.$el.append(thumbnailNode);
                 });
+                // load initial visible thumbnails
                 self.loadThumbnails(convertData);
                 return convertData;
             }
@@ -69,7 +72,7 @@ define('io.ox/presenter/views/thumbnailview', [
                 return $.Deferred().reject(response);
             }
             function beginConvertFinished() {
-                self.$el.removeClass('io-ox-busy');
+                self.$el.idle();
             }
 
             this.app.mainView.presentationView.$el.addClass('thumbnails-opened');
@@ -78,6 +81,7 @@ define('io.ox/presenter/views/thumbnailview', [
                 .done(beginConvertSuccess)
                 .fail(beginConvertError)
                 .always(beginConvertFinished);
+
             return this;
         },
 
@@ -85,26 +89,33 @@ define('io.ox/presenter/views/thumbnailview', [
          * Creates a complete thumbnail node.
          *
          * @param {Number} pageNumber
-         *  the page that should be shown in the thumbnail.
+         *  the one-based page number that should be shown in the thumbnail.
          *
          * @returns {jQuery} thumbnailLink
          */
         createThumbnailNode: function (pageNumber) {
-            var thumbnailLink = $('<a class="presenter-thumbnail-link" tabindex="1">'),
-                thumbnailWrapper = $('<div class="wrapper">'),
-                thumbnail = $('<div class="presenter-thumbnail">'),
-                thumbnailImage = this.createDocumentThumbnailImage('thumbnail-image'),
-                thumbnailPageNumber = $('<div class="page-number">').text(pageNumber + 1);
+            var thumbnailLink = '<a class="presenter-thumbnail-link" tabindex="1" role="button" aria-selected="false" data-page="' + pageNumber + '">';
+            var thumbnailWrapper = '<div class="wrapper">';
+            var thumbnail = '<div class="presenter-thumbnail"></div>';
+            var thumbnailPageNumber = '<div class="page-number">' + pageNumber + '</div>';
+            var thumbnailImage = this.createDocumentThumbnailImage('thumbnail-image');
 
-            thumbnail.append(thumbnailImage).addClass('io-ox-busy');
+            // create DOM from strings to optimize performance for presentations with lots of slides
+            //
+            // <a class="presenter-thumbnail-link" tabindex="1" role="button" aria-selected="false" data-page="1">
+            //     <div class="wrapper">
+            //         <div class="presenter-thumbnail">
+            //             <img class="thumbnail-image">
+            //         </div>
+            //         <div class="page-number">1</div>
+            //     </div>
+            // </a>
+            var nodeStr = thumbnailLink + thumbnailWrapper + thumbnail + thumbnailPageNumber + '</div></a>';
+            var node = $(nodeStr);
+            node.find('.presenter-thumbnail').append(thumbnailImage);
             this.thumbnailImages.push(thumbnailImage);
-            thumbnailWrapper.append(thumbnail, thumbnailPageNumber);
-            thumbnailLink.append(thumbnailWrapper).attr({
-                'role': 'button',
-                'aria-selected': false,
-                'data-page': pageNumber + 1
-            });
-            return thumbnailLink;
+
+            return node;
         },
 
         /**
@@ -115,31 +126,33 @@ define('io.ox/presenter/views/thumbnailview', [
          *  the convert jobID and the total page count.
          */
         loadThumbnails: function (convertData) {
+            var thumbnailsToLoad = Util.getThumbnailsToLoad(this.thumbnailImages);
             var params = {
-                    action: 'convertdocument',
-                    convert_action: 'getpage',
-                    target_format: 'png',
-                    target_width: 200,
-                    target_zoom: 1,
-                    job_id: convertData.jobID,
-                    page_number: convertData.pageNumber,
-                    id: this.model.get('id'),
-                    folder_id: this.model.get('folder_id'),
-                    filename: this.model.get('filename'),
-                    version: this.model.get('version')
-                },
-                thumbnailNodes = this.$('.presenter-thumbnail'),
-                thumbnailsToLoad = Util.getVisibleNodes(thumbnailNodes);
+                action: 'convertdocument',
+                convert_action: 'getpage',
+                target_format: 'png',
+                target_width: 200,
+                target_zoom: 1,
+                job_id: convertData.jobID,
+                page_number: convertData.pageNumber,
+                id: this.model.get('id'),
+                folder_id: this.model.get('folder_id'),
+                filename: this.model.get('filename'),
+                version: this.model.get('version')
+            };
 
             _.each(thumbnailsToLoad, function (pageNumber) {
                 var image = this.thumbnailImages[pageNumber - 1];
                 if (image.src) {
                     return;
                 }
+
+                $(image.parentNode).busy();
+
                 params.page_number = pageNumber;
                 var thumbnailUrl = DocConverterUtils.getConverterUrl(params, { encodeUrl: true });
                 image.src = thumbnailUrl;
-            }.bind(this));
+            }, this);
         },
 
         /**
@@ -149,21 +162,31 @@ define('io.ox/presenter/views/thumbnailview', [
          *  the image HTML element.
          */
         createDocumentThumbnailImage: function (className) {
-            var image = new Image(),
-                self = this;
+            var self = this;
+            var image = new Image();
 
             image.className = className;
             image.onload = function () {
-                var $image = $(this),
-                    $parent = $image.parent(),
-                    width = $image.width(),
-                    height = $image.height(),
-                    ratio = width / height,
-                    defaultWidth = (width > height) ? self.thumbnailWidthLandscape : self.thumbnailWidthPortrait;
+                var $image = $(this);
+                var $parent = $image.parent();
+                var width = $image.width();
+                var height = $image.height();
+                var ratio = width / height;
+                var defaultWidth = (width > height) ? self.thumbnailWidthLandscape : self.thumbnailWidthPortrait;
 
-                $parent.width(defaultWidth).height(defaultWidth / ratio).removeClass('io-ox-busy');
+                $parent.width(defaultWidth).height(defaultWidth / ratio).idle();
             };
             return image;
+        },
+
+        /**
+         * Thumbnail scroll handler:
+         * - refresh thumbnails by loading visible ones.
+         *
+         * @param {jQuery.Event} event
+         */
+        onThumbnailScroll: function (/*event*/) {
+            this.refreshThumbnails();
         },
 
         /**
@@ -230,14 +253,16 @@ define('io.ox/presenter/views/thumbnailview', [
 
         /**
          * Selects a thumbnail of a particular page number.
+         *
          * @param {Number} pageNumber
          *  page number to be selected, 0-based.
          */
         selectThumbnail: function (pageNumber) {
             var thumbnail = this.$el.find('.presenter-thumbnail-link[data-page=' + (pageNumber + 1) + ']');
+
             if ((thumbnail.length > 0) && (!thumbnail.hasClass('selected'))) {
                 thumbnail.addClass('selected').attr('aria-selected', true);
-                thumbnail.siblings().removeClass('selected').attr('aria-selected', false);
+                thumbnail.siblings('.selected').removeClass('selected').attr('aria-selected', false);
                 // scroll if the selected thumbnail is not wholly visible
                 var thumbnailPane = this.$el,
                     thumbnailPaneScrollLeft = thumbnailPane.scrollLeft(),
@@ -260,7 +285,10 @@ define('io.ox/presenter/views/thumbnailview', [
          */
         refreshThumbnails: function () {
             this.thumbnailLoadDef.done(function (convertData) {
-                this.loadThumbnails(convertData);
+                if (this.$el.is(':visible')) {
+                    // load thumbnails only if thumbnailview is visible
+                    this.loadThumbnails(convertData);
+                }
             }.bind(this));
         },
 

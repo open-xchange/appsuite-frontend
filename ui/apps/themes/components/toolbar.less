@@ -34,9 +34,7 @@
         i {
             color: @toolbar-button-color;
 
-            html.high-contrast & {
-                color: @black; // HC
-            }
+            html.high-contrast & { color: @black; }
 
             &.accent-color {
                 background-color: @toolbar-button-accent;
@@ -50,21 +48,15 @@
         }
 
         &:hover {
-
             text-decoration:none !important; // IE 10 needs important otherwise it will be ignored See: #27913
 
-            html.high-contrast & {
-                background-color: @black; // HC
-            }
+            html.high-contrast & { background-color: @black; }
 
             i {
-
                 color: darken(@toolbar-button-color, 20%);
                 text-decoration: none;
 
-                html.high-contrast & {
-                    color: @white; // HC
-                }
+                html.high-contrast & { color: @white; }
 
                 &.accent-color {
                     background-color: darken(@toolbar-button-accent, 10%);
@@ -75,13 +67,11 @@
 
         @media (min-width: 481px), (min-device-width: 481px) {
             &:focus {
-
                 color: darken(@toolbar-button-color, 20%);
                 text-decoration: none;
                 background-color: @toolbar-focus-color;
 
                 i {
-
                     color: white;
                     text-decoration: none;
 
@@ -93,21 +83,17 @@
             }
         }
 
-        &.disabled {
+        &.disabled i {
+            color: #eee;
+            cursor: default;
 
-            i {
+            html.high-contrast & {
+                color: @hc-gray; // HC
+            }
 
-                color: #eee;
-                cursor: default;
-
-                html.high-contrast & {
-                    color: @hc-gray; // HC
-                }
-
-                &.accent-color {
-                    background-color: #fff;
-                    border-color: #fff;
-                }
+            &.accent-color {
+                background-color: #fff;
+                border-color: #fff;
             }
         }
     }
@@ -120,21 +106,22 @@
 .mobile-navbar {
     text-align: center;
     font-size: 15px;
+
     .navbar-action {
-        .ellipsis();
-        max-width: 24%;
-        top: 10px;
         position: absolute;
+        top: 10px;
+        max-width: 24%;
+        .ellipsis();
+
         &.left {
-            .fa-chevron-left {
-                margin-right: 3px;
-            }
             left: 3px;
+
+            .fa-chevron-left { margin-right: 3px; }
         }
-        &.right {
-            right: 16px;
-        }
+
+        &.right { right: 16px; }
     }
+
     .navbar-title {
         .ellipsis();
         margin: 10px 24%;
@@ -151,6 +138,7 @@
     margin: 0;
     border-top: 1px solid #ccc;
     width: 100%;
+
     .list-unstyled > li, .io-ox-action-link.mobile-toolbar-action {
         display: inline-block;
         font-size: 20px;
@@ -161,6 +149,7 @@
         margin: 0;
         vertical-align: middle;
     }
+
     .dropdown {
         display: inline-block;
         position: static;
@@ -223,12 +212,9 @@
 
 .window-toolbar {
 
-    & > ul{
-        margin: 0;
-    }
+    & > ul{ margin: 0; }
 
     & > a {
-
         color: @toolbar-link-color;
         display: inline-block;
         margin: 0 1em 0 0;
@@ -237,37 +223,22 @@
         text-decoration: none;
         outline: 0;
 
-        &:hover {
-            color: darken(@toolbar-link-color, 10%);
-        }
-
+        &:hover { color: darken(@toolbar-link-color, 10%); }
     }
 
     .dropdown-menu {
-
         text-align: left;
 
-        a {
-            margin-right: 0;
-        }
-
+        a { margin-right: 0; }
     }
 
-    .touch & a {
-        outline: 0;
-    }
+    .touch & a { outline: 0; }
 
-    .btn {
-        font-size: 13px;
-    }
+    .btn { font-size: 13px; }
 
-    .btn-group + .btn-group {
-        margin-left: 15px;
-    }
+    .btn-group + .btn-group { margin-left: 15px; }
 
-    .btn-primary + .btn-primary {
-        margin-left: 10px;
-    }
+    .btn-primary + .btn-primary { margin-left: 10px; }
 
     a.btn-primary, a.btn-primary:hover {
         color: white;
@@ -276,9 +247,8 @@
         text-decoration: none;
     }
 
-    a:hover, a.button:hover {
-        text-decoration: underline;
-    }
+    a:hover,
+    a.button:hover { text-decoration: underline; }
 }
 
 //
@@ -319,19 +289,14 @@
         padding: 0 @default-padding;
         text-decoration: none;
 
-        .folder-up {
-            &.fa-stack {
-                .fa-level-up {
-                    -webkit-transform: scale(-1.2, 1) translate(4px, 0);
-                    -ms-transform: scale(-1.2, 1) translate(4px, 0);
-                    transform: scale(-1.2, 1) translate(4px, 0);
-                }
-            }
+        .folder-up.fa-stack .fa-level-up {
+            -webkit-transform: scale(-1.2, 1) translate(4px, 0);
+            -ms-transform: scale(-1.2, 1) translate(4px, 0);
+            transform: scale(-1.2, 1) translate(4px, 0);
         }
     }
 
     &.visual-focus .toolbar-item {
-
         outline: 0;
 
         &:hover {
@@ -352,26 +317,18 @@
     &.toolbar-small {
         height: @height-small;
         line-height: @height-small - 1;
-        .toolbar-item {
-            line-height: @height-small - 1;
-        }
+
+        .toolbar-item { line-height: @height-small - 1; }
     }
 }
 
-.secondary-toolbar {
-    font-size: 13px;
-}
+.secondary-toolbar { font-size: 13px; }
 
 // landscape fullscreen on iPhone
 // iOS will go fullscreen and show an overaly with own buttons
 // we need to position our buttons around them
 @media (height: 320px) and (orientation:landscape) {
-
-    .window-head {
-        .toolbar-button {
-            float: right;
-        }
-    }
+    .window-head .toolbar-button { float: right; }
 }
 
 // small screens (mobile)
@@ -380,16 +337,11 @@
 // property
 @media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
 
-    .toolbar-button {
-        margin: 0;
-    }
+    .toolbar-button { margin: 0; }
 
-    #multi-select-toolbar {
-
-        .select-counter {
-            margin-left: 15px;
-            font-weight: bold;
-            color: #aaa;
-        }
+    #multi-select-toolbar .select-counter {
+        margin-left: 15px;
+        font-weight: bold;
+        color: #aaa;
     }
 }

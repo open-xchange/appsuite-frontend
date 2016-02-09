@@ -50,16 +50,21 @@ define('io.ox/core/folder/actions/move', [
         item: function (options) {
 
             var type = options.type || 'move',
-                settings = options.settings;
+                settings = options.settings,
+                // input is either source folder (move all) or a list of items (move)
+                input = options.source || options.list,
+                isMove = /^move/.test(type),
+                multiple = type === 'moveAll' || options.list.length > 1,
+                current = options.source || options.list[0].folder_id;
 
             function success() {
-                notifications.yell('success', options.list.length > 1 ? options.success.multiple : options.success.single);
+                notifications.yell('success', multiple ? options.success.multiple : options.success.single);
                 if (options.api.refresh) options.api.refresh();
             }
 
             function commit(target) {
 
-                if (type === 'move' && options.vgrid) options.vgrid.busy();
+                if (isMove && options.vgrid) options.vgrid.busy();
 
                 if (/^virtual/.test(target)) {
                     return notifications.yell('error', gt('You cannot move items to virtual folders'));
@@ -70,7 +75,8 @@ define('io.ox/core/folder/actions/move', [
                     return notifications.yell('error', gt('You cannot move items to this folder'));
                 }
 
-                options.api[type](options.list, target, options.all).then(
+                // support for move, moveAll, and copy
+                options.api[type](input, target, options.all).then(
                     function (response) {
                         // files API returns array on error; mail just a single object
                         // contacts a double array of undefined; tasks the new object.
@@ -84,8 +90,8 @@ define('io.ox/core/folder/actions/move', [
                             notifications.yell(response);
                         } else {
                             if (type === 'copy') success();
-                            api.reload(target, options.list);
-                            if (type === 'move' && options.vgrid) options.vgrid.idle();
+                            api.reload(input, target);
+                            if (isMove && options.vgrid) options.vgrid.idle();
                         }
                     },
                     notifications.yell
@@ -93,11 +99,9 @@ define('io.ox/core/folder/actions/move', [
             }
 
             if (options.target) {
-                if (options.list[0].folder_id !== options.target) commit(options.target);
+                if (current !== options.target) commit(options.target);
                 return;
             }
-
-            var current = options.list[0].folder_id;
 
             picker({
 
@@ -117,11 +121,16 @@ define('io.ox/core/folder/actions/move', [
                 },
 
                 disable: function (data, options) {
-                    var same = type === 'move' && data.id === current,
+                    var same = isMove && data.id === current,
                         create = api.can('create', data);
                     return same || !create || (options && /^virtual/.test(options.folder));
                 }
             });
+        },
+
+        all: function (options) {
+            // default API is mail API
+            this.item(_.extend({ api: mailAPI, module: 'mail', type: 'moveAll' }, options));
         },
 
         folder: function (id) {

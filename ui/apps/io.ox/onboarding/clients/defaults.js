@@ -12,8 +12,7 @@
  */
 
 define('io.ox/onboarding/clients/defaults', [
-    'gettext!io.ox/core/onboarding'
-], function (gt) {
+], function () {
 
     return {
         platforms: {
@@ -26,15 +25,17 @@ define('io.ox/onboarding/clients/defaults', [
             'android.tablet':   { icon: 'fa-tablet' },
             'apple.iphone':     { icon: 'fa-mobile' },
             'apple.ipad':       { icon: 'fa-tablet' },
-            'apple.mac':        { icon: 'fa-desktop' },
+            'apple.mac':        { icon: 'fa-laptop' },
             'windows.phone':    { icon: 'fa-mobile' },
-            'windows.desktop':  { icon: 'fa-desktop' }
+            'windows.desktop':  { icon: 'fa-laptop' }
         },
         scenarios: {
-            'davsync':      { icon: 'fa-calendar', name: gt('Calendar') },
-            'davmanual':    { icon: 'fa-wrench', name: gt('Calendar (Manually)') },
-            'mailsync':     { icon: 'fa-envelope-o', name: gt('Mail') },
-            'mailmanual':   { icon: 'fa-wrench', name: gt('Mail (Manually)') }
+            'davsync':          { icon: ['fa-calendar', 'fa-users'] },
+            'davmanual':        { icon: 'fa-wrench' },
+            'mailsync':         { icon: 'fa-envelope-o' },
+            'mailmanual':       { icon: 'fa-envelope-o' },
+            'mailappinstall':   { icon: 'fa-envelope-o' },
+            'driveappinstall':  { icon: 'fa-cloud' }
         }
     };
 });

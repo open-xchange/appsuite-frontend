@@ -171,6 +171,18 @@
 // tasks app
 //----------------------
 @task-priority:                         #ff4700;
+@badge-deferred-bg: #aaaaaa;
+@badge-deferred-color: @white;
+@badge-inprogress-bg: #aaaaaa;
+@badge-inprogress-color: @white;
+@badge-notstarted-bg: #aaaaaa;
+@badge-notstarted-color: @white;
+@badge-done-bg: @green;
+@badge-done-color: @white;
+@badge-waiting-bg: #aaaaaa;
+@badge-waiting-color: @white;
+@badge-overdue-bg: @blue;
+@badge-overdue-color: @white;
 
 // calendar app
 //----------------------
@@ -231,9 +243,9 @@
 
 // wizard & tours
 @wizard-backdrop-color: rgba(90, 186, 255, 0.20);
-@wizard-hotspot-color: rgba(92, 199, 255, 1.00);
-@wizard-pulse-color: rgba(92, 199, 255, 0.70);
-@wizard-pulse-border-color: rgba(92, 199, 255, 1.00);
+@wizard-hotspot-color: #FD057C;
+@wizard-pulse-color: fade(@wizard-hotspot-color, 70%);
+@wizard-pulse-border-color: @wizard-hotspot-color;
 
 // mobile
 //----------------------
@@ -256,6 +268,6 @@
 
 // premium toolbar colors
 @premium-toolbar-background:            darken(@brand-primary, 10%);
-@premium-toolbar-header-background:     @brand-primary;
+@premium-toolbar-header-background:     lighten(@premium-toolbar-background, 10%);
 @premium-toolbar-link-color:            #fff;
-@premium-toolbar-header-color:          lighten(@brand-primary, 35%);
+@premium-toolbar-header-color:          lighten(@premium-toolbar-header-background, 35%);

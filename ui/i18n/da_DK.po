@@ -58,6 +58,11 @@ msgid_plural "%1$d attachments"
 msgstr[0] "%1$d vedhæftning"
 msgstr[1] "%1$d vedhæftninger"
 
+#. %1$d and %2$d are both numbers; usually > 100; never singular
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d contacts found. This list is limited to %2$d items."
+msgstr ""
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d day"
@@ -69,6 +74,7 @@ msgstr[1] "%1$d dage"
 #. %1$d is the number of days
 #. %2$s is the text for the remainder of the last day
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%1$d day, %2$s"
 msgid_plural "%1$d days, %2$s"
 msgstr[0] "%1$d dag, %2$s"
@@ -78,6 +84,7 @@ msgstr[1] "%1$d dage, %2$s"
 #. %1$d is the number of days
 #. %2$s is the text for the remainder of the last day
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%1$d day, %2$s"
 msgid_plural "%1$d days, %2$s"
@@ -99,6 +106,7 @@ msgstr[1] "%1$d timer"
 #. %1$d is the number of hours
 #. %2$s is the text for the remainder of the last hour
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%1$d hour and %2$s"
 msgid_plural "%1$d hours and %2$s"
 msgstr[0] "%1$d time og %2$s"
@@ -108,6 +116,7 @@ msgstr[1] "%1$d timer og %2$s"
 #. %1$d is the number of hours
 #. %2$s is the text for the remainder of the last hour
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%1$d hour and %2$s"
 msgid_plural "%1$d hours and %2$s"
@@ -217,6 +226,7 @@ msgstr "%1$s %2$s"
 #. %5$s Appointment Organizer
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
+#, c-format
 msgid "%1$s %2$s %3$s %4$s %5$s."
 msgstr ""
 "%1$s\n"
@@ -229,6 +239,7 @@ msgstr ""
 #. %3$s Appointment time
 #. %4$s Appointment location
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, c-format
 msgid "%1$s %2$s %3$s %4$s."
 msgstr ""
 "%1$s\n"
@@ -240,6 +251,7 @@ msgstr ""
 #. %3$s task status
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
+#, c-format
 msgid "%1$s %2$s %3$s."
 msgstr ""
 "%1$s\n"
@@ -249,6 +261,7 @@ msgstr ""
 #. %1$s task title
 #. %2$s task end date
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
+#, c-format
 msgid "%1$s %2$s."
 msgstr ""
 "%1$s\n"
@@ -258,6 +271,7 @@ msgstr ""
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js
+#, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (foreløbig)"
 
@@ -321,6 +335,7 @@ msgstr[1] "%1$s elementer valgt"
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
+#, c-format
 msgid "%1$s of %2$s"
 msgstr "%1$s af %2$s"
 
@@ -341,6 +356,7 @@ msgstr "%1$s anbefaler dette link:"
 #. %1$s is the start date
 #. %2$s is the end date
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, c-format
 msgid "%1$s to %2$s"
 msgstr "Fra %1$s til %2$s"
 
@@ -386,6 +402,7 @@ msgstr "%3$s %2$s, %1$s"
 #. %d is the number of days
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/core/date.js
 #: module:io.ox/core
+#, c-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d dag"
@@ -394,6 +411,7 @@ msgstr[1] "%d dage"
 #. Reminder (objective case): in X days
 #. %d is the number of days
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%d day"
 msgid_plural "%d days"
@@ -403,6 +421,7 @@ msgstr[1] "%d dage"
 #. General duration (nominative case): X hours
 #. %d is the number of hours
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d time"
@@ -411,6 +430,7 @@ msgstr[1] "%d timer"
 #. Reminder (objective case): in X hours
 #. %d is the number of hours
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%d hour"
 msgid_plural "%d hours"
@@ -421,6 +441,7 @@ msgstr[1] "%d timer"
 #. %d is the number of minutes
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d minut"
@@ -429,6 +450,7 @@ msgstr[1] "%d minutter"
 #. Reminder (objective case): in X minutes
 #. %d is the number of minutes
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%d minute"
 msgid_plural "%d minutes"
@@ -438,6 +460,7 @@ msgstr[1] "%d minutter"
 #. General duration (nominative case): X weeks
 #. %d is the number of weeks
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] "%d uge"
@@ -446,6 +469,7 @@ msgstr[1] "%d uger"
 #. Reminder (objective case): in X weeks
 #. %d is the number of weeks
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%d week"
 msgid_plural "%d weeks"
@@ -648,10 +672,9 @@ msgstr "Konto opdateret"
 msgid "Accounts"
 msgstr "Konti"
 
-#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/core/extPatterns/links.js
+#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -659,6 +682,11 @@ msgstr "Konti"
 #: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "Actions"
 msgstr "Handlinger"
+
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+msgid "Actions. Use cursor keys to navigate."
+msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -958,6 +986,12 @@ msgstr "Alle filer er blevet slettet"
 msgid "All folders"
 msgstr "Alle mapper"
 
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All messages have been deleted"
+msgstr "Alle filer er blevet slettet"
+
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr ""
@@ -980,9 +1014,16 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Tillad forhåndsindlæsning af eksternt linkede billeder"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 #, fuzzy
 #| msgid "An error occurred while loading the document."
 msgid "An error occurred converting the document so it cannot be displayed."
+msgstr "Der opstod en fejl under indlæsningen af dokumentet."
+
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "An error occurred while loading the document."
+msgid "An error occurred loading the document so it cannot be displayed."
 msgstr "Der opstod en fejl under indlæsningen af dokumentet."
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -1017,6 +1058,10 @@ msgstr "Jubilæum"
 #: module:io.ox/settings
 msgid "Any recipient"
 msgstr "Enhver modtager"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "App Store"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Append vCard"
@@ -1210,6 +1255,12 @@ msgstr "Gem e-mail-kladder automatisk"
 msgid "Automatic Configuration"
 msgstr "Automatisk log ud"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic sign out"
+msgid "Automatic Configuration (via SMS)"
+msgstr "Automatisk log ud"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "Automatisk åbning af påmindelsesområde"
@@ -1231,10 +1282,6 @@ msgid ""
 "sending"
 msgstr ""
 "Saml automatisk kontakter i mappen \"Indsamlede adresser\" imens der sendes"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Automatically configure your device by clicking the button below."
-msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
@@ -1273,26 +1320,6 @@ msgstr "Tilbage"
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "Back to appointment"
 msgstr "Tilbage til aftale"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
-#, fuzzy
-#| msgid "Back to sign in"
-msgid "Back to devices"
-msgstr "Tilbage til log-ind"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Back to sign in"
-msgid "Back to modules"
-msgstr "Tilbage til log-ind"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
-#, fuzzy
-#| msgid "your platform"
-msgid "Back to platforms"
-msgstr "din platform"
 
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid "Back to sign in"
@@ -1411,7 +1438,6 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "Kalender"
 
@@ -1422,10 +1448,6 @@ msgctxt "app"
 msgid "Calendar"
 msgstr "Kalender"
 
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Calendar (Manually)"
-msgstr ""
-
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
 msgstr "Kalendervisning"
@@ -1434,6 +1456,7 @@ msgstr "Kalendervisning"
 msgid "Calendar:"
 msgstr "Kalender:"
 
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
@@ -1444,7 +1467,7 @@ msgstr "Kalender:"
 #: apps/io.ox/calendar/week/perspective.js
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js apps/io.ox/contacts/edit/main.js
-#: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js module:io.ox/core
+#: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js
 #: apps/io.ox/core/export/export.js apps/io.ox/core/folder/actions/add.js
 #: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
@@ -1540,7 +1563,8 @@ msgid "Cart is empty."
 msgstr "Indkøbsvogn er tom."
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "Mobiltelefon"
 
@@ -1706,15 +1730,14 @@ msgstr "Tryk for at prøve igen."
 msgid "Click to upload image"
 msgstr "Klik for at overføre billede"
 
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
 msgstr ""
 
-#: apps/io.ox/core/about/about.js module:io.ox/core
-#: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
+#: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/wizard.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -1833,6 +1856,12 @@ msgstr "Betingelser"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
+#| msgid "Confirmation message"
+msgid "Configuration Email"
+msgstr "Bekræftelsesbesked"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
 #| msgid "Confirmed"
 msgid "Configure now"
 msgstr "Bekræftet"
@@ -1857,6 +1886,12 @@ msgstr "Konflikter med ressourcer kan ikke ignoreres"
 #: apps/io.ox/calendar/view-grid-template.js module:io.ox/calendar
 msgid "Conflicts:"
 msgstr "Konflikter:"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Selecting a view"
+msgid "Connect your Device"
+msgstr "Vælger en visning"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Connector for Microsoft Outlook®"
@@ -2289,10 +2324,9 @@ msgstr "Slet konto"
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #, fuzzy
-#| msgctxt "folder"
-#| msgid "Deleted messages"
-msgid "Delete all %1$d messages"
-msgstr "Slettet beskeder"
+#| msgid "Show all %1$d messages in inbox"
+msgid "Delete all messages in this folder"
+msgstr "Vis alle %1$d beskeder i indbakke"
 
 #. object permissions - delete
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -2488,10 +2522,10 @@ msgstr "Distributionsliste"
 msgid "Distribution List Details"
 msgstr "Distributionslistedetaljer"
 
-#: apps/io.ox/contacts/common-extensions.js module:io.ox/contacts
-#: apps/io.ox/contacts/main.js apps/io.ox/contacts/model.js
-#: apps/io.ox/contacts/view-detail.js apps/io.ox/participants/model.js
-#: module:io.ox/core
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/contacts/common-extensions.js apps/io.ox/contacts/main.js
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
+#: apps/io.ox/participants/model.js module:io.ox/core
 msgid "Distribution list"
 msgstr "Distributionsliste"
 
@@ -2787,6 +2821,7 @@ msgstr "Senest"
 
 #. %1$s due date of a task
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, c-format
 msgid "Due %1$s"
 msgstr "Senest %1$s"
 
@@ -2918,7 +2953,6 @@ msgid "Editor"
 msgstr "Editor"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Email"
 msgstr "E-mail"
 
@@ -3015,8 +3049,6 @@ msgstr "Aktivér"
 msgid "Enable for the following addresses"
 msgstr "Aktiveret for følgende adresser"
 
-#. used as a label for the end time of an appointment, try to keep short because it's used in a compact printing view
-#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "End"
 msgstr "Slut"
@@ -3081,6 +3113,10 @@ msgstr "Fejl"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Error log"
 msgstr "Fejllog"
+
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Error while loading message content"
+msgstr ""
 
 #: apps/io.ox/mail/actions/invite.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -3203,6 +3239,12 @@ msgstr "Udvid form"
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Expand timeframe by one month"
 msgstr "Udvid tidsramme med en måned"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Expert mode"
+msgid "Expert user?"
+msgstr "Ekspert mode"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 #, fuzzy
@@ -3664,6 +3706,10 @@ msgid "Get started here"
 msgstr "Kom i gang her"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Get the App from %1$s"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Get your device configured by email."
 msgstr ""
 
@@ -3683,6 +3729,12 @@ msgstr "God morgen %s"
 #, fuzzy
 #| msgid "Add Google Drive account"
 msgid "Google Drive"
+msgstr "Tilføj »Google Drive«-konto"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Play"
 msgstr "Tilføj »Google Drive«-konto"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -3804,6 +3856,12 @@ msgstr "Skjul detaljer"
 msgid "Hide names"
 msgstr "Skjul navne"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced filters"
+msgid "Hide options for expert users."
+msgstr "Vis avanceret filtre"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
 msgstr "Skjul forespørgslens krop"
@@ -3898,6 +3956,10 @@ msgid ""
 msgstr ""
 "Hvis du ændrer adgangskoden, bliver du logget ud. Sørg venligst for at alt "
 "er gemt og lukket."
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "If you know what you are doing...just setup your account manually!"
+msgstr ""
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid ""
@@ -3996,6 +4058,14 @@ msgstr "Inkludér distributionslister"
 msgid "Incoming server"
 msgstr "Indkomne server"
 
+#. error message when server returns incomplete
+#. configuration for client onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic sign out"
+msgid "Incomplete configuration."
+msgstr "Automatisk log ud"
+
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr "Inkonsistente datoer"
@@ -4048,6 +4118,10 @@ msgid ""
 msgstr ""
 "Installér denne web-app på din %1$s: Tap %2$s og så %3$s'Tilføj til Home "
 "Screen'%4$s"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Installation"
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Instant Messenger 1"
@@ -4177,6 +4251,14 @@ msgstr "Deltag i præsentation"
 #, fuzzy
 #| msgid "Join presentation"
 msgid "Join the presentation"
+msgstr "Deltag i præsentation"
+
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Join presentation"
+msgid "Joining the presentation of %1$s."
 msgstr "Deltag i præsentation"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -4311,6 +4393,12 @@ msgstr "Forlad præsentation"
 msgid "Letters • Symbols"
 msgstr "Bogstaver • Symboler"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid ""
+"Let´s automatically configure your device, by clicking the button below. It"
+"´s that simple!"
+msgstr ""
+
 #. Emoji category
 #. Japanese: 日常
 #. Rather "everyday life". Contains: Cars, trucks, plane, buildings, flags
@@ -4415,7 +4503,6 @@ msgid "MM"
 msgstr "MM"
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Mail"
 msgstr "E-mail"
 
@@ -4425,10 +4512,6 @@ msgstr "E-mail"
 msgctxt "app"
 msgid "Mail"
 msgstr "E-mail"
-
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Mail (Manually)"
-msgstr ""
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Mail Details"
@@ -4461,6 +4544,7 @@ msgstr "E-mail mængdekvote"
 #. %1$s mail sender
 #. %2$s mail subject
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#, c-format
 msgid "Mail from %1$s, %2$s"
 msgstr "E-mail fra %1$s om %2$s"
 
@@ -4689,6 +4773,7 @@ msgstr "Minimér"
 
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+#, c-format
 msgid "Minimum password length is %1$d."
 msgstr "Adgangskoder skal bestå af mindst %1$d tegn."
 
@@ -4760,16 +4845,22 @@ msgstr "Der blev fundet flere elementer end de %1$s viste"
 msgid "Move"
 msgstr "Flyt"
 
-#. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 #, fuzzy
-#| msgid "Show all %1$d messages in inbox"
-msgid "Move all %1$d messages to another folder"
-msgstr "Vis alle %1$d beskeder i indbakke"
+#| msgid "Close all"
+msgid "Move all"
+msgstr "Luk alle"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Move all messages"
 msgstr "Flyt alle beskeder"
+
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show all %1$d messages in inbox"
+msgid "Move all messages to another folder"
+msgstr "Vis alle %1$d beskeder i indbakke"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
@@ -4788,6 +4879,7 @@ msgstr "Vælg flere"
 msgid "Music"
 msgstr "Musik"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My address books"
 msgstr "Mine adressebøger"
@@ -5087,6 +5179,7 @@ msgstr "Ingen langsomme forespørgsler"
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail apps/io.ox/mail/util.js
 #: module:io.ox/core apps/plugins/notifications/mail/register.js
 #: module:plugins/notifications
+#, c-format
 msgid "No subject"
 msgstr "Intet emne"
 
@@ -5256,6 +5349,12 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/backbone/mini-views/help.js module:io.ox/core
+#, fuzzy
+#| msgid "Opening the help"
+msgid "Online help"
+msgstr "Åbning af hjælp"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "Viser kun elementer relaterede til mappen »%1$s«"
@@ -5399,6 +5498,10 @@ msgstr "Rækkefølge"
 msgid "Organizer"
 msgstr "Organisér"
 
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+msgid "Original mail"
+msgstr ""
+
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
 msgstr "Anden adresse"
@@ -5466,6 +5569,7 @@ msgstr "Adgangskode"
 #. %1$s is the minimum password length
 #. %2$s is the maximum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+#, c-format
 msgid "Password length must be between %1$d and %2$d characters."
 msgstr "Adgangskoder skal bestå af %1$d til %2$d tegn."
 
@@ -5734,6 +5838,7 @@ msgstr "Indtast venligst korrekt adgangskode"
 
 #. %1$s the missing request parameter
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#, c-format
 msgid "Please enter the following data: %1$s"
 msgstr "Indtast venligst følgende data: %1$s"
 
@@ -5744,6 +5849,12 @@ msgstr "Indtast venligst værdien imellem 0 og 100."
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please enter your credentials."
 msgstr "Indtast venligst dine loginoplysninger."
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid ""
+"Please enter your mobile phone number, and we´ll send you a link to "
+"automatically configure your iOS device! It´s that simple!"
+msgstr ""
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please enter your password."
@@ -5848,6 +5959,10 @@ msgstr "Slå en statusopdatering op"
 msgid "Postcode"
 msgstr "Postnummer"
 
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+msgid "Premium"
+msgstr ""
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Premium features"
 msgstr ""
@@ -5874,6 +5989,13 @@ msgstr "Præsentation afsluttet"
 #: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 msgid "Presentation is paused."
 msgstr "Præsentation på pause."
+
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Presentation end"
+msgid "Presentation join"
+msgstr "Præsentation afsluttet"
 
 #. headline of a presentation start alert
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
@@ -6030,6 +6152,7 @@ msgstr "Fremgang"
 #. %1$s how much of a task is completed in percent, values from 0-100
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 #: apps/io.ox/tasks/view-grid-template.js
+#, c-format
 msgid "Progress %1$s %"
 msgstr "Fremgang %1$s %"
 
@@ -6046,6 +6169,7 @@ msgstr "Fremgang skal være et gyldigt nummer imellem 0 og 100"
 msgid "Properties"
 msgstr "Egenskaber"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public address books"
 msgstr "Offentlige adressebøger"
@@ -6095,7 +6219,8 @@ msgstr "Købsbekræftelse"
 msgid "Purple"
 msgstr "Lilla"
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Quick reply"
 msgstr ""
 
@@ -6126,6 +6251,7 @@ msgstr ""
 #. %1$d is current raiting
 #. %2$d is the maximum rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+#, c-format
 msgid ""
 "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
 "arrowkeys to adjust your rating."
@@ -6331,6 +6457,7 @@ msgstr "Påmindelsesdato"
 
 #. %1$s reminder date of a task
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, c-format
 msgid "Reminder date %1$s"
 msgstr "Påmindelsesdato %1$s"
 
@@ -6520,10 +6647,6 @@ msgid "Running applications"
 msgstr "Kør programmer"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "SMS"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP login"
 msgstr ""
 
@@ -6632,6 +6755,7 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Planlægning"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/desktop.js module:io.ox/core apps/io.ox/core/main.js
 #: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
 #: apps/io.ox/find/view-tokenfield.js
@@ -6673,6 +6797,14 @@ msgctxt "dropdown"
 msgid "Select"
 msgstr "Vælg"
 
+#. Context: Add selected contacts; German "Auswählen", for example
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Select"
+msgctxt "select-contacts"
+msgid "Select"
+msgstr "Vælg"
+
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid ""
 "Select a checkbox to define a custom name for that address; otherwise the "
@@ -6687,6 +6819,12 @@ msgstr ""
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Select all"
 msgstr "Vælg alle"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Delete contact"
+msgid "Select contacts"
+msgstr "Slet kontakt"
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -6703,16 +6841,6 @@ msgstr "Vælg fil"
 #: module:io.ox/settings
 msgid "Select folder"
 msgstr "Vælg mappe"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-msgid "Select the platform of your device:"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Selecting a view"
-msgid "Select your device"
-msgstr "Vælger en visning"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
@@ -6760,10 +6888,6 @@ msgstr "Send e-mail"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "Send e-mail til alle deltagere"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Send me the profile data by SMS."
-msgstr ""
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
@@ -6846,10 +6970,6 @@ msgstr "Indstillinger"
 msgid "Settings for advanced users"
 msgstr "Vis avanceret filtre"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Setup your profile manually."
-msgstr ""
-
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files apps/plugins/portal/xing/actions.js
@@ -6928,6 +7048,7 @@ msgstr "Delte aftaler"
 msgid "Shared activity"
 msgstr "Delt aktivitet"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
 msgstr "Delte adressebøger"
@@ -7220,8 +7341,6 @@ msgstr "Standard mapper"
 msgid "Standard timezone"
 msgstr "Standardtidszone"
 
-#. used as a label for the start time of an appointment, try to keep short because it's used in a compact printing view
-#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
@@ -7235,6 +7354,12 @@ msgstr "Startdato"
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid "Start date timezone"
 msgstr "Tidszone for startdato"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Shared address books"
+msgid "Start in global address book"
+msgstr "Delte adressebøger"
 
 #. 'start presentation' dropdown menu entry to start a local only presentation where no remote participants would be able to join.
 #: apps/io.ox/presenter/actions.js module:io.ox/presenter
@@ -7734,6 +7859,10 @@ msgstr "Denne mappe er blevet ryddet op."
 msgid "The folder has been emptied"
 msgstr "Mappen er blevet tømt"
 
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "The following actions apply to all messages (%1$d) in this folder:"
+msgstr ""
+
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
@@ -7753,6 +7882,7 @@ msgstr "De følgende produkter vil blive aktiveret nu:"
 #. message text of an alert box if joining a presentation fails
 #. %1$d is the name of the user who started the presentation
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, c-format
 msgid ""
 "The limit of participants has been reached. Please contact the presenter "
 "%1$s."
@@ -8000,6 +8130,7 @@ msgid "This distribution list has been added to the portal"
 msgstr "Denne distributionsliste er blevet tilføjet portalen"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 msgid "This document is password protected and cannot be displayed."
 msgstr "Dette dokument er beskyttet med en adgangskode og kan ikke vises."
 
@@ -8214,10 +8345,6 @@ msgstr ""
 msgid "Today"
 msgstr "I dag"
 
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-msgid "Toggle checkboxes"
-msgstr "Skift afkrydsningsfelter"
-
 #. button label for toggling fullscreen mode
 #. button tooltip for toggling fullscreen mode
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -8235,6 +8362,10 @@ msgstr "Slå panel til/fra"
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "I morgen"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Too many contacts in your address book."
+msgstr ""
 
 #. Emoji category
 #. Japanese: ツール
@@ -8381,6 +8512,12 @@ msgstr "Unavngivet abonnement"
 msgid "Unread"
 msgstr "Ulæst"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+#, fuzzy
+#| msgid "Your messages"
+msgid "Unread messages"
+msgstr "Dine beskeder"
+
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Ulæst: %1$d"
@@ -8487,6 +8624,13 @@ msgid ""
 msgstr ""
 "Brug piltaster for at ændre elementets position.  Virtuel cursor skal være "
 "slået fra."
+
+#. Tooltip for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#, fuzzy
+#| msgid "Use custom name"
+msgid "Use cursor keys to navigate"
+msgstr "Brug tilpasset navn"
 
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
@@ -8703,6 +8847,12 @@ msgstr "Velkommen.  Giv venligst din respons om dette produkt"
 #, fuzzy
 #| msgid "Do you really want to discard your changes?"
 msgid "What do you want to use?"
+msgstr "Vil du virkelig kassere dine ændringer?"
+
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you really want to discard your changes?"
+msgid "What type of device do you want to configure?"
 msgstr "Vil du virkelig kassere dine ændringer?"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -8922,6 +9072,7 @@ msgstr "Du har ingen opgaver som snart forfalder eller er forfaldet."
 
 #. %1$d number of notifications
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
+#, c-format
 msgid "You have %1$d notification."
 msgid_plural "You have %1$d notifications."
 msgstr[0] "Du har %1$d underretning."
@@ -9162,6 +9313,7 @@ msgstr ""
 
 #. %1$s are some example characters
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+#, c-format
 msgid ""
 "Your password is more secure if it also contains capital letters, numbers, "
 "and special characters like %1$s"
@@ -9872,9 +10024,6 @@ msgstr "åååå"
 #~ msgid "Addresses"
 #~ msgstr "Adresser"
 
-#~ msgid "Advanced Facets"
-#~ msgstr "Avancerede kategorier"
-
 #~ msgid "Advanced facets block was closed."
 #~ msgstr "Blokken avancerede kategorier blev lukket."
 
@@ -9884,6 +10033,16 @@ msgstr "åååå"
 #, fuzzy
 #~ msgid "Advanced options"
 #~ msgstr "Avancerede indstillinger"
+
+#, fuzzy
+#~| msgid "Advanced Facets"
+#~ msgid "Advanced user?"
+#~ msgstr "Avancerede kategorier"
+
+#, fuzzy
+#~| msgid "Assistant"
+#~ msgid "Afghanistan"
+#~ msgstr "Assistent"
 
 #~ msgid "Allow us to use your %s account here"
 #~ msgstr "Giv os lov til at bruge din %s-konto her"
@@ -9916,6 +10075,11 @@ msgstr "åååå"
 #~ msgid "Are you sure?"
 #~ msgstr "Er du sikker?"
 
+#, fuzzy
+#~| msgid "Attention"
+#~ msgid "Argentina"
+#~ msgstr "Bemærk"
+
 #~ msgid "Ask for return receipt"
 #~ msgstr "Bed om en leveringskvittering"
 
@@ -9944,9 +10108,6 @@ msgstr "åååå"
 #~ msgid "Attachments   "
 #~ msgstr "Vedhæftninger..."
 
-#~ msgid "Attention"
-#~ msgstr "Bemærk"
-
 #~ msgid "Auto Logout"
 #~ msgstr "Automatisk logud"
 
@@ -9969,6 +10130,21 @@ msgstr "åååå"
 
 #~ msgid "Automatically wrap plain text after character:"
 #~ msgstr "Ombryd automatisk efter tegnet:"
+
+#, fuzzy
+#~| msgid "Back to sign in"
+#~ msgid "Back to devices"
+#~ msgstr "Tilbage til log-ind"
+
+#, fuzzy
+#~| msgid "Back to sign in"
+#~ msgid "Back to modules"
+#~ msgstr "Tilbage til log-ind"
+
+#, fuzzy
+#~| msgid "your platform"
+#~ msgid "Back to platforms"
+#~ msgstr "din platform"
 
 #~ msgid "Bcc"
 #~ msgstr "Blind kopi til (Bcc)"
@@ -10001,6 +10177,11 @@ msgstr "åååå"
 #~ msgid "Change subscription"
 #~ msgstr "Ændr abonnement"
 
+#, fuzzy
+#~| msgid "Children"
+#~ msgid "Chile"
+#~ msgstr "Børn"
+
 #~ msgid "Cleaning up... This may take a few seconds."
 #~ msgstr "Rydder op... Dette kan tage nogle sekunder."
 
@@ -10017,17 +10198,24 @@ msgstr "åååå"
 #~ "Tryk på et bogstav i venstre side af navigationslinjen, for at vise de "
 #~ "tilhørende kontakter fra den valgte adressebog."
 
-#~ msgid "Close all"
-#~ msgstr "Luk alle"
-
 #~ msgid "Close document"
 #~ msgstr "Luk dokument"
 
 #~ msgid "Closing a tile"
 #~ msgstr "Lukker en flise"
 
+#, fuzzy
+#~| msgid "Color"
+#~ msgid "Colombia"
+#~ msgstr "Farve"
+
 #~ msgid "Common Facets"
 #~ msgstr "Almindelige kategorier"
+
+#, fuzzy
+#~| msgid "Tomorrow"
+#~ msgid "Comoros"
+#~ msgstr "I morgen"
 
 #~ msgid "Compact view"
 #~ msgstr "Kompakt visning"
@@ -10037,9 +10225,6 @@ msgstr "åååå"
 
 #~ msgid "Confirm"
 #~ msgstr "Bekræft"
-
-#~ msgid "Confirmation message"
-#~ msgstr "Bekræftelsesbesked"
 
 #~ msgid "Confirmation status"
 #~ msgstr "Bekræftelsesstatus"
@@ -10131,6 +10316,12 @@ msgstr "åååå"
 #~ msgid "Default view"
 #~ msgstr "Standard visning"
 
+#, fuzzy
+#~| msgctxt "folder"
+#~| msgid "Deleted messages"
+#~ msgid "Delete all %1$d messages"
+#~ msgstr "Slettet beskeder"
+
 #~ msgid "Delete all accounts"
 #~ msgstr "Slet alle konti"
 
@@ -10156,6 +10347,11 @@ msgstr "åååå"
 
 #~ msgid "Displaying the help or the settings"
 #~ msgstr "Vis hjælp eller indstillinger"
+
+#, fuzzy
+#~| msgid "About"
+#~ msgid "Djibouti"
+#~ msgstr "Om"
 
 #~ msgid "Do you already have a %s account?"
 #~ msgstr "Har du allerede en %s-konto?"
@@ -10198,6 +10394,11 @@ msgstr "åååå"
 
 #~ msgid "Each %s. %s"
 #~ msgstr "Hver %s. %s"
+
+#, fuzzy
+#~| msgid "Last month"
+#~ msgid "East Timor"
+#~ msgstr "Sidste måned"
 
 #~ msgid ""
 #~ "Edit a setting on the right side. In most of the cases, the changes are "
@@ -10321,9 +10522,6 @@ msgstr "åååå"
 #~ msgid "Exit Fullscreen"
 #~ msgstr "Luk fuldskærm"
 
-#~ msgid "Expert mode"
-#~ msgstr "Ekspert mode"
-
 #~ msgid "Extended view"
 #~ msgstr "Udvidet visning"
 
@@ -10406,6 +10604,11 @@ msgstr "åååå"
 #~ msgid "Forward emails as:"
 #~ msgstr "Videresend e-mails som:"
 
+#, fuzzy
+#~| msgid "Freelancer"
+#~ msgid "France"
+#~ msgstr "Freelancer"
+
 #~ msgid "Friday"
 #~ msgstr "Fredag"
 
@@ -10433,8 +10636,23 @@ msgstr "åååå"
 #~ msgid "Good morning"
 #~ msgstr "God morgen"
 
+#, fuzzy
+#~| msgid "Green"
+#~ msgid "Greece"
+#~ msgstr "Grøn"
+
+#, fuzzy
+#~| msgid "Green"
+#~ msgid "Greenland"
+#~ msgstr "Grøn"
+
 #~ msgid "Guidance"
 #~ msgstr "Vejledning"
+
+#, fuzzy
+#~| msgid "Waiting"
+#~ msgid "Haiti"
+#~ msgstr "Venter"
 
 #~ msgid "Halo view"
 #~ msgstr "Samlet visning"
@@ -10518,6 +10736,11 @@ msgstr "åååå"
 #~ msgid "Incoming Notification Mails"
 #~ msgstr "Indkomne e-mailunderretninger"
 
+#, fuzzy
+#~| msgid "Undone"
+#~ msgid "Indonesia"
+#~ msgstr "Fortryd"
+
 #~ msgid "Info area"
 #~ msgstr "Informationsområde"
 
@@ -10526,6 +10749,11 @@ msgstr "åååå"
 
 #~ msgid "Items without a file can not be opened."
 #~ msgstr "Elementer uden en fil kan ikke åbnes."
+
+#, fuzzy
+#~| msgid "Due on %1$s"
+#~ msgid "Just open %1$s"
+#~ msgstr "Forfalder d. %1$s"
 
 #~ msgid "Label"
 #~ msgstr "Etiket"
@@ -10612,6 +10840,11 @@ msgstr "åååå"
 #~ msgid "Month View"
 #~ msgstr "Månedsvisning"
 
+#, fuzzy
+#~| msgid "Months"
+#~ msgid "Montserrat"
+#~ msgstr "Måneder"
+
 #~ msgid "More zoom settings"
 #~ msgstr "Flere indstillinger for zoom"
 
@@ -10627,8 +10860,18 @@ msgstr "åååå"
 #~ msgid "Navigation bar"
 #~ msgstr "Navigationslinje"
 
+#, fuzzy
+#~| msgid "New calendar"
+#~ msgid "New Caledonia"
+#~ msgstr "Ny kalender"
+
 #~ msgid "New Mail from %1$s %2$s. Press [enter] to open"
 #~ msgstr "Ny e-mail fra %1$s %2$s. Tryk [enter] for at åbne"
+
+#, fuzzy
+#~| msgid "New calendar"
+#~ msgid "New Zealand"
+#~ msgstr "Ny kalender"
 
 #~ msgid "New objects icon"
 #~ msgstr "Nyt objektikon"
@@ -10678,6 +10921,11 @@ msgstr "åååå"
 #~ msgid "No wall posts yet."
 #~ msgstr "Ingen poster på væggen endnu."
 
+#, fuzzy
+#~| msgid "Forward"
+#~ msgid "Norway"
+#~ msgstr "Videresend"
+
 #~ msgid "Not yet confirmed"
 #~ msgstr "Endnu ikke bekræftet"
 
@@ -10713,6 +10961,11 @@ msgstr "åååå"
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "Vi kun widget-opsummering på mobile enheder"
 
+#, fuzzy
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "Åbn"
+
 #~ msgid "Open in new tab"
 #~ msgstr "Åbn i ny fane"
 
@@ -10725,9 +10978,6 @@ msgstr "åååå"
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "Åbner E-mail-indstillingerne"
 
-#~ msgid "Opening the help"
-#~ msgstr "Åbning af hjælp"
-
 #~ msgid "Opening the settings"
 #~ msgstr "Åbner indstillingerne"
 
@@ -10736,6 +10986,11 @@ msgstr "åååå"
 
 #~ msgid "Page number"
 #~ msgstr "Sidenummer"
+
+#, fuzzy
+#~| msgid "Distance"
+#~ msgid "Pakistan"
+#~ msgstr "Distance"
 
 #, fuzzy
 #~ msgid "Pause Presentation"
@@ -10768,6 +11023,11 @@ msgstr "åååå"
 
 #~ msgid "Portal Widgets"
 #~ msgstr "Portal-widgets"
+
+#, fuzzy
+#~| msgid "Portal"
+#~ msgid "Portugal"
+#~ msgstr "Portal"
 
 #, fuzzy
 #~ msgid "Presenter Navigation"
@@ -11045,6 +11305,11 @@ msgstr "åååå"
 
 #~ msgid "Sunday"
 #~ msgstr "Søndag"
+
+#, fuzzy
+#~| msgid "Your name"
+#~ msgid "Suriname"
+#~ msgstr "Dit navn"
 
 #, fuzzy
 #~| msgid "Enable"
@@ -11473,6 +11738,9 @@ msgstr "åååå"
 #~ "For at se flere informationer, klik på en fil. Informationer bliver vist "
 #~ "i et popop-vindue."
 
+#~ msgid "Toggle checkboxes"
+#~ msgstr "Skift afkrydsningsfelter"
+
 #~ msgid "Toggle folder"
 #~ msgstr "Vælg mappe til/fra"
 
@@ -11540,6 +11808,16 @@ msgstr "åååå"
 
 #~ msgid "Using the reminder functions"
 #~ msgstr "Brug af funktionerne til påmindelse"
+
+#, fuzzy
+#~| msgid "Manual"
+#~ msgid "Vanuatu"
+#~ msgstr "Manuelt"
+
+#, fuzzy
+#~| msgid "Vertical"
+#~ msgid "Vatican"
+#~ msgstr "Lodret"
 
 #~ msgid "Version history"
 #~ msgstr "Versionshistorik"
@@ -11722,13 +12000,15 @@ msgstr "åååå"
 #~ msgid "remove share"
 #~ msgstr "fjern"
 
-#~ msgid "show image"
-#~ msgstr "vis billede"
-
 #, fuzzy
 #~| msgid "show all"
 #~ msgid "show link"
 #~ msgstr "Vis alle"
+
+#, fuzzy
+#~| msgid "show image"
+#~ msgid "show mail"
+#~ msgstr "vis billede"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "undermapper til %s"

@@ -14,24 +14,26 @@
 
 // special color scheme if widget has no account yet
 .io-ox-portal {
+
     @color: #01AEEB;
+
     .widget.widget-color-custom.color-twitter {
+
         .decoration { background-color: @color; }
-        &:focus {
-            .decoration { background-color: darken(@color, 10%); }
-        }
+
+        &:focus .decoration { background-color: darken(@color, 10%); }
     }
 
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
         .widget.widget-color-custom.color-twitter {
             background-color: @color;
+
             .decoration { background-color: transparent; }
         }
     }
 }
 
 .twitter {
-
     margin-top: 26px;
     padding: 0;
 
@@ -110,11 +112,9 @@
 
     i { padding-right: 5px; }
 
-    &:hover {
-        i {
-            color: #666666;
-            text-decoration: none;
-        }
+    &:hover i {
+        color: #666666;
+        text-decoration: none;
     }
 }
 
@@ -150,6 +150,7 @@
     color: gray;
     font-weight: 300;
 }
+
 .io-ox-twitter-name a { color: black; }
 
 .io-ox-twitter-tweet-container {
@@ -163,6 +164,7 @@
 
     .btn.disabled:hover { background-color: #e6e6e6; }
 }
+
 .io-ox-twitter-tweet-button { text-align: right; }
 
 .io-ox-twitter-tweet-counter {
@@ -173,8 +175,6 @@
     text-align: right;
 }
 
-.io-ox-twitter-tweet-counter.limit-exceeded {
-    color: red;
-}
+.io-ox-twitter-tweet-counter.limit-exceeded { color: red; }
 
 .io-ox-twitter-hidden { display: none; }

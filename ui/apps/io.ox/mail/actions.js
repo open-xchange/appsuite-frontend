@@ -17,11 +17,12 @@ define('io.ox/mail/actions', [
     'io.ox/core/extPatterns/links',
     'io.ox/mail/api',
     'io.ox/mail/util',
-    'gettext!io.ox/mail',
     'io.ox/core/folder/api',
     'io.ox/core/print',
-    'io.ox/core/api/account'
-], function (ext, links, api, util, gt, folderAPI, print, account) {
+    'io.ox/core/api/account',
+    'settings!io.ox/mail',
+    'gettext!io.ox/mail'
+], function (ext, links, api, util, folderAPI, print, account, settings, gt) {
 
     'use strict';
 
@@ -49,6 +50,44 @@ define('io.ox/mail/actions', [
         multiple: function (list) {
             require(['io.ox/mail/actions/delete'], function (action) {
                 action.multiple(list);
+            });
+        }
+    });
+
+    new Action('io.ox/mail/actions/inplace-reply', {
+        requires: function (e) {
+            // desktop only
+            if (!_.device('desktop')) return;
+            // feature toggle
+            if (!settings.get('features/inplaceReply', true)) return;
+            // must be top-level
+            if (!e.collection.has('toplevel', 'one')) return;
+            // get first mail
+            var data = e.baton.first();
+            // has sender? and not a draft mail
+            return util.hasFrom(data) && !isDraftMail(data);
+        },
+        action: function (baton) {
+
+            var cid = _.cid(baton.data),
+                // needs baton view
+                view = baton.view,
+                // hide inline link
+                link = view.$('[data-ref="io.ox/mail/actions/inplace-reply"]').hide();
+
+            require(['io.ox/mail/inplace-reply'], function (InplaceReplyView) {
+                view.$('section.body').before(
+                    new InplaceReplyView({ tagName: 'section', cid: cid })
+                    .on('send', function (cid) {
+                        view.$el.closest('.thread-view-control').data('open', cid);
+                    })
+                    .on('dispose', function () {
+                        link.show().focus();
+                        view = link = null;
+                    })
+                    .render()
+                    .$el
+                );
             });
         }
     });
@@ -458,7 +497,7 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/premium/actions/synchronize', {
-        capabilities: 'active_sync',
+        capabilities: 'active_sync client-onboarding',
         action: function () {
             require(['io.ox/onboarding/clients/wizard'], function (wizard) {
                 wizard.run();
@@ -472,6 +511,17 @@ define('io.ox/mail/actions', [
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
         prio: 'hi',
+        id: 'inplace-reply',
+        mobile: 'hi',
+        //#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+        label: gt('Quick reply'),
+        ref: 'io.ox/mail/actions/inplace-reply',
+        section: 'standard'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: INDEX += 100,
+        prio: 'lo',
         id: 'reply',
         mobile: 'hi',
         label: gt('Reply'),
@@ -523,7 +573,7 @@ define('io.ox/mail/actions', [
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
-        prio: 'hi',
+        prio: 'lo',
         mobile: 'hi',
         id: 'mark-unread',
         label:
@@ -537,7 +587,7 @@ define('io.ox/mail/actions', [
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX + 1,
-        prio: 'hi',
+        prio: 'lo',
         mobile: 'hi',
         id: 'mark-read',
         label:
@@ -557,7 +607,7 @@ define('io.ox/mail/actions', [
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
-        prio: 'hi',
+        prio: 'lo',
         mobile: 'hi',
         id: 'spam',
         label: gt('Mark as spam'),
@@ -567,7 +617,7 @@ define('io.ox/mail/actions', [
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX + 1,
-        prio: 'hi',
+        prio: 'lo',
         mobile: 'hi',
         id: 'nospam',
         label: gt('Not spam'),
@@ -628,7 +678,7 @@ define('io.ox/mail/actions', [
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
-        prio: 'hi',
+        prio: 'lo',
         mobile: 'hi',
         id: 'archive',
         //#. Verb: (to) archive messages

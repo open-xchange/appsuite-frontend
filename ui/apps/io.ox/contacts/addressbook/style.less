@@ -1,0 +1,98 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2016 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+.addressbook-popup {
+
+    .modal-header .row {
+        margin-top: 8px;
+    }
+
+    .modal-body.error {
+        color: #777;
+        background-color: #eee;
+        display: flex;
+        align-items: center;
+        text-align: center;
+    }
+
+    .list-view {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        height: auto;
+    }
+
+    .list-item {
+        line-height: 16px;
+        padding-top: 11px;
+        padding-bottom: 11px;
+
+        &:last-child { border: 0; }
+
+        .fa.fa-checkmark { top: 18px; }
+    }
+
+    .limit {
+        color: #777;
+        background-color: #eee;
+        padding: 8px;
+        text-align: center;
+    }
+
+    .contact-picture {
+        float: left;
+        display: inline-block;
+        margin-right: 16px;
+        background-color: #eee;
+        position: relative;
+        top: -4px;
+        .picture(40px, 40px);
+    }
+
+    .name, .email {
+        .ellipsis();
+    }
+
+    .list-item.selected .contact-picture {
+        opacity: 0.25;
+        -webkit-filter: saturate(0);
+        background-color: #eee;
+    }
+
+    .initials, .distribution-list {
+        color: rgba(0, 0, 0, 0.60);
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .initials {
+        &.red { background-color: #FFA0A5; }
+        &.orange { background-color: #FFA77B; }
+        &.yellow { background-color: #FFD23A; }
+        &.green { background-color: #BFDE45; }
+        &.cyan { background-color: #99E4FB; }
+        &.blue { background-color: #95CEFF; }
+        &.purple { background-color: #E5B0FF; }
+        &.pink { background-color: #FFC2DE; }
+    }
+
+    .distribution-list {
+        font-size: 14px;
+        color: #fff;
+        background-color: #555;
+    }
+}

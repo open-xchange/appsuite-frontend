@@ -11,17 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-.wizard-container {
-    display: flex;
-}
+.wizard-container { display: flex; }
 
 .wizard-step {
-
     font-size: 14px;
     background-color: white;
     outline: 0;
     z-index: 1000;
-
     position: absolute;
 
     // default width
@@ -55,24 +51,23 @@
         top: 8px;
         right: 8px;
         outline: 0;
+
         &:focus {
             color: #333;
             background-color: #ccc;
         }
     }
 
-    .wizard-content {
-        padding: 24px 16px;
-    }
+    .wizard-content { padding: 24px 16px; }
 
     .wizard-footer {
         padding: 0 16px 16px 16px;
         font-weight: bold;
         text-align: right;
+
         &:empty { display: none; }
-        .btn {
-            margin-left: 8px;
-        }
+
+        .btn { margin-left: 8px; }
     }
 }
 
@@ -99,35 +94,35 @@
     z-index: 999;
     background-color: @wizard-hotspot-color;
     .border-radius(50%);
-}
 
-.wizard-hotspot:before {
-    content: '';
-    position: absolute;
-    background-color: @wizard-pulse-color;
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    border: 1px solid @wizard-pulse-border-color;
-    -webkit-animation: hotspot-pulsar 2.0s infinite ease-out;
-    animation: hotspot-pulsar 2.0s infinite ease-out;
-    top: -56px;
-    left: -56px;
-    z-index: -1;
-}
+    &:before {
+        content: '';
+        position: absolute;
+        background-color: @wizard-pulse-color;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 1px solid @wizard-pulse-border-color;
+        -webkit-animation: hotspot-pulsar 2.0s infinite ease-out;
+        animation: hotspot-pulsar 2.0s infinite ease-out;
+        top: -56px;
+        left: -56px;
+        z-index: -1;
+    }
 
-.wizard-hotspot:after {
-    content: '';
-    position: absolute;
-    background-color: @wizard-pulse-color;
-    width: 120px;
-    height: 120px;
-    top: -56px;
-    left: -56px;
-    border-radius: 50%;
-    border: 1px solid @wizard-pulse-border-color;
-    -webkit-animation: hotspot-pulsar-inner 2.0s infinite ease-out;
-    animation: hotspot-pulsar-inner 2.0s infinite ease-out;
+    &:after {
+        content: '';
+        position: absolute;
+        background-color: @wizard-pulse-color;
+        width: 120px;
+        height: 120px;
+        top: -56px;
+        left: -56px;
+        border-radius: 50%;
+        border: 1px solid @wizard-pulse-border-color;
+        -webkit-animation: hotspot-pulsar-inner 2.0s infinite ease-out;
+        animation: hotspot-pulsar-inner 2.0s infinite ease-out;
+    }
 }
 
 @-webkit-keyframes hotspot-pulsar {
@@ -177,13 +172,12 @@
         line-height: 48px;
         display: table;
         table-layout: fixed;
+        -webkit-touch-callout: none;
 
         a:active, a:focus {
             opacity: 0.50;
             text-decoration: none;
         }
-
-        -webkit-touch-callout: none;
     }
 
     .wizard-title, .wizard-back, .wizard-next {
@@ -215,9 +209,7 @@
         bottom: 0;
     }
 
-    .wizard-animation {
-        display: none;
-    }
+    .wizard-animation { display: none; }
 
     .wizard-step {
         font-size: 16px;

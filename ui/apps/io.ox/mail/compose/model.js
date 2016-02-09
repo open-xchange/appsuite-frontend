@@ -119,7 +119,7 @@ define.async('io.ox/mail/compose/model', [
         },
 
         getCopy: function () {
-            var ret = _.clone(this.attributes);
+            var ret = _.clone(this.toJSON());
             ret.attachments = _.clone(this.attributes.attachments.toJSON());
             return ret;
         },
@@ -231,6 +231,8 @@ define.async('io.ox/mail/compose/model', [
                     attachment.set('content', attachment.get('content').replace(/<img[^>]*src=\\?"data:[^>]*>/gi, ''));
                 }
             });
+            // Get flat attachments
+            mail.attachments = this.attributes.attachments.toJSON();
             return {
                 description: gt('Mail') + ': ' + (mail.subject || gt('No subject')),
                 point: mail

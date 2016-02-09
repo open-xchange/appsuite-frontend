@@ -314,6 +314,25 @@ define('io.ox/core/tk/tokenfield', [
                         if (token.value !== token.label) {
                             e.attrs.value = token.label ? '"' + token.label + '" <' + token.value + '>' : token.value;
                         }
+                        self.getInput().one('blur', function () {
+                            // see if there is a token with the cid
+                            var tokens = self.$el.parent().find('.token'),
+                                cid = self.getInput().data().editModel.cid,
+                                found = false;
+
+                            for (var i = 0; i < tokens.length; i++) {
+                                if ($(tokens[i]).data('attrs').value === cid) {
+                                    found = true;
+                                    return;
+                                }
+                            }
+
+                            // user tries to remove token by clearing the token in editmode
+                            // token was removed but it's still in the collection, so we need to remove it correctly
+                            if (!found) {
+                                self.collection.remove(self.getModelByCID(cid));
+                            }
+                        });
                     }
                 },
                 'tokenfield:removetoken': function (e) {

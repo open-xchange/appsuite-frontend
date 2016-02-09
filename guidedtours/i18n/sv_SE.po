@@ -16,6 +16,12 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: apps/io.ox/tours/files.js:215 module:io.ox/tours
+#, fuzzy
+#| msgid "Add new account"
+msgid "Add another account"
+msgstr "Lägg till nytt konto"
+
 #: apps/io.ox/tours/calendar.js:72 module:io.ox/tours
 msgid "Adding attachments"
 msgstr "Lägga till bilagor"
@@ -23,6 +29,20 @@ msgstr "Lägga till bilagor"
 #: apps/io.ox/tours/tasks.js:54 module:io.ox/tours
 msgid "Adding further details"
 msgstr "Lägga till ytterligare detaljer"
+
+#: apps/io.ox/tours/files.js:101 module:io.ox/tours
+msgid ""
+"At the top you can find the toolbar with many functions and additional "
+"options. You can easily create new folders, new files and much more."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:163 module:io.ox/tours
+msgid ""
+"Choose from two alternatives to share your files and folders. Use Invite "
+"people if you want to manage access rights and allow recipients to create "
+"and edit files. Or just get a link to let others view and download your "
+"files. You can use an expiration date and password protection if you like."
+msgstr ""
 
 #: apps/io.ox/tours/contacts.js:36 module:io.ox/tours
 msgid ""
@@ -32,9 +52,23 @@ msgstr ""
 "Klicka på en bokstav till vänster om navigationsraden för att visa "
 "motsvarande kontakter från den valda adressboken."
 
+#: apps/io.ox/tours/files.js:78 module:io.ox/tours
+msgid ""
+"Clicking on a folder displays all the subfolders, documents, media and other "
+"files that it contains."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:129 module:io.ox/tours
+msgid "Clicking on the view icon leads you to a preview of the selected file."
+msgstr ""
+
 #: apps/io.ox/tours/portal.js:45 module:io.ox/tours
 msgid "Closing a square"
 msgstr "Stäng en ruta"
+
+#: apps/io.ox/tours/files.js:176 module:io.ox/tours
+msgid "Collaborating"
+msgstr ""
 
 #: apps/io.ox/tours/mail.js:33 module:io.ox/tours
 msgid "Composing a new E-Mail"
@@ -51,10 +85,6 @@ msgstr "Skapa ny kontakt"
 #: apps/io.ox/tours/tasks.js:32 module:io.ox/tours
 msgid "Creating a new task"
 msgstr "Skapa en ny uppgift"
-
-#: apps/io.ox/tours/files.js:60 module:io.ox/tours
-msgid "Creating a note"
-msgstr "Skapa en anteckning"
 
 #: apps/io.ox/tours/intro.js:72 module:io.ox/tours
 msgid "Creating new items"
@@ -95,9 +125,16 @@ msgstr ""
 "Detaljerade instruktioner för de enstaka programmen finns i Systemmeny > "
 "Hjälp."
 
-#: apps/io.ox/tours/files.js:67 module:io.ox/tours
-msgid "Displaying information"
-msgstr "Visa information"
+#: apps/io.ox/tours/files.js:192 module:io.ox/tours
+msgid ""
+"Did you know that you can edit text documents and spreadsheets online? Drive "
+"will automatically update your edited file, but thanks to versioning the "
+"original file stays available."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:86 module:io.ox/tours
+msgid "Different views are available. Just select the one you like best."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -107,6 +144,13 @@ msgstr "Visa hjälp eller inställningar"
 msgid "Drag and drop"
 msgstr "Dra och släpp"
 
+#: apps/io.ox/tours/files.js:216 module:io.ox/tours
+msgid ""
+"Drive allows you to connect to other storage solutions if you already have a "
+"cloud storage account you use to save and sync your files. Simply click on "
+"the appropriate logo to access your existing data."
+msgstr ""
+
 #: apps/io.ox/tours/settings.js:44 module:io.ox/tours
 msgid ""
 "Edit a setting on the right side. In most of the cases, the changes are "
@@ -114,6 +158,12 @@ msgid ""
 msgstr ""
 "Ändra en inställning till höger. I de flesta fallen tillämpas ändringarna "
 "omedelbart."
+
+#: apps/io.ox/tours/files.js:191 module:io.ox/tours
+#, fuzzy
+#| msgid "Edit document"
+msgid "Edit documents"
+msgstr "Redigera dokument"
 
 #: apps/io.ox/tours/mail.js:106 module:io.ox/tours
 msgid "Editing multiple E-Mails"
@@ -191,9 +241,27 @@ msgstr "Skriva rubrik"
 msgid "Entering the task's data"
 msgstr "Skriva in information om uppgift"
 
-#: apps/io.ox/tours/files.js:30 module:io.ox/tours
+#: apps/io.ox/tours/files.js:199 module:io.ox/tours
+#, fuzzy
+#| msgid "File Details"
+msgid "File details"
+msgstr "Fildetaljer"
+
+#: apps/io.ox/tours/files.js:77 module:io.ox/tours
+#, fuzzy
+#| msgid "Folder tree"
+msgid "Folder content"
+msgstr "Mappträd"
+
+#: apps/io.ox/tours/files.js:63 module:io.ox/tours
 msgid "Folder tree"
 msgstr "Mappträd"
+
+#: apps/io.ox/tours/files.js:140 module:io.ox/tours
+msgid ""
+"From preview you can also select other options to help you manage and work "
+"on your files."
+msgstr ""
 
 #: apps/io.ox/tours/calendar.js:73 module:io.ox/tours
 msgid "Further down you can add documents as attachments to the appointment."
@@ -215,6 +283,18 @@ msgstr "Kom igång"
 #: apps/io.ox/tours/mail.js:101 module:io.ox/tours
 msgid "Halo view"
 msgstr "Halovy"
+
+#: apps/io.ox/tours/files.js:151 module:io.ox/tours
+msgid ""
+"Here you can share files with your colleagues and external contacts. You can "
+"also collaborate on a document and set different access rights."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:226 module:io.ox/tours
+msgid ""
+"Hint: you can always restart guided tours, any time you need them, from the "
+"system menu."
+msgstr ""
 
 #: apps/io.ox/tours/settings.js:36 module:io.ox/tours
 msgid "How the settings are organized"
@@ -266,9 +346,29 @@ msgstr "Bjud in andra deltagare"
 msgid "Launching an app"
 msgstr "Starta ett program"
 
+#: apps/io.ox/tours/files.js:37 module:io.ox/tours
+msgid ""
+"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy "
+"eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam "
+"voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet "
+"clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit "
+"amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam "
+"nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed "
+"diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet "
+"clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+msgstr ""
+
 #: apps/io.ox/tours/contacts.js:35 module:io.ox/tours
 msgid "Navigation bar"
 msgstr "Navigeringsraden"
+
+#: apps/io.ox/tours/files.js:64 module:io.ox/tours
+msgid ""
+"On the left you can see the folder tree. It displays your folder structure "
+"and allows you to navigate to specific folders and subfolders. To make your "
+"life easier, we have already included folders for your Documents, Music, "
+"Pictures and Videos."
+msgstr ""
 
 #: apps/io.ox/tours/mail.js:91 module:io.ox/tours
 msgid "Opening an E-Mail in a separate window"
@@ -290,6 +390,16 @@ msgstr "Öppna hjälpen"
 msgid "Opening the settings"
 msgstr "Öppna inställningarna"
 
+#: apps/io.ox/tours/files.js:128 module:io.ox/tours
+#, fuzzy
+msgid "Preview files"
+msgstr "Förhandsgranska"
+
+#: apps/io.ox/tours/files.js:139 module:io.ox/tours
+#, fuzzy
+msgid "Preview mode"
+msgstr "Förhandsgranska"
+
 #: apps/io.ox/tours/mail.js:96 module:io.ox/tours
 msgid "Reading E-Mail conversations"
 msgstr "Läsa e-postkonversationer"
@@ -298,12 +408,22 @@ msgstr "Läsa e-postkonversationer"
 msgid "Reading the details"
 msgstr "Läsa detaljerna"
 
+#: apps/io.ox/tours/files.js:225 module:io.ox/tours
+msgid "Restart Guided Tour"
+msgstr ""
+
 #: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Hitta objekt"
 
+#: apps/io.ox/tours/files.js:85 module:io.ox/tours
+#, fuzzy
+#| msgid "Selecting a view"
+msgid "Select a view"
+msgstr "Välj visningsläge"
+
 #: apps/io.ox/tours/calendar.js:83 module:io.ox/tours
-#: apps/io.ox/tours/files.js:35 apps/io.ox/tours/mail.js:86
+#: apps/io.ox/tours/mail.js:86
 msgid "Selecting a view"
 msgstr "Välj visningsläge"
 
@@ -314,6 +434,26 @@ msgstr "Skicka e-post till en kontakt"
 #: apps/io.ox/tours/mail.js:74 module:io.ox/tours
 msgid "Sending the E-Mail"
 msgstr "Skicka e-post"
+
+#: apps/io.ox/tours/files.js:150 module:io.ox/tours
+#, fuzzy
+#| msgid "Share this file"
+msgid "Share files"
+msgstr "Dela ut filen"
+
+#: apps/io.ox/tours/files.js:177 module:io.ox/tours
+msgid ""
+"Sharing files by inviting people does not only offer your recipients the "
+"option to create and edit files. Internal and external participants are also "
+"able to collaborate with you on text documents and spreadsheets at the same "
+"time."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:162 module:io.ox/tours
+#, fuzzy
+#| msgid "Sort options"
+msgid "Sharing options"
+msgstr "Sorteringsalternativ"
 
 #: apps/io.ox/tours/settings.js:54 module:io.ox/tours
 msgid "Signing out"
@@ -339,20 +479,21 @@ msgstr ""
 "Detaljvyn visar ett objekts innehåll. Beroende på programmet kan ytterligare "
 "funktioner för organisering av objekt hittas i Detaljvyn."
 
-#: apps/io.ox/tours/files.js:45 module:io.ox/tours
-msgid "The Icons view"
-msgstr "Ikonvyn"
+#: apps/io.ox/tours/files.js:56 module:io.ox/tours
+#, fuzzy
+#| msgctxt "help"
+#| msgid "The Drive App"
+msgid "The Drive app"
+msgstr "Drive-programmet"
 
-#: apps/io.ox/tours/files.js:46 module:io.ox/tours
-msgid ""
-"The Icons view displays an icon and the file name for each file. Click on an "
-"icon to view further details and functions in the pop-up."
-msgstr ""
-"Ikonvyn visar en ikon och filnamnet för alla filer. Klicka på en ikon för "
-"att se ytterligare detaljer och funktioner i popuprutan."
+#: apps/io.ox/tours/files.js:50 module:io.ox/tours
+#, fuzzy
+#| msgctxt "help"
+#| msgid "The Drive App"
+msgid "The Drive app tour.txt"
+msgstr "Drive-programmet"
 
 #: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
-#: apps/io.ox/tours/files.js:40
 msgid "The List view"
 msgstr "Listvyn"
 
@@ -365,16 +506,6 @@ msgstr ""
 "Listvyn visar en lista över möten i den aktuella mappen. Om du klickar på "
 "ett möte kommer information om mötet och ett par funktioner visas i "
 "Detaljvyn."
-
-#: apps/io.ox/tours/files.js:41 module:io.ox/tours
-msgid ""
-"The List view shows details like the size and date of change. Use the "
-"checkboxes to select files. Click on a file to view further details and "
-"functions in the pop-up."
-msgstr ""
-"Listvyn visar detaljer som storlek, och ändringsdatum. Använd kryssrutorna "
-"för att välja filer. Klicka på en fil för att se ytterligare detaljer och "
-"funktioner i popuprutan."
 
 #: apps/io.ox/tours/intro.js:58 module:io.ox/tours
 msgid "The New objects icon"
@@ -400,18 +531,6 @@ msgstr ""
 "Portalen informerar dig om aktuell e-post, möten, eller nyheter från sociala "
 "nätverk."
 
-#: apps/io.ox/tours/files.js:50 module:io.ox/tours
-msgid "The Tiles view"
-msgstr "Rutvyn"
-
-#: apps/io.ox/tours/files.js:51 module:io.ox/tours
-msgid ""
-"The Tiles view shows a big icon for each file. Click on an icon to view "
-"further details and functions in the pop-up."
-msgstr ""
-"Rutvyn visar en stor ikon för varje fil. Klicka på en ikon för att se "
-"ytterligare detaljer och funktioner i popuprutan."
-
 #: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
 msgid "The calendar views"
 msgstr "Kalendervyerna"
@@ -423,6 +542,13 @@ msgid ""
 msgstr ""
 "Kalendervyerna visar ett kalenderark med mötena inom det valda "
 "tidsintervallet."
+
+#: apps/io.ox/tours/files.js:200 module:io.ox/tours
+msgid ""
+"The file details side bar offers additional information about your files. "
+"Just enable the File details option from the View drop down menu and select "
+"a file to see the details."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js:104 module:io.ox/tours
 msgid "The folder tree"
@@ -499,12 +625,6 @@ msgstr ""
 #: apps/io.ox/tours/tasks.js:33 module:io.ox/tours
 msgid "To create a new task, click on New in the toolbar."
 msgstr "För att skapa en ny uppgift, klicka på Nytt i verktygsraden."
-
-#: apps/io.ox/tours/files.js:61 module:io.ox/tours
-msgid "To create a note, click on New > Add note in the toolbar."
-msgstr ""
-"För att skapa en anteckning, klicka på Nytt > Lägg till anteckning i "
-"verktygsraden."
 
 #: apps/io.ox/tours/calendar.js:58 module:io.ox/tours
 msgid ""
@@ -661,14 +781,6 @@ msgstr ""
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr "För att söka efter objekt, klicka på Sök-ikonen i menyraden."
 
-#: apps/io.ox/tours/files.js:36 module:io.ox/tours
-msgid ""
-"To select one of the views List, Icons or Squares, click on View on the "
-"right side of the toolbar."
-msgstr ""
-"För att välja en av vyerna - Lista, Ikoner eller Rutor - klicka på Visa till "
-"högeri verktygsraden."
-
 #: apps/io.ox/tours/calendar.js:84 module:io.ox/tours
 msgid ""
 "To select one of the views like Day, Month or List, click on View in the "
@@ -712,34 +824,29 @@ msgstr ""
 msgid "To track the editing status, enter the current progress."
 msgstr "För att följa redigeringsstatusen, ange aktuella framsteg."
 
-#: apps/io.ox/tours/files.js:56 module:io.ox/tours
-msgid "To upload a file, click on New > Upload new file in the toolbar."
-msgstr ""
-"För att ladda upp en fil, klicka på Nytt > Ladda upp ny fil i verktygsraden."
-
-#: apps/io.ox/tours/files.js:68 module:io.ox/tours
+#: apps/io.ox/tours/files.js:114 module:io.ox/tours
 msgid ""
-"To view further information, click on a file. A pop-up window displays "
-"further details and functions."
+"To upload a new file from your local device, simply click on Add local file "
+"and select the file you would like to upload. It is even easier if you just "
+"drag and drop files from your local device into Drive. The uploaded file is "
+"now available in Drive on all your devices."
 msgstr ""
-"För att visa ytterligare information, klicka på en fil. Ett popupfönster "
-"kommer visa ytterligare detaljer och funktioner."
+
+#: apps/io.ox/tours/files.js:100 module:io.ox/tours
+#, fuzzy
+#| msgid "The toolbar"
+msgid "Toolbar"
+msgstr "Verktygsraden"
 
 #: apps/io.ox/tours/tasks.js:72 module:io.ox/tours
 msgid "Tracking the editing status"
 msgstr "Följa redigeringsstatus"
 
-#: apps/io.ox/tours/files.js:55 module:io.ox/tours
-msgid "Uploading a file"
-msgstr "Ladda upp en fil"
-
-#: apps/io.ox/tours/files.js:31 module:io.ox/tours
-msgid ""
-"Use the folder tree to access own, public or shared files. If the folder "
-"tree is hidden, click on View > Folder view on the right side of the toolbar."
-msgstr ""
-"Använd mappträdet för att komma åt egna, offentliga, eller delade filer. Om "
-"mappträdet är dolt, klicka på Visa > Mappvy till höger i verktygsraden."
+#: apps/io.ox/tours/files.js:113 module:io.ox/tours
+#, fuzzy
+#| msgid "Upload new file"
+msgid "Upload a new file"
+msgstr "Ladda upp ny fil"
 
 #: apps/io.ox/tours/intro.js:105 module:io.ox/tours
 msgid ""
@@ -764,6 +871,14 @@ msgstr "Använda påminnelsefunktionen"
 #: apps/io.ox/tours/intro.js:34 module:io.ox/tours
 msgid "Welcome to %s"
 msgstr "Välkommen till %s"
+
+#: apps/io.ox/tours/files.js:57 module:io.ox/tours
+msgid ""
+"Welcome to your cloud storage app. This Guided Tour will introduce you to "
+"your new online storage solution - your one point to access online stored "
+"files from all your accounts. This is where you can upload and save your "
+"files, share them and synchronize them with different devices.  "
+msgstr ""
 
 #~ msgid "%1$d %2$s"
 #~ msgstr "%1$d %2$s"
@@ -1519,9 +1634,6 @@ msgstr "Välkommen till %s"
 
 #~ msgid "Add mail account"
 #~ msgstr "Lägg till e-postkonto"
-
-#~ msgid "Add new account"
-#~ msgstr "Lägg till nytt konto"
 
 #~ msgid "Add new folder"
 #~ msgstr "lägg till ny mapp"
@@ -2919,6 +3031,9 @@ msgstr "Välkommen till %s"
 #~ msgid "Creating Files"
 #~ msgstr "Skapa filer"
 
+#~ msgid "Creating a note"
+#~ msgstr "Skapa en anteckning"
+
 #~ msgid ""
 #~ "Critical Error occurred. This folder contains a contact with no id. "
 #~ "Context %1$d Folder %2$d"
@@ -3117,6 +3232,9 @@ msgstr "Välkommen till %s"
 
 #~ msgid "Display of names"
 #~ msgstr "Visning av namn"
+
+#~ msgid "Displaying information"
+#~ msgstr "Visa information"
 
 #~ msgid "Distance"
 #~ msgstr "Avstånd"
@@ -3367,9 +3485,6 @@ msgstr "Välkommen till %s"
 
 #~ msgid "Edit description"
 #~ msgstr "Ändra beskrivning"
-
-#~ msgid "Edit document"
-#~ msgstr "Redigera dokument"
 
 #, fuzzy
 #~ msgid "Edit draft"
@@ -3829,9 +3944,6 @@ msgstr "Välkommen till %s"
 
 #~ msgid "File \"%1$s\" is not readable."
 #~ msgstr "Filen \"%1$s\" är inte läsbar."
-
-#~ msgid "File Details"
-#~ msgstr "Fildetaljer"
 
 #~ msgid "File is not a directory: %s"
 #~ msgstr "Filen är ingen katalog: %s"
@@ -6268,10 +6380,6 @@ msgstr "Välkommen till %s"
 #~ msgid "Preview"
 #~ msgstr "Förhandsgranska"
 
-#, fuzzy
-#~ msgid "Preview pane"
-#~ msgstr "Förhandsgranska"
-
 #~ msgid "Previous"
 #~ msgstr "Föregående"
 
@@ -6929,9 +7037,6 @@ msgstr "Välkommen till %s"
 #~ msgid "Share link by email"
 #~ msgstr "Dela länk via e-post"
 
-#~ msgid "Share this file"
-#~ msgstr "Dela ut filen"
-
 #~ msgid "Share this folder"
 #~ msgstr "Dela ut mappen"
 
@@ -7176,9 +7281,6 @@ msgstr "Välkommen till %s"
 #~ msgid "Sort field %1$s is not supported via IMAP SORT command"
 #~ msgstr "Sorteringsfält %1$s stöds inte via IMAP SORT-kommando "
 
-#~ msgid "Sort options"
-#~ msgstr "Sorteringsalternativ"
-
 #~ msgid "Source"
 #~ msgstr "Källa"
 
@@ -7401,10 +7503,6 @@ msgstr "Välkommen till %s"
 #~ msgstr "Textformat"
 
 #~ msgctxt "help"
-#~ msgid "The Drive App"
-#~ msgstr "Drive-programmet"
-
-#~ msgctxt "help"
 #~ msgid "The E-Mail Components"
 #~ msgstr "E-postkomponenterna"
 
@@ -7414,6 +7512,16 @@ msgstr "Välkommen till %s"
 
 #~ msgid "The IP address of host \"%1$s\" could not be determined"
 #~ msgstr "IP-adressen för värden \"%1$s\" kunde inte fastslås"
+
+#~ msgid "The Icons view"
+#~ msgstr "Ikonvyn"
+
+#~ msgid ""
+#~ "The Icons view displays an icon and the file name for each file. Click on "
+#~ "an icon to view further details and functions in the pop-up."
+#~ msgstr ""
+#~ "Ikonvyn visar en ikon och filnamnet för alla filer. Klicka på en ikon för "
+#~ "att se ytterligare detaljer och funktioner i popuprutan."
 
 #~ msgid "The Icons view displays an icon for each file."
 #~ msgstr "Ikonvyn visar en ikon för varje fil."
@@ -7435,11 +7543,30 @@ msgstr "Välkommen till %s"
 #~ "den markerade filen. Denna vy motsvarar vyerna i E-post och Kontakter."
 
 #~ msgid ""
+#~ "The List view shows details like the size and date of change. Use the "
+#~ "checkboxes to select files. Click on a file to view further details and "
+#~ "functions in the pop-up."
+#~ msgstr ""
+#~ "Listvyn visar detaljer som storlek, och ändringsdatum. Använd "
+#~ "kryssrutorna för att välja filer. Klicka på en fil för att se ytterligare "
+#~ "detaljer och funktioner i popuprutan."
+
+#~ msgid ""
 #~ "The Object could not be detached because the update to an underlying "
 #~ "object failed."
 #~ msgstr ""
 #~ "Objektet kunde inte avskiljas på grund av att uppdateringen av ett "
 #~ "underliggande objekt misslyckades. "
+
+#~ msgid "The Tiles view"
+#~ msgstr "Rutvyn"
+
+#~ msgid ""
+#~ "The Tiles view shows a big icon for each file. Click on an icon to view "
+#~ "further details and functions in the pop-up."
+#~ msgstr ""
+#~ "Rutvyn visar en stor ikon för varje fil. Klicka på en ikon för att se "
+#~ "ytterligare detaljer och funktioner i popuprutan."
 
 #~ msgid "The account must be named"
 #~ msgstr "Kontot måste ha ett namn"
@@ -8618,6 +8745,11 @@ msgstr "Välkommen till %s"
 #~ "För att lägga till deltagare manuellt, ange en giltig e-postadress (t.ex. "
 #~ "sven.andersson@exempel.se eller \"Sven Andersson\" <sa@exempel.se>)"
 
+#~ msgid "To create a note, click on New > Add note in the toolbar."
+#~ msgstr ""
+#~ "För att skapa en anteckning, klicka på Nytt > Lägg till anteckning i "
+#~ "verktygsraden."
+
 #~ msgid "To create a note, click the icon at the top. Select Add note."
 #~ msgstr ""
 #~ "För att skapa en anteckning, klicka på ikonen längst upp. Välj Lägg till "
@@ -8648,8 +8780,27 @@ msgstr "Välkommen till %s"
 #~ "För att öppna hjälpen, klicka på Systemmenyikonen längst upp till höger i "
 #~ "menyraden. Välj Hjälp."
 
+#~ msgid ""
+#~ "To select one of the views List, Icons or Squares, click on View on the "
+#~ "right side of the toolbar."
+#~ msgstr ""
+#~ "För att välja en av vyerna - Lista, Ikoner eller Rutor - klicka på Visa "
+#~ "till högeri verktygsraden."
+
 #~ msgid "To send the E-Mail, click on Send on the upper right side."
 #~ msgstr "För att skicka e-brevet, klicka på Skicka på den övre högra sidan."
+
+#~ msgid "To upload a file, click on New > Upload new file in the toolbar."
+#~ msgstr ""
+#~ "För att ladda upp en fil, klicka på Nytt > Ladda upp ny fil i "
+#~ "verktygsraden."
+
+#~ msgid ""
+#~ "To view further information, click on a file. A pop-up window displays "
+#~ "further details and functions."
+#~ msgstr ""
+#~ "För att visa ytterligare information, klicka på en fil. Ett popupfönster "
+#~ "kommer visa ytterligare detaljer och funktioner."
 
 #~ msgid "Today"
 #~ msgstr "Idag"
@@ -9226,9 +9377,6 @@ msgstr "Välkommen till %s"
 #~ "Den uppladdade filens innehålls-typ \"%1$s\" matchar inte filfiltret "
 #~ "\"%2$s\""
 
-#~ msgid "Upload new file"
-#~ msgstr "Ladda upp ny fil"
-
 #~ msgid "Upload new files"
 #~ msgstr "Ladda upp nya filer"
 
@@ -9243,6 +9391,9 @@ msgstr "Välkommen till %s"
 
 #~ msgid "Uploaded file is of type %s, cannot handle that"
 #~ msgstr "Överförd fil är av typen %s, kan inte hantera det"
+
+#~ msgid "Uploading a file"
+#~ msgstr "Ladda upp en fil"
 
 #~ msgid "Uploading folders is not supported."
 #~ msgstr "Inget stöd för att ladda upp mappar."
@@ -9270,6 +9421,14 @@ msgstr "Välkommen till %s"
 
 #~ msgid "Use fixed-width font for text mails"
 #~ msgstr "Använd teckensnitt med fast bredd för text-e-post"
+
+#~ msgid ""
+#~ "Use the folder tree to access own, public or shared files. If the folder "
+#~ "tree is hidden, click on View > Folder view on the right side of the "
+#~ "toolbar."
+#~ msgstr ""
+#~ "Använd mappträdet för att komma åt egna, offentliga, eller delade filer. "
+#~ "Om mappträdet är dolt, klicka på Visa > Mappvy till höger i verktygsraden."
 
 #~ msgid "Use unified mail for this account"
 #~ msgstr "Använd enhetlig e-post för det här kontot"

@@ -66,13 +66,16 @@ define('io.ox/mail/actions/reminder', [
                 if (action === 'create') {
 
                     //Calculate the right time
-                    var dates = tasksUtil.computePopupTime(dateSelector.val(), true);
+                    var dates = tasksUtil.computePopupTime(dateSelector.val(), true),
+                        note;
 
+                    //add mail cid so the task can offer a link
+                    note = noteInput.val() + '\n--\nmail://' + _.cid(data);
                     taskAPI.create({
                         title: titleInput.val(),
                         folder_id: coreConfig.get('folder/tasks'),
                         alarm: dates.alarmDate,
-                        note: noteInput.val(),
+                        note: note,
                         status: 1,
                         recurrence_type: 0,
                         percent_completed: 0

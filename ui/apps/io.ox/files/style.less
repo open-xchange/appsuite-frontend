@@ -34,20 +34,10 @@
         line-height: 20px;
         padding: 2px 16px 2px 42px;
         border-bottom: 0;
-        &:not(.selected):nth-child(odd),  {
-            background-color: #f5f5f5;
-        }
-        &.even:not(.selected) {
-            background-color: inherit;
-        }
-        &.odd:not(.selected) {
-            background-color: #f5f5f5;
-        }
+        &:not(.selected):nth-child(odd) { background-color: #f5f5f5; }
     }
 
-    &.column-layout.hide-checkboxes .list-item {
-        padding-left: 16px;
-    }
+    &.column-layout.hide-checkboxes .list-item { padding-left: 16px; }
 
     &.column-layout .list-item-content {
         display: table;
@@ -66,45 +56,28 @@
         &.column-4 { width: 120px; text-align: right; }
     }
 
-    &.visible-selection.has-focus .list-item.selected i {
-        color: rgba(255, 255, 255, 0.50);
-    }
+    &.visible-selection.has-focus .list-item.selected i { color: rgba(255, 255, 255, 0.50); }
 
-    .list-item .list-item-checkmark .fa-checkmark {
-        top: 10px;
-    }
+    .list-item .list-item-checkmark .fa-checkmark { top: 10px; }
 
     &.column-layout {
+        .list-item .list-item-checkmark .fa-checkmark { top: 3px; }
 
-        .list-item .list-item-checkmark .fa-checkmark {
-            top: 3px;
-        }
-
-        .filename {
-            .ellipsis();
-        }
+        .filename { .ellipsis(); }
     }
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
-        &.column-layout .list-item {
-            line-height: 40px;
-
-        }
+        &.column-layout .list-item { line-height: 40px; }
         &.column-layout, &.grid-layout, &.icon-layout {
-            .list-item {
-                font-size: 15px;
-            }
+            .list-item { font-size: 15px; }
         }
 
-        &.column-layout {
-            .list-item .list-item-checkmark .fa-checkmark {
-                top: 14px;
-            }
+        &.column-layout .list-item .list-item-checkmark .fa-checkmark {
+            top: 14px;
         }
     }
 }
 
 .file-type-icon {
-
     font-size: 14px;
     width: 16px;
     text-align: center;
@@ -190,9 +163,7 @@
         @filename_margin: 12px;
         @height: @thumbnail_height + 2 * @filename_margin + @filename_height;
 
-        .list-item-checkmark {
-            top: 60px;
-        }
+        .list-item-checkmark { top: 60px; }
 
         .list-item-content {
             width: 100%;
@@ -204,7 +175,6 @@
         }
 
         .icon-thumbnail.default-icon {
-
             display: table;
             width: 101%; // yep, 101, fixes layout glitch in chrome
 
@@ -214,6 +184,7 @@
                 display: table-cell;
                 text-align: center;
                 vertical-align: middle;
+
                 i.fa {
                     font-size: 42px;
                     width: auto;
@@ -255,9 +226,7 @@
 
     &.tile-layout {
 
-        & > li.list-item {
-            border-width: 0 @default-padding @default-padding 0;
-        }
+        & > li.list-item { border-width: 0 @default-padding @default-padding 0; }
 
         // width is > 160px, so assuming a 4/3 format, we're around 120px (see above)
         @thumbnail_height: 128px;
@@ -269,10 +238,6 @@
 
         .icon-thumbnail {
             .thumbnail(@thumbnail_height);
-        }
-
-        .icon-thumbnail {
-
             display: table;
             width: 100%;
 
@@ -282,9 +247,7 @@
                 vertical-align: middle;
             }
 
-            .folder-name {
-                color: #333;
-            }
+            .folder-name { color: #333; }
 
             .file-icon i.fa {
                 font-size: 42px;
@@ -292,9 +255,7 @@
             }
         }
 
-        .file-type-folder .folder-icon {
-            display: none;
-        }
+        .file-type-folder .folder-icon { display: none; }
 
         .busy-indicator(@thumbnail_height, left);
 
@@ -307,6 +268,7 @@
             height: 40px;
             right: 0;
             left: auto;
+
             .fa-checkmark {
                 color: #fff;
                 text-shadow: 0 0 3px #000;
@@ -319,9 +281,7 @@
             text-shadow: none;
         }
 
-        li.selected .list-item-checkmark .fa-checkmark {
-            color: #fff;
-        }
+        li.selected .list-item-checkmark .fa-checkmark { color: #fff; }
     }
 
     //
@@ -330,17 +290,12 @@
 
     &.icon-layout {
 
-        .selected .icon-thumbnail {
-            opacity: 0.70;
-        }
+        .selected .icon-thumbnail { opacity: 0.70; }
 
-        &.has-focus {
-            .selected .icon-thumbnail {
-                background-color: darken(@selected-background, 15%);
-                .folder-icon i.fa:before {
-                    color: rgba(0, 0, 0, 0.50);
-                }
-            }
+        &.has-focus .selected .icon-thumbnail {
+            background-color: darken(@selected-background, 15%);
+
+            .folder-icon i.fa:before { color: rgba(0, 0, 0, 0.50); }
         }
     }
 
@@ -351,16 +306,14 @@
             box-shadow: 0 0 1px 2px white inset;
         }
 
-        .selected.file-type-folder .icon-thumbnail {
-            background-color: #ddd;
-        }
+        .selected.file-type-folder .icon-thumbnail { background-color: #ddd; }
 
         &.has-focus {
-            .selected .icon-thumbnail {
-                border-color: @selected-background;
-            }
+            .selected .icon-thumbnail { border-color: @selected-background; }
+
             .selected.file-type-folder .icon-thumbnail {
                 background-color: @selected-background;
+
                 .folder-name { color: white; }
             }
         }
@@ -368,19 +321,17 @@
 
     // file lock
     .locked { color: rgb(204, 0, 0); }
+
     &.has-focus .selected .locked { color: #fff; }
 
     // adjust thumbnail position for images
-    &.icon-layout, &.tile-layout {
-        .file-type-image .icon-thumbnail {
-            background-position: center center;
-        }
+    &.icon-layout,
+    &.tile-layout {
+        .file-type-image .icon-thumbnail { background-position: center center; }
     }
 }
 
-.margin-bottom {
-    bottom: 68px;
-}
+.margin-bottom { bottom: 68px; }
 
 .upload-wrapper {
     border-top: rgb(221, 221, 221) 1px solid;
@@ -394,13 +345,9 @@
     .upload-title {
         margin-bottom: 8px;
 
-        .file-name {
-            white-space: nowrap;
-        }
+        .file-name { white-space: nowrap; }
 
-        .estimated-time {
-            float: right;
-        }
+        .estimated-time { float: right; }
     }
 
     .upload-details {
@@ -408,9 +355,7 @@
         margin-left: 10px;
     }
 
-    .progress {
-        margin: 0;
-    }
+    .progress { margin: 0; }
 }
 
 .has-publications {
@@ -425,19 +370,14 @@
     margin: 10px 10px 55px 10px;
 }
 
-.dndinfo {
-    margin-top: 10px;
-}
+.dndinfo { margin-top: 10px; }
 
 .vgrid-cell.file {
-
     display: table-row;
     padding-top: 3px;
     padding-bottom: 3px;
 
-    .vgrid-cell-checkbox {
-        padding-top: 9px;
-    }
+    .vgrid-cell-checkbox { padding-top: 9px; }
 
     .name {
         display: table-cell;
@@ -449,32 +389,21 @@
     }
 }
 
-ul.breadcrumb li.prefix {
-    white-space: nowrap;
-}
+ul.breadcrumb li.prefix { white-space: nowrap; }
 
 // small screens
 
 .width-less-than-480 {
 
-    .file-list-view {
-        .list-item-column {
-            &.column-2 { width: 100%; padding-right: 0; }
-        }
+    .file-list-view .list-item-column.column-2 { width: 100%; padding-right: 0; }
+
+    #window-content-top #inline-actions-ms {
+        margin: 0 30px 0 30px;
+
+        .summary { font-size: 12pt; }
     }
 
-    #window-content-top {
-        #inline-actions-ms {
-            margin: 0 30px 0 30px;
-            .summary {
-                font-size: 12pt;
-            }
-        }
-    }
-
-    .margin-bottom {
-        bottom: 116px;
-    }
+    .margin-bottom { bottom: 116px; }
 
     .upload-wrapper {
         margin-bottom: 45px;
@@ -484,9 +413,7 @@ ul.breadcrumb li.prefix {
             text-overflow: ellipsis;
         }
 
-        .estimated-time {
-            display: none;
-        }
+        .estimated-time { display: none; }
     }
 
     body > .io-ox-dialog-wrapper .io-ox-dialog-popup {
@@ -497,8 +424,10 @@ ul.breadcrumb li.prefix {
         bottom: 40px;
         height: 100%;
         max-height: 100%;
+
         .modal-body {
             max-height: auto;
+
             .row textarea.col-lg-12 { max-height: 100px; }
             .fileupload .uneditable-input { width: 130px; }
         }
@@ -514,6 +443,7 @@ ul.breadcrumb li.prefix {
                     margin-left: 0;
                     float: left;
                 }
+
                 .btn {
                     border: 0;
                     border-radius: 0;
@@ -523,9 +453,8 @@ ul.breadcrumb li.prefix {
                     padding: 0;
                     line-height: 40px;
                 }
-                &>div {
-                    padding: 0;
-                }
+
+                & > div { padding: 0; }
             }
         }
     }
@@ -562,9 +491,8 @@ ul.breadcrumb li.prefix {
         margin-left: 0.5em;
         float: right;
         opacity: 0.50;
-        html.high-contrast & {
-            opacity: 1;
-        }
+
+        html.high-contrast & { opacity: 1; }
     }
 
     .locked {
@@ -572,9 +500,7 @@ ul.breadcrumb li.prefix {
         color: rgb(204, 0, 0);
     }
 
-    .size {
-        color: rgb(119, 119, 119);
-    }
+    .size { color: rgb(119, 119, 119); }
 }
 
 .io-ox-files-main {
@@ -584,9 +510,7 @@ ul.breadcrumb li.prefix {
         right: 0;
     }
 
-    .has-rightside .leftside {
-        right: 320px;
-    }
+    .has-rightside .leftside { right: 320px; }
 
     .rightside {
         width: 320px;
@@ -595,29 +519,21 @@ ul.breadcrumb li.prefix {
     }
 
     .viewer-sidebar {
-
         padding: 0;
         background-color: #f5f5f5;
         font-size: 13px;
 
         .viewer-sidebar-pane {
             height: 100%;
-            &.thumbnail-pane {
-                display: none;
-            }
+
+            &.thumbnail-pane { display: none; }
         }
 
-        .wrapper {
-            padding: 0px 16px;
-        }
+        .wrapper { padding: 0px 16px; }
 
-        .sidebar-panel-body {
-            padding: 12px 0 5px 0;
-        }
+        .sidebar-panel-body { padding: 12px 0 5px 0; }
 
-        .sidebar-panel .sidebar-panel-heading {
-            border-bottom: none;
-        }
+        .sidebar-panel .sidebar-panel-heading { border-bottom: none; }
 
         .sidebar-panel-thumbnail {
 
@@ -644,61 +560,41 @@ ul.breadcrumb li.prefix {
     overflow-y: auto;
 }
 
-.filestorage-conflict-warning {
-    padding-top: 8px;
-}
+.filestorage-conflict-warning { padding-top: 8px; }
 
 // add storage account dialog
-.select-storage-account-dialog {
+.select-storage-account-dialog .modal-body {
+    padding: 16px 16px 0 16px;
 
-    .modal-body {
+    .add-acc-label {
+        color: #555;
+        margin: 0;
+    }
 
-        padding: 16px 16px 0 16px;
+    .storage-account-item {
 
-        .add-acc-label {
-            color: #555;
-            margin: 0;
+        display: inline-block;
+        padding: 0;
+        line-height: 28px;
+        margin: 0 16px 16px 0;
+
+        &:last-child { margin-right: 0; }
+
+        &:focus, &:active { background-color: white; }
+
+        &:hover { background-color: #f5f5f5; }
+
+        .icon {
+            margin: 15px 20px 0;
+            text-align: center;
+            width: 64px;
+            height: 64px;
+            background-size: cover;
         }
 
-        .storage-account-item {
-
-            display: inline-block;
-            padding: 0;
-            line-height: 28px;
-            margin: 0 16px 16px 0;
-
-            &:last-child {
-                margin-right: 0;
-            }
-
-            &:focus, &:active {
-                background-color: white;
-            }
-
-            &:hover {
-                background-color: #f5f5f5;
-            }
-
-            .icon {
-                margin: 15px 20px 0;
-                text-align: center;
-                width: 64px;
-                height: 64px;
-                background-size: cover;
-            }
-
-            &.logo-google .icon {
-                background-image: url(apps/themes/default/googledrive_logo128.png);
-            }
-            &.logo-boxcom .icon {
-                background-image: url(apps/themes/default/box_logo128.png);
-            }
-            &.logo-onedrive .icon {
-                background-image: url(apps/themes/default/onedrive_logo128.png);
-            }
-            &.logo-dropbox .icon {
-                background-image: url(apps/themes/default/dropbox_logo128.png);
-            }
-        }
+        &.logo-google   .icon { background-image: url(apps/themes/default/googledrive_logo128.png); }
+        &.logo-boxcom   .icon { background-image: url(apps/themes/default/box_logo128.png);         }
+        &.logo-onedrive .icon { background-image: url(apps/themes/default/onedrive_logo128.png);    }
+        &.logo-dropbox  .icon { background-image: url(apps/themes/default/dropbox_logo128.png);     }
     }
 }

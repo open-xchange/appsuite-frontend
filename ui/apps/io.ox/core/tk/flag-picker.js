@@ -14,7 +14,8 @@
 define('io.ox/core/tk/flag-picker', [
     'io.ox/mail/api',
     'io.ox/core/folder/api',
-    'gettext!io.ox/mail'
+    'gettext!io.ox/mail',
+    'less!io.ox/core/tk/flag-picker'
 ], function (api, folderAPI, gt) {
 
     'use strict';

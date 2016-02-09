@@ -15,17 +15,20 @@
 .permissions-dialog {
 
     .modal-header {
+        *zoom: 1;
+
         .btn {
             float: right;
             &.btn-primary { margin-left: 13px; }
         }
-        *zoom: 1;
+
         &:before,
         &:after {
           display: table;
           content: "";
           line-height: 0;
         }
+
         &:after { clear: both; }
 
         .autocomplete-controls {
@@ -34,21 +37,16 @@
         }
     }
 
-    .modal-footer {
-
-        .cascade {
-            display: table;
-            position: relative;
-            float: left;
-            margin-top: 5px;
-            margin-bottom: 0;
-            margin-left: 10px;
-        }
-
+    .modal-footer .cascade {
+        display: table;
+        position: relative;
+        float: left;
+        margin-top: 5px;
+        margin-bottom: 0;
+        margin-left: 10px;
     }
 
     .permission {
-
         margin-bottom: 8px;
 
         .contact-picture {
@@ -60,13 +58,15 @@
             i { font-size: 48px; line-height: 48px; color: #eee; }
         }
 
-        .readwrite, .readonly { margin-right: 45px; }
+        .readwrite,
+        .readonly { margin-right: 45px; }
 
         .readonly {
 			a {
 				cursor: default;
 				color: #888;
 			}
+
             i {
                 font-style:normal;
                 color: #333;
@@ -76,6 +76,7 @@
         .entity {
             padding-left: 64px + 13;
             position: relative;
+
             a { white-space: nowrap; }
         }
 
@@ -101,9 +102,8 @@
 
             &:hover {
                 background-color: @trash-icon-hover-background;
-                i {
-                    color: @trash-icon-hover-color;
-                }
+
+                i { color: @trash-icon-hover-color; }
             }
 
             i {

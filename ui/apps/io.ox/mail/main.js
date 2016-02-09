@@ -336,6 +336,33 @@ define('io.ox/mail/main', [
         },
 
         /*
+         * Add support for virtual folder "Unread"
+         */
+        'all-unseen': function (app) {
+
+            var loader = api.collectionLoader,
+                params = loader.getQueryParams({ folder: 'virtual/all-unseen' }),
+                collection = loader.getCollection(params);
+
+            // register load listener which triggers complete
+            collection.on('load', function () {
+                this.complete = true;
+                this.preserve = true;
+                this.CUSTOM_PAGE_SIZE = 250;
+                this.trigger('complete');
+            });
+
+            // use mail API's "all-unseen" event to update counter (that is also used in top-bar)
+            var virtualAllSeen = folderAPI.pool.getModel('virtual/all-unseen');
+            api.on('all-unseen', function (e, count) {
+                virtualAllSeen.set('unread', count);
+            });
+
+            // make virtual folder clickable
+            app.folderView.tree.selection.addSelectableVirtualFolder('virtual/all-unseen');
+        },
+
+        /*
          * Split into left and right pane
          */
         'vsplit': function (app) {
@@ -356,7 +383,7 @@ define('io.ox/mail/main', [
          */
         'list-view': function (app) {
             app.listView = new MailListView({ swipe: true, app: app, draggable: true, ignoreFocus: true, selectionOptions: { mode: 'special' } });
-            app.listView.model.set({ folder: app.folder.get(), preserve: false });
+            app.listView.model.set({ folder: app.folder.get() });
             app.listView.model.set('thread', true);
             // for debugging
             window.list = app.listView;
@@ -441,8 +468,7 @@ define('io.ox/mail/main', [
                     app.props.set('thread', options.threadrestore || false);
                 }
                 // now change sort columns
-                // use "preserve" mode for "sort by unseen" (only)
-                model.set({ sort: value, preserve: value === 651 });
+                model.set({ sort: value });
             });
         },
 
@@ -460,7 +486,7 @@ define('io.ox/mail/main', [
          */
         'change:thread': function (app) {
             app.props.on('change:thread', function (model, value, opt) {
-                if (app.listView.collection) {
+                if (!app.changingFolders && app.listView.collection) {
                     app.listView.collection.expired = true;
                 }
                 if (value === true) {
@@ -619,17 +645,12 @@ define('io.ox/mail/main', [
 
                 var options = app.getViewOptions(id),
                     fromTo = $(app.left[0]).find('.dropdown.grid-options .dropdown-menu [data-value="from-to"] span'),
-                    showFrom = account.is('sent|drafts', id);
+                    showTo = account.is('sent|drafts', id);
 
                 app.props.set(_.pick(options, 'sort', 'order', 'thread'));
                 app.listView.model.set('folder', id);
                 app.folder.getData();
-
-                if (showFrom) {
-                    fromTo.text(gt('To'));
-                } else {
-                    fromTo.text(gt('From'));
-                }
+                fromTo.text(showTo ? gt('To') : gt('From'));
                 app.changingFolders = false;
             });
         },
@@ -665,6 +686,10 @@ define('io.ox/mail/main', [
                 eventTimer,
                 messageTimer,
                 latestMessage;
+
+            app.recentDelete = function () {
+                return recentDeleteEventCount > 0;
+            };
 
             function show() {
                 // check if message is still within the current collection
@@ -743,7 +768,10 @@ define('io.ox/mail/main', [
                 list = api.resolve(list, app.props.get('thread'));
 
                 // check if a folder is selected
-                var id = app.folder.get(), model = folderAPI.pool.getModel(id), total = model.get('total');
+                var id = app.folder.get(),
+                    model = folderAPI.pool.getModel(id),
+                    total = model.get('total'),
+                    search = app.get('find') && app.get('find').isActive();
 
                 app.right.find('.multi-selection-message .message')
                     .empty()
@@ -754,21 +782,23 @@ define('io.ox/mail/main', [
                             gt('%1$d messages selected', $('<span class="number">').text(list.length).prop('outerHTML'))
                         ),
                         // inline actions
-                        id && total ?
+                        id && total && !search ?
                             $('<div class="inline-actions">').append(
-                                //#. %1$d is the total number of messages
-                                $('<a href="#">').text(gt('Move all %1$d messages to another folder', total)),
+                                $('<span>').text(gt('The following actions apply to all messages (%1$d) in this folder:', total)),
                                 $('<br>'),
                                 //#. %1$d is the total number of messages
-                                $('<a href="#">').text(gt('Delete all %1$d messages', total))
+                                $('<a href="#" data-action="moveAll">').text(gt('Move all messages to another folder')),
+                                $('<br>'),
+                                //#. %1$d is the total number of messages
+                                $('<a href="#" data-action="clear">').text(gt('Delete all messages in this folder'))
                             )
                             .on('click', 'a', function (e) {
                                 e.preventDefault();
-                                if (ox.debug) {
-                                    /*eslint-disable no-alert*/
-                                    alert('TBD');
-                                    /*eslint-enable no-alert */
-                                }
+                                var action = $(e.currentTarget).data('action');
+                                require(['io.ox/core/folder/actions/common'], function (common) {
+                                    if (action === 'moveAll') common.moveAll(id);
+                                    else if (action === 'clear') common.clearFolder(id);
+                                });
                             })
                             : $()
                     );
@@ -1061,10 +1091,15 @@ define('io.ox/mail/main', [
             if (!settings.get('prefetch/next', true)) return;
 
             app.listView.on('selection:one', function () {
+
+                // do not prefetch if a message has just been deleted
+                if (app.recentDelete()) return;
+
                 var items = this.selection.getItems(),
                     pos = this.selection.getPosition(items),
                     dir = this.selection.getDirection(),
                     last = items.length - 1, next;
+
                 if (dir === 'down' && pos < last) next = items.eq(pos + 1);
                 else if (dir === 'up' && pos > 0) next = items.eq(pos - 1);
                 if (next) {
@@ -1147,7 +1182,9 @@ define('io.ox/mail/main', [
                 // resolve thread
                 baton.data = api.resolve(baton.data, app.props.get('thread'));
                 // call action
-                actions.invoke('io.ox/mail/actions/move', null, baton);
+                actions.check('io.ox/mail/actions/move', baton.data).done(function () {
+                    actions.invoke('io.ox/mail/actions/move', null, baton);
+                });
             });
         },
 
@@ -1162,7 +1199,9 @@ define('io.ox/mail/main', [
                 // resolve thread
                 baton.data = api.resolve(baton.data, app.props.get('thread'));
                 // call action
-                actions.invoke('io.ox/mail/actions/archive', null, baton);
+                actions.check('io.ox/mail/actions/archive', baton.data).done(function () {
+                    actions.invoke('io.ox/mail/actions/archive', null, baton);
+                });
             });
         },
 
@@ -1177,7 +1216,10 @@ define('io.ox/mail/main', [
                 // resolve thread
                 baton.data = api.resolve(baton.data, app.props.get('thread'));
                 // call action
-                actions.invoke('io.ox/mail/actions/delete', null, baton);
+                // check if action can be called
+                actions.check('io.ox/mail/actions/delete', baton.data).done(function () {
+                    actions.invoke('io.ox/mail/actions/delete', null, baton);
+                });
             });
         },
 
@@ -1369,6 +1411,21 @@ define('io.ox/mail/main', [
                 if (!$(e.target).hasClass('folder')) return;
                 if (e.which === 13) app.listView.restoreFocus(true);
                 if (e.which === 27) $('#io-ox-topbar .active-app > a').focus();
+            });
+        },
+
+        'auto-expunge': function (app) {
+
+            if (!settings.get('features/autoExpunge', false)) return;
+
+            function isDeleted(model) {
+                return (model.get('flags') & 2) === 2;
+            }
+
+            app.listView.on('collection:load collection:paginate collection:reload', function () {
+                // any deleted message?
+                var any = this.collection.any(isDeleted);
+                if (any) api.expunge(app.folder.get());
             });
         },
 

@@ -58,6 +58,11 @@ msgid_plural "%1$d attachments"
 msgstr[0] "%1$d 個附件"
 msgstr[1] "(%1$s) 附件"
 
+#. %1$d and %2$d are both numbers; usually > 100; never singular
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d contacts found. This list is limited to %2$d items."
+msgstr ""
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d day"
@@ -69,6 +74,7 @@ msgstr[1] "%1$d 天"
 #. %1$d is the number of days
 #. %2$s is the text for the remainder of the last day
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%1$d day, %2$s"
 msgid_plural "%1$d days, %2$s"
 msgstr[0] "%1$d 天、%2$s"
@@ -78,6 +84,7 @@ msgstr[1] "%1$d 天、%2$s"
 #. %1$d is the number of days
 #. %2$s is the text for the remainder of the last day
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%1$d day, %2$s"
 msgid_plural "%1$d days, %2$s"
@@ -99,6 +106,7 @@ msgstr[1] "%1$d 小時"
 #. %1$d is the number of hours
 #. %2$s is the text for the remainder of the last hour
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%1$d hour and %2$s"
 msgid_plural "%1$d hours and %2$s"
 msgstr[0] "%1$d 小時和 %2$s"
@@ -108,6 +116,7 @@ msgstr[1] "%1$d 小時和 %2$s"
 #. %1$d is the number of hours
 #. %2$s is the text for the remainder of the last hour
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%1$d hour and %2$s"
 msgid_plural "%1$d hours and %2$s"
@@ -215,6 +224,7 @@ msgstr "%1$s %2$s"
 #. %5$s Appointment Organizer
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
+#, c-format
 msgid "%1$s %2$s %3$s %4$s %5$s."
 msgstr "%1$s %2$s %3$s %4$s %5$s。"
 
@@ -223,6 +233,7 @@ msgstr "%1$s %2$s %3$s %4$s %5$s。"
 #. %3$s Appointment time
 #. %4$s Appointment location
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, c-format
 msgid "%1$s %2$s %3$s %4$s."
 msgstr "%1$s %2$s %3$s %4$s。"
 
@@ -231,12 +242,14 @@ msgstr "%1$s %2$s %3$s %4$s。"
 #. %3$s task status
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
+#, c-format
 msgid "%1$s %2$s %3$s."
 msgstr "%1$s %2$s %3$s。"
 
 #. %1$s task title
 #. %2$s task end date
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
+#, c-format
 msgid "%1$s %2$s."
 msgstr "%1$s %2$s。"
 
@@ -244,6 +257,7 @@ msgstr "%1$s %2$s。"
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js
+#, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (暫定)"
 
@@ -307,6 +321,7 @@ msgstr[1] "已選擇 %1$s 個項目"
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
+#, c-format
 msgid "%1$s of %2$s"
 msgstr "%2$s 的 %1$s"
 
@@ -327,6 +342,7 @@ msgstr "%1$s 推薦此連結:"
 #. %1$s is the start date
 #. %2$s is the end date
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, c-format
 msgid "%1$s to %2$s"
 msgstr "%2$s 到 %1$s"
 
@@ -372,6 +388,7 @@ msgstr "%3$s %2$s、%1$s"
 #. %d is the number of days
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/core/date.js
 #: module:io.ox/core
+#, c-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d 天"
@@ -380,6 +397,7 @@ msgstr[1] "%d 天"
 #. Reminder (objective case): in X days
 #. %d is the number of days
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%d day"
 msgid_plural "%d days"
@@ -389,6 +407,7 @@ msgstr[1] "%d 天"
 #. General duration (nominative case): X hours
 #. %d is the number of hours
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d 小時"
@@ -397,6 +416,7 @@ msgstr[1] "%d 小時"
 #. Reminder (objective case): in X hours
 #. %d is the number of hours
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%d hour"
 msgid_plural "%d hours"
@@ -407,6 +427,7 @@ msgstr[1] "%d 小時"
 #. %d is the number of minutes
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d 分鐘"
@@ -415,6 +436,7 @@ msgstr[1] "%d 分鐘"
 #. Reminder (objective case): in X minutes
 #. %d is the number of minutes
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%d minute"
 msgid_plural "%d minutes"
@@ -424,6 +446,7 @@ msgstr[1] "%d 分鐘"
 #. General duration (nominative case): X weeks
 #. %d is the number of weeks
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] "%d 周"
@@ -432,6 +455,7 @@ msgstr[1] "%d 周"
 #. Reminder (objective case): in X weeks
 #. %d is the number of weeks
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%d week"
 msgid_plural "%d weeks"
@@ -630,10 +654,9 @@ msgstr "已更新帳戶"
 msgid "Accounts"
 msgstr "帳戶"
 
-#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/core/extPatterns/links.js
+#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -641,6 +664,11 @@ msgstr "帳戶"
 #: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "Actions"
 msgstr "行為"
+
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+msgid "Actions. Use cursor keys to navigate."
+msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -940,6 +968,12 @@ msgstr "已刪除所有檔案"
 msgid "All folders"
 msgstr "所有資料夾"
 
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All messages have been deleted"
+msgstr "已刪除所有檔案"
+
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr "超過 %1$d 天的訊息將被移動至封存信件匣"
@@ -961,9 +995,16 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "允許預載外部鏈結圖像"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 #, fuzzy
 #| msgid "An error occurred while importing the document."
 msgid "An error occurred converting the document so it cannot be displayed."
+msgstr "匯入文件時發生錯誤。"
+
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "An error occurred while importing the document."
+msgid "An error occurred loading the document so it cannot be displayed."
 msgstr "匯入文件時發生錯誤。"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -997,6 +1038,10 @@ msgstr "周年紀念日"
 #: module:io.ox/settings
 msgid "Any recipient"
 msgstr "任何收件人"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "App Store"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Append vCard"
@@ -1191,6 +1236,12 @@ msgstr "自動保存電子郵件草稿"
 msgid "Automatic Configuration"
 msgstr "自動登出"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic sign out"
+msgid "Automatic Configuration (via SMS)"
+msgstr "自動登出"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "自動開啟通知區域"
@@ -1210,10 +1261,6 @@ msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "sending"
 msgstr "寄件時自動將收集到的聯絡人加入到「收集到的地址」資料夾？"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Automatically configure your device by clicking the button below."
-msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
@@ -1250,26 +1297,6 @@ msgstr "向後"
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "Back to appointment"
 msgstr "回到約會"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
-#, fuzzy
-#| msgid "Back to sign in"
-msgid "Back to devices"
-msgstr "回到登入"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Back to sign in"
-msgid "Back to modules"
-msgstr "回到登入"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
-#, fuzzy
-#| msgid "your platform"
-msgid "Back to platforms"
-msgstr "您的平台"
 
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid "Back to sign in"
@@ -1384,7 +1411,6 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "日曆"
 
@@ -1395,10 +1421,6 @@ msgctxt "app"
 msgid "Calendar"
 msgstr "日曆"
 
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Calendar (Manually)"
-msgstr ""
-
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
 msgstr "日曆視圖"
@@ -1407,6 +1429,7 @@ msgstr "日曆視圖"
 msgid "Calendar:"
 msgstr "行事曆:"
 
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
@@ -1417,7 +1440,7 @@ msgstr "行事曆:"
 #: apps/io.ox/calendar/week/perspective.js
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js apps/io.ox/contacts/edit/main.js
-#: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js module:io.ox/core
+#: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js
 #: apps/io.ox/core/export/export.js apps/io.ox/core/folder/actions/add.js
 #: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
@@ -1513,7 +1536,8 @@ msgid "Cart is empty."
 msgstr "購物車是空的。"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "行動電話"
 
@@ -1679,15 +1703,14 @@ msgstr "點擊以再試一次。"
 msgid "Click to upload image"
 msgstr "單點上傳圖像。"
 
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
 msgstr ""
 
-#: apps/io.ox/core/about/about.js module:io.ox/core
-#: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
+#: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/wizard.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -1806,6 +1829,12 @@ msgstr "條件"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
+#| msgid "Confirmation message"
+msgid "Configuration Email"
+msgstr "確認訊息"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
 #| msgid "Confirmed"
 msgid "Configure now"
 msgstr "確認"
@@ -1830,6 +1859,12 @@ msgstr "無法忽略的資源衝突"
 #: apps/io.ox/calendar/view-grid-template.js module:io.ox/calendar
 msgid "Conflicts:"
 msgstr "衝突:"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Selecting a view"
+msgid "Connect your Device"
+msgstr "選擇視圖"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Connector for Microsoft Outlook®"
@@ -2259,10 +2294,9 @@ msgstr "刪除帳號"
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #, fuzzy
-#| msgctxt "folder"
-#| msgid "Deleted messages"
-msgid "Delete all %1$d messages"
-msgstr "已刪除訊息"
+#| msgid "Show all %1$d messages in inbox"
+msgid "Delete all messages in this folder"
+msgstr "顯示收件匣中全部 %1$d 封訊息"
 
 #. object permissions - delete
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -2458,10 +2492,10 @@ msgstr "通訊組列表"
 msgid "Distribution List Details"
 msgstr "通訊組清單詳細資訊"
 
-#: apps/io.ox/contacts/common-extensions.js module:io.ox/contacts
-#: apps/io.ox/contacts/main.js apps/io.ox/contacts/model.js
-#: apps/io.ox/contacts/view-detail.js apps/io.ox/participants/model.js
-#: module:io.ox/core
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/contacts/common-extensions.js apps/io.ox/contacts/main.js
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
+#: apps/io.ox/participants/model.js module:io.ox/core
 msgid "Distribution list"
 msgstr "通訊組列表"
 
@@ -2754,6 +2788,7 @@ msgstr "到期日"
 
 #. %1$s due date of a task
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, c-format
 msgid "Due %1$s"
 msgstr "%1$s 到期"
 
@@ -2885,7 +2920,6 @@ msgid "Editor"
 msgstr "編輯器"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Email"
 msgstr "電子郵件"
 
@@ -2981,8 +3015,6 @@ msgstr "啟用"
 msgid "Enable for the following addresses"
 msgstr "對下列地址啟用"
 
-#. used as a label for the end time of an appointment, try to keep short because it's used in a compact printing view
-#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "End"
 msgstr "結束"
@@ -3047,6 +3079,12 @@ msgstr "錯誤"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Error log"
 msgstr "錯誤記錄"
+
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "An error occurred while loading the document."
+msgid "Error while loading message content"
+msgstr "載入文件時發生錯誤。"
 
 #: apps/io.ox/mail/actions/invite.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -3166,6 +3204,12 @@ msgstr "展開表單"
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Expand timeframe by one month"
 msgstr "展開時間範圍一個月"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Expert mode"
+msgid "Expert user?"
+msgstr "專家模式"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 #, fuzzy
@@ -3616,6 +3660,10 @@ msgid "Get started here"
 msgstr "開始入門"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Get the App from %1$s"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Get your device configured by email."
 msgstr ""
 
@@ -3635,6 +3683,12 @@ msgstr "%s 早安"
 #, fuzzy
 #| msgid "Add Google Drive account"
 msgid "Google Drive"
+msgstr "新增 Google Drive 帳號"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Play"
 msgstr "新增 Google Drive 帳號"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -3756,6 +3810,12 @@ msgstr "隱藏詳情"
 msgid "Hide names"
 msgstr "隱藏名稱"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced filters"
+msgid "Hide options for expert users."
+msgstr "顯示進階過濾器"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
 msgstr "隱藏請求內容"
@@ -3848,6 +3908,10 @@ msgid ""
 "If you change the password, you will be signed out. Please ensure that "
 "everything is closed and saved."
 msgstr "若您變更密碼將會被登出，請確保所有東西已關閉並儲存。"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "If you know what you are doing...just setup your account manually!"
+msgstr ""
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid ""
@@ -3942,6 +4006,14 @@ msgstr "包含通訊組列表"
 msgid "Incoming server"
 msgstr "收件伺服器"
 
+#. error message when server returns incomplete
+#. configuration for client onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic sign out"
+msgid "Incomplete configuration."
+msgstr "自動登出"
+
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr "不連貫的日期"
@@ -3991,6 +4063,12 @@ msgid ""
 "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home "
 "Screen'%4$s"
 msgstr "在您的 %1$s 安裝此網頁應用程式: 點選 %2$s -> %3$s「新增至主畫面」%4$s"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Administration"
+msgid "Installation"
+msgstr "管理"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Instant Messenger 1"
@@ -4118,6 +4196,14 @@ msgstr "加入簡報"
 #, fuzzy
 #| msgid "Join presentation"
 msgid "Join the presentation"
+msgstr "加入簡報"
+
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Join presentation"
+msgid "Joining the presentation of %1$s."
 msgstr "加入簡報"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -4252,6 +4338,12 @@ msgstr "離開簡報"
 msgid "Letters • Symbols"
 msgstr "書信‧符號"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid ""
+"Let´s automatically configure your device, by clicking the button below. It"
+"´s that simple!"
+msgstr ""
+
 #. Emoji category
 #. Japanese: 日常
 #. Rather "everyday life". Contains: Cars, trucks, plane, buildings, flags
@@ -4356,7 +4448,6 @@ msgid "MM"
 msgstr "月"
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Mail"
 msgstr "郵件"
 
@@ -4366,10 +4457,6 @@ msgstr "郵件"
 msgctxt "app"
 msgid "Mail"
 msgstr "郵件"
-
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Mail (Manually)"
-msgstr ""
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Mail Details"
@@ -4402,6 +4489,7 @@ msgstr "郵件數量額度"
 #. %1$s mail sender
 #. %2$s mail subject
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#, c-format
 msgid "Mail from %1$s, %2$s"
 msgstr "來自 %1$s 的郵件: %2$s"
 
@@ -4630,6 +4718,7 @@ msgstr "最小化"
 
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+#, c-format
 msgid "Minimum password length is %1$d."
 msgstr "最小密碼長度為 %1$d。"
 
@@ -4701,16 +4790,22 @@ msgstr "找到超過目前顯示的 %1$s 個項目"
 msgid "Move"
 msgstr "移動"
 
-#. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 #, fuzzy
-#| msgid "Show all %1$d messages in inbox"
-msgid "Move all %1$d messages to another folder"
-msgstr "顯示收件匣中全部 %1$d 封訊息"
+#| msgid "Close all"
+msgid "Move all"
+msgstr "全部關閉"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Move all messages"
 msgstr "移動所有訊息"
+
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show all %1$d messages in inbox"
+msgid "Move all messages to another folder"
+msgstr "顯示收件匣中全部 %1$d 封訊息"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
@@ -4729,6 +4824,7 @@ msgstr "多重選擇"
 msgid "Music"
 msgstr "音樂"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My address books"
 msgstr "我的通訊錄"
@@ -5026,6 +5122,7 @@ msgstr "無慢速請求"
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail apps/io.ox/mail/util.js
 #: module:io.ox/core apps/plugins/notifications/mail/register.js
 #: module:plugins/notifications
+#, c-format
 msgid "No subject"
 msgstr "無主題"
 
@@ -5191,6 +5288,12 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/backbone/mini-views/help.js module:io.ox/core
+#, fuzzy
+#| msgid "Opening the help"
+msgid "Online help"
+msgstr "開啟說明"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "只顯示與「%1$s」資料夾相關的項目"
@@ -5334,6 +5437,12 @@ msgstr "訂購"
 msgid "Organizer"
 msgstr "組織"
 
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+#, fuzzy
+#| msgid "Primary Email"
+msgid "Original mail"
+msgstr "主要電子郵件"
+
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
 msgstr "其他地址"
@@ -5401,6 +5510,7 @@ msgstr "密碼"
 #. %1$s is the minimum password length
 #. %2$s is the maximum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+#, c-format
 msgid "Password length must be between %1$d and %2$d characters."
 msgstr "密碼長度必須在 %1$d 到 %2$d 字元之間。"
 
@@ -5666,6 +5776,7 @@ msgstr "請輸入正確密碼"
 
 #. %1$s the missing request parameter
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#, c-format
 msgid "Please enter the following data: %1$s"
 msgstr "請輸入下列資料: %1$s"
 
@@ -5676,6 +5787,12 @@ msgstr "請輸入從 0 到 100 間的值。"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please enter your credentials."
 msgstr "請輸入您的帳號密碼。"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid ""
+"Please enter your mobile phone number, and we´ll send you a link to "
+"automatically configure your iOS device! It´s that simple!"
+msgstr ""
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please enter your password."
@@ -5775,6 +5892,10 @@ msgstr "張貼狀態更新"
 msgid "Postcode"
 msgstr "郵遞區號"
 
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+msgid "Premium"
+msgstr ""
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Premium features"
 msgstr ""
@@ -5801,6 +5922,13 @@ msgstr "簡報結束"
 #: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 msgid "Presentation is paused."
 msgstr "簡報已暫停。"
+
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Presentation end"
+msgid "Presentation join"
+msgstr "簡報結束"
 
 #. headline of a presentation start alert
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
@@ -5957,6 +6085,7 @@ msgstr "進度"
 #. %1$s how much of a task is completed in percent, values from 0-100
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 #: apps/io.ox/tasks/view-grid-template.js
+#, c-format
 msgid "Progress %1$s %"
 msgstr "進度 %1$s %"
 
@@ -5973,6 +6102,7 @@ msgstr "進度必須是從 0 到 100 內的數字"
 msgid "Properties"
 msgstr "屬性"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public address books"
 msgstr "公開通訊錄"
@@ -6022,7 +6152,8 @@ msgstr "確認購買"
 msgid "Purple"
 msgstr "紫色"
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 #, fuzzy
 #| msgid "Quick Search"
 msgid "Quick reply"
@@ -6053,6 +6184,7 @@ msgstr "已確認 %1$d / %2$d 評分。請使用左右鍵調整您的評分。"
 #. %1$d is current raiting
 #. %2$d is the maximum rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+#, c-format
 msgid ""
 "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
 "arrowkeys to adjust your rating."
@@ -6248,6 +6380,7 @@ msgstr "提醒日期"
 
 #. %1$s reminder date of a task
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, c-format
 msgid "Reminder date %1$s"
 msgstr "提醒日期 %1$s"
 
@@ -6437,12 +6570,6 @@ msgid "Running applications"
 msgstr "執行中的應用程式"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "RSS"
-msgid "SMS"
-msgstr "RSS"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP login"
 msgstr ""
 
@@ -6551,6 +6678,7 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "行程"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/desktop.js module:io.ox/core apps/io.ox/core/main.js
 #: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
 #: apps/io.ox/find/view-tokenfield.js
@@ -6591,6 +6719,14 @@ msgctxt "dropdown"
 msgid "Select"
 msgstr "選擇"
 
+#. Context: Add selected contacts; German "Auswählen", for example
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Select"
+msgctxt "select-contacts"
+msgid "Select"
+msgstr "選擇"
+
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid ""
 "Select a checkbox to define a custom name for that address; otherwise the "
@@ -6604,6 +6740,12 @@ msgstr ""
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Select all"
 msgstr "選擇全部"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Delete contact"
+msgid "Select contacts"
+msgstr "刪除聯絡人"
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -6620,16 +6762,6 @@ msgstr "選擇檔案"
 #: module:io.ox/settings
 msgid "Select folder"
 msgstr "選擇資料夾"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-msgid "Select the platform of your device:"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Selecting a view"
-msgid "Select your device"
-msgstr "選擇視圖"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
@@ -6677,10 +6809,6 @@ msgstr "寄送郵件"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "傳送郵件給所有參與者"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Send me the profile data by SMS."
-msgstr ""
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
@@ -6763,10 +6891,6 @@ msgstr "選項"
 msgid "Settings for advanced users"
 msgstr "顯示進階過濾器"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Setup your profile manually."
-msgstr ""
-
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files apps/plugins/portal/xing/actions.js
@@ -6845,6 +6969,7 @@ msgstr "共享約會"
 msgid "Shared activity"
 msgstr "分享的動態"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
 msgstr "共享的通訊錄"
@@ -7135,8 +7260,6 @@ msgstr "標準資料夾"
 msgid "Standard timezone"
 msgstr "標準時區"
 
-#. used as a label for the start time of an appointment, try to keep short because it's used in a compact printing view
-#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
@@ -7150,6 +7273,12 @@ msgstr "起始日期"
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid "Start date timezone"
 msgstr "起始日期時區"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Shared address books"
+msgid "Start in global address book"
+msgstr "共享的通訊錄"
 
 #. 'start presentation' dropdown menu entry to start a local only presentation where no remote participants would be able to join.
 #: apps/io.ox/presenter/actions.js module:io.ox/presenter
@@ -7639,6 +7768,10 @@ msgstr "已清理此資料夾。"
 msgid "The folder has been emptied"
 msgstr "已清空資料夾"
 
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "The following actions apply to all messages (%1$d) in this folder:"
+msgstr ""
+
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
@@ -7656,6 +7789,7 @@ msgstr "下列產品將會被啟用:"
 #. message text of an alert box if joining a presentation fails
 #. %1$d is the name of the user who started the presentation
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, c-format
 msgid ""
 "The limit of participants has been reached. Please contact the presenter "
 "%1$s."
@@ -7889,6 +8023,7 @@ msgid "This distribution list has been added to the portal"
 msgstr "此通訊組清單已被加入到入口畫面"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 msgid "This document is password protected and cannot be displayed."
 msgstr "此文件已受密碼保護，無法顯示。"
 
@@ -8094,10 +8229,6 @@ msgstr ""
 msgid "Today"
 msgstr "今天"
 
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-msgid "Toggle checkboxes"
-msgstr "切換選取盒"
-
 #. button label for toggling fullscreen mode
 #. button tooltip for toggling fullscreen mode
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -8115,6 +8246,10 @@ msgstr "切換面板"
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "明天"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Too many contacts in your address book."
+msgstr ""
 
 #. Emoji category
 #. Japanese: ツール
@@ -8261,6 +8396,12 @@ msgstr "未命名的訂閱"
 msgid "Unread"
 msgstr "未讀"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+#, fuzzy
+#| msgid "Your messages"
+msgid "Unread messages"
+msgstr "您的訊息"
+
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "未讀: %1$d"
@@ -8363,6 +8504,13 @@ msgid ""
 "Use cursor keys to change the item position. Virtual cursor mode has to be "
 "disabled."
 msgstr "使用方向鍵修改項目位置。必須停用虛擬游標模式。"
+
+#. Tooltip for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#, fuzzy
+#| msgid "Use custom name"
+msgid "Use cursor keys to navigate"
+msgstr "使用自訂名稱"
 
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
@@ -8577,6 +8725,12 @@ msgstr "歡迎，請提供您關於此產品的意見回饋"
 msgid "What do you want to use?"
 msgstr "您是否想保存您的配置？"
 
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your configuration?"
+msgid "What type of device do you want to configure?"
+msgstr "您是否想保存您的配置？"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/updater/register.js module:plugins/portal
 msgid ""
@@ -8781,6 +8935,7 @@ msgstr "您沒有快要到期或已過期的任務。"
 
 #. %1$d number of notifications
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
+#, c-format
 msgid "You have %1$d notification."
 msgid_plural "You have %1$d notifications."
 msgstr[0] "您有 %1$d 個通知。"
@@ -9019,6 +9174,7 @@ msgstr ""
 
 #. %1$s are some example characters
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+#, c-format
 msgid ""
 "Your password is more secure if it also contains capital letters, numbers, "
 "and special characters like %1$s"
@@ -9937,12 +10093,6 @@ msgstr "年"
 #~ msgid "Admin"
 #~ msgstr "管理"
 
-#~ msgid "Administration"
-#~ msgstr "管理"
-
-#~ msgid "Advanced Facets"
-#~ msgstr "進階 Facet"
-
 #~ msgid "Advanced facets block was closed."
 #~ msgstr "進階 facet 區塊已被關閉。"
 
@@ -9953,6 +10103,11 @@ msgstr "年"
 #~ msgid "Advanced options"
 #~ msgstr "進階設定"
 
+#, fuzzy
+#~| msgid "Advanced Facets"
+#~ msgid "Advanced user?"
+#~ msgstr "進階 Facet"
+
 #~ msgid "Afghanistan"
 #~ msgstr "阿富汗"
 
@@ -9960,6 +10115,11 @@ msgstr "年"
 #~ "After pressing OK, a new window will open where you can authorize %s to "
 #~ "access your account data."
 #~ msgstr "按確定後，將打開一個新窗口讓您可以授權%s訪問您的帳戶資料。"
+
+#, fuzzy
+#~| msgid "Cayman Islands"
+#~ msgid "Aland Islands"
+#~ msgstr "開曼群島"
 
 #~ msgid "Albania"
 #~ msgstr "阿爾巴尼亞"
@@ -9990,9 +10150,6 @@ msgstr "年"
 
 #~ msgid "An error occurred while loading page %1$d."
 #~ msgstr "載入第 %1$d 頁時發生錯誤。"
-
-#~ msgid "An error occurred while loading the document."
-#~ msgstr "載入文件時發生錯誤。"
 
 #~ msgid "An error occurred. (%1$s, %3$s)"
 #~ msgstr "發生錯誤。(%1$s，%3$s)"
@@ -10229,6 +10386,21 @@ msgstr "年"
 
 #~ msgid "Azerbaijan"
 #~ msgstr "亞塞拜然"
+
+#, fuzzy
+#~| msgid "Back to sign in"
+#~ msgid "Back to devices"
+#~ msgstr "回到登入"
+
+#, fuzzy
+#~| msgid "Back to sign in"
+#~ msgid "Back to modules"
+#~ msgstr "回到登入"
+
+#, fuzzy
+#~| msgid "your platform"
+#~ msgid "Back to platforms"
+#~ msgstr "您的平台"
 
 #~ msgid "Background 1"
 #~ msgstr "背景 1"
@@ -10530,9 +10702,6 @@ msgstr "年"
 #~ msgid "Close Window"
 #~ msgstr "關閉窗口"
 
-#~ msgid "Close all"
-#~ msgstr "全部關閉"
-
 #~ msgid "Close document"
 #~ msgstr "關閉文件"
 
@@ -10547,6 +10716,11 @@ msgstr "年"
 
 #~ msgid "Cocos (Keeling) Islands"
 #~ msgstr "科克斯（基靈）群島"
+
+#, fuzzy
+#~| msgid "Cook Islands"
+#~ msgid "Cocos Islands"
+#~ msgstr "庫克群島"
 
 #~ msgid "Collect while reading E-Mails?"
 #~ msgstr "閱讀電子郵件時收集聯繫人？"
@@ -10572,6 +10746,11 @@ msgstr "年"
 #~ msgid "Common Facets"
 #~ msgstr "常見 Facet"
 
+#, fuzzy
+#~| msgid "Tomorrow"
+#~ msgid "Comoros"
+#~ msgstr "明天"
+
 #~ msgid "Compact view"
 #~ msgstr "精簡型面板"
 
@@ -10586,9 +10765,6 @@ msgstr "年"
 
 #~ msgid "Confirm"
 #~ msgstr "確認"
-
-#~ msgid "Confirmation message"
-#~ msgstr "確認訊息"
 
 #~ msgid "Confirmation status"
 #~ msgstr "確認狀態"
@@ -10874,6 +11050,12 @@ msgstr "年"
 #~ msgid "Delete a stream"
 #~ msgstr "刪除串流"
 
+#, fuzzy
+#~| msgctxt "folder"
+#~| msgid "Deleted messages"
+#~ msgid "Delete all %1$d messages"
+#~ msgstr "已刪除訊息"
+
 #~ msgid "Delete all accounts"
 #~ msgstr "刪除所有帳號"
 
@@ -11084,9 +11266,6 @@ msgstr "年"
 #~ msgid "Due today!"
 #~ msgstr "今天截止！"
 
-#~ msgid "Dutch (Netherlands)"
-#~ msgstr "荷蘭文"
-
 #~ msgid "Dynamic resizing..."
 #~ msgstr "動態調整大小..."
 
@@ -11131,6 +11310,11 @@ msgstr "年"
 
 #~ msgid "Each %s. %s"
 #~ msgstr "每 %s %s"
+
+#, fuzzy
+#~| msgid "Last month"
+#~ msgid "East Timor"
+#~ msgstr "上個月"
 
 #~ msgid "Ecuador"
 #~ msgstr "厄瓜多"
@@ -11415,9 +11599,6 @@ msgstr "年"
 #~ msgid "Exit Fullscreen"
 #~ msgstr "離開全螢幕"
 
-#~ msgid "Expert mode"
-#~ msgstr "專家模式"
-
 #~ msgid "Extended view"
 #~ msgstr "擴展面板"
 
@@ -11433,6 +11614,16 @@ msgstr "年"
 
 #~ msgid "Failure! Please refresh."
 #~ msgstr "失敗！請重新整理。"
+
+#, fuzzy
+#~| msgid "Cayman Islands"
+#~ msgid "Falkland Islands"
+#~ msgstr "開曼群島"
+
+#, fuzzy
+#~| msgid "Cook Islands"
+#~ msgid "Faroe Islands"
+#~ msgstr "庫克群島"
 
 #~ msgctxt "app"
 #~ msgid "Favorite timezone"
@@ -11514,7 +11705,14 @@ msgstr "年"
 #~ msgid "Forward emails as:"
 #~ msgstr "轉發電子郵件為："
 
-#~ msgid "French"
+#, fuzzy
+#~| msgid "Freelancer"
+#~ msgid "France"
+#~ msgstr "自由工作者"
+
+#, fuzzy
+#~| msgid "French"
+#~ msgid "French Guiana"
 #~ msgstr "法文"
 
 #~ msgid "Friday"
@@ -11532,7 +11730,9 @@ msgstr "年"
 #~ msgid "Further information"
 #~ msgstr "更多資訊"
 
-#~ msgid "German"
+#, fuzzy
+#~| msgid "German"
+#~ msgid "Germany"
 #~ msgstr "德文"
 
 #~ msgid "Get started here!"
@@ -11547,8 +11747,23 @@ msgstr "年"
 #~ msgid "Good morning"
 #~ msgstr "早上好"
 
+#, fuzzy
+#~| msgid "Green"
+#~ msgid "Greece"
+#~ msgstr "綠色"
+
 #~ msgid "Greek"
 #~ msgstr "希臘文"
+
+#, fuzzy
+#~| msgid "Green"
+#~ msgid "Greenland"
+#~ msgstr "綠色"
+
+#, fuzzy
+#~| msgid "Canada"
+#~ msgid "Grenada"
+#~ msgstr "加拿大"
 
 #~ msgid "Grey"
 #~ msgstr "灰色"
@@ -11558,6 +11773,11 @@ msgstr "年"
 
 #~ msgid "H-split view"
 #~ msgstr "水準拆分視圖"
+
+#, fuzzy
+#~| msgid "Waiting"
+#~ msgid "Haiti"
+#~ msgstr "等待中"
 
 #~ msgid "Halo view"
 #~ msgstr "Halo View"
@@ -11599,7 +11819,9 @@ msgstr "年"
 #~ msgid "How the settings are organized"
 #~ msgstr "設定如何整理"
 
-#~ msgid "Hungarian"
+#, fuzzy
+#~| msgid "Hungarian"
+#~ msgid "Hungary"
 #~ msgstr "匈牙利文"
 
 #~ msgid "IMAP folder subscription"
@@ -11663,6 +11885,11 @@ msgstr "年"
 #~ msgid "Incoming Notification Mails"
 #~ msgstr "接收通知郵件"
 
+#, fuzzy
+#~| msgid "Undone"
+#~ msgid "Indonesia"
+#~ msgstr "已還原"
+
 #~ msgid "Info area"
 #~ msgstr "資訊區域"
 
@@ -11723,11 +11950,18 @@ msgstr "年"
 #~ msgid "Italian (Italy)"
 #~ msgstr "義大利文 (義大利)"
 
-#~ msgid "Italic"
+#, fuzzy
+#~| msgid "Italic"
+#~ msgid "Italy"
 #~ msgstr "斜體"
 
 #~ msgid "Items without a file can not be opened."
 #~ msgstr "無法開啟沒有檔案的項目。"
+
+#, fuzzy
+#~| msgid "Due on %1$s"
+#~ msgid "Just open %1$s"
+#~ msgstr "結束於 %s"
 
 #~ msgid "Justify"
 #~ msgstr "左右對齊"
@@ -11819,6 +12053,11 @@ msgstr "年"
 #~ msgid "Managing E-Mail messages"
 #~ msgstr "管理 E-Mail"
 
+#, fuzzy
+#~| msgid "Cayman Islands"
+#~ msgid "Marshall Islands"
+#~ msgstr "開曼群島"
+
 #~ msgid "Mediaplayer"
 #~ msgstr "Mediaplayer"
 
@@ -11837,8 +12076,18 @@ msgstr "年"
 #~ msgid "Monday"
 #~ msgstr "星期一"
 
+#, fuzzy
+#~| msgid "Angola"
+#~ msgid "Mongolia"
+#~ msgstr "安哥拉"
+
 #~ msgid "Month View"
 #~ msgstr "月視圖"
+
+#, fuzzy
+#~| msgid "Months"
+#~ msgid "Montserrat"
+#~ msgstr "月"
 
 #~ msgid "More zoom settings"
 #~ msgstr "更多縮放設定"
@@ -11864,11 +12113,26 @@ msgstr "年"
 #~ msgid "Navigation bar"
 #~ msgstr "導覽列"
 
+#, fuzzy
+#~| msgid "Dutch (Netherlands)"
+#~ msgid "Netherlands"
+#~ msgstr "荷蘭文"
+
 #~ msgid "Network Problems"
 #~ msgstr "網路錯誤"
 
+#, fuzzy
+#~| msgid "New calendar"
+#~ msgid "New Caledonia"
+#~ msgstr "新增行事曆"
+
 #~ msgid "New Mail from %1$s %2$s. Press [enter] to open"
 #~ msgstr "來自 %1$s %2$s 的新郵件。按 Enter 以開啟。"
+
+#, fuzzy
+#~| msgid "New calendar"
+#~ msgid "New Zealand"
+#~ msgstr "新增行事曆"
 
 #~ msgid "New objects icon"
 #~ msgstr "新物件圖示"
@@ -11893,6 +12157,11 @@ msgstr "年"
 
 #~ msgid "Next birthdays"
 #~ msgstr "下個生日"
+
+#, fuzzy
+#~| msgid "Algeria"
+#~ msgid "Nigeria"
+#~ msgstr "阿爾及利亞"
 
 #~ msgid "No appointments found for \"%s\""
 #~ msgstr "找不到「%s」的約會"
@@ -11929,6 +12198,16 @@ msgstr "年"
 
 #~ msgid "No wall posts yet."
 #~ msgstr "尚無塗鴉牆貼文。"
+
+#, fuzzy
+#~| msgid "Cook Islands"
+#~ msgid "Norfolk Island"
+#~ msgstr "庫克群島"
+
+#, fuzzy
+#~| msgid "Forward"
+#~ msgid "Norway"
+#~ msgstr "轉發"
 
 #~ msgid "Not yet confirmed"
 #~ msgstr "未確認"
@@ -11971,6 +12250,11 @@ msgstr "年"
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "只在行動裝置中顯示小工具摘要"
 
+#, fuzzy
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "打開"
+
 #~ msgid "Open in new tab"
 #~ msgstr "在新分頁開啟"
 
@@ -11982,9 +12266,6 @@ msgstr "年"
 
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "開啟郵件選項"
-
-#~ msgid "Opening the help"
-#~ msgstr "開啟說明"
 
 #~ msgid "Opening the settings"
 #~ msgstr "開啟選項"
@@ -11998,6 +12279,16 @@ msgstr "年"
 #~ msgid "Page number"
 #~ msgstr "頁數"
 
+#, fuzzy
+#~| msgid "Afghanistan"
+#~ msgid "Pakistan"
+#~ msgstr "阿富汗"
+
+#, fuzzy
+#~| msgid "British Indian Ocean Territory"
+#~ msgid "Palestinian Territory"
+#~ msgstr "英屬印度洋領地"
+
 #~ msgid "Paragraph Alignment"
 #~ msgstr "段落對齊"
 
@@ -12007,7 +12298,9 @@ msgstr "年"
 #~ msgid "Paragraph borders"
 #~ msgstr "段落邊框"
 
-#~ msgid "Paragraph style"
+#, fuzzy
+#~| msgid "Paragraph style"
+#~ msgid "Paraguay"
 #~ msgstr "段落樣式"
 
 #, fuzzy
@@ -12054,6 +12347,11 @@ msgstr "年"
 #~ msgid "Portal Widgets"
 #~ msgstr "入口小工具"
 
+#, fuzzy
+#~| msgid "Portal"
+#~ msgid "Portugal"
+#~ msgstr "入口"
+
 #~ msgid "Portuguese (Portugal)"
 #~ msgstr "葡萄牙文 (葡萄牙)"
 
@@ -12080,9 +12378,6 @@ msgstr "年"
 #, fuzzy
 #~ msgid "Preview pane"
 #~ msgstr "預覽"
-
-#~ msgid "Primary Email"
-#~ msgstr "主要電子郵件"
 
 #~ msgid "Privacy Notice"
 #~ msgstr "隱私權公告"
@@ -12164,11 +12459,20 @@ msgstr "年"
 #~ msgid "Right aligned, text wraps at left side"
 #~ msgstr "靠右，文字於左邊換行"
 
-#~ msgid "Romanian"
+#, fuzzy
+#~| msgid "Romanian"
+#~ msgid "Romania"
 #~ msgstr "羅馬尼亞文"
 
-#~ msgid "Russian"
+#, fuzzy
+#~| msgid "Russian"
+#~ msgid "Russia"
 #~ msgstr "俄文"
+
+#, fuzzy
+#~| msgid "RSS"
+#~ msgid "SMS"
+#~ msgstr "RSS"
 
 #~ msgid "Saturday"
 #~ msgstr "星期六"
@@ -12324,7 +12628,9 @@ msgstr "年"
 #~ msgid "Simple Pad"
 #~ msgstr "Simple Pad"
 
-#~ msgid "Single"
+#, fuzzy
+#~| msgid "Single"
+#~ msgid "Singapore"
 #~ msgstr "單行"
 
 #~ msgid "Skip this step"
@@ -12341,6 +12647,11 @@ msgstr "年"
 #~ msgid ""
 #~ "Social accounts are only used to download contact and/or calendar data"
 #~ msgstr "社交帳戶將只會用來下載聯絡人與/或行事曆資料"
+
+#, fuzzy
+#~| msgid "Cook Islands"
+#~ msgid "Solomon Islands"
+#~ msgstr "庫克群島"
 
 #~ msgid "Someone shared a file with you"
 #~ msgstr "某人與您分享了檔案"
@@ -12424,6 +12735,11 @@ msgstr "年"
 
 #~ msgid "Superscript"
 #~ msgstr "上標"
+
+#, fuzzy
+#~| msgid "Your name"
+#~ msgid "Suriname"
+#~ msgstr "您的姓名"
 
 #~ msgid "Swedish (Sweden)"
 #~ msgstr "瑞典文"
@@ -12841,6 +13157,9 @@ msgstr "年"
 #~ "displayed in a pop-up window."
 #~ msgstr "要檢視更多資訊，點選檔案。資訊將會顯示於彈出的視窗中。"
 
+#~ msgid "Toggle checkboxes"
+#~ msgstr "切換選取盒"
+
 #~ msgid "Toggle folder"
 #~ msgstr "切換文件夾"
 
@@ -12864,6 +13183,11 @@ msgstr "年"
 
 #~ msgid "Tuesday"
 #~ msgstr "星期二"
+
+#, fuzzy
+#~| msgid "Armenia"
+#~ msgid "Turkmenistan"
+#~ msgstr "亞美尼亞"
 
 #~ msgid "Tweet"
 #~ msgstr "推"
@@ -12916,6 +13240,16 @@ msgstr "年"
 
 #~ msgid "Using the reminder functions"
 #~ msgstr "使用提醒功能"
+
+#, fuzzy
+#~| msgid "Manual"
+#~ msgid "Vanuatu"
+#~ msgstr "手動"
+
+#, fuzzy
+#~| msgid "Vertical"
+#~ msgid "Vatican"
+#~ msgstr "垂直"
 
 #~ msgid "Version history"
 #~ msgstr "版本記錄"
@@ -13188,13 +13522,15 @@ msgstr "年"
 #~ msgid "september"
 #~ msgstr "九月"
 
-#~ msgid "show image"
-#~ msgstr "顯示圖片"
-
 #, fuzzy
 #~| msgid "show all"
 #~ msgid "show link"
 #~ msgstr "顯示全部"
+
+#, fuzzy
+#~| msgid "show image"
+#~ msgid "show mail"
+#~ msgstr "顯示圖片"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "%s 的子資料夾"

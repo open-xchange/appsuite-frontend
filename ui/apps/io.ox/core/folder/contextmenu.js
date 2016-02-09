@@ -140,15 +140,9 @@ define('io.ox/core/folder/contextmenu', [
 
             addLink(this, {
                 action: 'move-all-messages',
-                data: { folder: baton.data.id, app: baton.app },
+                data: { id: baton.data.id },
                 enabled: true,
-                handler: function () {
-                    if (ox.debug) {
-                        /*eslint-disable no-alert*/
-                        alert('Available once we get the proper API action');
-                        /*eslint-enable no-alert */
-                    }
-                },
+                handler: actions.moveAll.bind(actions, baton.data.id),
                 text: gt('Move all messages')
             });
         },
@@ -164,7 +158,7 @@ define('io.ox/core/folder/contextmenu', [
                 action: 'expunge',
                 data: { folder: baton.data.id },
                 enabled: api.can('delete', baton.data),
-                handler: actions.expungeFolder,
+                handler: actions.expunge.bind(actions, baton.data.id),
                 text: gt('Clean up')
             });
         },
@@ -210,9 +204,9 @@ define('io.ox/core/folder/contextmenu', [
 
             addLink(this, {
                 action: 'clearfolder',
-                data: { id: baton.data.id, module: baton.module },
+                data: { id: baton.data.id },
                 enabled: api.can('delete', baton.data),
-                handler: actions.clearFolder,
+                handler: actions.clearFolder.bind(actions, baton.data.id),
                 text: gt('Empty folder')
             });
         },

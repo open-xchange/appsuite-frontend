@@ -18,7 +18,7 @@
 }
 
 .io-ox-tasks-edit-main {
-    //hide collapsed and details on startup
+    // hide collapsed and details on startup
     .collapsed, .task-edit-details { display: none; }
 
     .progress-field { text-align: center; }
@@ -34,12 +34,10 @@
         margin-bottom: 9px;
     }
 
-    //add temporariily higher z index to fix the focus outline (Bug 41266)
+    // add temporariily higher z index to fix the focus outline (Bug 41266)
     .input-group {
         .progress-field:focus,
         button[data-action='minus']:focus,
-        button[data-action='plus']:focus {
-            z-index: 3;
-        }
+        button[data-action='plus']:focus { z-index: 3; }
     }
 }

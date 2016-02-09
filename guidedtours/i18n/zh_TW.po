@@ -13,6 +13,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.4\n"
 
+#: apps/io.ox/tours/files.js:215 module:io.ox/tours
+#, fuzzy
+#| msgid "Add new account"
+msgid "Add another account"
+msgstr "新增帳號"
+
 #: apps/io.ox/tours/calendar.js:72 module:io.ox/tours
 msgid "Adding attachments"
 msgstr "新增附件"
@@ -21,15 +27,43 @@ msgstr "新增附件"
 msgid "Adding further details"
 msgstr "新增更多詳情"
 
+#: apps/io.ox/tours/files.js:101 module:io.ox/tours
+msgid ""
+"At the top you can find the toolbar with many functions and additional "
+"options. You can easily create new folders, new files and much more."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:163 module:io.ox/tours
+msgid ""
+"Choose from two alternatives to share your files and folders. Use Invite "
+"people if you want to manage access rights and allow recipients to create "
+"and edit files. Or just get a link to let others view and download your "
+"files. You can use an expiration date and password protection if you like."
+msgstr ""
+
 #: apps/io.ox/tours/contacts.js:36 module:io.ox/tours
 msgid ""
 "Click on a letter on the left side of the navigation bar in order to display "
 "the corresponding contacts from the selected address book."
 msgstr "點選導覽列左方的字母以顯示選擇的通訊錄中對應的聯絡人。"
 
+#: apps/io.ox/tours/files.js:78 module:io.ox/tours
+msgid ""
+"Clicking on a folder displays all the subfolders, documents, media and other "
+"files that it contains."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:129 module:io.ox/tours
+msgid "Clicking on the view icon leads you to a preview of the selected file."
+msgstr ""
+
 #: apps/io.ox/tours/portal.js:45 module:io.ox/tours
 msgid "Closing a square"
 msgstr "關閉方塊"
+
+#: apps/io.ox/tours/files.js:176 module:io.ox/tours
+msgid "Collaborating"
+msgstr ""
 
 #: apps/io.ox/tours/mail.js:33 module:io.ox/tours
 msgid "Composing a new E-Mail"
@@ -46,10 +80,6 @@ msgstr "新增聯絡人"
 #: apps/io.ox/tours/tasks.js:32 module:io.ox/tours
 msgid "Creating a new task"
 msgstr "新建工作"
-
-#: apps/io.ox/tours/files.js:60 module:io.ox/tours
-msgid "Creating a note"
-msgstr "建立筆記"
 
 #: apps/io.ox/tours/intro.js:72 module:io.ox/tours
 msgid "Creating new items"
@@ -86,9 +116,16 @@ msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
 msgstr "可以在系統選單 > 說明中找到各程式的詳細操作說明。"
 
-#: apps/io.ox/tours/files.js:67 module:io.ox/tours
-msgid "Displaying information"
-msgstr "顯示資訊"
+#: apps/io.ox/tours/files.js:192 module:io.ox/tours
+msgid ""
+"Did you know that you can edit text documents and spreadsheets online? Drive "
+"will automatically update your edited file, but thanks to versioning the "
+"original file stays available."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:86 module:io.ox/tours
+msgid "Different views are available. Just select the one you like best."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -98,11 +135,24 @@ msgstr "顯示選項或說明"
 msgid "Drag and drop"
 msgstr "拖曳"
 
+#: apps/io.ox/tours/files.js:216 module:io.ox/tours
+msgid ""
+"Drive allows you to connect to other storage solutions if you already have a "
+"cloud storage account you use to save and sync your files. Simply click on "
+"the appropriate logo to access your existing data."
+msgstr ""
+
 #: apps/io.ox/tours/settings.js:44 module:io.ox/tours
 msgid ""
 "Edit a setting on the right side. In most of the cases, the changes are "
 "activated immediately."
 msgstr "編輯右邊的設定，在大多數的情況下變更將會即時生效。"
+
+#: apps/io.ox/tours/files.js:191 module:io.ox/tours
+#, fuzzy
+#| msgid "Edit document"
+msgid "Edit documents"
+msgstr "編輯文件"
 
 #: apps/io.ox/tours/mail.js:106 module:io.ox/tours
 msgid "Editing multiple E-Mails"
@@ -176,9 +226,27 @@ msgstr "輸入主旨"
 msgid "Entering the task's data"
 msgstr "輸入任務資料"
 
-#: apps/io.ox/tours/files.js:30 module:io.ox/tours
+#: apps/io.ox/tours/files.js:199 module:io.ox/tours
+#, fuzzy
+#| msgid "File Details"
+msgid "File details"
+msgstr "檔案詳情"
+
+#: apps/io.ox/tours/files.js:77 module:io.ox/tours
+#, fuzzy
+#| msgid "Folder tree"
+msgid "Folder content"
+msgstr "資料夾樹"
+
+#: apps/io.ox/tours/files.js:63 module:io.ox/tours
 msgid "Folder tree"
 msgstr "資料夾樹"
+
+#: apps/io.ox/tours/files.js:140 module:io.ox/tours
+msgid ""
+"From preview you can also select other options to help you manage and work "
+"on your files."
+msgstr ""
 
 #: apps/io.ox/tours/calendar.js:73 module:io.ox/tours
 msgid "Further down you can add documents as attachments to the appointment."
@@ -200,6 +268,18 @@ msgstr "開始入門"
 #: apps/io.ox/tours/mail.js:101 module:io.ox/tours
 msgid "Halo view"
 msgstr "Halo View"
+
+#: apps/io.ox/tours/files.js:151 module:io.ox/tours
+msgid ""
+"Here you can share files with your colleagues and external contacts. You can "
+"also collaborate on a document and set different access rights."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:226 module:io.ox/tours
+msgid ""
+"Hint: you can always restart guided tours, any time you need them, from the "
+"system menu."
+msgstr ""
 
 #: apps/io.ox/tours/settings.js:36 module:io.ox/tours
 msgid "How the settings are organized"
@@ -244,9 +324,29 @@ msgstr "邀請其他參與者"
 msgid "Launching an app"
 msgstr "執行應用程式"
 
+#: apps/io.ox/tours/files.js:37 module:io.ox/tours
+msgid ""
+"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy "
+"eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam "
+"voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet "
+"clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit "
+"amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam "
+"nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed "
+"diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet "
+"clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+msgstr ""
+
 #: apps/io.ox/tours/contacts.js:35 module:io.ox/tours
 msgid "Navigation bar"
 msgstr "導覽列"
+
+#: apps/io.ox/tours/files.js:64 module:io.ox/tours
+msgid ""
+"On the left you can see the folder tree. It displays your folder structure "
+"and allows you to navigate to specific folders and subfolders. To make your "
+"life easier, we have already included folders for your Documents, Music, "
+"Pictures and Videos."
+msgstr ""
 
 #: apps/io.ox/tours/mail.js:91 module:io.ox/tours
 msgid "Opening an E-Mail in a separate window"
@@ -268,6 +368,16 @@ msgstr "開啟說明"
 msgid "Opening the settings"
 msgstr "開啟選項"
 
+#: apps/io.ox/tours/files.js:128 module:io.ox/tours
+#, fuzzy
+msgid "Preview files"
+msgstr "預覽"
+
+#: apps/io.ox/tours/files.js:139 module:io.ox/tours
+#, fuzzy
+msgid "Preview mode"
+msgstr "預覽"
+
 #: apps/io.ox/tours/mail.js:96 module:io.ox/tours
 msgid "Reading E-Mail conversations"
 msgstr "閱讀郵件討論串"
@@ -276,12 +386,22 @@ msgstr "閱讀郵件討論串"
 msgid "Reading the details"
 msgstr "閱讀詳情"
 
+#: apps/io.ox/tours/files.js:225 module:io.ox/tours
+msgid "Restart Guided Tour"
+msgstr ""
+
 #: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "搜尋物件"
 
+#: apps/io.ox/tours/files.js:85 module:io.ox/tours
+#, fuzzy
+#| msgid "Selecting a view"
+msgid "Select a view"
+msgstr "選擇視圖"
+
 #: apps/io.ox/tours/calendar.js:83 module:io.ox/tours
-#: apps/io.ox/tours/files.js:35 apps/io.ox/tours/mail.js:86
+#: apps/io.ox/tours/mail.js:86
 msgid "Selecting a view"
 msgstr "選擇視圖"
 
@@ -292,6 +412,26 @@ msgstr "傳送郵件給某個聯絡人"
 #: apps/io.ox/tours/mail.js:74 module:io.ox/tours
 msgid "Sending the E-Mail"
 msgstr "寄送郵件"
+
+#: apps/io.ox/tours/files.js:150 module:io.ox/tours
+#, fuzzy
+#| msgid "Share this file"
+msgid "Share files"
+msgstr "分享此檔案"
+
+#: apps/io.ox/tours/files.js:177 module:io.ox/tours
+msgid ""
+"Sharing files by inviting people does not only offer your recipients the "
+"option to create and edit files. Internal and external participants are also "
+"able to collaborate with you on text documents and spreadsheets at the same "
+"time."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:162 module:io.ox/tours
+#, fuzzy
+#| msgid "Sort options"
+msgid "Sharing options"
+msgstr "排序選項"
 
 #: apps/io.ox/tours/settings.js:54 module:io.ox/tours
 msgid "Signing out"
@@ -317,20 +457,21 @@ msgstr ""
 "詳細視圖會顯示物件的內容，視應用程式而定，您可以在詳細視圖中找到更多管理物件"
 "的功能。"
 
-#: apps/io.ox/tours/files.js:45 module:io.ox/tours
-msgid "The Icons view"
-msgstr "圖示視圖"
+#: apps/io.ox/tours/files.js:56 module:io.ox/tours
+#, fuzzy
+#| msgctxt "help"
+#| msgid "The Drive App"
+msgid "The Drive app"
+msgstr "Drive 應用程式"
 
-#: apps/io.ox/tours/files.js:46 module:io.ox/tours
-msgid ""
-"The Icons view displays an icon and the file name for each file. Click on an "
-"icon to view further details and functions in the pop-up."
-msgstr ""
-"圖示視圖將顯示每個檔案的圖示與檔名。點擊圖示以在彈出視窗中檢視更多資料或操作"
-"功能。"
+#: apps/io.ox/tours/files.js:50 module:io.ox/tours
+#, fuzzy
+#| msgctxt "help"
+#| msgid "The Drive App"
+msgid "The Drive app tour.txt"
+msgstr "Drive 應用程式"
 
 #: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
-#: apps/io.ox/tours/files.js:40
 msgid "The List view"
 msgstr "清單視圖"
 
@@ -342,15 +483,6 @@ msgid ""
 msgstr ""
 "清單視圖會顯示目前資料夾中的約會，點擊約會時，約會資料與一些功能將顯示於詳細"
 "視圖。"
-
-#: apps/io.ox/tours/files.js:41 module:io.ox/tours
-msgid ""
-"The List view shows details like the size and date of change. Use the "
-"checkboxes to select files. Click on a file to view further details and "
-"functions in the pop-up."
-msgstr ""
-"清單視圖將會顯示大小與修改日期等詳情。使用選取盒來選取檔案，點擊檔案以在彈出"
-"視窗中檢視更多資料或操作功能。"
 
 #: apps/io.ox/tours/intro.js:58 module:io.ox/tours
 msgid "The New objects icon"
@@ -372,18 +504,6 @@ msgid ""
 "news."
 msgstr "入口可通知您目前有什麼郵件、約會、或社交網路中的消息。"
 
-#: apps/io.ox/tours/files.js:50 module:io.ox/tours
-msgid "The Tiles view"
-msgstr "磚塊視圖"
-
-#: apps/io.ox/tours/files.js:51 module:io.ox/tours
-msgid ""
-"The Tiles view shows a big icon for each file. Click on an icon to view "
-"further details and functions in the pop-up."
-msgstr ""
-"磚塊視圖會為每個檔案顯示大圖示。點擊圖示以在彈出視窗中檢視更多資料或操作功"
-"能。"
-
 #: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
 msgid "The calendar views"
 msgstr "行事曆視圖"
@@ -393,6 +513,13 @@ msgid ""
 "The calendar views display a calendar sheet with the appointments for the "
 "selected time range."
 msgstr "行事曆視圖將會顯示包含指定時間範圍中約會的行事曆。"
+
+#: apps/io.ox/tours/files.js:200 module:io.ox/tours
+msgid ""
+"The file details side bar offers additional information about your files. "
+"Just enable the File details option from the View drop down menu and select "
+"a file to see the details."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js:104 module:io.ox/tours
 msgid "The folder tree"
@@ -459,10 +586,6 @@ msgstr "要新增聯絡人，點選工具列中的新增 > 新增聯絡人。"
 #: apps/io.ox/tours/tasks.js:33 module:io.ox/tours
 msgid "To create a new task, click on New in the toolbar."
 msgstr "要建立新任務，點選工具列中的新增。"
-
-#: apps/io.ox/tours/files.js:61 module:io.ox/tours
-msgid "To create a note, click on New > Add note in the toolbar."
-msgstr "要新增筆記，點選工具列中的新增 > 新增筆記。"
 
 #: apps/io.ox/tours/calendar.js:58 module:io.ox/tours
 msgid ""
@@ -597,12 +720,6 @@ msgstr "要取得寄件者或其他收件者的資訊，點選姓名中的 Halo 
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr "要搜尋物件，點選選單列中的搜尋圖示。"
 
-#: apps/io.ox/tours/files.js:36 module:io.ox/tours
-msgid ""
-"To select one of the views List, Icons or Squares, click on View on the "
-"right side of the toolbar."
-msgstr "要選擇清單、圖示或方塊視圖清單，點擊工具列右邊的視圖。"
-
 #: apps/io.ox/tours/calendar.js:84 module:io.ox/tours
 msgid ""
 "To select one of the views like Day, Month or List, click on View in the "
@@ -638,31 +755,29 @@ msgstr "要排序任務，點選排序依照。選擇排序條件。"
 msgid "To track the editing status, enter the current progress."
 msgstr "要追蹤編輯狀態，輸入目前的進度。"
 
-#: apps/io.ox/tours/files.js:56 module:io.ox/tours
-msgid "To upload a file, click on New > Upload new file in the toolbar."
-msgstr "要上傳檔案，點選工具列中的新增 > 上傳新檔案。"
-
-#: apps/io.ox/tours/files.js:68 module:io.ox/tours
+#: apps/io.ox/tours/files.js:114 module:io.ox/tours
 msgid ""
-"To view further information, click on a file. A pop-up window displays "
-"further details and functions."
-msgstr "要檢視更多資訊，點選檔案。更多資訊與功能將會顯示於彈出的視窗中。"
+"To upload a new file from your local device, simply click on Add local file "
+"and select the file you would like to upload. It is even easier if you just "
+"drag and drop files from your local device into Drive. The uploaded file is "
+"now available in Drive on all your devices."
+msgstr ""
+
+#: apps/io.ox/tours/files.js:100 module:io.ox/tours
+#, fuzzy
+#| msgid "The toolbar"
+msgid "Toolbar"
+msgstr "工具列"
 
 #: apps/io.ox/tours/tasks.js:72 module:io.ox/tours
 msgid "Tracking the editing status"
 msgstr "追蹤編輯狀態"
 
-#: apps/io.ox/tours/files.js:55 module:io.ox/tours
-msgid "Uploading a file"
-msgstr "上傳檔案"
-
-#: apps/io.ox/tours/files.js:31 module:io.ox/tours
-msgid ""
-"Use the folder tree to access own, public or shared files. If the folder "
-"tree is hidden, click on View > Folder view on the right side of the toolbar."
-msgstr ""
-"使用資料夾樹存取自己的、公開的或共享的檔案。若資料夾樹被隱藏了，點擊工具列右"
-"邊的檢視 > 資料夾視圖。"
+#: apps/io.ox/tours/files.js:113 module:io.ox/tours
+#, fuzzy
+#| msgid "Upload new file"
+msgid "Upload a new file"
+msgstr "上傳新檔案"
 
 #: apps/io.ox/tours/intro.js:105 module:io.ox/tours
 msgid ""
@@ -683,6 +798,14 @@ msgstr "使用提醒功能"
 #: apps/io.ox/tours/intro.js:34 module:io.ox/tours
 msgid "Welcome to %s"
 msgstr "歡迎使用 %s"
+
+#: apps/io.ox/tours/files.js:57 module:io.ox/tours
+msgid ""
+"Welcome to your cloud storage app. This Guided Tour will introduce you to "
+"your new online storage solution - your one point to access online stored "
+"files from all your accounts. This is where you can upload and save your "
+"files, share them and synchronize them with different devices.  "
+msgstr ""
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s)"
@@ -1266,9 +1389,6 @@ msgstr "歡迎使用 %s"
 
 #~ msgid "Add mail account"
 #~ msgstr "新增郵件帳號"
-
-#~ msgid "Add new account"
-#~ msgstr "新增帳號"
 
 #~ msgid "Add new folder"
 #~ msgstr "新增資料夾"
@@ -2675,6 +2795,9 @@ msgstr "歡迎使用 %s"
 #~ msgid "Creating Files"
 #~ msgstr "建立檔案"
 
+#~ msgid "Creating a note"
+#~ msgstr "建立筆記"
+
 #~ msgid "Creation date:"
 #~ msgstr "建立日期："
 
@@ -3051,6 +3174,9 @@ msgstr "歡迎使用 %s"
 #~ msgid "Displayed name"
 #~ msgstr "顯示名"
 
+#~ msgid "Displaying information"
+#~ msgstr "顯示資訊"
+
 #~ msgid "Distance"
 #~ msgstr "距離"
 
@@ -3418,9 +3544,6 @@ msgstr "歡迎使用 %s"
 
 #~ msgid "Edit description"
 #~ msgstr "編輯描述"
-
-#~ msgid "Edit document"
-#~ msgstr "編輯文件"
 
 #~ msgid "Edit draft"
 #~ msgstr "編輯草稿"
@@ -3876,9 +3999,6 @@ msgstr "歡迎使用 %s"
 
 #~ msgid "File"
 #~ msgstr "檔案"
-
-#~ msgid "File Details"
-#~ msgstr "檔案詳情"
 
 #~ msgid "File name"
 #~ msgstr "檔案名稱"
@@ -5557,10 +5677,6 @@ msgstr "歡迎使用 %s"
 #~ msgid "Preview could not be loaded"
 #~ msgstr "無法載入預覽"
 
-#, fuzzy
-#~ msgid "Preview pane"
-#~ msgstr "預覽"
-
 #~ msgid "Previous"
 #~ msgstr "上一個"
 
@@ -6087,9 +6203,6 @@ msgstr "歡迎使用 %s"
 #~ msgid "Share link by email"
 #~ msgstr "透過電子郵件分享連結"
 
-#~ msgid "Share this file"
-#~ msgstr "分享此檔案"
-
 #~ msgid "Share this folder"
 #~ msgstr "分享此資料夾"
 
@@ -6316,9 +6429,6 @@ msgstr "歡迎使用 %s"
 #~ msgstr ""
 #~ "抱歉，我們無法在此幫忙。您的提供者需要自 LinkedIn 取得金鑰與讀取訊息的權"
 #~ "限。"
-
-#~ msgid "Sort options"
-#~ msgstr "排序選項"
 
 #~ msgid "Source"
 #~ msgstr "來源"
@@ -6547,16 +6657,22 @@ msgstr "歡迎使用 %s"
 #~ msgstr "新增資訊來源群組"
 
 #~ msgctxt "help"
-#~ msgid "The Drive App"
-#~ msgstr "Drive 應用程式"
-
-#~ msgctxt "help"
 #~ msgid "The E-Mail Components"
 #~ msgstr "E-Mail 元件"
 
 #~ msgctxt "help"
 #~ msgid "The Files Components"
 #~ msgstr "檔案元件"
+
+#~ msgid "The Icons view"
+#~ msgstr "圖示視圖"
+
+#~ msgid ""
+#~ "The Icons view displays an icon and the file name for each file. Click on "
+#~ "an icon to view further details and functions in the pop-up."
+#~ msgstr ""
+#~ "圖示視圖將顯示每個檔案的圖示與檔名。點擊圖示以在彈出視窗中檢視更多資料或操"
+#~ "作功能。"
 
 #~ msgid "The Icons view displays an icon for each file."
 #~ msgstr "圖示視圖將會為每個檔案顯示圖示。"
@@ -6576,6 +6692,24 @@ msgstr "歡迎使用 %s"
 #~ msgstr ""
 #~ "清單視圖將會顯示包含檔案與所選檔案資料的視圖。此試圖將與郵件與聯絡人視圖相"
 #~ "同。"
+
+#~ msgid ""
+#~ "The List view shows details like the size and date of change. Use the "
+#~ "checkboxes to select files. Click on a file to view further details and "
+#~ "functions in the pop-up."
+#~ msgstr ""
+#~ "清單視圖將會顯示大小與修改日期等詳情。使用選取盒來選取檔案，點擊檔案以在彈"
+#~ "出視窗中檢視更多資料或操作功能。"
+
+#~ msgid "The Tiles view"
+#~ msgstr "磚塊視圖"
+
+#~ msgid ""
+#~ "The Tiles view shows a big icon for each file. Click on an icon to view "
+#~ "further details and functions in the pop-up."
+#~ msgstr ""
+#~ "磚塊視圖會為每個檔案顯示大圖示。點擊圖示以在彈出視窗中檢視更多資料或操作功"
+#~ "能。"
 
 #~ msgid "The account must be named"
 #~ msgstr "必須為帳號取名"
@@ -7076,6 +7210,9 @@ msgstr "歡迎使用 %s"
 #~ "要手動新增參與者，只需要提供有效電子郵件位置 (例如 john.doe@example.com 或"
 #~ "是 \"John Doe\" <jd@example.com>)"
 
+#~ msgid "To create a note, click on New > Add note in the toolbar."
+#~ msgstr "要新增筆記，點選工具列中的新增 > 新增筆記。"
+
 #~ msgid "To create a note, click the icon at the top. Select Add note."
 #~ msgstr "要建立筆記，點選頂端的圖示，選擇新增筆記。"
 
@@ -7100,8 +7237,21 @@ msgstr "歡迎使用 %s"
 #~ "the menu bar. Select Help."
 #~ msgstr "要開啟說明，點選選單列右上角的系統選單，選擇說明。"
 
+#~ msgid ""
+#~ "To select one of the views List, Icons or Squares, click on View on the "
+#~ "right side of the toolbar."
+#~ msgstr "要選擇清單、圖示或方塊視圖清單，點擊工具列右邊的視圖。"
+
 #~ msgid "To send the E-Mail, click on Send on the upper right side."
 #~ msgstr "要傳送郵件，點選右上角的傳送。"
+
+#~ msgid "To upload a file, click on New > Upload new file in the toolbar."
+#~ msgstr "要上傳檔案，點選工具列中的新增 > 上傳新檔案。"
+
+#~ msgid ""
+#~ "To view further information, click on a file. A pop-up window displays "
+#~ "further details and functions."
+#~ msgstr "要檢視更多資訊，點選檔案。更多資訊與功能將會顯示於彈出的視窗中。"
 
 #~ msgid "Today"
 #~ msgstr "今天"
@@ -7265,14 +7415,14 @@ msgstr "歡迎使用 %s"
 #~ msgid "Upload file"
 #~ msgstr "上傳檔案"
 
-#~ msgid "Upload new file"
-#~ msgstr "上傳新檔案"
-
 #~ msgid "Upload new files"
 #~ msgstr "上傳新檔案"
 
 #~ msgid "Upload new version"
 #~ msgstr "上載新版本"
+
+#~ msgid "Uploading a file"
+#~ msgstr "上傳檔案"
 
 #~ msgid "Uploading folders is not supported."
 #~ msgstr "不支援上傳資料夾。"
@@ -7299,6 +7449,14 @@ msgstr "歡迎使用 %s"
 
 #~ msgid "Use fixed-width font for text mails"
 #~ msgstr "針對純文字郵件使用固定寬度字體顯示"
+
+#~ msgid ""
+#~ "Use the folder tree to access own, public or shared files. If the folder "
+#~ "tree is hidden, click on View > Folder view on the right side of the "
+#~ "toolbar."
+#~ msgstr ""
+#~ "使用資料夾樹存取自己的、公開的或共享的檔案。若資料夾樹被隱藏了，點擊工具列"
+#~ "右邊的檢視 > 資料夾視圖。"
 
 #~ msgid "Use unified mail for this account"
 #~ msgstr "為此帳戶使用統一郵件"

@@ -16,14 +16,11 @@
 /* Guidance view */
 
 .statistics {
-
-    .overflow(auto);
     position: static; /* Bug 31425 */
+    .overflow(auto);
     @distance: 28px;
 
-    &.modal-body {
-        padding: 28px 28px 0 28px;
-    }
+    &.modal-body { padding: 28px 28px 0 28px; }
 
     h1.folder-name {
         font-size: 24px;
@@ -36,13 +33,9 @@
         &:last-child { margin-bottom: 0; }
     }
 
-    .folder-summary {
-        color: #888;
-    }
+    .folder-summary { color: #888; }
 
-    .folder-actions {
-        margin-top: 14px;
-    }
+    .folder-actions { margin-top: 14px; }
 
     h2 {
         font-size: 20px;
@@ -52,19 +45,9 @@
     }
 
     ul.compact {
-
-        li {
-            a.disabled {
-                display: none;
-            }
-        }
-
-        li.divider {
-            display: none;
-        }
+        li a.disabled,
+        li.divider { display: none; }
     }
 
-    canvas {
-        margin-bottom: 10px;
-    }
+    canvas { margin-bottom: 10px; }
 }

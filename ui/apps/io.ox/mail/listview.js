@@ -78,7 +78,7 @@ define('io.ox/mail/listview', [
             index: 100,
             draw: function (baton) {
                 var column = $('<div class="list-item-column column-1">');
-                extensions.unread.call(column, baton);
+                extensions.envelope.call(column, baton);
                 this.append(column);
             }
         },
@@ -149,6 +149,11 @@ define('io.ox/mail/listview', [
             id: 'original-folder',
             index: 150,
             draw: extensions.folder
+        },
+        {
+            id: 'unseen-foldername',
+            index: 175,
+            draw: extensions.folderName
         },
         {
             id: 'flag',
@@ -255,6 +260,11 @@ define('io.ox/mail/listview', [
             draw: extensions.folder
         },
         {
+            id: 'unseen-foldername',
+            index: 175,
+            draw: extensions.folderName
+        },
+        {
             id: 'flag',
             index: 200,
             draw: extensions.flag
@@ -306,7 +316,7 @@ define('io.ox/mail/listview', [
             ListView.prototype.initialize.call(this, options);
             this.$el.addClass('mail-item');
             this.on('collection:load', this.lookForUnseenMessage);
-            this.$el.on('click mousedown', '.selectable .icon-unread', this.markRead.bind(this));
+            this.$el.on('click mousedown', '.selectable .seen-unseen-indicator', this.markRead.bind(this));
 
             // track some states
             if (options && options.app) {
@@ -341,7 +351,11 @@ define('io.ox/mail/listview', [
                     return memo || util.isUnseen(item);
                 }, false);
 
-            if (isUnseen) api.markRead(thread);
+            if (isUnseen) {
+                api.markRead(thread);
+            } else {
+                api.markUnread(thread);
+            }
 
             e.preventDefault();
             e.stopPropagation();

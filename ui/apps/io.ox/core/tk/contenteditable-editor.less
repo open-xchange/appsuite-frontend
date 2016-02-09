@@ -27,21 +27,15 @@
 
 .mce-window {
     // fix for tinymce link dialog
-    .mce-formitem {
-        .mce-widget {
-            width: auto!important;;
-            position: relative!important;
-        }
+    .mce-formitem .mce-widget {
+        width: auto!important;;
+        position: relative!important;
     }
 
     // fix for tinymce alerts
-    .mce-container-body.mce-window-body.mce-abs-layout {
-        label {
-            &.mce-widget.mce-label.mce-autoscroll.mce-abs-layout-item.mce-first.mce-last {
-                white-space: pre-wrap;
-                position: relative;
-            }
-        }
+    .mce-container-body.mce-window-body.mce-abs-layout label.mce-widget.mce-label.mce-autoscroll.mce-abs-layout-item.mce-first.mce-last {
+        white-space: pre-wrap;
+        position: relative;
     }
 
     .mce-btn {
@@ -56,19 +50,17 @@
         border: 1px solid transparent;
         white-space: nowrap;
         .user-select(none);
-
         min-width: 80px;
         margin-right: 8px;
         height: 32px;
+        .button-variant(@btn-default-color; @btn-default-bg; @btn-default-border);
 
         &:not(.mce-open) {
             .border-radius(@border-radius-base);
             .user-select(none);
         }
-        .button-variant(@btn-default-color; @btn-default-bg; @btn-default-border);
-        &.mce-primary {
-            .button-variant(@btn-primary-color; @btn-primary-bg; @btn-primary-border);
-        }
+
+        &.mce-primary { .button-variant(@btn-primary-color; @btn-primary-bg; @btn-primary-border); }
     }
 }
 
@@ -81,23 +73,24 @@
     .mce-btn.mce-active, .mce-btn.mce-active:hover { background-color: #e6e6e6; }
 }
 
-.mce-toolbar {
-    .mce-btn-group, .mce-btn-group:not(:first-child) {
-        border: 0;
-        .mce-btn {
-            border:0;
-            background:transparent;
-            padding-bottom:2px;
-            padding-top:1px;
+.mce-toolbar .mce-btn-group, .mce-btn-group:not(:first-child) {
+    border: 0;
 
-            &:focus { background-color: #ddd; outline: 1px solid blue; }
-            &:hover { background-color: #ddd; }
-        }
+    .mce-btn {
+        border:0;
+        background:transparent;
+        padding-bottom:2px;
+        padding-top:1px;
+
+        &:focus { background-color: #ddd; outline: 1px solid blue; }
+        &:hover { background-color: #ddd; }
     }
 }
 
 .mce-panel {
+
     &.mce-container:not(.mce-floatpanel):not(.mce-edit-area) { border-width:0 !important; }
+
     &.mce-edit-area { border:1px solid #ccc !important; }
 }
 
@@ -124,11 +117,9 @@
 
 /* emoji plugin */
 .mce-container *:not(.emoji, .mce-i-backcolor) { background:transparent; }
+
 .mce-container *:not(.emoji) .mce-menu-item:hover,
 .mce-container *:not(.emoji) .mce-menu-item.mce-selected,
-.mce-container *:not(.emoji) .mce-menu-item:focus {
-    background-color: #0081c2;
-}
-.mce-grid.mce-colorbutton-grid td.mce-grid-cell div {
-    line-height: 11px;
-}
+.mce-container *:not(.emoji) .mce-menu-item:focus { background-color: #0081c2; }
+
+.mce-grid.mce-colorbutton-grid td.mce-grid-cell div { line-height: 11px; }

@@ -318,11 +318,9 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
             // manual invoke to consider baton
             if (baton instanceof Baton) {
                 return o
-                    .filter(function (ext) {
-                        return !baton.isDisabled(self.id, ext.id) && _.isFunction(ext[name]);
-                    })
                     .map(function (ext) {
                         try {
+                            if (baton.isDisabled(self.id, ext.id) || !_.isFunction(ext[name])) return;
                             // stopped?
                             if (baton.isPropagationStopped()) return;
                             // prevent default?

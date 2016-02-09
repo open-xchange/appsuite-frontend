@@ -107,9 +107,7 @@ define('io.ox/core/main', [
                             fallback = ox.serverConfig.logoutLocation || ox.logoutLocation,
                             logoutLocation = location || (fallback + (opt.autologout ? '#autologout=true' : ''));
                         // Substitute some variables
-                        // [hostname], [login]
-                        logoutLocation = logoutLocation.replace('[hostname]', window.location.hostname);
-                        _.url.redirect(logoutLocation);
+                        _.url.redirect(_.url.vars(logoutLocation));
                     });
                 },
                 function cancel() {
@@ -901,6 +899,27 @@ define('io.ox/core/main', [
                     .on('click', function (e) {
                         e.preventDefault();
                         ox.launch('io.ox/settings/main');
+                    })
+                );
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'onboarding',
+            index: 120,
+            draw: function () {
+                if (capabilities.has('!client-onboarding')) return;
+
+                this.append(
+                    $('<li role="presentation">').append(
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="onboarding" role="menuitem" tabindex="-1">')
+                        .text(gt('Connect your Device'))
+                    )
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        require(['io.ox/onboarding/clients/wizard'], function (wizard) {
+                            wizard.run();
+                        });
                     })
                 );
             }
@@ -1768,11 +1787,27 @@ define('io.ox/core/main', [
                 break;
             case 'LGI-0016':
                 // redirect based on error message; who had the brilliant idea to name the message of the error object 'error'?
-                location.href = error.error;
+                location.href = _.url.vars(error.error);
                 break;
             // no default
         }
     });
+
+    function replacer(key, value) {
+        return value === undefined ? 'undefined' : value;
+    }
+
+    if (ox.debug) {
+        ox.on('http:before:send', function (options) {
+            var json = _(['params', 'data']).reduce(function (str, id) {
+                return str + (_.isString(options[id]) ? options[id] : JSON.stringify(options[id], replacer));
+            }, '');
+            // look for missing id, folder, or folder_id
+            if (/"(id|folder|folder_id)":("undefined"|null)/.test(json)) {
+                console.error('Spotted undefined or null value for id, folder, or folder_id', options);
+            }
+        });
+    }
 
     // white list warninff codes
     var isValidWarning = (function () {

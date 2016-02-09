@@ -15,9 +15,7 @@
 
 .week-view {
 
-    * {
-        -webkit-tap-highlight-color: rgba(0,0,0,0);
-    }
+    * { -webkit-tap-highlight-color: rgba(0,0,0,0); }
 
     .week {
         width: 100%;
@@ -32,25 +30,20 @@
     }
 
     .toolbar {
-
         .info {
             cursor: pointer;
             text-decoration: none;
         }
-
     }
 
     .footer-container {
-
         .footer {
             .overflow-y(scroll);
             .overflow-x(hidden);
         }
-
     }
 
     .week-view-container {
-
         position: absolute;
         left: 0;
         right: 0;
@@ -88,7 +81,6 @@
         }
 
         .fulltime-container {
-
             height: @weekview-footer-height;
             .overflow-y(scroll);
             .overflow-x(hidden);
@@ -97,7 +89,6 @@
             right: 0;
 
             .fulltime {
-
                 position: relative;
                 height: 100%;
 
@@ -114,16 +105,11 @@
                     padding: 0 10px;
                 }
 
-                .day {
-                    border: none;
-                }
-
+                .day { border: none; }
             }
-
         }
 
         .scrollpane {
-
             .overflow-y(scroll);
             .overflow-x(hidden);
             position: absolute;
@@ -134,26 +120,22 @@
             outline: 0;
 
             .week-container-label {
-
                 width: @weekview-time-width;
                 float: left;
 
                 .time {
-
-                    &.working-time-border {
-                        border-bottom: 1px solid @weekview-working-time-border;
-                    }
-
-                    &.in {
-                        font-weight: bold;
-                        color: #333;
-                    }
-
                     position: relative;
                     height: 48px;
                     margin-left: 1em;
                     border-bottom: 1px solid @weekview-border;
                     color: #777;
+
+                    &.working-time-border { border-bottom: 1px solid @weekview-working-time-border; }
+
+                    &.in {
+                        font-weight: bold;
+                        color: #333;
+                    }
 
                     .number {
                         font-size: 12px;
@@ -164,18 +146,13 @@
 
                 }
 
-                &.secondary-timezone {
-                    .time {
-                        &.in {
-                            font-weight: normal;
-                            color: #777;
-                        }
-                    }
+                &.secondary-timezone .time.in {
+                    font-weight: normal;
+                    color: #777;
                 }
             }
 
             .week-container {
-
                 margin-left: @weekview-time-width;
 
                 .timeline {
@@ -199,7 +176,6 @@
         }
 
         .day {
-
             position: relative;
             height: 100%;
             float: left;
@@ -208,7 +184,6 @@
             .user-select(none);
 
             .timeslot {
-
                 -webkit-touch-callout: none !important;
                 border-bottom: 1px solid @weekview-border;
                 height: 24px;
@@ -216,25 +191,15 @@
                 &:nth-child(2n+1) {
                     border-color: lighten(@weekview-border, 10%);
 
-                    &.out {
-                        border-color: transparent;
-                    }
+                    &.out { border-color: transparent; }
                 }
 
-                &:last-child, .time:last-child {
-                    border: none;
-                }
+                &:last-child, .time:last-child { border: none; }
 
-                &.working-time-border {
-                    border-bottom: 1px solid @weekview-working-time-border;
-                }
+                &.working-time-border { border-bottom: 1px solid @weekview-working-time-border; }
             }
 
-            &.today .timeslot {
-
-                background-color: @calendar-today-background;
-
-            }
+            &.today .timeslot { background-color: @calendar-today-background; }
 
         }
 
@@ -243,22 +208,15 @@
     // Hide days in dayview
     .dayview {
 
-        .toolbar {
-            padding-bottom: @calendar-toolbar-top-padding;
-        }
+        .toolbar { padding-bottom: @calendar-toolbar-top-padding; }
 
-        .week-view-container {
-            top: 67px;
-        }
+        .week-view-container { top: 67px; }
 
-        .footer-container {
-            display: none;
-        }
+        .footer-container { display: none; }
 
     }
 
     .appointment {
-
         position: absolute;
         background-color: @appointment-reserved;
         opacity: 1;
@@ -274,15 +232,11 @@
                     text-overflow: clip;
                 }
 
-                .location {
-                    margin-left: 5px;
-                }
+                .location { margin-left: 5px; }
             }
         }
 
-        &.modify {
-            cursor: pointer;
-        }
+        &.modify { cursor: pointer; }
 
         &.border {
             @border: 1px solid rgba(0, 0, 0, 0.2);
@@ -311,7 +265,6 @@
         }
 
         .appointment-content {
-
             height: 100%;
             font-size: 12px;
             padding: 0 7px;
@@ -319,10 +272,7 @@
             border-color: inherit;
             .ellipsis();
 
-            * {
-                .ellipsis();
-            }
-
+            * { .ellipsis(); }
         }
 
     }
@@ -374,94 +324,43 @@
         @adjusted-width: @weekview-time-width * 1.25;
 
         .week-view-container {
-            .time-label-bar {
-                width: @adjusted-width;
-            }
 
-            .fulltime-container {
-                margin-left: @adjusted-width;
-            }
+            .time-label-bar,
+            .scrollpane .week-container-label { width: @adjusted-width; }
 
-            .scrollpane {
-                .week-container-label {
-                    width: @adjusted-width;
-               }
+            .scrollpane.secondary .week-container-label{ width: @weekview-time-width; }
 
-               .week-container {
-                   margin-left: @adjusted-width;
-               }
-
-               &.secondary {
-                   .week-container-label {
-                       width: @weekview-time-width;
-                   }
-               }
-            }
+            .fulltime-container,
+            .scrollpane .week-container  { margin-left: @adjusted-width; }
         }
     }
 
     // Big Screen
     @media all and (min-height: 1200px) {
-
-        .week-view-container {
-
-            .scrollpane {
-
-                .week-container {
-
-                    .appointment-content {
-                        line-height: 20px;
-                    }
-
-                }
-
-            }
-
-        }
-
+        .week-view-container .scrollpane .week-container .appointment-content { line-height: 20px; }
     }
 
     // Mobile
     @media (max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
 
-        .info {
-            cursor: auto;
-        }
+        .info { cursor: auto; }
 
         .week-view-container {
 
-            .fulltime-container {
-                margin-left: @weekview-time-widthSmall;
-            }
+            .fulltime-container { margin-left: @weekview-time-widthSmall; }
 
             .scrollpane {
 
                 .week-container-label {
-
                     width: @weekview-time-widthSmall;
 
-                    .time {
-                        margin-left: 0.3em;
-                    }
-
+                    .time { margin-left: 0.3em; }
                 }
 
-                .week-container {
-                    margin-left:  @weekview-time-widthSmall;
-                }
-
+                .week-container { margin-left: @weekview-time-widthSmall; }
             }
-
         }
 
-        .dayview {
-
-            .week-view-container {
-               top: 0;
-            }
-
-        }
-
+        .dayview .week-view-container { top: 0; }
     }
-
 }

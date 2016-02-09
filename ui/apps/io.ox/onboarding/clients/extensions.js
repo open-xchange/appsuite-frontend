@@ -25,15 +25,29 @@ define('io.ox/onboarding/clients/extensions', [
 
     var POINT = 'io.ox/onboarding/clients/views';
 
-    function notify(resp) {
+    function yellError(resp) {
         if (_.isObject(resp) && 'error' in resp) return yell(resp);
-        return yell('info', resp);
     }
+
+    var util = {
+        removeIcons: function (e) {
+            var target = $(e.target);
+            target.parent().find('button-clicked').remove();
+        },
+        addIcon: function (e) {
+            var target = $(e.target);
+            target.after($('<i class="fa fa-check .button-clicked"></i>'));
+        },
+        disable: function (e) {
+            $(e.target).addClass('disabled');
+        }
+    };
 
     var ActionsView = Backbone.View.extend({
 
         events: {
-            'click .action>legend': 'accordion'
+            'click .action>legend': 'accordion',
+            'click .toggle-link': 'toggleMode'
         },
 
         initialize: function (options) {
@@ -41,32 +55,83 @@ define('io.ox/onboarding/clients/extensions', [
             this.setElement($('<div class="actions">'));
         },
 
+        $toggleMode: $('<a href="#" class="toggle-link">').text(gt('Expert user?')),
+
+        toggleMode: function (e) {
+            e.preventDefault();
+            var step = this.$el.closest('.wizard-step'),
+                value = step.attr('data-mode'),
+                link = this.$el.find('.toggle-link');
+            // simple
+            if (value === 'advanced') {
+                step.attr('data-mode', 'simple');
+                link.text(gt('Expert user?'));
+                return this.update();
+            }
+            // advanced
+            step.attr('data-mode', 'advanced');
+            link.text(gt('Hide options for expert users.'));
+            // update
+            this.update();
+        },
+
+        update: function () {
+            var list = this.$el.find('.actions-scenario'),
+                mode = this.$step.attr('data-mode');
+            _.each(list, function (container) {
+                container = $(container);
+                // advanced: cover (hidden) actions of not selected
+                // selections to be ready when users switches scenarios
+                var actions = container.find(mode === 'advanced' ? '.action' : '.action:visible');
+                if (actions.length <= 1) {
+                    return container.addClass('single-action');
+                }
+                container.removeClass('single-action');
+            });
+        },
+
         render: function () {
             var scenarios = this.scenarios,
-                config = this.config;
+                config = this.config,
+                self = this;
             _.each(scenarios, function (scenario) {
                 var list = config.getActions(scenario.id),
-                    node = $('<div>').attr('data-parent', scenario.id),
+                    node = $('<div class="actions-scenario">').attr('data-parent', scenario.id),
                     baton = ext.Baton({ data: list, config: config, model: config.model });
                 // draw actions
                 _.each(baton.data, function (action) {
                     node.attr('data-value', action.id);
-                    ext.point(POINT + '/' + action.id).invoke('draw', node, action, baton);
+                    var actionpoint = ext.point(POINT + '/' + action.id);
+                    // TODO: remove when middleware is ready
+                    if (actionpoint.list().length === 0 && ox.debug) console.error('missing view for client-onboarding action: ' + action.id);
+                    actionpoint.invoke('draw', node, action, baton);
                 });
+                // add toggle link
+                if (baton.data.length > 1) node.append(self.$toggleMode.clone());
                 this.$el.append(node);
                 // expand first action
                 this.$el.find('.action:first').addClass('expanded');
             }.bind(this));
+            // update
+            this.update();
             return this;
         },
 
         accordion: function (e) {
             e.preventDefault();
-            // collapse other actions
-            var target = $(e.target).closest('.action');
-            target.toggleClass('expanded');
-            target.parent().find('.action').not(target).removeClass('expanded');
+            var target = $(e.target),
+                action = target.closest('.action'),
+                container = action.closest('.actions');
+            if (container.find('.action:visible').length <= 1) {
+                // does not collapse when only action visible
+                action.addClass('expanded');
+            } else {
+                action.toggleClass('expanded');
+            }
+            // there can only be one
+            action.closest('.actions-scenario').find('.action').not(action).removeClass('expanded');
         }
+
     });
 
     var DisplayActionView = Backbone.View.extend({
@@ -103,7 +168,7 @@ define('io.ox/onboarding/clients/extensions', [
             this.$el.empty()
                 .append(
                     // title
-                    $('<legend class="title sectiontitle">')
+                    $('<legend class="title section-title">')
                         .append(
                             $('<i class="fa fa-fw fa-chevron-right">'),
                             $('<i class="fa fa-fw fa-chevron-down">'),
@@ -112,7 +177,7 @@ define('io.ox/onboarding/clients/extensions', [
                     // content
                     $('<span class="content">').append(
                         $('<div class="description">')
-                            .text(gt('Setup your profile manually.')),
+                            .text(gt('If you know what you are doing...just setup your account manually!')),
                         form = $('<div class="data">')
                     )
                 );
@@ -122,8 +187,8 @@ define('io.ox/onboarding/clients/extensions', [
                 var value = self.data[key],
                     group = $('<div class="row">');
                 group.append(
-                    $('<label class="control-label col-sm-4">').text(self.labels[key] || key),
-                    $('<div class="col-sm-7">').append(
+                    $('<label class="control-label display-label col-sm-3">').text(self.labels[key] || key),
+                    $('<div class="col-sm-9">').append(
                         $('<input class="form-control" readonly>').val(value)
                             .on('click', function () {
                                 $(this).select();
@@ -136,67 +201,76 @@ define('io.ox/onboarding/clients/extensions', [
         }
     });
 
-    var NumberActionView = Backbone.View.extend({
+    var ShortMessageActionView = Backbone.View.extend({
 
-        events: {
-            'click .btn': '_onClick'
-        },
+        tagName: 'fieldset',
+        className: 'action form-group',
+        events: { 'click .btn': '_onClick' },
 
         initialize: function (action, options) {
             _.extend(this, action);
             this.model = options.baton.model;
             this.config = options.baton.config;
-            // root
-            this.setElement(
-                $('<fieldset class="action form-group">')
-                .attr('data-action', action.id)
-            );
+            this.$el.attr('data-action', action.id);
+        },
+
+        _input: function () {
+            var value = this.model.get('sms') || this.config.getUserMobile();
+            return new mini.InputView({ name: 'sms', type: 'tel', model: this.model }).render()
+                    .$el
+                    .removeClass('form-control')
+                    .addClass('field form-control')
+                    .attr('title', this.name)
+                    .attr('list', 'addresses')
+                    .attr('placeholder', gt('Cell phone'))
+                    .val(value).trigger('change');
+        },
+
+        _select: function () {
+            var select = new mini.SelectView({
+                    name: 'code',
+                    model: this.model,
+                    list: this.config.getCodes()
+                }),
+                standard = 'DE';
+            // adjust node
+            select.render().$el
+                .removeClass('form-control')
+                .addClass('select form-control')
+                .attr('title', this.name)
+                .attr('list', 'addresses')
+                .val(this.model.get('code') || this.config.getCodes(standard).value).trigger('change');
+            return select;
         },
 
         render: function () {
-            var form;
             this.$el.empty()
                 .append(
                     // title
-                    $('<legend class="title sectiontitle">')
+                    $('<legend class="title section-title">')
                         .append(
                             $('<i class="fa fa-fw fa-chevron-right">'),
                             $('<i class="fa fa-fw fa-chevron-down">'),
-                            $.txt(gt('SMS'))
+                            $.txt(gt('Automatic Configuration (via SMS)'))
                         ),
                     $('<span class="content">').append(
                         // description
                         $('<div class="description">')
-                            .text(gt('Send me the profile data by SMS.')),
+                            .text(gt('Please enter your mobile phone number, and we´ll send you a link to automatically configure your iOS device! It´s that simple!')),
                         // form
-                        form = $('<div class="data">'),
-                        // action
-                        $('<button>')
-                            .addClass('btn btn-sm btn-primary')
-                            .text(gt('Send'))
+                        $('<div class="interaction">').append(
+                            $('<form class="form-inline">').append(
+                                $('<div class="row">').append(
+                                    //$('<label class="control-label">').text(gt('Phone Number')),
+                                    this._select().$el,
+                                    this._input(),
+                                    $('<button class="btn btn-primary">').text(gt('Send'))
+                                )
+                            )
+                        )
                     )
                 );
-            var value = this.model.get('number'),
-                node = new mini.InputView({ name: 'number', model: this.model }).render()
-                        .$el
-                        .removeClass('form-control')
-                        .addClass('field form-control')
-                        .attr('title', this.name)
-                        .attr('list', 'addresses')
-                        .val(value || '');
 
-            var group = $('<div class="row">');
-            group.append(
-                $('<label class="control-label col-sm-4">').text(gt('SMS')),
-                $('<div class="col-sm-7">').append(
-                    node,
-                    $('<datalist id="addresses">').append(
-                        $('<option>').attr('value', this.config.getUserMobile())
-                    )
-                )
-            );
-            if (value) node.val(value);
-            form.append(group);
             return this;
         },
 
@@ -205,10 +279,15 @@ define('io.ox/onboarding/clients/extensions', [
             var scenario = this.config.getScenarioCID(),
                 action = this.id,
                 data = {
-                    number: this.model.get('number')
+                    sms: this.model.get('sms'),
+                    code: this.model.get('code')
                 };
             // call
-            api.execute(scenario, action, data).always(notify);
+            util.disable(e);
+            util.removeIcons(e);
+            api.execute(scenario, action, data)
+                .always(yellError)
+                .always(_.partial(util.addIcon, e));
         }
     });
 
@@ -229,50 +308,45 @@ define('io.ox/onboarding/clients/extensions', [
             );
         },
 
+        _input: function () {
+            var value = this.model.get('email') || this.config.getUserMail();
+            return new mini.InputView({ name: 'email', model: this.model }).render()
+                .$el
+                .addClass('field form-control')
+                .attr('title', this.name)
+                .attr('list', 'addresses')
+                .val(value || '').trigger('change');
+        },
+
         render: function () {
-            var form;
             this.$el.empty()
                 .append(
                     // title
-                    $('<legend class="title sectiontitle">')
+                    $('<legend class="title section-title">')
                         .append(
                             $('<i class="fa fa-fw fa-chevron-right">'),
                             $('<i class="fa fa-fw fa-chevron-down">'),
-                            $.txt(gt('Email'))
+                            $.txt(gt('Configuration Email'))
                         ),
                     $('<span class="content">').append(
                         // description
                         $('<div class="description">')
                             .text(gt('Get your device configured by email.')),
                         // form
-                        form = $('<div class="data">'),
-                        // action
-                        $('<button>')
-                            .addClass('btn btn-sm btn-primary')
-                            .text(gt('Send'))
+                        $('<div class="interaction">').append(
+                            $('<form class="form-inline">').append(
+                                $('<div class="row">').append(
+                                    //$('<label class="control-label">').text(gt('Email')),
+                                    this._input(),
+                                    // action
+                                    $('<button>')
+                                        .addClass('btn btn-primary')
+                                        .text(gt('Send'))
+                                )
+                            )
+                        )
                     )
                 );
-            var value = this.model.get('email'),
-                node = new mini.InputView({ name: 'email', model: this.model }).render()
-                        .$el
-                        .removeClass('form-control')
-                        .addClass('field form-control')
-                        .attr('title', this.name)
-                        .attr('list', 'addresses')
-                        .val(value || '');
-
-            var group = $('<div class="row">');
-            group.append(
-                $('<label class="control-label col-sm-4">').text(gt('Email')),
-                $('<div class="col-sm-7">').append(
-                    node,
-                    $('<datalist id="addresses">').append(
-                        $('<option>').attr('value', this.config.getUserMail())
-                    )
-                )
-            );
-            if (value) node.val(value);
-            form.append(group);
             return this;
         },
 
@@ -284,7 +358,10 @@ define('io.ox/onboarding/clients/extensions', [
                     email: this.model.get('email')
                 };
             // call
-            api.execute(scenario, action, data).always(notify);
+            util.removeIcons(e);
+            api.execute(scenario, action, data)
+                .always(yellError)
+                .always(_.partial(util.addIcon, e));
         }
     });
 
@@ -309,7 +386,7 @@ define('io.ox/onboarding/clients/extensions', [
             this.$el.empty()
                 .append(
                     // title
-                    $('<legend class="title sectiontitle">')
+                    $('<legend class="title section-title">')
                         .append(
                             $('<i class="fa fa-fw fa-chevron-right">'),
                             $('<i class="fa fa-fw fa-chevron-down">'),
@@ -318,10 +395,10 @@ define('io.ox/onboarding/clients/extensions', [
                     $('<span class="content">').append(
                         // description
                         $('<div class="description">')
-                            .text(gt('Automatically configure your device by clicking the button below.')),
+                            .text(gt('Let´s automatically configure your device, by clicking the button below. It´s that simple!')),
                         // action
                         $('<button>')
-                            .addClass('btn btn-sm btn-primary')
+                            .addClass('btn btn-primary')
                             .text(gt('Configure now'))
                     )
                 );
@@ -337,11 +414,81 @@ define('io.ox/onboarding/clients/extensions', [
         }
     });
 
+    var AppActionView = Backbone.View.extend({
+
+        events: {
+            'click .btn': '_onClick',
+            'click .store': '_onClick'
+        },
+
+        initialize: function (action, options) {
+            _.extend(this, action);
+            this.model = options.baton.model;
+            this.config = options.baton.config;
+            // root
+            this.setElement(
+                $('<fieldset class="action form-group">')
+                .attr('data-action', action.id)
+            );
+            // device specific
+            this.device = this.config.getDevice();
+            this.link = action[this.device.id].link;
+            this.type = action[this.device.id].type;
+        },
+
+        getLabel: function () {
+            return {
+                'appstore': gt('App Store'),
+                'playstore': gt('Google Play')
+            }[this.type];
+        },
+
+        getBadgeUrl: function () {
+            var available = ['EN', 'DE', 'ES', 'FR'],
+                prefix = ox.language.slice(0, 2).toUpperCase(),
+                country = _.contains(available, prefix) ? prefix : 'EN',
+                stores = {
+                    'appstore': 'apps/themes/icons/default/appstore/App_Store_Badge_' + country + '_135x40.svg',
+                    'playstore': 'apps/themes/icons/default/googleplay/google-play-badge_' + country + '.svg'
+                };
+            return stores[this.type];
+        },
+
+        render: function () {
+            this.$el.empty()
+                .append(
+                    // title
+                    $('<legend class="title section-title">')
+                        .append(
+                            $('<i class="fa fa-fw fa-chevron-right">'),
+                            $('<i class="fa fa-fw fa-chevron-down">'),
+                            $.txt(gt('Installation'))
+                        ),
+                    $('<span class="content">').append(
+                        // description
+                        $('<div class="description">')
+                            .text(gt('Get the App from %1$s', this.getLabel())),
+                        // action
+                        $('<a class="store">').append(
+                            $('<img class="store-icon">').attr('src', this.getBadgeUrl())
+                        )
+                    )
+                );
+            return this;
+        },
+
+        _onClick: function (e) {
+            e.preventDefault();
+            window.open(this.link);
+        }
+    });
+
     return {
         ActionsView: ActionsView,
         DisplayActionView: DisplayActionView,
-        NumberActionView: NumberActionView,
+        ShortMessageActionView: ShortMessageActionView,
         EmailActionView: EmailActionView,
-        DownloadActionView: DownloadActionView
+        DownloadActionView: DownloadActionView,
+        AppActionView: AppActionView
     };
 });

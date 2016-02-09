@@ -59,6 +59,11 @@ msgid_plural "%1$d attachments"
 msgstr[0] "%1$d adjunt"
 msgstr[1] "%1$d adjunts"
 
+#. %1$d and %2$d are both numbers; usually > 100; never singular
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d contacts found. This list is limited to %2$d items."
+msgstr ""
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #, fuzzy
@@ -73,6 +78,7 @@ msgstr[1] "%1$d dies"
 #. %1$d is the number of days
 #. %2$s is the text for the remainder of the last day
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%1$d day, %2$s"
 msgid_plural "%1$d days, %2$s"
 msgstr[0] "%1$d dia, %2$s"
@@ -82,6 +88,7 @@ msgstr[1] "%1$d dies, %2$s"
 #. %1$d is the number of days
 #. %2$s is the text for the remainder of the last day
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%1$d day, %2$s"
 msgid_plural "%1$d days, %2$s"
@@ -106,6 +113,7 @@ msgstr[1] "%1$d hores"
 #. %1$d is the number of hours
 #. %2$s is the text for the remainder of the last hour
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%1$d hour and %2$s"
 msgid_plural "%1$d hours and %2$s"
 msgstr[0] "%1$d hour i %2$s"
@@ -115,6 +123,7 @@ msgstr[1] "%1$d hores i %2$s"
 #. %1$d is the number of hours
 #. %2$s is the text for the remainder of the last hour
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%1$d hour and %2$s"
 msgid_plural "%1$d hours and %2$s"
@@ -242,7 +251,7 @@ msgstr "%1$s %2$s"
 #. %5$s Appointment Organizer
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
-#, fuzzy
+#, fuzzy, c-format
 #| msgid ""
 #| "%1$s\n"
 #| "%2$s %3$s\n"
@@ -260,7 +269,7 @@ msgstr ""
 #. %3$s Appointment time
 #. %4$s Appointment location
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#, fuzzy
+#, fuzzy, c-format
 #| msgid ""
 #| "%1$s\n"
 #| "%2$s %3$s\n"
@@ -278,7 +287,7 @@ msgstr ""
 #. %3$s task status
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-#, fuzzy
+#, fuzzy, c-format
 #| msgid "%3$s %2$s, %1$s"
 msgid "%1$s %2$s %3$s."
 msgstr "%3$s %2$s, %1$s"
@@ -286,7 +295,7 @@ msgstr "%3$s %2$s, %1$s"
 #. %1$s task title
 #. %2$s task end date
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-#, fuzzy
+#, fuzzy, c-format
 #| msgctxt "mail address"
 #| msgid "%1$s %2$s"
 msgid "%1$s %2$s."
@@ -296,6 +305,7 @@ msgstr "%1$s %2$s"
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js
+#, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Provisional)"
 
@@ -367,6 +377,7 @@ msgstr[1] "%1$d de seleccionats"
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
+#, c-format
 msgid "%1$s of %2$s"
 msgstr "%1$s de %2$s"
 
@@ -387,7 +398,7 @@ msgstr "%1$s recomana aquest enllaç:"
 #. %1$s is the start date
 #. %2$s is the end date
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
+#, fuzzy, c-format
 #| msgid "%1$s at %2$s"
 msgid "%1$s to %2$s"
 msgstr "%1$s a %2$s"
@@ -440,6 +451,7 @@ msgstr "%3$s %2$s, %1$s"
 #. %d is the number of days
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/core/date.js
 #: module:io.ox/core
+#, c-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d dia"
@@ -448,6 +460,7 @@ msgstr[1] "%d dies"
 #. Reminder (objective case): in X days
 #. %d is the number of days
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%d day"
 msgid_plural "%d days"
@@ -457,6 +470,7 @@ msgstr[1] "%d dies"
 #. General duration (nominative case): X hours
 #. %d is the number of hours
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d hora"
@@ -465,6 +479,7 @@ msgstr[1] "%d hores"
 #. Reminder (objective case): in X hours
 #. %d is the number of hours
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%d hour"
 msgid_plural "%d hours"
@@ -475,6 +490,7 @@ msgstr[1] "%d hores"
 #. %d is the number of minutes
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d minut"
@@ -483,6 +499,7 @@ msgstr[1] "%d minuts"
 #. Reminder (objective case): in X minutes
 #. %d is the number of minutes
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%d minute"
 msgid_plural "%d minutes"
@@ -492,6 +509,7 @@ msgstr[1] "%d minuts"
 #. General duration (nominative case): X weeks
 #. %d is the number of weeks
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] "%d setmana"
@@ -500,6 +518,7 @@ msgstr[1] "%d setmanes"
 #. Reminder (objective case): in X weeks
 #. %d is the number of weeks
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%d week"
 msgid_plural "%d weeks"
@@ -711,10 +730,9 @@ msgstr "Compte actualitzat"
 msgid "Accounts"
 msgstr "Compte"
 
-#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/core/extPatterns/links.js
+#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -722,6 +740,11 @@ msgstr "Compte"
 #: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "Actions"
 msgstr "Accions"
+
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+msgid "Actions. Use cursor keys to navigate."
+msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -1050,6 +1073,13 @@ msgstr "S'ha suprimit aquest fitxer"
 msgid "All folders"
 msgstr "Totes les carpetes"
 
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "This file has been deleted"
+#| msgid_plural "These files have been deleted"
+msgid "All messages have been deleted"
+msgstr "S'ha suprimit aquest fitxer"
+
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr ""
@@ -1077,7 +1107,12 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Permet la precàrrega d'imatges externes enllaçades"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 msgid "An error occurred converting the document so it cannot be displayed."
+msgstr ""
+
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
+msgid "An error occurred loading the document so it cannot be displayed."
 msgstr ""
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -1115,6 +1150,10 @@ msgstr "Aniversari"
 #: module:io.ox/settings
 msgid "Any recipient"
 msgstr "Qualsevol destinatari"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "App Store"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Append vCard"
@@ -1319,6 +1358,12 @@ msgstr "Desa automàticament els esborranys de correu electrònic"
 msgid "Automatic Configuration"
 msgstr "Desconnexió automàtica"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic sign out"
+msgid "Automatic Configuration (via SMS)"
+msgstr "Desconnexió automàtica"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "Obertura automàtica de l'àrea de notificació"
@@ -1342,10 +1387,6 @@ msgid ""
 msgstr ""
 "Recopila contactes automàticament a la carpeta \"Adreces recopilades\" en "
 "enviar un correu"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Automatically configure your device by clicking the button below."
-msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
@@ -1384,26 +1425,6 @@ msgstr "Enrere"
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "Back to appointment"
 msgstr "Torna a la cita"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
-#, fuzzy
-#| msgid "Failed to sign in"
-msgid "Back to devices"
-msgstr "Ha fallat l'inici de sessió"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Failed to sign in"
-msgid "Back to modules"
-msgstr "Ha fallat l'inici de sessió"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
-#, fuzzy
-#| msgid "your platform"
-msgid "Back to platforms"
-msgstr "la vostra plataforma"
 
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 #, fuzzy
@@ -1520,7 +1541,6 @@ msgstr "URL de CalDAV"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "Calendari"
 
@@ -1530,10 +1550,6 @@ msgstr "Calendari"
 msgctxt "app"
 msgid "Calendar"
 msgstr "Calendari"
-
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Calendar (Manually)"
-msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
@@ -1545,6 +1561,7 @@ msgstr "Vista de calendari"
 msgid "Calendar:"
 msgstr "Calendari"
 
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
@@ -1555,7 +1572,7 @@ msgstr "Calendari"
 #: apps/io.ox/calendar/week/perspective.js
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js apps/io.ox/contacts/edit/main.js
-#: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js module:io.ox/core
+#: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js
 #: apps/io.ox/core/export/export.js apps/io.ox/core/folder/actions/add.js
 #: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
@@ -1658,7 +1675,8 @@ msgid "Cart is empty."
 msgstr "La cistella és buida."
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "Telèfon mòbil"
 
@@ -1842,15 +1860,14 @@ msgstr "Premeu per a provar-ho de nou."
 msgid "Click to upload image"
 msgstr "Premeu per a puja una imatge"
 
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
 msgstr ""
 
-#: apps/io.ox/core/about/about.js module:io.ox/core
-#: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
+#: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/wizard.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -1968,6 +1985,12 @@ msgid "Conditions"
 msgstr "Condicions"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Confirmation"
+msgid "Configuration Email"
+msgstr "Confirmació"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
 msgstr ""
 
@@ -1993,6 +2016,12 @@ msgstr "Els conflictes amb recursos no es poden ignorar"
 #: apps/io.ox/calendar/view-grid-template.js module:io.ox/calendar
 msgid "Conflicts:"
 msgstr "Conflictes:"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Select folder"
+msgid "Connect your Device"
+msgstr "Selecciona carpeta"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Connector for Microsoft Outlook®"
@@ -2453,10 +2482,9 @@ msgstr "Suprimeix el compte"
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #, fuzzy
-#| msgctxt "folder"
-#| msgid "Deleted messages"
-msgid "Delete all %1$d messages"
-msgstr "Missatges esborrats"
+#| msgid "Show all %1$d messages in inbox"
+msgid "Delete all messages in this folder"
+msgstr "Mostra tots els missatges de %1$d a la safata d'entrada"
 
 #. object permissions - delete
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -2670,10 +2698,10 @@ msgstr "Llista de distribució"
 msgid "Distribution List Details"
 msgstr "Llista de distribució"
 
-#: apps/io.ox/contacts/common-extensions.js module:io.ox/contacts
-#: apps/io.ox/contacts/main.js apps/io.ox/contacts/model.js
-#: apps/io.ox/contacts/view-detail.js apps/io.ox/participants/model.js
-#: module:io.ox/core
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/contacts/common-extensions.js apps/io.ox/contacts/main.js
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
+#: apps/io.ox/participants/model.js module:io.ox/core
 msgid "Distribution list"
 msgstr "Llista de distribució"
 
@@ -2988,6 +3016,7 @@ msgstr "Venciment"
 
 #. %1$s due date of a task
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, c-format
 msgid "Due %1$s"
 msgstr "Venciment %1$s"
 
@@ -3135,7 +3164,6 @@ msgid "Editor"
 msgstr "Editor"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Email"
 msgstr "Correu electrònic"
 
@@ -3235,8 +3263,6 @@ msgstr "Activa"
 msgid "Enable for the following addresses"
 msgstr "Activat per a les següents adreces"
 
-#. used as a label for the end time of an appointment, try to keep short because it's used in a compact printing view
-#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "End"
 msgstr "Fi"
@@ -3307,6 +3333,10 @@ msgstr "Error"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Error log"
 msgstr "Registre d'errors"
+
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Error while loading message content"
+msgstr ""
 
 #: apps/io.ox/mail/actions/invite.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -3432,6 +3462,10 @@ msgstr "Desplega el formulari"
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Expand timeframe by one month"
 msgstr "Amplia el rang de temps un mes"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Expert user?"
+msgstr ""
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 #, fuzzy
@@ -3927,6 +3961,10 @@ msgid "Get started here"
 msgstr "Presa de contacte"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Get the App from %1$s"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Get your device configured by email."
 msgstr ""
 
@@ -3946,6 +3984,12 @@ msgstr "Bon dia, %s"
 #, fuzzy
 #| msgid "Add your account"
 msgid "Google Drive"
+msgstr "Afegeix el meu compte"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Add your account"
+msgid "Google Play"
 msgstr "Afegeix el meu compte"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -4091,6 +4135,12 @@ msgstr "Amaga els detalls"
 msgid "Hide names"
 msgstr "Segon nom"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced filters"
+msgid "Hide options for expert users."
+msgstr "Mostra els filtres avançats"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
 msgstr "Amaga el cos de la petició"
@@ -4187,6 +4237,10 @@ msgid ""
 msgstr ""
 "Si canviau la contrasenya, es tancarà la sessió. Per favor, assegurau-vos "
 "que tot quedi tancat i desat."
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "If you know what you are doing...just setup your account manually!"
+msgstr ""
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid ""
@@ -4288,6 +4342,14 @@ msgstr "Inclou llistes de distribució"
 msgid "Incoming server"
 msgstr "Servidor d'entrada"
 
+#. error message when server returns incomplete
+#. configuration for client onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic sign out"
+msgid "Incomplete configuration."
+msgstr "Desconnexió automàtica"
+
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr "Dates inconsistents"
@@ -4344,6 +4406,10 @@ msgid ""
 msgstr ""
 "Instal·lau aquesta aplicació en el vostre %1$s: Premeu %2$s i després "
 "%3$s'Afagiu a la pantalla d'inici'%4$s"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Installation"
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Instant Messenger 1"
@@ -4489,6 +4555,14 @@ msgstr "Convits a tasques"
 #, fuzzy
 #| msgid "Task invitations"
 msgid "Join the presentation"
+msgstr "Convits a tasques"
+
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Task invitations"
+msgid "Joining the presentation of %1$s."
 msgstr "Convits a tasques"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -4642,6 +4716,12 @@ msgstr "Convits a tasques"
 msgid "Letters • Symbols"
 msgstr "Lletres • Símbols"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid ""
+"Let´s automatically configure your device, by clicking the button below. It"
+"´s that simple!"
+msgstr ""
+
 #. Emoji category
 #. Japanese: 日常
 #. Rather "everyday life". Contains: Cars, trucks, plane, buildings, flags
@@ -4750,7 +4830,6 @@ msgid "MM"
 msgstr ""
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Mail"
 msgstr "Correu"
 
@@ -4760,10 +4839,6 @@ msgstr "Correu"
 msgctxt "app"
 msgid "Mail"
 msgstr "Correu"
-
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Mail (Manually)"
-msgstr ""
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Mail Details"
@@ -4798,7 +4873,7 @@ msgstr "Quota de nombre de correus"
 #. %1$s mail sender
 #. %2$s mail subject
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
-#, fuzzy
+#, fuzzy, c-format
 #| msgid "Email from %1$s: %2$s"
 msgid "Mail from %1$s, %2$s"
 msgstr "Correu de %1$s: %2$s"
@@ -5036,6 +5111,7 @@ msgstr "Minimitza"
 
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+#, c-format
 msgid "Minimum password length is %1$d."
 msgstr "La longitud mínima de contrasenya és %1$d."
 
@@ -5107,18 +5183,24 @@ msgstr "S'han trobat més elements que els %1$s que es mostren a continuació"
 msgid "Move"
 msgstr "Mou"
 
-#. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 #, fuzzy
-#| msgid "Show all %1$d messages in inbox"
-msgid "Move all %1$d messages to another folder"
-msgstr "Mostra tots els missatges de %1$d a la safata d'entrada"
+#| msgid "Close all"
+msgid "Move all"
+msgstr "Tanca-ho tot"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #, fuzzy
 #| msgid "Open/close all messages"
 msgid "Move all messages"
 msgstr "Obre/tanca tots els missatges"
+
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show all %1$d messages in inbox"
+msgid "Move all messages to another folder"
+msgstr "Mostra tots els missatges de %1$d a la safata d'entrada"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
@@ -5137,6 +5219,7 @@ msgstr ""
 msgid "Music"
 msgstr ""
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #, fuzzy
 #| msgid "Add to address book"
@@ -5470,6 +5553,7 @@ msgstr "No hi ha peticions lentes"
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail apps/io.ox/mail/util.js
 #: module:io.ox/core apps/plugins/notifications/mail/register.js
 #: module:plugins/notifications
+#, c-format
 msgid "No subject"
 msgstr "Sense assumpte"
 
@@ -5641,6 +5725,12 @@ msgstr ""
 msgid "OneDrive"
 msgstr "Drive"
 
+#: apps/io.ox/backbone/mini-views/help.js module:io.ox/core
+#, fuzzy
+#| msgid "Offline mode"
+msgid "Online help"
+msgstr "Mode desconnectat"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "Es mostren només els elements relacionats amb la carpeta \"%1$s\""
@@ -5786,6 +5876,10 @@ msgstr "Ordre"
 msgid "Organizer"
 msgstr "Organitzador"
 
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+msgid "Original mail"
+msgstr ""
+
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
 msgstr "Altres adreces"
@@ -5855,6 +5949,7 @@ msgstr "Contrasenya"
 #. %1$s is the minimum password length
 #. %2$s is the maximum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+#, c-format
 msgid "Password length must be between %1$d and %2$d characters."
 msgstr "La longitud de la contrasenya ha de ser d'entre %1$d i %2$d caràcters."
 
@@ -6131,6 +6226,7 @@ msgstr "Per favor, introduïu la contrasenya correcta"
 
 #. %1$s the missing request parameter
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#, c-format
 msgid "Please enter the following data: %1$s"
 msgstr "Per favor, indicau les següents dades: %1$s"
 
@@ -6141,6 +6237,12 @@ msgstr "Per favor, indicau un valor entre 0 i 100."
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please enter your credentials."
 msgstr "Per favor, introduïu les vostres credencials."
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid ""
+"Please enter your mobile phone number, and we´ll send you a link to "
+"automatically configure your iOS device! It´s that simple!"
+msgstr ""
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please enter your password."
@@ -6252,6 +6354,10 @@ msgstr "Publica una actualització d'estat"
 msgid "Postcode"
 msgstr "Codi postal"
 
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+msgid "Premium"
+msgstr ""
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Premium features"
 msgstr ""
@@ -6282,6 +6388,13 @@ msgstr "Convits a tasques"
 #, fuzzy
 #| msgid "Task invitations"
 msgid "Presentation is paused."
+msgstr "Convits a tasques"
+
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Task invitations"
+msgid "Presentation join"
 msgstr "Convits a tasques"
 
 #. headline of a presentation start alert
@@ -6461,6 +6574,7 @@ msgstr "Progrés"
 #. %1$s how much of a task is completed in percent, values from 0-100
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 #: apps/io.ox/tasks/view-grid-template.js
+#, c-format
 msgid "Progress %1$s %"
 msgstr "Progrés %1$s %"
 
@@ -6477,6 +6591,7 @@ msgstr "El progrés ha de ser un nombre vàlid entre 0 i 100"
 msgid "Properties"
 msgstr "Propietats"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #, fuzzy
 #| msgid "Add to address book"
@@ -6538,7 +6653,8 @@ msgstr "Confirma la compra"
 msgid "Purple"
 msgstr "Morat"
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Quick reply"
 msgstr ""
 
@@ -6569,6 +6685,7 @@ msgstr ""
 #. %1$d is current raiting
 #. %2$d is the maximum rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+#, c-format
 msgid ""
 "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
 "arrowkeys to adjust your rating."
@@ -6787,6 +6904,7 @@ msgstr "Data del recordatori"
 
 #. %1$s reminder date of a task
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, c-format
 msgid "Reminder date %1$s"
 msgstr "Data de recordatori %1$s"
 
@@ -6988,10 +7106,6 @@ msgid "Running applications"
 msgstr "Execució d'aplicacions"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "SMS"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP login"
 msgstr ""
 
@@ -7104,6 +7218,7 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Planificació"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/desktop.js module:io.ox/core apps/io.ox/core/main.js
 #: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
 #: apps/io.ox/find/view-tokenfield.js
@@ -7147,6 +7262,14 @@ msgctxt "dropdown"
 msgid "Select"
 msgstr "Selecciona"
 
+#. Context: Add selected contacts; German "Auswählen", for example
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Select"
+msgctxt "select-contacts"
+msgid "Select"
+msgstr "Selecciona"
+
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid ""
 "Select a checkbox to define a custom name for that address; otherwise the "
@@ -7158,6 +7281,12 @@ msgstr ""
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Select all"
 msgstr "Selecciona-ho tot"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Create contact"
+msgid "Select contacts"
+msgstr "Crea un contacte"
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -7177,16 +7306,6 @@ msgstr "Selecciona carpeta"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Select folder"
-msgstr "Selecciona carpeta"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-msgid "Select the platform of your device:"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Select folder"
-msgid "Select your device"
 msgstr "Selecciona carpeta"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
@@ -7237,10 +7356,6 @@ msgstr "Envia correu"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "Envia correu electrònic a tots els participants"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Send me the profile data by SMS."
-msgstr ""
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
@@ -7322,10 +7437,6 @@ msgstr "Preferències"
 #| msgid "Show advanced filters"
 msgid "Settings for advanced users"
 msgstr "Mostra els filtres avançats"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Setup your profile manually."
-msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
@@ -7413,6 +7524,7 @@ msgstr "Cites compartides"
 msgid "Shared activity"
 msgstr "Activitat compartida"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #, fuzzy
 #| msgid "Add to address book"
@@ -7740,8 +7852,6 @@ msgstr "Carpetes estàndard"
 msgid "Standard timezone"
 msgstr "Carpetes estàndard"
 
-#. used as a label for the start time of an appointment, try to keep short because it's used in a compact printing view
-#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
@@ -7757,6 +7867,12 @@ msgstr "Data d'inici"
 #| msgid "Start date"
 msgid "Start date timezone"
 msgstr "Data d'inici"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Add to address book"
+msgid "Start in global address book"
+msgstr "Afegeix a la llibreta d'adreces"
 
 #. 'start presentation' dropdown menu entry to start a local only presentation where no remote participants would be able to join.
 #: apps/io.ox/presenter/actions.js module:io.ox/presenter
@@ -8297,6 +8413,10 @@ msgstr "La carpeta s'ha netejat."
 msgid "The folder has been emptied"
 msgstr "La carpeta s'ha buidat."
 
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "The following actions apply to all messages (%1$d) in this folder:"
+msgstr ""
+
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
@@ -8316,6 +8436,7 @@ msgstr "Els següents productes s'activaran ara:"
 #. message text of an alert box if joining a presentation fails
 #. %1$d is the name of the user who started the presentation
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, c-format
 msgid ""
 "The limit of participants has been reached. Please contact the presenter "
 "%1$s."
@@ -8568,6 +8689,7 @@ msgid "This distribution list has been added to the portal"
 msgstr "Aquesta llista de distribució s'ha afegit al portal"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 #, fuzzy
 #| msgid "This contact is private and cannot be shared"
 msgid "This document is password protected and cannot be displayed."
@@ -8810,10 +8932,6 @@ msgstr ""
 msgid "Today"
 msgstr "Avui"
 
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-msgid "Toggle checkboxes"
-msgstr "Canvia les caselles de verificació"
-
 #. button label for toggling fullscreen mode
 #. button tooltip for toggling fullscreen mode
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -8835,6 +8953,10 @@ msgstr "Canvia de carpeta"
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "Demà"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Too many contacts in your address book."
+msgstr ""
 
 #. Emoji category
 #. Japanese: ツール
@@ -8986,6 +9108,12 @@ msgstr "Nova subscripció"
 msgid "Unread"
 msgstr "No llegit"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+#, fuzzy
+#| msgid "Your messages"
+msgid "Unread messages"
+msgstr "Els vostres missatges"
+
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "No llegits: %1$d"
@@ -9107,6 +9235,13 @@ msgid ""
 "Use cursor keys to change the item position. Virtual cursor mode has to be "
 "disabled."
 msgstr "Emprau les tecles del cursor per a canviar la posició de l'element"
+
+#. Tooltip for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#, fuzzy
+#| msgid "User name"
+msgid "Use cursor keys to navigate"
+msgstr "Nom d'usuari"
 
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 #, fuzzy
@@ -9345,6 +9480,12 @@ msgstr "Benvingut. Per favor, feu un comentari sobre aquest producte"
 msgid "What do you want to use?"
 msgstr "Realment voleu descartar els canvis?"
 
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you really want to discard your changes?"
+msgid "What type of device do you want to configure?"
+msgstr "Realment voleu descartar els canvis?"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/updater/register.js module:plugins/portal
 msgid ""
@@ -9579,6 +9720,7 @@ msgstr "No teniu cap tasca vençuda o propera a fer-ho."
 
 #. %1$d number of notifications
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
+#, c-format
 msgid "You have %1$d notification."
 msgid_plural "You have %1$d notifications."
 msgstr[0] "Teniu %1$d notificació."
@@ -9834,6 +9976,7 @@ msgstr ""
 
 #. %1$s are some example characters
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+#, c-format
 msgid ""
 "Your password is more secure if it also contains capital letters, numbers, "
 "and special characters like %1$s"
@@ -10601,16 +10744,21 @@ msgstr ""
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Això es pot torbar uns segons"
 
-#, fuzzy
-#~| msgid "Advanced Settings"
-#~ msgid "Advanced Facets"
-#~ msgstr "Preferències avançades"
-
 #~ msgid "Advanced Settings"
 #~ msgstr "Preferències avançades"
 
 #~ msgid "Advanced options"
 #~ msgstr "Opcions avançades"
+
+#, fuzzy
+#~| msgid "Advanced Settings"
+#~ msgid "Advanced user?"
+#~ msgstr "Preferències avançades"
+
+#, fuzzy
+#~| msgid "Assistant"
+#~ msgid "Afghanistan"
+#~ msgstr "Ajudant"
 
 #~ msgid ""
 #~ "Appointment invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open"
@@ -10624,6 +10772,21 @@ msgstr ""
 #~ msgid "Automatically wrap plain text after character:"
 #~ msgstr "Divideix el text pla automàticament darrere el caràcter:"
 
+#, fuzzy
+#~| msgid "Failed to sign in"
+#~ msgid "Back to devices"
+#~ msgstr "Ha fallat l'inici de sessió"
+
+#, fuzzy
+#~| msgid "Failed to sign in"
+#~ msgid "Back to modules"
+#~ msgstr "Ha fallat l'inici de sessió"
+
+#, fuzzy
+#~| msgid "your platform"
+#~ msgid "Back to platforms"
+#~ msgstr "la vostra plataforma"
+
 #~ msgid "Bcc"
 #~ msgstr "Cco"
 
@@ -10635,19 +10798,31 @@ msgstr ""
 #~ msgid "Change folder"
 #~ msgstr "Nova carpeta"
 
+#, fuzzy
+#~| msgid "Children"
+#~ msgid "Chile"
+#~ msgstr "Fills"
+
 #~ msgid "Cleaning up... This may take a few seconds."
 #~ msgstr "Netejant... el procés es pot torbar uns segons."
 
 #~ msgid "Click here for free trial."
 #~ msgstr "Premeu aquí per a una prova gratuïta."
 
-#~ msgid "Close all"
-#~ msgstr "Tanca-ho tot"
+#, fuzzy
+#~| msgid "Color"
+#~ msgid "Colombia"
+#~ msgstr "Color"
 
 #, fuzzy
 #~| msgid "Comments"
 #~ msgid "Common Facets"
 #~ msgstr "Comentaris"
+
+#, fuzzy
+#~| msgid "Tomorrow"
+#~ msgid "Comoros"
+#~ msgstr "Demà"
 
 #~ msgid "Compact view"
 #~ msgstr "Vista compacta"
@@ -10670,9 +10845,25 @@ msgstr ""
 #~ msgstr "Crea una nova tasca"
 
 #, fuzzy
+#~| msgctxt "folder"
+#~| msgid "Deleted messages"
+#~ msgid "Delete all %1$d messages"
+#~ msgstr "Missatges esborrats"
+
+#, fuzzy
+#~| msgid "About"
+#~ msgid "Djibouti"
+#~ msgstr "Quant a"
+
+#, fuzzy
 #~| msgid "Mail"
 #~ msgid "EMail"
 #~ msgstr "Correu"
+
+#, fuzzy
+#~| msgid "six months"
+#~ msgid "East Timor"
+#~ msgstr "sis mesos"
 
 #~ msgid "Email notification for Accept/Declined"
 #~ msgstr "Notificació per correu electrònic per a acceptades/rebutjades"
@@ -10739,14 +10930,34 @@ msgstr ""
 #~ msgid "Folder names must not contain slashes"
 #~ msgstr "Els noms de carpeta no poden contenir barres inclinades"
 
+#, fuzzy
+#~| msgid "Freelancer"
+#~ msgid "France"
+#~ msgstr "Autònom"
+
 #~ msgid "Friday"
 #~ msgstr "divendres"
 
 #~ msgid "Fullscreen"
 #~ msgstr "Pantalla completa"
 
+#, fuzzy
+#~| msgid "Green"
+#~ msgid "Greece"
+#~ msgstr "Verd"
+
+#, fuzzy
+#~| msgid "Green"
+#~ msgid "Greenland"
+#~ msgstr "Verd"
+
 #~ msgid "Guidance"
 #~ msgstr "Guia"
+
+#, fuzzy
+#~| msgid "Waiting"
+#~ msgid "Haiti"
+#~ msgstr "En espera"
 
 #~ msgid "Hidden"
 #~ msgstr "Amaga"
@@ -10768,6 +10979,16 @@ msgstr ""
 
 #~ msgid "Incoming Notification Mails"
 #~ msgstr "Correus de notificacions entrants"
+
+#, fuzzy
+#~| msgid "Undone"
+#~ msgid "Indonesia"
+#~ msgstr "Sense completar"
+
+#, fuzzy
+#~| msgid "Due on %1$s"
+#~ msgid "Just open %1$s"
+#~ msgstr "Venç el %1$s"
 
 #, fuzzy
 #~| msgid "Task invitations"
@@ -10794,6 +11015,21 @@ msgstr ""
 #~ msgid "Month View"
 #~ msgstr "Vista de mesos"
 
+#, fuzzy
+#~| msgid "Months"
+#~ msgid "Montserrat"
+#~ msgstr "Mesos"
+
+#, fuzzy
+#~| msgid "New calendar"
+#~ msgid "New Caledonia"
+#~ msgstr "Nou calendari"
+
+#, fuzzy
+#~| msgid "New calendar"
+#~ msgid "New Zealand"
+#~ msgstr "Nou calendari"
+
 #~ msgid "New private calendar"
 #~ msgstr "Nou calendari privat"
 
@@ -10812,6 +11048,11 @@ msgstr ""
 #~ msgid "No wall posts yet."
 #~ msgstr "Encara no hi ha publicacions al mur."
 
+#, fuzzy
+#~| msgid "Forward"
+#~ msgid "Norway"
+#~ msgstr "Reenvia"
+
 #~ msgid "Off"
 #~ msgstr "Desconnectat"
 
@@ -10828,8 +11069,18 @@ msgstr ""
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "Mostra el menú de widgets només en dispositius mòbils"
 
+#, fuzzy
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "Obre"
+
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "Tasca endarrerida. %1$s %2$s. Premeu [Intro] per a obrir-la"
+
+#, fuzzy
+#~| msgid "Distance"
+#~ msgid "Pakistan"
+#~ msgstr "Distància"
 
 #, fuzzy
 #~| msgid "Task invitations"
@@ -10848,6 +11099,12 @@ msgstr ""
 
 #~ msgid "Portal Widgets"
 #~ msgstr "Widgets del portal"
+
+#, fuzzy
+#~| msgctxt "app"
+#~| msgid "Portal"
+#~ msgid "Portugal"
+#~ msgstr "Portal"
 
 #~ msgid "Press [enter] to jump to the facebook stream."
 #~ msgstr "Premeu [Intro] per a anar al flux de Facebook."
@@ -10966,6 +11223,11 @@ msgstr ""
 #~ msgstr "diumenge"
 
 #, fuzzy
+#~| msgid "Your name"
+#~ msgid "Suriname"
+#~ msgstr "El vostre nom"
+
+#, fuzzy
 #~| msgid "Enable"
 #~ msgid "Tablet"
 #~ msgstr "Activa"
@@ -11037,6 +11299,9 @@ msgstr ""
 #~ msgid "Timezone"
 #~ msgstr "Zona horària"
 
+#~ msgid "Toggle checkboxes"
+#~ msgstr "Canvia les caselles de verificació"
+
 #, fuzzy
 #~| msgid "Sort options"
 #~ msgid "Toggle options"
@@ -11056,6 +11321,16 @@ msgstr ""
 
 #~ msgid "Upload new files"
 #~ msgstr "Puja nous fitxers"
+
+#, fuzzy
+#~| msgid "Manual"
+#~ msgid "Vanuatu"
+#~ msgstr "Manual"
+
+#, fuzzy
+#~| msgid "Vertical"
+#~ msgid "Vatican"
+#~ msgstr "Vertical"
 
 #~ msgid "Version history"
 #~ msgstr "Historial de versions"
@@ -11145,13 +11420,15 @@ msgstr ""
 #~ msgid "remove share"
 #~ msgstr "suprimeix"
 
-#~ msgid "show image"
-#~ msgstr "mostra imatge"
-
 #, fuzzy
 #~| msgid "Show list"
 #~ msgid "show link"
 #~ msgstr "Mostra la llista"
+
+#, fuzzy
+#~| msgid "show image"
+#~ msgid "show mail"
+#~ msgstr "mostra imatge"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "subcarpetes de %s"

@@ -27,8 +27,10 @@ define('plugins/notifications/mail/register', [
     function filter(model) {
         // ignore virtual/all (used by search, for example) and unsubscribed folders
         if (!model.get('subscribed') || (/^default0\/virtual/.test(model.id))) return false;
-        return /^default0\D/.test(model.id) && !account.is('spam|trash', model.id) && folderApi.getSection(model.get('type') === 'private');
+        return /^default0\D/.test(model.id) && !account.is('spam|trash|unseen', model.id) && folderApi.getSection(model.get('type') === 'private');
     }
+
+    var lastCount = -1;
 
     var update = _.debounce(function () {
 
@@ -43,6 +45,11 @@ define('plugins/notifications/mail/register', [
                 return sum + (model && model.get('unread')) || 0;
             }, 0)
             .value();
+
+        if (count !== lastCount) {
+            api.trigger('all-unseen', count);
+            lastCount = count;
+        }
 
         // don't let the badge grow infinite
         if (count > 99) count = '99+';

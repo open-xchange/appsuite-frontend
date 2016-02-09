@@ -269,6 +269,11 @@ define('io.ox/mail/api', [
             delete data.cid;
             //don't save raw data in our models. We only want preformated content there
             if (!obj.view || (obj.view && obj.view !== 'raw')) {
+                // sanitize content Types
+                _(data.attachments).map(function (attachment) {
+                    attachment.content_type = attachment.content_type.replace(/^text\/plain.*/, 'text/plain').replace(/^text\/html.*/, 'text/html');
+                    return attachment;
+                });
                 // either update or add model
                 if (model) {
                     // if we already have a model we promote changes for threads
@@ -368,11 +373,11 @@ define('io.ox/mail/api', [
      */
     api.remove = (function () {
 
-        var pending = false, queue = [], wait = $.Deferred();
+        var pending = false, queue = [], wait = $.Deferred(), recentlyDeleted = {};
 
         var dequeue = _.debounce(function () {
             if (queue.length) {
-                remove(queue).always(wait.resolve);
+                removeOnServer(queue).always(wait.resolve);
                 queue = [];
                 wait = $.Deferred();
             } else {
@@ -385,7 +390,21 @@ define('io.ox/mail/api', [
             return wait.promise();
         }
 
-        function remove(ids) {
+        // remember deleted messages for 15 seconds
+        function remember(ids) {
+            var list = [].concat(ids);
+            list.forEach(function (item) {
+                recentlyDeleted[_.cid(item)] = true;
+            });
+            setTimeout(function () {
+                list.forEach(function (item) {
+                    delete recentlyDeleted[_.cid(item)];
+                });
+                list = null;
+            }, 15000);
+        }
+
+        function removeOnServer(ids) {
             pending = true;
             return http.wait(
                 // wait a short moment, so that the UI reacts first, i.e. triggers
@@ -420,16 +439,28 @@ define('io.ox/mail/api', [
             );
         }
 
-        return function (ids, all) {
+        function remove(ids, all) {
             try {
+                // add to recently deleted hash
+                remember(ids);
                 // avoid parallel delete requests
-                return pending ? enqueue(ids) : remove(ids);
+                return pending ? enqueue(ids) : removeOnServer(ids);
             } finally {
                 // try/finally is used to set up http.wait() first
                 // otherwise we run into race-conditions (see bug 37707)
                 prepareRemove(ids, all);
             }
+        }
+
+        remove.getRecentlyDeleted = function () {
+            return recentlyDeleted;
         };
+
+        remove.isRecentlyDeleted = function (id) {
+            return !!recentlyDeleted[id];
+        };
+
+        return remove;
 
     }());
 
@@ -810,6 +841,27 @@ define('io.ox/mail/api', [
         }
     };
 
+    api.moveAll = function (source, target) {
+
+        // clear affected collections
+        _(pool.getByFolder(source)).each(function (collection) {
+            collection.reset([]);
+            collection.complete = true;
+        });
+
+        return http.wait(
+            http.PUT({
+                module: 'mail',
+                appendColumns: false,
+                params: { action: 'move_all' },
+                data: { source: source, target: target }
+            })
+        )
+        .done(function () {
+            folderAPI.reload([source, target]);
+        });
+    };
+
     /**
      * copies a number of mails to another folder
      * @param  {array} list
@@ -1083,6 +1135,8 @@ define('io.ox/mail/api', [
 
         deferred = handleSendXHR2(data, files, deferred);
 
+        var DELAY = api.SEND_REFRESH_DELAY;
+
         return deferred
             .done(function () {
                 contactsAPI.trigger('maybyNewContact');
@@ -1099,7 +1153,7 @@ define('io.ox/mail/api', [
                     resetFolderByType('sent');
                     resetFolderByType('drafts');
                     api.trigger('refresh.all');
-                }, 3000);
+                }, DELAY);
                 // IE9
                 if (_.isObject(text)) return text;
                 // process HTML-ish non-JSONP response
@@ -1115,20 +1169,34 @@ define('io.ox/mail/api', [
                     var base = _(result.data.toString().split(api.separator)),
                         id = base.last(),
                         folder = base.without(id).join(api.separator);
-                    $.when(accountAPI.getUnifiedMailboxName())
-                    .done(function (isUnified) {
-                        if (isUnified !== null) {
-                            folderAPI.refresh();
-                        } else {
-                            folderAPI.reload(folder);
-                        }
-                        api.trigger('refresh.list');
+                    $.when(accountAPI.getUnifiedMailboxName(), accountAPI.getPrimaryAddress())
+                    .done(function (isUnified, senderAddress) {
+                        // check if mail was sent to self to update inbox counters correctly
+                        var sendToSelf = false;
+                        _.chain(_.union(data.to, data.cc, data.bcc)).each(function (item) {
+                            if (item[1] === senderAddress[1]) {
+                                sendToSelf = true;
+                                return;
+                            }
+                        });
+                        // wait a moment, then update folders as well
+                        setTimeout(function () {
+                            if (isUnified !== null) {
+                                folderAPI.refresh();
+                            } else if (sendToSelf) {
+                                folderAPI.reload(folder, accountAPI.getInbox());
+                            } else {
+                                folderAPI.reload(folder);
+                            }
+                        }, DELAY);
                     });
                 }
-
                 return result;
             });
     };
+
+    // delay to refresh mail list and folders after sending a message
+    api.SEND_REFRESH_DELAY = 5000;
 
     function handleSendXHR2(data, files) {
 
@@ -1379,8 +1447,8 @@ define('io.ox/mail/api', [
      * @return { deferred} returns array with objects (id, folder_id)
      */
     api.importEML = function (options) {
-        options.folder = options.folder || api.getDefaultFolder();
 
+        var folder = options.folder || api.getDefaultFolder();
         var form = new FormData();
         form.append('file', options.file);
 
@@ -1388,7 +1456,7 @@ define('io.ox/mail/api', [
             module: 'mail',
             params: {
                 action: 'import',
-                folder: options.folder,
+                folder: folder,
                 // don't check from address!
                 force: true
             },
@@ -1396,8 +1464,8 @@ define('io.ox/mail/api', [
             fixPost: true
         })
         .done(function () {
-            pool.resetFolder(options.folder);
-            folderAPI.reload(options.folder);
+            pool.resetFolder(folder);
+            folderAPI.reload(folder);
             api.trigger('refresh.all');
         });
     };
@@ -1586,6 +1654,13 @@ define('io.ox/mail/api', [
             var top = this.reverse[cid];
             if (!top) return 1;
             return (this.hash[top] || [cid]).length;
+        },
+
+        append: function (existingCID, newCID) {
+            var root = this.reverse[existingCID];
+            if (!root) return;
+            (this.hash[root] = (this.hash[root] || [])).unshift(newCID);
+            this.touch(root);
         }
     };
 
@@ -1594,10 +1669,32 @@ define('io.ox/mail/api', [
         return api.threads.getModels(cid);
     };
 
+    function filterAllSeen(data) {
+        // rewrite folder_id and id
+        data.id = data.original_id;
+        data.folder_id = data.original_folder_id;
+        // drop seen messages (faster check first)
+        if ((data.flags & 32) === 32) return false;
+        // drop messages from spam and trash
+        return !accountAPI.is('spam|trash', data.folder_id);
+    }
+
     // collection loader
     api.collectionLoader = new CollectionLoader({
         module: 'mail',
         getQueryParams: function (params) {
+            // is all unseen?
+            if (params.folder === 'virtual/all-unseen') {
+                return {
+                    action: 'all',
+                    folder: 'default0/virtual/all',
+                    // need original_id and original_folder_id
+                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,654,655,656',
+                    sort: '651',
+                    order: 'asc',
+                    timezone: 'utc'
+                };
+            }
             // use threads?
             if (params.thread === true) {
                 return {
@@ -1620,11 +1717,22 @@ define('io.ox/mail/api', [
                 timezone: 'utc'
             };
         },
+        filter: function (item) {
+            return !api.remove.isRecentlyDeleted(_.cid(item));
+        },
         fail: function (error) {
             api.trigger('error error:' + error.code, error);
             return error;
         },
-
+        httpGet: function (module, params) {
+            // apply static limit for all-unseen
+            var isAllUnseen = params.folder === 'default0/virtual/all' && params.sort === '651';
+            if (isAllUnseen) params.limit = '0,250';
+            return http.GET({ module: module, params: params }).then(function (data) {
+                // drop all seen messages for all-unseen
+                return isAllUnseen ? _(data).filter(filterAllSeen) : data;
+            });
+        },
         PRIMARY_PAGE_SIZE: settings.get('listview/primaryPageSize', 50),
         SECONDARY_PAGE_SIZE: settings.get('listview/secondaryPageSize', 200)
     });

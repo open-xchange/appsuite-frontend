@@ -13,46 +13,49 @@
 
 // special color scheme if widget has no account yet
 .io-ox-portal {
+
     @color: #007bb6;
+
     .widget.widget-color-custom.color-linkedin {
         .decoration { background-color: @color; }
-        &:focus {
-            .decoration { background-color: darken(@color, 10%); }
-        }
+
+        &:focus .decoration { background-color: darken(@color, 10%); }
     }
 
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
         .widget.widget-color-custom.color-linkedin {
             background-color: @color;
+
             .decoration { background-color: transparent; }
         }
     }
 }
 
 .linkedIn {
-    .actions a {
-        margin-right : 10px;
-    }
-    .extension {
-        margin-bottom: 20px;
-    }
+    .actions a { margin-right : 10px; }
+
+    .extension { margin-bottom: 20px; }
+
     .position {
         margin: 0.5em 0 0.5em 0;
 
         .companyName { font-size: 9pt; }
+
         .companyIndustry {
             display: none;
             font-size: 9pt;
         }
+
         .timeSpent {
             float: right;
             color: #AAA;
         }
     }
+
     .details {
-        .name {
-            font-size: 24px;
-        }
+
+        .name { font-size: 24px; }
+
         .headline {
             font-size: 16px;
             color: #AAA;

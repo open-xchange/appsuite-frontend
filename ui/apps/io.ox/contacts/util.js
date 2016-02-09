@@ -134,9 +134,9 @@ define('io.ox/contacts/util', [
             if (htmlOutput === true) {
                 copy = {};
                 _(['title', 'first_name', 'last_name', 'display_name']).each(function (id) {
-                    if ($.trim(obj[id])) {
-                        copy[id] = '<span class="' + id + '">' + _.escape(obj[id]) + '</span>';
-                    }
+                    if (!$.trim(obj[id])) return;
+                    var tagName = id === 'last_name' ? 'b' : 'span';
+                    copy[id] = '<' + tagName + ' class="' + id + '">' + _.escape(obj[id]) + '</' + tagName + '>';
                 });
             }
             fmt = this.getFullNameFormat(copy);
@@ -292,7 +292,71 @@ define('io.ox/contacts/util', [
             return birthday.format(
                 moment.localeData().longDateFormat('l').replace(/[\/\-]*Y+[\/\-]*/, '')
             );
-        }
+        },
+
+        // @arg is either a string (image1_url) or an object with image1_url
+        getImage: function (arg, options) {
+
+            if (_.isObject(arg)) arg = arg.image1_url;
+            if (!arg) return '';
+
+            options = _.extend({ width: 40, height: 40, scaleType: 'cover' }, options);
+
+            // use double size for retina displays
+            if (_.device('retina')) {
+                options.width *= 2;
+                options.height *= 2;
+            }
+
+            return arg.replace(/^https?\:\/\/[^\/]+/i, '').replace(/^\/ajax/, ox.apiRoot) + $.param(options);
+        },
+
+        getInitials: (function () {
+
+            var regFirst = /^.*?([a-z0-9\xC0-\xFF])/i,
+                regLast = /\s.*?([a-z0-9\xC0-\xFF])\S*$/i;
+
+            function first(str) {
+                var match = regFirst.exec(str);
+                return ((match && match[1]) || '');
+            }
+
+            function last(str) {
+                var match = regLast.exec(str);
+                return ((match && match[1]) || '');
+            }
+
+            function get(obj) {
+
+                var first_name = $.trim(obj.first_name),
+                    last_name = $.trim(obj.last_name),
+                    display_name = $.trim(obj.display_name);
+
+                // yep, both first()
+                if (first_name && last_name) return first(first_name) + first(last_name);
+                if (display_name) return first(display_name) + last(display_name);
+                // again, first() only
+                if (last_name) return first(last_name);
+                if (first_name) return first(first_name);
+
+                return '';
+            }
+
+            return function (obj) {
+                return get(obj).toUpperCase();
+            };
+        }()),
+
+        getInitialsColor: (function () {
+
+            var colors = ['red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'purple', 'pink'],
+                modulo = colors.length;
+
+            return function (initials) {
+                if (!initials) return 'gray';
+                return colors[initials[0].charCodeAt() % modulo];
+            };
+        }())
     };
 
     return that;

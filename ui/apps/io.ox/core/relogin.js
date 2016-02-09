@@ -13,12 +13,13 @@
 
 define('io.ox/core/relogin', [
     'io.ox/core/session',
+    'io.ox/core/util',
     'io.ox/core/notifications',
     'io.ox/core/capabilities',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/core',
     'settings!io.ox/core'
-], function (session, notifications, capabilities, dialogs, gt, settings) {
+], function (session, util, notifications, capabilities, dialogs, gt, settings) {
 
     'use strict';
 
@@ -34,7 +35,7 @@ define('io.ox/core/relogin', [
         var location = capabilities.has('guest') ?
             settings.get('customLocations/guestLogout') || ox.serverConfig.guestLogoutLocation :
             settings.get('customLocations/logout') || ox.serverConfig.logoutLocation;
-        return (location || ox.logoutLocation || '').replace('[hostname]', window.location.hostname);
+        return _.url.vars(location || ox.logoutLocation || '');
     }
 
     function redirect() {
@@ -44,6 +45,7 @@ define('io.ox/core/relogin', [
     function relogin(request, deferred, error) {
 
         if (!ox.online) return;
+        if (!settings.get('features/reloginPopup', true)) return;
 
         // don't ask anonymous users
         if (ox.user === 'anonymous') {

@@ -101,7 +101,9 @@ define('io.ox/tasks/view-detail', [
         id: 'note',
         draw: function (baton) {
             var note = calendarUtil.getNote(baton.interpretedData);
-            if (note !== '') {
+            note = util.checkMailLinks(note);
+
+            if (note) {
                 this.append(
                     $('<div class="note">').html(
                         note

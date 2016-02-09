@@ -315,6 +315,13 @@ define('io.ox/files/main', [
          * Respond to folder change
          */
         'folder:change': function (app) {
+            // see Bug 43512 - Opening a Drive direct link in Safari removes the edit bar
+            if (_.device('safari')) {
+                // hide and show sidepanel for correct layout. Somehow, scroll into view and flexbox-layout have errors in safari
+                app.folderView.tree.selection.view.on('scrollIntoView', function () {
+                    app.getWindow().nodes.sidepanel.hide().show(0);
+                });
+            }
 
             app.on('folder:change', function (id) {
                 // we clear the list now to avoid flickering due to subsequent layout changes
@@ -1115,9 +1122,10 @@ define('io.ox/files/main', [
                 });
                 // check for clicks in folder trew
                 app.on('folder:change folder-virtual:change', function (folder, data) {
+                    var list = [];
                     // http://oxpedia.org/wiki/index.php?title=HTTP_API#DefaultTypes
-                    // hint: custom ids for virtual folder 'vi'
-                    var list = [data.standard_folder_type, data.type];
+                    if (data) { list.push(data.standard_folder_type, data.type); }
+                    if (folderAPI.isVirtual(folder)) { list.push('virtual'); }
                     // add filestorage data
                     if (data.account_id) {
                         // simplify: 'dropbox://164' -> ['dropbox', '164']

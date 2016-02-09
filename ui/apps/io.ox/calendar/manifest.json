@@ -1,17 +1,10 @@
-[
-    {
-        "title": "Calendar",
-        "company": "Open-Xchange",
-        "icon": "calendar.png",
-        "category": "Productivity",
-        "settings": true,
-        "requires": "calendar",
-        "refreshable": true,
-        "index": 800
-    },
-    {
-        "namespace": "io.ox/dev/testing/main",
-        "path": "io.ox/calendar/test",
-        "requires": "calendar"
-    }
-]
+{
+    "title": "Calendar",
+    "company": "Open-Xchange",
+    "icon": "calendar.png",
+    "category": "Productivity",
+    "settings": true,
+    "requires": "calendar",
+    "refreshable": true,
+    "index": 800
+}

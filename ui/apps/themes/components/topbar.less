@@ -21,13 +21,10 @@
     background-image: url('apps/themes/default/logo-small.png');
     background-repeat: no-repeat;
 
-    html.high-contrast & {
-        display: none;
-    }
+    html.high-contrast & { display: none; }
 }
 
 #io-ox-topbar {
-
     position: absolute;
     top: 0;
     left: 0;
@@ -77,38 +74,30 @@
 
             &:hover {
                 text-decoration: none;
+
                 i.fa {
-                    html.high-contrast & {
-                        color: @white;
-                    }
+                    html.high-contrast & { color: @white; }
                 }
             }
 
             &:focus {
-
                 outline: 0;
                 color: @topbar-launcher-color-hover;
                 background-color: @topbar-launcher-background-hover;
                 text-decoration: none;
 
-                html.high-contrast & {
-                    color: @black;
-                }
+                html.high-contrast & { color: @black; }
 
             }
 
             &.closelink {
-
                 padding: 13px 0 13px 0;
 
                 &:focus {
-
                     outline: 0;
                     background-color: @topbar-launcher-background-hover;
 
-                    i.fa {
-                        color: @topbar-launcher-color-hover;
-                    }
+                    i.fa { color: @topbar-launcher-color-hover; }
 
                 }
 
@@ -118,12 +107,9 @@
 
     }
 
-    .launcher.closable:hover {
-        color: @topbar-launcher-color-hover;
-    }
+    .launcher.closable:hover { color: @topbar-launcher-color-hover; }
 
     .launcher {
-
         max-width: 15em; // see bug :29238
         cursor: pointer;
         text-overflow: ellipsis;
@@ -133,7 +119,6 @@
         -webkit-font-smoothing: antialiased;
 
         & > a {
-
             // IE10 needs this :link class otherwise :active is not removed
             &:link {
                 color: @topbar-launcher-color;
@@ -141,7 +126,6 @@
             }
 
             &:hover {
-
                 color: @topbar-launcher-color-hover;
                 background-color: @topbar-launcher-background-hover;
 
@@ -157,11 +141,9 @@
                 color: @topbar-launcher-color-hover;
                 background-color: @topbar-launcher-background-hover;
             }
-
         }
 
         &.upsell {
-
             color: darken(@topbar-launcher-color, 20%);
 
             i.fa {
@@ -173,7 +155,6 @@
         }
 
         &.active-app {
-
             color: @topbar-launcher-color-active;
             background-color: @topbar-launcher-background-active;
             -webkit-font-smoothing: initial;
@@ -183,32 +164,23 @@
             }
 
             html.high-contrast & {
+                background-color: @hc-link-color;
 
-                background-color: @hc-link-color; // HC
-
-                & > a {
-                    color: @white; // HC
-                }
-
+                & > a {color: @white; }
             }
 
             &.closable {
-                .apptitle i.fa {
-                    color: rgba(255, 255, 255, 0.80);
-                }
-                i.fa {
-                    color: rgba(255, 255, 255, 0.50);
-                }
+                .apptitle i.fa { color: rgba(255, 255, 255, 0.80); }
+
+                i.fa { color: rgba(255, 255, 255, 0.50); }
             }
         }
 
         &.closable {
-
             max-width: none;
             text-overflow: clip;
 
             & > a {
-
                 max-width: 15em;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -220,7 +192,6 @@
             }
 
             i {
-
                 &.fa  {
                     font-size: 14px; // default font size (see Bug 27900)
                     top: 0;
@@ -230,32 +201,25 @@
                 }
 
                 &.fa-times {
-
                     padding: 12px 16px;
                     margin: 0;
 
-                    &:hover {
-                        color: #fff;
-                    }
-
+                    &:hover { color: #fff; }
                 }
-
             }
-
         }
 
-        &.left-corner {
-            text-align: center;
-        }
+        &.left-corner { text-align: center; }
 
         &.right {
-
             float: right;
             overflow: visible;
             height: 40px;
 
             .dropdown-menu {
-                left: auto; right: 0; text-align: left;
+                left: auto;
+                right: 0;
+                text-align: left;
             }
 
             .dropdown-toggle {
@@ -264,7 +228,6 @@
                 outline: 0;
                 border: 0 none;
             }
-
         }
 
         &.io-ox-progress i {
@@ -282,6 +245,7 @@
 
         &.dropdown {
             overflow: visible;
+
             .dropdown-menu {
                 right: 4px;
                 left: auto;
@@ -298,9 +262,9 @@
     }
 
     .launcher-dropdown {
-
         float: left;
         display: none;
+
         @media (max-width: 480px), (max-device-width: 480px) {
             .dropdown-toggle {
                 font-size: @mobile-launcher-icon-size;
@@ -310,10 +274,12 @@
 
         li {
             text-align: left;
+
             &.upsell i.fa {
                 color: #AAA;
                 width: 1.25em;
             }
+
             a {
                 max-width: 10em;
                 .ellipsis();
@@ -334,9 +300,7 @@
             }
         }
 
-        ul {
-            left: 13px;
-        }
+        ul { left: 13px; }
 
         a.dropdown-toggle {
             color: white;
@@ -344,9 +308,7 @@
             outline: none;
         }
 
-        li.active-app a {
-            font-weight: bold;
-        }
+        li.active-app a { font-weight: bold; }
     }
 
     i.fa.launcher-icon {
@@ -356,11 +318,11 @@
         line-height: 1em;
         position: relative;
         top: 2px;
+
         html.high-contrast & {
-            color: @black; // HC
-            &:hover {
-                color: @white; //HC
-            }
+            color: @black;
+
+            &:hover { color: @white; }
         }
     }
 
@@ -375,7 +337,6 @@
     }
 
     i.fa-refresh {
-
         @color: rgba(255, 255, 255, 0.9);
 
         color: @color;
@@ -384,9 +345,7 @@
         /* http://stackoverflow.com/questions/7947385/hovering-over-css-transition-in-safari-lightens-certain-font-color */
         -webkit-transform: translateZ(0);
 
-        &.fa-spin {
-            color: #fff;
-        }
+        &.fa-spin { color: #fff; }
 
         &.fa-spin-paused {
             -webkit-animation-play-state: paused;
@@ -397,18 +356,14 @@
     }
 
     .launcher a.notifications-icon {
-
         display: block;
         width: 50px;
         height: 40px;
 
         &.no-notifications {
-            i {
-                color: rgba(255, 255, 255, 0.3);
-            }
-            .badge {
-                display: none;
-            }
+            i { color: rgba(255, 255, 255, 0.3); }
+
+            .badge { display: none; }
         }
 
         html.high-contrast & {
@@ -426,13 +381,11 @@
         }
 
         .badge {
-
             position: relative;
             top: -7px;
             left: -11px;
             z-index: 1;
             vertical-align: top;
-
             color: @notification-icon-color;
             background-color: @notification-icon-background;
 
@@ -454,17 +407,10 @@
         }
     }
 
-    .launcher.minimizedmediaplayer:focus {
-        outline-style: none;
-    }
+    .launcher.minimizedmediaplayer:focus { outline-style: none; }
 }
 
-.touch {
-
-    #io-ox-topbar {
-        height: 40px;
-    }
-}
+.touch #io-ox-topbar { height: 40px; }
 
 //
 // iOS 8 on Ipad needs some extra top padding for its status bar in standalone mode
@@ -472,7 +418,6 @@
 //
 
 html.ios8-standalone-ipad-fix {
-
     @height: 20px;
 
     #io-ox-topbar {
@@ -480,9 +425,7 @@ html.ios8-standalone-ipad-fix {
         height: 40 + @height;
     }
 
-    #io-ox-screens {
-        top: 40 + @height;
-    }
+    #io-ox-screens { top: 40 + @height; }
 }
 
 @media (min-width: 481px), (min-device-width: 481px) {//don't break mobile dropdowns
@@ -505,11 +448,7 @@ html.ios8-standalone-ipad-fix {
             min-width: 40px;
             text-align: center;
 
-            &.no-notifications {
-                .badge {
-                    display: inline-block;
-                }
-            }
+            &.no-notifications .badge { display: inline-block; }
         }
     }
 }
@@ -522,21 +461,12 @@ html.ios8-standalone-ipad-fix {
 
     .smartphone {
         #io-ox-topbar {
-            .launcher-dropdown {
-                i:before {
-                    content: "\f0c9";
-                }
-            }
-            .launchers-secondary .launcher.dropdown {
-                i:before {
-                    content: "\f013";
-                }
-            }
+            .launcher-dropdown i:before { content: "\f0c9"; }
+            .launchers-secondary .launcher.dropdown i:before { content: "\f013"; }
         }
     }
 
     #io-ox-topbar {
-
         .launchers-secondary {
             margin-right: 0;
             padding-left: 0;

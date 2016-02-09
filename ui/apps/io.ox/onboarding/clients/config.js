@@ -14,8 +14,9 @@
 define('io.ox/onboarding/clients/config', [
     'io.ox/onboarding/clients/api',
     'io.ox/core/api/user',
-    'io.ox/onboarding/clients/defaults'
-], function (api, userAPI, defaults) {
+    'io.ox/onboarding/clients/defaults',
+    'io.ox/onboarding/clients/codes'
+], function (api, userAPI, defaults, codes) {
 
     'use strict';
 
@@ -32,6 +33,18 @@ define('io.ox/onboarding/clients/config', [
         return clone;
     }
 
+    function getIndexFor(obj) {
+        var order = {
+            'apple.iphone': 101,
+            'apple.ipad': 102,
+            'apple.mac': 103,
+            'android.phone': 201,
+            'android.tablet': 202,
+            'windows.desktop': 301
+        };
+        return order[obj.id] || 1000;
+    }
+
     var config = {
 
         hash: {},
@@ -40,8 +53,11 @@ define('io.ox/onboarding/clients/config', [
 
         load: function () {
             return api.config().then(function (data) {
+                // reoder devices
+                data.devices = _.sortBy(data.devices, getIndexFor);
+                // extend
                 _.extend(this, data);
-                // user inputs
+                // user inputs and step progress
                 this.model = new Backbone.Model();
                 // hash maps and defaults
                 _(this.types).each(function (type) {
@@ -56,6 +72,8 @@ define('io.ox/onboarding/clients/config', [
                 userAPI.getCurrentUser().then(function (data) {
                     config.user = data.attributes;
                 });
+                // return config
+                return this;
             }.bind(this));
         },
 
@@ -119,6 +137,12 @@ define('io.ox/onboarding/clients/config', [
         getActions: function (scenario) {
             var cid = _cid(this.model.get('device'), scenario || this.model.get('scenario')),
                 matching = this.hash.matching[cid];
+
+            // TODO: remove after backend added check
+            if (!matching) {
+                if (ox.debug) console.error('undefined onboarding scenario: ' + cid);
+                return;
+            }
             return _.filter(this.actions, function (obj) {
                 return matching.actions.indexOf(obj.id) >= 0;
             });
@@ -136,7 +160,17 @@ define('io.ox/onboarding/clients/config', [
             var user = this.user;
             if (!user) return;
             return user.cellular_telephone1 || user.cellular_telephone2;
-        }
+        },
+
+        isIncomplete: function () {
+            var complete = true;
+            _.each(this.hash, function (data) {
+                complete = complete && !_.isEmpty(data);
+            });
+            return !complete;
+        },
+
+        getCodes: codes.get
     };
 
     return config;

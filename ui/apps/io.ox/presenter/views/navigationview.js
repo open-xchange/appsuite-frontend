@@ -54,7 +54,7 @@ define('io.ox/presenter/views/navigationview', [
                 gt('Previous slide')
         });
 
-        icon.addClass((type === 'next') ? 'fa-arrow-down' : 'fa-arrow-up');
+        icon.addClass((type === 'next') ? 'fa-chevron-right' : 'fa-chevron-left');
         return button.append(icon);
     }
 
@@ -180,7 +180,7 @@ define('io.ox/presenter/views/navigationview', [
             dropdown.$el.tooltip({
                 //#. the dropdown button tooltip for the participants dropdown.
                 title: gt('View participants'),
-                placement: 'top'
+                placement: 'left'
             });
 
             _.each(participants, function (user) {

@@ -54,6 +54,11 @@ msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
 msgstr[0] "%1$d 個の添付ファイル"
 
+#. %1$d and %2$d are both numbers; usually > 100; never singular
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d contacts found. This list is limited to %2$d items."
+msgstr ""
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d day"
@@ -64,6 +69,7 @@ msgstr[0] "%1$d 日"
 #. %1$d is the number of days
 #. %2$s is the text for the remainder of the last day
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%1$d day, %2$s"
 msgid_plural "%1$d days, %2$s"
 msgstr[0] "%1$d 日 %2$s"
@@ -72,6 +78,7 @@ msgstr[0] "%1$d 日 %2$s"
 #. %1$d is the number of days
 #. %2$s is the text for the remainder of the last day
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%1$d day, %2$s"
 msgid_plural "%1$d days, %2$s"
@@ -91,6 +98,7 @@ msgstr[0] "%1$d 時間"
 #. %1$d is the number of hours
 #. %2$s is the text for the remainder of the last hour
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%1$d hour and %2$s"
 msgid_plural "%1$d hours and %2$s"
 msgstr[0] "%1$d 時間 %2$s"
@@ -99,6 +107,7 @@ msgstr[0] "%1$d 時間 %2$s"
 #. %1$d is the number of hours
 #. %2$s is the text for the remainder of the last hour
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%1$d hour and %2$s"
 msgid_plural "%1$d hours and %2$s"
@@ -203,6 +212,7 @@ msgstr "%2$s %1$s"
 #. %5$s Appointment Organizer
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
+#, c-format
 msgid "%1$s %2$s %3$s %4$s %5$s."
 msgstr "%1$s %2$s %3$s %4$s %5$s。"
 
@@ -211,6 +221,7 @@ msgstr "%1$s %2$s %3$s %4$s %5$s。"
 #. %3$s Appointment time
 #. %4$s Appointment location
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#, c-format
 msgid "%1$s %2$s %3$s %4$s."
 msgstr "%1$s %2$s %3$s %4$s。"
 
@@ -219,12 +230,14 @@ msgstr "%1$s %2$s %3$s %4$s。"
 #. %3$s task status
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
+#, c-format
 msgid "%1$s %2$s %3$s."
 msgstr "%1$s %2$s %3$s。"
 
 #. %1$s task title
 #. %2$s task end date
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
+#, c-format
 msgid "%1$s %2$s."
 msgstr "%1$s %2$s。"
 
@@ -232,6 +245,7 @@ msgstr "%1$s %2$s。"
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js
+#, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (仮の予定)"
 
@@ -294,6 +308,7 @@ msgstr[0] "%1$s 件のアイテムが選択されています。"
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
+#, c-format
 msgid "%1$s of %2$s"
 msgstr "%2$s 中の %1$s"
 
@@ -314,6 +329,7 @@ msgstr "%1$s が次のリンクをお勧めしました:"
 #. %1$s is the start date
 #. %2$s is the end date
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, c-format
 msgid "%1$s to %2$s"
 msgstr "%1$s が %2$s 宛に"
 
@@ -359,6 +375,7 @@ msgstr "%3$s %2$s %1$s"
 #. %d is the number of days
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/core/date.js
 #: module:io.ox/core
+#, c-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d 日"
@@ -366,6 +383,7 @@ msgstr[0] "%d 日"
 #. Reminder (objective case): in X days
 #. %d is the number of days
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%d day"
 msgid_plural "%d days"
@@ -374,6 +392,7 @@ msgstr[0] "%d 日"
 #. General duration (nominative case): X hours
 #. %d is the number of hours
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d 時間"
@@ -381,6 +400,7 @@ msgstr[0] "%d 時間"
 #. Reminder (objective case): in X hours
 #. %d is the number of hours
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%d hour"
 msgid_plural "%d hours"
@@ -390,6 +410,7 @@ msgstr[0] "%d 時間"
 #. %d is the number of minutes
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d 分"
@@ -397,6 +418,7 @@ msgstr[0] "%d 分"
 #. Reminder (objective case): in X minutes
 #. %d is the number of minutes
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%d minute"
 msgid_plural "%d minutes"
@@ -405,6 +427,7 @@ msgstr[0] "%d 分"
 #. General duration (nominative case): X weeks
 #. %d is the number of weeks
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] "%d 週間"
@@ -412,6 +435,7 @@ msgstr[0] "%d 週間"
 #. Reminder (objective case): in X weeks
 #. %d is the number of weeks
 #: apps/io.ox/core/date.js module:io.ox/core
+#, c-format
 msgctxt "in"
 msgid "%d week"
 msgid_plural "%d weeks"
@@ -612,10 +636,9 @@ msgstr "アカウントが更新されました。"
 msgid "Accounts"
 msgstr "アカウント"
 
-#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/core/extPatterns/links.js
+#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -623,6 +646,11 @@ msgstr "アカウント"
 #: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "Actions"
 msgstr "アクション"
+
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+msgid "Actions. Use cursor keys to navigate."
+msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -922,6 +950,12 @@ msgstr "すべてのファイルを削除しました。"
 msgid "All folders"
 msgstr "すべてのフォルダ"
 
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All messages have been deleted"
+msgstr "すべてのファイルを削除しました。"
+
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr "%1$d 日以上経過したメッセージは、アーカイブ フォルダに移動されます。"
@@ -943,9 +977,16 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "外部リンク先の画像の事前読み込みを許可"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 #, fuzzy
 #| msgid "An error occurred while importing the document."
 msgid "An error occurred converting the document so it cannot be displayed."
+msgstr "ドキュメントのインポート中にエラーが発生しました。"
+
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "An error occurred while importing the document."
+msgid "An error occurred loading the document so it cannot be displayed."
 msgstr "ドキュメントのインポート中にエラーが発生しました。"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -979,6 +1020,10 @@ msgstr "記念日"
 #: module:io.ox/settings
 msgid "Any recipient"
 msgstr "すべての宛先"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "App Store"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Append vCard"
@@ -1174,6 +1219,12 @@ msgstr "下書きの自動保存"
 msgid "Automatic Configuration"
 msgstr "マイ ソーシャルの構成"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "My Social Configuration"
+msgid "Automatic Configuration (via SMS)"
+msgstr "マイ ソーシャルの構成"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "通知エリアを自動的に表示"
@@ -1193,10 +1244,6 @@ msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "sending"
 msgstr "メールの送信時に \"収集済みアドレス\" フォルダに連絡先を自動的に収集"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Automatically configure your device by clicking the button below."
-msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
@@ -1233,26 +1280,6 @@ msgstr "戻る"
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 msgid "Back to appointment"
 msgstr "アポイントに戻る"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
-#, fuzzy
-#| msgid "Back to sign in"
-msgid "Back to devices"
-msgstr "サイン インに戻る"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Back to sign in"
-msgid "Back to modules"
-msgstr "サイン インに戻る"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
-#, fuzzy
-#| msgid "your platform"
-msgid "Back to platforms"
-msgstr "ご利用のプラットフォーム"
 
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid "Back to sign in"
@@ -1373,7 +1400,6 @@ msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Calendar"
 msgstr "予定表"
 
@@ -1384,12 +1410,6 @@ msgctxt "app"
 msgid "Calendar"
 msgstr "予定表"
 
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Calendar day view"
-msgid "Calendar (Manually)"
-msgstr "予定表の日ビュー"
-
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
 msgstr "予定表ビュー"
@@ -1398,6 +1418,7 @@ msgstr "予定表ビュー"
 msgid "Calendar:"
 msgstr "予定表："
 
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
@@ -1408,7 +1429,7 @@ msgstr "予定表："
 #: apps/io.ox/calendar/week/perspective.js
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js apps/io.ox/contacts/edit/main.js
-#: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js module:io.ox/core
+#: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js
 #: apps/io.ox/core/export/export.js apps/io.ox/core/folder/actions/add.js
 #: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
@@ -1503,7 +1524,8 @@ msgid "Cart is empty."
 msgstr "カートには何も入っていません。"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "携帯電話"
 
@@ -1672,15 +1694,14 @@ msgstr "クリックして再試行"
 msgid "Click to upload image"
 msgstr "クリックして画像をアップロード"
 
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
 msgstr ""
 
-#: apps/io.ox/core/about/about.js module:io.ox/core
-#: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
+#: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/wizard.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -1801,6 +1822,12 @@ msgstr "条件"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
+#| msgid "Configuration changed"
+msgid "Configuration Email"
+msgstr "構成が変更されました。"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
 #| msgid "Confirmed"
 msgid "Configure now"
 msgstr "確認"
@@ -1825,6 +1852,12 @@ msgstr "設備との競合は無視できません。"
 #: apps/io.ox/calendar/view-grid-template.js module:io.ox/calendar
 msgid "Conflicts:"
 msgstr "競合:"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Selecting a view"
+msgid "Connect your Device"
+msgstr "ビューの選択"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Connector for Microsoft Outlook®"
@@ -2257,10 +2290,9 @@ msgstr "アカウントを削除"
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #, fuzzy
-#| msgctxt "folder"
-#| msgid "Deleted messages"
-msgid "Delete all %1$d messages"
-msgstr "削除済みメッセージ"
+#| msgid "Show all %1$d messages in inbox"
+msgid "Delete all messages in this folder"
+msgstr "受信トレイにある %1$d 件のメッセージをすべて表示"
 
 #. object permissions - delete
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -2456,10 +2488,10 @@ msgstr "配布リスト"
 msgid "Distribution List Details"
 msgstr "配布リスト詳細"
 
-#: apps/io.ox/contacts/common-extensions.js module:io.ox/contacts
-#: apps/io.ox/contacts/main.js apps/io.ox/contacts/model.js
-#: apps/io.ox/contacts/view-detail.js apps/io.ox/participants/model.js
-#: module:io.ox/core
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/contacts/common-extensions.js apps/io.ox/contacts/main.js
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
+#: apps/io.ox/participants/model.js module:io.ox/core
 msgid "Distribution list"
 msgstr "配布リスト"
 
@@ -2764,6 +2796,7 @@ msgstr "期限"
 
 #. %1$s due date of a task
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, c-format
 msgid "Due %1$s"
 msgstr "期限 %1$s"
 
@@ -2895,7 +2928,6 @@ msgid "Editor"
 msgstr "エディタ"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Email"
 msgstr "メール"
 
@@ -2991,8 +3023,6 @@ msgstr "有効"
 msgid "Enable for the following addresses"
 msgstr "次のアドレスに適用"
 
-#. used as a label for the end time of an appointment, try to keep short because it's used in a compact printing view
-#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "End"
 msgstr "終了"
@@ -3057,6 +3087,12 @@ msgstr "エラー"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Error log"
 msgstr "エラー ログ"
+
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "An error occurred while loading the document."
+msgid "Error while loading message content"
+msgstr "ドキュメントの読み込み中にエラーが発生しました。"
 
 #: apps/io.ox/mail/actions/invite.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -3181,6 +3217,12 @@ msgstr "フォームを展開"
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Expand timeframe by one month"
 msgstr "1 か月期間を拡大する"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Expert mode"
+msgid "Expert user?"
+msgstr "エキスパート モード"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 #, fuzzy
@@ -3641,6 +3683,10 @@ msgid "Get started here"
 msgstr "はじめにここからはじめます。"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Get the App from %1$s"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Get your device configured by email."
 msgstr ""
 
@@ -3660,6 +3706,12 @@ msgstr "おはようございます、%s さん。"
 #, fuzzy
 #| msgid "Add Google Drive account"
 msgid "Google Drive"
+msgstr "Google Drive アカウントを追加"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Play"
 msgstr "Google Drive アカウントを追加"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
@@ -3781,6 +3833,12 @@ msgstr "詳細を隠す"
 msgid "Hide names"
 msgstr "名前を隠す"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Show advanced filters"
+msgid "Hide options for expert users."
+msgstr "詳細フィルタを表示"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Hide request body"
 msgstr "リクエストの本文を隠す"
@@ -3875,6 +3933,10 @@ msgid ""
 msgstr ""
 "パスワードを変更すると、サインアウトされます。作業中のすべてのファイルを保存"
 "し、閉じてください。"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "If you know what you are doing...just setup your account manually!"
+msgstr ""
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid ""
@@ -3973,6 +4035,14 @@ msgstr "配布リストを追加"
 msgid "Incoming server"
 msgstr "受信サーバ"
 
+#. error message when server returns incomplete
+#. configuration for client onboarding
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Close configuration"
+msgid "Incomplete configuration."
+msgstr "構成を閉じる"
+
 #: apps/io.ox/tasks/common-extensions.js module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr "日付が矛盾しています。"
@@ -4025,6 +4095,12 @@ msgid ""
 msgstr ""
 "ご利用の %1$s にこの Web アプリケーションをインストールします。%2$s をタップ"
 "し、%3$s'ホーム スクリーンに追加'%4$s をタップします。"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Initialization ..."
+msgid "Installation"
+msgstr "初期化しています..."
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Instant Messenger 1"
@@ -4154,6 +4230,14 @@ msgstr "プレゼンテーションに参加"
 #, fuzzy
 #| msgid "Join presentation"
 msgid "Join the presentation"
+msgstr "プレゼンテーションに参加"
+
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Join presentation"
+msgid "Joining the presentation of %1$s."
 msgstr "プレゼンテーションに参加"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -4289,6 +4373,12 @@ msgstr "プレゼンテーションを退出します。"
 msgid "Letters • Symbols"
 msgstr "文字・記号"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid ""
+"Let´s automatically configure your device, by clicking the button below. It"
+"´s that simple!"
+msgstr ""
+
 #. Emoji category
 #. Japanese: 日常
 #. Rather "everyday life". Contains: Cars, trucks, plane, buildings, flags
@@ -4394,7 +4484,6 @@ msgid "MM"
 msgstr "MM"
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
 msgid "Mail"
 msgstr "メール"
 
@@ -4404,10 +4493,6 @@ msgstr "メール"
 msgctxt "app"
 msgid "Mail"
 msgstr "メール"
-
-#: apps/io.ox/onboarding/clients/defaults.js module:io.ox/core/onboarding
-msgid "Mail (Manually)"
-msgstr ""
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Mail Details"
@@ -4440,6 +4525,7 @@ msgstr "メール数割当量"
 #. %1$s mail sender
 #. %2$s mail subject
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#, c-format
 msgid "Mail from %1$s, %2$s"
 msgstr "%1$s %2$s からのメール"
 
@@ -4669,6 +4755,7 @@ msgstr "最小化"
 
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+#, c-format
 msgid "Minimum password length is %1$d."
 msgstr "パスワードは最低 %1$d 文字必要です。"
 
@@ -4741,16 +4828,22 @@ msgstr ""
 msgid "Move"
 msgstr "移動"
 
-#. %1$d is the total number of messages
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 #, fuzzy
-#| msgid "Show all %1$d messages in inbox"
-msgid "Move all %1$d messages to another folder"
-msgstr "受信トレイにある %1$d 件のメッセージをすべて表示"
+#| msgid "Close all"
+msgid "Move all"
+msgstr "すべて閉じる"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Move all messages"
 msgstr "全てのメッセージを移動する"
+
+#. %1$d is the total number of messages
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show all %1$d messages in inbox"
+msgid "Move all messages to another folder"
+msgstr "受信トレイにある %1$d 件のメッセージをすべて表示"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
@@ -4769,6 +4862,7 @@ msgstr "複数選択"
 msgid "Music"
 msgstr "音楽"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My address books"
 msgstr "アドレス帳"
@@ -5068,6 +5162,7 @@ msgstr "低速なリクエストはありません。"
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail apps/io.ox/mail/util.js
 #: module:io.ox/core apps/plugins/notifications/mail/register.js
 #: module:plugins/notifications
+#, c-format
 msgid "No subject"
 msgstr "件名なし"
 
@@ -5232,6 +5327,12 @@ msgstr ""
 msgid "OneDrive"
 msgstr "ドライブ"
 
+#: apps/io.ox/backbone/mini-views/help.js module:io.ox/core
+#, fuzzy
+#| msgid "Opening the help"
+msgid "Online help"
+msgstr "ヘルプを開く"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "フォルダ \"%1$s\" に関連するアイテムのみを表示しています。"
@@ -5375,6 +5476,12 @@ msgstr "順序"
 msgid "Organizer"
 msgstr "開催者"
 
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+#, fuzzy
+#| msgid "Primary Email"
+msgid "Original mail"
+msgstr "既定のメール"
+
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
 msgstr "その他の住所"
@@ -5442,6 +5549,7 @@ msgstr "パスワード"
 #. %1$s is the minimum password length
 #. %2$s is the maximum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+#, c-format
 msgid "Password length must be between %1$d and %2$d characters."
 msgstr "パスワードは %1$d 文字以上 %2$d 文字以下にしてください。"
 
@@ -5709,6 +5817,7 @@ msgstr "正しいパスワードを入力してください。"
 
 #. %1$s the missing request parameter
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#, c-format
 msgid "Please enter the following data: %1$s"
 msgstr "次のデータを入力してください: %1$s"
 
@@ -5719,6 +5828,12 @@ msgstr "0 から 100 までの値を入力してください。"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please enter your credentials."
 msgstr "認証情報を入力してください。"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid ""
+"Please enter your mobile phone number, and we´ll send you a link to "
+"automatically configure your iOS device! It´s that simple!"
+msgstr ""
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please enter your password."
@@ -5821,6 +5936,12 @@ msgstr "ステータスのアップデートを投稿"
 msgid "Postcode"
 msgstr "郵便番号"
 
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Premium features"
+msgid "Premium"
+msgstr "プレミアム機能"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Premium features"
 msgstr "プレミアム機能"
@@ -5847,6 +5968,13 @@ msgstr "プレゼンテーション終了"
 #: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 msgid "Presentation is paused."
 msgstr "プレゼンテーションは一時停止になっています。"
+
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, fuzzy
+#| msgid "Presentation end"
+msgid "Presentation join"
+msgstr "プレゼンテーション終了"
 
 #. headline of a presentation start alert
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
@@ -6003,6 +6131,7 @@ msgstr "達成率"
 #. %1$s how much of a task is completed in percent, values from 0-100
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 #: apps/io.ox/tasks/view-grid-template.js
+#, c-format
 msgid "Progress %1$s %"
 msgstr "達成率 %1$s %"
 
@@ -6019,6 +6148,7 @@ msgstr "達成率は 0 から 100 までの数字でなければなりません�
 msgid "Properties"
 msgstr "プロパティ"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public address books"
 msgstr "パブリックアドレス帳"
@@ -6068,7 +6198,8 @@ msgstr "購入の確認"
 msgid "Purple"
 msgstr "紫"
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 #, fuzzy
 #| msgid "Quick Search"
 msgid "Quick reply"
@@ -6100,6 +6231,7 @@ msgstr ""
 #. %1$d is current raiting
 #. %2$d is the maximum rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+#, c-format
 msgid ""
 "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
 "arrowkeys to adjust your rating."
@@ -6299,6 +6431,7 @@ msgstr "アラーム通知日"
 
 #. %1$s reminder date of a task
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#, c-format
 msgid "Reminder date %1$s"
 msgstr "アラーム通知日 %1$s"
 
@@ -6488,12 +6621,6 @@ msgid "Running applications"
 msgstr "実行中のアプリケーション"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "RSS"
-msgid "SMS"
-msgstr "RSS"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP login"
 msgstr ""
 
@@ -6601,6 +6728,7 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "スケジューリング"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/desktop.js module:io.ox/core apps/io.ox/core/main.js
 #: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
 #: apps/io.ox/find/view-tokenfield.js
@@ -6642,6 +6770,14 @@ msgctxt "dropdown"
 msgid "Select"
 msgstr "選択"
 
+#. Context: Add selected contacts; German "Auswählen", for example
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Select"
+msgctxt "select-contacts"
+msgid "Select"
+msgstr "選択"
+
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid ""
 "Select a checkbox to define a custom name for that address; otherwise the "
@@ -6656,6 +6792,12 @@ msgstr ""
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Select all"
 msgstr "すべてを選択"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Select a contact"
+msgid "Select contacts"
+msgstr "連絡先を選択してください。"
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -6672,16 +6814,6 @@ msgstr "ファイルを選択"
 #: module:io.ox/settings
 msgid "Select folder"
 msgstr "フォルダを選択"
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-msgid "Select the platform of your device:"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/view.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Selecting a view"
-msgid "Select your device"
-msgstr "ビューの選択"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
@@ -6729,10 +6861,6 @@ msgstr "メールを送信"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "すべての出席者にメールを送信"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Send me the profile data by SMS."
-msgstr ""
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
@@ -6815,10 +6943,6 @@ msgstr "設定"
 msgid "Settings for advanced users"
 msgstr "詳細フィルタを表示"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Setup your profile manually."
-msgstr ""
-
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files apps/plugins/portal/xing/actions.js
@@ -6891,6 +7015,7 @@ msgstr "共有アポイント"
 msgid "Shared activity"
 msgstr "共有アクティビティ"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared address books"
 msgstr "共有アドレス帳"
@@ -7184,8 +7309,6 @@ msgstr "標準フォルダ"
 msgid "Standard timezone"
 msgstr "標準タイムゾーン"
 
-#. used as a label for the start time of an appointment, try to keep short because it's used in a compact printing view
-#: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
@@ -7199,6 +7322,12 @@ msgstr "開始日"
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid "Start date timezone"
 msgstr "開始日タイムゾーン"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Shared address books"
+msgid "Start in global address book"
+msgstr "共有アドレス帳"
 
 #. 'start presentation' dropdown menu entry to start a local only presentation where no remote participants would be able to join.
 #: apps/io.ox/presenter/actions.js module:io.ox/presenter
@@ -7699,6 +7828,10 @@ msgstr "フォルダのクリーン アップが完了しました。"
 msgid "The folder has been emptied"
 msgstr "フォルダを空にしました。"
 
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "The following actions apply to all messages (%1$d) in this folder:"
+msgstr ""
+
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
@@ -7718,6 +7851,7 @@ msgstr "次の製品が有効になりました。"
 #. message text of an alert box if joining a presentation fails
 #. %1$d is the name of the user who started the presentation
 #: apps/io.ox/presenter/views/mainview.js module:io.ox/presenter
+#, c-format
 msgid ""
 "The limit of participants has been reached. Please contact the presenter "
 "%1$s."
@@ -7960,6 +8094,7 @@ msgid "This distribution list has been added to the portal"
 msgstr "この配布リストをポータルに追加しました。"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 msgid "This document is password protected and cannot be displayed."
 msgstr "本ドキュメントはパスワードで保護されており、表示できません。"
 
@@ -8173,10 +8308,6 @@ msgstr ""
 msgid "Today"
 msgstr "今日"
 
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-msgid "Toggle checkboxes"
-msgstr "チェックボックスを表示"
-
 #. button label for toggling fullscreen mode
 #. button tooltip for toggling fullscreen mode
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -8194,6 +8325,10 @@ msgstr "オプションパネル"
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "明日"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Too many contacts in your address book."
+msgstr ""
 
 #. Emoji category
 #. Japanese: ツール
@@ -8340,6 +8475,12 @@ msgstr "新規の登録"
 msgid "Unread"
 msgstr "未読にする"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+#, fuzzy
+#| msgid "Your messages"
+msgid "Unread messages"
+msgstr "メッセージ"
+
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "未読: %1$d"
@@ -8448,6 +8589,13 @@ msgid ""
 msgstr ""
 "カーソルキーを使用して、アイテムの位置を変更できます。仮想カーソルモードは無"
 "効にしてください。"
+
+#. Tooltip for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#, fuzzy
+#| msgid "Use custom name"
+msgid "Use cursor keys to navigate"
+msgstr "カスタム名を使用"
 
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
@@ -8664,6 +8812,12 @@ msgstr "ようこそこの製品のフィードバックをお送りください
 msgid "What do you want to use?"
 msgstr "レイアウトの変更を保存しますか？"
 
+#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Do you want to save your layout changes?"
+msgid "What type of device do you want to configure?"
+msgstr "レイアウトの変更を保存しますか？"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/updater/register.js module:plugins/portal
 msgid ""
@@ -8878,6 +9032,7 @@ msgstr "期限が近い仕事や期限が過ぎた仕事はありません。"
 
 #. %1$d number of notifications
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
+#, c-format
 msgid "You have %1$d notification."
 msgid_plural "You have %1$d notifications."
 msgstr[0] "%1$d 件の通知があります。"
@@ -9120,6 +9275,7 @@ msgstr "セッションが期限切れです。もう一度ログインしてく
 
 #. %1$s are some example characters
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+#, c-format
 msgid ""
 "Your password is more secure if it also contains capital letters, numbers, "
 "and special characters like %1$s"
@@ -10084,9 +10240,6 @@ msgstr "yyyy"
 #~ msgid "Administration"
 #~ msgstr "管理"
 
-#~ msgid "Advanced Facets"
-#~ msgstr "詳細ファセット"
-
 #~ msgid "Advanced facets block was closed."
 #~ msgstr "詳細ファセットブロックが閉じられました。"
 
@@ -10095,6 +10248,11 @@ msgstr "yyyy"
 
 #~ msgid "Advanced options"
 #~ msgstr "詳細設定"
+
+#, fuzzy
+#~| msgid "Advanced Facets"
+#~ msgid "Advanced user?"
+#~ msgstr "詳細ファセット"
 
 #~ msgid "Afghanistan"
 #~ msgstr "アフガニスタン"
@@ -10295,9 +10453,6 @@ msgstr "yyyy"
 #~ msgid "America/Barbados"
 #~ msgstr "アメリカ/バルバドス"
 
-#~ msgid "America/Belize"
-#~ msgstr "アメリカ/ベリーズ"
-
 #~ msgid "America/Bogota"
 #~ msgstr "アメリカ/ボゴタ"
 
@@ -10409,9 +10564,6 @@ msgstr "yyyy"
 #~ msgid "America/Montreal"
 #~ msgstr "アメリカ/モントリオール"
 
-#~ msgid "America/Montserrat"
-#~ msgstr "アメリカ/モントセラト島"
-
 #~ msgid "America/Nassau"
 #~ msgstr "アメリカ/ナッソー"
 
@@ -10498,9 +10650,6 @@ msgstr "yyyy"
 
 #~ msgid "An error occurred"
 #~ msgstr "エラーが発生しました。"
-
-#~ msgid "An error occurred while loading the document."
-#~ msgstr "ドキュメントの読み込み中にエラーが発生しました。"
 
 #~ msgid "An error occurred. (%1$s, %3$s)"
 #~ msgstr "エラーが起こりました (%1$s、%3$s)"
@@ -10709,9 +10858,6 @@ msgstr "yyyy"
 #~ msgid "Asia/Bishkek"
 #~ msgstr "アジア/ビシケク"
 
-#~ msgid "Asia/Brunei"
-#~ msgstr "アジア/ブルネイ"
-
 #~ msgid "Asia/Calcutta"
 #~ msgstr "アジア/カルカッタ"
 
@@ -10793,9 +10939,6 @@ msgstr "yyyy"
 #~ msgid "Asia/Pyongyang"
 #~ msgstr "アジア/ピョンヤン"
 
-#~ msgid "Asia/Qatar"
-#~ msgstr "アジア/カタール"
-
 #~ msgid "Asia/Rangoon"
 #~ msgstr "アジア/ラングーン"
 
@@ -10810,9 +10953,6 @@ msgstr "yyyy"
 
 #~ msgid "Asia/Shanghai"
 #~ msgstr "アジア/シャンハイ"
-
-#~ msgid "Asia/Singapore"
-#~ msgstr "アジア/シンガポール"
 
 #~ msgid "Asia/Taipei"
 #~ msgstr "アジア/タイペイ"
@@ -11007,6 +11147,21 @@ msgstr "yyyy"
 #~ msgid "Azerbaijan"
 #~ msgstr "アゼルバイジャン"
 
+#, fuzzy
+#~| msgid "Back to sign in"
+#~ msgid "Back to devices"
+#~ msgstr "サイン インに戻る"
+
+#, fuzzy
+#~| msgid "Back to sign in"
+#~ msgid "Back to modules"
+#~ msgstr "サイン インに戻る"
+
+#, fuzzy
+#~| msgid "your platform"
+#~ msgid "Back to platforms"
+#~ msgstr "ご利用のプラットフォーム"
+
 #~ msgid "Background 1"
 #~ msgstr "背景色 1"
 
@@ -11051,6 +11206,11 @@ msgstr "yyyy"
 
 #~ msgid "Belarus"
 #~ msgstr "ベラルーシ"
+
+#, fuzzy
+#~| msgid "America/Belize"
+#~ msgid "Belize"
+#~ msgstr "アメリカ/ベリーズ"
 
 #~ msgid ""
 #~ "Below the recipient you will find further functions, e.g. for sending "
@@ -11131,6 +11291,16 @@ msgstr "yyyy"
 #~ msgid "British Indian Ocean Territory"
 #~ msgstr "英領インド洋植民地"
 
+#, fuzzy
+#~| msgid "Virgin Islands, U.S."
+#~ msgid "British Virgin Islands"
+#~ msgstr "ヴァージン諸島 (米国)"
+
+#, fuzzy
+#~| msgid "Asia/Brunei"
+#~ msgid "Brunei"
+#~ msgstr "アジア/ブルネイ"
+
 #~ msgid "Brunei Darussalam"
 #~ msgstr "ブルネイダルサラーム国"
 
@@ -11157,6 +11327,11 @@ msgstr "yyyy"
 
 #~ msgid "CW"
 #~ msgstr "CW"
+
+#, fuzzy
+#~| msgid "Calendar day view"
+#~ msgid "Calendar (Manually)"
+#~ msgstr "予定表の日ビュー"
 
 #~ msgid "Calendar custom view"
 #~ msgstr "予定表のカスタム ビュー"
@@ -11352,12 +11527,6 @@ msgstr "yyyy"
 #~ msgid "Close Window"
 #~ msgstr "ウィンドウを閉じる"
 
-#~ msgid "Close all"
-#~ msgstr "すべて閉じる"
-
-#~ msgid "Close configuration"
-#~ msgstr "構成を閉じる"
-
 #~ msgid "Close document"
 #~ msgstr "ドキュメントを閉じる"
 
@@ -11372,6 +11541,11 @@ msgstr "yyyy"
 
 #~ msgid "Cocos (Keeling) Islands"
 #~ msgstr "ココス諸島"
+
+#, fuzzy
+#~| msgid "Cook Islands"
+#~ msgid "Cocos Islands"
+#~ msgstr "クック諸島"
 
 #~ msgid "Collect while reading E-Mails?"
 #~ msgstr "メールの表示時に収集"
@@ -11397,6 +11571,11 @@ msgstr "yyyy"
 #~ msgid "Common Facets"
 #~ msgstr "一般的なファセット"
 
+#, fuzzy
+#~| msgid "Tomorrow"
+#~ msgid "Comoros"
+#~ msgstr "明日"
+
 #~ msgid "Compact view"
 #~ msgstr "コンパクト ビュー"
 
@@ -11408,9 +11587,6 @@ msgstr "yyyy"
 
 #~ msgid "Composing a new E-Mail"
 #~ msgstr "新規メールの作成"
-
-#~ msgid "Configuration changed"
-#~ msgstr "構成が変更されました。"
 
 #~ msgid "Configuration damaged, please inform the administrator."
 #~ msgstr "構成が破損しています。管理者に連絡してください。"
@@ -11596,6 +11772,11 @@ msgstr "yyyy"
 #~ msgid "Cuba"
 #~ msgstr "キューバ"
 
+#, fuzzy
+#~| msgid "Macao"
+#~ msgid "Curacao"
+#~ msgstr "マカオ"
+
 #~ msgid "Current Costs:"
 #~ msgstr "現在のコスト:"
 
@@ -11748,6 +11929,12 @@ msgstr "yyyy"
 #~ msgid "Delete a stream"
 #~ msgstr "ストリームを削除"
 
+#, fuzzy
+#~| msgctxt "folder"
+#~| msgid "Deleted messages"
+#~ msgid "Delete all %1$d messages"
+#~ msgstr "削除済みメッセージ"
+
 #~ msgid "Delete all accounts"
 #~ msgstr "すべてのアカウントを削除"
 
@@ -11769,6 +11956,11 @@ msgstr "yyyy"
 #~| msgid "Return Receipt"
 #~ msgid "Delivery Receipt"
 #~ msgstr "開封通知を送信"
+
+#, fuzzy
+#~| msgid "Korea, Democratic People's Republic of"
+#~ msgid "Democratic Republic of the Congo"
+#~ msgstr "北朝鮮"
 
 #~ msgid "Demote One Level"
 #~ msgstr "1 レベル下げる"
@@ -11995,9 +12187,6 @@ msgstr "yyyy"
 #~ msgid "Due today!"
 #~ msgstr "今日が期限です。"
 
-#~ msgid "Dutch (Netherlands)"
-#~ msgstr "オランダ語 (オランダ)"
-
 #~ msgid "Dynamic resizing..."
 #~ msgstr "ダイナミック リサイズしています..."
 
@@ -12051,6 +12240,11 @@ msgstr "yyyy"
 
 #~ msgid "Each %s. %s"
 #~ msgstr "指定日: %s 日 指定月: %s"
+
+#, fuzzy
+#~| msgid "Last month"
+#~ msgid "East Timor"
+#~ msgstr "先月"
 
 #~ msgid "Ecuador"
 #~ msgstr "エクアドル"
@@ -12472,9 +12666,6 @@ msgstr "yyyy"
 #~ msgid "Expand the panel"
 #~ msgstr "パネルを拡張"
 
-#~ msgid "Expert mode"
-#~ msgstr "エキスパート モード"
-
 #~ msgid "Extended view"
 #~ msgstr "拡張ビュー"
 
@@ -12498,6 +12689,11 @@ msgstr "yyyy"
 
 #~ msgid "Failure! Please refresh."
 #~ msgstr "エラーが発生しました。最新の状態に更新してください。"
+
+#, fuzzy
+#~| msgid "Aland Islands"
+#~ msgid "Falkland Islands"
+#~ msgstr "オーランド諸島"
 
 #~ msgid "Falkland Islands (Malvinas)"
 #~ msgstr "フォークランド諸島"
@@ -12657,6 +12853,11 @@ msgstr "yyyy"
 #~ msgid "Forward emails as:"
 #~ msgstr "メールの転送方法:"
 
+#, fuzzy
+#~| msgid "Freelancer"
+#~ msgid "France"
+#~ msgstr "フリーランサー"
+
 #~ msgid "Free trial..."
 #~ msgstr "無償評価版..."
 
@@ -12722,7 +12923,9 @@ msgstr "yyyy"
 #~ msgid "Georgia"
 #~ msgstr "ジョージア"
 
-#~ msgid "German"
+#, fuzzy
+#~| msgid "German"
+#~ msgid "Germany"
 #~ msgstr "ドイツ語"
 
 #~ msgid "Get directions"
@@ -12751,6 +12954,11 @@ msgstr "yyyy"
 
 #~ msgid "Good morning"
 #~ msgstr "おはようございます"
+
+#, fuzzy
+#~| msgid "Green"
+#~ msgid "Greece"
+#~ msgstr "緑"
 
 #~ msgid "Greek"
 #~ msgstr "ギリシア語"
@@ -12913,7 +13121,9 @@ msgstr "yyyy"
 #~ msgid "How the settings are organized"
 #~ msgstr "設定の項目について"
 
-#~ msgid "Hungarian"
+#, fuzzy
+#~| msgid "Hungarian"
+#~ msgid "Hungary"
 #~ msgstr "ハンガリー語"
 
 #
@@ -13109,9 +13319,6 @@ msgstr "yyyy"
 #~ msgid "Infostore"
 #~ msgstr "インフォストア"
 
-#~ msgid "Initialization ..."
-#~ msgstr "初期化しています..."
-
 #~ msgid "Inline With Text"
 #~ msgstr "インラインにテキストを表示"
 
@@ -13231,7 +13438,9 @@ msgstr "yyyy"
 #~ msgid "Italian (Italy)"
 #~ msgstr "イタリア語 (イタリア)"
 
-#~ msgid "Italic"
+#, fuzzy
+#~| msgid "Italic"
+#~ msgid "Italy"
 #~ msgstr "斜体"
 
 #~ msgid "Items without a file can not be opened."
@@ -13261,6 +13470,11 @@ msgstr "yyyy"
 #~ msgid "Jun"
 #~ msgstr "6 月"
 
+#, fuzzy
+#~| msgid "Due on %1$s"
+#~ msgid "Just open %1$s"
+#~ msgstr "期限: %1$s"
+
 #~ msgid "Justify"
 #~ msgstr "両端揃え"
 
@@ -13275,9 +13489,6 @@ msgstr "yyyy"
 
 #~ msgid "Kiribati"
 #~ msgstr "キリバス"
-
-#~ msgid "Korea, Democratic People's Republic of"
-#~ msgstr "北朝鮮"
 
 #~ msgid "Korea, Republic of"
 #~ msgstr "韓国"
@@ -13636,6 +13847,11 @@ msgstr "yyyy"
 #~ msgid "Month View"
 #~ msgstr "月ビュー"
 
+#, fuzzy
+#~| msgid "America/Montserrat"
+#~ msgid "Montserrat"
+#~ msgstr "アメリカ/モントセラト島"
+
 #~ msgid "More zoom settings"
 #~ msgstr "ズーム設定の詳細"
 
@@ -13689,6 +13905,11 @@ msgstr "yyyy"
 
 #~ msgid "Nepal"
 #~ msgstr "ネパール"
+
+#, fuzzy
+#~| msgid "Dutch (Netherlands)"
+#~ msgid "Netherlands"
+#~ msgstr "オランダ語 (オランダ)"
 
 #~ msgid "Netherlands Antilles"
 #~ msgstr "オランダ領アンティル"
@@ -14007,6 +14228,11 @@ msgstr "yyyy"
 #~ "部のコンピュータ (例えば、インターネットカフェ内) を使用している場合には、"
 #~ "このオプションを使用しないでください。"
 
+#, fuzzy
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "開く"
+
 #~ msgid "Open attachment"
 #~ msgstr "添付ファイルを開く"
 
@@ -14030,9 +14256,6 @@ msgstr "yyyy"
 
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "メール設定を開く"
-
-#~ msgid "Opening the help"
-#~ msgstr "ヘルプを開く"
 
 #~ msgid "Opening the settings"
 #~ msgstr "設定を開く"
@@ -14211,7 +14434,9 @@ msgstr "yyyy"
 #~ msgid "Palau"
 #~ msgstr "パラウ"
 
-#~ msgid "Palestinian Territory, Occupied"
+#, fuzzy
+#~| msgid "Palestinian Territory, Occupied"
+#~ msgid "Palestinian Territory"
 #~ msgstr "パレスチナ"
 
 #~ msgid "Panama"
@@ -14234,6 +14459,11 @@ msgstr "yyyy"
 
 #~ msgid "Paragraph style"
 #~ msgstr "段落スタイル"
+
+#, fuzzy
+#~| msgid "Nicaragua"
+#~ msgid "Paraguay"
+#~ msgstr "ニカラグア"
 
 #~ msgid "Parameter:"
 #~ msgstr "パラメータ:"
@@ -14459,9 +14689,6 @@ msgstr "yyyy"
 #~ msgid "Preview pane"
 #~ msgstr "プレビュー"
 
-#~ msgid "Primary Email"
-#~ msgstr "既定のメール"
-
 #~ msgid "Principal:"
 #~ msgstr "主催者:"
 
@@ -14582,6 +14809,11 @@ msgstr "yyyy"
 
 #~ msgid "Pull To Refresh"
 #~ msgstr "プルして最新の状態に更新"
+
+#, fuzzy
+#~| msgid "Asia/Qatar"
+#~ msgid "Qatar"
+#~ msgstr "アジア/カタール"
 
 #~ msgid "Quick config"
 #~ msgstr "クイック構成"
@@ -14725,7 +14957,9 @@ msgstr "yyyy"
 #~ msgid "Right aligned, text wraps at left side"
 #~ msgstr "右揃え＋テキストを左側で折り返し"
 
-#~ msgid "Romanian"
+#, fuzzy
+#~| msgid "Romanian"
+#~ msgid "Romania"
 #~ msgstr "ルーマニア語"
 
 #~ msgid "Room number:"
@@ -14737,7 +14971,9 @@ msgstr "yyyy"
 #~ msgid "Rules"
 #~ msgstr "ルール"
 
-#~ msgid "Russian"
+#, fuzzy
+#~| msgid "Russian"
+#~ msgid "Russia"
 #~ msgstr "ロシア語"
 
 #~ msgid "Russian Federation"
@@ -14759,6 +14995,11 @@ msgstr "yyyy"
 #~ msgid "SEK"
 #~ msgstr "SEK"
 
+#, fuzzy
+#~| msgid "RSS"
+#~ msgid "SMS"
+#~ msgstr "RSS"
+
 #~ msgid "Saint Barthelemy"
 #~ msgstr "サン・バルテルミー島"
 
@@ -14770,6 +15011,11 @@ msgstr "yyyy"
 
 #~ msgid "Saint Lucia"
 #~ msgstr "セントルシア"
+
+#, fuzzy
+#~| msgid "San Marino"
+#~ msgid "Saint Martin"
+#~ msgstr "サンマリノ"
 
 #~ msgid "Saint Martin (French part)"
 #~ msgstr "セイントマーティン(フランス)"
@@ -14873,9 +15119,6 @@ msgstr "yyyy"
 
 #~ msgid "Select Users"
 #~ msgstr "ユーザを選択してください。"
-
-#~ msgid "Select a contact"
-#~ msgstr "連絡先を選択してください。"
 
 #~ msgid "Select a contact category"
 #~ msgstr "連絡先のカテゴリを選択してください。"
@@ -15152,8 +15395,18 @@ msgstr "yyyy"
 #~ msgid "Since the appointment is recurring, it may cause further conflicts."
 #~ msgstr "定期的なアポイントのため、今後競合が発生する可能性があります。"
 
+#, fuzzy
+#~| msgid "Asia/Singapore"
+#~ msgid "Singapore"
+#~ msgstr "アジア/シンガポール"
+
 #~ msgid "Single"
 #~ msgstr "1 行"
+
+#, fuzzy
+#~| msgid "Saint Barthelemy"
+#~ msgid "Sint Maarten"
+#~ msgstr "サン・バルテルミー島"
 
 #~ msgid "Size:"
 #~ msgstr "サイズ:"
@@ -15223,6 +15476,16 @@ msgstr "yyyy"
 
 #~ msgid "South Georgia and the South Sandwich Islands"
 #~ msgstr "サウスジョージアとサウスサンドイッチ諸島"
+
+#, fuzzy
+#~| msgid "South Africa"
+#~ msgid "South Korea"
+#~ msgstr "南アフリカ"
+
+#, fuzzy
+#~| msgid "Sudan"
+#~ msgid "South Sudan"
+#~ msgstr "スーダン"
 
 #~ msgid "Spam folder"
 #~ msgstr "スパム フォルダ"
@@ -16216,6 +16479,9 @@ msgstr "yyyy"
 #~ msgid "To:"
 #~ msgstr "宛先:"
 
+#~ msgid "Toggle checkboxes"
+#~ msgstr "チェックボックスを表示"
+
 #~ msgid "Toggle folder"
 #~ msgstr "フォルダを表示"
 
@@ -16278,6 +16544,11 @@ msgstr "yyyy"
 
 #~ msgid "Type:"
 #~ msgstr "タイプ:"
+
+#, fuzzy
+#~| msgid "Virgin Islands, U.S."
+#~ msgid "U.S. Virgin Islands"
+#~ msgstr "ヴァージン諸島 (米国)"
 
 #~ msgid "URI"
 #~ msgstr "URI"
@@ -16468,6 +16739,11 @@ msgstr "yyyy"
 #~ msgid "Vanuatu"
 #~ msgstr "ヴァヌアトゥ"
 
+#, fuzzy
+#~| msgid "Vertical"
+#~ msgid "Vatican"
+#~ msgstr "垂直分割"
+
 #~ msgid "Venezuela"
 #~ msgstr "ベネズエラ"
 
@@ -16492,7 +16768,9 @@ msgstr "yyyy"
 #~ msgid "Video enabled"
 #~ msgstr "ビデオを有効化"
 
-#~ msgid "Viet Nam"
+#, fuzzy
+#~| msgid "Viet Nam"
+#~ msgid "Vietnam"
 #~ msgstr "ベトナム"
 
 #~ msgid "View Slideshow"
@@ -16539,9 +16817,6 @@ msgstr "yyyy"
 
 #~ msgid "Virgin Islands, British"
 #~ msgstr "ヴァージン諸島 (英国)"
-
-#~ msgid "Virgin Islands, U.S."
-#~ msgstr "ヴァージン諸島 (米国)"
 
 #~ msgid "Visibility"
 #~ msgstr "可視性"
@@ -17153,9 +17428,6 @@ msgstr "yyyy"
 #~ msgid "set the last used time range of the new view"
 #~ msgstr "前回使用された時間軸を新しいビューに設定する"
 
-#~ msgid "show all"
-#~ msgstr "すべてを表示"
-
 #~ msgid "show all my appointments from all calendars"
 #~ msgstr "予定表全体から自分のアポイントをすべて表示"
 
@@ -17165,6 +17437,11 @@ msgstr "yyyy"
 #~| msgid "As link"
 #~ msgid "show link"
 #~ msgstr "リンクとして"
+
+#, fuzzy
+#~| msgid "show all"
+#~ msgid "show mail"
+#~ msgstr "すべてを表示"
 
 #~ msgid ""
 #~ "street\n"

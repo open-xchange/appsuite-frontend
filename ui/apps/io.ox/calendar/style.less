@@ -14,17 +14,14 @@
 .week-view, .month-view {
 
     .toolbar {
-
         /* Mobile */
-        @media (max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
-            display: none;
-        }
+        @media (max-width:  480px) and (orientation: portrait),
+               (max-height: 480px) and (orientation: landscape) { display: none; }
 
         height: @calendar-toolbar-height;
         padding-top: @calendar-toolbar-top-padding;
 
         .info {
-
             text-align: left;
             max-width: 30%;
             position: absolute;
@@ -41,7 +38,6 @@
                 font-size: 14px;
                 color: @hc-gray;
             }
-
         }
     }
 
@@ -51,13 +47,10 @@
         width: @weekview-time-width;
         text-align: center;
 
-        a {
-            padding: 9px;
-        }
+        a { padding: 9px; }
     }
 
     .footer-container {
-
         height: @weekview-footer-height;
         left: 0;
         right: 0;
@@ -65,7 +58,6 @@
         .overflow(hidden);
 
         .footer {
-
             position: absolute;
             line-height: normal;
             right: 0;
@@ -74,7 +66,6 @@
             padding-top: 13px;
 
             .weekday {
-
                 display: inline-block;
                 font-size: 13px;
                 line-height: 14px;
@@ -87,11 +78,8 @@
                     background-color: @calendar-today;
                     color: #fff;
                 }
-
             }
-
         }
-
     }
 
     // dark colors (define first)
@@ -107,19 +95,19 @@
             &.hover { background-color: darken(@color, 10%); }
         }
 
-        &.reserved { .background(@appointment-reserved); }
-        &.absent { .background(@appointment-absent); }
+        &.reserved  { .background(@appointment-reserved); }
+        &.absent    { .background(@appointment-absent);   }
         &.temporary {
             .background(@appointment-temporary);
             //white text would fail contrast requirements
             .title { color: #321900; }
         }
-        &.free { .background(@appointment-free-dark); }
-        &.private { .background(@appointment-private); }
+        &.free    { .background(@appointment-free-dark); }
+        &.private { .background(@appointment-private);   }
 
         &.border { border-left: 1px solid rgba(0, 0, 0, 0.2); }
 
-        &.declined { background-color: @appointment-declined; }
+        &.declined    { background-color: @appointment-declined;    }
         &.unconfirmed { background-color: @appointment-unconfirmed; }
 
         &.unconfirmed:not(.hover) {
@@ -131,38 +119,37 @@
     }
 
     .appointment {
+        cursor: pointer;
 
         &.io-ox-busy:before {
             color: inherit;
             opacity: 0.50;
         }
 
-        .title {
-            font-weight: bold;
-        }
+        .title { font-weight: bold; }
 
         &.opac {
             opacity: 0.5;
             .transition(opacity 0.2s);
         }
 
-        .common() {
+        &.disabled { cursor: default; }
 
+        .common() {
             border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 
-            html.high-contrast & .location, html.high-contrast & .title {
-                color: @black;
-            }
+            html.high-contrast & .location,
+            html.high-contrast & .title { color: @black; }
         }
 
         &.reserved {
-
             @r: #D0EAFF;
+
             border-color: lighten(@appointment-reserved, 10%);
             color: darken(@appointment-reserved, 5%);
             background-color: @r;
 
-            &.hover {
+            &.hover:not(.disabled) {
                 background-color: darken(@r, @appointment-hover-pct);
             }
 
@@ -170,13 +157,13 @@
         }
 
         &.temporary {
-
             @t: lighten(@appointment-temporary, 25%);
+
             border-color: darken(@appointment-temporary, 15%);
             color: darken(@appointment-temporary, 25%);
             background-color: @t;
 
-            &.hover {
+            &.hover:not(.disabled) {
                 background-color: darken(@t, @appointment-hover-pct);
                 color: darken(darken(@appointment-temporary, 15%), @appointment-hover-pct);
             }
@@ -185,13 +172,13 @@
        }
 
         &.absent {
-
             @a: lighten(@appointment-absent, 50%);
+
             border-color: lighten(@appointment-absent, 10%);
             color: darken(@appointment-absent, 0%);
             background-color: @a;
 
-            &.hover {
+            &.hover:not(.disabled) {
                 background-color: darken(@a, @appointment-hover-pct);
                 color: darken(@appointment-absent, @appointment-hover-pct);
             }
@@ -200,32 +187,25 @@
         }
 
         &.free {
-
             @f: lighten(@appointment-free, 30%);
+
             border-color: darken(@appointment-free, 10%);
             color: darken(@appointment-free, 30%);
             background-color: @f;
 
-            &.hover {
-                background-color: darken(@f, @appointment-hover-pct);
-            }
+            &.hover:not(.disabled) { background-color: darken(@f, @appointment-hover-pct); }
 
             .common();
         }
 
         &.private {
-
             border-color: darken(@appointment-private, 10%);
             color: @white;
             background-color: @appointment-private;
 
-            &.hover {
+            &.hover:not(.disabled) {
                 background-color: darken(@appointment-private, @appointment-hover-pct);
                 color: @white;
-            }
-
-            &.disabled {
-                cursor: normal;
             }
 
             .common();
@@ -235,17 +215,15 @@
             color: @appointment-unconfirmed-font;
             background-color: @appointment-unconfirmed;
             border-left-color: rgba(0, 0, 0, 0.2);
-            &.hover {
-                background-color: darken(@appointment-unconfirmed, @appointment-hover-pct);
-            }
+
+            &.hover:not(.disabled) { background-color: darken(@appointment-unconfirmed, @appointment-hover-pct); }
         }
 
         &.declined {
             background-color: @appointment-declined;
             border-left-color: rgba(0, 0, 0, 0.1);
-            &.hover {
-                background-color: darken(@appointment-declined, @appointment-hover-pct);
-            }
+
+            &.hover:not(.disabled) { background-color: darken(@appointment-declined, @appointment-hover-pct); }
         }
 
         &.declined .appointment-content * {
@@ -275,11 +253,9 @@
                 background-color: @@background;
                 border-left-color: @@color;
 
-                &.private {
-                    border-left-color: #222;
-                }
+                &.private { border-left-color: #222; }
 
-                &.hover {
+                &.hover:not(.disabled) {
                     background-color: darken(@@background, @custom-color-hover-pct);
                 }
 
@@ -316,67 +292,51 @@
 
     @media (min-width: 1281px) {
         @adjusted-width: @weekview-time-width * 1.25;
-        .toolbar {
-            .info {
-                left: @adjusted-width;
-            }
-        }
 
-        .controls-container {
-            width: @adjusted-width;
-        }
+        .toolbar .info { left: @adjusted-width; }
 
-        .footer-container {
-            .footer {
-                left: @adjusted-width;
-            }
-        }
+        .controls-container { width: @adjusted-width; }
+
+        .footer-container .footer { left: @adjusted-width; }
     }
 }
 
-.custom-colors {
-    .folder-tree {
-        .folder-node {
-            .folder-label {
+.custom-colors .folder-tree .folder-node .folder-label {
 
-                position: relative;
+    position: relative;
 
-                &.color-label {
-                    &:before {
-                        content: "";
-                        display: inline-block;
-                        width: 16px;
-                        height: 16px;
-                        position: absolute;
-                        left: -25px;
-                        top: 3px;
-                        border: 1px solid rgba(0, 0, 0, 0.2);
-                        background-clip: border-box;
-                    }
-                }
-
-                @media all and (max-width: 480px), all and (max-device-width: 480px) {
-                    &.color-label {
-                        &:before {
-                            top: 12px;
-                        }
-                        margin-left: 25px;
-                    }
-                }
-
-                .generate-color-label(@counter) when (@counter > 0) {
-                    .generate-color-label((@counter - 1));
-
-                    &.color-label-@{counter}:before {
-                        @color-label-counter: ~"color-label-bg-@{counter}";
-                        background-color: darken(@@color-label-counter, 10%);
-                    }
-                }
-
-                .generate-color-label(10);
-            }
+    &.color-label {
+        &:before {
+            content: "";
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            left: -25px;
+            top: 3px;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            background-clip: border-box;
         }
     }
+
+    @media all and (max-width: 480px), all and (max-device-width: 480px) {
+        &.color-label {
+            margin-left: 25px;
+
+            &:before { top: 12px; }
+        }
+    }
+
+    .generate-color-label(@counter) when (@counter > 0) {
+        .generate-color-label((@counter - 1));
+
+        &.color-label-@{counter}:before {
+            @color-label-counter: ~"color-label-bg-@{counter}";
+            background-color: darken(@@color-label-counter, 10%);
+        }
+    }
+
+    .generate-color-label(10);
 }
 
 // Grid , only used in conflicts. Listview styles are located under list/style.less
@@ -402,13 +362,9 @@
         }
 
         .location {
-
             color: #888;
 
-            html.high-contrast & {
-                color: @black;
-            }
-
+            html.high-contrast & { color: @black; }
         }
 
         .shown_as.label {
@@ -451,22 +407,10 @@
     }
 
     .shown_as {
-
-        &.reserved {
-            background-color: @appointment-reserved;
-        }
-
-        &.temporary {
-            background-color: @appointment-temporary;
-        }
-
-        &.absent {
-            background-color: @appointment-absent;
-        }
-
-        &.free {
-            background-color: @appointment-free;
-        }
+        &.reserved  { background-color: @appointment-reserved;  }
+        &.temporary { background-color: @appointment-temporary; }
+        &.absent    { background-color: @appointment-absent;    }
+        &.free      { background-color: @appointment-free;      }
     }
 }
 
@@ -474,12 +418,9 @@
 .additional-info {
 
     .vgrid-cell.calendar {
-
         padding: 7px 0;
 
-        &:last-child {
-            border: none;
-        }
+        &:last-child { border: none; }
     }
 
     .buttons {
@@ -487,41 +428,31 @@
         width: 100%;
         margin: 10px 0;
 
-        .col-md-12 {
-            position: relative;
-        }
+        .col-md-12 { position: relative; }
     }
 
     .conflicts .person-link {
 
-        &.accepted {
-            color: #5C7F31;
-        }
+        &.accepted { color: #5C7F31; }
 
         &.declined {
             text-decoration: line-through;
             color: #913F3F;
         }
 
-        &.tentative {
-            color: #c80;
-        }
-
+        &.tentative { color: #c80; }
     }
-
 }
 
 // Detail view
 .calendar-detail {
+    font-weight: 300;
 
     @media (max-width: 480px), (max-device-width: 480px) {
         margin: 8px 10px 55px 10px;
     }
-    font-weight: 300;
 
-    .io-ox-inline-links:first-child {
-        margin-top: 0;
-    }
+    .io-ox-inline-links:first-child { margin-top: 0; }
 
     h1.subject {
         display: inline-block;
@@ -546,11 +477,13 @@
     .time {
         font-weight: bold;
         white-space: nowrap;
+
         .label-default {
             margin-left: 7px;
             position: relative;
             top: -1px;
             background-color: #999;
+
             html.high-contrast & {
                 color: white;
                 background-color: @black;
@@ -558,18 +491,14 @@
         }
     }
 
-    .date {
-        white-space: nowrap;
-    }
+    .date { white-space: nowrap; }
 
     .recurrence {
         color: #888;
         font-weight: 300;
     }
 
-    .location {
-        font-weight: bold;
-    }
+    .location { font-weight: bold; }
 
     .private-flag {
         font-size: 18pt;
@@ -585,12 +514,9 @@
         cursor: text;
     }
 
-    .attachment-list .dropdown.attachment-link {
-        display: inline-block;
-    }
+    .attachment-list .dropdown.attachment-link { display: inline-block; }
 
     .details {
-
         font-size: 0.9em;
 
         dt {
@@ -600,51 +526,25 @@
         }
 
         .shown_as {
-
-            &.reserved {
-                color: @appointment-reserved;
-            }
-
-            &.temporary {
-                color: @appointment-temporary;
-            }
-
-            &.absent {
-                color: @appointment-absent;
-            }
-
-            &.free {
-                color: @appointment-free;
-            }
-
+            &.reserved  { color: @appointment-reserved; }
+            &.temporary { color: @appointment-temporary; }
+            &.absent    { color: @appointment-absent; }
+            &.free      { color: @appointment-free; }
         }
-
     }
 
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
 
         .io-ox-inline-links:first-child {
-
             margin: 0;
             padding: 15px 0;
 
-            span.io-ox-action-link.dropdown {
-                float: right;
-            }
-
+            span.io-ox-action-link.dropdown { float: right; }
         }
 
-        .io-ox-inline-links {
+        .io-ox-inline-links.embedded { text-align: left; }
 
-            &.embedded {
-                text-align: left;
-            }
-
-        }
-
-        .private-flag {
-            line-height: 20px;
-        }
+        .private-flag { line-height: 20px; }
 
         h1.subject {
             line-height: 24px;
@@ -658,13 +558,9 @@
             line-height: 24px;
         }
 
-        .date-time {
-            padding-top: 14px;
-        }
+        .date-time { padding-top: 14px; }
 
-        .recurrence {
-            margin-bottom: 10px;
-        }
+        .recurrence { margin-bottom: 10px; }
 
         .date-time-recurrence { margin: 0; }
 
@@ -681,9 +577,7 @@
         }
 
         .attachments {
-            .io-ox-label {
-                margin-bottom: 3px;
-            }
+            .io-ox-label { margin-bottom: 3px; }
 
             .attachment-list {
                 line-height: 16px;
@@ -692,9 +586,7 @@
             }
         }
 
-        .participants-view {
-            padding-top: 8px;
-        }
+        .participants-view { padding-top: 8px; }
 
         .details {
             legend {
@@ -730,16 +622,13 @@
 .popover {
 
     &.timezones {
-
         width: auto;
         min-width: 236px;
         width: 280px;
 
         .popover-content ul {
 
-            .time {
-                float: right;
-            }
+            .time { float: right; }
 
             .label {
                 float: right;
@@ -750,18 +639,15 @@
 }
 
 // Invitations
-.itip-section.io-ox-busy {
-    min-height: 60px;
-}
+.itip-section.io-ox-busy { min-height: 60px; }
 
 .itip-actions {
     text-align: right;
     margin: 16px 0 0 0;
     white-space: nowrap;
     display: inline-block;
-    .btn {
-        margin-left: 8px;
-    }
+
+    .btn { margin-left: 8px; }
 }
 
 .itip-item {
@@ -771,21 +657,16 @@
     background-color: #F5F5F5;
 }
 
-.itip-item + .itip-item {
-    border-top: 1px solid #aaa;
-}
+.itip-item + .itip-item { border-top: 1px solid #aaa; }
 
-.itip-annotations, .itip-changes, .itip-conflicts {
-    margin: 16px 0;
-}
+.itip-annotations, .itip-changes, .itip-conflicts { margin: 16px 0; }
 
 .itip-controls {
     text-align: right;
     margin-top: 16px;
     min-height: 32px;
-    &:empty {
-        min-height: initial;
-    }
+
+    &:empty { min-height: initial; }
 }
 
 .itip-reminder {
@@ -795,6 +676,7 @@
 
 .itip-details {
     margin: 16px 0;
+
     .confirmation-status {
         &.accepted { color: @green; }
         &.declined { color: @red; }
@@ -810,13 +692,11 @@
         &:first-child { border-top: 1px solid #ccc; }
         &:last-child { border-bottom: 1px solid #ccc; }
     }
-    .date {
-        margin-right: 16px;
-    }
+
+    .date { margin-right: 16px; }
 }
 
 .show-all-checkbox {
-
     padding-right: 16px;
 
     label {
@@ -852,9 +732,7 @@
         float: right;
     }
 
-    .label {
-        margin-left: 5px;
-    }
+    .label { margin-left: 5px; }
 }
 
 li {
@@ -872,9 +750,8 @@ li {
 
             .color-label-@{counter} {
                 background-color: ~"@{color-label-bg-@{counter}}";
-                .fa {
-                    color: @color-label-contrast;
-                }
+
+                .fa { color: @color-label-contrast; }
             }
         }
 
@@ -893,11 +770,7 @@ li {
                 width: 14px;
             }
 
-            &.active {
-                .fa {
-                    display: inline-block;
-                }
-            }
+            &.active .fa { display: inline-block; }
         }
     }
 }
@@ -906,15 +779,14 @@ li {
     li {
         .custom-colors {
             max-width: 320px;
+
             .color-label {
                 width: 40px;
                 height: 40px;
                 margin: 4px;
                 font-size: 28px;
 
-                .fa {
-                    width: 34px;
-                }
+                .fa { width: 34px; }
             }
         }
     }

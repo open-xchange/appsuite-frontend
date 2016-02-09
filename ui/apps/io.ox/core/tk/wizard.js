@@ -99,6 +99,9 @@ define('io.ox/core/tk/wizard', [
         this.steps = [];
         this.closed = false;
 
+        // ensure model
+        this.options.model = this.options.model || new Backbone.Model();
+
         // add event hub
         _.extend(this, Backbone.Events);
 
@@ -154,21 +157,13 @@ define('io.ox/core/tk/wizard', [
             return this.steps[num];
         },
 
-        skippable: function (index) {
-            var step = this.get(index);
-            return (step && step.skippable && step.skippable());
-        },
-
         shift: function (num) {
             this.withCurrentStep(function (step) {
                 step.hide();
             });
-            // skip next/previus step?
-            var targetIndex = this.currentStep + num;
-            if (this.skippable(targetIndex)) {
-                num = num < 0 ? num - 1 : num + 1;
-                this.trigger('step:skip', targetIndex);
-                return this.shift(num);
+            if (this.isInvalidShift(num)) {
+                this.trigger('skip:step');
+                return this.shift(num < 0 ? num - 1 : num + 1);
             }
             this.setCurrentStep(this.currentStep + num);
             this.withCurrentStep(function (step) {
@@ -216,8 +211,17 @@ define('io.ox/core/tk/wizard', [
             return this;
         },
 
-        start: function () {
+        isInvalidShift: function (num) {
+            // corresponding step value already set
+            var index = this.currentStep + (num || 0),
+                step = this.get(index);
+            if (!step) return false;
+            // last on is always valid
+            if (index === this.steps.length - 1) return false;
+            return step.hasValue();
+        },
 
+        start: function () {
             if (_.device('smartphone')) {
                 this.trigger('before:start');
                 _(this.steps).invoke('show');
@@ -227,18 +231,21 @@ define('io.ox/core/tk/wizard', [
                 });
                 this.trigger('start');
             } else {
-                this.withCurrentStep(function (step) {
-                    this.trigger('before:start');
-                    this.container.appendTo('body');
-                    step.show();
-                    this.trigger('start');
-                });
+                this.trigger('before:start');
+                this.container.appendTo('body');
+                this.showFirst();
+                this.trigger('start');
             }
 
             // for debugging
             window.wizard = this;
 
             return this;
+        },
+
+        showFirst: function () {
+            this.currentStep = 0;
+            this.shift(0);
         },
 
         spotlight: function (selector) {
@@ -297,6 +304,7 @@ define('io.ox/core/tk/wizard', [
         onAction: function (e) {
             e.preventDefault();
             var action = $(e.currentTarget).attr('data-action');
+            e.stopImmediatePropagation();
             this.trigger(action);
         },
 
@@ -333,6 +341,7 @@ define('io.ox/core/tk/wizard', [
             this.parent = parent;
 
             this.options = _.extend({
+                id: undefined,
                 // general
                 modal: true,
                 focusWatcher: true,
@@ -368,10 +377,6 @@ define('io.ox/core/tk/wizard', [
             this.render();
         },
 
-        getModel: function () {
-            return this.parent.options.model;
-        },
-
         // append to title element
         title: append('.wizard-title'),
 
@@ -381,9 +386,24 @@ define('io.ox/core/tk/wizard', [
         // append to footer element
         footer: append('.wizard-footer'),
 
-        setSkippable: function (callback) {
-            if (callback) this.skippable = callback;
-            return this;
+        getModel: function () {
+            return this.parent.options.model;
+        },
+
+        getId: function () {
+            return this.options.id;
+        },
+
+        setValue: function (value) {
+            return this.getModel.set(this.getId(), value);
+        },
+
+        getValue: function () {
+            return this.getModel().get(this.getId());
+        },
+
+        hasValue: function () {
+            return this.getValue() !== undefined;
         },
 
         // render scaffold

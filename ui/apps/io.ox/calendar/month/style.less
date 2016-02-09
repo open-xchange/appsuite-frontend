@@ -13,36 +13,27 @@
 
 .month-view {
 
-    * {
-        -webkit-tap-highlight-color: rgba(0,0,0,0);
-    }
+    * { -webkit-tap-highlight-color: rgba(0,0,0,0); }
 
     .footer-container {
-
         position: absolute;
         top: 7px;
         margin-left: @monthview-cw-width;
         width: auto;
 
         .footer {
-
             left: 0;
 
             .weekday {
                 width: 100/7%;
                 text-align: center;
             }
-
         }
-
     }
 
-    .controls-container {
-        padding-top: 16px;
-    }
+    .controls-container { padding-top: @default-padding; }
 
     .scrollpane {
-
         outline: 0;
         position: absolute;
         top: @weekview-footer-height + 11px;
@@ -53,13 +44,11 @@
         .backface-visibility(hidden);
 
         .week {
-
             // might be 6 weeks in a month
             height: 100/6%;
             padding-left: @monthview-cw-width;
 
             .week-info {
-
                 position: absolute;
                 left: 0;
                 width: @monthview-cw-width - 10px;
@@ -89,13 +78,11 @@
                 height: 100%;
                 background-color: @white;
 
-                &.bordertop { border-top: 1px solid @monthview-border; }
-
+                &.bordertop   { border-top:   1px solid @monthview-border; }
                 &.borderright { border-right: 1px solid @monthview-border; }
             }
 
             .day {
-
                 position: relative;
                 display: inline-block;
                 width: 100/7%;
@@ -104,20 +91,16 @@
                 border-right: 1px solid @monthview-border;
                 background-color: @white;
 
-                &.bordertop { border-top: 1px solid @monthview-border; }
-
+                &.bordertop    { border-top:    1px solid @monthview-border; }
                 &.borderbottom { border-bottom: 1px solid @monthview-border; }
-
-                &.borderleft { border-left: 1px solid @monthview-border; }
-
-                &.borderright { border-right: 1px solid @monthview-border; }
+                &.borderleft   { border-left:   1px solid @monthview-border; }
+                &.borderright  { border-right:  1px solid @monthview-border; }
 
                 &.first { border-left: none; }
 
                 &.forceleftborder { border-left: 1px solid @monthview-border; }
 
                 .number {
-
                     position: absolute;
                     color: #aaa;
                     text-align: right;
@@ -131,25 +114,17 @@
                     .user-select(none);
                     cursor: default;
 
-                    html.high-contrast & {
-                        color: @black;
-                    }
+                    html.high-contrast & { color: @black; }
 
                 }
 
-                &.today {
-
-                    .number {
-                        color: #fff;
-                        font-weight: bold;
-                        background-color: @calendar-today;
-                    }
-
+                &.today .number {
+                    color: #fff;
+                    font-weight: bold;
+                    background-color: @calendar-today;
                 }
 
-                &.weekend .number {
-                    color: #a00;
-                }
+                &.weekend .number { color: #a00; }
 
                 .list {
                     top: 25px;
@@ -157,9 +132,7 @@
                     .overflow-y(auto);
                     z-index: 0;
                 }
-
             }
-
         }
 
         .month-name {
@@ -168,9 +141,7 @@
             min-height: 40px;
             color: #777;
 
-            @media (min-height: 850px) {
-                font-size: 35px;
-            }
+            @media (min-height: 850px) { font-size: 35px; }
 
             div {
                 position: relative;
@@ -185,7 +156,6 @@
 
     // Appointment
     .appointment {
-
         line-height: 14px;
         margin-bottom: 1px;
         white-space: nowrap;
@@ -212,75 +182,57 @@
             float: left;
             font-size: 15px;
         }
-
     }
 
     @media (min-width: 1281px) {
         @adjusted-width: @monthview-cw-width * 1.25;
 
-        .footer-container {
-            margin-left: @adjusted-width;
-        }
+        .footer-container { margin-left: @adjusted-width; }
 
-        .scrollpane {
-            .week {
-                padding-left: @adjusted-width;
+        .scrollpane .week {
+            padding-left: @adjusted-width;
 
-                .week-info {
-                    width: @adjusted-width - 10px;
-                }
-            }
+            .week-info { width: @adjusted-width - 10px; }
         }
     }
 
     // Mobile
     @media (max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
 
-        .toolbar {
-
-            .info {
-                top: 10px;
-                left: 10px;
-                .ellipsis();
-                width: 45%;
-            }
-
+        .toolbar .info {
+            top: 10px;
+            left: 10px;
+            .ellipsis();
+            width: 45%;
         }
 
         .footer-container {
-
             top: 0;
             margin-left: 0;
 
             .footer {
-
                 left: 0;
 
                 .weekday {
                     width: 100/7%;
                     font-size: 15px;
                 }
-
             }
-
         }
 
         .scrollpane {
-
             -webkit-user-select: none;
             top: 33px;
 
             .week {
-
-                &.no-border { border: 0; }
-
                 height: 100/6%;
                 min-height: 40px;
                 border-bottom: 1px solid #ccc;
                 padding-left: 0;
 
-                .day {
+                &.no-border { border: 0; }
 
+                .day {
                     width: 100/7%;
                     border-width: 0;
                     -webkit-user-select: auto;
@@ -314,7 +266,6 @@
                         color: #777;
                         .transition(color 0.2s linear);
                     }
-
                 }
 
                 .day-filler {
@@ -323,7 +274,6 @@
 
                     &.bordertop { border: 0; }
                 }
-
             }
 
             .month-name {
@@ -332,9 +282,6 @@
                 font-size: 26px;
                 font-weight: 300;
             }
-
         }
-
     }
-
 }

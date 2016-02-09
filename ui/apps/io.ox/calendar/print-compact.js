@@ -21,6 +21,12 @@ define('io.ox/calendar/print-compact', [
 
     'use strict';
 
+    function getDate(data) {
+        var time = util.getTimeInterval(data),
+            date = util.getDateInterval(data);
+        return date + ' ' + time;
+    }
+
     // used to get participants in groups
     function load(data) {
         var list = data.participants,
@@ -55,8 +61,7 @@ define('io.ox/calendar/print-compact', [
                 original: data,
                 subject: data.title,
                 location: $.trim(data.location),
-                start: moment(data.start_time).format('l LT'),
-                end: moment(data.end_time).format('l LT'),
+                date: getDate(data),
                 participants: participants
             };
         });
@@ -73,10 +78,6 @@ define('io.ox/calendar/print-compact', [
                 },
 
                 i18n: {
-                    //#. used as a label for the start time of an appointment, try to keep short because it's used in a compact printing view
-                    start: gt('Start'),
-                    //#. used as a label for the end time of an appointment, try to keep short because it's used in a compact printing view
-                    end: gt('End'),
                     location: gt('Location'),
                     participants: gt('Participants')
                 },

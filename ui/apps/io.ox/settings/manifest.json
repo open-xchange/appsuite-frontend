@@ -1,14 +1,8 @@
-[
-    {
-        "title": "Settings",
-        "company": "Open-Xchange",
-        "icon": "files.png",
-        "category": "Basic",
-        "refreshable": true,
-        "settings": false
-    },
-    {
-        "namespace": "io.ox/dev/testing/main",
-        "path": "io.ox/settings/test"
-    }
-]
+{
+    "title": "Settings",
+    "company": "Open-Xchange",
+    "icon": "files.png",
+    "category": "Basic",
+    "refreshable": true,
+    "settings": false
+}
