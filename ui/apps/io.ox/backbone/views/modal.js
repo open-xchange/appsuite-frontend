@@ -36,7 +36,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
 
         events: {
             'click [data-action]': 'onAction',
-            'keydown input:text, input:password': 'onKeypress'
+            'keydown input:text, input:password': 'onKeypress',
+            'keydown': 'onEscape'
         },
 
         // we use the constructor here not to collide with initialize()
@@ -81,7 +82,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             var o = this.options;
             this.render().$el.appendTo(o.container);
             this.trigger('before:open');
-            this.$el.modal({ keyboard: o.keyboard }).modal('show');
+            // keyboard: false to support preventDefault on escape key
+            this.$el.modal({ keyboard: false }).modal('show');
             this.trigger('open');
             // set initial focus
             this.previousFocus = $(document.activeElement);
@@ -188,6 +190,12 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             if (!this.options.enter) return;
             if (!$(e.target).is('input:text, input:password')) return;
             this.invokeAction(this.options.enter);
+        },
+
+        onEscape: function (e) {
+            if (e.which !== 27) return;
+            if (e.isDefaultPrevented()) return;
+            this.close();
         }
     });
 
