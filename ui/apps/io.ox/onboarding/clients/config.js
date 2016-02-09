@@ -122,7 +122,7 @@ define('io.ox/onboarding/clients/config', [
                 // hash maps and defaults
                 _(this.types).each(function (type) {
                     // create hash maps
-                    var hash = this.hash[type] = _.toHash(data[type]);
+                    var hash = this.hash[type] = _.toHash(data[type], 'id');
                     // apply defaults (keepa hash and list up-to-date)
                     _.each(this.defaults[type], function (value, key) {
                         _.extend(hash[key], value, compactObject(hash[key]));
