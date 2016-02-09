@@ -13,9 +13,14 @@
 define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
     'use strict';
 
+    var editors = {
+        text: 'io.ox/core/tk/text-editor',
+        html: 'io.ox/core/tk/contenteditable-editor'
+    };
+
     describe('Mail Compose', function () {
 
-        describe('main app', function () {
+        describe.only('main app', function () {
             var app, pictureHalo, snippetsGetAll, getValidAddress, pluginStub;
             beforeEach(function () {
                 return require([
@@ -29,8 +34,9 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                     getValidAddress = sinon.stub(accountAPI, 'getValidAddress', function (d) { return $.when(d); });
                     //load plaintext editor, much faster than spinning up tinymce all the time
                     settings.set('messageFormat', 'text');
-                    pluginStub = sinon.stub(ox.manifests, 'loadPluginsFor', function () {
-                        return require(['io.ox/core/tk/text-editor']);
+                    pluginStub = sinon.stub(ox.manifests, 'loadPluginsFor', function (namespace) {
+                        namespace = namespace.replace(/^io.ox\/mail\/compose\/editor\//, '');
+                        return require([editors[namespace]]);
                     });
                 }).then(function () {
                     app = compose.getApp();
