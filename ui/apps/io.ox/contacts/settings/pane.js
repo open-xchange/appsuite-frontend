@@ -74,6 +74,9 @@ define('io.ox/contacts/settings/pane', [
             draw: function () {
                 this.append(
                     $('<fieldset>').append(
+                        $('<legend>').addClass('sectiontitle').append(
+                            $('<h2>').text(gt('Initial folder'))
+                        ),
                         $('<div>').addClass('form-group').append(
                             $('<div>').addClass('checkbox').append(
                                 $('<label>').text(gt('Start in global address book')).prepend(
