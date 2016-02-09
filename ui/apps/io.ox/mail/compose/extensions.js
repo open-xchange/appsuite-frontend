@@ -231,6 +231,17 @@ define('io.ox/mail/compose/extensions', [
 
             if (attr === 'reply_to' && settings.get('showReplyTo/configurable', false) === false) return;
 
+            function onClickLabel(e) {
+                e.preventDefault();
+                var attr = e.data.attr, model = e.data.model;
+                require(['io.ox/contacts/addressbook/popup'], function (popup) {
+                    popup.open(function (result) {
+                        var list = model.get(attr) || [];
+                        model.set(attr, list.concat(_(result).pluck('array')));
+                    });
+                });
+            }
+
             return function (baton) {
                 var guid = _.uniqueId('form-control-label-'),
                     value = baton.model.get(attr) || [],
@@ -257,13 +268,24 @@ define('io.ox/mail/compose/extensions', [
                     ext.point(POINT + '/recipientActions').invoke('draw', node);
                 }
 
+                var title = gt('Click to select contacts');
+
                 this.append(
-                    $('<div data-extension-id="' + attr + '">').addClass(cls)
-                        .append(
-                            $('<label class="maillabel col-xs-1">').text(tokenfieldTranslations[attr]).attr({ 'for': guid }),
-                            node
-                        )
-                    );
+                    $('<div data-extension-id="' + attr + '">').addClass(cls).append(
+                        $('<div class="maillabel col-xs-1">').append(
+                            $('<a href="#" role="button" tabindex="1">')
+                            .text(tokenfieldTranslations[attr])
+                            .attr({
+                                // add aria label since tooltip takes away the title attribute
+                                'aria-label': title,
+                                'title': title
+                            })
+                            .on('click', { attr: attr, model: baton.model }, onClickLabel)
+                            .tooltip({ animation: false, delay: 0, placement: 'bottom' })
+                        ),
+                        node
+                    )
+                );
 
                 tokenfieldView.render().$el.on('tokenfield:createdtoken', function (e) {
                     // extension point for validation etc.
