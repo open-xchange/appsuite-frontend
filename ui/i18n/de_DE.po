@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-02-03 14:02+0100\n"
+"PO-Revision-Date: 2016-02-09 14:11+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -131,7 +131,7 @@ msgstr "Aktionen. Mit Pfeiltasten navigieren."
 #: apps/io.ox/backbone/mini-views/toolbar.js:42 module:io.ox/core
 #, fuzzy
 msgid "Use cursor keys to navigate"
-msgstr "Mit Pfeiltasten navigieren"
+msgstr "Verwenden Sie die Pfeiltasten zum Navigieren"
 
 #. %1$s inline menu title for better accessibility
 #: apps/io.ox/backbone/mini-views/toolbar.js:52 module:io.ox/core
@@ -3105,7 +3105,7 @@ msgstr "Premium-Funktionen schließen"
 #: apps/io.ox/core/commons.js:700 module:io.ox/core
 #, fuzzy
 msgid "Try now!"
-msgstr "Jetzt ausprobieren"
+msgstr "Jetzt testen!"
 
 #: apps/io.ox/core/commons.js:825 module:io.ox/core
 msgid "Retry"
@@ -3430,7 +3430,7 @@ msgstr "Alle Nachrichten wurden gelöscht"
 
 #: apps/io.ox/core/folder/actions/common.js:57 module:io.ox/core
 msgid "All files have been deleted"
-msgstr "Alle Dateien wurden gelöscht"
+msgstr "Ale Dateien wurden gelöscht"
 
 #: apps/io.ox/core/folder/actions/common.js:58 module:io.ox/core
 msgid "The folder has been emptied"
@@ -3914,7 +3914,6 @@ msgid "Settings"
 msgstr "Einstellungen"
 
 #: apps/io.ox/core/main.js:916 module:io.ox/core
-#, fuzzy
 msgid "Connect your Device"
 msgstr "Ihr Gerät anschließen"
 
@@ -7511,7 +7510,6 @@ msgid "%1$d messages selected"
 msgstr "%1$d Nachrichten markiert"
 
 #: apps/io.ox/mail/main.js:787 module:io.ox/mail
-#, fuzzy
 msgid "The following actions apply to all messages (%1$d) in this folder:"
 msgstr "Folgende Aktionen gelten für alle Nachrichten (% 1$d) in diesem Ordner:"
 
@@ -7972,7 +7970,6 @@ msgid "EAS hostname"
 msgstr "EAS-Hostname"
 
 #: apps/io.ox/onboarding/clients/extensions.js:168 module:io.ox/core/onboarding
-#, fuzzy
 msgid "EAS login"
 msgstr "EAS-Anmeldung"
 
@@ -7997,7 +7994,7 @@ msgid ""
 "automatically configure your iOS device! It´s that simple!"
 msgstr ""
 "Bitte geben Sie Ihre Mobiltelefonnummer ein und wir senden Ihnen einen Link "
-"zur automatischen Konfiguration Ihres iOS-Geräts! So einfach ist das!"
+"zur automatischen Konfiguration Ihres iOS-Geräts! Es ist so einfach!"
 
 #: apps/io.ox/onboarding/clients/extensions.js:368 module:io.ox/core/onboarding
 msgid "Configuration Email"
@@ -8047,7 +8044,7 @@ msgstr "Die App von %1$s abrufen"
 #: apps/io.ox/onboarding/clients/extensions.js:489 module:io.ox/core/onboarding
 #, fuzzy
 msgid "Download the application."
-msgstr "Die Applikation herunterladen."
+msgstr "Laden Sie die Applikation herunter."
 
 #: apps/io.ox/onboarding/clients/extensions.js:534 module:io.ox/core/onboarding
 msgid "Installation"
@@ -8061,7 +8058,6 @@ msgstr ""
 "neuesten Stand."
 
 #: apps/io.ox/onboarding/clients/wizard.js:65 module:io.ox/core/onboarding
-#, fuzzy
 msgid "back"
 msgstr "zurück"
 
@@ -8091,7 +8087,6 @@ msgid "list of available devices"
 msgstr "Liste der verfügbaren Geräte"
 
 #: apps/io.ox/onboarding/clients/wizard.js:187 module:io.ox/core/onboarding
-#, fuzzy
 msgid "choose a different platform"
 msgstr "wählen Sie eine andere Plattform"
 
@@ -8104,7 +8099,6 @@ msgid "list of available actions"
 msgstr "Liste der verfügbaren Aktionen"
 
 #: apps/io.ox/onboarding/clients/wizard.js:257 module:io.ox/core/onboarding
-#, fuzzy
 msgid "choose a different scenario"
 msgstr "wählen Sie ein anderes Szenario"
 
@@ -8443,7 +8437,6 @@ msgstr "Navigationsleiste Vortragender"
 
 #. button tooltip for 'jump to presentation slide' action
 #: apps/io.ox/presenter/views/navigationview.js:348 module:io.ox/presenter
-#, fuzzy
 msgid "Jump to slide"
 msgstr "Wechseln zu Folie"
 
