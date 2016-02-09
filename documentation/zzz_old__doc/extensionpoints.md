@@ -1,3 +1,6 @@
+---
+---
+
 <!doctype html>
 <html><head><title>Extension points</title></head><body><ul>
 <li>io.ox/application-foldertree/links</li>

@@ -1,9 +1,12 @@
+---
+---
+
 <h1>Adding actions to the files detail area</h1>
 <p>To add an action to the files app detail area the extensionpoint <em>io.ox/files/links/inline</em> is used.<br>
 Use the Link pattern in <em>io.ox/core/extPatterns/links.js</em> to extend this point.<br>
 </p>
 <p>Try via console:</p>
-<script type="text/example">
+```
 require(['io.ox/core/extensions', 'io.ox/core/extPatterns/links'], function (ext, links) {
 
     new links.Action('io.ox/files/actions/testlink', {
@@ -23,7 +26,7 @@ require(['io.ox/core/extensions', 'io.ox/core/extPatterns/links'], function (ext
     }));
 });
 
-</script>
+```
 
 <b>Action</b><br><br>
 
@@ -41,4 +44,3 @@ id - must be unique<br>
 index - the position/order of the link<br>
 label - the label for the link<br>
 ref - the reference to the action id<br>
-

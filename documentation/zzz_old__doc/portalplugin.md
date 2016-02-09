@@ -1,3 +1,6 @@
+---
+---
+
 <h1>Declaring a portal plugin</h1>
 
 <p>
