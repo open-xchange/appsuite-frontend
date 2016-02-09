@@ -4,7 +4,7 @@ description: How to use capabilities so that your new AppSuite plugin can be ena
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Capabilities
 ---
 
-## What are capabilities?
+# What are capabilities?
 
 __Usecase__
 
@@ -12,65 +12,81 @@ You write a new UI app or plugin (chat module, for example) and in addition, you
 
 _Example:_ 
 
-Your chat app should only be available after a user has bought it in your online shop. To do so, you will need to implement the capabilities logic within your UI app or plugin and restrict it to a user or context marked accordingly (called "premium" in further examples).
+Your chat app should only be available after a user has bought it in your online shop.
+To do so, you will need to implement the capabilities logic within your UI app or plugin and restrict it to a user or context marked accordingly (called "premium" in further examples).
 
-## Set a capability
+# Set a capability
 
 First, disable it for everyone as default (or enable it for everyone, depending on what your aim is). 
 
-In <tt>/opt/open-xchange/etc/[myproduct].properties</tt>:
-{% highlight javascript linenos %}
-  com.openexchange.capability.[myproduct]=false # off for everyone
-{% endhighlight %}
+In ``/opt/open-xchange/etc/[myproduct].properties``:
+
+```bash
+# off for everyone
+com.openexchange.capability.[myproduct]=false
+```
 
 Then restart the OX Application Server and afterwards use the general OX AppSuite commandline tools to enable the capability/capabilities. 
 
-The commandline tools used in the following examples are located in: 
+The __commandline tools__ used in the following examples are located in:
 
-{% highlight javascript linenos %}
-  /opt/open-xchange/sbin
-{% endhighlight %}
+```bash
+/opt/open-xchange/sbin
+```
 
-In this example, only for a specific user:
+In this example, only for a __specific user__:
 
-{% highlight javascript linenos %}
-  changeuser ... --config/com.openexchange.capability.[myproduct]=true
-{% endhighlight %}
+```bash
+changeuser ... --config/com.openexchange.capability.[myproduct]=true
+```
 
-...or for a full context:
 
-{% highlight javascript linenos %}
+...or for a __full context__:
+
+```bash
   changecontext -c ... --config/com.openexchange.capability.[myproduct]=true
-{% endhighlight %}
+```
 
-...or set the capability to a context set:
 
-{% highlight javascript linenos %}
-  changecontext -c ... --taxonomy/types=premium
-{% endhighlight %}
+...or set the capability to a __context set__:
 
-To get the capability/capabilities working for context sets (like above), you also need to edit the contextSet files in:
 
-{% highlight javascript linenos %}
-  <tt>/opt/open-xchange/etc/contextSets/premium.yml</tt>
-{% endhighlight %}
+```bash
+changecontext -c ... --taxonomy/types=premium
+```
+
+
+To get the capability/capabilities working for context sets (like above), you also need to edit the __contextSet files__ in:
+
+
+```bash
+  /opt/open-xchange/etc/contextSets/premium.yml
+```
+
 
 And add the corresponding capability/capabilities:
 
-{% highlight javascript linenos %}
+
+```javascript
   premium:
      com.openexchange.capability.[myproduct]: true
      withTags: premium
-{% endhighlight %}
+```
 
 Then restart the OX Application Server!
 
-## Query capabilities via the HTTP API
+# Query capabilities via the HTTP API
 
-{% highlight javascript linenos %}
-Query:
+
+__Query__
+
+```
   GET /appsuite/api/capabilities?action=all&session=991fd40f635b45...
-Response:
+```
+
+__Response__
+
+```json
 {"data":[
     {"id":"oauth","attributes":{}},
     {"id":"webmail","attributes":{}},
@@ -124,28 +140,29 @@ Response:
     {"id":"webdav_xml","attributes":{}},
     {"id":"twitter","attributes":{}}
 ]}
+```
 
-ABOUT
-{% endhighlight %}
+Here _id_ is the name of the capability.
 
-Here <tt>id</tt> is the name of the capability.
+# Query capabilities in the UI
 
-## Query capabilities in the UI
 
-{% highlight javascript linenos %}
+```javascript
   require(['io.ox/core/capabilities'], function (cap) { if cap.has('[myproduct]' { ... } );
-{% endhighlight %}
 
-## Require the capabilities in your UI manifest file
+```
 
-{% highlight javascript linenos %}
+# Require the capabilities in your UI manifest file
+
+
+```bash
 {
     namespace: ...
     requires: '[myproduct]'
 }
-{% endhighlight %}
+```
 
-Now your plugin will only be loaded if the capability '[myproduct]' is set for a specific user, context, context set.
+Now your plugin will only be loaded if the capability _'[myproduct]'_ is set for a specific user, context, context set.
 
 ## Testing the capabilities
 
@@ -153,20 +170,21 @@ Now your plugin will only be loaded if the capability '[myproduct]' is set for a
 
 Add the following parameter to your AppSuite URL in the browser to activate:
 
-{% highlight javascript linenos %}
-  &cap=[myproduct]
-{% endhighlight %}
+
+```javascript
+&cap=[myproduct]
+```
 
 or use 
 
-{% highlight javascript linenos %}
-  &disableFeature=[myproduct]
-{% endhighlight %}
+```javascript
+&cap=-[myproduct]
+```
 
-to disable a certain capability. 
+to disable a certain capability (mind the minus sign).
 
 In general, after adding those URL parameters, you need to reload the UI to temporarly test/enable the set capability.
 
 ## Further informations
-* See the dedicated wiki page of the [[ConfigCascade]] mechanism for more details.
-* If you want to know about existing capabilities and the way they are used for upsell, see [[AppSuite:Upsell#Capabilities_and_Upsell_triggers]]
+* See the dedicated wiki page of the [ConfigCascade](http://oxpedia.org/wiki/index.php?title=ConfigCascade) mechanism for more details.
+* If you want to know about existing capabilities and the way they are used for upsell, see [Capabilities and Upsell triggers](http://oxpedia.org/wiki/index.php?title=AppSuite:Upsell#Capabilities_and_Upsell_triggers).
