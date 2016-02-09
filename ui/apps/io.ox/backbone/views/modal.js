@@ -87,7 +87,12 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             this.trigger('open');
             // set initial focus
             this.previousFocus = $(document.activeElement);
-            this.$(o.focus).focus();
+            var elem = this.$(o.focus);
+            if (elem.length) {
+                // dialog might be busy, i.e. elements are invisible so focus() might not work
+                this.activeElement = elem[0];
+                elem[0].focus();
+            }
             return this;
         },
 
@@ -117,7 +122,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
 
         busy: function (withAnimation) {
             this.disableFormElements();
-            this.activeElement = $(document.activeElement);
+            this.activeElement = this.activeElement || document.activeElement;
             if (withAnimation) {
                 this.$body.addClass('invisible');
                 this.$('.modal-content').busy();
@@ -132,7 +137,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             this.enableFormElements();
             this.$('.modal-content').idle();
             this.$body.removeClass('invisible').css('opacity', '');
-            if (this.activeElement) this.activeElement.focus();
+            if ($.contains(this.el, this.activeElement)) $(this.activeElement).focus();
+            this.activeElement = null;
             return this;
         },
 
