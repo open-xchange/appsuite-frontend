@@ -15,14 +15,23 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
 
     describe('Mail Compose', function () {
 
-        describe.skip('main app', function () {
-            var app, pictureHalo, snippetsGetAll;
+        describe('main app', function () {
+            var app, pictureHalo, snippetsGetAll, getValidAddress, pluginStub;
             beforeEach(function () {
-                return require(['io.ox/core/api/snippets', 'io.ox/contacts/api', 'settings!io.ox/mail'], function (snippetAPI, contactsAPI, settings) {
+                return require([
+                    'io.ox/core/api/snippets',
+                    'io.ox/contacts/api',
+                    'io.ox/core/api/account',
+                    'settings!io.ox/mail'
+                ], function (snippetAPI, contactsAPI, accountAPI, settings) {
                     snippetsGetAll = sinon.stub(snippetAPI, 'getAll', function () { return $.when([]); });
                     pictureHalo = sinon.stub(contactsAPI, 'pictureHalo', _.noop);
+                    getValidAddress = sinon.stub(accountAPI, 'getValidAddress', function (d) { return $.when(d); });
                     //load plaintext editor, much faster than spinning up tinymce all the time
                     settings.set('messageFormat', 'text');
+                    pluginStub = sinon.stub(ox.manifests, 'loadPluginsFor', function () {
+                        return require(['io.ox/core/tk/text-editor']);
+                    });
                 }).then(function () {
                     app = compose.getApp();
                     return app.launch();
@@ -34,11 +43,13 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                 }
                 snippetsGetAll.restore();
                 pictureHalo.restore();
+                pluginStub.restore();
+                getValidAddress.restore();
                 return app.quit();
             });
 
             it('should open up a new mail compose window', function () {
-                return app.compose({ folder_id: 'default0/INBOX' }).done(function () {
+                return app.compose().then(function () {
                     expect(app.get('state')).to.equal('running');
                     expect(app.view.$el.is(':visible'), 'view element is visible').to.be.true;
                     expect(_.url.hash('app')).to.equal('io.ox/mail/compose:compose');
@@ -51,7 +62,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                         data: {}
                     }));
                 });
-                return app.edit({ folder_id: 'default0/INBOX' }).done(function () {
+                return app.edit().then(function () {
                     expect(app.get('state')).to.equal('running');
                     expect(app.view.$el.is(':visible'), 'view element is visible').to.be.true;
                     expect(_.url.hash('app')).to.equal('io.ox/mail/compose:edit');
@@ -64,7 +75,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                         data: {}
                     }));
                 });
-                return app.reply({ folder: 'default0/INBOX' }).done(function () {
+                return app.reply({ folder: 'default0/INBOX' }).then(function () {
                     expect(app.get('state')).to.equal('running');
                     expect(app.view.$el.is(':visible'), 'view element is visible').to.be.true;
                     expect(_.url.hash('app')).to.equal('io.ox/mail/compose:reply');
@@ -76,7 +87,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                     addressEntry = [[address, address]];
 
                 beforeEach(function () {
-                    return app.compose({ folder_id: 'default0/INBOX' });
+                    return app.compose();
                 });
                 it('should add recipients to "to" tokenfield', function () {
                     app.view.model.set('to', addressEntry);
