@@ -14,11 +14,36 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
     'use strict';
 
     describe('Mail Compose', function () {
-        var app, pictureHalo, snippetsGetAll;
+
+        var app, pictureHalo, snippetsGetAll, getValidAddress;
+
+        var editors = {
+                text: 'io.ox/core/tk/text-editor',
+                html: 'io.ox/core/tk/contenteditable-editor'
+            },
+            pluginStub;
+
         beforeEach(function () {
-            return require(['io.ox/core/api/snippets', 'io.ox/contacts/api', 'settings!io.ox/mail'], function (snippetAPI, contactsAPI, settings) {
+            pluginStub = sinon.stub(ox.manifests, 'loadPluginsFor', function (namespace) {
+                namespace = namespace.replace(/^io.ox\/mail\/compose\/editor\//, '');
+                return require([editors[namespace]]);
+            });
+        });
+        afterEach(function () {
+            pluginStub.restore();
+        });
+
+        beforeEach(function () {
+            return require([
+                'io.ox/core/api/snippets',
+                'io.ox/contacts/api',
+                'io.ox/core/api/account',
+                'settings!io.ox/mail'
+            ], function (snippetAPI, contactsAPI, accountAPI, settings) {
                 snippetsGetAll = sinon.stub(snippetAPI, 'getAll', function () { return $.when([]); });
                 pictureHalo = sinon.stub(contactsAPI, 'pictureHalo', _.noop);
+                getValidAddress = sinon.stub(accountAPI, 'getValidAddress', function (d) { return $.when(d); });
+                //load plaintext editor, much faster than spinning up tinymce all the time
                 settings.set('messageFormat', 'html');
             }).then(function () {
                 app = compose.getApp();
@@ -31,9 +56,11 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
             }
             snippetsGetAll.restore();
             pictureHalo.restore();
+            getValidAddress.restore();
             return app.quit();
         });
-        describe.skip('inline images', function () {
+
+        describe('inline images', function () {
             beforeEach(function () {
                 this.server.respondWith('POST', /api\/mail\?action=new/, function (xhr) {
                     xhr.respond(200, 'content-type:text/javascript;', JSON.stringify({
@@ -67,6 +94,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                     spy.restore();
                 });
             });
+
             it('should not switch src attribute of emoji icons', function () {
                 var api = require('io.ox/mail/api');
                 var spy = sinon.stub(api, 'get');

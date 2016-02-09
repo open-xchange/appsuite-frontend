@@ -14,7 +14,7 @@ define(['io.ox/mail/compose/model'], function (MailModel) {
     'use strict';
 
     describe('Mail Compose', function () {
-        describe.skip('different content types', function () {
+        describe('different content types', function () {
             it('switching text -> html', function () {
                 var model = new MailModel({
                     editorMode: 'text'

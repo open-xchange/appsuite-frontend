@@ -13,15 +13,28 @@
 define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
     'use strict';
 
-    var editors = {
-        text: 'io.ox/core/tk/text-editor',
-        html: 'io.ox/core/tk/contenteditable-editor'
-    };
-
     describe('Mail Compose', function () {
 
-        describe.only('main app', function () {
-            var app, pictureHalo, snippetsGetAll, getValidAddress, pluginStub;
+        describe('main app', function () {
+
+            var app, pictureHalo, snippetsGetAll, getValidAddress;
+
+            var editors = {
+                    text: 'io.ox/core/tk/text-editor',
+                    html: 'io.ox/core/tk/contenteditable-editor'
+                },
+                pluginStub;
+
+            beforeEach(function () {
+                pluginStub = sinon.stub(ox.manifests, 'loadPluginsFor', function (namespace) {
+                    namespace = namespace.replace(/^io.ox\/mail\/compose\/editor\//, '');
+                    return require([editors[namespace]]);
+                });
+            });
+            afterEach(function () {
+                pluginStub.restore();
+            });
+
             beforeEach(function () {
                 return require([
                     'io.ox/core/api/snippets',
@@ -34,10 +47,6 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                     getValidAddress = sinon.stub(accountAPI, 'getValidAddress', function (d) { return $.when(d); });
                     //load plaintext editor, much faster than spinning up tinymce all the time
                     settings.set('messageFormat', 'text');
-                    pluginStub = sinon.stub(ox.manifests, 'loadPluginsFor', function (namespace) {
-                        namespace = namespace.replace(/^io.ox\/mail\/compose\/editor\//, '');
-                        return require([editors[namespace]]);
-                    });
                 }).then(function () {
                     app = compose.getApp();
                     return app.launch();
@@ -49,7 +58,6 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                 }
                 snippetsGetAll.restore();
                 pictureHalo.restore();
-                pluginStub.restore();
                 getValidAddress.restore();
                 return app.quit();
             });

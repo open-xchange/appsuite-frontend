@@ -13,22 +13,62 @@
 define(['io.ox/mail/compose/main', 'settings!io.ox/mail'], function (compose, settings) {
     'use strict';
 
+    var editors = {
+        text: 'io.ox/core/tk/text-editor',
+        html: 'io.ox/core/tk/contenteditable-editor'
+    };
+
     describe('Mail Compose', function () {
-        var app;
-        beforeEach(function () {
-            this.server.respondWith('GET', /api\/halo\/contact\/picture/, function (xhr) {
-                xhr.respond(200, 'image/gif', '');
+
+        describe('forward a message', function () {
+
+            var app, pictureHalo, snippetsGetAll, getValidAddress;
+
+            var editors = {
+                    text: 'io.ox/core/tk/text-editor',
+                    html: 'io.ox/core/tk/contenteditable-editor'
+                },
+                pluginStub;
+
+            beforeEach(function () {
+                pluginStub = sinon.stub(ox.manifests, 'loadPluginsFor', function (namespace) {
+                    namespace = namespace.replace(/^io.ox\/mail\/compose\/editor\//, '');
+                    return require([editors[namespace]]);
+                });
             });
-            app = compose.getApp();
-            return app.launch();
-        });
-        afterEach(function () {
-            if (app.view && app.view.model) {
-                app.view.model.dirty(false);
-            }
-            return app.quit();
-        });
-        describe.skip('forward a message', function () {
+
+            afterEach(function () {
+                pluginStub.restore();
+            });
+
+            beforeEach(function () {
+                return require([
+                    'io.ox/core/api/snippets',
+                    'io.ox/contacts/api',
+                    'io.ox/core/api/account',
+                    'settings!io.ox/mail'
+                ], function (snippetAPI, contactsAPI, accountAPI, settings) {
+                    snippetsGetAll = sinon.stub(snippetAPI, 'getAll', function () { return $.when([]); });
+                    pictureHalo = sinon.stub(contactsAPI, 'pictureHalo', _.noop);
+                    getValidAddress = sinon.stub(accountAPI, 'getValidAddress', function (d) { return $.when(d); });
+                    //load plaintext editor, much faster than spinning up tinymce all the time
+                    settings.set('messageFormat', 'text');
+                }).then(function () {
+                    app = compose.getApp();
+                    return app.launch();
+                });
+            });
+
+            afterEach(function () {
+                if (app.view && app.view.model) {
+                    app.view.model.dirty(false);
+                }
+                snippetsGetAll.restore();
+                pictureHalo.restore();
+                getValidAddress.restore();
+                return app.quit();
+            });
+
             beforeEach(function () {
                 this.server.respondWith('PUT', /api\/mail\?action=forward/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
@@ -77,9 +117,6 @@ define(['io.ox/mail/compose/main', 'settings!io.ox/mail'], function (compose, se
                 settings.set('autoSaveDraftsAfter', '1_minute');
                 var callback = sinon.spy();
                 var api = require('io.ox/mail/api');
-                //don't fetch contact pictures
-                var contactAPI = require('io.ox/contacts/api');
-                var haloSpy = sinon.stub(contactAPI, 'pictureHalo', _.noop);
 
                 expect(app.view.model.get('sendtype')).to.equal(api.SENDTYPE.FORWARD);
                 expect(app.view.model.get('msgref')).to.exist;
@@ -127,7 +164,6 @@ define(['io.ox/mail/compose/main', 'settings!io.ox/mail'], function (compose, se
                     expect(mail.sendtype).to.equal(api.SENDTYPE.DRAFT);
                     expect(mail.msgref).to.equal('default0/INBOX/Drafts/666');
                     spy.restore();
-                    haloSpy.restore();
                     settings.set('autoSaveDraftsAfter', 'disabled');
                 });
             });
