@@ -146,8 +146,10 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                     app.view.model.set('editorMode', 'html');
                     return waitsFor(function () {
                         //need to wait, until it is painted, because we started in text mode
-                        return app.view.$el.find('.editable-toolbar').is(':visible');
+                        return app.view.$el.find('.editable.mce-content-body').is(':visible');
                     }).done(function () {
+                        expect(app.view.$el.find('textarea.plain-text').is(':visible'), 'plain text editor is visible').to.be.false;
+                        expect(app.view.$el.find('.editable-toolbar').is(':visible'), 'tinymce toolbar element is visible').to.be.true;
                         expect(app.view.$el.find('.editable.mce-content-body').is(':visible'), 'tinymce contenteditable editor element is visible').to.be.true;
                     });
                 });
