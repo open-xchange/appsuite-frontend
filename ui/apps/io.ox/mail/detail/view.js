@@ -347,9 +347,18 @@ define('io.ox/mail/detail/view',
             }
         },
 
-        onLoadFail: function () {
+        onLoadFail: function (e) {
             this.trigger('load:done');
-            if (this.$el) this.$el.attr('data-loaded', false).removeClass('expanded');
+            if (!this.$el) return;
+            this.$el.attr('data-loaded', false);
+            this.$('section.body').removeClass('loading').empty().append(
+                $('<div class="mail-detail-content">').append(
+                    $('<div class="loading-error">').append(
+                        $('<h4>').text(gt('Error while loading message content')),
+                        $('<div>').text(e.error)
+                    )
+                )
+            );
         },
 
         toggle: function (state) {
