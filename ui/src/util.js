@@ -820,7 +820,7 @@
     };
 
     _.escapeRegExp = function (s) {
-        return (s || '').replace(/([|^$\\.*+?()[\]{}])/g, '\\$1');
+        return (s || '').replace(/([$^*+?!:=.|(){}[\]\\])/g, function () { return ('\\' + arguments[1]); });
     };
 
     window.assert = function (value, message) {
