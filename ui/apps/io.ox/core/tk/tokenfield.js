@@ -17,12 +17,13 @@ define('io.ox/core/tk/tokenfield', [
     'io.ox/participants/model',
     'io.ox/participants/views',
     'io.ox/contacts/api',
+    'io.ox/core/util',
     'gettext!io.ox/core',
     'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css',
     'less!io.ox/core/tk/tokenfield',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, Typeahead, pModel, pViews, contactAPI, gt) {
+], function (ext, Typeahead, pModel, pViews, contactAPI, util, gt) {
 
     'use strict';
 
@@ -37,7 +38,8 @@ define('io.ox/core/tk/tokenfield', [
             if (token.model) {
                 var displayname = token.model.getDisplayName(),
                     email = token.model.getEmail ? token.model.getEmail() : undefined;
-                return displayname === email ? email : '"' + displayname + '" <' + email + '>';
+                // make sure the displayname contains no outer quotes
+                return displayname === email ? email : '"' + util.removeQuotes(displayname) + '" <' + email + '>';
             }
             return token.value;
         }).join(separator);
@@ -217,7 +219,8 @@ define('io.ox/core/tk/tokenfield', [
                         // edit mode
                         newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
                         if (_.isArray(newAttrs)) {
-                            e.attrs.label = newAttrs[1];
+                            // this is a mail address
+                            e.attrs.label = util.removeQuotes(newAttrs[1]);
                         } else {
                             newAttrs = ['', e.attrs.value, '', e.attrs.value];
                         }
@@ -241,7 +244,8 @@ define('io.ox/core/tk/tokenfield', [
                     if (!e.attrs.model) {
                         newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
                         if (_.isArray(newAttrs)) {
-                            e.attrs.label = newAttrs[1];
+                            // this is a mail address
+                            e.attrs.label = util.removeQuotes(newAttrs[1]);
                             e.attrs.value = newAttrs[3];
                         } else {
                             newAttrs = ['', e.attrs.value, '', e.attrs.value];
@@ -329,7 +333,8 @@ define('io.ox/core/tk/tokenfield', [
                         // build edit string
                         e.attrs.value = token.label;
                         if (token.value !== token.label) {
-                            e.attrs.value = token.label ? '"' + token.label + '" <' + token.value + '>' : token.value;
+                            // token.label might have quotes, so we need to clean up again
+                            e.attrs.value = token.label ? '"' + util.removeQuotes(token.label) + '" <' + token.value + '>' : token.value;
                         }
                         self.getInput().one('blur', function () {
                             // see if there is a token with the cid
