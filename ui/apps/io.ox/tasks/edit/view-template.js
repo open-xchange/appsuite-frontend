@@ -25,8 +25,9 @@ define('io.ox/tasks/edit/view-template', [
     'io.ox/tasks/api',
     'io.ox/core/extensions',
     'io.ox/tasks/util',
+    'io.ox/core/folder/api',
     'settings!io.ox/tasks'
-], function (gt, views, notifications, mini, DatePicker, util, RecurrenceView, AddParticipant, pViews, attachments, api, ext, taskUtil, settings) {
+], function (gt, views, notifications, mini, DatePicker, util, RecurrenceView, AddParticipant, pViews, attachments, api, ext, taskUtil, folderAPI, settings) {
 
     'use strict';
 
@@ -386,6 +387,11 @@ define('io.ox/tasks/edit/view-template', [
         index: 1400,
         className: 'checkbox col-sm-3 collapsed',
         render: function () {
+
+            // private flag only works in private folders
+            var folder_id = this.model.get('folder_id');
+            if (!folderAPI.pool.getModel(folder_id).is('private')) return;
+
             this.$el.append(
                 $('<fieldset>').append(
                     $('<legend>').addClass('simple').text(gt('Type')),

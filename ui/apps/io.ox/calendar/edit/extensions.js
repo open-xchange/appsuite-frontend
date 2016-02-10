@@ -461,6 +461,11 @@ define('io.ox/calendar/edit/extensions', [
         index: 1200,
         className: 'col-md-6',
         render: function () {
+
+            // private flag only works in private folders
+            var folder_id = this.model.get('folder_id');
+            if (!folderAPI.pool.getModel(folder_id).is('private')) return;
+
             this.$el.append(
                 $('<fieldset>').append(
                     $('<legend>').addClass('simple').text(gt('Type')),
