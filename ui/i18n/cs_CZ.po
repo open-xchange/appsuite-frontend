@@ -1738,6 +1738,12 @@ msgstr "Klikněte, chcete-li to zkusit znovu."
 msgid "Click to retry later."
 msgstr "Klikněte, chcete-li to zkusit později znovu."
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Select a contact"
+msgid "Click to select contacts"
+msgstr "Vybrat kontakt"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
 msgstr "Klikněte, chcete-li to zkusit znovu."
@@ -4103,6 +4109,12 @@ msgid ""
 msgstr ""
 "Informuje o aktuálním stavu pošty a schůzek, aniž by bylo nutné zobrazovat "
 "uživatelské rozhraní nebo jiného klienta pro Windows®."
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Visible folder"
+msgid "Initial folder"
+msgstr "Viditelná složka"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Inline"
@@ -18332,9 +18344,6 @@ msgstr "rrrr"
 
 #~ msgid "Visibility"
 #~ msgstr "Viditelnost"
-
-#~ msgid "Visible folder"
-#~ msgstr "Viditelná složka"
 
 #~ msgid "Visual effects"
 #~ msgstr "Vzhledové efekty"

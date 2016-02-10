@@ -1722,6 +1722,12 @@ msgstr "Klik for at prøve igen"
 msgid "Click to retry later."
 msgstr "Klik for at prøve senere."
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete contact"
+msgid "Click to select contacts"
+msgstr "Slet kontakt"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
 msgstr "Tryk for at prøve igen."
@@ -4082,6 +4088,12 @@ msgid ""
 msgstr ""
 "Oplyser om den aktuelle status for e-mails og aftaler uden at skulle vise "
 "brugergrænsefladen eller en anden Windows®-klient."
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Rename folder"
+msgid "Initial folder"
+msgstr "Omdøb mappe"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Inline"

@@ -1713,6 +1713,12 @@ msgstr "Kattintson az újrapróbálkozáshoz"
 msgid "Click to retry later."
 msgstr "Kattintson a későbbi újrapróbálkozáshoz."
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete contact"
+msgid "Click to select contacts"
+msgstr "Névjegy törlése"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
 msgstr "Kattintson az újrapróbálkozáshoz."
@@ -4079,6 +4085,12 @@ msgid ""
 msgstr ""
 "Tájékoztatja a levelek és találkozók aktuális állapotáról a felhasználói "
 "felület vagy másik Windows® kliens megjelenítése nélkül."
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Rename folder"
+msgid "Initial folder"
+msgstr "Mappa átnevezése"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Inline"

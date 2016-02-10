@@ -1713,6 +1713,12 @@ msgstr "Für einen erneuten Versuch bitte klicken."
 msgid "Click to retry later."
 msgstr "Für einen späteren Versuch bitte klicken"
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete contact"
+msgid "Click to select contacts"
+msgstr "Kontakt löschen"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
 msgstr "Für einen erneuten Versuch bitte klicken"
@@ -4070,6 +4076,12 @@ msgid ""
 msgstr ""
 "Informiert über den aktuellen Stand der E-Mails und Termine, ohne dafür die "
 "Benutzeroberfläche oder einen anderen Windows®-Client anzeigen zu müssen."
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Sent folder"
+msgid "Initial folder"
+msgstr "Ordner 'Gesendet'"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Inline"
@@ -12435,9 +12447,6 @@ msgstr "JJJJ"
 
 #~ msgid "Senegal"
 #~ msgstr "Senegal"
-
-#~ msgid "Sent folder"
-#~ msgstr "Ordner 'Gesendet'"
 
 #~ msgid "Serbia"
 #~ msgstr "Serbien"

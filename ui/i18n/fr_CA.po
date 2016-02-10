@@ -1722,6 +1722,12 @@ msgstr "Cliquez pour réessayer"
 msgid "Click to retry later."
 msgstr "Cliquez pour réessayer ultérieurement."
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete contact"
+msgid "Click to select contacts"
+msgstr "Supprimer le contact"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
 msgstr "Cliquez pour réessayer."
@@ -4117,6 +4123,12 @@ msgid ""
 msgstr ""
 "Informe de l'état actuel des courriels et rendez-vous sans avoir à afficher "
 "l'interface utilisateur ou un autre client Windows®."
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Rename folder"
+msgid "Initial folder"
+msgstr "Renommer le dossier"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Inline"

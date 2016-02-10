@@ -1676,6 +1676,12 @@ msgstr ""
 msgid "Click to retry later."
 msgstr ""
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete contact"
+msgid "Click to select contacts"
+msgstr "Контактыг устгах"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
 msgstr ""
@@ -3982,6 +3988,10 @@ msgstr "Мэдээлэл"
 msgid ""
 "Informs about the current status of Emails and appointments without having "
 "to display the user interface or another Windows® client."
+msgstr ""
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Initial folder"
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail

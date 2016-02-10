@@ -3256,6 +3256,11 @@ msgstr ""
 
 #: apps/io.ox/contacts/settings/pane.js
 #: module:io.ox/contacts
+msgid "Initial folder"
+msgstr ""
+
+#: apps/io.ox/contacts/settings/pane.js
+#: module:io.ox/contacts
 msgid "Start in global address book"
 msgstr ""
 
@@ -8069,6 +8074,11 @@ msgstr ""
 #: apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
 msgid "Show blind carbon copy input field"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
+msgid "Click to select contacts"
 msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js

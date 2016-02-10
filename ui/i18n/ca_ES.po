@@ -1852,6 +1852,12 @@ msgstr "Premeu per a tornar-ho a provar"
 msgid "Click to retry later."
 msgstr "Premeu per a provar-ho més tard."
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Create contact"
+msgid "Click to select contacts"
+msgstr "Crea un contacte"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
 msgstr "Premeu per a provar-ho de nou."
@@ -4370,6 +4376,12 @@ msgid ""
 msgstr ""
 "Informa sobre l'estat actual dels correus electrònics i cites sense haver de "
 "mostrar la interfície s'usuari o altre client de Windows®."
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Rename folder"
+msgid "Initial folder"
+msgstr "Reanomena la carpeta"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Inline"

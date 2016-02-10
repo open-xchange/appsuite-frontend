@@ -1719,6 +1719,12 @@ msgstr "Pulse para reintentarlo"
 msgid "Click to retry later."
 msgstr "Pulse para reintentarlo más tarde."
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Select a contact"
+msgid "Click to select contacts"
+msgstr "Seleccionar un contacto"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
 msgstr "Pulse para intentarlo otra vez."
@@ -4104,6 +4110,12 @@ msgid ""
 msgstr ""
 "Informa sobre el estado actual de los correos electrónicos y citas sin tener "
 "que mostrar la interfaz de usuario u otro cliente de Windows®."
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Visible folder"
+msgid "Initial folder"
+msgstr "Carpeta visible"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Inline"
@@ -18405,9 +18417,6 @@ msgstr "yyyy"
 
 #~ msgid "Visibility"
 #~ msgstr "Visibilidad"
-
-#~ msgid "Visible folder"
-#~ msgstr "Carpeta visible"
 
 #~ msgid "Visual effects"
 #~ msgstr "Efectos visuales"

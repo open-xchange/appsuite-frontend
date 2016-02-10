@@ -1704,6 +1704,12 @@ msgstr "Napsauta yrittääksesi uudelleen."
 msgid "Click to retry later."
 msgstr "Napsauta yrittääksesi uudelleen myöhemmin."
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete contact"
+msgid "Click to select contacts"
+msgstr "Poista yhteystieto"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
 msgstr "Napsauta yrittääksesi uudestaan."
@@ -4062,6 +4068,12 @@ msgid ""
 msgstr ""
 "Ilmoittaa tämänhetkisen viestien ja tapaamisten tilanteen ilman "
 "käyttöliittymän tai toisen Windows asiakasohjelmiston näyttämistä."
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Rename folder"
+msgid "Initial folder"
+msgstr "Uudelleennimeä kansio"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Inline"
