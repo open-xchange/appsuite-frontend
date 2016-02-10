@@ -110,6 +110,12 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
             return { url: url, suffix: suffix };
         },
 
+        // remove (almost) all quotes from a string
+        removeQuotes: function (str) {
+            // remove all outer single and double quotes; also remove all inner quotes
+            return $.trim(str).replace(/^["'\\]+|["'\\]+$/g, '').replace(/\\?\"/g, '');
+        },
+
         // detect URLs in plain text
         urlify: function (text) {
             return text.replace(regUrl, function (url) {
