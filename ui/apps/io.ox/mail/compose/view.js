@@ -514,7 +514,8 @@ define('io.ox/mail/compose/view', [
                         $('img:not(.emoji):eq(' + index + ')', self.editorContainer.find('.editable')).attr('src', $(el).attr('src'));
                     });
                 }
-                model.set('msgref', result.data, { silent: true });
+                model.set('msgref', result.data);
+                model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT);
                 model.dirty(false);
                 notifications.yell('success', gt('Mail saved as draft'));
                 return result;
@@ -534,9 +535,9 @@ define('io.ox/mail/compose/view', [
                     notifications.yell(result);
                     def.reject(result);
                 } else {
-                    if (mail.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
-                        model.set('msgref', result, { silent: true });
-                    }
+
+                    model.set('msgref', result);
+                    model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT);
 
                     var saved = model.get('infostore_ids_saved');
                     model.set('infostore_ids_saved', [].concat(saved, mail.infostore_ids || []));
