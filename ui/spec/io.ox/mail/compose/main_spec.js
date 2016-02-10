@@ -70,13 +70,6 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                 });
             });
 
-            //if this step is not provided, the next step will fail for unknown reason
-            it('TEMP FIX/WORKAROUND: should open up a new mail compose window', function () {
-                return app.compose().done(function () {
-                    expect(app.get('state')).to.equal('running');
-                });
-            });
-
             it('should provide an edit window', function () {
                 this.server.respondWith('PUT', /api\/mail\?action=get/, function (xhr) {
                     xhr.respond(200, 'content-type:text/javascript;', JSON.stringify({
