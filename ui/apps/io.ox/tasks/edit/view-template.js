@@ -67,7 +67,6 @@ define('io.ox/tasks/edit/view-template', [
                             setTimeout(function () {
                                 delete baton.model.saving;
                                 app.getWindow().idle();
-                                debugger;
                                 yell(response);
                             }, 300);
                         });
