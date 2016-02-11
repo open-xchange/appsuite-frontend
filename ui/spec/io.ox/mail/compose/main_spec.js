@@ -146,8 +146,8 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                 it('should change editor mode from text to html', function () {
                     app.view.model.set('editorMode', 'html');
                     return waitsFor(function () {
-                        //need to wait, until it is painted, because we started in text mode
-                        return app.view.$el.find('.editable.mce-content-body').is(':visible');
+                        //need to wait, until it is painted, because we started in text mode (.editor is not busy any longer)
+                        return app.view.$el.find('.editable.mce-content-body').is(':visible') && app.view.$el.find('.editor:not(.io-ox-busy)').length === 1;
                     }).done(function () {
                         expect(app.view.$el.find('textarea.plain-text').is(':visible'), 'plain text editor is visible').to.be.false;
                         expect(app.view.$el.find('.editable-toolbar').is(':visible'), 'tinymce toolbar element is visible').to.be.true;
@@ -157,7 +157,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                 it('should change editor mode from html to text', function () {
                     app.view.model.set('editorMode', 'text');
                     return waitsFor(function () {
-                        return app.view.$el.find('textarea.plain-text').is(':visible') === true;
+                        return app.view.$el.find('textarea.plain-text').is(':visible')  && app.view.$el.find('.editor:not(.io-ox-busy)').length === 1;
                     }).then(function () {
                         expect(app.view.$el.find('textarea.plain-text').is(':visible'), 'plain text editor is visible').to.be.true;
                         expect(app.view.$el.find('.editable-toolbar').is(':visible'), 'tinymce toolbar element is visible').to.be.false;
@@ -167,7 +167,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                 it('should change editor mode from text to html', function () {
                     app.view.model.set('editorMode', 'html');
                     return waitsFor(function () {
-                        return app.view.$el.find('.editable.mce-content-body').is(':visible') === true;
+                        return app.view.$el.find('.editable.mce-content-body').is(':visible')  && app.view.$el.find('.editor:not(.io-ox-busy)').length === 1;
                     }).then(function () {
                         expect(app.view.$el.find('textarea.plain-text').is(':visible'), 'plain text editor is visible').to.be.false;
                         expect(app.view.$el.find('.editable-toolbar').is(':visible'), 'tinymce toolbar element is visible').to.be.true;
