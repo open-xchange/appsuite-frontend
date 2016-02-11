@@ -14,7 +14,7 @@
 define('io.ox/tasks/edit/view-template', [
     'gettext!io.ox/tasks/edit',
     'io.ox/backbone/views',
-    'io.ox/core/notifications',
+    'io.ox/core/yell',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/datepicker',
     'io.ox/tasks/edit/util',
@@ -27,7 +27,7 @@ define('io.ox/tasks/edit/view-template', [
     'io.ox/tasks/util',
     'io.ox/core/folder/api',
     'settings!io.ox/tasks'
-], function (gt, views, notifications, mini, DatePicker, util, RecurrenceView, AddParticipant, pViews, attachments, api, ext, taskUtil, folderAPI, settings) {
+], function (gt, views, yell, mini, DatePicker, util, RecurrenceView, AddParticipant, pViews, attachments, api, ext, taskUtil, folderAPI, settings) {
 
     'use strict';
 
@@ -58,13 +58,17 @@ define('io.ox/tasks/edit/view-template', [
                         app.getWindow().busy();
                         util.sanitizeBeforeSave(baton);
 
+                        baton.model.saving = true;
                         baton.model.save().done(function () {
+                            delete baton.model.saving;
                             app.markClean();
                             app.quit();
                         }).fail(function (response) {
                             setTimeout(function () {
+                                delete baton.model.saving;
                                 app.getWindow().idle();
-                                notifications.yell(response);
+                                debugger;
+                                yell(response);
                             }, 300);
                         });
 
@@ -338,7 +342,7 @@ define('io.ox/tasks/edit/view-template', [
                             }
                             baton.model.set('percent_completed', number, { validate: true });
                         } else {
-                            notifications.yell('error', gt('Please enter value between 0 and 100.'));
+                            yell('error', gt('Please enter value between 0 and 100.'));
                             baton.model.trigger('change:percent_completed');
                         }
                     })
@@ -469,7 +473,7 @@ define('io.ox/tasks/edit/view-template', [
             obj.folder_id = model.attributes.folder_id || model.attributes.folder;
             //show errors
             _(errors).each(function (error) {
-                notifications.yell('error', error.error);
+                yell('error', error.error);
             });
             //no need to remove cachevalues if there was no upload
             if (api.uploadInProgress(_.ecid(obj))) {
@@ -527,6 +531,8 @@ define('io.ox/tasks/edit/view-template', [
                                 .on('change', changeHandler)
                                 .appendTo($input.parent());
                     }
+                    // look if the quota is exceeded
+                    baton.model.validate();
                 };
             $input.on('change', changeHandler);
             $inputWrap.on('change.fileupload', function () {

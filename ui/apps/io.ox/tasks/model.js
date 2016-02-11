@@ -18,8 +18,9 @@ define('io.ox/tasks/model', [
     'io.ox/core/extensions',
     'io.ox/participants/model',
     'settings!io.ox/core',
+    'io.ox/core/strings',
     'gettext!io.ox/tasks'
-], function (api, ModelFactory, Validations, ext, pModel, settings, gt) {
+], function (api, ModelFactory, Validations, ext, pModel, settings, strings, gt) {
 
     'use strict';
 
@@ -195,7 +196,8 @@ define('io.ox/tasks/model', [
         id: 'upload-quota',
         validate: function (attributes) {
             if (attributes.quotaExceeded) {
-                this.add('quota_exceeded', gt('Files can not be uploaded, because quota exceeded.'));
+                //#. %1$s is an upload limit like for example 10mb
+                this.add('quota_exceeded', gt('Files can not be uploaded, because upload limit of %1$s is exceeded.', strings.fileSize(attributes.quotaExceeded.attachmentMaxUploadSize, 2)));
             }
         }
     });

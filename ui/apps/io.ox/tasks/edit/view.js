@@ -48,6 +48,15 @@ define('io.ox/tasks/edit/view', [
                     }
                 }
             });
+            // add quota exceeded handler
+            this.model.on('invalid:quota_exceeded', function (messages) {
+                // not during saving to prevent double yells
+                if (!this.saving) {
+                    require(['io.ox/core/yell'], function (yell) {
+                        yell('error', messages[0]);
+                    });
+                }
+            });
         },
 
         autoOpen: function (data) {
