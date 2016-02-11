@@ -32,14 +32,18 @@ define('io.ox/onboarding/clients/extensions', [
     var util = {
         removeIcons: function (e) {
             var target = $(e.target);
-            target.parent().find('button-clicked').remove();
+            target.parent().find('.button-clicked').remove();
         },
         addIcon: function (e) {
             var target = $(e.target);
+            util.removeIcons(e);
             target.after($('<i class="fa fa-check button-clicked"></i>'));
         },
         disable: function (e) {
             $(e.target).addClass('disabled');
+        },
+        enable: function (e) {
+            $(e.target).removeClass('disabled');
         }
     };
 
@@ -158,19 +162,45 @@ define('io.ox/onboarding/clients/extensions', [
             'carddav_url': gt('CardDAV URL'),
             'carddav_login': gt('CardDAV Login'),
             // smtp
-            'smtpLogin': gt('SMTP login'),
-            'smtpServer': gt('SMTP server'),
-            'smtpPort': gt('SMTP port'),
-            'smtpSecure': gt('SMTP secure'),
+            'smtpServer': gt('SMTP Server'),
+            'smtpPort': gt('SMTP Port'),
+            'smtpLogin': gt('SMTP Login'),
+            'smtpSecure': gt('SMTP Secure'),
             // imap
-            'imapLogin': gt('IMAP login'),
-            'imapServer': gt('IMAP server'),
-            'imapPort': gt('IMAP port'),
-            'imapSecure': gt('IMAP secure'),
+            'imapServer': gt('IMAP Server'),
+            'imapPort': gt('IMAP Port'),
+            'imapLogin': gt('IMAP Login'),
+            'imapSecure': gt('IMAP Secure'),
             // eas
             'eas_url': gt('EAS URL'),
-            'eas_login': gt('EAS login')
+            'eas_login': gt('EAS Login')
         },
+
+        order: (function () {
+            var list = [
+                // card
+                'caldav_url',
+                'caldav_login',
+                'carddav_url',
+                'carddav_login',
+                // smtp
+                'smtpServer',
+                'smtpPort',
+                'smtpLogin',
+                'smtpSecure',
+                // imap
+                'imapServer',
+                'imapPort',
+                'imapLogin',
+                'imapSecure',
+                // eas
+                'eas_url',
+                'eas_login'
+            ];
+            return function (key) {
+                return list.indexOf(key);
+            };
+        }()),
 
         initialize: function (action, options) {
             _.extend(this, action);
@@ -205,8 +235,10 @@ define('io.ox/onboarding/clients/extensions', [
                             form = $('<div class="data">')
                         )
                 );
+            // sort
+            var list = Object.keys(this.data);
+            list = _.sortBy(list, this.order);
             // add rows
-            var list = Object.keys(this.data).sort();
             _.each(list, function (key) {
                 var value = self.data[key],
                     group = $('<div class="row">'),
@@ -309,10 +341,16 @@ define('io.ox/onboarding/clients/extensions', [
         getNumber: function () {
             var local = this.model.get('sms'),
                 prefix = this.model.get('code');
-            // remove non digits
+            // remove everything except digits and '+'
+            local = local.replace(/[^\d+]+/g, '');
+            // 0049... -> +49...
+            local = local.replace(/^00/, '+');
+            // valid country code entered?
+            if (!!this.config.find(local)) return local;
+            // keep only digits
             local = local.replace(/[\D]+/g, '');
             // remove leading zero
-            local = local.replace(/^[^\d]*0+/, '');
+            local = local.replace(/^0+/, '');
             return prefix + local;
         },
 
@@ -325,10 +363,10 @@ define('io.ox/onboarding/clients/extensions', [
                 };
             // call
             util.disable(e);
-            util.removeIcons(e);
             api.execute(scenario, action, data)
                 .always(yellError)
-                .always(_.partial(util.addIcon, e));
+                .done(_.partial(util.addIcon, e))
+                .fail(_.partial(util.enable, e));
         }
     });
 
@@ -401,7 +439,6 @@ define('io.ox/onboarding/clients/extensions', [
                     email: this.model.get('email')
                 };
             // call
-            util.removeIcons(e);
             api.execute(scenario, action, data)
                 .always(yellError)
                 .always(_.partial(util.addIcon, e));

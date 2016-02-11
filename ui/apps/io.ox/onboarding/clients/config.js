@@ -254,7 +254,9 @@ define('io.ox/onboarding/clients/config', [
             return !complete;
         },
 
-        getCodes: codes.get
+        getCodes: codes.get,
+
+        find: codes.find
     };
 
     return config;

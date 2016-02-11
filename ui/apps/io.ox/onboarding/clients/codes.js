@@ -35,6 +35,22 @@ define('io.ox/onboarding/clients/codes', [], function () {
             });
         },
 
+        find: function (phonenumber) {
+            var part = phonenumber.slice(0, 6);
+            if (part[0] !== '+') return;
+            var match, hash = _.toHash(codes.hash, 'code');
+            // order: more specefic -> more general
+            // +49123, +4912, +491, +49
+            _.each(part, function (char, index) {
+                if (match) return;
+                var scope = part.slice(0, part.length - index);
+                match = hash[scope];
+            });
+            return match;
+        },
+
+        // two digit country code may has a AREA suffix
+        // to differentiate different codes (f.e. DO_A1)
         hash: {
             'AF': {
                 'name': 'Afghanistan',
@@ -43,7 +59,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'AX': {
                 'name': 'Aland Islands',
-                'code': '+358-18',
+                'code': '+35818',
                 'id': 'AX'
             },
             'AL': {
@@ -58,7 +74,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'AS': {
                 'name': 'American Samoa',
-                'code': '+1-684',
+                'code': '+1684',
                 'id': 'AS'
             },
             'AD': {
@@ -73,12 +89,12 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'AI': {
                 'name': 'Anguilla',
-                'code': '+1-264',
+                'code': '+1264',
                 'id': 'AI'
             },
             'AG': {
                 'name': 'Antigua and Barbuda',
-                'code': '+1-268',
+                'code': '+1268',
                 'id': 'AG'
             },
             'AR': {
@@ -113,7 +129,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'BS': {
                 'name': 'Bahamas',
-                'code': '+1-242',
+                'code': '+1242',
                 'id': 'BS'
             },
             'BH': {
@@ -128,7 +144,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'BB': {
                 'name': 'Barbados',
-                'code': '+1-246',
+                'code': '+1246',
                 'id': 'BB'
             },
             'BY': {
@@ -153,7 +169,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'BM': {
                 'name': 'Bermuda',
-                'code': '+1-441',
+                'code': '+1441',
                 'id': 'BM'
             },
             'BT': {
@@ -193,7 +209,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'VG': {
                 'name': 'British Virgin Islands',
-                'code': '+1-284',
+                'code': '+1284',
                 'id': 'VG'
             },
             'BN': {
@@ -238,7 +254,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'KY': {
                 'name': 'Cayman Islands',
-                'code': '+1-345',
+                'code': '+1345',
                 'id': 'KY'
             },
             'CF': {
@@ -333,12 +349,22 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'DM': {
                 'name': 'Dominica',
-                'code': '+1-767',
+                'code': '+1767',
                 'id': 'DM'
             },
-            'DO': {
+            'DO_A1': {
                 'name': 'Dominican Republic',
-                'code': '+1-809 and 1-829',
+                'code': '+1809',
+                'id': 'DO'
+            },
+            'DO_A2': {
+                'name': 'Dominican Republic',
+                'code': '+1829',
+                'id': 'DO'
+            },
+            'DO_A3': {
+                'name': 'Dominican Republic',
+                'code': '+1849',
                 'id': 'DO'
             },
             'TL': {
@@ -458,7 +484,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'GD': {
                 'name': 'Grenada',
-                'code': '+1-473',
+                'code': '+1473',
                 'id': 'GD'
             },
             'GP': {
@@ -468,7 +494,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'GU': {
                 'name': 'Guam',
-                'code': '+1-671',
+                'code': '+1671',
                 'id': 'GU'
             },
             'GT': {
@@ -478,7 +504,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'GG': {
                 'name': 'Guernsey',
-                'code': '+44-1481',
+                'code': '+441481',
                 'id': 'GG'
             },
             'GN': {
@@ -553,7 +579,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'IM': {
                 'name': 'Isle of Man',
-                'code': '+44-1624',
+                'code': '+441624',
                 'id': 'IM'
             },
             'IL': {
@@ -573,7 +599,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'JM': {
                 'name': 'Jamaica',
-                'code': '+1-876',
+                'code': '+1876',
                 'id': 'JM'
             },
             'JP': {
@@ -583,7 +609,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'JE': {
                 'name': 'Jersey',
-                'code': '+44-1534',
+                'code': '+441534',
                 'id': 'JE'
             },
             'JO': {
@@ -758,7 +784,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'MS': {
                 'name': 'Montserrat',
-                'code': '+1-664',
+                'code': '+1664',
                 'id': 'MS'
             },
             'MA': {
@@ -838,7 +864,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'MP': {
                 'name': 'Northern Mariana Islands',
-                'code': '+1-670',
+                'code': '+1670',
                 'id': 'MP'
             },
             'NO': {
@@ -906,9 +932,14 @@ define('io.ox/onboarding/clients/codes', [], function () {
                 'code': '+351',
                 'id': 'PT'
             },
-            'PR': {
+            'PR_A1': {
                 'name': 'Puerto Rico',
-                'code': '+1-787 and 1-939',
+                'code': '+1787',
+                'id': 'PR'
+            },
+            'PR_A2': {
+                'name': 'Puerto Rico',
+                'code': '+1939',
                 'id': 'PR'
             },
             'QA': {
@@ -953,12 +984,12 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'KN': {
                 'name': 'Saint Kitts and Nevis',
-                'code': '+1-869',
+                'code': '+1869',
                 'id': 'KN'
             },
             'LC': {
                 'name': 'Saint Lucia',
-                'code': '+1-758',
+                'code': '+1758',
                 'id': 'LC'
             },
             'MF': {
@@ -973,7 +1004,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'VC': {
                 'name': 'Saint Vincent and the Grenadines',
-                'code': '+1-784',
+                'code': '+1784',
                 'id': 'VC'
             },
             'WS': {
@@ -1143,7 +1174,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'TT': {
                 'name': 'Trinidad and Tobago',
-                'code': '+1-868',
+                'code': '+1868',
                 'id': 'TT'
             },
             'TN': {
@@ -1163,7 +1194,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'TC': {
                 'name': 'Turks and Caicos Islands',
-                'code': '+1-649',
+                'code': '+1649',
                 'id': 'TC'
             },
             'TV': {
@@ -1173,7 +1204,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             },
             'VI': {
                 'name': 'U.S. Virgin Islands',
-                'code': '+1-340',
+                'code': '+1340',
                 'id': 'VI'
             },
             'UG': {
