@@ -1,6 +1,6 @@
 ---
 title: Extension points
-icon: fa-magic
+icon: fa-puzzle-piece
 description: stub
 ---
 

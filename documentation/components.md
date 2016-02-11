@@ -1,6 +1,4 @@
 ---
-title: Writing Components
+title: Components
 icon: fa-puzzle-piece
-description: stub
 ---
-
