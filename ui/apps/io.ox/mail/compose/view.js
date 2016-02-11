@@ -808,6 +808,8 @@ define('io.ox/mail/compose/view', [
                 content = content.replace(/\n<br>&nbsp;$/, '\n');
             }
 
+            this.setSimpleMail(content);
+
             this.editor.setContent(content);
 
             if (this.model.get('initial')) {
@@ -959,6 +961,11 @@ define('io.ox/mail/compose/view', [
                 self.setBody(self.model.getContent());
                 self.model.dirty(false);
             });
+        },
+
+        setSimpleMail: function (content) {
+            if (this.model.get('editorMode') === 'text') return;
+            if ($(content).find('table').length === 0) this.editorContainer.find('.editable.mce-content-body').addClass('simple-mail');
         },
 
         blockReuse: function (sendtype) {
