@@ -66,6 +66,7 @@ define('io.ox/calendar/edit/extensions', [
                 .text(baton.mode === 'edit' ? gt('Save') : gt('Create'))
                 .on('click', function () {
                     var save = _.bind(baton.app.onSave || _.noop, baton.app),
+                        fail = _.bind(baton.app.onError || _.noop, baton.app),
                         folder = baton.model.get('folder_id');
                     //check if attachments are changed
                     if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
@@ -82,7 +83,7 @@ define('io.ox/calendar/edit/extensions', [
                     var timezone = baton.model.get('endTimezone');
                     baton.model.unset('endTimezone', { silent: true });
                     baton.model.endTimezone = timezone;
-                    baton.model.save().done(save);
+                    baton.model.save().then(save, fail);
                 })
             );
 
@@ -605,6 +606,15 @@ define('io.ox/calendar/edit/extensions', [
                                 .on('change', changeHandler)
                                 .appendTo($input.parent());
                     }
+                    // look if the quota is exceeded
+                    baton.model.on('invalid:quota_exceeded', function (messages) {
+                        require(['io.ox/core/yell'], function (yell) {
+                            yell('error', messages[0]);
+                        });
+                    });
+                    baton.model.validate();
+                    // turn of again to prevent double yells on save
+                    baton.model.off('invalid:quota_exceeded');
                 };
             $input.on('change', changeHandler);
             $inputWrap.on('change.fileupload', function () {

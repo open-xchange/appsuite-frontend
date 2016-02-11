@@ -18,9 +18,10 @@ define('io.ox/calendar/model', [
     'io.ox/backbone/validation',
     'io.ox/participants/model',
     'io.ox/core/folder/api',
+    'io.ox/core/strings',
     'settings!io.ox/calendar',
     'settings!io.ox/core'
-], function (api, ext, extendedModel, gt, Validators, pModel, folderAPI, settings, coreSettings) {
+], function (api, ext, extendedModel, gt, Validators, pModel, folderAPI, strings, settings, coreSettings) {
 
     'use strict';
 
@@ -252,6 +253,10 @@ define('io.ox/calendar/model', [
                 attributesToSave.folder = this.get('folder') || this.get('folder_id');
             }
 
+            if (this.get('ignore_conflicts')) {
+                attributesToSave.ignore_conflicts = this.get('ignore_conflicts');
+            }
+
             return attributesToSave;
         }
     });
@@ -269,7 +274,8 @@ define('io.ox/calendar/model', [
         id: 'upload-quota',
         validate: function (attributes) {
             if (attributes.quotaExceeded) {
-                this.add('quota_exceeded', gt('Files can not be uploaded, because quota exceeded.'));
+                //#. %1$s is an upload limit like for example 10mb
+                this.add('quota_exceeded', gt('Files can not be uploaded, because upload limit of %1$s is exceeded.', strings.fileSize(attributes.quotaExceeded.attachmentMaxUploadSize, 2)));
             }
         }
     });

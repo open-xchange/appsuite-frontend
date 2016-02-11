@@ -353,10 +353,18 @@ define('io.ox/calendar/edit/main', [
             },
 
             onError: function (error) {
+                // conflicts have their own special handling
+                if (error.conflicts) return;
+
                 this.model.set('ignore_conflicts', false, { validate: true });
                 if (this.model.endTimezone) {
                     this.model.set('endTimezone', this.model.endTimezone);
                     delete this.model.endTimezone;
+                }
+
+                // restore state of model attributes for moving
+                if (this.moveAfterSave && this.model.get('folder_id') !== this.moveAfterSave) {
+                    this.model.set('folder_id', this.moveAfterSave, { silent: true });
                 }
                 delete this.moveAfterSave;
                 this.getWindow().idle();
