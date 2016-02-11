@@ -110,4 +110,28 @@ define('io.ox/contacts/settings/pane', [
             );
         }
     });
+
+    ext.point(POINT + '/pane').extend({
+        index: 300,
+        id: 'map-service',
+        draw: function () {
+
+            var options = [
+                { label: gt('Google Maps'), value: 'google' },
+                { label: gt('Open Street Map'), value: 'osm' },
+                { label: gt('No link'), value: 'none' }
+            ];
+
+            if (_.device('ios || macos')) options.splice(2, 0, { label: gt('Apple Maps'), value: 'apple' });
+
+            this.append(
+                $('<fieldset>').append(
+                    $('<legend class="sectiontitle">').append(
+                        $('<h2>').text(gt('Link postal addresses with map service'))
+                    ),
+                    new mini.RadioView({ list: options, name: 'mapService', model: contactsModel }).render().$el
+                )
+            );
+        }
+    });
 });

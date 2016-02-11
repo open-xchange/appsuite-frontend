@@ -25,8 +25,9 @@ define('io.ox/contacts/view-detail', [
     'io.ox/core/util',
     'io.ox/core/capabilities',
     'gettext!io.ox/contacts',
+    'settings!io.ox/contacts',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, capabilities, gt) {
+], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, capabilities, gt, settings) {
 
     'use strict';
 
@@ -406,19 +407,37 @@ define('io.ox/contacts/view-detail', [
             //#. %5$s is the country
             gt('%1$s\n%2$s %3$s\n%4$s\n%5$s', data);
 
+        var services = {
+            google: { label: gt('Google Maps'), url: 'https://www.google.com/maps?q=' },
+            osm: { label: gt('Open Street Map'), url: 'https://www.openstreetmap.org/search?query=' },
+            apple: { label: gt('Apple Maps'), url: 'https://maps.apple.com/?q=' }
+        };
+
         return function () {
+
+            var address = $('<address>').attr('data-property', type).text($.trim(text)),
+                service = settings.get('mapService', 'google');
+
+            // Apple Maps only works on iOS and MacOS
+            if (service === 'apple' && !_.device('ios || macos')) service = 'none';
+
+            if (service === 'none') {
+                return $(this).append(address);
+            }
+
+            var query = encodeURIComponent(text.replace(/\n*/, '\n').trim().replace(/\n/g, ', '));
+
             $(this).append(
-                $('<a class="google-maps" target="_blank">')
-                    .attr('href', 'http://www.google.com/maps?q=' + encodeURIComponent(text.replace(/\n*/, '\n').trim().replace(/\n/g, ', ')))
-                    .attr('data-property', type)
-                    .append(
-                        $('<address>').text($.trim(text)),
-                        $('<p>').append(
-                            $('<i class="fa fa-external-link">'),
-                            // \u2122 = &trade;
-                            $.txt(' Google Maps \u2122')
-                        )
+                $('<a class="maps-service" target="_blank">')
+                .attr('href', services[service].url + query)
+                .append(
+                    address,
+                    $('<p>').append(
+                        $('<i class="fa fa-external-link">'),
+                        //#. %1$s is a map service, like "Google Maps"
+                        $.txt(' ' + gt('Open in %1$s', services[service].label))
                     )
+                )
             );
         };
     }
