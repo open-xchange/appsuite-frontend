@@ -74,8 +74,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                 var api = require('io.ox/mail/api');
                 var spy = sinon.stub(api, 'get');
                 var def = waitsFor(function () {
-                    console.log('mu');
-                    return app.view.contentEditable.find('img').length > 0;
+                    return app.view.$el.find('.editable.mce-content-body img').length > 0;
                 });
 
                 app.view.setBody('<div>some<img src="test.png" />text</div>');
@@ -88,7 +87,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
 
                 return $.when(def, app.view.saveDraft()).then(function () {
                     expect(spy.calledOnce, 'mailAPI.get called once').to.be.true;
-                    var img = app.view.contentEditable.find('img');
+                    var img = app.view.$el.find('.editable.mce-content-body img');
                     expect(img.attr('src')).to.equal('test_changed_by_backend.png');
                 }).always(function () {
                     spy.restore();
@@ -99,7 +98,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                 var api = require('io.ox/mail/api');
                 var spy = sinon.stub(api, 'get');
                 var def = waitsFor(function () {
-                    return app.view.contentEditable.find('img').length > 0;
+                    return app.view.$el.find('.editable.mce-content-body img').length > 0;
                 });
 
                 app.view.setBody('<div>some<img src="test.png" />text and emoji<img src="1x1.gif" class="emoji" /></div>');
@@ -112,7 +111,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
 
                 return $.when(def, app.view.saveDraft()).then(function () {
                     expect(spy.calledOnce, 'mailAPI.get called once').to.be.true;
-                    var imgs = $('img', app.view.contentEditable);
+                    var imgs = $('.editable.mce-content-body img', app.view.$el);
                     expect($(imgs[0]).attr('src')).to.equal('test_changed_by_backend.png');
                     expect($(imgs[1]).attr('src')).to.equal('1x1.gif');
                 }).always(function () {
