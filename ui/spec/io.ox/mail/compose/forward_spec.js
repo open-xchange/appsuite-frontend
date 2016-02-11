@@ -109,6 +109,8 @@ define(['io.ox/mail/compose/main', 'settings!io.ox/mail'], function (compose, se
                     var mail = spy.firstCall.args[0];
                     expect(mail.sendtype).to.equal(api.SENDTYPE.FORWARD);
                     expect(mail.msgref).to.equal('default0/INBOX/666');
+                    expect(mail.flags & api.FLAGS.DRAFT, 'DRAFT flag not set').to.equal(0);
+
                     spy.restore();
                 });
             });
@@ -136,18 +138,27 @@ define(['io.ox/mail/compose/main', 'settings!io.ox/mail'], function (compose, se
                 app.view.model.set('to', [['Test', 'test@example.com']]);
                 clock.tick(59999);
                 expect(callback.called, 'callback called').to.be.false;
+                // touch the model
+                app.model.dirty(true);
                 //takes a little while for the request to be sent
                 clock.tick(100);
                 expect(callback.calledOnce, 'callback called').to.be.true;
+                // send type and msgref stay intact, but draft flag is set
                 var mail = JSON.parse(callback.firstCall.args[0]);
-                expect(mail.sendtype).to.equal(api.SENDTYPE.EDIT_DRAFT);
-                expect(mail.msgref).not.to.exist;
+                expect(mail.sendtype).to.equal(api.SENDTYPE.FORWARD);
+                expect(mail.msgref).to.exist;
+                expect(mail.msgref).to.equal('default0/INBOX/666');
+                expect(mail.flags & api.FLAGS.DRAFT, 'DRAFT flag set').to.equal(api.FLAGS.DRAFT);
 
+                // touch the model
+                app.model.dirty(true);
                 clock.tick(60000);
                 expect(callback.calledTwice, 'callback called').to.be.true;
                 mail = JSON.parse(callback.secondCall.args[0]);
+                // now in edit draft mode
                 expect(mail.sendtype).to.equal(api.SENDTYPE.EDIT_DRAFT);
                 expect(mail.msgref).to.equal('default0/INBOX/Drafts/666');
+                expect(mail.flags & api.FLAGS.DRAFT, 'DRAFT flag set').to.equal(api.FLAGS.DRAFT);
 
                 clock.restore();
 
@@ -163,6 +174,8 @@ define(['io.ox/mail/compose/main', 'settings!io.ox/mail'], function (compose, se
                     var mail = spy.firstCall.args[0];
                     expect(mail.sendtype).to.equal(api.SENDTYPE.DRAFT);
                     expect(mail.msgref).to.equal('default0/INBOX/Drafts/666');
+                    expect(mail.flags & api.FLAGS.DRAFT, 'DRAFT flag not set').to.equal(0);
+
                     spy.restore();
                     settings.set('autoSaveDraftsAfter', 'disabled');
                 });
