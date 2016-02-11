@@ -1312,6 +1312,12 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             return def;
         },
 
+        getColumn: function (module, column) {
+            if (!module) return idMapping;
+            var columns = idMapping[module] || {};
+            return column ? columns[column] : columns;
+        },
+
         // send server ping
         ping: function () {
             var t0 = _.now();

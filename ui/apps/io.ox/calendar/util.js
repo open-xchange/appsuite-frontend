@@ -43,6 +43,13 @@ define('io.ox/calendar/util', [
 
     var that = {
 
+        // column translations
+        columns: {
+            title: gt('Subject'),
+            location: gt('Location'),
+            note: gt('Description')
+        },
+
         // day bitmask
         days: {
             SUNDAY: 1,
