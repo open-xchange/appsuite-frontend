@@ -29,7 +29,7 @@
     "requirejs": "2.1.14",
     "bootstrap-accessibility-plugin": "https://github.com/Open-Xchange-Frontend/bootstrap-accessibility-plugin.git#5d5908aebdd26963b7f5322ae5b623a83b912862",
     "jquery.lazyload": "https://github.com/Open-Xchange-Frontend/jquery_lazyload.git#aac4435ac7c09de8f271d82a761ad2442fb37c72",
-    "bootstrap-tokenfield": "https://github.com/Open-Xchange-Frontend/bootstrap-tokenfield.git#0ea7b1c516592101fda27935665e9d6368a02448",
+    "bootstrap-tokenfield": "https://github.com/Open-Xchange-Frontend/bootstrap-tokenfield.git#b90b45fca2e8c8baea66372154f0ba21c9c615c3",
     "typeahead.js": "0.10.5",
     "marked": "~0.3.3"
   },
