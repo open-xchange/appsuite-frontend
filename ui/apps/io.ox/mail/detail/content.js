@@ -200,7 +200,11 @@ define('io.ox/mail/detail/content', [
         id: 'link-target',
         index: 500,
         process: function (baton) {
-            baton.source = baton.source.replace(/<a[^>]*href=(?:\"|\')(https?:\/\/[^>]+)(?:\"|\')[^>]*>/g, setLinkTarget);
+            baton.source = baton.source
+                // fix missing protocol
+                .replace(/(<a.*?href=("|'))www\./g, '$1http://www.')
+                // fix targets
+                .replace(/<a[^>]*href=(?:\"|\')(https?:\/\/[^>]+)(?:\"|\')[^>]*>/g, setLinkTarget);
         }
     });
 
