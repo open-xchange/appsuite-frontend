@@ -126,9 +126,12 @@ define('io.ox/calendar/model', [
         },
 
         // special get function for datepicker
-        getDate: function (attr) {
+        getDate: function (attr, options) {
             var time = this.get.apply(this, arguments);
-            if (this.get('full_time')) {
+            options = options || {};
+            // use this.get('fulltime') only as a backup, some datepickers have ignore fulltime enabled which would not be honored this way
+            options.fulltime = options.fulltime || this.get('full_time');
+            if (options.fulltime) {
                 time = moment.utc(time).local(true);
                 // fake end date for datepicker
                 if (attr === 'end_date') {
@@ -140,8 +143,11 @@ define('io.ox/calendar/model', [
         },
 
         // special set function for datepicker
-        setDate: function (attr, time) {
-            if (this.get('full_time')) {
+        setDate: function (attr, time, options) {
+            options = options || {};
+            // use this.get('fulltime') only as a backup, some datepickers have ignore fulltime enabled which would not be honored this way
+            options.fulltime = options.fulltime || this.get('full_time');
+            if (options.fulltime) {
                 time = moment(time);
                 // fix fake end date for model
                 if (attr === 'end_date') {
