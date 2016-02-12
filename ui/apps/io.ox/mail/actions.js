@@ -203,6 +203,36 @@ define('io.ox/mail/actions', [
         }
     });
 
+    new Action('io.ox/mail/actions/filter', {
+        requires: function (e) {
+            // must be at least one message and top-level
+            if (!e.collection.has('some') || !e.collection.has('toplevel')) return;
+            // multiple selection
+            if (e.baton.selection && e.baton.selection.length > 1) return;
+            // multiple and not a thread?
+            if (!e.collection.has('one') && !e.baton.isThread) return;
+            return true;
+        },
+        action: function (baton) {
+            require(['io.ox/mail/mailfilter/settings/filter'
+                ], function (filter) {
+
+                filter.initialize().then(function (data, config, opt) {
+                    var factory = opt.model.protectedMethods.buildFactory('io.ox/core/mailfilter/model', opt.api),
+                        args = { data: { obj: factory.create(opt.model.protectedMethods.provideEmptyModel()) } },
+                        preparedTest = { id: 'allof', tests: [opt.filterDefaults.tests.Subject, opt.filterDefaults.tests.From] };
+
+                    preparedTest.tests[0].values = [baton.data.subject];
+                    preparedTest.tests[1].values = [baton.data.from[0][1]];
+
+                    args.data.obj.set('test', preparedTest);
+
+                    ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', undefined, args, config[0]);
+                });
+            });
+        }
+    });
+
     new Action('io.ox/mail/actions/print', {
         requires: function (e) {
             // not on smartphones
@@ -716,6 +746,16 @@ define('io.ox/mail/actions', [
         label: gt('View source'),
         ref: 'io.ox/mail/actions/source',
         section: 'export'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: INDEX += 100,
+        prio: 'lo',
+        mobile: 'none',
+        id: 'filter',
+        label: gt('Create filter rule'),
+        ref: 'io.ox/mail/actions/filter',
+        section: 'file-op'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({

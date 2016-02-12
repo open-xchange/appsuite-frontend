@@ -23,7 +23,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/mail/mailfilter/settings/filter/defaults',
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/disposable',
-    'static/3rd.party/jquery-ui.min.js'
+    'static/3rd.party/jquery-ui.min.js',
+    'less!io.ox/mail/mailfilter/settings/style'
 ], function (ext, api, mailfilterModel, dialogs, notifications, settingsUtil, FilterDetailView, gt, DEFAULTS, listUtils, DisposableView) {
 
     'use strict';
@@ -191,7 +192,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args, config);
             };
 
-            return $.when(api.getRules(), api.getConfig()).then(function (data, config) {
+            return this.initialize().then(function (data, config) {
                 data = data[0];
                 config = config[0];
 
@@ -508,6 +509,14 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 return collection;
             });
 
+        },
+        initialize: function () {
+            var options = {
+                api: api,
+                model: mailfilterModel,
+                filterDefaults: DEFAULTS
+            };
+            return $.when(api.getRules(), api.getConfig(), options);
         }
     };
 
