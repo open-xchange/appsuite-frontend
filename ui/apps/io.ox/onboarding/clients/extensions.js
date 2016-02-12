@@ -183,16 +183,16 @@ define('io.ox/onboarding/clients/extensions', [
                 'caldav_login',
                 'carddav_url',
                 'carddav_login',
-                // smtp
-                'smtpServer',
-                'smtpPort',
-                'smtpLogin',
-                'smtpSecure',
                 // imap
                 'imapServer',
                 'imapPort',
                 'imapLogin',
                 'imapSecure',
+                // smtp
+                'smtpServer',
+                'smtpPort',
+                'smtpLogin',
+                'smtpSecure',
                 // eas
                 'eas_url',
                 'eas_login'
