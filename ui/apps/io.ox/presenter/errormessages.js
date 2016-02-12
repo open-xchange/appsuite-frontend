@@ -28,15 +28,12 @@ define('io.ox/presenter/errormessages', [
     var FILE_STORAGE = {
         '8': gt('The requested document does not exist.'),
         '17': gt('The presentation cannot be started. Please check the URL or contact the presenter.'),
-        '18': FILE_STORAGE['17'],
-        '26': FILE_STORAGE['8'],
-        '28': FILE_STORAGE['17'],
-        '47': FILE_STORAGE['17'],
-        '55': FILE_STORAGE['8'],
         '57': gt('This document does not have any content.'),
-        '58': gt('You do not have the appropriate permissions to read the document.'),
-        '62': FILE_STORAGE['58']
+        '58': gt('You do not have the appropriate permissions to read the document.')
     };
+    FILE_STORAGE['18'] = FILE_STORAGE['28'] = FILE_STORAGE['47'] = FILE_STORAGE['17'];
+    FILE_STORAGE['26'] = FILE_STORAGE['55'] = FILE_STORAGE['8'];
+    FILE_STORAGE['62'] = FILE_STORAGE['58'];
 
     var IFO = {
         '300': FILE_STORAGE['8'],
@@ -55,9 +52,9 @@ define('io.ox/presenter/errormessages', [
         '4': FILE_STORAGE['17'],
         '10': FILE_STORAGE['17'],
         '15': gt('A general network error occurred. Please contact your system administrator.'),
-        '16': SVL['15'],
         '30': FILE_STORAGE['17']
     };
+    SVL['16'] = SVL['15'];
 
     var RT_ERROR_MESSAGES = processErrorMessages(SVL, 'SVL');
 
