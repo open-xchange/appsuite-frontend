@@ -272,7 +272,10 @@ define('io.ox/mail/api', [
                 // sanitize content Types (we want lowercase 'text/plain' or 'text/html')
                 // split by ; because this field might contain further unwanted data
                 _(data.attachments).each(function (attachment) {
-                    attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
+                    if (/^text\/(plain|html)/i.test(attachment.content_type)) {
+                        // only clean-up text and html; otherwise we lose data (see bug 43727)
+                        attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
+                    }
                 });
                 // either update or add model
                 if (model) {
