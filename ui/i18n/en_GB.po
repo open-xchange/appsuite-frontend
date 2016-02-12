@@ -1054,6 +1054,11 @@ msgstr ""
 msgid "Append vCard"
 msgstr "Append vCard"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Apple Maps"
+msgstr ""
+
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Application Tool bar"
@@ -3735,6 +3740,13 @@ msgstr "Good morning, %s"
 msgid "Google Drive"
 msgstr "Add Google Drive account"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Maps"
+msgstr "Add Google Drive account"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
@@ -4444,6 +4456,10 @@ msgstr "Liked comment"
 msgid "Link"
 msgstr "Link"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Link postal addresses with map service"
+msgstr ""
+
 #: apps/plugins/portal/linkedIn/register.js module:plugins/portal
 msgid "LinkedIn"
 msgstr "LinkedIn"
@@ -5139,6 +5155,12 @@ msgstr "No files have been changed recently"
 msgid "No items found"
 msgstr "No items found"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "show all"
+msgid "No link"
+msgstr "show all"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "No lost requests"
 msgstr "No lost requests"
@@ -5370,6 +5392,11 @@ msgstr "Only showing items related to folder \"%1$s\""
 msgid "Open"
 msgstr "Open"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Open Street Map"
+msgstr ""
+
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Open external link"
@@ -5380,6 +5407,13 @@ msgstr "Open external link"
 #: module:io.ox/mail
 msgid "Open folder view"
 msgstr "Open folder view"
+
+#. %1$s is a map service, like "Google Maps"
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Open in %1$s"
+msgstr "Due on %1$s"
 
 #: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/mail/actions.js
 #: module:io.ox/mail
@@ -12119,11 +12153,6 @@ msgstr "yyyy"
 
 #~ msgid "september"
 #~ msgstr "September"
-
-#, fuzzy
-#~| msgid "show all"
-#~ msgid "show link"
-#~ msgstr "show all"
 
 #, fuzzy
 #~| msgid "show image"

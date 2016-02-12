@@ -1051,6 +1051,11 @@ msgstr ""
 msgid "Append vCard"
 msgstr "vCard hozzáadása"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Apple Maps"
+msgstr ""
+
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Alkalmazás eszköztár"
@@ -3734,6 +3739,13 @@ msgstr "Jó reggelt, %s"
 msgid "Google Drive"
 msgstr "Google Drive falhasználói fiók hozzáadása"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Maps"
+msgstr "Google Drive falhasználói fiók hozzáadása"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
@@ -4443,6 +4455,10 @@ msgstr "Kedvelt megjegyzés"
 msgid "Link"
 msgstr "Hivatkozás"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Link postal addresses with map service"
+msgstr ""
+
 #: apps/plugins/portal/linkedIn/register.js module:plugins/portal
 msgid "LinkedIn"
 msgstr "LinkedIn"
@@ -5139,6 +5155,12 @@ msgstr "Mostanság nem változott egyik fájl sem"
 msgid "No items found"
 msgstr "Nem találhatók elemek"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Get link"
+msgid "No link"
+msgstr "Hivatkozás letöltése"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "No lost requests"
 msgstr "Nincs elveszett kérés"
@@ -5369,6 +5391,11 @@ msgstr "Csak a(z) „%1$s” mappával kapcsolatos elemek megjelenítése"
 msgid "Open"
 msgstr "Megnyitás"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Open Street Map"
+msgstr ""
+
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Külső hivatkozás megnyitása"
@@ -5379,6 +5406,13 @@ msgstr "Külső hivatkozás megnyitása"
 #: module:io.ox/mail
 msgid "Open folder view"
 msgstr "Mappanézet megnyitása"
+
+#. %1$s is a map service, like "Google Maps"
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Open in %1$s"
+msgstr "Határidő: %1$s"
 
 #: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/mail/actions.js
 #: module:io.ox/mail

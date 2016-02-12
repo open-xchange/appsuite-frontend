@@ -1079,6 +1079,11 @@ msgstr ""
 msgid "Append vCard"
 msgstr "Pripojiť vCard"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Apple Maps"
+msgstr ""
+
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Panel nástrojov aplikácie"
@@ -3771,6 +3776,13 @@ msgstr "Dobré ráno, %s"
 msgid "Google Drive"
 msgstr "Pridať účet Google Drive"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Maps"
+msgstr "Pridať účet Google Drive"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
@@ -4484,6 +4496,10 @@ msgstr "Komentár, ktorý sa páčil"
 msgid "Link"
 msgstr "Odkaz"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Link postal addresses with map service"
+msgstr ""
+
 #: apps/plugins/portal/linkedIn/register.js module:plugins/portal
 msgid "LinkedIn"
 msgstr "LinkedIn"
@@ -5180,6 +5196,12 @@ msgstr "Žiadne súbory boli nedávno zmenené"
 msgid "No items found"
 msgstr "Neboli nájdené žiadne položky"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "show all"
+msgid "No link"
+msgstr "zobraziť všetky"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "No lost requests"
 msgstr "Žiadne stratené požiadavky"
@@ -5416,6 +5438,11 @@ msgstr "Zobrazujú sa len položky súvisiace s priečinkom „%1$s“"
 msgid "Open"
 msgstr "Otvoriť"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Open Street Map"
+msgstr ""
+
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Otvoriť externý odkaz"
@@ -5426,6 +5453,13 @@ msgstr "Otvoriť externý odkaz"
 #: module:io.ox/mail
 msgid "Open folder view"
 msgstr "Otvoriť zobrazenie priečinka"
+
+#. %1$s is a map service, like "Google Maps"
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Open in %1$s"
+msgstr "Termín %1$s"
 
 #: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/mail/actions.js
 #: module:io.ox/mail
@@ -16125,11 +16159,6 @@ msgstr "RRRR"
 
 #~ msgid "set the last used time range of the new view"
 #~ msgstr "nastaviť posledný použitý časový rozsah nového zobrazenia"
-
-#, fuzzy
-#~| msgid "show all"
-#~ msgid "show link"
-#~ msgstr "zobraziť všetky"
 
 #, fuzzy
 #~| msgid "show image"

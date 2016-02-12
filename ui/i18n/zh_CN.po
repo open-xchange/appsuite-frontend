@@ -1048,6 +1048,11 @@ msgstr ""
 msgid "Append vCard"
 msgstr "追加 vcard"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Apple Maps"
+msgstr ""
+
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
 msgstr "应用程序工具条"
@@ -3692,6 +3697,13 @@ msgstr "早上好， %s"
 msgid "Google Drive"
 msgstr "添加 Google Drive 户口"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Maps"
+msgstr "添加 Google Drive 户口"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
@@ -4393,6 +4405,10 @@ msgstr "已赞回帖"
 msgid "Link"
 msgstr "连结"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Link postal addresses with map service"
+msgstr ""
+
 #: apps/plugins/portal/linkedIn/register.js module:plugins/portal
 msgid "LinkedIn"
 msgstr "LinkedIn"
@@ -5087,6 +5103,12 @@ msgstr "最近没有文件更改"
 msgid "No items found"
 msgstr "没找到项目"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "show all"
+msgid "No link"
+msgstr "显示全部"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "No lost requests"
 msgstr "没有丢失请求"
@@ -5315,6 +5337,11 @@ msgstr "只显示和 \"%1$s\" 文件夹有关的项目"
 msgid "Open"
 msgstr "打开"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Open Street Map"
+msgstr ""
+
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "打开外部链接"
@@ -5325,6 +5352,13 @@ msgstr "打开外部链接"
 #: module:io.ox/mail
 msgid "Open folder view"
 msgstr "打开文件夹视图"
+
+#. %1$s is a map service, like "Google Maps"
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Open in %1$s"
+msgstr "结束于 %1$s"
 
 #: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/mail/actions.js
 #: module:io.ox/mail
@@ -13650,11 +13684,6 @@ msgstr "年"
 
 #~ msgid "september"
 #~ msgstr "九月"
-
-#, fuzzy
-#~| msgid "show all"
-#~ msgid "show link"
-#~ msgstr "显示全部"
 
 #, fuzzy
 #~| msgid "show image"

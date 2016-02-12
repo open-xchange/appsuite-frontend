@@ -1046,6 +1046,11 @@ msgstr ""
 msgid "Append vCard"
 msgstr "Lisää vCard käyntikorttini"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Apple Maps"
+msgstr ""
+
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Sovellustyökalupalkki"
@@ -3717,6 +3722,13 @@ msgstr "Hyvää huomenta, %s"
 msgid "Google Drive"
 msgstr "Lisää Google Drive-tili"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Maps"
+msgstr "Lisää Google Drive-tili"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
@@ -4426,6 +4438,10 @@ msgstr "Tykätty kommentti"
 msgid "Link"
 msgstr "Linkki"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Link postal addresses with map service"
+msgstr ""
+
 #: apps/plugins/portal/linkedIn/register.js module:plugins/portal
 msgid "LinkedIn"
 msgstr "LinkedIn"
@@ -5121,6 +5137,12 @@ msgstr "Mitään tiedostoja ei ole hiljattain muutettu"
 msgid "No items found"
 msgstr "Kohteita ei löytynyt"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Show list"
+msgid "No link"
+msgstr "Näytä luettelo"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "No lost requests"
 msgstr "Ei kadotettuja pyyntöjä"
@@ -5353,6 +5375,11 @@ msgstr "Näytetään vain kansioon %1$s liittyvät kohdat"
 msgid "Open"
 msgstr "Avaa"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Open Street Map"
+msgstr ""
+
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Avaa ulkoinen linkki"
@@ -5363,6 +5390,13 @@ msgstr "Avaa ulkoinen linkki"
 #: module:io.ox/mail
 msgid "Open folder view"
 msgstr "Avaa kansionäkymä"
+
+#. %1$s is a map service, like "Google Maps"
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Open in %1$s"
+msgstr "Erääntyy %1$s"
 
 #: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/mail/actions.js
 #: module:io.ox/mail
@@ -11729,11 +11763,6 @@ msgstr "vvvv"
 #~| msgid "remove"
 #~ msgid "remove share"
 #~ msgstr "poista"
-
-#, fuzzy
-#~| msgid "Show list"
-#~ msgid "show link"
-#~ msgstr "Näytä luettelo"
 
 #, fuzzy
 #~| msgid "show image"

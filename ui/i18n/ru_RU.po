@@ -1076,6 +1076,11 @@ msgstr ""
 msgid "Append vCard"
 msgstr "Добавить vCard"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Apple Maps"
+msgstr ""
+
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Панель приложений"
@@ -3748,6 +3753,13 @@ msgstr "Доброе утро, %s"
 msgid "Google Drive"
 msgstr "Добавить аккаунт Google Drive"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Maps"
+msgstr "Добавить аккаунт Google Drive"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
@@ -4455,6 +4467,10 @@ msgstr "Комментарий нравится"
 msgid "Link"
 msgstr "Ссылка"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Link postal addresses with map service"
+msgstr ""
+
 #: apps/plugins/portal/linkedIn/register.js module:plugins/portal
 msgid "LinkedIn"
 msgstr "LinkedIn"
@@ -5151,6 +5167,12 @@ msgstr "В последнее время файлы не изменялись"
 msgid "No items found"
 msgstr "Нет результатов."
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "show all"
+msgid "No link"
+msgstr "показать все"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "No lost requests"
 msgstr "Нет потерянных запросов"
@@ -5386,6 +5408,11 @@ msgstr "Показаны только объекты папки «%1$s»."
 msgid "Open"
 msgstr "Открыть"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Open Street Map"
+msgstr ""
+
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Открыть внешнюю ссылку"
@@ -5396,6 +5423,13 @@ msgstr "Открыть внешнюю ссылку"
 #: module:io.ox/mail
 msgid "Open folder view"
 msgstr "Открыть просмотр папок"
+
+#. %1$s is a map service, like "Google Maps"
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Open in %1$s"
+msgstr "Заканчивается %1$s"
 
 #: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/mail/actions.js
 #: module:io.ox/mail
@@ -12185,11 +12219,6 @@ msgstr "гггг"
 
 #~ msgid "september"
 #~ msgstr "сентябрь"
-
-#, fuzzy
-#~| msgid "show all"
-#~ msgid "show link"
-#~ msgstr "показать все"
 
 #, fuzzy
 #~| msgid "show image"

@@ -1029,6 +1029,11 @@ msgstr ""
 msgid "Append vCard"
 msgstr "vCard を添付"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Apple Maps"
+msgstr ""
+
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
 msgstr "アプリケーション ツールバー"
@@ -3714,6 +3719,13 @@ msgstr "おはようございます、%s さん。"
 msgid "Google Drive"
 msgstr "Google Drive アカウントを追加"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Maps"
+msgstr "Google Drive アカウントを追加"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
@@ -4426,6 +4438,10 @@ msgstr "いいね！を付けられたコメント"
 msgid "Link"
 msgstr "リンク"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Link postal addresses with map service"
+msgstr ""
+
 #: apps/plugins/portal/linkedIn/register.js module:plugins/portal
 msgid "LinkedIn"
 msgstr "LinkedIn"
@@ -5125,6 +5141,12 @@ msgstr "最近変更されたファイルはありません。"
 msgid "No items found"
 msgstr "アイテムが見つかりません。"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "show link"
+msgid "No link"
+msgstr "リンクとして"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "No lost requests"
 msgstr "失われたリクエストはありません。"
@@ -5353,6 +5375,11 @@ msgstr "フォルダ \"%1$s\" に関連するアイテムのみを表示して�
 msgid "Open"
 msgstr "開く"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Open Street Map"
+msgstr ""
+
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "外部リンクを開く"
@@ -5363,6 +5390,13 @@ msgstr "外部リンクを開く"
 #: module:io.ox/mail
 msgid "Open folder view"
 msgstr "フォルダ ビューを開く"
+
+#. %1$s is a map service, like "Google Maps"
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Open in %1$s"
+msgstr "期限: %1$s"
 
 #: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/mail/actions.js
 #: module:io.ox/mail
@@ -17442,10 +17476,6 @@ msgstr "yyyy"
 
 #~ msgid "show image"
 #~ msgstr "画像を表示"
-
-#~| msgid "As link"
-#~ msgid "show link"
-#~ msgstr "リンクとして"
 
 #, fuzzy
 #~| msgid "show all"

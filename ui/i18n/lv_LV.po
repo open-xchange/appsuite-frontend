@@ -1077,6 +1077,11 @@ msgstr ""
 msgid "Append vCard"
 msgstr "Pievienot vCard"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Apple Maps"
+msgstr ""
+
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Aplikācijas rīkjosla"
@@ -3772,6 +3777,13 @@ msgstr "Labrīt, %s"
 msgid "Google Drive"
 msgstr "Pievienot Google Drive kontu"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Maps"
+msgstr "Pievienot Google Drive kontu"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
@@ -4483,6 +4495,10 @@ msgstr "Patīk komentārs"
 msgid "Link"
 msgstr "Saite"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Link postal addresses with map service"
+msgstr ""
+
 #: apps/plugins/portal/linkedIn/register.js module:plugins/portal
 msgid "LinkedIn"
 msgstr "LinkedIn"
@@ -5179,6 +5195,12 @@ msgstr "Neviens fails nav nesen izmainīts"
 msgid "No items found"
 msgstr "Nav atrasta neviena vienība"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "show all"
+msgid "No link"
+msgstr "rādīt visu"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "No lost requests"
 msgstr "Nav zaudētu pieprasījumu"
@@ -5417,6 +5439,11 @@ msgstr "Uzrāda tikai ar mapi \"%1$s\" saistītās vienības"
 msgid "Open"
 msgstr "Atvērt"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Open Street Map"
+msgstr ""
+
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Atvērt ārējo saiti"
@@ -5427,6 +5454,13 @@ msgstr "Atvērt ārējo saiti"
 #: module:io.ox/mail
 msgid "Open folder view"
 msgstr "Atvērt mapes skatu"
+
+#. %1$s is a map service, like "Google Maps"
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Open in %1$s"
+msgstr "Izpildāms %1$s"
 
 #: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/mail/actions.js
 #: module:io.ox/mail
@@ -16185,11 +16219,6 @@ msgstr "yyyy"
 
 #~ msgid "set the last used time range of the new view"
 #~ msgstr "iestatīt jaunā skata pēdējā lietojuma laika apgabalu"
-
-#, fuzzy
-#~| msgid "show all"
-#~ msgid "show link"
-#~ msgstr "rādīt visu"
 
 #, fuzzy
 #~| msgid "show image"

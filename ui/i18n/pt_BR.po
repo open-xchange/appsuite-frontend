@@ -1057,6 +1057,11 @@ msgstr ""
 msgid "Append vCard"
 msgstr "Anexar vCard"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Apple Maps"
+msgstr ""
+
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Barra de ferramentas do aplicativo"
@@ -3743,6 +3748,13 @@ msgstr "Bom dia, %s"
 msgid "Google Drive"
 msgstr "Adicionar conta do Google Drive"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Maps"
+msgstr "Adicionar conta do Google Drive"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
@@ -4456,6 +4468,10 @@ msgstr "Comentário curtido"
 msgid "Link"
 msgstr "Link"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Link postal addresses with map service"
+msgstr ""
+
 #: apps/plugins/portal/linkedIn/register.js module:plugins/portal
 msgid "LinkedIn"
 msgstr "LinkedIn"
@@ -5152,6 +5168,12 @@ msgstr "Nenhum arquivo foi alterado recentemente"
 msgid "No items found"
 msgstr "Nenhum item localizado"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "show all"
+msgid "No link"
+msgstr "mostrar todos"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "No lost requests"
 msgstr "Sem requisições perdidas"
@@ -5386,6 +5408,11 @@ msgstr "Exibindo somente itens relacionados à pasta \"%1$s\""
 msgid "Open"
 msgstr "Abrir"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Open Street Map"
+msgstr ""
+
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Abrir link externo"
@@ -5396,6 +5423,13 @@ msgstr "Abrir link externo"
 #: module:io.ox/mail
 msgid "Open folder view"
 msgstr "Abrir visualização de pasta"
+
+#. %1$s is a map service, like "Google Maps"
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Open in %1$s"
+msgstr "Vencimento em %1$s"
 
 #: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/mail/actions.js
 #: module:io.ox/mail
@@ -15360,11 +15394,6 @@ msgstr "aaaa"
 #~ msgid "set the last used time range of the new view"
 #~ msgstr ""
 #~ "configurar o último intervalo de tempo usado para a nova visualização"
-
-#, fuzzy
-#~| msgid "show all"
-#~ msgid "show link"
-#~ msgstr "mostrar todos"
 
 #, fuzzy
 #~| msgid "show image"

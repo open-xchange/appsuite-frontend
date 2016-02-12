@@ -1059,6 +1059,11 @@ msgstr ""
 msgid "Append vCard"
 msgstr "Aggiungi vCard"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Apple Maps"
+msgstr ""
+
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Barra degli strumenti delle applicazioni"
@@ -3753,6 +3758,13 @@ msgstr "Buongiorno, %s"
 msgid "Google Drive"
 msgstr "Aggiungi account Google Drive"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+#, fuzzy
+#| msgid "Add Google Drive account"
+msgid "Google Maps"
+msgstr "Aggiungi account Google Drive"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 #| msgid "Add Google Drive account"
@@ -4464,6 +4476,10 @@ msgstr "Commento gradito"
 msgid "Link"
 msgstr "Collegamento"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Link postal addresses with map service"
+msgstr ""
+
 #: apps/plugins/portal/linkedIn/register.js module:plugins/portal
 msgid "LinkedIn"
 msgstr "LinkedIn"
@@ -5159,6 +5175,12 @@ msgstr "Nessun file è stato modificato di recente"
 msgid "No items found"
 msgstr "Nessun elemento trovato"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "show all"
+msgid "No link"
+msgstr "mostra tutto"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "No lost requests"
 msgstr "Nessuna richiesta persa"
@@ -5394,6 +5416,11 @@ msgstr "Mostra solo gli elementi relativi alla cartella \"%1$s\""
 msgid "Open"
 msgstr "Apri"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Open Street Map"
+msgstr ""
+
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Apri collegamento esterno"
@@ -5404,6 +5431,13 @@ msgstr "Apri collegamento esterno"
 #: module:io.ox/mail
 msgid "Open folder view"
 msgstr "Apri la vista della cartella"
+
+#. %1$s is a map service, like "Google Maps"
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Open in %1$s"
+msgstr "Scade il %1$s"
 
 #: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/mail/actions.js
 #: module:io.ox/mail
@@ -14040,11 +14074,6 @@ msgstr "aaaa"
 
 #~ msgid "september"
 #~ msgstr "settembre"
-
-#, fuzzy
-#~| msgid "show all"
-#~ msgid "show link"
-#~ msgstr "mostra tutto"
 
 #, fuzzy
 #~| msgid "show image"

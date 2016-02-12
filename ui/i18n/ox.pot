@@ -3284,6 +3284,34 @@ msgstr ""
 msgid "Display of names"
 msgstr ""
 
+#: apps/io.ox/contacts/settings/pane.js
+#: module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Google Maps"
+msgstr ""
+
+#: apps/io.ox/contacts/settings/pane.js
+#: module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Open Street Map"
+msgstr ""
+
+#: apps/io.ox/contacts/settings/pane.js
+#: module:io.ox/contacts
+msgid "No link"
+msgstr ""
+
+#: apps/io.ox/contacts/settings/pane.js
+#: module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Apple Maps"
+msgstr ""
+
+#: apps/io.ox/contacts/settings/pane.js
+#: module:io.ox/contacts
+msgid "Link postal addresses with map service"
+msgstr ""
+
 #: apps/io.ox/contacts/toolbar.js
 #: module:io.ox/contacts
 #: apps/io.ox/files/actions/share.js
@@ -3353,6 +3381,12 @@ msgstr ""
 #: apps/io.ox/contacts/view-detail.js
 #: module:io.ox/contacts
 msgid "Messenger"
+msgstr ""
+
+#. %1$s is a map service, like "Google Maps"
+#: apps/io.ox/contacts/view-detail.js
+#: module:io.ox/contacts
+msgid "Open in %1$s"
 msgstr ""
 
 #: apps/io.ox/contacts/view-detail.js

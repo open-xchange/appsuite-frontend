@@ -1058,6 +1058,11 @@ msgstr "Apple App Store"
 msgid "Append vCard"
 msgstr "Visitenkarte anhängen"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Apple Maps"
+msgstr ""
+
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Applikations-Werkzeugleiste"
@@ -3728,6 +3733,12 @@ msgstr "Guten Morgen, %s"
 msgid "Google Drive"
 msgstr "Google Drive"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+#, fuzzy
+msgid "Google Maps"
+msgstr "Google Play Store"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #, fuzzy
 msgid "Google Play"
@@ -4434,6 +4445,10 @@ msgstr "Gefällt der Kommentar"
 msgid "Link"
 msgstr "Link"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Link postal addresses with map service"
+msgstr ""
+
 #: apps/plugins/portal/linkedIn/register.js module:plugins/portal
 msgid "LinkedIn"
 msgstr "LinkedIn"
@@ -5125,6 +5140,12 @@ msgstr "Es wurden kürzlich keine Dateien geändert."
 msgid "No items found"
 msgstr "Keine Objekte gefunden"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "show link"
+msgid "No link"
+msgstr "Link anzeigen"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "No lost requests"
 msgstr "Keine verlorenen Anfragen"
@@ -5351,6 +5372,11 @@ msgstr ""
 msgid "Open"
 msgstr "Öffnen"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "Open Street Map"
+msgstr ""
+
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Externen Link öffnen"
@@ -5361,6 +5387,13 @@ msgstr "Externen Link öffnen"
 #: module:io.ox/mail
 msgid "Open folder view"
 msgstr "Ordneransicht öffnen"
+
+#. %1$s is a map service, like "Google Maps"
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Open in %1$s"
+msgstr "Fällig am %1$s"
 
 #: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/mail/actions.js
 #: module:io.ox/mail
@@ -13822,9 +13855,6 @@ msgstr "JJJJ"
 
 #~ msgid "september"
 #~ msgstr "September"
-
-#~ msgid "show link"
-#~ msgstr "Link anzeigen"
 
 #, fuzzy
 #~ msgid "show mail"
