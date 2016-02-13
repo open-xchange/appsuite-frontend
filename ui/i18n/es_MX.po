@@ -2109,6 +2109,12 @@ msgstr "Crear contacto"
 msgid "Create distribution list"
 msgstr "Crear lista de distribución"
 
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Create a filter"
+msgid "Create filter rule"
+msgstr "Crear un filtro"
+
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
 msgstr "Crear lista"
@@ -12763,9 +12769,6 @@ msgstr "yyyy"
 
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Crear una cuenta %s usando los datos guardados aquí"
-
-#~ msgid "Create a filter"
-#~ msgstr "Crear un filtro"
 
 #~ msgid "Create a recurring appointment"
 #~ msgstr "Crear una cita recurrente"

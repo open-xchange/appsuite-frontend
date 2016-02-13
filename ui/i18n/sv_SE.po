@@ -2097,6 +2097,12 @@ msgstr "Skapa kontakt"
 msgid "Create distribution list"
 msgstr "Skapa distributionslista"
 
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Create new rule"
+msgid "Create filter rule"
+msgstr "Skapa ny regel"
+
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
 msgstr "Skapa lista"

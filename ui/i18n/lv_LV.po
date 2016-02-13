@@ -2129,6 +2129,12 @@ msgstr "Izveidot kontaktu"
 msgid "Create distribution list"
 msgstr "Izveidot izplatīšanas sarakstu"
 
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Create a filter"
+msgid "Create filter rule"
+msgstr "Izveidot filtru"
+
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
 msgstr "Izveidot"
@@ -11189,9 +11195,6 @@ msgstr "yyyy"
 
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Izveidot %s kontu, izmantojot šeit saglabātos datus"
-
-#~ msgid "Create a filter"
-#~ msgstr "Izveidot filtru"
 
 #~ msgid "Create new task"
 #~ msgstr "Izveidot jaunu uzdevumu"

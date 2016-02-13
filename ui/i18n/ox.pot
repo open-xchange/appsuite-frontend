@@ -7779,6 +7779,11 @@ msgstr ""
 
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
+msgid "Create filter rule"
+msgstr ""
+
+#: apps/io.ox/mail/actions.js
+#: module:io.ox/mail
 msgid "Add to calendar"
 msgstr ""
 

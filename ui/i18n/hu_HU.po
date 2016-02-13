@@ -2098,6 +2098,12 @@ msgstr "Névjegy létrehozása"
 msgid "Create distribution list"
 msgstr "Disztribúciós lista létrehozása"
 
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Create new rule"
+msgid "Create filter rule"
+msgstr "Új szabály létrehozása"
+
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
 msgstr "Lista létrehozása"

@@ -2242,6 +2242,12 @@ msgstr "Crea un contacte"
 msgid "Create distribution list"
 msgstr "Crea una llista de distribució"
 
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Create new rule"
+msgid "Create filter rule"
+msgstr "Crea una nova regla"
+
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
 msgstr "Crea una llista"

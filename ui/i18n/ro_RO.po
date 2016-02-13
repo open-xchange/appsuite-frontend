@@ -2133,6 +2133,12 @@ msgstr "Creează un contact"
 msgid "Create distribution list"
 msgstr "Creează o listă de distribuție"
 
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Create a filter"
+msgid "Create filter rule"
+msgstr "Creează un filtru"
+
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
 msgstr "Creează o listă"
@@ -11223,9 +11229,6 @@ msgstr "aaaa"
 
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Creează un cont %s pe baza datelor stocate aici"
-
-#~ msgid "Create a filter"
-#~ msgstr "Creează un filtru"
 
 #~ msgid "Create new task"
 #~ msgstr "Creează sarcină nouă"

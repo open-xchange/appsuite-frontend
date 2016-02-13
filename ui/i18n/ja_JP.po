@@ -2073,6 +2073,12 @@ msgstr "連絡先を作成"
 msgid "Create distribution list"
 msgstr "配布リストを作成"
 
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Create a filter"
+msgid "Create filter rule"
+msgstr "フィルタを作成"
+
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
 msgstr "リストを作成"
@@ -11729,9 +11735,6 @@ msgstr "yyyy"
 
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "ここに保存されているデータを使用して %s アカウントを作成"
-
-#~ msgid "Create a filter"
-#~ msgstr "フィルタを作成"
 
 #~ msgid "Create a new E-Mail"
 #~ msgstr "新規メールを作成"

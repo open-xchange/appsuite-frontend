@@ -2126,6 +2126,12 @@ msgstr "Vytvořit kontakt"
 msgid "Create distribution list"
 msgstr "Vytvořit distribuční seznam"
 
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Create a filter"
+msgid "Create filter rule"
+msgstr "Vytvořit filtr"
+
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
 msgstr "Vytvořit seznam"
@@ -12745,9 +12751,6 @@ msgstr "rrrr"
 
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Vytvořit účet %s s použitím údajů uložených zde"
-
-#~ msgid "Create a filter"
-#~ msgstr "Vytvořit filtr"
 
 #~ msgid "Create a recurring appointment"
 #~ msgstr "Vytvořit opakující schůzku"

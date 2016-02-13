@@ -2091,6 +2091,12 @@ msgstr "Luo yhteystieto"
 msgid "Create distribution list"
 msgstr "Luo jakelulista"
 
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Create new rule"
+msgid "Create filter rule"
+msgstr "Luo uusi sääntö"
+
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
 msgstr "Luo lista"

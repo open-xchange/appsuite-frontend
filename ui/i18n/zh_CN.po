@@ -2079,6 +2079,12 @@ msgstr "创建联系人"
 msgid "Create distribution list"
 msgstr "创建通讯组列表"
 
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Create a filter"
+msgid "Create filter rule"
+msgstr "创建一个过滤器"
+
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
 msgstr "创建列表"
@@ -10889,9 +10895,6 @@ msgstr "年"
 
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "使用储存在这里的数据创建一个 %s 户口"
-
-#~ msgid "Create a filter"
-#~ msgstr "创建一个过滤器"
 
 #~ msgid "Create new task"
 #~ msgstr "创建新任务"
