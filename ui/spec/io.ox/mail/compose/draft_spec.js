@@ -14,18 +14,46 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
     'use strict';
 
     describe('Mail Compose', function () {
-        describe.skip('draft mails', function () {
+        describe('draft mails', function () {
 
-            var app, clock, pictureHalo, snippetsGetAll;
+            var app, pictureHalo, snippetsGetAll, getValidAddress;
+
+            var editors = {
+                    text: 'io.ox/core/tk/text-editor',
+                    html: 'io.ox/core/tk/contenteditable-editor'
+                },
+                pluginStub;
+
             beforeEach(function () {
-                return require(['io.ox/core/api/snippets', 'io.ox/contacts/api'], function (snippetAPI, contactsAPI) {
+                pluginStub = sinon.stub(ox.manifests, 'loadPluginsFor', function (namespace) {
+                    namespace = namespace.replace(/^io.ox\/mail\/compose\/editor\//, '');
+                    return require([editors[namespace]]);
+                });
+            });
+            afterEach(function () {
+                pluginStub.restore();
+            });
+
+            beforeEach(function () {
+                return require([
+                    'io.ox/core/api/snippets',
+                    'io.ox/contacts/api',
+                    'io.ox/core/api/account',
+                    'settings!io.ox/mail'
+                ], function (snippetAPI, contactsAPI, accountAPI, settings) {
                     snippetsGetAll = sinon.stub(snippetAPI, 'getAll', function () { return $.when([]); });
                     pictureHalo = sinon.stub(contactsAPI, 'pictureHalo', _.noop);
+                    getValidAddress = sinon.stub(accountAPI, 'getValidAddress', function (d) { return $.when(d); });
+                    //load plaintext editor, much faster than spinning up tinymce all the time
+                    settings.set('messageFormat', 'text');
                 }).then(function () {
                     app = compose.getApp();
                     return app.launch();
                 });
             });
+
+            var clock;
+
             afterEach(function () {
                 if (clock) {
                     clock.restore();
@@ -36,6 +64,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                 }
                 snippetsGetAll.restore();
                 pictureHalo.restore();
+                getValidAddress.restore();
                 return app.quit();
             });
 
@@ -100,12 +129,14 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                     btn.click();
                     expect(spy.called, 'mail API send has been called').to.be.true;
                     var mail = spy.firstCall.args[0];
-                    //3 - A draft edit operation. The field "msgref" must be present in order to delete previous draft message since e.g. IMAP does not support changing/replacing a message but requires a delete-and-insert sequence
-                    expect(mail.sendtype).to.equal(api.SENDTYPE.EDIT_DRAFT);
+                    // mail must have normal send type, without a msgref, but have the draft flags be set
+                    // so the middleware will save this mail as draft and not send it out
+                    expect(mail.sendtype).to.equal(api.SENDTYPE.NORMAL);
                     expect(mail.msgref).not.to.exist;
+                    expect(mail.flags & api.FLAGS.DRAFT, 'DRAFT flag set').to.equal(api.FLAGS.DRAFT);
                     spy.restore();
                 });
-                it('should ', function () {
+                it('should send correct data when clicking compose, save, save, send', function () {
                     this.server.respondWith('POST', /api\/mail\?action=new/, function (xhr) {
                         xhr.respond(200, 'content-type:text/javascript;', JSON.stringify({
                             data: 'default0/INBOX/Drafts/666'
@@ -134,9 +165,9 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                     var def = app.view.saveDraft().then(function () {
                         expect(spy.calledOnce, 'mail API send has been called once').to.be.true;
                         var mail = spy.firstCall.args[0];
-                        //3 - A draft edit operation. The field "msgref" must be present in order to delete previous draft message since e.g. IMAP does not support changing/replacing a message but requires a delete-and-insert sequence
-                        expect(mail.sendtype).to.equal(api.SENDTYPE.EDIT_DRAFT);
+                        expect(mail.sendtype).to.equal(api.SENDTYPE.NORMAL);
                         expect(mail.msgref).not.to.exist;
+                        expect(mail.flags & api.FLAGS.DRAFT, 'DRAFT flag set').to.equal(api.FLAGS.DRAFT);
 
                         return app.view.saveDraft();
                     }).then(function () {
@@ -145,6 +176,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                         //3 - A draft edit operation. The field "msgref" must be present in order to delete previous draft message since e.g. IMAP does not support changing/replacing a message but requires a delete-and-insert sequence
                         expect(mail.sendtype).to.equal(api.SENDTYPE.EDIT_DRAFT);
                         expect(mail.msgref).to.exist;
+                        expect(mail.flags & api.FLAGS.DRAFT, 'DRAFT flag set').to.equal(api.FLAGS.DRAFT);
 
                         return app.view.send();
                     }).then(function () {
@@ -153,6 +185,8 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                         // 4 - Transport of a draft mail. The field "msgref" must be present
                         expect(mail.sendtype).to.equal(api.SENDTYPE.DRAFT);
                         expect(mail.msgref).to.exist;
+                        expect(mail.flags & api.FLAGS.DRAFT, 'DRAFT flag not set').to.equal(0);
+
                         // app already garbage collected because of quit being called by send()
                         app = {
                             quit: $.noop

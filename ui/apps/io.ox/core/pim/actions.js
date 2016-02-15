@@ -77,7 +77,8 @@ define('io.ox/core/pim/actions', [
         view: gt('View'),
         open: gt('Open in browser'),
         download: gt('Download'),
-        save: gt('Save to Drive')
+        //#. %1$s is usually "Drive" (product name; might be customized)
+        save: gt('Save to %1$s', gt.pgettext('app', 'Drive'))
     };
 
     // and let's define all points right now

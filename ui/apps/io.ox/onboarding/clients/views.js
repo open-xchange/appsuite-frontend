@@ -18,77 +18,46 @@ define('io.ox/onboarding/clients/views', [
 
     'use strict';
 
-    var POINT = 'io.ox/onboarding/clients/views';
+    var POINT = 'io.ox/onboarding/clients/views',
+        views = {
+            list: function (data) {
+                var view = new extensions.ActionsListView(data);
+                this.append(view.render().$el);
+            },
+            download: function (action, baton) {
+                var view = new extensions.DownloadActionView(action, { baton: baton });
+                this.append(view.render().$el);
+            },
+            shortmessage: function (action, baton) {
+                var view = new extensions.ShortMessageActionView(action, { baton: baton });
+                this.append(view.render().$el);
+            },
+            email: function (action, baton) {
+                var view = new extensions.EmailActionView(action, { baton: baton });
+                this.append(view.render().$el);
+            },
+            display: function (action, baton) {
+                var view = new extensions.DisplayActionView(action, { baton: baton });
+                this.append(view.render().$el);
+            },
+            client: function (action, baton) {
+                var view = new extensions.ClientActionView(action, { baton: baton });
+                this.append(view.render().$el);
+            }
+        };
 
-    //
-    // actions block
-    //
+    // actions list view
+    ext.point(POINT).extend({ draw: views.list });
 
-    ext.point(POINT).extend({
-        index: 100,
-        draw: function (data) {
-            var view = new extensions.ActionsView(data);
-            this.append(view.render().$el);
-        }
-    });
+    // config
+    ext.point(POINT + '/download').extend({ draw: views.download });
+    ext.point(POINT + '/email').extend({ draw: views.email });
+    ext.point(POINT + '/sms').extend({ draw: views.shortmessage });
+    // display: generic
+    ext.point(POINT + '/display').extend({ draw: views.display });
+    // client download: generic
+    ext.point(POINT + '/link').extend({ draw: views.client });
 
-    //
-    // action types
-    //
+    return views;
 
-    ext.point(POINT + '/download').extend({
-        index: 100,
-        draw: function (action, baton) {
-            var view = new extensions.DownloadActionView(action, { baton: baton });
-            this.append(view.render().$el);
-        }
-    });
-
-    ext.point(POINT + '/email').extend({
-        index: 100,
-        draw: function (action, baton) {
-            var view = new extensions.EmailActionView(action, { baton: baton });
-            this.append(view.render().$el);
-        }
-    });
-
-    ext.point(POINT + '/sms').extend({
-        index: 100,
-        draw: function (action, baton) {
-            var view = new extensions.ShortMessageActionView(action, { baton: baton });
-            this.append(view.render().$el);
-        }
-    });
-
-    ext.point(POINT + '/display/davmanual').extend({
-        index: 100,
-        draw: function (action, baton) {
-            var view = new extensions.DisplayActionView(action, { baton: baton });
-            this.append(view.render().$el);
-        }
-    });
-
-    ext.point(POINT + '/display/mailmanual').extend({
-        index: 100,
-        draw: function (action, baton) {
-            var view = new extensions.DisplayActionView(action, { baton: baton });
-            this.append(view.render().$el);
-        }
-    });
-
-    ext.point(POINT + '/link/mailappinstall').extend({
-        index: 100,
-        draw: function (action, baton) {
-            var view = new extensions.AppActionView(action, { baton: baton });
-            this.append(view.render().$el);
-        }
-    });
-
-    ext.point(POINT + '/link/driveappinstall').extend({
-        index: 100,
-        draw: function (action, baton) {
-            var view = new extensions.AppActionView(action, { baton: baton });
-            this.append(view.render().$el);
-        }
-    });
 });

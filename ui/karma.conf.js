@@ -2,74 +2,76 @@
 // Generated on Fri Jun 28 2013 12:45:50 GMT+0200 (CEST)
 
 module.exports = function (config) {
-  config.set({
 
-    // base path, that will be used to resolve files and exclude
-    basePath: 'build/',
-    builddir: 'build/',
+    config.set({
 
-    // frameworks to use
-    frameworks: ['ox-ui', 'sinon', 'mocha', 'chai'],
+        // base path, that will be used to resolve files and exclude
+        basePath: 'build/',
+        builddir: 'build/',
 
-    // list of files / patterns to load in the browser
-    files: [
-        'spec/main-test.js',
-        {pattern: 'spec/**/*_spec.js', included: false },
-        {pattern: 'spec/fixtures/**/*.*', included: false, served: true },
-        {pattern: 'spec/shared/**/*.js' }
-    ],
+        // frameworks to use
+        frameworks: ['ox-ui', 'sinon', 'mocha', 'chai'],
 
-    // list of files to exclude
-    exclude: [
-    ],
+        // list of files / patterns to load in the browser
+        files: [
+            'spec/main-test.js',
+            {pattern: 'spec/**/*_spec.js', included: false },
+            {pattern: 'spec/fixtures/**/*.*', included: false, served: true },
+            {pattern: 'spec/shared/**/*.js' }
+        ],
 
-    // test results reporter to use
-    // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-    reporters: ['dots'],
+        // list of files to exclude
+        exclude: [
+        ],
 
-    // web server port
-    port: 9876,
+        // test results reporter to use
+        // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
+        reporters: ['dots'],
 
-    // cli runner port
-    runnerPort: 9100,
+        // web server port
+        port: 9876,
 
-    // enable / disable colors in the output (reporters and logs)
-    colors: true,
+        // cli runner port
+        runnerPort: 9100,
 
-    // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_ERROR,
+        // enable / disable colors in the output (reporters and logs)
+        colors: true,
 
-    // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
+        // level of logging
+        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+        logLevel: config.LOG_ERROR,
 
-    // Start these browsers, currently available:
-    // - Chrome
-    // - ChromeCanary
-    // - Firefox
-    // - Opera
-    // - Safari (only Mac)
-    // - PhantomJS
-    // - IE (only Windows)
-    browsers: ['PhantomJS'],
+        // enable / disable watching file and executing tests whenever any file changes
+        autoWatch: true,
 
-    phantomjsLauncher: {
-        options: {
-            viewportSize: { width: 1024, height: 768 }
+        // Start these browsers, currently available:
+        // - Chrome
+        // - ChromeCanary
+        // - Firefox
+        // - Opera
+        // - Safari (only Mac)
+        // - PhantomJS
+        // - IE (only Windows)
+        browsers: ['PhantomJS'],
+
+        phantomjsLauncher: {
+            options: {
+                viewportSize: { width: 1024, height: 768 }
+            },
+            exitOnResourceError: true
+        },
+
+        // If browser does not capture in given timeout [ms], kill it
+        captureTimeout: 60000,
+
+        // Continuous Integration mode
+        // if true, it capture browsers, run tests and exit
+        singleRun: false,
+
+        proxies:  {},
+
+        junitReporter: {
+            outputFile: 'reports/test-results.xml'
         }
-    },
-
-    // If browser does not capture in given timeout [ms], kill it
-    captureTimeout: 60000,
-
-    // Continuous Integration mode
-    // if true, it capture browsers, run tests and exit
-    singleRun: false,
-
-    proxies:  {},
-
-    junitReporter: {
-        outputFile: 'reports/test-results.xml'
-    }
-  });
-}
+    });
+};

@@ -105,14 +105,6 @@
             opacity: 0.9;
         }
 
-        .mceEmojiPane {
-            z-index:1;
-            min-height:300px;
-            box-sizing: content-box;
-
-            div { box-sizing: content-box; }
-        }
-
         input.file-input:hover { cursor: pointer; }
 
         .mce-panel.mce-container:not(.mce-floatpanel):not(.mce-edit-area) { background-color: #fff; }
@@ -123,14 +115,31 @@
 
     textarea.editable,
     .mce-content-body.editable {
-
         background: white;
         border: 1px solid #ccc;
         padding: 13px;
+    }
+
+    .mce-content-body.editable {
+
+        // For large mails e.g. newsletters
+        overflow-x: auto;
 
         &.mce-edit-focus {
             outline: none;
             .form-control-focus();
+        }
+
+        &.simple-mail {
+            img {
+                max-width: 100%;
+                height: auto!important;
+            }
+        }
+
+        // Force aspect ratio resizing of images in tinymce
+        img.aspect-ratio {
+            height: auto!important;
         }
 
         a {

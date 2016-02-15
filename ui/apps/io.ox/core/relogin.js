@@ -31,39 +31,53 @@ define('io.ox/core/relogin', [
             gt('Your session is expired');
     }
 
-    function getLocation() {
+    function getLoginLocation() {
+        var location = capabilities.has('guest') ?
+            settings.get('customLocations/guestLogin') || ox.serverConfig.guestLoginLocation :
+            settings.get('customLocations/login') || ox.serverConfig.loginLocation;
+        return _.url.vars(location || ox.loginLocation || '');
+    }
+
+    function getLogoutLocation() {
         var location = capabilities.has('guest') ?
             settings.get('customLocations/guestLogout') || ox.serverConfig.guestLogoutLocation :
             settings.get('customLocations/logout') || ox.serverConfig.logoutLocation;
         return _.url.vars(location || ox.logoutLocation || '');
     }
 
-    function redirect() {
-        _.url.redirect(getLocation());
+    function gotoLoginLocation() {
+        _.url.redirect(getLoginLocation());
+    }
+
+    function gotoLogoutLocation() {
+        _.url.redirect(getLogoutLocation());
+    }
+
+    function showSessionLostDialog(error) {
+        new dialogs.ModalDialog({ easyOut: false, width: 400 })
+            .build(function () {
+                this.getPopup().addClass('relogin');
+                this.getContentNode().append(
+                    $('<h4>').text(getReason(error)),
+                    $('<div>').text(gt('You have to sign in again'))
+                );
+            })
+            .addPrimaryButton('ok', gt('Ok'))
+            .on('ok', function () {
+                ox.trigger('relogin:cancel');
+                gotoLoginLocation();
+            })
+            .show();
     }
 
     function relogin(request, deferred, error) {
 
         if (!ox.online) return;
-        if (!settings.get('features/reloginPopup', true)) return;
 
         // don't ask anonymous users
         if (ox.user === 'anonymous') {
-
-            return new dialogs.ModalDialog({ easyOut: false, width: 400 })
-                .build(function () {
-                    this.getPopup().addClass('relogin');
-                    this.getContentNode().append(
-                        $('<h4>').text(getReason(error)),
-                        $('<div>').text(gt('You have to sign in again'))
-                    );
-                })
-                .addPrimaryButton('ok', gt('Ok'))
-                .on('ok', function () {
-                    ox.trigger('relogin:cancel');
-                    redirect();
-                })
-                .show();
+            showSessionLostDialog(error);
+            return;
         }
 
         if (!pending) {
@@ -90,7 +104,7 @@ define('io.ox/core/relogin', [
                 .addAlternativeButton('cancel', gt('Cancel'))
                 .on('cancel', function () {
                     ox.trigger('relogin:cancel');
-                    redirect();
+                    gotoLogoutLocation();
                 })
                 .on('relogin', function () {
                     var self = this.busy();
@@ -144,8 +158,18 @@ define('io.ox/core/relogin', [
         }
     }
 
+    function onSessionLost(request, deferred, error) {
+        ox.off('relogin:required', onSessionLost);
+        showSessionLostDialog(error);
+    }
+
     ox.off('relogin:required', ox.relogin);
-    ox.on('relogin:required', relogin);
+
+    if (settings.get('features/reloginPopup', true)) {
+        ox.on('relogin:required', relogin);
+    } else {
+        ox.on('relogin:required', onSessionLost);
+    }
 
     return relogin;
 });

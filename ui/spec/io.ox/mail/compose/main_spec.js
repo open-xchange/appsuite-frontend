@@ -15,12 +15,36 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
 
     describe('Mail Compose', function () {
 
-        describe.skip('main app', function () {
-            var app, pictureHalo, snippetsGetAll;
+        describe('main app', function () {
+
+            var app, pictureHalo, snippetsGetAll, getValidAddress;
+
+            var editors = {
+                    text: 'io.ox/core/tk/text-editor',
+                    html: 'io.ox/core/tk/contenteditable-editor'
+                },
+                pluginStub;
+
             beforeEach(function () {
-                return require(['io.ox/core/api/snippets', 'io.ox/contacts/api', 'settings!io.ox/mail'], function (snippetAPI, contactsAPI, settings) {
+                pluginStub = sinon.stub(ox.manifests, 'loadPluginsFor', function (namespace) {
+                    namespace = namespace.replace(/^io.ox\/mail\/compose\/editor\//, '');
+                    return require([editors[namespace]]);
+                });
+            });
+            afterEach(function () {
+                pluginStub.restore();
+            });
+
+            beforeEach(function () {
+                return require([
+                    'io.ox/core/api/snippets',
+                    'io.ox/contacts/api',
+                    'io.ox/core/api/account',
+                    'settings!io.ox/mail'
+                ], function (snippetAPI, contactsAPI, accountAPI, settings) {
                     snippetsGetAll = sinon.stub(snippetAPI, 'getAll', function () { return $.when([]); });
                     pictureHalo = sinon.stub(contactsAPI, 'pictureHalo', _.noop);
+                    getValidAddress = sinon.stub(accountAPI, 'getValidAddress', function (d) { return $.when(d); });
                     //load plaintext editor, much faster than spinning up tinymce all the time
                     settings.set('messageFormat', 'text');
                 }).then(function () {
@@ -34,11 +58,12 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                 }
                 snippetsGetAll.restore();
                 pictureHalo.restore();
+                getValidAddress.restore();
                 return app.quit();
             });
 
             it('should open up a new mail compose window', function () {
-                return app.compose({ folder_id: 'default0/INBOX' }).done(function () {
+                return app.compose().then(function () {
                     expect(app.get('state')).to.equal('running');
                     expect(app.view.$el.is(':visible'), 'view element is visible').to.be.true;
                     expect(_.url.hash('app')).to.equal('io.ox/mail/compose:compose');
@@ -51,7 +76,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                         data: {}
                     }));
                 });
-                return app.edit({ folder_id: 'default0/INBOX' }).done(function () {
+                return app.edit().then(function () {
                     expect(app.get('state')).to.equal('running');
                     expect(app.view.$el.is(':visible'), 'view element is visible').to.be.true;
                     expect(_.url.hash('app')).to.equal('io.ox/mail/compose:edit');
@@ -64,7 +89,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                         data: {}
                     }));
                 });
-                return app.reply({ folder: 'default0/INBOX' }).done(function () {
+                return app.reply({ folder: 'default0/INBOX' }).then(function () {
                     expect(app.get('state')).to.equal('running');
                     expect(app.view.$el.is(':visible'), 'view element is visible').to.be.true;
                     expect(_.url.hash('app')).to.equal('io.ox/mail/compose:reply');
@@ -76,7 +101,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                     addressEntry = [[address, address]];
 
                 beforeEach(function () {
-                    return app.compose({ folder_id: 'default0/INBOX' });
+                    return app.compose();
                 });
                 it('should add recipients to "to" tokenfield', function () {
                     app.view.model.set('to', addressEntry);
@@ -121,16 +146,18 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                 it('should change editor mode from text to html', function () {
                     app.view.model.set('editorMode', 'html');
                     return waitsFor(function () {
-                        //need to wait, until it is painted, because we started in text mode
-                        return app.view.$el.find('.editable-toolbar').is(':visible');
+                        //need to wait, until it is painted, because we started in text mode (.editor is not busy any longer)
+                        return app.view.$el.find('.editable.mce-content-body').is(':visible') && app.view.$el.find('.editor:not(.io-ox-busy)').length === 1;
                     }).done(function () {
+                        expect(app.view.$el.find('textarea.plain-text').is(':visible'), 'plain text editor is visible').to.be.false;
+                        expect(app.view.$el.find('.editable-toolbar').is(':visible'), 'tinymce toolbar element is visible').to.be.true;
                         expect(app.view.$el.find('.editable.mce-content-body').is(':visible'), 'tinymce contenteditable editor element is visible').to.be.true;
                     });
                 });
                 it('should change editor mode from html to text', function () {
                     app.view.model.set('editorMode', 'text');
                     return waitsFor(function () {
-                        return app.view.$el.find('textarea.plain-text').is(':visible') === true;
+                        return app.view.$el.find('textarea.plain-text').is(':visible')  && app.view.$el.find('.editor:not(.io-ox-busy)').length === 1;
                     }).then(function () {
                         expect(app.view.$el.find('textarea.plain-text').is(':visible'), 'plain text editor is visible').to.be.true;
                         expect(app.view.$el.find('.editable-toolbar').is(':visible'), 'tinymce toolbar element is visible').to.be.false;
@@ -140,7 +167,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                 it('should change editor mode from text to html', function () {
                     app.view.model.set('editorMode', 'html');
                     return waitsFor(function () {
-                        return app.view.$el.find('.editable.mce-content-body').is(':visible') === true;
+                        return app.view.$el.find('.editable.mce-content-body').is(':visible')  && app.view.$el.find('.editor:not(.io-ox-busy)').length === 1;
                     }).then(function () {
                         expect(app.view.$el.find('textarea.plain-text').is(':visible'), 'plain text editor is visible').to.be.false;
                         expect(app.view.$el.find('.editable-toolbar').is(':visible'), 'tinymce toolbar element is visible').to.be.true;

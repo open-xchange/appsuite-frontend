@@ -14,21 +14,52 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
     'use strict';
 
     describe('Mail Compose', function () {
-        var app;
-        describe.skip('sending a message', function () {
+        describe('sending a message', function () {
+
+            var app, pictureHalo, snippetsGetAll, getValidAddress;
+
+            var editors = {
+                    text: 'io.ox/core/tk/text-editor',
+                    html: 'io.ox/core/tk/contenteditable-editor'
+                },
+                pluginStub;
+
             beforeEach(function () {
-                this.server.respondWith('GET', /api\/halo\/contact\/picture/, function (xhr) {
-                    xhr.respond(200, 'image/gif', '');
+                pluginStub = sinon.stub(ox.manifests, 'loadPluginsFor', function (namespace) {
+                    namespace = namespace.replace(/^io.ox\/mail\/compose\/editor\//, '');
+                    return require([editors[namespace]]);
                 });
-                app = compose.getApp();
-                return app.launch().then(function () {
-                    return app.compose({ folder_id: 'default0/INBOX' });
+            });
+            afterEach(function () {
+                pluginStub.restore();
+            });
+
+            beforeEach(function () {
+                return require([
+                    'io.ox/core/api/snippets',
+                    'io.ox/contacts/api',
+                    'io.ox/core/api/account',
+                    'settings!io.ox/mail'
+                ], function (snippetAPI, contactsAPI, accountAPI, settings) {
+                    snippetsGetAll = sinon.stub(snippetAPI, 'getAll', function () { return $.when([]); });
+                    pictureHalo = sinon.stub(contactsAPI, 'pictureHalo', _.noop);
+                    getValidAddress = sinon.stub(accountAPI, 'getValidAddress', function (d) { return $.when(d); });
+                    //load plaintext editor, much faster than spinning up tinymce all the time
+                    settings.set('messageFormat', 'text');
+                }).then(function () {
+                    app = compose.getApp();
+                    return app.launch().then(function () {
+                        return app.compose({ folder_id: 'default0/INBOX' });
+                    });
                 });
             });
             afterEach(function () {
                 if (app.view && app.view.model) {
                     app.view.model.dirty(false);
                 }
+                snippetsGetAll.restore();
+                pictureHalo.restore();
+                getValidAddress.restore();
                 return app.quit();
             });
 
@@ -44,7 +75,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                 btn.click();
                 expect(spy.called, 'mail API send has been called').to.be.true;
                 var mail = spy.firstCall.args[0];
-                expect(mail.sendtype).to.equal('0');
+                expect(mail.sendtype).to.equal(0);
                 expect(mail.subject).to.equal('some subject');
                 spy.restore();
             });

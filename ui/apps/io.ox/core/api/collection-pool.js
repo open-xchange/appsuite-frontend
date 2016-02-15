@@ -95,8 +95,8 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
 
         // mark all collections as expired
         _(hash).each(function (entry, id) {
-            // ignore detail collection
-            if (id === 'detail') return;
+            // ignore detail collection and those with gc=false, e.g. all-visible
+            if (id === 'detail' || entry.collection.gc === false) return;
             // mark as expired
             entry.collection.expired = true;
         });

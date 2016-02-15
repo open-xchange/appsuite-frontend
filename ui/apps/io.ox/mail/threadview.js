@@ -36,14 +36,14 @@ define('io.ox/mail/threadview', [
             this.$el.append(
                 $('<nav class="back-navigation generic-toolbar">').append(
                     $('<div class="button">').append(
-                        $('<a href="#" class="back" tabindex="1">').append(
+                        $('<a href="#" role="button" class="back" tabindex="1">').append(
                             $('<i class="fa fa-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
                         )
                     ),
                     $('<div class="position">'),
                     $('<div class="prev-next">').append(
-                        $('<a href="#" class="previous-mail" tabindex="1">').append('<i class="fa fa-chevron-up">'),
-                        $('<a href="#" class="next-mail" tabindex="1">').append('<i class="fa fa-chevron-down">')
+                        $('<a href="#" role="button" class="previous-mail" tabindex="1">').append('<i class="fa fa-chevron-up">'),
+                        $('<a href="#" role="button" class="next-mail" tabindex="1">').append('<i class="fa fa-chevron-down">')
                     )
                 ).attr('role', 'toolbar')
             );
@@ -488,7 +488,7 @@ define('io.ox/mail/threadview', [
                 data: model.toJSON(),
                 disable: {
                     'io.ox/mail/detail': ['subject', 'actions'],
-                    'io.ox/mail/detail/header': ['unread-toggle'],
+                    'io.ox/mail/detail/header': ['unread-toggle', 'paper-clip'],
                     'io.ox/mail/detail/header/row1': ['flag-picker']
                 }
             });

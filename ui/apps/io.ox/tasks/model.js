@@ -18,8 +18,9 @@ define('io.ox/tasks/model', [
     'io.ox/core/extensions',
     'io.ox/participants/model',
     'settings!io.ox/core',
+    'io.ox/core/strings',
     'gettext!io.ox/tasks'
-], function (api, ModelFactory, Validations, ext, pModel, settings, gt) {
+], function (api, ModelFactory, Validations, ext, pModel, settings, strings, gt) {
 
     'use strict';
 
@@ -71,21 +72,29 @@ define('io.ox/tasks/model', [
                 },
 
                 // special get function for datepicker
-                getDate: function () {
+                getDate: function (attribute, options) {
                     var time = this.get.apply(this, arguments);
+                    options = options || {};
+                    // use this.get('fulltime') only as a backup, some datepickers have ignore fulltime enabled which would not be honored this way
+                    options.fulltime = options.fulltime || this.get('full_time');
+
                     // if time is undefined moment initializes with the current date, we need to prevent that
                     // !time check would be wrong for timestamp 0 so specific check is needed
-                    if ((time !== undefined && time !== null) && this.get('full_time')) {
+                    if ((time !== undefined && time !== null) && options.fulltime) {
                         time = moment.utc(time).local(true).valueOf();
                     }
                     return time;
                 },
 
                 // special set function for datepicker
-                setDate: function (attr, time) {
+                setDate: function (attr, time, options) {
+                    options = options || {};
+                    // use this.get('fulltime') only as a backup, some datepickers have ignore fulltime enabled which would not be honored this way
+                    options.fulltime = options.fulltime || this.get('full_time');
+
                     // if time is undefined moment initializes with the current date, we need to prevent that
                     // !time check would be wrong for timestamp 0 so specific check is needed
-                    if ((time !== undefined && time !== null) && this.get('full_time')) {
+                    if ((time !== undefined && time !== null) && options.fulltime) {
                         time = moment(time);
                         arguments[1] = time.utc(true).valueOf();
                     }
@@ -195,7 +204,8 @@ define('io.ox/tasks/model', [
         id: 'upload-quota',
         validate: function (attributes) {
             if (attributes.quotaExceeded) {
-                this.add('quota_exceeded', gt('Files can not be uploaded, because quota exceeded.'));
+                //#. %1$s is an upload limit like for example 10mb
+                this.add('quota_exceeded', gt('Files can not be uploaded, because upload limit of %1$s is exceeded.', strings.fileSize(attributes.quotaExceeded.attachmentMaxUploadSize, 2)));
             }
         }
     });

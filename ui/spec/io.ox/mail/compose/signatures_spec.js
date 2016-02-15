@@ -18,23 +18,48 @@ define([
     'use strict';
 
     describe('Mail Compose', function () {
-        var app;
-        var leetSignature = signatures.current.data.filter(function (s) {
-            return s.id === '1337';
-        })[0];
+        var app, pictureHalo, getValidAddress;
+
+        var editors = {
+                text: 'io.ox/core/tk/text-editor',
+                html: 'io.ox/core/tk/contenteditable-editor'
+            },
+            pluginStub;
 
         beforeEach(function () {
-            app = compose.getApp();
-            return app.launch();
+            pluginStub = sinon.stub(ox.manifests, 'loadPluginsFor', function (namespace) {
+                namespace = namespace.replace(/^io.ox\/mail\/compose\/editor\//, '');
+                return require([editors[namespace]]);
+            });
+        });
+        afterEach(function () {
+            pluginStub.restore();
+        });
+
+        beforeEach(function () {
+            return require([
+                'io.ox/contacts/api',
+                'io.ox/core/api/account',
+                'settings!io.ox/mail'
+            ], function (contactsAPI, accountAPI, settings) {
+                pictureHalo = sinon.stub(contactsAPI, 'pictureHalo', _.noop);
+                getValidAddress = sinon.stub(accountAPI, 'getValidAddress', function (d) { return $.when(d); });
+            }).then(function () {
+                app = compose.getApp();
+                return app.launch();
+            });
         });
         afterEach(function () {
             if (app.view && app.view.model) {
                 app.view.model.dirty(false);
             }
+            pictureHalo.restore();
+            getValidAddress.restore();
             return app.quit();
         });
+
         describe('signatures', function () {
-            describe.skip('in HTML mode', function () {
+            describe('in HTML mode', function () {
                 beforeEach(function () {
                     this.server.respondWith('GET', /api\/snippet\?action=all/, function (xhr) {
                         xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(signatures.current));

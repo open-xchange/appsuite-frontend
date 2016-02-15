@@ -184,17 +184,16 @@ define.async('io.ox/core/tk/contenteditable-editor', [
     }
 
     function Editor(el, opt) {
-        el.append(
-            el = $('<div class="contenteditable-editor">').attr('data-editor-id', el.data('editorId'))
-        );
-        var toolbar, editor;
-
-        el.append(
-            toolbar = $('<div class="editable-toolbar">').attr('data-editor-id', el.attr('data-editor-id')),
-            editor = $('<div class="editable">').attr('tabindex', 1).css('margin-bottom', '32px')
-        );
 
         var rendered = $.Deferred(), initialized = $.Deferred(), ed;
+        var toolbar, editor, editorId = el.data('editorId');
+
+        el.append(
+            el = $('<div class="contenteditable-editor">').attr('data-editor-id', editorId).append(
+                toolbar = $('<div class="editable-toolbar">').attr('data-editor-id', editorId),
+                editor = $('<div class="editable" tabindex="1">').css('margin-bottom', '32px')
+            )
+        );
 
         opt = _.extend({
             toolbar1: 'undo redo | bold italic | emoji | bullist numlist outdent indent',
@@ -223,7 +222,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             opt.plugins = opt.plugins.replace(/emoji/g, '').trim();
         }
 
-        var fixed_toolbar = '[data-editor-id="' + el.attr('data-editor-id') + '"].editable-toolbar';
+        var fixed_toolbar = '.editable-toolbar[data-editor-id="' + editorId + '"]';
 
         // remove all toolbars in mobileapp
         if (window.cordova) {
@@ -416,7 +415,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             if (_.device('ios')) return;
             _.defer(function () {
                 ed.focus();
-                ed.execCommand('mceFocus', false, el.attr('data-editor-id'));
+                ed.execCommand('mceFocus', false, editorId);
             });
         };
 
@@ -576,7 +575,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         // convenience access
         this.tinymce = function () {
-            return el.tinymce ? el.tinymce() : {};
+            return editor.tinymce ? editor.tinymce() : {};
         };
 
         this.show = function () {
@@ -621,13 +620,13 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         this.destroy = function () {
             this.hide();
             clearKeepalive();
-            if (el.tinymce()) {
+            if (editor.tinymce()) {
                 //empty node before removing because tiny saves the contents before.
                 //this might cause server errors if there were inline images (those only exist temporarily and are already removed)
-                el.empty();
-                el.tinymce().remove();
+                editor.empty();
+                editor.tinymce().remove();
             }
-            el = el.tinymce = initialized = rendered = ed = null;
+            el = editor = editor.tinymce = initialized = rendered = ed = null;
         };
 
         var intervals = [];

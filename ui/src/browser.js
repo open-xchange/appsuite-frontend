@@ -163,19 +163,20 @@
 
         }
 
-        // fixes for Windows 8 Chrome
-        // Windows 8 Chrome does report touch events which leads to
-        // a wrong feature set (disabled stuff) as AppSuite thinks
-        // this is a Smartphone or tablet without a mouse.
-        if (us.browser.chrome && us.browser.windows8 && Modernizr.touch) {
-            // overwrite Modernizr's touch property and remove html class
-            Modernizr.touch = false;
-            document.getElementsByTagName('html')[0].className = document.getElementsByTagName('html')[0].className.replace(/\btouch\b/, '');
-        }
     }
 
     // first detection
     detectBrowser(navigator);
+
+    function detectTouch() {
+
+        // Windows 8 Chrome does report touch events which leads to
+        // a wrong feature set (disabled stuff) as AppSuite thinks
+        // this is a Smartphone or tablet without a mouse.
+        if (us.browser.chrome && us.browser.windows8) return false;
+
+        return ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
+    }
 
     // do media queries here
     // TODO define sizes to match pads and phones
@@ -208,7 +209,7 @@
             stockBrowser = android && android[1] < 537,
             ratio = stockBrowser ? (window.devicePixelRatio || 1) : 1,
             size = Math.min(screen.width / ratio, screen.height / ratio) < 540,
-            touch = (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch),
+            touch = detectTouch(),
             razrHD = navigator.userAgent.indexOf('RAZR 4G') >= 0;
 
         return (size && touch && mobileOS) || razrHD;
@@ -259,7 +260,7 @@
             var misc = {}, lang = (ox.language || 'en_US').toLowerCase();
             misc[lang] = true;
             misc[lang.split('_')[0] + '_*'] = true;
-            misc.touch = (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch);
+            misc.touch = detectTouch();
             misc.standalone = standalone;
             misc.emoji = underscoreExtends.hasNativeEmoji();
             // no arguments?s

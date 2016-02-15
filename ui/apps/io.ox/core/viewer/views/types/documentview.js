@@ -560,6 +560,14 @@ define('io.ox/core/viewer/views/types/documentview', [
             }
 
             /**
+             * Returns true if a previous loading action resulted in a password protected error.
+             */
+            function isPasswordProtected(model) {
+                var meta = model.get('meta');
+                return meta && meta.document_conversion_error === 'passwordProtected';
+            }
+
+            /**
              *
              * @param {Number} pageCount
              *  page count of the pdf document delivered by the PDF.js library.
@@ -633,14 +641,26 @@ define('io.ox/core/viewer/views/types/documentview', [
              */
             function pdfDocumentLoadError(response) {
                 console.warn('Core.Viewer.DocumentView.show(): failed loading PDF document. Cause: ', response.cause);
-                var notificationText = PDF_ERROR_NOTIFICATIONS[response.cause] || PDF_ERROR_NOTIFICATIONS.general,
-                    notificationIconClass;
-                if (response.cause === 'passwordProtected') {
-                    notificationIconClass = 'fa-lock';
-                }
+                var notificationText = PDF_ERROR_NOTIFICATIONS[response.cause] || PDF_ERROR_NOTIFICATIONS.general;
+                var notificationIconClass = (response.cause === 'passwordProtected') ? 'fa-lock' : null;
+
+                // display error message
                 this.displayNotification(notificationText, notificationIconClass);
-                // resolve the document load Deferred: this document view is fully loaded.
+
+                // store error info in meta data of the file model
+                if (this.model.isFile()) {
+                    var meta = _.extend({}, this.model.get('meta'), { document_conversion_error:  response.cause });
+                    this.model.set('meta', meta);
+                }
+
+                // reject the document load Deferred.
                 this.documentLoad.reject();
+            }
+
+            if (isPasswordProtected(this.model)) {
+                this.displayNotification(PDF_ERROR_NOTIFICATIONS.passwordProtected, 'fa-lock');
+                this.documentLoad.reject();
+                return this;
             }
 
             var documentUrl = DocConverterUtils.getEncodedConverterUrl(this.model);

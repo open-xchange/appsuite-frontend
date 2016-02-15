@@ -157,6 +157,10 @@ define('io.ox/core/tk/wizard', [
             return this.steps[num];
         },
 
+        getContainer: function () {
+            return this.container;
+        },
+
         shift: function (num) {
             this.withCurrentStep(function (step) {
                 step.hide();

@@ -89,13 +89,18 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
                 return $.when(props);
             }
 
+            function findUserPermissions(item) {
+                return item.group === false && item.entity === ox.user_id;
+            }
+
             return api.multiple(folders).then(function (array) {
 
-                var i = 0, item = null, folder = null, hash = _.toHash(array, 'id'), folders = false, items = false;
+                var i = 0, item = null, folder = null, hash = _.toHash(array, 'id'), folders = false, items = false, objectPermission;
 
                 for (; i < $l; i++) {
 
                     item = collection[i];
+                    objectPermission = item && item.object_permissions && _(item.object_permissions).find(findUserPermissions);
 
                     if (isFolder(item)) {
 
@@ -109,17 +114,25 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
                         // we unify delete; otherwise the action checks are too complicated
                         props['delete'] = props['delete'] && api.can('delete:folder', item);
 
-                    } else if ((folder = hash[getFolderId(item)])) {
+                    } else if (objectPermission || (folder = hash[getFolderId(item)])) {
+
                         // get properties
                         items = true;
-                        // read
-                        props.read = props.read && getRight(folder, item.created_by, 7);
-                        // write
-                        props.modify = props.modify && getRight(folder, item.created_by, 14);
-                        // delete
-                        props['delete'] = props['delete'] && getRight(folder, item.created_by, 21);
-                        // create new objects
-                        props.create = props.create && (folder.own_rights & 127) >= 2;
+                        // item-specific
+                        if (objectPermission) {
+                            props.read = props.read && objectPermission.bits >= 1;
+                            props.modify = props.modify && objectPermission.bits >= 2;
+                            props['delete'] = props['delete'] && objectPermission.bits >= 4;
+                        } else {
+                            props.read = props.read && getRight(folder, item.created_by, 7);
+                            props.modify = props.modify && getRight(folder, item.created_by, 14);
+                            props['delete'] = props['delete'] && getRight(folder, item.created_by, 21);
+                        }
+                        if (folder) {
+                            // create new objects
+                            props.create = props.create && (folder.own_rights & 127) >= 2;
+                        }
+
                     } else {
                         // folder unknown
                         props.unknown = true;

@@ -908,11 +908,12 @@ define('io.ox/core/main', [
             id: 'onboarding',
             index: 120,
             draw: function () {
+                if (_.device('smartphone')) return;
                 if (capabilities.has('!client-onboarding')) return;
 
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" data-action="onboarding" role="menuitem" tabindex="-1">')
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem" tabindex="-1">')
                         .text(gt('Connect your Device'))
                     )
                     .on('click', function (e) {
@@ -1060,7 +1061,7 @@ define('io.ox/core/main', [
                 id: 'logout-button',
                 index: 2000,
                 draw: function () {
-                    var logoutButton = addLauncher('right', $('<i class="fa fa-power-off launcher-icon">').attr('aria-hidden', 'true'), function () {
+                    var logoutButton = addLauncher('right', $('<i class="fa fa-sign-out launcher-icon">').attr('aria-hidden', 'true'), function () {
                         logout();
                     }, gt('Sign out'));
                     logoutButton.find('a').tooltip({
@@ -1213,7 +1214,7 @@ define('io.ox/core/main', [
                 content.append(
                     $('<a href="#" class="banner-action" data-action="logout" role="button" tabindex="1">')
                     .attr('title', gt('Sign out'))
-                    .append('<i class="fa fa-power-off">')
+                    .append('<i class="fa fa-sign-out">')
                     .on('click', function (e) {
                         e.preventDefault();
                         logout();
@@ -1687,6 +1688,22 @@ define('io.ox/core/main', [
                                 }
                             });
                         }
+                        // non-app deeplinks
+                        var id = _.url.hash('reg');
+                        if (id && ox.registry.get(id)) {
+                            // normalise args
+                            var list = (_.url.hash('regopt') || '').split(','),
+                                data = {}, parts;
+                            // key:value, key:value... -> object
+                            _.each(list, function (str) {
+                                parts = str.split(':');
+                                data[parts[0]] = parts[1];
+                            });
+                            // call after app is ready
+                            launch.done(function () {
+                                ox.registry.call(id, 'client-onboarding', { data: data });
+                            });
+                        }
                     });
                     // restore apps
                     ox.ui.App.restore();
@@ -1734,7 +1751,8 @@ define('io.ox/core/main', [
     (function () {
 
         var hash = {
-            'mail-compose': 'io.ox/mail/compose/main'
+            'mail-compose': 'io.ox/mail/compose/main',
+            'client-onboarding': 'io.ox/onboarding/clients/wizard'
         };
 
         var custom = {};
@@ -1750,6 +1768,10 @@ define('io.ox/core/main', [
                 var dep = this.get(id),
                     args = _(arguments).toArray().slice(2);
                 return ox.load([dep]).then(function (m) {
+                    // non-apps
+                    if (m.run && _.isFunction(m.run)) return m.run.apply(m, args);
+                    if (!m.reuse || !m.getApp) return;
+                    // app
                     if (m.reuse(name, args[0])) return;
                     return m.getApp().launch().then(function () {
                         return this[name].apply(this, args);
@@ -1797,7 +1819,7 @@ define('io.ox/core/main', [
         return value === undefined ? 'undefined' : value;
     }
 
-    if (ox.debug) {
+    if (ox.debug && _.device('!karma')) {
         ox.on('http:before:send', function (options) {
             var json = _(['params', 'data']).reduce(function (str, id) {
                 return str + (_.isString(options[id]) ? options[id] : JSON.stringify(options[id], replacer));

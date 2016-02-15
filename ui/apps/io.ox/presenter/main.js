@@ -19,9 +19,10 @@ define('io.ox/presenter/main', [
     'io.ox/presenter/rtmodel',
     'io.ox/presenter/localmodel',
     'io.ox/presenter/views/mainview',
+    'io.ox/presenter/views/notification',
     'io.ox/core/tk/sessionrestore',
     'less!io.ox/presenter/style'
-], function (FilesAPI, PageController, RTConnection, RTModel, LocalModel, MainView, SessionRestore) {
+], function (FilesAPI, PageController, RTConnection, RTModel, LocalModel, MainView, Notification, SessionRestore) {
 
     'use strict';
 
@@ -42,62 +43,101 @@ define('io.ox/presenter/main', [
             app.pages.setCurrentPage('presentationView');
         },
 
+        'show-error-notification': function (app) {
+            app.showErrorNotification = function (error, options) {
+                var page = app.pages.getPage('presentationView');
+                var notificationNode = Notification.createErrorNode(error, options);
+                page.empty().append(notificationNode);
+            };
+        },
+
         'start-presentation': function (app) {
 
             app.startPresentation = function (file) {
 
                 app.file = _.clone(file);
 
-                FilesAPI.get(file).done(function (data) {
+                // get file success handler
+                function getFileSuccess(data) {
+                    var title = data.filename || data.title;
 
-                    var title = data.filename || data.title,
-                        fileModel = FilesAPI.pool.get('detail').get(_.cid(data)),
-                        page = app.pages.getPage('presentationView'),
-                        lastState = SessionRestore.state('presenter~' + app.file.id);
-
-                    // RT connect success handler
-                    function rtConnectSuccess(response) {
-                        app.rtModel.set(app.rtModel.parse(response));
-                        app.mainView = new MainView({ model: fileModel, app: app });
-                        page.append(app.mainView.render().$el);
-                        // restore state before the browser reload
-                        if (lastState && lastState.isPresenter) {
-                            app.rtConnection.startPresentation({ activeSlide: lastState.slideId || 0 });
-                        }
-                        // join a runnig presentation if Presenter was started from a deep link
-                        if (app.deepLink && app.rtModel.canJoin()) {
-                            app.mainView.notifyPresentationJoin();
-                            app.mainView.joinPresentation();
-                        }
-                    }
-
-                    // RT connect error handler
-                    function rtConnectError(response) {
-                        console.warn('ConnectError', response);
-                    }
-
-                    // Handler update events of the RT connection
-                    function rtUpdateHandler(event, data) {
-                        //console.info('Presenter - rtUpdateHandler()', data);
-                        app.rtModel.set(app.rtModel.parse(data));
-                    }
+                    app.setTitle(title);
+                    app.fileModel = FilesAPI.pool.get('detail').get(_.cid(data));
+                    app.offlineHandlerTriggered = false;
 
                     // init local model
                     app.localModel = new LocalModel();
 
                     // init RT connection
                     app.rtModel = new RTModel();
-                    app.rtConnection = new RTConnection(fileModel.toJSON());
+                    app.rtConnection = new RTConnection(app.fileModel.toJSON());
                     app.rtConnection.connect().then(rtConnectSuccess, rtConnectError);
-                    app.rtConnection.on({ 'update': rtUpdateHandler });
-
-                    app.setTitle(title);
-
-                    FilesAPI.once('delete:' + _.ecid(data), function () {
-                        app.quit();
+                    app.rtConnection.on({
+                        'update': rtUpdateHandler,
+                        'online': rtOnlineHandler,
+                        'offline': rtOfflineHandler,
+                        'timeout reset error:notMember error:stanzaProcessingFailed error:joinFailed error:disposed': rtErrorHandler
                     });
-                });
+                }
 
+                // get file error handler
+                function getFileError(error) {
+                    console.warn('File Error', error);
+                    app.showErrorNotification(error, { category: 'drive' });
+                }
+
+                // RT connection update event handler
+                function rtUpdateHandler(event, data) {
+                    //console.info('Presenter - rtUpdateHandler()', data);
+                    app.rtModel.set(app.rtModel.parse(data));
+                }
+
+                // RT connect success handler
+                function rtConnectSuccess(response) {
+                    var page = app.pages.getPage('presentationView');
+                    var lastState = SessionRestore.state('presenter~' + app.file.id);
+
+                    app.rtModel.set(app.rtModel.parse(response));
+                    app.mainView = new MainView({ model: app.fileModel, app: app });
+                    page.append(app.mainView.render().$el);
+                    // restore state before the browser reload
+                    if (lastState && lastState.isPresenter) {
+                        app.rtConnection.startPresentation({ activeSlide: lastState.slideId || 0 });
+                    }
+                    // join a runnig presentation if Presenter was started from a deep link
+                    if (app.deepLink && app.rtModel.canJoin()) {
+                        Notification.notifyPresentationJoin(app.rtModel, app.rtConnection);
+                        app.mainView.joinPresentation();
+                    }
+                }
+
+                // RT connect error handler
+                function rtConnectError(response) {
+                    console.warn('RT Connect Error', response);
+                    app.showErrorNotification(response, { category: 'rt' });
+                }
+
+                // RT error handler
+                function rtErrorHandler(event) {
+                    Notification.notifyRealtimeError(event && event.type);
+                }
+
+                // RT online handler
+                function rtOnlineHandler() {
+                    if (app.offlineHandlerTriggered) {
+                        app.offlineHandlerTriggered = false;
+                        Notification.notifyRealtimeOnline();
+                    }
+                }
+
+                // RT offline handler
+                function rtOfflineHandler() {
+                    app.offlineHandlerTriggered = true;
+                    Notification.notifyRealtimeOffline();
+                }
+
+                // get file model
+                FilesAPI.get(file).then(getFileSuccess, getFileError);
             };
         },
 
@@ -180,11 +220,8 @@ define('io.ox/presenter/main', [
 
             // deep-link
             obj = app.getState();
-
-            if (obj.folder && obj.id) {
-                app.deepLink = true;
-                app.startPresentation(obj);
-            }
+            app.deepLink = true;
+            app.startPresentation(obj);
         });
     }
 

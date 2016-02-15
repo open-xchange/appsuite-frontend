@@ -1,0 +1,5 @@
+{
+    "namespace": "portal",
+    "requires": "client-onboarding",
+    "device": "!smartphone"
+}

@@ -14,9 +14,8 @@
 define('io.ox/onboarding/clients/config', [
     'io.ox/onboarding/clients/api',
     'io.ox/core/api/user',
-    'io.ox/onboarding/clients/defaults',
     'io.ox/onboarding/clients/codes'
-], function (api, userAPI, defaults, codes) {
+], function (api, userAPI, codes) {
 
     'use strict';
 
@@ -34,15 +33,7 @@ define('io.ox/onboarding/clients/config', [
     }
 
     function getIndexFor(obj) {
-        var order = {
-            'apple.iphone': 101,
-            'apple.ipad': 102,
-            'apple.mac': 103,
-            'android.phone': 201,
-            'android.tablet': 202,
-            'windows.desktop': 301
-        };
-        return order[obj.id] || 1000;
+        return this.order[obj.id] || 1000;
     }
 
     var config = {
@@ -51,10 +42,79 @@ define('io.ox/onboarding/clients/config', [
 
         types: ['platforms', 'devices', 'scenarios', 'actions', 'matching'],
 
+        props: {
+            platform: 'platforms',
+            device: 'devices',
+            scenario: 'scenarios'
+        },
+
+        order: {
+            // os
+            'windows': 101,
+            'android': 102,
+            'apple': 103,
+            // devices
+            'apple.iphone': 101,
+            'apple.ipad': 102,
+            'apple.mac': 103,
+            'android.phone': 201,
+            'android.tablet': 202,
+            // scenarios
+            'eassync': 101,
+            'emclientinstall': 102,
+            'mailappinstall': 201,
+            'mailsync': 202,
+            'mailmanual': 203,
+            'syncappinstall': 301,
+            'davsync': 302,
+            'davmanual': 303,
+            'drivewindowsclientinstall': 401,
+            'driveappinstall': 402,
+            'drivemacinstall': 403
+        },
+
+        defaults: {
+            platforms: {
+                'android':  { icon: 'fa-android' },
+                'apple':    { icon: 'fa-apple' },
+                'windows':  { icon: 'fa-windows' }
+            },
+            devices: {
+                'android.phone':    { icon: 'fa-mobile' },
+                'android.tablet':   { icon: 'fa-tablet' },
+                'apple.iphone':     { icon: 'fa-mobile' },
+                'apple.ipad':       { icon: 'fa-tablet' },
+                'apple.mac':        { icon: 'fa-laptop' },
+                'windows.phone':    { icon: 'fa-mobile' },
+                'windows.desktop':  { icon: 'fa-laptop' }
+            },
+            scenarios: {
+                // combinations
+                'eassync':          { icon: ['fa-envelope-o', 'fa-calendar', 'fa-users'] },
+                'oxupdaterinstall': { icon: ['fa-envelope-o', 'fa-calendar', 'fa-users'] },
+                'emclientinstall':  { icon: ['fa-envelope-o', 'fa-calendar', 'fa-users'] },
+                // mail
+                'mailappinstall':   { icon: 'fa-envelope-o' },
+                'mailsync':         { icon: 'fa-envelope-o' },
+                'mailmanual':       { icon: 'fa-envelope-o' },
+                // davs
+                'davsync':          { icon: ['fa-calendar', 'fa-users'] },
+                'syncappinstall':   { icon: ['fa-calendar', 'fa-users'] },
+                'davmanual':        { icon: 'fa-wrench' },
+                // drive
+                'drivewindowsclientinstall':  { icon: 'fa-cloud' },
+                'driveappinstall':  { icon: 'fa-cloud' },
+                'drivemacinstall':  { icon: 'fa-cloud' }
+
+            }
+        },
+
         load: function () {
             return api.config().then(function (data) {
-                // reoder devices
-                data.devices = _.sortBy(data.devices, getIndexFor);
+                // reoder devices and scenarios
+                data.platforms = _.sortBy(data.platforms, getIndexFor, this);
+                data.devices = _.sortBy(data.devices, getIndexFor, this);
+                data.scenarios = _.sortBy(data.scenarios, getIndexFor, this);
                 // extend
                 _.extend(this, data);
                 // user inputs and step progress
@@ -62,9 +122,9 @@ define('io.ox/onboarding/clients/config', [
                 // hash maps and defaults
                 _(this.types).each(function (type) {
                     // create hash maps
-                    var hash = this.hash[type] = _.toHash(data[type]);
+                    var hash = this.hash[type] = _.toHash(data[type], 'id');
                     // apply defaults (keepa hash and list up-to-date)
-                    _.each(defaults[type], function (value, key) {
+                    _.each(this.defaults[type], function (value, key) {
                         _.extend(hash[key], value, compactObject(hash[key]));
                     });
                 }, this);
@@ -83,6 +143,22 @@ define('io.ox/onboarding/clients/config', [
 
         getScenarioCID: function () {
             return _cid(this.model.get('device'), this.model.get('scenario'));
+        },
+
+        // remove invalid values
+
+        filterInvalid: function (data) {
+            var obj = {};
+            // device, scenario, action
+            _.each(data, function (value, key) {
+                var prop = config.props[key];
+                // invalid key
+                if (!prop) return;
+                // invalid value
+                if (!config.hash[prop][value]) return;
+                obj[key] = value;
+            });
+            return obj;
         },
 
         // user states
@@ -143,9 +219,10 @@ define('io.ox/onboarding/clients/config', [
                 if (ox.debug) console.error('undefined onboarding scenario: ' + cid);
                 return;
             }
-            return _.filter(this.actions, function (obj) {
-                return matching.actions.indexOf(obj.id) >= 0;
-            });
+            return _.chain(this.actions)
+                    .filter(function (obj) { return matching.actions.indexOf(obj.id) >= 0; })
+                    .sortBy(function (obj) { return matching.actions.indexOf(obj.id); })
+                    .value();
         },
 
         // user data helpers
@@ -162,6 +239,13 @@ define('io.ox/onboarding/clients/config', [
             return user.cellular_telephone1 || user.cellular_telephone2;
         },
 
+        getUserCountryCode: function () {
+            var user = this.user;
+            if (!user) return;
+            // iso country code
+            return user.locale.slice(3, 5).toUpperCase();
+        },
+
         isIncomplete: function () {
             var complete = true;
             _.each(this.hash, function (data) {
@@ -170,7 +254,9 @@ define('io.ox/onboarding/clients/config', [
             return !complete;
         },
 
-        getCodes: codes.get
+        getCodes: codes.get,
+
+        find: codes.find
     };
 
     return config;

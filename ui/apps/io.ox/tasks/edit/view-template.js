@@ -14,7 +14,7 @@
 define('io.ox/tasks/edit/view-template', [
     'gettext!io.ox/tasks/edit',
     'io.ox/backbone/views',
-    'io.ox/core/notifications',
+    'io.ox/core/yell',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/datepicker',
     'io.ox/tasks/edit/util',
@@ -25,8 +25,9 @@ define('io.ox/tasks/edit/view-template', [
     'io.ox/tasks/api',
     'io.ox/core/extensions',
     'io.ox/tasks/util',
+    'io.ox/core/folder/api',
     'settings!io.ox/tasks'
-], function (gt, views, notifications, mini, DatePicker, util, RecurrenceView, AddParticipant, pViews, attachments, api, ext, taskUtil, settings) {
+], function (gt, views, yell, mini, DatePicker, util, RecurrenceView, AddParticipant, pViews, attachments, api, ext, taskUtil, folderAPI, settings) {
 
     'use strict';
 
@@ -57,13 +58,16 @@ define('io.ox/tasks/edit/view-template', [
                         app.getWindow().busy();
                         util.sanitizeBeforeSave(baton);
 
+                        baton.model.saving = true;
                         baton.model.save().done(function () {
+                            delete baton.model.saving;
                             app.markClean();
                             app.quit();
                         }).fail(function (response) {
                             setTimeout(function () {
+                                delete baton.model.saving;
                                 app.getWindow().idle();
-                                notifications.yell(response);
+                                yell(response);
                             }, 300);
                         });
 
@@ -322,23 +326,22 @@ define('io.ox/tasks/edit/view-template', [
                      $('<label>').text(gt('Progress in %')).attr('for', 'task-edit-progress-field'), $(progressField.wrapper)
                     .val(baton.model.get('percent_completed'))
                     .on('change', function () {
-                        var value = parseInt(progressField.progress.val(), 10);
-                        if (value !== 'NaN' && value >= 0 && value <= 100) {
-                            if (progressField.progress.val() === '') {
-                                progressField.progress.val(0);
+                        var value = $.trim(progressField.progress.val()).replace(/\s*%$/, ''),
+                            valid = /^\d+$/.test(value),
+                            number = parseInt(value, 10);
+                        if (valid && number >= 0 && number <= 100) {
+                            if (number === 0 && baton.model.get('status') === 2) {
                                 baton.model.set('status', 1, { validate: true });
-                            } else if (progressField.progress.val() === '0' && baton.model.get('status') === 2) {
-                                baton.model.set('status', 1, { validate: true });
-                            } else if (progressField.progress.val() === '100' && baton.model.get('status') !== 3) {
+                            } else if (number === 100 && baton.model.get('status') !== 3) {
                                 baton.model.set('status', 3, { validate: true });
                             } else if (baton.model.get('status') === 3) {
                                 baton.model.set('status', 2, { validate: true });
                             } else if (baton.model.get('status') === 1) {
                                 baton.model.set('status', 2, { validate: true });
                             }
-                            baton.model.set('percent_completed', value, { validate: true });
+                            baton.model.set('percent_completed', number, { validate: true });
                         } else {
-                            notifications.yell('error', gt('Please enter value between 0 and 100.'));
+                            yell('error', gt('Please enter value between 0 and 100.'));
                             baton.model.trigger('change:percent_completed');
                         }
                     })
@@ -387,6 +390,11 @@ define('io.ox/tasks/edit/view-template', [
         index: 1400,
         className: 'checkbox col-sm-3 collapsed',
         render: function () {
+
+            // private flag only works in private folders
+            var folder_id = this.model.get('folder_id');
+            if (!folderAPI.pool.getModel(folder_id).is('private')) return;
+
             this.$el.append(
                 $('<fieldset>').append(
                     $('<legend>').addClass('simple').text(gt('Type')),
@@ -464,7 +472,7 @@ define('io.ox/tasks/edit/view-template', [
             obj.folder_id = model.attributes.folder_id || model.attributes.folder;
             //show errors
             _(errors).each(function (error) {
-                notifications.yell('error', error.error);
+                yell('error', error.error);
             });
             //no need to remove cachevalues if there was no upload
             if (api.uploadInProgress(_.ecid(obj))) {
@@ -522,6 +530,8 @@ define('io.ox/tasks/edit/view-template', [
                                 .on('change', changeHandler)
                                 .appendTo($input.parent());
                     }
+                    // look if the quota is exceeded
+                    baton.model.validate();
                 };
             $input.on('change', changeHandler);
             $inputWrap.on('change.fileupload', function () {
@@ -563,7 +573,8 @@ define('io.ox/tasks/edit/view-template', [
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<label class="control-label">').text(gt('Estimated duration in minutes')).attr({ for: guid }),
-                new mini.InputView({ name: 'target_duration', model: this.model }).render().$el.attr({ id: guid })
+                new mini.InputView({ name: 'target_duration', model: this.model }).render().$el.attr({ id: guid }),
+                new mini.ErrorView({ name: 'target_duration', model: this.model }).render().$el
             );
         }
     }, { row: '16' });
@@ -577,7 +588,8 @@ define('io.ox/tasks/edit/view-template', [
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<label class="control-label">').text(gt('Actual duration in minutes')).attr({ for: guid }),
-                new mini.InputView({ name: 'actual_duration', model: this.model }).render().$el.attr({ id: guid })
+                new mini.InputView({ name: 'actual_duration', model: this.model }).render().$el.attr({ id: guid }),
+                new mini.ErrorView({ name: 'actual_duration', model: this.model }).render().$el
             );
         }
     }, { row: '16' });
@@ -591,7 +603,8 @@ define('io.ox/tasks/edit/view-template', [
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<label class="control-label">').text(gt('Estimated costs')).attr({ for: guid }),
-                new mini.InputView({ name: 'target_costs', model: this.model }).render().$el.attr({ id: guid })
+                new mini.InputView({ name: 'target_costs', model: this.model }).render().$el.attr({ id: guid }),
+                new mini.ErrorView({ name: 'target_costs', model: this.model }).render().$el
             );
         }
     }, { row: '17' });
@@ -605,7 +618,8 @@ define('io.ox/tasks/edit/view-template', [
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<label class="control-label">').text(gt('Actual costs')).attr({ for: guid }),
-                new mini.InputView({ name: 'actual_costs', model: this.model }).render().$el.attr({ id: guid })
+                new mini.InputView({ name: 'actual_costs', model: this.model }).render().$el.attr({ id: guid }),
+                new mini.ErrorView({ name: 'actual_costs', model: this.model }).render().$el
             );
         }
     }, { row: '17' });

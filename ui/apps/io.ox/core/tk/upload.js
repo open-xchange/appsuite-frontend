@@ -350,7 +350,8 @@ define('io.ox/core/tk/upload', [
     return {
 
         dnd: {
-            enabled: Modernizr.draganddrop,
+            // was: Modernizr.draganddrop but that test is gone
+            enabled: _.device('!touch'),
             createDropZone: function (options) {
                 options = options || {};
                 if (!this.enabled) {

@@ -586,7 +586,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             return !!this.unfold;
         },
 
-        resetSwipeCell: function (selection, a) {
+        resetSwipeCell: function (selection, a, instant) {
             var self = this;
             try {
                 selection.startX = 0;
@@ -594,17 +594,24 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 selection.unfold = false;
                 selection.target = null;
                 selection.otherUnfolded = false;
-                $(self).velocity({
-                    'translateX': [0, a]
-                }, {
-                    duration: RESET_CELL_TIME,
-                    complete: function () {
-                        $(self).removeAttr('style');
-                        $(self).removeClass('unfolded');
-                        if (self.swipeCell) self.swipeCell.remove();
-                        self.swipeCell = null;
-                    }
-                });
+                if (!instant) {
+                    $(self).velocity({
+                        'translateX': [0, a]
+                    }, {
+                        duration: RESET_CELL_TIME,
+                        complete: function () {
+                            $(self).removeAttr('style');
+                            $(self).removeClass('unfolded');
+                            if (self.swipeCell) self.swipeCell.remove();
+                            self.swipeCell = null;
+                        }
+                    });
+                } else {
+                    $(self).removeAttr('style');
+                    $(self).removeClass('unfolded');
+                    if (self.swipeCell) self.swipeCell.remove();
+                    self.swipeCell = null;
+                }
             } catch (e) {
                 console.warn('something went wrong during reset', e);
             }
@@ -641,7 +648,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.distanceX = (this.startX - currentX) * -1; // invert value
             this.scrolling = false;
 
-            // try to swipe right at the start
+            // try to swipe to the right at the start
             if (currentX > this.startX && !this.unfolded && this.distanceX <= THRESHOLD_X) {
                 return; // left to right is not allowed at the start
             }
@@ -697,13 +704,16 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         onTouchEnd: function (e) {
-
             if (this.scrolling) return; // return if simple list scroll
 
             this.remove = this.unfold = e.data.view.isSwiping = false;
             this.isMoving = false;
             // left to right on closed cells is not allowed, we have to check this in touchmove and touchend
-            if ((this.distanceX > 0) && !this.unfolded) return;
+            if ((this.distanceX > 0) && !this.unfolded) {
+                // always reset the cell to prevent half-opened cells
+                e.data.resetSwipeCell.call(this, e.data, 0, true);
+                return;
+            }
 
             // check for tap on unfolded cell
             if (this.unfolded && this.distanceX <= 10) {
@@ -727,7 +737,6 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             }
 
             cell = $(this); // save for later animation
-
             if (this.unfold) {
                 this.expandDelete = false;
 

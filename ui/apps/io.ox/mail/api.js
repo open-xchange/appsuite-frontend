@@ -269,10 +269,13 @@ define('io.ox/mail/api', [
             delete data.cid;
             //don't save raw data in our models. We only want preformated content there
             if (!obj.view || (obj.view && obj.view !== 'raw')) {
-                // sanitize content Types
-                _(data.attachments).map(function (attachment) {
-                    attachment.content_type = attachment.content_type.replace(/^text\/plain.*/, 'text/plain').replace(/^text\/html.*/, 'text/html');
-                    return attachment;
+                // sanitize content Types (we want lowercase 'text/plain' or 'text/html')
+                // split by ; because this field might contain further unwanted data
+                _(data.attachments).each(function (attachment) {
+                    if (/^text\/(plain|html)/i.test(attachment.content_type)) {
+                        // only clean-up text and html; otherwise we lose data (see bug 43727)
+                        attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
+                    }
                 });
                 // either update or add model
                 if (model) {
@@ -896,7 +899,7 @@ define('io.ox/mail/api', [
                     var draftsFolder = accountAPI.getFoldersByType('drafts');
                     pool.resetFolder(draftsFolder);
                     folderAPI.reload(draftsFolder);
-                    api.trigger('refresh.all');
+                    api.trigger('autosave refresh.all');
                     return result;
                 })
             );
@@ -926,7 +929,7 @@ define('io.ox/mail/api', [
         if (view === 'text' && obj.content_type === 'text/plain' && isDraft) view = 'raw';
 
         // attach original message on touch devices?
-        var attachOriginalMessage = view === 'text' && Modernizr.touch && settings.get('attachOriginalMessage', false) === true,
+        var attachOriginalMessage = view === 'text' && _.device('touch') && settings.get('attachOriginalMessage', false) === true,
             csid = api.csid();
 
         return http.PUT({

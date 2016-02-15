@@ -73,7 +73,7 @@ define('io.ox/files/actions', [
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
                 return util.conditionChain(
-                    e.collection.has('one'),
+                    e.collection.has('one', 'modify'),
                     !util.hasStatus('lockedByOthers', e),
                     (/\.(csv|txt|js|css|md|tmpl|html?)$/i).test(e.context.filename),
                     (e.baton.openedBy !== 'io.ox/mail/compose'),
@@ -669,6 +669,9 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/premium/actions/synchronize', {
         capabilities: 'client-onboarding (boxcom || google || msliveconnect)',
+        requires: function () {
+            return _.device('!smartphone');
+        },
         action: function () {
             require(['io.ox/onboarding/clients/wizard'], function (wizard) {
                 wizard.run();

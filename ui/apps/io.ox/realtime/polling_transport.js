@@ -18,9 +18,10 @@ define.async('io.ox/realtime/polling_transport',
         'io.ox/core/uuids',
         'io.ox/core/http',
         'io.ox/realtime/stanza',
-        'io.ox/realtime/tab_id'
+        'io.ox/realtime/tab_id',
+        'io.ox/realtime/synchronized_http'
     ],
-function (ext, Event, caps, uuids, http, stanza, tabId) {
+function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
 
     'use strict';
 
@@ -171,7 +172,7 @@ function (ext, Event, caps, uuids, http, stanza, tabId) {
         }
 
         transmitting = true;
-        http.PUT({
+        synchronizedHTTP.PUT({
             module: 'rt',
             params: {
                 action: 'send',
@@ -338,7 +339,7 @@ function (ext, Event, caps, uuids, http, stanza, tabId) {
             console.log('Resetting sequence to ', newSequence);
         }
         flushAllBuffers();
-        http.PUT({
+        synchronizedHTTP.PUT({
             module: 'rt',
             params: {
                 action: 'send',
@@ -620,7 +621,7 @@ function (ext, Event, caps, uuids, http, stanza, tabId) {
             console.log('Transmitting query, so setting transmitting to true');
         }
 
-        http.PUT({
+        synchronizedHTTP.PUT({
             module: 'rt',
             params: {
                 action: 'query',

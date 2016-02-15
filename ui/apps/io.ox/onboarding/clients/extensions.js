@@ -32,47 +32,63 @@ define('io.ox/onboarding/clients/extensions', [
     var util = {
         removeIcons: function (e) {
             var target = $(e.target);
-            target.parent().find('button-clicked').remove();
+            target.parent().find('.button-clicked').remove();
         },
         addIcon: function (e) {
             var target = $(e.target);
-            target.after($('<i class="fa fa-check .button-clicked"></i>'));
+            util.removeIcons(e);
+            target.after($('<i class="fa fa-check button-clicked"></i>'));
         },
         disable: function (e) {
             $(e.target).addClass('disabled');
+        },
+        enable: function (e) {
+            $(e.target).removeClass('disabled');
         }
     };
 
-    var ActionsView = Backbone.View.extend({
+    var ActionsListView = Backbone.View.extend({
 
         events: {
-            'click .action>legend': 'accordion',
+            'click .section-title': 'accordion',
             'click .toggle-link': 'toggleMode'
         },
 
         initialize: function (options) {
             _.extend(this, options);
             this.setElement($('<div class="actions">'));
+            this.register();
         },
 
-        $toggleMode: $('<a href="#" class="toggle-link">').text(gt('Expert user?')),
+        register: function () {
+            // metrics
+            var wizard = this.wizard;
+            this.$el.on('click', '.action', function (e) {
+                var id = $(this).attr('data-action'),
+                    target = $(e.target),
+                    eventname = target.hasClass('action-call') ? 'action:execute' : 'action:select',
+                    detail = target.attr('data-detail');
+                wizard.trigger(eventname, id, detail);
+            });
+        },
+
+        getToggleNode: function () {
+            var id = _.uniqueId('description');
+            return [
+                $('<div class="sr-only">').attr('id', id).text(gt('Click to show or hide actions for advanced users.')),
+                $('<a href="#" class="toggle-link" data-value="to-advanced" tabindex="1">').attr('aria-describedby', id).text(gt('Expert user?')),
+                $('<a href="#" class="toggle-link" data-value="to-simple" tabindex="1">').attr('aria-describedby', id).text(gt('Hide options for expert users.'))
+            ];
+        },
 
         toggleMode: function (e) {
             e.preventDefault();
             var step = this.$el.closest('.wizard-step'),
-                value = step.attr('data-mode'),
-                link = this.$el.find('.toggle-link');
-            // simple
-            if (value === 'advanced') {
-                step.attr('data-mode', 'simple');
-                link.text(gt('Expert user?'));
-                return this.update();
-            }
-            // advanced
-            step.attr('data-mode', 'advanced');
-            link.text(gt('Hide options for expert users.'));
-            // update
-            this.update();
+                toSimple = step.attr('data-mode') === 'advanced';
+            // update model and trigger event
+            step.attr('data-mode', toSimple ? 'simple' : 'advanced');
+            this.wizard.trigger('mode:toggle', toSimple ? 'simple' : 'advanced');
+            return this.update();
         },
 
         update: function () {
@@ -95,19 +111,22 @@ define('io.ox/onboarding/clients/extensions', [
                 config = this.config,
                 self = this;
             _.each(scenarios, function (scenario) {
-                var list = config.getActions(scenario.id),
-                    node = $('<div class="actions-scenario">').attr('data-parent', scenario.id),
+                var list = config.getActions(scenario.id) || [],
+                    node = $('<div class="actions-scenario" role="tablist">').attr('data-parent', scenario.id),
                     baton = ext.Baton({ data: list, config: config, model: config.model });
                 // draw actions
                 _.each(baton.data, function (action) {
                     node.attr('data-value', action.id);
-                    var actionpoint = ext.point(POINT + '/' + action.id);
+                    var actiontype = action.id.split('/')[0],
+                        actionpoint = ext.point(POINT + '/' + actiontype);
                     // TODO: remove when middleware is ready
                     if (actionpoint.list().length === 0 && ox.debug) console.error('missing view for client-onboarding action: ' + action.id);
                     actionpoint.invoke('draw', node, action, baton);
                 });
                 // add toggle link
-                if (baton.data.length > 1) node.append(self.$toggleMode.clone());
+                if (baton.data.length > 1) {
+                    node.append(self.getToggleNode());
+                }
                 this.$el.append(node);
                 // expand first action
                 this.$el.find('.action:first').addClass('expanded');
@@ -124,12 +143,12 @@ define('io.ox/onboarding/clients/extensions', [
                 container = action.closest('.actions');
             if (container.find('.action:visible').length <= 1) {
                 // does not collapse when only action visible
-                action.addClass('expanded');
+                action.addClass('expanded').find('.section-title').attr('aria-pressed', true);
             } else {
-                action.toggleClass('expanded');
+                action.toggleClass('expanded').find('.section-title').attr('aria-pressed', action.hasClass('expanded'));
             }
             // there can only be one
-            action.closest('.actions-scenario').find('.action').not(action).removeClass('expanded');
+            action.closest('.actions-scenario').find('.action').not(action).removeClass('expanded').find('.section-title').attr('aria-pressed', false);
         }
 
     });
@@ -138,19 +157,50 @@ define('io.ox/onboarding/clients/extensions', [
 
         labels: {
             // card
-            'carddav_hostName': gt('hostname'),
-            'carddav_login': gt('login'),
+            'caldav_url': gt('CalDAV URL'),
+            'caldav_login': gt('CalDAV Login'),
+            'carddav_url': gt('CardDAV URL'),
+            'carddav_login': gt('CardDAV Login'),
             // smtp
-            'smtpLogin': gt('SMTP login'),
-            'smtpServer': gt('SMTP server'),
-            'smtpPort': gt('SMTP port'),
-            'smtpSecure': gt('SMTP secure'),
+            'smtpServer': gt('SMTP Server'),
+            'smtpPort': gt('SMTP Port'),
+            'smtpLogin': gt('SMTP Login'),
+            'smtpSecure': gt('SMTP Secure'),
             // imap
-            'imapLogin': gt('IMAP login'),
-            'imapServer': gt('IMAP server'),
-            'imapPort': gt('IMAP port'),
-            'imapSecure': gt('IMAP secure')
+            'imapServer': gt('IMAP Server'),
+            'imapPort': gt('IMAP Port'),
+            'imapLogin': gt('IMAP Login'),
+            'imapSecure': gt('IMAP Secure'),
+            // eas
+            'eas_url': gt('EAS URL'),
+            'eas_login': gt('EAS Login')
         },
+
+        order: (function () {
+            var list = [
+                // card
+                'caldav_url',
+                'caldav_login',
+                'carddav_url',
+                'carddav_login',
+                // imap
+                'imapServer',
+                'imapPort',
+                'imapLogin',
+                'imapSecure',
+                // smtp
+                'smtpServer',
+                'smtpPort',
+                'smtpLogin',
+                'smtpSecure',
+                // eas
+                'eas_url',
+                'eas_login'
+            ];
+            return function (key) {
+                return list.indexOf(key);
+            };
+        }()),
 
         initialize: function (action, options) {
             _.extend(this, action);
@@ -164,32 +214,43 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         render: function () {
-            var self = this, form;
+            var self = this, form,
+                id = _.uniqueId('controls');
             this.$el.empty()
                 .append(
                     // title
-                    $('<legend class="title section-title">')
+                    $('<button class="title section-title" tabindex="1" role="tab">')
+                        .attr('aria-controls', id)
                         .append(
-                            $('<i class="fa fa-fw fa-chevron-right">'),
-                            $('<i class="fa fa-fw fa-chevron-down">'),
+                            $('<i class="fa fa-fw fa-chevron-right" aria-hidden="true"> '),
+                            $('<i class="fa fa-fw fa-chevron-down" aria-hidden="true">'),
                             $.txt(gt('Settings for advanced users'))
                         ),
                     // content
-                    $('<span class="content">').append(
-                        $('<div class="description">')
-                            .text(gt('If you know what you are doing...just setup your account manually!')),
-                        form = $('<div class="data">')
-                    )
+                    $('<span class="content">')
+                        .attr('id', id)
+                        .append(
+                            $('<div class="description">')
+                                .text(gt('If you know what you are doing...just setup your account manually!')),
+                            form = $('<div class="data">')
+                        )
                 );
+            // sort
+            var list = Object.keys(this.data);
+            list = _.sortBy(list, this.order);
             // add rows
-            var list = Object.keys(this.data).sort();
             _.each(list, function (key) {
                 var value = self.data[key],
-                    group = $('<div class="row">');
+                    group = $('<div class="row">'),
+                    id = _.uniqueId('label');
                 group.append(
-                    $('<label class="control-label display-label col-sm-3">').text(self.labels[key] || key),
+                    $('<label class="control-label display-label col-sm-3">')
+                        .attr('id', id)
+                        .text(self.labels[key] || key),
                     $('<div class="col-sm-9">').append(
-                        $('<input class="form-control" readonly>').val(value)
+                        $('<input class="form-control" readonly tabindex="1">')
+                            .attr('aria-labelledby', id)
+                            .val(value)
                             .on('click', function () {
                                 $(this).select();
                             })
@@ -232,7 +293,7 @@ define('io.ox/onboarding/clients/extensions', [
                     model: this.model,
                     list: this.config.getCodes()
                 }),
-                standard = 'DE';
+                standard = this['default'];
             // adjust node
             select.render().$el
                 .removeClass('form-control')
@@ -244,18 +305,21 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         render: function () {
+            var id = _.uniqueId('description');
             this.$el.empty()
                 .append(
                     // title
-                    $('<legend class="title section-title">')
+                    $('<button class="title section-title" tabindex="1" role="tab">')
+                        .attr('aria-describedby', id)
                         .append(
-                            $('<i class="fa fa-fw fa-chevron-right">'),
-                            $('<i class="fa fa-fw fa-chevron-down">'),
+                            $('<i class="fa fa-fw fa-chevron-right" aria-hidden="true"> '),
+                            $('<i class="fa fa-fw fa-chevron-down" aria-hidden="true">'),
                             $.txt(gt('Automatic Configuration (via SMS)'))
                         ),
                     $('<span class="content">').append(
                         // description
                         $('<div class="description">')
+                            .attr('id', id)
                             .text(gt('Please enter your mobile phone number, and we´ll send you a link to automatically configure your iOS device! It´s that simple!')),
                         // form
                         $('<div class="interaction">').append(
@@ -264,7 +328,7 @@ define('io.ox/onboarding/clients/extensions', [
                                     //$('<label class="control-label">').text(gt('Phone Number')),
                                     this._select().$el,
                                     this._input(),
-                                    $('<button class="btn btn-primary">').text(gt('Send'))
+                                    $('<button class="btn btn-primary" tabindex="1">').attr('role', 'button').text(gt('Send'))
                                 )
                             )
                         )
@@ -274,20 +338,35 @@ define('io.ox/onboarding/clients/extensions', [
             return this;
         },
 
+        getNumber: function () {
+            var local = this.model.get('sms'),
+                prefix = this.model.get('code');
+            // remove everything except digits and '+'
+            local = local.replace(/[^\d+]+/g, '');
+            // 0049... -> +49...
+            local = local.replace(/^00/, '+');
+            // valid country code entered?
+            if (!!this.config.find(local)) return local;
+            // keep only digits
+            local = local.replace(/[\D]+/g, '');
+            // remove leading zero
+            local = local.replace(/^0+/, '');
+            return prefix + local;
+        },
+
         _onClick: function (e) {
             e.preventDefault();
             var scenario = this.config.getScenarioCID(),
                 action = this.id,
                 data = {
-                    sms: this.model.get('sms'),
-                    code: this.model.get('code')
+                    sms: this.getNumber()
                 };
             // call
             util.disable(e);
-            util.removeIcons(e);
             api.execute(scenario, action, data)
                 .always(yellError)
-                .always(_.partial(util.addIcon, e));
+                .done(_.partial(util.addIcon, e))
+                .fail(_.partial(util.enable, e));
         }
     });
 
@@ -319,28 +398,30 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         render: function () {
+            var id = _.uniqueId('description');
             this.$el.empty()
                 .append(
                     // title
-                    $('<legend class="title section-title">')
+                    $('<button class="title section-title" tabindex="1" role="tab">')
+                        .attr('aria-describedby', id)
                         .append(
-                            $('<i class="fa fa-fw fa-chevron-right">'),
-                            $('<i class="fa fa-fw fa-chevron-down">'),
+                            $('<i class="fa fa-fw fa-chevron-right" aria-hidden="true"> '),
+                            $('<i class="fa fa-fw fa-chevron-down" aria-hidden="true">'),
                             $.txt(gt('Configuration Email'))
                         ),
                     $('<span class="content">').append(
                         // description
                         $('<div class="description">')
+                            .attr('id', id)
                             .text(gt('Get your device configured by email.')),
                         // form
                         $('<div class="interaction">').append(
                             $('<form class="form-inline">').append(
                                 $('<div class="row">').append(
-                                    //$('<label class="control-label">').text(gt('Email')),
                                     this._input(),
                                     // action
-                                    $('<button>')
-                                        .addClass('btn btn-primary')
+                                    $('<button class="btn btn-primary action-call" tabindex="1">')
+                                        .attr('role', 'button')
                                         .text(gt('Send'))
                                 )
                             )
@@ -358,7 +439,6 @@ define('io.ox/onboarding/clients/extensions', [
                     email: this.model.get('email')
                 };
             // call
-            util.removeIcons(e);
             api.execute(scenario, action, data)
                 .always(yellError)
                 .always(_.partial(util.addIcon, e));
@@ -383,22 +463,25 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         render: function () {
+            var ref = _.uniqueId('description-');
             this.$el.empty()
                 .append(
                     // title
-                    $('<legend class="title section-title">')
+                    $('<button class="title section-title" tabindex="1" role="tab">')
                         .append(
-                            $('<i class="fa fa-fw fa-chevron-right">'),
-                            $('<i class="fa fa-fw fa-chevron-down">'),
+                            $('<i class="fa fa-fw fa-chevron-right" aria-hidden="true"> '),
+                            $('<i class="fa fa-fw fa-chevron-down" aria-hidden="true">'),
                             $.txt(gt('Automatic Configuration'))
                         ),
                     $('<span class="content">').append(
                         // description
                         $('<div class="description">')
+                            .attr('id', ref)
                             .text(gt('Let´s automatically configure your device, by clicking the button below. It´s that simple!')),
                         // action
-                        $('<button>')
-                            .addClass('btn btn-primary')
+                        $('<button class="btn btn-primary action-call" tabindex="1">')
+                            .attr('role', 'button')
+                            .attr('aria-describedby', ref)
                             .text(gt('Configure now'))
                     )
                 );
@@ -414,11 +497,10 @@ define('io.ox/onboarding/clients/extensions', [
         }
     });
 
-    var AppActionView = Backbone.View.extend({
+    var ClientActionView = Backbone.View.extend({
 
         events: {
-            'click .btn': '_onClick',
-            'click .store': '_onClick'
+            'click .action-call': '_onClick'
         },
 
         initialize: function (action, options) {
@@ -436,11 +518,37 @@ define('io.ox/onboarding/clients/extensions', [
             this.type = action[this.device.id].type;
         },
 
+        hash: {
+            'macappstore': gt('Mac App Store'),
+            'appstore': gt('App Store'),
+            'playstore': gt('Google Play')
+        },
+
         getLabel: function () {
-            return {
-                'appstore': gt('App Store'),
-                'playstore': gt('Google Play')
-            }[this.type];
+            var storename = this.hash[this.type];
+            //#. %1$s: app store name
+            return storename ? gt('Get the App from %1$s', storename) : gt('Download the application.');
+        },
+
+
+        getButton: function () {
+            var badgeurl = this.getBadgeUrl();
+            // badge
+            if (badgeurl) {
+                return $('<a href="#" class="store">').append(
+                    $('<img class="store-icon action-call">')
+                    .attr({
+                        'role': 'button',
+                        'tabindex': 1,
+                        'data-detail': this.hash[this.type],
+                        'src': this.getBadgeUrl()
+                    })
+                );
+            }
+            // simple button
+            return $('<button class="btn btn-primary action-call" tabindex="1">')
+                .attr('role', 'button')
+                .text(gt('Download'));
         },
 
         getBadgeUrl: function () {
@@ -448,6 +556,7 @@ define('io.ox/onboarding/clients/extensions', [
                 prefix = ox.language.slice(0, 2).toUpperCase(),
                 country = _.contains(available, prefix) ? prefix : 'EN',
                 stores = {
+                    'macappstore': 'apps/themes/icons/default/appstore/Mac_App_Store_Badge_' + country + '_165x40.svg',
                     'appstore': 'apps/themes/icons/default/appstore/App_Store_Badge_' + country + '_135x40.svg',
                     'playstore': 'apps/themes/icons/default/googleplay/google-play-badge_' + country + '.svg'
                 };
@@ -455,23 +564,22 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         render: function () {
+            var id = _.uniqueId('description');
             this.$el.empty()
                 .append(
                     // title
-                    $('<legend class="title section-title">')
+                    $('<button class="title section-title" tabindex="1" role="tab">')
+                        .attr('aria-describedby', id)
                         .append(
-                            $('<i class="fa fa-fw fa-chevron-right">'),
-                            $('<i class="fa fa-fw fa-chevron-down">'),
+                            $('<i class="fa fa-fw fa-chevron-right" aria-hidden="true"> '),
+                            $('<i class="fa fa-fw fa-chevron-down" aria-hidden="true">'),
                             $.txt(gt('Installation'))
                         ),
                     $('<span class="content">').append(
                         // description
-                        $('<div class="description">')
-                            .text(gt('Get the App from %1$s', this.getLabel())),
-                        // action
-                        $('<a class="store">').append(
-                            $('<img class="store-icon">').attr('src', this.getBadgeUrl())
-                        )
+                        $('<div class="description">').attr(id, id).text(this.getLabel()),
+                        this.getButton()
+
                     )
                 );
             return this;
@@ -484,11 +592,11 @@ define('io.ox/onboarding/clients/extensions', [
     });
 
     return {
-        ActionsView: ActionsView,
+        ActionsListView: ActionsListView,
         DisplayActionView: DisplayActionView,
         ShortMessageActionView: ShortMessageActionView,
         EmailActionView: EmailActionView,
         DownloadActionView: DownloadActionView,
-        AppActionView: AppActionView
+        ClientActionView: ClientActionView
     };
 });

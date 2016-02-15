@@ -669,21 +669,24 @@ define('io.ox/core/commons', [
         },
 
         addPremiumFeatures: function (app, opt) {
+
             if (_.device('smartphone')) return;
-            if (capabilities.has('!client-onboarding')) return;
-            if (coreSettings.get('features/hiddenPremiumFeatures')) return;
+            if (!capabilities.has('client-onboarding')) return;
+            if (!coreSettings.get('upsell/premium/folderView/visible')) return;
+            if (coreSettings.get('upsell/premium/folderView/closedByUser')) return;
 
             var sidepanel = app.getWindow().nodes.sidepanel,
                 container = $('<div class="premium-toolbar generic-toolbar bottom visual-focus in">').append(
                     $('<div class="header">').append(
                         gt('Premium features'),
-                        $('<a href="#" class="pull-right">').append(
+                        $('<a href="#" role="button" class="pull-right">').append(
                             $('<i class="fa fa-times" aria-hidden="true">'),
                             $('<span class="sr-only">').text(gt('Close premium features'))
-                        ).on('click', function (e) {
+                        )
+                        .on('click', function (e) {
                             e.preventDefault();
                             $(this).closest('.premium-toolbar').collapse('hide');
-                            coreSettings.set('features/hiddenPremiumFeatures', true).save();
+                            coreSettings.set('upsell/premium/folderView/closedByUser', true).save();
                         })
                     )
                 );

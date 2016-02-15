@@ -346,6 +346,7 @@ define('io.ox/mail/main', [
 
             // register load listener which triggers complete
             collection.on('load', function () {
+                this.gc = false;
                 this.complete = true;
                 this.preserve = true;
                 this.CUSTOM_PAGE_SIZE = 250;
@@ -408,6 +409,7 @@ define('io.ox/mail/main', [
                 //.removeClass('hidden')
                 .find('.message-empty')
                 // customize message
+                //#. when items list is empty (e.g. search result)
                 .text(gt('Empty'));
         },
 
@@ -1469,6 +1471,13 @@ define('io.ox/mail/main', [
                         handleError(error);
                     }
                 });
+            });
+        },
+
+        'save-draft': function (app) {
+            api.on('autosave send', function () {
+                var folder = app.folder.get();
+                if (folderAPI.is('drafts', folder)) app.listView.reload();
             });
         },
 

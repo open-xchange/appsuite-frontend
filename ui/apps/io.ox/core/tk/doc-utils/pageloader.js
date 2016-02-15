@@ -20,7 +20,7 @@ define('io.ox/core/tk/doc-utils/pageloader', [
     'use strict';
 
     var // the maximum number of simultaneous pending page render requests
-        MAX_REQUESTS = Modernizr.touch ? 2 : 5,
+        MAX_REQUESTS = _.device('touch') ? 2 : 5,
 
         // the number of page render requests currently running
         RUNNING_REQUESTS = 0,

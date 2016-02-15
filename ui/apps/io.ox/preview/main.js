@@ -22,7 +22,8 @@ define('io.ox/preview/main', [
 
     'use strict';
 
-    var supportsDragOut = Modernizr.draganddrop && _.browser.Chrome;
+    // was: Modernizr.draganddrop but that test is gone
+    var supportsDragOut = !!_.browser.Chrome;
     var dragOutHandler = $.noop;
     var clickableLink = $.noop;
 

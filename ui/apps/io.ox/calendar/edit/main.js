@@ -18,10 +18,12 @@ define('io.ox/calendar/edit/main', [
     'io.ox/calendar/edit/view',
     'io.ox/core/notifications',
     'io.ox/core/folder/api',
+    'io.ox/calendar/util',
+    'io.ox/core/http',
     'gettext!io.ox/calendar/edit/main',
     'settings!io.ox/calendar',
     'less!io.ox/calendar/edit/style'
-], function (AppointmentModel, api, dnd, EditView, notifications, folderAPI, gt, settings) {
+], function (AppointmentModel, api, dnd, EditView, notifications, folderAPI, util, http, gt, settings) {
 
     'use strict';
 
@@ -110,19 +112,27 @@ define('io.ox/calendar/edit/main', [
                             .on('change', function () {
                                 self.considerSaved = false;
                             })
-                            .on('backendError', function (response) {
+                            .on('backendError', function (error) {
                                 try {
                                     self.getWindow().idle();
                                 } catch (e) {
-                                    if (response.code === 'UPL-0005') {
+                                    if (error.code === 'UPL-0005') {
                                         //uploadsize to big; remove busy animation
                                         api.removeFromUploadList(_.ecid(this.attributes));
                                     }
                                 }
-                                if (response.conflicts) {
-                                    return;
+                                if (error.conflicts) return;
+                                var message;
+                                if (error.problematic) {
+                                    message = _(error.problematic).map(function (field) {
+                                        var id = http.getColumn('calendar', field.id) || field.id,
+                                            name = util.columns[id] || id;
+                                        return gt('The field "%1$s" exceeds its maximum size of %2$d characters.', name, field.max_size);
+                                    }).join(' ');
+                                } else {
+                                    message = error.error;
                                 }
-                                notifications.yell('error', response.error);
+                                notifications.yell('error', message);
                             })
                             .on('conflicts', function (con) {
                                 var hardConflict = false;
@@ -343,10 +353,18 @@ define('io.ox/calendar/edit/main', [
             },
 
             onError: function (error) {
+                // conflicts have their own special handling
+                if (error.conflicts) return;
+
                 this.model.set('ignore_conflicts', false, { validate: true });
                 if (this.model.endTimezone) {
                     this.model.set('endTimezone', this.model.endTimezone);
                     delete this.model.endTimezone;
+                }
+
+                // restore state of model attributes for moving
+                if (this.moveAfterSave && this.model.get('folder_id') !== this.moveAfterSave) {
+                    this.model.set('folder_id', this.moveAfterSave, { silent: true });
                 }
                 delete this.moveAfterSave;
                 this.getWindow().idle();

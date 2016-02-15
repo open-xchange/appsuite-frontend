@@ -103,9 +103,8 @@ define('io.ox/core/folder/node', [
         },
 
         onRemove: function (model) {
-            var children = this.$.subfolders.children();
-            children.filter('[data-id="' + $.escape(model.id) + '"]').remove();
-            if (children.length === 0) this.model.set('subfolders', false);
+            this.$.subfolders.children('[data-id="' + $.escape(model.id) + '"]').remove();
+            // we do not update models if the DOM is empty! (see bug 43754)
             this.renderEmpty();
         },
 
@@ -505,7 +504,7 @@ define('io.ox/core/folder/node', [
 
         renderIcon: function () {
             var o = this.options, type;
-            if (!o.icons || (o.tree.module !== 'mail' && o.tree.module !== 'infostore')) return;
+            if ((o.tree.module !== 'infostore' && !o.icons) || (o.tree.module !== 'mail' && o.tree.module !== 'infostore')) return;
             if (o.tree.module === 'mail') {
                 type = account.getType(this.folder) || 'default';
                 this.$.icon.addClass('visible ' + type);

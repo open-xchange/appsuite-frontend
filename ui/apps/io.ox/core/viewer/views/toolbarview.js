@@ -298,7 +298,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'savemailattachmenttodrive': {
                     prio: 'lo',
                     mobile: 'lo',
-                    label: gt('Save to Drive'),
+                    //#. %1$s is usually "Drive" (product name; might be customized)
+                    label: gt('Save to %1$s', gt.pgettext('app', 'Drive')),
                     ref: 'io.ox/mail/actions/save-attachment'
                 },
                 'sendmailattachmentasmail': {
@@ -325,7 +326,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'savemailattachmenttodrive': {
                     prio: 'lo',
                     mobile: 'lo',
-                    label: gt('Save to Drive'),
+                    //#. %1$s is usually "Drive" (product name; might be customized)
+                    label: gt('Save to %1$s', gt.pgettext('app', 'Drive')),
                     ref: 'io.ox/core/tk/actions/save-attachment'
                 }
             },
@@ -399,8 +401,15 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/launchpresenter', {
         capabilities: 'presenter document_preview',
         requires: function (e) {
+            if (!e.collection.has('one', 'read')) {
+                return false;
+            }
+
             var model = e.baton.model;
-            return ((model.isPresentation() || model.isPDF()) && model.isFile());
+            var meta = model.get('meta');
+            var isError = meta && meta.document_conversion_error && meta.document_conversion_error.length > 0;
+
+            return (!isError && model.isFile() && (model.isPresentation() || model.isPDF()));
         },
         action: function (baton) {
             var fileModel = baton.model;

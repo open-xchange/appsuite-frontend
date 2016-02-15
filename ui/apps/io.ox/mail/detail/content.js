@@ -200,7 +200,11 @@ define('io.ox/mail/detail/content', [
         id: 'link-target',
         index: 500,
         process: function (baton) {
-            baton.source = baton.source.replace(/<a[^>]*href=(?:\"|\')(https?:\/\/[^>]+)(?:\"|\')[^>]*>/g, setLinkTarget);
+            baton.source = baton.source
+                // fix missing protocol
+                .replace(/(<a.*?href=("|'))www\./g, '$1http://www.')
+                // fix targets
+                .replace(/<a[^>]*href=(?:\"|\')(https?:\/\/[^>]+)(?:\"|\')[^>]*>/g, setLinkTarget);
         }
     });
 
@@ -401,19 +405,20 @@ define('io.ox/mail/detail/content', [
         }
     });
 
-    ext.point('io.ox/mail/detail/content').extend({
-        id: 'lazyload-images',
-        index: 1200,
-        process: function () {
-            $(this).find('img[src!=""]').each(function () {
-                var img = $(this);
-                img.attr({
-                    'data-original': img.attr('src'),
-                    'src': '//:0'
-                }).addClass('lazyload');
-            });
-        }
-    });
+    // commented out DUE TO BUGS! (27.01.2016)
+    // ext.point('io.ox/mail/detail/content').extend({
+    //     id: 'lazyload-images',
+    //     index: 1200,
+    //     process: function () {
+    //         $(this).find('img[src!=""]').each(function () {
+    //             var img = $(this);
+    //             img.attr({
+    //                 'data-original': img.attr('src'),
+    //                 'src': '//:0'
+    //             }).addClass('lazyload');
+    //         });
+    //     }
+    // });
 
     function isBlockquoteToggle(elem) {
         return $(elem).parent().hasClass('blockquote-toggle');

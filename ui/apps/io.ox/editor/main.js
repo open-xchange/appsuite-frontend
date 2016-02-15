@@ -262,51 +262,52 @@ define('io.ox/editor/main', [
                     if (defaultFolder) {
                         // update mode and notify user
                         model.set('folder_id', defaultFolder);
+                        model.unset('id');
                         notifications.yell('info', gt('This file will be written in your default folder to allow editing'));
                     }
                 });
             };
 
-            require(['io.ox/files/util'], function (util) {
+            return require(['io.ox/files/util']).then(function (util) {
+                return $.when(
+                    util.confirmDialog(app.view.getFilename(), app.view.data.saved.filename),
+                    fixFolder()
+                );
+            }).then(function () {
                 var blob, data;
-                return fixFolder().then(
-                            util.confirmDialog(app.view.getFilename(), app.view.data.saved.filename)
-                                .then(function () {
-                                    // generate blob
-                                    view.updateModel();
-                                    data = model.toJSON();
-                                    blob = new window.Blob([data.content], { type: 'text/plain' });
-                                    delete data.content;
-                                    view.busy();
-                                    // create or update?
-                                    if (model.has('id')) {
-                                        // update
-                                        return api.versions.upload({ id: data.id, folder: data.folder_id, file: blob, filename: data.filename })
-                                            .done(function () {
-                                                previous = model.toJSON();
-                                            })
-                                            .always(function () { view.idle(); })
-                                            .fail(notifications.yell)
-                                            .fail(function (error) {
-                                                // file no longer exists
-                                                if (error.code === 'IFO-0300') model.unset('id');
-                                            });
-                                    }
-                                    // create
-                                    return api.upload({ folder: data.folder_id, file: blob, filename: data.filename })
-                                        .done(function (data) {
-                                            delete data.content;
-                                            app.setState({ folder: data.folder_id, id: data.id });
-                                            model.set(data);
-                                            previous = model.toJSON();
-                                            view.idle();
-                                        })
-                                        .always(function () { view.idle(); })
-                                        .fail(notifications.yell);
-                                }, function () {
-                                    view.idle.apply(app.view);
-                                })
-                        );
+                // generate blob
+                view.updateModel();
+                data = model.toJSON();
+                blob = new window.Blob([data.content], { type: 'text/plain' });
+                delete data.content;
+                view.busy();
+                // create or update?
+                if (model.has('id')) {
+                    // update
+                    return api.versions.upload({ id: data.id, folder: data.folder_id, file: blob, filename: data.filename })
+                        .done(function () {
+                            previous = model.toJSON();
+                        })
+                        .always(function () { view.idle(); })
+                        .fail(notifications.yell)
+                        .fail(function (error) {
+                            // file no longer exists
+                            if (error.code === 'IFO-0300') model.unset('id');
+                        });
+                }
+                // create
+                return api.upload({ folder: data.folder_id, file: blob, filename: data.filename })
+                    .done(function (data) {
+                        delete data.content;
+                        app.setState({ folder: data.folder_id, id: data.id });
+                        model.set(data);
+                        previous = model.toJSON();
+                        view.idle();
+                    })
+                    .always(function () { view.idle(); })
+                    .fail(notifications.yell);
+            }, function () {
+                view.idle.apply(app.view);
             });
         };
 

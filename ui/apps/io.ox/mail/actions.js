@@ -162,15 +162,14 @@ define('io.ox/mail/actions', [
             return data && isDraftMail(data);
         },
         action: function (baton) {
+
             var data = baton.first(),
-                check = false;
-            _.each(ox.ui.apps.models, function (app) {
-                if (app.refId === data.id) {
-                    check = true;
-                    app.launch();
-                }
-            });
-            if (check === true) return;
+                app = _(ox.ui.apps.models).find(function (model) {
+                    return model.refId === data.id;
+                });
+
+            // reuse open editor
+            if (app) return app.launch();
 
             require(['settings!io.ox/mail'], function (settings) {
 
@@ -528,6 +527,9 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/premium/actions/synchronize', {
         capabilities: 'active_sync client-onboarding',
+        requires: function () {
+            return _.device('!smartphone');
+        },
         action: function () {
             require(['io.ox/onboarding/clients/wizard'], function (wizard) {
                 wizard.run();
@@ -824,7 +826,8 @@ define('io.ox/mail/actions', [
         id: 'save',
         index: 500,
         mobile: 'high',
-        label: gt('Save to Drive'),
+        //#. %1$s is usually "Drive" (product name; might be customized)
+        label: gt('Save to %1$s', gt.pgettext('app', 'Drive')),
         ref: 'io.ox/mail/actions/save-attachment'
     }));
 

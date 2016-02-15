@@ -18,9 +18,10 @@ define('io.ox/calendar/model', [
     'io.ox/backbone/validation',
     'io.ox/participants/model',
     'io.ox/core/folder/api',
+    'io.ox/core/strings',
     'settings!io.ox/calendar',
     'settings!io.ox/core'
-], function (api, ext, extendedModel, gt, Validators, pModel, folderAPI, settings, coreSettings) {
+], function (api, ext, extendedModel, gt, Validators, pModel, folderAPI, strings, settings, coreSettings) {
 
     'use strict';
 
@@ -65,29 +66,33 @@ define('io.ox/calendar/model', [
 
             // bind events
             this.on({
+
                 'create:fail update:fail': function (response) {
                     if (response.conflicts) {
                         this.trigger('conflicts', response.conflicts);
                     }
                 },
+
                 'change:start_date': function (model, startDate) {
-                    if (length < 0) {
-                        return;
-                    }
+                    if (length < 0) return;
                     if (startDate && _.isNumber(length)) {
                         model.set('end_date', startDate + length, { validate: true });
                     }
                 },
-                'change:end_date': function (model, endDate) {
-                    var tmpLength = endDate - model.get('start_date');
-                    if (tmpLength < 0) {
-                        if (endDate && _.isNumber(length)) {
-                            model.set('start_date', endDate - length, { validate: true });
-                        }
-                    } else {
-                        length = tmpLength;
-                    }
-                },
+
+                // 'change:end_date': function (model, endDate) { },
+                //
+                // We DO NOT anything else if the length gets negative
+                //
+                // Actually you have three major optons
+                // 1. shift the start_date to keep the current length
+                // 2. shift the start_date for example 1 hour before the new end date (OX6)
+                // 3. do nothing so that the user recognizes that the start date has also changed
+                //
+                // We could show a hint right away but this is here is still rocket science
+                // and triggering a simple validation seems impossible.
+                // Therefore TODO: completely rewrite this whole model-validaten-magic!
+
                 'change:full_time': function (model, fulltime) {
                     // handle shown as
                     if (settings.get('markFulltimeAppointmentsAsFree', false)) {
@@ -121,9 +126,12 @@ define('io.ox/calendar/model', [
         },
 
         // special get function for datepicker
-        getDate: function (attr) {
+        getDate: function (attr, options) {
             var time = this.get.apply(this, arguments);
-            if (this.get('full_time')) {
+            options = options || {};
+            // use this.get('fulltime') only as a backup, some datepickers have ignore fulltime enabled which would not be honored this way
+            options.fulltime = options.fulltime || this.get('full_time');
+            if (options.fulltime) {
                 time = moment.utc(time).local(true);
                 // fake end date for datepicker
                 if (attr === 'end_date') {
@@ -135,8 +143,11 @@ define('io.ox/calendar/model', [
         },
 
         // special set function for datepicker
-        setDate: function (attr, time) {
-            if (this.get('full_time')) {
+        setDate: function (attr, time, options) {
+            options = options || {};
+            // use this.get('fulltime') only as a backup, some datepickers have ignore fulltime enabled which would not be honored this way
+            options.fulltime = options.fulltime || this.get('full_time');
+            if (options.fulltime) {
                 time = moment(time);
                 // fix fake end date for model
                 if (attr === 'end_date') {
@@ -248,6 +259,10 @@ define('io.ox/calendar/model', [
                 attributesToSave.folder = this.get('folder') || this.get('folder_id');
             }
 
+            if (this.get('ignore_conflicts')) {
+                attributesToSave.ignore_conflicts = this.get('ignore_conflicts');
+            }
+
             return attributesToSave;
         }
     });
@@ -256,8 +271,7 @@ define('io.ox/calendar/model', [
         id: 'start-date-before-end-date',
         validate: function (attributes) {
             if (attributes.start_date && attributes.end_date && attributes.end_date < attributes.start_date) {
-                this.add('start_date', gt('The start date must be before the end date.'));
-                this.add('end_date', gt('The start date must be before the end date.'));
+                this.add('end_date', gt('The end date must be after the start date.'));
             }
         }
     });
@@ -266,7 +280,8 @@ define('io.ox/calendar/model', [
         id: 'upload-quota',
         validate: function (attributes) {
             if (attributes.quotaExceeded) {
-                this.add('quota_exceeded', gt('Files can not be uploaded, because quota exceeded.'));
+                //#. %1$s is an upload limit like for example 10mb
+                this.add('quota_exceeded', gt('Files can not be uploaded, because upload limit of %1$s is exceeded.', strings.fileSize(attributes.quotaExceeded.attachmentMaxUploadSize, 2)));
             }
         }
     });

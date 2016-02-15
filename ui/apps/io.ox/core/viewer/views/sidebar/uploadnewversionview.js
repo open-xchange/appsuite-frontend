@@ -80,7 +80,12 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
         index: 400,
         id: 'cancel',
         draw: function (baton) {
-            baton.$.addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' });
+            var self = this;
+            baton.$.addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
+                .on('cancel', function () {
+                    // reset file input
+                    _.first(self.$('input[type="file"]')).value = '';
+                });
         }
     });
 
@@ -166,7 +171,9 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
                             buttontext: gt('Upload new version')
                         })
                     );
-                });
+                    // Extension point required for Guard implementation
+                    ext.point('io.ox/core/viewer/views/sidebarview/uploadnewversion').invoke('draw', this);
+                }.bind(this));
             }.bind(this));
             return this;
         },

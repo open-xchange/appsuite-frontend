@@ -514,7 +514,8 @@ define('io.ox/mail/compose/view', [
                         $('img:not(.emoji):eq(' + index + ')', self.editorContainer.find('.editable')).attr('src', $(el).attr('src'));
                     });
                 }
-                model.set('msgref', result.data, { silent: true });
+                model.set('msgref', result.data);
+                model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT);
                 model.dirty(false);
                 notifications.yell('success', gt('Mail saved as draft'));
                 return result;
@@ -534,9 +535,9 @@ define('io.ox/mail/compose/view', [
                     notifications.yell(result);
                     def.reject(result);
                 } else {
-                    if (mail.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
-                        model.set('msgref', result, { silent: true });
-                    }
+
+                    model.set('msgref', result);
+                    model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT);
 
                     var saved = model.get('infostore_ids_saved');
                     model.set('infostore_ids_saved', [].concat(saved, mail.infostore_ids || []));
@@ -766,23 +767,26 @@ define('io.ox/mail/compose/view', [
         },
 
         toggleEditorMode: function () {
-            var self = this, content;
-            this.editorContainer.busy();
+
+            var content;
 
             if (this.editor) {
                 this.removeSignature();
-
                 content = this.editor.getPlainText();
-
                 this.editor.hide();
             }
 
+            this.editorContainer.busy();
+
             return this.loadEditor(content).then(function () {
-                self.editorContainer.idle();
-                //update the content type of the mail
-                //FIXME: may be, do this somewhere else? in the model?
-                self.model.setMailContentType(self.editor.content_type);
-            });
+                this.editorContainer.idle();
+                // update the content type of the mail
+                // FIXME: may be, do this somewhere else? in the model?
+                this.model.setMailContentType(this.editor.content_type);
+                // reset tinyMCE's undo stack
+                if (!_.isFunction(this.editor.tinymce)) return;
+                this.editor.tinymce().undoManager.clear();
+            }.bind(this));
         },
 
         syncMail: function () {
@@ -803,6 +807,8 @@ define('io.ox/mail/compose/view', [
                 // Remove extranous <br>
                 content = content.replace(/\n<br>&nbsp;$/, '\n');
             }
+
+            this.setSimpleMail(content);
 
             this.editor.setContent(content);
 
@@ -939,7 +945,8 @@ define('io.ox/mail/compose/view', [
 
             return this.toggleEditorMode().then(function () {
                 return self.signaturesLoading;
-            }).done(function () {
+            })
+            .done(function () {
                 var mode = self.model.get('mode');
                 // set focus in compose and forward mode to recipient tokenfield
                 if (/(compose|forward)/.test(mode)) {
@@ -947,12 +954,18 @@ define('io.ox/mail/compose/view', [
                 } else {
                     self.editor.focus();
                 }
-                if (mode === 'replyall' && !_.isEmpty(self.model.get('cc'))) {
-                    self.toggleTokenfield('cc');
+                if (mode === 'replyall' || mode === 'edit') {
+                    if (!_.isEmpty(self.model.get('cc'))) self.toggleTokenfield('cc');
+                    if (!_.isEmpty(self.model.get('bcc'))) self.toggleTokenfield('bcc');
                 }
                 self.setBody(self.model.getContent());
                 self.model.dirty(false);
             });
+        },
+
+        setSimpleMail: function (content) {
+            if (this.model.get('editorMode') === 'text') return;
+            if ($(content).find('table').length === 0) this.editorContainer.find('.editable.mce-content-body').addClass('simple-mail');
         },
 
         blockReuse: function (sendtype) {

@@ -42,6 +42,8 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
                     title: gt('Use cursor keys to navigate'),
                     trigger: 'focus'
                 })
+                // make sure it always disappears
+                .on('dispose', function () { $(this).tooltip('hide'); })
                 // always avoid clearing the URL hash
                 .on('click', 'a', $.preventDefault);
         },

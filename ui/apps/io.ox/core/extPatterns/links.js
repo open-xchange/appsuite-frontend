@@ -415,14 +415,15 @@ define('io.ox/core/extPatterns/links', [
                             'data-toggle': 'dropdown',
                             'data-action': 'more',
                             'aria-haspopup': true,
-                            'aria-label': isSmartphone ? gt('Actions') : gt('More')
+                            'aria-label': isSmartphone ? gt('Actions') : gt('More actions'),
+                            'title': isSmartphone ? gt('Actions') : gt('More actions')
                         })
                         .append(
                             isSmartphone && !extension.compactDropdown ?
                                 $().add($.txt(gt('Actions'))).add($('<i aria-hidden="true" class="fa fa-caret-down">')) :
                                 $('<span class="sr-only">').text(gt('Actions')).add($('<i aria-hidden="true" class="fa fa-bars">'))
                         )
-                        .on(Modernizr.touch ? 'touchstart' : 'click', function () {
+                        .on(_.device('touch') ? 'touchstart' : 'click', function () {
                             // fix dropdown position on-the-fly
                             var left = $(this).parent().position().left;
                             $(this).next().attr('class', 'dropdown-menu' + (left < 200 ? '' : ' pull-right'));
@@ -433,10 +434,24 @@ define('io.ox/core/extPatterns/links', [
                     )
                 );
 
+                if (!isSmartphone) {
+                    dd.attr({
+                        'data-placement': 'bottom',
+                        'data-animation': 'false',
+                        'data-container': 'body'
+                    })
+                    .tooltip({ trigger: 'hover' })
+                    .parent()
+                    .on('shown.bs.dropdown dispose', function () {
+                        $(this).children('a').tooltip('hide');
+                    });
+                }
+
                 //in firefox draggable=false is not enough to prevent dragging...
                 if (_.device('firefox')) {
                     dd.attr('ondragstart', 'return false;');
                 }
+
                 dd.dropdown();
                 injectDividers(nav.find('ul'));
             }

@@ -200,7 +200,7 @@ define('io.ox/backbone/mini-views/datepicker', [
         },
 
         updateView: function () {
-            var timestamp = parseInt(this.model[this.model.getDate ? 'getDate' : 'get'](this.attribute), 10);
+            var timestamp = parseInt(this.model.getDate ? this.model.getDate(this.attribute, { fulltime: this.isFullTime() }) : this.model.get(this.attribute), 10);
             if (_.isNaN(timestamp)) return;
             timestamp = moment.tz(timestamp, this.model.get(this.options.timezoneAttribute));
             if (!this.mobileMode) {
@@ -221,7 +221,8 @@ define('io.ox/backbone/mini-views/datepicker', [
         updateModel: function () {
             var time = this.getTimestamp();
             if (_.isNull(time) || _.isNumber(time)) {
-                this.model[this.model.setDate ? 'setDate' : 'set'](this.attribute, time, { validate: true });
+                var params = { validate: true, fulltime: this.isFullTime() };
+                this.model[this.model.setDate ? 'setDate' : 'set'](this.attribute, time, params);
                 this.model.trigger('valid');
             } else {
                 this.model.trigger('invalid:' + this.attribute, [gt('Please enter a valid date')]);

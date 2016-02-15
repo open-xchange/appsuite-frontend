@@ -12,7 +12,7 @@ msgstr ""
 #: apps/io.ox/backbone/basicModel.js
 #: module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
-msgid "Invalid data"
+msgid "The dialog contains invalid data"
 msgstr ""
 
 #: apps/io.ox/backbone/basicModel.js
@@ -766,6 +766,8 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/util.js
+#: module:io.ox/calendar
 #: apps/io.ox/mail/actions/reminder.js
 #: module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js
@@ -784,6 +786,7 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/print-compact.js
 #: module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Location"
 msgstr ""
 
@@ -813,6 +816,8 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/util.js
+#: module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 #: apps/io.ox/files/actions/edit-description.js
@@ -950,6 +955,11 @@ msgstr ""
 #: apps/io.ox/calendar/edit/main.js
 #: module:io.ox/calendar/edit/main
 msgid "Description has been copied"
+msgstr ""
+
+#: apps/io.ox/calendar/edit/main.js
+#: module:io.ox/calendar/edit/main
+msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 msgstr ""
 
 #: apps/io.ox/calendar/edit/main.js
@@ -1625,18 +1635,15 @@ msgstr ""
 
 #: apps/io.ox/calendar/model.js
 #: module:io.ox/calendar
-#: apps/io.ox/mail/vacationnotice/settings/filter.js
-#: module:io.ox/mail
-msgid "The start date must be before the end date."
+msgid "The end date must be after the start date."
 msgstr ""
 
+#. %1$s is an upload limit like for example 10mb
 #: apps/io.ox/calendar/model.js
 #: module:io.ox/calendar
-#: apps/io.ox/contacts/model.js
-#: module:io.ox/contacts
 #: apps/io.ox/tasks/model.js
 #: module:io.ox/tasks
-msgid "Files can not be uploaded, because quota exceeded."
+msgid "Files can not be uploaded, because upload limit of %1$s is exceeded."
 msgstr ""
 
 #: apps/io.ox/calendar/month/perspective.js
@@ -1689,7 +1696,7 @@ msgstr ""
 msgid "%1$s (Tentative)"
 msgstr ""
 
-#. text of an user list that shows the names of presenting user and participants.
+#. text of a user list that shows the names of presenting user and participants.
 #. the dropdown button label for the participants dropdown.
 #. the participants section label.
 #: apps/io.ox/calendar/print-compact.js
@@ -2754,6 +2761,11 @@ msgstr ""
 #: apps/io.ox/contacts/main.js
 #: module:io.ox/contacts
 msgid "Item List"
+msgstr ""
+
+#: apps/io.ox/contacts/model.js
+#: module:io.ox/contacts
+msgid "Files can not be uploaded, because quota exceeded."
 msgstr ""
 
 #: apps/io.ox/contacts/model.js
@@ -3917,6 +3929,11 @@ msgstr ""
 
 #: apps/io.ox/core/extPatterns/links.js
 #: module:io.ox/core
+msgid "More actions"
+msgstr ""
+
+#: apps/io.ox/core/extPatterns/links.js
+#: module:io.ox/core
 #: apps/io.ox/find/extensions-api.js
 #: apps/io.ox/search/facets/extensions.js
 msgid "More"
@@ -4068,7 +4085,7 @@ msgstr ""
 msgid "Folder type"
 msgstr ""
 
-#. number of items in a folder
+#. number of messages in a folder (mail only)
 #: apps/io.ox/core/folder/actions/properties.js
 #: module:io.ox/core
 msgid "Number of messages"
@@ -4082,6 +4099,8 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/properties.js
 #: module:io.ox/core
+#: apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr ""
 
@@ -4170,6 +4189,11 @@ msgstr ""
 #: apps/io.ox/core/folder/contextmenu.js
 #: module:io.ox/core
 msgid "Clean up"
+msgstr ""
+
+#: apps/io.ox/core/folder/contextmenu.js
+#: module:io.ox/core
+msgid "Empty trash"
 msgstr ""
 
 #: apps/io.ox/core/folder/contextmenu.js
@@ -4527,11 +4551,16 @@ msgctxt "app"
 msgid "Tasks"
 msgstr ""
 
+#. %1$s is usually "Drive" (product name; might be customized)
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
+#: apps/io.ox/core/pim/actions.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js
 #: module:io.ox/files
 #: apps/io.ox/launchpad/main.js
+#: apps/io.ox/mail/actions.js
+#: module:io.ox/mail
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Drive"
@@ -4589,6 +4618,8 @@ msgstr ""
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
+#: apps/plugins/portal/client-onboarding/register.js
+#: module:plugins/portal
 msgid "Connect your Device"
 msgstr ""
 
@@ -4900,17 +4931,20 @@ msgstr ""
 #: apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
+#: apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
 #: apps/plugins/portal/updater/register.js
 #: module:plugins/portal
 msgid "Download"
 msgstr ""
 
+#. %1$s is usually "Drive" (product name; might be customized)
 #: apps/io.ox/core/pim/actions.js
 #: module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
-msgid "Save to Drive"
+msgid "Save to %1$s"
 msgstr ""
 
 #: apps/io.ox/core/print.js
@@ -6169,14 +6203,14 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/types/documentview.js
 #: module:io.ox/core
-#: apps/io.ox/presenter/views/presentationview.js
+#: apps/io.ox/presenter/errormessages.js
 #: module:io.ox/presenter
 msgid "An error occurred converting the document so it cannot be displayed."
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/types/documentview.js
 #: module:io.ox/core
-#: apps/io.ox/presenter/views/presentationview.js
+#: apps/io.ox/presenter/errormessages.js
 #: module:io.ox/presenter
 msgid "This document is password protected and cannot be displayed."
 msgstr ""
@@ -8646,6 +8680,7 @@ msgstr ""
 msgid "Mail Details"
 msgstr ""
 
+#. when items list is empty (e.g. search result)
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
 msgid "Empty"
@@ -8713,11 +8748,6 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
 msgid "Mark as unread"
-msgstr ""
-
-#: apps/io.ox/mail/mobile-toolbar-actions.js
-#: module:io.ox/mail
-msgid "Mark as"
 msgstr ""
 
 #: apps/io.ox/mail/mobile-toolbar-actions.js
@@ -9038,6 +9068,11 @@ msgstr ""
 msgid "Primary account"
 msgstr ""
 
+#: apps/io.ox/mail/vacationnotice/settings/filter.js
+#: module:io.ox/mail
+msgid "The start date must be before the end date."
+msgstr ""
+
 #: apps/io.ox/mail/vacationnotice/settings/model.js
 #: module:io.ox/mail
 msgid "vacation notice"
@@ -9143,6 +9178,11 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
+msgid "Click to show or hide actions for advanced users."
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
 msgid "Expert user?"
 msgstr ""
 
@@ -9153,52 +9193,67 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "hostname"
+msgid "CalDAV Login"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "login"
+msgid "CardDAV URL"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "SMTP login"
+msgid "CardDAV Login"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "SMTP server"
+msgid "SMTP Server"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "SMTP port"
+msgid "SMTP Port"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "SMTP secure"
+msgid "SMTP Login"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "IMAP login"
+msgid "SMTP Secure"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "IMAP server"
+msgid "IMAP Server"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "IMAP port"
+msgid "IMAP Port"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "IMAP secure"
+msgid "IMAP Login"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
+msgid "IMAP Secure"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
+msgid "EAS URL"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
+msgid "EAS Login"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
@@ -9248,6 +9303,11 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
+msgid "Mac App Store"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
 msgid "App Store"
 msgstr ""
 
@@ -9256,19 +9316,33 @@ msgstr ""
 msgid "Google Play"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
-msgid "Installation"
-msgstr ""
-
+#. %1$s: app store name
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
 msgid "Get the App from %1$s"
 msgstr ""
 
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
+msgid "Download the application."
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
+msgid "Installation"
+msgstr ""
+
 #: apps/io.ox/onboarding/clients/wizard.js
 #: module:io.ox/core/onboarding
+#: apps/plugins/portal/client-onboarding/register.js
+#: module:plugins/portal
 msgid "Take %1$s with you! Stay up-to-date on your favorite devices."
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js
+#: module:io.ox/core/onboarding
+msgid "back"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/wizard.js
@@ -9283,6 +9357,11 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/wizard.js
 #: module:io.ox/core/onboarding
+msgid "list of available platforms"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js
+#: module:io.ox/core/onboarding
 msgid "Which device do you want to configure?"
 msgstr ""
 
@@ -9293,7 +9372,27 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/wizard.js
 #: module:io.ox/core/onboarding
+msgid "list of available devices"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js
+#: module:io.ox/core/onboarding
+msgid "choose a different platform"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js
+#: module:io.ox/core/onboarding
 msgid "What do you want to use?"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js
+#: module:io.ox/core/onboarding
+msgid "list of available actions"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/wizard.js
+#: module:io.ox/core/onboarding
+msgid "choose a different scenario"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/wizard.js
@@ -9525,57 +9624,49 @@ msgstr ""
 msgid "Broadcast your presentation over the Web."
 msgstr ""
 
-#. headline of a presentation start alert
-#: apps/io.ox/presenter/views/mainview.js
+#: apps/io.ox/presenter/errormessages.js
 #: module:io.ox/presenter
-msgid "Presentation start"
+msgid "A general error occurred. Please try to reload the document. In case this does not help, please contact your system administrator."
 msgstr ""
 
-#. message text of of a presentation start alert
-#. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js
+#: apps/io.ox/presenter/errormessages.js
 #: module:io.ox/presenter
-msgid "%1$s has started the presentation."
+msgid "A general network error occurred. Please try to reload the document. In case this does not help, please contact your system administrator."
 msgstr ""
 
-#. link button to join the currently running presentation
-#: apps/io.ox/presenter/views/mainview.js
+#: apps/io.ox/presenter/errormessages.js
 #: module:io.ox/presenter
-msgid "Join Presentation"
+msgid "A general file storage error occurred. Please try to reload the document. In case this does not help, please contact your system administrator."
 msgstr ""
 
-#. headline of a presentation end alert
-#: apps/io.ox/presenter/views/mainview.js
+#: apps/io.ox/presenter/errormessages.js
 #: module:io.ox/presenter
-msgid "Presentation end"
+msgid "The requested document does not exist."
 msgstr ""
 
-#. message text of a presentation end alert
-#. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js
+#: apps/io.ox/presenter/errormessages.js
 #: module:io.ox/presenter
-msgid "%1$s has ended the presentation."
+msgid "The presentation cannot be started. Please check the URL or contact the presenter."
 msgstr ""
 
-#. headline of a presentation end alert
-#: apps/io.ox/presenter/views/mainview.js
+#: apps/io.ox/presenter/errormessages.js
 #: module:io.ox/presenter
-msgid "Presentation join"
+msgid "This document does not have any content."
 msgstr ""
 
-#. message text of a presentation end alert
-#. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js
+#: apps/io.ox/presenter/errormessages.js
 #: module:io.ox/presenter
-msgid "Joining the presentation of %1$s."
+msgid "You do not have the appropriate permissions to read the document."
 msgstr ""
 
-#. message text of an alert box if joining a presentation fails
-#. %1$d is the name of the user who started the presentation
-#: apps/io.ox/presenter/views/mainview.js
+#: apps/io.ox/presenter/errormessages.js
 #: module:io.ox/presenter
-#, c-format
-msgid "The limit of participants has been reached. Please contact the presenter %1$s."
+msgid "A general network error occurred. Please contact your system administrator."
+msgstr ""
+
+#: apps/io.ox/presenter/errormessages.js
+#: module:io.ox/presenter
+msgid "An error occurred loading the document so it cannot be displayed."
 msgstr ""
 
 #. button tooltip for 'go to next presentation slide' action
@@ -9630,7 +9721,7 @@ msgstr ""
 msgid "Toggle fullscreen"
 msgstr ""
 
-#. text of an user list that shows the names of presenting user and participants.
+#. text of a user list that shows the names of presenting user and participants.
 #. the text to display as presenter name if no user is presenting yet.
 #. the text to display as participants names if no users are listening yet.
 #: apps/io.ox/presenter/views/navigationview.js
@@ -9638,7 +9729,7 @@ msgstr ""
 msgid "none"
 msgstr ""
 
-#. text of an user list that shows the names of presenting user and participants.
+#. text of a user list that shows the names of presenting user and participants.
 #. the presenter section label.
 #. tooltip for the icon that identifies the presenting user
 #: apps/io.ox/presenter/views/navigationview.js
@@ -9668,9 +9759,76 @@ msgstr ""
 msgid "Jump to slide"
 msgstr ""
 
-#: apps/io.ox/presenter/views/presentationview.js
+#. headline of a presentation start alert
+#: apps/io.ox/presenter/views/notification.js
 #: module:io.ox/presenter
-msgid "An error occurred loading the document so it cannot be displayed."
+msgid "Presentation start"
+msgstr ""
+
+#. message text of of a presentation start alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/notification.js
+#: module:io.ox/presenter
+msgid "%1$s has started the presentation."
+msgstr ""
+
+#. link button to join the currently running presentation
+#: apps/io.ox/presenter/views/notification.js
+#: module:io.ox/presenter
+msgid "Join Presentation"
+msgstr ""
+
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/notification.js
+#: module:io.ox/presenter
+msgid "Presentation end"
+msgstr ""
+
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/notification.js
+#: module:io.ox/presenter
+msgid "%1$s has ended the presentation."
+msgstr ""
+
+#. headline of a presentation join alert
+#: apps/io.ox/presenter/views/notification.js
+#: module:io.ox/presenter
+msgid "Presentation join"
+msgstr ""
+
+#. message text of a presentation join alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/notification.js
+#: module:io.ox/presenter
+msgid "Joining the presentation of %1$s."
+msgstr ""
+
+#. message text of an alert box if joining a presentation fails
+#. %1$d is the name of the user who started the presentation
+#: apps/io.ox/presenter/views/notification.js
+#: module:io.ox/presenter
+#, c-format
+msgid "The limit of participants has been reached. Please contact the presenter %1$s."
+msgstr ""
+
+#. message text of an alert indicating that the presentation file was deleted while presenting it
+#. %1$d is the file name
+#: apps/io.ox/presenter/views/notification.js
+#: module:io.ox/presenter
+msgid "The presentation document %1$s was deleted."
+msgstr ""
+
+#. message text of a Realtime connection online info
+#: apps/io.ox/presenter/views/notification.js
+#: module:io.ox/presenter
+msgid "The realtime connection is established."
+msgstr ""
+
+#. message text of a Realtime connection offline alert.
+#: apps/io.ox/presenter/views/notification.js
+#: module:io.ox/presenter
+msgid "The realtime connection is lost."
 msgstr ""
 
 #. Info text that says the presentation is paused.
@@ -10968,6 +11126,11 @@ msgstr ""
 #: apps/plugins/portal/calendar/register.js
 #: module:plugins/portal
 msgid "You don't have any appointments in the near future."
+msgstr ""
+
+#: apps/plugins/portal/client-onboarding/register.js
+#: module:plugins/portal
+msgid "Connect"
 msgstr ""
 
 #: apps/plugins/portal/flickr/register.js

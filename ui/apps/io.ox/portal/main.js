@@ -726,7 +726,7 @@ define('io.ox/portal/main', [
             }
 
             // make sortable, but not for Touch devices
-            if (!Modernizr.touch) {
+            if (!_.device('touch')) {
                 require(['static/3rd.party/jquery-ui.min.js']).done(function () {
                     appBaton.$.widgets.sortable({
                         cancel: 'li.protected',

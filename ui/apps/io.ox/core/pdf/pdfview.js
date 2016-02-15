@@ -183,7 +183,7 @@ define('io.ox/core/pdf/pdfview', [
                 pageChildren = textWrapperNode.children();
                 _.each(pageChildren, function (child, index) {
                     // Non IPAD case
-                    if (!(Modernizr.touch && _.browser.iOS && _.browser.Safari)) {
+                    if (!(_.device('touch') && _.browser.iOS && _.browser.Safari)) {
                         child.style.margin = margin;
                         child.style.padding = padding;
                         child.style.transformOrigin = origin;
