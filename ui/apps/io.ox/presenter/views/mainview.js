@@ -12,18 +12,16 @@
  */
 define('io.ox/presenter/views/mainview', [
     'io.ox/backbone/disposable',
-    'io.ox/core/notifications',
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/actions',
     'io.ox/core/tk/sessionrestore',
     'io.ox/presenter/views/presentationview',
     'io.ox/presenter/views/sidebarview',
     'io.ox/presenter/views/toolbarview',
     'io.ox/presenter/views/thumbnailview',
+    'io.ox/presenter/views/notification',
     'static/3rd.party/bigscreen/bigscreen.min.js',
-    'gettext!io.ox/presenter',
     'io.ox/core/tk/nodetouch'
-], function (DisposableView, Notifications, Ext, ActionsPattern, SessionRestore, PresentationView, SidebarView, ToolbarView, ThumbnailView, BigScreen, gt) {
+], function (DisposableView, Ext, SessionRestore, PresentationView, SidebarView, ToolbarView, ThumbnailView, Notification, BigScreen) {
 
     'use strict';
 
@@ -72,6 +70,8 @@ define('io.ox/presenter/views/mainview', [
             // listen to presentation start, end events
             this.listenTo(this.presenterEvents, 'presenter:presentation:start', this.onPresentationStart);
             this.listenTo(this.presenterEvents, 'presenter:presentation:end', this.onPresentationEnd);
+            // listen to presenter close evemts
+            this.listenTo(this.presenterEvents, 'presenter:close', this.closePresenter);
 
             // show navigation panel on user activity
             this.$el.on('mousemove', _.throttle(this.onMouseMove.bind(this), 500));
@@ -191,7 +191,8 @@ define('io.ox/presenter/views/mainview', [
 
             if (!localModel.isPresenter(userId)) {
                 // show presentation start notification to all participants in case of a remote presentation.
-                this.notifyPresentationStart();
+                var baton = Ext.Baton({ context: this, model: this.model, data: this.model.toJSON() });
+                Notification.notifyPresentationStart(this.app.rtModel, this.app.rtConnection, baton);
             }
         },
 
@@ -222,7 +223,7 @@ define('io.ox/presenter/views/mainview', [
 
                 // show presentation end notification to all participants that joined the remote presentation.
                 if (wasParticipant(userId)) {
-                    this.notifyPresentationEnd();
+                    Notification.notifyPresentationEnd(this.app.rtModel, this.app.rtConnection);
                 }
 
                 // leave full screen mode
@@ -398,149 +399,6 @@ define('io.ox/presenter/views/mainview', [
         },
 
         /**
-         * Shows an alert banner.
-         *
-         * @param {Object} yellOptions
-         *  The settings for the alert banner:
-         *  @param {String} [yellOptions.type='info']
-         *      The type of the alert banner. Supported types are 'success',
-         *      'info', 'warning', and 'error'.
-         *  @param {String} [yellOptions.headline]
-         *      An optional headline shown above the message text.
-         *  @param {String} yellOptions.message
-         *      The message text shown in the alert banner.
-         *  @param {Number} [yellOptions.duration]
-         *      The time to show the alert banner, in milliseconds; or -1 to
-         *      show a permanent alert.
-         *  @param {Object} [yellOptions.action]
-         *      An arbitrary action button that will be shown below the
-         *      message text, with the following properties:
-         *      @param {String} yellOptions.action.label
-         *          The display text for the button.
-         *      @param {String} yellOptions.action.ref
-         *          The action reference id.
-         *      @param {Baton} [yellOptions.action.baton=null]
-         *          The baton to hand over to the action.
-         */
-        showNotification: function (yellOptions) {
-            var // the notification DOM element
-                yellNode = null;
-
-            function onNotificationAppear() {
-                // add action button to the message
-                var // the button label
-                    label = yellOptions.action.label,
-                    // the action ref the button invokes
-                    ref = yellOptions.action.ref,
-                    // the baton to hand over to the action
-                    baton = yellOptions.action.baton || null,
-                    // the message node as target for additional contents
-                    messageNode = yellNode.find('.message'),
-                    // the button node to add to the message
-                    button = $('<a role="button" class="presenter-notification-btn" tabindex="1">').attr('title', label).text(label);
-
-                button.on('click', function () {
-                    ActionsPattern.invoke(ref, null, baton);
-                    Notifications.yell.close();
-                });
-
-                messageNode.append($('<div>').append(button));
-            }
-
-            // add default options
-            yellOptions = _.extend({ type: 'info' }, yellOptions);
-            // create and show the notification DOM node
-            yellNode = Notifications.yell(yellOptions);
-            // register event handlers
-
-            if (_.isObject(yellOptions.action)) {
-                yellNode.one('notification:appear', onNotificationAppear);
-            }
-        },
-
-        /**
-         * Shows a notification for the participants when the presenter starts the presentation.
-         */
-        notifyPresentationStart: function () {
-            var rtModel = this.app.rtModel,
-                userId = this.app.rtConnection.getRTUuid();
-
-            if (rtModel.isPresenter(userId) || rtModel.isJoined(userId)) { return; }
-
-            var baton = Ext.Baton({ context: this, model: this.model, data: this.model.toJSON() });
-            var yellOptions = {
-                //#. headline of a presentation start alert
-                headline: gt('Presentation start'),
-                //#. message text of of a presentation start alert
-                //#. %1$d is the presenter name
-                message: gt('%1$s has started the presentation.', this.app.rtModel.get('presenterName')),
-                duration: -1,
-                focus: true,
-                action: {
-                    //#. link button to join the currently running presentation
-                    label: gt('Join Presentation'),
-                    ref: 'io.ox/presenter/actions/join',
-                    baton: baton
-                }
-            };
-
-            this.showNotification(yellOptions);
-        },
-
-        /**
-         * Shows a notification to all participants when the presenter ends the presentation.
-         */
-        notifyPresentationEnd: function () {
-            var rtModel = this.app.rtModel,
-                userId = this.app.rtConnection.getRTUuid(),
-                presenterId,
-                presenterName;
-
-            if (_.isEmpty(rtModel.get('presenterId'))) {
-                // the presenter has already been reset, look for previous data
-                presenterId = rtModel.previous('presenterId');
-                presenterName = rtModel.previous('presenterName');
-
-            } else {
-                // use current presenter
-                presenterId = rtModel.get('presenterId');
-                presenterName = rtModel.get('presenterName');
-            }
-
-            if (userId === presenterId) { return; }
-
-            this.showNotification({
-                //#. headline of a presentation end alert
-                headline: gt('Presentation end'),
-                //#. message text of a presentation end alert
-                //#. %1$d is the presenter name
-                message: gt('%1$s has ended the presentation.', presenterName),
-                duration: 6000
-            });
-        },
-
-        /**
-         * Shows a notification to the participant who joined the presentation.
-         */
-        notifyPresentationJoin: function () {
-            var rtModel = this.app.rtModel,
-                userId = this.app.rtConnection.getRTUuid(),
-                presenterName = rtModel.get('presenterName');
-
-            if (rtModel.isPresenter(userId) || rtModel.isJoined(userId)) { return; }
-
-            this.showNotification({
-                //#. headline of a presentation end alert
-                headline: gt('Presentation join'),
-                //#. message text of a presentation end alert
-                //#. %1$d is the presenter name
-                //message: gt('%1$s has ended the presentation.', presenterName),
-                message: gt('Joining the presentation of %1$s.', presenterName),
-                duration: 6000
-            });
-        },
-
-        /**
          * Toggles full screen mode of the main view depending on the given state.
          *  A state of 'true' starts full screen mode, 'false' exits the full screen mode and
          *  'undefined' toggles the full screen state.
@@ -683,14 +541,7 @@ define('io.ox/presenter/views/mainview', [
 
                 // show an alert box for known errors
                 if (_.isObject(error) && (error.error === 'PRESENTER_MAX_PARTICIPANTS_FOR_PRESENTATION_REACHED_ERROR')) {
-                    this.showNotification({
-                        type: 'error',
-                        //#. message text of an alert box if joining a presentation fails
-                        //#. %1$d is the name of the user who started the presentation
-                        //#, c-format
-                        message: gt('The limit of participants has been reached. Please contact the presenter %1$s.', this.app.rtModel.get('presenterName')),
-                        focus: true
-                    });
+                    Notification.notifyMaxParticipantsReached(this.app.rtModel.get('presenterName'));
                 }
             }.bind(this));
 
@@ -698,7 +549,14 @@ define('io.ox/presenter/views/mainview', [
         },
 
         /**
-         * Destructor function of the PresentationView.
+         * Presenter close handler.
+         */
+        closePresenter: function () {
+            this.app.quit();
+        },
+
+        /**
+         * Destructor function of the MainView.
          */
         disposeView: function () {
             //console.info('Presenter - dispose MainView');

@@ -23,7 +23,7 @@ define('io.ox/presenter/rtconnection', [
     'use strict';
 
     var // names of internal events for the real-time connection state
-        INTERNAL_EVENTS = 'online offline reset error:notMember',
+        INTERNAL_EVENTS = 'online offline reset error:notMember timeout error:stanzaProcessingFailed error:joinFailed error:disposed',
 
         // names of runtime push messages
         PUSH_EVENTS = 'update';
