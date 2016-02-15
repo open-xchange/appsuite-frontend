@@ -63,7 +63,7 @@ The following extension points are defined in AppSuite Core UI and can be used t
 * io.ox/ads/portalBillboard
 * io.ox/ads/mailSentOverlay
 
-In order to activate one of these areas, a [custom plugin](components/plugins/01_create-plugins] is needed, shipping a configuration as described [above](#Configuration).
+In order to activate one of these areas, a [custom plugin](components/plugins/01_create-plugins) is needed, shipping a configuration as described [above](#Configuration).
 
 # Customization
 
