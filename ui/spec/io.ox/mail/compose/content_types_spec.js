@@ -21,8 +21,7 @@ define(['io.ox/mail/compose/model'], function (MailModel) {
                 });
                 model.setContent('This is some plain text\n\n with line breaks and stuff.');
                 expect(model.get('attachments').at(0).get('content_type')).to.equal('text/plain');
-                //TODO: bad API? 'text' is not a content type. text/html is, or rename method to 'editorMode' or so
-                model.setMailContentType('html');
+                model.setMailContentType('text/html');
                 expect(model.getContent()).to.equal('This is some plain text\n\n with line breaks and stuff.');
                 expect(model.get('attachments').at(0).get('content')).to.equal('This is some plain text\n\n with line breaks and stuff.');
                 expect(model.get('attachments').at(0).get('content_type')).to.equal('text/html');
@@ -33,9 +32,7 @@ define(['io.ox/mail/compose/model'], function (MailModel) {
                 });
                 model.setContent('This is some <i>html</i> <b>text</b><br /><br> with line breaks and stuff.');
                 expect(model.get('attachments').at(0).get('content_type')).to.equal('text/html');
-                //TODO: bad API? 'text' is not a content type. text/plain is, or rename method to 'editorMode' or so
-                model.setMailContentType('text');
-                //FIXME: should not this be text/plain?
+                model.setMailContentType('text/plain');
                 expect(model.get('attachments').at(0).get('content_type')).to.equal('text/plain');
                 expect(model.get('attachments').at(0).get('content')).to.equal('This is some <i>html</i> <b>text</b><br /><br> with line breaks and stuff.');
                 expect(model.getContent()).to.equal('This is some <i>html</i> <b>text</b><br /><br> with line breaks and stuff.');
