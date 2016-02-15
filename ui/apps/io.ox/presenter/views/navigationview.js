@@ -72,8 +72,11 @@ define('io.ox/presenter/views/navigationview', [
             title: gt('Pause the presentation'),
             ref: PRESENTER_ACTION_ID + '/pause',
             customize: function () {
+                var data = this.data('bs.tooltip');
                 this.attr({ 'aria-label': gt('Pause presentation') });
-                this.data('bs.tooltip').options.placement = 'top';
+                if (data && data.options) {
+                    data.options.placement = 'top';
+                }
             }
         },
         'continue': {
@@ -85,8 +88,11 @@ define('io.ox/presenter/views/navigationview', [
             title: gt('Continue the presentation'),
             ref: PRESENTER_ACTION_ID + '/continue',
             customize: function () {
+                var data = this.data('bs.tooltip');
                 this.attr({ 'aria-label': gt('Continue presentation') });
-                this.data('bs.tooltip').options.placement = 'top';
+                if (data && data.options) {
+                    data.options.placement = 'top';
+                }
             }
         },
         'fullscreen': {
@@ -99,8 +105,11 @@ define('io.ox/presenter/views/navigationview', [
             title: gt('Toggle fullscreen'),
             ref: PRESENTER_ACTION_ID + '/fullscreen',
             customize: function () {
+                var data = this.data('bs.tooltip');
                 this.attr({ 'aria-label': gt('Toggle fullscreen') });
-                this.data('bs.tooltip').options.placement = 'top';
+                if (data && data.options) {
+                    data.options.placement = 'top';
+                }
             }
         }
     };
@@ -156,24 +165,24 @@ define('io.ox/presenter/views/navigationview', [
             var participants = rtModel.get('participants');
             var presenterId = rtModel.get('presenterId') || 'none';
             var presenterName = rtModel.get('presenterName') ||
-                    //#. text of an user list that shows the names of presenting user and participants.
+                    //#. text of a user list that shows the names of presenting user and participants.
                     //#. the text to display as presenter name if no user is presenting yet.
                     gt('none');
 
             var dropdown = new Dropdown({
                 model: baton.context.app.rtModel,
-                //#. text of an user list that shows the names of presenting user and participants.
+                //#. text of a user list that shows the names of presenting user and participants.
                 //#. the dropdown button label for the participants dropdown.
                 label: gt('Participants'),
                 tagName: 'li',
                 caret: true
             })
-                //#. text of an user list that shows the names of presenting user and participants.
+                //#. text of a user list that shows the names of presenting user and participants.
                 //#. the presenter section label.
                 .header(gt('Presenter'))
                 .link(presenterId, presenterName, null)
                 .divider()
-                //#. text of an user list that shows the names of presenting user and participants.
+                //#. text of a user list that shows the names of presenting user and participants.
                 //#. the participants section label.
                 .header(gt('Participants'));
 
@@ -195,7 +204,7 @@ define('io.ox/presenter/views/navigationview', [
             }, this);
 
             if (!participantsJoined) {
-                //#. text of an user list that shows the names of presenting user and participants.
+                //#. text of a user list that shows the names of presenting user and participants.
                 //#. the text to display as participants names if no users are listening yet.
                 dropdown.link('none', gt('none'), null);
             }

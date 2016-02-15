@@ -16,13 +16,14 @@ define('io.ox/presenter/views/presentationview', [
     'io.ox/core/pdf/pdfdocument',
     'io.ox/core/pdf/pdfview',
     'io.ox/presenter/views/navigationview',
+    'io.ox/presenter/views/notification',
     'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/tk/doc-utils/pageloader',
     'io.ox/presenter/util',
     'gettext!io.ox/presenter',
     'static/3rd.party/swiper/swiper.jquery.js',
     'css!3rd.party/swiper/swiper.css'
-], function (DisposableView, PDFDocument, PDFView, NavigationView, DocConverterUtils, PageLoader, Util, gt) {
+], function (DisposableView, PDFDocument, PDFView, NavigationView, Notification, DocConverterUtils, PageLoader, Util, gt) {
 
     'use strict';
 
@@ -64,12 +65,6 @@ define('io.ox/presenter/views/presentationview', [
 
     // defines how many pages are loaded before and after the visible pages
     var NON_VISIBLE_PAGES_TO_LOAD_BESIDE = 1;
-
-    var PDF_ERROR_NOTIFICATIONS = {
-        importError: { msg: gt('An error occurred loading the document so it cannot be displayed.'), icon: 'fa fa-exclamation-triangle' },
-        filterError: { msg: gt('An error occurred converting the document so it cannot be displayed.'), icon: 'fa fa-exclamation-triangle' },
-        passwordProtected: { msg: gt('This document is password protected and cannot be displayed.'), icon: 'fa fa-lock' }
-    };
 
     /**
      * Creates the HTML mark-up for a slide navigation button.
@@ -988,28 +983,9 @@ define('io.ox/presenter/views/presentationview', [
          */
         pdfDocumentLoadError: function (error) {
             console.warn('Presenter - failed loading PDF document. Cause: ', error.cause);
-            this.showErrorNotification(error);
+            this.$el.append(Notification.createErrorNode(error, { category: 'conversion' }));
             // reject the document load Deferred.
             this.documentLoad.reject();
-        },
-
-        /**
-         * Displays an error notification for the given PDF load error.
-         *
-         * @param {Object} error
-         *  the PDF load error data.
-         */
-        showErrorNotification: function (error) {
-            var errorData = PDF_ERROR_NOTIFICATIONS[error && error.cause];
-            var iconClass = errorData && errorData.icon || PDF_ERROR_NOTIFICATIONS.importError.icon;
-            var msg = errorData && errorData.msg || PDF_ERROR_NOTIFICATIONS.importError.msg;
-
-            var notificationNode = $('<div class="presenter-error-notification">').append(
-                                        $('<i>').addClass(iconClass),
-                                        $('<p class="apology">').text(msg)
-                                   );
-
-            this.$el.append(notificationNode);
         },
 
         /**
