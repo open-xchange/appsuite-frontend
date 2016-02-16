@@ -77,7 +77,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
 
             it('same day', function () {
                 var start = moment([2012, 10, 11, 11, 11, 0]);
-                expect(util.getTimeInterval({ start_date: start.valueOf(), end_date: start.add(1, 'hour').valueOf() })).to.equal('11:11\u201312:11');
+                expect(util.getTimeInterval({ start_date: start.valueOf(), end_date: start.add(1, 'hour').valueOf() })).to.equal('11:11\u201312:11 Uhr');
             });
 
         });
