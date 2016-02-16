@@ -53,7 +53,7 @@
 
 .preview-bottom {
     .leftside { left: 0; right: 0; bottom: auto; width: auto !important; height: 45%; border-bottom: 1px solid #ccc;  z-index: 2; overflow: visible; }
-    .rightside { left: 0 !important; right: 0; top: 45%; z-index: 1; }
+    .rightside { left: 0 !important; right: 0; top: 45%; z-index: 2; }
     // horizontal resizebar
     .list-view-control .resizebar {
         display: none;
@@ -225,6 +225,14 @@
         outline: 0;
         &.loading {
             min-height: 80px;
+        }
+        .loading-error {
+            color: #800;
+            line-height: 16px;
+            h4 {
+                font-size: inherit;
+                margin: 4px 0 0 0;
+            }
         }
     }
     section.attachments {
