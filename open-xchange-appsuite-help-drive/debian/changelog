@@ -1,3 +1,9 @@
+open-xchange-appsuite-help-drive (7.6.2-30) stable; urgency=medium
+
+  * Build for patch 2016-02-17 (3107)
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Tue, 16 Feb 2016 17:14:45 +0000
+
 open-xchange-appsuite-help-drive (7.6.2-29) stable; urgency=medium
 
   * Build for patch 2016-02-08 (3071)
