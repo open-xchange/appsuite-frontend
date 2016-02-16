@@ -1251,7 +1251,7 @@ define('io.ox/core/folder/api', [
     function getExistingFolder(type) {
         var defaultId = util.getDefaultFolder(type);
         if (defaultId) return $.Deferred().resolve(defaultId);
-        if (type === 'mail') return $.Deferred().resolve('default0' + mailSettings.get('defaultseparator') + 'INBOX');
+        if (type === 'mail') return $.Deferred().resolve('default0' + mailSettings.get('defaultseparator', '/') + 'INBOX');
         if (type === 'infostore') return $.Deferred().resolve(10);
         return flat({ module: type }).then(function (data) {
             for (var section in data) {
