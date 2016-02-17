@@ -12,13 +12,18 @@
  */
 
 define('io.ox/find/extensions-api', [
+    'io.ox/core/folder/util',
     'gettext!io.ox/core'
-], function (gt) {
+], function (folderUtil, gt) {
 
     'use strict';
 
     function isVirtualFolder(data) {
         return /^virtual/.test(data.id);
+    }
+
+    function isProtected(data) {
+        return !folderUtil.can('read', data);
     }
 
     var extensions = {
@@ -251,10 +256,23 @@ define('io.ox/find/extensions-api', [
                         // possible preselected options
                         all = _.findWhere(options, { id: 'disabled' }),
                         selected = _.findWhere(options, { value: current }),
-                        standard = _.findWhere(options, { type: 'default' });
+                        standard = _.findWhere(options, { type: 'default' }),
+                        // primary check
+                        isSelectedPrimary = selected.account === '0';
 
                     // prefer selected before default folder
                     preselect = selected || standard;
+
+                    // preselect first valid standard folder in case invalid non-primary
+                    // folder was selected (account4711 -> account4711/INBOX)
+                    if (!isSelectedPrimary && selected && isProtected(selected.data)) {
+                        var account = selected.account;
+                        preselect = _.findWhere(options, { type: 'standard', account: account }) || preselect;
+                        // remove invalid entry from list
+                        if (preselect.id !== selected.id) {
+                            options = folder.values[0].options = _.without(options, selected);
+                        }
+                    }
 
                     // decision parameters
                     isMandatory = baton.app.isMandatory('folder');
@@ -319,12 +337,22 @@ define('io.ox/find/extensions-api', [
                 // standard folders for mail
                 if (module === 'mail') {
                     _.each(folderAPI.getStandardMailFolders(), function (id) {
-                        // use only primary here cause of the slow fetching folder data from externals accounts
                         var isPrimary = id.indexOf('default0') > -1,
-                            isValid = ['inbox', 'sent', 'drafts', 'trash'].indexOf(accountAPI.getType(id)) > -1;
-                        if (isPrimary && isValid) {
-                            mapping[id] = 'standard';
-                        }
+                            isValidPrimary = isPrimary && ['inbox', 'sent', 'drafts', 'trash'].indexOf(accountAPI.getType(id)) > -1;
+
+                        // primary-block
+                        if (isValidPrimary) return (mapping[id] = 'standard');
+                        if (isPrimary) return;
+
+                        // selected-non-primary block
+                        // hint: we are requesting only non-primary-account date when some folder is selected
+                        var selected = baton.app.get('parent').folder.get().split('/')[0];
+                        // same account?
+                        if (id.indexOf(selected) < 0) return;
+                        // valid type?
+                        if (['inbox', 'sent'].indexOf(accountAPI.getType(id)) < 0) return;
+
+                        return (mapping[id] = 'standard');
                     });
                     // add account data to multiple
                     req.push(accountAPI.all());
