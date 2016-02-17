@@ -96,10 +96,13 @@ define('io.ox/ads/register', [
      ** Add extensions for core UI points, can be used to hook up ad extension points
      **/
     ox.on('mail:send:start', function () {
+        // ignore, if not configured at all
+        if (!config['io.ox/ads/mailSentOverlay']) return;
+
         require(['io.ox/ads/mailoverlay'], function (Overlay) {
             var app = ox.ui.apps.get('io.ox/mail'),
                 target = app.pages.getAll().detailView.$el.closest('.window-body'),
-                baton = ext.Baton.ensure(config.mailoverlay || { html: '' });
+                baton = ext.Baton.ensure(config['io.ox/ads/mailSentOverlay'] || { html: '' });
 
             new Overlay({ target: target, baton: baton }).show();
         });
