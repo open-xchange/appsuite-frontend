@@ -2,14 +2,15 @@
 // Generated on Fri Jun 28 2013 12:45:50 GMT+0200 (CEST)
 
 var fs = require('fs');
-var localConf;
+var _ = require('lodash');
+var localConf = {};
 
 if (fs.existsSync('grunt/local.conf.json')) {
     localConf = JSON.parse(fs.readFileSync('grunt/local.conf.json'));
 }
 module.exports = function (config) {
 
-    config.set({
+    config.set(_.extend({}, {
 
         // base path, that will be used to resolve files and exclude
         basePath: 'build/',
@@ -81,5 +82,5 @@ module.exports = function (config) {
         },
 
         appserver: localConf.appserver
-    });
+    }, localConf.karma || {}));
 };
