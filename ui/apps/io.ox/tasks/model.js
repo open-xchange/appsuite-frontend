@@ -41,6 +41,7 @@ define('io.ox/tasks/model', [
             ref: 'io.ox/tasks/model',
             api: api,
             model: {
+                idAttribute: 'id',
                 defaults: defaults,
                 getParticipants: function () {
                     if (this._participants) {

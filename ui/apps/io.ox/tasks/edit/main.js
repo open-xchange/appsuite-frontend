@@ -16,9 +16,10 @@ define('io.ox/tasks/edit/main', [
     'io.ox/core/extensions',
     'io.ox/tasks/model',
     'io.ox/tasks/edit/view',
+    'io.ox/tasks/api',
     'io.ox/core/extPatterns/dnd',
     'less!io.ox/tasks/edit/style'
-], function (gt, ext, model, view, dnd) {
+], function (gt, ext, model, view, api, dnd) {
 
     'use strict';
 
@@ -140,11 +141,25 @@ define('io.ox/tasks/edit/main', [
                 this.edit = true;
                 app.cid = 'io.ox/tasks:edit.' + _.cid(taskData);
 
-                model.factory.realm('edit').retain().get(taskData).done(function (task) {
-                    app.model = taskModel = task;
-                    taskModel.getParticipants();
+                // get fresh data to see if the task changed meanwhile
+                api.get(taskData, false).done(function (task) {
+                    if (taskData.last_modified !== task.last_modified) {
+                        // clear cashes
+                        var key = _.cid(taskData);
+                        api.removeFromCache(key).then(function () {
+                            api.caches.all.clear();
 
-                    startApp();
+                            app.model = taskModel = model.factory.create(task);
+                            taskModel.getParticipants();
+
+                            startApp();
+                        });
+                    } else {
+                        app.model = taskModel = model.factory.create(task);
+                        taskModel.getParticipants();
+
+                        startApp();
+                    }
                 });
             } else {
                 app.attributes.title = gt('Create task');
@@ -195,8 +210,6 @@ define('io.ox/tasks/edit/main', [
                 });
             } else if (app.edit) {
                 clean();
-                //old model no longer needed
-                model.factory.realm('edit').release();
                 def.resolve();
             } else {
                 clean();
