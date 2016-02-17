@@ -1,6 +1,12 @@
 // Karma configuration
 // Generated on Fri Jun 28 2013 12:45:50 GMT+0200 (CEST)
 
+var fs = require('fs');
+var localConf;
+
+if (fs.existsSync('grunt/local.conf.json')) {
+    localConf = JSON.parse(fs.readFileSync('grunt/local.conf.json'));
+}
 module.exports = function (config) {
 
     config.set({
@@ -72,6 +78,8 @@ module.exports = function (config) {
 
         junitReporter: {
             outputFile: 'reports/test-results.xml'
-        }
+        },
+
+        appserver: localConf.appserver
     });
 };
