@@ -130,6 +130,9 @@ define('io.ox/tours/files', [
                 .on('before:show', function () {
                     $('.list-view li .filename:contains("The Drive app tour.txt")').click();
                 })
+                .on('back', function () {
+                    $('.viewer-toolbar [data-action="close"]').click();
+                })
                 .waitFor('.classic-toolbar-container [data-action="viewer"]')
                 .spotlight('.classic-toolbar-container [data-action="viewer"]', { position: 'right' })
                 .hotspot('.classic-toolbar-container [data-action="viewer"] i', { position: 'right' })
