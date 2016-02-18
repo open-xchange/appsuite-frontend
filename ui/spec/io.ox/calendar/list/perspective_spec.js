@@ -185,7 +185,7 @@ define([
 
                 it('and it should show the duration of the appointment', function () {
                     var right = this.nodes.body.find('.rightside');
-                    expect(right.find('.time').text()).to.equal('14:00–15:00');
+                    expect(right.find('.time').text()).to.equal('14:00–15:00 Uhr');
                 });
 
                 it('and it should show the notes of the appointment', function () {
