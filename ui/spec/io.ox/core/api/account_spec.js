@@ -85,7 +85,7 @@ define([
             unified_inbox_enabled: false
         };
 
-        it('sets custom account data', function (done) {
+        it('sets custom account data', function () {
 
             // clear
             api.cache = {};
@@ -93,19 +93,15 @@ define([
             // now add custom data
             api.cache[account0.id] = account0;
             // get all -- NO CLUE why we need that wait; without wait() the server is not yet up
-            _.wait(1).then(function () {
-                api.all().done(function (accounts) {
-                    expect(accounts.length).to.equal(1);
-                    done();
-                });
+            return api.all().then(function (accounts) {
+                expect(accounts.length).to.equal(1);
             });
         });
 
-        it('returns proper account data', function (done) {
-            api.get(0).done(function (data) {
+        it('returns proper account data', function () {
+            return api.get(0).then(function (data) {
                 expect(data.id).to.equal(0);
                 expect(data.login).to.equal('otto.xentner');
-                done();
             });
         });
 
@@ -143,56 +139,53 @@ define([
             expect(id).to.equal(0);
         });
 
-        it('returns correct primary address', function (done) {
-            require(['settings!io.ox/mail']).then(function (settings) {
+        it('returns correct primary address', function () {
+            return require(['settings!io.ox/mail']).then(function (settings) {
 
                 // overwrite settings. white-space
                 settings.set('defaultSendAddress', ' otto.xentner@open-xchange.com ');
 
-                api.getPrimaryAddress(0).done(function (address) {
-                    expect(address).to.deep.equal(['Otto Xentner', 'otto.xentner@open-xchange.com']);
-                    done();
-                });
+                return api.getPrimaryAddress(0);
+            }).then(function (address) {
+                expect(address).to.deep.equal(['Otto Xentner', 'otto.xentner@open-xchange.com']);
             });
         });
 
-        it('returns default display name', function (done) {
-            api.getDefaultDisplayName().done(function (name) {
+        it('returns default display name', function () {
+            return api.getDefaultDisplayName().then(function (name) {
                 expect(name).to.equal('Otto Xentner');
-                done();
             });
         });
 
-        it('uses default display_name as fallback (personal)', function (done) {
+        it('uses default display_name as fallback (personal)', function () {
             // clear "personal" first
             account0.personal = '';
             api.cache[account0.id] = account0;
 
-            api.getDefaultDisplayName().done(function (name) {
-                api.getPrimaryAddress(0).done(function (address) {
-                    expect(address).to.deep.equal([name, 'otto.xentner@open-xchange.com']);
-                    done();
-                });
+            return $.when(
+                api.getDefaultDisplayName(),
+                api.getPrimaryAddress(0)
+            ).then(function (name, address) {
+                expect(address).to.deep.equal([name, 'otto.xentner@open-xchange.com']);
             });
         });
 
-        it('returns correct sender addresses', function (done) {
+        it('returns correct sender addresses', function () {
             // add some addresses. with some falsy white-space and upper-case
             account0.addresses = ' otto.xentner@open-xchange.com ,ALL@open-xchange.com, alias@open-xchange.com,another.alias@open-xchange.com ';
             api.cache[0] = account0;
 
-            api.getSenderAddresses(0).done(function (addresses) {
+            return api.getSenderAddresses(0).then(function (addresses) {
                 expect(addresses).to.deep.equal([
                     ['Otto Xentner', 'alias@open-xchange.com'],
                     ['Otto Xentner', 'all@open-xchange.com'],
                     ['Otto Xentner', 'another.alias@open-xchange.com'],
                     ['Otto Xentner', 'otto.xentner@open-xchange.com']
                 ]);
-                done();
             });
         });
 
-        it('returns all sender addresses across all accounts', function (done) {
+        it('returns all sender addresses across all accounts', function () {
             // add second account
             var account1 = _.extend({}, account0, {
                 addresses: ' test@gmail.com,   FOO@gmail.com, yeah@gmail.com',
@@ -203,7 +196,7 @@ define([
 
             api.cache[1] = account1;
 
-            api.getAllSenderAddresses().done(function (addresses) {
+            return api.getAllSenderAddresses().then(function (addresses) {
                 var expected = [
                     ['Otto Xentner', 'alias@open-xchange.com'],
                     ['Otto Xentner', 'all@open-xchange.com'],
@@ -214,21 +207,18 @@ define([
                     ['Test', 'yeah@gmail.com']
                 ];
                 expect(addresses).to.deep.equal(expected);
-                done();
             });
         });
 
-        it('returns correct primary address for folder_id', function (done) {
-            api.getPrimaryAddressFromFolder('default1/INBOX/test').done(function (address) {
+        it('returns correct primary address for folder_id', function () {
+            return api.getPrimaryAddressFromFolder('default1/INBOX/test').then(function (address) {
                 expect(address).to.deep.equal(['Test', 'foo@gmail.com']);
-                done();
             });
         });
 
-        it('returns correct primary address for account_id', function (done) {
-            api.getPrimaryAddressFromFolder(1).done(function (address) {
+        it('returns correct primary address for account_id', function () {
+            return api.getPrimaryAddressFromFolder(1).then(function (address) {
                 expect(address).to.deep.equal(['Test', 'foo@gmail.com']);
-                done();
             });
         });
 
@@ -237,7 +227,7 @@ define([
             expect(defaultAddress).to.equal('otto.xentner@open-xchange.com');
         });
 
-        it('creates proper select-box with sender addresses', function (done) {
+        it('creates proper select-box with sender addresses', function () {
             $('body').append(
                 select = $('<select class="sender-dropdown" size="1">').css('width', '400px')
             );
@@ -256,10 +246,9 @@ define([
                 return ['cellular_telephone1', 'cellular_telephone2', 'cellular_telephone3'];
             };
 
-            sender.drawOptions(select).done(function () {
+            return sender.drawOptions(select).then(function () {
                 expect(select.children().length).to.equal(8);
                 expect(select.find('[default]').length).to.equal(1);
-                done();
             });
         });
 
@@ -283,7 +272,7 @@ define([
             expect(value).to.equal('"Otto Xentner" <otto.xentner@open-xchange.com>');
         });
 
-        it('selects proper address during initial loading', function (done) {
+        it('selects proper address during initial loading', function () {
             // clear box
             select.empty().removeAttr('data-default');
 
@@ -294,29 +283,23 @@ define([
             expect(select.children().length).to.equal(0);
 
             // an invalid value select first item in the list
-            setTimeout(function () {
-                sender.drawOptions(select).done(function () {
-                    var index = select.prop('selectedIndex');
-                    expect(index).to.equal(5);
-                    done();
-                });
-            }, 100);
+            return sender.drawOptions(select).then(function () {
+                var index = select.prop('selectedIndex');
+                expect(index).to.equal(5);
+            });
         });
 
         // tidy up
 
-        it('resets account data', function (done) {
+        it('resets account data', function () {
             api.cache = {};
-            var mailSettings;
 
-            require(['settings!io.ox/mail']).then(function (settings) {
-                mailSettings = settings;
-                return api.all();
-            })
-            .done(function (accounts) {
+            return $.when(
+                require(['settings!io.ox/mail']),
+                api.all()
+            ).then(function (settings, accounts) {
                 expect(accounts.length).to.equal(1);
-                mailSettings.set('defaultSendAddress');
-                done();
+                settings.set('defaultSendAddress');
             });
         });
     });

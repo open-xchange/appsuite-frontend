@@ -44,59 +44,36 @@ define([
         });
 
         it('should draw the form', function () {
-            node.find('h1').length.should.be.equal(1);
-            node.find('h1').text().should.be.equal(gt.pgettext('app', 'Mail'));
+            expect(node.find('h1').text()).to.equal(gt.pgettext('app', 'Mail'));
 
-            node.find('input[name="removeDeletedPermanently"]').length.should.be.equal(1);
-            node.find('input[name="removeDeletedPermanently"]').parent().text().should.be.equal(gt('Permanently remove deleted emails'));
+            expect(node.find('input[name="removeDeletedPermanently"]').parent().text()).to.equal(gt('Permanently remove deleted emails'));
 
-            // node.find('input[name="contactCollectOnMailTransport"]').length.should.be.equal(1);
-            // node.find('input[name="contactCollectOnMailTransport"]').parent().text().should.be.equal(gt('Automatically collect contacts in the folder "Collected addresses" while sending'));
+            expect(node.find('input[name="useFixedWidthFont"]').parent().text()).to.equal(gt('Use fixed-width font for text mails'));
 
-            // node.find('input[name="contactCollectOnMailAccess"]').length.should.be.equal(1);
-            // node.find('input[name="contactCollectOnMailAccess"]').parent().text().should.be.equal(gt('Automatically collect contacts in the folder "Collected addresses" while reading'));
+            expect(node.find('input[name="appendVcard"]').parent().text()).to.equal(gt('Append vCard'));
 
-            node.find('input[name="useFixedWidthFont"]').length.should.be.equal(1);
-            node.find('input[name="useFixedWidthFont"]').parent().text().should.be.equal(gt('Use fixed-width font for text mails'));
+            expect(node.find('input[name="appendMailTextOnReply"]').parent().text()).to.equal(gt('Insert the original email text to a reply'));
 
-            node.find('input[name="appendVcard"]').length.should.be.equal(1);
-            node.find('input[name="appendVcard"]').parent().text().should.be.equal(gt('Append vCard'));
+            expect(node.find('input[name="forwardMessageAs"]').length).to.equal(2);
+            expect(node.find('input[name="forwardMessageAs"]').first().parent().text()).to.equal(gt('Inline'));
+            expect(node.find('input[name="forwardMessageAs"]').last().parent().text()).to.equal(gt('Attachment'));
 
-            node.find('input[name="appendMailTextOnReply"]').length.should.be.equal(1);
-            node.find('input[name="appendMailTextOnReply"]').parent().text().should.be.equal(gt('Insert the original email text to a reply'));
+            expect(node.find('input[name="messageFormat"]').length).to.equal(3);
+            expect(node.find('input[name="messageFormat"]:eq(0)').parent().text()).to.equal(gt('HTML'));
+            expect(node.find('input[name="messageFormat"]:eq(1)').parent().text()).to.equal(gt('Plain text'));
+            expect(node.find('input[name="messageFormat"]:eq(2)').parent().text()).to.equal(gt('HTML and plain text'));
 
-            // node.find('input[name="threadView"]').length.should.be.equal(3); // depends on caps.contactCollect
+            expect(node.find('select[id="defaultSendAddress"]').length).to.equal(1);
 
-            node.find('input[name="forwardMessageAs"]').length.should.be.equal(2);
-            node.find('input[name="forwardMessageAs"]').first().parent().text().should.be.equal(gt('Inline'));
-            node.find('input[name="forwardMessageAs"]').last().parent().text().should.be.equal(gt('Attachment'));
+            expect(node.find('select[id="autoSaveDraftsAfter"]').children().length).to.equal(5);
 
-            node.find('input[name="messageFormat"]').length.should.be.equal(3);
-            node.find('input[name="messageFormat"]:eq(0)').parent().text().should.be.equal(gt('HTML'));
-            node.find('input[name="messageFormat"]:eq(1)').parent().text().should.be.equal(gt('Plain text'));
-            node.find('input[name="messageFormat"]:eq(2)').parent().text().should.be.equal(gt('HTML and plain text'));
+            expect(node.find('input[name="allowHtmlMessages"]').parent().text()).to.equal(gt('Allow html formatted emails'));
 
-            node.find('input[type="text"]').length.should.be.equal(1);
-            node.find('input[type="text"]').closest('.form-group').find('label').text().should.be.equal(gt('Automatically wrap plain text after character:'));
+            expect(node.find('input[name="allowHtmlImages"]').parent().text()).to.equal(gt('Allow pre-loading of externally linked images'));
 
-            node.find('select[id="defaultSendAddress"]').length.should.be.equal(1);
+            expect(node.find('input[name="isColorQuoted"]').parent().text()).to.equal(gt('Color quoted lines'));
 
-            node.find('select[id="autoSaveDraftsAfter"]').length.should.be.equal(1);
-            node.find('select[id="autoSaveDraftsAfter"]').children().length.should.be.equal(5);
-
-            node.find('input[name="allowHtmlMessages"]').length.should.be.equal(1);
-            node.find('input[name="allowHtmlMessages"]').parent().text().should.be.equal(gt('Allow html formatted emails'));
-
-            node.find('input[name="allowHtmlImages"]').length.should.be.equal(1);
-            node.find('input[name="allowHtmlImages"]').parent().text().should.be.equal(gt('Allow pre-loading of externally linked images'));
-
-            // emoticons depends on capabilities.has('emoji')
-            node.find('input[name="isColorQuoted"]').length.should.be.equal(1);
-            node.find('input[name="isColorQuoted"]').parent().text().should.be.equal(gt('Color quoted lines'));
-
-            node.find('input[name="sendDispositionNotification"]').length.should.be.equal(1);
-            node.find('input[name="sendDispositionNotification"]').parent().text().should.be.equal(gt('Show requests for read receipts'));
-
+            expect(node.find('input[name="sendDispositionNotification"]').parent().text()).to.equal(gt('Show requests for read receipts'));
         });
 
     });

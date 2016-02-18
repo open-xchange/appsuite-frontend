@@ -15,8 +15,6 @@ define(['io.ox/mail/threadview', 'io.ox/mail/api', 'fixture!io.ox/mail/thread.js
 
     'use strict';
 
-    var expect = chai.expect;
-
     describe('Mail Threadview', function () {
 
         beforeEach(function () {

@@ -25,7 +25,7 @@ define([
         });
 
         afterEach(function () {
-            $('#filessettingsNode', document).remove();
+            this.node.remove();
         });
 
         it('should draw the form', function () {

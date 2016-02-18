@@ -52,21 +52,20 @@ define([
                 ext.point('spec/io.ox/core/extPatterns/default').clear();
             });
 
-            it('paints an empty unordered list without any link extensions', function (done) {
+            it('paints an empty unordered list without any link extensions', function () {
                 var node = $('<div class="testNode">').appendTo($('body', document));
                 this.baton = { id: 1 };
 
                 this.point.invoke('draw', node, this.baton);
-                waitsFor(function () {
+                return waitsFor(function () {
                     return node.find('ul').hasClass('empty');
                 }).then(function () {
                     expect(node.find('ul').is(':empty')).to.be.true;
                     node.remove();
-                    done();
                 });
             });
 
-            it('work with one link extensions', function (done) {
+            it('work with one link extensions', function () {
                 var node = $('<div class="testNode">').appendTo($('body', document));
                 this.baton = { id: 1 };
 
@@ -77,16 +76,15 @@ define([
                 }));
 
                 this.point.invoke('draw', node, this.baton);
-                waitsFor(function () {
+                return waitsFor(function () {
                     return !node.find('ul').hasClass('empty');
                 }).then(function () {
                     expect(node.find('li', 'ul')).to.have.length(1);
                     node.remove();
-                    done();
                 });
             });
 
-            it('work with a few link extensions', function (done) {
+            it('work with a few link extensions', function () {
                 var node = $('<div class="testNode">').appendTo($('body', document));
                 this.baton = { id: 1 };
 
@@ -109,12 +107,11 @@ define([
                 }));
 
                 this.point.invoke('draw', node, this.baton);
-                waitsFor(function () {
+                return waitsFor(function () {
                     return !node.find('ul').hasClass('empty');
                 }).then(function () {
                     expect(node.find('li', 'ul')).to.have.length(4);
                     node.remove();
-                    done();
                 });
             });
         });
