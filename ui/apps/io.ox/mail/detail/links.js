@@ -182,14 +182,13 @@ define('io.ox/mail/detail/links', [
     // Complex Mail Address: "name" <address>
     //
 
-    var regMailComplex = /^([\s\S]*?)(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+<([^@]+@[^&]+)>([\s\S]*)$/,
-        regMailComplexMatch = /^([\s\S]*?)(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+<([^@]+@[^&]+)>([\s\S]*)$/;
+    var regMailComplexMatch = /^([\s\S]*?)(?:&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(?:\s|<br>)+(?:<|&#60;)([^@]+@[^&].*?)(?:>|&#62;)([\s\S]*)$/;
 
     function processComplexMailAddress(node) {
 
         var matches = node.nodeValue.match(regMailComplexMatch);
         if (matches === null || matches.length === 0) return node;
-        var prefix = matches[1], name = matches[4], address = matches[7], suffix = matches[8];
+        var prefix = matches[1], name = matches[2] || matches[3] || matches[4], address = matches[5], suffix = matches[6];
 
         var link = $('<a href="#" class="mailto-link" target="_blank">').attr('href', 'mailto:' + address)
             .data({ address: address, name: name })
@@ -226,7 +225,7 @@ define('io.ox/mail/detail/links', [
                 // quick check
                 if (node.nodeValue.indexOf('@') === -1) return false;
                 // precise check
-                return regMailComplex.test(node.nodeValue) && $(node).closest('a').length === 0;
+                return regMailComplexMatch.test(node.nodeValue) && $(node).closest('a').length === 0;
             },
             process: processComplexMailAddress
         },
