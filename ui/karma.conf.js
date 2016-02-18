@@ -64,8 +64,7 @@ module.exports = function (config) {
         phantomjsLauncher: {
             options: {
                 viewportSize: { width: 1024, height: 768 }
-            },
-            exitOnResourceError: true
+            }
         },
 
         // If browser does not capture in given timeout [ms], kill it
