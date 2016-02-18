@@ -243,7 +243,7 @@ define('io.ox/calendar/edit/main', [
                 } else {
 
                     // default values from settings
-                    data.alarm = settings.get('defaultReminder', 15);
+                    data.alarm = data.alarm || settings.get('defaultReminder', 15);
                     if (data.full_time) {
                         data.shown_as = settings.get('markFulltimeAppointmentsAsFree', false) ? 4 : 1;
                     }
