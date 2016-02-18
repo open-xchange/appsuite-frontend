@@ -32,19 +32,22 @@ define('io.ox/tours/files', [
         app: 'io.ox/files',
         priority: 1
     }, function () {
-        ox.launch('io.ox/files/main', {}).done(function () {
-        });
         var SAMPLE_CONTENT = gt('Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'),
             blob = new window.Blob([SAMPLE_CONTENT], { type: 'text/plain' }),
             standardFolder = settings.get('folder/infostore'),
             file,
-            tour =  new Tour();
+            current = {},
+            tour = new Tour();
 
         function cleanup() {
             api.get(file).done(function (newData) {
                 api.remove([newData]);
                 api.trigger('refresh.all');
             });
+            // restore
+            var app = ox.ui.App.getCurrentApp();
+            app.folder.set(current.folder);
+            app.props.set('layout', current.view);
         }
 
         api.upload({ folder: standardFolder, file: blob, filename: gt('The Drive app tour.txt') }).done(function (data) {
@@ -250,6 +253,17 @@ define('io.ox/tours/files', [
             tour.steps.splice(10, 2);
         }
 
-        tour.start();
+        ox.launch('io.ox/files/main').done(function () {
+            var app = ox.ui.App.getCurrentApp();
+            // remember current state
+            current.folder = app.folder.get();
+            current.view = app.props.get('layout');
+
+            // set folder and layout: ensure we find the uploaded 'drive app tour.txt'
+            if (current.folder !== standardFolder) app.folder.set(standardFolder);
+            if (current.view === 'tile') app.props.set('layout', 'list');
+            // ensure
+            tour.start();
+        });
     });
 });
