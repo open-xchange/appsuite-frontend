@@ -95,7 +95,7 @@ define([
                 expect(cells).to.have.length(2);
             });
 
-            it('should show 2 label cells in the grid', function () {
+            it.skip('should show 2 label cells in the grid', function () {
                 var c = this.grid.getContainer(),
                     labelCells = $('.vgrid-cell.vgrid-label', c);
                 expect(labelCells).to.have.length(2);
@@ -107,7 +107,7 @@ define([
                 expect(tailCell).to.have.length(1);
             });
 
-            it('should have a text in its grid-label cells', function () {
+            it.skip('should have a text in its grid-label cells', function () {
                 var c = this.grid.getContainer(),
                     cells = $('.vgrid-cell.vgrid-label', c),
                     textLength1 = $(cells[0]).text().length,
