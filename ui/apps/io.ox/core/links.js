@@ -120,10 +120,10 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
         ox.launch('io.ox/tasks/main', { folder: data.folder }).done(function () {
             var app = this, folder = data.folder, id = data.id;
             if (app.folder.get() === folder) {
-                app.getGrid().selection.set(id);
+                app.getGrid().selection.set(_.cid({ folder: folder, id: id }));
             } else {
                 app.folder.set(folder).done(function () {
-                    app.getGrid().selection.set(id);
+                    app.getGrid().selection.set(_.cid({ folder: folder, id: id }));
                 });
             }
         });
