@@ -28,6 +28,7 @@ define('io.ox/mail/main',
      'io.ox/core/capabilities',
      'io.ox/core/folder/tree',
      'io.ox/core/folder/view',
+     'io.ox/core/folder/api',
      'gettext!io.ox/mail',
      'settings!io.ox/mail',
      'io.ox/mail/actions',
@@ -37,7 +38,7 @@ define('io.ox/mail/main',
      'io.ox/mail/import',
      'less!io.ox/mail/style',
      'io.ox/mail/folderview-extensions'
-    ], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, gt, settings) {
+    ], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, gt, settings) {
 
     'use strict';
 
@@ -1167,6 +1168,13 @@ define('io.ox/mail/main',
                             app.listView.load();
                         });
                     });
+            });
+        },
+
+        'save-draft': function (app) {
+            api.on('autosave send', function () {
+                var folder = app.folder.get();
+                if (folderAPI.is('drafts', folder)) app.listView.reload();
             });
         }
     });

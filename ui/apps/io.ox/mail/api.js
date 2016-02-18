@@ -1113,8 +1113,14 @@ define('io.ox/mail/api',
             },
             data: obj,
             appendColumns: false
-        }).pipe(function (data) {
-            return $.Deferred().resolve(data);
+        })
+        .then(function (result) {
+            // reset draft folder
+            var draftsFolder = accountAPI.getFoldersByType('drafts');
+            pool.resetFolder(draftsFolder);
+            folderAPI.reload(draftsFolder);
+            api.trigger('autosave refresh.all');
+            return result;
         });
     };
 
