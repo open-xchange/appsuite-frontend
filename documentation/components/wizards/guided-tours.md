@@ -43,29 +43,34 @@ ext.point('io.ox/tours/extensions').extend({
    priority: 1,
    tour: {
      id: 'Switching from OX6',
-     steps: [{
-       title: gt('Launching an app'),
-       placement: 'bottom',
-       target: function () { return $('.launcher[data-app-name="io.ox/mail"]')[0]; },
-       content: gt('To launch an app, click on an entry on the top-left side of the menu bar.')
-     },
-     {
-       onShow: function () { notifications.hideList(); },
-       title: gt('Displaying the help or the settings'),
-       placement: 'left',
-       target: function () { return $('.launcher .icon-cog:visible')[0]; },
-       content: gt('To display the help or the settings, use the icons on the right side of the menu bar.'),
-       arrowOffset: 1,
-       yOffset: -5
-     },
-     {
-       onShow: function () { notifications.showList(); },
-       title: gt('New objects icon'),
-       placement: 'left',
-       target: function () { return $('#io-ox-notifications-icon:visible')[0]; },
-       content: gt('The New objects icon shows the number of unread E-Mails or other notifications. If clicking the icon, the info area opens.'),
-       arrowOffset: -1
-     }, [...]
+     steps: [
+         {
+           title: gt('Launching an app'),
+           placement: 'bottom',
+           target: function () { return $('.launcher[data-app-name="io.ox/mail"]')[0]; },
+           content: gt('To launch an app, click on an entry on the top-left side of the menu bar.')
+         },
+         {
+           onShow: function () { notifications.hideList(); },
+           title: gt('Displaying the help or the settings'),
+           placement: 'left',
+           target: function () { return $('.launcher .icon-cog:visible')[0]; },
+           content: gt('To display the help or the settings, use the icons on the right side of the menu bar.'),
+           arrowOffset: 1,
+           yOffset: -5
+         },
+         {
+           onShow: function () { notifications.showList(); },
+           title: gt('New objects icon'),
+           placement: 'left',
+           target: function () { return $('#io-ox-notifications-icon:visible')[0]; },
+           content: gt('The New objects icon shows the number of unread E-Mails or other notifications. If clicking the icon, the info area opens.'),
+           arrowOffset: -1
+         }
+         //[...]
+    ]
+  }
+});
 ```
 
 # Components of a tour
