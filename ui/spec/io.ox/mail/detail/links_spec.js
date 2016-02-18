@@ -73,12 +73,12 @@ define(['io.ox/mail/detail/links'], function (links) {
 
         it('recognizes deep links', function () {
             var html = process('Lorem ipsum http://test/foo#m=infostore&f=43876&i=154571');
-            expect(html).to.equal('Lorem ipsum <a role="button" href="http://test/foo#m=infostore&amp;f=43876&amp;i=154571" target="_blank" class="deep-link btn btn-primary btn-xs deep-link-files" style="font-family: Arial; color: white; text-decoration: none;">Datei</a>');
+            expect(html).to.equal('Lorem ipsum <a href="http://test/foo#m=infostore&amp;f=43876&amp;i=154571" target="_blank" class="deep-link deep-link-files" role="button">Datei</a>');
         });
 
         it('recognizes multiple links', function () {
             var html = process('Hoi http://yeah.html! test http://test/foo#m=calendar&f=1&i=1337 foo "Jon doe" <icke@domain.foo> END.');
-            expect(html).to.equal('Hoi <a href="http://yeah.html" target="_blank">http://yeah.html</a>! test <a role="button" href="http://test/foo#m=calendar&amp;f=1&amp;i=1337" target="_blank" class="deep-link btn btn-primary btn-xs deep-link-calendar" style="font-family: Arial; color: white; text-decoration: none;">Termin</a> foo <a href="mailto:icke@domain.foo" class="mailto-link" target="_blank">Jon doe</a> END.');
+            expect(html).to.equal('Hoi <a href="http://yeah.html" target="_blank">http://yeah.html</a>! test <a href="http://test/foo#m=calendar&amp;f=1&amp;i=1337" target="_blank" class="deep-link deep-link-calendar" role="button">Termin</a> foo <a href="mailto:icke@domain.foo" class="mailto-link" target="_blank">Jon doe</a> END.');
         });
 
         it('recognizes multiple links (not greedy)', function () {
