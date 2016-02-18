@@ -24,7 +24,7 @@ define([
     testData[1].birthday = new moment.utc().valueOf();                      //today
     testData[2].birthday = new moment.utc().add(1, 'day').valueOf();        //tomorrow
 
-    describe('portal Birthday plugin', function () {
+    describe('Portal Birthday plugin', function () {
 
         describe('should', function () {
             beforeEach(function (done) {

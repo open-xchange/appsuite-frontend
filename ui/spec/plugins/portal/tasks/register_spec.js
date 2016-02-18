@@ -18,7 +18,7 @@ define([
 ], function (tasksPlugin, ext, moment, testData) {
     'use strict';
 
-    describe('portal Tasks plugin', function () {
+    describe('Portal Tasks plugin', function () {
 
         describe('should', function () {
             beforeEach(function () {

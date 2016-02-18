@@ -32,7 +32,7 @@ define([
      * Suite: Distributionlist Test
      */
 
-    describe('Distributionlist edit', function () {
+    describe('Contact Distributionlist edit', function () {
         var app = null,
             clock;
 

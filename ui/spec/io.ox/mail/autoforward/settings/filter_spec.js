@@ -42,7 +42,7 @@ define(['io.ox/mail/autoforward/settings/filter', 'gettext!io.ox/mail'], functio
     multiValues = {},
     model;
 
-    describe('autoforward', function () {
+    describe('Mailfilter Autoforward', function () {
 
         beforeEach(function (done) {
             this.server.respondWith('GET', /api\/mailfilter\?action=list&flag=autoforward/, function (xhr) {

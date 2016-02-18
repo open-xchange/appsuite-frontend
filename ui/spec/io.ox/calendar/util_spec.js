@@ -15,7 +15,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
 
     'use strict';
 
-    describe('Util for calendar', function () {
+    describe('Calendar utils', function () {
 
         describe('can convert timestamp to even smarter dates', function () {
 

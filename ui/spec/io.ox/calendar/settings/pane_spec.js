@@ -16,7 +16,7 @@ define([
     'io.ox/calendar/settings/pane'
 ], function (ext, gt) {
 
-    describe('calendarsettings', function () {
+    describe('Calendar settings', function () {
         beforeEach(function () {
 
             $('body', document).append(this.node = $('<div id="calendarsettingsNode">'));

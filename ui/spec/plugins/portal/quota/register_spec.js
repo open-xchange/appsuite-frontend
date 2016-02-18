@@ -19,7 +19,7 @@ define([
 
     var capabilities = caputil.preset('common').init('plugins/portal/quota/register', quotaPlugin);
 
-    describe('portal Quota plugin', function () {
+    describe('Portal Quota plugin', function () {
         beforeEach(function (done) {
             this.server.responses = this.server.responses.filter(function (r) {
                 return r.method !== 'PUT' || String(r.url) !== '/api\\/multiple\\?/';

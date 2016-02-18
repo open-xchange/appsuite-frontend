@@ -13,7 +13,7 @@
 define(['io.ox/files/mediasupport'], function (ms) {
     var expect = chai.expect;
 
-    describe('mediasupport util', function () {
+    describe('Files mediasupport util', function () {
 
         describe('has some methods', function () {
             it('that always use same return type', function () {

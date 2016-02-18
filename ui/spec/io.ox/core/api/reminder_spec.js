@@ -47,52 +47,50 @@ define([
         user_id: 1337
     }];
 
-    describe('reminder api', function () {
+    describe('Core reminder api', function () {
         beforeEach(function () {
             this.server.respondWith('GET', /api\/reminder\?action=range/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data": ' + JSON.stringify(reminderData) + '}');
             });
         });
-        describe('should', function () {
-            it('trigger correct events', function () {
-                var defTaskEvent = $.Deferred(),
-                    defCalendarEvent = $.Deferred(),
-                    taskEventListener = function () {
-                        defTaskEvent.resolve();
-                    },
-                    calendarEventListener = function () {
-                        defCalendarEvent.resolve();
-                    };
+        it('should trigger correct events', function () {
+            var defTaskEvent = $.Deferred(),
+                defCalendarEvent = $.Deferred(),
+                taskEventListener = function () {
+                    defTaskEvent.resolve();
+                },
+                calendarEventListener = function () {
+                    defCalendarEvent.resolve();
+                };
 
-                api.one('set:calendar:reminder', calendarEventListener);
-                api.one('set:tasks:reminder', taskEventListener);
-                api.getReminders();
-                return $.when(defTaskEvent, defCalendarEvent);
-            });
-            it('return correct data', function () {
-                var defTaskEvent = $.Deferred(),
-                    defCalendarEvent = $.Deferred(),
-                    taskEventListener = function (e, tasks) {
-                        expect(tasks).to.have.length(1);
-                        expect(tasks[0].id).to.equal(1);
-                        expect(tasks[0].module).to.equal(4);
-                        if (tasks.length === 1 && tasks[0].id === 1 && tasks[0].module === 4) {
-                            defTaskEvent.resolve();
-                        }
-                    },
-                    calendarEventListener = function (e, appointments) {
-                        expect(appointments).to.have.length(1);
-                        expect(appointments[0].id).to.equal(2);
-                        expect(appointments[0].module).to.equal(1);
-                        if (appointments.length === 1 && appointments[0].id === 2 && appointments[0].module === 1) {
-                            defCalendarEvent.resolve();
-                        }
-                    };
-                api.one('set:calendar:reminder', calendarEventListener);
-                api.one('set:tasks:reminder', taskEventListener);
-                api.getReminders();
-                return $.when(defTaskEvent, defCalendarEvent);
-            });
+            api.one('set:calendar:reminder', calendarEventListener);
+            api.one('set:tasks:reminder', taskEventListener);
+            api.getReminders();
+            return $.when(defTaskEvent, defCalendarEvent);
+        });
+        it('should return correct data', function () {
+            var defTaskEvent = $.Deferred(),
+                defCalendarEvent = $.Deferred(),
+                taskEventListener = function (e, tasks) {
+                    expect(tasks).to.have.length(1);
+                    expect(tasks[0].id).to.equal(1);
+                    expect(tasks[0].module).to.equal(4);
+                    if (tasks.length === 1 && tasks[0].id === 1 && tasks[0].module === 4) {
+                        defTaskEvent.resolve();
+                    }
+                },
+                calendarEventListener = function (e, appointments) {
+                    expect(appointments).to.have.length(1);
+                    expect(appointments[0].id).to.equal(2);
+                    expect(appointments[0].module).to.equal(1);
+                    if (appointments.length === 1 && appointments[0].id === 2 && appointments[0].module === 1) {
+                        defCalendarEvent.resolve();
+                    }
+                };
+            api.one('set:calendar:reminder', calendarEventListener);
+            api.one('set:tasks:reminder', taskEventListener);
+            api.getReminders();
+            return $.when(defTaskEvent, defCalendarEvent);
         });
     });
 });

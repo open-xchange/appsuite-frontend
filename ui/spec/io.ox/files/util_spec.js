@@ -27,7 +27,7 @@ define(['io.ox/files/util', 'waitsFor'], function (util, waitsFor) {
         });
     }
 
-    describe('Utilities for files:', function () {
+    describe('Files Utilities:', function () {
         var container = $('<div>'),
             options = {
                 container: container

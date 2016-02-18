@@ -19,7 +19,7 @@ define([
     'io.ox/mail/settings/pane'
 ], function (ext, waitsFor, gt, accounts, userData) {
 
-    describe('mail settings', function () {
+    describe('Mail settings', function () {
         var node;
         beforeEach(function () {
             this.server.respondWith('GET', /api\/user\?action=get/, function (xhr) {

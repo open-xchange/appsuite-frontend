@@ -16,7 +16,7 @@ define([
     'waitsFor'
 ], function (register, ext, waitsFor) {
 
-    describe.skip('html signatures', function () {
+    describe.skip('Mail settings Signatures HTML', function () {
         var node,
             baton;
 

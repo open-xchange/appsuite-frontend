@@ -16,7 +16,7 @@ define([
     'io.ox/files/settings/pane'
 ], function (ext, gt) {
 
-    describe('filessettings', function () {
+    describe('Files settings', function () {
         beforeEach(function () {
 
             $('body', document).append(this.node = $('<div id="filessettingsNode">'));
