@@ -54,6 +54,18 @@ define.async('io.ox/core/tk/contenteditable-editor',
         }
     });
 
+    ext.point(POINT + '/setup').extend({
+        id: 'list-style-position',
+        index: INDEX += 100,
+        draw: function (ed) {
+            ed.on('NodeChange', function (e) {
+                if (e.element.nodeName !== 'LI') return;
+                if (e.element.style.textAlign === 'left' || e.element.style.textAlign === '') return;
+                $(e.element).css('list-style-position', 'inside');
+            });
+        }
+    });
+
     function splitContent_W3C(ed) {
         // get current range
         var range = ed.selection.getRng();
@@ -233,7 +245,7 @@ define.async('io.ox/core/tk/contenteditable-editor',
 
             browser_spellcheck: true,
 
-            plugins: 'autolink oximage link paste textcolor emoji',
+            plugins: 'autolink oximage link paste textcolor lists emoji',
 
             //link plugin settings
             link_title: false,
