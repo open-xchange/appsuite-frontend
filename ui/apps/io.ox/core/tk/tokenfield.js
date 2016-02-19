@@ -227,6 +227,7 @@ define('io.ox/core/tk/tokenfield', [
                 'typeahead:selected typeahead:autocompleted': function (e, item) {
                     if (item.model.get('distribution_list')) {
                         item.model.get('distribution_list').map(function (m) {
+                            m.mail = m.mail.trim();
                             var p = new pModel.Participant({
                                 type: 5,
                                 display_name: m.display_name,
@@ -237,7 +238,7 @@ define('io.ox/core/tk/tokenfield', [
                                 value: m.mail
                             }, { silent: true });
                             self.collection.addUniquely(makeUnique(p));
-                            self.resort.call(self);
+                            self.redrawToken.call(self);
                         });
                     }
                     o.click.call(this, e, item.data);
