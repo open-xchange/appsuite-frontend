@@ -238,8 +238,8 @@ define('io.ox/core/tk/tokenfield', [
                                 value: m.mail
                             }, { silent: true });
                             self.collection.addUniquely(makeUnique(p));
-                            self.redrawToken.call(self);
                         });
+                        self.redrawToken.call(self);
                     }
                     o.click.call(this, e, item.data);
                     self.input.trigger('select', item.data);
