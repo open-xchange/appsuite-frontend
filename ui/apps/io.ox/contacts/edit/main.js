@@ -80,6 +80,8 @@ define('io.ox/contacts/edit/main', [
 
                         editView.on('save:start', function () {
                             win.busy();
+                            // reset error marker
+                            container.find('[data-field]').removeClass('has-error');
                         });
 
                         editView.on('save:fail', function (e, error) {
@@ -99,7 +101,8 @@ define('io.ox/contacts/edit/main', [
 
                             if (invalid) {
                                 notifications.yell('error', gt('Some fields contain invalid data'));
-                                field.get(0).scrollIntoView();
+                                // set error marker and scroll
+                                field.addClass('has-error').get(0).scrollIntoView();
                                 field = null;
                             } else {
                                 notifications.yell(error);
