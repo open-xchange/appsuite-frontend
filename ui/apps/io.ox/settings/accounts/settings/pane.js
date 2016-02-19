@@ -150,6 +150,17 @@ define('io.ox/settings/accounts/settings/pane', [
                                     popup.close();
                                 }
                             )
+                            .always(function () {
+                                // update folder tree
+                                require(['io.ox/core/api/account', 'io.ox/core/folder/api'], function (accountAPI, folderAPI) {
+                                    accountAPI.getUnifiedInbox().done(function (unifiedInbox) {
+                                        if (!unifiedInbox) return;
+                                        var prefix = unifiedInbox.split('/')[0];
+                                        folderAPI.pool.unfetch(prefix);
+                                        folderAPI.refresh();
+                                    });
+                                });
+                            })
                         );
                     })
                     .show();
