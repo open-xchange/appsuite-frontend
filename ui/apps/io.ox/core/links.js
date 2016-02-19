@@ -118,12 +118,14 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
         e.preventDefault();
         var data = $(this).data();
         ox.launch('io.ox/tasks/main', { folder: data.folder }).done(function () {
-            var app = this, folder = data.folder, id = data.id;
+            var app = this, folder = data.folder, id = data.id,
+                cid = id && id.indexOf('.') !== -1 ? id : _.cid({ folder: folder, id: id });
+
             if (app.folder.get() === folder) {
-                app.getGrid().selection.set(_.cid({ folder: folder, id: id }));
+                app.getGrid().selection.set(cid);
             } else {
                 app.folder.set(folder).done(function () {
-                    app.getGrid().selection.set(_.cid({ folder: folder, id: id }));
+                    app.getGrid().selection.set(cid);
                 });
             }
         });
