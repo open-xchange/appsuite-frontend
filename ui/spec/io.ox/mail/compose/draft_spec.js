@@ -97,7 +97,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                     clock.tick(59999);
                     expect(callback.called, 'callback called').to.be.false;
                     //takes a little while for the request to be sent
-                    clock.tick(100);
+                    clock.tick(500);
                     expect(callback.called, 'callback called').to.be.true;
                 });
             });
