@@ -135,6 +135,7 @@
             &.action-cancel { display: none; }
         }
         .search-box-filter { display: none; }
+        .flex(0 1 auto);
     }
 
     /**
@@ -147,8 +148,8 @@
 
         .io-ox-find {
             //top: managed by backbone view
-            position: fixed;
-            width: 100%;
+            position: absolute;
+            width: 100vw;
             height: 40px;
 
             .search-box {
