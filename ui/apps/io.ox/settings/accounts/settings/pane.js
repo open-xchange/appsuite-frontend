@@ -116,8 +116,9 @@ define('io.ox/settings/accounts/settings/pane', [
                                 'edit'
                             )
                     ),
-                    // some Filesorage accounts may contain errors, if thats the case show them
-                    listUtils.drawError(filestorageApi.getAccountForOauth(self.model))
+                    // some Filestorage accounts may contain errors, if thats the case show them
+                    // support for standard and oauth accounts
+                    self.model.get('accountType') !== 'mail' ? listUtils.drawError(filestorageApi.getAccountsCache().get(self.model) || filestorageApi.getAccountForOauth(self.model)) : ''
                 );
 
                 return self;
