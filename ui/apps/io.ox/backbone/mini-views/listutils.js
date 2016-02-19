@@ -144,6 +144,12 @@ var appendIconText = function (target, text, type, activeColor) {
             tabindex: 1,
             'aria-label': title + ', ' + label
         });
+    },
+    drawError = function (account) {
+        if (!account || !account.get('hasError')) {
+            return '';
+        }
+        return $('<div class="account-error-message">').text(account.get('error'));
     };
 
 return {
@@ -155,6 +161,7 @@ return {
         controlsEdit: controlsEdit,
         controlsToggle: controlsToggle,
         dragHandle: dragHandle,
-        controlProcessSub: controlProcessSub
+        controlProcessSub: controlProcessSub,
+        drawError: drawError
     };
 });
