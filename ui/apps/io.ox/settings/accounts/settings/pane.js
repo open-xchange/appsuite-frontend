@@ -21,9 +21,10 @@ define('io.ox/settings/accounts/settings/pane', [
     'io.ox/core/notifications',
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/disposable',
+    'io.ox/core/api/filestorage',
     'gettext!io.ox/settings/accounts',
     'withPluginsFor!keychainSettings'
-], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, listUtils, DisposableView, gt) {
+], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, listUtils, DisposableView, filestorageApi, gt) {
 
     'use strict';
 
@@ -114,7 +115,9 @@ define('io.ox/settings/accounts/settings/pane', [
                                 gt('Edit'),
                                 'edit'
                             )
-                    )
+                    ),
+                    // some Filesorage accounts may contain errors, if thats the case show them
+                    listUtils.drawError(filestorageApi.getAccountForOauth(self.model))
                 );
 
                 return self;
