@@ -140,7 +140,9 @@ define('io.ox/mail/mobile-toolbar-actions', [
     addAction(pointDetailView, ['reply', 'reply-all', 'delete', 'forward']);
 
     //multiselect in listview
-    addAction(pointListViewMultiSelect, ['delete', 'forward', 'move', 'archive']);
+    var actionList = ['delete', 'forward', 'move'];
+    if (cap.has('archive_emails')) actionList.push('archive');
+    addAction(pointListViewMultiSelect, actionList);
 
     pointDetailView.extend(new links.Dropdown({
         id: 'test',
