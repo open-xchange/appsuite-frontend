@@ -304,22 +304,6 @@ define.async('io.ox/mail/compose/model', [
         getMailForDraft: function () {
             var mail = this.getMail();
 
-            switch (mail.sendtype) {
-                case mailAPI.SENDTYPE.DRAFT:
-                    mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                    break;
-                case mailAPI.SENDTYPE.EDIT_DRAFT:
-                    break;
-                case mailAPI.SENDTYPE.FORWARD:
-                    mail.sendtype = mailAPI.SENDTYPE.DRAFT;
-                    break;
-                default:
-                    mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                    if (mail.msgref) delete mail.msgref;
-            }
-
-            this.set('sendtype', mail.sendtype, { silent: true });
-
             if (_(mail.flags).isUndefined()) {
                 mail.flags = mailAPI.FLAGS.DRAFT;
             } else if ((mail.data.flags & 4) === 0) {
