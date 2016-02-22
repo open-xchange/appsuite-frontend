@@ -205,6 +205,22 @@ define('io.ox/presenter/views/toolbarview', [
                         'aria-label': gt('View participants')
                     });
                 }
+            },
+            'close': {
+                prio: 'hi',
+                mobile: 'hi',
+                icon: 'fa fa-times',
+                //#. button label for closing the Presenter app.
+                label: gt('Close'),
+                //#. button tooltip for closing the Presenter app.
+                title: gt('Close'),
+                ref: PRESENTER_ACTION_ID + '/close',
+                customize: function () {
+                    this.addClass('presenter-toolbar-close').attr({
+                        'aria-label': gt('Close')
+                    });
+                    this.parent().addClass('pull-right');
+                }
             }
         };
 

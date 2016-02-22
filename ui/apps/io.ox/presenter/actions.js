@@ -261,4 +261,14 @@ define('io.ox/presenter/actions', [
             baton.context.app.mainView.presenterEvents.trigger('presenter:zoomout');
         }
     });
+
+    new Action(PRESENTER_ACTION_ID + '/close', {
+        requires: function (e) {
+            return _.isObject(e.baton.context);
+        },
+        action: function (baton) {
+            baton.context.app.mainView.presenterEvents.trigger('presenter:close');
+        }
+    });
+
 });

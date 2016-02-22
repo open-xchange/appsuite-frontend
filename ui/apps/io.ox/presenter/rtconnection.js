@@ -758,6 +758,7 @@ define('io.ox/presenter/rtconnection', [
     });
 
     RTConnection.log = function (msg) { console.info('Presenter - RTConnection - log', msg); };
+    RTConnection.error = function (msg) { console.error('Presenter - RTConnection - error', msg); };
 
     // exports ================================================================
 

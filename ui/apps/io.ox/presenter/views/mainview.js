@@ -262,16 +262,6 @@ define('io.ox/presenter/views/mainview', [
                 }
             }
 
-            function endOrLeavePresentation() {
-                if (rtModel.isPresenter(userId)) {
-                    rtConnection.endPresentation();
-                } else if (localModel.isPresenter(userId)) {
-                    localModel.endPresentation(userId);
-                } else if (rtModel.canLeave(userId)) {
-                    rtConnection.leavePresentation();
-                }
-            }
-
             function startOrJoinPresentation() {
                 if (rtModel.canStart(userId)) {
                     var slideId = self.getActiveSlideIndex();
@@ -297,7 +287,7 @@ define('io.ox/presenter/views/mainview', [
 
                 case 8: // ctrl + backspace : ends or leaves the presentation. backspace : show previous slide
                     if (event.ctrlKey) {
-                        endOrLeavePresentation();
+                        this.endOrLeavePresentation();
                     } else {
                         event.preventDefault();
                         this.showPreviousSlide();
@@ -549,10 +539,35 @@ define('io.ox/presenter/views/mainview', [
         },
 
         /**
+         * Ends the presentation if the user is currently presenting (locally or remote),
+         * or leaves the presentation if the user participates a remote presentation.
+         *
+         * @returns {jQuery.Promise}
+         */
+        endOrLeavePresentation: function () {
+            var rtModel = this.app.rtModel;
+            var localModel = this.app.localModel;
+            var rtConnection = this.app.rtConnection;
+            var userId = rtConnection.getRTUuid();
+
+            if (rtModel.isPresenter(userId)) {
+                return rtConnection.endPresentation();
+            } else if (localModel.isPresenter(userId)) {
+                localModel.endPresentation(userId);
+            } else if (rtModel.canLeave(userId)) {
+                return rtConnection.leavePresentation();
+            }
+
+            return $.when();
+        },
+
+        /**
          * Presenter close handler.
          */
         closePresenter: function () {
-            this.app.quit();
+            this.endOrLeavePresentation().done(function () {
+                this.app.quit();
+            }.bind(this));
         },
 
         /**
