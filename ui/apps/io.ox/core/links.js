@@ -99,7 +99,12 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
         var data = $(this).data();
         if (data.id) {
             ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/api', 'io.ox/calendar/view-detail']).done(function (dialogs, api, view) {
-                new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
+                // chrome uses a shadowdom, this prevents the sidepopup from finding the correct parent to attach.
+                var sidepopup = new dialogs.SidePopup({ arrow: !_.device('chrome'), tabTrap: true });
+                if (_.device('chrome')) {
+                    sidepopup.setTarget(document.body);
+                }
+                sidepopup.show(e, function (popup) {
                     popup.busy();
                     api.get(data).done(function (data) {
                         popup.idle().append(view.draw(data));
