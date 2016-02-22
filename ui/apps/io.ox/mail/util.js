@@ -538,6 +538,13 @@ define('io.ox/mail/util', [
                 .replace(/data-mce-src="[^"]+"\s?/, '');
         },
 
+        parseMsgref: function (separator, msgref) {
+            var base = _(msgref.toString().split(separator)),
+                id = base.last(),
+                folder = base.without(id).join(separator);
+            return { folder_id: folder, id: id };
+        },
+
         signatures: (function () {
 
             var looksLikeHTML = function (text) {

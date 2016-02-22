@@ -1475,6 +1475,16 @@ define('io.ox/mail/main', [
         },
 
         'save-draft': function (app) {
+            api.on('beforesend before:autosave', function (e, obj) {
+                if (!obj.data.msgref) return;
+                var cid = _.cid(util.parseMsgref(api.separator, obj.data.msgref)),
+                    draftsId = account.getFoldersByType('drafts');
+                _(draftsId).each(function (id) {
+                    _(api.pool.getByFolder(id)).each(function (collection) {
+                        collection.remove(cid);
+                    });
+                });
+            });
             api.on('autosave send', function () {
                 var folder = app.folder.get();
                 if (folderAPI.is('drafts', folder)) app.listView.reload();
