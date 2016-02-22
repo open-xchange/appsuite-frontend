@@ -218,6 +218,9 @@ define('io.ox/ads/register', [
         id: 'default',
         index: 100,
         draw: function (baton) {
+            //not called from mail overlay view
+            if (typeof this === 'undefined') return;
+
             this.append(
                 baton.data.html
             );
