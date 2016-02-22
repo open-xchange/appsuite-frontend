@@ -6,8 +6,8 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Groupware">
 <link rel="up" href="index.html" title="Groupware">
-<link rel="prev" href="ox.appsuite.user.sect.portal.customize.settings.html" title="4.2.5. ポータル ウィジェットの設定の変更">
-<link rel="next" href="ox.appsuite.user.sect.email.gui.html" title="5.1. メール の画面構成">
+<link rel="prev" href="ox.appsuite.user.sect.portal.customize.html" title="4.2. カスタマイズポータル">
+<link rel="next" href="ox.appsuite.user.sect.email.gui.html" title="5.1. メールの画面構成">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -22,7 +22,7 @@
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.portal.customize.settings.html">戻る</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.portal.customize.html">戻る</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">ホーム</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目次</a></li>
 <li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.email.gui.html">次へ</a></li>
@@ -32,18 +32,11 @@
   <div lang="ja-JA" class="chapter">
 <div class="titlepage"><div><div><h1 class="title">
 <a name="ox.appsuite.user.chap.email"></a>第5章 <span class="phrase">メール</span>
-		
-		
-		</h1></div></div></div>
+</h1></div></div></div>
 <div class="toc">
 <p><b>目次</b></p>
 <dl class="toc">
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.gui.html">5.1 <span class="phrase">
-				<span class="guilabel"><strong>メール</strong></span>
-			</span>
-			
-			
-			の画面構成</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.gui.html">5.1 <span class="phrase"><span class="guilabel"><strong>メール</strong></span></span>の画面構成</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.view.html">5.2 メールの表示</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.attachments.html">5.3 添付ファイルの表示、保存</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.send.html">5.4 メールの送信</a></span></dt>
@@ -53,6 +46,7 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.send.forward.html">5.4.3 メールの転送</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.send.autoforward.html">5.4.4 メールの自動転送</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.send.vacationnotice.html">5.4.5 休暇通知の送信</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.send.signatures.html">5.4.6 署名の作成と管理</a></span></dt>
 </dl></dd>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.manage.html">5.5 メールの整理</a></span></dt>
 <dd><dl>
@@ -63,7 +57,7 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.label.html">5.5.5 カラー ラベルによるメールの分類</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.source.html">5.5.6 メールのソースの表示</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.draft.html">5.5.7 メールの下書きの作成</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.reminder.html">5.5.8 メール アラームを設定する</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.reminder.html">5.5.8 メール アラームを作成する</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.addportal.html">5.5.9 ポータルへのメールの追加</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.save.html">5.5.10 メールの保存</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.import.html">5.5.11 メールのインポート</a></span></dt>
@@ -92,48 +86,23 @@
 </dl>
 </div>
 <a class="indexterm" name="id-1.6.2"></a><a class="indexterm" name="id-1.6.3"></a><a class="indexterm" name="id-1.6.4"></a><a class="indexterm" name="id-1.6.5"></a><div class="concept">
-<a name="ox.appsuite.user.concept.email"></a><p><span class="phrase">
-			<span class="guilabel"><strong>メール</strong></span>
-		</span>
-		
-		
-		アプリケーションの使用方法を次のトピックごとに説明します。</p>
+<a name="ox.appsuite.user.concept.email"></a><p><span class="phrase"><span class="guilabel"><strong>メール</strong></span></span>アプリケーションの使用方法を次のトピックごとに説明します。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.gui.html" title="5.1. メール の画面構成"><span class="phrase">
-							<span class="guilabel"><strong>メール</strong></span>
-						</span>
-						
-						
-						</a>の画面構成</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.gui.html" title="5.1. メールの画面構成"><span class="phrase"><span class="guilabel"><strong>メール</strong></span></span></a>の画面構成</p></li>
 <li class="listitem"><p>メールの <a class="link" href="ox.appsuite.user.sect.email.view.html" title="5.2. メールの表示">表示</a></p></li>
 <li class="listitem"><p>メールの <a class="link" href="ox.appsuite.user.sect.email.send.html" title="5.4. メールの送信">送信</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.manage.html" title="5.5. メールの整理">整理</a> メール</p></li>
 <li class="listitem"><p>メールの <a class="link" href="ox.appsuite.user.sect.email.search.html" title="5.6. メールの検索">検索</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.share.html" title="5.7. チームのメール">他の <span class="guilabel"><strong>ユーザ</strong></span> とのメールの共有</a></p></li>
 <li class="listitem"><p>他のプロバイダでセットアップした <a class="link" href="ox.appsuite.user.sect.email.externalaccounts.html" title="5.8. メール アカウント">外部メール アカウント</a> のアクセス</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.settings.html" title="5.9. メール設定"><span class="phrase">
-							<span class="guilabel"><strong>メール</strong></span>
-						</span>
-						
-						
-						設定</a>の使用</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.settings.html" title="5.9. メール設定"><span class="phrase"><span class="guilabel"><strong>メール</strong></span></span>設定</a>の使用</p></li>
 </ul></div>
 <p>
   </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.email.start"></a><p class="title"><span class="phrase">
-				<span class="guilabel"><strong>メール</strong></span>
-			</span>
-			
-			
-			アプリケーションを起動する</p>
-<div class="procedure"><ul class="procedure"><li class="step"><p>メニュー バーで、<span class="phrase">
-						<span class="guimenu"><strong>メール</strong></span>
-					</span>
-					
-					
-					 をクリックします。</p></li></ul></div>
+<a name="ox.appsuite.user.task.email.start"></a><p class="title"><span class="phrase"><span class="guilabel"><strong>メール</strong></span></span>アプリケーションを起動する</p>
+<div class="procedure"><ul class="procedure"><li class="step"><p>メニュー バーで、<span class="phrase"><span class="guimenu"><strong>メール</strong></span></span> をクリックします。</p></li></ul></div>
 </div>
 </div>
           </div>

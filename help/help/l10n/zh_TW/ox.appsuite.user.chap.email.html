@@ -6,7 +6,7 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="">
 <link rel="up" href="index.html" title="">
-<link rel="prev" href="ox.appsuite.user.sect.portal.customize.settings.html" title="4.2.5. 更改入口小工具的設定">
+<link rel="prev" href="ox.appsuite.user.sect.portal.customize.html" title="4.2. 自訂入口">
 <link rel="next" href="ox.appsuite.user.sect.email.gui.html" title="5.1. 電子郵件 元件">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律聲明">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
@@ -22,7 +22,7 @@
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only"></span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.portal.customize.settings.html">前一頁</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.portal.customize.html">前一頁</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">起始頁</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目錄</a></li>
 <li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.email.gui.html">下一頁</a></li>
@@ -32,18 +32,11 @@
   <div lang="zh-TW" class="chapter">
 <div class="titlepage"><div><div><h1 class="title">
 <a name="ox.appsuite.user.chap.email"></a>章 5. <span class="phrase">電子郵件</span>
-		
-		
-		</h1></div></div></div>
+</h1></div></div></div>
 <div class="toc">
 <p><b>內容目錄</b></p>
 <dl class="toc">
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.gui.html">5.1 <span class="phrase">
-				<span class="guilabel"><strong>電子郵件</strong></span>
-			</span>
-			
-			
-			 元件</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.gui.html">5.1 <span class="phrase"><span class="guilabel"><strong>電子郵件</strong></span></span> 元件</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.view.html">5.2 顯示電子郵件</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.attachments.html">5.3 檢視或保存電子郵件附件</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.send.html">5.4 發送電子郵件</a></span></dt>
@@ -53,6 +46,7 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.send.forward.html">5.4.3 轉發電子郵件</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.send.autoforward.html">5.4.4 自動轉發電子郵件</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.send.vacationnotice.html">5.4.5 傳送假期通知</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.send.signatures.html">5.4.6 建立和管理簽名</a></span></dt>
 </dl></dd>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.manage.html">5.5 管理電子郵件</a></span></dt>
 <dd><dl>
@@ -63,7 +57,7 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.label.html">5.5.5 使用色彩標籤分類郵件</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.source.html">5.5.6 顯示電子郵件原始內容</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.draft.html">5.5.7 使用電子郵件草稿</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.reminder.html">5.5.8 啟用郵件提醒</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.reminder.html">5.5.8 建立郵件提醒</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.addportal.html">5.5.9 新增郵件到入口</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.save.html">5.5.10 保存電子郵件</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.import.html">5.5.11 匯入郵件</a></span></dt>
@@ -92,48 +86,23 @@
 </dl>
 </div>
 <a class="indexterm" name="id-1.6.2"></a><a class="indexterm" name="id-1.6.3"></a><a class="indexterm" name="id-1.6.4"></a><a class="indexterm" name="id-1.6.5"></a><div class="concept">
-<a name="ox.appsuite.user.concept.email"></a><p>了解如何使用 <span class="phrase">
-			<span class="guilabel"><strong>電子郵件</strong></span>
-		</span>
-		
-		
-		 應用程式。</p>
+<a name="ox.appsuite.user.concept.email"></a><p>了解如何使用 <span class="phrase"><span class="guilabel"><strong>電子郵件</strong></span></span> 應用程式。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.gui.html" title="5.1. 電子郵件 元件"><span class="phrase">
-							<span class="guilabel"><strong>電子郵件</strong></span>
-						</span>
-						
-						
-						 元件</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.gui.html" title="5.1. 電子郵件 元件"><span class="phrase"><span class="guilabel"><strong>電子郵件</strong></span></span> 元件</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.view.html" title="5.2. 顯示電子郵件">顯示</a> 電子郵件</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.send.html" title="5.4. 發送電子郵件">傳送</a> 電子郵件</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.manage.html" title="5.5. 管理電子郵件">管理</a>郵件</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.search.html" title="5.6. 搜尋電子郵件">搜尋</a> 電子郵件</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.share.html" title="5.7. 與團隊發送郵件">分享郵件給其他 <span class="guilabel"><strong>使用者</strong></span></a></p></li>
 <li class="listitem"><p>存取您在其他供應商註冊的 <a class="link" href="ox.appsuite.user.sect.email.externalaccounts.html" title="5.8. 電子郵件帳號">外部郵件帳號</a>。</p></li>
-<li class="listitem"><p>使用 <a class="link" href="ox.appsuite.user.sect.email.settings.html" title="5.9. 電子郵件設置"><span class="phrase">
-							<span class="guilabel"><strong>電子郵件</strong></span>
-						</span>
-						
-						
-						 選項</a></p></li>
+<li class="listitem"><p>使用 <a class="link" href="ox.appsuite.user.sect.email.settings.html" title="5.9. 電子郵件設置"><span class="phrase"><span class="guilabel"><strong>電子郵件</strong></span></span> 選項</a></p></li>
 </ul></div>
 <p>
   </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.email.start"></a><p class="title">如何啟動 <span class="phrase">
-				<span class="guilabel"><strong>電子郵件</strong></span>
-			</span>
-			
-			
-			 應用程式:</p>
-<div class="procedure"><ul class="procedure"><li class="step"><p>點選選單列中的 <span class="phrase">
-						<span class="guimenu"><strong>電子郵件</strong></span>
-					</span>
-					
-					
-					。</p></li></ul></div>
+<a name="ox.appsuite.user.task.email.start"></a><p class="title">如何啟動 <span class="phrase"><span class="guilabel"><strong>電子郵件</strong></span></span> 應用程式:</p>
+<div class="procedure"><ul class="procedure"><li class="step"><p>點選選單列中的 <span class="phrase"><span class="guimenu"><strong>電子郵件</strong></span></span>。</p></li></ul></div>
 </div>
 </div>
           </div>
