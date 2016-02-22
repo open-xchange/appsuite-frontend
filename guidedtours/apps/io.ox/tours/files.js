@@ -133,9 +133,6 @@ define('io.ox/tours/files', [
                 .on('before:show', function () {
                     $('.list-view li .filename:contains("The Drive app tour.txt")').click();
                 })
-                .on('back', function () {
-                    $('.viewer-toolbar [data-action="close"]').click();
-                })
                 .waitFor('.classic-toolbar-container [data-action="viewer"]')
                 .spotlight('.classic-toolbar-container [data-action="viewer"]', { position: 'right' })
                 .hotspot('.classic-toolbar-container [data-action="viewer"] i', { position: 'right' })
@@ -146,6 +143,9 @@ define('io.ox/tours/files', [
                 .content(gt('From preview you can also select other options to help you manage and work on your files.'))
                 .on('before:show', function () {
                     $('.classic-toolbar-container [data-action="viewer"]').click();
+                })
+                .on('back', function () {
+                    $('.viewer-toolbar [data-action="close"]').click();
                 })
                 .waitFor('.io-ox-viewer .viewer-toolbar')
                 .spotlight('.viewer-toolbar [data-action="editor"]', { position: 'left' })
