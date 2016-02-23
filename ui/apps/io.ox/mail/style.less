@@ -986,14 +986,23 @@ textarea.inplace-editor {
         padding: 0;
 
         & > h1 {
-            font-size: @phone-font-size + 2;
+            font-size: @phone-font-size;
             padding-bottom: 24px;
-            .summary { font-size: @phone-font-size - 2; }
+            background-color: #aaa;
+            color: #fff;
+            .summary {
+                font-size: @phone-font-size - 2;
+                color: #fff;
+                margin-top: -8px;
+            }
         }
 
-        .thread-view header { border-bottom: 1px solid #eee; }
+        .thread-view header { border-bottom: 1px solid #ccc; }
 
         .from, .recipients, .date {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
             font-size: @phone-font-size;
             line-height: @phone-line-height;
         }
@@ -1033,7 +1042,7 @@ textarea.inplace-editor {
             padding: 0;
             min-height: auto;
 
-            .from { padding: (@default-padding / 2) 0 0 @default-padding; }
+            .from { padding: (@default-padding / 2) 8px 0 @default-padding; }
 
             time  { padding: (@default-padding / 2) @default-padding 0 0; }
 
