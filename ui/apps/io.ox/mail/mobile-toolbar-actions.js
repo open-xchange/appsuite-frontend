@@ -15,8 +15,9 @@ define('io.ox/mail/mobile-toolbar-actions', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/mail/api',
+    'io.ox/core/capabilities',
     'gettext!io.ox/mail'
-], function (ext, links, api, gt) {
+], function (ext, links, api, capabilities, gt) {
 
     'use strict';
 
@@ -141,7 +142,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
 
     //multiselect in listview
     var actionList = ['delete', 'forward', 'move'];
-    if (cap.has('archive_emails')) actionList.push('archive');
+    if (capabilities.has('archive_emails')) actionList.push('archive');
     addAction(pointListViewMultiSelect, actionList);
 
     pointDetailView.extend(new links.Dropdown({
