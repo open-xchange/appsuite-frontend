@@ -182,6 +182,7 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         check: function (nodes) {
+            if (this.view.disposed) return $();
             var width = this.view.$el.width();
             return nodes.addClass('selected')
                 .attr({ 'aria-selected': true, tabindex: 1 })
@@ -201,7 +202,8 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         getItems: function () {
-            return this.view.$el.find('.selectable');
+            if (this.view.disposed) return $();
+            return this.view.$('.selectable');
         },
 
         addSelectableVirtualFolder: function (id) {
