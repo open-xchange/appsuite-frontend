@@ -21,7 +21,20 @@ define('io.ox/realtime/synchronized_http', ['io.ox/core/http'], function (http) 
             var def = $.Deferred();
             this.buffer.push({
                 options: options,
-                deferred: def
+                deferred: def,
+                method: 'PUT'
+            });
+
+            this.tick();
+
+            return def;
+        },
+        GET: function (options) {
+            var def = $.Deferred();
+            this.buffer.push({
+                options: options,
+                deferred: def,
+                method: 'GET'
             });
 
             this.tick();
@@ -39,10 +52,21 @@ define('io.ox/realtime/synchronized_http', ['io.ox/core/http'], function (http) 
             }
             this.transmitting = true;
             var nextRequest = this.buffer.shift();
-            http.PUT(nextRequest.options).always(function () {
-                self.transmitting = false;
-                self.tick();
-            }).done(nextRequest.deferred.resolve).fail(nextRequest.deferred.reject);
+            if (nextRequest.skipable) {
+                this.tick();
+                return;
+            }
+            if (nextRequest.method === 'PUT') {
+                http.PUT(nextRequest.options).always(function () {
+                    self.transmitting = false;
+                    self.tick();
+                }).done(nextRequest.deferred.resolve).fail(nextRequest.deferred.reject);
+            } else if (nextRequest.method === 'GET') {
+                http.GET(nextRequest.options).always(function () {
+                    self.transmitting = false;
+                    self.tick();
+                }).done(nextRequest.deferred.resolve).fail(nextRequest.deferred.reject);
+            }
         }
     };
 
