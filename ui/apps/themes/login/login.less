@@ -22,6 +22,7 @@
 @import '../../../bower_components/bootstrap/less/buttons.less';
 @import '../../../bower_components/bootstrap/less/dropdowns.less';
 @import '../../../bower_components/bootstrap/less/utilities.less';
+@import '../../../bower_components/font-awesome/less/variables.less';
 
 
 // link color on login screen must match background
@@ -40,9 +41,10 @@
 
 @font-face {
     font-family: 'FontAwesome';
-    src: url('../../3rd.party/font-awesome/fonts/fontawesome-webfont.woff?v=4.2.0') format('woff'),
-         url('../../3rd.party/font-awesome/fonts/fontawesome-webfont.ttf?v=4.2.0') format('truetype'),
-         url('../../3rd.party/font-awesome/fonts/fontawesome-webfont.svg?v=4.2.0#fontawesomeregular') format('svg');
+    src: url('../../3rd.party/font-awesome/fonts/fontawesome-webfont.woff2?v=@{fa-version}') format('woff2'),
+         url('../../3rd.party/font-awesome/fonts/fontawesome-webfont.woff?v=@{fa-version}') format('woff'),
+         url('../../3rd.party/font-awesome/fonts/fontawesome-webfont.ttf?v=@{fa-version}') format('truetype'),
+         url('../../3rd.party/font-awesome/fonts/fontawesome-webfont.svg?v=@{fa-version}#fontawesomeregular') format('svg');
     font-weight: normal;
     font-style: normal;
 }
