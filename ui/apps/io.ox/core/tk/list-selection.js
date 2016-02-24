@@ -184,8 +184,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             } else if (list.length > 1) {
                 events += ' selection:multiple';
             }
-            // all vs subset
-            if (items.length > 0 && items.length === list.length) {
+            // to keep correct select all checkbox state
+            // if the folder only contains one item, we must check the checkbox status
+            if (items && items.length > 0 && items.length === list.length && (items.length !== 1 || !$(items[0]).hasClass('no-checkbox'))) {
                 events += ' selection:all';
             } else {
                 events += ' selection:subset';
@@ -851,6 +852,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         pickSingle: function (node) {
             node.addClass('selected no-checkbox').attr('aria-selected', true);
+            // remove select all checkbox;
+            this.view.trigger('selection:subset');
         },
 
         onKeydown: function (e) {
@@ -900,7 +903,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     events = 'selection:change selection:action';
 
                 // to keep correct select all checkbox state
-                if (items && items.length > 0 && items.length === list.length) {
+                // if the folder only contains one item, we must check the checkbox status
+                if (items && items.length > 0 && items.length === list.length && (items.length !== 1 || !$(items[0]).hasClass('no-checkbox'))) {
                     events += ' selection:all';
                 } else {
                     events += ' selection:subset';
