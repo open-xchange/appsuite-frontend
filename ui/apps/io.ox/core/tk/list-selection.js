@@ -138,12 +138,21 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             // default event
             var list = this.get(), events = 'selection:change';
             // empty, one, multiple
-            if (list.length === 0) events += ' selection:empty';
-            else if (list.length === 1) events += ' selection:one';
-            else if (list.length > 1) events += ' selection:multiple';
-            // all vs subset
-            if (items.length > 0 && items.length === list.length) events += ' selection:all';
-            else events += ' selection:subset';
+            if (list.length === 0) {
+                events += ' selection:empty';
+            } else if (list.length === 1) {
+                events += ' selection:one';
+            } else if (list.length > 1) {
+                events += ' selection:multiple';
+            }
+            // to keep correct select all checkbox state
+            // if the folder only contains one item, we must check the checkbox status
+            if (items && items.length > 0 && items.length === list.length && (items.length !== 1 || !$(items[0]).hasClass('no-checkbox'))) {
+                events += ' selection:all';
+            } else {
+                events += ' selection:subset';
+            }
+
             this.view.trigger(events, list);
         },
 
@@ -484,6 +493,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         pickSingle: function (node) {
             node.addClass('selected no-checkbox').attr('aria-selected', true);
+            // remove select all checkbox;
+            this.view.trigger('selection:subset');
         },
 
         onKeydown: function (e) {
@@ -535,7 +546,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     events = 'selection:change selection:action';
 
                 // to keep correct select all checkbox state
-                if (items  && items.length > 0 && items.length === list.length) {
+                // if the folder only contains one item, we must check the checkbox status
+                if (items && items.length > 0 && items.length === list.length && (items.length !== 1 || !$(items[0]).hasClass('no-checkbox'))) {
                     events += ' selection:all';
                 } else {
                     events += ' selection:subset';
