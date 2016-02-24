@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-02-16 13:06+0100\n"
+"PO-Revision-Date: 2016-02-24 16:10+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -7535,7 +7535,7 @@ msgstr "%1$d Nachrichten markiert"
 
 #: apps/io.ox/mail/main.js:789 module:io.ox/mail
 msgid "The following actions apply to all messages (%1$d) in this folder:"
-msgstr "Folgende Aktionen gelten für alle Nachrichten (% 1$d) in diesem Ordner:"
+msgstr "Folgende Aktionen gelten für alle Nachrichten (%1$d) in diesem Ordner:"
 
 #. %1$d is the total number of messages
 #: apps/io.ox/mail/main.js:792 module:io.ox/mail
