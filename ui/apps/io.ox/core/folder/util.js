@@ -71,7 +71,8 @@ define('io.ox/core/folder/util', [
             case 'shared':
                 return data.type === 3;
             case 'system':
-                return data.type === 5;
+                // some folders have legacy type 7 but are actually system folders, so check module too
+                return data.type === 5 || data.module === 'system';
             case 'trash':
                 // some trash folders have the legacy type 7, so check standard_folder_type too
                 return data.type === 16 || data.standard_folder_type === 12;
