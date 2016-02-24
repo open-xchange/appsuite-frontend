@@ -786,12 +786,11 @@ define('io.ox/mail/main', [
                         // inline actions
                         id && total && !search ?
                             $('<div class="inline-actions">').append(
+                                //#. %1$d is the total number of messages
                                 $('<span>').text(gt('The following actions apply to all messages (%1$d) in this folder:', total)),
                                 $('<br>'),
-                                //#. %1$d is the total number of messages
                                 $('<a href="#" data-action="moveAll">').text(gt('Move all messages to another folder')),
                                 $('<br>'),
-                                //#. %1$d is the total number of messages
                                 $('<a href="#" data-action="clear">').text(gt('Delete all messages in this folder'))
                             )
                             .on('click', 'a', function (e) {
