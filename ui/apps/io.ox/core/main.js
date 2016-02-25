@@ -308,7 +308,7 @@ define('io.ox/core/main', [
 
     // add launcher
     var addLauncher = function (side, label, fn, arialabel) {
-        var node = $('<li class="launcher">');
+        var node = $('<li class="launcher" role="presentation">');
 
         if (fn) {
             node.on('click', function (e) {
