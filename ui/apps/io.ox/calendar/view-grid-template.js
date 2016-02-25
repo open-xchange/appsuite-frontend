@@ -82,7 +82,10 @@ define('io.ox/calendar/view-grid-template', [
                         );
                 }
                 if (data.location) {
-                    a11yLabel += ', ' + data.location;
+                    //#. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
+                    //#. This fragment appears within a long string for screen readers.
+                    //#. Some languages (e.g. German) might need to translate "location:".
+                    a11yLabel += ', ' + gt.pgettext('a11y', 'at %1$s', data.location);
                 }
                 fields.location.text(gt.noI18n(data.location || '\u00A0'));
                 fields.time.text(gt.noI18n(util.getTimeInterval(data)));
@@ -141,7 +144,7 @@ define('io.ox/calendar/view-grid-template', [
                 } else {
                     fields.isPrivate.hide();
                 }
-                this.attr({ 'aria-label': _.escape(a11yLabel) });
+                this.attr('aria-label', _.escape(a11yLabel) + '.');
             }
         },
 
