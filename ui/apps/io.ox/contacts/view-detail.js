@@ -112,7 +112,7 @@ define('io.ox/contacts/view-detail', [
         draw: function (baton) {
             var node;
             this.append(
-                node = $('<header class="contact-header" role="heading">')
+                node = $('<header class="contact-header">')
             );
             ext.point('io.ox/contacts/detail/head').invoke('draw', node, baton);
         }
