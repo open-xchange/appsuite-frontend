@@ -53,7 +53,7 @@ define('io.ox/core/main', [
 
     // a11y: fix for role="button"
     $(document).on('keydown', 'a[role="button"]', function (e) {
-        if (e.which !== 32) return;
+        if (e.which !== 32 || e.isDefaultPrevented()) return;
         e.preventDefault();
         $(e.currentTarget).click();
     });

@@ -99,6 +99,7 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
 
                 // SPACE
                 case 32:
+                    e.preventDefault();
                     $(e.currentTarget).click();
                     break;
 
