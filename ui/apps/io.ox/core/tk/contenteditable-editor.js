@@ -21,8 +21,9 @@ define.async('io.ox/core/tk/contenteditable-editor', [
     'io.ox/mail/api',
     'settings!io.ox/core',
     'settings!io.ox/mail',
+    'gettext!io.ox/core',
     'less!io.ox/core/tk/contenteditable-editor'
-], function (emoji, capabilities, ext, textproc, mailAPI, settings, mailSettings) {
+], function (emoji, capabilities, ext, textproc, mailAPI, settings, mailSettings, gt) {
 
     'use strict';
 
@@ -201,7 +202,10 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         var toolbar, editor, editorId = el.data('editorId');
 
         el.append(
-            el = $('<div class="contenteditable-editor">').attr('data-editor-id', editorId).append(
+            el = $('<div class="contenteditable-editor">').attr({
+                'data-editor-id': editorId,
+                'title': gt('Rich Text Area. Press ALT-F10 for toolbar')
+            }).append(
                 toolbar = $('<div class="editable-toolbar">').attr('data-editor-id', editorId),
                 editor = $('<div class="editable" tabindex="1">').css('margin-bottom', '32px')
             )
