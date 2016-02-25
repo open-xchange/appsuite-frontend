@@ -247,7 +247,8 @@ define('io.ox/mail/compose/extensions', [
                             msisdn: true,
                             emailAutoComplete: true
                         },
-                        maxResults: 20
+                        maxResults: 20,
+                        placeholder: tokenfieldTranslations[attr]
                     });
 
                 var node = $('<div class="col-xs-11">').append(
