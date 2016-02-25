@@ -200,6 +200,13 @@ define('io.ox/backbone/mini-views/datepicker', [
         },
 
         updateView: function () {
+            // clear if set to null
+            if (_.isNull(this.model.get(this.attribute))) {
+                this.nodes.dayField.val('');
+                if (this.nodes.timeField) {
+                    this.nodes.timeField.val('');
+                }
+            }
             var timestamp = parseInt(this.model.getDate ? this.model.getDate(this.attribute, { fulltime: this.isFullTime() }) : this.model.get(this.attribute), 10);
             if (_.isNaN(timestamp)) return;
             timestamp = moment.tz(timestamp, this.model.get(this.options.timezoneAttribute));

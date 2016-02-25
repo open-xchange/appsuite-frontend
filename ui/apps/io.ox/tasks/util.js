@@ -40,7 +40,8 @@ define('io.ox/tasks/util', [
         util = {
             computePopupTime: function (value, smartEndDate) {
                 smartEndDate = smartEndDate || false;
-                var alarmDate = moment(),
+                // no need for milliseconds or seconds, minutes are accurate enough
+                var alarmDate = moment().milliseconds(0).seconds(0),
                     endDate;
 
                 if (!isNaN(parseInt(value, 10))) {

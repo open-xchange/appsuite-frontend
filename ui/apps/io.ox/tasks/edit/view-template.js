@@ -238,18 +238,41 @@ define('io.ox/tasks/edit/view-template', [
         draw: function (baton) {
             var selector;
             this.append($('<div class="col-sm-6 collapsed">').append(
-                    $('<label>').text(gt('Remind me')).attr('for', 'task-edit-reminder-select'), selector = $('<select tabindex="1">').attr('id', 'task-edit-reminder-select').addClass('form-control')
+                    $('<label>').text(gt('Reminder')).attr('for', 'task-edit-reminder-select'), selector = $('<select tabindex="1">').attr('id', 'task-edit-reminder-select').addClass('form-control')
                     .append($('<option>')
-                    .text(''), taskUtil.buildDropdownMenu())
+                    //#. Text that is displayed in a select box for task reminders, when the user does not use a predefined time, like in 15minutes
+                    .text(gt('Manual input')), taskUtil.buildDropdownMenu(),
+                    $('<option>').text('No reminder'))
                     .on('change', function () {
                         if (selector.prop('selectedIndex') === 0) {
-                            baton.model.set('alarm', null, { validate: true });
+                            // manual input selected, change nothing
+                            return;
+                        } else if (selector.prop('selectedIndex') === selector.prop('length') - 1) {
+                            // no Reminder Selected, remove reminder
+                            baton.model.set('alarm', null, { validate: true, setBy: 'selectbox' });
                         } else {
-                            baton.model.set('alarm', taskUtil.computePopupTime(selector.val()).alarmDate, { validate: true });
+                            // set to correct time
+                            baton.model.set('alarm', taskUtil.computePopupTime(selector.val()).alarmDate, { validate: true, setBy: 'selectbox' });
                         }
                     })
                 )
             );
+            baton.model.on('change:alarm', function (model, value, options) {
+                // no need to update the selectbox if the new value was set by it (avoid invinite loop)
+                if (options.setBy !== 'selectbox') {
+                    if (_.isNull(value)) {
+                        // set to no reminder
+                        selector.prop('selectedIndex', selector.prop('length') - 1);
+                    } else {
+                        // set to manual input
+                        selector.prop('selectedIndex', 0);
+                    }
+                }
+            });
+            if (!baton.model.get('alarm')) {
+                // set to no reminder
+                selector.prop('selectedIndex', selector.prop('length') - 1);
+            }
         }
     });
 
