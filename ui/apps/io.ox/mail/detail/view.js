@@ -566,12 +566,10 @@ define('io.ox/mail/detail/view', [
             this.$el.attr({
                 'data-cid': this.model.cid,
                 'aria-expanded': 'false',
-                'data-loaded': 'false'
+                'data-loaded': 'false',
+                'role': 'group',
+                'aria-label': title
             });
-
-            this.$el.prepend(
-                $('<h2 class="sr-only">').text(title)
-            );
 
             this.$el.data({ view: this, model: this.model });
 
