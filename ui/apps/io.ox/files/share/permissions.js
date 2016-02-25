@@ -728,20 +728,20 @@ define('io.ox/files/share/permissions', [
 
                 switch (type) {
                     case 'group':
-                        dropdown.link('revoke', gt('Revoke access'));
+                        dropdown.link('revoke', isNew ? gt('Remove') : gt('Revoke access'));
                         break;
                     case 'user':
                     case 'guest':
                         if (!myself && !isNew && !isMail) {
                             dropdown.link('resend', gt('Resend invitation')).divider();
                         }
-                        dropdown.link('revoke', gt('Revoke access'));
+                        dropdown.link('revoke', isNew ? gt('Remove') : gt('Revoke access'));
                         break;
                     case 'anonymous':
                         if (capabilities.has('share_links')) {
                             dropdown.link('edit', gt('Edit')).divider();
                         }
-                        dropdown.link('revoke', gt('Revoke access'));
+                        dropdown.link('revoke', isNew ? gt('Remove') : gt('Revoke access'));
                         break;
                     // no default
                 }
