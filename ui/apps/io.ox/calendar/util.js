@@ -391,6 +391,10 @@ define('io.ox/calendar/util', [
             return confirmClass[status || 0];
         },
 
+        getConfirmationLabel: function (status) {
+            return confirmTitles[status || 0];
+        },
+
         getRecurrenceString: function (data) {
 
             function getCountString(i) {
