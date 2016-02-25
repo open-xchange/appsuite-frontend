@@ -42,14 +42,19 @@ define('io.ox/mail/common-extensions', [
     var extensions = {
 
         a11yLabel: function (baton) {
+
             var data = baton.data,
                 size = api.threads.size(data),
-                threadSize = size <= 1 ? '' : ', ' + gt.format('Thread contains %1$d messages', gt.noI18n(size)),
                 fromlist = data.from || [['', '']],
-                subject = $.trim(data.subject),
-                unread = util.isUnseen(data) ? gt('Unread') + ', ' : '',
-                a11yLabel = unread + util.getDisplayName(fromlist[0]) + ', ' + subject + ', ' + util.getTime(data.received_date) + threadSize +
-                    (data.attachment ? ', ' + gt('has attachments') : '');
+                parts = [],
+                a11yLabel;
+
+            if (util.isUnseen(data)) parts.push(gt('Unread'));
+            parts.push(util.getDisplayName(fromlist[0]), data.subject, util.getTime(data.received_date));
+            if (size > 1) parts.push(gt.format('Thread contains %1$d messages', size));
+            if (data.attachment) parts.push(gt('has attachments'));
+
+            a11yLabel = parts.join(', ') + '.';
 
             this.attr({
                 'aria-hidden': true
