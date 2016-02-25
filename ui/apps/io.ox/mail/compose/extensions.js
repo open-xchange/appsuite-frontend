@@ -248,7 +248,7 @@ define('io.ox/mail/compose/extensions', [
                             emailAutoComplete: true
                         },
                         maxResults: 20,
-                        placeholder: tokenfieldTranslations[attr]
+                        placeholder: tokenfieldTranslations[attr] // for a11y and easy access for custom dev when they want to display placeholders (these are made transparent via less)
                     });
 
                 var node = $('<div class="col-xs-11">').append(
