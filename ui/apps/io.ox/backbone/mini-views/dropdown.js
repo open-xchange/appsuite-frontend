@@ -158,7 +158,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     href: '#',
                     tabindex: 1,
                     draggable: false,
-                    role: 'menuitem',
+                    role: 'button',
                     'aria-haspopup': true,
                     'aria-label': ariaLabel,
                     'data-toggle': 'dropdown'
