@@ -253,6 +253,7 @@ define('io.ox/files/share/permissions', [
                 this.user = null;
                 this.display_name = '';
                 this.description = '';
+                this.ariaLabel = '';
 
                 this.parseBitmask();
 
@@ -287,6 +288,7 @@ define('io.ox/files/share/permissions', [
 
             render: function () {
                 this.getEntityDetails();
+                this.$el.attr({ 'aria-label': this.ariaLabel + '.', 'role': 'group' });
                 var baton = ext.Baton({ model: this.model, view: this, parentModel: this.parentModel });
                 ext.point(POINT + '/entity').invoke('draw', this.$el.empty(), baton);
                 return this;
@@ -359,11 +361,14 @@ define('io.ox/files/share/permissions', [
                         break;
                     case 'anonymous':
                         // TODO: public vs. password-protected link
-                        this.display_name = gt('Public link');
+                        this.display_name = this.ariaLabel = gt('Public link');
                         this.description = this.model.get('share_url');
                         break;
                     // no default
                 }
+
+                // a11y: just say "Public link"; other types use their description
+                this.ariaLabel = this.ariaLabel || (this.display_name + ', ' + this.description);
             },
 
             getRole: function () {
@@ -720,7 +725,7 @@ define('io.ox/files/share/permissions', [
                 if (!baton.parentModel.isAdmin()) return;
                 if (isFolderAdmin && baton.model.get('entity') === baton.parentModel.get('created_by')) return;
 
-                var dropdown = new DropdownView({ label: $('<i class="fa fa-bars">'), smart: true, title: gt('Actions') }),
+                var dropdown = new DropdownView({ label: $('<i class="fa fa-bars" aria-hidden="true">'), smart: true, title: gt('Actions') }),
                     type = baton.model.get('type'),
                     myself = baton.model.isMyself(),
                     isNew = baton.model.has('new'),
