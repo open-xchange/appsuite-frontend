@@ -1,6 +1,6 @@
 ---
 title: Configuring
-description: How to configure which plugins ("widgets") are shown, whether they are mandatory or just suggested to the user
+description: How to configure which plugins ('widgets') are shown, whether they are mandatory or just suggested to the user
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Configuring_portal_plugins
 ---
 
