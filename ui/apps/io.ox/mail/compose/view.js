@@ -965,7 +965,7 @@ define('io.ox/mail/compose/view', [
 
         setSimpleMail: function (content) {
             if (this.model.get('editorMode') === 'text') return;
-            if ($(content).find('table').length === 0) this.editorContainer.find('.editable.mce-content-body').addClass('simple-mail');
+            if (!/<table/.test(content)) this.editorContainer.find('.editable.mce-content-body').addClass('simple-mail');
         },
 
         blockReuse: function (sendtype) {
