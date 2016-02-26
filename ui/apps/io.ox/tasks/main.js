@@ -793,7 +793,8 @@ define('io.ox/tasks/main', [
             hideTopbar: _.device('smartphone'),
             hideToolbar: _.device('smartphone'),
             // if it's shown, it should be on the top
-            toolbarPlacement: 'top'
+            toolbarPlacement: 'top',
+            templateOptions: { tagName: 'li', defaultClassName: 'vgrid-cell list-unstyled' }
         });
 
         app.grid = grid;

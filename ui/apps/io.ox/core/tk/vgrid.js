@@ -325,8 +325,12 @@ define('io.ox/core/tk/vgrid', [
                             .on('click', { grid: this }, fnToggleEditable)
                 )
                 .prependTo(node),
-            // item template
-            template = new Template({ tempDrawContainer: container }),
+        // item template
+            templateOptions = { tempDrawContainer: container };
+        if (options.templateOptions) {
+            templateOptions = _.extend(templateOptions, options.templateOptions);
+        }
+        var template = new Template(templateOptions),
             // label template
             label = new Template({ tempDrawContainer: container }),
             // item pool
