@@ -43,7 +43,7 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
                     trigger: 'focus'
                 })
                 // make sure it always disappears
-                .on('dispose', function () { $(this).tooltip('hide'); })
+                .on('dispose', function () { $(this).tooltip('destroy'); })
                 // always avoid clearing the URL hash
                 .on('click', 'a', $.preventDefault);
         },
