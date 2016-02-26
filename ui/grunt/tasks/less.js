@@ -31,7 +31,7 @@ module.exports = function (grunt) {
             login: {
                 options: {
                     lessrc: '.lessrc',
-                    rootpath: 'v=<%= pkg.version %>.' + grunt.template.date(new Date(), 'yyyymmdd.hhMMss') + '/'
+                    rootpath: grunt.config('oxbase') + '/'
                 },
                 files: [
                     {
@@ -43,7 +43,10 @@ module.exports = function (grunt) {
                 ]
             },
             busy: {
-                options: { lessrc: '.lessrc' },
+                options: {
+                    lessrc: '.lessrc',
+                    rootpath: grunt.config('oxbase') + '/'
+                },
                 files: [
                     {
                         src: ['apps/themes/busy/busy.less'],
