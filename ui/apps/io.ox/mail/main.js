@@ -51,6 +51,9 @@ define('io.ox/mail/main', [
         title: 'Mail'
     });
 
+    // a11y: dumb approach to track recent keyboard usage
+    var openMessageByKeyboard = false;
+
     app.mediator({
         /*
          * Init pages for mobile use
@@ -697,6 +700,16 @@ define('io.ox/mail/main', [
                 // check if message is still within the current collection
                 if (!app.listView.collection.get(latestMessage)) return;
                 app.threadView.show(latestMessage, app.isThreaded());
+                // a11y: used keyboard?
+                if (openMessageByKeyboard || app.props.get('layout') === 'list') {
+                    openMessageByKeyboard = false;
+                    // set focus
+                    var items = app.threadView.$('.list-item'),
+                        index = items.index(items.filter('.expanded'));
+                    items.filter('.expanded:first').find('.body').focus();
+                    // fix scroll position (focus might scroll down)
+                    if (index === 0) app.threadView.$('.scrollable').scrollTop(0);
+                }
             }
 
             // show instantly
@@ -1398,12 +1411,24 @@ define('io.ox/mail/main', [
             // mail list: focus mail detail view on <enter>
             // mail list: focus folder on <escape>
             app.listView.$el.on('keydown', '.list-item', function (e) {
-                if (e.which === 13) app.threadView.$('.list-item.expanded .body').focus();
-                if (e.which === 27) { app.folderView.tree.$('.folder.selected').focus(); return false; }
+                // focus message?
+                if (e.which === 13) {
+                    openMessageByKeyboard = true;
+                    return;
+                }
+                // if a message is selected (mouse or keyboard) the focus is set on body
+                if (e.which === 27) {
+                    app.folderView.tree.$('.folder.selected').focus();
+                    return false;
+                }
             });
             // detail view: return back to list view via <escape>
-            app.threadView.$el.on('keydown', '.list-item', function (e) {
-                if (e.which === 27) app.listView.restoreFocus(true);
+            app.threadView.$el.attr('tabindex', -1).on('keydown', function (e) {
+                if (e.which !== 27) return;
+                if ($(e.target).is('.smart-dropdown, .dropdown-toggle, :input')) return;
+                // make sure the detail view closes in list layout
+                app.right.removeClass('preview-visible');
+                app.listView.restoreFocus(true);
             });
             // folder tree: focus list view on <enter>
             // folder tree: focus top-bar on <escape>
