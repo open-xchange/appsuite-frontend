@@ -77,7 +77,7 @@ define('io.ox/tasks/model', [
                     var time = this.get.apply(this, arguments);
                     options = options || {};
                     // use this.get('fulltime') only as a backup, some datepickers have ignore fulltime enabled which would not be honored this way
-                    options.fulltime = options.fulltime || this.get('full_time');
+                    options.fulltime = _.isBoolean(options.fulltime) ? options.fulltime : this.get('full_time');
 
                     // if time is undefined moment initializes with the current date, we need to prevent that
                     // !time check would be wrong for timestamp 0 so specific check is needed
@@ -91,7 +91,7 @@ define('io.ox/tasks/model', [
                 setDate: function (attr, time, options) {
                     options = options || {};
                     // use this.get('fulltime') only as a backup, some datepickers have ignore fulltime enabled which would not be honored this way
-                    options.fulltime = options.fulltime || this.get('full_time');
+                    options.fulltime = _.isBoolean(options.fulltime) ? options.fulltime : this.get('full_time');
 
                     // if time is undefined moment initializes with the current date, we need to prevent that
                     // !time check would be wrong for timestamp 0 so specific check is needed
