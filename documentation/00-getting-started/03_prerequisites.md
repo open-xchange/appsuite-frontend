@@ -34,4 +34,4 @@ and wait for the checkout to complete.
 This will create the directory web with the source code of the frontend in it. Building the ui and documentation
 
 # Build
-Please refer to the build process article [here](/ui/build-process/076_appserve.html)
+Please refer to the build process article [here](/ui/00-getting-started/04_build-process.html)

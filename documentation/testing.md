@@ -1,5 +1,7 @@
 ---
 title: Testing
 icon: fa-bar-chart-o
-description: stub
+description:
 ---
+
+How to use, change and create tests for appsuite ui.

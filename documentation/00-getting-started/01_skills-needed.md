@@ -1,13 +1,8 @@
 ---
 title: Skills needed
-description: This article explains the languages and frameworks used within the AppSuite frontend
+description: This article explains the languages and frameworks used within the App Suite frontend
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:UI_developer_primer
 ---
-
-This article explains the languages and frameworks used within the
-AppSuite frontend. It is aimed at developers that want to work with the
-frontend, be it creating new plugins or applications or modifying
-existing code.
 
 # Basics
 

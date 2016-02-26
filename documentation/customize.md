@@ -4,7 +4,8 @@ icon: fa-plug
 description: Getting ready to develop your own plugins / apps
 ---
 
-There are two ways that your code can interact with the appsuite. First of all there are __apps__ that are described briefly here [TODO](). 
+There are two ways that your code can interact with the appsuite.
+First of all there are __apps__ that are described briefly [here](/ui/customize/app/first-app.html).
 
 
 The second way is using __extension points and extensions__. 
