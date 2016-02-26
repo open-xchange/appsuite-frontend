@@ -4687,6 +4687,13 @@ msgstr "ファイルの管理"
 msgid "Manual"
 msgstr "手動設定"
 
+#. Text that is displayed in a select box for task reminders, when the user does not use a predefined time, like in 15minutes
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#, fuzzy
+#| msgid "Manual"
+msgid "Manual input"
+msgstr "手動設定"
+
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "March"
 msgstr "3 月"
@@ -6442,7 +6449,6 @@ msgid "Remaining time: %1$s"
 msgstr "残り時間： %1$s"
 
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Remind me"
 msgstr "通知"
 
@@ -6458,6 +6464,7 @@ msgstr "再通知 "
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Reminder"
 msgstr "アラーム"
 

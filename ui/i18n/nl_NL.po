@@ -4746,6 +4746,13 @@ msgstr "Bestanden Beheren"
 msgid "Manual"
 msgstr "Handmatig"
 
+#. Text that is displayed in a select box for task reminders, when the user does not use a predefined time, like in 15minutes
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#, fuzzy
+#| msgid "Manual"
+msgid "Manual input"
+msgstr "Handmatig"
+
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "March"
 msgstr "maart"
@@ -6527,7 +6534,6 @@ msgid "Remaining time: %1$s"
 msgstr "Overgebleven tijd: %1$s"
 
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Remind me"
 msgstr "Herinner mij"
 
@@ -6543,6 +6549,7 @@ msgstr "Herinner me opnieuw"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Reminder"
 msgstr "Herinnering"
 

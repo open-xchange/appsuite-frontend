@@ -505,6 +505,8 @@ msgstr ""
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
 msgid "Reminder"
 msgstr ""
 
@@ -7909,8 +7911,6 @@ msgstr ""
 
 #: apps/io.ox/mail/actions/reminder.js
 #: module:io.ox/mail
-#: apps/io.ox/tasks/edit/view-template.js
-#: module:io.ox/tasks/edit
 msgid "Remind me"
 msgstr ""
 
@@ -10181,6 +10181,12 @@ msgstr ""
 #: apps/io.ox/tasks/main.js
 #: module:io.ox/tasks
 msgid "Due date"
+msgstr ""
+
+#. Text that is displayed in a select box for task reminders, when the user does not use a predefined time, like in 15minutes
+#: apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
+msgid "Manual input"
 msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js
