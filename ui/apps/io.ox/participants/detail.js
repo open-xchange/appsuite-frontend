@@ -85,7 +85,7 @@ define('io.ox/participants/detail', [
                 // has confirmation icon?
                 confirm !== '' ? $('<span class="status" aria-hidden="true">').addClass(statusClass).append(confirm) : '',
                 // has confirmation comment?
-                comment !== '' ? $('<div classs="comment">').text(gt.noI18n(conf.comment)) : ''
+                comment !== '' ? $('<div class="comment">').text(gt.noI18n(conf.comment)) : ''
             );
         }
 
