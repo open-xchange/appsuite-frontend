@@ -36,14 +36,18 @@ define('io.ox/mail/threadview', [
             this.$el.append(
                 $('<nav class="back-navigation generic-toolbar">').append(
                     $('<div class="button">').append(
-                        $('<a href="#" role="button" class="back" tabindex="1">').append(
-                            $('<i class="fa fa-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
-                        )
+                        $('<a href="#" role="button" class="back" tabindex="1">')
+                        .attr('aria-label', gt('Back to list'))
+                        .append($('<i class="fa fa-chevron-left" aria-hidden="true">'), $.txt(' '), $.txt(gt('Back')))
                     ),
                     $('<div class="position">'),
                     $('<div class="prev-next">').append(
-                        $('<a href="#" role="button" class="previous-mail" tabindex="1">').append('<i class="fa fa-chevron-up">'),
-                        $('<a href="#" role="button" class="next-mail" tabindex="1">').append('<i class="fa fa-chevron-down">')
+                        $('<a href="#" role="button" class="previous-mail" tabindex="1">')
+                            .attr('aria-label', gt('Previous message'))
+                            .append('<i class="fa fa-chevron-up" aria-hidden="true">'),
+                        $('<a href="#" role="button" class="next-mail" tabindex="1">')
+                            .attr('aria-label', gt('Next message'))
+                            .append('<i class="fa fa-chevron-down" aria-hidden="true">')
                     )
                 ).attr('role', 'toolbar')
             );
