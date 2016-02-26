@@ -462,7 +462,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     if (e.ctrlKey || e.metaKey) {
                         e.preventDefault();
                         this.selectAll();
-                    } else {
+                    } else if (!e.shiftKey && !e.altKey) {
                         this.view.trigger('selection:archive', this.get());
                     }
                     break;
