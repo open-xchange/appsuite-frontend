@@ -22,6 +22,16 @@ define('io.ox/files/common-extensions', [
 
     var extensions = {
 
+        ariaLabel: function (baton) {
+            var parts = [];
+            // filename, last modified, and size
+            parts.push(baton.data.filename || baton.data.title);
+            if (baton.model.isFolder()) parts.push(gt('Folder'));
+            parts.push(gt('modified') + ' ' + moment(baton.data.last_modified).format('LLL'));
+            parts.push(gt('size') + ' ' + strings.fileSize(baton.data.file_size || 0, 1));
+            this.attr('aria-label', parts.join(', ') + '.');
+        },
+
         date: function (baton, options) {
             var data = baton.data, t = data.last_modified;
             if (!_.isNumber(t)) return;
