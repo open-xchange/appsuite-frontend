@@ -108,10 +108,11 @@ define('io.ox/mail/threadview', [
         draw: function (baton) {
 
             var length = baton.view.collection.length;
-            if (length <= 1) return;
 
             this.append(
-                $('<div class="summary">').text(gt('%1$d messages in this conversation', length))
+                $('<div class="summary">').text(
+                    length > 1 ? gt('%1$d messages in this conversation', length) : '\u00A0'
+                )
             );
         }
     });

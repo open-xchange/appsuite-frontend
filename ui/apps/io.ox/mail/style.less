@@ -762,7 +762,7 @@
     & > h1 {
 
         .subject-base();
-        padding-bottom: 8px;
+        padding-bottom: 0;
         background-color: white;
 
         .subject {
@@ -783,7 +783,8 @@
             font-size: 13px;
             line-height: 16px;
             font-weight: 300;
-            margin: -5px @default-padding -11px 0;
+            position: relative;
+            top: -5px;
             html.high-contrast & { color: @hc-gray; }
         }
     }
