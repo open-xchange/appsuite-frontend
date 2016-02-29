@@ -19,8 +19,9 @@ define('io.ox/contacts/addressbook/popup', [
     'io.ox/core/extensions',
     'io.ox/contacts/util',
     'gettext!io.ox/contacts',
+    'settings!io.ox/mail',
     'less!io.ox/contacts/addressbook/style'
-], function (http, folderAPI, ModalDialog, ListView, ext, util, gt) {
+], function (http, folderAPI, ModalDialog, ListView, ext, util, gt, mailSettings) {
 
     'use strict';
 
@@ -28,7 +29,7 @@ define('io.ox/contacts/addressbook/popup', [
         addresses = 'email1 email2 email3'.split(' ');
 
     // special folder id
-    var collected_id = 0;
+    var collected_id = mailSettings.get('contactCollectFolder', 0);
 
     // split words
     var regSplitWords = /[\s,.\-:;\<\>\(\)\_\@\/\'\"]/;
@@ -126,29 +127,15 @@ define('io.ox/contacts/addressbook/popup', [
             options = _.extend({
                 // keep this list really small for good performance!
                 columns: '1,20,500,501,502,505,555,556,557,592,602,606',
-                limit: 10000
+                limit: 5000
             }, options);
 
-            return getFolders().then(function () {
-                if (options.folder === 'all') delete options.folder;
-                return fetchAddresses(options).then(function (list) {
-                    return processAddresses(list, options);
-                });
+            if (options.folder === 'all') delete options.folder;
+
+            return fetchAddresses(options).then(function (list) {
+                return processAddresses(list, options);
             });
         };
-
-        function getFolders() {
-            // get contacts folders
-            return folderAPI.flat({ module: 'contacts' }).done(function (folders) {
-                // exclude "collected addresses"
-                _(folders['private']).find(function (folder) {
-                    if (folder.standard_folder && folder.standard_folder_type === 0) {
-                        collected_id = String(folder.id);
-                        return true;
-                    }
-                });
-            });
-        }
 
         function fetchAddresses(options) {
             return http.PUT({
@@ -156,8 +143,7 @@ define('io.ox/contacts/addressbook/popup', [
                 params: {
                     action: 'search',
                     columns: options.columns,
-                    limit: '0,' + options.limit
-                    // sort: '609'
+                    right_hand_limit: options.limit
                 },
                 data: {
                     // emailAutoComplete doesn't work; need to clean up client-side anyway
@@ -171,7 +157,7 @@ define('io.ox/contacts/addressbook/popup', [
             var result = [], hash = {};
 
             // fail when exceeding the limit
-            if (list.length > options.limit) return $.Deferred().reject('too-many');
+            if (list.length >= options.limit) return $.Deferred().reject('too-many');
 
             list.forEach(function (item) {
                 // get sort name
