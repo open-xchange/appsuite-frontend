@@ -640,7 +640,7 @@ define('io.ox/files/share/permissions', [
                     maxWrite = model.get('write') === 64 ? 64 : 2,
                     maxDelete = model.get('delete') === 64 ? 64 : 2;
 
-                var dropdown = new DropdownView({ caret: true, keep: true, label: gt('Details'), model: model, smart: true })
+                var dropdown = new DropdownView({ caret: true, keep: true, label: gt('Details'), title: gt('Detailed access rights'), model: model, smart: true })
                     //
                     // FOLDER access
                     //
@@ -707,9 +707,7 @@ define('io.ox/files/share/permissions', [
                 }
 
                 this.append(
-                    $('<div class="col-sm-2 col-xs-4 detail-dropdown">').append(
-                        dropdown.$el.attr('title', gt('Detailed access rights'))
-                    )
+                    $('<div class="col-sm-2 col-xs-4 detail-dropdown">').append(dropdown.$el)
                 );
             }
         },
