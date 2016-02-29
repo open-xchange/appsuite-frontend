@@ -45,7 +45,7 @@ define([
         describe('with a list of birthdays', function () {
             beforeEach(function () {
                 this.server.respondWith('GET', /api\/contacts\?action=birthdays/, function (xhr) {
-                    xhr.respond(200, {'Content-Type': 'text/javascript;charset=UTF-8'},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                         '{ "timestamp":1368791630910,"data": ' + JSON.stringify(testData) + '}');
                 });
                 return invokeDraw.call(this);
@@ -76,7 +76,7 @@ define([
         describe('with empty list of birtdays', function () {
             beforeEach(function () {
                 this.server.respondWith('GET', /api\/contacts\?action=birthdays/, function (xhr) {
-                    xhr.respond(200, {'Content-Type': 'text/javascript;charset=UTF-8'},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                         '{ "timestamp":1368791630910,"data": []}');
                 });
                 return invokeDraw.call(this);
