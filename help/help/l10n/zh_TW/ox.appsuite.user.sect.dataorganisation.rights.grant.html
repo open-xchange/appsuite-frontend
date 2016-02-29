@@ -1,13 +1,13 @@
-<html>
+<html lang="zh_tw">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>11.2.4. 共享文件夾</title>
+<title>11.2.4. 授權</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. 權限">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html" title="11.2.3. 權限 針對新文件夾的權限">
-<link rel="next" href="ox.appsuite.user.sect.dataorganisation.pubsub.html" title="11.3. 發佈與訂閱">
+<link rel="next" href="ox.appsuite.user.sect.dataorganisation.pubsub.html" title="11.3. 訂閱">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律聲明">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -29,13 +29,15 @@
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
-  <div class="sect2">
+  <h1 class="sr-only">管理資料</h1>
+<h2 class="sr-only">權限</h2>
+<div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.dataorganisation.rights.grant"></a>11.2.4. 共享文件夾</h3></div></div></div>
-<a class="indexterm" name="idm140723394958928"></a><a class="indexterm" name="idm140723394957312"></a><a class="indexterm" name="idm140723394955696"></a><a class="indexterm" name="idm140723394954080"></a><div class="concept">
-<a name="ox.appsuite.user.concept.rights.share"></a><p>要與其他用戶共享數據，請共享一個或多個文件夾。您可以通過授予其他用戶具體的文件夾權限來共享文件夾。存在下列選項:</p>
+<a name="ox.appsuite.user.sect.dataorganisation.rights.grant"></a>11.2.4. 授權</h3></div></div></div>
+<a class="indexterm" name="id-1.12.5.8.2"></a><a class="indexterm" name="id-1.12.5.8.3"></a><div class="concept">
+<a name="ox.appsuite.user.concept.rights.grant"></a><p>要與其他用戶共享數據，請共享一個或多個文件夾。您可以通過授予其他用戶具體的文件夾權限來共享文件夾。存在下列選項:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.share" title="如何為資料夾授權:">授予</a> 資料夾權限，</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.add" title="如何為資料夾授權:">授予</a> 資料夾權限，</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.change" title="如何更改資料夾權限:">修改</a> 資料夾權限，</p></li>
 <li class="listitem"><p>透過套用 <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.applyrole" title="如何透過套用使用者角色進行授權:">使用者角色</a> 進行授權，並</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.remove" title="如何移除使用者的資料夾權限:">刪除</a> 資料夾權限。</p></li>
@@ -44,52 +46,56 @@
       </p>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.share.limitations"></a><p><span class="phrase"><strong>註：</strong></span> 注意以下限制。</p>
+<a name="ox.appsuite.user.concept.rights.limitations"></a><p><span class="phrase"><strong>註：</strong></span> 注意以下限制。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none"><p>要向其他用戶授予文件夾權限，您必須具備該文件夾的管理員權限。</p></li>
-<li class="listitem" style="list-style-type: none"><p>您不能共享您的個人 <span class="guilabel"><strong>收件箱</strong></span> 文件夾。要授權其他用戶訪問您的電子郵件，請共享您的 <span class="guilabel"><strong>收件箱</strong></span> 文件夾下的電子郵件文件箱。其他使用者必須訂閱此電子郵件文件夾。參見 <a class="xref" href="ox.appsuite.user.sect.email.share.subscribe.html" title="5.7.2. 訂閱電子郵件文件夾">5.7.2: 訂閱電子郵件文件夾</a>。</p></li>
-<li class="listitem" style="list-style-type: none"><p>您對您的個人行事曆、聯絡人，以及工作文件夾有以下排他性權限。您不能將這些文件夾的管理員權限授予其他用戶。可在 : <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights" title="問：">資料管理與團隊協作問題</a> 中找到有關切實可行的設置的示例。</p></li>
+<li class="listitem" style="list-style-type: none"><p>您不能共享您的個人 <span class="guilabel"><strong>收件箱</strong></span> 文件夾。要授權其他用戶訪問您的電子郵件，請共享您的 <span class="guilabel"><strong>收件箱</strong></span> 文件夾下的電子郵件文件箱。其他使用者必須訂閱此電子郵件文件夾。</p></li>
+<li class="listitem" style="list-style-type: none"><p>您對您的個人行事曆、聯絡人，以及工作文件夾有以下排他性權限。您不能將這些文件夾的管理員權限授予其他用戶。</p></li>
 </ul></div>
 <p>
       </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.rights.share"></a><p class="title"><b>如何為資料夾授權:</b></p>
+<a name="ox.appsuite.user.task.rights.add"></a><p class="title">如何為資料夾授權:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p>從資料夾樹中 <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="如何開啟某個資料夾:">選擇</a> 資料夾。</p>
+<p>從資料夾樹中 <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="如何開啟或選擇資料夾:">選擇</a> 資料夾。</p>
 <p><span class="phrase"><strong>註:</strong></span> 您需要對該資料夾有管理權限。</p>
 </li>
 <li class="step"><p>點選資料夾旁邊的 <span class="guibutton"><strong>資料夾相關操作</strong></span> 圖示 <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.share"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span>。點擊 <span class="guibutton"><strong>權限</strong></span>。<span class="guilabel"><strong>資料夾權限</strong></span> 視窗將顯示此資料夾目前的權限。</p></li>
-<li class="step"><p>在底端輸入使用者姓名。點擊圖示 <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.share.add"></a><img src="../../images/appsuite_user_icon_add.png"></span>。該使用者取得預設權限。</p></li>
-<li class="step"><p>點選使用者的一項權限以修改。設定範例可在 <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights" title="問：">關於資料管理與團隊協作的問題</a> 中找到。</p></li>
+<li class="step"><p>輸入使用者或群組的電子郵件地址。該使用者或群組將取得預設權限。</p></li>
+<li class="step"><p>若要變更使用者或群組的權限，點擊 <span class="guibutton"><strong>存取權限</strong></span>。從選單中選擇權限。</p></li>
 <li class="step"><p>若需要，請重複這些步驟以授權更多權限。</p></li>
+<li class="step">
+<p>若要轉移此資料夾中所有現有或新建立子資料夾的權限，勾選 <span class="guibutton"><strong>套用至所有子資料夾</strong></span>。</p>
+<p><span class="phrase"><strong>註:</strong></span> 您需要對子資料夾有管理權限。</p>
+</li>
 <li class="step"><p>單擊 <span class="guibutton"><strong>保存</strong></span>。</p></li>
 </ol></div>
 <div class="taskrelated">
-          <p><span class="phrase"><strong>秘訣:</strong></span> 共享資料夾將使用 <span class="guibutton"><strong>已共享</strong></span> 圖示 <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.rights.share.shared"></a><img src="../../images/appsuite_user_icon_folder_share.png"></span> 標示。點選圖示時，<span class="guilabel"><strong>資料夾權限</strong></span> 視窗開啟。</p>
+          <p><span class="phrase"><strong>秘訣:</strong></span> 共享資料夾將使用 <span class="guibutton"><strong>已共享</strong></span> 圖示 <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.rights.shared"></a><img src="../../images/appsuite_user_icon_folder_shared.png"></span> 標示。點選圖示時，<span class="guilabel"><strong>資料夾權限</strong></span> 視窗開啟。</p>
         </div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.rights.change"></a><p class="title"><b>如何更改資料夾權限:</b></p>
+<a name="ox.appsuite.user.task.rights.change"></a><p class="title">如何更改資料夾權限:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p>從資料夾樹中 <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="如何開啟某個資料夾:">選擇</a> 資料夾。</p>
+<p>從資料夾樹中 <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="如何開啟或選擇資料夾:">選擇</a> 資料夾。</p>
 <p><span class="phrase"><strong>註:</strong></span> 您需要對該資料夾有管理權限。</p>
 </li>
 <li class="step"><p>點選資料夾旁邊的 <span class="guibutton"><strong>資料夾相關操作</strong></span> 圖示 <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.change"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span>。點擊 <span class="guibutton"><strong>權限</strong></span>。<span class="guilabel"><strong>資料夾權限</strong></span> 視窗將顯示此資料夾目前的權限。</p></li>
 <li class="step">
-<p>點選資料夾的一項權限以修改。設定範例可在 <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights" title="問：">關於資料管理與團隊協作的問題</a> 中找到。</p>
+<p>若要變更使用者或群組的權限，點擊 <span class="guibutton"><strong>存取權限</strong></span>。從選單中選擇權限。</p>
 <p><span class="phrase"><strong>注:</strong></span> 您無法修改個人文件夾的管理權限。</p>
 </li>
 <li class="step"><p>單擊 <span class="guibutton"><strong>保存</strong></span>。</p></li>
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.rights.applyrole"></a><p class="title"><b>如何透過套用使用者角色進行授權:</b></p>
+<a name="ox.appsuite.user.task.rights.applyrole"></a><p class="title">如何透過套用使用者角色進行授權:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p>從資料夾樹中 <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="如何開啟某個資料夾:">選擇</a> 資料夾。</p>
+<p>從資料夾樹中 <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="如何開啟或選擇資料夾:">選擇</a> 資料夾。</p>
 <p><span class="phrase"><strong>註:</strong></span> 您需要對該資料夾有管理權限。</p>
 </li>
 <li class="step"><p>點選資料夾旁邊的 <span class="guibutton"><strong>資料夾相關操作</strong></span> 圖示 <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.applyrole"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span>。點擊 <span class="guibutton"><strong>權限</strong></span>。<span class="guilabel"><strong>資料夾權限</strong></span> 視窗將顯示此資料夾目前的權限。</p></li>
@@ -98,10 +104,10 @@
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.rights.remove"></a><p class="title"><b>如何移除使用者的資料夾權限:</b></p>
+<a name="ox.appsuite.user.task.rights.remove"></a><p class="title">如何移除使用者的資料夾權限:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p>從資料夾樹中 <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="如何開啟某個資料夾:">選擇</a> 資料夾。</p>
+<p>從資料夾樹中 <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="如何開啟或選擇資料夾:">選擇</a> 資料夾。</p>
 <p><span class="phrase"><strong>註:</strong></span> 您需要對該資料夾有管理權限。</p>
 </li>
 <li class="step"><p>點選資料夾旁邊的 <span class="guibutton"><strong>資料夾相關操作</strong></span> 圖示 <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.remove"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span>。點擊 <span class="guibutton"><strong>權限</strong></span>。</p></li>
@@ -110,5 +116,6 @@
 </ol></div>
 </div>
 </div>
-</body>
+          </div>
+        </body>
 </html>

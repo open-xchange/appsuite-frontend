@@ -797,12 +797,11 @@ define('io.ox/mail/api', [
                 appendColumns: false
             })
             .then(function (result) {
-
                 // reset draft folder
                 var draftsFolder = accountAPI.getFoldersByType('drafts');
                 pool.resetFolder(draftsFolder);
                 folderAPI.reload(draftsFolder);
-                api.trigger('refresh.all');
+                api.trigger('autosave refresh.all');
                 return result;
             }));
         } finally {

@@ -46,6 +46,13 @@ define('io.ox/keychain/secretRecoveryDialog', [
                     return api.migrateFromOldSecret(this.getContentNode().find('input').val()).done(function migrationSuccessful() {
                         self.getContentNode().find('input').val('');
                         self.close();
+
+                        require(['io.ox/core/folder/api'], function (api) {
+                            api.list('1', { cache: false }).done(function () {
+                                api.virtual.refresh();
+                            });
+                        });
+
                         // process queue
                     }).fail(function migrationFailed(e) {
                         // eloquentify standard error message ;-)
