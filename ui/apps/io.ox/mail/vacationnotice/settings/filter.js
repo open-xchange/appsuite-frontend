@@ -48,8 +48,7 @@ define('io.ox/mail/vacationnotice/settings/filter',
                         days: '7',
                         internal_id: 'vacation',
                         subject: '',
-                        text: '',
-                        from: multiValues.from
+                        text: ''
                     },
                     vacationData,
                     VacationEdit,
