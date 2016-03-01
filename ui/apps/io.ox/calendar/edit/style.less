@@ -35,6 +35,41 @@
     .find-free-time { margin-top: 12px; }
 
     .custom-color {
+
+        padding-top: 8px;
+
+        input[type="radio"] {
+            // display: none does NOT work; cannot receive focus
+            position: absolute;
+            clip: rect(0, 0, 0, 0);
+        }
+
+        label {
+            padding: 0;
+            margin: 0;
+        }
+
+        .box:before {
+            font-family: 'FontAwesome';
+            content: '\00a0';
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            margin-right: 4px;
+            border-radius: @border-radius-small;
+            text-align: center;
+            font-size: 14px;
+            line-height: 20px;
+        }
+
+        input[type="radio"]:focus + .box:before {
+            box-shadow: 0 0 3px @link-color;
+        }
+
+        input[type="radio"]:checked + .box:before {
+            content: '\f00c';
+        }
+
         .generate-color-label(@counter) when (@counter > 0) {
             .generate-color-label((@counter - 1));
 
@@ -42,9 +77,9 @@
             @color-label-contrast: contrast(@@color-label-bg-mod);
 
             .color-label-@{counter} {
-                @color-label-counter: ~"color-label-bg-@{counter}";
-                background-color: darken(@@color-label-counter, 10%);
-                .fa {
+                &:before {
+                    @color-label-counter: ~"color-label-bg-@{counter}";
+                    background-color: darken(@@color-label-counter, 10%);
                     color: @color-label-contrast;
                 }
             }
@@ -52,23 +87,10 @@
 
         .generate-color-label(10);
 
-        .color-label {
-            width: 20px;
-            height: 20px;
-            margin: 2px;
-            text-align: center;
-            border-radius: @border-radius-small;
-            cursor: pointer;
-
-            &.no-color {
-                border: 1px solid #555;
-                margin-right: 22px;
-                color: @black;
-            }
-
-            .fa { display: none; }
-
-            &.active .fa { display: inline-block; }
+        .box.no-color:before {
+            border: 1px solid #888;
+            margin-right: 24px;
+            color: @black;
         }
     }
 
