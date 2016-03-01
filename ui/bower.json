@@ -18,7 +18,7 @@
     "bootstrap": "3.3.6",
     "bootstrap-accessibility-plugin": "https://github.com/Open-Xchange-Frontend/bootstrap-accessibility-plugin.git#90a9ca94ab7712915d0416102837f8a638fc2819",
     "bootstrap-datepicker": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#tag-1.3.1",
-    "bootstrap-tokenfield": "https://github.com/Open-Xchange-Frontend/bootstrap-tokenfield.git#0298dcd395091e5d47bc1f2b854192415b72c46c",
+    "bootstrap-tokenfield": "https://github.com/Open-Xchange-Frontend/bootstrap-tokenfield.git#db79219699545ddea9b82ce31716045d064a5d5c",
     "font-awesome": "4.4.0",
     "jquery": "2.1.4",
     "jquery-imageloader": "https://github.com/beatak/jquery-imageloader.git#3e616c19ad3bb32e4e62679a348f8b18a80790d2",
