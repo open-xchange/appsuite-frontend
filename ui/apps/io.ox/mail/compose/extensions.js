@@ -235,7 +235,8 @@ define('io.ox/mail/compose/extensions', [
             if (attr === 'reply_to' && settings.get('showReplyTo/configurable', false) === false) return;
 
             return function (baton) {
-                var guid = _.uniqueId('form-control-label-'),
+                var extNode,
+                    guid = _.uniqueId('form-control-label-'),
                     value = baton.model.get(attr) || [],
                     // hide tokeninputfields if necessary (empty cc/bcc)
                     cls = 'row' + (/cc$/.test(attr) && !value.length ? ' hidden' : ''),
@@ -262,7 +263,7 @@ define('io.ox/mail/compose/extensions', [
                 }
 
                 this.append(
-                    $('<div data-extension-id="' + attr + '">').addClass(cls)
+                    extNode = $('<div data-extension-id="' + attr + '">').addClass(cls)
                         .append(
                             $('<label class="maillabel col-xs-1">').text(tokenfieldTranslations[attr]).attr({ 'for': guid }),
                             node
@@ -272,6 +273,8 @@ define('io.ox/mail/compose/extensions', [
                 tokenfieldView.render().$el.on('tokenfield:createdtoken', function (e) {
                     // extension point for validation etc.
                     ext.point(POINT + '/createtoken').invoke('action', this, _.extend(baton, { event: e }));
+                }).on('tokenfield:next', function () {
+                    extNode.nextAll().find('input.tt-input,input[name="subject"]').filter(':visible').first().focus();
                 });
 
                 // bind mail-model to collection

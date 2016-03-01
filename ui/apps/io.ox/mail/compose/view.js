@@ -277,7 +277,7 @@ define('io.ox/mail/compose/view', [
 
         events: {
             'click [data-action="add"]': 'toggleTokenfield',
-            'keyup [data-extension-id="subject"] input': 'setSubject',
+            'keydown [data-extension-id="subject"] input': 'setSubject',
             'keydown': 'focusSendButton'
         },
 
