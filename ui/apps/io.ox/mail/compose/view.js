@@ -980,9 +980,14 @@ define('io.ox/mail/compose/view', [
             }
         },
 
+        focusEditor: function () {
+            this.editor.focus();
+        },
+
         focusSendButton: function (e) {
             // Focus send button on ctrl || meta + Enter (a11y + keyboardsupport)
             if ((e.metaKey || e.ctrlKey) && ((e.keyCode || e.which) === 13)) {
+                e.preventDefault();
                 this.$el.parents().find('button[data-action="send"]').focus();
             }
         },
