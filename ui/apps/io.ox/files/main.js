@@ -669,6 +669,9 @@ define('io.ox/files/main', [
             app.listView.$el.on('keydown', '.file-type-folder', function (e) {
                 if (e.which === 13) {
                     var obj = _.cid($(e.currentTarget).attr('data-cid'));
+                    app.listView.once('collection:load', function () {
+                        app.listView.selection.select(0);
+                    });
                     app.folder.set(obj.id);
                 }
             });
