@@ -1,0 +1,19 @@
+{
+  "plugins": {
+    "lint": {
+      "no-multiple-toplevel-headings": false,
+      "list-item-indent": false,
+      "maximum-line-length": false,
+      "table-cell-padding": false,
+      "no-heading-punctuation": ".,;:!",
+      "fenced-code-flag": false,
+      "maximum-heading-length": false
+    }
+  },
+  "settings": {
+    "gfm": true,
+    "listItemIndent": "1",
+    "fence": "`",
+    "fences": true
+  }
+}
