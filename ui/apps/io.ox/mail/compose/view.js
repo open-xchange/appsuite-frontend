@@ -954,10 +954,11 @@ define('io.ox/mail/compose/view', [
                 } else {
                     self.editor.focus();
                 }
+                self.model.setAutoBCC();
                 if (mode === 'replyall' || mode === 'edit') {
                     if (!_.isEmpty(self.model.get('cc'))) self.toggleTokenfield('cc');
-                    if (!_.isEmpty(self.model.get('bcc'))) self.toggleTokenfield('bcc');
                 }
+                if (!_.isEmpty(self.model.get('bcc'))) self.toggleTokenfield('bcc');
                 self.setBody(self.model.getContent());
                 self.model.dirty(false);
             });

@@ -118,6 +118,12 @@ define.async('io.ox/mail/compose/model', [
             this.updateShadow();
         },
 
+        setAutoBCC: function () {
+            if (settings.get('autobcc') && this.get('mode') !== 'edit') {
+                this.set('bcc', mailUtil.parseRecipients(settings.get('autobcc'), { localpart: false }));
+            }
+        },
+
         getCopy: function () {
             var ret = _.clone(this.toJSON());
             ret.attachments = _.clone(this.attributes.attachments.toJSON());

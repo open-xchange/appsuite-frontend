@@ -132,8 +132,9 @@ define('io.ox/mail/util', [
             return phone.replace(rTelephoneCleanup, '');
         },
 
-        parseRecipient: function (s) {
-            var recipient = $.trim(s), match, name, target;
+        parseRecipient: function (s, o) {
+            var recipient = $.trim(s), match, name, target,
+                options = _.extend({ localpart: true }, o);
             if ((match = recipient.match(rRecipient)) !== null) {
                 // case 1: display name plus email address / telephone number
                 if (that.getChannel(match[3]) === 'email') {
@@ -146,6 +147,9 @@ define('io.ox/mail/util', [
                 // case 2: assume plain email address / telephone number
                 target = recipient.replace(rMailCleanup, '').toLowerCase();
                 name = target.split(/@/)[0];
+                // If this is set to false, localpart will be set to null
+                // This is the expected behaviour for tokenfields
+                if (!options.localpart) name = null;
             } else {
                 name = target = that.cleanupPhone(recipient);
             }
@@ -199,14 +203,14 @@ define('io.ox/mail/util', [
          * Parse comma or semicolon separated list of recipients
          * Example: '"Doe, Jon" <jon@doe.foo>, "\'World, Hello\'" <hi@dom.tld>, urbi@orbi.tld'
          */
-        parseRecipients: function (s) {
-            var list = [], match, recipient;
+        parseRecipients: function (s, o) {
+            var list = [], match, recipient, options = o;
             if (!s) return list;
             while ((match = s.match(rRecipientList)) !== null) {
                 // look ahead for next round
                 s = s.substr(match[0].length).replace(rRecipientCleanup, '');
                 // get recipient
-                recipient = this.parseRecipient(match[0]);
+                recipient = this.parseRecipient(match[0], options);
                 //stupid workarround so exchange draft emails without proper mail adresses get displayed correctly (Bug 23983)
                 var msExchange = recipient[0] === recipient[1];
                 // add to list? (stupid check but avoids trash)
