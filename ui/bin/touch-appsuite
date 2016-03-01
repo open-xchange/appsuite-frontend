@@ -48,8 +48,8 @@ fi
 
 VERSION=$(sed -n \
     '/v=/{s/^.*v=\([0-9A-Za-z._-]*\)\.[0-9]\{8\}\.[0-9]\{6\}.*$/\1/p;q}' \
-    core)
+    ui)
 
-for f in core signin boot.js; do
+for f in ui core signin boot.js; do
     sed -i "s/${VERSION}"'\.[0-9]\{8\}\.[0-9]\{6\}/'"${VERSION}.${NOW}/g" "$f"
 done
