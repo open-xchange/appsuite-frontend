@@ -380,6 +380,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     new Action(TOOLBAR_ACTION_ID + '/popoutstandalone', {
+        capabilities: 'infostore',
         requires: function () {
             var currentApp = ox.ui.App.getCurrentApp().getName();
             // detail is the target of popoutstandalone, no support for mail attachments
