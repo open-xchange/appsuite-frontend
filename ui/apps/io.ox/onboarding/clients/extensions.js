@@ -30,20 +30,20 @@ define('io.ox/onboarding/clients/extensions', [
     }
 
     var util = {
-        removeIcons: function (e) {
-            var target = $(e.target);
+        removeIcons: function (obj) {
+            var target = $(obj.target || obj);
             target.parent().find('.button-clicked').remove();
         },
-        addIcon: function (e) {
-            var target = $(e.target);
-            util.removeIcons(e);
+        addIcon: function (obj) {
+            var target = $(obj.target || obj);
+            util.removeIcons(obj);
             target.after($('<i class="fa fa-check button-clicked"></i>'));
         },
-        disable: function (e) {
-            $(e.target).addClass('disabled');
+        disable: function (obj) {
+            $(obj.target || obj).addClass('disabled');
         },
-        enable: function (e) {
-            $(e.target).removeClass('disabled');
+        enable: function (obj) {
+            $(obj.target || obj).removeClass('disabled');
         }
     };
 
@@ -266,7 +266,11 @@ define('io.ox/onboarding/clients/extensions', [
 
         tagName: 'fieldset',
         className: 'action form-group',
-        events: { 'click .btn': '_onClick' },
+        events: {
+            'click .btn': '_onClick',
+            'keyup input': '_updateState',
+            'change input': '_updateState'
+        },
 
         initialize: function (action, options) {
             _.extend(this, action);
@@ -328,7 +332,7 @@ define('io.ox/onboarding/clients/extensions', [
                                     //$('<label class="control-label">').text(gt('Phone Number')),
                                     this._select().$el,
                                     this._input(),
-                                    $('<button class="btn btn-primary" tabindex="1">').attr('role', 'button').text(gt('Send'))
+                                    $('<button class="btn btn-primary action-call" tabindex="1">').attr('role', 'button').text(gt('Send'))
                                 )
                             )
                         )
@@ -354,6 +358,14 @@ define('io.ox/onboarding/clients/extensions', [
             return prefix + local;
         },
 
+        _updateState: function (e) {
+            var value = $(e.target).val().trim(),
+                button = this.$('button.action-call');
+            util.removeIcons(button);
+            if (!value.length) return util.disable(button);
+            util.enable(button);
+        },
+
         _onClick: function (e) {
             e.preventDefault();
             var scenario = this.config.getScenarioCID(),
@@ -373,7 +385,9 @@ define('io.ox/onboarding/clients/extensions', [
     var EmailActionView = Backbone.View.extend({
 
         events: {
-            'click .btn': '_onClick'
+            'click .btn': '_onClick',
+            'keyup input': '_updateState',
+            'change input': '_updateState'
         },
 
         initialize: function (action, options) {
@@ -394,7 +408,8 @@ define('io.ox/onboarding/clients/extensions', [
                 .addClass('field form-control')
                 .attr('title', this.name)
                 .attr('list', 'addresses')
-                .val(value || '').trigger('change');
+                .val(value || '')
+                .trigger('change');
         },
 
         render: function () {
@@ -429,6 +444,14 @@ define('io.ox/onboarding/clients/extensions', [
                     )
                 );
             return this;
+        },
+
+        _updateState: function (e) {
+            var value = $(e.target).val().trim(),
+                button = this.$('button.action-call');
+            util.removeIcons(button);
+            if (!value.length) return util.disable(button);
+            util.enable(button);
         },
 
         _onClick: function (e) {
