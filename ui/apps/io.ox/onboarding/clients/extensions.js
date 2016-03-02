@@ -26,7 +26,7 @@ define('io.ox/onboarding/clients/extensions', [
     var POINT = 'io.ox/onboarding/clients/views';
 
     function yellError(resp) {
-        if (_.isObject(resp) && 'error' in resp) return yell(resp);
+        if (_.isObject(resp) && 'error' in resp) return yell('error', resp.error_desc || resp.error);
     }
 
     var util = {
@@ -378,6 +378,7 @@ define('io.ox/onboarding/clients/extensions', [
             api.execute(scenario, action, data)
                 .always(yellError)
                 .done(_.partial(util.addIcon, e))
+                .fail(_.partial(util.removeIcons, e))
                 .fail(_.partial(util.enable, e));
         }
     });
@@ -464,7 +465,9 @@ define('io.ox/onboarding/clients/extensions', [
             // call
             api.execute(scenario, action, data)
                 .always(yellError)
-                .always(_.partial(util.addIcon, e));
+                .done(_.partial(util.addIcon, e))
+                .fail(_.partial(util.removeIcons, e))
+                .fail(_.partial(util.enable, e));
         }
     });
 
