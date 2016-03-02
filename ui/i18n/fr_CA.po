@@ -1023,6 +1023,10 @@ msgstr "Autoriser les courriels mis en forme avec HTML"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Autoriser le préchargement des images externes liées"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Always add the following recipient to blind carbon copy (BCC)"
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 #: apps/io.ox/presenter/errormessages.js module:io.ox/presenter
 msgid "An error occurred converting the document so it cannot be displayed."

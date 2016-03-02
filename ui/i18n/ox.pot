@@ -8875,6 +8875,11 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
+msgid "Always add the following recipient to blind carbon copy (BCC)"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
 msgid "Display"
 msgstr ""
 

@@ -991,6 +991,10 @@ msgstr "HTML フォーマットのメールを許可"
 msgid "Allow pre-loading of externally linked images"
 msgstr "外部リンク先の画像の事前読み込みを許可"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Always add the following recipient to blind carbon copy (BCC)"
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 #: apps/io.ox/presenter/errormessages.js module:io.ox/presenter
 msgid "An error occurred converting the document so it cannot be displayed."

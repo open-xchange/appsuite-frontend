@@ -1039,6 +1039,10 @@ msgstr "Atļaut HTML formatētu e-pastu"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Atļaut ārēji saistīto attēlu priekš-ielādi"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Always add the following recipient to blind carbon copy (BCC)"
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 #: apps/io.ox/presenter/errormessages.js module:io.ox/presenter
 msgid "An error occurred converting the document so it cannot be displayed."
