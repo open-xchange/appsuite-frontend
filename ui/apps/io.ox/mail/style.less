@@ -49,6 +49,11 @@
         right: 0;
         left: 0 !important;
         z-index: 2;
+        overflow: visible;
+    }
+    // outer layer overflow visible inner layer overflow auto. This is to show scrollbars when needed while keeping the dropdown from hiding under the mail list. see Bug(43449)
+    .thread-view-control {
+        overflow: auto;
     }
     // horizontal resizebar
     .list-view-control .resizebar {
