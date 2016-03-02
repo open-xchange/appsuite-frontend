@@ -29,29 +29,30 @@ define('io.ox/mail/detail/content', [
     /*
      * Helpers to beautify text mails
      */
-    var markupQuotes = function (text) {
-        var lines = String(text || '').split(/<br\s?\/?>/i),
-            quoting = false,
+
+    var markupQuotes = function (str) {
+        var blockquoteStart = '<blockquote type="cite">',
+            blockquoteEnd = '</blockquote>',
             regQuoted = /^&gt;( |$)/i,
-            i = 0, $i = lines.length, tmp = [], line;
-        for (text = ''; i < $i; i++) {
-            line = lines[i];
-            if (!regQuoted.test(line)) {
-                if (!quoting) {
-                    text += line + '<br>';
-                } else {
-                    tmp = $.trim(tmp.join('\n')).replace(/\n/g, '<br>');
-                    text = text.replace(/<br>$/, '') + '<blockquote type="cite"><p>' + tmp + '</p></blockquote>' + line;
-                    quoting = false;
-                }
-            } else if (quoting) {
-                tmp.push(line.replace(regQuoted, ''));
-            } else {
-                quoting = true;
-                tmp = [line.replace(regQuoted, '')];
+            level = 0;
+
+        if (!str) return;
+
+        var lines = str.split(/<br\s?\/?>/i);
+
+        _(lines).each(function (line, i) {
+            if (line.length > 0) {
+                var lineLevel = 0;
+                for (; line.match(regQuoted); lineLevel++) line = line.replace(regQuoted, '');
+                for (; lineLevel > level; level++) line = blockquoteStart + line;
+                for (; lineLevel < level; level--) lines[i - 1] = lines[i - 1] + blockquoteEnd;
             }
-        }
-        return text.replace(/<br>$/, '');
+            lines[i] = line;
+        });
+
+        for (; level > 0; level--) lines.push(blockquoteEnd);
+
+        return lines.join('<br>').replace(/<br><\/blockquote>/g, '</blockquote>');
     };
 
     var regHTML = /^text\/html$/i,
@@ -128,9 +129,8 @@ define('io.ox/mail/detail/content', [
             .join('');
         var hasBlockquotes = text.match(/(&gt; )+/g);
         if (hasBlockquotes) {
-            $.each(hasBlockquotes.sort().reverse()[0].match(/&gt; /g), function () {
-                text = markupQuotes(text);
-            });
+            text = markupQuotes(text);
+
         }
         return text;
     };
