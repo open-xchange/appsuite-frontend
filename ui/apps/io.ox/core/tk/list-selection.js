@@ -276,6 +276,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             var cursor = this.getPosition(items),
                 start = Math.min(index, cursor),
                 end = Math.max(index, cursor);
+
+            // remove no-checkbox class for range select
+            $(items.slice(start, end + 1)).removeClass('no-checkbox');
             this.check(items.slice(start, end + 1));
             this.focus(index, items);
         },
