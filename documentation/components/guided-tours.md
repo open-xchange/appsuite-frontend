@@ -1,17 +1,17 @@
 ---
-title: Guided tours 
-description: Guided tours are series of little steps meant to explain the various functions of OX to an end user. 
+title: Guided tours
+description: Guided tours are series of little steps meant to explain the various functions of OX to an end user.
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Guided_tours
 ---
 
 # Basic framework
 
-Guided tours are built on [LinkedIn's hopscotch.js framework](https://github.com/linkedin/hopscotch). 
+Guided tours are built on [LinkedIn's hopscotch.js framework](https://github.com/linkedin/hopscotch).
 It forms a series of small information "bubbles" that point to UI elements and display a text as well as small navigation elements.
 
 ## Package
 
-Guided tours are contained in a separate package, named open-xchange-guidedtours. 
+Guided tours are contained in a separate package, named open-xchange-guidedtours.
 This will install UI as well as backend components (in the form of a config file).
 
 ## Configuration
@@ -27,7 +27,7 @@ Several configuration parameters guide the running of Guided Tours:
 
 ## Customizing
 
-Tours use [extension points](http://oxpedia.org/wiki/index.php?title=AppSuite:Extension_points) as mechanism to extend them. 
+Tours use [extension points](http://oxpedia.org/wiki/index.php?title=AppSuite:Extension_points) as mechanism to extend them.
 The relevant point is _io.ox/tours/extensions_.
 
 # Example tour

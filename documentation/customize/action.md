@@ -4,11 +4,15 @@ description: To add an action to the files app detail area the extensionpoint io
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Files_App_Actions
 ---
 
-# Examples
+For details about actions and links please refer to the main [action article](TODO).
 
-## Adding actions to the files detail area
 
-To add an action to the files app detail area the extensionpoint _io.ox/files/links/inline_ is used.
+# Adding actions to the files detail area
+
+Creating a new action is pretty straight forward.
+Just create a new Action and give it a unique name (internally we use slashes to indicate a module hierarchy, so names are inherently unique) and provide a few options.
+
+To add an action to the drive app file detail area the extension point _io.ox/files/links/inline_ is used.
 
 Use the Link pattern in _io.ox/core/extPatterns/links.js_ to extend this point.
 
@@ -17,6 +21,7 @@ __Try via browser console__
 ```javascript
 require(['io.ox/core/extensions', 'io.ox/core/extPatterns/links'], function (ext, links) {
 
+    // create action
     new links.Action('io.ox/files/actions/testlink', {
         requires: function (e) {
             e.collection.has('some') && capabilities.has('webmail');
@@ -26,33 +31,19 @@ require(['io.ox/core/extensions', 'io.ox/core/extPatterns/links'], function (ext
         }
     });
 
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
+    // extend this classic toolbar extension point to add the new link there
+    ext.point('io.ox/files/classic-toolbar/links').extend(new links.Link({
         id: 'testlink',
-        index: 400,
+        index: 101,
         label: 'Test Action',
+        prio: 'hi',
         ref: 'io.ox/files/actions/testlink'
     }));
 });
 ```
 
-### Action
 
-The first argument is the unique id of the action. 
-
-requires - checks for the needed components and the collection status. (_some_ is used for multiple elements, _one_ for an single one)
-
-- If the action is used only on a single element use _action_.
-- If the action should be applied to multiple elements use _multiple_.
-- In both cases the baton is available to the action.
-
-### Link
-
-- id: must be unique
-- index: the position/order of the link
-- label:  the label for the link
-- ref:the reference to the action id
-
-## Disable existing action
+# Disable existing action
 
 Basically a action is a extension point (id: action id) with exactly one action (id: 'default') - so disabling is quite simple:
 

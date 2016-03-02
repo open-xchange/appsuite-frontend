@@ -19,7 +19,7 @@ The abstract view is used to manage the dispose feature for all mini-views.
 # Common mini-views
 
 All mini-views provides functions for handling the common interactions between model data and form element like initial setup, update and rendering.
-To provide some basic a11y the tabindex is set by default to _1_ and can be changed via ``this.options.tabindex`` to every needed value.
+To provide some basic a11y the tabindex is set by default to _1_ and can be changed via `this.options.tabindex` to every needed value.
 
 The 'id' option should be used to connect the view with the model data and render an id attribute. 
 This can be used to connect with a label which is not surrounding the form field.
@@ -54,14 +54,13 @@ renders the following markup
 <input type="password" id="password" class="form-control" autocomplete="off" autocorrect="off" name="password" tabindex="1">
 ```
 
-If no password value is provided via model the field value is changed to ``********``. 
+If no password value is provided via model the field value is changed to `********`.
 This especially is needed since already provided passwords are not delivered via the api request. 
 The attributes "autocomplete" and "autocorrect" are set to "off" by default.
 
 ## TextView
 
 It draws a simple textarea form field.
-
 
 ```javascript
 new TextView({ name: [attribute], model: [model], rows: [rowcount] }).render().$el
@@ -93,7 +92,6 @@ renders the following markup
 
 It draws a simple radio form field.
 
-
 ```javascript
 new RadioView({ name: [attribute], model: [model], list: [radioOptions] }).render().$el
 ```
@@ -108,9 +106,7 @@ var radioOptions = var options = [
 ];
 ```
 
-
 renders the following markup
-
 
 ```html
 <div id="radio" class="controls">
@@ -129,7 +125,6 @@ renders the following markup
 ## SelectView
 
 It draws a simple select form field.
-
 
 ```javascript
 new SelectView({ name: [attribute], model: [model], list: [selectOptions] }).render().$el
@@ -163,7 +158,6 @@ It draws a span with the class "help-block" to display error messages in case of
 <span class="help-block" aria-live="assertive" style="display: none;"></span>
 ```
 
-
 It always should be placed beneath the corresponding form field.
 
 ```javascript
@@ -184,19 +178,17 @@ It draws a simple form element. As a miniview, it automatically cleans up the co
 <form></form>
 ```
 
-
 ```javascript
 new FormView({ model: [model] }).render().$el;
 ```
 
 ## DateView
 
-It draws a set of 'select' form fields to display and edit a date. Day, month and year will each be represented by a single ``<select>` item.
+It draws a set of 'select' form fields to display and edit a date. Day, month and year will each be represented by a single `<select>` item.
 
 ```javascript
 new DateView({ name: [attribute], model: [model] }).render().$el
 ```
-
 
 It renders the following markup:
 
@@ -262,7 +254,6 @@ _arguments: [text for header]_
 
 Use this.divider to provide a visual devider between groups.
 
-
 ```javascript
 var dropdown = new Dropdown({ model: model, label: gt('Dropdown'), tagName: 'li' })
     .header(gt('Options'))
@@ -278,7 +269,6 @@ var dropdown = new Dropdown({ model: model, label: gt('Dropdown'), tagName: 'li'
 
 dropdown.render().$el;
 ```
-
 
 It renders the following markup:
 
@@ -323,18 +313,15 @@ It renders the following markup:
 </li>
 ```
 
-
 ## Dropdown Link
 
 It draws a link which opens a dropdown. The link text always shows the selected option.
-
 
 ```javascript
 new DropdownLinkView({ name: [attribute], model: [model], values: [dropdownOptions] }).render().$el
 ```
 
 Use this.options.values to set the list of available values and labels.
-
 
 ```javascript
 var dropdownOptions = { 
@@ -361,7 +348,6 @@ It renders the following markup:
 
 Simply copy/paste the code beneath in to your browser console while being logged in. 
 This creates an playground for the mentioned mini views.
-
 
 ```javascript
 require(['io.ox/backbone/mini-views', 'io.ox/backbone/mini-views/dropdown'], function(mini, Dropdown) {
@@ -515,21 +501,21 @@ require(['io.ox/backbone/mini-views', 'io.ox/backbone/mini-views/dropdown'], fun
 
 You can copy/paste the following examples in your browser console to make changes to the data in the playground.
 
-__to modify values via console__
+**to modify values via console**
 
 ```javascript
 window.model.set('password', 'new password');
 // window.model.set([attribute], [new value]);
 ```
 
-__to trigger an validation fault__
+**to trigger an validation fault**
 
 ```javascript
 window.model.trigger('invalid:password', 'something is wrong here'); 
 // window.model.trigger('invalid:' + [attribute], [Error Message]); 
 ```
 
-__to remove an validation fault__
+**to remove an validation fault**
 
 ```javascript
 window.model.trigger('valid:password');
