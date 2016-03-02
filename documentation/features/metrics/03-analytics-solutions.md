@@ -5,7 +5,7 @@ description:
 
 # PIWIK
 
-With this easy step-by-step guide it should be quite simple to setup PIWIK and adjust the relevant properties to start tracking. Documentation about the corresponding front end adapter can be found [ here].
+With this easy step-by-step guide it should be quite simple to setup PIWIK and adjust the relevant properties to start tracking. Documentation about the corresponding front end adapter can be found [here](TODO).
 
 ## Preconditions
 
@@ -15,7 +15,7 @@ Please ensure PIWIK runs also on SSL in case OX Appsuite does.
 
 ### adblockers
 
-hint: in case you consider to bypass adblockier mechanisms please avoid suspicious strings for any part of the url (for example ‘piwik’). One possible solution would be to use _apaches mod\_rewrite_ or something similar to alias affected urls.
+hint: in case you consider to bypass adblockier mechanisms please avoid suspicious strings for any part of the url (for example ‘piwik’). One possible solution would be to use _apaches mod_rewrite_ or something similar to alias affected urls.
 
 ## Install PIWIK
 
@@ -26,7 +26,6 @@ Please pause when you reach step 8 of the wizard (JavaScript Tag) and move on wi
 ## Take a deeper look at the generated script
 
 The script provided by PIWIK will look like this:
-
 
 ```javascript
   <!-- Piwik -->
@@ -59,7 +58,7 @@ Now we have to extract some of the information used in this script. The script i
 
 ### base url
 
-You need to specify the base url that allows OX Appsuite calling the PIWIK tracking API. You can simply check if got the right url by trying to open the url followed by ‘piwik.php’ in the browser (example: ‘https:%%//%%metrics.example.com/piwik/piwik.php’). You should see some message similiar to ‘Piwik is a free/libre web analytics that lets you keep control of your data.’
+You need to specify the base url that allows OX Appsuite calling the PIWIK tracking API. You can simply check if got the right url by trying to open the url followed by ‘piwik.php’ in the browser (example: ‘https&#x3A;%%//%%metrics.example.com/piwik/piwik.php’). You should see some message similiar to ‘Piwik is a free/libre web analytics that lets you keep control of your data.’
 
 _generated PIWIK script_
 

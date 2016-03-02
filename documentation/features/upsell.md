@@ -7,29 +7,27 @@ source: http://oxpedia.org/wiki/index.php?title=AppSuite:Upsell
 This article is mainly for UI developers and introduces the concept of upsell from a technical point of view. 
 In short: End-user has a set of so-called capabilities. 
 UI, however, offers functionality beyond that limited set for promotion purposes. 
-Actions, e.g. inline links, that require missing capabilities trigger an __in-app__ upsell. This process leads to a trial period or a new subscription. 
+Actions, e.g. inline links, that require missing capabilities trigger an **in-app** upsell. This process leads to a trial period or a new subscription.
 Technical challenge for the UI developer is to check what the end-user has, what can be shown beyond that, and how to handle upsell. 
 It is also possible for hosting companies to easily integrate their own online shop into OX Upsell, since the internal mechanisms are loosely coupled via events.
 
 # Enable upsell
 
-In order to configure upsell server-side, just create a new file ``upsell-appsuite.properties`` or append to existing ``appsuite.properties`` (mind the __double-slash__; this in not a typo!).
-If you configure upsell in the ``upsell-appsuite.properties`` the properties are loaded when you trigger the __live reload__ function.
-
+In order to configure upsell server-side, just create a new file `upsell-appsuite.properties` or append to existing `appsuite.properties` (mind the **double-slash**; this in not a typo!).
+If you configure upsell in the `upsell-appsuite.properties` the properties are loaded when you trigger the **live reload** function.
 
 ```javascript
 io.ox/core//upsell/enabled/infostore=true
 io.ox/core//upsell/enabled/portal=true
 io.ox/core//upsell/enabled/tasks=true
 ```
-  
 
 Each line enables a specific [capability](TODO) for upsell. 
 That means whenever a feature misses one these capabilities a special upsell-related event is triggered.
 
-__Hint__
+**Hint**
 
-For simple demo purposes, you can enable an internal upsell configuration by appending __"&demo=upsell"__ to the URL. Needs to reload page, of course.
+For simple demo purposes, you can enable an internal upsell configuration by appending **"&demo=upsell"** to the URL. Needs to reload page, of course.
 
 # Custom upsell links
 
@@ -44,20 +42,19 @@ This upsell trigger is inteded to sell a premium account to a user and has the d
 That means, if one of those capabilities is not set for a user and the upsell is activated for active_sync AND caldav AND carddav the upsell trigger will be shown. 
 You can enable upsell for those capabilities with
 
-
 ```javascript
 io.ox/core//upsell/enabled/active_sync=true
 io.ox/core//upsell/enabled/caldav=true
 io.ox/core//upsell/enabled/carddav=true
 ```
 
-inside an existing or new ``.properties`` file. Note that you have to restart the server so that the changes take place.
+inside an existing or new `.properties` file. Note that you have to restart the server so that the changes take place.
 
 If a user clicks on the upsell trigger, a upsell event of type 'custom' and with id 'secondary-toolbar' is triggered so that the page or dialog which will be opened can react depending on the clicked link.
 
 ## Change appearance
 
-Any custom upsell triggers which have icons will use a __fa-star__ as default icon. 
+Any custom upsell triggers which have icons will use a **fa-star** as default icon.
 You can change the default icon to any font-awesome icon (or a set of space separated icons) via
 
 ```
@@ -82,12 +79,11 @@ where $id is the id of the upsell trigger and the color string can be any css co
 
 If you want to disable a custom upsell trigger, then you can add
 
-
 ```javascript
 io.ox/core//features/upsell/$id/enabled=false
 ```
 
-to a __.properties__ file.
+to a **.properties** file.
 
 ## Customize strings
 
@@ -121,31 +117,31 @@ io.ox/core//features/upsell/$id/requires="active_sync && (caldav || !carddav)"
 
 This sections lists the custom triggers and how they can be configured.
 
-| ID | Config | Texts | Default capabilities | Description |
-|-----------------------------|-------------------------------------|-------|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| secondary-launcher | icon, color | title | active_sync or caldav or carddav | This trigger is located in the secondary toolbar left of the notifications icon. It can contain an icon and text and can be colored. It is intended as __upgrade to premium__ trigger. This trigger is not shown on mobile devices due to space limitations. |
-| folderview/mail | icon, color | title | active_sync | This trigger is located below the folderview of mails. |
-| folderview/mail/bottom | color | title | active_sync | This trigger is located at the bottom of the folderview of the mail app in the premium area. This trigger is styled as a button with the default text 'Try now' and has no icon by default. |
-| folderview/contacts | icon, color | title | carddav | This trigger is located below the folderview of the address book. |
-| folderview/contacts/bottom | color | title | carddav | This trigger is located at the bottom of the folderview of the contacts app in the premium area. This trigger is styled as a button with the default text 'Try now' and has no icon by default. |
-| folderview/calendar | icon, color | title | caldav | This trigger is located below the folderview of the calendar. |
-| folderview/calendar/bottom | color | title | caldav | This trigger is located at the bottom of the folderview of the calendar app in the premium area. This trigger is styled as a button with the default text 'Try now' and has no icon by default. |
-| folderview/infostore/bottom | color | title | boxcom or google or msliveconnect | This trigger is located at the bottom of the folderview of the drive app in the premium area. This trigger is styled as a button with the default text 'Try now' and has no icon by default. |
-| topbar-dropdown | icon, color | title | active_sync or caldav or carddav | This trigger is located on the first position of the dropdown in the secondary toolbar. It contains a text and an icon. |
-| portal-widget | imageURL, removable (boolean), icon | title | active_sync or caldav or carddav | This trigger adds a draggable portal widget to the appsuite portal. This widget is not removable by default and displays a default text. A customer can add a backgroundimage with __imageURL__ and can make this widget __removable__ by setting removableto true. If no image is used, the widget displays the title in the center with a customizable space separated list of font-awesome icons. |
-| mail-folderview-quota | upsellLimit, icon, color | title | active_sync or caldav or carddav | This trigger is appended below the mail quota in the folderview. You can set the __upsellLimit__ (in Bytes). If the maximum mail quota is larger than __upsellLimit__, the upsell button will not be shown. This upsell trigger has no icon by default. |
+| ID                          | Config                              | Texts | Default capabilities              | Description                                                                                                                                                                                                                                                                                                                                                                                          |
+| --------------------------- | ----------------------------------- | ----- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| secondary-launcher          | icon, color                         | title | active_sync or caldav or carddav  | This trigger is located in the secondary toolbar left of the notifications icon. It can contain an icon and text and can be colored. It is intended as **upgrade to premium** trigger. This trigger is not shown on mobile devices due to space limitations.                                                                                                                                         |
+| folderview/mail             | icon, color                         | title | active_sync                       | This trigger is located below the folderview of mails.                                                                                                                                                                                                                                                                                                                                               |
+| folderview/mail/bottom      | color                               | title | active_sync                       | This trigger is located at the bottom of the folderview of the mail app in the premium area. This trigger is styled as a button with the default text 'Try now' and has no icon by default.                                                                                                                                                                                                          |
+| folderview/contacts         | icon, color                         | title | carddav                           | This trigger is located below the folderview of the address book.                                                                                                                                                                                                                                                                                                                                    |
+| folderview/contacts/bottom  | color                               | title | carddav                           | This trigger is located at the bottom of the folderview of the contacts app in the premium area. This trigger is styled as a button with the default text 'Try now' and has no icon by default.                                                                                                                                                                                                      |
+| folderview/calendar         | icon, color                         | title | caldav                            | This trigger is located below the folderview of the calendar.                                                                                                                                                                                                                                                                                                                                        |
+| folderview/calendar/bottom  | color                               | title | caldav                            | This trigger is located at the bottom of the folderview of the calendar app in the premium area. This trigger is styled as a button with the default text 'Try now' and has no icon by default.                                                                                                                                                                                                      |
+| folderview/infostore/bottom | color                               | title | boxcom or google or msliveconnect | This trigger is located at the bottom of the folderview of the drive app in the premium area. This trigger is styled as a button with the default text 'Try now' and has no icon by default.                                                                                                                                                                                                         |
+| topbar-dropdown             | icon, color                         | title | active_sync or caldav or carddav  | This trigger is located on the first position of the dropdown in the secondary toolbar. It contains a text and an icon.                                                                                                                                                                                                                                                                              |
+| portal-widget               | imageURL, removable (boolean), icon | title | active_sync or caldav or carddav  | This trigger adds a draggable portal widget to the appsuite portal. This widget is not removable by default and displays a default text. A customer can add a backgroundimage with **imageURL** and can make this widget **removable** by setting removableto true. If no image is used, the widget displays the title in the center with a customizable space separated list of font-awesome icons. |
+| mail-folderview-quota       | upsellLimit, icon, color            | title | active_sync or caldav or carddav  | This trigger is appended below the mail quota in the folderview. You can set the **upsellLimit** (in Bytes). If the maximum mail quota is larger than **upsellLimit**, the upsell button will not be shown. This upsell trigger has no icon by default.                                                                                                                                              |
 
 # Upsell Wizard
 
 Customers usually want to offer context-sensitive content in an IFRAME if the upsell is triggered. 
 Therefore, App Suite comes with an integrated but optional plugin that takes care of this. 
-Just enable ``plugins/upsell/simple-wizard`` by setting the capability simple-wizard server-side (or by adding it to the URL ...__&cap=simple-wizard__ for testing/development purposes).
+Just enable `plugins/upsell/simple-wizard` by setting the capability simple-wizard server-side (or by adding it to the URL ...**&cap=simple-wizard** for testing/development purposes).
 
 This plugin registers for the event "_upsell:requires-upsell_", opens a modal popup, and loads a custom URL in an embedded IFRAME.
 
 ## Wizard settings
 
-In order to configure this server-side, just create a new file ``upsell.properties`` or append to existing ``appsuite.properties`` (mind the __double-slash__; this in not a typo! plus: changing such settings requires a backend restart):
+In order to configure this server-side, just create a new file `upsell.properties` or append to existing `appsuite.properties` (mind the **double-slash**; this in not a typo! plus: changing such settings requires a backend restart):
 
 ```
 plugins/upsell/simple-wizard//url=blank.html?user=$user,user_id=$user_id,context_id=$context_id
@@ -157,15 +153,15 @@ plugins/upsell/simple-wizard//height=390
 plugins/upsell/simple-wizard//closeButton=true
 ```
 
-| Settings | Description |
-|----------------|---------------------------------------------------------------------------------------------------|
-| url | Custom URL that is loaded in IFRAME; can contain special variables. |
-| overlayOpacity | CSS opacity value for overlay; default is 0.5 |
-| overlayColor | CSS background color for overlay; default is black |
-| zeroPadding | If true (default) there is no inner padding inside modal dialog, i.e. the IFRAME covers the popup |
-| width | Width of outer popup (not IFRAME) in pixel |
-| height | Height of IFRAME in pixel |
-| closeButton | If true (default) the wizard shows its own close button |
+| Settings       | Description                                                                                       |
+| -------------- | ------------------------------------------------------------------------------------------------- |
+| url            | Custom URL that is loaded in IFRAME; can contain special variables.                               |
+| overlayOpacity | CSS opacity value for overlay; default is 0.5                                                     |
+| overlayColor   | CSS background color for overlay; default is black                                                |
+| zeroPadding    | If true (default) there is no inner padding inside modal dialog, i.e. the IFRAME covers the popup |
+| width          | Width of outer popup (not IFRAME) in pixel                                                        |
+| height         | Height of IFRAME in pixel                                                                         |
+| closeButton    | If true (default) the wizard shows its own close button                                           |
 
 ## Custom URL variables
 
@@ -177,21 +173,21 @@ Other variables help identifying the user. An example:
 upsell.php?user_id=$user_id&context_id=$context_id&language=$language&missing=$missing
 ```
 
-| Settings | Description |
-|-------------|--------------------------------------------------------------------------------------------------------------------|
-| Variable | Description |
-| $context_id | context_id of current user |
-| $hostname | hostname of current session, e.g. www.one-of-countless-virtual-hosts.com |
-| $id | The trigger's identifier, e.g. "io.ox/files". Can refer to an app, an inline action, or a portal plugin. See $type |
-| $imap_login | The current user's imap login |
-| $language | The current user's language, e.g. de_DE or en_US |
-| $mail | The current user's primary email address |
-| $missing | The set of missing capabilities, comma separated, e.g. "files" |
-| $session | The current user's session id |
-| $type | Either app, inline-action, or portal-widget. Describes what triggered the upsell. See $id |
-| $user | The current user's login name (can include context name, i.e somebody@foo) |
-| $user_id | The current user's numeric id |
-| $user_login | The current user's login (usually without context name) |
+| Settings    | Description                                                                                                        |
+| ----------- | ------------------------------------------------------------------------------------------------------------------ |
+| Variable    | Description                                                                                                        |
+| $context_id | context_id of current user                                                                                         |
+| $hostname   | hostname of current session, e.g. www.one-of-countless-virtual-hosts.com                                           |
+| $id         | The trigger's identifier, e.g. "io.ox/files". Can refer to an app, an inline action, or a portal plugin. See $type |
+| $imap_login | The current user's imap login                                                                                      |
+| $language   | The current user's language, e.g. de_DE or en_US                                                                   |
+| $mail       | The current user's primary email address                                                                           |
+| $missing    | The set of missing capabilities, comma separated, e.g. "files"                                                     |
+| $session    | The current user's session id                                                                                      |
+| $type       | Either app, inline-action, or portal-widget. Describes what triggered the upsell. See $id                          |
+| $user       | The current user's login name (can include context name, i.e somebody@foo)                                         |
+| $user_id    | The current user's numeric id                                                                                      |
+| $user_login | The current user's login (usually without context name)                                                            |
 
 ## Develop and debug
 
@@ -243,7 +239,6 @@ wizard.enable();
 
 Some examples for customizations in UI plugins or in console:
 
-
 ```javascript
 // get plugin (this muse be properly loaded, otherwise you get a runtime error)
 var wizard = require('plugins/upsell/simple-wizard/register'); 
@@ -265,7 +260,6 @@ ox.on('upsell:simple-wizard:show:before', function (e, popup) {
 
 The upsell wizard can easily be closed via javascript or by redirecting the IFRAME to a prepared HTML page. 
 In order to see this in action, run the following code (step by step):
-
 
 ```javascript
 // get plugin (this must be properly loaded, otherwise you get a runtime error)
@@ -328,26 +322,26 @@ They are defined on the server-side and basically they are just strings.
 Let's keep it simple and understand them as either services (e.g. mobility), specific functionalities (e.g. multiple_mail_accounts) or applications (e.g. calendar). 
 Some obvious examples:
 
-| Capability | Description | Upsell trigger (if capability is missing) |
-|------------|-----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| calendar | User has "Calendar" app | Mail/All recipients: Invite to appointment; Add portal widget; Top bar |
-| contacts | User has "Address Book" app | Mail/App recipients: Save as distribution list; Calendar: Save participants as distribution list; Top bar |
-| infostore | User has "Files" app | Mail: Save in infostore; Add portal widget (My latest files, Recently changed files); Top bar |
-| portal | User has "Portal" app | Mail: Add to portal; Contacts: Add to portal; Files: Add to portal; Top bar |
-| tasks | User has "Tasks" app | Mail: Remind me; Add portal widget; Top bar |
-| webmail | User has "Mail" app | Calendar: Send mail to all participants; Contacts: Send mail; Contacts: Send vCard; Files: Send as link; Files: Send by mail; Add portal widget; Top bar |
+| Capability | Description                 | Upsell trigger (if capability is missing)                                                                                                                |
+| ---------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| calendar   | User has "Calendar" app     | Mail/All recipients: Invite to appointment; Add portal widget; Top bar                                                                                   |
+| contacts   | User has "Address Book" app | Mail/App recipients: Save as distribution list; Calendar: Save participants as distribution list; Top bar                                                |
+| infostore  | User has "Files" app        | Mail: Save in infostore; Add portal widget (My latest files, Recently changed files); Top bar                                                            |
+| portal     | User has "Portal" app       | Mail: Add to portal; Contacts: Add to portal; Files: Add to portal; Top bar                                                                              |
+| tasks      | User has "Tasks" app        | Mail: Remind me; Add portal widget; Top bar                                                                                                              |
+| webmail    | User has "Mail" app         | Calendar: Send mail to all participants; Contacts: Send mail; Contacts: Send vCard; Files: Send as link; Files: Send by mail; Add portal widget; Top bar |
 
 ```javascript
 // list all available capabilities
 _(ox.serverConfig.capabilities).pluck('id').sort();
 ```
 
-__An example__
+**An example**
 
-Free-mail users might just have __webmail__ and __contacts__. 
-If __infostore__ is enabled for upsell, end-users will see the link to store mail attachments. 
+Free-mail users might just have **webmail** and **contacts**.
+If **infostore** is enabled for upsell, end-users will see the link to store mail attachments.
 But since this capability is missing, the event "upsell:requires-upgrade" is triggered which starts the upsell process. 
-Upon successful completion this process should unlock the capability __infostore__ for the end-user.
+Upon successful completion this process should unlock the capability **infostore** for the end-user.
 
 The advantage of using rather atomic capabilities as the foundation for upsell is that developers don't have to consider and implement sales programs or marketing matrices in UI code.
 
@@ -355,7 +349,6 @@ The advantage of using rather atomic capabilities as the foundation for upsell i
 
 Whenever the event "_upsell:requires-upgrade_" is triggered there should be some response for the end-user. 
 Usually an upsell dialog should open. This can be implemented as follows:
-
 
 ```javascript
 function showUpgradeDialog(e, options) {
@@ -405,7 +398,7 @@ ox.on('upsell:requires-upgrade', showUpgradeDialog);
 ox.on('upsell:upgrade', upgrade);
 ```
 
-The second event "__upsell:upgrade__" can be understood as the final imperative to request the upsell server-side.
+The second event "**upsell:upgrade**" can be understood as the final imperative to request the upsell server-side.
 
 ## Example portal widget
 
@@ -465,7 +458,6 @@ define('plugins/portal/upsell/register',
 
 The upsell configuration is located in the namespace "io.ox/core", the path is "upsell/enabled". Example:
 
-
 ```javascript
 // get all capabilities that can trigger upsell
 require('settings!io.ox/core').get('upsell/enabled');
@@ -478,7 +470,7 @@ require('settings!io.ox/core').get('upsell/enabled');
 }
 ```
 
-If upsell is __not__ enabled and the end-user lacks specific capabilities, the app or the inline-action is not shown. 
+If upsell is **not** enabled and the end-user lacks specific capabilities, the app or the inline-action is not shown.
 If upsell is enabled by the upper configuration, inline-actions are shown and trigger the upsell event "_upsell:requires-upgrade_" if clicked (but do not execute the action itself).
 
 ```javascript

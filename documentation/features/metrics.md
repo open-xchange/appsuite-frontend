@@ -8,16 +8,17 @@ The Metrics module provides a very flexible and extendible way to track user beh
 A common set of events is tracked by default. Out of the box PIWIK is supported as reference analytics framework. Every other analytics framework can be added easily by registering a new adapter within the metrics module where data and events are mapped to the special needs of the target analytics framework.
 
 # Setup Metrics within AppSuite
+
 Please follow [theses steps](TODO) to configure AppSuite metrics + PIWIK.
 
 # Basics
 
 The metrics framework is located in Appsuite’s front end and can be [configured](#backend) by backend properties. The components and their tasks are listed as follows:
  
-  * listener/handler: waiting for events and call metrics module
-  * metrics module: provides a central API for tracking and propagate events to enabled adapters
-  * adapter: maps generic event data for a concrete analytics framework and calls their API
 
+- listener/handler: waiting for events and call metrics module
+- metrics module: provides a central API for tracking and propagate events to enabled adapters
+- adapter: maps generic event data for a concrete analytics framework and calls their API
 
 ## Frontend
 
@@ -25,10 +26,10 @@ The parts a separated by their role/task with high flexibility and extendability
 
 ### Components
 
-  - metrics listener: waiting for a event (example: click on an ‘mail reply’)
-  - metrics handler: submits data to the metrics module
-  - metrics module: central facade with a generic API as connecting piece between event handlers and adapters
-  - metrics adapter: communicates with a concrete analytics framework API
+- metrics listener: waiting for a event (example: click on an ‘mail reply’)
+- metrics handler: submits data to the metrics module
+- metrics module: central facade with a generic API as connecting piece between event handlers and adapters
+- metrics adapter: communicates with a concrete analytics framework API
 
 ### Source code
 
@@ -46,11 +47,11 @@ The parts a separated by their role/task with high flexibility and extendability
   io.ox/metrics/extensions.js
 ```
 
-## Backend 
+## Backend
 
 Use the following setting properties to enhance/adjust usage. Please be aware of the double slashes that are used as separator for the namespaces.
 
-### Global 
+### Global
 
 ```
   # global switch [true/false]
@@ -64,7 +65,7 @@ Use the following setting properties to enhance/adjust usage. Please be aware of
   io.ox/core//tracking/donottrack
 ```
 
-### Adapterspecific 
+### Adapterspecific
 
 For more details visit the [adapter article](TODO).
 
@@ -85,4 +86,3 @@ For more details visit the [adapter article](TODO).
 
   # ADAPTER BLOCK PIWIK: END 
 ```
-

@@ -62,7 +62,7 @@ The delayInMilliseconds represents the transition time from one slide to the nex
 
 The text can contain HTML and is inserted via the innerHtml method of JQuery in case you feel the need for markup.
 
-The value of "image" is put into the src attribute of an ``<img/>`` element, so you can use a local path as well as a URL.
+The value of "image" is put into the src attribute of an `<img/>` element, so you can use a local path as well as a URL.
 
 The type can be one of text-top, text-bottom, text-only and image-only. 
 Text usually takes up a third of an ad that also contains an image. 
@@ -104,7 +104,6 @@ The Upsell Wizard is a small shopping cart application that displays things that
 They process is the usual three-step process of putting items in your cart, reviewing them and ordering them. 
 Upon completion the Wizard calls an URL with the ordered items as well as the shoppers's ID and context number. 
 It is left to the provider to implement some handler for that.
-
 
 ```yaml
  plugins/upsell//shop:

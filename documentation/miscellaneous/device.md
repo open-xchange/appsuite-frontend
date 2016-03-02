@@ -73,7 +73,7 @@ To match any variant of the current language, the second part can be replaced by
 E.g. if the current language is en_US, then the following variables would be defined:
 
 - en_us
-- en\_\*
+- en_*
 
 ## Miscellaneous
 

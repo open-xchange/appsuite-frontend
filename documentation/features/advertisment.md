@@ -20,20 +20,20 @@ It is therefore possible to customize this functionality by extending `io.ox/ads
 
 When using the default implementation, custom modules should return an object containing two keys:
 
-* `inject` - a String with valid HTML code which is to be appended to the head element
-* `config` - the configuration is simply stored internally
+- `inject` - a String with valid HTML code which is to be appended to the head element
+- `config` - the configuration is simply stored internally
 
 The `config` object can contain arbitrary data.
-The `changeModule` method of the `io.ox/ads` extension point will be invoked with the app name as first parameter and a [Baton] containing
+The `changeModule` method of the `io.ox/ads` extension point will be invoked with the app name as first parameter and a [Baton](TODO) containing
 a reference to the app and the `config` object.
 
 The default implementation expects the `config` object to contain one key for each [area](advertisment#areas).
 Values for these keys used in the default implementation should be an object defining:
 
-* `html` - a String which is appended to the corresponding [area](advertisment#areas)
-* `reloadAfter` - a number value, representing the time until the next refresh operation for an area is invoked
-* `showInModules` - `falsy` value (always active) OR an array with app names to match against (e.g. `'io.ox/mail'`, …)
-* `capabilities` - `falsy` value (always active) OR a string to be passed to capabilities.has method (e.g. `'webmail && !alone'`)
+- `html` - a String which is appended to the corresponding [area](advertisment#areas)
+- `reloadAfter` - a number value, representing the time until the next refresh operation for an area is invoked
+- `showInModules` - `falsy` value (always active) OR an array with app names to match against (e.g. `'io.ox/mail'`, …)
+- `capabilities` - `falsy` value (always active) OR a string to be passed to capabilities.has method (e.g. `'webmail && !alone'`)
 
 For every defined area, the `cleanup` method of the corresponding extension point will be invoked.
 Active areas are determined by filtering using `showInModules` and `capabilities` options in the area configuration.
@@ -53,14 +53,15 @@ ext.point('the/points/name').extend({
     reload: function (baton) { /* trigger a reload of the banner */ }
 });
 ```
+
 The following extension points are defined in AppSuite Core UI and can be used to serve ads:
 
-* io.ox/ads/leaderboard
-* io.ox/ads/skyscraper
-* io.ox/ads/mailDetail
-* io.ox/ads/driveFolder
-* io.ox/ads/portalBillboard
-* io.ox/ads/mailSentOverlay
+- io.ox/ads/leaderboard
+- io.ox/ads/skyscraper
+- io.ox/ads/mailDetail
+- io.ox/ads/driveFolder
+- io.ox/ads/portalBillboard
+- io.ox/ads/mailSentOverlay
 
 In order to activate one of these areas, a [custom plugin](components/plugins/01_create-plugins) is needed, shipping a configuration as described [above](#Configuration).
 
